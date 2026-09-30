@@ -921,7 +921,9 @@ def _validate_image(build, toolchain, evidence):
               "artifact changed during validation")
     _revalidate_link_contract_snapshots(build, evidence, link_snapshot)
     _check_signal()
-    return artifacts
+    # Keep the exact link inputs and evidence bound beyond image inspection:
+    # source/toolchain rechecks, copying and receipt inventory still follow.
+    return artifacts, link_snapshot
 
 
 def _validate_link_contract(build, evidence, toolchain):
@@ -975,7 +977,11 @@ def _validate_link_contract(build, evidence, toolchain):
     _fail(len(map_tokens) == 1 and map_tokens[0] == expected_map and
           not any(token.startswith("-Map") and token != "-Map=" + expected_map for token in tokens),
           "image link map differs")
-    forbidden_exact = {"-lc", "-lgcc", "-lstdc++", "--default-lib"}
+    # This freestanding raw-ld contract has no library selection at all.  A
+    # name blacklist misses split, equals and colon spellings (and new names).
+    _fail(not any(token.startswith(("-l", "--library", "-L", "--default-lib",
+                                    "-default-lib")) for token in tokens[1:]),
+          "image link includes library-selection/default-library option")
     forbidden_lib_names = {"libc.a", "libc.so", "libpthread.a", "libpthread.so",
                            "libm.a", "libm.so", "libdl.a", "libdl.so", "libgcc_s.so"}
     crt_names = {"crt1.o", "crti.o", "crtn.o", "crtbegin.o", "crtend.o",
@@ -983,12 +989,22 @@ def _validate_link_contract(build, evidence, toolchain):
     forbidden_crt = lambda token: Path(token).name in crt_names
     forbidden_lib = lambda token: Path(token).name in forbidden_lib_names or \
         Path(token).name in {"libc.a", "libc.so", "libgcc.a", "libgcc_s.so"}
-    library_pairs = any(tokens[i:i + 2] in (["-l", "c"], ["-l", "gcc"], ["--library", "c"],
-                                            ["--library", "gcc"]) for i in range(len(tokens) - 1))
-    library_colon = any(token in ("-l:libc.a", "-l:libgcc.a") for token in tokens)
-    _fail(not any(token in forbidden_exact or forbidden_crt(token) or forbidden_lib(token)
-                  for token in tokens) and not library_pairs and not library_colon,
+    _fail(not any(forbidden_crt(token) or forbidden_lib(token) for token in tokens[1:]),
           "image link includes CRT/default library")
+    # GNU ld accepts long-option aliases with one dash and abbreviations.
+    # Accept only the option spellings emitted by this target, so another
+    # spelling cannot silently override its checked entry/script/map/depfile.
+    index = 1
+    while index < len(tokens):
+        token = tokens[index]
+        if token in ("-e", "-T", "-o", "--dependency-file"):
+            _fail(index + 1 < len(tokens), "image link option argument missing")
+            index += 2
+            continue
+        _fail(not token.startswith("-") or token == "--build-id" or
+              token.startswith(("-Map=", "--dependency-file=")),
+              "image link unsupported option spelling: " + token)
+        index += 1
     depfile = Path(dependency)
     if not depfile.is_absolute():
         depfile = Path(build) / "kernel" / depfile
@@ -1001,25 +1017,27 @@ def _validate_link_contract(build, evidence, toolchain):
     _fail((link_after, link_after_snapshot) == (link_bytes, link_snapshot) and
           (dep_after, dep_after_snapshot) == (depfile_bytes, dep_snapshot),
           "image link inputs changed after evidence write")
-    evidence_link, _ = _stable_snapshot(evidence / "image-link-contract.txt", "image link evidence")
-    evidence_dep, _ = _stable_snapshot(evidence / "image-link-dependency.d", "image dependency evidence")
-    _fail(evidence_link == link_bytes and evidence_dep == depfile_bytes,
+    evidence_link = _stable_snapshot(evidence / "image-link-contract.txt", "image link evidence")
+    evidence_dep = _stable_snapshot(evidence / "image-link-dependency.d", "image dependency evidence")
+    _fail(evidence_link[0] == link_bytes and evidence_dep[0] == depfile_bytes,
           "image link evidence changed after write")
-    return (link_bytes, link_snapshot, depfile_bytes, dep_snapshot)
+    # Nested tuples contain only immutable bytes/integers, including the
+    # evidence inode identities; a same-byte replacement is still drift.
+    return ((link_bytes, link_snapshot), (depfile_bytes, dep_snapshot),
+            evidence_link, evidence_dep)
 
 
 def _revalidate_link_contract_snapshots(build, evidence, snapshots):
-    """Recheck link inputs/evidence after all final image inspection work."""
-    link_bytes, link_snapshot, depfile_bytes, dep_snapshot = snapshots
+    """Recheck all four byte/inode identities without refreshing the baseline."""
+    link_snapshot, dep_snapshot, evidence_link, evidence_dep = snapshots
     link = Path(build) / "kernel/CMakeFiles/mckernel.img.dir/link.txt"
     depfile = Path(build) / "kernel/CMakeFiles/mckernel.img.dir/link.d"
     current_link = _stable_snapshot(link, "image link command")
     current_dep = _stable_snapshot(depfile, "image link dependency file")
-    _fail(current_link == (link_bytes, link_snapshot) and
-          current_dep == (depfile_bytes, dep_snapshot),
+    _fail(current_link == link_snapshot and current_dep == dep_snapshot,
           "image link inputs changed during final validation")
-    _fail(_stable_snapshot(evidence / "image-link-contract.txt", "image link evidence")[0] == link_bytes and
-          _stable_snapshot(evidence / "image-link-dependency.d", "image dependency evidence")[0] == depfile_bytes,
+    _fail(_stable_snapshot(evidence / "image-link-contract.txt", "image link evidence") == evidence_link and
+          _stable_snapshot(evidence / "image-link-dependency.d", "image dependency evidence") == evidence_dep,
           "image link evidence changed during final validation")
 
 
@@ -1380,7 +1398,7 @@ def _run(source_root, candidate_sha, ihk_sha, manifest, toolchain, output, evide
         progress["phase"] = "artifact-validation"
         _check_signal()
         _atomic_json(evidence / "progress.json", progress)
-        artifacts = _validate_image(build, tools, evidence)
+        artifacts, link_snapshot = _validate_image(build, tools, evidence)
         source_after = _validate_source(source_root, candidate_sha, ihk_sha, manifest,
                                         tools["tools"]["git"])
         if gitlink_manifest is not None:
@@ -1454,6 +1472,10 @@ def _run(source_root, candidate_sha, ihk_sha, manifest, toolchain, output, evide
         progress.update(status="FAIL", error=result.get("error"))
         _atomic_json(evidence / "progress.json", progress)
     try:
+        if result["status"] == "PASS":
+            # Publication is the last boundary: inventory and all source/tool
+            # checks and artifact copies must precede this immutable recheck.
+            _revalidate_link_contract_snapshots(build, evidence, link_snapshot)
         _atomic_json(evidence / "receipt.json", result)
     except ImageBuildError as exc:
         result.update(status="FAIL", error=str(exc))

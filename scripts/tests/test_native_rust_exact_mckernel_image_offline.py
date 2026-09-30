@@ -209,31 +209,57 @@ exit 2
         self.assertEqual((evidence / "image-link-dependency.d").read_bytes(), depfile.read_bytes())
 
     def test_link_contract_rejects_adversarial_flags_and_paths(self):
-        cases = (
-            (str(self.root / "other-ld") + " -e arch_start", "raw ld"),
-            (None, "entry"),
-            (None, "build-id"),
-            (None, "script"),
-            (None, "line"),
-            (None, "shell"),
-            (None, "libc"),
-            (None, "crt"),
-        )
-        base = str(self.ld) + " -e arch_start -T /tmp/config/smp-x86.lds --build-id -Map=/tmp/mckernel.img.map --dependency-file=CMakeFiles/mckernel.img.dir/link.d\n"
-        mutations = {
-            "raw ld": cases[0][0] + "\n",
-            "entry": base.replace("-e arch_start", "-e arch_start -e main"),
-            "build-id": base.replace("--build-id", "--build-id=none"),
-            "script": base.replace("-T /tmp/config/smp-x86.lds", "-T /tmp/config/smp-x86.lds -T /tmp/override.lds"),
-            "line": base + "/usr/bin/cc -c x.c\n",
-            "shell": base.replace("--build-id", "--build-id;echo pwned"),
-            "libc": base.replace("--build-id", "/usr/lib64/libc.a --build-id"),
-            "crt": base.replace("--build-id", "/tmp/crt1.o --build-id"),
-        }
-        for _unused, label in cases:
-            with self.subTest(label=label):
-                build, evidence, tools, _link, _dep = self._link_contract_fixture(mutations[label])
-                with self.assertRaises(driver.ImageBuildError):
+        cases = [
+            ("raw ld", lambda line: line.replace(str(self.ld), "/unbound/ld", 1)),
+            ("raw ld", lambda line: "/usr/bin/cc " + line),
+            ("raw ld", lambda line: "/bin/sh -c " + line),
+            ("entry differs", lambda line: line.replace("-e arch_start", "-e arch_start -e main")),
+            ("entry differs", lambda line: line.replace("-e arch_start", "--entry=arch_start")),
+            ("build-id option differs", lambda line: line.replace("--build-id", "--build-id=none")),
+            ("script is duplicated", lambda line: line.replace("--build-id", "-T /override.lds --build-id")),
+            ("script differs", lambda line: line.replace("/kernel/config/smp-x86.lds", "/wrong.lds")),
+            ("map differs", lambda line: line.replace("/kernel/mckernel.img.map", "/wrong.map")),
+            ("dependency-file spelling differs", lambda line: line.replace("=CMakeFiles/", "=/wrong/")),
+            ("dependency-file is duplicated", lambda line: line.replace("--build-id", "--dependency-file=/other --build-id")),
+            ("one line", lambda line: line + "/usr/bin/cc -c x.c\n"),
+            ("shell control", lambda line: line.replace("--build-id", "--build-id;echo pwned")),
+            ("shell control", lambda line: line.replace("--build-id", "--build-id $(echo x)")),
+        ]
+        for option, reason in (
+            ("-Wl,-e,main", "compiler linker wrapper"),
+            ("-Xlinker --entry=main", "compiler linker wrapper"),
+            ("@response.txt", "response file"),
+            ("-script /override.lds", "unsupported option spelling"),
+            ("--Map=/override.map", "unsupported option spelling"),
+            ("-dependency-file=/override.d", "unsupported option spelling"),
+            ("--entr=main", "unsupported option spelling"),
+            ("/usr/lib64/libc.a", "CRT/default library"),
+            ("/tmp/crt1.o", "CRT/default library"),
+        ):
+            cases.append((reason, lambda line, option=option: line.rstrip("\n") + " " + option + "\n"))
+        for reason, mutate in cases:
+            with self.subTest(reason=reason):
+                build, evidence, tools, link, _dep = self._link_contract_fixture()
+                baseline = driver._validate_link_contract(build, evidence, tools)
+                self.assertEqual(baseline[0][0], link.read_bytes())
+                link.write_text(mutate(link.read_text()))
+                with self.assertRaisesRegex(driver.ImageBuildError, reason):
+                    driver._validate_link_contract(build, evidence, tools)
+
+    def test_link_contract_rejects_every_library_selector_form(self):
+        for option in ("-lc", "-lgcc", "-lstdc++", "-l c", "-l gcc", "-l stdc++",
+                       "-l arbitrary", "-larbitrary", "-l:libc.a", "-l:libgcc.a",
+                       "-l:arbitrary.a", "--library c", "--library gcc",
+                       "--library stdc++", "--library=c", "--library=gcc",
+                       "--library=stdc++", "--library=:libc.a", "-library=c",
+                       "--default-lib", "--default-lib=libc.a", "-default-lib=libc.a",
+                       "-L /tmp", "-L/tmp", "--library-path=/tmp"):
+            with self.subTest(option=option):
+                build, evidence, tools, link, _dep = self._link_contract_fixture()
+                baseline = driver._validate_link_contract(build, evidence, tools)
+                self.assertEqual(baseline[0][0], link.read_bytes())
+                link.write_text(link.read_text().rstrip("\n") + " " + option + "\n")
+                with self.assertRaisesRegex(driver.ImageBuildError, "library-selection/default-library option"):
                     driver._validate_link_contract(build, evidence, tools)
 
     def test_link_contract_accepts_benign_crt_notes_and_rejects_symlink(self):
@@ -771,9 +797,9 @@ exit 2
     def test_artifact_mutation_after_validation_is_rejected(self):
         original = driver._validate_image
         def mutate(*args):
-            artifacts = original(*args)
+            artifacts, snapshots = original(*args)
             Path(artifacts["mckernel.img"]["path"]).write_bytes(b"changed after validation")
-            return artifacts
+            return artifacts, snapshots
         with mock.patch.object(driver, "_validate_image", side_effect=mutate):
             result = self.execute()
         self.assertEqual(result["status"], "FAIL", result)
@@ -788,6 +814,70 @@ exit 2
             result = self.execute()
         self.assertEqual(result["status"], "FAIL", result)
         self.assertIn("artifact evidence copy differs", result["error"])
+
+    def _assert_late_link_drift_rejected(self, stage):
+        baseline = self.execute(output=self.root / "baseline-output",
+                                evidence=self.root / "baseline-evidence")
+        self.assertEqual(baseline["status"], "PASS", baseline)
+        paths = (
+            ("build/kernel/CMakeFiles/mckernel.img.dir/link.txt", "inputs"),
+            ("build/kernel/CMakeFiles/mckernel.img.dir/link.d", "inputs"),
+            ("image-link-contract.txt", "evidence"),
+            ("image-link-dependency.d", "evidence"),
+        )
+        for index, (relative, kind) in enumerate(paths):
+            for replace_inode in (False, True):
+                with self.subTest(stage=stage, path=relative, replace_inode=replace_inode):
+                    suffix = "%s-%s" % (index, replace_inode)
+                    output = self.root / ("output-" + suffix)
+                    evidence = self.root / ("evidence-" + suffix)
+                    path = (output if kind == "inputs" else evidence) / relative
+                    mutated = []
+
+                    def mutate():
+                        self.assertFalse(mutated)
+                        mutated.append(True)
+                        if replace_inode:
+                            replacement = path.with_name(path.name + ".replacement")
+                            replacement.write_bytes(path.read_bytes())
+                            os.replace(replacement, path)
+                        else:
+                            path.write_bytes(path.read_bytes() + b"changed after validation\n")
+
+                    original_validate = driver._validate_image
+                    original_sha = driver._sha256
+
+                    def validate_then_mutate(*args):
+                        validated = original_validate(*args)
+                        mutate()
+                        return validated
+
+                    def inventory_then_mutate(item):
+                        digest = original_sha(item)
+                        # symbols.txt is the last evidence inventory file.
+                        # This hook runs after source/toolchain checks and copies.
+                        if Path(item) == evidence / "symbols.txt":
+                            mutate()
+                        return digest
+
+                    target, action = (("_validate_image", validate_then_mutate)
+                                      if stage == "after-image-validation" else
+                                      ("_sha256", inventory_then_mutate))
+                    with mock.patch.object(driver, target, side_effect=action):
+                        result = self.execute(output=output, evidence=evidence)
+                    self.assertEqual(mutated, [True])
+                    self.assertEqual(result["status"], "FAIL", result)
+                    self.assertEqual(result["error"],
+                                     "image link %s changed during final validation" % kind)
+                    receipt = json.loads((evidence / "receipt.json").read_text())
+                    self.assertEqual(receipt["status"], "FAIL")
+                    self.assertEqual(receipt["error"], result["error"])
+
+    def test_link_and_depfile_drift_after_image_validation_cannot_publish_pass(self):
+        self._assert_late_link_drift_rejected("after-image-validation")
+
+    def test_link_and_depfile_drift_during_receipt_inventory_cannot_publish_pass(self):
+        self._assert_late_link_drift_rejected("receipt-inventory")
 
     def test_late_term_during_receipt_cannot_return_pass(self):
         original = driver._atomic_json

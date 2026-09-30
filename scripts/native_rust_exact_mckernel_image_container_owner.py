@@ -30,7 +30,7 @@ import uuid
 REQUEST_SCHEMA = "mckernel.native-exact-mckernel-image-container-request.v1"
 RECEIPT_SCHEMA = "mckernel.native-exact-mckernel-image-container-receipt.v1"
 OWNER_RECEIPT_NAME = "owner-receipt.json"
-EXPECTED_DRIVER_SHA256 = "d236409ddb71dfbc31a70b072bb1acfe3a1f33bb29cf51707ce8bb536d7c9974"
+EXPECTED_DRIVER_SHA256 = "91aa047f61167dd93002a0bc12e55b18f4b2fcaf65e246e574e8350a0c37f4cc"
 EXPECTED_PROVENANCE_SHA256 = "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a"
 EXPECTED_HOST_OWNER_SHA256 = "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155"
 # The image owner advances with the disk-candidate namespace.  Keep consumed

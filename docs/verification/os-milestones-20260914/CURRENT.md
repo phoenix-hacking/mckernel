@@ -10610,3 +10610,50 @@ threads/futexes, signals and separately reviewed shutdown diagnostic packets.
 Diagnostic output remains distinct from application or production acceptance.
 The OS goal remains incomplete and is neither resumed nor completed during
 this shutdown.
+
+Continuation checkpoint 252, 2026-09-30: the stop request arrived after the
+bounded cleanup correction completed.  No new work was dispatched.  All child
+agents are completed, no QEMU, mcexec, image owner or heavy build is live, and
+no candidate file was removed.  Launcher wrapper/launcher/worker/server remain
+`1442141/1442142/1442145/1442149`, all started 2026-09-30 10:46:42 PDT.  The
+two retained containers remain terminal: exportset-24 is
+`053b5528...d24f`, exited/PID0/exit1/OOMfalse; the retained completed host
+build is `4d15b349...e4f86`, exited/PID0/exit0/OOMfalse.
+
+Independent final-link review now passes the exact exportset-25 source packet.
+The offline driver/owner hashes are `91aa047f...7f4cc` and
+`a6d6ffaa...f7f0`; their tests are `3c2891f6...1653` and
+`17481bea...a0aef`.  The retained combined suite is 66/66 PASS.  This is
+source integration and packet preparation only; exportset-25 has no execution
+release and did not run.  Independent diagnostic review also passes the new
+post-link checker `c22255b2...2731` and tests `cb154873...c0c9`; its retained
+full suite is 181/181 PASS.  Actual current-image invocation and its separate
+ownership check remain mandatory.
+
+The candidate-12 read-only audit plan passes and identifies 2,507 exact
+committed duplicate files occupying 9,102,798,848 allocated bytes, with no
+protected overlap.  The plan-bound cleanup correction now hashes to
+`61b83992...4c7e`, its tests hash to `6ddb4aa0...1224`, and its worker suite
+passes 51/51.  Because shutdown arrived before independent rereview, that
+corrected source is explicitly pending review.  It has no execution release;
+the plan remains unapplied and files removed remain zero.
+
+The exact retained Rocky bzImage/module tuple independently passes same-byte
+diagnostic reuse review, and retained mcexec `ee1f660b...073b` contains the
+matching IHK build ID `3114d9e`.  A fresh manifest and independently released
+guest packet remain required.  Host/scratch free bytes at shutdown are
+31,104,782,336/17,105,330,176 and MemAvailable is 29,261,602,816 bytes.  The
+cursor remains nine failed plus one completed current-candidate build records,
+zero linked smallest-current images, one exact current-crate compile and zero
+real current-image diagnostic guest apps.  Full identities and next actions
+are retained in
+`docs/verification/evidence/native-exact-export25-postlink-cleanup-shutdown-20260930.json`.
+
+Next continuation must first independently rereview the cleanup correction.
+Only after a separately committed, reviewed and fetched execution release may
+it run once.  Then trim scratch, prepare fresh scratch-13/exportset-25 inputs,
+run one serialized image build, validate the actual linked artifact, and bind
+the retained runtime tuple into fresh startup, memory, files, threads/futexes,
+signals and shutdown diagnostic packets.  Diagnostic output remains distinct
+from acceptance.  The OS goal remains incomplete and is neither resumed nor
+completed during this shutdown.

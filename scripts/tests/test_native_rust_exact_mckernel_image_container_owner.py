@@ -36,6 +36,12 @@ def inventory(root):
     return result
 
 
+class DriverReleasePinTests(unittest.TestCase):
+    def test_release_pin_matches_current_offline_driver(self):
+        path = Path(__file__).resolve().parents[1] / "native_rust_exact_mckernel_image_offline.py"
+        self.assertEqual(owner.EXPECTED_DRIVER_SHA256, digest(path))
+
+
 class FakeDocker:
     def __init__(self, evidence, image):
         self.evidence = Path(evidence)
@@ -384,6 +390,15 @@ class OwnerTests(unittest.TestCase):
         self.common.write_text("held\n")
         with self.assertRaisesRegex(owner.OwnerError, "common exclusion"):
             owner.ImageOwner(request, docker=FakeDocker(self.evidence, self.image)).run()
+
+    def test_changed_driver_bytes_rejected_with_correct_release_pin(self):
+        request = self.request()
+        owner.ImageOwner(request, docker=FakeDocker(self.evidence, self.image)).validate()
+        changed_driver = self.root / "changed-driver.py"
+        changed_driver.write_bytes(self.driver.read_bytes() + b"\n# changed\n")
+        request["driver_path"] = str(changed_driver)
+        with self.assertRaisesRegex(owner.OwnerError, "offline driver bytes differ"):
+            owner.ImageOwner(request, docker=FakeDocker(self.evidence, self.image)).validate()
 
     def test_v2_owner_admission_and_offline_container_fixture(self):
         """One v2 closure is admitted by the owner and consumed as /out,/nightly.

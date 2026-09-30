@@ -1,0 +1,100 @@
+{
+  "schema": "mckernel.shutdown-checkpoint.v1",
+  "recorded_at": "2026-09-30T16:11:31-07:00",
+  "source_head_before_checkpoint": "6799c36a0e969cc723c728027bdb7fff10a3f160",
+  "branch": "codex/local-native-staging-repair",
+  "os_complete": false,
+  "diagnostic_acceptance_claimed": false,
+  "production_acceptance_claimed": false,
+  "dispatch_stopped": true,
+  "heavy_process_live": false,
+  "cursor": {
+    "failed_current_candidate_build_records": 9,
+    "completed_current_candidate_build_records": 1,
+    "linked_smallest_current_images": 0,
+    "exact_current_crate_compiles": 1,
+    "real_current_image_diagnostic_guest_apps": 0
+  },
+  "final_link_exportset25": {
+    "review": "PASS_SOURCE_INTEGRATION_AND_PACKET_PREPARATION_ONLY",
+    "kernel_cmake_sha256": "0fb8528175443a0cab4b1b12e62a2b9851b918b416f9a235f598cb143f616e35",
+    "offline_driver_sha256": "91aa047f61167dd93002a0bc12e55b18f4b2fcaf65e246e574e8350a0c37f4cc",
+    "owner_sha256": "a6d6ffaaa84fd5fd5090875b7ec7829c136b55af81104cf630ecc273ed9df7f0",
+    "offline_tests_sha256": "3c2891f60347b5da37dde06241350b019f708c349456fb873fda5282397c1653",
+    "owner_tests_sha256": "17481bea97268fee8e8d915824111f4ebd5fe5039a63f128b2f05bbf5a3b0aef",
+    "combined_tests": "66 tests, 37.281 seconds, OK",
+    "combined_log": "/home/holden/mckernel-work/scratch/exportset25-final-review.ugCUwS/full-tests.log",
+    "combined_log_sha256": "16c6768211b9019a2d1c5ebecea8e8bb309c7699ad00902e1d15377b422997ef",
+    "execution_released": false
+  },
+  "current_image_postlink": {
+    "review": "PASS_DIAGNOSTIC_SOURCE_INTEGRATION_ONLY",
+    "checker_sha256": "c22255b2acddc40c0ad1435561984e1c8c4fe757545ccc323bcc393db8d92731",
+    "tests_sha256": "cb15487324a14ca13b9e5e6d31148aad5279bb2a0aa0e368972eaf144e94c0c9",
+    "combined_tests": "181 tests, 26.734 seconds, OK",
+    "combined_log": "/home/holden/mckernel-work/scratch/current-image-postlink-final2-review.T85Sp7/full-tests.log",
+    "combined_log_sha256": "4a4f67942655a27b1e02fbd701b9d7934f25a1820ecd9a07edf33231450b3428",
+    "actual_current_image_invocation_complete": false,
+    "ownership_check_complete": false
+  },
+  "candidate12_cleanup": {
+    "read_only_audit": "PASS",
+    "plan": "/home/holden/mckernel-work/scratch/native-exact-candidate12-source-audit-reviewed-20260930-1.json",
+    "plan_sha256": "eaba225bfeb8e58fa1a6a7d5cfe1ae622e5bb1f9355e359af16464968ac0f957",
+    "planned_unique_files": 2507,
+    "planned_content_bytes": 9096966061,
+    "planned_allocated_bytes": 9102798848,
+    "corrected_helper_sha256": "61b83992e4873c2970e6880ded65b31dab988d7655c892ce014999789abb4c7e",
+    "corrected_tests_sha256": "6ddb4aa0ace42849e68b245dad2b04d109e1d50cf115c278e96135b515fe1224",
+    "worker_tests": "51 tests, PASS",
+    "corrected_source_review": "PENDING_INDEPENDENT_REREVIEW",
+    "execution_release": false,
+    "executed": false,
+    "files_removed": 0
+  },
+  "retained_runtime_inputs": {
+    "module_tuple_review": "PASS_DIAGNOSTIC_REUSE_ONLY",
+    "bzimage_sha256": "c995dfd141a6c2fb64c293a7e5b37fc5954008d1dfceb3d778910aa76261985e",
+    "ihk_ko_sha256": "b4dbf04c47c8b8175462982cfee6e833bd40a2b7d6cadd947d68d4612c97dc9f",
+    "ihk_smp_sha256": "268d6d3b36fd33f9650c5b7b3ae5233e606d07c992e1e0c4be64493527f84bbb",
+    "mcctrl_sha256": "d927bc4460d23c175660f0a23ad8d9dec79b9e5c144e4ae0c898091bcc98a019",
+    "mcexec_sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+    "ihk_build_id": "3114d9e"
+  },
+  "retained_containers": [
+    {
+      "id": "053b5528de7605a712b7842b0145c7e777843c2fd14225174ac8959918a7d24f",
+      "name": "/mckernel-image-69d5302ef1b74816aec831cf959404ee",
+      "state": "exited",
+      "pid": 0,
+      "exit_code": 1,
+      "oom_killed": false
+    },
+    {
+      "id": "4d15b3493f869a1b0a89f1dc16fda59e1c145b78e2b57308bed35f3d954e4f86",
+      "name": "/mckernel-exact-a97aabd626bd41f59032728f2c1b5282",
+      "state": "exited",
+      "pid": 0,
+      "exit_code": 0,
+      "oom_killed": false
+    }
+  ],
+  "live_launcher_processes": [
+    {"pid": 1442141, "role": "tmux-wrapper", "started": "2026-09-30 10:46:42 PDT"},
+    {"pid": 1442142, "role": "launcher", "started": "2026-09-30 10:46:42 PDT"},
+    {"pid": 1442145, "role": "worker", "started": "2026-09-30 10:46:42 PDT"},
+    {"pid": 1442149, "role": "app-server", "started": "2026-09-30 10:46:42 PDT"}
+  ],
+  "resources": {
+    "host_free_bytes": 31104782336,
+    "scratch_free_bytes": 17105330176,
+    "mem_available_bytes": 29261602816
+  },
+  "next_tasks": [
+    "Independently rereview the corrected candidate-12 plan-bound cleanup source; do not execute it from this checkpoint.",
+    "If review passes, commit a separate exact execution release, independently review it, fetch-verify it, remeasure resources, and execute cleanup once.",
+    "Trim scratch after a passing cleanup and prepare fresh scratch-13/exportset-25 inputs from a fetched checkpoint.",
+    "Run one serialized smallest-current image build, then invoke the post-link checker and separate ownership checker on the actual artifact.",
+    "Bind the retained Rocky module tuple and BUILDID-compatible mcexec into a fresh diagnostic package and run startup before memory, files, threads/futexes, signals, and shutdown. Keep diagnostic results separate from acceptance."
+  ]
+}
