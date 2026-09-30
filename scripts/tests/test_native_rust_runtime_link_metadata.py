@@ -37,7 +37,10 @@ class NativeRustRuntimeLinkMetadataTests(unittest.TestCase):
             [self.closure.COMPATIBILITY_BUILD_ID_PATH],
             [item["path"] for item in actual["generated_metadata_inputs"]],
         )
-        self.assertTrue(all(item["path"].endswith(".rs") for item in actual["source_closure"]))
+        self.assertEqual(
+            [item["path"] for item in actual["source_closure"]],
+            list(self.closure.EXPECTED_COMPILER_SOURCES),
+        )
         self.assertFalse(any(actual["claims"].values()))
 
     def test_compatibility_change_preserves_separate_native_source_identity(self):

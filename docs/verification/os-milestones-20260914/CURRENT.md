@@ -8800,3 +8800,41 @@ using this request, checkpoint this preparation result, and execute only that
 released command.  Preserve terminal containers and exclusions on every
 result.  No compile artifact or diagnostic application exists yet; formal
 counters remain unchanged.
+
+Continuation checkpoint 188, 2026-09-30: the independently released
+`scratch-2` host build ran once in the pinned four-CPU/12-GiB/no-swap/no-network
+profile and failed before compilation after 671 source tests with one failure
+and three errors.  All five defects from the prior attempt now pass.  The new
+failure family is confined to detached runtime-evidence reconstruction: it
+still compared against the old Rust-only compiler-source set after the closure
+authority added the real assembly inputs.  The substitution negative then saw
+the earlier closure error instead of its intended output-difference error.
+
+Terminal container
+`340d3232f39b292f4d5412729c971b31b0ca38b2828c5ac2e647caefeb6cac25`
+(`mckernel-exact-dad0bfb903544364bf7df6bb949afafe`) exited 1 with PID 0
+and remains retained under owner nonce `04bdb4e5057c44b88990dcae0ab6e423`.
+The `closurefix-4` exclusion is identity `1831:31529`, SHA
+`80128636...1dbb`; owner receipt SHA is `dc01a4de...7b9e`, driver receipt
+SHA is `a252779d...25bb`, and driver log SHA is `06ad8bdb...cedb`.  No build
+output exists.  The complete 1,576,960-byte, 48-member failure archive SHA is
+`55b18988...05d2c`; independent streamed review verifies every source,
+preparation, request, exclusion and terminal identity.  Additive record
+`docs/verification/evidence/native-exact-build-63235981-scratch-2-failure-20260930.json`
+has SHA `ed6dfd80...d9be`.
+
+The bounded correction now independently passes 80 affected tests.  Detached
+reconstruction consumes and returns the exact ordered full compiler-source
+authority, including both assembly inputs; its regression asserts exact
+membership rather than only `.rs` suffixes.  All four original failures pass,
+four additional assembly substitutions are rejected, descriptor-bound replay
+and the negative substitution oracle remain intact, and the FP-0006/RS-006
+transitive identity fixed point and both normalized self-digests pass.  The
+runtime checker SHA is `87198dcb...c063`; acceptance closure contract SHA is
+`9e949e81...43aa`.
+
+Next commit/push/fetch this correction and failure record, advance the wrapper
+to a fresh `-5` namespace, and prepare a new disk candidate from that frozen
+repair commit.  Do not retry the deterministic `scratch-2` request.  No
+artifact, boot or diagnostic app has passed, and formal counters remain 6/130,
+350/10000 and 0/273 applications.

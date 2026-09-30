@@ -1,0 +1,39 @@
+{
+  "schema": "mckernel.native-exact-build-failure-evidence.v1",
+  "status": "DIAGNOSTIC_BUILD_FAIL",
+  "scope": "source/build evidence only; no runtime, diagnostic application, or acceptance credit",
+  "command": "/usr/bin/python3 -E -s -B /home/holden/mckernel/scripts/native_rust_exact_disk_build_wrapper.py /home/holden/mckernel-work/scratch/native-exact-build-request-63235981-scratch-2.json --launcher-aggregate-gib 16.2158",
+  "candidate_sha": "6323598141241dc7f734f42bac78c939bf5ae292",
+  "request": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-request-63235981-scratch-2.json", "sha256": "6fefac2543ce689ac03e90c488f30dd34989476a16e60822ce51186da685e58e"},
+  "source_preparation": {
+    "preparation_log_sha256": "7e3102a77867a676303446e66ed87f7c1ba408e0aa049bd51243b6c0ed3e1bc9",
+    "preparation_terminal_sha256": "94eb7673296551786c956b0406ddc9279aae2c14575153d16f71fb6370786201",
+    "input_manifest_sha256": "5b1584289494b684f9c984b7c4eb10fb2006de31b2129ba72819507b9005752f",
+    "candidate_root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-63235981-scratch-2"
+  },
+  "operational_exclusion": {"path": "native-exact-candidate-operational-exclusion-closurefix-4.json", "device": 1831, "inode": 31529, "sha256": "801286361464b7e5798bf31f1148e5b7d6eaa5b83981ca881e1b1be3c0e91dbb"},
+  "terminal": {
+    "container_id": "340d3232f39b292f4d5412729c971b31b0ca38b2828c5ac2e647caefeb6cac25",
+    "container_name": "mckernel-exact-dad0bfb903544364bf7df6bb949afafe",
+    "status": "exited", "pid": 0, "exit_code": 1,
+    "owner_nonce": "04bdb4e5057c44b88990dcae0ab6e423"
+  },
+  "receipts": {
+    "owner_receipt_sha256": "dc01a4de74ef7b98cf09670cce8abc13a42810e499b274604b0a133848a87b9e",
+    "driver_receipt_sha256": "a252779d935b83f89b5fc7d57271154ad0db7a585d18ef26f3440d1ad72d25bb",
+    "driver_log_sha256": "06ad8bdb61d4a618a8524e0fbc6b3fa9773ff1065e54bf5c98ac5840f640cedb"
+  },
+  "result": {
+    "tests_run": 671, "failures": 1, "errors": 3,
+    "failure": "test_bound_phase2_replay_rejects_resealed_output_substitution",
+    "errors": [
+      "test_bound_byte_reconstruction_matches_filesystem_closure",
+      "test_compatibility_change_preserves_separate_native_source_identity",
+      "test_bound_phase2_snapshot_survives_ancestor_swap"
+    ],
+    "cause": "runtime detached reconstruction used the old compiler source closure",
+    "outputs": "none"
+  },
+  "archive": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-failure-63235981-scratch-2-20260930-1.tar", "sha256": "55b18988534ec0f9eb88e94162638941ab13e9361545355d6c19a1c28fe05d2c", "size": 1576960, "members": 48},
+  "next_bounded_correction": "Bind detached reconstruction to the current compiler source closure, rerun the focused runtime-link metadata/evidence tests, then prepare a fresh candidate and exact build after independent review; preserve this failure archive."
+}

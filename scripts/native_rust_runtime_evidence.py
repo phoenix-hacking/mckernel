@@ -35,7 +35,7 @@ EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {'kbuild_link_closure': {'gi
                     'sha256': 'fbb89bdb8766dcd446e8d75440c9e6bed1cf0a286107312510daef6626e80ab4',
                     'size': 46669}}
 ISOLATED_SELF_DIGEST = (
-    "ISOLATED_SELF_DIGEST:48cb63b8154245eebf8cd57a2337f282fcb0db8f109403b764e1ac6e8b711625"
+    "ISOLATED_SELF_DIGEST:a797f11ac0c6371559971a9c34adcc2374287a6eb6cd394ca99cb1b81fa74dd6"
 ).split(":", 1)[1]
 
 _SEMANTIC_AUTHORITY_FILENAMES = {
@@ -4923,7 +4923,7 @@ def _validate_kbuild_link_closure_bytes(
     if len(source_prefixes) != 1:
         raise LinkClosureError("Rust crate roots do not share one staged source tree")
     if tuple(sorted(all_sources)) != tuple(
-        sorted(_link_closure_module.EXPECTED_STAGED_RUST_SOURCES)
+        sorted(_link_closure_module.EXPECTED_COMPILER_SOURCES)
     ):
         raise LinkClosureError("compiler Rust source closure differs")
     raw_records = [
@@ -4966,7 +4966,7 @@ def _validate_kbuild_link_closure_bytes(
         "schema_id": _link_closure_module.SCHEMA_ID,
         "source_closure": [
             {"path": path, "stage_sha256": stage_digests[path]}
-            for path in _link_closure_module.EXPECTED_STAGED_RUST_SOURCES
+            for path in _link_closure_module.EXPECTED_COMPILER_SOURCES
         ],
         "source_closure_scope": (
             "staged McKernel Rust project sources named by rustc dependency records; "
