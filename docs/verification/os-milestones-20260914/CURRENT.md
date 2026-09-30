@@ -8584,3 +8584,37 @@ current McKernel image serially, and run startup, memory, files,
 threads/futexes, signals and shutdown diagnostics.  Formal counters remain
 6/130, 350/10000 and 0/273 applications; no current-candidate build or real
 diagnostic app has run, and the OS remains incomplete.
+
+Continuation checkpoint 181, 2026-09-30: exact candidate retirement closure
+now independently passes.  The first postflight attempt preserved a completely
+clean 823-identity round, then failed because an unchanged-global-census rule
+treated one exact process exit as unsafe.  Its four-entry archive SHA is
+`15309d25...05fd1`.  The corrected V2 oracle reconciles exact exited
+identities, requires every final live identity to have a successful scan, and
+rejects PID/TID reuse across or during scans.  Thirty-six focused tests and
+independent source review pass.
+
+The released observation-only retry from fetched commit
+`a9889b0e3ef45bf1782f3165e33d219904973ebd` passes all three rounds over
+10,751 retained target inode identities.  Census sizes are 823/823,
+823/823/823 and 823/822; the latter rounds each reconcile one exact exit.
+Every reference, denial, incomplete scan, replacement, entry-churn,
+unscanned-final and nonconvergence count is zero.  Terminal status SHA is
+`22a73d2...eb5c`; round SHAs are `17a0052f...8177`,
+`c434f972...6d72d` and `14b01c87...7e5f`.  Independent postflight and archive
+review pass.  The five immutable retirement tombstones and both original
+failed evidence sets remain unchanged; this success does not remove them.
+
+The fresh disk build path is now source-reviewed.  Wrapper SHA
+`edc6e02...a5fc2` accepts only the new exclusion ending `76ae20b5-2.json` and
+rejects the old tombstone.  Request SHA `23b0d911...caad` binds the exact disk
+candidate/backup, 9,161 source bindings, four assets, owner/provenance bytes,
+overlay, 4-CPU/12-GiB/no-swap/no-network/512-task profile and exact 16.2158-GiB
+aggregate.  Fresh output/evidence directories are empty identities
+`1831:5242881` and `1831:5373953`; independent execution review passes.
+Next execute that one serialized host build.  Preserve its terminal container
+and fresh common exclusion for separately reviewed cleanup, then build the
+current McKernel image serially and run startup, memory, files,
+threads/futexes, signals and shutdown diagnostics.  Formal counters remain
+6/130, 350/10000 and 0/273 applications; no current-candidate build or real
+diagnostic app has yet run, and the OS remains incomplete.
