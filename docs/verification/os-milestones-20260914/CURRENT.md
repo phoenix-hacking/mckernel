@@ -9330,3 +9330,38 @@ attempts in this loop: one failed `dce800af` build and zero completed images.
 Real diagnostic guest applications in this loop: zero.  Formal counters remain
 6/130, 350/10000 and 0/273 applications; no cleanup, preparation or diagnostic
 result is acceptance credit.
+
+Continuation checkpoint 206, 2026-09-30: the independently released scratch-6
+build ran exactly once and stopped after 45 seconds in phase 0, before any
+compilation.  The exact runtime-evidence contract carried the correct
+95,328-byte workflow SHA-256 (`030822f4...8629`) but a stale Git blob identity;
+the checker rejected it with `runtime repository workflow identities differ`.
+No compiler artifact, image, boot or application result exists.  Container
+`92b2f3fed037...` exited 1/PID 0, was not OOM-killed and remains retained.
+Output is empty; evidence allocation is 229,376 bytes.  Owner/build/driver-log
+SHAs are `fba8703b...4107`, `ffa7765a...889` and `6023ceed...df5`; consumed
+`objtoolbinding-11` is identity `1831:57597`.  Additive failure record
+`native-exact-build-8b5056f8-scratch6-runtime-workflow-failure-20260930.json`
+preserves the exact terminal state.
+
+The bounded correction changes only that workflow Git blob to
+`7d922ef0efc6629837b9fdb090d596bd63d90d69` and cascades the two exact contract
+digests.  The workflow semantic validator passes and independent source review
+passes.  A broader optional RS-006 follow-up still reports seven pre-existing
+inventory mismatches and receives no credit; it is not in this phase-0 build
+path.  Build/image owners now use fresh `runtimeblob-12`, explicitly retiring
+`objtoolbinding-11`; 38 focused tests pass.  The pushed retry source is
+`c658175ae1831e2caef6ecf59730a272f1324645`.
+
+Scratch-6 remains identity `1831:5111816` and consumes 9,235,599,360 allocated
+bytes.  Current host/scratch free space is approximately 27.0/19.9 GB; copying
+a fresh candidate now would violate the 12-GiB scratch reserve.  Next create a
+portable archive of the exact scratch-6 failure, relocate the source to host
+under separately reviewed no-replace/capacity/process/container gates, trim
+scratch, and run the reviewed scratch-7 preparation bound to `c658175a` and
+`runtimeblob-12`.  Then obtain one fresh execution release and run the exact
+build.  It must pass the retained phase-0 and objtool failures before image or
+real startup/memory/files/threads/signals/shutdown diagnostics.  Current-
+candidate builds in this loop: two failed, zero completed.  Real diagnostic
+guest applications: zero; all diagnostic results remain separate from formal
+acceptance.
