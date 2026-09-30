@@ -107,7 +107,9 @@ def test_mount_process_existing_destination_and_exclusion_guards_are_present():
 def test_packet_never_replaces_existing_exclusion_or_destination():
     text = source()
     assert "native-exact-candidate-operational-exclusion-objtoolbinding-11.json" in text
-    assert "native-exact-candidate-operational-exclusion-relocation-8b5056f8-12.json" in text
+    assert "native-exact-candidate-operational-exclusion-relocation-8b5056f8-13.json" in text
+    assert "scratch6-20260930-retry1.log" in text
+    assert "retry1-terminal.json" in text
     assert '"$BUILD_EXCLUSION_SHA"' in text
     assert "os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW" in text
     assert "if pathlib.Path(DEST).exists() or pathlib.Path(DEST).is_symlink()" in text
@@ -115,6 +117,12 @@ def test_packet_never_replaces_existing_exclusion_or_destination():
     assert "durable(DELETE_INTENT" in text
     assert text.count("durable(TERMINAL") == 2  # mutually exclusive failure or final PASS
     assert "fsync_tree(tmp)" in text
+
+
+def test_absent_fixed_lease_paths_are_filtered_before_privileged_read():
+    text = source()
+    assert "lease_paths=[p for p in lease_paths if os.path.lexists(p)]" in text
+    assert "lease-read-failed:'+str(path)+':rc='+str(r.returncode)" in text
 
 
 def test_distinct_deletion_intent_and_terminal_success_sequence():

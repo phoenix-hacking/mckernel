@@ -1,0 +1,38 @@
+{
+  "schema": "mckernel.native-exact-candidate-relocation-failure.v1",
+  "status": "FAIL_CLOSED",
+  "failure_family": "lease-path-census",
+  "candidate_commit": "8b5056f836ecd3e6916625696750c4dfadbaaf9f",
+  "candidate_identity": "1831:5111816",
+  "candidate_allocated_bytes": 9235599360,
+  "release_commit": "20569c93f64ad89560375b4e9cd79300666963c6",
+  "packet_sha256": "08fbe668ce030df633cd65300219d80b29ac991a43bbef7a9f36a8c6289e32e4",
+  "test_sha256": "0e99f6c56d9c3a5d34caeebd9705c0880ac57ab48c59e7ce46befb6cdb19ac6a",
+  "archive_sha256": "7353268529c3e0be4fb323c1f6844867633f61e188da89b79f913cbcbb9ee01f",
+  "observed_error": [
+    "RuntimeError: lease-read-failed",
+    "RuntimeError: malformed-lease"
+  ],
+  "root_cause": "The exhaustive lease list included absent fixed /run paths and passed them to the privileged JSON reader. The first missing path failed closed before any copy.",
+  "log": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-relocation-8b5056f8-scratch6-20260930.log",
+    "identity": "1831:57603",
+    "size": 0
+  },
+  "lock": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-relocation-8b5056f8-scratch6-20260930.lock",
+    "identity": "1831:57602",
+    "size": 0
+  },
+  "postflight": {
+    "source_preserved": true,
+    "destination_absent": true,
+    "archive_preserved": true,
+    "copy_started": false,
+    "source_deletion_started": false,
+    "host_available_bytes": 35744944128,
+    "scratch_available_bytes": 19867942912
+  },
+  "bounded_correction": "Use fresh retry output identities, filter only literally absent fixed lease paths before parsing, and continue to reject every existing malformed or live lease without deleting tombstones.",
+  "acceptance": "No relocation, build, image, boot, application or production acceptance."
+}

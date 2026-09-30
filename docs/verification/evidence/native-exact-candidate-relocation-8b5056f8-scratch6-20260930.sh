@@ -15,13 +15,13 @@ readonly ARCHIVE="$SCRATCH/native-exact-build-failure-8b5056f8-scratch-6-2026093
 readonly PREP_TERMINAL="$SCRATCH/native-exact-candidate-preparation-8b5056f8-scratch-6-terminal.json"
 readonly REQUEST="$SCRATCH/native-exact-build-request-8b5056f8-scratch-6.json"
 readonly MANIFEST="$SCRATCH/native-exact-inputs-8b5056f8-scratch-6.json"
-readonly LOG="$SCRATCH/native-exact-candidate-relocation-8b5056f8-scratch6-20260930.log"
-readonly TERMINAL="$SCRATCH/native-exact-candidate-relocation-8b5056f8-scratch6-20260930-terminal.json"
-readonly INTENT="$SCRATCH/native-exact-candidate-relocation-8b5056f8-scratch6-20260930-intent.json"
-readonly DELETE_INTENT="$SCRATCH/native-exact-candidate-relocation-8b5056f8-scratch6-20260930-deletion-intent.json"
+readonly LOG="$SCRATCH/native-exact-candidate-relocation-8b5056f8-scratch6-20260930-retry1.log"
+readonly TERMINAL="$SCRATCH/native-exact-candidate-relocation-8b5056f8-scratch6-20260930-retry1-terminal.json"
+readonly INTENT="$SCRATCH/native-exact-candidate-relocation-8b5056f8-scratch6-20260930-retry1-intent.json"
+readonly DELETE_INTENT="$SCRATCH/native-exact-candidate-relocation-8b5056f8-scratch6-20260930-retry1-deletion-intent.json"
 readonly BUILD_EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-objtoolbinding-11.json"
-readonly EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-relocation-8b5056f8-12.json"
-readonly LOCK="$SCRATCH/native-exact-candidate-relocation-8b5056f8-scratch6-20260930.lock"
+readonly EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-relocation-8b5056f8-13.json"
+readonly LOCK="$SCRATCH/native-exact-candidate-relocation-8b5056f8-scratch6-20260930-retry1.lock"
 readonly SRC_DEV=1831 DEST_DEV=66306
 readonly CANDIDATE_COMMIT=8b5056f836ecd3e6916625696750c4dfadbaaf9f
 readonly IHK_COMMIT=3114d9e7101ad52030eb3effa849a5c108972a1f
@@ -148,7 +148,7 @@ def validate_historical_leases(paths,boot_id,proc_root='/proc',reader=None):
  if reader is None:
   def reader(path):
    r=subprocess.run(['/usr/bin/sudo','-A','/bin/cat',str(path)],check=False,text=True,capture_output=True)
-   if r.returncode or r.stderr.strip(): raise RuntimeError('lease-read-failed')
+   if r.returncode or r.stderr.strip(): raise RuntimeError('lease-read-failed:'+str(path)+':rc='+str(r.returncode))
    return r.stdout
  for path in paths:
   try: row=json.loads(reader(path))
@@ -211,6 +211,7 @@ def fail_if_active():
  if any('mckernel-exact' in x for x in dp.stdout.splitlines()): raise RuntimeError('active-docker')
  lease_paths=[pathlib.Path('/run/lock/mckernel-build.lock'),pathlib.Path('/run/mckernel-build.lease'),pathlib.Path('/run/mckernel-build.lock'),pathlib.Path('/run/lock/mckernel-exact-build.lock')]
  lease_paths += list(pathlib.Path('/home/holden/mckernel-work/scratch').glob('native-exact-build-lease-*.json'))
+ lease_paths=[p for p in lease_paths if os.path.lexists(p)]
  validate_historical_leases(lease_paths, pathlib.Path('/proc/sys/kernel/random/boot_id').read_text().strip())
 def git(*args):
  env=dict(os.environ,GIT_CONFIG_NOSYSTEM='1',GIT_CONFIG_GLOBAL='/dev/null',GIT_NO_REPLACE_OBJECTS='1',GIT_TERMINAL_PROMPT='0',PATH='/usr/bin:/bin',HOME='/nonexistent')
