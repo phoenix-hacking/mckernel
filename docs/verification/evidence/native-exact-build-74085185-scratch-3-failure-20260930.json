@@ -1,0 +1,16 @@
+{
+  "schema": "mckernel.native-exact-build-failure-evidence.v1",
+  "status": "DIAGNOSTIC_BUILD_FAIL",
+  "scope": "source/build evidence only; no runtime application or acceptance credit",
+  "command": "/usr/bin/python3 -E -s -B /home/holden/mckernel/scripts/native_rust_exact_disk_build_wrapper.py /home/holden/mckernel-work/scratch/native-exact-build-request-74085185-scratch-3.json --launcher-aggregate-gib 16.2158",
+  "candidate_sha": "740851854b53036d4834dfb86a5fc7fb0f3954e6",
+  "request": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-request-74085185-scratch-3.json", "sha256": "c0fe30d7c04a05d17ca36f61a9cd7ce66c18b43e6306f506d3bb91d6ca166156"},
+  "source": {"input_manifest_sha256": "2e54c946a47cf438d7eb0e2175b4802daf22a55682944b5ef24c5d7f85f1b77f", "candidate_root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-74085185-scratch-3"},
+  "preparation": {"log_sha256": "f7eb4c6060bde7b8fce7b86f4875381a67a48810f6fd356365bfe57f9b11da5b", "terminal_sha256": "9620f0915aa3b05f0a6ef1d0c33742461dd9c42d7d17734dafebb8dfea329472"},
+  "operational_exclusion": {"path": "native-exact-candidate-operational-exclusion-runtimeclosure-5.json", "device": 1831, "sha256": "0b2cf4f2718834f27e054684559ff31d1d4ce8dcff75aa5548ac572a0ee9fccb"},
+  "terminal": {"container_id": "80e172a592939e2c30ca87a5bc3b9356467876f8ca1716b4ccf718320593eb22", "container_name": "mckernel-exact-d60382667e3d4c1f89a61850e5a1ba59", "status": "exited", "pid": 0, "exit_code": 1, "owner_nonce": "7662672170dd49eb8a0fb007ff33f007"},
+  "receipts": {"owner_receipt_sha256": "d4c1bc42cd20e2357e3f2e039c257617c4434c151199d04d026a9513b2bb7e6a", "driver_receipt_sha256": "265f8d16b8d87ede7fea9a14c9f20b6526fadae4296517922335570ce7449885", "driver_log_sha256": "52be20096dfe6989992dcc146d7efa801090108516a4c024ec8158bbd2291cf1"},
+  "result": {"tests": 671, "source_tests": "PASS", "phase1": "PASS", "phase2": "FAIL", "failure": "mktemp: failed to create file via template './.tmp.config.XXXXXXXXXX': Read-only file system", "partial_output": "approximately 1.8 GiB retained and receipt-bound; zero final artifacts"},
+  "archive": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-failure-74085185-scratch-3-20260930-1.tar", "sha256": "4fb88caac3e95612f52e4f51059e2a2efedd3d43a3753ae86c5e1c594ef9b4ee", "size": 87541760, "members": 52},
+  "next_bounded_correction": "Correct the phase-2 harness temporary-file placement/permissions while preserving read-only source semantics, then rerun the focused phase-2 check and exact build after review."
+}

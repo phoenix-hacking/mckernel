@@ -368,6 +368,23 @@ def workflow_bodies(text):
         result[name] = '\n'.join(body).rstrip() + '\n'
     if tuple(result) != STEPS:
         raise BuildError('workflow phase set/order differs')
+    phase2 = result[STEPS[2]]
+    merge_group = '''"${kbuild_environment[@]}" /usr/bin/bash --noprofile --norc -p \\
+  "$NATIVE_SOURCE_ROOT/scripts/kconfig/merge_config.sh" -m -O "$BUILD_DIR" \\
+  "$BUILD_DIR/.config" \\
+  "$GITHUB_WORKSPACE/host-kernel/rocky/configs/rust-minimal.config" \\
+  "$GITHUB_WORKSPACE/host-kernel/rocky/configs/native-rust-evidence.config"
+'''
+    if phase2.count(merge_group) != 1:
+        raise BuildError('merge_config adaptation anchor changed')
+    adapted_merge_group = '''(
+  cd "$BUILD_DIR"
+  ''' + merge_group + ''')
+'''
+    phase2 = phase2.replace(merge_group, adapted_merge_group, 1)
+    if phase2.count('cd "$BUILD_DIR"') != 1:
+        raise BuildError('merge_config writable-build adaptation differs')
+    result[STEPS[2]] = phase2
     acquisition = result[STEPS[1]]
     marker = 'archive="$SOURCE_ASSETS/' + ARCHIVE + '"\n'
     if acquisition.count(marker) != 1:

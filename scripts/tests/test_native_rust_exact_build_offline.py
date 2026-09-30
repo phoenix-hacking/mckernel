@@ -392,7 +392,7 @@ PY
     def test_source_build_config_and_validation_bodies_preserved(self):
         bodies = driver.workflow_bodies(WORKFLOW_TEXT)
         # Compare literal original bodies, not lists of validator keywords.
-        for name in (driver.STEPS[0], driver.STEPS[2], driver.STEPS[3]):
+        for name in (driver.STEPS[0], driver.STEPS[3]):
             raw = WORKFLOW_TEXT.split('      - name: ' + name + '\n', 1)[1]
             raw = raw.split('        run: |\n', 1)[1].split('\n      - name:', 1)[0]
             raw = '\n'.join(line[10:] if line else '' for line in raw.splitlines()).rstrip() + '\n'
@@ -403,6 +403,12 @@ PY
         suffix = 'archive="$SOURCE_ASSETS/' + '\n'.join(
             line[10:] if i else line for i, line in enumerate(original_suffix.splitlines())).rstrip() + '\n'
         self.assertTrue(acquisition.endswith(suffix))
+        phase2 = bodies[driver.STEPS[2]]
+        self.assertEqual(phase2.count('cd "$BUILD_DIR"'), 1)
+        self.assertEqual(phase2.count('merge_config.sh'), 1)
+        self.assertIn('(\n  cd "$BUILD_DIR"\n', phase2)
+        self.assertIn('\n)\n"${kbuild_environment[@]}" /usr/bin/make', phase2)
+        self.assertNotIn('cd "$GITHUB_WORKSPACE"', phase2)
         validation = bodies[driver.STEPS[4]]
         self.assertIn('scripts/native_rust_kbuild_link_closure.py', validation)
         self.assertNotIn('github_run_id =', validation)
@@ -421,7 +427,8 @@ PY
     def test_adaptation_anchor_drift_rejects(self):
         for old, new in [('archive="$SOURCE_ASSETS/', 'archive="$DIFFERENT/'),
                          ('# Preserve the exact binaries', '# changed marker'),
-                         (driver.STEPS[3], 'Different compilation step')]:
+                         (driver.STEPS[3], 'Different compilation step'),
+                         ('merge_config.sh', 'merge_config_changed.sh')]:
             with self.assertRaises(driver.BuildError):
                 driver.workflow_bodies(WORKFLOW_TEXT.replace(old, new))
 

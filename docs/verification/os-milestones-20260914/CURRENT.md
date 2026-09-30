@@ -8880,3 +8880,39 @@ Next checkpoint this preparation result, obtain an independent decision for
 the one exact host-build command, and execute no other heavy work.  Preserve
 the three prior stopped failure containers, exclusions and archives.  No
 artifact, boot or diagnostic application has yet passed.
+
+Continuation checkpoint 191, 2026-09-30: the independently released
+`scratch-3` build ran exactly once.  All 671 source tests and phase 1 passed;
+phase 2 then failed before compilation because Rocky's `merge_config.sh`
+created `./.tmp.config.*` in the deliberately read-only `/src` working
+directory.  This is a new harness temporary-file-placement failure family,
+not a McKernel compile result.  There are zero final artifacts and no boot or
+application result.
+
+Terminal container
+`80e172a592939e2c30ca87a5bc3b9356467876f8ca1716b4ccf718320593eb22`
+(`mckernel-exact-d60382667e3d4c1f89a61850e5a1ba59`) exited 1 with PID 0
+and remains retained under owner nonce `7662672170dd49eb8a0fb007ff33f007`.
+The `runtimeclosure-5` exclusion is identity `1831:31535`, SHA
+`0b2cf4f2...e9fccb`; owner receipt SHA is `d4c1bc42...b7e6`, driver receipt
+SHA is `265f8d16...9885`, and driver log SHA is `52be2009...cf1`.  The
+receipt-bound partial output is approximately 1.8 GiB.  The complete
+87,541,760-byte, 52-member failure archive SHA is `4fb88caa...b4ee` and
+independently passes archive review.  Additive failure record
+`docs/verification/evidence/native-exact-build-74085185-scratch-3-failure-20260930.json`
+has SHA `e8670961...f8a0`.
+
+The one bounded correction for this family now independently passes source
+review and 20 focused tests.  It anchors exactly one unchanged merge-config
+command group, runs only that group from the writable build directory, then
+returns automatically to the original workspace cwd for the following solver.
+Anchor drift, duplicate anchors and any broader cwd adaptation fail closed;
+the source mount remains read-only.  Driver SHA is `1993f3dd...a388` and test
+SHA is `d8ddcb51...a5b2`.
+
+Next commit/push/fetch this harness correction and failure record, advance the
+wrapper to a fresh exclusion namespace, and prepare a new disk candidate from
+that frozen repair commit.  Never rerun the deterministic `scratch-3` request.
+Preserve all four stopped failure containers, prior exclusions and archives.
+No current-candidate artifact or diagnostic application has passed; formal
+counters remain 6/130, 350/10000 and 0/273 applications.
