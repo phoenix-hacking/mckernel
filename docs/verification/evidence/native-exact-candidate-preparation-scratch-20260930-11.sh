@@ -7,7 +7,7 @@ readonly SOURCE=/home/holden/mckernel
 readonly SOURCE_GIT=/home/holden/mckernel/.git
 readonly SOURCE_IHK_GIT=/home/holden/mckernel/.git/modules/ihk
 readonly SHA="${PREPARATION_CANDIDATE_SHA:?frozen candidate commit required}"
-readonly EXPECTED_SHA=50cfef9cb8045ba391cf8bf241a13e393449c443
+readonly EXPECTED_SHA=acd4197b6e1f53715f75cad6e2e7677d8ab24bc0
 readonly IHK_SHA=3114d9e7101ad52030eb3effa849a5c108972a1f
 readonly SCRATCH=/home/holden/mckernel-work/scratch
 readonly C="$SCRATCH/mckernel-exact-candidate-${SHA:0:8}-scratch-11"
@@ -30,8 +30,8 @@ readonly OVERLAY_RESULT_BLOB_SHA=7abb77fdc3049a54caebc3344de14c41e779502b4abcb7f
 readonly IMAGE_ID=sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d
 readonly PLACEMENT="$SOURCE/scripts/native_exact_candidate_placement_observer_20260929.py"
 readonly TERMINAL="$SCRATCH/native-exact-candidate-preparation-${SHA:0:8}-scratch-11-terminal.json"
-# Fresh runtime-blob checkpoint bound by the reviewed exportset-14 wrapper.
-readonly EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-exportset-14.json"
+# Fresh runtime-blob checkpoint; exportset-14 belongs to retained scratch-10.
+readonly EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-exportset-15.json"
 readonly RELEASE="${PREPARATION_RELEASE_COMMIT:?independently reviewed fetched release commit required}"
 readonly RELEASE_REF=refs/remotes/origin/codex/local-native-staging-repair
 readonly CLOSURE="$SCRATCH/source-git-closure-observer-80b8c492-1.py"
@@ -42,14 +42,14 @@ readonly METADATA_SHA=b68a8b5d18a6642ef0043b791984e7a4ea2503a61b8d9153a781827a22
 readonly MANIFEST_SHA=9723cec5c36ad77e90d7619f1ad9fae3e193f1b92a9b152193f2c223b3453b38
 readonly OFFLINE_SHA=cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a
 readonly OWNER_SHA=a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155
-readonly IMAGE_OWNER_SHA=08179c0c0d488f89c0863516f57a862cc0c52f2c967ccde35e6eba8c11b375c3
+readonly IMAGE_OWNER_SHA=5e434fa0c6b3654bff6d6a6a3cb1136ed68f50599525336942c6d1d6ff7cfa5e
 readonly RUNTIME_CHECKER_SHA=c6a971686b872eabe0835f64e4585e83b732b32672cfee06ac925ecdac463c45
 readonly NATIVE_RUNTIME_CONTRACT_SHA=a2cbfcffe491879b0732ed2c0cc7b615254ab11c4d8cbaf3614f6c3361fd99e6
 readonly FP_RUNTIME_CONTRACT_SHA=09bd5cc3ee9cc1aeb6c60a2230f738757a3f26ec8f1a2e7a8529cf2df01e2aca
 readonly RS006_CONTRACT_SHA=dd23dd4b14ece8428a80d7229cdd4bb3224c583ed720c4b8e8535cc5d1d8977e
 readonly FP_CLOSURE_CONTRACT_SHA=7b8fcdb55fc1f3c990b9ebad971b1397fbd4bc5590754fa5b251be50200a78dc
 readonly WRAPPER_SHA="${PREPARATION_WRAPPER_SHA:?frozen wrapper hash required}"
-readonly EXPECTED_WRAPPER_SHA=2e33e74c1208c7349335d2303203d0b1f79475999aeb16533f0ebccaeec94899
+readonly EXPECTED_WRAPPER_SHA=8c3a1a75cd4ee73c80aa942677f704e8a891eb858969c1d871ebdfcf4b08ceac
 readonly HOST_RESERVE_BYTES=$((16 << 30))
 readonly SCRATCH_RESERVE_BYTES=$((12 << 30))
 # Measured lower bound from the prior exact candidate, plus explicit safety

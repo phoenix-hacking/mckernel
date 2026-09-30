@@ -237,7 +237,7 @@ class PlacementRealGit(unittest.TestCase):
         section = PACKET.read_text().split('# Validate the later packet/helper release separately from the candidate source.\n', 1)[1].split('\ntopology_check() {', 1)[0]
         prefix = ('set -Eeuo pipefail\nSOURCE=$1; SOURCE_GIT=$1/.git; SHA=$2; RELEASE=$3; '
                   "WRAPPER_SHA=$(sha256sum \"$SOURCE/scripts/native_rust_exact_disk_build_wrapper.py\" | awk '{print $1}'); "
-                  'IHK_SHA=3114d9e7101ad52030eb3effa849a5c108972a1f IMAGE_OWNER_SHA=08179c0c0d488f89c0863516f57a862cc0c52f2c967ccde35e6eba8c11b375c3 RUNTIME_CHECKER_SHA=c6a971686b872eabe0835f64e4585e83b732b32672cfee06ac925ecdac463c45 NATIVE_RUNTIME_CONTRACT_SHA=a2cbfcffe491879b0732ed2c0cc7b615254ab11c4d8cbaf3614f6c3361fd99e6 FP_RUNTIME_CONTRACT_SHA=09bd5cc3ee9cc1aeb6c60a2230f738757a3f26ec8f1a2e7a8529cf2df01e2aca RS006_CONTRACT_SHA=dd23dd4b14ece8428a80d7229cdd4bb3224c583ed720c4b8e8535cc5d1d8977e FP_CLOSURE_CONTRACT_SHA=7b8fcdb55fc1f3c990b9ebad971b1397fbd4bc5590754fa5b251be50200a78dc '
+                  'IHK_SHA=3114d9e7101ad52030eb3effa849a5c108972a1f IMAGE_OWNER_SHA=5e434fa0c6b3654bff6d6a6a3cb1136ed68f50599525336942c6d1d6ff7cfa5e RUNTIME_CHECKER_SHA=c6a971686b872eabe0835f64e4585e83b732b32672cfee06ac925ecdac463c45 NATIVE_RUNTIME_CONTRACT_SHA=a2cbfcffe491879b0732ed2c0cc7b615254ab11c4d8cbaf3614f6c3361fd99e6 FP_RUNTIME_CONTRACT_SHA=09bd5cc3ee9cc1aeb6c60a2230f738757a3f26ec8f1a2e7a8529cf2df01e2aca RS006_CONTRACT_SHA=dd23dd4b14ece8428a80d7229cdd4bb3224c583ed720c4b8e8535cc5d1d8977e FP_CLOSURE_CONTRACT_SHA=7b8fcdb55fc1f3c990b9ebad971b1397fbd4bc5590754fa5b251be50200a78dc '
                   'RELEASE_REF=refs/remotes/origin/released\n'
                   'GIT_ENV=(/usr/bin/git)\n')
         return ['/bin/bash', '-c', prefix + section,
@@ -276,21 +276,21 @@ class PacketAdmission(unittest.TestCase):
         self.assertIn('PREPARATION_WRAPPER_SHA:?', self.text)
         released = self.text.replace('${PREPARATION_CANDIDATE_SHA:?frozen candidate commit required}', 'b' * 40).replace('${PREPARATION_RELEASE_COMMIT:?independently reviewed fetched release commit required}', 'c' * 40).replace('${PREPARATION_WRAPPER_SHA:?frozen wrapper hash required}', 'd' * 64)
         self.assertNotIn('${PREPARATION_', released)
-        self.assertIn('exportset-14.json', released)
+        self.assertIn('exportset-15.json', released)
 
     def test_shell_syntax(self):
         subprocess.run(['/bin/bash', '-n', str(PACKET)], check=True)
 
     def test_frozen_candidate_and_wrapper_bindings(self):
-        self.assertIn('EXPECTED_SHA=50cfef9cb8045ba391cf8bf241a13e393449c443', self.text)
-        self.assertIn('EXPECTED_WRAPPER_SHA=2e33e74c1208c7349335d2303203d0b1f79475999aeb16533f0ebccaeec94899', self.text)
-        self.assertIn('IMAGE_OWNER_SHA=08179c0c0d488f89c0863516f57a862cc0c52f2c967ccde35e6eba8c11b375c3', self.text)
+        self.assertIn('EXPECTED_SHA=acd4197b6e1f53715f75cad6e2e7677d8ab24bc0', self.text)
+        self.assertIn('EXPECTED_WRAPPER_SHA=8c3a1a75cd4ee73c80aa942677f704e8a891eb858969c1d871ebdfcf4b08ceac', self.text)
+        self.assertIn('IMAGE_OWNER_SHA=5e434fa0c6b3654bff6d6a6a3cb1136ed68f50599525336942c6d1d6ff7cfa5e', self.text)
         self.assertIn('RUNTIME_CHECKER_SHA=c6a971686b872eabe0835f64e4585e83b732b32672cfee06ac925ecdac463c45', self.text)
         self.assertIn('NATIVE_RUNTIME_CONTRACT_SHA=a2cbfcffe491879b0732ed2c0cc7b615254ab11c4d8cbaf3614f6c3361fd99e6', self.text)
         self.assertIn('FP_RUNTIME_CONTRACT_SHA=09bd5cc3ee9cc1aeb6c60a2230f738757a3f26ec8f1a2e7a8529cf2df01e2aca', self.text)
         self.assertIn('RS006_CONTRACT_SHA=dd23dd4b14ece8428a80d7229cdd4bb3224c583ed720c4b8e8535cc5d1d8977e', self.text)
         self.assertIn('FP_CLOSURE_CONTRACT_SHA=7b8fcdb55fc1f3c990b9ebad971b1397fbd4bc5590754fa5b251be50200a78dc', self.text)
-        self.assertIn('exportset-14.json', self.text)
+        self.assertIn('exportset-15.json', self.text)
         self.assertIn('scratch-11', self.text)
         self.assertLess(self.text.index('test ! -e "$EXCLUSION"'), self.text.index('preparation-clone'))
 
@@ -322,10 +322,10 @@ class PacketAdmission(unittest.TestCase):
         self.assertIn('CHECKOUT_ALLOC_BYTES', self.text[:pre])
 
     def test_retained_failure_identity_bindings(self):
-        self.assertIn('IMAGE_OWNER_SHA=08179c0c0d488f89c0863516f57a862cc0c52f2c967ccde35e6eba8c11b375c3', self.text)
+        self.assertIn('IMAGE_OWNER_SHA=5e434fa0c6b3654bff6d6a6a3cb1136ed68f50599525336942c6d1d6ff7cfa5e', self.text)
         self.assertIn('RUNTIME_CHECKER_SHA=c6a971686b872eabe0835f64e4585e83b732b32672cfee06ac925ecdac463c45', self.text)
         self.assertIn('NATIVE_RUNTIME_CONTRACT_SHA=a2cbfcffe491879b0732ed2c0cc7b615254ab11c4d8cbaf3614f6c3361fd99e6', self.text)
-        self.assertIn('EXPECTED_SHA=50cfef9cb8045ba391cf8bf241a13e393449c443', self.text)
+        self.assertIn('EXPECTED_SHA=acd4197b6e1f53715f75cad6e2e7677d8ab24bc0', self.text)
 
     def test_exclusion_namespace_matches_wrapper_and_image_owner(self):
         wrapper = (ROOT / 'scripts/native_rust_exact_disk_build_wrapper.py').read_text()
@@ -335,7 +335,7 @@ class PacketAdmission(unittest.TestCase):
         owner_path = re.search(r'COMMON_EXCLUSION\s*=\s*"[^"]*/([^/"]+\.json)"', owner)[1]
         self.assertEqual(packet_path, wrapper_path)
         self.assertEqual(packet_path, owner_path)
-        self.assertEqual(packet_path, 'native-exact-candidate-operational-exclusion-exportset-14.json')
+        self.assertEqual(packet_path, 'native-exact-candidate-operational-exclusion-exportset-15.json')
         self.assertIn('selfdigest-13', wrapper)
         self.assertIn('selfdigest-13', owner)
         self.assertNotEqual(packet_path, 'native-exact-candidate-operational-exclusion-selfdigest-13.json')
