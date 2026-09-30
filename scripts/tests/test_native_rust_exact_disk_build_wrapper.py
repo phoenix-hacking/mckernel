@@ -63,7 +63,8 @@ def request(source):
 class WrapperTests(unittest.TestCase):
     def setUp(self):
         self.lock_dir = Path(tempfile.mkdtemp(prefix="mckernel-wrapper-lock-"))
-        wrapper.OPERATIONAL_EXCLUSION_PATH = str(self.lock_dir / "operational.json")
+        wrapper.OPERATIONAL_EXCLUSION_PATH = str(
+            self.lock_dir / "native-exact-candidate-operational-exclusion-97fb67a7-3.json")
         FakeOwner.calls = FakeOwner.validations = 0
         FakeOwner.CliSignals.entered = FakeOwner.CliSignals.exited = 0
         FakeOwner.measurement = {
@@ -105,8 +106,8 @@ class WrapperTests(unittest.TestCase):
     def test_fresh_exclusion_replaces_retired_tombstone(self):
         self.assertNotEqual(wrapper.OPERATIONAL_EXCLUSION_PATH,
                             wrapper.RETIRED_OPERATIONAL_EXCLUSION_PATH)
-        self.assertTrue(wrapper.REVIEWED_OPERATIONAL_EXCLUSION_PATH.endswith(
-            "native-exact-candidate-operational-exclusion-76ae20b5-2.json"))
+        self.assertTrue(wrapper.OPERATIONAL_EXCLUSION_PATH.endswith(
+            "native-exact-candidate-operational-exclusion-97fb67a7-3.json"))
         old_request = request
         def retired_request(source):
             value = old_request(source)
@@ -125,6 +126,18 @@ class WrapperTests(unittest.TestCase):
         lock.unlink()
         result = self.invoke(request)
         self.assertEqual(result["status"], "PASS")
+
+    def test_failed_minus_two_exclusion_is_rejected(self):
+        old_request = request
+        def failed_request(source):
+            value = old_request(source)
+            value["operational_exclusion_path"] = (
+                wrapper.REVIEWED_OPERATIONAL_EXCLUSION_PATH)
+            return value
+        with self.assertRaisesRegex(wrapper.AdmissionError,
+                                    "reviewed exact path"):
+            self.invoke(failed_request)
+        self.assertEqual(FakeOwner.calls, 0)
 
     def test_existing_exclusion_fails_closed(self):
         lock = Path(wrapper.OPERATIONAL_EXCLUSION_PATH)
