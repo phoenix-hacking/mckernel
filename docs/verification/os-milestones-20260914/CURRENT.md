@@ -8951,3 +8951,26 @@ Next push/fetch this packet release, recheck the fresh targets and resources,
 then obtain independent authorization for exactly one unprivileged preparation
 run.  No current candidate artifact, boot or diagnostic application has
 passed.
+
+Continuation checkpoint 193, 2026-09-30: the exact reviewed `scratch-4`
+preparation ran once from fetched packet release
+`b9eb98fbf1e6e6819c77dd330fd165ca61108fa4` and independently passes
+postflight.  Terminal SHA is `b9d29597...c4906`, log SHA is
+`f92646eb...ad90`, and PID/starttime `156365/95002515` plus descendants are
+absent.  Candidate `e1c5e4e2...b74df` is identity `1831:4587522`; backup is
+`1831:6684674`; pinned IHK, overlay, gitlinks and assets match.  Manifest SHA
+is `217454a7...e2d` and request SHA is `afc33966...ed9`.
+
+Output identity `1831:6815746` and evidence identity `1831:7077891` are empty
+mode-0700 directories.  The fresh build lease and `offlinecwd-6` exclusion
+remain absent.  Owner accounting passes with 9,236,525,056 allocated bytes and
+zero memory-backed allocation.  Postflight scratch free is 23,906,914,304
+bytes and available memory is 30,636,957,696 bytes, preserving the reviewed
+floors.  The authorized Docker census found every McKernel container stopped
+and only two unrelated Kasper services live.
+
+Next checkpoint this preparation result, obtain an independent decision for
+exactly one build-wrapper invocation using the generated request, and execute
+no other heavy work.  Preserve all four current stopped failure containers,
+all historical exclusions and archives.  No artifact, boot or diagnostic app
+has passed.
