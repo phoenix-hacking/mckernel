@@ -8936,3 +8936,18 @@ Next freeze and push this wrapper commit, create a separately reviewed
 `scratch-4` preparation packet bound to it and the corrected offline driver,
 then run preparation and obtain a fresh exact-build release.  No artifact,
 boot or diagnostic application result exists yet.
+
+The `scratch-4` preparation packet now independently passes source review.
+Packet SHA is `63507d09...31c`, test SHA is `1b13b811...2f0e`, both current
+and prior preparation suites pass 68 tests total, and both packets pass shell
+syntax checks.  It binds frozen candidate `e1c5e4e2...b74df`, the corrected
+offline driver, reviewed wrapper, pinned IHK/overlay/assets, eleven absent
+fresh targets and only `offlinecwd-6`.  Preparation calls validation rather
+than the owner's run path, cannot acquire a lease or invoke Docker, and retains
+partial evidence on failure.  The later fetched packet release remains a
+separate required binding.
+
+Next push/fetch this packet release, recheck the fresh targets and resources,
+then obtain independent authorization for exactly one unprivileged preparation
+run.  No current candidate artifact, boot or diagnostic application has
+passed.
