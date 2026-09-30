@@ -5,6 +5,7 @@ from pathlib import Path
 
 REPO=Path('/home/holden/mckernel'); SCRATCH=Path('/home/holden/mckernel-work/scratch')
 SOURCE=SCRATCH/'native-exact-build-evidence-f021bdee-scratch-8'; SOURCE_ID='1831:6684763'
+SOURCE_DEVICE=1831
 RETAINED=Path('/home/holden/mckernel-work/retained-exact-candidates')
 ARCHIVE=RETAINED/'native-exact-build-evidence-f021bdee-scratch-8-20260930.tar.gz'
 MAP=RETAINED/'native-exact-build-evidence-f021bdee-scratch-8-20260930.map.json'
@@ -48,14 +49,25 @@ def guard():
     if not FAILURE.is_file() or digest(FAILURE) != FAILURE_SHA: die('original failure changed')
     return census()
 def snapshot():
+    def linkrow(p):
+        st=os.lstat(p); target=os.readlink(p)
+        if not target or os.path.isabs(target): die('absolute/empty symlink: '+str(p))
+        try: resolved=(p.parent/target).resolve(strict=True)
+        except OSError: die('dangling symlink: '+str(p))
+        if os.path.commonpath((str(SOURCE.resolve()),str(resolved))) != str(SOURCE.resolve()): die('escaping symlink: '+str(p))
+        return {'path':str(p.relative_to(SOURCE)),'type':'symlink','mode':stat.S_IMODE(st.st_mode),'uid':st.st_uid,'gid':st.st_gid,'mtime_ns':st.st_mtime_ns,'size':0,'linkname':target}
     rows=[]
     for d,dirs,files in os.walk(SOURCE,topdown=True,followlinks=False):
         dirs.sort(); files.sort(); ds=os.lstat(d)
-        if not stat.S_ISDIR(ds.st_mode) or ds.st_dev!=1831: die('bad directory')
+        if not stat.S_ISDIR(ds.st_mode) or ds.st_dev!=SOURCE_DEVICE: die('bad directory')
         rel='.' if Path(d)==SOURCE else str(Path(d).relative_to(SOURCE)); rows.append({'path':rel,'type':'dir','mode':stat.S_IMODE(ds.st_mode),'uid':ds.st_uid,'gid':ds.st_gid,'mtime_ns':ds.st_mtime_ns,'size':0})
+        for n in list(dirs):
+            p=Path(d)/n
+            if p.is_symlink(): dirs.remove(n); rows.append(linkrow(p))
         for n in files:
             p=Path(d)/n; st=os.lstat(p)
-            if not stat.S_ISREG(st.st_mode) or st.st_nlink!=1 or st.st_dev!=1831: die('special/link/hardlink member: '+str(p))
+            if stat.S_ISLNK(st.st_mode): rows.append(linkrow(p)); continue
+            if not stat.S_ISREG(st.st_mode) or st.st_nlink!=1 or st.st_dev!=SOURCE_DEVICE: die('special/link/hardlink member: '+str(p))
             rows.append({'path':str(p.relative_to(SOURCE)),'type':'file','mode':stat.S_IMODE(st.st_mode),'uid':st.st_uid,'gid':st.st_gid,'mtime_ns':st.st_mtime_ns,'size':st.st_size,'sha256':digest(p),'allocated_bytes':st.st_blocks*512})
     if not rows: die('empty evidence root')
     return rows
@@ -68,6 +80,7 @@ def verify(path,rows):
             for m in members:
                 r=expected[m.name]
                 if r['type']=='dir' and not m.isdir(): die('directory type mismatch')
+                if r['type']=='symlink' and (not m.issym() or m.linkname!=r['linkname']): die('symlink member mismatch')
                 if r['type']=='file' and (not m.isfile() or m.size!=r['size'] or hashlib.sha256(tf.extractfile(m).read()).hexdigest()!=r['sha256']): die('file member mismatch')
                 if (m.mode&0o7777,m.uid,m.gid)!=(r['mode'],r['uid'],r['gid']): die('member metadata mismatch')
     except (OSError,tarfile.TarError) as exc: die('archive unreadable: '+str(exc))

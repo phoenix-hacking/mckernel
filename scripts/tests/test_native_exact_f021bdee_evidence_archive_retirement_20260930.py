@@ -16,10 +16,21 @@ def test_frozen_scope_and_protection():
     assert 'ARCHIVE_PASS' in text and '--retire' in text
 
 def test_snapshot_rejects_link_special_or_hardlink(tmp_path,monkeypatch):
-    monkeypatch.setattr(M,'SOURCE',tmp_path/'evidence'); M.SOURCE.mkdir()
+    monkeypatch.setattr(M,'SOURCE',tmp_path/'evidence'); M.SOURCE.mkdir(); monkeypatch.setattr(M,'SOURCE_DEVICE',M.SOURCE.stat().st_dev)
     (M.SOURCE/'ok').write_bytes(b'ok'); os.link(M.SOURCE/'ok',M.SOURCE/'hard')
     with pytest.raises(SystemExit):
         M.snapshot()
+
+def test_safe_symlink_roundtrip_and_bad_links_rejected(tmp_path,monkeypatch):
+    monkeypatch.setattr(M,'SOURCE',tmp_path/'evidence'); M.SOURCE.mkdir(); monkeypatch.setattr(M,'SOURCE_DEVICE',M.SOURCE.stat().st_dev)
+    (M.SOURCE/'target').write_bytes(b'ok'); (M.SOURCE/'safe').symlink_to('target')
+    rows=M.snapshot(); link=next(r for r in rows if r['path']=='safe'); assert link['type']=='symlink' and link['linkname']=='target'
+    (M.SOURCE/'safe').unlink(); (M.SOURCE/'absolute').symlink_to('/etc/passwd')
+    with pytest.raises(SystemExit,match='absolute'): M.snapshot()
+    (M.SOURCE/'absolute').unlink(); (tmp_path/'outside').write_bytes(b'x'); (M.SOURCE/'escape').symlink_to('../outside')
+    with pytest.raises(SystemExit,match='escaping'): M.snapshot()
+    (M.SOURCE/'escape').unlink(); (M.SOURCE/'dangling').symlink_to('missing')
+    with pytest.raises(SystemExit,match='dangling'): M.snapshot()
 
 def test_archive_verifier_rejects_missing_or_changed_member(tmp_path):
     p=tmp_path/'x.tar.gz'; p.write_bytes(b'not an archive')
