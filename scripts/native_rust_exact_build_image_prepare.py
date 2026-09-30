@@ -57,10 +57,14 @@ for name in tools:
     data['tools'][name] = {'path':path, 'target':str(target),
         'owner':output(['rpm','-qf','--qf','%{NAME}',str(target)]),
         'rpm_nevra':output(['rpm','-qf','--qf','%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}',str(target)]),
-        'executable_version':output([str(target),'--version']),
+        # Preserve argv[0] for multicall tools such as ld.lld/lld.  The
+        # canonical target above is the identity that RPM owns and whose
+        # bytes are hashed; version output must come from the lookup spelling
+        # because some dispatchers select their mode from argv[0].
+        'executable_version':output([path,'--version']),
         # ``version`` is retained for v1 consumers; v2 admission binds the
         # unambiguous executable_version and rpm_nevra fields above.
-        'version':output([str(target),'--version']),
+        'version':output([path,'--version']),
         'sha256':hashlib.sha256(target.read_bytes()).hexdigest()}
 verified = subprocess.run(['rpm', '-V', '--noconfig', *packages], text=True,
                           stdout=subprocess.PIPE, stderr=subprocess.PIPE)

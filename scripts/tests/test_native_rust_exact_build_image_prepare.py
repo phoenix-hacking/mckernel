@@ -216,6 +216,22 @@ class PreparationTests(unittest.TestCase):
         probe['tools']['cmake']['rpm_nevra'] = probe['packages']['cmake']
         prep.validate_probe(probe, {'rust': 'rust-0:1.92.0-1.el10.x86_64'})
 
+    def test_probe_versions_preserve_lookup_argv0_for_multicall_tools(self):
+        # ld.lld is commonly a symlink to the generic lld dispatcher.  RPM
+        # ownership/hash/NEVRA must use the canonical target, while --version
+        # must execute the lookup spelling so argv[0] selects ld.lld mode.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / 'lld'
+            lookup = root / 'ld.lld'
+            target.write_text('#!/bin/sh\n')
+            lookup.symlink_to(target.name)
+            self.assertNotEqual(str(lookup), str(lookup.resolve()))
+        self.assertIn("'executable_version':output([path,'--version'])", prep.PROBE)
+        self.assertIn("'version':output([path,'--version'])", prep.PROBE)
+        self.assertNotIn("'executable_version':output([str(target),'--version'])", prep.PROBE)
+        self.assertNotIn("'version':output([str(target),'--version'])", prep.PROBE)
+
     def test_failed_probe_retired_and_preserved(self):
         fake = FakeDocker()
         fake.probe = probe_fixture()

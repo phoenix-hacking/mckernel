@@ -9944,3 +9944,28 @@ owner.  Then run it exactly once, retain actual CMake/tool observations, image
 ID, both terminal inspections and lease retirement.  Current-candidate builds
 remain six failed and one completed; real current diagnostic guest applications
 remain zero.  This release grants no image-build, guest or acceptance credit.
+
+Continuation checkpoint 226, 2026-09-30: tool-image attempt1 ran once under
+the reviewed release and failed after successful pinned DNF installation and
+cleanup.  The package transaction installed CMake `3.31.8-1.el10` and returned
+zero.  The subsequent probe called canonical `/usr/bin/lld --version`; the
+generic multicall driver returned 1 and instructed callers to use `ld.lld`.
+No image was committed and the offline probe did not start.  Receipt SHA is
+`eb295e7f...c8392`; failed stderr SHA is `7be3897d...633`; full compact evidence
+is `docs/verification/evidence/native-exact-tool-image-attempt1-failure-20260930.json`.
+
+The exact failed container `5b11e19e...97f6` is preserved exited 143, OOM false,
+PID 0 with matching owner nonce.  Its lease is absent after proven retirement;
+output/evidence identities `66306:45493667`/`66306:45494833` remain.  The one
+bounded correction preserves canonical target bytes for RPM owner, NEVRA and
+SHA checks but executes the PATH lookup spelling for version output, retaining
+argv0-sensitive `ld.lld` behavior.  Eighty-two combined tests, `py_compile` and
+diff-check pass.  Independent review grants `PASS_EXECUTION_CORRECTION` to
+fresh attempt2 paths only, bound to source/test SHAs `bbe0ee6c...c0b2` and
+`4f5befcf...c0db`.
+
+Next push and fetched-blob verify the correction, remeasure resources and run
+fresh attempt2 exactly once.  Do not reuse attempt1 paths or remove its failed
+container/evidence.  Current-candidate builds remain six failed and one
+completed; current tool-image attempts are one failed and zero completed; real
+current diagnostic guest applications remain zero.  No acceptance bar moves.
