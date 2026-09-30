@@ -9703,3 +9703,24 @@ capacity and fetched release, execute preparation only, checkpoint its exact
 manifest/request identities, and then obtain a fresh heavy-build release.
 Current-candidate builds remain five failed and zero completed; real diagnostic
 guest applications remain zero.
+
+Continuation checkpoint 217, 2026-09-30: scratch-11 preparation passes for
+candidate `acd4197b6e1f53715f75cad6e2e7677d8ab24bc0`, which carries the
+postcheck executable-temp correction and fresh exportset-15 namespace.  The
+independently reviewed packet SHA is `662c8d19...f648`; 41 focused tests pass.
+Candidate identity is `1831:4063240`.  Manifest/request SHAs are
+`241a53dd...1587` and `002b13dc...9db0`; output/evidence identities
+`1831:3933547`/`1831:3933548` are empty.  The build lease and exportset-15 are
+absent.  Preparation PID 1134304/starttime 99197642 returned 0; terminal/log
+SHAs are `d83d6f1b...fbfe` and `06070640...35a`.
+
+Post-preparation host/scratch/memory availability is
+29,277,093,888/17,855,930,368/29,295,230,976 bytes.  This clears the 16/12-GiB
+reserve and leaves about 5.85 GB beyond the scratch reserve, slightly above the
+last build's 5.17-GB output.  Next obtain a fresh independent heavy-build
+review for request `002b13dc...9db0`, remeasure immediately, and run exactly one
+build under CPUs 2-5, 12 GiB, no swap expansion, 512 PIDs and no network.  Full
+preparation result is
+`docs/verification/evidence/native-exact-candidate-preparation-scratch11-result-20260930.json`.
+Current-candidate builds remain five failed and zero completed; real diagnostic
+guest applications remain zero.
