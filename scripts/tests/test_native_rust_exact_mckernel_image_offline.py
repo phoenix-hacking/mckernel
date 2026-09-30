@@ -316,6 +316,30 @@ exit 2
             flags.write_text("C_FLAGS = -DMAP_KERNEL_START=" + expected_map + " -DKERNEL_RAM_VADDR=" + expected_ram + suffix + "\n")
             with self.subTest(suffix=suffix), self.assertRaisesRegex(driver.ImageBuildError, "flags consumer differs"):
                 driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+        valid_flags = "C_FLAGS = -DMAP_KERNEL_START=" + expected_map + " -DKERNEL_RAM_VADDR=" + expected_ram + "\n"
+        for suffix in (" -DMAP_KERNEL_START()=0", " -D MAP_KERNEL_START()=0",
+                       " -UMAP_KERNEL_START()", " -U MAP_KERNEL_START()"):
+            flags.write_text(valid_flags + suffix + "\n")
+            with self.subTest(function_like_flags=suffix), self.assertRaisesRegex(driver.ImageBuildError, "flags consumer differs"):
+                driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+        flags.write_text(valid_flags)
+        for suffix in (" -DMAP_KERNEL_START()=0", " -D MAP_KERNEL_START()=0",
+                       " -UMAP_KERNEL_START()", " -U MAP_KERNEL_START()"):
+            compile.write_text(json.dumps([{"file": "kernel/rust/native.rs",
+                                             "command": "rustc native.rs -DMAP_KERNEL_START=" + expected_map +
+                                             " -DKERNEL_RAM_VADDR=" + expected_ram + suffix}]))
+            with self.subTest(function_like_compile=suffix), self.assertRaisesRegex(driver.ImageBuildError, "compile_commands row 0 command consumer differs"):
+                driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+        for suffix in (" '-DMAP_KERNEL_START =0'", " -D 'MAP_KERNEL_START =0'"):
+            flags.write_text(valid_flags + suffix + "\n")
+            with self.subTest(malformed_whitespace_flags=suffix), self.assertRaisesRegex(driver.ImageBuildError, "flags consumer differs"):
+                driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+        flags.write_text(valid_flags)
+        compile.write_text(json.dumps([{"file": "kernel/rust/native.rs",
+                                         "command": "rustc native.rs -DMAP_KERNEL_START=" + expected_map +
+                                         " -DKERNEL_RAM_VADDR=" + expected_ram + " '-DMAP_KERNEL_START =0'"}]))
+        with self.assertRaisesRegex(driver.ImageBuildError, "compile_commands row 0 command consumer differs"):
+            driver._validate_modules_end_probe(build, tools, self.root / "evidence")
         self.readelf.write_text("#!/bin/sh\n"
             "[ \"$1\" = \"-h\" ] && { echo warning >&2; printf '%s\\n' '  Class: ELF64' \"  Data: 2's complement, little endian\" '  Type: REL (Relocatable file)' '  Machine: Advanced Micro Devices X86-64'; exit 0; }\nexit 2\n")
         self.readelf.chmod(0o755)
@@ -327,6 +351,76 @@ exit 2
         self.readelf.chmod(0o755)
         with self.assertRaisesRegex(driver.ImageBuildError, "not ELF64 little-endian x86-64"):
             driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+
+    def test_modules_end_probe_checks_each_relevant_compile_command(self):
+        self.execute()
+        tools = driver._validate_toolchain(self.toolchain)
+        build = self.root / "output/build"
+        flags = build / "kernel/CMakeFiles/mckernel.img.dir/flags.make"
+        compile = build / "compile_commands.json"
+        expected_map = "0xffff800000000000UL"
+        expected_ram = "0xffff800000000000"
+        flags.write_text("C_FLAGS = -DMAP_KERNEL_START=" + expected_map + " -DKERNEL_RAM_VADDR=" + expected_ram + "\n")
+        complete = "cc -DMAP_KERNEL_START=" + expected_map + " -DKERNEL_RAM_VADDR=" + expected_ram
+        compile.write_text(json.dumps([
+            {"file": "kernel/rust/one.rs", "command": "cc -DMAP_KERNEL_START=" + expected_map},
+            {"file": "kernel/rust/two.rs", "command": "cc -DKERNEL_RAM_VADDR=" + expected_ram},
+        ]))
+        with self.assertRaisesRegex(driver.ImageBuildError, "compile_commands row 0 command consumer differs"):
+            driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+        compile.write_text(json.dumps([
+            {"file": "kernel/rust/complete.rs", "command": complete},
+            {"file": "kernel/rust/missing.rs", "arguments": ["cc", "-D", "MAP_KERNEL_START=" + expected_map]},
+        ]))
+        with self.assertRaisesRegex(driver.ImageBuildError, "compile_commands row 1 arguments consumer differs"):
+            driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+        # A kernel source makes the row applicable even when it does not
+        # mention either macro; its omission must not classify it unrelated.
+        compile.write_text(json.dumps([{"file": "kernel/main.c", "command": "cc -c kernel/main.c"}]))
+        with self.assertRaisesRegex(driver.ImageBuildError, "compile_commands row 0 command consumer differs"):
+            driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+        # The invocation source path independently makes this row applicable,
+        # despite the non-project file field.
+        compile.write_text(json.dumps([{"file": "/opt/external/other.c", "command": "cc -c kernel/main.c"}]))
+        with self.assertRaisesRegex(driver.ImageBuildError, "compile_commands row 0 command consumer differs"):
+            driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+        compile.write_text(json.dumps([{"file": "/opt/external/other.c", "command": "cc -Wall"}]))
+        with self.assertRaisesRegex(driver.ImageBuildError, "compile_commands consumer differs"):
+            driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+        # Both supplied encodings of an applicable row must independently be
+        # complete, in either direction; neither may be empty.
+        compile.write_text(json.dumps([{
+            "file": "kernel/main.c", "command": complete,
+            "arguments": ["cc", "-c", "kernel/main.c"],
+        }]))
+        with self.assertRaisesRegex(driver.ImageBuildError, "compile_commands row 0 arguments consumer differs"):
+            driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+        compile.write_text(json.dumps([{
+            "file": "kernel/main.c", "command": "cc -c kernel/main.c",
+            "arguments": ["cc", "-D", "MAP_KERNEL_START=" + expected_map,
+                          "-D", "KERNEL_RAM_VADDR=" + expected_ram],
+        }]))
+        with self.assertRaisesRegex(driver.ImageBuildError, "compile_commands row 0 command consumer differs"):
+            driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+        compile.write_text(json.dumps([{
+            "file": "kernel/main.c", "command": complete, "arguments": [],
+        }]))
+        with self.assertRaisesRegex(driver.ImageBuildError, "arguments empty"):
+            driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+        compile.write_text(json.dumps([{
+            "file": "kernel/main.c", "command": "",
+            "arguments": ["cc", "-D", "MAP_KERNEL_START=" + expected_map,
+                          "-D", "KERNEL_RAM_VADDR=" + expected_ram],
+        }]))
+        with self.assertRaisesRegex(driver.ImageBuildError, "command empty"):
+            driver._validate_modules_end_probe(build, tools, self.root / "evidence")
+        # A complete protected command and an obviously external database row
+        # are both accepted; only applicable kernel rows carry this invariant.
+        compile.write_text(json.dumps([
+            {"file": "kernel/rust/complete.rs", "command": complete},
+            {"file": "/opt/external/other.c", "arguments": ["cc", "-Wall", "-c", "/opt/external/other.c"]},
+        ]))
+        driver._validate_modules_end_probe(build, tools, self.root / "evidence")
 
     def test_v2_image_tool_preserves_lookup_argv0(self):
         host = self._write_v2_toolchain()

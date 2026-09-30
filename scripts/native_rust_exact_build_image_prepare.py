@@ -17,7 +17,7 @@ from native_rust_exact_build_container_owner import (
 )
 
 BASE_IMAGE = 'rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176'
-PACKAGES = tuple('bc binutils binutils-devel bison bindgen-cli bpftool cargo clang cmake coreutils cpio diffutils dwarves elfutils-libelf-devel findutils flex gcc git-core gzip hostname kernel-rpm-macros kmod lld llvm make ncurses-devel numactl-devel numactl-libs openssl openssl-devel patch perl python3 python3-devel python3-pyyaml redhat-rpm-config rpm-build rust rust-src rustfmt systemd-devel systemd-libs tar which xz zstd'.split())
+PACKAGES = tuple('bc binutils binutils-devel bison bindgen-cli bpftool cargo clang cmake coreutils-single cpio diffutils dwarves elfutils-libelf-devel findutils flex gcc git-core gzip hostname kernel-rpm-macros kmod lld llvm make ncurses-devel numactl-devel numactl-libs openssl openssl-devel patch perl python3 python3-devel python3-pyyaml redhat-rpm-config rpm-build rust rust-src rustfmt systemd-devel systemd-libs tar which xz zstd'.split())
 EXPECTED_RUST = 'rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)'
 # RPM's gpg-pubkey pseudo-packages report ``(none)`` as their architecture.
 # Keep this exception bounded to the architecture field of a full inventory
@@ -36,7 +36,7 @@ TOOLS = {'rustc': 'rust', 'clang': 'clang', 'ld.lld': 'lld', 'bindgen': 'bindgen
          'make': 'make', 'ld': 'binutils', 'objcopy': 'binutils', 'ar': 'binutils',
          'ranlib': 'binutils', 'git': 'git-core', 'openssl': 'openssl',
          'kmod': 'kmod', 'python3': 'python3', 'rpm': 'rpm', 'tar': 'tar',
-         'patch': 'patch', 'cpio': 'cpio', 'dd': 'coreutils'}
+         'patch': 'patch', 'cpio': 'cpio', 'dd': 'coreutils-single'}
 # These are the development/linker artifacts CMake resolves in this project.
 # The record binds the lookup spelling, resolved target, bytes and RPM owner
 # for each artifact, as well as the public headers needed by the consumers.

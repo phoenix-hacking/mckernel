@@ -948,13 +948,16 @@ def _validate_modules_end_probe(build, toolchain, evidence):
     linker_text = linker.read_text(encoding="utf-8", errors="strict")
     _fail(re.search(r"^\s*\.\s*=\s*" + re.escape(value_hex) + r"\s*\+\s*0x1000;\s*$", linker_text, re.M) is not None,
           "MODULES_END probe linker consumer differs")
-    def definitions(text, label):
-        try:
-            tokens = shlex.split(text)
-        except ValueError as exc:
-            raise ImageBuildError("MODULES_END probe " + label + " compiler tokens malformed") from exc
+    def definitions(tokens, label, require_definitions=True):
+        """Validate protected macro options in one compiler invocation.
+
+        ``compile_commands.json`` is a database of independent invocations.
+        In particular, its rows must never be combined: doing so could make
+        two individually incomplete invocations look complete.
+        """
         expected = {"MAP_KERNEL_START": value_hex + "UL", "KERNEL_RAM_VADDR": value_hex}
         found = {name: [] for name in expected}
+        relevant = False
         index = 0
         while index < len(tokens):
             token = tokens[index]
@@ -969,22 +972,82 @@ def _validate_modules_end_probe(build, toolchain, evidence):
                 index += 1
                 continue
             macro = argument.split("=", 1)[0]
-            if macro not in expected:
+            protected = next((name for name in expected
+                              if macro == name or macro.startswith(name + "(") or
+                              (macro.startswith(name) and
+                               (any(character.isspace() for character in macro[len(name):]) or
+                                not re.match(r"^[A-Za-z0-9_]*$", macro[len(name):])))), None)
+            if protected is None:
                 continue
-            _fail(kind == "-D" and "=" in argument and argument.split("=", 1)[1] == expected[macro],
+            relevant = True
+            # A function-like spelling is a distinct macro from the protected
+            # object-like macro, and can shadow or evade the value check.
+            _fail(macro == protected, "MODULES_END probe " + label + " consumer differs")
+            _fail(kind == "-D" and "=" in argument and
+                  argument.split("=", 1)[1] == expected[protected],
                   "MODULES_END probe " + label + " consumer differs")
-            found[macro].append(argument.split("=", 1)[1])
-        _fail(all(found[name] and set(found[name]) == {expected[name]} for name in expected),
-              "MODULES_END probe " + label + " consumer differs")
-        return found
+            found[protected].append(argument.split("=", 1)[1])
+        if require_definitions:
+            _fail(all(found[name] and set(found[name]) == {expected[name]} for name in expected),
+                  "MODULES_END probe " + label + " consumer differs")
+        return relevant
+
+    def text_tokens(text, label):
+        try:
+            return shlex.split(text)
+        except ValueError as exc:
+            raise ImageBuildError("MODULES_END probe " + label + " compiler tokens malformed") from exc
+
+    def text_definitions(text, label, require_definitions=True):
+        return definitions(text_tokens(text, label), label, require_definitions)
+
+    source_suffixes = (".c", ".cc", ".cpp", ".cxx", ".s", ".S", ".rs")
+
+    def kernel_source_path(path):
+        normalized = path.replace("\\", "/")
+        return (normalized.startswith("kernel/") or "/kernel/" in normalized) and \
+            normalized.endswith(source_suffixes)
+
+    def invocation_has_kernel_source(tokens):
+        return any(not token.startswith("-") and kernel_source_path(token) for token in tokens)
+
     flags_text = flags.read_text(encoding="utf-8", errors="strict")
     compile = _json(compile_commands, "MODULES_END probe compile_commands")
     _fail(isinstance(compile, list), "MODULES_END probe compile_commands malformed")
-    compile_text = "\n".join(str(row.get("command", "")) + " " + " ".join(row.get("arguments", []))
-                             for row in compile if isinstance(row, dict) and
-                             isinstance(row.get("arguments", []), list))
-    for text, label in ((flags_text, "flags"), (compile_text, "compile_commands")):
-        definitions(text, label)
+    text_definitions(flags_text, "flags")
+    applicable_rows = 0
+    for row_index, row in enumerate(compile):
+        _fail(isinstance(row, dict), "MODULES_END probe compile_commands malformed")
+        source = row.get("file")
+        command = row.get("command")
+        arguments = row.get("arguments")
+        _fail(isinstance(source, str) and source.strip(),
+              "MODULES_END probe compile_commands malformed")
+        _fail(command is None or isinstance(command, str),
+              "MODULES_END probe compile_commands malformed")
+        _fail(arguments is None or (isinstance(arguments, list) and
+                                    all(isinstance(argument, str) for argument in arguments)),
+              "MODULES_END probe compile_commands malformed")
+        _fail(command is not None or arguments is not None,
+              "MODULES_END probe compile_commands malformed")
+        command_tokens = text_tokens(command, "compile_commands row %d command" % row_index) \
+            if command is not None else None
+        applicable = kernel_source_path(source) or \
+            (command_tokens is not None and invocation_has_kernel_source(command_tokens)) or \
+            (arguments is not None and invocation_has_kernel_source(arguments))
+        if not applicable:
+            continue
+        applicable_rows += 1
+        # A relevant row may provide one or both standardized encodings.  The
+        # row source/invocation makes applicability independent of macro text;
+        # every supplied encoding must therefore contain both exact macros.
+        if command is not None:
+            _fail(command_tokens, "MODULES_END probe compile_commands row %d command empty" % row_index)
+            definitions(command_tokens, "compile_commands row %d command" % row_index)
+        if arguments is not None:
+            _fail(arguments, "MODULES_END probe compile_commands row %d arguments empty" % row_index)
+            definitions(arguments, "compile_commands row %d arguments" % row_index)
+    _fail(applicable_rows > 0, "MODULES_END probe compile_commands consumer differs")
     observed = {"module": _artifact(module, "MODULES_END probe module"),
                 "data_offset": offset, "data_size": data["size"], "section_index": data["index"],
                 "map_kernel_start_hex": value_hex,

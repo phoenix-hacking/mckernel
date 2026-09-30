@@ -151,6 +151,22 @@ class PreparationTests(unittest.TestCase):
                          fake.probe)
         self.assertTrue((self.root / 'ev' / 'offline-inspect-terminal.json').exists())
 
+    def test_coreutils_single_package_and_dd_owner_contract(self):
+        self.assertIn('coreutils-single', prep.PACKAGES)
+        self.assertNotIn('coreutils', prep.PACKAGES)
+        self.assertEqual(prep.TOOLS['dd'], 'coreutils-single')
+
+    def test_coreutils_substitution_and_dd_owner_drift_fail_closed(self):
+        probe = probe_fixture()
+        probe['packages']['coreutils'] = probe['packages'].pop('coreutils-single')
+        with self.assertRaises(prep.PreparationError):
+            prep.validate_probe(probe, {'rust': 'rust-0:1.92.0-1.el10.x86_64'})
+
+        probe = probe_fixture()
+        probe['tools']['dd']['owner'] = 'coreutils'
+        with self.assertRaises(prep.PreparationError):
+            prep.validate_probe(probe, {'rust': 'rust-0:1.92.0-1.el10.x86_64'})
+
     def test_production_docker_uses_reviewed_sudo_client(self):
         RecordingDocker.instances.clear()
         with mock.patch.object(prep, 'Docker', RecordingDocker):

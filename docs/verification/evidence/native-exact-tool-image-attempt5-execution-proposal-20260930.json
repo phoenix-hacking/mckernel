@@ -1,0 +1,59 @@
+{
+  "schema": "mckernel.native-exact-tool-image-execution-proposal.v1",
+  "recorded_at": "2026-09-30T21:42:00-07:00",
+  "status": "PROPOSED_NOT_RELEASED",
+  "scope": "one bounded correction attempt: fresh source-free Rocky tool-image preparation followed sequentially by one offline identity probe",
+  "base_commit": "6332b77f223258ca00a36e14b72a2e8e01549885",
+  "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+  "command": [
+    "python3", "-B", "scripts/native_rust_exact_build_image_prepare.py",
+    "--candidate-sha", "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+    "--output-root", "/home/holden/mckernel-exact-image-f0a97d42-5",
+    "--evidence-root", "/home/holden/mckernel-exact-image-evidence-f0a97d42-5",
+    "--lease-path", "/home/holden/mckernel-work/scratch/native-exact-image-preparation-lease-f0a97d42-5.json",
+    "--toolchain-lock", "/home/holden/mckernel/host-kernel/rocky/toolchain-lock.json"
+  ],
+  "source_sha256": {
+    "scripts/native_rust_exact_build_image_prepare.py": "7ffa3a75a4d45f350803282eeeabce2d608377a4ccd4536bab2c4080412118ad",
+    "scripts/native_rust_exact_build_container_owner.py": "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155",
+    "host-kernel/rocky/toolchain-lock.json": "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802"
+  },
+  "correction": {
+    "previous_attempt": 4,
+    "failure_family": "Rocky minimal package closure",
+    "delta": "coreutils-single replaces conflicting coreutils and becomes the exact dd RPM owner",
+    "independent_source_result": "PASS_SOURCE_CORRECTION"
+  },
+  "fresh_paths": {
+    "output": "/home/holden/mckernel-exact-image-f0a97d42-5",
+    "evidence": "/home/holden/mckernel-exact-image-evidence-f0a97d42-5",
+    "lease": "/home/holden/mckernel-work/scratch/native-exact-image-preparation-lease-f0a97d42-5.json"
+  },
+  "limits": {
+    "cpus": "2-5", "cpu_count": 4,
+    "memory_bytes": 12884901888, "memory_swap_bytes": 12884901888,
+    "pids": 512, "preparation_network": "bridge",
+    "offline_network": "none", "offline_read_only": true,
+    "offline_user": "caller uid/gid", "offline_capabilities": "drop ALL"
+  },
+  "required_preflight": [
+    "all three attempt5 paths absent",
+    "host free at least 16 GiB and scratch free at least 12 GiB",
+    "aggregate memory budget and 4 GiB emergency headroom pass",
+    "no live heavy owner, QEMU or mcexec and all protected historical lease owners absent"
+  ],
+  "required_result": [
+    "actual coreutils-single and dd owner observation",
+    "exact package, executable and four-library closure",
+    "online and offline observations exactly equal",
+    "immutable image ID and full inspect evidence",
+    "both containers retired, lease absent and client retirement proven"
+  ],
+  "prohibitions": [
+    "never reuse attempt4 paths or rerun its proposal",
+    "no host source mounts/copies",
+    "no mckernel image build or guest",
+    "no acceptance inference"
+  ],
+  "authorization": "requires independent PASS_EXECUTION_CORRECTION for these exact bytes and command"
+}

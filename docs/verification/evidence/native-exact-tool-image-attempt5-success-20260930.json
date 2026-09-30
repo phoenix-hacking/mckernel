@@ -1,0 +1,43 @@
+{
+  "schema": "mckernel.native-exact-tool-image-success.v1",
+  "recorded_at": "2026-09-30T13:50:00-07:00",
+  "status": "PASS_RESULT",
+  "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+  "image_id": "sha256:58da6415d97b404595c6deccf0f61167876cc547918e70ad88592cf69b374346",
+  "receipt": {
+    "path": "/home/holden/mckernel-exact-image-evidence-f0a97d42-5/image-receipt.json",
+    "sha256": "329811a1acdbaf1a7e28a7e50c25bb01c021d0177f8e73986f31e5573f4445ce",
+    "status": "PASS",
+    "source_free": true,
+    "runtime_network": "none",
+    "retired": true
+  },
+  "observations": {
+    "online_sha256": "f3b88a584cb18c2087a74270b6d3fe0fa0a265c8aed92ae72d581d0e6ab9cbc0",
+    "offline_sha256": "f3b88a584cb18c2087a74270b6d3fe0fa0a265c8aed92ae72d581d0e6ab9cbc0",
+    "exactly_equal": true,
+    "packages": 46,
+    "tools": 22,
+    "libraries": 4,
+    "rpm_inventory_entries": 479,
+    "coreutils_single_nevra": "coreutils-single-0:9.5-8.el10_2.1.x86_64",
+    "dd_sha256": "afc84e0b7f78721d72cc70e5207c0a948889401b1ae985f88fe5557010898d16"
+  },
+  "source_sha256": {
+    "scripts/native_rust_exact_build_image_prepare.py": "7ffa3a75a4d45f350803282eeeabce2d608377a4ccd4536bab2c4080412118ad",
+    "scripts/native_rust_exact_build_container_owner.py": "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155"
+  },
+  "reviews": {
+    "source_correction": "PASS_SOURCE_CORRECTION",
+    "execution": "PASS_EXECUTION_CORRECTION",
+    "result": "PASS_RESULT_ATTEMPT5; all 92 receipt-listed evidence members verified"
+  },
+  "terminal": {
+    "online_inspect_sha256": "a6ac347c5a5cf1a95a9f0b82aac89c73d2e87be52ca4ddd481396e2921598b2f",
+    "offline_inspect_sha256": "94ca111cfe27ca37072ec5cab0c95a4ef0080a981ccaf560e00c643ba82718ff",
+    "both": "exited, PID 0, exit 143, OOM false",
+    "lease_absent": true,
+    "matching_containers_removed": true
+  },
+  "acceptance": "This accepts only the exact source-free tool image and its offline identity observations. It proves no McKernel build, guest, application, platform or OS acceptance."
+}

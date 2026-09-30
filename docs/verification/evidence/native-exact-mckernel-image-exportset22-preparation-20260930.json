@@ -1,0 +1,45 @@
+{
+  "schema": "mckernel.native-exact-mckernel-image-packet-preparation.v1",
+  "recorded_at": "2026-09-30T14:02:55-07:00",
+  "status": "PASS_PACKET_AND_EXECUTION_RELEASE",
+  "candidate_sha": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+  "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "image_id": "sha256:58da6415d97b404595c6deccf0f61167876cc547918e70ad88592cf69b374346",
+  "packet": {
+    "inputs": {"path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-prepare-inputs-4e99a82c-exportset-22.json", "sha256": "d2517eb9de0b749be09884f4b38d4f387ff671c07b40fee7297765af524521e3", "size": 14751},
+    "toolchain": {"path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-toolchain-4e99a82c-exportset-22.json", "sha256": "6f6530725a135bafb736bd73e82a8943b770e1337ad371a9fb0d98756e06a26d", "size": 80770489},
+    "request": {"path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-4e99a82c-exportset-22.json", "sha256": "7a9c1c525c03e0329e43cec140dbc20784c4a6be8042cc82583a0f237c7b4c60", "size": 43891119}
+  },
+  "source_sha256": {
+    "scripts/native_rust_exact_build_image_prepare.py": "7ffa3a75a4d45f350803282eeeabce2d608377a4ccd4536bab2c4080412118ad",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "7de99b722212564307e86b065386a7efba47e1771cc67f821966eac55e0c6637",
+    "scripts/native_rust_exact_mckernel_image_request_prepare.py": "7acda323de2a3c9f0ebee22f0b2bd3f3188320a69bea63cc42c428ecd8204ae2",
+    "scripts/native_rust_exact_mckernel_image_offline.py": "417175f7c42f3f2baf19b9aa432c4eb80dcc85ce301029936f999dafafbde3dc"
+  },
+  "roots": {
+    "work": {"path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-4e99a82c-exportset-22", "identity": "1831:1720079", "mode": "0700", "empty": true},
+    "owner_evidence": {"path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-owner-evidence-4e99a82c-exportset-22", "identity": "1831:1720080", "mode": "0700", "empty": true},
+    "lease_absent": true,
+    "exclusion_absent": true
+  },
+  "admission": {
+    "jobs": 4,
+    "timeout_seconds": 19800,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "profile": "CPUs2-5, 12GiB/no swap expansion, 512 PIDs, network none, read-only root, caller uid/gid, cap-drop ALL"
+  },
+  "reviews": {
+    "source": "PASS_SOURCE_FINAL plus PASS_SOURCE_REBIND and PASS_SOURCE_NAMESPACE",
+    "packet": "PASS_PACKET after confirming the active exclusion must be absent before atomic O_EXCL acquisition",
+    "execution": "PASS_EXECUTION_EXPORTSET22 for exactly one serialized owner invocation"
+  },
+  "history": {
+    "exportset19": "rejected stale driver release hash before publication",
+    "exportset20": "rejected host disk floor before publication",
+    "exportset21": "rejected stale active exclusion namespace before publication",
+    "retired_names": "exportsets 18 through 21; never reuse"
+  },
+  "next": "Checkpoint/fetch these exact source bytes, remeasure capacity, then run at most one serialized image build.",
+  "acceptance": "Packet preparation is not an execution release or build/application/OS acceptance."
+}

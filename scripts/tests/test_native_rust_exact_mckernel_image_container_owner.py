@@ -192,10 +192,16 @@ class OwnerTests(unittest.TestCase):
         owner.COMMON_EXCLUSION = str(self.common)
 
     def test_current_exportset_namespace_retires_selfdigest(self):
-        current = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-18.json"
+        current = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-22.json"
+        retired_exportsets = [
+            "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-18.json",
+            "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-19.json",
+            "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-20.json",
+            "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-21.json",
+        ]
         retired_selfdigest = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-selfdigest-13.json"
         retired = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-runtimeblob-12.json"
-        self.assertTrue(current.endswith("exportset-18.json"))
+        self.assertTrue(current.endswith("exportset-22.json"))
         self.assertIn(
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-17.json",
             owner.RETIRED_COMMON_EXCLUSIONS,
@@ -205,6 +211,8 @@ class OwnerTests(unittest.TestCase):
             owner.RETIRED_COMMON_EXCLUSIONS,
         )
         self.assertNotIn(current, owner.RETIRED_COMMON_EXCLUSIONS)
+        for retired_exportset in retired_exportsets:
+            self.assertIn(retired_exportset, owner.RETIRED_COMMON_EXCLUSIONS)
         self.assertIn(retired_selfdigest, owner.RETIRED_COMMON_EXCLUSIONS)
         self.assertIn(retired, owner.RETIRED_COMMON_EXCLUSIONS)
         self.assertIn(
@@ -581,13 +589,17 @@ class OwnerTests(unittest.TestCase):
                                                         "/nightly": self.root / "v2-nightly"})
 
     def test_consumed_exclusions_are_rejected(self):
-        request = self.request()
         saved = owner.COMMON_EXCLUSION
         try:
-            owner.COMMON_EXCLUSION = next(iter(owner.RETIRED_COMMON_EXCLUSIONS))
-            request["common_exclusion_path"] = owner.COMMON_EXCLUSION
-            with self.assertRaisesRegex(owner.OwnerError, "common exclusion"):
-                owner.ImageOwner(request).validate()
+            for suffix in ("18", "19", "20", "21"):
+                request = self.request()
+                owner.COMMON_EXCLUSION = (
+                    "/home/holden/mckernel-work/scratch/"
+                    f"native-exact-candidate-operational-exclusion-exportset-{suffix}.json"
+                )
+                request["common_exclusion_path"] = owner.COMMON_EXCLUSION
+                with self.assertRaisesRegex(owner.OwnerError, "common exclusion"):
+                    owner.ImageOwner(request).validate()
         finally:
             owner.COMMON_EXCLUSION = saved
 

@@ -10289,3 +10289,77 @@ mcexec is live.  Launcher wrapper/launcher/worker/server identities remain
 left untouched for the launcher-controlled pause.  Host/scratch free bytes are
 19,196,985,344/15,243,829,248 and MemAvailable is 29,881,408 KiB.  The OS goal
 remains incomplete and is not resumed or completed by this checkpoint.
+
+Continuation checkpoint 236, 2026-09-30: the current-image configure repair is
+now independently `PASS_SOURCE_FINAL`.  Expert correction closes every reported
+protected-macro bypass: function-like and malformed spellings, complementary
+rows, missing definitions, dual representation inconsistencies, empty/malformed
+rows and absent native-kernel consumers all reject.  The complete four-suite
+coordinator run passes 108 tests.  Final driver SHA is `417175f7...de3dc`;
+owner `7de99b72...0c6637` pins it, advances the sole active namespace to
+exportset-22 and rejects retired exportsets 18 through 21.  Owner/request tests
+pass 53/53 and both the driver and namespace bindings have independent source
+PASS decisions.  This remains source evidence, not runtime acceptance.
+
+The first fresh tool-image run, attempt4, failed safely during networked package
+installation: Rocky's minimal base already contains `coreutils-single`, and the
+requested full `coreutils` conflicted.  Its exact DNF streams/status and receipt
+are retained in
+`docs/verification/evidence/native-exact-tool-image-attempt4-failure-20260930.json`.
+Container `506c390e...79d5` is exited/PID0/OOMfalse and retained; its lease is
+absent.  The one bounded correction authenticates `coreutils-single` as the
+package and `/usr/bin/dd` owner; 21 tests and independent source/execution review
+PASS.
+
+Released attempt5 then passes.  Image `sha256:58da6415...4346`, receipt
+`329811a1...445ce`, 46 packages, 22 tools, four exact library/header groups and
+479 RPM inventory entries are independently verified.  Online and offline
+observations are byte-identical at `f3b88a58...9cbc0`; both containers retired,
+were removed, and the lease is absent.  Exact result evidence is
+`docs/verification/evidence/native-exact-tool-image-attempt5-success-20260930.json`.
+This accepts only the source-free tool image.
+
+Data-only exportsets 19, 20 and 21 each failed closed before final publication,
+respectively on the stale driver pin, the 16-GiB host floor, and the stale active
+exclusion namespace.  Their fresh inputs/empty roots are retained and their
+names retired.  Exportset-22 now prepares successfully: toolchain
+`6f653072...a26d` (80,770,489 bytes), request `7a9c1c52...4c60`
+(43,891,119 bytes), work identity `1831:1720079` and owner-evidence identity
+`1831:1720080`; both roots are empty mode0700 and lease/exclusion are absent.
+The complete binding is
+`docs/verification/evidence/native-exact-mckernel-image-exportset22-preparation-20260930.json`.
+
+To restore the immutable host floor without deleting evidence, three
+unreferenced temporary repository/test copies (35,449,874 bytes) were moved from
+`/tmp` to scratch preservation root
+`/home/holden/mckernel-work/scratch/host-temp-preserved-20260930-1`.  One
+unreferenced generated export18 summary and three local test logs were removed;
+all are reproducible and no retained failure, image, container, receipt or input
+was removed.  Current pre-review host/scratch free bytes are
+17,310,855,168/15,078,977,536 and MemAvailable is 30,145,724 KiB.
+
+Next obtain exact `PASS_PACKET` and `PASS_EXECUTION_EXPORTSET22`, checkpoint and
+fetch-verify these source bytes, remeasure the narrow capacity margin, then run
+at most one serialized build.  On an authenticated `mckernel.img`, rebind the
+strict memory diagnostic (stdout `NATIVE_CORE PASS memory\n`, empty stderr,
+exit37/raw9472), followed by files, threads/futexes, signals and shutdown.  Real
+current diagnostic guest applications remain zero; no production/application
+acceptance counter moves.
+
+Independent packet rereview now returns `PASS_PACKET`: the sole initial concern
+was resolved by the owner contract itself—the active exclusion must be absent so
+`run()` can acquire it atomically with `O_CREAT|O_EXCL`; preexistence is the
+rejection case.  Independent execution review returns
+`PASS_EXECUTION_EXPORTSET22` for exactly one invocation of
+`python3 -I -B scripts/native_rust_exact_mckernel_image_container_owner.py`
+with request `7a9c1c52...4c60`.  It verifies the single heavy lease, exclusion,
+read-only input mounts, CPUs2-5/four CPUs, 12GiB/equal swap, 512 PIDs, no
+network, private IPC, caller uid/gid, cap-drop ALL, no-new-privileges,
+read-only root, sole writable `/work`, bounded `/tmp`, timeout, capture and
+terminal retirement paths.  No reviewer ran Docker or a build.
+
+This exact source/packet checkpoint must be committed, pushed and fetched before
+the released invocation.  Immediately before it, recheck the 16-GiB host and
+12-GiB scratch floors: the last independent host observation was only
+128,393,216 bytes above its floor.  Any admission failure is preserved and not
+bypassed.  No guest may overlap the build.

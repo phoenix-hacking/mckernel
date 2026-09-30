@@ -1,0 +1,43 @@
+{
+  "schema": "mckernel.native-exact-tool-image-failure.v1",
+  "recorded_at": "2026-09-30T21:41:00-07:00",
+  "status": "FAIL_PREPARATION_RETIRED",
+  "proposal_sha256": "b09b287e7aeffe9793c3978793280e26909fcd553ada243d61a609e9b50710d0",
+  "receipt": {
+    "path": "/home/holden/mckernel-exact-image-evidence-f0a97d42-4/image-receipt.json",
+    "sha256": "2aea79ce0ec8ee4d86d15a7d292b37397d621c9c21b7922ede021e7f9201d08d",
+    "error": "docker command failed: exec",
+    "source_free": false
+  },
+  "failure": {
+    "phase": "networked package installation",
+    "command_status_sha256": "9a808f4f181837da7c64fdf5d2bb6bc8609978834ef0e34aabc59f7bb7ba912d",
+    "stdout_sha256": "3b5b8685fc8d612fe8e71caaa20f184e004f62fa9ad9048867512a66f7a6753c",
+    "stderr_sha256": "cdaabc0896691b9fd083a5d00acc79e13f2c56fa9a4371b27863c622c049159a",
+    "exit_code": 1,
+    "cause": "Rocky minimal base has coreutils-single; requesting full coreutils conflicts with that installed package"
+  },
+  "owner": {
+    "pid": 1785776,
+    "starttime": "101062301",
+    "container_name": "mckernel-tools-02f371cc05d04b9693cb9c40e6680c18",
+    "container_id": "506c390e6a25ff81ba4adb824e8081a297642c3a88ae8eb65b22d4d2e55e79d5",
+    "nonce": "1f9ce2271f8f4b91919e9d9e5009148e",
+    "terminal": "exited, PID 0, exit 143, OOM false",
+    "lease_absent": true,
+    "failed_container_retained": true
+  },
+  "roots": {
+    "output": {"path": "/home/holden/mckernel-exact-image-f0a97d42-4", "identity": "66306:45495734"},
+    "evidence": {"path": "/home/holden/mckernel-exact-image-evidence-f0a97d42-4", "identity": "66306:45495735"}
+  },
+  "bounded_correction": {
+    "description": "request and authenticate coreutils-single and bind dd to that exact RPM owner",
+    "source_sha256": "7ffa3a75a4d45f350803282eeeabce2d608377a4ccd4536bab2c4080412118ad",
+    "test_sha256": "95c9e6da810bee4a75a92a2ca538089b98c208d7353547a7344c5842c9b25cf3",
+    "focused_tests": "PASS 21/21",
+    "independent_review": "PASS_SOURCE_CORRECTION",
+    "runtime": "not yet executed"
+  },
+  "acceptance": "No tool image, McKernel build, guest, application or production acceptance follows from this retained failure."
+}
