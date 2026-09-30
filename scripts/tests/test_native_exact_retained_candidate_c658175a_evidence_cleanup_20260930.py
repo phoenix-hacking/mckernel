@@ -1,4 +1,5 @@
 import importlib.util
+import os
 from pathlib import Path
 import tempfile
 import pytest
@@ -46,3 +47,43 @@ def test_safety_census_is_read_only_commands():
     assert 'os.replace' not in text
     assert 'os.link(tmp,path)' in text
     assert 'os.fsync(d)' in text
+
+def good_census():
+    return {"open_processes":{"returncode":1,"output":"","stderr":""},
+            "mount_device":{"returncode":0,"output":"SOURCE FSTYPE MAJ:MIN TARGET\n/dev/nvme0n1p2 ext4 259:2 /\n","stderr":""},
+            "docker_all":{"returncode":0,"output":"","stderr":""},"lease_exclusion_paths":[]}
+
+@pytest.mark.parametrize("field,value", [
+    ("open_processes", {"returncode":2,"output":"","stderr":"permission denied"}),
+    ("mount_device", {"returncode":0,"output":"SOURCE FSTYPE MAJ:MIN TARGET\n/dev/other ext4 1:2 /\n","stderr":""}),
+    ("docker_all", {"returncode":1,"output":"","stderr":"permission denied"}),
+])
+def test_each_safety_census_failure_blocks(field,value):
+    c=good_census(); c[field]=value
+    with pytest.raises(SystemExit): M.validate_census(c)
+
+def self_starttime():
+    text=Path('/proc/self/stat').read_text()
+    return text.rsplit(')',1)[1].split()[19]
+
+def test_relevant_running_container_rejected():
+    c=good_census(); c['docker_all']['output']='{"Names":"mckernel-exact-fixture","State":"running","Mounts":"/home/holden/mckernel-work/scratch/x"}\n'
+    with pytest.raises(SystemExit,match='running container'): M.validate_census(c)
+
+def test_active_nonprotected_owner_rejected(tmp_path):
+    c=good_census(); p=tmp_path/'lease.json'; p.write_text('{}')
+    c['lease_exclusion_paths']=[{"path":str(p),"owner_record":{"pid":str(os.getpid()),"starttime":self_starttime()}}]
+    with pytest.raises(SystemExit,match='active owner exclusion'): M.validate_census(c)
+
+def test_nested_mount_rejected():
+    c=good_census(); c['mount_device']['output']='SOURCE FSTYPE MAJ:MIN TARGET\n/dev/nvme0n1p2 ext4 259:2 /\n/dev/loop0 ext4 7:0 /nested\n'
+    with pytest.raises(SystemExit,match='nested mount'): M.validate_census(c)
+
+def test_protected_disjoint_live_exclusion_owner_allowed(tmp_path):
+    c=good_census(); p=M.PROTECTED_LIVE_EXCLUSION
+    c['lease_exclusion_paths']=[{"path":str(p),"owner_record":{"pid":str(os.getpid()),"starttime":self_starttime()}}]
+    M.validate_census(c)
+
+def test_active_lsof_reference_rejected():
+    c=good_census(); c['open_processes']={"returncode":0,"output":"COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME\nworker 42 holden cwd DIR 1831 4096 1 /candidate\n","stderr":""}
+    with pytest.raises(SystemExit,match='lsof reported'): M.validate_census(c)

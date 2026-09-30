@@ -18,6 +18,7 @@ LIVE_CANDIDATE = LIVE_SCRATCH/"mckernel-exact-candidate-c658175a-scratch-7"
 LIVE_FAILURE = REPO/"docs/verification/evidence/native-exact-build-c658175a-scratch7-runtime-self-digest-failure-20260930.json"
 LIVE_EVIDENCE = LIVE_SCRATCH/"native-exact-build-evidence-c658175a-scratch-7-retry1"
 LIVE_OUTPUT = LIVE_SCRATCH/"native-exact-build-output-c658175a-scratch-7-retry1"
+PROTECTED_LIVE_EXCLUSION = LIVE_SCRATCH/"native-exact-candidate-operational-exclusion-runtimeblob-12.json"
 
 def die(message): raise SystemExit("FAIL_CLOSED: " + message)
 def sha(data): return hashlib.sha256(data).hexdigest()
@@ -53,21 +54,55 @@ def census(root):
     root=Path(root)
     def run(argv,timeout=15):
         try:
-            p=subprocess.run(argv,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=timeout,check=False)
-            return {"argv":argv,"returncode":p.returncode,"output":p.stdout}
+            p=subprocess.run(argv,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,timeout=timeout,check=False)
+            return {"argv":argv,"returncode":p.returncode,"output":p.stdout,"stderr":p.stderr}
         except (OSError,subprocess.TimeoutExpired) as exc:
             return {"argv":argv,"error":type(exc).__name__+":"+str(exc)}
     leases=[]
     for p in sorted(LIVE_SCRATCH.iterdir()):
         if p.is_file() and ("lease" in p.name or "operational-exclusion" in p.name):
             st=p.stat(); leases.append({"path":str(p),"dev":st.st_dev,"ino":st.st_ino,"uid":st.st_uid,"gid":st.st_gid,"mode":stat.S_IMODE(st.st_mode)})
-    return {"open_processes":run(["sudo","-A","lsof","-nP","+D",str(root)]),
+    records=[]
+    for item in leases:
+        rec=run(["sudo","-A","cat",item["path"]])
+        try: owner=json.loads(rec.get("output","")) if rec.get("returncode")==0 else None
+        except json.JSONDecodeError: owner=None
+        item["owner_record"]={k:owner.get(k) for k in ("pid","starttime","state","immutable") if owner} if owner else None
+        records.append(item)
+    result={"open_processes":run(["sudo","-A","lsof","-nP","+D",str(root)]),
             "mount_device":run(["findmnt","-T",str(root),"-o","SOURCE,FSTYPE,MAJ:MIN,TARGET"]),
-            "docker_all":run(["docker","ps","-a","--no-trunc","--format","{{json .}}"]),
-            "lease_exclusion_paths":leases,
+            "docker_all":run(["sudo","-A","docker","ps","-a","--no-trunc","--format","{{json .}}"]),
+            "lease_exclusion_paths":records,
             "lease_exclusion_listing":run(["find",str(LIVE_SCRATCH),"-maxdepth","1","-type","f","(","-name","*lease*","-o","-name","*operational-exclusion*",")","-printf","%p %D:%i %u:%g %m\\n"]),
             "lease_policy":"historical tombstones require immutable-owner policy or absent owner PID/starttime; live f021 exclusion remains untouched",
             "live_exclusion_untouched":True}
+    validate_census(result)
+    return result
+
+def validate_census(c):
+    l=c["open_processes"]
+    if l.get("returncode") not in (0,1): die("lsof census failed")
+    payload=[x for x in (l.get("output","")+"\n"+l.get("stderr","")).splitlines() if x and not x.startswith("lsof:") and not x.startswith("COMMAND")]
+    if l.get("returncode")==1 and payload: die("lsof reported open reference")
+    if l.get("returncode")==0 and payload: die("lsof reported open reference")
+    m=c["mount_device"]
+    if m.get("returncode") != 0: die("mount census failed")
+    mount_lines=[x.split() for x in m.get("output","").splitlines() if x.strip() and not x.startswith("SOURCE")]
+    if len(mount_lines)!=1 or mount_lines[0][:4] != ["/dev/nvme0n1p2","ext4","259:2","/"]: die("unexpected nested mount/device")
+    d=c["docker_all"]
+    if d.get("returncode") != 0: die("Docker census failed")
+    for line in d.get("output","").splitlines():
+        try: obj=json.loads(line)
+        except json.JSONDecodeError: die("Docker census malformed")
+        if str(obj.get("State","")).lower() in ("running","restarting") and (str(obj.get("Names","")).startswith("mckernel-exact") or "/home/holden/mckernel-work" in str(obj.get("Mounts","") )): die("relevant running container")
+    for item in c.get("lease_exclusion_paths",[]):
+        owner=item.get("owner_record") or {}; pid=owner.get("pid"); active=False
+        if pid:
+            try:
+                text=Path(f"/proc/{int(pid)}/stat").read_text(); active=text.rsplit(")",1)[1].split()[19] == str(owner.get("starttime"))
+            except (OSError,ValueError,IndexError): active=False
+        if active and Path(item["path"]).resolve() != PROTECTED_LIVE_EXCLUSION.resolve(): die("active owner exclusion")
+        if active and Path(item["path"]).resolve() == PROTECTED_LIVE_EXCLUSION.resolve(): item["protected_active_owner"]=True
 
 def blob(repo,commit,path):
     try: return subprocess.check_output(["git","-C",str(repo),"show",f"{commit}:{path}"],stderr=subprocess.STDOUT)
