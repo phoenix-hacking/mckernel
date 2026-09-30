@@ -8772,3 +8772,31 @@ request and empty output/evidence roots before seeking a new single-build
 execution decision.  Preserve both prior terminal containers, all old
 exclusions and failure archives.  Formal counters remain 6/130, 350/10000 and
 0/273 applications.
+
+Continuation checkpoint 187, 2026-09-30: the exact reviewed `scratch-2`
+preparation ran once from fetched packet release
+`42cd5b069fd201d1904c93743f71072edcc52514` and independently passes
+postflight.  Terminal SHA is `94eb7673...6201`, log SHA is
+`7e3102a7...1bc9`, PID/starttime `98932/94725417` and every descendant are
+absent, and the log ends `PASS_PREPARATION_VALIDATE_ONLY` with no live child.
+Candidate `63235981...e292` is identity `1831:6160385`; its IHK commit,
+overlay and all four gitlinks match.  Backup identity is `1831:6684673`.
+Manifest SHA is `5b158428...752f` and request SHA is
+`6fefac25...e58e`.
+
+The output and evidence roots are empty mode-0700 identities
+`1831:6815745` and `1831:6291459`.  The new build lease and `closurefix-4`
+exclusion remain absent.  Independent owner validation passes with
+9,236,455,424 total allocated bytes, zero memory-backed/tmpfs allocation and a
+12-GiB aggregate requirement under the 16.2158-GiB launcher ceiling.  Fresh
+measurements before build review show 38,061,215,744 host bytes,
+44,420,222,976 scratch bytes and 30,823,661,568 available-memory bytes; no
+build, owner, guest or mcexec process is active.  An authorized unfiltered
+Docker census confirms every McKernel container is stopped and only unrelated
+Kasper services run.
+
+Next obtain the independent decision for exactly one four-CPU pinned host build
+using this request, checkpoint this preparation result, and execute only that
+released command.  Preserve terminal containers and exclusions on every
+result.  No compile artifact or diagnostic application exists yet; formal
+counters remain unchanged.
