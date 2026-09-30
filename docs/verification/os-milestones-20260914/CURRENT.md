@@ -9230,3 +9230,23 @@ Next push/fetch this complete source-binding correction, update the reviewed
 preparation template to `lifecyclebinding-10`, and prepare a fresh candidate.
 Do not reuse either failed scratch-5 request.  The next exact build remains the
 first compiler check; no diagnostic app has run.
+
+Continuation checkpoint 203, 2026-09-30: fetched complete binding-sweep commit
+`dce800af8c19d014ef509e102ca4f4b1c473e2ab` produced a fresh candidate and
+request exactly once.  Independent postflight passes.  Terminal/log SHAs are
+`2788c195...dcd9`/`d0dac54f...c0e4`; PID `370707` and descendants are absent.
+Candidate/backup identities are `1831:5242884`/`1831:5373996`; exact Git, IHK,
+overlay and generated closure bindings match.  Manifest/request SHAs are
+`0b80c8ad...74ce`/`d0cdd1e8...b039`.
+
+Output/evidence identities `1831:5373997`/`1831:5373998` are empty mode-0700,
+and the fresh lease plus `lifecyclebinding-10` exclusion are absent.  Current
+host/scratch/memory availability is
+25,802,477,568/25,804,738,560/30,159,790,080 bytes.  This leaves about 8.62 GB
+of host headroom above reserve and 12.92 GB of scratch headroom, both exceeding
+the measured 5.58-GB prior partial build footprint.
+
+Next push/fetch this preparation checkpoint, reconcile the single heavy lease
+and obtain exact execution release for request SHA `d0cdd1e8...b039`.  Run no
+other heavy operation.  A successful run must compile past Rust E0107 before
+any image or diagnostic boot is attempted.
