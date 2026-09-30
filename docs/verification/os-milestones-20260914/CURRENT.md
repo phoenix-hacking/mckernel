@@ -10755,3 +10755,36 @@ Host/scratch free bytes are 31,006,511,104/17,102,430,208 and MemAvailable is
 bytes are committed, pushed, fetched and finally commit-bound.  Next perform
 that verification and invoke it once; do not reuse release 1.  No OS acceptance
 or diagnostic result changes.
+
+Continuation checkpoint 258, 2026-09-30: cleanup attempt 2 ran once from the
+fetched release and failed closed at `staged-admission` with
+`open-references-or-incomplete-census`.  All 2,507 plan files remain intact in
+candidate-local quarantine `.planbound-cleanup-20260930-2`; the original
+evidence directory contains zero files and no deletion was attempted.  The
+journal/receipt/status hashes are `4749ea4d...d02`/`83d22b06...3c52`/
+`b22762e6...9484a`.  Attempt 2 must not be retried or moved during shutdown.
+
+The failure is in the observer, not the protected bytes: `lsof -w +D` returned
+one while emitting only the cleanup process's exact root and quarantine
+directory descriptors and empty stderr.  Without `-w`, lsof reports unrelated
+inaccessible FUSE mounts.  Expert review requires a separate exact rename-back
+recovery release, followed by a filesystem-scoped `lsof +f --` correction with
+a pinned scratch witness, strict full-NUL parsing, canonical-path plus
+device/inode classification, no-follow validation of outside-root records and
+hard rejection of deleted, unknown, relative, escaped or aliased paths.  The
+existing mount-device/no-alias and six-container checks remain mandatory.
+
+Shutdown next tasks are therefore: independently implement and review the
+exact 2,507-file rename-back packet; execute it only from a fresh fetched
+release; then implement/test/review the observer correction and issue a new
+cleanup release.  After cleanup succeeds, trim and remeasure capacity, release
+scratch-13 preparation, build the smallest current image, and begin the
+separately labelled diagnostic startup/memory/files/threads-futex/signals/
+shutdown loop.  Exact failure evidence is
+`docs/verification/evidence/native-exact-candidate12-planbound-cleanup-attempt2-failure-20260930.json`.
+
+At shutdown, the preserved launcher identities are PIDs 1442141/1442142/
+1442145/1442149 (wrapper/launcher/worker/app-server), all started 2026-09-30
+10:46:42 PDT.  There is no build, QEMU, mcexec or guest process.  All child
+lanes are quiesced.  The OS goal remains incomplete and is paused by the
+launcher; it is neither resumed nor marked complete here.

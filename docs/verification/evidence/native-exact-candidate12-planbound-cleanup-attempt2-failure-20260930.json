@@ -1,0 +1,57 @@
+{
+  "schema": "mckernel.native-exact-candidate12.planbound-cleanup-attempt-failure.v1",
+  "recorded_at": "2026-09-30T21:14:29-07:00",
+  "result": "FAIL_CLOSED",
+  "acceptance_effect": "none",
+  "source_checkpoint": "b2a262265a4b9ca40dfba425a9ba3e3780b163b8",
+  "release": {
+    "path": "docs/verification/evidence/native-exact-candidate12-planbound-cleanup-release-20260930-2.json",
+    "sha256": "b2a601c050d560abc820f6d5a4805541c8023cdf031671e323ea8f7f01f73eec"
+  },
+  "failure": {
+    "phase": "staged-admission",
+    "error": "open-references-or-incomplete-census",
+    "interrupted": false,
+    "attempted_delete": null,
+    "state_counts": {"staged": 2507},
+    "deleted_files": 0
+  },
+  "preserved_state": {
+    "candidate_root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-4e99a82c-scratch-12",
+    "quarantine": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-4e99a82c-scratch-12/.planbound-cleanup-20260930-2",
+    "quarantine_file_count": 2507,
+    "original_evidence_file_count": 0,
+    "quarantine_stat": {"dev": 1831, "ino": 3701891, "mode": "0700", "nlink": 2},
+    "instruction": "Do not move, delete, retry, or reuse attempt 2. Restore only through a separately reviewed exact rename-back recovery release."
+  },
+  "outputs": {
+    "journal": {"path": "/home/holden/mckernel-work/scratch/native-exact-candidate12-planbound-cleanup-20260930-2.journal.jsonl", "sha256": "4749ea4d1b97bc99959c1ec75c0f329682f834d075738264a44efde33ce90d02", "size": 3238188, "dev": 1831, "ino": 90655, "mode": "0600", "nlink": 1},
+    "receipt": {"path": "/home/holden/mckernel-work/scratch/native-exact-candidate12-planbound-cleanup-20260930-2.receipt.json", "sha256": "83d22b06d9d143b3acc0508d738f6b1039184a5d2d473d314f5a1e3a65cd3c52", "size": 1399041, "dev": 1831, "ino": 90656, "mode": "0600", "nlink": 1},
+    "status": {"path": "/home/holden/mckernel-work/scratch/native-exact-candidate12-planbound-cleanup-20260930-2.status.json", "sha256": "b22762e6ef19ae31c4aad21fa2164ed9536e8d3b6b8c28e7aed886bc44d9484a", "size": 252, "dev": 1831, "ino": 90657, "mode": "0600", "nlink": 1}
+  },
+  "diagnosis": {
+    "observer": "lsof -w +D candidate-root",
+    "observed_returncode": 1,
+    "observed_stderr": "",
+    "observed_records": [
+      "PID 2141171 fd 3: quarantine directory dev 1831 ino 3701891",
+      "PID 2141171 fd 6: candidate root dev 1831 ino 3693246"
+    ],
+    "root_cause": "The +D observer returned one despite complete owned-reference output; without -w, unrelated inaccessible FUSE mounts explain lsof's incomplete-output warning.",
+    "reviewed_correction": "Use a filesystem-scoped lsof +f -- exact-scratch census with a pinned scratch witness, strict full NUL parsing, canonical path plus device/inode membership checks, no-follow validation for outside-root records, rejection of deleted/unknown/relative/escaped or aliased paths, and mandatory owned witnesses. Preserve the existing mount-device/no-alias and six-container checks."
+  },
+  "next_actions": [
+    "Author and independently review a separate exact rename-back recovery packet and execution release for all 2507 staged files.",
+    "After verified restoration, implement and regression-test the reviewed filesystem-scoped observer correction; do not retry attempt 2.",
+    "Checkpoint and fetch-verify a fresh cleanup release before any new privileged cleanup attempt.",
+    "Only after cleanup succeeds, trim and remeasure capacity, release scratch-13 preparation, and build the smallest current candidate."
+  ],
+  "active_process_identities": [
+    {"pid": 1442141, "role": "launcher tmux wrapper", "started": "2026-09-30 10:46:42 PDT"},
+    {"pid": 1442142, "role": "launcher", "started": "2026-09-30 10:46:42 PDT"},
+    {"pid": 1442145, "role": "launcher worker", "started": "2026-09-30 10:46:42 PDT"},
+    {"pid": 1442149, "role": "Codex app-server", "started": "2026-09-30 10:46:42 PDT"}
+  ],
+  "heavy_processes": {"build": 0, "qemu": 0, "mcexec": 0, "guest": 0},
+  "goal_status": "incomplete_and_paused_by_launcher_shutdown"
+}

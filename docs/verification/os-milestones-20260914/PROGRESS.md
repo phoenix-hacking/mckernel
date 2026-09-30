@@ -5,8 +5,8 @@
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-09-30T23:43:30+00:00`
-- Launcher state heartbeat: `2026-09-30T23:43:18.296281+00:00`
+- Dashboard refreshed: `2026-09-30T23:51:16+00:00`
+- Launcher state heartbeat: `2026-09-30T23:51:13.849291+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `1442145`; server PID: `1442149`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20260930T174643Z-2adefc1c`
@@ -56,6 +56,10 @@ These are separate engineering states, not a stability percentage. Existing base
 ## Current Blockers
 
 - `none`: launcher state is currently `running`.
+- Shutdown checkpoint 258 preserves 2,507 intact files in candidate-local
+  quarantine after a fail-closed observer error.  A separately reviewed exact
+  rename-back release is the next executable action; attempt 2 must not be
+  retried, moved or deleted.
 - The OS objective is not complete: source review and infrastructure packets are not substitutes for native, guest, application, language, platform or release proof.
 - The heavy build/guest lease and free-space policy must be checked immediately before every expensive run.
 - External hardware, hosted CI, and platform-specific acceptance remain later gates even when local preparation is complete.
