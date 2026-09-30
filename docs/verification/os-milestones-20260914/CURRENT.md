@@ -9172,3 +9172,27 @@ freeze and push the correction, then prepare a fresh candidate.  Never rerun
 the deterministic scratch-5 request or reuse `memorymap-relocated-8`.  Preserve
 its candidate, evidence, exclusion and stopped container until durable
 retention is independently verified.  No diagnostic app has run.
+
+Continuation checkpoint 201, 2026-09-30: the consumed scratch-5 candidate is
+now durably retained at host identity `66306:47622717`.  Before source
+retirement, a 1,433,600-byte portable failure archive with 49 safe members was
+created at SHA `e84ec295...74b3`; it retains the request, manifest,
+preparation, exclusion and complete output/evidence.  Two full checksum
+comparisons were empty, and independent relocation postflight passes.  Source
+inode `1831:5505025` is absent after atomic retirement and literal deletion;
+all failure evidence and stopped container `f64d0a94...` remain.  Relocation
+recovered 9,235,308,544 scratch bytes and trim returned 15,352,991,744 bytes.
+
+Fetched correction/release `43e9dbbddd384d4197f981ada7f7a6ecced75555`
+then produced a fresh validated candidate exactly once.  Terminal SHA is
+`5dd5ca4f...9cea`, log SHA is `34f5d96a...ec8e`, candidate identity is
+`1831:6422529`, and backup identity is `1831:6291500`.  Manifest/request SHAs
+are `09c1eaa3...ef38` and `6f6dd8f9...1409`.  Output/evidence identities
+`1831:6291501`/`1831:6291502` are empty mode-0700; the lease and fresh
+`mappingbinding-9` exclusion are absent.  Post-preparation host/scratch/memory
+availability is 35,261,022,208/25,809,145,856/30,179,463,168 bytes.
+
+Next independently verify preparation postflight, push/fetch this checkpoint,
+and obtain release for exactly one generated build request.  Preserve the
+prior phase-0 failure unchanged.  No compiled current-candidate artifact,
+image, boot, guest app or shutdown result exists yet.
