@@ -56,6 +56,15 @@ class PostflightTests(unittest.TestCase):
   self.assertNotEqual(M.IDENTITY_SHA,M.LIVE_IDENTITY_SHA)
   self.assertTrue(evidence['stable_noatime_snapshots'])
 
+ def test_prior_postflight_failure_and_fresh_namespace_are_bound(self):
+  prior=M.fixed_release_inputs()['prior_postflight']
+  self.assertEqual(prior['source_evidence']['inode'],69537)
+  self.assertEqual(prior['source_evidence']['historical_identity_sha256'],prior['source_evidence']['admission_identity_sha256'])
+  self.assertEqual(prior['archive']['size'],2375680)
+  self.assertEqual(set(prior['source_evidence']['special']),{'packet.failure','post-delete-scan-1.json','post-delete-scan-2.json'})
+  self.assertNotEqual(M.OUTPUT,M.PRIOR_DIR)
+  self.assertEqual(M.OUTPUT.name,'.mckernel-retirement-postflight-76ae20b5-2')
+
  def test_no_destructive_retry_docker_sudo_or_source_hash_override(self):
   tree=ast.parse(PACKET.read_text())
   forbidden={'retire','remove_root','unlink','rmdir','rename','rename_noreplace','docker_callback'}
@@ -136,7 +145,57 @@ class PostflightTests(unittest.TestCase):
 
  def round(self):
   row={'schema':'mckernel.post-delete-live-reference-round.v1','status':'PASS','round':1,'scan_complete':True,'observer_sha256':M.OBSERVER_SHA,'baseline_sha256':M.BASELINE_SHA,'retained_inode_count':1,'task_churn':False,'closure_nonconvergent':False,'censuses':[[[10,10,'20']],[[10,10,'20']]],'records':[{'identity':[10,10,'20'],'successful':True,'state':'same','references':[],'denials':[],'incomplete':[],'mount_proof':{'complete':True,'identity':[10,10,'20']}}]}
+  row.update(closure_passes=1,task_census_changed=False,reconciled_exits=[])
   row.update({k:[] for k in ('path_failures_before','path_failures_after','target_references','permission_denials','incomplete','identity_replacements','entry_churn','unscanned_final_identities')});return row
+
+ def changing_round(self):
+  row=self.round();a=[10,10,'20'];b=[11,11,'21'];c=[12,12,'22']
+  row['censuses']=[[a,b],[a,c],[a,c]];row['closure_passes']=2;row['task_census_changed']=True
+  row['reconciled_exits']=[{'identity':b,'resolution':'exited'}]
+  exited={'identity':b,'successful':False,'state':'exited','references':[],'denials':[],'incomplete':[],'mount_proof':None}
+  added=copy.deepcopy(row['records'][0]);added['identity']=c;added['mount_proof']['identity']=c
+  row['records'].extend([exited,added]);return row
+
+ def test_v2_exact_exit_and_scanned_addition_pass(self):
+  row=self.changing_round();M.validate_round(row,1,{(26,2)})
+  # A successful complete scan followed by exit is also reconciled.
+  row['records'][1].update(successful=True,state='same',mount_proof={'complete':True,'identity':[11,11,'21']})
+  M.validate_round(row,1,{(26,2)})
+
+ def test_real_observer_v2_records_accept_in_memory_and_serialized_identities(self):
+  a=(10,10,'20');b=(11,11,'21');c=(12,12,'22');snapshots=iter(({a,b},{a,c},{a,c}))
+  def scanner(who):
+   return {'identity':who,'successful':who!=b,'state':'exited' if who==b else 'same','references':[],'denials':[],'incomplete':[],'expected_absences':[],'mount_proof':None if who==b else {'complete':True,'identity':who}}
+  with mock.patch.object(O,'source_hash',return_value=M.OBSERVER_SHA):
+   row=O.post_delete_round(1,M.BASELINE_SHA,[],{}, {(26,2)},scanner=scanner,snapshot=lambda:next(snapshots),absence_reader=lambda:[])
+  M.validate_round(row,1,{(26,2)})
+  M.validate_round(M.decode(M.encoded(row)),1,{(26,2)})
+
+ def test_v2_rejects_unresolved_states_reuse_and_forged_diagnostics(self):
+  for case in ('reused','unknown','exit_final','exit_success','exit_reference','exit_denial','exit_incomplete','unscanned_add','replacement','reuse_census','diagnostic','exits_missing','exits_extra','entry_churn','record_entry_churn','nonconvergent','task_churn','missing_final','passes','duplicate','unknown_record'):
+   with self.subTest(case=case):
+    row=self.changing_round();record=row['records'][1]
+    if case in ('reused','unknown'):record['state']=case
+    elif case=='exit_final':row['censuses'][-1].append([11,11,'21']);row['reconciled_exits']=[]
+    elif case=='exit_success':record['successful']=True
+    elif case=='exit_reference':record['references']=[{}]
+    elif case=='exit_denial':record['denials']=[{}]
+    elif case=='exit_incomplete':record['incomplete']=[{}]
+    elif case=='unscanned_add':row['records'].pop()
+    elif case=='replacement':row['identity_replacements']=[{}]
+    elif case=='reuse_census':row['censuses'][-1][0]=[10,10,'999']
+    elif case=='diagnostic':row['task_census_changed']=False
+    elif case=='exits_missing':row['reconciled_exits']=[]
+    elif case=='exits_extra':row['reconciled_exits'].append({'identity':[99,99,'99'],'resolution':'exited'})
+    elif case=='entry_churn':row['entry_churn']=[{}]
+    elif case=='record_entry_churn':record['expected_absences']=[{'reason':'per-entry-procfs-absence'}]
+    elif case=='nonconvergent':row['closure_nonconvergent']=True
+    elif case=='task_churn':row['task_churn']=True
+    elif case=='missing_final':row['unscanned_final_identities']=[[12,12,'22']]
+    elif case=='passes':row['closure_passes']=6
+    elif case=='duplicate':row['records'].append(copy.deepcopy(record))
+    elif case=='unknown_record':record['identity']=[99,99,'99']
+    with self.assertRaises(M.Error):M.validate_round(row,1,{(26,2)})
 
  def test_every_round_rejects_refs_denials_missing_proof_and_all_churn(self):
   row=self.round();M.validate_round(row,1,{(26,2)})
@@ -186,5 +245,35 @@ class PostflightTests(unittest.TestCase):
     for name in names:
      info=tarfile.TarInfo(name);info.size=1;archive.addfile(info,io.BytesIO(b'x'))
    with self.assertRaises(M.Error):M.archive_inventory(raw.getvalue())
+
+ def test_prior_failure_inventory_exact_archive_and_stable_noatime(self):
+  with tempfile.TemporaryDirectory() as directory:
+   root=Path(directory);names=sorted(M.PRIOR_SPECIAL)
+   contents={name:b'x' for name in names};contents[names[0]]=b'y'*(2362404-2)
+   for name,data in contents.items():(root/name).write_bytes(data)
+   fd=M.open_directory(root)
+   try:rows,ids=M.source_inventory(fd);again,againids=M.source_inventory(fd)
+   finally:os.close(fd)
+   archive=io.BytesIO()
+   with tarfile.open(fileobj=archive,mode='w',format=tarfile.PAX_FORMAT) as tar:
+    for row in rows:
+     info=tarfile.TarInfo('./'+row['path']);info.uid=row['uid'];info.gid=row['gid'];info.mode=row['mode'];info.pax_headers={'mtime':str(Decimal(row['mtime_ns'])/Decimal(1000000000))}
+     if row['type']=='directory':info.type=tarfile.DIRTYPE;tar.addfile(info)
+     else:info.size=row['size'];tar.addfile(info,io.BytesIO(contents[row['path']]))
+   archived=M.archive_inventory(archive.getvalue())
+   with mock.patch.object(M,'PRIOR_COMPARABLE_SHA',M.digest(M.encoded(rows))),mock.patch.object(M,'PRIOR_IDENTITY_SHA',M.digest(M.encoded(ids))),mock.patch.object(M,'PRIOR_SPECIAL',{name:M.digest(data) for name,data in contents.items()}):
+    M.validate_prior_inventory(again,againids,archived,prior=(rows,ids))
+    for case in ('count','hash','archive','identity','snapshot'):
+     with self.subTest(case=case):
+      changed,changedids,changedarchive=copy.deepcopy((rows,ids,archived))
+      if case=='count':changed.pop()
+      elif case=='hash':changed[-1]['sha256']='0'*64
+      elif case=='archive':changedarchive[-1]['sha256']='0'*64
+      else:changedids[1][1][-1]+=1
+      if case=='snapshot':
+       with mock.patch.object(M,'PRIOR_IDENTITY_SHA',M.digest(M.encoded(changedids))):
+        with self.assertRaisesRegex(M.Error,'changed across NOATIME snapshots'):M.validate_prior_inventory(changed,changedids,changedarchive,prior=(rows,ids))
+      else:
+       with self.assertRaises(M.Error):M.validate_prior_inventory(changed,changedids,changedarchive,prior=(rows,ids))
 
 if __name__=='__main__':unittest.main()

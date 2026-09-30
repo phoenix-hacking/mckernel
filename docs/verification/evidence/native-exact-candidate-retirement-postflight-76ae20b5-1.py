@@ -25,22 +25,35 @@ SOURCE=Path('/home/holden/mckernel')
 PACKET_REL='docs/verification/evidence/native-exact-candidate-retirement-postflight-76ae20b5-1.py'
 TEST_REL='scripts/tests/test_native_exact_candidate_retirement_postflight_76ae20b5.py'
 RELEASE_REL='docs/verification/evidence/stability-native-exact-candidate-retirement-postflight-76ae20b5-1.release.json'
-RELEASE_SHA256='abeb2ec6cfb1c0fbb5153ae6e05b076a7ac687a5ed4002dead398ca388658fe0'
+RELEASE_SHA256='RELEASE_HASH_REQUIRED'
 OLD_COMMIT='99fd0558dfce14c8f53c3fb2c0253129ccb25c60'
 SUPPORT_REL='docs/verification/evidence/native-exact-candidate-retirement-76ae20b5-1.py'
 SUPPORT_SHA='91ed39cb0ce6c75172c83eb64632ceebab7f0781d1433d18fe173fa7709526e4'
 OLD_RELEASE_REL='docs/verification/evidence/stability-native-exact-candidate-retirement-76ae20b5-1.release.json'
 OLD_RELEASE_SHA='d725b00db634fe553fc2029ff5c83bf1b03630b80d062520a60a5b688f61c9ce'
-OBSERVER_COMMIT='6e5de06ac8dddf4a7e20bf5ccc8fb8ab84335450'
+OBSERVER_COMMIT='0a795fcb3e5c6527239d08e39b793543a2e86c91'
 OBSERVER_REL='docs/verification/evidence/native-exact-candidate-live-reference-observer-76ae20b5-1.py'
-OBSERVER_SHA='23936865f6125e6f9ca4be9ac49eb75a4139cc669646720d016a48d7f98edb11'
+OBSERVER_SHA='7ab91bd96a1ff768a3c5704d0cf614602969c340c15ecb54d9914f38f580c27f'
 OBSERVER_TEST_REL='scripts/tests/test_native_exact_candidate_live_reference_observer_76ae20b5.py'
-OBSERVER_TEST_SHA='d67d532b758ed22523b9662ad0e7cb31dee89cfd0411fd1208266b3936aa92d7'
+OBSERVER_TEST_SHA='fc84ad15fcfbc13114ffee6f7f25cb64d7ba7e9494ce7fa26dea8a3c8f326c1c'
 PREDECESSOR_SHA='e81b9a654be747839880585935d3428cbdf084d25eb8a5295682a8371cb2803a'
 BOOT='c733d83b-a5ae-4f91-9ce6-9f8ccf119afd'
 LAUNCHERS=((4055286,92631630),(4055294,92631636),(4055298,92631642))
 OLD_DIR=Path('/dev/shm/.mckernel-retirement-evidence-76ae20b5-1')
-OUTPUT=Path('/dev/shm/.mckernel-retirement-postflight-76ae20b5-1')
+OUTPUT=Path('/dev/shm/.mckernel-retirement-postflight-76ae20b5-2')
+PRIOR_DIR=Path('/dev/shm/.mckernel-retirement-postflight-76ae20b5-1')
+PRIOR_COMMIT='f437992b8e333696e4fc827e9921839ce28ddcf3'
+PRIOR_PACKET_SHA='d8b4baed324f160e9074fb8da93bc74ea835ec393a3121b62ba5f43931439677'
+PRIOR_RELEASE_SHA='abeb2ec6cfb1c0fbb5153ae6e05b076a7ac687a5ed4002dead398ca388658fe0'
+PRIOR_OBSERVER_SHA='23936865f6125e6f9ca4be9ac49eb75a4139cc669646720d016a48d7f98edb11'
+PRIOR_ARCHIVE=Path('/home/holden/mckernel-work/scratch/native-exact-candidate-retirement-postflight-76ae20b5-1-failed-evidence-20260930-1.tar')
+PRIOR_ARCHIVE_SHA='15309d25f692c444bca202f180490a9d03772c89055b5e912705b556e5e05fd1'
+PRIOR_ARCHIVE_BYTES=2375680
+PRIOR_COMPARABLE_SHA='2818f95e30e7a56cca7c318b7c447d01ef82fad87cf3d045c5569df215b73606'
+PRIOR_IDENTITY_SHA='38cae43e7f9e191726c6fd360f41466bbb67cffbd217763429b56935b07293c2'
+PRIOR_SPECIAL={'packet.failure':'6de91efe3d1ae8f0ac7a5a7acdc07230dff397a8e4f589891dfadaf80ba762e0',
+ 'post-delete-scan-1.json':'b03a1c47cb12eca928fcbd76ff504b73b5505cc478c79bfc3a033fb94312f98f',
+ 'post-delete-scan-2.json':'e20eb7d88f850088fe520e0349e4861d1912ecdb6952af5537670aac910e5179'}
 ARCHIVE=Path('/home/holden/mckernel-work/scratch/native-exact-candidate-retirement-76ae20b5-1-failed-evidence-20260930-1.tar')
 ARCHIVE_SHA='9ecab3772c9b8a6e3a4b0257bce3136734e0bac0becf4b79157b35bb78ce9abe'
 ARCHIVE_BYTES=10874880
@@ -187,6 +200,19 @@ def validate_original_inventory(rows,identities,archived,prior=None):
  bypath={x['path']:x for x in rows}
  for name,wanted in SPECIAL.items():require(bypath.get(name,{}).get('sha256')==wanted,'original special evidence binding')
 
+def validate_prior_inventory(rows,identities,archived,prior=None):
+ require(len(rows)==4 and len([x for x in rows if x['type']=='file'])==3 and sum(x['size'] for x in rows)==2362404,'prior postflight evidence counts')
+ require(digest(encoded(rows))==PRIOR_COMPARABLE_SHA and digest(encoded(identities))==PRIOR_IDENTITY_SHA,'prior postflight inventory binding')
+ require(rows==archived,'prior postflight archive/live mismatch')
+ if prior is not None:require((rows,identities)==prior,'prior postflight changed across NOATIME snapshots')
+ bypath={x['path']:x for x in rows}
+ for name,wanted in PRIOR_SPECIAL.items():require(bypath.get(name,{}).get('sha256')==wanted,'prior postflight special binding')
+
+def prior_release_inputs():
+ return {'commit':PRIOR_COMMIT,'packet_sha256':PRIOR_PACKET_SHA,'release_sha256':PRIOR_RELEASE_SHA,'observer_sha256':PRIOR_OBSERVER_SHA,
+  'source_evidence':{'path':str(PRIOR_DIR),'device':26,'inode':69537,'uid':0,'gid':0,'mode':0o700,'entries':4,'files':3,'bytes':2362404,'comparable_sha256':PRIOR_COMPARABLE_SHA,'historical_identity_sha256':PRIOR_IDENTITY_SHA,'admission_identity_sha256':PRIOR_IDENTITY_SHA,'stable_noatime_snapshots':True,'special':PRIOR_SPECIAL},
+  'archive':{'path':str(PRIOR_ARCHIVE),'size':PRIOR_ARCHIVE_BYTES,'sha256':PRIOR_ARCHIVE_SHA}}
+
 def validate_predecessor(baseline,old_release,observer):
  require((baseline.get('schema'),baseline.get('status'),baseline.get('scan_complete'),baseline.get('boot_id'),baseline.get('observer_sha256'),baseline.get('failure'))==('mckernel.read-only-live-reference-snapshot.v7','PASS',True,BOOT,PREDECESSOR_SHA,None),'predecessor baseline provenance')
  require(old_release.get('observer',{}).get('observer_sha256')==PREDECESSOR_SHA and old_release.get('boot_id')==BOOT,'predecessor release provenance')
@@ -212,19 +238,35 @@ def validate_round(row,number,inodes):
  require((row.get('schema'),row.get('status'),row.get('round'),row.get('scan_complete'),row.get('observer_sha256'),row.get('baseline_sha256'),row.get('retained_inode_count'))==('mckernel.post-delete-live-reference-round.v1','PASS',number,True,OBSERVER_SHA,BASELINE_SHA,len(inodes)),'postflight round binding')
  for key in ('path_failures_before','path_failures_after','target_references','permission_denials','incomplete','identity_replacements','entry_churn','unscanned_final_identities'):require(row.get(key)==[],'postflight incomplete closure')
  require(row.get('task_churn') is False and row.get('closure_nonconvergent') is False,'postflight churn')
- censuses=row.get('censuses');require(isinstance(censuses,list) and len(censuses)>=2 and all(x==censuses[0] for x in censuses),'postflight census disagreement')
- seen=set()
- for record in row.get('records',[]):
-  require(record.get('successful') is True and record.get('state')=='same' and record.get('references')==[] and record.get('denials')==[] and record.get('incomplete')==[],'postflight process scan')
-  proof=record.get('mount_proof',{});require(proof.get('complete') is True and proof.get('identity')==record.get('identity'),'postflight mount proof')
-  who=tuple(record['identity']);require(who not in seen,'duplicate postflight identity');seen.add(who)
- require(seen and seen=={tuple(x) for x in censuses[0]},'postflight census coverage')
+ censuses=row.get('censuses');passes=row.get('closure_passes')
+ require(type(passes) is int and 1<=passes<=5 and isinstance(censuses,list) and len(censuses)==passes+1,'postflight census bounds')
+ def identity(value):
+  require(isinstance(value,(list,tuple)) and len(value)==3 and all(type(x) is int and x>0 for x in value[:2]) and isinstance(value[2],str) and re.fullmatch('[0-9]+',value[2]),'postflight identity shape')
+  return tuple(value)
+ sets=[];starts={}
+ for census in censuses:
+  require(isinstance(census,list),'postflight census shape');values=[identity(x) for x in census]
+  require(len(set(values))==len(values),'duplicate census identity');sets.append(set(values))
+  for who in values:require(starts.setdefault(who[:2],who[2])==who[2],'postflight census identity reuse')
+ final=sets[-1];observed=set().union(*sets)
+ require(row.get('task_census_changed') is any(x!=sets[0] for x in sets[1:]),'postflight census diagnostic')
+ require(row.get('reconciled_exits')==[{'identity':list(who),'resolution':'exited'} for who in sorted(observed-final)],'postflight reconciled exits')
+ records=row.get('records');require(isinstance(records,list),'postflight records shape');seen=set();successful=set()
+ for record in records:
+  require(isinstance(record,dict),'postflight record shape');who=identity(record.get('identity'))
+  require(who in observed and who not in seen,'unbound or duplicate postflight identity');seen.add(who)
+  require(record.get('references')==[] and record.get('denials')==[] and record.get('incomplete')==[],'postflight process hazards')
+  absences=record.get('expected_absences',[]);require(isinstance(absences,list) and all(isinstance(x,dict) and x.get('reason')!='per-entry-procfs-absence' for x in absences),'postflight record entry churn')
+  if record.get('successful') is True and record.get('state')=='same':
+   proof=record.get('mount_proof',{});require(isinstance(proof,dict) and proof.get('complete') is True and proof.get('identity')==record.get('identity'),'postflight mount proof');successful.add(who)
+  else:require(record.get('successful') is False and record.get('state')=='exited' and who not in final,'postflight unresolved process state')
+ require(final and final<=successful,'postflight final census coverage')
 
 def final_bytes(template,release_sha):
  sentinel=b'RELEASE_SHA256='+bytes((39,))+b'RELEASE_HASH_REQUIRED'+bytes((39,));require(template.count(sentinel)==1 and H64.fullmatch(release_sha),'finalization binding')
  return template.replace(sentinel,b"RELEASE_SHA256='"+release_sha.encode()+b"'")
 def fixed_release_inputs():
- return {'old_commit':OLD_COMMIT,'support_sha256':SUPPORT_SHA,'old_release_sha256':OLD_RELEASE_SHA,'observer_commit':OBSERVER_COMMIT,'observer_sha256':OBSERVER_SHA,'observer_test_sha256':OBSERVER_TEST_SHA,'predecessor_sha256':PREDECESSOR_SHA,'boot_id':BOOT,'launcher_identities':[list(x) for x in LAUNCHERS],'source_evidence':{'path':str(OLD_DIR),'device':26,'inode':69508,'comparable_sha256':COMPARABLE_SHA,'historical_identity_sha256':IDENTITY_SHA,'admission_identity_sha256':LIVE_IDENTITY_SHA,'stable_noatime_snapshots':True,'special':SPECIAL},'archive':{'path':str(ARCHIVE),'device':1831,'inode':31513,'size':ARCHIVE_BYTES,'sha256':ARCHIVE_SHA},'locks':[{'path':str(WORK/name),'device':1831,'inode':ino,'size':size,'sha256':sha,'uid':0,'gid':0,'mode':0o600,'immutable':True} for name,ino,size,sha in LOCKS],'protected':{'disk_candidate':{'path':str(WORK/'mckernel-exact-candidate-76ae20b5-disk-1'),'device':1831,'inode':4194306},'disk_backup':{'path':str(WORK/'mckernel-exact-metadata-backup-76ae20b5-disk-1'),'device':1831,'inode':4204970},'seal':{'path':str(WORK/'native-exact-candidate-disk-validation-76ae20b5-2-evidence/corrupt-tmpfs-archive.bin'),'device':1831,'inode':4849667,'size':40004941,'sha256':'192f8fe161ee0e486b0c0532f64bc34bb0684da2b113d01d13dc4f4ba7bb1c2c'}},'resource_floors':{'host':16<<30,'scratch':12<<30,'tmpfs':4<<30,'memory':4<<30},'output':str(OUTPUT),'rounds':3,'timeout_seconds':TIMEOUT_SECONDS,'retirement':False,'deletion':False,'lock_removal':False}
+ return {'prior_postflight':prior_release_inputs(),'old_commit':OLD_COMMIT,'support_sha256':SUPPORT_SHA,'old_release_sha256':OLD_RELEASE_SHA,'observer_commit':OBSERVER_COMMIT,'observer_sha256':OBSERVER_SHA,'observer_test_sha256':OBSERVER_TEST_SHA,'predecessor_sha256':PREDECESSOR_SHA,'boot_id':BOOT,'launcher_identities':[list(x) for x in LAUNCHERS],'source_evidence':{'path':str(OLD_DIR),'device':26,'inode':69508,'comparable_sha256':COMPARABLE_SHA,'historical_identity_sha256':IDENTITY_SHA,'admission_identity_sha256':LIVE_IDENTITY_SHA,'stable_noatime_snapshots':True,'special':SPECIAL},'archive':{'path':str(ARCHIVE),'device':1831,'inode':31513,'size':ARCHIVE_BYTES,'sha256':ARCHIVE_SHA},'locks':[{'path':str(WORK/name),'device':1831,'inode':ino,'size':size,'sha256':sha,'uid':0,'gid':0,'mode':0o600,'immutable':True} for name,ino,size,sha in LOCKS],'protected':{'disk_candidate':{'path':str(WORK/'mckernel-exact-candidate-76ae20b5-disk-1'),'device':1831,'inode':4194306},'disk_backup':{'path':str(WORK/'mckernel-exact-metadata-backup-76ae20b5-disk-1'),'device':1831,'inode':4204970},'seal':{'path':str(WORK/'native-exact-candidate-disk-validation-76ae20b5-2-evidence/corrupt-tmpfs-archive.bin'),'device':1831,'inode':4849667,'size':40004941,'sha256':'192f8fe161ee0e486b0c0532f64bc34bb0684da2b113d01d13dc4f4ba7bb1c2c'}},'resource_floors':{'host':16<<30,'scratch':12<<30,'tmpfs':4<<30,'memory':4<<30},'output':str(OUTPUT),'rounds':3,'timeout_seconds':TIMEOUT_SECONDS,'retirement':False,'deletion':False,'lock_removal':False}
 
 def admit(support,release_path):
  require(Path(release_path)==SOURCE/RELEASE_REL,'canonical release argument')
@@ -237,7 +279,8 @@ def admit(support,release_path):
  require(set(r)=={'schema','status','inputs','template','finalization'} and r['schema']=='mckernel.retirement-postflight-release.v1' and r['status']=='PASS_ONE_SHOT_POSTFLIGHT' and r['inputs']==fixed_release_inputs(),'postflight release scope')
  template=r['template'];commit=template.get('commit');require(isinstance(commit,str) and re.fullmatch('[0-9a-f]{40}',commit),'template commit')
  require(r['finalization']=={'prior_ancestor':commit,'allowed_changed_paths':[PACKET_REL,RELEASE_REL]},'mechanical finalization scope')
- for ancestor in (commit,OLD_COMMIT,OBSERVER_COMMIT):require(support.run_bounded(support.gargv(support.GIT,'merge-base','--is-ancestor',ancestor,fetched))[2]==0,'source ancestry')
+ for ancestor in (commit,OLD_COMMIT,OBSERVER_COMMIT,PRIOR_COMMIT):require(support.run_bounded(support.gargv(support.GIT,'merge-base','--is-ancestor',ancestor,fetched))[2]==0,'source ancestry')
+ require(digest(support.blob(support.GIT,PRIOR_COMMIT,PACKET_REL))==PRIOR_PACKET_SHA and digest(support.blob(support.GIT,PRIOR_COMMIT,RELEASE_REL))==PRIOR_RELEASE_SHA,'prior postflight source binding')
  require(support.gout(support.GIT,'diff','--name-only',commit,fetched).decode().splitlines()==[PACKET_REL,RELEASE_REL],'nonmechanical finalization')
  raw=support.blob(support.GIT,commit,PACKET_REL);test=support.blob(support.GIT,commit,TEST_REL)
  require(digest(raw)==template.get('packet_sha256') and digest(test)==template.get('test_sha256'),'template digests')
@@ -247,7 +290,7 @@ def admit(support,release_path):
 def execute(release_path):
  require(RELEASE_SHA256!='RELEASE_HASH_REQUIRED' and H64.fullmatch(RELEASE_SHA256),'DRAFT_NOT_RELEASED')
  require(os.geteuid()==0 and os.getegid()==0,'external root boundary required')
- pins=[];modules=[];oldfd=None;output=None;publisher=None;protected=None;failure=None;completed=[];support=None
+ pins=[];modules=[];oldfd=None;priorfd=None;output=None;publisher=None;protected=None;failure=None;completed=[];support=None
  require(signal.getitimer(signal.ITIMER_REAL)==(0.0,0.0),'preexisting execution timer')
  old_signals={sig:signal.getsignal(sig) for sig in (signal.SIGINT,signal.SIGTERM,signal.SIGALRM)}
  def interrupted(signum,frame):raise Error('postflight interrupted')
@@ -269,6 +312,15 @@ def execute(release_path):
   oldfd=open_directory(OLD_DIR);oldstat=os.fstat(oldfd)
   require((oldstat.st_dev,oldstat.st_ino,oldstat.st_uid,oldstat.st_gid,stat.S_IMODE(oldstat.st_mode))==(26,69508,0,0,0o700),'original evidence directory')
   rows,identities=source_inventory(oldfd);validate_original_inventory(rows,identities,archived)
+  priorarchive=pin(PRIOR_ARCHIVE,PRIOR_ARCHIVE_SHA,PRIOR_ARCHIVE_BYTES,root_owned=True);priorarchived=archive_inventory(priorarchive.raw)
+  priorfd=open_directory(PRIOR_DIR);priorstat=os.fstat(priorfd)
+  require((priorstat.st_dev,priorstat.st_ino,priorstat.st_uid,priorstat.st_gid,stat.S_IMODE(priorstat.st_mode))==(26,69537,0,0,0o700),'prior postflight evidence directory')
+  priorrows,priorids=source_inventory(priorfd);validate_prior_inventory(priorrows,priorids,priorarchived)
+  priorfailure=decode(pin(PRIOR_DIR/'packet.failure',PRIOR_SPECIAL['packet.failure'],root_owned=True).raw)
+  require((priorfailure.get('schema'),priorfailure.get('status'),priorfailure.get('release_sha256'),priorfailure.get('round_sha256'))==('mckernel.retirement-postflight-result.v1','FAIL',PRIOR_RELEASE_SHA,[PRIOR_SPECIAL['post-delete-scan-1.json']]),'prior postflight failure provenance')
+  for number,status in ((1,'PASS'),(2,'FAIL')):
+   name='post-delete-scan-%d.json'%number;record=decode(pin(PRIOR_DIR/name,PRIOR_SPECIAL[name],root_owned=True).raw)
+   require((record.get('schema'),record.get('status'),record.get('round'),record.get('observer_sha256'),record.get('baseline_sha256'),record.get('recovery_release_sha256'))==('mckernel.post-delete-live-reference-round.v1',status,number,PRIOR_OBSERVER_SHA,BASELINE_SHA,PRIOR_RELEASE_SHA),'prior postflight round provenance')
   lockpins=[]
   for name,ino,size,sha in LOCKS:lockpins.append(pin(WORK/name,sha,size,(1831,ino),True))
   baseline_pin=pin(OLD_DIR/'observer.stdout',BASELINE_SHA,root_owned=True)
@@ -290,6 +342,8 @@ def execute(release_path):
    require(not observer.absence_failures(),'original or quarantine survived')
    require((os.lstat(OLD_DIR).st_dev,os.lstat(OLD_DIR).st_ino)==(26,69508),'original evidence replaced')
    now,ids=source_inventory(oldfd);validate_original_inventory(now,ids,archived,prior=(rows,identities))
+   require((os.lstat(PRIOR_DIR).st_dev,os.lstat(PRIOR_DIR).st_ino)==(26,69537),'prior postflight evidence replaced')
+   now,ids=source_inventory(priorfd);validate_prior_inventory(now,ids,priorarchived,prior=(priorrows,priorids))
   guard()
   parent=open_directory(OUTPUT.parent)
   try:
@@ -317,6 +371,9 @@ def execute(release_path):
  if oldfd is not None:
   try:os.close(oldfd)
   except BaseException:failure=failure or 'EvidenceCleanupError'
+ if priorfd is not None:
+  try:os.close(priorfd)
+  except BaseException:failure=failure or 'PriorEvidenceCleanupError'
  for value in reversed(pins):
   try:value.close()
   except BaseException:failure=failure or 'DescriptorCleanupError'
