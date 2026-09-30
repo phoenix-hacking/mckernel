@@ -291,6 +291,7 @@ def scan_identity(who, targets, reference, inode_ids, own_pid, allowed_fds,
         return result
     pid, tid, _ = who
     base = Path(proc_root) / str(pid) / 'task' / str(tid)
+    map_fallback_leader = None
 
     def probe(path, label):
         try:
@@ -327,14 +328,37 @@ def scan_identity(who, targets, reference, inode_ids, own_pid, allowed_fds,
             return result
     for directory in ('fd', 'map_files'):
         try:
-            with os.scandir(base / directory) as iterator:
+            scan_path = base / directory
+            try:
+                iterator = os.scandir(scan_path)
+            except FileNotFoundError:
+                if directory != 'map_files' or observed_state() != 'same':
+                    raise
+                # Linux exposes map_files in /proc/PID but commonly omits it
+                # from /proc/PID/task/TID, including the thread-group leader.
+                # Absence there is not proof of an empty address space. Scan
+                # the process-level source, bound to the leader and this TID.
+                map_fallback_leader = identity_reader(pid, pid)
+                if map_fallback_leader is None or map_fallback_leader[:2] != (pid, pid):
+                    result['incomplete'].append({'identity': who, 'field': 'map_files',
+                                                 'resolution': 'fallback-leader-unavailable'})
+                    return result
+                scan_path = Path(proc_root) / str(pid) / 'map_files'
+                result['map_files_source'] = {'path': str(scan_path),
+                                             'leader_identity': map_fallback_leader}
+                result['map_files_source']['directory_identity'] = node_identity(scan_path.stat())
+                iterator = os.scandir(scan_path)
+            with iterator:
                 for child in iterator:
                     if not probe(Path(child.path), directory + '/' + child.name):
                         return result
         except FileNotFoundError:
             if observed_state() != 'same':
                 return result
-            if safe_proc_absence(directory):
+            if directory == 'map_files' and map_fallback_leader is not None:
+                result['incomplete'].append({'identity': who, 'field': directory,
+                                             'resolution': 'process-map-files-unavailable'})
+            elif safe_proc_absence(directory):
                 result['expected_absences'].append({'identity': who, 'field': directory,
                                                      'reason': 'per-entry-procfs-absence'})
             else:
@@ -364,6 +388,34 @@ def scan_identity(who, targets, reference, inode_ids, own_pid, allowed_fds,
     if not complete:
         result['incomplete'].append({'identity': who, 'field': 'mount-proof',
                                      'resolution': 'incomplete'})
+    if map_fallback_leader is not None:
+        leader_state = identity_state(map_fallback_leader, identity_reader)
+        result['map_files_source']['leader_state_after'] = leader_state
+        if leader_state != 'same':
+            result['incomplete'].append({'identity': who, 'field': 'map_files',
+                                         'resolution': 'fallback-leader-' + leader_state})
+        try:
+            fallback_identity = node_identity(Path(result['map_files_source']['path']).stat())
+        except FileNotFoundError:
+            result['incomplete'].append({'identity': who, 'field': 'map_files',
+                                         'resolution': 'fallback-directory-disappeared'})
+        except PermissionError:
+            result['denials'].append({'identity': who, 'field': 'map_files-fallback-recheck'})
+        else:
+            if fallback_identity != result['map_files_source'].get('directory_identity'):
+                result['incomplete'].append({'identity': who, 'field': 'map_files',
+                                             'resolution': 'fallback-directory-changed'})
+        try:
+            os.stat(base / 'map_files', follow_symlinks=False)
+        except FileNotFoundError:
+            result['expected_absences'].append({'identity': who, 'field': 'map_files',
+                                                 'reason': 'stable-optional-task-map-files-absent',
+                                                 'scanned_fallback': result['map_files_source']['path']})
+        except PermissionError:
+            result['denials'].append({'identity': who, 'field': 'map_files-recheck'})
+        else:
+            result['incomplete'].append({'identity': who, 'field': 'map_files',
+                                         'resolution': 'optional-task-source-appeared'})
     state = observed_state()
     result['state'] = state
     if state == 'same' and not result['references'] and not result['denials'] and not result['incomplete']:

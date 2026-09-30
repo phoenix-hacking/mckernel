@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Unprivileged behavioral tests: temporary files and fake procfs only."""
+"""Unprivileged behavioral tests: temporary fixtures and current-process procfs."""
 import copy
+import ctypes
 import hashlib
 import importlib.util
 import json
+import mmap
 import os
 from pathlib import Path
 import signal
@@ -170,6 +172,134 @@ class FakeProcTests(unittest.TestCase):
         record = self.scan(identity_reader=lambda pid, tid: next(values))
         self.assertEqual(record['state'], 'reused')
         self.assertFalse(record['successful'])
+
+    def use_process_map_files(self):
+        path = self.proc / '300/map_files'
+        (self.base / 'map_files').rename(path)
+        return path
+
+    def fallback_scan(self, **changes):
+        args = {'identity_reader': lambda pid, tid: (pid, tid, '123')}
+        args.update(changes)
+        return self.scan(**args)
+
+    def test_stably_absent_task_map_files_scans_process_source(self):
+        path = self.use_process_map_files()
+        record = self.fallback_scan()
+        self.assertTrue(record['successful'])
+        self.assertEqual(record['field_counts']['map_files'], 1)
+        self.assertEqual(record['map_files_source']['path'], str(path))
+        self.assertEqual(record['map_files_source']['leader_state_after'], 'same')
+        self.assertEqual(record['expected_absences'][0]['reason'], 'stable-optional-task-map-files-absent')
+        result = o.post_delete_round(1, 'a' * 64, [], MOUNT, set(),
+                                     scanner=lambda who: self.fallback_scan(),
+                                     snapshot=lambda: {WHO}, absence_reader=lambda: [])
+        self.assertEqual(result['status'], 'PASS')
+        self.assertEqual(result['entry_churn'], [])
+
+    def test_fallback_mapping_reference_remains_rejected(self):
+        path = self.use_process_map_files()
+        def reader(item):
+            if item == path / '1000-2000':
+                return SimpleNamespace(st_dev=26, st_ino=58680)
+            return item.stat()
+        record = self.fallback_scan(stat_reader=reader)
+        self.assertFalse(record['successful'])
+        self.assertEqual(record['references'][0]['field'], 'map_files/1000-2000')
+
+    def test_missing_process_source_is_incomplete(self):
+        path = self.use_process_map_files()
+        (path / '1000-2000').unlink()
+        path.rmdir()
+        record = self.fallback_scan()
+        self.assertFalse(record['successful'])
+        self.assertIn('process-map-files-unavailable', [row['resolution'] for row in record['incomplete']])
+
+    def test_fallback_directory_denial_is_not_absence(self):
+        path = self.use_process_map_files()
+        original = o.os.scandir
+        def denied(item):
+            if Path(item) == path:
+                raise PermissionError('denied process map_files')
+            return original(item)
+        with mock.patch.object(o.os, 'scandir', side_effect=denied):
+            record = self.fallback_scan()
+        self.assertFalse(record['successful'])
+        self.assertEqual(record['denials'], [{'identity': WHO, 'field': 'map_files'}])
+
+    def test_fallback_leader_replacement_rejected(self):
+        self.use_process_map_files()
+        leader_calls = []
+        def identities(pid, tid):
+            if tid == pid:
+                leader_calls.append(tid)
+                return (pid, tid, '123' if len(leader_calls) == 1 else '124')
+            return WHO
+        record = self.fallback_scan(identity_reader=identities)
+        self.assertFalse(record['successful'])
+        self.assertIn('fallback-leader-reused', [row['resolution'] for row in record['incomplete']])
+
+    def test_task_source_appearance_is_not_stable_absence(self):
+        self.use_process_map_files()
+        def mounts(pid, tid):
+            (self.base / 'map_files').mkdir()
+            return [MOUNT]
+        record = self.fallback_scan(mount_reader=mounts)
+        self.assertFalse(record['successful'])
+        self.assertIn('optional-task-source-appeared', [row['resolution'] for row in record['incomplete']])
+
+    def test_fallback_directory_disappearance_is_incomplete(self):
+        path = self.use_process_map_files()
+        def mounts(pid, tid):
+            (path / '1000-2000').unlink()
+            path.rmdir()
+            return [MOUNT]
+        record = self.fallback_scan(mount_reader=mounts)
+        self.assertFalse(record['successful'])
+        self.assertIn('fallback-directory-disappeared', [row['resolution'] for row in record['incomplete']])
+
+    def test_fallback_entry_disappearance_is_churn(self):
+        path = self.use_process_map_files()
+        def reader(item):
+            if item == path / '1000-2000':
+                raise FileNotFoundError('mapping disappeared during probe')
+            return item.stat()
+        result = o.post_delete_round(1, 'a' * 64, [], MOUNT, set(),
+                                     scanner=lambda who: self.fallback_scan(stat_reader=reader),
+                                     snapshot=lambda: {WHO}, absence_reader=lambda: [])
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(result['entry_churn'][0]['field'], 'map_files/1000-2000')
+
+
+class RealProcTests(unittest.TestCase):
+    def test_current_process_mapping_is_scanned_or_denied_with_real_proc_layout(self):
+        pid = os.getpid()
+        who = o.identity(pid, pid)
+        with tempfile.TemporaryFile() as stream:
+            stream.write(b'x' * mmap.PAGESIZE)
+            stream.flush()
+            info = os.fstat(stream.fileno())
+            with mmap.mmap(stream.fileno(), mmap.PAGESIZE, access=mmap.ACCESS_WRITE) as mapping:
+                address = ctypes.addressof(ctypes.c_char.from_buffer(mapping))
+                entries = list((Path('/proc') / str(pid) / 'map_files').iterdir())
+                wanted = [entry.name for entry in entries
+                          if int(entry.name.split('-')[0], 16) <= address < int(entry.name.split('-')[1], 16)]
+                self.assertEqual(len(wanted), 1)
+                record = o.scan_identity(who, [], MOUNT, {(info.st_dev, info.st_ino)}, pid, set())
+        field = 'map_files/' + wanted[0]
+        mapping_references = [row for row in record['references'] if row['field'] == field]
+        mapping_denials = [row for row in record['denials'] if row['field'] == field]
+        # Linux may require CAP_SYS_ADMIN for following even one's own mapping
+        # links. The exact real mapping must be scanned or explicitly denied;
+        # its absence must never be mistaken for an empty optional source.
+        self.assertTrue(mapping_references or mapping_denials, record)
+        self.assertFalse(record['successful'])
+        self.assertFalse(record['incomplete'], record)
+        self.assertEqual(record['state'], 'same')
+        if not (Path('/proc') / str(pid) / 'task' / str(pid) / 'map_files').exists():
+            self.assertEqual(record['map_files_source']['path'], '/proc/%d/map_files' % pid)
+            self.assertTrue(any(row['reason'] == 'stable-optional-task-map-files-absent'
+                                for row in record['expected_absences']))
 
 
 class PostDeleteTests(unittest.TestCase):
