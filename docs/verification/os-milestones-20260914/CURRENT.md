@@ -9456,3 +9456,29 @@ image preparation and real startup/memory/files/threads/signals/shutdown
 diagnostic applications.  Current-candidate builds in this loop: three failed,
 zero completed.  Real diagnostic guest applications: zero; diagnostics remain
 separate from formal acceptance.
+
+Continuation checkpoint 209, 2026-09-30: fresh `selfdigest-13` candidate
+preparation passes for exact source `f021bdee206944fc9c68a3f1f2e0f6683a849435`.
+The reviewed scratch-8 packet protects both the host sparse-backing filesystem
+and scratch at reserve + metadata + emergency after clone and after preparation,
+without double-counting checkout bytes.  Its 40 focused tests and independent
+source/execution reviews pass at fetched release `5829a9e2`.
+
+The candidate is
+`/home/holden/mckernel-work/scratch/mckernel-exact-candidate-f021bdee-scratch-8`,
+identity `1831:5242921`, with 9,237,291,008 allocated bytes.  Manifest SHA is
+`595382ec...40af`; request SHA is `afa27486...37e9`.  Terminal/log SHAs are
+`0b6c1112...69bc`/`0d431898...c854`, with preparation PID 719558, starttime
+97695444, return 0.  Output/evidence identities `1831:6684756` and
+`1831:6684763` are empty; the build lease and `selfdigest-13` exclusion remain
+absent.  The request preserves CPUs 2-5, 12 GiB, no extra swap, no network,
+512 PIDs, and the four-job ceiling.  Post-preparation host/scratch/memory
+availability was 25,351,069,696/19,853,746,176/29,325,033,472 bytes.
+
+Independent heavy-build readiness is PASS_EXECUTION: exact candidate/IHK,
+wrapper, owner, runtime checker/contract, image receipt, manifest/request,
+empty roots, leases, process census, and unfiltered Docker state match.  Run
+only `scripts/native_rust_exact_disk_build_wrapper.py` from the prepared
+candidate with the exact scratch-8 request.  This is the single active heavy
+lease.  It must clear the preserved self-digest and objtool families before
+image preparation; no preparation result is build or runtime acceptance.
