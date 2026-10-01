@@ -13526,3 +13526,23 @@ No unchanged retry is permitted.  Next independently review and consume exact
 cleanup, then use the one bounded correction for this mountpoint family while
 preserving read-only source semantics.  Counts and acceptance bars do not
 change; the OS remains incomplete.
+
+Continuation checkpoint 341, 2026-10-01: independently released attempt-1
+cleanup PASSed and its terminal replay PASSed.  Exact container
+`482d8bdb...45c13` is absent; the active candidate/shared exclusion names and
+already-absent image lease are absent.  Original exclusion bytes remain
+archived at their original inodes 57654/57653 with unchanged hashes, and all
+failed-owner evidence remains intact.
+
+The one bounded correction created only the empty tracked libdwarf gitlink
+mountpoint at inode 3842182, mode 0755.  The tracked commit remains
+`ab9230b2...63753`, source manifest `36e2ad18...71a` is unchanged, and actual
+libdwarf bytes remain supplied by the separately authenticated read-only bind.
+Fresh attempt-2 work/evidence roots are empty at inodes 6685284/6685285; fresh
+request `27d7f21f...e969` and identical toolchain manifest
+`de4bcafc...1cf83` pass owner read-only validation.  No Docker build or heavy
+lease was started during preparation.  Next independently release and run the
+one serialized attempt-2 image build, then postlink-check its result before a
+diagnostic startup guest.  Counts remain two current compiled candidates, five
+prior diagnostic guest passes and zero formal application accepts; the OS
+remains incomplete.
