@@ -1,10 +1,10 @@
 # Native c81 memory diagnostic execution packet 1
 
 Status: **NOT_RELEASED**. This packet is a bounded proposal only. It cannot be
-executed until (1) the separately retained exportset26 container is cleaned up
-under its own reviewed release and (2) an independent execution reviewer binds
-this exact packet SHA-256, source hashes, manifest and command. It is neither
-application nor production acceptance.
+executed until an independent execution reviewer binds this exact packet
+SHA-256, source hashes, manifest and command, then a fresh live preflight
+passes. The exportset26 cleanup prerequisite is complete as documented below.
+It is neither application nor production acceptance.
 
 Before such a release, this corrected packet and its exact referenced runtime
 source checkpoint must be committed, pushed and fetched-byte verified. Only
@@ -42,6 +42,20 @@ Candidate `c81aeaca5cedd893981a058444fa11a03a49a744` has static c81 evidence:
 | Postlink report, attempt 2 | `/home/holden/mckernel-work/scratch/native-exact-export26-postlink-validation-20261001-2/current-image-postlink-c81aeaca-exportset26-attempt2.json` | `a22efb04bdf122778e5a122b7ceec8abe887e30870e03bb0b3231531fb869445` |
 | Linked-text ownership report | `/home/holden/mckernel-work/scratch/native-exact-export26-postlink-validation-20261001-1/mckernel-linked-text-ownership-c81aeaca-exportset26.json` | `23f83418101aea86c5400b34f2bf96c54b28e2b3936bb0309da88ff7d6f06a21` |
 | Postlink/diagnostic preparation checkpoint | `docs/verification/evidence/native-exact-export26-postlink-diagnostic-preparation-checkpoint-20261001.json` | `91ff3b2cacec68da8a4eb399e72b18e2401d8163a2c842606070e7860a1596cc` |
+
+### Exportset26 cleanup postflight
+
+`PASS_CLEANUP_POSTFLIGHT` is retained at
+`/home/holden/mckernel-work/scratch/native-exact-export26-build-cleanup-20261001-4/PASS.json`,
+SHA-256 `bdce8379f13b8715d4d4b8182541d0d6ae8634745b1a22a8d0008fdc84038d4e`.
+Its reviewed release commit is `ae9661f76317382bf5591012691be94a632befe9`
+and packet/helper SHA-256 is
+`55074890efa99a57fd15186997404e8927b641be690599eb4d403a2873bdab36`.
+The exact exportset26 target container is absent. Its exclusion remains
+quarantined at
+`/home/holden/mckernel-work/scratch/.native-exact-export26-build-cleanup-20261001-4-quarantine/native-exact-candidate-operational-exclusion-exportset-26.json`,
+SHA-256 `8099da3fbac5e6cfc3722af036614d7e5434c8988a7d2e172581bac64a606c86`,
+device/inode `1831:90699`.
 
 The strict loader-validated manifest is
 `/home/holden/mckernel-work/scratch/native-diagnostic-memory-c81-manifest-20261001-1/manifest.json`,
@@ -122,5 +136,6 @@ Before a release, remeasure host/scratch/RAM floors (at least 16/12 GiB free
 plus packet headroom), reconcile launcher/heavy-runtime leases, prove no owner,
 QEMU, mcexec, Docker client or matching container is live, authenticate all
 listed files, and prove parent/attempt/evidence-sibling absence. Exportset26
-cleanup and independent review are outstanding; therefore this document is
+cleanup has passed postflight, but independent guest execution review and its
+fresh live preflight remain outstanding; therefore this document is
 **NOT_RELEASED** and must not create the parent or invoke the command.
