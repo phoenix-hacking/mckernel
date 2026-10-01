@@ -11553,3 +11553,34 @@ exportset-26 image request.  Only after its separate reviewed release may the
 single four-job kernel image build start.  On image PASS, validate artifact,
 postlink and linked text before running the unchanged dynamic memory diagnostic
 with stdout `NATIVE_CORE PASS memory\n`, empty stderr and exit 37.
+
+Continuation checkpoint 279, 2026-10-01: the c81/exportset-26 gitlink packet
+completed once with wrapper exit zero and an externally observed stdout commit
+witness matching terminal `90d5c20e...5e22`.  Independent result review returns
+`PASS_RESULT_EXPORTSET26_GITLINK`.  Manifest `ec6c0995...c492`, log
+`c7d2c3a8...621c` and terminal bind the scratch-14 candidate/IHK and the sole
+libdwarf gitlink at commit `ab9230b2...3753`, tree `dcc29777...5668`; all 412
+tracked and 21 Git metadata files verify.  Owner/child/helper PIDs
+2400910/2400914/2400915 are absent.  The additive record preserves the wrapper
+witness explicitly at
+`docs/verification/evidence/native-exact-mckernel-gitlink-c81aeaca-exportset26-success-20261001.json`.
+No build or runtime acceptance follows.
+
+The fresh image-request preparation packet reached `PASS_SOURCE` after two
+separate bounded corrections.  Its first disposable suite exposed the inherited
+exportset-25 test-root prefix before child identity publication; changing it to
+exportset-26 made all 23 tests pass.  A subsequent binding audit found the
+inherited owner hash stale; the packet now binds the reviewed active
+exportset-26 owner `1e1e05b2...94a1b`.  Final packet SHA is
+`de7e1f70...3e21f`, tests SHA `60dfa7d7...333f`, and independent Python-3.8
+execution passes 23/23.  The packet authenticates the complete candidate,
+tool-image receipt and gitlink inputs before mutation, publishes exclusively,
+retires descendants and emits only a non-executable request.  It calls owner
+validation but never owner execution and acquires neither build lease nor
+operational exclusion.
+
+Next checkpoint/fetch these exact bytes, obtain a live one-shot ordinary-user
+preparation release, execute once, and independently review its toolchain,
+inputs, request, terminal, witness and retirement.  Only then prepare the
+separate four-job heavy-build release.  Linked current images and real
+current-candidate applications remain zero.
