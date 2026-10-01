@@ -12839,3 +12839,19 @@ scratch18 inputs.  Never mutate or rerun scratch17.  Exact evidence is
 `native-exact-scratch17-terminal-successor-prerequisite-checkpoint-20261001.json`.
 No build or guest ran; counts remain one compiled current candidate, five
 bounded diagnostic guest passes and zero formal application acceptances.
+
+Continuation checkpoint 317, 2026-10-01: fetched side target
+`227d1fe3...c5ad` has parent 50b, tree `33b7ea46...63e7` and exactly six
+reviewed build-admission/observer source and test changes.  Merge checkpoint
+`caaae799...6852` makes it reachable from the fetched branch, and all six target
+blob hashes match.  Unrelated shutdown, launcher, rejected-test and blocked
+tool-image work is excluded.
+
+This target is intentionally not executable: its common build/image/guest
+contract remains unreleased until the actual image and guest entry points use
+the same retained O_EXCL ownership.  The scratch18 preparation lane was stopped
+before edits or execution because binding this target would create another
+known non-releasable candidate.  Next wire and independently review image and
+guest ownership, publish a successor side target with the common contract
+explicitly released, and only then prepare scratch18.  Exact evidence is
+`native-exact-successor-side-target-checkpoint-20261001.json`.
