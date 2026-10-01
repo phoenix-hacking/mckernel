@@ -74,15 +74,64 @@ class StagerTests(unittest.TestCase):
         self.assertEqual(a["artifacts"], b["artifacts"])
         with self.assertRaises(S.StagerError): S.stage(self.base, self.payload, self.collector, self.base / "nested", cpio=str(self.cpio), gzip=str(self.gzip))
 
-    def _replacement_map(self):
+    def _replacement_map(self, include_mcexec=False):
         result = {}
-        for index, rel in enumerate(sorted(S.REPLACEMENT_PATHS)):
+        paths = S.MCEEXEC_REPLACEMENT_PATHS if include_mcexec else S.REPLACEMENT_PATHS
+        for index, rel in enumerate(sorted(paths)):
             source = self.d / ("replacement-%d.bin" % index)
             source.write_bytes(("replacement-%d\n" % index).encode("ascii"))
             source.chmod(0o755)
             result[rel] = {"path": str(source), "sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
                            "size": source.stat().st_size, "mode": source.stat().st_mode & 0o7777}
         return result
+
+    def test_five_artifact_mode_replaces_stale_mcexec_exactly(self):
+        replacements = self._replacement_map(include_mcexec=True)
+        launcher = Path(replacements["bin/mcexec"]["path"])
+        corrected_hash = hashlib.sha256(launcher.read_bytes()).hexdigest()
+        stale = self.base / "bin/mcexec"
+        stale.write_bytes(b"stale-launcher"); stale.chmod(0o755)
+        before = (stale.read_bytes(), stale.stat().st_mode, stale.stat().st_mtime_ns)
+        out = self.d / "five-artifact"
+        with mock.patch.object(S, "MCEEXEC_SHA256", corrected_hash), \
+             mock.patch.object(S, "MCEEXEC_SIZE", launcher.stat().st_size):
+            manifest = S.stage(self.base, self.payload, self.collector, out,
+                               cpio=str(self.cpio), gzip=str(self.gzip),
+                               replacements=replacements)
+        self.assertEqual((out / "root/bin/mcexec").read_bytes(), launcher.read_bytes())
+        self.assertEqual(manifest["replacements"]["bin/mcexec"]["final_sha256"], corrected_hash)
+        self.assertEqual((stale.read_bytes(), stale.stat().st_mode, stale.stat().st_mtime_ns), before)
+
+    def test_mcexec_replacement_requires_corrected_hash_size_and_mode(self):
+        replacements = self._replacement_map(include_mcexec=True)
+        launcher = Path(replacements["bin/mcexec"]["path"])
+        corrected_hash = hashlib.sha256(launcher.read_bytes()).hexdigest()
+        for field in ("hash", "size", "mode"):
+            with self.subTest(field=field):
+                expected_hash = corrected_hash if field != "hash" else "0" * 64
+                expected_size = launcher.stat().st_size if field != "size" else launcher.stat().st_size + 1
+                expected_mode = 0o755 if field != "mode" else 0o700
+                with mock.patch.object(S, "MCEEXEC_SHA256", expected_hash), \
+                     mock.patch.object(S, "MCEEXEC_SIZE", expected_size):
+                    if field == "mode":
+                        launcher.chmod(expected_mode)
+                        replacements["bin/mcexec"]["mode"] = expected_mode
+                    try:
+                        with self.assertRaisesRegex(S.StagerError, "exact corrected executable"):
+                            S.stage(self.base, self.payload, self.collector,
+                                    self.d / ("bad-mcexec-" + field),
+                                    cpio=str(self.cpio), gzip=str(self.gzip),
+                                    replacements=replacements)
+                    finally:
+                        launcher.chmod(0o755)
+                        replacements["bin/mcexec"]["mode"] = 0o755
+
+    def test_stale_base_still_rejected_without_mcexec_replacement(self):
+        (self.base / "bin/mcexec").write_bytes(b"stale-launcher")
+        with self.assertRaisesRegex(S.StagerError, "hash mismatch: bin/mcexec"):
+            S.stage(self.base, self.payload, self.collector, self.d / "stale-four",
+                    cpio=str(self.cpio), gzip=str(self.gzip),
+                    replacements=self._replacement_map())
 
     def test_authenticated_four_artifact_replacements_are_staged_and_recorded(self):
         replacements = self._replacement_map()

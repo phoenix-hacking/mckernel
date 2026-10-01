@@ -11667,3 +11667,49 @@ shutdown.  There is now one actual current-candidate compiled kernel artifact
 and still zero real current-candidate guest applications.  Diagnostic and
 formal application acceptance counters remain unchanged; the OS goal is active
 and incomplete, and this shutdown checkpoint does not resume or complete it.
+
+Continuation checkpoint 282, 2026-10-01: actual exportset-26 postlink admission
+and linked-text ownership now pass independent review.  The first invocation
+preserves a tool-selection failure because `/usr/bin/readelf` is a symlink and
+the validator intentionally admits only no-follow regular executable paths.
+Using its resolved executable then exposed the intentional handwritten
+`native_xrstor_checked` state-restoration wrapper.  The original classifier
+incorrectly rejected every XRSTOR even though the vector contract permits exact
+reviewed state-management bytes.  Its first bounded exception report
+`ab50c3c0...26a6f5` remains rejected because independent review proved it had
+discarded ELF section indices; UND/ABS/wrong-section labels could authenticate
+unrelated `.text` offsets.  These failures and the rejected report are retained.
+
+The corrected validator binds unique defined wrapper/fault/recovery symbols to
+the same allocated executable `.text` PROGBITS section in both object and image,
+checks complete section bounds, exact 16-byte wrapper
+`4889f04889f248c1ea200fae2f31c0c3`, object offsets 0x10/0x1a/0x1f, linked
+addresses `fffffffffe826250`/`...25a`/`...25f` and the link map.  It rejects
+every other XRSTOR/vector instruction.  Independent review passes all 192 tests
+and replays all 12 tool outputs and 168,791 decoded instructions.  Fresh report
+`a22efb04...9445` is `PASS_RESULT`.  Separate ownership report
+`23f83418...06a21` attributes 626,547 of 803,383 executable bytes to the Rust
+object (77.988581%), leaving 176,836 C/assembly/unknown/padding bytes.  This is
+static diagnostic admission and object attribution, not runtime or Rust-language
+acceptance.
+
+Two dependency-ready source repairs also pass independent review.  The
+diagnostic stager now accepts either the exact four kernel artifacts or those
+four plus `bin/mcexec`; five-file mode independently pins corrected launcher
+SHA `ee1f660b...073b`, size 453,352 and mode 0755 while preserving the stale
+historical root.  Fifteen focused and 117 combined stager/overlay/diagnostic
+tests pass.  The exportset-26 cleanup helper passes 87 mocked transaction tests
+after review caught and corrected an unsafe final unlink: successful cleanup
+must retain the exact exclusion permanently in durable quarantine.  Its source
+is `c41930c0...46ac`, tests `78c66b15...bdf5`; no live cleanup has run.
+
+Exact additive evidence is
+`docs/verification/evidence/native-exact-export26-postlink-diagnostic-preparation-checkpoint-20261001.json`.
+Next commit and fetched-verify these exact sources, then create and independently
+review the committed cleanup release.  Execute it once, retaining the quarantined
+exclusion, before a guest lease.  In parallel-safe ordinary-user work, prepare
+the fresh five-artifact startup base, memory overlay and strict manifest from
+the c81 image, unchanged scratch-12 bzImage/modules and corrected launcher.
+Then obtain the separate guest release and run the exact memory oracle.  Real
+current-candidate guest applications remain zero and all formal counters remain
+unchanged.

@@ -57,6 +57,63 @@ class PostLinkTests(unittest.TestCase):
                                  self.readelf, self.nm, self.objdump,
                                  self.output if publish else None)
 
+    def install_xrstor_fixture(self, *, object_checked=0x100, image_checked=None,
+                               raw_bytes=tool.XRSTOR_BYTES, disassembly=None,
+                               duplicate_object_symbol=False,
+                               object_ndxs=('1', '1', '1'), image_ndxs=('1', '1', '1'),
+                               object_section=(1, '.text'), image_section=(1, '.text')):
+        """Make the sole approved wrapper visible to every checked view."""
+        if image_checked is None:
+            image_checked = tool.BASE + 0x180
+        names = (tool.XRSTOR_WRAPPER, tool.XRSTOR_FAULT, tool.XRSTOR_RECOVER)
+        object_values = (object_checked, object_checked + 10, object_checked + 15)
+        image_values = (image_checked, image_checked + 10, image_checked + 15)
+        self.map.write_text(''.join(f' 0x{value:x} {name}\n' for value, name in zip(image_values, names)))
+
+        def symbols(values, ndxs):
+            rows = [f'  1: {values[0]:016x}    16 FUNC    GLOBAL DEFAULT    1 {names[0]}',
+                    f'  2: {values[1]:016x}     0 NOTYPE  GLOBAL DEFAULT    1 {names[1]}',
+                    f'  3: {values[2]:016x}     0 NOTYPE  GLOBAL DEFAULT    1 {names[2]}']
+            rows = [row.rsplit(' ', 2)[0] + f' {ndx} ' + row.rsplit(' ', 1)[1]
+                    for row, ndx in zip(rows, ndxs)]
+            if duplicate_object_symbol:
+                rows.append(rows[0].replace('  1:', '  4:'))
+            return '\n'.join(rows)
+        object_symbols, image_symbols = symbols(object_values, object_ndxs), symbols(image_values, image_ndxs)
+        def sections(spec, address):
+            index, name = spec
+            return f'  [{index:2d}] {name} PROGBITS        {address:016x} 000000 000200 00 AX  0   0 16'
+        object_sections = sections(object_section, 0)
+        image_sections = sections(image_section, image_checked)
+        self.readelf = self.fake('readelf',
+            "import os, sys\n"
+            f"obj = {self.obj.name!r}\nobject_symbols = {object_symbols!r}\nimage_symbols = {image_symbols!r}\n"
+            f"object_sections = {object_sections!r}\nimage_sections = {image_sections!r}\n"
+            "target = os.path.basename(os.readlink(sys.argv[-1]))\n"
+            "if '-rW' in sys.argv: print('There are no relocations in this file.')\n"
+            "elif '-sW' in sys.argv: print(object_symbols if target == obj else image_symbols)\n"
+            "elif '-SW' in sys.argv: print(object_sections if target == obj else image_sections)\n"
+            "else: print('headers and note')")
+        def raw_listing(address):
+            return '\n'.join(f' {address + offset:x}: ' + ' '.join(f'{byte:02x}' for byte in raw_bytes[offset:offset + 4]) + ' insn'
+                             for offset in range(0, len(raw_bytes), 4))
+        if disassembly is None:
+            disassembly = ('Disassembly of section .text:\n'
+                           f' {object_checked:x}: mov %rsi,%rax\n'
+                           f' {object_checked + 3:x}: mov %rsi,%rdx\n'
+                           f' {object_checked + 6:x}: shr $0x20,%rdx\n'
+                           f' {object_checked + 10:x}: xrstor (%rdi)\n'
+                           f' {object_checked + 13:x}: xor %eax,%eax\n'
+                           f' {object_checked + 15:x}: ret')
+        self.objdump = self.fake('objdump',
+            "import os, sys\n"
+            f"obj = {self.obj.name!r}\ndisassembly = {disassembly!r}\n"
+            f"object_raw = {raw_listing(object_checked)!r}\nimage_raw = {raw_listing(image_checked)!r}\n"
+            "target = os.path.basename(os.readlink(sys.argv[-1]))\n"
+            "if '-d' not in sys.argv: print('')\n"
+            "elif '--no-show-raw-insn' in sys.argv: print(disassembly)\n"
+            "else: print(object_raw if target == obj else image_raw)")
+
     def reject(self, message):
         with self.assertRaisesRegex((ValueError, OSError), message):
             self.check(True)
@@ -161,6 +218,125 @@ class PostLinkTests(unittest.TestCase):
         dis += '\n0000 <vzeroupper_fninit_xmm0>:\n'
         self.objdump = self.fake('objdump', f"import sys\nprint({dis!r} if '-d' in sys.argv else '')")
         self.assertEqual(self.check()['tools']['disassembled_instructions'], len(instructions))
+
+    def test_exact_xrstor_wrapper_is_reported(self):
+        self.install_xrstor_fixture()
+        result = self.check(True)
+        facts = result['xrstor_exception']
+        self.assertEqual(facts['wrapper'], tool.XRSTOR_WRAPPER)
+        self.assertEqual(facts['bytes_hex'], tool.XRSTOR_BYTES.hex())
+        self.assertEqual(facts['size'], 16)
+        self.assertEqual(facts['fault_offset'], 10)
+        self.assertEqual(facts['recover_offset'], 15)
+        self.assertEqual(facts['object']['bytes_hex'], tool.XRSTOR_BYTES.hex())
+        self.assertEqual(facts['image']['bytes_hex'], tool.XRSTOR_BYTES.hex())
+        outputs = result['tools']['outputs']
+        self.assertEqual(outputs['xrstor_object_symbols']['target']['path'], str(self.obj))
+        self.assertEqual(outputs['xrstor_image_symbols']['target']['path'], str(self.image))
+        self.assertEqual(outputs['xrstor_object_sections']['target']['path'], str(self.obj))
+        self.assertEqual(outputs['xrstor_image_sections']['target']['path'], str(self.image))
+        self.assertEqual(outputs['xrstor_object_bytes']['target']['path'], str(self.obj))
+        self.assertEqual(outputs['xrstor_image_bytes']['target']['path'], str(self.image))
+
+    def test_xrstor_rejects_undefined_absolute_invalid_and_differing_sections(self):
+        for ndxs in (('UND', 'UND', 'UND'), ('ABS', 'ABS', 'ABS'),
+                     ('999', '999', '999'), ('1', '2', '1')):
+            with self.subTest(ndxs=ndxs):
+                self.install_xrstor_fixture(object_ndxs=ndxs)
+                self.reject('Rust object XRSTOR symbols must share one defined section index|'
+                            'Rust object XRSTOR symbols must be in one executable .text PROGBITS section')
+
+    def test_xrstor_rejects_nontext_or_out_of_bounds_sections(self):
+        self.install_xrstor_fixture(object_ndxs=('2', '2', '2'), object_section=(2, '.ltext.other'))
+        self.reject('Rust object XRSTOR symbols must be in one executable .text PROGBITS section')
+        self.install_xrstor_fixture(object_section=(1, '.text'))
+        # The fixture section has a 0x200-byte range; move the wrapper past it
+        # while retaining its three relative labels and matching raw bytes.
+        self.install_xrstor_fixture(object_checked=0x200)
+        self.reject('Rust object native_xrstor_checked exceeds its .text section bounds')
+
+    def test_xrstor_changed_bytes_rejected(self):
+        self.install_xrstor_fixture(raw_bytes=tool.XRSTOR_BYTES[:-1] + b'\x90')
+        self.reject('XRSTOR wrapper bytes differ from exact approved sequence')
+
+    def test_xrstor_duplicate_object_symbol_rejected(self):
+        self.install_xrstor_fixture(duplicate_object_symbol=True)
+        self.reject('Rust object XRSTOR symbol is missing or non-unique')
+
+    def test_xrstor_missing_or_misplaced_map_label_rejected(self):
+        self.install_xrstor_fixture()
+        self.map.write_text(f' 0x{tool.BASE + 0x180:x} {tool.XRSTOR_WRAPPER}\n'
+                            f' 0x{tool.BASE + 0x18a:x} {tool.XRSTOR_FAULT}\n')
+        self.reject('link map XRSTOR symbol is missing or non-unique')
+
+    def test_xrstor_image_map_disagreement_rejected(self):
+        self.install_xrstor_fixture()
+        self.map.write_text(f' 0x{tool.BASE + 0x180:x} {tool.XRSTOR_WRAPPER}\n'
+                            f' 0x{tool.BASE + 0x18a:x} {tool.XRSTOR_FAULT}\n'
+                            f' 0x{tool.BASE + 0x191:x} {tool.XRSTOR_RECOVER}\n')
+        self.reject('link map native_xrstor_recover does not match image symbol')
+
+    def test_xrstor_wrong_label_offset_rejected(self):
+        self.install_xrstor_fixture()
+        # The map stays internally consistent with the image fixture; the
+        # object label alone must still retain the exact recovery offset.
+        good = ('  1: %016x    16 FUNC    GLOBAL DEFAULT    1 native_xrstor_checked\n'
+                '  2: %016x     0 NOTYPE  GLOBAL DEFAULT    1 native_xrstor_fault\n'
+                '  3: %016x     0 NOTYPE  GLOBAL DEFAULT    1 native_xrstor_recover'
+                % (tool.BASE + 0x180, tool.BASE + 0x18a, tool.BASE + 0x18f))
+        bad = ('  1: %016x    16 FUNC    GLOBAL DEFAULT    1 native_xrstor_checked\n'
+               '  2: %016x     0 NOTYPE  GLOBAL DEFAULT    1 native_xrstor_fault\n'
+               '  3: %016x     0 NOTYPE  GLOBAL DEFAULT    1 native_xrstor_recover'
+               % (0x100, 0x10a, 0x10e))
+        object_sections = '  [ 1] .text PROGBITS        0000000000000000 000000 000200 00 AX  0   0 16'
+        image_sections = f'  [ 1] .text PROGBITS        {tool.BASE + 0x180:016x} 000000 000200 00 AX  0   0 16'
+        self.readelf = self.fake('readelf',
+            "import os, sys\n"
+            f"obj = {self.obj.name!r}\n"
+            f"good = {good!r}\n"
+            f"bad = {bad!r}\n"
+            f"object_sections = {object_sections!r}\n"
+            f"image_sections = {image_sections!r}\n"
+            "target = os.path.basename(os.readlink(sys.argv[-1]))\n"
+            "if '-rW' in sys.argv: print('There are no relocations in this file.')\n"
+            "elif '-sW' in sys.argv: print(bad if target == obj else good)\n"
+            "elif '-SW' in sys.argv: print(object_sections if target == obj else image_sections)\n"
+            "else: print('headers and note')")
+        self.reject('Rust object native_xrstor_recover has wrong native_xrstor_checked offset')
+
+    def test_xrstor_wrong_operand_and_extra_xrstor_rejected(self):
+        self.install_xrstor_fixture(disassembly=('Disassembly of section .text:\n'
+                                                  ' 100: mov %rsi,%rax\n'
+                                                  ' 103: mov %rsi,%rdx\n'
+                                                  ' 106: shr $0x20,%rdx\n'
+                                                  ' 10a: xrstor (%rax)\n'
+                                                  ' 10d: xor %eax,%eax\n'
+                                                  ' 10f: ret\n'
+                                                  ' 110: xrstor (%rdi)'))
+        self.reject('forbidden vector/x87/MMX instruction: xrstor')
+
+    def test_xrstor_additional_instruction_rejected(self):
+        self.install_xrstor_fixture(disassembly=('Disassembly of section .text:\n'
+                                                  ' 100: mov %rsi,%rax\n'
+                                                  ' 103: mov %rsi,%rdx\n'
+                                                  ' 106: shr $0x20,%rdx\n'
+                                                  ' 10a: xrstor (%rdi)\n'
+                                                  ' 10d: xor %eax,%eax\n'
+                                                  ' 10f: ret\n'
+                                                  ' 110: xrstor (%rdi)'))
+        self.reject('forbidden vector/x87/MMX instruction: xrstor')
+
+    def test_xrstor_vector_inside_and_outside_wrapper_rejected(self):
+        self.install_xrstor_fixture(disassembly=('Disassembly of section .text:\n'
+                                                  ' 100: vzeroall\n'
+                                                  ' 103: mov %rsi,%rdx\n'
+                                                  ' 106: shr $0x20,%rdx\n'
+                                                  ' 10a: xrstor (%rdi)\n'
+                                                  ' 10d: xor %eax,%eax\n'
+                                                  ' 10f: ret\n'
+                                                  'Disassembly of section .ltext.other:\n'
+                                                  ' 100: movaps %xmm0,%xmm1'))
+        self.reject('forbidden vector/x87/MMX instruction')
 
     def test_disassembly_retention_is_bounded_and_hashed(self):
         dis = ' 100: ret\n' * 1000

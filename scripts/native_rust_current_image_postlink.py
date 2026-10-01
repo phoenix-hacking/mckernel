@@ -34,6 +34,11 @@ NOTE_NAME = b'MCKERNEL\0'
 NOTE_DESC = struct.pack('<IIII', 4, 0x00060c00, 7616, 1)
 EH = struct.Struct('<16sHHIQQQIHHHHHH')
 PH = struct.Struct('<IIQQQQQQ')
+XRSTOR_WRAPPER = 'native_xrstor_checked'
+XRSTOR_FAULT = 'native_xrstor_fault'
+XRSTOR_RECOVER = 'native_xrstor_recover'
+XRSTOR_SYMBOLS = (XRSTOR_WRAPPER, XRSTOR_FAULT, XRSTOR_RECOVER)
+XRSTOR_BYTES = bytes.fromhex('48 89 f0 48 89 f2 48 c1 ea 20 0f ae 2f 31 c0 c3')
 
 
 def open_path(path, label, directory=False):
@@ -217,16 +222,22 @@ def run_tool(snap, args, target, limit=MAX_OUTPUT):
             'timeout_seconds': TOOL_TIMEOUT}
 
 
-def check_disassembly(text):
+def check_disassembly(text, xrstor=None):
     count = 0
+    section = None
+    seen_xrstor = 0
     for line in text.splitlines():
+        section_match = re.match(r'^Disassembly of section (\S+):$', line)
+        if section_match:
+            section = section_match.group(1)
+            continue
         # --no-show-raw-insn makes instruction boundaries independent of widths.
-        match = re.match(r'^\s*[0-9a-fA-F]+:\s+(.+)$', line)
+        match = re.match(r'^\s*([0-9a-fA-F]+):\s+(.+)$', line)
         if not match:
             continue
         # GNU objdump's AT&T output puts symbolic annotations after '#'.
         # A referenced symbol named xmm0 is not a register operand.
-        instruction = match.group(1).split('#', 1)[0]
+        instruction = match.group(2).split('#', 1)[0]
         instruction = re.sub(r'<[^>]*>', '', instruction)
         words = instruction.lower().split()
         while words and (words[0] in ('lock', 'rep', 'repe', 'repz', 'repne', 'repnz',
@@ -237,17 +248,141 @@ def check_disassembly(text):
             raise ValueError('Rust object disassembly has undecoded instruction')
         count += 1
         mnemonic, operands = words[0], ' '.join(words[1:])
+        permitted_xrstor = (xrstor is not None and mnemonic == 'xrstor'
+                             and section == '.text'
+                             and int(match.group(1), 16) == xrstor['object']['fault']
+                             and operands == '(%rdi)')
+        if mnemonic.startswith('xrstor'):
+            if not permitted_xrstor:
+                raise ValueError(f'Rust object contains forbidden vector/x87/MMX instruction: {mnemonic}')
+            seen_xrstor += 1
         scalar_p = mnemonic.startswith(('push', 'pop', 'prefetch')) or mnemonic in ('pause', 'pext', 'pdep', 'ptwrite', 'ptwritel', 'ptwriteq', 'pconfig')
         if (mnemonic.startswith('f') or mnemonic.startswith('v') and mnemonic not in ('verr', 'verw')
                 or mnemonic.startswith('p') and not scalar_p
-                or mnemonic.startswith(('xsave', 'xrstor', 'ldmxcsr', 'stmxcsr', 'kadd', 'kand', 'kmov', 'knot', 'kor', 'kshift', 'ktest', 'kunpck', 'kxnor', 'kxor'))
+                or mnemonic.startswith(('xsave', 'ldmxcsr', 'stmxcsr', 'kadd', 'kand', 'kmov', 'knot', 'kor', 'kshift', 'ktest', 'kunpck', 'kxnor', 'kxor'))
                 or mnemonic in ('emms', 'wait')
                 or re.search(r'%(?:xmm|ymm|zmm|mm|k)[0-9]+\b|%st\b', operands)
                 or re.search(r'\b(?:xmm|ymm|zmm|mm)[0-9]+\b', operands)):
             raise ValueError(f'Rust object contains forbidden vector/x87/MMX instruction: {mnemonic}')
     if not count:
         raise ValueError('Rust object disassembly has no instructions')
+    if xrstor is not None and seen_xrstor != 1:
+        raise ValueError('native_xrstor_checked does not have exactly one XRSTOR')
     return count
+
+
+def readelf_symbols(text, name, label):
+    entries = []
+    for line in text.splitlines():
+        fields = line.split()
+        if (len(fields) == 8 and re.fullmatch(r'[0-9]+:', fields[0])
+                and fields[-1] == name and re.fullmatch(r'[0-9a-fA-F]+', fields[1])
+                and fields[2].isdigit()):
+            entries.append({'value': int(fields[1], 16), 'size': int(fields[2]),
+                            'type': fields[3], 'bind': fields[4], 'ndx': fields[6],
+                            'name': name})
+    if len(entries) != 1:
+        raise ValueError(f'{label} XRSTOR symbol is missing or non-unique: {name}')
+    return entries[0]
+
+
+def readelf_sections(text, label):
+    sections = {}
+    for line in text.splitlines():
+        match = re.match(r'^\s*\[\s*([0-9]+)\]\s+(\S+)\s+(\S+)\s+'
+                         r'([0-9a-fA-F]+)\s+([0-9a-fA-F]+)\s+([0-9a-fA-F]+)\s+'
+                         r'\S+\s+(\S+)\s+', line)
+        if not match:
+            continue
+        index = int(match.group(1), 10)
+        if index in sections:
+            raise ValueError(f'{label} section index is non-unique: {index}')
+        sections[index] = {'name': match.group(2), 'type': match.group(3),
+                           'address': int(match.group(4), 16),
+                           'size': int(match.group(6), 16), 'flags': match.group(7)}
+    if not sections:
+        raise ValueError(f'{label} section headers are unrecognized')
+    return sections
+
+
+def map_symbol(text, name):
+    matches = []
+    occurrences = len(re.findall(r'(?<![A-Za-z0-9_])' + re.escape(name) + r'(?![A-Za-z0-9_])', text))
+    for line in text.splitlines():
+        match = re.match(r'^\s*(?:0x)?([0-9a-fA-F]+)\s+' + re.escape(name) + r'\s*$', line)
+        if match:
+            matches.append(int(match.group(1), 16))
+    if occurrences != 1 or len(matches) != 1:
+        raise ValueError(f'link map XRSTOR symbol is missing or non-unique: {name}')
+    return matches[0]
+
+
+def wrapper_bytes(text, start, label):
+    found = {}
+    stop = start + len(XRSTOR_BYTES)
+    for line in text.splitlines():
+        match = re.match(r'^\s*([0-9a-fA-F]+):\s+((?:[0-9a-fA-F]{2}\s+)+)', line)
+        if not match:
+            continue
+        address = int(match.group(1), 16)
+        raw = bytes(int(value, 16) for value in match.group(2).split())
+        if address < stop and address + len(raw) > start:
+            if address < start or address + len(raw) > stop:
+                raise ValueError(f'{label} XRSTOR wrapper instruction exceeds exact bounds')
+            for offset, value in enumerate(raw):
+                at = address + offset
+                if at in found:
+                    raise ValueError(f'{label} XRSTOR wrapper bytes are ambiguous')
+                found[at] = value
+    if any(address not in found for address in range(start, stop)):
+        raise ValueError(f'{label} XRSTOR wrapper bytes are incomplete')
+    actual = bytes(found[address] for address in range(start, stop))
+    if actual != XRSTOR_BYTES:
+        raise ValueError(f'{label} XRSTOR wrapper bytes differ from exact approved sequence')
+    return actual.hex()
+
+
+def xrstor_exception_context(object_symbols, image_symbols, object_sections, image_sections, link_map):
+    object_entries = {name: readelf_symbols(object_symbols, name, 'Rust object') for name in XRSTOR_SYMBOLS}
+    image_entries = {name: readelf_symbols(image_symbols, name, 'image') for name in XRSTOR_SYMBOLS}
+    map_entries = {name: map_symbol(link_map, name) for name in XRSTOR_SYMBOLS}
+    for label, entries, section_text in (('Rust object', object_entries, object_sections),
+                                         ('image', image_entries, image_sections)):
+        sections = readelf_sections(section_text, label)
+        checked = entries[XRSTOR_WRAPPER]
+        if checked['type'] != 'FUNC' or checked['bind'] != 'GLOBAL' or checked['size'] != len(XRSTOR_BYTES):
+            raise ValueError(f'{label} native_xrstor_checked must be one GLOBAL FUNC of size 16')
+        ndxs = {entry['ndx'] for entry in entries.values()}
+        if len(ndxs) != 1 or not next(iter(ndxs)).isdigit():
+            raise ValueError(f'{label} XRSTOR symbols must share one defined section index')
+        section = sections.get(int(next(iter(ndxs)), 10))
+        if (section is None or section['name'] != '.text' or section['type'] != 'PROGBITS'
+                or 'A' not in section['flags'] or 'X' not in section['flags']):
+            raise ValueError(f'{label} XRSTOR symbols must be in one executable .text PROGBITS section')
+        section_end = section['address'] + section['size']
+        if (checked['value'] < section['address']
+                or checked['value'] + checked['size'] > section_end):
+            raise ValueError(f'{label} native_xrstor_checked exceeds its .text section bounds')
+        for name, offset in ((XRSTOR_FAULT, 10), (XRSTOR_RECOVER, 15)):
+            entry = entries[name]
+            if entry['type'] != 'NOTYPE' or entry['bind'] != 'GLOBAL' or entry['size'] != 0:
+                raise ValueError(f'{label} {name} must be a zero-size GLOBAL NOTYPE label')
+            if entry['value'] != checked['value'] + offset:
+                raise ValueError(f'{label} {name} has wrong native_xrstor_checked offset')
+            if not section['address'] <= entry['value'] < section_end:
+                raise ValueError(f'{label} {name} lies outside its .text section bounds')
+    for name in XRSTOR_SYMBOLS:
+        if map_entries[name] != image_entries[name]['value']:
+            raise ValueError(f'link map {name} does not match image symbol')
+    return {'wrapper': XRSTOR_WRAPPER, 'bytes_hex': XRSTOR_BYTES.hex(),
+            'object': {'checked': object_entries[XRSTOR_WRAPPER]['value'],
+                       'fault': object_entries[XRSTOR_FAULT]['value'],
+                       'recover': object_entries[XRSTOR_RECOVER]['value']},
+            'image': {'checked': image_entries[XRSTOR_WRAPPER]['value'],
+                      'fault': image_entries[XRSTOR_FAULT]['value'],
+                      'recover': image_entries[XRSTOR_RECOVER]['value']},
+            'link_map': map_entries, 'size': len(XRSTOR_BYTES),
+            'fault_offset': 10, 'recover_offset': 15}
 
 
 def check_relocations(text):
@@ -305,7 +440,38 @@ def build_report(image, link_map, rust_object, source_commit, readelf, nm, objdu
         dis = run_tool(snaps[5], ['-d', '--no-show-raw-insn'], snaps[2], MAX_DISASSEMBLY)
         if re.search(r'(^|\n)\s*[0-9a-fA-F]+\s+\S+', rel['stdout']):
             raise ValueError('linked image has relocations')
-        count = check_disassembly(dis['stdout'])
+        try:
+            map_text = snaps[1].data.decode('utf-8', 'strict')
+        except UnicodeDecodeError as exc:
+            raise ValueError('link map is not UTF-8 text') from exc
+        xrstor_markers = '|'.join(re.escape(name) for name in XRSTOR_SYMBOLS)
+        xrstor_present = (re.search(xrstor_markers, no['stdout']) is not None
+                          or re.search(xrstor_markers, map_text) is not None
+                          or re.search(r'\bxrstor[a-z0-9_.]*\b', dis['stdout'], re.I) is not None)
+        xrstor = None
+        xrstor_outputs = {}
+        if xrstor_present:
+            object_symbols = run_tool(snaps[3], ['-sW'], snaps[2])
+            image_symbols = run_tool(snaps[3], ['-sW'], snaps[0])
+            object_sections = run_tool(snaps[3], ['-SW'], snaps[2])
+            image_sections = run_tool(snaps[3], ['-SW'], snaps[0])
+            xrstor = xrstor_exception_context(object_symbols['stdout'], image_symbols['stdout'],
+                                              object_sections['stdout'], image_sections['stdout'], map_text)
+            object_bytes = run_tool(snaps[5], ['-d', '--section=.text',
+                                                f"--start-address=0x{xrstor['object']['checked']:x}",
+                                                f"--stop-address=0x{xrstor['object']['checked'] + xrstor['size']:x}"], snaps[2])
+            image_bytes = run_tool(snaps[5], ['-d', '--section=.text',
+                                               f"--start-address=0x{xrstor['image']['checked']:x}",
+                                               f"--stop-address=0x{xrstor['image']['checked'] + xrstor['size']:x}"], snaps[0])
+            xrstor['object']['bytes_hex'] = wrapper_bytes(object_bytes['stdout'], xrstor['object']['checked'], 'Rust object')
+            xrstor['image']['bytes_hex'] = wrapper_bytes(image_bytes['stdout'], xrstor['image']['checked'], 'image')
+            xrstor_outputs = {'xrstor_object_symbols': output_evidence(object_symbols),
+                              'xrstor_image_symbols': output_evidence(image_symbols),
+                              'xrstor_object_sections': output_evidence(object_sections),
+                              'xrstor_image_sections': output_evidence(image_sections),
+                              'xrstor_object_bytes': output_evidence(object_bytes, True),
+                              'xrstor_image_bytes': output_evidence(image_bytes, True)}
+        count = check_disassembly(dis['stdout'], xrstor)
         verify()
         report = {'schema': 'mckernel-current-image-postlink-admission-v2',
                   'admission': 'diagnostic-only', 'runtime': False, 'application': False,
@@ -318,10 +484,12 @@ def build_report(image, link_map, rust_object, source_commit, readelf, nm, objdu
                                 'all_relocations': output_evidence(allrel),
                                 'undefined_symbols': output_evidence(undefined),
                                 'relocations': output_evidence(rel),
-                                'disassembly': output_evidence(dis, True)},
+                                'disassembly': output_evidence(dis, True), **xrstor_outputs},
                             'disassembled_instructions': count},
                   'ownership': {'status': 'mandatory-outstanding',
                                 'helper': 'scripts/mckernel_linked_text_ownership.py', 'claim': False}}
+        if xrstor is not None:
+            report['xrstor_exception'] = xrstor
         verify()
         if output is not None:
             publish(output, report, verify)

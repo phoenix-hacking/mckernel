@@ -18,6 +18,7 @@ import subprocess
 import tempfile
 
 MCEEXEC_SHA256 = "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b"
+MCEEXEC_SIZE = 453352
 BASE_ROOT = Path("/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root")
 PAYLOAD = Path("/home/holden/mckernel-work/scratch/stability-packet001-compile-20260913-1/startup.argv-empty/payload")
 EXPECTED = {
@@ -33,6 +34,7 @@ LOADER = "lib64/ld-linux-x86-64.so.2"
 LIBC = "lib64/libc.so.6"
 REPLACEMENT_PATHS = frozenset(("images/mckernel.img", "modules/ihk.ko",
                                "modules/ihk-smp-x86_64.ko", "modules/mcctrl.ko"))
+MCEEXEC_REPLACEMENT_PATHS = REPLACEMENT_PATHS | frozenset(("bin/mcexec",))
 
 class StagerError(ValueError):
     pass
@@ -144,11 +146,13 @@ def _recheck_source(descriptor):
         os.close(fd)
 
 def _replacement_map(value, stack):
-    """Authenticate the reviewed four-file replacement map."""
-    _fail(isinstance(value, dict) and set(value) == set(REPLACEMENT_PATHS),
-          "replacement map must contain exactly the four kernel artifacts")
+    """Authenticate four kernel artifacts and, optionally, corrected mcexec."""
+    keys = set(value) if isinstance(value, dict) else set()
+    _fail(isinstance(value, dict) and keys in (set(REPLACEMENT_PATHS),
+                                               set(MCEEXEC_REPLACEMENT_PATHS)),
+          "replacement map must contain the four kernel artifacts and optional mcexec")
     result = {}; seen_sources = set()
-    for rel in sorted(REPLACEMENT_PATHS):
+    for rel in sorted(keys):
         item = value[rel]
         _fail(isinstance(item, dict) and set(item) == {"path", "sha256", "size", "mode"},
               "malformed replacement descriptor: " + rel)
@@ -169,6 +173,10 @@ def _replacement_map(value, stack):
         _fail(expected_size >= 0 and expected_mode == descriptor["mode"] and descriptor["size"] == expected_size,
               "replacement source metadata mismatch: " + rel)
         _fail(descriptor["sha256"] == item["sha256"], "replacement source hash mismatch: " + rel)
+        if rel == "bin/mcexec":
+            _fail(descriptor["sha256"] == MCEEXEC_SHA256 and
+                  descriptor["size"] == MCEEXEC_SIZE and descriptor["mode"] == 0o755,
+                  "mcexec replacement is not the exact corrected executable")
         _recheck_source(descriptor)
         result[rel] = descriptor
     return result
@@ -400,7 +408,7 @@ def main(argv=None):
     p.add_argument("--base-root", type=Path, default=BASE_ROOT); p.add_argument("--payload", type=Path, default=PAYLOAD)
     p.add_argument("--collector", type=Path, required=True); p.add_argument("--output", type=Path, required=True)
     p.add_argument("--replacements", type=Path,
-                   help="reviewed JSON map for exactly the kernel image and three modules")
+                   help="reviewed JSON map for the kernel image, three modules, and optional corrected mcexec")
     a = p.parse_args(argv)
     replacements = json.loads(a.replacements.read_text()) if a.replacements else None
     print(json.dumps(stage(a.base_root, a.payload, a.collector, a.output, replacements=replacements), sort_keys=True))
