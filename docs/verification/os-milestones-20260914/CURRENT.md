@@ -13247,3 +13247,33 @@ replay.  After independent PASS, publish/fetch and consume that cleanup once;
 then the reclaimed capacity permits a fresh scratch18 build under the unchanged
 12-GiB floor.  No new compiled artifact or guest result is claimed, and the OS
 remains incomplete.
+
+Continuation checkpoint 329, 2026-10-01: both interrupted scratch18 trees now
+have independently verified off-scratch archives while their originals remain
+immutable.  The output archive has SHA-256 `22abd1b6...8d7f`, 131,997 entries,
+and a full ACL/xattr compare exit 0; the evidence archive has SHA-256
+`bff28f2a...be10`, 51 entries, and the same complete compare result.  Fetched
+restoration mapping is
+`native-exact-scratch18-interrupted-archives-preparation-20261001.json` at
+commit `fe045b0816ca9e21c4aa0cd2a78358a51a8a66b9`.  This is preservation only,
+not build or application acceptance.
+
+Independent rereview BLOCKS the ordinary interrupt-cleanup correction at hashes
+`c353c2df...442c6d` / `137cc51d...faf36`.  Reproductions show a forged terminal
+journal can return PASS with all records live, every partial unlink prefix is
+non-resumable, CLI replay refuses before replay, the process census omits full
+descendant/starttime validation and known survivor 3315131, and privileged
+subprocesses inherit an overbroad environment.  None of these blocked bytes ran
+in production.  CONVERGENCE escalation is active with a stronger expert rewrite
+rather than another unchanged ordinary correction.
+
+Fresh retry schema review proves the existing prepared candidate/source may be
+reused read-only, but the wrapper hard-codes the global shared and scratch18
+operational-exclusion paths.  A new request must keep that source and use only
+fresh empty output/evidence and lease/evidence paths; cleanup/census/resource
+claims belong to the external admission packet, not extra request fields.  The
+old output/evidence roots and old resume release cannot be reused.  Current
+host/scratch/available-memory bytes are 26,615,476,224 / 18,126,430,208 /
+23,841,058,816.  Next finish and independently review the escalated cleanup,
+publish/fetch and consume it once, then prepare/review the corrected fresh request
+and build.  Counts remain unchanged and the OS remains incomplete.
