@@ -253,6 +253,11 @@ class NativeDiagnosticTests(unittest.TestCase):
         manifest = ND.load_manifest(str(self.manifest_path))
         self.assertEqual(manifest["payload"]["argv"][-1], "memory")
 
+        self.raw["payload"]["argv"] = ["/bin/mcexec", "-t", "1", "0", "/apps/app"]
+        self.manifest_path.write_text(json.dumps(self.raw))
+        manifest = ND.load_manifest(str(self.manifest_path))
+        self.assertEqual(manifest["payload"]["argv"][-1], "/apps/app")
+
     def test_payload_argv_rejects_empty_oversize_nul_nonstring_and_prefix_drift(self):
         cases = [
             ([], "non-empty"),
@@ -263,6 +268,7 @@ class NativeDiagnosticTests(unittest.TestCase):
             (["/bin/mcexec", "-t", "1", "0", "app", "bad\0arg"], "argv item"),
             (["/bin/mcexec", "-t", "1", "0", "app", True], "argv item"),
             (["/bin/mcexec", "-x", "1", "0", "app", "A"], "prefix"),
+            (["/bin/mcexec", "-t", "1", "0", "apps/app"], "prefix/path"),
         ]
         for argv, message in cases:
             with self.subTest(argv=argv):

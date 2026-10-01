@@ -143,6 +143,7 @@
     ,"native_diag_c81_threads_signals_prep": "docs/verification/evidence/native-exact-c81-threads-and-signals-preparation-checkpoint-20261001.json"
     ,"native_diag_c81_signals": "docs/verification/evidence/native-exact-c81-signals-diagnostic-checkpoint-20261001.json"
     ,"native_diag_c81_futex_oracle": "docs/verification/evidence/native-exact-c81-futex-typed-oracle-source-checkpoint-20261001.json"
+    ,"native_diag_c81_futex_prep": "docs/verification/evidence/native-exact-c81-futex-preparation-checkpoint-20261001.json"
     ,"shutdown_effect_boundary": "docs/verification/evidence/native-exact-shutdown-effect-boundary-source-checkpoint-20261001.json"
     ,"shutdown_observer": "docs/verification/stability-native-shutdown-observer-source-success-20260928-1.json"
     ,"shutdown_registry": "docs/verification/stability-native-shutdown-registry-source-success-20260928-1.json"
@@ -547,8 +548,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "The current c81 candidate independently passes memory, files, startup, threads and signals diagnostics. Signals proves exact output/exit 37, blocked/unblocked SIGUSR1, two alternate-stack deliveries, restored action/mask/stack, pager/process retirement and exact teardown. The direct-futex lane is blocked before release because its stderr is dynamic and the collector branch lacks executable framing tests. Preserved conservative result fields prevent formal acceptance. These are diagnostic protocol results, not catalog acceptance.",
-      "next_check": "Compile the independently accepted ND_FUTEX collector, then prepare/review a fresh c81 overlay and strict manifest before a distinct direct-futex diagnostic; continue production shutdown sender-drain/STOP/reclamation implementation.",
+      "result": "The current c81 candidate independently passes memory, files, startup, threads and signals diagnostics. The direct-futex collector artifact, typed oracle, deterministic c81 overlay and corrected strict manifest now pass independent preparation review, including the exact /apps/app argv join; the one-shot guest packet remains NOT_RELEASED. Preserved conservative result fields prevent formal acceptance. These are diagnostic protocol/preparation results, not catalog acceptance.",
+      "next_check": "Commit/push/fetch the exact direct-futex packet and corrected runtime sources, obtain fresh independent execution release, then run it once under the sole heavy lease; continue production shutdown production-body drain evidence separately.",
       "evidence": [
         "history",
         "plan",
@@ -587,7 +588,8 @@
         "native_diag_signals_success",
         "native_diag_c81_threads_signals_prep",
         "native_diag_c81_signals",
-        "native_diag_c81_futex_oracle"
+        "native_diag_c81_futex_oracle",
+        "native_diag_c81_futex_prep"
       ],
       "depends_on": []
     },
@@ -1312,13 +1314,14 @@
       "area": "PROC",
       "title": "Futex wait/wake and thread synchronization",
       "status": "baseline",
-      "result": "Baseline barrier/mutex, two children, TID transfer and futex/child-TID tests passed. The current c81 diagnostic confirms barrier, mutex, two workers, TLS and joins, but its trace does not identify direct futex operations or counts.",
-      "next_check": "Compile the independently accepted typed-oracle collector, prepare/review the c81 overlay and manifest, then release a distinct direct-futex diagnostic with explicit wait/wake results and syscall trace.",
+      "result": "Baseline barrier/mutex, two children, TID transfer and futex/child-TID tests passed. The current c81 threads diagnostic confirms barrier, mutex, two workers, TLS and joins. A distinct direct-futex collector and strict typed-oracle manifest are now independently prepared but have not run.",
+      "next_check": "Fetch-verify and independently release the exact one-shot direct-futex packet, then preserve all 16 wait/wake case records, clone/thread records, syscall trace and teardown from one c81 guest.",
       "evidence": [
         "app",
         "baseline",
         "native_diag_c81_threads_signals_prep",
-        "native_diag_c81_futex_oracle"
+        "native_diag_c81_futex_oracle",
+        "native_diag_c81_futex_prep"
       ],
       "depends_on": [
         "SC-CPU-02"

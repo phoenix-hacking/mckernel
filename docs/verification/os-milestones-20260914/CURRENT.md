@@ -12039,3 +12039,40 @@ IRQ-drain candidate now models sender closure, per-node BUSY polling and
 `irq_work_sync`, but cannot be accepted until an actual-body fixture executes
 route quarantine/reuse, callback and finalization races; v4 remains unwired.
 The OS goal remains active and incomplete.
+
+Continuation checkpoint 291, 2026-10-01: the c81 direct-futex diagnostic is
+prepared but not released.  Exact static ND_FUTEX collector
+`3833fd03...db2e69` passed independent artifact review; corrected attempt 3
+binds the retained 45,304-byte payload `9593e5f1...b2ecc`, deterministic overlay
+`08afffe0...d0efc`, representation `5e252f5b...a3335`, and strict manifest
+`ce4be004...ef28d`.  Its exact launch contract is
+`/bin/mcexec -t 1 0 /apps/app`, stdout
+`NATIVE_ULTRA_FUTEX PASS cases=16 threads=2 raw_clone=1\n`, typed 18-line
+stderr and exit 37.  Independent review returns
+`PASS_PREP_FUTEX_CORRECTED`; it verified the complete 60-member replay and
+deterministic image.
+
+The first review BLOCK is preserved.  Attempt-2 manifest `51a7f75c...61a1`
+described `app` while the collector executes/reports `/apps/app`, which would
+have failed the exact argv join.  The bounded correction permits only those two
+reviewed payload spellings and also repairs the typed-oracle optional-key bug;
+64 diagnostic tests plus 21 collector tests pass.  Owner binding
+`5d6fffe0...9b20e` passes 89 tests locally.  Independent review first observed
+two writer-completion timing failures after cleanup/lease-release assertions,
+then an identical bounded rerun passed 89/89 in 7.057 seconds; retain both.
+The one-shot packet
+`docs/verification/stability-native-diagnostic-futex-c81-execution-packet-20261001-1.md`
+remains `NOT_RELEASED`.  No futex guest has run and the diagnostic count remains
+five; formal application/catalog acceptance remains zero.
+
+Shutdown IRQ drain also remains source-only and blocked.  Independent review
+found the first fixture compiled a handwritten model instead of mechanically
+extracted production bodies and that ordinary pre-start route drop consumed a
+slot permanently.  Expert correction now restores only proven-unused LIVE
+routes and passes 11 model tests, but it still does not supply the required
+compiled production-body extraction.  Preserve the uncommitted candidate; do
+not claim IRQ drain or wire v5.  Next commit/push/fetch the futex-only packet
+and corrected runtime sources, obtain an exact one-shot execution release and
+run the direct-futex guest.  Separately replace the shutdown model with a real
+production-body extraction before another shutdown source review.  The OS goal
+remains active and incomplete.

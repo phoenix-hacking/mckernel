@@ -30,7 +30,8 @@ APPEND = "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000
 # The launcher prefix is part of the reviewed wire contract.  The tail is
 # deliberately bounded rather than frozen so the same manifest validator can
 # describe startup and the four core-mode payloads.
-PAYLOAD_ARGV_PREFIX = ("/bin/mcexec", "-t", "1", "0", "app")
+PAYLOAD_ARGV_PREFIX = ("/bin/mcexec", "-t", "1", "0")
+PAYLOAD_PATHS = ("app", "/apps/app")
 PAYLOAD_ARGC_MAX = 32
 PAYLOAD_ARG_BYTES_MAX = 256
 PAYLOAD_ARGV_BYTES_MAX = 2048
@@ -107,8 +108,10 @@ def _validate_payload_argv(argv):
     """Validate the bounded mcexec payload argv without normalising it."""
     _need(type(argv) is list and argv, "payload argv must be a non-empty list")
     _need(len(argv) <= PAYLOAD_ARGC_MAX, "payload argv argc limit")
-    _need(tuple(argv[:len(PAYLOAD_ARGV_PREFIX)]) == PAYLOAD_ARGV_PREFIX,
-          "payload argv prefix")
+    _need(tuple(argv[:len(PAYLOAD_ARGV_PREFIX)]) == PAYLOAD_ARGV_PREFIX and
+          len(argv) > len(PAYLOAD_ARGV_PREFIX) and
+          argv[len(PAYLOAD_ARGV_PREFIX)] in PAYLOAD_PATHS,
+          "payload argv prefix/path")
     encoded = 0
     for item in argv:
         _need(type(item) is str and "\0" not in item, "payload argv item")
@@ -224,7 +227,9 @@ def _validate_manifest(obj):
     _validate_payload_argv(payload["argv"])
     _need(payload["env"] == {"PATH": "/usr/bin:/bin", "COKERNEL_PATH": "/apps"}, "frozen environment")
     oracle = payload["oracle"]
-    _keys(oracle, ("stdout_hex", "stderr_hex", "exit_code"), ("stderr_typed",))
+    _need(set(oracle) in ({"stdout_hex", "stderr_hex", "exit_code"},
+                          {"stdout_hex", "stderr_hex", "exit_code", "stderr_typed"}),
+          "manifest keys differ")
     _need(type(oracle["stdout_hex"]) is str and re.fullmatch(r"(?:[0-9a-fA-F]{2})*", oracle["stdout_hex"]), "oracle stdout")
     _need(type(oracle["stderr_hex"]) is str and re.fullmatch(r"(?:[0-9a-fA-F]{2})*", oracle["stderr_hex"]), "oracle stderr")
     _need(type(oracle["exit_code"]) is int and not isinstance(oracle["exit_code"], bool) and 0 <= oracle["exit_code"] <= 255, "oracle exit")

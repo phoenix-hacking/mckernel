@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "status": "PREPARED_NOT_RELEASED",
+  "candidate_source_commit": "c81aeaca5cedd893981a058444fa11a03a49a744",
+  "candidate_image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+  "compiled_current_candidate_count": 1,
+  "accepted_current_candidate_diagnostics": 5,
+  "formal_application_catalog_acceptance": 0,
+  "collector": {
+    "path": "/home/holden/mckernel-work/scratch/native-diagnostic-futex-collector-build-20261001-1/init",
+    "size": 1021296,
+    "mode": "0700",
+    "sha256": "3833fd03dbfeb0d2db6d03cc07399ec4b9a64fb6e2f892f5d7be2c0fafdb2e69",
+    "independent_review": "PASS_FUTEX_COLLECTOR_ARTIFACT"
+  },
+  "correction": {
+    "original_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-diagnostic-futex-c81-20261001-2/manifest.json",
+      "sha256": "51a7f75cc0315b781867337c185f8f1e94b094d10d5041faa30c0bc45e8861a1",
+      "decision": "BLOCK_PREP_FUTEX",
+      "failure": "manifest argv app differed from collector execution/report argv /apps/app"
+    },
+    "corrected_validator_sha256": "bda3191b20e1c2a8bdfab44c116536569b91e05835ae3bf1bcc97fa67ba45375",
+    "corrected_validator_test_sha256": "960200e546dd138db384d0339eaac4cc7b53b4e2e0415520bbcad4eb7b7c19d7",
+    "validator_and_collector_tests": {"command": "python3 -B -m unittest scripts.tests.test_application_native_diagnostic scripts.tests.test_native_diagnostic_guest_collector", "passed": 85},
+    "owner_tests": {"command": "python3 -B -m unittest scripts.tests.test_application_native_diagnostic_container_owner", "passed": 89},
+    "owner_sha256": "5d6fffe0bcc73929772c55dff3a57c3c7aace8fa74eea5745fcd1720c869b20e"
+  },
+  "prepared": {
+    "root": "/home/holden/mckernel-work/scratch/native-diagnostic-futex-c81-20261001-3",
+    "manifest": {"size": 6080, "mode": "0600", "sha256": "ce4be0043b42e1fac46862811dc78d15a1e89740c20a609d32f60db6ba5ef28d"},
+    "derived_initramfs": {"size": 12894522, "mode": "0600", "sha256": "08afffe000231b1ff4f1d87efd7c74e5e098473a7082c5d6e8298abe691d0efc"},
+    "overlay_result": {"size": 13783, "mode": "0600", "sha256": "5e252f5b4c8912ffeafddb7015e6aa356da365ec3ab416619b5eb8b7e62a3335"},
+    "overlay_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "argv": ["/bin/mcexec", "-t", "1", "0", "/apps/app"],
+    "stdout_hex": "4e41544956455f554c5452415f465554455820504153532063617365733d313620746872656164733d32207261775f636c6f6e653d310a",
+    "stderr_oracle": "native-ultra-futex-v1, 18 typed lines",
+    "exit_code": 37
+  },
+  "independent_review": {
+    "decision": "PASS_PREP_FUTEX_CORRECTED",
+    "scope": "preparation only; no runtime authority",
+    "validator_tests_reproduced": 64,
+    "collector_tests_retained": 21,
+    "owner_tests": {
+      "initial": "2/89 timing-sensitive writer-completion failures after cleanup and lease-release assertions",
+      "bounded_identical_rerun": "89/89 PASS in 7.057 seconds",
+      "classification": "preserved scheduling-sensitive test failure; no demonstrated cleanup defect"
+    }
+  },
+  "runtime_executed": false,
+  "production_gate_credit": false,
+  "application_acceptance": false,
+  "next": "commit/push/fetch the exact packet and corrected sources, then obtain one-shot independent execution release"
+}

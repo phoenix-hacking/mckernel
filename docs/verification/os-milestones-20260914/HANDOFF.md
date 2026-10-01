@@ -1465,3 +1465,22 @@ validated disk request and source-approved exact budget wrapper SHA
 offline build at `-j<=4`. On build success start fresh non-accepting diagnostic
 startup, memory, files, threads/futexes, signals and shutdown checks. Formal
 counters remain 6/130, 350/10000 and 0/273.
+
+Checkpoint 291 prepares, but does not release, the current-candidate direct
+futex diagnostic.  Attempt 2 is preserved BLOCKed because its manifest said
+`app` while the exact collector executes/reports `/apps/app`.  Bounded attempt
+3 manifest `ce4be004...ef28d`, overlay `08afffe0...d0efc`, representation
+`5e252f5b...a3335`, collector `3833fd03...db2e69` and payload
+`9593e5f1...b2ecc` pass independent preparation review.  The validator now
+admits only the two exact reviewed payload spellings and supports either
+byte-exact or typed stderr contracts; 85 combined tests pass.  Owner binding
+`5d6fffe0...9b20e` passes 89 tests, with one preserved independent timing
+failure followed by an identical bounded 89/89 pass.
+
+Packet `stability-native-diagnostic-futex-c81-execution-packet-20261001-1.md`
+is still `NOT_RELEASED`.  Next commit/push/fetch it with the corrected sources,
+then obtain a new exact-hash execution release before the sole command.  No
+direct-futex guest has run; current-candidate diagnostics remain five and
+formal application acceptance remains zero.  Shutdown IRQ source is separately
+blocked because its tests still compile a model rather than extracted
+production bodies; keep that candidate uncommitted and unwired.
