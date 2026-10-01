@@ -1,5 +1,41 @@
 # Compact dispatcher handoff
 
+## Latest continuation: checkpoint 288
+
+Fetched HEAD before this checkpoint is `1e2daf64b7b8a5b6f9e0a517bb1bc186e9b3442a`
+on `codex/local-native-staging-repair`.  Adopted policy SHA-256 values remain
+GOAL `76c4f5d1...c0bcc3`, START `1698d342...6216c`, CONVERGENCE
+`f6938bd2...3e86a` and HANDOFF predecessor `bdc94610...af8c5`.
+
+The current c81 candidate now independently passes four diagnostic applications:
+memory, files, startup and threads.  Threads nonce
+`dba946c3722df2f16cf6ed8035768849` produced exact stdout
+`NATIVE_CORE PASS threads\n`, empty stderr and exit 37; two workers, barrier,
+mutex counter 2,000, TLS, joins and TID/procfs retirement pass.  Result/serial/
+QMP hashes are `9eb36fe3...135f2`, `47ea843d...50d3` and
+`e0d58586...61da`.  Independent semantic and postflight decisions pass; owner,
+container and 30 Docker clients retired and the heavy lease is free.  This does
+not separately prove direct futex operations or formal application acceptance.
+
+C81 signals preparation succeeds only on fresh attempt 3 after two retained
+harness-input failures.  Archive/overlay/manifest hashes are
+`138b2bb5...c55a`, `eec0964b...a473` and `7638d982...c298`; exact collector is
+`e1c7b50e...cdea`.  New packet
+`stability-native-diagnostic-signals-c81-execution-packet-20261001-1.md` is
+`NOT_RELEASED`, SHA-256 `3724d708...28c5`.  Next commit/push/fetch this exact
+checkpoint, obtain fresh execution review, then run that sole command once.
+After independent result/postflight review, prepare a distinct direct-futex
+diagnostic from the retained `native-ultra-futex` artifact.
+
+Production shutdown remains separate.  Booted SMP still registers v4, so
+`os_runtime.rs` returns `ENOSYS`.  A bounded effect-aware transaction candidate
+is under expert correction after its initial review and one correction failure;
+do not include or accept it until actual-body Rust 1.92 tests and independent
+rereview pass.  STOP/quiescence, sender/callback drain, CPU reclamation and
+resource restoration remain required.  Application exit/QMP poweroff is not OS
+shutdown.  Build count is one, diagnostic app count four, formal applications
+remain 0/273 and the whole-OS goal is active and incomplete.
+
 ## Latest continuation: checkpoint 153
 
 Checkpoint 153 supersedes the retirement release state. Fetched v1 release

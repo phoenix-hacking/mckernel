@@ -11919,3 +11919,54 @@ still requires implementing and reviewing the booted `ENOSYS` path,
 effect-aware STOP/quiescence, callback drain and reset/resource restoration;
 application exit and QMP poweroff do not satisfy it.  The OS goal is paused for
 this launcher shutdown, remains incomplete, and was not marked complete.
+
+Continuation checkpoint 288, 2026-10-01: the one-shot c81 threads diagnostic
+completed after a fresh fetched-hash execution release.  Independent reviews
+return `PASS_DIAGNOSTIC_C81_THREADS` and `PASS_GUEST_POSTFLIGHT_THREADS` for
+nonce `dba946c3722df2f16cf6ed8035768849`.  Exact stdout is
+`NATIVE_CORE PASS threads\n`, stderr is empty, exit/raw status is 37/9472,
+both streams reach EOF without truncation or discarded bytes, and procfs is
+empty.  The bound fixture proves two workers, a three-party barrier, 2,000
+mutex-protected increments, TLS isolation, joins with distinct results and
+synchronization-object destruction.  Raw trace joins TIDs 255/256/257, a
+512-byte TID transfer, 28 sampled deliveries, 27 returns and 14 routes; the
+terminal unreturned delivery is `exit_group`.  Pager references drain to zero,
+retirement progresses from retained `-11` to zero, and process cleanup succeeds.
+
+The fetched packet is SHA-256 `0f01ae3e...baa8`, manifest
+`d3264702...db3d`, result `9eb36fe3...135f2`, serial
+`47ea843d...50d3` and QMP `e0d58586...61da`.  Owner PID 2925101 and all 30
+Docker clients are absent.  Container `a9c629a8...10b4e7` exited zero without
+OOM and is removed.  QMP records guest shutdown/nonrunning status and
+acknowledged quit before controlled QEMU reap `-9`; the development lock is
+released and evidence directories remain preserved.  The postflight reviewer
+could not read the root-owned evidence directory directly and explicitly relies
+on coordinator-supplied hash-bound privileged receipts for those conclusions.
+Clone3/futex entries or counts are not separately traced, so this passes the
+threads diagnostic only.  A distinct direct-futex diagnostic remains required.
+
+Signals preparation attempt 3 now passes expert identity review, exact command
+admission and independent `PASS_SIGNALS_MANIFEST_C81`.  Attempts 1 and 2 remain
+preserved: the first precreated an absent-only output, and the second supplied
+the non-authoritative collector hash
+`e1c7b50e58c3a82f7e22b879048425ed7be1874a67f80add89986b3ee197cdea`.
+The authoritative retained collector is `e1c7b50e3efe...cdea`.  Fresh archive
+`/home/holden/mckernel-work/scratch/native-diagnostic-signals-c81-20261001-3/initramfs.cpio.gz`
+is 12,891,736 bytes at `138b2bb5...c55a`; overlay representation is
+`eec0964b...a473`; its stderr is empty.  Strict manifest is 5,336 bytes at
+`7638d982...c298` and binds exact output `NATIVE_CORE PASS signals\n`, empty
+stderr and exit 37.  The new packet
+`docs/verification/stability-native-diagnostic-signals-c81-execution-packet-20261001-1.md`
+is `NOT_RELEASED`, SHA-256 `3724d708...28c5`.  No signals guest has run.
+
+Exact additive evidence is
+`docs/verification/evidence/native-exact-c81-threads-and-signals-preparation-checkpoint-20261001.json`.
+The current-candidate build count remains one; accepted current-candidate
+diagnostic applications are now four (memory, files, startup and threads), and
+formal application/catalog acceptance remains zero.  Next fetch-verify this
+checkpoint, obtain a fresh independent release of the exact signals packet,
+run it once under the sole heavy lease, and independently review result and
+postflight.  Then stage the retained direct-futex payload against c81.  Native
+OS shutdown remains a separate production implementation family; neither this
+guest's `exit_group` nor QMP poweroff satisfies it.  The OS goal remains active
+and incomplete.

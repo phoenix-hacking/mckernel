@@ -1,0 +1,126 @@
+{
+  "schema": "mckernel.diagnostic-checkpoint.v1",
+  "recorded_at": "2026-10-01T07:31:00Z",
+  "repository_commit_before_record": "1e2daf64b7b8a5b6f9e0a517bb1bc186e9b3442a",
+  "candidate": {
+    "source_commit": "c81aeaca5cedd893981a058444fa11a03a49a744",
+    "mckernel_image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+    "compiled_candidate_count": 1
+  },
+  "threads": {
+    "nonce": "dba946c3722df2f16cf6ed8035768849",
+    "packet": {
+      "path": "docs/verification/stability-native-diagnostic-threads-c81-execution-packet-20261001-1.md",
+      "sha256": "0f01ae3e197f5ceb275ca652a23ecd6b45d9e39137ca0f6da2d921f6f309baa8"
+    },
+    "manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-diagnostic-threads-c81-20261001-1/manifest.json",
+      "sha256": "d3264702d3281c59660c4c5057535ef3d602a754248e10b55dba5376d475db3d"
+    },
+    "attempt": "/home/holden/mckernel-work/scratch/ndtc81-20261001-1/attempt-dba946c3722df2f16cf6ed8035768849",
+    "raw": {
+      "result_sha256": "9eb36fe3b8bd93eda30f634e33de71296d814ad03c0d6967ba418c43bfa135f2",
+      "serial_sha256": "47ea843d3f4da6645ade85547389163b889e6187420496cd4eae48131c0d50d3",
+      "qmp_sha256": "e0d585865fbd27e048566d548c0c95d14c7e1ce9c9418a975853e60b27a861da",
+      "owner_result_sha256": "338b0902fc09314b6957176d9166d32b7829cdd72096438f46a11e662c33a220",
+      "owner_state_sha256": "e15f60bdd92f0f984d90c8a066a78b0c7d11ffaac22f6d9fc5ad659a1d7599bb",
+      "owner_identity_sha256": "0433efaf4c9fe60d7d9e8e41ddcc1ca42d3a3eed1bcd8969b7c5431984b3a963"
+    },
+    "observed": {
+      "stdout_hex": "4e41544956455f434f5245205041535320746872656164730a",
+      "stderr_hex": "",
+      "exit_code": 37,
+      "raw_wait_status": 9472,
+      "streams_eof": true,
+      "discarded_bytes": 0,
+      "truncated": false,
+      "procfs_empty": true,
+      "tids": [255, 256, 257],
+      "tid_transfer_bytes": 512,
+      "sampled_deliveries": 28,
+      "matched_returns": 27,
+      "routes": 14,
+      "pager_references_released": 4,
+      "qmp_matched_replies": 697,
+      "qemu_returncode": -9
+    },
+    "decisions": [
+      "PASS_EXECUTION_C81_THREADS",
+      "PASS_DIAGNOSTIC_C81_THREADS",
+      "PASS_GUEST_POSTFLIGHT_THREADS"
+    ],
+    "verified_behavior": [
+      "two workers",
+      "three-party barrier",
+      "2000 mutex-protected increments",
+      "TLS isolation",
+      "successful joins with distinct returns",
+      "synchronization-object destruction",
+      "TID publication and procfs deletion",
+      "pager and process retirement"
+    ],
+    "cleanup": {
+      "container_id": "a9c629a8af6ee460c7f050fda80d85ed7aff49d6fe5a234a97eb40d6d010b4e7",
+      "container_exit_code": 0,
+      "container_oom_killed": false,
+      "container_absent": true,
+      "docker_clients_reaped": 30,
+      "owner_pid": 2925101,
+      "owner_pid_absent": true,
+      "development_lock_released": true,
+      "lease_retained": false
+    },
+    "limitations": [
+      "clone3 and futex entries/counts were not separately traced",
+      "the root evidence directory was unreadable to the postflight reviewer; privileged receipts were supplied by the coordinator",
+      "QEMU -9 is controlled retirement, not natural QEMU exit"
+    ]
+  },
+  "signals_preparation": {
+    "failure_family_history": [
+      {
+        "attempt": 1,
+        "outcome": "FAIL",
+        "reason": "precreated output passed to an absent-output interface",
+        "retained_empty_paths": [
+          "/tmp/native-diagnostic-signals-c81-overlay.EnXoAf",
+          "/tmp/native-diagnostic-signals-c81-result.E24lob"
+        ]
+      },
+      {
+        "attempt": 2,
+        "outcome": "FAIL",
+        "reason": "non-authoritative collector digest was supplied",
+        "supplied_sha256": "e1c7b50e58c3a82f7e22b879048425ed7be1874a67f80add89986b3ee197cdea",
+        "retained_path": "/home/holden/mckernel-work/scratch/native-diagnostic-signals-c81-20261001-2/overlay-result.json"
+      }
+    ],
+    "expert_identity_decision": "PASS for one fresh ordinary-user preparation using the original authenticated collector identity",
+    "attempt": 3,
+    "outcome": "PASS_SIGNALS_MANIFEST_C81",
+    "root": "/home/holden/mckernel-work/scratch/native-diagnostic-signals-c81-20261001-3",
+    "collector_sha256": "e1c7b50e3efe559c72ded2288da021ad6c15ace1825074e1ef0e60ae43a0cdea",
+    "overlay_sha256": "138b2bb557d3c4cbfaed8409f0cc22a629f1c00e2add7824e3ed61ae1b4ac55a",
+    "overlay_result_sha256": "eec0964b94da39e26f7795d811a6d93aa86a23f1a186b6ee341ae0b87544a473",
+    "overlay_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "manifest_sha256": "7638d9829c8e2fbc45829b7e3aae1e602e1c8bd42ee611796ee0e5037001c298",
+    "manifest_path": "/home/holden/mckernel-work/scratch/native-diagnostic-signals-c81-20261001-3/manifest.json",
+    "packet": {
+      "path": "docs/verification/stability-native-diagnostic-signals-c81-execution-packet-20261001-1.md",
+      "sha256": "3724d7082feb5f55d7e85a8d2bb3c0f26409f15e56ac87274cbf7a056fea28c5",
+      "status": "NOT_RELEASED"
+    },
+    "oracle": {
+      "stdout_hex": "4e41544956455f434f52452050415353207369676e616c730a",
+      "stderr_hex": "",
+      "exit_code": 37
+    }
+  },
+  "accounting": {
+    "accepted_current_candidate_diagnostic_applications": 4,
+    "formal_application_acceptance": 0,
+    "distinct_futex_diagnostic": "NOT_RUN",
+    "signals_c81_guest": "NOT_RUN"
+  },
+  "scope": "Diagnostic execution and preparation only. No production gate, catalog case, language gate, shutdown, or whole-OS acceptance is promoted."
+}

@@ -140,6 +140,7 @@
     ,"native_diag_signals_artifact": "docs/verification/stability-native-diagnostic-signals-artifact-success-20260928-1.json"
     ,"native_diag_signals_release": "docs/verification/stability-native-diagnostic-signals-execution-release-20260928-1.json"
     ,"native_diag_signals_success": "docs/verification/stability-native-diagnostic-signals-success-20260928-1.json"
+    ,"native_diag_c81_threads_signals_prep": "docs/verification/evidence/native-exact-c81-threads-and-signals-preparation-checkpoint-20261001.json"
     ,"shutdown_observer": "docs/verification/stability-native-shutdown-observer-source-success-20260928-1.json"
     ,"shutdown_registry": "docs/verification/stability-native-shutdown-registry-source-success-20260928-1.json"
     ,"shutdown_admission": "docs/verification/stability-native-shutdown-admission-source-success-20260928-1.json"
@@ -543,8 +544,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "Packet 6 passes one startup diagnostic. The exact retained current signal tuple independently passes baseline.core.memory, baseline.core.files, baseline.core.threads and baseline.core.signals diagnostics. Signals proves exact output/exit 37, blocked/pending SIGUSR1 and mask fixture assertions, two alternate-stack handler invocations with successful returns, retirement, pager/process release, 673/673 QMP replies and exact QEMU/Docker cleanup. The assertion is not a complete signal-event trace or general signal qualification. Preserved conservative result fields prevent formal acceptance. These are diagnostic protocol results, not catalog acceptance.",
-      "next_check": "Integrate the source-reviewed seven-phase shutdown observer into a separately reviewed Rocky boot-workload-stop packet bound to the lean source stage; do not relabel application exit_group, guest poweroff or controlled QEMU cleanup as independent OS shutdown.",
+      "result": "The current c81 candidate independently passes memory, files, startup and threads diagnostics. Threads proves exact output/exit 37, two workers, barrier, 2,000 mutex-protected increments, TLS, joins, TIDs 255/256/257, procfs deletion, pager/process release, 697/697 QMP replies and exact teardown. Clone3/futex operations are not separately traced. The c81 signals overlay and strict manifest pass independent preparation review but have not run. Preserved conservative result fields prevent formal acceptance. These are diagnostic protocol results, not catalog acceptance.",
+      "next_check": "Run the separately released c81 signals packet, then a distinct direct-futex diagnostic; continue production shutdown effect/IRQ-drain/reclamation implementation and never relabel application exit_group, guest poweroff or controlled QEMU cleanup as OS shutdown.",
       "evidence": [
         "history",
         "plan",
@@ -580,7 +581,8 @@
         "native_diag_threads_success",
         "native_diag_signals_artifact",
         "native_diag_signals_release",
-        "native_diag_signals_success"
+        "native_diag_signals_success",
+        "native_diag_c81_threads_signals_prep"
       ],
       "depends_on": []
     },
@@ -1232,11 +1234,12 @@
       "area": "PROC",
       "title": "Exit, join and child-TID ownership",
       "status": "baseline",
-      "result": "Baseline passed futex/child-TID and thread-node removal checks.",
-      "next_check": "Exercise normal exit, concurrent joins/waits, invalid TID pointers and clear-TID wake ownership; no double reap or dangling user pointer.",
+      "result": "Baseline passed futex/child-TID and thread-node removal checks. The current c81 threads diagnostic also publishes TIDs 255/256/257 and deletes all three procfs nodes, but does not separately trace clear-TID futex wake.",
+      "next_check": "Run the retained direct futex/child-TID diagnostic on c81, then exercise normal exit, concurrent joins/waits, invalid TID pointers and clear-TID wake ownership; no double reap or dangling user pointer.",
       "evidence": [
         "baseline",
-        "app"
+        "app",
+        "native_diag_c81_threads_signals_prep"
       ],
       "depends_on": []
     },
@@ -1303,11 +1306,12 @@
       "area": "PROC",
       "title": "Futex wait/wake and thread synchronization",
       "status": "baseline",
-      "result": "Baseline barrier/mutex, two children, TID transfer and futex/child-TID tests passed.",
-      "next_check": "Replay contention, wake counts and timeout/cancel paths with actual runnable peer progress and correct errno/results.",
+      "result": "Baseline barrier/mutex, two children, TID transfer and futex/child-TID tests passed. The current c81 diagnostic confirms barrier, mutex, two workers, TLS and joins, but its trace does not identify direct futex operations or counts.",
+      "next_check": "Run a distinct c81 direct-futex diagnostic with explicit wait/wake results and syscall trace, then replay contention, wake counts and timeout/cancel paths with actual runnable peer progress and correct errno/results.",
       "evidence": [
         "app",
-        "baseline"
+        "baseline",
+        "native_diag_c81_threads_signals_prep"
       ],
       "depends_on": [
         "SC-CPU-02"
