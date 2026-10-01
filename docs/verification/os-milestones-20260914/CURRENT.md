@@ -11193,3 +11193,38 @@ terminal/log, exact request/toolchain documents and postflight before seeking a
 separate heavy-build release.  Current linked-image and current-candidate real
 guest-app counts remain zero; no formal counter changes and the whole OS goal
 remains active.
+
+Continuation checkpoint 270, 2026-09-30: corrected fetched commit
+`4ae69af9...0e50` received fresh independent
+`PASS_EXECUTION_EXPORT25_PREPARATION_ATTEMPT2`.  Complete live admission again
+verified exact helpers and inputs, all targets absent, no conflicting process,
+devices 66306/1831, 28,794,834,944/16,906,440,704 free bytes,
+27,897,464 KiB MemAvailable, the immutable image identity and the complete
+41-container census with only two unrelated Kasper services running.
+
+The single ordinary-user attempt then completed after about three minutes with
+wrapper exit zero and one stdout commit witness.  Independent review returns
+`PASS_EXPORT25_PREPARATION_RESULT`: terminal/log hashes are
+`8a72acac...e072`/`867ddf41...1b86`, publication is `request-published`, child
+return is zero, semantic validation PASS and all descendants retired.  Published
+inputs/toolchain/request hashes are `af41bb15...97ee`/
+`de4bcafc...1cf83`/`9923b51f...461d`.  Terminal and pending names share inode
+90678/link-count two.
+
+Independent reconstruction verifies 140,053 retained `/out` entries, 3,035
+nightly entries, 86 backup entries and all 92 tool-image evidence files.  A
+mutation-denying replay of authenticated `ImageOwner.validate()` passes.
+Owner/child/helper PIDs 2281698/2281701/2281739 are absent; work/evidence roots
+are empty and lease/exclusion/attempt/new build output remain absent.  Postflight
+host/scratch free bytes are 28,680,130,560/16,797,904,896 and available memory
+is 27,958,583,296 bytes.  Exact evidence is
+`docs/verification/evidence/native-exact-export25-image-preparation-attempt2-success-20260930.json`.
+
+This accepts preparation only.  Next checkpoint/fetch these bytes, obtain a
+separate independent one-shot heavy-build release for the exact request
+`9923b51f...461d`, then repeat complete process/lease/Docker/capacity admission
+immediately before invoking the image owner unprivileged.  Preserve every owner,
+driver, Docker and terminal artifact.  A successful build still requires
+independent artifact review plus separate postlink and linked-text reports before
+the memory diagnostic can be rebound.  Current linked-image and real current-
+candidate guest-app counts remain zero and no formal counter changes.
