@@ -14,6 +14,7 @@ import importlib.util
 from contextlib import contextmanager
 
 BASELINE = "50b084322610a9326b1b7b528edd4cd73b635632"
+SOURCE_BASE = "1e95abdc2b124c19f16b88cdb21600c768a10c2d"
 TARGET = "89ab5c555aac9177a789efc67ddc775dacb25d6d"
 TARGET_TREE = "e57e36cfefa874eb97eff87aca32794a3826b538"
 FETCHED_REF = "refs/remotes/origin/codex/local-native-staging-repair"
@@ -43,8 +44,13 @@ OVERLAY_RESULT_COMMIT_SHA='21a0d1eb1705c3ee597aed41358ba4c0a92d5f8c'
 OVERLAY_BASE_BLOB_SHA='91fe5688f3282c1617a75f08c4b435a793200f2cf9beafe432cef7ad3ca0bd4c'
 IMAGE_ID='sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d'
 DEFAULT_SCRATCH = Path('/home/holden/mckernel-work/scratch')
+INTERMEDIATE_CANDIDATE_NAME = 'mckernel-exact-candidate-ddb8d7d5-scratch-16'
 PREVIOUS_CANDIDATE_NAME = 'mckernel-exact-candidate-50b08432-scratch-17'
 EXPECTED_SHARED_FILES = 486
+PRIVATE_RETENTION = (
+    ('docs/verification/evidence/native-exact-candidate-retention-c81aeaca-scratch14-20261001.inventory.json', 'ccb49a07c48cc671b61d8247b33934912346947d', '12de35d422c6ec014e9ed893c1e1c7ffdb772969ff6f5a5978258203f5519630', 5479703),
+    ('docs/verification/evidence/native-exact-candidate-retention-c81aeaca-scratch14-20261001.tar', 'b94f56184255e6390197243ccea8d1a4518abb4d', '8ca6a306ade8b7eb88d62488b239e5c9a3b7c5fb4b11f9af8d313d0497c8203d', 12247040),
+)
 CANDIDATE_NAME = 'mckernel-exact-candidate-scratch-18'
 MANIFEST_NAME = 'native-exact-inputs-scratch-18.json'
 REQUEST_NAME = 'native-exact-delta-request-scratch-18.json'
@@ -226,15 +232,16 @@ def private_size(root):
     return sum(p.stat().st_size + 4096 for p in Path(root).rglob('*') if p.is_file())
 
 
-def check_shared(candidate, scratch15, previous_candidate, shared):
+def check_shared(candidate, scratch15, scratch16, previous_candidate, shared):
     for row in shared:
         left = snapshot(scratch15/row['path'])
+        middle = snapshot(scratch16/row['path'])
         owner = snapshot(previous_candidate/row['path'])
         right = snapshot(candidate/row['path'])
-        expected_final = dict(row['before'], nlink=3)
-        if (left != expected_final or owner != expected_final or
+        expected_final = dict(row['before'], nlink=4)
+        if (left != expected_final or middle != expected_final or owner != expected_final or
                 right != expected_final or left['inode'] != owner['inode'] or
-                right['inode'] != left['inode']):
+                middle['inode'] != left['inode'] or right['inode'] != left['inode']):
             raise Refusal('shared evidence identity/mode/hash changed: '+row['path'])
 
 
@@ -263,7 +270,7 @@ class Journal:
                         (json.dumps(row, sort_keys=True)+'\n').encode(), 0o600)
 
 
-def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, target=TARGET,
+def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, source_base=SOURCE_BASE, target=TARGET,
             baseline=BASELINE,
             ihk_expected=IHK, overlay_sha=OVERLAY_SHA256,
             overlay_result_sha=OVERLAY_RESULT_SHA256, assets_root=ASSETS,
@@ -271,9 +278,10 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, target=T
             image_receipt_sha256=RECEIPT_SHA256,
             overlay_base_sha256=OVERLAY_BASE_BLOB_SHA,
             overlay_result_commit=OVERLAY_RESULT_COMMIT_SHA,
-            previous_candidate=None, expected_shared_files=EXPECTED_SHARED_FILES,
+            scratch16=None, previous_candidate=None, expected_shared_files=EXPECTED_SHARED_FILES,
             expected_delta=EXACT_DELTA):
     source, scratch15, scratch = map(Path, (source, scratch15, scratch))
+    scratch16 = Path(scratch16) if scratch16 else scratch/INTERMEDIATE_CANDIDATE_NAME
     candidate = scratch/CANDIDATE_NAME
     previous_candidate = Path(previous_candidate) if previous_candidate else scratch/PREVIOUS_CANDIDATE_NAME
     paths = {'candidate': candidate, 'backup': scratch/(CANDIDATE_NAME+'-metadata-backup'),
@@ -284,10 +292,12 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, target=T
              'lease': scratch/LEASE_NAME,
              'exclusion': Path(exclusion) if exclusion else
                  scratch/EXCLUSION_NAME}
-    for root in (source, scratch15, scratch):
+    for root in (source, scratch15, scratch, scratch16):
         if not root.is_absolute() or root.is_symlink() or not root.is_dir():
             raise Refusal('invalid root: '+str(root))
         if root.resolve() != root: raise Refusal('root alias: '+str(root))
+    if len({scratch15.resolve(), scratch16.resolve(), previous_candidate.resolve(), candidate.resolve()}) != 4:
+        raise Refusal('shared root alias')
     if any(os.path.lexists(p) for p in paths.values()): raise Refusal('destination-present')
     # The journal exists before the first candidate mutation. Every Python
     # exception, including argparse SystemExit, produces a terminal failure.
@@ -297,9 +307,20 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, target=T
             raise Refusal('exact future target required')
         if target != TARGET:
             raise Refusal('target is not the reviewed exact side target')
+        if not isinstance(source_base,str) or len(source_base)!=40 or any(c not in '0123456789abcdef' for c in source_base):
+            raise Refusal('exact source base required')
+        if source_base != SOURCE_BASE:
+            raise Refusal('source base is not the reviewed exact source base')
         if git(source,'rev-parse','--verify',target+'^{commit}').decode().strip()!=target:
             raise Refusal('target not fetched')
-        if git(source,'rev-parse','--verify',FETCHED_REF).decode().strip() != git(source,'merge-base',target,FETCHED_REF).decode().strip():
+        if git(source,'rev-parse','--verify',source_base+'^{commit}').decode().strip()!=source_base:
+            raise Refusal('source base not fetched')
+        # The fetched ref must contain the reviewed target in its ancestry.
+        # Comparing it with merge-base(target, ref) in the opposite direction
+        # admits an ancestor ref and rejects a valid descendant ref.
+        try:
+            git(source,'merge-base','--is-ancestor',target,FETCHED_REF)
+        except Refusal:
             raise Refusal('target is not reachable from fetched ref')
         if git(source,'rev-parse','--verify',target+'^{tree}').decode().strip()!=TARGET_TREE:
             raise Refusal('target tree mismatch')
@@ -307,12 +328,19 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, target=T
             raise Refusal('target parent/baseline mismatch')
         if old != baseline:
             raise Refusal('baseline mismatch')
-        if git(scratch15,'rev-parse','HEAD').decode().strip()!=old:
-            raise Refusal('scratch15 main HEAD mismatch')
+        if git(scratch15,'rev-parse','HEAD').decode().strip()!=source_base:
+            raise Refusal('scratch15 source base HEAD mismatch')
+        try:
+            git(source,'merge-base','--is-ancestor',source_base,old)
+        except Refusal:
+            raise Refusal('source base is not an ancestor of baseline')
         validate_git_roots(scratch15)
         if (not previous_candidate.is_absolute() or previous_candidate.is_symlink() or
                 not previous_candidate.is_dir() or previous_candidate.resolve()!=previous_candidate):
             raise Refusal('invalid prior candidate root: '+str(previous_candidate))
+        if (not scratch16.is_absolute() or scratch16.is_symlink() or
+                not scratch16.is_dir() or scratch16.resolve()!=scratch16):
+            raise Refusal('invalid intermediate candidate root: '+str(scratch16))
         delta = raw_delta(source, old, target, expected_delta)
         # Authenticate the immutable scratch17-backed pair before either
         # validate-only return or candidate mutation.  This is deliberately
@@ -326,6 +354,8 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, target=T
                 fields = metadata.split()
                 if fields[1] == b'blob': sizes[rel.decode()] = int(fields[3])
         shared = []
+        private_retained = []
+        expected_private = {path:(oid, checksum, size) for path,oid,checksum,size in PRIVATE_RETENTION}
         private_bytes = 0
         for mode, kind, oid, rel in entries:
             if kind!='blob': continue
@@ -333,20 +363,42 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, target=T
             can_share = (sizes[rel] > 1 << 20 and
                          rel.startswith('docs/verification/evidence/') and
                          old_entries.get(rel)==(mode,kind,oid) and
+                         prior.exists() and
                          mode in ('100644','100755'))
             if can_share:
                 before = snapshot(prior)
+                middle_path = scratch16/rel
+                middle = snapshot(middle_path)
                 owner_path = previous_candidate/rel
                 owner = snapshot(owner_path)
-                if (before['nlink']!=2 or owner['nlink']!=2 or before != owner or
+                if (before['nlink']!=3 or middle['nlink']!=3 or owner['nlink']!=3 or
+                        before != middle or before != owner or
                         before['mode']!=int(mode,8)&0o777 or
                         before['device']!=scratch.stat().st_dev or
                         git(source,'hash-object','--no-filters',str(prior)).decode().strip()!=oid):
                     raise Refusal('unauthenticated prior shared evidence: '+rel)
                 if snapshot(prior)!=before: raise Refusal('shared input raced: '+rel)
+                if snapshot(middle_path)!=middle: raise Refusal('intermediate shared evidence raced: '+rel)
                 if snapshot(owner_path)!=owner: raise Refusal('prior shared evidence raced: '+rel)
                 shared.append({'path':rel, 'before':before, 'blob':oid})
+            elif (sizes[rel] > 1 << 20 and rel.startswith('docs/verification/evidence/') and
+                  old_entries.get(rel)==(mode,kind,oid) and not prior.exists()):
+                if rel not in expected_private or (oid, sizes[rel]) != (expected_private[rel][0], expected_private[rel][2]):
+                    raise Refusal('unexpected missing large retained evidence: '+rel)
+                middle_path, owner_path = scratch16/rel, previous_candidate/rel
+                middle, owner = snapshot(middle_path), snapshot(owner_path)
+                if (middle['nlink']!=1 or owner['nlink']!=1 or
+                        middle['mode']!=owner['mode'] or middle['size']!=owner['size'] or
+                        middle['sha256']!=owner['sha256'] or middle['device']!=owner['device'] or
+                        middle['mode']!=int(mode,8)&0o777 or middle['size']!=sizes[rel] or
+                        middle['sha256']!=expected_private[rel][1] or
+                        git(source,'hash-object','--no-filters',str(middle_path)).decode().strip()!=oid):
+                    raise Refusal('unauthenticated private retained evidence: '+rel)
+                private_retained.append({'path':rel,'middle':middle,'owner':owner,'blob':oid})
+                private_bytes += sizes[rel] + 4096
             else: private_bytes += sizes[rel] + 4096
+        if {row['path'] for row in private_retained} != set(expected_private):
+            raise Refusal('unexpected private retained evidence set')
         if len(shared) != expected_shared_files:
             raise Refusal('unexpected authenticated shared-file count: '+str(len(shared)))
         if not execute:
@@ -389,7 +441,15 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, target=T
                 raw=object_bytes(source,'blob',oid)
                 if mode=='120000': os.symlink(os.fsdecode(raw),dst)
                 else: write_exclusive(dst,raw,int(mode,8))
-        check_shared(candidate,scratch15,previous_candidate,shared)
+        check_shared(candidate,scratch15,scratch16,previous_candidate,shared)
+        for row in private_retained:
+            middle = snapshot(scratch16/row['path'])
+            owner = snapshot(previous_candidate/row['path'])
+            private = snapshot(candidate/row['path'])
+            if (middle != row['middle'] or owner != row['owner'] or middle['nlink'] != 1 or
+                    owner['nlink'] != 1 or private['nlink'] != 1 or
+                    private['sha256'] != middle['sha256'] or private['inode'] in (middle['inode'], owner['inode'])):
+                raise Refusal('private retained evidence changed: '+row['path'])
         journal.event('copy-ihk')
         shutil.copytree(ihk_src,candidate/'ihk',symlinks=True)
         overlay=candidate/OVERLAY_REL
@@ -446,7 +506,15 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, target=T
             admitted.validate()
             if admitted.docker is not None: raise Refusal('unexpected Docker construction')
             journal.event('canonical-owner-validated', measurement=admitted.measurement)
-        check_shared(candidate,scratch15,previous_candidate,shared)
+        check_shared(candidate,scratch15,scratch16,previous_candidate,shared)
+        for row in private_retained:
+            middle, owner, private = (snapshot(scratch16/row['path']),
+                                      snapshot(previous_candidate/row['path']),
+                                      snapshot(candidate/row['path']))
+            if (middle != row['middle'] or owner != row['owner'] or middle['nlink'] != 1 or
+                    owner['nlink'] != 1 or private['nlink'] != 1 or
+                    private['sha256'] != middle['sha256'] or private['inode'] in (middle['inode'], owner['inode'])):
+                raise Refusal('private retained evidence changed: '+row['path'])
         post=capacity(scratch)
         for key in ('lease','exclusion'):
             if os.path.lexists(paths[key]): raise Refusal('unexpected runtime state: '+key)
@@ -465,13 +533,15 @@ def main(argv=None):
     ap=argparse.ArgumentParser()
     ap.add_argument('--source-root',default='/home/holden/mckernel')
     ap.add_argument('--scratch15-root',default=str(DEFAULT_SCRATCH/'mckernel-exact-candidate-1e95abdc-scratch-15'))
+    ap.add_argument('--scratch16-root',default=str(DEFAULT_SCRATCH/INTERMEDIATE_CANDIDATE_NAME))
     ap.add_argument('--scratch-root',default=str(DEFAULT_SCRATCH))
     ap.add_argument('--execute',action='store_true')
     ap.add_argument('--target',default=TARGET,required=TARGET is None)
     a=ap.parse_args(argv)
     try:
         print(json.dumps(prepare(a.source_root,a.scratch15_root,a.scratch_root,
-                                 execute=a.execute,target=a.target),sort_keys=True))
+                                 execute=a.execute,target=a.target,
+                                 scratch16=a.scratch16_root),sort_keys=True))
         return 0
     except (Exception, SystemExit) as error:
         print('REFUSED: '+type(error).__name__+': '+str(error),file=sys.stderr)

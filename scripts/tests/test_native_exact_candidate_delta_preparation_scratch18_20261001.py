@@ -28,7 +28,7 @@ class Scratch18(unittest.TestCase):
         self.t = tempfile.TemporaryDirectory(prefix='scratch18-regression-', dir=p.DEFAULT_SCRATCH)
         self.addCleanup(self.t.cleanup)
         self.r = Path(self.t.name)
-        self.src, self.s15, self.scratch = [self.r/x for x in ('src','s15','scratch')]
+        self.src, self.s15, self.s16, self.scratch = [self.r/x for x in ('src','s15','s16','scratch')]
         self.src.mkdir()
         self.scratch.mkdir()
         self.init(self.src)
@@ -75,17 +75,35 @@ class Scratch18(unittest.TestCase):
         for i in range(13): self.put(self.src,'old%d.txt'%i,b'old\n')
         self.large='docs/verification/evidence/large.bin'
         self.put(self.src,self.large,b'x'*((1<<20)+1))
+        self.private_paths = (
+            'docs/verification/evidence/native-exact-candidate-retention-c81aeaca-scratch14-20261001.inventory.json',
+            'docs/verification/evidence/native-exact-candidate-retention-c81aeaca-scratch14-20261001.tar')
+        self.put(self.src,self.private_paths[0],b'i' * 5479703)
+        self.put(self.src,self.private_paths[1],b't' * 12247040)
         self.g(self.src,'add','.')
         self.g(self.src,'update-index','--add','--cacheinfo','160000,'+self.ihk+',ihk')
-        self.g(self.src,'commit','-qm','old')
-        self.old=self.g(self.src,'rev-parse','HEAD').decode().strip()
+        self.g(self.src,'commit','-qm','source-base')
+        self.source_base=self.g(self.src,'rev-parse','HEAD').decode().strip()
         self.historical=self.g(self.src,'hash-object','-w','--stdin',input=b'historical ABI object').decode().strip()
         shutil.copytree(self.src,self.s15,symlinks=True)
         shutil.copytree(ihk,self.s15/'ihk',symlinks=True)
+        shutil.copytree(self.src,self.s16,symlinks=True)
+        shutil.copytree(ihk,self.s16/'ihk',symlinks=True)
         shutil.copytree(ihk,self.src/'ihk',symlinks=True)
+        self.g(self.src,'commit','--allow-empty','-qm','old')
+        self.old=self.g(self.src,'rev-parse','HEAD').decode().strip()
         self.previous=self.scratch/p.PREVIOUS_CANDIDATE_NAME
         (self.previous/self.large).parent.mkdir(parents=True)
+        (self.s16/self.large).unlink()
+        os.link(self.s15/self.large,self.s16/self.large)
         os.link(self.s15/self.large,self.previous/self.large)
+        for rel in self.private_paths:
+            (self.s15/rel).unlink()
+            (self.previous/rel).parent.mkdir(parents=True,exist_ok=True)
+            shutil.copy2(self.s16/rel,self.previous/rel)
+        p.PRIVATE_RETENTION = tuple(
+            (rel, self.g(self.src,'hash-object',rel).decode().strip(), p.sha((self.src/rel).read_bytes()),
+             (self.src/rel).stat().st_size) for rel in self.private_paths)
         # The old immutable metadata deliberately lacks the target commit.
         for i in range(5): self.put(self.src,'new%d.txt'%i,b'new\n')
         for i in range(9): self.put(self.src,'old%d.txt'%i,b'changed\n')
@@ -93,6 +111,7 @@ class Scratch18(unittest.TestCase):
         self.g(self.src,'commit','-qm','target')
         self.target=self.g(self.src,'rev-parse','HEAD').decode().strip()
         self.g(self.src,'update-ref',p.FETCHED_REF,self.target)
+        p.SOURCE_BASE = self.source_base
         p.TARGET = self.target
         p.TARGET_TREE = self.g(self.src,'rev-parse',self.target+'^{tree}').decode().strip()
         p.EXACT_DELTA = tuple(
@@ -105,11 +124,11 @@ class Scratch18(unittest.TestCase):
         self.expected_delta = tuple(
             (status, path, self.g(self.src,'rev-parse',self.target+':'+path).decode().strip())
             for status, path in [row.split('\t',1) for row in delta])
-        self.kw=dict(old=self.old,baseline=self.old,target=self.target,expected_delta=self.expected_delta,ihk_expected=self.ihk,
+        self.kw=dict(old=self.old,baseline=self.old,source_base=self.source_base,target=self.target,expected_delta=self.expected_delta,ihk_expected=self.ihk,
                      overlay_sha=self.overlay,overlay_result_sha=self.result,
                      overlay_base_sha256=self.base,assets_root=self.assets,
                      image_receipt=self.receipt,image_receipt_sha256=p.digest(self.receipt),
-                     previous_candidate=self.previous,expected_shared_files=1)
+                     scratch16=self.s16,previous_candidate=self.previous,expected_shared_files=1)
         self.commands=[]
         original=subprocess.Popen
         def only_git(argv,*args,**kwargs):
@@ -140,12 +159,16 @@ class Scratch18(unittest.TestCase):
     def prepare(self,**kwargs):
         return p.prepare(self.src,self.s15,self.scratch,**dict(self.kw,**kwargs))
 
+    def set_fetched_ref(self, commit):
+        self.g(self.src,'update-ref',p.FETCHED_REF,commit)
+
     def terminal(self):
         return json.loads((self.scratch/p.TERMINAL_NAME).read_text())
 
     def test_exact_delta_and_validate_only(self):
-        self.assertEqual((self.s15/self.large).stat().st_nlink,2)
-        self.assertEqual((self.previous/self.large).stat().st_nlink,2)
+        self.assertEqual((self.s15/self.large).stat().st_nlink,3)
+        self.assertEqual((self.s16/self.large).stat().st_nlink,3)
+        self.assertEqual((self.previous/self.large).stat().st_nlink,3)
         stale = dict(self.kw, expected_delta=self.expected_delta[:-1])
         with self.assertRaisesRegex(p.Refusal, 'exact target allowlist'):
             self.prepare(**stale)
@@ -153,8 +176,9 @@ class Scratch18(unittest.TestCase):
         self.assertEqual(tuple((status, path, self.g(self.src,'rev-parse',self.target+':'+path).decode().strip())
                                for status, path in result['delta']), self.expected_delta)
         self.assertEqual(result['shared_files'],1)
-        self.assertEqual((self.s15/self.large).stat().st_nlink,2)
-        self.assertEqual((self.previous/self.large).stat().st_nlink,2)
+        self.assertEqual((self.s15/self.large).stat().st_nlink,3)
+        self.assertEqual((self.s16/self.large).stat().st_nlink,3)
+        self.assertEqual((self.previous/self.large).stat().st_nlink,3)
         self.assertFalse((self.scratch/p.CANDIDATE_NAME).exists())
         self.assertFalse((self.scratch/p.LOG_NAME).exists())
 
@@ -177,9 +201,29 @@ class Scratch18(unittest.TestCase):
         self.assertFalse((self.scratch/p.MANIFEST_NAME).exists())
         self.assertFalse((self.scratch/p.LOG_NAME).exists())
 
+    def test_validate_only_stale_intermediate_owner_refused(self):
+        prior=self.s16/self.large
+        prior.unlink()
+        self.put(self.s16,self.large,b'z'*((1<<20)+1))
+        with self.assertRaisesRegex(p.Refusal,'unauthenticated prior shared evidence'):
+            self.prepare()
+        self.assertFalse((self.scratch/p.CANDIDATE_NAME).exists())
+
+    def test_validate_only_unknown_missing_large_file_refused(self):
+        (self.s15/self.large).unlink()
+        with self.assertRaisesRegex(p.Refusal,'unexpected missing large retained evidence'):
+            self.prepare()
+
+    def test_validate_only_multilink_private_owner_refused(self):
+        extra=self.r/'private-extra-owner.bin'
+        os.link(self.s16/self.private_paths[0],extra)
+        with self.assertRaisesRegex(p.Refusal,'unauthenticated private retained evidence'):
+            self.prepare()
+
     def test_complete_canonical_preparation(self):
-        self.assertEqual((self.s15/self.large).stat().st_nlink,2)
-        self.assertEqual((self.previous/self.large).stat().st_nlink,2)
+        self.assertEqual((self.s15/self.large).stat().st_nlink,3)
+        self.assertEqual((self.s16/self.large).stat().st_nlink,3)
+        self.assertEqual((self.previous/self.large).stat().st_nlink,3)
         calls=[]
         original_path=sys.path[:]
         original_modules={name:sys.modules.get(name) for name in
@@ -207,8 +251,13 @@ class Scratch18(unittest.TestCase):
         self.assertEqual(self.g(candidate,'rev-parse','HEAD').decode().strip(),self.target)
         self.assertEqual(self.g(candidate,'cat-file','blob',self.historical),b'historical ABI object')
         self.assertEqual(p.snapshot(candidate/self.large),p.snapshot(self.s15/self.large))
-        self.assertEqual((candidate/self.large).stat().st_nlink,3)
-        self.assertEqual((self.s15/self.large).stat().st_nlink,3)
+        self.assertEqual((candidate/self.large).stat().st_nlink,4)
+        self.assertEqual((self.s15/self.large).stat().st_nlink,4)
+        self.assertEqual((self.s16/self.large).stat().st_nlink,4)
+        self.assertEqual((self.previous/self.large).stat().st_nlink,4)
+        for rel in self.private_paths:
+            self.assertEqual((candidate/rel).read_bytes(),(self.s16/rel).read_bytes())
+            self.assertNotEqual((candidate/rel).stat().st_ino,(self.s16/rel).stat().st_ino)
         self.assertNotEqual((candidate/'.git/index').stat().st_ino,(self.s15/'.git/index').stat().st_ino)
         request=json.loads((self.scratch/p.REQUEST_NAME).read_text())
         self.assertEqual(request['ihk_overlay_base_sha'],self.ihk)
@@ -237,7 +286,8 @@ class Scratch18(unittest.TestCase):
         self.assertTrue((self.scratch/p.MANIFEST_NAME).is_file())
         self.assertEqual((self.scratch/p.CANDIDATE_NAME/'old0.txt').read_text(),'corruption\n')
         self.assertEqual((self.s15/'old0.txt').read_text(),'old\n')
-        self.assertEqual((self.s15/self.large).stat().st_nlink,3)
+        self.assertEqual((self.s15/self.large).stat().st_nlink,4)
+        self.assertEqual((self.s16/self.large).stat().st_nlink,4)
         self.assertFalse((self.scratch/p.REQUEST_NAME).exists())
 
     def test_owner_failure_retains_published_exact_request(self):
@@ -308,12 +358,45 @@ class Scratch18(unittest.TestCase):
     def test_future_target_is_required_and_parent_bound(self):
         with self.assertRaisesRegex(p.Refusal, 'exact future target required'):
             p.prepare(self.src, self.s15, self.scratch, old=self.old,
-                      baseline=self.old, target=None, previous_candidate=self.previous,
-                      expected_shared_files=1)
+                      baseline=self.old, target=None, scratch16=self.s16, previous_candidate=self.previous,
+                      source_base=self.source_base, expected_shared_files=1)
         with self.assertRaisesRegex(p.Refusal, 'target parent/baseline mismatch'):
             p.prepare(self.src, self.s15, self.scratch, old='0'*40,
-                      baseline='0'*40, target=self.target, previous_candidate=self.previous,
+                      baseline='0'*40, source_base=self.source_base, target=self.target, scratch16=self.s16, previous_candidate=self.previous,
                       expected_shared_files=1)
+
+    def test_wrong_source_base_is_refused(self):
+        with self.assertRaisesRegex(p.Refusal, 'source base is not the reviewed exact source base'):
+            self.prepare(source_base='0'*40)
+
+    def test_nonancestor_source_base_is_refused(self):
+        unrelated = self.g(self.src,'commit-tree',self.target+'^{tree}',input=b'unrelated source\n').decode().strip()
+        target = self.g(self.src,'commit-tree',self.target+'^{tree}','-p',unrelated,
+                        input=b'nonancestor target\n').decode().strip()
+        self.set_fetched_ref(target)
+        original_target, original_tree = p.TARGET, p.TARGET_TREE
+        p.TARGET, p.TARGET_TREE = target, self.g(self.src,'rev-parse',target+'^{tree}').decode().strip()
+        self.addCleanup(setattr, p, 'TARGET', original_target)
+        self.addCleanup(setattr, p, 'TARGET_TREE', original_tree)
+        with self.assertRaisesRegex(p.Refusal, 'source base is not an ancestor of baseline'):
+            self.prepare(old=unrelated, baseline=unrelated, target=target)
+
+    def test_fetched_descendant_of_target_is_accepted(self):
+        descendant = self.g(self.src,'commit-tree',self.target+'^{tree}','-p',self.target,
+                            input=b'descendant\n').decode().strip()
+        self.set_fetched_ref(descendant)
+        self.assertEqual(self.prepare()['status'], 'PASS_VALIDATE_ONLY')
+
+    def test_fetched_baseline_ancestor_is_refused(self):
+        self.set_fetched_ref(self.old)
+        with self.assertRaisesRegex(p.Refusal, 'target is not reachable from fetched ref'):
+            self.prepare()
+
+    def test_fetched_unrelated_commit_is_refused(self):
+        unrelated = self.g(self.src,'commit-tree',self.target+'^{tree}',input=b'unrelated\n').decode().strip()
+        self.set_fetched_ref(unrelated)
+        with self.assertRaisesRegex(p.Refusal, 'target is not reachable from fetched ref'):
+            self.prepare()
 
 if __name__=='__main__':
     unittest.main()

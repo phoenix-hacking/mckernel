@@ -13005,3 +13005,43 @@ shutdown ordering semantics into production and obtain module plus normal-boot
 runtime evidence.  Counts remain one compiled current candidate, five bounded
 diagnostic guest passes, zero formal application acceptances, 6/130 production
 gates and 0/7 language gates; the OS remains incomplete.
+
+Continuation checkpoint 322, 2026-10-01: the fresh scratch18 candidate is now
+prepared and independently accepted as `PASS_PREPARED_ARTIFACTS`.  Four distinct
+read-only production admission findings were preserved and corrected before the
+one-shot preparation: reversed fetched-ref ancestry, conflated scratch15 source
+base/50b parent identities, an incorrect two-owner assumption for the retained
+three-owner hardlink chain, and two large post-source-base retention files that
+require exact private materialization.  The final helper/test hashes are
+`1ee2cb0a...f77e9` and `6dcbe203...5ff2`; 21/21 focused tests pass.
+
+Production validate-only passes against target `89ab5c55...d6d`.  The authorized
+preparation-only execution then returns `PASS_PREPARE_ONLY`, producing candidate
+HEAD/tree `89ab5c55...d6d`/`e57e36cf...b538`, IHK `3114d9e7...a1f`, manifest
+`36e2ad18...f71a`, request `52ee2c0b...eaae`, log `ac184748...5716` and terminal
+`7895d3c6...0376`.  It opened no build lease, operational exclusion, Docker or
+guest.  Output and evidence roots remain empty.
+
+Independent artifact review hashes all 486 shared files across scratch15/16/17/
+18 and confirms the intended link-count transition from three to four.  Both
+private retention exceptions have exact target bytes and distinct single-link
+inodes.  All 9,479 manifest entries and four assets pass canonical validation;
+the candidate wrapper returns `PASS_COMPATIBILITY_ONLY`.  The IHK backup/live
+index difference is only refreshed stat/FSMN cache metadata: tracked paths,
+modes, object IDs, flags, TREE and source bytes match.
+
+A fresh artifact-bound build admission is ready for publication.  Packet/test
+hashes `072de9dd...c185`/`6c3982a4...e3a2d` pass 19/19 coordinator and independent
+tests and receive `PASS_SOURCE_BUILD_RELEASE_PENDING_PUBLICATION`.  It changes
+only the three release booleans, preserves the release and exclusion contracts,
+requires exact fetched packet/test/wrapper blobs and ancestry, validates before
+O_EXCL/fsynced publication, and invokes the shared-lock wrapper only afterward.
+No derived request exists yet.
+
+Exact evidence is `native-exact-scratch18-preparation-checkpoint-20261001.json`.
+Next commit/push/fetch-verify these exact bytes, run unmocked packet validate-only
+against that fetched commit, repeat the capacity/process/container/lease census,
+then consume the independently authorized one-shot build release.  No new build
+or guest has run yet: counts remain one compiled current candidate, five bounded
+diagnostic guest passes, zero formal application acceptances, 6/130 production
+gates and 0/7 language gates; the OS remains incomplete.
