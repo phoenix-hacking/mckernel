@@ -13735,3 +13735,32 @@ pair once if the artifact census remains quiescent, preserve exact outputs and
 cleanup, and triage the first real failure.  Formal counters remain 0/273
 applications, 6/130 production gates and 0/7 language gates; the OS remains
 incomplete.
+
+Continuation checkpoint 351, 2026-10-01: the released two-guest pilot reached
+two fresh application behaviors and preserved the first failures without
+acceptance inflation.  Attempt `dual-guest-gnpnx51b` first failed the evaluator
+because both new manifests omitted the collector's fixed `A`, empty, `B` argv
+suffix.  After that bounded manifest correction, fresh attempt
+`dual-guest-taifr8lg` exposed one real functional defect and one second
+manifest-contract refusal.  `process.fork-exit` delivered syscall 56 and the
+host returned `-95`; libc emitted exactly `ERROR: creating PPD /dev/mcos0` and
+`fork(): error with child process after fork`, then exited with raw wait status
+256.  The process/procfs cleanup completed.  Source diagnosis places the error
+in native `FileContext::create_process`, which explicitly rejects every
+non-null `MCEXEC_UP_CREATE_PPD` descriptor because the inherited-mirror clear
+adapter is missing.
+
+In the peer guest, `signal.block-pending` produced exact stdout
+`pending_before=1 pending_after=0 handled=1`, empty stderr, exit zero and empty
+procfs.  Its evaluator nevertheless failed closed because the manifest claimed
+a 4,096-byte stdout limit while the collector recorded its fixed 1,024-byte
+limit.  Both draft manifests are now corrected to 1,024 bytes, but no unchanged
+third replay will run before the fork host-path repair and a fresh candidate.
+Both exact containers, QEMU and mcexec are absent and the root development lock
+is unheld.  Exact hashes and raw paths are retained in
+`native-diagnostic-dual-new-behavior-failure-20261001.json`.  These attempts add
+zero diagnostic passes and zero formal credit; counts remain three compiled
+current candidates, 11 bounded diagnostic guest passes, 0/273 applications,
+6/130 production gates and 0/7 language gates.  Next implement the bounded
+inherited-MM `MCEXEC_UP_CREATE_PPD` path, build a fresh source-bound candidate,
+then retry the corrected process/signal pair once.
