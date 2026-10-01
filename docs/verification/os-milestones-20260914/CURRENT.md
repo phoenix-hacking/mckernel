@@ -13546,3 +13546,23 @@ one serialized attempt-2 image build, then postlink-check its result before a
 diagnostic startup guest.  Counts remain two current compiled candidates, five
 prior diagnostic guest passes and zero formal application accepts; the OS
 remains incomplete.
+
+Continuation checkpoint 342, 2026-10-01: independently released scratch18
+image attempt 2 reached the offline driver, proving the nested libdwarf bind
+correction, but failed before compilation on its exact source-status check.
+Actual main status is deletion of the still-absent tracked `syscall_intercept`
+and `uti` gitlinks plus the expected modified IHK gitlink; the driver permits
+the missing gitlinks in its authenticated inventory but requires only the IHK
+status.  This is a new deterministic failure family; no unchanged retry is
+permitted.
+
+Exact exited container `199591e8...ebb562` / `mckernel-image-a54e9e91af62474c8de5042bef79741d`
+is preserved at exit 1, PID 0, non-OOM with nonce `3db31b96...a1cb05`.
+Receipt/log hashes are `92a34439...5d4608`, `f8a5fc59...d9357` and
+`fa2b1267...5045`.  The image lease is absent; candidate/shared exclusions
+remain at inodes 57661/57659.  Work remains empty and no image bytes exist.
+Exact evidence is `native-exact-scratch18-image-build-attempt2-failure-20261001.json`.
+Next independently clean this exact terminal attempt, then apply one bounded
+correction for the remaining-gitlink status family.  Counts remain two current
+compiled candidates, five prior diagnostic guest passes and zero formal
+application accepts; the OS remains incomplete.
