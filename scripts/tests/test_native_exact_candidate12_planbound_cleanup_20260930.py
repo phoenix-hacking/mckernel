@@ -1,5 +1,6 @@
 """Disposable filesystem tests; never access real candidate, Docker, or sudo."""
 import copy
+import contextlib
 import hashlib
 import importlib.util
 import json
@@ -1135,6 +1136,313 @@ class Fixture(unittest.TestCase):
         self.assertEqual(result['states'], ['original'] * 3)
         self.assertFalse(Path(self.outputs['quarantine']).exists())
         self.assert_originals()
+
+
+class RecoveryFixture(Fixture):
+    """A tiny, exact-shaped attempt-2 fixture; it never opens real scratch."""
+    def stage_attempt(self):
+        q = self.root / '.planbound-cleanup-20260930-2'
+        q.mkdir(mode=0o700)
+        for i, row in enumerate(self.rows):
+            os.rename(row['path'], q / str(i))
+        receipt = {'status': 'FAIL', 'phase': 'staged-admission',
+                   'error': 'open-references-or-incomplete-census', 'interrupted': False,
+                   'attempted': None, 'states': ['staged'] * len(self.rows),
+                   'restoration': self.rows, 'quarantine': str(q)}
+        journal_events = [
+            {'event': 'admitted'}, {'event': 'census'}, {'event': 'transaction-entered'},
+            {'event': 'quarantine-intent'}, {'event': 'quarantine-created'},
+        ]
+        for i, row in enumerate(self.rows):
+            journal_events += [{'event': 'stage-intent', 'index': i, 'restore': row},
+                               {'event': 'staged', 'index': i}]
+        journal_events += [{'event': 'staging-complete'}, {'event': 'post-staging-census'},
+                           {'event': 'failure', 'status': 'FAIL', 'phase': 'staged-admission',
+                            'error': 'open-references-or-incomplete-census', 'attempted': None,
+                            'states': ['staged'] * len(self.rows)}]
+        old = {}
+        for name, data in {
+                'journal': ('\n'.join(json.dumps(x, sort_keys=True) for x in journal_events) + '\n').encode(),
+                'receipt': json.dumps(receipt, sort_keys=True).encode(),
+                'status': json.dumps({'status': 'FAIL', 'receipt': str(self.base / 'attempt-receipt'),
+                                      'journal': str(self.base / 'attempt-journal')}, sort_keys=True).encode(),
+        }.items():
+            p = self.base / ('attempt-' + name)
+            p.write_bytes(data); p.chmod(0o600)
+            old[name] = {'path': str(p), **m.metadata(p.stat()), 'sha256': m.sha(data)}
+        old['quarantine'] = {'path': str(q), 'dev': q.stat().st_dev, 'ino': q.stat().st_ino,
+                             'mode': stat.S_IMODE(q.stat().st_mode), 'nlink': q.stat().st_nlink}
+        outputs = {'journal': str(self.base / 'recovery-journal'),
+                   'receipt': str(self.base / 'recovery-receipt'),
+                   'status': str(self.base / 'recovery-status'), 'quarantine': str(q)}
+        return old, outputs
+
+    def recovery(self, mutate=None):
+        attempt, outputs = self.stage_attempt()
+        if mutate: mutate(attempt, outputs)
+        def collector(root):
+            c = self.census()
+            q = Path(outputs['quarantine'])
+            qs = q.stat()
+            qfd = next(int(p.name) for p in Path('/proc/self/fd').iterdir()
+                       if os.path.realpath(p) == str(q))
+            witness = {'pid': os.getpid(), 'fd': qfd, 'dev': qs.st_dev, 'ino': qs.st_ino,
+                       'access': 'r', 'path': str(q)}
+            c['witnesses'].append(witness)
+            c['lsof']['stdout'] += (f'f{qfd}\0ar\0tDIR\0D{hex(qs.st_dev)}\0'
+                                    f'i{qs.st_ino}\0n{q}\0\n')
+            return c
+        with mock.patch.object(m, 'BINDING', self.binding), \
+             mock.patch.object(m, 'ATTEMPT2', attempt), \
+             mock.patch.object(m, 'committed_file', side_effect=self.committed), \
+             mock.patch.object(m, 'collect_census', side_effect=collector):
+            m.recovery_output_paths(outputs, self.plan, str(self.base))
+            opened = m.precreate_recovery_outputs(outputs)
+            try:
+                with m.terminal_latch():
+                    result = m.recover_staged(self.plan, outputs, m.FDJournal(opened['journal'][1]))
+                    try: m.write_precreated(opened['receipt'], result)
+                    except m.Refusal: pass
+                    try: m.write_precreated(opened['status'], {'status': result['status']})
+                    except m.Refusal: pass
+                    return result, outputs
+            finally:
+                m.close_recovery_outputs(opened)
+
+    def execute_recovery(self, mutate_writer=None, latch_complete=False):
+        attempt, outputs = self.stage_attempt()
+        def collector(root):
+            c = self.census(); q = Path(outputs['quarantine']); qs = q.stat()
+            qfd = next(int(p.name) for p in Path('/proc/self/fd').iterdir()
+                       if os.path.realpath(p) == str(q))
+            c['witnesses'].append({'pid': os.getpid(), 'fd': qfd, 'dev': qs.st_dev, 'ino': qs.st_ino,
+                                   'access': 'r', 'path': str(q)})
+            c['lsof']['stdout'] += (f'f{qfd}\0ar\0tDIR\0D{hex(qs.st_dev)}\0i{qs.st_ino}\0n{q}\0\n')
+            return c
+        release = {'absent_leases': m.LEASES, '_staged_manifest': {'targets': self.rows}}
+        patches = [mock.patch.object(m, 'BINDING', self.binding),
+                   mock.patch.object(m, 'ATTEMPT2', attempt),
+                   mock.patch.object(m, 'MUTEX', str(self.base / 'recovery-mutex')),
+                   mock.patch.object(m, 'validate_recovery_release', return_value=release),
+                   mock.patch.object(m, 'validate_recovery_plan', return_value=self.plan),
+                   mock.patch.object(m, 'validate_attempt2', return_value={}),
+                   mock.patch.object(m, 'committed_file', side_effect=self.committed),
+                   mock.patch.object(m, 'collect_census', side_effect=collector)]
+        if mutate_writer: patches.append(mock.patch.object(m, 'write_precreated', side_effect=mutate_writer))
+        if latch_complete:
+            original = m.FDJournal.append
+            def latch(journal, event):
+                value = original(journal, event)
+                if event.get('event') == 'recovery-complete': m._terminal_latched = True
+                return value
+            patches.append(mock.patch.object(m.FDJournal, 'append', latch))
+        with contextlib.ExitStack() as stack:
+            for patch in patches: stack.enter_context(patch)
+            return m.execute_recovery(str(self.plan_path), 'release', 'b' * 40, outputs,
+                                      ['python', 'tool', '--recover-staged']), outputs
+
+    def test_recovery_restores_exact_staged_tree(self):
+        result, outputs = self.recovery()
+        self.assertEqual(result['status'], 'PASS')
+        self.assertEqual(result['states'], ['restored'] * 3)
+        self.assert_originals()
+        self.assertEqual(os.listdir(outputs['quarantine']), [])
+        self.assertEqual(json.loads(Path(outputs['receipt']).read_text())['status'], 'PASS')
+
+    def test_recovery_collision_does_not_overwrite(self):
+        def collision(attempt, outputs):
+            Path(self.rows[1]['path']).write_bytes(b'foreign')
+        result, outputs = self.recovery(collision)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(Path(self.rows[1]['path']).read_bytes(), b'foreign')
+        self.assertNotEqual(result['states'][1], 'restored')
+
+    def test_recovery_parent_namespace_drift_fails_before_rename(self):
+        def drift(attempt, outputs):
+            (self.evidence / 'foreign').write_bytes(b'x')
+        result, _ = self.recovery(drift)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(result['error'], 'subtree-set')
+
+    def test_recovery_root_swap_after_admission_never_redirects_restore(self):
+        original = m.FDJournal.append
+        moved = self.base / 'old-root'
+        swapped = False
+        def swap(journal, event):
+            nonlocal swapped
+            value = original(journal, event)
+            if event.get('event') == 'recovery-admitted' and not swapped:
+                swapped = True
+                self.root.rename(moved)
+                self.root.mkdir()
+            return value
+        with mock.patch.object(m.FDJournal, 'append', swap):
+            result, outputs = self.recovery()
+        self.assertTrue(swapped)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertTrue((moved / '.planbound-cleanup-20260930-2' / '0').exists())
+
+    def test_recovery_evidence_swap_after_admission_never_redirects_restore(self):
+        original = m.FDJournal.append
+        moved = self.root / 'docs/verification/saved-evidence'; swapped = False
+        def swap(journal, event):
+            nonlocal swapped
+            value = original(journal, event)
+            if event.get('event') == 'recovery-admitted' and not swapped:
+                swapped = True; self.evidence.rename(moved); self.evidence.mkdir()
+            return value
+        with mock.patch.object(m.FDJournal, 'append', swap): result, _ = self.recovery()
+        self.assertTrue(swapped); self.assertEqual(result['status'], 'FAIL')
+        self.assertTrue((Path(result['quarantine']) / '0').exists())
+        self.assertFalse((self.evidence / 'file-0').exists())
+
+    def test_recovery_post_syscall_interrupt_reconciles_all_rows(self):
+        old = m.rename_noreplace
+        fired = False
+        def interrupt(*args):
+            nonlocal fired
+            old(*args)
+            if not fired:
+                fired = True
+                raise KeyboardInterrupt()
+        with mock.patch.object(m, 'rename_noreplace', side_effect=interrupt):
+            result, _ = self.recovery()
+        self.assertTrue(fired)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(result['states'][2], 'restored')
+        self.assertTrue(all('locations' in x for x in result['reconciliation']))
+
+    def test_recovery_short_and_zero_write_fail_closed(self):
+        original = os.write
+        def short(fd, data): return original(fd, data[:2])
+        with mock.patch.object(m.os, 'write', side_effect=short):
+            result, _ = self.recovery()
+        self.assertEqual(result['status'], 'PASS')
+
+    def test_recovery_zero_journal_write_prevents_rename(self):
+        with mock.patch.object(m.os, 'write', return_value=0):
+            result, _ = self.recovery()
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertTrue(all(state == 'staged' for state in result['states']))
+
+    def test_recovery_release_binds_manifest_and_external_commit(self):
+        attempt, outputs = self.stage_attempt()
+        tool = self.base / m.TOOL_PATH; tool.parent.mkdir(parents=True, exist_ok=True)
+        tool.write_bytes(b'exact recovery tool')
+        test_path = 'scripts/tests/test_native_exact_candidate12_planbound_cleanup_20260930.py'
+        test_file = self.base / test_path; test_file.parent.mkdir(parents=True, exist_ok=True)
+        test_file.write_bytes(b'exact recovery tests')
+        manifest_path = 'docs/verification/recovery-staged-manifest.json'
+        manifest_file = self.base / manifest_path; manifest_file.parent.mkdir(parents=True, exist_ok=True)
+        manifest = {'schema': 'mckernel.candidate12-cleanup-staged-manifest.v1', 'status': 'PASS',
+                    'plan': self.binding, 'attempt2': attempt, 'quarantine': attempt['quarantine']['path'],
+                    'targets': self.rows}
+        manifest_file.write_bytes(json.dumps(manifest, sort_keys=True).encode())
+        release_path = self.base / 'docs/verification/recovery-release.json'
+        command = ['python', 'tool', '--recover-staged']
+        release = {'schema': m.RECOVERY_SCHEMA, 'status': 'PASS', 'finalization': 'PASS',
+                   'source_commit': 'a' * 40, 'tool_sha256': m.sha(tool.read_bytes()),
+                   'tool_blob': 'c' * 40, 'test_path': test_path,
+                   'test_sha256': m.sha(test_file.read_bytes()), 'test_blob': 'd' * 40, 'plan': self.binding,
+                   'staged_manifest': {'path': manifest_path, 'sha256': m.sha(manifest_file.read_bytes()),
+                                       'size': len(manifest_file.read_bytes())},
+                   'command': command, 'outputs': outputs, 'quarantine': attempt['quarantine']['path'],
+                   'absent_leases': m.LEASES, 'dispatcher_exclusive': True,
+                   'retained_containers': m.CONTAINER_BINDINGS}
+        release_path.write_bytes(json.dumps(release, sort_keys=True).encode())
+        def git(repo, *args):
+            if args[0] == 'merge-base': return b''
+            if args[0] == 'rev-parse':
+                return (b'd' * 40 if args[1].endswith(test_path) else b'c' * 40) + b'\n'
+            if args[0] == 'show':
+                name = args[1].split(':', 1)[1]
+                return {'docs/verification/recovery-release.json': release_path.read_bytes(),
+                        m.TOOL_PATH: tool.read_bytes(), test_path: test_file.read_bytes(),
+                        manifest_path: manifest_file.read_bytes()}[name]
+            self.fail('unexpected recovery git edge')
+        with mock.patch.object(m, 'ATTEMPT2', attempt), mock.patch.object(m, 'git', side_effect=git):
+            m.validate_recovery_release(str(release_path), 'b' * 40, outputs, command, self.binding)
+            release['staged_manifest']['sha256'] = '0' * 64
+            release_path.write_bytes(json.dumps(release, sort_keys=True).encode())
+            with self.assertRaisesRegex(m.Refusal, 'recovery-manifest-content'):
+                m.validate_recovery_release(str(release_path), 'b' * 40, outputs, command, self.binding)
+
+    def test_recovery_journal_enospc_reconciles_each_row(self):
+        original = m.FDJournal.append
+        calls = 0
+        def full(journal, record):
+            nonlocal calls
+            calls += 1
+            if record.get('event') == 'restore-intent':
+                raise OSError(28, 'ENOSPC')
+            return original(journal, record)
+        with mock.patch.object(m.FDJournal, 'append', full):
+            result, _ = self.recovery()
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(len(result['reconciliation']), 3)
+        self.assertTrue(all(state == 'staged' for state in result['states']))
+
+    def test_recovery_signal_during_final_scan_never_passes(self):
+        original = m.recovery_evidence_shape
+        calls = 0
+        def signal_after(plan, destinations, staged=False):
+            nonlocal calls
+            value = original(plan, destinations, staged)
+            calls += 1
+            if calls >= 2 and not staged:
+                m._terminal_latched = True
+            return value
+        with mock.patch.object(m, 'recovery_evidence_shape', side_effect=signal_after):
+            result, _ = self.recovery()
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(result['error'], 'terminal-signal-latched')
+
+    def test_recovery_final_mutation_after_census_never_passes(self):
+        original = m.FDJournal.append
+        changed = False
+        def mutate(journal, event):
+            nonlocal changed
+            value = original(journal, event)
+            if event.get('event') == 'recovery-final-census' and not changed:
+                changed = True
+                Path(self.rows[0]['path']).write_bytes(b'changed final evidence')
+            return value
+        with mock.patch.object(m.FDJournal, 'append', mutate):
+            result, _ = self.recovery()
+        self.assertTrue(changed)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(result['error'], 'file-metadata')
+
+    def test_recovery_publication_failures_demote_pass_and_status(self):
+        real = m.write_precreated
+        def receipt_full(entry, record, replace=False):
+            if entry[1] == receipt_fd: raise OSError(28, 'ENOSPC')
+            return real(entry, record, replace)
+        receipt_fd = None
+        # Learn the receipt fd in a first wrapper call without altering writes.
+        def fail_receipt(entry, record, replace=False):
+            nonlocal receipt_fd
+            if receipt_fd is None and record.get('restore_commit'):
+                receipt_fd = entry[1]; raise OSError(28, 'ENOSPC')
+            return real(entry, record, replace)
+        result, outputs = self.execute_recovery(fail_receipt)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(json.loads(Path(outputs['status']).read_text())['status'], 'FAIL')
+
+    def test_recovery_signal_after_complete_demotes_public_status(self):
+        result, outputs = self.execute_recovery(latch_complete=True)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(json.loads(Path(outputs['status']).read_text())['status'], 'FAIL')
+
+    def test_cli_validate_recovery_is_read_only_mode(self):
+        release = {'_staged_manifest': {'targets': self.rows}}
+        with mock.patch.object(m, 'git', return_value=b'b' * 40 + b'\n'), \
+             mock.patch.object(m, 'validate_recovery_release', return_value=release) as released, \
+             mock.patch.object(m, 'validate_recovery_plan', return_value=self.plan), \
+             mock.patch.object(m, 'validate_attempt2', return_value={}), \
+             mock.patch.object(m, 'validate_live_staged_recovery') as live:
+            self.assertEqual(m.main(['--validate-recovery', '--release', '/tmp/release.json']), 0)
+        released.assert_called_once(); live.assert_called_once_with(self.plan)
 
 
 if __name__ == '__main__':

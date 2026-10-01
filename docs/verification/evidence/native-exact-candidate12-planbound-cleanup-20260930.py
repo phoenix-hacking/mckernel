@@ -25,6 +25,7 @@ import json
 import os
 from pathlib import Path
 import re
+import signal
 import stat
 import subprocess
 import sys
@@ -48,6 +49,25 @@ LEASES = [SCRATCH + '/native-exact-build-lease-4e99a82c-scratch-12.json',
 CONTAINER = '053b5528de7605a712b7842b0145c7e777843c2fd14225174ac8959918a7d24f'
 CONTAINER_NAME = '/mckernel-image-69d5302ef1b74816aec831cf959404ee'
 HOST_CONTAINER = '4d15b3493f869a1b0a89f1dc16fda59e1c145b78e2b57308bed35f3d954e4f86'
+
+# This is an immutable failed transaction, not a new input discovered at run
+# time.  The staged-recovery mode below is deliberately bound to it so an
+# operator cannot point a rename-back at a different failed cleanup attempt.
+ATTEMPT2 = {
+    'journal': {'path': SCRATCH + '/native-exact-candidate12-planbound-cleanup-20260930-2.journal.jsonl',
+                'sha256': '4749ea4d1b97bc99959c1ec75c0f329682f834d075738264a44efde33ce90d02',
+                'size': 3238188, 'dev': 1831, 'ino': 90655, 'mode': 0o600, 'nlink': 1},
+    'receipt': {'path': SCRATCH + '/native-exact-candidate12-planbound-cleanup-20260930-2.receipt.json',
+                'sha256': '83d22b06d9d143b3acc0508d738f6b1039184a5d2d473d314f5a1e3a65cd3c52',
+                'size': 1399041, 'dev': 1831, 'ino': 90656, 'mode': 0o600, 'nlink': 1},
+    'status': {'path': SCRATCH + '/native-exact-candidate12-planbound-cleanup-20260930-2.status.json',
+               'sha256': 'b22762e6ef19ae31c4aad21fa2164ed9536e8d3b6b8c28e7aed886bc44d9484a',
+               'size': 252, 'dev': 1831, 'ino': 90657, 'mode': 0o600, 'nlink': 1},
+    'quarantine': {'path': SCRATCH + '/mckernel-exact-candidate-4e99a82c-scratch-12/.planbound-cleanup-20260930-2',
+                   'dev': 1831, 'ino': 3701891, 'mode': 0o700, 'nlink': 2},
+}
+RECOVERY_SCHEMA = 'mckernel.candidate12-cleanup-recovery-release.v1'
+_terminal_latched = False
 
 
 def mount(source, destination, writable=False):
@@ -737,6 +757,173 @@ def validate_release(path, release_commit, outputs, command, binding=None):
     return release
 
 
+def validate_recovery_plan(path, binding=None):
+    """Authenticate the plan without dereferencing its intentionally absent files."""
+    binding = BINDING if binding is None else binding
+    require(str(path) == binding['path'], 'plan-path')
+    plan, _ = read_json(path, binding)
+    require(set(plan) == {'candidate_commit', 'candidate_identity', 'candidate_root',
+                         'nested_delta_preserved', 'preserved', 'protected_paths',
+                         'safety_census', 'schema', 'status', 'targets'}, 'plan-schema')
+    require(plan['schema'] == 'mckernel.exact-git-source-audit.v1' and
+            plan['status'] == 'AUDIT_PASS' and plan['preserved'] == [] and
+            plan['nested_delta_preserved'] is True, 'plan-status')
+    root = canonical(plan['candidate_root'])
+    require(root == binding['root'] and plan['candidate_commit'] == binding['commit'] and
+            plan['candidate_identity'] == binding['identity'], 'plan-binding')
+    with directory(root) as fd:
+        s = os.fstat(fd)
+        require(str(s.st_dev) + ':' + str(s.st_ino) == binding['identity'], 'root-identity')
+    require(git(root, 'rev-parse', 'HEAD').decode().strip() == binding['commit'], 'root-head')
+    rows = plan['targets']
+    require(len(rows) == binding['count'] and sum(r['size'] for r in rows) == binding['bytes'] and
+            sum(r['allocated_bytes'] for r in rows) == binding['allocated'], 'target-totals')
+    names, inodes = set(), set()
+    for row in rows:
+        require(set(row) == {'allocated_bytes', 'blob', 'dev', 'ino', 'mode', 'mtime_ns',
+                             'nlink', 'path', 'restore_git_path', 'sha256', 'size'}, 'row-schema')
+        target = canonical(row['path'])
+        require(target.startswith(root + '/docs/verification/evidence/') and
+                target == root + '/' + row['restore_git_path'] and target not in names and
+                (row['dev'], row['ino']) not in inodes and row['nlink'] == 1 and
+                row['mode'] in (0o644, 0o755), 'target-path-set')
+        require(not any(inside(target, canonical(p)) or inside(p, target)
+                        for p in plan['protected_paths']), 'target-protected')
+        names.add(target); inodes.add((row['dev'], row['ino']))
+        committed_file(binding['commit'], row['restore_git_path'], row)
+    validate_protected(plan)
+    return plan
+
+
+def _attempt_file(name):
+    row = ATTEMPT2[name]
+    value, raw = read_json(row['path'], row)
+    require(sha(raw) == row['sha256'], 'attempt2-' + name + '-content')
+    return value
+
+
+def validate_attempt2(plan):
+    """Bind the immutable failed staging transaction, including its exact journal."""
+    receipt = _attempt_file('receipt')
+    status = _attempt_file('status')
+    # The journal is JSONL rather than one JSON object, but has the same
+    # private-regular-file and identity requirements as the two JSON outputs.
+    with opened(ATTEMPT2['journal']['path']) as fd:
+        verify_fd(fd, ATTEMPT2['journal'])
+        os.lseek(fd, 0, os.SEEK_SET)
+        raw = b''.join(iter(lambda: os.read(fd, 1024 * 1024), b''))
+    events = [json.loads(line, object_pairs_hook=lambda values: _unique_pairs(values))
+              for line in raw.splitlines()]
+    require(events and all(isinstance(event, dict) for event in events), 'attempt2-journal-json')
+    kinds = [event.get('event') for event in events]
+    require(not ({'delete-intent', 'deleted', 'irreversible-delete-admitted'} & set(kinds)),
+            'attempt2-journal-deletion')
+    # The only legal failed path is complete staging followed by rejected
+    # admission.  Index/order checks make a truncated or spliced journal fail.
+    require(kinds[:5] == ['admitted', 'census', 'transaction-entered',
+                          'quarantine-intent', 'quarantine-created'], 'attempt2-journal-prefix')
+    cursor = 5
+    for index, row in enumerate(plan['targets']):
+        require(cursor + 1 < len(events) and events[cursor].get('event') == 'stage-intent' and
+                events[cursor].get('index') == index and events[cursor].get('restore') == row and
+                events[cursor + 1] == {'event': 'staged', 'index': index}, 'attempt2-journal-stage')
+        cursor += 2
+    require(kinds[cursor:] == ['staging-complete', 'post-staging-census', 'failure'],
+            'attempt2-journal-suffix')
+    failure = events[-1]
+    require(failure.get('status') == 'FAIL' and failure.get('phase') == 'staged-admission' and
+            failure.get('error') == 'open-references-or-incomplete-census' and
+            failure.get('attempted') is None and failure.get('states') == ['staged'] * len(plan['targets']),
+            'attempt2-journal-failure')
+    require(receipt.get('status') == 'FAIL' and receipt.get('phase') == 'staged-admission' and
+            receipt.get('error') == 'open-references-or-incomplete-census' and
+            receipt.get('interrupted') is False and receipt.get('attempted') is None and
+            receipt.get('states') == ['staged'] * len(plan['targets']) and
+            receipt.get('restoration') == plan['targets'] and
+            receipt.get('quarantine') == ATTEMPT2['quarantine']['path'], 'attempt2-receipt')
+    require(status == {'status': 'FAIL', 'receipt': ATTEMPT2['receipt']['path'],
+                       'journal': ATTEMPT2['journal']['path']}, 'attempt2-status')
+    return receipt
+
+
+def _unique_pairs(values):
+    result = {}
+    for key, value in values:
+        require(key not in result, 'json-duplicate-key')
+        result[key] = value
+    return result
+
+
+def validate_recovery_release(path, release_commit, outputs=None, command=None, binding=None):
+    binding = BINDING if binding is None else binding
+    require(path and release_commit and re.fullmatch('[a-f0-9]{40}', release_commit), 'release-required')
+    path = canonical(path)
+    require(inside(path, str(REPO) + '/docs/verification/') and path.endswith('.json'), 'release-path')
+    release, raw = read_json(path)
+    relpath = str(Path(path).relative_to(REPO))
+    git(REPO, 'merge-base', '--is-ancestor', release_commit, REMOTE_REF)
+    require(git(REPO, 'show', release_commit + ':' + relpath) == raw, 'release-not-committed')
+    require(set(release) == {'schema', 'status', 'finalization', 'source_commit', 'tool_sha256',
+                             'tool_blob', 'test_path', 'test_sha256', 'test_blob', 'plan', 'staged_manifest', 'command', 'outputs', 'quarantine',
+                             'absent_leases', 'dispatcher_exclusive', 'retained_containers'}, 'release-schema')
+    source = release['source_commit']
+    require(re.fullmatch('[a-f0-9]{40}', source) and source != release_commit, 'release-source')
+    git(REPO, 'merge-base', '--is-ancestor', source, release_commit)
+    require(release['schema'] == RECOVERY_SCHEMA and release['status'] == release['finalization'] == 'PASS' and
+            release['plan'] == binding and
+            (command is None or release['command'] == command) and
+            (outputs is None or release['outputs'] == outputs) and
+            release['quarantine'] == ATTEMPT2['quarantine']['path'] and
+            release['dispatcher_exclusive'] is True, 'release-binding')
+    require(release['absent_leases'] == LEASES and release['retained_containers'] == CONTAINER_BINDINGS,
+            'release-inventory')
+    require(isinstance(release['command'], list) and release['command'] and
+            '--recover-staged' in release['command'] and
+            set(release['outputs']) == {'journal', 'receipt', 'status', 'quarantine'} and
+            all(isinstance(value, str) and canonical(value) == value
+                for value in release['outputs'].values()), 'release-command-outputs')
+    validate_container_proofs()
+    for lease in LEASES:
+        require(inside(canonical(lease), SCRATCH) and not os.path.lexists(lease), 'active-lease')
+    with opened(str(REPO / TOOL_PATH)) as fd:
+        actual = hash_fd(fd)
+    require(actual == release['tool_sha256'] and sha(git(REPO, 'show', source + ':' + TOOL_PATH)) == actual and
+            git(REPO, 'rev-parse', source + ':' + TOOL_PATH).decode().strip() == release['tool_blob'],
+            'release-tool')
+    require(git(REPO, 'show', release_commit + ':' + TOOL_PATH) ==
+            git(REPO, 'show', source + ':' + TOOL_PATH), 'release-tool-changed')
+    test_path = release['test_path']
+    require(isinstance(test_path, str) and test_path.startswith('scripts/tests/') and
+            not test_path.startswith('/') and re.fullmatch('[a-f0-9]{64}', release['test_sha256']) and
+            re.fullmatch('[a-f0-9]{40}', release['test_blob']), 'release-test-binding')
+    with opened(str(REPO / test_path)) as fd:
+        test_actual = hash_fd(fd)
+    require(test_actual == release['test_sha256'] and
+            sha(git(REPO, 'show', source + ':' + test_path)) == test_actual and
+            git(REPO, 'rev-parse', source + ':' + test_path).decode().strip() == release['test_blob'] and
+            git(REPO, 'show', release_commit + ':' + test_path) ==
+            git(REPO, 'show', source + ':' + test_path), 'release-test')
+    manifest_binding = release['staged_manifest']
+    require(set(manifest_binding) == {'path', 'sha256', 'size'}, 'recovery-manifest-binding')
+    manifest_path = manifest_binding['path']
+    require(isinstance(manifest_path, str) and manifest_path.startswith('docs/verification/') and
+            not manifest_path.startswith('/') and re.fullmatch('[a-f0-9]{64}', manifest_binding['sha256']) and
+            type(manifest_binding['size']) is int and manifest_binding['size'] > 0,
+            'recovery-manifest-binding')
+    manifest, manifest_raw = read_json(str(REPO / manifest_path))
+    require(len(manifest_raw) == manifest_binding['size'] and sha(manifest_raw) == manifest_binding['sha256'] and
+            git(REPO, 'show', source + ':' + manifest_path) == manifest_raw and
+            git(REPO, 'show', release_commit + ':' + manifest_path) == manifest_raw,
+            'recovery-manifest-content')
+    require(set(manifest) == {'schema', 'status', 'plan', 'attempt2', 'quarantine', 'targets'} and
+            manifest['schema'] == 'mckernel.candidate12-cleanup-staged-manifest.v1' and
+            manifest['status'] == 'PASS' and manifest['plan'] == binding and
+            manifest['attempt2'] == ATTEMPT2 and manifest['quarantine'] == ATTEMPT2['quarantine']['path'] and
+            isinstance(manifest['targets'], list), 'recovery-manifest')
+    release['_staged_manifest'] = manifest
+    return release
+
+
 def write_all(fd, data):
     offset = 0
     while offset < len(data):
@@ -765,6 +952,19 @@ class Journal:
 
     def close(self):
         os.close(self.fd)
+
+
+class FDJournal:
+    """A pre-created evidence writer: its parent and inode remain pinned."""
+    def __init__(self, fd):
+        self.fd = fd
+
+    def append(self, record):
+        write_all(self.fd, (json.dumps(record, sort_keys=True) + '\n').encode())
+        os.fsync(self.fd)
+
+    def close(self):
+        pass
 
 
 def publish(path, record):
@@ -820,6 +1020,145 @@ def output_paths(outputs, plan, output_root=None):
                             for p in plan['protected_paths']), 'output-protected')
         with directory(str(Path(path).parent)):
             pass
+
+
+def recovery_output_paths(outputs, plan, output_root=None):
+    """Recovery has exactly three fresh evidence files and one old quarantine."""
+    output_root = SCRATCH if output_root is None else output_root
+    require(set(outputs) == {'journal', 'receipt', 'status', 'quarantine'} and
+            len(set(outputs.values())) == 4, 'recovery-output-schema')
+    require(outputs['quarantine'] == ATTEMPT2['quarantine']['path'], 'recovery-quarantine-path')
+    for key in ('journal', 'receipt', 'status'):
+        path = canonical(outputs[key])
+        require(not os.path.lexists(path) and inside(path, output_root) and path != output_root and
+                not inside(path, plan['candidate_root']) and
+                not any(inside(path, p) or inside(p, path) for p in plan['protected_paths']),
+                'recovery-output-path')
+        with directory(str(Path(path).parent)):
+            pass
+
+
+def precreate_recovery_outputs(outputs):
+    """Create and retain all result files before the first recovery rename."""
+    result = {}
+    try:
+        for key in ('journal', 'receipt', 'status'):
+            p = Path(outputs[key])
+            with directory(str(p.parent)) as parent:
+                fd = os.open(p.name, os.O_RDWR | os.O_CREAT | os.O_EXCL | NOFOLLOW,
+                             0o600, dir_fd=parent)
+                try:
+                    os.fsync(fd)
+                    os.fsync(parent)
+                    current = os.stat(p.name, dir_fd=parent, follow_symlinks=False)
+                    require(metadata(current) == metadata(os.fstat(fd)), 'recovery-output-replaced')
+                    # Duplicate the directory descriptor so it remains held beyond
+                    # the context manager and no later compound parent resolution
+                    # can redirect publication.
+                    result[key] = (os.dup(parent), fd, metadata(os.fstat(parent)))
+                except BaseException:
+                    os.close(fd)
+                    raise
+        # Multiple fresh files commonly share one parent; record its identity
+        # after the complete creation set, not after the first entry.
+        for key, (parent, fd, _) in tuple(result.items()):
+            result[key] = (parent, fd, metadata(os.fstat(parent)))
+        return result
+    except BaseException:
+        for parent, fd, _ in result.values():
+            os.close(fd); os.close(parent)
+        raise
+
+
+def close_recovery_outputs(opened_outputs):
+    for parent, fd, _ in opened_outputs.values():
+        try:
+            os.close(fd)
+        finally:
+            os.close(parent)
+
+
+def output_parent_held(entry):
+    parent, _, expected = entry
+    require(metadata(os.fstat(parent)) == expected, 'recovery-output-parent-replaced')
+
+
+def write_precreated(entry, record, replace=False):
+    parent, fd, _ = entry
+    output_parent_held(entry)
+    if replace:
+        os.ftruncate(fd, 0)
+        os.lseek(fd, 0, os.SEEK_SET)
+    else:
+        require(os.lseek(fd, 0, os.SEEK_END) == 0, 'recovery-output-not-empty')
+    write_all(fd, (json.dumps(record, sort_keys=True) + '\n').encode())
+    os.fsync(fd)
+    os.fsync(parent)
+
+
+@contextlib.contextmanager
+def terminal_latch():
+    global _terminal_latched
+    _terminal_latched = False
+    def latch(signum, frame):
+        del signum, frame
+        global _terminal_latched
+        _terminal_latched = True
+    previous = {sig: signal.signal(sig, latch) for sig in (signal.SIGTERM, signal.SIGINT)}
+    try:
+        yield
+    finally:
+        for sig, old in previous.items():
+            signal.signal(sig, old)
+
+
+def require_unlatched():
+    require(not _terminal_latched, 'terminal-signal-latched')
+
+
+def demote_recovery_result(result, code):
+    result = dict(result)
+    result['status'] = 'FAIL'
+    result['publication_error'] = code
+    result['interrupted'] = result.get('interrupted', False) or _terminal_latched
+    return result
+
+
+def publish_recovery_result(open_outputs, result, outputs, journal):
+    """Never return/pass a PASS record when either publication edge failed."""
+    try:
+        require_unlatched()
+        os.fsync(journal.fd)
+        require_unlatched()
+    except BaseException as error:
+        result = demote_recovery_result(result, 'journal-finalize-' + type(error).__name__)
+    try:
+        require_unlatched()
+        write_precreated(open_outputs['receipt'], result)
+        require_unlatched()
+    except BaseException as error:
+        result = demote_recovery_result(result, 'receipt-' + type(error).__name__)
+        try: write_precreated(open_outputs['receipt'], result, replace=True)
+        except BaseException: result['receipt_failure'] = True
+    status_record = {'status': result['status'], 'receipt': outputs['receipt'],
+                     'journal': outputs['journal']}
+    try:
+        require_unlatched()
+        write_precreated(open_outputs['status'], status_record)
+        require_unlatched()
+    except BaseException as error:
+        result = demote_recovery_result(result, 'status-' + type(error).__name__)
+        # A status failure must not leave the preceding PASS receipt as an
+        # apparent acceptance.  Both rewrites are best-effort but individually
+        # fsynced and are attempted even if the other one faults.
+        for key, record in (('receipt', result),
+                            ('status', {'status': 'FAIL', 'receipt': outputs['receipt'],
+                                        'journal': outputs['journal']})):
+            try: write_precreated(open_outputs[key], record, replace=True)
+            except BaseException: result[key + '_failure'] = True
+    if _terminal_latched and result['status'] == 'PASS':
+        result = demote_recovery_result(result, 'terminal-latch')
+    return result
 
 
 def location(parent, name, row):
@@ -897,6 +1236,7 @@ def _transact(plan, outputs, journal, progress):
     phase = progress['phase'] = 'staging'
     qname = Path(outputs['quarantine']).name
     qfd = None
+    destinations = None
     result = None
     with directory(root) as rfd:
         try:
@@ -1113,11 +1453,340 @@ def execute(plan_path, release_path, release_commit, outputs, command):
         os.close(mutex)
 
 
+def recovery_quarantine(rootfd, qfd):
+    qname = Path(ATTEMPT2['quarantine']['path']).name
+    verify_quarantine(rootfd, qname, qfd)
+    held = os.fstat(qfd)
+    expected = ATTEMPT2['quarantine']
+    require((held.st_dev, held.st_ino, stat.S_IMODE(held.st_mode), held.st_nlink) ==
+            (expected['dev'], expected['ino'], expected['mode'], expected['nlink']),
+            'attempt2-quarantine-identity')
+
+
+def recovery_destinations(rfd, plan):
+    """Pin every destination directory below the authenticated root descriptor."""
+    root = plan['candidate_root']
+    result = {'': (os.dup(rfd), directory_identity(os.fstat(rfd)), None, None)}
+    try:
+        wanted = sorted({str(Path(row['restore_git_path']).parent) for row in plan['targets']},
+                        key=lambda value: (len(Path(value).parts), value))
+        for relative in wanted:
+            require(relative != '.' and not relative.startswith('/') and '..' not in Path(relative).parts,
+                    'recovery-destination-relative')
+            current = ''
+            for component in Path(relative).parts:
+                child = component if not current else current + '/' + component
+                if child in result:
+                    current = child
+                    continue
+                parentfd, _, _, _ = result[current]
+                fd = os.open(component, os.O_RDONLY | os.O_DIRECTORY | NOFOLLOW, dir_fd=parentfd)
+                try:
+                    named = os.stat(component, dir_fd=parentfd, follow_symlinks=False)
+                    require(directory_identity(named) == directory_identity(os.fstat(fd)),
+                            'recovery-destination-component')
+                    result[child] = (fd, directory_identity(os.fstat(fd)), current, component)
+                except BaseException:
+                    os.close(fd); raise
+                current = child
+        return result
+    except BaseException:
+        close_recovery_destinations(result)
+        raise
+
+
+def close_recovery_destinations(destinations):
+    for fd, _, _, _ in destinations.values():
+        try: os.close(fd)
+        except OSError: pass
+
+
+def directory_identity(s):
+    return (s.st_dev, s.st_ino, stat.S_IMODE(s.st_mode), s.st_nlink)
+
+
+def validate_recovery_destinations(rfd, plan, destinations):
+    """Bind held descriptors to the currently reachable root namespace."""
+    with directory(plan['candidate_root']) as live_root:
+        require(directory_identity(os.fstat(live_root)) == directory_identity(os.fstat(rfd)),
+                'recovery-root-replaced')
+    require(directory_identity(os.fstat(rfd)) == destinations[''][1], 'recovery-root-held-drift')
+    for relative, (fd, identity, parent_relative, name) in destinations.items():
+        require(directory_identity(os.fstat(fd)) == identity, 'recovery-destination-held-drift')
+        if parent_relative is not None:
+            parentfd = destinations[parent_relative][0]
+            live = os.stat(name, dir_fd=parentfd, follow_symlinks=False)
+            require(directory_identity(live) == identity, 'recovery-destination-replaced')
+
+
+def recovery_parent(destinations, row):
+    relative = str(Path(row['restore_git_path']).parent)
+    require(relative in destinations, 'recovery-destination-missing')
+    return destinations[relative][0]
+
+
+def recovery_evidence_shape(plan, destinations, staged=False):
+    expected_files = {str(Path(row['restore_git_path']).relative_to('docs/verification/evidence'))
+                      for row in plan['targets']}
+    expected_dirs = {''}
+    for name in expected_files:
+        parent = str(Path(name).parent)
+        while parent != '.':
+            expected_dirs.add(parent); parent = str(Path(parent).parent)
+    efd = destinations['docs/verification/evidence'][0]
+    dirs, files = set(), set()
+    def visit(fd, relative):
+        dirs.add(relative)
+        for name in os.listdir(fd):
+            child = relative + '/' + name if relative else name
+            s = os.stat(name, dir_fd=fd, follow_symlinks=False)
+            if stat.S_ISDIR(s.st_mode):
+                sub = os.open(name, os.O_RDONLY | os.O_DIRECTORY | NOFOLLOW, dir_fd=fd)
+                try:
+                    require(metadata(os.fstat(sub)) == metadata(s), 'recovery-subtree-directory-race')
+                    visit(sub, child)
+                    require(metadata(os.stat(name, dir_fd=fd, follow_symlinks=False)) == metadata(s),
+                            'recovery-subtree-directory-race')
+                finally: os.close(sub)
+            else:
+                require(stat.S_ISREG(s.st_mode), 'recovery-subtree-special-or-symlink')
+                files.add(child)
+    visit(efd, '')
+    require(dirs == expected_dirs and files == (set() if staged else expected_files), 'recovery-subtree-set')
+
+
+def recovery_original_evidence(plan, destinations):
+    """Final content-and-metadata proof using only held destination descriptors."""
+    validate_recovery_destinations(destinations[''][0], plan, destinations)
+    recovery_evidence_shape(plan, destinations)
+    for row in plan['targets']:
+        verify_name(recovery_parent(destinations, row), Path(row['path']).name, row)
+
+
+def reconcile_recovery_rename(row, qfd, index, destinations):
+    source = location(recovery_parent(destinations, row), Path(row['path']).name, row)
+    quarantine = location(qfd, str(index), row)
+    observations = {'source': source, 'quarantine': quarantine}
+    if observations == {'source': 'expected', 'quarantine': 'missing'}:
+        return 'original', observations
+    if observations == {'source': 'missing', 'quarantine': 'expected'}:
+        return 'staged', observations
+    return 'uncertain', observations
+
+
+def recovery_result(plan, outputs, states, status, phase, error=None, interrupted=False):
+    result = {'status': status, 'phase': phase, 'states': list(states),
+              'restore_commit': plan['candidate_commit'], 'restoration': plan['targets'],
+              'quarantine': outputs['quarantine'], 'interrupted': interrupted}
+    if error is not None:
+        result['error'] = error
+    return result
+
+
+def recover_staged(plan, outputs, journal):
+    """Reverse only the authenticated attempt-2 staging, fail closed on any drift."""
+    rows = plan['targets']
+    states = ['staged'] * len(rows)
+    qfd = None
+    destinations = None
+    phase = 'recovery-admission'
+    root = plan['candidate_root']
+    try:
+        with directory(root) as rfd:
+            qname = Path(outputs['quarantine']).name
+            qfd = os.open(qname, os.O_RDONLY | os.O_DIRECTORY | NOFOLLOW, dir_fd=rfd)
+            try:
+                recovery_quarantine(rfd, qfd)
+                evidence_shape(plan, staged=True)
+                quarantine_shape(qfd, rows)
+                validate_protected(plan)
+                # Retain the complete destination hierarchy before admission.
+                destinations = recovery_destinations(rfd, plan)
+                validate_recovery_destinations(rfd, plan, destinations)
+                # Re-hash authenticated inputs directly before the first
+                # namespace mutation.  This remains useful even after release
+                # validation, which intentionally happened before the mutex.
+                validate_recovery_plan(BINDING['path'])
+                validate_attempt2(plan)
+                recovery_quarantine(rfd, qfd)
+                validate_recovery_destinations(rfd, plan, destinations)
+                recovery_evidence_shape(plan, destinations, staged=True)
+                quarantine_shape(qfd, rows)
+                owned = pinned_references((rfd, root), (qfd, outputs['quarantine']))
+                census = collect_census(root)
+                journal.append({'event': 'recovery-census', 'census': census,
+                                'owned_references': owned})
+                check_census(census, root, owned)
+                for lease in LEASES:
+                    require(not os.path.lexists(lease), 'active-lease')
+                require_unlatched()
+                journal.append({'event': 'recovery-admitted', 'count': len(rows),
+                                'attempt2': ATTEMPT2})
+                phase = 'restoring'
+                for index in reversed(range(len(rows))):
+                    row = rows[index]
+                    require_unlatched()
+                    recovery_quarantine(rfd, qfd)
+                    validate_recovery_destinations(rfd, plan, destinations)
+                    parent = recovery_parent(destinations, row)
+                    target_name = Path(row['path']).name
+                    require(not _name_exists(parent, target_name), 'recovery-destination-exists')
+                    verify_name(qfd, str(index), row)
+                    journal.append({'event': 'restore-intent', 'index': index, 'restore': row})
+                    states[index] = 'restore-uncertain'
+                    require_unlatched()
+                    rename_noreplace(qfd, str(index), parent, target_name)
+                    require_unlatched()
+                    states[index] = 'restored-not-durable'
+                    os.fsync(parent); os.fsync(qfd)
+                    verify_name(parent, target_name, row)
+                    states[index] = 'restored'
+                    journal.append({'event': 'restored', 'index': index})
+                phase = 'final-scan'
+                require_unlatched()
+                recovery_quarantine(rfd, qfd)
+                require(not os.listdir(qfd), 'recovery-quarantine-not-empty')
+                recovery_original_evidence(plan, destinations)
+                validate_protected(plan)
+                require_unlatched()
+                census = collect_census(root)
+                journal.append({'event': 'recovery-final-census', 'census': census,
+                                'owned_references': owned})
+                check_census(census, root, owned)
+                for lease in LEASES:
+                    require(not os.path.lexists(lease), 'active-lease')
+                recovery_original_evidence(plan, destinations)
+                validate_protected(plan)
+                require_unlatched()
+                result = recovery_result(plan, outputs, states, 'PASS', 'complete')
+                journal.append({'event': 'recovery-complete', 'count': len(rows)})
+                return result
+            except BaseException as error:
+                # Never let an evidence-writer fault suppress independent
+                # reconciliation of later rows.  This reports every observed
+                # location, including rows never reached by the forward loop.
+                interrupted = isinstance(error, KeyboardInterrupt) or _terminal_latched
+                reconciliation = []
+                for index, row in enumerate(rows):
+                    where, observations = (reconcile_recovery_rename(row, qfd, index, destinations)
+                                           if destinations is not None else
+                                           reconcile_rename(row, qfd, index))
+                    states[index] = ('restored' if where == 'original' else
+                                     'staged' if where == 'staged' else 'restore-uncertain')
+                    entry = {'index': index, 'state': states[index], 'locations': observations}
+                    reconciliation.append(entry)
+                    try:
+                        journal.append({'event': 'recovery-reconciled', **entry})
+                    except BaseException:
+                        entry['journal_failure'] = True
+                result = recovery_result(plan, outputs, states, 'FAIL', phase,
+                                         str(error) if isinstance(error, Refusal) else type(error).__name__,
+                                         interrupted)
+                result['reconciliation'] = reconciliation
+                try:
+                    journal.append({'event': 'recovery-failure', **result})
+                except BaseException:
+                    result['journal_failure'] = True
+                return result
+            finally:
+                if destinations is not None:
+                    close_recovery_destinations(destinations)
+                os.close(qfd)
+    except BaseException as error:
+        return recovery_result(plan, outputs, states, 'FAIL', phase,
+                               str(error) if isinstance(error, Refusal) else type(error).__name__,
+                               isinstance(error, KeyboardInterrupt) or _terminal_latched)
+
+
+def _name_exists(parent, name):
+    try:
+        os.stat(name, dir_fd=parent, follow_symlinks=False)
+        return True
+    except FileNotFoundError:
+        return False
+
+
+def validate_live_staged_recovery(plan):
+    """Read-only recovery admission probe; it intentionally creates no outputs."""
+    root = plan['candidate_root']
+    with directory(root) as rfd:
+        qname = Path(ATTEMPT2['quarantine']['path']).name
+        qfd = os.open(qname, os.O_RDONLY | os.O_DIRECTORY | NOFOLLOW, dir_fd=rfd)
+        destinations = None
+        try:
+            recovery_quarantine(rfd, qfd)
+            destinations = recovery_destinations(rfd, plan)
+            validate_recovery_destinations(rfd, plan, destinations)
+            recovery_evidence_shape(plan, destinations, staged=True)
+            quarantine_shape(qfd, plan['targets'])
+            validate_protected(plan)
+            owned = pinned_references((rfd, root), (qfd, ATTEMPT2['quarantine']['path']))
+            census = collect_census(root)
+            check_census(census, root, owned)
+            for lease in LEASES:
+                require(not os.path.lexists(lease), 'active-lease')
+            require_unlatched()
+        finally:
+            if destinations is not None:
+                close_recovery_destinations(destinations)
+            os.close(qfd)
+
+
+def execute_recovery(plan_path, release_path, release_commit, outputs, command):
+    """Dedicated --recover-staged entry point; it never enters _transact."""
+    release = validate_recovery_release(release_path, release_commit, outputs, command)
+    with directory(str(Path(MUTEX).parent)) as mutex_parent:
+        mutex = os.open(Path(MUTEX).name, os.O_RDWR | os.O_CREAT | NOFOLLOW, 0o600, dir_fd=mutex_parent)
+        try:
+            os.fsync(mutex); os.fsync(mutex_parent)
+        except BaseException:
+            os.close(mutex); raise
+    try:
+        s = os.fstat(mutex)
+        require(stat.S_ISREG(s.st_mode) and s.st_nlink == 1 and stat.S_IMODE(s.st_mode) == 0o600 and
+                s.st_uid == os.geteuid(), 'mutex-identity')
+        fcntl.flock(mutex, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        with opened(MUTEX) as current:
+            require(metadata(os.fstat(current)) == metadata(s), 'mutex-replaced')
+        plan = validate_recovery_plan(plan_path)
+        require(release['_staged_manifest']['targets'] == plan['targets'], 'recovery-manifest-targets')
+        receipt = validate_attempt2(plan)
+        del receipt
+        recovery_output_paths(outputs, plan)
+        open_outputs = precreate_recovery_outputs(outputs)
+        try:
+            with terminal_latch():
+                journal = FDJournal(open_outputs['journal'][1])
+                result = None
+                try:
+                    journal.append({'event': 'recovery-admitted', 'plan': BINDING, 'attempt2': ATTEMPT2,
+                                    'outputs': outputs, 'command': command, 'release_commit': release_commit,
+                                    'mutex': {'path': MUTEX, **metadata(s)},
+                                    'absent_leases': release['absent_leases']})
+                    result = recover_staged(plan, outputs, journal)
+                except BaseException as error:
+                    result = recovery_result(plan, outputs, ['restore-uncertain'] * len(plan['targets']),
+                                             'FAIL', 'recovery-entered',
+                                             str(error) if isinstance(error, Refusal) else type(error).__name__,
+                                             isinstance(error, KeyboardInterrupt) or _terminal_latched)
+                    try:
+                        journal.append({'event': 'recovery-unwind-failure', **result})
+                    except BaseException:
+                        result['journal_failure'] = True
+                return publish_recovery_result(open_outputs, result, outputs, journal)
+        finally:
+            close_recovery_outputs(open_outputs)
+    finally:
+        os.close(mutex)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument('--validate-only', action='store_true')
+    mode.add_argument('--validate-recovery', action='store_true')
     mode.add_argument('--execute', action='store_true')
+    mode.add_argument('--recover-staged', action='store_true')
     parser.add_argument('--plan', default=BINDING['path'])
     parser.add_argument('--release')
     for key in ('journal', 'receipt', 'status', 'quarantine'):
@@ -1128,13 +1797,26 @@ def main(argv=None):
             validate_plan(args.plan)
             print('VALIDATION_PASS; no mutation or runtime acceptance')
             return 0
+        if args.validate_recovery:
+            require(args.release, 'release-required')
+            release_commit = git(REPO, 'rev-parse', REMOTE_REF).decode().strip()
+            release = validate_recovery_release(args.release, release_commit)
+            plan = validate_recovery_plan(args.plan)
+            require(release['_staged_manifest']['targets'] == plan['targets'], 'recovery-manifest-targets')
+            validate_attempt2(plan)
+            with terminal_latch():
+                validate_live_staged_recovery(plan)
+            print('RECOVERY_VALIDATION_PASS; no output or candidate mutation')
+            return 0
         outputs = {k: getattr(args, k) for k in ('journal', 'receipt', 'status', 'quarantine')}
         require(all(outputs.values()), 'output-paths-required')
         require(args.release, 'release-required')
         release_commit = git(REPO, 'rev-parse', REMOTE_REF).decode().strip()
-        result = execute(args.plan, args.release, release_commit, outputs,
-                         [sys.executable, str(Path(__file__).absolute()), *sys.argv[1:]])
-        print('STORAGE_' + result['status'])
+        command = [sys.executable, str(Path(__file__).absolute()), *sys.argv[1:]]
+        result = (execute_recovery(args.plan, args.release, release_commit, outputs, command)
+                  if args.recover_staged else
+                  execute(args.plan, args.release, release_commit, outputs, command))
+        print(('RECOVERY_' if args.recover_staged else 'STORAGE_') + result['status'])
         return 0 if result['status'] == 'PASS' else 130 if result.get('interrupted') else 1
     except BaseException as error:
         print('FAIL_CLOSED: ' + (str(error) if isinstance(error, Refusal)

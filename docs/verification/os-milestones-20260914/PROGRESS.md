@@ -5,8 +5,8 @@
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-01T00:15:48+00:00`
-- Launcher state heartbeat: `2026-10-01T00:15:33.669337+00:00`
+- Dashboard refreshed: `2026-10-01T00:35:07+00:00`
+- Launcher state heartbeat: `2026-10-01T00:35:02.576847+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `1442145`; server PID: `1442149`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20260930T174643Z-2adefc1c`
@@ -56,11 +56,6 @@ These are separate engineering states, not a stability percentage. Existing base
 ## Current Blockers
 
 - `none`: launcher state is currently `running`.
-- Candidate-12 remains safely staged with 2,507 intact quarantined files and
-  zero deletions.  The filesystem observer source now passes independent review;
-  the next executable dependency is an independently reviewed staged-recovery
-  mode integrated into the existing cleanup transaction.  Three standalone
-  recovery designs are rejected and must not be released or executed.
 - The OS objective is not complete: source review and infrastructure packets are not substitutes for native, guest, application, language, platform or release proof.
 - The heavy build/guest lease and free-space policy must be checked immediately before every expensive run.
 - External hardware, hosted CI, and platform-specific acceptance remain later gates even when local preparation is complete.

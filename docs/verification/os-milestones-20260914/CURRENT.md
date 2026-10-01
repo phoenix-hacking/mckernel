@@ -10829,3 +10829,33 @@ recovery: run the corrected cleanup once from a fresh release, trim/remeasure,
 release scratch-13 preparation and the serialized current-image build, then run
 the separately labelled startup/memory/files/threads-futex/signals/shutdown
 diagnostic loop.  No formal acceptance counter changes.
+
+Continuation checkpoint 260, 2026-09-30: shutdown stopped new dispatch and
+completed only the already active bounded integrated-recovery correction.  The
+exact tool/test hashes are `0afa98cd...ae83` and `7dc098d9...a341`; all 163
+focused disposable tests pass, `py_compile` passes and `git diff --check`
+passes.  The correction pins the complete destination hierarchy with retained
+directory descriptors, uses those descriptors for rename/final verification/
+reconciliation, adds a read-only `--validate-recovery` path and exact test
+artifact release bindings, and demotes publication or terminal-signal failures
+instead of reporting PASS.  Exact source-only WIP evidence is
+`docs/verification/evidence/native-exact-candidate12-integrated-recovery-correction-wip-20260930.json`.
+
+This is not an independent review or execution release.  No live recovery,
+privileged census, Docker operation, build or guest ran.  The exact attempt-2
+state remains 2,507 quarantined files, zero originals and zero deletions; its
+journal/receipt/status hashes remain `4749ea4d...d02`/`83d22b06...3c52`/
+`b22762e6...9484a`.  The preserved launcher identities remain PIDs
+1442141/1442142/1442145/1442149 (wrapper/launcher/worker/app-server), started
+2026-09-30 10:46:42 PDT.  There is no QEMU, mcexec, build or guest process.
+
+Next continuation must first obtain a fresh independent source review against
+the exact committed correction.  If it passes, author, checkpoint, push/fetch
+verify and independently review a separate one-shot staged-recovery release;
+run read-only recovery validation before any mutation, then execute at most
+once.  After exact restoration, issue a fresh corrected-cleanup release, trim
+and remeasure capacity, release scratch-13 preparation, build the smallest
+current image, and run separately labelled startup/memory/files/threads-futex/
+signals/shutdown diagnostics.  Diagnostic results remain distinct from formal
+acceptance.  The OS goal is incomplete and remains launcher-paused during this
+shutdown; it is neither resumed nor marked complete.
