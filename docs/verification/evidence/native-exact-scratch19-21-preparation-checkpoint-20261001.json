@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "status": "PASS_PREPARATION_SCRATCH21",
+  "build_executed": false,
+  "guest_executed": false,
+  "target": "28a905bfc177627e338a3fd91f69329ac2e74046",
+  "target_tree": "1d7bfce8a37ab5dd1bdd8197c4531a157ffdfd0f",
+  "candidate": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21",
+  "candidate_identity": {"device": 1831, "inode": 3933582, "mode": 448},
+  "successful_attempt": {
+    "log_sha256": "a315d57ee118d0d6349a69a5997ab6b85418cd3f4950dfbaa90da04aefa499eb",
+    "terminal_sha256": "56224a42d466fdf4ad6dc7a3e34b6ab66d1709f57c3b88631958722f0106f5a0",
+    "manifest_sha256": "3b30018845da5a574c352ecc8704a9916f0aca876b96d0665cb973b9e67779df",
+    "request_sha256": "04a7b363d94af5da8276397f6c2e0baec058eabdcc10471b8e2c8d0f9b554f2c",
+    "shared_files": 486,
+    "shared_link_transition": "5_to_6",
+    "predecessor_aliases": ["scratch15", "scratch16", "scratch17", "scratch18", "scratch20"],
+    "active_exclusion_path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json",
+    "active_exclusion_present_after_preparation": false,
+    "lease_present_after_preparation": false
+  },
+  "preserved_failures": [
+    {
+      "attempt": "scratch19",
+      "phase": "started",
+      "reason": "inherited function default retained the scratch18 target",
+      "log_sha256": "94c56d8f3e761970dfd164e8062caa0442c643b298af4025054f001d16f6d044",
+      "terminal_sha256": "23988fbc63101a3d8b15d3e591121215790f069c25e6c18f958f630bee46eedf",
+      "candidate_created": false
+    },
+    {
+      "attempt": "scratch20",
+      "phase": "canonical-owner-validation",
+      "reason": "fresh exclusion pathname did not match the exact active pathname pinned by the target owner",
+      "log_sha256": "7b0567f506a02b9935a5c0e41853d846b88b63a8d39a2915f778a2b829126e7e",
+      "terminal_sha256": "5b196eecc2e74eff5a780a868862e395f465a695c72f606e23174b5a29d417da",
+      "manifest_sha256": "3b30018845da5a574c352ecc8704a9916f0aca876b96d0665cb973b9e67779df",
+      "request_sha256": "1896495d8230f85662ed876505a0ea15c5be27eb80c92a078ad5c57e1448d8c6",
+      "candidate_preserved": true,
+      "build_started": false
+    }
+  ],
+  "release": {
+    "wrapper_sha256": "e4bf50c400eb9f9b39975a0b4a671507bd8b5072e89fdc4b4682f288681794ea",
+    "wrapper_test_sha256": "f58082f825a76ea7ea9840155d4d2f99634512f58de036fb94b4ceb52a58e26c",
+    "independent_decision": "PASS_EXECUTION_PREPARATION_ONLY"
+  },
+  "next": "Independently review the prepared candidate, manifest, request and terminal state; then create a separate one-shot heavy-build release."
+}

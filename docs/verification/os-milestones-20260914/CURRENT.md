@@ -13792,3 +13792,27 @@ implement and executable-test the complete provenance-bound child backend/VMA
 ownership transaction, then rebind the scratch19 preparation helper to its
 reviewed fetched commit and build a fresh candidate containing shutdown v6.
 The OS remains incomplete.
+
+Continuation checkpoint 353, 2026-10-01: fresh scratch21 preparation PASSed
+for exact source target `28a905bf...e74046` and tree
+`1d7bfce8...57310f`.  The candidate is inode `1831:3933582`, mode 0700;
+its canonical manifest and non-executable request hash to `3b300188...79df`
+and `04a7b363...4f2c`.  All 486 large evidence inputs were authenticated as
+the same five retained aliases across scratch15/16/17/18 and failed scratch20,
+then rechecked at link count six after scratch21 materialization and again
+after canonical owner validation.  The exact active scratch18 exclusion path
+pinned by the target owner remains absent, as does the scratch21 lease.  No
+Docker container, build or guest ran.
+
+Two fail-closed preparation attempts remain preserved.  Scratch19 stopped
+before mutation because an inherited Python default retained the scratch18
+target.  Scratch20 materialized but stopped at canonical owner validation
+because its fresh exclusion pathname did not match the target owner's pinned
+active slot; its PID is gone, output/evidence directories are empty and no
+lease exists.  Exact logs, terminals, manifests, requests, corrections and
+review decisions are recorded in
+`native-exact-scratch19-21-preparation-checkpoint-20261001.json`.  Next obtain
+independent prepared-artifact review and a separate heavy-build execution
+release for scratch21.  Counts remain three compiled current candidates, 12
+bounded diagnostic guest passes, 0/273 formal applications, 6/130 production
+gates and 0/7 language gates.  The OS remains incomplete.
