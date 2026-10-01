@@ -29,6 +29,7 @@ MODULE_NAMES = ("ihk.ko", "ihk-smp-x86_64.ko", "mcctrl.ko")
 APPEND = "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
 PROFILE_RETAINED = "native-diagnostic-4vcpu-8192mib"
 PROFILE_SMALL = "native-diagnostic-2vcpu-6144mib"
+PROFILE_DUAL = "native-diagnostic-4vcpu-6144mib"
 # The launcher prefix is part of the reviewed wire contract.  The tail is
 # deliberately bounded rather than frozen so the same manifest validator can
 # describe startup and the four core-mode payloads.
@@ -221,8 +222,9 @@ def _validate_manifest(obj):
     profile = obj["profile"]
     _need(all(type(profile[k]) is int for k in ("memory_mib", "vcpus", "numa_nodes")), "profile types")
     name = profile.get("name", PROFILE_RETAINED)
-    _need(type(name) is str and name in (PROFILE_RETAINED, PROFILE_SMALL), "profile name")
-    expected = {PROFILE_RETAINED: (8192, 4, 2), PROFILE_SMALL: (6144, 2, 1)}[name]
+    _need(type(name) is str and name in (PROFILE_RETAINED, PROFILE_SMALL, PROFILE_DUAL), "profile name")
+    expected = {PROFILE_RETAINED: (8192, 4, 2), PROFILE_SMALL: (6144, 2, 1),
+                PROFILE_DUAL: (6144, 4, 2)}[name]
     _need((profile["memory_mib"], profile["vcpus"], profile["numa_nodes"]) == expected, "profile differs")
     append = profile.get("append", APPEND)
     _need(append == APPEND, "kernel append differs from retained profile")
@@ -459,6 +461,12 @@ def expected_qemu_argv(manifest, attempt):
         profile_args = ["-smp", "2,sockets=1,cores=2,threads=1", "-m", "6144",
                         "-object", "memory-backend-ram,size=6G,id=ram-node0",
                         "-numa", "node,nodeid=0,cpus=0-1,memdev=ram-node0"]
+    elif manifest["profile"]["name"] == PROFILE_DUAL:
+        profile_args = ["-smp", "4,sockets=2,cores=2,threads=1", "-m", "6144",
+                        "-object", "memory-backend-ram,size=3G,id=ram-node0",
+                        "-object", "memory-backend-ram,size=3G,id=ram-node1",
+                        "-numa", "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+                        "-numa", "node,nodeid=1,cpus=2-3,memdev=ram-node1"]
     else:
         profile_args = ["-smp", "4,sockets=2,cores=2,threads=1", "-m", "8192",
                         "-object", "memory-backend-ram,size=4G,id=ram-node0",

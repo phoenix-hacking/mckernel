@@ -13673,3 +13673,65 @@ prepare a fresh measured small-profile packet/release.  Only after measured
 peak CPU/RAM and isolation review may concurrent guests be considered.  Finish
 the batch corrections separately; never use either unreleased WIP lane.  No
 acceptance counters change at shutdown and the OS remains incomplete.
+
+Continuation checkpoint 348, 2026-10-01 diagnostic concurrency pilot: the
+campaign remained stopped while a separate, diagnostic-only two-guest owner
+was built and tested. The two-vCPU/six-GiB *guest* topology failed the existing
+fixture's four-CPU online-mask contract before payload; the corrected topology
+uses four guest vCPUs/six GiB and two NUMA nodes in each container, while
+pinning each container to a distinct pair of physical host CPUs with a two-CPU,
+seven-GiB/no-swap cap. Four initial two-guest pairs returned diagnostic PASS;
+a hardened fifth startup/signals pair returned PASS with 38.191 seconds of
+Docker-state overlap in a 38.764-second pair phase. Exact evidence and limits
+are in `native-diagnostic-two-guest-pilot-handoff-20261001.md`; the fifth
+summary is `dual-guest-vxg5lb71/summary.json`.
+
+The pilot now refuses input/source drift, wrong bind sources or writable
+mounts, mismatched inner result fields and non-overlapping guest intervals;
+it retries exact labeled-container cleanup before releasing the development
+lock. Offline pilot regression suite passes 13 tests, including simulated
+TERM/HUP and false-PASS cases. A standalone resource observer and sequential
+batch sidecar also pass their focused offline tests but remain separate and
+unreleased. No pilot container or QEMU is left running. These replayed
+diagnostic cases do not increase the 11 earlier bounded guest passes or any
+formal counter: application 0/273, production gates 6/130, languages 0/7.
+Next obtain the independent pilot safety review, then resume the campaign and
+use this bounded two-guest lane only for compatible short diagnostics while
+continuing Rust kernel and app-readiness work. The OS remains incomplete.
+
+Continuation checkpoint 349, 2026-10-01: independent pilot review found and
+the owner corrected three false-PASS risks: host PID/IPC and added-capability
+drift, a one-guest invocation mislabeled as parallel, and imports from mutable
+repo source. It now requires exactly two guests, checks these isolation fields,
+and runs a root-owned read-only private copy of all four runtime Python files.
+Host Docker output and inner-result reads are bounded. Fourteen focused offline
+pilot tests pass. A fresh startup/signals pair under the source-sealed owner
+PASSed with 38.803 seconds of observed overlap in 39.843 seconds wall time;
+`dual-guest-3lgmesb0/summary.json` retains exact hashes and outputs, and both
+owned containers are absent. The known fail-closed caveat is a hung Docker
+`create`, during which the owner holds the development lock rather than
+releasing it before daemon settlement. Independent re-review is pending.
+This remains diagnostic-only replay, not additional app or production credit;
+the OS remains incomplete.
+
+Continuation checkpoint 350, 2026-10-01: independent read-only rereview clears
+the remaining P1 blocker for diagnostic-only use of the two-guest pilot.  Exact
+pilot/test hashes are `5b5c782e...ed69b` / `e415a3a1...0b11`; the coordinator
+reproduces all 14 focused offline tests passing.  The latest source- and
+manifest-sealed startup/signals pair at `dual-guest-_v1mu8cd/summary.json`
+(`5680a8f5...fbb`) contains two `PROTOCOL_PASS` results, 38.070 seconds of
+measured Docker-state overlap in a 40.642-second pair phase, and both exact
+containers are absent.
+
+The released diagnostic profile requires exactly two compatible four-vCPU,
+6,144-MiB, two-NUMA-node manifests.  Each container remains pinned to a
+different two-physical-CPU set with 7 GiB/no swap, and the pilot exclusively
+owns the preserved root development lock.  A hung Docker create remains
+fail-closed while that lock stays held; it must not be force-released.  This
+release does not confer application, production, artifact or whole-OS
+acceptance.  Next use it for fresh functional behavior rather than replay:
+prepare and seal `process.fork-exit` plus `signal.block-pending`, execute the
+pair once if the artifact census remains quiescent, preserve exact outputs and
+cleanup, and triage the first real failure.  Formal counters remain 0/273
+applications, 6/130 production gates and 0/7 language gates; the OS remains
+incomplete.

@@ -259,6 +259,19 @@ class NativeDiagnosticTests(unittest.TestCase):
         self.assertEqual(args.count("-numa"), 1)
         self.assertIn("memory-backend-ram,size=6G,id=ram-node0", args)
 
+    def test_explicit_dual_profile_preserves_four_cpu_topology_with_six_gib(self):
+        value = copy.deepcopy(self.raw)
+        value["profile"] = {"name": ND.PROFILE_DUAL, "memory_mib": 6144,
+                             "vcpus": 4, "numa_nodes": 2}
+        self.manifest_path.write_text(json.dumps(value))
+        manifest = ND.load_manifest(str(self.manifest_path))
+        args = ND.build_command(manifest, self.attempt())["argv"]
+        self.assertEqual(args[args.index("-smp") + 1], "4,sockets=2,cores=2,threads=1")
+        self.assertEqual(args[args.index("-m") + 1], "6144")
+        self.assertEqual(args.count("-numa"), 2)
+        self.assertIn("memory-backend-ram,size=3G,id=ram-node0", args)
+        self.assertIn("memory-backend-ram,size=3G,id=ram-node1", args)
+
     def test_profile_name_cannot_be_implicit_or_append_override(self):
         for profile in ({"name": ND.PROFILE_SMALL, "memory_mib": 6144, "vcpus": 2, "numa_nodes": 1,
                          "append": "console=ttyS0"},
