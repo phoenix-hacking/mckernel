@@ -12489,3 +12489,31 @@ Uncommitted rejected shutdown changes in `smp_cpu.rs` and `smp_memory.rs` are
 excluded, untouched, and not covered by this PASS.  Scratch15 and its failed
 request remain immutable evidence.  Next checkpoint these bytes, then prepare
 a fresh candidate and fresh one-shot build request; never rerun scratch15.
+
+Continuation checkpoint 306, 2026-10-01: the launcher requested an immediate
+window shutdown.  No new work was dispatched; all eight child lanes are
+complete and no heavy build or guest is active.  The failed scratch15 Docker
+container `4ab0887b...6ff6` remains exited with PID zero and no OOM, its lease
+is absent, and its original request, exportset-27 and failure evidence remain
+preserved.  Host and scratch free space are 24,744,185,856 and 16,009,342,976
+bytes respectively.  Launcher wrapper/launcher/worker PIDs 1442141/1442142/
+1442145, app-server PID 1442149 and current code-host PID 1442494 remain live;
+unrelated code-host PID 3011513 remains untouched.
+
+The scratch16 preparation worker left packet `50f4d50b...69e9d` and test
+`8b07e739...4b713` uncommitted.  They are preserved in place but are not
+execution-released.  The only independent BLOCK covers superseded hashes; the
+current bytes have no final review and still require canonical unchanged
+manifest generation, a complete standard owner request, BuildOwner admission,
+robust capacity/release/failure evidence and a final exact-hash review.  Do not
+execute or commit them as accepted work on resume.  Exact shutdown state and
+next tasks are in `os-window-shutdown-checkpoint-20261001-306.json`.
+
+Next resume at the scratch16 source review: correct those admission/evidence
+gaps, rerun lightweight tests, obtain independent review, then commit and
+fetched-blob verify before any preparation.  After a prepared-candidate review,
+bind a fresh exclusion and one-shot build request while keeping scratch15
+immutable.  A successful compile unlocks image build and the real futex
+diagnostic retry.  Counts remain one compiled current candidate, five bounded
+diagnostic guest passes and zero formal application acceptances.  The OS goal
+is active and incomplete; the launcher pause is a window boundary only.

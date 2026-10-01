@@ -1,0 +1,54 @@
+{
+  "schema": "mckernel.os-window-shutdown-checkpoint.v1",
+  "recorded_at_utc": "2026-10-01T10:51:38Z",
+  "source_head": "ddb8d7d58a9de7063663a27397b9fb9613a6325c",
+  "branch": "codex/local-native-staging-repair",
+  "goal_status": "active_incomplete_launcher_paused",
+  "acceptance": {
+    "compiled_current_candidates": 1,
+    "bounded_diagnostic_guest_passes": 5,
+    "formal_application_acceptances": 0,
+    "os_complete": false
+  },
+  "active_process_identities": [
+    {"pid": 1442141, "ppid": 1353, "started": "Wed Sep 30 10:46:42 2026", "identity": "tmux mckernel-goal wrapper"},
+    {"pid": 1442142, "ppid": 1442141, "started": "Wed Sep 30 10:46:42 2026", "identity": "scripts/run_os_goal.py launcher"},
+    {"pid": 1442145, "ppid": 1442142, "started": "Wed Sep 30 10:46:42 2026", "identity": "scripts/run_os_goal.py worker"},
+    {"pid": 1442149, "ppid": 1442145, "started": "Wed Sep 30 10:46:42 2026", "identity": "codex app-server"},
+    {"pid": 1442494, "ppid": 1442149, "started": "Wed Sep 30 10:47:15 2026", "identity": "current codex-code-mode-host"},
+    {"pid": 3011513, "ppid": 771805, "started": "Sun Sep 27 23:19:35 2026", "identity": "unrelated codex-code-mode-host; preserved"}
+  ],
+  "heavy_operation": {
+    "active": false,
+    "retained_container_id": "4ab0887b2fcaaa7ff5393fc674e52defb75155cfe25cfbac84b8231b3f6f6ff6",
+    "container_state": "exited",
+    "container_pid": 0,
+    "oom_killed": false,
+    "scratch15_lease_absent": true,
+    "note": "The failed scratch15 container, request, exclusion and evidence remain immutable. Never rerun that request."
+  },
+  "capacity_bytes_available": {
+    "host": 24744185856,
+    "scratch": 16009342976
+  },
+  "joined_children": {
+    "active_count": 0,
+    "scratch16_worker_result": "completed_uncommitted",
+    "scratch16_review_result": "BLOCK applies only to the superseded 80b978c4 packet and 2b18d96f test hashes; no independent decision covers the current bytes"
+  },
+  "preserved_uncommitted_scratch16": {
+    "packet_path": "docs/verification/evidence/native-exact-candidate-delta-preparation-scratch16-20261001.py",
+    "packet_sha256": "50f4d50bc62d1f7f0faeed013dcdef3d4c3abfef1528f83a0f6fe17b60b69e9d",
+    "test_path": "scripts/tests/test_native_exact_candidate_delta_preparation_scratch16_20261001.py",
+    "test_sha256": "8b07e73969234b094844f885d2d349d178cbf2d5babb70969e349c31dfe4b713",
+    "status": "unreviewed_not_execution_released",
+    "known_remaining_issue": "Current packet still needs canonical unchanged manifest generation, a complete standard owner request, BuildOwner.validate coverage, robust capacity/release/failure evidence, and final independent exact-hash review."
+  },
+  "next_tasks": [
+    "Resume by reviewing the preserved scratch16 packet bytes; do not execute them as currently stored.",
+    "Correct canonical manifest/full request/owner admission and failure-evidence gaps, rerun lightweight tests, then obtain an independent review bound to final hashes.",
+    "Commit and fetched-blob verify the reviewed preparation packet before one validate-only preparation run.",
+    "Independently inspect the prepared candidate, then bind a fresh exclusion and one-shot build request; keep scratch15 immutable.",
+    "If the fresh candidate compiles, build the image and retry the real futex diagnostic before additional application lanes."
+  ]
+}
