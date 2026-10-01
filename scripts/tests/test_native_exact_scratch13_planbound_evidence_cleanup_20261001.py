@@ -63,7 +63,7 @@ class Fixture(unittest.TestCase):
         s = self.protected.stat()
         protected = [{'path': str(self.protected), 'type': 'file', 'dev': s.st_dev,
                       'ino': s.st_ino, 'mode': stat.S_IMODE(s.st_mode), 'size': s.st_size,
-                      'sha256': m.sha(self.protected.read_bytes())}]
+                      'sha256': m.sha(self.protected.read_bytes()), 'nlink': s.st_nlink}]
         s = self.protected_dir.stat()
         protected.append({'path': str(self.protected_dir), 'type': 'directory',
                           'dev': s.st_dev, 'ino': s.st_ino, 'mode': stat.S_IMODE(s.st_mode)})
@@ -116,6 +116,18 @@ class Fixture(unittest.TestCase):
         for patch in self.patches:
             patch.start()
             self.addCleanup(patch.stop)
+
+    def test_production_plan_binding_is_exact_reviewed_input(self):
+        self.assertEqual(m.BINDING, {
+            'path': '/home/holden/mckernel/docs/verification/evidence/native-exact-retained-candidate-6fed3a10-source-evidence-plan-20261001.json',
+            'sha256': '0176dc3032e9df821494d2f08c8b810db0dac6b12681367733676b7729df647a',
+            'size': 1607383, 'dev': 66306, 'ino': 47497531, 'mode': 0o600,
+            'nlink': 1,
+            'root': '/home/holden/mckernel-work/scratch/mckernel-exact-candidate-6fed3a10-scratch-13',
+            'identity': '1831:3169097',
+            'commit': '6fed3a1022db0b4f9828dd42a8bd8f88fc052053',
+            'count': 2560, 'bytes': 9098723581, 'allocated': 9104986112,
+        })
 
     def seal(self):
         self.plan_path.write_text(json.dumps(self.plan))
@@ -282,6 +294,56 @@ class Fixture(unittest.TestCase):
             result = self.census()
             if calls == 3:
                 self.protected.write_bytes(b'changed protected object')
+            return result
+        result, count = self.execute_fixture(collector)
+        self.assertEqual(count, 3)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(result['phase'], 'deleting')
+
+    def test_protected_hardlink_count_two_is_authenticated(self):
+        alias = self.base / 'protected-alias'
+        os.link(self.protected, alias)
+        self.plan['protected_inventory'][0]['nlink'] = 2
+        self.seal()
+        self.validate()
+        result, count = self.execute_fixture(lambda root: self.census())
+        self.assertEqual(result['status'], 'PASS')
+        self.assertEqual(count, 3)
+        self.assertTrue(alias.exists())
+
+    def test_protected_link_count_drift_is_rejected_at_validation(self):
+        self.plan['protected_inventory'][0]['nlink'] = 2
+        self.seal()
+        with self.assertRaisesRegex(m.Refusal, 'file-metadata'):
+            self.validate()
+
+    def test_protected_link_count_drift_after_staging_never_passes(self):
+        alias = self.base / 'protected-alias'
+        os.link(self.protected, alias)
+        self.plan['protected_inventory'][0]['nlink'] = 2
+        self.seal()
+        calls = 0
+        def collector(root):
+            nonlocal calls
+            calls += 1
+            result = self.census()
+            if calls == 2:
+                alias.unlink()
+            return result
+        result, count = self.execute_fixture(collector)
+        self.assertEqual(count, 2)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(result['phase'], 'staged-admission')
+
+    def test_protected_link_count_drift_at_final_census_never_passes(self):
+        alias = self.base / 'protected-alias'
+        calls = 0
+        def collector(root):
+            nonlocal calls
+            calls += 1
+            result = self.census()
+            if calls == 3:
+                os.link(self.protected, alias)
             return result
         result, count = self.execute_fixture(collector)
         self.assertEqual(count, 3)

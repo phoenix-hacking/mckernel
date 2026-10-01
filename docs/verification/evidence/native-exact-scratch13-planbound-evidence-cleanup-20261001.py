@@ -35,16 +35,16 @@ TOOL_PATH = 'docs/verification/evidence/native-exact-scratch13-planbound-evidenc
 REMOTE_REF = 'refs/remotes/origin/codex/local-native-staging-repair'
 SCRATCH = '/home/holden/mckernel-work/scratch'
 BINDING = {
-    # The reviewed audit plan is deliberately a later, separately released
-    # input.  These zero counters fail closed until its exact binding is
-    # installed; tests replace this whole row with a disposable fixture.
-    'path': SCRATCH + '/native-exact-retained-candidate-6fed3a10-source-evidence-plan-20261001.json',
-    'sha256': '0' * 64,
-    'size': 0, 'dev': 1831, 'ino': 0, 'mode': 0o600, 'nlink': 1,
+    # This is the exact independently reviewed audit-plan admission.  Every
+    # identity and aggregate is fixed so a different plan cannot be consumed
+    # by the cleanup transaction.
+    'path': str(REPO / 'docs/verification/evidence/native-exact-retained-candidate-6fed3a10-source-evidence-plan-20261001.json'),
+    'sha256': '0176dc3032e9df821494d2f08c8b810db0dac6b12681367733676b7729df647a',
+    'size': 1607383, 'dev': 66306, 'ino': 47497531, 'mode': 0o600, 'nlink': 1,
     'root': SCRATCH + '/mckernel-exact-candidate-6fed3a10-scratch-13',
     'identity': '1831:3169097',
     'commit': '6fed3a1022db0b4f9828dd42a8bd8f88fc052053',
-    'count': 0, 'bytes': 0, 'allocated': 0,
+    'count': 2560, 'bytes': 9098723581, 'allocated': 9104986112,
 }
 MUTEX = SCRATCH + '/native-exact-scratch13-cleanup-operation.mutex'
 LEASES = [SCRATCH + '/native-exact-build-lease-6fed3a10-scratch-13.json',
@@ -186,9 +186,10 @@ def metadata(s):
             'size': s.st_size, 'mtime_ns': s.st_mtime_ns, 'nlink': s.st_nlink}
 
 
-def verify_fd(fd, row):
+def verify_fd(fd, row, strict_nlink=True):
     before = os.fstat(fd)
-    require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1, 'file-type-link')
+    require(stat.S_ISREG(before.st_mode) and before.st_nlink >= 1 and
+            (not strict_nlink or before.st_nlink == 1), 'file-type-link')
     require(all(metadata(before)[k] == row[k] for k in metadata(before) if k in row),
             'file-metadata')
     require(hash_fd(fd) == row['sha256'], 'file-content')
@@ -276,8 +277,10 @@ def validate_protected(plan):
                         (row['dev'], row['ino'], row['mode']), 'protected-directory')
         else:
             require(row['type'] == 'file', 'protected-type')
+            require(isinstance(row.get('nlink'), int) and row['nlink'] >= 1,
+                    'protected-link-count')
             with opened(row['path']) as fd:
-                verify_fd(fd, row)
+                verify_fd(fd, row, strict_nlink=False)
 
 
 def protected_overlap(plan, path):
