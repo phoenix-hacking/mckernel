@@ -101,9 +101,9 @@ int main(int argc, char **argv) {
             "wake_empty", "wake_unmapped_private", "wait_relative_runnable"};
         static const int results[] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,-1};
         static const int errors[] = {11,110,110,110,110,14,22,14,14,22,22,22,22,0,0,110};
-        for (int i = 0; i != 15; ++i) {
+        for (int i = 0; i != 16; ++i) {
             char line[256];
-            unsigned long long elapsed = (i == 2 || i == 4) ? 10000000ull : 1000ull;
+            unsigned long long elapsed = (i == 2 || i == 4 || i == 15) ? 10000000ull : 1000ull;
             unsigned long long before = 100000ull + i * 2000000ull;
             unsigned long long after = before + elapsed;
             unsigned long long deadline = i == 4 ? after - 5000000ull : 0ull;
@@ -111,12 +111,10 @@ int main(int argc, char **argv) {
                              ids[i], results[i], errors[i], elapsed, before, after, deadline);
             if (n <= 0 || write(2, line, (size_t)n) != n) return 93;
         }
-        const char clone[] = "NATIVE_ULTRA_FUTEX_CLONE parent_tid=319 child_tid=322 entry_tid=322 stored_tid=322 cleared_tid=0 entered=1 wait_calls=0 elapsed_ns=8354973 flags=1250f00 stack_bytes=262144\n";
-        const char final_case[] = "NATIVE_ULTRA_FUTEX_CASE id=wait_relative_runnable result=-1 errno=110 elapsed_ns=20090542 before_ns=40732446749 after_ns=40752537291 deadline_ns=0\n";
         const char threads[] = "NATIVE_ULTRA_FUTEX_THREADS joined=2 parent_tid=319 tid0=322 tid1=321 count0=217233 count1=241664 token0=1 token1=2 stack_bytes=262144 elapsed_ns=112287456\n";
-        if (write(2, clone, sizeof clone - 1) != (ssize_t)(sizeof clone - 1) ||
-            write(2, final_case, sizeof final_case - 1) != (ssize_t)(sizeof final_case - 1) ||
-            write(2, threads, sizeof threads - 1) != (ssize_t)(sizeof threads - 1)) return 93;
+        const char clone[] = "NATIVE_ULTRA_FUTEX_CLONE parent_tid=319 child_tid=322 entry_tid=322 stored_tid=322 cleared_tid=0 entered=1 wait_calls=0 elapsed_ns=8354973 flags=1250f00 stack_bytes=262144\n";
+        if (write(2, threads, sizeof threads - 1) != (ssize_t)(sizeof threads - 1) ||
+            write(2, clone, sizeof clone - 1) != (ssize_t)(sizeof clone - 1)) return 93;
         return 37;
     }
 #elif defined(ND_CORE_MEMORY) || defined(ND_CORE_FILES) || defined(ND_CORE_THREADS) || defined(ND_CORE_SIGNALS)
@@ -301,7 +299,7 @@ class CollectorTests(unittest.TestCase):
         self.assertEqual(bytes.fromhex(report["streams"]["stdout"]["hex"]),
                          b"NATIVE_ULTRA_FUTEX PASS cases=16 threads=2 raw_clone=1\n")
         raw_stderr = bytes.fromhex(report["streams"]["stderr"]["hex"])
-        oracle = {"kind": "native-ultra-futex-v1", "line_count": 18,
+        oracle = {"kind": "native-ultra-futex-v1", "record_order": "current-source-v1", "line_count": 18,
                   "case_ids": [row[0] for row in _DIAGNOSTIC._FUTEX_CASES],
                   "thread_count": 2, "clone": True}
         _DIAGNOSTIC._check_typed_futex_stderr(raw_stderr, oracle)
@@ -309,7 +307,7 @@ class CollectorTests(unittest.TestCase):
         self.assertFalse(report["streams"]["stderr"]["truncated"])
 
     def test_typed_futex_oracle_rejects_mutation_and_overflow(self):
-        oracle = {"kind": "native-ultra-futex-v1", "line_count": 18,
+        oracle = {"kind": "native-ultra-futex-v1", "record_order": "current-source-v1", "line_count": 18,
                   "case_ids": [row[0] for row in _DIAGNOSTIC._FUTEX_CASES],
                   "thread_count": 2, "clone": True}
         binary = self.build(SOURCE, "futex-overflow", "futex")
@@ -345,7 +343,7 @@ class CollectorTests(unittest.TestCase):
         _DIAGNOSTIC._check_typed_futex_stderr(thread_six, oracle)
 
     def test_retained_current_order_archive_replay_and_legacy_order_rejection(self):
-        oracle = {"kind": "native-ultra-futex-v1", "line_count": 18,
+        oracle = {"kind": "native-ultra-futex-v1", "record_order": "historical-split-v1", "line_count": 18,
                   "case_ids": [row[0] for row in _DIAGNOSTIC._FUTEX_CASES],
                   "thread_count": 2, "clone": True}
         archive = ROOT / "docs/verification/evidence/native-ultra-futex-guest-20260909-2.tar.gz"
@@ -358,10 +356,14 @@ class CollectorTests(unittest.TestCase):
             self.assertEqual(hashlib.sha256(p.stdout).hexdigest(), digest)
             _DIAGNOSTIC._check_typed_futex_stderr(p.stdout, oracle)
             payloads.append(p.stdout)
-        lines = payloads[1].splitlines(keepends=True)
-        legacy = b"".join(lines[:15] + [lines[16], lines[17], lines[15]])
+        current_oracle = dict(oracle, record_order="current-source-v1")
         with self.assertRaises(_DIAGNOSTIC.DiagnosticError):
-            _DIAGNOSTIC._check_typed_futex_stderr(legacy, oracle)
+            _DIAGNOSTIC._check_typed_futex_stderr(payloads[1], current_oracle)
+        lines = payloads[1].splitlines(keepends=True)
+        current = b"".join(lines[:15] + [lines[16], lines[17], lines[15]])
+        _DIAGNOSTIC._check_typed_futex_stderr(current, current_oracle)
+        with self.assertRaises(_DIAGNOSTIC.DiagnosticError):
+            _DIAGNOSTIC._check_typed_futex_stderr(current, oracle)
 
     def test_binary_streams_raw_wait_and_eof(self):
         r, _ = self.run_case("run")

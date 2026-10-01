@@ -262,8 +262,10 @@ _FUTEX_MAX_PID = (1 << 31) - 1
 
 def _validate_typed_stderr_oracle(oracle):
     """Validate the dynamic, line-oriented native-ultra-futex contract."""
-    _keys(oracle, ("kind", "line_count", "case_ids", "thread_count", "clone"))
+    _keys(oracle, ("kind", "record_order", "line_count", "case_ids", "thread_count", "clone"))
     _need(oracle["kind"] == "native-ultra-futex-v1", "typed stderr kind")
+    _need(oracle["record_order"] in ("current-source-v1", "historical-split-v1"),
+          "typed stderr record order")
     _need(type(oracle["line_count"]) is int and oracle["line_count"] == 18,
           "typed stderr line count")
     _need(oracle["case_ids"] == [row[0] for row in _FUTEX_CASES], "typed stderr cases")
@@ -289,7 +291,8 @@ def _check_typed_futex_stderr(data, oracle):
         parsed = int(value)
         _need(0 <= parsed <= _FUTEX_MAX_I64, label + " signed range")
         return parsed
-    for line, expected in zip(lines[:15], _FUTEX_CASES[:15]):
+    case_count = 16 if oracle["record_order"] == "current-source-v1" else 15
+    for line, expected in zip(lines[:case_count], _FUTEX_CASES[:case_count]):
         match = case_re.fullmatch(line)
         _need(match is not None, "typed futex case framing")
         case, result, errno_value, elapsed, before, after, deadline = match.groups()
@@ -310,7 +313,9 @@ def _check_typed_futex_stderr(data, oracle):
                           r"child_tid=([1-9][0-9]*) entry_tid=([1-9][0-9]*) "
                           r"stored_tid=([1-9][0-9]*) cleared_tid=0 entered=1 wait_calls=([0-9]+) "
                           r"elapsed_ns=([0-9]+) flags=([0-9a-f]+) stack_bytes=262144\n$")
-    match = clone_re.fullmatch(lines[15])
+    clone_index = 17 if oracle["record_order"] == "current-source-v1" else 15
+    thread_index = 16 if oracle["record_order"] == "current-source-v1" else 17
+    match = clone_re.fullmatch(lines[clone_index])
     _need(match is not None, "typed futex clone framing")
     clone_parent, child, entry, stored, wait_calls, clone_elapsed, flags = match.groups()
     _need(0 <= int(wait_calls) <= 256 and flags == "1250f00",
@@ -319,7 +324,7 @@ def _check_typed_futex_stderr(data, oracle):
                            r"tid0=([1-9][0-9]*) tid1=([1-9][0-9]*) count0=([1-9][0-9]*) "
                            r"count1=([1-9][0-9]*) token0=1 token1=2 stack_bytes=262144 "
                            r"elapsed_ns=([0-9]+)\n$")
-    match = thread_re.fullmatch(lines[17])
+    match = thread_re.fullmatch(lines[thread_index])
     _need(match is not None, "typed futex thread framing")
     parent, tid0, tid1, count0, count1, thread_elapsed = map(int, match.groups())
     _need(all(1 <= value <= _FUTEX_MAX_PID for value in (parent, tid0, tid1)) and
@@ -332,19 +337,20 @@ def _check_typed_futex_stderr(data, oracle):
           int(clone_parent) == parent and int(child) == int(entry) == int(stored) and
           int(child) != int(clone_parent) and 0 <= int(clone_elapsed) <= _FUTEX_MAX_NS,
           "typed futex clone identities")
-    # The final CASE is intentionally after CLONE in the native fixture.
-    match = case_re.fullmatch(lines[16])
-    _need(match is not None and match.group(1) == "wait_relative_runnable" and
-          (int(match.group(2)), int(match.group(3))) == _FUTEX_CASES[15][1:],
-          "typed futex final case")
-    _, _, _, elapsed, before, after, deadline = match.groups()
-    elapsed_i, before_i, after_i, deadline_i = (u64(elapsed, "typed futex final elapsed"),
-                                                u64(before, "typed futex final before"),
-                                                u64(after, "typed futex final after"),
-                                                u64(deadline, "typed futex final deadline"))
-    _need(elapsed_i == after_i - before_i and 9_000_000 <= elapsed_i <= _FUTEX_MAX_NS and
-          deadline_i == 0,
-          "typed futex final case timing")
+    if oracle["record_order"] == "historical-split-v1":
+        # The historical fixture split the final CASE after CLONE.
+        match = case_re.fullmatch(lines[16])
+        _need(match is not None and match.group(1) == "wait_relative_runnable" and
+              (int(match.group(2)), int(match.group(3))) == _FUTEX_CASES[15][1:],
+              "typed futex final case")
+        _, _, _, elapsed, before, after, deadline = match.groups()
+        elapsed_i, before_i, after_i, deadline_i = (u64(elapsed, "typed futex final elapsed"),
+                                                    u64(before, "typed futex final before"),
+                                                    u64(after, "typed futex final after"),
+                                                    u64(deadline, "typed futex final deadline"))
+        _need(elapsed_i == after_i - before_i and 9_000_000 <= elapsed_i <= _FUTEX_MAX_NS and
+              deadline_i == 0,
+              "typed futex final case timing")
 
 
 def _freeze(value):

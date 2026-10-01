@@ -1484,3 +1484,18 @@ direct-futex guest has run; current-candidate diagnostics remain five and
 formal application acceptance remains zero.  Shutdown IRQ source is separately
 blocked because its tests still compile a model rather than extracted
 production bodies; keep that candidate uncommitted and unwired.
+
+Checkpoint 293 prepares the sole bounded correction after packet-1 futex FAIL.
+The failure remains committed at `b77d815c...6288`.  Independent review returns
+`PASS_FUTEX_ORDER_CORRECTION_PREP`: evaluator `2aa9b025...f9356` requires an
+explicit mutually rejecting current or historical record order, replays the
+original 2,610-byte c81 stderr only as 16 CASE/THREADS/CLONE, and preserves both
+historical streams only under their split variant.  Fresh manifest
+`5c0925bc...88dc9`, overlay `08afffe0...d0efc`, representation
+`fd5feac7...0c97` and owner `e530a2db...9b60` are prepared.
+
+Packet `stability-native-diagnostic-futex-c81-execution-packet-20261001-2.md`
+with nonce `01d30ee0c82232c5efe4a3d810fe8af7` is `NOT_RELEASED`.  Next
+commit/push/fetch exact sources, packet and evidence; then independently release
+and run its sole command once.  Never reuse packet 1, its nonce, parent or
+evidence.  Direct-futex PASS count has not advanced; formal apps remain zero.

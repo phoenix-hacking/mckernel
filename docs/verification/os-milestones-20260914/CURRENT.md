@@ -12109,3 +12109,28 @@ work remains separate and unaccepted.  The production-body extraction now
 executes exact BootIrqRoute bodies for six cases, but PreparedBoot sender close
 and BootStorage ownership extraction remain missing.  The OS goal remains
 active and incomplete.
+
+Continuation checkpoint 293, 2026-10-01: the sole bounded direct-futex
+record-order correction and fresh preparation pass independent review; no
+second guest has run.  Evaluator `2aa9b025...f9356` now requires one explicit
+variant. `current-source-v1` accepts only 16 CASE, THREADS, CLONE;
+`historical-split-v1` accepts only 15 CASE, CLONE, final CASE, THREADS.  Each
+rejects the other's authenticated bytes, and every prior result/errno,
+timing/deadline, TID/clone, count, flag, stack and framing check remains.
+Independent `PASS_FUTEX_ORDER_CORRECTION_PREP` replayed the original failed
+2,610-byte guest stream only through the current variant and both historical
+archive streams only through the historical variant; 174 tests pass.
+
+Fresh attempt-4 manifest is 6,125 bytes at `5c0925bc...88dc9`, selecting the
+current-source variant.  Its overlay remains byte-identical at
+`08afffe0...d0efc`; representation is `fd5feac7...0c97`; owner source is
+`e530a2db...9b60`.  The new one-shot packet
+`docs/verification/stability-native-diagnostic-futex-c81-execution-packet-20261001-2.md`
+uses nonce `01d30ee0c82232c5efe4a3d810fe8af7`, remains `NOT_RELEASED`, and
+forbids reuse of packet 1 or any earlier parent/evidence path.  Exact additive
+preparation evidence is
+`docs/verification/evidence/native-exact-c81-futex-order-correction-preparation-20261001.json`.
+The preserved packet-1 result remains FAIL and diagnostic PASS count remains
+five; formal application/catalog acceptance remains zero.  Next commit/push/
+fetch these exact bytes, obtain a fresh one-shot release and run packet 2 under
+the sole heavy lease.  The OS goal remains active and incomplete.

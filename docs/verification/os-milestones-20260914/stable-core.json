@@ -145,6 +145,7 @@
     ,"native_diag_c81_futex_oracle": "docs/verification/evidence/native-exact-c81-futex-typed-oracle-source-checkpoint-20261001.json"
     ,"native_diag_c81_futex_prep": "docs/verification/evidence/native-exact-c81-futex-preparation-checkpoint-20261001.json"
     ,"native_diag_c81_futex_failure": "docs/verification/evidence/native-exact-c81-futex-diagnostic-failure-20261001.json"
+    ,"native_diag_c81_futex_order_prep": "docs/verification/evidence/native-exact-c81-futex-order-correction-preparation-20261001.json"
     ,"shutdown_effect_boundary": "docs/verification/evidence/native-exact-shutdown-effect-boundary-source-checkpoint-20261001.json"
     ,"shutdown_observer": "docs/verification/stability-native-shutdown-observer-source-success-20260928-1.json"
     ,"shutdown_registry": "docs/verification/stability-native-shutdown-registry-source-success-20260928-1.json"
@@ -549,8 +550,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "The current c81 candidate independently passes memory, files, startup, threads and signals diagnostics. The direct-futex guest ran the expected application to exit 37 with complete streams, but strict evaluation correctly retained FAIL because the typed oracle bound the historical record order instead of the current payload source's 16 CASE, THREADS, CLONE order. No runtime PASS is awarded.",
-      "next_check": "Bind current and historical record orders as explicit mutually rejecting typed-oracle variants, run source tests and review, then prepare/release one fresh bounded correction attempt; continue production shutdown production-body drain evidence separately.",
+      "result": "The current c81 candidate independently passes memory, files, startup, threads and signals diagnostics. The first direct-futex guest remains FAIL on an oracle-order defect. Its sole bounded correction now passes independent preparation review with mutually rejecting current-source and historical record-order variants; no second guest has run.",
+      "next_check": "Commit/push/fetch the exact corrected evaluator, manifest and packet; obtain fresh one-shot execution release and run packet 2 once under the sole heavy lease; continue shutdown production-body drain evidence separately.",
       "evidence": [
         "history",
         "plan",
@@ -591,7 +592,8 @@
         "native_diag_c81_signals",
         "native_diag_c81_futex_oracle",
         "native_diag_c81_futex_prep",
-        "native_diag_c81_futex_failure"
+        "native_diag_c81_futex_failure",
+        "native_diag_c81_futex_order_prep"
       ],
       "depends_on": []
     },
@@ -1316,15 +1318,16 @@
       "area": "PROC",
       "title": "Futex wait/wake and thread synchronization",
       "status": "baseline",
-      "result": "Baseline barrier/mutex, two children, TID transfer and futex/child-TID tests passed. The c81 direct-futex application emitted all 16 expected case records plus THREADS and CLONE and exited 37, but evaluation retained FAIL because its explicit record-order variant was wrong; this is not runtime acceptance.",
-      "next_check": "Correct the typed oracle with mutually rejecting current-source and historical record-order variants, then independently review and run one fresh c81 correction attempt preserving all raw records and teardown.",
+      "result": "Baseline barrier/mutex, two children, TID transfer and futex/child-TID tests passed. The first c81 direct-futex application emitted all expected records and exit 37 but remains FAIL on its oracle-order defect. The exact mutually rejecting order correction and fresh manifest pass independent preparation review only.",
+      "next_check": "Fetch-verify and independently release the corrected one-shot packet, then run one fresh c81 attempt preserving all 16 cases, thread/clone records, syscall trace and teardown.",
       "evidence": [
         "app",
         "baseline",
         "native_diag_c81_threads_signals_prep",
         "native_diag_c81_futex_oracle",
         "native_diag_c81_futex_prep",
-        "native_diag_c81_futex_failure"
+        "native_diag_c81_futex_failure",
+        "native_diag_c81_futex_order_prep"
       ],
       "depends_on": [
         "SC-CPU-02"

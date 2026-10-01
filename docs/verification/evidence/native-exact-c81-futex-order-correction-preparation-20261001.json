@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "status": "PREPARED_NOT_RELEASED",
+  "failure_evidence": "docs/verification/evidence/native-exact-c81-futex-diagnostic-failure-20261001.json",
+  "bounded_correction": "required explicit typed stderr record_order variant",
+  "sources": {
+    "evaluator_sha256": "2aa9b0257395624ced3ecb4d9e4d3e9373310a9266653b1d1f3cec9d2c8f9356",
+    "test_sha256": "3128e4a4463877c94ed2a6d4ade8be113e507ce28762cd4d5bd42b2ca25b5d2f",
+    "owner_sha256": "e530a2dba473d8da6a8cb21db570eb121d16cff28be1e298fdb21f22d4ee9b60"
+  },
+  "variants": {
+    "current-source-v1": "16 CASE, THREADS, CLONE",
+    "historical-split-v1": "15 CASE, CLONE, final CASE, THREADS",
+    "cross_order_rejected": true
+  },
+  "tests": {
+    "collector_and_validator": "85/85 PASS",
+    "native_diagnostic_discovery": "294/294 PASS",
+    "owner": "89/89 PASS",
+    "preserved_failed_guest_replay": "PASS current-source-v1 only"
+  },
+  "prepared": {
+    "root": "/home/holden/mckernel-work/scratch/native-diagnostic-futex-c81-20261001-4",
+    "manifest": {"size": 6125, "mode": "0600", "sha256": "5c0925bc4c5a59c6728187577d91599b7cdd395858feca69c719e5bf00d88dc9"},
+    "derived_initramfs": {"size": 12894522, "mode": "0600", "sha256": "08afffe000231b1ff4f1d87efd7c74e5e098473a7082c5d6e8298abe691d0efc"},
+    "overlay_result": {"size": 13783, "mode": "0600", "sha256": "fd5feac712acce95361a7f2b33024be697bdb58334e7b70cb26570bbba0b0c97"},
+    "overlay_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "independent_review": {
+    "decision": "PASS_FUTEX_ORDER_CORRECTION_PREP",
+    "tests_reproduced": "174/174 PASS",
+    "payload_source_sha256": "34d76099e1c936b4effb415896b1591d520879310758f169e0251907e3b5469d",
+    "current_and_historical_variants_mutually_reject": true,
+    "runtime_authority": false
+  },
+  "runtime_executed_by_this_correction": false,
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "next": "commit/push/fetch corrected source and packet, then obtain a fresh one-shot execution release"
+}
