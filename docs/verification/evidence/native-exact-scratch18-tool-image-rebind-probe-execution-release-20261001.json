@@ -1,0 +1,85 @@
+{
+  "schema": "mckernel.native-exact-tool-image-rebind-probe-execution-release.v1",
+  "status": "READY_FOR_INDEPENDENT_EXECUTION_REVIEW",
+  "scope": "one fresh source-free offline probe of the immutable c81 tool image, candidate receipt rebinding, owned retirement and exact absence",
+  "source_checkpoint": {
+    "commit": "133af3dbe071fcd958ee43d271779d31ed896f82",
+    "branch": "codex/local-native-staging-repair",
+    "must_equal_head_fetch_head_and_origin": true,
+    "source": "scripts/native_rust_exact_build_image_rebind_probe.py",
+    "source_sha256": "9634b56f251857141c67b70ce7a0c058470d6ef000a5f041898a91e3a71f6679",
+    "tests": "scripts/tests/test_native_rust_exact_build_image_rebind_probe.py",
+    "tests_sha256": "8a3b193b05853779f64aa00a894373c2bf63f82cf1a251d74436a07e9bfaa6e3",
+    "tests_result": "PASS 26/26 Python 3.8",
+    "source_evidence": "docs/verification/evidence/native-exact-scratch18-tool-image-rebind-probe-source-20261001.json",
+    "source_evidence_sha256": "904d237a0dad30e2b65721b53bf53799306a10485bcb3f9d1cc2b765dae41e8b"
+  },
+  "dependencies": {
+    "scripts/native_rust_exact_build_container_owner.py": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+    "scripts/native_rust_exact_build_image_prepare.py": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b",
+    "scripts/native_rust_exact_build_image_rebind.py": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "556f2acecaf713c3eeb3e1f9c671bd13f401210a871554a89ac6f7b8d4ff6b4c",
+    "scripts/native_rust_exact_disk_build_wrapper.py": "3b910b0c968d85390ca7d00e6953ddb13dc91714180c51fd476853dac529739c"
+  },
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-image-rebind-89ab5c55-scratch18-retry2-20261001.json",
+    "sha256": "f798675c12d5342fd1409e7842bd78e09277ece511e34dfbf888cef227d0ea66",
+    "source_candidate_sha": "c81aeaca5cedd893981a058444fa11a03a49a744",
+    "target_candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+    "image_id": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5"
+  },
+  "fresh_paths": {
+    "target_evidence_root": "/home/holden/mckernel-exact-image-evidence-89ab5c55-scratch18-retry2-20261001",
+    "target_receipt": "/home/holden/mckernel-exact-image-evidence-89ab5c55-scratch18-retry2-20261001/image-receipt.json",
+    "lease": "/home/holden/.mckernel-exact-image-evidence-89ab5c55-scratch18-retry2-20261001.lease.json",
+    "shared_heavy_operation": "/home/holden/mckernel-work/scratch/native-exact-build-heavy-operation.json",
+    "all_must_be_absent_before_execution": true
+  },
+  "resource_admission": {
+    "host_free_floor_bytes": 17179869184,
+    "scratch_free_floor_bytes": 12884901888,
+    "memory_available_floor_bytes": 17179869184,
+    "remeasure_immediately_before_execution": true,
+    "profile": {
+      "cpuset": "2-5",
+      "cpus": 4,
+      "memory_bytes": 12884901888,
+      "memory_swap_bytes": 12884901888,
+      "pids": 512,
+      "network": "none",
+      "mounts": "none",
+      "read_only": true,
+      "unprivileged": true
+    }
+  },
+  "preflight": [
+    "verify exact fetched checkpoint and every listed source/dependency hash",
+    "rerun 26 Python 3.8 tests on CPUs 6-7 with 3-GiB address-space limit",
+    "authenticate the exact request and all 92 source evidence rows",
+    "verify exact immutable image is linux/amd64",
+    "verify no running McKernel owner and all fresh paths/shared lock are absent",
+    "remeasure host, scratch and available-memory floors"
+  ],
+  "execution": {
+    "cwd": "/home/holden/mckernel",
+    "command": [
+      "/usr/bin/python3.8",
+      "/home/holden/mckernel/scripts/native_rust_exact_build_image_rebind_probe.py",
+      "--request",
+      "/home/holden/mckernel-work/scratch/native-exact-build-image-rebind-89ab5c55-scratch18-retry2-20261001.json",
+      "--expected-request-sha256",
+      "f798675c12d5342fd1409e7842bd78e09277ece511e34dfbf888cef227d0ea66"
+    ],
+    "use_inherited_sudo_askpass": true,
+    "execute_once": true,
+    "success_requires": [
+      "exit status zero and PASS receipt",
+      "fresh observation exactly equals authenticated source observation",
+      "owned container retired, removed and exact absence proven",
+      "lease and shared heavy-operation token absent",
+      "complete candidate-bound receipt passes downstream preparation validation"
+    ],
+    "failure_policy": "stop; preserve receipt, evidence, exact container name, lease and shared token; do not retry unchanged"
+  },
+  "acceptance": "execution release only; a PASS is tool-image identity evidence, not a McKernel image, guest, application, production or OS acceptance"
+}
