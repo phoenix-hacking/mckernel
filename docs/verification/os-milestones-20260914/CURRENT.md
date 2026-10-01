@@ -11871,3 +11871,51 @@ nonblocking regular input; these are source/test results only.  Next run threads
 after its packet/release, then signals.  Native OS shutdown remains blocked by
 the booted `ENOSYS` path and missing effect-aware STOP/drain/reset/resource
 retirement.  The OS goal remains active and incomplete.
+
+Shutdown checkpoint 287, 2026-10-01: dispatch stopped on the launcher signal
+before any threads or signals guest execution.  All eight child lanes are now
+terminal.  The independent threads execution review was interrupted before it
+returned a release decision, so the packet remains `NOT_RELEASED` and its sole
+command was not issued.  The retained packet is
+`docs/verification/stability-native-diagnostic-threads-c81-execution-packet-20261001-1.md`,
+SHA-256 `0f01ae3e...baa8`, at fetched commit `d351a1b9...ad3a`; its strict
+manifest remains `d3264702...db3d`.  The proposed parent
+`/home/holden/mckernel-work/scratch/ndtc81-20261001-1` was not created.
+
+Signals ordinary-user preparation stopped twice without a guest or derived
+initramfs.  Attempt 1 passed a precreated output to an absent-output interface;
+its two empty mode-0600 files remain
+`/tmp/native-diagnostic-signals-c81-overlay.EnXoAf` and
+`/tmp/native-diagnostic-signals-c81-result.E24lob`, each SHA-256
+`e3b0c442...b855`.  Bounded attempt 2 stopped on collector hash mismatch: the
+supplied digest began `e1c7b50e58c3`, while the retained collector's actual
+SHA-256 is `e1c7b50e3efe559c72ded2288da021ad6c15ace1825074e1ef0e60ae43a0cdea`.
+Its mode-0700 root
+`/home/holden/mckernel-work/scratch/native-diagnostic-signals-c81-20261001-2`
+contains only the empty mode-0600 `overlay-result.json`, SHA-256
+`e3b0c442...b855`.  No third preparation attempt is authorized from this
+checkpoint; preserve both failures and obtain focused review of the collector
+identity and a fresh correction before any new path is created.
+
+Fresh process inspection at `2026-10-01T07:20:37Z` found no live QEMU,
+`mcexec`, diagnostic owner/backend or heavy Docker client.  Host and scratch
+free space were 21,764,943,872 and 16,219,824,128 bytes.  Preserved launcher
+identities are wrapper 1442141, launcher 1442142, worker 1442145, app-server
+1442149 and code-mode host 1442494; unrelated older code-mode host 3011513
+remains outside this launcher tree.  None was terminated.  The current-candidate
+compiled build count remains one; accepted diagnostic applications remain
+three (memory, files and startup), and formal application acceptance remains
+zero.
+
+Next continuation must first recheck live capacity and the sole heavy lease,
+then repeat an independent exact-hash/fresh-preflight review of the unchanged
+threads packet.  Only a new explicit release may authorize its one-shot guest;
+after execution, obtain separate result and postflight reviews before another
+guest.  In parallel-safe source work, review the signals collector identity
+discrepancy and bind a fresh preparation path without erasing either failure.
+After threads, run a distinct futex diagnostic if its evidence does not prove
+the required futex behavior, then prepare/release signals.  Production shutdown
+still requires implementing and reviewing the booted `ENOSYS` path,
+effect-aware STOP/quiescence, callback drain and reset/resource restoration;
+application exit and QMP poweroff do not satisfy it.  The OS goal is paused for
+this launcher shutdown, remains incomplete, and was not marked complete.
