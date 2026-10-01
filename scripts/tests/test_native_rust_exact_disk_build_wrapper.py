@@ -104,6 +104,14 @@ class WrapperTests(unittest.TestCase):
         self.reconcile.stop()
         self.lock_dir.rmdir()
 
+    def test_retry2_release_classifier_and_exact_caller_contract(self):
+        release = '/home/holden/mckernel/docs/verification/evidence/native-exact-scratch18-retry2-execution-20261001.py'
+        self.assertTrue(wrapper._heavy_identity('/usr/bin/python3', ['python3', release]))
+        self.assertTrue(wrapper._heavy_identity('/usr/bin/python3', ['python3', '/tmp/native-exact-scratch18-retry2-execution-20261001.py']))
+        self.assertIn('script == RETRY2_RELEASE_PATH', wrapper.PRIVILEGED_PROCESS_OBSERVER_SOURCE)
+        self.assertIn("Path(script).name == \"native_rust_exact_disk_build_wrapper.py\"", wrapper.PRIVILEGED_PROCESS_OBSERVER_SOURCE)
+        self.assertNotIn("Path(script).name == \"native-exact-scratch18-retry2-execution-20261001.py\"", wrapper.PRIVILEGED_PROCESS_OBSERVER_SOURCE)
+
     def invoke(self, req, aggregate=wrapper.LAUNCHER_AGGREGATE_GIB):
         with tempfile.TemporaryDirectory() as td:
             source = Path(td)

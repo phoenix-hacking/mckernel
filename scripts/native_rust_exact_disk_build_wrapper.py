@@ -73,7 +73,9 @@ HISTORICAL_OBSERVER_SHA256 = 'fad2dd08fdc098c1dcda1d2fa8eaf9fc885f64d4054c9ca85a
 HEAVY_EXECUTABLES = frozenset(('qemu-system-x86_64', 'qemu-system-aarch64',
     'qemu-kvm', 'mcexec', 'firecracker', 'rustc', 'cargo', 'make', 'ninja', 'buildah'))
 HEAVY_SCRIPTS = frozenset(('native_rust_exact_build_container_owner.py',
-    'native_rust_exact_disk_build_wrapper.py', 'native_rust_exact_build_offline.py'))
+    'native_rust_exact_disk_build_wrapper.py', 'native_rust_exact_build_offline.py',
+    'native-exact-scratch18-retry2-execution-20261001.py'))
+RETRY2_RELEASE_PATH = '/home/holden/mckernel/docs/verification/evidence/native-exact-scratch18-retry2-execution-20261001.py'
 MAX_PROC_ENTRIES = 4096
 MAX_CMDLINE_BYTES = 1 << 20
 MAX_ARG_COUNT = 256
@@ -130,7 +132,8 @@ exec(PYTHON_SCRIPT_PARSER_SOURCE, _PYTHON_PARSER_NAMESPACE)
 PRIVILEGED_PROCESS_OBSERVER_SOURCE = PYTHON_SCRIPT_PARSER_SOURCE + r'''import json, os, re
 from pathlib import Path
 HEAVY = frozenset(("qemu-system-x86_64", "qemu-system-aarch64", "qemu-kvm", "mcexec", "firecracker", "rustc", "cargo", "make", "ninja", "buildah"))
-SCRIPTS = frozenset(("native_rust_exact_build_container_owner.py", "native_rust_exact_disk_build_wrapper.py", "native_rust_exact_build_offline.py"))
+SCRIPTS = frozenset(("native_rust_exact_build_container_owner.py", "native_rust_exact_disk_build_wrapper.py", "native_rust_exact_build_offline.py", "native-exact-scratch18-retry2-execution-20261001.py"))
+RETRY2_RELEASE_PATH = "/home/holden/mckernel/docs/verification/evidence/native-exact-scratch18-retry2-execution-20261001.py"
 MAX_PROC_ENTRIES = 4096
 MAX_CMDLINE_BYTES = 1 << 20
 MAX_ARG_COUNT = 256
@@ -168,7 +171,8 @@ def caller():
             exe = os.readlink(str(Path("/proc") / str(pid) / "exe")); second = st(pid)
         except FileNotFoundError: pid = 0; continue
         if first != second: raise RuntimeError("caller identity changed")
-        if re.fullmatch(r"python(?:3(?:\.\d+)?)?", Path(exe.removesuffix(" (deleted)") if hasattr(str, "removesuffix") else exe.split(" (deleted)")[0]).name) and python_script(argv) is not None and Path(python_script(argv)).name == "native_rust_exact_disk_build_wrapper.py":
+        script = python_script(argv) if re.fullmatch(r"python(?:3(?:\.\d+)?)?", Path(exe.removesuffix(" (deleted)") if hasattr(str, "removesuffix") else exe.split(" (deleted)")[0]).name) else None
+        if script is not None and (Path(script).name == "native_rust_exact_disk_build_wrapper.py" or script == RETRY2_RELEASE_PATH):
             return pid, first
         try: pid = int(Path("/proc").joinpath(str(pid), "status").read_text().split("\nPPid:\t", 1)[1].split()[0])
         except (FileNotFoundError, IndexError, ValueError): pid = 0
@@ -205,7 +209,7 @@ def observe():
     print(output)
 if __name__ == "__main__": observe()
 '''
-PRIVILEGED_PROCESS_OBSERVER_SHA256 = '42f690a2d5a551142e13ecdba1678bad49e0de1be42db099693664c16be09f1e'
+PRIVILEGED_PROCESS_OBSERVER_SHA256 = 'e8b81e17d602e9e9ab88dd5df02cc92b21a9980852eb11859487317ea9a21445'
 
 
 class AdmissionError(ValueError):

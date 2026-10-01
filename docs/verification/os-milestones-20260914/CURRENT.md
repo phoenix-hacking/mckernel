@@ -13374,3 +13374,22 @@ in-memory wrapper through its single `run_request` call.  Before execution,
 publish/fetch these exact bytes, run real validate-only, remeasure capacity and
 then consume `--execute` once.  This is build admission only: candidate and
 application counters remain unchanged, and the OS remains incomplete.
+
+Continuation checkpoint 334, 2026-10-01: the first real retry2 validate-only
+attempt refused before every ownership/build mutation because the privileged
+process observer could not identify the in-memory wrapper's calling script.
+The derived execution request, shared lock, operational exclusion and retry
+lease all remained absent; no container or build started.  Direct bounded
+diagnosis retained the exact root cause `calling wrapper identity unavailable`.
+
+The expert-directed correction preserves every existing wrapper-basename caller
+and additionally recognizes only the exact absolute retry2 execution-release
+path; the release basename is heavy in both local and privileged classifiers,
+so another release process still blocks admission.  The observer digest is
+updated without weakening PID/starttime checks.  Wrapper/tests/release/tests
+now pass 59/59 Python 3.8 checks at hashes `3b910b0c...739c`,
+`7760ea44...7be7`, `ab4c1375...a2bc` and `5499225c...b2b59`; independent expert
+review PASSes publication and an absolute-path real validate-only retry.  Next
+publish/fetch these exact blobs, rerun validate-only by its absolute pathname,
+then execute once only if the fresh privileged census and resource floors PASS.
+No acceptance counter changes, and the OS remains incomplete.
