@@ -11618,3 +11618,52 @@ retrying.  Before execution, checkpoint/fetch the proposal and obtain a fresh
 independent `PASS_EXECUTION_EXPORT26_BUILD` after full live capacity, process,
 Docker, lease and source admission.  This release will not include a guest.
 Linked current images and real current-candidate applications remain zero.
+
+Shutdown checkpoint 281, 2026-10-01: the separately released exportset-26
+heavy build completed once and independent result review returns
+`PASS_RESULT_EXPORT26_BUILD`.  Candidate `c81aeaca...a744` configured and built
+`mckernel.img` with both commands exiting zero; raw stdout ends with `Built
+target mckernel.img`.  The prior exportset-25 undefined-Rust-`bcmp` failure did
+not recur.  Actual `bcmp` resolves from `rust/mckernel_rust.o`, its disassembly
+is bounded and nonrecursive, and the linked image has no undefined symbols.
+
+The new compiled artifacts are `mckernel.img` (7,908,256 bytes,
+`fa668554...f39ed`), `mckernel.img.map` (738,606 bytes,
+`9a27435c...bb7b3`) and `mckernel_rust.o` (12,591,904 bytes,
+`532af648...0f92`).  Driver receipt `9ead2e93...32c6` and owner receipt
+`462d3f7c...f301` bind the exact artifact paths.  Independent review checked
+all 17 driver evidence members, all six original/copied artifacts, all 9,404
+candidate provenance members including 49 symlink-byte bindings, all 412
+libdwarf members, compiler identity, source bindings and link result.  Exact
+additive evidence is
+`docs/verification/evidence/native-exact-export26-heavy-build-success-20261001.json`.
+
+The build owner PID 2420278 and seven recorded Docker-client PIDs are absent;
+the heavy lease is absent.  Terminal container
+`f37e71e0731fb6cd4068746225d65eb1b372d6ba88c929def94ae889caa4c68e`
+(`mckernel-image-b4bbcea94b854c40a6da36b1c80469d0`) remains deliberately
+retained at exited/0/PID0/not-OOM.  Its profile remains CPUs 2-5, four jobs,
+12 GiB with no additional swap, 512 tasks, network none, read-only root and
+sole writable `/work`.  Common exclusion
+`native-exact-candidate-operational-exclusion-exportset-26.json` remains at
+identity `1831:90699`, SHA-256 `8099da3f...6c86`; cleanup is separately
+reviewed work and was not started during shutdown.  The original exportset-25
+failure/container/evidence remain preserved.
+
+All child lanes are terminal and no compiler, QEMU guest or mcexec process is
+running.  Launcher identities remain wrapper 1442141, launcher 1442142, worker
+1442145, app-server 1442149 and code-mode host 1442494, all started 2026-09-30
+10:46-10:47 PDT.  They are launcher state, not build or guest leases.
+
+The next executable continuation step is the unprivileged read-only postlink
+and linked-text ownership validation on the exact image/map/Rust object above,
+followed by independent result review.  Then obtain a separate reviewed cleanup
+for the retained terminal container/exclusion.  Only after those gates should
+the current-candidate module/image/initramfs/manifest and diagnostic-memory
+release be prepared.  The first real-app oracle remains exact stdout
+`NATIVE_CORE PASS memory\n`, empty stderr, exit 37, EOF/no truncation and empty
+procfs after teardown.  No postlink validation or guest was started during
+shutdown.  There is now one actual current-candidate compiled kernel artifact
+and still zero real current-candidate guest applications.  Diagnostic and
+formal application acceptance counters remain unchanged; the OS goal is active
+and incomplete, and this shutdown checkpoint does not resume or complete it.
