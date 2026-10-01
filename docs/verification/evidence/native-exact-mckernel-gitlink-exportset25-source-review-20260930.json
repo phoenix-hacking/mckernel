@@ -1,0 +1,51 @@
+{
+  "schema": "mckernel.native-exact-mckernel-gitlink-exportset25-source-review.v1",
+  "recorded_at": "2026-09-30T19:12:00-07:00",
+  "status": "PASS_GITLINK_PACKET_SOURCE",
+  "candidate_sha": "6fed3a1022db0b4f9828dd42a8bd8f88fc052053",
+  "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "accepted": {
+    "packet": "docs/verification/evidence/native-exact-mckernel-gitlink-preparation-6fed3a10-exportset25.sh",
+    "packet_sha256": "3e006c7cf15dcb5eff1edf7bafe8ac62cf8458d3e97384b74b90a07ad385dc65",
+    "test": "scripts/tests/test_native_exact_mckernel_gitlink_preparation_6fed3a10_exportset25.py",
+    "test_sha256": "eef597790ecbe3b24f1047b7139562e9ab4bc26b0a7e9cfd9d6b734df594e080",
+    "independent_review": "PASS_GITLINK_PACKET_SOURCE",
+    "tests": "12 methods / 23 parameterized behavior vectors PASS under one CPU and 1.5 GiB",
+    "bash_n": "PASS",
+    "py_compile": "PASS",
+    "diff_check": "PASS"
+  },
+  "failure_history": [
+    {
+      "packet_sha256": "be7cf65f1c3eaa55be2d0df9ffa0f72e9795952f53f62189de4c9a117a604de5",
+      "test_sha256": "d0a5699c026792981a92940f874f29b1a5c06ba8548c821596e06b08d6cfd7e0",
+      "result": "BLOCK",
+      "findings": "check-then-truncate log, no log fsync, wrong process identity, incomplete output validation and keyword-only tests"
+    },
+    {
+      "packet_sha256": "638d6dbc3f6e7dddb94b6dcaf21a9e39b84562472fe494c9d371e8c264c40eea",
+      "test_sha256": "2c141033c217662531088afb9d46c7d2611cc34ee0bedc94eb7c53d6af25c983",
+      "result": "BLOCK_BOUNDED_CORRECTION",
+      "findings": "only empty log fsynced, live descendants after signal, late-signal committed-outcome gap, partial inventory semantics and snippet tests"
+    }
+  ],
+  "expert_repair": {
+    "exclusive_claims": true,
+    "held_log_descriptor": true,
+    "final_log_fsync": true,
+    "durable_terminal_publication": true,
+    "subreaper_and_session_retirement": true,
+    "bounded_term_kill_reap": true,
+    "late_signals_blocked_through_delivery_and_exit": true,
+    "full_helper_inventory_comparison": true,
+    "actual_packet_behavioral_tests": true,
+    "success_contract": "zero wrapper exit plus stdout JSON commit witness matching terminal and log"
+  },
+  "scope_limitations": [
+    "Trusted cooperative filesystem ownership is assumed; an independent same-UID malicious pathname replacer is outside this packet boundary.",
+    "Trusted helper/Git descendants are assumed not to deliberately escape their owned session.",
+    "SIGKILL, power loss and unresolved persistent I/O failure require external reconciliation.",
+    "Source approval is not production execution, a build, a guest or application acceptance."
+  ],
+  "next": "Fetch-verify this source checkpoint, confirm all real output and claim names remain absent, run the unprivileged packet once, and accept only zero exit plus the matching commit witness and independently verified artifacts."
+}
