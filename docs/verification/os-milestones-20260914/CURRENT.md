@@ -11005,3 +11005,56 @@ shutdown diagnostic applications.  This window produced zero current image
 builds and zero real guest applications; diagnostic and formal acceptance
 counters remain unchanged.  The OS goal is incomplete and launcher-paused for
 shutdown; it is neither resumed nor marked complete.
+
+Continuation checkpoint 266, 2026-09-30: the resumed invocation found that the
+old source-free tool-image receipt was candidate-bound to `4e99a82c`; it could
+not authorize a `6fed3a10` request unchanged.  A proposed receipt-only rebind
+was independently rejected: it required same-candidate and invented schema
+fields, emitted an unconsumed request without an offline probe/final PASS path,
+and had incomplete evidence and publication protections.  Its exact rejected
+source/test hashes are `691130fa...dafc`/`ec9b7c0f...7009`; all seven synthetic
+tests passed but do not cure those findings.  Failure evidence is
+`docs/verification/evidence/native-exact-tool-image-rebind-source-failure-20260930.json`.
+
+The strategy changed to the already reviewed source-free producer.  Fresh
+attempt-6 proposal `e7327ee8...967f5` at fetched commit `94d4ef77...331c`
+received independent `PASS_EXECUTION_ATTEMPT6`.  Privileged preflight found all
+historical lease owner PIDs absent, all three attempt paths fresh, no live
+heavy/QEMU/mcexec owner, 41 retained containers with only two unrelated Kasper
+services running, and host/scratch/MemAvailable readings above the reviewed
+floors.  The exact command ran once and exited zero.
+
+Independent result review returns `PASS_RESULT_ATTEMPT6`.  Read-only receipt
+`a030708f...2f08` binds candidate `6fed3a10...2053`, immutable amd64 image
+`sha256:5688f9c8...cb98` (1,726,886,736 bytes), the exact toolchain lock, 46
+packages, 22 executables, four library/header groups and 479 RPM identities.
+All 92 receipt members and 28 successful command captures verify.  Online and
+offline observations are byte-identical at `f3b88a58...9cbc`; both sequential
+owned containers retired as exited/PID0/exit143/OOM-false and were removed.
+The lease and all owner/client PIDs are absent.
+
+Actual scratch device 1831 remained at 16,948,912,128 free bytes; host free is
+28,919,656,448 and MemAvailable is 28,074,128 KiB after the run.  The producer
+receipt's `scratch_free` field measures its host output filesystem, so the
+separate actual-scratch measurements remain the capacity evidence.  One local
+regression invocation with an artificial per-user `--nproc=96` limit produced
+19 fork EAGAIN harness errors; removing only that artificial limit in the
+bounded correction yielded all 86 tests PASS under one CPU/1.5 GiB.
+
+Independent review also accepts reuse of the retained scratch-12 host output
+as exportset-25's read-only `/out`: all 140,053 closure rows, 132,191 regular
+files and 4,799,270,420 bytes match both live contents and the original PASS
+owner inventory, with unchanged host/IHK inputs.  Only the McKernel-local
+linker-wrapper source changed.  This avoids a redundant host build but grants
+no new host-build acceptance.  Exact combined evidence is
+`docs/verification/evidence/native-exact-tool-image-6fed3a10-attempt6-success-20260930.json`.
+
+The next executable dependency is the fresh current-candidate libdwarf
+gitlink binding.  Its first packet and bounded correction are both retained
+BLOCKs for lifecycle/durability/inventory defects; an expert escalation is
+active and must pass independent source review before one unprivileged
+preparation.  Then prepare and review exportset-25 against the fresh tool image,
+scoped retained `/out`, exact nightly and current source, run one serialized
+image build, and validate the linked artifact before any diagnostic guest.
+This continuation still has zero linked current images and zero real guest
+applications; no formal acceptance counter changes.
