@@ -11228,3 +11228,47 @@ driver, Docker and terminal artifact.  A successful build still requires
 independent artifact review plus separate postlink and linked-text reports before
 the memory diagnostic can be rebound.  Current linked-image and real current-
 candidate guest-app counts remain zero and no formal counter changes.
+
+Continuation checkpoint 271, 2026-09-30: fetched commit
+`85d254de...bfbd` received independent `PASS_EXECUTION_EXPORT25_HEAVY_BUILD`
+for exactly one ordinary-user owner invocation.  Immediate admission verified
+the exact request `9923b51f...461d`, owner `a6d6ffaa...7f0`, protected inputs,
+empty work/evidence roots, absent attempt/output/lease/exclusion targets, no
+competing build or guest, 28,661,276,672/16,797,904,896 host/scratch free
+bytes, 27,858,200 KiB MemAvailable, and the complete 41-container census with
+only the two unrelated Kasper services running.
+
+The exact released command ran once and failed immediately with exit 1 and no
+stdout.  Its import-time authenticated loader raised `RuntimeError: host owner
+is not a regular source file`.  The consumed command named the owner script
+relatively; Python therefore supplied a relative `__file__`, while
+`_load_reviewed_host_owner()` deliberately requires an absolute regular source
+path before reading the host owner.  This is a new deterministic
+relative-entrypoint-authenticated-import failure family.  It occurred before
+request parsing, claim/lease creation, Docker or build execution.  Do not retry
+the consumed release.
+
+Shutdown postflight found no matching owner, driver, mcexec or QEMU process;
+the work and owner-evidence roots remain empty; output, evidence, attempt,
+lease and common-exclusion targets remain absent.  The Docker census is still
+41 total/two running with no exportset-25 or 6fed3a10 container.  Host/scratch
+free bytes are 28,658,655,232/16,797,904,896 and MemAvailable is 27,858,896
+KiB.  Original failure and postflight evidence is
+`docs/verification/evidence/native-exact-export25-heavy-build-attempt1-failure-20260930.json`.
+
+The launcher process identities preserved at shutdown are wrapper 1442141,
+launcher 1442142, worker 1442145 and app-server 1442149, all started
+2026-09-30 10:46:42 PDT.  All eight child lanes are completed.  The launcher
+requested a checkpoint pause; the goal is not complete and is not resumed in
+this window.
+
+Next continuation: first add a cheap disposable regression that binds the
+relative-entrypoint failure and proves the absolute entry point reaches the
+same authenticated source loader without invoking `.run()`.  Independently
+review the smallest command-only or source correction, checkpoint/fetch it,
+then obtain a fresh one-shot heavy-build release using an exact absolute owner
+path and repeat the full live admission.  On build PASS, independently validate
+the artifacts, postlink and linked-text reports before rebinding and running
+the diagnostic-only memory smoke.  Current counts remain zero linked current
+images and zero real current-candidate guest applications; no formal acceptance
+counter changes.
