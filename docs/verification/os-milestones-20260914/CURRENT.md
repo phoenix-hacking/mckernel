@@ -12743,3 +12743,42 @@ then execute scratch17 preparation exactly once.  Review the resulting candidate
 before creating the one expert-released successor build request.  Counts remain
 one compiled current candidate, five bounded diagnostic guest passes and zero
 formal application acceptances.
+
+Continuation checkpoint 314, 2026-10-01: fetched source checkpoint
+`844dd6aa...28344` is exact and scratch17 preparation now passes.  The first
+coordinator validate-only invocation was refused before admission because an
+extra 3-GiB address-space cap prevented Git packfile mapping; removing only that
+unreviewed harness cap produced `PASS_VALIDATE_ONLY` without artifacts.  Fresh
+preflight measured 24.14 GiB host free, 15.73 GiB scratch free and 24.33 GiB
+available RAM, with all relevant containers exited, only immutable retirement
+tombstone leases present and every scratch17 destination absent.
+
+The one-shot preparation ran as PID 3107111/starttime 106635860 and returned
+zero.  Independent review returns `PASS_PREPARED_CANDIDATE`: candidate
+`50b08432...35632`, 9,474 source entries and four assets pass canonical input
+and BuildOwner validation.  All 486 scratch15/scratch16/scratch17 evidence
+triples match bytes, mode, size, mtime, device and inode at exactly nlink three;
+other metadata is private.  The owner is absent, output/evidence are empty,
+lease/exclusion are absent and no build artifact exists.  Manifest
+`cbdfac7b...a92bc`, request `852f7d8f...db852`, journal
+`0f02a34a...cb1a8` and terminal `e5d7b5bc...080bee` are retained.  Exact evidence
+is `native-exact-scratch17-prepared-candidate-checkpoint-20261001.json`.
+
+The first successor build packet is source-only and remains blocked: the
+fetched build owner still binds the immutable scratch16 exclusion.  Update it
+to an exact fresh scratch17 build exclusion, rerun mutation-sensitive tests,
+independently review and bind fetched blobs before any Docker execution.  The
+separate tool-image execution-release draft also remains blocked on census
+freshness/provenance, RAM-floor, single-read and durable-exclusive-publication
+defects.  No build or guest ran.  Counts remain one compiled current candidate,
+five bounded diagnostic guest passes and zero formal application acceptances.
+
+The retained futex failure is now source-regression bound.  Target 50b already
+contains the terminal-delivery bypass `number == 231 || self.trace()`; the new
+66-test observer suite proves 64 ordinary samples followed by non-returning
+exit_group 231 are accepted, while removing either the terminal record or the
+source bypass is rejected.  Independent review returns
+`PASS_SOURCE_REGRESSION` for test `ec0ceb7d...66e1`.  This does not add runtime
+credit: a fresh host module, image and reviewed guest packet remain required.
+Exact evidence is
+`native-exact-futex-terminal-trace-regression-checkpoint-20261001.json`.

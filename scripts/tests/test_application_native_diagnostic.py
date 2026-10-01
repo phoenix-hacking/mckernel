@@ -758,6 +758,45 @@ class NativeDiagnosticTests(unittest.TestCase):
                 observation = self.observation(); observation["serial"] = "\n".join(lines)
                 with self.assertRaises(ND.DiagnosticError): ND.evaluate(self.manifest, observation)
 
+    def test_trace_budget_exhaustion_still_requires_terminal_exit_delivery(self):
+        """The observer retains exit_group after 64 ordinary samples."""
+        lines = [
+            "application SCHEDULE os=0 generation=1 pid=12 cpu=0",
+            "application procfs published os=0 generation=1 pid=12 tid=12",
+        ]
+        for delivery in range(1, 65):
+            lines.extend([
+                "application_syscall=delivered os=0 generation=1 pid=12 "
+                f"worker=9 delivery={delivery} cpu=0 number=1",
+                "application_syscall=return_route os=0 generation=1 pid=12 "
+                f"worker=9 delivery={delivery} launcher_cpu=1 guest_cpu=0",
+                "application_syscall=returned os=0 generation=1 pid=12 "
+                f"worker=9 delivery={delivery} cpu=0 value=4",
+            ])
+        lines.extend([
+            "application_syscall=delivered os=0 generation=1 pid=12 "
+            "worker=9 delivery=65 cpu=0 number=231",
+            "application procfs deleted os=0 generation=1 pid=12 tid=12",
+            "application retirement os=0 generation=1 pid=12 token=2 errno=0",
+            "application_process=release os=0 generation=1 pid=12 cleanup_errno=0",
+            "ND_PAYLOAD " + json.dumps(self.report()), "",
+        ])
+        observation = self.observation()
+        observation["serial"] = "\n".join(lines)
+        result = ND.evaluate(self.manifest, observation)
+        self.assertEqual(result["status"], "PROTOCOL_PASS")
+
+    def test_production_sampler_keeps_terminal_branch_after_budget_mutation(self):
+        """The checked-in producer must preserve the source-bound terminal rule."""
+        source_path = ROOT / "host-kernel" / "native-rust" / "mcctrl_process.rs"
+        source = source_path.read_text(encoding="utf-8")
+        branch = "let traced = number == 231 || self.trace();"
+        self.assertIn("let number = image::word(&bytes, 40).map_err(errno)?;", source)
+        self.assertIn(branch, source)
+        mutated = source.replace(branch, "let traced = self.trace();", 1)
+        self.assertNotIn(branch, mutated)
+        self.assertNotEqual(source, mutated)
+
     def test_source_supported_launcher_slots_and_same_cpu_no_route(self):
         for cpu in ("-1", "0", "2", "3", "9999999999"):
             observation = self.observation()
