@@ -11839,3 +11839,35 @@ regression is still under review/compile admission.  Native OS shutdown remains
 open: the booted path currently returns `ENOSYS`, and STOP/quiescence, callback
 drain, effect-aware reset and resource restoration remain unimplemented.  The
 OS goal remains active and incomplete.
+
+Continuation checkpoint 286, 2026-10-01: the distinct c81 startup argv-empty
+diagnostic completed and independent reviews return
+`PASS_DIAGNOSTIC_C81_STARTUP` and `PASS_GUEST_POSTFLIGHT_STARTUP`.  The real
+McKernel launch preserved argv `app`, `A`, the literal empty argument and `B`;
+stdout is the exact frozen 91-byte JSON record, stderr is empty, exit/wait status
+is zero, both streams reach EOF without truncation/discard, and procfs is empty.
+Trace review joins OS0/generation1/PID257 to 17 syscall deliveries, 16 returns,
+seven routes, four pager references and 473 page reads, followed by complete
+pager/procfs/process retirement after one preserved transient `-11`.
+
+The fetched packet is commit `0e3a9dd4...1d09e`, SHA-256
+`41ae67f0...2f143`; inner result/serial/QMP are `dbea9b72...ab1b9`,
+`ddff4c42...eff7`, and `be2b95fa...d25e`.  Owner PID 2916187 and all 30
+Docker clients are absent.  Exact container `8d53082b...b7147c` exited zero,
+was not OOM-killed and is removed.  QMP proves guest shutdown/nonrunning status
+and acknowledged quit; QEMU then has the reviewed forced retirement status -9.
+The development lock is released and evidence directories remain preserved.
+Unrelated-container equivalence is not established because no authenticated
+pre/post snapshot was required or retained.
+
+This raises the current-candidate diagnostic count to three: memory, files and
+startup.  Formal application/catalog acceptance remains zero.  Exact additive
+evidence is
+`docs/verification/evidence/native-exact-c81-startup-diagnostic-checkpoint-20261001.json`.
+The selected native signal-consumer fixture also passed its pinned unprivileged
+container suite after source review, and the shutdown observer now binds
+phase-specific CPU expectations through a separate hash-pinned, no-follow,
+nonblocking regular input; these are source/test results only.  Next run threads
+after its packet/release, then signals.  Native OS shutdown remains blocked by
+the booted `ENOSYS` path and missing effect-aware STOP/drain/reset/resource
+retirement.  The OS goal remains active and incomplete.
