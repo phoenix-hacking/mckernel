@@ -1,0 +1,12 @@
+{
+  "schema": "mckernel.evidence-subtree-retirement-source-checkpoint.v1",
+  "status": "PASS_EVIDENCE_SUBTREE_SOURCE",
+  "executor": {"path": "docs/verification/evidence/native-exact-scratch14-evidence-subtree-retire-20261001.py", "sha256": "be4730a16748f6e964df67ada1089a180244b3d65ee2021ec6c052f9f75143e1"},
+  "test": {"path": "scripts/tests/test_native_exact_scratch14_evidence_subtree_retire_20261001.py", "sha256": "899a9f2c25335c03eb0eac7ae39530698a637eac3dd54ec5b29bfa5ed39fce90", "result": "9 passed"},
+  "target": {"path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-c81aeaca-scratch-14/docs/verification/evidence", "device": 1831, "inode": 1465177, "regular_files": 2576, "directories": 101, "logical_bytes": 9098810271},
+  "retention_inventory_sha256": "12de35d422c6ec014e9ed893c1e1c7ffdb772969ff6f5a5978258203f5519630",
+  "retention_capsule_sha256": "8ca6a306ade8b7eb88d62488b239e5c9a3b7c5fb4b11f9af8d313d0497c8203d",
+  "properties": ["all target members are reconstructible exact Git objects", "full descriptor hash census before and after quarantine", "root-owned mode-0500 quarantine excludes uid1000 writers before deletion", "post-lockdown live-reference census", "each unlink/rmdir is identity-bound and parent-fsynced before journaling", "READY is non-authoritative without exit zero and independent reconciliation"],
+  "execution": "NOT_YET_RUN",
+  "acceptance": "Storage maintenance only; no build, guest, application, or OS acceptance."
+}

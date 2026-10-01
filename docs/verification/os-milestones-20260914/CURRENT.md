@@ -12293,3 +12293,25 @@ independently review a fresh ordinary two-root retirement release.  After
 successful deletion and targeted scratch trim, remeasure capacity and execute
 the reviewed scratch15 preparation packet.  The OS goal remains active and
 incomplete.
+
+Continuation checkpoint 299, 2026-10-01: a narrow one-shot executor for the
+fully reconstructible scratch14 evidence subtree passes independent source
+review.  Executor `be4730a1...5143e1` binds the fetched inventory/capsule and
+external preparation identities, requires exact c81 HEAD and a clean subtree,
+rehashes all 2,576 files, and rejects unexpected types, links, mounts, leases,
+process references and running-container mounts.  It atomically quarantines
+the exact `1831:1465177` directory, repeats the full descriptor census, changes
+only the quarantine root to root-owned mode 0500, and repeats the live-reference
+census before any unlink.  Every deletion is bound to the verified inode/hash,
+its parent is fsynced before the progress journal, and deleted-inode and exact
+Git deletion postflights precede a non-authoritative READY record.
+
+Nine synthetic tests pass, including content drift, symlink, hardlink,
+intermediate symlink, quarantine collision, inserted-member, purge containment
+and deleted-inode visibility failures.  Independent review returns
+`PASS_EVIDENCE_SUBTREE_SOURCE` for serialized maintenance with no concurrent
+privileged writer.  Live deletion has not run.  Next push/fetch these exact
+source bytes, rerun fresh capacity/lease/reference checks through the executor,
+execute it once under `sudo -A`, independently reconcile exit/journal/status,
+then trim scratch and remeasure capacity.  This cleanup changes no OS
+acceptance count.
