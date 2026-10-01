@@ -12411,3 +12411,31 @@ both byte and canonical hashes, durably publishes without replacement and
 invokes this corrected host wrapper exactly once.  Only after a fetched release
 and fresh capacity/process/lease/container preflight may the coordinator start
 the one heavy pinned build.  Application and OS acceptance counts do not move.
+
+Continuation checkpoint 303, 2026-10-01: the bounded scratch15 execution
+packet now passes independent source-release review after two concrete test
+evidence blockers were corrected.  Packet `c8f5ef7f...03d771` and test
+`91418505...c0e7db` pass all ten lightweight cases.  The first rejected test
+fixture never reached its claimed destination/symlink checks; the corrected
+fixture first completes admission, then proves each specific rejection.  The
+second correction adds actual fetched-ref/blob mismatch, successful one-exec
+ordering, zero execution after admission/publication failures, short writes,
+and retained complete derived bytes after parent-fsync failure.
+
+The packet preserves original request `1c18211b...cd8d8` byte-for-byte and
+allows exactly five values to change: fresh exportset-27, consumed false,
+preparation-only false, execution-released true and executable true.  Every
+other key/value remains exact and `release_required` stays true.  Expected
+derived bytes hash `74a43aaf...3f6203`; canonical request hash
+`f1db435d...993fd4`.  Fixed `/usr/bin/git` under a minimal environment binds
+the fetched branch commit, ancestry and exact packet/test/wrapper blobs.  Exact
+candidate/IHK, overlay, terminal/log, manifest, owner, driver, empty roots and
+absent lease/exclusion/destination checks precede exclusive publication, file
+and parent fsync, then exactly one pinned wrapper exec.
+
+Exact evidence is
+`native-exact-scratch15-build-execution-source-checkpoint-20261001.json`.
+This is source execution-release readiness only.  Next push/fetch these exact
+blobs, run validate-only against that fetched commit, perform fresh full
+process/lease/container/capacity preflight, then invoke `--execute` once.  No
+unchanged retry is allowed, and no application or OS acceptance count moves.

@@ -1,0 +1,25 @@
+{
+  "schema": "mckernel.native-exact-build-execution-source-checkpoint.v1",
+  "status": "PASS_SOURCE_EXECUTION_RELEASE_READINESS",
+  "packet": {"path": "docs/verification/evidence/native-exact-scratch15-build-execution-20261001.py", "sha256": "c8f5ef7feed904743b6a6c7bc7668ac2b5553715f6e30e4eedac76105303d771"},
+  "test": {"path": "scripts/tests/test_native_exact_scratch15_build_execution_20261001.py", "sha256": "914185054c07afdd3f0147f6b7d4f0d0773d8991a88265b2aa6ac5300ec0e7db", "result": "10 passed"},
+  "original_request": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-request-1e95abdc-scratch-15.json", "sha256": "1c18211bde1005ee0dab8b7251df2854b005cb8768347ff5063878621c7cd8d8", "immutable": true},
+  "derived_request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-request-1e95abdc-scratch-15-execution.json",
+    "byte_sha256": "74a43aaf257c45986aee9aa59a6cc722d91315eac871ff7663efe6c5cb3f6203",
+    "canonical_sha256": "f1db435d991cbbf4c16d624c6d33d3abcd0e5f39f165a980910d632835993fd4",
+    "publication_state": "not-yet-created"
+  },
+  "permitted_changes": {
+    "operational_exclusion_path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch15-exportset-27.json",
+    "operational_exclusion_consumed": false,
+    "preparation_only": false,
+    "execution_released": true,
+    "executable": true
+  },
+  "bindings": ["fixed fetched remote branch commit and candidate ancestry", "exact packet, test and corrected host-wrapper blobs", "candidate and pinned IHK HEADs", "overlay patch and result", "preparation terminal and log", "input manifest", "owner, provenance and driver paths and hashes", "empty output/evidence roots", "absent lease, derived request and fresh exclusion"],
+  "properties": ["fixed /usr/bin/git and minimal environment", "identical request key set and all nonpermitted values", "exclusive no-follow request publication", "complete short-write loop", "file and parent fsync before exec", "failure retains evidence and prevents execution", "exactly one corrected wrapper exec after successful publication", "pinned aggregate 16.2158-GiB launcher ceiling"],
+  "review": "PASS final source/test hashes; both prior test-evidence blockers resolved",
+  "execution": "NOT_YET_RELEASED_UNTIL_FETCHED_BLOBS_AND_FRESH_PREFLIGHT",
+  "acceptance": "Source execution-release readiness only; no build, Docker, root, guest, diagnostic application, formal application, shutdown or OS acceptance."
+}
