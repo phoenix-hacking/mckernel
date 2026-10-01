@@ -258,8 +258,8 @@ class OwnerTests(unittest.TestCase):
         self.old_shared_path = owner._SHARED_HEAVY_ENTRY_CONTRACT.SHARED_HEAVY_LOCK_PATH
         owner.EXPECTED_DRIVER_SHA256 = digest(self.driver)
         owner.COMMON_EXCLUSION = str(self.common)
-        # Unit tests use the reviewed contract with a private lock path; the
-        # production constant remains false and is never enabled by source.
+        # Unit tests use the enabled source contract with a private lock path;
+        # they never issue an execution release or use a real Docker transport.
         owner._SHARED_HEAVY_ENTRY_CONTRACT.HEAVY_ENTRY_CONTRACT_RELEASED = True
         owner._SHARED_HEAVY_ENTRY_CONTRACT.SHARED_HEAVY_LOCK_PATH = str(self.root / "shared.lock")
 

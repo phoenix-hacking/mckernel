@@ -4,7 +4,8 @@
 This policy boundary serializes admission with shared and per-attempt locks.
 It delegates container ownership exactly once to the authenticated BuildOwner,
 preserving that owner's lease and evidence protocol. The shared build/image/
-guest entry contract remains source-only until independently released.
+guest source contract is enabled; each operation still needs its own reviewed
+execution release and exact input bindings.
 """
 import argparse
 from decimal import Decimal, InvalidOperation
@@ -62,9 +63,9 @@ OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-ca
 DISPATCHER_SCRATCH_ROOT = "/home/holden/mckernel-work/scratch"
 DISPATCHER_EMERGENCY_BYTES = 512 * 2 ** 20
 SHARED_HEAVY_LOCK_PATH = DISPATCHER_SCRATCH_ROOT + '/mckernel-heavy-operation.lock'
-# Source-only until all build/image/guest entrypoints consume this contract.
-# An execution release must bind their reviewed source hashes before enabling it.
-HEAVY_ENTRY_CONTRACT_RELEASED = False
+# Independently reviewed common source contract, enabled with the guest switch.
+# This is not a build, image or guest execution release.
+HEAVY_ENTRY_CONTRACT_RELEASED = True
 HISTORICAL_OBSERVER_SHA256 = 'fad2dd08fdc098c1dcda1d2fa8eaf9fc885f64d4054c9ca85ad71f7a5000fed0'
 HEAVY_EXECUTABLES = frozenset(('qemu-system-x86_64', 'qemu-system-aarch64',
     'qemu-kvm', 'mcexec', 'firecracker', 'rustc', 'cargo', 'make', 'ninja', 'buildah'))

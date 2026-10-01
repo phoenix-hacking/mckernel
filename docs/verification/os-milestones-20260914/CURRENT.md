@@ -12880,3 +12880,38 @@ retirement helper.  Only after that source passes independent review may the
 common contract be released and a new fetched side target prepared for
 scratch18.  Counts remain one compiled current candidate, five bounded
 diagnostic guest passes and zero formal application acceptances.
+
+Continuation checkpoint 319, 2026-10-01: launcher shutdown stopped all new
+dispatch and interrupted the coordinated shared-heavy source integration at a
+source-only boundary.  Every child lane is closed.  No McKernel build, QEMU
+guest or campaign-owned container remains active, and the common lock path is
+absent.  Launcher identities are preserved as PID/starttime 1442141/100022769,
+1442145/100022779 and 1442149/100022785; two long-running unrelated Kasper
+containers were observed and left untouched.
+
+The immediately preceding guest source passed independent review as
+`PASS_SOURCE_GUEST_LOCK_FINAL`: runner `7e84063a...00d5`, helper
+`60f4ebad...16fb4` and tests `74d4475e...7521`, with both release switches
+false.  The interrupted integration then changed the paired release switches
+and dependent hashes but did not receive independent review.  Its exact WIP
+hashes are wrapper `150f74c7...8243`, image owner `1f815a24...ccc`, unchanged
+runner `7e84063a...00d5`, helper `23a05247...44b`, guest tests
+`f9c76862...2365`, image tests `b9ed3cea...9465` and terminal scratch17 packet
+`18cc2707...cf90`.  This is preserved WIP, not an execution release.
+
+Bounded shutdown verification passes 123 build/wrapper/observer/terminal tests,
+124 image/preparer/container tests, the current 60 guest tests, shell syntax
+and `git diff --check`.  The reduction from the reviewed 63-case guest suite
+must be explained during independent review; passing current tests does not
+promote the interrupted source.  Exact shutdown evidence is
+`native-shared-heavy-contract-shutdown-wip-20261001.json`.
+
+Next independently review or correct these exact integration hashes, restore
+the full intended negative coverage, and prove the build/image/guest entry
+points use one common lock inode with paired release switches.  Then publish
+and fetch a new selective side target based on `50b08432...35632`; do not use
+the intentionally unreleased `227d1fe3...c5ad`.  Only after that target is
+reviewed and reachable may a fresh scratch18 candidate be prepared.  Scratch17
+remains terminal non-releasable and must never be mutated or rerun.  Counts
+remain one compiled current candidate, five bounded diagnostic guest passes
+and zero formal application acceptances; the OS remains incomplete.
