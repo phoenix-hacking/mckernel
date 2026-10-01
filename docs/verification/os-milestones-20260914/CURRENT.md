@@ -12630,8 +12630,8 @@ failure receipts and evidence remain preserved.  Exact shutdown evidence is
 `os-window-shutdown-checkpoint-20261001-310.json`.
 
 This shutdown checkpoint commits, pushes, fetches and verifies these exact
-release blobs.  On the next authorized invocation, run validate-only against
-that fetched commit.  After a fresh capacity/process/lease/container/artifact
+release blobs at `93ea9ef7...5b601`.  On the next authorized invocation, run
+validate-only against that fetched commit.  After a fresh capacity/process/lease/container/artifact
 preflight, execute the
 scratch16 build packet exactly once.  A successful compiled candidate unlocks
 current-image preparation and the real futex diagnostic rebind; physical
