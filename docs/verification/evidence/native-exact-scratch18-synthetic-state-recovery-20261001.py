@@ -68,7 +68,14 @@ def _read(fd, path, expected):
             raise Refusal('record-identity:' + name)
         data = os.read(f, expected[2] + 1)
         after = os.fstat(f)
-        if len(data) != expected[2] or digest(data) != expected[0] or before != after:
+        # Reading may advance atime (including after an exchange changes ctime
+        # and makes relatime eligible). Bind every mutation-sensitive field,
+        # including nanosecond mtime/ctime, to the snapshot taken AFTER rename.
+        # Only access time is excluded; content still has its exact byte hash.
+        stable = lambda st: (st.st_dev, st.st_ino, st.st_mode, st.st_uid,
+                             st.st_gid, st.st_nlink, st.st_size,
+                             st.st_mtime_ns, st.st_ctime_ns)
+        if len(data) != expected[2] or digest(data) != expected[0] or stable(before) != stable(after):
             raise Refusal('record-mutated:' + name)
         return data
     finally:

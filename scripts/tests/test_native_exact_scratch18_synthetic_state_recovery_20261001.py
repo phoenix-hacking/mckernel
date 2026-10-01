@@ -221,4 +221,62 @@ class SyntheticRecoveryTests(unittest.TestCase):
         with self.assertRaisesRegex(self.m.Refusal, 'illegal-record-state'):
             self.m.recover(True)
 
+    def test_real_read_atime_change_preserves_stable_identity(self):
+        # Use a real filesystem atime update, not a mocked stat_result. An old
+        # atime guarantees eligibility under the test filesystem's relatime.
+        old = self.m.PLAN.stat()
+        os.utime(self.m.PLAN, ns=(1, old.st_mtime_ns))
+        before = self.m.PLAN.stat()
+        fd = self.m._open_root()
+        try:
+            data = self.m._read(fd, self.m.PLAN, self.m.PLAN_RECORD)
+        finally:
+            os.close(fd)
+        after = self.m.PLAN.stat()
+        self.assertGreater(after.st_atime_ns, before.st_atime_ns)
+        self.assertEqual(after.st_mtime_ns, before.st_mtime_ns)
+        self.assertEqual(after.st_ctime_ns, before.st_ctime_ns)
+        self.assertEqual(self.m.digest(data), self.m.PLAN_RECORD[0])
+
+    def test_metadata_mutation_during_read_still_refuses(self):
+        original = self.m.os.read
+        def mutate(fd, size):
+            data = original(fd, size)
+            os.fchmod(fd, 0o640)
+            return data
+        fd = self.m._open_root()
+        try:
+            with mock.patch.object(self.m.os, 'read', mutate):
+                with self.assertRaisesRegex(self.m.Refusal, 'record-mutated'):
+                    self.m._read(fd, self.m.PLAN, self.m.PLAN_RECORD)
+        finally:
+            os.close(fd)
+
+    def test_production_exchanged_plan_prefix_validates_and_resumes(self):
+        # Production refusal left PLAN=directory, PLAN_SENTINEL=exact file,
+        # JOURNAL=exact live file; no archives or journal sentinel exist.
+        self.m.PLAN_SENTINEL.mkdir(mode=0o700)
+        marker_inode = self.m.PLAN_SENTINEL.stat().st_ino
+        fd = self.m._open_root()
+        try:
+            self.m._exchange(fd, self.m.PLAN.name, self.m.PLAN_SENTINEL.name)
+            os.fsync(fd)
+            _, states = self.m._states(fd)
+            self.assertEqual([stage for stage, _ in states], [2, 0])
+        finally:
+            os.close(fd)
+        captured = self.m.PLAN_SENTINEL.stat()
+        os.utime(self.m.PLAN_SENTINEL, ns=(1, captured.st_mtime_ns))
+        self.assertEqual(self.m.recover(), {'status': 'PASS_VALIDATE_ONLY', 'terminal': False})
+        self.assertEqual(self.m.PLAN.stat().st_ino, marker_inode)
+        self.assertEqual(self.m.PLAN_SENTINEL.stat().st_ino, self.m.PLAN_RECORD[1])
+        self.assertFalse(self.m.PLAN_ARCHIVE.exists())
+        with mock.patch.object(self.m, '_exchange', wraps=self.m._exchange) as exchange:
+            self.assertEqual(self.m.recover(True)['status'], 'PASS_EXECUTED')
+        self.assertEqual(exchange.call_count, 1)
+        self.assertEqual(exchange.call_args.args[1:], (self.m.JOURNAL.name, self.m.JOURNAL_SENTINEL.name))
+        self.assertEqual(self.m._retained(self.m.PLAN_SENTINEL).stat().st_ino, marker_inode)
+        self.assertEqual(self.m.PLAN_ARCHIVE.stat().st_ino, self.m.PLAN_RECORD[1])
+        self.assertEqual(self.m.JOURNAL_ARCHIVE.stat().st_ino, self.m.JOURNAL_RECORD[1])
+
 if __name__ == '__main__': unittest.main()
