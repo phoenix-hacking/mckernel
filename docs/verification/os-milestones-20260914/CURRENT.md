@@ -12812,3 +12812,30 @@ threads/clone, stdout/exit-37, route/return/terminal, procfs, retirement and
 release oracle.  Artifacts remain UNBOUND and launch remains prohibited until
 the scratch17 build succeeds and a separate privileged release binds its actual
 artifacts, nonce, owner command and fresh resource/process census.
+
+Continuation checkpoint 316, 2026-10-01: scratch17 is now explicitly terminal
+and non-releasable rather than receiving another unchanged build attempt.  Its
+immutable request/candidate bind historical owner `a8c4c9fc...b9155`; the
+corrected owner cannot be substituted without violating the manifest.  Actual
+packet `--execute` returns `TERMINAL_NON_RELEASABLE` before publication, while
+validation-only confirms the historical request as compatibility-only.  The
+original request, manifest and candidate remain unchanged.
+
+Expert rereview returns `PASS_SOURCE_SUCCESSOR_PREREQUISITE` for corrected
+owner `57a5af06...f077a`, wrapper `578d34e8...f26b1`, exact historical-lease
+observer `fad2dd08...0fed0` and terminal packet `078c34b2...2c573`.
+Coordinator execution passes all 123 owner/wrapper/observer/packet tests.
+Live heavy processes block before owner loading; malformed, unknown or live
+container rows block; the sanitized census preserves inherited SUDO_ASKPASS
+without recording it; and unknown or self-declared lease tombstones block.
+Seven root-owned 0600 historical tombstones match exact committed retirement
+evidence, with all recorded PIDs absent and no relevant running container.
+
+The shared build/image/guest lock contract remains intentionally unreleased
+until every actual heavy entry point is wired, and the bounded privileged
+historical observer has not run.  Next create and fetch a side target based on
+50b containing only reviewed build-admission corrections, then prepare fresh
+scratch18 inputs.  Never mutate or rerun scratch17.  Exact evidence is
+`native-exact-scratch17-terminal-successor-prerequisite-checkpoint-20261001.json`.
+No build or guest ran; counts remain one compiled current candidate, five
+bounded diagnostic guest passes and zero formal application acceptances.
