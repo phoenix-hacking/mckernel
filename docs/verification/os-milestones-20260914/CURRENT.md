@@ -11970,3 +11970,44 @@ postflight.  Then stage the retained direct-futex payload against c81.  Native
 OS shutdown remains a separate production implementation family; neither this
 guest's `exit_group` nor QMP poweroff satisfies it.  The OS goal remains active
 and incomplete.
+
+Continuation checkpoint 289, 2026-10-01: the one-shot c81 signals diagnostic
+completed after exact fetched-packet release.  Independent reviews return
+`PASS_DIAGNOSTIC_C81_SIGNALS` and `PASS_GUEST_POSTFLIGHT_SIGNALS` for nonce
+`12b580e25217daeb184cc3b6af080b0e`.  Exact stdout is
+`NATIVE_CORE PASS signals\n`, stderr is empty, exit/raw status is 37/9472,
+both streams reach EOF without truncation or discarded bytes, and procfs is
+empty.  The bound fixture proves blocked SIGUSR1 remained pending, unblocking
+delivered it on the alternate stack, a second delivery also used that stack,
+and action, mask and alternate-stack state were restored.  PID/TID 256 was
+deleted, four pager references drained to zero, and retirement progressed from
+retained `-11` to zero.
+
+The fetched packet/manifest hashes are `3724d708...28c5` and
+`7638d982...c298`; result/serial/QMP hashes are `49c012dc...e2d7e`,
+`48af3364...639f` and `e7b16355...857e`.  Container `eb33a982...cbcb0`
+exited zero without OOM and is removed.  Owner PID 2933484 and all 30 Docker
+clients are absent, the development lock is released, and no heavy lease
+remains.  QMP records guest shutdown/nonrunning status and acknowledged quit
+before controlled QEMU reap `-9`; this is not graceful QEMU exit or native OS
+shutdown.  Exact additive evidence is
+`docs/verification/evidence/native-exact-c81-signals-diagnostic-checkpoint-20261001.json`.
+
+The current-candidate compiled build count remains one.  Accepted bounded
+current-candidate diagnostics are now five: memory, files, startup, threads and
+signals.  Formal application/catalog acceptance remains zero.  A distinct
+direct-futex diagnostic remains blocked before artifact/runtime release:
+independent review found the retained fixture's typed stderr contains dynamic
+timestamps, counts and TIDs, while the current evaluator requires byte-exact
+stderr; the new collector test only compiles that branch and does not execute
+its framing, partial-write or failure paths.  Preserve the uncommitted collector
+candidate and first add a bounded typed stderr oracle plus executable host tests.
+
+The separately fetched shutdown source checkpoint `04bdc6af...a2327` adds only
+the independently accepted effect-aware host transaction boundary.  Exact
+Rust-body tests pass 66 cases, including fail-closed post-effect corruption and
+same-generation retry.  SMP still registers v4 and the booted path remains
+`ENOSYS`; no kernel ABI, production build or shutdown runtime credit advances.
+Next implement generation-bound IRQ sender closure/callback drain before STOP,
+CPU reclamation and resource restoration.  The OS goal remains active and
+incomplete.

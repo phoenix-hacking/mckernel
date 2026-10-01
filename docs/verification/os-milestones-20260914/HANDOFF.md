@@ -1,6 +1,33 @@
 # Compact dispatcher handoff
 
-## Latest continuation: checkpoint 288
+## Latest continuation: checkpoint 289
+
+Fetched shutdown source checkpoint is `04bdc6afb4652b9e016a69261dd7c2227e4a2327`.
+The current c81 candidate now independently passes five bounded diagnostics:
+memory, files, startup, threads and signals.  Signals nonce
+`12b580e25217daeb184cc3b6af080b0e` produced exact stdout
+`NATIVE_CORE PASS signals\n`, empty stderr and exit 37.  Blocked/unblocked
+SIGUSR1, two alternate-stack deliveries, restored action/mask/stack, process and
+pager retirement all pass.  Result/serial/QMP hashes are
+`49c012dc...e2d7e`, `48af3364...639f` and `e7b16355...857e`; owner,
+container and 30 clients retired and the heavy lease is free.  This is not
+general signal correctness, formal application acceptance or native shutdown.
+
+Direct futex is the next diagnostic.  Do not release the current collector
+candidate: independent review found the fixture's stderr has dynamic timestamps,
+counts and TIDs, while the evaluator requires byte identity, and its new test
+does not execute the futex publication branch.  First implement and independently
+review a bounded typed stderr oracle and executable collector tests covering
+complete framing, partial writes and failure.
+
+The accepted shutdown source slice is Layer-B only: 66 exact Rust-body tests
+cover its effect boundary and fail-closed retry semantics.  SMP remains v4 and
+booted shutdown remains `ENOSYS`.  Next add generation-bound sender closure and
+callback drain, then STOP/quiescence, CPU reclamation and resource restoration.
+Build count is one, diagnostic app count five, formal applications remain 0/273,
+and the whole-OS goal is active and incomplete.
+
+## Previous continuation: checkpoint 288
 
 Fetched HEAD before this checkpoint is `1e2daf64b7b8a5b6f9e0a517bb1bc186e9b3442a`
 on `codex/local-native-staging-repair`.  Adopted policy SHA-256 values remain

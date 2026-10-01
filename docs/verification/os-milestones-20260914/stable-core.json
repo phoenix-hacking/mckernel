@@ -141,6 +141,8 @@
     ,"native_diag_signals_release": "docs/verification/stability-native-diagnostic-signals-execution-release-20260928-1.json"
     ,"native_diag_signals_success": "docs/verification/stability-native-diagnostic-signals-success-20260928-1.json"
     ,"native_diag_c81_threads_signals_prep": "docs/verification/evidence/native-exact-c81-threads-and-signals-preparation-checkpoint-20261001.json"
+    ,"native_diag_c81_signals": "docs/verification/evidence/native-exact-c81-signals-diagnostic-checkpoint-20261001.json"
+    ,"shutdown_effect_boundary": "docs/verification/evidence/native-exact-shutdown-effect-boundary-source-checkpoint-20261001.json"
     ,"shutdown_observer": "docs/verification/stability-native-shutdown-observer-source-success-20260928-1.json"
     ,"shutdown_registry": "docs/verification/stability-native-shutdown-registry-source-success-20260928-1.json"
     ,"shutdown_admission": "docs/verification/stability-native-shutdown-admission-source-success-20260928-1.json"
@@ -544,8 +546,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "The current c81 candidate independently passes memory, files, startup and threads diagnostics. Threads proves exact output/exit 37, two workers, barrier, 2,000 mutex-protected increments, TLS, joins, TIDs 255/256/257, procfs deletion, pager/process release, 697/697 QMP replies and exact teardown. Clone3/futex operations are not separately traced. The c81 signals overlay and strict manifest pass independent preparation review but have not run. Preserved conservative result fields prevent formal acceptance. These are diagnostic protocol results, not catalog acceptance.",
-      "next_check": "Run the separately released c81 signals packet, then a distinct direct-futex diagnostic; continue production shutdown effect/IRQ-drain/reclamation implementation and never relabel application exit_group, guest poweroff or controlled QEMU cleanup as OS shutdown.",
+      "result": "The current c81 candidate independently passes memory, files, startup, threads and signals diagnostics. Signals proves exact output/exit 37, blocked/unblocked SIGUSR1, two alternate-stack deliveries, restored action/mask/stack, pager/process retirement and exact teardown. The direct-futex lane is blocked before release because its stderr is dynamic and the collector branch lacks executable framing tests. Preserved conservative result fields prevent formal acceptance. These are diagnostic protocol results, not catalog acceptance.",
+      "next_check": "Implement a bounded typed futex stderr oracle and executable collector framing/partial-write/failure tests before a distinct direct-futex diagnostic; continue production shutdown sender-drain/STOP/reclamation implementation and never relabel application exit_group, guest poweroff or controlled QEMU cleanup as OS shutdown.",
       "evidence": [
         "history",
         "plan",
@@ -582,7 +584,8 @@
         "native_diag_signals_artifact",
         "native_diag_signals_release",
         "native_diag_signals_success",
-        "native_diag_c81_threads_signals_prep"
+        "native_diag_c81_threads_signals_prep",
+        "native_diag_c81_signals"
       ],
       "depends_on": []
     },
@@ -1278,11 +1281,12 @@
       "area": "PROC",
       "title": "Signals, masks, altstack and ordinary sigreturn",
       "status": "baseline",
-      "result": "Baseline signals and ordinary signal ABI suites passed on bound artifacts.",
-      "next_check": "Replay masks/pending delivery/altstack/return and documented unsupported flags without silently broadening signal support.",
+      "result": "Baseline signals and ordinary signal ABI suites passed on bound artifacts. The current c81 bounded diagnostic also proves pending blocked SIGUSR1, unblocking and two alternate-stack deliveries with restored action, mask and stack, plus process/pager retirement.",
+      "next_check": "Extend beyond the bounded c81 diagnostic to documented unsupported flags, malformed frames, interruption and recipient-lifetime races without silently broadening signal support.",
       "evidence": [
         "app",
-        "baseline"
+        "baseline",
+        "native_diag_c81_signals"
       ],
       "depends_on": []
     },
@@ -1307,7 +1311,7 @@
       "title": "Futex wait/wake and thread synchronization",
       "status": "baseline",
       "result": "Baseline barrier/mutex, two children, TID transfer and futex/child-TID tests passed. The current c81 diagnostic confirms barrier, mutex, two workers, TLS and joins, but its trace does not identify direct futex operations or counts.",
-      "next_check": "Run a distinct c81 direct-futex diagnostic with explicit wait/wake results and syscall trace, then replay contention, wake counts and timeout/cancel paths with actual runnable peer progress and correct errno/results.",
+      "next_check": "First add a bounded typed stderr oracle and execute the collector's futex framing, partial-write and failure paths; only then release a distinct c81 direct-futex diagnostic with explicit wait/wake results and syscall trace.",
       "evidence": [
         "app",
         "baseline",
@@ -1787,12 +1791,13 @@
       "area": "LIFE",
       "title": "Lifecycle state and ownership order",
       "status": "partial",
-      "result": "The allocation-free registry transaction and additive v5 host shutdown/admission boundary pass exact Rust 1.92 execution and independent source review. Live application and file-service contexts reject shutdown before provider invocation; provider Close precedes admission/lease release; pre-effect errors roll back; allocation-failure Close can reenter serialized topology without deadlock. Native SMP CPU stop, IRQ-work drain and resource restoration remain unimplemented and unexecuted.",
-      "next_check": "Implement independently retained guest parking plus an exact per-generation Linux IRQ-work inventory/drain before freezing STOP/ACK or wiring the v5 callback; then build and review the production ABI.",
+      "result": "The allocation-free registry transaction and additive v5 host shutdown/admission boundary pass exact Rust 1.92 execution and independent source review. The effect-aware host transaction now passes 66 actual-body tests, including fail-closed post-effect corruption and same-generation retry. SMP still registers v4; native CPU stop, IRQ-work drain and resource restoration remain unimplemented and unexecuted.",
+      "next_check": "Implement generation-bound sender closure and callback drain, then independently retained guest parking and exact per-generation IRQ-work inventory/drain before STOP/ACK or wiring v5; then build and review the production ABI.",
       "evidence": [
         "shutdown_registry",
         "shutdown_admission",
         "shutdown_observer",
+        "shutdown_effect_boundary",
         "rocky_lean_source",
         "app",
         "plan"
