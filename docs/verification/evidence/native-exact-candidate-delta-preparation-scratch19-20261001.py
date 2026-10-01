@@ -17,15 +17,14 @@ _IMPL = importlib.util.module_from_spec(_SPEC)
 assert _SPEC.loader is not None
 _SPEC.loader.exec_module(_IMPL)
 
-BASELINE = '3e8f779e205418122588c06e8113b056fad9b0a5'
+BASELINE = '5f063f75d7385a9763904d2f1a5888ea131c754d'
 SOURCE_BASE = '1e95abdc2b124c19f16b88cdb21600c768a10c2d'
-TARGET = '7ecabfabe688d8a873137671b91c71c6a71c31ec'
-TARGET_TREE = '454bc8efe92f95fd8718b8f771390309b088e98a'
+TARGET = '28a905bfc177627e338a3fd91f69329ac2e74046'
+TARGET_TREE = '1d7bfce8a37ab5dd1bdd8197c4531a157ffdfd0f'
 EXACT_DELTA = (
-    ('A', 'docs/verification/evidence/native-exact-c81-futex-order-correction-addendum-20261001.json', '3eb309c1005dd48285f83a57aadab59bca9d66d1'),
-    ('A', 'docs/verification/evidence/native-exact-scratch18-core-diagnostics-checkpoint-20261001.json', 'b56169d87fa75bc57d4a039773cdc35bc8a86422'),
-    ('M', 'docs/verification/os-milestones-20260914/CURRENT.md', '4fe700ce3b6befc95fc8069bf3a8f3b4d6b580be'),
-    ('M', 'docs/verification/os-milestones-20260914/PROGRESS.md', '5c6a5e37ee52fc401d1fa4e6297fccfe95c434d5'),
+    ('A', 'docs/verification/evidence/native-diagnostic-signal-block-pending-pass-20261001.json', 'de4096c6f904baed5b4b6a8c77990a7f3e375a66'),
+    ('M', 'docs/verification/os-milestones-20260914/CURRENT.md', '1c412dc0e8e81deb1376ad3c50a7cce2becccd2e'),
+    ('M', 'docs/verification/os-milestones-20260914/PROGRESS.md', 'db5eb9dfb2a651588bce336ee8df07168b3290e9'),
 )
 CANDIDATE_NAME = 'mckernel-exact-candidate-scratch-19'
 MANIFEST_NAME = 'native-exact-inputs-scratch-19.json'
