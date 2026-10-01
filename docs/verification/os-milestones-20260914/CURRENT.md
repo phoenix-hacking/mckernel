@@ -12963,3 +12963,45 @@ target, and bind its identity plus file/hash allowlist into a reviewed scratch18
 preparation invocation.  No build, Docker or guest ran in this checkpoint.
 Counts remain one compiled current candidate, five diagnostic guest passes and
 zero formal application acceptances; the OS remains incomplete.
+
+Continuation checkpoint 321, 2026-10-01: launcher shutdown closed every child
+lane at a source-only boundary.  No preparation, build, Docker, QEMU guest or
+production shutdown operation was started.  The shared heavy lock is absent
+and no campaign heavy process is live.  Preserved launcher identities are
+1442141, 1442142, 1442145 and 1442149, all started 2026-09-30 10:46:42 PDT,
+plus code-mode host 1442494 started at 10:47:15 PDT.
+
+The exact shared-heavy side target is now published and independently verified:
+target `89ab5c55...d6d`, sole parent `50b08432...35632`, tree
+`e57e36cf...b538`, and fetched reachable merge `6afe71c9...7f`.  Its raw-object
+diff is exactly the accepted 14 paths (five additions, nine modifications),
+with all blob hashes and four gitlinks unchanged as required.
+
+The scratch18 preparation helper is now bound to that exact target, parent,
+tree, fetched ref and 14-entry path/status/blob allowlist.  Coordinator tests
+pass 13/13 on CPUs 6-7 under a 3-GiB cap; exact hashes are helper
+`f1f2a56b...37da3` and tests `0732479a...c0e2`.  Production validate-only and
+preparation were deliberately not run during shutdown.  The final bound bytes
+still require an independent rereview because the earlier preparation review
+predates this concrete binding.
+
+The corrected shutdown v6 normal-boot ordering model independently returns
+`PASS_SOURCE_MODEL_ONLY`.  Coordinator verification passes two Python checks
+and five pinned-Rust cases; the reconciliation-before-effects mutant compiles
+and exits 101 at the required prerequisite assertion.  Driver hash is
+`d0934bf1...4781`, fixture hash `b96df16c...ecfa`.  This sequential model does
+not execute production shutdown bodies and adds no module, guest, hardware,
+shutdown or application credit.
+
+Exact evidence is
+`native-scratch18-target-shutdown-checkpoint-20261001.json`.  Next independently
+rereview the bound preparation bytes, run validate-only against the fetched
+target, confirm scratch18 destinations remain absent, then remeasure/reconcile
+and prepare scratch18 once.  Independently review its candidate/request/manifest
+before issuing a fresh artifact-bound build release.  After one serialized
+current-candidate build, continue image and real futex diagnostic execution only
+through fresh artifact-bound releases.  Separately integrate the reviewed
+shutdown ordering semantics into production and obtain module plus normal-boot
+runtime evidence.  Counts remain one compiled current candidate, five bounded
+diagnostic guest passes, zero formal application acceptances, 6/130 production
+gates and 0/7 language gates; the OS remains incomplete.

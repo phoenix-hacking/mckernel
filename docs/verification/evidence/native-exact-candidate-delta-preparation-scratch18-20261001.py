@@ -14,9 +14,25 @@ import importlib.util
 from contextlib import contextmanager
 
 BASELINE = "50b084322610a9326b1b7b528edd4cd73b635632"
-# Deliberately unset until the reviewed successor is fetched.  The CLI or
-# caller must bind an exact 40-hex target; this packet never invents one.
-TARGET = None
+TARGET = "89ab5c555aac9177a789efc67ddc775dacb25d6d"
+TARGET_TREE = "e57e36cfefa874eb97eff87aca32794a3826b538"
+FETCHED_REF = "refs/remotes/origin/codex/local-native-staging-repair"
+EXACT_DELTA = (
+    ('A', 'scripts/native_exact_historical_lease_observer.py', '2e77ca4e6abd6505b7d6a2a879164207c73b0307'),
+    ('M', 'scripts/native_rust_exact_build_container_owner.py', '872cfb40bf1adb1d9e0cfe9d22803cc05b1ba1f1'),
+    ('M', 'scripts/native_rust_exact_build_image_prepare.py', 'acc1c4401a2597a91854ed406cafcdf1c09e131a'),
+    ('M', 'scripts/native_rust_exact_disk_build_wrapper.py', 'e43dcfb60ee1b383c8e0ed02eb9859719f917e1e'),
+    ('M', 'scripts/native_rust_exact_mckernel_image_container_owner.py', '0eb04da9cdcd387d3f5ab8fe4d21e869fcd68122'),
+    ('M', 'scripts/qemu-mckernel-guest.sh', '3b2e92320e4eb7c0a9d001b4151ed8d72244e2b4'),
+    ('A', 'scripts/qemu_guest_heavy_v1.py', '9628466576da1fe15c8cbd2192ea8188e669e030'),
+    ('A', 'scripts/tests/test_native_exact_historical_lease_observer.py', 'eb1ea8c7e32ce24d873b9090328f7191df9a6465'),
+    ('M', 'scripts/tests/test_native_rust_exact_build_container_owner.py', '52b5f3ee7f30f20da373ff9cca318f9d9329e412'),
+    ('M', 'scripts/tests/test_native_rust_exact_build_image_prepare.py', '74cae38aeb57c2e376c2302ccaaf1cb07df914bb'),
+    ('M', 'scripts/tests/test_native_rust_exact_disk_build_wrapper.py', '8cd456d6a740669c862cb9e35408ceefe72d1b30'),
+    ('M', 'scripts/tests/test_native_rust_exact_mckernel_image_container_owner.py', '18cf7f8127274ba4396bd571eaa02f0c22a305c6'),
+    ('A', 'scripts/tests/test_native_shared_heavy_entry_contract_20261001.py', 'a231d3721fde9965fa546ee021e0e9d037aa7eb7'),
+    ('A', 'scripts/tests/test_qemu_guest_heavy_v1.py', '7d9d0bafd40898b1bb423abfef9713596e6db5a9'),
+)
 IHK = "3114d9e7101ad52030eb3effa849a5c108972a1f"
 OVERLAY_REL = 'host-kernel/exact-build/ihk-clear-host-pte-overlay.patch'
 OVERLAY_SHA256 = 'cbaaec7b649608674747e4d88acdd1f0a005cff6ff696046b8d96ed959af49e7'
@@ -121,17 +137,19 @@ def write_exclusive(path, data, mode):
     try: os.fsync(directory)
     finally: os.close(directory)
 
-def raw_delta(source, old=BASELINE, target=TARGET, expected=None):
+def raw_delta(source, old=BASELINE, target=TARGET, expected=EXACT_DELTA):
     rows=git(source,'diff','--name-status','--no-renames','-z',old,target).split(b'\0')[:-1]
     if len(rows)%2: raise Refusal('malformed raw delta')
     parsed=[(rows[i].decode(),rows[i+1].decode()) for i in range(0,len(rows),2)]
     if any(r[0] not in ('A','M') for r in parsed):
         raise Refusal('unexpected raw delta')
     if expected is not None:
-        actual = {'A': sum(r[0] == 'A' for r in parsed),
-                  'M': sum(r[0] == 'M' for r in parsed)}
-        if actual != dict(expected):
-            raise Refusal('raw delta does not match caller-bound expectation')
+        actual = []
+        for status, path in parsed:
+            blob = git(source, 'rev-parse', target+':'+path).decode().strip()
+            actual.append((status, path, blob))
+        if tuple(actual) != tuple(expected):
+            raise Refusal('raw delta does not match exact target allowlist')
     return parsed
 
 def validate_git_roots(root):
@@ -254,7 +272,7 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, target=T
             overlay_base_sha256=OVERLAY_BASE_BLOB_SHA,
             overlay_result_commit=OVERLAY_RESULT_COMMIT_SHA,
             previous_candidate=None, expected_shared_files=EXPECTED_SHARED_FILES,
-            expected_delta=None):
+            expected_delta=EXACT_DELTA):
     source, scratch15, scratch = map(Path, (source, scratch15, scratch))
     candidate = scratch/CANDIDATE_NAME
     previous_candidate = Path(previous_candidate) if previous_candidate else scratch/PREVIOUS_CANDIDATE_NAME
@@ -277,8 +295,14 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, target=T
     try:
         if not isinstance(target,str) or len(target)!=40 or any(c not in '0123456789abcdef' for c in target):
             raise Refusal('exact future target required')
+        if target != TARGET:
+            raise Refusal('target is not the reviewed exact side target')
         if git(source,'rev-parse','--verify',target+'^{commit}').decode().strip()!=target:
             raise Refusal('target not fetched')
+        if git(source,'rev-parse','--verify',FETCHED_REF).decode().strip() != git(source,'merge-base',target,FETCHED_REF).decode().strip():
+            raise Refusal('target is not reachable from fetched ref')
+        if git(source,'rev-parse','--verify',target+'^{tree}').decode().strip()!=TARGET_TREE:
+            raise Refusal('target tree mismatch')
         if git(source,'rev-parse','--verify',target+'^').decode().strip()!=old:
             raise Refusal('target parent/baseline mismatch')
         if old != baseline:

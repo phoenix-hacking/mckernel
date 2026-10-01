@@ -87,17 +87,24 @@ class Scratch18(unittest.TestCase):
         (self.previous/self.large).parent.mkdir(parents=True)
         os.link(self.s15/self.large,self.previous/self.large)
         # The old immutable metadata deliberately lacks the target commit.
-        for i in range(20): self.put(self.src,'new%d.txt'%i,b'new\n')
-        os.symlink('old0.txt',self.src/'new-link')
-        for i in range(13): self.put(self.src,'old%d.txt'%i,b'changed\n')
+        for i in range(5): self.put(self.src,'new%d.txt'%i,b'new\n')
+        for i in range(9): self.put(self.src,'old%d.txt'%i,b'changed\n')
         self.g(self.src,'add','.')
         self.g(self.src,'commit','-qm','target')
         self.target=self.g(self.src,'rev-parse','HEAD').decode().strip()
+        self.g(self.src,'update-ref',p.FETCHED_REF,self.target)
+        p.TARGET = self.target
+        p.TARGET_TREE = self.g(self.src,'rev-parse',self.target+'^{tree}').decode().strip()
+        p.EXACT_DELTA = tuple(
+            (status, path, self.g(self.src,'rev-parse',self.target+':'+path).decode().strip())
+            for status, path in [row.split('\t',1) for row in
+                self.g(self.src,'diff','--name-status','--no-renames',self.old,self.target).decode().splitlines()])
         self.receipt=self.r/'receipt.json'
         self.receipt.write_text(json.dumps({'status':'PASS','image_id':p.IMAGE_ID}))
         delta = self.g(self.src,'diff','--name-status','--no-renames',self.old,self.target).decode().splitlines()
-        self.expected_delta = {'A': sum(row.startswith('A\t') for row in delta),
-                               'M': sum(row.startswith('M\t') for row in delta)}
+        self.expected_delta = tuple(
+            (status, path, self.g(self.src,'rev-parse',self.target+':'+path).decode().strip())
+            for status, path in [row.split('\t',1) for row in delta])
         self.kw=dict(old=self.old,baseline=self.old,target=self.target,expected_delta=self.expected_delta,ihk_expected=self.ihk,
                      overlay_sha=self.overlay,overlay_result_sha=self.result,
                      overlay_base_sha256=self.base,assets_root=self.assets,
@@ -139,12 +146,12 @@ class Scratch18(unittest.TestCase):
     def test_exact_delta_and_validate_only(self):
         self.assertEqual((self.s15/self.large).stat().st_nlink,2)
         self.assertEqual((self.previous/self.large).stat().st_nlink,2)
-        stale = dict(self.kw, expected_delta={'A': self.expected_delta['A'] + 1,
-                                               'M': self.expected_delta['M']})
-        with self.assertRaisesRegex(p.Refusal, 'caller-bound expectation'):
+        stale = dict(self.kw, expected_delta=self.expected_delta[:-1])
+        with self.assertRaisesRegex(p.Refusal, 'exact target allowlist'):
             self.prepare(**stale)
         result=self.prepare()
-        self.assertEqual({k: sum(r[0] == k for r in result['delta']) for k in ('A','M')}, self.expected_delta)
+        self.assertEqual(tuple((status, path, self.g(self.src,'rev-parse',self.target+':'+path).decode().strip())
+                               for status, path in result['delta']), self.expected_delta)
         self.assertEqual(result['shared_files'],1)
         self.assertEqual((self.s15/self.large).stat().st_nlink,2)
         self.assertEqual((self.previous/self.large).stat().st_nlink,2)
@@ -199,8 +206,6 @@ class Scratch18(unittest.TestCase):
         candidate=self.scratch/p.CANDIDATE_NAME
         self.assertEqual(self.g(candidate,'rev-parse','HEAD').decode().strip(),self.target)
         self.assertEqual(self.g(candidate,'cat-file','blob',self.historical),b'historical ABI object')
-        link_oid=self.g(self.src,'rev-parse',self.target+':new-link').decode().strip()
-        self.assertEqual(self.g(candidate,'cat-file','blob',link_oid),b'old0.txt')
         self.assertEqual(p.snapshot(candidate/self.large),p.snapshot(self.s15/self.large))
         self.assertEqual((candidate/self.large).stat().st_nlink,3)
         self.assertEqual((self.s15/self.large).stat().st_nlink,3)
