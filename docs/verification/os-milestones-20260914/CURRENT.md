@@ -11272,3 +11272,39 @@ the artifacts, postlink and linked-text reports before rebinding and running
 the diagnostic-only memory smoke.  Current counts remain zero linked current
 images and zero real current-candidate guest applications; no formal acceptance
 counter changes.
+
+Continuation checkpoint 272, 2026-09-30: the first exportset-25 heavy owner
+failure is now bound by a cheap command-level regression.  The production
+owner, host owner, provenance and request remain byte-identical at
+`a6d6ffaa...7f0`/`a8c4c9fc...9155`/`cc243126...cd1a`/
+`9923b51f...461d`; no source correction is required.  The smallest bounded
+correction is an exact absolute owner entry point:
+`/usr/bin/python3 -I -B /home/holden/mckernel/scripts/native_rust_exact_mckernel_image_container_owner.py`
+followed by the unchanged absolute request path.
+
+The new exact-interpreter regression proves the consumed relative command
+exits 1 with `host owner is not a regular source file` before argument parsing,
+while the absolute command without a request authenticates its reviewed
+adjacent sources and reaches argparse exit 2 without invoking `ImageOwner.run()`.
+Its first draft used the test interpreter and exposed a Python 3.9 semantic
+difference; the retained final test binds the released `/usr/bin/python3` and
+passes from both Python 3.8 and 3.9 harnesses.  The focused test passes 1/1 on
+each interpreter and the complete owner suite passes 26/26 under Python 3.9,
+all on CPU 0 with a 2-GiB address-space limit.
+
+Independent rereview returns
+`PASS_CHECKPOINT_EXPORT25_ABSOLUTE_ENTRYPOINT` for exact test hash
+`a2ecf663...01dd5`; production owner remains `a6d6ffaa...7f0`.  The review
+finds the command-only correction preserves authenticated source bytes,
+full-hash and symlink checks and existing admission, but does not itself
+release a build.  Exact correction evidence is
+`docs/verification/evidence/native-exact-export25-heavy-build-entrypoint-correction-20260930.json`.
+
+Next checkpoint and fetch-verify these exact test/evidence bytes.  Then obtain
+a fresh independent one-shot execution release for the exact absolute command,
+repeat request/source/lease/process/Docker/capacity admission immediately before
+launch, and preserve every owner/driver/container artifact.  A build PASS must
+still receive independent result review plus postlink and linked-text reports
+before the diagnostic memory guest is rebound.  Linked current images and real
+current-candidate guest applications remain zero; no formal acceptance counters
+change.

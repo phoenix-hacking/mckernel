@@ -36,6 +36,31 @@ def inventory(root):
     return result
 
 
+class EntrypointPathTests(unittest.TestCase):
+    def test_relative_entrypoint_fails_before_authentication_but_absolute_reaches_main(self):
+        """The released owner command must use an absolute authenticated entrypoint."""
+        repository = Path(__file__).resolve().parents[2]
+        script = repository / "scripts" / "native_rust_exact_mckernel_image_container_owner.py"
+        relative = Path("scripts") / script.name
+
+        released_python = "/usr/bin/python3"
+        relative_run = subprocess.run(
+            [released_python, "-I", "-B", str(relative)], cwd=repository,
+            capture_output=True, text=True, timeout=30, check=False)
+        self.assertEqual(relative_run.returncode, 1)
+        self.assertIn("host owner is not a regular source file", relative_run.stderr)
+        self.assertNotIn("usage:", relative_run.stderr)
+
+        absolute_run = subprocess.run(
+            [released_python, "-I", "-B", str(script)], cwd=repository,
+            capture_output=True, text=True, timeout=30, check=False)
+        self.assertEqual(absolute_run.returncode, 2)
+        self.assertIn("usage:", absolute_run.stderr)
+        self.assertIn("the following arguments are required: request", absolute_run.stderr)
+        self.assertNotIn("not a regular source file", absolute_run.stderr)
+        self.assertEqual(absolute_run.stdout, "")
+
+
 class DriverReleasePinTests(unittest.TestCase):
     def test_release_pin_matches_current_offline_driver(self):
         path = Path(__file__).resolve().parents[1] / "native_rust_exact_mckernel_image_offline.py"

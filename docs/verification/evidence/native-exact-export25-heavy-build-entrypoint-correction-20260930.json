@@ -1,0 +1,59 @@
+{
+  "schema": "mckernel.native-exact-export25-heavy-build-entrypoint-correction.v1",
+  "recorded_at": "2026-09-30T20:10:55-07:00",
+  "base_commit": "be527bf594fd2c851d2db935730361513bc8877e",
+  "failure_evidence": "docs/verification/evidence/native-exact-export25-heavy-build-attempt1-failure-20260930.json",
+  "failure_family": "relative-entrypoint-authenticated-import",
+  "correction_scope": "Command-only correction from a relative to the exact absolute image-owner entry point; production owner and request bytes are unchanged.",
+  "corrected_command": "/usr/bin/python3 -I -B /home/holden/mckernel/scripts/native_rust_exact_mckernel_image_container_owner.py /home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-6fed3a10-exportset-25.json",
+  "bindings": {
+    "test_sha256": "a2ecf663a2c0421652d30b04f7c98afe5a8a2084e3f9ad180905500b32701dd5",
+    "owner_sha256": "a6d6ffaaa84fd5fd5090875b7ec7829c136b55af81104cf630ecc273ed9df7f0",
+    "host_owner_sha256": "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155",
+    "provenance_sha256": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+    "request_sha256": "9923b51f8765040b7a4ea4b66669e5adb412e8f675196b9cc17499fba313461d"
+  },
+  "regression": {
+    "relative_exact_interpreter": {
+      "command_shape": "/usr/bin/python3 -I -B scripts/native_rust_exact_mckernel_image_container_owner.py",
+      "returncode": 1,
+      "required_stderr": "host owner is not a regular source file",
+      "meaning": "Reproduces the consumed failure before argument parsing."
+    },
+    "absolute_exact_interpreter": {
+      "command_shape": "/usr/bin/python3 -I -B /home/holden/mckernel/scripts/native_rust_exact_mckernel_image_container_owner.py",
+      "returncode": 2,
+      "required_stderr": "the following arguments are required: request",
+      "meaning": "Authenticates adjacent reviewed source and reaches argparse without reading a request or calling ImageOwner.run()."
+    }
+  },
+  "tests": [
+    {
+      "command": "taskset -c 0 prlimit --as=2147483648 -- /usr/bin/python3 -B -m unittest scripts.tests.test_native_rust_exact_mckernel_image_container_owner.EntrypointPathTests",
+      "result": "PASS 1/1"
+    },
+    {
+      "command": "taskset -c 0 prlimit --as=2147483648 -- /home/holden/anaconda3/bin/python3 -B -m unittest scripts.tests.test_native_rust_exact_mckernel_image_container_owner.EntrypointPathTests",
+      "result": "PASS 1/1"
+    },
+    {
+      "command": "taskset -c 0 prlimit --as=2147483648 -- /home/holden/anaconda3/bin/python3 -B -m unittest scripts.tests.test_native_rust_exact_mckernel_image_container_owner",
+      "result": "PASS 26/26"
+    },
+    {
+      "command": "git diff --check -- scripts/tests/test_native_rust_exact_mckernel_image_container_owner.py",
+      "result": "PASS"
+    }
+  ],
+  "preserved_development_observation": "The first draft used sys.executable and passed under Python 3.8 but failed under Python 3.9 because that interpreter normalized the script __file__. The final regression binds the exact released /usr/bin/python3 interpreter and passes when the test harness itself runs under both Python 3.8 and 3.9.",
+  "independent_review": "PASS_CHECKPOINT_EXPORT25_ABSOLUTE_ENTRYPOINT",
+  "review_scope": "Exact test SHA a2ecf663...; authorizes checkpointing only, not a build.",
+  "side_effects": {
+    "docker": false,
+    "build": false,
+    "guest": false,
+    "request_consumed": false,
+    "acceptance_counter_change": false
+  },
+  "next_action": "Commit, push and fetch-verify this exact regression; obtain a fresh independent one-shot execution release for the corrected absolute command; repeat complete live admission immediately before invocation."
+}
