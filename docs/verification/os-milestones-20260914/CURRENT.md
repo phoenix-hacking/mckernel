@@ -11391,3 +11391,46 @@ candidate design; do not silently weaken the full manifest closure.  Then
 prepare a fresh candidate-bound tool receipt, gitlink and exportset-26 request,
 and rebuild once.  Linked current images and real current-candidate applications
 remain zero; no formal counter changes.
+
+Shutdown checkpoint 275, 2026-10-01: the launcher requested an immediate
+checkpoint before scratch-capacity work began.  No new task was dispatched
+after that request.  The one bounded scratch-13 source-evidence audit lane was
+stopped before it wrote either proposed file, so there is no partial audit
+implementation or unreviewed plan to resume.  All child agents are closed.  No
+heavy build, guest, candidate preparation, cleanup or trim is running, and no
+exportset-25 build lease exists.
+
+Preserve the original exportset-25 failure exactly: terminal container
+`aef5164c5209f62b5f1be6d545f34001779d2ed78008235114890f981635708b`,
+name `mckernel-image-bc0df6c9bd6d4234a1ec686df14ec493`, nonce
+`5630f734cf3249d38945489942d03fad`, owner PID/PGID/SID 2298732 now absent,
+and exclusion inode 90679 with SHA-256 `2eeed65d...7c18`.  Preserve the full
+work/output/owner evidence, scratch-13 source and metadata backup, scratch-12
+output, exact nightly and every request/toolchain/gitlink input.  Current
+launcher identities are wrapper 1442141, launcher 1442142, worker 1442145 and
+app-server 1442149, all started 2026-09-30 10:46:42 PDT; these are launcher
+state, not build or guest leases.
+
+Read-only capacity review measures scratch free near 16.78 GB versus the
+23,731,113,984-byte scratch-14 floor.  The scratch-13 candidate is identity
+`1831:3169097` with 9,240,506,368 allocated bytes; its committed historical
+`docs/verification/evidence` copies account for 9,105,633,280 allocated bytes.
+Selective retirement is only a feasibility result, not a release.  A safe
+continuation must first finish the fresh read-only audit generator and tests,
+obtain independent source review, checkpoint/fetch them, then generate and
+independently review an exact no-follow restoration plan.  Only after a fresh
+plan-bound cleanup executor, live process/open-file/mount/container census and
+independent execution release may verified Git-backed copies be removed.  Do
+not use the hard-coded candidate-12 cleanup or generic retirement helper
+unchanged, and do not remove the source tree, metadata backup, retained
+container, exclusion or original failure evidence.
+
+After verified cleanup and a fresh capacity measurement reaches the preserved
+floor, prepare a new scratch-14 candidate and candidate-bound tool receipt,
+gitlink and exportset-26 request.  Then run exactly one fresh heavy image build;
+on PASS require independent artifact, postlink and linked-text validation before
+binding the diagnostic-only startup/memory/files/threads-futexes/signals/
+shutdown applications.  Linked current images and real current-candidate
+applications remain zero; no diagnostic or formal acceptance counter changes.
+The OS goal remains active and incomplete and is not resumed or marked complete
+by this shutdown checkpoint.
