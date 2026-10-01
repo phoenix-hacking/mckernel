@@ -13221,3 +13221,29 @@ then launch a fresh scratch18 attempt with the unchanged 12-GiB floor.  Counts
 remain one compiled current candidate, five bounded diagnostic guest passes,
 zero formal application acceptances, 6/130 production gates and 0/7 language
 gates; the OS remains incomplete.
+
+Continuation checkpoint 328, 2026-10-01: independent review and an immediate
+privileged proc/Docker consumer rescan PASS for the exact scratch11 output
+identity 1831:3933547.  Its fetched restoration mapping was already present at
+`31d5df4b215ac701bd7b42591ebe1b363d60c1bf`.  The exact source tree is now
+absent; the off-scratch archive remains identity 66306:47498558, size
+1,323,885,514, mode 0600 and SHA-256 `0c159fe9...a875`.  Full ACL/xattr compare,
+pathname membership and no-hardlink checks passed before removal.  The retained
+scratch11 failure evidence at 1831:3933548 and its driver/terminal hashes remain
+unchanged.  Scratch availability rose from 12,959,698,944 to 18,126,438,400
+bytes, exactly the 5,166,739,456-byte expanded tree, while the host retains
+27,026,628,608 bytes.  Exact completion evidence is
+`native-exact-scratch11-output-archive-completion-20261001.json`.
+
+The first scratch18 interrupt-cleanup helper candidate is independently BLOCKED
+before production use.  It authenticated records only before its census, used
+an unprivileged owner-PID stat rather than the required privileged process
+census, and had no durable journal or exact-prefix crash recovery across its
+three unlinks.  Its seven synthetic tests do not cover those failures.  There
+was no production execution.  One bounded correction is active: pinned-device
+mutex, full privileged census, post-census revalidation, durable plan/journal,
+attempt-before-lease-before-shared crash-resumable retirement and terminal
+replay.  After independent PASS, publish/fetch and consume that cleanup once;
+then the reclaimed capacity permits a fresh scratch18 build under the unchanged
+12-GiB floor.  No new compiled artifact or guest result is claimed, and the OS
+remains incomplete.
