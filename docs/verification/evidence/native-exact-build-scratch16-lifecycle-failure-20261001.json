@@ -1,0 +1,86 @@
+{
+  "schema": "mckernel.native-exact-build-scratch16-lifecycle-failure.v1",
+  "recorded_at_utc": "2026-10-01T11:34:53Z",
+  "status": "FAIL_PRECOMPILATION_SOURCE_AUTHORITY",
+  "release_commit": "ceffb5c7a878a9f5911708b3d0bb02bae8d33fae",
+  "candidate_sha": "ddb8d7d58a9de7063663a27397b9fb9613a6325c",
+  "validate_only": {
+    "status": "PASS_VALIDATE_ONLY",
+    "derived_byte_sha256": "8f8a9afc3a87cfdbbaf1f8cdee82211f31f3f671de837a16a21b17803a4c6ae7",
+    "derived_canonical_sha256": "24bf35a3b86dedd6392bf508fa00912fd66cc455ef1b111a4abf69994a0ac716"
+  },
+  "execution": {
+    "command": "taskset -c 6,7 /usr/bin/python3 -I -B docs/verification/evidence/native-exact-scratch16-build-execution-20261001.py --release-commit ceffb5c7a878a9f5911708b3d0bb02bae8d33fae --execute",
+    "dispatcher_session": 36974,
+    "owner_pid": 3073276,
+    "owner_starttime": "106399431",
+    "owner_pid_currently_absent": true,
+    "exit_code": 1,
+    "derived_request_sha256": "8f8a9afc3a87cfdbbaf1f8cdee82211f31f3f671de837a16a21b17803a4c6ae7",
+    "operational_exclusion_sha256": "1fec61f77b0f05ad209993dc03eebab5b2e077b4b3bf1f851e65fc86fbcedaaf",
+    "lease_present_after_retirement": false,
+    "output_entry_count": 0
+  },
+  "container": {
+    "id": "b1f8b2cc6140c2522c9f2d85da902be3646f8a74f71f802702b00b7f6c1eff56",
+    "name": "mckernel-exact-496eaf7238ea44a69e55638f9fcc9202",
+    "owner_nonce": "f12de235289b48e398993bdf396c2668",
+    "status": "exited",
+    "pid": 0,
+    "exit_code": 1,
+    "oom_killed": false,
+    "retained": true,
+    "cleanup_separately_required": true
+  },
+  "failure": {
+    "phase": "Verify source-only contracts without claiming readiness",
+    "message": "ihk-native-lifecycle-check: FAIL: support_sources[6] digest is stale",
+    "compilation_started": false,
+    "artifacts_produced": false,
+    "actual_source_path": "host-kernel/native-rust/os_runtime.rs",
+    "actual_source_sha256": "aa9fa37f67762565c3d1be1a0c7662736932a136bc43a3fd3ef2deb319c2a4b6",
+    "stale_lifecycle_sha256": "3a9ed51277c8ce0475c11c720152bb3e3020a971c06c912ae9a2517486261aa6",
+    "family": "stale native-Rust source-authority closure",
+    "history": "scratch15 was the original failure and scratch16 was its bounded correction; another build requires expert-directed consolidated contract closure, not an unchanged retry"
+  },
+  "preserved_evidence": {
+    "owner_receipt": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-ddb8d7d5-scratch-16-evidence/receipt.json",
+      "sha256": "3f37f94e34ca29d2126b3bf682659ad472b7f95f61a29c5ab0ea48f374470db2"
+    },
+    "driver_receipt": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-ddb8d7d5-scratch-16-evidence/build/receipt.json",
+      "sha256": "14e3080c2955c4a5a9cc592efe457c63dc3658c660d59703615b7c584443f8cd"
+    },
+    "driver_log": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-ddb8d7d5-scratch-16-evidence/build/driver.log",
+      "sha256": "b71ec00d08ba6e9cb5882826c8f9ab0b5c97ee9510e4808f2ca1f641e1c062b2"
+    },
+    "terminal_inspect_sha256": "04593357b1e4ef8e868fd85772ef8a9fd694d9c009045a46bae674b7977b64be",
+    "container_log_sha256": "c2739580c7049afc831186ba7080573374b386d0db8575781bd94cb9b18f42ec"
+  },
+  "expert_review": {
+    "decision": "BLOCK_ANOTHER_BUILD_PENDING_CONSOLIDATED_AUTHORITY_REPAIR",
+    "additional_stale_bindings": [
+      "host-kernel/contracts/ihk-os-runtime-v1.json source, fixture and test identities",
+      "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json os_runtime identities"
+    ],
+    "production_defect_established": false
+  },
+  "resources_after": {
+    "host_free_bytes": 24218841088,
+    "scratch_free_bytes": 15731056640,
+    "memory_available_bytes": 25050640384
+  },
+  "counts": {
+    "compiled_current_candidates": 1,
+    "diagnostic_guest_passes": 5,
+    "formal_application_acceptances": 0
+  },
+  "acceptance": {
+    "build_pass": false,
+    "guest_executed": false,
+    "formal_application_acceptance": false,
+    "os_complete": false
+  }
+}

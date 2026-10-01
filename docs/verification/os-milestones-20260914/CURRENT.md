@@ -12639,3 +12639,36 @@ shutdown STOP-owner integration remains separate.  Counts remain one compiled
 current candidate, five bounded diagnostic guest passes and zero formal
 application acceptances.  The OS goal is active and incomplete; it was not
 resumed or completed during shutdown.
+
+Continuation checkpoint 311, 2026-10-01: fetched-release validate-only passed
+at `ceffb5c7...d33fae`, then the one released scratch16 attempt ran and failed
+safely before compilation.  The exact failure is
+`ihk-native-lifecycle-check: FAIL: support_sources[6] digest is stale`:
+`os_runtime.rs` is `aa9fa37f...2a4b6`, while the lifecycle closure retained
+`3a9ed512...261aa6`.  The preceding build-surface, host-audit and Rocky staging
+integrity checks passed.  Output is empty and no binary was built or promoted.
+
+Owner PID 3073276/starttime 106399431 is absent.  Container
+`b1f8b2cc...1eff56`, name `mckernel-exact-496eaf7238ea44a69e55638f9fcc9202`,
+nonce `f12de235...c2668`, is retained exited 1 with PID zero and no OOM.  The
+lease retired; the exact derived request and immutable scratch16 exclusion
+remain.  Owner receipt `3f37f94e...70db2`, driver receipt
+`14e3080c...3f8cd`, driver log `b71ec00d...c062b`, terminal inspect
+`04593357...b64be` and container log `c2739580...f42ec` preserve the attempt.
+Exact additive evidence is
+`native-exact-build-scratch16-lifecycle-failure-20261001.json`.
+
+Independent review classifies scratch16 as the bounded correction failure in
+the same stale native-Rust source-authority family as scratch15.  Another build
+is blocked pending expert-directed consolidated closure, not a renamed or
+unchanged retry.  The lifecycle JSON, runtime contract's source/fixture/test
+bindings and unsafe-FFI ledger all require coherent resealing against unchanged
+production bytes and executable negative checks.  No production Rust defect is
+established by this failure.
+
+Next finish and independently review that consolidated authority repair, then
+checkpoint it and prepare a genuinely fresh candidate/request with all old
+attempt paths immutable.  Only after source-closure checks pass end-to-end may
+one expert-released successor build run.  Counts remain one compiled current
+candidate, five bounded diagnostic guest passes and zero formal application
+acceptances; no current-window guest ran.
