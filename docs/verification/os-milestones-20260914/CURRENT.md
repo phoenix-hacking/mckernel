@@ -11434,3 +11434,49 @@ shutdown applications.  Linked current images and real current-candidate
 applications remain zero; no diagnostic or formal acceptance counter changes.
 The OS goal remains active and incomplete and is not resumed or marked complete
 by this shutdown checkpoint.
+
+Continuation checkpoint 276, 2026-10-01: scratch capacity now clears the
+preserved scratch-14 floor through a reviewed, Git-restorable selective cleanup.
+The read-only source audit was narrowed to an exact restoration inventory, not
+a quiescence or deletion claim.  Its no-follow descriptor reads, parent/leaf
+namespace revalidation, exact candidate/IHK/exclusion bindings, protected
+hardlink support and durable no-replace publication pass independent source
+review.  The generated plan
+`native-exact-retained-candidate-6fed3a10-source-evidence-plan-20261001.json`
+has SHA-256 `0176dc30...647a` and independently authenticates 2,560 ordinary
+single-link targets against commit `6fed3a10...053`: 9,098,723,581 logical and
+9,104,986,112 allocated bytes, with zero differing/preserved files.
+
+The plan-bound cleanup adapter received independent source and one-shot
+execution review after corrections for producer/consumer schema, preserved
+files through staging/final census, protected two-link evidence, final protected
+postflight and the exact repository plan path.  Fetched release commit
+`f1a20950...c0c0` admitted the terminal exportset-25 container and a live
+42-container/process/open-file/mount census.  PID 2365657 completed once with
+`STORAGE_PASS`.  Its 10,250-event journal `6c1522b6...37a3`, receipt
+`d8bc9cf2...e6e` and status `577ac439...db38` record all 2,560 states deleted;
+the quarantine is empty at identity `1831:3180176`.
+
+Independent postflight returns `PASS_POSTFLIGHT`: all targets are absent and
+each restoration row revalidates against exact Git bytes/mode; 24 protected
+objects, two anchors, 6,824 remaining source-manifest entries, the 86-entry
+metadata backup, six driver-evidence files, nested IHK overlay and exclusion
+inode 90679 remain exact.  Container `aef5164...708b` remains exited/1/PID0;
+the cleanup process and leases are absent.  Scratch free space is now
+25,875,873,792 bytes, 2,144,759,808 above the 23,731,113,984-byte preparation
+floor.  Exact additive evidence is
+`docs/verification/evidence/native-exact-scratch13-planbound-cleanup-success-20261001.json`.
+No trim, build, guest, diagnostic or formal acceptance follows from this
+storage result.
+
+Next independently review and execute the fresh scratch-14 preparation packet
+for candidate `c81aeaca5cedd893981a058444fa11a03a49a744`, preserving IHK
+`3114d9e...a1f`.  Then produce its candidate-bound tool-image receipt, fresh
+libdwarf gitlink and exportset-26 request and run the one permitted four-job
+image build.  On PASS require actual artifact/postlink/linked-text validation,
+then rebind the unchanged dynamic memory diagnostic.  The authoritative oracle
+is stdout `NATIVE_CORE PASS memory\n`, empty stderr and exit 37; regenerate the
+image/module/initramfs/manifest and execution release while reusing unchanged
+application/collector/Linux inputs only after hash authentication.  Linked
+current images and real current-candidate applications remain zero; no formal
+counter changes.
