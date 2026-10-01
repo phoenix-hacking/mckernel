@@ -13045,3 +13045,40 @@ then consume the independently authorized one-shot build release.  No new build
 or guest has run yet: counts remain one compiled current candidate, five bounded
 diagnostic guest passes, zero formal application acceptances, 6/130 production
 gates and 0/7 language gates; the OS remains incomplete.
+
+Continuation checkpoint 323, 2026-10-01: fetched release commit
+`ef777b07...1717` passes the unmocked scratch18 build-packet validate-only with
+derived-byte hash `80de5f1c...2bd7`.  The single released build invocation then
+failed before Docker or compilation because the unprivileged wrapper could not
+read `/proc/1/exe` under the host procfs policy.  The exact terminal exception is
+`AdmissionError: process identity unverifiable`, caused by `PermissionError`.
+No unchanged retry occurred.
+
+The fail-closed path preserves derived request inode 90729/hash
+`80de5f1c...2bd7`, shared lock inode 90730/hash `3aa97b06...cdc5`, and attempt
+exclusion inode 90731/hash `e39dc0fe...ca1e`.  Their owner PID/starttime
+3288332/107474009 is absent.  The build lease is absent, output/evidence roots
+remain empty at device/inodes 1831:3571962/3571963, and the privileged Docker
+census shows no container created after the attempt; the newest McKernel
+container predates it by nearly three hours.  This is a pre-owner admission
+failure, not a compiled candidate.
+
+Exact additive failure evidence is
+`native-exact-scratch18-build-admission-failure-20261001-1.json`.  It binds the
+released command, return status, traceback, wrapper/request/lock identities,
+launcher log location and postflight census.  The original packet cannot resume
+and none of the retained paths may be deleted or reused.
+
+Independent review blocks the first privileged process-census fallback because
+its Python operand parser misses clustered/attached options and its process-exit
+and output bounds are incomplete.  Expert correction is active.  Independent
+review also blocks the first recovery helper: it trusted caller assertions and
+used link/unlink instead of a pinned atomic no-replace rename.  Its bounded
+correction is active.  Next obtain independent PASS for both exact corrections,
+publish/fetch their hashes, run only the reviewed read-only censuses, then issue
+a separate one-shot recovery release that archives the attempt lock first and
+shared lock last.  A fresh resume-only packet must bind the unchanged derived
+request; the original execution packet must never be rerun.  Counts remain one
+compiled current candidate, five bounded diagnostic guest passes, zero formal
+application acceptances, 6/130 production gates and 0/7 language gates; the OS
+remains incomplete.
