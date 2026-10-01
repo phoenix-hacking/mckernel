@@ -13182,3 +13182,42 @@ state before a future recovery attempt.  Counts remain one compiled current
 candidate, five bounded diagnostic guest passes, zero formal application
 acceptances, 6/130 production gates and 0/7 language gates; the OS remains
 incomplete.
+
+Continuation checkpoint 327, 2026-10-01: the user stopped the two unrelated
+Kasper containers with restart policy `no`; their database volumes were not
+changed.  The corrected fetched wrapper then completed the reviewed privileged
+read-only census with zero processes and containers, all seven historical leases
+authenticated, CPUs `[0,2,3,4,5,6,7]`, and host/scratch/available-memory bytes
+`31,047,974,912` / `15,174,578,176` / `24,000,233,472`.  No host-wide procfs
+permission changed.  The independently released one-shot pre-owner recovery
+archived the attempt record first and shared record last, completed its durable
+hash-chained journal at state 2, and received independent production postflight
+PASS.  The unchanged request remains inode 90729/hash `80de5f1c...2bd7`.
+
+The independently reviewed resume release at fetched commit
+`7282fa453075d4f13683ed3fd70c18411cc6ecaf` admitted one fresh scratch18 build.
+It ran in container `fb3917d...9193` under the reviewed CPUs 2-5, 12-GiB,
+no-swap-growth, 512-PID, network-none profile.  Source contracts, source staging,
+configuration resolution and 54 twice-byte-identical Kconfig cases completed;
+the real `make -j2 bzImage` compile was active when scratch availability reached
+`12,899,287,040` bytes, only 14,385,152 bytes above the required 12-GiB floor.
+The coordinator sent SIGINT before crossing the guard.  The container exited 143
+without OOM and was removed after its exact terminal inspect; owner and Docker
+waiter PIDs are absent.  No bzImage, McKernel image, native module or guest result
+was produced, and the matrix remains captured-unreviewed with no acceptance
+credit.  Receipt/build evidence is losslessly compressed and independently
+matches all 285,763 regular members.  Exact evidence is
+`native-exact-scratch18-interrupted-build-20261001.json`.
+
+The lease and two ownership records remain deliberately retained pending the
+new interrupt-cleanup release.  Capacity analysis found no disposable active
+cache.  The unique 5,166,739,456-byte scratch11 output was therefore copied to
+an off-scratch 1,323,885,514-byte archive, SHA-256 `0c159fe9...a875`; full tar
+comparison passes while the source remains present.  Additive restoration
+mapping is `native-exact-scratch11-output-archive-preparation-20261001.json`.
+Next independently review/publish and consume the interrupt cleanup, obtain
+independent archive deletion PASS, reclaim only that exact scratch11 output,
+then launch a fresh scratch18 attempt with the unchanged 12-GiB floor.  Counts
+remain one compiled current candidate, five bounded diagnostic guest passes,
+zero formal application acceptances, 6/130 production gates and 0/7 language
+gates; the OS remains incomplete.

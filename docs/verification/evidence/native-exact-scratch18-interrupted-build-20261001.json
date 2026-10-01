@@ -1,0 +1,56 @@
+{
+  "schema": "mckernel.native-exact.interrupted-build.v1",
+  "recorded_at_utc": "2026-10-01T15:53:58Z",
+  "repository_commit_at_launch": "7282fa453075d4f13683ed3fd70c18411cc6ecaf",
+  "candidate_commit": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "result": "FAIL_RESOURCE_GUARD_INTERRUPT",
+  "acceptance_credit": false,
+  "reason": "Scratch free space reached 12,899,287,040 bytes, only 14,385,152 bytes above the required 12-GiB reserve, while the bzImage object tree was still growing. The coordinator sent SIGINT before crossing the floor.",
+  "execution": {
+    "wrapper_pid": 3314709,
+    "wrapper_starttime": "107861476",
+    "owner_nonce": "082111a619e44cf0a7d8b5d5863d0d46",
+    "container_id": "fb3917d1485a1572815dcb9dcb505526f1f6da72f0db26372d0678822fe09193",
+    "container_name": "mckernel-exact-9fb87f6fe3614764bebcd924b62b0fa8",
+    "container_exit": 143,
+    "container_oom_killed": false,
+    "container_finished_at": "2026-10-01T15:48:27.612383972Z",
+    "profile": "CPUs 2-5, 4 NanoCPU, 12 GiB memory/no swap growth, 512 PIDs, no network, unprivileged, read-only root",
+    "wrapper_exit": 1
+  },
+  "observed_progress": {
+    "completed_phases": [
+      "source contracts",
+      "source staging",
+      "configuration resolution"
+    ],
+    "matrix": "54 cases resolved twice byte-identically plus two negative invocations; captured-unreviewed and no acceptance credit",
+    "interrupted_phase": "make -j2 bzImage",
+    "compiled_artifacts": [],
+    "guest_runs": 0
+  },
+  "preserved_evidence": {
+    "receipt_original_sha256": "59b1b7d9a5102b8f417e23f23d081627a2b9a06875391ce79f7c9d2e25fa0c6b",
+    "receipt_gzip": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-18-evidence/receipt.json.gz",
+      "sha256": "4fda6f407d29c31a904b965297cf84599cde0b7a2224da60b671a6ac8a3eefb2",
+      "size": 8091506
+    },
+    "build_archive": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-18-evidence/build.tar.gz",
+      "sha256": "626e2ed07fd5c251be9deb10509cd20f97f39f409ef3c3f659a038bf1cea6a86",
+      "size": 32879285,
+      "verified_regular_members_against_receipt": 285763,
+      "missing_or_mismatched_members": 0
+    },
+    "terminal_inspect_sha256": "c2196dd5b766dfc604a47c850b48b537a60c7043a22662f1953f9df5166426e6",
+    "docker_log_sha256": "fc4c98bde6810a1181ddc0b5446eb48f2c6abc426704310bb443d0acaa1b8308"
+  },
+  "cleanup_state": {
+    "container_removed_after_exact_terminal_inspect": true,
+    "wrapper_and_waiter_pids_absent": true,
+    "lease_and_ownership_records_retained": true,
+    "cleanup_release_pending": true
+  },
+  "next": "Independently review and publish the exact interrupt-cleanup packet, consume it once to retire the lease and exclusions with the shared record last, reclaim independently archived inactive scratch capacity, then launch a fresh scratch18 attempt."
+}
