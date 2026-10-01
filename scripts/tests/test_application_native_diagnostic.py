@@ -247,6 +247,28 @@ class NativeDiagnosticTests(unittest.TestCase):
         for item in ("/apps/app", "/images/mckernel.img"): self.assertIn(item, plan["overlay"]["guest_destinations"])
         self.assertIn("insmod /modules/ihk-smp-x86_64.ko ihk_trampoline=524288", plan["overlay"]["init_sequence"])
 
+    def test_explicit_small_profile_has_exact_two_cpu_six_gib_topology(self):
+        value = copy.deepcopy(self.raw)
+        value["profile"] = {"name": ND.PROFILE_SMALL, "memory_mib": 6144,
+                             "vcpus": 2, "numa_nodes": 1}
+        self.manifest_path.write_text(json.dumps(value))
+        manifest = ND.load_manifest(str(self.manifest_path))
+        args = ND.build_command(manifest, self.attempt())["argv"]
+        self.assertEqual(args[args.index("-smp") + 1], "2,sockets=1,cores=2,threads=1")
+        self.assertEqual(args[args.index("-m") + 1], "6144")
+        self.assertEqual(args.count("-numa"), 1)
+        self.assertIn("memory-backend-ram,size=6G,id=ram-node0", args)
+
+    def test_profile_name_cannot_be_implicit_or_append_override(self):
+        for profile in ({"name": ND.PROFILE_SMALL, "memory_mib": 6144, "vcpus": 2, "numa_nodes": 1,
+                         "append": "console=ttyS0"},
+                        {"name": ND.PROFILE_SMALL, "memory_mib": 8192, "vcpus": 2, "numa_nodes": 1},
+                        {"name": "small", "memory_mib": 6144, "vcpus": 2, "numa_nodes": 1}):
+            value = copy.deepcopy(self.raw); value["profile"] = profile
+            self.manifest_path.write_text(json.dumps(value))
+            with self.assertRaises(ND.DiagnosticError):
+                ND.load_manifest(str(self.manifest_path))
+
     def test_payload_argv_accepts_core_memory_tail_and_retains_startup_prefix(self):
         self.raw["payload"]["argv"] = ["/bin/mcexec", "-t", "1", "0", "app", "memory"]
         self.manifest_path.write_text(json.dumps(self.raw))

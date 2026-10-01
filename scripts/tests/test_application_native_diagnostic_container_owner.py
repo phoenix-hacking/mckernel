@@ -230,6 +230,34 @@ class OwnerTests(unittest.TestCase):
         self.assertEqual(owner_record["lock"]["mode"], 0o600)
         self.assertEqual(owner_record["cgroup_profile"], {str(self.root / "cgroup"): "512"})
 
+    def test_small_guest_profile_is_forwarded_but_outer_container_stays_large_profile(self):
+        """The inner QEMU profile is manifest-selected; Docker admission is not."""
+        self.bound.side_effect = lambda path, digest: (self.diagnostic, {
+            "case_id": "x", "profile": {"name": "small", "memory_mib": 6144,
+                                             "vcpus": 2, "numa_nodes": 1},
+        })
+        self.assertEqual(self.obj.run()["status"], "PROTOCOL_PASS")
+        create = next(argv for argv, _ in self.fake.calls if argv[3] == "create")
+        self.assertIn("--cpus=4", create)
+        self.assertIn("--cpuset-cpus=2-5", create)
+        self.assertIn("--memory=12g", create)
+        self.assertIn("--memory-swap=12g", create)
+        self.assertIn("--pids-limit=512", create)
+        self.assertIn("--network=none", create)
+        # The exact manifest path/digest remains an inner-runner input.
+        self.assertIn("--manifest", create)
+
+    def test_profile_is_not_implicitly_small_when_name_is_omitted(self):
+        self.bound.side_effect = lambda path, digest: (self.diagnostic, {
+            "case_id": "implicit", "profile": {"memory_mib": 6144, "vcpus": 2,
+                                                "numa_nodes": 1},
+        })
+        # Owner forwards the manifest; native_diagnostic's validator owns the
+        # explicit profile/name check and rejects this before guest execution.
+        self.fake.start_failure = owner.OwnerError("profile name required")
+        with self.assertRaisesRegex(owner.OwnerError, "profile name required"):
+            self.obj.run()
+
     def test_outer_rejects_qemu_evidence_argv_not_equal_to_admitted_plan(self):
         def mismatch(record):
             record["qemu_evidence"]["argv"] = ["/usr/libexec/qemu-kvm", "-qmp", "unix:wrong"]

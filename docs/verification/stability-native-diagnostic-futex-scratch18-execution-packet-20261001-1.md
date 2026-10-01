@@ -106,3 +106,26 @@ postflight absence.
 This remains diagnostic-only: even a passing one-shot guest cannot promote
 formal application acceptance, general futex coverage, production readiness,
 shutdown correctness, or OS completion.
+
+## Scratch18 fixture binding (prepared, not released)
+
+The fresh fixture root is
+`/home/holden/mckernel-work/scratch/native-diagnostic-futex-scratch18-runtime-20261001-1`
+and its strict manifest is `manifest.json`, mode 0600, SHA-256
+`12ad84a4ef33b5dcbca507cf71b28fd962e4e0e3460ec2ceca037a7c347dd594`.
+The manifest artifact inventory was independently rehashed in place
+(`MANIFEST_ARTIFACTS_PASS`, 17 entries). It binds the scratch18 image
+`fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed`,
+`ihk.ko` `db003ffdbd2f939badac7753a1df08b9daf4a80544bf812e53ba1276fbd62519`,
+`ihk-smp-x86_64.ko` `268d6d3b36fd33f9650c5b7b3ae5233e606d07c992e1e0c4be64493527f84bbb`,
+and `mcctrl.ko` `4cf6196f9e93fb10b08bc4e5bf75022b0858779a6479910340941006748cd23f`.
+The unchanged futex payload, collector, derived initramfs, startup oracle,
+and profile remain source-bound to the c81 packet inputs above.
+
+Fresh one-shot nonce reserved for a later independent release:
+`4e77144119439085593c17714867debd`. Suggested private attempt parent is
+`/home/holden/mckernel-work/scratch/ndfutexs18-20261001-1`; it does not yet
+exist. No owner process, container, QEMU guest, release, or runtime evidence
+was created by this preparation. A reviewer must recheck capacities, locks,
+process absence, exact fetched source hashes and this packet/manifest hash,
+then issue a separate one-shot release before any launch.

@@ -27,6 +27,8 @@ ARTIFACTS = ("bzImage", "initramfs", "root_base", "mckernel_image", "mcexec", "p
              "native_boot", "loader", "libc")
 MODULE_NAMES = ("ihk.ko", "ihk-smp-x86_64.ko", "mcctrl.ko")
 APPEND = "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+PROFILE_RETAINED = "native-diagnostic-4vcpu-8192mib"
+PROFILE_SMALL = "native-diagnostic-2vcpu-6144mib"
 # The launcher prefix is part of the reviewed wire contract.  The tail is
 # deliberately bounded rather than frozen so the same manifest validator can
 # describe startup and the four core-mode payloads.
@@ -214,11 +216,14 @@ def _validate_manifest(obj):
     modules = [_ref(ref, "module") for ref in obj["modules"]]
     _need(tuple(Path(ref["path"]).name for ref in modules) == MODULE_NAMES, "module inventory")
     staging = _staging(obj["staging"], bound, modules)
-    _need(isinstance(obj["profile"], dict) and set(obj["profile"]) <= {"memory_mib", "vcpus", "numa_nodes", "append"}
+    _need(isinstance(obj["profile"], dict) and set(obj["profile"]) <= {"name", "memory_mib", "vcpus", "numa_nodes", "append"}
           and {"memory_mib", "vcpus", "numa_nodes"} <= set(obj["profile"]), "profile keys")
     profile = obj["profile"]
-    _need(all(type(profile[k]) is int for k in ("memory_mib", "vcpus", "numa_nodes")) and
-          profile["memory_mib"] == 8192 and profile["vcpus"] == 4 and profile["numa_nodes"] == 2, "profile differs")
+    _need(all(type(profile[k]) is int for k in ("memory_mib", "vcpus", "numa_nodes")), "profile types")
+    name = profile.get("name", PROFILE_RETAINED)
+    _need(type(name) is str and name in (PROFILE_RETAINED, PROFILE_SMALL), "profile name")
+    expected = {PROFILE_RETAINED: (8192, 4, 2), PROFILE_SMALL: (6144, 2, 1)}[name]
+    _need((profile["memory_mib"], profile["vcpus"], profile["numa_nodes"]) == expected, "profile differs")
     append = profile.get("append", APPEND)
     _need(append == APPEND, "kernel append differs from retained profile")
     _keys(obj["payload"], ("cwd", "argv", "env", "oracle", "stdout_limit_bytes", "stderr_limit_bytes"))
@@ -236,12 +241,13 @@ def _validate_manifest(obj):
     if "stderr_typed" in oracle:
         _validate_typed_stderr_oracle(oracle["stderr_typed"])
         _need(oracle["stderr_hex"] == "", "typed stderr cannot also freeze bytes")
-    for name in ("stdout", "stderr"):
-        limit = payload[name + "_limit_bytes"]
-        _need(type(limit) is int and 0 <= limit <= MAX_JSON and len(bytes.fromhex(oracle[name + "_hex"])) <= limit, "stream limit")
+    for stream_name in ("stdout", "stderr"):
+        limit = payload[stream_name + "_limit_bytes"]
+        _need(type(limit) is int and 0 <= limit <= MAX_JSON and len(bytes.fromhex(oracle[stream_name + "_hex"])) <= limit, "stream limit")
     return {"schema_version": 1, "kind": obj["kind"], "case_id": obj["case_id"], "artifacts": bound,
             "modules": modules, "staging": staging,
-            "profile": {"memory_mib": 8192, "vcpus": 4, "numa_nodes": 2, "append": append},
+            "profile": {"name": name, "memory_mib": expected[0], "vcpus": expected[1],
+                        "numa_nodes": expected[2], "append": append},
             "payload": dict(payload)}
 
 
@@ -449,12 +455,18 @@ def expected_qemu_argv(manifest, attempt):
     manifest = _validate_manifest(_thaw(_freeze(manifest)))
     a = manifest["artifacts"]
     qmp = str(attempt / "qmp.sock")
+    if manifest["profile"]["name"] == PROFILE_SMALL:
+        profile_args = ["-smp", "2,sockets=1,cores=2,threads=1", "-m", "6144",
+                        "-object", "memory-backend-ram,size=6G,id=ram-node0",
+                        "-numa", "node,nodeid=0,cpus=0-1,memdev=ram-node0"]
+    else:
+        profile_args = ["-smp", "4,sockets=2,cores=2,threads=1", "-m", "8192",
+                        "-object", "memory-backend-ram,size=4G,id=ram-node0",
+                        "-object", "memory-backend-ram,size=4G,id=ram-node1",
+                        "-numa", "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+                        "-numa", "node,nodeid=1,cpus=2-3,memdev=ram-node1"]
     return [QEMU, "-machine", "q35", "-accel", "tcg,thread=multi", "-cpu", "max,la57=off",
-            "-smp", "4,sockets=2,cores=2,threads=1", "-m", "8192",
-            "-object", "memory-backend-ram,size=4G,id=ram-node0",
-            "-object", "memory-backend-ram,size=4G,id=ram-node1",
-            "-numa", "node,nodeid=0,cpus=0-1,memdev=ram-node0",
-            "-numa", "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+            *profile_args,
             "-nic", "none", "-display", "none", "-no-reboot", "-no-shutdown", "-S", "-monitor", "none",
             "-qmp", "unix:" + qmp + ",server=on,wait=off", "-serial", "file:" + str(attempt / "serial.log"),
             "-debugcon", "file:" + str(attempt / "debugcon.log"), "-global", "isa-debugcon.iobase=0xe9",
