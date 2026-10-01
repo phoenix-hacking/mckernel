@@ -401,54 +401,150 @@ def pinned_references(*pairs):
     return refs
 
 
-def check_lsof(lsof, owned):
-    require(not lsof['stderr'], 'open-references-or-incomplete-census')
-    if not lsof['stdout']:
-        require(lsof['returncode'] == 1, 'open-references-or-incomplete-census')
-        return
-    require(lsof['returncode'] == 0 and owned, 'open-references-or-incomplete-census')
-    # -F0pfaDint supplies only PID and these six exact file fields.
-    pid, current, records = None, None, []
-    for token in lsof['stdout'].split('\0'):
-        token = token.lstrip('\n')
-        if not token:
-            continue
-        key, value = token[0], token[1:]
-        require('\n' not in value, 'lsof-fields')
-        if key == 'p':
-            if current is not None:
-                records.append((pid, current))
-                current = None
-            require(value.isdigit(), 'lsof-pid')
-            pid = int(value)
-        elif key == 'f':
-            if current is not None:
-                records.append((pid, current))
-            require(pid is not None and value.isdigit(), 'lsof-fd')
-            current = {'f': value}
-        else:
-            require(current is not None and key in ('a', 'D', 'i', 'n', 't') and
-                    key not in current, 'lsof-fields')
-            current[key] = value
-    if current is not None:
-        records.append((pid, current))
+def check_lsof(lsof, owned, root, scratch):
+    """Validate a complete filesystem census, including paths outside candidate.
+
+    ``+D`` is deliberately not used: lsof can return rc=1 for an otherwise
+    successful recursive directory walk (notably on FUSE).  A mount-scoped
+    census must be rc=0 and contain complete NUL records.  Every name is
+    resolved without following symlinks and is bound to the emitted dev/ino.
+    """
+    require(lsof['returncode'] == 0 and not lsof['stderr'] and lsof['stdout'],
+            'open-references-or-incomplete-census')
+    # lsof 4.93.2's ``-F0pfaDint`` format is not merely NUL separated.  A
+    # process set is ``pPID\\0\\n`` followed by one or more complete file
+    # sets, each ``fFD\\0aACCESS\\0tTYPE\\0DDEV\\0iINO\\0nPATH\\0\\n``.
+    # Do not normalize the newlines: doing so used to accept orphan PIDs,
+    # trailing garbage and records spliced into a different process set.
+    data = lsof['stdout']
+    pos, records, process_ids = 0, [], set()
+
+    def field(tag):
+        nonlocal pos
+        require(pos < len(data) and data[pos] == tag, 'lsof-fields')
+        end = data.find('\0', pos + 1)
+        require(end > pos + 1, 'lsof-fields')
+        value = data[pos + 1:end]
+        require('\n' not in value and '\r' not in value, 'lsof-fields')
+        pos = end + 1
+        return value
+
+    while pos < len(data):
+        pid_text = field('p')
+        require(pid_text.isdigit() and int(pid_text) > 0, 'lsof-pid')
+        pid = int(pid_text)
+        require(pid not in process_ids and pos < len(data) and data[pos] == '\n',
+                'lsof-fields')
+        process_ids.add(pid)
+        pos += 1
+        file_count = 0
+        while pos < len(data) and data[pos] == 'f':
+            fd_text = field('f')
+            access = field('a')
+            kind = field('t')
+            device = field('D')
+            inode = field('i')
+            name = field('n')
+            require(fd_text.isdigit() and access in {'r', 'w', 'u', '-'} and
+                    kind in {'DIR', 'REG', 'CHR', 'BLK', 'FIFO', 'LINK', 'SOCK'} and
+                    inode.isdigit() and re.fullmatch(r'(0x)?[0-9a-fA-F]+', device),
+                    'lsof-fields')
+            require(pos < len(data) and data[pos] == '\n', 'lsof-fields')
+            pos += 1
+            records.append((pid, {'f': fd_text, 'a': access, 't': kind,
+                                  'D': device, 'i': inode, 'n': name}))
+            file_count += 1
+        require(file_count > 0, 'lsof-fields')
+        # The only legal next byte begins a fresh process set.  In particular
+        # this rejects extra blank lines and a final orphan separator.
+        require(pos == len(data) or data[pos] == 'p', 'lsof-fields')
+    root_stat = os.stat(root, follow_symlinks=False)
+    candidate_ids = {(root_stat.st_dev, root_stat.st_ino)}
+    # Bind every currently present candidate/quarantine object by identity so
+    # an outside hard-link is not mistaken for an unrelated scratch record.
+    pending = [root]
+    while pending:
+        current_path = pending.pop()
+        try:
+            entries = list(os.scandir(current_path))
+        except OSError:
+            raise Refusal('lsof-path')
+        for entry in entries:
+            try:
+                entry_stat = entry.stat(follow_symlinks=False)
+            except OSError:
+                raise Refusal('lsof-path')
+            candidate_ids.add((entry_stat.st_dev, entry_stat.st_ino))
+            if stat.S_ISDIR(entry_stat.st_mode):
+                pending.append(entry.path)
+    candidate_ids.update((r['dev'], r['ino']) for r in owned if inside(r['path'], root))
     require(records, 'lsof-empty-records')
+    expected_by_key = {}
+    expected_tuples = set()
+    for witness in owned:
+        require(set(witness) == {'pid', 'fd', 'dev', 'ino', 'access', 'path'} and
+                type(witness['pid']) is int and witness['pid'] > 0 and
+                type(witness['fd']) is int and witness['fd'] >= 0 and
+                witness['access'] == 'r' and canonical(witness['path']) == witness['path'],
+                'self-reference-binding')
+        try:
+            witness_stat = os.stat(witness['path'], follow_symlinks=False)
+        except OSError:
+            raise Refusal('self-reference-binding')
+        require(stat.S_ISDIR(witness_stat.st_mode) and
+                (witness_stat.st_dev, witness_stat.st_ino) ==
+                (witness['dev'], witness['ino']), 'self-reference-binding')
+        witness_key = (witness['pid'], witness['fd'])
+        bound = (witness['pid'], witness['fd'], witness['access'], 'DIR',
+                 witness['dev'], witness['ino'], witness['path'])
+        # ``owned`` is an additional pin held by the transaction.  Test and
+        # collector code may report that very descriptor again in witnesses;
+        # it is one declaration, not a second descriptor that can be omitted.
+        if witness_key in expected_by_key:
+            require(expected_by_key[witness_key] == bound, 'self-reference-binding')
+            continue
+        require(bound not in expected_tuples, 'self-reference-binding')
+        expected_by_key[witness_key] = bound
+        expected_tuples.add(bound)
     seen = set()
+    seen_owned = set()
     for pid, row in records:
-        require(set(row) == {'f', 'a', 'D', 'i', 'n', 't'}, 'lsof-fields')
-        require(row['i'].isdigit() and re.fullmatch(r'(0x)?[0-9a-fA-F]+', row['D']),
-                'lsof-device-inode')
         key = (pid, int(row['f']))
         require(key not in seen, 'lsof-duplicate')
         seen.add(key)
-        match = [r for r in owned if (r['pid'], r['fd']) == key]
-        require(len(match) == 1 and pid == os.getpid(), 'open-references-or-incomplete-census')
-        expected = match[0]
-        require(row['t'] == 'DIR' and row['a'] == expected['access'] == 'r' and
-                int(row['D'], 16) == expected['dev'] and int(row['i']) == expected['ino'] and
-                row['n'] == expected['path'], 'self-reference-binding')
-        current = pinned_references((int(row['f']), row['n']))[0]
-        require(current == expected, 'self-reference-drift')
+        require(row['n'].startswith('/') and canonical(row['n']) == row['n'],
+                'lsof-path')
+        try:
+            target = Path(row['n'])
+            with directory(str(target.parent)) as parent:
+                st = os.stat(target.name, dir_fd=parent, follow_symlinks=False)
+        except (OSError, ValueError):
+            raise Refusal('lsof-path')
+        require(not stat.S_ISLNK(st.st_mode), 'lsof-path-alias')
+        require((st.st_dev, st.st_ino) == (int(row['D'], 16), int(row['i'])),
+                'lsof-device-inode')
+        kinds = ((stat.S_ISDIR(st.st_mode), 'DIR'), (stat.S_ISREG(st.st_mode), 'REG'),
+                 (stat.S_ISCHR(st.st_mode), 'CHR'), (stat.S_ISBLK(st.st_mode), 'BLK'),
+                 (stat.S_ISFIFO(st.st_mode), 'FIFO'), (stat.S_ISLNK(st.st_mode), 'LINK'),
+                 (stat.S_ISSOCK(st.st_mode), 'SOCK'))
+        require(any(ok and row['t'] == kind for ok, kind in kinds), 'lsof-fields')
+        in_candidate = inside(row['n'], root)
+        observed = (pid, int(row['f']), row['a'], row['t'], st.st_dev, st.st_ino, row['n'])
+        if not in_candidate:
+            require((st.st_dev, st.st_ino) not in candidate_ids, 'lsof-path-alias')
+        if in_candidate:
+            require(observed in expected_tuples, 'open-references-or-incomplete-census')
+        if key in expected_by_key:
+            require(observed == expected_by_key[key], 'self-reference-drift')
+            seen_owned.add(observed)
+        elif observed in expected_tuples:
+            # A matching pathname with a substituted descriptor or PID must
+            # not satisfy a different declared witness.
+            raise Refusal('self-reference-drift')
+        # The candidate is normally below the scratch mount; membership in
+        # the mount is therefore not itself an alias.  Identity checks above
+        # are what reject an outside hard-link/symlink alias.
+    require(seen_owned == expected_tuples, 'open-references-or-incomplete-census')
 
 
 def mount_set(mounts):
@@ -490,7 +586,25 @@ def validate_container_proofs():
 
 
 def check_census(census, root, owned=()):
-    check_lsof(census['lsof'], owned)
+    scratch = canonical(census.get('scratch_mount', SCRATCH))
+    require(scratch == canonical(SCRATCH), 'scratch-mount')
+    witnesses = census.get('witnesses', [])
+    require(any(w.get('path') == scratch for w in witnesses) and
+            any(w.get('path') == root for w in tuple(owned) + tuple(witnesses)),
+            'scratch-witness-missing')
+    require(all(set(w) == {'pid', 'fd', 'dev', 'ino', 'access', 'path'} and
+                type(w['pid']) is int and w['pid'] > 0 and type(w['fd']) is int and w['fd'] >= 0 and
+                w['access'] == 'r' and canonical(w['path']) == w['path']
+                for w in witnesses), 'scratch-witness-missing')
+    for witness in witnesses:
+        path = canonical(witness['path'])
+        try:
+            s = os.stat(path, follow_symlinks=False)
+        except OSError:
+            raise Refusal('scratch-witness-missing')
+        require(stat.S_ISDIR(s.st_mode) and (s.st_dev, s.st_ino) ==
+                (witness['dev'], witness['ino']), 'scratch-witness-missing')
+    check_lsof(census['lsof'], tuple(owned) + tuple(witnesses), root, scratch)
     validate_container_proofs()
     mounts = []
     for line in census['mountinfo'].splitlines():
@@ -506,6 +620,12 @@ def check_census(census, root, owned=()):
     with directory(root) as fd:
         device = os.fstat(fd).st_dev
     require(main[0] == str(os.major(device)) + ':' + str(os.minor(device)), 'mount-device')
+    with directory(scratch) as fd:
+        scratch_device = os.fstat(fd).st_dev
+    scratch_mounts = [m for m in mounts if m[2] == scratch]
+    require(len(scratch_mounts) == 1 and
+            scratch_mounts[0][0] == str(os.major(scratch_device)) + ':' +
+            str(os.minor(scratch_device)), 'scratch-mount')
     require(not any(inside(m[2], root) for m in mounts), 'mount-descendant')
     require(not any(m != main and m[0] == main[0] for m in mounts), 'mount-alias')
     require(census['findmnt']['returncode'] == 0 and not census['findmnt']['stderr'],
@@ -546,6 +666,12 @@ def collect_census(root):
         require(all(re.fullmatch('[a-f0-9]{64}', r) for r in rows), 'docker-ps-id')
         return sorted(rows), result
     before, ps_before = ids()
+    mount_probe = run(['findmnt', '-T', SCRATCH, '-o', 'TARGET', '-n'])
+    require(mount_probe['returncode'] == 0 and not mount_probe['stderr'], 'scratch-mount')
+    scratch = canonical(mount_probe['stdout'].strip())
+    with directory(scratch) as scratch_fd, directory(root) as root_fd:
+        witnesses = pinned_references((scratch_fd, scratch), (root_fd, root))
+        lsof = run(['sudo', '-A', 'lsof', '-nP', '-w', '-F0pfaDint', '+f', '--', scratch])
     inspections = {}
     commands = []
     for cid in before:
@@ -563,7 +689,7 @@ def collect_census(root):
         commands.append(result['argv'])
     after, ps_after = ids()
     census = {'time': datetime.datetime.now(datetime.timezone.utc).isoformat(),
-              'lsof': run(['sudo', '-A', 'lsof', '-nP', '-w', '-F0pfaDint', '+D', root]),
+              'scratch_mount': scratch, 'witnesses': witnesses, 'lsof': lsof,
               'findmnt': run(['findmnt', '-T', root, '-o', 'SOURCE,FSTYPE,MAJ:MIN,TARGET']),
               'mountinfo': Path('/proc/self/mountinfo').read_text(),
               'ids': before, 'ids_after': after, 'inspect': inspections,

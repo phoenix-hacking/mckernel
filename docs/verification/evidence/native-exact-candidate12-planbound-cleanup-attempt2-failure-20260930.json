@@ -41,7 +41,7 @@
     "reviewed_correction": "Use a filesystem-scoped lsof +f -- exact-scratch census with a pinned scratch witness, strict full NUL parsing, canonical path plus device/inode membership checks, no-follow validation for outside-root records, rejection of deleted/unknown/relative/escaped or aliased paths, and mandatory owned witnesses. Preserve the existing mount-device/no-alias and six-container checks."
   },
   "next_actions": [
-    "Author and independently review a separate exact rename-back recovery packet and execution release for all 2507 staged files.",
+    "Extend the independently reviewed cleanup transaction with an exact staged-recovery mode that reuses its authenticated plan, release, mutex, census, directory-descriptor, rename, reconciliation and durable publication primitives; do not retry the rejected standalone recovery designs.",
     "After verified restoration, implement and regression-test the reviewed filesystem-scoped observer correction; do not retry attempt 2.",
     "Checkpoint and fetch-verify a fresh cleanup release before any new privileged cleanup attempt.",
     "Only after cleanup succeeds, trim and remeasure capacity, release scratch-13 preparation, and build the smallest current candidate."

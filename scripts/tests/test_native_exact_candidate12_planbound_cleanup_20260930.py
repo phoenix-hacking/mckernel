@@ -5,6 +5,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import shutil
 import stat
 import tempfile
 import unittest
@@ -141,6 +142,34 @@ class Fixture(unittest.TestCase):
     def census(self):
         dev = self.root.stat().st_dev
         major_minor = str(os.major(dev)) + ':' + str(os.minor(dev))
+        scratch = str(self.base)
+        root_stat = self.root.stat()
+        scratch_stat = self.base.stat()
+        pid = os.getpid()
+        witnesses = [
+            {'pid': pid, 'fd': 100, 'dev': scratch_stat.st_dev, 'ino': scratch_stat.st_ino,
+             'access': 'r', 'path': scratch},
+            {'pid': pid, 'fd': 101, 'dev': root_stat.st_dev, 'ino': root_stat.st_ino,
+             'access': 'r', 'path': str(self.root)},
+        ]
+        quarantine = self.root / '.planbound-cleanup-test'
+        if quarantine.is_dir():
+            qstat = quarantine.stat()
+            witnesses.append({'pid': pid, 'fd': 102, 'dev': qstat.st_dev, 'ino': qstat.st_ino,
+                              'access': 'r', 'path': str(quarantine)})
+        for witness in witnesses:
+            for fd_path in Path('/proc/self/fd').iterdir():
+                try:
+                    if os.path.realpath(fd_path) == witness['path']:
+                        witness['fd'] = int(fd_path.name)
+                        break
+                except (OSError, ValueError):
+                    pass
+        # lsof 4.93.2 emits one ``p`` set followed by newline-framed ``f``
+        # records, even when every descriptor belongs to the same process.
+        lsof = f"p{pid}\0\n" + ''.join(
+            f"f{w['fd']}\0a{w['access']}\0tDIR\0D{hex(w['dev'])}\0"
+            f"i{w['ino']}\0n{w['path']}\0\n" for w in witnesses)
         objects = {}
         for cid, expected in self.container_bindings.items():
             objects[cid] = {'Id': cid, 'Name': expected['Name'],
@@ -150,7 +179,8 @@ class Fixture(unittest.TestCase):
                            'Config': {'Labels': {'mckernel.owner': expected['owner_nonce']}},
                            'HostConfig': {'RestartPolicy': {'Name': 'no', 'MaximumRetryCount': 0},
                                           'AutoRemove': False}}
-        return {'lsof': {'returncode': 1, 'stdout': '', 'stderr': ''},
+        return {'lsof': {'returncode': 0, 'stdout': lsof, 'stderr': ''},
+                'scratch_mount': scratch, 'witnesses': witnesses,
                 'findmnt': {'returncode': 0, 'stdout': 'fixture', 'stderr': ''},
                 'mountinfo': '1 0 ' + major_minor + ' / ' + str(self.base) + ' rw - ext4 /dev/test rw\n',
                 'ids': sorted(objects), 'ids_after': sorted(objects), 'inspect': objects}
@@ -257,7 +287,131 @@ class Fixture(unittest.TestCase):
         m.check_census(c, str(self.root))
         c['lsof']['returncode'] = 0
         c['lsof']['stdout'] = 'PID FILE\n'
-        with self.assertRaisesRegex(m.Refusal, 'open-reference'): m.check_census(c, str(self.root))
+        with self.assertRaisesRegex(m.Refusal, 'lsof-fields'): m.check_census(c, str(self.root))
+
+    def test_filesystem_census_rejects_rc1_plus_d_and_identity_alias(self):
+        c = self.census()
+        c['lsof'] = {'returncode': 1, 'stdout': '', 'stderr': ''}
+        with self.assertRaisesRegex(m.Refusal, 'open-references-or-incomplete-census'):
+            m.check_census(c, str(self.root))
+        alias = self.base / 'root-alias'
+        alias.symlink_to(self.root, target_is_directory=True)
+        st = alias.resolve().stat()
+        pid = os.getpid()
+        c['lsof'] = {'returncode': 0, 'stdout':
+                     f'p{pid}\0\nf9\0ar\0tDIR\0D{hex(st.st_dev)}\0i{st.st_ino}\0n{alias}\0\n',
+                     'stderr': ''}
+        with self.assertRaisesRegex(m.Refusal, 'lsof-path-alias'):
+            m.check_census(c, str(self.root))
+
+    def test_filesystem_census_accepts_outside_non_alias_identity(self):
+        c = self.census()
+        outside = self.base / 'outside'
+        outside.mkdir()
+        st = outside.stat()
+        pid = os.getpid()
+        c['lsof']['stdout'] += (
+            f'f10\0ar\0tDIR\0D{hex(st.st_dev)}\0i{st.st_ino}\0n{outside}\0\n')
+        m.check_census(c, str(self.root))
+
+    def test_filesystem_census_rejects_strict_record_variants(self):
+        c = self.census()
+        outside = self.base / 'strict-outside'
+        outside.mkdir()
+        st = outside.stat()
+        pid = os.getpid()
+        good = (f'p{pid}\0\nf10\0ar\0tDIR\0D{hex(st.st_dev)}\0i{st.st_ino}\0n{outside}\0\n')
+        variants = [
+            good[:-1],  # missing final NUL terminator
+            f'p{pid}\0\n',  # orphan PID record
+            good.replace('tDIR', 'tunknown'),
+            good.replace('ar\0', 'arrw-\0'),
+        ]
+        regular = self.base / 'strict-regular'
+        regular.write_bytes(b'x')
+        rs = regular.stat()
+        variants.append(f'p{pid}\0f10\0ar\0tDIR\0D{hex(rs.st_dev)}\0i{rs.st_ino}\0n{regular}\0')
+        alias = self.base / 'strict-alias'
+        alias.mkdir()
+        nested = alias / 'nested'
+        nested.write_bytes(b'x')
+        link = self.base / 'strict-link'
+        link.symlink_to(alias, target_is_directory=True)
+        ns = nested.stat()
+        variants.append(f'p{pid}\0f10\0ar\0tREG\0D{hex(ns.st_dev)}\0i{ns.st_ino}\0n{link}/nested\0')
+        for payload in variants:
+            c['lsof'] = {'returncode': 0, 'stdout': payload, 'stderr': ''}
+            with self.subTest(payload=payload), self.assertRaises(m.Refusal):
+                m.check_census(c, str(self.root))
+
+    def test_lsof_complete_census_rejects_separator_and_witness_substitutions(self):
+        data = self.census()['lsof']['stdout']
+        for label, payload in {
+                'missing-record-newline': data[:-1],
+                'appended-nul': data + '\0',
+                'appended-newline': data + '\n',
+                'orphan-process': data + 'p999999\0\n',
+                'unknown-access': data.replace('ar\0', 'ax\0', 1),
+                'unknown-type': data.replace('tDIR\0', 'tUNKNOWN\0', 1),
+        }.items():
+            c = self.census()
+            c['lsof']['stdout'] = payload
+            with self.subTest(label=label), self.assertRaises(m.Refusal):
+                m.check_census(c, str(self.root))
+
+        c = self.census()
+        root_witness = next(w for w in c['witnesses'] if w['path'] == str(self.root))
+        scratch_witness = next(w for w in c['witnesses'] if w['path'] == c['scratch_mount'])
+        # A different PID/FD may not borrow the root pathname witness.
+        c['lsof']['stdout'] += (
+            f'p999999\0\nf9\0ar\0tDIR\0D{hex(root_witness["dev"])}\0'
+            f'i{root_witness["ino"]}\0n{root_witness["path"]}\0\n')
+        with self.assertRaisesRegex(m.Refusal, 'open-references-or-incomplete-census'):
+            m.check_census(c, str(self.root))
+
+        c = self.census()
+        c['lsof']['stdout'] = c['lsof']['stdout'].replace(
+            f'f{root_witness["fd"]}\0', f'f{scratch_witness["fd"]}\0', 1)
+        with self.assertRaises(m.Refusal):
+            m.check_census(c, str(self.root))
+
+        c = self.census()
+        second = dict(root_witness, fd=999)
+        c['witnesses'].append(second)
+        # Same pathname, distinct descriptor: both witnesses are required.
+        with self.assertRaisesRegex(m.Refusal, 'open-references-or-incomplete-census'):
+            m.check_census(c, str(self.root))
+        c['lsof']['stdout'] += (
+            f'f{second["fd"]}\0ar\0tDIR\0D{hex(second["dev"])}\0'
+            f'i{second["ino"]}\0n{second["path"]}\0\n')
+        m.check_census(c, str(self.root))
+
+    @unittest.skipUnless(shutil.which('lsof'), 'lsof unavailable')
+    def test_real_unprivileged_lsof_493_nul_newline_grammar(self):
+        # This deliberately bypasses Docker/root census collection.  It binds
+        # a genuine descriptor, captures lsof 4.93.2 output, and then mutates
+        # the complete valid record rather than testing a hand-written fragment.
+        with m.directory(str(self.base)) as scratch_fd, m.directory(str(self.root)) as root_fd:
+            owned = m.pinned_references((scratch_fd, str(self.base)), (root_fd, str(self.root)))
+            captured = m.run(['lsof', '-nP', '-w', '-F0pfaDint', '--', str(self.root)])
+            self.assertEqual(captured['returncode'], 0, captured['stderr'])
+            self.assertTrue(captured['stdout'].startswith(f'p{os.getpid()}\0\nf{root_fd}\0'))
+            self.assertIn('\0\n', captured['stdout'])
+            # The command scoped to root observes the root descriptor only;
+            # scratch is deliberately not declared to this direct parser test.
+            root_only = (owned[1],)
+            m.check_lsof(captured, root_only, str(self.root), str(self.base))
+            for label, payload in {
+                    'extra-nul': captured['stdout'] + '\0',
+                    'extra-newline': captured['stdout'] + '\n',
+                    'orphan-process': captured['stdout'] + 'p999999\0\n',
+                    'access': captured['stdout'].replace('ar\0', 'aw\0', 1),
+                    'type': captured['stdout'].replace('tDIR\0', 'tREG\0', 1),
+                    'path': captured['stdout'].replace(f'n{self.root}\0', f'n{self.base}\0', 1),
+            }.items():
+                bad = dict(captured, stdout=payload)
+                with self.subTest(label=label), self.assertRaises(m.Refusal):
+                    m.check_lsof(bad, root_only, str(self.root), str(self.base))
 
     def test_mount_descendant_and_alias(self):
         dev = self.root.stat().st_dev
@@ -618,8 +772,11 @@ class Fixture(unittest.TestCase):
         with m.directory(str(self.root)) as fd:
             owned = m.pinned_references((fd, str(self.root)))
             r = owned[0]
-            data = (f"p{r['pid']}\0f{fd}\0ar\0tDIR\0D{hex(r['dev'])}\0i{r['ino']}\0n{self.root}\0\n")
             c = self.census()
+            data = (f"p{r['pid']}\0\nf{fd}\0ar\0tDIR\0D{hex(r['dev'])}\0i{r['ino']}\0n{self.root}\0\n")
+            sw = next(w for w in c['witnesses'] if w['path'] == c['scratch_mount'])
+            data += (f"f{sw['fd']}\0ar\0tDIR\0D{hex(sw['dev'])}\0"
+                     f"i{sw['ino']}\0n{sw['path']}\0\n")
             c['lsof'] = {'returncode': 0, 'stdout': data, 'stderr': ''}
             m.check_census(c, str(self.root), owned)
             for old, new in [(f"p{r['pid']}", 'p999999'), (f'f{fd}', f'f{fd + 500}'),
@@ -630,7 +787,8 @@ class Fixture(unittest.TestCase):
                 with self.subTest(field=old), self.assertRaises(m.Refusal):
                     m.check_census(c, str(self.root), owned)
             c['lsof']['stdout'] = data + data
-            with self.assertRaisesRegex(m.Refusal, 'duplicate'): m.check_census(c, str(self.root), owned)
+            with self.assertRaisesRegex(m.Refusal, 'lsof-fields'):
+                m.check_census(c, str(self.root), owned)
 
     def test_host_container_required_and_terminal(self):
         c = self.census()
@@ -833,7 +991,11 @@ class Fixture(unittest.TestCase):
         c = self.census()
         for obj in c['inspect'].values(): obj['Mounts'].reverse()
         m.check_census(c, str(self.root))
-        result, count = self.execute_fixture(lambda root: copy.deepcopy(c))
+        def collector(root):
+            value = self.census()
+            for obj in value['inspect'].values(): obj['Mounts'].reverse()
+            return value
+        result, count = self.execute_fixture(collector)
         self.assertEqual(result['status'], 'PASS')
         self.assertEqual(count, 3)
         self.assertEqual(result['states'], ['deleted'] * 3)
@@ -928,9 +1090,9 @@ class Fixture(unittest.TestCase):
                 obj['Config']['Labels']['unrelated'] = 'fixture-unrelated-label'
                 result['stdout'] = json.dumps([obj])
             elif 'lsof' in argv:
-                result['returncode'] = 1
+                result['stdout'] = c['lsof']['stdout']
             elif argv[0] == 'findmnt':
-                result['stdout'] = 'fixture mount'
+                result['stdout'] = str(self.base) + '\n'
             else:
                 self.fail('unexpected census command')
             return result

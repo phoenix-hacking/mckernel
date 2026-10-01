@@ -1,0 +1,29 @@
+{
+  "schema": "mckernel.candidate12-filesystem-observer-source-failures.v1",
+  "scope": "source and disposable observer tests only",
+  "live_cleanup": false,
+  "attempt2_observation": {"lsof_returncode": 1, "stderr": "", "records": 2, "journal_sha256": "4749ea4d1b97bc99959c1ec75c0f329682f834d075738264a44efde33ce90d02"},
+  "candidate_1": {
+    "tool_sha256": "cc297635f9360869731dbab9ab5947b7415e40cb04d77cddd2173907fb41b1eb",
+    "tests_sha256": "f6c1d048a743ff92175c524c2f8c478a265c1fb03554cc3372302a3e1e4b56",
+    "supplied_tests": {"passed": 71},
+    "independent_result": "BLOCK",
+    "reproduced_failures": ["missing scratch/root/quarantine witnesses accepted", "unterminated final field and orphan PID accepted", "unknown type and invalid access accepted", "intermediate symlink alias accepted", "emitted type not bound to object", "findmnt enclosing mount accepted"]
+  },
+  "bounded_correction_1": {
+    "tool_sha256": "6038c1307ec601a2cad61ccda542c5a73f5fa22328d4559a7beccf2d637dd189",
+    "tests_sha256": "36811a6ffc9712a833ce797c7fd16d90c32fab35ef11b1e582ed5506c3534fb8",
+    "supplied_tests": {"passed": 72},
+    "independent_result": "BLOCK",
+    "reproduced_failures": ["real lsof 4.93.2 NUL-newline framing rejected", "orphan PID and extra separators accepted", "unrelated process candidate-root descriptor accepted", "one witness substituted for another at the same path", "scratch witness write access accepted"]
+  },
+  "expert_correction": {
+    "tool_sha256": "09f6d7a1df354c4952d85aa6ba474b08ae8971572687a8d6ebcfb47f179e1b28",
+    "tests_sha256": "a8abeb1fd695737f8ab2bef956a9db719d2536125ec79ec31348a2938a6f4073",
+    "tests": {"passed": 74, "skipped": 0},
+    "independent_result": "PASS_SOURCE_INTEGRATION",
+    "verified": ["actual local lsof 4.93.2 NUL-newline framing", "complete process/file state grammar", "each distinct witness exactly once", "exact PID/FD/access/type/path/device/inode binding", "component no-follow resolution", "outside hard-link rejection", "exact scratch mount and device"]
+  },
+  "convergence_action": "Observer source converged after expert repair. Commit and fetch-verify it, then use it in the new staged-recovery integration and a fresh cleanup release; no privileged execution is authorized by this source result.",
+  "acceptance_effect": "none"
+}

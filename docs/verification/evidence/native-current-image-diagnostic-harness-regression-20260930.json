@@ -1,0 +1,24 @@
+{
+  "schema": "mckernel.native-current-image-diagnostic-harness-regression.v1",
+  "recorded_at": "2026-09-30T17:00:00-07:00",
+  "command": ["python3", "-m", "unittest", "-v", "scripts.tests.test_application_native_diagnostic", "scripts.tests.test_application_native_diagnostic_runner", "scripts.tests.test_application_native_diagnostic_backend", "scripts.tests.test_application_native_diagnostic_stager", "scripts.tests.test_application_native_shutdown_observer"],
+  "result": {"status": "PASS", "tests": 135, "elapsed_seconds": 10.929, "exit_status": 0},
+  "bindings": {
+    "scripts/application-tests/native_diagnostic.py": "65a2b9ee037fdf21255a3500bbac408bd9a0916467375c252d04c6356ca50043",
+    "scripts/application-tests/native_diagnostic_runner.py": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+    "scripts/application-tests/native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+    "scripts/application-tests/native_diagnostic_stager.py": "dee5497c4045996282b1c279dac8396cdc55932b5ef602de4a547ad024f59560",
+    "scripts/application-tests/native_shutdown_observer.py": "4ecc80eb221c55d3fbe66f02ea9a5052205b7741a921f35757712ef7ff7ffcf4",
+    "scripts/tests/test_application_native_diagnostic.py": "5189d6c4f702dbd69fb96932ca20a11c6a0cf393236676137a29e87d6a91b4c0",
+    "scripts/tests/test_application_native_diagnostic_runner.py": "e57e5c99d1f1f764e6ba4471c12c896854a5c02c1b4bc071551672c5289f47f7",
+    "scripts/tests/test_application_native_diagnostic_backend.py": "1014639170fd5a128706152fa8a250439b8b7fd42c1adc5b18b14d953372e4b9",
+    "scripts/tests/test_application_native_diagnostic_stager.py": "39e3e7cd211df7dc2cc03bfcccc046dab5d05841c1dad9fbe7218198311ddf26",
+    "scripts/tests/test_application_native_shutdown_observer.py": "d0578157af6cf4d2fd8dab1ff5dfa0903b56649d0dc87e7197e1199b568bc5d4"
+  },
+  "verified_behavior": "The diagnostic owner/runner/backend/stager and shutdown observer retain fail-closed artifact, process-identity, QMP, output, teardown and diagnostic-only scope checks under their disposable regressions.",
+  "limitations": [
+    "No QEMU, McKernel guest, module, mcexec, or application executed.",
+    "This is harness regression evidence only and grants no diagnostic or formal application acceptance."
+  ],
+  "next": "Bind the actual fresh current image and retained runtime tuple in a separately reviewed guest release, then capture real startup bytes, exit 37, kernel log and teardown."
+}

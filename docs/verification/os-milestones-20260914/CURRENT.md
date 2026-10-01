@@ -10788,3 +10788,44 @@ At shutdown, the preserved launcher identities are PIDs 1442141/1442142/
 10:46:42 PDT.  There is no build, QEMU, mcexec or guest process.  All child
 lanes are quiesced.  The OS goal remains incomplete and is paused by the
 launcher; it is neither resumed nor marked complete here.
+
+Continuation checkpoint 259, 2026-09-30: the candidate-12 filesystem-wide
+observer correction now independently passes source integration after the
+required expert escalation.  Exact cleanup tool/test hashes are
+`09f6d7a1...e1b28` and `a8abeb1f...f4073`; all 74 tests pass with no skips,
+including a real unprivileged lsof 4.93.2 capture and 24 independent framing,
+witness, PID/FD, access/type, alias and mount adversarial cases.  The exact
+six-container, lease, release and transaction protections remain in place.
+This is source evidence only: no privileged census or cleanup ran.
+
+Three standalone rename-back recovery designs remain rejected.  Their supplied
+5/7/11-test suites passed, but independent probes reproduced uncommitted or
+self-referential release authority, intermediate-symlink destination escape,
+incomplete namespace and metadata checks, missing operational exclusion,
+output-parent substitution, truncated-evidence false PASS, signal/reconciliation
+loss and—on the expert candidate—an immediate live `receipt-full-namespace`
+refusal because the immutable attempt-2 receipt never contained invented
+snapshot fields.  The final rejected source/test hashes are
+`83b1e671...b6bd4`/`40f8c2d0...03d2f`; they are preserved but must never be
+released or executed.  Exact failure history is in
+`native-exact-candidate12-renameback-recovery-source-failures-20260930.json`.
+
+The repair strategy changes now: extend the already reviewed cleanup
+transaction with a dedicated staged-recovery mode, reusing its authenticated
+plan and fetched-release contract, shared mutex, real live census, component
+no-follow directory descriptors, `RENAME_NOREPLACE`, durable journal/publication
+and per-row rollback reconciliation.  It must consume the exact immutable
+attempt-2 journal/receipt/status and validate the current 2,507-entry staged
+shape rather than require new fields in historical evidence.  Independently
+review and checkpoint that source before authoring a fresh recovery release.
+
+Two cheap readiness regressions also pass: 215 exportset-25 owner/postlink/
+linked-text tests and 135 diagnostic owner/runner/backend/stager/shutdown tests.
+They are infrastructure-only.  This continuation has executed zero real guest
+applications and produced zero current-candidate builds; the exact blocker is
+the staged candidate-12 recovery.  Live state remains 2,507 quarantined files,
+zero originals and zero deletions with attempt hashes unchanged.  After safe
+recovery: run the corrected cleanup once from a fresh release, trim/remeasure,
+release scratch-13 preparation and the serialized current-image build, then run
+the separately labelled startup/memory/files/threads-futex/signals/shutdown
+diagnostic loop.  No formal acceptance counter changes.
