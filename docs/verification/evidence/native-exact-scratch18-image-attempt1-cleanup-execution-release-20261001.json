@@ -1,0 +1,63 @@
+{
+  "schema": "mckernel.native-exact-scratch18-image-attempt1-cleanup-execution-release.v1",
+  "status": "PROPOSED",
+  "scope": "one exact failed-image cleanup invocation only",
+  "candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "published_commit": "6d5619e8b946f7d104795c90969c61351e4f032b",
+  "fetched_commit_verified": true,
+  "implementation": {
+    "path": "docs/verification/evidence/native-exact-scratch18-image-attempt1-cleanup-20261001.py",
+    "sha256": "44cc3acb23421ebc0b6027777ee6c53377d9f64c7e31059a7ab349714f35f6dd",
+    "tests_path": "scripts/tests/test_native_exact_scratch18_image_attempt1_cleanup_20261001.py",
+    "tests_sha256": "801e6ecc2cc53a0bf50c45b35db578bc40458fe0196d75aa033d293ee8d7efa4",
+    "tests": "46 passed on CPUs 6-7 under a 3-GiB address-space ceiling",
+    "independent_source_review": "PASS"
+  },
+  "command": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native-exact-scratch18-image-attempt1-cleanup-20261001.py",
+    "--execute"
+  ],
+  "preflight": {
+    "validate_only": "PASS_VALIDATE_ONLY",
+    "events": 0,
+    "container_present": true,
+    "transaction_files_absent": true,
+    "host_free_bytes": 39653625856,
+    "scratch_free_bytes": 34691366912,
+    "memory_available_bytes": 23070339072
+  },
+  "target": {
+    "container_id": "482d8bdb0e6186082531bcf73b801e45fed5e2f810162b12679a96d3d5845c13",
+    "container_name": "mckernel-image-a16e098cae6f43b09fb6fc847c568fc6",
+    "owner_nonce": "78a66b69ed7a4b41a3af541e2ce52422",
+    "required_state": "created",
+    "required_pid": 0,
+    "required_exit_code": 128,
+    "required_oom_killed": false,
+    "image_lease_required_absent": true,
+    "work_root_required_empty": true
+  },
+  "authorized_effects": [
+    "capture and authenticate empty Docker logs",
+    "remove only the exact terminal container without force",
+    "transactionally archive the exact candidate and shared exclusion records",
+    "release only their active ownership pathnames"
+  ],
+  "preserve": [
+    "owner receipt and all original attempt evidence",
+    "failed work and evidence directory identities",
+    "absent image lease",
+    "all source, toolchain, request and build inputs",
+    "current c81 image and five prior diagnostic guest passes"
+  ],
+  "not_authorized": [
+    "source correction",
+    "image build retry",
+    "guest execution",
+    "application or OS acceptance"
+  ],
+  "execution_requires": "a separate independent PASS_EXECUTION over this exact published release"
+}
