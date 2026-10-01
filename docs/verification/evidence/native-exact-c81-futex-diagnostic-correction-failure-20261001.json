@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "status": "FAIL",
+  "scope": "sole bounded record-order correction guest; preserved original failure",
+  "packet": {"commit": "345f5de8c21dc46973f557b635e01d810e9ad569", "sha256": "7b85b2912851e14900de53b843391960cebdbe12d013ab0df57767ad0414c1c3"},
+  "release": "PASS_EXECUTION_C81_FUTEX_CORRECTION",
+  "nonce": "01d30ee0c82232c5efe4a3d810fe8af7",
+  "container": "82e8387599e1e05035b51136462c0563a5a777760cb7a897319d34f81267c3c1",
+  "failure": {
+    "phase": "evaluation",
+    "type": "DiagnosticError",
+    "error": "missing actual route/exit evidence",
+    "cause": "current host trace_budget logged 64 complete delivery/return samples and routes but was exhausted before the high-volume fixture's final exit_group delivery",
+    "record_order_correction_passed_before_this_check": true,
+    "third_guest_under_unchanged_design_forbidden": true
+  },
+  "actual_application": {
+    "payload_source_sha256": "34d7609917814f96cadda0ab549164a059e84ff8364ab5298283b1e704f2469d",
+    "argv": ["/bin/mcexec", "-t", "1", "0", "/apps/app"],
+    "stdout": "NATIVE_ULTRA_FUTEX PASS cases=16 threads=2 raw_clone=1\n",
+    "stdout_size": 55,
+    "stdout_sha256": "c70ccab9355ffa7ad8021c3b6d0d78b8c5c7f73c53b2749e99b29ff64b4d08b9",
+    "stderr_size": 2609,
+    "stderr_sha256": "86c43829e2cf801b13dc4e43609dea92b37f6cfd2725f1f69195f967416e5e4e",
+    "stderr_record_order": "16 CASE, THREADS, CLONE",
+    "typed_oracle": "PASS before syscall trace evaluation",
+    "raw_wait_status": 9472,
+    "exit_code": 37,
+    "procfs_empty": true,
+    "streams_complete": true,
+    "discarded_bytes": 0
+  },
+  "trace_observation": {
+    "delivered_samples": 64,
+    "returned_samples": 64,
+    "return_routes": 31,
+    "sampled_futex_number_202": 7,
+    "sampled_exit_group_231": 0,
+    "retirement_attempts": 2,
+    "final_retirement_errno": 0,
+    "process_release_errno": 0,
+    "source_trace_budget": 64,
+    "complete_sample_pairing_preserved": true
+  },
+  "inner_evidence": {
+    "result.json": {"size": 2860, "sha256": "334d6853bf7bb10315bc180a2f84569da9cbe4012c2c1a645bb953f1d2c90607"},
+    "serial.log": {"size": 158734, "sha256": "c8ed1cd5def238a256cf746e1689bbf987f36218be318e28bf01d6f4b3349d6c"},
+    "debugcon.log": {"size": 152, "sha256": "bd87db779e6878802fa64fdee99f2eb08dee1529bbea800a65356f051e186685"},
+    "qmp.transcript.json": {"size": 238540, "sha256": "2959c2fb4a7bde9fe4b3dbeb4d1704e463ebb211cdede79c58044ff9218812ca"},
+    "first-failure.jsonl": {"size": 98, "sha256": "b3307a0b7433e39618992186e2b03c641a72ffaf4caed88cc36080222c3a2cb1"}
+  },
+  "owner_evidence": {
+    "result_sha256": "44695a72b6813b9df7ad502c15faa66473d9de4586e043c4a1a5f397edc7f48a",
+    "owner_sha256": "44bf05f2f985ebdf786da2c170d072e3fa5b1e4d1be42201e392e285cb30a54b",
+    "container_exit_code": 1,
+    "oom_killed": false,
+    "absence_verified": true,
+    "lease_retained": false,
+    "secondary_failures": []
+  },
+  "qmp_terminal": {"guest_shutdown": true, "query_status": "shutdown", "running": false, "quit_acknowledged": true, "qemu_returncode": -9},
+  "postflight": {"owner_live": false, "qemu_live": false, "mcexec_live": false, "diagnostic_container_live": false, "development_lock": "free", "heavy_lease": "free"},
+  "application_acceptance": false,
+  "production_gate_credit": false,
+  "next": "expert source correction must guarantee terminal exit trace independently of the bounded ordinary-sample budget, then build and bind a new host module before any further guest"
+}

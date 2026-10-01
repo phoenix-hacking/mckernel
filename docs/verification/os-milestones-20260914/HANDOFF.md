@@ -1499,3 +1499,25 @@ with nonce `01d30ee0c82232c5efe4a3d810fe8af7` is `NOT_RELEASED`.  Next
 commit/push/fetch exact sources, packet and evidence; then independently release
 and run its sole command once.  Never reuse packet 1, its nonce, parent or
 evidence.  Direct-futex PASS count has not advanced; formal apps remain zero.
+
+Checkpoint 294 preserves the second direct-futex FAIL and changes strategy.
+The record-order correction itself worked: the current-source oracle accepted
+16 CASE records followed by THREADS and CLONE, and the unchanged application
+again emitted exact PASS stdout and exit 37.  Strict evaluation then rejected
+`missing actual route/exit evidence`: the current host spent its 64-delivery
+ordinary trace budget before the fixture's final exit_group.  The serial has
+64 complete delivery/return pairs, 31 routes and seven sampled futex calls, but
+no sampled exit_group.  Retirement and process release reached errno zero,
+procfs was empty, QMP shutdown/quit completed and every owner/client/container
+retired without a secondary cleanup failure.
+
+Do not run a third guest under either existing packet.  The next executable
+step is an expert-reviewed source correction that keeps the terminal exit_group
+delivery observable independently of ordinary sample exhaustion while
+preserving the established non-returning exit contract and ordinary trace
+groups.  Add executable budget-exhaustion tests, then rebuild and bind a new
+host module before any new manifest or one-shot execution packet.  Exact
+evidence is `docs/verification/evidence/native-exact-c81-futex-diagnostic-correction-failure-20261001.json`.
+Diagnostic PASS count remains five, formal application/catalog acceptance
+remains zero, shutdown is separately blocked and unwired, and the OS goal is
+active and incomplete.

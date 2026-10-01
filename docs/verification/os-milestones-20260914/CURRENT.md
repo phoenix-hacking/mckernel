@@ -12110,6 +12110,34 @@ executes exact BootIrqRoute bodies for six cases, but PreparedBoot sender close
 and BootStorage ownership extraction remain missing.  The OS goal remains
 active and incomplete.
 
+Continuation checkpoint 294, 2026-10-01: the sole record-order correction guest
+also remains FAIL; no third guest is authorized under the unchanged design.
+The correction worked: `current-source-v1` accepted all 16 CASE records followed
+by THREADS and CLONE.  The real payload again produced exact 55-byte PASS
+stdout, complete 2,609-byte typed stderr `86c43829...e5e4e`, exit/raw status
+37/9472 and empty procfs.  Strict evaluation then failed on
+`missing actual route/exit evidence` because the current host's 64-delivery
+trace budget was exhausted before the high-volume fixture's final exit_group.
+
+The serial retains 64 complete delivery/return pairs, 31 routes and seven
+sampled futex-number-202 deliveries, but zero sampled exit_group deliveries;
+retirement still reaches errno zero and process release succeeds.  Result,
+serial and QMP hashes are `334d6853...90607`, `c8ed1cd5...49d6c` and
+`2959c2fb...12ca`.  Container `82e83875...c3c1` exited 1 without OOM and is
+removed; all owner/client/guest processes retired, QMP observed shutdown and
+acknowledged quit, the development lock is free and cleanup has no secondary
+failure.  Exact evidence is
+`docs/verification/evidence/native-exact-c81-futex-diagnostic-correction-failure-20261001.json`.
+
+This is a distinct observed host trace-sampling defect.  Expert escalation must
+make terminal exit delivery observable independently of the bounded ordinary
+sample budget, retain complete delivery/route/return groups and rebuild/bind a
+new host module before another guest.  Do not weaken the exit oracle based only
+on raw wait or retirement, and never reuse either failed futex packet, nonce or
+parent.  Diagnostic PASS count remains five and formal application/catalog
+acceptance remains zero.  Shutdown remains separately blocked and unwired.  The
+OS goal remains active and incomplete.
+
 Continuation checkpoint 293, 2026-10-01: the sole bounded direct-futex
 record-order correction and fresh preparation pass independent review; no
 second guest has run.  Evaluator `2aa9b025...f9356` now requires one explicit

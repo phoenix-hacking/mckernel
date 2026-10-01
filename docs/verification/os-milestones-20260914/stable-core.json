@@ -146,6 +146,7 @@
     ,"native_diag_c81_futex_prep": "docs/verification/evidence/native-exact-c81-futex-preparation-checkpoint-20261001.json"
     ,"native_diag_c81_futex_failure": "docs/verification/evidence/native-exact-c81-futex-diagnostic-failure-20261001.json"
     ,"native_diag_c81_futex_order_prep": "docs/verification/evidence/native-exact-c81-futex-order-correction-preparation-20261001.json"
+    ,"native_diag_c81_futex_correction_failure": "docs/verification/evidence/native-exact-c81-futex-diagnostic-correction-failure-20261001.json"
     ,"shutdown_effect_boundary": "docs/verification/evidence/native-exact-shutdown-effect-boundary-source-checkpoint-20261001.json"
     ,"shutdown_observer": "docs/verification/stability-native-shutdown-observer-source-success-20260928-1.json"
     ,"shutdown_registry": "docs/verification/stability-native-shutdown-registry-source-success-20260928-1.json"
@@ -550,8 +551,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "The current c81 candidate independently passes memory, files, startup, threads and signals diagnostics. The first direct-futex guest remains FAIL on an oracle-order defect. Its sole bounded correction now passes independent preparation review with mutually rejecting current-source and historical record-order variants; no second guest has run.",
-      "next_check": "Commit/push/fetch the exact corrected evaluator, manifest and packet; obtain fresh one-shot execution release and run packet 2 once under the sole heavy lease; continue shutdown production-body drain evidence separately.",
+      "result": "The current c81 candidate independently passes memory, files, startup, threads and signals diagnostics. Both direct-futex attempts remain FAIL. The bounded record-order correction worked and accepted the current 16 CASE, THREADS, CLONE stream, but the host's 64-delivery sample budget omitted the final exit_group delivery, so strict route/exit evidence still failed. Exact stdout, exit 37, typed stderr and complete cleanup are retained; no direct-futex runtime PASS is claimed.",
+      "next_check": "Expert-correct terminal exit tracing so the non-returning exit_group delivery remains observable independently of ordinary sample-budget exhaustion while ordinary groups remain unchanged, add executable exhaustion tests, then rebuild and bind a new host module before preparing any fresh guest packet; continue shutdown separately.",
       "evidence": [
         "history",
         "plan",
@@ -593,7 +594,8 @@
         "native_diag_c81_futex_oracle",
         "native_diag_c81_futex_prep",
         "native_diag_c81_futex_failure",
-        "native_diag_c81_futex_order_prep"
+        "native_diag_c81_futex_order_prep",
+        "native_diag_c81_futex_correction_failure"
       ],
       "depends_on": []
     },
@@ -1318,8 +1320,8 @@
       "area": "PROC",
       "title": "Futex wait/wake and thread synchronization",
       "status": "baseline",
-      "result": "Baseline barrier/mutex, two children, TID transfer and futex/child-TID tests passed. The first c81 direct-futex application emitted all expected records and exit 37 but remains FAIL on its oracle-order defect. The exact mutually rejecting order correction and fresh manifest pass independent preparation review only.",
-      "next_check": "Fetch-verify and independently release the corrected one-shot packet, then run one fresh c81 attempt preserving all 16 cases, thread/clone records, syscall trace and teardown.",
+      "result": "Baseline barrier/mutex, two children, TID transfer and futex/child-TID tests passed. Both c81 direct-futex attempts emitted all expected application records and exit 37 but remain FAIL. The record-order correction passed; the corrected guest then exposed that the host's bounded delivery trace exhausted before final exit_group, leaving the required terminal route/exit group unobserved.",
+      "next_check": "Add a reviewed terminal-delivery trace path independent of ordinary sample exhaustion without inventing a return for non-returning exit_group, prove it with executable tests, rebuild the bound host module and only then prepare a new one-shot c81 guest attempt.",
       "evidence": [
         "app",
         "baseline",
@@ -1327,7 +1329,8 @@
         "native_diag_c81_futex_oracle",
         "native_diag_c81_futex_prep",
         "native_diag_c81_futex_failure",
-        "native_diag_c81_futex_order_prep"
+        "native_diag_c81_futex_order_prep",
+        "native_diag_c81_futex_correction_failure"
       ],
       "depends_on": [
         "SC-CPU-02"
