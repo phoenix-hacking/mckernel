@@ -13082,3 +13082,36 @@ request; the original execution packet must never be rerun.  Counts remain one
 compiled current candidate, five bounded diagnostic guest passes, zero formal
 application acceptances, 6/130 production gates and 0/7 language gates; the OS
 remains incomplete.
+
+Continuation checkpoint 324, 2026-10-01: launcher shutdown stopped new
+dispatch and closed both active lanes.  No recovery, privileged census, Docker,
+build or guest operation ran.  The recovery expert was interrupted at the
+bounded source-only boundary; its visible helper/tests remain the independently
+blocked hashes `8960083d...54a`/`3505cfb3...8fcf` and are not a production
+release.
+
+The process-census expert completed a new source correction before shutdown.
+Wrapper/tests hashes `288acfa4...14ed`/`e325698e...6dcf` report 41/41 focused
+tests passing under CPUs 6-7 and a 3-GiB address-space ceiling; embedded observer
+hash is `5f261e9e...6612`.  These bytes have not received independent review and
+no privileged host probe was run.
+
+The original pre-owner failure state remains byte- and inode-identical: derived
+request inode 90729/hash `80de5f1c...2bd7`, shared lock inode 90730/hash
+`3aa97b06...cdc5`, and attempt exclusion inode 90731/hash `e39dc0fe...ca1e`.
+Failed owner PID/starttime 3288332/107474009 remains absent.  Live launcher
+identities are PID/start-ticks 1442141/100022769, 1442142/100022770 and
+1442145/100022779 on boot `c733d83b-a5ae-4f91-9ce6-9f8ccf119afd`; no campaign
+heavy process is live.
+
+Exact shutdown evidence is
+`native-exact-scratch18-shutdown-checkpoint-20261001.json`.  Next independently
+review the exact wrapper/observer bytes; after PASS, finish and review the
+crash-safe recovery state machine with that hash bound.  Only a separately
+reviewed one-shot recovery may archive attempt lock first and shared lock last.
+Then independently verify the archives/terminal and create a resume-only packet
+bound to the unchanged derived request.  Never rerun the original build packet
+or delete/reuse the retained paths.  Counts remain one compiled current
+candidate, five bounded diagnostic guest passes, zero formal application
+acceptances, 6/130 production gates and 0/7 language gates; the OS remains
+incomplete and paused for the next launcher invocation.

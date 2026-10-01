@@ -9,6 +9,8 @@ import unittest
 from unittest import mock
 import sys
 import hashlib
+import io
+import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -166,9 +168,204 @@ class WrapperTests(unittest.TestCase):
             self.assertTrue(wrapper._heavy_identity(exe, argv))
         for exe, argv in (('/usr/bin/rg', ['rg', 'qemu|rustc']),
                           ('/usr/bin/python3.9', ['python3', '-c', 'rustc native_rust_exact_build_container_owner.py']),
+                          ('/usr/bin/python3.9', ['python3', '-c', 'pass', 'native_rust_exact_build_container_owner.py']),
+                          ('/usr/bin/python3.9evil', ['python3.9evil', 'native_rust_exact_build_container_owner.py']),
                           ('/usr/bin/bash', ['bash', '-c', 'echo qemu']),
                           ('/usr/bin/python3.9', ['python3', '/x/test_native_rust_exact_disk_build_wrapper.py'])):
             self.assertFalse(wrapper._heavy_identity(exe, argv))
+        for exe in ('/usr/bin/python3.8', '/usr/bin/python3.9'):
+            self.assertTrue(wrapper._heavy_identity(exe, ['python3', '-X', 'dev', '/x/native_rust_exact_build_container_owner.py']))
+        self.assertTrue(wrapper._heavy_identity('/usr/bin/python3.9', ['python3', '-W', 'ignore', '/x/native_rust_exact_build_container_owner.py']))
+
+    def test_embedded_and_wrapper_classifiers_have_python_option_parity(self):
+        namespace = {'__name__': 'observer_test'}
+        exec(wrapper.PRIVILEGED_PROCESS_OBSERVER_SOURCE, namespace)
+        script = '/x/native_rust_exact_build_container_owner.py'
+        for options in ([], ['-IW', 'ignore'], ['-IX', 'dev'], ['-IBWignore'],
+                        ['-IBXdev'], ['-W', 'ignore'], ['-X', 'dev'],
+                        ['-IBB', '-qSuv'], ['--check-hash-based-pycs', 'always'],
+                        ['--check-hash-based-pycs=always'], ['--'],
+                        ['-IX', '-W'], ['-IW', '-X']):
+            argv = ['python3'] + options + [script]
+            with self.subTest(argv=argv):
+                self.assertEqual(wrapper._python_script_operand(argv), script)
+                self.assertEqual(namespace['python_script'](argv), script)
+                for exe in ('/usr/bin/python3.8', '/usr/bin/python3.9'):
+                    self.assertTrue(wrapper._heavy_identity(exe, argv))
+                    self.assertTrue(namespace['heavy'](exe, argv))
+        for options in (['-c', 'pass'], ['-cpass'], ['-Icpass'], ['-m', 'pkg'],
+                        ['-mpkg'], ['-Impkg'], ['-'], ['-V'], ['--help']):
+            argv = ['python3'] + options + [script]
+            with self.subTest(argv=argv):
+                self.assertIsNone(wrapper._python_script_operand(argv))
+                self.assertIsNone(namespace['python_script'](argv))
+                self.assertFalse(namespace['heavy']('/usr/bin/python3.8', argv))
+                self.assertFalse(wrapper._heavy_identity('/usr/bin/python3.8', argv))
+        for options in (['-J'], ['-IJ'], ['--unknown'], ['--check-hash-based-pycsbad'],
+                        ['--check-hash-based-pycs='], ['-I='], ['-IW'], ['-IX'],
+                        ['--check-hash-based-pycs']):
+            argv = ['python3'] + options
+            with self.subTest(argv=argv):
+                with self.assertRaises(wrapper.AdmissionError): wrapper._python_script_operand(argv)
+                with self.assertRaises(ValueError): namespace['python_script'](argv)
+
+    def test_attached_code_or_module_cannot_impersonate_calling_wrapper(self):
+        namespace = {'__name__': 'observer_test'}
+        exec(wrapper.PRIVILEGED_PROCESS_OBSERVER_SOURCE, namespace)
+        for option in ('-cpass', '-mpkg', '-Icpass', '-Impkg'):
+            with self.subTest(option=option), \
+                 mock.patch.object(wrapper.os, 'getppid', return_value=91), \
+                 mock.patch.object(wrapper.os, 'readlink', return_value='/usr/bin/python3.8'), \
+                 mock.patch.dict(namespace, {'st': lambda pid: '1234',
+                     'cmdline': lambda pid: ['python3', option, 'native_rust_exact_disk_build_wrapper.py']}), \
+                 mock.patch.object(Path, 'read_text', return_value='Name:\ttest\nPPid:\t1\n'):
+                with self.assertRaisesRegex(RuntimeError, 'calling wrapper identity unavailable'):
+                    namespace['caller']()
+
+    def test_process_census_requires_retirement_after_missing_or_empty_identity(self):
+        entry = Path('/proc/900001')
+        stat = '900001 (test) ' + ' '.join(['S', '1', '1', '1', '0', '0', '0'] + ['0'] * 12 + ['1234'])
+        for raw in (b'python3\0worker.py\0', b''):
+            with self.subTest(raw=raw), mock.patch.object(Path, 'iterdir', return_value=[entry]), \
+                 mock.patch.object(wrapper, '_proc_starttime', return_value='1234'), \
+                 mock.patch.object(Path, 'open', side_effect=lambda *a, **k: io.BytesIO(raw)), \
+                 mock.patch.object(Path, 'read_text', return_value=stat), \
+                 mock.patch.object(wrapper.os, 'readlink', side_effect=FileNotFoundError()):
+                with self.assertRaises(wrapper.AdmissionError): wrapper._dispatcher_processes()
+        for starts in (['1234', FileNotFoundError()], ['1234', '5678']):
+            with self.subTest(starts=starts), mock.patch.object(Path, 'iterdir', return_value=[entry]), \
+                 mock.patch.object(wrapper, '_proc_starttime', side_effect=starts), \
+                 mock.patch.object(Path, 'open', return_value=io.BytesIO(b'python3\0worker.py\0')), \
+                 mock.patch.object(wrapper.os, 'readlink', side_effect=FileNotFoundError()):
+                self.assertEqual(wrapper._dispatcher_processes(), [])
+
+    def test_empty_process_identity_parity_and_initial_stat_race(self):
+        namespace = {'__name__': 'observer_test'}
+        exec(wrapper.PRIVILEGED_PROCESS_OBSERVER_SOURCE, namespace)
+        entry = Path('/proc/900001')
+        for state, flags, accepted in (('S', '0', False), ('S', str(0x200000), True),
+                                       ('Z', '0', True), ('X', '0', True)):
+            stat = '900001 (test) ' + ' '.join([state, '1', '1', '1', '0', '0', flags] + ['0'] * 12 + ['1234'])
+            with self.subTest(state=state, flags=flags), \
+                 mock.patch.object(Path, 'iterdir', return_value=[entry]), \
+                 mock.patch.object(Path, 'open', side_effect=lambda *a, **k: io.BytesIO(b'')), \
+                 mock.patch.object(Path, 'read_text', return_value=stat), \
+                 mock.patch.object(wrapper, '_proc_starttime', return_value='1234'), \
+                 mock.patch.object(wrapper.os, 'geteuid', return_value=0), \
+                 mock.patch.dict(namespace, {'caller': lambda: (91, '2345'), 'st': lambda pid: '1234'}), \
+                 mock.patch('builtins.print'):
+                if accepted:
+                    self.assertEqual(wrapper._dispatcher_processes(), [])
+                    namespace['observe']()
+                else:
+                    with self.assertRaises(wrapper.AdmissionError): wrapper._dispatcher_processes()
+                    with self.assertRaisesRegex(RuntimeError, 'live process command line unavailable'):
+                        namespace['observe']()
+        for raw in (b'python3\0worker.py\0',):
+            with mock.patch.object(Path, 'iterdir', return_value=[entry]), \
+                 mock.patch.object(Path, 'open', side_effect=lambda *a, **k: io.BytesIO(raw)), \
+                 mock.patch.object(Path, 'read_text', return_value='boot'), \
+                 mock.patch.object(wrapper.os, 'geteuid', return_value=0), \
+                 mock.patch.object(wrapper.os, 'readlink', side_effect=FileNotFoundError()), \
+                 mock.patch.dict(namespace, {'caller': lambda: (91, '2345'), 'st': lambda pid: '1234'}):
+                with self.assertRaisesRegex(RuntimeError, 'process executable disappeared'):
+                    namespace['observe']()
+        with mock.patch.object(Path, 'iterdir', return_value=[entry]), \
+             mock.patch.object(wrapper, '_proc_starttime', side_effect=[FileNotFoundError(), '1234']):
+            with self.assertRaises(wrapper.AdmissionError): wrapper._dispatcher_processes()
+
+    def test_python_cluster_options_match_real_interpreter(self):
+        with tempfile.TemporaryDirectory() as td:
+            script = Path(td) / 'native_rust_exact_build_container_owner.py'
+            script.write_text('print("parser-script-reached")\n')
+            for options in (['-IW', 'ignore'], ['-IX', 'dev'], ['-IBWignore'], ['-IBXdev']):
+                with self.subTest(options=options):
+                    result = subprocess.run([sys.executable] + options + [str(script)],
+                                            capture_output=True, timeout=5)
+                    self.assertEqual((result.returncode, result.stdout), (0, b'parser-script-reached\n'))
+                    self.assertEqual(wrapper._python_script_operand([sys.executable] + options + [str(script)]), str(script))
+
+    def test_embedded_cmdline_read_is_bounded_for_caller_and_census(self):
+        namespace = {'__name__': 'observer_test'}
+        exec(wrapper.PRIVILEGED_PROCESS_OBSERVER_SOURCE, namespace)
+        stream = mock.MagicMock()
+        stream.__enter__.return_value = stream
+        stream.read.return_value = b'x' * (wrapper.MAX_CMDLINE_BYTES + 1)
+        with mock.patch.object(Path, 'open', return_value=stream):
+            with self.assertRaisesRegex(RuntimeError, 'command line exceeds bound'):
+                namespace['cmdline'](91)
+        stream.read.assert_called_once_with(wrapper.MAX_CMDLINE_BYTES + 1)
+
+    def test_bounded_observer_capture_caps_both_streams_and_reaps(self):
+        for payload in ("import os; os.write(1, b'x' * 2000000)",
+                        "import os; os.write(2, b'x' * 2000000)"):
+            children = []
+            real_popen = subprocess.Popen
+            def launch(*args, **kwargs):
+                child = real_popen(*args, **kwargs)
+                children.append(child)
+                return child
+            with self.subTest(payload=payload), mock.patch.object(wrapper.subprocess, 'Popen', side_effect=launch):
+                with self.assertRaisesRegex(wrapper.AdmissionError, 'report exceeds bound'):
+                    wrapper._run_bounded_observer([sys.executable, '-I', '-B', '-'], payload.encode(), {})
+            self.assertIsNotNone(children[0].poll())
+            self.assertTrue(all(stream.closed for stream in (children[0].stdin, children[0].stdout, children[0].stderr)))
+        result = wrapper._run_bounded_observer([sys.executable, '-I', '-B', '-'], b'print("{}")', {})
+        self.assertEqual((result.returncode, result.stdout), (0, b'{}\n'))
+        with self.assertRaisesRegex(wrapper.AdmissionError, 'timed out'):
+            wrapper._run_bounded_observer([sys.executable, '-I', '-B', '-'], b'import time; time.sleep(3)', {}, timeout=0.05)
+
+    def test_permission_limited_process_census_uses_authenticated_observer(self):
+        report = {'schema': 'mckernel.heavy-process-observation.v1',
+                  'status': 'PASS_READ_ONLY',
+                  'boot_id': Path('/proc/sys/kernel/random/boot_id').read_text().strip(),
+                  'processes': [{'pid': 91, 'starttime': '1234',
+                                 'executable': '/usr/bin/rustc'}]}
+        completed = types.SimpleNamespace(returncode=0,
+                                          stdout=json.dumps(report).encode(), stderr=b'')
+        with mock.patch.object(wrapper, '_proc_starttime', side_effect=PermissionError()), \
+             mock.patch.object(wrapper, '_run_bounded_observer', return_value=completed) as run, \
+             mock.patch.dict(os.environ, {'SUDO_ASKPASS': '/secret-askpass', 'EVIL': 'nope'}):
+            self.assertEqual(wrapper._dispatcher_processes(), report['processes'])
+        self.assertEqual(run.call_args.args[0],
+                         ['/usr/bin/sudo', '-A', '/usr/bin/python3', '-I', '-B', '-'])
+        self.assertNotIn(b'/secret-askpass', run.call_args.args[1])
+        self.assertEqual(run.call_args.args[2], {
+            'PATH': '/usr/bin:/bin', 'HOME': '/nonexistent', 'LANG': 'C',
+            'LC_ALL': 'C', 'SUDO_ASKPASS': '/secret-askpass'})
+
+    def test_privileged_process_report_is_strict_and_fail_closed(self):
+        boot = Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+        base = {'schema': 'mckernel.heavy-process-observation.v1',
+                'status': 'PASS_READ_ONLY', 'boot_id': boot,
+                'processes': [{'pid': 91, 'starttime': '1234',
+                               'executable': '/usr/bin/rustc'}]}
+        for mutate in (lambda r: r.update(schema='wrong'),
+                       lambda r: r.update(processes=[dict(r['processes'][0]), dict(r['processes'][0])]),
+                       lambda r: r['processes'][0].update(pid=True),
+                       lambda r: r['processes'][0].update(executable='rustc')):
+            report = copy.deepcopy(base); mutate(report)
+            completed = types.SimpleNamespace(returncode=0,
+                                              stdout=json.dumps(report).encode(), stderr=b'')
+            with self.subTest(report=report), mock.patch.object(wrapper, '_run_bounded_observer', return_value=completed):
+                with self.assertRaises(wrapper.AdmissionError):
+                    wrapper._privileged_process_observation()
+        with mock.patch.object(wrapper, '_run_bounded_observer', side_effect=PermissionError('sudo denied')):
+            with self.assertRaisesRegex(wrapper.AdmissionError, 'observer unavailable'):
+                wrapper._privileged_process_observation()
+        oversized = copy.deepcopy(base)
+        oversized['processes'][0]['executable'] = '/' + ('x' * wrapper.MAX_REPORT_BYTES)
+        completed = types.SimpleNamespace(returncode=0, stdout=json.dumps(oversized).encode(), stderr=b'')
+        with mock.patch.object(wrapper, '_run_bounded_observer', return_value=completed):
+            with self.assertRaisesRegex(wrapper.AdmissionError, 'report exceeds bound'):
+                wrapper._privileged_process_observation()
+
+    def test_observer_keeps_ordinary_unprivileged_census_path(self):
+        with mock.patch.object(Path, 'iterdir', return_value=[Path('/proc/900001')]), \
+             mock.patch.object(Path, 'open', return_value=io.BytesIO(b'rg\0pattern\0')), \
+             mock.patch.object(wrapper, '_proc_starttime', return_value='1234'), \
+             mock.patch.object(wrapper.os, 'readlink', return_value='/usr/bin/rg'):
+            self.assertIsInstance(wrapper._dispatcher_processes(), list)
 
     def test_container_census_rejects_unknown_json_and_all_live_names(self):
         good = {'ID': 'a' * 64, 'Image': 'unrelated', 'Names': 'innocent',

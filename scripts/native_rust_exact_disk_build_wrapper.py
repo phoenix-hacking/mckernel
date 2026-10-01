@@ -19,6 +19,8 @@ import stat
 import shutil
 import subprocess
 import re
+import selectors
+import time
 
 
 LAUNCHER_AGGREGATE_GIB = "16.2158"
@@ -72,6 +74,136 @@ HEAVY_EXECUTABLES = frozenset(('qemu-system-x86_64', 'qemu-system-aarch64',
     'qemu-kvm', 'mcexec', 'firecracker', 'rustc', 'cargo', 'make', 'ninja', 'buildah'))
 HEAVY_SCRIPTS = frozenset(('native_rust_exact_build_container_owner.py',
     'native_rust_exact_disk_build_wrapper.py', 'native_rust_exact_build_offline.py'))
+MAX_PROC_ENTRIES = 4096
+MAX_CMDLINE_BYTES = 1 << 20
+MAX_ARG_COUNT = 256
+MAX_ARG_BYTES = 4096
+MAX_REPORT_BYTES = 1 << 20
+MAX_HEAVY_ROWS = 256
+
+# Identical parser source is used by the local and privileged classifiers.
+# Unknown options are an unverifiable identity, never evidence of an idle host.
+PYTHON_SCRIPT_PARSER_SOURCE = r'''def python_script(argv):
+    if not isinstance(argv, list) or not argv or len(argv) > MAX_ARG_COUNT:
+        raise ValueError("Python argument count invalid")
+    if any(not isinstance(arg, str) or len(arg) > MAX_ARG_BYTES or "\0" in arg for arg in argv):
+        raise ValueError("Python argument invalid")
+    i = 1
+    while i < len(argv):
+        arg = argv[i]
+        if arg == "--": return argv[i + 1] if i + 1 < len(argv) else None
+        if arg == "-": return None
+        if not arg.startswith("-"): return arg
+        if arg in ("--help", "--version", "--help-env", "--help-xoptions", "--help-all"):
+            return None
+        if arg == "--check-hash-based-pycs":
+            if i + 1 >= len(argv): raise ValueError("Python option operand missing")
+            i += 2
+            continue
+        if arg.startswith("--check-hash-based-pycs="):
+            if not arg.split("=", 1)[1]: raise ValueError("Python option operand missing")
+            i += 1
+            continue
+        if arg.startswith("--"): raise ValueError("unknown Python long option")
+        j = 1
+        while j < len(arg):
+            option = arg[j]
+            if option in "cm": return None
+            if option in "h?V": return None
+            if option in "WX":
+                if j + 1 == len(arg):
+                    if i + 1 >= len(argv): raise ValueError("Python option operand missing")
+                    i += 1
+                break
+            if option not in "bBdEiqIOsSuvxRt":
+                raise ValueError("unknown Python short option")
+            j += 1
+        i += 1
+    return None
+'''
+_PYTHON_PARSER_NAMESPACE = {'MAX_ARG_COUNT': MAX_ARG_COUNT, 'MAX_ARG_BYTES': MAX_ARG_BYTES}
+exec(PYTHON_SCRIPT_PARSER_SOURCE, _PYTHON_PARSER_NAMESPACE)
+
+# This observer is deliberately self-contained: it receives no arguments and
+# emits only authenticated heavy rows.  Its source is hashed before sudo is
+# invoked, so a path/PATH replacement cannot change the privileged code.
+PRIVILEGED_PROCESS_OBSERVER_SOURCE = PYTHON_SCRIPT_PARSER_SOURCE + r'''import json, os, re
+from pathlib import Path
+HEAVY = frozenset(("qemu-system-x86_64", "qemu-system-aarch64", "qemu-kvm", "mcexec", "firecracker", "rustc", "cargo", "make", "ninja", "buildah"))
+SCRIPTS = frozenset(("native_rust_exact_build_container_owner.py", "native_rust_exact_disk_build_wrapper.py", "native_rust_exact_build_offline.py"))
+MAX_PROC_ENTRIES = 4096
+MAX_CMDLINE_BYTES = 1 << 20
+MAX_ARG_COUNT = 256
+MAX_ARG_BYTES = 4096
+MAX_HEAVY_ROWS = 256
+MAX_REPORT_BYTES = 1 << 20
+def st(pid):
+    return Path("/proc").joinpath(str(pid), "stat").read_text().rsplit(")", 1)[1].split()[19]
+def cmdline(pid):
+    with (Path("/proc") / str(pid) / "cmdline").open("rb") as stream:
+        raw = stream.read(MAX_CMDLINE_BYTES + 1)
+    if len(raw) > MAX_CMDLINE_BYTES: raise RuntimeError("command line exceeds bound")
+    argv = [x.decode("utf-8", "strict") for x in raw.split(b"\0") if x]
+    if len(argv) > MAX_ARG_COUNT or any(len(x) > MAX_ARG_BYTES for x in argv): raise RuntimeError("argument exceeds bound")
+    return argv
+def retired_or_kernel(pid, first):
+    fields = (Path("/proc") / str(pid) / "stat").read_text().rsplit(")", 1)[1].split()
+    return fields[19] != first or fields[0] in ("Z", "X", "x") or bool(int(fields[6]) & 0x200000)
+def heavy(exe, argv):
+    name = Path(exe.removesuffix(" (deleted)") if hasattr(str, "removesuffix") else exe.split(" (deleted)")[0]).name
+    if name in HEAVY or name.startswith("qemu-system-"): return True
+    if name in ("docker", "podman"): return any(a in ("build", "run", "start") for a in argv[1:])
+    if re.fullmatch(r"python(?:[23](?:\.\d+)?)?", name):
+        script = python_script(argv)
+        return script is not None and Path(script).name in SCRIPTS
+    return name in SCRIPTS
+def caller():
+    seen = set(); pid = os.getppid()
+    while pid > 1 and pid not in seen:
+        seen.add(pid)
+        try:
+            first = st(pid); argv = cmdline(pid)
+            exe = os.readlink(str(Path("/proc") / str(pid) / "exe")); second = st(pid)
+        except FileNotFoundError: pid = 0; continue
+        if first != second: raise RuntimeError("caller identity changed")
+        if re.fullmatch(r"python(?:3(?:\.\d+)?)?", Path(exe.removesuffix(" (deleted)") if hasattr(str, "removesuffix") else exe.split(" (deleted)")[0]).name) and python_script(argv) is not None and Path(python_script(argv)).name == "native_rust_exact_disk_build_wrapper.py":
+            return pid, first
+        try: pid = int(Path("/proc").joinpath(str(pid), "status").read_text().split("\nPPid:\t", 1)[1].split()[0])
+        except (FileNotFoundError, IndexError, ValueError): pid = 0
+    raise RuntimeError("calling wrapper identity unavailable")
+def observe():
+    if os.geteuid() != 0: raise RuntimeError("privileged observer required")
+    boot = Path("/proc/sys/kernel/random/boot_id").read_text().strip()
+    skip_pid, skip_start = caller(); rows = []
+    entries = list(Path("/proc").iterdir())
+    if len(entries) > MAX_PROC_ENTRIES: raise RuntimeError("process entry bound exceeded")
+    for entry in entries:
+        if not entry.name.isdigit(): continue
+        pid = int(entry.name)
+        first = None
+        try:
+            first = st(pid); argv = cmdline(pid)
+            if not argv:
+                if retired_or_kernel(pid, first): continue
+                raise RuntimeError("live process command line unavailable")
+            exe = os.readlink(str(entry / "exe")); second = st(pid)
+            if first != second: raise RuntimeError("process identity changed")
+        except FileNotFoundError:
+            try:
+                current = st(pid)
+                if first is None or current == first: raise RuntimeError("process executable disappeared")
+            except FileNotFoundError: pass
+            continue
+        if pid == skip_pid and first == skip_start: continue
+        if heavy(exe, argv):
+            if len(rows) >= MAX_HEAVY_ROWS: raise RuntimeError("heavy row bound exceeded")
+            rows.append({"pid": pid, "starttime": first, "executable": exe})
+    output = json.dumps({"schema":"mckernel.heavy-process-observation.v1", "status":"PASS_READ_ONLY", "boot_id":boot, "processes":rows}, sort_keys=True)
+    if len(output.encode()) > MAX_REPORT_BYTES: raise RuntimeError("observer report exceeds bound")
+    print(output)
+if __name__ == "__main__": observe()
+'''
+PRIVILEGED_PROCESS_OBSERVER_SHA256 = '5f261e9ed481a8f7750e298f48c56293ee33d99df92e18595b562bc19b446612'
 
 
 class AdmissionError(ValueError):
@@ -170,28 +302,158 @@ def _dispatcher_processes():
     proc = Path('/proc')
     try:
         entries = list(proc.iterdir())
+    except PermissionError:
+        return _privileged_process_observation()
     except OSError as exc:
         raise AdmissionError('process census unavailable') from exc
+    if len(entries) > MAX_PROC_ENTRIES:
+        raise AdmissionError('process census exceeds bound')
     for entry in entries:
         if not entry.name.isdigit() or int(entry.name) == os.getpid():
             continue
+        start = None
         try:
-            argv = (entry / 'cmdline').read_bytes().split(b'\0')
-            argv = [item.decode('utf-8', 'strict') for item in argv if item]
             start = _proc_starttime(int(entry.name))
+            with (entry / 'cmdline').open('rb') as stream:
+                raw = stream.read(MAX_CMDLINE_BYTES + 1)
+            if len(raw) > MAX_CMDLINE_BYTES:
+                raise AdmissionError('process command line exceeds bound')
+            argv = raw.split(b'\0')
+            argv = [item.decode('utf-8', 'strict') for item in argv if item]
+            if len(argv) > MAX_ARG_COUNT or any(len(item) > MAX_ARG_BYTES for item in argv):
+                raise AdmissionError('process argument exceeds bound')
             if not argv:
-                continue  # kernel thread or already exited; no userspace owner
+                fields = (entry / 'stat').read_text().rsplit(')', 1)[1].split()
+                if (fields[19] != start or fields[0] in ('Z', 'X', 'x') or
+                    int(fields[6]) & 0x200000):
+                    continue
+                raise AdmissionError('live process command line unavailable')
             exe = os.readlink(str(entry / 'exe'))
             if _proc_starttime(int(entry.name)) != start:
                 raise AdmissionError('process identity changed during census')
         except FileNotFoundError:
-            # A process can exit between directory enumeration and read; it
-            # cannot be a live conflicting owner after this observation.
+            try:
+                current = _proc_starttime(int(entry.name))
+            except FileNotFoundError:
+                continue
+            except PermissionError:
+                return _privileged_process_observation()
+            except OSError as exc:
+                raise AdmissionError('process identity unverifiable') from exc
+            if start is None or current == start:
+                raise AdmissionError('live process executable or command line disappeared')
             continue
-        except (OSError, UnicodeDecodeError) as exc:
+        except PermissionError:
+            return _privileged_process_observation()
+        except (OSError, UnicodeDecodeError, IndexError, ValueError) as exc:
+            if isinstance(exc, AdmissionError):
+                raise
             raise AdmissionError('process identity unverifiable') from exc
         if _heavy_identity(exe, argv):
+            if len(rows) >= MAX_HEAVY_ROWS:
+                raise AdmissionError('heavy process row bound exceeded')
             rows.append({'pid': int(entry.name), 'starttime': start, 'executable': exe})
+    return rows
+
+
+def _run_bounded_observer(command, source, env, timeout=15):
+    """Bound both pipes while draining them; never include stderr in errors."""
+    deadline = time.monotonic() + timeout
+    result = None
+    with selectors.DefaultSelector() as selector:
+        process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE, env=env)
+        try:
+            for stream, event, label in ((process.stdin, selectors.EVENT_WRITE, 'input'),
+                                          (process.stdout, selectors.EVENT_READ, 'stdout'),
+                                          (process.stderr, selectors.EVENT_READ, 'stderr')):
+                os.set_blocking(stream.fileno(), False)
+                selector.register(stream, event, label)
+            offset = 0
+            output = bytearray()
+            error_bytes = 0
+            while selector.get_map():
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    raise AdmissionError('privileged process observer timed out')
+                events = selector.select(remaining)
+                for key, _ in events:
+                    if key.data == 'input':
+                        try:
+                            offset += os.write(key.fd, source[offset:offset + 4096])
+                        except BrokenPipeError:
+                            offset = len(source)
+                        if offset == len(source):
+                            selector.unregister(key.fileobj)
+                            key.fileobj.close()
+                    else:
+                        limit = MAX_REPORT_BYTES if key.data == 'stdout' else 65536
+                        used = len(output) if key.data == 'stdout' else error_bytes
+                        chunk = os.read(key.fd, min(65536, limit - used + 1))
+                        if not chunk:
+                            selector.unregister(key.fileobj)
+                            key.fileobj.close()
+                        elif used + len(chunk) > limit:
+                            raise AdmissionError('privileged process report exceeds bound')
+                        elif key.data == 'stdout':
+                            output.extend(chunk)
+                        else:
+                            error_bytes += len(chunk)
+            result = types.SimpleNamespace(
+                returncode=process.wait(timeout=max(0.001, deadline - time.monotonic())),
+                stdout=bytes(output))
+        finally:
+            if process.poll() is None:
+                process.kill()
+            process.wait(timeout=5)
+            for stream in (process.stdin, process.stdout, process.stderr):
+                stream.close()
+    return result
+
+
+def _privileged_process_observation():
+    source = PRIVILEGED_PROCESS_OBSERVER_SOURCE.encode()
+    if hashlib.sha256(source).hexdigest() != PRIVILEGED_PROCESS_OBSERVER_SHA256:
+        raise AdmissionError('privileged process observer source hash mismatch')
+    try:
+        result = _run_bounded_observer(
+            ['/usr/bin/sudo', '-A', '/usr/bin/python3', '-I', '-B', '-'],
+            source, _sudo_environment())
+    except AdmissionError:
+        raise
+    except Exception as exc:
+        raise AdmissionError('privileged process observer unavailable') from exc
+    if result.returncode:
+        raise AdmissionError('privileged process observer unavailable')
+    if len(result.stdout) > MAX_REPORT_BYTES:
+        raise AdmissionError('privileged process report exceeds bound')
+    report = _strict_json(result.stdout)
+    try:
+        boot = Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+    except OSError as exc:
+        raise AdmissionError('process observer boot identity unavailable') from exc
+    if (not isinstance(report, dict) or
+        set(report) != {'schema', 'status', 'boot_id', 'processes'} or
+        report['schema'] != 'mckernel.heavy-process-observation.v1' or
+        report['status'] != 'PASS_READ_ONLY' or report['boot_id'] != boot or
+        not isinstance(report['processes'], list)):
+        raise AdmissionError('privileged process report malformed')
+    rows = []
+    identities = set()
+    if len(report['processes']) > MAX_HEAVY_ROWS:
+        raise AdmissionError('privileged process row bound exceeded')
+    for row in report['processes']:
+        if (not isinstance(row, dict) or set(row) != {'pid', 'starttime', 'executable'} or
+            type(row['pid']) is not int or row['pid'] <= 0 or
+            not isinstance(row['starttime'], str) or not re.fullmatch(r'[0-9]+', row['starttime']) or
+            not isinstance(row['executable'], str) or not row['executable'].startswith('/') or
+            '\x00' in row['executable']):
+            raise AdmissionError('privileged process row malformed')
+        identity = (row['pid'], row['starttime'])
+        if identity in identities or row['pid'] in {item[0] for item in identities}:
+            raise AdmissionError('privileged process row duplicated')
+        identities.add(identity)
+        rows.append(row)
     return rows
 
 
@@ -203,12 +465,17 @@ def _heavy_identity(executable, argv):
     if name in ('docker', 'podman'):
         return any(arg in ('build', 'run', 'start') for arg in argv[1:])
     if re.fullmatch(r'python(?:[23](?:\.\d+)?)?', name):
-        # Only the interpreter's actual script operand is relevant. Never scan
-        # -c source, test names, grep expressions or arbitrary command strings.
-        for arg in argv[1:]:
-            if arg in ('-c', '-m'): return False
-            if not arg.startswith('-'): return Path(arg).name in HEAVY_SCRIPTS
+        script = _python_script_operand(argv)
+        return script is not None and Path(script).name in HEAVY_SCRIPTS
     return name in HEAVY_SCRIPTS
+
+
+def _python_script_operand(argv):
+    """Return the actual Python script operand; never inspect -c/-m payloads."""
+    try:
+        return _PYTHON_PARSER_NAMESPACE['python_script'](argv)
+    except ValueError as exc:
+        raise AdmissionError('Python process identity unverifiable') from exc
 
 
 def _sudo_environment():
