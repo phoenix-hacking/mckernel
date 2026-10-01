@@ -18,7 +18,7 @@ timeout, or failure.
 If and only if independently released, the sole command is:
 
 ```text
-/usr/bin/sudo -A /home/holden/anaconda3/bin/python3 -B /home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py --attempt-parent /home/holden/mckernel-work/scratch/ndt18-20261001-1 --nonce 8a5c4f6e0eab4e17b4c7f09e6a2d3scratch18 --owner-sha256 c6a6423712fc117ebba9eb56b1e1af1aca718a1a9f1ec9d4ccfc15c2b33ac4b7 --manifest /home/holden/mckernel-work/scratch/native-diagnostic-scratch18-threads-runtime-20261001-1/manifest.json --manifest-sha256 23d0218399883c5f7990ca6b1faca3ea7735de4242875f2fbda4628a68794e44
+/usr/bin/sudo -A /home/holden/anaconda3/bin/python3 -B /home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py --attempt-parent /home/holden/mckernel-work/scratch/ndt18-20261001-1 --nonce 8a5c4f6e0eab4e17b4c7f09e6a2d3scratch18 --owner-sha256 c6a6423712fc117ebba9eb56b1e1af1aca718a1a9f1ec9d4ccfc15c2b33ac4b7 --manifest /home/holden/mckernel-work/scratch/native-diagnostic-scratch18-threads-runtime-20261001-1/manifest.json --manifest-sha256 c4fb59c80a73d53a0ce631098959330dff62b100ea840298df9a2c3e42b4a317
 ```
 
 Use inherited `SUDO_ASKPASS` only through `sudo -A`; never inspect or invoke
@@ -30,7 +30,7 @@ uid/gid 1000, mode 0700. This command is one-shot.
 Manifest:
 `/home/holden/mckernel-work/scratch/native-diagnostic-scratch18-threads-runtime-20261001-1/manifest.json`,
 mode 0600, SHA-256
-`23d0218399883c5f7990ca6b1faca3ea7735de4242875f2fbda4628a68794e44`.
+`c4fb59c80a73d53a0ce631098959330dff62b100ea840298df9a2c3e42b4a317`.
 `PASS_THREADS_MANIFEST_SCRATCH18` authenticates schema 1, case
 `baseline.core.threads`, every path/mode/size/hash, and:
 
