@@ -13484,3 +13484,26 @@ guest has run.  Exact source-only evidence is
 Next publish/fetch these bytes, obtain a separate hash-bound execution release,
 run one fresh offline probe, then prepare and build the scratch18 McKernel image.
 Counts and acceptance bars remain unchanged; the OS remains incomplete.
+
+Continuation checkpoint 339, 2026-10-01: the independently released fresh
+tool-image probe ran exactly once and PASSed.  Candidate-bound receipt
+`36d7b704...37bb0` authenticates 137 evidence rows, 22 tools, 46 packages and
+four library closures; the fresh network-none/no-mount observation exactly
+equals the retained c81 observation.  Container
+`mckernel-tool-rebind-32182198712c40bcbbdd1724fec08bd8` is exactly absent,
+and its lease plus `mckernel-heavy-operation.lock` are absent.  This is
+tool-image identity evidence only.
+
+The source-only McKernel image-request preparer then completed against the
+fresh receipt, the 850-entry scratch18 metadata inventory, expanded read-only
+scratch12 toolchain output and fresh gitlink closure.  Input/toolchain/request
+hashes are `5cad6e89...d42e3`, `de4bcafc...1cf83` and
+`e360fadc...a7f57`; owner work/evidence roots remain empty at inodes
+1831:6684818 and 1831:6685253.  No Docker or heavy token was used by request
+preparation.  Exact evidence is
+`native-exact-scratch18-tool-image-and-request-prepared-20261001.json`; the
+one-build proposal is `native-exact-scratch18-image-build-execution-proposal-20261001.json`.
+Next independently review and run that one serialized four-job image build,
+then validate/postlink its actual image before the startup diagnostic.  Counts
+remain two current compiled candidates, five prior diagnostic guest passes and
+zero formal application accepts; the OS remains incomplete.
