@@ -1,4 +1,6 @@
 import copy
+import json
+import os
 import shutil
 from pathlib import Path
 import tempfile
@@ -63,8 +65,14 @@ def request(source):
 class WrapperTests(unittest.TestCase):
     def setUp(self):
         self.lock_dir = Path(tempfile.mkdtemp(prefix="mckernel-wrapper-lock-"))
+        self.contract = mock.patch.object(wrapper, 'HEAVY_ENTRY_CONTRACT_RELEASED', True)
+        self.contract.start()
+        self.shared = mock.patch.object(wrapper, 'SHARED_HEAVY_LOCK_PATH', str(self.lock_dir / 'shared.lock'))
+        self.shared.start()
         wrapper.OPERATIONAL_EXCLUSION_PATH = str(
-            self.lock_dir / "native-exact-candidate-operational-exclusion-scratch15-exportset-27.json")
+            self.lock_dir / "native-exact-candidate-operational-exclusion-scratch17.json")
+        wrapper.RETIRED_SCRATCH16_OPERATIONAL_EXCLUSION_PATH = str(
+            self.lock_dir / "native-exact-candidate-operational-exclusion-scratch16.json")
         FakeOwner.calls = FakeOwner.validations = 0
         FakeOwner.CliSignals.entered = FakeOwner.CliSignals.exited = 0
         FakeOwner.measurement = {
@@ -75,11 +83,21 @@ class WrapperTests(unittest.TestCase):
             "candidate_memory_effect": {"classification": "none", "bytes": 0},
             "aggregate_memory_required": wrapper.EXPECTED_LIMITS["Memory"],
         }
+        self.reconcile = mock.patch.object(wrapper, "_dispatcher_reconcile", return_value={
+            "processes": [], "containers": [], "leases": [],
+            "resources": {"host_free": 64 * 2**30, "scratch_free": 64 * 2**30,
+                          "memory_available": 32 * 2**30, "cpus": [2, 3, 4, 5]}})
+        self.reconcile_mock = self.reconcile.start()
 
     def tearDown(self):
+        shared = Path(wrapper.SHARED_HEAVY_LOCK_PATH)
+        if shared.exists(): shared.unlink()
+        self.shared.stop()
+        self.contract.stop()
         lock = Path(wrapper.OPERATIONAL_EXCLUSION_PATH)
         if lock.exists():
             lock.unlink()
+        self.reconcile.stop()
         self.lock_dir.rmdir()
 
     def invoke(self, req, aggregate=wrapper.LAUNCHER_AGGREGATE_GIB):
@@ -103,13 +121,153 @@ class WrapperTests(unittest.TestCase):
         self.assertEqual(FakeOwner.CliSignals.entered, 1)
         self.assertEqual(FakeOwner.CliSignals.exited, 1)
 
+    def test_shared_entry_contract_is_required_and_serializes_all_kinds(self):
+        with mock.patch.object(wrapper, 'HEAVY_ENTRY_CONTRACT_RELEASED', False):
+            with self.assertRaisesRegex(wrapper.AdmissionError, 'not released'):
+                self.invoke(request)
+        lock, record = wrapper.acquire_heavy_operation({}, 'image')
+        for kind in ('build', 'guest', 'image'):
+            with self.subTest(kind=kind), self.assertRaisesRegex(wrapper.AdmissionError, 'already exists'):
+                wrapper.acquire_heavy_operation({}, kind)
+        self.assertTrue(lock.exists())
+        self.assertFalse(wrapper._release_exclusion(lock, record, {'status': 'FAIL'}))
+        self.assertTrue(lock.exists())
+
+    def test_validation_only_never_acquires_or_runs(self):
+        owner = types.SimpleNamespace(LIMITS=FakeOwner.LIMITS, provenance=FakeOwner.provenance,
+                                      BuildOwner=FakeOwner)
+        with mock.patch.object(wrapper, '_load_owner', return_value=owner), \
+             mock.patch.object(wrapper, '_acquire_exclusion') as acquire, \
+             mock.patch.object(wrapper, '_dispatcher_reconcile') as census:
+            result = wrapper.validate_request(request(self.lock_dir))
+        self.assertEqual(result['status'], 'PASS_COMPATIBILITY_ONLY')
+        self.assertEqual(FakeOwner.validations, 1)
+        self.assertEqual(FakeOwner.calls, 0)
+        acquire.assert_not_called(); census.assert_not_called()
+
+    def test_nonempty_process_result_hard_blocks_before_owner_construction(self):
+        self.reconcile.stop()
+        try:
+            for rows in ([{'pid': 55}], None, {'unknown': True}):
+                with mock.patch.object(wrapper, '_dispatcher_processes', return_value=rows), \
+                     mock.patch.object(wrapper, '_load_owner') as owner:
+                    with self.assertRaisesRegex(wrapper.AdmissionError, 'heavy process'):
+                        wrapper._dispatcher_reconcile(request(self.lock_dir))
+                    owner.assert_not_called()
+        finally:
+            self.reconcile.start()
+
+    def test_exact_executable_census_avoids_observer_self_match(self):
+        for exe, argv in (('/usr/bin/qemu-system-x86_64', ['qemu-system-x86_64']),
+                          ('/usr/bin/rustc', ['rustc', '--version']),
+                          ('/usr/bin/python3.9', ['python3', '-B', '/x/native_rust_exact_build_container_owner.py'])):
+            self.assertTrue(wrapper._heavy_identity(exe, argv))
+        for exe, argv in (('/usr/bin/rg', ['rg', 'qemu|rustc']),
+                          ('/usr/bin/python3.9', ['python3', '-c', 'rustc native_rust_exact_build_container_owner.py']),
+                          ('/usr/bin/bash', ['bash', '-c', 'echo qemu']),
+                          ('/usr/bin/python3.9', ['python3', '/x/test_native_rust_exact_disk_build_wrapper.py'])):
+            self.assertFalse(wrapper._heavy_identity(exe, argv))
+
+    def test_container_census_rejects_unknown_json_and_all_live_names(self):
+        good = {'ID': 'a' * 64, 'Image': 'unrelated', 'Names': 'innocent',
+                'State': 'running', 'Status': 'Up 10 seconds'}
+        for data in (b'null', b'[]', b'1', b'{}', b'{"ID":"a","ID":"b"}',
+                     json.dumps(dict(good, State='unknown')).encode(),
+                     json.dumps(dict(good, ID=True)).encode(), json.dumps(good).encode()):
+            result = types.SimpleNamespace(returncode=0, stdout=data, stderr=b'')
+            with mock.patch.object(wrapper.subprocess, 'run', return_value=result):
+                with self.assertRaises(wrapper.AdmissionError): wrapper._dispatcher_containers()
+        with mock.patch.object(wrapper.subprocess, 'run', return_value=types.SimpleNamespace(returncode=0, stdout=b'')) as run, \
+             mock.patch.dict(os.environ, {'SUDO_ASKPASS': '/synthetic-helper', 'EVIL': 'discard'}):
+            self.assertEqual(wrapper._dispatcher_containers(), [])
+            self.assertEqual(run.call_args.kwargs['env'].get('SUDO_ASKPASS'), '/synthetic-helper')
+            self.assertNotIn('EVIL', run.call_args.kwargs['env'])
+
+    def test_serialization_lock_spans_reconciled_owner_execution(self):
+        events = []
+        self.reconcile_mock.side_effect = lambda req: events.append('reconcile') or {}
+        real_acquire = wrapper._acquire_exclusion
+        def acquire(req):
+            events.append('lock')
+            return real_acquire(req)
+        real_run = FakeOwner.run
+        def run(owner_instance):
+            events.append('owner')
+            return real_run(owner_instance)
+        with mock.patch.object(wrapper, '_acquire_exclusion', side_effect=acquire), \
+             mock.patch.object(FakeOwner, 'run', run):
+            self.assertEqual(self.invoke(request)['status'], 'PASS')
+        self.assertEqual(events, ['lock', 'reconcile', 'owner'])
+
+    def test_dispatcher_reconciliation_collects_explicit_domains(self):
+        self.reconcile.stop()
+        try:
+            with mock.patch.object(wrapper, '_dispatcher_processes', return_value=[]), \
+                 mock.patch.object(wrapper, '_dispatcher_containers', return_value=[]), \
+                 mock.patch.object(wrapper, '_dispatcher_leases', return_value=[]), \
+                 mock.patch.object(wrapper, '_dispatcher_resources', return_value={'fresh': True}):
+                result = wrapper._dispatcher_reconcile(request(Path(self.lock_dir)))
+        finally:
+            self.reconcile.start()
+        self.assertEqual(set(result), {'processes', 'containers', 'leases', 'resources'})
+        self.assertEqual(result['resources'], {'fresh': True})
+
+    def test_non_tombstone_lease_blocks_dispatch(self):
+        with tempfile.TemporaryDirectory() as td:
+            old_root = wrapper.DISPATCHER_SCRATCH_ROOT
+            wrapper.DISPATCHER_SCRATCH_ROOT = td
+            try:
+                (Path(td) / 'native-exact-build-lease-live.json').write_text(
+                    '{"pid": 123, "starttime": "456"}')
+                with self.assertRaisesRegex(wrapper.AdmissionError, 'non-tombstone lease'):
+                    wrapper._dispatcher_leases(request(self.lock_dir))
+            finally:
+                wrapper.DISPATCHER_SCRATCH_ROOT = old_root
+
+    def test_tombstone_with_live_owner_identity_blocks_dispatch(self):
+        with tempfile.TemporaryDirectory() as td:
+            old_root = wrapper.DISPATCHER_SCRATCH_ROOT
+            wrapper.DISPATCHER_SCRATCH_ROOT = td
+            try:
+                start = wrapper._proc_starttime(os.getpid())
+                (Path(td) / 'native-exact-build-lease-tombstone.json').write_text(
+                    json.dumps({'tombstone': True, 'pid': os.getpid(), 'starttime': start}))
+                with self.assertRaisesRegex(wrapper.AdmissionError, 'still live'):
+                    wrapper._dispatcher_leases(request(self.lock_dir))
+            finally:
+                wrapper.DISPATCHER_SCRATCH_ROOT = old_root
+
+    def test_unverifiable_dispatcher_observation_blocks_before_lock(self):
+        self.reconcile.stop()
+        try:
+            with mock.patch.object(wrapper, '_dispatcher_processes',
+                                   side_effect=wrapper.AdmissionError('process identity unverifiable')):
+                with self.assertRaisesRegex(wrapper.AdmissionError, 'unverifiable'):
+                    wrapper.run_request(request(self.lock_dir))
+            self.assertTrue(Path(wrapper.OPERATIONAL_EXCLUSION_PATH).exists())
+            Path(wrapper.OPERATIONAL_EXCLUSION_PATH).unlink()
+        finally:
+            self.reconcile.start()
+
+    def test_dispatcher_reconciliation_is_required_before_exclusion(self):
+        with mock.patch.object(wrapper, "_dispatcher_reconcile",
+                               side_effect=wrapper.AdmissionError("unverifiable live owner")):
+            with self.assertRaisesRegex(wrapper.AdmissionError, "unverifiable"):
+                self.invoke(request)
+        self.assertTrue(Path(wrapper.OPERATIONAL_EXCLUSION_PATH).exists())
+        Path(wrapper.OPERATIONAL_EXCLUSION_PATH).unlink()
+        self.assertEqual(FakeOwner.calls, 0)
+
     def test_fresh_exclusion_replaces_retired_tombstone(self):
         self.assertNotEqual(wrapper.OPERATIONAL_EXCLUSION_PATH,
                             wrapper.RETIRED_OPERATIONAL_EXCLUSION_PATH)
         self.assertTrue(wrapper.OPERATIONAL_EXCLUSION_PATH.endswith(
-            "native-exact-candidate-operational-exclusion-scratch15-exportset-27.json"))
+            "native-exact-candidate-operational-exclusion-scratch17.json"))
+        self.assertTrue(wrapper.RETIRED_SCRATCH16_OPERATIONAL_EXCLUSION_PATH.endswith(
+            "native-exact-candidate-operational-exclusion-scratch16.json"))
         for rejected_path in (
             wrapper.CONSUMED_EXPORTSET16_OPERATIONAL_EXCLUSION_PATH,
+            wrapper.RETIRED_SCRATCH16_OPERATIONAL_EXCLUSION_PATH,
             wrapper.RETIRED_OPERATIONAL_EXCLUSION_PATH,
             wrapper.REVIEWED_OPERATIONAL_EXCLUSION_PATH,
             wrapper.SUPERSEDED_OPERATIONAL_EXCLUSION_PATH,
