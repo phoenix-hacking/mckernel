@@ -1,0 +1,77 @@
+{
+  "schema": "mckernel.native-exact-candidate12.planbound-cleanup-success.v1",
+  "recorded_at": "2026-09-30T18:27:00-07:00",
+  "status": "PASS_CLEANUP_EVIDENCE",
+  "release": {
+    "path": "docs/verification/evidence/native-exact-candidate12-planbound-cleanup-release-20260930-3.json",
+    "commit": "3385747b65658fef1a7e2c20e7f6652f10ffeff8",
+    "sha256": "455b092e5b91d1b1ca0d7a549801e58a3f5f52c6dfeff9f6db95fceae4a0b256"
+  },
+  "execution": {
+    "exit_code": 0,
+    "stdout": "STORAGE_PASS",
+    "one_shot": true,
+    "build": false,
+    "guest": false,
+    "acceptance_change": false
+  },
+  "outputs": {
+    "journal": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate12-planbound-cleanup-20260930-3.journal.jsonl",
+      "sha256": "78fd1fd64c15af577bf8307efd8223fccca36ba388a83ed69f96cdf4b8e12353",
+      "size": 3524952,
+      "dev": 1831,
+      "ino": 90661,
+      "mode": "0600",
+      "nlink": 1,
+      "records": 10038
+    },
+    "receipt": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate12-planbound-cleanup-20260930-3.receipt.json",
+      "sha256": "3c136b0dc1c89693bf00abdc0ef4eb0bd5ba4a466fec8f82077b096284002092",
+      "size": 1401453,
+      "dev": 1831,
+      "ino": 90662,
+      "mode": "0600",
+      "nlink": 1
+    },
+    "status": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate12-planbound-cleanup-20260930-3.status.json",
+      "sha256": "b73bdb912eaa9b2a9f6ec7530f5f35dcda14ef09fa55cf7b6fc376fa0302763d",
+      "size": 252,
+      "dev": 1831,
+      "ino": 90663,
+      "mode": "0600",
+      "nlink": 1
+    }
+  },
+  "deleted": {
+    "files": 2507,
+    "bytes": 9096966061,
+    "allocated_bytes": 9102798848,
+    "receipt_states": ["deleted"],
+    "uncertain_states": 0,
+    "original_target_count": 0,
+    "quarantine2_files": 0,
+    "quarantine3_files": 0
+  },
+  "restoration_authority": {
+    "plan_sha256": "eaba225bfeb8e58fa1a6a7d5cfe1ae622e5bb1f9355e359af16464968ac0f957",
+    "candidate_commit": "4e99a82c9b87a7cf3d6002b75ec380fef37af7a1",
+    "verified_git_paths": 2507,
+    "separate_capsule": false
+  },
+  "census": {
+    "snapshots": 3,
+    "containers": 41,
+    "candidate_intersections": 6,
+    "absent_leases": 2,
+    "protected_entries": 17
+  },
+  "capacity_before_trim": {
+    "host_free_bytes": 30831599616,
+    "scratch_free_bytes": 26192269312,
+    "mem_available_kib": 28479932
+  },
+  "scope": "Exact candidate12 target cleanup only; fstrim, build, guest and OS acceptance remain separate."
+}

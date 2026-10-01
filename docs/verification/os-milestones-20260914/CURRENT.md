@@ -10916,3 +10916,27 @@ independent execution review and run it once.  On accepted cleanup, trim and
 remeasure capacity, rebind/release scratch-13 preparation and exportset-25,
 build the smallest current image and run separately labelled diagnostic
 startup/memory/files/threads-futex/signals/shutdown applications.
+
+Continuation checkpoint 263, 2026-09-30: fresh cleanup release
+`455b092e...b256` at fetched commit `3385747b...eff8` passed independent
+execution review and its single authorized attempt returned `STORAGE_PASS` with
+exit zero.  Independent evidence review accepts all 10,038 journal records:
+complete staging, renewed census, irreversible admission, 2,507 paired deletion
+intents/completions, final census and completion.  The receipt contains exactly
+2,507 `deleted` states and no uncertain state.
+
+All targets are absent; quarantines 2 and 3 exist and are empty.  Three raw
+censuses retain stable 41-container inventories with exactly six authenticated
+terminal intersections, both leases absent and all 17 protected entries valid.
+All 2,507 restoration paths and Git blobs (9,096,966,061 bytes) remain verified
+at `4e99a82c...7a1`; there is no separate capsule.  Journal/receipt/status hashes
+are `78fd1fd6...2353`/`3c136b0d...2092`/`b73bdb91...763d`.  Exact evidence is
+`docs/verification/evidence/native-exact-candidate12-planbound-cleanup-success-20260930.json`.
+
+Scratch free space rose from about 17.1 GB to 26.19 GB before trim; host free is
+30.83 GB and MemAvailable is 28,479,932 KiB.  This accepts cleanup only.  Next
+checkpoint/fetch this evidence, run targeted scratch `fstrim`, remeasure floors,
+then rebind and release scratch-13 preparation against the fetched descendant.
+After preparation, independently release exactly one serialized exportset-25
+build, validate its real linked artifact, and begin the separately labelled
+diagnostic application loop.  No formal acceptance counter changes here.
