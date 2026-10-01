@@ -13277,3 +13277,25 @@ host/scratch/available-memory bytes are 26,615,476,224 / 18,126,430,208 /
 23,841,058,816.  Next finish and independently review the escalated cleanup,
 publish/fetch and consume it once, then prepare/review the corrected fresh request
 and build.  Counts remain unchanged and the OS remains incomplete.
+
+Continuation checkpoint 330, 2026-10-01: the user externally completed
+lossless retirement of the inactive e1c5e4e2 scratch4 and f021bdee scratch8
+expanded build outputs.  Both original output paths are absent.  Their exact
+off-scratch tar.zst archives are respectively 1,350,926,377 bytes at SHA-256
+`596335bd...54b5` and 1,357,417,364 bytes at SHA-256 `1ac3bd04...33c`; the user
+reports complete ACL/xattr/numeric-owner tar comparisons over 140,028 and
+140,054 entries.  Concise learning notes retain the Rust MemoryMap-generic
+failure/correction and the 20-symbol lifecycle-oracle correction.  Current
+host/scratch/available-memory bytes reconcile to 39,526,014,976 /
+28,422,197,248 / 23,841,058,816 with zero running containers.  A targeted
+scratch fstrim returned zero bytes because the external cleanup had already
+returned its free extents.  Exact additive mapping is
+`native-exact-old-output-retirement-external-20261001.json`.
+
+Do not expect or recreate those expanded output paths except by verified archive
+restore for historical analysis.  Preserve their source/evidence, active
+scratch18 inputs and interrupted archives, c81 image/five diagnostic passes and
+all ownership safeguards.  The recovered headroom is reserved for the next
+fresh scratch18 build.  Cleanup source remains unexecuted while its atomic
+active-ownership correction is independently reviewed; no acceptance counters
+change and the OS remains incomplete.
