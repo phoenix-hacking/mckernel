@@ -12709,3 +12709,37 @@ scratch16 remain immutable and must never rerun.  After prepared-candidate
 review, one expert-released successor build may test whether phase-0 now reaches
 compilation.  Counts remain one compiled current candidate, five bounded
 diagnostic guest passes and zero formal application acceptances.
+
+Continuation checkpoint 313, 2026-10-01: target `50b08432...35632` is now a
+fetched ancestor of branch head `41c7f1b1...7d74a`.  Independent review returns
+`PASS_SOURCE_PREPARATION_ONLY` for fresh scratch17 packet
+`c5c8d8ca...cc8a10` and its 12-test suite `e6240955...51c92`.  The target delta
+from the retained scratch15 base is exactly 21 additions and 13 modifications.
+
+Production validate-only completed in 55.315 seconds without creating any
+destination.  It authenticated exactly 486 scratch15/scratch16 evidence pairs
+with matching inode, bytes, mode, size, mtime, device and nlink two.  Execution
+would require all three owners at nlink three; third/fourth-owner and mismatched
+owner mutations are rejected.  The earlier nlink-one and validate-only-bypass
+drafts remain rejected history.  No production preparation has run.
+
+Two downstream source lanes also pass bounded review.  Image owner
+`1737f060...9cfb5` plus tests `44af86b1...dc48` bind a fresh exact
+`scratch17-image-1` exclusion, reject all historical/arbitrary/alias paths and
+retain O_EXCL records; 28 tests and three mutations pass.  Tool-image packet
+`89ffa8e6...6545` plus tests `d34cb6f6...cc12a` passes 25 tests and eight
+negative probes for the candidate-bound bridge-setup/offline-no-network profile.
+It is `PASS_SOURCE_PACKET_ONLY`, not execution-released: a separate release must
+bind live process/container/lease reconciliation and resource measurements.
+
+The shutdown v5 blocker test `831307c0...05a1f` remains rejected WIP because
+its manual transaction model does not execute production admission/registry
+paths; it is not staged or accepted.  Exact source-preparation evidence is
+`native-exact-scratch17-preparation-source-checkpoint-20261001.json`.
+
+Next commit/push/fetch and verify these exact source blobs, rerun scratch17
+production validate-only at the fetched head, remeasure capacity/process state,
+then execute scratch17 preparation exactly once.  Review the resulting candidate
+before creating the one expert-released successor build request.  Counts remain
+one compiled current candidate, five bounded diagnostic guest passes and zero
+formal application acceptances.
