@@ -13828,7 +13828,12 @@ empty.
 Additive v2 invokes the authenticated candidate outer disk wrapper while its
 parent holds root development lock inode `27:4` across compatibility validation,
 privileged read-only census, O_EXCL request publication, build and terminal
-reconciliation.  Four focused tests pass.  It derives only the four release
+reconciliation.  The first v2 review found its parent timeout/signal path could
+release that lock with uncertain Docker retirement.  The bounded correction
+removes the outer timeout, defers SIGHUP/SIGINT/SIGTERM, passes the lock fd to
+the child, and enters a non-returning root-lock quarantine after any started
+build without positive current terminal retirement.  Six focused tests pass,
+including retirement mutants and quarantine-before-unlock ordering.  It derives only the four release
 flags, producing request SHA-256 `35efb73b...45b6`.  Its corrected terminal
 policy releases the per-request lease only after proven retirement while
 retaining the terminal container and both shared exclusions for separately

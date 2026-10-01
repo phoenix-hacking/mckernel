@@ -44,6 +44,31 @@ class ReleaseTests(unittest.TestCase):
         self.assertNotIn("str(CANDIDATE / \"scripts/native_rust_exact_build_container_owner.py\")", source)
         self.assertIn("cleanup_separately_required", source)
         self.assertIn("terminal_container_retained", source)
+        self.assertIn("pass_fds=(lockfd,)", source)
+        self.assertNotIn("timeout=19920", source)
+        self.assertIn("signal.SIGHUP, signal.SIGINT, signal.SIGTERM", source)
+
+    def test_only_positive_current_terminal_proves_retirement(self):
+        good = {"retired": True, "cleanup_separately_required": True,
+                "terminal_container_retained": True,
+                "terminal_container_info": {"State": {"Running": False}},
+                "terminal_container_info_current": True}
+        self.assertTrue(MODULE.retirement_proven(good))
+        for key, value in (("retired", False), ("cleanup_separately_required", False),
+                           ("terminal_container_retained", None),
+                           ("terminal_container_info", None),
+                           ("terminal_container_info_current", False),
+                           ("client_retirement_unproven", True)):
+            bad = dict(good)
+            bad[key] = value
+            self.assertFalse(MODULE.retirement_proven(bad), key)
+
+    def test_uncertain_started_build_quarantines_before_unlock(self):
+        source = PATH.read_text()
+        finally_block = source.split("    finally:\n        if build_started", 1)[1]
+        self.assertLess(finally_block.index("quarantine_root_lock"),
+                        finally_block.index("fcntl.flock(lockfd, fcntl.LOCK_UN)"))
+        self.assertIn("while True:\n        signal.pause()", source)
 
 
 if __name__ == "__main__":

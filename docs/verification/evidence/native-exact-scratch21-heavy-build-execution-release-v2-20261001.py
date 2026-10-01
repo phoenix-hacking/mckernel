@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 import re
+import signal
 import stat
 import subprocess
 from pathlib import Path
@@ -29,6 +30,7 @@ LOCK = Path("/run/lock/mckernel-development.lock")
 STDOUT = ROOT / "native-exact-scratch21-heavy-build-v2.stdout"
 STDERR = ROOT / "native-exact-scratch21-heavy-build-v2.stderr"
 TERMINAL = ROOT / "native-exact-scratch21-heavy-build-v2.terminal.json"
+QUARANTINE = ROOT / "native-exact-scratch21-heavy-build-v2.root-lock-quarantine.json"
 
 PREP_SHA256 = "04a7b363d94af5da8276397f6c2e0baec058eabdcc10471b8e2c8d0f9b554f2c"
 DERIVED_SHA256 = "35efb73b2b5356507bd4b740b8925a3bd325135257ffaf39bffcefa9930c45b6"
@@ -168,12 +170,12 @@ def preflight():
     return derived, derived_raw
 
 
-def run_checked(command, stdout_path, stderr_path):
+def run_checked(command, stdout_path, stderr_path, lockfd):
     outfd = os.open(str(stdout_path), os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | os.O_CLOEXEC, 0o600)
     errfd = os.open(str(stderr_path), os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | os.O_CLOEXEC, 0o600)
     try:
         result = subprocess.run(command, stdin=subprocess.DEVNULL, stdout=outfd, stderr=errfd,
-                                close_fds=True, timeout=19920,
+                                close_fds=True, pass_fds=(lockfd,),
                                 env={"PATH": "/usr/bin:/bin", "HOME": "/home/holden",
                                      "LANG": "C", "LC_ALL": "C",
                                      "SUDO_ASKPASS": os.environ.get("SUDO_ASKPASS", "")})
@@ -199,9 +201,46 @@ def publish(path, raw, expected_sha256=None):
         raise Refusal("published request changed")
 
 
+def retirement_proven(result):
+    """Only a current, positively retired terminal owner permits lock release."""
+    return (isinstance(result, dict) and result.get("retired") is True and
+            result.get("client_retirement_unproven") is not True and
+            result.get("cleanup_separately_required") is True and
+            result.get("terminal_container_retained") is True and
+            result.get("terminal_container_info") is not None and
+            result.get("terminal_container_info_current") is True)
+
+
+def quarantine_root_lock(lockfd, reason):
+    """Retain the live root lock until separately reviewed cleanup.
+
+    This intentionally does not return.  Signals are already deferred, so an
+    uncertain container/client cannot become concurrent with another guest.
+    """
+    record = {"schema": "mckernel.native-exact-scratch21-root-lock-quarantine.v1",
+              "status": "QUARANTINED", "pid": os.getpid(),
+              "starttime": Path("/proc/self/stat").read_text().rsplit(")", 1)[1].split()[19],
+              "boot_id": Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
+              "lock_device_inode": "%d:%d" % LOCK_ID[:2], "reason": reason}
+    if not os.path.lexists(QUARANTINE):
+        publish(QUARANTINE, canonical(record))
+    while True:
+        signal.pause()
+
+
 def execute(release_commit):
     bind_release(release_commit)
+    requested = []
+    old_handlers = {}
+    def defer(signum, _frame):
+        if not requested:
+            requested.append(signum)
+    for signum in (signal.SIGHUP, signal.SIGINT, signal.SIGTERM):
+        old_handlers[signum] = signal.getsignal(signum)
+        signal.signal(signum, defer)
     lockfd = acquire_development_lock()
+    build_started = False
+    safe_to_release = True
     try:
         request, raw = preflight()
         # Read-only checks occur under the root lock before the request is consumed.
@@ -217,13 +256,17 @@ def execute(release_commit):
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=600)
         if census.returncode or b'"status":"PASS_READ_ONLY"' not in census.stdout.replace(b" ", b""):
             raise Refusal("read-only census refused")
+        if requested:
+            raise Refusal("signal received before request publication")
         # Recheck all mutation-sensitive inputs immediately before O_EXCL publication.
         request2, raw2 = preflight()
         if request2 != request or raw2 != raw:
             raise Refusal("preflight changed")
         publish(EXECUTION, raw, DERIVED_SHA256)
+        build_started = True
+        safe_to_release = False
         code = run_checked(["/usr/bin/python3", "-B", str(WRAPPER), str(EXECUTION),
-                            "--launcher-aggregate-gib", "16.2158"], STDOUT, STDERR)
+                            "--launcher-aggregate-gib", "16.2158"], STDOUT, STDERR, lockfd)
         stdout = stable_regular(STDOUT, maximum=MAX_CAPTURE)
         stderr = stable_regular(STDERR, maximum=MAX_CAPTURE)
         try:
@@ -233,24 +276,29 @@ def execute(release_commit):
         terminal = {"schema": "mckernel.native-exact-scratch21-heavy-build-terminal.v2",
                     "release_commit": release_commit, "request_sha256": DERIVED_SHA256,
                     "returncode": code, "stdout_sha256": sha(stdout), "stderr_sha256": sha(stderr),
-                    "wrapper_result": result}
+                    "deferred_signals": requested, "wrapper_result": result}
         publish(TERMINAL, canonical(terminal))
+        safe_to_release = retirement_proven(result)
+        if not safe_to_release:
+            raise Refusal("terminal retirement is uncertain")
         if code != 0 or not isinstance(result, dict) or result.get("status") != "PASS":
-            raise Refusal("heavy build failed; preserve terminal ownership")
-        if result.get("retired") is not True or result.get("cleanup_separately_required") is not True:
-            raise Refusal("terminal ownership result mismatch")
-        if result.get("terminal_container_retained") is not True or result.get("terminal_container_info_current") is not True:
-            raise Refusal("terminal container retention mismatch")
+            raise Refusal("heavy build failed after positive retirement")
         if os.path.lexists(LEASE):
             raise Refusal("retired request lease unexpectedly remains")
         if not os.path.lexists(EXCLUSION) or not os.path.lexists(SHARED):
             raise Refusal("shared exclusions were not retained for cleanup")
+        if requested:
+            raise Refusal("signal received during build; retirement was preserved")
         return {"status": "PASS_EXECUTED", "release_commit": release_commit,
                 "request_sha256": DERIVED_SHA256, "wrapper_result": result,
                 "terminal_sha256": sha(stable_regular(TERMINAL))}
     finally:
+        if build_started and not safe_to_release:
+            quarantine_root_lock(lockfd, "build-started-without-positive-terminal-retirement")
         fcntl.flock(lockfd, fcntl.LOCK_UN)
         os.close(lockfd)
+        for signum, handler in old_handlers.items():
+            signal.signal(signum, handler)
 
 
 def main(argv=None):
