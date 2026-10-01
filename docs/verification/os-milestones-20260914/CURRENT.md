@@ -11713,3 +11713,49 @@ the c81 image, unchanged scratch-12 bzImage/modules and corrected launcher.
 Then obtain the separate guest release and run the exact memory oracle.  Real
 current-candidate guest applications remain zero and all formal counters remain
 unchanged.
+
+Shutdown checkpoint 283, 2026-10-01: no new dispatch or runtime was started
+after the launcher stop request.  All eight child lanes are terminal.  No
+compiler, QEMU guest or `mcexec` process is active; the only matching campaign
+processes are launcher wrapper 1442141, launcher 1442142, worker 1442145,
+app-server 1442149 and code-mode host 1442494, all started 2026-09-30
+10:46-10:47 PDT.  The unrelated older code-mode host 3011513 remains outside
+this launcher tree.  These identities are preserved, not terminated.
+
+The exact c81 diagnostic base was prepared without root or guest execution.
+Its uncompressed initramfs is 39,366,656 bytes at `defbea55...b23`, compressed
+base is 12,303,864 bytes at `ed554007...38466`, and staging manifest is 19,845
+bytes at `131a838a...508a58`.  The memory overlay is the regular file
+`/home/holden/mckernel-work/scratch/native-diagnostic-memory-c81-overlay-20261001-1`,
+12,891,594 bytes, mode 0600, identity `1831:90701`, SHA-256
+`e2684f76...22eb8b`.  It binds the accepted c81 image, unchanged scratch-12
+modules/bzImage, corrected `mcexec`, unchanged memory payload and collector.
+This is data-only diagnostic preparation; no strict runtime manifest, guest
+release, application output or acceptance exists yet.
+
+The committed exportset-26 cleanup release at `43c583d6...d9d74` is invalid
+and was not executed.  Independent live review stopped before journal creation
+or mutation because the helper's generic single-link check rejected the
+intentional two-name retained build-helper inode `66306:47485298`, nlink 2,
+SHA-256 `cc243126...cd1a`.  The exclusion, retained successful container and
+all evidence remain unchanged.  A bounded working-tree correction now
+authenticates exactly the primary helper and its historical d094 alias with
+that identity, metadata and bytes, rereads both against intervening changes,
+and leaves nlink 1 mandatory everywhere else.  Its helper SHA is
+`f208d4d1...2def3`, test SHA `4ea93c45...6ef80`, and all 102 mocked tests pass.
+It is checkpointed but unreleased at shutdown; the old release must never be
+executed.
+
+Next continuation must first independently review the checkpointed cleanup
+source, create and commit/fetch a fresh superseding release, obtain fresh
+execution review and run that exact cleanup once.  Then construct and validate
+the strict c81 memory manifest from the retained base/overlay, checkpoint/fetch
+a separate guest execution release, and run the exact memory oracle: stdout
+`NATIVE_CORE PASS memory\n`, empty stderr, exit 37, EOF/no truncation, kernel
+log, clean QMP shutdown and empty procfs after teardown.  Preserve any first
+runtime failure and apply only one bounded correction per failure family.
+Startup, files, threads/futexes, signals and shutdown remain subsequent real
+diagnostic lanes.  The current-candidate build count is one; real
+current-candidate guest applications remain zero.  Diagnostic and formal
+acceptance counters are unchanged, and the OS goal remains active and
+incomplete.

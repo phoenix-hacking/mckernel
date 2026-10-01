@@ -526,3 +526,85 @@ def test_source_has_no_exclusion_deletion_operation():
     assert 'os.unlink(' not in source
     assert 'os.remove(' not in source
     assert 'os.rmdir(' not in source
+
+
+@pytest.fixture
+def exact_hardlink(tmp_path, monkeypatch):
+    primary = tmp_path / 'primary'
+    alias = tmp_path / 'alias'
+    primary.write_bytes(b'exact historical read-only bind')
+    primary.chmod(0o600)
+    os.link(primary, alias)
+    st = primary.stat()
+    monkeypatch.setattr(m, 'HARDLINK_PATHS', (primary, alias))
+    monkeypatch.setattr(m, 'HARDLINK_METADATA',
+                        (st.st_dev, st.st_ino, 2, st.st_size, 0o600, st.st_uid))
+    monkeypatch.setattr(m, 'HARDLINK_SHA', m.sha(primary.read_bytes()))
+    return primary, alias
+
+
+def test_exact_hardlink_pair_authenticates_each_name(exact_hardlink):
+    primary, alias = exact_hardlink
+    assert m.read_file(primary)[0] == primary.read_bytes()
+    assert m.read_file(alias)[0] == primary.read_bytes()
+
+
+@pytest.mark.parametrize('change', ['extra_alias', 'missing_alias', 'repointed_alias',
+                                   'symlink_alias', 'bytes', 'mode'])
+def test_exact_hardlink_rejects_alias_or_file_drift(exact_hardlink, tmp_path, change):
+    primary, alias = exact_hardlink
+    if change == 'extra_alias':
+        os.link(primary, tmp_path / 'third')
+    elif change == 'missing_alias':
+        alias.unlink()
+    elif change == 'repointed_alias':
+        payload = alias.read_bytes()
+        alias.unlink()
+        alias.write_bytes(payload)
+        os.link(primary, tmp_path / 'unapproved-primary-name')
+        os.link(alias, tmp_path / 'unapproved-alias-name')
+    elif change == 'symlink_alias':
+        alias.unlink()
+        alias.symlink_to(primary)
+        os.link(primary, tmp_path / 'unapproved-primary-name')
+    elif change == 'bytes':
+        primary.write_bytes(b'wrong' + primary.read_bytes()[5:])
+    else:
+        primary.chmod(0o644)
+    with pytest.raises((m.Error, OSError)):
+        m.read_file(primary)
+
+
+@pytest.mark.parametrize('field', range(6))
+def test_exact_hardlink_requires_every_metadata_field(exact_hardlink, monkeypatch, field):
+    primary, _ = exact_hardlink
+    expected = list(m.HARDLINK_METADATA)
+    expected[field] += 1
+    monkeypatch.setattr(m, 'HARDLINK_METADATA', tuple(expected))
+    with pytest.raises(m.Error, match='hardlink bind identity'):
+        m.read_file(primary)
+
+
+def test_hardlink_exception_does_not_admit_other_pairs(exact_hardlink, tmp_path):
+    other = tmp_path / 'other'
+    other.write_bytes(b'unapproved')
+    os.link(other, tmp_path / 'other-alias')
+    with pytest.raises(m.Error, match='nonordinary'):
+        m.read_file(other)
+
+
+def test_hardlink_pair_rechecked_after_first_read(exact_hardlink, monkeypatch):
+    primary, alias = exact_hardlink
+    original = m._read_stable_file
+    calls = []
+
+    def changed(path, limit, links):
+        answer = original(path, limit, links)
+        calls.append(path)
+        if len(calls) == 2:
+            primary.write_bytes(b'x' * primary.stat().st_size)
+        return answer
+
+    monkeypatch.setattr(m, '_read_stable_file', changed)
+    with pytest.raises(m.Error, match='changed during authentication'):
+        m.read_file(primary)

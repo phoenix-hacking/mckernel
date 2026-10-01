@@ -74,6 +74,15 @@ CLIENT_SHA = {
     'command-0ea00086082f457b840aade62710a00c': '39e12925bb5b94cf2eb636e9584389bd1b1c2070bf93f1641c08493bd565c32d',
 }
 SIGNALS = {signal.SIGINT, signal.SIGTERM, signal.SIGHUP}
+# This historical read-only bind has exactly two names. Both names, including
+# the otherwise unrelated retained candidate alias, must authenticate together.
+# No other hardlinked input is admitted by this exception.
+HARDLINK_PATHS = (
+    REPO / 'scripts/native_rust_exact_build_offline.py',
+    Path('/home/holden/mckernel-exact-candidate-d0947e0c/scripts/native_rust_exact_build_offline.py'),
+)
+HARDLINK_METADATA = (66306, 47485298, 2, 27338, 0o600, 1000)
+HARDLINK_SHA = 'cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a'
 
 
 class Error(RuntimeError):
@@ -101,13 +110,13 @@ def open_directory(path):
         raise
 
 
-def read_file(path, limit=128 << 20):
+def _read_stable_file(path, limit, required_links):
     parent = open_directory(Path(path).parent)
     fd = None
     try:
         fd = os.open(Path(path).name, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC | os.O_NONBLOCK, dir_fd=parent)
         before = os.fstat(fd)
-        if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size > limit:
+        if not stat.S_ISREG(before.st_mode) or before.st_nlink != required_links or before.st_size > limit:
             raise Error('unbounded/nonordinary file: ' + str(path))
         chunks = []
         count = 0
@@ -129,6 +138,29 @@ def read_file(path, limit=128 << 20):
         if fd is not None:
             os.close(fd)
         os.close(parent)
+
+
+def read_file(path, limit=128 << 20):
+    path = Path(path)
+    if path not in HARDLINK_PATHS:
+        return _read_stable_file(path, limit, 1)
+    observed = {}
+    for alias in HARDLINK_PATHS:
+        data, st = _read_stable_file(alias, limit, 2)
+        identity = (st.st_dev, st.st_ino, st.st_nlink, st.st_size,
+                    stat.S_IMODE(st.st_mode), st.st_uid)
+        if identity != HARDLINK_METADATA or sha(data) != HARDLINK_SHA:
+            raise Error('exact hardlink bind identity/bytes mismatch')
+        observed[alias] = (data, st)
+    # Recheck both names after the pair was read: an alias change must not be
+    # hidden by authenticating the primary and alias at different instants.
+    for alias, (data, before) in observed.items():
+        again, after = _read_stable_file(alias, limit, 2)
+        fields = lambda s: (s.st_dev, s.st_ino, s.st_mode, s.st_uid, s.st_nlink,
+                            s.st_size, s.st_mtime_ns, s.st_ctime_ns)
+        if again != data or fields(before) != fields(after):
+            raise Error('exact hardlink bind changed during authentication')
+    return observed[path]
 
 
 def checked(path, expected):
