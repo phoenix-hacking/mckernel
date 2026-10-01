@@ -13152,3 +13152,33 @@ first and shared lock last.  No build or guest has run: counts remain one
 compiled current candidate, five bounded diagnostic guest passes, zero formal
 application acceptances, 6/130 production gates and 0/7 language gates; the OS
 remains incomplete.
+
+Continuation checkpoint 326, 2026-10-01: the fetched wrapper's first real
+privileged census returns the bounded exact result `REFUSED` with status 1.
+There was no unchanged retry.  A separate read-only Docker observation identifies
+two long-running unrelated Kasper containers.  Both are presently lightly loaded,
+but neither has an enforceable CPU, memory, PID, block-I/O or log-growth bound.
+Independent profile review therefore returns BLOCK for an exact-ID exemption:
+identity binding alone cannot preserve the aggregate 7-CPU/24-GiB ceiling.  The
+containers were not stopped, restarted, limited or otherwise changed.
+
+The crash-safe scratch18 pre-owner recovery helper now independently returns
+`PASS_SOURCE` at helper/tests hashes `5159d2d3...c6e8e7` and
+`8e3def92...354ec`, bound to fetched wrapper `12508d3a...64a25`.  All 35
+coordinator and independent tests pass, plus actual fork/crash probes immediately
+after both no-replace renames.  The helper authenticates the complete census,
+request, artifacts, owner absence and seven historical leases, then uses a
+pinned-device mutex, durable predeclared plan, attempt-before-shared renames,
+parent fsyncs and a hash-chained journal.  Exact partial states resume only after
+the prior owner is absent; ambiguous or torn evidence refuses.
+
+This is source acceptance only.  Production recovery did not run and the three
+retained request/lock records remain unchanged.  Exact evidence is
+`native-exact-scratch18-recovery-source-and-census-checkpoint-20261001.json`.
+Next publish/fetch these recovery bytes and author an exact one-shot execution
+release, but do not consume it while the strict census refuses.  Continue the
+resume-only packet and other source-ready work; recheck the external container
+state before a future recovery attempt.  Counts remain one compiled current
+candidate, five bounded diagnostic guest passes, zero formal application
+acceptances, 6/130 production gates and 0/7 language gates; the OS remains
+incomplete.
