@@ -12517,3 +12517,37 @@ immutable.  A successful compile unlocks image build and the real futex
 diagnostic retry.  Counts remain one compiled current candidate, five bounded
 diagnostic guest passes and zero formal application acceptances.  The OS goal
 is active and incomplete; the launcher pause is a window boundary only.
+
+Continuation checkpoint 307, 2026-10-01: expert repair and independent review
+return `PASS_SOURCE_PREPARATION_ONLY` for scratch16 packet
+`740024b8...729ff` and its seven-test suite `906a74ff...f76a0`.  The earlier
+80b/c769/b6c drafts and their BLOCK decisions remain historical.  The final
+packet privately copies scratch15 metadata, imports the exact ddb8 target
+commit/tree/symlink closure without duplicating ordinary blobs, preserves the
+historical ABI objects, and shares only authenticated unchanged evidence files
+larger than 1 MiB.  All other target files receive private inodes; the exact
+scratch15 IHK/overlay identities remain bound.
+
+The real disposable positive path executes the candidate canonical manifest,
+explicit provenance verification and actual `BuildOwner.validate` after
+durably publishing a complete nonreleased 4-CPU/12-GiB request.  Seven tests
+pass locally and independently under a two-CPU/4-GiB test cap.  Injected input
+and owner failures preserve the partial tree, phase log and PID/starttime
+terminal record.  No Docker client, lease, exclusion, compilation or guest is
+started.  Exact evidence is
+`native-exact-scratch16-delta-preparation-source-checkpoint-20261001.json`.
+
+A completed source-audit lane briefly consumed 9,253,031,936 bytes in exact
+disposable `/tmp/mckernel-head-EwRDX9`; after its process finished and an lsof
+check found zero references, that reconstructible Git export was removed.
+Host/scratch free space returned to 24,633,139,200/16,009,342,976 bytes.  The
+audit independently passes the three-module build surface and strict staging
+manifest; the four known downstream Rocky gates remain NOT READY.
+
+Next commit/push/fetch these exact packet/test blobs, run fetched-release
+validate-only, and perform fresh process/lease/container/capacity preflight.
+Only then execute scratch16 preparation once and independently inspect its
+terminal, manifest, request, shared-inode inventory and private metadata.
+Physical shutdown remains separate unfinished WIP under expert fixture repair;
+booted shutdown remains ENOSYS.  Counts remain one compiled current candidate,
+five bounded diagnostic guest passes and zero formal application acceptances.
