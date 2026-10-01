@@ -1,0 +1,93 @@
+{
+  "schema": "mckernel.native-exact-candidate-preparation-success.v1",
+  "recorded_utc": "2026-10-01T02:03:00Z",
+  "scope": "preparation-only",
+  "result": "PASS_PREPARATION_EVIDENCE",
+  "candidate_commit": "6fed3a1022db0b4f9828dd42a8bd8f88fc052053",
+  "release_commit": "b55e3c37427a1ff462d53d1712c46f92328312a2",
+  "packet": {
+    "path": "docs/verification/evidence/native-exact-candidate-preparation-scratch-20260930-13.sh",
+    "sha256": "5aa30499f665affd414434ce51cab033349aa5a22793ef2f89188a4778f35589"
+  },
+  "execution": {
+    "pid": 2236619,
+    "pid_starttime": 102856668,
+    "exit_code": 0,
+    "terminal_stdout": "LOG_FINAL_FSYNC=PASS",
+    "live_children_after": [],
+    "preparation_pid_present_after": false
+  },
+  "artifacts": {
+    "candidate": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-6fed3a10-scratch-13",
+      "device": 1831,
+      "inode": 3169097,
+      "allocated_bytes": 9240506368
+    },
+    "metadata_backup": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-metadata-backup-6fed3a10-scratch-13",
+      "device": 1831,
+      "inode": 1722598,
+      "allocated_bytes": 1556480
+    },
+    "log": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-preparation-6fed3a10-scratch-13.log",
+      "sha256": "03e6fc489e989dd71b754165fa76ee2aefbc1b82f905d26176dbeb2cca593a03",
+      "size": 49490,
+      "inode": 90664
+    },
+    "terminal": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-preparation-6fed3a10-scratch-13-terminal.json",
+      "sha256": "beee2e47828a4de3ce265f0167c42916208fadfd81c4338b7dbb004e9bc5c3ec",
+      "size": 364,
+      "inode": 90667
+    },
+    "input_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-inputs-6fed3a10-scratch-13.json",
+      "sha256": "fbfde0a1d83501c8411a8163dd8acb37952c5e110339d166fe83c9c2fdec3161",
+      "size": 1211894,
+      "inode": 90665
+    },
+    "nonreleased_request": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-build-request-6fed3a10-scratch-13.json",
+      "sha256": "765af9524a89d2e1ecf3896c3528e5e840be25d95c24cdf77673192b9ae97688",
+      "size": 3051,
+      "inode": 90666,
+      "preparation_only": true,
+      "execution_released": false,
+      "executable": false,
+      "release_required": true
+    }
+  },
+  "verified_state": {
+    "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "filesystem": "ext4",
+    "memory_backed_allocation_bytes": 0,
+    "output_directory_empty": true,
+    "evidence_directory_empty": true,
+    "lease_absent": true,
+    "exportset_25_exclusion_absent": true,
+    "host_free_bytes": 30651449344,
+    "scratch_free_bytes": 16948912128,
+    "host_required_floor_bytes": 18790481920,
+    "scratch_required_floor_bytes": 14495514624
+  },
+  "review": {
+    "independent_result": "PASS_PREPARATION_EVIDENCE",
+    "reviewed_bindings": [
+      "released packet",
+      "candidate and pinned IHK",
+      "retained-file input verification",
+      "standalone Git metadata",
+      "placement",
+      "artifact hashes and identities",
+      "terminal process identity and exit"
+    ]
+  },
+  "limitations": [
+    "The raw log intentionally ends with LOG_FINAL_FSYNC=PENDING; the packet publishes the hash-bound terminal after the successful log fsync, while the dispatcher observed LOG_FINAL_FSYNC=PASS on stdout.",
+    "This is preparation evidence only, not an image-build execution release.",
+    "No Docker build, kernel build, guest, runtime behavior, application acceptance, production acceptance or OS completion is established."
+  ],
+  "next_action": "Prepare and independently review an acyclic exportset-25 image-build request bound to this candidate and current source, then run exactly one serialized build only after a fresh capacity, process, Docker and lease preflight."
+}

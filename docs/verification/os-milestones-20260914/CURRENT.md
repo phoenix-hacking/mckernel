@@ -10963,3 +10963,45 @@ capacity preflight, then run the packet once with candidate `6fed3a10...2053`
 and the fetched descendant as its release commit.  Preparation creates no
 Docker container, lease, compilation or guest.  A separate reviewed one-shot
 exportset-25 build remains required afterward; no formal acceptance changes.
+
+Continuation checkpoint 265, 2026-09-30: the single released scratch-13
+preparation invocation completed with exit zero and final dispatcher stdout
+`LOG_FINAL_FSYNC=PASS`.  Independent evidence review returns
+`PASS_PREPARATION_EVIDENCE`.  The exact candidate/release are
+`6fed3a10...2053`/`b55e3c37...12a2`; candidate and metadata-backup identities
+are device 1831, inodes 3169097/1722598, with 9,240,506,368/1,556,480 allocated
+bytes.  The candidate preserves pinned IHK `3114d9e...72a1f`, passes the
+retained-file input, standalone Git-metadata and placement checks, and uses
+ext4 with zero memory-backed allocation.
+
+The raw log/terminal/input-manifest/nonreleased-request hashes are
+`03e6fc48...a03`/`beee2e47...c3ec`/`fbfde0a1...3161`/
+`765af952...688`.  The terminal binds preparation PID 2236619, starttime
+102856668 and return code zero; that PID and all children are absent.  Output
+and evidence directories are empty, while the request lease and exportset-25
+exclusion are absent.  The request explicitly remains
+`preparation_only=true`, `execution_released=false`, `executable=false` and
+`release_required=true`.  Exact evidence is
+`docs/verification/evidence/native-exact-candidate-preparation-scratch13-success-20260930.json`.
+
+Launcher shutdown then stopped new dispatch and joined every child lane.
+Preserved launcher process identities are PIDs 1442141/1442142/1442145/
+1442149 (wrapper/launcher/worker/app-server), all started 2026-09-30 10:46:42
+PDT.  No QEMU, mcexec, kernel build or guest is active.  Current host/scratch
+free bytes are 30,651,338,752/16,948,912,128 and MemAvailable is 28,347,768
+KiB; the independently checked required floors are 18,790,481,920/
+14,495,514,624 bytes.  The raw log intentionally ends with
+`LOG_FINAL_FSYNC=PENDING`; successful fsync precedes publication of the
+hash-bound terminal, and the dispatcher retained its final PASS stdout.
+
+The next invocation must not reuse the nonexecutable host request.  First
+prepare an acyclic exportset-25 image input/toolchain/request binding for this
+candidate and the current image owner/postlink/linked-text sources, then obtain
+independent one-shot heavy-build release.  Recheck capacity, persistent
+process identities, all leases and the full Docker census immediately before
+the single serialized build.  If its real linked artifact passes, proceed to
+separately labelled startup, memory, files, threads/futexes, signals and
+shutdown diagnostic applications.  This window produced zero current image
+builds and zero real guest applications; diagnostic and formal acceptance
+counters remain unchanged.  The OS goal is incomplete and launcher-paused for
+shutdown; it is neither resumed nor marked complete.
