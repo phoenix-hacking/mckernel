@@ -66,7 +66,7 @@ before launch. Exact artifact/input hashes are:
 | files collector | 1021296 | 0700 | `44bdb28f6c57d28eee9959bb729a51e56fb67026fcae3d5d5f43159d0b651ab6` |
 | derived files overlay | 12891590 | 0600 | `c470d9f6c3e974f59c71c251024556254e74d125a8905a2eabb9e5d58cd151a0` |
 | overlay representation | 15067 | 0600 | `cb9342e7065d8507b2e11339309cb84cf326ebfa21a4571cc4f97438383bc6a6` |
-| overlay source | 26579 | 0644 | `46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d` |
+| overlay source | 26579 | 0600 | `46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d` |
 
 The derived overlay is
 `/home/holden/mckernel-work/scratch/native-diagnostic-files-c81-20261001-1/initramfs.cpio.gz`;
