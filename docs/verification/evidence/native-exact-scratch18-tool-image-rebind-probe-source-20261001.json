@@ -1,0 +1,44 @@
+{
+  "schema": "mckernel.native-exact-scratch18-tool-image-rebind-probe-source.v1",
+  "status": "PASS_SOURCE_ONLY",
+  "candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "source_candidate_sha": "c81aeaca5cedd893981a058444fa11a03a49a744",
+  "request": "/home/holden/mckernel-work/scratch/native-exact-build-image-rebind-89ab5c55-scratch18-retry2-20261001.json",
+  "request_sha256": "f798675c12d5342fd1409e7842bd78e09277ece511e34dfbf888cef227d0ea66",
+  "source": {
+    "path": "scripts/native_rust_exact_build_image_rebind_probe.py",
+    "sha256": "9634b56f251857141c67b70ce7a0c058470d6ef000a5f041898a91e3a71f6679"
+  },
+  "tests": {
+    "path": "scripts/tests/test_native_rust_exact_build_image_rebind_probe.py",
+    "sha256": "8a3b193b05853779f64aa00a894373c2bf63f82cf1a251d74436a07e9bfaa6e3",
+    "command": "taskset -c 6,7 bash -lc 'ulimit -v 3145728; python3.8 -m py_compile scripts/native_rust_exact_build_image_rebind_probe.py scripts/tests/test_native_rust_exact_build_image_rebind_probe.py && python3.8 -m unittest scripts/tests/test_native_rust_exact_build_image_rebind_probe.py'",
+    "result": "PASS 26/26"
+  },
+  "actual_read_only_checks": {
+    "request_authentication": "PASS; 92 evidence rows and 22 tools",
+    "temporary_no_replace_copy": "PASS; all 92 sizes and SHA-256 values matched",
+    "downstream_receipt_closure": "PASS; seven preparation files, 22 tools and four library closures",
+    "image_identity": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5 linux/amd64",
+    "shared_heavy_operation": "ABSENT",
+    "scratch18_image_exclusion": "ABSENT",
+    "target_evidence_root": "ABSENT"
+  },
+  "independent_review": {
+    "result": "PASS",
+    "scope": "source, Python 3.8 regression, mocked lifecycle and downstream-consumer compatibility",
+    "production_execution": false
+  },
+  "profile": {
+    "cpuset": "2-5",
+    "cpus": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids": 512,
+    "network": "none",
+    "mounts": "none",
+    "read_only": true,
+    "unprivileged": true
+  },
+  "next": "publish and fetch this exact source checkpoint, then obtain a separately hash-bound execution release before one fresh probe"
+}

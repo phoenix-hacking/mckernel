@@ -13462,3 +13462,25 @@ then prepare and build the candidate McKernel image before the startup diagnosti
 Counts remain two compiled current candidates, five prior bounded diagnostic
 guest passes, zero formal application acceptances, 6/130 production gates and
 0/7 language gates; the OS remains incomplete.
+
+Continuation checkpoint 338, 2026-10-01: the fresh c81-to-scratch18 tool-image
+probe owner is source-ready after three rejected drafts and a changed repair
+strategy.  The final source/tests hashes are `9634b56f...f6679` and
+`8a3b193b...a6e3`; 26/26 Python 3.8 regressions pass under CPUs 6-7 and a
+3-GiB light-test ceiling.  Independent adversarial review PASSes request and
+92-file source-evidence authentication, exact CPUs 2-5/four-CPU/12-GiB/no-swap/
+512-task/no-network isolation, ambiguous-create recovery, signal and Docker
+client retirement handling, exact absence classification, no-replace evidence
+publication and downstream receipt compatibility.
+
+Actual read-only checks authenticate request `f798675c...a66`, all 92 retained
+c81 evidence rows and 22 image tools.  A temporary fresh no-replace copy matched
+every size/hash, and the downstream receipt/library validator accepted all
+seven required preparation records and four library closures.  The immutable
+tool image still resolves as Linux/amd64.  The shared heavy token, scratch18
+image exclusion and target evidence root are absent; no probe, image build or
+guest has run.  Exact source-only evidence is
+`native-exact-scratch18-tool-image-rebind-probe-source-20261001.json`.
+Next publish/fetch these bytes, obtain a separate hash-bound execution release,
+run one fresh offline probe, then prepare and build the scratch18 McKernel image.
+Counts and acceptance bars remain unchanged; the OS remains incomplete.
