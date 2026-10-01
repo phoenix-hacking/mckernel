@@ -12315,3 +12315,44 @@ source bytes, rerun fresh capacity/lease/reference checks through the executor,
 execute it once under `sudo -A`, independently reconcile exit/journal/status,
 then trim scratch and remeasure capacity.  This cleanup changes no OS
 acceptance count.
+
+Continuation checkpoint 300, 2026-10-01: the one-shot scratch14 evidence
+subtree transaction completed its exact bounded deletion and independent
+postflight returns `PASS_EVIDENCE_SUBTREE_RECONCILED`; the original executor
+process exit remains 1 and was not retried.  The executor deleted exactly
+2,576 regular files, 100 descendant directories and the target root, covering
+2,677 distinct authenticated inodes.  Its 2,681-line journal has no failure
+record and ends in `root-deleted` and `deletion-complete`; claim
+`279a5dd0...6415`, journal `7a91562b...7259` and status
+`a3484dbf...7220` bind the completed transaction.  The target and quarantine
+are absent, candidate HEAD remains exact c81, Git reports exactly the expected
+2,576 deletions, both leases are absent, no matching active process or running
+candidate container exists, and a fresh deleted-inode census has zero
+intersection and empty stderr.
+
+The original exit-1 observation is preserved: after writing READY, the
+top-level observer caught its own successful `SystemExit(0)` under
+`BaseException` and emitted `RETIREMENT_FAIL SystemExit: 0`.  The narrow
+correction catches `Exception` only; transactional `BaseException` handling is
+unchanged.  Executor `414e8a10...08c497` and test
+`b718f191...b5068a` pass all nine focused cases.  This accepts the independently
+reconciled deletion outcome, not a successful original process exit, and the
+executor must never be rerun.
+
+Targeted scratch trim returned 12,262,146,048 bytes.  A separate 6.4-GiB
+disposable synthetic review probe at `/tmp/tmpiff8xalx`, with no open
+references, was removed by exact path.  Current available capacity is
+34,081,189,888 host bytes and 25,255,170,048 scratch bytes, clearing the
+reviewed scratch15 preparation floors.  Exact additive evidence is
+`native-exact-scratch14-evidence-subtree-retirement-result-20261001.json`.
+Storage maintenance changes no OS acceptance count.
+
+Next commit/push/fetch this reconciliation and observer correction, perform a
+fresh process/lease/container/capacity preflight, and execute only the reviewed
+source-only scratch15 preparation packet for candidate
+`1e95abdc2b124c19f16b88cdb21600c768a10c2d`.  Independently inspect its
+terminal record, input manifest and build request before granting the separate
+pinned three-module heavy build.  Compiled current-candidate count remains one,
+diagnostic guest PASS count remains five, formal application/catalog count
+remains zero, shutdown remains unwired, and the OS goal is active and
+incomplete.

@@ -125,6 +125,9 @@ class RetirementSafety(unittest.TestCase):
         self.assertIn("root_override=(0, 0, 0o500)", source)
         self.assertGreaterEqual(source.count('no_live_references(QUARANTINE)'), 2)
         self.assertIn("'-u', '#1000'", source)
+        entrypoint = source.rsplit("if __name__ == '__main__':", 1)[1]
+        self.assertIn('except Exception as error:', entrypoint)
+        self.assertNotIn('except BaseException as error:', entrypoint)
 
 
 if __name__ == '__main__':

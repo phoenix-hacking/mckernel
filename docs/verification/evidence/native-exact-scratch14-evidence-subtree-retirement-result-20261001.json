@@ -1,0 +1,62 @@
+{
+  "schema": "mckernel.evidence-subtree-retirement-result.v1",
+  "status": "PASS_EVIDENCE_SUBTREE_RECONCILED",
+  "execution": {
+    "command": "/usr/bin/sudo -A /usr/bin/python3 -B /home/holden/mckernel/docs/verification/evidence/native-exact-scratch14-evidence-subtree-retire-20261001.py --execute",
+    "original_exit_status": 1,
+    "original_observation": "RETIREMENT_FAIL SystemExit: 0",
+    "retry": "PROHIBITED_AND_NOT_PERFORMED",
+    "transaction_status": "PASS",
+    "explanation": "The top-level observer caught successful SystemExit(0) as BaseException after the transaction and READY record completed. Independent postflight preserves exit 1 while accepting only the already-completed bounded deletion outcome."
+  },
+  "target": {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-c81aeaca-scratch-14/docs/verification/evidence",
+    "device": 1831,
+    "inode": 1465177,
+    "state": "absent",
+    "quarantine_state": "absent",
+    "regular_files_deleted": 2576,
+    "descendant_directories_deleted": 100,
+    "root_directories_deleted": 1,
+    "distinct_inodes_deleted": 2677
+  },
+  "records": {
+    "claim": {"path": "/home/holden/mckernel-work/scratch/native-exact-scratch14-evidence-retire-20261001-1.claim.json", "sha256": "279a5dd0ad324d77abeaeba3f558f16f60a90ef11f07abc14be726d1361f6415"},
+    "journal": {"path": "/home/holden/mckernel-work/scratch/native-exact-scratch14-evidence-retire-20261001-1.journal.jsonl", "sha256": "7a91562b98053fe831d812266e6f5fda0b78eb4b4aeb0831a580a4dba3a57259", "lines": 2681, "terminal_events": ["root-deleted", "deletion-complete"], "failure_records": 0},
+    "status": {"path": "/home/holden/mckernel-work/scratch/native-exact-scratch14-evidence-retire-20261001-1.status.json", "sha256": "a3484dbf2f8ed4ad5ee350c6098bf18d65148fae3c479a96ae2afc4e3bd87220", "value": "READY_FOR_VERIFICATION"}
+  },
+  "independent_postflight": {
+    "result": "PASS_EVIDENCE_SUBTREE_RECONCILED",
+    "candidate_head": "c81aeaca5cedd893981a058444fa11a03a49a744",
+    "expected_git_deletions": 2576,
+    "observed_git_deletions": 2576,
+    "deleted_inode_lsof_intersection": 0,
+    "lsof_stderr_bytes": 0,
+    "active_matching_processes": 0,
+    "heavy_leases_present": 0,
+    "running_candidate_containers": 0,
+    "retention_inventory_sha256": "12de35d422c6ec014e9ed893c1e1c7ffdb772969ff6f5a5978258203f5519630",
+    "retention_capsule_sha256": "8ca6a306ade8b7eb88d62488b239e5c9a3b7c5fb4b11f9af8d313d0497c8203d"
+  },
+  "observer_correction": {
+    "executor_path": "docs/verification/evidence/native-exact-scratch14-evidence-subtree-retire-20261001.py",
+    "executor_sha256": "414e8a101081eb6c70ac2d5a9009ec80e7c105b3b7dd9558c5b49e7d8b08c497",
+    "test_path": "scripts/tests/test_native_exact_scratch14_evidence_subtree_retire_20261001.py",
+    "test_sha256": "b718f1919297174967db123092691fe90496824d4e0b8f52e9289aeeb1b5068a",
+    "tests": "9 passed",
+    "scope": "Only the entrypoint catches Exception instead of BaseException; the transactional failure handler remains unchanged."
+  },
+  "storage": {
+    "fstrim_command": "/usr/bin/sudo -A /usr/sbin/fstrim -v /home/holden/mckernel-work/scratch",
+    "trimmed_bytes": 12262146048,
+    "host_available_before_trim_bytes": 18176356352,
+    "host_available_after_trim_bytes": 27281874944,
+    "scratch_available_after_trim_bytes": 25255170048,
+    "disposable_probe_removed": "/tmp/tmpiff8xalx",
+    "disposable_probe_bytes": 6803943424,
+    "disposable_probe_open_references": 0,
+    "host_available_after_probe_removal_bytes": 34081189888
+  },
+  "preserved_process_identities": {"launcher_wrapper_pid": 1442141, "launcher_pid": 1442142, "worker_pid": 1442145, "appserver_pid": 1442149, "codehost_pid": 1442494, "unrelated_codehost_pid": 3011513},
+  "acceptance": "Storage maintenance and observer correction only. This is not a build, guest, diagnostic application, formal application, shutdown, or OS acceptance result."
+}
