@@ -483,7 +483,8 @@ def _python_script_operand(argv):
 
 
 def _sudo_environment():
-    env = {'PATH': '/usr/bin:/bin', 'HOME': '/nonexistent', 'LANG': 'C', 'LC_ALL': 'C'}
+    # Leave HOME unset so the inherited askpass helper can use account lookup.
+    env = {'PATH': '/usr/bin:/bin', 'LANG': 'C', 'LC_ALL': 'C'}
     if 'SUDO_ASKPASS' in os.environ:
         env['SUDO_ASKPASS'] = os.environ['SUDO_ASKPASS']
     return env

@@ -19,7 +19,7 @@ ROOT = Path('/home/holden/mckernel-work/scratch')
 EVIDENCE = Path(__file__).with_name('native-exact-scratch18-build-admission-failure-20261001-1.json')
 FAILURE_SHA256 = '40497b42fd0906cfe45af35ee07a9be736948db8cda84d036216e9670663aec7'
 # Candidate dependency binding, not independent acceptance or execution release.
-WRAPPER_SHA256 = '12508d3a2d9bffcb84c34deabf9ef9e3d905167fc264ff2c4649057a95364a25'
+WRAPPER_SHA256 = 'ccfbd404ff2428c4eb8841948b761118a42bd25ed8875c583755e6a97d8f0393'
 BOOT_ID = 'c733d83b-a5ae-4f91-9ce6-9f8ccf119afd'
 ARCHIVE = 'native-exact-scratch18-preowner-archives'
 MUTEX = 'native-exact-scratch18-preowner-recovery.mutex'
@@ -403,7 +403,10 @@ class _Transaction:
     def reconcile_journal(self, events, actual):
         """Reject regressions, invented transitions and malformed owner records."""
         frontier, pending = 0, None
+        terminal = False
         for row in events:
+            if terminal:
+                raise Refusal('journal-after-complete')
             kind = row['event']
             if kind == 'owner':
                 owner = row.get('owner')
@@ -428,11 +431,16 @@ class _Transaction:
                     raise Refusal('journal-transition')
                 if target != frontier:
                     frontier, pending = target, None
-            elif kind != 'complete' or row.get('state') != 2 or frontier != 2:
+            elif kind == 'complete':
+                if type(row.get('state')) is not int or row['state'] != 2 or frontier != 2:
+                    raise Refusal('journal-transition')
+                terminal = True
+            else:
                 raise Refusal('journal-transition')
         allowed = (frontier, frontier + 1) if pending == frontier else (frontier,)
         if actual not in allowed:
             raise Refusal('journal-state-regression')
+        return terminal
 
     def journal(self, plan, events, event, **fields):
         self.pinned()
@@ -464,15 +472,16 @@ class _Transaction:
                 if raw != canonical(plan) + b'\n':
                     raise Refusal('plan-binding')
                 state = self.state(plan)
-                self.reconcile_journal(self.events(plan), state)
+                terminal = self.reconcile_journal(self.events(plan), state)
             else:
                 for record in self.failure['retained_locks'].values():
                     if Path(record['path']).parent != self.root:
                         raise Refusal('lock-parent')
                     _read_at(self.rfd, Path(record['path']).name, dict(record, device=self.device))
                 state = 0
+                terminal = False
             self.pinned()
-            return {'status': 'PASS_VALIDATE_ONLY', 'state': state}
+            return {'status': 'PASS_VALIDATE_ONLY', 'state': state, 'terminal': terminal}
         self.lock()
         observe(self.failure, self.rfd)
         self.open_archive()
@@ -489,7 +498,10 @@ class _Transaction:
             _create(self.afd, PLAN, canonical(plan) + b'\n')
         state = self.state(plan)
         events = self.events(plan)
-        self.reconcile_journal(events, state)
+        if self.reconcile_journal(events, state):
+            # The exclusive recovery mutex is still held. A valid completion
+            # is immutable evidence, never permission for another transaction.
+            raise Refusal('recovery-already-complete')
         owners = [row['owner'] for row in events if row['event'] == 'owner']
         if owners:
             prior = owners[-1]

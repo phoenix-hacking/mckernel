@@ -362,7 +362,7 @@ class WrapperTests(unittest.TestCase):
                          ['/usr/bin/sudo', '-A', '/usr/bin/python3', '-I', '-B', '-'])
         self.assertNotIn(b'/secret-askpass', run.call_args.args[1])
         self.assertEqual(run.call_args.args[2], {
-            'PATH': '/usr/bin:/bin', 'HOME': '/nonexistent', 'LANG': 'C',
+            'PATH': '/usr/bin:/bin', 'LANG': 'C',
             'LC_ALL': 'C', 'SUDO_ASKPASS': '/secret-askpass'})
 
     def test_privileged_process_report_is_strict_and_fail_closed(self):
@@ -411,7 +411,22 @@ class WrapperTests(unittest.TestCase):
              mock.patch.dict(os.environ, {'SUDO_ASKPASS': '/synthetic-helper', 'EVIL': 'discard'}):
             self.assertEqual(wrapper._dispatcher_containers(), [])
             self.assertEqual(run.call_args.args[2].get('SUDO_ASKPASS'), '/synthetic-helper')
+            self.assertNotIn('HOME', run.call_args.args[2])
             self.assertNotIn('EVIL', run.call_args.args[2])
+
+    def test_sudo_environment_omits_home_and_unrelated_variables(self):
+        base = {'PATH': '/usr/bin:/bin', 'LANG': 'C', 'LC_ALL': 'C'}
+        for helper in (None, '/synthetic-helper'):
+            inherited = {'HOME': '/synthetic-home', 'PATH': '/untrusted-bin',
+                         'LANG': 'other', 'LC_ALL': 'other', 'UNRELATED': 'discard'}
+            expected = dict(base)
+            if helper is not None:
+                inherited['SUDO_ASKPASS'] = helper
+                expected['SUDO_ASKPASS'] = helper
+            with self.subTest(helper=helper), mock.patch.dict(os.environ, inherited, clear=True):
+                self.assertEqual(wrapper._sudo_environment(), expected)
+                self.assertNotIn('HOME', wrapper._sudo_environment())
+                self.assertNotIn('UNRELATED', wrapper._sudo_environment())
 
     def test_recovery_census_cli_is_read_only_and_strict(self):
         with tempfile.TemporaryDirectory() as td:

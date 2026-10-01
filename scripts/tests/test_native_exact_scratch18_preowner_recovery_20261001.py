@@ -329,6 +329,77 @@ class Recovery(unittest.TestCase):
             self.recover()
         self.assertTrue(self.shared.exists())
 
+    def completed_snapshot(self):
+        return {path.name: (path.stat().st_ino, path.read_bytes())
+                for path in self.archive.iterdir()}
+
+    def append_fixture_event(self, event, **fields):
+        journal = self.archive / self.m.JOURNAL
+        raw = journal.read_bytes()
+        rows = [json.loads(line) for line in raw.splitlines()]
+        record = dict(fields, event=event, sequence=len(rows),
+                      plan_sha256=rows[-1]['plan_sha256'],
+                      previous=self.m.sha(self.m.canonical(rows[-1])))
+        journal.write_bytes(raw + self.m.canonical(record) + b'\n')
+
+    def test_completed_recovery_execute_replay_refuses_with_owner_absent(self):
+        self.fork_run(self.recover)
+        before = self.completed_snapshot()
+        original = self.m._Transaction.reconcile_journal
+        def check_mutex(tx, events, state):
+            other = self.m._Transaction(self.failure, self.root, self.device)
+            try:
+                with self.assertRaisesRegex(self.m.Refusal, 'recovery-busy'):
+                    other.lock()
+            finally:
+                other.close()
+            return original(tx, events, state)
+        with mock.patch.object(self.m._Transaction, 'reconcile_journal', check_mutex), \
+                mock.patch.object(self.m._Transaction, 'journal') as append, \
+                mock.patch.object(self.m, '_rename_noreplace') as rename:
+            with self.assertRaisesRegex(self.m.Refusal, 'recovery-already-complete'):
+                self.recover()
+            append.assert_not_called()
+            rename.assert_not_called()
+        self.assertEqual(self.completed_snapshot(), before)
+        self.assertEqual(self.recover(False), {'status': 'PASS_VALIDATE_ONLY', 'state': 2, 'terminal': True})
+        self.assertEqual(self.completed_snapshot(), before)
+
+    def test_event_after_complete_refuses_even_with_valid_hash_chain(self):
+        self.fork_run(self.recover)
+        self.append_fixture_event('owner', owner=self.m._owner())
+        before = self.completed_snapshot()
+        for execute in (False, True):
+            with self.subTest(execute=execute):
+                with self.assertRaisesRegex(self.m.Refusal, 'journal-after-complete'):
+                    self.recover(execute)
+                self.assertEqual(self.completed_snapshot(), before)
+
+    def test_duplicate_complete_refuses_even_with_valid_hash_chain(self):
+        self.fork_run(self.recover)
+        self.append_fixture_event('complete', state=2)
+        before = self.completed_snapshot()
+        for execute in (False, True):
+            with self.subTest(execute=execute):
+                with self.assertRaisesRegex(self.m.Refusal, 'journal-after-complete'):
+                    self.recover(execute)
+                self.assertEqual(self.completed_snapshot(), before)
+
+    def test_state_two_without_complete_resumes_only_finalization(self):
+        self.crash('rename2')
+        self.assertEqual(self.recover(False), {'status': 'PASS_VALIDATE_ONLY', 'state': 2, 'terminal': False})
+        journal = self.archive / self.m.JOURNAL
+        before = [json.loads(line) for line in journal.read_bytes().splitlines()]
+        self.assertFalse(any(row['event'] == 'complete' for row in before))
+        with mock.patch.object(self.m, '_rename_noreplace', side_effect=AssertionError('must not rename again')):
+            self.assertEqual(self.recover()['status'], 'PASS')
+        after = [json.loads(line) for line in journal.read_bytes().splitlines()]
+        self.assertEqual(after[:len(before)], before)
+        self.assertEqual([row['event'] for row in after[len(before):]], ['owner', 'reconciled', 'complete'])
+        self.assertEqual(sum(row['event'] == 'complete' for row in after), 1)
+        with self.assertRaisesRegex(self.m.Refusal, 'recovery-already-complete'):
+            self.recover()
+
     def test_truncated_journal_refused(self):
         self.crash('before0')
         journal = self.archive / self.m.JOURNAL
