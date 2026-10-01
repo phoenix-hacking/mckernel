@@ -619,6 +619,7 @@ static APPLICATION_CLOSES: AtomicI32 = AtomicI32::new(0);
 static APPLICATION_INVOKES: AtomicI32 = AtomicI32::new(0);
 static APPLICATION_CLOSE_QUERY: AtomicI64 = AtomicI64::new(0);
 static APPLICATION_CLOSE_GENERATION: AtomicI64 = AtomicI64::new(0);
+static CHECK_CLOSE_OWNERS: AtomicBool = AtomicBool::new(false);
 static APPLICATION_EVENTS: Mutex<Vec<u8>> = Mutex::new(Vec::new());
 static APPLICATION_CONTEXT: u8 = 7;
 static SERVICE_OPENS: AtomicI32 = AtomicI32::new(0);
@@ -679,6 +680,9 @@ unsafe extern "C" fn application_invoke(
     17
 }
 unsafe extern "C" fn application_close(_context: *mut core::ffi::c_void) {
+    if CHECK_CLOSE_OWNERS.load(Ordering::SeqCst) {
+        os_runtime::fixture_assert_application_close_owners();
+    }
     APPLICATION_CLOSES.fetch_add(1, Ordering::SeqCst);
     APPLICATION_EVENTS.lock().unwrap().push(1); // Close entered.
     let generation = APPLICATION_CLOSE_GENERATION.load(Ordering::SeqCst) as u64;
@@ -928,6 +932,7 @@ fn application_connection_blocks_shutdown_until_close() {
         };
         assert_eq!(status(&mut second, false, abi::IHK_OS_SHUTDOWN), -16);
         assert_eq!(SHUTDOWN_CALLS.load(Ordering::SeqCst), 0);
+        CHECK_CLOSE_OWNERS.store(true, Ordering::SeqCst);
         unsafe { os_runtime::close_application(generation) };
         assert_eq!(APPLICATION_CLOSES.load(Ordering::SeqCst), 1);
         APPLICATION_CLOSE_GENERATION.store(1, Ordering::SeqCst);
@@ -943,6 +948,7 @@ fn application_connection_blocks_shutdown_until_close() {
         assert_eq!(APPLICATION_CLOSES.load(Ordering::SeqCst), 2);
         assert_eq!(APPLICATION_CLOSE_QUERY.load(Ordering::SeqCst), 73);
         assert_eq!(*APPLICATION_EVENTS.lock().unwrap(), [1, 2]);
+        CHECK_CLOSE_OWNERS.store(false, Ordering::SeqCst);
         assert_eq!(status(&mut second, false, abi::IHK_OS_SHUTDOWN), 0);
         close(file);
         close(second);
@@ -1275,4 +1281,129 @@ fn exclusive_unbooted_cleanup_guard_rejects_loading_and_preserves_instance() {
     destroy.require_unbooted_destroy().unwrap();
     destroy.commit_after_external_success().unwrap();
     assert_eq!(registry.live_count(), 0);
+}
+// RUNTIME_PRIVATE_TESTS
+// Appended inside the copied production os_runtime module by the driver.
+#[cfg(test)]
+pub(crate) fn fixture_assert_application_close_owners() {
+    let handle = OS_REGISTRY.resolve_minor(0).unwrap();
+    // Two open files plus the connection must remain leased during Close.
+    assert_eq!(OS_REGISTRY.snapshot(handle).unwrap().references, 3);
+    let object = OS_OBJECTS[0].load(Ordering::Acquire);
+    assert!(!object.is_null());
+    // The fixture invokes this synchronously from the retained Close callback.
+    let gate = unsafe { &(*object).admission };
+    assert_eq!(gate.word.load(Ordering::Acquire) & ADMISSION_COUNT_MASK, 1);
+    assert!(matches!(gate.close_for_shutdown(), Err(error) if error.to_errno() == -16));
+    assert!(!gate.is_closed());
+}
+
+#[cfg(test)]
+mod shutdown_effect_tests {
+    use super::*;
+    use crate::os_registry::{self, OsRegistry, OsStatus, RegistryError};
+
+    fn ready(registry: &OsRegistry) -> os_registry::OsHandle {
+        let reservation = registry.reserve().unwrap();
+        let handle = reservation.handle();
+        reservation.commit().unwrap();
+        // Match os_request's successful boot, not an invalid direct Ready edge.
+        registry.transition(handle, OsStatus::Booting).unwrap();
+        registry.transition(handle, OsStatus::Ready).unwrap();
+        handle
+    }
+
+    #[test]
+    fn v5_outcome_keeps_nonzero_pre_effect() {
+        assert_eq!(shutdown_v5_outcome(0), ShutdownCallbackOutcome::Complete);
+        for result in [-1, -4095, 1, -4096] {
+            assert_eq!(shutdown_v5_outcome(result), ShutdownCallbackOutcome::PreEffectFailure(result));
+        }
+        assert_ne!(ShutdownCallbackOutcome::PostEffectFailure(-5), shutdown_v5_outcome(-5));
+    }
+
+    #[test]
+    fn post_effect_retains_shutdown_admission_lease_and_same_generation_retry() {
+        let registry = OsRegistry::new();
+        let handle = ready(&registry);
+        let lease = registry.acquire(handle).unwrap();
+        let gate = Admission::new();
+        let admission = gate.close_for_shutdown().unwrap();
+        let guard = registry.begin_shutdown(handle).unwrap();
+        assert_eq!(finish_shutdown(guard, admission, ShutdownCallbackOutcome::PostEffectFailure(-5)), -5);
+        assert!(gate.is_closed());
+        assert!(matches!(gate.enter(), Err(error) if error.to_errno() == -16));
+        let retained = registry.snapshot(handle).unwrap();
+        assert_eq!(retained.status, OsStatus::Shutdown);
+        assert_eq!(retained.references, 1);
+        assert!(matches!(registry.begin_destroy(handle), Err(RegistryError::Busy)));
+
+        // A retry reporting no new effect must not reopen the old close or
+        // resurrect Ready after a previous attempt already changed the guest.
+        let admission = gate.close_for_shutdown().unwrap();
+        let retry = registry.begin_shutdown(handle).unwrap();
+        assert_eq!(finish_shutdown(retry, admission, ShutdownCallbackOutcome::PreEffectFailure(-16)), -16);
+        assert_eq!(registry.snapshot(handle).unwrap(), retained);
+        assert!(gate.is_closed());
+        assert!(matches!(gate.enter(), Err(error) if error.to_errno() == -16));
+
+        let admission = gate.close_for_shutdown().unwrap();
+        let retry = registry.begin_shutdown(handle).unwrap();
+        assert_eq!(retry.handle(), handle);
+        assert_eq!(finish_shutdown(retry, admission, ShutdownCallbackOutcome::Complete), 0);
+        let completed = registry.snapshot(handle).unwrap();
+        assert_eq!(completed.handle, handle);
+        assert_eq!(completed.status, OsStatus::NotBooted);
+        assert_eq!(completed.references, 1);
+        assert!(gate.is_closed());
+        assert!(matches!(gate.enter(), Err(error) if error.to_errno() == -16));
+        drop(lease);
+        assert_eq!(registry.snapshot(handle).unwrap().references, 0);
+    }
+
+    #[test]
+    fn mark_irreversible_fault_does_not_reopen_admission() {
+        let registry = OsRegistry::new();
+        let handle = ready(&registry);
+        let lease = registry.acquire(handle).unwrap();
+        let gate = Admission::new();
+        let admission = gate.close_for_shutdown().unwrap();
+        let guard = registry.begin_shutdown(handle).unwrap();
+        // Deliberately corrupt only phase, keeping generation/status/references
+        // intact; the real mark_irreversible must reject this impossible word.
+        os_registry::fixture_invalidate_shutdown_phase(&registry, handle);
+        let corrupted = registry.snapshot(handle).unwrap();
+        assert_eq!(finish_shutdown(guard, admission, ShutdownCallbackOutcome::PostEffectFailure(-5)), -16);
+        assert!(gate.is_closed());
+        assert!(matches!(gate.enter(), Err(error) if error.to_errno() == -16));
+        assert_eq!(registry.snapshot(handle).unwrap(), corrupted);
+        assert_eq!(corrupted.status, OsStatus::Shutdown);
+        assert_eq!(corrupted.references, 1);
+        drop(lease);
+    }
+
+    #[test]
+    fn stale_generation_cannot_retry_shutdown() {
+        let registry = OsRegistry::new();
+        let old = ready(&registry);
+        let gate = Admission::new();
+        assert_eq!(finish_shutdown(registry.begin_shutdown(old).unwrap(), gate.close_for_shutdown().unwrap(), ShutdownCallbackOutcome::Complete), 0);
+        registry.begin_destroy(old).unwrap().commit().unwrap();
+        let current = ready(&registry);
+        assert_eq!(old.minor(), current.minor());
+        assert_ne!(old.generation(), current.generation());
+        let before = registry.snapshot(current).unwrap();
+        assert!(matches!(registry.begin_shutdown(old), Err(RegistryError::StaleHandle)));
+        assert_eq!(registry.snapshot(current).unwrap(), before);
+        assert!(gate.is_closed());
+    }
+}
+// REGISTRY_FIXTURE_FAULT
+// Appended only to the disposable registry copy. No production test hook.
+#[cfg(test)]
+pub(crate) fn fixture_invalidate_shutdown_phase(registry: &OsRegistry, handle: OsHandle) {
+    let slot = &registry.slots[handle.minor()];
+    let current = slot.word.load(Ordering::Acquire);
+    assert!(is_shutdown_word(current, handle));
+    slot.word.store((current & !PHASE_MASK) | PHASE_LIVE, Ordering::Release);
 }

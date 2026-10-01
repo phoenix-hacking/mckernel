@@ -194,6 +194,36 @@ type OsBackendStartBootV3 = unsafe extern "C" fn(u32, u64) -> i32;
 // provider's shutdown attempt and return a Linux-style errno result.
 type OsBackendShutdownV5 = unsafe extern "C" fn(u32, u64) -> i32;
 
+/// The transaction boundary is deliberately separate from the v5 C result.
+/// v5 callbacks are rollback-safe: every nonzero result is pre-effect.  A
+/// future teardown adapter may report a failure after its irreversible effect
+/// using the post-effect variant, which keeps Shutdown and closed admission for a
+/// same-generation retry.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum ShutdownCallbackOutcome {
+    Complete,
+    PreEffectFailure(i32),
+    // Reserved for the future teardown adapter; v5 cannot produce this tag.
+    #[allow(dead_code)]
+    PostEffectFailure(i32),
+}
+
+fn shutdown_v5_outcome(result: i32) -> ShutdownCallbackOutcome {
+    if result == 0 {
+        ShutdownCallbackOutcome::Complete
+    } else {
+        ShutdownCallbackOutcome::PreEffectFailure(result)
+    }
+}
+
+fn shutdown_errno(result: i32) -> i32 {
+    if (-4095..0).contains(&result) {
+        result
+    } else {
+        -5
+    }
+}
+
 #[derive(Clone, Copy)]
 struct OsBackendBootV3 {
     prepare: OsBackendPrepareBootV3,
@@ -371,6 +401,41 @@ impl Drop for ShutdownAdmission {
         // SAFETY: The operation mutex and caller's OsLease retain the object
         // through the complete shutdown transaction.
         unsafe { &*self.admission }.reopen_unpoisoned();
+    }
+}
+
+/// Finish one shutdown transaction at its explicit effect boundary.  The v5
+/// adapter below supplies only `Complete` or `PreEffectFailure`; the
+/// post-effect arm is intentionally available for the reviewed future
+/// teardown adapter and is the only path that marks the registry irreversible.
+fn finish_shutdown(
+    mut guard: super::os_registry::ShutdownGuard<'_>,
+    admission: ShutdownAdmission,
+    outcome: ShutdownCallbackOutcome,
+) -> i32 {
+    match outcome {
+        ShutdownCallbackOutcome::Complete => match guard.commit() {
+            Ok(()) => {
+                admission.commit();
+                0
+            }
+            Err(error) => {
+                // A completed callback is already post-effect.  Keep
+                // admission closed even if registry publication is corrupt.
+                admission.commit();
+                error.errno()
+            }
+        },
+        ShutdownCallbackOutcome::PreEffectFailure(result) => shutdown_errno(result),
+        ShutdownCallbackOutcome::PostEffectFailure(result) => {
+            // The callback declared an effect. Commit admission first so even
+            // an unexpected registry word cannot reopen the callback surface.
+            admission.commit();
+            if let Err(error) = guard.mark_irreversible() {
+                return error.errno();
+            }
+            shutdown_errno(result)
+        }
     }
 }
 
@@ -1105,26 +1170,8 @@ unsafe fn os_request(
         // nonzero result: it must not stop/drain a guest or make any externally
         // visible teardown effect. Only that contract permits rollback/opening
         // admission below; SMP/CPU/IRQ/resource teardown is not wired here.
-        let result = unsafe { shutdown(handle.minor() as u32, handle.generation()) };
-        let result = if result == 0 {
-            match guard.commit() {
-                Ok(()) => {
-                    admission.commit();
-                    0
-                }
-                // A callback success is post-effect. The registry corruption
-                // path cannot safely publish callbacks, so retain the close
-                // even though ShutdownGuard restores the registry word.
-                Err(error) => {
-                    admission.commit();
-                    error.errno()
-                }
-            }
-        } else if (-4095..0).contains(&result) {
-            result
-        } else {
-            EIO.to_errno()
-        };
+        let callback = unsafe { shutdown(handle.minor() as u32, handle.generation()) };
+        let result = finish_shutdown(guard, admission, shutdown_v5_outcome(callback));
         return result as core::ffi::c_long;
     }
     // The immutable compatibility ID is also available on a booted OS, without

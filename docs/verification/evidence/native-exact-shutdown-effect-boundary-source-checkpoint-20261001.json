@@ -1,0 +1,77 @@
+{
+  "schema": "mckernel.source-checkpoint.v1",
+  "recorded_at": "2026-10-01T07:44:00Z",
+  "base_commit": "61b0b027a878c2b709164e8cffdf34ddb82c452f",
+  "scope": "M05 host shutdown transaction effect boundary, source and production-body Layer-B fixture only",
+  "final_sources": {
+    "host-kernel/native-rust/os_runtime.rs": "6b0acd68f9c4a922ce1dd4167e2278dcddd23fb3c4aa8685e5a8af0a9001127f",
+    "scripts/tests/fixtures/ihk_os_runtime_compile.rs": "6b6d47a25036c8eb93969054b03d7aae4412ffed1e5261ce523d8eef297cf5b9",
+    "scripts/tests/test_ihk_os_runtime.py": "e1201405164379a2b8d233809bc52aa577b374273eb9388d2025bf8b244372b6"
+  },
+  "implemented": [
+    "explicit Complete, PreEffectFailure and reserved PostEffectFailure outcomes",
+    "v5 callback nonzero results remain pre-effect and keep their existing extern ABI",
+    "post-effect admission is committed closed before registry irreversibility publication",
+    "mark_irreversible failure returns the registry error without reopening admission",
+    "successful same-generation retry can commit NotBooted while failed retry remains closed",
+    "production helper visibility remains private; test-only hooks exist only in disposable fixture copies",
+    "connection Close callbacks execute while admission ownership and all three OS leases remain held"
+  ],
+  "failure_history": [
+    {
+      "attempt": "initial worker candidate",
+      "outcome": "BLOCK",
+      "findings": [
+        "mark_irreversible error could drop armed admission and reopen after a declared effect",
+        "the new test compared outcome enum values without executing finish_shutdown"
+      ]
+    },
+    {
+      "attempt": "bounded correction",
+      "outcome": "FAIL",
+      "reason": "fixture attempted invalid NotBooted to Ready transition after 63 passing cases",
+      "stdout": {
+        "path": "/tmp/mckernel-shutdown-effect-boundary-correction-20261001-1.stdout",
+        "sha256": "dd129bde8777f5b9261fcb1533f2b11ea1b849b480cec5dfe998818382eeadcc"
+      },
+      "stderr_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "exit_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "attempt": "expert escalation",
+      "outcome": "PASS",
+      "repair": "use production-valid NotBooted to Booting to Ready and execute the complete registry/admission body including injected registry corruption"
+    }
+  ],
+  "test": {
+    "command": "MCKERNEL_RUSTC_1_92=/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc python3 -B -m unittest -v scripts.tests.test_ihk_os_runtime",
+    "result": "PASS, 66 Rust tests, zero failed, Python unittest exit 0",
+    "stdout": {
+      "path": "/tmp/mckernel-shutdown-effect-boundary-expert-20261001-2.stdout",
+      "sha256": "0ec61ebe1381e0cb825f0879851a97e6f4377a45abcdb2ec768cad9742659546"
+    },
+    "stderr": {
+      "path": "/tmp/mckernel-shutdown-effect-boundary-expert-20261001-2.stderr",
+      "sha256": "b550965afa18b41c69049dde732d263359eafbaca311a9f936a120395cafd575"
+    },
+    "exit_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "diff_sha256": "ed10433a5fe4dbf0564ca94feaccee9382d7ad662cb9b8052bef1071c8a12a9d",
+    "covered": [
+      "post-effect Shutdown/admission/lease retention",
+      "mark_irreversible failure retains closed admission",
+      "rejected admission",
+      "unsuccessful and successful same-generation retry",
+      "stale-generation rejection",
+      "Close callback ownership and reentrant topology query"
+    ]
+  },
+  "independent_review": "PASS_SOURCE_SHUTDOWN_EFFECT_BOUNDARY",
+  "limitations": [
+    "SMP still registers v4 and has no shutdown callback",
+    "no production module was built or loaded",
+    "no STOP/quiescence, IRQ callback drain, CPU reclamation or resource restoration is implemented by this slice",
+    "no root command, guest, native shutdown, recreation or production acceptance follows",
+    "the retained test capture does not independently encode the Rust compiler identity"
+  ],
+  "next": "Implement and independently review generation-bound IRQ sender closure/callback drain before CPU-reclamation integration; keep the booted ENOSYS path until an actual effect-bearing SMP callback satisfies this boundary."
+}

@@ -17,6 +17,10 @@ class NativeOsRuntimeTests(unittest.TestCase):
         if not rustc:
             self.skipTest("rustc is unavailable for native OS adapter execution")
         template = (ROOT / "scripts/tests/fixtures/ihk_os_runtime_compile.rs").read_text()
+        # Keep private-access tests and corruption injection in the fixture,
+        # appended to byte-for-byte production bodies in disposable copies.
+        template, runtime_tests = template.split("// RUNTIME_PRIVATE_TESTS\n")
+        runtime_tests, registry_fault = runtime_tests.split("// REGISTRY_FIXTURE_FAULT\n")
         modules = []
         for name in ("abi", "application_abi", "service_abi", "device_registry", "os_registry", "ihk_ioctl", "os_service", "os_runtime"):
             relative = {"abi": "abi/x86_64.rs", "application_abi": "abi/application.rs",
@@ -28,6 +32,11 @@ class NativeOsRuntimeTests(unittest.TestCase):
         self.assertEqual(1, template.count("// SOURCE_MODULES"))
         with tempfile.TemporaryDirectory(prefix="ihk-os-runtime-") as temporary:
             directory = Path(temporary)
+            for name, supplement in (("os_runtime", runtime_tests), ("os_registry", registry_fault)):
+                source = ROOT / "host-kernel/native-rust" / (name + ".rs")
+                copy = directory / (name + ".rs")
+                copy.write_text(source.read_text() + "\n" + supplement)
+                modules = [entry.replace(str(source), str(copy)) for entry in modules]
             fixture = directory / "fixture.rs"
             fixture.write_text(template.replace("// SOURCE_MODULES", "\n".join(modules)))
             binary = directory / "tests"
@@ -41,7 +50,8 @@ class NativeOsRuntimeTests(unittest.TestCase):
             result = subprocess.run([str(binary), "--test-threads=1"],
                                     capture_output=True, text=True, timeout=90)
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
-            self.assertIn("62 passed; 0 failed", result.stdout)
+            self.assertIn("66 passed; 0 failed", result.stdout)
+            print(result.stdout, end="")
 
 
 if __name__ == "__main__":
