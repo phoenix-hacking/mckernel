@@ -11759,3 +11759,39 @@ diagnostic lanes.  The current-candidate build count is one; real
 current-candidate guest applications remain zero.  Diagnostic and formal
 acceptance counters are unchanged, and the OS goal remains active and
 incomplete.
+
+Shutdown checkpoint 284, 2026-10-01: dispatch stopped immediately on the
+launcher signal.  One already-completed c81 memory guest attempt is retained at
+`/home/holden/mckernel-work/scratch/ndmc81-20261001-1`.  Its raw result is
+`PROTOCOL_PASS` and records exact stdout `NATIVE_CORE PASS memory\n`, empty
+stderr, wait status 9472 / exit 37, both EOFs, no truncation or capture errors,
+and empty procfs.  Independent result review returns
+`PASS_DIAGNOSTIC_C81_MEMORY` after exact production-oracle replay; its conservative
+`application_acceptance:false` and `mckernel_application_executed:false` fields
+are preserved because they are unconditional harness defaults.  This checkpoint
+therefore counts one real accepted diagnostic guest application and zero formal
+applications.
+
+Independent teardown review returns `PASS_GUEST_POSTFLIGHT`.  Owner PID 2483741
+at starttime 104688002 is absent; container
+`b984279d...18735a17` is absent; all 30 recorded Docker clients are reaped; QMP
+records guest shutdown and acknowledged quit before bounded QEMU group retirement
+with return -9.  No guest/build lease, QEMU, `mcexec`, diagnostic owner or Docker
+client remains.  Launcher identities are preserved as wrapper 1442141, launcher
+1442142, worker 1442145, app-server 1442149 and code-mode host 1442494; unrelated
+older code-mode host 3011513 remains outside this launcher tree.
+
+The next files lane completed ordinary-user preparation only.  Its derived
+archive is 12,891,590 bytes at `c470d9f6...151a0`, overlay result is 15,067
+bytes at `cb9342e7...c6a6`, and strict manifest is 4,712 bytes at
+`51541ade...7513`; all are mode 0600 and the strict loader returns PASS for
+`baseline.core.files`.  No files guest or root action started.  Exact additive
+shutdown evidence is
+`docs/verification/evidence/native-exact-c81-memory-diagnostic-shutdown-checkpoint-20261001.json`.
+
+Next continuation must independently review the files manifest, commit/fetch a
+fresh execution packet, obtain a fresh live guest release, and run files once.
+Threads/futexes, signals and shutdown remain later diagnostic lanes.  The
+current-candidate compiled build count is one and real accepted current-candidate
+diagnostic application count is one; the OS goal remains active and incomplete,
+and diagnostic results remain separate from formal acceptance.

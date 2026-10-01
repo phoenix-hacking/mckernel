@@ -1,0 +1,286 @@
+{
+  "schema": "mckernel.native-exact-c81-diagnostic-preparation-wip.v1",
+  "recorded_at": "2026-10-01T06:25:12Z",
+  "updated_at": "2026-10-01T06:49:31Z",
+  "updated_for": "Preserve the pre-execution preparation state; superseded after the one-shot memory diagnostic by the shutdown checkpoint record",
+  "status": "SUPERSEDED_PREPARATION_WIP_PRESERVED",
+  "superseded_by": "docs/verification/evidence/native-exact-c81-memory-diagnostic-shutdown-checkpoint-20261001.json",
+  "candidate_sha": "c81aeaca5cedd893981a058444fa11a03a49a744",
+  "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "current_candidate_compiled_kernel_artifacts": 1,
+  "real_current_candidate_guest_applications": 1,
+  "compiled_artifacts": {
+    "image": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-c81aeaca-exportset-26/output/build/kernel/mckernel.img",
+      "device_inode": "1831:1859947",
+      "size": 7908256,
+      "mode_octal": "0755",
+      "uid": 1000,
+      "nlink": 1,
+      "sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed"
+    },
+    "link_map": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-c81aeaca-exportset-26/output/build/kernel/mckernel.img.map",
+      "device_inode": "1831:1859946",
+      "size": 738606,
+      "mode_octal": "0644",
+      "uid": 1000,
+      "nlink": 1,
+      "sha256": "9a27435ca9faf2be359ae8a23f6f9e5d71a8701ccdcb2349e0d420f7b22bb7b3"
+    },
+    "rust_object": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-c81aeaca-exportset-26/output/build/kernel/rust/mckernel_rust.o",
+      "device_inode": "1831:1859920",
+      "size": 12591904,
+      "mode_octal": "0644",
+      "uid": 1000,
+      "nlink": 1,
+      "sha256": "532af6482181b68dfa4f6176fd50de34a999b53bbae9167f9c7cde0b3af70f92"
+    }
+  },
+  "stage": {
+    "root": "/home/holden/mckernel-work/scratch/native-diagnostic-memory-c81-stage-20261001-1",
+    "historical_source_root": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root",
+    "cpio": {
+      "path": "/home/holden/mckernel-work/scratch/native-diagnostic-memory-c81-stage-20261001-1/initramfs.cpio",
+      "device_inode": "1831:3292940",
+      "size": 39366656,
+      "mode_octal": "0600",
+      "uid": 1000,
+      "nlink": 1,
+      "sha256": "defbea55bebd9dc8c009e1317183bb08988d467911a41cb59c7e09dc59647b23"
+    },
+    "gzip": {
+      "path": "/home/holden/mckernel-work/scratch/native-diagnostic-memory-c81-stage-20261001-1/initramfs.cpio.gz",
+      "device_inode": "1831:3292941",
+      "size": 12303864,
+      "mode_octal": "0600",
+      "uid": 1000,
+      "nlink": 1,
+      "sha256": "ed55400792c0fcb25f861062158b059d8db5b4d18399a33407f4e33b42138466"
+    },
+    "manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-diagnostic-memory-c81-stage-20261001-1/manifest.json",
+      "device_inode": "1831:3292942",
+      "size": 19845,
+      "mode_octal": "0600",
+      "uid": 1000,
+      "nlink": 1,
+      "sha256": "131a838a8e14377e9c7f86054c5c2d46e97191656f1b0a6d7a9e1f4a16508a58",
+      "kind": "native-diagnostic-initramfs",
+      "schema_version": 1,
+      "is_strict_runtime_manifest": false
+    },
+    "corrected_launcher": {
+      "destination": "bin/mcexec",
+      "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+      "device_inode": "1831:147952",
+      "size": 453352,
+      "mode_octal": "0755",
+      "uid": 1000,
+      "nlink": 1,
+      "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+      "staged_final_sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b"
+    },
+    "stager": {
+      "path": "scripts/application-tests/native_diagnostic_stager.py",
+      "sha256": "a99f18a971e8d564a32c576262ef9121b4035ecbf4149ecfc603d6d8f6e8a6a4",
+      "tests_path": "scripts/tests/test_application_native_diagnostic_stager.py",
+      "tests_sha256": "6d930344adb8bde69f61b57bc24c5f07864f8be5f4cd69d6cab5b76143f6ee4b",
+      "historical_source_review": "PASS_SOURCE; 15 focused and 117 combined tests, as recorded in the referenced postlink/preparation checkpoint",
+      "contract": "Exact four kernel artifacts, optionally plus independently pinned corrected bin/mcexec; this stage uses five replacements."
+    },
+    "replacement_inputs_record": "/home/holden/mckernel-work/scratch/native-diagnostic-memory-c81-replacements-20261001-1.json",
+    "base_payload_from_staging_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/stability-packet001-compile-20260913-1/startup.argv-empty/payload",
+      "sha256": "ff227c83b2da598110768e13f5e042b437e049659706b56079cc73f7c818a836"
+    },
+    "collector_from_staging_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-diagnostic-memory-collector-build-20260928-1/init",
+      "sha256": "247433d68fa712f0f456366baead6040848832284b5ff14d89fced108b200556"
+    },
+    "scope": "The retained manifest binds preparation of the startup base. The separate memory-overlay stdout manifest is now retained for attempt 3; neither record establishes execution."
+  },
+  "memory_overlay": {
+    "path": "/home/holden/mckernel-work/scratch/native-diagnostic-memory-c81-overlay-20261001-3",
+    "file_type": "regular",
+    "device_inode": "1831:90703",
+    "size": 12891594,
+    "mode_octal": "0600",
+    "uid": 1000,
+    "nlink": 1,
+    "sha256": "e2684f7641f2ea6a8f69632371a34fbed3960e4af2cc5badd90ceca93c22eb8b",
+    "producer_path": "scripts/application-tests/native_diagnostic_overlay.py",
+    "producer_sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+    "stdout_manifest_separately_retained": true,
+    "stdout_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-diagnostic-memory-c81-overlay-result-20261001-3.json",
+      "device_inode": "1831:90704",
+      "size": 13792,
+      "mode_octal": "0600",
+      "uid": 1000,
+      "nlink": 1,
+      "sha256": "6821cce5d6c4fbb2b3def336d571edf214a79ce18b82c41ed5971780405c88db"
+    },
+    "preservation_defect_status": "CORRECTED_BY_FRESH_DETERMINISTIC_ATTEMPT_3",
+    "preserved_missing_manifest_failures": [
+      {
+        "attempt": 1,
+        "path": "/home/holden/mckernel-work/scratch/native-diagnostic-memory-c81-overlay-20261001-1",
+        "device_inode": "1831:90701",
+        "size": 12891594,
+        "sha256": "e2684f7641f2ea6a8f69632371a34fbed3960e4af2cc5badd90ceca93c22eb8b",
+        "failure": "Overlay output produced, but stdout manifest was not separately retained. Preserve the original output; it does not supply the missing binding record."
+      },
+      {
+        "attempt": 2,
+        "path": "/home/holden/mckernel-work/scratch/native-diagnostic-memory-c81-overlay-20261001-2",
+        "device_inode": "1831:90702",
+        "size": 12891594,
+        "sha256": "e2684f7641f2ea6a8f69632371a34fbed3960e4af2cc5badd90ceca93c22eb8b",
+        "failure": "Overlay output produced, but stdout manifest was not separately retained. Preserve the original output; attempt 3 supplies the fresh persisted manifest."
+      }
+    ],
+    "strict_runtime_manifest_status": "PASS_STRICT_MANIFEST_RESULT",
+    "strict_runtime_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-diagnostic-memory-c81-manifest-20261001-1/manifest.json",
+      "sha256": "ccc2150208b86f898f9d01a3a6f760d763cd2b661bb1585ad10f53cff26a6b30",
+      "size": 4709,
+      "mode_octal": "0600",
+      "device_inode": "1831:1859961",
+      "loader_result": "PASS",
+      "independent_result_review": "PASS_STRICT_MANIFEST_RESULT",
+      "guest_execution_release": "NOT_ESTABLISHED",
+      "provenance": "Current manifest identity, loader PASS and independent PASS_STRICT_MANIFEST_RESULT supplied by the coordinating implementation/review lanes; this additive evidence lane does not rerun the loader or grant execution authority."
+    },
+    "guest_execution_release_status": "BLOCKED",
+    "blocker": "The stdout-preservation defect is corrected by attempt 3; strict manifest independent review passes. Only fresh guest execution review/release and live preflight remain as the runtime admission blocker."
+  },
+  "diagnostic_packet": {
+    "path": "docs/verification/stability-native-diagnostic-memory-c81-execution-packet-20261001-1.md",
+    "sha256": "49a227fbc31b706ce6ddb31830aea64acf8da76baa52e6a05994fcf5c6c770fd",
+    "prior_source_review": "PASS_PACKET_SOURCE for prior packet hash; subsequent cleanup binding requires fresh final execution review",
+    "prior_source_sha256": "32fee1272f56988ebb1ede6dc2b58f14e3d149dc1bea82edc1946400d990c920",
+    "prior_committed_and_fetched_at": "18c7ea084a3877e9b729958c3a7163dc887671a1",
+    "committed_and_fetched_at": "3afc42f0fb23be1d0665a0b296e7550325df5807",
+    "observed_current_branch_head": "3afc42f0fb23be1d0665a0b296e7550325df5807",
+    "current_packet_change": "Bind accepted cleanup postflight to the packet before final execution review.",
+    "final_execution_review": "IN_PROGRESS",
+    "guest_execution_status": "NOT_RELEASED",
+    "runtime_blocker": "Fresh independent guest execution review/release and live preflight are still required. Packet source PASS and cleanup PASS do not authorize execution."
+  },
+  "cleanup_wip": {
+    "current_status": "PASS_CLEANUP_POSTFLIGHT_ATTEMPT4",
+    "invalid_release": {
+      "path": "docs/verification/evidence/native-exact-export26-build-cleanup-release-20261001-1.json",
+      "sha256": "93a0ff4e4a68082c97c96272cb21cf12022765c016e4f652e032b57ddf311263",
+      "commit": "43c583d69b4381fe81df5ffe0dca2fa077de278a",
+      "bound_helper_sha256": "c41930c02951d7f47d2cd4409791f3042279b2e078ce95baa4f521d2bcee46ac",
+      "status": "INVALID_DO_NOT_EXECUTE",
+      "preflight_result": "FAIL_EXECUTION before Journal creation or cleanup mutation",
+      "failure": "Generic nlink==1 admission rejected an intentional nlink==2 read-only build-helper bind."
+    },
+    "exact_hardlink_correction": {
+      "primary": "/home/holden/mckernel/scripts/native_rust_exact_build_offline.py",
+      "alias": "/home/holden/mckernel-exact-candidate-d0947e0c/scripts/native_rust_exact_build_offline.py",
+      "device_inode": "66306:47485298",
+      "nlink": 2,
+      "size": 27338,
+      "mode_octal": "0600",
+      "uid": 1000,
+      "sha256": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+      "checkpointed_helper_sha256": "f208d4d1a7846ea78a888616dd6113c934e368015fd4e567a1c042061682def3",
+      "checkpointed_tests_sha256": "4ea93c45ff49b9c45a5339bce6c4eb01a256d0ca44c077cff81eff9481f6ef80",
+      "checkpoint_commit": "deb565653117fd9dbb40120d83af0ea1351b2fe8",
+      "historical_tests": "102 fixture-only tests PASS; no cleanup execution",
+      "contract": "Authenticate both exact names, metadata and hashes; reread both; require nlink==1 for all other files."
+    },
+    "committed_successor_preparation": {
+      "helper_path": "docs/verification/evidence/native-exact-export26-build-cleanup-20261001.py",
+      "helper_sha256": "f828895d8977ade3008419e8acfc43ce30e1538d7106a26cab788ee053e5e5e5",
+      "tests_path": "scripts/tests/test_native_exact_export26_build_cleanup_20261001.py",
+      "tests_sha256": "2f1c026233712af949d3b7170bd9388ffdbbf94a8bad4cf3126d96ca0c3abc89",
+      "helper_commit": "1157bfec51af7d8e7745d30fa919eda2de564bd0",
+      "change": "Fresh attempt-2 release, evidence and retained-quarantine names; source committed without claiming cleanup execution or rerunning its tests in this evidence lane.",
+      "release_path": "docs/verification/evidence/native-exact-export26-build-cleanup-release-20261001-2.json",
+      "release_sha256": "7ba8f5f856de5e9f1a936c592acff17f4c75d56044e2f4a5ad5542a8a7bf413c",
+      "release_commit": "26c19ba76294fd62b6e942cc31d7ecdafab8ea49",
+      "release_checkpoint_fetched": true,
+      "execution_status": "FAIL_EXECUTION_ATTEMPT2_PREFLIGHT_NO_JOURNAL_OR_MUTATION",
+      "preflight_failure": "Order-sensitive comparison of Docker mount arrays rejected equivalent mount semantics presented in a different order. Attempt 2 did not create a journal or mutate the container/exclusion; the source correction normalized and authenticated exact mount semantics for fresh attempt 3.",
+      "evidence_root": "/home/holden/mckernel-work/scratch/native-exact-export26-build-cleanup-20261001-2",
+      "quarantine_name": ".native-exact-export26-build-cleanup-20261001-2-quarantine",
+      "runtime_authority_established_by_this_record": false
+    },
+    "attempt3_preserved_failure": {
+      "helper_sha256": "346776f07dba379b02d1a4d4baef246b1ecb3d1acb37862a04548ee61edbbcf5",
+      "source_commit": "ff7c03bf0071a98680be5126c1d71128f6629179",
+      "release_path": "docs/verification/evidence/native-exact-export26-build-cleanup-release-20261001-3.json",
+      "release_sha256": "3faa3c093489926ee87d5ced9bb212896486044c4398ad840e9e23be76abcc12",
+      "release_commit": "87a2c4201caa2f06da69284ebaa39afb62989488",
+      "executed": true,
+      "evidence_root": "/home/holden/mckernel-work/scratch/native-exact-export26-build-cleanup-20261001-3",
+      "failure_record_path": "/home/holden/mckernel-work/scratch/native-exact-export26-build-cleanup-20261001-3/FAIL.json",
+      "failure_record_sha256": "a6ff769a013c334c1cd84fc423ced6a9ee10e69363fbd9ac6a4405455354d76b",
+      "failure_detail": "container removal uncertain",
+      "docker_remove_returncode": 125,
+      "docker_remove_stderr": "unknown flag: --no-prune\nSee 'docker rm --help'.\n",
+      "effect": "Safe command-line rejection before target removal or exclusion quarantine. Original attempt evidence is retained; no unchanged retry was performed."
+    },
+    "attempt4_accepted_cleanup": {
+      "helper_sha256": "55074890efa99a57fd15186997404e8927b641be690599eb4d403a2873bdab36",
+      "source_commit": "c62fb1aff9ed373f36cf39b8912767bdd1660913",
+      "source_correction": "Docker-compatible exact-ID removal, preserving the no-force/no-volume-deletion boundary and retained exclusion transaction.",
+      "release_path": "docs/verification/evidence/native-exact-export26-build-cleanup-release-20261001-4.json",
+      "release_sha256": "4315c23f189b43f747f34b77cfe569d9d26ab82d5e613210bde118abbe9fd52c",
+      "release_commit": "ae9661f76317382bf5591012691be94a632befe9",
+      "executed": true,
+      "evidence_root": "/home/holden/mckernel-work/scratch/native-exact-export26-build-cleanup-20261001-4",
+      "pass_record_path": "/home/holden/mckernel-work/scratch/native-exact-export26-build-cleanup-20261001-4/PASS.json",
+      "pass_record_sha256": "bdce8379f13b8715d4d4b8182541d0d6ae8634745b1a22a8d0008fdc84038d4e",
+      "independent_result_review": "PASS_CLEANUP_POSTFLIGHT",
+      "docker_remove_returncode": 0,
+      "target_container_id": "f37e71e0731fb6cd4068746225d65eb1b372d6ba88c929def94ae889caa4c68e",
+      "target_container_absent": true,
+      "absence_evidence_path": "/home/holden/mckernel-work/scratch/native-exact-export26-build-cleanup-20261001-4/absence-proven.json",
+      "original_exclusion_absent": true,
+      "retained_exclusion": {
+        "path": "/home/holden/mckernel-work/scratch/.native-exact-export26-build-cleanup-20261001-4-quarantine/native-exact-candidate-operational-exclusion-exportset-26.json",
+        "device_inode": "1831:90699",
+        "size": 269,
+        "mode_octal": "0600",
+        "uid": 1000,
+        "nlink": 1,
+        "sha256": "8099da3fbac5e6cfc3722af036614d7e5434c8988a7d2e172581bac64a606c86"
+      },
+      "scope": "Cleanup prerequisite only. Exact terminal container removed; exclusion remains recoverable in quarantine. No guest/application or formal OS acceptance follows from this result."
+    },
+    "terminal_contract": "Attempt 4 completed separately released cleanup: exact terminal exportset-26 container removed with daemon absence evidence, exact exclusion retained in durable quarantine. This record authorizes no further cleanup or deletion.",
+    "cleanup_executed_by_this_lane": false
+  },
+  "sources": [
+    "docs/verification/evidence/native-exact-export26-heavy-build-success-20261001.json",
+    "docs/verification/evidence/native-exact-export26-postlink-diagnostic-preparation-checkpoint-20261001.json",
+    "docs/verification/os-milestones-20260914/CURRENT.md: shutdown checkpoint 283",
+    "/home/holden/mckernel-work/scratch/native-diagnostic-memory-c81-stage-20261001-1/manifest.json"
+  ],
+  "checks_for_this_record": [
+    "Read-only stat and SHA256 checks of current image, link map, Rust object, base cpio/gzip/manifest, overlay and corrected mcexec.",
+    "Read-only SHA256 checks of stager, overlay producer, invalid cleanup release and corrected cleanup helper/test sources.",
+    "Read-only stat/SHA256 checks of overlay attempts 2 and 3 and the separately persisted attempt-3 stdout JSON; resolve helper/release commits from local Git.",
+    "Read retained attempt-3 FAIL/remove-result records and attempt-4 PASS/absence/remove-result records; verify cleanup release hashes, PASS hash and retained quarantine identity/hash. Independent review outcomes are supplied by the coordinating review lanes.",
+    "Read retained staging manifest and replacement input record; resolve the invalid release commit from local Git.",
+    "This additive evidence lane performed no build, root command, Docker operation, guest, cleanup or application execution. Cleanup attempt 4 was executed by the separately authorized coordinator lane and is recorded above."
+  ],
+  "acceptance": {
+    "promotion": false,
+    "formal_gate_counters_changed": false,
+    "runtime_outputs_available": false,
+    "scope": "Additive WIP inventory and blockers only. Existing static/build evidence retains its original scope. No application, production, language or whole-OS acceptance is established."
+  },
+  "next": [
+    "Preserve all cleanup attempt evidence, the attempt-4 quarantined exclusion, overlay attempts 1 and 2 as missing-manifest failures, and both attempt-3 output and its persisted stdout JSON.",
+    "Obtain fresh independent guest execution review/release for the exact committed packet and strict manifest, then pass its fresh live preflight.",
+    "Run the real memory diagnostic with exact stdout NATIVE_CORE PASS memory followed by newline, empty stderr, exit 37, EOF/no truncation, kernel log, QMP shutdown and teardown/procfs evidence; preserve any first failure."
+  ]
+}
