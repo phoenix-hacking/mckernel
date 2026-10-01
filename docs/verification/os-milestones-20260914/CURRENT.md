@@ -11153,3 +11153,43 @@ with exact stdout `NATIVE_CORE_PASS memory\n`, empty stderr and exit 37.  The
 diagnostic remains distinct from application acceptance.  Current counts remain
 zero linked current images and zero real current-candidate guest applications;
 the OS goal remains active and incomplete.
+
+Continuation checkpoint 269, 2026-09-30: fetched source commit
+`5b7b4d87...8564` received independent conditional execution release for one
+ordinary-user data-only invocation.  Fresh admission verified all targets
+absent, exact input/helper/image hashes, no conflicting process, devices
+66306/1831, 28,812,750,848/16,906,440,704 host/scratch free bytes,
+27,916,440 KiB MemAvailable, and a complete privileged Docker census with only
+the two unrelated Kasper services running.  The first process observer matched
+its own shell and stopped before completing admission; the corrected observer
+excluded only its verified ancestor chain.  Neither observer created a target
+or consumed the released packet.
+
+The exact released command then ran once and failed immediately with exit 1,
+empty stdout and `SUPERVISOR_ERROR=RuntimeError('receipt evidence name')`.
+Every preparation target remains absent; no claim, directory, lease, exclusion,
+Docker operation or build exists.  The consumed packet/release must never be
+retried.  Diagnosis proves its read-only receipt validator incorrectly required
+basenames while the immutable receipt validly binds nested command-capture names
+such as `command-041639d913a34bfb854521039c919db3/status.json`.
+
+The one bounded production correction admits only normalized nonempty relative
+nested paths below the receipt root and continues to reject absolute, traversal,
+dot, non-normal and symlink-escape paths with exact size/hash checks.  Its first
+test candidate was independently BLOCKed only because a fixed `/tmp` escape
+directory made the symlink regression nonrepeatable.  Expert escalation changed
+that fixture to a unique temporary directory with registered cleanup; no stale
+directory deletion was required.  Independent rereview now returns
+`PASS_EXPORT25_RECEIPT_PATH_CORRECTION` for packet/test hashes
+`a8f4fcb8...893f`/`a9e75195...5024`.  Both expert and reviewer passed the full
+23-test suite twice; production packet behavior outside this path validator is
+unchanged.  Exact additive evidence is
+`docs/verification/evidence/native-exact-export25-image-preparation-attempt1-failure-and-correction-20260930.json`.
+
+Next checkpoint and fetch-verify the corrected bytes, obtain a fresh independent
+execution review, and use the same complete live admission with a new one-shot
+authority.  On preparation PASS, independently validate the stdout witness,
+terminal/log, exact request/toolchain documents and postflight before seeking a
+separate heavy-build release.  Current linked-image and current-candidate real
+guest-app counts remain zero; no formal counter changes and the whole OS goal
+remains active.

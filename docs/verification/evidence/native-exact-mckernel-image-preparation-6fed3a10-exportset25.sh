@@ -278,8 +278,12 @@ def preflight():
             receipt['source_free'] is True and receipt['retired'] is True and
             receipt['runtime_network'] == 'none', 'receipt identities')
     for name, row in receipt['evidence'].items():
-        require(name == Path(name).name, 'receipt evidence name')
-        path = safe(Path(cfg['receipt']).parent/name, 'file')
+        relative = Path(name) if isinstance(name, str) else Path('.')
+        require(isinstance(name, str) and name and not relative.is_absolute() and
+                name == relative.as_posix() and relative != Path('.') and
+                all(part not in ('', '.', '..') for part in relative.parts),
+                'receipt evidence name')
+        path = safe(Path(cfg['receipt']).parent/relative, 'file')
         require(path.stat().st_size == row['size'] and sha(path) == row['sha256'], 'receipt evidence changed: '+name)
     link = document(cfg['gitlink_manifest'])
     require(link['schema'] == 'mckernel.native-exact-mckernel-gitlink-inputs.v1' and

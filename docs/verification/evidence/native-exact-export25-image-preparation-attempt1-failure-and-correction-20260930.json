@@ -1,0 +1,40 @@
+{
+  "schema": "mckernel.native-exact-export25-image-preparation-attempt1-failure-and-correction.v1",
+  "recorded_at": "2026-09-30T19:49:47-07:00",
+  "release_commit": "5b7b4d87bfbde2b3080da483b93a30c94bdf8564",
+  "attempt": {
+    "command": [
+      "/bin/bash",
+      "docs/verification/evidence/native-exact-mckernel-image-preparation-6fed3a10-exportset25.sh"
+    ],
+    "packet_sha256": "fbae0ebb831b2feb4601f1e5d9b0cbb60b6526a84e9cda571226acf86112cbb4",
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "SUPERVISOR_ERROR=RuntimeError('receipt evidence name')\n",
+    "publication": "no-claim-no-publication",
+    "production_targets_after": "all absent",
+    "docker_or_build_started": false
+  },
+  "diagnosis": {
+    "status": "REPRODUCED",
+    "failing_invariant": "The packet required receipt evidence keys to be basenames, while the immutable receipt validly uses nested relative command capture paths.",
+    "example": "command-041639d913a34bfb854521039c919db3/status.json",
+    "mutation_boundary": "Failure occurred during read-only preflight before claim creation, target mkdir, import, lease, exclusion, Docker or build."
+  },
+  "bounded_correction": {
+    "packet_sha256": "a8f4fcb8db0f39a4dc7c6b3954ade19ce3402f862947a39844b598cdd9ec893f",
+    "tests_sha256": "a9e75195dcd9912bcccec4c133416cc5ebd94b5cf31e019faaaf3a2c70535024",
+    "decision": "PASS_EXPORT25_RECEIPT_PATH_CORRECTION",
+    "tests": "23/23 twice by the expert and 23/23 twice by the independent reviewer",
+    "behavior": "Admits normalized nonempty relative nested paths; rejects absolute, traversal, dot, non-normal and symlink-escape paths; retains exact size/hash checks."
+  },
+  "preserved_failures": [
+    "The first correction test used a fixed /tmp escape directory and was independently blocked as nonrepeatable.",
+    "The expert test-only repair uses a unique TemporaryDirectory with registered cleanup; no stale directory deletion was needed."
+  ],
+  "limitations": [
+    "The consumed release and packet must never be retried.",
+    "The corrected packet requires a new fetched checkpoint and separate execution review.",
+    "No build, linked image, guest, application or formal acceptance follows."
+  ]
+}

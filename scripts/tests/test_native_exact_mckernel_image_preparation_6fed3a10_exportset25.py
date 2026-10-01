@@ -411,6 +411,49 @@ cache.write_bytes(b._code_to_timestamp_pyc(compile(sys.argv[2],str(p),'exec'),in
         self.done(self.start(),1)
         for k in TARGETS: self.assertFalse(os.path.lexists(self.cfg[k]),k)
 
+    def test_nested_receipt_evidence_is_accepted_by_actual_supervisor(self):
+        nested = self.root/'command-123'/'status.json'
+        nested.parent.mkdir()
+        nested.write_text('{}')
+        receipt = json.loads((self.root/'receipt').read_text())
+        receipt['evidence']['command-123/status.json'] = dict(sha256=digest(nested), size=2)
+        (self.root/'receipt').write_text(json.dumps(receipt))
+        self.cfg['receipt_sha'] = digest(self.root/'receipt')
+        out,err = self.done(self.start())
+        self.assertEqual(json.loads(out)['preparation_returncode'],0)
+        self.assertEqual(self.terminal()['returncode'],0)
+
+    def test_receipt_evidence_paths_reject_unsafe_forms_before_claim(self):
+        vectors = ('/tmp/status.json', '../status.json', 'command-123//status.json',
+                   'command-123/./status.json')
+        for name in vectors:
+            with self.subTest(name=name):
+                case = PreparationPacket('test_success_real_preparer_and_commit_witness')
+                case.setUp()
+                try:
+                    receipt = json.loads((case.root/'receipt').read_text())
+                    receipt['evidence'][name] = dict(sha256=digest(case.root/'tool-observation.json'), size=2)
+                    (case.root/'receipt').write_text(json.dumps(receipt))
+                    case.cfg['receipt_sha'] = digest(case.root/'receipt')
+                    case.done(case.start(),1)
+                    for key in TARGETS: case.assertFalse(os.path.lexists(case.cfg[key]),key)
+                finally:
+                    case.doCleanups()
+
+        outside_temp = tempfile.TemporaryDirectory(
+            prefix='mckernel-image25-receipt-escape-', dir=str(self.root.parent))
+        self.addCleanup(outside_temp.cleanup)
+        outside = Path(outside_temp.name)
+        self.assertNotIn(self.root, outside.parents)
+        (outside/'payload').write_text('{}')
+        (self.root/'escape').symlink_to(outside, target_is_directory=True)
+        receipt = json.loads((self.root/'receipt').read_text())
+        receipt['evidence']['escape/payload'] = dict(sha256=digest(outside/'payload'), size=2)
+        (self.root/'receipt').write_text(json.dumps(receipt))
+        self.cfg['receipt_sha'] = digest(self.root/'receipt')
+        self.done(self.start(),1)
+        for key in TARGETS: self.assertFalse(os.path.lexists(self.cfg[key]),key)
+
     def test_broken_stdout(self):
         proc = self.start(pause_at='after-terminal')
         self.wait_file('paused-after-terminal')
