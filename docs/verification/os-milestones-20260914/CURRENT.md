@@ -12855,3 +12855,28 @@ known non-releasable candidate.  Next wire and independently review image and
 guest ownership, publish a successor side target with the common contract
 explicitly released, and only then prepare scratch18.  Exact evidence is
 `native-exact-successor-side-target-checkpoint-20261001.json`.
+
+Continuation checkpoint 318, 2026-10-01: independent review returns
+`PASS_SOURCE_IMAGE_LOCK`.  Exact authenticated wrapper bytes are compiled and
+executed directly, symlink/identity/cache substitutions fail closed, and shared
+kind=image ownership now precedes resource measurement, per-attempt exclusions,
+leases and Docker.  All 124 image/preparer/container tests pass, including four
+corrected signal regressions.  The production common contract remains disabled;
+no Docker or image preparation ran.  Exact evidence is
+`native-shared-image-lock-source-checkpoint-20261001.json`.
+
+Shutdown provider source independently returns
+`PASS_SOURCE_PROVIDER_NO_NORMAL_BOOT`.  Ninety-six compiled Rust semantic cases,
+eight mutations, two Send controls, lifecycle/mapping contracts and the
+panic-free resource policy pass.  Pre-effect failures reopen safely; retries
+revalidate identity without repeating physical effects; success requires CPU,
+memory, journal and boot-storage reconciliation.  Normal boots retain
+service/sysfs/procfs owners and therefore terminate with tagged EBUSY rather
+than unsafe success.  No module or guest ran and no shutdown credit is added.
+Exact evidence is `native-shutdown-v6-provider-source-checkpoint-20261001.json`.
+
+The remaining shared-heavy prerequisite is the expert guest admission and
+retirement helper.  Only after that source passes independent review may the
+common contract be released and a new fetched side target prepared for
+scratch18.  Counts remain one compiled current candidate, five bounded
+diagnostic guest passes and zero formal application acceptances.

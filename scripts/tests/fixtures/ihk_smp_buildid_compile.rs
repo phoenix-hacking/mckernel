@@ -114,7 +114,8 @@ unsafe fn ihk_os_create_unbooted_v2(_minor: u32, _owner: *mut kernel::bindings::
     assert!(ioctl.is_some() && release.is_some());
     -12
 }
-unsafe fn ihk_os_create_unbooted_v4(
+unsafe extern "C" fn ihk_smp_shutdown_v6(_slot: u32, _generation: u64) -> i64 { -38 }
+unsafe fn ihk_os_create_unbooted_v6(
     _minor: u32,
     _owner: *mut core::ffi::c_void,
     _argument: u64,
@@ -126,10 +127,12 @@ unsafe fn ihk_os_create_unbooted_v4(
     open: Option<application_abi::Open>,
     invoke: Option<application_abi::Invoke>,
     close: Option<application_abi::Close>,
+    shutdown: Option<unsafe extern "C" fn(u32, u64) -> i64>,
 ) -> i64 {
     assert_eq!(callback_abi, 1);
     assert!(ioctl.is_some() && release.is_some() && prepare.is_some() && start.is_some());
     assert!(open.is_some() && invoke.is_some() && close.is_some());
+    assert!(shutdown.is_some());
     -12
 }
 unsafe fn ihk_os_destroy_unbooted_v1(_provider: u32, _minor: u64) -> i64 { -22 }
@@ -139,7 +142,7 @@ struct IhkSmpControlDevice;
 
 // These are the exact callback shapes consumed by the extracted production
 // CREATE_OS branch.  The fixture does not model an OS or application; it only
-// proves that production dispatch supplies the complete v4 callback bundle.
+// proves that production dispatch supplies the complete v6 callback bundle.
 mod application_abi {
     pub type Open = unsafe extern "C" fn(
         u32,

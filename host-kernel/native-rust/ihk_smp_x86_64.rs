@@ -91,6 +91,7 @@ const IHK_SMP_IMPORT_NAMESPACE: &str = "MCKERNEL_IHK_V1";
 const IHK_SMP_PROVIDER_CALLBACK_ABI_V1: u32 = 1;
 const IHK_SMP_PROVIDER_FLAG_SHARED: u32 = 1;
 const IHK_SMP_CONTROL_DEVICE_MINOR: u32 = 0;
+const IHK_SMP_SHUTDOWN_V6_POST_EFFECT: i64 = 1_i64 << 62;
 
 const IHK_DEVICE_GET_BUILDID: u32 = 0x0011_290b;
 const IHK_DEVICE_CREATE_OS: u32 = 0x0011_2900;
@@ -122,7 +123,7 @@ fn control_device_request(cmd: u32, arg: usize) -> Result<isize> {
             // THIS_MODULE. IHK acquires its own module reference before the
             // instance becomes live; the raw scalar argument is never a pointer.
             let result = unsafe {
-                ihk_os_create_unbooted_v4(
+                ihk_os_create_unbooted_v6(
                     IHK_SMP_CONTROL_DEVICE_MINOR,
                     THIS_MODULE.as_ptr().cast(),
                     arg as u64,
@@ -134,6 +135,7 @@ fn control_device_request(cmd: u32, arg: usize) -> Result<isize> {
                     Some(application_open),
                     Some(application_invoke),
                     Some(application_close),
+                    Some(ihk_smp_shutdown_v6),
                 )
             };
             if result < 0 {
@@ -173,6 +175,10 @@ type IhkSmpOsReleaseV2 = unsafe extern "C" fn(u32, u64) -> i32;
 type IhkSmpPrepareBootV3 = unsafe extern "C" fn(u32, u64, u64, u64) -> i32;
 // SAFETY: IHK publishes Booting first and retains owners after any start result.
 type IhkSmpStartBootV3 = unsafe extern "C" fn(u32, u64) -> i32;
+// SAFETY: IHK invokes this under the exact operation lock and generation lease.
+// The tagged scalar result distinguishes rollback-safe failure from an effect
+// which must remain closed for later reconciliation.
+type IhkSmpShutdownV6 = unsafe extern "C" fn(u32, u64) -> i64;
 
 // SAFETY: The provider owns these namespaced symbols for its full module
 // lifetime.  The byte is read-only; the C-ABI functions exchange only scalars
@@ -194,8 +200,8 @@ extern "C" {
     fn ihk_smp_provider_open_v1(minor: u32) -> i64;
     #[link_name = "ihk_smp_provider_close_v1"]
     fn ihk_smp_provider_close_v1(receipt: i64);
-    #[link_name = "ihk_os_create_unbooted_v4"]
-    fn ihk_os_create_unbooted_v4(
+    #[link_name = "ihk_os_create_unbooted_v6"]
+    fn ihk_os_create_unbooted_v6(
         provider_minor: u32,
         owner: *mut core::ffi::c_void,
         argument: u64,
@@ -207,6 +213,7 @@ extern "C" {
         application_open: Option<application_abi::Open>,
         application_invoke: Option<application_abi::Invoke>,
         application_close: Option<application_abi::Close>,
+        shutdown: Option<IhkSmpShutdownV6>,
     ) -> i64;
     #[link_name = "ihk_os_destroy_unbooted_v1"]
     fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;
@@ -389,6 +396,39 @@ unsafe extern "C" fn ihk_smp_start_boot_v3(slot: u32, generation: u64) -> i32 {
     match smp_cpu::start_os_boot(owner) {
         Ok(()) => 0,
         Err(error) => error.to_errno(),
+    }
+}
+
+fn shutdown_v6_post_effect(error: kernel::Error) -> i64 {
+    IHK_SMP_SHUTDOWN_V6_POST_EFFECT | (error.to_errno() as u32 as i64)
+}
+
+// SAFETY: IHK supplies the exact generation lease and serializes this call
+// with every OS operation. Sender closure completes before any CPU reset;
+// all owners remain retained on either failure class.
+unsafe extern "C" fn ihk_smp_shutdown_v6(slot: u32, generation: u64) -> i64 {
+    let owner = match unsafe { smp_resource::OsToken::from_ihk_lease_v2(slot, generation) } {
+        Ok(owner) => owner,
+        Err(_) => return EINVAL.to_errno() as i64,
+    };
+
+    match smp_memory::shutdown_close_irq_senders(owner) {
+        Ok(()) => {}
+        Err(smp_memory::ShutdownIrqFailure::PreEffect(error)) => {
+            return error.to_errno() as i64;
+        }
+        Err(smp_memory::ShutdownIrqFailure::PostEffect(error)) => {
+            return shutdown_v6_post_effect(error);
+        }
+    }
+
+    match smp_cpu::shutdown_reset_and_reonline_outcome(owner) {
+        Ok(()) => match smp_cpu::reconcile_shutdown(owner) {
+            Ok(()) => 0,
+            Err(error) => shutdown_v6_post_effect(error),
+        },
+        Err(smp_cpu::ShutdownResetFailure::PreEffect(error)) => shutdown_v6_post_effect(error),
+        Err(smp_cpu::ShutdownResetFailure::PostEffect(error)) => shutdown_v6_post_effect(error),
     }
 }
 

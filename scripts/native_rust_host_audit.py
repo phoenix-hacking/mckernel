@@ -214,8 +214,10 @@ static IHK_BUILTIN_VERSION_MODINFO: [u8; 21] = *b"ihk.version=1.7.0rc4\\0";''',
   'type IhkSmpOsReleaseV2 = unsafe extern "C" fn(u32, u64) -> i32;'),
  ('IHK SMP prepare boot callback type',
   'type IhkSmpPrepareBootV3 = unsafe extern "C" fn(u32, u64, u64, u64) -> i32;'),
- ('IHK SMP start boot callback type',
-  'type IhkSmpStartBootV3 = unsafe extern "C" fn(u32, u64) -> i32;'),
+('IHK SMP start boot callback type',
+ 'type IhkSmpStartBootV3 = unsafe extern "C" fn(u32, u64) -> i32;'),
+ ('IHK SMP shutdown callback type',
+  'type IhkSmpShutdownV6 = unsafe extern "C" fn(u32, u64) -> i64;'),
  ('IHK SMP provider and OS import',
   'extern "C" {\n'
   '    #[link_name = "ihk_provider_lifecycle_v1"]\n'
@@ -233,8 +235,8 @@ static IHK_BUILTIN_VERSION_MODINFO: [u8; 21] = *b"ihk.version=1.7.0rc4\\0";''',
   '    fn ihk_smp_provider_open_v1(minor: u32) -> i64;\n'
   '    #[link_name = "ihk_smp_provider_close_v1"]\n'
   '    fn ihk_smp_provider_close_v1(receipt: i64);\n'
-  '    #[link_name = "ihk_os_create_unbooted_v4"]\n'
-  '    fn ihk_os_create_unbooted_v4(\n'
+  '    #[link_name = "ihk_os_create_unbooted_v6"]\n'
+  '    fn ihk_os_create_unbooted_v6(\n'
   '        provider_minor: u32,\n'
   '        owner: *mut core::ffi::c_void,\n'
   '        argument: u64,\n'
@@ -246,6 +248,7 @@ static IHK_BUILTIN_VERSION_MODINFO: [u8; 21] = *b"ihk.version=1.7.0rc4\\0";''',
   '        application_open: Option<application_abi::Open>,\n'
   '        application_invoke: Option<application_abi::Invoke>,\n'
   '        application_close: Option<application_abi::Close>,\n'
+  '        shutdown: Option<IhkSmpShutdownV6>,\n'
   '    ) -> i64;\n'
   '    #[link_name = "ihk_os_destroy_unbooted_v1"]\n'
   '    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n'
@@ -259,7 +262,8 @@ static IHK_BUILTIN_VERSION_MODINFO: [u8; 21] = *b"ihk.version=1.7.0rc4\\0";''',
   '    compat: u32,\n'
   ') -> i64 {'),
  ('IHK SMP OS release callback ABI',
-  'unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {'),
+ 'unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {'),
+ ('IHK SMP shutdown callback ABI', 'unsafe extern "C" fn ihk_smp_shutdown_v6(slot: u32, generation: u64) -> i64 {'),
  ('IHK SMP init callback ABI', 'extern "C" fn ihk_smp_provider_init_v2() -> i32 {'),
  ('IHK SMP exit callback ABI', 'extern "C" fn ihk_smp_provider_exit_v2() {'),
  ('IHK SMP parameter descriptor section',
@@ -312,6 +316,11 @@ REVIEWED_RUST_ESCAPE_BLOCKS['host-kernel/native-rust/smp_cpu.rs'] = (
 
 REVIEWED_RUST_ESCAPE_BLOCKS['host-kernel/native-rust/smp_memory.rs'] = (
     ('Memory adapter shared ABI', '#[path = "abi/x86_64.rs"]\nmod abi;'),
+    ('Memory IRQ work synchronization import', '''extern "C" {
+    /// GPL-exported Linux irq_work synchronization primitive.  This is used
+    /// only after the guest sender gate is closed and each slot is validated.
+    fn irq_work_sync(work: *mut core::ffi::c_void);
+}'''),
     ('Memory boot Linux imports', '''extern "C" {
     // Exact existing Linux APIs, with patch 0006 exporting the unchanged start
     // implementation and permanent data symbol. Opaque addresses never borrow
@@ -799,10 +808,12 @@ REVIEWED_RUST_ESCAPE_ORDER = {
         'IHK SMP init callback type', 'IHK SMP exit callback type',
         'IHK SMP OS ioctl callback type', 'IHK SMP OS release callback type',
         'IHK SMP prepare boot callback type', 'IHK SMP start boot callback type',
+        'IHK SMP shutdown callback type',
         'IHK SMP provider and OS import', 'SMP application open callback ABI',
         'SMP application invoke callback ABI', 'SMP application close callback ABI',
         'IHK SMP OS ioctl callback ABI', 'IHK SMP OS release callback ABI',
         'SMP prepare boot callback ABI', 'SMP start boot callback ABI',
+        'IHK SMP shutdown callback ABI',
         'IHK SMP init callback ABI', 'IHK SMP exit callback ABI',
         'IHK SMP parameter descriptor section', 'IHK SMP loadable parameter metadata',
         'IHK SMP built-in parameter metadata',
@@ -822,7 +833,7 @@ REVIEWED_RUST_ESCAPE_ORDER = {
     ),
     'host-kernel/native-rust/smp_memory.rs': (
         'Memory adapter shared ABI', 'Memory service module path',
-        'Memory boot Linux imports', 'Memory boot RDTSC ABI',
+        'Memory IRQ work synchronization import', 'Memory boot Linux imports', 'Memory boot RDTSC ABI',
     ),
     'host-kernel/native-rust/os_runtime.rs': (
         'OS Linux kernel exports', 'OS backend ioctl callback type',
@@ -910,7 +921,7 @@ REVIEWED_RUST_BLOCK_PREFIXES.update({
     'mcctrl ioctl callback ABI': '// SAFETY: IHK retains the successful context and module pin, excludes final\n// release and supplies normalized compat arguments. No service/file/OS lock\n// crosses this call; the IHK topology query may take its short operation lock.\n',
     'mcctrl close callback ABI': '// SAFETY: IHK transfers back the unique Box after every ioctl has finished,\n// retaining both the OS generation and our module until this returns.\n',
     'CPU adapter offline callback': '// SAFETY: Registered at AP_ONLINE_DYN, before irreversible target teardown.\n// The CPUHP callback uses only one bounded atomic and never a resource mutex.\n',
-    'CPU adapter boot IRQ callback': '// SAFETY: Each monomorphized identity belongs to one pinned OS slot. A started\n// route cannot retire until guest senders stop and Linux drains every work\n// node. Hard IRQ drains bounded packets; no sleepable lock is acquired.\n',
+    'CPU adapter boot IRQ callback': '// SAFETY: Each monomorphized identity belongs to one pinned OS slot. A started\n// route cannot retire until the caller stops guest senders and Linux drains\n// every work node. This callback only accounts bounded hard-IRQ work; it does\n// not establish either external condition.\n',
     'CPU adapter boot IRQ callback table ABI': '',
     'CPU adapter boot IRQ table type ABI': '',
     'IHK SMP provider and OS import': '// SAFETY: The provider owns these namespaced symbols for its full module\n// lifetime.  The byte is read-only; the C-ABI functions exchange only scalars\n// and scalar-only callback function identities. The OS-create call also borrows\n// the pinned caller\'s Linux module pointer; no private Rust object crosses it.\n',
@@ -922,6 +933,8 @@ REVIEWED_RUST_BLOCK_PREFIXES.update({
 })
 REVIEWED_RUST_OUTER_BLOCKS = REVIEWED_RUST_OUTER_BLOCKS | frozenset(('OS Linux kernel exports', 'OS create ABI', 'OS destroy ABI', 'OS open ABI', 'OS release ABI', 'OS ioctl ABI', 'OS create export record', 'OS destroy export record'))
 REVIEWED_RUST_OUTER_BLOCKS = REVIEWED_RUST_OUTER_BLOCKS | frozenset((
+    'IHK SMP shutdown callback type', 'IHK SMP shutdown callback ABI',
+    'Memory IRQ work synchronization import',
     'IHK OS service ABI module path', 'IHK application ABI module path',
     'SMP vDSO ABI module path', 'SMP sysfs ABI module path',
     'SMP sysfs request ABI module path', 'SMP application ABI module path',

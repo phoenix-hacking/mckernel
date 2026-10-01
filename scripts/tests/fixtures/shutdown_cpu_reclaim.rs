@@ -17,6 +17,12 @@ mod smp_memory {
         commit();
         Ok(())
     }
+    pub fn finish_shutdown(_owner: OsToken, commit: impl FnOnce()) -> Result {
+        let status = super::fixture::FINISH_STATUS.load(Ordering::Relaxed);
+        if status != 0 { return Err(status); }
+        commit();
+        Ok(())
+    }
 }
 mod fixture {
     use std::pin::Pin;
@@ -74,6 +80,7 @@ mod fixture {
             (cpu as usize + 0x1000) as *mut device
         }
         pub unsafe fn device_online(cpu_device: *mut device) -> i32 {
+            super::ONLINE_CALLS.fetch_add(1, Ordering::Relaxed);
             let cpu = cpu_device as usize - 0x1000;
             let status = STATUS[cpu].load(Ordering::Acquire);
             if status == 0 {
@@ -149,7 +156,24 @@ mod fixture {
     struct CpuTable<const N: usize> {
         slots: [Slot; N],
     }
+    struct ShutdownOnline<'a> { table: &'a mut CpuTable<SMP_MAX_CPUS>, cpus: &'a [usize] }
+    impl ShutdownOnline<'_> {
+        fn commit(self) {
+            for &cpu in self.cpus {
+                self.table.slots[cpu].owner = None;
+                self.table.slots[cpu].state = CpuState::Online;
+            }
+        }
+    }
     impl CpuTable<SMP_MAX_CPUS> {
+        fn preflight_shutdown_online(&self, owner: OsToken, cpus: &[usize]) -> Result {
+            if cpus.iter().any(|&cpu| self.slots[cpu].owner != Some(owner)) { return Err(EIO); }
+            Ok(())
+        }
+        fn prepare_shutdown_online<'a>(&'a mut self, owner: OsToken, cpus: &'a [usize]) -> Result<ShutdownOnline<'a>> {
+            self.preflight_shutdown_online(owner, cpus)?;
+            Ok(ShutdownOnline { table: self, cpus })
+        }
         fn slot(&self, cpu: usize) -> Result<&Slot> {
             self.slots.get(cpu).ok_or(EIO)
         }
@@ -283,6 +307,9 @@ mod fixture {
     }
 
     static RESET_CALLS: AtomicU32 = AtomicU32::new(0);
+    static ONLINE_CALLS: AtomicU32 = AtomicU32::new(0);
+    pub(super) static FINISH_STATUS: AtomicI32 = AtomicI32::new(0);
+    static BLOCK_ONLINE: [AtomicBool; SMP_MAX_CPUS] = [const { AtomicBool::new(true) }; SMP_MAX_CPUS];
     pub(super) static RETIRE_CALLS: AtomicU32 = AtomicU32::new(0);
     pub(super) static MEMORY_RELEASES: AtomicU32 = AtomicU32::new(0);
     static BEGIN_CALLS: AtomicU32 = AtomicU32::new(0);
@@ -296,6 +323,8 @@ mod fixture {
     fn reset_mock() {
         bindings::reset();
         RESET_CALLS.store(0, Ordering::Relaxed);
+        ONLINE_CALLS.store(0, Ordering::Relaxed);
+        FINISH_STATUS.store(0, Ordering::Relaxed);
         for counter in [
             &RETIRE_CALLS,
             &MEMORY_RELEASES,
@@ -481,19 +510,123 @@ mod fixture {
             .all(|record| !record.recorded && !record.retained));
     }
     #[test]
-    fn extracted_entry_rejects_second_call_without_clearing_journal() {
+    fn extracted_retry_revalidates_success_without_repeating_effects() {
         reset_mock();
         let (mut context, result) = run(&[1]);
         assert_eq!(result, Ok(()));
         assert_eq!(
             context.shutdown_reset_and_reonline(token(), &DeviceHotplugGuard),
-            Err(EIO)
+            Ok(())
         );
         assert!(
-            context.poisoned
-                && context.shutdown_journal[0].recorded
+            context.shutdown_journal[0].recorded
                 && context.shutdown_journal[0].online
         );
+        assert_eq!(RESET_CALLS.load(Ordering::Acquire), 1);
+        assert_eq!(ONLINE_CALLS.load(Ordering::Acquire), 1);
+        bindings::set_online(1, false);
+        assert_eq!(context.shutdown_reset_and_reonline(token(), &DeviceHotplugGuard), Err(EIO));
+        assert_eq!(RESET_CALLS.load(Ordering::Acquire), 1);
+    }
+
+    #[test]
+    fn retries_resume_each_failed_boundary_without_repeating_reset() {
+        for boundary in 0..3 {
+            reset_mock();
+            match boundary {
+                0 => fail_on_observation(2, 2),
+                1 => bindings::set_status(2, -19),
+                2 => fail_on_observation(2, 3),
+                _ => unreachable!(),
+            }
+            let (mut context, result) = run(&[1, 2]);
+            assert!(result.is_err());
+            bindings::set_status(2, 0);
+            assert_eq!(context.shutdown_reset_and_reonline(token(), &DeviceHotplugGuard), Ok(()));
+            assert_eq!(RESET_CALLS.load(Ordering::Acquire), 2);
+            assert_eq!(ONLINE_CALLS.load(Ordering::Acquire), if boundary == 1 { 3 } else { 2 });
+            assert!(context.shutdown_journal[..2].iter().all(|r| r.online));
+        }
+    }
+
+    #[test]
+    fn retry_rejects_wrong_generation_without_effects() {
+        reset_mock();
+        let (mut context, result) = run(&[1]);
+        assert_eq!(result, Ok(()));
+        let wrong = OsToken { generation: token().generation + 1, ..token() };
+        assert_eq!(context.shutdown_reset_and_reonline(wrong, &DeviceHotplugGuard), Err(EIO));
+        assert_eq!(RESET_CALLS.load(Ordering::Acquire), 1);
+    }
+
+    #[test]
+    fn failed_online_with_observed_effect_is_not_repeated() {
+        reset_mock();
+        bindings::set_status(1, -19);
+        let (mut context, result) = run(&[1]);
+        assert_eq!(result, Err(-19));
+        bindings::set_online(1, true);
+        assert_eq!(context.shutdown_reset_and_reonline(token(), &DeviceHotplugGuard), Ok(()));
+        assert_eq!(RESET_CALLS.load(Ordering::Acquire), 1);
+        assert_eq!(ONLINE_CALLS.load(Ordering::Acquire), 1);
+    }
+
+    fn finish(context: &mut CpuContext, owner: OsToken) -> Result {
+        let mut mutex = Mutex(std::sync::Mutex::new(context));
+        PUBLISHED.store((&mut mutex as *mut Mutex<&mut CpuContext>).cast(), Ordering::Release);
+        let result = reconcile_shutdown(owner);
+        PUBLISHED.store(ptr::null_mut(), Ordering::Release);
+        result
+    }
+
+    #[test]
+    fn extracted_outcome_preserves_pre_and_post_reset_failure_classes() {
+        reset_mock();
+        assert!(matches!(shutdown_reset_and_reonline_outcome(token()), Err(ShutdownResetFailure::PreEffect(ENODEV))));
+        for after_reset in [false, true] {
+            reset_mock();
+            if after_reset { bindings::set_status(1, -19); }
+            else { bindings::set_online(1, true); }
+            let mut context = CpuContext::new(&[1]);
+            let mut mutex = Mutex(std::sync::Mutex::new(&mut context));
+            PUBLISHED.store((&mut mutex as *mut Mutex<&mut CpuContext>).cast(), Ordering::Release);
+            let result = shutdown_reset_and_reonline_outcome(token());
+            PUBLISHED.store(ptr::null_mut(), Ordering::Release);
+            if after_reset { assert!(matches!(result, Err(ShutdownResetFailure::PostEffect(-19)))); }
+            else { assert!(matches!(result, Err(ShutdownResetFailure::PreEffect(EIO)))); }
+        }
+    }
+
+    #[test]
+    fn reconciliation_retains_on_error_then_releases_every_cpu_owner() {
+        reset_mock();
+        let (mut context, result) = run(&[1, 2]);
+        assert_eq!(result, Ok(()));
+        FINISH_STATUS.store(-16, Ordering::Release);
+        assert_eq!(finish(&mut context, token()), Err(-16));
+        assert!(context.devices[1].is_some() && context.shutdown_journal[0].recorded);
+        FINISH_STATUS.store(0, Ordering::Release);
+        assert_eq!(finish(&mut context, token()), Ok(()));
+        assert!(context.shutdown_journal.iter().all(|r| !r.recorded));
+        assert!(context.devices[1].is_none() && context.devices[2].is_none());
+        assert!(context.pin.is_none() && !context.poisoned);
+        assert_eq!(context.table.slots[1].state, CpuState::Online);
+        assert_eq!(context.table.slots[1].owner, None);
+        assert!(!BLOCK_ONLINE[1].load(Ordering::Acquire));
+        assert_eq!(context.verify_owned(&DeviceHotplugGuard), Ok(()));
+    }
+
+    #[test]
+    fn reconciliation_checks_current_online_and_exact_generation() {
+        reset_mock();
+        let (mut context, _) = run(&[1]);
+        bindings::set_online(1, false);
+        assert_eq!(finish(&mut context, token()), Err(EIO));
+        bindings::set_online(1, true);
+        let wrong = OsToken { generation: token().generation + 1, ..token() };
+        assert_eq!(finish(&mut context, wrong), Err(EIO));
+        assert!(context.devices[1].is_some());
+        assert_eq!(finish(&mut context, token()), Ok(()));
     }
 
     #[test]

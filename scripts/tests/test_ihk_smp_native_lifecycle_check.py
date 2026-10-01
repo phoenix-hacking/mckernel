@@ -85,7 +85,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
                 "ihk_smp_provider_detach_v2",
                 "ihk_smp_provider_open_v1",
                 "ihk_smp_provider_close_v1",
-                "ihk_os_create_unbooted_v4",
+                "ihk_os_create_unbooted_v6",
                 "ihk_os_destroy_unbooted_v1",
             ],
             summary["provider_symbols"],
@@ -95,7 +95,7 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         self.assertFalse(summary["provider_lease_runtime_proven"])
         self.assertFalse(summary["resource_foundation_credit_eligible"])
         self.assertTrue(summary["resource_foundation_linux_reachable"])
-        self.assertEqual(51, summary["resource_foundation_tests"])
+        self.assertEqual(52, summary["resource_foundation_tests"])
         self.assertEqual("mcd0", summary["control_device_name"])
         self.assertTrue(summary["control_device_source_reachable"])
         self.assertEqual("TODO", summary["control_device_gate_status"])

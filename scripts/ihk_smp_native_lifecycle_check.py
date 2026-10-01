@@ -42,16 +42,16 @@ BOUND_MODINFO_ENVIRONMENT = {
 }
 EXPECTED_CRATE_MODULES = [{'destination': 'smp_resource.rs',
   'path': 'host-kernel/native-rust/smp_resource.rs',
-  'sha256': 'd8c567be5d3e3953bf2954d5e43130e5204ae4f6ad4158d18e7efb99088c64d3'},
+  'sha256': 'd4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd'},
  {'destination': 'smp_cpu.rs',
   'path': 'host-kernel/native-rust/smp_cpu.rs',
-  'sha256': 'ac6b73ebf70d9f70b882091a8eccc0134eb4e33095ca57dd8489fbcadd160806'},
+  'sha256': 'ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb'},
  {'destination': 'abi/x86_64.rs',
   'path': 'host-kernel/native-rust/abi/x86_64.rs',
   'sha256': '89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3'},
  {'destination': 'smp_memory.rs',
   'path': 'host-kernel/native-rust/smp_memory.rs',
-  'sha256': '1809dfde57054447b32417d0810e0766b6638495b5a4635662e0f8be73e4334f'},
+  'sha256': '5560c847d65e22ace8cb4da8bce3ed233bd10ae327b043e5f01953684b121c67'},
  {'destination': 'ihk_mapping.rs',
   'path': 'host-kernel/native-rust/ihk_mapping.rs',
   'sha256': '085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc'},
@@ -68,8 +68,8 @@ EXPECTED_RESOURCE_FOUNDATION = {'credit_eligible': False,
  'external_effect_failure_policy': {'cpu': 'quarantine-affected-slots-unless-compensated-rollback',
                                     'memory': 'poison-live-map-unless-compensated-rollback'},
  'fixture': {'expected_fixture_tests': 14,
-             'expected_in_file_tests': 37,
-             'expected_total_tests': 51,
+             'expected_in_file_tests': 38,
+             'expected_total_tests': 52,
              'minimum_rustc': '1.92.0',
              'negative_path': 'scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs',
              'negative_sha256': '4a3ee8971e6e34f48f4ee0a920fcdb21e713784a01838da4b05ab3bcc7276159',
@@ -140,8 +140,8 @@ EXPECTED_CONTROL_DEVICE_SHELL = {'close_symbol': 'ihk_smp_provider_close_v1',
                  'safe_usercopy': 'kernel::uaccess::UserSlice::writer::write_slice',
                  'source_fixture': {'expected_tests': 8,
                                     'path': 'scripts/tests/fixtures/ihk_smp_buildid_compile.rs',
-                                    'sha256': '91a7498c3ca718a15b449964ed19b5998cf8f1eb3543dcf8d1e8fda2185fea9a',
-                                    'size': 11653},
+                                    'sha256': '2998807ec73766c2a50dfae7ba6a6c89cabfef208a7acddef7ac8b16ffa1a83e',
+                                    'size': 11833},
                  'source_fixture_scope': 'extracted production dispatch with mock UserSlice; no '
                                          'kernel usercopy or runtime proof',
                  'success_result': 0},
@@ -1035,7 +1035,7 @@ def _provider_symbols(contract: dict[str, Any]) -> tuple[str, str, str, str, str
 
 
 def _module_provider_symbols(contract: dict[str, Any]) -> tuple[str, ...]:
-    return _provider_symbols(contract) + ("ihk_os_create_unbooted_v4", "ihk_os_destroy_unbooted_v1")
+    return _provider_symbols(contract) + ("ihk_os_create_unbooted_v6", "ihk_os_destroy_unbooted_v1")
 
 
 def _provider_import(contract: dict[str, Any]) -> str:
@@ -1057,8 +1057,8 @@ def _provider_import(contract: dict[str, Any]) -> str:
         f"    fn {open_symbol}(minor: u32) -> i64;\n"
         f'    #[link_name = "{close_symbol}"]\n'
         f"    fn {close_symbol}(receipt: i64);\n"
-        '    #[link_name = "ihk_os_create_unbooted_v4"]\n'
-        '    fn ihk_os_create_unbooted_v4(\n'
+        '    #[link_name = "ihk_os_create_unbooted_v6"]\n'
+        '    fn ihk_os_create_unbooted_v6(\n'
         '        provider_minor: u32,\n'
         '        owner: *mut core::ffi::c_void,\n'
         '        argument: u64,\n'
@@ -1070,6 +1070,7 @@ def _provider_import(contract: dict[str, Any]) -> str:
         '        application_open: Option<application_abi::Open>,\n'
         '        application_invoke: Option<application_abi::Invoke>,\n'
         '        application_close: Option<application_abi::Close>,\n'
+        '        shutdown: Option<IhkSmpShutdownV6>,\n'
         '    ) -> i64;\n'
         '    #[link_name = "ihk_os_destroy_unbooted_v1"]\n'
         "    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n"
@@ -1122,6 +1123,7 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
     callback_exit_type = 'type IhkSmpProviderExitV2 = extern "C" fn();'
     callback_prepare_type = 'type IhkSmpPrepareBootV3 = unsafe extern "C" fn(u32, u64, u64, u64) -> i32;'
     callback_start_type = 'type IhkSmpStartBootV3 = unsafe extern "C" fn(u32, u64) -> i32;'
+    callback_shutdown_type = 'type IhkSmpShutdownV6 = unsafe extern "C" fn(u32, u64) -> i64;'
     callback_init = 'extern "C" fn ihk_smp_provider_init_v2() -> i32 {'
     callback_exit = 'extern "C" fn ihk_smp_provider_exit_v2() {'
     _validate_rust_escape_hatches(
@@ -1132,6 +1134,7 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
             callback_exit_type,
             callback_prepare_type,
             callback_start_type,
+            callback_shutdown_type,
             provider_import,
             *EXPECTED_OS_CALLBACK_TYPES,
             *EXPECTED_OS_CALLBACK_HEADERS,
@@ -1142,6 +1145,7 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
             'unsafe extern "C" fn application_close(context: *mut core::ffi::c_void) {',
             'unsafe extern "C" fn ihk_smp_prepare_boot_v3(\n    slot: u32,\n    generation: u64,\n    kmsg: u64,\n    kmsg_bytes: u64,\n) -> i32 {',
             'unsafe extern "C" fn ihk_smp_start_boot_v3(slot: u32, generation: u64) -> i32 {',
+            'unsafe extern "C" fn ihk_smp_shutdown_v6(slot: u32, generation: u64) -> i64 {',
         ),
         allow_buildid_include=True,
     )
@@ -1330,7 +1334,7 @@ struct ProviderOpenLease {
         "Rust exact GET_BUILDID command",
     )
     expected_os_request = EXPECTED_OS_REQUEST.replace(
-        "ihk_os_create_unbooted_v2", "ihk_os_create_unbooted_v4"
+        "ihk_os_create_unbooted_v2", "ihk_os_create_unbooted_v6"
     ).replace(
         "                    Some(ihk_smp_os_release_v2),\n",
         "                    Some(ihk_smp_os_release_v2),\n"
@@ -1338,7 +1342,8 @@ struct ProviderOpenLease {
         "                    Some(ihk_smp_start_boot_v3),\n"
         "                    Some(application_open),\n"
         "                    Some(application_invoke),\n"
-        "                    Some(application_close),\n",
+        "                    Some(application_close),\n"
+        "                    Some(ihk_smp_shutdown_v6),\n",
     )
     _require_active_count(text, code, expected_os_request, 1,
                           "Rust exact unbooted OS request and module owner boundary")

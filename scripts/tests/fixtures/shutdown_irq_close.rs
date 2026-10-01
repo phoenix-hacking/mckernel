@@ -257,3 +257,22 @@ fn retained(p:&PreparedBoot,senders:u32){
     assert_eq!(close_native_irq_work_senders_typed(descriptor(&p),p.irq_slots.address,||false),Err(native_irq_error(110)));
     assert_eq!(descriptor(&p).senders.load(Ordering::Acquire),(1<<31)|2);assert!(TRACE.lock().unwrap().is_empty());
 }
+#[test]fn reconciliation_releases_only_exact_drained_slot_for_reuse(){
+    reset();
+    let owner=OsToken{slot:3,generation:9};
+    let next=OsToken{slot:3,generation:10};
+    let topology=BootTopology{cpus:&[HostCpu{online:true}]};
+    let mut route=BootIrqRoute::new(owner,&topology).unwrap();
+    assert_eq!(route.release_drained(owner),Err(EIO));
+    route.begin_close().unwrap();route.finish_close().unwrap();
+    assert_eq!(route.release_drained(next),Err(EIO));
+    assert!(BootIrqRoute::new(next,&topology).is_err());
+    assert_eq!(route.release_drained(owner),Ok(()));
+    assert_eq!(route.release_drained(owner),Err(EIO));
+    let next_route=BootIrqRoute::new(next,&topology).unwrap();
+    drop(route);
+    assert_eq!(BOOT_IRQ_TARGET_USERS.load(Ordering::Acquire),1);
+    assert_eq!(BOOT_IRQ_GENERATIONS[3].load(Ordering::Acquire),10);
+    drop(next_route);
+    assert_eq!(BOOT_IRQ_TARGET_USERS.load(Ordering::Acquire),0);
+}

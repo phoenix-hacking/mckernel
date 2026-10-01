@@ -574,6 +574,11 @@ struct MemoryContext {
     arguments: [Option<(super::smp_resource::OsToken, [u8; 256])>; 64],
 }
 
+pub(super) enum ShutdownIrqFailure {
+    PreEffect(Error),
+    PostEffect(Error),
+}
+
 // Loading does not publish a boot capability. The following AP-start adapter
 // must revalidate this generation and its layout under the same resource locks.
 #[allow(dead_code)]
@@ -1136,6 +1141,8 @@ impl PreparedBoot {
 struct BootStorage {
     prepared: ManuallyDrop<PreparedBoot>,
     started: bool,
+    /// Terminal quarantine until service/procfs/sysfs retirement is implemented.
+    shutdown_terminal: bool,
 }
 
 impl Drop for BootStorage {
@@ -1208,6 +1215,82 @@ impl MemoryContext {
                 return Err(EBUSY);
             }
         }
+        Ok(())
+    }
+
+    /// Close the started generation's native IRQ senders while preserving the
+    /// effect boundary for the v6 shutdown owner. Validation and admission
+    /// failures precede CLOSING; once CLOSING is published, every failure is
+    /// retained as post-effect because the route cannot be reopened safely.
+    fn close_irq_senders_for_shutdown(
+        &mut self,
+        owner: super::smp_resource::OsToken,
+    ) -> core::result::Result<(), ShutdownIrqFailure> {
+        let had_effect = self.images.get(owner.slot() as usize)
+            .and_then(Option::as_ref).filter(|image| image.owner == owner)
+            .and_then(|image| image.boot.as_ref())
+            .is_some_and(|boot| boot.prepared.irq.shutdown_has_effect(owner));
+        let classify = |error| if had_effect { ShutdownIrqFailure::PostEffect(error) }
+            else { ShutdownIrqFailure::PreEffect(error) };
+        self.verify().map_err(classify)?;
+        let image = self
+            .images
+            .get_mut(owner.slot() as usize)
+            .and_then(Option::as_mut)
+            .ok_or_else(|| classify(EINVAL))?;
+        if image.owner != owner || !image.started() {
+            return Err(classify(EBUSY));
+        }
+        let boot = image
+            .boot
+            .as_mut()
+            .ok_or_else(|| classify(EIO))?;
+        if boot.shutdown_terminal {
+            return Err(ShutdownIrqFailure::PostEffect(EBUSY));
+        }
+        if boot.prepared.irq.shutdown_drained(owner) {
+            return Ok(());
+        }
+        match boot.prepared.close_irq_senders(&self.map) {
+            Ok(()) => Ok(()),
+            Err(error) if boot.prepared.irq.shutdown_has_effect(owner) =>
+                Err(ShutdownIrqFailure::PostEffect(error)),
+            Err(error) => Err(ShutdownIrqFailure::PreEffect(error)),
+        }
+    }
+
+    /// CPU reset/re-online and IRQ drain are necessary but not sufficient:
+    /// continuing service mappings must have their own retirement proof.
+    /// Until that protocol exists, retain those boots as an explicit terminal
+    /// post-effect quarantine, including every page and module owner.
+    fn finish_shutdown(
+        &mut self,
+        owner: super::smp_resource::OsToken,
+        commit_cpu: impl FnOnce(),
+    ) -> Result {
+        self.verify()?;
+        let image = self.images.get_mut(owner.slot() as usize)
+            .and_then(Option::as_mut).ok_or(EIO)?;
+        if image.owner != owner { return Err(EIO); }
+        let boot = image.boot.as_mut().ok_or(EIO)?;
+        if !boot.started || !boot.prepared.irq.shutdown_drained(owner) { return Err(EIO); }
+        if boot.prepared.continuing.is_some() || boot.prepared.sysfs.is_some() {
+            boot.shutdown_terminal = true;
+            return Err(EBUSY);
+        }
+        let mut workspace = MemoryWorkspace::new(&mut self.staging).map_err(|_| EIO)?;
+        let mut transaction = self.map.prepare_release_all(owner, &mut workspace)
+            .map_err(|_| EIO)?;
+        transaction.begin_external_effects().map_err(|_| EIO)?;
+        if let Err(error) = boot.prepared.irq.release_drained(owner) {
+            transaction.compensated_rollback().map_err(|_| EIO)?;
+            return Err(error);
+        }
+        commit_cpu();
+        transaction.commit().unwrap_or_else(|_| panic!("shutdown memory reconciliation lost preflight"));
+        boot.started = false;
+        self.images[owner.slot() as usize] = None;
+        self.arguments[owner.slot() as usize] = None;
         Ok(())
     }
     const fn new() -> Self {
@@ -2156,6 +2239,7 @@ impl MemoryContext {
                 vdso_request: 0,
             }),
             started: false,
+            shutdown_terminal: false,
         });
         Ok(())
     }
@@ -2610,6 +2694,32 @@ pub(super) fn start_os_boot(
     // The native storage makes the lifetime irreversible before INIT/SIPI.
     let mut context = unsafe { &*published }.lock();
     context.start_boot(owner, topology)
+}
+
+/// Close IRQ senders before the CPU reset phase of v6 STOP. The memory mutex
+/// is released before the CPU adapter is entered, preserving the established
+/// CPU -> memory lock order for ordinary resource operations.
+pub(super) fn shutdown_close_irq_senders(
+    owner: super::smp_resource::OsToken,
+) -> core::result::Result<(), ShutdownIrqFailure> {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() {
+        return Err(ShutdownIrqFailure::PreEffect(ENODEV));
+    }
+    // SAFETY: IHK's exact-generation shutdown lease and operation lock retain
+    // this controller while the route is closed and any failure is journaled.
+    let mut context = unsafe { &*published }.lock();
+    context.close_irq_senders_for_shutdown(owner)
+}
+
+/// CPU policy and hotplug locks precede this memory lock. Both logical maps
+/// commit together only after every fallible teardown prerequisite succeeds.
+pub(super) fn finish_shutdown(owner: super::smp_resource::OsToken, commit_cpu: impl FnOnce()) -> Result {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() { return Err(ENODEV); }
+    // SAFETY: The synchronous exact-generation backend lease pins this owner.
+    let mut context = unsafe { &*published }.lock();
+    context.finish_shutdown(owner, commit_cpu)
 }
 
 /// The existing boot owner is the sole source of application topology. IHK

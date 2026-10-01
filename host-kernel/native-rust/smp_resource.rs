@@ -238,6 +238,25 @@ pub(crate) struct CpuTable<const N: usize> {
     ikc_destinations: [Option<usize>; N],
 }
 
+/// Prevalidated logical shutdown commit. Private fields prevent forged tokens;
+/// the borrows prevent changes to either the table or CPU set after validation.
+#[must_use = "commit shutdown ownership or drop the token without changes"]
+pub(crate) struct ShutdownOnline<'table, 'cpus, const N: usize> {
+    table: &'table mut CpuTable<N>,
+    cpus: &'cpus [usize],
+}
+
+impl<const N: usize> ShutdownOnline<'_, '_, N> {
+    pub(crate) fn commit(self) {
+        for &cpu in self.cpus {
+            self.table.slots[cpu].state = CpuState::Online;
+            self.table.slots[cpu].owner = None;
+            self.table.slots[cpu].assignment_rank = None;
+            self.table.ikc_destinations[cpu] = None;
+        }
+    }
+}
+
 impl<const N: usize> CpuTable<N> {
     pub(crate) const fn new() -> Self {
         Self {
@@ -324,6 +343,36 @@ impl<const N: usize> CpuTable<N> {
     ) -> Result<CpuTransaction<'table, 'workspace, N>, ResourceError> {
         owner.validate()?;
         self.prepare(CpuOperation::Release, Some(owner), cpus, workspace)
+    }
+
+    /// Preflight the complete assignment, after the adapter has proved every
+    /// exact retained CPU online under Linux hotplug exclusion.
+    pub(crate) fn preflight_shutdown_online(
+        &self, owner: OsToken, cpus: &[usize],
+    ) -> Result<(), ResourceError> {
+        owner.validate()?;
+        self.ensure_owner_not_poisoned(owner)?;
+        self.validate()?;
+        if cpus.is_empty() { return Err(ResourceError::EmptyRequest); }
+        let assigned = self.slots.iter().filter(|s| s.owner == Some(owner)).count();
+        if assigned != cpus.len() { return Err(ResourceError::Ownership); }
+        for (index, &cpu) in cpus.iter().enumerate() {
+            let slot = self.slot(cpu)?;
+            if cpu == 0 || slot.state != CpuState::Assigned || slot.owner != Some(owner) {
+                return Err(ResourceError::Ownership);
+            }
+            if cpus[..index].contains(&cpu) { return Err(ResourceError::DuplicateCpu); }
+        }
+        Ok(())
+    }
+
+    /// The token holds the validated CPU set and exclusive table borrow until
+    /// commit. Dropping it before commit leaves the table unchanged.
+    pub(crate) fn prepare_shutdown_online<'table, 'cpus>(
+        &'table mut self, owner: OsToken, cpus: &'cpus [usize],
+    ) -> Result<ShutdownOnline<'table, 'cpus, N>, ResourceError> {
+        self.preflight_shutdown_online(owner, cpus)?;
+        Ok(ShutdownOnline { table: self, cpus })
     }
 
     pub(crate) fn assigned_cpus(
@@ -2093,6 +2142,30 @@ mod tests {
         assert_eq!(token(2, 7).slot(), 2);
         assert_eq!(token(2, 7).generation(), 7);
         assert_eq!(token(3, OS_TOKEN_MAX_GENERATION).generation(), OS_TOKEN_MAX_GENERATION);
+    }
+
+    #[test]
+    fn shutdown_reconciliation_is_complete_generation_bound_and_reusable() {
+        let mut table = table();
+        let owner = token(1, 2);
+        reserve(&mut table, &[1, 2]);
+        assign(&mut table, owner, &[1, 2]);
+        assert_eq!(table.preflight_shutdown_online(token(1, 3), &[1, 2]), Err(ResourceError::Ownership));
+        assert_eq!(table.preflight_shutdown_online(owner, &[1]), Err(ResourceError::Ownership));
+        assert_eq!(table.preflight_shutdown_online(owner, &[1, 1]), Err(ResourceError::DuplicateCpu));
+        assert_eq!(table.slot(1).unwrap().owner(), Some(owner));
+        table.preflight_shutdown_online(owner, &[1, 2]).unwrap();
+        drop(table.prepare_shutdown_online(owner, &[1, 2]).unwrap());
+        assert_eq!(table.slot(1).unwrap().owner(), Some(owner));
+        table.prepare_shutdown_online(owner, &[1, 2]).unwrap().commit();
+        table.validate().unwrap();
+        for cpu in [1, 2] {
+            assert_eq!(table.slot(cpu).unwrap().state(), CpuState::Online);
+            assert_eq!(table.slot(cpu).unwrap().owner(), None);
+        }
+        reserve(&mut table, &[1, 2]);
+        assign(&mut table, token(1, 3), &[1, 2]);
+        assert_eq!(table.slot(2).unwrap().owner(), Some(token(1, 3)));
     }
 
     #[test]

@@ -43,10 +43,15 @@ if pid:
         except ChildProcessError: break
     sys.exit(0)
 request = json.loads((root / 'signal-request.json').read_text())
-# The subprocess receives the same isolated fixture binding as the parent
-# test; production uses the literal scratch17 path in the owner module.
-owner.OPERATIONAL_EXCLUSION_PATH = request['operational_exclusion_path']
-owner.RETIRED_OPERATIONAL_EXCLUSION_PATHS = frozenset()
+# The owner child receives its isolated exclusion binding explicitly.  The
+# preparer child is a separate process and does not inherit the parent's
+# monkeypatch; give it only a private test lock and test-only release state.
+if mode.startswith('owner'):
+    owner.OPERATIONAL_EXCLUSION_PATH = request['operational_exclusion_path']
+    owner.RETIRED_OPERATIONAL_EXCLUSION_PATHS = frozenset()
+else:
+    prep._SHARED_HEAVY_ENTRY_CONTRACT.HEAVY_ENTRY_CONTRACT_RELEASED = True
+    prep._SHARED_HEAVY_ENTRY_CONTRACT.SHARED_HEAVY_LOCK_PATH = str(root / 'prepare.shared.lock')
 RealDocker, RealPopen = owner.Docker, subprocess.Popen
 emitter = "import os,time; from pathlib import Path; os.write(1,b'SIGNAL-STDOUT\\n'); os.write(2,b'SIGNAL-STDERR\\n'); Path(%r).write_text('ready'); time.sleep(1.5)" % str(root / 'emitter.ready')
 def local_popen(argv, **kwargs):

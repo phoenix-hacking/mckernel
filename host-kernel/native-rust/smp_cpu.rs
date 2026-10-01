@@ -183,6 +183,27 @@ impl BootIrqRoute {
         BOOT_IRQ_EVENTS[self.owner.slot() as usize].load(Ordering::Acquire)
     }
 
+    pub(super) fn shutdown_drained(&self, owner: OsToken) -> bool {
+        self.owner == owner
+            && self.closed
+            && BOOT_IRQ_PHASE[owner.slot() as usize].load(Ordering::Acquire) == BOOT_IRQ_DRAINED
+            && BOOT_IRQ_GENERATIONS[owner.slot() as usize].load(Ordering::Acquire) == 0
+    }
+
+    pub(super) fn shutdown_has_effect(&self, owner: OsToken) -> bool {
+        self.owner == owner
+            && BOOT_IRQ_PHASE[owner.slot() as usize].load(Ordering::Acquire) != BOOT_IRQ_LIVE
+    }
+
+    /// Called only after AP reset/re-online, worker joins and IRQ drain.
+    pub(super) fn release_drained(&mut self, owner: OsToken) -> Result {
+        if !self.shutdown_drained(owner) { return Err(EIO); }
+        BOOT_IRQ_PHASE[owner.slot() as usize]
+            .compare_exchange(BOOT_IRQ_DRAINED, 0, Ordering::AcqRel, Ordering::Acquire)
+            .map_err(|_| EIO)?;
+        Ok(())
+    }
+
     // SAFETY: master is already in stable heap storage retained permanently by
     // this started boot. It cannot be dropped before sender stop and IRQ drain.
     pub(super) unsafe fn publish_master(&self, master: &super::smp_ikc::BootMaster) -> Result {
@@ -811,8 +832,12 @@ impl CpuContext {
         owner: OsToken,
         hotplug: &DeviceHotplugGuard,
     ) -> Result {
-        if self.poisoned || shutdown_journal_blocks_ordinary_use(&self.shutdown_journal) {
-            self.poisoned = true;
+        let retry = shutdown_journal_blocks_ordinary_use(&self.shutdown_journal);
+        if retry {
+            if self.shutdown_journal.iter().any(|r| r.recorded && !r.matches_owner(owner)) {
+                return Err(EIO);
+            }
+        } else if self.poisoned {
             return Err(EIO);
         }
         let count = self
@@ -823,6 +848,13 @@ impl CpuContext {
             return Err(EINVAL);
         }
 
+        if retry {
+            if self.shutdown_journal.iter().filter(|r| r.recorded).count() != count
+                || (0..count).any(|i| self.shutdown_journal[i].cpu as usize != self.requests[i])
+            {
+                return Err(EIO);
+            }
+        } else {
         self.prevalidate_shutdown_targets(owner, count, hotplug)?;
 
         // The complete canonical device/identity preflight above finished
@@ -850,13 +882,24 @@ impl CpuContext {
                 device.0,
             );
         }
+        }
 
         {
             let read = CpuReadGuard::lock();
             for index in 0..count {
                 let record = self.shutdown_journal[index];
+                // Linux may return an error after changing the online bit.
+                // Prove the current exact identity before recognizing that
+                // effect; never repeat device_online on an already-online AP.
+                if record.online_attempted && self.validate_shutdown_target(
+                    owner, record, true, &read, hotplug).is_ok() {
+                    self.shutdown_journal[index].online();
+                    continue;
+                }
                 if self
-                    .validate_shutdown_target(owner, record, false, &read, hotplug)
+                    .validate_shutdown_target(owner, record,
+                        record.online || (record.online_attempted && record.online_status == 0),
+                        &read, hotplug)
                     .is_err()
                 {
                     return Err(self.retain_shutdown_failure(
@@ -868,6 +911,7 @@ impl CpuContext {
             }
             for index in 0..count {
                 let record = &mut self.shutdown_journal[index];
+                if record.reset_attempted { continue; }
                 // SAFETY: CPU read exclusion fixes this validated APIC target.
                 // The pending native wrapper owns its exact preemption bracket
                 // and returns before this Rust code can reach device_online.
@@ -881,6 +925,15 @@ impl CpuContext {
         // device_online is sleepable and may invoke CPUHP paths.
         for index in 0..count {
             let record = self.shutdown_journal[index];
+            if record.online { continue; }
+            // A successful Linux return is an applied effect even when its
+            // post-observation failed. Revalidate it, never online it twice.
+            if record.online_attempted && record.online_status == 0 {
+                let read = CpuReadGuard::lock();
+                self.validate_shutdown_target(owner, record, true, &read, hotplug)?;
+                self.shutdown_journal[index].online();
+                continue;
+            }
             let _permission = TransitionTask::new(record.cpu as usize);
             self.shutdown_journal[index].online_attempted();
             // SAFETY: Device-hotplug exclusion and the retained journal device
@@ -1389,6 +1442,77 @@ pub(super) fn shutdown_reset_and_reonline(owner: OsToken) -> Result {
     let context = &mut **guard;
     let hotplug = DeviceHotplugGuard::lock();
     context.shutdown_reset_and_reonline(owner, &hotplug)
+}
+
+pub(super) enum ShutdownResetFailure {
+    PreEffect(Error),
+    PostEffect(Error),
+}
+
+/// Classify the existing reset/re-online journal for the v6 effect-aware
+/// shutdown callback. The underlying primitive retains every owner on error;
+/// a recorded INIT attempt is the durable proof that rollback is impossible.
+pub(super) fn shutdown_reset_and_reonline_outcome(
+    owner: OsToken,
+) -> core::result::Result<(), ShutdownResetFailure> {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() {
+        return Err(ShutdownResetFailure::PreEffect(ENODEV));
+    }
+    // SAFETY: The exact OS lease and operation lock retain this controller and
+    // its journals across the complete reset/re-online transaction.
+    let mut guard = unsafe { &*published }.lock();
+    let context = &mut **guard;
+    let hotplug = DeviceHotplugGuard::lock();
+    match context.shutdown_reset_and_reonline(owner, &hotplug) {
+        Ok(()) => Ok(()),
+        Err(error) if context
+            .shutdown_journal
+            .iter()
+            .any(|record| record.matches_owner(owner) && record.reset_attempted) =>
+        {
+            Err(ShutdownResetFailure::PostEffect(error))
+        }
+        Err(error) => Err(ShutdownResetFailure::PreEffect(error)),
+    }
+}
+
+pub(super) fn reconcile_shutdown(owner: OsToken) -> Result {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() { return Err(ENODEV); }
+    // SAFETY: The synchronous callback retains the generation and module.
+    let mut guard = unsafe { &*published }.lock();
+    let context = &mut **guard;
+    let hotplug = DeviceHotplugGuard::lock();
+    let count = context.table.assigned_cpus(owner, &mut context.requests).map_err(|_| EIO)?;
+    if count == 0 || context.shutdown_journal.iter().filter(|r| r.recorded).count() != count {
+        return Err(EIO);
+    }
+    {
+        let read = CpuReadGuard::lock();
+        for index in 0..count {
+            let record = context.shutdown_journal[index];
+            if !record.reset_attempted || !record.online
+                || record.cpu as usize != context.requests[index] { return Err(EIO); }
+            context.validate_shutdown_target(owner, record, true, &read, &hotplug)?;
+        }
+    }
+    let transaction = context.table.prepare_shutdown_online(owner, &context.requests[..count]).map_err(|_| EIO)?;
+    super::smp_memory::finish_shutdown(owner, || {
+        transaction.commit();
+    })?;
+    // Memory returns success only after invoking the infallible table commit.
+    // Both policy locks and Linux hotplug exclusion covered that boundary;
+    // this remaining owner cleanup is infallible under the CPU mutex.
+    for index in 0..count {
+        let cpu = context.requests[index];
+        context.devices[cpu].take();
+        BLOCK_ONLINE[cpu].store(false, Ordering::Release);
+        context.shutdown_journal[index] = ShutdownCpuJournal::empty();
+    }
+    context.poisoned = false;
+    if !context.has_owned_cpu() { context.pin.take(); }
+    Ok(())
 }
 
 /// Release both resource classes before the exclusive OS destruction returns.
