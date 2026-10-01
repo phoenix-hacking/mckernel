@@ -11101,3 +11101,55 @@ loop (then files, threads/futexes, signals and shutdown).  Current counts remain
 zero linked current images and zero real current-candidate guest applications.
 The OS goal is incomplete and launcher-paused; it is neither resumed nor marked
 complete.
+
+Continuation checkpoint 268, 2026-09-30: the launcher continuation resumed the
+active objective and adopted the unchanged policy hashes GOAL
+`76c4f5d1...c0bcc3`, START `1698d342...6216c`, CONVERGENCE
+`f6938bd2...3e86a` and HANDOFF `bdc94610...0af8c5`.  Live reconciliation found
+the same wrapper/launcher/worker/app-server PIDs 1442141/1442142/1442145/
+1442149 and no QEMU, mcexec, image owner/offline driver, compiler build or heavy
+lease occupant.  Scratch free space was 16,906,440,704 bytes and MemAvailable
+about 27.9 million KiB.  A complete privileged Docker census remains a required
+immediate pre-execution gate.
+
+Independent final review confirmed the unreleased bounded correction at
+packet/test hashes `4445af94...8203`/`e81ce26e...9616` was BLOCKed: it fails
+deterministically after partial mutation, authenticates executable dependencies
+with only 28-bit prefixes, and has no claim, terminal outcome, bounded child
+retirement or semantic publication validation.  Per convergence, an Astra
+expert redesigned the same two-file boundary.  Its first candidate
+`8c3d5686...9be0`/`841340c4...2c2` passed 19 tests but independent review found
+two additional blockers: valid Python bytecode caches could execute
+unauthenticated code, and discarded initial build/nightly inventories allowed
+both child and validator to accept a changed tree.  Both original findings are
+preserved; no production target was touched.
+
+The narrow expert correction now independently returns
+`PASS_EXPORT25_PACKET_SOURCE` for exact packet/test hashes
+`fbae0ebb...cbb4`/`963f8cad...7aca`.  Twenty-one methods and 103 counted vectors
+pass on Python 3.8/3.9; the independent run passed in 17.908 seconds on CPU 0
+with a 1.5-GiB address-space limit.  The preparer closure executes only
+authenticated bundled source bytes through a closed importer; poisoned valid
+cache controls and deterministic build/nightly mid-flight mutations reject.
+The retained supervisor also supplies full-hash preflight, exclusive persistent
+claim, durable log, bounded session/subreaper/pidfd retirement, explicit three-
+state publication classification, independent exact-document validation,
+durable no-replace terminal and matching stdout witness.  It remains data-only:
+no Docker, build, heavy lease or owner `.run()` path is reachable.  Exact source
+evidence is
+`docs/verification/evidence/native-exact-export25-image-preparation-source-success-20260930.json`.
+
+Next checkpoint and fetch-verify these exact bytes, then obtain an independent
+command-level execution release for one ordinary-user invocation of the packet.
+Reconcile all target absence, claims, leases, processes, capacity and the full
+privileged Docker census immediately before running it.  Accept preparation
+only from zero wrapper exit plus the stdout witness matching the durable
+terminal/log; independently review the resulting toolchain/request and partial-
+publication state.  Only after a fetched accepted request may a separate
+one-shot heavy-build release invoke the image owner.  Validate any linked image
+with separate postlink and linked-text reports, then rebind the memory diagnostic
+to the exact image/module/mcexec tuple and run `/bin/mcexec -t 1 0 app memory`
+with exact stdout `NATIVE_CORE_PASS memory\n`, empty stderr and exit 37.  The
+diagnostic remains distinct from application acceptance.  Current counts remain
+zero linked current images and zero real current-candidate guest applications;
+the OS goal remains active and incomplete.

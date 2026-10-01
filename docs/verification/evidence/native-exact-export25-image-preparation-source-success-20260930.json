@@ -1,0 +1,51 @@
+{
+  "schema": "mckernel.native-exact-export25-image-preparation-source-success.v1",
+  "recorded_at": "2026-09-30T19:39:20-07:00",
+  "base_commit": "c061654b0d054e5355d9d4c3f7f89d7b3d4aeefc",
+  "candidate_sha": "6fed3a1022db0b4f9828dd42a8bd8f88fc052053",
+  "status": "PASS_EXPORT25_PACKET_SOURCE",
+  "final": {
+    "packet": "docs/verification/evidence/native-exact-mckernel-image-preparation-6fed3a10-exportset25.sh",
+    "packet_sha256": "fbae0ebb831b2feb4601f1e5d9b0cbb60b6526a84e9cda571226acf86112cbb4",
+    "tests": "scripts/tests/test_native_exact_mckernel_image_preparation_6fed3a10_exportset25.py",
+    "tests_sha256": "963f8cadc8598d5136cda8dc98aa4414fcec1e65ac2298765a382b4f8ba87aca",
+    "test_methods": 21,
+    "test_vectors": 103,
+    "independent_elapsed_seconds": 17.908,
+    "independent_profile": "CPU 0, 1.5-GiB address-space limit"
+  },
+  "failure_family": [
+    {
+      "packet_sha256": "49bde75f",
+      "decision": "BLOCK",
+      "summary": "arguments, fixed temporary input, mutation ordering, authentication and lifecycle defects"
+    },
+    {
+      "packet_sha256": "4445af949518eb8402866510eba4ccd7ad40df497164db93e9293b9e0b858203",
+      "tests_sha256": "e81ce26ef747dee484e68d95c59e12a42fbb64c5a72b6ec829b651f899cc9616",
+      "decision": "BLOCK",
+      "summary": "deterministic post-mutation failure, prefix hashes, no claim/terminal/retirement or semantic outcome"
+    },
+    {
+      "packet_sha256": "8c3d5686f82923e577579cf8e79ddecac56945de5210639aad2b8efac1549be0",
+      "tests_sha256": "841340c426e63042bc597063fa4394564e8420f6c5155c9b7219fa1951ccb2c2",
+      "decision": "BLOCK",
+      "summary": "valid pyc cache could execute unauthenticated bytes; initial build/nightly inventories were discarded"
+    }
+  ],
+  "verified_behavior": [
+    "All fixed dependencies are authenticated by complete SHA-256 before mutation, import or execution.",
+    "The preparer dependency closure executes from authenticated bundled source bytes through a closed importer.",
+    "An exclusive identity-bound claim, durable append log, bounded child session and subreaper/pidfd retirement cover the attempt.",
+    "No-publication, toolchain-only and request-published outcomes are durably distinguished.",
+    "Initial and final exact toolchain/request documents must match; build and nightly mutation regressions reject.",
+    "Success requires exact semantic validation, durable terminal publication and matching stdout commit witness."
+  ],
+  "scope": "Data-only preparation packet source and disposable behavioral tests.",
+  "limitations": [
+    "Production preparation has not run.",
+    "No Docker operation, build, linked image, guest or diagnostic application ran.",
+    "A separate fetched checkpoint and independent execution review are required before one production preparation attempt.",
+    "This evidence changes no production, language or application acceptance counter."
+  ]
+}
