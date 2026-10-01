@@ -325,6 +325,20 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
                     lifecycle.validate_repository(self.repo)
                 source.write_text(original, encoding="utf-8")
 
+    def test_runtime_support_source_drift_is_rejected(self) -> None:
+        """Keep the runtime support-source digest covered by a negative control."""
+        index = 6
+        support = self.contract["support_sources"][index]
+        source = self.repo / support["path"]
+        original = source.read_text(encoding="utf-8")
+        source.write_text(original + "// unbound runtime support drift\n", encoding="utf-8")
+        with self.assertRaisesRegex(
+            lifecycle.ValidationError,
+            r"support_sources\[{0}\] digest".format(index),
+        ):
+            lifecycle.validate_repository(self.repo)
+        source.write_text(original, encoding="utf-8")
+
     def test_page_support_contract_cannot_claim_credit(self) -> None:
         for index in (4, 5):
             with self.subTest(index=index):
