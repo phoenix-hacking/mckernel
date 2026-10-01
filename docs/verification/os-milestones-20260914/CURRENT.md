@@ -12601,3 +12601,41 @@ scratch16 wrapper/execution packet, commit/push/fetch its exact blobs, run
 validate-only and fresh heavy preflight, then execute one pinned build attempt.
 Never rerun scratch15.  Counts remain one compiled current candidate, five
 bounded diagnostic guest passes and zero formal application acceptances.
+
+Continuation checkpoint 310, 2026-10-01: the launcher requested an immediate
+window shutdown before the scratch16 build.  No new work was dispatched; all
+eight child lanes are terminal and no QEMU, mcexec, build wrapper, scratch16
+packet or Docker build process is active.  Scratch16 has no lease, operational
+exclusion or derived execution request.  The launcher/coordinator/worker remain
+PIDs 1442141/1442142/1442145, app-server PID 1442149 and active code-host PID
+1442494; unrelated code-host PID 3011513 remains untouched.
+
+Independent review returns `PASS_SOURCE_REVIEW` for scratch16 wrapper
+`e4334bdf...84b6e`, execution packet `bcf89ccf...1391e3`, tests
+`2128126d...391e3` and unchanged wrapper tests `f216ffa6...d8ba`.  All 34 tests
+pass independently under CPUs 2-3 and a 3-GiB address-space cap.  The corrected
+packet binds the actual prepared request, manifest, journal, terminal,
+candidate, output and evidence paths; it changes exactly the three release
+booleans, publishes exclusively and durably, and permits exactly one wrapper
+exec only after admission.  Expected derived byte/canonical hashes are
+`8f8a9afc...c6ae7`/`24bf35a3...716e3`.  No derived request was published and
+no build or guest ran.
+
+The prepared candidate remains at exact `ddb8d7d5...a6325c`, device 1831,
+inode 3693759; metadata backup inode 3830821.  Host/scratch free space is
+24,312,733,696/15,731,265,536 bytes and available RAM is 25,339,240,448 bytes.
+The historical failed scratch15 container identity remains recorded, but a
+fresh privileged inspect now reports that Docker object absent; its original
+failure receipts and evidence remain preserved.  Exact shutdown evidence is
+`os-window-shutdown-checkpoint-20261001-310.json`.
+
+This shutdown checkpoint commits, pushes, fetches and verifies these exact
+release blobs.  On the next authorized invocation, run validate-only against
+that fetched commit.  After a fresh capacity/process/lease/container/artifact
+preflight, execute the
+scratch16 build packet exactly once.  A successful compiled candidate unlocks
+current-image preparation and the real futex diagnostic rebind; physical
+shutdown STOP-owner integration remains separate.  Counts remain one compiled
+current candidate, five bounded diagnostic guest passes and zero formal
+application acceptances.  The OS goal is active and incomplete; it was not
+resumed or completed during shutdown.

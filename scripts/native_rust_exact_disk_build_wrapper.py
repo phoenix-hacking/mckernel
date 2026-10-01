@@ -52,9 +52,9 @@ OBJTOOLBINDING_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/
 RUNTIMEBLOB_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-runtimeblob-12.json"
 SELFDIGEST_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-selfdigest-13.json"
 CONSUMED_EXPORTSET16_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-16.json"
-# Fresh scratch15 lease.  The consumed exportset-16 path above remains an
+# Fresh scratch16 lease.  The consumed exportset-16 path above remains an
 # immutable historical record and must never be reused as an active lock.
-OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch15-exportset-27.json"
+OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch16.json"
 
 
 class AdmissionError(ValueError):

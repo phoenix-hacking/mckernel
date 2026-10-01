@@ -1,0 +1,89 @@
+{
+  "schema": "mckernel.os-window-shutdown-checkpoint.v1",
+  "recorded_at_utc": "2026-10-01T11:24:36Z",
+  "status": "CHECKPOINT_PAUSED_NOT_COMPLETE",
+  "source_head_before_checkpoint": "482e1e74cb538a10b31eca04e258103ee90fc522",
+  "reason": "launcher stop instruction",
+  "new_dispatch_stopped": true,
+  "children": {
+    "active": 0,
+    "completed": 8,
+    "final_result": "PASS_SOURCE_REVIEW"
+  },
+  "scratch16_build_release": {
+    "wrapper": {
+      "path": "scripts/native_rust_exact_disk_build_wrapper.py",
+      "sha256": "e4334bdf581bcf83f7a13a3410f16437f35a600cfa6678f65ebc480ebc584b6e"
+    },
+    "packet": {
+      "path": "docs/verification/evidence/native-exact-scratch16-build-execution-20261001.py",
+      "sha256": "bcf89ccf856be5e93c77dfef7619eeb92e55435691529f897c7d394804481391"
+    },
+    "tests": {
+      "path": "scripts/tests/test_native_exact_scratch16_build_execution_20261001.py",
+      "sha256": "2128126decc48b618bfab86a2894645c18e2c6768485402517e4fa84491391e3"
+    },
+    "wrapper_tests_sha256": "f216ffa6e195e61dd8aa69288a6fd6fe96adf23e789deb3720254accc32dd8ba",
+    "tests_result": "PASS 34 tests independently, 0.125 seconds, CPUs 2-3, 3-GiB address-space cap",
+    "derived_byte_sha256": "8f8a9afc3a87cfdbbaf1f8cdee82211f31f3f671de837a16a21b17803a4c6ae7",
+    "derived_canonical_sha256": "24bf35a3b86dedd6392bf508fa00912fd66cc455ef1b111a4abf69994a0ac716",
+    "review_decision": "PASS_SOURCE_REVIEW",
+    "production_execution": false,
+    "derived_request_published": false,
+    "fetched_release_verified": false
+  },
+  "prepared_candidate": {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-ddb8d7d5-scratch-16",
+    "sha": "ddb8d7d58a9de7063663a27397b9fb9613a6325c",
+    "device": 1831,
+    "inode": 3693759,
+    "metadata_backup_inode": 3830821,
+    "lease_present": false,
+    "exclusion_present": false,
+    "derived_execution_request_present": false
+  },
+  "live_processes": [
+    {"pid": 1442141, "start": "2026-09-30T10:46:42-07:00", "identity": "tmux mckernel-goal launcher"},
+    {"pid": 1442142, "start": "2026-09-30T10:46:42-07:00", "identity": "run_os_goal.py coordinator"},
+    {"pid": 1442145, "start": "2026-09-30T10:46:42-07:00", "identity": "run_os_goal.py worker"},
+    {"pid": 1442149, "start": "2026-09-30T10:46:42-07:00", "identity": "codex app-server"},
+    {"pid": 1442494, "start": "2026-09-30T10:47:15-07:00", "identity": "active codex-code-mode host"},
+    {"pid": 3011513, "start": "2026-09-27T23:19:35-07:00", "identity": "unrelated codex-code-mode host, untouched"}
+  ],
+  "heavy_process_census": {
+    "qemu": 0,
+    "mcexec": 0,
+    "scratch16_packet": 0,
+    "build_wrapper": 0,
+    "docker_build_exec": 0
+  },
+  "historical_scratch15_container": {
+    "id": "4ab0887b9dbb4138e76cb3fa10846a4efad43f314fcbb0c108625d6b46c36ff6",
+    "previously_recorded_state": "exited, PID 0, not OOM-killed, exit 1",
+    "current_observation": "docker inspect returned No such object",
+    "original_failure_evidence_preserved": true
+  },
+  "resources": {
+    "host_free_bytes": 24312733696,
+    "scratch_free_bytes": 15731265536,
+    "memory_available_bytes": 25339240448
+  },
+  "counts": {
+    "compiled_current_candidates": 1,
+    "diagnostic_guest_passes": 5,
+    "formal_application_acceptances": 0
+  },
+  "next_tasks": [
+    "Run packet validate-only against that fetched commit; it must not publish the derived request.",
+    "Remeasure capacity and reconcile candidate, request, manifest, journal, terminal, lease, exclusion, Docker and heavy-process state.",
+    "If every release and preflight gate passes, execute the scratch16 build packet exactly once and independently inspect its receipt and artifacts.",
+    "After a successful host-module build, prepare the current-candidate image and rebind the real futex diagnostic; keep shutdown STOP-owner integration separate."
+  ],
+  "acceptance": {
+    "build_executed": false,
+    "guest_executed": false,
+    "formal_application_acceptance": false,
+    "os_complete": false,
+    "goal_resumed_during_shutdown": false
+  }
+}
