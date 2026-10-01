@@ -5,7 +5,7 @@
   "source_checkpoint": {
     "commit": "133af3dbe071fcd958ee43d271779d31ed896f82",
     "branch": "codex/local-native-staging-repair",
-    "must_equal_head_fetch_head_and_origin": true,
+    "must_be_ancestor_of_execution_release_checkpoint": true,
     "source": "scripts/native_rust_exact_build_image_rebind_probe.py",
     "source_sha256": "9634b56f251857141c67b70ce7a0c058470d6ef000a5f041898a91e3a71f6679",
     "tests": "scripts/tests/test_native_rust_exact_build_image_rebind_probe.py",
@@ -13,6 +13,10 @@
     "tests_result": "PASS 26/26 Python 3.8",
     "source_evidence": "docs/verification/evidence/native-exact-scratch18-tool-image-rebind-probe-source-20261001.json",
     "source_evidence_sha256": "904d237a0dad30e2b65721b53bf53799306a10485bcb3f9d1cc2b765dae41e8b"
+  },
+  "execution_release_checkpoint": {
+    "commit": "7095933b0d070692a3736a93167636d63705492e",
+    "must_equal_or_be_ancestor_of_head_fetch_head_and_origin": true
   },
   "dependencies": {
     "scripts/native_rust_exact_build_container_owner.py": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
