@@ -1,0 +1,55 @@
+{
+  "schema": "mckernel.native-exact-candidate12.trim-and-scratch13-rebind-source.v1",
+  "recorded_at": "2026-09-30T18:34:00-07:00",
+  "status": "PASS_PREPARATION_SOURCE",
+  "cleanup": {
+    "evidence": "docs/verification/evidence/native-exact-candidate12-planbound-cleanup-success-20260930.json",
+    "deleted_files": 2507,
+    "accepted": true
+  },
+  "trim": {
+    "mount": "/home/holden/mckernel-work/scratch",
+    "backing_file": "/home/holden/mckernel-work/scratch.ext4",
+    "command": "sudo -A fstrim -v /home/holden/mckernel-work/scratch",
+    "reported_trimmed_bytes": 11979268096,
+    "allocated_before_bytes": 97652879360,
+    "allocated_after_bytes": 88548909056,
+    "allocated_reduction_bytes": 9103970304,
+    "logical_size_bytes": 118111600640
+  },
+  "capacity_after_trim": {
+    "host_free_bytes": 39930843136,
+    "scratch_free_bytes": 26192269312,
+    "mem_available_kib": 28473880
+  },
+  "candidate": {
+    "commit": "6fed3a1022db0b4f9828dd42a8bd8f88fc052053",
+    "fetched": true,
+    "fresh_prefix": "6fed3a10-scratch-13"
+  },
+  "packet": {
+    "path": "docs/verification/evidence/native-exact-candidate-preparation-scratch-20260930-13.sh",
+    "sha256": "5aa30499f665affd414434ce51cab033349aa5a22793ef2f89188a4778f35589"
+  },
+  "tests": {
+    "path": "scripts/tests/test_native_exact_candidate_preparation_scratch_20260930_13.py",
+    "sha256": "57b65381cd9ec76107bb6561fa8b88c3b1c326881ef649638c2eb8902d5495db",
+    "result": "43 passed"
+  },
+  "review": {
+    "result": "PASS_PREPARATION_SOURCE",
+    "candidate_tool_contract_hashes_match": true,
+    "fresh_targets_absent": 11,
+    "historical_exportset16_authenticated": true,
+    "exportset25_absent": true,
+    "resource_gates_unchanged": true
+  },
+  "execution": {
+    "packet_run": false,
+    "docker": false,
+    "build": false,
+    "guest": false,
+    "acceptance_change": false
+  },
+  "next": "Commit and fetch-verify the exact rebind, obtain command-level execution review with live preflight, then run the preparation packet once with PREPARATION_CANDIDATE_SHA=6fed3a1022db0b4f9828dd42a8bd8f88fc052053 and PREPARATION_RELEASE_COMMIT equal to the fetched descendant."
+}

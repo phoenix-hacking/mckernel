@@ -282,7 +282,7 @@ class PacketAdmission(unittest.TestCase):
         subprocess.run(['/bin/bash', '-n', str(PACKET)], check=True)
 
     def test_frozen_candidate_and_wrapper_bindings(self):
-        self.assertIn('EXPECTED_SHA=9a6eb5b4e26b1ade6c9b32d4789ffe23f9d37684', self.text)
+        self.assertIn('EXPECTED_SHA=6fed3a1022db0b4f9828dd42a8bd8f88fc052053', self.text)
         self.assertIn('EXPECTED_WRAPPER_SHA=2231d6c695c1bcf65eab65ba4c63f21b74d15ad91d5b0d1248210f74f7d310ad', self.text)
         self.assertIn('IMAGE_OWNER_SHA=a6d6ffaaa84fd5fd5090875b7ec7829c136b55af81104cf630ecc273ed9df7f0', self.text)
         self.assertIn('FINAL_LINK_DRIVER_SHA=91aa047f61167dd93002a0bc12e55b18f4b2fcaf65e246e574e8350a0c37f4cc', self.text)
@@ -326,7 +326,7 @@ class PacketAdmission(unittest.TestCase):
         self.assertIn('IMAGE_OWNER_SHA=a6d6ffaaa84fd5fd5090875b7ec7829c136b55af81104cf630ecc273ed9df7f0', self.text)
         self.assertIn('RUNTIME_CHECKER_SHA=c6a971686b872eabe0835f64e4585e83b732b32672cfee06ac925ecdac463c45', self.text)
         self.assertIn('NATIVE_RUNTIME_CONTRACT_SHA=a2cbfcffe491879b0732ed2c0cc7b615254ab11c4d8cbaf3614f6c3361fd99e6', self.text)
-        self.assertIn('EXPECTED_SHA=9a6eb5b4e26b1ade6c9b32d4789ffe23f9d37684', self.text)
+        self.assertIn('EXPECTED_SHA=6fed3a1022db0b4f9828dd42a8bd8f88fc052053', self.text)
         self.assertIn('FINAL_LINK_DRIVER_SHA=91aa047f61167dd93002a0bc12e55b18f4b2fcaf65e246e574e8350a0c37f4cc', self.text)
 
     def test_exclusion_namespace_matches_wrapper_and_image_owner(self):

@@ -10940,3 +10940,26 @@ then rebind and release scratch-13 preparation against the fetched descendant.
 After preparation, independently release exactly one serialized exportset-25
 build, validate its real linked artifact, and begin the separately labelled
 diagnostic application loop.  No formal acceptance counter changes here.
+
+Continuation checkpoint 264, 2026-09-30: after the fetched cleanup-evidence
+checkpoint, targeted scratch `fstrim` reported 11,979,268,096 bytes trimmed.
+The sparse backing allocation fell from 97,652,879,360 to 88,548,909,056 bytes,
+a 9,103,970,304-byte host recovery.  Host/scratch free bytes are now
+39,930,843,136/26,192,269,312 and MemAvailable is 28,473,880 KiB, above the
+16/12/16-GiB floors.
+
+Scratch-13 preparation is now rebound acyclically to fetched cleanup commit
+`6fed3a10...2053`.  Exact packet/test hashes are `5aa30499...5589` and
+`57b65381...95db`; all 43 tests, `bash -n` and diff checks pass.  Independent
+source review confirms only the candidate sentinel and its two assertions
+changed; all tool/contract/overlay bindings, resource gates and the consumed
+exportset-16 identity remain exact, while all ten `6fed3a10-scratch-13` targets
+plus exportset-25 are absent.  Exact evidence is
+`docs/verification/evidence/native-exact-candidate12-trim-and-scratch13-rebind-source-20260930.json`.
+
+This is preparation-source evidence only.  Next fetch-verify the rebind commit,
+obtain command-level execution review and complete live process/lease/Docker/
+capacity preflight, then run the packet once with candidate `6fed3a10...2053`
+and the fetched descendant as its release commit.  Preparation creates no
+Docker container, lease, compilation or guest.  A separate reviewed one-shot
+exportset-25 build remains required afterward; no formal acceptance changes.
