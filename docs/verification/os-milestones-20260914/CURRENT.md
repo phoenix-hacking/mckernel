@@ -11521,3 +11521,35 @@ started 2026-09-30 10:46-10:47 PDT.  They are launcher state, not build or
 guest leases.  Linked current images and real current-candidate applications
 remain zero.  The OS goal remains active and incomplete; this checkpoint does
 not resume or complete it.
+
+Continuation checkpoint 278, 2026-10-01: attempt 7 produced the fresh
+candidate-bound source-free tool image in exactly one released invocation.
+Independent review returns `PASS_RESULT_ATTEMPT7`.  Receipt
+`824e22c0...f845` is read-only and binds candidate `c81aeaca...a744` to image
+`sha256:41778f1f...e50b5` (1,726,876,694 bytes).  All 92 evidence members and
+28 zero-exit command captures verify.  The 46-package, 22-executable and
+four-library observations are byte-identical online and offline at
+`f3b88a58...9cbc0`; RPM verification is clean.
+
+The preparation and offline containers used CPUs 2-5, four CPUs, 12 GiB,
+no additional swap and 512 tasks.  Offline verification had no network, a
+read-only root, caller UID/GID, no capabilities and no host mounts.  Both
+containers retired as exit 143/PID0/not-OOM and were removed.  Owner PID
+2392351, all Docker client identities and the lease are absent.  The original
+exportset-25 failed container, exclusion and evidence remain preserved.  Exact
+additive evidence is
+`docs/verification/evidence/native-exact-tool-image-c81aeaca-attempt7-success-20261001.json`.
+This is tool-image infrastructure only: linked current images and real
+current-candidate applications remain zero.
+
+The fresh c81/exportset-26 libdwarf preparation packet and its 12-test
+Python-3.8 suite now pass independent source review.  Its exact packet SHA is
+`04869832...6e84`; tests SHA is `4864a33b...e9a9`.  It preserves exclusive
+publication, gated child startup, descendant retirement, signal handling and
+durable log/terminal boundaries while binding the scratch-14 manifest and
+candidate/IHK identities.  Next obtain the fetched one-shot execution release,
+run it once, review the resulting gitlink manifest, then prepare the fresh
+exportset-26 image request.  Only after its separate reviewed release may the
+single four-job kernel image build start.  On image PASS, validate artifact,
+postlink and linked text before running the unchanged dynamic memory diagnostic
+with stdout `NATIVE_CORE PASS memory\n`, empty stderr and exit 37.

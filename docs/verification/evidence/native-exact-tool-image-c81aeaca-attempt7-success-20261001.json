@@ -1,0 +1,81 @@
+{
+  "schema": "mckernel.native-exact-tool-image-success.v1",
+  "recorded_at": "2026-09-30T21:55:28-07:00",
+  "status": "PASS_RESULT_ATTEMPT7",
+  "candidate_sha": "c81aeaca5cedd893981a058444fa11a03a49a744",
+  "release": {
+    "proposal": "docs/verification/evidence/native-exact-tool-image-c81aeaca-attempt7-execution-proposal-20261001.json",
+    "proposal_commit": "e9362a7a4c8feaa14ad46dc6c503a7ccb69c1da4",
+    "proposal_sha256": "b96628cfefdd5e7ae60d793562dd34906e970dddc70311f4e16bb926e4ea75a4",
+    "independent_decision": "PASS_EXECUTION_ATTEMPT7",
+    "invocations": 1,
+    "exit_code": 0
+  },
+  "receipt": {
+    "path": "/home/holden/mckernel-exact-image-evidence-c81aeaca-7/image-receipt.json",
+    "sha256": "824e22c0aad7494914d39adb31bb70290c59912d5326618d2ffeb5cdbb6ef845",
+    "mode": "0444",
+    "status": "PASS",
+    "source_free": true,
+    "runtime_network": "none",
+    "retired": true,
+    "evidence_members": 92
+  },
+  "image": {
+    "id": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "size": 1726876694,
+    "architecture": "amd64",
+    "os": "linux",
+    "inspect_sha256": "163e3359f886e5a8cc89f8d64fa04a8e0356458ad180cc61a6d2d419302ba726"
+  },
+  "observations": {
+    "online_sha256": "f3b88a584cb18c2087a74270b6d3fe0fa0a265c8aed92ae72d581d0e6ab9cbc0",
+    "offline_sha256": "f3b88a584cb18c2087a74270b6d3fe0fa0a265c8aed92ae72d581d0e6ab9cbc0",
+    "exactly_equal": true,
+    "packages": 46,
+    "tools": 22,
+    "libraries": 4,
+    "rpm_inventory_entries": 479,
+    "command_captures": 28,
+    "command_failures": 0
+  },
+  "terminal": {
+    "preparation_container": "73301900eee9d1dc2f539b7491e2afc08413ebd87e9e1ccb13b93a412776afcf",
+    "offline_container": "d502dbba12e6dabade033c41f896bf20d746de4da3b5564031573e1e7be0fd35",
+    "preparation_inspect_sha256": "6d1a55749aa302b7224e8063a9ef0a16afd67b5548ba226e2b6a08f88fd37fc1",
+    "offline_inspect_sha256": "a8f8598bb9f9f7193ce6246b62d4de7bd546bdc49b55ec595932ba951297c368",
+    "both": "exited, PID 0, exit 143, OOM false",
+    "owned_containers_removed": true,
+    "lease_absent": true,
+    "owner_and_client_pids_absent": true
+  },
+  "resources": {
+    "preflight_host_free_bytes": 24082583552,
+    "preflight_scratch_free_bytes": 16632545280,
+    "preflight_memory_available_bytes": 27667132416,
+    "postflight_host_free_bytes": 22537801728,
+    "postflight_scratch_free_bytes": 16632545280,
+    "postflight_mem_available_kib": 26975780,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "note": "The producer receipt measures both output roots on the host device; coordinator and independent review separately measured the scratch device."
+  },
+  "source_regression": {
+    "commands": [
+      "/usr/bin/python3 -B -m unittest scripts.tests.test_native_rust_exact_build_image_prepare",
+      "/usr/bin/python3 -B -m unittest scripts.tests.test_native_rust_exact_build_container_owner"
+    ],
+    "result": "21 plus 65 tests PASS"
+  },
+  "preserved_exportset25": {
+    "container": "aef5164c5209f62b5f1be6d545f34001779d2ed78008235114890f981635708b",
+    "state": "exited-1-pid0-not-oom",
+    "exclusion_identity": "1831:90679",
+    "output_regular_files": 396,
+    "output_current_regular_bytes": 17456869,
+    "limitation": "No original per-output inventory exists, so whole-output byte identity is not certified."
+  },
+  "review": "PASS_RESULT_ATTEMPT7; all 92 evidence members, 28 commands, profiles, closures, terminal states, live image and cleanup verified independently",
+  "acceptance": "This accepts only source-free tool-image preparation and offline identity verification. It proves no linked McKernel image, guest, application, packaging-signature closure or OS acceptance.",
+  "next": "Execute the independently reviewed c81/exportset-26 libdwarf preparation, then prepare and release the fresh candidate-bound image request."
+}
