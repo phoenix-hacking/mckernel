@@ -13846,3 +13846,38 @@ PASS_EXECUTION over the substituted fetched commit, then execute once.  Counts
 remain three compiled current candidates, 12 bounded diagnostic guest passes,
 0/273 formal applications, 6/130 production gates and 0/7 language gates.  The
 OS remains incomplete.
+
+Continuation checkpoint 355, 2026-10-01: the independently released scratch21
+build ran exactly once and failed in phase 0 before compilation.  The concrete
+failure is `native Rust build-surface audit failed: os_runtime.rs authority
+digest drift`; output inventory is empty.  Request, release terminal, owner
+receipt, driver receipt and driver log SHA-256 values are respectively
+`35efb73b...45b6`, `919a01c...226`, `c772a969...51c`,
+`2e0d57f...5ef5` and `15c9539e...b4d`.  Independent review returns
+`PASS_FAILURE_EVIDENCE`, not a build pass.
+
+Retirement is positively proven but cleanup is deliberately pending.  Stopped
+container `e1f6dd1...20ea9` / `mckernel-exact-57e76f6bf33a48da82047f98242bf019`
+has owner nonce `1439909012a04cf789981b951b34d399`, PID 0, exit 1, and is neither
+dead nor OOM-killed.  Owner PID 3788091/starttime 110575783 and the request
+lease are absent.  Shared heavy lock inode `1831:57687` and operational
+exclusion inode `1831:57688` remain; root development lock `27:4` is unheld.
+No cleanup helper has passed review, so do not issue raw Docker removal or
+unlink either record.
+
+The bounded source correction updates four authority consumers from stale
+`aa9fa37f...a4b6` to actual `os_runtime.rs` `af4864fc...4413`.
+`native_rust_build_surface_audit.py` now passes, but three dependent checks fail
+closed: Rocky staging reports `modules[1].source lacks one exact audited extern
+boundary`, the lifecycle check reports stale `support_sources[6]`, and RS-011
+reports a stale ledger digest.  This correction is unreviewed and must not feed
+a build yet.
+On restart: first finish/review/release exact scratch21 terminal cleanup; then
+repair all three dependent authority bindings and run the complete source checks,
+commit/fetch, prepare fresh scratch22 names and obtain a new one-shot build
+release.  Never replay consumed scratch21.  The next new diagnostic after a
+successful artifact is `signal.mask-restore`, exact stdout
+`handled=1 observed_blocked=1 restored=1\n`, exit 0.  Counts remain three
+compiled current candidates, 12 bounded diagnostic guest passes, 0/273 formal
+applications, 6/130 production gates and 0/7 language gates.  The stop is
+restart-ready and the OS remains incomplete.

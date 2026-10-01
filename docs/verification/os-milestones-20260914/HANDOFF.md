@@ -1,5 +1,32 @@
 # Compact dispatcher handoff
 
+## Latest continuation: checkpoint 355
+
+Scratch21 consumed its one-shot release and failed before compilation in phase
+0: `os_runtime.rs authority digest drift`.  Preserve the exact evidence in
+`native-exact-scratch21-build-failure-checkpoint-20261001.json`; request,
+terminal, owner receipt, driver receipt and driver log hashes are
+`35efb73b...45b6`, `919a01c...226`, `c772a969...51c`,
+`2e0d57f...5ef5`, `15c9539e...b4d`.  Do not replay scratch21.
+
+The stopped retained container is `e1f6dd1...20ea9`, owner nonce
+`1439909012a04cf789981b951b34d399`, PID 0/exit 1.  The request lease and owner
+process are absent; shared heavy inode `1831:57687` and scratch18 operational
+exclusion inode `1831:57688` remain.  Root lock `27:4` is unheld.  No cleanup
+release exists: do not raw-remove the container or unlink locks.
+
+Four source-authority consumers now carry actual `os_runtime.rs` digest
+`af4864fc...4413`, and build-surface audit passes, but Rocky staging still
+fails on `modules[1].source lacks one exact audited extern boundary`; lifecycle
+reports stale `support_sources[6]`, and RS-011 reports a stale ledger digest.
+These edits are unreviewed WIP.  Exact resume order: (1) publish/review/execute a
+scratch21-specific terminal cleanup, (2) fix and fully test those three
+dependent bindings plus all four metadata consumers, (3) commit/push/fetch, (4) prepare
+fresh scratch22 and seek a new build release, then (5) rebind and run new
+diagnostic `signal.mask-restore`.  Counts: 3 compiled candidates, 12 diagnostic
+guest passes, 0/273 formal apps, 6/130 production gates, 0/7 languages.  The
+OS is incomplete; this is a temporary restart-ready stop.
+
 ## Latest continuation: checkpoint 290
 
 The c81 direct-futex lane now has independently accepted source/host plumbing,
