@@ -1,0 +1,38 @@
+{
+  "schema": "mckernel.native-exact-scratch18-image-build-attempt3-execution-proposal.v1",
+  "status": "PROPOSED",
+  "candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "preparation_evidence": "docs/verification/evidence/native-exact-scratch18-image-attempt3-preparation-20261001.json",
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-89ab5c55-scratch18-retry2-attempt3-20261001.json",
+    "sha256": "9b34a16cb24168614e3a1186070c15906bc220775c2c93741eae0bbf42484a2b",
+    "size": 35943606,
+    "device_inode": "1831:6685325"
+  },
+  "command": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/scripts/native_rust_exact_mckernel_image_container_owner.py",
+    "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-89ab5c55-scratch18-retry2-attempt3-20261001.json"
+  ],
+  "execution_count": 1,
+  "profile": {
+    "cpus": "2-5",
+    "jobs": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids_limit": 512,
+    "network": "none",
+    "read_only_root": true,
+    "sole_writable_bind": "/work"
+  },
+  "convergence": "one bounded correction for the driver source-status family; no unchanged retry",
+  "requires": [
+    "independent PASS_EXECUTION over this exact published proposal and live state",
+    "one heavy build/guest lease only",
+    "postlink and linked-text checks before diagnostic guest",
+    "separate reviewed cleanup"
+  ],
+  "not_acceptance": "proposal/build readiness is not image, guest, application, production or OS acceptance"
+}

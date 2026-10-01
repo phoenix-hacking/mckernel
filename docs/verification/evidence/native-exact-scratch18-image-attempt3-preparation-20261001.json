@@ -1,0 +1,56 @@
+{
+  "schema": "mckernel.native-exact-scratch18-image-attempt3-preparation.v1",
+  "status": "PASS_PREPARATION_ONLY",
+  "candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "attempt2_cleanup": {
+    "release2_sha256": "399a629b20375678e310fca640dd2590b2ded5dc3a272721d71cb949ffcdf772",
+    "result": "PASS_EXECUTED",
+    "terminal_replay": "PASS_TERMINAL_REPLAY",
+    "plan_sha256": "8447255c5b5946ade3b7411b3f89e638b91b083baa8f2015a97dd74bbc9f4eb9",
+    "container_and_active_records_absent": true,
+    "attempt_archive_sha256": "6cfeab6f651956db68d93ccda51782ddb90b6685e4e64c35e900f156594908f3",
+    "shared_archive_sha256": "3ea7739ed466d16bc78ab6019f0ede878e2fb3c63ccf8dd633cc44cd03e35efe"
+  },
+  "bounded_correction": {
+    "failure_family": "driver exact source status versus absent tracked unconsumed gitlinks",
+    "review": "two independent read-only reviews recommended exact empty placeholders matching c81",
+    "parent_device_inode": "1831:3836128",
+    "created": {
+      "executer/user/lib/syscall_intercept": {
+        "tracked_commit": "66a47ceb1c5c05e1d613ab3f1f7164f42d5aca6f",
+        "device_inode": "1831:3842381",
+        "mode": "0755",
+        "empty": true
+      },
+      "executer/user/lib/uti": {
+        "tracked_commit": "8c5a556814efe1f57e5eb58b72318069dd7738b5",
+        "device_inode": "1831:3850330",
+        "mode": "0755",
+        "empty": true
+      }
+    },
+    "post_status": " M ihk",
+    "nested_ihk_status": " M test/ihklib/whitebox/src/driver/mckernel/syscall.c",
+    "source_manifest_sha256_unchanged": "36e2ad1864bbec0641c88e097225c3aead887545b32882abbc288f8f41e4f71a",
+    "tracked_bytes_or_index_changed": false
+  },
+  "fresh_request": {
+    "inputs_sha256": "f9c4d3abfce27efa341b1a29649302090905f898c75474d3caf8dd5a2645daf3",
+    "toolchain_sha256": "de4bcafc0e0c33e5d19fb50e3b88c4b9470e3c4c27d7478b3da6c08abb81cf83",
+    "request_sha256": "9b34a16cb24168614e3a1186070c15906bc220775c2c93741eae0bbf42484a2b",
+    "request_path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-89ab5c55-scratch18-retry2-attempt3-20261001.json",
+    "work_root_device_inode": "1831:6685320",
+    "owner_evidence_device_inode": "1831:6685321",
+    "both_empty": true,
+    "owner_read_only_validation": "PASS",
+    "docker_started": false,
+    "heavy_token_acquired": false
+  },
+  "capacity": {
+    "host_free_bytes": 39313448960,
+    "scratch_free_bytes": 34473574400,
+    "memory_available_bytes": 23071285248,
+    "floors_satisfied": true
+  },
+  "acceptance": "preparation only; no image, guest, application, production or OS acceptance"
+}
