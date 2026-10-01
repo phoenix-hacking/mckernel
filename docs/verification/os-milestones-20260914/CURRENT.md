@@ -13566,3 +13566,24 @@ Next independently clean this exact terminal attempt, then apply one bounded
 correction for the remaining-gitlink status family.  Counts remain two current
 compiled candidates, five prior diagnostic guest passes and zero formal
 application accepts; the OS remains incomplete.
+
+Continuation checkpoint 343, 2026-10-01: scratch18 image attempt 3 PASSed the
+actual four-job build and required postlink checks.  CMake built the Rust kernel
+object plus C/assembly closure and linked `mckernel.img` at 7,908,256 bytes,
+SHA `fa668554...39ed`.  Its map and Rust object hashes are `9a27435c...b7b3`
+and `532af648...0f92`.  Owner/build receipts are `90a4c37f...bcaf` and
+`2a1f4bbb...6932`.
+
+Current-image postlink report `682e23b3...2e9e` PASSes the ELF/note/load and
+native-xrstor checks.  Linked-text report `26b7a74b...786a` attributes 626,547
+of 803,383 executable bytes (77.988581%) to 2,735 exact Rust-object input
+contributions.  Terminal exited container `a24d40c5...ec821`, exit 0/PID 0/
+non-OOM, remains retained with candidate/shared exclusions at inodes
+57668/57667; the image lease is absent.  Exact evidence is
+`native-exact-scratch18-image-attempt3-success-20261001.json`.
+
+This raises actual compiled current candidates to three; prior diagnostic
+guest passes remain five and formal application accepts remain zero.  Next
+independently review the artifact evidence, clean the exact terminal container,
+then bind this image into a fresh diagnostic startup packet.  No production or
+OS acceptance is claimed; the OS remains incomplete.

@@ -1,0 +1,77 @@
+{
+  "schema": "mckernel.native-exact-scratch18-image-attempt3-success.v1",
+  "status": "PASS_BUILD_AND_POSTLINK",
+  "candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "execution": {
+    "proposal_sha256": "05c9b5f4d724a66429572d3bbf8a9c87314c0104e307cfd9d59aec83ea72284c",
+    "independent_decision": "PASS_EXECUTION",
+    "invocations": 1,
+    "owner_status": "PASS",
+    "owner_exit_code": 0,
+    "owner_receipt_sha256": "90a4c37fc23d87a47abbff2287dde73ff51ab3fc107b00a92e927a224cafbcaf",
+    "build_receipt_sha256": "2a1f4bbb21cd36f03366f8630f82acc34a181f9263b1a0b03d279a07ec046932",
+    "build_stdout_sha256": "7d967506925270bf9583cf886f6373c86ead05e475f06999f1b3393bcb2c3022",
+    "build_stderr_sha256": "baf58e86d546a45e043aa937e3d0be4576edcae24af1b8aca17b88dfe3401e18"
+  },
+  "artifacts": {
+    "image": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-89ab5c55-scratch18-retry2-attempt3-20261001/output/build/kernel/mckernel.img",
+      "bytes": 7908256,
+      "device_inode": "1831:6685845",
+      "mode": "0755",
+      "sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed"
+    },
+    "link_map": {
+      "bytes": 738606,
+      "device_inode": "1831:6685844",
+      "sha256": "9a27435ca9faf2be359ae8a23f6f9e5d71a8701ccdcb2349e0d420f7b22bb7b3"
+    },
+    "rust_object": {
+      "bytes": 12591904,
+      "device_inode": "1831:6685818",
+      "sha256": "532af6482181b68dfa4f6176fd50de34a999b53bbae9167f9c7cde0b3af70f92"
+    }
+  },
+  "postlink": {
+    "status": "PASS_DIAGNOSTIC_ADMISSION",
+    "report_sha256": "682e23b3d8b485ff7e3340185f526ed2e8857de70d145d619a56a5445ee42e9e",
+    "report_device_inode": "1831:6685858",
+    "elf_entry": "0xfffffffffe84f0f0",
+    "program_headers": 3,
+    "pt_loads": 2,
+    "native_xrstor_checked": true,
+    "note": [4, 396288, 7616, 1]
+  },
+  "linked_text_ownership": {
+    "status": "PASS_REPORT",
+    "report_sha256": "26b7a74b437af1bf8b79034693df727fccb7ba7c3e3f5a16abdab25c8485786a",
+    "report_device_inode": "1831:6685859",
+    "total_executable_text_bytes": 803383,
+    "rust_executable_text_bytes": 626547,
+    "rust_executable_text_percent": "77.988581",
+    "rust_input_contribution_count": 2735
+  },
+  "terminal_container": {
+    "id": "a24d40c58d472befc7392f5ee31286d4a165e6acc267ae2ec34e692ef58ec821",
+    "name": "mckernel-image-762f686fc788463d95aeae7500c6be5d",
+    "owner_nonce": "5ac3b2e7b103420ab54e90fdc12389f6",
+    "state": "exited",
+    "exit_code": 0,
+    "pid": 0,
+    "oom_killed": false,
+    "retained_for_separate_cleanup": true
+  },
+  "ownership": {
+    "image_lease_absent": true,
+    "candidate_exclusion_inode_sha256": "1831:57668 16a32feefa41054b7ce56fd54f2c92c634d9397fffe3726ad06a958c4432e456",
+    "shared_exclusion_inode_sha256": "1831:57667 7c88a8176cd7fdce2e6aa99538279ce77df71b32d50f2b6ab90b290eb49a6af4"
+  },
+  "counts": {
+    "compiled_current_candidates": 3,
+    "diagnostic_guest_passes": 5,
+    "formal_application_accepts": 0
+  },
+  "acceptance": "build and diagnostic postlink evidence only; no guest, application, production or OS acceptance",
+  "next": "independently review artifacts, clean the terminal build container, then create a fresh candidate-bound startup diagnostic packet"
+}
