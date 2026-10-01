@@ -13323,3 +13323,32 @@ limitation.  Next publish/fetch these bytes, consume the archival once, and
 postflight its exact file archives before running the separately reviewed real
 ownership cleanup.  No build or guest ran; counters remain unchanged and the OS
 is incomplete.
+
+Continuation checkpoint 332, 2026-10-01: the synthetic v1 cleanup pollution is
+terminally archived, and the independently released real interrupted-owner
+cleanup has now completed.  Its 40/40 Python 3.8 tests pass; production execute
+returned `PASS_EXECUTED terminal=true`, postflight returned
+`PASS_TERMINAL_REPLAY terminal=true`, and an independent live audit confirms
+all 13 journal events.  The original attempt/lease/shared records remain at
+their exact inodes 90734/90735/90733 and hashes `76bc6aa6...bf9e`,
+`a48f2d1f...bc2fb` and `c4ca1cab...206d` under the three
+`native-exact-scratch18-interrupt-*.archive` names.  Their active names are
+absent; the persistent mutex, plan and journal remain at exact inodes
+57637/57638/57639.  The stopped container is absent, while the interrupted
+output/evidence trees and their independently compared off-scratch archives
+remain preserved.  Exact terminal evidence is
+`native-exact-scratch18-interrupt-cleanup-terminal-20261001.json`.
+
+The user also completed full-tar-compare archival of the retained 3.1-GiB
+`native-build-base-24a151fe` dependency.  Its archive is
+`/home/holden/mckernel-work/retained-exact-candidates/native-build-base-24a151fe-20261001.tar.zst`,
+SHA-256 `e1316b7c...f4a`, while the expanded tree deliberately remains unchanged
+at inode `1831:3276801`.  The consolidated historical manifest is now SHA-256
+`9a19ac02...b563`; scratch3/5/10 expanded outputs stay absent, and scratch12
+stays expanded read-only.  Current host/scratch free bytes are approximately
+46.92/40.59 GB with 22,965,932 KiB available memory.  No acceptance counter
+changes.  A fresh retry2 preparation is being corrected to consume this exact
+schema-v5 terminal state; after its separate execution release, run the one
+serialized candidate build, then postlink/image preparation and diagnostic
+startup, memory, files, threads/futexes, signals and shutdown guests.  The OS
+remains incomplete.

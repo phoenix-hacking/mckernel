@@ -1,0 +1,101 @@
+{
+  "schema": "mckernel.native-exact.scratch18-interrupt-cleanup-terminal.v1",
+  "result": "PASS_TERMINAL_REPLAY",
+  "acceptance_credit": false,
+  "cleanup_source": {
+    "path": "docs/verification/evidence/native-exact-scratch18-interrupt-cleanup-20261001.py",
+    "sha256": "d0ccafbe0795b5e47b260948bdbcabf5f3bceaa71f47a1e75ab49d03c762f76b",
+    "tests_sha256": "f217527315e48a1ae55201c3a796a22d8b0cd7bfff70cf252de827c7c8f93007",
+    "python": "/usr/bin/python3 3.8.10",
+    "focused_tests": "40/40 PASS"
+  },
+  "publisher_contract": {
+    "schema": "scratch18.publisher-contract.v1",
+    "coordination": "sole-campaign-coordinator-no-concurrent-build-or-cleanup",
+    "publishers": "project-owned-regular-file-O_CREAT|O_EXCL-only",
+    "census": "privileged-full-process-and-active-container-before-transaction-and-every-rmdir",
+    "excluded": "arbitrary-same-UID-directory-substitution-after-final-check"
+  },
+  "execution": {
+    "execute_result": "PASS_EXECUTED terminal=true",
+    "postflight_result": "PASS_TERMINAL_REPLAY terminal=true",
+    "journal_events": 13,
+    "independent_terminal_audit": "PASS",
+    "container_id": "fb3917d1485a1572815dcb9dcb505526f1f6da72f0db26372d0678822fe09193",
+    "container_absent": true
+  },
+  "archives": {
+    "attempt": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch18-interrupt-attempt.archive",
+      "device": 1831,
+      "inode": 90734,
+      "size": 269,
+      "mode": "0600",
+      "uid": 1000,
+      "gid": 1000,
+      "sha256": "76bc6aa633d1098ac6e3f0f7a5b0701d002ccf3d5f8980427b2cb124eb67bf9e"
+    },
+    "lease": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch18-interrupt-lease.archive",
+      "device": 1831,
+      "inode": 90735,
+      "size": 174,
+      "mode": "0600",
+      "uid": 1000,
+      "gid": 1000,
+      "sha256": "a48f2d1f0f645f3f8e8de60365d0b9f8256c47ee6fb66074993f4328fedbc2fb"
+    },
+    "shared": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch18-interrupt-shared.archive",
+      "device": 1831,
+      "inode": 90733,
+      "size": 269,
+      "mode": "0600",
+      "uid": 1000,
+      "gid": 1000,
+      "sha256": "c4ca1cabb6dadbe9f01b2403d22f9688c35953db0376db4c8d2fc7c7af74206d"
+    }
+  },
+  "transaction_records": {
+    "plan": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch18-interrupt-cleanup.plan.json",
+      "device": 1831,
+      "inode": 57638,
+      "size": 1680,
+      "mode": "0600",
+      "sha256": "ec87c8f701cb063cfafc1936124f4a360cd42a5639a71acbfcdbf21f2488e1fc"
+    },
+    "journal": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch18-interrupt-cleanup.journal.jsonl",
+      "device": 1831,
+      "inode": 57639,
+      "size": 3655,
+      "mode": "0600",
+      "sha256": "73b62d18bf40bc83ff5fe75fe816bcb0ce356d829b317464fd77426bdcb8d7ab"
+    },
+    "mutex": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch18-interrupt-cleanup.mutex",
+      "device": 1831,
+      "inode": 57637,
+      "size": 0,
+      "mode": "0600",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "active_paths_absent": [
+    "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json",
+    "/home/holden/mckernel-work/scratch/native-exact-build-lease-scratch-18.json",
+    "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock"
+  ],
+  "preservation": {
+    "terminal_inspect_sha256": "c2196dd5b766dfc604a47c850b48b537a60c7043a22662f1953f9df5166426e6",
+    "interrupted_output_archive_sha256": "22abd1b6a43b0b9e4774d7f3c22235f8960d3b7b58f2bcebb3846b30f93d8d7f",
+    "interrupted_evidence_archive_sha256": "bff28f2add6f3669413178c1ee129bed790f3f38a972ef780a6698c4a147be10"
+  },
+  "capacity": {
+    "host_free_bytes": 46924443648,
+    "scratch_free_bytes": 40590585856,
+    "mem_available_kib": 22965932
+  },
+  "next": "Prepare a fresh retry2 request bound to this exact terminal cleanup state, independently release its execution, and run one serialized heavy candidate build."
+}
