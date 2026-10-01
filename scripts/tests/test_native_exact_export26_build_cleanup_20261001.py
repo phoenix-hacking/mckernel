@@ -15,13 +15,14 @@ spec.loader.exec_module(m)
 REAL_QUARANTINE = m.quarantine_exclusion
 
 
-def test_attempt_two_bindings_consume_fresh_paths_and_reject_attempt_one():
-    assert m.RELEASE_PATH.endswith('-2.json')
-    assert m.EVIDENCE.name.endswith('-2')
-    assert m.QUARANTINE.endswith('-2-quarantine')
-    assert '-20261001-1' not in m.RELEASE_PATH
-    assert '-20261001-1' not in str(m.EVIDENCE)
-    assert '-20261001-1' not in m.QUARANTINE
+def test_attempt_three_bindings_consume_fresh_paths_and_reject_prior_attempts():
+    assert m.RELEASE_PATH.endswith('-3.json')
+    assert m.EVIDENCE.name.endswith('-3')
+    assert m.QUARANTINE.endswith('-3-quarantine')
+    for old in ('-20261001-1', '-20261001-2'):
+        assert old not in m.RELEASE_PATH
+        assert old not in str(m.EVIDENCE)
+        assert old not in m.QUARANTINE
 
 
 def result(data=b'', code=0, err=b''):
@@ -320,6 +321,34 @@ def test_container_identity_rejection(field, value, monkeypatch):
     changed[field] = value
     with pytest.raises(m.Error):
         m.inspect(result(json.dumps([changed]).encode()))
+
+
+@pytest.mark.parametrize('change', ['permutation', 'mutation', 'missing', 'duplicate'])
+def test_mounts_are_authenticated_as_unordered_complete_multiset(change, monkeypatch):
+    mounts = [
+        {'Source': '/src', 'Destination': '/src', 'RW': False, 'Type': 'bind'},
+        {'Source': '/work', 'Destination': '/work', 'RW': True, 'Type': 'bind'},
+        {'Source': '/work', 'Destination': '/work', 'RW': True, 'Type': 'bind'},
+    ]
+    obj = {'Id': m.CONTAINER, 'Name': '/' + m.NAME, 'Image': m.IMAGE,
+           'Config': {'Labels': {'mckernel.owner': m.NONCE}},
+           'State': {'Status': 'exited', 'Pid': 0, 'ExitCode': 0, 'Running': False,
+                     'OOMKilled': False, 'Paused': False, 'Restarting': False, 'Dead': False},
+           'Mounts': mounts, 'HostConfig': {'RestartPolicy': {'Name': 'no'}}}
+    retained = json.loads(json.dumps(obj))
+    monkeypatch.setattr(m, 'read_file', lambda *a: (json.dumps({'terminal_container_info': retained}).encode(), None))
+    if change == 'permutation':
+        obj['Mounts'] = list(reversed(obj['Mounts']))
+        assert m.inspect(result(json.dumps([obj]).encode())) == obj
+        return
+    if change == 'mutation':
+        obj['Mounts'][0]['RW'] = True
+    elif change == 'missing':
+        obj['Mounts'].pop()
+    else:
+        obj['Mounts'].append(dict(obj['Mounts'][0]))
+    with pytest.raises(m.Error, match='container mount/profile changed'):
+        m.inspect(result(json.dumps([obj]).encode()))
 
 
 def test_release_hash_is_external_not_circular():

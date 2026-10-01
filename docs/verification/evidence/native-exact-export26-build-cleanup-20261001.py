@@ -39,9 +39,9 @@ EXCLUSION = SCRATCH / 'native-exact-candidate-operational-exclusion-exportset-26
 EXCLUSION_SHA = '8099da3fbac5e6cfc3722af036614d7e5434c8988a7d2e172581bac64a606c86'
 EXCLUSION_ID = (1831, 90699)
 LOG_SHA = '3265a9f6bacbb32e7f0222543ac7a70a83685b567636cabcaa0647ffd50baa24'
-EVIDENCE = SCRATCH / 'native-exact-export26-build-cleanup-20261001-2'
-QUARANTINE = '.native-exact-export26-build-cleanup-20261001-2-quarantine'
-RELEASE_PATH = 'docs/verification/evidence/native-exact-export26-build-cleanup-release-20261001-2.json'
+EVIDENCE = SCRATCH / 'native-exact-export26-build-cleanup-20261001-3'
+QUARANTINE = '.native-exact-export26-build-cleanup-20261001-3-quarantine'
+RELEASE_PATH = 'docs/verification/evidence/native-exact-export26-build-cleanup-release-20261001-3.json'
 PACKET_PATH = 'docs/verification/evidence/native-exact-export26-build-cleanup-20261001.py'
 PINNED_FILES = {
     OWNER_RECEIPT: '462d3f7c3d8426c7b6a08085481fa470b9bd9b05a3d659390b313074291ef301',
@@ -311,7 +311,14 @@ def inspect(result):
         if not good:
             raise Error('container identity or terminal state changed')
         retained = json.loads(read_file(OWNER_RECEIPT)[0])['terminal_container_info']
-        if x['Mounts'] != retained['Mounts'] or x['HostConfig'] != retained['HostConfig']:
+        # Docker may reorder Mounts between inspect calls.  Authenticate the
+        # complete rows as an unordered multiset: sorting canonical rows
+        # preserves cardinality and duplicate rows while rejecting any field
+        # mutation, omission, or added duplicate.
+        mounts = lambda value: sorted(json.dumps(row, sort_keys=True,
+                                                 separators=(',', ':'))
+                                      for row in value)
+        if mounts(x['Mounts']) != mounts(retained['Mounts']) or x['HostConfig'] != retained['HostConfig']:
             raise Error('container mount/profile changed')
         return x
     except (KeyError, TypeError, ValueError):
