@@ -1,0 +1,46 @@
+{
+  "schema": "mckernel.application-catalog-linux-fixture-checkpoint.v1",
+  "time_utc": "2026-10-01T09:26:51Z",
+  "status": "PASS_DIAGNOSTIC_FIXTURES",
+  "scope": "Linux host compile and oracle only; no McKernel guest or application acceptance",
+  "compile_profile": "gcc -std=c11 -O2 -Wall -Wextra -Werror -pthread",
+  "corrected_sources": {
+    "scripts/application-tests/cases/startup/startup.argv-empty.c": "bb1a251863df4309555857af9f614dee63f0d5448aff2f3d6312918af55efbd2",
+    "scripts/application-tests/cases/file/file.unlink-open.c": "563904045ff0132568bc23a7f472f9ffed8c2f0dba016e0c4020b6d1d03e8d1e",
+    "scripts/application-tests/cases/futex/futex.wake-empty.c": "9d5872decd1d272379e4bd78ea2315b09775081dcd782134de721841d86857ce"
+  },
+  "original_failures": [
+    {
+      "case": "file.unlink-open",
+      "phase": "compile",
+      "stderr_sha256": "3285caf0ee50cd1a59e32b9bd92c39748fa46d27c589e014090a540cbb34c0c3",
+      "reason": "-Werror=misleading-indentation"
+    },
+    {
+      "case": "futex.wake-empty",
+      "phase": "compile",
+      "stderr_sha256": "2548fe3878c4236f6d9c1e1c474f510a3d54a675dc4670f18e29549271091dee",
+      "reason": "implicit declaration of syscall under strict C11"
+    },
+    {
+      "case": "file.unlink-open",
+      "phase": "run",
+      "reason": "hard-coded /case/work ignored the reviewed cwd fixture and returned exit 1"
+    },
+    {
+      "case": "startup.argv-empty",
+      "phase": "oracle",
+      "reason": "argv-only source emitted an unrelated APP_STARTUP_ENV_MISSING record already owned by startup.environment"
+    }
+  ],
+  "results": {
+    "startup.argv-empty": {"exit": 0, "stdout_sha256": "e60b793f8774bf2189744d89772aa8e30ce8b8e456d561052463d90a02073690", "stderr_bytes": 0, "elf_sha256": "d4a4d0d9fe43d4da4211a72295138e844c35eb74281a5346589469a61022e577"},
+    "memory.realloc-shrink": {"exit": 0, "stdout_sha256": "61fd063b62a870d805deb408349d614d84cf5300383a700b5575776272966c6c", "stderr_bytes": 0, "elf_sha256": "1f2793512ef417981b7e46dcc16b23d2f215f6114d306138839874dd110e6607"},
+    "file.unlink-open": {"exit": 0, "stdout_sha256": "6c16d8af1a3abe5b08fb73e349f9b072cd96f5b194b55f6f0e360e9d217a51b4", "stderr_bytes": 0, "elf_sha256": "0995632dfe015564d29dbd5319730edb6e13d4e20e72feb979cb0e9f33577164"},
+    "thread.mutex-counter": {"exit": 0, "stdout_sha256": "d7443814b52d2e53d9c3e7f11ffbc3f176e2a1f0cd41f0f5ea3b150a1740c1ec", "stderr_bytes": 0, "elf_sha256": "807a551f3d0bbbf0424f4014a17c15a17adbf05b5f2655f135765778874c0b66"},
+    "futex.wake-empty": {"exit": 0, "stdout_sha256": "8aa197852c1e613744789334330b9f4ddf41b64c080f3501222ba162812ac352", "stderr_bytes": 0, "elf_sha256": "88cbfb6abfa3f777a541f53833bc46f94bfd90e1f3362a4b4590506aa36c58a3"},
+    "signal.handler-flags": {"exit": 0, "stdout_sha256": "1f381e60d47118953519a18ed27fe7f059238fe7b61d34672523710ac37f8301", "stderr_bytes": 0, "elf_sha256": "c66d496033556bb39da898a19df15f8d3589031812a84357b5d0981f43e30ddd"}
+  },
+  "review": "Independent PASS_DIAGNOSTIC_FIXTURES",
+  "acceptance": {"catalog_cases": 0, "diagnostic_only": true, "os_complete": false}
+}

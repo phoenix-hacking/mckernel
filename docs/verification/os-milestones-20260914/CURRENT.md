@@ -12204,3 +12204,56 @@ The preserved packet-1 result remains FAIL and diagnostic PASS count remains
 five; formal application/catalog acceptance remains zero.  Next commit/push/
 fetch these exact bytes, obtain a fresh one-shot release and run packet 2 under
 the sole heavy lease.  The OS goal remains active and incomplete.
+
+Continuation checkpoint 297, 2026-10-01: the corrected host sources now have
+an independently reviewed preparation-only packet for a fresh exact candidate
+at `1e95abdc2b124c19f16b88cdb21600c768a10c2d`.  Packet
+`native-exact-candidate-preparation-scratch-20261001-15.sh` is
+`c5a78452...fd9689`; its focused test is `e80137eb...068a3`, with 43/43 tests
+and `bash -n` passing.  Independent review returns
+`PASS_SCRATCH15_PREP_SOURCE`: all outputs are fresh scratch-15 paths, the
+historical exclusion and current helper/contract identities are bound, and the
+packet cannot acquire a build lease, construct Docker, compile or run a guest.
+This is not an execution release.
+
+Measured free capacity is only 21,004,500,992 host bytes and 16,150,040,576
+scratch bytes.  It fails the packet's 16/12-GiB floors plus the measured
+9,235,599,360-byte checkout, 512-MiB metadata allowance and 1-GiB emergency
+margin.  The proposed per-file scratch14 cleanup is preserved BLOCK and was
+never executed: independent probes found incomplete receipt/status chain
+authentication, audit publication bypassing the complete live validator, and
+no no-replace temporary final-record publication.  Its exact failed source and
+test hashes are retained in
+`native-exact-scratch14-cleanup-convergence-record-20261001.json`; do not run
+that helper.
+
+The repair strategy has changed to the reviewed mature ordinary-retirement
+path.  `PASS_RETIREMENT_DESIGN` requires a fresh inventory and deterministic
+capsule for exactly the never-built c81 scratch14 candidate and metadata backup,
+including the authenticated IHK overlay delta and Git metadata, followed by a
+pushed/fetched one-shot retirement release.  External empty build/evidence
+directories and every exportset-25 failure remain untouched.  No deletion has
+occurred.  Exact scratch15 preparation evidence is
+`native-exact-scratch15-preparation-source-checkpoint-20261001.json`.
+
+A bounded Linux-side catalog-fixture sweep separately exposed two compile
+failures and one runtime/oracle mismatch.  Narrow current working-tree fixes
+place `_GNU_SOURCE` before futex headers, use the file fixture's reviewed cwd
+instead of hard-coded `/case/work`, split its misleading one-line `if`, and
+remove an unrelated environment record from the argv-only startup fixture.
+All six startup, memory, files, threads, futex and signal fixtures now compile
+with strict C11 warnings-as-errors and match their Linux oracles with exit zero
+and empty stderr.  Independent review returns `PASS_DIAGNOSTIC_FIXTURES` and
+exact source, ELF and output hashes are retained in
+`application-catalog-linux-fixture-correction-checkpoint-20261001.json`.
+These are light diagnostic fixture results, never McKernel application
+acceptance.
+
+Next finish and independently review the scratch14 retention-preparation
+packet, commit/push/fetch its source checkpoint, then run only its archive
+preparation.  After the retained inventory and capsule are fetched, prepare and
+review wholesale retirement, remeasure capacity, execute scratch15 preparation,
+and rebuild all three pinned host modules.  The terminal-futex guest cannot be
+retried before that new module exists.  Compiled current-candidate count remains
+one, diagnostic guest PASS count remains five, formal application/catalog count
+remains zero, shutdown remains unwired, and the OS goal is active and incomplete.

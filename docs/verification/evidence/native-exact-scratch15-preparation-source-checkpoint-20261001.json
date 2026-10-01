@@ -1,0 +1,37 @@
+{
+  "schema": "mckernel.native-exact-preparation-source-checkpoint.v1",
+  "time_utc": "2026-10-01T09:26:51Z",
+  "status": "PASS_SOURCE_ONLY",
+  "candidate_commit": "1e95abdc2b124c19f16b88cdb21600c768a10c2d",
+  "packet": {
+    "path": "docs/verification/evidence/native-exact-candidate-preparation-scratch-20261001-15.sh",
+    "sha256": "c5a784524c8918d3edea77c3df26f2f91ccb24f655aa77d9577f4b2cbbfd9689"
+  },
+  "test": {
+    "path": "scripts/tests/test_native_exact_candidate_preparation_scratch15_20261001.py",
+    "sha256": "e80137eb561213926e3e2038377cfb9e2a35f61a364d36d1f3172dce8ff068a3",
+    "result": "43 passed"
+  },
+  "checks": [
+    "bash -n passed",
+    "independent review PASS_SCRATCH15_PREP_SOURCE",
+    "preparation-only path does not acquire a lease, construct Docker, compile, or run a guest",
+    "all persistent targets are fresh scratch-15 names",
+    "capacity gates preserve 16 GiB host and 12 GiB scratch plus checkout, metadata, and emergency overhead"
+  ],
+  "capacity_bytes": {
+    "host_free": 21004500992,
+    "scratch_free": 16150040576,
+    "checkout_allocation": 9235599360,
+    "metadata_overhead": 536870912,
+    "emergency_margin": 1073741824
+  },
+  "execution": "NOT_RELEASED",
+  "blocker": "Current host and scratch capacity fail the packet's initial floors. Retire the never-built scratch14 candidate through a separately retained and reviewed ordinary-retirement packet first.",
+  "acceptance": {
+    "compiled_candidate_count": 1,
+    "diagnostic_guest_pass_count": 5,
+    "formal_application_count": 0,
+    "os_complete": false
+  }
+}
