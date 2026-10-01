@@ -32,12 +32,13 @@ RECEIPT_SCHEMA = "mckernel.native-exact-mckernel-image-container-receipt.v1"
 OWNER_RECEIPT_NAME = "owner-receipt.json"
 EXPECTED_DRIVER_SHA256 = "91aa047f61167dd93002a0bc12e55b18f4b2fcaf65e246e574e8350a0c37f4cc"
 EXPECTED_PROVENANCE_SHA256 = "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a"
-EXPECTED_HOST_OWNER_SHA256 = "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155"
-# The image owner advances with the disk-candidate namespace.  Keep consumed
+EXPECTED_HOST_OWNER_SHA256 = "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "788be3f5d31620d0aff0bd4e480d7bbbbde2f8f1dc5dcf671ad2ebf114107894"
+# The image owner advances with the image-candidate namespace.  Keep consumed
 # exclusions explicit: accepting one of these would allow a request to race a
 # retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
 # fixture, so the rejection list remains separate from the active value.
-COMMON_EXCLUSION = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-26.json"
+COMMON_EXCLUSION = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json"
 RETIRED_COMMON_EXCLUSIONS = frozenset(
     "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-" + suffix + ".json"
     for suffix in (
@@ -47,7 +48,7 @@ RETIRED_COMMON_EXCLUSIONS = frozenset(
         "objtoolbinding-11", "runtimeblob-12", "selfdigest-13", "exportset-16",
         "exportset-17", "exportset-18", "exportset-19", "exportset-20",
         "exportset-21", "exportset-22", "exportset-23", "exportset-24",
-        "exportset-25",
+        "exportset-25", "exportset-26", "scratch15-exportset-27", "scratch16", "scratch17-image-1",
     )
 )
 LIMITS = {
@@ -94,6 +95,40 @@ _PREPARATION_EVIDENCE = (
 )
 SUDO_DOCKER_PREFIX = ("/usr/bin/sudo", "-A", "/usr/bin/docker",
                       "--host=unix:///var/run/docker.sock")
+
+
+def _load_heavy_entry_contract(path=None, expected_sha256=None):
+    """Execute the authenticated regular-file bytes of the shared contract.
+
+    Importlib is deliberately avoided: a loader may consult a cache or follow
+    a changed path after authentication.  The path and identity are checked
+    both before and after the single byte read, then those exact bytes are
+    compiled and executed.
+    """
+    path = (Path(__file__).with_name("native_rust_exact_disk_build_wrapper.py")
+            if path is None else Path(path))
+    expected_sha256 = (EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256
+                       if expected_sha256 is None else expected_sha256)
+    if not (path.is_absolute() and path.is_file() and not path.is_symlink()):
+        raise OwnerError("shared heavy-entry contract is not a regular source file")
+    current = Path(path.anchor)
+    for component in path.parts[1:]:
+        current /= component
+        if current.is_symlink():
+            raise OwnerError("shared heavy-entry contract has symlink parent")
+    before = os.lstat(path)
+    data = path.read_bytes()
+    after = os.lstat(path)
+    identity = lambda row: (row.st_dev, row.st_ino, row.st_size, row.st_mode)
+    if identity(before) != identity(after):
+        raise OwnerError("shared heavy-entry contract identity changed during import")
+    if hashlib.sha256(data).hexdigest() != expected_sha256:
+        raise OwnerError("shared heavy-entry contract hash mismatch")
+    module = types.ModuleType("_mckernel_exact_heavy_entry_contract")
+    module.__file__ = str(path)
+    module.__package__ = ""
+    exec(compile(data, str(path), "exec"), module.__dict__)
+    return module
 
 
 def _load_reviewed_host_owner(path, host_sha256=None, provenance_path=None,
@@ -157,6 +192,9 @@ _HOST_OWNER = _load_reviewed_host_owner(
 
 class OwnerError(RuntimeError):
     pass
+
+
+_SHARED_HEAVY_ENTRY_CONTRACT = _load_heavy_entry_contract()
 
 
 def _gitlink_rows(raw, tree=False):
@@ -1303,7 +1341,13 @@ class ImageOwner:
         return self.bound
 
     def run(self):
-        bound = self.validate(); r = self.request
+        r = self.request
+        # Shared admission must precede validation because validation performs
+        # authenticated host measurement.  If anything after this acquisition
+        # fails, the token is intentionally retained for recovery/review.
+        shared_lock, shared_record = _SHARED_HEAVY_ENTRY_CONTRACT.acquire_heavy_operation(
+            r, "image")
+        bound = self.validate()
         evidence = bound["evidence"]
         _revalidate_inputs(bound, r)
         host_owner = bound["host_owner"]
@@ -1324,7 +1368,10 @@ class ImageOwner:
         docker = self.docker or host_owner.Docker(bound["attempt"] / "docker.log", self.signals, sudo=True)
         receipt = {"schema": RECEIPT_SCHEMA, "status": "FAIL", "candidate_sha": r["candidate_sha"],
                    "ihk_sha": r["ihk_sha"], "container_name": name, "owner_nonce": nonce,
-                   "cleanup_separately_required": True, "terminal_container_retained": False}
+                   "cleanup_separately_required": True, "terminal_container_retained": False,
+                   "terminal_container_info": None, "terminal_container_info_current": False,
+                   "shared_heavy_operation": {"kind": "image", "path": str(shared_lock),
+                                              "record": shared_record}}
         attempted = False
         try:
             image = json.loads(docker.call(["image", "inspect", r["image_id"]]).stdout)[0]
@@ -1415,6 +1462,8 @@ class ImageOwner:
                     receipt["client_retirement_unproven"] = True
             else:
                 receipt["retired"] = True
+                receipt["cleanup_separately_required"] = False
+                receipt["terminal_container_info_current"] = True
             try:
                 _revalidate_inputs(bound, r)
             except BaseException as exc:
@@ -1431,6 +1480,12 @@ class ImageOwner:
             _exclusive_json(bound["owner_evidence"] / OWNER_RECEIPT_NAME, receipt)
             if receipt.get("retired"):
                 lease.release()
+            # The shared contract releases only after a positive PASS,
+            # terminal retirement, and sealed evidence.  Any uncertain
+            # container, observer, or evidence state deliberately retains it
+            # for explicit reconciliation.
+            _SHARED_HEAVY_ENTRY_CONTRACT._release_exclusion(
+                shared_lock, shared_record, receipt)
         return receipt
 
 

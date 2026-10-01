@@ -15,6 +15,7 @@ from native_rust_exact_build_container_owner import (
     CliSignals, Docker, Lease, RESOURCE_ARGS, atomic, check_profile, digest, exact_sha,
     inspect, inventory, measure, retire, roots_disjoint,
 )
+from native_rust_exact_mckernel_image_container_owner import _SHARED_HEAVY_ENTRY_CONTRACT
 
 BASE_IMAGE = 'rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176'
 PACKAGES = tuple('bc binutils binutils-devel bison bindgen-cli bpftool cargo clang cmake coreutils-single cpio diffutils dwarves elfutils-libelf-devel findutils flex gcc git-core gzip hostname kernel-rpm-macros kmod lld llvm make ncurses-devel numactl-devel numactl-libs openssl openssl-devel patch perl python3 python3-devel python3-pyyaml redhat-rpm-config rpm-build rust rust-src rustfmt systemd-devel systemd-libs tar which xz zstd'.split())
@@ -191,6 +192,16 @@ def prepare(*, candidate_sha, output_root, evidence_root, lease_path, toolchain_
     if base_image != BASE_IMAGE:
         raise PreparationError('base image is not pinned')
     output, evidence = Path(output_root).resolve(), Path(evidence_root).resolve()
+    shared_request = {
+        'kind': 'tool-image', 'candidate_sha': candidate_sha,
+        'base_image': base_image, 'output_root': str(output),
+        'evidence_root': str(evidence), 'lease_path': str(Path(lease_path).resolve()),
+        'toolchain_lock': str(Path(toolchain_lock).resolve()),
+    }
+    # Acquire the common build/image/guest lock before creating roots,
+    # allocating the tool-image lease, or constructing a Docker client.
+    shared_lock, shared_record = _SHARED_HEAVY_ENTRY_CONTRACT.acquire_heavy_operation(
+        shared_request, 'image')
     output.mkdir(parents=True, exist_ok=False)
     evidence.mkdir(parents=True, exist_ok=False)
     roots_disjoint([output, evidence])
@@ -214,7 +225,11 @@ def prepare(*, candidate_sha, output_root, evidence_root, lease_path, toolchain_
     phase = 'preparation'
     receipt = {'status': 'FAIL', 'candidate_sha': candidate_sha, 'base_image': base_image,
                'measurement': measurement, 'owner': lease.record, 'retired': False,
-               'toolchain_lock_sha256': digest(toolchain_lock), 'source_free': False}
+               'toolchain_lock_sha256': digest(toolchain_lock), 'source_free': False,
+               'cleanup_separately_required': True, 'terminal_container_info': None,
+               'terminal_container_info_current': False,
+               'shared_heavy_operation': {'kind': 'image', 'path': str(shared_lock),
+                                          'record': shared_record}}
     try:
         docker.call(['pull', '--platform=linux/amd64', base_image], timeout=900)
         base = json.loads(docker.call(['image', 'inspect', base_image]).stdout)[0]
@@ -313,6 +328,9 @@ def prepare(*, candidate_sha, output_root, evidence_root, lease_path, toolchain_
                        source_free_basis='no host mounts/copies; fixed bootstrap/probe command set',
                        runtime_network='none', packages=probe['packages'], tools=probe['tools'],
                        libraries=probe['libraries'])
+        receipt.update(cleanup_separately_required=False,
+                       terminal_container_info=None,
+                       terminal_container_info_current=True)
     except BaseException as exc:
         receipt['error'] = str(exc)
     finally:
@@ -346,6 +364,7 @@ def prepare(*, candidate_sha, output_root, evidence_root, lease_path, toolchain_
             (evidence / 'image-receipt.json').chmod(0o444)
         if receipt['retired']:
             lease.release()
+        _SHARED_HEAVY_ENTRY_CONTRACT._release_exclusion(shared_lock, shared_record, receipt)
     return evidence / 'image-receipt.json'
 
 

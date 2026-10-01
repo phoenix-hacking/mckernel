@@ -43,6 +43,15 @@ if pid:
         except ChildProcessError: break
     sys.exit(0)
 request = json.loads((root / 'signal-request.json').read_text())
+# The owner child receives its isolated exclusion binding explicitly.  The
+# preparer child is a separate process and does not inherit the parent's
+# monkeypatch; give it only a private test lock and test-only release state.
+if mode.startswith('owner'):
+    owner.OPERATIONAL_EXCLUSION_PATH = request['operational_exclusion_path']
+    owner.RETIRED_OPERATIONAL_EXCLUSION_PATHS = frozenset()
+else:
+    prep._SHARED_HEAVY_ENTRY_CONTRACT.HEAVY_ENTRY_CONTRACT_RELEASED = True
+    prep._SHARED_HEAVY_ENTRY_CONTRACT.SHARED_HEAVY_LOCK_PATH = str(root / 'prepare.shared.lock')
 RealDocker, RealPopen = owner.Docker, subprocess.Popen
 emitter = "import os,time; from pathlib import Path; os.write(1,b'SIGNAL-STDOUT\\n'); os.write(2,b'SIGNAL-STDERR\\n'); Path(%r).write_text('ready'); time.sleep(1.5)" % str(root / 'emitter.ready')
 def local_popen(argv, **kwargs):
@@ -266,7 +275,14 @@ class OwnerTests(unittest.TestCase):
                         'host_measure_root': str(self.root),
                         'scratch_measure_root': str(self.measure_output),
                         'memory_allocation_roots': [str(self.root / 'src')],
-                        'lease_path': str(self.root / 'lease')}
+                        'lease_path': str(self.root / 'lease'),
+                        'operational_exclusion_path': str(self.root / 'active-exclusion'),
+                        'operational_exclusion_consumed': False}
+        owner.OPERATIONAL_EXCLUSION_PATH = self.request['operational_exclusion_path']
+        owner.RETIRED_OPERATIONAL_EXCLUSION_PATHS = frozenset({
+            str(self.root / 'scratch15-exclusion'),
+            str(self.root / 'scratch16-exclusion'),
+            str(self.root / 'scratch17-exclusion')})
         files = {'driver_path': 'driver', 'image_receipt': json.dumps({'status': 'PASS', 'image_id': IMAGE}),
                  'input_manifest': json.dumps({'candidate_sha': 'a' * 40})}
         for key, contents in files.items():
@@ -314,6 +330,37 @@ class OwnerTests(unittest.TestCase):
         self.assertEqual(result['terminal_container_info']['Name'],
                          '/' + result['container_name'])
         self.assertTrue(result['cleanup_separately_required'])
+
+    def test_operational_exclusion_accepts_only_fresh_exact_path(self):
+        checked = owner.BuildOwner(self.request)
+        checked.validate()
+        for path in (str(self.root / 'scratch16-exclusion'),
+                     str(self.root / 'scratch17-exclusion'),
+                     str(self.root / 'arbitrary-exclusion'),
+                     self.request['operational_exclusion_path'] + '/alias'):
+            with self.subTest(path=path):
+                changed = dict(self.request, operational_exclusion_path=path)
+                with self.assertRaises(ValueError):
+                    owner.BuildOwner(changed).validate()
+        changed = dict(self.request, operational_exclusion_consumed=True)
+        with self.assertRaisesRegex(ValueError, 'state is not fresh'):
+            owner.BuildOwner(changed).validate()
+
+    def test_retired_scratch16_path_fails_before_lease_or_docker(self):
+        changed = dict(self.request, operational_exclusion_path=str(self.root / 'scratch16-exclusion'))
+        fake = FakeDocker(changed)
+        with self.assertRaisesRegex(ValueError, 'retired operational exclusion'):
+            owner.BuildOwner(changed, fake).run()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(changed['lease_path']).exists())
+
+    def test_retired_scratch17_path_fails_before_lease_or_docker(self):
+        changed = dict(self.request, operational_exclusion_path=str(self.root / 'scratch17-exclusion'))
+        fake = FakeDocker(changed)
+        with self.assertRaisesRegex(ValueError, 'retired operational exclusion'):
+            owner.BuildOwner(changed, fake).run()
+        self.assertEqual(fake.commands, [])
+        self.assertFalse(Path(changed['lease_path']).exists())
 
     def test_candidate_mode_admission_precedes_lease_and_docker(self):
         manifest_path = Path(self.request['input_manifest'])

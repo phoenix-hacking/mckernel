@@ -33,6 +33,15 @@ ENV = {'PATH': '/usr/sbin:/usr/bin:/sbin:/bin', 'LANG': 'C', 'LC_ALL': 'C',
        'GIT_CONFIG_GLOBAL': '/dev/null'}
 SUDO_DOCKER_PREFIX = ('/usr/bin/sudo', '-A', '/usr/bin/docker',
                       '--host=unix:///var/run/docker.sock')
+# The wrapper acquires this exact host-wide exclusion with O_EXCL before
+# entering this owner.  Keep every prior attempt immutable and reject aliases
+# or arbitrary paths before any lease/container operation.
+OPERATIONAL_EXCLUSION_PATH = '/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json'
+RETIRED_OPERATIONAL_EXCLUSION_PATHS = frozenset({
+    '/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch15-exportset-27.json',
+    '/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch16.json',
+    '/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch17.json',
+})
 
 
 def docker_env():
@@ -852,6 +861,13 @@ class BuildOwner:
 
     def validate(self):
         r = self.r
+        exclusion = r.get('operational_exclusion_path')
+        if not isinstance(exclusion, str) or exclusion in RETIRED_OPERATIONAL_EXCLUSION_PATHS:
+            raise ValueError('retired operational exclusion path')
+        if exclusion != OPERATIONAL_EXCLUSION_PATH:
+            raise ValueError('operational exclusion path is not the exact active path')
+        if r.get('operational_exclusion_consumed') is not False:
+            raise ValueError('operational exclusion state is not fresh')
         exact_sha(r['candidate_sha'])
         if not re.fullmatch('sha256:[0-9a-f]{64}', r['image_id']):
             raise ValueError('full immutable image ID required')

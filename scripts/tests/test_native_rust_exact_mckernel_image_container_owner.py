@@ -67,6 +67,40 @@ class DriverReleasePinTests(unittest.TestCase):
         self.assertEqual(owner.EXPECTED_DRIVER_SHA256, digest(path))
 
 
+class HeavyEntryAuthenticationTests(unittest.TestCase):
+    def test_loader_executes_authenticated_source_bytes_and_rejects_aliases(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / "contract.py"
+            source.write_bytes(Path(owner.__file__).with_name(
+                "native_rust_exact_disk_build_wrapper.py").read_bytes())
+            loaded = owner._load_heavy_entry_contract(source, digest(source))
+            self.assertTrue(hasattr(loaded, "acquire_heavy_operation"))
+            alias = root / "alias.py"
+            alias.symlink_to(source)
+            with self.assertRaisesRegex(owner.OwnerError, "regular source file"):
+                owner._load_heavy_entry_contract(alias, digest(source))
+
+    def test_loader_rejects_identity_change_and_binary_cache_substitution(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / "contract.py"
+            source.write_bytes(Path(owner.__file__).with_name(
+                "native_rust_exact_disk_build_wrapper.py").read_bytes())
+            original_read = owner.Path.read_bytes
+            def mutate(path):
+                data = original_read(path)
+                path.write_bytes(data + b"\n# changed while authenticating\n")
+                return data
+            with mock.patch.object(owner.Path, "read_bytes", mutate):
+                with self.assertRaisesRegex(owner.OwnerError, "identity changed"):
+                    owner._load_heavy_entry_contract(source, digest(source))
+            cache = root / "contract.pyc"
+            cache.write_bytes(b"\x00\x00\x00\x00not-source-bytecode")
+            with self.assertRaises((owner.OwnerError, SyntaxError, ValueError)):
+                owner._load_heavy_entry_contract(cache, digest(cache))
+
+
 class FakeDocker:
     def __init__(self, evidence, image):
         self.evidence = Path(evidence)
@@ -220,11 +254,25 @@ class OwnerTests(unittest.TestCase):
         self.lease = self.root / "lease.json"
         self.old_driver_hash = owner.EXPECTED_DRIVER_SHA256
         self.old_common = owner.COMMON_EXCLUSION
+        self.old_shared_release = owner._SHARED_HEAVY_ENTRY_CONTRACT.HEAVY_ENTRY_CONTRACT_RELEASED
+        self.old_shared_path = owner._SHARED_HEAVY_ENTRY_CONTRACT.SHARED_HEAVY_LOCK_PATH
         owner.EXPECTED_DRIVER_SHA256 = digest(self.driver)
         owner.COMMON_EXCLUSION = str(self.common)
+        # Unit tests use the enabled source contract with a private lock path;
+        # they never issue an execution release or use a real Docker transport.
+        owner._SHARED_HEAVY_ENTRY_CONTRACT.HEAVY_ENTRY_CONTRACT_RELEASED = True
+        owner._SHARED_HEAVY_ENTRY_CONTRACT.SHARED_HEAVY_LOCK_PATH = str(self.root / "shared.lock")
 
-    def test_current_exportset_namespace_retires_selfdigest(self):
-        current = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-26.json"
+    def test_current_image_namespace_retires_previous_host_builds(self):
+        source = Path(owner.__file__).read_text(encoding="utf-8")
+        current = ("/home/holden/mckernel-work/scratch/"
+                   "native-exact-candidate-operational-exclusion-scratch18-image-1.json")
+        self.assertIn(
+            'COMMON_EXCLUSION = "' + current + '"', source,
+            "the production image owner must bind the reviewed successor path",
+        )
+        self.assertEqual(current, "/home/holden/mckernel-work/scratch/"
+                         "native-exact-candidate-operational-exclusion-scratch18-image-1.json")
         retired_exportsets = [
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-18.json",
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-19.json",
@@ -236,7 +284,7 @@ class OwnerTests(unittest.TestCase):
         ]
         retired_selfdigest = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-selfdigest-13.json"
         retired = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-runtimeblob-12.json"
-        self.assertTrue(current.endswith("exportset-26.json"))
+        self.assertTrue(current.endswith("scratch18-image-1.json"))
         self.assertIn(
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-17.json",
             owner.RETIRED_COMMON_EXCLUSIONS,
@@ -252,6 +300,13 @@ class OwnerTests(unittest.TestCase):
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-25.json",
             owner.RETIRED_COMMON_EXCLUSIONS,
         )
+        for retired in (
+                "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-26.json",
+                "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch15-exportset-27.json",
+                "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch16.json",
+                "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch17-image-1.json",
+        ):
+            self.assertIn(retired, owner.RETIRED_COMMON_EXCLUSIONS)
         self.assertNotIn(current, owner.RETIRED_COMMON_EXCLUSIONS)
         self.assertIn(retired_selfdigest, owner.RETIRED_COMMON_EXCLUSIONS)
         self.assertIn(retired, owner.RETIRED_COMMON_EXCLUSIONS)
@@ -264,21 +319,30 @@ class OwnerTests(unittest.TestCase):
             owner.RETIRED_COMMON_EXCLUSIONS,
         )
 
-    def test_consumed_exportset_25_rejected_and_exportset_26_accepted(self):
-        """A disposable request cannot reuse 25 and accepts only the new 26 namespace."""
+    def test_consumed_and_alias_exclusions_rejected_active_image_accepted(self):
+        """Only the exact successor image namespace is admitted."""
         saved = owner.COMMON_EXCLUSION
         try:
-            retired = ("/home/holden/mckernel-work/scratch/"
-                       "native-exact-candidate-operational-exclusion-exportset-25.json")
-            owner.COMMON_EXCLUSION = retired
-            rejected = self.request()
-            rejected["common_exclusion_path"] = retired
-            with self.assertRaisesRegex(owner.OwnerError, "common exclusion"):
-                owner.ImageOwner(rejected).validate()
-
+            retired_paths = (
+                "native-exact-candidate-operational-exclusion-exportset-26.json",
+                "native-exact-candidate-operational-exclusion-scratch15-exportset-27.json",
+                "native-exact-candidate-operational-exclusion-scratch16.json",
+            )
             active = ("/home/holden/mckernel-work/scratch/"
-                      "native-exact-candidate-operational-exclusion-exportset-26.json")
+                      "native-exact-candidate-operational-exclusion-scratch18-image-1.json")
             owner.COMMON_EXCLUSION = active
+            for name in retired_paths:
+                rejected = self.request()
+                rejected["common_exclusion_path"] = str(Path(active).with_name(name))
+                with self.assertRaisesRegex(owner.OwnerError, "common exclusion"):
+                    owner.ImageOwner(rejected).validate()
+            for alias in (active + "/", active.replace("scratch18-image-1", "scratch18-image-01"),
+                          active.replace("/scratch/", "/scratch/./"),
+                          active.replace("scratch18-image-1", "arbitrary-image")):
+                rejected = self.request()
+                rejected["common_exclusion_path"] = alias
+                with self.assertRaisesRegex(owner.OwnerError, "common exclusion"):
+                    owner.ImageOwner(rejected).validate()
             accepted = self.request()
             accepted["common_exclusion_path"] = active
             owner.ImageOwner(accepted).validate()
@@ -287,10 +351,69 @@ class OwnerTests(unittest.TestCase):
         finally:
             owner.COMMON_EXCLUSION = saved
 
+    def test_common_exclusion_uses_o_excl_and_retains_original_record(self):
+        first = owner.CommonExclusion(self.common, {"attempt": "first"})
+        first.acquire()
+        original = self.common.read_bytes()
+        first_identity = self.common.stat()
+        second = owner.CommonExclusion(self.common, {"attempt": "second"})
+        with self.assertRaisesRegex(owner.OwnerError, "common exclusion exists"):
+            second.acquire()
+        self.assertEqual(self.common.read_bytes(), original)
+        after = self.common.stat()
+        self.assertEqual((after.st_dev, after.st_ino, after.st_size, after.st_mode),
+                         (first_identity.st_dev, first_identity.st_ino,
+                          first_identity.st_size, first_identity.st_mode))
+
     def tearDown(self):
         owner.EXPECTED_DRIVER_SHA256 = self.old_driver_hash
         owner.COMMON_EXCLUSION = self.old_common
+        owner._SHARED_HEAVY_ENTRY_CONTRACT.HEAVY_ENTRY_CONTRACT_RELEASED = self.old_shared_release
+        owner._SHARED_HEAVY_ENTRY_CONTRACT.SHARED_HEAVY_LOCK_PATH = self.old_shared_path
         self.tmp.cleanup()
+
+    def test_shared_contract_is_fail_closed_before_image_exclusion_or_docker(self):
+        request = self.request()
+        fake = FakeDocker(self.evidence, self.image)
+        owner._SHARED_HEAVY_ENTRY_CONTRACT.HEAVY_ENTRY_CONTRACT_RELEASED = False
+        with self.assertRaisesRegex(ValueError, "entry contract not released"):
+            owner.ImageOwner(request, docker=fake).run()
+        self.assertFalse(self.common.exists())
+        self.assertFalse(self.lease.exists())
+        self.assertEqual(fake.calls, [])
+
+    def test_cross_kind_shared_lock_blocks_before_image_exclusion_or_docker(self):
+        request = self.request()
+        fake = FakeDocker(self.evidence, self.image)
+        shared_path = Path(owner._SHARED_HEAVY_ENTRY_CONTRACT.SHARED_HEAVY_LOCK_PATH)
+        owner._SHARED_HEAVY_ENTRY_CONTRACT._acquire_lock(shared_path, request, "build")
+        with self.assertRaisesRegex(ValueError, "operational exclusion already exists"):
+            owner.ImageOwner(request, docker=fake).run()
+        self.assertFalse(self.common.exists())
+        self.assertFalse(self.lease.exists())
+        self.assertEqual(fake.calls, [])
+        record = json.loads(shared_path.read_text())
+        self.assertEqual(record["kind"], "build")
+        self.assertEqual(record["pid"], os.getpid())
+        self.assertTrue(record["starttime"])
+        self.assertTrue(record["boot_id"])
+        self.assertEqual(record["request_sha256"], owner._SHARED_HEAVY_ENTRY_CONTRACT._request_hash(request))
+
+    def test_shared_image_lock_precedes_authenticated_validation(self):
+        events = []
+        contract = owner._SHARED_HEAVY_ENTRY_CONTRACT
+        original_acquire = contract.acquire_heavy_operation
+        def acquire(request, kind):
+            events.append("shared")
+            return original_acquire(request, kind)
+        def stop_validation(_instance):
+            events.append("validate")
+            raise owner.OwnerError("validation stopped for ordering probe")
+        with mock.patch.object(contract, "acquire_heavy_operation", acquire), \
+             mock.patch.object(owner.ImageOwner, "validate", stop_validation):
+            with self.assertRaisesRegex(owner.OwnerError, "ordering probe"):
+                owner.ImageOwner(self.request()).run()
+        self.assertEqual(events, ["shared", "validate"])
 
     def test_transport_lease_and_signal_primitives_are_reused(self):
         """The image owner must not fork a second Docker/lease implementation."""

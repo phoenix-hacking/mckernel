@@ -107,6 +107,10 @@ class PreparationTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)
+        self.old_shared_release = prep._SHARED_HEAVY_ENTRY_CONTRACT.HEAVY_ENTRY_CONTRACT_RELEASED
+        self.old_shared_path = prep._SHARED_HEAVY_ENTRY_CONTRACT.SHARED_HEAVY_LOCK_PATH
+        prep._SHARED_HEAVY_ENTRY_CONTRACT.HEAVY_ENTRY_CONTRACT_RELEASED = True
+        prep._SHARED_HEAVY_ENTRY_CONTRACT.SHARED_HEAVY_LOCK_PATH = str(self.root / 'shared.lock')
         self.lock = self.root / 'toolchain.json'
         self.lock.write_text(json.dumps({'direct_artifacts': [
             {'name': 'rust', 'nevra': 'rust-0:1.92.0-1.el10.x86_64'}]}))
@@ -115,7 +119,53 @@ class PreparationTests(unittest.TestCase):
                          toolchain_lock=self.lock)
 
     def tearDown(self):
+        prep._SHARED_HEAVY_ENTRY_CONTRACT.HEAVY_ENTRY_CONTRACT_RELEASED = self.old_shared_release
+        prep._SHARED_HEAVY_ENTRY_CONTRACT.SHARED_HEAVY_LOCK_PATH = self.old_shared_path
         self.temp.cleanup()
+
+    def test_shared_contract_is_fail_closed_before_tool_image_roots_or_docker(self):
+        fake = FakeDocker()
+        prep._SHARED_HEAVY_ENTRY_CONTRACT.HEAVY_ENTRY_CONTRACT_RELEASED = False
+        with self.assertRaisesRegex(ValueError, 'entry contract not released'):
+            prep.prepare(**self.args, runner=fake)
+        self.assertFalse((self.root / 'out').exists())
+        self.assertFalse((self.root / 'ev').exists())
+        self.assertFalse((self.root / 'lease').exists())
+        self.assertEqual(fake.commands, [])
+
+    def test_cross_kind_shared_lock_blocks_before_tool_image_roots_or_docker(self):
+        fake = FakeDocker()
+        request = {'kind': 'tool-image', 'candidate_sha': self.args['candidate_sha'],
+                   'base_image': prep.BASE_IMAGE,
+                   'output_root': str((self.root / 'out').resolve()),
+                   'evidence_root': str((self.root / 'ev').resolve()),
+                   'lease_path': str(self.args['lease_path'].resolve()),
+                   'toolchain_lock': str(self.lock.resolve())}
+        prep._SHARED_HEAVY_ENTRY_CONTRACT._acquire_lock(
+            Path(prep._SHARED_HEAVY_ENTRY_CONTRACT.SHARED_HEAVY_LOCK_PATH), request, 'build')
+        with self.assertRaisesRegex(ValueError, 'operational exclusion already exists'):
+            prep.prepare(**self.args, runner=fake)
+        self.assertFalse((self.root / 'out').exists())
+        self.assertFalse((self.root / 'ev').exists())
+        self.assertFalse((self.root / 'lease').exists())
+        self.assertEqual(fake.commands, [])
+
+    def test_shared_image_lock_precedes_tool_resource_measurement(self):
+        events = []
+        contract = prep._SHARED_HEAVY_ENTRY_CONTRACT
+        original_acquire = contract.acquire_heavy_operation
+        def acquire(request, kind):
+            events.append('shared')
+            return original_acquire(request, kind)
+        def measure(*args, **kwargs):
+            events.append('measure')
+            raise prep.PreparationError('measurement stopped for ordering probe')
+        with mock.patch.object(contract, 'acquire_heavy_operation', acquire), \
+             mock.patch.object(prep, 'measure', measure):
+            with self.assertRaisesRegex(prep.PreparationError, 'ordering probe'):
+                prep.prepare(**self.args, runner=FakeDocker())
+        self.assertEqual(events, ['shared', 'measure'])
+        self.assertTrue(Path(prep._SHARED_HEAVY_ENTRY_CONTRACT.SHARED_HEAVY_LOCK_PATH).exists())
 
     def execute(self, fake):
         original = owner.Path.read_text
