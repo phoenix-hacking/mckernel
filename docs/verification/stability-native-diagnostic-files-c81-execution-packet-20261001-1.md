@@ -98,8 +98,10 @@ truncation, timeout or failed oracle, stop immediately, retain all evidence,
 and do not retry. Cleanup must be authenticated: preserve raw streams/status,
 serial/debugcon/kernel log, full QMP and argv, Docker identities/statuses,
 inspect/OOM state, owner/root-lock/cgroup identities, first and secondary
-failures, then prove final parent/attempt/evidence-sibling absence. Never
-delete or rewrite prior failure evidence.
+failures, then prove authenticated container absence, owner/QEMU/Docker-client
+retirement and development-lock release. Preserve the parent, attempt and
+root-owned evidence sibling with their exact identities and captured bytes;
+never delete or rewrite diagnostic or prior failure evidence.
 
 This diagnostic observes the files path only. A pass is diagnostic evidence,
 not formal application acceptance, production acceptance, or a memory-path
