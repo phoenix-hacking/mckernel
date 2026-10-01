@@ -1537,3 +1537,13 @@ candidate and separately reviewed pinned three-module build, then bind a new
 module set before generating any new futex manifest or one-shot guest packet.
 The existing two packets remain spent and FAIL.  Diagnostic PASS count remains
 five and formal application/catalog acceptance remains zero.
+
+Checkpoint 296 closes the prior host effect-boundary source-review finding, not
+shutdown runtime.  Actual `finish_shutdown`, admission and registry bodies now
+execute the rejected irreversible-publication path with admission retained
+closed, surviving callback/lease rejection, same-generation retry and stale
+generation controls.  Rust 1.92 passes 66/66 and independent review returns
+`PASS_SHUTDOWN_EFFECT_CORRECTION`.  Exact additive evidence is
+`docs/verification/evidence/native-exact-shutdown-effect-boundary-followup-source-checkpoint-20261001.json`.
+SMP v5 wiring, sender stop, IRQ drain, boot-route ownership, CPU reclamation
+and a real shutdown guest remain open; no acceptance counter moves.

@@ -149,6 +149,7 @@
     ,"native_diag_c81_futex_correction_failure": "docs/verification/evidence/native-exact-c81-futex-diagnostic-correction-failure-20261001.json"
     ,"native_diag_c81_futex_terminal_trace_source": "docs/verification/evidence/native-exact-c81-futex-terminal-trace-source-checkpoint-20261001.json"
     ,"shutdown_effect_boundary": "docs/verification/evidence/native-exact-shutdown-effect-boundary-source-checkpoint-20261001.json"
+    ,"shutdown_effect_boundary_followup": "docs/verification/evidence/native-exact-shutdown-effect-boundary-followup-source-checkpoint-20261001.json"
     ,"shutdown_observer": "docs/verification/stability-native-shutdown-observer-source-success-20260928-1.json"
     ,"shutdown_registry": "docs/verification/stability-native-shutdown-registry-source-success-20260928-1.json"
     ,"shutdown_admission": "docs/verification/stability-native-shutdown-admission-source-success-20260928-1.json"
@@ -1809,13 +1810,14 @@
       "area": "LIFE",
       "title": "Lifecycle state and ownership order",
       "status": "partial",
-      "result": "The allocation-free registry transaction and additive v5 host shutdown/admission boundary pass exact Rust 1.92 execution and independent source review. The effect-aware host transaction now passes 66 actual-body tests, including fail-closed post-effect corruption and same-generation retry. SMP still registers v4; native CPU stop, IRQ-work drain and resource restoration remain unimplemented and unexecuted.",
+      "result": "The allocation-free registry transaction and additive v5 host shutdown/admission boundary pass exact Rust 1.92 execution and independent source review. The effect-aware host transaction passes 66 actual-body tests, including fail-closed rejected irreversible publication, surviving callback admission rejection, stale generation and same-generation retry. SMP still registers v4; native CPU stop, IRQ-work drain and resource restoration remain unimplemented and unexecuted.",
       "next_check": "Implement generation-bound sender closure and callback drain, then independently retained guest parking and exact per-generation IRQ-work inventory/drain before STOP/ACK or wiring v5; then build and review the production ABI.",
       "evidence": [
         "shutdown_registry",
         "shutdown_admission",
         "shutdown_observer",
         "shutdown_effect_boundary",
+        "shutdown_effect_boundary_followup",
         "rocky_lean_source",
         "app",
         "plan"

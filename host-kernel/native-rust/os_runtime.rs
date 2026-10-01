@@ -432,6 +432,10 @@ fn finish_shutdown(
             // an unexpected registry word cannot reopen the callback surface.
             admission.commit();
             if let Err(error) = guard.mark_irreversible() {
+                // ShutdownGuard may restore only the registry word on this
+                // rejected publication. The effect boundary is still final:
+                // the committed admission claim must remain closed while the
+                // registry error is returned to the caller.
                 return error.errno();
             }
             shutdown_errno(result)

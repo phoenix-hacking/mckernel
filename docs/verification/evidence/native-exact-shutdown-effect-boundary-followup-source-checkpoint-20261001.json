@@ -1,0 +1,30 @@
+{
+  "schema": "mckernel.native-exact-shutdown-effect-boundary-followup.v1",
+  "recorded_at": "2026-10-01T09:08:00Z",
+  "base_commit": "7f391a889baac7c6607354dc655de47c52dc1673",
+  "status": "PASS_SHUTDOWN_EFFECT_CORRECTION",
+  "scope": "source and actual-production-body fixture only; no module build, SMP wiring, guest shutdown, IRQ drain, CPU reclamation, or runtime acceptance",
+  "source": {
+    "path": "host-kernel/native-rust/os_runtime.rs",
+    "sha256": "aa9fa37f67762565c3d1be1a0c7662736932a136bc43a3fd3ef2deb319c2a4b6",
+    "effect": "a rejected irreversible-state publication returns the registry errno while the already committed shutdown admission claim remains closed"
+  },
+  "fixture": {
+    "path": "scripts/tests/fixtures/ihk_os_runtime_compile.rs",
+    "sha256": "e8307a28d9f10cb40b35b71f84afe90876df58e19ef9df87cc31a62513ce9f92",
+    "driver": "scripts/tests/test_ihk_os_runtime.py",
+    "driver_sha256": "e1201405164379a2b8d233809bc52aa577b374273eb9388d2025bf8b244372b6",
+    "compiler": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "result": "66 tests passed; 0 failed"
+  },
+  "executable_coverage": [
+    "actual finish_shutdown, Admission and ShutdownGuard bodies",
+    "mark_irreversible rejection after admission is committed closed",
+    "new admission remains rejected and registry status/references remain unchanged",
+    "closure rejects a surviving callback while its lease remains live",
+    "failed and successful same-generation retry",
+    "stale-generation rejection"
+  ],
+  "independent_review": "PASS_SHUTDOWN_EFFECT_CORRECTION",
+  "next": "finish reviewed sender stop, IRQ-work drain, boot-route ownership and v5 SMP wiring before any shutdown guest"
+}

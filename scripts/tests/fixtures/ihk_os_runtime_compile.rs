@@ -1328,6 +1328,9 @@ mod shutdown_effect_tests {
         let handle = ready(&registry);
         let lease = registry.acquire(handle).unwrap();
         let gate = Admission::new();
+        let surviving_callback = gate.enter().unwrap();
+        assert!(matches!(gate.close_for_shutdown(), Err(error) if error.to_errno() == -16));
+        drop(surviving_callback);
         let admission = gate.close_for_shutdown().unwrap();
         let guard = registry.begin_shutdown(handle).unwrap();
         assert_eq!(finish_shutdown(guard, admission, ShutdownCallbackOutcome::PostEffectFailure(-5)), -5);

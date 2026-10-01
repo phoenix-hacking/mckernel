@@ -12163,6 +12163,23 @@ guest packet.  Neither failed packet may be reused.  Diagnostic PASS count
 remains five, formal application/catalog acceptance remains zero, shutdown is
 separately blocked and unwired, and the OS goal remains active and incomplete.
 
+Continuation checkpoint 296, 2026-10-01: the host shutdown effect boundary now
+has the additive actual-body evidence requested by independent review; shutdown
+is still unwired and unaccepted.  The executed production `finish_shutdown`,
+`Admission` and `ShutdownGuard` bodies prove that a rejected irreversible-state
+publication returns its registry errno after committing admission closed.  New
+admission remains rejected, status/references remain unchanged, and the fixture
+also covers a surviving callback lease, rejected close, failed and successful
+same-generation retry and stale-generation rejection.  Rust 1.92 passes 66/66
+focused tests; independent review returns `PASS_SHUTDOWN_EFFECT_CORRECTION`.
+
+Source/fixture hashes are `aa9fa37f...a4b6` and `e8307a28...9f92`; exact
+evidence is
+`docs/verification/evidence/native-exact-shutdown-effect-boundary-followup-source-checkpoint-20261001.json`.
+This proves only the host transaction boundary.  SMP still registers v4 and
+sender stop, IRQ-work drain, boot-route ownership, CPU reclamation and an actual
+shutdown guest remain open.  No diagnostic or formal acceptance count moves.
+
 Continuation checkpoint 293, 2026-10-01: the sole bounded direct-futex
 record-order correction and fresh preparation pass independent review; no
 second guest has run.  Evaluator `2aa9b025...f9356` now requires one explicit
