@@ -1,0 +1,49 @@
+{
+  "schema": "mckernel.native-exact.historical-output-archives-reconciliation.v1",
+  "recorded_at_utc": "2026-10-01T16:36:25Z",
+  "authority": "User-requested external archival completed; coordinator reconciled the consolidated mapping and live path states.",
+  "mapping": {
+    "path": "/home/holden/mckernel-work/retained-exact-candidates/HISTORICAL-BUILD-ARCHIVES-20261001.md",
+    "device": 66306,
+    "inode": 47498731,
+    "size": 3807,
+    "mode": "0664",
+    "uid": 1000,
+    "gid": 1000,
+    "links": 1,
+    "sha256": "844c84c18a270fec97f722d16e2c42fc5b21e5a2700677a0d9b538a7aab2dd64"
+  },
+  "outputs": [
+    {
+      "name": "native-exact-build-output-74085185-scratch-3",
+      "expanded": "absent",
+      "archive_sha256": "60200b29d0c712a7ebc860c396ebd9f2fcb45cf956a40768ee4dc92527c03a68",
+      "archive_size": 236702764
+    },
+    {
+      "name": "native-exact-build-output-dce800af-scratch-5",
+      "expanded": "absent",
+      "archive_sha256": "0677b2aa499d02d76aebd8048702c99f7dbe991f4051ff959df4dac3157028c5",
+      "archive_size": 1166241090
+    },
+    {
+      "name": "native-exact-build-output-e8bece7f-scratch-10",
+      "expanded": "absent",
+      "archive_sha256": "722db6bffe13511de2b4fe34964bd2df305a32170c41db398ca9f34334fcaa0a",
+      "archive_size": 1170306352
+    },
+    {
+      "name": "native-exact-build-output-4e99a82c-scratch-12",
+      "expanded": "present-operational-read-only-input",
+      "archive_sha256": "7810f64f71256ae1715984e3f19197f303cb22069a5e03e2de599c7c035c9c7d",
+      "archive_size": 1170349937
+    }
+  ],
+  "capacity": {
+    "host_available_bytes": 47874277376,
+    "scratch_available_bytes": 40590602240,
+    "user_reported_fstrim_complete": true
+  },
+  "policy": "Do not expect or recreate scratch3, scratch5 or scratch10 expanded outputs unless explicitly restoring their verified archives. Preserve scratch12 expanded output as an operational read-only input. Preserve active scratch18 inputs, evidence, leases and current images.",
+  "acceptance_credit": false
+}

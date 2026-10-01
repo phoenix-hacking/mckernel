@@ -13299,3 +13299,27 @@ all ownership safeguards.  The recovered headroom is reserved for the next
 fresh scratch18 build.  Cleanup source remains unexecuted while its atomic
 active-ownership correction is independently reviewed; no acceptance counters
 change and the OS remains incomplete.
+
+Continuation checkpoint 331, 2026-10-01: the user completed the expanded-output
+archival sweep for scratch3, scratch5 and scratch10; those paths are absent and
+must not be recreated except from their verified archives.  Scratch12 has a
+verified archive but remains expanded as an operational read-only image input.
+The consolidated restoration map is
+`/home/holden/mckernel-work/retained-exact-candidates/HISTORICAL-BUILD-ARCHIVES-20261001.md`,
+SHA-256 `844c84c1...dd64`; additive reconciliation is
+`native-exact-historical-output-archives-reconciliation-20261001.json`.
+Post-fstrim host/scratch free bytes are 47,874,277,376 / 40,590,602,240.
+External read-only archival of `native-build-base-24a151fe` is still in progress;
+do not touch it, and preserve its expanded tree afterward because historical
+helpers consume it.
+
+The accidental synthetic v1 scratch18 cleanup plan/journal is now independently
+approved for bounded archival at source/tests hashes `30396cd8...04a8e` /
+`90b56539...2697b`.  Eighteen tests cover all eight mutation crash frontiers;
+actual validate-only returns `PASS_VALIDATE_ONLY`.  Exact original file archive
+identity is enforced and no object is deleted.  Retained marker directories are
+shape-bound rather than historically inode-bound, an explicit non-acceptance
+limitation.  Next publish/fetch these bytes, consume the archival once, and
+postflight its exact file archives before running the separately reviewed real
+ownership cleanup.  No build or guest ran; counters remain unchanged and the OS
+is incomplete.
