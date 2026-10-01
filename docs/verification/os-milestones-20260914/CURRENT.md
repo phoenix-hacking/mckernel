@@ -13352,3 +13352,25 @@ schema-v5 terminal state; after its separate execution release, run the one
 serialized candidate build, then postlink/image preparation and diagnostic
 startup, memory, files, threads/futexes, signals and shutdown guests.  The OS
 remains incomplete.
+
+Continuation checkpoint 333, 2026-10-01: the fetched retry2 preparation at
+`d97fd046f76ffff10b2d98eb1130969d77bbba5b` passed 22/22 Python 3.8 tests and
+independent adversarial review, then completed its preparation-only transaction.
+The terminal journal contains all eight ordered events ending in `complete`.
+The fresh request remains unreleased for execution at inode 57643, size 3,134,
+SHA-256 `eed75f5d...f106`; plan/journal/mutex remain at exact inodes
+57641/57642/57640 and hashes `3b22b670...fcd6`, `41fc8f0b...f133` and the empty
+digest.  Fresh empty output/evidence/owner-evidence directories are inodes
+5374028/5374032/5767173.  Exact evidence is
+`native-exact-scratch18-retry2-prepared-20261001.json`.  No Docker container,
+build or guest was started by preparation.
+
+The separate retry2 execution release now passes 11/11 Python 3.8 tests and
+independent expert review at source/test hashes `5c4c30db...004fd` /
+`5499225c...b2b59`.  It binds all prepared identities and full hashes, fetched
+self/dependency blobs, the terminal cleanup, exact request bytes, fresh
+privileged read-only census, O_EXCL derived publication and the authenticated
+in-memory wrapper through its single `run_request` call.  Before execution,
+publish/fetch these exact bytes, run real validate-only, remeasure capacity and
+then consume `--execute` once.  This is build admission only: candidate and
+application counters remain unchanged, and the OS remains incomplete.
