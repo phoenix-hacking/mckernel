@@ -278,7 +278,8 @@ class WrapperTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             script = Path(td) / 'native_rust_exact_build_container_owner.py'
             script.write_text('print("parser-script-reached")\n')
-            for options in (['-IW', 'ignore'], ['-IX', 'dev'], ['-IBWignore'], ['-IBXdev']):
+            for options in (['-IW', 'ignore'], ['-IX', 'dev'], ['-IBWignore'], ['-IBXdev'],
+                            ['-W', ''], ['-X', ''], ['-IW', ''], ['-IX', '']):
                 with self.subTest(options=options):
                     result = subprocess.run([sys.executable] + options + [str(script)],
                                             capture_output=True, timeout=5)
@@ -295,6 +296,36 @@ class WrapperTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, 'command line exceeds bound'):
                 namespace['cmdline'](91)
         stream.read.assert_called_once_with(wrapper.MAX_CMDLINE_BYTES + 1)
+
+    def test_empty_option_operands_survive_both_complete_census_paths(self):
+        namespace = {'__name__': 'observer_test'}
+        exec(wrapper.PRIVILEGED_PROCESS_OBSERVER_SOURCE, namespace)
+        entry = Path('/proc/900001')
+        script = '/x/native_rust_exact_build_container_owner.py'
+        expected = [{'pid': 900001, 'starttime': '1234', 'executable': '/usr/bin/python3.8'}]
+        for option in ('-W', '-X', '-IW', '-IX'):
+            raw = b'python3\0' + option.encode() + b'\0\0' + script.encode() + b'\0'
+            with self.subTest(option=option), \
+                 mock.patch.object(Path, 'iterdir', return_value=[entry]), \
+                 mock.patch.object(Path, 'open', side_effect=lambda *a, **k: io.BytesIO(raw)), \
+                 mock.patch.object(Path, 'read_text', return_value='boot'), \
+                 mock.patch.object(wrapper, '_proc_starttime', return_value='1234'), \
+                 mock.patch.object(wrapper.os, 'geteuid', return_value=0), \
+                 mock.patch.object(wrapper.os, 'readlink', return_value='/usr/bin/python3.8'), \
+                 mock.patch.dict(namespace, {'caller': lambda: (91, '2345'), 'st': lambda pid: '1234'}), \
+                 mock.patch('builtins.print') as output:
+                self.assertEqual(wrapper._dispatcher_processes(), expected)
+                self.assertEqual(namespace['cmdline'](900001), ['python3', option, '', script])
+                namespace['observe']()
+                self.assertEqual(json.loads(output.call_args.args[0])['processes'], expected)
+        raw = b'python3\0' + b'\0' * wrapper.MAX_ARG_COUNT
+        with mock.patch.object(Path, 'iterdir', return_value=[entry]), \
+             mock.patch.object(Path, 'open', side_effect=lambda *a, **k: io.BytesIO(raw)), \
+             mock.patch.object(wrapper, '_proc_starttime', return_value='1234'):
+            with self.assertRaisesRegex(wrapper.AdmissionError, 'argument exceeds bound'):
+                wrapper._dispatcher_processes()
+            with self.assertRaisesRegex(RuntimeError, 'argument exceeds bound'):
+                namespace['cmdline'](900001)
 
     def test_bounded_observer_capture_caps_both_streams_and_reaps(self):
         for payload in ("import os; os.write(1, b'x' * 2000000)",
@@ -374,13 +405,169 @@ class WrapperTests(unittest.TestCase):
                      json.dumps(dict(good, State='unknown')).encode(),
                      json.dumps(dict(good, ID=True)).encode(), json.dumps(good).encode()):
             result = types.SimpleNamespace(returncode=0, stdout=data, stderr=b'')
-            with mock.patch.object(wrapper.subprocess, 'run', return_value=result):
+            with mock.patch.object(wrapper, '_run_bounded_observer', return_value=result):
                 with self.assertRaises(wrapper.AdmissionError): wrapper._dispatcher_containers()
-        with mock.patch.object(wrapper.subprocess, 'run', return_value=types.SimpleNamespace(returncode=0, stdout=b'')) as run, \
+        with mock.patch.object(wrapper, '_run_bounded_observer', return_value=types.SimpleNamespace(returncode=0, stdout=b'')) as run, \
              mock.patch.dict(os.environ, {'SUDO_ASKPASS': '/synthetic-helper', 'EVIL': 'discard'}):
             self.assertEqual(wrapper._dispatcher_containers(), [])
-            self.assertEqual(run.call_args.kwargs['env'].get('SUDO_ASKPASS'), '/synthetic-helper')
-            self.assertNotIn('EVIL', run.call_args.kwargs['env'])
+            self.assertEqual(run.call_args.args[2].get('SUDO_ASKPASS'), '/synthetic-helper')
+            self.assertNotIn('EVIL', run.call_args.args[2])
+
+    def test_recovery_census_cli_is_read_only_and_strict(self):
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / 'request.json'
+            raw = json.dumps(request(self.lock_dir)).encode()
+            path.write_bytes(raw)
+            digest = hashlib.sha256(raw).hexdigest()
+            before = path.stat()
+            with mock.patch.object(wrapper, 'acquire_heavy_operation') as shared, \
+                 mock.patch.object(wrapper, '_acquire_exclusion') as attempt, \
+                 mock.patch.object(wrapper, '_load_owner') as owner, \
+                 mock.patch.object(wrapper, 'run_request') as run, \
+                 mock.patch('builtins.print') as output:
+                self.assertEqual(wrapper.main([str(path), '--census-only', '--request-sha256', digest]), 0)
+            shared.assert_not_called(); attempt.assert_not_called(); owner.assert_not_called(); run.assert_not_called()
+            report = json.loads(output.call_args.args[0])
+            self.assertEqual(set(report), {'schema', 'status', 'execution_released', 'boot_id', 'request',
+                                          'processes', 'containers', 'leases', 'resources'})
+            self.assertEqual(report['status'], 'PASS_READ_ONLY')
+            self.assertFalse(report['execution_released'])
+            self.assertEqual(report['request']['sha256'], digest)
+            self.assertEqual(report['request']['inode'], before.st_ino)
+            self.assertEqual(report['request']['normalized_sha256'], wrapper._request_hash(json.loads(raw)))
+            self.assertEqual(path.stat(), before)
+            self.assertEqual(path.read_bytes(), raw)
+            self.assertEqual(list(Path(td).iterdir()), [path])
+            for args in ([str(path), '--census-only'],
+                         [str(path), '--census-only', '--validate-only', '--request-sha256', digest],
+                         [str(path), '--request-sha256', digest],
+                         [str(path), '--census', '--request-sha256', digest]):
+                with self.subTest(args=args), mock.patch('sys.stderr', new_callable=io.StringIO):
+                    with self.assertRaises(SystemExit): wrapper.main(args)
+
+    def test_recovery_census_binds_open_descriptor_and_rejects_malformed_inputs(self):
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / 'request.json'
+            valid_raw = json.dumps(request(self.lock_dir)).encode()
+            for raw in (b'[]', b'{"host_floor":NaN}', b'{"host_floor":1,"host_floor":2}',
+                        b'{"host_floor":true}', b'x' * (wrapper.MAX_REPORT_BYTES + 1)):
+                path.write_bytes(raw)
+                with self.subTest(raw=raw[:60]), self.assertRaises(wrapper.AdmissionError):
+                    wrapper.census_request(path, hashlib.sha256(raw).hexdigest())
+            path.write_bytes(valid_raw)
+            digest = hashlib.sha256(valid_raw).hexdigest()
+            with self.assertRaises(wrapper.AdmissionError): wrapper.census_request(path, '0' * 64)
+            with self.assertRaises(wrapper.AdmissionError): wrapper.census_request(path, None)
+            link = Path(td) / 'link'; link.symlink_to(path)
+            with self.assertRaises(wrapper.AdmissionError): wrapper.census_request(link, digest)
+            good = copy.deepcopy(self.reconcile_mock.return_value)
+            def change_bytes(req):
+                path.write_bytes(valid_raw + b' ')
+                return good
+            def replace_inode(req):
+                path.unlink(); path.write_bytes(valid_raw)
+                return good
+            for mutate in (change_bytes, replace_inode):
+                path.write_bytes(valid_raw)
+                with self.subTest(mutate=mutate.__name__), \
+                     mock.patch.object(wrapper, '_dispatcher_reconcile', side_effect=mutate), \
+                     self.assertRaisesRegex(wrapper.AdmissionError, 'changed during observations'):
+                    wrapper.census_request(path, digest)
+            path.write_bytes(valid_raw)
+            for field, value in (('processes', [{'pid': 42}]), ('containers', [{'ID': 'live'}]),
+                                 ('leases', [{}]), ('resources', {'host_free': float('nan')})):
+                bad = copy.deepcopy(good); bad[field] = value
+                with self.subTest(field=field), mock.patch.object(wrapper, '_dispatcher_reconcile', return_value=bad), \
+                     self.assertRaises(wrapper.AdmissionError):
+                    wrapper.census_request(path, digest)
+            with mock.patch.object(wrapper, '_dispatcher_reconcile', side_effect=wrapper.AdmissionError('observer timed out')), \
+                 mock.patch('builtins.print') as output:
+                self.assertEqual(wrapper.main([str(path), '--census-only', '--request-sha256', digest]), 1)
+                self.assertEqual(json.loads(output.call_args.args[0]),
+                                 {'schema': 'mckernel.heavy-recovery-census.v1', 'status': 'REFUSED'})
+            with self.assertRaisesRegex(wrapper.AdmissionError, 'report exceeds bound'):
+                wrapper._encode_census_report({'x': 'y' * wrapper.MAX_REPORT_BYTES})
+            with self.assertRaisesRegex(wrapper.AdmissionError, 'report malformed'):
+                wrapper._encode_census_report({'x': float('nan')})
+
+    def test_recovery_census_rejects_actual_ancestor_replacement(self):
+        for replacement in ('different-bytes', 'same-bytes', 'symlink', 'mode-change'):
+            with self.subTest(replacement=replacement), tempfile.TemporaryDirectory() as td:
+                root = Path(td)
+                ancestor = root / 'ancestor'
+                parent = ancestor / 'requests'
+                parent.mkdir(parents=True)
+                path = parent / 'request.json'
+                raw = json.dumps(request(self.lock_dir)).encode()
+                path.write_bytes(raw)
+                original_inode = path.stat().st_ino
+                good = copy.deepcopy(self.reconcile_mock.return_value)
+                def change_ancestor(req):
+                    if replacement == 'mode-change':
+                        ancestor.chmod(0o700)
+                    else:
+                        ancestor.rename(root / 'detached')
+                        if replacement == 'symlink':
+                            ancestor.symlink_to(root / 'detached', target_is_directory=True)
+                        else:
+                            parent.mkdir(parents=True)
+                            path.write_bytes(raw if replacement == 'same-bytes' else b'replacement')
+                            self.assertNotEqual(path.stat().st_ino, original_inode)
+                    return good
+                ancestor.chmod(0o755)
+                with mock.patch.object(wrapper, '_dispatcher_reconcile', side_effect=change_ancestor):
+                    with self.assertRaises(wrapper.AdmissionError):
+                        wrapper.census_request(path, hashlib.sha256(raw).hexdigest())
+                if replacement != 'mode-change':
+                    self.assertEqual((root / 'detached/requests/request.json').read_bytes(), raw)
+
+    def test_recovery_subprocess_keeps_real_wrapper_caller_identity(self):
+        # Test-only copy instruments observation boundaries; production offers
+        # no environment hook or caller spoof. The embedded caller() reads the
+        # actual /proc identity of the wrapper subprocess launched by recovery.
+        fixture = r'''
+def _test_permission(pid): raise PermissionError()
+_proc_starttime = _test_permission
+def _test_observe(command, source, env, timeout=15):
+    assert command == ['/usr/bin/sudo', '-A', '/usr/bin/python3', '-I', '-B', '-']
+    assert source == PRIVILEGED_PROCESS_OBSERVER_SOURCE.encode()
+    import sys
+    probe = source.decode().replace('if __name__ == "__main__": observe()', '')
+    probe += '\nassert caller()[0] == os.getppid()\n'
+    probe += 'print(json.dumps({"schema":"mckernel.heavy-process-observation.v1", "status":"PASS_READ_ONLY", "boot_id":Path("/proc/sys/kernel/random/boot_id").read_text().strip(), "processes":[]}))\n'
+    return subprocess.run([sys.executable, '-I', '-B', '-'], input=probe.encode(), capture_output=True, timeout=5)
+_run_bounded_observer = _test_observe
+_dispatcher_containers = lambda: []
+_dispatcher_leases = lambda request: []
+_dispatcher_resources = lambda request: {'host_free': 64 * 2**30, 'scratch_free': 64 * 2**30, 'memory_available': 32 * 2**30, 'cpus': [2,3,4,5]}
+def _test_mutation(*args, **kwargs): raise AssertionError('mutation entered')
+acquire_heavy_operation = _acquire_exclusion = _load_owner = run_request = _test_mutation
+'''
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            script = root / 'native_rust_exact_disk_build_wrapper.py'
+            source = Path(wrapper.__file__).read_text()
+            marker = 'if __name__ == "__main__":\n    raise SystemExit(main())'
+            self.assertEqual(source.count(marker), 1)
+            script.write_text(source.replace(marker, fixture + '\n' + marker))
+            caller = root / 'recovery_caller.py'
+            caller.write_text('import subprocess,sys\np=subprocess.run([sys.executable,"-I","-B"]+sys.argv[1:],capture_output=True,timeout=10)\nsys.stdout.buffer.write(p.stdout)\nsys.stderr.buffer.write(p.stderr)\nsys.exit(p.returncode)\n')
+            path = root / 'request.json'
+            # Read the production constant from the unmodified source namespace.
+            production = {'__name__': 'synthetic_import', '__file__': str(script)}
+            exec(source, production)
+            raw = json.dumps({'operational_exclusion_path': production['OPERATIONAL_EXCLUSION_PATH']}).encode()
+            path.write_bytes(raw)
+            before = path.stat()
+            result = subprocess.run([sys.executable, '-I', '-B', str(caller), str(script), str(path),
+                                     '--census-only', '--request-sha256', hashlib.sha256(raw).hexdigest()],
+                                    capture_output=True, timeout=15)
+            self.assertEqual(result.returncode, 0, result.stderr.decode())
+            report = json.loads(result.stdout)
+            self.assertEqual(report['status'], 'PASS_READ_ONLY')
+            self.assertEqual(report['processes'], [])
+            self.assertEqual(path.stat(), before)
+            self.assertEqual(set(root.iterdir()), {script, caller, path})
 
     def test_serialization_lock_spans_reconciled_owner_execution(self):
         events = []

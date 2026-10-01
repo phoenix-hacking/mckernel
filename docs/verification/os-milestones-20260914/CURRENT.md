@@ -13115,3 +13115,40 @@ or delete/reuse the retained paths.  Counts remain one compiled current
 candidate, five bounded diagnostic guest passes, zero formal application
 acceptances, 6/130 production gates and 0/7 language gates; the OS remains
 incomplete and paused for the next launcher invocation.
+
+Continuation checkpoint 325, 2026-10-01: the wrapper's read-only privileged
+process-census boundary now receives independent source PASS after three exact
+review findings and expert corrections.  Empty `-W`/`-X` Python operands remain
+visible to both complete decoders; a recovery subprocess reaches the embedded
+observer with the real wrapper caller identity; and the exact request is held
+by descriptor and revalidated through a fresh-root walk of every ancestor before
+success.  Wrapper/tests/embedded-observer hashes are
+`12508d3a...4a25`/`0cb921c7...557a`/`42f690a2...9f1e`.  Coordinator and expert
+runs pass all 46 focused tests; independent review adds eight direct-parent and
+higher-ancestor replacement probes.
+
+The census-only mode acquires no ownership locks, imports no build owner and
+grants no execution.  It requires the exact existing request and raw hash,
+preserves strict idle process/container policy, authenticates historical leases,
+checks resource floors and emits a bounded fail-closed report.  Independent
+review releases only a read-only privileged host census after commit and
+fetched-byte verification; recovery mutation and build execution remain
+unreleased.
+
+Fresh unprivileged live audit reconfirms the retained request/shared/attempt
+device-inodes 1831:90729/90730/90731 and exact hashes.  The failed owner and
+scratch18 build lease are absent and output/evidence remain empty.  Sixty-three
+of 276 executable identities are hidden by procfs, including PID 1, so the
+unprivileged observation does not establish global idleness.  Measured host,
+scratch and available-memory bytes are 23,230,111,744 / 15,174,578,176 /
+23,987,646,464.
+
+Exact evidence is
+`native-exact-scratch18-census-source-checkpoint-20261001.json`.  Next publish
+and fetched-verify these exact bytes, then run the released read-only census.
+Finish and independently review the crash-safe recovery helper against its exact
+report; only a separate one-shot recovery release may archive the attempt lock
+first and shared lock last.  No build or guest has run: counts remain one
+compiled current candidate, five bounded diagnostic guest passes, zero formal
+application acceptances, 6/130 production gates and 0/7 language gates; the OS
+remains incomplete.

@@ -143,8 +143,10 @@ def cmdline(pid):
     with (Path("/proc") / str(pid) / "cmdline").open("rb") as stream:
         raw = stream.read(MAX_CMDLINE_BYTES + 1)
     if len(raw) > MAX_CMDLINE_BYTES: raise RuntimeError("command line exceeds bound")
-    argv = [x.decode("utf-8", "strict") for x in raw.split(b"\0") if x]
-    if len(argv) > MAX_ARG_COUNT or any(len(x) > MAX_ARG_BYTES for x in argv): raise RuntimeError("argument exceeds bound")
+    parts = raw.split(b"\0") if raw else []
+    if parts and raw.endswith(b"\0"): parts.pop()
+    if len(parts) > MAX_ARG_COUNT or any(len(x) > MAX_ARG_BYTES for x in parts): raise RuntimeError("argument exceeds bound")
+    argv = [x.decode("utf-8", "strict") for x in parts]
     return argv
 def retired_or_kernel(pid, first):
     fields = (Path("/proc") / str(pid) / "stat").read_text().rsplit(")", 1)[1].split()
@@ -203,7 +205,7 @@ def observe():
     print(output)
 if __name__ == "__main__": observe()
 '''
-PRIVILEGED_PROCESS_OBSERVER_SHA256 = '5f261e9ed481a8f7750e298f48c56293ee33d99df92e18595b562bc19b446612'
+PRIVILEGED_PROCESS_OBSERVER_SHA256 = '42f690a2d5a551142e13ecdba1678bad49e0de1be42db099693664c16be09f1e'
 
 
 class AdmissionError(ValueError):
@@ -318,10 +320,12 @@ def _dispatcher_processes():
                 raw = stream.read(MAX_CMDLINE_BYTES + 1)
             if len(raw) > MAX_CMDLINE_BYTES:
                 raise AdmissionError('process command line exceeds bound')
-            argv = raw.split(b'\0')
-            argv = [item.decode('utf-8', 'strict') for item in argv if item]
-            if len(argv) > MAX_ARG_COUNT or any(len(item) > MAX_ARG_BYTES for item in argv):
+            parts = raw.split(b'\0') if raw else []
+            if parts and raw.endswith(b'\0'):
+                parts.pop()
+            if len(parts) > MAX_ARG_COUNT or any(len(item) > MAX_ARG_BYTES for item in parts):
                 raise AdmissionError('process argument exceeds bound')
+            argv = [item.decode('utf-8', 'strict') for item in parts]
             if not argv:
                 fields = (entry / 'stat').read_text().rsplit(')', 1)[1].split()
                 if (fields[19] != start or fields[0] in ('Z', 'X', 'x') or
@@ -492,8 +496,10 @@ def _strict_json(data):
             if key in result: raise AdmissionError('duplicate JSON key')
             result[key] = value
         return result
+    def constant(value):
+        raise AdmissionError('non-finite JSON number')
     try:
-        return json.loads(data, object_pairs_hook=pairs)
+        return json.loads(data, object_pairs_hook=pairs, parse_constant=constant)
     except (ValueError, UnicodeDecodeError) as exc:
         raise AdmissionError('invalid census JSON') from exc
 
@@ -503,8 +509,7 @@ def _dispatcher_containers():
     command = ['/usr/bin/sudo', '-A', '/usr/bin/docker', '--host=unix:///var/run/docker.sock',
                'ps', '--no-trunc', '--format', '{{json .}}']
     try:
-        result = subprocess.run(command, env=env, stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE, timeout=15)
+        result = _run_bounded_observer(command, b'', env)
     except Exception as exc:
         raise AdmissionError('container census unavailable') from exc
     if result.returncode:
@@ -580,9 +585,9 @@ def _historical_lease_observation():
                              HISTORICAL_OBSERVER_SHA256, 'historical observer')
     # Execute authenticated bytes, avoiding a path replacement between hash
     # verification and privileged import. Only sudo receives the askpass value.
-    result = subprocess.run(['/usr/bin/sudo', '-A', '/usr/bin/python3', '-I', '-B', '-'],
-                            input=data, env=_sudo_environment(), stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE, timeout=30)
+    result = _run_bounded_observer(
+        ['/usr/bin/sudo', '-A', '/usr/bin/python3', '-I', '-B', '-'],
+        data, _sudo_environment(), timeout=30)
     if result.returncode: raise AdmissionError('historical lease observer unavailable')
     report = _strict_json(result.stdout)
     if (not isinstance(report, dict) or report.get('status') != 'PASS_READ_ONLY' or
@@ -899,12 +904,188 @@ def validate_request(request, aggregate_gib=LAUNCHER_AGGREGATE_GIB):
             'request_sha256': _request_hash(request)}
 
 
+def _validate_census_domains(domains):
+    """Keep the recovery report's idle and authenticated-lease meanings exact."""
+    if (not isinstance(domains, dict) or
+        set(domains) != {'processes', 'containers', 'leases', 'resources'} or
+        domains['processes'] != [] or domains['containers'] != []):
+        raise AdmissionError('recovery census is not idle or is malformed')
+    leases = domains['leases']
+    if not isinstance(leases, list) or len(leases) > MAX_HEAVY_ROWS:
+        raise AdmissionError('recovery lease census malformed')
+    seen = set()
+    for row in leases:
+        if (not isinstance(row, dict) or
+            set(row) != {'path', 'sha256', 'device', 'inode', 'size', 'pid', 'starttime', 'evidence_sha256'} or
+            not isinstance(row['path'], str) or not row['path'].startswith('/') or
+            '\0' in row['path'] or len(row['path']) > MAX_ARG_BYTES or row['path'] in seen or
+            any(type(row[key]) is not int or row[key] < 0 for key in ('device', 'inode', 'size', 'pid')) or
+            row['pid'] == 0 or row['inode'] == 0 or
+            not isinstance(row['starttime'], str) or not re.fullmatch(r'[0-9]+', row['starttime']) or
+            any(not isinstance(row[key], str) or not re.fullmatch(r'[0-9a-f]{64}', row[key])
+                for key in ('sha256', 'evidence_sha256'))):
+            raise AdmissionError('recovery lease row malformed')
+        seen.add(row['path'])
+    resources = domains['resources']
+    if (not isinstance(resources, dict) or
+        set(resources) != {'host_free', 'scratch_free', 'memory_available', 'cpus'} or
+        any(type(resources[key]) is not int or resources[key] < 0
+            for key in ('host_free', 'scratch_free', 'memory_available')) or
+        not isinstance(resources['cpus'], list) or len(resources['cpus']) > MAX_PROC_ENTRIES or
+        any(type(cpu) is not int or cpu < 0 for cpu in resources['cpus']) or
+        resources['cpus'] != sorted(set(resources['cpus'])) or
+        not set(range(2, 6)).issubset(resources['cpus'])):
+        raise AdmissionError('recovery resource census malformed')
+
+
+def census_request(path, expected_sha256, aggregate_gib=LAUNCHER_AGGREGATE_GIB):
+    """Observe an exact existing request without acquiring any ownership.
+
+    `leases` contains only the complete rows accepted by _dispatcher_leases:
+    authenticated retired historical leases. Unknown/live leases, processes,
+    containers or insufficient capacity prevent a PASS_READ_ONLY result.
+    The request descriptor stays open and is rechecked after the observations.
+    This result grants neither recovery mutation nor build execution authority.
+    """
+    _aggregate_argument(aggregate_gib)
+    if not isinstance(expected_sha256, str) or not re.fullmatch(r'[0-9a-f]{64}', expected_sha256):
+        raise AdmissionError('exact request SHA256 is required for census')
+    path = Path(path)
+    if not path.is_absolute() or '..' in path.parts or not path.name:
+        raise AdmissionError('census request path must be absolute and normalized')
+    fds = []
+    ancestors = []
+    def identity(meta):
+        return (meta.st_dev, meta.st_ino, meta.st_size, meta.st_mode, meta.st_nlink,
+                meta.st_uid, meta.st_gid, meta.st_mtime_ns, meta.st_ctime_ns)
+    def directory_identity(meta):
+        return (meta.st_dev, meta.st_ino, meta.st_mode, meta.st_uid, meta.st_gid)
+    def read_request(fd):
+        os.lseek(fd, 0, os.SEEK_SET)
+        data = bytearray()
+        while len(data) <= MAX_REPORT_BYTES:
+            block = os.read(fd, min(65536, MAX_REPORT_BYTES + 1 - len(data)))
+            if not block: break
+            data.extend(block)
+        if len(data) > MAX_REPORT_BYTES:
+            raise AdmissionError('census request exceeds bound')
+        return bytes(data)
+    try:
+        parent = os.open('/', os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+        fds.append(parent)
+        ancestors.append((parent, directory_identity(os.fstat(parent))))
+        for component in path.parts[1:-1]:
+            parent = os.open(component, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=parent)
+            fds.append(parent)
+            ancestors.append((parent, directory_identity(os.fstat(parent))))
+        fd = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK | os.O_NOATIME, dir_fd=parent)
+        fds.append(fd)
+        before = os.fstat(fd)
+        if (not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or
+            before.st_size > MAX_REPORT_BYTES):
+            raise AdmissionError('census request is not a bounded unique regular file')
+        raw = read_request(fd)
+        if identity(os.fstat(fd)) != identity(before) or hashlib.sha256(raw).hexdigest() != expected_sha256:
+            raise AdmissionError('census request binding changed')
+        request = _strict_json(raw)
+        if not isinstance(request, dict):
+            raise AdmissionError('census request must be an object')
+        for key in ('host_floor', 'scratch_floor'):
+            if type(request.get(key, 0)) is not int or request.get(key, 0) < 0:
+                raise AdmissionError('census request floor malformed')
+        if 'launcher_aggregate_memory_gib' in request:
+            _aggregate_argument(request['launcher_aggregate_memory_gib'])
+        boot = Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+        if not re.fullmatch(r'[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}', boot):
+            raise AdmissionError('census boot identity malformed')
+        domains = _dispatcher_reconcile(request)
+        _validate_census_domains(domains)
+        if (domains['resources']['host_free'] < request.get('host_floor', 0) + DISPATCHER_EMERGENCY_BYTES or
+            domains['resources']['scratch_free'] < request.get('scratch_floor', 0) + DISPATCHER_EMERGENCY_BYTES or
+            domains['resources']['memory_available'] < EXPECTED_LIMITS['Memory']):
+            raise AdmissionError('recovery resource floors unavailable')
+        if (read_request(fd) != raw or identity(os.fstat(fd)) != identity(before) or
+            identity(os.stat(path.name, dir_fd=parent, follow_symlinks=False)) != identity(before) or
+            Path('/proc/sys/kernel/random/boot_id').read_text().strip() != boot):
+            raise AdmissionError('census request or boot identity changed during observations')
+        # Original dirfds can remain valid after an ancestor is renamed away.
+        # Re-resolve the absolute pathname from a new root descriptor and bind
+        # every directory plus the final entry to the initially pinned chain.
+        current_parent = os.open('/', os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+        fds.append(current_parent)
+        current_ancestors = [current_parent]
+        for index, component in enumerate(('/',) + path.parts[1:-1]):
+            if index:
+                current_parent = os.open(component, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW,
+                                         dir_fd=current_parent)
+                fds.append(current_parent)
+                current_ancestors.append(current_parent)
+            original_fd, expected_directory = ancestors[index]
+            if (directory_identity(os.fstat(current_parent)) != expected_directory or
+                directory_identity(os.fstat(original_fd)) != expected_directory):
+                raise AdmissionError('census request ancestor changed during observations')
+        current_fd = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK | os.O_NOATIME,
+                             dir_fd=current_parent)
+        fds.append(current_fd)
+        if (identity(os.fstat(current_fd)) != identity(before) or read_request(current_fd) != raw or
+            identity(os.fstat(current_fd)) != identity(before) or
+            identity(os.stat(path.name, dir_fd=current_parent, follow_symlinks=False)) != identity(before)):
+            raise AdmissionError('census request absolute path changed during observations')
+        for index, component in enumerate(path.parts[1:-1], 1):
+            if (directory_identity(os.stat(component, dir_fd=current_ancestors[index - 1],
+                                           follow_symlinks=False)) != ancestors[index][1]):
+                raise AdmissionError('census request ancestor entry changed during observations')
+        result = {'schema': 'mckernel.heavy-recovery-census.v1', 'status': 'PASS_READ_ONLY',
+                  'execution_released': False, 'boot_id': boot,
+                  'request': {'path': str(path), 'sha256': expected_sha256,
+                              'normalized_sha256': _request_hash(request),
+                              'device': before.st_dev, 'inode': before.st_ino,
+                              'mode': '%04o' % stat.S_IMODE(before.st_mode),
+                              'uid': before.st_uid, 'gid': before.st_gid},
+                  **domains}
+        _encode_census_report(result)
+        return result
+    except AdmissionError:
+        raise
+    except (OSError, ValueError, TypeError, RecursionError) as exc:
+        raise AdmissionError('read-only recovery census unavailable') from exc
+    finally:
+        for fd in reversed(fds):
+            os.close(fd)
+
+
+def _encode_census_report(result):
+    try:
+        encoded = json.dumps(result, sort_keys=True, separators=(',', ':'), allow_nan=False)
+    except (ValueError, TypeError, RecursionError) as exc:
+        raise AdmissionError('recovery census report malformed') from exc
+    if len(encoded.encode('utf-8')) + 1 > MAX_REPORT_BYTES:
+        raise AdmissionError('recovery census report exceeds bound')
+    return encoded
+
+
 def main(argv=None):
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(allow_abbrev=False)
     parser.add_argument("request", type=Path)
     parser.add_argument("--launcher-aggregate-gib", default=LAUNCHER_AGGREGATE_GIB)
-    parser.add_argument('--validate-only', action='store_true')
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument('--validate-only', action='store_true')
+    modes.add_argument('--census-only', action='store_true')
+    parser.add_argument('--request-sha256')
     args = parser.parse_args(argv)
+    if args.census_only:
+        if args.request_sha256 is None:
+            parser.error('--census-only requires --request-sha256')
+        try:
+            result = census_request(args.request, args.request_sha256, args.launcher_aggregate_gib)
+            print(_encode_census_report(result))
+            return 0
+        except AdmissionError:
+            # Do not publish a partial report or echo exception/credential data.
+            print('{"schema":"mckernel.heavy-recovery-census.v1","status":"REFUSED"}')
+            return 1
+    if args.request_sha256 is not None:
+        parser.error('--request-sha256 is only valid with --census-only')
     request = json.loads(args.request.read_text())
     result = (validate_request if args.validate_only else run_request)(request, args.launcher_aggregate_gib)
     print(json.dumps(result, sort_keys=True))
