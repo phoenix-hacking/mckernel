@@ -11480,3 +11480,44 @@ image/module/initramfs/manifest and execution release while reusing unchanged
 application/collector/Linux inputs only after hash authentication.  Linked
 current images and real current-candidate applications remain zero; no formal
 counter changes.
+
+Shutdown checkpoint 277, 2026-10-01: the launcher stopped this invocation
+after the scratch-14 preparation completed, before any tool-image operation was
+released or started.  No task was dispatched after the stop request.  All eight
+child lanes are terminal: seven completed and the earlier scratch-13 audit lane
+was interrupted without an active operation.  No build-image helper, compiler,
+QEMU guest or mcexec process is running; the fresh attempt-7 output root,
+evidence root and lease remain absent.
+
+Scratch-14 preparation is independently `PASS_POSTFLIGHT` for preparation only.
+Candidate root identity `1831:1464725` has HEAD
+`c81aeaca5cedd893981a058444fa11a03a49a744`; nested IHK remains
+`3114d9e7101ad52030eb3effa849a5c108972a1f` with the exact reviewed overlay.
+The source manifest has 9,404 entries and SHA-256 `1bf7aea3...eed3`; its
+non-executable request is `fb0d0a5b...1164`, metadata receipt
+`3b2a4429...3190`, terminal `d41e8031...a6fd` and log `5b611d53...ad1`.
+Output/evidence directories are empty, preparation PID/PGID/SID 2383539 is
+retired, and neither the preparation lease nor exportset-26 exclusion exists.
+The additive record is
+`docs/verification/evidence/native-exact-candidate-c81aeaca-scratch14-preparation-success-20261001.json`.
+This is not a build, guest, diagnostic or acceptance result.
+
+The next bounded operation is described, but explicitly not released, by
+`docs/verification/evidence/native-exact-tool-image-c81aeaca-attempt7-execution-proposal-20261001.json`.
+It proposes a fresh source-free tool-image preparation for candidate
+`c81aeaca...a744` using fresh output/evidence roots ending `c81aeaca-7` and a
+fresh preparation lease.  The historical d094 receipt cannot be relabeled;
+only its immutable base-image identity may be reused after authentication.
+Continuation must independently review the exact fetched proposal and repeat
+the live capacity, process, Docker, path-absence and source-binding preflight
+before issuing a one-shot execution release.  On success, prepare a fresh
+c81-bound libdwarf gitlink and exportset-26 image request, then release the one
+permitted four-job heavy build.  Preserve every partial artifact and original
+failure on any error; do not retry an unchanged deterministic failure.
+
+Launcher identities preserved at shutdown are wrapper 1442141, launcher
+1442142, worker 1442145, app-server 1442149 and code-mode host 1442494, all
+started 2026-09-30 10:46-10:47 PDT.  They are launcher state, not build or
+guest leases.  Linked current images and real current-candidate applications
+remain zero.  The OS goal remains active and incomplete; this checkpoint does
+not resume or complete it.
