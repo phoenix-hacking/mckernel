@@ -13393,3 +13393,28 @@ review PASSes publication and an absolute-path real validate-only retry.  Next
 publish/fetch these exact blobs, rerun validate-only by its absolute pathname,
 then execute once only if the fresh privileged census and resource floors PASS.
 No acceptance counter changes, and the OS remains incomplete.
+
+Continuation checkpoint 335, 2026-10-01: scratch18 retry2 is the second real
+compiled current candidate.  The exact offline build completed all five phases
+with exit code zero for candidate `89ab5c555aac9177a789efc67ddc775dacb25d6d`.
+Its receipt is PASS/complete at SHA-256 `7b5ecbce...7ee2`, and all 48 rows of
+the artifact checksum manifest verify.  Actual products are bzImage
+`550e8fcb...df07`, ihk.ko `db003ffd...519f`, ihk-smp-x86_64.ko
+`268d6d3b...4bbb`, and mcctrl.ko `4cf6196f...23f`; exact sizes and full hashes
+are retained in `native-exact-scratch18-retry2-build-pass-20261001.json`.
+
+The successfully exited, non-OOM container remains deliberately retained as
+`3af1e30c...ee0a9` with owner nonce `51fc08b6...07eb`, exact CPUs 2-5,
+12-GiB memory/no-swap, 512-task and no-network limits.  The retry lease is
+absent, while operational exclusion inode 57646 and shared heavy-lock inode
+57645 remain active at hashes `207f2d4f...f48` and `2ccb8ad7...4ab4`.
+No second heavy operation may start yet.  A fresh exact cleanup packet is being
+bounded to authenticate and remove only this terminal container and retain both
+ownership records in no-replace quarantine.  After independent review and
+fetched publication, consume that cleanup, then start fresh McKernel image
+preparation and the startup diagnostic.  Host/scratch/available-memory bytes
+after the build are approximately 40.01/34.92/23.40 GB, above the unchanged
+17.18/12.88-GB floors.  Counts are now two compiled current candidates and
+five prior bounded diagnostic guest passes, but zero formal application
+acceptances, 6/130 production gates and 0/7 language gates; the OS remains
+incomplete.

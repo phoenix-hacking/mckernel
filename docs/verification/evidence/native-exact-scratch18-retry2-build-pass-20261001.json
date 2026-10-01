@@ -1,0 +1,76 @@
+{
+  "schema": "mckernel.native-exact-scratch18-retry2-build-pass.v1",
+  "recorded_at": "2026-10-01T11:04:12-07:00",
+  "status": "BUILD_PASS_CLEANUP_PENDING",
+  "candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "scope": "Exact offline host-kernel and IHK module build result. This is not an McKernel image, guest, application, or production acceptance result.",
+  "execution": {
+    "release_commit": "d605f78da999c53c1c2c985d13e14da8d19c82d0",
+    "request_path": "/home/holden/mckernel-work/scratch/native-exact-build-request-scratch-18-retry2-20261001.execution.json",
+    "request_device_inode": "1831:57644",
+    "request_size": 3133,
+    "request_sha256": "1dc0b3dfb7f9183c03988ce4d08634dd18550b9058be0bbd8041073d2a6a8cc1",
+    "result": "PASS_EXECUTED",
+    "container_exit_code": 0,
+    "elapsed_seconds_approximate": 2144
+  },
+  "receipt": {
+    "outer_path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-18-retry2-20261001-evidence/receipt.json",
+    "outer_device_inode": "1831:5464289",
+    "outer_size": 89352405,
+    "outer_sha256": "3f95ee61907192a4a2bd63b02fcfa24e169243d8a7ee41d77eed50119d7e3fc0",
+    "build_path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-18-retry2-20261001-evidence/build/receipt.json",
+    "build_device_inode": "1831:5464286",
+    "build_size": 87617431,
+    "build_sha256": "7b5ecbce6e6b31c913acdf4d584979e299c28ae74a59a6a357beb39c8c197ee2",
+    "build_status": "PASS",
+    "build_phase": "complete",
+    "phase_exit_codes": [0, 0, 0, 0, 0]
+  },
+  "artifacts": {
+    "root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-18-retry2-20261001-evidence/build/native-rust-build-evidence",
+    "sha256sums_rows": 48,
+    "sha256sums_verification": "PASS",
+    "SHA256SUMS": "5fac47a6a82086e20c5832c28e8c244e0c1c8370dbe65cdada4515c26530636d4",
+    "bzImage": {"size": 16130048, "sha256": "550e8fcbb3c33fc057b06235b2bd7f5548426d575c8e83f0d32824d3e460df07"},
+    "ihk.ko": {"size": 1426784, "sha256": "db003ffdbd2f939badac7753a1df08b9daf4a80544bf812e53ba1276fbd62519"},
+    "ihk-smp-x86_64.ko": {"size": 11075136, "sha256": "268d6d3b36fd33f9650c5b7b3ae5233e606d07c992e1e0c4be64493527f84bbb"},
+    "mcctrl.ko": {"size": 1914512, "sha256": "4cf6196f9e93fb10b08bc4e5bf75022b0858779a6479910340941006748cd23f"},
+    "kernel.release": {"size": 40, "sha256": "42bb1d3c01816ca5d716e59ce1b50f1b96be1e5643d866486b0f6db098d2725a"},
+    "kbuild-link-closure.json": {"size": 12585, "sha256": "2305f965be544ee7cdb18ff3b7e35478fd4289962d286bc36075306078afa06f"}
+  },
+  "retained_terminal_container": {
+    "id": "3af1e30c1e2db5b868e5b9f0d235426e128ccafe6b6193c1de54f44fafdee0a9",
+    "name": "mckernel-exact-4192f858907f4fd2add8871fee8cf750",
+    "owner_nonce": "51fc08b654d644478765e9f28d1807eb",
+    "owner_pid": 3459677,
+    "owner_starttime": "108526336",
+    "state": "exited",
+    "exit_code": 0,
+    "oom_killed": false,
+    "limits": {"cpuset_cpus": "2-5", "nano_cpus": 4000000000, "memory": 12884901888, "memory_swap": 12884901888, "pids_limit": 512, "network": "none", "rootfs_read_only": true},
+    "inspect_terminal_sha256": "14928c60c92c8cd0a6fd88a9243cc854320c0b1577ad8aa7d282dcf19227b9b2",
+    "container_log_sha256": "95ec65b922159adefdf90a2aa49325b38b9f4937ffc634421eb4d24ec3516e91",
+    "cleanup_separately_required": true
+  },
+  "retained_ownership": {
+    "lease_absent": true,
+    "operational_exclusion": {"path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json", "device_inode": "1831:57646", "size": 269, "sha256": "207f2d4f77542dae9db5dc8210a921cc574db51e6720d454231a49591011cf48"},
+    "shared_heavy_lock": {"path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock", "device_inode": "1831:57645", "size": 269, "sha256": "2ccb8ad7b12b55e555cf053d1051c5b33d5893e1ae28e10f70f3d9a3f7b44ab4"},
+    "next_action": "Independently review and execute a one-shot exact container-retirement transaction; retain both lock records in durable no-replace quarantine before starting image preparation."
+  },
+  "resources_after_build": {
+    "host_free_bytes": 40010072064,
+    "scratch_free_bytes": 34921132032,
+    "available_memory_bytes": 23396388864,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888
+  },
+  "counts": {
+    "compiled_current_candidates": 2,
+    "prior_bounded_diagnostic_guest_passes": 5,
+    "formal_application_acceptances": 0,
+    "native_production_gates": "6/130",
+    "language_gates": "0/7"
+  }
+}
