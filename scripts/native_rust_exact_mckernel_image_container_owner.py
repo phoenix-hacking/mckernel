@@ -33,7 +33,7 @@ OWNER_RECEIPT_NAME = "owner-receipt.json"
 EXPECTED_DRIVER_SHA256 = "91aa047f61167dd93002a0bc12e55b18f4b2fcaf65e246e574e8350a0c37f4cc"
 EXPECTED_PROVENANCE_SHA256 = "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a"
 EXPECTED_HOST_OWNER_SHA256 = "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
-EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "788be3f5d31620d0aff0bd4e480d7bbbbde2f8f1dc5dcf671ad2ebf114107894"
+EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "3b910b0c968d85390ca7d00e6953ddb13dc91714180c51fd476853dac529739c"
 # The image owner advances with the image-candidate namespace.  Keep consumed
 # exclusions explicit: accepting one of these would allow a request to race a
 # retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
