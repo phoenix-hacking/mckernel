@@ -1,0 +1,95 @@
+{
+  "schema": "mckernel.native-exact-c81-files-diagnostic-checkpoint.v1",
+  "recorded_at": "2026-10-01T07:05:45Z",
+  "status": "PASS_DIAGNOSTIC_C81_FILES_AND_PASS_GUEST_POSTFLIGHT_FILES",
+  "candidate_sha": "c81aeaca5cedd893981a058444fa11a03a49a744",
+  "candidate_image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+  "current_candidate_builds": 1,
+  "accepted_current_candidate_diagnostic_applications": 2,
+  "formal_application_acceptance": false,
+  "packet": {
+    "path": "docs/verification/stability-native-diagnostic-files-c81-execution-packet-20261001-1.md",
+    "commit": "1581e23c0dc900a1d6ec5341cf1cb2b484b17812",
+    "sha256": "09082e91ae91d9ba9d5bcc89d371b55c98e8bbffbe04cd18bef988137baa20b1",
+    "execution_review": "PASS_EXECUTION_C81_FILES",
+    "preserved_corrections": [
+      "The draft stdout hex encoded NATIVE_CORE_PASS rather than the immutable NATIVE_CORE PASS oracle; corrected before execution review.",
+      "The first committed packet recorded overlay-source mode 0644 instead of live/manifest 0600; corrected and the rejected review retained.",
+      "The second packet incorrectly required deletion of retained evidence directories after cleanup; corrected to preserve evidence while authenticating container/process/client retirement and lock release."
+    ]
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-diagnostic-files-c81-20261001-1/manifest.json",
+    "sha256": "51541adecd6ffc2cbc182d267ffd976b4e39ba4e3e3f44580c0d73ce09ef7513",
+    "size": 4712,
+    "mode_octal": "0600",
+    "independent_review": "PASS_FILES_MANIFEST_C81"
+  },
+  "attempt": {
+    "nonce": "b12fe7d1ca5d5dc8714810d657fe6c65",
+    "root": "/home/holden/mckernel-work/scratch/ndfc81-20261001-1/attempt-b12fe7d1ca5d5dc8714810d657fe6c65",
+    "result_sha256": "8531603abf767f689748f45648f82713e62623c17766dd8321c0fc605e6da6eb",
+    "serial_sha256": "dde64e3e299488359b671b0a857dfed2e3734b38e47d428ac7e36b5c4f688b14",
+    "qmp_transcript_sha256": "f2f957cbba8b2c82c773d099f633dce085392182f62983564b688344e90755b1",
+    "raw_status": "PROTOCOL_PASS",
+    "independent_result_review": "PASS_DIAGNOSTIC_C81_FILES",
+    "argv": ["/bin/mcexec", "-t", "1", "0", "app", "files"],
+    "stdout_hex": "4e41544956455f434f524520504153532066696c65730a",
+    "stderr_hex": "",
+    "raw_wait_status": 9472,
+    "exit_status": 37,
+    "stdout_eof": true,
+    "stderr_eof": true,
+    "stream_truncated_or_discarded": false,
+    "procfs_empty": true,
+    "capture_errors": [],
+    "raw_conservative_fields_preserved": {
+      "application_acceptance": false,
+      "mckernel_application_executed": false,
+      "runtime_blocker": "protocol observation only; independent guest execution review is pending"
+    },
+    "observed_behavior": "One scheduled PID exercised 8209-byte write/read/pread, one-byte pwrite, fsync, close/reopen/read/unlink and expected ENOENT; pager references drained from four to zero; procfs, process and pager cleanup completed after one retained initial EAGAIN."
+  },
+  "postflight": {
+    "result": "PASS_GUEST_POSTFLIGHT_FILES",
+    "owner_result_path": "/home/holden/mckernel-work/scratch/ndfc81-20261001-1.owner-b12fe7d1ca5d5dc8714810d657fe6c65/result.json",
+    "owner_result_sha256": "a5e359865e71617faca83d2143a46b47a946da4d480353b4fc25c17f29b23f6f",
+    "owner_pid": 2814049,
+    "owner_absent": true,
+    "container_id": "dc0357731ce05dce6e8068cf3cb77d25a448ca828d8e3fc7306c8575f878db4e",
+    "container_absent": true,
+    "container_exit_status": 0,
+    "container_oom": false,
+    "docker_clients_reaped": 30,
+    "qemu_pid_pgid_sid": "10:10:10",
+    "qemu_starttime_ticks": 104785961,
+    "qemu_returncode": -9,
+    "qmp_guest_shutdown_observed": true,
+    "development_lock_released": true,
+    "lease_retained": false,
+    "unrelated_container_before_after_equivalence": "NOT_ESTABLISHED; the released packet did not require and did not retain an authenticated preflight inventory. Current unrelated services remain present."
+  },
+  "prepared_next": {
+    "startup": {
+      "status": "PREPARED_PENDING_INDEPENDENT_MANIFEST_REVIEW_AND_EXECUTION_PACKET",
+      "root": "/home/holden/mckernel-work/scratch/native-diagnostic-startup-c81-20261001-1",
+      "archive_sha256": "c2735cd31b59e280ad6b4276b4f432a7646a3b72a276e79375cdd1d789f95ab8",
+      "overlay_sha256": "6c9801770fbbfd1609ad92b5e29a603b7735768652b69b54f04c3999d8b0bbe8",
+      "manifest_sha256": "7f7a7150142848e315676ed3fba09847e5f52c9f7b0491858ab65467268439fb"
+    },
+    "threads": {
+      "status": "PREPARED_PENDING_INDEPENDENT_MANIFEST_REVIEW_AND_EXECUTION_PACKET",
+      "root": "/home/holden/mckernel-work/scratch/native-diagnostic-threads-c81-20261001-1",
+      "archive_sha256": "20749f16b12ac9bffe8080fdb013831b26684456a4aba4383016220970fc33a6",
+      "overlay_sha256": "620a02b7ae3b59389a487e53bf77811057334d14e929ad2b7dcace426a72d553",
+      "manifest_sha256": "d3264702d3281c59660c4c5057535ef3d602a754248e10b55dba5376d475db3d"
+    }
+  },
+  "next_tasks": [
+    "Complete independent startup manifest review, bind/commit/fetch its one-shot packet, obtain fresh execution release, and run startup once.",
+    "Review the prepared threads manifest and execute it only after a separate packet/release and full startup retirement.",
+    "Finish corrected selected-consumer signal regression and prepare the c81 signals overlay before its separate guest.",
+    "Keep native OS shutdown open: booted shutdown currently returns ENOSYS and effect-aware stop/drain/reset/resource retirement remain unimplemented."
+  ],
+  "os_goal_complete": false
+}

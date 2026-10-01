@@ -11795,3 +11795,47 @@ Threads/futexes, signals and shutdown remain later diagnostic lanes.  The
 current-candidate compiled build count is one and real accepted current-candidate
 diagnostic application count is one; the OS goal remains active and incomplete,
 and diagnostic results remain separate from formal acceptance.
+
+Continuation checkpoint 285, 2026-10-01: the one-shot c81 files diagnostic
+completed and independent reviews return `PASS_DIAGNOSTIC_C81_FILES` and
+`PASS_GUEST_POSTFLIGHT_FILES`.  The unchanged payload produced exact 23-byte
+stdout `NATIVE_CORE PASS files\n`, empty stderr, exit 37 / wait status 9472,
+both EOFs, no truncation/discard and empty procfs.  Trace review joins one
+scheduled PID to 8,209-byte write/read/pread, one-byte pwrite, fsync,
+close/reopen/read/unlink and expected `ENOENT`.  Four shared pager references
+drain to zero; an initial retained retirement `EAGAIN` is followed by successful
+procfs deletion, retirement and process release.  This is the second accepted
+current-candidate diagnostic application and remains zero formal applications.
+
+The execution packet required three preserved corrections before release: its
+draft stdout hex encoded an underscore in place of the frozen space; its first
+committed table recorded the overlay source as mode 0644 rather than 0600; and
+its next cleanup contract incorrectly required deletion of evidence directories
+that the reviewed owner deliberately preserves.  Final fetched packet commit is
+`1581e23c0dc900a1d6ec5341cf1cb2b484b17812`, SHA-256
+`09082e91...20b1`.  The exact inner result is `8531603a...a6eb`, serial
+`dde64e3e...8b14`, and QMP `f2f957cb...55b1`.
+
+Owner PID 2814049 and all 30 Docker clients are absent.  Exact container
+`dc035773...8db4e` exited zero without OOM and is removed.  QMP records guest
+shutdown/nonrunning status and acknowledged quit before bounded QEMU reap `-9`;
+the development lock is released and no heavy lease remains.  Evidence
+directories are intentionally retained.  Unrelated-container before/after
+equivalence is not established because the released packet did not retain that
+preflight inventory; current unrelated services remain present.  Exact additive
+evidence is
+`docs/verification/evidence/native-exact-c81-files-diagnostic-checkpoint-20261001.json`.
+
+Fresh ordinary-user preparation also produced c81 startup and threads overlays.
+Startup archive/overlay/manifest hashes are `c2735cd3...5ab8`,
+`6c980177...bbe8`, and `7f7a7150...39fb`; threads hashes are
+`20749f16...33a6`, `620a02b7...d553`, and `d3264702...db3d`.  Neither has
+execution authority or runtime evidence.  Startup is a distinct diagnostic:
+the memory application does not satisfy its empty-argv contract.  Next complete
+startup manifest review and its committed/fetched one-shot packet, execute it
+after a fresh release, then independently review and run threads.  Signal source
+already contains the native altstack correction but its new selected-consumer
+regression is still under review/compile admission.  Native OS shutdown remains
+open: the booted path currently returns `ENOSYS`, and STOP/quiescence, callback
+drain, effect-aware reset and resource restoration remain unimplemented.  The
+OS goal remains active and incomplete.
