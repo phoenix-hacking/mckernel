@@ -224,10 +224,13 @@ def _validate_manifest(obj):
     _validate_payload_argv(payload["argv"])
     _need(payload["env"] == {"PATH": "/usr/bin:/bin", "COKERNEL_PATH": "/apps"}, "frozen environment")
     oracle = payload["oracle"]
-    _keys(oracle, ("stdout_hex", "stderr_hex", "exit_code"))
+    _keys(oracle, ("stdout_hex", "stderr_hex", "exit_code"), ("stderr_typed",))
     _need(type(oracle["stdout_hex"]) is str and re.fullmatch(r"(?:[0-9a-fA-F]{2})*", oracle["stdout_hex"]), "oracle stdout")
     _need(type(oracle["stderr_hex"]) is str and re.fullmatch(r"(?:[0-9a-fA-F]{2})*", oracle["stderr_hex"]), "oracle stderr")
     _need(type(oracle["exit_code"]) is int and not isinstance(oracle["exit_code"], bool) and 0 <= oracle["exit_code"] <= 255, "oracle exit")
+    if "stderr_typed" in oracle:
+        _validate_typed_stderr_oracle(oracle["stderr_typed"])
+        _need(oracle["stderr_hex"] == "", "typed stderr cannot also freeze bytes")
     for name in ("stdout", "stderr"):
         limit = payload[name + "_limit_bytes"]
         _need(type(limit) is int and 0 <= limit <= MAX_JSON and len(bytes.fromhex(oracle[name + "_hex"])) <= limit, "stream limit")
@@ -235,6 +238,108 @@ def _validate_manifest(obj):
             "modules": modules, "staging": staging,
             "profile": {"memory_mib": 8192, "vcpus": 4, "numa_nodes": 2, "append": append},
             "payload": dict(payload)}
+
+
+_FUTEX_CASES = (
+    ("wait_mismatch", -1, 11), ("wait_relative_zero", -1, 110),
+    ("wait_relative_10ms", -1, 110), ("wait_bitset_expired", -1, 110),
+    ("wait_bitset_future", -1, 110), ("wait_null_word", -1, 14),
+    ("wait_unaligned_word", -1, 22), ("timeout_protected", -1, 14),
+    ("timeout_cross_page", -1, 14), ("timeout_negative_seconds", -1, 22),
+    ("timeout_negative_nanoseconds", -1, 22), ("timeout_large_nanoseconds", -1, 22),
+    ("wait_bitset_zero", -1, 22), ("wake_empty", 0, 0),
+    ("wake_unmapped_private", 0, 0), ("wait_relative_runnable", -1, 110),
+)
+_FUTEX_MAX_NS = 2_000_000_000
+_FUTEX_MAX_I64 = (1 << 63) - 1
+_FUTEX_MAX_PID = (1 << 31) - 1
+
+
+def _validate_typed_stderr_oracle(oracle):
+    """Validate the dynamic, line-oriented native-ultra-futex contract."""
+    _keys(oracle, ("kind", "line_count", "case_ids", "thread_count", "clone"))
+    _need(oracle["kind"] == "native-ultra-futex-v1", "typed stderr kind")
+    _need(type(oracle["line_count"]) is int and oracle["line_count"] == 18,
+          "typed stderr line count")
+    _need(oracle["case_ids"] == [row[0] for row in _FUTEX_CASES], "typed stderr cases")
+    _need(type(oracle["thread_count"]) is int and oracle["thread_count"] == 2,
+          "typed stderr thread count")
+    _need(oracle["clone"] is True, "typed stderr clone requirement")
+
+
+def _check_typed_futex_stderr(data, oracle):
+    """Check stable meanings while allowing timestamps, counts and TIDs to vary."""
+    _validate_typed_stderr_oracle(oracle)
+    try:
+        text = data.decode("ascii")
+    except UnicodeDecodeError as exc:
+        raise DiagnosticError("typed stderr is not ASCII") from exc
+    lines = text.splitlines(keepends=True)
+    _need(len(lines) == oracle["line_count"] and all(line.endswith("\n") for line in lines),
+          "typed stderr framing")
+    case_re = re.compile(r"^NATIVE_ULTRA_FUTEX_CASE id=([a-z0-9_]+) result=(-?[0-9]+) "
+                         r"errno=([0-9]+) elapsed_ns=([0-9]+) before_ns=([0-9]+) "
+                         r"after_ns=([0-9]+) deadline_ns=([0-9]+)\n$")
+    def u64(value, label):
+        parsed = int(value)
+        _need(0 <= parsed <= _FUTEX_MAX_I64, label + " signed range")
+        return parsed
+    for line, expected in zip(lines[:15], _FUTEX_CASES[:15]):
+        match = case_re.fullmatch(line)
+        _need(match is not None, "typed futex case framing")
+        case, result, errno_value, elapsed, before, after, deadline = match.groups()
+        _need((case, int(result), int(errno_value)) == expected, "typed futex case result")
+        elapsed_i, before_i, after_i, deadline_i = (u64(elapsed, "typed futex elapsed"),
+                                                    u64(before, "typed futex before"),
+                                                    u64(after, "typed futex after"),
+                                                    u64(deadline, "typed futex deadline"))
+        minimum = 9_000_000 if case in ("wait_relative_10ms", "wait_relative_runnable") else 0
+        _need(elapsed_i == after_i - before_i and minimum <= elapsed_i <= _FUTEX_MAX_NS,
+              "typed futex case timing")
+        if case == "wait_bitset_future":
+            _need(deadline_i > 0 and after_i >= deadline_i - 1_000_000,
+                  "typed futex future deadline")
+        else:
+            _need(deadline_i == 0, "typed futex unexpected deadline")
+    clone_re = re.compile(r"^NATIVE_ULTRA_FUTEX_CLONE parent_tid=([1-9][0-9]*) "
+                          r"child_tid=([1-9][0-9]*) entry_tid=([1-9][0-9]*) "
+                          r"stored_tid=([1-9][0-9]*) cleared_tid=0 entered=1 wait_calls=([0-9]+) "
+                          r"elapsed_ns=([0-9]+) flags=([0-9a-f]+) stack_bytes=262144\n$")
+    match = clone_re.fullmatch(lines[15])
+    _need(match is not None, "typed futex clone framing")
+    clone_parent, child, entry, stored, wait_calls, clone_elapsed, flags = match.groups()
+    _need(0 <= int(wait_calls) <= 256 and flags == "1250f00",
+          "typed futex clone fields")
+    thread_re = re.compile(r"^NATIVE_ULTRA_FUTEX_THREADS joined=2 parent_tid=([1-9][0-9]*) "
+                           r"tid0=([1-9][0-9]*) tid1=([1-9][0-9]*) count0=([1-9][0-9]*) "
+                           r"count1=([1-9][0-9]*) token0=1 token1=2 stack_bytes=262144 "
+                           r"elapsed_ns=([0-9]+)\n$")
+    match = thread_re.fullmatch(lines[17])
+    _need(match is not None, "typed futex thread framing")
+    parent, tid0, tid1, count0, count1, thread_elapsed = map(int, match.groups())
+    _need(all(1 <= value <= _FUTEX_MAX_PID for value in (parent, tid0, tid1)) and
+          len({parent, tid0, tid1}) == 3 and int(count0) > 0 and int(count1) > 0 and
+          all(1 <= value < 20_000_000 for value in (int(count0), int(count1))) and
+          thread_elapsed <= 6_000_000_000,
+          "typed futex thread identities")
+    _need(all(1 <= int(value) <= _FUTEX_MAX_PID for value in
+              (clone_parent, child, entry, stored)) and
+          int(clone_parent) == parent and int(child) == int(entry) == int(stored) and
+          int(child) != int(clone_parent) and 0 <= int(clone_elapsed) <= _FUTEX_MAX_NS,
+          "typed futex clone identities")
+    # The final CASE is intentionally after CLONE in the native fixture.
+    match = case_re.fullmatch(lines[16])
+    _need(match is not None and match.group(1) == "wait_relative_runnable" and
+          (int(match.group(2)), int(match.group(3))) == _FUTEX_CASES[15][1:],
+          "typed futex final case")
+    _, _, _, elapsed, before, after, deadline = match.groups()
+    elapsed_i, before_i, after_i, deadline_i = (u64(elapsed, "typed futex final elapsed"),
+                                                u64(before, "typed futex final before"),
+                                                u64(after, "typed futex final after"),
+                                                u64(deadline, "typed futex final deadline"))
+    _need(elapsed_i == after_i - before_i and 9_000_000 <= elapsed_i <= _FUTEX_MAX_NS and
+          deadline_i == 0,
+          "typed futex final case timing")
 
 
 def _freeze(value):
@@ -416,7 +521,11 @@ def evaluate(manifest, observation):
         _need(stream["limit"] == limit and stream["observed"] == stream["retained"] == len(data) <= limit
               and stream["discarded"] == 0, "stream accounting")
         _need(report["started_ns"] <= stream["eof_ns"] <= report["finished_ns"], "EOF timestamp")
-        _need(data == bytes.fromhex(manifest["payload"]["oracle"][name + "_hex"]), "wrong payload bytes")
+        typed = manifest["payload"]["oracle"].get("stderr_typed") if name == "stderr" else None
+        if typed is not None:
+            _check_typed_futex_stderr(data, typed)
+        else:
+            _need(data == bytes.fromhex(manifest["payload"]["oracle"][name + "_hex"]), "wrong payload bytes")
     schedules = re.findall(r"application SCHEDULE os=0 generation=1 pid=(\d+) cpu=0\b", serial)
     _need(len(schedules) == 1, "guest scheduling evidence")
     prefix = r"os=0 generation=1 pid=" + schedules[0]

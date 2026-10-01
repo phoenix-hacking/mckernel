@@ -12011,3 +12011,31 @@ same-generation retry.  SMP still registers v4 and the booted path remains
 Next implement generation-bound IRQ sender closure/callback drain before STOP,
 CPU reclamation and resource restoration.  The OS goal remains active and
 incomplete.
+
+Continuation checkpoint 290, 2026-10-01: the direct-futex collector and typed
+stderr oracle now pass independent source review after preserving three blocked
+iterations.  The final evaluator binds all 16 case IDs/results/errno values,
+current line order, exact timing/deadline relationships, clone/worker identity,
+wait/count bounds and distinct 2-second/6-second limits while retaining complete
+raw stderr.  Both authenticated guest-2 historical streams replay: Linux is
+2,583 bytes at `4aff87fd...5d6`; McKernel is 2,608 bytes at
+`85f59a08...e67f`.  The executable collector harness proves one exact frame
+larger than `PIPE_BUF`, observes a short write and `EAGAIN`, and verifies
+byte-for-byte delivery.  All 21 bounded tests pass.
+
+Exact source hashes are evaluator `e50d2c1b...9317`, collector
+`82825cf1...965e` and tests `492ccde4...27e`.  The retained payload remains
+45,304 bytes at `9593e5f1...2ecc`, with exact stdout
+`NATIVE_ULTRA_FUTEX PASS cases=16 threads=2 raw_clone=1\n` and exit 37.
+This is source/host evidence only: no collector artifact, c81 overlay, manifest,
+execution packet or futex guest exists.  Diagnostic count remains five and
+formal application/catalog acceptance remains zero.  Exact additive evidence is
+`docs/verification/evidence/native-exact-c81-futex-typed-oracle-source-checkpoint-20261001.json`.
+
+Next compile the exact `ND_FUTEX=1` collector in the reviewed pinned
+unprivileged profile, then prepare and independently review a fresh c81 overlay
+and strict manifest.  Production shutdown remains separate.  Its uncommitted
+IRQ-drain candidate now models sender closure, per-node BUSY polling and
+`irq_work_sync`, but cannot be accepted until an actual-body fixture executes
+route quarantine/reuse, callback and finalization races; v4 remains unwired.
+The OS goal remains active and incomplete.

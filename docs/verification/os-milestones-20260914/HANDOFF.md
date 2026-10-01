@@ -1,6 +1,26 @@
 # Compact dispatcher handoff
 
-## Latest continuation: checkpoint 289
+## Latest continuation: checkpoint 290
+
+The c81 direct-futex lane now has independently accepted source/host plumbing,
+not runtime evidence.  Exact hashes are evaluator `e50d2c1b...9317`, collector
+`82825cf1...965e`, and tests `492ccde4...27e`; 21 tests pass.  The typed oracle
+preserves complete raw stderr while checking current order, all 16 case
+results, timing/deadline relations, clone/thread identities and bounds.  Both
+authenticated guest-2 Linux/McKernel streams replay, and a valid frame above
+`PIPE_BUF` proves exact delivery through observed short-write/EAGAIN handling.
+
+Next compile the `ND_FUTEX=1` collector under the pinned unprivileged profile,
+then prepare and review a fresh c81 overlay/manifest.  Do not release a guest
+from source evidence.  The retained payload is `9593e5f1...2ecc`, expected
+stdout is `NATIVE_ULTRA_FUTEX PASS cases=16 threads=2 raw_clone=1\n`, exit 37.
+
+Shutdown IRQ drain remains an unaccepted candidate: queued-node synchronization
+and quarantine are being added, but actual production bodies still need focused
+race/finalization execution.  Keep v4 unwired.  Build count remains one,
+diagnostic app count five, formal applications 0/273, and the OS goal is active.
+
+## Previous continuation: checkpoint 289
 
 Fetched shutdown source checkpoint is `04bdc6afb4652b9e016a69261dd7c2227e4a2327`.
 The current c81 candidate now independently passes five bounded diagnostics:

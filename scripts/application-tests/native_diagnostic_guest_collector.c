@@ -23,8 +23,13 @@
 #include <time.h>
 #include <unistd.h>
 
+#if defined(ND_FUTEX)
+#define STREAM_LIMIT 4096u
+#define FRAME_LIMIT 8192u
+#else
 #define STREAM_LIMIT 1024u
 #define FRAME_LIMIT 4096u
+#endif
 #define MS 1000000ull
 #define COLLECTOR_SECONDS 120u
 /* native-boot contains two mandatory ten-second capture_pause calls. Allow
@@ -53,6 +58,10 @@ struct child_fault { int stage, number; };
      defined(ND_CORE_THREADS) + defined(ND_CORE_SIGNALS)) > 1
 #error "select at most one ND_CORE_* profile"
 #endif
+#if defined(ND_FUTEX) && (defined(ND_CORE_MEMORY) || defined(ND_CORE_FILES) || \
+                          defined(ND_CORE_THREADS) || defined(ND_CORE_SIGNALS))
+#error "ND_FUTEX is mutually exclusive with ND_CORE_* profiles"
+#endif
 #if defined(ND_CORE_MEMORY)
 static const char nd_core_case[] = "memory";
 #elif defined(ND_CORE_FILES)
@@ -67,6 +76,10 @@ static const char nd_core_case[] = "signals";
 static char *const payload_argv[] = {
     "/bin/mcexec", "-t", "1", "0", "app", (char *)nd_core_case, NULL
 };
+#elif defined(ND_FUTEX)
+static char *const payload_argv[] = {
+    "/bin/mcexec", "-t", "1", "0", "/apps/app", NULL
+};
 #else
 static char *const payload_argv[] = {
     "/bin/mcexec", "-t", "1", "0", "app", "A", "", "B", NULL
@@ -74,6 +87,11 @@ static char *const payload_argv[] = {
 #endif
 static char *const payload_env[] = {"PATH=/usr/bin:/bin", "COKERNEL_PATH=/apps", NULL};
 static char *const helper_env[] = {"PATH=/bin:/sbin:/usr/bin:/usr/sbin", "LC_ALL=C", NULL};
+#if defined(ND_FUTEX)
+static char *const futex_boot_argv[] = {
+    "/bin/native-boot", "hidos", "allow_oversubscribe", NULL
+};
+#endif
 
 static uint64_t now_ns(void)
 {
@@ -313,6 +331,13 @@ static int frame(char *b, const struct result *r, int empty)
                "\"finished_ns\":%llu,\"streams\":{\"stdout\":", argv_case, r->status,
                (unsigned long long)r->started, (unsigned long long)r->reaped,
                (unsigned long long)r->finished) ||
+#elif defined(ND_FUTEX)
+    if (append(b, &n, "ND_PAYLOAD {\"argv\":[\"/bin/mcexec\",\"-t\",\"1\",\"0\",\"/apps/app\"],\"cwd\":\"/case/work\","
+               "\"env\":{\"PATH\":\"/usr/bin:/bin\",\"COKERNEL_PATH\":\"/apps\"},"
+               "\"raw_wait_status\":%d,\"started_ns\":%llu,\"reaped_ns\":%llu,"
+               "\"finished_ns\":%llu,\"streams\":{\"stdout\":", r->status,
+               (unsigned long long)r->started, (unsigned long long)r->reaped,
+               (unsigned long long)r->finished) ||
 #else
     if (append(b, &n, "ND_PAYLOAD {\"argv\":[\"/bin/mcexec\",\"-t\",\"1\",\"0\","
                "\"app\",\"A\",\"\",\"B\"],\"cwd\":\"/case/work\","
@@ -329,10 +354,13 @@ static int frame(char *b, const struct result *r, int empty)
     return (int)n;
 }
 
-/* One attempted record write; never retry a partial write by appending a
- * second fragment. On a pipe <= PIPE_BUF is atomic. In the guest, all children
- * have been reaped, their outputs were piped, and printk console output is
- * suppressed; this is the sole userspace console writer. */
+static int write_all(int fd, const void *data, size_t len);
+
+/* One attempted record write. The ordinary profiles remain a single
+ * PIPE_BUF-sized atomic write; the futex profile is larger and uses the
+ * bounded write_all path below. In the guest, all children have been reaped,
+ * their outputs were piped, and printk console output is suppressed; this is
+ * the sole userspace console writer. */
 static int publish(int fd, const struct result *r, int empty)
 {
     char b[FRAME_LIMIT];
@@ -342,10 +370,15 @@ static int publish(int fd, const struct result *r, int empty)
         failed.fault = 1; failed.out.kept = 0; failed.err.kept = 0;
         n = frame(b, &failed, 0);
     }
+#if defined(ND_FUTEX)
+    if (n <= 0 || (unsigned)n > FRAME_LIMIT) return -1;
+    return write_all(fd, b, (size_t)n);
+#else
     if (n <= 0 || n > (int)PIPE_BUF) return -1;
     ssize_t written;
     do { written = write(fd, b, (size_t)n); } while (written < 0 && errno == EINTR);
     return written == n ? 0 : -1;
+#endif
 }
 
 static int write_all(int fd, const void *data, size_t len)
@@ -454,7 +487,11 @@ int main(void)
     loaded = 2;
     if (helper("load-mcctrl", "/sbin/insmod", (char *const[]){"insmod","/modules/mcctrl.ko",NULL}, &safe)) { good = 0; goto finish; }
     loaded = 3;
+#if defined(ND_FUTEX)
+    if (helper("boot", "/bin/native-boot", futex_boot_argv, &safe)) { good = 0; goto finish; }
+#else
     if (helper("boot", "/bin/native-boot", (char *const[]){"/bin/native-boot",NULL}, &safe)) { good = 0; goto finish; }
+#endif
     supervise("/bin/mcexec", payload_argv, payload_env, "/case/work", 10000, &payload);
     if (!payload.clean) safe = 0;
     if (save_file("/case/evidence/payload.stdout", payload.out.data, payload.out.kept) ||
