@@ -15,11 +15,11 @@ spec.loader.exec_module(m)
 REAL_QUARANTINE = m.quarantine_exclusion
 
 
-def test_attempt_three_bindings_consume_fresh_paths_and_reject_prior_attempts():
-    assert m.RELEASE_PATH.endswith('-3.json')
-    assert m.EVIDENCE.name.endswith('-3')
-    assert m.QUARANTINE.endswith('-3-quarantine')
-    for old in ('-20261001-1', '-20261001-2'):
+def test_attempt_four_bindings_consume_fresh_paths_and_reject_prior_attempts():
+    assert m.RELEASE_PATH.endswith('-4.json')
+    assert m.EVIDENCE.name.endswith('-4')
+    assert m.QUARANTINE.endswith('-4-quarantine')
+    for old in ('-20261001-1', '-20261001-2', '-20261001-3'):
         assert old not in m.RELEASE_PATH
         assert old not in str(m.EVIDENCE)
         assert old not in m.QUARANTINE
@@ -64,7 +64,7 @@ def transaction(tmp_path, monkeypatch):
             return result(b'[]')
         if args[0] == 'logs':
             return result(b'log')
-        if args == ('rm', '--no-prune', m.CONTAINER):
+        if args == ('rm', m.CONTAINER):
             return result(m.CONTAINER.encode() + b'\n')
         raise AssertionError(args)
 
@@ -300,12 +300,14 @@ def test_quarantine_replacement_is_retained(quarantine, monkeypatch):
         journal.close()
 
 
-def test_docker_transport_has_fixed_host_and_no_force(monkeypatch):
+def test_docker_transport_has_fixed_host_and_no_volume_removal(monkeypatch):
     captured = []
     monkeypatch.setattr(m, 'run', lambda args: captured.append(args))
-    m.docker('rm', '--no-prune', m.CONTAINER)
+    m.docker('rm', m.CONTAINER)
     assert captured == [['/usr/bin/sudo', '-A', '/usr/bin/docker', '--host',
-                         'unix:///var/run/docker.sock', 'rm', '--no-prune', m.CONTAINER]]
+                         'unix:///var/run/docker.sock', 'rm', m.CONTAINER]]
+    assert '-v' not in captured[0] and '--volumes' not in captured[0]
+    assert '--no-prune' not in captured[0]
 
 
 @pytest.mark.parametrize('field,value', [('Id', 'f' * 64), ('Name', '/other'), ('Image', 'other')])

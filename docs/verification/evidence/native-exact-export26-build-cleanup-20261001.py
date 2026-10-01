@@ -39,9 +39,9 @@ EXCLUSION = SCRATCH / 'native-exact-candidate-operational-exclusion-exportset-26
 EXCLUSION_SHA = '8099da3fbac5e6cfc3722af036614d7e5434c8988a7d2e172581bac64a606c86'
 EXCLUSION_ID = (1831, 90699)
 LOG_SHA = '3265a9f6bacbb32e7f0222543ac7a70a83685b567636cabcaa0647ffd50baa24'
-EVIDENCE = SCRATCH / 'native-exact-export26-build-cleanup-20261001-3'
-QUARANTINE = '.native-exact-export26-build-cleanup-20261001-3-quarantine'
-RELEASE_PATH = 'docs/verification/evidence/native-exact-export26-build-cleanup-release-20261001-3.json'
+EVIDENCE = SCRATCH / 'native-exact-export26-build-cleanup-20261001-4'
+QUARANTINE = '.native-exact-export26-build-cleanup-20261001-4-quarantine'
+RELEASE_PATH = 'docs/verification/evidence/native-exact-export26-build-cleanup-release-20261001-4.json'
 PACKET_PATH = 'docs/verification/evidence/native-exact-export26-build-cleanup-20261001.py'
 PINNED_FILES = {
     OWNER_RECEIPT: '462d3f7c3d8426c7b6a08085481fa470b9bd9b05a3d659390b313074291ef301',
@@ -459,7 +459,10 @@ def execute(commit, release_sha):
             cancellation.check()
             journal.event('remove-intent', container=CONTAINER)
             cancellation.check()
-            removed = docker('rm', '--no-prune', CONTAINER)
+            # Docker's default rm does not remove volumes unless -v/--volumes
+            # is supplied.  Keep the invocation portable across daemon CLI
+            # versions; --no-prune is not accepted by all clients.
+            removed = docker('rm', CONTAINER)
             journal.capture('remove-result', removed)
             if removed.returncode != 0 or removed.stderr.strip() or removed.stdout.strip() != CONTAINER.encode():
                 raise Error('container removal uncertain')
