@@ -1,0 +1,81 @@
+{
+  "schema": "mckernel.native-exact-candidate12.staged-recovery-success.v1",
+  "recorded_at": "2026-09-30T18:13:00-07:00",
+  "status": "PASS_RECOVERY_EVIDENCE",
+  "release": {
+    "path": "docs/verification/evidence/native-exact-candidate12-staged-recovery-release-20260930-1.json",
+    "commit": "8b6c1c118cc46374c00579b3e32ddd6941f8e441",
+    "sha256": "4383b9c15ae4dc8e6b4e9dd9e917649cab2c8cfa98c1fee029ab75e0316ca203"
+  },
+  "validation": {
+    "command_mode": "--validate-recovery",
+    "exit_code": 0,
+    "stdout": "RECOVERY_VALIDATION_PASS; no output or candidate mutation"
+  },
+  "execution": {
+    "command_mode": "--recover-staged",
+    "exit_code": 0,
+    "stdout": "RECOVERY_PASS",
+    "live_recovery": true,
+    "deletion": false,
+    "build": false,
+    "guest": false,
+    "acceptance_change": false
+  },
+  "outputs": {
+    "journal": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate12-staged-recovery-20260930-1.journal.jsonl",
+      "sha256": "d07654663e9fc9724304ffcacfb6bb80e5f11e147c3248d47249ff7f8441713a",
+      "size": 1880475,
+      "dev": 1831,
+      "ino": 90658,
+      "mode": "0600",
+      "nlink": 1,
+      "records": 5019
+    },
+    "receipt": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate12-staged-recovery-20260930-1.receipt.json",
+      "sha256": "92b51fe4a88e13b17fd0f3ac56379217add7723fe49ef947f05bfb1c05c8489f",
+      "size": 1403963,
+      "dev": 1831,
+      "ino": 90659,
+      "mode": "0600",
+      "nlink": 1
+    },
+    "status": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate12-staged-recovery-20260930-1.status.json",
+      "sha256": "5b3ebb13e583a14f02b2630bcade00db2382409b342309131b81b37860bbe57f",
+      "size": 248,
+      "dev": 1831,
+      "ino": 90660,
+      "mode": "0600",
+      "nlink": 1
+    }
+  },
+  "restoration": {
+    "candidate_root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-4e99a82c-scratch-12",
+    "candidate_identity": "1831:3693246",
+    "files": 2507,
+    "bytes": 9096966061,
+    "allocated_bytes": 9102798848,
+    "directories": 100,
+    "states": ["restored"],
+    "post_validate_only": "VALIDATION_PASS; no mutation or runtime acceptance"
+  },
+  "quarantine": {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-4e99a82c-scratch-12/.planbound-cleanup-20260930-2",
+    "dev": 1831,
+    "ino": 3701891,
+    "mode": "0700",
+    "files": 0
+  },
+  "census": {
+    "lsof_records_each": 115,
+    "declared_descriptors_and_witnesses": 108,
+    "candidate_references": 107,
+    "containers": 41,
+    "candidate_intersections": 6,
+    "absent_leases": 2
+  },
+  "scope": "Exact candidate12 rename-back recovery only; no cleanup/deletion, build, guest or acceptance authority."
+}

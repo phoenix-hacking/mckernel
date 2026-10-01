@@ -10890,3 +10890,29 @@ restoration unlocks a fresh corrected-cleanup release, scratch trim/capacity
 measurement, rebound scratch-13 preparation, the serialized smallest-current
 image build and separately labelled diagnostic applications.  No formal
 acceptance counter changes here.
+
+Continuation checkpoint 262, 2026-09-30: exact staged-recovery release
+`4383b9c1...ca203` at fetched commit `8b6c1c11...e441` passed independent
+execution review, then its single read-only validation and single recovery
+invocation both passed.  The validation printed `RECOVERY_VALIDATION_PASS` and
+the execution printed `RECOVERY_PASS`, both with exit zero.  No delete path was
+entered.
+
+Independent evidence review accepts all 5,019 journal records and all 2,507
+restored files (9,096,966,061 bytes; 9,102,798,848 allocated bytes) against the
+exact plan, including content, inode, mode, link, size, mtime and allocation.
+The exact 100-directory evidence shape is restored.  The original quarantine
+inode remains mode 0700 and empty; both leases are absent.  Journal/receipt/
+status hashes are `d0765466...713a`/`92b51fe4...849f`/`5b3ebb13...e57f`.
+Both initial and final censuses contain 115 complete lsof records, 41 stable
+containers and exactly six authenticated terminal candidate intersections.
+Exact evidence is
+`docs/verification/evidence/native-exact-candidate12-staged-recovery-success-20260930.json`.
+
+This accepts rename-back recovery only.  It is not cleanup/deletion, a build,
+a guest or OS acceptance.  Next author a fresh cleanup release binding the
+accepted observer/current source and entirely fresh attempt-3 outputs; obtain
+independent execution review and run it once.  On accepted cleanup, trim and
+remeasure capacity, rebind/release scratch-13 preparation and exportset-25,
+build the smallest current image and run separately labelled diagnostic
+startup/memory/files/threads-futex/signals/shutdown applications.
