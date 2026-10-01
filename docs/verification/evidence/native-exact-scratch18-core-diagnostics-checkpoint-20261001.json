@@ -1,0 +1,39 @@
+{
+  "schema": "mckernel.native-exact-scratch18-core-diagnostics-checkpoint.v1",
+  "recorded_at": "2026-10-01T20:58:51Z",
+  "status": "PASS_FIVE_FRESH_DIAGNOSTIC_GUESTS",
+  "candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+  "modules": [
+    "db003ffdbd2f939badac7753a1df08b9daf4a80544bf812e53ba1276fbd62519",
+    "268d6d3b36fd33f9650c5b7b3ae5233e606d07c992e1e0c4be64493527f84bbb",
+    "4cf6196f9e93fb10b08bc4e5bf75022b0858779a6479910340941006748cd23f"
+  ],
+  "runs": {
+    "memory": {"status":"PASS_DIAGNOSTIC","exit":37,"stdout":"NATIVE_CORE PASS memory\n","stderr_bytes":0,"result_sha256":"482b82522276a336f7e95e4658e9d90c0cea24d1d63bcf85d1f5d47dbb2e571f","serial_sha256":"62f0515f53a94e3cee1dff356ddfe3b18ff548dc1f61f716b9df8616303dad43","qmp_sha256":"625d2250246a2a96dd463001a60b401540872be175551778473ddff008b448a9","boot_to_payload_seconds":30.052705308,"payload_to_reap_seconds":3.064938141,"observation_seconds":35.282835582},
+    "files": {"status":"PASS_DIAGNOSTIC","exit":37,"stdout":"NATIVE_CORE PASS files\n","stderr_bytes":0,"result_sha256":"fd7574fedd12d57fe3d0b2cc1d67af0523ac895c3a707207bfefea62848da04d","serial_sha256":"b00f46b5c1264bfd6c8cf200ea29d1c537e123e46f7e43d0e4363fad28f101ce","qmp_sha256":"fecdd3c43978c9e327d675a8ecb43f961aa40905f591770d6a851eea0eecb997","boot_to_payload_seconds":30.038410782,"payload_to_reap_seconds":3.077441965,"observation_seconds":35.323619067},
+    "threads": {"status":"PASS_DIAGNOSTIC","exit":37,"stdout":"NATIVE_CORE PASS threads\n","stderr_bytes":0,"result_sha256":"294fe5e42331d5eeffaec9a66daa5bb3212afb0d6bb27d18cbcfc18f221fb4cf","serial_sha256":"54e53d7ba78e0b8a2363afa7acc9fa64d0adf2cc480b8a4d9324b48d7882d63a","qmp_sha256":"c31d68af6a6768dbe4a59cc83ca3a229572e3d380efe5daf3f82f3b34b968fce","boot_to_payload_seconds":30.332577951,"payload_to_reap_seconds":2.783800734,"observation_seconds":35.348506592},
+    "futex": {"status":"PASS_DIAGNOSTIC","exit":37,"stdout":"NATIVE_ULTRA_FUTEX PASS cases=16 threads=2 raw_clone=1\n","stderr_bytes":2608,"result_sha256":"136f867f11cea7143cc10ef568d9503bd8ab89ded9e9cfb90e01e4c173dba795","serial_sha256":"426ad65af2254764ffccb7352d938971f0c8d7f7bed86dfbad7b14ac012faeb8","qmp_sha256":"80600dde4473e0812953d6a458172a794676beb6fdbb6c9e5ab45b1548fb4e5d","boot_to_payload_seconds":29.988779188,"payload_to_reap_seconds":3.127855356,"observation_seconds":35.324250918},
+    "signals": {"status":"PASS_DIAGNOSTIC","exit":37,"stdout":"NATIVE_CORE PASS signals\n","stderr_bytes":0,"result_sha256":"f0b6aeee4fd960a79df25f196820397502574b5de2f91b6d7591c86489bb45cd","serial_sha256":"f581b3d6a3bf31d381bc0ab9fc0b83ae01013152dbb47d028a5cda70853eb5a3","qmp_sha256":"eee46aadee35eb031570d3252d361601b99be05f2f29fb915d8d0bbb00605db9","boot_to_payload_seconds":29.871399231,"payload_to_reap_seconds":3.239242696,"observation_seconds":35.387952676}
+  },
+  "verified_behavior": {
+    "memory": "host invalidation and three allocator-zeroing completions observed; final record still had pending=70",
+    "files": "8209-byte write/read, EOF, positional update/read, fsync, close/reopen/read, unlink and expected ENOENT",
+    "threads": "512-byte TID transfer, three TIDs, two workers, barrier, 2000 mutex increments, TLS and joins",
+    "futex": "16 typed cases, two pthreads and raw clone TID set/clear; wait_calls=0 does not prove blocked clear-child-TID wake",
+    "signals": "payload assertions cover pending/unblock and two sequential alternate-stack handlers with restoration; serial does not expose handler stack addresses"
+  },
+  "teardown": "All five runs observed QMP guest shutdown, QEMU bounded reap, container exit 0/non-OOM and exact removal, procfs deletion, pager drain, retirement and process release.",
+  "timing": {"mean_observation_seconds":35.333433,"serial_throughput_cases_per_minute":1.698,"peak_resource_measurement":"NOT_CAPTURED"},
+  "capacity_after": {"host_free_bytes":38888804352,"scratch_free_bytes":34230886400,"memory_available_bytes":22530310144},
+  "accounting": {"current_candidate_builds":3,"bounded_diagnostic_guest_passes":11,"formal_application_acceptances":0,"native_production_gates":"6/130","language_gates":"0/7"},
+  "limitations": [
+    "Diagnostic results are not formal acceptance.",
+    "The futex payload binds retained source 34d7609917814f96cadda0ab549164a059e84ff8364ab5298283b1e704f2469d, not the current fixture source.",
+    "The sequential batch runner remains unreleased after review findings.",
+    "The 2-vCPU/6-GiB profile is source-tested but has not run.",
+    "No peak CPU/RAM measurement or concurrent-guest authorization exists."
+  ],
+  "next_tasks": ["Repair and review resource measurement.","Run one measured 2-vCPU/6-GiB startup pilot under separate release.","Repair and re-review bounded stop-on-first-failure batching.","Do not authorize concurrent guests until measurements and isolation review pass."],
+  "os_goal_complete": false
+}

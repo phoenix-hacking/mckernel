@@ -13616,3 +13616,60 @@ the smallest scratch18 memory diagnostic, then files, threads/futexes and
 signals, repairing the first observed failure with a fresh attempt.  No
 production, formal application or OS acceptance is claimed; the OS remains
 incomplete.
+
+Continuation checkpoint 346, 2026-10-01: five additional fresh scratch18
+diagnostic guests PASSed serially under the reviewed four-vCPU/eight-GiB guest
+and four-CPU/12-GiB container profile.  Memory, files, threads, direct futex
+and signals each returned the exact oracle and exit 37; stderr was empty except
+for the futex fixture's exact 2,608-byte typed record.  All runs reached procfs
+deletion, pager drain, retirement/process release, QMP guest shutdown, bounded
+QEMU reap and exact container removal without OOM.  Independent result reviews
+PASS all five within their stated diagnostic scopes.
+
+Concrete behavior includes three zeroing completions and host invalidation;
+8,209-byte file write/read plus positional I/O, fsync, reopen and unlink; three
+published TIDs, pthread barrier/mutex/TLS/join; 16 exact futex cases, two
+pthreads and raw-clone TID clear; and the signal payload's pending/unblock plus
+two alternate-stack delivery/restoration assertions.  Limits remain explicit:
+the last memory zeroing record has `pending=70`; raw clone had `wait_calls=0`;
+the futex binary binds retained source `34d76099...2469d`, not today's fixture;
+and serial does not expose signal handler stack addresses.
+
+Measured mean per-guest observation time is 35.333 seconds, about 1.698 cases
+per minute serially; payload launch occurs near 30 seconds.  Peak CPU/RAM was
+not captured by the existing owner, so concurrent guests remain unauthorized.
+Exact outputs, timings and raw result/serial/QMP hashes are in
+`native-exact-scratch18-core-diagnostics-checkpoint-20261001.json`.  A separate
+addendum corrects the malformed historical futex payload-source hash without
+editing the original record.  Counts are now three compiled current candidates,
+11 bounded diagnostic guest passes, zero formal application accepts, 6/130
+production gates and 0/7 language gates.  Next repair/review resource metrics,
+run one measured two-vCPU/six-GiB startup pilot, and finish bounded batching;
+the OS remains incomplete.
+
+Continuation checkpoint 347, 2026-10-01 shutdown: launcher stop arrived after
+all six new scratch18 guests (startup plus five core/futex runs) completed and
+their owners cleaned.  No QEMU, mcexec, diagnostic owner/resource observer or
+matching live container remains; `/run/lock/mckernel-development.lock` is the
+preserved root-owned inode `27:4` and is unheld.  There is no active heavy
+process identity to resume.
+
+Two source lanes are deliberately unreleased and remain uncommitted in the
+shared worktree for the next invocation.  Batch source/tests hashes are
+`121e8432...2007` / `25abd653...28e`; the last independent review still blocks
+timeout supervision, exact owner-invocation binding, durable drift refusal and
+reserved-output identity.  Resource-owner draft hash `343b99cf...e6c37f`
+still cannot observe a live synchronous container and must be restored to the
+published owner before use.  A separate read-only observer draft exists at
+`962fd1e1...ccbee` but lacks its requested test suite and independent review.
+None of these bytes authorizes execution.
+
+The source-validated small startup manifest is preserved at
+`native-diagnostic-scratch18-startup-small-profile-20261001-1/manifest.json`,
+SHA `c98eb53e...101be`, inode `1831:4457669`; it selects two vCPUs, 6,144 MiB
+and one NUMA node but has not run.  Next restore the owner to published hash
+`a3efa2ef...deec`, finish and review the standalone resource observer, then
+prepare a fresh measured small-profile packet/release.  Only after measured
+peak CPU/RAM and isolation review may concurrent guests be considered.  Finish
+the batch corrections separately; never use either unreleased WIP lane.  No
+acceptance counters change at shutdown and the OS remains incomplete.
