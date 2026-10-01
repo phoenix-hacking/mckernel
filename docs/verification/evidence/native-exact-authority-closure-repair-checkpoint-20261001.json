@@ -1,0 +1,77 @@
+{
+  "schema": "mckernel.native-exact-authority-closure-repair-checkpoint.v1",
+  "recorded_at_utc": "2026-10-01T11:48:00Z",
+  "status": "PASS_SOURCE_AUTHORITY_REPAIR",
+  "failure_evidence": "docs/verification/evidence/native-exact-build-scratch16-lifecycle-failure-20261001.json",
+  "source_base": "ddb8d7d58a9de7063663a27397b9fb9613a6325c",
+  "bounded_target_commit": "50b084322610a9326b1b7b528edd4cd73b635632",
+  "bounded_target_tree": "d28aaf4fa3df195e7ea36c4fa51b9392bfcb5620",
+  "bounded_target_delta": [
+    "host-kernel/contracts/ihk-os-runtime-v1.json",
+    "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json",
+    "host-kernel/native-rust/ihk-lifecycle-contract-v1.json",
+    "scripts/tests/test_ihk_native_lifecycle_check.py"
+  ],
+  "artifacts": {
+    "runtime_contract_sha256": "c051471f307aff072b20c86c9a4c9b94fb47b983f2695a1ccbb1c91af21ddd7d",
+    "lifecycle_contract_sha256": "226455ffdd21611f3b33e149bbaddead7676aca3aa63e808fbe269e1a7285be1",
+    "unsafe_ffi_ledger_sha256": "655f8ed04b50dd4f9f6e7db5fab5d7f1dbedb629c10152dc9afc1b5cd7c76b8d",
+    "unsafe_ffi_ledger_self_digest": "c2ca2f6c7f02b5ffa12250ec1d561ac3963d037881624b6bf2ec59cec9ec04ca",
+    "unsafe_ffi_source_closure_sha256": "1c217ec58951f7fbabfc7a63fd0be1dc395373cfbc18002fd97fa060e6b89653",
+    "lifecycle_test_sha256": "965f55d976905384aa551cbc3d532e37d548cd0a7df03f0025326fa255a0b2cf",
+    "production_os_runtime_sha256": "aa9fa37f67762565c3d1be1a0c7662736932a136bc43a3fd3ef2deb319c2a4b6"
+  },
+  "verified_scope": {
+    "source_inputs": 55,
+    "unsafe_ffi_sites": 637,
+    "durable_annotations_preserved": true,
+    "gate_scope_readiness_preserved": true,
+    "production_source_changed": false,
+    "runtime_validator": "PASS",
+    "lifecycle_validator": "PASS",
+    "unsafe_ffi_validator": "PASS on exact ddb8 overlay",
+    "lifecycle_and_ledger_tests": "PASS 80",
+    "rust_1_92_runtime_mock_cases": "PASS 66",
+    "broader_source_checks": "PASS through API/ABI, build-surface, host-audit, staging, registries, ioctl, SMP/mcctrl lifecycle and RS006"
+  },
+  "independent_review": {
+    "decision": "PASS_SOURCE_AUTHORITY_REPAIR",
+    "reviewer_blocks_before_pass": [
+      "stale unsafe-ledger source_closure_sha256",
+      "stale stage-manifest repository lock",
+      "stale runtime and mcctrl_process mechanical source/site bindings"
+    ]
+  },
+  "raw_logs": {
+    "root": "/home/holden/mckernel-work/scratch/native-exact-authority-closure-review-20261001-1",
+    "initial_phase0_sha256": "7382c3e8a5a4c78b4b16f9adb4c40357c712d7910b9dfbcc0875ef3b4f97950b",
+    "initial_direct_checks_sha256": "509b11d39ffe3533d721aefffd8d158e3cf0fbb3d69d3034362d573bdc58ebd1",
+    "initial_ledger_differences_sha256": "f20a12dc5f4eb9dbb79c093f3c011e768261f8839c23bc75861c322700c5fd05",
+    "final_direct_checks_sha256": "4cfbbfa4ecfd22e5c2cc058b12f73425ab6f4149be220699a3f6617ecd62c0f4",
+    "final_runtime_cases_sha256": "835c93f8a6cb03332105659a438a6d8cbf9deb8844dab0d10430d168ad0ef85b",
+    "final_source_checks_sha256": "8dd073bc73534115fd88f369d04cb1248d24b475dfde1bba17345a7b86e1e6bc"
+  },
+  "limitations": [
+    "Complete phase-0/build release remains unproven because the host Rust 1.92 binary lacks the exact Red Hat compiler identity required by the Rocky checker.",
+    "The runtime-evidence checker requires Python 3.10 or newer while the reviewed host paths supplied Python 3.8/3.9.",
+    "The RK006 check rejected the disposable hard-linked overlay contract at nlink two; this is not a source-binding failure.",
+    "A fresh candidate, fresh preparation, independent release and one successor build are still required."
+  ],
+  "cleanup": {
+    "initial_tmp_tree_allocated_bytes": 9257091072,
+    "initial_tmp_tree_open_references_before_removal": 0,
+    "initial_tmp_tree_removed": true,
+    "final_overlay_open_references_before_removal": 0,
+    "final_overlay_removed": true,
+    "logs_preserved_before_removal": true,
+    "host_free_bytes_after_removal": 24188911616,
+    "scratch_free_bytes_after_removal": 15730933760
+  },
+  "acceptance": {
+    "source_authority_repair": true,
+    "build_executed": false,
+    "guest_executed": false,
+    "formal_application_acceptance": false,
+    "os_complete": false
+  }
+}

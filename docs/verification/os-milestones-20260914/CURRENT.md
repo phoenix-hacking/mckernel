@@ -12672,3 +12672,40 @@ attempt paths immutable.  Only after source-closure checks pass end-to-end may
 one expert-released successor build run.  Counts remain one compiled current
 candidate, five bounded diagnostic guest passes and zero formal application
 acceptances; no current-window guest ran.
+
+Continuation checkpoint 312, 2026-10-01: expert-directed regeneration and
+independent review return `PASS_SOURCE_AUTHORITY_REPAIR` for the complete ddb8
+closure.  The bounded target commit `50b08432...35632` has parent ddb8 and tree
+`d28aaf4f...b5620`; it differs from ddb8 in exactly four authority/test files,
+so later shutdown work is excluded from the next build correction.
+
+Runtime contract `c051471f...ddd7d`, lifecycle contract
+`226455ff...5be1`, unsafe/FFI ledger `655f8ed0...76b8d` and lifecycle tests
+`965f55d9...b2cf` bind unchanged production runtime `aa9fa37f...2a4b6`.
+The regenerated ledger covers 55 inputs and 637 sites with closure
+`1c217ec5...89653` and self-digest `c2ca2f6c...c04ca`.  All durable IDs,
+obligations, context constraints, owners, capture/review states, scope,
+coverage and NOT_READY status remain unchanged.
+
+Independent exact-overlay validation passes the runtime, lifecycle and RS-011
+validators, 80 lifecycle/ledger tests, 66 Rust 1.92 runtime mock cases and the
+broader API/ABI/build-surface/host/staging/registry/ioctl/SMP/mcctrl/RS006
+source checks.  The review first blocked incomplete closure and forced repair
+of the stage-manifest lock, runtime/mcctrl-process mechanical sites and closure
+digest; those original BLOCK findings remain preserved.
+
+Complete phase-0/build release is still unproven locally: the available Rust
+1.92 lacks the exact Red Hat identity, runtime-evidence needs Python >=3.10,
+and RK006 rejected a disposable nlink-two overlay contract.  These are recorded
+limitations, not another source-binding failure.  Six raw review logs are
+preserved under `native-exact-authority-closure-review-20261001-1`; both large
+reconstructible review trees were removed only after terminal-process and lsof
+checks.  Exact evidence is
+`native-exact-authority-closure-repair-checkpoint-20261001.json`.
+
+Next push/fetch and independently verify the bounded target commit, then create
+a fresh scratch17 preparation packet from that exact target.  Scratch15 and
+scratch16 remain immutable and must never rerun.  After prepared-candidate
+review, one expert-released successor build may test whether phase-0 now reaches
+compilation.  Counts remain one compiled current candidate, five bounded
+diagnostic guest passes and zero formal application acceptances.
