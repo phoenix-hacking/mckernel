@@ -15,6 +15,15 @@ spec.loader.exec_module(m)
 REAL_QUARANTINE = m.quarantine_exclusion
 
 
+def test_attempt_two_bindings_consume_fresh_paths_and_reject_attempt_one():
+    assert m.RELEASE_PATH.endswith('-2.json')
+    assert m.EVIDENCE.name.endswith('-2')
+    assert m.QUARANTINE.endswith('-2-quarantine')
+    assert '-20261001-1' not in m.RELEASE_PATH
+    assert '-20261001-1' not in str(m.EVIDENCE)
+    assert '-20261001-1' not in m.QUARANTINE
+
+
 def result(data=b'', code=0, err=b''):
     return SimpleNamespace(returncode=code, stdout=data, stderr=err)
 
