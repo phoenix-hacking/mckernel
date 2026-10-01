@@ -12439,3 +12439,53 @@ This is source execution-release readiness only.  Next push/fetch these exact
 blobs, run validate-only against that fetched commit, perform fresh full
 process/lease/container/capacity preflight, then invoke `--execute` once.  No
 unchanged retry is allowed, and no application or OS acceptance count moves.
+
+Continuation checkpoint 304, 2026-10-01: the single released scratch15 build
+attempt failed safely before compilation in its first source-contract phase.
+The actual driver output is `native Rust build-surface audit failed:
+mcctrl_process.rs authority digest drift`; source bytes are
+`148134730...ffc70` while the staging manifest and generated expected-input
+table retained `dfc4f4ec...ede67`.  No binary was built or promoted.  The
+pinned container `4ab0887b...6ff6` exited 1, was not OOM-killed, has PID zero,
+and remains retained under owner label `7da56f66...d84f`.  The lease retired;
+fresh exportset-27 remains as immutable attempt evidence.
+
+Owner receipt `f1ed8149...6a474`, driver receipt
+`35d92093...0f907`, driver log `145ecb65...4c723`, terminal inspect
+`b8224245...9cb57`, derived request `74a43aaf...3f6203`, and exclusion
+`27a8b2e5...aa5553` bind the original failure.  Exact additive evidence is
+`native-exact-build-scratch15-authority-failure-20261001.json`.  This exact
+request must never be rerun.
+
+The one bounded correction for the stale native-Rust staging-authority family
+updates the authoritative mcctrl-process hash and the already-committed
+os-runtime hash in both `stage-manifest.json` and the generated
+`EXPECTED_INPUTS`.  A disposable tree containing exact HEAD host-kernel bytes
+plus only the corrected manifest passes the native build-surface audit and
+Rocky staging manifest integrity; Rocky remains explicitly NOT READY at its
+four downstream qualification blockers.  Unrelated uncommitted rejected
+shutdown edits in `smp_cpu.rs` and `smp_memory.rs` remain excluded and
+untouched.  Independent review of this correction is pending before a fresh
+candidate.  Compiled current-candidate count remains one, diagnostic guest
+PASS count remains five, formal application count remains zero, and the OS
+goal is active and incomplete.
+
+Continuation checkpoint 305, 2026-10-01: independent review returns PASS for
+the complete bounded staging-authority correction.  At source HEAD
+`81691656...b9e`, exactly two of 56 manifest inputs were stale:
+`mcctrl_process.rs` at `148134730...ffc70` and `os_runtime.rs` at
+`aa9fa37f...2a4b6`.  The audit is alphabetical, so the original build reported
+only the first.  Independent read-only replay proves the original manifest
+fails on mcctrl, an mcctrl-only correction next fails on os-runtime, and the
+complete two-digest correction passes the full build-surface audit for all
+three modules.  All 56 inputs plus three crate roots match exact committed
+source bytes; strict Rocky staging-manifest validation passes while correctly
+remaining non-credit-eligible at its four downstream qualification blockers.
+
+Corrected manifest `1d0ecb3c...e63869` and generated expected-input table
+`9b0943b3...0f53e` are the only source-authority changes.  Exact review evidence
+is `native-exact-authority-digest-correction-checkpoint-20261001.json`.
+Uncommitted rejected shutdown changes in `smp_cpu.rs` and `smp_memory.rs` are
+excluded, untouched, and not covered by this PASS.  Scratch15 and its failed
+request remain immutable evidence.  Next checkpoint these bytes, then prepare
+a fresh candidate and fresh one-shot build request; never rerun scratch15.

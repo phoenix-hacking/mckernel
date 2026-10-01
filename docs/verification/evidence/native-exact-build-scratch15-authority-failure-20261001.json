@@ -1,0 +1,50 @@
+{
+  "schema": "mckernel.native-exact-build-failure.v1",
+  "status": "FAIL_SOURCE_CONTRACT",
+  "candidate_commit": "1e95abdc2b124c19f16b88cdb21600c768a10c2d",
+  "release_commit": "81691656298dca9c732a3ec185bb1e40b7118b9e",
+  "execution": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 /usr/bin/python3 -B docs/verification/evidence/native-exact-scratch15-build-execution-20261001.py --release-commit 81691656298dca9c732a3ec185bb1e40b7118b9e --execute",
+    "exit_code": 1,
+    "owner_pid": 3031407,
+    "owner_starttime": "106041947",
+    "failure_phase": "Verify source-only contracts without claiming readiness",
+    "error": "native Rust build-surface audit failed: mcctrl_process.rs authority digest drift",
+    "compile_started": false,
+    "artifacts_promoted": false
+  },
+  "request": {
+    "original_sha256": "1c18211bde1005ee0dab8b7251df2854b005cb8768347ff5063878621c7cd8d8",
+    "derived_path": "/home/holden/mckernel-work/scratch/native-exact-build-request-1e95abdc-scratch-15-execution.json",
+    "derived_byte_sha256": "74a43aaf257c45986aee9aa59a6cc722d91315eac871ff7663efe6c5cb3f6203",
+    "derived_canonical_sha256": "f1db435d991cbbf4c16d624c6d33d3abcd0e5f39f165a980910d632835993fd4"
+  },
+  "resource_profile": {"cpuset_cpus": "2-5", "memory_bytes": 12884901888, "memory_swap_bytes": 12884901888, "nano_cpus": 4000000000, "pids_limit": 512, "network_mode": "none", "oom_killed": false},
+  "container": {
+    "id": "4ab0887b2fcaaa7ff5393fc674e52defb75155cfe25cfbac84b8231b3f6f6ff6",
+    "name": "mckernel-exact-160d90019e014cfea61834ab5e0d6b22",
+    "owner_label": "mckernel.owner=7da56f66136b4f8dbf9ab8aa6a86d84f",
+    "started_at": "2026-10-01T10:30:23.886166415Z",
+    "finished_at": "2026-10-01T10:30:40.332733657Z",
+    "exit_code": 1,
+    "state": "exited-retained",
+    "cleanup_separately_required": true
+  },
+  "evidence": {
+    "owner_receipt": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-1e95abdc-scratch-15/receipt.json", "sha256": "f1ed8149fe2bfd90ae6e5ac918a926cfca567f723703c68e665562333366a474"},
+    "driver_receipt": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-1e95abdc-scratch-15/build/receipt.json", "sha256": "35d920934ff543c7647ed24b883eeff16e065773aff3fe24fceb21790400f907"},
+    "driver_log": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-1e95abdc-scratch-15/build/driver.log", "sha256": "145ecb6593f26769f1a3c969d993a698493346cd07b70a6770f571fd89c4c723"},
+    "terminal_inspect": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-evidence-1e95abdc-scratch-15/inspect-terminal.json", "sha256": "b822424547fe6563ba1a69e0877916831c3e3bfaf14ec088afd7621fa3c9cb57"},
+    "operational_exclusion": {"path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch15-exportset-27.json", "sha256": "27a8b2e5b962e5de1e52ed7d10e5eb44547dfa1633390c7fc5127ae9c1aa5553", "retained": true},
+    "lease_absent_after_retirement": true
+  },
+  "preflight": {"host_free_bytes": 24788303872, "scratch_free_bytes": 16009543680, "memory_available_bytes": 25760428032, "active_heavy_leases": 0, "matching_processes": 0, "unrelated_running_containers": 2},
+  "diagnosis": {
+    "observed_source_sha256": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+    "stale_manifest_sha256": "dfc4f4ec13c15e3279cf5240bc741d0977de4cb2fa8149b24427f183faeede67",
+    "family": "stale-native-Rust-staging-authority-digests",
+    "disposition": "Preserve this original failed attempt. Apply one complete bounded source-authority correction and prepare a fresh candidate; never rerun this immutable request."
+  },
+  "counters": {"compiled_current_candidate_count": 1, "scratch15_build_attempts": 1, "scratch15_build_failures": 1, "diagnostic_guest_passes": 5, "formal_application_acceptances": 0},
+  "acceptance": "Original build failure evidence only. No compiled artifact, boot, guest, diagnostic application, formal application, shutdown or OS acceptance."
+}
