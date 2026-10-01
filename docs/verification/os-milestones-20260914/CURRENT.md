@@ -11544,7 +11544,7 @@ current-candidate applications remain zero.
 
 The fresh c81/exportset-26 libdwarf preparation packet and its 12-test
 Python-3.8 suite now pass independent source review.  Its exact packet SHA is
-`04869832...6e84`; tests SHA is `4864a33b...e9a9`.  It preserves exclusive
+`c8c0dceb...15ca`; tests SHA is `c3665bd2...8d2`.  It preserves exclusive
 publication, gated child startup, descendant retirement, signal handling and
 durable log/terminal boundaries while binding the scratch-14 manifest and
 candidate/IHK identities.  Next obtain the fetched one-shot execution release,
