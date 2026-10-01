@@ -1,0 +1,58 @@
+{
+  "schema": "mckernel.native-exact.interrupted-archives-preparation.v1",
+  "recorded_at_utc": "2026-10-01T16:05:00Z",
+  "state": "PREPARED_SOURCE_TREES_RETAINED",
+  "acceptance_credit": false,
+  "sources": {
+    "output": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-18-output",
+      "device": 1831,
+      "inode": 3571962,
+      "size_bytes": 2173669376,
+      "mode": "0700",
+      "uid": 1000,
+      "gid": 1000,
+      "links": 4
+    },
+    "evidence": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-18-evidence",
+      "device": 1831,
+      "inode": 3571963,
+      "size_bytes": 41193472,
+      "mode": "0700",
+      "uid": 1000,
+      "gid": 1000,
+      "links": 13
+    }
+  },
+  "archives": {
+    "output": {
+      "path": "/home/holden/mckernel-work/mckernel-exact-candidate-scratch-18-interrupted-output.tar.gz",
+      "device": 66306,
+      "inode": 47498677,
+      "size_bytes": 347495406,
+      "mode": "0600",
+      "uid": 1000,
+      "gid": 1000,
+      "links": 1,
+      "sha256": "22abd1b6a43b0b9e4774d7f3c22235f8960d3b7b58f2bcebb3846b30f93d8d7f",
+      "compare": "tar --acls --xattrs --compare exited 0",
+      "restore_command": "tar --numeric-owner --acls --xattrs --same-permissions -xzf /home/holden/mckernel-work/mckernel-exact-candidate-scratch-18-interrupted-output.tar.gz -C /home/holden/mckernel-work/scratch"
+    },
+    "evidence": {
+      "path": "/home/holden/mckernel-work/mckernel-exact-candidate-scratch-18-interrupted-evidence.tar.gz",
+      "device": 66306,
+      "inode": 47498688,
+      "size_bytes": 39457828,
+      "mode": "0600",
+      "uid": 1000,
+      "gid": 1000,
+      "links": 1,
+      "sha256": "bff28f2add6f3669413178c1ee129bed790f3f38a972ef780a6698c4a147be10",
+      "compare": "tar --acls --xattrs --compare exited 0",
+      "restore_command": "tar --numeric-owner --acls --xattrs --same-permissions -xzf /home/holden/mckernel-work/mckernel-exact-candidate-scratch-18-interrupted-evidence.tar.gz -C /home/holden/mckernel-work/scratch"
+    }
+  },
+  "preservation_policy": "The original output and evidence trees remain immutable historical failure evidence. A fresh retry must use new namespace identities and must not reuse or clear these paths.",
+  "next": "Independently verify both archives and fetched mapping; retain original trees while capacity permits, and generate a new request with fresh output/evidence/work/owner paths."
+}
