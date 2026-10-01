@@ -217,15 +217,26 @@ def quarantine_root_lock(lockfd, reason):
     This intentionally does not return.  Signals are already deferred, so an
     uncertain container/client cannot become concurrent with another guest.
     """
-    record = {"schema": "mckernel.native-exact-scratch21-root-lock-quarantine.v1",
-              "status": "QUARANTINED", "pid": os.getpid(),
-              "starttime": Path("/proc/self/stat").read_text().rsplit(")", 1)[1].split()[19],
-              "boot_id": Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
-              "lock_device_inode": "%d:%d" % LOCK_ID[:2], "reason": reason}
-    if not os.path.lexists(QUARANTINE):
-        publish(QUARANTINE, canonical(record))
+    try:
+        record = {"schema": "mckernel.native-exact-scratch21-root-lock-quarantine.v1",
+                  "status": "QUARANTINED", "pid": os.getpid(),
+                  "starttime": Path("/proc/self/stat").read_text().rsplit(")", 1)[1].split()[19],
+                  "boot_id": Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
+                  "lock_device_inode": "%d:%d" % LOCK_ID[:2], "reason": reason}
+        if not os.path.lexists(QUARANTINE):
+            publish(QUARANTINE, canonical(record))
+    except BaseException:
+        # Evidence failure must never release the only live safety owner.
+        pass
+    quarantine_wait()
+
+
+def quarantine_wait():
     while True:
-        signal.pause()
+        try:
+            signal.pause()
+        except BaseException:
+            pass
 
 
 def execute(release_commit):
@@ -262,6 +273,8 @@ def execute(release_commit):
         request2, raw2 = preflight()
         if request2 != request or raw2 != raw:
             raise Refusal("preflight changed")
+        if requested:
+            raise Refusal("signal received before request publication")
         publish(EXECUTION, raw, DERIVED_SHA256)
         build_started = True
         safe_to_release = False

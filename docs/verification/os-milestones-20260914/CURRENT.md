@@ -13832,8 +13832,12 @@ reconciliation.  The first v2 review found its parent timeout/signal path could
 release that lock with uncertain Docker retirement.  The bounded correction
 removes the outer timeout, defers SIGHUP/SIGINT/SIGTERM, passes the lock fd to
 the child, and enters a non-returning root-lock quarantine after any started
-build without positive current terminal retirement.  Six focused tests pass,
-including retirement mutants and quarantine-before-unlock ordering.  It derives only the four release
+build without positive current terminal retirement.  A second review found the
+quarantine evidence writer itself could fail before entering its hold loop; the
+correction now makes that write best-effort and the hold unconditionally
+non-returning.  Eight focused tests pass, including retirement mutants,
+malformed-terminal quarantine, evidence-write failure and
+quarantine-before-unlock ordering.  It derives only the four release
 flags, producing request SHA-256 `35efb73b...45b6`.  Its corrected terminal
 policy releases the per-request lease only after proven retirement while
 retaining the terminal container and both shared exclusions for separately

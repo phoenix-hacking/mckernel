@@ -4,6 +4,8 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest import mock
 
 PATH = Path(__file__).parents[2] / "docs/verification/evidence/native-exact-scratch21-heavy-build-execution-release-v2-20261001.py"
 SPEC = importlib.util.spec_from_file_location("scratch21_release_v2", PATH)
@@ -68,7 +70,34 @@ class ReleaseTests(unittest.TestCase):
         finally_block = source.split("    finally:\n        if build_started", 1)[1]
         self.assertLess(finally_block.index("quarantine_root_lock"),
                         finally_block.index("fcntl.flock(lockfd, fcntl.LOCK_UN)"))
-        self.assertIn("while True:\n        signal.pause()", source)
+        self.assertIn("def quarantine_wait():\n    while True:", source)
+
+    def test_malformed_terminal_behavior_enters_quarantine(self):
+        validate = SimpleNamespace(returncode=0, stdout=b"PASS_COMPATIBILITY_ONLY", stderr=b"")
+        census = SimpleNamespace(returncode=0, stdout=b'{"status":"PASS_READ_ONLY"}', stderr=b"")
+        with mock.patch.object(MODULE, "bind_release"), \
+             mock.patch.object(MODULE, "acquire_development_lock", return_value=91), \
+             mock.patch.object(MODULE, "preflight", side_effect=[({}, b"{}\n"), ({}, b"{}\n")]), \
+             mock.patch.object(MODULE.subprocess, "run", side_effect=[validate, census]), \
+             mock.patch.object(MODULE, "publish"), \
+             mock.patch.object(MODULE, "run_checked", return_value=1), \
+             mock.patch.object(MODULE, "stable_regular", side_effect=[b"malformed", b""]), \
+             mock.patch.object(MODULE, "quarantine_root_lock", side_effect=RuntimeError("quarantined")) as quarantine, \
+             mock.patch.object(MODULE.signal, "getsignal", return_value=None), \
+             mock.patch.object(MODULE.signal, "signal"), \
+             mock.patch.object(MODULE.fcntl, "flock") as flock:
+            with self.assertRaisesRegex(RuntimeError, "quarantined"):
+                MODULE.execute("0" * 40)
+        quarantine.assert_called_once_with(91, "build-started-without-positive-terminal-retirement")
+        flock.assert_not_called()
+
+    def test_quarantine_evidence_failure_still_waits(self):
+        with mock.patch.object(MODULE.os.path, "lexists", return_value=False), \
+             mock.patch.object(MODULE, "publish", side_effect=OSError("full")), \
+             mock.patch.object(MODULE, "quarantine_wait", side_effect=RuntimeError("held")) as wait:
+            with self.assertRaisesRegex(RuntimeError, "held"):
+                MODULE.quarantine_root_lock(91, "uncertain")
+        wait.assert_called_once_with()
 
 
 if __name__ == "__main__":
