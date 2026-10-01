@@ -1,0 +1,33 @@
+{
+  "schema": "mckernel.native-exact-scratch21-heavy-build-execution-proposal.v2",
+  "status": "PROPOSED",
+  "supersedes_blocked_proposal_sha256": "0263cf13b015b1716941059b09c38aee2beebb41cc94fd9e1fdf885927fd3223",
+  "candidate_sha": "28a905bfc177627e338a3fd91f69329ac2e74046",
+  "candidate_tree": "1d7bfce8a37ab5dd1bdd8197c4531a157ffdfd0f",
+  "prepared_request_sha256": "04a7b363d94af5da8276397f6c2e0baec058eabdcc10471b8e2c8d0f9b554f2c",
+  "derived_request_sha256": "35efb73b2b5356507bd4b740b8925a3bd325135257ffaf39bffcefa9930c45b6",
+  "candidate_disk_wrapper_sha256": "3b910b0c968d85390ca7d00e6953ddb13dc91714180c51fd476853dac529739c",
+  "execution_count": 1,
+  "command_template": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native-exact-scratch21-heavy-build-execution-release-v2-20261001.py",
+    "--release-commit",
+    "FETCHED_COMMIT_CONTAINING_THIS_EXACT_PROPOSAL_WRAPPER_AND_TEST",
+    "--execute"
+  ],
+  "ownership": "the release parent holds root development lock inode 27:4 across validation, census, request publication, build and terminal reconciliation; the candidate outer disk wrapper acquires the shared heavy and exact operational exclusions before its own census and owner construction",
+  "profile": {
+    "cpus": "2-5",
+    "jobs_actual": 2,
+    "jobs_max": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids_limit": 512,
+    "network": "none",
+    "timeout_seconds": 19800
+  },
+  "terminal_policy": "after positive retirement the per-request lease is released by BuildOwner; the terminal container is retained and cleanup_separately_required remains true, so the candidate outer wrapper retains both shared heavy and operational exclusion paths until separately reviewed cleanup; uncertain retirement retains every available owner",
+  "authorization": "requires independent PASS_EXECUTION for one exact command after the fetched release commit is substituted",
+  "not_acceptance": "successful execution creates one compiled candidate only; it is not guest, application, production, exact-byte artifact or whole-OS acceptance"
+}

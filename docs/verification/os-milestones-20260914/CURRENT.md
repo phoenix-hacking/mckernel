@@ -13816,3 +13816,24 @@ independent prepared-artifact review and a separate heavy-build execution
 release for scratch21.  Counts remain three compiled current candidates, 12
 bounded diagnostic guest passes, 0/273 formal applications, 6/130 production
 gates and 0/7 language gates.  The OS remains incomplete.
+
+Continuation checkpoint 354, 2026-10-01: independent execution review BLOCKed
+the first scratch21 build proposal before any build.  Its direct isolated owner
+command could not import the sibling provenance module, did not acquire the
+shared heavy or root development locks, and misstated terminal lease lifetime.
+The exact published v1 proposal remains preserved at SHA-256
+`0263cf13...223d`; no request was consumed and scratch21 output/evidence remain
+empty.
+
+Additive v2 invokes the authenticated candidate outer disk wrapper while its
+parent holds root development lock inode `27:4` across compatibility validation,
+privileged read-only census, O_EXCL request publication, build and terminal
+reconciliation.  Four focused tests pass.  It derives only the four release
+flags, producing request SHA-256 `35efb73b...45b6`.  Its corrected terminal
+policy releases the per-request lease only after proven retirement while
+retaining the terminal container and both shared exclusions for separately
+reviewed cleanup.  Next commit/push/fetch these exact bytes, obtain independent
+PASS_EXECUTION over the substituted fetched commit, then execute once.  Counts
+remain three compiled current candidates, 12 bounded diagnostic guest passes,
+0/273 formal applications, 6/130 production gates and 0/7 language gates.  The
+OS remains incomplete.
