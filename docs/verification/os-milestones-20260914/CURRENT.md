@@ -13764,3 +13764,31 @@ current candidates, 11 bounded diagnostic guest passes, 0/273 applications,
 6/130 production gates and 0/7 language gates.  Next implement the bounded
 inherited-MM `MCEXEC_UP_CREATE_PPD` path, build a fresh source-bound candidate,
 then retry the corrected process/signal pair once.
+
+Continuation checkpoint 352, 2026-10-01: the corrected signal manifest and a
+known startup control PASSed in the released diagnostic-only two-guest pilot.
+Attempt `dual-guest-_nm6yypf` records 33.465 seconds of actual Docker-state
+overlap in a 37.421-second pair phase.  `signal.block-pending` exited zero,
+emitted exact stdout `pending_before=1 pending_after=0 handled=1` and empty
+stderr, reached stream EOF without truncation, emptied procfs and returned
+`PROTOCOL_PASS`.  The `startup.argv-empty` control also returned
+`PROTOCOL_PASS`.  Both exact containers, QEMU and mcexec are absent and the
+development lock is unheld.  Exact manifests, results and raw capture hashes
+are retained in `native-diagnostic-signal-block-pending-pass-20261001.json`.
+This raises bounded diagnostic guest passes from 11 to 12; it changes no formal
+application, production or language count.
+
+Independent source review BLOCKed the first fork repair before compilation.
+Although its corrected descriptor decoder used the real
+`rpgtable,start,len` layout, an adopted child `Mirror` could not change the
+inherited VMA's parent-owned fault route, and the child backend still lacked
+adopted prepare/page-table, worker and retirement state.  The draft also had
+irreversible-clear/publication ordering risks.  The rejected production bytes
+were removed without a build; their hashes and the required transactional
+child-adoption design are preserved in the same evidence record.  Counts are
+three compiled current candidates, 12 bounded diagnostic guest passes, 0/273
+formal applications, 6/130 production gates and 0/7 language gates.  Next
+implement and executable-test the complete provenance-bound child backend/VMA
+ownership transaction, then rebind the scratch19 preparation helper to its
+reviewed fetched commit and build a fresh candidate containing shutdown v6.
+The OS remains incomplete.
