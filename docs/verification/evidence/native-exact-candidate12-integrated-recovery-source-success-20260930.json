@@ -1,0 +1,70 @@
+{
+  "schema": "mckernel.native-exact-candidate12.integrated-recovery-source-success.v1",
+  "recorded_at": "2026-09-30T18:04:00-07:00",
+  "base_commit": "b4e0ea372b5eaa022589e1c098fb3d834224e6c5",
+  "status": "PASS_SOURCE_INTEGRATION",
+  "tool": {
+    "path": "docs/verification/evidence/native-exact-candidate12-planbound-cleanup-20260930.py",
+    "sha256": "a7a5766cd7cf2f40b3eab396565a59d8834d8e33e2f32f1dba6d678d998d0c2e"
+  },
+  "tests": {
+    "path": "scripts/tests/test_native_exact_candidate12_planbound_cleanup_20260930.py",
+    "sha256": "86a6b7dc570f1fcf1bbb856d8209399c866a5d4f5829b97bddc636e6b5914e84",
+    "command": "ulimit -v 1572864; taskset -c 2 python3 -B -m pytest -q -p no:cacheprovider scripts/tests/test_native_exact_candidate12_planbound_cleanup_20260930.py",
+    "coordinator_result": "182 passed in 7.67s",
+    "independent_result": "182 passed in 6.97s"
+  },
+  "failure_family_history": [
+    {
+      "tool_sha256": "d4e46c454a90806b22bbe4ed908b0a98ba9bbf9b86ecaa4ac4547bd025e22e8c",
+      "result": "BLOCK",
+      "findings": ["publication false PASS", "destination substitution", "missing recovery validation and test binding"]
+    },
+    {
+      "tool_sha256": "0afa98cdf92b4d3906804908fcd62e986b38fc376e42b096874e02700180ae83",
+      "result": "BLOCK",
+      "findings": ["undeclared retained destination descriptors", "output-parent substitution", "late-signal durable outcome divergence"]
+    },
+    {
+      "tool_sha256": "53f094d54d36f10ab6090016b2017c16ca269d9de8d36aab4efeae76ca08d6e0",
+      "result": "BLOCK",
+      "findings": ["terminal protection ended before cleanup and CLI delivery", "metadata drift prevented held-inode invalidation"]
+    },
+    {
+      "tool_sha256": "a7a5766cd7cf2f40b3eab396565a59d8834d8e33e2f32f1dba6d678d998d0c2e",
+      "result": "PASS_SOURCE_INTEGRATION",
+      "findings": []
+    }
+  ],
+  "accepted_scope": [
+    "authenticated attempt and release binding",
+    "complete retained destination descriptor census",
+    "destination and output namespace substitution detection",
+    "per-row recovery reconciliation",
+    "held-inode invalidation after mutable metadata drift",
+    "committed outcome preservation through output cleanup, mutex close, CLI delivery, stream flush and low-level exit"
+  ],
+  "retained_attempt2": {
+    "candidate_root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-4e99a82c-scratch-12",
+    "quarantine": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-4e99a82c-scratch-12/.planbound-cleanup-20260930-2",
+    "quarantined_files": 2507,
+    "original_files": 0,
+    "deleted_files": 0,
+    "journal_sha256": "4749ea4d1b97bc99959c1ec75c0f329682f834d075738264a44efde33ce90d02",
+    "receipt_sha256": "83d22b06d9d143b3acc0508d738f6b1039184a5d2d473d314f5a1e3a65cd3c52",
+    "status_sha256": "b22762e6ef19ae31c4aad21fa2164ed9536e8d3b6b8c28e7aed886bc44d9484a"
+  },
+  "limitations": [
+    "source and disposable-test integration only",
+    "persistent I/O failure, SIGKILL, power loss and malicious concurrent mutation require external reconciliation",
+    "a separate committed, fetched and independently reviewed one-shot execution release is mandatory"
+  ],
+  "execution": {
+    "live_recovery": false,
+    "privileged_census": false,
+    "docker": false,
+    "build": false,
+    "guest": false,
+    "acceptance_change": false
+  }
+}

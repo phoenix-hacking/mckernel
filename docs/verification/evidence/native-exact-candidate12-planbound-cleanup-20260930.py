@@ -68,6 +68,9 @@ ATTEMPT2 = {
 }
 RECOVERY_SCHEMA = 'mckernel.candidate12-cleanup-recovery-release.v1'
 _terminal_latched = False
+_terminal_committed = False
+_terminal_result = None
+_terminal_depth = 0
 
 
 def mount(source, destination, writable=False):
@@ -1044,7 +1047,9 @@ def precreate_recovery_outputs(outputs):
     try:
         for key in ('journal', 'receipt', 'status'):
             p = Path(outputs[key])
-            with directory(str(p.parent)) as parent:
+            chain = pin_output_namespace(str(p.parent))
+            parent = chain[-1][0]
+            try:
                 fd = os.open(p.name, os.O_RDWR | os.O_CREAT | os.O_EXCL | NOFOLLOW,
                              0o600, dir_fd=parent)
                 try:
@@ -1052,35 +1057,73 @@ def precreate_recovery_outputs(outputs):
                     os.fsync(parent)
                     current = os.stat(p.name, dir_fd=parent, follow_symlinks=False)
                     require(metadata(current) == metadata(os.fstat(fd)), 'recovery-output-replaced')
-                    # Duplicate the directory descriptor so it remains held beyond
-                    # the context manager and no later compound parent resolution
-                    # can redirect publication.
-                    result[key] = (os.dup(parent), fd, metadata(os.fstat(parent)))
+                    result[key] = (parent, fd, {'chain': chain, 'name': p.name,
+                                               'identity': output_identity(os.fstat(fd))})
                 except BaseException:
                     os.close(fd)
                     raise
-        # Multiple fresh files commonly share one parent; record its identity
-        # after the complete creation set, not after the first entry.
-        for key, (parent, fd, _) in tuple(result.items()):
-            result[key] = (parent, fd, metadata(os.fstat(parent)))
+            except BaseException:
+                for held, _, _ in chain:
+                    os.close(held)
+                raise
+        for entry in result.values():
+            output_parent_held(entry)
         return result
     except BaseException:
-        for parent, fd, _ in result.values():
-            os.close(fd); os.close(parent)
+        close_recovery_outputs(result)
+        raise
+
+
+def output_identity(s):
+    return (s.st_dev, s.st_ino, s.st_mode, s.st_uid, s.st_gid)
+
+
+def pin_output_namespace(path):
+    """Retain every no-follow edge from / to the declared publication parent."""
+    canonical(path)
+    chain = []
+    try:
+        fd = os.open('/', os.O_RDONLY | os.O_DIRECTORY | NOFOLLOW)
+        chain.append((fd, output_identity(os.fstat(fd)), None))
+        for component in Path(path).parts[1:]:
+            fd = os.open(component, os.O_RDONLY | os.O_DIRECTORY | NOFOLLOW, dir_fd=chain[-1][0])
+            chain.append((fd, output_identity(os.fstat(fd)), component))
+        return chain
+    except BaseException:
+        for fd, _, _ in chain:
+            os.close(fd)
         raise
 
 
 def close_recovery_outputs(opened_outputs):
-    for parent, fd, _ in opened_outputs.values():
-        try:
-            os.close(fd)
-        finally:
-            os.close(parent)
+    failure = None
+    for _, fd, binding in opened_outputs.values():
+        for held in [fd] + [item[0] for item in binding['chain']]:
+            try:
+                os.close(held)
+            except BaseException as error:
+                # A close error must not skip later descriptors. Do not retry
+                # an ambiguous close: Linux may already have released its fd.
+                if failure is None:
+                    failure = error
+    if failure is not None:
+        raise failure
 
 
 def output_parent_held(entry):
-    parent, _, expected = entry
-    require(metadata(os.fstat(parent)) == expected, 'recovery-output-parent-replaced')
+    parent, fd, binding = entry
+    previous = None
+    for held, identity, name in binding['chain']:
+        require(output_identity(os.fstat(held)) == identity, 'recovery-output-parent-replaced')
+        named = os.stat('/', follow_symlinks=False) if previous is None else os.stat(
+            name, dir_fd=previous, follow_symlinks=False)
+        require(output_identity(named) == identity, 'recovery-output-parent-replaced')
+        previous = held
+    require(output_identity(os.fstat(fd)) == binding['identity'] and os.fstat(fd).st_nlink == 1,
+            'recovery-output-held-replaced')
+    named = os.stat(binding['name'], dir_fd=parent, follow_symlinks=False)
+    require(output_identity(named) == binding['identity'] and named.st_nlink == 1,
+            'recovery-output-replaced')
 
 
 def write_precreated(entry, record, replace=False):
@@ -1094,22 +1137,42 @@ def write_precreated(entry, record, replace=False):
     write_all(fd, (json.dumps(record, sort_keys=True) + '\n').encode())
     os.fsync(fd)
     os.fsync(parent)
+    output_parent_held(entry)
 
 
 @contextlib.contextmanager
-def terminal_latch():
-    global _terminal_latched
+def terminal_latch(retain_committed=False):
+    """Own one outcome through nested operation, cleanup and CLI delivery.
+
+    Library callers regain their handlers after all owned cleanup. The one-shot
+    CLI retains committed handling until process exit, so neither status output
+    nor interpreter teardown opens a second terminal-outcome window.
+    """
+    global _terminal_latched, _terminal_committed, _terminal_result, _terminal_depth
+    if _terminal_depth:
+        _terminal_depth += 1
+        try:
+            yield
+        finally:
+            _terminal_depth -= 1
+        return
     _terminal_latched = False
+    _terminal_committed = False
+    _terminal_result = None
     def latch(signum, frame):
         del signum, frame
         global _terminal_latched
-        _terminal_latched = True
+        if not _terminal_committed:
+            _terminal_latched = True
     previous = {sig: signal.signal(sig, latch) for sig in (signal.SIGTERM, signal.SIGINT)}
+    _terminal_depth = 1
     try:
         yield
     finally:
-        for sig, old in previous.items():
-            signal.signal(sig, old)
+        _terminal_depth = 0
+        if not (retain_committed and _terminal_committed):
+            for sig, old in previous.items():
+                signal.signal(sig, old)
 
 
 def require_unlatched():
@@ -1125,40 +1188,76 @@ def demote_recovery_result(result, code):
 
 
 def publish_recovery_result(open_outputs, result, outputs, journal):
-    """Never return/pass a PASS record when either publication edge failed."""
+    """Commit the durable and returned outcome together under a terminal mask.
+
+    A signal observed before commit demotes both files. Signals after the commit
+    point are completion notifications, not a second outcome. The latch remains
+    installed while unmasking, so a pending signal cannot escape into the prior
+    handler. SIGKILL/power loss and persistent I/O failure still require external
+    reconciliation; this is not an atomic multi-file filesystem transaction.
+    """
+    global _terminal_committed, _terminal_latched, _terminal_result
+    terminal = {signal.SIGTERM, signal.SIGINT}
+    previous = signal.pthread_sigmask(signal.SIG_BLOCK, terminal)
     try:
-        require_unlatched()
-        os.fsync(journal.fd)
-        require_unlatched()
-    except BaseException as error:
-        result = demote_recovery_result(result, 'journal-finalize-' + type(error).__name__)
-    try:
-        require_unlatched()
-        write_precreated(open_outputs['receipt'], result)
-        require_unlatched()
-    except BaseException as error:
-        result = demote_recovery_result(result, 'receipt-' + type(error).__name__)
-        try: write_precreated(open_outputs['receipt'], result, replace=True)
-        except BaseException: result['receipt_failure'] = True
-    status_record = {'status': result['status'], 'receipt': outputs['receipt'],
-                     'journal': outputs['journal']}
-    try:
-        require_unlatched()
-        write_precreated(open_outputs['status'], status_record)
-        require_unlatched()
-    except BaseException as error:
-        result = demote_recovery_result(result, 'status-' + type(error).__name__)
-        # A status failure must not leave the preceding PASS receipt as an
-        # apparent acceptance.  Both rewrites are best-effort but individually
-        # fsynced and are attempted even if the other one faults.
-        for key, record in (('receipt', result),
-                            ('status', {'status': 'FAIL', 'receipt': outputs['receipt'],
-                                        'journal': outputs['journal']})):
-            try: write_precreated(open_outputs[key], record, replace=True)
-            except BaseException: result[key + '_failure'] = True
-    if _terminal_latched and result['status'] == 'PASS':
-        result = demote_recovery_result(result, 'terminal-latch')
-    return result
+        def check_terminal():
+            global _terminal_latched
+            if signal.sigpending() & terminal:
+                _terminal_latched = True
+            require_unlatched()
+
+        try:
+            check_terminal()
+            for entry in open_outputs.values():
+                output_parent_held(entry)
+            os.fsync(journal.fd)
+            check_terminal()
+            write_precreated(open_outputs['receipt'], result)
+            check_terminal()
+            write_precreated(open_outputs['status'], {'status': result['status'],
+                             'receipt': outputs['receipt'], 'journal': outputs['journal']})
+            for entry in open_outputs.values():
+                output_parent_held(entry)
+            check_terminal()
+        except BaseException as error:
+            result = demote_recovery_result(result, 'finalize-' +
+                                            (str(error) if isinstance(error, Refusal) else type(error).__name__))
+            # Namespace failure must not leave PASS in displaced owned files.
+            # Rewrite through the authenticated descriptors without following or
+            # creating any substituted name. Each write is attempted independently.
+            for key, record in (('receipt', result), ('status', {'status': 'FAIL',
+                                'receipt': outputs['receipt'], 'journal': outputs['journal']})):
+                try:
+                    invalidate_precreated(open_outputs[key], record)
+                except BaseException:
+                    result[key + '_failure'] = True
+        # No latch check or further fallible publication occurs after this point.
+        # In particular, a late delivered signal must not demote only the return.
+        _terminal_result = result
+        _terminal_committed = True
+        return result
+    finally:
+        signal.pthread_sigmask(signal.SIG_SETMASK, previous)
+
+
+def invalidate_precreated(entry, record):
+    """Durably invalidate our held output even after its namespace was displaced."""
+    parent, fd, binding = entry
+    held = os.fstat(fd)
+    # Mode/uid/gid drift is a reason to FAIL, not a reason to leave our own
+    # PASS bytes intact. The descriptor is retained continuously from O_EXCL
+    # creation; dev/ino and regular-file type authenticate that same object.
+    # nlink may be zero after unlink, or increased by an alias: neither transfers
+    # ownership of this open file description or forbids invalidating its bytes.
+    require(record['status'] == 'FAIL' and stat.S_ISREG(held.st_mode) and
+            (held.st_dev, held.st_ino) == binding['identity'][:2] and held.st_nlink >= 0 and
+            fcntl.fcntl(fd, fcntl.F_GETFL) & os.O_ACCMODE == os.O_RDWR,
+            'recovery-invalidation-identity')
+    os.ftruncate(fd, 0)
+    os.lseek(fd, 0, os.SEEK_SET)
+    write_all(fd, (json.dumps(record, sort_keys=True) + '\n').encode())
+    os.fsync(fd)
+    os.fsync(parent)
 
 
 def location(parent, name, row):
@@ -1525,6 +1624,13 @@ def recovery_parent(destinations, row):
     return destinations[relative][0]
 
 
+def recovery_references(rfd, qfd, root, quarantine, destinations):
+    """Declare every retained descriptor, including the duplicate root pin."""
+    return pinned_references((rfd, root), (qfd, quarantine),
+                             *((entry[0], str(Path(root) / relative))
+                               for relative, entry in destinations.items()))
+
+
 def recovery_evidence_shape(plan, destinations, staged=False):
     expected_files = {str(Path(row['restore_git_path']).relative_to('docs/verification/evidence'))
                       for row in plan['targets']}
@@ -1563,10 +1669,15 @@ def recovery_original_evidence(plan, destinations):
         verify_name(recovery_parent(destinations, row), Path(row['path']).name, row)
 
 
-def reconcile_recovery_rename(row, qfd, index, destinations):
+def reconcile_recovery_rename(row, qfd, index, destinations, namespace_valid=True):
     source = location(recovery_parent(destinations, row), Path(row['path']).name, row)
     quarantine = location(qfd, str(index), row)
     observations = {'source': source, 'quarantine': quarantine}
+    if not namespace_valid:
+        # A held old parent proves retained bytes, not restoration at the
+        # declared pathname. Preserve that distinction for every row.
+        observations['namespace'] = 'replaced-or-unreadable'
+        return 'uncertain', observations
     if observations == {'source': 'expected', 'quarantine': 'missing'}:
         return 'original', observations
     if observations == {'source': 'missing', 'quarantine': 'expected'}:
@@ -1612,7 +1723,7 @@ def recover_staged(plan, outputs, journal):
                 validate_recovery_destinations(rfd, plan, destinations)
                 recovery_evidence_shape(plan, destinations, staged=True)
                 quarantine_shape(qfd, rows)
-                owned = pinned_references((rfd, root), (qfd, outputs['quarantine']))
+                owned = recovery_references(rfd, qfd, root, outputs['quarantine'], destinations)
                 census = collect_census(root)
                 journal.append({'event': 'recovery-census', 'census': census,
                                 'owned_references': owned})
@@ -1667,10 +1778,21 @@ def recover_staged(plan, outputs, journal):
                 # location, including rows never reached by the forward loop.
                 interrupted = isinstance(error, KeyboardInterrupt) or _terminal_latched
                 reconciliation = []
+                namespace_valid = False
+                if destinations is not None:
+                    try:
+                        validate_recovery_destinations(rfd, plan, destinations)
+                        namespace_valid = True
+                    except BaseException:
+                        pass
                 for index, row in enumerate(rows):
-                    where, observations = (reconcile_recovery_rename(row, qfd, index, destinations)
-                                           if destinations is not None else
-                                           reconcile_rename(row, qfd, index))
+                    try:
+                        where, observations = (reconcile_recovery_rename(
+                            row, qfd, index, destinations, namespace_valid)
+                            if destinations is not None else reconcile_rename(row, qfd, index))
+                    except BaseException:
+                        where, observations = 'uncertain', {'source': 'unreadable',
+                                                           'quarantine': 'unreadable'}
                     states[index] = ('restored' if where == 'original' else
                                      'staged' if where == 'staged' else 'restore-uncertain')
                     entry = {'index': index, 'state': states[index], 'locations': observations}
@@ -1720,7 +1842,7 @@ def validate_live_staged_recovery(plan):
             recovery_evidence_shape(plan, destinations, staged=True)
             quarantine_shape(qfd, plan['targets'])
             validate_protected(plan)
-            owned = pinned_references((rfd, root), (qfd, ATTEMPT2['quarantine']['path']))
+            owned = recovery_references(rfd, qfd, root, ATTEMPT2['quarantine']['path'], destinations)
             census = collect_census(root)
             check_census(census, root, owned)
             for lease in LEASES:
@@ -1734,6 +1856,18 @@ def validate_live_staged_recovery(plan):
 
 def execute_recovery(plan_path, release_path, release_commit, outputs, command):
     """Dedicated --recover-staged entry point; it never enters _transact."""
+    with terminal_latch():
+        try:
+            return _execute_recovery(plan_path, release_path, release_commit, outputs, command)
+        except BaseException:
+            if _terminal_committed:
+                # Publication is already durable. Descriptor close failures
+                # cannot revoke it, and the CLI will retire the process itself.
+                return _terminal_result
+            raise
+
+
+def _execute_recovery(plan_path, release_path, release_commit, outputs, command):
     release = validate_recovery_release(release_path, release_commit, outputs, command)
     with directory(str(Path(MUTEX).parent)) as mutex_parent:
         mutex = os.open(Path(MUTEX).name, os.O_RDWR | os.O_CREAT | NOFOLLOW, 0o600, dir_fd=mutex_parent)
@@ -1780,7 +1914,26 @@ def execute_recovery(plan_path, release_path, release_commit, outputs, command):
         os.close(mutex)
 
 
-def main(argv=None):
+def result_exit_code(result):
+    return 0 if result['status'] == 'PASS' else 130 if result.get('interrupted') else 1
+
+
+def main(argv=None, cli=False):
+    args = parse_args(argv)
+    if not args.recover_staged:
+        return _main(args)
+    with terminal_latch(retain_committed=cli):
+        try:
+            return _main(args)
+        except BaseException:
+            if _terminal_committed:
+                # Broken stdout/stderr or other delivery errors cannot replace
+                # the receipt/status outcome that is already committed.
+                return result_exit_code(_terminal_result)
+            raise
+
+
+def parse_args(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument('--validate-only', action='store_true')
@@ -1791,7 +1944,10 @@ def main(argv=None):
     parser.add_argument('--release')
     for key in ('journal', 'receipt', 'status', 'quarantine'):
         parser.add_argument('--' + key)
-    args = parser.parse_args(argv)
+    return parser.parse_args(argv)
+
+
+def _main(args):
     try:
         if args.validate_only:
             validate_plan(args.plan)
@@ -1817,12 +1973,29 @@ def main(argv=None):
                   if args.recover_staged else
                   execute(args.plan, args.release, release_commit, outputs, command))
         print(('RECOVERY_' if args.recover_staged else 'STORAGE_') + result['status'])
-        return 0 if result['status'] == 'PASS' else 130 if result.get('interrupted') else 1
+        return result_exit_code(result)
     except BaseException as error:
+        if args.recover_staged and _terminal_committed:
+            raise
         print('FAIL_CLOSED: ' + (str(error) if isinstance(error, Refusal)
                                 else type(error).__name__), file=sys.stderr)
         return 1
 
 
+def cli_exit():
+    code = main(cli=True)
+    if _terminal_committed:
+        # Python's implicit stream flush can change exit 0 to 120. Perform
+        # best-effort delivery explicitly and keep the durable outcome through
+        # the final syscall, with the committed terminal handler still installed.
+        for stream in (sys.stdout, sys.stderr):
+            try:
+                stream.flush()
+            except BaseException:
+                pass
+        os._exit(code)
+    raise SystemExit(code)
+
+
 if __name__ == '__main__':
-    raise SystemExit(main())
+    cli_exit()

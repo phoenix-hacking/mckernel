@@ -7,7 +7,10 @@ import json
 import os
 from pathlib import Path
 import shutil
+import signal
 import stat
+import subprocess
+import sys
 import tempfile
 import unittest
 from unittest import mock
@@ -1140,6 +1143,24 @@ class Fixture(unittest.TestCase):
 
 class RecoveryFixture(Fixture):
     """A tiny, exact-shaped attempt-2 fixture; it never opens real scratch."""
+    def recovery_census(self, root):
+        c = self.census()
+        seen = {w['fd'] for w in c['witnesses']}
+        # Enumerate actual retained descriptors, independently of the helper's
+        # declaration. A omitted duplicate/ancestor must fail the real parser.
+        for entry in Path('/proc/self/fd').iterdir():
+            try:
+                fd = int(entry.name)
+                path = os.readlink(entry)
+                st = os.fstat(fd)
+            except (OSError, ValueError):
+                continue
+            if fd not in seen and m.inside(path, root):
+                self.assertTrue(stat.S_ISDIR(st.st_mode))
+                c['lsof']['stdout'] += (f'f{fd}\0ar\0tDIR\0D{hex(st.st_dev)}\0'
+                                       f'i{st.st_ino}\0n{path}\0\n')
+        return c
+
     def stage_attempt(self):
         q = self.root / '.planbound-cleanup-20260930-2'
         q.mkdir(mode=0o700)
@@ -1180,22 +1201,10 @@ class RecoveryFixture(Fixture):
     def recovery(self, mutate=None):
         attempt, outputs = self.stage_attempt()
         if mutate: mutate(attempt, outputs)
-        def collector(root):
-            c = self.census()
-            q = Path(outputs['quarantine'])
-            qs = q.stat()
-            qfd = next(int(p.name) for p in Path('/proc/self/fd').iterdir()
-                       if os.path.realpath(p) == str(q))
-            witness = {'pid': os.getpid(), 'fd': qfd, 'dev': qs.st_dev, 'ino': qs.st_ino,
-                       'access': 'r', 'path': str(q)}
-            c['witnesses'].append(witness)
-            c['lsof']['stdout'] += (f'f{qfd}\0ar\0tDIR\0D{hex(qs.st_dev)}\0'
-                                    f'i{qs.st_ino}\0n{q}\0\n')
-            return c
         with mock.patch.object(m, 'BINDING', self.binding), \
              mock.patch.object(m, 'ATTEMPT2', attempt), \
              mock.patch.object(m, 'committed_file', side_effect=self.committed), \
-             mock.patch.object(m, 'collect_census', side_effect=collector):
+             mock.patch.object(m, 'collect_census', side_effect=self.recovery_census):
             m.recovery_output_paths(outputs, self.plan, str(self.base))
             opened = m.precreate_recovery_outputs(outputs)
             try:
@@ -1209,16 +1218,8 @@ class RecoveryFixture(Fixture):
             finally:
                 m.close_recovery_outputs(opened)
 
-    def execute_recovery(self, mutate_writer=None, latch_complete=False):
+    def execute_recovery(self, mutate_writer=None, latch_complete=False, cli=False):
         attempt, outputs = self.stage_attempt()
-        def collector(root):
-            c = self.census(); q = Path(outputs['quarantine']); qs = q.stat()
-            qfd = next(int(p.name) for p in Path('/proc/self/fd').iterdir()
-                       if os.path.realpath(p) == str(q))
-            c['witnesses'].append({'pid': os.getpid(), 'fd': qfd, 'dev': qs.st_dev, 'ino': qs.st_ino,
-                                   'access': 'r', 'path': str(q)})
-            c['lsof']['stdout'] += (f'f{qfd}\0ar\0tDIR\0D{hex(qs.st_dev)}\0i{qs.st_ino}\0n{q}\0\n')
-            return c
         release = {'absent_leases': m.LEASES, '_staged_manifest': {'targets': self.rows}}
         patches = [mock.patch.object(m, 'BINDING', self.binding),
                    mock.patch.object(m, 'ATTEMPT2', attempt),
@@ -1227,7 +1228,7 @@ class RecoveryFixture(Fixture):
                    mock.patch.object(m, 'validate_recovery_plan', return_value=self.plan),
                    mock.patch.object(m, 'validate_attempt2', return_value={}),
                    mock.patch.object(m, 'committed_file', side_effect=self.committed),
-                   mock.patch.object(m, 'collect_census', side_effect=collector)]
+                   mock.patch.object(m, 'collect_census', side_effect=self.recovery_census)]
         if mutate_writer: patches.append(mock.patch.object(m, 'write_precreated', side_effect=mutate_writer))
         if latch_complete:
             original = m.FDJournal.append
@@ -1238,8 +1239,141 @@ class RecoveryFixture(Fixture):
             patches.append(mock.patch.object(m.FDJournal, 'append', latch))
         with contextlib.ExitStack() as stack:
             for patch in patches: stack.enter_context(patch)
+            if cli:
+                argv = ['tool', '--recover-staged', '--plan', str(self.plan_path), '--release', 'release']
+                for key, value in outputs.items(): argv += ['--' + key, value]
+                with mock.patch.object(m, 'git', return_value=b'b' * 40 + b'\n'), \
+                     mock.patch.object(sys, 'argv', argv):
+                    m.cli_exit()
             return m.execute_recovery(str(self.plan_path), 'release', 'b' * 40, outputs,
                                       ['python', 'tool', '--recover-staged']), outputs
+
+    def assert_durable_outcome(self, result, outputs, expected='PASS'):
+        self.assertEqual(result['status'], expected)
+        for key in ('receipt', 'status'):
+            self.assertEqual(json.loads(Path(outputs[key]).read_text())['status'], expected)
+
+    def cleanup_signal(self, signum):
+        real = m.close_recovery_outputs
+        fired = []
+        def close(opened):
+            real(opened)
+            os.kill(os.getpid(), signum)
+            fired.append(True)
+        previous = {s: signal.getsignal(s) for s in (signal.SIGINT, signal.SIGTERM)}
+        with mock.patch.object(m, 'close_recovery_outputs', side_effect=close):
+            result, outputs = self.execute_recovery()
+        self.assertTrue(fired)
+        self.assert_durable_outcome(result, outputs)
+        self.assertEqual({s: signal.getsignal(s) for s in previous}, previous)
+
+    def test_execute_recovery_sigint_after_output_close_keeps_committed_result(self):
+        self.cleanup_signal(signal.SIGINT)
+
+    def test_execute_recovery_sigterm_after_output_close_keeps_committed_result(self):
+        self.cleanup_signal(signal.SIGTERM)
+
+    def test_execute_recovery_cleanup_exception_keeps_committed_result(self):
+        real = m.close_recovery_outputs
+        def close(opened):
+            real(opened)
+            raise OSError('fixture post-close error')
+        with mock.patch.object(m, 'close_recovery_outputs', side_effect=close):
+            result, outputs = self.execute_recovery()
+        self.assert_durable_outcome(result, outputs)
+
+    def test_execute_recovery_cleanup_signal_preserves_committed_fail(self):
+        real = m.close_recovery_outputs
+        def close(opened):
+            real(opened)
+            os.kill(os.getpid(), signal.SIGTERM)
+        with mock.patch.object(m, 'close_recovery_outputs', side_effect=close):
+            result, outputs = self.execute_recovery(latch_complete=True)
+        self.assert_durable_outcome(result, outputs, 'FAIL')
+        self.assertEqual(m.result_exit_code(result), 130)
+
+    def test_execute_recovery_mutex_close_signal_and_exception_keep_outcome(self):
+        real = os.close
+        fired = []
+        def close(fd):
+            target = os.readlink('/proc/self/fd/' + str(fd))
+            real(fd)
+            if target == str(self.base / 'recovery-mutex') and m._terminal_committed:
+                fired.append(True)
+                os.kill(os.getpid(), signal.SIGINT)
+                raise OSError('fixture post-mutex-close error')
+        with mock.patch.object(m.os, 'close', side_effect=close):
+            result, outputs = self.execute_recovery()
+        self.assertTrue(fired)
+        self.assert_durable_outcome(result, outputs)
+
+    def test_close_outputs_attempts_every_descriptor_after_one_close_error(self):
+        _, _, opened = self.publication_fixture()
+        real = os.close
+        observed = []
+        expected = {entry[1] for entry in opened.values()}
+        expected.update(item[0] for entry in opened.values() for item in entry[2]['chain'])
+        def close(fd):
+            real(fd); observed.append(fd)
+            if len(observed) == 1: raise OSError('fixture post-close error')
+        with mock.patch.object(m.os, 'close', side_effect=close):
+            with self.assertRaises(OSError): m.close_recovery_outputs(opened)
+        self.assertEqual(set(observed), expected)
+        opened.clear()  # all descriptors closed; registered fixture cleanup is empty
+
+    def test_isolated_cli_terminal_signals_through_cleanup_delivery_and_exit(self):
+        # Each child runs the production main/execute/publication/cleanup/exit
+        # stack against this suite's disposable three-file recovery fixture.
+        code = r'''
+import importlib.util, os, signal, sys
+spec = importlib.util.spec_from_file_location('recovery_tests', sys.argv[1])
+t = importlib.util.module_from_spec(spec); spec.loader.exec_module(t)
+c = t.RecoveryFixture(); c.setUp()
+print(str(c.base), flush=True)
+signum = int(sys.argv[2]); phase = sys.argv[3]
+m = t.m
+if phase in ('outputs', 'fail'):
+    real = m.close_recovery_outputs
+    def close(outputs):
+        real(outputs); os.kill(os.getpid(), signum)
+    m.close_recovery_outputs = close
+elif phase == 'mutex':
+    real = os.close
+    def close(fd):
+        path = os.readlink('/proc/self/fd/' + str(fd))
+        real(fd)
+        if path == str(c.base / 'recovery-mutex') and m._terminal_committed:
+            os.kill(os.getpid(), signum)
+    m.os.close = close
+else:
+    class Delivery:
+        def write(self, value):
+            if phase in ('delivery', 'delivery-error') and m._terminal_committed:
+                os.kill(os.getpid(), signum)
+                if phase == 'delivery-error':
+                    raise OSError('fixture status delivery failure')
+            return sys.__stdout__.write(value)
+        def flush(self):
+            if phase == 'exit' and m._terminal_committed:
+                os.kill(os.getpid(), signum)
+                raise OSError('fixture stream flush failure')
+            return sys.__stdout__.flush()
+    sys.stdout = Delivery()
+c.execute_recovery(latch_complete=(phase == 'fail'), cli=True)
+raise AssertionError('CLI unexpectedly returned')
+'''
+        for signum in (signal.SIGINT, signal.SIGTERM):
+            for phase in ('outputs', 'mutex', 'delivery', 'delivery-error', 'exit', 'fail'):
+                with self.subTest(signum=signum, phase=phase):
+                    completed = subprocess.run([sys.executable, '-B', '-c', code, __file__,
+                                                str(int(signum)), phase], env={**os.environ, 'TMPDIR': str(self.base)},
+                                               capture_output=True, text=True, timeout=15)
+                    self.assertEqual(completed.returncode, 130 if phase == 'fail' else 0, completed.stderr)
+                    child_root = Path(completed.stdout.splitlines()[0])
+                    self.assertTrue(m.inside(str(child_root), str(self.base)))
+                    expected = 'FAIL' if phase == 'fail' else 'PASS'
+                    self.assert_durable_outcome({'status': expected},
+                        {key: str(child_root / ('recovery-' + key)) for key in ('receipt', 'status')}, expected)
 
     def test_recovery_restores_exact_staged_tree(self):
         result, outputs = self.recovery()
@@ -1248,6 +1382,182 @@ class RecoveryFixture(Fixture):
         self.assert_originals()
         self.assertEqual(os.listdir(outputs['quarantine']), [])
         self.assertEqual(json.loads(Path(outputs['receipt']).read_text())['status'], 'PASS')
+
+    def test_recovery_declares_all_actual_destination_descriptors(self):
+        captured = []
+        real = m.check_census
+        def check(census, root, owned=()):
+            actual = {}
+            for path in Path('/proc/self/fd').iterdir():
+                try:
+                    name = os.readlink(path)
+                    if m.inside(name, root):
+                        fd = int(path.name); st = os.fstat(fd)
+                        actual[fd] = (os.getpid(), name, st.st_dev, st.st_ino, 'r')
+                except OSError:
+                    pass
+            declared = {w['fd']: (w['pid'], w['path'], w['dev'], w['ino'], w['access']) for w in owned}
+            self.assertEqual(declared, actual)
+            self.assertEqual(len([v for v in actual.values() if v[1] == root]), 2)
+            self.assertGreaterEqual(len(actual), 6)
+            captured.append(actual)
+            return real(census, root, owned)
+        with mock.patch.object(m, 'check_census', side_effect=check):
+            result, _ = self.execute_recovery()
+        self.assertEqual(result['status'], 'PASS')
+        self.assertEqual(len(captured), 2)
+
+    def test_recovery_census_rejects_omitted_retained_ancestor(self):
+        real = m.recovery_references
+        def omit(*args):
+            refs = real(*args)
+            return [w for w in refs if w['path'] != str(self.root / 'docs')]
+        with mock.patch.object(m, 'recovery_references', side_effect=omit):
+            result, _ = self.execute_recovery()
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(result['error'], 'open-references-or-incomplete-census')
+        self.assertEqual(result['states'], ['staged'] * 3)
+
+    @unittest.skipUnless(shutil.which('lsof'), 'lsof unavailable')
+    def test_validate_recovery_actual_unprivileged_lsof_all_pins(self):
+        attempt, outputs = self.stage_attempt()
+        def collector(root):
+            with m.directory(str(self.base)):
+                c = self.census()
+                paths = {str(self.base)}
+                for entry in Path('/proc/self/fd').iterdir():
+                    try:
+                        path = os.readlink(entry)
+                        if m.inside(path, root): paths.add(path)
+                    except OSError:
+                        pass
+                c['lsof'] = m.run(['lsof', '-nP', '-w', '-a', '-p', str(os.getpid()),
+                                   '-F0pfaDint', '--', *sorted(paths)])
+                return c
+        with mock.patch.object(m, 'ATTEMPT2', attempt), \
+             mock.patch.object(m, 'collect_census', side_effect=collector), m.terminal_latch():
+            m.validate_live_staged_recovery(self.plan)
+        self.assertFalse(Path(outputs['receipt']).exists())
+        self.assertEqual(sorted(os.listdir(outputs['quarantine'])), ['0', '1', '2'])
+
+    def publication_fixture(self):
+        parent = self.base / 'output-space' / 'nested'
+        parent.mkdir(parents=True)
+        outputs = {k: str(parent / k) for k in ('journal', 'receipt', 'status')}
+        opened = m.precreate_recovery_outputs(outputs)
+        self.addCleanup(m.close_recovery_outputs, opened)
+        return parent, outputs, opened
+
+    def publish_fixture(self, opened, outputs):
+        with m.terminal_latch():
+            return m.publish_recovery_result(opened, {'status': 'PASS'}, outputs,
+                                             m.FDJournal(opened['journal'][1]))
+
+    def test_publication_parent_substitution_invalidates_displaced_pass(self):
+        parent, outputs, opened = self.publication_fixture()
+        displaced = parent.with_name('displaced')
+        real = m.write_precreated
+        def swap(entry, record, replace=False):
+            real(entry, record, replace)
+            if entry is opened['status']:
+                parent.rename(displaced)
+                parent.mkdir()
+        with mock.patch.object(m, 'write_precreated', side_effect=swap):
+            result = self.publish_fixture(opened, outputs)
+        self.assertEqual(result['status'], 'FAIL')
+        for key in ('receipt', 'status'):
+            self.assertFalse(Path(outputs[key]).exists())
+            self.assertEqual(json.loads((displaced / key).read_text())['status'], 'FAIL')
+
+    def test_publication_ancestor_substitution_invalidates_displaced_pass(self):
+        parent, outputs, opened = self.publication_fixture()
+        ancestor = parent.parent
+        displaced = ancestor.with_name('saved-space')
+        real = m.write_precreated
+        def swap(entry, record, replace=False):
+            real(entry, record, replace)
+            if entry is opened['receipt']:
+                ancestor.rename(displaced)
+                parent.mkdir(parents=True)
+        with mock.patch.object(m, 'write_precreated', side_effect=swap):
+            result = self.publish_fixture(opened, outputs)
+        self.assertEqual(result['status'], 'FAIL')
+        for key in ('receipt', 'status'):
+            self.assertFalse(Path(outputs[key]).exists())
+            self.assertEqual(json.loads((displaced / 'nested' / key).read_text())['status'], 'FAIL')
+
+    def test_publication_output_name_substitution_invalidates_owned_pass(self):
+        parent, outputs, opened = self.publication_fixture()
+        real = m.write_precreated
+        displaced = parent / 'saved-receipt'
+        def swap(entry, record, replace=False):
+            real(entry, record, replace)
+            if entry is opened['status']:
+                Path(outputs['receipt']).rename(displaced)
+                Path(outputs['receipt']).write_bytes(b'foreign')
+        with mock.patch.object(m, 'write_precreated', side_effect=swap):
+            result = self.publish_fixture(opened, outputs)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(Path(outputs['receipt']).read_bytes(), b'foreign')
+        self.assertEqual(json.loads(displaced.read_text())['status'], 'FAIL')
+        self.assertEqual(json.loads(Path(outputs['status']).read_text())['status'], 'FAIL')
+
+    def metadata_drift_after_pass(self, mutate):
+        _, outputs, opened = self.publication_fixture()
+        real = m.write_precreated
+        def change(entry, record, replace=False):
+            real(entry, record, replace)
+            if entry is opened['status']:
+                mutate(opened['receipt'][1])
+                mutate(opened['status'][1])
+        with mock.patch.object(m, 'write_precreated', side_effect=change):
+            result = self.publish_fixture(opened, outputs)
+        self.assert_durable_outcome(result, outputs, 'FAIL')
+        self.assertNotIn('receipt_failure', result)
+        self.assertNotIn('status_failure', result)
+
+    def test_publication_chmod_after_pass_invalidates_both_owned_files(self):
+        self.metadata_drift_after_pass(lambda fd: os.fchmod(fd, 0o644))
+
+    def test_publication_group_change_after_pass_invalidates_both_owned_files(self):
+        groups = [gid for gid in os.getgroups() if gid != os.getegid()]
+        if not groups:
+            self.skipTest('no alternate supplementary group for unprivileged fchown')
+        self.metadata_drift_after_pass(lambda fd: os.fchown(fd, -1, groups[0]))
+
+    def test_publication_late_real_signal_after_durable_pass_demotes_both(self):
+        _, outputs, opened = self.publication_fixture()
+        real = m.write_precreated
+        def terminate(entry, record, replace=False):
+            real(entry, record, replace)
+            if entry is opened['status']:
+                self.assertEqual(json.loads(Path(outputs['status']).read_text())['status'], 'PASS')
+                os.kill(os.getpid(), signal.SIGTERM)
+                self.assertIn(signal.SIGTERM, signal.sigpending())
+        with mock.patch.object(m, 'write_precreated', side_effect=terminate):
+            result = self.publish_fixture(opened, outputs)
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertTrue(result['interrupted'])
+        for key in ('receipt', 'status'):
+            self.assertEqual(json.loads(Path(outputs[key]).read_text())['status'], 'FAIL')
+
+    def test_publication_signal_at_committed_unmask_keeps_one_outcome(self):
+        _, outputs, opened = self.publication_fixture()
+        real = signal.pthread_sigmask
+        fired = []
+        def unmask(how, mask):
+            if how == signal.SIG_SETMASK:
+                self.assertTrue(m._terminal_committed)
+                os.kill(os.getpid(), signal.SIGTERM)
+                fired.append(True)
+            return real(how, mask)
+        with mock.patch.object(m.signal, 'pthread_sigmask', side_effect=unmask):
+            result = self.publish_fixture(opened, outputs)
+        self.assertTrue(fired)
+        self.assertEqual(result['status'], 'PASS')
+        self.assertFalse(m._terminal_latched)
+        for key in ('receipt', 'status'):
+            self.assertEqual(json.loads(Path(outputs[key]).read_text())['status'], result['status'])
 
     def test_recovery_collision_does_not_overwrite(self):
         def collision(attempt, outputs):
@@ -1295,6 +1605,34 @@ class RecoveryFixture(Fixture):
         self.assertTrue(swapped); self.assertEqual(result['status'], 'FAIL')
         self.assertTrue((Path(result['quarantine']) / '0').exists())
         self.assertFalse((self.evidence / 'file-0').exists())
+
+    def test_recovery_displaced_restored_tree_reconciles_as_uncertain(self):
+        real = m.FDJournal.append
+        moved = self.evidence.with_name('displaced')
+        def swap(journal, event):
+            value = real(journal, event)
+            if event.get('event') == 'restored' and not moved.exists():
+                self.evidence.rename(moved)
+                self.evidence.mkdir()
+            return value
+        with mock.patch.object(m.FDJournal, 'append', swap):
+            result, _ = self.recovery()
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(result['states'], ['restore-uncertain'] * 3)
+        self.assertEqual(result['reconciliation'][2]['locations']['source'], 'expected')
+        self.assertEqual(result['reconciliation'][2]['locations']['namespace'], 'replaced-or-unreadable')
+
+    def test_recovery_one_reconcile_exception_does_not_omit_other_rows(self):
+        real = m.reconcile_recovery_rename
+        def unreadable(row, qfd, index, destinations, namespace_valid=True):
+            if index == 0: raise OSError('fixture reconciliation read error')
+            return real(row, qfd, index, destinations, namespace_valid)
+        with mock.patch.object(m, 'rename_noreplace', side_effect=KeyboardInterrupt), \
+             mock.patch.object(m, 'reconcile_recovery_rename', side_effect=unreadable):
+            result, _ = self.recovery()
+        self.assertEqual(result['status'], 'FAIL')
+        self.assertEqual(result['states'], ['restore-uncertain', 'staged', 'staged'])
+        self.assertEqual([entry['index'] for entry in result['reconciliation']], [0, 1, 2])
 
     def test_recovery_post_syscall_interrupt_reconciles_all_rows(self):
         old = m.rename_noreplace

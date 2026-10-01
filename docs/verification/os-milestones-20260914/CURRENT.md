@@ -10859,3 +10859,34 @@ current image, and run separately labelled startup/memory/files/threads-futex/
 signals/shutdown diagnostics.  Diagnostic results remain distinct from formal
 acceptance.  The OS goal is incomplete and remains launcher-paused during this
 shutdown; it is neither resumed nor marked complete.
+
+Continuation checkpoint 261, 2026-09-30: the escalated integrated staged-
+recovery boundary independently passes source integration.  Exact tool/test
+hashes are `a7a5766c...d0c2e` and `86a6b7dc...14e84`; all 182 disposable tests
+pass under one CPU and 1.5 GiB, including actual SIGINT/SIGTERM in twelve
+isolated CLI executions.  The accepted scope covers complete retained-FD lsof
+declaration, destination/output namespace pinning, row reconciliation, held-
+inode invalidation after permission/ownership drift, and one committed outcome
+through output cleanup, mutex close, CLI delivery, stream flush and low-level
+exit.  Exact evidence is
+`docs/verification/evidence/native-exact-candidate12-integrated-recovery-source-success-20260930.json`.
+
+Three earlier integrated candidates remain retained BLOCKs.  Their concrete
+findings were publication false PASS and destination substitution; undeclared
+destination FDs, output-parent replacement and late-signal divergence; then
+terminal protection ending before cleanup/delivery and mutable metadata
+preventing held-inode invalidation.  The accepted larger-boundary repair does
+not convert those failures into passes.  Persistent I/O failure, SIGKILL, power
+loss or malicious concurrent mutation still requires external reconciliation.
+
+This is source-only evidence.  The exact live state remains 2,507 quarantined
+files, zero originals and zero deletions, with attempt-2 journal/receipt/status
+hashes `4749ea4d...d02`/`83d22b06...3c52`/`b22762e6...9484a`.  No privileged
+census, Docker operation, build or guest ran.  Next fetch-verify this source
+checkpoint, mechanically author the exact staged manifest and fresh one-shot
+recovery release in a separate commit, independently review that execution
+authority, run `--validate-recovery`, and only then execute once.  Successful
+restoration unlocks a fresh corrected-cleanup release, scratch trim/capacity
+measurement, rebound scratch-13 preparation, the serialized smallest-current
+image build and separately labelled diagnostic applications.  No formal
+acceptance counter changes here.
