@@ -11058,3 +11058,46 @@ scoped retained `/out`, exact nightly and current source, run one serialized
 image build, and validate the linked artifact before any diagnostic guest.
 This continuation still has zero linked current images and zero real guest
 applications; no formal acceptance counter changes.
+
+Continuation checkpoint 267, 2026-09-30: the expert-repaired exportset-25
+libdwarf packet at fetched commit `1db10b23...7ff` passed independent source
+review.  Its packet/test hashes are `3e006c7c...dc65`/
+`eef59779...e080`; 12 actual-packet methods covering 23 vectors passed under
+one CPU and 1.5 GiB.  The single unprivileged production invocation then
+returned zero with the required stdout commit witness and `LOG_FINAL_FSYNC=PASS`.
+
+Independent result review returns `PASS_GITLINK_PREPARATION_RESULT`.  The new
+manifest is `fcdc013f...9046`, the terminal is `e48b985c...dd3`, and the final
+log is `645a8863...bb6`.  The clean libdwarf checkout binds commit/tree
+`ab9230...3753`/`dcc297...668`, all 412 tracked files and 21 Git metadata
+files.  Owner/child/helper PIDs 2258539/2258540/2258541 are absent; all four
+exclusive claims remain as evidence.  Exact committed evidence is
+`docs/verification/evidence/native-exact-export25-gitlink-preparation-success-20260930.json`.
+
+Shutdown stopped new dispatch and joined every child lane.  Preserved launcher
+process identities remain PIDs 1442141/1442142/1442145/1442149
+(wrapper/launcher/worker/app-server), started 2026-09-30 10:46:42 PDT.  No
+QEMU, mcexec, McKernel image owner/offline driver or compiler build is active.
+Host/scratch free bytes are 28,857,323,520/16,906,440,704 and MemAvailable is
+28,065,060 KiB.  No heavy build was started during shutdown.
+
+The exportset-25 request wrapper's first version was independently blocked and
+its one bounded correction is preserved unreleased at packet/test hashes
+`4445af94...8203`/`e81ce26e...9616`.  The correction has only three superficial
+tests and still lacks complete claims, signal/descendant retirement, exact
+full dependency hashes, checked complete writes, durable log/terminal outcome,
+and semantic post-result validation.  Per convergence, do not execute or send
+it back through another cheap correction.  The next invocation must obtain an
+independent final review of this correction, retain the expected BLOCK, then
+escalate an expert repair using the accepted gitlink supervisor pattern.  After
+that repaired data-only request packet passes review and runs once, checkpoint
+and fetch-verify its exact request, obtain a separate one-shot heavy-build
+release, and invoke the image owner unprivileged with the positional request.
+The owner must retain the pinned four-CPU/12-GiB/no-network profile and the
+read-only scratch-12 `/out`; preserve owner/driver evidence and terminal Docker
+metadata.  Validate any real artifact with separate postlink and linked-text
+ownership reports before the separately labelled memory-first diagnostic app
+loop (then files, threads/futexes, signals and shutdown).  Current counts remain
+zero linked current images and zero real current-candidate guest applications.
+The OS goal is incomplete and launcher-paused; it is neither resumed nor marked
+complete.
