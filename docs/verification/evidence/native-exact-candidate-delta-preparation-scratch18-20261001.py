@@ -232,13 +232,13 @@ def private_size(root):
     return sum(p.stat().st_size + 4096 for p in Path(root).rglob('*') if p.is_file())
 
 
-def check_shared(candidate, scratch15, scratch16, previous_candidate, shared):
+def check_shared(candidate, scratch15, scratch16, previous_candidate, shared, expected_initial_links=3):
     for row in shared:
         left = snapshot(scratch15/row['path'])
         middle = snapshot(scratch16/row['path'])
         owner = snapshot(previous_candidate/row['path'])
         right = snapshot(candidate/row['path'])
-        expected_final = dict(row['before'], nlink=4)
+        expected_final = dict(row['before'], nlink=expected_initial_links + 1)
         if (left != expected_final or middle != expected_final or owner != expected_final or
                 right != expected_final or left['inode'] != owner['inode'] or
                 middle['inode'] != left['inode'] or right['inode'] != left['inode']):
@@ -279,6 +279,7 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, source_b
             overlay_base_sha256=OVERLAY_BASE_BLOB_SHA,
             overlay_result_commit=OVERLAY_RESULT_COMMIT_SHA,
             scratch16=None, previous_candidate=None, expected_shared_files=EXPECTED_SHARED_FILES,
+            expected_initial_links=3,
             expected_delta=EXACT_DELTA):
     source, scratch15, scratch = map(Path, (source, scratch15, scratch))
     scratch16 = Path(scratch16) if scratch16 else scratch/INTERMEDIATE_CANDIDATE_NAME
@@ -371,7 +372,7 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, source_b
                 middle = snapshot(middle_path)
                 owner_path = previous_candidate/rel
                 owner = snapshot(owner_path)
-                if (before['nlink']!=3 or middle['nlink']!=3 or owner['nlink']!=3 or
+                if (before['nlink']!=expected_initial_links or middle['nlink']!=expected_initial_links or owner['nlink']!=expected_initial_links or
                         before != middle or before != owner or
                         before['mode']!=int(mode,8)&0o777 or
                         before['device']!=scratch.stat().st_dev or
@@ -441,7 +442,7 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, source_b
                 raw=object_bytes(source,'blob',oid)
                 if mode=='120000': os.symlink(os.fsdecode(raw),dst)
                 else: write_exclusive(dst,raw,int(mode,8))
-        check_shared(candidate,scratch15,scratch16,previous_candidate,shared)
+        check_shared(candidate,scratch15,scratch16,previous_candidate,shared,expected_initial_links)
         for row in private_retained:
             middle = snapshot(scratch16/row['path'])
             owner = snapshot(previous_candidate/row['path'])
@@ -506,7 +507,7 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, source_b
             admitted.validate()
             if admitted.docker is not None: raise Refusal('unexpected Docker construction')
             journal.event('canonical-owner-validated', measurement=admitted.measurement)
-        check_shared(candidate,scratch15,scratch16,previous_candidate,shared)
+        check_shared(candidate,scratch15,scratch16,previous_candidate,shared,expected_initial_links)
         for row in private_retained:
             middle, owner, private = (snapshot(scratch16/row['path']),
                                       snapshot(previous_candidate/row['path']),
