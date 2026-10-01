@@ -224,7 +224,7 @@ class OwnerTests(unittest.TestCase):
         owner.COMMON_EXCLUSION = str(self.common)
 
     def test_current_exportset_namespace_retires_selfdigest(self):
-        current = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-25.json"
+        current = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-26.json"
         retired_exportsets = [
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-18.json",
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-19.json",
@@ -236,7 +236,7 @@ class OwnerTests(unittest.TestCase):
         ]
         retired_selfdigest = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-selfdigest-13.json"
         retired = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-runtimeblob-12.json"
-        self.assertTrue(current.endswith("exportset-25.json"))
+        self.assertTrue(current.endswith("exportset-26.json"))
         self.assertIn(
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-17.json",
             owner.RETIRED_COMMON_EXCLUSIONS,
@@ -248,6 +248,11 @@ class OwnerTests(unittest.TestCase):
         self.assertNotIn(current, owner.RETIRED_COMMON_EXCLUSIONS)
         for retired_exportset in retired_exportsets:
             self.assertIn(retired_exportset, owner.RETIRED_COMMON_EXCLUSIONS)
+        self.assertIn(
+            "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-25.json",
+            owner.RETIRED_COMMON_EXCLUSIONS,
+        )
+        self.assertNotIn(current, owner.RETIRED_COMMON_EXCLUSIONS)
         self.assertIn(retired_selfdigest, owner.RETIRED_COMMON_EXCLUSIONS)
         self.assertIn(retired, owner.RETIRED_COMMON_EXCLUSIONS)
         self.assertIn(
@@ -258,6 +263,29 @@ class OwnerTests(unittest.TestCase):
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-objtoolbinding-11.json",
             owner.RETIRED_COMMON_EXCLUSIONS,
         )
+
+    def test_consumed_exportset_25_rejected_and_exportset_26_accepted(self):
+        """A disposable request cannot reuse 25 and accepts only the new 26 namespace."""
+        saved = owner.COMMON_EXCLUSION
+        try:
+            retired = ("/home/holden/mckernel-work/scratch/"
+                       "native-exact-candidate-operational-exclusion-exportset-25.json")
+            owner.COMMON_EXCLUSION = retired
+            rejected = self.request()
+            rejected["common_exclusion_path"] = retired
+            with self.assertRaisesRegex(owner.OwnerError, "common exclusion"):
+                owner.ImageOwner(rejected).validate()
+
+            active = ("/home/holden/mckernel-work/scratch/"
+                      "native-exact-candidate-operational-exclusion-exportset-26.json")
+            owner.COMMON_EXCLUSION = active
+            accepted = self.request()
+            accepted["common_exclusion_path"] = active
+            owner.ImageOwner(accepted).validate()
+            self.assertEqual(accepted["common_exclusion_path"], active)
+            self.assertEqual(owner.COMMON_EXCLUSION, active)
+        finally:
+            owner.COMMON_EXCLUSION = saved
 
     def tearDown(self):
         owner.EXPECTED_DRIVER_SHA256 = self.old_driver_hash

@@ -11308,3 +11308,86 @@ still receive independent result review plus postlink and linked-text reports
 before the diagnostic memory guest is rebound.  Linked current images and real
 current-candidate guest applications remain zero; no formal acceptance counters
 change.
+
+Continuation checkpoint 273, 2026-09-30: fetched commit
+`b42c7018...a603` received fresh independent
+`PASS_EXECUTION_EXPORT25_ABSOLUTE_HEAVY_BUILD` for one exact absolute-path
+owner invocation.  Immediate admission passed at request `9923b51f...461d`:
+all fresh targets were absent, no competing heavy process existed, the complete
+Docker census was 41 total/two unrelated running, and host/scratch/available
+memory were 28,588,077,056/16,797,904,896/27,924,201,472 bytes.
+
+The one-shot owner ran as PID/PGID/SID 2298732 and created retained container
+`aef5164...708b` (`mckernel-image-bc0df6c9bd6d4234a1ec686df14ec493`).
+Configure passed, but the four-job `mckernel.img` build failed at its final link:
+the exact nightly lowered `NativeIrqWorkDescriptor.reserved == [0; 6]` to a
+24-byte `bcmp`, and `mckernel_rust.o` left `bcmp` undefined at
+`.ltext.ihk_mc_interrupt_host+0x2a2`.  No other fatal was observed.  The failed
+Rust object is `c32ff593...c23e2`; raw stderr is `07bf8c4e...88c7`.
+
+The terminal container is retained exited/1 with PID zero, not OOM-killed, and
+the owner plus all seven captured Docker-client PIDs are absent.  Owner and
+driver receipts `df80c9c5...c98785`/`7b693056...e467` validate the failure;
+all six driver evidence files, 9,384 source-manifest members and the 86-entry
+backup inventory independently match.  The lease is absent.  The common
+exclusion remains intentionally retained at inode 90679, hash
+`2eeed65d...7c18`; no cleanup or retry is authorized.  Original failure evidence
+is `docs/verification/evidence/native-exact-export25-heavy-build-attempt2-bcmp-failure-20260930.json`.
+
+Independent expert and source review agree on one bounded correction: add a
+Rust-owned freestanding `bcmp` to `kernel/rust/string.rs`, with zero-length-safe
+bounded volatile-byte equality loads.  Do not delegate to the existing
+`memcmp`, which reads at length zero, and do not rewrite only the descriptor
+comparison to hide the compiler-runtime requirement.  Validate null/zero,
+equal/mismatch/high-bit/unaligned/guard-boundary cases, prove the optimized
+exact-nightly object defines `bcmp` without self/libc relocation or prohibited
+vector instructions, and retain descriptor semantics.
+
+After source review, checkpoint/fetch the correction and prepare a completely
+fresh candidate/request under exportset-26; never reuse exportset-25 roots.
+Current scratch free space is below the preserved full-clone preparation floor,
+so a separately reviewed retention-backed retirement of an obsolete 9-GiB
+candidate or a reviewed source-only candidate variant is required before a
+fresh full checkout.  Then rebuild once, require postlink/linked-text reports,
+and only afterward bind the diagnostic memory tuple.  Linked current images and
+real current-candidate applications remain zero; no formal counter changes.
+
+Continuation checkpoint 274, 2026-09-30: the bounded undefined-`bcmp`
+correction is implemented and independently returns
+`PASS_SOURCE_BCMP_CORRECTION_FINAL`.  `kernel/rust/string.rs` now exports a
+Rust-owned C-ABI equality primitive that checks length before bounded volatile
+`u8` reads, returns zero/equal or one/different, and never delegates to the
+existing zero-length-unsafe `memcmp`.  Exact production/vector/harness hashes
+are `579d8c06...fbf3`/`2b9971c0...79d6`/`08d5fcd0...fe8d`.
+
+The exact retained nightly passes all three focused behavioral tests: null
+zero-length, equal and high-bit/mismatch positions, unaligned inputs, and 64
+independently guarded lengths.  The optimized object `4a483883...223` defines
+global `bcmp`; its scalar leaf section has no relocation, call or SIMD, with
+inspection tools pinned to `/usr/bin/nm` and `/usr/bin/objdump`.  A separate
+unchanged descriptor-production test stopped before compile because PATH
+selected Rust 1.60 instead of its required 1.92; that tool-selection failure is
+retained and is not counted as descriptor proof.  Full image linkage remains
+required.
+
+The fresh operational namespace is independently accepted source-only as
+`PASS_EXPORT26_NAMESPACE_SOURCE`: the owner advances to
+exportset-26 and explicitly retires consumed exportset-25.  Exact owner/test
+hashes are `1e1e05b2...94a1b`/`a83359e8...eaad`; focused namespace tests pass
+2/2 and the full owner suite passes 27/27 under Python 3.9.  This is not an
+execution release.  The independent Python 3.8 run preserves two pre-existing
+`Path.readlink` compatibility errors; its namespace and entrypoint cases pass.
+Light downstream preparation also passes 181/181 postlink
+and 9/9 linked-text tests.  Exact additive evidence is
+`docs/verification/evidence/native-exact-export25-bcmp-correction-and-export26-namespace-20260930.json`.
+
+Next checkpoint/fetch all exact correction bytes, then address the measured
+scratch preparation deficit.  A
+fresh scratch-14 full candidate requires 23,731,113,984 bytes free; only about
+16.78 GB is available.  Preserve the exportset-25 failure, exclusion, container
+and receipts.  Use either separately reviewed retention-backed retirement of
+an obsolete recoverable candidate or a separately reviewed source-only
+candidate design; do not silently weaken the full manifest closure.  Then
+prepare a fresh candidate-bound tool receipt, gitlink and exportset-26 request,
+and rebuild once.  Linked current images and real current-candidate applications
+remain zero; no formal counter changes.

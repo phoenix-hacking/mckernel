@@ -313,6 +313,25 @@ pub unsafe extern "C" fn __inline_memset(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn bcmp(s1: *const c_void, s2: *const c_void, mut n: SizeT) -> CInt {
+    let mut p1 = s1.cast::<u8>();
+    let mut p2 = s2.cast::<u8>();
+
+    // Volatile byte reads keep this freestanding primitive from being lowered
+    // to a call to itself. Test the length before touching either pointer.
+    while n > 0 {
+        if read_volatile(p1) != read_volatile(p2) {
+            return 1;
+        }
+        p1 = p1.add(1);
+        p2 = p2.add(1);
+        n -= 1;
+    }
+
+    0
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn memcmp(s1: *const c_void, s2: *const c_void, mut n: SizeT) -> CInt {
     let mut p1 = s1.cast::<i8>();
     let mut p2 = s2.cast::<i8>();
