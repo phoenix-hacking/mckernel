@@ -94,14 +94,14 @@ def hash_fd(fd):
         if not b: return h.hexdigest(), size
         size += len(b); h.update(b)
 
-def read_checked(path, expected=None):
+def read_checked(path, expected=None, require_nlink1=True):
     p = Path(canonical(path))
     with directory(str(p.parent)) as parent:
         parent_before = os.fstat(parent)
         fd = os.open(p.name, os.O_RDONLY | os.O_NONBLOCK | NOFOLLOW, dir_fd=parent)
         try:
             before = os.fstat(fd)
-            if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1: fail("file-type-link")
+            if not stat.S_ISREG(before.st_mode) or before.st_nlink < 1 or (require_nlink1 and before.st_nlink != 1): fail("file-type-link")
             if expected and any(metadata(before).get(k) != expected.get(k) for k in metadata(before) if k in expected): fail("file-metadata")
             sha, size = hash_fd(fd); after = os.fstat(fd)
             namespace = os.stat(p.name, dir_fd=parent, follow_symlinks=False)
@@ -196,8 +196,8 @@ def protected_inventory():
                 actual = os.fstat(fd)
                 if (actual.st_dev, actual.st_ino, stat.S_IMODE(actual.st_mode)) != (s.st_dev, s.st_ino, stat.S_IMODE(s.st_mode)): fail("protected directory race")
             row = {"path": str(p), "dev": s.st_dev, "ino": s.st_ino, "mode": stat.S_IMODE(s.st_mode), "type": "directory"}
-        elif stat.S_ISREG(s.st_mode) and s.st_nlink == 1:
-            sha, size, actual = read_checked(str(p), metadata(s))
+        elif stat.S_ISREG(s.st_mode) and s.st_nlink >= 1:
+            sha, size, actual = read_checked(str(p), metadata(s), require_nlink1=False)
             row = {"path": str(p), "dev": actual.st_dev, "ino": actual.st_ino, "mode": stat.S_IMODE(actual.st_mode), "type": "file", "size": size, "sha256": sha, "nlink": actual.st_nlink}
         else: fail("protected special or hardlink: " + str(p))
         rows.append(row)

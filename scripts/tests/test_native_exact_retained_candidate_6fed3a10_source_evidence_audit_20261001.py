@@ -47,11 +47,23 @@ def test_protected_regular_and_symlink_fifo_refusal(tmp_path, monkeypatch):
     regular = tmp_path / "regular"; regular.write_bytes(b"protected")
     monkeypatch.setattr(m, "PROTECTED", (regular,))
     assert m.protected_inventory()[0]["sha256"] == m.digest(b"protected")
+    hard = tmp_path / "hard"; os.link(regular, hard)
+    monkeypatch.setattr(m, "PROTECTED", (regular,))
+    assert m.protected_inventory()[0]["nlink"] == 2
     root = tmp_path / "root"; root.mkdir(); link = root / "linked"; link.symlink_to(tmp_path, target_is_directory=True)
     monkeypatch.setattr(m, "PROTECTED", (link,))
     with pytest.raises(SystemExit): m.protected_inventory()
     fifo = tmp_path / "fifo"; os.mkfifo(fifo)
     with pytest.raises(SystemExit): m.read_checked(str(fifo))
+
+def test_link_count_drift_fails_closed(tmp_path):
+    p = tmp_path / "read"; p.write_bytes(b"before"); old_hash = m.hash_fd
+    def add_link(fd):
+        os.link(p, tmp_path / "new-link"); return old_hash(fd)
+    m.hash_fd = add_link
+    try:
+        with pytest.raises(SystemExit): m.read_checked(str(p), require_nlink1=False)
+    finally: m.hash_fd = old_hash
 
 def test_read_replacement_and_parent_replacement_fail_closed(tmp_path):
     p = tmp_path / "read"; p.write_bytes(b"before"); expected = m.metadata(m.inspect_entry(p)); old_hash = m.hash_fd
