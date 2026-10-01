@@ -13418,3 +13418,26 @@ after the build are approximately 40.01/34.92/23.40 GB, above the unchanged
 five prior bounded diagnostic guest passes, but zero formal application
 acceptances, 6/130 production gates and 0/7 language gates; the OS remains
 incomplete.
+
+Continuation checkpoint 336, 2026-10-01: the exact successful-build cleanup
+source is ready for a separate execution release at SHA-256
+`01e24b5b...3b8a`; 40 Python 3.8 regressions and independent adversarial review
+PASS.  It binds the exact exited container, full 4-CPU/12-GiB/no-network
+profile and mounts, 78,421,325-byte live/retained log, both ownership records,
+all receipts, request and compiled artifacts.  Its persistent mutex, sentinel
+exchange, hash-chained journal and two-record replay preserve every frontier;
+validate-only is read-only.  Production cleanup has not run, so container
+`3af1e30c...ee0a9` and the two exact active lock records remain unchanged.
+
+The source-only tool-image rebind helper is independently approved at SHA-256
+`f10ab116...b61e` with 14/14 tests.  It authenticates the immutable c81 PASS
+receipt and all 92 retained evidence entries from one snapshot, keeps source
+and target candidates distinct, and publishes only a non-executing request via
+descriptor-anchored no-replace I/O.  A fresh no-network/no-mount probe and
+owned cleanup must still create a target-bound PASS receipt.  The scratch18
+image preparation plan now binds that route, the required owner layout and
+shared exclusion; it remains preparation-only.  Next publish/fetch this source
+checkpoint, run real cleanup validate-only, obtain a hash-bound execution
+release and retire the exact terminal container/locks.  Then publish the rebind
+request and separately release the fresh image probe and McKernel image build.
+No application or acceptance counter changes; the OS remains incomplete.
