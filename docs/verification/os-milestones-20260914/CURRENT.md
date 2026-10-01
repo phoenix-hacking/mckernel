@@ -13507,3 +13507,22 @@ Next independently review and run that one serialized four-job image build,
 then validate/postlink its actual image before the startup diagnostic.  Counts
 remain two current compiled candidates, five prior diagnostic guest passes and
 zero formal application accepts; the OS remains incomplete.
+
+Continuation checkpoint 340, 2026-10-01: scratch18 McKernel image attempt 1
+failed deterministically at Docker start before the driver or any compilation.
+The external libdwarf checkout was mounted at
+`/src/executer/user/lib/libdwarf/libdwarf`, but scratch18 intentionally lacks
+that empty gitlink mountpoint and `/src` is read-only; runc therefore refused
+to create the nested target.  Original receipt/docker/start-stderr hashes are
+`d5e0e367...4f5ef`, `73c9fc18...b2f0` and `6f5381ca...84c`.
+
+Container `482d8bdb...45c13` / `mckernel-image-a16e098cae6f43b09fb6fc847c568fc6`
+is preserved in terminal `created`, PID-0, exit-128, non-OOM state with nonce
+`78a66b69...52422`.  The lease is absent; candidate/shared exclusions remain
+at exact inodes 57654/57653 and hashes `891e8e0d...8b5c3` /
+`792925a9...2253`.  No output bytes were produced.  Exact evidence is
+`native-exact-scratch18-image-build-attempt1-failure-20261001.json`.
+No unchanged retry is permitted.  Next independently review and consume exact
+cleanup, then use the one bounded correction for this mountpoint family while
+preserving read-only source semantics.  Counts and acceptance bars do not
+change; the OS remains incomplete.
