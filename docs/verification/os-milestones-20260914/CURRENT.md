@@ -11572,12 +11572,19 @@ exportset-25 test-root prefix before child identity publication; changing it to
 exportset-26 made all 23 tests pass.  A subsequent binding audit found the
 inherited owner hash stale; the packet now binds the reviewed active
 exportset-26 owner `1e1e05b2...94a1b`.  Final packet SHA is
-`de7e1f70...3e21f`, tests SHA `60dfa7d7...333f`, and independent Python-3.8
+`767ff18a...273f`, tests SHA `60dfa7d7...333f`, and independent Python-3.8
 execution passes 23/23.  The packet authenticates the complete candidate,
 tool-image receipt and gitlink inputs before mutation, publishes exclusively,
 retires descendants and emits only a non-executable request.  It calls owner
 validation but never owner execution and acquires neither build lease nor
 operational exclusion.
+
+A final pre-execution binding check also corrected the inherited host-output
+path: scratch-14's output is intentionally empty preparation state, while the
+accepted read-only host closure remains
+`native-exact-build-output-4e99a82c-scratch-12` (132,191 regular files).  The
+production packet was not executed with the empty path; all 23 disposable tests
+pass again after this distinct correction.
 
 Next checkpoint/fetch these exact bytes, obtain a live one-shot ordinary-user
 preparation release, execute once, and independently review its toolchain,
