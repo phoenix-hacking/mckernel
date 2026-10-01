@@ -13441,3 +13441,24 @@ checkpoint, run real cleanup validate-only, obtain a hash-bound execution
 release and retire the exact terminal container/locks.  Then publish the rebind
 request and separately release the fresh image probe and McKernel image build.
 No application or acceptance counter changes; the OS remains incomplete.
+
+Continuation checkpoint 337, 2026-10-01: the independently released scratch18
+retry2 successful-build cleanup completed and its immediate default replay
+returned `PASS_TERMINAL_REPLAY`.  Exact terminal container
+`3af1e30c...ee0a9` is absent from the complete Docker census.  The active
+operational and shared lock names are absent; their original inode/hash pairs
+57646/`207f2d4f...f48` and 57645/`2ccb8ad7...4ab4` remain durably archived.
+The nine-event hash-chained journal ends at `complete:2`, and the exact
+78,421,325-byte container log is retained both in original evidence and the
+transaction capture at SHA-256 `95ec65b9...e91`.  Plan/journal/mutex/capture
+identities and full hashes are recorded in
+`native-exact-scratch18-retry2-build-cleanup-terminal-20261001.json`.
+
+The one-heavy-operation lane is now free.  All compiled retry2 receipts and
+artifacts remain unchanged, as do the c81 image and five prior diagnostic guest
+passes.  Next publish the already reviewed data-only c81-to-scratch18 tool-image
+probe request, separately release and run its fresh network-none identity probe,
+then prepare and build the candidate McKernel image before the startup diagnostic.
+Counts remain two compiled current candidates, five prior bounded diagnostic
+guest passes, zero formal application acceptances, 6/130 production gates and
+0/7 language gates; the OS remains incomplete.

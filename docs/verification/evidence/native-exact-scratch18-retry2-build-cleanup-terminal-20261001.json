@@ -1,0 +1,36 @@
+{
+  "schema": "mckernel.native-exact-scratch18-retry2-build-cleanup-terminal.v1",
+  "recorded_at": "2026-10-01T11:34:00-07:00",
+  "status": "PASS_TERMINAL_REPLAY",
+  "release_commit": "2c3f8be75f1a54212c91aa7fb7be50073cb5a7e2",
+  "release_sha256": "1d901c77af54103ecdf9be947accd1c484290d885b0819fd49e6ac62edf788d9",
+  "source_sha256": "01e24b5b5b5a1c69d3c512d196862418f3f4e28d2295a06132aad81795ce3b8a",
+  "execution_result": {"status": "PASS_EXECUTED", "terminal": true, "plan_sha256": "679a8bedca00e9edef0c86814ffb12d3c117378ec5a6cff0c54d113bf1026feb"},
+  "replay_result": {"status": "PASS_TERMINAL_REPLAY", "terminal": true},
+  "container": {
+    "id": "3af1e30c1e2db5b868e5b9f0d235426e128ccafe6b6193c1de54f44fafdee0a9",
+    "name": "mckernel-exact-4192f858907f4fd2add8871fee8cf750",
+    "absent_from_complete_docker_census": true,
+    "removal_used_volume_or_prune_flags": false
+  },
+  "active_names": {
+    "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json": "absent",
+    "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock": "absent"
+  },
+  "archives": {
+    "native-exact-scratch18-retry2-attempt.archive": {"device_inode": "1831:57646", "size": 269, "mode": "0600", "sha256": "207f2d4f77542dae9db5dc8210a921cc574db51e6720d454231a49591011cf48"},
+    "native-exact-scratch18-retry2-shared.archive": {"device_inode": "1831:57645", "size": 269, "mode": "0600", "sha256": "2ccb8ad7b12b55e555cf053d1051c5b33d5893e1ae28e10f70f3d9a3f7b44ab4"}
+  },
+  "transaction": {
+    "mutex": {"device_inode": "1831:57647", "size": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+    "capture": {"device_inode": "1831:57648", "size": 78421325, "sha256": "95ec65b922159adefdf90a2aa49325b38b9f4937ffc634421eb4d24ec3516e91"},
+    "plan": {"device_inode": "1831:57649", "size": 1508, "sha256": "f7284b4b364972caa4fb64987c5876f1064faddc6d7bd0f79e77e7daf630bd75"},
+    "journal": {"device_inode": "1831:57650", "size": 2527, "sha256": "1832841f06f5a932f82f01c54bf0181c8404572ae881aba1648d7e55e81a4a3e", "events": ["before_exchange:0", "after_exchange:0", "release:0", "after_release:0", "before_exchange:1", "after_exchange:1", "release:1", "after_release:1", "complete:2"]}
+  },
+  "preserved": {
+    "compiled_artifacts": "all source-bound receipt and artifact hashes revalidated at every transaction frontier",
+    "original_container_log_sha256": "95ec65b922159adefdf90a2aa49325b38b9f4937ffc634421eb4d24ec3516e91",
+    "current_c81_image_and_prior_guests": "unchanged"
+  },
+  "acceptance": "Terminal successful-build cleanup only; no image, guest, application, production, or OS acceptance."
+}
