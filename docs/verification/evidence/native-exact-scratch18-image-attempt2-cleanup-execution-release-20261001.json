@@ -1,0 +1,63 @@
+{
+  "schema": "mckernel.native-exact-scratch18-image-attempt2-cleanup-execution-release.v1",
+  "status": "PROPOSED",
+  "scope": "one exact attempt-2 failed-image cleanup invocation only",
+  "candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "published_commit": "1dab63410fe17172c0476614798630dc7a76fcb0",
+  "fetched_commit_verified": true,
+  "implementation": {
+    "path": "docs/verification/evidence/native-exact-scratch18-image-attempt2-cleanup-20261001.py",
+    "sha256": "489ea04b8fe5d5c95f56e2599d90e8cae945caa31c96676ca8cb76e3df6336ff",
+    "tests_path": "scripts/tests/test_native_exact_scratch18_image_attempt2_cleanup_20261001.py",
+    "tests_sha256": "012240a1eeb7cc2db7477b9a7021c7fd860cb0813ee0fb4cd54254b43cf8d8c9",
+    "tests": "50 passed on CPUs 6-7 under a 3-GiB address-space ceiling",
+    "independent_source_review": "PASS"
+  },
+  "command": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native-exact-scratch18-image-attempt2-cleanup-20261001.py",
+    "--execute"
+  ],
+  "preflight": {
+    "validate_only": "PASS_VALIDATE_ONLY",
+    "events": 0,
+    "container_present": true,
+    "transaction_files_absent": true,
+    "host_free_bytes": 39485382656,
+    "scratch_free_bytes": 34582396928,
+    "memory_available_bytes": 23072362496
+  },
+  "target": {
+    "container_id": "199591e8a9d9fca3ee1026fe43457b6f775888e22431dc89caafc5e865ebb562",
+    "container_name": "mckernel-image-a54e9e91af62474c8de5042bef79741d",
+    "owner_nonce": "3db31b9648044af19daf952651a1cb05",
+    "required_state": "exited",
+    "required_pid": 0,
+    "required_exit_code": 1,
+    "required_oom_killed": false,
+    "image_lease_required_absent": true,
+    "work_root_required_empty": true
+  },
+  "authorized_effects": [
+    "capture and authenticate exact stdout-plus-stderr Docker logs",
+    "remove only the exact terminal container without force",
+    "transactionally archive the exact candidate and shared exclusion records",
+    "release only their active ownership pathnames"
+  ],
+  "preserve": [
+    "owner receipt and all original attempt evidence",
+    "failed work and evidence directory identities",
+    "absent image lease",
+    "all source, toolchain, request and build inputs",
+    "current c81 image and five prior diagnostic guest passes"
+  ],
+  "not_authorized": [
+    "source correction",
+    "image build retry",
+    "guest execution",
+    "application or OS acceptance"
+  ],
+  "execution_requires": "a separate independent PASS_EXECUTION over this exact published release"
+}
