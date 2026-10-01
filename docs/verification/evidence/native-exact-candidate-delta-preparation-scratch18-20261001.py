@@ -232,16 +232,20 @@ def private_size(root):
     return sum(p.stat().st_size + 4096 for p in Path(root).rglob('*') if p.is_file())
 
 
-def check_shared(candidate, scratch15, scratch16, previous_candidate, shared, expected_initial_links=3):
+def check_shared(candidate, scratch15, scratch16, previous_candidate, shared,
+                 expected_initial_links=3, additional_shared_roots=()):
     for row in shared:
         left = snapshot(scratch15/row['path'])
         middle = snapshot(scratch16/row['path'])
         owner = snapshot(previous_candidate/row['path'])
+        additional = [snapshot(root/row['path']) for root in additional_shared_roots]
         right = snapshot(candidate/row['path'])
         expected_final = dict(row['before'], nlink=expected_initial_links + 1)
         if (left != expected_final or middle != expected_final or owner != expected_final or
                 right != expected_final or left['inode'] != owner['inode'] or
-                middle['inode'] != left['inode'] or right['inode'] != left['inode']):
+                middle['inode'] != left['inode'] or right['inode'] != left['inode'] or
+                any(extra != expected_final or extra['inode'] != left['inode']
+                    for extra in additional)):
             raise Refusal('shared evidence identity/mode/hash changed: '+row['path'])
 
 
@@ -280,9 +284,11 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, source_b
             overlay_result_commit=OVERLAY_RESULT_COMMIT_SHA,
             scratch16=None, previous_candidate=None, expected_shared_files=EXPECTED_SHARED_FILES,
             expected_initial_links=3,
+            additional_shared_roots=(),
             expected_delta=EXACT_DELTA):
     source, scratch15, scratch = map(Path, (source, scratch15, scratch))
     scratch16 = Path(scratch16) if scratch16 else scratch/INTERMEDIATE_CANDIDATE_NAME
+    additional_shared_roots = tuple(map(Path, additional_shared_roots))
     candidate = scratch/CANDIDATE_NAME
     previous_candidate = Path(previous_candidate) if previous_candidate else scratch/PREVIOUS_CANDIDATE_NAME
     paths = {'candidate': candidate, 'backup': scratch/(CANDIDATE_NAME+'-metadata-backup'),
@@ -293,11 +299,12 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, source_b
              'lease': scratch/LEASE_NAME,
              'exclusion': Path(exclusion) if exclusion else
                  scratch/EXCLUSION_NAME}
-    for root in (source, scratch15, scratch, scratch16):
+    for root in (source, scratch15, scratch, scratch16, *additional_shared_roots):
         if not root.is_absolute() or root.is_symlink() or not root.is_dir():
             raise Refusal('invalid root: '+str(root))
         if root.resolve() != root: raise Refusal('root alias: '+str(root))
-    if len({scratch15.resolve(), scratch16.resolve(), previous_candidate.resolve(), candidate.resolve()}) != 4:
+    all_shared_roots = (scratch15, scratch16, previous_candidate, *additional_shared_roots)
+    if len({root.resolve() for root in (*all_shared_roots, candidate)}) != len(all_shared_roots) + 1:
         raise Refusal('shared root alias')
     if any(os.path.lexists(p) for p in paths.values()): raise Refusal('destination-present')
     # The journal exists before the first candidate mutation. Every Python
@@ -372,8 +379,10 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, source_b
                 middle = snapshot(middle_path)
                 owner_path = previous_candidate/rel
                 owner = snapshot(owner_path)
+                additional = [snapshot(root/rel) for root in additional_shared_roots]
                 if (before['nlink']!=expected_initial_links or middle['nlink']!=expected_initial_links or owner['nlink']!=expected_initial_links or
                         before != middle or before != owner or
+                        any(extra != before for extra in additional) or
                         before['mode']!=int(mode,8)&0o777 or
                         before['device']!=scratch.stat().st_dev or
                         git(source,'hash-object','--no-filters',str(prior)).decode().strip()!=oid):
@@ -442,7 +451,8 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, source_b
                 raw=object_bytes(source,'blob',oid)
                 if mode=='120000': os.symlink(os.fsdecode(raw),dst)
                 else: write_exclusive(dst,raw,int(mode,8))
-        check_shared(candidate,scratch15,scratch16,previous_candidate,shared,expected_initial_links)
+        check_shared(candidate,scratch15,scratch16,previous_candidate,shared,
+                     expected_initial_links,additional_shared_roots)
         for row in private_retained:
             middle = snapshot(scratch16/row['path'])
             owner = snapshot(previous_candidate/row['path'])
@@ -507,7 +517,8 @@ def prepare(source, scratch15, scratch, *, execute=False, old=BASELINE, source_b
             admitted.validate()
             if admitted.docker is not None: raise Refusal('unexpected Docker construction')
             journal.event('canonical-owner-validated', measurement=admitted.measurement)
-        check_shared(candidate,scratch15,scratch16,previous_candidate,shared,expected_initial_links)
+        check_shared(candidate,scratch15,scratch16,previous_candidate,shared,
+                     expected_initial_links,additional_shared_roots)
         for row in private_retained:
             middle, owner, private = (snapshot(scratch16/row['path']),
                                       snapshot(previous_candidate/row['path']),
