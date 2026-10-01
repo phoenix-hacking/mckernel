@@ -12257,3 +12257,39 @@ and rebuild all three pinned host modules.  The terminal-futex guest cannot be
 retried before that new module exists.  Compiled current-candidate count remains
 one, diagnostic guest PASS count remains five, formal application/catalog count
 remains zero, shutdown remains unwired, and the OS goal is active and incomplete.
+
+Continuation checkpoint 298, 2026-10-01: mature retention preparation for the
+never-built scratch14 candidate completed and passed independent artifact
+review; no retirement is authorized yet.  The no-follow planner performed a
+complete double walk and Git classification of the exact c81 main and
+`3114d9e7...` IHK roots.  Inventory `12de35d4...519630` is 5,479,703 bytes
+with 10,992 entries, of which 921 require the capsule.  Deterministic capsule
+`8ca6a306...c8203d` is 12,247,040 bytes with exactly 933 members: its embedded
+manifest is byte-identical, every required member and ancestor is present, and
+there are no missing, extra or duplicate members.
+
+Independent `PASS_RETENTION_ARTIFACTS` reproduced the entire manifest from a
+fresh two-root scan, verified 8,108 main and 1,295 IHK reconstructible
+non-directory objects against Git, and confirmed that the only required
+non-metadata regular delta is
+`ihk/test/ihklib/whitebox/src/driver/mckernel/syscall.c` at
+`7abb77fd...15bf77`.  Candidate Git metadata, all 86 backup entries and three
+empty gitlink directories are retained.  The external preparation log,
+terminal, input manifest, build request and metadata receipt remain outside the
+retirement roots and are bound by exact inode, size and hash in
+`native-exact-c81-scratch14-retention-artifacts-checkpoint-20261001.json`.
+
+The attempted custom retention wrapper `fa63c10d...2aaced` is BLOCKED and must
+not run: it named the wrong backup and overlay, allowed caller-weakened hashes
+and arbitrary roots, and did not implement actual inventory/archive
+verification.  The accepted artifacts were created directly by the mature
+planner `d0bd9ce3...bbae1` and archiver `6a28184e...c06e`, not that wrapper.
+
+Current host availability is only 14,168,383,488 bytes, below the 16-GiB
+retirement floor; scratch has 16,150,040,576 bytes.  Therefore no retirement,
+build or guest may start.  Next push/fetch the inventory and capsule, recover
+host capacity without touching protected current inputs, then create and
+independently review a fresh ordinary two-root retirement release.  After
+successful deletion and targeted scratch trim, remeasure capacity and execute
+the reviewed scratch15 preparation packet.  The OS goal remains active and
+incomplete.
