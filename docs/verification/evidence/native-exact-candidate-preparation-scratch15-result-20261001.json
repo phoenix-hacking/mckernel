@@ -1,0 +1,61 @@
+{
+  "schema": "mckernel.native-exact-candidate-preparation-success.v1",
+  "recorded_utc": "2026-10-01T10:11:51Z",
+  "scope": "preparation-only",
+  "result": "PASS_SCRATCH15_PREPARATION",
+  "candidate_commit": "1e95abdc2b124c19f16b88cdb21600c768a10c2d",
+  "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "release_commit": "e3c037050545472a2faa7b4aaa537136b64db75a",
+  "packet": {
+    "path": "docs/verification/evidence/native-exact-candidate-preparation-scratch-20261001-15.sh",
+    "sha256": "c5a784524c8918d3edea77c3df26f2f91ccb24f655aa77d9577f4b2cbbfd9689"
+  },
+  "execution": {
+    "pid": 3015913,
+    "pid_starttime": "105917446",
+    "exit_code": 0,
+    "terminal_stdout": "LOG_FINAL_FSYNC=PASS",
+    "live_children_after": [],
+    "preparation_pid_present_after": false
+  },
+  "artifacts": {
+    "candidate": {"path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-1e95abdc-scratch-15", "device": 1831, "inode": 1858912, "allocated_bytes": 9242759168},
+    "metadata_backup": {"path": "/home/holden/mckernel-work/scratch/native-exact-metadata-backup-1e95abdc-scratch-15", "device": 1831, "inode": 3693699, "allocated_bytes": 1564672},
+    "log": {"path": "/home/holden/mckernel-work/scratch/native-exact-candidate-preparation-1e95abdc-scratch-15.log", "sha256": "7d8d91bff694371f07a6ad8bb4c9cc3ad63c2b63f339db1f2f608c04a25f6a31", "size": 49507, "inode": 90709},
+    "terminal": {"path": "/home/holden/mckernel-work/scratch/native-exact-candidate-preparation-1e95abdc-scratch-15-terminal.json", "sha256": "fd564ce351116abe7d94e85505ff058a23f30682499d02d65e91e874e3b6f004", "size": 364, "inode": 90712},
+    "input_manifest": {"path": "/home/holden/mckernel-work/scratch/native-exact-inputs-1e95abdc-scratch-15.json", "sha256": "b1f827a82b9f7cc06164a716e341d62f2d78f187ece452bf1a7f985cd94a6749", "size": 1222935, "inode": 90710, "entries_verified": 9453},
+    "nonreleased_request": {"path": "/home/holden/mckernel-work/scratch/native-exact-build-request-1e95abdc-scratch-15.json", "sha256": "1c18211bde1005ee0dab8b7251df2854b005cb8768347ff5063878621c7cd8d8", "size": 3051, "inode": 90711, "preparation_only": true, "execution_released": false, "executable": false, "release_required": true},
+    "metadata_receipt": {"path": "/home/holden/mckernel-work/scratch/native-exact-metadata-evidence-1e95abdc-scratch-15/receipt.json", "sha256": "2fa772b34b93bbeaf046ba32b155744120ff6e2c59e8fa3a7941e20f26861fcc"}
+  },
+  "verified_state": {
+    "main_tree_clean_except_expected_ihk_gitlink_modification": true,
+    "ihk_overlay_patch_sha256": "cbaaec7b649608674747e4d88acdd1f0a005cff6ff696046b8d96ed959af49e7",
+    "ihk_overlay_result_sha256": "7abb77fdc3049a54caebc3344de14c41e779502b4abcb7f301de4a647e15bf77",
+    "manifest_symlinks_verified_by_link_text_and_git_blob": 49,
+    "filesystem": "ext4",
+    "memory_backed_allocation_bytes": 0,
+    "output_directory_empty": true,
+    "evidence_directory_empty": true,
+    "lease_absent": true,
+    "exportset_26_exclusion_absent": true,
+    "host_free_bytes": 24830590976,
+    "scratch_free_bytes": 16009555968,
+    "host_required_floor_bytes": 18790481920,
+    "scratch_required_floor_bytes": 14495514624
+  },
+  "review": {
+    "independent_result": "PASS_SCRATCH15_PREPARATION",
+    "reviewed_bindings": ["released preparation packet", "candidate and pinned IHK", "overlay patch and result", "all 9453 manifest entries", "49 symlink link-text and Git-blob bindings", "four asset hashes", "standalone Git metadata", "artifact hashes and identities", "terminal process identity and exit", "empty output/evidence and absent lease"]
+  },
+  "execution_blocker": {
+    "family": "consumed-operational-exclusion",
+    "detail": "The immutable nonreleased request names consumed exportset-16. The pinned wrapper uses O_EXCL and would deterministically reject it.",
+    "required_correction": "Create and independently review a fresh exclusion/source/request execution binding while preserving the original request."
+  },
+  "limitations": [
+    "The raw log intentionally ends with LOG_FINAL_FSYNC=PENDING; dispatcher stdout observed LOG_FINAL_FSYNC=PASS after the successful fsync.",
+    "This is preparation evidence only and the original request is intentionally non-executable.",
+    "No Docker build, kernel build, guest, runtime behavior, diagnostic application, formal application, production acceptance or OS completion is established."
+  ],
+  "next_action": "Repair and review the fresh one-shot exclusion and derived execution-request binding, checkpoint it, then run one serialized pinned host-module build after a fresh process, Docker, lease and capacity preflight."
+}

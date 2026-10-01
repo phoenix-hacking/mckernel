@@ -64,7 +64,7 @@ class WrapperTests(unittest.TestCase):
     def setUp(self):
         self.lock_dir = Path(tempfile.mkdtemp(prefix="mckernel-wrapper-lock-"))
         wrapper.OPERATIONAL_EXCLUSION_PATH = str(
-            self.lock_dir / "native-exact-candidate-operational-exclusion-exportset-16.json")
+            self.lock_dir / "native-exact-candidate-operational-exclusion-scratch15-exportset-27.json")
         FakeOwner.calls = FakeOwner.validations = 0
         FakeOwner.CliSignals.entered = FakeOwner.CliSignals.exited = 0
         FakeOwner.measurement = {
@@ -107,8 +107,9 @@ class WrapperTests(unittest.TestCase):
         self.assertNotEqual(wrapper.OPERATIONAL_EXCLUSION_PATH,
                             wrapper.RETIRED_OPERATIONAL_EXCLUSION_PATH)
         self.assertTrue(wrapper.OPERATIONAL_EXCLUSION_PATH.endswith(
-            "native-exact-candidate-operational-exclusion-exportset-16.json"))
+            "native-exact-candidate-operational-exclusion-scratch15-exportset-27.json"))
         for rejected_path in (
+            wrapper.CONSUMED_EXPORTSET16_OPERATIONAL_EXCLUSION_PATH,
             wrapper.RETIRED_OPERATIONAL_EXCLUSION_PATH,
             wrapper.REVIEWED_OPERATIONAL_EXCLUSION_PATH,
             wrapper.SUPERSEDED_OPERATIONAL_EXCLUSION_PATH,
@@ -140,6 +141,26 @@ class WrapperTests(unittest.TestCase):
         lock.unlink()
         result = self.invoke(request)
         self.assertEqual(result["status"], "PASS")
+
+    def test_request_hash_remains_bound_to_exact_fresh_path(self):
+        request_with_fresh_path = {
+            "operational_exclusion_path": wrapper.OPERATIONAL_EXCLUSION_PATH,
+            "profile": "reviewed-pinned-profile",
+        }
+        request_with_consumed_path = dict(
+            request_with_fresh_path,
+            operational_exclusion_path=wrapper.CONSUMED_EXPORTSET16_OPERATIONAL_EXCLUSION_PATH,
+        )
+        self.assertNotEqual(wrapper._request_hash(request_with_fresh_path),
+                            wrapper._request_hash(request_with_consumed_path))
+        lock, record = wrapper._acquire_exclusion(request_with_fresh_path)
+        try:
+            self.assertEqual(record["request_sha256"],
+                             wrapper._request_hash(request_with_fresh_path))
+            self.assertNotEqual(record["request_sha256"],
+                                wrapper._request_hash(request_with_consumed_path))
+        finally:
+            lock.unlink()
 
     def test_failed_minus_two_exclusion_is_rejected(self):
         old_request = request

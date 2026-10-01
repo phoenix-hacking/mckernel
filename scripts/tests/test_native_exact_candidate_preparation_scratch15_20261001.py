@@ -291,9 +291,11 @@ class PacketAdmission(unittest.TestCase):
         packet_path = re.search(r'readonly EXCLUSION="[^"]*/([^/"]+\.json)"', self.text)[1]
         wrapper_path = re.search(r'^OPERATIONAL_EXCLUSION_PATH\s*=\s*"[^"]*/([^/"]+\.json)"', wrapper, re.MULTILINE)[1]
         owner_path = re.search(r'COMMON_EXCLUSION\s*=\s*"[^"]*/([^/"]+\.json)"', owner)[1]
-        self.assertEqual(packet_path, wrapper_path)
+        self.assertNotEqual(packet_path, wrapper_path)
         self.assertNotEqual(packet_path, owner_path)
         self.assertEqual(packet_path, 'native-exact-candidate-operational-exclusion-exportset-16.json')
+        self.assertEqual(wrapper_path, 'native-exact-candidate-operational-exclusion-scratch15-exportset-27.json')
+        self.assertIn('CONSUMED_EXPORTSET16_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-16.json"', wrapper)
         self.assertIn('IMAGE_EXCLUSION="$SCRATCH/native-exact-candidate-operational-exclusion-exportset-26.json"', self.text)
         self.assertIn('COMMON_EXCLUSION = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-26.json"', self.text)
         self.assertIn('selfdigest-13', wrapper)

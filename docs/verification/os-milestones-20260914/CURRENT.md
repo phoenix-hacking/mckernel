@@ -12356,3 +12356,58 @@ pinned three-module heavy build.  Compiled current-candidate count remains one,
 diagnostic guest PASS count remains five, formal application/catalog count
 remains zero, shutdown remains unwired, and the OS goal is active and
 incomplete.
+
+Continuation checkpoint 301, 2026-10-01: reviewed source-only scratch15
+preparation completed with exit zero and independent
+`PASS_SCRATCH15_PREPARATION`.  Candidate HEAD is exact
+`1e95abdc2b124c19f16b88cdb21600c768a10c2d`, pinned IHK is exact
+`3114d9e7...`, and the only main-tree status is the expected IHK modification.
+Overlay patch `cbaaec7b...9af49e7` produces exact file
+`7abb77fd...15bf77`.  All 9,453 manifest entries, including 49 symlinks
+checked by link text and Git blob, and all four assets pass independent
+verification.
+
+Terminal `fd564ce3...b6f004` binds log `7d8d91bf...5f6a31`, PID 3015913 at
+starttime 105917446, exit zero, no live children and durable final log fsync.
+Manifest `b1f827a8...4a6749`, original nonreleased request
+`1c18211b...cd8d8`, and metadata receipt `2fa772b3...61fcc` are retained by
+exact identity.  Output and evidence roots are empty mode-0700 uid1000
+directories; the scratch15 lease and exportset-26 exclusion are absent.
+Recorded final capacity is 24,830,590,976 host bytes and 16,009,555,968
+scratch bytes, above the packet's post-preparation floors.
+
+The prepared request is deliberately not a build release: it says
+`preparation_only=true`, `executable=false`, `execution_released=false` and
+names the already-consumed exportset-16 operational exclusion.  The wrapper's
+`O_EXCL` admission would deterministically reject it.  Preserve that original
+request and preparation evidence.  The single bounded correction for this
+failure family is a fresh exclusion plus derived immutable execution-request
+binding, with focused tests and independent review before the heavy build.
+Exact evidence is
+`native-exact-candidate-preparation-scratch15-result-20261001.json`.  No build,
+guest, diagnostic application or formal acceptance is promoted.
+
+Continuation checkpoint 302, 2026-10-01: the single bounded correction for
+the consumed-operational-exclusion family passes independent three-file
+source/test review.  The host wrapper now explicitly retains and rejects
+immutable exportset-16 (`ddc0596d...698518`) and accepts only fresh absent
+`native-exact-candidate-operational-exclusion-scratch15-exportset-27.json`.
+Its existing `O_EXCL`, canonical full-request hash, pinned
+4-CPU/12-GiB/no-network/512-task profile, dual resource validation, failure
+retention and identity-checked retirement rules are unchanged.
+
+Wrapper `94a2abea...6ff0d`, wrapper tests `f216ffa6...d8ba` and preparation
+tests `811510f1...a7012` pass 63 combined tests; independent review reruns 35
+and returns PASS.  The preparation test deliberately distinguishes historical
+packet exportset-16, current build-wrapper exportset-27 and image-owner
+exportset-26.  The earlier independent escaped-literal test failure is retained
+and resolved by the final ordinary-slash assertion.  Exact evidence is
+`native-exact-scratch15-fresh-exclusion-source-checkpoint-20261001.json`.
+
+Execution remains unreleased.  Next complete and independently review the
+bounded execution packet that preserves original request
+`1c18211b...cd8d8`, permits exactly five derived-request value changes, binds
+both byte and canonical hashes, durably publishes without replacement and
+invokes this corrected host wrapper exactly once.  Only after a fetched release
+and fresh capacity/process/lease/container preflight may the coordinator start
+the one heavy pinned build.  Application and OS acceptance counts do not move.
