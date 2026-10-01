@@ -12076,3 +12076,36 @@ and corrected runtime sources, obtain an exact one-shot execution release and
 run the direct-futex guest.  Separately replace the shutdown model with a real
 production-body extraction before another shutdown source review.  The OS goal
 remains active and incomplete.
+
+Continuation checkpoint 292, 2026-10-01: the released c81 direct-futex guest
+ran once and is preserved FAIL at the evaluator, not retried.  The real payload
+returned the exact 55-byte stdout
+`NATIVE_ULTRA_FUTEX PASS cases=16 threads=2 raw_clone=1\n`, exit/raw status
+37/9472, empty discarded-byte counts, complete EOF and empty procfs.  Its
+2,610-byte stderr at `64e45bd3...32a2c` contains all 16 expected CASE records,
+then THREADS, then CLONE.  The typed evaluator expected the historical archive
+order of 15 CASE, CLONE, final CASE, THREADS and rejected it as
+`typed futex clone framing`.  Inspection of the retained current payload source
+confirms that 16 CASE, THREADS, CLONE is its production order; this is an oracle
+variant-binding defect, not an accepted application result.
+
+Inner result/serial/QMP hashes are `9c0f0f87...f4851`,
+`02b3b4ef...4a90c` and `b6e98092...9d56b`.  QMP observed guest shutdown,
+nonrunning status and acknowledged quit before controlled QEMU reap `-9`.
+Container `27637190...d808a` is removed, no diagnostic process/client remains,
+the development lock is free and owner cleanup reports no secondary failures.
+Exact evidence is
+`docs/verification/evidence/native-exact-c81-futex-diagnostic-failure-20261001.json`.
+Diagnostic PASS count remains five and formal application/catalog acceptance
+remains zero.
+
+The sole bounded correction is to make record order an explicit typed-oracle
+variant: the current retained source must require 16 CASE, THREADS, CLONE, while
+authenticated historical replay must remain explicitly bound to its older
+split order.  Cross-order input must reject.  After executable tests and
+independent source review, prepare a fresh manifest, nonce and packet; never
+reuse attempt `1a9f699e18ae309d0cb9205564458ab0` or its parent.  Shutdown IRQ
+work remains separate and unaccepted.  The production-body extraction now
+executes exact BootIrqRoute bodies for six cases, but PreparedBoot sender close
+and BootStorage ownership extraction remain missing.  The OS goal remains
+active and incomplete.
