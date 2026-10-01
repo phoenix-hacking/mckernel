@@ -1521,3 +1521,19 @@ evidence is `docs/verification/evidence/native-exact-c81-futex-diagnostic-correc
 Diagnostic PASS count remains five, formal application/catalog acceptance
 remains zero, shutdown is separately blocked and unwired, and the OS goal is
 active and incomplete.
+
+Checkpoint 295 adds the independently reviewed terminal trace source fix, not
+a runtime result.  After successful copy and COPIED_SYSCALL commit, the host
+now traces non-returning exit_group 231 regardless of ordinary sample-budget
+exhaustion without consuming that budget.  It retains worker-local trace state
+and Release/Acquire publication, emits no invented terminal RET, and publishes
+nothing on copy or commit failure.  Fresh production-body extraction passes
+12/12 tests with warnings denied; broader diagnostic suites pass 174/174.
+Exact source evidence is
+`docs/verification/evidence/native-exact-c81-futex-terminal-trace-source-checkpoint-20261001.json`.
+
+Next commit and fetched-blob verify the exact sources, prepare a fresh exact
+candidate and separately reviewed pinned three-module build, then bind a new
+module set before generating any new futex manifest or one-shot guest packet.
+The existing two packets remain spent and FAIL.  Diagnostic PASS count remains
+five and formal application/catalog acceptance remains zero.

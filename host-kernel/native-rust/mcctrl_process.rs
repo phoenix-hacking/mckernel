@@ -270,21 +270,23 @@ impl Registration {
             // The original private request stays queued if any user byte faults.
             copied?;
             commit?;
+            let number = image::word(&bytes, 40).map_err(errno)?;
             // The launcher uses its Linux worker slot in RET.cpu. Retain the
             // packet's guest CPU before publishing this private delivered serial.
             worker.delivery_cpu.store(
                 image::word(&bytes, 16).map_err(errno)? as i32,
                 Ordering::Relaxed,
             );
-            // Sample the complete delivery, so exhausting the budget cannot
-            // split a logged route from its actual return result.
-            let traced = self.trace();
+            // Ordinary samples remain grouped with their route and return;
+            // committed non-returning exit_group delivery is always visible
+            // even after the ordinary trace budget is exhausted.
+            let traced = number == 231 || self.trace();
             worker.delivery_trace.store(traced, Ordering::Relaxed);
             worker.delivery.store(serial, Ordering::Release);
             if traced {
                 pr_info!("application_syscall=delivered os={} generation={} pid={} worker={} delivery={} cpu={} number={}\n",
                 self.slot, self.generation, self.pid, worker.handle, serial,
-                image::word(&bytes, 16).map_err(errno)?, image::word(&bytes, 40).map_err(errno)?);
+                image::word(&bytes, 16).map_err(errno)?, number);
             }
             return Ok(0);
         }

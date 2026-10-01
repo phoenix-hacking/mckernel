@@ -110,6 +110,7 @@ struct Backend {
     serial: u64,
     guest_cpu: i64,
     copied: Vec<bool>,
+    copied_error: Option<i32>,
     returns: Vec<[u8; 72]>,
     accepted: bool,
     error: Option<i32>,
@@ -144,6 +145,7 @@ impl Registration {
                 serial: 73,
                 guest_cpu: cpu,
                 copied: Vec::new(),
+                copied_error: None,
                 returns: Vec::new(),
                 accepted: true,
                 error: None,
@@ -178,6 +180,9 @@ impl Registration {
             application_abi::COPIED_SYSCALL => {
                 assert_eq!(image::word(bytes, 8)?, backend.serial);
                 backend.copied.push(image::word(bytes, 16)? != 0);
+                if let Some(error) = backend.copied_error {
+                    return Err(error);
+                }
             }
             application_abi::RETURN_SYSCALL => {
                 assert_eq!(image::word(bytes, 8)?, backend.serial);
@@ -415,4 +420,65 @@ fn final_trace_budget_slot_retains_complete_delivery_route_and_actual_result() {
     assert_eq!(registration.trace_budget.load(Ordering::Relaxed), 0);
     LOG.with(|log| assert_eq!(log.borrow().len(), 3));
     assert_eq!(registration.backend.borrow().returns.len(), 2);
+}
+
+#[test]
+fn terminal_exit_delivery_is_traced_without_consuming_budget() {
+    LOG.with(|log| log.borrow_mut().clear());
+    let registration = Registration::new(0);
+    registration.trace_budget.store(0, Ordering::Relaxed);
+    for _ in 0..64 {
+        registration.backend.borrow_mut().number = 1;
+        assert_eq!(registration.deliver(), Ok(0));
+        assert!(!registration.worker.delivery_trace.load(Ordering::Relaxed));
+        assert_eq!(registration.complete(1, 25, 0), Ok(0));
+    }
+    assert_eq!(registration.backend.borrow().returns.len(), 64);
+    registration.backend.borrow_mut().number = 231;
+    assert_eq!(registration.deliver(), Ok(0));
+    assert_eq!(registration.trace_budget.load(Ordering::Relaxed), 0);
+    assert!(registration.worker.delivery_trace.load(Ordering::Relaxed));
+    assert_eq!(registration.backend.borrow().returns.len(), 64);
+    LOG.with(|log| {
+        let log = log.borrow();
+        assert_eq!(log.len(), 1);
+        assert!(log[0].contains("application_syscall=delivered"));
+        assert!(log[0].contains("number=231"));
+    });
+}
+
+#[test]
+fn terminal_exit_delivery_preserves_an_available_budget_slot() {
+    LOG.with(|log| log.borrow_mut().clear());
+    let registration = Registration::new(0);
+    registration.trace_budget.store(1, Ordering::Relaxed);
+    registration.backend.borrow_mut().number = 231;
+    assert_eq!(registration.deliver(), Ok(0));
+    assert_eq!(registration.trace_budget.load(Ordering::Relaxed), 1);
+    assert!(registration.worker.delivery_trace.load(Ordering::Relaxed));
+}
+
+#[test]
+fn failed_terminal_exit_admission_does_not_publish_or_log_before_retry() {
+    LOG.with(|log| log.borrow_mut().clear());
+    let registration = Registration::new(0);
+    registration.trace_budget.store(0, Ordering::Relaxed);
+    registration.backend.borrow_mut().number = 231;
+    WRITE_FAULT.with(|fault| fault.set(true));
+    assert_eq!(registration.deliver(), Err(-14));
+    WRITE_FAULT.with(|fault| fault.set(false));
+    assert_eq!(registration.worker.delivery.load(Ordering::Acquire), 0);
+    LOG.with(|log| assert!(log.borrow().is_empty()));
+    registration.backend.borrow_mut().copied_error = Some(-4);
+    assert_eq!(registration.deliver(), Err(-4));
+    assert_eq!(registration.worker.delivery.load(Ordering::Acquire), 0);
+    LOG.with(|log| assert!(log.borrow().is_empty()));
+    registration.backend.borrow_mut().copied_error = None;
+    assert_eq!(registration.deliver(), Ok(0));
+    assert_eq!(registration.worker.delivery.load(Ordering::Acquire), 73);
+    LOG.with(|log| {
+        let log = log.borrow();
+        assert_eq!(log.len(), 1);
+        assert!(log[0].contains("number=231"));
+    });
 }

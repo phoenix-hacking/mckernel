@@ -147,6 +147,7 @@
     ,"native_diag_c81_futex_failure": "docs/verification/evidence/native-exact-c81-futex-diagnostic-failure-20261001.json"
     ,"native_diag_c81_futex_order_prep": "docs/verification/evidence/native-exact-c81-futex-order-correction-preparation-20261001.json"
     ,"native_diag_c81_futex_correction_failure": "docs/verification/evidence/native-exact-c81-futex-diagnostic-correction-failure-20261001.json"
+    ,"native_diag_c81_futex_terminal_trace_source": "docs/verification/evidence/native-exact-c81-futex-terminal-trace-source-checkpoint-20261001.json"
     ,"shutdown_effect_boundary": "docs/verification/evidence/native-exact-shutdown-effect-boundary-source-checkpoint-20261001.json"
     ,"shutdown_observer": "docs/verification/stability-native-shutdown-observer-source-success-20260928-1.json"
     ,"shutdown_registry": "docs/verification/stability-native-shutdown-registry-source-success-20260928-1.json"
@@ -551,8 +552,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "The current c81 candidate independently passes memory, files, startup, threads and signals diagnostics. Both direct-futex attempts remain FAIL. The bounded record-order correction worked and accepted the current 16 CASE, THREADS, CLONE stream, but the host's 64-delivery sample budget omitted the final exit_group delivery, so strict route/exit evidence still failed. Exact stdout, exit 37, typed stderr and complete cleanup are retained; no direct-futex runtime PASS is claimed.",
-      "next_check": "Expert-correct terminal exit tracing so the non-returning exit_group delivery remains observable independently of ordinary sample-budget exhaustion while ordinary groups remain unchanged, add executable exhaustion tests, then rebuild and bind a new host module before preparing any fresh guest packet; continue shutdown separately.",
+      "result": "The current c81 candidate independently passes memory, files, startup, threads and signals diagnostics. Both direct-futex attempts remain FAIL. The bounded record-order correction worked; the second run exposed exhaustion of the host's ordinary trace budget before final exit_group. A bounded source correction now keeps committed non-returning exit_group delivery observable without consuming that budget and passes independent production-body adapter review (12/12) plus 174 diagnostic tests. No rebuilt module or direct-futex runtime PASS exists yet.",
+      "next_check": "Commit/fetch-verify the correction, prepare a fresh exact candidate and separately reviewed three-module build, bind the rebuilt modules, then prepare a new one-shot futex guest packet; continue shutdown separately.",
       "evidence": [
         "history",
         "plan",
@@ -595,7 +596,8 @@
         "native_diag_c81_futex_prep",
         "native_diag_c81_futex_failure",
         "native_diag_c81_futex_order_prep",
-        "native_diag_c81_futex_correction_failure"
+        "native_diag_c81_futex_correction_failure",
+        "native_diag_c81_futex_terminal_trace_source"
       ],
       "depends_on": []
     },
@@ -1320,8 +1322,8 @@
       "area": "PROC",
       "title": "Futex wait/wake and thread synchronization",
       "status": "baseline",
-      "result": "Baseline barrier/mutex, two children, TID transfer and futex/child-TID tests passed. Both c81 direct-futex attempts emitted all expected application records and exit 37 but remain FAIL. The record-order correction passed; the corrected guest then exposed that the host's bounded delivery trace exhausted before final exit_group, leaving the required terminal route/exit group unobserved.",
-      "next_check": "Add a reviewed terminal-delivery trace path independent of ordinary sample exhaustion without inventing a return for non-returning exit_group, prove it with executable tests, rebuild the bound host module and only then prepare a new one-shot c81 guest attempt.",
+      "result": "Baseline barrier/mutex, two children, TID transfer and futex/child-TID tests passed. Both c81 direct-futex attempts emitted all expected application records and exit 37 but remain FAIL. The record-order correction passed; the second guest exposed exhausted host trace sampling. The independently reviewed source fix always records committed non-returning exit_group delivery without spending ordinary budget and passes 12 production-body adapter tests, but is not built or guest-tested.",
+      "next_check": "Build and bind a fresh exact three-module set containing the reviewed terminal-delivery source fix, then prepare a new one-shot c81 guest attempt preserving all typed records and strict teardown checks.",
       "evidence": [
         "app",
         "baseline",
@@ -1330,7 +1332,8 @@
         "native_diag_c81_futex_prep",
         "native_diag_c81_futex_failure",
         "native_diag_c81_futex_order_prep",
-        "native_diag_c81_futex_correction_failure"
+        "native_diag_c81_futex_correction_failure",
+        "native_diag_c81_futex_terminal_trace_source"
       ],
       "depends_on": [
         "SC-CPU-02"

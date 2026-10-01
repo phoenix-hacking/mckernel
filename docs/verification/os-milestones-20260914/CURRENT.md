@@ -12138,6 +12138,31 @@ parent.  Diagnostic PASS count remains five and formal application/catalog
 acceptance remains zero.  Shutdown remains separately blocked and unwired.  The
 OS goal remains active and incomplete.
 
+Continuation checkpoint 295, 2026-10-01: the distinct terminal trace-sampling
+defect has a bounded independently reviewed source correction; no module or
+guest result is claimed.  The production wait path now decodes the syscall
+number only after successful copy and COPIED_SYSCALL commit.  Non-returning
+exit_group 231 is logged without consuming or resetting the ordinary bounded
+trace budget; ordinary worker-local trace state and Release/Acquire publication
+remain unchanged, and no terminal RET is invented.  Copy and commit failures
+still publish and log nothing.
+
+An independent fresh extraction of the current production trace/wait/return
+bodies passes 12/12 Rust 1.85.1 tests with warnings denied, including nine
+existing regressions, 64 exhausted ordinary delivery/return cycles, terminal
+delivery with zero or one budget slot, no manufactured terminal return, and
+copy/commit failure followed by one successful retry.  The broader diagnostic
+oracle/collector/owner suite passes 174/174.  Production and fixture hashes are
+`14813473...ffc70` and `d8b340c6...2158b`.  Exact evidence is
+`docs/verification/evidence/native-exact-c81-futex-terminal-trace-source-checkpoint-20261001.json`.
+
+Next create a fresh exact source candidate at the committed correction, obtain
+a separately reviewed pinned three-module build release, rebuild and bind the
+matching host modules, and only then prepare a new futex manifest and one-shot
+guest packet.  Neither failed packet may be reused.  Diagnostic PASS count
+remains five, formal application/catalog acceptance remains zero, shutdown is
+separately blocked and unwired, and the OS goal remains active and incomplete.
+
 Continuation checkpoint 293, 2026-10-01: the sole bounded direct-futex
 record-order correction and fresh preparation pass independent review; no
 second guest has run.  Evaluator `2aa9b025...f9356` now requires one explicit
