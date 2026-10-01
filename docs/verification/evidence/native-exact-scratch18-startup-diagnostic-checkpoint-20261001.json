@@ -1,0 +1,79 @@
+{
+  "schema": "mckernel.native-exact-scratch18-startup-diagnostic-checkpoint.v1",
+  "recorded_at": "2026-10-01T20:22:08Z",
+  "status": "PASS_DIAGNOSTIC_SCRATCH18_STARTUP_AND_PASS_GUEST_POSTFLIGHT",
+  "candidate_sha": "89ab5c555aac9177a789efc67ddc775dacb25d6d",
+  "image": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-89ab5c55-scratch18-retry2-attempt3-20261001/output/build/kernel/mckernel.img",
+    "sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+    "size": 7908256
+  },
+  "modules": {
+    "ihk.ko": "db003ffdbd2f939badac7753a1df08b9daf4a80544bf812e53ba1276fbd62519",
+    "ihk-smp-x86_64.ko": "268d6d3b36fd33f9650c5b7b3ae5233e606d07c992e1e0c4be64493527f84bbb",
+    "mcctrl.ko": "4cf6196f9e93fb10b08bc4e5bf75022b0858779a6479910340941006748cd23f"
+  },
+  "packet": {
+    "path": "docs/verification/stability-native-diagnostic-startup-scratch18-execution-packet-20261001-1.md",
+    "commit": "76a638e4d6bba063ca1ad6930f4c1aafd820e579",
+    "sha256": "450b677ee0e758500a4308ce845de85a57cf3f05021924ba91217a9dd87c8d79",
+    "manifest_sha256": "c3a04371e9e67a861718a096dc3fd9f530ea7c66750a45caf71faa144f8f0c65",
+    "execution_review": "PASS_EXECUTION"
+  },
+  "attempt": {
+    "root": "/home/holden/mckernel-work/scratch/ndss18-20261001-1/attempt-19972bcaaec2c3904d4102e50c0f2dd5",
+    "nonce": "19972bcaaec2c3904d4102e50c0f2dd5",
+    "result_sha256": "38a952e0237c567007db603bea0efc6e2bfe3eb3e978b69e522bbf278f11435f",
+    "serial_sha256": "afeb33a12a03cf5a970dd7b58cb0a90c0ab2ca6258e21c774d13a4a137fbe7e7",
+    "qmp_transcript_sha256": "aa5b0719eeb7a87549c46c58f8605b3c379ce7b80d212894c262599a3734c9eb",
+    "debugcon_sha256": "bd87db779e6878802fa64fdee99f2eb08dee1529bbea800a65356f051e186685",
+    "argv": ["/bin/mcexec", "-t", "1", "0", "app", "A", "", "B"],
+    "raw_wait_status": 0,
+    "exit_status": 0,
+    "stdout_bytes": 91,
+    "stdout_hex": "7b2263617365223a22737461727475702e617267762d656d707479222c2261726763223a342c2261726776223a5b22617070222c2241222c22222c2242225d2c227465726d696e61746f725f69735f6e756c6c223a747275657d0a",
+    "stderr_hex": "",
+    "stdout_eof": true,
+    "stderr_eof": true,
+    "stream_truncated_or_discarded": false,
+    "procfs_empty": true,
+    "capture_errors": [],
+    "result_review": "PASS_DIAGNOSTIC_SCRATCH18_STARTUP"
+  },
+  "observed_behavior": "One OS0/generation1/PID257 launch preserved the empty argument and NULL terminator; delegated write returned 91 bytes, exit-group completed, pager references drained, procfs was deleted and retirement succeeded after one transient -EAGAIN.",
+  "postflight": {
+    "owner_result_sha256": "7992bdbbe47beb64c483162d2827fd604ceb463a8ce7f8e37d0450c01156fafe",
+    "owner_record_sha256": "35207d1cde2a2ef8b6e34aafc942063140ff57eab5f80c6333267e6590e27c34",
+    "capture_bindings_sha256": "a0eb69b03ecefe0f77009ee0f03fe159da46effe9a24062e21c6700b68a77f15",
+    "container_id": "e5a2a60c98d88fc60f8a2fa69317ba86fdf0c4b8f7e14f1f27a8549ed74e9dc4",
+    "container_exit_status": 0,
+    "container_absent": true,
+    "container_oom": false,
+    "owner_absent": true,
+    "qemu_and_mcexec_absent": true,
+    "development_lock_released": true,
+    "lease_retained": false,
+    "qmp_guest_shutdown_observed": true,
+    "qemu_returncode": -9,
+    "evidence_preserved": true
+  },
+  "capacity_after": {
+    "host_free_bytes": 39109570560,
+    "scratch_free_bytes": 34314878976,
+    "memory_available_bytes": 22951686144
+  },
+  "accounting": {
+    "current_candidate_builds": 3,
+    "bounded_diagnostic_guest_passes": 6,
+    "formal_application_acceptances": 0,
+    "native_production_gates": "6/130",
+    "language_gates": "0/7"
+  },
+  "scope": "One scratch18 startup diagnostic, normal application retirement, guest shutdown and host cleanup only. No memory/files/threads/futex/signals, production, formal application, language or OS acceptance.",
+  "next_tasks": [
+    "Prepare and independently release the smallest scratch18 memory diagnostic.",
+    "Continue with files, threads/futexes and signals using each first observed runtime failure to select fixes.",
+    "Preserve serialized heavy-runtime ownership and fresh attempt identities."
+  ],
+  "os_goal_complete": false
+}

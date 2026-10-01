@@ -13587,3 +13587,32 @@ guest passes remain five and formal application accepts remain zero.  Next
 independently review the artifact evidence, clean the exact terminal container,
 then bind this image into a fresh diagnostic startup packet.  No production or
 OS acceptance is claimed; the OS remains incomplete.
+
+Continuation checkpoint 344, 2026-10-01: the independently released attempt-3
+terminal cleanup and replay PASSed.  Exact exited image-build container
+`a24d40c5...ec821` is absent, and the candidate/shared exclusion records and
+already-absent image lease are absent.  Original ownership records, build log,
+receipts, linked image/map/Rust object and both postlink reports remain intact;
+the cleanup journal ends at `complete`.  The serialized heavy lane was released
+without changing the compiled artifact.
+
+Continuation checkpoint 345, 2026-10-01: the first scratch18 real application
+diagnostic PASSed under the independently released known-good startup profile.
+The guest ran exact argv `/bin/mcexec -t 1 0 app A "" B`, exited 0, emitted the
+exact 91-byte JSON oracle including the empty argument and NULL terminator, and
+emitted no stderr.  Both streams reached EOF without truncation; delegated
+write, exit-group, pager release, procfs deletion and retirement completed.
+QMP observed guest shutdown, QEMU was reaped, Docker exited 0/non-OOM and was
+removed, all owner/QEMU/mcexec processes are absent, and the development lock
+is free.  The independently reviewed result is retained in
+`native-exact-scratch18-startup-diagnostic-checkpoint-20261001.json`; raw
+result/serial/QMP hashes are `38a952e0...435f`, `afeb33a1...be7e7` and
+`aa5b0719...c9eb`.
+
+This raises bounded diagnostic guest passes to six while current-candidate
+builds remain three.  Formal application accepts remain zero, production gates
+remain 6/130 and language gates 0/7.  Next prepare and independently release
+the smallest scratch18 memory diagnostic, then files, threads/futexes and
+signals, repairing the first observed failure with a fresh attempt.  No
+production, formal application or OS acceptance is claimed; the OS remains
+incomplete.
