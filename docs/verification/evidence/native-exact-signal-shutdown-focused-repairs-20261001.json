@@ -1,0 +1,53 @@
+{
+  "schema": "mckernel.native-exact-signal-shutdown-focused-repairs.v1",
+  "recorded_at": "2026-10-01T07:14:00Z",
+  "status": "PASS_FOCUSED_SOURCE_AND_EXECUTABLE_TESTS",
+  "signal_selected_consumer": {
+    "fixture": "scripts/tests/fixtures/native-signal-abi.rs",
+    "fixture_sha256": "82a16e2e7be2af3b34622bd106098ea102f5fbcee1ae3c9b66108d8735208642",
+    "production_consumer": "kernel/rust/native_signal.rs",
+    "production_consumer_sha256": "f0df5a110d9bb9dab8e460513616df0e10964b8554936fa2cb9723ee2eea9d4a",
+    "independent_review": "PASS_SOURCE_SIGNAL_SELECTED_TEST",
+    "executable_record": "/home/holden/mckernel-work/scratch/native-signal-abi-protocol-20260909-4/record.json",
+    "executable_record_sha256": "feb3f2ed6c9ac108adc8293d104f918f7a9aad1fc06c9a5e0a6ab728fc951ebf",
+    "executable_status": "PASS",
+    "profile": "Pinned unprivileged native container, uid/gid 1000, CPUs 2-5, 12 GiB with no additional swap, 512 tasks, no network/capabilities, read-only repository and private writable /work.",
+    "covered": [
+      "Two sequential selected native sigreturn alternate-stack round trips clear SS_ONSTACK.",
+      "Nested selected return preserves active state until the outer return clears it.",
+      "Restored RSP/RIP and complete alternate-stack base/size/flags are asserted.",
+      "Copy and FP callback failures preserve context fields, signal mask and alternate-stack state."
+    ],
+    "preserved_review_corrections": [
+      "Use one raw register-context pointer throughout to avoid conflicting reference provenance.",
+      "Use a distinct valid saved alternate-stack configuration so premature failure-path restoration is observable."
+    ],
+    "limitations": "Synthetic frame storage and controlled callbacks; no real restorer copy, architectural FP restore, syscall-dispatch execution or c81 signal guest result."
+  },
+  "shutdown_observer": {
+    "source": "scripts/application-tests/native_shutdown_observer.py",
+    "source_sha256": "d109736f2497a15dc4908792c5aee7447bfdf04b0aa0f90443b3a50029b94218",
+    "tests": "scripts/tests/test_application_native_shutdown_observer.py",
+    "tests_sha256": "0ea32ae65d149e830aec16db9c7cd892308d199c49b4ce8495a421b91f5769d1",
+    "independent_review": "PASS_SOURCE_SHUTDOWN_OBSERVER",
+    "focused_test_command": "PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest -v scripts/tests/test_application_native_shutdown_observer.py",
+    "focused_test_result": "PASS 11 tests",
+    "retained_test_log": "/tmp/native-shutdown-observer-tests-20261001-6.stdout",
+    "retained_test_log_sha256": "4574a82364d0ded19c912571511bbf7d28988c3a1767523784f59a63667284f8",
+    "covered": [
+      "Phase-specific CPU inventories derive from a separately hash-bound trusted baseline/offline authorization input.",
+      "Transient boot/workload/pre-stop inventories equal baseline minus authorized offline CPUs.",
+      "Release, unload and policy-restored boundaries exactly restore the baseline.",
+      "Joint observation/embedded-expectation mutation cannot override the separate anchor.",
+      "Trusted input opens no-follow and nonblocking, then rejects non-regular FIFO and symlink inputs."
+    ],
+    "preserved_failures": [
+      "The initial candidate allowed jointly changing observations and in-document CPU expectations.",
+      "The first trusted reader could block indefinitely opening a FIFO before fstat.",
+      "The initial corrected-test construction failure remains at /tmp/native-shutdown-observer-tests-20261001-2.stdout."
+    ],
+    "limitations": "Source/protocol evidence only. Future collector and execution packet must independently pin the CPU expectation digest. Actual booted shutdown still returns ENOSYS and STOP/drain/reset/resource retirement remain open."
+  },
+  "formal_acceptance": false,
+  "os_goal_complete": false
+}

@@ -1,6 +1,8 @@
 import copy
+import hashlib
 import importlib.util
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -63,8 +65,13 @@ def document():
     rows[4]["procfs"] = procfs(False)
     rows[5]["reserves"] = unavailable()
     rows[6]["reserves"] = unavailable()
+    # CPU 1 is offline/assigned while the provider is running and is restored
+    # at provider release and every later clean boundary.
+    for index in (1, 2, 3):
+        rows[index]["cpu_online"] = [0]
     expectations = {"processes": {}, "procfs": {}, "devices": {}, "modules": {},
-                    "cpu_online": [0, 1], "irqs": {"32": {"affinity": "0-1"}},
+                    "cpu_online": {row["phase"]: list(row["cpu_online"]) for row in rows},
+                    "irqs": {"32": {"affinity": "0-1"}},
                     "policy": copy.deepcopy(rows[0]["policy"])}
     for row in rows:
         expectations["processes"][row["phase"]] = copy.deepcopy(row["processes"])
@@ -74,12 +81,17 @@ def document():
                                                     "maps_sha256": NSO._map_digest(p["maps"])}
         expectations["devices"][row["phase"]] = copy.deepcopy(row["devices"])
         expectations["modules"][row["phase"]] = copy.deepcopy(row["modules"])
-    return {"schema": "native-shutdown-observer-v2", "expectations": expectations, "phases": rows}
+    return {"schema": "native-shutdown-observer-v3", "expectations": expectations, "phases": rows}
+
+
+def trusted(value):
+    phases = copy.deepcopy(value["expectations"]["cpu_online"])
+    return {"baseline": phases["clean_baseline"], "offline": [1], "phases": phases}
 
 
 class ShutdownObserverTests(unittest.TestCase):
     def test_one_cycle_is_diagnostic_only(self):
-        result = NSO.validate(document())
+        value = document(); result = NSO.validate(value, trusted(value))
         self.assertEqual(result["status"], "PROTOCOL_PASS")
         self.assertFalse(result["application_acceptance"])
         self.assertEqual(result["phases"], list(NSO.PHASES))
@@ -92,107 +104,146 @@ class ShutdownObserverTests(unittest.TestCase):
                 lambda rows: rows.__setitem__(1, rows[2])):
             value = document(); mutate(value["phases"])
             with self.subTest(mutate=mutate), self.assertRaisesRegex(NSO.ShutdownObservationError, "phase"):
-                NSO.validate(value)
+                NSO.validate(value, trusted(value))
         value = document(); value["phases"][2]["procfs"]["errors"] = ["timeout"]
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "error"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
 
     def test_query_read_failure_and_stale_procfs_sysfs_reject(self):
         value = document(); value["phases"][4]["procfs"]["state"] = "absent"; value["phases"][4]["procfs"]["numeric_nodes"] = [4]
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "absent procfs"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
         value = document(); value["phases"][1]["procfs"]["errors"] = ["EIO"]
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "error"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
         device = {"path": "/dev/mcos0", "role": "os", "type": "char", "major": 240, "minor": 0,
                   "owner": {"uid": 0, "gid": 0}, "mode": 0o660,
                   "sysfs": {"dev": "240:1", "type": "char"}}
         value = document(); value["phases"][1]["devices"] = [device]
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "sysfs"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
 
     def test_residual_reserves_wrong_refs_and_identities_reject(self):
         value = document(); value["phases"][4]["reserves"] = reserve([2])
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "residual"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
         value = document(); value["phases"][1]["modules"] = {"mcctrl": {"refcount": 2, "holders": ["x"]}}
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "module"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
         value = document(); value["phases"][2]["processes"][0]["starttime_ticks"] = 78
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "identity"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
 
     def test_unavailable_reserves_need_a_known_reason_and_no_queries(self):
         value = document(); value["phases"][5]["reserves"]["cpu"]["reason"] = "empty"
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "bad unavailable"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
         value = document(); value["phases"][5]["reserves"]["numa_memory"]["queries"] = {"node0": {"values": []}}
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "unavailable reserve has queries"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
 
     def test_device_role_must_match_provider_or_os_namespace(self):
         value = document(); value["phases"][1]["devices"][0]["role"] = "os"
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "role/path"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
         value = document(); value["phases"][4]["devices"].append({
             "path": "/dev/mcos0", "role": "os", "type": "char", "major": 241, "minor": 0,
             "owner": {"uid": 0, "gid": 0}, "mode": 0o660,
             "sysfs": {"dev": "241:0", "type": "char"}})
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "provider resources"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
 
     def test_lifecycle_device_and_reserve_invariants_reject_hostile_drift(self):
         value = document(); value["phases"][0]["devices"] = [copy.deepcopy(value["phases"][1]["devices"][0])]
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "unclean baseline"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
         value = document(); value["phases"][2]["devices"] = [copy.deepcopy(value["phases"][2]["devices"][0])]
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "provider/OS"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
         value = document(); value["phases"][4]["devices"].append(copy.deepcopy(value["phases"][1]["devices"][1]))
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "provider resources"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
         value = document(); value["phases"][5]["reserves"]["cpu"]["reason"] = "query_unavailable"
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "provider-absent"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
 
     def test_policy_cpu_and_irq_drift_reject(self):
         value = document(); value["phases"][-1]["policy"]["swappiness"] = 1
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "policy"):
-            NSO.validate(value)
-        value = document(); value["phases"][3]["cpu_online"] = [0]
+            NSO.validate(value, trusted(value))
+        value = document(); value["phases"][3]["cpu_online"] = [1]
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "CPU"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
+        value = document(); value["phases"][6]["cpu_online"] = [0]
+        with self.assertRaisesRegex(NSO.ShutdownObservationError, "CPU"):
+            NSO.validate(value, trusted(value))
+        value = document(); value["phases"][4]["cpu_online"] = [0, 2]
+        with self.assertRaisesRegex(NSO.ShutdownObservationError, "CPU"):
+            NSO.validate(value, trusted(value))
         value = document(); value["phases"][3]["irqs"]["inventory"]["33"] = {"affinity": "1"}
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "IRQ added"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
         value = document(); value["phases"][6]["irqs"]["inventory"]["32"]["affinity"] = "1"
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "IRQ affinity restoration"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
+
+    def test_trusted_cpu_anchor_rejects_joint_mutation_and_bad_restoration(self):
+        value = document(); value["phases"][2]["cpu_online"] = [0, 1]
+        value["expectations"]["cpu_online"]["workload_live"] = [0, 1]
+        with self.assertRaisesRegex(NSO.ShutdownObservationError, "trusted input"):
+            NSO.validate(value, trusted(document()))
+        value = document(); anchor = trusted(value); anchor["phases"]["fully_unloaded"] = [0]
+        with self.assertRaisesRegex(NSO.ShutdownObservationError, "restoration"):
+            NSO.validate(value, anchor)
+        value = document(); anchor = trusted(value); anchor["baseline"] = [0]
+        with self.assertRaisesRegex(NSO.ShutdownObservationError, "trusted CPU"):
+            NSO.validate(value, anchor)
+        value = document(); anchor = trusted(value); anchor["phases"]["booted"] = [0, 1, 1]
+        with self.assertRaisesRegex(NSO.ShutdownObservationError, "trusted CPU phase"):
+            NSO.validate(value, anchor)
+        value = document(); anchor = trusted(value)
+        for index in (0, 4, 5, 6):
+            bad = copy.deepcopy(anchor); bad["phases"][NSO.PHASES[index]] = [0]
+            with self.subTest(index=index), self.assertRaises(NSO.ShutdownObservationError):
+                NSO.validate(value, bad)
 
     def test_external_procfs_expectations_and_phase_transitions_reject_drift(self):
         value = document(); value["phases"][2]["procfs"]["status"]["0"] = "STALE"
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "procfs content/digest"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
         value = document(); value["phases"][1]["devices"] = []
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "provider/OS"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
         value = document(); value["phases"][3]["processes"] = [{"pid": 123, "starttime_ticks": 77}]
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "workload not retired"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
         value = document(); value["phases"][5]["modules"] = {"mcctrl": {"refcount": 0, "holders": []}}
         with self.assertRaisesRegex(NSO.ShutdownObservationError, "fully unloaded"):
-            NSO.validate(value)
+            NSO.validate(value, trusted(value))
 
     def test_cli_writes_once_and_reports_evidence_write_failure(self):
         with tempfile.TemporaryDirectory() as directory:
-            source, output = Path(directory) / "input.json", Path(directory) / "result.json"
-            source.write_text(json.dumps(document()))
-            self.assertEqual(NSO.main([str(source), "--output", str(output)]), 0)
+            source, cpu, output = Path(directory) / "input.json", Path(directory) / "cpu.json", Path(directory) / "result.json"
+            value = document(); source.write_text(json.dumps(value))
+            raw_cpu = (json.dumps(trusted(value), sort_keys=True, separators=(",", ":")) + "\n").encode()
+            cpu.write_bytes(raw_cpu); digest = hashlib.sha256(raw_cpu).hexdigest()
+            args = [str(source), "--cpu-expectations", str(cpu), "--cpu-expectations-sha256", digest,
+                    "--output", str(output)]
+            self.assertEqual(NSO.main(args), 0)
             self.assertEqual(json.loads(output.read_text())["status"], "PROTOCOL_PASS")
-            self.assertEqual(NSO.main([str(source), "--output", str(output)]), 2)
+            self.assertEqual(NSO.main(args[:4] + ["0" * 64] + args[5:-1] + [str(Path(directory) / "hash-fail.json")]), 2)
+            fifo = Path(directory) / "cpu.fifo"; os.mkfifo(fifo)
+            self.assertEqual(NSO.main([str(source), "--cpu-expectations", str(fifo),
+                                       "--cpu-expectations-sha256", digest, "--output",
+                                       str(Path(directory) / "fifo-fail.json")]), 2)
+            symlink = Path(directory) / "cpu.symlink"; symlink.symlink_to(cpu)
+            self.assertEqual(NSO.main([str(source), "--cpu-expectations", str(symlink),
+                                       "--cpu-expectations-sha256", digest, "--output",
+                                       str(Path(directory) / "symlink-fail.json")]), 2)
+            self.assertEqual(NSO.main(args), 2)
             failed = Path(directory) / "failed.json"
             with mock.patch.object(NSO.os, "write", side_effect=OSError("evidence disk failure")):
-                self.assertEqual(NSO.main([str(source), "--output", str(failed)]), 2)
+                self.assertEqual(NSO.main(args[:-1] + [str(failed)]), 2)
 
 
 if __name__ == "__main__":

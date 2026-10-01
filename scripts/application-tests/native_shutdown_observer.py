@@ -19,6 +19,11 @@ PHASES = (
     "clean_baseline", "booted", "workload_live", "workload_retired_pre_stop",
     "destroyed_resources_released_provider_present", "fully_unloaded", "policy_restored",
 )
+# CPUs may be taken offline while the provider owns them, but every release
+# boundary must prove restoration to the clean inventory.
+CPU_RESTORED_PHASES = ("clean_baseline", "destroyed_resources_released_provider_present",
+                       "fully_unloaded", "policy_restored")
+CPU_TRANSIENT_PHASES = ("booted", "workload_live", "workload_retired_pre_stop")
 LIMITATIONS = frozenset(("internal_mapping_ledger_unobserved",
                          "internal_callback_ledger_unobserved",
                          "recreate_not_exercised"))
@@ -227,20 +232,51 @@ def _expectations(value):
         expected["procfs"][name] = dict(proc)
         expected["devices"][name] = _devices(value["devices"][name])
         expected["modules"][name] = _modules(value["modules"][name])
-    _need(type(value["cpu_online"]) is list and value["cpu_online"] == sorted(set(value["cpu_online"])) and
-          all(type(cpu) is int and cpu >= 0 for cpu in value["cpu_online"]), "expected CPU online")
-    expected["cpu_online"] = list(value["cpu_online"])
+    _need(type(value["cpu_online"]) is dict and set(value["cpu_online"]) == set(PHASES),
+          "expected phase CPU online inventories")
+    expected["cpu_online"] = {}
+    for phase in PHASES:
+        cpus = value["cpu_online"][phase]
+        _need(type(cpus) is list and cpus == sorted(set(cpus)) and
+              all(type(cpu) is int and cpu >= 0 for cpu in cpus), "expected CPU online")
+        expected["cpu_online"][phase] = list(cpus)
+    baseline_cpus = expected["cpu_online"]["clean_baseline"]
+    for phase in CPU_RESTORED_PHASES:
+        _need(expected["cpu_online"][phase] == baseline_cpus,
+              "expected CPU online restoration baseline")
+    for phase in CPU_TRANSIENT_PHASES:
+        _need(set(expected["cpu_online"][phase]) <= set(baseline_cpus),
+              "expected CPU online transient inventory")
     expected["irqs"] = _irqs({"inventory": value["irqs"], "added": [], "removed": []})["inventory"]
     expected["policy"] = _policy(value["policy"])
     return expected
 
 
-def validate(document):
+def _cpu_expectations(value):
+    _keys(value, ("baseline", "offline", "phases"))
+    def cpus(item, label):
+        _need(type(item) is list and item == sorted(set(item)) and
+              all(type(cpu) is int and cpu >= 0 for cpu in item), label)
+        return list(item)
+    baseline, offline = cpus(value["baseline"], "trusted CPU baseline"), cpus(value["offline"], "trusted CPU offline set")
+    _need(set(offline) <= set(baseline), "trusted CPU offline set outside baseline")
+    _need(type(value["phases"]) is dict and set(value["phases"]) == set(PHASES), "trusted phase CPU inventories")
+    phases = {phase: cpus(value["phases"][phase], "trusted CPU phase inventory") for phase in PHASES}
+    for phase in CPU_RESTORED_PHASES:
+        _need(phases[phase] == baseline, "trusted CPU restoration baseline")
+    for phase in CPU_TRANSIENT_PHASES:
+        _need(phases[phase] == sorted(set(baseline) - set(offline)), "trusted CPU transient inventory is not authorized")
+    return {"baseline": baseline, "offline": offline, "phases": phases}
+
+
+def validate(document, trusted_cpu_expectations):
     """Validate seven snapshots and return bounded diagnostic-only evidence."""
     _keys(document, ("schema", "expectations", "phases"))
-    _need(document["schema"] == "native-shutdown-observer-v2" and type(document["phases"]) is list,
+    _need(document["schema"] == "native-shutdown-observer-v3" and type(document["phases"]) is list,
           "shutdown observer schema")
+    trusted = _cpu_expectations(trusted_cpu_expectations)
     expected, snapshots = _expectations(document["expectations"]), [_snapshot(row) for row in document["phases"]]
+    _need(expected["cpu_online"] == trusted["phases"], "in-document CPU expectations differ from trusted input")
     _need([row["phase"] for row in snapshots] == list(PHASES), "missing/duplicate/out-of-order phase")
     baseline = snapshots[0]
     _need(baseline["procfs"]["state"] == "absent" and not baseline["processes"] and
@@ -283,11 +319,18 @@ def validate(document):
               _map_digest(row["procfs"]["maps"]) == proc["maps_sha256"], "procfs content/digest mismatch")
         _need(row["devices"] == expected["devices"][phase], "device/sysfs transition mismatch")
         _need(row["modules"] == expected["modules"][phase], "module refcount/holders transition mismatch")
-        _need(row["cpu_online"] == expected["cpu_online"], "CPU online baseline drift")
+        _need(row["cpu_online"] == trusted["phases"][phase], "CPU online phase expectation mismatch")
         _need(row["irqs"]["added"] == sorted(set(row["irqs"]["inventory"]) - set(expected["irqs"])),
               "IRQ added reconciliation")
         _need(row["irqs"]["removed"] == sorted(set(expected["irqs"]) - set(row["irqs"]["inventory"])),
               "IRQ removed reconciliation")
+    baseline_cpus = trusted["baseline"]
+    for index in (0, 4, 5, 6):
+        _need(snapshots[index]["cpu_online"] == baseline_cpus,
+              "CPU online restoration drift")
+    for index in (1, 2, 3):
+        _need(set(snapshots[index]["cpu_online"]) <= set(baseline_cpus),
+              "CPU online transient inventory drift")
     for index in (0, 5, 6):
         _need(snapshots[index]["irqs"]["inventory"] == expected["irqs"], "IRQ affinity restoration drift")
     _need(snapshots[-1]["policy"] == expected["policy"], "policy restoration drift")
@@ -310,13 +353,30 @@ def _read(path):
     return json.loads(raw.decode("utf-8"), object_pairs_hook=_pairs)
 
 
+def _read_trusted(path, digest):
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    try:
+        _need(stat.S_ISREG(os.fstat(fd).st_mode), "CPU expectations must be a regular file")
+        raw = os.read(fd, MAX_JSON + 1)
+    finally:
+        os.close(fd)
+    _need(len(raw) <= MAX_JSON, "oversize CPU expectations")
+    _need(hashlib.sha256(raw).hexdigest() == digest, "CPU expectations hash mismatch")
+    return json.loads(raw.decode("utf-8"), object_pairs_hook=_pairs)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description="validate native shutdown snapshots", allow_abbrev=False)
     parser.add_argument("input")
+    parser.add_argument("--cpu-expectations", required=True)
+    parser.add_argument("--cpu-expectations-sha256", required=True)
     parser.add_argument("--output")
     args = parser.parse_args(argv)
     try:
-        result = validate(_read(args.input))
+        _need(re.fullmatch(r"[0-9a-f]{64}", args.cpu_expectations_sha256) is not None,
+              "CPU expectations hash format")
+        result = validate(_read(args.input), _read_trusted(args.cpu_expectations,
+                                                            args.cpu_expectations_sha256))
         raw = (json.dumps(result, sort_keys=True, separators=(",", ":")) + "\n").encode()
         if args.output:
             fd = os.open(args.output, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
