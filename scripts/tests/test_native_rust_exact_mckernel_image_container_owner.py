@@ -266,13 +266,13 @@ class OwnerTests(unittest.TestCase):
     def test_current_image_namespace_retires_previous_host_builds(self):
         source = Path(owner.__file__).read_text(encoding="utf-8")
         current = ("/home/holden/mckernel-work/scratch/"
-                   "native-exact-candidate-operational-exclusion-scratch17-image-1.json")
+                   "native-exact-candidate-operational-exclusion-scratch18-image-1.json")
         self.assertIn(
             'COMMON_EXCLUSION = "' + current + '"', source,
             "the production image owner must bind the reviewed successor path",
         )
         self.assertEqual(current, "/home/holden/mckernel-work/scratch/"
-                         "native-exact-candidate-operational-exclusion-scratch17-image-1.json")
+                         "native-exact-candidate-operational-exclusion-scratch18-image-1.json")
         retired_exportsets = [
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-18.json",
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-19.json",
@@ -284,7 +284,7 @@ class OwnerTests(unittest.TestCase):
         ]
         retired_selfdigest = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-selfdigest-13.json"
         retired = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-runtimeblob-12.json"
-        self.assertTrue(current.endswith("scratch17-image-1.json"))
+        self.assertTrue(current.endswith("scratch18-image-1.json"))
         self.assertIn(
             "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-17.json",
             owner.RETIRED_COMMON_EXCLUSIONS,
@@ -304,6 +304,7 @@ class OwnerTests(unittest.TestCase):
                 "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-26.json",
                 "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch15-exportset-27.json",
                 "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch16.json",
+                "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch17-image-1.json",
         ):
             self.assertIn(retired, owner.RETIRED_COMMON_EXCLUSIONS)
         self.assertNotIn(current, owner.RETIRED_COMMON_EXCLUSIONS)
@@ -328,16 +329,16 @@ class OwnerTests(unittest.TestCase):
                 "native-exact-candidate-operational-exclusion-scratch16.json",
             )
             active = ("/home/holden/mckernel-work/scratch/"
-                      "native-exact-candidate-operational-exclusion-scratch17-image-1.json")
+                      "native-exact-candidate-operational-exclusion-scratch18-image-1.json")
             owner.COMMON_EXCLUSION = active
             for name in retired_paths:
                 rejected = self.request()
                 rejected["common_exclusion_path"] = str(Path(active).with_name(name))
                 with self.assertRaisesRegex(owner.OwnerError, "common exclusion"):
                     owner.ImageOwner(rejected).validate()
-            for alias in (active + "/", active.replace("scratch17-image-1", "scratch17-image-01"),
+            for alias in (active + "/", active.replace("scratch18-image-1", "scratch18-image-01"),
                           active.replace("/scratch/", "/scratch/./"),
-                          active.replace("scratch17-image-1", "arbitrary-image")):
+                          active.replace("scratch18-image-1", "arbitrary-image")):
                 rejected = self.request()
                 rejected["common_exclusion_path"] = alias
                 with self.assertRaisesRegex(owner.OwnerError, "common exclusion"):

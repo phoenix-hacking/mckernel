@@ -12915,3 +12915,51 @@ reviewed and reachable may a fresh scratch18 candidate be prepared.  Scratch17
 remains terminal non-releasable and must never be mutated or rerun.  Counts
 remain one compiled current candidate, five bounded diagnostic guest passes
 and zero formal application acceptances; the OS remains incomplete.
+
+Continuation checkpoint 320, 2026-10-01: independent review accepts the common
+build/image/guest ownership mechanism and the corrected scratch18 successor
+source as `PASS_SOURCE_SUCCESSOR_COMPOSITION_AND_PREPARATION_HELPER`.  The
+initial review accepted the shared lock but blocked execution because the build
+and image owners still named scratch17.  The bounded correction advances active
+namespaces to scratch18 and scratch18-image-1, retains both scratch17 namespaces
+as rejected history, cascades wrapper pin `788be3f5...107894`, and restores the
+terminal scratch17 packet to historical wrapper `578d34e8...f26b1`.
+
+The first corrected rereview stopped after 252 passes plus one error: the
+scratch18 fixture rewrote the now-retired scratch17 exclusion instead of the
+new active path.  That original failure is preserved.  The bounded fixture
+correction passes all 263 independent build/image/guest/cross-entry/preparation
+tests on CPUs 6-7 under a 3-GiB address-space cap.  The earlier apparent 63 to
+60 guest-test reduction is only command scope: the reviewed total is 60 guest
+tests plus three unchanged CPU-policy tests, and all 63 pass again.
+
+The independently accepted selective successor is exactly 14 paths relative
+to parent `50b08432...35632`: five additions and nine modifications covering
+the historical observer, build owner/wrapper, image preparer/owner, guest
+runner/helper and their focused tests.  Scratch17 terminal and scratch18
+preparation files are dispatcher-side and excluded from that target.  The
+preparation helper now uses fresh scratch18 roots, requires an exact target
+whose first parent is 50b, authenticates scratch15/scratch17 shared evidence,
+and passes 13 tests.  It remains source-only; fetched-origin and the exact
+14-file/hash allowlist must be bound externally before production preparation.
+
+The future scratch18 futex packet also passes independent source review after
+one retained BLOCK: invented case names and an erroneous 231-delivery claim
+were replaced by the exact 16 `_FUTEX_CASES`, complete sampled ordinary
+delivery/return/route correspondence and exactly one terminal syscall number
+231 with no RET.  Its five tests pass, but it remains NOT_RELEASED/UNBOUND.
+
+Read-only live reconciliation returns `PASS_READ_ONLY` for all seven immutable
+historical tombstones; bound PIDs are absent, every McKernel container is
+exited, the common lock is absent and only unrelated Kasper containers run.
+Measured free bytes are 23,610,621,952 host, 15,452,831,744 scratch and
+24,400,297,984 available RAM.  The live HANDOFF hash is
+`331d5480...2ab32`, newer than the launcher's stored `bdc94610...af8c5`;
+CURRENT and live state remain authoritative.
+
+Exact evidence is `native-shared-heavy-scratch18-source-checkpoint-20261001.json`.
+Next checkpoint these blobs, create/push/fetch-verify the exact 14-path side
+target, and bind its identity plus file/hash allowlist into a reviewed scratch18
+preparation invocation.  No build, Docker or guest ran in this checkpoint.
+Counts remain one compiled current candidate, five diagnostic guest passes and
+zero formal application acceptances; the OS remains incomplete.

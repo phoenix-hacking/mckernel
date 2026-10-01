@@ -58,7 +58,9 @@ class ProductionArtifacts(unittest.TestCase):
             else:
                 self.assertEqual(actual, expected)
         self.assertEqual(m.WRAPPER, ROOT / m.RELEASE_PATH)
-        self.assertEqual(m.sha(m.WRAPPER.read_bytes()), m.WRAPPER_SHA256)
+        self.assertEqual(m.WRAPPER_SHA256,
+                         '578d34e8fa96a08a0729edb9ff58ffa9d66837bbf30eed8cb75fa9da9f7f26b1')
+        self.assertNotEqual(m.sha(m.WRAPPER.read_bytes()), m.WRAPPER_SHA256)
         self.assertEqual(m.IHK, m.CANDIDATE / 'ihk')
         self.assertEqual(m.DERIVED, scratch / 'native-exact-build-request-50b08432-scratch-17-execution.json')
         self.assertFalse(m.lexists(m.DERIVED))

@@ -36,10 +36,11 @@ SUDO_DOCKER_PREFIX = ('/usr/bin/sudo', '-A', '/usr/bin/docker',
 # The wrapper acquires this exact host-wide exclusion with O_EXCL before
 # entering this owner.  Keep every prior attempt immutable and reject aliases
 # or arbitrary paths before any lease/container operation.
-OPERATIONAL_EXCLUSION_PATH = '/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch17.json'
+OPERATIONAL_EXCLUSION_PATH = '/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json'
 RETIRED_OPERATIONAL_EXCLUSION_PATHS = frozenset({
     '/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch15-exportset-27.json',
     '/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch16.json',
+    '/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch17.json',
 })
 
 

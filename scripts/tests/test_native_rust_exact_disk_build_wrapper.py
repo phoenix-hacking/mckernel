@@ -70,9 +70,11 @@ class WrapperTests(unittest.TestCase):
         self.shared = mock.patch.object(wrapper, 'SHARED_HEAVY_LOCK_PATH', str(self.lock_dir / 'shared.lock'))
         self.shared.start()
         wrapper.OPERATIONAL_EXCLUSION_PATH = str(
-            self.lock_dir / "native-exact-candidate-operational-exclusion-scratch17.json")
+            self.lock_dir / "native-exact-candidate-operational-exclusion-scratch18.json")
         wrapper.RETIRED_SCRATCH16_OPERATIONAL_EXCLUSION_PATH = str(
             self.lock_dir / "native-exact-candidate-operational-exclusion-scratch16.json")
+        wrapper.RETIRED_SCRATCH17_OPERATIONAL_EXCLUSION_PATH = str(
+            self.lock_dir / "native-exact-candidate-operational-exclusion-scratch17.json")
         FakeOwner.calls = FakeOwner.validations = 0
         FakeOwner.CliSignals.entered = FakeOwner.CliSignals.exited = 0
         FakeOwner.measurement = {
@@ -262,12 +264,15 @@ class WrapperTests(unittest.TestCase):
         self.assertNotEqual(wrapper.OPERATIONAL_EXCLUSION_PATH,
                             wrapper.RETIRED_OPERATIONAL_EXCLUSION_PATH)
         self.assertTrue(wrapper.OPERATIONAL_EXCLUSION_PATH.endswith(
+            "native-exact-candidate-operational-exclusion-scratch18.json"))
+        self.assertTrue(wrapper.RETIRED_SCRATCH17_OPERATIONAL_EXCLUSION_PATH.endswith(
             "native-exact-candidate-operational-exclusion-scratch17.json"))
         self.assertTrue(wrapper.RETIRED_SCRATCH16_OPERATIONAL_EXCLUSION_PATH.endswith(
             "native-exact-candidate-operational-exclusion-scratch16.json"))
         for rejected_path in (
             wrapper.CONSUMED_EXPORTSET16_OPERATIONAL_EXCLUSION_PATH,
             wrapper.RETIRED_SCRATCH16_OPERATIONAL_EXCLUSION_PATH,
+            wrapper.RETIRED_SCRATCH17_OPERATIONAL_EXCLUSION_PATH,
             wrapper.RETIRED_OPERATIONAL_EXCLUSION_PATH,
             wrapper.REVIEWED_OPERATIONAL_EXCLUSION_PATH,
             wrapper.SUPERSEDED_OPERATIONAL_EXCLUSION_PATH,

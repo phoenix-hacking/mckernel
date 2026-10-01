@@ -56,10 +56,11 @@ OBJTOOLBINDING_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/
 RUNTIMEBLOB_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-runtimeblob-12.json"
 SELFDIGEST_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-selfdigest-13.json"
 CONSUMED_EXPORTSET16_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-exportset-16.json"
-# Fresh scratch17 lease.  Scratch16 and every earlier exportset remain
+# Fresh scratch18 lease.  Scratch17, scratch16 and every earlier exportset remain
 # immutable historical records and must never be reused as an active lock.
 RETIRED_SCRATCH16_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch16.json"
-OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch17.json"
+RETIRED_SCRATCH17_OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch17.json"
+OPERATIONAL_EXCLUSION_PATH = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json"
 DISPATCHER_SCRATCH_ROOT = "/home/holden/mckernel-work/scratch"
 DISPATCHER_EMERGENCY_BYTES = 512 * 2 ** 20
 SHARED_HEAVY_LOCK_PATH = DISPATCHER_SCRATCH_ROOT + '/mckernel-heavy-operation.lock'

@@ -32,13 +32,13 @@ RECEIPT_SCHEMA = "mckernel.native-exact-mckernel-image-container-receipt.v1"
 OWNER_RECEIPT_NAME = "owner-receipt.json"
 EXPECTED_DRIVER_SHA256 = "91aa047f61167dd93002a0bc12e55b18f4b2fcaf65e246e574e8350a0c37f4cc"
 EXPECTED_PROVENANCE_SHA256 = "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a"
-EXPECTED_HOST_OWNER_SHA256 = "57a5af06e6339030dad727fef655d4bd3550f65c9e60553090511f42426f077a"
-EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "150f74c78cc6e319c17edf918443ae60408af084d3a9436b96e09623cc678243"
+EXPECTED_HOST_OWNER_SHA256 = "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "788be3f5d31620d0aff0bd4e480d7bbbbde2f8f1dc5dcf671ad2ebf114107894"
 # The image owner advances with the image-candidate namespace.  Keep consumed
 # exclusions explicit: accepting one of these would allow a request to race a
 # retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
 # fixture, so the rejection list remains separate from the active value.
-COMMON_EXCLUSION = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch17-image-1.json"
+COMMON_EXCLUSION = "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json"
 RETIRED_COMMON_EXCLUSIONS = frozenset(
     "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-" + suffix + ".json"
     for suffix in (
@@ -48,7 +48,7 @@ RETIRED_COMMON_EXCLUSIONS = frozenset(
         "objtoolbinding-11", "runtimeblob-12", "selfdigest-13", "exportset-16",
         "exportset-17", "exportset-18", "exportset-19", "exportset-20",
         "exportset-21", "exportset-22", "exportset-23", "exportset-24",
-        "exportset-25", "exportset-26", "scratch15-exportset-27", "scratch16",
+        "exportset-25", "exportset-26", "scratch15-exportset-27", "scratch16", "scratch17-image-1",
     )
 )
 LIMITS = {
