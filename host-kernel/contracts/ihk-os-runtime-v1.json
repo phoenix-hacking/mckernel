@@ -14,7 +14,9 @@
       "resident_application_or_service": "returns EBUSY before v5 shutdown callback until its resident admission owner releases",
       "shutdown_admission": "close_for_shutdown closes an open idle gate; successful shutdown commits and leaves the gate closed",
       "shutdown_admission_rollback": "ShutdownAdmission drop reopens only an open gate closed by this attempt; a borrowed prior close and overflow poison stay closed",
-      "shutdown_v5_nonzero": "callback must make no teardown effects; ShutdownGuard drop restores the original live registry status while preserving references",
+        "shutdown_v5_nonzero": "callback must make no teardown effects; ShutdownGuard drop restores the original live registry status while preserving references",
+        "shutdown_v6_outcome": "zero is complete; a signed Linux errno is pre-effect; SHUTDOWN_V6_POST_EFFECT tagged errno is post-effect",
+        "shutdown_v6_post_effect": "retains Shutdown registry and closed admission for same-generation reconciliation; it cannot be rolled back as pre-effect",
       "successful_shutdown": "commits NotBooted with admission closed"
     },
     "destroy_command": "0x00112901",
@@ -85,8 +87,8 @@
   "inputs": [
     {
       "path": "host-kernel/native-rust/os_runtime.rs",
-      "sha256": "aa9fa37f67762565c3d1be1a0c7662736932a136bc43a3fd3ef2deb319c2a4b6",
-      "size": 65760
+      "sha256": "af4864fc05f6b5bf46c307abe8b3bae9cbd1372d1815a287c5b5557cad4c4413",
+      "size": 69792
     },
     {
       "path": "host-kernel/native-rust/abi/x86_64.rs",
@@ -110,12 +112,12 @@
     },
     {
       "path": "scripts/tests/fixtures/ihk_os_runtime_compile.rs",
-      "sha256": "e8307a28d9f10cb40b35b71f84afe90876df58e19ef9df87cc31a62513ce9f92",
-      "size": 51685
+      "sha256": "ba928d5c6e3e2c0895ca7fbe686aa6f98f1157ac3793f62f5adbd40b985a771f",
+      "size": 55783
     },
     {
       "path": "scripts/tests/test_ihk_os_runtime.py",
-      "sha256": "e1201405164379a2b8d233809bc52aa577b374273eb9388d2025bf8b244372b6",
+      "sha256": "3993db88e1fe662a980c2ef20f6310725b3f139f3dca3e097f83a280d2e60a11",
       "size": 3191
     }
   ],

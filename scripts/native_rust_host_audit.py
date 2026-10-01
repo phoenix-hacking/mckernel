@@ -399,6 +399,8 @@ REVIEWED_RUST_ESCAPE_BLOCKS['host-kernel/native-rust/os_runtime.rs'] = (('OS Lin
   'type OsBackendStartBootV3 = unsafe extern "C" fn(u32, u64) -> i32;'),
  ('OS backend shutdown callback type',
   'type OsBackendShutdownV5 = unsafe extern "C" fn(u32, u64) -> i32;'),
+ ('OS backend shutdown v6 callback type',
+  'type OsBackendShutdownV6 = unsafe extern "C" fn(u32, u64) -> i64;'),
  ('OS create ABI',
   '#[export_name = "ihk_os_create_unbooted_v1"]\n'
   '// SAFETY: The C caller supplies its already pinned Linux module pointer; this\n'
@@ -623,6 +625,21 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v5(
     close: Option<super::application_abi::Close>,
     shutdown: Option<OsBackendShutdownV5>,
 ) -> i64 {'''),
+    ('OS create v6 ABI', '''#[export_name = "ihk_os_create_unbooted_v6"]
+pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v6(
+    provider_minor: u32,
+    owner: *mut c_void,
+    argument: u64,
+    callback_abi: u32,
+    ioctl: Option<OsBackendIoctlV2>,
+    release: Option<OsBackendReleaseV2>,
+    prepare: Option<OsBackendPrepareBootV3>,
+    start: Option<OsBackendStartBootV3>,
+    open: Option<super::application_abi::Open>,
+    invoke: Option<super::application_abi::Invoke>,
+    close: Option<super::application_abi::Close>,
+    shutdown: Option<OsBackendShutdownV6>,
+) -> i64 {'''),
 )
 REVIEWED_RUST_BLOCK_PREFIXES.update({
     'OS create v3 ABI': '''/// Add boot preparation/start callbacks while retaining the v1/v2 contracts.
@@ -650,6 +667,12 @@ REVIEWED_RUST_BLOCK_PREFIXES.update({
 /// locking rules. `shutdown` receives the exact generation under the operation
 /// lock; a nonzero result is pre-effect or rollback-safe, so it performs no
 /// stop, drain, release, or visible teardown.
+''',
+    'OS create v6 ABI': '''/// Add the effect-aware shutdown callback while preserving the v5 ABI.
+/// `shutdown` returns zero for complete success, a signed Linux errno for a
+/// pre-effect failure, or `SHUTDOWN_V6_POST_EFFECT | (errno as u32)` after an
+/// irreversible effect.  The latter keeps admission closed and retains the
+/// exact generation for reconciliation/retry.
 ''',
 })
 
@@ -704,6 +727,7 @@ pub(crate) unsafe extern "C" fn invoke_application(
     ('OS create v3 export record', _os_export_record('__export_symbol_ihk_os_create_unbooted_v3', 'IHK_OS_CREATE_V3_EXPORT', 'ihk_os_create_unbooted_v3')),
     ('OS create v4 export record', _os_export_record('__export_symbol_ihk_os_create_unbooted_v4', 'IHK_OS_CREATE_V4_EXPORT', 'ihk_os_create_unbooted_v4')),
     ('OS create v5 export record', _os_export_record('__export_symbol_ihk_os_create_unbooted_v5', 'IHK_OS_CREATE_V5_EXPORT', 'ihk_os_create_unbooted_v5')),
+    ('OS create v6 export record', _os_export_record('__export_symbol_ihk_os_create_unbooted_v6', 'IHK_OS_CREATE_V6_EXPORT', 'ihk_os_create_unbooted_v6')),
     ('OS kobject export record', _os_export_record('__export_symbol_ihk_os_with_kobject_v1', 'IHK_OS_KOBJECT_EXPORT', 'ihk_os_with_kobject_v1')),
 )
 REVIEWED_RUST_BLOCK_PREFIXES.update({
@@ -804,8 +828,9 @@ REVIEWED_RUST_ESCAPE_ORDER = {
         'OS Linux kernel exports', 'OS backend ioctl callback type',
         'OS backend release callback type', 'OS backend prepare boot callback type',
         'OS backend start boot callback type', 'OS backend shutdown callback type',
-        'OS create ABI', 'OS create v2 ABI', 'OS create v3 ABI', 'OS create v4 ABI',
-        'OS create v5 ABI', 'OS destroy ABI', 'OS kobject callback type',
+        'OS backend shutdown v6 callback type', 'OS create ABI', 'OS create v2 ABI',
+        'OS create v3 ABI', 'OS create v4 ABI', 'OS create v5 ABI', 'OS create v6 ABI',
+        'OS destroy ABI', 'OS kobject callback type',
         'OS kobject ABI', 'OS open ABI', 'OS release ABI', 'OS ioctl ABI',
         'OS compat ioctl ABI', 'OS application open ABI', 'OS application invoke ABI',
         'OS application close ABI', 'OS application open export record',
@@ -813,7 +838,7 @@ REVIEWED_RUST_ESCAPE_ORDER = {
         'OS topology query ABI', 'OS topology query export record',
         'OS create export record', 'OS create v2 export record',
         'OS create v3 export record', 'OS create v4 export record',
-        'OS create v5 export record', 'OS destroy export record',
+        'OS create v5 export record', 'OS create v6 export record', 'OS destroy export record',
         'OS kobject export record',
     ),
 }
@@ -959,6 +984,9 @@ REVIEWED_RUST_BLOCK_PREFIXES.update({'IHK SMP OS ioctl callback ABI': "// SAFETY
  'OS backend shutdown callback type': '// SAFETY: The callback runs under the per-OS operation lock after the\n'
                                       '// registry has entered PHASE_DESTROYING/Shutdown. It must only perform the\n'
                                       "// provider's shutdown attempt and return a Linux-style errno result.\n",
+ 'OS backend shutdown v6 callback type': '/// v6 carries the effect boundary in-band.  Zero is a complete transaction;\n'
+                                         '/// a signed Linux errno is pre-effect; the high tag bit marks a post-effect\n'
+                                         '/// failure whose admission and registry state must remain closed.\n',
  'OS compat ioctl ABI': "// SAFETY: Linux's compat callback has the same file lifetime as native "
                         'ioctl.\n'
                         '// Zero-extend the top-level user address once before any backend can '
@@ -984,13 +1012,15 @@ REVIEWED_RUST_OUTER_BLOCKS = REVIEWED_RUST_OUTER_BLOCKS | frozenset(('IHK SMP OS
 
 REVIEWED_RUST_OUTER_BLOCKS = REVIEWED_RUST_OUTER_BLOCKS | frozenset((
     'OS backend prepare boot callback type', 'OS backend start boot callback type',
-    'OS backend shutdown callback type', 'OS create v3 ABI', 'OS create v4 ABI',
-    'OS create v5 ABI', 'OS kobject callback type', 'OS kobject ABI',
+    'OS backend shutdown callback type', 'OS backend shutdown v6 callback type',
+    'OS create v3 ABI', 'OS create v4 ABI', 'OS create v5 ABI', 'OS create v6 ABI',
+    'OS kobject callback type', 'OS kobject ABI',
     'OS application open ABI', 'OS application invoke ABI', 'OS application close ABI',
     'OS topology query ABI', 'OS application open export record',
     'OS application invoke export record', 'OS application close export record',
     'OS topology query export record', 'OS create v3 export record',
-    'OS create v4 export record', 'OS create v5 export record', 'OS kobject export record',
+    'OS create v4 export record', 'OS create v5 export record', 'OS create v6 export record',
+    'OS kobject export record',
 ))
 
 REVIEWED_RUST_BRACED_BLOCKS = frozenset(

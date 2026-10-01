@@ -1,0 +1,67 @@
+{
+  "schema": "mckernel.native-shutdown-v6-source-checkpoint.v1",
+  "recorded_at_utc": "2026-10-01T12:25:43Z",
+  "status": "PASS_SOURCE_V6",
+  "defect": "v5 maps every nonzero STOP result to rollback-safe pre-effect failure and cannot represent reset-complete/re-online-failed state",
+  "implementation": {
+    "runtime": {
+      "path": "host-kernel/native-rust/os_runtime.rs",
+      "sha256": "af4864fc05f6b5bf46c307abe8b3bae9cbd1372d1815a287c5b5557cad4c4413"
+    },
+    "host_audit": {
+      "path": "scripts/native_rust_host_audit.py",
+      "sha256": "1d1dff867c9d46a5cf8ce55cc4127b1ea26a837f03e371d0ecd4402a642dd376"
+    },
+    "contract": {
+      "path": "host-kernel/contracts/ihk-os-runtime-v1.json",
+      "sha256": "92e35534a3b1b69615cda33e526b0616043ab3a3b53b80abd0b1aa664da8688c"
+    },
+    "contract_checker": {
+      "path": "scripts/ihk_os_runtime_check.py",
+      "sha256": "cd3170fa5db6c6446cf7c228a419f54b63b6fd12ee4e409f3203af58030b569c"
+    },
+    "fixture": {
+      "path": "scripts/tests/fixtures/ihk_os_runtime_compile.rs",
+      "sha256": "ba928d5c6e3e2c0895ca7fbe686aa6f98f1157ac3793f62f5adbd40b985a771f"
+    },
+    "tests": {
+      "path": "scripts/tests/test_ihk_os_runtime.py",
+      "sha256": "3993db88e1fe662a980c2ef20f6310725b3f139f3dca3e097f83a280d2e60a11"
+    }
+  },
+  "behavior": {
+    "v4_v5_public_signatures_unchanged": true,
+    "v5_nonzero_remains_pre_effect": true,
+    "v6_callback_result_type": "i64",
+    "v6_post_effect_encoding_is_positive": true,
+    "v6_post_effect_failure_retains_shutdown": true,
+    "v6_same_generation_retry_supported": true,
+    "v6_success_commits_not_booted": true
+  },
+  "verification": {
+    "pinned_rust": "rustc 1.92.0 (ded5c06cf 2025-12-08)",
+    "compiled_production_path_tests": "PASS 69",
+    "drop_always_returns_mutation": "REJECTED",
+    "timeout_to_complete_mutation": "REJECTED",
+    "runtime_contract_validator": "PASS",
+    "runtime_escape_audit": "PASS",
+    "review_decision": "PASS_SOURCE_V6"
+  },
+  "coordinator_environment_note": {
+    "default_rustc": "rustc 1.60.0-nightly",
+    "default_run_result": "toolchain rejected existing modern Rust syntax before tests",
+    "pinned_rust_1_92_rerun": "PASS 69"
+  },
+  "remaining": {
+    "preexisting_full_host_audit_blocker": "unchanged smp_cpu.rs support digest drift",
+    "physical_stop_caller_integrated": false,
+    "module_built": false,
+    "guest_executed": false,
+    "shutdown_accepted": false
+  },
+  "acceptance": {
+    "source_scope_only": true,
+    "formal_application_acceptance": false,
+    "os_complete": false
+  }
+}

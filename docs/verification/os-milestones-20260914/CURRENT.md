@@ -12782,3 +12782,33 @@ source bypass is rejected.  Independent review returns
 credit: a fresh host module, image and reviewed guest packet remain required.
 Exact evidence is
 `native-exact-futex-terminal-trace-regression-checkpoint-20261001.json`.
+
+Continuation checkpoint 315, 2026-10-01: shutdown now has an independently
+reviewed additive v6 source ABI for effect-aware STOP results.  V4/v5 public
+signatures and v5 rollback-safe error semantics remain unchanged.  V6 uses a
+noncolliding positive tagged post-effect result, retains Shutdown/admission on
+post-effect failure, supports same-generation reconciliation and commits
+NotBooted only after success.
+
+Pinned Rust 1.92 executes 69 production runtime/registry cases.  The fresh
+admission test rejects a Drop-always-returns mutation, the v6 outcome test
+rejects timeout-to-Complete, and the rebound runtime contract and escape audit
+pass.  A coordinator run with the host default Rust 1.60 rejected pre-existing
+modern syntax before tests; the unchanged suite passes with the required pinned
+compiler.  The full host audit still first encounters unrelated pre-existing
+`smp_cpu.rs` support-digest drift.  Exact source evidence is
+`native-shutdown-v6-source-checkpoint-20261001.json`.
+
+This is not shutdown runtime credit.  The physical STOP caller still needs v6
+integration, a current module build and a booted shutdown diagnostic.  Counts
+remain one compiled current candidate, five bounded diagnostic guest passes and
+zero formal application acceptances.
+
+The future futex replay packet also returns `PASS_SOURCE_PACKET_ONLY` at
+`810a5692...ac730c` with five validator tests `73f4c840...64ca2c`.  It binds
+target 50b and the accepted producer/observer/fixture/collector bytes, requires
+fresh absent module/image/guest paths, and preserves the complete 16-case,
+threads/clone, stdout/exit-37, route/return/terminal, procfs, retirement and
+release oracle.  Artifacts remain UNBOUND and launch remains prohibited until
+the scratch17 build succeeds and a separate privileged release binds its actual
+artifacts, nonce, owner command and fresh resource/process census.

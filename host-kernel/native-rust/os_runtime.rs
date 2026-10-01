@@ -193,6 +193,13 @@ type OsBackendStartBootV3 = unsafe extern "C" fn(u32, u64) -> i32;
 // registry has entered PHASE_DESTROYING/Shutdown. It must only perform the
 // provider's shutdown attempt and return a Linux-style errno result.
 type OsBackendShutdownV5 = unsafe extern "C" fn(u32, u64) -> i32;
+/// v6 carries the effect boundary in-band.  Zero is a complete transaction;
+/// a signed Linux errno is pre-effect; the high tag bit marks a post-effect
+/// failure whose admission and registry state must remain closed.
+type OsBackendShutdownV6 = unsafe extern "C" fn(u32, u64) -> i64;
+
+const SHUTDOWN_V6_POST_EFFECT: i64 = 1_i64 << 62;
+const SHUTDOWN_V6_PAYLOAD_MASK: i64 = 0xffff_ffff;
 
 /// The transaction boundary is deliberately separate from the v5 C result.
 /// v5 callbacks are rollback-safe: every nonzero result is pre-effect.  A
@@ -213,6 +220,24 @@ fn shutdown_v5_outcome(result: i32) -> ShutdownCallbackOutcome {
         ShutdownCallbackOutcome::Complete
     } else {
         ShutdownCallbackOutcome::PreEffectFailure(result)
+    }
+}
+
+fn shutdown_v6_outcome(result: i64) -> ShutdownCallbackOutcome {
+    if result == 0 {
+        return ShutdownCallbackOutcome::Complete;
+    }
+    // Pre-effect Linux errno values are negative and therefore have all high
+    // bits set when widened.  The tag is intentionally positive so this
+    // range check cannot confuse an ordinary negative errno for post-effect.
+    if result >= SHUTDOWN_V6_POST_EFFECT {
+        let payload = (result & SHUTDOWN_V6_PAYLOAD_MASK) as u32 as i32;
+        return ShutdownCallbackOutcome::PostEffectFailure(payload);
+    }
+    if (-4095..0).contains(&result) {
+        ShutdownCallbackOutcome::PreEffectFailure(result as i32)
+    } else {
+        ShutdownCallbackOutcome::PreEffectFailure(-5)
     }
 }
 
@@ -243,7 +268,13 @@ struct OsBackend {
     release: OsBackendReleaseV2,
     boot: Option<OsBackendBootV3>,
     application: Option<ApplicationCallbacks>,
-    shutdown: Option<OsBackendShutdownV5>,
+    shutdown: Option<OsBackendShutdown>,
+}
+
+#[derive(Clone, Copy)]
+enum OsBackendShutdown {
+    V5(OsBackendShutdownV5),
+    V6(OsBackendShutdownV6),
 }
 
 // The high bits close/poison admission; the low bits count every callback borrow
@@ -767,13 +798,76 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v5(
                 invoke,
                 close,
             }),
-            shutdown: Some(shutdown),
+            shutdown: Some(OsBackendShutdown::V5(shutdown)),
         },
         _ => return EINVAL.to_errno() as i64,
     };
     // SAFETY: The validated trusted owner is retained through create_os's
     // initial reference, and all eight ABI-correct resident callbacks are
     // transferred into its existing ownership/concurrency transaction.
+    match unsafe { create_os(provider_minor, owner.cast(), argument, Some(backend)) } {
+        Ok(minor) => minor as i64,
+        Err(error) => error.to_errno() as i64,
+    }
+}
+
+/// Add the effect-aware shutdown callback while preserving the v5 ABI.
+/// `shutdown` returns zero for complete success, a signed Linux errno for a
+/// pre-effect failure, or `SHUTDOWN_V6_POST_EFFECT | (errno as u32)` after an
+/// irreversible effect.  The latter keeps admission closed and retains the
+/// exact generation for reconciliation/retry.
+#[export_name = "ihk_os_create_unbooted_v6"]
+pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v6(
+    provider_minor: u32,
+    owner: *mut c_void,
+    argument: u64,
+    callback_abi: u32,
+    ioctl: Option<OsBackendIoctlV2>,
+    release: Option<OsBackendReleaseV2>,
+    prepare: Option<OsBackendPrepareBootV3>,
+    start: Option<OsBackendStartBootV3>,
+    open: Option<super::application_abi::Open>,
+    invoke: Option<super::application_abi::Invoke>,
+    close: Option<super::application_abi::Close>,
+    shutdown: Option<OsBackendShutdownV6>,
+) -> i64 {
+    let backend = match (
+        callback_abi,
+        ioctl,
+        release,
+        prepare,
+        start,
+        open,
+        invoke,
+        close,
+        shutdown,
+    ) {
+        (
+            1,
+            Some(ioctl),
+            Some(release),
+            Some(prepare),
+            Some(start),
+            Some(open),
+            Some(invoke),
+            Some(close),
+            Some(shutdown),
+        ) => OsBackend {
+            ioctl,
+            release,
+            boot: Some(OsBackendBootV3 { prepare, start }),
+            application: Some(ApplicationCallbacks {
+                open,
+                invoke,
+                close,
+            }),
+            shutdown: Some(OsBackendShutdown::V6(shutdown)),
+        },
+        _ => return EINVAL.to_errno() as i64,
+    };
+    // SAFETY: The validated trusted owner is retained through create_os's
+    // initial reference, and every v6 callback remains resident for the
+    // complete OS lifetime exactly as with v5.
     match unsafe { create_os(provider_minor, owner.cast(), argument, Some(backend)) } {
         Ok(minor) => minor as i64,
         Err(error) => error.to_errno() as i64,
@@ -1170,12 +1264,20 @@ unsafe fn os_request(
             Err(error) => return error.errno() as core::ffi::c_long,
         };
         // SAFETY: The lease, operation lock and provider module owner pin the
-        // exact callback and generation. v5 is explicitly pre-effect on every
-        // nonzero result: it must not stop/drain a guest or make any externally
-        // visible teardown effect. Only that contract permits rollback/opening
-        // admission below; SMP/CPU/IRQ/resource teardown is not wired here.
-        let callback = unsafe { shutdown(handle.minor() as u32, handle.generation()) };
-        let result = finish_shutdown(guard, admission, shutdown_v5_outcome(callback));
+        // exact callback and generation. v5 remains rollback-safe; v6 carries
+        // an explicit post-effect tag so a STOP/drain failure cannot reopen
+        // admission or resurrect the registry's live state.
+        let outcome = match shutdown {
+            OsBackendShutdown::V5(callback) => {
+                let result = unsafe { callback(handle.minor() as u32, handle.generation()) };
+                shutdown_v5_outcome(result)
+            }
+            OsBackendShutdown::V6(callback) => {
+                let result = unsafe { callback(handle.minor() as u32, handle.generation()) };
+                shutdown_v6_outcome(result)
+            }
+        };
+        let result = finish_shutdown(guard, admission, outcome);
         return result as core::ffi::c_long;
     }
     // The immutable compatibility ID is also available on a booted OS, without
@@ -1593,6 +1695,17 @@ pub(crate) static IHK_OS_CREATE_V5_EXPORT: IhkExportSymbolRecord = IhkExportSymb
     namespace: *b"MCKERNEL_IHK_V1\0",
     padding: [0; 4],
     symbol: ihk_os_create_unbooted_v5 as *const () as *const u8,
+};
+
+// SAFETY: Linux modpost reads this immutable relocation for the module lifetime.
+#[export_name = "__export_symbol_ihk_os_create_unbooted_v6"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub(crate) static IHK_OS_CREATE_V6_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0",
+    namespace: *b"MCKERNEL_IHK_V1\0",
+    padding: [0; 4],
+    symbol: ihk_os_create_unbooted_v6 as *const () as *const u8,
 };
 
 // SAFETY: Linux modpost reads this immutable relocation for the module lifetime.

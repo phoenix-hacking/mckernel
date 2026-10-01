@@ -81,6 +81,8 @@ def derive_contract(repo):
                 "boot_start_nonzero": "may have CPU effects and retains non-destroyable generation, owners and resources",
                 "resident_application_or_service": "returns EBUSY before v5 shutdown callback until its resident admission owner releases",
                 "shutdown_v5_nonzero": "callback must make no teardown effects; ShutdownGuard drop restores the original live registry status while preserving references",
+                "shutdown_v6_outcome": "zero is complete; a signed Linux errno is pre-effect; SHUTDOWN_V6_POST_EFFECT tagged errno is post-effect",
+                "shutdown_v6_post_effect": "retains Shutdown registry and closed admission for same-generation reconciliation; it cannot be rolled back as pre-effect",
                 "shutdown_admission": "close_for_shutdown closes an open idle gate; successful shutdown commits and leaves the gate closed",
                 "shutdown_admission_rollback": "ShutdownAdmission drop reopens only an open gate closed by this attempt; a borrowed prior close and overflow poison stay closed",
                 "closed_gate_retry": "an idle closed non-poisoned gate can be borrowed for a shutdown retry and remains closed if that retry fails",

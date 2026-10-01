@@ -612,6 +612,7 @@ static BOOT_START_STATUS: AtomicI32 = AtomicI32::new(0);
 static BOOT_GENERATION: AtomicI64 = AtomicI64::new(0);
 static BOOT_START_CALLS: AtomicI32 = AtomicI32::new(0);
 static SHUTDOWN_STATUS: AtomicI32 = AtomicI32::new(0);
+static SHUTDOWN_V6_STATUS: AtomicI64 = AtomicI64::new(0);
 static SHUTDOWN_CALLS: AtomicI32 = AtomicI32::new(0);
 static SHUTDOWN_IDENTITY: Mutex<Vec<(u32, u64)>> = Mutex::new(Vec::new());
 static APPLICATION_SUCCEED: AtomicBool = AtomicBool::new(false);
@@ -696,6 +697,12 @@ unsafe extern "C" fn backend_shutdown(slot: u32, generation: u64) -> i32 {
     SHUTDOWN_STATUS.load(Ordering::SeqCst)
 }
 
+unsafe extern "C" fn backend_shutdown_v6(slot: u32, generation: u64) -> i64 {
+    SHUTDOWN_CALLS.fetch_add(1, Ordering::SeqCst);
+    SHUTDOWN_IDENTITY.lock().unwrap().push((slot, generation));
+    SHUTDOWN_V6_STATUS.load(Ordering::SeqCst)
+}
+
 unsafe extern "C" fn backend_prepare_boot(
     slot: u32,
     generation: u64,
@@ -758,6 +765,25 @@ fn create_boot_backend() -> i64 {
 fn create_shutdown_backend(shutdown: Option<unsafe extern "C" fn(u32, u64) -> i32>) -> i64 {
     unsafe {
         os_runtime::ihk_os_create_unbooted_v5(
+            0,
+            THIS_MODULE.as_ptr().cast(),
+            u64::MAX,
+            1,
+            Some(backend_ioctl),
+            Some(backend_release),
+            Some(backend_prepare_boot),
+            Some(backend_start_boot),
+            Some(application_open),
+            Some(application_invoke),
+            Some(application_close),
+            shutdown,
+        )
+    }
+}
+
+fn create_shutdown_backend_v6(shutdown: Option<unsafe extern "C" fn(u32, u64) -> i64>) -> i64 {
+    unsafe {
+        os_runtime::ihk_os_create_unbooted_v6(
             0,
             THIS_MODULE.as_ptr().cast(),
             u64::MAX,
@@ -1301,6 +1327,11 @@ pub(crate) fn fixture_assert_application_close_owners() {
 #[cfg(test)]
 mod shutdown_effect_tests {
     use super::*;
+    use crate::{
+        abi, backend_shutdown_v6, close, create_shutdown_backend_v6, destroy, open, status,
+        with_family, BOOT_PREPARE_STATUS, BOOT_START_STATUS, SHUTDOWN_CALLS,
+        SHUTDOWN_V6_STATUS,
+    };
     use crate::os_registry::{self, OsRegistry, OsStatus, RegistryError};
 
     fn ready(registry: &OsRegistry) -> os_registry::OsHandle {
@@ -1320,6 +1351,75 @@ mod shutdown_effect_tests {
             assert_eq!(shutdown_v5_outcome(result), ShutdownCallbackOutcome::PreEffectFailure(result));
         }
         assert_ne!(ShutdownCallbackOutcome::PostEffectFailure(-5), shutdown_v5_outcome(-5));
+    }
+
+    #[test]
+    fn v6_outcome_tag_drives_production_shutdown_transaction() {
+        assert_eq!(shutdown_v6_outcome(0), ShutdownCallbackOutcome::Complete);
+        assert_eq!(
+            shutdown_v6_outcome(-110),
+            ShutdownCallbackOutcome::PreEffectFailure(-110)
+        );
+        let encoded = SHUTDOWN_V6_POST_EFFECT | ((-110_i32 as u32) as i64);
+        assert_eq!(
+            shutdown_v6_outcome(encoded),
+            ShutdownCallbackOutcome::PostEffectFailure(-110)
+        );
+        assert_eq!(
+            shutdown_v6_outcome(1),
+            ShutdownCallbackOutcome::PreEffectFailure(-5)
+        );
+    }
+
+    #[test]
+    fn pre_effect_failure_reopens_gate_and_allows_new_admission() {
+        let registry = OsRegistry::new();
+        let handle = ready(&registry);
+        let lease = registry.acquire(handle).unwrap();
+        let gate = Admission::new();
+        let admission = gate.close_for_shutdown().unwrap();
+        let guard = registry.begin_shutdown(handle).unwrap();
+        assert_eq!(finish_shutdown(guard, admission, ShutdownCallbackOutcome::PreEffectFailure(-110)), -110);
+        assert!(!gate.is_closed());
+        let fresh = gate.enter().expect("pre-effect rollback must reopen admission");
+        drop(fresh);
+        assert!(matches!(registry.snapshot(handle).unwrap().status, OsStatus::Ready));
+        drop(lease);
+    }
+
+    #[test]
+    fn v6_post_effect_failure_keeps_admission_and_registry_closed() {
+        with_family(|| {
+            BOOT_PREPARE_STATUS.store(0, Ordering::SeqCst);
+            BOOT_START_STATUS.store(0, Ordering::SeqCst);
+            SHUTDOWN_CALLS.store(0, Ordering::SeqCst);
+            SHUTDOWN_V6_STATUS.store(
+                SHUTDOWN_V6_POST_EFFECT | ((-110_i32 as u32) as i64),
+                Ordering::SeqCst,
+            );
+            assert_eq!(create_shutdown_backend_v6(Some(backend_shutdown_v6)), 0);
+            let mut file = open(0).unwrap();
+            assert_eq!(status(&mut file, false, abi::IHK_OS_BOOT), 0);
+            assert_eq!(status(&mut file, false, abi::IHK_OS_SHUTDOWN), -110);
+            assert_eq!(
+                status(&mut file, false, abi::IHK_OS_QUERY_STATUS),
+                abi::IHK_OS_STATUS_SHUTDOWN as i64
+            );
+            // A same-handle retry reaches the retained v6 callback while the
+            // registry remains Shutdown; its tagged failure is still reported
+            // without reopening admission.
+            assert_eq!(status(&mut file, false, abi::IHK_OS_SHUTDOWN), -110);
+            assert_eq!(SHUTDOWN_CALLS.load(Ordering::SeqCst), 2);
+            SHUTDOWN_V6_STATUS.store(0, Ordering::SeqCst);
+            assert_eq!(status(&mut file, false, abi::IHK_OS_SHUTDOWN), 0);
+            assert_eq!(
+                status(&mut file, false, abi::IHK_OS_QUERY_STATUS),
+                abi::IHK_OS_STATUS_NOT_BOOTED as i64
+            );
+            assert_eq!(SHUTDOWN_CALLS.load(Ordering::SeqCst), 3);
+            close(file);
+            assert_eq!(destroy(0), 0);
+        });
     }
 
     #[test]
