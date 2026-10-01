@@ -575,7 +575,9 @@ class OwnerTests(unittest.TestCase):
         tools = driver._validate_toolchain(self.toolchain,
                                            container_roots={"/out": out, "/nightly": nightly})
         self.assertEqual(tools["kernel_dir"], str(out / "build"))
-        self.assertEqual(str((out / "build" / "source").readlink()), "/out/source")
+        # pathlib.Path.readlink() was only added in Python 3.9.  Keep this
+        # assertion equally strict on the released Python 3.8 runner.
+        self.assertEqual(os.readlink(out / "build" / "source"), "/out/source")
         fake = FakeDocker(self.evidence, self.image)
         fake.candidate_sha = self.candidate
         fake.ihk_sha = self.ihk
