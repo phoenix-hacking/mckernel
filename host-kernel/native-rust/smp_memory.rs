@@ -81,7 +81,6 @@ const NATIVE_IRQ_WORK_MAGIC: u32 = 0x4d43_4957;
 const NATIVE_IRQ_WORK_VERSION: u16 = 1;
 const NATIVE_IRQ_WORK_RELEASE_READY: u32 = 1;
 const NATIVE_IRQ_WORK_SLOT_BYTES: u32 = 64;
-
 impl NativeIrqWorkDescriptorView {
     fn encode_unpublished(generation: u64, physical: u64, count: u32) -> [u8; 64] {
         let mut bytes = [0; 64];
@@ -168,6 +167,67 @@ fn overflow() -> Error {
         Err(error) => error,
         Ok(()) => EINVAL,
     }
+}
+
+const NATIVE_IRQ_WORK_CLOSED: u32 = 1 << 31;
+const NATIVE_IRQ_WORK_BUSY: u32 = 1 << 1;
+const NATIVE_IRQ_WORK_ETIMEDOUT: i32 = 110;
+
+#[repr(C, align(8))]
+struct NativeIrqWorkSlot {
+    _llist: [u8; 8],
+    flags: AtomicU32,
+    opaque: [u8; 20],
+}
+
+const _: () = {
+    assert!(core::mem::size_of::<NativeIrqWorkSlot>() == 32);
+    assert!(core::mem::align_of::<NativeIrqWorkSlot>() == 8);
+    assert!(core::mem::offset_of!(NativeIrqWorkSlot, flags) == 8);
+};
+
+extern "C" {
+    /// GPL-exported Linux irq_work synchronization primitive.  This is used
+    /// only after the guest sender gate is closed and each slot is validated.
+    fn irq_work_sync(work: *mut core::ffi::c_void);
+}
+
+fn native_irq_error(errno: i32) -> Error {
+    match kernel::error::to_result(-errno) {
+        Err(error) => error,
+        Ok(()) => EINVAL,
+    }
+}
+
+fn close_native_irq_work_senders_typed(
+    descriptor: &NativeIrqWorkDescriptorView,
+    slots_address: u64,
+    mut wait: impl FnMut() -> bool,
+) -> Result {
+    descriptor.senders.fetch_or(NATIVE_IRQ_WORK_CLOSED, Ordering::AcqRel);
+    loop {
+        if descriptor.senders.load(Ordering::Acquire) == NATIVE_IRQ_WORK_CLOSED {
+            break;
+        }
+        if !wait() { return Err(native_irq_error(NATIVE_IRQ_WORK_ETIMEDOUT)); }
+    }
+    for index in 0..descriptor.slots_count as usize {
+        let offset = index.checked_mul(NATIVE_IRQ_WORK_SLOT_BYTES as usize).ok_or(EIO)?;
+        let address = slots_address.checked_add(offset as u64).ok_or(EIO)?;
+        // SAFETY: descriptor validation proves the retained allocation covers
+        // exactly slots_count nodes at this 64-byte stride.
+        let slot = unsafe { &*(address as *const NativeIrqWorkSlot) };
+        let mut polls = 1000;
+        while slot.flags.load(Ordering::Acquire) & NATIVE_IRQ_WORK_BUSY != 0 {
+            if polls == 0 { return Err(native_irq_error(NATIVE_IRQ_WORK_ETIMEDOUT)); }
+            polls -= 1;
+            if !wait() { return Err(native_irq_error(NATIVE_IRQ_WORK_ETIMEDOUT)); }
+        }
+        // SAFETY: The opaque pointer is the exact retained node address and
+        // Linux's GPL irq_work_sync drains any final callback before release.
+        unsafe { irq_work_sync(address as *mut core::ffi::c_void) };
+    }
+    Ok(())
 }
 
 #[cfg(not(all(
@@ -1047,22 +1107,27 @@ impl PreparedBoot {
     // Only future reviewed STOP orchestration may call this, then synchronize
     // callbacks. Timeout permanently retains the closed gate and all owners.
     #[allow(dead_code)]
-    fn close_irq_senders(&self, memory: &MemoryMap<MAX_EXTENTS>) -> Result {
+    fn close_irq_senders(&mut self, memory: &MemoryMap<MAX_EXTENTS>) -> Result {
         self.validate_irq_slots(memory)?;
         // SAFETY: validate_irq_slots checked the retained final 64-byte,
         // 8-byte-aligned descriptor for this generation. This short borrow
         // precedes the sender-close wait and does not release its owner.
         let descriptor = unsafe { &*((self.params.address + self.params.bytes as u64 - 64)
             as *const NativeIrqWorkDescriptorView) };
+        self.irq.begin_close()?;
         let mut remaining = 1000;
-        if close_native_irq_work_senders(descriptor, || {
+        if let Err(error) = close_native_irq_work_senders_typed(descriptor, self.irq_slots.address, || {
             if remaining == 0 { return false; }
             remaining -= 1;
             // SAFETY: This STOP-only caller runs in sleepable context. Timeout
             // returns false and retains the closed gate and every owner.
             unsafe { bindings::msleep(1) };
             true
-        }) { Ok(()) } else { Err(EBUSY) }
+        }) {
+            self.irq.quarantine();
+            return Err(error);
+        }
+        self.irq.finish_close()
     }
 }
 

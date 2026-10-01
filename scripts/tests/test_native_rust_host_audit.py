@@ -518,10 +518,11 @@ fn inert_raw_identifier() { let r#extern = 1; let _ = r#extern; }
         with open(source, "r", encoding="utf-8") as stream:
             text = stream.read()
 
-        for name in ("validate_irq_slots", "close_irq_senders"):
+        for name, receiver in (("validate_irq_slots", "&self"),
+                               ("close_irq_senders", "&mut self")):
             pattern = (
                 r"fn\s+" + name
-                + r"\s*\(\s*&self\s*,\s*memory\s*:\s*"
+                + r"\s*\(\s*" + re.escape(receiver) + r"\s*,\s*memory\s*:\s*"
                 + r"&MemoryMap<MAX_EXTENTS>\s*\)"
             )
             self.assertEqual(

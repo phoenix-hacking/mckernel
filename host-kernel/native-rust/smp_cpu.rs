@@ -46,9 +46,23 @@ static ALLOWED_TASK: [AtomicPtr<bindings::task_struct>; SMP_MAX_CPUS] =
     [const { AtomicPtr::new(ptr::null_mut()) }; SMP_MAX_CPUS];
 static BOOT_IRQ_TARGET_USERS: AtomicU32 = AtomicU32::new(0);
 static BOOT_IRQ_GENERATIONS: [AtomicU64; 64] = [const { AtomicU64::new(0) }; 64];
+static BOOT_IRQ_INFLIGHT: [AtomicU32; 64] = [const { AtomicU32::new(0) }; 64];
+static BOOT_IRQ_PHASE: [AtomicU32; 64] = [const { AtomicU32::new(0) }; 64];
 static BOOT_IRQ_EVENTS: [AtomicU64; 64] = [const { AtomicU64::new(0) }; 64];
 static BOOT_MASTER: [AtomicPtr<super::smp_ikc::BootMaster>; 64] =
     [const { AtomicPtr::new(ptr::null_mut()) }; 64];
+const BOOT_IRQ_STALE: i32 = 116;
+const BOOT_IRQ_LIVE: u32 = 1;
+const BOOT_IRQ_CLOSING: u32 = 2;
+const BOOT_IRQ_DRAINED: u32 = 3;
+const BOOT_IRQ_QUARANTINED: u32 = 4;
+
+fn boot_irq_stale() -> Error {
+    match kernel::error::to_result(-BOOT_IRQ_STALE) {
+        Err(error) => error,
+        Ok(()) => EBUSY,
+    }
+}
 
 // SAFETY: Registered at AP_ONLINE_DYN, before irreversible target teardown.
 // The CPUHP callback uses only one bounded atomic and never a resource mutex.
@@ -61,11 +75,35 @@ unsafe extern "C" fn allow_cpu_offline(cpu: u32) -> i32 {
 }
 
 // SAFETY: Each monomorphized identity belongs to one pinned OS slot. A started
-// route cannot retire until guest senders stop and Linux drains every work
-// node. Hard IRQ drains bounded packets; no sleepable lock is acquired.
+// route cannot retire until the caller stops guest senders and Linux drains
+// every work node. This callback only accounts bounded hard-IRQ work; it does
+// not establish either external condition.
 unsafe extern "C" fn boot_irq_callback<const SLOT: usize>(_work: *mut core::ffi::c_void) {
+    // Closing is a hard admission boundary.  Check it before and after the
+    // in-flight increment: close may publish CLOSING between those two
+    // operations, and such a callback must retire without touching the
+    // generation's master.
+    if BOOT_IRQ_PHASE[SLOT].load(Ordering::Acquire) != BOOT_IRQ_LIVE {
+        return;
+    }
+    // Count first, before sampling the generation.  Otherwise close could
+    // observe zero in-flight between a callback's initial load and its
+    // increment, clear the master, and only then discover that callback.
+    BOOT_IRQ_INFLIGHT[SLOT].fetch_add(1, Ordering::Acquire);
+    if BOOT_IRQ_PHASE[SLOT].load(Ordering::Acquire) != BOOT_IRQ_LIVE {
+        BOOT_IRQ_INFLIGHT[SLOT].fetch_sub(1, Ordering::Release);
+        return;
+    }
     let generation = BOOT_IRQ_GENERATIONS[SLOT].load(Ordering::Acquire);
-    if generation != 0 {
+    if generation == 0 {
+        BOOT_IRQ_INFLIGHT[SLOT].fetch_sub(1, Ordering::Release);
+        return;
+    }
+    // Closing publishes zero before waiting for this counter.  The second
+    // generation check prevents a speculative callback from dereferencing a
+    // master after close, while the counter keeps close from clearing it
+    // before this callback has finished its identity check.
+    if BOOT_IRQ_GENERATIONS[SLOT].load(Ordering::Acquire) == generation {
         BOOT_IRQ_EVENTS[SLOT].fetch_add(1, Ordering::Release);
         let master = BOOT_MASTER[SLOT].load(Ordering::Acquire);
         if !master.is_null() {
@@ -77,12 +115,13 @@ unsafe extern "C" fn boot_irq_callback<const SLOT: usize>(_work: *mut core::ffi:
             }
         }
     }
+    BOOT_IRQ_INFLIGHT[SLOT].fetch_sub(1, Ordering::Release);
 }
 
 // SAFETY: Each literal is in 0..=63 and selects one resident module callback.
-// The published master has the exact live generation; the slot is reusable
-// only after sender stop and Linux callback drain. The IRQ callback never
-// sleeps.
+// The published master has the exact live generation; slot reuse remains a
+// caller- and Linux-drain obligation. The IRQ callback never sleeps and
+// cannot prove either obligation itself.
 macro_rules! boot_irq_callbacks {
     ($($slot:literal),* $(,)?) => {
         [$(boot_irq_callback::<$slot> as unsafe extern "C" fn(*mut core::ffi::c_void)),*]
@@ -90,8 +129,9 @@ macro_rules! boot_irq_callbacks {
 }
 
 // SAFETY: This table contains only the 64 resident callbacks above. Each entry
-// is used for its exact live generation and is retained until sender stop and
-// Linux callback drain complete; hard IRQ invocation cannot sleep.
+// is used for its exact live generation and is retained until the external
+// sender-stop and Linux callback-drain conditions are established; hard IRQ
+// invocation cannot sleep or establish those conditions.
 const BOOT_IRQ_CALLBACKS: [unsafe extern "C" fn(*mut core::ffi::c_void); 64] = boot_irq_callbacks!(
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
     26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
@@ -102,6 +142,8 @@ const BOOT_IRQ_CALLBACKS: [unsafe extern "C" fn(*mut core::ffi::c_void); 64] = b
 /// dropping it; generation reuse requires a separate sender-stop/drain proof.
 pub(super) struct BootIrqRoute {
     owner: OsToken,
+    closed: bool,
+    master: AtomicPtr<super::smp_ikc::BootMaster>,
 }
 
 impl BootIrqRoute {
@@ -110,14 +152,27 @@ impl BootIrqRoute {
         if !topology.host_cpu(0)?.online {
             return Err(ENODEV);
         }
-        BOOT_IRQ_GENERATIONS[owner.slot() as usize]
-            .compare_exchange(0, owner.generation(), Ordering::AcqRel, Ordering::Acquire)
+        let slot = owner.slot() as usize;
+        BOOT_IRQ_PHASE[slot]
+            .compare_exchange(0, BOOT_IRQ_LIVE, Ordering::AcqRel, Ordering::Acquire)
             .map_err(|_| EBUSY)?;
+        if BOOT_IRQ_GENERATIONS[slot]
+            .compare_exchange(0, owner.generation(), Ordering::AcqRel, Ordering::Acquire)
+            .is_err()
+        {
+            BOOT_IRQ_PHASE[slot].store(0, Ordering::Release);
+            return Err(EBUSY);
+        }
         // At most 64 routes exist; the CPU read guard excludes teardown until
         // this counter has made the persistent CPUHP veto visible.
         BOOT_IRQ_TARGET_USERS.fetch_add(1, Ordering::Release);
         BOOT_IRQ_EVENTS[owner.slot() as usize].store(0, Ordering::Relaxed);
-        Ok(Self { owner })
+        BOOT_IRQ_INFLIGHT[owner.slot() as usize].store(0, Ordering::Relaxed);
+        Ok(Self {
+            owner,
+            closed: false,
+            master: AtomicPtr::new(ptr::null_mut()),
+        })
     }
 
     pub(super) fn callback(&self) -> *mut core::ffi::c_void {
@@ -131,30 +186,148 @@ impl BootIrqRoute {
     // SAFETY: master is already in stable heap storage retained permanently by
     // this started boot. It cannot be dropped before sender stop and IRQ drain.
     pub(super) unsafe fn publish_master(&self, master: &super::smp_ikc::BootMaster) -> Result {
+        if self.closed {
+            return Err(EBUSY);
+        }
         if master.owner() != self.owner {
             return Err(EINVAL);
         }
+        let pointer = (master as *const super::smp_ikc::BootMaster).cast_mut();
         BOOT_MASTER[self.owner.slot() as usize]
             .compare_exchange(
                 ptr::null_mut(),
-                (master as *const super::smp_ikc::BootMaster).cast_mut(),
+                pointer,
                 Ordering::Release,
                 Ordering::Acquire,
             )
             .map_err(|_| EBUSY)?;
+        self.master.store(pointer, Ordering::Release);
         Ok(())
+    }
+
+    pub(super) fn begin_close(&mut self) -> Result {
+        if self.closed { return Err(EBUSY); }
+        let slot = self.owner.slot() as usize;
+        BOOT_IRQ_PHASE[slot]
+            .compare_exchange(BOOT_IRQ_LIVE, BOOT_IRQ_CLOSING, Ordering::AcqRel, Ordering::Acquire)
+            .map_err(|_| EBUSY)?;
+        Ok(())
+    }
+
+    pub(super) fn quarantine(&mut self) {
+        let slot = self.owner.slot() as usize;
+        BOOT_IRQ_PHASE[slot].store(BOOT_IRQ_QUARANTINED, Ordering::Release);
+        self.closed = true;
+    }
+
+    pub(super) fn finish_close(&mut self) -> Result {
+        if self.closed { return Err(EBUSY); }
+        let slot = self.owner.slot() as usize;
+        if BOOT_IRQ_PHASE[slot].load(Ordering::Acquire) != BOOT_IRQ_CLOSING {
+            BOOT_IRQ_PHASE[slot].store(BOOT_IRQ_QUARANTINED, Ordering::Release);
+            self.closed = true;
+            return Err(boot_irq_stale());
+        }
+        const DRAIN_POLLS: usize = 100;
+        for _ in 0..DRAIN_POLLS {
+            if BOOT_IRQ_INFLIGHT[slot].load(Ordering::Acquire) == 0 {
+                if BOOT_IRQ_GENERATIONS[slot].load(Ordering::Acquire) != self.owner.generation() {
+                    BOOT_IRQ_PHASE[slot].store(BOOT_IRQ_QUARANTINED, Ordering::Release);
+                    self.closed = true;
+                    return Err(boot_irq_stale());
+                }
+                let expected = self.master.load(Ordering::Acquire);
+                if BOOT_MASTER[slot]
+                    .compare_exchange(
+                        expected,
+                        ptr::null_mut(),
+                        Ordering::AcqRel,
+                        Ordering::Acquire,
+                    )
+                    .is_err()
+                {
+                    BOOT_IRQ_PHASE[slot].store(BOOT_IRQ_QUARANTINED, Ordering::Release);
+                    self.closed = true;
+                    return Err(boot_irq_stale());
+                }
+                if BOOT_IRQ_GENERATIONS[slot]
+                    .compare_exchange(self.owner.generation(), 0, Ordering::AcqRel, Ordering::Acquire)
+                    .is_err()
+                {
+                    let _ = BOOT_MASTER[slot].compare_exchange(
+                        ptr::null_mut(), expected, Ordering::AcqRel, Ordering::Acquire);
+                    BOOT_IRQ_PHASE[slot].store(BOOT_IRQ_QUARANTINED, Ordering::Release);
+                    self.closed = true;
+                    return Err(boot_irq_stale());
+                }
+                BOOT_IRQ_PHASE[slot].store(BOOT_IRQ_DRAINED, Ordering::Release);
+                BOOT_IRQ_TARGET_USERS.fetch_sub(1, Ordering::AcqRel);
+                self.closed = true;
+                return Ok(());
+            }
+            // SAFETY: close is only called from sleepable process context.
+            unsafe { bindings::msleep(1) };
+        }
+        BOOT_IRQ_PHASE[slot].store(BOOT_IRQ_QUARANTINED, Ordering::Release);
+        self.closed = true;
+        Err(EBUSY)
     }
 }
 
 impl Drop for BootIrqRoute {
     fn drop(&mut self) {
-        // This destructor is reachable only before any CPU-start effect.
-        // No guest work can still refer to the slot or this module callback.
-        assert_eq!(
-            BOOT_IRQ_GENERATIONS[self.owner.slot() as usize].swap(0, Ordering::AcqRel),
-            self.owner.generation()
-        );
+        if self.closed {
+            // A failed close is intentionally quarantined: the generation is
+            // already closed, but callback/master ownership must not be
+            // guessed away after a timeout or identity mismatch.
+            return;
+        }
+        let slot = self.owner.slot() as usize;
+        // Only an entirely unused, pre-start route may be recycled.  A
+        // closing route, a quarantined route, or a route which has published
+        // a master is retained permanently; guessing its ownership away here
+        // would permit a callback from the old generation to reach a reused
+        // slot.  The phase CAS also excludes a concurrent constructor while
+        // this destructor is clearing the generation.
+        if BOOT_IRQ_PHASE[slot]
+            .compare_exchange(BOOT_IRQ_LIVE, BOOT_IRQ_DRAINED, Ordering::AcqRel, Ordering::Acquire)
+            .is_err()
+        {
+            return;
+        }
+        let expected = self.master.load(Ordering::Acquire);
+        if !expected.is_null()
+            || BOOT_MASTER[slot].load(Ordering::Acquire) != ptr::null_mut()
+            || BOOT_IRQ_GENERATIONS[slot].load(Ordering::Acquire) != self.owner.generation()
+        {
+            BOOT_IRQ_PHASE[slot].store(BOOT_IRQ_QUARANTINED, Ordering::Release);
+            return;
+        }
+        if BOOT_IRQ_GENERATIONS[slot]
+            .compare_exchange(self.owner.generation(), 0, Ordering::AcqRel, Ordering::Acquire)
+            .is_err()
+        {
+            BOOT_IRQ_PHASE[slot].store(BOOT_IRQ_QUARANTINED, Ordering::Release);
+            return;
+        }
+        if BOOT_MASTER[slot]
+            .compare_exchange(
+                ptr::null_mut(),
+                ptr::null_mut(),
+                Ordering::AcqRel,
+                Ordering::Acquire,
+            )
+            .is_err()
+        {
+            BOOT_IRQ_GENERATIONS[slot].store(self.owner.generation(), Ordering::Release);
+            BOOT_IRQ_PHASE[slot].store(BOOT_IRQ_QUARANTINED, Ordering::Release);
+            return;
+        }
         assert!(BOOT_IRQ_TARGET_USERS.fetch_sub(1, Ordering::AcqRel) > 0);
+        // No callback can refer to this generation: it was never published
+        // and the route was never started.  Make the slot available only
+        // after all identity words have been cleared.
+        BOOT_IRQ_PHASE[slot].store(0, Ordering::Release);
     }
 }
 

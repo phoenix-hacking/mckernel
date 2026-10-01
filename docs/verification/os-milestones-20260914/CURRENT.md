@@ -12551,3 +12551,53 @@ terminal, manifest, request, shared-inode inventory and private metadata.
 Physical shutdown remains separate unfinished WIP under expert fixture repair;
 booted shutdown remains ENOSYS.  Counts remain one compiled current candidate,
 five bounded diagnostic guest passes and zero formal application acceptances.
+
+Continuation checkpoint 308, 2026-10-01: the bounded physical shutdown IRQ
+infrastructure now passes independent Layer-B source review after expert
+fixture repair.  Exact `smp_cpu.rs` `54ba1a2d...bc84e` and `smp_memory.rs`
+`0e73a1be...20de8` add a fail-closed callback admission/inflight boundary,
+typed sender/BUSY-node drain through the pinned GPL `irq_work_sync`, and
+quarantine on timeout or identity uncertainty.  The corrected const-generic
+host oracle requires `validate_irq_slots(&self, MemoryMap<MAX_EXTENTS>)` and
+`close_irq_senders(&mut self, MemoryMap<MAX_EXTENTS>)` exactly.
+
+Four Python tests and 19 Rust 1.92 production-body cases pass; four compiled
+mutations for missing synchronization, premature sender retirement, wrong BUSY
+bit and premature master removal are rejected.  Independent review verifies raw
+log `24e05d9a...b4552` and returns `PASS_SOURCE_INFRASTRUCTURE_LAYER_B` for the
+five exact source/test hashes in
+`native-exact-shutdown-irq-close-source-checkpoint-20261001.json`.
+
+This is not physical shutdown completion.  Linux synchronization/allocation is
+mocked, `PreparedBoot::close_irq_senders` still has no production STOP caller,
+booted shutdown remains ENOSYS, DRAINED route slots are not reusable, and no
+module linkage, guest shutdown or acceptance credit is claimed.  Next identify
+and implement the correct STOP/quiescence owner transaction before compiling
+this separate lane into a later candidate.
+
+Continuation checkpoint 309, 2026-10-01: the exact scratch16 preparation ran
+once and independently passes `PASS_PREPARATION`.  Dispatcher session 93148
+observed PID 3053627/starttime 106283046 exit zero after 148.4 seconds; that PID
+is absent.  Candidate HEAD is exact `ddb8d7d5...a6325c`, IHK HEAD is exact
+`3114d9e7...72a1f`, and only the reviewed overlay remains.  The canonical
+manifest covers 9,474 source entries and four pinned assets; real independent
+`BuildOwner.validate` passes.
+
+Exactly 486 unchanged evidence files share scratch15 inodes at nlink two and
+match every recorded byte/mode/size/mtime/device/inode field.  Every other
+regular candidate/backup file has nlink one.  The candidate/backup allocate
+9,269,284,864/7,950,336 bytes, of which 9,000,583,168 candidate bytes were
+already shared.  Metadata is private and retains all four historical ABI blobs;
+backup index differences are stat cache only and semantic index entries match.
+
+Manifest `de7399c...5dd7d`, nonreleased request `0f5f8fa1...f02ae`, journal
+`32f635e0...94ffd` and terminal `c6d30df2...2f1563` bind the complete result.
+Output/evidence roots are empty; lease and exclusion are absent.  Host/scratch
+postflight free space is 24,325,545,984/15,731,265,536 bytes.  Exact evidence is
+`native-exact-candidate-preparation-scratch16-result-20261001.json`.
+
+This preparation is not a build release.  Next independently review the fresh
+scratch16 wrapper/execution packet, commit/push/fetch its exact blobs, run
+validate-only and fresh heavy preflight, then execute one pinned build attempt.
+Never rerun scratch15.  Counts remain one compiled current candidate, five
+bounded diagnostic guest passes and zero formal application acceptances.
