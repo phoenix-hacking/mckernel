@@ -1,0 +1,62 @@
+{
+  "schema": "mckernel.native-exact-heavy-build-execution-proposal.v1",
+  "recorded_at": "2026-09-30T22:19:51-07:00",
+  "status": "PROPOSED_NOT_RELEASED",
+  "scope": "one serialized four-job current-candidate McKernel image build for c81/exportset-26; no guest",
+  "candidate_sha": "c81aeaca5cedd893981a058444fa11a03a49a744",
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-c81aeaca-exportset-26.json",
+    "sha256": "bfe96ee458677468e29c5f5efbde0c369a05363348ed666c2624d894be9c1e98",
+    "preparation_result": "PASS_RESULT_REQUEST_PREP"
+  },
+  "command": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/scripts/native_rust_exact_mckernel_image_container_owner.py",
+    "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-c81aeaca-exportset-26.json"
+  ],
+  "source_sha256": {
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "1e1e05b2cf07f599c8c6157c4e6921d25a668a5be0ae5bd6bd36b195c3694a1b",
+    "scripts/tests/test_native_rust_exact_mckernel_image_container_owner.py": "62cf819624eed4378b72dd2fad81d51f108d42ce4ed834541f54ffaca157498d",
+    "scripts/native_rust_exact_mckernel_image_offline.py": "91aa047f61167dd93002a0bc12e55b18f4b2fcaf65e246e574e8350a0c37f4cc",
+    "scripts/native_rust_exact_build_offline.py": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+    "scripts/native_rust_exact_build_container_owner.py": "a8c4c9fc61fab312e3a6e48e93b417453ec12e6543d6adbb7038933f92e79155"
+  },
+  "limits": {
+    "cpus": "2-5",
+    "jobs": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids": 512,
+    "network": "none",
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "aggregate_heavy_leases": 1
+  },
+  "failure_family_history": [
+    "exportset-25 attempt 1 failed before Docker because the relative entrypoint could not be authenticated; absolute entrypoint correction passed focused regression.",
+    "exportset-25 attempt 2 compiled until Rust undefined symbol bcmp; exact failure/container/object remain retained.",
+    "candidate c81 includes the bounded bcmp correction and fresh exportset-26 namespace; the same family must escalate if this candidate repeats unchanged."
+  ],
+  "required_preflight": [
+    "fetched proposal/request/source bytes match exactly",
+    "production owner read-only validation passes against all complete inventories",
+    "work/evidence roots are empty and lease/exclusion absent",
+    "no competing heavy build, QEMU or mcexec",
+    "full Docker census preserves the terminal exportset-25 failure and only unrelated services run",
+    "host, scratch and memory floors plus emergency headroom pass"
+  ],
+  "required_result": [
+    "preserve original output, progress, terminal and container on failure",
+    "on PASS bind actual module/image bytes, all source/compiler inputs, terminal cleanup and owner retirement",
+    "independent artifact, postlink and linked-text review before any diagnostic guest"
+  ],
+  "prohibitions": [
+    "no unchanged retry after deterministic failure",
+    "do not remove or overwrite exportset-25 failure evidence",
+    "no guest or application execution in this release",
+    "no formal acceptance inference from compilation"
+  ],
+  "authorization": "requires independent PASS_EXECUTION_EXPORT26_BUILD for this exact fetched proposal, request and live preflight"
+}

@@ -11591,3 +11591,30 @@ preparation release, execute once, and independently review its toolchain,
 inputs, request, terminal, witness and retirement.  Only then prepare the
 separate four-job heavy-build release.  Linked current images and real
 current-candidate applications remain zero.
+
+Continuation checkpoint 280, 2026-10-01: the corrected exportset-26 request
+preparation completed once and independent review returns
+`PASS_RESULT_REQUEST_PREP`.  The original wrapper exit zero/stdout witness binds
+inputs `ed7bbe8e...160d`, toolchain `de4bcafc...cf83`, request
+`bfe96ee4...1e98`, log `5093e80f...1aae` and terminal
+`13532e9a...872d`.  Whole-document recomputation, production owner read-only
+validation and the complete 140,053 host-output, 3,035 nightly, 86 backup,
+92 tool-evidence and 412-file gitlink inventories pass.  Owner/worker/helper
+PIDs 2409599/2409603/2409636 are absent; work/evidence are empty and no lease
+or exclusion exists.  The terminal and `.pending` name intentionally retain
+two identical hardlinks at inode `1831:90698`, matching the reviewed publication
+protocol and predecessor.  Exact additive evidence is
+`docs/verification/evidence/native-exact-export26-image-request-preparation-success-20261001.json`.
+
+The next heavy operation is proposed but not released in
+`docs/verification/evidence/native-exact-export26-heavy-build-attempt1-execution-proposal-20261001.json`.
+It binds the absolute owner entrypoint, request, active exportset-26 sources,
+four jobs on CPUs 2-5, 12 GiB/no additional swap, 512 tasks and network none.
+The carried failure-family history is explicit: exportset-25 attempt 1 was the
+corrected relative-entrypoint harness failure; attempt 2 reached compilation
+and failed on undefined Rust `bcmp`; candidate c81 contains the one bounded
+correction.  If the same failure repeats, preserve it and escalate rather than
+retrying.  Before execution, checkpoint/fetch the proposal and obtain a fresh
+independent `PASS_EXECUTION_EXPORT26_BUILD` after full live capacity, process,
+Docker, lease and source admission.  This release will not include a guest.
+Linked current images and real current-candidate applications remain zero.

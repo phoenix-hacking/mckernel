@@ -1,0 +1,61 @@
+{
+  "schema": "mckernel.native-exact-export26-image-request-preparation-success.v1",
+  "recorded_at": "2026-09-30T22:19:51-07:00",
+  "status": "PASS_RESULT_REQUEST_PREP",
+  "candidate_sha": "c81aeaca5cedd893981a058444fa11a03a49a744",
+  "release": {
+    "commit": "62e86085de84081d61e905cb6afe5fffb797af2f",
+    "packet": "docs/verification/evidence/native-exact-mckernel-image-request-preparation-c81aeaca-exportset26-20261001.sh",
+    "packet_sha256": "767ff18aa591f3cbcdc02a4770548f99aba08cf64cfc92f458bde9e9f11d273f",
+    "independent_decision": "PASS_EXECUTION_REQUEST_PREP",
+    "invocations": 1
+  },
+  "external_commit_witness": {
+    "wrapper_exit_code": 0,
+    "stdout_exact": "{\"log\": \"/home/holden/mckernel-work/scratch/native-exact-mckernel-image-preparation-c81aeaca-exportset-26.log\", \"log_sha256\": \"5093e80f23a3f128f0f5a9c9e82d9011841e8d18214268460708921e7bc91aae\", \"preparation_returncode\": 0, \"publication\": \"request-published\", \"terminal\": \"/home/holden/mckernel-work/scratch/native-exact-mckernel-image-preparation-c81aeaca-exportset-26-terminal.json\", \"terminal_sha256\": \"13532e9a2e577605f9c0f3603a9e94979fc0c298be6d91ff19323bf992ed872d\"}\n"
+  },
+  "published": {
+    "inputs_path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-prepare-inputs-c81aeaca-exportset-26.json",
+    "inputs_sha256": "ed7bbe8e7fc061c32dd84817367e57bbf48b8ae06dbee790c98199fc3493160d",
+    "toolchain_path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-toolchain-c81aeaca-exportset-26.json",
+    "toolchain_sha256": "de4bcafc0e0c33e5d19fb50e3b88c4b9470e3c4c27d7478b3da6c08abb81cf83",
+    "request_path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-request-c81aeaca-exportset-26.json",
+    "request_sha256": "bfe96ee458677468e29c5f5efbde0c369a05363348ed666c2624d894be9c1e98",
+    "log_sha256": "5093e80f23a3f128f0f5a9c9e82d9011841e8d18214268460708921e7bc91aae",
+    "terminal_sha256": "13532e9a2e577605f9c0f3603a9e94979fc0c298be6d91ff19323bf992ed872d",
+    "publication": "request-published",
+    "semantic_validation": "PASS"
+  },
+  "inventories": {
+    "retained_host_output_entries": 140053,
+    "nightly_entries": 3035,
+    "backup_entries": 86,
+    "tool_image_evidence_files": 92,
+    "gitlink_tracked_files": 412,
+    "gitlink_metadata_files": 21
+  },
+  "retirement": {
+    "owner_pid": 2409599,
+    "worker_pid": 2409603,
+    "helper_pid": 2409636,
+    "all_absent": true,
+    "work_evidence_empty": true,
+    "lease_absent": true,
+    "exclusion_absent": true
+  },
+  "terminal_publication": {
+    "terminal_pending_is_expected": true,
+    "terminal_device_inode": "1831:90698",
+    "terminal_link_count": 2,
+    "terminal_mode": "0600",
+    "pending_and_terminal_identical": true
+  },
+  "correction_history": [
+    "The inherited exportset-25 disposable-root prefix blocked the first signal test before child identity publication; exportset-26 prefix correction made 23 tests pass.",
+    "The inherited owner SHA was rebound to the reviewed exportset-26 owner.",
+    "The empty scratch-14 preparation output was replaced by the accepted retained scratch-12 host-output closure before production execution."
+  ],
+  "review": "PASS_RESULT_REQUEST_PREP; exact external witness, whole documents, complete inventories, production owner read-only validation and retirement verified independently",
+  "acceptance": "This accepts only data-only request publication. It starts no Docker build or guest and grants no application or OS acceptance.",
+  "next": "Checkpoint and independently release one four-job exportset-26 heavy image build from the exact request."
+}
