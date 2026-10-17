@@ -32,6 +32,17 @@ def canonical(value):
     return (json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False) + '\n').encode()
 
 
+def mount_records(value):
+    """Docker may reorder Mounts; preserve every complete record and count."""
+    if not isinstance(value, list) or any(not isinstance(row, dict) for row in value):
+        raise RuntimeError('fresh exact stopped image container has invalid mounts')
+    destinations = [row.get('Destination') for row in value]
+    if (any(not isinstance(path, str) or not path.startswith('/') for path in destinations) or
+            len(set(destinations)) != len(destinations)):
+        raise RuntimeError('fresh exact stopped image container has ambiguous mounts')
+    return sorted(canonical(row) for row in value)
+
+
 def bound(pointer):
     if not re.fullmatch('[0-9a-f]{64}', str(pointer.get('sha256', ''))):
         raise RuntimeError('exact external SHA256 required')
@@ -121,7 +132,8 @@ def prove_retired(request, result, docker, capture):
             config.get('Labels', {}).get('mckernel.owner') != result['owner_nonce'] or
             state.get('Running') is not False or state.get('Pid') != 0 or
             state.get('Status') not in ('exited', 'created') or state.get('OOMKilled') is not False or
-            any(fresh.get(key) != old.get(key) for key in ('HostConfig', 'Config', 'Mounts')) or
+            any(fresh.get(key) != old.get(key) for key in ('HostConfig', 'Config')) or
+            mount_records(fresh.get('Mounts')) != mount_records(old.get('Mounts')) or
             any(host.get(key) != value for key, value in image.LIMITS.items()) or
             host.get('Privileged') is not False or host.get('ReadonlyRootfs') is not True or
             host.get('CapDrop') != ['ALL'] or host.get('SecurityOpt') != ['no-new-privileges'] or

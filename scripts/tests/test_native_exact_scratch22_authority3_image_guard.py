@@ -1,4 +1,5 @@
 import fcntl
+import copy
 import hashlib
 import json
 import os
@@ -101,6 +102,49 @@ class GuardTests(unittest.TestCase):
     def test_failed_owner_with_positive_terminal_can_return_fail(self):
         self.result['status'] = 'FAIL'; self.write_receipt()
         self.assertEqual(self.run_guard()['owner_status'], 'FAIL')
+
+    def mount_snapshot(self):
+        self.info['Mounts'] = [
+            {'Destination': '/src', 'Source': '/retained/source', 'RW': False,
+             'Type': 'bind', 'Propagation': 'rprivate', 'Mode': ''},
+            {'Destination': '/work', 'Source': '/retained/work', 'RW': True,
+             'Type': 'bind', 'Propagation': 'rprivate', 'Mode': ''},
+        ]
+        self.result['terminal_container_info'] = copy.deepcopy(self.info)
+        self.write_receipt()
+
+    def test_mount_record_order_is_not_container_profile_drift(self):
+        self.mount_snapshot()
+        self.info['Mounts'].reverse()
+        self.assertEqual(self.direct_proof()['owner_status'], 'PASS')
+
+    def direct_proof(self):
+        # Exercise the predicate directly: an expected rejection must never
+        # enter the production nonreturning quarantine in a unit test.
+        self.capture.mkdir(exist_ok=True)
+        fd = os.open(self.lock, os.O_RDONLY)
+        try:
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            return guard.prove_retired(self.request, self.result, self.docker, self.capture)
+        finally:
+            os.close(fd)
+
+    def test_mount_record_changes_and_multiplicity_still_quarantine(self):
+        self.mount_snapshot()
+        original = copy.deepcopy(self.info['Mounts'])
+        mutations = [
+            lambda rows: rows[0].update(Source='/foreign/source'),
+            lambda rows: rows[0].update(RW=True),
+            lambda rows: rows[0].update(Propagation='rshared'),
+            lambda rows: rows.append(copy.deepcopy(rows[0])),
+            lambda rows: rows.pop(),
+        ]
+        for change in mutations:
+            with self.subTest(change=mutations.index(change)):
+                self.info['Mounts'] = copy.deepcopy(original)
+                change(self.info['Mounts'])
+                with self.assertRaisesRegex(RuntimeError, 'stopped image container'):
+                    self.direct_proof()
 
     def quarantined(self, mutation):
         class Quarantined(Exception):

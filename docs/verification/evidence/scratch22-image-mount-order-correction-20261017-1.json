@@ -1,0 +1,65 @@
+{
+  "schema": "mckernel.scratch22-image-mount-order-correction.v1",
+  "status": "PASS_SOURCE_AND_10_PYTHON_TESTS",
+  "recorded_at": "2026-10-17T12:57:17.118939+00:00",
+  "author": "/root",
+  "independent_review": {
+    "reviewer": "/root/image_retirement_review",
+    "decision": "PASS_SOURCE_MOUNT_ORDER_CORRECTION",
+    "implementation_ownership": false,
+    "delivery": "collaboration tool message, same live session; reviewer role read-only, recorded by dispatcher",
+    "findings": "Complete canonical mount records compared independently of order after unique absolute destination validation. Other profile fields remain exact. Source/RW/Propagation/add-duplicate/remove controls reject. No consumed release replay or retrospective guard proof."
+  },
+  "sources": [
+    {
+      "path": "/home/holden/mckernel/scripts/native_exact_scratch22_authority3_image_guard.py",
+      "sha256": "99a216c106a38d855828aedf9041c7524d5ed1e8301ae2bf563f3b49427d98cd",
+      "size": 12758
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/test_native_exact_scratch22_authority3_image_guard.py",
+      "sha256": "8d8beab125676302c366b9cc9c74ca806c245d596d91fcad91a2ff715c63e372",
+      "size": 10257
+    }
+  ],
+  "checks": {
+    "original_predicate_reproducer": {
+      "exit_code": 1,
+      "stderr": {
+        "path": "/home/holden/mckernel-work/scratch/scratch22-image-mount-order-reproducer-20261017-2.stderr",
+        "sha256": "06bfe3f06cf0398ce748b937a2243e605c917e312ad6af401e97201c8f5afbe6",
+        "size": 1128
+      }
+    },
+    "corrected_suite": {
+      "exit_code": 0,
+      "tests": 10,
+      "stdout": {
+        "path": "/home/holden/mckernel-work/scratch/scratch22-image-mount-order-correction-20261017-1.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/scratch/scratch22-image-mount-order-correction-20261017-1.stderr",
+        "sha256": "fb2fe0b283090ec025048926e1a6c0484c394fba745a876ce19b357dd5fa8706",
+        "size": 109
+      }
+    },
+    "initial_test_harness_error": {
+      "reason": "Positive regression incorrectly invoked nonreturning production quarantine. Test now invokes actual predicate under guaranteed temporary-lock finally cleanup. Only owned test PID499468 was identity-checked then killed after timeout TERM was deferred; no project runtime or launcher was signalled.",
+      "retained_stderr": {
+        "path": "/home/holden/mckernel-work/scratch/scratch22-image-mount-order-reproducer-20261017-1.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      }
+    }
+  },
+  "original_guard_quarantine": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-authority3-image-execution-release-20261017.json.root-lock-quarantine.json",
+    "sha256": "1f150f0076bb9fbdf1a911ac29b6e788016bdf05a73ad6a4b290c3db31d2392a",
+    "size": 224
+  },
+  "next": "Distinct reviewed read-only root recovery proof, then reviewed archival cleanup and exact signal.mask-restore guest.",
+  "guest_runs": 0,
+  "formal_acceptance_delta": 0
+}
