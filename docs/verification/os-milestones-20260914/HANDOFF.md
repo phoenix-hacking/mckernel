@@ -9,11 +9,20 @@ source-boundary PASS4d874b72 and actual4Rust tests, no activation/runtime claim.
 File write/read Linux reference passes six lines/empty stderr/exit0; McKernel
 execution remains pending. Keep these changes outside frozen942c927b candidate.
 
-LIVE native build: session54012; rootguard269925/start1544930; canonical owner
-270194/start1549252, nonce1ad4cb62c80241cca1c2b4e56cd61d95, container name
-mckernel-exact-58e9a0e7646742c9a4a87fa387ced61b. Release6df828bf was fetched
-and five exact blobs verified at a1c4073c before sole execution. One heavy lane;
-do not interrupt or clean up until positive terminal retirement. Driver log:
+Current actual result: session54012 JOINED exit1. Kernel and all three native
+modules compiled/linked; final oracle failed because its exact allowlist omitted
+the already exported/called ihk_os_create_unbooted_v6. Original attempt remains
+FAIL. Checker-only correction baba647f, independent3479c507, six focused tests
+and all three actual retained-module host artifact rechecks PASS. No full-native
+milestone announcement yet: remaining final checks must finish in pinned tools.
+Rootguard269925/start1544930 and owner270194/start1549252 positively retired.
+Exact stopped container153492d487bf1b66c47b43b03fc5552c9e912c1422265788d04722dcc7ebd4ab
+was removed by separately reviewed cleanup3eed810f/ac70e88e, session93843 joined0.
+Both exclusions archived; source/output/evidence preserved. Independent actual
+postflightd748a392 PASS: fresh291x2process/44container census, no publishers or
+old owner/container, exact UUID/boot/rootlock27:4 released. Do not replay failed build or rebuild Linux for checker-only
+changes: scoped read-only artifact revalidation is being implemented separately.
+Driver log:
 scratch/mckernel-exact-candidate-scratch-22-authority3-evidence/build/driver.log.
 Matching-image libdwarf input0dd84e6b prepared once in4.05s; no image build yet.
 Follow-on duplicate-read correction now includes inherited preflight/final

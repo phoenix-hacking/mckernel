@@ -14635,3 +14635,48 @@ fixture19contentstreams ->one, no real-corpus rescan. It is off this build's
 critical path; inherited helper phases remain immutable/source-bound. Do not
 run another avoidable duplicate-hash preparation unchanged. Explicit compatible
 read-only-build-tree module diagnostic reuse is proposed, not yet released.
+
+## Checkpoint 371 — native compiler/link completed; final-oracle mismatch repaired
+
+Actual942c927b native run compiled/linked control bzImage and ihk.ko,
+ihk-smp-x86_64.ko and mcctrl.ko, then failed final IHK artifact validation:
+exact export allowlist omitted already exported/called ihk_os_create_unbooted_v6.
+Driver8074dbb0 records this concrete failure; original receipt3002334a remains
+FAIL. No full native PASS or runtime credit is claimed. Session54012 joined1;
+guard269925/start1544930 and owner270194/start1549252 positively retired.
+Retained native artifacts: bzImage032653ee, ihk331f4cc1, SMPf51d975a,
+mcctrl4cf6196f. Source and all failed outputs remain immutable.
+
+Small correction baba647f adds exactlyv6 to checker89e11f81 plus focused
+negative controls. Six tests PASS and actual retained ihk artifact PASS;
+SMP/mcctrl actual artifact contracts also verify. Independent3479c507 confirms
+existing GPL/MCKERNEL_IHK_V1 producer/caller and exact rejection oracle, and
+admits remaining original final checks against this retained compiled set in
+pinned Red Hat tools, read-only source/build/checker-overlay plus fresh capture.
+Do not rebuild Linux or replay the consumed full driver for this checker-only
+correction. Original strict attempt stays FAIL even if diagnostic revalidation
+passes. Complete all expected artifact/final checks before announcing native
+build working, then continue directly toward matching image and first guest.
+
+Separately released cleanup3eed810f, independentac70e88e, source66bee58c was
+published/fetched80e9299b; compressed full releasee963415f tar-compares0.
+Session93843 joined0/empty stderr, actual resultd2c0c65b PASS_EXECUTED. Only
+stopped container153492d487bf1b66c47b43b03fc5552c9e912c1422265788d04722dcc7ebd4ab
+removed; both original exclusions archived. Full metadata140054output/
+286318evidence entries and12selected byte joins preserved. Independent actual
+postflightd748a392 accepts exact seven-pointer chain and fresh under-lock census:
+291processes twice,44containers, target/owner/guard absent, no publisher, exact
+UUID/boot/rootlock27:4, archives verified; lock released. No inventory/corpus
+or passed source suite replay by reviewer. Raw release/observation preserved.
+
+Next executable step is scoped retained-artifact final validation, not another
+full Linux build. Payloadb84aa890 reuses only original fifth workflow step;
+six tests PASS. Specialized sole-heavy owner is being narrowly bound to exact
+four artifact/two frozen source identities, UUID and reviewed lifetime guards;
+separate actual execution review/release is mandatory before use. Fresh942
+tool-rebind datafa3a2da8 and libdwarf0dd84e6b are ready, no image/guest executed.
+First guest remains signal.mask-restore exact stdout/exit0. At07:05UTC host
+20751089664/scratch19356033024bytes free, MemAvailable29416552kB; maintain
+floors, capture reserve and one heavy operation. Counts unchanged3prior compiled
+candidates/12diagnosticpasses,0/273formalapps,6/130production,0/7language;
+this new linked candidate is not yet a complete native-build PASS.
