@@ -648,9 +648,19 @@
               "path": "docs/verification/evidence/native-shutdown-lifecycle-result-review-20261017-1.json",
               "sha256": "2f8dd8f8e1b38957f38c75f861263b639fa129fcc465fc382a9785e17a99b526",
               "size": 13510
+            },
+            {
+              "path": "docs/verification/evidence/native-resource-reboot-cycle-result-review-20261017-2.json",
+              "sha256": "9c3847933f8cc9e3d175363338e87ff229ef7fcd1912d146219e7c990224efea",
+              "size": 5172
+            },
+            {
+              "path": "docs/verification/evidence/native-cpu-reacquire-external-modules-result-review-20261017-1.json",
+              "sha256": "0cc6f31e9c8f92696abcd9390c937c6414f0917fc065061bef24c28034bf0ec5",
+              "size": 11103
             }
           ],
-          "assessment_note": "Current source3f7b265b matched modules independently built and loaded; actual strict probe observed Running5 -> shutdown0 -> NotBooted0 -> close0, all errno0. Native reconcile result=0 effect=complete. This closes the two named defects for this candidate; prior failures retained. No full restoration/reboot-cycle credit."
+          "assessment_note": "Current source3f7b265b matched modules independently built and loaded; actual strict probe observed Running5 -> shutdown0 -> NotBooted0 -> close0, all errno0. Native reconcile result=0 effect=complete. This closes the two named defects for this candidate; prior failures retained. No full restoration/reboot-cycle credit. Carried currentd99 matched source now also passes one public fullcycle; CPUsecondreservation defect repaired/validated separately."
         },
         {
           "id": "P-M05-02",
@@ -671,9 +681,19 @@
               "path": "docs/verification/evidence/native-resource-release-v2-result-review-20261017-1.json",
               "sha256": "fce2fbbb3e3c3fc8e113be97eefd84518e748e24eeab345d816f9be05e6991f2",
               "size": 13560
+            },
+            {
+              "path": "docs/verification/evidence/native-resource-reboot-cycle-result-review-20261017-2.json",
+              "sha256": "9c3847933f8cc9e3d175363338e87ff229ef7fcd1912d146219e7c990224efea",
+              "size": 5172
+            },
+            {
+              "path": "docs/verification/evidence/native-cpu-reacquire-external-modules-result-review-20261017-1.json",
+              "sha256": "0cc6f31e9c8f92696abcd9390c937c6414f0917fc065061bef24c28034bf0ec5",
+              "size": 11103
             }
           ],
-          "assessment_note": "Actual v2 public trace: strictstop5/0/0/close0, OS inventory attempts exactEBUSY/unavailable, OS0destroy0, refreshed128MiB node0 device memory released once, final device CPU/MEM pools empty and CPU1online. App/host retirement accepted. Full same-guest reboot and complete mapping/callback/ref restoration still open; no physical/generation identity claim."
+          "assessment_note": "Currentd99 one public boot/workload/strictstop/destroy/release/boot observed and independently accepted. CPU/memory public pools restore and freshsecondbootgeneration2 reachesRunning5; exactCPUdiscovery reference repair validated. Complete mapping/callback/reference/physical/generation-identity restoration remains open; secondOS retained untilordinaryguestshutdown, nosecondstop."
         },
         {
           "id": "P-M05-03",
@@ -684,12 +704,22 @@
               "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
               "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
               "size": 17317
+            },
+            {
+              "path": "docs/verification/evidence/native-resource-reboot-cycle-result-review-20261017-2.json",
+              "sha256": "9c3847933f8cc9e3d175363338e87ff229ef7fcd1912d146219e7c990224efea",
+              "size": 5172
+            },
+            {
+              "path": "docs/verification/evidence/native-cpu-reacquire-external-modules-result-review-20261017-1.json",
+              "sha256": "0cc6f31e9c8f92696abcd9390c937c6414f0917fc065061bef24c28034bf0ec5",
+              "size": 11103
             }
           ],
-          "assessment_note": "Zero complete accepted native lifecycle cycles in this selected campaign. Ten full cycles remain required; the failed stop is retained and receives no cycle credit."
+          "assessment_note": "One of ten complete public native lifecycle cycles accepted with full owner/client/QEMU retirement. First CPU-reacquisition failure and cycle2 pinned-consumer PRI mismatch preserved; version3 consumer correction independently accepts unchanged actual capture. Nine additional cycles and specified failure/recovery obligations remain open."
         }
       ],
-      "current_evidence_summary": "Current3f7 native strict stop and public destroy/device-memory release independently pass. Closed OS CPU/MEM queries are explicitly unavailable/EBUSY; final public device pools empty and CPU1online. Full same-guest reboot/cycles and complete lifetime restoration remain open; cycles0."
+      "current_evidence_summary": "Currentd99 CPU reference repair compiled in18.148s and validated by one public boot/workload/stop/destroy/release/boot, secondgeneration2/Running5. Allfour consumers and full retirement pass after source-bound PRI14 correction; original failures preserved. Cycles1/10; complete lifetime restoration remains open."
     },
     {
       "id": "M06",
@@ -816,12 +846,17 @@
               "path": "docs/verification/evidence/practical-m07-active-state-mismatch-20261017-1.json",
               "sha256": "acb73548a7d2f878dd2b27fa75774d19589bcd57d5cd45e108c4640609659a45",
               "size": 29784
+            },
+            {
+              "path": "docs/verification/evidence/native_fp_save_repair_20261017.json",
+              "sha256": "18d4be0f9954ce09183387d2a9b2b4561510383977212dba76441fc8bebbec67",
+              "size": 76931
             }
           ],
-          "assessment_note": "Exact reviewed payload5362705 passed natively:77-byte four-line oracle, XMM0-15/MXCSR/x87 CW/TOP/two80-bit values across syscall, confirmed blocked futex and signal return, with full retirement. AVX/XSAVE/multicore and final actually-used feature coverage are not accepted. A separate bounded active-source exposure/save-path check is investigating allocation-failure handling; no native failure inferred. Actual compiled942 save/check/fullschedule body reproduces ignored ENOMEM reaching mocked restore/switch; source-level allocation-failure defect is under isolated correction and independent review, without native/hardware corruption claim."
+          "assessment_note": "Exact reviewed payload5362705 passed natively:77-byte four-line oracle, XMM0-15/MXCSR/x87 CW/TOP/two80-bit values across syscall, confirmed blocked futex and signal return, with full retirement. AVX/XSAVE/multicore and final actually-used feature coverage are not accepted. A separate bounded active-source exposure/save-path check is investigating allocation-failure handling; no native failure inferred. Actual compiled942 save/check/fullschedule body reproduces ignored ENOMEM reaching mocked restore/switch; source-level allocation-failure defect is under isolated correction and independent review, without native/hardware corruption claim. Isolated fail-stop scheduling correction independently accepted42injected/source executions, no newnativeimage yet. Thinmaterialization firstattempt failed on49authenticatedtracked symlinks; bounded source-form correction underway, oldpartialtree retained."
         }
       ],
-      "current_evidence_summary": "Actual native selected SSE2/XMM0-15, MXCSR and x87 control/TOP/two-value preservation passed across raw syscall, blocked futex and delivered signal. Compiler/libc/final application-visible ISA requirements remain incompletely closed; cpu=max guest Linux capabilities do not prove McKernel/IFUNC selection. Both checks and milestone remain open. Source-bound ignored FPU-save ENOMEM is a concrete open correction; current cycle artifacts remain unchanged."
+      "current_evidence_summary": "NativeSSE2/XMM/MXCSR/x87 selected checks accepted; wholeapplication-visible ISA/IFUNC closure remains open. FPU-save allocation failure repair passed source/injected tests; image preparation needs exacttracked-symlink compatibility correction. NewAVX/YMMpayload/Linuxreference prepared, independentABIreview/nativefeature observation pending; no extra nativecredit."
     },
     {
       "id": "M08",
@@ -885,9 +920,19 @@
               "path": "docs/verification/evidence/native-shutdown-lifecycle-result-review-20261017-1.json",
               "sha256": "2f8dd8f8e1b38957f38c75f861263b639fa129fcc465fc382a9785e17a99b526",
               "size": 13510
+            },
+            {
+              "path": "docs/verification/evidence/native-cpu-reacquire-external-modules-result-review-20261017-1.json",
+              "sha256": "0cc6f31e9c8f92696abcd9390c937c6414f0917fc065061bef24c28034bf0ec5",
+              "size": 11103
+            },
+            {
+              "path": "docs/verification/evidence/native-resource-reboot-cycle-result-review-20261017-2.json",
+              "sha256": "9c3847933f8cc9e3d175363338e87ff229ef7fcd1912d146219e7c990224efea",
+              "size": 5172
             }
           ],
-          "assessment_note": "Matched source3f7b265b IHK/SMP/mcctrl modules compiled with make0/driver0 in18.664067s and loaded together in the strict native shutdown guest. Exact payload, Running5 and shutdown0 observed. IHK/mcctrl are honestly byte-identical to prior artifacts; SMP changed. Future source integration retains its own build/load obligation."
+          "assessment_note": "Matched source3f7b265b IHK/SMP/mcctrl modules compiled with make0/driver0 in18.664067s and loaded together in the strict native shutdown guest. Exact payload, Running5 and shutdown0 observed. IHK/mcctrl are honestly byte-identical to prior artifacts; SMP changed. Future source integration retains its own build/load obligation. Currentd99 matchedmodule build andload now independently accepted; CPUreacquisition/fullpubliccycle1 works. Fork/carrier andremainingunsafe/ABI obligations remain open."
         },
         {
           "id": "P-M08-02",
@@ -938,12 +983,22 @@
               "path": "docs/verification/evidence/native-shutdown-lifecycle-result-review-20261017-1.json",
               "sha256": "2f8dd8f8e1b38957f38c75f861263b639fa129fcc465fc382a9785e17a99b526",
               "size": 13510
+            },
+            {
+              "path": "docs/verification/evidence/native-cpu-reacquire-external-modules-result-review-20261017-1.json",
+              "sha256": "0cc6f31e9c8f92696abcd9390c937c6414f0917fc065061bef24c28034bf0ec5",
+              "size": 11103
+            },
+            {
+              "path": "docs/verification/evidence/native-resource-reboot-cycle-result-review-20261017-2.json",
+              "sha256": "9c3847933f8cc9e3d175363338e87ff229ef7fcd1912d146219e7c990224efea",
+              "size": 5172
             }
           ],
-          "assessment_note": "Current3f7b matched binaries now validate used strict boot/Running/publication/shutdown paths. Resource destroy/release/reboot, dormant fork integration and remaining changed unsafe/ABI boundaries are still open."
+          "assessment_note": "Current3f7b matched binaries now validate used strict boot/Running/publication/shutdown paths. Resource destroy/release/reboot, dormant fork integration and remaining changed unsafe/ABI boundaries are still open. Currentd99 matchedmodule build andload now independently accepted; CPUreacquisition/fullpubliccycle1 works. Fork/carrier andremainingunsafe/ABI obligations remain open."
         }
       ],
-      "current_evidence_summary": "Current3f7b matched three-module build accepted18.664067s; all three loaded and actual strict shutdown passed. Used remaining resource/fork/lifetime paths still open; milestone not complete."
+      "current_evidence_summary": "Currentd99 matched three-module build accepted18.148s; newSMP82c9021f loaded, onepublicnativecycle andsecondbootRunning5 passed. IHK/mcctrl bytes unchanged. Fork/currentchangedunsafe andcomplete lifetime obligations still open."
     },
     {
       "id": "M09",
@@ -1526,9 +1581,10 @@
     "signed production/repository/independent external release qualification"
   ],
   "next_actions": [
-    "Implement/review separately released complete same-guest boot/workload/stop/destroy/release/boot collector; actual v2 public release now passed, full cycles remain0.",
-    "Continue actual fork carrier/producer, LINK, module-pin/cancel/Accept/cache/parent-retirement corrections; CREATE_PPD remains fail-closed.",
-    "Resolve bounded actual application-visible ISA/save-path contract and source-bound save-allocation failure reproducer; no accepted vector rerun or capability weakening."
+    "Prepare separately reviewed realpayload execution afterfreshsecondboot, proving rebootedOSserveswork; no secondstop/release or10cyclequota authority fromfirstcycle.",
+    "Finish reviewedthinmaterializer exact49tracked-symlink correction preservingfailedpartialtree/fullsourceauthority, then independently release matchingFPUimagebuild.",
+    "Close selectedapplication-visible XCR0/libc/Rustrequirements andreview boundedAVX/YMMpreservation extension; currentnativecoverage unchanged.",
+    "Continue actualMemory\u2192ingress\u2192checkedREADY\u2192LINK\u2192guestaccept joins andfinalACK/RET/destructor/revocation; CREATE_PPD remains fail-closed."
   ],
   "evidence_reconciliation": {
     "date": "2026-10-17",

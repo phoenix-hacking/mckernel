@@ -1,0 +1,48 @@
+{
+  "status": "PASS_LIVE_PREEXECUTION_SNAPSHOT",
+  "time_epoch": 1792262023.0196686,
+  "head": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+  "proposal_sha256": "e9a0451534f4600f11b79d916bb6f56ea4ac5e1904b403802c5f07789a6cc437",
+  "parent": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 114737,
+    "mode": "0o700",
+    "path": "/home/holden/mckernel-work/scratch/ndrc2-7bcff1b5",
+    "uid": 1000
+  },
+  "source_owner_sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+  "manifest_sha256": "f99e973622a3b7eb459d370f84326631916b18d76a8df0637d086a710284a37f",
+  "root_lock_free": [
+    27,
+    4
+  ],
+  "capacity": [
+    {
+      "path": "/",
+      "available_bytes": 17746546688,
+      "floor_plus_full_remaining_384MiB_reserve_bytes": 17582522368,
+      "margin_after_packet_floor_plus_reserve_bytes": 164024320
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch",
+      "available_bytes": 16830291968,
+      "floor_plus_full_remaining_384MiB_reserve_bytes": 13287555072,
+      "margin_after_packet_floor_plus_reserve_bytes": 3542736896
+    }
+  ],
+  "memory_available_bytes": 30110961664,
+  "mount": {
+    "filesystems": [
+      {
+        "target": "/home/holden/mckernel-work/scratch",
+        "source": "/dev/loop36",
+        "fstype": "ext4",
+        "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52"
+      }
+    ]
+  },
+  "exclusive_heavy": "No active heavy operation; preceding CPU matchedmodule retirement accepted0cc6. Root owner performs definitive admission under mutex.",
+  "included_usage_guard": "Existing launcher97% included-account stop remains active; no filesystem percentage requirement.",
+  "trim_gate": false
+}

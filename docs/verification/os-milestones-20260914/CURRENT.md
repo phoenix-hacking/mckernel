@@ -15391,3 +15391,46 @@ must not delay CPU retry. Fork typed carrier/LINK/v9 consumers continue isolated
 CREATE_PPD remains gated. Actual app behaviors14, complete native cycles0;
 practical percentage baseline unchanged. Review9 saved, next review18:25UTC.
 Continue after checkpoint; no launcher/state changes.
+
+## Checkpoint396 — one native public cycle accepted; next useful boundaries queued
+
+Currentd99 CPU repair matchedmodule build independently passed18.148365s;
+SMP82c9021f/all3artifacts/compilerbindings/14Docker+observer retirement accepted
+(result0cc6f31e). Fresh cycle2 owner0/58.946946s proves one boot/workload/strict5
+stop/destroy/publicCPU+MEMrelease/boot, secondgeneration2/Running5. Completecycles1,
+distinctappdiagnostics14unchanged. Allfourconsumers and30clients/container/QEMU
+retirement accepted; canonical9c384793/archive04ebf75d/retention027dcced.
+Originalpinnedconsumer failed authenticPRI14 vswrongPRI6. Helperwrites6, Linux
+LOG_USER encodes14; correctedconsumer53dace6e/newdecodereb9fa110 independently
+passed retainedactualcapture+strictnegatives. Failure00e532 remains; no guestretry.
+No secondstop/physicalidentity/fullmapping-callback-refrestoration/10cycle claim.
+
+Targetedtrim exactone-shot accepted (6d0ee5d0): actualbackingallocation recovered
+1,078,071,296B, distinctfrom19,199,012,864Badvertiseddiscard. MountUUID/110GiB/
+backinginode/historicalleases unchanged; no deletes/resize; root27:4free.
+Postrecordhost18,800,750,592/scratch16,823,934,976, full576MiBreserve margins
+1,016,901,632/3,335,053,312. Futureoperation mustremeasure;97% is INCLUDEDACCOUNT
+usage stop, neveran inventedfilesystemoccupancyguard. Two stagingpreparation
+failures (invented97%diskcheck/binderfieldnames) preserved andboundedcorrected.
+
+FPUthinpreparation+mandatorylibdwarf correction independently accepted; actual
+materialization FIRSTFAIL after4866/6948 entries on tracked120000/rawlink input.
+Reportcebd95a8 preserves117,846,016Bpartialprefix+journal/no receipt. Exactly49
+same-parentlinks matchfullGit/indexauthority; expertapproved plan for typed exact
+allowlist/newmaterializationID/freshattempt2, preserving6927selection/full9760
+andallfailedbytes. Author+reviewer active; NOFPUimagebuild/retry yet. Sourcefix
+18d4be0f remainsisolated, mainprocessa5b unchanged. NewM07AVX/YMM Linuxpayload
+6bc33bdd prepared; ABIreview/application-visible XCR0/IFUNC observation pending.
+
+Nexttwo guestcases only: actualrealpayload AFTERfreshsecondboot (NEW collector
+prep native_running_publication; separateauthorityrequired,no secondstop/release),
+and bounded enabled-state/FPU-image feedback. Neitherprerequisiteforotherbuild.
+ActualforkIHKpreMMconsumer82 and guestNEWmarker metadata tests independentlypass;
+realMemory→ingress→checkedREADY→LINK→Caccept join preparing. Expertfound &mut
+argument acrossfirstREADYunlock: narrowNonNull/innerborrow correction accepted
+source-only; actualjointcompile pending andoldprecompilepackets preserved. CREATE_PPD stays-95; no forkactivationcredit.
+
+PracticalM05/M08/M07 evidence/nextchecks reconciled; rows/statuses stayopen,
+cycles1/10, baseline15:25engineeringpercentagefile unchanged. Review10+VELOCITY
+97%clarification saved; nextsupervisor18:55UTC. Continuousworkaftercheckpoint;
+no launcher/state/model/usageguard changes. RootownsGit/runtime/acceptance.

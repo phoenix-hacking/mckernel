@@ -186,7 +186,7 @@ int cycle_close(int);long cycle_read(int,void *,unsigned long);
             if scenario == 0:
                 release, reboot = result.stdout.split(DELIMITER)
                 timing = json.loads(times.read_text())
-                args = [release, b"", 0, reboot, b"", 0, kmsg.read_bytes(), *timing]
+                args = [release, b"", 0, reboot, b"", 0, kmsg.read_bytes().replace(b"<6>", b"<14>", 1), *timing]
                 self.assertEqual(sequence.evaluate(*args)["public_release_then_strict5_boot_protocol"], "PASS")
                 for index, bad in [(5, False), (5, 0.0), (6, b""), (6, sequence.BOOT_KMSG * 2), (3, reboot.replace(b"observed=5", b"observed=4")), (8, timing[0]), (7, True)]:
                     changed = list(args); changed[index] = bad
@@ -206,7 +206,8 @@ class RetainedSequenceOracle(unittest.TestCase):
         release, reboot = (case / "scenario-0.stdout").read_bytes().split(DELIMITER)
         timing = json.loads((case / "scenario-0.timestamps.json").read_text())
         actual_marker = (case / "scenario-0.kmsg").read_bytes()
-        self.assertEqual(actual_marker, sequence.BOOT_KMSG)
+        self.assertEqual(actual_marker, sequence.BOOT_WRITE_KMSG)
+        actual_marker = actual_marker.replace(b"<6>", b"<14>", 1)
         # Synthetic first-boot prefix plus exact retained second-helper write:
         # tests cursor extraction only, never proof of an actual kernel log.
         before = sequence.BOOT_KMSG
@@ -214,7 +215,7 @@ class RetainedSequenceOracle(unittest.TestCase):
         observed = sequence.second_boot_status(before, after)
         args = [release, b"", 0, reboot, b"", 0, observed, *timing]
         self.assertEqual(sequence.evaluate(*args)["public_release_then_strict5_boot_protocol"], "PASS")
-        timestamped = before + b"<6>[   123.456789] " + actual_marker[len(b"<6>"):]
+        timestamped = before + b"<14>[   123.456789] " + actual_marker[len(b"<14>"): ]
         self.assertEqual(sequence.second_boot_status(before, timestamped), sequence.BOOT_KMSG)
         for left, right in [(before, before), (before, after + actual_marker),
                             (before, b"wrapped\n" + actual_marker), (before, after[:-1]),
@@ -228,6 +229,43 @@ class RetainedSequenceOracle(unittest.TestCase):
                              (8, timing[0]), (7, True), (9, float(timing[2]))]:
             changed = list(args); changed[index] = value
             with self.assertRaises(ValueError): sequence.evaluate(*changed)
+
+
+class ActualCycle2Priority(unittest.TestCase):
+    def test_actual_decoder_to_version3_consumer_and_priority_negatives(self):
+        root = Path(os.environ["REBOOT_CONSUMER_EVIDENCE"])
+        sys.path.insert(0, str(APP))
+        import native_resource_reboot_sequence as sequence
+        path = Path("/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-decoder-20261017-2/reboot_capture.py")
+        spec = importlib.util.spec_from_file_location("actual_version3_decoder", path)
+        decoder = importlib.util.module_from_spec(spec); spec.loader.exec_module(decoder)
+        serial = (root / "actual-serial.log").read_bytes().decode("utf8")
+        result = decoder.evaluate(serial)
+        captured = {"before": bytearray(), "after": bytearray()}
+        for line in serial.splitlines():
+            if line.startswith("ND_REBOOT_CHUNK "):
+                row = json.loads(line.split(" ", 1)[1])
+                if row["name"] in captured:
+                    captured[row["name"]].extend(bytes.fromhex(row["hex"]))
+        captured = {key: bytes(value) for key, value in captured.items()}
+        self.assertEqual(result["public_release_then_strict5_boot_protocol"], "PASS")
+        self.assertEqual(sequence.PROTOCOL_VERSION, 3)
+        before, after = captured["before"], captured["after"]
+        delta = after[len(before):]
+        self.assertIn(b"<14>[   34.067225] NATIVE_BOOT_STATUS x86_64 observed=5 expected=5\n", delta)
+        (root / "actual-before.snapshot").write_bytes(before)
+        (root / "actual-after.snapshot").write_bytes(after)
+        (root / "corrected-actual-result.json").write_text(json.dumps(result, sort_keys=True) + "\n")
+        marker = next(line for line in delta.splitlines(keepends=True) if b"NATIVE_BOOT_STATUS" in line)
+        mutations = [before, before + marker*2, after[:-1], b"wrapped\n" + delta,
+                     b"x" * 262144, after.replace(marker, marker.replace(b"observed=5", b"observed=3")),
+                     after.replace(marker, marker.replace(b"observed=5", b"observed=4"))]
+        for pri in [b"0", b"6", b"13", b"15", b"22"]:
+            mutations.append(after.replace(marker, marker.replace(b"<14>", b"<"+pri+b">")))
+        for bad in mutations:
+            with self.assertRaises(ValueError): sequence.second_boot_status(before, bad)
+        with self.assertRaises(ValueError): sequence.second_boot_status(before[:-1], after)
+        with self.assertRaises(ValueError): sequence.second_boot_status(before, after.replace(marker, b""))
 
 
 if __name__ == "__main__":

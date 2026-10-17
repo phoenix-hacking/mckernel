@@ -158,6 +158,12 @@ Preserve host/scratch free-space floors; the ready queue is deliberately bounded
 so extra overlays do not consume the runway. Healthy silent builds/soaks retain
 their owners; a reporting target never interrupts them.
 
+The97% stop measures included account usage. Disk admission uses the selected
+packet's byte floors and growth reserve. Do not convert the account threshold
+into a host-filesystem occupancy rule or add an unsupported admission gate.
+If a selected profile explicitly has another disk rule, cite and preserve that
+rule. Retain failed prechecks and correct only the demonstrated scope error.
+
 ## Reduce coordination and review latency
 
 - Use fresh, self-contained worker packets: invariant, selected current inputs,

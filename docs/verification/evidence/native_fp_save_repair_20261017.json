@@ -1,0 +1,1564 @@
+{
+  "schema": "mckernel.native-fp-save-repair.20261017.v1",
+  "status": "SOURCE_BODY_CANDIDATE_PASS_READY_FOR_INDEPENDENT_REVIEW",
+  "scope": "Isolated scheduler fail-stop candidate only; no main-tree production edit, build/image input change or native execution.",
+  "invariant": "Every live nonidle/nonexited previous thread must save successfully before scheduler preparation/locks/runqueue mutation/restore/switch. Failure is terminal panic with IRQ disabled, no runqueue mutation. no_preempt does not save. Nonterminal paths restore original entry IRQ state exactly.",
+  "base_image_binding": {
+    "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "provenance": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-942c927b-scratch22-authority3-image1-20261017/evidence/provenance.json",
+      "sha256": "73c6c2b0634b018229feb314060705baa6612015c0d291d604729e5747024ff1",
+      "size": 2725311
+    },
+    "compile_database": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-942c927b-scratch22-authority3-image1-20261017/evidence/artifacts/compile_commands.json",
+      "sha256": "64abc0b58258b2319290ca86c91c04136fe3afec920099719b677601176b8d52",
+      "size": 74300
+    },
+    "original_finding": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-m07-active-state-mismatch-20261017-1.json",
+      "sha256": "acb73548a7d2f878dd2b27fa75774d19589bcd57d5cd45e108c4640609659a45",
+      "size": 29784
+    },
+    "selected_active_macro": "MCKERNEL_RUST_PROCESS_HELPERS"
+  },
+  "source_files": [
+    {
+      "repository_relative_path": "kernel/process.c",
+      "base": {
+        "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/original/kernel/process.c",
+        "sha256": "6480b1ab121acf17610495682cd9e58cba774427de9695b1ce8dd65a9bc07cb2",
+        "size": 153997
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/candidate/kernel/process.c",
+        "sha256": "15cbf76ac6a1466b7a0825e8f2a495887238e9815f587a9babadddb958ede823",
+        "size": 154434
+      },
+      "matches_compiled_provenance": true
+    },
+    {
+      "repository_relative_path": "arch/x86_64/kernel/cpu.c",
+      "base": {
+        "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/original/arch/x86_64/kernel/cpu.c",
+        "sha256": "115725e4341f34d13d2a8385d87521874af5b7a53923bb0d407d580793a934f9",
+        "size": 93339
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/candidate/arch/x86_64/kernel/cpu.c",
+        "sha256": "115725e4341f34d13d2a8385d87521874af5b7a53923bb0d407d580793a934f9",
+        "size": 93339
+      },
+      "matches_compiled_provenance": true
+    },
+    {
+      "repository_relative_path": "kernel/rust/sched_helpers.rs",
+      "base": {
+        "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/original/kernel/rust/sched_helpers.rs",
+        "sha256": "5f6841a4f17330e4d37510f4467e8747ca183ecf1b2055ebfa8718974f017475",
+        "size": 160439
+      },
+      "candidate": {
+        "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/candidate/kernel/rust/sched_helpers.rs",
+        "sha256": "5f6841a4f17330e4d37510f4467e8747ca183ecf1b2055ebfa8718974f017475",
+        "size": 160439
+      },
+      "matches_compiled_provenance": true
+    }
+  ],
+  "patch": {
+    "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/repair.patch",
+    "sha256": "91a14a4f3556c2c57f1e1fc7109b76a20de8aa13b8e14e35f9b9a1f0e3f3d6f2",
+    "size": 3179
+  },
+  "packet": {
+    "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/packet.json",
+    "sha256": "15732351f140493716176f1fe2b9c8993b5524d43fa1f4c4af320c850486b573",
+    "size": 1900
+  },
+  "implementation": {
+    "changed_function": "kernel/process.c::schedule",
+    "strategy": "Common IRQ-disabled save admission before Rust/C scheduler preparation; no_preempt skips save. Failed save invokes terminal panic before runqueue locks/mutation. Native preparation nested IRQ state is replaced with original entry state on switch; non-switch explicitly restores original entry state. Redundant late saves and fallback nested IRQ saves removed.",
+    "abi_geometry_ownership": "Public ABI, xsave_mask, allocation rounding/flags, thread creation/clone/exec/release, refs and buffer lifetimes untouched.",
+    "deliberate_policy_effect": "Admission saves before next-thread selection; eligible live thread may allocate/save and terminally panic even if prepare would choose NO_SWITCH.",
+    "fail_stop_limit": "Production panic halts calling CPU and publishes monitor panic; no automatic recovery, whole-guest termination or native shutdown claimed."
+  },
+  "tests": {
+    "actual_complete_bodies": [
+      "cpu.c::check_and_allocate_fp_regs",
+      "cpu.c::save_fp_regs (single XSAVE instruction replaced with explicitly mocked instruction boundary)",
+      "process.c::schedule (both macro selections)",
+      "sched_helpers.rs::sched_schedule_prepare_body_result",
+      "Exact retained list/counting, pending-signal and result helpers required by Rust preparation"
+    ],
+    "boundaries": [
+      "allocator returns injected NULL or page-aligned private Linux storage; asserts flags/full rounded geometry; positive verifies complete zeroing",
+      "XSAVE observation checks full configured mask, alignment/storage and IRQ exclusion; no hardware FPU instruction executes",
+      "IRQ/locks track state/ownership; Rust preparation and real runqueue list/count mutations execute",
+      "restore/context-switch are observations; panic longjmp is observation of terminal boundary only"
+    ],
+    "oracle": "Frozen packet + C assert oracle. Original ENOMEM must restore/switch unsafely; candidate ENOMEM must panic without prepare/lock/unlock/runqueue/current/thread mutation/restore/switch. Successful paths require balanced locks and exact entry IRQ restoration.",
+    "matrix": {
+      "entry_irq": [
+        0,
+        1
+      ],
+      "original_rust_ENOMEM": 2,
+      "candidate_rust": 20,
+      "candidate_c_fallback": 20,
+      "total_executions": 42,
+      "cases": [
+        "failure",
+        "no-switch-failure",
+        "positive",
+        "large (8193-byte configured xstate ->3 pages)",
+        "no-switch",
+        "no-preempt",
+        "no-xsave",
+        "idle",
+        "exited",
+        "null-current"
+      ]
+    },
+    "result": "PASS42; pinned Rust actual preparation staticlib and all3 GCC fixture binaries compile; all stdout/stderr/status retained.",
+    "attempt_history": [
+      {
+        "attempt": 1,
+        "result": "Fixture compile failure: extra mock detach helper setup argument. No production body executed.",
+        "bounded_correction": "Remove extra fixture-only argument."
+      },
+      {
+        "attempt": 2,
+        "result": "Original2 +candidateRust20 PASS; fallback fixture compile unused native-only prepare_order variable under -Werror.",
+        "escalation": "Stopped after one bounded correction; independent high reviewer recommended exact fixture-only #ifdef declaration; dispatcher explicitly authorized fresh attempt3."
+      },
+      {
+        "attempt": 3,
+        "result": "PASS42",
+        "correction": "Native-only observation declaration guarded by MCKERNEL_RUST_PROCESS_HELPERS; no production/oracle/flags changes."
+      }
+    ],
+    "results": [
+      "OLD_UNSAFE save_errno=-12 allocations=1 restore=1 switch=1",
+      "OLD_UNSAFE save_errno=-12 allocations=1 restore=1 switch=1",
+      "PASS failure irq=0 allocations=1 saves=0 prepares=0 locks=0 restore=0 switch=0 panic=1",
+      "PASS failure irq=1 allocations=1 saves=0 prepares=0 locks=0 restore=0 switch=0 panic=1",
+      "PASS no-switch-failure irq=0 allocations=1 saves=0 prepares=0 locks=0 restore=0 switch=0 panic=1",
+      "PASS no-switch-failure irq=1 allocations=1 saves=0 prepares=0 locks=0 restore=0 switch=0 panic=1",
+      "PASS positive irq=0 allocations=1 saves=1 prepares=1 locks=1 restore=1 switch=1 panic=0",
+      "PASS positive irq=1 allocations=1 saves=1 prepares=1 locks=1 restore=1 switch=1 panic=0",
+      "PASS large irq=0 allocations=1 saves=1 prepares=1 locks=1 restore=1 switch=1 panic=0",
+      "PASS large irq=1 allocations=1 saves=1 prepares=1 locks=1 restore=1 switch=1 panic=0",
+      "PASS no-switch irq=0 allocations=1 saves=1 prepares=1 locks=1 restore=0 switch=0 panic=0",
+      "PASS no-switch irq=1 allocations=1 saves=1 prepares=1 locks=1 restore=0 switch=0 panic=0",
+      "PASS no-preempt irq=0 allocations=0 saves=0 prepares=1 locks=1 restore=0 switch=0 panic=0",
+      "PASS no-preempt irq=1 allocations=0 saves=0 prepares=1 locks=1 restore=0 switch=0 panic=0",
+      "PASS no-xsave irq=0 allocations=0 saves=0 prepares=1 locks=1 restore=1 switch=1 panic=0",
+      "PASS no-xsave irq=1 allocations=0 saves=0 prepares=1 locks=1 restore=1 switch=1 panic=0",
+      "PASS idle irq=0 allocations=0 saves=0 prepares=1 locks=1 restore=1 switch=1 panic=0",
+      "PASS idle irq=1 allocations=0 saves=0 prepares=1 locks=1 restore=1 switch=1 panic=0",
+      "PASS exited irq=0 allocations=0 saves=0 prepares=1 locks=1 restore=0 switch=1 panic=0",
+      "PASS exited irq=1 allocations=0 saves=0 prepares=1 locks=1 restore=0 switch=1 panic=0",
+      "PASS null irq=0 allocations=0 saves=0 prepares=1 locks=1 restore=1 switch=1 panic=0",
+      "PASS null irq=1 allocations=0 saves=0 prepares=1 locks=1 restore=1 switch=1 panic=0",
+      "PASS failure irq=0 allocations=1 saves=0 prepares=0 locks=0 restore=0 switch=0 panic=1",
+      "PASS failure irq=1 allocations=1 saves=0 prepares=0 locks=0 restore=0 switch=0 panic=1",
+      "PASS no-switch-failure irq=0 allocations=1 saves=0 prepares=0 locks=0 restore=0 switch=0 panic=1",
+      "PASS no-switch-failure irq=1 allocations=1 saves=0 prepares=0 locks=0 restore=0 switch=0 panic=1",
+      "PASS positive irq=0 allocations=1 saves=1 prepares=0 locks=1 restore=1 switch=1 panic=0",
+      "PASS positive irq=1 allocations=1 saves=1 prepares=0 locks=1 restore=1 switch=1 panic=0",
+      "PASS large irq=0 allocations=1 saves=1 prepares=0 locks=1 restore=1 switch=1 panic=0",
+      "PASS large irq=1 allocations=1 saves=1 prepares=0 locks=1 restore=1 switch=1 panic=0",
+      "PASS no-switch irq=0 allocations=1 saves=1 prepares=0 locks=1 restore=0 switch=0 panic=0",
+      "PASS no-switch irq=1 allocations=1 saves=1 prepares=0 locks=1 restore=0 switch=0 panic=0",
+      "PASS no-preempt irq=0 allocations=0 saves=0 prepares=0 locks=1 restore=0 switch=0 panic=0",
+      "PASS no-preempt irq=1 allocations=0 saves=0 prepares=0 locks=1 restore=0 switch=0 panic=0",
+      "PASS no-xsave irq=0 allocations=0 saves=0 prepares=0 locks=1 restore=1 switch=1 panic=0",
+      "PASS no-xsave irq=1 allocations=0 saves=0 prepares=0 locks=1 restore=1 switch=1 panic=0",
+      "PASS idle irq=0 allocations=0 saves=0 prepares=0 locks=1 restore=1 switch=1 panic=0",
+      "PASS idle irq=1 allocations=0 saves=0 prepares=0 locks=1 restore=1 switch=1 panic=0",
+      "PASS exited irq=0 allocations=0 saves=0 prepares=0 locks=1 restore=0 switch=1 panic=0",
+      "PASS exited irq=1 allocations=0 saves=0 prepares=0 locks=1 restore=0 switch=1 panic=0",
+      "PASS null irq=0 allocations=0 saves=0 prepares=0 locks=1 restore=1 switch=1 panic=0",
+      "PASS null irq=1 allocations=0 saves=0 prepares=0 locks=1 restore=1 switch=1 panic=0"
+    ],
+    "command_profile": {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/command-profile.json",
+      "sha256": "3ed6a8d300fecf2ee43c0a1e1bb0510e4102cb438360103b14afcc4592b922dc",
+      "size": 1702
+    }
+  },
+  "new_repo_files": [
+    {
+      "path": "/home/holden/mckernel/scripts/tests/test_native_fp_save_repair_20261017.py",
+      "sha256": "c8b4b01474755bcb087b564ae3f3aba61ab307a18f38437c5a0420c8bc02f40e",
+      "size": 6962
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/fixtures/native_fp_save_repair_20261017.c",
+      "sha256": "ab5c6813129811fe7ac5baf5abde0e8cb74608ccf04de0030fe8267b5d33fd28",
+      "size": 10012
+    }
+  ],
+  "preserved_evidence": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt1/actual_prepare.rs",
+      "sha256": "89c31b26ce9f430355e69600f1ff7020b3d235fd22d5592b4fc58f619c9402e0",
+      "size": 13421
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt1/commands.json",
+      "sha256": "36354784019bd9070b5a17133a804dffbd56049e0529013c5355cffa031a44b7",
+      "size": 1169
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt1/libprepare.a",
+      "sha256": "a51c551efb31840cb75a21aad564cedfe722636e325f7657cb29795e08435f48",
+      "size": 20720278
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt1/native_fp_save_repair_20261017.c",
+      "sha256": "bfbb9a7f4046151112488794f812760ab427095af651a472d57faadab69043b8",
+      "size": 9967
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt1/original-rust-compile.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt1/original-rust-compile.stderr",
+      "sha256": "4ce7fcb539e57aa39ba00421e87a8419df4a1509154a1656b8f4b80cc0ea0c33",
+      "size": 1703
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt1/original-rust-compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt1/original-rust.c",
+      "sha256": "f6805ccb44debb5d8db7761087a5ab17c6515fe99ebe64afbe2e7ff94cbf86f1",
+      "size": 23487
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt1/rust-compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt1/rust-compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt1/rust-compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt1/test_native_fp_save_repair_20261017.py",
+      "sha256": "c8b4b01474755bcb087b564ae3f3aba61ab307a18f38437c5a0420c8bc02f40e",
+      "size": 6962
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/actual_prepare.rs",
+      "sha256": "89c31b26ce9f430355e69600f1ff7020b3d235fd22d5592b4fc58f619c9402e0",
+      "size": 13421
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-c-compile.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-c-compile.stderr",
+      "sha256": "810524eab0e6a496ea2be07f16580334dc95ee6df4eaa1496c9d2aba089abdb9",
+      "size": 356
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-c-compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-c.c",
+      "sha256": "0cbb9b0062dc9f44c2063b1510a8e9574c62f7eacab259e39d1a726a11198c71",
+      "size": 23914
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust",
+      "sha256": "4329d671990209b2a1670e5bb1b37cae8504ecdae023c144bc434e3692eddf0a",
+      "size": 23600
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-exited-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-exited-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-exited-0.stdout",
+      "sha256": "c23fe2a7f714a0a23184b7a53961ff4db67279e6b3aa531645855233b7eb45f8",
+      "size": 86
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-exited-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-exited-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-exited-1.stdout",
+      "sha256": "afbea26f5023c9c2f5fae5beb4b37d18dfbb4a50cedc987a41944b953a31b31b",
+      "size": 86
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-failure-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-failure-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-failure-0.stdout",
+      "sha256": "19ca514593cd0df41c773c750e8d39c87615ce3fcbf2b6fa81bbf9691d81e91e",
+      "size": 87
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-failure-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-failure-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-failure-1.stdout",
+      "sha256": "7c4179770cd80b34195a4b69e32963e08b8bc71abb7629a1ee5356a2d9b28c8c",
+      "size": 87
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-idle-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-idle-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-idle-0.stdout",
+      "sha256": "4453bd1898678508a96f71e3cabbddf028e61ddced984447060fc9f1ab30a16a",
+      "size": 84
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-idle-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-idle-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-idle-1.stdout",
+      "sha256": "3012f11bc52ba38c24555fc8760d13cb1706a67294fe8fd722246855d5200ecf",
+      "size": 84
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-large-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-large-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-large-0.stdout",
+      "sha256": "221ab65f960903db9f020adfe3980e82f69c82fb47277f1879fdcc38e01931a6",
+      "size": 85
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-large-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-large-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-large-1.stdout",
+      "sha256": "b4578a6ec3b68dc088a6713b863c85e71481a7407ccd64cfb1a41c33ed20dbe2",
+      "size": 85
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-preempt-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-preempt-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-preempt-0.stdout",
+      "sha256": "bfcf6d4839a5b4f205b57cad121b4bf532026de7dd84ad55efd7edd2046a55c4",
+      "size": 90
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-preempt-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-preempt-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-preempt-1.stdout",
+      "sha256": "ff0953bf2a4f1d27099bede06f461ca39bb16be70181d18dde84e07c067da8d1",
+      "size": 90
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-switch-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-switch-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-switch-0.stdout",
+      "sha256": "1cb31fdef1e2db2ce6158847e15ac0c09216c0c15092d98208a549216f2ad9f2",
+      "size": 89
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-switch-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-switch-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-switch-1.stdout",
+      "sha256": "bfc51e8612b7425b0bffe1b2ca6a6a043de139b7586c6e05083984a7284bf6ee",
+      "size": 89
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-switch-failure-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-switch-failure-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-switch-failure-0.stdout",
+      "sha256": "4011a1dbc1c29ceaf364cb04ed6b8991082907d3146230f84ed4776ffc186312",
+      "size": 97
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-switch-failure-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-switch-failure-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-switch-failure-1.stdout",
+      "sha256": "70f288debc9ccdc75416cdb91d36b11c607326319f4e93ded729b1e910681c71",
+      "size": 97
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-xsave-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-xsave-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-xsave-0.stdout",
+      "sha256": "fc3baf4b28ea8286c4a58b6039b32c707fdaf69387659c3bd371d3b3a3ac4d3f",
+      "size": 88
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-xsave-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-xsave-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-no-xsave-1.stdout",
+      "sha256": "ea5a21f39d03300f0c10202a7f6830ffd037416ad9d7011418c001a8bcdab08e",
+      "size": 88
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-null-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-null-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-null-0.stdout",
+      "sha256": "622fadb45334a2965651daee79a8fa0263204e6c78c737b6cd617b2db8637911",
+      "size": 84
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-null-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-null-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-null-1.stdout",
+      "sha256": "a2c2a408463c748de397c50dafc62b5407bbe912e965452dce5043efb731294a",
+      "size": 84
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-positive-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-positive-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-positive-0.stdout",
+      "sha256": "5c35bc663de719322c4a34d7e322162bec281a5cc615aa201ab6592964e62649",
+      "size": 88
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-positive-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-positive-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust-positive-1.stdout",
+      "sha256": "c62253a84fd4810e2048dc75ee68bece83282d5c8e63b73fab17e75049e7c34c",
+      "size": 88
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/candidate-rust.c",
+      "sha256": "0cbb9b0062dc9f44c2063b1510a8e9574c62f7eacab259e39d1a726a11198c71",
+      "size": 23914
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/commands.json",
+      "sha256": "695a7910d4868b71a3dc70cddd6f69f6924a3cdb4c8531aaba37dc595f733b96",
+      "size": 6781
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/libprepare.a",
+      "sha256": "a51c551efb31840cb75a21aad564cedfe722636e325f7657cb29795e08435f48",
+      "size": 20720278
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/native_fp_save_repair_20261017.c",
+      "sha256": "3565022ed36a2f28d1ec7c66397f906f7820f10d25c41db22639e9bebc0abb14",
+      "size": 9957
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/original-rust",
+      "sha256": "9eda99ec7e27e7a14e02bf9c79af2851df0f2467bdbda316a7a94c83480e3fc2",
+      "size": 23360
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/original-rust-compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/original-rust-compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/original-rust-compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/original-rust-failure-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/original-rust-failure-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/original-rust-failure-0.stdout",
+      "sha256": "ee05ab0862dfed41b1594076d27feef0f23b44e240e530b166f8cdebf137117e",
+      "size": 59
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/original-rust-failure-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/original-rust-failure-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/original-rust-failure-1.stdout",
+      "sha256": "ee05ab0862dfed41b1594076d27feef0f23b44e240e530b166f8cdebf137117e",
+      "size": 59
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/original-rust.c",
+      "sha256": "e33141e5443575e93c698f9c4b51a5c260d80c983c927ede7e5d72a9c08da894",
+      "size": 23477
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/rust-compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/rust-compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/rust-compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt2/test_native_fp_save_repair_20261017.py",
+      "sha256": "c8b4b01474755bcb087b564ae3f3aba61ab307a18f38437c5a0420c8bc02f40e",
+      "size": 6962
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/actual_prepare.rs",
+      "sha256": "89c31b26ce9f430355e69600f1ff7020b3d235fd22d5592b4fc58f619c9402e0",
+      "size": 13421
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c",
+      "sha256": "cd729eee88e6c4d407d7f5184a34aa8fafb47d4221f32cf393e1f4aaae417145",
+      "size": 22968
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-exited-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-exited-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-exited-0.stdout",
+      "sha256": "5f5d05c89831b8bcdb72786da42993d4ab2465f50959fff12550f98490c65c0d",
+      "size": 86
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-exited-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-exited-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-exited-1.stdout",
+      "sha256": "31c9d544ba025d4dbf1152ee4edb2cc8db232a2ab831aea1a26209b2f357e6f5",
+      "size": 86
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-failure-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-failure-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-failure-0.stdout",
+      "sha256": "19ca514593cd0df41c773c750e8d39c87615ce3fcbf2b6fa81bbf9691d81e91e",
+      "size": 87
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-failure-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-failure-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-failure-1.stdout",
+      "sha256": "7c4179770cd80b34195a4b69e32963e08b8bc71abb7629a1ee5356a2d9b28c8c",
+      "size": 87
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-idle-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-idle-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-idle-0.stdout",
+      "sha256": "59055e2c1197e7b1efda4df9be1c1c991aa80769563bb504ee120b7237e860a5",
+      "size": 84
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-idle-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-idle-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-idle-1.stdout",
+      "sha256": "7ca78da23328f038d2f21a44be1d15fb9076cbb002e99b9c4c8182a8e5099552",
+      "size": 84
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-large-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-large-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-large-0.stdout",
+      "sha256": "a70a98b5ba5203d42efec663546665db6107a09beccea9c2089fbe921410bca5",
+      "size": 85
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-large-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-large-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-large-1.stdout",
+      "sha256": "24303e548eda7804d4158e55309cebe78cb74096fa5fd074a65c0126132d44f8",
+      "size": 85
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-preempt-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-preempt-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-preempt-0.stdout",
+      "sha256": "e27e0093f1ba3d1b6d27a0bf072372c6c94988d29cd2c65574a5d3fb2b696e3d",
+      "size": 90
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-preempt-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-preempt-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-preempt-1.stdout",
+      "sha256": "c320e8a0f9af311ecf76ad96dce4efa9787a32907aca839c255ab5f1ea9600ac",
+      "size": 90
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-switch-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-switch-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-switch-0.stdout",
+      "sha256": "ac9215a4b8e445ff79d4295c8b4927ba74adc05be60cf0880eaffc25b18eacbd",
+      "size": 89
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-switch-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-switch-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-switch-1.stdout",
+      "sha256": "0b30517c41f12c03e3ec1d6f836415faa45e25f13e890196d1dbc90d2a357314",
+      "size": 89
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-switch-failure-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-switch-failure-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-switch-failure-0.stdout",
+      "sha256": "4011a1dbc1c29ceaf364cb04ed6b8991082907d3146230f84ed4776ffc186312",
+      "size": 97
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-switch-failure-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-switch-failure-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-switch-failure-1.stdout",
+      "sha256": "70f288debc9ccdc75416cdb91d36b11c607326319f4e93ded729b1e910681c71",
+      "size": 97
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-xsave-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-xsave-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-xsave-0.stdout",
+      "sha256": "19da57c5e10d1b023fa5ed212b2db0dbd93d7298c116664ed5d8443f6dc1a98f",
+      "size": 88
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-xsave-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-xsave-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-no-xsave-1.stdout",
+      "sha256": "9e318919b274a133adb1cff6ec44d13ed6280ddbca0240e492c07af8dcb38083",
+      "size": 88
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-null-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-null-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-null-0.stdout",
+      "sha256": "3f26e9b68924482bea27e3bbfdff9ade1048afa2cf69d32e6c82cde44beb2bb6",
+      "size": 84
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-null-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-null-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-null-1.stdout",
+      "sha256": "fa79afffeb495b35c14b699f97898b7292ead80912fc5e54e1249a87814c4291",
+      "size": 84
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-positive-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-positive-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-positive-0.stdout",
+      "sha256": "e98991e0a3fcea59cfccffe80e3fc49790f29b789b7a86a4d55e9d332511b0e0",
+      "size": 88
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-positive-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-positive-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c-positive-1.stdout",
+      "sha256": "a8a073e0ab298340acec608be41bc085c8bf472db27175f6d6d123c17b1c96f1",
+      "size": 88
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-c.c",
+      "sha256": "0d83195142ea5606361fb72eb78a712edf0301792bf710b2d7a1a78f59f44c92",
+      "size": 23969
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust",
+      "sha256": "fa12be592f948961b8cfe783c77cb9bebb1f8a3094ff211a21a636940d77651e",
+      "size": 23600
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-exited-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-exited-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-exited-0.stdout",
+      "sha256": "c23fe2a7f714a0a23184b7a53961ff4db67279e6b3aa531645855233b7eb45f8",
+      "size": 86
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-exited-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-exited-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-exited-1.stdout",
+      "sha256": "afbea26f5023c9c2f5fae5beb4b37d18dfbb4a50cedc987a41944b953a31b31b",
+      "size": 86
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-failure-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-failure-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-failure-0.stdout",
+      "sha256": "19ca514593cd0df41c773c750e8d39c87615ce3fcbf2b6fa81bbf9691d81e91e",
+      "size": 87
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-failure-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-failure-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-failure-1.stdout",
+      "sha256": "7c4179770cd80b34195a4b69e32963e08b8bc71abb7629a1ee5356a2d9b28c8c",
+      "size": 87
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-idle-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-idle-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-idle-0.stdout",
+      "sha256": "4453bd1898678508a96f71e3cabbddf028e61ddced984447060fc9f1ab30a16a",
+      "size": 84
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-idle-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-idle-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-idle-1.stdout",
+      "sha256": "3012f11bc52ba38c24555fc8760d13cb1706a67294fe8fd722246855d5200ecf",
+      "size": 84
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-large-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-large-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-large-0.stdout",
+      "sha256": "221ab65f960903db9f020adfe3980e82f69c82fb47277f1879fdcc38e01931a6",
+      "size": 85
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-large-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-large-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-large-1.stdout",
+      "sha256": "b4578a6ec3b68dc088a6713b863c85e71481a7407ccd64cfb1a41c33ed20dbe2",
+      "size": 85
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-preempt-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-preempt-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-preempt-0.stdout",
+      "sha256": "bfcf6d4839a5b4f205b57cad121b4bf532026de7dd84ad55efd7edd2046a55c4",
+      "size": 90
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-preempt-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-preempt-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-preempt-1.stdout",
+      "sha256": "ff0953bf2a4f1d27099bede06f461ca39bb16be70181d18dde84e07c067da8d1",
+      "size": 90
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-switch-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-switch-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-switch-0.stdout",
+      "sha256": "1cb31fdef1e2db2ce6158847e15ac0c09216c0c15092d98208a549216f2ad9f2",
+      "size": 89
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-switch-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-switch-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-switch-1.stdout",
+      "sha256": "bfc51e8612b7425b0bffe1b2ca6a6a043de139b7586c6e05083984a7284bf6ee",
+      "size": 89
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-switch-failure-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-switch-failure-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-switch-failure-0.stdout",
+      "sha256": "4011a1dbc1c29ceaf364cb04ed6b8991082907d3146230f84ed4776ffc186312",
+      "size": 97
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-switch-failure-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-switch-failure-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-switch-failure-1.stdout",
+      "sha256": "70f288debc9ccdc75416cdb91d36b11c607326319f4e93ded729b1e910681c71",
+      "size": 97
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-xsave-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-xsave-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-xsave-0.stdout",
+      "sha256": "fc3baf4b28ea8286c4a58b6039b32c707fdaf69387659c3bd371d3b3a3ac4d3f",
+      "size": 88
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-xsave-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-xsave-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-no-xsave-1.stdout",
+      "sha256": "ea5a21f39d03300f0c10202a7f6830ffd037416ad9d7011418c001a8bcdab08e",
+      "size": 88
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-null-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-null-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-null-0.stdout",
+      "sha256": "622fadb45334a2965651daee79a8fa0263204e6c78c737b6cd617b2db8637911",
+      "size": 84
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-null-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-null-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-null-1.stdout",
+      "sha256": "a2c2a408463c748de397c50dafc62b5407bbe912e965452dce5043efb731294a",
+      "size": 84
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-positive-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-positive-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-positive-0.stdout",
+      "sha256": "5c35bc663de719322c4a34d7e322162bec281a5cc615aa201ab6592964e62649",
+      "size": 88
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-positive-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-positive-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust-positive-1.stdout",
+      "sha256": "c62253a84fd4810e2048dc75ee68bece83282d5c8e63b73fab17e75049e7c34c",
+      "size": 88
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/candidate-rust.c",
+      "sha256": "0d83195142ea5606361fb72eb78a712edf0301792bf710b2d7a1a78f59f44c92",
+      "size": 23969
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/commands.json",
+      "sha256": "5a00437e6d985bd9165a38464f3edd10fb22f88ce1ae57f4af9f56e2913d0081",
+      "size": 10653
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/libprepare.a",
+      "sha256": "a51c551efb31840cb75a21aad564cedfe722636e325f7657cb29795e08435f48",
+      "size": 20720278
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/native_fp_save_repair_20261017.c",
+      "sha256": "ab5c6813129811fe7ac5baf5abde0e8cb74608ccf04de0030fe8267b5d33fd28",
+      "size": 10012
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/original-rust",
+      "sha256": "86fed97b732b513727792ec0a0599a5eba65e4ab042cd5d17eab3e25607b5fbb",
+      "size": 23360
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/original-rust-compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/original-rust-compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/original-rust-compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/original-rust-failure-0.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/original-rust-failure-0.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/original-rust-failure-0.stdout",
+      "sha256": "ee05ab0862dfed41b1594076d27feef0f23b44e240e530b166f8cdebf137117e",
+      "size": 59
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/original-rust-failure-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/original-rust-failure-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/original-rust-failure-1.stdout",
+      "sha256": "ee05ab0862dfed41b1594076d27feef0f23b44e240e530b166f8cdebf137117e",
+      "size": 59
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/original-rust.c",
+      "sha256": "8a84968a137889a622657ce2364ff6205a16f5ac78d16a315883a30a260fac6f",
+      "size": 23532
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/results.json",
+      "sha256": "06c8276784baffebabbfa01da1623f8053c29665a7a5bee152c0e54171967ca1",
+      "size": 3843
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/rust-compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/rust-compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/rust-compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/attempt3/test_native_fp_save_repair_20261017.py",
+      "sha256": "c8b4b01474755bcb087b564ae3f3aba61ab307a18f38437c5a0420c8bc02f40e",
+      "size": 6962
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/bounded-correction.json",
+      "sha256": "90910ab935bd04fa68c40655863d0947092f17200cfd42903ff9d912e42ed8b8",
+      "size": 400
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/candidate/arch/x86_64/kernel/cpu.c",
+      "sha256": "115725e4341f34d13d2a8385d87521874af5b7a53923bb0d407d580793a934f9",
+      "size": 93339
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/candidate/kernel/process.c",
+      "sha256": "15cbf76ac6a1466b7a0825e8f2a495887238e9815f587a9babadddb958ede823",
+      "size": 154434
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/candidate/kernel/rust/sched_helpers.rs",
+      "sha256": "5f6841a4f17330e4d37510f4467e8747ca183ecf1b2055ebfa8718974f017475",
+      "size": 160439
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/command-profile.json",
+      "sha256": "3ed6a8d300fecf2ee43c0a1e1bb0510e4102cb438360103b14afcc4592b922dc",
+      "size": 1702
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/expert-correction.json",
+      "sha256": "49944d68d40596cdf148fee1b81735403d13313e3c6f7420113cacdbaa914fb0",
+      "size": 384
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/original/arch/x86_64/kernel/cpu.c",
+      "sha256": "115725e4341f34d13d2a8385d87521874af5b7a53923bb0d407d580793a934f9",
+      "size": 93339
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/original/kernel/process.c",
+      "sha256": "6480b1ab121acf17610495682cd9e58cba774427de9695b1ce8dd65a9bc07cb2",
+      "size": 153997
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/original/kernel/rust/sched_helpers.rs",
+      "sha256": "5f6841a4f17330e4d37510f4467e8747ca183ecf1b2055ebfa8718974f017475",
+      "size": 160439
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/packet.json",
+      "sha256": "15732351f140493716176f1fe2b9c8993b5524d43fa1f4c4af320c850486b573",
+      "size": 1900
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/repair.patch",
+      "sha256": "91a14a4f3556c2c57f1e1fc7109b76a20de8aa13b8e14e35f9b9a1f0e3f3d6f2",
+      "size": 3179
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/run1.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/run1.stderr",
+      "sha256": "c2c97a7615b7f60b51c832a61d93064f18312e1cfe135ac5c5460b9699b8bbb2",
+      "size": 2543
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/run1.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/run2.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/run2.stderr",
+      "sha256": "1d77680d9457557cca5d467529ec9e7cbaafe628edc83655c525d6662b1a2cdf",
+      "size": 1196
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/run2.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/run3.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/run3.stderr",
+      "sha256": "a69ac673785e4e6ef9f5a25dd76f78bf92d21ae5ac11de44f027232ff2e6eb83",
+      "size": 199
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-save-repair-20261017-1/run3.stdout",
+      "sha256": "6317114584abbc5afe48ad5d7dad38d069089443db610b4491ebe4fcd1b7b731",
+      "size": 3630
+    }
+  ],
+  "remaining_prerequisites": [
+    "Independent reviewer source/evidence acceptance of exact frozen patch and raw matrix.",
+    "Dispatcher selects/integrates exact production source candidate; preserve active3f7 hostmodules/image942 and current fullcycle work.",
+    "Compile native affected image with current full source/compiler bindings and reviewed isolated heavy profile; source fixture is not native image compilation.",
+    "Separate runtime execution release and actual supported-profile application/context feedback on newly bound artifact; no hardware/vector replay or acceptance authorized here."
+  ],
+  "production_or_native_acceptance": false,
+  "runtime_authority": false,
+  "milestone_effect": "M07 remains partial/open. Candidate closes the source-level unsafe continuation path only after independent source review; no diagnostic/build/acceptance counters changed."
+}

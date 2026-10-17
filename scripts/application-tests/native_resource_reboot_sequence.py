@@ -1,5 +1,6 @@
 """Join native-resource-release-v2 and fresh strict5 helper captures offline.
 
+V3 distinguishes the helper write PRI6 from Linux LOG_USER snapshot PRI14.
 V2 requires OS CPU/memory inventories explicitly unavailable after successful
 shutdown: both public queries return EBUSY under closed admission. No empty
 OS inventories or query capability are inferred.
@@ -23,7 +24,11 @@ BOOT_STDOUT = (
     b"NATIVE_BOOT_START x86_64 CAPTURED ready=1 resources_retained=1\n"
     b"NATIVE_OS_SYSFS x86_64 PASS checks=2 setup_completed=1\n"
 )
-BOOT_KMSG = b"<6>NATIVE_BOOT_STATUS x86_64 observed=5 expected=5\n"
+# /dev/kmsg write<6> has facility0; Linux enforces LOG_USER(1),
+# so klogctl syslog serialization emits (1 << 3) | 6 == 14.
+PROTOCOL_VERSION = 3
+BOOT_WRITE_KMSG = b"<6>NATIVE_BOOT_STATUS x86_64 observed=5 expected=5\n"
+BOOT_KMSG = b"<14>NATIVE_BOOT_STATUS x86_64 observed=5 expected=5\n"
 
 
 def second_boot_status(kernel_before, kernel_after):
@@ -43,7 +48,7 @@ def second_boot_status(kernel_before, kernel_after):
     records = [line for line in delta.splitlines(keepends=True)
                if b"NATIVE_BOOT_STATUS" in line]
     if len(records) != 1 or re.fullmatch(
-            rb"<6>(?:\[\s*[0-9]+\.[0-9]+\]\s*)?"
+            rb"<14>(?:\[\s*[0-9]+\.[0-9]+\]\s*)?"
             rb"NATIVE_BOOT_STATUS x86_64 observed=5 expected=5\n", records[0]) is None:
         raise ValueError("fresh strict5 kernel status")
     return BOOT_KMSG

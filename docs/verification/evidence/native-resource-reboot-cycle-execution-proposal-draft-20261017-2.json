@@ -1,0 +1,1097 @@
+{
+  "application_acceptance": false,
+  "author": "/root/native_running_publication",
+  "executable_argv": null,
+  "execution_allowed": false,
+  "modules": {
+    "ihk-smp-x86_64.ko": {
+      "bytes": null,
+      "compiler_source_binding": null,
+      "path": null,
+      "sha256": null,
+      "status": "PENDING_FRESH_MATCHED_MODULE_BUILD_AND_ARTIFACT_REVIEW",
+      "vermagic": null
+    },
+    "ihk.ko": {
+      "bytes": null,
+      "compiler_source_binding": null,
+      "path": null,
+      "sha256": null,
+      "status": "PENDING_FRESH_MATCHED_MODULE_BUILD_AND_ARTIFACT_REVIEW",
+      "vermagic": null
+    },
+    "mcctrl.ko": {
+      "bytes": null,
+      "compiler_source_binding": null,
+      "path": null,
+      "sha256": null,
+      "status": "PENDING_FRESH_MATCHED_MODULE_BUILD_AND_ARTIFACT_REVIEW",
+      "vermagic": null
+    }
+  },
+  "no_automatic_retry": true,
+  "nonce": "7bcff1b51dde46c3a476cd47662acca2",
+  "one_new_attempt_only": true,
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828
+  },
+  "owner_cli_template": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/ndrc2-7bcff1b5",
+    "--nonce",
+    "7bcff1b51dde46c3a476cd47662acca2",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--manifest",
+    "<PENDING_NEW_BOUND_MANIFEST>",
+    "--manifest-sha256",
+    "<PENDING_NEW_BOUND_MANIFEST_SHA256>"
+  ],
+  "parent": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 114737,
+    "mode": "0o700",
+    "path": "/home/holden/mckernel-work/scratch/ndrc2-7bcff1b5",
+    "uid": 1000
+  },
+  "pending": [
+    "Positive fresh matched d99 all3module build receipt",
+    "Independent artifact/result/retirement review of that build",
+    "One required fresh module-dependentstage and exact61member manifest/overlay bindings",
+    "Independent exact newcase source/artifact/stage/execution review",
+    "Fresh liveowner/rootmutex/boot/scratch/resources/97percent guards and exclusive admission",
+    "Separately reviewed fresh one-shot release; no oldrelease reuse"
+  ],
+  "postjoin_readback": {
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndrc2-7bcff1b5.owner-7bcff1b51dde46c3a476cd47662acca2",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/ndrc2-7bcff1b5/attempt-7bcff1b51dde46c3a476cd47662acca2/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndrc2-7bcff1b5/attempt-7bcff1b51dde46c3a476cd47662acca2",
+        "."
+      ]
+    ],
+    "capture_limit_bytes_per_command": 33554432,
+    "conditions": "Only after joined positive owner/client retirement; verify unchanged canonical exact directories/regular result; use fresh ordinary-UID captures, default tar without dereference. Preserve every failed result and socket-omission stderr.",
+    "requested": true,
+    "timeout_seconds_per_command": 30
+  },
+  "preparation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-reboot-cycle-preparation-draft-20261017-2.json",
+    "sha256": "d17e7859c9564610870ab9ea068875842609b5d16c98bae8897f2ccf4834ab46",
+    "size": 36695
+  },
+  "preserved_original_failure_and_retirement": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-reboot-cycle-failure-review-20261017-1.json",
+    "sha256": "0f530ca350d94907bac1df55dc55468f89a8af37fa944e6f9b8d26f64945fe98",
+    "size": 16399
+  },
+  "prior_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-reboot-cycle-execution-proposal-20261017-1.json",
+    "sha256": "a41817fa3e8883f5fb0820acd81c74e69d4a43f6971379d50c1f37b97ef8a7b6",
+    "size": 24955
+  },
+  "production_acceptance": false,
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "runtime_release": false,
+  "schema": "mckernel.native-resource-reboot-cycle-execution-proposal-draft.v1",
+  "source_contract": {
+    "all3_from_same_fresh_matched_build_required": true,
+    "artifact_result_review": null,
+    "baseline_linux_image_abi": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "build_receipt": null,
+    "new_module_source_candidate": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+    "no_old_new_module_mixing": true,
+    "prior_module_source_candidate": "3f7b265b9f90279f5bd36f33f294eaa117609f12",
+    "single_production_delta": {
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "sha256": "356853344bffaa5b3d625c97eb3928b8908d45abbc94d16902e19bdef45ea90c",
+      "size": 76797
+    },
+    "source_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-cpu-reacquire-source-integration-20261017-1.json",
+      "sha256": "447b80ffb62cdfcb68062c2f7be3a07453b3faf41025d40835df088a5bc9a375",
+      "size": 3031
+    }
+  },
+  "stage_plan": {
+    "existing_overlay_source": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+      "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+      "size": 26579
+    },
+    "existing_stager": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-v2-preparation-20261017-1/native_diagnostic_stager.py",
+      "sha256": "a8e623197f45f503e203f4b32a3e5e130d3756f9f46f83ac6695ca85c6048d1f",
+      "size": 22065
+    },
+    "final_member_count_expected": 61,
+    "manifest": null,
+    "overlay": null,
+    "prior_fullcycle_manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-preparation-20261017-1/manifest.json",
+      "sha256": "94367d3e1f382f9ff1be7e0a12f458f115172737f4b1e962a0b27fcc763551da",
+      "size": 5468
+    },
+    "prior_overlay": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-preparation-20261017-1/cycle.cpio.gz",
+      "sha256": "91c5395ca4e8d225bdb26c96244cd07655430dbce4f2a7fb0ca2bdb54efc97fb",
+      "size": 14028981
+    },
+    "producer_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-v2-preparation-20261017-1/stage/manifest.json",
+      "sha256": "98f5cdbc8c641a168ecdd6981829a45195738a4d9eba2798ad493bd6c9eb808f",
+      "size": 20172
+    },
+    "producer_source_count": 57,
+    "producer_source_inventory": [
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin",
+        "sha256": null,
+        "size": 4096,
+        "type": "dir",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/bash",
+        "sha256": "a59fc4da19d169c175b247bfaf4a21c2ee7c16c3ed2820daa807ab12affe98fc",
+        "size": 1410688,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/dmesg",
+        "sha256": "8d98381f576d147789c950da4377464d2dfbb590bd4d7ef8ff9dbc81d74cdbd1",
+        "size": 72088,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/mcd0-ioctl-i386",
+        "sha256": "9cae94a48462fe1fd409d572acd2c0dff04decb0c7eacae703aa5876389c24f2",
+        "size": 8416,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/mcd0-ioctl-x86_64",
+        "sha256": "dac5c47b17cec8b063329dff21c7318506e1d7a3e05a1f905be53c6483f6fed9",
+        "size": 8512,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/mcexec",
+        "sha256": "b786e9c98ecc3d429c5ce4d683f1ef4ebca7b3ea132b8435ed6026fc9e984639",
+        "size": 453288,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/mount",
+        "sha256": "3ab3ac4707f4d02f4d46c916e537c38cdaee3b9daa64f91f850decf47bc889d9",
+        "size": 48864,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/native-application-core",
+        "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+        "size": 39488,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/native-application-hello",
+        "sha256": "fd08a46261fa79fdd16ddb2dce6e7f99c77178b290815c06445277db454851e7",
+        "size": 1264,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/native-boot",
+        "sha256": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+        "size": 31208,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/native-lifecycle-probe",
+        "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+        "size": 872616,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/native-os-buildid-i386",
+        "sha256": "04b7ad7993ce87fce24108491959374303bd74ea38e85e591dcdce096396e2ce",
+        "size": 29716,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/native-os-buildid-x86_64",
+        "sha256": "65f51b8d3324641b6fcd72d79448e15b1cc0fe054f3116d6ceb8ea1b5c56d18b",
+        "size": 30376,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/native-resource-release-probe",
+        "sha256": "e914699243b4440f31b58921c10c74252c4bea1ded7929bea129c69c348a3345",
+        "size": 876648,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/native-string-i386",
+        "sha256": "b2884ecbe15f3dbb763d1192332bfeb0bd78d864984d7b31a6f96a4ca99ea111",
+        "size": 38740,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/native-string-x86_64",
+        "sha256": "ba40b85c8620454276f631096b6f807cc4384c5354880e1af43de6e45532495c",
+        "size": 39352,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/stat",
+        "sha256": "9f6ffbf89d8463633790130b1d79999e1f5ef72fa63ac128eefc19101116b4d3",
+        "size": 51,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "bin/uname",
+        "sha256": "050964cc46affadcf00d817106c47a6bde087fc483fa0643e168a816b76de608",
+        "size": 52,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "dev",
+        "sha256": null,
+        "size": 4096,
+        "type": "dir",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "images",
+        "sha256": null,
+        "size": 4096,
+        "type": "dir",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 420,
+        "path": "images/mckernel.img",
+        "sha256": "5f370ee96463a0a606e2b06d0e76e26bd77055f44396e5cb0a4326bf996763a4",
+        "size": 8016600,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "init",
+        "sha256": "4211dbebe427dd8376bded2055c93f4d38fd7d03b3f54ec0597449c80ed99fba",
+        "size": 2721,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib",
+        "sha256": null,
+        "size": 4096,
+        "type": "dir",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64",
+        "sha256": null,
+        "size": 4096,
+        "type": "dir",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/ld-linux-x86-64.so.2",
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "size": 930600,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libacl.so.1",
+        "sha256": "342a0213a17809ee41816a95c939f11ba25ff92da53ae849bc88cf3da81649aa",
+        "size": 40896,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libattr.so.1",
+        "sha256": "1369a9dd4a7bcd8d4bf71293b369f6d222a1ea12132d988ed529d796522076a0",
+        "size": 28296,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libblkid.so.1",
+        "sha256": "6149c97e401f088ee8e4d9681e0498486e41a90b90618b0dafca0b8545230143",
+        "size": 242128,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libc.so.6",
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "size": 2339896,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libcap.so.2",
+        "sha256": "70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf",
+        "size": 53168,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libcrypto.so.3",
+        "sha256": "3da8e54521ce53e2a09d9ca0d1d5c3368b8abba252492cee21affd6146f72d82",
+        "size": 5631152,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libgcc_s.so.1",
+        "sha256": "cc9c9d070f290bd0b39a7208f8850f6f6cb85491cf6aee80ef4502c3f040c2cb",
+        "size": 186528,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/liblzma.so.5",
+        "sha256": "a1ccc4236761114ffa9efa797501b9f34398a20de75ca0ca22df9410cbe41bde",
+        "size": 215496,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libmount.so.1",
+        "sha256": "5199b49c7ad1565700fd649e9b13024919192128908536203fe95fff4adadb2c",
+        "size": 333512,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 420,
+        "path": "lib64/libnuma.so.1",
+        "sha256": "be20c2b16781eea6c69d47816bf15869f90f2a009628c310049da1d2f3c31e4e",
+        "size": 62328,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libpcre2-8.so.0",
+        "sha256": "ac0dcbb0620261d144a5255ce79c30c583593e7a29822df7a529c06922852e94",
+        "size": 665664,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 420,
+        "path": "lib64/libpthread.so.0",
+        "sha256": "f2791d4558ccad3fd23808f206e1b8e861b448b04d1e5cc75ae405e3e028fa1a",
+        "size": 15496,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 420,
+        "path": "lib64/librt.so.1",
+        "sha256": "3edee3d7a74e29d28e4831c37e9ef8330c1702f391302a30d241f6aa579b9afa",
+        "size": 15632,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libselinux.so.1",
+        "sha256": "79e73dd27d4a90f25969c43c298ad32aa21c718c8508ef86c5a8e6ee083723a9",
+        "size": 200664,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libtinfo.so.6",
+        "sha256": "3a4bdb43bc49568cec111b5486e6daa6fbca08dc205357b3d737044eb0ab315a",
+        "size": 187296,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libz.so.1",
+        "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+        "size": 140824,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "lib64/libzstd.so.1",
+        "sha256": "250dc1e1302e3eedd9f483c7cb3d52ab15882bf9d12072539cc4f06660b384e1",
+        "size": 729608,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "modules",
+        "sha256": null,
+        "size": 4096,
+        "type": "dir",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 420,
+        "path": "modules/ihk-smp-x86_64.ko",
+        "sha256": "5bdcd1b4e285f3f8e23d0cb75e2e62db66161120623887543546f93b5987be90",
+        "size": 10942760,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 420,
+        "path": "modules/ihk.ko",
+        "sha256": "2443a0b50b2aa1ad8f003558cd30bb0628ae35544925ca67e998a7cbc01545df",
+        "size": 1357704,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 420,
+        "path": "modules/mcctrl.ko",
+        "sha256": "332d7560e02f64844a4d01b837c2d64e65d0f792f3d186bdb8e3e19553efce46",
+        "size": 1916160,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "poweroff",
+        "sha256": "384607e6e1544a549c793f34a21d8d555879abaa1d532b5e2b9dc5e020dcc569",
+        "size": 4456,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "proc",
+        "sha256": null,
+        "size": 4096,
+        "type": "dir",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "sbin",
+        "sha256": null,
+        "size": 4096,
+        "type": "dir",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "sbin/insmod",
+        "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+        "size": 182088,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "sbin/rmmod",
+        "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+        "size": 182088,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "sys",
+        "sha256": null,
+        "size": 4096,
+        "type": "dir",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 1023,
+        "path": "tmp",
+        "sha256": null,
+        "size": 4096,
+        "type": "dir",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "usr",
+        "sha256": null,
+        "size": 4096,
+        "type": "dir",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "usr/bin",
+        "sha256": null,
+        "size": 4096,
+        "type": "dir",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "usr/bin/coreutils",
+        "sha256": "8e7928bf899599dbe98a4baaf2b5cba78a0b003213ab83104182e31475c068ff",
+        "size": 1347728,
+        "type": "file",
+        "uid": 1000
+      },
+      {
+        "gid": 1000,
+        "mode": 493,
+        "path": "usr/sbin",
+        "sha256": null,
+        "size": 4096,
+        "type": "dir",
+        "uid": 1000
+      }
+    ],
+    "required_future_delta": "Only all3module replacement bindings change to fresh d99 build; collector/helper/probe/image/payload/oracles/profile unchanged. Old archive embeds3f7 SMP and cannot be relabeled as newmodule build. After positive build/artifactreview, use unchanged retained57-member source inventory/stager with exact3newmodule replacements once, then unchangedoverlay once and strict61map/manifest check. No unchanged preparation/test replay now.",
+    "reusable_inputs": {
+      "bzImage": {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+        "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+        "size": 16130048
+      },
+      "collector": {
+        "mode": 33216,
+        "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/native-resource-reboot-cycle-collector",
+        "sha256": "41c39c1a8b3aa8c4d8d0522085674e9799cb539e0ffa01edc1911a3f90a893f5",
+        "size": 1030488
+      },
+      "lifecycle_oracle": {
+        "argv": [
+          "/bin/native-lifecycle-probe",
+          "0"
+        ],
+        "os_destroyed": false,
+        "require_independent_payload_evaluation": true,
+        "resource_restoration_verified": false,
+        "shutdown_return": 0,
+        "status_after": 0,
+        "status_before": 5,
+        "transition_observed": true
+      },
+      "lifecycle_parser": {
+        "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py",
+        "sha256": "0585f78b80e603c010316418ce307794d59e1d92581b845ec6b2e74e22c8954b",
+        "size": 7025
+      },
+      "lifecycle_probe": {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/native-lifecycle-probe",
+        "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+        "size": 872616
+      },
+      "mcexec": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+        "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+        "size": 453352
+      },
+      "mckernel_image": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-942c927b-scratch22-authority3-image1-20261017/evidence/artifacts/mckernel.img",
+        "sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+        "size": 7908256
+      },
+      "native_boot": {
+        "path": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/native-boot-running",
+        "sha256": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+        "size": 31208
+      },
+      "payload": {
+        "mode": 33216,
+        "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/app",
+        "sha256": "8be0b167d7267d4ef5aa122f62ebdbd95d6aa0be4f75384b9285d9983683c234",
+        "size": 872056
+      },
+      "payload_contract": {
+        "argv": [
+          "/bin/mcexec",
+          "-t",
+          "1",
+          "0",
+          "app",
+          "A",
+          "",
+          "B"
+        ],
+        "cwd": "/case/work",
+        "env": {
+          "COKERNEL_PATH": "/apps",
+          "PATH": "/usr/bin:/bin"
+        },
+        "oracle": {
+          "exit_code": 0,
+          "stderr_hex": "",
+          "stdout_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a"
+        },
+        "stderr_limit_bytes": 1024,
+        "stdout_limit_bytes": 1024
+      },
+      "profile": {
+        "cleanup_timeout_seconds": 15,
+        "cpus": 4,
+        "cpuset": "2-5",
+        "guest_memory_mib": 8192,
+        "guest_numa_nodes": 2,
+        "guest_timeout_seconds": 300,
+        "guest_vcpus": 4,
+        "heavy_operations": 1,
+        "mckernel_cpus": 1,
+        "mckernel_memory_mib": 128,
+        "memory": 12884901888,
+        "memory_swap": 12884901888,
+        "network": "none",
+        "payload_timeout_seconds": 10,
+        "pids": 512
+      },
+      "reboot_contract": {
+        "argv": [
+          "/bin/native-boot"
+        ],
+        "before_after": "klogctl3 immediatelybefore/afteractualsecondhelper; fullrawsnapshots retainedconsole+guestfiles, each<262144; append-prefix/fresh5 by exact consumerdfa2.",
+        "cycles_attempted": 1,
+        "extra_cycle_authorized": false,
+        "helper_timeout_ms": 60000,
+        "host_evaluation": [
+          "Unchanged native_diagnostic.evaluate independently validates ordinarypayload/kernel/QMP/retirement",
+          "Unchanged strictlifecycle parser validates firstRunning5\u2192shutdown0\u2192query0/close0",
+          "Unchanged e66e +9c62 decode/evaluate v2publicrelease",
+          "New source-bound reboot_decoder.evaluate(serial) reuses pinneddfa2consumer,requiresordered samecapturedresourcefinish/bootstart/finish and fresh5before/afterdelta, scans full snapshots with unchangedBAD_MARKERS"
+        ],
+        "outer_collector_seconds": 120,
+        "resource_gate": "Only good/safe complete actualresourcehelper raw0 permits second helper; first payload/strictlife gates unchanged.",
+        "second_boot_resources_retained": true,
+        "second_stop_authorized": false,
+        "serializer": "ND_REBOOT metadata+two bootstreams+before/afterrawsnapshot chunks512bytes; one terminalLF/CRLF outeronly, innerhelper/log bytes exactLF.",
+        "streams": {
+          "privatepipes": true,
+          "rawstatus_required": 0,
+          "stderr_limit": 1024,
+          "stdout_limit": 1024
+        }
+      },
+      "reboot_decoder": {
+        "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/reboot_capture.py",
+        "sha256": "9ce5380fa50243ea9f865e45c0432b733f7373385c8e70a1ac13ed0f636fc558",
+        "size": 7120
+      },
+      "reboot_sequence_consumer": {
+        "path": "/home/holden/mckernel/scripts/application-tests/native_resource_reboot_sequence.py",
+        "sha256": "dfa2d96b1be6d698ae00c83a622986d3e8f6f13e1f376d8914491aa78612cb5d",
+        "size": 3942
+      },
+      "resource_contract": {
+        "argv": [
+          "/bin/native-resource-release-probe"
+        ],
+        "capture_stream_limit": 4096,
+        "chunk_bytes": 512,
+        "gate": "Exact ordinary40-byte LF stdout/emptyerr/status0, clean complete pipes and safe retirement plus exact Running5\u2192shutdown0\u2192query0/close0 lifecycle stdout/status0.",
+        "helper_timeout_ms": 10000,
+        "host_evaluation": {
+          "inner_bytes": "Reconstructed C helper output remains exactLF; no normalization",
+          "outer_terminators": "LF or one terminalCRLF; reject embedded/bare/extraCR",
+          "steps": [
+            "decode exact collector serial with source-bound resource_decoder.decode(serial)",
+            "Pass returned rawstdout/rawstderr/rawwaitstatus unchanged to source-bound resource_probe_parser.evaluate(stdout,stderr,status)",
+            "Require PASS public_release_protocol while preserving actual guest/result/retirement bindings separately"
+          ]
+        },
+        "inventory_contract": "Device CPUempty/128MiBnode0 before; OSCPU/MEM unavailable; close/destroy, refreshdeviceMEM, release exactMEM, deviceCPU/MEMempty and CPU1online after.",
+        "schema": "native-resource-release-v2",
+        "scope_exclusions": [
+          "physical frame identity",
+          "generation identity",
+          "complete boot/workload/stop/destroy/release/boot cycle",
+          "reboot acceptance"
+        ],
+        "source_guard": "Compiled3f7 status bypasses admission; ordinary OSCPU/MEM queries hit closedadmission and must return-1/errno16/linux_result-16, explicitly unavailable. No kernel admission guard change."
+      },
+      "resource_decoder": {
+        "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/resource_capture.py",
+        "sha256": "e66e014f4b67854f05457770a42250fb5e0929e0da304bdbc2b7366b6bde9240",
+        "size": 4146
+      },
+      "resource_probe": {
+        "mode": 33216,
+        "path": "/home/holden/mckernel-work/scratch/native-resource-release-v2-20261017-1/static-1/native-resource-release-probe",
+        "sha256": "e914699243b4440f31b58921c10c74252c4bea1ded7929bea129c69c348a3345",
+        "size": 876648
+      },
+      "resource_probe_parser": {
+        "path": "/home/holden/mckernel/scripts/application-tests/native_resource_release_capture.py",
+        "sha256": "9c628074de9ae897e82f15c2f4438d2558c2a10fde6a0d5a288b8964eddfcc76",
+        "size": 5649
+      }
+    },
+    "stage_executed": false,
+    "status": "PENDING_NEW_MODULE_ARTIFACTS_NO_STAGE_OR_OVERLAY_CREATED",
+    "why_existing_archive_cannot_be_final": "Existing base and overlay contain prior3f7 module bytes. A new manifest that merely names d99 modules would fail final_map/module source binding and is not executable."
+  },
+  "status": "NONEXECUTING_PENDING_BUILD_ARTIFACT_STAGE_AND_SEPARATE_EXECUTION_REVIEW",
+  "task_id": "native-resource-reboot-cycle-execution-proposal-draft-20261017-2",
+  "unchanged_inputs": {
+    "bzImage": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+      "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+      "size": 16130048
+    },
+    "collector": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/native-resource-reboot-cycle-collector",
+      "sha256": "41c39c1a8b3aa8c4d8d0522085674e9799cb539e0ffa01edc1911a3f90a893f5",
+      "size": 1030488
+    },
+    "lifecycle_oracle": {
+      "argv": [
+        "/bin/native-lifecycle-probe",
+        "0"
+      ],
+      "os_destroyed": false,
+      "require_independent_payload_evaluation": true,
+      "resource_restoration_verified": false,
+      "shutdown_return": 0,
+      "status_after": 0,
+      "status_before": 5,
+      "transition_observed": true
+    },
+    "lifecycle_parser": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py",
+      "sha256": "0585f78b80e603c010316418ce307794d59e1d92581b845ec6b2e74e22c8954b",
+      "size": 7025
+    },
+    "lifecycle_probe": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/native-lifecycle-probe",
+      "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+      "size": 872616
+    },
+    "mcexec": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+      "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+      "size": 453352
+    },
+    "mckernel_image": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-942c927b-scratch22-authority3-image1-20261017/evidence/artifacts/mckernel.img",
+      "sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+      "size": 7908256
+    },
+    "native_boot": {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/native-boot-running",
+      "sha256": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+      "size": 31208
+    },
+    "payload": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/app",
+      "sha256": "8be0b167d7267d4ef5aa122f62ebdbd95d6aa0be4f75384b9285d9983683c234",
+      "size": 872056
+    },
+    "payload_contract": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "oracle": {
+        "exit_code": 0,
+        "stderr_hex": "",
+        "stdout_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a"
+      },
+      "stderr_limit_bytes": 1024,
+      "stdout_limit_bytes": 1024
+    },
+    "profile": {
+      "cleanup_timeout_seconds": 15,
+      "cpus": 4,
+      "cpuset": "2-5",
+      "guest_memory_mib": 8192,
+      "guest_numa_nodes": 2,
+      "guest_timeout_seconds": 300,
+      "guest_vcpus": 4,
+      "heavy_operations": 1,
+      "mckernel_cpus": 1,
+      "mckernel_memory_mib": 128,
+      "memory": 12884901888,
+      "memory_swap": 12884901888,
+      "network": "none",
+      "payload_timeout_seconds": 10,
+      "pids": 512
+    },
+    "reboot_contract": {
+      "argv": [
+        "/bin/native-boot"
+      ],
+      "before_after": "klogctl3 immediatelybefore/afteractualsecondhelper; fullrawsnapshots retainedconsole+guestfiles, each<262144; append-prefix/fresh5 by exact consumerdfa2.",
+      "cycles_attempted": 1,
+      "extra_cycle_authorized": false,
+      "helper_timeout_ms": 60000,
+      "host_evaluation": [
+        "Unchanged native_diagnostic.evaluate independently validates ordinarypayload/kernel/QMP/retirement",
+        "Unchanged strictlifecycle parser validates firstRunning5\u2192shutdown0\u2192query0/close0",
+        "Unchanged e66e +9c62 decode/evaluate v2publicrelease",
+        "New source-bound reboot_decoder.evaluate(serial) reuses pinneddfa2consumer,requiresordered samecapturedresourcefinish/bootstart/finish and fresh5before/afterdelta, scans full snapshots with unchangedBAD_MARKERS"
+      ],
+      "outer_collector_seconds": 120,
+      "resource_gate": "Only good/safe complete actualresourcehelper raw0 permits second helper; first payload/strictlife gates unchanged.",
+      "second_boot_resources_retained": true,
+      "second_stop_authorized": false,
+      "serializer": "ND_REBOOT metadata+two bootstreams+before/afterrawsnapshot chunks512bytes; one terminalLF/CRLF outeronly, innerhelper/log bytes exactLF.",
+      "streams": {
+        "privatepipes": true,
+        "rawstatus_required": 0,
+        "stderr_limit": 1024,
+        "stdout_limit": 1024
+      }
+    },
+    "reboot_decoder": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-collector-20261017-1/source/reboot_capture.py",
+      "sha256": "9ce5380fa50243ea9f865e45c0432b733f7373385c8e70a1ac13ed0f636fc558",
+      "size": 7120
+    },
+    "reboot_sequence_consumer": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_resource_reboot_sequence.py",
+      "sha256": "dfa2d96b1be6d698ae00c83a622986d3e8f6f13e1f376d8914491aa78612cb5d",
+      "size": 3942
+    },
+    "resource_contract": {
+      "argv": [
+        "/bin/native-resource-release-probe"
+      ],
+      "capture_stream_limit": 4096,
+      "chunk_bytes": 512,
+      "gate": "Exact ordinary40-byte LF stdout/emptyerr/status0, clean complete pipes and safe retirement plus exact Running5\u2192shutdown0\u2192query0/close0 lifecycle stdout/status0.",
+      "helper_timeout_ms": 10000,
+      "host_evaluation": {
+        "inner_bytes": "Reconstructed C helper output remains exactLF; no normalization",
+        "outer_terminators": "LF or one terminalCRLF; reject embedded/bare/extraCR",
+        "steps": [
+          "decode exact collector serial with source-bound resource_decoder.decode(serial)",
+          "Pass returned rawstdout/rawstderr/rawwaitstatus unchanged to source-bound resource_probe_parser.evaluate(stdout,stderr,status)",
+          "Require PASS public_release_protocol while preserving actual guest/result/retirement bindings separately"
+        ]
+      },
+      "inventory_contract": "Device CPUempty/128MiBnode0 before; OSCPU/MEM unavailable; close/destroy, refreshdeviceMEM, release exactMEM, deviceCPU/MEMempty and CPU1online after.",
+      "schema": "native-resource-release-v2",
+      "scope_exclusions": [
+        "physical frame identity",
+        "generation identity",
+        "complete boot/workload/stop/destroy/release/boot cycle",
+        "reboot acceptance"
+      ],
+      "source_guard": "Compiled3f7 status bypasses admission; ordinary OSCPU/MEM queries hit closedadmission and must return-1/errno16/linux_result-16, explicitly unavailable. No kernel admission guard change."
+    },
+    "resource_decoder": {
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/resource_capture.py",
+      "sha256": "e66e014f4b67854f05457770a42250fb5e0929e0da304bdbc2b7366b6bde9240",
+      "size": 4146
+    },
+    "resource_probe": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/native-resource-release-v2-20261017-1/static-1/native-resource-release-probe",
+      "sha256": "e914699243b4440f31b58921c10c74252c4bea1ded7929bea129c69c348a3345",
+      "size": 876648
+    },
+    "resource_probe_parser": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_resource_release_capture.py",
+      "sha256": "9c628074de9ae897e82f15c2f4438d2558c2a10fde6a0d5a288b8964eddfcc76",
+      "size": 5649
+    }
+  },
+  "unix_socket_preflight": {
+    "actual_generated_endpoint_count": 1,
+    "endpoints": [
+      {
+        "encoded_bytes": 99,
+        "exists": false,
+        "limit": 107,
+        "path": "/home/holden/mckernel-work/scratch/ndrc2-7bcff1b5/attempt-7bcff1b51dde46c3a476cd47662acca2/qmp.sock"
+      }
+    ],
+    "function": "_qmp_socket_path",
+    "long_nested_path_rejected_before_creation": {
+      "encoded_bytes": 138,
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-preparation-20261017-2/p/attempt-7bcff1b51dde46c3a476cd47662acca2/qmp.sock",
+      "reason": "Exceeds107; dispatcher explicitly extended only exact freshshortparent namespace."
+    },
+    "other_endpoints": "Frozen QEMU profile serial/debugcon use regular files; only QMP is a generated UNIX socket.",
+    "source": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440
+    }
+  }
+}

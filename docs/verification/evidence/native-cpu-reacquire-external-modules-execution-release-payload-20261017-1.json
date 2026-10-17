@@ -1,0 +1,65 @@
+{
+  "schema": "mckernel.native-running-external-modules-release.v1",
+  "status": "PASS_EXECUTION_RELEASE",
+  "execution_count": 1,
+  "author": "/root",
+  "activation_conditions": "Only execute after independent exact payload review, source checkpoint pushed/fetched/blob verified, fresh mount/resource/root/shared ownership admission, exclusiveheavy and HEADfreeze. Fields do not themselves claim a build or observed source replay.",
+  "request": {
+    "path": "/home/holden/mckernel-work/scratch/native-cpu-reacquire-module-preparation-20261017-1/final/request.json",
+    "sha256": "90fffc80e0e4ec78dc1973676bf2d80cf3b182126c13a45f7490569fc1a700ea"
+  },
+  "nonce": "a7d84db0d8b54b9b94347fd0aff57594",
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "fetched_source_verified": true,
+  "terminal_policy": "remove-owned-terminal",
+  "historical_observer": {
+    "path": "/home/holden/mckernel-work/scratch/native-cpu-reacquire-module-preparation-20261017-1/final/capsule/scripts/native_exact_historical_lease_observer.py",
+    "prefix": [
+      "/usr/bin/sudo",
+      "-A",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B"
+    ],
+    "sha256": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "timeout_seconds": 30
+  },
+  "source_sha256": {
+    "scripts/native_exact_historical_lease_observer.py": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "scripts/native_running_external_modules_offline.py": "2622f418c3748dfacaecfe368762ecb2f0a205939c23c121f37629745e6498c5",
+    "scripts/native_running_external_modules_owner.py": "601e745fd864b10389e1205ea20bf3bdcb241376d86a0b752d7b19dc5664198a",
+    "scripts/native_rust_exact_build_container_owner.py": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+    "scripts/native_rust_exact_build_image_prepare.py": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b",
+    "scripts/native_rust_exact_build_image_rebind.py": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e",
+    "scripts/native_rust_exact_build_image_rebind_probe.py": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635",
+    "scripts/native_rust_exact_build_offline.py": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+    "scripts/native_rust_exact_disk_build_wrapper.py": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "e9861cf73b0328c9fe2eacb987ea179933146cbeddbc3951405d4e60e89560f4",
+    "scripts/tests/test_native_running_external_modules_owner.py": "22f30b785d02b0ff3b917b2f53f7d884e085aefff15336b8d0bebf09e2e66aba"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-cpu-reacquire-external-modules-independent-source-review-20261017-1.json",
+    "sha256": "48a9d911dd3ec25ead1421bfd234c68f2905b6f416f294f9241605b63aff0fb8"
+  },
+  "reviewed_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-cpu-reacquire-external-modules-execution-proposal-20261017-1.json",
+    "sha256": "f8077b24a177fef732c7d504ec3c738caa0e9f07e55effc48ecb7249dbd8a08f"
+  },
+  "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "source_candidate_sha": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+  "preceding_actual_retirement": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-reboot-cycle-failure-review-20261017-1.json",
+    "sha256": "0f530ca350d94907bac1df55dc55468f89a8af37fa944e6f9b8d26f64945fe98"
+  },
+  "source_derivation": {
+    "path": "/home/holden/mckernel-work/scratch/native-cpu-reacquire-module-preparation-20261017-1/final/source-binding.json",
+    "sha256": "f5f2d281618eaa6755e74a29657ccbf49b3ffd88a7a838f9a6eb2420df2e16bd"
+  },
+  "scope": "One fresh matched three-module external build for CPU reacquisition; unchanged Linux/tool image; no image/Linux rebuild or guest authority. Previous failure/captures preserved.",
+  "storage": "Fresh owner admission must preserve host16GiB/scratch12GiB floors plus entire576MiB estimated growth reserve; reserve is conservative estimate, not measured peak or quota. No floor relaxation or trim prerequisite when satisfied.",
+  "source_checkpoint_verification": {
+    "commit": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+    "fetched_commit": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+    "changed_blobs_byte_verified": 19
+  }
+}

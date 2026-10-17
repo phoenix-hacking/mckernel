@@ -1,0 +1,55 @@
+{
+  "schema": "mckernel.native-fp-save-thin-materialization-attempt.v1",
+  "status": "FAIL_SOURCE_FORM_ASSERTION_PARTIAL_TREE_PRESERVED",
+  "attempt": 1,
+  "family": "thin_source_materialization_regular_only_missed_tracked_symlinks",
+  "materializer_sha256": "3159007fdc61614723ffcbeb3d84e58e58e965154fc00b2ae16144d019baa62d",
+  "completed_entries": 4866,
+  "expected_entries": 6948,
+  "private_regular_prefix_verified": 4866,
+  "prefix_logical_bytes": 105695946,
+  "prefix_allocated_file_bytes": 117846016,
+  "failed_next_relative": "test/freeze_thaw/tp/100.sh",
+  "source_semantics": "Git index120000 and original full source manifest hash raw symlink target text, not target file contents; old thin contract incorrectly assumed all materialized entries regular.",
+  "direct_index_observation": {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3/.git/index",
+    "sha256": "008035bd0dae41eda3e4445d7238ba3c098a14ef4c784a84c065a6e7cf953717",
+    "format": 2,
+    "entries": 8468,
+    "checksum_verified": true,
+    "git_executed": false
+  },
+  "symlinks": 49,
+  "all_targets_relative_onehop_in_selected_source": true,
+  "receipt_exists": false,
+  "proof_scope": "Only failed private copying and postfailure verified prefix; no image compilation/native failure or acceptance.",
+  "storage": {
+    "host": {
+      "available": 18660667392,
+      "floor": 17179869184,
+      "above_floor": 1480798208
+    },
+    "scratch": {
+      "available": 16700162048,
+      "floor": 12884901888,
+      "above_floor": 3815260160
+    }
+  },
+  "old_512MiB_plan_unspent_after_file_bytes_only": 419024896,
+  "remaining_budget_limit": "File-byte-only subtraction excludes directory/journal/report overhead and concurrent unrelated filesystem changes. Failed tree retained; another full private attempt would add ~139MB and must be added to fresh peak/admission planning. No cleanup authorized.",
+  "preserved_paths": [
+    "/home/holden/mckernel-work/scratch/native-fp-save-thin-preparation-20261017-1/materialized-source",
+    "/home/holden/mckernel-work/scratch/native-fp-save-thin-preparation-20261017-1/materialization-journal.jsonl",
+    "/home/holden/mckernel-work/scratch/native-fp-save-thin-preparation-20261017-1/actual-materialization.stdout",
+    "/home/holden/mckernel-work/scratch/native-fp-save-thin-preparation-20261017-1/actual-materialization.stderr",
+    "/home/holden/mckernel-work/scratch/native-fp-save-thin-preparation-20261017-1/actual-materialization.status",
+    "/home/holden/mckernel-work/scratch/native-fp-save-thin-preparation-20261017-1/actual-materialization-before.json",
+    "/home/holden/mckernel-work/scratch/native-fp-save-thin-preparation-20261017-1/actual-materialization-symlink-discovery.json",
+    "/home/holden/mckernel-work/scratch/native-fp-save-thin-preparation-20261017-1/actual-materialization-partial-inventory.json"
+  ],
+  "next_step": "Root +independent expert choose exact symlink/materialization semantics before ONEbounded correction. No retry/deletion/reset/attemptreuse.",
+  "observed_at_utc": "2026-10-17T18:45:34.679970+00:00",
+  "builds": 0,
+  "guests": 0,
+  "main_sources_changed": false
+}

@@ -13,13 +13,13 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-17T17:57:25Z` (interval 30m24s).
-- Next full review target: `2026-10-17T18:25:00Z` (11:25 America/Los_Angeles).
-- Next review latest target: `2026-10-17T18:55:00Z`; preserve healthy operations.
-- Last included-usage observation: 26%; existing campaign stop remains 97%.
-- Current intervention: resolve final cycle source/evidence joins and live
-  admission, then execute the separately released one-cycle case; continue
-  isolated FPU-save repair and actual fork carrier/LINK implementation.
+- Last full review: `2026-10-17T18:25:56Z` (interval 28m31s).
+- Next full review target: `2026-10-17T18:55:00Z` (11:55 America/Los_Angeles).
+- Next review latest target: `2026-10-17T19:25:00Z`; preserve healthy operations.
+- Last included-usage observation: 28%; existing campaign stop remains 97%.
+- Current intervention: bind accepted CPU-repair modules to the fresh cycle
+  packet and obtain native feedback; continue thin FPU-build preparation,
+  bounded storage recovery and actual fork carrier/LINK integration in parallel.
 - Current invocation independently accepted app/diagnostic behaviors: 14 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -28,6 +28,8 @@ This file describes supervision, not OS acceptance or execution authority.
 - Separate native3f7b observations: independently accepted quiescent native
   shutdown5->0->0/close0 and public destroy/device-memory release; complete
   stop/destroy/release/reboot cycles remain0.
+- CPU-repair candidate d99edf2f has independently accepted matched modules;
+  its CPU reacquisition and cycle retry have no native acceptance yet.
   Old formal scores and estimates remain historical, not the new goal's percentage.
 - No new monitor script, OS timer, engineering dispatcher or workload was started.
 
@@ -845,3 +847,84 @@ practical-m07-active-state-mismatch-20261017-1.json;
 native_fp_save_repair_20261017.json. Fork correction report remains
 under scratch/fork-adoption-wip-20261017-1/docs/verification/evidence/
 fork-provider-completion-correction-20261017-1/report.json.
+
+## Review 10 — 2026-10-17 18:25:56 UTC
+
+Interval: `17:57:25` to `18:25:56` UTC,28m31s. Same live worker498255/start3900845
+and server498257/start3900851; running, no stop. Usage28%, stop97%.
+HEADd99edf2f58ee44b1a7e9aa726cbb49eee7850248 is pushed/fetched/byte-verified by
+the dispatcher. Supervisor owns no runtime/Git.
+
+| Actual operation | Elapsed | Independent result |
+| --- | --- | --- |
+| First native same-guest cycle, launch17:57:51.178 | 36.447s | Retired failed second CPU reacquisition18:03:30 |
+| CPU-repair matched three-module build | 18.15s | Artifact and retirement PASS18:23:57 |
+
+**Delivered:** a concrete native failure localized, repaired and compiled. First
+workload, strict shutdown and public resource release passed again. Second helper
+CPU1reservation failed before memory reservation, OScreation or second boot;
+75bytes/exit1/empty stderr, no fresh status5. Numeric guest errno was not captured.
+The compiled shutdown dropped its CPU-device snapshot, while subsequent reserve
+required it without reacquisition. Original-source fixtures reproduce-19; ENODEV
+is source inference, not an observed guest errno. All25clients, owner/container/
+QEMU retired; lease/root lock released. The failed capture remains preserved.
+
+The repair retains module-owned CPU discovery references across successful
+reconciliation while clearing OSassignment, journal, veto and resource pins.
+Later reserve still checks device/topology/APIC/NUMA identity and online state;
+actual controller Drop releases the references after callback removal. Six
+actual-body tests pass; original source fails four. Independent source PASS
+18:09:08; integration20cases plus compile/mutation controls PASS18:14:38 and the
+original15case reclaim suite passes. Fixture changes preserve ownership and
+retirement assertions. These tests use deterministic hardware adapters.
+
+Build uses60files/1,205,770bytes, only smp_cpu.rs changed. All three ELF/compiler
+bindings pass with exit0/empty compiler stderr. SMP hash82c9021f7491fa8bc6d178fe99e7d4b7b6f90838474a9c91b62ddb8edb3d13f8.
+All14Docker clients, fixed observer, owner/container retire; three owned records
+archived/released. Accepted artifacts now unblock module-dependent cycle staging.
+The fresh short-path cycle2draft reuses unchanged image/helper/collector/oracles;
+final module bindings, staging and separate execution release remain next.
+
+**Actual totals:**14distinct app behaviors unchanged; no new app or successful
+native cycle this interval. Complete cycles0; checklist3complete/32open; all14
+milestones open. Source fixes and compilation are not native fix acceptance or
+evidence of a2x/3x throughput gain. The first cycle exposed the CPU-reuse defect
+and produced a source-reviewed, compiled repair.
+
+Storage is a concrete preparation constraint. Final build record, not a fresh
+measurement: host17,963,380,736B free against17,783,848,960B floor-plus576MiB
+reserve, margin179,531,776B; scratch margin3,525,877,760B after its same reserve.
+Earlier quoted251MB was an older reserve-adjusted margin, not headroom above
+the general16GiB floor. Fresh admission passed the full reserve for this build.
+Trim remains separate from a guest that independently passes its own admission.
+No trim/deletion ran. Wrapper review found missing competing-fstrim publisher
+classification; a narrow identity-aware correction is in progress. Estimated
+reclaim2.51GB is optimistic, not guaranteed.
+
+FPU thin preparation is ready for independent review:117MBrequired source,
+exact omission/restoration records, full9,760file authority with only process.c
+changed, five isolated admission/guard diffs. Estimated peak464MB/reserve512MiB.
+No materialization or image build occurred. The reviewed fail-stop repair remains
+isolated; original full-tree validation is unchanged. Fork storage and guest
+backing prerequisites pass, including the copied operations-table lifetime fix;
+provider52case suite passes. Actual pre-MM module-pinned capsule, phase writer,
+resolver/LINK and finalRET/ACK joins are still being integrated. No native fork;
+production non-nullCREATE_PPD remains-95.
+
+**Next adjustment:** immediately bind the accepted modules and complete the fresh
+cycle packet/review/admission; do not wait for unrelated FPU/fork work or routine
+notes. Keep thin-source and targeted-trim reviews on independent cheap lanes;
+any trim needs exact release, fresh identities and exclusive ownership. Source
+checks continue within remaining resources while the single runtime lane works.
+Preserve all failures, scratch21 and historical exclusions. Percentage baseline
+remains immutable. Next review18:55UTC, latest19:25. Steering180528,180931,181231
+and182329 reached the campaign; no supervisor workload, cleanup or launcher ran.
+
+Anchors under ../evidence/: native-resource-reboot-cycle-failure-review-20261017-1.json;
+native-cpu-reacquire-source-integration-20261017-1.json;
+native-cpu-reacquire-external-modules-execution-proposal-20261017-1.json;
+native-resource-reboot-cycle-execution-proposal-draft-20261017-2.json;
+native_fp_save_thin_preparation_20261017.json;
+native-targeted-trim-preparation-20261017-1.json. Actual build/owner receipts are
+under scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/evidence/receipt.json and
+scratch/nsd-o-a7d84db0d8b54b9b94347fd0aff57594/owner-receipt.json.
