@@ -1,0 +1,19 @@
+{
+  "schema": "mckernel.scratch22.actual-kernel-metadata-result.v1",
+  "status": "FAIL_TOOLCHAIN_METADATA_INCOMPATIBILITY_NOT_SOURCE_REPAIR_FAILURE",
+  "preparation": "scratch22-native-error-actual-crate-compile-preparation-20261017.json",
+  "preparation_sha256": "8af5292f9da2833d54676eca9e97258af9837b2597e2066d72b2d6449d6e789b",
+  "capture_root": "/home/holden/mckernel-work/scratch/mckernel-s22-errorpath-realcrate-roe8doii",
+  "observer_source": "/home/holden/mckernel-work/scratch/scratch22-realcrate-observer-20261017.py",
+  "profile": "ordinary user CPU7/one job/2GiB/150s observer,120s compiler; actual kernel metadata read-only, only fresh disposable outputs; no root, container, heavy lease or guest",
+  "quiescence": "Independent review be4ea78f63872e69f9f1463d0587a9d6ebe6eeab5fbec923588101c5c89e4a19 proves canonical owner and clients absent and container stopped. The known idle outer observer remains quarantined holding the development lock; this read-only ordinary compiler does not change or release that ownership.",
+  "exit_code": 1,
+  "compiler_elapsed_seconds": 0.05889272689819336,
+  "stdout_empty": true,
+  "stderr_sha256": "9155e9eea00256a39eb41c16789ee16605c2d403ad51a7bd83c5a30d6a895153",
+  "finding": "E0514: retained core/kernel/alloc/compiler_builtins were built by Red Hat Rust1.92.0-1.el10 and are incompatible with rustup Rust1.92.0 despite matching release and commit. E0635 new_uninit is an additional distribution feature mismatch. The corrected source was not type-checked against compatible actual kernel metadata.",
+  "protected_inputs": "All17 prepared input SHA256/device/inode/size identities matched before execution; all17 SHA256 values remained unchanged afterward.",
+  "next_action": "Do not retry unchanged host metadata checks or clean/rebuild retained metadata. Complete reviewed guard recovery and terminal cleanup, then compile fresh corrected minimal candidate in the existing pinned native tool container with fresh strict output. No incremental framework project.",
+  "source_failure_family": "S22-NATIVE-SHUTDOWN-ERROR-PATH-1 remains one real native failure plus one source correction awaiting compatible native compilation",
+  "acceptance_delta": 0
+}

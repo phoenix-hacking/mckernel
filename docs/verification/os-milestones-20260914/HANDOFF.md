@@ -1,5 +1,46 @@
 # Compact dispatcher handoff
 
+## Current continuation: checkpoint 365, compiler repair / guard recovery pending
+
+CONTINUE. Authority1 fd09933c actual native attempt FAILED: SMP helper used absent
+kernel::Error. Boot bzImage exists (16,130,048B,SHA9092e7a4...81d), ihk.o/mcctrl.o
+compiled, but all three final .ko files are absent. No acceptance increment.
+Fix64effd66 passes8Python,4095errno vectors, old-root E0412negative and oldshutdown
+regressions/mutations. Minimal target d37d2216a60c6db10442ba8bc238d64fbd59c5ea,
+tree95cbbdba1bdfa58e48ba7edba6a2d0d20259ecc6,parentfd09933c, has ONLY production
+typepath+fixture namespaceadapter changes; pushed/fetched at separate
+origin/scratch22-authority2-source-errorpath-20261017. Independent source review
+f0a565f2...a077 passes; all12 RS011 authority files/checkers unchanged.
+
+Owner80867/7Docker clients retired; container18ce9ef5...b5aa6 exited1/Pid0 at
+04:35:02Z, no OOM. Outer guard80259/start718109 still holds rootlock27:4 in
+QUARANTINE:16MiB observer cap rejected80,143,046B stdout. Original89,341,228B
+ownerreceipt/logs/exclusions remain. Independent profilebe4ea78f...4a19 proves
+actual retirement and conditionally permits ONLY exact pidfd-bound guard
+retirement after fresh checks; no signal has run. Never numeric/groupkill or
+touch launcher23902/23943/23945. Recovery code author scratch21_transaction;
+concrete independent review/release next. Actual terminal cleanup then needs
+new release/live identities. Size-corrected cleanup15b7f924...1098 passes8tests;
+full inventories140028+286298entries/155MB,400000/root+256MiB docs, streaming
+128MiB selectedfiles. Old cleanup review does not release changed code.
+
+Authority2 adapter/guard templates pass30/38tests; inert until actual accepted
+recovery+cleanup contracts are wired/reviewed. Use fresh output/requests/names,
+never replay authority1 or start heavy work while barriers remain. Host actual
+kernel.rmeta experiment failed once on E0514 RedHat-vs-rustup incompatibility,
+not source repair: retain mckernel-s22-errorpath-realcrate-roe8doii, no retry or
+metadata cleanup. Next compiler layer uses pinned container/fresh strict output.
+
+Standing user044427 directive: after reproducible PASS native+matchingimage,
+retain immutable exact kernel/modules/toolchain/config/source identities; reuse
+compatible artifacts across eligible fresh payloads. Payload-only changes do not
+require rebuilding unchanged inputs. Fresh oracle/output/exit/log/teardown/failure
+evidence remains; passing build != runtime stability. No incremental framework,
+mutated baseline or consumed-attempt replay. Continue boot/test/firstfailure/
+minimalfix/regression/retest and useful parallel lanes within existing resources,
+isolation,GPT6.1 and97%reserve. Relayed to active implementation worker; carry in
+EVERY future packet with the parallelism/code-first preference below.
+
 ## Current continuation: checkpoint 364, native compiler active
 
 CONTINUE, not a stop. Pinned fd09933c candidate is compiling under the sole heavy

@@ -1,0 +1,306 @@
+{
+  "schema_version": 1,
+  "status": "PREPARATION_ONLY_NOT_EXECUTION_RELEASE",
+  "failure_family": "S22-NATIVE-SHUTDOWN-ERROR-PATH-1",
+  "attempt_history": "First actual candidate failed E0412 at shutdown_v6_post_effect(error: kernel::Error). One bounded correction is pending with shutdown_actual_bodies; this preparation neither runs nor resets that history.",
+  "acceptance_credit": false,
+  "compiler_invoked": false,
+  "observation": {
+    "container_paths": "/scratch was not a host mount; exact host retained output is /home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output.",
+    "failed_smp_cmd_exists": false,
+    "available_failed_smp_depinfo": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/drivers/misc/mckernel/.ihk_smp_x86_64.o.d",
+    "source_failure": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ihk_smp_x86_64.rs",
+      "line": 402,
+      "signature": "fn shutdown_v6_post_effect(error: kernel::Error) -> i64 {"
+    },
+    "actual_api": {
+      "module_declaration": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/source/linux-6.12.0-211.44.1.el10_2/rust/kernel/lib.rs:37 pub mod error;",
+      "type_definition": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/source/linux-6.12.0-211.44.1.el10_2/rust/kernel/error.rs:91 pub struct Error(core::ffi::c_int);",
+      "method_definition": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/source/linux-6.12.0-211.44.1.el10_2/rust/kernel/error.rs:125 pub fn to_errno(self) -> core::ffi::c_int"
+    },
+    "kernel_metadata_exists": true
+  },
+  "read_only_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/rust/libkernel.rmeta",
+      "sha256": "f9805c18556598b5fb88cf703d32a43d01668302770417abeae9af8cf0f42388",
+      "size": 1633186,
+      "device": 1828,
+      "inode": 5464494
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/rust/libcore.rmeta",
+      "sha256": "3f02784957b62d4926aeb9e199e90597db322e2504f571accb848d15725fb2c4",
+      "size": 59454428,
+      "device": 1828,
+      "inode": 5464470
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/rust/liballoc.rmeta",
+      "sha256": "583e1996905ea2d24756a4e59d60dc4936aa19a7750b99c0326f45ada319954d",
+      "size": 1317138,
+      "device": 1828,
+      "inode": 5464478
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/rust/libbindings.rmeta",
+      "sha256": "d2d6892e9adf3da2d32f229ef3038facc4e732da1757f58ec7259c18a4ecf43f",
+      "size": 19688412,
+      "device": 1828,
+      "inode": 5464485
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/rust/libuapi.rmeta",
+      "sha256": "f9d2f4b4481d5efb3531178e93192e2f8309309c507de371fd5d057e7ad0acad",
+      "size": 16740726,
+      "device": 1828,
+      "inode": 5464487
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/rust/libcompiler_builtins.rmeta",
+      "sha256": "3c2b9f02f87bf6cc7b31dfba4c23c3892afa0a024a1778a76f563c82b0a73290",
+      "size": 8868,
+      "device": 1828,
+      "inode": 5464475
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/rust/libbuild_error.rmeta",
+      "sha256": "6ba8796ddf6f417e00bb678de91d0c95765374b2b40e798df005f1e568977fb2",
+      "size": 3627,
+      "device": 1828,
+      "inode": 5464482
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/rust/libmacros.so",
+      "sha256": "50534a1cde9fb7a839e3324fa6628c3f57d39354bf03d8aef317c4fe71dfee77",
+      "size": 12029112,
+      "device": 1828,
+      "inode": 5464459
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/scripts/target.json",
+      "sha256": "99841dcc659681b8bd45e47d0dee08d3c3c3fa04e0f3331dede10ba0fbb00ea7",
+      "size": 545,
+      "device": 1828,
+      "inode": 5338678
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/rust/.kernel.o.cmd",
+      "sha256": "3e0ff080ee51df791ea58e91a67f739ef06b71dc1d851f6232079c5047a0b790",
+      "size": 5318,
+      "device": 1828,
+      "inode": 5464495
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/drivers/misc/mckernel/.ihk.o.cmd",
+      "sha256": "db2a929e3a8c3e7eaaa5d6cce9dd721b6ac6da05347d54f482a6253fb86b54ef",
+      "size": 3259,
+      "device": 1828,
+      "inode": 5731817
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/drivers/misc/mckernel/.ihk_smp_x86_64.o.d",
+      "sha256": "1ac3a15898ea85b39a48163fd8bb2555820616ef8eb225a6ff6500fa465b8dd7",
+      "size": 11448,
+      "device": 1828,
+      "inode": 5731816
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/include/generated/rustc_cfg",
+      "sha256": "e2799dd37996a64ab04e0548be1bd7f4e22a375c74e77e19c09098cdb6bc3939",
+      "size": 315138,
+      "device": 1828,
+      "inode": 5594585
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/source/linux-6.12.0-211.44.1.el10_2/rust/kernel/lib.rs",
+      "sha256": "cde3e1e9608006f36c3a44ee11be848d8481c665f75b6d29937c9e9d9f76b0b6",
+      "size": 4196,
+      "device": 1828,
+      "inode": 6511882
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/source/linux-6.12.0-211.44.1.el10_2/rust/kernel/error.rs",
+      "sha256": "50181273de10264d9aa181ba573ef859945808ebf59b01453939de75f9b47ff2",
+      "size": 12261,
+      "device": 1828,
+      "inode": 6506227
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ihk_smp_x86_64.rs",
+      "sha256": "ead31123d69508bd678f321137e9fba023621a46cdf86aa3466381b966b52b44",
+      "size": 34552,
+      "device": 1828,
+      "inode": 6381192
+    },
+    {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+      "size": 654904,
+      "device": 66306,
+      "inode": 48369307
+    }
+  ],
+  "compiler_compatibility": {
+    "host_rustc_sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+    "host_version_receipt": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/multirust-channel-manifest.toml [pkg.rustc] version = 1.92.0 (ded5c06cf 2025-12-08)",
+    "kernel_version_receipt": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/.config CONFIG_RUSTC_VERSION=109200; CONFIG_RUSTC_VERSION_TEXT=\"rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)\"",
+    "bootstrap_receipt": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/source/linux-6.12.0-211.44.1.el10_2/Makefile:612 export RUSTC_BOOTSTRAP := 1",
+    "conclusion": "Version and commit match; distribution metadata compatibility is unproven until the first permitted compiler load. No version subprocess was run.",
+    "risks": [
+      "The distro compiler may have a distinct metadata encoding/version identity despite matching release/commit; classify E0514/incompatible compiler as toolchain incompatibility, not another source correction.",
+      "The absolute custom target must preserve the exact target.json contents and target name; using a built-in x86_64 target would mismatch the actual kernel/core metadata.",
+      "All transitive core/alloc/bindings/uapi/build_error/compiler_builtins metadata must remain from this same built kernel; do not substitute the host sysroot.",
+      "The libmacros.so dependency is built in the pinned container. If loaded, host shared-library or proc-macro ABI compatibility can fail before type checking.",
+      "The extracted helper proves this exact real kernel API/type usage, not complete SMP module compilation, module ABI, link closure, runtime behavior or acceptance."
+    ]
+  },
+  "candidate_check": {
+    "eligible_after": [
+      "Dispatcher approval of this concrete command profile.",
+      "Verified terminal quiescence and applicable retirement/barrier completion for the active root owner; a preparation record grants no authority.",
+      "Remeasure capacity/headroom and bind retained metadata/target/config identities immediately before execution.",
+      "Main author finishes and freezes the single bounded correction; extract its exact helper and constant and bind their source SHA. Stop if the helper differs from the expected type-path-only correction."
+    ],
+    "profile": {
+      "ordinary_user": true,
+      "cpu_affinity": [
+        7
+      ],
+      "jobs": 1,
+      "address_space_limit_bytes": 2147483648,
+      "timeout_seconds": 120,
+      "read_only_roots": [
+        "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output"
+      ],
+      "output_root": "Fresh tempfile.mkdtemp(prefix='mckernel-s22-errorpath-realcrate-', dir='/tmp'); substitute its returned absolute path for {fresh_dir}; never reuse a prior directory.",
+      "cwd": "{fresh_dir}",
+      "guest": false,
+      "docker": false,
+      "root": false,
+      "network": false
+    },
+    "environment_exact": {
+      "PATH": "/usr/bin:/bin",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "TZ": "UTC",
+      "RUSTC_BOOTSTRAP": "1",
+      "TMPDIR": "{fresh_dir}",
+      "LD_LIBRARY_PATH": "",
+      "LD_PRELOAD": ""
+    },
+    "environment_policy": "Use env -i with only environment_exact; the pinned rustc path is absolute.",
+    "process_argv_template": [
+      "/usr/bin/timeout",
+      "120",
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--as=2147483648",
+      "--",
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "-Zbinary_dep_depinfo=y",
+      "-Astable_features",
+      "-Dunsafe_op_in_unsafe_fn",
+      "-Dnon_ascii_idents",
+      "-Wrust_2018_idioms",
+      "-Wunreachable_pub",
+      "-Wmissing_docs",
+      "-Wrustdoc::missing_crate_level_docs",
+      "-Wclippy::all",
+      "-Wclippy::mut_mut",
+      "-Wclippy::needless_bitwise_bool",
+      "-Wclippy::needless_continue",
+      "-Wclippy::no_mangle_with_rust_abi",
+      "-Wclippy::dbg_macro",
+      "-Cpanic=abort",
+      "-Cembed-bitcode=n",
+      "-Clto=n",
+      "-Cforce-unwind-tables=n",
+      "-Ccodegen-units=1",
+      "-Csymbol-mangling-version=v0",
+      "-Crelocation-model=static",
+      "-Zfunction-sections=n",
+      "-Wclippy::float_arithmetic",
+      "--target=/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/scripts/target.json",
+      "-Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2",
+      "-Zcf-protection=branch",
+      "-Zno-jump-tables",
+      "-Ztune-cpu=generic",
+      "-Cno-redzone=y",
+      "-Ccode-model=kernel",
+      "-Zfunction-return=thunk-extern",
+      "-Zpatchable-function-entry=16,16",
+      "-Copt-level=2",
+      "-Cdebug-assertions=n",
+      "-Coverflow-checks=n",
+      "-Dwarnings",
+      "-Cdebuginfo=2",
+      "--cfg",
+      "MODULE",
+      "@/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/include/generated/rustc_cfg",
+      "-Zallow-features=arbitrary_self_types,new_uninit,used_with_arg",
+      "-Zcrate-attr=no_std",
+      "-Zcrate-attr=feature(arbitrary_self_types,new_uninit,used_with_arg)",
+      "-Zunstable-options",
+      "--extern",
+      "force:alloc",
+      "--extern",
+      "kernel=/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/rust/libkernel.rmeta",
+      "--crate-type",
+      "rlib",
+      "-L",
+      "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1-output/build/rust",
+      "--crate-name",
+      "s22_shutdown_errorpath",
+      "--sysroot=/dev/null",
+      "--emit=metadata={fresh_dir}/shutdown_errorpath.rmeta",
+      "-"
+    ],
+    "stdin_template": "//! Real-kernel metadata check of the retained shutdown errno helper.\nconst IHK_SMP_SHUTDOWN_V6_POST_EFFECT: i64 = 1_i64 << 62;\n\nfn shutdown_v6_post_effect(error: kernel::error::Error) -> i64 {\n    IHK_SMP_SHUTDOWN_V6_POST_EFFECT | (error.to_errno() as u32 as i64)\n}\n\n/// Keep the exact private helper reachable during this metadata-only check.\npub fn check_shutdown_error(error: kernel::error::Error) -> i64 {\n    shutdown_v6_post_effect(error)\n}\n",
+    "stdin_binding": "The constant and private helper must be extracted verbatim from the frozen corrected production source. Only crate documentation and the documented public reachability wrapper are test scaffolding; no fake kernel crate, replacement Error type, mock ABI or source text acceptance oracle.",
+    "output_capture": [
+      "Exact argv/environment/cwd, stdin bytes/source binding and launch/exit identities",
+      "stdout and stderr as separate complete files below {fresh_dir}",
+      "exit code and timeout classification",
+      "metadata artifact sha256/size only on exit0",
+      "post-check metadata/input digest comparison and verified child retirement; retain failed directory and streams"
+    ],
+    "expected_first_observation": "If toolchain metadata is compatible, corrected kernel::error::Error resolves from the actual libkernel.rmeta and to_errno type-checks; expected exit0 and nonempty shutdown_errorpath.rmeta. E0412 at the corrected path is a source/API finding; E0514/E0460 or target/core metadata mismatch is a toolchain/target blocker. Do not replay the unchanged original failure or consume another bounded source correction for metadata incompatibility.",
+    "stop_conditions": [
+      "Any retained input identity drift or uncertain live owner/lease state",
+      "Nonzero exit or timeout: retain evidence, classify once and report; no unchanged retry",
+      "Fresh check exit0: stop this cheap check and hand the result to dispatcher for the existing complete native-module build layer"
+    ]
+  },
+  "command_derivation": {
+    "observed_savedcmd": "savedcmd_drivers/misc/mckernel/ihk.o := RUST_MODFILE=drivers/misc/mckernel/ihk rustc --edition=2021 -Zbinary_dep_depinfo=y -Astable_features -Dunsafe_op_in_unsafe_fn -Dnon_ascii_idents -Wrust_2018_idioms -Wunreachable_pub -Wmissing_docs -Wrustdoc::missing_crate_level_docs -Wclippy::all -Wclippy::mut_mut -Wclippy::needless_bitwise_bool -Wclippy::needless_continue -Wclippy::no_mangle_with_rust_abi -Wclippy::dbg_macro -Cpanic=abort -Cembed-bitcode=n -Clto=n -Cforce-unwind-tables=n -Ccodegen-units=1 -Csymbol-mangling-version=v0 -Crelocation-model=static -Zfunction-sections=n -Wclippy::float_arithmetic --target=./scripts/target.json -Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2 -Zcf-protection=branch -Zno-jump-tables -Ztune-cpu=generic -Cno-redzone=y -Ccode-model=kernel -Zfunction-return=thunk-extern -Zpatchable-function-entry=16,16 -Copt-level=2 -Cdebug-assertions=n -Coverflow-checks=n -Dwarnings -Cdebuginfo=2  --cfg MODULE  @./include/generated/rustc_cfg -Zallow-features=arbitrary_self_types,new_uninit,used_with_arg -Zcrate-attr=no_std -Zcrate-attr='feature(arbitrary_self_types,new_uninit,used_with_arg)' -Zunstable-options --extern force:alloc --extern kernel --crate-type rlib -L ./rust/ --crate-name ihk --sysroot=/dev/null --out-dir drivers/misc/mckernel/ --emit=dep-info=drivers/misc/mckernel/.ihk.o.d --emit=obj=drivers/misc/mckernel/ihk.o /out/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ihk.rs  ; ./tools/objtool/objtool --hacks=jump_label --hacks=noinstr --hacks=skylake --ibt --mcount --mnop --orc --retpoline --rethunk --sls --static-call --uaccess --prefix=16 --werror  --link  --module drivers/misc/mckernel/ihk.o",
+    "changes": [
+      "Use pinned host rustc and absolute retained target/config/search paths; bind --extern kernel to actual libkernel.rmeta.",
+      "Preserve original saved compile flags, kernel custom target features, panic=abort, --sysroot=/dev/null and forced alloc dependency.",
+      "Remove the live output directory, object/dep-info emission, production source argument and objtool suffix; use stdin and metadata emission only in fresh disposable output.",
+      "Rename the isolated crate to s22_shutdown_errorpath."
+    ]
+  },
+  "fallback": {
+    "condition": "Host compiler rejects actual retained metadata or dependencies before the helper is type-checked.",
+    "missing_resource": "A compiler/runtime exactly compatible with the pinned Red Hat Rust 1.92.0 metadata/proc-macro dependency set, or a separately reviewed ordinary-user invocation inside that already pinned tool environment.",
+    "shortest_existing_module_layer": "Use the existing pinned source/output execution machinery and reviewed 4-CPU/12-GiB/no-swap/512-task isolation, one heavy owner at a time, with only make -j1 drivers/misc/mckernel/ihk-smp-x86_64.ko after a fresh source/materialization/release. Do not rerun bzImage or mutate retained scratch22 output in place.",
+    "make_argv_inside_existing_profile": [
+      "/usr/bin/make",
+      "-C",
+      "/out/source/linux-6.12.0-211.44.1.el10_2",
+      "O=/out/build",
+      "ARCH=x86_64",
+      "LLVM=1",
+      "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+      "-j1",
+      "drivers/misc/mckernel/ihk-smp-x86_64.ko"
+    ],
+    "note": "This is an existing-profile next target, not permission to start Docker/root or reuse scratch22. The dispatcher must bind exact inherited build environment/source and fresh one-shot authority."
+  }
+}

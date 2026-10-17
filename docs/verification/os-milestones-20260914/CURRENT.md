@@ -14304,3 +14304,80 @@ the extracted fixture and undergoing independent review; no publicgate/runtime
 fork is enabled. Tool probe source/release reviewa86c4bd2...8535 now conditionally
 passes corrected pin+actualCLIguard. Activation still waits for actual native
 terminal and independently accepted cleanup/fresh resources/verified checkpoint.
+
+### Checkpoint 365 — 2026-10-17T04:45Z: actual compiler failure, minimal repair, guarded recovery
+
+Actual authority1 fd09933c container ran04:03:27–04:35:02Z and exited1, non-OOM.
+Source52Rust/config54matrix passed; kernel linked and bzImage16130048B exists,
+SHA9092e7a4344805ba6ba053a3e7208f519213ad9465bc91644fe759a5048cd81d.
+ihk.o1323904B/db17a47e73d096ce32ac297edc775e8e289d7cf6982341404d8ba26bff30050c
+and mcctrl.o1803056B/9f279b9b13cb3ba656c20de42eb74063a329a4ede4814504186248a3ca93a167
+exist; all three final .ko files absent. SMP E0412 at shutdown_v6_post_effect:
+kernel::Error is not exported at crate root. Original driver log1ff0935e...1b64,
+container18ce9ef597cfc38f4c661a7a36d80d872d3dfc96f6e93551651bc8f0b31b5aa6,
+request520fbc79...cecbe and all expanded failure artifacts remain pinned.
+
+One-line production fix64effd66971ca5e7c10ed307327d0a7809525c3b uses
+kernel::error::Error; body/policy unchanged. Old provider fixture now supplies
+the correct namespace, retaining its old rootalias solely for unchanged negative
+mutation text. New target-surface fixture extracts actual Linux Error/to_errno
+with NO rootalias. Actual8Python/4095errno vectors+oldpathE0412negative,
+9providerRust+13actualorderRust and all old mutations pass2.04s/135136KiB/no swap.
+Initial Python3.8 tuple[str,str] import failure occurred before Rust; preserved,
+bounded command correction uses installed Python3.9.12 without legacy source edits.
+Source/result records shutdown-native-error-path-{repair,central-pass}-20261017.json
+are separate/frozen. Minimal candidate d37d2216a60c6db10442ba8bc238d64fbd59c5ea,
+tree95cbbdba1bdfa58e48ba7edba6a2d0d20259ecc6,parentfd09933c has ONLY2filedelta;
+no optional fork/API/4job changes. Pushed/fetched separate source branch; main
+index/HEAD/userWIP unaffected by source construction. Source reviewf0a565f2...a077
+passes exact2filetransform and all12 RS011/checker hashes remain unchanged.
+
+Owner80867/start722300 and7Docker clients positively retired, but outer guard
+80259/start718109 quarantined rootlock27:4: MAX_CAPTURE16MiB refused80143046B
+canonicalstdout. Ownerreceipt89341228B/SHA9fa6a298...6a8c and stdout8909ccea...d681
+parse identically with actual current retirement/retained-container predicates.
+Independent reviewbe4ea78f...4a19 captured fresh root fullproc+Docker terminal
+proof and conditional exact pidfd(SIGKILL) process-retirement profile, no action.
+Guard/quarantine inode57730/SHA d3cbda53...1a38, exclusions57728/57729, stopped
+container/request/receipts preserved. Recovery code then independent concrete
+review/release is next; do not numeric/groupkill/watchers or raw-release barriers.
+Actual terminal cleanup remains separate. Its size-corrected source15b7f924...1098
+passes8 tests: full output140028/evidence286298 entries serialize155348885B;
+finite400000/root,128MiB streamedselectedfiles,256MiB documents. No old release
+or source review silently transfers to corrected code. Future rootprofile4GiB
+recommended for complete inventories; sourcecheaptests2GiB/no actualroot actions.
+
+Host actual-kernel.rmeta experiment ran ONCE under ordinary CPU7/2GiB and all17
+input hashes remained unchanged. E0514 RedHat1.92-vs-rustup1.92/E0635new_uninit
+confirms toolchain incompatibility, not another source defect. Preserve complete
+root mckernel-s22-errorpath-realcrate-roe8doii and additive failure record; no
+retry/metadata cleanup. Use pinned container and fresh strict next native output.
+Authority2 adapter/guard templates30/38tests pass but remain inert pending actual
+retirement/cleanup contracts. Future128MiB stdout+terminal handling preserves
+default16MiB release/source caps and four-signal/quarantine logic.
+
+User044427 baseline-reuse directive relayed to active implementation worker:
+after reproducible passing native build+matchingimage retain immutable exact
+kernel/modules/toolchain/config/source identities and reuse eligible unchanged
+artifacts across fresh case payloads. No payload-only rebuild, acceptance shortcut
+or new incremental framework. Preserve fresh oracle/streams/status/kernel-log/
+teardown/failures; actual runtime failure selects minimal repair/regression/retest.
+Continue after ordinary checkpoints and first image milestone; carry this and
+responsible parallelism/code-first preferences into every future packet.
+
+Parallel fork branch ef748f5c579af3d2fc54cc663df56ee8ae2b6e4f is pushed/fetched,
+all7new blobs exact; scoped backend+bounded inherited fixture correction review
+passes1203fa79...8ab8, original HOLD9fca4e48 preserved. Corrected inherited6Python/
+16Rust pass0.55s/135752KiB; new backend5Rust reused, no native/runtimefork. Two
+static memory.anonymous-zero/futex.wait-mismatch payloads now compile and match
+Linux exact outputs, recorda8be63f0...b329; no McKernel credit. Optional four-job
+proposal has3syntax tests but authority pins block integration: exact patch
+retained, production workflow restoredbyteexact030822f4...8629. Do not divert
+current image path into workflow-authority rebinding. Latest host29.90GB/scratch
+27.19GB free; failed output5.13GB/evidence0.45GB remain pinned, no cleanup sweep.
+
+Counts unchanged3compiled candidates/12diagnosticpasses,0/273formalapps,
+6/130production,0/7language. Baseline engineering-estimate original ranges stay
+unchanged. Next: exact guard recovery -> independently released terminal cleanup
+-> configure/review fresh authority2 preparation/build -> actual corrected native
+compiler result -> matching image -> signal.mask-restore first new guest.

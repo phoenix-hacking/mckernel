@@ -1,0 +1,103 @@
+{
+  "schema": "scratch22-authority1.cleanup-actual-size-independent-review.v1",
+  "recorded_at_utc": "2026-10-17T04:49:12Z",
+  "decision": "PASS_SOURCE",
+  "reviewer": "/root/cheap_profile_review",
+  "implementation_author": "/root/scratch21_transaction",
+  "model": "gpt-6.1-sol",
+  "implementation_ownership": false,
+  "scope": "Exact cleanup actual-size helper correction only, reusing the unchanged independently accepted transaction/release/quarantine baseline. This does not release actual root cleanup or recovery.",
+  "files_sha256": {
+    "scripts/native_exact_scratch22_authority1_terminal_cleanup.py": "15b7f9241741ccaff065819ea6847323d6ce47ac1fc69a3ea87fbdbad9b01098",
+    "scripts/tests/test_native_exact_scratch22_authority1_terminal_cleanup.py": "6ff24e9b6139aa7a0d71d69194f6e9be63396756fbf7a65bfc572ca87442339c"
+  },
+  "author_record": {
+    "path": "docs/verification/evidence/scratch22-authority1-cleanup-actual-size-correction-20261017.json",
+    "sha256": "fbb5182fc258a314da82a427cb89d54160f6fd4be2702b0805024a25e83b9588",
+    "status": "NOT_RELEASED"
+  },
+  "accepted_baseline": {
+    "commit": "17df061c",
+    "source_sha256": "7d4673dbb1ff0b3bc33b25aab2a10de9f18f759df84eb5255613dd7d1fdf7ced",
+    "tests_sha256": "bd0e93447b348f1c08b26cbd257288d0a7344145e10160b7193bc3aa201dd921",
+    "independent_review": {
+      "path": "docs/verification/evidence/scratch22-authority1-cleanup-source-independent-review-20261017.json",
+      "sha256": "8a041383428c5f3e2892f62e9565446c2bc1ce9382873242091e19631466f8e3"
+    },
+    "baseline_fault_tests_sha256": "e1467625cfcc848c7834e23c6bff26a535b40115a0d85bb512f488bf8fcb7d90",
+    "reuse": "Accepted 32 transaction/fault tests and prior seven focused adaptation checks are reused. No repeat of the unchanged complete baseline or actual recovery/cleanup."
+  },
+  "review_findings": {
+    "streamed_selected_hashes": "observe_identity hashes the same already-open O_NOFOLLOW regular-file descriptor in at most 1-MiB chunks. It rejects files above 128 MiB before reading, reads at most recorded size plus one byte, requires the exact original byte count and retains all before/after fstat fields plus final pathname device/inode agreement. It no longer buffers the 89,341,228-byte selected receipt or reopens it through read_bounded.",
+    "finite_complete_inventories": "metadata_inventory counts paths during collection before sorting and refuses overflow rather than truncating. Its per-root 400,000-row maximum includes the root; all permitted descendants are sorted and represented with unchanged full metadata and symlink-target handling. Existing protected_files requires exact complete inventory equality and independently hashes every selected file. No omitted-record fallback or whole-tree content-acceptance claim is introduced.",
+    "document_bounds": "The separate 256-MiB read_bounded document ceiling covers the author-recorded 155,348,885-byte combined inventories plus release fields. Before/after/path race checks remain. Documents still require buffering/parsing; this is not described as constant-memory JSON processing.",
+    "capture_and_replay": "container.log is now read through the stable bounded reader with an explicit 128-MiB limit. Existing captures are revalidated by streamed full SHA256 and exact device/uid/gid/mode/link-count/size instead of the 1-MiB small transaction reader. This preserves the old shape/ownership conditions and complete byte binding while admitting the actual larger log. Fresh captured Docker log bytes must still equal the entire retained expected log before transaction progression.",
+    "preserved_small_readers": "The 1-MiB plan/journal/control reader read_at and all of its original regular-file, link/device/uid/gid/mode/size/race requirements are unchanged.",
+    "unchanged_safety_authority": "AST comparison against the exact accepted source finds only metadata_inventory, capture_logs, read_bounded, observe_identity and read_at_path changed. Transaction, recover, configure, terminal_result, publisher/process/container gates, root locking, signal handling, quarantine, exchanges, archived inodes, journal and sentinel release semantics are unchanged. The original Authority1CleanupTests AST is identical; only ActualSizeTests was added.",
+    "actual_size_scope": "The actual tree/log/receipt sizes are consumed from the bound author measurement record; reviewer did not traverse or hash any live candidate/output/evidence tree or inspect any runtime owner. The measured 286,298 evidence and 140,028 output entries each fit the finite per-root cap; selected 89,341,228-byte owner receipt and 78,411,751-byte container log each fit 128 MiB."
+  },
+  "independent_checks": [
+    {
+      "kind": "Read-only Git blob/hash and AST comparison",
+      "exit_code": 0,
+      "stdout": "PASS exact baseline source and frozen changed-source hashes; only five helper function ASTs changed\nPASS complete Transaction, recover, configure, identity/release/publisher/process/container gates, small transaction readers, exchange/quarantine ASTs reused unchanged\nPASS original authority1 focused tests unchanged; only ActualSizeTests class added\n"
+    },
+    {
+      "command": "taskset -c 2 timeout --kill-after=5s 120s prlimit --as=2147483648 --cpu=100 --nofile=256 --core=0 /home/holden/anaconda3/bin/python3 -B -m unittest -v scripts.tests.test_native_exact_scratch22_authority1_terminal_cleanup.ActualSizeTests",
+      "exit_code": 0,
+      "cases": 5,
+      "reported_seconds": 0.258,
+      "coverage": [
+        "89,341,228-byte sparse receipt matches independently computed hash without buffered reader; reads at most 1 MiB.",
+        "128-MiB-plus-one selected input refuses before read.",
+        "Document beyond old 32 MiB succeeds; 256-MiB-plus-one refuses before read.",
+        "Exact inventory cap succeeds; overflow refuses while preserving every path.",
+        "Saved log above 1 MiB replays without small transaction reader or Docker; byte drift refuses."
+      ],
+      "operations": "Only disposable ordinary-user files and mocked external commands; no child fault tests or live protected data."
+    },
+    {
+      "kind": "Final exact source/test/author-record SHA256 recheck",
+      "exit_code": 0,
+      "result": "All three match the frozen hashes above."
+    }
+  ],
+  "author_checks_reviewed": {
+    "focused_cases": 8,
+    "exit_code": 0,
+    "reported_seconds": 0.342,
+    "baseline_preservation_cases": 3,
+    "source": "Exact author_record.checks; five new size cases independently rerun, three previously accepted preservation checks reused rather than redundantly repeated."
+  },
+  "future_root_profile_recommendation": {
+    "memory_bytes": 4294967296,
+    "reason": "The 155-MB serialized observation has Python JSON/object expansion, duplicate complete metadata inventories and bounded log/document buffers. Recommend a separately reviewed 4-GiB actual-root address-space/planning share rather than the 2-GiB cheap-fixture share.",
+    "not_a_memory_benchmark": "No actual 426,326-entry root parse/cleanup or worst-case maximum-inventory memory claim was executed here. Fresh root execution review must bind this resource share and actual sizes.",
+    "authority": "Recommendation only. No root execution release is created; account the 4-GiB share within the unchanged aggregate campaign budget and preserve existing capacity floors."
+  },
+  "failure_history": "Preserve the actual native E0412 failure, 80,143,046-byte stdout, full receipts/logs and quarantine/ownership evidence. This exact helper correction addresses measured observer/cleanup size limits; no original failure is hidden, normalized to success, replayed or counted as kernel progress.",
+  "blocking_findings": [],
+  "live_state_not_inspected": true,
+  "not_performed": [
+    "live root lock or quarantine-owner access",
+    "process signal/kill",
+    "Docker or container access",
+    "live candidate/output/evidence traversal or hashing",
+    "guard/lease/exclusion mutation",
+    "cleanup/recovery execution",
+    "Git writes",
+    "compiler",
+    "guest",
+    "network"
+  ],
+  "next": "After the separately reviewed actual quarantine-process recovery and fresh exact live observations, dispatcher may prepare the new hash-bound terminal cleanup release for independent execution review. This source decision cannot be used before those prerequisites.",
+  "acceptance": {
+    "source_approved": true,
+    "root_execution_released": false,
+    "recovery_authorized_by_this_record": false,
+    "cleanup_executed": false,
+    "native_failure_resolved": false,
+    "formal_credit": false,
+    "os_complete": false
+  }
+}
