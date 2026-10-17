@@ -1,0 +1,88 @@
+{
+  "schema": "scratch22-authority3.cleanup-independent-execution-review.v1",
+  "decision": "PASS_EXECUTION",
+  "reviewer": "/root/scratch21_source_review",
+  "implementation_ownership": false,
+  "scope": "One exact authority3 terminal cleanup after the mechanical finalization below. No build, tool probe, guest or acceptance authority.",
+  "draft": {
+    "path": "/home/holden/mckernel-work/scratch/scratch22-authority3-cleanup-release-draft-20261017.json",
+    "sha256": "51d2ada9c59fd771c27069eedd59e8dd96456d49b2e845ef9ab62d4efea6d1c5",
+    "bytes": 155293075
+  },
+  "observation": {
+    "path": "/home/holden/mckernel-work/scratch/scratch22-authority3-cleanup-observation-20261017.json",
+    "sha256": "7ea12900a94706947219aeb4679b7db7ef8511f3ba172ea0a2c08a7414997bbf"
+  },
+  "source_review": {
+    "path": "docs/verification/evidence/scratch22-authority3-cleanup-source-independent-review-20261017.json",
+    "sha256": "86a2236a7534b4f664e35a83167744937076c9c6584d9bcdfa88f2d9089477c5",
+    "reviewer": "/root/cheap_profile_review"
+  },
+  "source_commit": "66bee58cdb7cd10c976c5d8f2370eaabf8db37bc",
+  "source_tree": "705268372d668324c0ed6ee72ec52d8f34ac42ad",
+  "files_sha256": {
+    "scripts/native_exact_scratch22_authority3_terminal_cleanup.py": "8449b4b87b2286d4dc3d08e0c5921d2d79e44f17920d0aaee3eae646993fc995",
+    "scripts/tests/test_native_exact_scratch22_authority3_terminal_cleanup.py": "73e39c5e7651481005b08002bebfdc11f503b050d35189555afb34866aa08ded"
+  },
+  "target": {
+    "candidate_commit": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "candidate_tree": "07d05c1bb2ea5f4b6a3817ba55cd32afe56c8d59",
+    "candidate_root_inode": 3946466,
+    "request_sha256": "a7804ae6945743eafca6bf6ceeb184e1d75e9c0306ce17354f22fc650f630599",
+    "container_id": "153492d487bf1b66c47b43b03fc5552c9e912c1422265788d04722dcc7ebd4ab",
+    "container_name": "mckernel-exact-58e9a0e7646742c9a4a87fa387ced61b",
+    "image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+    "owner_nonce": "1ad4cb62c80241cca1c2b4e56cd61d95",
+    "owner_pid": 270194,
+    "owner_starttime": "1549252",
+    "absent_guard_required": 269925,
+    "exit_code": 1,
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "scratch_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "scratch_device": 1828,
+    "root_lock_device_inode": [27, 4],
+    "attempt_exclusion_inode": 57863,
+    "attempt_exclusion_sha256": "1e7baabf474549a3bcb8f75a1f6716983400d969f66c96a32acf96058a5737ba",
+    "shared_exclusion_inode": 57862,
+    "shared_exclusion_sha256": "896f82bf88cb2ee0bec6864bef8798f833473419645e64248569ddb822b6aca9"
+  },
+  "independent_checks": {
+    "embedded_observation_equals_exact_observation": true,
+    "source_and_tests_match_reviewed_worktree_and_commit_blobs": true,
+    "exact_request_and_both_exclusion_bytes_owner_boot_and_canonical_request_join_verified": true,
+    "stopped_exit1_pid0_non_oom_container_profile_command_labels_and_all_six_mounts_verified": true,
+    "selected_files": 12,
+    "output_inventory_rows": 140054,
+    "evidence_inventory_rows": 286318,
+    "output_root_inode": 4471486,
+    "evidence_root_inode": 4471487,
+    "inventories_nonempty_within_400000_cap_and_confined_to_exact_roots": true,
+    "request_lease_and_all_seven_transaction_paths_absent": true,
+    "unchanged_configure_recover_and_cli_execution_boundary_inspected": true,
+    "live_census_docker_protected_corpus_and_passed_core_tests_repeated": false,
+    "blocking_findings": []
+  },
+  "mechanical_finalization_only": {
+    "status": "PASS_EXECUTION_RELEASE",
+    "author": "/root",
+    "fetched_source_verified": true,
+    "source_review": "Set status PASS, reviewer /root/cheap_profile_review, evidence_path and evidence_sha256 to the exact source_review pointer above.",
+    "execution_review": "Set status PASS, reviewer /root/scratch21_source_review, evidence_path and evidence_sha256 to this exact immutable report.",
+    "all_other_fields_frozen": true,
+    "rule": "No observation, inventory, selected identity, transaction path, publisher contract, source/test hash, commit/tree or baseline change. Dispatcher binds final raw release SHA256 through --release-sha256. This report binds the exact draft and only these five top-level replacements, avoiding a self-hash cycle."
+  },
+  "execution_profile": {
+    "owner": "sole dispatcher",
+    "invocations": 1,
+    "cpu": 0,
+    "memory_planning_ceiling_bytes": 4294967296,
+    "no_outer_timeout": true,
+    "no_small_rlimit_as": true,
+    "command": "sudo -A /home/holden/anaconda3/bin/python3 -B /home/holden/mckernel/scripts/native_exact_scratch22_authority3_terminal_cleanup.py --release FINAL_MECHANICALLY_FINALIZED_RELEASE_PATH --release-sha256 EXACT_FINAL_RAW_SHA256 --execute"
+  },
+  "mandatory_live_conditions": "Before mutation the unchanged transaction must acquire and preserve exact root flock27:4, revalidate boot/UUID/device/inodes/source/request/evidence/inventories/full terminal profile, establish owner270194/start1549252 and guard269925 absence via fresh full scoped census, exclude other heavy/container publishers and enforce the sole-coordinator regular O_CREAT|O_EXCL publisher contract. Any drift or uncertainty refuses or quarantines according to the accepted core; no force removal, raw exclusion unlink, speculative journal replay or lock release.",
+  "permitted_mutation": "Capture and match the exact stopped container log before nonforce removal; prove exact container absence; atomically exchange both exact exclusion names with sentinels and retain durable originals in the two fixed archives; retain the complete journal and final fresh publisher census. Preserve the consumed failed request, candidate, all output/evidence bytes and original failure records. Root flock and deferred HUP/INT/TERM/QUIT policy remain held throughout mutation or uncertain quarantine, including evidence-writer failure.",
+  "postflight_required": "Actual cleanup result, raw release, plan/journal/capture and exact original archives must receive independent postflight review before any downstream heavy operation.",
+  "reviewer_root_or_execution_actions": false,
+  "acceptance_credit": false
+}
