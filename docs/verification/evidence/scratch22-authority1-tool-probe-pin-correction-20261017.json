@@ -1,0 +1,38 @@
+{
+  "schema": "mckernel.tool-probe-pin-correction.v1",
+  "status": "PASS_FOCUSED_TESTS_NOT_EXECUTION_RELEASE",
+  "candidate_sha": "fd09933c64adaba32bf975ec96e5d518a42544e9",
+  "candidate_unchanged": true,
+  "failure_family": "S22-HISTORICAL-LEASE-BOOT-1 downstream consumer pin",
+  "original_failure": "Unprivileged rebind probe --help exited 1 before argument parsing: shared heavy-entry contract hash mismatch.",
+  "original_capture_prefix": "/home/holden/mckernel-work/scratch/scratch22-authority1-tool-probe-import-original-20261017",
+  "original_stderr_sha256": "809b28d0ebf11c3bf52c83247f45caa0057283294745a476ea0b0a6357a9f393",
+  "change": {
+    "path": "scripts/native_rust_exact_mckernel_image_container_owner.py",
+    "only_field": "EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256",
+    "old": "3b910b0c968d85390ca7d00e6953ddb13dc91714180c51fd476853dac529739c",
+    "new": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+    "corrected_owner_sha256": "e9861cf73b0328c9fe2eacb987ea179933146cbeddbc3951405d4e60e89560f4",
+    "authority": "historical-lease-authority-independent-review-20261017.json"
+  },
+  "checks": {
+    "command": "taskset -c 0 timeout 120 prlimit --as=2147483648 --cpu=100 --nofile=256 --fsize=67108864 --core=0 /usr/bin/python3 -B -m unittest scripts.tests.test_native_rust_exact_build_image_rebind_probe scripts.tests.test_native_rust_exact_mckernel_image_container_owner.HeavyEntryAuthenticationTests scripts.tests.test_native_rust_exact_mckernel_image_container_owner.EntrypointPathTests",
+    "exit_code": 0,
+    "tests_passed": 29,
+    "duration_seconds_reported": 0.299,
+    "capture_prefix": "/home/holden/mckernel-work/scratch/scratch22-authority1-tool-probe-pin-tests-20261017",
+    "stderr_sha256": "ce4c708257ff62bb47e1d3163cb0b4dd300aa8dc0057a0284995952305c39f4c",
+    "corrected_help_exit_code": 0,
+    "corrected_help_stdout_sha256": "d4f752794f63e8673197ac0cf9c3923b9582b920f5409b01921931af98460a28",
+    "corrected_help_stderr_empty": true
+  },
+  "fresh_data_only_inputs": {
+    "gitlink_manifest": "/home/holden/mckernel-work/scratch/native-exact-mckernel-gitlink-inputs-fd09933c-scratch22-authority1-image1-20261017.json",
+    "gitlink_manifest_sha256": "f90ef3831ad03a443b644dee44ab3b2fa91e541c975c8266dcea96ec17efce66",
+    "tool_rebind_request": "/home/holden/mckernel-work/scratch/native-exact-build-image-rebind-fd09933c-scratch22-authority1-image1-20261017.json",
+    "tool_rebind_request_sha256": "dc13f4cc7ad37c2511978ef70db3a9e0de7354d61e88203d479e04ac5ad5a1d5"
+  },
+  "runtime_execution": false,
+  "active_native_build_untouched": true,
+  "formal_acceptance_delta": 0
+}
