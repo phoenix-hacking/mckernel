@@ -1,0 +1,103 @@
+{
+  "schema": "scratch22-authority2.cleanup-execution-independent-review.v1",
+  "decision": "PASS_EXECUTION_RELEASE",
+  "status": "PASS",
+  "reviewer": "/root/cheap_profile_review",
+  "model": "gpt-6.1-sol",
+  "implementation_ownership": false,
+  "executor": "/root",
+  "proposal": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority2-cleanup-proposal-20261017.json",
+    "sha256": "ebf0fed15100a9e604ff84193158d3b50d0f867354d8bc118c2ecf8a9d6c2469"
+  },
+  "reviewed_payload_sha256": "89dce0c8bdc85499712e53b73100a671eca812c1aee0f26afdc17ee2e1c2cc70",
+  "payload_digest_definition": "SHA256(json.dumps({k:v for k,v in release.items() if k != 'execution_review'},sort_keys=True,separators=(',',':')).encode()); no newline; exclude solely execution_review.",
+  "finalization": "Replace only execution_review.evidence_sha256 PENDING_INDEPENDENT_EXECUTION_REVIEW with the actual raw SHA256 of this immutable record. Keep execution_review.status PASS and reviewer /root/cheap_profile_review, with no other payload changes. Use integer-preserving Python JSON. Assert reviewed_payload_sha256 unchanged, then freeze final raw bytes and use their exact SHA256 for --release-sha256. This review does not authorize the placeholder proposal itself or a changed payload.",
+  "source": {
+    "git_commit": "9c855de038e34c7755d4d4030989f34c661fa4eb",
+    "git_tree": "bf7032378f090a42c77f8885b57cd168a976e606",
+    "remote_ref": "refs/remotes/origin/codex/local-native-staging-repair equals exact commit",
+    "files_sha256": {
+      "scripts/native_exact_scratch22_authority2_terminal_cleanup.py": "802d2e7934d8177cabb6338039f831e11f1ca63be4eb3ac9b9d70c23a0f1f484",
+      "scripts/tests/test_native_exact_scratch22_authority2_terminal_cleanup.py": "bb4a5ff367065599a1bd166278e0d7f50b31d09d8254e0b1910f886d45bddae1",
+      "docs/verification/evidence/scratch22-authority2-cleanup-source-independent-review-20261017.json": "e4cf4c315eeaee2f0f7757092a4075d12f796c94e157f3aadef3d06deee6a9ef"
+    },
+    "verification": "Exact local/commit source and test hashes and committed independent source-review blob verified; exact commit/tree and fetched remote ref match. Reuse accepted source review and16focused tests, no repeated core test suite."
+  },
+  "observation": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority2-cleanup-observation-20261017.json",
+    "sha256": "dcddf2b0f093be46fc176bbc4a9b07f3f7e7a0f8f3a1951be375c705975c8c04",
+    "exact_embedded_equality": true,
+    "output_entries": 1,
+    "evidence_entries": 41,
+    "selected_files": 12,
+    "observer_retained_body": {
+      "path": "docs/verification/evidence/scratch22-authority2-cleanup-observer-retained-20261017.py",
+      "sha256": "dfdfd2e07bebea595a222f3329b714a349551f588619677a1b420a3675f0cd9b",
+      "scope": "Retrospectively retained exact executed inline Python body plus leading comments, not a claim that this file was executed. Body takes NOFOLLOW/nonblocking exclusive root lock, asserts lease/owner244086/guard243497 absent, reads actual exact Docker inspect and complete inventories/selected identities, captures mount/boot/root27:4, asserts UUID and releases lock in finally."
+    }
+  },
+  "positive_retirement_proofs": {
+    "terminal": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch-22-authority2-heavy-build.terminal.json",
+      "sha256": "de969cce6bf74105c28a9c4e093e3f842a3d5217b7b057170f3744bc934a2843"
+    },
+    "receipt": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority2-evidence/receipt.json",
+      "sha256": "972e89a24c4fa52e3ebc16882a48929951e0949ba3b404f36f86188aa419fc0d"
+    },
+    "failure_preservation": {
+      "path": "docs/verification/evidence/scratch22-authority2-precompiler-failure-20261017.json",
+      "sha256": "d5a55dcc5ea66340d80ee14eb0ca34b96f9205ed85749be9ca6792f7816caf0f"
+    },
+    "complete_archive": {
+      "path": "docs/verification/evidence/scratch22-authority2-precompiler-failure-artifacts-20261017.tar.gz",
+      "sha256": "a8a6105d3ba63d01beda1784e15781584c0240d84d220529079f734b56b7d233",
+      "dispatcher_tar_compare_exit": 0
+    },
+    "verified": "Root terminal returncode1/wrapper_result equals exact owner receipt; status FAIL, retired true, cleanup_separately_required true, exact current owned terminal retained. Owner PID244086/start1324045/nonce and container/request joins match. All7 owner-hash-bound command status files are exited/exit0 for PIDs244198,244186,244285,244211,244223,244398,244385. Driver receipt proves source-only contract phase failure before compiler, outputs empty. Guard closed normally with no recovery signal required; no lease/quarantine is reported or adopted."
+  },
+  "identity_scope": {
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "scratch_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "scratch_device": 1828,
+    "root_lock": [27, 4],
+    "container_id": "63c2d2570315c693bc06befaa37d1408ded53896b35d13d80bc4d7b9ecdba9cb",
+    "container_name": "mckernel-exact-0de548ba8b824f99bba6d8ea16325100",
+    "owner_pid": 244086,
+    "owner_starttime": "1324045",
+    "owner_nonce": "51e1e7d8a9c14b2eb0ea63e4f15dd77b",
+    "retired_guard_required_absent": 243497,
+    "exit_code": 1,
+    "request_inode": 57826,
+    "request_sha256": "c38fdd289b8f688a92449b0d68c2216412f10c3bc7ceedf563246ef8086cb565",
+    "exclusions": [
+      {"inode": 57830, "sha256": "2174a5325e84494fcf47933a86cb21b72e4fde3e95458923a3e78f74b684ac90"},
+      {"inode": 57829, "sha256": "0fcea609a53d2fb1a7469cee69442c4ce3a8f3b9c6303932aa71bcc7e84cd1ce"}
+    ]
+  },
+  "independent_read_only_checks": {
+    "status": "PASS",
+    "profile": "CPU2/2GiBAS/120seconds one ordinary Python job, no children except fixed read-only git/findmnt subprocesses from accepted configure; no root/Docker/lock/recover/mutation.",
+    "configuration": "Actual unchanged helper configure(proposal,execute=False) passes exact source/review/commit, request/exclusion owner and bytes, stopped container/resource/profile/mount joins, selected file/source hashes, candidate Git commit/tree, actual mount and full1/41inventories. No recover called or lock acquired. Pending proposal is not authorized to execute.",
+    "fresh_transaction_paths": "All7 new authority2 mutex/plan/journal/capture/quarantine/archive paths absent. No authority1 transaction paths reused.",
+    "runtime_census": "Fresh observation plus positively retired producer/clients is sufficient here; unlike authority1 no quarantined guard is being recovered. Unchanged root cleanup must still acquire exact root27:4 and obtain full privileged two-snapshot process/publisher and container census before mutation and each sentinel rmdir. A stale or unexpected publisher/container/lock/identity refuses; saved observations never replace runtime checks."
+  },
+  "execution_profile": {
+    "reuse": "Exact authority1 accepted CPU0/4GiB one-job terminal cleanup profile and installed tools from review1eede18d9b3e1e77229d29304cf87d13001458adae64a754d6408be152e3aff5, with only authority2 helper/release paths substituted; no resource or privilege expansion.",
+    "cpu_affinity": [0],
+    "address_space_bytes": 4294967296,
+    "concurrent_jobs": 1,
+    "nofile": 256,
+    "core_bytes": 0,
+    "outer_timeout": false,
+    "command_template": ["/usr/bin/sudo", "-A", "--", "/usr/bin/taskset", "-c", "0", "/usr/bin/prlimit", "--as=4294967296", "--nofile=256", "--core=0", "--", "/usr/bin/python3.8", "-I", "-B", "/home/holden/mckernel/scripts/native_exact_scratch22_authority2_terminal_cleanup.py", "--release", "FINAL_FROZEN_AUTHORITY2_RELEASE_PATH", "--release-sha256", "FINAL_RAW_RELEASE_SHA256", "--execute"],
+    "mandatory": "Exclusive root lane, no heavy build/guest overlap, unchanged aggregate7jobs/24GiB and16GiB host/12GiB scratch floors; credential-safe sudo -A only, no askpass reads. Capture complete stdout/stderr/status. No outer timeout or CPU-limit kill of mutating owner. Keep four-signal deferral, inherited reviewed subprocess timeouts, root flock, positive retirement, original-inode archive transaction and nonreturning uncertainty quarantine unchanged."
+  },
+  "postflight_contract": "Require scratch22-authority2.cleanup-postflight-review.v1 PASS_TERMINAL_CLEANUP_POSTFLIGHT. Exact path/sha256-only result/release/plan/journal/capture/terminal/receipt pointers, separate observed_metadata, full archives rows, raw/canonical release distinction,9legal journal events, original57830/57829inode archives, positive container absence, active exclusion absence and preserved failed output/evidence. No replay of this failed build.",
+  "blocking_findings": [],
+  "cleanup_complete_claimed": false,
+  "compiler_or_guest_credit": false,
+  "acceptance_credit": false,
+  "scope": "Permission only for this exact authority2 cleanup transaction after final review-pointer binding. No recovery signal, replay, candidate/source mutation, build, image, guest or formal acceptance permission."
+}
