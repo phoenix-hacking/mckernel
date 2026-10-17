@@ -1,0 +1,138 @@
+{
+  "schema": "scratch21.cleanup-postflight-review.v1",
+  "decision": "PASS_CLEANUP",
+  "reviewer": "/root/scratch21_source_review",
+  "implementation_author": "/root/scratch21_transaction",
+  "executor": "/root",
+  "independent_of_implementation_and_execution": true,
+  "result_sha256": "c5483d3dee5469b44c9c8e531197fdf8a3982f44ffc06d9f8d55affc84515c27",
+  "release_sha256": "236d208df08a6b983c431c0166bf6eab1712a0638fda41f8dbc2d50be798060e",
+  "raw_release_file_sha256": "738951610e6691071c1b1f5dfb46b91a1e55988f7240759f73baf01ef0f0b44d",
+  "digest_semantics": {
+    "result_sha256": "Exact execute stdout file bytes, including the trailing newline.",
+    "release_sha256": "Canonical sorted compact release JSON without a trailing newline, matching the production cleanup-result.v1 field.",
+    "raw_release_file_sha256": "Exact finalized pretty-printed release file bytes used by the privileged command."
+  },
+  "source": {
+    "commit": "0c8f2cef2f200b88bcf79e40255d4dfe9bae1e25",
+    "tree": "6908f84a6fb119ecd39508248e6e2138a439efe9",
+    "script_sha256": "6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed",
+    "tests_sha256": "e1467625cfcc848c7834e23c6bff26a535b40115a0d85bb512f488bf8fcb7d90",
+    "source_review_sha256": "f1c5065880df2b4a4769cde6b7b0ac68621108f663c480d1b332f16c599b3b91",
+    "execution_review_sha256": "0f25117420913f350fe1d708edef27610c17475a2122595b887731c33bd2eb88",
+    "final_release_fetched_commit": "b2cb0d93edb8e40e3038cd016d505d1b8909fdeb"
+  },
+  "captures": {
+    "bundle_path": "docs/verification/evidence/scratch21-cleanup-runtime-captures-20261017.json",
+    "bundle_sha256": "9adc66ed348138583356bb916975667d5d68267ea37e74e7450bceabee65705a",
+    "bundle_file_count": 11,
+    "every_hex_capture_matches_current_raw_bytes_metadata_and_hash": true,
+    "execute_stdout": "/home/holden/mckernel-work/scratch/native-exact-scratch21-cleanup-20261017.execute.stdout",
+    "execute_status": "PASS_EXECUTED",
+    "execute_exit": 0,
+    "execute_stderr": "",
+    "replay_stdout": "/home/holden/mckernel-work/scratch/native-exact-scratch21-cleanup-20261017.replay.stdout",
+    "replay_stdout_sha256": "91a605d5b4cca98fb115ad076c1dd0dd6fa9063c60ec92eb585cf26d867271af",
+    "replay_status": "PASS_TERMINAL_REPLAY",
+    "replay_exit": 0,
+    "replay_stderr": "",
+    "result_comparison": "Every parsed field is identical except status; plan/journal/capture/archive identities and hashes are unchanged."
+  },
+  "transaction": {
+    "schema": "scratch21.cleanup-result.v1",
+    "terminal": true,
+    "container_absent": true,
+    "container_id": "e1f6dd145149c026c46adb82c3f3addb9e3c9e2a12b0d71a6813f00895220ea9",
+    "container_absence_evidence": "Both authorized root execution and root terminal replay use the reviewed strict full process/Docker census and return container_absent true. This independent postflight made no additional root or Docker call.",
+    "filesystem_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "device": 1828,
+    "root_lock_identity": [27, 4],
+    "root_and_transaction_mutex_available": true,
+    "ordinary_exact_script_argv_process_scan_matches": [],
+    "active_operational_exclusion_absent": true,
+    "active_shared_heavy_exclusion_absent": true,
+    "request_lease_absent": true,
+    "quarantine_absent": true,
+    "plan": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch21-terminal-cleanup-20261017.plan.json",
+      "device": 1828,
+      "inode": 57695,
+      "size": 1877,
+      "sha256": "c23ed0da5c133f5e534a50657028e73ceece638ab81e10429bb9396e278251ff",
+      "canonical_plan_sha256": "f009a1dc11c21b771130145428bd7290893d00e99cfc93d51b1417623b41c16b"
+    },
+    "journal": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch21-terminal-cleanup-20261017.journal.jsonl",
+      "device": 1828,
+      "inode": 57694,
+      "size": 2788,
+      "sha256": "804abfe2089791f4433b677de01aa58cb81a9f1b8f80e2e90fb6ce5c7a84b493",
+      "rows": 9,
+      "chain_valid": true,
+      "complete_event_sequence": "before_exchange/after_exchange/release/after_release for index 0, then the same for index 1, then complete index 2",
+      "actual_states": ["after_release", "after_release"]
+    },
+    "log_capture": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch21-terminal-cleanup-20261017.docker-logs.capture",
+      "device": 1828,
+      "inode": 57693,
+      "size": 1145,
+      "sha256": "5998ffae79f7e31e34b90e32e24f32b4c145c842357e39a474dacff7a40bcc80",
+      "equals_original_container_log": true
+    },
+    "archives": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-exact-scratch21-terminal-cleanup-20261017.attempt.archive",
+        "original_active_path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json",
+        "device": 1828,
+        "inode": 57688,
+        "size": 269,
+        "mode": "0o600",
+        "uid": 1000,
+        "gid": 1000,
+        "nlink": 1,
+        "sha256": "eeb41f3a01bf2b31e5ff15232ba31ab6cf92676b8587963d1faffeace44451f5"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-exact-scratch21-terminal-cleanup-20261017.shared.archive",
+        "original_active_path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+        "device": 1828,
+        "inode": 57687,
+        "size": 269,
+        "mode": "0o600",
+        "uid": 1000,
+        "gid": 1000,
+        "nlink": 1,
+        "sha256": "7be39d1cf3bebcf4e586716badf2e3be366fae928ce2b39ce21fa6db770a7134"
+      }
+    ]
+  },
+  "preservation": {
+    "original_consumed_request_unchanged": true,
+    "protected_failure_files_checked": 5,
+    "complete_owner_evidence_inventory_checked": 40,
+    "direct_request_consumers_checked": 4,
+    "output_and_evidence_directory_identities_unchanged": true,
+    "output_still_empty": true,
+    "candidate_head_still_original": "28a905bfc177627e338a3fd91f69329ac2e74046",
+    "original_ownership_bytes_and_inodes_archived_not_deleted": true,
+    "scratch21_replayed": false
+  },
+  "independent_checks": {
+    "result": "PASS; return code 0",
+    "profile": "Ordinary read-only Python under one affinity CPU, 2 GiB virtual-memory ceiling and 180-second timeout; no root, Docker call, cleanup mutation, build, guest or network.",
+    "actual_reviewed_bodies": "configure(release, False), Transaction construction and lock(False), protected_files(), load_plan(), state(plan), terminal_result() equality against exact runtime result. Transaction was closed in finally. These calls only read and briefly acquire the already existing root/mutex flocks; run(), census(), recover() and mutation functions were not called.",
+    "checks": [
+      "Exact bundle and all 11 raw capture metadata, bytes, lengths and hashes.",
+      "Execute/replay raw hashes, exit files containing 0 newline, empty stderr and exact result schema/status joins.",
+      "Raw versus canonical release hashes distinguished and checked against the actual production canonical encoder.",
+      "Exact current Git source/test, UUID/mount/device/boot, root-lock, candidate, all direct inputs, protected failure files, complete evidence inventory and preserved directories.",
+      "Production plan/journal binding, nine-row legal chain, terminal archives and absence of active names/lease/quarantine.",
+      "Independent root/mutex flock acquisition proves no holder at review time; ordinary exact-script process scan has no matches."
+    ]
+  },
+  "blockers": [],
+  "acceptance_credit": false,
+  "scope": "Accepted archival retirement of the consumed scratch21 attempt only. This concrete cleanup receipt may satisfy scratch22's cleanup prerequisite; it grants no source-authority approval, preparation/materialization execution release, build, guest or OS acceptance. All original failed request/evidence and cleanup transaction artifacts remain retained."
+}
