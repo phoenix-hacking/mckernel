@@ -1,0 +1,107 @@
+{
+  "schema": "mckernel.native-fork-adoption-cheap-profile-extension.v1",
+  "recorded_at_utc": "2026-10-17T03:13:58Z",
+  "decision": "PASS_LAYER_B",
+  "reviewer": "/root/cheap_profile_review",
+  "model": "gpt-6.1-sol",
+  "implementation_ownership": false,
+  "scope": "Extend the existing reusable unprivileged actual-body microtest profile to the isolated fork-adoption source root and named test/helper/templates. Command, privilege, tool, resource and side-effect classes remain unchanged. Candidate semantics and unsafe/native integration are not approved here.",
+  "parent_profile": {
+    "path": "docs/verification/evidence/native-cheap-profile-review-20261017.json",
+    "sha256": "cd30aaf1caec5da84a7a34716d837181684f4e8be5a6c959f25bb557dd69309f",
+    "decision": "PASS_LAYER_B"
+  },
+  "source_root": {
+    "path": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+    "detached_head": "09f438751c28df0f497ed45a6bf6a4c6e0821d7b",
+    "device": 1828,
+    "inode": 4458848,
+    "mode": 448,
+    "repository_access": "Read-only during each reviewed test; preserve existing isolated production/test WIP. This is approved trusted command behavior, not an enforced read-only filesystem sandbox."
+  },
+  "reviewed_inputs_sha256": {
+    "scripts/tests/test_native_fork_adoption_transaction_20261017.py": "df5ed6c6b550d6df9bec50a683d78626529c1566b0fbe6a2eeba70a1a225025e",
+    "scripts/tests/fixtures/native_fork_adoption_transaction_20261017.rs": "6ecfcb36c425577492262c2241d773041f371c4b052ec70016a4bc3912c6990f",
+    "scripts/tests/test_native_fork_ownership_20261017.py": "f1035bef192fc05e420985ad5d09438adff4fff5fab3195abb03369eaf6379b0",
+    "scripts/tests/fixtures/native_fork_ownership_20261017.rs": "49367dcd8ece7fe45419936604f631bcc9a7e00733facd93c6bf93f7ef4f9c22",
+    "host-kernel/native-rust/mcctrl_vm.rs": "f00a3d7b7ef547b8ef8c598f0f8b890086d4657a9ae19504d3a8d3ff855ea44e",
+    "host-kernel/native-rust/smp_application_image.rs": "a559bf426360940760907b8cf840ac60b3e56ab148235a8c0e88d50dc002492b",
+    "host-kernel/native-rust/mcctrl_process.rs": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+    "host-kernel/native-rust/smp_application.rs": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8"
+  },
+  "inspection": {
+    "entrypoint": "Read the complete new driver. It reads exact local production/test sources, invokes one existing extraction helper and creates one retained mkdtemp output root. Only pinned rustc --version, the existing --edition=2021 --test -Dwarnings compiler family and the resulting fixture --test-threads=1 are invoked, sequentially.",
+    "transitive_repository_imports": "The sole repository import is fixture_source from test_native_fork_ownership_20261017.py. Read its complete changed driver and boundary template. Imports otherwise use Python standard libraries and have no compiler, host-state, root, Docker or network side effects.",
+    "generated_fixture": "Read both complete templates and each extracted production VMA owner/open/close, mmap, lookup_fault, worker and fork-adoption transition body. Generated fixture contains deterministic local test values and ordinary in-process Arc/RefCell/atomic-free state adapters, with no external side effects or hardware access.",
+    "oracle_scope": "The original four negative/control boundary tests remain in the generated fixture, with eight additional bootstrap/adoption failure/order tests declared. Their execution and semantic coverage are not claimed by this profile review.",
+    "fork_gate": "Read non-null CREATE_PPD rejection in unchanged mcctrl_process.rs. The test asserts the rejection remains present; this profile does not enable the production fork gate.",
+    "retention": "The retained mkdtemp source/binary root is never automatically deleted by the admitted driver. Commands, compiler version, compile/run stdout/stderr and return statuses are saved before assertions. Timeout streams and explicit timeout status are saved. TMPDIR must be supplied under the fresh dispatcher-owned evidence root."
+  },
+  "static_generation_check": {
+    "executed": true,
+    "compiler_executed": false,
+    "fixture_executed": false,
+    "generated_fixture_bytes": 29821,
+    "generated_fixture_sha256": "a3fd986a122e690569bf45317515268c6720ed4fc1a844d950fc1451f3e9d027",
+    "declared_test_attributes": 12,
+    "unexpanded_markers": false
+  },
+  "commands": {
+    "cwd": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+    "python": "/home/holden/anaconda3/bin/python3 -B -m unittest scripts.tests.test_native_fork_adoption_transaction_20261017 [or an exact selected case]",
+    "legacy_driver": "The same admitted command family may run scripts.tests.test_native_fork_ownership_20261017 in this source root.",
+    "rustc": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc --edition=2021 --test -Dwarnings <fresh-attempt>/actual_bodies.rs -o <fresh-attempt>/actual_bodies",
+    "fixture": "<fresh-attempt>/actual_bodies --test-threads=1",
+    "version": "Pinned rustc --version; no toolchain installation or fallback.",
+    "environment": "env -i with PATH=/usr/bin:/bin, LC_ALL=C, LANG=C, PYTHONDONTWRITEBYTECODE=1, MCKERNEL_RUSTC_1_92 set to the existing pinned compiler and HOME/TMPDIR under one fresh private dispatcher evidence root. Clear credentials, SUDO_ASKPASS, loader/Python/compiler overrides; no source-root writes.",
+    "outer_bounds": "taskset CPU7, inherited reviewed prlimit and outer timeout 180 seconds plus at most five seconds cleanup of only the owned process group."
+  },
+  "resources": {
+    "cpu_affinity": [
+      7
+    ],
+    "cpu_planning_shares": 1,
+    "memory_planning_share_bytes": 2147483648,
+    "inherited_rlimit_as_bytes_per_process": 2147483648,
+    "inherited_rlimit_cpu_seconds_per_process": 150,
+    "inherited_rlimit_nofile": 256,
+    "inherited_rlimit_fsize_bytes_per_file": 67108864,
+    "inherited_rlimit_core": 0,
+    "wall_seconds": 180,
+    "owned_group_termination_cleanup_seconds": 5,
+    "concurrent_processes_maximum": 8,
+    "compiler_test_families_at_once": 1,
+    "aggregate": "Deduct one CPU/2 GiB from the existing shared campaign budget. This extends the root/entrypoint envelope, not the number of reserved jobs or heavy leases. Dispatcher schedules this compiler before the heavy build under the current instruction.",
+    "limits_caveat": "Per-process AS/CPU/file-size limits are not aggregate quotas. The eight-process bound is assured by the reviewed serial subprocess family, not RLIMIT_NPROC for the shared user. Preserve original capacity floors and retain all failed materializations/results."
+  },
+  "change_envelope": "Reuse for changed candidate production bytes and routine vectors within this same extracted-body/test family, with fresh hashes/results and unchanged independent expectations. Dispatcher inspects each changed entrypoint/helper/generated side-effect boundary. No fresh review per routine vector; changes to commands, dependencies, privilege, isolation, resource use or side effects require renewed review.",
+  "prohibited": [
+    "sudo/root",
+    "Docker",
+    "network",
+    "modules",
+    "guest",
+    "hardware",
+    "native production build",
+    "toolchain installation",
+    "production-state or source-root writes",
+    "changing production fork admission",
+    "deleting failed evidence"
+  ],
+  "blocking_findings": [],
+  "not_executed": [
+    "Rust compiler",
+    "generated fixture",
+    "native module/image build",
+    "root or guest execution"
+  ],
+  "acceptance": {
+    "layer_b_profile_extension_released": true,
+    "compiler_scheduling_owned_by_dispatcher": true,
+    "new_behavior_verified": false,
+    "production_fork_adoption_accepted": false,
+    "runtime_acceptance": false,
+    "formal_application_acceptance": false,
+    "os_complete": false
+  }
+}

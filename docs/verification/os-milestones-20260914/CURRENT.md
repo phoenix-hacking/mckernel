@@ -14091,3 +14091,64 @@ prevent full adoption. Broader fork repair does not delay scratch22.
 Current-window real guest apps/new candidate builds remain zero; baseline stays
 3 builds, 12 bounded diagnostic passes, 0/273 formal apps, 6/130 production and
 0/7 language gates. The image-first campaign continues after this checkpoint.
+
+Continuation checkpoint 362, 2026-10-17: independently released scratch22
+preparation completed once, exit 0, 431.66s wall, 71,196 KiB maximum RSS, no
+swap. Exact source remains `0a40e44230b9bb19c4e2e3a1109b2797b6c3afe1`;
+request `ac0fedaf...ea8e`, manifest `663722cd...d9ce`, terminal
+`698a5902...731f`, log `0c03fae4...c777`. Canonical manifest/input/owner
+validation and all 486 shared files/7 links pass. Independent prepared-artifact
+review `scratch22-prepared-artifact-independent-review-20261017.json` returns
+PASS_PREPARED_ARTIFACT, SHA `90b3b9234c3b5361124d562d48283df50825737bcfcffd9dd7737921d7056fee`.
+All original admission/preparation captures, journal, request and manifest are
+tar-compared in `scratch22-preparation-captures-20261017.tar.gz`, SHA
+`a16eb30337019291ee286dbed8b741e05745a945a4c9698a1e3f69320bf029f1`.
+The initial read-only admission's Git mmap failure under a 2-GiB virtual-AS cap
+and its environment-only correction remain preserved; no production-source
+change or unchanged retry was used for that failure.
+
+Build execution is BLOCKED, not released. Its fresh read-only canonical census
+deterministically rejects the authenticated historical-lease observer's old
+boot/device pins (`c733d83b...`/1831 versus current `7bfc5687...`/1828).
+No build, lease or execution request was started. Exact failed observation and
+bounded diagnostic-harness correction are retained in
+`scratch22-heavy-build-independent-execution-review-20261017.json`, SHA
+`5a267e8234f6dd517290353f4e52f2dff8742d2bc2cf11f5680e0ecbdf1ac489`.
+Preserve accepted scratch22 materializations and all seven immutable historical
+leases; do not bypass census, substitute historical evidence, or replay scratch21.
+Next repair family S22-HISTORICAL-LEASE-BOOT-1: `scratch21_transaction` owns the
+observer/current-generation authority plus consumer hash and strict mock tests;
+the new check must bind stable ext4 UUID as well as current boot/device and every
+original lease/evidence identity. Independent source and bounded read-only
+execution review precede a new live census. `scratch22_adapter` and
+`scratch22_build_wrapper` own disjoint fresh `scratch-22-authority1` adapters,
+tests and outputs, retaining every original safety check and family history.
+Only reviewed source commit/push/fetch, fresh materialization and new one-shot
+release may unlock the corrected heavy build. This is the same bounded failure
+family, not reset acceptance or an abandoned failed attempt.
+
+Frozen signal.mask-restore payload and default collector now compile as static
+x86-64 ET_EXEC binaries without interpreter, executable stack or W+X segments.
+Actual Linux reference stdout is exactly `handled=1 observed_blocked=1 restored=1\n`,
+empty stderr, exit 0, initially unblocked mask; collector was never executed.
+Source/tool/header/command/capture evidence is
+`signal-mask-restore-static-reference-20261017.json` and independent
+PASS_PREPARATION_ONLY review `4ad0459d...bf17`. This is not McKernel behavior.
+The next new actual diagnostic remains that unchanged signal case after fresh
+matching artifacts and separately reviewed image/guest releases.
+
+The optional isolated fork slice independently passes its retained 12 Rust and
+3 Python checks, with CREATE_PPD still rejecting. A separately reviewed additive
+checked-release API contract now guides exact final thread/VM destructor proof;
+`fork_ownership` implements only five kernel files and three tests in the sparse
+worktree, without enabling adoption or touching the image candidate. A source-
+extraction harness correction is retained; C/Rust compilation awaits profile
+admission. Workspace extension preserved all six original WIP files and index
+bytes. Missing VMA-write helper and actual native transaction integration remain.
+
+Counts remain 3 compiled candidates, 12 bounded diagnostic guest passes,
+0/273 formal apps, 6/130 production gates and 0/7 language gates; this invocation
+has no new kernel build or guest yet. The engineering-estimate comparison
+baseline `engineering-estimate-20261017T025932Z.json` remains byte-identical,
+SHA `708a8e4d9851db522dbccf578c541440d71ce328ea40245581f69c02d6430aa1`.
+No completion or pause is claimed: continue the image-first correction path.

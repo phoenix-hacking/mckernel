@@ -1,0 +1,68 @@
+{
+  "schema": "mckernel.scratch22-preparation-result.v1",
+  "status": "PASS_PREPARE_ONLY",
+  "target": "0a40e44230b9bb19c4e2e3a1109b2797b6c3afe1",
+  "target_tree": "5a2a17e3155b61ab3e2f2e18a8bbaceb95a89bb2",
+  "controller": "7f4faf87e94e23aff81f128e020cd3b98ee75774",
+  "release": {
+    "path": "docs/verification/evidence/scratch22-preparation-execution-release-20261017.json",
+    "sha256": "ce0ff2356372f7c3ecec44ace5967fd0e7b2ab94adad3e7cf295ea29808d86e5"
+  },
+  "execution_review": {
+    "path": "docs/verification/evidence/scratch22-preparation-independent-execution-review-20261017.json",
+    "sha256": "8d14066ff329e7e3052d34e9057c519caecb60014609156d722a10ae842174b4"
+  },
+  "capture_archive": {
+    "path": "docs/verification/evidence/scratch22-preparation-captures-20261017.tar.gz",
+    "sha256": "a16eb30337019291ee286dbed8b741e05745a945a4c9698a1e3f69320bf029f1",
+    "tar_compare_exit": 0,
+    "contents": [
+      "native-exact-scratch22-source-admission-20261017.capture",
+      "native-exact-scratch22-source-admission-20261017.bounded-correction.capture",
+      "native-exact-scratch22-preparation-20261017.stdout",
+      "native-exact-scratch22-preparation-20261017.stderr",
+      "native-exact-scratch22-preparation-20261017.status",
+      "native-exact-candidate-delta-preparation-scratch-22.log",
+      "native-exact-candidate-delta-preparation-scratch-22-terminal.json",
+      "native-exact-inputs-scratch-22.json",
+      "native-exact-delta-request-scratch-22.json"
+    ]
+  },
+  "runtime": {
+    "exit_code": 0,
+    "wall_seconds": 431.66,
+    "user_seconds": 371.95,
+    "system_seconds": 42.36,
+    "maximum_rss_kib": 71196,
+    "swaps": 0,
+    "cpu_affinity": [
+      0
+    ],
+    "pid": 44809,
+    "pid_starttime": "495958",
+    "process_terminal": true,
+    "stderr": "Only /usr/bin/time -v statistics; no preparation diagnostic error.",
+    "canonical_owner_request_validation": "PASS",
+    "authenticated_initial_links": 6,
+    "materialized_links": 7,
+    "shared_files": 486,
+    "exact_delta_rows": 14
+  },
+  "artifacts": {
+    "request_sha256": "ac0fedafa61fbf1b10e037933f96cdb5937137a8c81da0099d24b6535673ea8e",
+    "manifest_sha256": "663722cd9705555f585c078f3b82da1b15e81cbcbc3b6c87a0aeb8bff615d9ce",
+    "terminal_sha256": "698a5902003ca7e0ecc705797831bf4057f2e5bde8a62cd8ed91d3f1d5dc731f",
+    "log_sha256": "0c03fae4dc580215a03d4fe36fdbc30bd461c785c2223bed6da06990edf8c777",
+    "stdout_sha256": "80dbd7cc086980a8d20b9c63431e37f7d1f246b82ffc9134869e499437328dc9",
+    "stderr_sha256": "622b30c98bac44209ba9086aa95ec146b633d845be46fb08844419de8b7d7d45"
+  },
+  "failure_history": {
+    "initial_source_admission": "2-GiB RLIMIT_AS refused mapping the existing Git pack before mutation; exact failed capture retained.",
+    "bounded_correction": "Removed virtual-address cap only, retained one CPU/2-GiB RSS planning/time bounds; read-only full admission passed at 224.69s/71116KiB. No production source change or unchanged retry."
+  },
+  "build_execution_released": false,
+  "new_current_candidate_builds": 0,
+  "new_real_guest_apps": 0,
+  "formal_acceptance_credit": false,
+  "next": "Independent prepared-artifact review, exact committed/pushed/fetched one-shot heavy-build release, then build. Fresh image preparation/build and signal.mask-restore follow their actual reviewed prerequisites."
+}

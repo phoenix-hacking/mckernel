@@ -1,5 +1,41 @@
 # Compact dispatcher handoff
 
+## Current continuation: checkpoint 362, preparation accepted / build census blocked
+
+Scratch22 exact `0a40e442...c3afe1` materialized once and independently passed
+prepared-artifact review `90b3b923...56fee`; all original captures are retained
+and tar-compared. No build ran. Its fresh canonical read-only census refused
+the old historical-lease observer boot/device pins; BLOCK review
+`../evidence/scratch22-heavy-build-independent-execution-review-20261017.json`
+SHA `5a267e82...ac489` preserves the original failure. Do not execute its DRAFT
+release or alter/reuse scratch22 materializations. Scratch21 cleanup stays accepted.
+
+Shortest next path: finish independent current-generation historical-lease
+authority repair (fixed UUID + current boot/device, all original immutable
+lease/evidence checks), review and execute its bounded read-only census, then
+commit/push/fetch corrected sources. Disjoint fresh `scratch-22-authority1`
+preparation/build adapters are in progress; they must preserve the same failure
+family and every safety check, add accepted scratch22 as the seventh alias root,
+and require the new independent source-authority record. Never raw-remove leases
+or bypass census. Source author `scratch21_transaction`; preparation author
+`scratch22_adapter`; build-wrapper author `scratch22_build_wrapper`.
+
+Signal payload/default collector are now static-compiled and independently
+reviewed; Linux reference exact stdout/empty stderr/exit0 passes. Retained root
+`/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR`.
+No collector/guest ran. First new diagnostic remains signal.mask-restore after
+matching fresh image/modules and actual one-shot release. Existing image inputs
+and historical failure guards are in `scratch22-image-next-inputs-20261017.json`.
+The old-looking image shared exclusion is a deliberate ABI lock slot, not a
+reused request; use fresh work/request/lease names and independent live admission.
+
+Fork checked-destructor implementation stays isolated and disabled pending
+actual-body C/Rust tests and independent review. Original first slice is accepted
+only as scoped source evidence. Counts remain 3 builds/12 diagnostic passes,
+0/273 formal apps, 6/130 production, 0/7 language gates. Comparison baseline
+`engineering-estimate-20261017T025932Z.json` stays unchanged. Continue after this
+checkpoint; no pause, OS completion or formal acceptance increment.
+
 ## Current continuation: checkpoint 361, cleanup accepted
 
 Scratch21 cleanup and immutable terminal replay exited zero; independent

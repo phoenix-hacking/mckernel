@@ -1,0 +1,140 @@
+{
+  "schema": "scratch22.preparation-independent-execution-review.v1",
+  "decision": "PASS_PREPARATION_EXECUTION",
+  "reviewer": "/root/scratch22_adapter_review",
+  "implementation_author": "/root/scratch22_adapter",
+  "executor": "/root",
+  "implementation_ownership": false,
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "high",
+  "scope": "One ordinary-user materialization of the exact fresh scratch22 source preparation. No root, Docker, compiler, build, module, guest or application execution is released.",
+  "target": "0a40e44230b9bb19c4e2e3a1109b2797b6c3afe1",
+  "target_tree": "5a2a17e3155b61ab3e2f2e18a8bbaceb95a89bb2",
+  "baseline": "cfc0187e3af8642f57f088b19c8bfbc3355d21ec",
+  "controller": "7f4faf87e94e23aff81f128e020cd3b98ee75774",
+  "fetched_ref": "refs/remotes/origin/scratch22-source-0a40e442",
+  "proposal": {
+    "path": "docs/verification/evidence/scratch22-preparation-proposal-20261017.json",
+    "sha256": "d79e2d0ddb1f839a57adc678eb8d2fa4baf85abad295dfc83506288ce6774303",
+    "status": "DRAFT_PREPARATION_EXECUTION"
+  },
+  "reviewed_inputs_sha256": {
+    "script_sha256": "3c3dd179301ee9d16ecf8c9e918fee304ee76cb6a89bc2a987235c1f52ec6663",
+    "tests_sha256": "71d1c0658fb67b65df761ce5b13f145ccb54a5f0ded64e0e06edf5fbcde1a97f",
+    "ancestor_sha256": "23d2dcc45db9e9268456a202e46c0e25e982b13d91413271cf00452d0564a731",
+    "cleanup_sha256": "c5483d3dee5469b44c9c8e531197fdf8a3982f44ffc06d9f8d55affc84515c27",
+    "cleanup_release_sha256": "738951610e6691071c1b1f5dfb46b91a1e55988f7240759f73baf01ef0f0b44d",
+    "cleanup_postflight_sha256": "bb15150fa9f68ce4f79eb28ac20268291ed78c594fcf744ab3d5e4b592b375bc",
+    "source_checks_sha256": "77c98238bb181b0bab2ee0915f386c9294441fb8d07692995b61a789e6172516",
+    "source_review_sha256": "5457654a2b15bdf94e4edf5d163fd4eeb1192da6604996df8646d45328c33213"
+  },
+  "mechanical_finalization": {
+    "allowed_changes_only": [
+      "Replace proposal.status with PASS_PREPARATION_EXECUTION_RELEASE.",
+      "Replace proposal.preparation_review null with an object containing path to this exact review file and sha256 of its complete finalized bytes."
+    ],
+    "all_other_proposal_fields_unchanged": true,
+    "final_release_digest": "Compute SHA-256 over the complete finalized release file bytes and supply that exact external digest to --release-sha256.",
+    "fixed_controller": "Do not commit or move HEAD before preparation terminal; helper/tests/ancestor and actual prerequisite evidence are already committed and fetched. The release and this review may remain hash-bound uncommitted WIP until terminal, then dispatcher checkpoints them and the actual result.",
+    "no_new_authority_layer": true
+  },
+  "approved_command": {
+    "argv": [
+      "python3", "-B", "scripts/prepare_native_exact_scratch22.py",
+      "--release", "ABSOLUTE_FINALIZED_RELEASE_PATH",
+      "--release-sha256", "EXACT_FINALIZED_RELEASE_FILE_SHA256",
+      "--materialize"
+    ],
+    "working_directory": "/home/holden/mckernel",
+    "invocations": 1,
+    "ordinary_user": "holden",
+    "cpu_affinity": [0],
+    "cpu_share": 1,
+    "rss_planning_share_bytes": 2147483648,
+    "virtual_address_space_cap": null,
+    "virtual_address_space_reason": "Git maps the existing approximately 7.4-GiB pack file. Mapping is not equivalent to resident RAM consumption; the successful admission maximum RSS is 71,116 KiB.",
+    "wall_seconds_maximum": 1200,
+    "cpu_seconds_maximum": 1100,
+    "root_development_lease_required": false,
+    "root": false,
+    "sudo": false,
+    "docker": false,
+    "compiler_or_build": false,
+    "guest": false,
+    "network": false,
+    "shared_resource_rule": "One CPU and the 2-GiB RSS planning share belong to the existing aggregate seven-job/24-GiB allowance; this preparation creates no extra heavy or guest slot."
+  },
+  "read_only_admission": {
+    "release_path": "docs/verification/evidence/scratch22-source-admission-20261017.json",
+    "release_sha256": "3b1708805a653717efc8d9035d84aee1d2cc8629b896bdf5e66970e9ce3e75ab",
+    "capture_path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-source-admission-20261017.bounded-correction.capture",
+    "capture_sha256": "4287637c6b0c6a4f50c7026f536f5b8f7f4907b23590651742bd4b6256fea99f",
+    "status": "PASS_VALIDATE_ONLY",
+    "exit_code": 0,
+    "shared_files": 486,
+    "authenticated_initial_links": 6,
+    "expected_materialized_links": 7,
+    "exact_delta_rows": 14,
+    "wall_seconds": 224.69,
+    "user_seconds": 198.16,
+    "system_seconds": 18.89,
+    "maximum_rss_kib": 71116,
+    "swaps": 0,
+    "reviewer_repeated_full_shared_census": false,
+    "profile_sizing": "Materialization repeats admission and adds two complete post-materialization shared-file checks, private metadata/blob construction and canonical manifest/input/owner verification. The 1200-wall/1100-CPU bound provides room for those measured sequential filesystem checks; no guest limit is expanded."
+  },
+  "independent_checks": {
+    "status": "PASS_READ_ONLY_PROPOSAL_BOUNDARIES",
+    "command_profile": "Ordinary Python with taskset CPU 0 and 60-second wall bound; no virtual-AS cap, root, Docker, compiler, guest, network or materialization. No repeated full evidence corpus hash and no repeated 143-test source suite.",
+    "checks": [
+      "Exact proposal raw SHA256, helper/test/ancestor hashes and fixed controller HEAD match the reviewed source.",
+      "Actual production validate_release on the hash-bound source-admission record succeeds. It checks the accepted executed cleanup/result/release/plan/journal/archive/capture chain and independent postflight; actual five ordered successful source checks and independently reviewed target file hashes; exact origin anchor target/tree/parent and fourteen-row delta; canonical owner scratch18 exclusion slot.",
+      "The source-admission record equals the preparation proposal in every field except its deliberate source-admission schema/status pair.",
+      "All three controller Git blob SHA256 values match the exact current adapter/test/ancestor hashes.",
+      "The exact fetched anchor resolves to target 0a40e442; inherited FETCHED_REF is explicitly rebound from release.fetched_ref. The inherited target-is-ancestor check uses that same real fetched anchor even though the campaign branch is now a descendant.",
+      "Actual live_preparation_boundary succeeds for canonical scratch, stable UUID, current device/boot and ext4 rw/nodev/nosuid profile.",
+      "Candidate, metadata backup, output, evidence, manifest, request, log, terminal, lease, pinned scratch18 exclusion and shared heavy-operation exclusion are all absent before preparation.",
+      "Exact inherited private-size calculation and host/scratch capacity floors pass, including the private retention pair, two private metadata/IHK copies, 32-MiB overhead and 512-MiB emergency reserve.",
+      "The prior independent source review and 22 passing disposable regressions cover all explicit inherited defaults, alias safety, actual materialize branch, release drift/reviewer independence and returned non-executable canonical owner/request boundary."
+    ],
+    "capacity": {
+      "host_free_bytes": 29429477376,
+      "scratch_free_bytes": 33514463232,
+      "host_floor_bytes": 17179869184,
+      "scratch_floor_bytes": 12884901888,
+      "private_bytes_budget": 86430585,
+      "emergency_bytes": 536870912,
+      "observed_mem_available_kib": 29854532
+    },
+    "live_binding": {
+      "scratch_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+      "scratch_device": 1828,
+      "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb"
+    }
+  },
+  "preserved_failures": [
+    {
+      "family": "source-admission observer process resource envelope",
+      "capture_path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-source-admission-20261017.capture",
+      "capture_sha256": "8b156847a345591152233b1d7e6465e24555bedad7ee42bf12a5116d25602688",
+      "failure": "2-GiB RLIMIT_AS rejected mapping the existing Git pack during ls-tree before any preparation mutation.",
+      "bounded_correction": "Remove virtual address-space cap while retaining one CPU, shared 2-GiB RSS planning share and bounded time. Exact production source remained unchanged; read-only full admission then passed."
+    },
+    {
+      "family": "independent reviewer temporary read-only harness path normalization",
+      "failure": "The first reviewer harness used relative spec.__file__ with absolute ROOT.relative_to, raising ValueError after production release and live-boundary validation. No production source or scratch destination was changed.",
+      "bounded_correction": "Resolve the harness helper path before relative_to; the same read-only proposal/source/live/controller/destination/capacity checks then passed."
+    }
+  ],
+  "required_terminal_observation": [
+    "Capture actual preparation stdout/stderr/status and inherited fresh scratch22 journal/terminal. Successful output must be PASS_PREPARE_ONLY with canonical_owner_request_validation PASS and execution_released false.",
+    "Verify exact candidate target/tree, generated canonical manifest/request identities and preparation-only non-executable request flags; independently review actual prepared artifacts before any heavy release.",
+    "Preserve every failed materialization and partially constructed scratch22 name. After any mutation failure, do not replay/reuse scratch22 or remove its materializations without the applicable exact reconciliation/cleanup authority.",
+    "Do not interrupt a healthy preparation before the reviewed bound. Stop on a new external stop or included-usage guard, preserve current process/evidence identities, and grant no build or guest authority from partial results."
+  ],
+  "blocking_findings": [],
+  "materialization_performed_by_reviewer": false,
+  "build_execution_released": false,
+  "guest_execution_released": false,
+  "acceptance_credit": false
+}

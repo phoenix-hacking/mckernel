@@ -1,0 +1,154 @@
+{
+  "schema": "mckernel.signal-mask-restore-compile-profile-review.v1",
+  "recorded_at_utc": "2026-10-17T03:25:53Z",
+  "decision": "PASS_LAYER_B",
+  "reviewer": "/root/cheap_profile_review",
+  "model": "gpt-6.1-sol",
+  "implementation_ownership": false,
+  "scope": "Reusable ordinary-user static compilation of the frozen signal.mask-restore payload and default diagnostic collector, plus Linux reference execution of the payload only. No collector execution, native production build, root, Docker or guest authority.",
+  "frozen_inputs_sha256": {
+    "scripts/application-tests/cases/signal/signal.mask-restore.c": "c5c7803f9d9592151d1c3508d832cd1c26aafca3ac55c420c209b1bc1c740a57",
+    "scripts/application-tests/oracles/signal.mask-restore.json": "9f7f1d39a26e9016331e1ad2032062d84feb72c23540064fe1994dd00dc56759",
+    "scripts/application-tests/native_diagnostic_guest_collector.c": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e",
+    "docs/verification/evidence/signal-mask-restore-preparation-20261017.json": "ac2d677a2298615211fd2375b05a6f182483972bad27ae3968801d2d07c9c900"
+  },
+  "toolchain": {
+    "gcc": {
+      "path": "/usr/bin/gcc",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "version": "gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0",
+      "target": "x86_64-linux-gnu"
+    },
+    "assembler": {
+      "path": "/usr/bin/as",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-as",
+      "sha256": "8d45684bbd6420e3e97907257c510f199bb6c5f9b02ea8ee0a590c1a8b662ead",
+      "version": "GNU assembler (GNU Binutils for Ubuntu) 2.34"
+    },
+    "linker": {
+      "path": "/usr/bin/ld",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+      "version": "GNU ld (GNU Binutils for Ubuntu) 2.34"
+    },
+    "packages": {
+      "gcc-9": "9.4.0-1ubuntu1~20.04.2",
+      "binutils": "2.34-6ubuntu1.11",
+      "libc6-dev": "2.31-0ubuntu9.18",
+      "linux-libc-dev": "5.4.0-216.236"
+    },
+    "python_capture_runner": {
+      "path": "/home/holden/anaconda3/bin/python3",
+      "version": "Python 3.9.12",
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+      "scope": "Standard-library command/capture/status observer and initial signal-mask observation only; no arbitrary repository imports."
+    }
+  },
+  "installed_link_inputs_sha256": {
+    "/usr/lib/x86_64-linux-gnu/libc.a": "f9831edeccd3a87eb3fbba795f92bfa83409b3951f05ec40ca5df432b8699127",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc.a": "82b6c0bfc28d5314fffaaa2a920516575f347972f685b5805f5749a87a617df0",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc_eh.a": "1dc66e2a55a6cefe1458b4e94f9b321e453a5b7279638cd7d12e1ddf83ec59f8",
+    "/usr/lib/x86_64-linux-gnu/crt1.o": "27daac7b3f9e861ef8df49f45b2a8ffb7130a1899f86efe53c6f84d63fd3cd0d",
+    "/usr/lib/x86_64-linux-gnu/crti.o": "2f1c31070d95f398fe4c1388408e83283cc7e0cee0ebb64882e0b331e8e178e8",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/crtbeginT.o": "9fe07384ef0078de4a23fe2acc4137cb5aeeddcc715cf189cc0d985b602d348a",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/crtend.o": "c29d8ba35b3afad85993fa8f64b1a4d91678deaeb0f1cae952f12c0bdd4c83c1",
+    "/usr/lib/x86_64-linux-gnu/crtn.o": "a2266079f95b84ccc2162ebbf279bcd78858a748aa1882e0bdb912316c76a58f",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/cc1": "c09275e2d3f811e23d255eac415bfedd9e68ba8b5cf4b261d2fce136b5e8fc99",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/collect2": "5228dbf1e15d16694059023d16e7f13f201ea0d76a82e8837c6483dc21d66682"
+  },
+  "selected_header_inputs_sha256": {
+    "/usr/include/signal.h": "f9c42bf1df8c113861410d711967973a3e8578641d88fbb9021effa8d928aaf9",
+    "/usr/include/stdio.h": "e7d85131c888412c0eaaaca3a7165d86f147c8645993ddf333a5b2500117a478",
+    "/usr/include/stdlib.h": "7ea37adb35a2acc112198f826c7c02ba214c0fd3e3532174870ba2fbc86a83b3",
+    "/usr/include/features.h": "981a26a502075c066b75617ea8db7623f98935b035e470833c46e53f1dea4e2b",
+    "/usr/include/x86_64-linux-gnu/bits/libc-header-start.h": "42053eaf4d2751e7be1cc8342f4c1c7404a6670c330ca493b7e884b20d6c1747"
+  },
+  "source_and_include_inspection": {
+    "payload": "Read complete frozen source. It uses only installed signal.h/stdio.h/stdlib.h, installs a local SIGUSR1 handler, raises that signal in its own process, queries its mask and prints one line. No file, network, privilege, child-process or external host-state operation.",
+    "collector": "Read complete default collector source, including every conditional include/flag and main. All includes are installed system headers; no project include, generated include, build script, plugin, external command during preprocessing or custom search path. Installed direct headers exist. ND_CORE_*, ND_FUTEX and other profile definitions are forbidden for this admission.",
+    "collector_execution": "Not admitted on the host. The resulting init is only an artifact: its PID1/root path mounts filesystems, accesses klog, loads modules and performs guest shutdown. Its compilation does not grant that execution authority.",
+    "transitive_headers": "Use only GCC's installed standard include search under cleared environment. -MD/-MF captures the actual system/project include dependency closure for each compile; retain and hash consumed headers from that depfile with the actual build evidence. Selected header hashes above are not a claim to inventory the complete transitive closure before preprocessing."
+  },
+  "command_profile": {
+    "source_root": "/home/holden/mckernel",
+    "fresh_output_root": "One exclusive mkdtemp directory /home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-XXXXXX with private HOME, TMPDIR and case/work subdirectories. Never use or overwrite a historical attempt.",
+    "common_flags": [
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-static",
+      "-fno-pie",
+      "-no-pie",
+      "-Wl,-z,noexecstack"
+    ],
+    "payload_command": "/usr/bin/gcc -std=gnu11 -O2 -Wall -Wextra -Werror -static -fno-pie -no-pie -Wl,-z,noexecstack -MD -MF <fresh>/app.d /home/holden/mckernel/scripts/application-tests/cases/signal/signal.mask-restore.c -o <fresh>/app",
+    "collector_command": "/usr/bin/gcc -std=gnu11 -O2 -Wall -Wextra -Werror -static -fno-pie -no-pie -Wl,-z,noexecstack -MD -MF <fresh>/collector.d /home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c -o <fresh>/init",
+    "linux_reference_argv": [
+      "<fresh>/app",
+      "A",
+      "",
+      "B"
+    ],
+    "linux_reference_cwd": "<fresh>/case/work",
+    "capture_observer": "Pinned Python -B standard-library observer may record exact argv/environment, initial signal.pthread_sigmask(SIG_BLOCK, set()), subprocess returncode/stdout/stderr, timeout status, file hashes and depfile/header identities. It refuses a baseline with SIGUSR1 or SIGUSR2 blocked and does not alter the frozen source, oracle or inherited mask to conceal that condition. Run payload with subprocess.run(..., capture_output=True, timeout=10) and the sanitized environment, retaining raw streams/status before comparing the frozen oracle. No collector execution or repository launcher import is admitted.",
+    "environment": "env -i PATH=/usr/bin:/bin LC_ALL=C LANG=C TZ=UTC PYTHONDONTWRITEBYTECODE=1 HOME=<fresh>/home TMPDIR=<fresh>/tmp. No credentials, SUDO_ASKPASS, LD_*, GCC_EXEC_PREFIX, COMPILER_PATH, LIBRARY_PATH, CPATH, C_INCLUDE_PATH, PYTHONPATH/PYTHONHOME, toolchain overrides or unrelated launcher variables.",
+    "read_only_identity_commands": "Pinned tools --version, gcc -dumpmachine/-print-file-name/-print-prog-name, dpkg-query package versions, read-only stat/readlink/hash checks and ELF header/program-header/symbol inspection of the produced files are allowed. No toolchain installation or fallback."
+  },
+  "resources": {
+    "cpu_affinity": [
+      6
+    ],
+    "cpu_planning_shares": 1,
+    "memory_planning_share_bytes": 2147483648,
+    "inherited_rlimit_as_bytes_per_process": 2147483648,
+    "inherited_rlimit_cpu_seconds_per_process": 100,
+    "inherited_rlimit_nofile": 256,
+    "inherited_rlimit_fsize_bytes_per_file": 67108864,
+    "inherited_rlimit_core_bytes": 0,
+    "total_wall_seconds": 120,
+    "payload_run_timeout_seconds": 10,
+    "owned_group_termination_cleanup_seconds_maximum": 5,
+    "concurrent_processes_maximum": 8,
+    "parallel_compiler_or_payload_families": 1,
+    "aggregate": "One job/2 GiB deducted from the shared seven-job/24-GiB allowance. May overlap CPU0 ordinary materialization only under dispatcher accounting; creates no heavy lease or guest concurrency.",
+    "caveat": "Per-process AS/CPU/file-size limits are not aggregate cgroup quotas. The process count is maintained by this small serial GCC/assembler/linker or payload family, not per-user RLIMIT_NPROC. Preserve existing host/scratch capacity floors."
+  },
+  "frozen_oracle": {
+    "stdout_utf8": "handled=1 observed_blocked=1 restored=1\n",
+    "stdout_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+    "stderr_hex": "",
+    "exit_code": 0,
+    "raw_wait_status": 0
+  },
+  "evidence_and_failure_policy": {
+    "retain": "Retain source/oracle/tool hashes, exact commands/environment and initial signal mask, stdout/stderr and statuses for both compiles and payload run, generated binaries, depfiles and header hashes under the fresh output root, including every failed attempt. Save timeout/exception information explicitly; stdout text is not a substitute for raw captured bytes.",
+    "prior_failure": "The historical container's missing-static-libc compile failure remains retained. This admitted host environment is a concrete environment change: /usr/lib/x86_64-linux-gnu/libc.a is a verified regular 5,747,618-byte archive and all listed static startup/libgcc inputs exist. It is not an unchanged retry of that environment.",
+    "limits": "No compilation/link or Linux payload execution was performed by this reviewer. Presence of dependencies is profile admission, not a successful static-link claim. On deterministic failure preserve it and apply the campaign's one bounded correction/failure-family escalation; do not rerun unchanged.",
+    "semantic_limits": "SIGUSR1/SIGUSR2 baseline observation preserves the preparation limitation. The frozen payload checks restoration of those two mask bits and handler SIGUSR2 blocking; it does not prove arbitrary whole-mask restoration or automatic blocking of the delivered signal. Linux reference success supplies no McKernel/formal acceptance."
+  },
+  "blocking_findings": [],
+  "prohibited": [
+    "root/sudo",
+    "Docker",
+    "network",
+    "module loading",
+    "guest",
+    "host collector execution",
+    "native module/image build",
+    "toolchain or package install",
+    "source/oracle edits",
+    "historical attempt reuse or deletion"
+  ],
+  "acceptance": {
+    "layer_b_compile_reference_profile_released": true,
+    "static_compilation_verified": false,
+    "linux_reference_verified": false,
+    "guest_execution_released": false,
+    "formal_application_acceptance": false,
+    "production_acceptance": false,
+    "os_complete": false
+  }
+}

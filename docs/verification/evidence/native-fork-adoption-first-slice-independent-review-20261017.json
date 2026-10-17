@@ -1,0 +1,125 @@
+{
+  "schema": "mckernel.native-fork-adoption-first-slice-independent-review.v1",
+  "decision": "PASS_SCOPED_SOURCE_SLICE",
+  "reviewer": "/root/fork_adoption_boundary_review",
+  "author": "/root/fork_ownership",
+  "independent_of_author": true,
+  "model": "gpt-6.1-sol",
+  "scope": "Review the concrete two-file ownership/transition slice and retained actual-body fixture execution. This is not fork integration, native compilation, an execution release, guest behavior or acceptance.",
+  "isolated_root": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+  "isolated_sha256": {
+    "host-kernel/native-rust/mcctrl_vm.rs": "f00a3d7b7ef547b8ef8c598f0f8b890086d4657a9ae19504d3a8d3ff855ea44e",
+    "host-kernel/native-rust/smp_application_image.rs": "a559bf426360940760907b8cf840ac60b3e56ab148235a8c0e88d50dc002492b",
+    "scripts/tests/test_native_fork_ownership_20261017.py": "f1035bef192fc05e420985ad5d09438adff4fff5fab3195abb03369eaf6379b0",
+    "scripts/tests/fixtures/native_fork_ownership_20261017.rs": "49367dcd8ece7fe45419936604f631bcc9a7e00733facd93c6bf93f7ef4f9c22",
+    "scripts/tests/test_native_fork_adoption_transaction_20261017.py": "df5ed6c6b550d6df9bec50a683d78626529c1566b0fbe6a2eeba70a1a225025e",
+    "scripts/tests/fixtures/native_fork_adoption_transaction_20261017.rs": "6ecfcb36c425577492262c2241d773041f371c4b052ec70016a4bc3912c6990f",
+    "host-kernel/native-rust/mcctrl_process.rs": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70"
+  },
+  "input_records_sha256": {
+    "docs/verification/evidence/native-fork-adoption-implementation-20261017.json": "e11b82f25372afbe6eebc7f284e397af08682b9b936ee993d4233b407d19afd1",
+    "docs/verification/evidence/native-fork-adoption-cheap-profile-extension-20261017.json": "b4b40a063cac43aecf6182ba1618a0b0f6c41083ddd4a27e7e24372926bc79da"
+  },
+  "source_findings": [
+    {
+      "subject": "Initial VMA ownership transfer",
+      "result": "PASS",
+      "detail": "MappingFile owns a mutex-protected one-shot Option<Arc<VmaOwner>>. mmap checks MM/range/pgoff/private-data before consuming it. Failed validation leaves ownership with the file; successful mmap transfers exactly one raw Arc to vm_private_data with no later failing callback operation. The consumed file has no remaining Registration/Mirror owner."
+    },
+    {
+      "subject": "Linux callback and error ordering",
+      "result": "PASS",
+      "detail": "Pinned mm/vma.c::__mmap_new_vma preallocates before the file mmap callback, and its successful callback has no subsequent recoverable allocation failure. The VM_PFNMAP/VM_DONTEXPAND flags select the special-VMA path and prevent the ordinary post-callback merge. Linux dup_mmap and same-MM split call open on the copied live vm_private_data. Normal unmap/exit finish PTE/TLB teardown before close; remove_vma is a sleepable callback context and closes before file fput. This supports the raw-owner transfer and matching close rather than assuming every conceivable mmap error calls close."
+    },
+    {
+      "subject": "Raw Arc balance and borrow lifetime",
+      "result": "PASS",
+      "detail": "vma_owner is unsafe and requires live VMA exclusion across its ArcBorrow. Its from_raw pointer comes from the initial transfer or open. vma_open converts ArcBorrow into a new Arc using the allocation-free kernel reference increment; vma_close nulls vm_private_data then consumes one owned raw reference. Kernel ArcBorrow's actual From implementation matches the adapter semantics. All present vma_owner callers retain fault/MM exclusion; no current live rebinding is attempted."
+    },
+    {
+      "subject": "Mirror/MM/file/registration lifetime and locking",
+      "result": "PASS_WITHIN_CURRENT_DISABLED_SLICE",
+      "detail": "VmaOwner retains Registration plus Mirror. Mirror retains only a structural mm_count reference, not mm_users, so it does not keep exit_mmap alive in a cycle. Registration.mapping owns Mirror but Mirror does not own Registration. Once the bootstrap is consumed, neutral file state does not extend the parent application lifetime. An inherited child VMA deliberately retains its parent's owner until adoption/close and still rejects MM-mismatched faults. Final owner destruction can run existing bounded Registration cleanup while Linux holds teardown exclusion; the independent backend pump does not acquire this MM lock, and the same-MM worker current-MM checks prevent a surviving child worker from using a parent MM. No new mutex-to-MM inversion or ownership cycle was found in the slice. This finding does not certify future cross-entry revoke/rebind code."
+    },
+    {
+      "subject": "ForkAdoption transition helpers",
+      "result": "PASS_AS_DORMANT_COMPARISON_AND_ORDERING_HELPERS",
+      "detail": "Identity equality covers all supplied comparison keys, positive first RET is restricted to the child PID, and second linkage requires first publication. Cancellation denies new accesses; outstanding accesses prevent HostRevoked. Unsafe host_revoked and guest_destroyed explicitly require the external revocation/destructor facts, and no production caller supplies them. Final ACK is identity checked and idempotent only after the same transaction reached Released. These scalar helpers do not themselves own a PID, MM, root, original delivery or a response claim."
+    },
+    {
+      "subject": "Production admission",
+      "result": "PASS_GATE_STAYS_CLOSED",
+      "detail": "The isolated mcctrl_process.rs still matches the original source and returns -95 for non-null CREATE_PPD after user-copy validation, before registration publication. Remote::worker still requires a successful real Preparation. The slice adds no adopted-image admission, fake PREPARE/SCHEDULE or guest ACK."
+    }
+  ],
+  "retained_execution": {
+    "capture_root": "/home/holden/mckernel-work/scratch/native-cheap-20261017-gj7VHZ",
+    "result": "3 Python tests and 12 generated Rust tests passed; both compiler and fixture exit status 0",
+    "compiler": "rustc 1.92.0 (ded5c06cf 2025-12-08)",
+    "rerun_by_reviewer": false,
+    "capture_sha256": {
+      "inputs.sha256": "985e05de6e5ee20a6ba82376b98fac4795ccbc507a014026d66ee9e328489b79",
+      "status": "58304e22a2335464bf6b54991bf5fffa13bc960529269f5fe380c510933ba821",
+      "unittest.capture": "f14caa66d44ffe5083c21709083f2f495a6a2c76f579bb6a14813df2aa8f43e0",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/actual_bodies.rs": "a3fd986a122e690569bf45317515268c6720ed4fc1a844d950fc1451f3e9d027",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/run.stdout": "495f65e7c04eaa5353fd9e8a22f404736f46b066b74db5b77acbd433b7808333",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/run.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/compile.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+      "tmp/native-fork-adoption-20261017-wjr3wrgi/compiler-version.stdout": "ecda74ca828b18debf1624cb36209a5b844fb1e1c1905ffb3d51b56cc275f96f"
+    },
+    "actual_production_extractions": ["VmaOwner/MappingFile/vma_owner/vma_open/vma_close block", "mmap", "lookup_fault", "Remote::worker", "ForkIdentity/ForkPhase/ForkAdoption block"],
+    "coverage": "The original four negative/control tests remain. Added tests exercise rejected bootstrap geometry, one-shot transfer, same-MM split/different-MM fork reference balance, neutral file teardown, exact scalar identity mismatch, invalid reserve geometry, wrong-PID/duplicate/reordered transitions, negative RET, access drainage and revoke/destruction/ACK ordering.",
+    "limits": "The fixtures replace Linux structs, Mutex, kernel Arc/MM references, Registration invocation and backend transport with explicit adapters. They do not run Mirror::reserve, Linux mmap/unmap/PTE/TLB machinery, real Registration::Drop, backend adoption, adopted-root translation or the guest destructor. Assertions named host_revoked/guest_destroyed invoke unsafe proof boundaries with fixture-supplied assumptions. This is useful source-slice regression evidence, not proof those external facts occurred."
+  },
+  "finite_remaining_boundaries": {
+    "linux_live_vma_write": {
+      "verified": true,
+      "source": "/home/holden/mckernel-work/scratch/native-source/linux-6.12.0-211.44.1.el10_2/include/linux/mm.h::vma_start_write",
+      "bindings_root": "/home/holden/mckernel-work/scratch/native-build-base-24a151fe/rust/bindings",
+      "bindings_sha256": {
+        "bindings_generated.rs": "89e60708ae31dbf48b4ebb60a118527c7f567e4954a4dbbaa41a58b2eccb22ec",
+        "bindings_helpers_generated.rs": "8e5d0035a389d3562eb742d54a489a9cdc02d55af9d8a2f6c2b061594b422ed5"
+      },
+      "finding": "Both generated binding files were searched. vma_set_file is present at bindings_generated.rs:59226; vma_start_write is absent. The latter static inline operation requires an exact reviewed helper/binding extension before modifying already-linked vm_private_data. Presence of vma_set_file does not authorize live backing-file replacement.",
+      "blocks_first_slice": false,
+      "blocks_live_adoption": true
+    },
+    "guest_final_destructor": {
+      "verified": true,
+      "finding": "process_release_vm_body_result returns 0 on a retained VM and 1 only after the final free_vm callback. process_release_thread_body_result uses void ProcessVmActionFn, invokes it and returns 1 after thread destruction without learning whether VM release was final. Rust release_thread/release_process_vm wrappers discard their helper results; C wrappers preserve the same loss. Existing vm->free_cb executes before flush/free-ranges/address-space teardown, so it is not an existing final-destruction ACK hook.",
+      "minimum_unconditional_extension": ["kernel/rust/process_helpers.rs", "kernel/process_helpers.c", "kernel/include/process_helpers.h", "kernel/process.c"],
+      "conditional_layout_extension": ["kernel/include/process.h", "kernel/rust/abi.rs"],
+      "conditional_layout_reason": "If final-completion identity/callback state must survive in process_vm until its last reference, its C layout change also requires the repr(C) ProcessVm mirror in kernel/rust/abi.rs:1430 and its exact size/offset assertions at 2300 onward. The author list omitted this conditional Rust ABI companion. An additive checked synchronous release API that changes no VM layout need not add those two layout files.",
+      "smallest_next_executable_check": "Add an actual-body release-helper regression distinguishing retained thread, destroyed thread with retained VM, and actual final VM destruction. A void callback must not count as final VM proof. A checked additive callback/API must preserve old wrappers and return no completion before the final free event; any delayed completion stores its transaction identity outside freed storage. Run through the existing cheap profile after selecting the exact additive API. No guest ACK or refcount forcing is allowed before that source evidence.",
+      "blocks_first_slice": false,
+      "blocks_prelink_abort_retirement": true,
+      "authority": "This review confirms the finite source boundary; it does not grant write ownership or authorize an unspecified helper/layout change."
+    }
+  },
+  "reference_sources_sha256": {
+    "host-kernel/native-rust/mcctrl_process.rs": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+    "host-kernel/native-rust/smp_application.rs": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+    "kernel/process_helpers.c": "c444c9c911b3dd231e6c8d8ae544c82f5d69893506f99bcff4be4ae3216a34f5",
+    "kernel/rust/process_helpers.rs": "b3a28ea8b0cd2594305644c224ae718eac384c0709305da315a6b8fd1285d00b",
+    "kernel/include/process_helpers.h": "2c01124eaf57635e9fb1c8ba1467a2d829767198d49fa5d3e49b9a9c71fc7ad7",
+    "kernel/process.c": "6480b1ab121acf17610495682cd9e58cba774427de9695b1ce8dd65a9bc07cb2",
+    "kernel/include/process.h": "907391bd99a38b48be54ff6700f1ca12143e5a9bfabf4826b6f09ab2b842bc6c",
+    "kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+  },
+  "linux_reference_root": "/home/holden/mckernel-work/scratch/native-source/linux-6.12.0-211.44.1.el10_2",
+  "linux_reference_sha256": {
+    "mm/vma.c": "11fffd2f5b6f246aa4f69dbad3e5703ff3a371a5adb671a88aa52f1eef564779",
+    "mm/mmap.c": "eb389f96f6871408a425c886c8f334f71a98d9c8a4664678ad11d5faee7c3bee",
+    "kernel/fork.c": "a0dd38fbb599576c8cfcaaffbf556dca11ac24d9ca400047c0a78d1d51f44120",
+    "include/linux/mm.h": "aac2bb23f3a07d0b6ab0e085c2a3fe4b00bc2f53bf5db237e1671ea39f346732",
+    "rust/kernel/sync/arc.rs": "d18fccfcbe7a55297dfd4574218c9e6aeeaf8d30f99b0128071f0f444768d8ae"
+  },
+  "blocking_findings_in_scoped_slice": [],
+  "required_correction_before_source_slice_handoff": null,
+  "execution_release": false,
+  "native_compile_pass": false,
+  "guest_behavior_verified": false,
+  "formal_case_credit": false,
+  "fork_acceptance": false,
+  "campaign_scope": "Main integration, source manifests, compiler approval and later execution remain dispatcher-owned. This isolated review neither changes nor delays the existing image-first source target. Reviewer wrote only this new evidence file; no implementation, root, Docker, Git, network, guest or compiler operation was performed."
+}
