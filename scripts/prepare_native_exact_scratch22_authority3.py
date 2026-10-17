@@ -642,36 +642,96 @@ def live_preparation_boundary(scratch, release):
     _IMPL.capacity(scratch)
 
 
+def _alias_phase_metadata(path, directory=False):
+    """No content read: canonical path, type and a complete mutation fence."""
+    path = Path(path)
+    try:
+        if not path.is_absolute() or path.resolve(strict=True) != path:
+            raise Refusal('noncanonical evidence alias path')
+        meta = os.lstat(path)
+        if not (stat.S_ISDIR(meta.st_mode) if directory else stat.S_ISREG(meta.st_mode)):
+            raise Refusal('alias path type differs')
+        return (meta.st_dev, meta.st_ino, meta.st_mode, meta.st_size, meta.st_nlink,
+                meta.st_mtime_ns, meta.st_ctime_ns, meta.st_uid, meta.st_gid)
+    except OSError as error:
+        raise Refusal('alias path metadata unavailable: ' + str(path)) from error
+
+
+def _alias_inode_digest(path, expected):
+    """Authenticate one descriptor in one bounded pass, with path/fstat fences."""
+    descriptor = None
+    try:
+        descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC | os.O_NONBLOCK)
+        def metadata():
+            meta = os.fstat(descriptor)
+            return (meta.st_dev, meta.st_ino, meta.st_mode, meta.st_size, meta.st_nlink,
+                    meta.st_mtime_ns, meta.st_ctime_ns, meta.st_uid, meta.st_gid)
+        if metadata() != expected or _alias_phase_metadata(path) != expected:
+            raise Refusal('alias descriptor/path changed before content authentication')
+        blob = hashlib.sha1(b'blob ' + str(expected[3]).encode('ascii') + b'\0')
+        content = hashlib.sha256()
+        consumed = 0
+        while True:
+            block = os.read(descriptor, min(1 << 20, expected[3] - consumed + 1))
+            if not block:
+                break
+            consumed += len(block)
+            if consumed > expected[3]:
+                raise Refusal('alias content size grew during authentication')
+            blob.update(block)
+            content.update(block)
+        if consumed != expected[3] or metadata() != expected or _alias_phase_metadata(path) != expected:
+            raise Refusal('alias content metadata raced during authentication')
+        return blob.hexdigest(), content.hexdigest()
+    except OSError as error:
+        raise Refusal('alias descriptor authentication unavailable: ' + str(path)) from error
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+
+
 def alias_census(roots, shared):
-    """Account for every link, authenticate bytes, and reject aliases/races."""
+    """Authenticate each inode once in THIS phase; fence every alias and root."""
     roots = tuple(map(Path, roots))
     if not roots or len(set(roots)) != len(roots):
         raise Refusal('duplicate/missing alias roots')
-    for root in roots:
-        if not root.is_absolute() or root.is_symlink() or root.resolve() != root or not root.is_dir():
-            raise Refusal('noncanonical alias root')
-    count = None
+    root_metadata = tuple(_alias_phase_metadata(root, directory=True) for root in roots)
+    if len({row[:2] for row in root_metadata}) != len(roots):
+        raise Refusal('alias root inode duplicated')
+    plans = []
     for rel, mode, oid in shared:
-        if Path(rel).is_absolute() or '..' in Path(rel).parts:
+        relative = Path(rel)
+        if relative.is_absolute() or '..' in relative.parts or relative.as_posix() != rel:
             raise Refusal('invalid evidence path')
-        if any((root / rel).resolve() != root / rel for root in roots):
-            raise Refusal('noncanonical evidence alias path')
-        rows = [_IMPL.snapshot(root / rel) for root in roots]
+        paths = tuple(root / rel for root in roots)
+        rows = tuple(_alias_phase_metadata(path) for path in paths)
         first = rows[0]
-        # nlink must be fully explained by distinct authenticated paths.
-        if first['nlink'] != len(roots) or any(row != first for row in rows):
+        # Every link has a distinct authenticated path; unknown links refuse.
+        if first[4] != len(roots) or any(row != first for row in rows):
             raise Refusal('incomplete authenticated alias census: ' + rel)
-        if first['mode'] != (int(mode, 8) & 0o777) or _IMPL.git(
-                ROOT, 'hash-object', '--no-filters', str(roots[0] / rel)).decode().strip() != oid:
+        if stat.S_IMODE(first[2]) != (int(mode, 8) & 0o777):
             raise Refusal('unauthenticated alias bytes/mode: ' + rel)
-        if [_IMPL.snapshot(root / rel) for root in roots] != rows:
-            raise Refusal('alias census raced')
-        if count is not None and count != first['nlink']:
-            raise Refusal('inconsistent alias link topology')
-        count = first['nlink']
-    if count is None:
+        plans.append((paths, rows, oid))
+    if not plans:
         raise Refusal('empty alias census')
-    return count
+    # Local to one invocation only. Subsequent validation phases read again.
+    authenticated = {}
+    for paths, rows, oid in plans:
+        first = rows[0]
+        key = first[:2]
+        if key not in authenticated:
+            blob, checksum = _alias_inode_digest(paths[0], first)
+            authenticated[key] = (first, blob, checksum)
+        if authenticated[key][:2] != (first, oid):
+            raise Refusal('unauthenticated alias bytes/inode: ' + str(paths[0]))
+    # Recheck ALL paths after ALL content reads, including earlier rows whose
+    # inode might change while a later row was being authenticated.
+    for paths, before, _ in plans:
+        if tuple(_alias_phase_metadata(path) for path in paths) != before:
+            raise Refusal('alias census raced')
+    if tuple(_alias_phase_metadata(root, directory=True) for root in roots) != root_metadata:
+        raise Refusal('alias root metadata raced')
+    return len(roots)
 
 
 def inherited_arguments(release, scratch, links):
