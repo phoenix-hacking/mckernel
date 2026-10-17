@@ -234,11 +234,9 @@ def _copy_replacement(source, target, descriptor):
               "replacement source changed while copying: " + descriptor["path"])
         os.chmod(target, descriptor["mode"])
         _recheck_source(descriptor)
-    except BaseException:
-        try: os.unlink(target)
-        except OSError: pass
-        raise
     finally:
+        # Retain any partial target as failure evidence; exclusive creation
+        # prevents a later attempt from overwriting it.
         os.close(source_fd)
 
 def _normalize(root):
@@ -400,7 +398,8 @@ def _stage(base_root, payload, collector, output, *, cpio, gzip, replacements, s
             _recheck_source(descriptor)
         return manifest
     except BaseException:
-        shutil.rmtree(output)
+        # Retain the attempt and original error, including partial artifacts.
+        # The fresh-output check prevents reuse of this failed attempt name.
         raise
 
 def main(argv=None):

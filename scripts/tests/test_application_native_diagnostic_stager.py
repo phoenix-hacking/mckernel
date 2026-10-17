@@ -67,6 +67,51 @@ class StagerTests(unittest.TestCase):
         (self.base / "lib64/libc.so.6").unlink()
         with self.assertRaises(S.StagerError): S.stage(self.base, self.payload, self.collector, self.d / "out", cpio=str(self.cpio), gzip=str(self.gzip))
 
+    def test_failed_tree_copy_retains_output_and_original_error(self):
+        out = self.d / "failed-copy"
+        failure = OSError("injected tree copy failure")
+        def fail_copy(source, target, replacements):
+            (target / "partial").write_bytes(b"retained-tree-bytes")
+            raise failure
+        with mock.patch.object(S, "_copy_tree", side_effect=fail_copy):
+            with self.assertRaises(OSError) as caught:
+                S.stage(self.base, self.payload, self.collector, out,
+                        cpio=str(self.cpio), gzip=str(self.gzip))
+        self.assertIs(caught.exception, failure)
+        self.assertEqual((out / "root/partial").read_bytes(), b"retained-tree-bytes")
+        self.assertFalse((out / "manifest.json").exists())
+        with self.assertRaisesRegex(S.StagerError, "output already exists"):
+            S.stage(self.base, self.payload, self.collector, out,
+                    cpio=str(self.cpio), gzip=str(self.gzip))
+        self.assertEqual((out / "root/partial").read_bytes(), b"retained-tree-bytes")
+
+    def test_partial_replacement_write_retains_bytes_and_original_error(self):
+        out = self.d / "failed-replacement"
+        replacements = self._replacement_map()
+        first = sorted(replacements)[0]
+        source = Path(replacements[first]["path"])
+        original = source.read_bytes()
+        real_write = os.write
+        failure = OSError("injected replacement write failure")
+        calls = []
+        def partial_write(fd, data):
+            if not calls:
+                calls.append(fd)
+                return real_write(fd, data[:3])
+            raise failure
+        with mock.patch.object(S.os, "write", side_effect=partial_write):
+            with self.assertRaises(OSError) as caught:
+                S.stage(self.base, self.payload, self.collector, out,
+                        cpio=str(self.cpio), gzip=str(self.gzip), replacements=replacements)
+        self.assertIs(caught.exception, failure)
+        self.assertEqual((out / "root" / first).read_bytes(), original[:3])
+        self.assertEqual(source.read_bytes(), original)
+        self.assertFalse((out / "manifest.json").exists())
+        with self.assertRaisesRegex(S.StagerError, "output already exists"):
+            S.stage(self.base, self.payload, self.collector, out,
+                    cpio=str(self.cpio), gzip=str(self.gzip), replacements=replacements)
+        self.assertEqual((out / "root" / first).read_bytes(), original[:3])
+
     def test_second_build_is_byte_identical_and_output_cannot_be_nested(self):
         first = self.d / "one"; second = self.d / "two"
         a = S.stage(self.base, self.payload, self.collector, first, cpio=str(self.cpio), gzip=str(self.gzip))
@@ -213,7 +258,8 @@ class StagerTests(unittest.TestCase):
                     with self.assertRaises(S.StagerError):
                         S.stage(self.base, self.payload, self.collector, out,
                                 cpio=str(self.cpio), gzip=str(self.gzip), replacements=replacements)
-                self.assertFalse(out.exists())
+                self.assertTrue((out / "root").is_dir())
+                self.assertFalse((out / "manifest.json").exists())
 
     def test_final_replacement_drift_before_inventory_is_rejected(self):
         for field in ("content", "size", "mode"):
@@ -232,7 +278,8 @@ class StagerTests(unittest.TestCase):
                     with self.assertRaisesRegex(S.StagerError, "final replacement drift"):
                         S.stage(self.base, self.payload, self.collector, out,
                                 cpio=str(self.cpio), gzip=str(self.gzip), replacements=replacements)
-                self.assertFalse(out.exists())
+                self.assertTrue((out / "root/images/mckernel.img").is_file())
+                self.assertFalse((out / "manifest.json").exists())
 
     @staticmethod
     def _member_offsets(data):
@@ -259,7 +306,8 @@ class StagerTests(unittest.TestCase):
             with self.assertRaisesRegex(S.StagerError, "archive member content mismatch"):
                 S.stage(self.base, self.payload, self.collector, out,
                         cpio=str(self.cpio), gzip=str(self.gzip), replacements=self._replacement_map())
-        self.assertFalse(out.exists())
+        self.assertTrue((out / "initramfs.cpio").is_file())
+        self.assertFalse((out / "manifest.json").exists())
 
     def test_newc_rejects_malformed_metadata_names_padding_and_truncation(self):
         out = self.d / "archive-tests"
