@@ -13,17 +13,20 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-17T16:24:58Z` (interval 29m44s).
-- Next full review target: `2026-10-17T16:55:00Z` (09:55 America/Los_Angeles).
-- Next review latest target: `2026-10-17T17:25:00Z`; preserve healthy operations.
-- Last included-usage observation: 20%; existing campaign stop remains 97%.
-- Current intervention: freeze/checkpoint the reviewed allocator correction and
-  advance its fresh matched-module build; feed the actual memory-fault app while
-  build admission is pending; continue concrete fork bridge/revocation/destructor work.
-- Current invocation independently accepted diagnostic/app behaviors: 12 (signal,
+- Last full review: `2026-10-17T16:55:03Z` (interval 30m05s).
+- Next full review target: `2026-10-17T17:25:00Z` (10:25 America/Los_Angeles).
+- Next review latest target: `2026-10-17T17:55:00Z`; preserve healthy operations.
+- Last included-usage observation: 21%; existing campaign stop remains 97%.
+- Current intervention: promote accepted native stop to separately reviewed
+  resource restoration and a complete destroy/release/reboot cycle; reconcile
+  the touched practical checks; continue fork caller/completion and used FPU tests.
+- Current invocation independently accepted current942 app/diagnostic behaviors: 13 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
-  useful dynamic-libc threads application, forced pthread contention app).
+  useful dynamic-libc threads application, forced pthread contention app,
+  actual memory-protection fault/recovery app).
+- Separate native3f7b observation: first independently accepted quiescent native
+  shutdown5->0->0/close0; complete stop/destroy/release/reboot cycles remain0.
   Old formal scores and estimates remain historical, not the new goal's percentage.
 - No new monitor script, OS timer, engineering dispatcher or workload was started.
 
@@ -605,3 +608,81 @@ practical-memory-protection-source-linux-20261017-1 (all.json). Build diagnostic
 and retirement remain in frozen nsd-c/nsd-o-23e0839d85fe47c4ab296fbe3f5a384c.
 Steering160021956942,161453583905,161950017153 accepted by server; supervisor
 started no workload/cleanup/launcher and performed no shared artifact rehash.
+
+## Review 7 — 2026-10-17 16:55:03 UTC
+
+Interval: `16:24:58` to `16:55:03` UTC, 30m05s. Campaign running, no stop; live
+worker498255/start3900845 and server498257/start3900851. Usage21%, existing97%stop.
+HEAD07c76eb7; corrected source3f7b265b. Supervisor owns no runtime/Git.
+
+| Actual operation | Launch UTC | Outer duration | Independent result |
+| --- | --- | --- | --- |
+| Memory-protection app, current942 | 16:33:45.929 | 33.690s | PASS16:36:43; app total13 |
+| Corrected matched shutdown build2 | 16:39:04.727 | 18.664s | PASS16:42:00; all3modules and retirement accepted |
+| New-module strict native shutdown | 16:47:22.341 | 34.844s | PASS16:51:55; first successful quiescent native stop |
+
+**Delivered:** +1 distinct app behavior, total13, plus an accepted matched build
+and the first direct nativeRunning5 ->shutdown0 ->NotBooted0 ->close0. The478-byte
+probe output, clean exit and both unchanged validators pass. Serial records
+reconcile result0/effectcomplete. Signal payload40bytes/exit0 and all30client,
+owner/container/guest retirement checks also pass. Prior5->EBUSY->8 failures stay
+unchanged. This resolves that observed quiescent boundary; it is not a full native
+cycle or independent physical-resource restoration proof. Probe explicitly reports
+resource_restoration_verified=false. Complete destroy/release/reboot cycles0.
+
+The protection app observes SIGSEGV/SEGV_ACCERR at the exact target address,
+unchanged readonly data, restored RW access and restored mask. Its61-byte oracle,
+empty stderr/exit0 and complete retirement pass. This is actual protection
+behavior, not merely mprotect returning0; broader matrices remain unproved.
+
+Build2 make/driver/owner pass with empty compiler stderr. All60source files stay
+exact, and all3ELF/vermagic/compiler bindings pass. IHK and mcctrl rebuild
+identically; the SMP artifact carries the shutdown repair. The one allocator
+conversion correction is independently reviewed and regression-bound. Failed
+build1 and its partial outputs remain retained. Original Linux/image dependencies
+were reused under the reviewed profile; this is not final full-recipe replay.
+
+Handoffs: protection decision ->build launch2m22s; build decision ->new guest
+launch5m22s includes staging/review/release; lifecycle completion ->review start
+2m46s. All13joined capture files were present before review; supervisor165035
+directed prompt notification. Avoidable portions are not precisely isolated.
+This mixed window does not establish a2x/3x multiplier.
+
+Parallel source progress: fork consumer/private bridge/mirror revocation has39
+actual-body cases and2compile controls, with actual C descriptor layout checks.
+The private provider has22cases and a C ABI witness. Production CREATE_PPD stays
+-95: actual caller/destructor wiring, backend-access drain, authenticated revoke,
+queuedRET reconciliation and finalACK hold release remain open. Actual caller
+fixture failures are under independent bounded correction; no native fork credit.
+
+Resource-release probe source tests now use the compiled shutdown contract:
+CPU1online, OSassignments empty, device reservation128MiB, then OSdestroy/memory
+release. Nineteen injected-main scenarios and5parser negatives pass; static tool
+compiled, not host-executed. Independent review/collector integration and native
+execution remain pending; this subset alone does not prove reboot. Four original
+outer summary files were overwritten; the limitation is reported, with inner
+commands/streams/source snapshots/invalid build retained. No preservation claim
+may hide that loss; subsequent attempts need fresh capture destinations.
+
+**Next adjustment:** independently review/admit the resource boundary, then obtain
+one complete boot/workload/stop/destroy/release/boot observation under a fresh
+release; the strict-stop packet adds no destroy/reboot authority. Reconcile literal
+P-M05-01 and P-M08-01 against the accepted current candidate at normal checkpoint;
+both remain open in the observed worklist, as do all14milestones. Do not wait for
+unrelated fork completion to record satisfied scoped checks. Keep other M05
+resource/repetition requirements open. Use a free cheap lane for selected-profile
+FPU/vector preservation across switching/syscalls/signals, while fork caller and
+completion implementation continues; keep the two-case queue and oneheavy limits.
+
+Saved percentage baseline stays immutable. No formal qualification is promoted.
+Next review17:25UTC, latest17:55. Primary anchors under ../evidence/:
+practical-memory-protection-current942-result-review-20261017-1.json,
+native-shutdown-external-modules-result-review-20261017-2.json,
+native-shutdown-lifecycle-execution-review-20261017-1.json,
+native-fork-bridge-revoke-source-20261017-1.json,
+native-resource-release-probe-source-20261017-1.json; actual lifecycle captures
+under scratch/native-shutdown-lifecycle-dispatch-20261017-1. Steering163247 and
+165035 accepted by server. Supervisor started no workload, cleanup or launcher.
+The native result verdict is the independent signal_guest_execution_review
+message completed16:51:55, joined to those raw captures; the execution-review
+JSON is invocation authority, not the result-preservation record.

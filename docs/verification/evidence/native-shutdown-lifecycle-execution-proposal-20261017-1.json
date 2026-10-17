@@ -1,0 +1,375 @@
+{
+  "application_acceptance": false,
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/ndsl-00df47cc",
+    "--nonce",
+    "00df47cccf8c4a72ba83d882db0d5036",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/native-shutdown-lifecycle-strict5-preparation-20261017-1/manifest.json",
+    "--manifest-sha256",
+    "2b0edab3020cd01e9f2a75d0abb055ba5e85a0322b80fd13235d0375070049bb"
+  ],
+  "artifact_review": {
+    "receipt": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-79b00103de104607b182b374a2a396ae/evidence/receipt.json",
+      "sha256": "85e13855248b6adccf70118743345baed84384e860001e6d07e7532bb8da4e8a",
+      "size": 30863
+    },
+    "required_before_execution": true,
+    "status": "PENDING_INDEPENDENT_BUILD2_ARTIFACT_REVIEW"
+  },
+  "assembly": {
+    "actual_content_deltas": [
+      "modules/ihk-smp-x86_64.ko"
+    ],
+    "execution_approved": false,
+    "fresh_parent_bound": true,
+    "parent_created": true,
+    "pattern": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-running-lifecycle-execution-proposal-20261017-3.json",
+      "sha256": "dfaf1a5a4a70eb863ac7d48e9843182ee9c375f5d02d326a6e7edab5c0a8aeef",
+      "size": 16008
+    },
+    "runtime_called": false,
+    "scope": "New module bindings and fresh paths only; same retained strict5 stager single-pin boundary, helper/collector/oracle/protocol.",
+    "selected_final_member_count": 60,
+    "selected_module_paths": 3,
+    "staged_overlay_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-lifecycle-strict5-preparation-20261017-1/overlay-manifest.json",
+      "sha256": "8a80eab463492958a724edfcb113851cd7749ad3d90c2e337feaf67a27dfb7c5",
+      "size": 19430
+    },
+    "tests_replayed": false
+  },
+  "author": "/root/native_running_publication",
+  "build_owner_retirement": {
+    "required_before_execution": true,
+    "status": "PENDING_CANONICAL_BUILD2_RETIREMENT_REVIEW"
+  },
+  "candidate_sha": "3f7b265b9f90279f5bd36f33f294eaa117609f12",
+  "crossbody_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-lifecycle-capture-crossbody-20261017-2.json",
+    "sha256": "12501910d607e7a48ad9fa32c3b4761cd7acd97fc33a52a18d20ff64260d9ebe",
+    "size": 13131
+  },
+  "execution_count": 1,
+  "failure_policy": "Exactly one fresh attempt under separately reviewed release. Any newsetup/payload/lifecycle/retirement failure is retained and stops this packet. No blended retry or useofoldfailedpacket.",
+  "formal_case_credit": false,
+  "helper_completion": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-boot-running-prerequisite-20261017-2.json",
+    "sha256": "7bf5cf9aca48121b6abaf63b8876fd063112e6fbb06c6dd44a68457b2ede35b4",
+    "size": 39833
+  },
+  "lifecycle_collector": {
+    "path": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/native-running-collector",
+    "sha256": "d58bb856295ec68424abe2ca9e6a11a7e32957983547c8abbb60a6df4790da38",
+    "size": 1021984
+  },
+  "lifecycle_oracle": {
+    "argv": [
+      "/bin/native-lifecycle-probe",
+      "0"
+    ],
+    "os_destroyed": false,
+    "require_independent_payload_evaluation": true,
+    "resource_restoration_verified": false,
+    "shutdown_return": 0,
+    "status_after": 0,
+    "status_before": 5,
+    "transition_observed": true
+  },
+  "lifecycle_parser": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py",
+    "sha256": "0585f78b80e603c010316418ce307794d59e1d92581b845ec6b2e74e22c8954b",
+    "size": 7025
+  },
+  "lifecycle_probe": {
+    "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/native-lifecycle-probe",
+    "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+    "size": 872616
+  },
+  "manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/native-shutdown-lifecycle-strict5-preparation-20261017-1/manifest.json",
+    "sha256": "2b0edab3020cd01e9f2a75d0abb055ba5e85a0322b80fd13235d0375070049bb",
+    "size": 5495
+  },
+  "matched_native_modules": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-79b00103de104607b182b374a2a396ae/modules/ihk.ko",
+      "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+      "size": 1440392
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-79b00103de104607b182b374a2a396ae/modules/ihk-smp-x86_64.ko",
+      "sha256": "990104bb9a384db8ffdb4832cc043f94b4abf54d044309ca56cbee02e389161f",
+      "size": 11634760
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-79b00103de104607b182b374a2a396ae/modules/mcctrl.ko",
+      "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+      "size": 1913904
+    }
+  ],
+  "module_contract": {
+    "all_three_matched_modules_required": true,
+    "artifact_acceptance_scope": "Actual make0 and driver artifact checks PASS; independent artifact/retirement review pending. No runtime acceptance.",
+    "compatibility_build_id": "Retained942compatibility blob is not proof of identical compiled module sources.",
+    "excluded_changes": "All unreviewed working-tree changes, including later fork/provider work, excluded from frozen3f7b60-file closure.",
+    "included_changes": "Matched3f7b module build: reviewed coherent shutdown integration plus BootEpoch allocate-tail correction; Running5 and stage logs retained.",
+    "runtime_abi": "v6ABI2 full-ready opt-in must remain matched across IHK/SMP/mcctrl; do not mix new/old modules."
+  },
+  "native_boot_running": {
+    "path": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/native-boot-running",
+    "sha256": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+    "size": 31208
+  },
+  "nonce": "00df47cccf8c4a72ba83d882db0d5036",
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a"
+  },
+  "original_actual_lifecycle_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+    "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+    "size": 17317
+  },
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828
+  },
+  "parent": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 110823,
+    "mode": "0o700",
+    "path": "/home/holden/mckernel-work/scratch/ndsl-00df47cc",
+    "uid": 1000
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "A",
+      "",
+      "B"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "postjoin_readback": {
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndsl-00df47cc.owner-00df47cccf8c4a72ba83d882db0d5036",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/ndsl-00df47cc/attempt-00df47cccf8c4a72ba83d882db0d5036/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndsl-00df47cc/attempt-00df47cccf8c4a72ba83d882db0d5036",
+        "."
+      ]
+    ],
+    "capture_limit_bytes_per_command": 33554432,
+    "conditions": "Only after joined positive owner/client retirement; verify unchanged canonical exact directories/regular result; use fresh ordinary-UID captures, default tar without dereference. Preserve every failed result and socket-omission stderr.",
+    "requested": true,
+    "timeout_seconds_per_command": 30
+  },
+  "prerequisites": {
+    "image_archival_cleanup": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-authority3-image-cleanup-result-review-20261017-1.json",
+      "sha256": "47cc7673788cb9b8c15443eec7f24c07d749b1bfe05875673d2c2b9af72bc15d",
+      "size": 1892
+    },
+    "image_retirement_proof": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-image-fresh-retirement-observation-20261017-1.json",
+      "sha256": "1cdf3af9fa657d160a801bf909f9e5c0e77dd132d3c38b3f1a38482bd1691da8",
+      "size": 1439
+    },
+    "independent_stage_and_execution_review": {
+      "reviewer": "/root/signal_guest_execution_review",
+      "scope": "Exactscratchstager onepin amendment, fresh60member strict5helper/newcollector archive and this exactone-shot proposal; strict Running5/shutdown0/query0, independent ordinary payload evaluation and fullerror scan remain mandatory.",
+      "status": "PENDING"
+    },
+    "live_preflight": {
+      "scope": "Fresh parent/nonce/endpoint/owner/source/artifact/scratch/resource/rootlock/no-other-heavy checks, actualHEAD/runtimefreeze and separate one-shot release.",
+      "status": "PENDING_DISPATCHER_LIVE_PREFLIGHT"
+    },
+    "new_build_artifact_and_retirement": "Canonical independent build2 artifact/retirement record must be joined before release",
+    "preceding_strict5_failed_guest_retirement": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-running-lifecycle-strict5-failure-review-20261017-2.json",
+      "sha256": "5d0ce60d57b709776ee971cd354fce16dfdabca428d66c135928a63cab315741",
+      "size": 2593
+    }
+  },
+  "previous_failed_guest_preserved": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-running-lifecycle-strict5-failure-review-20261017-2.json",
+    "sha256": "5d0ce60d57b709776ee971cd354fce16dfdabca428d66c135928a63cab315741",
+    "size": 2593
+  },
+  "production_acceptance": false,
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "retained_bzImage": {
+    "mode": 33188,
+    "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+    "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+    "size": 16130048
+  },
+  "retained_mckernel_image": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-942c927b-scratch22-authority3-image1-20261017/evidence/artifacts/mckernel.img",
+    "sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+    "size": 7908256
+  },
+  "runtime_release": false,
+  "schema": "mckernel.native-shutdown-lifecycle-strict5-execution-proposal.v1",
+  "scope": "Exactly one fresh native lifecycle attempt using all3 matched3f7b modules, existing strict5 helper/collector/probe/parser and exact40-byte payload. Mandatory Running5 then shutdown0, query0, cleanclose and independent payload evaluation. Preserve first setup/payload/lifecycle/retirement failure and stop. No rebuild, destroy/rmmod/reboot/resource-restoration acceptance.",
+  "source_identity": {
+    "all_three_module_source_candidate": "3f7b265b9f90279f5bd36f33f294eaa117609f12",
+    "linux_and_image_abi_baseline": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "module_source_provenance": {
+      "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+      "closure_hash_encoding": "SHA256 of UTF-8 JSON relative-path-to-SHA256 map, sorted keys, separators comma/colon",
+      "closure_sha256": "bf4774c6a520e98550d94acdaca80f62434308a0fbeb0e2cf27ddf35cc7d8737",
+      "compatibility_build_id": {
+        "meaning": "Retained baseline ABI compatibility blob; not proof of unchanged compiled source",
+        "path": "ihk-compat-build-id.bin",
+        "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0"
+      },
+      "excluded_working_tree": "Every unreviewed working-tree file; the nine reviewed shutdown deltas over retained176 and carried os_runtime are included",
+      "reviewed_deltas": [
+        {
+          "baseline_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+          "path": "ihk_smp_x86_64.rs",
+          "source_candidate_sha256": "5b12bf77664095c966245ac8a1312a41c2fc16dd4a8233abd9e6c602305ecd6d"
+        },
+        {
+          "baseline_sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+          "path": "os_runtime.rs",
+          "source_candidate_sha256": "65107aafb28868e76640cb2e1862e5d9e36a930a2e9dab850824d5108879225a"
+        },
+        {
+          "baseline_sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+          "path": "smp_application.rs",
+          "source_candidate_sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2"
+        },
+        {
+          "baseline_sha256": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb",
+          "path": "smp_cpu.rs",
+          "source_candidate_sha256": "52b77ecad0d686a57eaa1c5a5385686129eb7ae6af0d014296317ddf6468d7b3"
+        },
+        {
+          "baseline_sha256": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+          "path": "smp_file_pager.rs",
+          "source_candidate_sha256": "655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c"
+        },
+        {
+          "baseline_sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+          "path": "smp_memory.rs",
+          "source_candidate_sha256": "8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525"
+        },
+        {
+          "baseline_sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+          "path": "smp_procfs.rs",
+          "source_candidate_sha256": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea"
+        },
+        {
+          "baseline_sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+          "path": "smp_service.rs",
+          "source_candidate_sha256": "cd97c1528602323c43aaf70f528342fc3874fe9da1660cf1a767d27284cb5b5a"
+        },
+        {
+          "baseline_sha256": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81",
+          "path": "sysfs_memory.rs",
+          "source_candidate_sha256": "d64efe15ff3545e6f21733cdc6dcbf026df370049484a7221a653d502612bfc1"
+        },
+        {
+          "baseline_sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+          "path": "sysfs_remote.rs",
+          "source_candidate_sha256": "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9"
+        }
+      ],
+      "source_candidate_sha": "3f7b265b9f90279f5bd36f33f294eaa117609f12"
+    }
+  },
+  "source_review": {
+    "actual_test_exit": 0,
+    "decision": "PASS_SOURCE_INTEGRATED_QMP_ADMISSION",
+    "diagnostic_sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+    "owner_sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "reviewer": "/root/image_retirement_review",
+    "test_sha256": "6d7fdebda5a064dfbf8f1ddac8e4a771f9db237c575e2475bf643190560a8818",
+    "tests_passed": 76
+  },
+  "staging_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-lifecycle-strict5-preparation-20261017-1.json",
+    "sha256": "0c7371f24d7bc2521ac2fda9f8a090abf77059f3d5d3d3b85bff290b867cb691",
+    "size": 15023
+  },
+  "status": "PENDING_ARTIFACT_RETIREMENT_JOIN_AND_INDEPENDENT_STAGE_EXECUTION_REVIEW",
+  "task_id": "native-shutdown-lifecycle-strict5-execution-proposal-20261017-1",
+  "unix_monitor_endpoints": [
+    {
+      "encoded_bytes": 98,
+      "max_bytes": 107,
+      "path": "/home/holden/mckernel-work/scratch/ndsl-00df47cc/attempt-00df47cccf8c4a72ba83d882db0d5036/qmp.sock"
+    }
+  ]
+}

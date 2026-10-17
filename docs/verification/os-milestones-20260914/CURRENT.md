@@ -15276,3 +15276,32 @@ caller+queuedRET reconciliation remain explicit blockers; originalcallermust
 retainchild untilinbandrevoke/negativeRET/cleanupACK, noOOBUAF/doublefree.
 Allforksourcesisolated; CREATE_PPD stays-95. Nativecycles0; practicalrows/open
 criteria anddatedengineeringpercentagebaseline unchanged. Continue.
+
+
+## Checkpoint393 — matched shutdown repair works natively
+
+Source3f7b265b matched three-module build2 passed make0/driver0 in18.664067s;
+independent result da6123b6 records exact binaries and accepted retirement.
+Current candidate strict guest then independently passed Running5 -> shutdown0 ->
+NotBooted0 -> close0, all errno0, native reconcile result0/effectcomplete.
+Result2f8dd8f8/archive40e7150a preserves all13 files with exact integer-PAX metadata.
+Signal payload40bytes/exit0 retired; repeated payload earns no new app count.
+Thirty Docker clients/owner600206/container removed, leasefalse/root27:4free;
+QEMU reaped. One quiescent stop proved; full restoration/reboot cycles remain0.
+Literal P-M05-01 and P-M08-01 now complete for this candidate. Both milestone
+rows remain open; historical formal counts/dated percentage baseline unchanged.
+
+Thirteen current942 app behaviors remain accepted. Next heavy operation is the
+separately released resource observation after its focused parser correction and
+resource-only4096-byte actual producer->collector->parser test. Old1024 ordinary
+limits unchanged. Reject duplicate keys, missing LF, bool/float scalar aliases;
+reuse passed C helper/static artifact. Then complete boot/workload/stop/destroy/
+release/boot under new authority. No destroy/reboot authority from strict-stop.
+
+Fork actual in-band caller independently PASS_SOURCE_PRIVATE_UNWIRED:40 caller+
+4 actual AS cases,5Rust tests; prior failures retained. Typed retained Registration/
+mcctrl module context, backend drain/revocation and durable final ACK integration
+continue in isolated worktree; production CREATE_PPD stays-95. Selected-profile
+ABI-correct SSE2/x87/MXCSR syscall/blocking-futex/signal app Linux oracle lane
+active on CPU7. Aggregate limits/one heavy owner/97% stop remain. Review7 saved;
+next supervisor17:25/latest17:55UTC in VELOCITY-REVIEWS.md. Continue after save.

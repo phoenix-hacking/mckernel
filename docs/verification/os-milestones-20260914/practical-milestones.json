@@ -610,14 +610,14 @@
       "id": "M05",
       "scope_id": "practical-kernel-apps-v1-20261017",
       "title": "Native lifecycle and restoration",
-      "engineering_state": "blocked",
+      "engineering_state": "partial",
       "completion_status": "open",
       "exit_condition": "Actual native boot/workload/stop/destroy/release/boot restores resources.",
       "checks": [
         {
           "id": "P-M05-01",
           "description": "Resolve Ready/Running and post-effect shutdown EBUSY defects.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
@@ -628,9 +628,19 @@
               "path": "docs/verification/evidence/native-running-publication-independent-review-20261017-1.json",
               "sha256": "de20c89c2ed5c27d09a6f6b856b1d0f3f71cf5ad5480d359236bc1a5db39552f",
               "size": 1133
+            },
+            {
+              "path": "docs/verification/evidence/native-shutdown-external-modules-result-review-20261017-2.json",
+              "sha256": "da6123b6c840ca2302e0e431bdd88fb82c6cd0a5ec592ffea20f3f31a5fb4876",
+              "size": 4226
+            },
+            {
+              "path": "docs/verification/evidence/native-shutdown-lifecycle-result-review-20261017-1.json",
+              "sha256": "2f8dd8f8e1b38957f38c75f861263b639fa129fcc465fc382a9785e17a99b526",
+              "size": 13510
             }
           ],
-          "assessment_note": "Actual native Ready4\u2192shutdown-16\u2192Shutdown8 remains a failure. Running/publication and shutdown-stage logging repairs are independently source-reviewed, not compiled or natively validated in the pending module candidate."
+          "assessment_note": "Current source3f7b265b matched modules independently built and loaded; actual strict probe observed Running5 -> shutdown0 -> NotBooted0 -> close0, all errno0. Native reconcile result=0 effect=complete. This closes the two named defects for this candidate; prior failures retained. No full restoration/reboot-cycle credit."
         },
         {
           "id": "P-M05-02",
@@ -641,9 +651,14 @@
               "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
               "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
               "size": 17317
+            },
+            {
+              "path": "docs/verification/evidence/native-shutdown-lifecycle-result-review-20261017-1.json",
+              "sha256": "2f8dd8f8e1b38957f38c75f861263b639fa129fcc465fc382a9785e17a99b526",
+              "size": 13510
             }
           ],
-          "assessment_note": "No successful native stop/destroy/release or CPU/memory/mapping/callback/ref restoration is demonstrated; Linux guest disposal is not this proof."
+          "assessment_note": "One actual quiescent native stop now passes with accepted app and host-owner retirement. Public CPU/memory inventory, destroy/device release and complete process/mapping/callback/ref restoration still require the separately reviewed resource/cycle observation."
         },
         {
           "id": "P-M05-03",
@@ -659,7 +674,7 @@
           "assessment_note": "Zero complete accepted native lifecycle cycles in this selected campaign. Ten full cycles remain required; the failed stop is retained and receives no cycle credit."
         }
       ],
-      "current_evidence_summary": "Actual matched176 native Running5 observed, payload retired; shutdown IRQclose/reset_reonline succeed then reconcileEBUSY/after8. Reviewed942d rundown/reconcile correction awaits matched compile/native execution; complete restoration remains open."
+      "current_evidence_summary": "Current3f7b native Running5 -> shutdown0 -> query0/close0 independently passed, including native reconcile success and host retirement. One quiescent stop; resource restoration and complete lifecycle cycles remain0. Next resource parser/collector correction and separately released destroy/release/reboot observation."
     },
     {
       "id": "M06",
@@ -772,7 +787,7 @@
         {
           "id": "P-M08-01",
           "description": "Build/load matching IHK/SMP/mcctrl modules.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
@@ -813,9 +828,19 @@
               "path": "docs/verification/evidence/native-running-external-modules-artifact-review-20261017-1.json",
               "sha256": "273f9897fc2aa8fee7ad094c53e240006d7700b8da6e96a752e6715b1046c064",
               "size": 959
+            },
+            {
+              "path": "docs/verification/evidence/native-shutdown-external-modules-result-review-20261017-2.json",
+              "sha256": "da6123b6c840ca2302e0e431bdd88fb82c6cd0a5ec592ffea20f3f31a5fb4876",
+              "size": 4226
+            },
+            {
+              "path": "docs/verification/evidence/native-shutdown-lifecycle-result-review-20261017-1.json",
+              "sha256": "2f8dd8f8e1b38957f38c75f861263b639fa129fcc465fc382a9785e17a99b526",
+              "size": 13510
             }
           ],
-          "assessment_note": "Matched retained current942 modules load and support these diagnostics. Retained-artifact revalidation admission is not a fresh compile; the new Running/log module candidate still awaits build-profile review and compilation."
+          "assessment_note": "Matched source3f7b265b IHK/SMP/mcctrl modules compiled with make0/driver0 in18.664067s and loaded together in the strict native shutdown guest. Exact payload, Running5 and shutdown0 observed. IHK/mcctrl are honestly byte-identical to prior artifacts; SMP changed. Future source integration retains its own build/load obligation."
         },
         {
           "id": "P-M08-02",
@@ -861,12 +886,17 @@
               "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
               "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
               "size": 49179
+            },
+            {
+              "path": "docs/verification/evidence/native-shutdown-lifecycle-result-review-20261017-1.json",
+              "sha256": "2f8dd8f8e1b38957f38c75f861263b639fa129fcc465fc382a9785e17a99b526",
+              "size": 13510
             }
           ],
-          "assessment_note": "Used boot/resource/process paths have diagnostic evidence, but shutdown fails and changed final unsafe/ABI boundaries remain unvalidated in new matched binaries."
+          "assessment_note": "Current3f7b matched binaries now validate used strict boot/Running/publication/shutdown paths. Resource destroy/release/reboot, dormant fork integration and remaining changed unsafe/ABI boundaries are still open."
         }
       ],
-      "current_evidence_summary": "First source1769263c matched3module compile:make0; originalpostcheckFAIL preserved, correctedreadonlyartifactvalidation independentlyaccepted. Native newmodule load/runtime stillopen."
+      "current_evidence_summary": "Current3f7b matched three-module build accepted18.664067s; all three loaded and actual strict shutdown passed. Used remaining resource/fork/lifetime paths still open; milestone not complete."
     },
     {
       "id": "M09",
@@ -1449,9 +1479,9 @@
     "signed production/repository/independent external release qualification"
   ],
   "next_actions": [
-    "Run fresh independently released corrected shutdown3modulebuild2 source3f7b; request6550/finalreleasefaf3, interveningprotectionretirementaccepted.",
-    "Bind compilednewmodules into strict5 lifecycle and require actualshutdown/query0/restoration evidence.",
-    "Advance actualforkconsumer/backendbridge and finaldestructor/revocation safely; prepare actualprotectionfault app withoutfork."
+    "Finish reviewed resource parser correction and resource-only4096-byte collector producer-to-parser test; release the exact resource guest after independent review and fresh admission.",
+    "Observe separately released complete native boot/workload/stop/destroy/release/boot; full cycles remain0 until observed.",
+    "Continue typed fork completion/backend drain/alias revocation/final ACK integration fail-closed; prepare selected-profile ABI-correct FPU/vector Linux oracle."
   ],
   "evidence_reconciliation": {
     "date": "2026-10-17",
