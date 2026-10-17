@@ -13,15 +13,16 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-17T14:55:37Z` (interval 30m16s).
-- Next full review target: `2026-10-17T15:25:00Z` (08:25 America/Los_Angeles).
-- Next review latest target: `2026-10-17T15:55:00Z`; preserve healthy operations.
-- Last included-usage observation: 16%; existing campaign stop remains 97%.
-- Current intervention: resolve the exact historical-lease admission mismatch
-  for the next-module build while current942 diagnostics and useful C/Rust app
-  implementation progress independently; delegate next-case packet work early.
-- Current invocation independently accepted diagnostic guests: 7 (signal,
-  calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow).
+- Last full review: `2026-10-17T15:25:11Z` (interval 29m34s).
+- Next full review target: `2026-10-17T15:55:00Z` (08:55 America/Los_Angeles).
+- Next review latest target: `2026-10-17T16:25:00Z`; preserve healthy operations.
+- Last included-usage observation: 17%; existing campaign stop remains 97%.
+- Current intervention: test accepted new modules in the next lifecycle guest;
+  keep useful C/Rust application packets supplied, and perform approved passing-
+  owner readbacks immediately after join to reduce coordinator delay.
+- Current invocation independently accepted diagnostic/app behaviors: 9 (signal,
+  calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
+  adapted closed-read, useful dynamic-libc memory application).
   Old formal scores and estimates remain historical, not the new goal's percentage.
 - No new monitor script, OS timer, engineering dispatcher or workload was started.
 
@@ -360,3 +361,101 @@ worklist/reconciliation, existing PROGRESS.md, and external-owner reviewer findi
 at14:48:42 and14:54:40. Supervision started no launcher/build/guest/cleanup and
 rehashes no shared execution artifacts. Next adjustment: keep next-case assembly
 and review ahead of the runtime slot while the module admission fix proceeds.
+
+## Review 4 — 2026-10-17 15:25:11 UTC
+
+Interval: `14:55:37` to `15:25:11` UTC, 29m34s. Campaign/worker/app-server
+identities verified live. Practical goal remains active; next review15:55UTC.
+
+| Measure | Review 3 interval | This interval |
+| --- | --- | --- |
+| New accepted actual McKernel diagnostic/app behaviors | 3 | 2: closed-read and useful dynamic-libc memory |
+| Invocation total | 7 | 9, all with independent retirement acceptance |
+| Actual matched native-module compile | 0 | 1 invocation: all three Rust modules compiled/linked, make0 |
+| Accepted new artifact set | 0 | 1, through corrected artifact-only validation; original receipt remains FAIL |
+| New-module Running/native shutdown/restoration proof | 0 | 0 at cutoff; lifecycle packet reviewed next |
+| Included weekly usage | 16% | 17%; existing stop97% |
+
+**Application gains:** adapted closed-read launched14:57:19.263, owner0/35.098s,
+independent PASS by14:59:51. Covers EBADF and first/last buffer sentinels only.
+Dynamic-libc core memory launched15:18:55.587, owner0/38.104s, independently
+accepted15:22:01. Exact24-byte stdout, empty stderr and expected application
+exit37 pass. Actual malloc,256KiB mmap/data checks, mprotect read/read-write
+roundtrip, mapped write, munmap and free work. This is the first current942
+useful dynamic-libc core app in this campaign. It does not prove forbidden-write
+fault enforcement, broad VM stress or native OS restoration. Process-retirement
+EAGAIN followed by success remains retained in both captures.
+
+**Native build:** the matched-module owner launched15:11:10.484 and completed
+15:11:28.512 (18.034s outer invocation, not isolated compiler timing). make0;
+all three native Rust modules compiled/linked against retained Linux dependencies.
+The driver rejected modules.order because its synthetic expectation used .ko
+while pinned Linux6.12 emits .o. Original driver/owner outcome remains FAIL.
+Independent owner-retirement acceptance15:13:54 joins14Dockerclients+observer,
+exact container removal and three archived/released ownership records. Old
+historical records remain untouched.
+
+Corrected parser requires exactly three canonical candidate .o entries; foreign,
+duplicate, missing, aliased and .ko entries reject. Fourteen focused tests and a
+read-only replay pass actual ELF, vermagic, exports and compiler/source bindings.
+Independent ACCEPTED_ARTIFACTS_ONLY at15:16:21 permits staging the existing matched
+set. No rebuild or native runtime replay occurred. Honest provenance separates
+1769263c module sources from942kernel/image compatibility inputs.
+
+**Pipeline timing:** final build execution review15:09:06 -> launch2m04.484s.
+Build-retirement acceptance -> memory launch5m01.587s includes2m27s required
+artifact correction/review; artifact acceptance -> launch2m34.587s. Do not count
+all five minutes as avoidable. Memory owner result15:19:33.691 -> completion
+packet available15:21:26 leaves a concrete coordinator/readback gap of roughly
+1m52s. Future successful wrappers will run already-approved exact readbacks in
+the same command continuation after positive owner/client retirement, then
+notify the reviewer. Canonical paths, bounded fresh ordinary-UID captures and
+uncertainty stop rules remain. Dispatcher acknowledged15:23:17.
+
+**Useful parallel work:** a real Rust std app now has source/reference review,
+static GNU compile/reference and59-member staging/execution review. Its unchanged
+144-byte oracle covers Vec/file roundtrip, String/BTreeMap, joined barrier/mutex
+workers and TLS. Static linking removes the missing-libdl dependency; the dynamic
+variant remains preserved. No McKernel Rust app runtime credit yet. Retained
+dynamic-libc threads mode is separately prepared/reviewed with exact exit37.
+The next new-module lifecycle archive preserves60members and changes only the
+three matched modules. Strict Running5 -> shutdown0 -> NotBooted0 and raw
+independent lifecycle review remain required; expected EBUSY is never a pass.
+
+Shutdown epoch source passed independent review15:24:01 after a production-lint
+signature correction. The fixture now consumes actual Started/service body with
+production flags; restoring omitted PeerStopped lifetime reproduces the rejection.
+Retained evidence supports25Rustcases,9Pythonchecks and5compile controls.
+This API remains UNWIRED. Serialized provider/module lease, application/callback
+drain and final CPU/memory commit consuming the same live claim remain required
+integration work within the practical goal, not deferred qualification.
+
+Practical worklist still has only P-M02-03 closed and no whole M00-M13 area
+complete; this does not mean only that fraction of the code is implemented.
+Source/actual behavior improved while final-profile checks remain open. Earlier
+full-scope estimates are not interchangeable with the new practical denominator.
+At the user's ETA request, a7–21day continuous-work planning guess (~14day budget)
+was given, explicitly low confidence/not a deadline; reassess after24–48hours of
+real native lifecycle/process/VM and app closure rather than extrapolating tokens.
+
+**Next adjustment:** preserve fast module-only iteration, stage/review the next
+eligible runtime packet during artifact work, and inline already-approved passing
+readbacks. New postcheck predicates should consume actual retained producer
+output, and source tests should use production compiler flags/boundaries before
+larger execution. Reuse already-accepted source/preparation; no fresh history
+audit, unchanged Linux/image rebuild or generic monitoring framework.
+
+Key checkpoints:2558578c reviewed module build;7ff2d5f0 accepted matched artifacts
+and libc memory release. Sources: corresponding dispatch command/result records,
+new-module attempt/artifact reviews, closed-read/core-memory result reviews and
+native-shutdown-epoch-source-20261017-2.json under ../evidence/, plus selected
+state/console events. Steering:150239861035 useful apps/build priority,
+150635894646 epoch/refill, and152228560482 immediate reviewed readbacks. Supervisor
+started no launcher/build/guest/cleanup and rehashed no shared execution artifacts.
+
+At the user's percentage-uplift request after this review, saved a new practical-
+scope subjective baseline in practical-engineering-estimate-20261017T152511Z.json.
+No prior practical percentage baseline existed at14:47; do not invent retrospective
+percentage-point gains or subtract the old comprehensive-scope ranges. Current
+estimates are low-confidence engineering judgments; future same-scope deltas need
+concrete evidence. M05 remains the main blocker. This changes no acceptance state.

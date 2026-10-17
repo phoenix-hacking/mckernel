@@ -110,6 +110,13 @@ engineering completion. Do not rescale the old subjective estimates or relabel
 old formal gates PASS. Original acceptance counters remain explicitly historical/
 deferred and must not be the headline progress bar or active stopping condition.
 
+The user-requested percentage comparison baseline is
+[practical-engineering-estimate-20261017T152511Z.json](practical-engineering-estimate-20261017T152511Z.json),
+as of 2026-10-17 15:25:11 UTC. Preserve its fourteen ranges unchanged. Save future
+same-scope comparisons in new records with estimated percentage-point deltas and
+concrete code/test/runtime evidence; do not substitute the old comprehensive-scope
+table or treat activity, elapsed time or deferred requirements as engineering gains.
+
 The launcher has a legacy exact objective string used for resume validation.
 Do not mutate that constant, remote goal identity or live state to adopt these
 instructions. The latest explicit user scope controls work; the preserved string

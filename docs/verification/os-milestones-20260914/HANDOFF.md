@@ -1,6 +1,27 @@
 # Compact dispatcher handoff
 
 
+## Checkpoint388 — setup failure retired; ready Rust std guest next
+
+Newmodulelifecycle1 failed12.897635s preapplication: rawstart/reap0/status-1,
+evaluation guesttimestamp, noapp/probe/queriedRunning/shutdown credit.
+Independent RETIRED_FAILED_PRE_APPLICATION_SETUP:25clients/owner/container
+745b520removed/root27:4free. Failure2216a581/archive664b1f85 retained.
+Consumedlegacyboothelper4558995e requires4; strict5derivative+boundedkmsg
+observability/actualhelper-collector tests underrepair, causalnumericnotyet
+observed. Existingcurrent942helpers unchanged.
+NEXT readyRuststd current942release abd1a27e57860ab0795e5d5cd7ed3dcff4608e57
+213870945850a2cc2e63fb73,manifest364191b1,parentndstd-1 dev1828/109548 nonce
+ad3658d098c3490682133960758367cf QMP92/4096streams/144bytesexit0. Same
+commandpasses→immediateapprovedreadbacks; failureprocedure unchanged. Fresh
+admission/headfreeze/oneheavy afterpushfetch. Threecode lanes inparallel:
+strict5helper CPU7, provider/sameclaimintegration CPU0, disjointquiescence
+helpers CPU6; onejob1GiBeach. SourcechangesunreviewedWIP excludedcheckpoint.
+Datedpracticalcomparisonbaseline practical-engineering-estimate-20261017T152511Z
+.json retainedunchanged plusPRACTICAL-GOALpointer/Review4; futurecomparisons
+addnewrecords, no subtractinglegacypercentages or gateuplift.
+
+
 ## Checkpoint387 — useful libc memory accepted; new-module lifecycle released
 
 Ninthactualcurrent942diagnostic is originaldynamiclibcCOREmemory:38.104460s,
