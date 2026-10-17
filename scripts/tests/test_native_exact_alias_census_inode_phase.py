@@ -8,6 +8,7 @@ import tempfile
 import time
 import types
 import unittest
+from contextlib import contextmanager
 from unittest import mock
 
 
@@ -42,7 +43,7 @@ class InodePhaseTests(unittest.TestCase):
             root.mkdir()
         self.payload = b'checked-phase-content\n' * 2048
         self.shared = [self.add_file('evidence', self.payload)]
-        self.scope = extracted(SOURCE, ('_alias_phase_metadata', '_alias_inode_digest', 'alias_census'))
+        self.scope = extracted(SOURCE, ('_alias_phase_metadata', '_alias_inode_digest', '_alias_phase_proof', 'alias_census'))
         self.census = self.scope['alias_census']
 
     def add_file(self, name, payload):
@@ -225,11 +226,134 @@ class InodePhaseTests(unittest.TestCase):
         self.assertEqual(hashlib.sha256(ORIGINAL.read_bytes()).hexdigest(), BASE_SHA)
         original = ast.parse(ORIGINAL.read_text())
         current = ast.parse(SOURCE.read_text())
-        allowed = {'alias_census', '_alias_phase_metadata', '_alias_inode_digest'}
+        allowed = {'alias_census', '_alias_phase_metadata', '_alias_inode_digest',
+                   '_alias_phase_proof', '_inherited_alias_phase', 'prepare'}
         def unchanged(tree):
             return [ast.dump(node) for node in tree.body
-                    if not isinstance(node, ast.FunctionDef) or node.name not in allowed]
+                    if not (isinstance(node, ast.FunctionDef) and node.name in allowed)
+                    and not (isinstance(node, ast.ImportFrom) and node.module == 'contextlib')]
         self.assertEqual(unchanged(original), unchanged(current))
+
+    def inherited_fixture(self):
+        impl = types.SimpleNamespace()
+        historical = extracted(ANCESTOR, ('regular', 'digest', 'identity', 'snapshot', 'check_shared'))
+        impl.snapshot = historical['snapshot']
+        impl.check_shared = historical['check_shared']
+        impl.git = mock.Mock(side_effect=AssertionError('unexpected Git operation'))
+        functions = ('_alias_phase_metadata', '_alias_inode_digest', '_alias_phase_proof',
+                     '_inherited_alias_phase')
+        scope = extracted(SOURCE, functions, contextmanager=contextmanager,
+                          ANCESTOR=ANCESTOR, _IMPL=impl)
+        # Execute the ACTUAL pinned ancestor's can_share branch, not a model.
+        prepare = next(n for n in ast.parse(ANCESTOR.read_text()).body
+                       if isinstance(n, ast.FunctionDef) and n.name == 'prepare')
+        branch = next(n for n in ast.walk(prepare) if isinstance(n, ast.If)
+                      and isinstance(n.test, ast.Name) and n.test.id == 'can_share')
+        code = compile(ast.Module(body=branch.body, type_ignores=[]), str(ANCESTOR), 'exec')
+        def preflight():
+            rows = []
+            rel, mode, oid = self.shared[0]
+            values = dict(snapshot=impl.snapshot, git=impl.git, source=self.top,
+                          scratch15=self.roots[0], scratch16=self.roots[1],
+                          previous_candidate=self.roots[2], additional_shared_roots=self.roots[3:],
+                          expected_initial_links=9, scratch=self.top, prior=self.roots[0]/rel,
+                          rel=rel, mode=mode, oid=oid, shared=rows, Refusal=Refusal)
+            exec(code, values)
+            return rows
+        # Actual original check_shared resolves globals in its own namespace.
+        original_snapshot = impl.snapshot
+        def original_check(*args):
+            historical['snapshot'] = impl.snapshot
+            try:
+                return historical['check_shared'](*args)
+            finally:
+                historical['snapshot'] = original_snapshot
+        impl.check_shared = original_check
+        return impl, scope, preflight
+
+    def test_inherited_preflight_and_both_final_checks_one_read_each(self):
+        impl, scope, preflight = self.inherited_fixture()
+        originals = (impl.snapshot, impl.git, impl.check_shared)
+        candidate = self.top/'candidate'
+        candidate.mkdir()
+        real_read = os.read
+        reads = []
+        def reading(fd, size):
+            block = real_read(fd, size)
+            if block:
+                reads.append(len(block))
+            return block
+        with mock.patch.object(os, 'read', side_effect=reading):
+            proof = scope['_alias_phase_proof'](self.roots, self.shared)
+            with scope['_inherited_alias_phase'](proof, self.shared):
+                rows = preflight()
+                self.assertEqual(sum(reads), len(self.payload))
+                os.link(self.roots[0]/'evidence', candidate/'evidence')
+                for count in (2, 3):
+                    impl.check_shared(candidate, *self.roots[:3], rows, 9, self.roots[3:])
+                    self.assertEqual(sum(reads), count*len(self.payload))
+            self.assertEqual((impl.snapshot, impl.git, impl.check_shared), originals)
+
+    def test_inherited_hooks_restore_and_changed_ctime_never_reuses(self):
+        impl, scope, preflight = self.inherited_fixture()
+        proof = scope['_alias_phase_proof'](self.roots, self.shared)
+        originals = (impl.snapshot, impl.git, impl.check_shared)
+        before = (self.roots[0]/'evidence').stat()
+        with self.assertRaisesRegex(Refusal, 'proof metadata changed'):
+            with scope['_inherited_alias_phase'](proof, self.shared):
+                time.sleep(.02)
+                (self.roots[0]/'evidence').write_bytes(self.payload)
+                os.utime(self.roots[0]/'evidence', ns=(before.st_atime_ns, before.st_mtime_ns))
+                preflight()
+        self.assertEqual((impl.snapshot, impl.git, impl.check_shared), originals)
+
+    def test_inherited_unrelated_calls_fallthrough_and_pin_refuses(self):
+        impl, scope, _ = self.inherited_fixture()
+        other = self.top/'unrelated'
+        other.write_bytes(b'unrelated')
+        proof = scope['_alias_phase_proof'](self.roots, self.shared)
+        original_git = impl.git
+        with scope['_inherited_alias_phase'](proof, self.shared):
+            self.assertEqual(impl.snapshot(other)['sha256'], hashlib.sha256(b'unrelated').hexdigest())
+            original_git.return_value = b'fallback'
+            original_git.side_effect = None
+            self.assertEqual(impl.git(self.top, 'rev-parse', 'HEAD'), b'fallback')
+        changed = self.top/'changed-ancestor'
+        changed.write_bytes(b'not pinned')
+        scope['ANCESTOR'] = changed
+        originals = (impl.snapshot, impl.git, impl.check_shared)
+        with self.assertRaisesRegex(Refusal, 'callback contract changed'):
+            with scope['_inherited_alias_phase'](proof, self.shared):
+                self.fail('pin accepted')
+        self.assertEqual((impl.snapshot, impl.git, impl.check_shared), originals)
+
+    def test_inherited_final_original_hash_refusal_restores_hooks(self):
+        impl, scope, preflight = self.inherited_fixture()
+        candidate = self.top/'candidate'
+        candidate.mkdir()
+        proof = scope['_alias_phase_proof'](self.roots, self.shared)
+        originals = (impl.snapshot, impl.git, impl.check_shared)
+        with self.assertRaisesRegex(Refusal, 'identity/mode/hash changed'):
+            with scope['_inherited_alias_phase'](proof, self.shared):
+                rows = preflight()
+                os.link(self.roots[0]/'evidence', candidate/'evidence')
+                rows[0]['before']['sha256'] = '0'*64
+                impl.check_shared(candidate, *self.roots[:3], rows, 9, self.roots[3:])
+        self.assertEqual((impl.snapshot, impl.git, impl.check_shared), originals)
+
+    def test_inherited_final_phase_reauthenticates_and_refuses_unknown_link(self):
+        impl, scope, preflight = self.inherited_fixture()
+        candidate = self.top/'candidate'
+        candidate.mkdir()
+        proof = scope['_alias_phase_proof'](self.roots, self.shared)
+        originals = (impl.snapshot, impl.git, impl.check_shared)
+        with self.assertRaisesRegex(Refusal, 'incomplete authenticated alias census'):
+            with scope['_inherited_alias_phase'](proof, self.shared):
+                rows = preflight()
+                os.link(self.roots[0]/'evidence', candidate/'evidence')
+                os.link(candidate/'evidence', self.top/'unknown')
+                impl.check_shared(candidate, *self.roots[:3], rows, 9, self.roots[3:])
+        self.assertEqual((impl.snapshot, impl.git, impl.check_shared), originals)
 
 
 if __name__ == '__main__':

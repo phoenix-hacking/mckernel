@@ -15,6 +15,7 @@ import json
 import os
 import stat
 import subprocess
+from contextlib import contextmanager
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -690,7 +691,7 @@ def _alias_inode_digest(path, expected):
             os.close(descriptor)
 
 
-def alias_census(roots, shared):
+def _alias_phase_proof(roots, shared):
     """Authenticate each inode once in THIS phase; fence every alias and root."""
     roots = tuple(map(Path, roots))
     if not roots or len(set(roots)) != len(roots):
@@ -731,7 +732,77 @@ def alias_census(roots, shared):
             raise Refusal('alias census raced')
     if tuple(_alias_phase_metadata(root, directory=True) for root in roots) != root_metadata:
         raise Refusal('alias root metadata raced')
-    return len(roots)
+    proofs = {}
+    for paths, rows, oid in plans:
+        for path, metadata in zip(paths, rows):
+            proofs[path] = (metadata, oid, authenticated[metadata[:2]][2])
+    return roots, root_metadata, proofs
+
+
+def alias_census(roots, shared):
+    return len(_alias_phase_proof(roots, shared)[0])
+
+
+@contextmanager
+def _inherited_alias_phase(phase, shared):
+    """Reuse this phase's proof only for exact known paths in the pinned ancestor."""
+    if hashlib.sha256(ANCESTOR.read_bytes()).hexdigest() != '23d2dcc45db9e9268456a202e46c0e25e982b13d91413271cf00452d0564a731':
+        raise Refusal('inherited alias callback contract changed')
+    original_snapshot, original_git, original_check = _IMPL.snapshot, _IMPL.git, _IMPL.check_shared
+    active = phase
+
+    def known(path):
+        path = Path(path)
+        roots, root_metadata, proofs = active
+        if path not in proofs:
+            return None
+        metadata, oid, checksum = proofs[path]
+        if (_alias_phase_metadata(path) != metadata or
+                tuple(_alias_phase_metadata(root, directory=True) for root in roots) != root_metadata):
+            raise Refusal('inherited shared alias proof metadata changed')
+        return metadata, oid, checksum
+
+    def snapshot(path):
+        proof = known(path)
+        if proof is None:
+            return original_snapshot(path)
+        metadata, _, checksum = proof
+        return dict(zip(('device', 'inode', 'mode', 'size', 'nlink', 'mtime_ns'),
+                        (metadata[0], metadata[1], stat.S_IMODE(metadata[2]),
+                         metadata[3], metadata[4], metadata[5])), sha256=checksum)
+
+    def git(repo, *args, **kwargs):
+        if len(args) == 3 and args[:2] == ('hash-object', '--no-filters') and not kwargs:
+            proof = known(args[2])
+            if proof is not None:
+                return (proof[1] + '\n').encode('ascii')
+        return original_git(repo, *args, **kwargs)
+
+    def check(candidate, scratch15, scratch16, previous_candidate, rows,
+              expected_initial_links=3, additional_shared_roots=()):
+        nonlocal active
+        # Only the exact initially authenticated set may use this adapter.
+        if [(row['path'], row['blob']) for row in rows] != [(rel, oid) for rel, _, oid in shared]:
+            raise Refusal('inherited shared set differs from authenticated phase')
+        roots = (scratch15, scratch16, previous_candidate, *additional_shared_roots, candidate)
+        fresh = _alias_phase_proof(roots, shared)
+        if len(roots) != expected_initial_links + 1:
+            raise Refusal('inherited final alias count differs')
+        saved, active = active, fresh
+        try:
+            result = original_check(candidate, scratch15, scratch16, previous_candidate, rows,
+                                    expected_initial_links, additional_shared_roots)
+            for path in fresh[2]:
+                known(path)
+            return result
+        finally:
+            active = saved
+
+    _IMPL.snapshot, _IMPL.git, _IMPL.check_shared = snapshot, git, check
+    try:
+        yield
+    finally:
+        _IMPL.snapshot, _IMPL.git, _IMPL.check_shared = original_snapshot, original_git, original_check
 
 
 def inherited_arguments(release, scratch, links):
@@ -782,7 +853,8 @@ def prepare(*, release_path, release_sha256, source=ROOT,
               mode in ('100644', '100755')]
     if len(shared) != _IMPL.EXPECTED_SHARED_FILES:
         raise Refusal('incomplete 486-file evidence census')
-    links = alias_census(roots, shared)
+    phase = _alias_phase_proof(roots, shared)
+    links = len(phase[0])
     args = inherited_arguments(release, scratch, links)
     for name, value in dict(NAMES, TARGET=release['target'],
                             TARGET_TREE=release['target_tree'],
@@ -793,7 +865,8 @@ def prepare(*, release_path, release_sha256, source=ROOT,
     if materialize:
         live_preparation_boundary(scratch, release)
         args['execute'] = True
-    result = _IMPL.prepare(source, roots[0], scratch, **args)
+    with _inherited_alias_phase(phase, shared):
+        result = _IMPL.prepare(source, roots[0], scratch, **args)
     if materialize:
         if result.get('status') != 'PASS_PREPARE_ONLY':
             raise Refusal('inherited preparation did not complete')
