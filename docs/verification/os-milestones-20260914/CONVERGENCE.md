@@ -57,8 +57,14 @@ example already identifies the next concrete action.
 ## User priority: sustained implementation progress
 
 The user's current priority is a functional, stable McKernel core quickly, with
-real diagnostic application execution before perfect formal verification. Apply
-the following fast diagnostic lane to scheduling and iteration; it does not
+real diagnostic application execution before perfect formal verification.
+The 2026-10-17 clarification is to get the OS functioning first. Defer optional
+security audits, threat modeling, hardening and security-report writing that do
+not unblock the working image or useful applications. Prioritize concrete OS
+correctness failures and executable fixes. Keep required host isolation,
+ownership checks and platform safeguards; this scheduling priority does not
+disable service-side policy or grant acceptance for unrun qualification.
+Apply the following fast diagnostic lane to scheduling and iteration; it does not
 alter formal acceptance counters or grant privileged execution authority.
 Within an already reviewed unprivileged profile, compile and run the smallest
 positive/reproducer immediately, fix the observed code or harness defect, and

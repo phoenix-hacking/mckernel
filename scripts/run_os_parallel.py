@@ -52,8 +52,16 @@ def stopped_blockers(directory, state):
     failures = []
     if not state.get('thread_id') or not state.get('goal'):
         failures.append('A saved campaign and goal are required; this entry point never creates one.')
-    if state.get('phase') != 'stopped' or state.get('active_turns'):
-        failures.append('Saved dispatcher must be stopped with no active turns.')
+    if state.get('phase') != 'stopped':
+        failures.append('Saved dispatcher must be stopped before launch.')
+    if state.get('active_turns') and any(
+            type(state.get(key)) is not int or state[key] <= 0
+            for key in ('worker_pid', 'server_pid')):
+        failures.append('Recorded active turns need saved worker/server PIDs to confirm retirement.')
+    # A stopped worker may retain its last in-flight turn after an error. The
+    # PID and lease checks below establish that no launcher still owns it;
+    # saved turn metadata alone is not a live process. The existing launcher
+    # resumes the same thread under its own exclusive leases.
     if (state.get('goal') or {}).get('status') != 'paused':
         failures.append('Saved goal must be paused; inspect its actual status before resuming.')
     if (state.get('resume_instruction') or {}).get('status') in ('sending', 'delivery_uncertain'):
@@ -175,9 +183,9 @@ def main(argv=None):
         'pending_hold': 'Before activation the launcher archives only exact superseded bytes and an audit receipt.',
         'launch_blockers': failures,
         'engineering_prerequisites': [
-            'Scratch21-specific cleanup implementation, independent review and fresh live identity release.',
-            'Finish/review RS-011 source authority; retain failing discovery and run complete cheap checks.',
-            'Commit/push/fetch the reviewed sources, prepare fresh scratch22; obtain a new one-shot build release.',
+            'Follow the latest HANDOFF.md and CURRENT.md; earlier attempt prerequisites are historical.',
+            'Reconcile retained owners and exclusions using fresh live identities before cleanup or guests.',
+            'Reuse matching validated native/image artifacts when their current execution profile permits it.',
             'Real acceptance still requires original contracts, soaks, hardware and external qualification.'
         ],
         'command': shlex.join(command),

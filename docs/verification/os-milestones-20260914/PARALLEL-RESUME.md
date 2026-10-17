@@ -31,20 +31,28 @@ relevant CURRENT.md entries. Read the preparation handoff PREPARATION-20261016.m
 Reconcile HEAD, dirty/untracked work, launcher identities, mount UUID and live
 leases before any operation. Preserve preexisting WIP and every failed attempt.
 
-First unblock scratch21 cleanup and the remaining source authority. Never replay
-scratch21. Its consumed request and stopped container/exclusions are evidence,
-not abandoned debris. Cleanup needs a scratch21-specific transaction, independent
-review and a new release binding the filesystem UUID and fresh live device/inode,
-boot, process/container, lock and evidence identities. Do not raw-remove its
-container or unlink its exclusions. Read-only preparation reports grant no
-execution authority. After accepted cleanup and reviewed source checks,
-commit/push/fetch exact sources, then prepare fresh scratch22 names and a new
-one-shot release. Do not rename/reuse scratch21 requests or materializations.
+Start from the latest HANDOFF.md and actual retained results; earlier scratch21
+and scratch22 preparation instructions are historical, not work to replay.
+Prioritize the working native baseline, matching McKernel image and useful
+diagnostic applications. Reuse matching validated artifacts instead of rebuilding
+unchanged components. Reconcile any interrupted owner, quarantine and exclusions
+with fresh live identities before guests or cleanup; absent PIDs alone do not
+prove accepted retirement. Preserve all consumed requests and failure evidence.
+Never raw-remove containers, unlink ownership records or reuse attempt names.
+
+The user's immediate priority is a FUNCTIONING OS. Defer optional security audits,
+threat modeling, hardening and report writing that do not unblock the image or
+applications. Fix concrete functional correctness failures and obtain executable
+feedback promptly. Keep routine records minimal and batch normal notes. Retain
+host isolation and ownership/resource checks; platform safeguards remain in force.
+Do not suppress or automatically retry a service-side policy rejection.
 
 Keep the critical path moving while independent workers implement and test real
-kernel behavior. Start useful disjoint lanes promptly: exact cleanup transaction;
-RS-011 authority repair; scratch22 preparation adaptation; inherited-MM fork
-ownership; shutdown actual-body regressions; diagnostic oracle/collector work.
+kernel behavior. Keep several dependency-ready implementation/test workers
+productive alongside the exclusive heavy operation: current image-to-guest work,
+independent kernel repairs, production-body regressions and compiled payloads with
+Linux references. Assign retirement/cleanup work only when it actually blocks
+execution. Do not leave ready work idle or create audits to fill worker slots.
 Split further only where write sets, invariants and outputs are independent.
 Select exact current files/contracts before assigning each lane. Reviewers own
 no implementation files. Do not have two workers write a shared manifest/ledger.

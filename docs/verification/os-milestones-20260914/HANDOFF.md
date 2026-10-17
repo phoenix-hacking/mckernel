@@ -1,5 +1,17 @@
 # Compact dispatcher handoff
 
+Resume preparation after 2026-10-17 07:41UTC: campaign stopped/goal paused on
+child turn cyberPolicy; saved worker23943/server23945 are absent. Retained
+active_turns is historical metadata, not a live launcher. Parallel entry-point
+admission now permits this case only with valid recorded dead PIDs, free launcher
+leases and the existing paused/stopped/known-delivery guards. No state was edited
+and no campaign, build, guest or cleanup was started by this repair. The latest
+user priority in CONVERGENCE.md and PARALLEL-RESUME.md is FUNCTIONING OS FIRST;
+defer optional security audits and excessive records. On explicit resume,
+reconcile the interrupted image guard's quarantine/retirement before the guest:
+image and owner validation passed, but the outer retirement proof did not.
+Preserve existing native/image artifacts and the original policy-error evidence.
+
 Native working milestone NOW announced: actual942c927b compiler/link and all
 original final checks PASS after checker-only correction, revalidation session
 82380 joined0, owner402130 retired, exact container removed/absent and all

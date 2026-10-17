@@ -50,6 +50,70 @@ class ParallelTests(unittest.TestCase):
             'thread_id': 'saved', 'goal': {'status': 'active'},
             'phase': 'running', 'active_turns': {'saved': 'turn'}}))
 
+    def stopped_state_with_retired_turn(self):
+        # These values are outside Linux's PID range, so no live process can
+        # accidentally satisfy a fixture's recorded identity.
+        return {'thread_id': 'saved', 'goal': {'status': 'paused'},
+                'phase': 'stopped', 'active_turns': {'saved': 'old-turn'},
+                'worker_pid': 2147483646, 'server_pid': 2147483647}
+
+    def test_stopped_dead_launcher_can_resume_with_retained_turn_metadata(self):
+        state = self.stopped_state_with_retired_turn()
+        path = self.root / 'state.json'
+        raw = json.dumps(state).encode()
+        path.write_bytes(raw)
+        self.assertEqual(parallel.stopped_blockers(self.root, state), [])
+        self.assertEqual(path.read_bytes(), raw)
+        self.assertEqual(state['active_turns'], {'saved': 'old-turn'})
+
+    def test_retained_turn_does_not_hide_a_live_worker_server_or_watcher(self):
+        for key in ('worker_pid', 'server_pid', 'watcher_pid'):
+            with self.subTest(key=key):
+                state = self.stopped_state_with_retired_turn()
+                watch = self.root / 'watcher.json'
+                if key == 'watcher_pid':
+                    watch.write_text(json.dumps({'watcher_pid': os.getpid()}))
+                else:
+                    state[key] = os.getpid()
+                self.assertTrue(parallel.stopped_blockers(self.root, state))
+                if watch.exists():
+                    watch.unlink()
+
+    def test_retained_turn_requires_positive_recorded_process_ids(self):
+        for key in ('worker_pid', 'server_pid'):
+            for value in (None, False, True, 0, -1, '2147483647'):
+                with self.subTest(key=key, value=value):
+                    state = self.stopped_state_with_retired_turn()
+                    state[key] = value
+                    self.assertTrue(parallel.stopped_blockers(self.root, state))
+
+    def test_retained_turn_still_blocks_for_wrong_phase_goal_or_uncertain_delivery(self):
+        for phase in ('running', 'starting', 'ready'):
+            state = self.stopped_state_with_retired_turn()
+            state['phase'] = phase
+            self.assertTrue(parallel.stopped_blockers(self.root, state))
+        for status in ('active', 'complete', 'blocked', 'usageLimited'):
+            state = self.stopped_state_with_retired_turn()
+            state['goal']['status'] = status
+            self.assertTrue(parallel.stopped_blockers(self.root, state))
+        for status in ('sending', 'delivery_uncertain'):
+            state = self.stopped_state_with_retired_turn()
+            state['resume_instruction'] = {'status': status}
+            self.assertTrue(parallel.stopped_blockers(self.root, state))
+
+    def test_retained_turn_still_blocks_each_held_launcher_lease(self):
+        for name in ('run.lock', 'watch.lock'):
+            with self.subTest(name=name):
+                path = self.root / name
+                path.touch()
+                inode = path.stat().st_ino
+                with path.open('rb') as stream:
+                    parallel.fcntl.flock(stream, parallel.fcntl.LOCK_EX)
+                    failures = parallel.stopped_blockers(
+                        self.root, self.stopped_state_with_retired_turn())
+                self.assertTrue(any(name in item for item in failures))
+                self.assertEqual(path.stat().st_ino, inode)
+
     def test_uncertain_startup_receipt_blocks_before_preflight_or_launch(self):
         for status in ('sending', 'delivery_uncertain'):
             with self.subTest(status=status):
