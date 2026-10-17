@@ -1,0 +1,146 @@
+{
+  "application_acceptance": false,
+  "candidate_patch": {
+    "path": "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/native_diagnostic.patch",
+    "sha256": "8d6a2c9c145d9845914157a0bea3acc7a2e1e8db29be881b752efc24e18e910c"
+  },
+  "candidate_source": {
+    "path": "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/native_diagnostic.py",
+    "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e"
+  },
+  "change": "Both build_command and expected_qemu_argv use one helper admitting len(os.fsencode(actual_attempt / qmp.sock)) <= 107; -monitor none and the original argv/profile/oracles are preserved.",
+  "checks": [
+    {
+      "scope": "static syntax of candidate and copied/new fixtures",
+      "status": "PASS"
+    },
+    {
+      "scope": "real Linux AF_UNIX 107/108-byte ASCII/nonASCII binds; both argv paths; exact original endpoint; short next parent; owner preflight before side effects; direct runner before factories",
+      "status": "PASS",
+      "stderr": "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/boundary-tests-final.stderr",
+      "stdout": "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/boundary-tests-final.stdout",
+      "tests": 7
+    },
+    {
+      "scope": "all original native_diagnostic protocol/source tests imported from scratch against candidate; two fixture import bindings changed only",
+      "status": "PASS",
+      "stderr": "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/original-tests.stderr",
+      "stdout": "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/original-tests.stdout",
+      "tests": 69
+    }
+  ],
+  "environment": {
+    "address_space_kib": 1048576,
+    "clean_environment": true,
+    "cpu": 6,
+    "network_scope": "ordinary local AF_UNIX bind fixtures only",
+    "python": "/usr/bin/python3",
+    "timeout_seconds": 120,
+    "tmpdir": "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/t",
+    "uid": 1000
+  },
+  "execution_authority": false,
+  "failed_endpoint": {
+    "encoded_bytes": 132,
+    "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-guest-20261017-1/attempt-6fb44f2a0cd64994af43c47bfc7476ab/qmp.sock",
+    "qemu_stderr_evidence": "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/original-qemu.stderr"
+  },
+  "files": {
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/boundary-tests-final.stderr": {
+      "sha256": "6dde0e81d689879863888e9f01750ce0f471e11ada91dca46079acf1330748dd",
+      "size": 920
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/boundary-tests-final.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/boundary-tests.stderr": {
+      "sha256": "ee41a963a82ad65bcc74d9fafced03c0c901274332cc75c2ddb99ecef7d4971d",
+      "size": 920
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/boundary-tests.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/commands.json": {
+      "sha256": "5272e1f7b602a41971e60334f10f3012e7c4ab848fd0903de256bd549022183e",
+      "size": 1018
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/native_diagnostic.original.py": {
+      "sha256": "8af67bcf5015cbf1915a65fdb3ce50d09ed68ea39f3b08fa95fa29625fd7afbc",
+      "size": 53170
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/native_diagnostic.patch": {
+      "sha256": "8d6a2c9c145d9845914157a0bea3acc7a2e1e8db29be881b752efc24e18e910c",
+      "size": 1429
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/native_diagnostic.py": {
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/native_diagnostic_container_owner.original.py": {
+      "sha256": "740f507631e9076ef2fd8961206ff69a87abed4c686167348b2dc5ded3ce4034",
+      "size": 58828
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/original-qemu.stderr": {
+      "sha256": "8d08485847f3dd67734640d64e0364bbb20b231f8ce35c1c18248fb382c4e874",
+      "size": 370
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/original-tests.stderr": {
+      "sha256": "e010c032b5feec12a62a1c46534b3d367ec95591882a6e31d66a76d224aa3005",
+      "size": 8734
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/original-tests.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/syntax-final.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/syntax-final.stdout": {
+      "sha256": "a4e94069429487805cb65208bceff6b477b49cb7cca0eb223ae57f3f20193a4c",
+      "size": 34
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/syntax.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/syntax.stdout": {
+      "sha256": "a4e94069429487805cb65208bceff6b477b49cb7cca0eb223ae57f3f20193a4c",
+      "size": 34
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/test_application_native_diagnostic.original.py": {
+      "sha256": "c18853067bde77006f1ef9baf8304a2c4995c7c42a76651ada3a30371117b330",
+      "size": 68225
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/test_application_native_diagnostic.py": {
+      "sha256": "b2c3a180b7b74fa55e9ad408dc5fbfe5fbc9ce211bc1a0480cb0dca18ca2897c",
+      "size": 68212
+    },
+    "/home/holden/mckernel-work/scratch/qmp-path-admission-fix-20261017-1/test_qmp_path_admission.py": {
+      "sha256": "bf2a3a389e8220c06b26b30c9788e44255d728f59410ca041d1303e79e59b4b3",
+      "size": 5657
+    }
+  },
+  "next_invariant_check": "Dispatcher must first prove original active owner positive retirement. Then independently review and integrate this candidate, update the owner SOURCE_HASHES diagnostic pin from the original hash to candidate_source.sha256, rebind owner/source authority, and issue a fresh one-shot release using the short parent. No guest rerun is authorized by this source report.",
+  "next_parent": {
+    "created": false,
+    "endpoint_bytes": 92,
+    "generated_attempt": "/home/holden/mckernel-work/scratch/ndmsk-2/attempt-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "path": "/home/holden/mckernel-work/scratch/ndmsk-2"
+  },
+  "original_source": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+    "sha256": "8af67bcf5015cbf1915a65fdb3ce50d09ed68ea39f3b08fa95fa29625fd7afbc"
+  },
+  "owner_source": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "740f507631e9076ef2fd8961206ff69a87abed4c686167348b2dc5ded3ce4034"
+  },
+  "preserved": "Exact original source, owner, tests, failed QEMU stderr; active source/owner/runtime untouched. No root, Docker, guest, compiler, kernel/module/image rebuild, Git mutation, cleanup or quarantine operation.",
+  "schema": "mckernel.native-diagnostic-qmp-path-admission-source.v1",
+  "source_checkpoint": "89eabf36611f5623fa0bb62436e25dda4904e936",
+  "status": "READY_FOR_INDEPENDENT_SOURCE_REVIEW",
+  "task_id": "qmp-path-admission-fix-20261017-1"
+}

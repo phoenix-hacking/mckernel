@@ -14786,3 +14786,20 @@ build CPU6/1GiB and fileoverlayprepCPU7/1GiB canoverlaponeguestCPU2-5/12GiB.
 All formalcounts and M00-M13 acceptanceestimate deltasunchanged; no newguest
 resultyet. User's later131821instruction reservesVELOCITY.md/CONVERGENCE.md
 tosupervisingsession; do notmodify/stagethosepaths orpausecampaignforthem.
+
+## Checkpoint 375 — preboot QMP defect corrected; fresh signal release pending
+
+Signal guest1 exit1/301.856473s failed beforeboot at132byte AF_UNIX endpoint.
+Zero new boot/payload passes; independent RETIRED_FAILED_PREBOOT confirms owner,
+runner, QEMU,25Dockerclients and exactcontainer retired/root27:4free. Original
+failedattempt retained. No new kernel failure. Narrow encoded107byte admission
+now integrated and independently reviewed:1b43934a diagnostic/9084bfd3 ownerpin.
+Initial integrated7tests FAILED actual1 (wrapper0) preserved; corrected realowner
+constructor/import/pin/deterministiclongparent fixture now passes7+69=76tests
+actual subprocess0/8.352s. No source-candidate success counted as integration.
+Fresh /scratch/ndmsk-2 nonce2eccd0906ac64daeb33b20c971ea9455 endpoint92bytes,
+live source/mount/resource/rootlock/lease preflight PASS; separate guest release
+review pending. Signalmanifest47eb9589 reused; calloc589a4a86/filef60d142f ready.
+Static lifecycletool compiled only, not executed on host/device. Adopted
+VELOCITY.md and30-60minute review cadence, next13:55UTC; supervisor appends
+VELOCITY-REVIEWS.md. No estimate deltas/formal gate increases for these repairs.

@@ -1,0 +1,832 @@
+{
+  "schema": "mckernel.native-lifecycle-probe-static.v1",
+  "task_id": "M05-native-lifecycle-probe-static-20261017-1",
+  "status": "PASS_STATIC_BUILD_AND_ELF_INSPECTION_READY_FOR_REVIEW",
+  "authorization": "Dispatcher explicitly admitted standalone static compilation of frozen probe18444a09 plus readelf inspection only. No host execution of resulting probe.",
+  "artifact": {
+    "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/native-lifecycle-probe",
+    "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/native-lifecycle-probe",
+    "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+    "size": 872616
+  },
+  "inputs": {
+    "source": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_probe.c",
+      "resolved_path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_probe.c",
+      "sha256": "18444a0917ed850690cca41be1b9a6090a3ab533c94a0f1ad66892df0625ca44",
+      "size": 4282
+    },
+    "headers": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/ihk_host_user.h",
+        "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/ihk_host_user.h",
+        "sha256": "2335260024075a08becbe74651162a950aee8bea603e9a451cb8bcae3aa0ef97",
+        "size": 5704,
+        "git_revision": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+        "git_path": "linux/include/ihk/ihk_host_user.h"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/status.h",
+        "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/status.h",
+        "sha256": "fef81cf170da96d41500a572c22e44c272f7110eff815cf43944de0e429d81e7",
+        "size": 995,
+        "git_revision": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+        "git_path": "linux/include/ihk/status.h"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/ihk_monitor.h",
+        "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/ihk_monitor.h",
+        "sha256": "6fb530c99848036f8c71f946c01d2f7189e15c3e8a42b9962be980eaf29e3b60",
+        "size": 1575,
+        "git_revision": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+        "git_path": "linux/include/ihk/ihk_monitor.h"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/ihk_debug.h",
+        "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/ihk_debug.h",
+        "sha256": "63160ae79466f721b35bae1f2a8dad1378bcd4b8525045930abfaf4ec47383d7",
+        "size": 919,
+        "git_revision": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+        "git_path": "linux/include/ihk/ihk_debug.h"
+      }
+    ]
+  },
+  "compile": {
+    "command": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=150",
+        "--nofile=256",
+        "--fsize=67108864",
+        "--core=0",
+        "/usr/bin/timeout",
+        "-k",
+        "5s",
+        "180s",
+        "/usr/bin/gcc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-static",
+        "-fno-pie",
+        "-no-pie",
+        "-Wl,-z,noexecstack",
+        "-I",
+        "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include",
+        "-MD",
+        "-MF",
+        "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/app.d",
+        "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_probe.c",
+        "-o",
+        "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/native-lifecycle-probe"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/home",
+        "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/tmp"
+      },
+      "cwd": "/home/holden/mckernel"
+    },
+    "result": {
+      "returncode": 0,
+      "elapsed_seconds": 0.0765815240010852
+    },
+    "depfile": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/app.d",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/app.d",
+      "sha256": "40d89d1c99ce92dcc6fd6eaa17d3ca47945d55fc5f21d35fe5da5961d0b0dd72",
+      "size": 3813
+    },
+    "dependencies": [
+      {
+        "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_probe.c",
+        "resolved_path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_probe.c",
+        "sha256": "18444a0917ed850690cca41be1b9a6090a3ab533c94a0f1ad66892df0625ca44",
+        "size": 4282
+      },
+      {
+        "path": "/usr/include/stdc-predef.h",
+        "resolved_path": "/usr/include/stdc-predef.h",
+        "sha256": "64fdf694f7b3d51ec6c45c06dcb71ebbe9455742d3ea673012016668853d3bff",
+        "size": 2290
+      },
+      {
+        "path": "/usr/include/errno.h",
+        "resolved_path": "/usr/include/errno.h",
+        "sha256": "bb34795fb8a34bea0b33a4bcf4e60e1aa24ca03bba063e045b90447ee79e1137",
+        "size": 1679
+      },
+      {
+        "path": "/usr/include/features.h",
+        "resolved_path": "/usr/include/features.h",
+        "sha256": "981a26a502075c066b75617ea8db7623f98935b035e470833c46e53f1dea4e2b",
+        "size": 17079
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/sys/cdefs.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/sys/cdefs.h",
+        "sha256": "3cc074d3fb0761b678ab4d2a6108b5eb02b9b29341e0bae6a0755cfbbd69cf1f",
+        "size": 18308
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/wordsize.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/wordsize.h",
+        "sha256": "716d8459074e2a082d65a28192b32eddbfd7587348372395b1c283a723ae4c18",
+        "size": 442
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/long-double.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/long-double.h",
+        "sha256": "1d92fbb09acd8375debde9c0b4c6dd3e38d096d27159e32a537e3742f6b2cc25",
+        "size": 962
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/gnu/stubs.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/gnu/stubs.h",
+        "sha256": "ef444295a0a9e8f5c40918399a00cc91ba0bd79774110cdf6e652baa6cfadb2e",
+        "size": 384
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/gnu/stubs-64.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/gnu/stubs-64.h",
+        "sha256": "bae35edf2e1f5c08d88ff8a5b839e951c42839b855894751efdf94ae69cc0814",
+        "size": 523
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/errno.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/errno.h",
+        "sha256": "7e7e8b459ac9a9683fa9ed91fb05c89ea874ed70b6d4aa6ef407db87a28b023b",
+        "size": 1426
+      },
+      {
+        "path": "/usr/include/linux/errno.h",
+        "resolved_path": "/usr/include/linux/errno.h",
+        "sha256": "a47fb2f49bce0546a1e88805cec954338abb1b2ac87de042166e8e3a74b23261",
+        "size": 23
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/asm/errno.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/asm/errno.h",
+        "sha256": "4ee384515a4325315992e61dd957f0fa91f3858fe7c079de59f56edded51de86",
+        "size": 31
+      },
+      {
+        "path": "/usr/include/asm-generic/errno.h",
+        "resolved_path": "/usr/include/asm-generic/errno.h",
+        "sha256": "fb7b5a504015f3a9074c641e7371b250d867d751d90e4a22a8ac17fced3d50af",
+        "size": 5648
+      },
+      {
+        "path": "/usr/include/asm-generic/errno-base.h",
+        "resolved_path": "/usr/include/asm-generic/errno-base.h",
+        "sha256": "2c148e92b8318deeb767fabd60822113e575ee664ff09a1873aed8f7a495793c",
+        "size": 1612
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/types/error_t.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/types/error_t.h",
+        "sha256": "8b424ad860b52b27391b94ac486bdf86475ee6ece9bc378576859c2d904c76ec",
+        "size": 894
+      },
+      {
+        "path": "/usr/include/fcntl.h",
+        "resolved_path": "/usr/include/fcntl.h",
+        "sha256": "0b7409e674c5802bd43659ba883773e4e50332abff9614b767b3b7b07eb61cae",
+        "size": 9710
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/types.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/types.h",
+        "sha256": "69454c580d77b06559520ed59cd14551d626cb494fcf5fd95a29144d79b2538b",
+        "size": 8757
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/timesize.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/timesize.h",
+        "sha256": "9c1a1a3517fe96894cf4e09cd362c999faac951caf8e70c3c579506a777b522b",
+        "size": 1081
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/typesizes.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/typesizes.h",
+        "sha256": "dd38f16bed43eda106684d2af8b57af4373814fd1c4404b37302fdefde7be2e0",
+        "size": 3546
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/time64.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/time64.h",
+        "sha256": "14312d2bcdc321b6691ef167e4768124d9af1ace8bac0142eb1159fac5a1b3b7",
+        "size": 1340
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/fcntl.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/fcntl.h",
+        "sha256": "14001f0553d6adb1b08f16ec879f797a59034d59c81f1ef0b44eeb9f90ce0bf2",
+        "size": 2246
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/fcntl-linux.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/fcntl-linux.h",
+        "sha256": "1dc43f7aa98e2cea8ea4c26e8661ecdacb9ce4bb775bf8a959d4f5b1d6d9da97",
+        "size": 14912
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h",
+        "sha256": "89d865d365d7ae720892788154ad9e0c9c45087e14c759766b44315d30b22421",
+        "size": 1066
+      },
+      {
+        "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h",
+        "resolved_path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h",
+        "sha256": "45e80e1302342753d2f9e5945248fe3af7cf328a99804d2ec561850bbb550f7d",
+        "size": 12959
+      },
+      {
+        "path": "/usr/include/linux/falloc.h",
+        "resolved_path": "/usr/include/linux/falloc.h",
+        "sha256": "e35cbe823cf1b8ccb9d1ed755cc6ab8e842cfa0d240f9818cc554423dc0ceee0",
+        "size": 3584
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h",
+        "sha256": "494c455857a5fe8641d7f034a6892f848f1a2d304791bea3434e209a72d6b1cb",
+        "size": 728
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/endian.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/endian.h",
+        "sha256": "12b47b421313cf9ddc75afa754101c7034bca71ddb797f4f8ae06fc6c4161517",
+        "size": 1905
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/endianness.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/endianness.h",
+        "sha256": "659a7060004eda113671a38852c4d1e9cb97a35932bcd1d8540f98c09c180747",
+        "size": 273
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/stat.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/stat.h",
+        "sha256": "c7b261ced7bf6f6173097656d935f4a4dcf5bd7d40c92d5588652da1d1686978",
+        "size": 7620
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/fcntl2.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/fcntl2.h",
+        "sha256": "d2d3302ebcc06ffda2db2785a917b91a79e1a31bb7df4ed2cd55b14068ea0873",
+        "size": 5575
+      },
+      {
+        "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/limits.h",
+        "resolved_path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/limits.h",
+        "sha256": "c22d44de9cc1fd841e51fa2a5c7e0779b83124db9a923dca8b5268b7aa84f7a2",
+        "size": 6089
+      },
+      {
+        "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/syslimits.h",
+        "resolved_path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/syslimits.h",
+        "sha256": "22dd0ab81baadd5a8d455b445855f341d419c7b0267beca235de00b7ec78e529",
+        "size": 330
+      },
+      {
+        "path": "/usr/include/limits.h",
+        "resolved_path": "/usr/include/limits.h",
+        "sha256": "ee75b0899e59f5fdd40c864822bb8e8ba4356d85ec8b8e48b789cbd4a91652e7",
+        "size": 5417
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/libc-header-start.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/libc-header-start.h",
+        "sha256": "42053eaf4d2751e7be1cc8342f4c1c7404a6670c330ca493b7e884b20d6c1747",
+        "size": 3288
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/posix1_lim.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/posix1_lim.h",
+        "sha256": "b72756fac23fbaa251e7e02cc6db62aa15fa4f76355167d1f358bd742ae61492",
+        "size": 5189
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/local_lim.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/local_lim.h",
+        "sha256": "e48f9e05cad93954f1066dc50dbb8e3335304e7ff80c030641baaee21e267234",
+        "size": 3185
+      },
+      {
+        "path": "/usr/include/linux/limits.h",
+        "resolved_path": "/usr/include/linux/limits.h",
+        "sha256": "567dbb4893d20bb986996f0a8b8f774b02ca6cb7df8e4b642895eade7e7ffcd9",
+        "size": 937
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/posix2_lim.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/posix2_lim.h",
+        "sha256": "a5b58c4044a95c7252fca5ff1661046a8b15d27fd482bba27515336b0f36355e",
+        "size": 2867
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/xopen_lim.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/xopen_lim.h",
+        "sha256": "3a60b4caf4758fe13de86ae75f227cc06a6195ab9a585a04794f5369d06c3a55",
+        "size": 3858
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/uio_lim.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/uio_lim.h",
+        "sha256": "617a06f631635d7d0792ea2806e4cb482a67f0976d99502e8f596fbbc52fb832",
+        "size": 1385
+      },
+      {
+        "path": "/usr/include/stdio.h",
+        "resolved_path": "/usr/include/stdio.h",
+        "sha256": "e7d85131c888412c0eaaaca3a7165d86f147c8645993ddf333a5b2500117a478",
+        "size": 29950
+      },
+      {
+        "path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdarg.h",
+        "resolved_path": "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdarg.h",
+        "sha256": "0b1d4f68c42c238ae96d07e0e9d5868732054fc8ba704c1dde891649ff117483",
+        "size": 4072
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h",
+        "sha256": "603e58ab31ed75b7e0ab09a2ca94e99955f7fbc63310466321ce27c906227eb4",
+        "size": 381
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h",
+        "sha256": "c561df72d5b987ccbd022059fdb1bcb6899c3e94b403997a0576ef3e1afb0f94",
+        "size": 564
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h",
+        "sha256": "8afae3abf006beb39fd9d4d4bae38745cdf08a91e6217ddf25833c8d4b04751b",
+        "size": 410
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/types/__FILE.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/types/__FILE.h",
+        "sha256": "26c909942e8a6bc82725e9c402f393aed9e32d94190257ddf71e1b5f819b4e5e",
+        "size": 110
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/types/FILE.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/types/FILE.h",
+        "sha256": "37515f78be386f2edad4746f2947c928f480728c56d9a94e25302ebbdaef3c96",
+        "size": 180
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h",
+        "sha256": "4a1aefe381b17ad50add602a8f31c9d4579499064ad3dde703f7f6df48498311",
+        "size": 4104
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h",
+        "sha256": "e0f62133861106e467e0454988891e150dc6eb6f4a5098cedcf94a7d37e9aea6",
+        "size": 2725
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/stdio_lim.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/stdio_lim.h",
+        "sha256": "8b383d348468ce009e52ec801dfb0467f72b0f75496bb840f0ae0ef8a5f399a1",
+        "size": 1213
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h",
+        "sha256": "7ef402713da42e35dc8d50a4838b3fbb8bfe959176dd86dd621ec47ac547b5b6",
+        "size": 1216
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/stdio.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/stdio.h",
+        "sha256": "68f7c4aa205c5043f0b9363f4809851c3d735d17e145051ef3c9e771880ddb4f",
+        "size": 5584
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/stdio2.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/stdio2.h",
+        "sha256": "f30effdddb33b0a38dee1cd596c1277d0f8f800a0fbfdadb2fe214f33c86129a",
+        "size": 12679
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/sys/ioctl.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/sys/ioctl.h",
+        "sha256": "6b20455aa48049415fb2b1272cac5f84ba4ee28d1b5d930221427d38822ff2cb",
+        "size": 1740
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/ioctls.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/ioctls.h",
+        "sha256": "9aba6e4d4f21a3c10e4543425ab2ca743eef900fb8247affd5fa2c19b1ff1c45",
+        "size": 4478
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/asm/ioctls.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/asm/ioctls.h",
+        "sha256": "857d11a8415a18e7a6ccf23640cf9bddf245a5f90c43b3014d08d3ae19faf952",
+        "size": 32
+      },
+      {
+        "path": "/usr/include/asm-generic/ioctls.h",
+        "resolved_path": "/usr/include/asm-generic/ioctls.h",
+        "sha256": "456d8d175500bae6f73a66a023a71044f9cb077ab17531a7bf8df1509cc8dae3",
+        "size": 3987
+      },
+      {
+        "path": "/usr/include/linux/ioctl.h",
+        "resolved_path": "/usr/include/linux/ioctl.h",
+        "sha256": "ba73b5892de6605e6c40b151820e367dfcb98cbdb3f8f468c5ef2bd8437df873",
+        "size": 163
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/asm/ioctl.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/asm/ioctl.h",
+        "sha256": "9c6ca9e365296a6b66747cbebdcf76972b8cce7aab91e55bf4ab1f3581df9c2a",
+        "size": 31
+      },
+      {
+        "path": "/usr/include/asm-generic/ioctl.h",
+        "resolved_path": "/usr/include/asm-generic/ioctl.h",
+        "sha256": "76396e5537d75285c3ca20e3b6a79b101eebfdc14d39c104ff7eab778672160e",
+        "size": 3478
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/ioctl-types.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/ioctl-types.h",
+        "sha256": "0743f60e5875e818ae5f090d5c8cab84bf14be1bbfa79448b7094dcbb1a34561",
+        "size": 2456
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/sys/ttydefaults.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/sys/ttydefaults.h",
+        "sha256": "23dbc1caef6d19508707ffb8aef4498beba70340c87440dfafcf4f3c9dd6589f",
+        "size": 3568
+      },
+      {
+        "path": "/usr/include/unistd.h",
+        "resolved_path": "/usr/include/unistd.h",
+        "sha256": "690e12d91da100d6916752f38804386710d427823f7783f730218a9ac2d043e2",
+        "size": 42804
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/posix_opt.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/posix_opt.h",
+        "sha256": "8417772f0c9fa7a39fcec5323c23e9869454e1f0c63531dd878bc7e81e694fe6",
+        "size": 5913
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/environments.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/environments.h",
+        "sha256": "5f0d55d7cb0330bae9ef464394de98c9045d0e5880d266d3801034678843f435",
+        "size": 3791
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/confname.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/confname.h",
+        "sha256": "091903356b086e4c7a46054f7321d583d51ae35296b1f077d3216f5f3a76f4de",
+        "size": 23709
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/getopt_posix.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/getopt_posix.h",
+        "sha256": "530d55a1958c75b33eb8a65a04a746c27cf876ec3c47827bb3e11595761824ac",
+        "size": 1810
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/getopt_core.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/getopt_core.h",
+        "sha256": "9fa5de6af98115c111cf43befe7468827d6e283edb400e1a6ca7a609a11aadbc",
+        "size": 3667
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/unistd.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/unistd.h",
+        "sha256": "282a609004d8f3ccc4f5d92d58767d5c6d4fe8c95daa38e25691f3b65be14409",
+        "size": 13316
+      },
+      {
+        "path": "/usr/include/x86_64-linux-gnu/bits/unistd_ext.h",
+        "resolved_path": "/usr/include/x86_64-linux-gnu/bits/unistd_ext.h",
+        "sha256": "b2fafcd2805dbd6869e0ef89833d2ae03c197ac8c01b89bab86a13c2499fca0a",
+        "size": 1613
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/ihk_host_user.h",
+        "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/ihk_host_user.h",
+        "sha256": "2335260024075a08becbe74651162a950aee8bea603e9a451cb8bcae3aa0ef97",
+        "size": 5704
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/status.h",
+        "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/status.h",
+        "sha256": "fef81cf170da96d41500a572c22e44c272f7110eff815cf43944de0e429d81e7",
+        "size": 995
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/ihk_monitor.h",
+        "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/ihk_monitor.h",
+        "sha256": "6fb530c99848036f8c71f946c01d2f7189e15c3e8a42b9962be980eaf29e3b60",
+        "size": 1575
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/ihk_debug.h",
+        "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/ihk_debug.h",
+        "sha256": "63160ae79466f721b35bae1f2a8dad1378bcd4b8525045930abfaf4ec47383d7",
+        "size": 919
+      }
+    ]
+  },
+  "tools": [
+    {
+      "path": "/usr/bin/gcc",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "size": 1158288
+    },
+    {
+      "path": "/usr/bin/ld",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+      "size": 1732192
+    },
+    {
+      "path": "/usr/lib/gcc/x86_64-linux-gnu/9/collect2",
+      "resolved_path": "/usr/lib/gcc/x86_64-linux-gnu/9/collect2",
+      "sha256": "5228dbf1e15d16694059023d16e7f13f201ea0d76a82e8837c6483dc21d66682",
+      "size": 622960
+    },
+    {
+      "path": "/usr/bin/readelf",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-readelf",
+      "sha256": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb",
+      "size": 658360
+    },
+    {
+      "path": "/home/holden/anaconda3/bin/python3.9",
+      "resolved_path": "/home/holden/anaconda3/bin/python3.9",
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+      "size": 15880080
+    }
+  ],
+  "link": {
+    "flags": [
+      "-static",
+      "-fno-pie",
+      "-no-pie",
+      "-Wl,-z,noexecstack"
+    ],
+    "linker_tool": {
+      "path": "/usr/bin/ld",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+      "size": 1732192
+    },
+    "static_toolchain_reference_inputs": [
+      {
+        "path": "/usr/lib/x86_64-linux-gnu/crt1.o",
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/crt1.o",
+        "sha256": "27daac7b3f9e861ef8df49f45b2a8ffb7130a1899f86efe53c6f84d63fd3cd0d",
+        "size": 2040
+      },
+      {
+        "path": "/usr/lib/x86_64-linux-gnu/crti.o",
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/crti.o",
+        "sha256": "2f1c31070d95f398fe4c1388408e83283cc7e0cee0ebb64882e0b331e8e178e8",
+        "size": 1360
+      },
+      {
+        "path": "/usr/lib/x86_64-linux-gnu/crtn.o",
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/crtn.o",
+        "sha256": "a2266079f95b84ccc2162ebbf279bcd78858a748aa1882e0bdb912316c76a58f",
+        "size": 760
+      },
+      {
+        "path": "/usr/lib/x86_64-linux-gnu/libc.a",
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/libc.a",
+        "sha256": "f9831edeccd3a87eb3fbba795f92bfa83409b3951f05ec40ca5df432b8699127",
+        "size": 5747618
+      },
+      {
+        "path": "/usr/lib/x86_64-linux-gnu/libc_nonshared.a",
+        "resolved_path": "/usr/lib/x86_64-linux-gnu/libc_nonshared.a",
+        "sha256": "2aabc899fd2f27ff0bc1fd8540bd55e5e860560a601a1023df587b4454789b7d",
+        "size": 23930
+      },
+      {
+        "path": "/usr/lib/gcc/x86_64-linux-gnu/9/crtbeginT.o",
+        "resolved_path": "/usr/lib/gcc/x86_64-linux-gnu/9/crtbeginT.o",
+        "sha256": "9fe07384ef0078de4a23fe2acc4137cb5aeeddcc715cf189cc0d985b602d348a",
+        "size": 3120
+      },
+      {
+        "path": "/usr/lib/gcc/x86_64-linux-gnu/9/crtend.o",
+        "resolved_path": "/usr/lib/gcc/x86_64-linux-gnu/9/crtend.o",
+        "sha256": "c29d8ba35b3afad85993fa8f64b1a4d91678deaeb0f1cae952f12c0bdd4c83c1",
+        "size": 1360
+      },
+      {
+        "path": "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc.a",
+        "resolved_path": "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc.a",
+        "sha256": "82b6c0bfc28d5314fffaaa2a920516575f347972f685b5805f5749a87a617df0",
+        "size": 3045214
+      },
+      {
+        "path": "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc_eh.a",
+        "resolved_path": "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc_eh.a",
+        "sha256": "1dc66e2a55a6cefe1458b4e94f9b321e453a5b7279638cd7d12e1ddf83ec59f8",
+        "size": 58252
+      }
+    ],
+    "reference_scope": "Read-only hashes of standard GCC9 static link input paths after successful compile. No linker trace/map was requested; these are toolchain references, not an observed archive-member consumption ledger."
+  },
+  "elf_inspection": {
+    "command": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=150",
+        "--nofile=256",
+        "--fsize=67108864",
+        "--core=0",
+        "/usr/bin/timeout",
+        "-k",
+        "5s",
+        "180s",
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/native-lifecycle-probe"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/home",
+        "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/tmp"
+      },
+      "cwd": "/home/holden/mckernel"
+    },
+    "result": {
+      "returncode": 0,
+      "elapsed_seconds": 0.010680072999093682
+    },
+    "checks": {
+      "elf64": true,
+      "little_endian": true,
+      "x86_64": true,
+      "exec": true,
+      "no_interpreter": true,
+      "no_dynamic_segment": true,
+      "no_writable_executable_load": true,
+      "nonexecutable_stack": true
+    },
+    "program_headers": [
+      {
+        "type": "LOAD",
+        "flags": "R",
+        "raw": "  LOAD           0x000000 0x0000000000400000 0x0000000000400000 0x000518 0x000518 R   0x1000"
+      },
+      {
+        "type": "LOAD",
+        "flags": "RE",
+        "raw": "  LOAD           0x001000 0x0000000000401000 0x0000000000401000 0x093dbd 0x093dbd R E 0x1000"
+      },
+      {
+        "type": "LOAD",
+        "flags": "R",
+        "raw": "  LOAD           0x095000 0x0000000000495000 0x0000000000495000 0x02691d 0x02691d R   0x1000"
+      },
+      {
+        "type": "LOAD",
+        "flags": "RW",
+        "raw": "  LOAD           0x0bc0c0 0x00000000004bd0c0 0x00000000004bd0c0 0x005230 0x006980 RW  0x1000"
+      },
+      {
+        "type": "GNU_STACK",
+        "flags": "RW",
+        "raw": "  GNU_STACK      0x000000 0x0000000000000000 0x0000000000000000 0x000000 0x000000 RW  0x10"
+      }
+    ]
+  },
+  "resources": {
+    "cpu_affinity": [
+      6
+    ],
+    "address_space_bytes": 1073741824,
+    "cpu_seconds": 150,
+    "wall_seconds": 180,
+    "kill_after_seconds": 5,
+    "nofile": 256,
+    "file_size_bytes": 67108864,
+    "core_bytes": 0,
+    "jobs": 1,
+    "environment": "Exact explicit env recorded in both commands; only PATH/LANG/LC_ALL plus private HOME/TMPDIR. No inherited credentials/loader/compiler overrides."
+  },
+  "captures": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/app.d",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/app.d",
+      "sha256": "40d89d1c99ce92dcc6fd6eaa17d3ca47945d55fc5f21d35fe5da5961d0b0dd72",
+      "size": 3813
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/compile-command.json",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/compile-command.json",
+      "sha256": "4e3e809eb21a368d984ae28c588255d04f52728a00daafa95f5e83a6724ac704",
+      "size": 1151
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/compile-result.json",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/compile-result.json",
+      "sha256": "18e8fdedc8606fabc037efb77abc0442eb2197c49d345181c9dc3a9d1051959f",
+      "size": 63
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/compile.stderr",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/compile.stdout",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/input-identities.json",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/input-identities.json",
+      "sha256": "21505c5ce5ebdd5b3f3192a8b8665797f981d7c80b6f9929714389a47624b2aa",
+      "size": 2346
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/native-lifecycle-probe",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/native-lifecycle-probe",
+      "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+      "size": 872616
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/readelf-command.json",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/readelf-command.json",
+      "sha256": "68e08d3aa61548562c638859b9334337020429eb0bff7dfa76dd5010b71e8eaf",
+      "size": 717
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/readelf-result.json",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/readelf-result.json",
+      "sha256": "cad052a961e94a00a31ada9c1f3cc48db9a967a4cf08bbe7383e82450e38b612",
+      "size": 65
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/readelf.stderr",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/readelf.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/readelf.stdout",
+      "resolved_path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/readelf.stdout",
+      "sha256": "e497eed555a2e92f54b39cb0468216786cbb710ba756fbc046e2afa2ce73b9f5",
+      "size": 2567
+    }
+  ],
+  "failures": [],
+  "acceptance": {
+    "tool_executed_on_host": false,
+    "native_device_access": false,
+    "guest_executed": false,
+    "shutdown_observed": false,
+    "resource_restoration_verified": false,
+    "runtime_release": false,
+    "application_acceptance": false,
+    "production_acceptance": false
+  },
+  "limits": [
+    "Static standalone tool compilation and ELF metadata inspection only; no native shutdown or teardown executed.",
+    "Current frozen guest sources, collector, launcher and current942 artifacts are unchanged.",
+    "Separate guest-tool integration review and fresh isolated guest packet are still required.",
+    "No app.d entry or static archive hash proves native CPU/memory resource restoration."
+  ],
+  "blocker": null,
+  "next_task": "Dispatcher review of static artifact and exact build provenance, then separately authorized isolated native guest lifecycle diagnostic after successful app completion."
+}

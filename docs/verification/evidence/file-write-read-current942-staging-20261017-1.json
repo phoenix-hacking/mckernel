@@ -1,0 +1,162 @@
+{
+  "application_acceptance": false,
+  "command": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+    "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+    "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/file.write-read/app",
+    "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/init",
+    "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+    "/home/holden/mckernel-work/scratch/file-write-read-current942-overlay-20261017-1.cpio.gz",
+    "--collector-sha256",
+    "8089d5b7bcf8166e69cb9ea90fc4614674b4906813a40aa219972c02c7ec5e39",
+    "--mcexec-sha256",
+    "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+    "--payload-sha256",
+    "3f09a659061b67a1b5d096bf93ad7de8f00d4e92ff26908bfd5b283e3c3fb46a",
+    "--base-sha256",
+    "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+    "--base-size",
+    "12347108",
+    "--base-cpio-sha256",
+    "7e69601b68dafb44c945d2998b10ec024a73518303bb505f275490d83e4c6767",
+    "--base-cpio-size",
+    "39677952"
+  ],
+  "draft_oracle_caveat": [
+    "Freeze canonical output and reviewed input/oracle SHA256 before execution."
+  ],
+  "environment": {
+    "HOME": "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/home",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/tmp",
+    "TZ": "UTC"
+  },
+  "formal_case_credit": false,
+  "frozen_oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "62797465733d31207772697474656e3d3120726561643d31206261645f696e6465783d312073697a653d3120656f663d300a62797465733d34303935207772697474656e3d3430393520726561643d34303935206261645f696e6465783d343039352073697a653d3430393520656f663d300a62797465733d34303936207772697474656e3d3430393620726561643d34303936206261645f696e6465783d343039362073697a653d3430393620656f663d300a62797465733d34303937207772697474656e3d3430393720726561643d34303937206261645f696e6465783d343039372073697a653d3430393720656f663d300a62797465733d3635353533207772697474656e3d363535353320726561643d3635353533206261645f696e6465783d36353535332073697a653d363535353320656f663d300a62797465733d31303438353736207772697474656e3d3130343835373620726561643d31303438353736206261645f696e6465783d313034383537362073697a653d3130343835373620656f663d300a"
+  },
+  "inputs": {
+    "base": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+      "sha256": "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+      "size": 12347108
+    },
+    "base_cpio": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio",
+      "sha256": "7e69601b68dafb44c945d2998b10ec024a73518303bb505f275490d83e4c6767",
+      "size": 39677952
+    },
+    "collector": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/init",
+      "sha256": "8089d5b7bcf8166e69cb9ea90fc4614674b4906813a40aa219972c02c7ec5e39",
+      "size": 1021928
+    },
+    "frozen_inputs_sha256": {
+      "scripts/application-tests/cases/file/file.write-read.c": "942927376c8d3707a7d14b0f5bdc353790297ce4bf85fe6db2c34090198f58fd",
+      "scripts/application-tests/oracles/file.write-read.json": "a3262a52829161a9f0ede49d451a72cb7fcddaa857742d6fdc5cec6bf85141bd"
+    },
+    "mcexec": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+      "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+      "size": 453352
+    },
+    "payload": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/file.write-read/app",
+      "sha256": "3f09a659061b67a1b5d096bf93ad7de8f00d4e92ff26908bfd5b283e3c3fb46a",
+      "size": 876952
+    },
+    "source": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+      "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+      "size": 26579
+    }
+  },
+  "manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/file-write-read-current942-manifest-20261017-1.json",
+    "sha256": "f60d142f0b7a3bcedf059fb77176554b73a3475075961a5227ed101a64bd21ba",
+    "size": 6176
+  },
+  "new_guest_runs": 0,
+  "new_payload_runs": 0,
+  "overlay_capture": {
+    "elapsed_seconds": 8.68545,
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_manifest": "/home/holden/mckernel-work/scratch/file-write-read-current942-overlay-20261017-1.json",
+    "stdout_sha256": "4b8f67f82f3c9da06649e337433820dff6a670f7fcf1c55517a9740bdec5f7b2",
+    "stdout_size": 14847
+  },
+  "overlay_output": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/file-write-read-current942-overlay-20261017-1.cpio.gz",
+    "sha256": "28d5e3d4e58560f289b52983897fa51301277b730bc4851005e7985d8b1b583b",
+    "size": 13278206
+  },
+  "production_acceptance": false,
+  "resources": {
+    "address_space_limit_bytes": 1073741824,
+    "core": 0,
+    "cpu_affinity": [
+      7
+    ],
+    "cpu_seconds": 150,
+    "file_size_limit_bytes": 67108864,
+    "nofile": 256,
+    "outer_wall_seconds": 180
+  },
+  "review_prerequisites": [
+    "Independent exact manifest/overlay review.",
+    "Applicable current image retirement/launcher source authority and fresh owner/resource/lock/scratch preflight.",
+    "Separate reviewed one-shot guest execution release after signal/memory diagnostic outcomes.",
+    "Frozen original source/oracle remain draft; diagnostic output does not establish formal catalog acceptance."
+  ],
+  "runtime_release": false,
+  "schema": "mckernel.file-write-read-current942-staging.v1",
+  "scope": "Offline overlay transform and read-only strict manifest load only; no payload execution, stager, compiler, root, Docker, network, guest, prepare_attempt, backend or Git operations.",
+  "semantic_limit": "The unchanged source creates a temporary file once, writes, seeks to offset zero, reads/compares, checks fstat and EOF, then closes/unlinks it. It does not reopen the file, so the draft oracle's reopened/read wording is not an observed additional operation.",
+  "source_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-manifest-20261017-1.json",
+    "sha256": "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da",
+    "size": 5455
+  },
+  "source_reference_evidence": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-exact-file-write-read-linux-reference-20261017.json",
+    "sha256": "c9397742648c2fb8fa5cf8ed084ebc95e85049b59d4adc235a90af12aab143bc",
+    "size": 3598
+  },
+  "static_preparation_evidence": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/file-write-read-static-preparation-20261017.json",
+    "sha256": "4d2dc9df4aa9da002a78e54640dc000992b548b49173da086df3d3a2b37930ce",
+    "size": 10936
+  },
+  "status": "PASS_OVERLAY_STRICT_MANIFEST_59_MEMBER_JOINS",
+  "task_id": "file-write-read-current942-staging-20261017-1",
+  "validation": {
+    "backend_called": false,
+    "call": "native_diagnostic.load_manifest(absolute_manifest_path) only",
+    "elapsed_seconds": 0.088836,
+    "final_member_count": 59,
+    "join_scope": "All final members equal authenticated signal overlay map except apps/app, which joins exact compiled file payload hash/size/mode. Strict loader verifies live artifact and overlay identities.",
+    "loader_source_sha256": "8af67bcf5015cbf1915a65fdb3ce50d09ed68ea39f3b08fa95fa29625fd7afbc",
+    "prepare_attempt_called": false,
+    "result": "PASS"
+  }
+}

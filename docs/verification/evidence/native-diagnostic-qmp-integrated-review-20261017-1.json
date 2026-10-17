@@ -1,0 +1,20 @@
+{
+  "schema": "mckernel.qmp-integrated-independent-review.v1",
+  "decision": "PASS_SOURCE_INTEGRATED_QMP_ADMISSION",
+  "reviewer": "/root/image_retirement_review",
+  "diagnostic_sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+  "owner_sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+  "test_sha256": "6d7fdebda5a064dfbf8f1ddac8e4a771f9db237c575e2475bf643190560a8818",
+  "findings": [
+    "Integrated diagnostic matches reviewed candidate; owner sole implementation change is diagnostic source pin.",
+    "Test imports current owner, asserts file and pin, constructs complete owner and forces oversized encoded endpoint independently of TMPDIR.",
+    "Rejection precedes identity, acquisition, owner queue, backend and evidence side effects."
+  ],
+  "tests": {
+    "exit_code": 0,
+    "passed": 76,
+    "reviewer_rerun": false,
+    "retained": "/home/holden/mckernel-work/scratch/qt-1/integration-final.stderr"
+  },
+  "scope": "Source/admission only; no guest behavior/formal acceptance."
+}

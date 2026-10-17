@@ -56,6 +56,12 @@ example already identifies the next concrete action.
 
 ## User priority: sustained implementation progress
 
+Apply the user's [tactical velocity plan](VELOCITY.md) at the next safe dispatch
+boundary: keep the next two eligible guests ready, refill disjoint implementation
+lanes promptly, reuse the current compiled stack, and measure actual executable
+throughput at existing checkpoints. The 2x target and 3x stretch require measured
+evidence; they do not change acceptance, execution releases or resource limits.
+
 The user's current priority is a functional, stable McKernel core quickly, with
 real diagnostic application execution before perfect formal verification.
 The 2026-10-17 clarification is to get the OS functioning first. Defer optional

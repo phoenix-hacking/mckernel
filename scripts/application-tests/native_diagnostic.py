@@ -419,13 +419,20 @@ def prepare_attempt(manifest, parent, name):
     return attempt
 
 
+def _qmp_socket_path(attempt):
+    """Linux sun_path reserves one of its 108 bytes for the trailing NUL."""
+    path = str(Path(attempt) / "qmp.sock")
+    _need(len(os.fsencode(path)) <= 107, "QMP socket pathname exceeds Linux AF_UNIX 107-byte limit")
+    return path
+
+
 def build_command(manifest, attempt):
     """Return the exact QEMU argv only after the derived-image join is READY."""
     attempt = Path(attempt)
     _need(attempt.is_dir() and (attempt.stat().st_mode & 0o777) == 0o700, "attempt not private")
     manifest = _validate_manifest(_thaw(_freeze(manifest)))
     a = manifest["artifacts"]
-    qmp = str(attempt / "qmp.sock")
+    qmp = _qmp_socket_path(attempt)
     _need(not os.path.lexists(qmp), "stale QMP socket")
     for name in ("serial.log", "debugcon.log"):
         path = attempt / name
@@ -456,7 +463,7 @@ def expected_qemu_argv(manifest, attempt):
     _need(attempt.is_absolute(), "attempt path")
     manifest = _validate_manifest(_thaw(_freeze(manifest)))
     a = manifest["artifacts"]
-    qmp = str(attempt / "qmp.sock")
+    qmp = _qmp_socket_path(attempt)
     if manifest["profile"]["name"] == PROFILE_SMALL:
         profile_args = ["-smp", "2,sockets=1,cores=2,threads=1", "-m", "6144",
                         "-object", "memory-backend-ram,size=6G,id=ram-node0",

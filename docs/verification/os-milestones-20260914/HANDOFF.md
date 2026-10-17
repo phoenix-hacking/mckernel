@@ -1,20 +1,30 @@
 # Compact dispatcher handoff
 
-Checkpoint374: fresh root retirement observation312531b8 PASS2.573s and
-independent acceptance; exact archival cleanup PASS5.558s,9durable journal
-events, both exclusions archived with original inodes/bytes, stoppedcontainer
-absent, root27:4released and allactivelease/quarantine absent. Independent
-actual postflight47cc7673 PASS; original failedguard unchanged.
-Signalguest exact finalrelease now independently PASS_EXECUTION_REVIEW;
-nonce6fb44f2a0cd64994af43c47bfc7476ab/manifest47eb9589,parent1828/107782.
-Next sole action afterfetchedrelease/live recheck is actual signal.mask-restore
-guest. Keep HEADstable duringowner. Memorymanifest589a4a86 ready; filewrite
-preparation and static lifecycleprobe compilation proceed CPU7/CPU6 alongside
-exclusiveguestCPU2-5/12GiB, total6jobs/14GiB. Actualprobe main26injected
-scenariosPASS with validatedPython3.9/privateenv; sourceC18444a09 no device
-execution. Newguestcount0 sofar, formalcounts/acceptanceestimates unchanged.
-Supervisinguser reserves VELOCITY.md and CONVERGENCE.md for tacticalplan;
-do not edit/stage those paths. Continue campaign withoutwaitingfor thatdoc.
+Checkpoint375: signal guest1 failed BEFORE BOOT: QMP endpoint132encoded
+bytes exceeds107; exit1 after301.856s, zero boot/payload/guest passes and no
+kernel failure. Independent RETIRED_FAILED_PREBOOT accepts actual owner/runner/
+QEMU/all25Docker client retirement, exactcontainer absence and released27:4.
+Original failure evidence preserved. Narrow endpoint admission now integrated:
+diagnostic1b43934a/owner9084bfd3/test6d7fdeb; independent source review PASS.
+Initial integrated7testfailure preserved (actual1 despite outerwrapper0);
+fixture now constructs real currentowner, verifiesimport/pin, deterministic
+oversize and noqueue/evidence/lock/backend sideeffects. Final7+69tests PASS76,
+actual subprocess0/8.35s. Next fresh short parent /scratch/ndmsk-2, nonce
+2eccd0906ac64daeb33b20c971ea9455,92byteQMP; separate review/release then run.
+Unchanged signalmanifest47eb9589; no kernel/module/image rebuild.
+Next two guests ready: callocmanifest589a4a86 and filemanifestf60d142f.
+Static lifecycletool d8132525 compiled; no actual lifecycle execution yet.
+
+Adopted [VELOCITY.md](VELOCITY.md): target2x/stretch3x are measured experiments,
+not acceptance increases. Consume completed recovery, keep nexttwo eligible
+guests ready, promptly refill genuinely ready disjoint implementation/test
+lanes within shared7jobs/24GiB and oneheavyprofile; no manufactured tasks.
+Supervision cadence30-60minutes and next13:55UTC cursor are in
+[VELOCITY-REVIEWS.md](VELOCITY-REVIEWS.md); supervisingchat appends thatfile,
+dispatcher retains sole Git/runtime ownership. No newmonitorprocess.
+Current priority remains M00-M13 original100%, functionalcore first, real
+behavior/actualbody measures separate from formal gates; all estimates and
+formalcounts unchanged. Continue after checkpoints and freezeHEAD underowner.
 
 Current user priority 20261017T130554117286Z-ee81e2040f894282be224a30c0abb57e:
 push every M00-M13 milestone toward its original100% as aggressively and
