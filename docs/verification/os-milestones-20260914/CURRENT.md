@@ -13881,3 +13881,35 @@ successful artifact is `signal.mask-restore`, exact stdout
 compiled current candidates, 12 bounded diagnostic guest passes, 0/273 formal
 applications, 6/130 production gates and 0/7 language gates.  The stop is
 restart-ready and the OS remains incomplete.
+
+Continuation checkpoint 356, 2026-10-16 shutdown reconciliation: no new worker,
+build, guest or cleanup was dispatched before the launcher stop.  The repository
+and fetched branch remain exactly `a3fe106c263a69281ab28cd6eb498c2aee6312b7`.
+Scratch is mounted read-write, nodev/nosuid from `/dev/loop36`, filesystem UUID
+`2a5768c8-718d-4914-bdc0-6b32c5a92a52`; cgroup v2 is available.  Measured free
+space is 35,468,845,056 host bytes and 33,617,027,072 scratch bytes, with
+29,437,300 KiB MemAvailable.  No QEMU, mcexec, native exact owner or development
+lock holder is live.
+
+The exact scratch21 terminal container remains unchanged: ID
+`e1f6dd145149...20ea9`, name `mckernel-exact-57e76f6bf33a48da82047f98242bf019`,
+owner nonce `1439909012a04cf789981b951b34d399`, exited PID 0/status 1, non-OOM and
+not dead.  The shared/exact exclusion bytes still hash to
+`7be39d1c...a7134` / `eeb41f3a...51f5` and retain inodes 57687/57688, but the
+live `st_dev` is now 1828 after the scratch remount rather than historical 1831.
+Any cleanup release must bind the stable filesystem UUID plus fresh live
+device/inode evidence; it must not blindly reuse the pre-remount device number.
+The scratch21 request lease remains absent and root development lock is still
+root-owned inode `27:4`, unheld.
+
+Launcher wrapper PID 9339/starttime 42152 and worker PID 9343/starttime 42159
+were live when the stop arrived; app-server identities were PID 9116/starttime
+38792 and PID 9164/starttime 38834.  The launcher owns their shutdown.  On the
+next authorized invocation, first reconcile those identities and the loop36
+mount, then implement/review the exact scratch21 cleanup against the remounted
+filesystem identity.  After cleanup, resume checkpoint 355's three source-
+authority repairs, full cheap checks, fresh scratch22 preparation/build release,
+and only then `signal.mask-restore`.  Never replay scratch21.  Counts remain
+three compiled current candidates, 12 bounded diagnostic guest passes, 0/273
+formal applications, 6/130 production gates and 0/7 language gates.  This is a
+temporary restart-ready checkpoint; the OS remains incomplete.

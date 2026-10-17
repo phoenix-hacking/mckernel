@@ -1,5 +1,23 @@
 # Compact dispatcher handoff
 
+## Latest continuation: checkpoint 356
+
+The 2026-10-16 launcher stop arrived during read-only reconciliation; no worker,
+cleanup, build or guest was started.  HEAD/fetched remain `a3fe106c...12b7`.
+Scratch is `/dev/loop36`, UUID `2a5768c8-718d-4914-bdc0-6b32c5a92a52`, mounted
+rw,nodev,nosuid.  The scratch21 container and exclusion bytes are unchanged, but
+the remount changed live `st_dev` from historical 1831 to 1828 while preserving
+inodes 57687/57688.  A fresh cleanup release must bind the UUID and live identity;
+do not raw-remove the container or unlink either lock.
+
+No heavy process or development-lock holder is live.  Launcher wrapper/worker
+were PID/starttime 9339/42152 and 9343/42159 at stop.  Resume by reconciling
+those identities and the mount, then exact scratch21 cleanup, the three pending
+source-authority fixes from checkpoint 355, complete cheap checks, and fresh
+scratch22 preparation.  Never replay scratch21.  Counts stay 3 builds, 12
+diagnostic passes, 0/273 formal apps, 6/130 production, 0/7 languages; the OS
+is incomplete.
+
 ## Latest continuation: checkpoint 355
 
 Scratch21 consumed its one-shot release and failed before compilation in phase
