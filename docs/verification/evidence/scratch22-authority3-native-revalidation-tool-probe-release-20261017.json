@@ -1,0 +1,50 @@
+{
+  "schema": "scratch22-authority3.native-revalidation-tool-probe-release.v1",
+  "decision": "PASS_EXECUTION_DIAGNOSTIC_TOOL_PROBE",
+  "reviewer": "/root/cheap_profile_review",
+  "implementation_ownership": false,
+  "actual_postflight": "PASS_DIAGNOSTIC_REVALIDATION_POSTFLIGHT",
+  "revalidation_request": {
+    "path": "docs/verification/evidence/scratch22-authority3-artifact-revalidation-execution-release-20261017.json",
+    "sha256": "7821e34817e655ec422f51852751f10d3ac9042f0104ed470b0cbcd3f1974649"
+  },
+  "actual_proofs": {
+    "root": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1",
+    "owner-result.json": "be4f9d0895971341248097b1b45d317ff6688b7d715a67df5a5600b4e513afb6",
+    "payload/result.json": "b7d0596b35d0398d6f93ef530a8732f9634ca5e2e2fab95c3e30b1d4515740b1",
+    "inspect-terminal.json": "cda1e4ce6cc2bd091f75e6ffc68c488472e6460cfe33d56affba0835200b8e81",
+    "container-absence.json": "3c10767c918bc547b3412c8450ba46da5f1811a85bf51b4b5d7d3a4ce0b83512",
+    "ownership-release.json": "bfa758f088375420bf1e515776139e58dabce95ba860a3e047c2b64f3cf935c6",
+    "retained-inputs-before-create.json": "5bde941e80617baf8bc61be5a479bb561b8467ae5e4a7ef6fe7bd2ef6140e13b",
+    "retained-inputs-after-retirement.json": "5bde941e80617baf8bc61be5a479bb561b8467ae5e4a7ef6fe7bd2ef6140e13b"
+  },
+  "verified": "Actual request7821 matches exact f782-reviewed payload and review pointer. Owner PASS_DIAGNOSTIC_REVALIDATION/payloadexit0 and payload PASS_DIAGNOSTIC_FINAL_CHECKS/exit0 agree; all original fifth-step assertions and verify_artifacts passed through unchanged reviewed payload. Rootguard's pre/post six-file/942source/UUID checks passed. Exact owned sleep container exited143/Pid0/non-OOM during normal teardown, then positive exact Docker absence; ownership-release true, retired/absent/sharedreleased true/clientuncertain false and actual lease/shared paths absent. Dispatcher reports session82380 joined0. Reused completed final-check/artifact guards without duplicate binary hashing, test suites or census.",
+  "reused_reviews": {
+    "revalidation_execution_sha256": "f7820e8507f4df666b04f16094e35b027da79a925d121b07df477daebe3efd76",
+    "actual_authority3_cleanup_postflight_sha256": "d748a392772895a68035dee326e2bd082f9f7cea6cde31892439d4e9e593e7ec",
+    "unchanged_authority3_probe_conditional_sha256": "d6a4a30a7e3bf0eb8a182ca59c1a768f01a611ce37820e71e3b426500b2492ed",
+    "unchanged_probe_ancestor_sha256": "d650086ada75ab747e8143ca204265acd2e34c6e5d2dc05f07ac6510a585409c",
+    "guarded_probe_source_sha256": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635"
+  },
+  "diagnostic_activation": "Authorize the exact417 source-free tool probe for a diagnostic image using successfully compiled942artifacts and completed unchanged final checks. This is new explicitly diagnostic authority, NOT a claim that the older conditional review's strict native-workflow-PASS prerequisite was met. Original strict native attempt remainsFAIL; no original receipt edited or promoted. All other accepted probe isolation/ownership/retirement conditions stay unchanged.",
+  "probe_request": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-build-image-rebind-942c927b-scratch22-authority3-image1-20261017.json",
+    "sha256": "fa3a2da8898604d9cd2b7d34e4b8da0dc5e667e0bbeb1ca292f423b91ef58c39",
+    "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "image_id": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "target_evidence_root": "/home/holden/mckernel-exact-image-evidence-942c927b-scratch22-authority3-image1-20261017",
+    "target_receipt": "/home/holden/mckernel-exact-image-evidence-942c927b-scratch22-authority3-image1-20261017/image-receipt.json"
+  },
+  "fresh_preinvocation_census": {
+    "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-pre-toolprobe-census-20261017.json",
+    "sha256": "51cd1cc5f957e4438b61118ae8c1dbc9a5546913f7e6ae6faf9fada45f26f844",
+    "status": "PASS_READ_ONLY_LIVE_CENSUS",
+    "scope": "Dispatcher's already completed short observation under nonblocking root27:4, then released: boot7bfc5687/UUID2a5768/device1828 stable; no active container/publisher, retired owner402130 and prior owner/guard absent, exact revalidation container absent, lease/shared absent. Saved resource bytes host20675407872/scratch19300687872/RAM30139199488 meet accepted floors. No duplicate inventory/selected hashing. Any intervening owner/boot/mount/resource change requires reconciliation before invocation; no extra unchanged scan requested."
+  },
+  "command_once": ["/usr/bin/python3", "-B", "/home/holden/mckernel/scripts/native_rust_exact_build_image_rebind_probe.py", "--request", "/home/holden/mckernel-work/scratch/native-exact-build-image-rebind-942c927b-scratch22-authority3-image1-20261017.json", "--expected-request-sha256", "fa3a2da8898604d9cd2b7d34e4b8da0dc5e667e0bbeb1ca292f423b91ef58c39"],
+  "profile": "Ordinary currentUID1000 guarded CLI, exact root27:4 lock/four deferredsignals/nonreturning uncertainty quarantine; inherited original signal mask and credential-safe sudo-A Docker clients. One source-free417 container, CPUs2-5/4CPU,12GiB memory=swap,512tasks/no network/no mounts/read-only root/dropALL/no-new-privileges/privateIPC/256MiBtmpfs. Fresh planned target/receipt/lease/quarantine remain absent, no overlap and no outer timeout. Unchanged aggregate7jobs/24GiB,16/12GiB free and16GiB RAM floors plus capture headroom. Require actual probe PASS/identical authenticated tool observation and positive container removal/absence/client retirement before lease/shared/root release. Preserve any failure; no unchanged replay.",
+  "blocking_findings": [],
+  "probe_execution_performed_by_reviewer": false,
+  "strict_fresh_build_pass": false,
+  "runtime_or_acceptance_credit": false
+}

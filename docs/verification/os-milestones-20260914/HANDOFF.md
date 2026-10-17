@@ -1,5 +1,17 @@
 # Compact dispatcher handoff
 
+Native working milestone NOW announced: actual942c927b compiler/link and all
+original final checks PASS after checker-only correction, revalidation session
+82380 joined0, owner402130 retired, exact container removed/absent and all
+ownership released. Original strict attempt remains FAIL; diagnostic revalidation
+is not strict fresh-build or formal acceptance. Preserve immutable baseline in
+docs/verification/evidence/native-working-baseline-942c927b-20261017.json.
+Next already-prepared path: diagnostic417toolprobe -> matching942McKernel image
+-> exact signal.mask-restore guest. No unrelated Linux rebuild or test replay.
+Fresh image inputsfb1cb00e and toolrebindfa3a2da8 are ready, libdwarf0dd84e6b
+already prepared. New short full live census PASS after revalidation retirement,
+root27:4/UUID/dev/boot unchanged and released; no active publisher/container.
+
 Checkpoint370 continues the live compiler run below; not a pause. User explicitly
 requests immediate console announcement of COMPLETE native PASS (control kernel,
 all three modules, final checks), not bzImage alone. Next: exact terminal cleanup,

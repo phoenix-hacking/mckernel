@@ -1,0 +1,26 @@
+{
+  "schema": "mckernel.native-working-diagnostic-baseline.v1",
+  "status": "PASS_DIAGNOSTIC_REVALIDATION",
+  "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "candidate_tree": "07d05c1bb2ea5f4b6a3817ba55cd32afe56c8d59",
+  "checker_correction_commit": "baba647f",
+  "revalidation_release_commit": "d10008a2cd342517f05e85b1b41ce53d508b167b",
+  "revalidation_release_sha256": "7821e34817e655ec422f51852751f10d3ac9042f0104ed470b0cbcd3f1974649",
+  "original_full_workflow_attempt": "FAIL retained unchanged; the final exact export oracle omitted the already implemented v6 ABI",
+  "result": "Actual control-kernel/native-module compilation and linking completed; all original final workflow checks and artifact verifier subsequently passed in the same pinned Red Hat tool environment with only the reviewed checker overlay.",
+  "strict_fresh_build_pass": false,
+  "runtime_or_formal_acceptance": false,
+  "kernel_release": "6.12.0-211.44.1.el10_2.mckernel1.x86_64",
+  "tool_image": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+  "immutable_build_root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output",
+  "successful_final_capture": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence",
+  "artifacts": {
+    "bzImage": {"sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc", "size": 16130048},
+    "ihk.ko": {"sha256": "331f4cc1bd0ecaa4cecc55364fb3e8ce216df3a3cd406f1d05c35112276d1001", "size": 1438632},
+    "ihk-smp-x86_64.ko": {"sha256": "f51d975a7dd36b8e1fba2fd9d850e911f28cd0ad6cd8b292e33095791a4241f2", "size": 11418720},
+    "mcctrl.ko": {"sha256": "4cf6196f9e93fb10b08bc4e5bf75022b0858779a6479910340941006748cd23f", "size": 1914512}
+  },
+  "ownership": "Positive terminal retirement, exact container removal/absence, lease/shared release and root-lock release verified; all original failed source/output/evidence retained.",
+  "reuse": "Preserve this compatible kernel/module/toolchain/config/source set immutable across eligible payload-only diagnostics; changed source/ABI inputs require an explicitly reviewed affected-artifact path.",
+  "next": "Matching McKernel image, then signal.mask-restore guest. This baseline is not runtime stability or whole-OS completion."
+}

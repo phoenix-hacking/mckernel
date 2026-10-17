@@ -14680,3 +14680,27 @@ First guest remains signal.mask-restore exact stdout/exit0. At07:05UTC host
 floors, capture reserve and one heavy operation. Counts unchanged3prior compiled
 candidates/12diagnosticpasses,0/273formalapps,6/130production,0/7language;
 this new linked candidate is not yet a complete native-build PASS.
+
+Actual continuation result: retained-artifact revalidation release7821e348 was
+published/fetched d10008a2 and seven exact source blobs verified. Sole execution
+session82380 joined0. PASS_DIAGNOSTIC_REVALIDATION/FINAL_CHECKS, original fifth
+workflow step plus artifact verifier complete;72tests,1optional audit skipped,
+all other tests PASS. All three modules, control bzImage, link closure, exact
+kernel release/config/stage locks and complete SHA256SUMS verify. Before/after
+four-artifact/two-frozen-source identities match original compiled bytes. Owner
+402130 positively retired, container2d3af71d removed and absent, lease/shared
+ownership/rootlock all released. Native working milestone announced immediately
+to user, explicitly diagnostic revalidation and original strict attempt FAIL.
+Baseline docs/verification/evidence/native-working-baseline-942c927b-20261017.json
+is immutable compatible reuse authority input, not runtime/acceptance credit.
+
+Independent actual postflight plus source-free417toolprobe releaseb675da6a
+accepts this diagnostic path without promoting old strict workflow FAIL. Fresh
+short root census51cd1cc5 PASS after actual revalidation: original owner/guard,
+newowner402130 and container absent, no publisher/activecontainer/lease/shared;
+UUID/dev1828/boot/rootlock27:4 exact and released. Host20.675GB/scratch19.301GB/
+RAM30.139GB meet preserved floors/capture reserve. Next command is unchanged
+guarded toolprobe412d46 for requestfa3a2da8, then actual942 image preparation,
+image build and signal.mask-restore. No repeated Linux rebuild. Formal counts
+and12guest diagnostic passes unchanged; one new compiled candidate now also
+has complete passing diagnostic final checks. Continue autonomously.
