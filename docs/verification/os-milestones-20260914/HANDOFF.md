@@ -1,5 +1,41 @@
 # Compact dispatcher handoff
 
+## Current continuation: checkpoint 368, precompiler failure repaired locally
+
+CONTINUE. Authority2 consumed its sole release and stopped before compilation:
+`module root digest drift: ihk_smp_x86_64.rs`. Driver266bytes/ff754c19,
+receipt972e89a2, terminalde969cce, session5712 joined1. Guard243497 and
+owner244086/start1324045 positively retired with all seven clients; no lease
+or root quarantine remains. Stopped container63c2d257 and exclusion inodes
+57829/57830 remain pinned. NO raw removal or replay. Original source/output/
+evidence remain immutable. Exact additive failure record is
+docs/verification/evidence/scratch22-authority2-precompiler-failure-20261017.json.
+
+Bounded source correction is four active metadata bindings only, author090a1304:
+all five ordered checks and145tests PASS, including original stale-digest
+negative. Original654unsafe-site IDs/statuses/expressions/obligations and77c/545
+historical authority remain unchanged. Minimal new target942c927b/tree07d05c1b
+has exactly six changes againstfd099: old two type-path files plus four digest
+companions. Independent review pending; optional fork changes remain outside.
+
+Authority2 cleanup helper802d2e79/testsbb4a5ff3 has independent source PASSe4cf4c31,
+16focused tests PASS. Fresh read-only observationdcddf2b0 binds UUID/boot/rootlock,
+stopped owner/container/request and full output1/evidence41metadata inventory;
+captured under nonblocking rootlock then released. Separate exact execution
+release, fetched-source proof, root cleanup and independent postflight still
+required. In parallel, authority3 adapter/wrapper source-only preparation is
+underway. Next shortest path: accepted cleanup + source review -> fresh
+authority3 names/materialization -> released native build -> matching image ->
+signal.mask-restore guest. No new build/image/guest yet. Preserve all failures.
+
+Standing preference: responsibly maximize useful disjoint implementation/test
+work alongside one exclusive heavy operation. Once native PASS is reproducible,
+retain exact immutable kernel/modules/toolchain/config/source baseline and reuse
+compatible artifacts across new payloads; only changed consumed inputs trigger
+fresh-candidate rebuilds. Runtime evidence stays fresh and diagnostic-only.
+Counts unchanged3compiled candidates/12diagnosticpasses,0/273formalapps,
+6/130production,0/7language. Checkpoints do not stop the active campaign.
+
 ## Current continuation: checkpoint 367, fresh native build released
 
 CONTINUE. Minimal targetd37d2216/tree95cbbdba is now freshly materialized at

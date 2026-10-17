@@ -14499,3 +14499,38 @@ was replayed. All original engineering-estimate ranges/counters stay unchanged:
 3compiled candidates/12diagnosticpasses,0/273formalapps,6/130production,0/7language.
 Continue after checkpoint and first image milestone; actual compiler/runtime
 failures select next repair, compatible known-good artifacts reused per payload.
+
+## Checkpoint 368 — authority2 precompiler failure, digest companion correction
+
+Actual authority2 one-shot build ended before compiler: root digest drift for
+ihk_smp_x86_64.rs, driverlogff754c19. Session5712 joined1; container63c2d257
+stopped1/nonOOM, owner244086/start1324045 and guard243497 positively retired,
+seven clients retired. Receipt972e89a2/terminalde969cce bind complete FAIL;
+outputs empty. Root lease/quarantine absent; stopped container and exclusion
+inodes57829/57830 remain retained until separately reviewed cleanup. Source,
+output and original evidence untouched. New additive failure record is
+docs/verification/evidence/scratch22-authority2-precompiler-failure-20261017.json.
+
+Concrete bounded repair updates only four active root/source/position metadata
+companions. Author090a1304 records all five ordered source checks and145tests
+PASS, including actual stale-root rejection control;654unsafe-site IDs/statuses/
+expressions/obligations and original77c/545records remain unchanged. Main
+production source unchanged. Isolated-index target942c927b/tree07d05c1b based
+fd099 includes exactly old two type-path files plus these four companions;
+independent exact-target review pending. No consumed attempt will be replayed.
+
+Authority2 cleanup helper802d2e79/testsbb4a5ff3 independently PASSe4cf4c31,
+16tests. Read-only fresh observationdcddf2b0 captured under rootlock27:4,
+UUID unchanged, full output1/evidence41metadata entries, selected raw byte joins,
+requestc38f and stopped exact owner/container. Lock released, no cleanup yet.
+Execution release/source fetch/postflight remain prerequisites. New authority3
+adapter/wrapper preparation runs disjointly; no new heavy operation starts
+before actual accepted cleanup and repaired source authority.
+
+Next executable path: reviewed cleanup -> fresh authority3 materialization ->
+native compiler result -> matching image -> exact signal.mask-restore guest.
+Retain reproducible passing baseline unchanged and reuse compatible kernel/
+modules/image for eligible payload-only tests; rebuild affected changed inputs
+only through fresh output/release names. Useful parallelism and essential
+ownership/resource/isolation/97%usage guards remain. Counters unchanged:
+3compiled candidates/12diagnosticpasses,0/273formalapps,6/130production,0/7language.

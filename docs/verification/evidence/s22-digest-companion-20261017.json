@@ -1,0 +1,554 @@
+{
+  "schema": "mckernel.s22-digest-companion.v1",
+  "status": "PASS_SOURCE_COMPANION_BINDINGS",
+  "failure_family": "S22-DIGEST-COMPANION-1",
+  "scope": "Current active source-authority metadata binding repair only; no production source or historical acceptance record edited.",
+  "history": {
+    "first_native_attempt": {
+      "candidate_commit": "d37d2216a60c6db10442ba8bc238d64fbd59c5ea",
+      "container_prefix": "63c2d257",
+      "terminal": "exit1 non-OOM before compiler",
+      "driver_log_sha256": "ff754c19fcc4a5a773912b84986e1fd263e5a439b481d8d4b8af5f5b559de5dd",
+      "failure": "native Rust build-surface audit failed: module root digest drift: ihk_smp_x86_64.rs"
+    },
+    "pre_patch_main_reproduction": {
+      "command": [
+        "timeout",
+        "120",
+        "taskset",
+        "-c",
+        "7",
+        "bash",
+        "-c",
+        "ulimit -v 2097152; exec python3 -B scripts/native_rust_build_surface_audit.py"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "native Rust build-surface audit failed: module root digest drift: ihk_smp_x86_64.rs\n",
+      "main_head": "60115275f1408a7742120ee537f17eecf1470f59",
+      "old_root_sha256": "ead31123d69508bd678f321137e9fba023621a46cdf86aa3466381b966b52b44",
+      "current_root_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8"
+    },
+    "bounded_corrections": 1,
+    "unchanged_privileged_replays": 0
+  },
+  "source_comparison": {
+    "main_equals_pinned_equals_full_git_blob": true,
+    "source_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+    "source_size": 34559,
+    "failed_candidate_commit": "d37d2216a60c6db10442ba8bc238d64fbd59c5ea"
+  },
+  "baseline": {
+    "main_commit": "60115275f1408a7742120ee537f17eecf1470f59",
+    "files": [
+      {
+        "path": "host-kernel/kbuild/stage-manifest.json",
+        "sha256": "f5c7efabb35366142600b4c58df8aa77718ad982f282e00cdcf55c99cb965d46",
+        "size": 17114,
+        "git_blob_sha1": "89a6aec8bbfb8892ac6df3e1d23ad3077821a794"
+      },
+      {
+        "path": "scripts/rocky_rust_staging.py",
+        "sha256": "adf9d798856859ce7391f0cd7b8ba5a8c425cda71e73365db2923f0ab1abe981",
+        "size": 97233,
+        "git_blob_sha1": "ec7090726a0202e006b67f28f8a6b6cb80712e52"
+      },
+      {
+        "path": "host-kernel/native-rust/ihk-mapping-foundation-contract-v1.json",
+        "sha256": "9843b938d283e792c678032d697de46a966f071a634195d86163a8caddd50abc",
+        "size": 11473,
+        "git_blob_sha1": "2122ad81f2253cf429da8cd00fdb25de795a8cba"
+      },
+      {
+        "path": "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json",
+        "sha256": "12e67cb24105d53021da12aa3ad563dcd99baee6444d0ff21842cd36776971fa",
+        "size": 1362548,
+        "git_blob_sha1": "8ec3cbf6872d254dd836609c3ada73e4c1830355"
+      }
+    ],
+    "bytes_retained": "Every baseline file is bound by exact SHA256/size/Git blob SHA1 and remains recoverable from this retained Git commit; no baseline Git objects or failed attempt files were removed."
+  },
+  "repair": {
+    "active_binding_paths": [
+      "host-kernel/kbuild/stage-manifest.json",
+      "scripts/rocky_rust_staging.py",
+      "host-kernel/native-rust/ihk-mapping-foundation-contract-v1.json",
+      "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json"
+    ],
+    "kind": "Literal current root SHA/size and mechanically derived ledger authority only.",
+    "production_source_edited": false,
+    "discovery_or_oracles_changed": false,
+    "semantic_contracts_changed": false,
+    "old_root_sha256": "ead31123d69508bd678f321137e9fba023621a46cdf86aa3466381b966b52b44",
+    "current_root_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+    "old_root_bytes": 34552,
+    "current_root_bytes": 34559,
+    "ledger": {
+      "patch_chars": 22465,
+      "changes": [
+        {
+          "id": "RS011-SMP-0014",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0015",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0008",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0009",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0053",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0054",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0124",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0125",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0389",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0001",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0126",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0127",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0128",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0129",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0130",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0131",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0132",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0133",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0055",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0056",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0057",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0058",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0134",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0135",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0136",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0137",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0138",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0139",
+          "fields": [
+            "file_sha256"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0390",
+          "fields": [
+            "file_sha256",
+            "byte_start",
+            "byte_end"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0391",
+          "fields": [
+            "file_sha256",
+            "byte_start",
+            "byte_end"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0010",
+          "fields": [
+            "file_sha256",
+            "byte_start",
+            "byte_end"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0011",
+          "fields": [
+            "file_sha256",
+            "byte_start",
+            "byte_end"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0006",
+          "fields": [
+            "file_sha256",
+            "byte_start",
+            "byte_end"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0007",
+          "fields": [
+            "file_sha256",
+            "byte_start",
+            "byte_end"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0012",
+          "fields": [
+            "file_sha256",
+            "byte_start",
+            "byte_end"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0013",
+          "fields": [
+            "file_sha256",
+            "byte_start",
+            "byte_end"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0002",
+          "fields": [
+            "file_sha256",
+            "byte_start",
+            "byte_end"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0003",
+          "fields": [
+            "file_sha256",
+            "byte_start",
+            "byte_end"
+          ]
+        },
+        {
+          "id": "RS011-SMP-0005",
+          "fields": [
+            "file_sha256",
+            "byte_start",
+            "byte_end"
+          ]
+        }
+      ],
+      "preserved_ids": 654,
+      "source_closure_sha256": "8e649ff53ccd3b37f2724374e364cb73138cf0bd6c24b226aadd4bb77d74df06",
+      "ledger_sha256": "49fe1a437f370ef99c65b4fcefee00c6c9e54de7360dcf3eea0c22164b3c4f8f"
+    },
+    "gate_status": "NOT_READY",
+    "compiler_capture_status": "missing",
+    "independent_review_status": "pending",
+    "additive_current_authority": "This record binds the repaired current metadata. Prior source-authority author/review records remain historical exact-byte evidence and are not rewritten to claim these new source bytes.",
+    "ledger_site_count": 654,
+    "site_ids_added": 0,
+    "site_ids_removed": 0,
+    "changed_safety_comments": 0,
+    "changed_expression_digests": 0,
+    "compiler_review_statuses_promoted": 0
+  },
+  "regression": {
+    "path": "scripts/tests/test_s22_digest_companion.py",
+    "positive": "Exact a353 current root and active companion metadata must pass the actual build-surface audit.",
+    "negative": "Recreate the original consistent-but-stale ead manifest/checker binding in the established disposable surface fixture; actual audit.main must return1 and the exact original module-root-digest-drift stderr.",
+    "sha256": "286064272f9031afc9a3ef59d6d35155d65056a04680ca2652d52b84ec45587f",
+    "size": 2599
+  },
+  "resource_profile": {
+    "cpu_affinity": [
+      7
+    ],
+    "jobs": 1,
+    "address_space_limit_bytes": 2147483648,
+    "overall_seconds": 120,
+    "sequential": true,
+    "compiler": false,
+    "root": false,
+    "docker": false,
+    "network": false,
+    "git_writes": false,
+    "children": false
+  },
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/native_rust_build_surface_audit.py"
+      ],
+      "exit_code": 0,
+      "stdout": "native-rust-build-surface-audit: PASS modules=3 authorities=Kconfig,Kbuild\n",
+      "stderr": "",
+      "seconds": 0.744
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/rocky_rust_staging.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "Rocky Rust staging manifest integrity: PASS\nRocky Rust staging gate: NOT READY (4 blockers)\nBLOCKED: selected Rocky kernel source, toolchain, and config evidence is not gate-ready\nBLOCKED: upstream Rust-for-Linux sample has not built through this staging path\nBLOCKED: production namespace and import metadata has not been proven from built modules\nBLOCKED: zero-project-C final link manifests have not been captured\n",
+      "stderr": "",
+      "seconds": 1.33
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/ihk_native_lifecycle_check.py"
+      ],
+      "exit_code": 0,
+      "stdout": "ihk-native-lifecycle-check: PASS module=ihk version=1.7.0rc4 parameters=0 dependencies=0 artifact=not-supplied\n",
+      "stderr": "",
+      "seconds": 0.117
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/native_rust_unsafe_ffi_ledger.py",
+        "check"
+      ],
+      "exit_code": 0,
+      "stdout": "RS-011 source ledger verified: 55 inputs, 654 unsafe/FFI sites; gate_status=NOT_READY\n",
+      "stderr": "",
+      "seconds": 1.114
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-f",
+        "scripts.tests.test_rocky_rust_staging",
+        "scripts.tests.test_ihk_native_lifecycle_check",
+        "scripts.tests.test_native_rust_unsafe_ffi_ledger",
+        "scripts.tests.test_s22_digest_companion"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ".................................................................................................................................................\n----------------------------------------------------------------------\nRan 145 tests in 44.726s\n\nOK\n",
+      "seconds": 45.847
+    }
+  ],
+  "acceptance_delta": {
+    "native_builds": 0,
+    "guest_apps": 0,
+    "formal_application_cases": 0,
+    "production_gates": 0
+  },
+  "next_step": "Dispatcher independently reviews and integrates these exact four companion metadata files into the fd099-parent minimal candidate with the already accepted two-file type-path correction; run no further privileged attempt until this complete ordered source-check sequence passes and the new one-shot execution authority is issued.",
+  "test_summary": {
+    "passed": 145,
+    "new_regression_tests": 2,
+    "original_stale_root_negative_control": "PASS_EXPECTED_REFUSAL",
+    "all_five_ordered_commands_exit_zero": true
+  },
+  "current_files": [
+    {
+      "path": "host-kernel/kbuild/stage-manifest.json",
+      "sha256": "1d6da4db918016fbe11b98503e828049ecd821cfc6ebdb0600345fe04786eb8f",
+      "size": 17114,
+      "git_blob_sha1": "472262ed20e7b109de79127a7bc887937cb17bad"
+    },
+    {
+      "path": "scripts/rocky_rust_staging.py",
+      "sha256": "c9fe7bc9afb04e9acf943ab52760c451c2db3afd19ff9823a3ee937a9a553f2a",
+      "size": 97233,
+      "git_blob_sha1": "b8c3b00394c38d1af5c774ffe2ca56737150068d"
+    },
+    {
+      "path": "host-kernel/native-rust/ihk-mapping-foundation-contract-v1.json",
+      "sha256": "207202899e53c04943dad98e5c0499ccbcf1429f1c43adf4c6a5b9861ecf21c4",
+      "size": 11473,
+      "git_blob_sha1": "8ff57bb1cd3b4eed84a34dae7ba00ad4653b874c"
+    },
+    {
+      "path": "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json",
+      "sha256": "862f0c2c5c88bbd9bbef9571bae4103b4922bab079a0a111818178cdc5fdc7fa",
+      "size": 1362548,
+      "git_blob_sha1": "62fb6c342a3d4f124235831597f2fb77ad111e38"
+    }
+  ],
+  "current_files_sha256": {
+    "host-kernel/kbuild/stage-manifest.json": "1d6da4db918016fbe11b98503e828049ecd821cfc6ebdb0600345fe04786eb8f",
+    "scripts/rocky_rust_staging.py": "c9fe7bc9afb04e9acf943ab52760c451c2db3afd19ff9823a3ee937a9a553f2a",
+    "host-kernel/native-rust/ihk-mapping-foundation-contract-v1.json": "207202899e53c04943dad98e5c0499ccbcf1429f1c43adf4c6a5b9861ecf21c4",
+    "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json": "862f0c2c5c88bbd9bbef9571bae4103b4922bab079a0a111818178cdc5fdc7fa"
+  },
+  "additional_verification": {
+    "status": "PASS_EXACT_COMPANION_WHITELIST_AND_MAPPING_SOURCE_CONTRACT",
+    "files": [
+      {
+        "path": "host-kernel/kbuild/stage-manifest.json",
+        "sha256": "1d6da4db918016fbe11b98503e828049ecd821cfc6ebdb0600345fe04786eb8f",
+        "size": 17114,
+        "git_blob_sha1": "472262ed20e7b109de79127a7bc887937cb17bad"
+      },
+      {
+        "path": "scripts/rocky_rust_staging.py",
+        "sha256": "c9fe7bc9afb04e9acf943ab52760c451c2db3afd19ff9823a3ee937a9a553f2a",
+        "size": 97233,
+        "git_blob_sha1": "b8c3b00394c38d1af5c774ffe2ca56737150068d"
+      },
+      {
+        "path": "host-kernel/native-rust/ihk-mapping-foundation-contract-v1.json",
+        "sha256": "207202899e53c04943dad98e5c0499ccbcf1429f1c43adf4c6a5b9861ecf21c4",
+        "size": 11473,
+        "git_blob_sha1": "8ff57bb1cd3b4eed84a34dae7ba00ad4653b874c"
+      },
+      {
+        "path": "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json",
+        "sha256": "862f0c2c5c88bbd9bbef9571bae4103b4922bab079a0a111818178cdc5fdc7fa",
+        "size": 1362548,
+        "git_blob_sha1": "62fb6c342a3d4f124235831597f2fb77ad111e38"
+      }
+    ],
+    "regression": {
+      "path": "scripts/tests/test_s22_digest_companion.py",
+      "sha256": "286064272f9031afc9a3ef59d6d35155d65056a04680ca2652d52b84ec45587f",
+      "size": 2599
+    },
+    "immutable_records_unchanged": [
+      {
+        "path": "docs/verification/evidence/rs011-authority-20261017.json",
+        "sha256": "77c98238bb181b0bab2ee0915f386c9294441fb8d07692995b61a789e6172516",
+        "unchanged_from_baseline": true
+      },
+      {
+        "path": "docs/verification/evidence/rs011-authority-independent-review-20261017.json",
+        "sha256": "5457654a2b15bdf94e4edf5d163fd4eeb1192da6604996df8646d45328c33213",
+        "unchanged_from_baseline": true
+      }
+    ],
+    "production_root_unchanged": true,
+    "compiler_invoked": false
+  },
+  "immutable_records_unchanged": [
+    {
+      "path": "docs/verification/evidence/rs011-authority-20261017.json",
+      "sha256": "77c98238bb181b0bab2ee0915f386c9294441fb8d07692995b61a789e6172516",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "docs/verification/evidence/rs011-authority-independent-review-20261017.json",
+      "sha256": "5457654a2b15bdf94e4edf5d163fd4eeb1192da6604996df8646d45328c33213",
+      "unchanged_from_baseline": true
+    }
+  ],
+  "standing_runtime_policy": "After an actual reproducible native PASS, retain the exact immutable known-good control kernel/modules/toolchain/config/source and reuse the compatible unchanged artifact set across eligible new guest payloads; each case still requires its own frozen oracle, streams, logs and verified teardown. First new guest remains signal.mask-restore. No rebuild per unchanged eligible case is implied."
+}
