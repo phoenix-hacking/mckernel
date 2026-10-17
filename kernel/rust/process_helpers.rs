@@ -751,6 +751,7 @@ type ProcessThreadActionFn = unsafe extern "C" fn(*mut c_void);
 type ProcessThreadProcActionFn = unsafe extern "C" fn(*mut c_void, *mut c_void);
 type ProcessThreadTidActionFn = unsafe extern "C" fn(*mut c_void, *mut c_void, CInt);
 type ProcessVmActionFn = unsafe extern "C" fn(*mut c_void);
+type ProcessVmReleaseCheckedFn = unsafe extern "C" fn(*mut c_void) -> CInt;
 type ProcessMcsRwlockFn = unsafe extern "C" fn(CULong, *mut c_void);
 type ProcessAllocDebugregFn = unsafe extern "C" fn(*mut c_void) -> CInt;
 type ProcessPtraceTracemeLogFn = unsafe extern "C" fn(CInt, CInt, CULong, CInt);
@@ -5730,6 +5731,11 @@ pub unsafe extern "C" fn process_release_vm_bridge(vm: *mut c_void) {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn process_release_vm_checked_bridge(vm: *mut c_void) -> CInt {
+    release_process_vm_checked(vm.cast::<ProcessVm>())
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn process_flush_vm_bridge(vm: *mut c_void) {
     flush_nfo_tlb_mm(vm.cast::<ProcessVm>());
 }
@@ -9940,6 +9946,21 @@ pub unsafe extern "C" fn release_thread(thread: *mut Thread) {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn release_thread_checked(thread: *mut Thread) -> CInt {
+    process_release_thread_checked_body_result(
+        thread.cast(),
+        offset_of!(Thread, refcount) as CULong,
+        offset_of!(Thread, vm) as CULong,
+        offset_of!(Thread, proc) as CULong,
+        None,
+        Some(process_release_thread_profile_bridge),
+        Some(process_procfs_delete_thread_bridge),
+        Some(process_destroy_thread_bridge),
+        Some(process_release_vm_checked_bridge),
+    )
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn flush_process_memory(vm: *mut ProcessVm) {
     process_flush_memory_debug_bridge(vm.cast(), 0);
     let _ = process_flush_memory_body_result(
@@ -10025,6 +10046,35 @@ pub unsafe extern "C" fn release_process_vm(vm: *mut ProcessVm) {
         Some(process_policy_free_bridge),
         Some(process_free_vm_bridge),
     );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn release_process_vm_checked(vm: *mut ProcessVm) -> CInt {
+    process_release_vm_checked_body_result(
+        vm.cast(),
+        offset_of!(ProcessVm, refcount) as CULong,
+        offset_of!(ProcessVm, proc) as CULong,
+        offset_of!(Process, mckfd) as CULong,
+        offset_of!(Process, mckfd_lock) as CULong,
+        offset_of!(Mckfd, next) as CULong,
+        offset_of!(Mckfd, close_cb) as CULong,
+        offset_of!(ProcessVm, free_cb) as CULong,
+        offset_of!(ProcessVm, opt) as CULong,
+        offset_of!(ProcessVm, address_space) as CULong,
+        offset_of!(Process, pid) as CULong,
+        offset_of!(Process, vm) as CULong,
+        offset_of!(ProcessVm, vm_range_numa_policy_tree) as CULong,
+        offset_of!(VmRangeNumaPolicy, policy_rb_node) as CULong,
+        None,
+        Some(process_spin_lock_bridge),
+        Some(process_spin_unlock_bridge),
+        Some(process_flush_vm_bridge),
+        Some(process_free_all_ranges_bridge),
+        Some(process_detach_address_space_bridge),
+        Some(process_release_process_bridge),
+        Some(process_policy_free_bridge),
+        Some(process_free_vm_bridge),
+    )
 }
 
 #[no_mangle]
@@ -11198,5 +11248,125 @@ pub unsafe extern "C" fn process_release_vm_body_result(
         .cast::<RbRoot>();
     process_vm_policy_drain_free_result(policy_root, policy_node_offset, policy_free_fn);
     let _ = process_free_callback_result(vm, Some(free_vm_fn));
+    1
+}
+
+/// Additive final-destruction proof; legacy nonzero decrement policy is not
+/// suitable here. Every result consumes at most the one selected reference.
+/// Errors provide no retry or rollback authority over either input pointer.
+#[no_mangle]
+pub unsafe extern "C" fn process_release_thread_checked_body_result(
+    thread: *mut c_void,
+    refcount_offset: CULong,
+    vm_offset: CULong,
+    proc_offset: CULong,
+    dec_fn: Option<ProcessRefDecAndTestFn>,
+    profile_fn: Option<ProcessThreadProfileFn>,
+    procfs_delete_fn: Option<ProcessThreadActionFn>,
+    destroy_thread_fn: Option<ProcessThreadActionFn>,
+    release_vm_fn: Option<ProcessVmReleaseCheckedFn>,
+) -> CInt {
+    if thread.is_null() {
+        return -EINVAL;
+    }
+    let (Some(procfs_delete_fn), Some(destroy_thread_fn), Some(release_vm_fn)) =
+        (procfs_delete_fn, destroy_thread_fn, release_vm_fn)
+    else {
+        return -EINVAL;
+    };
+    // Cache both pointers before any decrement or destructive callback.
+    let vm = field_ptr(thread, vm_offset);
+    let proc = field_ptr(thread, proc_offset);
+    if vm.is_null() || proc.is_null() {
+        return -EINVAL;
+    }
+    match process_ref_dec_and_test_result(thread, refcount_offset, dec_fn) {
+        0 => return 0,
+        1 => {},
+        error if error < 0 => return error,
+        _ => return -EINVAL,
+    }
+    let _ = process_thread_profile_result(thread, proc, profile_fn);
+    procfs_delete_fn(thread);
+    destroy_thread_fn(thread);
+    // thread is dead. Only cached vm may be passed to the checked callback;
+    // vm may also become dead before the callback returns.
+    match release_vm_fn(vm) {
+        0 => 1,
+        1 => 2,
+        error if error < 0 => error,
+        _ => -EINVAL,
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_release_vm_checked_body_result(
+    vm: *mut c_void,
+    refcount_offset: CULong,
+    proc_offset: CULong,
+    proc_mckfd_offset: CULong,
+    proc_mckfd_lock_offset: CULong,
+    mckfd_next_offset: CULong,
+    mckfd_close_offset: CULong,
+    vm_free_cb_offset: CULong,
+    vm_opt_offset: CULong,
+    vm_address_space_offset: CULong,
+    proc_pid_offset: CULong,
+    proc_vm_offset: CULong,
+    vm_policy_tree_offset: CULong,
+    policy_node_offset: CULong,
+    dec_fn: Option<ProcessRefDecAndTestFn>,
+    lock_fn: Option<ProcessSpinLockFn>,
+    unlock_fn: Option<ProcessSpinUnlockFn>,
+    flush_fn: Option<ProcessVmActionFn>,
+    free_ranges_fn: Option<ProcessVmActionFn>,
+    detach_fn: Option<ProcessDetachAddressSpaceFn>,
+    release_process_fn: Option<ProcessReleaseProcessFn>,
+    policy_free_fn: Option<ProcessPolicyFreeFn>,
+    free_vm_fn: Option<ProcessFreeFn>,
+) -> CInt {
+    if vm.is_null() {
+        return -EINVAL;
+    }
+    let (Some(lock_fn), Some(unlock_fn), Some(flush_fn), Some(free_ranges_fn), Some(free_vm_fn)) =
+        (lock_fn, unlock_fn, flush_fn, free_ranges_fn, free_vm_fn)
+    else {
+        return -EINVAL;
+    };
+    if detach_fn.is_none() || release_process_fn.is_none() || policy_free_fn.is_none() {
+        return -EINVAL;
+    }
+    let proc = field_ptr(vm, proc_offset);
+    if proc.is_null() {
+        return -EINVAL;
+    }
+    match process_ref_dec_and_test_result(vm, refcount_offset, dec_fn) {
+        0 => return 0,
+        1 => {},
+        error if error < 0 => return error,
+        _ => return -EINVAL,
+    }
+    let lock_addr = (proc as CULong).wrapping_add(proc_mckfd_lock_offset);
+    let irqstate = process_spin_lock_result(lock_addr, Some(lock_fn));
+    let mckfd_head = field_ptr(proc, proc_mckfd_offset);
+    process_mckfd_close_all_result(mckfd_head, mckfd_next_offset, mckfd_close_offset);
+    let _ = process_spin_unlock_result(lock_addr, irqstate, Some(unlock_fn));
+
+    let free_cb = *(vm.cast::<u8>().wrapping_add(vm_free_cb_offset as usize)
+        .cast::<Option<ProcessVmFreeCallback>>());
+    if let Some(free_cb) = free_cb {
+        let opt = field_ptr(vm, vm_opt_offset);
+        free_cb(vm, opt);
+    }
+    flush_fn(vm);
+    free_ranges_fn(vm);
+    process_release_vm_detach_process_result(
+        vm, vm_address_space_offset, proc_offset, proc_pid_offset, proc_vm_offset,
+        detach_fn, release_process_fn,
+    );
+    let policy_root = vm.cast::<u8>().wrapping_add(vm_policy_tree_offset as usize).cast::<RbRoot>();
+    process_vm_policy_drain_free_result(policy_root, policy_node_offset, policy_free_fn);
+    free_vm_fn(vm);
+    // vm and proc may be freed. Return a literal scalar without another read.
     1
 }

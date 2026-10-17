@@ -493,6 +493,7 @@ void process_release_thread_profile_bridge(void *thread, void *proc)
 void process_procfs_delete_thread_bridge(void *thread);
 void process_destroy_thread_bridge(void *thread);
 void process_release_vm_bridge(void *vm);
+int process_release_vm_checked_bridge(void *vm);
 void process_flush_vm_bridge(void *vm);
 #else
 void process_procfs_delete_thread_bridge(void *thread)
@@ -508,6 +509,11 @@ void process_destroy_thread_bridge(void *thread)
 void process_release_vm_bridge(void *vm)
 {
 	release_process_vm(vm);
+}
+
+int process_release_vm_checked_bridge(void *vm)
+{
+	return release_process_vm_checked((struct process_vm *)vm);
 }
 
 void process_flush_vm_bridge(void *vm)
@@ -3541,6 +3547,37 @@ void release_process_vm(struct process_vm *vm)
 #endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
+int release_process_vm_checked(struct process_vm *vm)
+{
+	return process_release_vm_checked_body_result(vm,
+		__builtin_offsetof(struct process_vm, refcount),
+		__builtin_offsetof(struct process_vm, proc),
+		__builtin_offsetof(struct process, mckfd),
+		__builtin_offsetof(struct process, mckfd_lock),
+		__builtin_offsetof(struct mckfd, next),
+		__builtin_offsetof(struct mckfd, close_cb),
+		__builtin_offsetof(struct process_vm, free_cb),
+		__builtin_offsetof(struct process_vm, opt),
+		__builtin_offsetof(struct process_vm, address_space),
+		__builtin_offsetof(struct process, pid),
+		__builtin_offsetof(struct process, vm),
+		__builtin_offsetof(struct process_vm,
+				   vm_range_numa_policy_tree),
+		__builtin_offsetof(struct vm_range_numa_policy,
+				   policy_rb_node),
+		NULL,
+		process_spin_lock_bridge,
+		process_spin_unlock_bridge,
+		process_flush_vm_bridge,
+		process_free_all_ranges_bridge,
+		process_detach_address_space_bridge,
+		process_release_process_bridge,
+		process_policy_free_bridge,
+		process_free_vm_bridge);
+}
+#endif
+
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static int process_page_fault_process_vm_bridge(struct process_vm *vm,
 						unsigned long addr,
 						unsigned long reason)
@@ -3731,6 +3768,21 @@ void release_thread(struct thread *thread)
 		process_procfs_delete_thread_bridge,
 		process_destroy_thread_bridge,
 		process_release_vm_bridge);
+}
+#endif
+
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+int release_thread_checked(struct thread *thread)
+{
+	return process_release_thread_checked_body_result(thread,
+		__builtin_offsetof(struct thread, refcount),
+		__builtin_offsetof(struct thread, vm),
+		__builtin_offsetof(struct thread, proc),
+		NULL,
+		process_release_thread_profile_bridge,
+		process_procfs_delete_thread_bridge,
+		process_destroy_thread_bridge,
+		process_release_vm_checked_bridge);
 }
 #endif
 
