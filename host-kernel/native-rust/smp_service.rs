@@ -17,7 +17,7 @@ use super::{abi, BootCpu, MemoryMap, OwnedControlChannel, PreparedBoot, MAX_EXTE
 use core::{
     mem::offset_of,
     ptr,
-    sync::atomic::{AtomicBool, AtomicI32, AtomicU64, Ordering},
+    sync::atomic::{AtomicBool, AtomicI32, AtomicU64, AtomicU8, Ordering},
 };
 use kernel::{
     bindings,
@@ -703,11 +703,17 @@ unsafe extern "C" fn run(data: *mut core::ffi::c_void) -> i32 {
     0
 }
 
+const THREAD_CREATED: u8 = 0;
+const THREAD_ACTIVATING: u8 = 1;
+const THREAD_ACTIVE: u8 = 2;
+const THREAD_JOINING: u8 = 3;
+const THREAD_JOINED: u8 = 4;
+
 struct Thread {
     task: *mut bindings::task_struct,
     entry: *mut Entry,
     entered: Arc<AtomicBool>,
-    activated: AtomicBool,
+    lifecycle: AtomicU8,
 }
 
 // SAFETY: The private task pointer is used only for once-only wake and joined
@@ -751,30 +757,81 @@ impl Thread {
                 task,
                 entry,
                 entered,
-                activated: AtomicBool::new(false),
+                lifecycle: AtomicU8::new(THREAD_CREATED),
             },
             GFP_KERNEL,
         )?)
     }
 
     fn activate(&self) {
-        if !self.activated.swap(true, Ordering::AcqRel) {
-            // SAFETY: This owned task remains stopped/live until joined Drop.
+        if self
+            .lifecycle
+            .compare_exchange(
+                THREAD_CREATED,
+                THREAD_ACTIVATING,
+                Ordering::AcqRel,
+                Ordering::Acquire,
+            )
+            .is_ok()
+        {
+            // SAFETY: ACTIVATING excludes joining until wake_up_process returns.
+            // No stop caller can retire this task while its pointer is in use.
             unsafe { bindings::wake_up_process(self.task) };
+            self.lifecycle.store(THREAD_ACTIVE, Ordering::Release);
+        }
+    }
+
+    /// Sleepable, synchronous Linux join. Caller must hold no CPU, memory,
+    /// tree, transport or service lock needed by this callback. Peer-stop and
+    /// callback cancellation must precede a started service's explicit join.
+    /// This does not bound a blocked worker or grant permission to drop any
+    /// physical owners: future procfs/application rundown is still required.
+    fn stop_join(&self) {
+        loop {
+            let state = self.lifecycle.load(Ordering::Acquire);
+            match state {
+                THREAD_JOINED => return,
+                THREAD_CREATED | THREAD_ACTIVE => {
+                    if self
+                        .lifecycle
+                        .compare_exchange(
+                            state,
+                            THREAD_JOINING,
+                            Ordering::AcqRel,
+                            Ordering::Acquire,
+                        )
+                        .is_err()
+                    {
+                        continue;
+                    }
+                    // SAFETY: JOINING is the unique join owner and excludes
+                    // activation. The borrowed Thread retains its context until
+                    // Linux confirms this callback can never access it again.
+                    unsafe { bindings::kthread_stop(self.task) };
+                    if !self.entered.load(Ordering::Acquire) {
+                        // SAFETY: Joined task never entered/took this Box. Only
+                        // the unique JOINING owner can reclaim it in that case.
+                        unsafe { drop(Box::from_raw(self.entry)) };
+                    }
+                    self.lifecycle.store(THREAD_JOINED, Ordering::Release);
+                    return;
+                }
+                THREAD_ACTIVATING | THREAD_JOINING => {
+                    // SAFETY: Sleepable owner context; the callback never takes
+                    // this gate. A concurrent activator/joiner retains Thread.
+                    unsafe { bindings::msleep(1) };
+                }
+                _ => unreachable!("invalid continuing worker lifecycle"),
+            }
         }
     }
 }
 
 impl Drop for Thread {
     fn drop(&mut self) {
-        // SAFETY: This is the unique final task owner. Joining precedes any
-        // callback context reclamation. Started storage currently retains it
-        // until a real peer-stop and remote callback drain can be implemented.
-        unsafe { bindings::kthread_stop(self.task) };
-        if !self.entered.load(Ordering::Acquire) {
-            // SAFETY: Joined Linux task never entered, so never took its Box.
-            unsafe { drop(Box::from_raw(self.entry)) };
-        }
+        // Prepublication rollback and final destruction share the same join
+        // gate as explicit stop; an earlier join must never stop/free twice.
+        self.stop_join();
     }
 }
 
@@ -787,6 +844,26 @@ pub(in super::super) struct Started {
 }
 
 impl Started {
+    /// Unwired stage only: no producer of PeerStopped exists yet. Its future
+    /// producer must bind the active serialized shutdown and boot epoch, not
+    /// merely a reusable OS generation. Never call under resource/service
+    /// locks: workers acquire CPU/transport/tree locks and can block in RPCs.
+    /// Runtime, trees, channels and every mapping owner remain retained here.
+    #[allow(dead_code)]
+    pub(super) fn stop_workers_after_peer_stop(
+        &self,
+        proof: &super::super::sysfs_remote::PeerStopped<'_>,
+    ) -> Result {
+        self.runtime.remote.shutdown_after_peer_stop(proof)?;
+        self.packets.stop_join();
+        self.metadata.stop_join();
+        self.zeroing.stop_join();
+        if !self.runtime.remote.shutdown_drained(proof)? {
+            return Err(EBUSY);
+        }
+        Ok(())
+    }
+
     pub(super) fn require_ready(&self) -> Result {
         let error = self.runtime.error.load(Ordering::Acquire);
         if error != 0 {

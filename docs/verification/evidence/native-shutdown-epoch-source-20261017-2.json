@@ -1,0 +1,207 @@
+{
+  "task_id": "native-shutdown-epoch-source-20261017-2",
+  "status": "PASS_SOURCE_UNWIRED_REQUIRES_INDEPENDENT_REVIEW",
+  "supersedes_current_candidate_report": "evidence/native-shutdown-epoch-source-20261017-1.json",
+  "report1_preserved_sha256": "5a391a312edd8c6832b9f115a91868313185ecd7c3ad27051cb233f8adfe3be1",
+  "change": "Independent review identified elided PeerStopped lifetime in actual Started stop signature under production rust_2018_idioms lint. One bounded integration correction: explicit <'_> in that signature only; fixture now consumes actual Started struct and stop_workers_after_peer_stop body under -Wrust_2018_idioms -Dwarnings.",
+  "source_and_test_inputs": [
+    {
+      "path": "host-kernel/native-rust/smp_memory.rs",
+      "sha256": "374e397db63fe79ebf3290c68c4be9111d83932888b1e8b7db5e8a2404a8b659",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-inputs/smp_memory.rs"
+    },
+    {
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "sha256": "a3a2db7fbfc2e73cf0aee2a950131128e4776075fbd4d6115eb46ad528d6fa45",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-inputs/smp_cpu.rs"
+    },
+    {
+      "path": "host-kernel/native-rust/sysfs_remote.rs",
+      "sha256": "a4fd15f2393493f081371ea22bb84092a95558cd19087e2c7a79da7b1c5a552d",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-inputs/sysfs_remote.rs"
+    },
+    {
+      "path": "scripts/tests/test_sysfs_remote_shutdown_20261017.py",
+      "sha256": "94010b6dbde2d9ce1514741976b063771ae648898cee38ee32ade5d1772c19fa",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-inputs/test_sysfs_remote_shutdown_20261017.py"
+    },
+    {
+      "path": "scripts/tests/fixtures/sysfs_remote_shutdown_20261017.rs",
+      "sha256": "1f2c388f23fecf3c09f443152dfc3c8d7ce71ed49fa35ce3565bb9e12f44f1a3",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-inputs/sysfs_remote_shutdown_20261017.rs"
+    },
+    {
+      "path": "scripts/tests/test_native_shutdown_epoch_source_20261017_1.py",
+      "sha256": "8a09da48df85a1548212ef6fda18a606851f93ec2c159d3ff3125f76cd861ceb",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-inputs/test_native_shutdown_epoch_source_20261017_1.py"
+    },
+    {
+      "path": "scripts/tests/fixtures/native_shutdown_epoch_source_20261017_1.rs",
+      "sha256": "7743e2cd4813abe3e955a45bd91e0aabff66b4de10b14f3126757efc560dede2",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-inputs/native_shutdown_epoch_source_20261017_1.rs"
+    },
+    {
+      "path": "host-kernel/native-rust/smp_service.rs",
+      "sha256": "69eef654f7258acd079a8a0dc3788330fb8a512a57522fdf181c940f469f63bc",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-inputs/smp_service.rs"
+    }
+  ],
+  "tests": {
+    "python_checks": 9,
+    "rust_actual_body_cases": 25,
+    "compile_rejection_controls": 5,
+    "result": "PASS exit0",
+    "controls": [
+      "escaped claim E0521",
+      "escaped proof E0515",
+      "original elided production service lifetime rejected under production lint flags",
+      "RetainedCpuDevice Send E0277",
+      "CpuDevice Send E0277"
+    ],
+    "preserved_cases": "All original six epoch scenarios, four Remote semantic cases and fifteen CPU journal cases retained",
+    "lint_profile": "new epoch and Remote generated fixtures --edition=2021 --test -Wrust_2018_idioms -Dwarnings; original CPU regression unchanged",
+    "resource_profile": "CPU7 one job RLIMIT_AS=1GiB, private HOME/TMPDIR, known Python/Rust1.92, no root/Docker/build/guest",
+    "raw_results": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-epoch/actual.rs",
+        "sha256": "412f8441112e715eb94273374d117723dea380471d9c9ee546afb20f18ce74ca"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-epoch/compile.status",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-epoch/compile.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-epoch/compile.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-epoch/elided-service-lifetime.rs",
+        "sha256": "ba5bb5d09f01d4293009d510a64eb8d49c794f20e77f378a309f15ce05f67dcc"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-epoch/elided-service-lifetime.status",
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-epoch/elided-service-lifetime.stderr",
+        "sha256": "cb161841537cca53af1b77fca6dd8723bc3c760fb6348ccd08366e8481ddfa53"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-epoch/escape-claim.rs",
+        "sha256": "f6205aeb7b989e9305677e1d91beace3771cca192b26811f499d4f9c02565816"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-epoch/escape-claim.status",
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-epoch/escape-claim.stderr",
+        "sha256": "7b3dbf7f31a4cfa420ef98b80d6983c8bb07befa383065836d5020e2373d4583"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-epoch/escape-proof.rs",
+        "sha256": "995da9a48bbfb57470954debbdaa07a31da62f1ca360746f61112bcf06e0ffb3"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-epoch/escape-proof.status",
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-epoch/escape-proof.stderr",
+        "sha256": "6467d6104dcdd4dbe18d81c9497f23a51f123a852b4e7cc6d16bf1b599d998c9"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-epoch/run.status",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-epoch/run.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-epoch/run.stdout",
+        "sha256": "5e118e65698f69fd6f60bc1646d5532c8be7b05c01f26431fd4490f9a53f9ab7"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-remote/actual.rs",
+        "sha256": "f1642389a247039df0ad54ccf340cba02db95642a541eb4553a999b4c6d7bfbe"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-remote/compile.status",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-remote/compile.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-remote/compile.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-remote/run.status",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-remote/run.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-remote/run.stdout",
+        "sha256": "69acc3303a3cf32bc6c932c7b9039d0e5945c98f94189ce367a674dd49f58e3e"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-suite.stdout",
+        "sha256": "c19ee64089dbdadc323a2bc8f61d5471bef7630433524e7d0ed1c318824f08cb"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-suite.stderr",
+        "sha256": "69f164d64e51bf3bbbca2c058eab71c29db1bd278cc66e9e1d321706b406edae"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction-suite.status",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/lint-correction.diff",
+        "sha256": "7fcb4fe62c911c29714155ea536f631c9e0cbde93091f45f09114b49c36c7d56"
+      }
+    ]
+  },
+  "failure_families": [
+    {
+      "family": "fixture compile adapter",
+      "errors": [
+        "E0624 fixture OsToken methods private",
+        "unused fixture imports under Dwarnings"
+      ],
+      "production_failure": false,
+      "bounded_correction": "Expose fixture-only OsToken accessors to sibling modules and remove unused import; attempt2 PASS",
+      "raw_path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt1"
+    },
+    {
+      "family": "new scoped type integration / production lint",
+      "observed_by": "independent reviewer image_retirement_review",
+      "failure": "Missing explicit PeerStopped lifetime in actual smp_service.rs signature; previous Started adapter omitted this boundary",
+      "bounded_correction": "Single authorized signature fix; actual Started body consumed with production lint flags and negative control reproduces old rejected signature",
+      "result": "PASS; no second correction"
+    }
+  ],
+  "unchanged_production_scope": [
+    "smp_memory.rs source374e397db63fe79ebf3290c68c4be9111d83932888b1e8b7db5e8a2404a8b659",
+    "smp_cpu.rs sourcea3a2db7fbfc2e73cf0aee2a950131128e4776075fbd4d6115eb46ad528d6fa45",
+    "sysfs_remote.rs sourcea4fd15f2393493f081371ea22bb84092a95558cd19087e2c7a79da7b1c5a552d"
+  ],
+  "limitations": [
+    "UNWIRED: ihk_smp_x86_64.rs and frozen Running/log package unchanged",
+    "No actual native module build, hardware reset, application/guest or native lifecycle acceptance",
+    "Physical mappings, procfs/pager/zeroing claims and Linux callback owners remain retained; no callback-drain or physical-release proof",
+    "Future logical commit must consume/revalidate the same live claim; current unscoped finish is deliberately blocked during active claim",
+    "Backend operation/module lease remains a documented caller prerequisite; no new provider callback signature edited"
+  ],
+  "next": "Consolidated independent review; no provider wiring or heavy build until dispatcher releases exact candidate after first package native lifecycle feedback."
+}

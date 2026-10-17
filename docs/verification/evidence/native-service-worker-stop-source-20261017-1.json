@@ -1,0 +1,142 @@
+{
+  "task_id": "native_service_worker_stop",
+  "status": "READY_FOR_INDEPENDENT_SOURCE_REVIEW_UNWIRED",
+  "changed_paths": [
+    "host-kernel/native-rust/smp_service.rs",
+    "scripts/tests/test_native_service_worker_stop_20261017.py",
+    "scripts/tests/fixtures/native_service_worker_stop_20261017.rs"
+  ],
+  "sources": [
+    {
+      "path": "host-kernel/native-rust/smp_service.rs",
+      "sha256": "2c3712258b0a8de8b5dee6d27c2c4e5d3ca1be6b712fb0f79df42af9d4bc9a7f",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/smp_service.rs"
+    },
+    {
+      "path": "scripts/tests/test_native_service_worker_stop_20261017.py",
+      "sha256": "69f1f258610daa5144276c1a62918cb4526aa062143d55532bf4b34c65e36ecd",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/test_native_service_worker_stop_20261017.py"
+    },
+    {
+      "path": "scripts/tests/fixtures/native_service_worker_stop_20261017.rs",
+      "sha256": "1a1eb4ee970ee2e00f7e27c3702f9c2df0798d36f0a0b62210589c558ef7df8a",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/native_service_worker_stop_20261017.rs"
+    }
+  ],
+  "frozen_remote_sha256": "2e640d0483321985f55e7d8f3b154ad6f90d07df71fb974afe305e744d7c8c5e",
+  "api": [
+    "Private Thread::stop_join(&self), shared by explicit stop and Drop",
+    "Unwired Started::stop_workers_after_peer_stop(&PeerStopped) -> Result"
+  ],
+  "invariants": [
+    "Atomic lifecycle CREATED->ACTIVATING->ACTIVE->JOINING->JOINED excludes wake-vs-join pointer races",
+    "Only successful JOINING CAS owner calls kthread_stop; other callers wait and final Drop observes joined",
+    "Entered callback claims Entry Box; unentered Entry reclaimed only by joined unique stop owner",
+    "Thread and callback Runtime owner retained across concurrent join; Release/Acquire publishes finished join",
+    "Unwired Started stage closes/wakes reviewed Remote before joining and holds no acquired resource/service locks",
+    "No Tree/channel/page/IRQ/CPU/procfs physical owner release, no finish_shutdown guard change, no production PeerStopped constructor",
+    "Future proof producer must bind active serialized shutdown lifetime and boot epoch in addition to owner identity"
+  ],
+  "checks": {
+    "attempt": 1,
+    "result": "PASS",
+    "python_unittest": "1 passed",
+    "rust_tests": "5 passed; 0 failed",
+    "compiler": "rustc1.92 --edition=2021 --test -Dwarnings",
+    "actual_bodies": [
+      "Entry",
+      "run",
+      "Thread::activate",
+      "Thread::stop_join",
+      "Thread::drop"
+    ],
+    "substituted_boundaries": [
+      "task allocation/creation (Thread::new not executed)",
+      "Linux scheduler/task stop/should_stop with std threads",
+      "Runtime service work with controlled lock boundary"
+    ],
+    "tests": [
+      "unentered context reclaimed exactly once, repeated stop/Drop inert",
+      "actual callback entry/ownership each worker role",
+      "concurrent join retains Thread/Runtime while callback blocked; callback progresses when work lock released",
+      "activation in progress excludes join and later activation inert",
+      "final Drop joins never-entered task"
+    ],
+    "profile": "CPU7; AS1GiB; CPU150; nofile256; fsize64MiB; core0; wall180; one job; explicit Python3.9; minimal PATH; private HOME/TMPDIR; no nproc cap",
+    "command_record": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/command.json"
+  },
+  "limitations": [
+    "kthread_stop is synchronous and may block indefinitely if worker blocked elsewhere; no timeout or complete service retirement claimed",
+    "std synchronization/task boundary tests do not execute Linux kernel task lifetime, sysfs/procfs callback removal or hardware",
+    "Started staged method source reviewed in this lane but not executed as full production Runtime fixture",
+    "Independent review and dispatcher integration/build/fresh native stop guest still required"
+  ],
+  "blocker": "No component blocker. Full retirement requires reviewed epoch-bound CPU/IRQ proof, procfs/application/pager/ledger drain and callback removal outside dependent locks.",
+  "next_task": "Independent ownership review of exact source and five tests; keep this WIP excluded from current Running/log candidate. Later separately implement proof producer and complete rundown.",
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/attempt1/actual",
+      "sha256": "b4713eec7f5c5b18a992bd670ce143ef6e1052adee45764687892951bc6b3269"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/attempt1/actual.rs",
+      "sha256": "951ddbaad83cd0d2c0eafca233c09614512f44f919bbc35462228af381923b19"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/attempt1/compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/attempt1/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/attempt1/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/attempt1/run.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/attempt1/run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/attempt1/run.stdout",
+      "sha256": "ce915688e3e5f4f8ef86a86933750ba10e8f171f3a38b32340190817cfbfc0fa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/command.json",
+      "sha256": "939e2b234525dc15e8474a92baece72d11bc90086580b9ee4015853f140d33dc"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/native_service_worker_stop_20261017.rs",
+      "sha256": "1a1eb4ee970ee2e00f7e27c3702f9c2df0798d36f0a0b62210589c558ef7df8a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/service.diff",
+      "sha256": "8a3e2fc094715a6b32cc9613436d12dae51a207c97304d973acd33f0d37f4147"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/smp_service.rs",
+      "sha256": "2c3712258b0a8de8b5dee6d27c2c4e5d3ca1be6b712fb0f79df42af9d4bc9a7f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/stderr",
+      "sha256": "dc0120d79983b6970e1d991795551c260d1f856fd89df5b43d3a94561febd74d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/stdout",
+      "sha256": "ff54888d28b03a86e6249ecaffbc8bdc6643c3a3e0f126a71bf8512343968600"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-service-worker-stop-source-20261017-1/test_native_service_worker_stop_20261017.py",
+      "sha256": "69f1f258610daa5144276c1a62918cb4526aa062143d55532bf4b34c65e36ecd"
+    }
+  ]
+}

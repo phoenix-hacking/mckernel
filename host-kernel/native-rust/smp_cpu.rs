@@ -487,6 +487,8 @@ enum ShutdownCpuFailureStage {
 struct ShutdownCpuJournal {
     owner_slot: u32,
     owner_generation: u64,
+    // Zero belongs to the old unscoped adapter and cannot mint a peer proof.
+    boot_epoch: u64,
     cpu: u32,
     apic_id: u32,
     numa_node: u32,
@@ -508,6 +510,7 @@ impl ShutdownCpuJournal {
         Self {
             owner_slot: 0,
             owner_generation: 0,
+            boot_epoch: 0,
             cpu: 0,
             apic_id: 0,
             numa_node: 0,
@@ -533,6 +536,7 @@ impl ShutdownCpuJournal {
         *self = Self {
             owner_slot: owner.slot(),
             owner_generation: owner.generation(),
+            boot_epoch: 0,
             cpu: cpu as u32,
             apic_id: snapshot.hardware_id,
             numa_node: snapshot.numa_node,
@@ -965,6 +969,46 @@ impl CpuContext {
                 ));
             }
             self.shutdown_journal[index].online();
+        }
+        Ok(())
+    }
+
+    /// The only producer path for StoppedCpus. Existing unscoped journals,
+    /// stale generations and a same-generation different boot cannot qualify.
+    #[allow(dead_code)]
+    fn reset_shutdown_boot(
+        &mut self,
+        boot: &super::smp_memory::ShutdownBoot,
+        hotplug: &DeviceHotplugGuard,
+    ) -> Result {
+        let owner = boot.owner();
+        if !boot.matches_owner(owner) { return Err(EIO); }
+        if self.shutdown_journal.iter().any(|record| record.recorded
+            && (!record.matches_owner(owner) || record.boot_epoch != boot.epoch_id())) {
+            return Err(EIO);
+        }
+        let result = self.shutdown_reset_and_reonline(owner, hotplug);
+        // Bind even a partial first attempt: a later bounded recovery must
+        // retain that same boot epoch rather than adopt an owner-only journal.
+        for record in &mut self.shutdown_journal {
+            if record.matches_owner(owner) && record.boot_epoch == 0 {
+                record.boot_epoch = boot.epoch_id();
+            }
+        }
+        result?;
+        let count = self.table.assigned_cpus(owner, &mut self.requests).map_err(|_| EIO)?;
+        if count == 0 || self.shutdown_journal.iter().filter(|record| record.recorded).count() != count {
+            return Err(EIO);
+        }
+        let read = CpuReadGuard::lock();
+        for index in 0..count {
+            let record = self.shutdown_journal[index];
+            if record.boot_epoch != boot.epoch_id() || !record.reset_attempted || !record.online
+                || !record.online_attempted || record.online_status != 0
+                || record.cpu as usize != self.requests[index] {
+                return Err(EIO);
+            }
+            self.validate_shutdown_target(owner, record, true, &read, hotplug)?;
         }
         Ok(())
     }
@@ -1475,6 +1519,56 @@ pub(super) fn shutdown_reset_and_reonline_outcome(
         }
         Err(error) => Err(ShutdownResetFailure::PreEffect(error)),
     }
+}
+
+/// Private-field witness, borrowed only inside with_shutdown_workers_stopped.
+/// It is never Clone/Copy and cannot be created from an OsToken or errno.
+#[allow(dead_code)]
+pub(super) struct StoppedCpus<'boot> {
+    boot: &'boot super::smp_memory::ShutdownBoot,
+}
+
+#[allow(dead_code)]
+impl StoppedCpus<'_> {
+    pub(super) fn matches_owner(&self, owner: OsToken) -> bool { self.boot.matches_owner(owner) }
+    pub(super) fn matches_boot(&self, boot: &super::smp_memory::ShutdownBoot) -> bool {
+        self.boot.same_epoch(boot)
+    }
+}
+
+/// UNWIRED prerequisite: the serialized IHK shutdown callback must own the
+/// exact operation/module lease. This API keeps one boot claim live through
+/// IRQ sender/drain proof, exact reset/re-online, lock-free worker joins and
+/// subsequent retirement work. It does not release pages, callbacks or maps.
+/// Its higher-ranked scope prevents references to the claim escaping as a
+/// return value; the only peer witness is local and never reaches the caller.
+#[allow(dead_code)]
+pub(super) fn with_shutdown_workers_stopped(
+    owner: OsToken,
+    operation: impl for<'boot> FnOnce(&'boot super::smp_memory::ShutdownBoot) -> Result,
+) -> Result {
+    let boot = super::smp_memory::claim_shutdown_boot(owner)?;
+    super::smp_memory::shutdown_close_irq_senders(owner).map_err(|failure| match failure {
+        super::smp_memory::ShutdownIrqFailure::PreEffect(error)
+        | super::smp_memory::ShutdownIrqFailure::PostEffect(error) => error,
+    })?;
+    boot.revalidate()?;
+    {
+        let published = PUBLISHED.load(Ordering::Acquire);
+        if published.is_null() { return Err(ENODEV); }
+        // SAFETY: The synchronous backend lease and boot claim retain the
+        // controller. No guard or journal borrow escapes this short scope.
+        let mut guard = unsafe { &*published }.lock();
+        let hotplug = DeviceHotplugGuard::lock();
+        guard.reset_shutdown_boot(&boot, &hotplug)?;
+    }
+    // All CPU/memory/hotplug guards are gone before any worker can be joined.
+    boot.revalidate()?;
+    let cpus = StoppedCpus { boot: &boot };
+    let proof = super::sysfs_remote::PeerStopped::after_reset(&cpus);
+    boot.stop_workers(&proof)?;
+    operation(&boot)?;
+    boot.revalidate()
 }
 
 pub(super) fn reconcile_shutdown(owner: OsToken) -> Result {

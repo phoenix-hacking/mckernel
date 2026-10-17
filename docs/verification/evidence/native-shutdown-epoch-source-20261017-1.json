@@ -1,0 +1,309 @@
+{
+  "task_id": "native-shutdown-epoch-source-20261017-1",
+  "status": "PASS_SOURCE_UNWIRED_REQUIRES_INDEPENDENT_REVIEW",
+  "scope": "Unique active boot-epoch claim, actual reset journal binding, scoped peer-stop witness and joins outside dependent locks; no provider wiring or resource release",
+  "production_files": [
+    "host-kernel/native-rust/smp_memory.rs",
+    "host-kernel/native-rust/smp_cpu.rs",
+    "host-kernel/native-rust/sysfs_remote.rs"
+  ],
+  "source_and_test_inputs": [
+    {
+      "path": "host-kernel/native-rust/smp_memory.rs",
+      "sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/smp_memory.rs",
+      "current_sha256": "374e397db63fe79ebf3290c68c4be9111d83932888b1e8b7db5e8a2404a8b659",
+      "current_snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-inputs/smp_memory.rs"
+    },
+    {
+      "path": "host-kernel/native-rust/smp_cpu.rs",
+      "sha256": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/smp_cpu.rs",
+      "current_sha256": "a3a2db7fbfc2e73cf0aee2a950131128e4776075fbd4d6115eb46ad528d6fa45",
+      "current_snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-inputs/smp_cpu.rs"
+    },
+    {
+      "path": "host-kernel/native-rust/sysfs_remote.rs",
+      "sha256": "2e640d0483321985f55e7d8f3b154ad6f90d07df71fb974afe305e744d7c8c5e",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/sysfs_remote.rs",
+      "current_sha256": "a4fd15f2393493f081371ea22bb84092a95558cd19087e2c7a79da7b1c5a552d",
+      "current_snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-inputs/sysfs_remote.rs"
+    },
+    {
+      "path": "scripts/tests/test_sysfs_remote_shutdown_20261017.py",
+      "sha256": "bb78280a1b8d2d361fa9e4511c04d2293d434c80528575990b242ced945db8b0",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/test_sysfs_remote_shutdown_20261017.py",
+      "current_sha256": "d4a1635b92860688d9b2e95c8d0f896c8c330462fd435ad3483cc28461b000ae",
+      "current_snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-inputs/test_sysfs_remote_shutdown_20261017.py"
+    },
+    {
+      "path": "scripts/tests/fixtures/sysfs_remote_shutdown_20261017.rs",
+      "sha256": "e28130b1bae39d99ad7173653e25152495b08d8a8a09c1cfe4b711ab3825006d",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/sysfs_remote_shutdown_20261017.rs",
+      "current_sha256": "1f2c388f23fecf3c09f443152dfc3c8d7ce71ed49fa35ce3565bb9e12f44f1a3",
+      "current_snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-inputs/sysfs_remote_shutdown_20261017.rs"
+    },
+    {
+      "path": "scripts/tests/test_native_shutdown_epoch_source_20261017_1.py",
+      "sha256": "1be03830bc7743a32acf9dc58cf45a4185ff88bed0e6aff955de0e81e2c219e5",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-inputs/test_native_shutdown_epoch_source_20261017_1.py",
+      "new": true
+    },
+    {
+      "path": "scripts/tests/fixtures/native_shutdown_epoch_source_20261017_1.rs",
+      "sha256": "5209286ad46204405e90a7124abfe71c089381850bc8c6f3be0325fe606fc1ff",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-inputs/native_shutdown_epoch_source_20261017_1.rs",
+      "new": true
+    }
+  ],
+  "invariants": [
+    "Boot epoch IDs do not wrap/repeat; BootStorage and live ShutdownBoot retain exact epoch Arc identity",
+    "Only one active ShutdownBoot claim; ordinary boot/application admission rejected once stopping starts; failed drop retains closed admission",
+    "CPU journal must bind exact OS generation and boot epoch; legacy zero-epoch records cannot be adopted",
+    "PeerStopped constructor requires private-field StoppedCpus produced after complete actual reset/re-online journal validation and exact boot IRQ sender/drain validation",
+    "CPU/hotplug/memory guards are gone before Started worker stop/join; exact epoch revalidated before and after stop and after scoped retirement callback",
+    "Borrowed peer proof and callback claim cannot escape scoped transaction; ended-transaction proof fails epoch-active validation",
+    "Existing continuing/sysfs terminal EBUSY release guard remains; existing unscoped finish additionally rejects a live claim; mappings/ledgers/callback owners retained"
+  ],
+  "tests": {
+    "final_suite_python_checks": 9,
+    "new_epoch_actual_body_cases": 6,
+    "existing_remote_cases_preserved": 4,
+    "existing_cpu_actual_body_cases": 15,
+    "compile_fail_controls": [
+      "escaped claim E0521",
+      "escaped PeerStopped E0515",
+      "RetainedCpuDevice Send E0277",
+      "CpuDevice Send E0277"
+    ],
+    "result": "PASS exit 0; 25 Rust actual-body cases total, 4 compile rejection controls",
+    "command": "taskset -c 7 env HOME=<scratch>/home TMPDIR=<scratch>/tmp PATH=/usr/bin:/bin PYTHONDONTWRITEBYTECODE=1 MCKERNEL_SHUTDOWN_TEST_OUTPUT=<scratch>/final-remote MCKERNEL_SHUTDOWN_EPOCH_OUTPUT=<scratch>/final-epoch MCKERNEL_RUSTC_1_92=/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc /home/holden/anaconda3/bin/python3 -m unittest scripts.tests.test_native_shutdown_epoch_source_20261017_1.ShutdownEpochTests scripts.tests.test_sysfs_remote_shutdown_20261017.SysfsRemoteShutdownTests scripts.tests.test_shutdown_cpu_reclaim.ShutdownCpuReclaimTests",
+    "profile": {
+      "cpu": 7,
+      "jobs": 1,
+      "rlimit_as_bytes": 1073741824,
+      "root": false,
+      "docker": false,
+      "heavy_build": false,
+      "guest": false
+    },
+    "first_attempt_failure": {
+      "family": "fixture compile adapter",
+      "errors": [
+        "E0624 fixture OsToken methods private",
+        "unused fixture imports under Dwarnings"
+      ],
+      "production_failure": false,
+      "bounded_correction": "Expose fixture-only OsToken accessors to sibling modules and remove unused import; attempt2 PASS",
+      "raw_path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt1"
+    }
+  },
+  "predecessor": {
+    "remote_source_sha256": "2e640d0483321985f55e7d8f3b154ad6f90d07df71fb974afe305e744d7c8c5e",
+    "existing_remote_case_count": 4,
+    "scope": "Prior independently reviewed cancellation bodies preserved except scoped proof identity checking; old scalar proof fabrication removed from fixture"
+  },
+  "limitations": [
+    "UNWIRED: ihk_smp_x86_64.rs and frozen Running/log package unchanged",
+    "No actual native module build, hardware reset, application/guest or native lifecycle acceptance",
+    "Physical mappings, procfs/pager/zeroing claims and Linux callback owners remain retained; no callback-drain or physical-release proof",
+    "Future logical commit must consume/revalidate the same live claim; current unscoped finish is deliberately blocked during active claim",
+    "Backend operation/module lease remains a documented caller prerequisite; no new provider callback signature edited"
+  ],
+  "next_executable_observation": "Independent source/ownership review of these exact files and evidence; integrate only after applicable execution release. Frozen first Running/log candidate proceeds independently.",
+  "raw_results": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt1/actual.rs",
+      "sha256": "4a351b95f44fea1e4e497c4e5eb050f7e53754f96a649db3c20f29618f868903"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt1/compile.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt1/compile.stderr",
+      "sha256": "185e5e9653f294c9db8d5e770d8332c135f54396937b8356165e40ecda6ed446"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt1/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt2/actual.rs",
+      "sha256": "12577a5ef91c920c7787ebff7ca756c717e6a9d56cb1bdf0db578904c83b40c0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt2/compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt2/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt2/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt2/escape-claim.rs",
+      "sha256": "a87eee391ae3403a6ceab2fddea07717f79afad51d351d690bb30bf81695e9db"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt2/escape-claim.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt2/escape-claim.stderr",
+      "sha256": "abcd68e936e2c11ab5f20a256bee251b0cd96f2a2aa6b5e24eeca66e18053b6b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt2/escape-proof.rs",
+      "sha256": "f24f07e32c7c6d13317f5363a61d4fb5bddcb8886d60e0aeac8780a7b3194158"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt2/escape-proof.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt2/escape-proof.stderr",
+      "sha256": "33e64061671bd790afb95f7e3c284447dcf366f0f617edaee5284bb0d0eacabb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt2/run.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt2/run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/attempt2/run.stdout",
+      "sha256": "5e118e65698f69fd6f60bc1646d5532c8be7b05c01f26431fd4490f9a53f9ab7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/remote-compatibility1/actual.rs",
+      "sha256": "bd1ca4ef3aab6b339a4109d3b37b1f05848d0b3dca1c40506145c5c354c7746e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/remote-compatibility1/compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/remote-compatibility1/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/remote-compatibility1/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/remote-compatibility1/run.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/remote-compatibility1/run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/remote-compatibility1/run.stdout",
+      "sha256": "69acc3303a3cf32bc6c932c7b9039d0e5945c98f94189ce367a674dd49f58e3e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-epoch/actual.rs",
+      "sha256": "41d583c40823402e188c7b259dfc5ecab5a19f1deb8a3331fedd16902162228c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-epoch/compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-epoch/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-epoch/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-epoch/escape-claim.rs",
+      "sha256": "8d54c44c6879e2f21ee44f7a077bae2ca96902a02b94c8afcab237988d5f2d89"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-epoch/escape-claim.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-epoch/escape-claim.stderr",
+      "sha256": "662d2bca8214063df938d78dc2d7ac28425530f3d2b41fd01a25aa0df00f2c2f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-epoch/escape-proof.rs",
+      "sha256": "c739a57d481f46cae84107d19fad3cb13647f9f69296a9ab4fe2514b52f70ce9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-epoch/escape-proof.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-epoch/escape-proof.stderr",
+      "sha256": "08825e31af1e78fef06ce7d187d7b8e6a845cd34b9dacbb52d8881b01e25005d"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-epoch/run.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-epoch/run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-epoch/run.stdout",
+      "sha256": "5e118e65698f69fd6f60bc1646d5532c8be7b05c01f26431fd4490f9a53f9ab7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-remote/actual.rs",
+      "sha256": "bd1ca4ef3aab6b339a4109d3b37b1f05848d0b3dca1c40506145c5c354c7746e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-remote/compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-remote/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-remote/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-remote/run.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-remote/run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-remote/run.stdout",
+      "sha256": "69acc3303a3cf32bc6c932c7b9039d0e5945c98f94189ce367a674dd49f58e3e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-suite.stdout",
+      "sha256": "0dec50d96b9b0949185457fa007fb492a0769a426d7a7b30f6627b500ef922e0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-suite.stderr",
+      "sha256": "890bfed805dcbebbe2e9f718670409617f6627408053a6efd4df13c6a0cbac70"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/final-suite.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/source-and-test.diff",
+      "sha256": "6bc17fcc0d7ebe52826de928c1965fe8204cb21cedc0c9c1e94916321ebf9431"
+    }
+  ],
+  "diff": "/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/source-and-test.diff"
+}

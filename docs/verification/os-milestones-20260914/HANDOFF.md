@@ -1,6 +1,42 @@
 # Compact dispatcher handoff
 
 
+## Checkpoint387 — useful libc memory accepted; new-module lifecycle released
+
+Ninthactualcurrent942diagnostic is originaldynamiclibcCOREmemory:38.104460s,
+24exactbytes NATIVE_CORE PASS memory newline,exit37/emptyerr/procfs empty.
+IndependentPASS includesPID256 retirement-11→0/delete/release0,all30clients/
+outer562838/container06a97982removed/root27:4free/QMPguestshutdownbeforequit.
+Record49d4a5b5/archivec68d457f. Actualmalloc/mmap/data/mprotectroundtrip/write/
+munmap/free; no forbiddenwritefault/stress/nativeOSrestoration claim.
+
+NEXTsoleguest NEWMATCHED176module lifecycle RELEASE479ef0fc71fd17a88b1e855d
+6db07631afdbdf0fca152fb96e430d2b5b7137eb. Proposal50fb0123/prep6fc505f2/
+manifestdec492d2/overlay48e86e1d; parentndnlife-1 dev1828/109741,nonce
+015461121dc34cb4b7658b0602749823 QMP94. All3newKO+same942kernel/image; source
+176honestlydistinctfromABIblob942. Actualcompiledartifactacceptance/replay
+b54 bound; originalbuildadapterFAIL853a retained. Probe/collector/parser
+d813/8330/0585 unchanged, STRICTRunning5→shutdown0→query0+close plusordinary
+payload evaluator BOTHrequired. PROTOCOL_PASS scalarALONE notlifecyclecredit.
+ShutdownmaystillFAIL; captureactualstage logs, no guardwaiver/destroy/rmmod/
+reboot authority. Cmemoryretirement49d4bound. Push/fetch/livecheck→guest,
+HEAD/runtimefreeze. All3postjoinreadbacksapproved32MiB30s defaultnonderef.
+FuturePASSINGwrappers runexactapprovedreadbacks IMMEDIATELY inSAMEdispatcher
+commandcontinuation afterjoin+sourceknownpositiveowner/clientretirement and
+canonicalidentitychecks, thennotifyreviewer; uncertain/failedretirement retains
+existingfailureprocedure. No newharness/monitor/releaseexpansion.
+
+Epochsource2 independentlyPASS_SOURCE_UNWIRED afteroneproductionlintcorrection:
+374e397d memory/a3a2db7f CPU/a4fd15f2 Remote/69eef654 service.9Python/25Rust/
+5compilefailcontrolsPASS; actualStartedbodyproductionlints nowconsumed, old
+missinglifetime reproducer retained. Existingremote4/workerstop5 component
+work alsocheckpointed sourceonly. NOTinfirst176package. Remainingwire: provider
+operation/modulelease +app/callbackcancel/drain +same-liveclaimCPU/memorycommit.
+Allactiveclaim/continuing/sysfs guards remain. No newnativeRunning/restoration
+PASSyet; sourcecheckpoint isnotnativevalidation. ReviewedCthreads/Rustpackets
+remainready; nextkernelrepairfromactualnewmoduleprobe. All14practicalrowsOPEN.
+
+
 ## Checkpoint386 — real matched-module compile; corrected artifacts accepted
 
 Actualexternalbuild18.034310s,HEAD2558578c stable: make0/emptyerr with3RUSTC,

@@ -15,7 +15,7 @@ use core::{
     mem::{offset_of, size_of, ManuallyDrop},
     ptr,
     ptr::NonNull,
-    sync::atomic::{AtomicPtr, AtomicU32, Ordering},
+    sync::atomic::{AtomicPtr, AtomicU32, AtomicU64, Ordering},
 };
 use kernel::{
     bindings,
@@ -1141,9 +1141,94 @@ impl PreparedBoot {
     }
 }
 
+// Epoch IDs never wrap or repeat while this module and its journals live.
+// They identify boot storage, independently of a reusable IHK OS generation.
+static NEXT_BOOT_EPOCH: AtomicU64 = AtomicU64::new(1);
+const SHUTDOWN_OPEN: u32 = 0;
+const SHUTDOWN_ACTIVE: u32 = 1;
+const SHUTDOWN_RETAINED: u32 = 2;
+
+struct BootEpoch {
+    id: u64,
+    shutdown: AtomicU32,
+}
+
+impl BootEpoch {
+    fn allocate() -> Result<Arc<Self>> {
+        let id = NEXT_BOOT_EPOCH.fetch_update(Ordering::AcqRel, Ordering::Acquire,
+            |next| next.checked_add(1)).map_err(|_| EIO)?;
+        Arc::new(Self { id, shutdown: AtomicU32::new(SHUTDOWN_OPEN) }, GFP_KERNEL)
+    }
+
+    fn claim(&self) -> Result {
+        let previous = self.shutdown.load(Ordering::Acquire);
+        if previous == SHUTDOWN_ACTIVE { return Err(EBUSY); }
+        self.shutdown.compare_exchange(previous, SHUTDOWN_ACTIVE,
+            Ordering::AcqRel, Ordering::Acquire).map_err(|_| EBUSY)?;
+        Ok(())
+    }
+
+    fn admission_open(&self) -> bool {
+        self.shutdown.load(Ordering::Acquire) == SHUTDOWN_OPEN
+    }
+}
+
+/// A unique live shutdown transaction, acquired under the memory mutex. Its
+/// epoch Arc and Started clone retain identities; BootStorage retains every
+/// original mapping/ledger/callback owner. Dropping a failed transaction keeps
+/// admission closed. This is deliberately not a physical retirement proof.
+#[allow(dead_code)]
+pub(super) struct ShutdownBoot {
+    owner: super::smp_resource::OsToken,
+    epoch: Arc<BootEpoch>,
+    started: service::Started,
+    // Keep shutdown orchestration and all Linux lock guards on one task.
+    _task: PhantomData<*mut ()>,
+}
+
+#[allow(dead_code)]
+impl ShutdownBoot {
+    pub(super) fn owner(&self) -> super::smp_resource::OsToken { self.owner }
+    pub(super) fn epoch_id(&self) -> u64 { self.epoch.id }
+    pub(super) fn matches_owner(&self, owner: super::smp_resource::OsToken) -> bool {
+        self.owner == owner && self.epoch.shutdown.load(Ordering::Acquire) == SHUTDOWN_ACTIVE
+    }
+    pub(super) fn same_epoch(&self, other: &Self) -> bool {
+        self.matches_owner(other.owner) && other.matches_owner(self.owner)
+            && Arc::ptr_eq(&self.epoch, &other.epoch)
+    }
+
+    /// Short revalidation only; callers must release the guard before joins.
+    pub(super) fn revalidate(&self) -> Result {
+        let published = PUBLISHED.load(Ordering::Acquire);
+        if published.is_null() { return Err(ENODEV); }
+        // SAFETY: Started storage retains the resource/module owners. This
+        // claim never outlives the synchronous backend lease which acquired it.
+        let context = unsafe { &*published }.lock();
+        context.validate_shutdown_boot(self)
+    }
+
+    /// This method has no resource guard. CPU orchestration calls it only
+    /// after leaving its CPU/hotplug scope. It releases no physical owner.
+    pub(super) fn stop_workers(&self, proof: &super::sysfs_remote::PeerStopped<'_>) -> Result {
+        if !proof.matches_boot(self) { return Err(EIO); }
+        self.revalidate()?;
+        self.started.stop_workers_after_peer_stop(proof)?;
+        self.revalidate()
+    }
+}
+
+impl Drop for ShutdownBoot {
+    fn drop(&mut self) {
+        // Never reopen admission after a reset, cancellation or partial stop.
+        self.epoch.shutdown.store(SHUTDOWN_RETAINED, Ordering::Release);
+    }
+}
+
 /// Turning started on is irreversible without an implemented stop/drain proof.
 /// Even accidental metadata retirement cannot drop live boot/callback storage.
 struct BootStorage {
+    epoch: Arc<BootEpoch>,
     prepared: ManuallyDrop<PreparedBoot>,
     started: bool,
     /// Terminal quarantine until service/procfs/sysfs retirement is implemented.
@@ -1216,9 +1301,37 @@ impl MemoryContext {
             if image.owner != owner {
                 return Err(EIO);
             }
+            if image.boot.as_ref().is_some_and(|boot| !boot.epoch.admission_open()) {
+                return Err(EBUSY);
+            }
             if image.started() {
                 return Err(EBUSY);
             }
+        }
+        Ok(())
+    }
+
+    #[allow(dead_code)]
+    fn claim_shutdown_boot(&self, owner: super::smp_resource::OsToken) -> Result<ShutdownBoot> {
+        let image = self.images.get(owner.slot() as usize)
+            .and_then(Option::as_ref).ok_or(EINVAL)?;
+        if image.owner != owner { return Err(EIO); }
+        let boot = image.boot.as_ref().ok_or(EIO)?;
+        if !boot.started || boot.shutdown_terminal { return Err(EBUSY); }
+        let started = boot.prepared.continuing.as_ref().ok_or(EBUSY)?.clone();
+        boot.epoch.claim()?;
+        Ok(ShutdownBoot { owner, epoch: boot.epoch.clone(), started, _task: PhantomData })
+    }
+
+    #[allow(dead_code)]
+    fn validate_shutdown_boot(&self, claim: &ShutdownBoot) -> Result {
+        let image = self.images.get(claim.owner.slot() as usize)
+            .and_then(Option::as_ref).ok_or(EIO)?;
+        let boot = image.boot.as_ref().ok_or(EIO)?;
+        if image.owner != claim.owner || !boot.started || boot.shutdown_terminal
+            || !claim.matches_owner(image.owner) || !Arc::ptr_eq(&boot.epoch, &claim.epoch)
+            || !boot.prepared.irq.shutdown_drained(image.owner) {
+            return Err(EIO);
         }
         Ok(())
     }
@@ -1279,6 +1392,8 @@ impl MemoryContext {
         if image.owner != owner { return Err(EIO); }
         let boot = image.boot.as_mut().ok_or(EIO)?;
         if !boot.started || !boot.prepared.irq.shutdown_drained(owner) { return Err(EIO); }
+        // Existing unscoped reconciliation cannot commit across a live claim.
+        if boot.epoch.shutdown.load(Ordering::Acquire) == SHUTDOWN_ACTIVE { return Err(EBUSY); }
         if boot.prepared.continuing.is_some() || boot.prepared.sysfs.is_some() {
             boot.shutdown_terminal = true;
             return Err(EBUSY);
@@ -2225,7 +2340,9 @@ impl MemoryContext {
         );
         pr_info!("IHK-SMP: boot prepared os={} generation={} params={:x} bytes={} trampoline={:x} startup={:x} cpus={} numa={} chunks={} kmsg={:x}; CPUs not started\n",
             owner.slot(), owner.generation(), params.physical(), param_bytes, trampoline.physical(), layout.startup(), cpus.len(), nodes.len(), chunks.len(), kmsg);
+        let epoch = BootEpoch::allocate()?;
         self.images[owner.slot() as usize].as_mut().ok_or(EIO)?.boot = Some(BootStorage {
+            epoch,
             prepared: ManuallyDrop::new(PreparedBoot {
                 sysfs: Some(sysfs),
                 params,
@@ -2701,6 +2818,17 @@ pub(super) fn start_os_boot(
     context.start_boot(owner, topology)
 }
 
+/// Unwired: extract the exact boot/Started claim under a short memory guard.
+/// The caller retains the IHK operation lease through the entire scoped use.
+#[allow(dead_code)]
+pub(super) fn claim_shutdown_boot(owner: super::smp_resource::OsToken) -> Result<ShutdownBoot> {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() { return Err(ENODEV); }
+    // SAFETY: Synchronous backend lease and retained started storage pin it.
+    let context = unsafe { &*published }.lock();
+    context.claim_shutdown_boot(owner)
+}
+
 /// Close IRQ senders before the CPU reset phase of v6 STOP. The memory mutex
 /// is released before the CPU adapter is entered, preserving the established
 /// CPU -> memory lock order for ordinary resource operations.
@@ -2746,6 +2874,7 @@ pub(super) fn application_topology(
         return Err(kernel::error::to_result(-116).unwrap_err());
     }
     let boot = image.boot.as_ref().ok_or(EINVAL)?;
+    if !boot.epoch.admission_open() { return Err(EBUSY); }
     if !boot.started {
         return Err(EBUSY);
     }
@@ -2785,6 +2914,7 @@ pub(super) fn application_connection(
             return Err(kernel::error::to_result(-116).unwrap_err());
         }
         let boot = image.boot.as_ref().ok_or(EINVAL)?;
+        if !boot.epoch.admission_open() { return Err(EBUSY); }
         if !boot.started {
             return Err(EBUSY);
         }

@@ -20,9 +20,32 @@ fn errno(value: i32) -> Error {
     kernel::error::to_result(value).err().unwrap_or(EIO)
 }
 
+/// Scoped authority from the exact boot's CPU reset/re-online and IRQ drain
+/// producer. Private fields and a borrowed, non-clone witness prevent reuse
+/// after its live shutdown transaction or across a same-generation reboot.
+#[allow(dead_code)]
+pub(crate) struct PeerStopped<'boot> {
+    cpus: &'boot super::smp_cpu::StoppedCpus<'boot>,
+}
+
+#[allow(dead_code)]
+impl<'boot> PeerStopped<'boot> {
+    pub(super) fn after_reset(cpus: &'boot super::smp_cpu::StoppedCpus<'boot>) -> Self {
+        Self { cpus }
+    }
+    fn matches_owner(&self, owner: super::smp_resource::OsToken) -> bool {
+        self.cpus.matches_owner(owner)
+    }
+    pub(super) fn matches_boot(&self, boot: &super::smp_memory::ShutdownBoot) -> bool {
+        self.cpus.matches_boot(boot)
+    }
+}
+
 struct State {
     exchange: Exchange,
     caller: bool,
+    callbacks: usize,
+    peer_stopped: bool,
 }
 
 #[pin_data]
@@ -55,11 +78,38 @@ impl Remote {
         Arc::pin_init(
             pin_init!(Self {
                 data,
-                state <- new_mutex!(State { exchange: Exchange::new(), caller: false }),
+                state <- new_mutex!(State { exchange: Exchange::new(), caller: false, callbacks: 0, peer_stopped: false }),
                 changed <- new_condvar!(),
             }),
             GFP_KERNEL,
         )
+    }
+
+    /// Close admission and wake all callers without releasing the shared page
+    /// or discarding an exchange. Existing callback Arcs retain this Remote.
+    /// True means every admitted call has exited its payload access scope;
+    /// Linux attribute removal must still drain callbacks before page release.
+    #[allow(dead_code)] // Unwired until the peer-stop proof producer is reviewed.
+    pub(crate) fn shutdown_after_peer_stop(&self, proof: &PeerStopped<'_>) -> Result<bool> {
+        if !proof.matches_owner(self.data.owner) {
+            return Err(EINVAL);
+        }
+        let mut state = self.state.lock();
+        state.peer_stopped = true;
+        let drained = state.callbacks == 0;
+        drop(state);
+        self.changed.notify_all();
+        Ok(drained)
+    }
+
+    /// This is a local call drain, not Linux callback or physical page release.
+    #[allow(dead_code)]
+    pub(crate) fn shutdown_drained(&self, proof: &PeerStopped<'_>) -> Result<bool> {
+        if !proof.matches_owner(self.data.owner) {
+            return Err(EINVAL);
+        }
+        let state = self.state.lock();
+        Ok(state.peer_stopped && state.callbacks == 0)
     }
 
     /// Execute only the queue reservation/publication while holding this lock.
@@ -68,6 +118,9 @@ impl Remote {
     /// queue-full may retry later. Notify the guest after this method succeeds.
     pub(crate) fn publish(&self, send: impl FnOnce(&[u8; PACKET_BYTES]) -> Result) -> Result<bool> {
         let mut state = self.state.lock();
+        if state.peer_stopped {
+            return Err(ENODEV);
+        }
         let Some((token, packet)) = state.exchange.outgoing() else {
             return Ok(false);
         };
@@ -77,13 +130,19 @@ impl Remote {
     }
 
     pub(crate) fn queued(&self) -> bool {
-        self.state.lock().exchange.outgoing().is_some()
+        let state = self.state.lock();
+        !state.peer_stopped && state.exchange.outgoing().is_some()
     }
 
     /// The queue consumer must acquire the response publication before this
     /// call. It runs independently of the tree/removal lock and caller waits.
     pub(crate) fn reply(&self, packet: &[u8]) -> Result {
-        self.state.lock().exchange.accept(packet).map_err(errno)?;
+        let mut state = self.state.lock();
+        if state.peer_stopped {
+            return Err(ENODEV);
+        }
+        state.exchange.accept(packet).map_err(errno)?;
+        drop(state);
         self.changed.notify_all();
         Ok(())
     }
@@ -97,43 +156,15 @@ impl Remote {
         interruptible: bool,
     ) -> Result<usize> {
         let mut state = self.state.lock();
-        while state.caller {
-            if interruptible {
-                if self.changed.wait_interruptible(&mut state) {
-                    return Err(EINTR);
-                }
-            } else {
-                self.changed.wait(&mut state);
-            }
+        if state.peer_stopped {
+            return Err(ENODEV);
         }
-        state.caller = true;
-        // This scope always releases the caller flag, including an interrupted
-        // wait, but deliberately retains any outstanding exchange and its data.
+        state.callbacks = state.callbacks.checked_add(1).ok_or(EBUSY)?;
         let result = (|| {
-            if let Some(token) = state.exchange.token() {
-                while !state.exchange.completed(token).map_err(errno)? {
-                    if interruptible {
-                        if self.changed.wait_interruptible(&mut state) {
-                            return Err(EINTR);
-                        }
-                    } else {
-                        self.changed.wait(&mut state);
-                    }
+            while state.caller {
+                if state.peer_stopped {
+                    return Err(ENODEV);
                 }
-                // A preceding caller left on a signal; its completed result is
-                // discarded only after the peer has retired that exact token.
-                let _ = state.exchange.finish(token).map_err(errno)?;
-            }
-            let token = state.exchange.begin(client, call).map_err(errno)?;
-            if let Call::Store { bytes } = call {
-                debug_assert_eq!(bytes, input.len());
-                for (index, byte) in input.iter().copied().enumerate() {
-                    // SAFETY: begin bounds bytes to this retained page. This
-                    // sole caller fills it before publish can acquire the lock.
-                    unsafe { ptr::write_volatile((self.data.address as *mut u8).add(index), byte) };
-                }
-            }
-            while !state.exchange.completed(token).map_err(errno)? {
                 if interruptible {
                     if self.changed.wait_interruptible(&mut state) {
                         return Err(EINTR);
@@ -142,23 +173,81 @@ impl Remote {
                     self.changed.wait(&mut state);
                 }
             }
-            let bytes = state
-                .exchange
-                .finish(token)
-                .map_err(errno)?
-                .map_err(errno)?;
-            if matches!(call, Call::Show { .. }) {
-                for (index, byte) in output.get_mut(..bytes).ok_or(EIO)?.iter_mut().enumerate() {
-                    // SAFETY: The matching acquired response retires the peer's
-                    // write. The state lock and caller flag exclude a new call
-                    // until these bounded volatile reads have completed.
-                    *byte =
-                        unsafe { ptr::read_volatile((self.data.address as *const u8).add(index)) };
-                }
+            if state.peer_stopped {
+                return Err(ENODEV);
             }
-            Ok(bytes)
+            state.caller = true;
+            // This scope always releases the caller flag, including an interrupted
+            // wait, but deliberately retains any outstanding exchange and its data.
+            let result = (|| {
+                if let Some(token) = state.exchange.token() {
+                    while !state.exchange.completed(token).map_err(errno)? {
+                        if state.peer_stopped {
+                            return Err(ENODEV);
+                        }
+                        if interruptible {
+                            if self.changed.wait_interruptible(&mut state) {
+                                return Err(EINTR);
+                            }
+                        } else {
+                            self.changed.wait(&mut state);
+                        }
+                    }
+                    // A preceding caller left on a signal; its completed result is
+                    // discarded only after the peer has retired that exact token.
+                    let _ = state.exchange.finish(token).map_err(errno)?;
+                }
+                if state.peer_stopped {
+                    return Err(ENODEV);
+                }
+                let token = state.exchange.begin(client, call).map_err(errno)?;
+                if let Call::Store { bytes } = call {
+                    debug_assert_eq!(bytes, input.len());
+                    for (index, byte) in input.iter().copied().enumerate() {
+                        // SAFETY: begin bounds bytes to this retained page. This
+                        // sole caller fills it before publish can acquire the lock.
+                        unsafe {
+                            ptr::write_volatile((self.data.address as *mut u8).add(index), byte)
+                        };
+                    }
+                }
+                while !state.exchange.completed(token).map_err(errno)? {
+                    if state.peer_stopped {
+                        return Err(ENODEV);
+                    }
+                    if interruptible {
+                        if self.changed.wait_interruptible(&mut state) {
+                            return Err(EINTR);
+                        }
+                    } else {
+                        self.changed.wait(&mut state);
+                    }
+                }
+                if state.peer_stopped {
+                    return Err(ENODEV);
+                }
+                let bytes = state
+                    .exchange
+                    .finish(token)
+                    .map_err(errno)?
+                    .map_err(errno)?;
+                if matches!(call, Call::Show { .. }) {
+                    for (index, byte) in output.get_mut(..bytes).ok_or(EIO)?.iter_mut().enumerate()
+                    {
+                        // SAFETY: The matching acquired response retires the peer's
+                        // write. The state lock and caller flag exclude a new call
+                        // until these bounded volatile reads have completed.
+                        *byte = unsafe {
+                            ptr::read_volatile((self.data.address as *const u8).add(index))
+                        };
+                    }
+                }
+                Ok(bytes)
+            })();
+            state.caller = false;
+            result
         })();
-        state.caller = false;
+        state.callbacks -= 1;
         drop(state);
         self.changed.notify_all();
         result
