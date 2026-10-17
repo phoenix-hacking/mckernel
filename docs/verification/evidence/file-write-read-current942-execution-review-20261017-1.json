@@ -1,0 +1,44 @@
+{
+  "schema": "mckernel.file-write-read-execution-review.v1",
+  "decision": "PASS_EXECUTION_REVIEW_CONDITIONAL",
+  "reviewer": "/root/signal_guest_execution_review",
+  "proposal_sha256": "649206b59b305ce13778bfeb5260e6a5b4da0b4087d7bd802a39abdbd938aedb",
+  "bindings_verified": [
+    "Manifestf60d142f/owner9084bfd3/sourcepins/prerequisites exact",
+    "Parent1828/108269 uidgid1000 mode700 empty evidencesiblingabsent",
+    "Nonce877ca28b8c5945d293f77c6082917319 QMP93 monitor none",
+    "All59overlaymap entries unchanged except selectedapps/app",
+    "Originalsixsize395byteoracle matchesrawLinuxemptyerr/status0"
+  ],
+  "conditions": [
+    "Recordedindependentcalloc+retirement acceptance",
+    "Immediateprelaunchlivechecks resource/mount/source/ownership/nonce",
+    "FreezeHEAD/runtimesources throughjoin"
+  ],
+  "semantic_limits": [
+    "write/seek/read-compare/fstat/EOF",
+    "No reopen, close/unlink return values untested",
+    "No formal acceptance"
+  ],
+  "postjoin_readback": {
+    "approved": true,
+    "boundary": "Afterjoin+positiveownerclientretirement exactreadsonly ordinaryUIDcaptures defaulttar no-dereference",
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndfile-1.owner-877ca28b8c5945d293f77c6082917319",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/ndfile-1/attempt-877ca28b8c5945d293f77c6082917319/result.json"
+      ]
+    ]
+  }
+}

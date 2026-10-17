@@ -1,5 +1,16 @@
 # Compact dispatcher handoff
 
+Checkpoint377: calloc actualguest+retirementPASS33.677923s, exact205bytes/
+6sizes/emptyerr0/procfsempty; all30clientsreaped/containerremoved/root27:4free.
+Thisinvocation2distinctactualguestpasses(signal+calloc), formal0 unchanged.
+Next solefileguest exactrelease ready afterpush/fetch/livecheck: parent
+/scratch/ndfile-1 dev1828/inode108269 nonce877ca28b8c5945d293f77c6082917319,
+QMP93,manifestf60d142f owner9084bfd3,395byte6lineoracle. FreezeHEADunderowner.
+NextTLS strictmanifest /scratch/thread-tls-isolation-current942-20261017-1/manifest.json
+15bbc7c6 original2/4/8workers ready, separateadmission required. Lifecycle
+collector source36fa0d55/testbde48903 independentPASS/30injectedCscenarios;
+staticbuild+strictparser proceed, no actualshutdownclaimyet. Continuecampaign.
+
 Checkpoint376: actual current942 signal.mask-restore guest2 PASS33.352663s,
 independent PASS_DIAGNOSTIC_GUEST_AND_RETIREMENT. PID255 prepare/schedule/
 12deliveries/11returns/exit_group/cleanupACK/procfsdelete/retirement/release;

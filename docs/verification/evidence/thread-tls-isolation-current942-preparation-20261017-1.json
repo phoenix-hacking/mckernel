@@ -1,0 +1,640 @@
+{
+  "application_acceptance": false,
+  "artifacts": {
+    "app": {
+      "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/app",
+      "sha256": "f6bb60e0049d9a166d38eaccc55f96c752bb186675eb03f709bee39bb84c4c73",
+      "size": 1493104
+    },
+    "app.d": {
+      "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/app.d",
+      "sha256": "1a5e91474cabfd5140f577169414d872abfe0ebcf899977ec01d96ce51134846",
+      "size": 3670
+    },
+    "collector.d": {
+      "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/collector.d",
+      "sha256": "445703cac8377218ba826ffb06cf10d941fa27ab0145f4ce2fd014d099341744",
+      "size": 7514
+    },
+    "init": {
+      "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/init",
+      "sha256": "ead247cdf56556c7491bd5d8f746c6c668c0c944414ce51392f7caaed895a63a",
+      "size": 1021968
+    }
+  },
+  "authority": "Dispatcher admitted exact frozen 2/4/8 vectors, -pthread static compile/reference and same-source -DND_FUTEX collector compilation; collector never executed on host.",
+  "captures": {
+    "app": {
+      "sha256": "f6bb60e0049d9a166d38eaccc55f96c752bb186675eb03f709bee39bb84c4c73",
+      "size": 1493104
+    },
+    "app-readelf.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "app-readelf.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "app-readelf.stdout": {
+      "sha256": "0c7001a5ac274afa60e196c23c4720c964de435e71d15fe8347e41be7889a387",
+      "size": 2598
+    },
+    "app.d": {
+      "sha256": "1a5e91474cabfd5140f577169414d872abfe0ebcf899977ec01d96ce51134846",
+      "size": 3670
+    },
+    "collector-compile.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "collector-compile.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "collector-compile.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "collector.d": {
+      "sha256": "445703cac8377218ba826ffb06cf10d941fa27ab0145f4ce2fd014d099341744",
+      "size": 7514
+    },
+    "expected.stdout": {
+      "sha256": "5ee4522188d9d1248fa07e7895e068fed50791773dcf6a542a2442ab134dffc3",
+      "size": 55
+    },
+    "frozen-oracle.json": {
+      "sha256": "2bbde84497f6b165133afdb6fa2e4bacfc503ecc1fc1fd51fab7a66f134fa53d",
+      "size": 882
+    },
+    "frozen-source.c": {
+      "sha256": "e7b1133fffd39ed5d4d902489411662d7b3465007e0be3556ec2ed3529d74f79",
+      "size": 1337
+    },
+    "init": {
+      "sha256": "ead247cdf56556c7491bd5d8f746c6c668c0c944414ce51392f7caaed895a63a",
+      "size": 1021968
+    },
+    "init-readelf.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "init-readelf.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "init-readelf.stdout": {
+      "sha256": "8357b66df66eee50a8e8bf943ac47862c07c0ef72228dea2d56f095b37adec80",
+      "size": 2568
+    },
+    "linux-reference.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "linux-reference.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "linux-reference.stdout": {
+      "sha256": "5ee4522188d9d1248fa07e7895e068fed50791773dcf6a542a2442ab134dffc3",
+      "size": 55
+    },
+    "observe.py": {
+      "sha256": "c761efdd16745ee699cf46e20f7071d4a21d69e3c502f09952ac74fd3c5c1302",
+      "size": 7127
+    },
+    "payload-compile.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "payload-compile.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "payload-compile.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    }
+  },
+  "collector_selection": {
+    "actual_payload_argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "boot_argv": [
+      "/bin/native-boot",
+      "hidos",
+      "allow_oversubscribe"
+    ],
+    "existing_candidate": "/home/holden/mckernel-work/scratch/native-diagnostic-futex-collector-build-20261001-1/init",
+    "existing_reuse_decision": "Selected historical checkpoint pins binary but lacks matching compiled source/compiler binding; fresh admitted compilation of current source avoids unsupported reuse claim.",
+    "host_execution": false,
+    "profile": "ND_FUTEX"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-static",
+        "-fno-pie",
+        "-no-pie",
+        "-Wl,-z,noexecstack",
+        "-pthread",
+        "-MD",
+        "-MF",
+        "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/app.d",
+        "/home/holden/mckernel/scripts/application-tests/cases/thread/thread.tls-isolation.c",
+        "-o",
+        "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/app"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1",
+      "elapsed_seconds": 0.086737,
+      "label": "payload-compile",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "timeout_seconds": 60
+    },
+    {
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-static",
+        "-fno-pie",
+        "-no-pie",
+        "-Wl,-z,noexecstack",
+        "-DND_FUTEX",
+        "-MD",
+        "-MF",
+        "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/collector.d",
+        "/home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c",
+        "-o",
+        "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/init"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1",
+      "elapsed_seconds": 0.213008,
+      "label": "collector-compile",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "timeout_seconds": 60
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/app"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1",
+      "elapsed_seconds": 0.002893,
+      "label": "app-readelf",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "0c7001a5ac274afa60e196c23c4720c964de435e71d15fe8347e41be7889a387",
+      "timeout_seconds": 10
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/init"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1",
+      "elapsed_seconds": 0.002734,
+      "label": "init-readelf",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "8357b66df66eee50a8e8bf943ac47862c07c0ef72228dea2d56f095b37adec80",
+      "timeout_seconds": 10
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/case/work",
+      "elapsed_seconds": 0.002502,
+      "label": "linux-reference",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "5ee4522188d9d1248fa07e7895e068fed50791773dcf6a542a2442ab134dffc3",
+      "timeout_seconds": 10
+    }
+  ],
+  "consumed_inputs_sha256": {
+    "/home/holden/mckernel/scripts/application-tests/cases/thread/thread.tls-isolation.c": "e7b1133fffd39ed5d4d902489411662d7b3465007e0be3556ec2ed3529d74f79",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e",
+    "/usr/include/alloca.h": "c4d2f51d2f4bfd2ee1ced32cf4c6f0e6f1d562264ce26052aa0510ab6c675630",
+    "/usr/include/asm-generic/bitsperlong.h": "74a305fd9066eb64f775e56b49569e7909d0916c030d4f0972376b310e732833",
+    "/usr/include/asm-generic/errno-base.h": "2c148e92b8318deeb767fabd60822113e575ee664ff09a1873aed8f7a495793c",
+    "/usr/include/asm-generic/errno.h": "fb7b5a504015f3a9074c641e7371b250d867d751d90e4a22a8ac17fced3d50af",
+    "/usr/include/asm-generic/int-ll64.h": "eb8b891e775ebb50af0353fdcbc625854fd98780399b3a57a404d36af6c29749",
+    "/usr/include/asm-generic/ioctl.h": "76396e5537d75285c3ca20e3b6a79b101eebfdc14d39c104ff7eab778672160e",
+    "/usr/include/asm-generic/ioctls.h": "456d8d175500bae6f73a66a023a71044f9cb077ab17531a7bf8df1509cc8dae3",
+    "/usr/include/asm-generic/posix_types.h": "0b94eebdf4488407d32fa199136f302653ab51a2843bd68dee24c38c9f0ce82e",
+    "/usr/include/asm-generic/types.h": "09b4477d655ddd2c5657e83a0761700d6706f012c7365f310a6b0a6696936a10",
+    "/usr/include/dirent.h": "1f8dff932018a5c6d4bfc8d8b857c8541294d862e83ba7ea9488a56f5bc54289",
+    "/usr/include/endian.h": "043dbd7fc10f60f4efc0c7759bf0d5c202fcecfede131232ac53c62edf93ffda",
+    "/usr/include/errno.h": "bb34795fb8a34bea0b33a4bcf4e60e1aa24ca03bba063e045b90447ee79e1137",
+    "/usr/include/fcntl.h": "0b7409e674c5802bd43659ba883773e4e50332abff9614b767b3b7b07eb61cae",
+    "/usr/include/features.h": "981a26a502075c066b75617ea8db7623f98935b035e470833c46e53f1dea4e2b",
+    "/usr/include/limits.h": "ee75b0899e59f5fdd40c864822bb8e8ba4356d85ec8b8e48b789cbd4a91652e7",
+    "/usr/include/linux/errno.h": "a47fb2f49bce0546a1e88805cec954338abb1b2ac87de042166e8e3a74b23261",
+    "/usr/include/linux/falloc.h": "e35cbe823cf1b8ccb9d1ed755cc6ab8e842cfa0d240f9818cc554423dc0ceee0",
+    "/usr/include/linux/ioctl.h": "ba73b5892de6605e6c40b151820e367dfcb98cbdb3f8f468c5ef2bd8437df873",
+    "/usr/include/linux/limits.h": "567dbb4893d20bb986996f0a8b8f774b02ca6cb7df8e4b642895eade7e7ffcd9",
+    "/usr/include/linux/posix_types.h": "bc68636a383418f235d3457e4b21cf27cefc7c7f3edea4c1f6706f1018db196f",
+    "/usr/include/linux/prctl.h": "5d6c1c99502c6689ca44d631fba56b5c360116059f92cfc6b8ba7e8776f268e9",
+    "/usr/include/linux/stat.h": "4b446d3e7a36c27f0e3a5775d2bbba28e132a495d6d47a5f40152216ece72a4d",
+    "/usr/include/linux/stddef.h": "409a93a47c47070d2290292befd4f452c93b4f3bed8ecdbe63dea2ab9aff95aa",
+    "/usr/include/linux/types.h": "ac1030772b6c6c8031cee4711ebc1c1a9458aae9195e1483103f71d787c2a59a",
+    "/usr/include/poll.h": "04bd7e134e86aabf9499d9ef2f5b13546a7d0e113e141e8f935076d87ba185fd",
+    "/usr/include/pthread.h": "1bc615973d0d7c3734a927bd39184cc8601bebb9cc979ca55ceb99c905367765",
+    "/usr/include/sched.h": "0c52c7c3764b45982f2b6048a929c19dfd9200359c880d01b0cb2b0d0723fe75",
+    "/usr/include/signal.h": "f9c42bf1df8c113861410d711967973a3e8578641d88fbb9021effa8d928aaf9",
+    "/usr/include/stdc-predef.h": "64fdf694f7b3d51ec6c45c06dcb71ebbe9455742d3ea673012016668853d3bff",
+    "/usr/include/stdint.h": "1053c4020a8656922a2c2107228a43f1b889be46864f9b82b364ca67ee13b7a9",
+    "/usr/include/stdio.h": "e7d85131c888412c0eaaaca3a7165d86f147c8645993ddf333a5b2500117a478",
+    "/usr/include/stdlib.h": "7ea37adb35a2acc112198f826c7c02ba214c0fd3e3532174870ba2fbc86a83b3",
+    "/usr/include/string.h": "2315bb9e39fcb045b120599524f17461bd20bdf007c857b6fa52663cd620466d",
+    "/usr/include/strings.h": "ddce67e40651b6d2765cc3e9e72ea7376a810ba99b92b30e30c26422ef024832",
+    "/usr/include/time.h": "e88cfe6848c864eec16061f3a23a2c37aaa39ef1cf4e271e81b00b9df94ce05d",
+    "/usr/include/unistd.h": "690e12d91da100d6916752f38804386710d427823f7783f730218a9ac2d043e2",
+    "/usr/include/x86_64-linux-gnu/asm/bitsperlong.h": "8ef5efeb3f25ae47ce03ba892f5caf77631b1257715fc12de72c21e61db17e43",
+    "/usr/include/x86_64-linux-gnu/asm/errno.h": "4ee384515a4325315992e61dd957f0fa91f3858fe7c079de59f56edded51de86",
+    "/usr/include/x86_64-linux-gnu/asm/ioctl.h": "9c6ca9e365296a6b66747cbebdcf76972b8cce7aab91e55bf4ab1f3581df9c2a",
+    "/usr/include/x86_64-linux-gnu/asm/ioctls.h": "857d11a8415a18e7a6ccf23640cf9bddf245a5f90c43b3014d08d3ae19faf952",
+    "/usr/include/x86_64-linux-gnu/asm/posix_types.h": "983090c7e5e7eaff27114ec216889a8ad26e40ad8fbb78b8ae6c09391dc61543",
+    "/usr/include/x86_64-linux-gnu/asm/posix_types_64.h": "5cdabc01dac0a3e9731ac16353210a615ca44e85b6ec9eafd2e79206e0b26c76",
+    "/usr/include/x86_64-linux-gnu/asm/types.h": "b6bdcd528bce555b2ecb58e8a1624e3e13e09312c31318023c4e86b957e2b01f",
+    "/usr/include/x86_64-linux-gnu/bits/byteswap.h": "f68b8ddac8c43067083eb8bcee4309f565bba36805e5dc746732ddb731e744c4",
+    "/usr/include/x86_64-linux-gnu/bits/confname.h": "091903356b086e4c7a46054f7321d583d51ae35296b1f077d3216f5f3a76f4de",
+    "/usr/include/x86_64-linux-gnu/bits/cpu-set.h": "9a599a7d5538c4c8e4887983f4c819b1f2fc53086c850a807ff8ff8a6e6dce2d",
+    "/usr/include/x86_64-linux-gnu/bits/dirent.h": "8f485e5fec3b42aff3d1635d0e66ce5c4d2cdd76553687e4cb83726fd221fa27",
+    "/usr/include/x86_64-linux-gnu/bits/dirent_ext.h": "1b51dd5b0bf7e4b1a0049b194a4f653b0e670e51cdf39c30e354091f49f1555c",
+    "/usr/include/x86_64-linux-gnu/bits/endian.h": "12b47b421313cf9ddc75afa754101c7034bca71ddb797f4f8ae06fc6c4161517",
+    "/usr/include/x86_64-linux-gnu/bits/endianness.h": "659a7060004eda113671a38852c4d1e9cb97a35932bcd1d8540f98c09c180747",
+    "/usr/include/x86_64-linux-gnu/bits/environments.h": "5f0d55d7cb0330bae9ef464394de98c9045d0e5880d266d3801034678843f435",
+    "/usr/include/x86_64-linux-gnu/bits/errno.h": "7e7e8b459ac9a9683fa9ed91fb05c89ea874ed70b6d4aa6ef407db87a28b023b",
+    "/usr/include/x86_64-linux-gnu/bits/fcntl-linux.h": "1dc43f7aa98e2cea8ea4c26e8661ecdacb9ce4bb775bf8a959d4f5b1d6d9da97",
+    "/usr/include/x86_64-linux-gnu/bits/fcntl.h": "14001f0553d6adb1b08f16ec879f797a59034d59c81f1ef0b44eeb9f90ce0bf2",
+    "/usr/include/x86_64-linux-gnu/bits/fcntl2.h": "d2d3302ebcc06ffda2db2785a917b91a79e1a31bb7df4ed2cd55b14068ea0873",
+    "/usr/include/x86_64-linux-gnu/bits/floatn-common.h": "f127bf11e1c361e585667429b05746eb13f42a6050eea1ae80495ec6f10052e5",
+    "/usr/include/x86_64-linux-gnu/bits/floatn.h": "3309cebe42d8b2dae90dfd5c1bcfcbb497379ed8d2fadfa54361b9397cb4750e",
+    "/usr/include/x86_64-linux-gnu/bits/getopt_core.h": "9fa5de6af98115c111cf43befe7468827d6e283edb400e1a6ca7a609a11aadbc",
+    "/usr/include/x86_64-linux-gnu/bits/getopt_posix.h": "530d55a1958c75b33eb8a65a04a746c27cf876ec3c47827bb3e11595761824ac",
+    "/usr/include/x86_64-linux-gnu/bits/ioctl-types.h": "0743f60e5875e818ae5f090d5c8cab84bf14be1bbfa79448b7094dcbb1a34561",
+    "/usr/include/x86_64-linux-gnu/bits/ioctls.h": "9aba6e4d4f21a3c10e4543425ab2ca743eef900fb8247affd5fa2c19b1ff1c45",
+    "/usr/include/x86_64-linux-gnu/bits/libc-header-start.h": "42053eaf4d2751e7be1cc8342f4c1c7404a6670c330ca493b7e884b20d6c1747",
+    "/usr/include/x86_64-linux-gnu/bits/local_lim.h": "e48f9e05cad93954f1066dc50dbb8e3335304e7ff80c030641baaee21e267234",
+    "/usr/include/x86_64-linux-gnu/bits/long-double.h": "1d92fbb09acd8375debde9c0b4c6dd3e38d096d27159e32a537e3742f6b2cc25",
+    "/usr/include/x86_64-linux-gnu/bits/poll.h": "a1ce68bdd9798cb20c61cea95033502b245824e96860aae4cf79fabfd29e95b3",
+    "/usr/include/x86_64-linux-gnu/bits/poll2.h": "75fc09a3a7c3fa3239d17972c81b70f09d06ec64db77773beb98cbfa20476ba2",
+    "/usr/include/x86_64-linux-gnu/bits/posix1_lim.h": "b72756fac23fbaa251e7e02cc6db62aa15fa4f76355167d1f358bd742ae61492",
+    "/usr/include/x86_64-linux-gnu/bits/posix2_lim.h": "a5b58c4044a95c7252fca5ff1661046a8b15d27fd482bba27515336b0f36355e",
+    "/usr/include/x86_64-linux-gnu/bits/posix_opt.h": "8417772f0c9fa7a39fcec5323c23e9869454e1f0c63531dd878bc7e81e694fe6",
+    "/usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h": "306fc6a0ccf8eea0e57f0cc4a6a6f0acd7c845c99c42cc509959f9ff8c13b731",
+    "/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h": "bde992d95141320a2f4162d2d1336349b00f36531fb79b4b9d4bb2ec5dfd176b",
+    "/usr/include/x86_64-linux-gnu/bits/sched.h": "a3a56e27f5acdd9f7b0b537fb3f27531b59240c21470fba1ff15231bd71869af",
+    "/usr/include/x86_64-linux-gnu/bits/select.h": "bebcf564c0b0f5298e352bee095128dfe8cf483426bc6d36869043bb4a0e2fae",
+    "/usr/include/x86_64-linux-gnu/bits/select2.h": "0737611741ded5876a746c48f3a54a5f533fa8c24d9d27de75d40adc57253544",
+    "/usr/include/x86_64-linux-gnu/bits/setjmp.h": "3f6eea166e444b00dc94d25356b0d1a898e653c63d9c2bb7cc09bc212a678601",
+    "/usr/include/x86_64-linux-gnu/bits/sigaction.h": "834c1d1132bd3b1d156612c06204b7bb70698b1040381bf5247b95a9fcff2ae3",
+    "/usr/include/x86_64-linux-gnu/bits/sigcontext.h": "3d6c257508c625908a74876ad1810b9c800581d05ffbb6a023c95f4854cf528d",
+    "/usr/include/x86_64-linux-gnu/bits/sigevent-consts.h": "276d7c2dff64f09341c4894cf8244691b2878e657b3df8d77cc5c08336e8811a",
+    "/usr/include/x86_64-linux-gnu/bits/siginfo-arch.h": "0839bdc7af291182ff9822a7b6419659fb26a49af5e4264857a71af4ccb12213",
+    "/usr/include/x86_64-linux-gnu/bits/siginfo-consts-arch.h": "56e019330b859cc4e28af30854df4d29be120ec4bff74849301bb3c40c9f19ca",
+    "/usr/include/x86_64-linux-gnu/bits/siginfo-consts.h": "fc701a5ba17dfdd6fa149c1a6298bb50d037f79467cc103290fa63eee938effa",
+    "/usr/include/x86_64-linux-gnu/bits/signal_ext.h": "e91d623617ba0f2cc5c1477f587e32f1f6cd0bcc3f89b41dc4488f9376229a00",
+    "/usr/include/x86_64-linux-gnu/bits/signum-generic.h": "f12870e9fb54111b77278a2d5d5c96643c91f455e8ae5be9a378253bb1fd9d04",
+    "/usr/include/x86_64-linux-gnu/bits/signum.h": "796e7e4116a0cc06c2ed40751fe13f47353eb93d14a0ea84eff2ba4215b676dd",
+    "/usr/include/x86_64-linux-gnu/bits/sigstack.h": "ad115beaa73b88165428b91a3549f12589b8f8ac6241a9c9345bda93fedb8863",
+    "/usr/include/x86_64-linux-gnu/bits/sigthread.h": "0980803c3e101171029fbbcff761d44590ad4997e72cb82c1171ecbd6d764ee6",
+    "/usr/include/x86_64-linux-gnu/bits/ss_flags.h": "862d34c6cc7bd9df60e8e6c772a450b00086c4025205f3666d4a5a89086c6c6b",
+    "/usr/include/x86_64-linux-gnu/bits/stat.h": "c7b261ced7bf6f6173097656d935f4a4dcf5bd7d40c92d5588652da1d1686978",
+    "/usr/include/x86_64-linux-gnu/bits/statx-generic.h": "99a81321ee3c7d883bcfcf95d3c7556b090391a5f782fb8780f1f433af71d42b",
+    "/usr/include/x86_64-linux-gnu/bits/statx.h": "31f21592138b1ef47ace5ae6b10d7adfc5013e18f1a7012ed1fe4c77152caa11",
+    "/usr/include/x86_64-linux-gnu/bits/stdint-intn.h": "c29565a4c6cdbe6134a46ac42d882b5f1c1dadd335657b43e0155d5f235b5a86",
+    "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h": "14a8f967badbfc7633134ff1d5ebe45bc7398bb7d0baceda8de6e23235b38ee7",
+    "/usr/include/x86_64-linux-gnu/bits/stdio.h": "68f7c4aa205c5043f0b9363f4809851c3d735d17e145051ef3c9e771880ddb4f",
+    "/usr/include/x86_64-linux-gnu/bits/stdio2.h": "f30effdddb33b0a38dee1cd596c1277d0f8f800a0fbfdadb2fe214f33c86129a",
+    "/usr/include/x86_64-linux-gnu/bits/stdio_lim.h": "8b383d348468ce009e52ec801dfb0467f72b0f75496bb840f0ae0ef8a5f399a1",
+    "/usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h": "eb7074a863a17e3e684e83218a82ef7418eeb535f50d6fb5365b5427663f27ae",
+    "/usr/include/x86_64-linux-gnu/bits/stdlib-float.h": "d8d9dd9f0d7dba7b868157cbd25eee2b0ec9404f36a8677a6d614432d85f4721",
+    "/usr/include/x86_64-linux-gnu/bits/stdlib.h": "247ef679da8bb0d582bc84adb873e22e2097ad9cc0c92431142e7bd9d0ac76d1",
+    "/usr/include/x86_64-linux-gnu/bits/string_fortified.h": "4793434f02bbcd7fe6227451e5d35f7448f776f57f322838809cb2b1e45c0268",
+    "/usr/include/x86_64-linux-gnu/bits/strings_fortified.h": "7b47eb8f646951f268c71a5a29d98c9ed7159d3a1912425dc1e51562140a34f0",
+    "/usr/include/x86_64-linux-gnu/bits/struct_mutex.h": "f09453b4d356c8dc577f9b3f0c37b69c0ae76662e2c60be1cbd02b8f91865c51",
+    "/usr/include/x86_64-linux-gnu/bits/struct_rwlock.h": "b596548e86bc3f016b511778bcf88603938b349d7e44eaccf03b8ffb49210a60",
+    "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h": "7ef402713da42e35dc8d50a4838b3fbb8bfe959176dd86dd621ec47ac547b5b6",
+    "/usr/include/x86_64-linux-gnu/bits/thread-shared-types.h": "233b18bdcb7fa4332cebd6b5e6b9e35213538994582e322253459605d53fc273",
+    "/usr/include/x86_64-linux-gnu/bits/time.h": "2f1af538c704ea54e3364fe05ee3f9028c998ba842fc925a1dc767868cc6ea52",
+    "/usr/include/x86_64-linux-gnu/bits/time64.h": "14312d2bcdc321b6691ef167e4768124d9af1ace8bac0142eb1159fac5a1b3b7",
+    "/usr/include/x86_64-linux-gnu/bits/timesize.h": "9c1a1a3517fe96894cf4e09cd362c999faac951caf8e70c3c579506a777b522b",
+    "/usr/include/x86_64-linux-gnu/bits/timex.h": "0e1462ebbb5070579e80a5eb4a59d4a4f715741739b6cf27b2e670634767b41b",
+    "/usr/include/x86_64-linux-gnu/bits/types.h": "69454c580d77b06559520ed59cd14551d626cb494fcf5fd95a29144d79b2538b",
+    "/usr/include/x86_64-linux-gnu/bits/types/FILE.h": "37515f78be386f2edad4746f2947c928f480728c56d9a94e25302ebbdaef3c96",
+    "/usr/include/x86_64-linux-gnu/bits/types/__FILE.h": "26c909942e8a6bc82725e9c402f393aed9e32d94190257ddf71e1b5f819b4e5e",
+    "/usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h": "8afae3abf006beb39fd9d4d4bae38745cdf08a91e6217ddf25833c8d4b04751b",
+    "/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h": "603e58ab31ed75b7e0ab09a2ca94e99955f7fbc63310466321ce27c906227eb4",
+    "/usr/include/x86_64-linux-gnu/bits/types/__locale_t.h": "3263b6f6b2b75c11f881796e09d636b7c2baf6421b52d750b76ace42ffe89153",
+    "/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h": "c561df72d5b987ccbd022059fdb1bcb6899c3e94b403997a0576ef3e1afb0f94",
+    "/usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h": "05291a7d38bb1d0da1ed01c09fe85fa2b1f4d5bc708e06bb930efec672db08d5",
+    "/usr/include/x86_64-linux-gnu/bits/types/__sigval_t.h": "368161d070efa731428f02559f0996ec72e5f69150e3b76bf7a056ecd43c2687",
+    "/usr/include/x86_64-linux-gnu/bits/types/clock_t.h": "81e60e8a8d99b28bc723c14b156d7f7fc8ff663d98a857a3f5aea90431f577e3",
+    "/usr/include/x86_64-linux-gnu/bits/types/clockid_t.h": "dcd64d184855b245e5c7acf21910a0aaca590f1faf094e400da5d30551d11eb0",
+    "/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h": "e0f62133861106e467e0454988891e150dc6eb6f4a5098cedcf94a7d37e9aea6",
+    "/usr/include/x86_64-linux-gnu/bits/types/error_t.h": "8b424ad860b52b27391b94ac486bdf86475ee6ece9bc378576859c2d904c76ec",
+    "/usr/include/x86_64-linux-gnu/bits/types/locale_t.h": "19cb01f0a44723edb409ecb6fdabbcdf9bca9733439f46e962a33d4b0f7bb348",
+    "/usr/include/x86_64-linux-gnu/bits/types/sig_atomic_t.h": "8c44b91c2eb6e509905e1becec6b98f8ac006709bfa5d85d86e34a46eb9013cc",
+    "/usr/include/x86_64-linux-gnu/bits/types/sigevent_t.h": "7125083b8096dd146e6498a61f38bf3bc7215c1c9237e92469550bb355545bab",
+    "/usr/include/x86_64-linux-gnu/bits/types/siginfo_t.h": "88b1392b88af3a08d908866f4e9c5650c5cddb0c8e021b0a3f8293cef6616feb",
+    "/usr/include/x86_64-linux-gnu/bits/types/sigset_t.h": "3db5ded9d98a694e8c7196a06690b2e816ec6bb82689940d281f6504533f37e1",
+    "/usr/include/x86_64-linux-gnu/bits/types/sigval_t.h": "7d94a894bed0b9490967e8dbcd53725c0f2af9559e58d4b19bd14d3707974ee3",
+    "/usr/include/x86_64-linux-gnu/bits/types/stack_t.h": "5a70eeeebffb4a5141f728f5816067287aa41a3ed5aa3e88a6cdca4aaed529f6",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h": "4a1aefe381b17ad50add602a8f31c9d4579499064ad3dde703f7f6df48498311",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h": "89d865d365d7ae720892788154ad9e0c9c45087e14c759766b44315d30b22421",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h": "d6299fbc46fc57e7d14635cd5cf69125710ed021ab7305586c84644a03a39f8e",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h": "32877816a861201f1a8cbec905df10f6ed7cfb62113f5a7c5a53527043c4b5fa",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_sigstack.h": "04d7127ad6e3f781903f13d98d4dba3aa69d33f0007a68a74cc62f94cf7131b7",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_statx.h": "9f71fba8d353381b6bfc9dd6a059843666067c44d97dcbc63f3435565361bc73",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_statx_timestamp.h": "93ede0bfc25824e5d67dce9ac1605328f14cf6765ec1c4d1c1973bcdd3e26518",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h": "494c455857a5fe8641d7f034a6892f848f1a2d304791bea3434e209a72d6b1cb",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h": "0909a593d7f6dfae1ca5cef6cf1e62b6a67aaa586e50f6215f3622a47be854d4",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_tm.h": "e7bdda3f42eb0633850ed150fef0a0cf6193cbba8fa740e7505925424a595566",
+    "/usr/include/x86_64-linux-gnu/bits/types/time_t.h": "08a01b91752dc9dda93eb0f8c571e2c57fbb67b9768f5c23ad180fd0894e97a3",
+    "/usr/include/x86_64-linux-gnu/bits/types/timer_t.h": "d96a2452da0d933941273d11d1048ea525f033306892835b0a7a0999b13853aa",
+    "/usr/include/x86_64-linux-gnu/bits/typesizes.h": "dd38f16bed43eda106684d2af8b57af4373814fd1c4404b37302fdefde7be2e0",
+    "/usr/include/x86_64-linux-gnu/bits/uintn-identity.h": "789cb0b97f2ab1484b9d520ecdb94c93c07d2eb6c34d6c981b8e02785b90c137",
+    "/usr/include/x86_64-linux-gnu/bits/uio_lim.h": "617a06f631635d7d0792ea2806e4cb482a67f0976d99502e8f596fbbc52fb832",
+    "/usr/include/x86_64-linux-gnu/bits/unistd.h": "282a609004d8f3ccc4f5d92d58767d5c6d4fe8c95daa38e25691f3b65be14409",
+    "/usr/include/x86_64-linux-gnu/bits/unistd_ext.h": "b2fafcd2805dbd6869e0ef89833d2ae03c197ac8c01b89bab86a13c2499fca0a",
+    "/usr/include/x86_64-linux-gnu/bits/waitflags.h": "4b5a3c68814e83b0f24286101a50c7f8a838ab502c8ee0ab1729e4fc845b0c75",
+    "/usr/include/x86_64-linux-gnu/bits/waitstatus.h": "0b1a7624c450768f914aae61f3c45fb0aa48edd633285a64b6864aebae008703",
+    "/usr/include/x86_64-linux-gnu/bits/wchar.h": "43a321c5d22bfb678fcee382298c125e272ad21d05e55a2efea8e36f2a1e5cc0",
+    "/usr/include/x86_64-linux-gnu/bits/wordsize.h": "716d8459074e2a082d65a28192b32eddbfd7587348372395b1c283a723ae4c18",
+    "/usr/include/x86_64-linux-gnu/bits/xopen_lim.h": "3a60b4caf4758fe13de86ae75f227cc06a6195ab9a585a04794f5369d06c3a55",
+    "/usr/include/x86_64-linux-gnu/gnu/stubs-64.h": "bae35edf2e1f5c08d88ff8a5b839e951c42839b855894751efdf94ae69cc0814",
+    "/usr/include/x86_64-linux-gnu/gnu/stubs.h": "ef444295a0a9e8f5c40918399a00cc91ba0bd79774110cdf6e652baa6cfadb2e",
+    "/usr/include/x86_64-linux-gnu/sys/cdefs.h": "3cc074d3fb0761b678ab4d2a6108b5eb02b9b29341e0bae6a0755cfbbd69cf1f",
+    "/usr/include/x86_64-linux-gnu/sys/ioctl.h": "6b20455aa48049415fb2b1272cac5f84ba4ee28d1b5d930221427d38822ff2cb",
+    "/usr/include/x86_64-linux-gnu/sys/klog.h": "2ad21d655b5dbdecc5fb7f05a717637d5b55f8f408df18161c28dc55f5c32b88",
+    "/usr/include/x86_64-linux-gnu/sys/mount.h": "ebb8fa1f8d44c3e10eb029eef206b1e1f11511f5d679c6395f54e368c1f6ce3f",
+    "/usr/include/x86_64-linux-gnu/sys/poll.h": "fda2956fcb460a554f36295cf99ced1237266b826c91e62505497d61194f00a1",
+    "/usr/include/x86_64-linux-gnu/sys/prctl.h": "db450f90fbc2e37c7e6defe1b1a1d15e553f11fda7b1006c1b8825364d87c2fe",
+    "/usr/include/x86_64-linux-gnu/sys/reboot.h": "b89cc3728be8a22a711c62c53fd78dfd73d6c25ca441f726c4d6d8f42d9dd665",
+    "/usr/include/x86_64-linux-gnu/sys/select.h": "1fe9febd98bdea3ac0cfaa55a06e4bc5e0962783cd4ab22246117c8647c389b1",
+    "/usr/include/x86_64-linux-gnu/sys/stat.h": "e08cccf11fb167ea71163c3ac4dc73c8a155e8c3825ed33b554d735a8fe523dc",
+    "/usr/include/x86_64-linux-gnu/sys/ttydefaults.h": "23dbc1caef6d19508707ffb8aef4498beba70340c87440dfafcf4f3c9dd6589f",
+    "/usr/include/x86_64-linux-gnu/sys/types.h": "74ee1354a61ec7c6583e7995174223b69878915465fc36cafbc2d76d7f32262e",
+    "/usr/include/x86_64-linux-gnu/sys/ucontext.h": "6ea27d7ac320650fdb2924c6927ec73c71fcb1eb0303a40844b591fa4c278de4",
+    "/usr/include/x86_64-linux-gnu/sys/wait.h": "8217c6eb62cbb576fc2fb7f98711f8b1158d447f2031691b2f4ca758ef4669b5",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/include/limits.h": "c22d44de9cc1fd841e51fa2a5c7e0779b83124db9a923dca8b5268b7aa84f7a2",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdarg.h": "0b1d4f68c42c238ae96d07e0e9d5868732054fc8ba704c1dde891649ff117483",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdatomic.h": "cff4333dd21347c88344e296fe5a686a222111bfd4b5eff8c2b65b975033eb19",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h": "45e80e1302342753d2f9e5945248fe3af7cf328a99804d2ec561850bbb550f7d",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdint.h": "86a7914ab7d6a18465a6fb9a7b54f945cad604fdbf3ca0d10e4e0254e0037911",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/include/syslimits.h": "22dd0ab81baadd5a8d455b445855f341d419c7b0267beca235de00b7ec78e529"
+  },
+  "draft_oracle_caveat": [
+    "Freeze TLS ABI, explicit-stack evidence, and canonical vector output before execution."
+  ],
+  "elf_inspection": {
+    "GNU_STACK_nonexecuting": true,
+    "app_and_collector_static_no_interp_no_dynamic": true,
+    "evidence": "Retained app-readelf.stdout and init-readelf.stdout; admitted static profile checks completed before reference.",
+    "no_writable_executable_LOAD": true
+  },
+  "environment": {
+    "HOME": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/home",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/tmp",
+    "TZ": "UTC"
+  },
+  "evidence_root": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1",
+  "formal_case_credit": false,
+  "frozen_inputs_sha256": {
+    "/home/holden/mckernel/scripts/application-tests/cases/thread/thread.tls-isolation.c": "e7b1133fffd39ed5d4d902489411662d7b3465007e0be3556ec2ed3529d74f79",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e",
+    "/home/holden/mckernel/scripts/application-tests/oracles/thread.tls-isolation.json": "2bbde84497f6b165133afdb6fa2e4bacfc503ecc1fc1fd51fab7a66f134fa53d",
+    "/home/holden/mckernel/scripts/application-tests/packets/packet-036.json": "5bf3a220254a951972e9e241be5e58b0abaecf4371fed90c77ea5b9f22a43644"
+  },
+  "installed_link_inputs_sha256": {
+    "/usr/lib/gcc/x86_64-linux-gnu/9/cc1": "c09275e2d3f811e23d255eac415bfedd9e68ba8b5cf4b261d2fce136b5e8fc99",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/collect2": "5228dbf1e15d16694059023d16e7f13f201ea0d76a82e8837c6483dc21d66682",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/crtbeginT.o": "9fe07384ef0078de4a23fe2acc4137cb5aeeddcc715cf189cc0d985b602d348a",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/crtend.o": "c29d8ba35b3afad85993fa8f64b1a4d91678deaeb0f1cae952f12c0bdd4c83c1",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc.a": "82b6c0bfc28d5314fffaaa2a920516575f347972f685b5805f5749a87a617df0",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc_eh.a": "1dc66e2a55a6cefe1458b4e94f9b321e453a5b7279638cd7d12e1ddf83ec59f8",
+    "/usr/lib/x86_64-linux-gnu/crt1.o": "27daac7b3f9e861ef8df49f45b2a8ffb7130a1899f86efe53c6f84d63fd3cd0d",
+    "/usr/lib/x86_64-linux-gnu/crti.o": "2f1c31070d95f398fe4c1388408e83283cc7e0cee0ebb64882e0b331e8e178e8",
+    "/usr/lib/x86_64-linux-gnu/crtn.o": "a2266079f95b84ccc2162ebbf279bcd78858a748aa1882e0bdb912316c76a58f",
+    "/usr/lib/x86_64-linux-gnu/libc.a": "f9831edeccd3a87eb3fbba795f92bfa83409b3951f05ec40ca5df432b8699127",
+    "/usr/lib/x86_64-linux-gnu/libpthread.a": "2f90e0cb347e80a583aca3536715f93255593c9a1214ddbeba1fcc4055aab019"
+  },
+  "new_guest_runs": 0,
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "6e3d3220746c735f6f6b3d31206e3d3420746c735f6f6b3d31206e3d3820746c735f6f6b3d3120706172656e745f746c735f6f6b3d310a",
+    "stdout_utf8": "n=2 tls_ok=1 n=4 tls_ok=1 n=8 tls_ok=1 parent_tls_ok=1\n"
+  },
+  "prior_case_lookup": "No TLS-specific retained evidence found by selected docs/evidence filename lookup; process-thread-static-preparation covers mutex-counter only.",
+  "production_acceptance": false,
+  "profile_path": "/home/holden/mckernel/docs/verification/evidence/signal-mask-restore-compile-profile-review-20261017.json",
+  "profile_sha256": "320d19452c638e0853d21798628d59387d551ff2b212806e1061d9d0b644ff31",
+  "resources": {
+    "address_space_bytes": 1073741824,
+    "application_worker_vectors": [
+      2,
+      4,
+      8
+    ],
+    "core_bytes": 0,
+    "cpu_affinity": [
+      7
+    ],
+    "cpu_seconds": 150,
+    "explicit_stack_bytes": 262144,
+    "file_size_bytes": 67108864,
+    "nofile": 256,
+    "outer_wall_seconds": 180,
+    "peak_payload_threads_including_parent": 9,
+    "serial": true,
+    "static_stack_count": 8
+  },
+  "runtime_prerequisites": [
+    "Independent review of exact 2/4/8-worker runtime admission, TLS/explicit-stack evidence and ND_FUTEX allow_oversubscribe collector selection.",
+    "Fresh reviewed one-shot execution packet and owner/resource/lock/scratch/QMP identity preflight.",
+    "Prior signal/memory/file diagnostic outcomes and positive owner retirement considered by dispatcher before scheduling.",
+    "Original draft packet remains execution_disabled; static host reference supplies no formal catalog acceptance."
+  ],
+  "runtime_release": false,
+  "schema": "mckernel.thread-tls-isolation-current942-preparation.v1",
+  "semantic_limits": [
+    "Frozen source checks N=2,4,8, eight static 262144-byte stack slots and parent TLS=77. Do not reduce to a two-worker case.",
+    "Worker writes and immediately compares its own assigned TLS value; it does not test initial zero TLS or enforce overlapping lifetime with a barrier. Compiler optimization may remove the immediate comparison.",
+    "pthread_join/pthread_attr_destroy results and actual thread stack addresses are not separately observed. Host reference output supplies no McKernel ABI/runtime/formal acceptance.",
+    "Catalog ordinary-dynamic build and same-binary pinned-Linux guest reference remain formal obligations; this static host reference is additive diagnostic preparation only."
+  ],
+  "staging": {
+    "base": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+      "sha256": "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+      "size": 12347108
+    },
+    "base_cpio_sha256": "7e69601b68dafb44c945d2998b10ec024a73518303bb505f275490d83e4c6767",
+    "base_cpio_size": 39677952,
+    "capture": {
+      "elapsed_seconds": 8.835199,
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "91319f792bdbbc90a2c00752bb1302481e2b971afeae9c9a8608ee62c1b8cc16"
+    },
+    "command": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+      "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+      "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/app",
+      "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/init",
+      "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+      "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-20261017-1/initramfs.cpio.gz",
+      "--collector-sha256",
+      "ead247cdf56556c7491bd5d8f746c6c668c0c944414ce51392f7caaed895a63a",
+      "--mcexec-sha256",
+      "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+      "--payload-sha256",
+      "f6bb60e0049d9a166d38eaccc55f96c752bb186675eb03f709bee39bb84c4c73",
+      "--base-sha256",
+      "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+      "--base-size",
+      "12347108",
+      "--base-cpio-sha256",
+      "7e69601b68dafb44c945d2998b10ec024a73518303bb505f275490d83e4c6767",
+      "--base-cpio-size",
+      "39677952"
+    ],
+    "environment": {
+      "HOME": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/home",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "TMPDIR": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/tmp",
+      "TZ": "UTC"
+    },
+    "files": {
+      "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-20261017-1/command.json": {
+        "sha256": "e3f436b13816210e2acaa80f5f8631647781b01fd6e3c840195abc355b68d589",
+        "size": 1123
+      },
+      "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-20261017-1/initramfs.cpio.gz": {
+        "sha256": "8f44b732568f423b0c936c4461d772dd2045726ff638ccdb4b21dd978a601555",
+        "size": 13510760
+      },
+      "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-20261017-1/manifest.json": {
+        "sha256": "15bbc7c6a3a6b3bccaad4c6be08f3804a4916641715a69817105dd4889f917ce",
+        "size": 5462
+      },
+      "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-20261017-1/overlay-result.json": {
+        "sha256": "91319f792bdbbc90a2c00752bb1302481e2b971afeae9c9a8608ee62c1b8cc16",
+        "size": 14814
+      },
+      "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-20261017-1/overlay.status": {
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "size": 2
+      },
+      "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-20261017-1/overlay.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      }
+    },
+    "manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-20261017-1/manifest.json",
+      "sha256": "15bbc7c6a3a6b3bccaad4c6be08f3804a4916641715a69817105dd4889f917ce",
+      "size": 5462
+    },
+    "overlay": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-20261017-1/initramfs.cpio.gz",
+      "sha256": "8f44b732568f423b0c936c4461d772dd2045726ff638ccdb4b21dd978a601555",
+      "size": 13510760
+    },
+    "overlay_manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-20261017-1/overlay-result.json",
+      "sha256": "91319f792bdbbc90a2c00752bb1302481e2b971afeae9c9a8608ee62c1b8cc16",
+      "size": 14814
+    },
+    "root": "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-20261017-1",
+    "source_sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+    "source_signal_manifest_sha256": "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da",
+    "static_record_sha256": "d7c4ee5c734fc78d70befeaf24a1cce91dd129044e05e3ce15628cbf5db0c54c",
+    "status": "PASS_OVERLAY_STRICT_MANIFEST_59_MEMBER_JOINS",
+    "validation": {
+      "backend_called": false,
+      "call": "native_diagnostic.load_manifest(absolute_manifest_path) only",
+      "elapsed_seconds": 0.107347,
+      "final_member_count": 59,
+      "join_scope": "All final members equal authenticated signal map except init/apps/app, which match exact ND_FUTEX collector and TLS payload hashes/sizes/executable modes; strict loader verifies live references and source/output identities.",
+      "loader_source_sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "prepare_attempt_called": false,
+      "result": "PASS"
+    }
+  },
+  "status": "PASS_STATIC_LINUX_REFERENCE_ND_FUTEX_OVERLAY_STRICT_MANIFEST_PREPARATION_ONLY",
+  "task_id": "thread-tls-isolation-current942-preparation-20261017-1",
+  "toolchain_bindings": {
+    "assembler": {
+      "path": "/usr/bin/as",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-as",
+      "sha256": "8d45684bbd6420e3e97907257c510f199bb6c5f9b02ea8ee0a590c1a8b662ead"
+    },
+    "gcc": {
+      "path": "/usr/bin/gcc",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    "linker": {
+      "path": "/usr/bin/ld",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f"
+    },
+    "python_capture_runner": {
+      "path": "/home/holden/anaconda3/bin/python3",
+      "resolved_path": "/home/holden/anaconda3/bin/python3.9",
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+    },
+    "readelf": {
+      "path": "/usr/bin/readelf",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-readelf",
+      "sha256": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb"
+    }
+  }
+}

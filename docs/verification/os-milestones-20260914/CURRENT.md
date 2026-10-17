@@ -14819,3 +14819,19 @@ Nextcallocmanifest589a4a86/freshndcal-1 parent1828/108118/nonce5aab3db8a4bd4ca68
 QMP92, freshrelease reviewunderway; thenfilef60d142f. OriginalTLS2/4/8worker
 vectors andseparatelifecyclecollectorvariant preparedindisjointlanes. No new
 productionbodyrepair orformalM00-M13closure; acceptanceestimatedeltas0.
+
+## Checkpoint377 — current942 calloc diagnostic passed; file released
+
+Calloc actualexit0/33.677923s,HEADba88a7e9stable. Independent actualguest+
+retirementPASS: PID255 scheduled,write205bytes,exit_group/cleanupACK0/procfs
+delete/retirement0/release0, sixfrozenallocation sizes1..1048576allPASS,
+emptyerr/wait0/procfsempty. Allocatorzeroed258chunks/261pages. All5container
+inspectionsprofileexact, all30clientsreaped/containerremoved/name-label-ID
+empty/root27:4free; capture/innerresultbindingsmatch. Two distinct newguest
+diagnostics this invocation; no formalcasecredit/acceptanceestimatedeltas.
+Fileguest separatelyreviewed/released: parent1828/108269 ndfile-1 nonce
+877ca28b8c5945d293f77c6082917319,QMP93,manifestf60d142f; exact395byte6lineoracle.
+Scopewrite/seek/readcompare/fstat/EOF, not reopen/checkedclose-unlink. TLS
+2/4/8workerstatic/Linuxreference/ND_FUTEX/59joins/strictmanifest15bbc7c6PASS.
+LifecyclecollectoractualC30injectedscenarios2PythontestsPASS and independent
+source reviewPASS, no runtimeclaim; parser/staticbuild preparation proceeds.
