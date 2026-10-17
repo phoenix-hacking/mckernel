@@ -1,5 +1,31 @@
 # Prepared autonomous parallel run
 
+## 2026-10-17 launcher update
+
+Use `python3 -B /home/holden/mckernel/scripts/run_os_parallel.py --run --background`
+for the later run. All roles now require `gpt-6.1-sol`: medium coordination and
+implementation, low simple inventories/extraction, high complex repairs and
+independent reviews. Max/Ultra and older-model selections are refused. The
+default run has no time cutoff; it stops at 97% included usage, leaving the
+user-requested 3% reserve and retaining purchased-credit protection.
+
+The reported SIGINT came from the dispatcher obeying a stale preparation message
+delivered as a fresh user instruction. The launcher now archives only the exact
+hash-bound historical pending original before resume, preserving bytes and audit
+receipt, and submits one fresh explicit startup user message before activation.
+It does not seed another turn during automatic recovery. New stops, allowance
+events, completed/cleared/changed goals and uncertain delivery cannot be overwritten
+by stale startup state. Background mode detaches the existing watcher and reports
+its PID/log; use `python3 -B scripts/run_os_goal.py --progress` for actual status.
+
+117 focused offline tests pass, including crash-safe instruction archival,
+startup ordering, stop/usage races, model/effort rejection and background launch.
+The settings-only preflight confirms GPT-6.1 routing and 12 child slots. Exact
+new evidence is in `../evidence/os-model-migration-gpt61-20261017/`. The campaign
+remains paused during preparation. Scratch21 cleanup, RS-011 source authority and
+scratch22 release remain engineering prerequisites. Historical preparation below
+retains its original scope and observations; the model/startup policy above is current.
+
 Preparation only: the saved dispatcher remains paused/stopped on thread
 `01a0a312-8c59-7c80-93de-0b64adde646b`, with no active children. HEAD and the
 local origin tracking ref remain `42fde3aae0572022324fe9090793a5166059993b`.

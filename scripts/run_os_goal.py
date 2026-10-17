@@ -30,12 +30,17 @@ from os_goal_output import LiveOutput
 from os_goal_resources import (check_resources, resolve_resources,
                                resource_environment, resource_instructions)
 from os_goal_windows import window_capability
+from os_goal_instructions import reconcile_instructions
 
 
 REPO = Path(__file__).resolve().parents[1]
 SUDO_HELPER = REPO / "scripts/os_goal_sudo_askpass.py"
 SUDO_CREDENTIAL = Path.home() / ".local/state/mckernel-os-goal/sudo-password"
 PLAN_REL = "docs/verification/os-milestones-20260914"
+DEFAULT_DISPATCHER_MODEL = "gpt-6.1-sol"
+DEFAULT_WORKER_MODEL = "gpt-6.1-sol"
+AUDIT_MODEL = "gpt-6.1-sol"
+REVIEW_MODEL = "gpt-6.1-sol"
 OBJECTIVE = (
     "Complete the McKernel OS functionality, stability, native production and "
     "Rust/assembly acceptance objective in " + PLAN_REL + "/README.md. "
@@ -50,7 +55,9 @@ OBJECTIVE = (
 TERMINAL_CODES = {"complete": 0, "paused": 10, "blocked": 20,
                   "usageLimited": 21, "budgetLimited": 22}
 LIMIT_ERRORS = {"usageLimitExceeded", "sessionBudgetExceeded"}
-INCLUDED_USAGE_STOP_PERCENT = 95
+# The user selected continuous work through effectively the weekly allowance.
+# The user requested a 3% reserve for in-flight work and delayed usage reports.
+INCLUDED_USAGE_STOP_PERCENT = 97
 USER_INPUT_METHOD = "item/tool/requestUserInput"
 AUTONOMY_REPLY = (
     "Automatic launcher response applying the user's standing instruction; "
@@ -314,8 +321,19 @@ def policy_hashes(repo):
 def agent_settings(args, repo):
     return {"enabled": True,
             "max_concurrent_threads_per_session": launch_resources(args, repo)["max_agents"],
-            "max_depth": 1, "default_subagent_model": "gpt-5.6-luna",
-            "default_subagent_reasoning_effort": "low"}
+            "max_depth": 1, "default_subagent_model": DEFAULT_WORKER_MODEL,
+            "default_subagent_reasoning_effort": "medium"}
+
+
+def model_routing(args):
+    """One source for model admission, dispatcher guidance and preview output."""
+    return {
+        "dispatcher": {"model": args.model, "effort": args.effort},
+        "default_worker": {"model": DEFAULT_WORKER_MODEL, "effort": "medium"},
+        "complex_worker": {"model": DEFAULT_WORKER_MODEL, "effort": "high"},
+        "auditor": {"model": AUDIT_MODEL, "effort": "low"},
+        "reviewer": {"model": REVIEW_MODEL, "effort": "high"},
+    }
 
 
 def server_argv(args, repo):
@@ -360,12 +378,14 @@ def preflight(rpc, args, repo):
         cursor = page.get("nextCursor")
         if not cursor:
             break
-    for model, effort in [(args.model, args.effort), ("gpt-5.6-luna", "low"),
-                          ("gpt-5.6-luna", "medium"), ("gpt-6-astra", "high")]:
+    for selection in model_routing(args).values():
+        model, effort = selection["model"], selection["effort"]
         if effort not in {r["reasoningEffort"] for r in models.get(model, {}).get("supportedReasoningEfforts", [])}:
             raise RuntimeError("Required model/effort not advertised: " + model + "/" + effort)
     # Deliberately do not serialize the full personal config or authentication data.
     return {"model": args.model, "effort": args.effort, "agents": expected,
+            "model_routing": model_routing(args),
+            "included_usage_stop_percent": INCLUDED_USAGE_STOP_PERCENT,
             "resources": launch_resources(args, repo), "policy_sha256": policy_hashes(repo),
             "agent_windows": window_capability(args.agent_windows),
             "goals": True, "approval_policy": "never", "sandbox_mode": "danger-full-access",
@@ -470,7 +490,8 @@ class Campaign:
             return
         primary = (limits or {}).get("primary") or {}
         used = primary.get("usedPercent")
-        if not isinstance(used, (int, float)) or isinstance(used, bool):
+        if (not isinstance(used, (int, float)) or isinstance(used, bool) or
+                not math.isfinite(used) or not 0 <= used <= 100):
             self.stop_reason, self.stop_now = "included_usage_unknown", True
         elif used >= INCLUDED_USAGE_STOP_PERCENT:
             # Leave room for already-running turns and delayed usage reports.
@@ -568,7 +589,23 @@ class Campaign:
             "stored objective. Reconcile the compact handoff against live sources and leases. "
             "Adopt and record these policy SHA256 values: " + json.dumps(policy_hashes(self.repo), sort_keys=True) + ". "
             "The user explicitly authorizes "
-            "automatic cheap subagents; use fresh bounded packets and explicit models. "
+            "automatic bounded subagents; use fresh bounded packets and explicit models. "
+            "The user requested more GPT-6.1 use. Apply this invocation's model routing "
+            "instead of older model-selection instructions in workflow documents: "
+            + json.dumps(model_routing(self.args), sort_keys=True) + ". " +
+            "Use GPT-6.1 Sol/medium for implementation, test repair and ordinary workers; "
+            "use GPT-6.1 Sol/high for difficult multi-step kernel repairs. All "
+            "roles must use gpt-6.1-sol, including auditors and independent reviewers. Use the "
+            "auditor model only for bounded extraction/inventory tasks with fixed "
+            "expectations. Preserve the independent reviewer for unsafe ownership, "
+            "concurrency, ABI, execution release and final acceptance. Do not use "
+            "the auditor role for kernel implementation. Do not silently fall back "
+            "to an older model when a required selection is unavailable. "
+            "Choose the lowest effort suitable for the actual task: low for simple "
+            "inventories and extraction, medium for routine implementation/tests, "
+            "high for complex repairs and independent safety review. Increase effort "
+            "only when a concrete difficulty or failed bounded correction warrants "
+            "it; do not spend high effort on repetitive bookkeeping. Max/Ultra are disabled. "
             + resource_instructions(launch_resources(self.args, self.repo)) + " " +
             "Apply CONVERGENCE.md on every continuation: one failed candidate and one "
             "bounded correction per failure family before expert escalation. Carry family "
@@ -618,8 +655,13 @@ class Campaign:
             "Do not edit or start another launcher, clear/replace this goal, change its "
             "budget, or alter model/permission settings to bypass a blocker. "
             "The launcher controls the work window and goal pausing; agents use goal "
-            "status tools only under their actual tool rules. Keep CURRENT.md and "
-            "docs/verification/os-milestones-20260914/PROGRESS.md updated and "
+            "status tools only under their actual tool rules. "
+            "Never signal or kill this invocation's watcher/worker/server to obey a "
+            "historical preparation hold. Never call --instruct to fabricate a new "
+            "user instruction or requeue a historical instruction. A normal Git "
+            "checkpoint does not pause or stop the campaign. Only a new external "
+            "stop, the selected usage/time limit or an actual safety blocker does. "
+            "Keep CURRENT.md and docs/verification/os-milestones-20260914/PROGRESS.md updated and "
             "commit/push verified checkpoints about every 30 minutes and before long "
             "runs. At coherent checkpoints or formal acceptance updates, run "
             "python3 scripts/update_progress_tracker.py so the intermediary-goal bars, "
@@ -637,6 +679,8 @@ class Campaign:
 
     def begin(self):
         # Admission failures belong to this worker, never the preceding retry.
+        if (self.state.get("resume_instruction") or {}).get("status") in {"sending", "delivery_uncertain"}:
+            raise RuntimeError("Resume instruction delivery is uncertain; reconcile its saved turn before resuming")
         note = getattr(self.args, "startup_instruction", None)
         self.save(worker_pid=os.getpid(), server_pid=None, server_start=None, retryable=False,
                   startup_instruction_sha256=hashlib.sha256(note.encode()).hexdigest() if note else None)
@@ -660,6 +704,14 @@ class Campaign:
         self.record_rate_limits(self.rpc.call("account/rateLimits/read", {}).get("rateLimits"))
         if self.stop_reason:
             return
+        bindings = getattr(self.args, "supersede_instructions", [])
+        if bindings:
+            # Only the launcher holding run.lock changes its own instruction
+            # lifecycle. Never deliver an explicitly superseded historical hold
+            # as a new user message after the campaign starts.
+            receipts = reconcile_instructions(
+                self.directory, bindings, hashlib.sha256(note.encode()).hexdigest(), execute=True)
+            self.save(instruction_reconciliation=receipts)
         params = {"cwd": str(self.repo), "model": self.args.model, "approvalPolicy": "never",
                   "sandbox": "danger-full-access",
                   "config": {"model_reasoning_effort": self.args.effort},
@@ -711,14 +763,45 @@ class Campaign:
         if self.stop_reason:
             self.remember_goal(goal)
             return
+        if note and previous_id and goal and goal["status"] == "paused" and not self.args.recovered:
+            # A fresh explicit --run is a CURRENT user instruction. Seeding it
+            # once before activation fixes stale user-role history without a
+            # second dispatcher or an automatic turn/start continuation loop.
+            page = self.rpc.call("thread/turns/list", {
+                "threadId": ident, "limit": 1, "sortDirection": "desc", "itemsView": "notLoaded"})
+            if any(turn.get("status") == "inProgress" for turn in page["data"]):
+                raise RuntimeError("A saved turn is still active; reconcile it before a fresh resume instruction")
+            receipt = {"sha256": hashlib.sha256(note.encode()).hexdigest(), "status": "sending"}
+            self.save(resume_instruction=receipt)
+            try:
+                started = self.rpc.call("turn/start", {
+                    "threadId": ident, "input": [{"type": "text", "text": note}]})
+            except Exception as error:
+                self.save(resume_instruction=dict(receipt, status="delivery_uncertain"))
+                raise RuntimeError("Resume instruction delivery uncertain; reconcile the saved turn before retry") from error
+            self.save(resume_instruction=dict(receipt, status="accepted_by_server", turn_id=started["turn"]["id"]))
+            if self.stop_reason or self.stop_now:
+                return
+            # turn/start pumps asynchronous goal, signal and allowance events.
+            # Never activate from the pre-message paused snapshot after a new
+            # stop, terminal state, cleared goal or changed objective.
+            goal = self.rpc.call("thread/goal/get", {"threadId": ident})["goal"]
+            if self.stop_reason or self.stop_now:
+                return
+            if not goal or goal["objective"] != OBJECTIVE:
+                raise RuntimeError("Saved goal changed during resume instruction; it was not recreated or replaced")
+            if (goal["status"] in {"complete", "usageLimited"} or
+                    goal["status"] == "budgetLimited" and self.args.token_budget is None):
+                self.remember_goal(goal)
+                return
         update = {"threadId": ident, "status": "active"}
         if not goal:
             update["objective"] = OBJECTIVE
         if self.args.token_budget is not None:
             update["tokenBudget"] = self.args.token_budget
         if not goal or goal["status"] != "active" or self.args.token_budget is not None:
-            # The server's durable-goal engine starts/continues idle turns. Do not
-            # also send a turn/start loop, which could duplicate or steer that work.
+            # The server continues idle turns. An explicit startup message may
+            # already own the first turn; activation must not start a second one.
             goal = self.rpc.call("thread/goal/set", update)["goal"]
         self.remember_goal(goal)
         self.save(phase="running")
@@ -866,8 +949,9 @@ def arguments(argv=None):
     mode.add_argument("--instruct", metavar="TEXT", help="Send a live instruction to the coordinator; queues through checkpoints")
     parser.add_argument("--hours", type=float, default=0, help="Optional work window in hours; 0 means no time limit (default: 0)")
     parser.add_argument("--grace-seconds", type=float, default=600, help="Reserve up to this many seconds for a checkpoint")
-    parser.add_argument("--model", default="gpt-5.6-sol", help="Dispatcher model; default: gpt-5.6-sol")
-    parser.add_argument("--effort", default="medium", choices=["low", "medium", "high", "xhigh", "max", "ultra"])
+    parser.add_argument("--model", default=DEFAULT_DISPATCHER_MODEL, choices=[DEFAULT_DISPATCHER_MODEL],
+                        help="Dispatcher model; default: " + DEFAULT_DISPATCHER_MODEL)
+    parser.add_argument("--effort", default="medium", choices=["low", "medium", "high"])
     parser.add_argument("--profile", choices=["aggressive", "balanced"], default="aggressive",
                         help="Dedicated-machine parallelism (default) or historical balanced limits")
     parser.add_argument("--max-agents", type=int, help="Child-agent ceiling; default up to 8 aggressive / 3 balanced")
@@ -881,6 +965,8 @@ def arguments(argv=None):
                         help="Explicit invocation instructions loaded before resuming the saved thread")
     parser.add_argument("--startup-instruction-sha256",
                         help="Pin the invocation instructions across preflight and watcher recoveries")
+    parser.add_argument("--supersede-instruction", action="append", default=[], metavar="ID:SHA256",
+                        help="Archive an exact historical queued instruction before this explicit resume")
     parser.add_argument("--max-restarts", type=int, default=-1, help="Automatic recoveries; -1 means unlimited, 0 disables (default: -1)")
     parser.add_argument("--restart-delay", type=float, default=5, help="Initial recovery backoff in seconds (default: 5)")
     parser.add_argument("--watchdog-seconds", type=float, default=180, help="Recover a runner with no state heartbeat; 0 disables")
@@ -896,6 +982,13 @@ def arguments(argv=None):
         if (args.startup_instruction is None or
                 hashlib.sha256(args.startup_instruction.encode()).hexdigest() != args.startup_instruction_sha256):
             parser.error("Startup instruction digest differs; reconcile the changed instruction before resuming")
+    args.supersede_instructions = []
+    for binding in args.supersede_instruction:
+        ident, separator, digest = binding.partition(":")
+        if (not separator or not args.startup_instruction_sha256 or len(digest) != 64 or
+                any(c not in "0123456789abcdef" for c in digest)):
+            parser.error("Supersession requires ID:SHA256 and a hash-pinned startup instruction")
+        args.supersede_instructions.append({"id": ident, "sha256": digest})
     if any(value is not None and value <= 0 for value in (args.max_agents, args.build_jobs)):
         parser.error("max-agents and build-jobs must be positive")
     if args.memory_gib is not None and (not math.isfinite(args.memory_gib) or args.memory_gib <= 0):
@@ -955,6 +1048,9 @@ def main(argv=None):
                           "heartbeat_seconds": args.heartbeat_seconds, "live_output": not args.quiet,
                           "stall_seconds": args.stall_seconds,
                           "resources": launch_resources(args, REPO), "policy_sha256": policy_hashes(REPO),
+                          "model_routing": model_routing(args),
+                          "included_usage_stop_percent": INCLUDED_USAGE_STOP_PERCENT,
+                          "supersede_instructions": args.supersede_instructions,
                           "agent_windows": window_capability(args.agent_windows),
                           "startup_instruction_sha256": (hashlib.sha256(args.startup_instruction.encode()).hexdigest()
                                                          if args.startup_instruction else None),
@@ -972,6 +1068,9 @@ def main(argv=None):
     if not shutil.which(args.codex):
         raise RuntimeError("Codex executable not found. Install/sign in to the local CLI first.")
     if args.check:
+        if args.supersede_instructions:
+            reconcile_instructions(directory, args.supersede_instructions,
+                                   args.startup_instruction_sha256, execute=False)
         with tempfile.TemporaryDirectory(prefix="mckernel-goal-check-") as temporary:
             rpc = RPC(server_argv(args, REPO), Path(temporary), lambda event: None)
             try:

@@ -1,5 +1,23 @@
 # Compact dispatcher handoff
 
+## Latest preparation: GPT-6.1 and continuous launcher, 2026-10-17
+
+Start later with `python3 -B /home/holden/mckernel/scripts/run_os_parallel.py --run --background`.
+Every role requires GPT-6.1 Sol: medium routine/coordinator, low simple inventory,
+high complex repair/independent review. Max/Ultra and older models are refused.
+No time cutoff; classified recovery is unlimited; included usage stops at 97%,
+leaving 3% reserve. Background mode retains a private log and survives terminal close.
+
+The reported signal_2 stop was caused by stale preparation instruction delivery:
+the dispatcher copied that message and killed its watcher. The launcher now
+archives exact authorized historical bytes before activation and submits one
+fresh user startup message. No seed replay on automatic recovery; genuine new
+stops, quota events, terminal/changed goals and uncertain delivery are preserved.
+117 focused offline tests pass; settings-only preflight confirms 12 GPT-6.1
+children within the existing shared budget. No campaign/build/guest/cleanup ran.
+Evidence: `../evidence/os-model-migration-gpt61-20261017/`. Scratch21/RS-011/
+scratch22 prerequisites and all original acceptance counts remain unchanged.
+
 ## Latest preparation: 2026-10-16, campaign remains paused
 
 The user requested an aggressive autonomous parallel entry point and will run

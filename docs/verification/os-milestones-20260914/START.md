@@ -103,11 +103,12 @@ is faster observed kernel behavior, not a promised numerical speedup.
 
 ## Models, ownership and resources
 
-Keep Sol/medium coordination. Use Luna/low for bounded read-only inventories,
-Luna/medium for specified implementation/tests, Terra/medium or high for a bounded
-repair escalation, and Astra/high for ownership, unsafe code, ABI, execution
-release and final evidence. Use os_auditor/os_worker/os_reviewer roles where
-available; explicitly select each child model/effort without model upgrades.
+Use `gpt-6.1-sol` for coordination and every child; the user explicitly requires
+this model throughout. Use low for simple read-only inventories, medium for
+coordination/implementation, and high for complex repairs and independent
+ownership/unsafe/ABI/execution-release/final-evidence review. Use
+os_auditor/os_worker/os_reviewer roles where available. Do not fall back to older
+models; admission must verify every required GPT-6.1 effort before resume.
 Default `--profile aggressive` allows up to eight children, constrained by
 measured host CPU/RAM; no recursive dispatch. Final review must be independent
 of authorship. Project config sets eight; the launcher's measured effective cap

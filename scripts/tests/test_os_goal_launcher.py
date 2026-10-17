@@ -2,7 +2,8 @@
 """Offline launcher lifecycle/transport tests: no Codex inference or OS payloads."""
 
 from collections import deque
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
+import hashlib
 import importlib.util
 import io
 import json
@@ -11,7 +12,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 
 SOURCE = Path(__file__).resolve().parents[1] / "run_os_goal.py"
@@ -43,6 +44,9 @@ class FakeRPC:
         self.turns = {}
         self.bad_config = False
         self.bad_environment = False
+        self.worker_model = "gpt-6.1-sol"
+        self.worker_effort = "medium"
+        self.models = {"gpt-6.1-sol": ["low", "medium", "high"]}
         self.account_type = "chatgpt"
         self.limits = {"primary": {"usedPercent": 0, "windowDurationMins": 10080},
                        "credits": {"hasCredits": False, "balance": "0"}, "planType": "pro"}
@@ -81,12 +85,12 @@ class FakeRPC:
                 "approval_policy": "never", "features": {"goals": True}, "agents": {
                     "enabled": True, "max_concurrent_threads_per_session":
                         launcher.launch_resources(self.args, launcher.REPO)["max_agents"] + int(self.bad_config),
-                    "max_depth": 1, "default_subagent_model": "gpt-5.6-luna",
-                    "default_subagent_reasoning_effort": "low"}}}
+                    "max_depth": 1, "default_subagent_model": self.worker_model,
+                    "default_subagent_reasoning_effort": self.worker_effort}}}
         if method == "model/list":
             return {"data": [{"model": model, "supportedReasoningEfforts": [
-                {"reasoningEffort": effort} for effort in ["low", "medium", "high"]]}
-                for model in [self.args.model, "gpt-5.6-luna", "gpt-6-astra"]], "nextCursor": None}
+                {"reasoningEffort": effort} for effort in efforts]}
+                for model, efforts in self.models.items()], "nextCursor": None}
         if method == "account/read":
             return {"account": {"type": self.account_type}}
         if method == "account/rateLimits/read":
@@ -106,6 +110,10 @@ class FakeRPC:
             if self.goal["status"] == "active" and "test-thread" not in self.turns:
                 self.started()
             return {"goal": dict(self.goal)}
+        if method == "turn/start":
+            assert params["threadId"] not in self.turns, "Cannot seed an already active turn"
+            self.started("startup-turn-1", params["threadId"])
+            return {"turn": dict(self.turns[params["threadId"]])}
         if method == "turn/steer":
             self.completed()
             return {}
@@ -113,7 +121,8 @@ class FakeRPC:
             return {"data": list(self.turns), "nextCursor": None}
         if method == "thread/turns/list":
             assert params["itemsView"] == "notLoaded"
-            return {"data": [self.turns[params["threadId"]]], "nextCursor": None}
+            turn = self.turns.get(params["threadId"])
+            return {"data": [dict(turn)] if turn else [], "nextCursor": None}
         if method == "turn/interrupt":
             self.completed(params["threadId"])
             return {}
@@ -143,6 +152,14 @@ class CampaignTests(unittest.TestCase):
         launcher.atomic_json(self.directory / "state.json", {"schema_version": 1,
             "repo": str(self.directory), "thread_id": "test-thread", "goal": saved_goal})
 
+    def startup_arguments(self, *extra):
+        note = self.directory / "startup-note.txt"
+        note.write_text("Resume the OS work with GPT-6.1; reconcile the historical preparation hold.")
+        digest = hashlib.sha256(note.read_bytes()).hexdigest()
+        self.args = launcher.arguments(["--hours", "0", "--agent-windows", "off",
+            "--startup-instruction-file", str(note), "--startup-instruction-sha256", digest, *extra])
+        return note.read_text(), digest
+
     def run_campaign(self, rpc, expected):
         campaign = launcher.Campaign(self.args, self.directory, self.directory, rpc.factory)
         with redirect_stdout(io.StringIO()):
@@ -151,8 +168,9 @@ class CampaignTests(unittest.TestCase):
         self.all_calls.extend(rpc.calls)
         return json.loads((self.directory / "state.json").read_text())
 
-    def test_sol_and_aggressive_bounded_luna_defaults(self):
-        self.assertEqual(self.args.model, "gpt-5.6-sol")
+    def test_gpt_61_coordinator_and_worker_defaults_keep_aggressive_limits(self):
+        self.assertEqual(self.args.model, "gpt-6.1-sol")
+        self.assertEqual(self.args.effort, "medium")
         self.assertIsNone(self.args.token_budget)
         self.assertEqual(self.args.profile, "aggressive")
         self.assertEqual(self.args.stall_seconds, 0)
@@ -161,9 +179,50 @@ class CampaignTests(unittest.TestCase):
         self.assertIn("agents.max_concurrent_threads_per_session=" + str(resources["max_agents"]), command)
         self.assertIn('shell_environment_policy.set.CARGO_BUILD_JOBS="' + str(resources["build_jobs"]) + '"', command)
         self.assertIn("agents.max_depth=1", command)
+        self.assertIn('model="gpt-6.1-sol"', command)
+        self.assertIn('model_reasoning_effort="medium"', command)
+        self.assertIn('agents.default_subagent_model="gpt-6.1-sol"', command)
+        self.assertIn('agents.default_subagent_reasoning_effort="medium"', command)
         self.assertIn('sandbox_mode="danger-full-access"', command)
         self.assertIn('approval_policy="never"', command)
         self.assertNotIn("--dangerously-bypass-approvals-and-sandbox", command)
+
+    def test_model_routing_uses_only_gpt_61_for_every_role(self):
+        routing = launcher.model_routing(self.args)
+        self.assertEqual(routing, {
+            "dispatcher": {"model": "gpt-6.1-sol", "effort": "medium"},
+            "default_worker": {"model": "gpt-6.1-sol", "effort": "medium"},
+            "complex_worker": {"model": "gpt-6.1-sol", "effort": "high"},
+            "auditor": {"model": "gpt-6.1-sol", "effort": "low"},
+            "reviewer": {"model": "gpt-6.1-sol", "effort": "high"},
+        })
+        self.assertTrue(all(selection["model"] == "gpt-6.1-sol" for selection in routing.values()))
+
+    def test_coordinator_rejects_other_models_before_launch(self):
+        for model in ("gpt-5.6-sol", "gpt-5.6-luna", "gpt-6-astra", "unknown"):
+            with self.subTest(model=model), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+                launcher.arguments(["--model", model])
+
+    def test_coordinator_rejects_efforts_above_high(self):
+        for effort in ("xhigh", "max", "ultra"):
+            with self.subTest(effort=effort), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+                launcher.arguments(["--effort", effort])
+
+    def test_coordinator_effort_override_keeps_all_roles_on_gpt_61(self):
+        for effort in ("low", "high"):
+            with self.subTest(effort=effort):
+                self.args = launcher.arguments(["--model", "gpt-6.1-sol", "--effort", effort,
+                                                "--agent-windows", "off"])
+                rpc = FakeRPC(self.args)
+                settings = launcher.preflight(rpc, self.args, self.directory)
+                self.assertEqual(settings["model"], "gpt-6.1-sol")
+                self.assertEqual(settings["effort"], effort)
+                self.assertEqual(settings["model_routing"]["dispatcher"],
+                                 {"model": "gpt-6.1-sol", "effort": effort})
+                self.assertEqual(settings["model_routing"]["default_worker"],
+                                 {"model": "gpt-6.1-sol", "effort": "medium"})
+                self.assertEqual(settings["agents"]["default_subagent_model"], "gpt-6.1-sol")
+                self.assertFalse(any(method.startswith("thread/") for method, _ in rpc.calls))
 
     def test_live_instruction_is_queued_and_delivered_to_active_coordinator(self):
         campaign = launcher.Campaign(self.args, self.directory, self.directory)
@@ -369,7 +428,7 @@ class CampaignTests(unittest.TestCase):
         self.assertEqual(state["last_rate_limits"]["credits"]["balance"], "0")
 
     def test_included_limit_guard_stops_before_starting_inference(self):
-        for percent in (95, 100):
+        for percent in (97, 100):
             with self.subTest(percent=percent):
                 rpc = FakeRPC(self.args)
                 rpc.limits["primary"]["usedPercent"] = percent
@@ -378,6 +437,24 @@ class CampaignTests(unittest.TestCase):
                 self.assertFalse(any(m in ("thread/start", "thread/resume", "thread/goal/set")
                                      for m, _ in rpc.calls))
                 self.assertFalse(watcher.should_restart(21, state))
+
+    def test_included_usage_below_97_percent_keeps_the_requested_reserve(self):
+        self.assertEqual(launcher.INCLUDED_USAGE_STOP_PERCENT, 97)
+        rpc = FakeRPC(self.args, steps=[lambda r: (r.completed(), r.status("complete"))])
+        rpc.limits["primary"]["usedPercent"] = 96.9
+        state = self.run_campaign(rpc, 0)
+        self.assertIsNone(state["stop_reason"])
+        self.assertTrue(any(method == "thread/start" for method, _ in rpc.calls))
+
+    def test_invalid_included_usage_refuses_inference(self):
+        for percent in (float("nan"), float("inf"), -1, 101, True, None, "97"):
+            with self.subTest(percent=percent):
+                rpc = FakeRPC(self.args)
+                rpc.limits["primary"]["usedPercent"] = percent
+                state = self.run_campaign(rpc, 21)
+                self.assertEqual(state["stop_reason"], "included_usage_unknown")
+                self.assertFalse(any(method in ("thread/start", "thread/resume", "turn/start",
+                                                "thread/goal/set") for method, _ in rpc.calls))
 
     def test_api_key_auth_is_rejected_before_inference(self):
         rpc = FakeRPC(self.args)
@@ -478,6 +555,48 @@ class CampaignTests(unittest.TestCase):
         self.assertIn("build environment", state["last_error"])
         self.assertFalse(any(m.startswith("thread/") for m, p in rpc.calls))
 
+    def test_misconfigured_worker_model_or_effort_fails_before_resume(self):
+        for attribute, value in (("worker_model", "gpt-5.6-luna"), ("worker_effort", "low")):
+            with self.subTest(attribute=attribute):
+                self.saved(goal("paused"))
+                rpc = FakeRPC(self.args, goal("paused"))
+                setattr(rpc, attribute, value)
+                state = self.run_campaign(rpc, 1)
+                self.assertIn("Effective Codex settings", state["last_error"])
+                self.assertEqual(rpc.goal["status"], "paused")
+                self.assertFalse(any(m.startswith("thread/") for m, p in rpc.calls))
+
+    def test_missing_gpt_61_refuses_resume_even_with_legacy_models_available(self):
+        self.saved(goal("paused"))
+        rpc = FakeRPC(self.args, goal("paused"))
+        rpc.models = {"gpt-5.6-sol": ["low", "medium", "high"],
+                      "gpt-5.6-luna": ["low", "medium", "high"],
+                      "gpt-6-astra": ["low", "medium", "high"]}
+        state = self.run_campaign(rpc, 1)
+        self.assertIn("gpt-6.1-sol/medium", state["last_error"])
+        self.assertEqual(rpc.goal["status"], "paused")
+        self.assertFalse(any(m.startswith("thread/") for m, p in rpc.calls))
+
+    def test_unadvertised_routed_effort_refuses_resume_without_fallback(self):
+        for effort in ("low", "medium", "high"):
+            with self.subTest(effort=effort):
+                self.saved(goal("paused"))
+                rpc = FakeRPC(self.args, goal("paused"))
+                rpc.models["gpt-6.1-sol"].remove(effort)
+                state = self.run_campaign(rpc, 1)
+                self.assertIn("gpt-6.1-sol/" + effort, state["last_error"])
+                self.assertEqual(rpc.goal["status"], "paused")
+                self.assertFalse(any(m.startswith("thread/") for m, p in rpc.calls))
+
+    def test_only_gpt_61_catalogue_supports_all_routes(self):
+        rpc = FakeRPC(self.args)
+        settings = launcher.preflight(rpc, self.args, self.directory)
+        self.assertEqual(settings["model_routing"]["auditor"],
+                         {"model": "gpt-6.1-sol", "effort": "low"})
+        self.assertTrue(all(selection["model"] == "gpt-6.1-sol"
+                            for selection in settings["model_routing"].values()))
+        self.assertFalse(any(m.startswith("thread/") for m, p in rpc.calls))
+
     def test_stop_reason_survives_late_transient_error(self):
         campaign = launcher.Campaign(self.args, self.directory, self.directory)
         try:
@@ -538,14 +657,234 @@ class CampaignTests(unittest.TestCase):
         self.assertIn("Insufficient disk", json.loads((self.directory / "state.json").read_text())["last_error"])
 
     def test_resume_receives_profile_and_convergence_without_replacing_goal(self):
-        self.saved(goal("paused"))
-        rpc = FakeRPC(self.args, goal("paused"), [lambda r: (r.completed(), r.status("complete"))])
+        saved_goal = dict(goal("paused"), tokenBudget=432100)
+        self.saved(saved_goal)
+        rpc = FakeRPC(self.args, dict(saved_goal), [lambda r: (r.completed(), r.status("complete"))])
         state = self.run_campaign(rpc, 0)
         params = next(p for m, p in rpc.calls if m == "thread/resume")
         for name in ("CONVERGENCE.md", "HANDOFF.md", "disjoint", "failure family"):
             self.assertIn(name, params["developerInstructions"])
         self.assertEqual(state["settings"]["resources"]["profile"], "aggressive")
+        self.assertEqual(params["model"], "gpt-6.1-sol")
+        self.assertEqual(params["config"]["model_reasoning_effort"], "medium")
+        self.assertEqual(state["settings"]["agents"]["default_subagent_model"], "gpt-6.1-sol")
+        self.assertEqual(state["goal"]["objective"], saved_goal["objective"])
+        self.assertEqual(state["goal"]["tokenBudget"], saved_goal["tokenBudget"])
+        self.assertEqual(state["goal"]["tokensUsed"], saved_goal["tokensUsed"])
         self.assertFalse(any("objective" in p or "tokenBudget" in p for m, p in rpc.calls))
+
+    def test_stale_bound_hold_is_archived_before_resume_and_never_steered(self):
+        saved_goal = dict(goal("paused"), tokenBudget=432100)
+        self.saved(saved_goal)
+        stale_text = "Preparation only: do not start the historical campaign."
+        ident = launcher.queue_instruction(self.directory, stale_text)
+        pending = self.directory / "instructions" / "pending" / (ident + ".json")
+        original = pending.read_bytes()
+        original_inode = pending.stat().st_ino
+        archived = self.directory / "instructions" / "superseded" / pending.name
+        receipt = self.directory / "instructions" / "reconciliation" / pending.name
+        note, digest = self.startup_arguments("--supersede-instruction",
+            ident + ":" + hashlib.sha256(original).hexdigest())
+        checked = []
+
+        class ArchivalRPC(FakeRPC):
+            def call(rpc, method, params, **kwargs):
+                if method == "thread/resume":
+                    self.assertFalse(pending.exists())
+                    self.assertEqual(archived.read_bytes(), original)
+                    self.assertEqual(archived.stat().st_ino, original_inode)
+                    self.assertEqual(json.loads(receipt.read_text())["status"], "superseded")
+                    checked.append(True)
+                return super().call(method, params, **kwargs)
+
+        rpc = ArchivalRPC(self.args, dict(saved_goal),
+                          [lambda r: (r.completed(), r.status("complete"))])
+        state = self.run_campaign(rpc, 0)
+        self.assertEqual(checked, [True])
+        self.assertEqual(archived.read_bytes(), original)
+        self.assertEqual(json.loads(receipt.read_text())["startup_instruction_sha256"], digest)
+        self.assertFalse(any(method == "turn/steer" for method, _ in rpc.calls))
+        seeds = [params for method, params in rpc.calls if method == "turn/start"]
+        self.assertEqual(len(seeds), 1)
+        self.assertEqual(seeds[0]["input"], [{"type": "text", "text": note}])
+        self.assertEqual(state["goal"]["objective"], saved_goal["objective"])
+        self.assertEqual(state["goal"]["tokenBudget"], saved_goal["tokenBudget"])
+
+    def test_fresh_startup_user_message_precedes_goal_activation_once(self):
+        note, digest = self.startup_arguments()
+        saved_goal = dict(goal("paused"), tokenBudget=432100)
+        self.saved(saved_goal)
+        rpc = FakeRPC(self.args, dict(saved_goal),
+                      [lambda r: (r.completed(), r.status("complete"))])
+        state = self.run_campaign(rpc, 0)
+        starts = [(index, params) for index, (method, params) in enumerate(rpc.calls)
+                  if method == "turn/start"]
+        self.assertEqual(len(starts), 1)
+        seed_index, seed = starts[0]
+        activation = next(index for index, (method, params) in enumerate(rpc.calls)
+                          if method == "thread/goal/set" and params.get("status") == "active")
+        self.assertLess(seed_index, activation)
+        self.assertEqual(seed["threadId"], "test-thread")
+        self.assertEqual(seed["input"], [{"type": "text", "text": note}])
+        self.assertEqual(state["resume_instruction"]["sha256"], digest)
+        self.assertEqual(state["resume_instruction"]["turn_id"], "startup-turn-1")
+        self.assertEqual(state["resume_instruction"]["status"], "accepted_by_server")
+        self.assertEqual(state["goal"]["objective"], saved_goal["objective"])
+        self.assertEqual(state["goal"]["tokenBudget"], saved_goal["tokenBudget"])
+        self.assertEqual(state["goal"]["tokensUsed"], saved_goal["tokensUsed"])
+        self.assertFalse(any("objective" in params or "tokenBudget" in params
+                             for _, params in rpc.calls))
+
+    def test_automatic_recovery_never_seeds_a_duplicate_startup_message(self):
+        self.startup_arguments("--recovered")
+        self.saved(goal("paused"))
+        rpc = FakeRPC(self.args, goal("paused"),
+                      [lambda r: (r.completed(), r.status("complete"))])
+        self.run_campaign(rpc, 0)
+        self.assertTrue(any(method == "thread/resume" for method, _ in rpc.calls))
+        self.assertFalse(any(method == "turn/start" for method, _ in rpc.calls))
+
+    def test_startup_user_message_refuses_an_existing_active_turn(self):
+        self.startup_arguments()
+        self.saved(goal("paused"))
+        rpc = FakeRPC(self.args, goal("paused"))
+        rpc.turns["test-thread"] = {"id": "existing-turn", "items": [], "status": "inProgress"}
+        campaign = launcher.Campaign(self.args, self.directory, self.directory, rpc.factory)
+        try:
+            with redirect_stdout(io.StringIO()), self.assertRaises(RuntimeError):
+                campaign.begin()
+            self.assertFalse(any(method == "turn/start" for method, _ in rpc.calls))
+            self.assertFalse(any(method == "thread/goal/set" and params.get("status") == "active"
+                                 for method, params in rpc.calls))
+            self.assertEqual(rpc.goal["status"], "paused")
+            self.assertEqual(rpc.turns["test-thread"]["id"], "existing-turn")
+        finally:
+            rpc.close()
+            campaign.output.close()
+
+    def test_uncertain_startup_delivery_keeps_goal_paused_and_records_receipt(self):
+        _, digest = self.startup_arguments()
+        self.saved(goal("paused"))
+
+        class UncertainRPC(FakeRPC):
+            def call(rpc, method, params, **kwargs):
+                result = super().call(method, params, **kwargs)
+                if method == "turn/start":
+                    raise OSError("Response lost after the server accepted the startup turn")
+                return result
+
+        rpc = UncertainRPC(self.args, goal("paused"))
+        campaign = launcher.Campaign(self.args, self.directory, self.directory, rpc.factory)
+        try:
+            with redirect_stdout(io.StringIO()), self.assertRaisesRegex(RuntimeError, "delivery uncertain"):
+                campaign.begin()
+            receipt = json.loads((self.directory / "state.json").read_text())["resume_instruction"]
+            self.assertEqual(receipt["sha256"], digest)
+            self.assertEqual(receipt["status"], "delivery_uncertain")
+            self.assertEqual(sum(method == "turn/start" for method, _ in rpc.calls), 1)
+            self.assertFalse(any(method == "thread/goal/set" and params.get("status") == "active"
+                                 for method, params in rpc.calls))
+            self.assertEqual(rpc.goal["status"], "paused")
+        finally:
+            rpc.close()
+            campaign.output.close()
+
+    def test_uncertain_startup_receipt_blocks_fresh_launch_and_recovery_before_rpc(self):
+        for status in ("sending", "delivery_uncertain"):
+            for recovered in (False, True):
+                with self.subTest(status=status, recovered=recovered):
+                    _, digest = self.startup_arguments(*(["--recovered"] if recovered else []))
+                    self.saved(goal("paused"))
+                    state_path = self.directory / "state.json"
+                    state = json.loads(state_path.read_text())
+                    state["resume_instruction"] = {"sha256": digest, "status": status}
+                    launcher.atomic_json(state_path, state)
+                    original = state_path.read_bytes()
+                    factory = Mock(side_effect=AssertionError("RPC must not be started"))
+                    campaign = launcher.Campaign(self.args, self.directory, self.directory, factory)
+                    try:
+                        with self.assertRaisesRegex(RuntimeError, "delivery is uncertain"):
+                            campaign.begin()
+                        factory.assert_not_called()
+                        self.assertIsNone(campaign.rpc)
+                        self.assertEqual(state_path.read_bytes(), original)
+                        self.assertEqual(campaign.state["goal"]["status"], "paused")
+                    finally:
+                        campaign.output.close()
+
+    def test_signal_or_usage_stop_during_startup_message_prevents_goal_activation(self):
+        for cause in ("signal", "usage_guard"):
+            with self.subTest(cause=cause):
+                self.startup_arguments()
+                self.saved(goal("paused"))
+
+                class StopDuringSeedRPC(FakeRPC):
+                    def call(rpc, method, params, **kwargs):
+                        result = super().call(method, params, **kwargs)
+                        if method == "turn/start":
+                            if cause == "signal":
+                                rpc.on_event.__self__.on_signal(2, None)
+                            else:
+                                rpc.emit("account/rateLimits/updated", {"rateLimits": {
+                                    "primary": {"usedPercent": 97}, "credits": {"balance": "0"}}})
+                        return result
+
+                rpc = StopDuringSeedRPC(self.args, goal("paused"))
+                campaign = launcher.Campaign(self.args, self.directory, self.directory, rpc.factory)
+                try:
+                    with redirect_stdout(io.StringIO()):
+                        campaign.begin()
+                    self.assertEqual(campaign.stop_reason,
+                                     "signal_2" if cause == "signal" else "included_usage_guard")
+                    self.assertEqual(sum(method == "turn/start" for method, _ in rpc.calls), 1)
+                    self.assertFalse(any(method == "thread/goal/set" for method, _ in rpc.calls))
+                    self.assertEqual(rpc.goal["status"], "paused")
+                    self.assertEqual(campaign.state["resume_instruction"]["status"], "accepted_by_server")
+                finally:
+                    rpc.close()
+                    campaign.output.close()
+
+    def test_startup_message_cannot_overwrite_a_terminal_cleared_or_changed_goal(self):
+        for change in ("complete", "usageLimited", "budgetLimited", "cleared", "different_objective"):
+            with self.subTest(change=change):
+                self.startup_arguments()
+                saved_goal = dict(goal("paused"), tokenBudget=432100)
+                self.saved(saved_goal)
+
+                class ChangedDuringSeedRPC(FakeRPC):
+                    def call(rpc, method, params, **kwargs):
+                        result = super().call(method, params, **kwargs)
+                        if method == "turn/start":
+                            if change == "cleared":
+                                rpc.goal = None
+                            elif change == "different_objective":
+                                rpc.goal["objective"] = "Another user objective"
+                            else:
+                                rpc.status(change)
+                        return result
+
+                rpc = ChangedDuringSeedRPC(self.args, dict(saved_goal))
+                campaign = launcher.Campaign(self.args, self.directory, self.directory, rpc.factory)
+                try:
+                    with redirect_stdout(io.StringIO()):
+                        if change in ("cleared", "different_objective"):
+                            with self.assertRaisesRegex(RuntimeError, "goal changed"):
+                                campaign.begin()
+                        else:
+                            campaign.begin()
+                            self.assertEqual(campaign.goal["status"], change)
+                            self.assertEqual(campaign.goal["tokenBudget"], saved_goal["tokenBudget"])
+                    self.assertEqual(sum(method == "turn/start" for method, _ in rpc.calls), 1)
+                    self.assertFalse(any(method == "thread/goal/set" for method, _ in rpc.calls))
+                    if change == "cleared":
+                        self.assertIsNone(rpc.goal)
+                    elif change == "different_objective":
+                        self.assertEqual(rpc.goal["objective"], "Another user objective")
+                    else:
+                        self.assertEqual(rpc.goal["status"], change)
+                finally:
+                    rpc.close()
+                    campaign.output.close()
 
     def test_window_pauses_and_requests_checkpoint(self):
         self.args.hours = 1 / 3600
@@ -644,8 +983,11 @@ class CampaignTests(unittest.TestCase):
             import jsonschema
             files = {"initialize": "v1/InitializeParams.json", "config/read": "v2/ConfigReadParams.json",
                 "model/list": "v2/ModelListParams.json", "thread/start": "v2/ThreadStartParams.json",
+                "account/read": "v2/GetAccountParams.json",
+                "account/rateLimits/read": "v2/NullableGetAccountRateLimitsParams.json",
                 "thread/resume": "v2/ThreadResumeParams.json", "thread/goal/get": "v2/ThreadGoalGetParams.json",
-                "thread/goal/set": "v2/ThreadGoalSetParams.json", "turn/steer": "v2/TurnSteerParams.json",
+                "thread/goal/set": "v2/ThreadGoalSetParams.json", "turn/start": "v2/TurnStartParams.json",
+                "turn/steer": "v2/TurnSteerParams.json",
                 "thread/loaded/list": "v2/ThreadLoadedListParams.json",
                 "thread/turns/list": "v2/ThreadTurnsListParams.json", "turn/interrupt": "v2/TurnInterruptParams.json"}
             schemas = {method: json.loads((Path(directory) / name).read_text()) for method, name in files.items()}

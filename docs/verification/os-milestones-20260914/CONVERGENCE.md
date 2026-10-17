@@ -213,7 +213,7 @@ Escalate to a capable design/ownership expert with the complete current invarian
 matrix, original failure, smallest reproducer and exact affected files. The
 escalation must produce a coherent repair and executable checks, or a finite
 missing-authority/dependency list. Another prose-only redesign is not closure.
-Use the already selected Terra escalation or Astra/high ownership review where
+Use GPT-6.1 Sol/high repair escalation or independent ownership review where
 appropriate; keep the final reviewer independent of the implementation author.
 
 If the expert's candidate fails for the same family, the dispatcher must decide
@@ -263,10 +263,11 @@ sequence, lifetime and legitimate post-retirement reuse.
 
 ## Scheduling and model use
 
-Keep Sol/medium as dispatcher. Use Luna/low for bounded read-only inventory,
-Luna/medium for well-specified repairs/tests, the existing Terra escalation for
-bounded hard repairs, and Astra/high for ownership/unsafe/ABI/release review.
-Do not upgrade models. Default `--profile aggressive` permits up to eight children,
+The user requires `gpt-6.1-sol` for the dispatcher and all children. Use medium
+for coordination/implementation, low for simple inventories, and high for
+complex repairs and independent ownership/unsafe/ABI/release review. No older
+model fallback is allowed. This replaces the earlier mixed-model assignments.
+Default `--profile aggressive` permits up to eight children,
 constrained by measured host CPU/RAM, with no recursive dispatch and fresh packets.
 Sizing allows two remote child slots per affinity CPU and a 2-GiB planning share
 per child; the current host resolves to eight children/seven jobs/24 GiB.

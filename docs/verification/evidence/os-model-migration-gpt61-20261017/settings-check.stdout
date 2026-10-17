@@ -1,0 +1,161 @@
+{
+  "mode": "check",
+  "background": false,
+  "thread_id": "01a0a312-8c59-7c80-93de-0b64adde646b",
+  "resources": {
+    "profile": "aggressive",
+    "max_agents": 12,
+    "build_jobs": 7,
+    "memory_gib": 24,
+    "cpu_count": 7,
+    "cpu_affinity": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "available_memory_gib": 28.78664779663086,
+    "memory_reserve_gib": 4,
+    "agent_memory_gib": 2,
+    "max_depth": 1,
+    "heavy_jobs": 1,
+    "host_disk": {
+      "path": "/home/holden/mckernel",
+      "free_gib": 33.4836311340332,
+      "min_free_gib": 16
+    },
+    "scratch_disk": {
+      "path": "/home/holden/mckernel-work/scratch",
+      "mounted": true,
+      "free_gib": 31.30829620361328,
+      "min_free_gib": 12
+    }
+  },
+  "model_routing": {
+    "dispatcher": {
+      "model": "gpt-6.1-sol",
+      "effort": "medium"
+    },
+    "default_worker": {
+      "model": "gpt-6.1-sol",
+      "effort": "medium"
+    },
+    "complex_worker": {
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    "auditor": {
+      "model": "gpt-6.1-sol",
+      "effort": "low"
+    },
+    "reviewer": {
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    }
+  },
+  "included_usage_stop_percent": 97,
+  "scratch": {
+    "target": "/home/holden/mckernel-work/scratch",
+    "source": "/dev/loop36",
+    "fstype": "ext4",
+    "options": "rw,nosuid,nodev,relatime",
+    "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "maj:min": "7:36"
+  },
+  "startup_instruction_sha256": "be8bf7515958733c52263781240e3c14c6811246c0e0350e23017ce4acf151c8",
+  "pending_hold": "Before activation the launcher archives only exact superseded bytes and an audit receipt.",
+  "launch_blockers": [],
+  "engineering_prerequisites": [
+    "Scratch21-specific cleanup implementation, independent review and fresh live identity release.",
+    "Finish/review RS-011 source authority; retain failing discovery and run complete cheap checks.",
+    "Commit/push/fetch the reviewed sources, prepare fresh scratch22; obtain a new one-shot build release.",
+    "Real acceptance still requires original contracts, soaks, hardware and external qualification."
+  ],
+  "command": "/home/holden/anaconda3/bin/python3 -B /home/holden/mckernel/scripts/run_os_goal.py --model gpt-6.1-sol --effort medium --profile aggressive --max-agents 12 --build-jobs 7 --memory-gib 24 --hours 0 --agent-windows auto --stall-seconds 0 --startup-instruction-file /home/holden/mckernel/docs/verification/os-milestones-20260914/PARALLEL-RESUME.md --startup-instruction-sha256 be8bf7515958733c52263781240e3c14c6811246c0e0350e23017ce4acf151c8 --supersede-instruction 20261017T021032370649Z-e1d9b3466e7c4dcfb8838159453e3bf2:a05027f2144889dfa93755e2680f27614352b588972becb178697f524ff831b9",
+  "inference_started": false
+}
+{
+  "model": "gpt-6.1-sol",
+  "effort": "medium",
+  "agents": {
+    "enabled": true,
+    "max_concurrent_threads_per_session": 12,
+    "max_depth": 1,
+    "default_subagent_model": "gpt-6.1-sol",
+    "default_subagent_reasoning_effort": "medium"
+  },
+  "model_routing": {
+    "dispatcher": {
+      "model": "gpt-6.1-sol",
+      "effort": "medium"
+    },
+    "default_worker": {
+      "model": "gpt-6.1-sol",
+      "effort": "medium"
+    },
+    "complex_worker": {
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    "auditor": {
+      "model": "gpt-6.1-sol",
+      "effort": "low"
+    },
+    "reviewer": {
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    }
+  },
+  "included_usage_stop_percent": 97,
+  "resources": {
+    "profile": "aggressive",
+    "max_agents": 12,
+    "build_jobs": 7,
+    "memory_gib": 24.0,
+    "cpu_count": 7,
+    "cpu_affinity": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "available_memory_gib": 28.78238296508789,
+    "memory_reserve_gib": 4,
+    "agent_memory_gib": 2,
+    "max_depth": 1,
+    "heavy_jobs": 1,
+    "host_disk": {
+      "path": "/home/holden/mckernel",
+      "free_gib": 33.48362731933594,
+      "min_free_gib": 16
+    },
+    "scratch_disk": {
+      "path": "/home/holden/mckernel-work/scratch",
+      "mounted": true,
+      "free_gib": 31.30829620361328,
+      "min_free_gib": 12
+    }
+  },
+  "policy_sha256": {
+    "GOAL.md": "9b1540bbb4b45365b20cccee0e0a99a8e093e069b73e203f0c01427631f2df0f",
+    "START.md": "932a65612397d3b2dbc92721d7e108b0dbad11eb3dd48d33f40a73951b4233c7",
+    "CONVERGENCE.md": "f3f1363704fc86acac6f3b0bb0028d51a08799f35139e7db0d259dbd6bcf3be5",
+    "HANDOFF.md": "14a3f50bf7525952bfaab9b044a376b9d5989f64d3fa417ee2f6fb04cb282ed9"
+  },
+  "agent_windows": {
+    "enabled": true,
+    "backend": "/usr/bin/gnome-terminal",
+    "display": ":0",
+    "error": null
+  },
+  "goals": true,
+  "approval_policy": "never",
+  "sandbox_mode": "danger-full-access",
+  "scope": "Configuration and advertised models only; quota and inference untested."
+}

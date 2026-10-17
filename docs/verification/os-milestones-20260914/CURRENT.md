@@ -13948,3 +13948,27 @@ review patch, cleanup DRAFT, scratch22 prerequisites and next commands are in
 docs/verification/evidence/os-preparation-20261016/ and
 PREPARATION-20261016.md. Counts remain three builds, 12 bounded diagnostics,
 0/273 formal apps, 6/130 production gates and 0/7 languages; the OS is incomplete.
+
+Preparation checkpoint 358, 2026-10-17: the user requires only GPT-6.1 Sol,
+with task-dependent effort (low inventories, medium routine/coordinator, high
+complex repair/independent review), no Max/Ultra and a97% included-usage cutoff
+leaving3% reserve. The prepared wrapper supports --run --background with no
+wall-clock cutoff and existing classified recovery/resource/safety guards.
+The actual installed CLI settings/model preflight passes for all required efforts
+and12child slots. A117-test focused offline suite passes.
+
+Read-only diagnosis of run20261017T022450Z-a74f0ff1 proves the prior exit10 was
+caused by the coordinator receiving the old hold as a fresh user message,
+self-copying it to b204371b... and issuing kill -INT16566. This is a launcher
+bootstrap defect, not an OS validation failure. The fix archives only exact
+hash-bound historical pending bytes before resume, preserves an audit receipt,
+and submits one current user startup message before activation, without replay
+on automatic recovery. Independent GPT-6.1/high review reproduced and verified
+fixes for uncertain-delivery retries and stop/terminal-goal activation races.
+No new external stop is ignored. Evidence and limitations are retained under
+docs/verification/evidence/os-model-migration-gpt61-20261017/.
+The campaign remains stopped/paused; live queue/state, scratch21 container and
+exclusions remain retained. No workload or execution release ran. Counts stay
+3builds,12bounded diagnostic passes,0/273formal applications,6/130production
+and0/7language gates. Scratch21 cleanup, RS-011 and fresh scratch22 still block
+new runtime artifacts; the OS remains incomplete.

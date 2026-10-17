@@ -18,15 +18,17 @@ The launcher owns one separate persistent thread and resumes its exact ID. Keep
 any older interactive campaign paused; do not create competing dispatchers on
 the same checkout. Model changes do not replenish quota or prove continuation.
 
-Keep the user-selected Sol/medium dispatcher, Luna workers, bounded Terra repair
-escalations, and focused Astra/high ownership/unsafe/ABI/release reviews. Default
+The user now requires `gpt-6.1-sol` for the dispatcher and every subagent, with
+no older-model fallback. Use low for simple inventories, medium for coordination
+and implementation, and high for complex repairs and independent safety reviews. Default
 `--profile aggressive` allows up to eight children within measured host CPU/RAM
 capacity; no recursive dispatch, and fresh self-contained worker packets.
 `--profile balanced` restores three children/four build jobs/12 GiB. Explicit
 `--max-agents N --build-jobs N --memory-gib N` remain subject to host capacity.
 Aggressive uses all affinity CPUs (currently seven) and
 `min(24 GiB, measured available RAM minus 4 GiB headroom)`; see CONVERGENCE.md.
-Do not change model choices or global configuration merely to apply this policy.
+This user-authorized model policy supersedes earlier Sol/Luna/Terra/Astra role
+choices. Preserve reviewer independence and global configuration.
 
 ## Mandatory reading and precedence
 

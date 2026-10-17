@@ -1,0 +1,60 @@
+{
+  "at": "2026-10-17T02:41:02.322024+00:00",
+  "status": "PREPARED_NOT_STARTED",
+  "model": "gpt-6.1-sol",
+  "effort_policy": {
+    "coordinator": "medium",
+    "routine_worker": "medium",
+    "simple_auditor": "low",
+    "complex_repair": "high",
+    "independent_reviewer": "high"
+  },
+  "included_usage_stop_percent": 97,
+  "reserve_percent": 3,
+  "spend_purchased_credits": false,
+  "defaults": {
+    "hours": 0,
+    "max_restarts": -1,
+    "stall_seconds": 0,
+    "max_agents_measured": 12
+  },
+  "bug": {
+    "previous_run": "20261017T022450Z-a74f0ff1",
+    "first_stale_user_message": "2026-10-17T02:24:53.051Z",
+    "agent_copied_instruction": "20261017T022504821606Z-b204371bdb0f45fdb86cba68c3b3d37c",
+    "agent_signal_command": "kill -INT 16566",
+    "signal_at": "2026-10-17T02:25:12.727Z",
+    "stop_at": "2026-10-17T02:26:53.229Z",
+    "scope": "Launcher instruction bootstrap failure, no OS build/guest failure."
+  },
+  "fixes": [
+    "Exact original queued bytes archived with durable receipt before resume/activation.",
+    "One current explicit user message before activation; no duplicate on automatic recovery.",
+    "Uncertain delivery refuses fresh/recovered launch before RPC.",
+    "Stop/quota/terminal/cleared/changed-goal events preserved during startup.",
+    "Optional background mode detaches existing watcher and retains private0600 log."
+  ],
+  "review": {
+    "reviewer": "/root/final_harness_review",
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "decision": "Scoped source/control-flow PASS after two reproduced blockers were repaired.",
+    "not_run": [
+      "live campaign inference",
+      "actual billing/quota depletion",
+      "real server recovery or days-long scheduling",
+      "builds/guests/scratch cleanup"
+    ],
+    "acceptance_credit": false
+  },
+  "official_model_guidance": [
+    "https://learn.chatgpt.com/docs/models",
+    "https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6.1-sol"
+  ],
+  "source_sha256": {
+    "scripts/run_os_goal.py": "14091e1bba50effe3e8c2e9785a45ec538527b99e8290175bcbc53df89a08586",
+    "scripts/run_os_parallel.py": "70c90f471b5ebb0f51dd2ee73ca176bc5d34ce0e1daa874908ac8785b54b1f07",
+    "scripts/os_goal_instructions.py": "fc56ba5d15e5462c32ed6462ceb469af833e282a03eeb874da1a576e096a72f7",
+    "docs/verification/os-milestones-20260914/PARALLEL-RESUME.md": "be8bf7515958733c52263781240e3c14c6811246c0e0350e23017ce4acf151c8"
+  }
+}

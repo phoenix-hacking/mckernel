@@ -15,8 +15,11 @@ import shlex
 import stat
 import subprocess
 import sys
+import tempfile
 
 from os_goal_resources import check_resources, resolve_resources
+from run_os_goal import DEFAULT_DISPATCHER_MODEL, INCLUDED_USAGE_STOP_PERCENT, model_routing
+from os_goal_instructions import reconcile_instructions
 
 REPO = Path(__file__).resolve().parents[1]
 SCRATCH = Path('/home/holden/mckernel-work/scratch')
@@ -37,13 +40,12 @@ def state_directory(repo):
 
 
 def queue_blockers(directory):
-    failures = []
-    if any((directory / 'instructions/sending').glob('*.json')):
-        failures.append('Instruction delivery is uncertain; reconcile sending/ before resuming.')
-    for path in (directory / 'instructions/pending').glob('*.json'):
-        if path.stem != HOLD_ID or hashlib.sha256(path.read_bytes()).hexdigest() != HOLD_SHA:
-            failures.append('New/unrecognized pending instruction requires reconciliation: ' + path.name)
-    return failures
+    try:
+        reconcile_instructions(directory, [{'id': HOLD_ID, 'sha256': HOLD_SHA}],
+                               hashlib.sha256(NOTE.read_bytes()).hexdigest(), execute=False)
+    except (OSError, ValueError) as error:
+        return [str(error)]
+    return []
 
 
 def stopped_blockers(directory, state):
@@ -54,6 +56,8 @@ def stopped_blockers(directory, state):
         failures.append('Saved dispatcher must be stopped with no active turns.')
     if (state.get('goal') or {}).get('status') != 'paused':
         failures.append('Saved goal must be paused; inspect its actual status before resuming.')
+    if (state.get('resume_instruction') or {}).get('status') in ('sending', 'delivery_uncertain'):
+        failures.append('Resume instruction delivery is uncertain; reconcile its saved turn before resuming.')
     for name in ('run.lock', 'watch.lock'):
         path = directory / name
         if path.exists():
@@ -120,11 +124,13 @@ def read_mount():
 
 def launch_command(args, resources):
     return [sys.executable, '-B', str(REPO / 'scripts/run_os_goal.py'),
+            '--model', args.model, '--effort', args.effort,
             '--profile', 'aggressive', '--max-agents', str(resources['max_agents']),
             '--build-jobs', str(resources['build_jobs']), '--memory-gib', str(resources['memory_gib']),
             '--hours', str(args.hours), '--agent-windows', args.windows,
             '--stall-seconds', '0', '--startup-instruction-file', str(NOTE),
-            '--startup-instruction-sha256', hashlib.sha256(NOTE.read_bytes()).hexdigest()]
+            '--startup-instruction-sha256', hashlib.sha256(NOTE.read_bytes()).hexdigest(),
+            '--supersede-instruction', HOLD_ID + ':' + HOLD_SHA]
 
 
 def main(argv=None):
@@ -132,10 +138,18 @@ def main(argv=None):
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument('--run', action='store_true', help='Authorize autonomous execution in the saved campaign')
     mode.add_argument('--check', action='store_true', help='Also check local CLI settings/models, without inference')
+    parser.add_argument('--background', action='store_true',
+                        help='With --run, detach the existing watcher and retain its console in a private log')
     parser.add_argument('--agents', type=int, help='Optional smaller ceiling; default is the measured maximum')
     parser.add_argument('--hours', type=float, default=0, help='0: no wall-clock cutoff; optional finite window')
     parser.add_argument('--windows', choices=('auto', 'on', 'off'), default='auto')
+    parser.add_argument('--model', default=DEFAULT_DISPATCHER_MODEL, choices=[DEFAULT_DISPATCHER_MODEL],
+                        help='Coordinator model; default: ' + DEFAULT_DISPATCHER_MODEL)
+    parser.add_argument('--effort', choices=('low', 'medium', 'high'),
+                        default='medium', help='Coordinator reasoning; default: medium')
     args = parser.parse_args(argv)
+    if args.background and not args.run:
+        parser.error('--background requires --run')
     if not math.isfinite(args.hours) or args.hours < 0:
         parser.error('hours must be finite and non-negative')
     resources = resolve_resources(repo=REPO)
@@ -153,9 +167,12 @@ def main(argv=None):
     command = launch_command(args, resources)
     print(json.dumps({
         'mode': 'run' if args.run else 'check' if args.check else 'preview',
+        'background': args.background,
         'thread_id': state['thread_id'], 'resources': resources,
+        'model_routing': model_routing(args),
+        'included_usage_stop_percent': INCLUDED_USAGE_STOP_PERCENT,
         'scratch': mount, 'startup_instruction_sha256': hashlib.sha256(note.encode()).hexdigest(),
-        'pending_hold': 'Retained unchanged; explicitly reconciled in the initial resume instructions.',
+        'pending_hold': 'Before activation the launcher archives only exact superseded bytes and an audit receipt.',
         'launch_blockers': failures,
         'engineering_prerequisites': [
             'Scratch21-specific cleanup implementation, independent review and fresh live identity release.',
@@ -173,6 +190,18 @@ def main(argv=None):
         # build environment. It starts only a local app server, never inference.
         subprocess.run(command + ['--check'], cwd=REPO, check=True)
     if args.run:
+        if args.background:
+            logs = directory / 'launch-logs'
+            logs.mkdir(mode=0o700, parents=True, exist_ok=True)
+            with tempfile.NamedTemporaryFile(mode='ab', dir=logs, prefix='parallel-', suffix='.log',
+                                             delete=False) as stream:
+                process = subprocess.Popen(command, cwd=REPO, stdin=subprocess.DEVNULL,
+                                           stdout=stream, stderr=subprocess.STDOUT,
+                                           start_new_session=True, close_fds=True)
+            print(json.dumps({'launcher_pid': process.pid, 'console_log': stream.name,
+                              'monitor': 'python3 -B ' + str(REPO / 'scripts/run_os_goal.py') + ' --progress'}),
+                  flush=True)
+            return 0
         # Same process/terminal, existing watcher/signal handling, no second
         # dispatcher, no custom restart loop and no launcher-state edits.
         os.execv(sys.executable, command)

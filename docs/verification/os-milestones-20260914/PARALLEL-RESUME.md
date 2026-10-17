@@ -2,17 +2,26 @@ This is the user's explicit later execution instruction, effective only when
 scripts/run_os_parallel.py --run is invoked. Preparing or previewing that script
 does not resume the campaign. Resume the existing saved thread and objective.
 
-Reconcile queued instruction 20261017T021032370649Z-e1d9b3466e7c4dcfb8838159453e3bf2
-before doing any work. It applied to the previous preparation-only stop. This
-later --run invocation supersedes that instruction's preparation/no-source-edit
-hold, including if the old message is delivered after this startup note. Keep
-the original queue item and delivery receipts intact. This does not supersede a
-new stop or any other queued instruction. Unknown or uncertain instructions
+This is the current USER instruction for the new --run invocation: execute the
+unfinished OS work continuously, across checkpoints and days, through effectively
+the included weekly allowance. Do not stop merely because an earlier run ended.
+The historical preparation-only instruction
+20261017T021032370649Z-e1d9b3466e7c4dcfb8838159453e3bf2 and the dispatcher's copied
+instruction 20261017T022504821606Z-b204371bdb0f45fdb86cba68c3b3d37c applied to the
+previous stop and are superseded by this explicit new user invocation. The
+launcher archives only the exact hash-bound pending original before activation;
+it preserves its bytes and an audit receipt. Never requeue either historical
+instruction or send SIGINT to your watcher because of it. A new external stop
+remains authoritative. Unknown or uncertain instructions
 require reconciliation. Do not change launcher-owned state or create a new goal.
 
 This machine is dedicated to this task. Use the measured maximum child-agent
-ceiling supplied by the launcher. Keep the existing selected dispatcher/worker/
-expert models and independent final reviews. Complete the entire original OS
+ceiling supplied by the launcher. The user requires gpt-6.1-sol for the
+dispatcher and EVERY worker, auditor and independent reviewer. Choose low for
+simple inventories/extraction, medium for coordination/implementation, and high for complex
+repairs and independent safety/ABI/acceptance reviews. Never fall back to an
+older model. Choose the lowest suitable effort; never Max or Ultra. Keep authors and
+reviewers independent. Complete the entire original OS
 objective: all original production, language, application/configuration,
 Rust/assembly, platform, exposure, soak and external qualification requirements.
 Do not stop at an intermediate engineering checkpoint or dilute acceptance.
@@ -72,10 +81,12 @@ runtime or formal acceptance. Keep separate counters for real behavior and the
 original acceptance gates; never count worker activity, commits or repeated
 diagnostics as progress toward acceptance.
 
-Continue autonomously after coherent verified checkpoints, until full acceptance
-or a new explicit stop, selected limit, exhausted included usage, or genuine
+Continue autonomously after coherent verified checkpoints with no time cutoff,
+until full acceptance or a new explicit stop, selected limit, exhausted included usage, or genuine
 external blocker with no independent ready work. Keep the launcher's existing
 usage/credential guards, recovery classification and healthy-build protections.
+The included-usage stop is 97%, retaining 3% for in-flight work and delayed
+account reports; never switch to purchased credits or API-key billing.
 For unavailable hardware or independent external qualification, record the exact
 missing resource, owner and recheck condition; do not claim 100% or spin inference
 to restate it. Preserve exact next commands and prerequisites in the handoff.

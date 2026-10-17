@@ -9,13 +9,15 @@ evidence, isolation and cleanup remain.
 For a later launch, start or resume with one command, from any directory:
 
 ```bash
-python3 /home/holden/mckernel/scripts/run_os_goal.py
+python3 -B /home/holden/mckernel/scripts/run_os_parallel.py --run --background
 ```
 
-This starts the watcher and account-metered agent work using the local signed-in Codex CLI.
-It selects **Sol/medium for coordination**, Luna/low for audits, Luna/medium for
-specified implementation, bounded Terra repair escalations and focused Astra/high
-reviews under START.md, without model upgrades. Default `--profile aggressive`
+This detaches the existing watcher and retains its console in a private log, so
+closing the terminal does not end the run. It uses the local signed-in Codex CLI.
+The user requires **GPT-6.1 Sol for the coordinator and every subagent**. Use
+medium for coordination/implementation, low for simple inventories and high for
+complex repairs and independent reviews. No older-model fallback is allowed.
+Default `--profile aggressive`
 allows up to eight children within measured host CPU/RAM and one delegation level;
 no recursive dispatch. Small disjoint packets feed one dispatcher owning
 integration, Git, evidence and the single heavy build/guest lease.
@@ -50,6 +52,7 @@ read-order text without replacing the objective or thread.
 
 The prepared dedicated-machine entry point is
 `python3 -B /home/holden/mckernel/scripts/run_os_parallel.py --run`.
+Add `--background` to detach it, or keep the foreground terminal open.
 Without `--run` it previews only; `--check` also verifies settings without
 inference. It selects the measured maximum useful child ceiling (currently 12),
 keeps the existing saved campaign and resource/release rules, and supplies the
@@ -58,6 +61,12 @@ reconciled preparation instruction before resume. See
 The underlying `--startup-instruction-file PATH --startup-instruction-sha256 SHA`
 options pin that explicit instruction across preflight and watcher recoveries;
 they do not change the stored objective or authorize any execution release.
+The exact historical hold is archived with its original bytes and a durable
+receipt before activation. One fresh startup user message supersedes the prior
+run's stop; automatic recovery does not send another startup message. New
+external stops and uncertain deliveries remain authoritative. The default has
+no wall-clock cutoff and unlimited classified recoveries. Stop at 97% included
+usage (3% reserve), with purchased-credit protection retained.
 
 | Command suffix | Result |
 | --- | --- |
@@ -73,7 +82,7 @@ they do not change the stored objective or authorize any execution release.
 | `--hours 4` | Run a four-hour window, including checkpoint time. |
 | `--hours 0` | Default: continue without a wall-clock cutoff. |
 | `--grace-seconds 600` | Set the checkpoint reserve; default is 600 seconds. |
-| `--model gpt-5.6-sol --effort medium` | Explicitly select the default coordinator. |
+| `--model gpt-6.1-sol --effort medium` | Select the required GPT-6.1 coordinator; older models are refused. |
 | `--token-budget N` | Explicitly set the goal's total token budget; omitted means preserve it. |
 | `--max-restarts -1` | Default: no cap on eligible automatic recoveries; not permission to retry every failure. Use 0 to disable or a positive count to cap them. |
 | `--restart-delay 5` | Initial restart backoff; doubles per retry, capped at 60 seconds. |
