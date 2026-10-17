@@ -65,11 +65,13 @@ class WrapperTests(unittest.TestCase):
                            target='a' * 40, target_tree='b' * 40, author='preparation-author',
                            **source_hashes)
         for key in ('cleanup', 'cleanup_release', 'cleanup_postflight', 'source_checks', 'source_review',
-                    'authority_review'):
+                    'authority_review', 'repair_review', 'authority1_recovery',
+                    'authority1_recovery_review', 'authority1_cleanup', 'authority1_cleanup_review'):
             preparation[key] = dict(path='/exact-prerequisite/' + key, sha256='d' * 64)
         reviewed = dict(source_hashes, **{key + '_sha256': preparation[key]['sha256'] for key in
                          ('cleanup', 'cleanup_release', 'cleanup_postflight', 'source_checks', 'source_review',
-                          'authority_review')})
+                          'authority_review', 'repair_review', 'authority1_recovery',
+                          'authority1_recovery_review', 'authority1_cleanup', 'authority1_cleanup_review')})
         prep_review = dict(decision='PASS_PREPARATION_EXECUTION', reviewer='independent-reviewer',
                            implementation_ownership=False, reviewed_inputs_sha256=reviewed,
                            target=preparation['target'], target_tree=preparation['target_tree'])
@@ -119,9 +121,45 @@ class WrapperTests(unittest.TestCase):
             self.assertEqual(derived, fixture.derived)
             self.assertEqual(raw, M.canonical(fixture.derived))
             fixture.adapter.validate_cleanup.assert_called_once_with(fixture.preparation)
+            fixture.adapter.validate_authority1_retirement.assert_called_once_with(fixture.preparation)
             fixture.adapter.validate_source_authority.assert_called_once_with(M.REPO, fixture.preparation)
             fixture.adapter.validate_authority_review.assert_called_once_with(M.REPO, fixture.preparation)
             fixture.adapter.validate_prepared_request.assert_called_once_with(M.CANDIDATE, M.PREP)
+
+    def test_absent_or_unaccepted_authority1_retirement_stops_prepared_use(self):
+        for refusal in ('missing cleanup', 'missing recovery', 'recovery not COMPLETE', 'review not accepted'):
+            with self.subTest(refusal=refusal), ExitStack() as stack:
+                fixture = self.preparation_fixture(stack)
+                fixture.adapter.validate_authority1_retirement.side_effect = M.Refusal(refusal)
+                with self.assertRaisesRegex(M.Refusal, refusal):
+                    M.preflight(fixture.release)
+                fixture.adapter.validate_cleanup.assert_called_once_with(fixture.preparation)
+                fixture.adapter.validate_source_authority.assert_not_called()
+                fixture.adapter.validate_prepared_request.assert_not_called()
+
+    def test_preparation_review_must_bind_actual_minimal_repair_digest(self):
+        with ExitStack() as stack:
+            fixture = self.preparation_fixture(stack)
+            fixture.prep_review['reviewed_inputs_sha256'].pop('repair_review_sha256')
+            pointer = fixture.write(fixture.temp / 'unbound-repair-review.json', M.canonical(fixture.prep_review))
+            preparation = dict(fixture.preparation, preparation_review=pointer)
+            fixture.release['preparation_release'] = fixture.write(
+                fixture.temp / 'unbound-repair-release.json', M.canonical(preparation))
+            with self.assertRaisesRegex(M.Refusal, 'preparation execution review mismatch'):
+                M.preflight(fixture.release)
+
+    def test_preparation_review_must_bind_all_actual_retirement_receipts(self):
+        for key in ('authority1_recovery', 'authority1_recovery_review',
+                    'authority1_cleanup', 'authority1_cleanup_review'):
+            with self.subTest(key=key), ExitStack() as stack:
+                fixture = self.preparation_fixture(stack)
+                fixture.prep_review['reviewed_inputs_sha256'].pop(key + '_sha256')
+                pointer = fixture.write(fixture.temp / 'unbound-retirement-review.json', M.canonical(fixture.prep_review))
+                preparation = dict(fixture.preparation, preparation_review=pointer)
+                fixture.release['preparation_release'] = fixture.write(
+                    fixture.temp / 'unbound-retirement-release.json', M.canonical(preparation))
+                with self.assertRaisesRegex(M.Refusal, 'preparation execution review mismatch'):
+                    M.preflight(fixture.release)
 
     def test_original_scratch22_execution_release_refuses_new_attempt(self):
         release = dict(schema='scratch22.build-execution-release.v1',
@@ -620,7 +658,8 @@ raise AssertionError('quarantine escaped')
 
     def test_unreleased_adapter_refuses_before_release_read_or_lock(self):
         self.assertIs(M.ADAPTER_RELEASED, False)
-        self.assertIsNone(M.ADAPTER_SHA256)
+        self.assertEqual(M.ADAPTER_SHA256,
+                         'dbdc8c6711f4502328b37cec4b200d999c102af53f87aa183debbe160379dc0f')
         with mock.patch.object(M, 'bind_release') as bind, \
                 mock.patch.object(M, 'acquire_development_lock') as acquire:
             with self.assertRaisesRegex(M.Refusal, 'NOT_RELEASED'):

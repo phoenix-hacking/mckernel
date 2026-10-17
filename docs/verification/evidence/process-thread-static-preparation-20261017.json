@@ -1,0 +1,313 @@
+{
+  "schema": "mckernel.process-thread-static-preparation.v1",
+  "status": "PASS_STATIC_PREPARATION_LINUX_REFERENCE_ONLY",
+  "authority": "Dispatcher explicitly admitted process.exec-missing and thread.mutex-counter, including -pthread for the thread fixture, under the existing ordinary-user static GCC profile.",
+  "reused_profile": "docs/verification/evidence/signal-mask-restore-compile-profile-review-20261017.json",
+  "reused_observer": "/home/holden/mckernel-work/scratch/memory-futex-static-preparation-20261017-9l2wCV/observe.py",
+  "artifact_root": "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b",
+  "frozen_inputs": {
+    "scripts/application-tests/cases/process/process.exec-missing.c": {
+      "sha256": "cd8ed18b5462b86d04bb859c0160e3eca0193ac94fc89929dd0e31dcaa0f3da7",
+      "size": 577
+    },
+    "scripts/application-tests/oracles/process.exec-missing.json": {
+      "sha256": "751831023c47cd3e320cde0cfecd89885d81be71276a79777d0385fd66089d99",
+      "size": 833
+    },
+    "scripts/application-tests/cases/thread/thread.mutex-counter.c": {
+      "sha256": "25f9e7a407a02d8d3732ac0391bbfb6dc93d2b92ac6bf80d1e49a9321fbf4a42",
+      "size": 1175
+    },
+    "scripts/application-tests/oracles/thread.mutex-counter.json": {
+      "sha256": "2c680e8137f3ed36426e611c8cb5f5fc60047630177e29469266a680c2d33e5d",
+      "size": 847
+    },
+    "docs/verification/evidence/signal-mask-restore-compile-profile-review-20261017.json": {
+      "sha256": "320d19452c638e0853d21798628d59387d551ff2b212806e1061d9d0b644ff31",
+      "size": 11266
+    },
+    "/usr/lib/x86_64-linux-gnu/libpthread.a": {
+      "sha256": "2f90e0cb347e80a583aca3536715f93255593c9a1214ddbeba1fcc4055aab019",
+      "size": 6590210
+    }
+  },
+  "frozen_oracles": {
+    "process.exec-missing": {
+      "stdout_utf8": "rc=-1 errno=2 enoent=1 state=37 unchanged=1\n",
+      "stderr_hex": "",
+      "exit_code": 0
+    },
+    "thread.mutex-counter": {
+      "stdout_utf8": "n=2 counter_ok=1 n=4 counter_ok=1 n=8 counter_ok=1\n",
+      "stderr_hex": "",
+      "exit_code": 0
+    }
+  },
+  "profile": {
+    "uid": 1000,
+    "cpu_affinity": [
+      7
+    ],
+    "one_serial_compile_or_payload_family": true,
+    "address_space_limit_bytes": 2147483648,
+    "overall_timeout_seconds": 120,
+    "payload_timeout_seconds": 10,
+    "thread_fixture_peak_threads": 9,
+    "source_or_oracle_changes": false,
+    "root": false,
+    "docker": false,
+    "network": false,
+    "collector": false,
+    "guest": false
+  },
+  "preserved_preparation_failure": {
+    "kind": "read-only dependency inventory assumption before compiler/payload execution",
+    "stderr": "FileNotFoundError: [Errno 2] No such file or directory: '/usr/lib/x86_64-linux-gnu/libpthread_nonshared.a'",
+    "bounded_correction": "GCC -print-file-name confirms this unused archive is not installed. Retain and authenticate actual installed libpthread.a for the -pthread static link; remove the nonexistent optional library from the observer inventory. No compiler/payload retry occurred."
+  },
+  "case_semantics_limitations": [
+    "The process fixture checks the return/ENOENT and private state after failed execve; the independent output remains exact and immutable draft expectations are not promoted.",
+    "The thread fixture checks creation count, final N*1000 counter and lock/unlock errors across N=2,4,8. Its unchanged code does not inspect pthread_join or pthread_mutex_destroy return codes; Linux stdout success must not be reported as separately observing those return values."
+  ],
+  "acceptance_delta": {
+    "mckernel_runtime": 0,
+    "current_candidate_builds": 0,
+    "real_guest_apps": 0,
+    "formal_application_cases": 0,
+    "production_gates": 0
+  },
+  "execution": {
+    "resource_wrapper": "/usr/bin/timeout --signal=TERM --kill-after=5s 120s /usr/bin/taskset -c 7 /usr/bin/prlimit --as=2147483648 --cpu=100 --nofile=256 --fsize=67108864 --core=0 -- /usr/bin/env -i PATH=/usr/bin:/bin LC_ALL=C LANG=C TZ=UTC PYTHONDONTWRITEBYTECODE=1 HOME=/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/home TMPDIR=/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/tmp /home/holden/anaconda3/bin/python3 -B /home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/observe.py",
+    "uid": 1000,
+    "euid": 1000,
+    "start_utc": "2026-10-17T05:08:34.908818+00:00",
+    "end_utc": "2026-10-17T05:08:35.237110+00:00",
+    "initial_signal_mask": [],
+    "all_payload_initial_masks_empty": true,
+    "serial": true,
+    "environment": {
+      "HOME": "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/home",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "TMPDIR": "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/tmp",
+      "TZ": "UTC"
+    },
+    "rlimits": {
+      "0": [
+        100,
+        100
+      ],
+      "1": [
+        67108864,
+        67108864
+      ],
+      "4": [
+        0,
+        0
+      ],
+      "7": [
+        256,
+        256
+      ],
+      "9": [
+        2147483648,
+        2147483648
+      ]
+    },
+    "free_bytes_before": {
+      "/home/holden/mckernel": 29654138880,
+      "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b": 27034034176
+    },
+    "all_six_command_exit_codes_zero": true,
+    "compiler_stdout_stderr": "Empty for both compiles",
+    "payload_stderr": "Empty for both reference runs",
+    "all_subprocesses_completed": "Observer waited for every compiler, ELF inspection and payload subprocess; both thread vectors join created threads before payload exit."
+  },
+  "complete_observation": {
+    "relative_path": "observation.json",
+    "sha256": "031b388a4d2343f17dd7cf96923ac362a7f8db7070293ad8edd91ecafcd80c1d",
+    "observer_relative_path": "observe.py",
+    "observer_sha256": "8c74a1ebf9b3816527e0aaf03adb58a2988deeb73eb4e95d29a19edf650e2630",
+    "contains": "Exact argv/cwd/clean environment for each compile/readelf/reference; all raw stdout/stderr/status captures and hashes; all consumed source/oracle/tool/static archive/header dependency SHA256 bindings; binary/depfile hashes; initial mask, UID, resource limits, storage floors and pre-frozen expected output bytes.",
+    "pre_execution_freeze_record_sha256": "0547245a3245b45bc5b32894d0b29ce506214cbcdd36a3e84d89ac9699fd687e"
+  },
+  "cases": {
+    "process.exec-missing": {
+      "binary": "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/process.exec-missing/app",
+      "binary_sha256": "e964ca5a23e1d496c2942826de394e15df31e4783e7e968f8d11b2a4c8e53160",
+      "binary_size": 871944,
+      "depfile_sha256": "57a26e0eb88815f6c18e9bc9780fab6c1763b35aae0c81406336c994b9454fbc",
+      "elf_verified": {
+        "no_wx_load": true,
+        "nonexecuting_stack": true,
+        "static_no_interp_no_dynamic": true
+      },
+      "expected_exit": 0,
+      "expected_stderr_hex": "",
+      "expected_stdout_hex": "72633d2d31206572726e6f3d3220656e6f656e743d312073746174653d333720756e6368616e6765643d310a",
+      "observed_stdout_hex": "72633d2d31206572726e6f3d3220656e6f656e743d312073746174653d333720756e6368616e6765643d310a",
+      "oracle": "/home/holden/mckernel/scripts/application-tests/oracles/process.exec-missing.json",
+      "reference_runs": 1,
+      "source": "/home/holden/mckernel/scripts/application-tests/cases/process/process.exec-missing.c",
+      "status": "PASS_STATIC_LINUX_REFERENCE",
+      "header_dependency_count": 80
+    },
+    "thread.mutex-counter": {
+      "binary": "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/thread.mutex-counter/app",
+      "binary_sha256": "d4af491b243b1e3f896bff81fae34c95a3c87248b928951b2b507bcd9c2dc53c",
+      "binary_size": 1508600,
+      "depfile_sha256": "918a15e7451d022ffc2314d48636f73adda9691c7b14fd6d93e71f9bfb11e4e2",
+      "elf_verified": {
+        "no_wx_load": true,
+        "nonexecuting_stack": true,
+        "static_no_interp_no_dynamic": true
+      },
+      "expected_exit": 0,
+      "expected_stderr_hex": "",
+      "expected_stdout_hex": "6e3d3220636f756e7465725f6f6b3d31206e3d3420636f756e7465725f6f6b3d31206e3d3820636f756e7465725f6f6b3d310a",
+      "observed_stdout_hex": "6e3d3220636f756e7465725f6f6b3d31206e3d3420636f756e7465725f6f6b3d31206e3d3820636f756e7465725f6f6b3d310a",
+      "oracle": "/home/holden/mckernel/scripts/application-tests/oracles/thread.mutex-counter.json",
+      "reference_runs": 1,
+      "source": "/home/holden/mckernel/scripts/application-tests/cases/thread/thread.mutex-counter.c",
+      "status": "PASS_STATIC_LINUX_REFERENCE",
+      "header_dependency_count": 73
+    }
+  },
+  "tool_and_static_link_inputs_sha256": {
+    "/home/holden/anaconda3/bin/python3": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "/usr/bin/as": "8d45684bbd6420e3e97907257c510f199bb6c5f9b02ea8ee0a590c1a8b662ead",
+    "/usr/bin/gcc": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+    "/usr/bin/ld": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+    "/usr/bin/readelf": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/cc1": "c09275e2d3f811e23d255eac415bfedd9e68ba8b5cf4b261d2fce136b5e8fc99",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/collect2": "5228dbf1e15d16694059023d16e7f13f201ea0d76a82e8837c6483dc21d66682",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/crtbeginT.o": "9fe07384ef0078de4a23fe2acc4137cb5aeeddcc715cf189cc0d985b602d348a",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/crtend.o": "c29d8ba35b3afad85993fa8f64b1a4d91678deaeb0f1cae952f12c0bdd4c83c1",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc.a": "82b6c0bfc28d5314fffaaa2a920516575f347972f685b5805f5749a87a617df0",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc_eh.a": "1dc66e2a55a6cefe1458b4e94f9b321e453a5b7279638cd7d12e1ddf83ec59f8",
+    "/usr/lib/x86_64-linux-gnu/crt1.o": "27daac7b3f9e861ef8df49f45b2a8ffb7130a1899f86efe53c6f84d63fd3cd0d",
+    "/usr/lib/x86_64-linux-gnu/crti.o": "2f1c31070d95f398fe4c1388408e83283cc7e0cee0ebb64882e0b331e8e178e8",
+    "/usr/lib/x86_64-linux-gnu/crtn.o": "a2266079f95b84ccc2162ebbf279bcd78858a748aa1882e0bdb912316c76a58f",
+    "/usr/lib/x86_64-linux-gnu/libc.a": "f9831edeccd3a87eb3fbba795f92bfa83409b3951f05ec40ca5df432b8699127",
+    "/usr/lib/x86_64-linux-gnu/libpthread.a": "2f90e0cb347e80a583aca3536715f93255593c9a1214ddbeba1fcc4055aab019"
+  },
+  "raw_results": [
+    {
+      "label": "process.exec-missing.compile",
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-static",
+        "-fno-pie",
+        "-no-pie",
+        "-Wl,-z,noexecstack",
+        "-MD",
+        "-MF",
+        "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/process.exec-missing/app.d",
+        "/home/holden/mckernel/scripts/application-tests/cases/process/process.exec-missing.c",
+        "-o",
+        "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/process.exec-missing/app"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_relative_path": "process.exec-missing.compile.stdout",
+      "stderr_relative_path": "process.exec-missing.compile.stderr",
+      "status_relative_path": "process.exec-missing.compile.status"
+    },
+    {
+      "label": "process.exec-missing.readelf",
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/process.exec-missing/app"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "657e37b46f9d1c057d79fbd346c809d6c925bf74643fa7bfe251bd291ccaacfb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_relative_path": "process.exec-missing.readelf.stdout",
+      "stderr_relative_path": "process.exec-missing.readelf.stderr",
+      "status_relative_path": "process.exec-missing.readelf.status"
+    },
+    {
+      "label": "process.exec-missing.linux-reference",
+      "argv": [
+        "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/process.exec-missing/app"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "a2b3cff1f50c7d9e6edc9a8a04751661dda3a5be5608e14e34003be6fb4d6b22",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_relative_path": "process.exec-missing.linux-reference.stdout",
+      "stderr_relative_path": "process.exec-missing.linux-reference.stderr",
+      "status_relative_path": "process.exec-missing.linux-reference.status"
+    },
+    {
+      "label": "thread.mutex-counter.compile",
+      "argv": [
+        "/usr/bin/gcc",
+        "-pthread",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-static",
+        "-fno-pie",
+        "-no-pie",
+        "-Wl,-z,noexecstack",
+        "-MD",
+        "-MF",
+        "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/thread.mutex-counter/app.d",
+        "/home/holden/mckernel/scripts/application-tests/cases/thread/thread.mutex-counter.c",
+        "-o",
+        "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/thread.mutex-counter/app"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_relative_path": "thread.mutex-counter.compile.stdout",
+      "stderr_relative_path": "thread.mutex-counter.compile.stderr",
+      "status_relative_path": "thread.mutex-counter.compile.status"
+    },
+    {
+      "label": "thread.mutex-counter.readelf",
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/thread.mutex-counter/app"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "d4f944eadd1ed9f0d8253fcfcd004cefba0819e505aef72a08580f77ea236341",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_relative_path": "thread.mutex-counter.readelf.stdout",
+      "stderr_relative_path": "thread.mutex-counter.readelf.stderr",
+      "status_relative_path": "thread.mutex-counter.readelf.status"
+    },
+    {
+      "label": "thread.mutex-counter.linux-reference",
+      "argv": [
+        "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/thread.mutex-counter/app"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "d7443814b52d2e53d9c3e7f11ffbc3f176e2a1f0cd41f0f5ea3b150a1740c1ec",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_relative_path": "thread.mutex-counter.linux-reference.stdout",
+      "stderr_relative_path": "thread.mutex-counter.linux-reference.stderr",
+      "status_relative_path": "thread.mutex-counter.linux-reference.status"
+    }
+  ],
+  "compiler_or_payload_failures": [],
+  "compiler_or_payload_corrections_used": 0,
+  "fixed_inputs_unchanged_after_execution": true,
+  "next_dependency": "First new guest remains signal.mask-restore after a fresh accepted kernel/image and its applicable release. These two static artifacts are ready for later source-bound diagnostic overlays only; no guest authority or acceptance is granted."
+}

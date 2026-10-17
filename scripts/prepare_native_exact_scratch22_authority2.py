@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Scratch22 authority2 source template; retirement authority is not released.
+"""Scratch22 authority2 preparation with exact actual retirement evidence joins.
 
 The caller supplies an independently reviewed release's exact SHA-256; this
 module never guesses a target from HEAD or transfers scratch21 authority.
@@ -72,6 +72,16 @@ REPAIR_REPLACEMENTS = {
         b'    // Historical mutation driver names kernel::Error in its replacement text.\n'
         b'    // The separate target-export regression deliberately provides no root alias.\n'
         b'    pub type Error = error::Error;\n}'),
+}
+RECOVERY_PROFILE = ROOT / 'docs/verification/evidence/scratch22-authority1-root-quarantine-recovery-independent-review-20261017.json'
+RECOVERY_PROFILE_SHA256 = 'be4ea78f63872e69f9f1463d0587a9d6ebe6eeab5fbec923588101c5c89e4a19'
+RECOVERY_ORIGINAL_FAILURE_SHA256 = {
+    '/home/holden/mckernel-work/scratch/scratch22-authority1-quarantine-recovery-execution-20261017.stderr':
+        'a5b9268da8ce645636691b72c2b5848acbaf6611ec244b669da63bcbcd9ec006',
+    '/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-quarantine-recovery-20261017.before1.process.json':
+        '921f27731a6fd4d554b83f6f9b3001f5f465677f3bb317ae9bf41544d6a4da2d',
+    '/home/holden/mckernel-work/scratch/scratch22-authority1-recovery-environment-inspect-20261017.json':
+        '5fb9f8983ca81c5857203e7d6ac290af5a81e9aa74392b1f3d79c1dd267d770f',
 }
 
 
@@ -177,13 +187,142 @@ def validate_repair_review(source, release):
 
 
 def validate_authority1_retirement(release):
-    """Fail closed until the actual cleanup/recovery producers are reconciled.
+    """Consume actual producer results and independent postflights, never drafts."""
+    recovery_pointer = release['authority1_recovery']
+    recovery = bound_json(recovery_pointer['path'], recovery_pointer['sha256'])
+    pointer = release['authority1_recovery_review']
+    review = bound_json(pointer['path'], pointer['sha256'])
+    require_retirement_review(review, 'scratch22-authority1.quarantine-recovery-postflight-review.v1',
+                              'PASS_PROCESS_RECOVERY_POSTFLIGHT')
+    if review.get('result') != recovery_pointer:
+        raise Refusal('authority1 recovery postflight result differs')
+    recovery_release = bound_json(review['release']['path'], review['release']['sha256'])
+    prepared = bound_json(review['prepared']['path'], review['prepared']['sha256'])
+    profile = bound_json(RECOVERY_PROFILE, RECOVERY_PROFILE_SHA256)
+    if (recovery.get('schema') != 'scratch22-authority1.quarantine-recovery-complete.v1' or
+            recovery.get('status') != 'COMPLETE_PROCESS_RECOVERY' or
+            recovery.get('build_status') != 'FAIL' or recovery.get('cleanup_required') is not True or
+            recovery.get('acceptance_credit') is not False or
+            recovery.get('profile_sha256') != RECOVERY_PROFILE_SHA256 or
+            review.get('profile_sha256') != RECOVERY_PROFILE_SHA256 or
+            recovery.get('release_sha256') != review['release']['sha256'] or
+            recovery.get('prepared_sha256') != review['prepared']['sha256'] or
+            recovery.get('source_checkpoint') != review.get('source_checkpoint') or
+            recovery.get('source_checkpoint') != recovery_release.get('source_checkpoint') or
+            recovery_release.get('schema') != 'scratch22-authority1.quarantine-recovery-release.v1' or
+            recovery_release.get('status') != 'PASS_EXECUTION_RELEASE'):
+        raise Refusal('authority1 actual complete recovery binding differs')
+    guard = profile['bound_guard']
+    target = dict(pid=guard['pid'], starttime=guard['starttime'], parent=guard['parent_pid'],
+                  boot_id=guard['boot_id'], uid=guard['uid'], gid=guard['gid'], threads=guard['threads'])
+    if (recovery.get('target') != target or prepared.get('target') != target or
+            prepared.get('schema') != 'scratch22-authority1.quarantine-recovery-prepared.v1' or
+            prepared.get('status') != 'PREPARED_PROCESS_RETIREMENT' or
+            prepared.get('signal_budget') != 1 or prepared.get('build_status') != 'FAIL' or
+            any(prepared.get(key) != recovery.get(key) for key in
+                ('profile_sha256', 'release_sha256', 'source_checkpoint', 'original_failure_sha256')) or
+            recovery.get('sole_signal') != dict(syscall=424, signal=9, returncode=0) or
+            recovery.get('replacement_root_lock') != [guard['root_lock']['device'], guard['root_lock']['inode']] or
+            recovery.get('original_failure_sha256') != RECOVERY_ORIGINAL_FAILURE_SHA256 or
+            recovery_release.get('original_failure_sha256') != RECOVERY_ORIGINAL_FAILURE_SHA256):
+        raise Refusal('authority1 sole process-retirement proof differs')
+    exit_proof = recovery.get('exit_proof', {})
+    events = exit_proof.get('events', [])
+    if (exit_proof.get('pidfd_exit_ready') is not True or len(events) != 1 or
+            len(events[0]) != 2 or type(events[0][0]) is not int or events[0][0] < 0 or
+            type(events[0][1]) is not int or not events[0][1] & 1 or events[0][1] & ~17):
+        raise Refusal('authority1 positive pidfd exit proof missing')
+    before = prepared.get('before', [])
+    after = recovery.get('after', {})
+    if (len(before) != 2 or not before[0].get('inputs') or
+            before[0]['inputs'] != before[1].get('inputs') or
+            after.get('inputs') != before[0]['inputs'] or not after.get('root_locks') or
+            not isinstance(recovery.get('deferred_signals'), list)):
+        raise Refusal('authority1 original inputs/lock recovery proof differs')
+    for original, checksum in RECOVERY_ORIGINAL_FAILURE_SHA256.items():
+        if _IMPL.digest(Path(original)) != checksum:
+            raise Refusal('authority1 original recovery failure changed')
 
-    The failed authority1 container, 80-MiB capture, guard and exclusions must
-    never be treated as abandoned. No future acceptance record is synthesized
-    here. This source template needs a reviewed actual retirement integration.
-    """
-    raise Refusal('authority2 preparation not released: actual authority1 cleanup and quarantine recovery contracts pending')
+    cleanup_pointer = release['authority1_cleanup']
+    result = bound_json(cleanup_pointer['path'], cleanup_pointer['sha256'])
+    pointer = release['authority1_cleanup_review']
+    cleanup_review = bound_json(pointer['path'], pointer['sha256'])
+    require_retirement_review(cleanup_review, 'scratch22-authority1.cleanup-postflight-review.v1',
+                              'PASS_TERMINAL_CLEANUP_POSTFLIGHT')
+    if (cleanup_review.get('result') != cleanup_pointer or
+            cleanup_review.get('container_absent') is not True or
+            cleanup_review.get('exclusions_absent') is not True or
+            result.get('schema') != 'scratch22-authority1.cleanup-result.v1' or
+            result.get('status') not in ('PASS_EXECUTED', 'PASS_TERMINAL_REPLAY') or
+            result.get('terminal') is not True or result.get('container_absent') is not True or
+            result.get('container_id') != profile['retirement_proof']['container']['id'] or
+            result.get('filesystem_uuid') != SCRATCH_UUID or result.get('boot_id') != target['boot_id'] or
+            result.get('release_sha256') != cleanup_review.get('release_canonical_sha256') or
+            result.get('archives') != cleanup_review.get('archives')):
+        raise Refusal('authority1 accepted terminal cleanup binding differs')
+    # The accepted postflight binds the raw large release AND its canonical
+    # digest. Hash the raw file as a stream; do not reparse its 146-MB inventory.
+    authority = cleanup_review['release']
+    if _IMPL.snapshot(Path(authority['path']))['sha256'] != authority['sha256']:
+        raise Refusal('authority1 cleanup raw release changed')
+    for key in ('plan', 'journal', 'capture'):
+        row = result[key]
+        if cleanup_review.get(key) != {name: row[name] for name in ('path', 'sha256')}:
+            raise Refusal('authority1 cleanup evidence postflight differs: ' + key)
+    validate_authority1_cleanup_journal(result)
+    return dict(recovery=recovery, cleanup=result)
+
+
+def require_retirement_review(review, schema, decision):
+    if (review.get('schema') != schema or review.get('decision') != decision or
+            not review.get('reviewer') or review['reviewer'] == '/root' or
+            review.get('implementation_ownership') is not False):
+        raise Refusal('independent accepted authority1 retirement review required')
+
+
+def validate_authority1_cleanup_journal(result):
+    """Authenticate the actual terminal transaction and archived originals."""
+    plan_raw = bound_identity(result['plan'])
+    plan = json.loads(plan_raw, object_pairs_hook=unique_object)
+    plan_sha = hashlib.sha256(canonical(plan)).hexdigest()
+    if (plan.get('schema') != 'scratch22-authority1.terminal-cleanup.v1' or
+            plan.get('root') != str(_IMPL.DEFAULT_SCRATCH) or
+            plan.get('filesystem_uuid') != SCRATCH_UUID or
+            plan.get('release_sha256') != result['release_sha256'] or
+            plan_sha != result.get('plan_sha256') or plan_raw != canonical(plan) + b'\n'):
+        raise Refusal('authority1 actual cleanup plan differs')
+    journal = bound_identity(result['journal']).splitlines(keepends=True)
+    legal = [(event, index) for index in range(2) for event in
+             ('before_exchange', 'after_exchange', 'release', 'after_release')] + [('complete', 2)]
+    if len(journal) != len(legal):
+        raise Refusal('authority1 actual cleanup journal incomplete')
+    previous = plan_sha
+    for sequence, (line, (event, index)) in enumerate(zip(journal, legal)):
+        body = dict(event=event, index=index, sequence=sequence, plan_sha256=plan_sha,
+                    previous=previous, plan_identity=[result['plan']['device'], result['plan']['inode']])
+        expected = dict(body, hash=hashlib.sha256(canonical(body)).hexdigest())
+        if line != canonical(expected) + b'\n':
+            raise Refusal('authority1 actual cleanup journal chain differs')
+        previous = expected['hash']
+    archives = result.get('archives', [])
+    records = plan.get('records', [])
+    if len(archives) != 2 or len(records) != 2 or len({row['path'] for row in archives}) != 2:
+        raise Refusal('authority1 cleanup archive inventory differs')
+    for record, archive in zip(records, archives):
+        if (len(record) != 5 or Path(archive['path']).name != record[1] or
+                (archive['sha256'], archive['inode'], archive['size']) != tuple(record[2:])):
+            raise Refusal('authority1 cleanup archive plan differs')
+        bound_identity(archive)
+    # The large capture was independently sealed already; stream its exact
+    # hash/metadata again without materializing its complete bytes in memory.
+    row = result['capture']
+    observed = _IMPL.snapshot(Path(row['path']))
+    meta = os.lstat(row['path'])
+    wanted = dict(path=row['path'], device=observed['device'], inode=observed['inode'],
+                  mode=oct(stat.S_IMODE(meta.st_mode)), uid=meta.st_uid, gid=meta.st_gid,
+                  size=observed['size'], nlink=observed['nlink'], sha256=observed['sha256'])
+    if row != wanted:
+        raise Refusal('authority1 cleanup preserved capture differs')
 
 
 def validate_authority_review(source, release):
@@ -359,7 +498,8 @@ def validate_preparation_release(source, release):
         if hashlib.sha256(_IMPL.git(source, 'show', controller + ':' + rel)).hexdigest() != expected[key]:
             raise Refusal('preparation controller blob mismatch')
     expected.update({key + '_sha256': release[key]['sha256']
-                     for key in ('cleanup', 'cleanup_release', 'cleanup_postflight', 'source_checks', 'source_review', 'authority_review', 'repair_review')})
+                     for key in ('cleanup', 'cleanup_release', 'cleanup_postflight', 'source_checks', 'source_review', 'authority_review', 'repair_review',
+                                 'authority1_recovery', 'authority1_recovery_review', 'authority1_cleanup', 'authority1_cleanup_review')})
     pointer = release['preparation_review']
     review = bound_json(pointer['path'], pointer['sha256'])
     if (review.get('decision') != 'PASS_PREPARATION_EXECUTION' or

@@ -39,6 +39,12 @@ class Scratch22Authority2(unittest.TestCase):
         git_patcher = mock.patch.object(p._IMPL, 'git', side_effect=no_git_process)
         git_patcher.start()
         self.addCleanup(git_patcher.stop)
+        real_digest = p._IMPL.digest
+        def retained_failure_digest(path):
+            return p.RECOVERY_ORIGINAL_FAILURE_SHA256.get(str(path), None) or real_digest(path)
+        digest_patcher = mock.patch.object(p._IMPL, 'digest', side_effect=retained_failure_digest)
+        digest_patcher.start()
+        self.addCleanup(digest_patcher.stop)
         self.actual_retirement_gate = p.validate_authority1_retirement
         retirement = mock.patch.object(p, 'validate_authority1_retirement')
         retirement.start()
@@ -134,6 +140,7 @@ class Scratch22Authority2(unittest.TestCase):
             files_sha256_delta={rel: dict(baseline_sha256=hashlib.sha256(self.repair_bytes(rel, False)).hexdigest(),
                                          target_sha256=hashlib.sha256(self.repair_bytes(rel, True)).hexdigest())
                                 for rel in p.REPAIR_FILES}))
+        retirement = self.retirement_records()
         return dict(schema='scratch22-authority2-source-admission-v1', status='PASS',
                     attempt='scratch22-authority2', execution_released=False,
                     target=target, target_tree=tree, baseline=baseline,
@@ -142,7 +149,109 @@ class Scratch22Authority2(unittest.TestCase):
                     exact_delta=[['M', rel, 'd' * 40] for rel in sorted(p.REPAIR_FILES)],
                     cleanup=cleanup, cleanup_release=cleanup_release, cleanup_postflight=cleanup_postflight,
                     source_checks=checks, source_review=review, authority_review=authority_review,
-                    repair_review=repair_review)
+                    repair_review=repair_review, **retirement)
+
+    def producer_dict(self, path, function, variable, namespace):
+        """Extract only the actual producer's dict expression, never import it."""
+        tree = ast.parse((ROOT / path).read_text())
+        body = next(node for node in ast.walk(tree)
+                    if isinstance(node, ast.FunctionDef) and node.name == function)
+        if variable is None:
+            expression = next(node.value for node in body.body if isinstance(node, ast.Return))
+        else:
+            expression = next(node.value for node in ast.walk(body) if isinstance(node, ast.Assign)
+                              and any(isinstance(target, ast.Name) and target.id == variable for target in node.targets))
+        self.assertIsInstance(expression, (ast.Call, ast.Dict))
+        return eval(compile(ast.Expression(expression), str(path), 'eval'),
+                    dict(namespace, __builtins__={}, dict=dict, str=str))
+
+    def retirement_records(self):
+        """Synthetic actual-shape fixtures; no actual retirement result is made."""
+        profile = json.loads(p.RECOVERY_PROFILE.read_text())
+        guard = profile['bound_guard']
+        target = dict(pid=guard['pid'], starttime=guard['starttime'], parent=guard['parent_pid'],
+                      boot_id=guard['boot_id'], uid=guard['uid'], gid=guard['gid'], threads=guard['threads'])
+        authority = dict(schema='scratch22-authority1.quarantine-recovery-release.v1',
+                         status='PASS_EXECUTION_RELEASE', source_checkpoint='9' * 40,
+                         original_failure_sha256=p.RECOVERY_ORIGINAL_FAILURE_SHA256)
+        authority_pointer = self.record('synthetic-recovery-release.json', authority)
+        snapshot = dict(inputs={'synthetic': 'unchanged input hash map'},
+                        captures={}, root_locks=[['FLOCK', 'ADVISORY', 'WRITE', '1001', '00:1b:4', '0', 'EOF']])
+        ns = dict(PROFILE_SHA=p.RECOVERY_PROFILE_SHA256,
+                  ORIGINAL_FAILURE_SHA256=p.RECOVERY_ORIGINAL_FAILURE_SHA256,
+                  checksum=authority_pointer['sha256'], release=authority, target=target,
+                  first=snapshot, second=snapshot, after=snapshot, requested=[],
+                  signalled=dict(syscall=424, signal=9, returncode=0),
+                  exited=dict(pidfd_exit_ready=True, events=[[8, 1]]),
+                  canonical=lambda value: p.canonical(value) + b'\n',
+                  sha=lambda raw: hashlib.sha256(raw).hexdigest())
+        producer = 'scripts/native_exact_scratch22_authority1_quarantine_recovery.py'
+        prepared = self.producer_dict(producer, 'execute', 'prepared', ns)
+        prepared_path = self.top / 'synthetic-recovery-prepared.json'
+        prepared_path.write_bytes(p.canonical(prepared) + b'\n')
+        prepared_pointer = dict(path=str(prepared_path), sha256=hashlib.sha256(prepared_path.read_bytes()).hexdigest())
+        ns['prepared'] = prepared
+        complete = self.producer_dict(producer, 'execute', 'record', ns)
+        result_pointer = self.record('synthetic-recovery-complete.json', complete)
+        review_pointer = self.record('synthetic-recovery-review.json', dict(
+            schema='scratch22-authority1.quarantine-recovery-postflight-review.v1',
+            decision='PASS_PROCESS_RECOVERY_POSTFLIGHT', reviewer='independent-retirement-reviewer',
+            implementation_ownership=False, result=result_pointer, release=authority_pointer,
+            prepared=prepared_pointer, profile_sha256=p.RECOVERY_PROFILE_SHA256,
+            source_checkpoint=authority['source_checkpoint']))
+
+        directory = self.top / 'synthetic-cleanup'
+        directory.mkdir()
+        archives = []
+        for index in range(2):
+            path = directory / ('archive' + str(index))
+            path.write_bytes(b'preserved exclusion')
+            archives.append(self.identity(path))
+        cleanup_release = dict(schema='scratch22-authority1.cleanup-release.v1', status='PASS_EXECUTION_RELEASE')
+        cleanup_release_pointer = self.record('synthetic-cleanup-release.json', cleanup_release)
+        plan = dict(schema='scratch22-authority1.terminal-cleanup.v1', root=str(p._IMPL.DEFAULT_SCRATCH),
+                    filesystem_uuid=p.SCRATCH_UUID,
+                    release_sha256=hashlib.sha256(p.canonical(cleanup_release)).hexdigest(),
+                    records=[['original', Path(row['path']).name, row['sha256'], row['inode'], row['size']]
+                             for row in archives])
+        plan_path = directory / 'plan.json'
+        plan_path.write_bytes(p.canonical(plan) + b'\n')
+        plan_row = self.identity(plan_path)
+        plan_sha = hashlib.sha256(p.canonical(plan)).hexdigest()
+        previous = plan_sha
+        journal = b''
+        legal = [(event, index) for index in range(2) for event in
+                 ('before_exchange', 'after_exchange', 'release', 'after_release')] + [('complete', 2)]
+        for sequence, (event, index) in enumerate(legal):
+            body = dict(event=event, index=index, sequence=sequence, plan_sha256=plan_sha,
+                        previous=previous, plan_identity=[plan_row['device'], plan_row['inode']])
+            previous = hashlib.sha256(p.canonical(body)).hexdigest()
+            journal += p.canonical(dict(body, hash=previous)) + b'\n'
+        journal_path = directory / 'journal.jsonl'
+        journal_path.write_bytes(journal)
+        capture_path = directory / 'capture'
+        capture_path.write_bytes(b'synthetic retained container log')
+        cleanup_ns = dict(CONTAINER=profile['retirement_proof']['container']['id'],
+                          UUID=p.SCRATCH_UUID, BOOT_ID=target['boot_id'], RELEASE=cleanup_release,
+                          plan=plan, PLAN=plan_path, JOURNAL=journal_path, CAPTURE=capture_path,
+                          ROOT=directory, ARCHIVE_NAMES=[Path(row['path']).name for row in archives],
+                          PUBLISHER_CONTRACT={'synthetic': 'publisher proof'},
+                          canonical=p.canonical, observe_identity=self.identity,
+                          digest=lambda raw: hashlib.sha256(raw).hexdigest(), status='PASS_EXECUTED')
+        cleanup_result = self.producer_dict('scripts/native_exact_scratch22_authority1_terminal_cleanup.py',
+                                            'terminal_result', None, cleanup_ns)
+        cleanup_pointer = self.record('synthetic-cleanup-result.json', cleanup_result)
+        cleanup_review = self.record('synthetic-cleanup-review.json', dict(
+            schema='scratch22-authority1.cleanup-postflight-review.v1',
+            decision='PASS_TERMINAL_CLEANUP_POSTFLIGHT', reviewer='independent-retirement-reviewer',
+            implementation_ownership=False, result=cleanup_pointer, release=cleanup_release_pointer,
+            plan={key: cleanup_result['plan'][key] for key in ('path', 'sha256')},
+            journal={key: cleanup_result['journal'][key] for key in ('path', 'sha256')},
+            capture={key: cleanup_result['capture'][key] for key in ('path', 'sha256')},
+            release_canonical_sha256=cleanup_result['release_sha256'],
+            container_absent=True, exclusions_absent=True, archives=archives))
+        return dict(authority1_recovery=result_pointer, authority1_recovery_review=review_pointer,
+                    authority1_cleanup=cleanup_pointer, authority1_cleanup_review=cleanup_review)
 
     def repair_bytes(self, rel, repaired):
         old, new = p.REPAIR_REPLACEMENTS[rel]
@@ -417,7 +526,8 @@ class Scratch22Authority2(unittest.TestCase):
         release.update(controller='9' * 40, author='author')
         expected = {key: release[key] for key in paths}
         expected.update({key + '_sha256': release[key]['sha256'] for key in
-                         ('cleanup', 'cleanup_release', 'cleanup_postflight', 'source_checks', 'source_review', 'authority_review', 'repair_review')})
+                         ('cleanup', 'cleanup_release', 'cleanup_postflight', 'source_checks', 'source_review', 'authority_review', 'repair_review',
+                          'authority1_recovery', 'authority1_recovery_review', 'authority1_cleanup', 'authority1_cleanup_review')})
         review = dict(decision='PASS_PREPARATION_EXECUTION', reviewer='independent',
                       implementation_ownership=False, reviewed_inputs_sha256=expected,
                       target=release['target'], target_tree=release['target_tree'])
@@ -515,8 +625,11 @@ class Scratch22Authority2(unittest.TestCase):
         self.assertEqual(hashlib.sha256((ROOT / 'scripts/prepare_native_exact_scratch22_authority1.py').read_bytes()).hexdigest(),
                          '5e002228f09c2df3c712422d94f96f333bbc0df597335203de57350162723717')
 
-    def test_actual_authority1_retirement_contract_gap_blocks_preparation(self):
+    def test_missing_actual_accepted_retirement_records_block_preparation(self):
         release = self.release()
+        review = json.loads(Path(release['authority1_recovery_review']['path']).read_text())
+        review['decision'] = 'PENDING'
+        release['authority1_recovery_review'] = self.record('pending-recovery-review.json', review)
         with mock.patch.object(p, 'validate_authority1_retirement', side_effect=self.actual_retirement_gate), \
                 mock.patch.object(p._IMPL, 'git', side_effect=self.git_for_release(release)), \
                 mock.patch.object(p._IMPL, 'raw_delta'), mock.patch.object(p._IMPL, 'prepare') as inherited:
@@ -525,9 +638,53 @@ class Scratch22Authority2(unittest.TestCase):
                     release.update(schema='scratch22-authority2.preparation-release.v1',
                                    status='PASS_PREPARATION_EXECUTION_RELEASE')
                 pointer = self.record('release.json', release)
-                with self.assertRaisesRegex(p.Refusal, 'actual authority1 cleanup and quarantine recovery contracts pending'):
+                with self.assertRaisesRegex(p.Refusal, 'independent accepted authority1 retirement review required'):
                     p.prepare(release_path=pointer['path'], release_sha256=pointer['sha256'], materialize=materialize)
         inherited.assert_not_called()
+
+    def test_actual_producer_shapes_join_complete_recovery_and_terminal_cleanup(self):
+        release = self.release()
+        result = self.actual_retirement_gate(release)
+        self.assertEqual(result['recovery']['status'], 'COMPLETE_PROCESS_RECOVERY')
+        self.assertEqual(result['cleanup']['status'], 'PASS_EXECUTED')
+
+    def test_recovery_sole_signal_exit_original_failure_and_review_hash_drift_refuse(self):
+        release = self.release()
+        original = json.loads(Path(release['authority1_recovery']['path']).read_text())
+        for field, value, reason in (
+                ('sole_signal', dict(syscall=424, signal=15, returncode=0), 'sole process-retirement'),
+                ('exit_proof', dict(pidfd_exit_ready=False, events=[]), 'positive pidfd'),
+                ('original_failure_sha256', {}, 'sole process-retirement'),
+                ('status', 'PREPARED_PROCESS_RETIREMENT', 'actual complete recovery')):
+            with self.subTest(field=field):
+                altered = dict(original, **{field: value})
+                pointer = self.record('altered-recovery.json', altered)
+                review = json.loads(Path(release['authority1_recovery_review']['path']).read_text())
+                review['result'] = pointer
+                changed = dict(release, authority1_recovery=pointer,
+                               authority1_recovery_review=self.record('altered-review.json', review))
+                with self.assertRaisesRegex(p.Refusal, reason):
+                    self.actual_retirement_gate(changed)
+
+    def test_cleanup_postflight_and_complete_journal_required(self):
+        release = self.release()
+        review = json.loads(Path(release['authority1_cleanup_review']['path']).read_text())
+        review['exclusions_absent'] = False
+        release['authority1_cleanup_review'] = self.record('unclear-exclusion-review.json', review)
+        with self.assertRaisesRegex(p.Refusal, 'accepted terminal cleanup binding differs'):
+            self.actual_retirement_gate(release)
+        review['exclusions_absent'] = True
+        result = json.loads(Path(release['authority1_cleanup']['path']).read_text())
+        journal = Path(result['journal']['path'])
+        journal.write_bytes(b''.join(journal.read_bytes().splitlines(keepends=True)[:-1]))
+        result['journal'] = self.identity(journal)
+        review['journal'] = {key: result['journal'][key] for key in ('path', 'sha256')}
+        pointer = self.record('incomplete-cleanup.json', result)
+        review['result'] = pointer
+        release.update(authority1_cleanup=pointer,
+                       authority1_cleanup_review=self.record('incomplete-cleanup-review.json', review))
+        with self.assertRaisesRegex(p.Refusal, 'actual cleanup journal incomplete'):
+            self.actual_retirement_gate(release)
 
     def test_exact_two_file_repair_and_unaffected_rs011_hashes(self):
         release = self.release()

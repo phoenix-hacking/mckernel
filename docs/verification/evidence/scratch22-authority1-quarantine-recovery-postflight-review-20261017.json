@@ -1,0 +1,57 @@
+{
+  "schema": "scratch22-authority1.quarantine-recovery-postflight-review.v1",
+  "decision": "PASS_PROCESS_RECOVERY_POSTFLIGHT",
+  "reviewer": "/root/scratch21_source_review",
+  "implementation_ownership": false,
+  "executor": "/root",
+  "result": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-quarantine-recovery-20261017.correction1.complete.json",
+    "sha256": "f50a036e06aba4a87ac6bf1fad5a472844cbc4f62b11e1fe6542518fe80205f5"
+  },
+  "release": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-authority1-quarantine-recovery-correction1-execution-release-20261017.json",
+    "sha256": "d98bfb1b1936fb4dc0d07aa3b963565b41d7fb20bbd095685697db7939ad8231"
+  },
+  "prepared": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-quarantine-recovery-20261017.correction1.prepared.json",
+    "sha256": "228645338f31b869b17198f4f42c74ad451eeff68e8abe4cc2464051242b6500"
+  },
+  "profile_sha256": "be4ea78f63872e69f9f1463d0587a9d6ebe6eeab5fbec923588101c5c89e4a19",
+  "source_checkpoint": "9a60f6e5b2e1d4468e6be1f49247766373b12777",
+  "source_review_sha256": "e732501a45ee5ed3b13b76707572379eceb77e6950cf05d9ef2abe0b87c85f0d",
+  "actual_result": {
+    "schema": "scratch22-authority1.quarantine-recovery-complete.v1",
+    "status": "COMPLETE_PROCESS_RECOVERY",
+    "executor_reported_exit_code": 0,
+    "target": {"pid": 80259, "starttime": "718109", "parent": 80258, "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb", "uid": 1000, "gid": 1000, "threads": 1},
+    "sole_signal": {"syscall": 424, "signal": 9, "returncode": 0},
+    "exit_proof": {"pidfd_exit_ready": true, "events": [[3, 1]]},
+    "replacement_root_lock": [27, 4],
+    "recovery_process": {"pid": 219374, "starttime": "1112149"},
+    "guard_present_in_first_snapshot_of_before1_before2_after": [true, true, false],
+    "deferred_signals": [],
+    "build_status": "FAIL",
+    "cleanup_required": true,
+    "acceptance_credit": false
+  },
+  "verified_joins": [
+    "Exact COMPLETE/PREPARED/release raw-file digests and all profile/source-checkpoint/release/prepared/target joins match. Release selects the exact independently accepted correction source and e732 source review.",
+    "PREPARED binds signal_budget1, two before observations and original failure map. COMPLETE binds one syscall424/SIGKILL, positive PIDFD exit readiness and the same original-failure map. All three original failure files still match their retained digests.",
+    "All nine before1/before2/after capture files match their exact declared sizes and SHA256 values. The accepted process validator passes against the actual captured full snapshots: only guard publisher before, none after; original owner and seven Docker clients absent; exact caller identity consistent; no guard descendants.",
+    "All three actual Docker inspect captures equal the retained stopped terminal after Mounts-only comparison. Complete captured Docker inventories contain no active container and retain the one exact target container exited.",
+    "Before root-lock rows name80259; after row names recovery process219374 on unchanged inode27:4. COMPLETE is durable before the accepted helper's successful lock-close/return path; original launcher session42395 was reported joined137 as planned guard retirement, never build success.",
+    "All16 protected input identity/hash rows are identical across both pre-observations and post-observation and equal release's nine protected inputs plus seven client statuses. Current metadata matches those rows; small retained file hashes match. Existing80/89MiB receipt semantic proof and actual helper streaming checks are reused without reparsing or redundant large hashing.",
+    "No correction1 recovery quarantine was produced. The original guard quarantine, failed build receipts/output, stopped container and both persistent exclusions remain evidence for separately released cleanup."
+  ],
+  "independent_check": {
+    "returncode": 0,
+    "profile": "CPU6/2GiB/120seconds; ordinary read-only receipt/capture/source-review checks only. No root, live proc/Docker, signal, lock action, compiler, Git, children or whole-code review.",
+    "capture_files_verified": 9,
+    "protected_inputs_verified": 16,
+    "large_receipts_reparsed": false,
+    "new_failures": []
+  },
+  "blocking_findings": [],
+  "acceptance_credit": false,
+  "scope": "Accept this exact process recovery and lock handoff only. It permits satisfying the process-recovery prerequisite for a separately reviewed terminal cleanup. It grants no container/exclusion deletion, build replay, guest/image success or formal OS acceptance."
+}

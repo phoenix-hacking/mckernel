@@ -27,7 +27,7 @@ ADAPTER = 'scripts/prepare_native_exact_scratch22_authority2.py'
 # integrated and independently reviewed before a new source release can change
 # these values. No CLI option, environment variable or release JSON enables it.
 ADAPTER_RELEASED = False
-ADAPTER_SHA256 = None
+ADAPTER_SHA256 = 'dbdc8c6711f4502328b37cec4b200d999c102af53f87aa183debbe160379dc0f'
 ANCESTOR = 'docs/verification/evidence/native-exact-candidate-delta-preparation-scratch18-20261001.py'
 CANDIDATE = ROOT / 'mckernel-exact-candidate-scratch-22-authority2'
 PREP = ROOT / 'native-exact-delta-request-scratch-22-authority2.json'
@@ -237,6 +237,7 @@ def preflight(release):
         raise Refusal('actual scratch22-authority2 preparation execution authority required')
     # Consume the actual producer contracts, without normalizing their statuses.
     adapter.validate_cleanup(preparation)
+    adapter.validate_authority1_retirement(preparation)
     adapter.validate_source_authority(REPO, preparation)
     adapter.validate_authority_review(REPO, preparation)
     # The preparation controller may now be an ancestor of the build checkpoint.
@@ -251,7 +252,8 @@ def preflight(release):
             raise Refusal('original preparation controller source mismatch')
     reviewed.update({key + '_sha256': preparation[key]['sha256'] for key in
                     ('cleanup', 'cleanup_release', 'cleanup_postflight', 'source_checks', 'source_review',
-                     'authority_review')})
+                     'authority_review', 'repair_review', 'authority1_recovery',
+                     'authority1_recovery_review', 'authority1_cleanup', 'authority1_cleanup_review')})
     prep_review = bound_json(preparation['preparation_review'])
     if (prep_review.get('decision') != 'PASS_PREPARATION_EXECUTION' or
             not preparation.get('author') or not prep_review.get('reviewer') or
