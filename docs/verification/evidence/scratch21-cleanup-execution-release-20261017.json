@@ -1,0 +1,1025 @@
+{
+  "author": "/root/scratch21_transaction",
+  "directories": [
+    {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 4458708,
+      "mode": "0o700",
+      "nlink": 2,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-output",
+      "size": 4096,
+      "uid": 1000
+    },
+    {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 4458709,
+      "mode": "0o700",
+      "nlink": 10,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence",
+      "size": 4096,
+      "uid": 1000
+    }
+  ],
+  "execution_review": {
+    "status": "PASS",
+    "reviewer": "/root/scratch21_source_review",
+    "evidence_path": "docs/verification/evidence/scratch21-cleanup-independent-execution-review-20261017.json",
+    "evidence_sha256": "0f25117420913f350fe1d708edef27610c17475a2122595b887731c33bd2eb88"
+  },
+  "fetched_source_verified": true,
+  "git_commit": "0c8f2cef2f200b88bcf79e40255d4dfe9bae1e25",
+  "git_tree": "6908f84a6fb119ecd39508248e6e2138a439efe9",
+  "inputs": [
+    {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 3940282,
+      "mode": "0o644",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21/scripts/native_rust_exact_build_offline.py",
+      "sha256": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+      "size": 27338,
+      "uid": 1000
+    },
+    {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 3940277,
+      "mode": "0o644",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21/scripts/native_rust_exact_build_container_owner.py",
+      "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+      "size": 51420,
+      "uid": 1000
+    },
+    {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 57681,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-exact-inputs-scratch-21.json",
+      "sha256": "3b30018845da5a574c352ecc8704a9916f0aca876b96d0665cb973b9e67779df",
+      "size": 1246155,
+      "uid": 1000
+    },
+    {
+      "device": 66306,
+      "gid": 0,
+      "inode": 45523064,
+      "mode": "0o444",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-exact-image-evidence-d0947e0c-1/image-receipt.json",
+      "sha256": "18225919a44e2c07e87a66711c8d1c9483d10e15da91fa5d7fcb7339ff888172",
+      "size": 15550,
+      "uid": 0
+    }
+  ],
+  "observation": {
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "cleanup_execution": "NOT_IMPLEMENTED_OR_RELEASED; use the reviewed scratch21-specific transaction only.",
+    "container": {
+      "cleanup_separately_required": true,
+      "container_id": "e1f6dd145149c026c46adb82c3f3addb9e3c9e2a12b0d71a6813f00895220ea9",
+      "container_name": "mckernel-exact-57e76f6bf33a48da82047f98242bf019",
+      "dead": false,
+      "exit_code": 1,
+      "image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+      "oom_killed": false,
+      "owner_nonce": "1439909012a04cf789981b951b34d399",
+      "owner_pid": 3788091,
+      "owner_process_absent": true,
+      "owner_starttime": "110575783",
+      "pid": 0,
+      "request_lease_absent": true,
+      "retired": true,
+      "state": "exited"
+    },
+    "execution_released": false,
+    "future_transaction": [
+      "Pin UUID plus fresh live st_dev/inodes, current boot and all process/container/evidence identities.",
+      "Acquire preserved root development lock; hold through every mutation and terminal reconciliation.",
+      "Use fresh scratch21 plan/journal/mutex/archive names; retain all original ownership bytes.",
+      "Authenticate complete terminal profile/mounts and capture exact Docker logs before non-force removal.",
+      "Prove exact container absence, atomically exchange exclusions with sentinels, durably archive originals.",
+      "Recheck publisher census and identities before sentinel release; quarantine uncertain retirement.",
+      "Independently review actual cleanup evidence and immutable terminal replay before another workload."
+    ],
+    "live": {
+      "container": {
+        "AppArmorProfile": "docker-default",
+        "Args": [
+          "/driver.py",
+          "--repo",
+          "/src",
+          "--candidate",
+          "28a905bfc177627e338a3fd91f69329ac2e74046",
+          "--assets",
+          "/assets",
+          "--output",
+          "/out",
+          "--evidence",
+          "/evidence/build",
+          "--manifest",
+          "/inputs.json"
+        ],
+        "Config": {
+          "AttachStderr": true,
+          "AttachStdin": false,
+          "AttachStdout": true,
+          "Cmd": [
+            "/driver.py",
+            "--repo",
+            "/src",
+            "--candidate",
+            "28a905bfc177627e338a3fd91f69329ac2e74046",
+            "--assets",
+            "/assets",
+            "--output",
+            "/out",
+            "--evidence",
+            "/evidence/build",
+            "--manifest",
+            "/inputs.json"
+          ],
+          "Domainname": "",
+          "Entrypoint": [
+            "/usr/bin/python3"
+          ],
+          "Env": [
+            "container=oci"
+          ],
+          "Hostname": "e1f6dd145149",
+          "Image": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+          "Labels": {
+            "io.buildah.version": "1.43.1",
+            "license": "BSD-3-Clause",
+            "mckernel.owner": "1439909012a04cf789981b951b34d399",
+            "name": "rockylinux",
+            "org.opencontainers.image.authors": "Lukas Magauer, Neil Hanlon, Louis Abel",
+            "org.opencontainers.image.licenses": "BSD-3-Clause",
+            "org.opencontainers.image.source": "https://git.resf.org/sig_core/rocky-kiwi-descriptions/src/branch/r10",
+            "org.opencontainers.image.title": "rockylinux",
+            "org.opencontainers.image.vendor": "Rocky Enterprise Software Foundation",
+            "org.opencontainers.image.version": "10",
+            "summary": "Rocky Linux Base image",
+            "vendor": "Rocky Enterprise Software Foundation",
+            "version": "10"
+          },
+          "OnBuild": null,
+          "OpenStdin": false,
+          "StdinOnce": false,
+          "Tty": false,
+          "User": "1000:1000",
+          "Volumes": null,
+          "WorkingDir": "/"
+        },
+        "Created": "2026-10-01T23:06:03.750740998Z",
+        "Driver": "overlay2",
+        "ExecIDs": null,
+        "GraphDriver": {
+          "Data": {
+            "LowerDir": "/var/lib/docker/overlay2/a787ba621f0207478ed0db4b0311fc6085b5c0fd02a1a1b6cb2be8665610e784-init/diff:/var/lib/docker/overlay2/2b630378d51d71fdf5e1daf76f09ad0083d31140f811ad015375eb25a26bd540/diff:/var/lib/docker/overlay2/2a23ddce6067a5847fc046c77f050a037a224c752e9e6ff2d7d56ac9162e8982/diff",
+            "MergedDir": "/var/lib/docker/overlay2/a787ba621f0207478ed0db4b0311fc6085b5c0fd02a1a1b6cb2be8665610e784/merged",
+            "UpperDir": "/var/lib/docker/overlay2/a787ba621f0207478ed0db4b0311fc6085b5c0fd02a1a1b6cb2be8665610e784/diff",
+            "WorkDir": "/var/lib/docker/overlay2/a787ba621f0207478ed0db4b0311fc6085b5c0fd02a1a1b6cb2be8665610e784/work"
+          },
+          "Name": "overlay2"
+        },
+        "HostConfig": {
+          "AutoRemove": false,
+          "Binds": null,
+          "BlkioDeviceReadBps": [],
+          "BlkioDeviceReadIOps": [],
+          "BlkioDeviceWriteBps": [],
+          "BlkioDeviceWriteIOps": [],
+          "BlkioWeight": 0,
+          "BlkioWeightDevice": [],
+          "CapAdd": null,
+          "CapDrop": [
+            "ALL"
+          ],
+          "Cgroup": "",
+          "CgroupParent": "",
+          "CgroupnsMode": "host",
+          "ConsoleSize": [
+            0,
+            0
+          ],
+          "ContainerIDFile": "",
+          "CpuCount": 0,
+          "CpuPercent": 0,
+          "CpuPeriod": 0,
+          "CpuQuota": 0,
+          "CpuRealtimePeriod": 0,
+          "CpuRealtimeRuntime": 0,
+          "CpuShares": 0,
+          "CpusetCpus": "2-5",
+          "CpusetMems": "",
+          "DeviceCgroupRules": null,
+          "DeviceRequests": null,
+          "Devices": [],
+          "Dns": [],
+          "DnsOptions": [],
+          "DnsSearch": [],
+          "ExtraHosts": null,
+          "GroupAdd": null,
+          "IOMaximumBandwidth": 0,
+          "IOMaximumIOps": 0,
+          "Init": true,
+          "IpcMode": "private",
+          "Isolation": "",
+          "Links": null,
+          "LogConfig": {
+            "Config": {},
+            "Type": "json-file"
+          },
+          "MaskedPaths": [
+            "/proc/asound",
+            "/proc/acpi",
+            "/proc/kcore",
+            "/proc/keys",
+            "/proc/latency_stats",
+            "/proc/timer_list",
+            "/proc/timer_stats",
+            "/proc/sched_debug",
+            "/proc/scsi",
+            "/sys/firmware",
+            "/sys/devices/virtual/powercap"
+          ],
+          "Memory": 12884901888,
+          "MemoryReservation": 0,
+          "MemorySwap": 12884901888,
+          "MemorySwappiness": null,
+          "Mounts": [
+            {
+              "ReadOnly": true,
+              "Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21",
+              "Target": "/src",
+              "Type": "bind"
+            },
+            {
+              "ReadOnly": true,
+              "Source": "/home/holden/mckernel-work/scratch/native-exact-assets-16445ab2",
+              "Target": "/assets",
+              "Type": "bind"
+            },
+            {
+              "Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-output",
+              "Target": "/out",
+              "Type": "bind"
+            },
+            {
+              "Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence",
+              "Target": "/evidence",
+              "Type": "bind"
+            },
+            {
+              "ReadOnly": true,
+              "Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21/scripts/native_rust_exact_build_offline.py",
+              "Target": "/driver.py",
+              "Type": "bind"
+            },
+            {
+              "ReadOnly": true,
+              "Source": "/home/holden/mckernel-work/scratch/native-exact-inputs-scratch-21.json",
+              "Target": "/inputs.json",
+              "Type": "bind"
+            }
+          ],
+          "NanoCpus": 4000000000,
+          "NetworkMode": "none",
+          "OomKillDisable": false,
+          "OomScoreAdj": 0,
+          "PidMode": "",
+          "PidsLimit": 512,
+          "PortBindings": {},
+          "Privileged": false,
+          "PublishAllPorts": false,
+          "ReadonlyPaths": [
+            "/proc/bus",
+            "/proc/fs",
+            "/proc/irq",
+            "/proc/sys",
+            "/proc/sysrq-trigger"
+          ],
+          "ReadonlyRootfs": true,
+          "RestartPolicy": {
+            "MaximumRetryCount": 0,
+            "Name": "no"
+          },
+          "Runtime": "runc",
+          "SecurityOpt": [
+            "no-new-privileges"
+          ],
+          "ShmSize": 67108864,
+          "Tmpfs": {
+            "/tmp": "rw,nodev,nosuid,size=256m"
+          },
+          "UTSMode": "",
+          "Ulimits": [],
+          "UsernsMode": "",
+          "VolumeDriver": "",
+          "VolumesFrom": null
+        },
+        "HostnamePath": "/var/lib/docker/containers/e1f6dd145149c026c46adb82c3f3addb9e3c9e2a12b0d71a6813f00895220ea9/hostname",
+        "HostsPath": "/var/lib/docker/containers/e1f6dd145149c026c46adb82c3f3addb9e3c9e2a12b0d71a6813f00895220ea9/hosts",
+        "Id": "e1f6dd145149c026c46adb82c3f3addb9e3c9e2a12b0d71a6813f00895220ea9",
+        "Image": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+        "LogPath": "/var/lib/docker/containers/e1f6dd145149c026c46adb82c3f3addb9e3c9e2a12b0d71a6813f00895220ea9/e1f6dd145149c026c46adb82c3f3addb9e3c9e2a12b0d71a6813f00895220ea9-json.log",
+        "MountLabel": "",
+        "Mounts": [
+          {
+            "Destination": "/assets",
+            "Mode": "",
+            "Propagation": "rprivate",
+            "RW": false,
+            "Source": "/home/holden/mckernel-work/scratch/native-exact-assets-16445ab2",
+            "Type": "bind"
+          },
+          {
+            "Destination": "/driver.py",
+            "Mode": "",
+            "Propagation": "rprivate",
+            "RW": false,
+            "Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21/scripts/native_rust_exact_build_offline.py",
+            "Type": "bind"
+          },
+          {
+            "Destination": "/evidence",
+            "Mode": "",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence",
+            "Type": "bind"
+          },
+          {
+            "Destination": "/inputs.json",
+            "Mode": "",
+            "Propagation": "rprivate",
+            "RW": false,
+            "Source": "/home/holden/mckernel-work/scratch/native-exact-inputs-scratch-21.json",
+            "Type": "bind"
+          },
+          {
+            "Destination": "/out",
+            "Mode": "",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-output",
+            "Type": "bind"
+          },
+          {
+            "Destination": "/src",
+            "Mode": "",
+            "Propagation": "rprivate",
+            "RW": false,
+            "Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21",
+            "Type": "bind"
+          }
+        ],
+        "Name": "/mckernel-exact-57e76f6bf33a48da82047f98242bf019",
+        "NetworkSettings": {
+          "Bridge": "",
+          "EndpointID": "",
+          "Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "HairpinMode": false,
+          "IPAddress": "",
+          "IPPrefixLen": 0,
+          "IPv6Gateway": "",
+          "LinkLocalIPv6Address": "",
+          "LinkLocalIPv6PrefixLen": 0,
+          "MacAddress": "",
+          "Networks": {
+            "none": {
+              "Aliases": null,
+              "DNSNames": null,
+              "DriverOpts": null,
+              "EndpointID": "",
+              "Gateway": "",
+              "GlobalIPv6Address": "",
+              "GlobalIPv6PrefixLen": 0,
+              "IPAMConfig": null,
+              "IPAddress": "",
+              "IPPrefixLen": 0,
+              "IPv6Gateway": "",
+              "Links": null,
+              "MacAddress": "",
+              "NetworkID": "8c4a9a65ad813cb3f458da3761bdeba25d43fc777fb9fb0b91756f4e1553fa11"
+            }
+          },
+          "Ports": {},
+          "SandboxID": "285caa433c7f15b7c1151aa49347fe234e30349cb94d29c9f24c4346672afd3b",
+          "SandboxKey": "/var/run/docker/netns/285caa433c7f",
+          "SecondaryIPAddresses": null,
+          "SecondaryIPv6Addresses": null
+        },
+        "Path": "/usr/bin/python3",
+        "Platform": "linux",
+        "ProcessLabel": "",
+        "ResolvConfPath": "/var/lib/docker/containers/e1f6dd145149c026c46adb82c3f3addb9e3c9e2a12b0d71a6813f00895220ea9/resolv.conf",
+        "RestartCount": 0,
+        "State": {
+          "Dead": false,
+          "Error": "",
+          "ExitCode": 1,
+          "FinishedAt": "2026-10-01T23:06:19.880626327Z",
+          "OOMKilled": false,
+          "Paused": false,
+          "Pid": 0,
+          "Restarting": false,
+          "Running": false,
+          "StartedAt": "2026-10-01T23:06:04.118770435Z",
+          "Status": "exited"
+        }
+      },
+      "docker_log_sha256": "5998ffae79f7e31e34b90e32e24f32b4c145c842357e39a474dacff7a40bcc80",
+      "process_and_lock_census": {
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "locks": "1: FLOCK  ADVISORY  WRITE 9116 103:02:47459918 0 EOF\n2: FLOCK  ADVISORY  WRITE 9116 103:02:47459917 0 EOF\n3: FLOCK  ADVISORY  WRITE 23945 103:02:47459921 0 EOF\n4: FLOCK  ADVISORY  WRITE 9164 103:02:46013127 0 EOF\n5: POSIX  ADVISORY  READ 9116 103:02:46011287 128 128\n6: POSIX  ADVISORY  READ 9116 103:02:46013050 1073741826 1073742335\n7: FLOCK  ADVISORY  WRITE 5713 00:38:103 0 EOF\n8: POSIX  ADVISORY  WRITE 2196 00:19:1701 0 EOF\n9: FLOCK  ADVISORY  WRITE 910 103:02:52691275 0 EOF\n10: FLOCK  ADVISORY  WRITE 23945 103:02:47459940 0 EOF\n11: FLOCK  ADVISORY  WRITE 23945 103:02:47460075 0 EOF\n12: FLOCK  ADVISORY  WRITE 23945 103:02:46011513 0 EOF\n13: FLOCK  ADVISORY  WRITE 9116 103:02:47459912 0 EOF\n14: POSIX  ADVISORY  WRITE 971 103:02:13893648 0 EOF\n15: POSIX  ADVISORY  READ 9073 103:02:46010515 128 128\n16: POSIX  ADVISORY  READ 9073 103:02:46013047 1073741826 1073742335\n17: POSIX  ADVISORY  READ 9116 103:02:46010515 128 128\n18: POSIX  ADVISORY  READ 9116 103:02:46013047 1073741826 1073742335\n19: FLOCK  ADVISORY  WRITE 1213 103:02:55051482 0 EOF\n20: FLOCK  ADVISORY  WRITE 23945 103:02:47460068 0 EOF\n21: FLOCK  ADVISORY  WRITE 23945 103:02:47460066 0 EOF\n22: FLOCK  ADVISORY  WRITE 23945 103:02:47459941 0 EOF\n23: POSIX  ADVISORY  READ 23945 103:02:46013058 128 128\n24: POSIX  ADVISORY  READ 23945 103:02:46013056 1073741826 1073742335\n25: POSIX  ADVISORY  READ 23945 103:02:46011287 128 128\n26: POSIX  ADVISORY  READ 23945 103:02:46013050 1073741826 1073742335\n27: POSIX  ADVISORY  READ 23945 103:02:46010515 128 128\n28: POSIX  ADVISORY  READ 23945 103:02:46013047 1073741826 1073742335\n29: POSIX  ADVISORY  READ 23945 103:02:46011290 128 128\n30: POSIX  ADVISORY  READ 23945 103:02:46013044 1073741826 1073742335\n31: FLOCK  ADVISORY  WRITE 23943 103:02:47479248 0 EOF\n32: POSIX  ADVISORY  READ 9116 103:02:46011290 128 128\n33: POSIX  ADVISORY  READ 9116 103:02:46013044 1073741826 1073742335\n34: POSIX  ADVISORY  READ 9116 103:02:46013058 128 128\n35: POSIX  ADVISORY  READ 9116 103:02:46013056 1073741826 1073742335\n36: FLOCK  ADVISORY  WRITE 9116 103:02:46032736 0 EOF\n37: FLOCK  ADVISORY  WRITE 9073 103:02:46013142 0 EOF\n38: FLOCK  ADVISORY  WRITE 2036 103:02:55052393 0 EOF\n39: FLOCK  ADVISORY  WRITE 2036 103:02:55051524 0 EOF\n40: FLOCK  ADVISORY  WRITE 2036 103:02:55051522 0 EOF\n41: FLOCK  ADVISORY  WRITE 2036 103:02:55051521 0 EOF\n42: FLOCK  ADVISORY  WRITE 2036 103:02:55051520 0 EOF\n43: POSIX  ADVISORY  WRITE 922 00:19:1500 0 EOF\n44: POSIX  ADVISORY  WRITE 892 103:02:13893651 0 EOF\n45: FLOCK  ADVISORY  WRITE 23945 103:02:47459927 0 EOF\n46: FLOCK  ADVISORY  WRITE 23945 103:02:47499364 0 EOF\n47: FLOCK  ADVISORY  WRITE 9116 103:02:47459926 0 EOF\n48: FLOCK  ADVISORY  WRITE 23945 103:02:47474089 0 EOF\n49: FLOCK  ADVISORY  WRITE 9116 103:02:46013140 0 EOF\n50: POSIX  ADVISORY  WRITE 4369 103:02:57147728 1073741826 1073742335\n51: POSIX  ADVISORY  WRITE 4369 103:02:57147708 0 EOF\n52: POSIX  ADVISORY  WRITE 4369 103:02:57147718 0 EOF\n53: FLOCK  ADVISORY  WRITE 2036 103:02:55051515 0 EOF\n54: FLOCK  ADVISORY  WRITE 23945 103:02:47473956 0 EOF\n55: FLOCK  ADVISORY  WRITE 23945 103:02:47460019 0 EOF\n56: FLOCK  ADVISORY  WRITE 23945 103:02:47460067 0 EOF\n57: FLOCK  ADVISORY  WRITE 2036 103:02:55051509 0 EOF\n58: POSIX  ADVISORY  WRITE 2199 00:19:1702 0 EOF\n59: FLOCK  ADVISORY  WRITE 23945 103:02:47460074 0 EOF\n60: POSIX  ADVISORY  READ 23945 103:02:46011283 128 128\n61: POSIX  ADVISORY  READ 23945 103:02:46019532 1073741826 1073742335\n62: FLOCK  ADVISORY  WRITE 23902 103:02:47479175 0 EOF\n63: POSIX  ADVISORY  READ 9116 103:02:46011283 128 128\n64: POSIX  ADVISORY  READ 9116 103:02:46019532 1073741826 1073742335\n65: POSIX  ADVISORY  READ 4405 103:02:45482671 128 128\n66: POSIX  ADVISORY  READ 4405 103:02:45482006 1073741826 1073742335\n67: FLOCK  ADVISORY  WRITE 2199 103:02:13893689 0 EOF\n68: FLOCK  ADVISORY  WRITE 867 00:19:1429 0 EOF\n",
+        "publishers": [],
+        "uid": 0
+      }
+    },
+    "mount": {
+      "fstype": "ext4",
+      "maj:min": "7:36",
+      "options": "rw,nosuid,nodev,relatime",
+      "source": "/dev/loop36",
+      "target": "/home/holden/mckernel-work/scratch",
+      "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52"
+    },
+    "output_entries": [],
+    "owner_evidence_inventory": [
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458729,
+        "mode": "0o755",
+        "nlink": 2,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/build",
+        "size": 4096,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458738,
+        "mode": "0o644",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/build/driver.log",
+        "sha256": "15c9539eb672df33bfd32457d28c6d3011ad23be4d082fcb4f4a393c9dc8bb4d",
+        "size": 259,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458735,
+        "mode": "0o644",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/build/local-provenance.json",
+        "sha256": "605a08ab29199e8963c3e9f219d62b8ad6edb6c3da14e2d4ddc44d92dd65b43b",
+        "size": 411,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458736,
+        "mode": "0o644",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/build/phase-0.sh",
+        "sha256": "a1042bc7639515f0bdd38fd89e0335f043f86fc47fd753fe8b720df67fb41b7c",
+        "size": 4229,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458733,
+        "mode": "0o644",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/build/phase.env",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458734,
+        "mode": "0o644",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/build/phase.path",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458737,
+        "mode": "0o644",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/build/receipt.json",
+        "sha256": "2e0d57f5012c1a4af0e4a4ce8e9f092179a8dddd57f518d90a91b2a591b45ef5",
+        "size": 1313,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458715,
+        "mode": "0o700",
+        "nlink": 2,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-2ebd265ad12c478ab3db3c7b4258d4d4",
+        "size": 4096,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458716,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-2ebd265ad12c478ab3db3c7b4258d4d4/status.json",
+        "sha256": "0a9e3f04406036d0c8f6687ae8533276107f1df56a39583bf5de5895dac31914",
+        "size": 1853,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458718,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-2ebd265ad12c478ab3db3c7b4258d4d4/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458717,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-2ebd265ad12c478ab3db3c7b4258d4d4/stdout",
+        "sha256": "e2082292cb1b9f5e872a18387fec54f70351e317d05d6c068862ec28b410aa1f",
+        "size": 65,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458732,
+        "mode": "0o700",
+        "nlink": 2,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-7712353b6bf146d6af8b235c31c81437",
+        "size": 4096,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458740,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-7712353b6bf146d6af8b235c31c81437/status.json",
+        "sha256": "af2f84875558a0fe13468531b288ad2a5eba895b8c70ba8c78f60fc87e3081ff",
+        "size": 260,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458742,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-7712353b6bf146d6af8b235c31c81437/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458741,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-7712353b6bf146d6af8b235c31c81437/stdout",
+        "sha256": "80991ffb686d2d087d3b84fd89d3a0a938086b788b9897a6acbb15d5ee396344",
+        "size": 12573,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458710,
+        "mode": "0o700",
+        "nlink": 2,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-8bac39acdb3042e687f0fb618a18af6e",
+        "size": 4096,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458711,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-8bac39acdb3042e687f0fb618a18af6e/status.json",
+        "sha256": "1624a8cc6fe372774dee6f07a80858239f15c09ebf20d254e03e764ad90ce992",
+        "size": 297,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458714,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-8bac39acdb3042e687f0fb618a18af6e/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458713,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-8bac39acdb3042e687f0fb618a18af6e/stdout",
+        "sha256": "f8c041f783acc3d60e75ef51a1fe3ef8965e6a7d28a74995b4f0114806a0e885",
+        "size": 3033,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458744,
+        "mode": "0o700",
+        "nlink": 2,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-9a791575f4b049daa955fdf2d624fd13",
+        "size": 4096,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458745,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-9a791575f4b049daa955fdf2d624fd13/status.json",
+        "sha256": "101f14c8362537fa8233c824403b0eb4befa7aa4342bda7ff5c4be7d88332aee",
+        "size": 257,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458747,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-9a791575f4b049daa955fdf2d624fd13/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458746,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-9a791575f4b049daa955fdf2d624fd13/stdout",
+        "sha256": "5998ffae79f7e31e34b90e32e24f32b4c145c842357e39a474dacff7a40bcc80",
+        "size": 1145,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458728,
+        "mode": "0o700",
+        "nlink": 2,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-9c6f78bf1bd542c28c6ac5d07cee6f2c",
+        "size": 4096,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458739,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-9c6f78bf1bd542c28c6ac5d07cee6f2c/status.json",
+        "sha256": "d6c5929580b2494bdccb1f0885943cffd43155f7aa992e5659e4d4543ecd90ae",
+        "size": 259,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458731,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-9c6f78bf1bd542c28c6ac5d07cee6f2c/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458730,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-9c6f78bf1bd542c28c6ac5d07cee6f2c/stdout",
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+        "size": 2,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458724,
+        "mode": "0o700",
+        "nlink": 2,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-af5726b7c63c442385508f5d1fdd9b49",
+        "size": 4096,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458725,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-af5726b7c63c442385508f5d1fdd9b49/status.json",
+        "sha256": "c911db34c9206556c0a8b155821ad2fe7440e329f4e05924efc4d6a13badad28",
+        "size": 258,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458727,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-af5726b7c63c442385508f5d1fdd9b49/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458726,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-af5726b7c63c442385508f5d1fdd9b49/stdout",
+        "sha256": "6888ed0727d3f243b180d4674ae0337265f26474278e50a74d57d8572d2064f4",
+        "size": 48,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458719,
+        "mode": "0o700",
+        "nlink": 2,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-fcfa9613e5b64042a4953d888b87d122",
+        "size": 4096,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458720,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-fcfa9613e5b64042a4953d888b87d122/status.json",
+        "sha256": "a97ef0454ede864cc31f9286ac0053b2548b34e0aa2ccf15a810b1af0ee51d53",
+        "size": 260,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458722,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-fcfa9613e5b64042a4953d888b87d122/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458721,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/command-fcfa9613e5b64042a4953d888b87d122/stdout",
+        "sha256": "0bca9f7dd82c9db1445e9242d772529be7046917c6cc75b447fd4f129a3e6404",
+        "size": 11913,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458748,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/container.log",
+        "sha256": "5998ffae79f7e31e34b90e32e24f32b4c145c842357e39a474dacff7a40bcc80",
+        "size": 1145,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458712,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/docker.log",
+        "sha256": "b1c174ff6e23f6341ddb8bafc1d5ec549ce1c71ef478f7cdc19fcf71f8fb6934",
+        "size": 6461,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458723,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/inspect-before-start.json",
+        "sha256": "af8573eb5e23c53c8f24ad719605ffde95c62586d1d5bee5b1d62dfe1e8e4050",
+        "size": 8987,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458743,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/inspect-terminal.json",
+        "sha256": "7d50d8b48d87fe01d2167c28c3d1843a6837063bbaa1f53c5a14ffab677dbb2f",
+        "size": 9647,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458749,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/receipt.json",
+        "sha256": "c772a969145c9c8fbb7032b5ce801d204ca983aa90bda481a709e59cdb8bc51c",
+        "size": 21924,
+        "uid": 1000
+      }
+    ],
+    "protected_failure_files": [
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 57684,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/native-exact-build-request-scratch-21.execution.json",
+        "sha256": "35efb73b2b5356507bd4b740b8925a3bd325135257ffaf39bffcefa9930c45b6",
+        "size": 2974,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 57689,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/native-exact-scratch21-heavy-build-v2.terminal.json",
+        "sha256": "919a01c2929580a96afb5955b6c77f272c2fa6265800b01cb90dba6691137226",
+        "size": 17620,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458749,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/receipt.json",
+        "sha256": "c772a969145c9c8fbb7032b5ce801d204ca983aa90bda481a709e59cdb8bc51c",
+        "size": 21924,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458737,
+        "mode": "0o644",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/build/receipt.json",
+        "sha256": "2e0d57f5012c1a4af0e4a4ce8e9f092179a8dddd57f518d90a91b2a591b45ef5",
+        "size": 1313,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 4458738,
+        "mode": "0o644",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-21-evidence/build/driver.log",
+        "sha256": "15c9539eb672df33bfd32457d28c6d3011ad23be4d082fcb4f4a393c9dc8bb4d",
+        "size": 259,
+        "uid": 1000
+      }
+    ],
+    "request_lease_absent": true,
+    "retained_exclusions": [
+      {
+        "device": 1828,
+        "gid": 1000,
+        "historical_device": 1831,
+        "inode": 57687,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+        "sha256": "7be39d1cf3bebcf4e586716badf2e3be366fae928ce2b39ce21fa6db770a7134",
+        "size": 269,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "historical_device": 1831,
+        "inode": 57688,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json",
+        "sha256": "eeb41f3a01bf2b31e5ff15232ba31ab6cf92676b8587963d1faffeace44451f5",
+        "size": 269,
+        "uid": 1000
+      }
+    ],
+    "root": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 2,
+      "mode": "0o700",
+      "nlink": 1151,
+      "path": "/home/holden/mckernel-work/scratch",
+      "size": 188416,
+      "uid": 1000
+    },
+    "root_lock": {
+      "device": 27,
+      "gid": 0,
+      "inode": 4,
+      "mode": "0o644",
+      "nlink": 1,
+      "path": "/run/lock/mckernel-development.lock",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "schema": "mckernel.scratch21-cleanup-preparation.v1",
+    "status": "READ_ONLY_REVIEW_INPUT"
+  },
+  "publisher_contract": {
+    "census": "root-full-process-and-container-before-transaction-and-every-rmdir",
+    "coordination": "sole-campaign-coordinator-no-concurrent-build-or-cleanup",
+    "excluded": "arbitrary-same-UID-directory-substitution-after-final-check",
+    "publishers": "project-owned-regular-file-O_CREAT|O_EXCL-only",
+    "schema": "scratch21.publisher-contract.v1"
+  },
+  "schema": "scratch21.cleanup-release.v1",
+  "script_sha256": "6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed",
+  "source_review": {
+    "status": "PASS",
+    "reviewer": "/root/scratch21_source_review",
+    "evidence_path": "docs/verification/evidence/scratch21-cleanup-independent-source-review-20261017.json",
+    "evidence_sha256": "f1c5065880df2b4a4769cde6b7b0ac68621108f663c480d1b332f16c599b3b91"
+  },
+  "status": "PASS_EXECUTION_RELEASE",
+  "tests_sha256": "e1467625cfcc848c7834e23c6bff26a535b40115a0d85bb512f488bf8fcb7d90",
+  "transaction_paths": [
+    "/home/holden/mckernel-work/scratch/native-exact-scratch21-terminal-cleanup-20261017.mutex",
+    "/home/holden/mckernel-work/scratch/native-exact-scratch21-terminal-cleanup-20261017.plan.json",
+    "/home/holden/mckernel-work/scratch/native-exact-scratch21-terminal-cleanup-20261017.journal.jsonl",
+    "/home/holden/mckernel-work/scratch/native-exact-scratch21-terminal-cleanup-20261017.docker-logs.capture",
+    "/home/holden/mckernel-work/scratch/native-exact-scratch21-terminal-cleanup-20261017.quarantine.json",
+    "/home/holden/mckernel-work/scratch/native-exact-scratch21-terminal-cleanup-20261017.attempt.archive",
+    "/home/holden/mckernel-work/scratch/native-exact-scratch21-terminal-cleanup-20261017.shared.archive"
+  ]
+}
