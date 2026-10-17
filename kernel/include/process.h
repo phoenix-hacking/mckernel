@@ -822,9 +822,14 @@ struct thread *clone_thread(struct thread *org, unsigned long pc,
 void destroy_thread(struct thread *thread);
 int hold_thread(struct thread *thread);
 void release_thread(struct thread *thread);
+/* 0: consumed/nonfinal thread; 1: dead thread/nonfinal VM; 2: both final.
+ * Negative: no final proof. Never retry or inspect a possibly consumed input. */
+int release_thread_checked(struct thread *thread);
 void flush_process_memory(struct process_vm *vm);
 void hold_process_vm(struct process_vm *vm);
 void release_process_vm(struct process_vm *vm);
+/* 0: consumed/nonfinal VM; 1: final VM free completed; negative: unproven. */
+int release_process_vm_checked(struct process_vm *vm);
 void hold_process(struct process *);
 void release_process(struct process *);
 void free_all_process_memory_range(struct process_vm *vm);

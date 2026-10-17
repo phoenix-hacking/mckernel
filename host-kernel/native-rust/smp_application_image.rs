@@ -16,6 +16,180 @@ fn copy(bytes: &[u8]) -> Result<Vec<u8>> {
     Ok(output)
 }
 
+// BEGIN FORK ADOPTION TRANSITIONS
+// This first slice supplies the checked transitions only. No connection admits
+// an adopted image yet: non-null CREATE_PPD remains rejected. Integration must
+// retain referenced Linux PID/MM owners and the real original delivery claim;
+// these scalar identities are comparison keys, never standalone authority.
+#[allow(dead_code)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct ForkIdentity {
+    pub(crate) slot: u32,
+    pub(crate) generation: u64,
+    pub(crate) parent: u64,
+    pub(crate) worker: u64,
+    pub(crate) delivery: u64,
+    pub(crate) child: u64,
+    pub(crate) child_pid: i32,
+    pub(crate) child_mm: usize,
+    pub(crate) root: u64,
+    pub(crate) start: u64,
+    pub(crate) length: u64,
+    pub(crate) nonce: u64,
+}
+
+#[allow(dead_code)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum ForkPhase {
+    Reserved,
+    AdoptedAwaitFirstReturn,
+    FirstReturnPublished,
+    GuestLinkObserved,
+    Linked,
+    AbortRequested,
+    HostRevoked,
+    GuestDestroyed,
+    Released,
+    Quarantined,
+}
+
+#[allow(dead_code)]
+pub(crate) struct ForkAdoption {
+    identity: ForkIdentity,
+    phase: ForkPhase,
+    accesses: u32,
+}
+
+#[allow(dead_code)]
+impl ForkAdoption {
+    pub(crate) fn reserve(identity: ForkIdentity) -> Result<Self> {
+        if identity.generation == 0 || identity.parent == 0 || identity.worker == 0
+            || identity.delivery == 0 || identity.child == 0 || identity.child == identity.parent
+            || identity.child_pid <= 0 || identity.child_mm == 0
+            || identity.root == 0 || identity.root % 4096 != 0
+            || identity.start % 4096 != 0 || identity.length == 0 || identity.length % 4096 != 0
+            || identity.start.checked_add(identity.length).is_none() || identity.nonce == 0
+        {
+            return Err(EINVAL);
+        }
+        Ok(Self { identity, phase: ForkPhase::Reserved, accesses: 0 })
+    }
+
+    fn check(&self, identity: ForkIdentity) -> Result {
+        if self.identity != identity { return Err(EACCES); }
+        Ok(())
+    }
+
+    pub(crate) fn phase(&self) -> ForkPhase { self.phase }
+
+    pub(crate) fn adopted(&mut self, identity: ForkIdentity) -> Result {
+        self.check(identity)?;
+        if self.phase != ForkPhase::Reserved { return Err(EBUSY); }
+        self.phase = ForkPhase::AdoptedAwaitFirstReturn;
+        Ok(())
+    }
+
+    /// Call before publishing the ordinary launcher RET. Wrong positive PIDs
+    /// never change the transaction or publish a result for another child.
+    pub(crate) fn authorize_first_return(&self, identity: ForkIdentity, value: i64) -> Result {
+        self.check(identity)?;
+        if self.phase != ForkPhase::AdoptedAwaitFirstReturn { return Err(EBUSY); }
+        if value != identity.child_pid as i64 && !(-4095..0).contains(&value) {
+            return Err(EINVAL);
+        }
+        Ok(())
+    }
+
+    pub(crate) fn first_return_published(&mut self, identity: ForkIdentity, value: i64) -> Result {
+        self.authorize_first_return(identity, value)?;
+        self.phase = if value < 0 { ForkPhase::AbortRequested } else { ForkPhase::FirstReturnPublished };
+        Ok(())
+    }
+
+    pub(crate) fn observe_link(&mut self, identity: ForkIdentity) -> Result {
+        self.check(identity)?;
+        if self.phase != ForkPhase::FirstReturnPublished { return Err(EBUSY); }
+        self.phase = ForkPhase::GuestLinkObserved;
+        Ok(())
+    }
+
+    pub(crate) fn second_return_published(&mut self, identity: ForkIdentity, result: i32) -> Result {
+        self.check(identity)?;
+        if self.phase != ForkPhase::GuestLinkObserved { return Err(EBUSY); }
+        if result > 0 || result < -4095 { return Err(EINVAL); }
+        self.phase = if result == 0 { ForkPhase::Linked } else { ForkPhase::AbortRequested };
+        Ok(())
+    }
+
+    pub(crate) fn begin_access(&mut self, identity: ForkIdentity) -> Result {
+        self.check(identity)?;
+        if !matches!(self.phase, ForkPhase::AdoptedAwaitFirstReturn | ForkPhase::FirstReturnPublished
+            | ForkPhase::GuestLinkObserved | ForkPhase::Linked) { return Err(EBUSY); }
+        self.accesses = self.accesses.checked_add(1).ok_or(EOVERFLOW)?;
+        Ok(())
+    }
+
+    pub(crate) fn end_access(&mut self, identity: ForkIdentity) -> Result {
+        self.check(identity)?;
+        self.accesses = self.accesses.checked_sub(1).ok_or(EINVAL)?;
+        Ok(())
+    }
+
+    pub(crate) fn request_abort(&mut self, identity: ForkIdentity) -> Result {
+        self.check(identity)?;
+        match self.phase {
+            ForkPhase::Released | ForkPhase::GuestDestroyed | ForkPhase::Quarantined => return Err(EBUSY),
+            ForkPhase::HostRevoked => return Ok(()),
+            _ => self.phase = ForkPhase::AbortRequested,
+        }
+        Ok(())
+    }
+
+    /// # Safety
+    /// Caller must have closed admissions, drained all other operations, and
+    /// revoked every host alias with completed TLB invalidation under the exact
+    /// child MM/per-VMA exclusion. An exiting MM or missing PID is not proof.
+    pub(crate) unsafe fn host_revoked(&mut self, identity: ForkIdentity, result: i32) -> Result {
+        self.check(identity)?;
+        if self.phase != ForkPhase::AbortRequested || self.accesses != 0 { return Err(EBUSY); }
+        kernel::error::to_result(result)?;
+        if result != 0 { return Err(EINVAL); }
+        self.phase = ForkPhase::HostRevoked;
+        Ok(())
+    }
+
+    pub(crate) fn permit_guest_destroy(&self, identity: ForkIdentity) -> Result {
+        self.check(identity)?;
+        if self.phase != ForkPhase::HostRevoked || self.accesses != 0 { return Err(EBUSY); }
+        Ok(())
+    }
+
+    /// # Safety
+    /// Caller observed the final destructor of this exact guest VM after the
+    /// revoke barrier, not merely a void release_thread return or absent PID.
+    pub(crate) unsafe fn guest_destroyed(&mut self, identity: ForkIdentity) -> Result {
+        self.permit_guest_destroy(identity)?;
+        self.phase = ForkPhase::GuestDestroyed;
+        Ok(())
+    }
+
+    pub(crate) fn acknowledge_destroyed(&mut self, identity: ForkIdentity) -> Result {
+        self.check(identity)?;
+        if self.phase == ForkPhase::Released { return Ok(()); }
+        if self.phase != ForkPhase::GuestDestroyed { return Err(EBUSY); }
+        self.phase = ForkPhase::Released;
+        Ok(())
+    }
+
+    pub(crate) fn quarantine(&mut self, identity: ForkIdentity) -> Result {
+        self.check(identity)?;
+        if self.phase == ForkPhase::Released { return Err(EBUSY); }
+        self.phase = ForkPhase::Quarantined;
+        Ok(())
+    }
+}
+// END FORK ADOPTION TRANSITIONS
+
 struct Buffers {
     descriptor: BootPages,
     _args: BootPages,

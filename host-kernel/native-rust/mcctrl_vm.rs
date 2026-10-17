@@ -5,10 +5,11 @@ use super::{application_image as wire, mcctrl_process::Registration};
 use core::{
     ffi::{c_char, c_void},
     mem::{align_of, size_of, MaybeUninit},
+    pin::Pin,
     ptr::{self, NonNull},
     sync::atomic::{AtomicI32, Ordering},
 };
-use kernel::{bindings, prelude::*, sync::Arc};
+use kernel::{bindings, prelude::*, sync::{new_mutex, Arc, ArcBorrow, Mutex}};
 
 // SAFETY: This exported Linux API borrows static operations and transfers one
 // file reference. It retains operations.owner on success and leaves priv owned
@@ -99,10 +100,51 @@ pub(super) struct Mirror {
     pub(super) start: u64,
     pub(super) end: u64,
 }
-struct MappingFile {
+// BEGIN FORK VMA OWNERS
+// Each installed VMA owns one raw Arc. A file is neutral after its initial
+// mmap: inheriting vm_file must not retain the parent's application forever.
+struct VmaOwner {
     registration: Arc<Registration>,
     mirror: Arc<Mirror>,
 }
+struct MappingFile {
+    bootstrap: Pin<Box<Mutex<Option<Arc<VmaOwner>>>>>,
+}
+
+// SAFETY: The caller holds Linux's live VMA exclusion and keeps its owned raw
+// Arc valid for the entire returned borrow. Owner changes require both mmap
+// write exclusion and the pinned Linux per-VMA write discipline.
+unsafe fn vma_owner<'a>(vma: *mut bindings::vm_area_struct) -> Result<ArcBorrow<'a, VmaOwner>> {
+    let raw = unsafe { (*vma).vm_private_data.cast::<VmaOwner>() };
+    if raw.is_null() || unsafe { (*vma).vm_ops } != &VM_OPERATIONS.0 {
+        return Err(EACCES);
+    }
+    // SAFETY: mmap and open install exactly one owned raw reference, and the
+    // caller excludes close/rebind throughout this borrow.
+    Ok(unsafe { ArcBorrow::from_raw(raw) })
+}
+
+// SAFETY: Linux calls open on a copied VMA while the original owner is live.
+// This includes both a same-MM split and a different-MM fork. Clone is an
+// allocation-free reference increment; the inherited MM mismatch stays intact.
+unsafe extern "C" fn vma_open(vma: *mut bindings::vm_area_struct) {
+    if let Ok(owner) = unsafe { vma_owner(vma) } {
+        let reference: Arc<VmaOwner> = owner.into();
+        unsafe { (*vma).vm_private_data = Arc::into_raw(reference).cast_mut().cast() };
+    }
+}
+
+// SAFETY: Linux invokes close once for each successfully opened/mapped VMA,
+// after its fault borrows end. Returning this raw owner balances exactly that
+// VMA's reference; the file no longer contains an application owner.
+unsafe extern "C" fn vma_close(vma: *mut bindings::vm_area_struct) {
+    let raw = unsafe { (*vma).vm_private_data.cast::<VmaOwner>() };
+    unsafe { (*vma).vm_private_data = ptr::null_mut() };
+    if !raw.is_null() {
+        unsafe { drop(Arc::from_raw(raw)) };
+    }
+}
+// END FORK VMA OWNERS
 
 impl Mirror {
     pub(super) fn reserve(registration: Arc<Registration>) -> Result<Arc<Self>> {
@@ -130,11 +172,9 @@ impl Mirror {
             },
             GFP_KERNEL,
         )?;
+        let owner = Arc::new(VmaOwner { registration, mirror: mirror.clone() }, GFP_KERNEL)?;
         let private = Box::new(
-            MappingFile {
-                registration,
-                mirror: mirror.clone(),
-            },
+            MappingFile { bootstrap: Box::pin_init(new_mutex!(Some(owner)), GFP_KERNEL)? },
             GFP_KERNEL,
         )?;
         let private = Box::into_raw(private);
@@ -244,8 +284,8 @@ impl Mirror {
                         {
                             return Err(EINVAL);
                         }
-                        let private = &*(*(*vma).vm_file).private_data.cast::<MappingFile>();
-                        if !ptr::eq(&*private.mirror, self) {
+                        let owner = vma_owner(vma)?;
+                        if !ptr::eq(&*owner.mirror, self) {
                             return Err(EACCES);
                         }
                         let last = end.min((*vma).__bindgen_anon_1.__bindgen_anon_1.vm_end);
@@ -267,19 +307,27 @@ impl Mirror {
 // creator of this file supplied the complete MappingFile object above.
 unsafe extern "C" fn mmap(file: *mut bindings::file, vma: *mut bindings::vm_area_struct) -> i32 {
     let private = unsafe { &*(*file).private_data.cast::<MappingFile>() };
-    let mirror = &private.mirror;
+    let mut bootstrap = private.bootstrap.lock();
+    let Some(owner) = bootstrap.as_ref() else {
+        return EINVAL.to_errno();
+    };
+    let mirror = &owner.mirror;
     // SAFETY: Linux lends the live VMA exclusively to this mmap callback.
     unsafe {
         if (*vma).vm_mm != mirror.mm.0.as_ptr()
             || (*vma).__bindgen_anon_1.__bindgen_anon_1.vm_start != mirror.start
             || (*vma).__bindgen_anon_1.__bindgen_anon_1.vm_end != mirror.end
             || (*vma).vm_pgoff != 0
+            || !(*vma).vm_private_data.is_null()
         {
             return EINVAL.to_errno();
         }
         (*vma).__bindgen_anon_2.__vm_flags |=
             (bindings::VM_PFNMAP | bindings::VM_DONTEXPAND | bindings::VM_DONTDUMP) as u64;
         (*vma).vm_ops = &VM_OPERATIONS.0;
+        // All checks finished; this callback cannot fail after the transfer.
+        // Linux invokes close for the installed VMA, including later teardown.
+        (*vma).vm_private_data = Arc::into_raw(bootstrap.take().unwrap()).cast_mut().cast();
     }
     0
 }
@@ -302,12 +350,11 @@ unsafe fn lookup_fault(vmf: *mut bindings::vm_fault, write: bool) -> Result<Faul
             (*vmf).flags,
         )
     };
-    // SAFETY: lookup_fault's caller retains the locked live VMA and file;
-    // mmap installed a non-null MappingFile private_data of this exact type.
-    let private = unsafe { &*(*(*vma).vm_file).private_data.cast::<MappingFile>() };
-    let mirror = &private.mirror;
+    // SAFETY: The fault's VMA exclusion retains its exact per-VMA raw owner.
+    let owner = unsafe { vma_owner(vma) }?;
+    let mirror = &owner.mirror;
     // SAFETY: The same locked live VMA remains valid while its MM identity is
-    // compared against the MappingFile owner before any request is issued.
+    // compared against the per-VMA owner before any request is issued.
     if unsafe { (*vma).vm_mm } != mirror.mm.0.as_ptr()
         || address < mirror.start
         || address >= mirror.end
@@ -319,7 +366,7 @@ unsafe fn lookup_fault(vmf: *mut bindings::vm_fault, write: bool) -> Result<Faul
     // FAULT_FLAG_WRITE=bit 0 and FAULT_FLAG_INSTRUCTION=bit 8 in Linux.
     let access = u64::from(write || flags & 1 != 0) | u64::from(flags & 256 != 0) << 1;
     wire::put_word(&mut request, 8, access).map_err(errno)?;
-    private
+    owner
         .registration
         .invoke(super::application_abi::LOOKUP, &mut request)?;
     Ok(FaultPage {
@@ -410,6 +457,8 @@ static VM_OPERATIONS: VmOperations = VmOperations({
     let mut operations: bindings::vm_operations_struct =
         unsafe { MaybeUninit::zeroed().assume_init() };
     operations.fault = Some(fault);
+    operations.open = Some(vma_open);
+    operations.close = Some(vma_close);
     operations.pfn_mkwrite = Some(pfn_mkwrite);
     operations.mprotect = Some(mprotect);
     operations.mremap = Some(mremap);

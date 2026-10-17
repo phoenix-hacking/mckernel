@@ -20,6 +20,8 @@ def extracted_bodies():
     vm = (ROOT / "host-kernel/native-rust/mcctrl_vm.rs").read_text()
     backend = (ROOT / "host-kernel/native-rust/smp_application.rs").read_text()
     return {
+        "@VMA_OWNERS@": vm[vm.index("// BEGIN FORK VMA OWNERS"):
+                             vm.index("// END FORK VMA OWNERS")],
         "@LOOKUP_FAULT@": vm[vm.index("unsafe fn lookup_fault("):
                               vm.index("\n// SAFETY: The locked live VMA retains")],
         "@WORKER@": backend[backend.index("    pub(crate) fn worker("):
@@ -43,6 +45,7 @@ class NativeForkOwnershipTests(unittest.TestCase):
             self.assertEqual(source.count(body), 1)
         self.assertNotIn("@LOOKUP_FAULT@", source)
         self.assertNotIn("@WORKER@", source)
+        self.assertNotIn("@VMA_OWNERS@", source)
 
     def test_actual_fault_and_worker_reproducers(self):
         compiler = Path(os.environ.get("MCKERNEL_RUSTC_1_92", str(RUSTC)))
