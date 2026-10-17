@@ -146,6 +146,7 @@ EXPECTED_NATIVE_LIFECYCLE_EXPORTS = frozenset(
         "ihk_os_create_unbooted_v3",
         "ihk_os_create_unbooted_v4",
         "ihk_os_create_unbooted_v5",
+        "ihk_os_create_unbooted_v6",
         "ihk_os_service_register_v1",
         "ihk_os_service_unregister_v1",
         "ihk_os_topology_query_v1",

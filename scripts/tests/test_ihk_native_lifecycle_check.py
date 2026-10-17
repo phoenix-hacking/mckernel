@@ -917,6 +917,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             "ihk_os_create_unbooted_v3",
             "ihk_os_create_unbooted_v4",
             "ihk_os_create_unbooted_v5",
+            "ihk_os_create_unbooted_v6",
             "ihk_os_service_register_v1",
             "ihk_os_service_unregister_v1",
             "ihk_os_topology_query_v1",
@@ -941,6 +942,29 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             lifecycle._validate_provider_export_symbols(
                 symbols, set(summary["provider_symbols"]) | lifecycle.EXPECTED_NATIVE_LIFECYCLE_EXPORTS
             )
+
+    def test_reviewed_v6_export_requires_every_gpl_metadata_record(self) -> None:
+        expected = set(lifecycle.EXPECTED_NATIVE_LIFECYCLE_EXPORTS)
+        self.assertIn("ihk_os_create_unbooted_v6", expected)
+        symbols = reviewed_artifact_symbols([])
+        lifecycle._validate_provider_export_symbols(symbols, expected)
+        for prefix in ("__ksymtab_", "__kstrtab_", "__kstrtabns_"):
+            missing = prefix + "ihk_os_create_unbooted_v6"
+            with self.subTest(missing=missing), self.assertRaisesRegex(
+                lifecycle.ValidationError,
+                "lacks provider GPL export metadata: " + missing,
+            ):
+                lifecycle._validate_provider_export_symbols(symbols - {missing}, expected)
+
+    def test_unknown_v99_os_export_with_complete_metadata_is_rejected(self) -> None:
+        expected = set(lifecycle.EXPECTED_NATIVE_LIFECYCLE_EXPORTS)
+        symbols = reviewed_artifact_symbols([])
+        unknown = "ihk_os_create_unbooted_v99"
+        symbols.update({unknown} | {prefix + unknown for prefix in (
+            "__ksymtab_", "__kstrtab_", "__kstrtabns_"
+        )})
+        with self.assertRaisesRegex(lifecycle.ValidationError, "unreviewed export metadata"):
+            lifecycle._validate_provider_export_symbols(symbols, expected)
 
     def test_built_artifact_requires_all_provider_definitions(self) -> None:
         module = self.repo / "ihk.ko"

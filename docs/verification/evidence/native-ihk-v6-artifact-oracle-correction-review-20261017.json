@@ -1,0 +1,23 @@
+{
+  "schema": "native-ihk-v6-artifact-oracle-correction-review.v1",
+  "decision": "PASS_SOURCE",
+  "reviewer": "/root/cheap_profile_review",
+  "implementation_ownership": false,
+  "files_sha256": {
+    "scripts/ihk_native_lifecycle_check.py": "89e11f815960ba0159190c398e8292947b2491bcafdbf1713525a824e28ee437",
+    "scripts/tests/test_ihk_native_lifecycle_check.py": "4999ef7efb5ba848134616562c035f0fba630c557eae42a4698138501b5a67d2"
+  },
+  "boundary": "Exact diff adds only ihk_os_create_unbooted_v6 to the lifecycle export set and its exact-set test, plus two negative tests. Existing os_runtime.rs exports the actual v6 extern-C constructor with GPL/MCKERNEL_IHK_V1 export record; SMP declares/calls the same v6 callback signature and its checker already requires v6. This corrects an incomplete oracle, not production ABI or ownership. Validator still requires the definition and all3 __ksymtab_/__kstrtab_/__kstrtabns_ records and rejects unknown definitions/exports, including v99 with complete metadata. No discovery relaxation.",
+  "tests": "Author reports6focused tests PASS; dispatcher actual retained ihk.ko check PASS and SMP/mcctrl ARTIFACT-CONTRACT-VERIFIED. Review inspected the concrete delta and producer/caller/validator; no duplicate suite or artifact hashing.",
+  "reuse_decision": "ADMIT_BOUNDED_DIAGNOSTIC_FINAL_CHECKS_WITHOUT_LINUX_REBUILD",
+  "reuse_conditions": [
+    "Keep compiled942c927b artifacts, complete frozen942source and original failed receipt immutable. Run remaining original final-check commands in the pinned RedHat tool image; mount source/build/output read-only, supply only the reviewed checker as a separate read-only overlay, and direct all new streams/copies/checksum/link-closure outputs to fresh diagnostic capture. No full offline driver replay: native_rust_exact_build_offline.run rejects nonempty output and creates fresh evidence; its original FAIL cannot be promoted.",
+    "Remaining workflow checks at1473-1555 include registry/ioctl/source-body fixtures under pinnedRust1.92,3module ABI checks, config/bzImage/stage-lock and command/mod record capture, kernel-release equality, link-closure generation/check and final checksums. Reuse completed earlier checks; complete the still-unobserved checks with their unchanged assertions. Existing final phase writes EVIDENCE_DIR and GITHUB_ENV/PATH, so use fresh locations rather than the preserved failed evidence directory. Keep retained Linux build read-only; any attempted metadata regeneration is a refusal to adapt narrowly, not permission to alter/rebuild it. Actual kernelrelease target prints the source setlocalversion expression; no kernel compilation is needed.",
+    "Diagnostic recheck must bind frozen942source and separate checker hash, actual tool image/tools, original artifact identities and fresh complete results. It is not strict fresh-workflow PASS, formal runtime or an execution release; ordinary reviewed resource/isolation and independent root/container execution requirements still apply."
+  ],
+  "image_consumer_boundary": "native_rust_exact_mckernel_image_request_prepare.prepare lines155-233 accepts an existing build_output and inventories its build closure; it does NOT require a native host-build PASS receipt. Its PASS requirement is for the separate source-free/offline TOOL-IMAGE receipt, whose candidate_sha must equal the supplied source manifest, with exact image/tools/libraries/lock and positive retirement. Preserve those gates; an old mismatched tool-image receipt or the native FAIL receipt is not a substitute. Fresh request/toolchain/output/evidence/owner-work paths and unchanged candidate source/backup inventory are required. Thus a separately released explicitly diagnostic McKernel-image build can consume the rechecked942 Linux build without rebuilding Linux. It still configures/compiles a fresh McKernel image and must pass its existing image/ABI validation before a separately released guest.",
+  "blocking_findings": [],
+  "root_or_docker_execution_performed": false,
+  "strict_fresh_workflow_pass_claimed": false,
+  "runtime_or_acceptance_credit": false
+}
