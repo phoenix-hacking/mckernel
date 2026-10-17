@@ -6,6 +6,7 @@ import argparse
 import json
 import re
 from datetime import datetime, timezone
+from os.path import relpath
 from pathlib import Path
 
 import stable_core_tracker
@@ -48,6 +49,16 @@ def practical_panel(doc: dict) -> list[str]:
     def cell(value):
         return str(value).replace("|", "\\|").replace("\n", "<br>")
 
+    def evidence_cell(item):
+        if not isinstance(item, dict):
+            return cell(item)
+        path = item.get("path")
+        if not isinstance(path, str) or not path:
+            return "not recorded"
+        source = Path(path)
+        target = source if source.is_absolute() else ROOT / source
+        return "[" + cell(source.name) + "](" + Path(relpath(target, TRACKER_DIR)).as_posix() + ")"
+
     lines = ["## Primary target: practical kernel and applications", "",
              "Scope: `" + doc["scope_id"] + "`. See [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md) "
              "and [practical-milestones.json](practical-milestones.json).", "",
@@ -63,7 +74,7 @@ def practical_panel(doc: dict) -> list[str]:
               "| Check | Required behavior | State | Evidence |", "| --- | --- | --- | --- |"]
     for milestone in doc.get("milestones", []):
         for check in milestone.get("checks", []):
-            evidence = "; ".join(cell(json.dumps(item, sort_keys=True) if isinstance(item, dict) else item)
+            evidence = "; ".join(evidence_cell(item)
                                  for item in check.get("evidence", [])) or "not recorded"
             lines.append("| " + " | ".join((cell(check["id"]), cell(check["description"]),
                          cell(check.get("status", "unassessed")), evidence)) + " |")

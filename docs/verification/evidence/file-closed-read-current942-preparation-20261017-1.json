@@ -1,0 +1,74 @@
+{
+  "application_acceptance": false,
+  "blocker": "Independent source/oracle contract resolution required before executable preparation. Existing draft unresolved-expectations do not authorize serialization or signedness normalization.",
+  "evidence_root": "/home/holden/mckernel-work/scratch/file-closed-read-preparation-20261017-1",
+  "findings": [
+    {
+      "kind": "Exact serialization mismatch",
+      "oracle_second_line": "buffer-first=204 buffer-last=204",
+      "result": "Even matching numeric values cannot satisfy unchanged exact label bytes.",
+      "source_format": "buffer-first=%d last=%d\n"
+    },
+    {
+      "kind": "Plain-char signedness boundary",
+      "oracle_values": [
+        204,
+        204
+      ],
+      "result": "Integer values depend on target plain-char signedness; no reference result or unsigned interpretation manufactured.",
+      "source": "memset plain char buf[16] with0xCC then casts buf[0]/buf[15] to int."
+    }
+  ],
+  "formal_case_credit": false,
+  "frozen_oracle": {
+    "artifact_version": "20260909.1",
+    "case_id": "file.closed-read",
+    "case_version": 1,
+    "input_fixture": {
+      "environment": {
+        "LANG": "C",
+        "LC_ALL": "C",
+        "TZ": "UTC"
+      },
+      "operation": "read from closed fd"
+    },
+    "max_question_for_reviewer": "Should the unchanged-buffer rule be enforced as exact first/last byte or a stronger immutability relation?",
+    "relational_assertions": [
+      "read must fail with EBADF",
+      "user-visible buffer content must stay unchanged"
+    ],
+    "schema_version": 1,
+    "stderr": {
+      "hex": "",
+      "kind": "exact-bytes"
+    },
+    "stdout": {
+      "kind": "exact-line-lines",
+      "lines": [
+        "read-return=-1 errno=9",
+        "buffer-first=204 buffer-last=204"
+      ]
+    },
+    "unresolved_expectations": [
+      "Exact buffer byte dump may be normalized in execution capture to avoid line-specific assertions."
+    ],
+    "wait_status": {
+      "code": 0,
+      "kind": "exited"
+    }
+  },
+  "inputs_sha256": {
+    "/home/holden/mckernel/scripts/application-tests/cases/file/file.closed-read.c": "24cc7ec1d240df1bc34870a0e7ab685d11c38b80c1a5a2a40e3291bcf20a8d9c",
+    "/home/holden/mckernel/scripts/application-tests/oracles/file.closed-read.json": "7b2a2c124d1ffa6884cb18a5ecfcff098ad66a7712dae8b06e7a22e720feeb66",
+    "/home/holden/mckernel/scripts/application-tests/packets/packet-003.json": "af3246d6816f50cd08c3b2e038143f0a73bf6cd2569292532d471d88ed0b762b"
+  },
+  "new_compiler_runs": 0,
+  "new_guest_runs": 0,
+  "new_reference_runs": 0,
+  "next_task": "Dispatcher chooses a separately reviewed adaptation or source-bound oracle resolution; continue independent memory.realloc-grow lane.",
+  "preservation": "Original source/oracle/catalog unchanged; snapshots retained. No host payload, compile, overlay, manifest or guest invocation.",
+  "production_acceptance": false,
+  "schema": "mckernel.file-closed-read-current942-preparation.v1",
+  "status": "BLOCKED_FROZEN_SOURCE_ORACLE_MISMATCH_BEFORE_EXECUTION",
+  "task_id": "file-closed-read-current942-preparation-20261017-1"
+}

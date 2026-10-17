@@ -1,6 +1,28 @@
 # Compact dispatcher handoff
 
 
+## Checkpoint384 — realloc accepted; closed-descriptor diagnostic released
+
+Seven scoped current942 diagnostics accepted: realloc-grow33.747826s/25exact
+bytes/emptyerr0/PID257/procfs empty;retirement-11→0/release0/all30clients,
+containerfded9bd3/rootretirement independentlyPASS. Evidence18db3310/archive
+dd1ec80a. Only original32bytes preserved through growth2048; no relocation or
+newbytes claim. Next adaptedclosed-read independentlyreleased4011d965: manifest
+bc4b4e4f,parentndclr-1 dev1828/109227 nonce2c02eba3133d49cead146d1c2eaebc68,
+QMP92/exact56byteoracle/default1024. Originalfixture label/signedcharblocker
+preserved; minimalnewsourcef50d9702 separately reviewed; scopeEBADF+first/last
+bytes. All3postjoinboundedcaptures approved. Push/fetch/livecheck→soleguest.
+
+Externalmoduleowner descendantgap corrected23tests+independentsourcePASS,
+but guessedglobadmission rejects7preservedauthenticated historicalleases;
+reuseexistingexactretirementobservercontract beforebuild, no deletingrecords.
+No actualmodulecompile yet. Useful retainedlibc-core memory/realbarrierthreads
+modes preparation underway; realRuststdapp implementation/compile/reference
+assigned pinnedknownhostRust1.92. Practicaltargetprimary; conciseevidencelinks
+now replace repeatedJSON inexistingrenderer. All14practicalmilestonesOPEN;
+onlyP-M02-03 boundeddiagnosticretirementclosed; no nativeOSrestoration.
+
+
 ## Checkpoint383 — practical target adopted; alternate stack accepted
 
 The explicit user scope practical-kernel-apps-v1-20261017 now controls current
