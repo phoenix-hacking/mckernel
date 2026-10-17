@@ -15464,3 +15464,41 @@ retaining used ptr/NonNull import. No fork compiler or activation has run.
 
 Review11 saved; next supervisor19:25UTC. Dated15:25 estimate baseline unchanged.
 Continue after normal checkpoint; choose next fully admitted useful heavy case.
+
+## Live cursor — 19:26 UTC, FPU image accepted; terminal cleanup blocks next guests
+
+One-shot FPU image guard0/213.151351s, configure/build0, newimagea0f50854/7908616B.
+Independent linked-body review proves saveENOMEM reaches panic before scheduling,
+restore/switch; IRQhandling retained. Source explicit942+15cb derivativecd9/fcae,
+not main094 substitution. Artifactreview0dc769b9; guard/owner/eightclient retirement
+canonical53c800 accepted. Exact stoppedCID7b7045 remains with own common/shared
+records; separatecleanup NOTexecuted. Both original process.c.o and explicit
+retained /scratch/native-fp-save-image-object-retention-20261017-1/process.c.o
+are boundd651 (166b1419/319704B), neitherdeletiontarget. No runtime FPU credit.
+
+Cleanup narrow nested-path clone firstcandidate14disposabletests passed; review
+caught publishedtestlayout and exactknownowner identity gaps. Preservev1;
+expert-directed single bounded correction active, no rootcleanup yet. Publish
+exactsource/tests and Gitfetchverify only after affectedsourcePASS; then one
+fresh27:4-held observation, exactrelease/review/cleanup. No rawcontainerremove,
+ownershipunlink, loweredfloors or other heavy while retainedcommon/shared exist.
+
+Post-reboot workload stage61members/solecollectordelta+actualrunner/owner4test
+integration independently passed. Executionproposal2 conditionalPASS5741462;
+metadata-onlyfinalproposal3ae8090 preserves21runtimebindings. No newpush/fetch
+casegate. WaitacceptedFPUterminalcleanup/commonrelease then fresh384MiB-reserved
+admission and exactrelease. AVX/YMM case stagednewimagea0f/d99modules82c;
+typedstdout parser sourceaccepted, privatecaseadapter actualcallsite tests pending.
+Two-casequeue unchanged; actual distinctapps14/publicnativecycles1/10.
+
+Fork63v1merge review caught missingv7-v9 ABI2Running/success_status and missing
+forkpayload busyledger. Corrected8actualbodytests+oldnegativecontrols independently
+PASS(c8ba), v263closure9492. RealKbuild63source/11toolprofile independentlyPASS;
+truthful composite-source/tools Gitpublication/fetchbindings pending beforegate.
+No forkcompiler yet. Actualguestnegative-first kind3seq1/destructor2/kind4seq2
+sourcebody PASS622033 adapter-scope; genuineprovider/consumer finalRET joint
+active. CREATE_PPD-95/defaultNULL/finalComplete remain guarded. No activationcredit.
+
+HEAD2ea020a6 pushed/fetched21exactblobs; batchnextsafecheckpoint records/build and
+review log. Accountusage31%, stop97% unchanged. Preserve datedestimate baseline;
+allpracticalrowsOPEN, noformal/physicalrestoration promotion. Continueautonomously.

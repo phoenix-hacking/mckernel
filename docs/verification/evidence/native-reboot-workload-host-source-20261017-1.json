@@ -1,0 +1,490 @@
+{
+  "application_acceptance": false,
+  "checks": {
+    "actual_owner_inner_result_case_replay": true,
+    "actual_runner_run_exercise_lifecycle_case_evaluation": true,
+    "all_owner_function_bodies_except_bound_manifest_unchanged": true,
+    "backend_QMP_diagnostic_bytes_unchanged": true,
+    "canonical_default_never_rebound": true,
+    "exact_case_id_before_attempt": true,
+    "full_raw_observation_preserved": true,
+    "methods": 4,
+    "negatives": [
+      "wrongsecondstdoutbytes",
+      "foreigngeneration3",
+      "missingsyscallcorrespondence",
+      "secondnonzeroexit",
+      "kernelerror",
+      "ownerreplaymismatch",
+      "wrongcasebeforefactories"
+    ],
+    "private_module_bindings_only": true,
+    "replay_mismatch_rejected": true,
+    "returncode": 0,
+    "skips": 0
+  },
+  "command": {
+    "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host-tests.command.json",
+    "sha256": "69c777272fa1e130caf11dec81c2c7a84816b0770eb0bd8fe10e8f6f70b8d804",
+    "size": 661
+  },
+  "interface": {
+    "adapter": "case_evaluate(manifest,observation)->unchangedNDrecord+reboot_workload_protocol",
+    "case_id": "native.reboot-workload",
+    "effects": "No Docker/guest/client/ownership calls in evaluator; owneradmission/profile/mount/transport/retirement methods byteexact.",
+    "owner_binding": "NEWowner.bound_manifest aftersourcepins/strictmanifest/exactcase",
+    "raw_capture": "Fulloriginalobservationserial/debugcon retained; onlyoriginalND internalper-workloadvalidation useslosslessgen1view",
+    "runner_binding": "NEWrunner.run afterstrictload_manifest/exactcase/privatecopyhash, beforeprepare_attempt"
+  },
+  "native_postreboot_workload_verified": false,
+  "new_host_sources": {
+    "case_evaluator.py": {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host/case_evaluator.py",
+      "sha256": "5577902e51fdbfbef5245d22ea1961134a81ce33e6b0060f66579322824744dd",
+      "size": 1627
+    },
+    "native_diagnostic.py": {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host/native_diagnostic.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440
+    },
+    "native_diagnostic_backend.py": {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host/native_diagnostic_backend.py",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+      "size": 25398
+    },
+    "native_diagnostic_container_owner.py": {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host/native_diagnostic_container_owner.py",
+      "sha256": "24ba3d64dc94ade17bd62bec23173da523f168fa2a7147b12aeeba41fea2e661",
+      "size": 61073
+    },
+    "native_diagnostic_runner.py": {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host/native_diagnostic_runner.py",
+      "sha256": "83fd6c16d36c0a1dd581f22d763de3cdc61c1e9a3858e4ed486ee1dfafa45409",
+      "size": 6837
+    },
+    "qmp_capture.py": {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "size": 9913
+    }
+  },
+  "next": "Independenthostsource/executionpacketreview; freshgrowth-reserved exclusiveguestadmission bydispatcher only.",
+  "original_host_sources": {
+    "native_diagnostic.py": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440
+    },
+    "native_diagnostic_backend.py": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+      "size": 25398
+    },
+    "native_diagnostic_container_owner.py": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+      "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+      "size": 58828
+    },
+    "native_diagnostic_runner.py": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py",
+      "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+      "size": 6005
+    },
+    "qmp_capture.py": {
+      "path": "/home/holden/mckernel/scripts/application-tests/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "size": 9913
+    }
+  },
+  "retained_files": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/b/debugcon.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/b/first-failure.jsonl",
+      "sha256": "439da598834c138208959ca0597045733f9573bfa180cc4dad75fd60efbb1d72",
+      "size": 83
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/b/qemu.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/b/qemu.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/b/qmp.transcript.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/b/result.json",
+      "sha256": "ce98c33c2435d7b8d08bf83705f863dd9ac2365f81671e75f342451ba376022b",
+      "size": 2806
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/b/serial.log",
+      "sha256": "8f75ba6eadd4e4abacdfe4553e6d01304021c191a66901f0d32c4fc3b64fe256",
+      "size": 282471
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/b.fixture.json",
+      "sha256": "351c6878056f3a3749f306b21dfb862755ed06e60ff5ba1ee46de065bc293587",
+      "size": 250
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/b.status.json",
+      "sha256": "b18210116a7a567580b9ead22f9be3f29ad4bd80497bc814bd1f0d0b33d52b0f",
+      "size": 144
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/e/debugcon.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/e/first-failure.jsonl",
+      "sha256": "8bfe0098e7e9d20932704df0267360708bf1eaca7550be6519107c8f83fa31b8",
+      "size": 80
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/e/qemu.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/e/qemu.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/e/qmp.transcript.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/e/result.json",
+      "sha256": "c0517e70dc65817a6f62f1b4ddfe3db7b7b05f96fdecdd09b1fb3d5f702f0a40",
+      "size": 2803
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/e/serial.log",
+      "sha256": "8e143c03011af57ab0cbd80e2ae2ec9cfe28344273a33f533d1183616a7130ed",
+      "size": 282446
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/e.fixture.json",
+      "sha256": "40267b7ca8fc0e8774621f9efc2f1da45f87bf3d9cd006b439696a359a045886",
+      "size": 250
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/e.status.json",
+      "sha256": "946ba80ce1e7f3716a4f767de7ae4ff360a423f775b64f8ddee1ff9031cdfc40",
+      "size": 141
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/g/debugcon.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/g/first-failure.jsonl",
+      "sha256": "169193d603c045bd50b4a0be0cbf9a0a7b2c72d373546d6d091fd1b1f6605a37",
+      "size": 88
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/g/qemu.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/g/qemu.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/g/qmp.transcript.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/g/result.json",
+      "sha256": "ec478d047a357399024ba0518e433bedd4a39e22c6c0cc9a10e633385bd38b36",
+      "size": 2811
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/g/serial.log",
+      "sha256": "fd02f87300ce5108a6939324dba5eaec465afde07e1939156855e83d3d951c1a",
+      "size": 282411
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/g.fixture.json",
+      "sha256": "a427093866234c7e599ef8611d9b9521449dd3b0b7770ab6c218a1588284332f",
+      "size": 250
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/g.status.json",
+      "sha256": "f2232cfb5b802acdccc0e7924b89fae734e6cedf9fad08888618ead3e6bf9fa6",
+      "size": 149
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/m/debugcon.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/m/first-failure.jsonl",
+      "sha256": "2c4727c06c33d0efc1326d59d4d0334c356e32b54930b9fea33bb018604aec02",
+      "size": 97
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/m/qemu.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/m/qemu.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/m/qmp.transcript.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/m/result.json",
+      "sha256": "9da4b87152cecc7bd339695a6d2f72cb058f480a1a6a2b8aa4ffdcb8237cef24",
+      "size": 2820
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/m/serial.log",
+      "sha256": "f4244c3459f6ab8db6658e1c04b40ae8e06baef28c2c618181929d5b63f3d8bb",
+      "size": 282295
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/m.fixture.json",
+      "sha256": "bbb7ff62c708a172f5d1545322f490b7e169fac772ab62ca7c2172ce8a3240fa",
+      "size": 250
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/m.status.json",
+      "sha256": "fd60c89841fcb241068e386d793e2d86ce3e5d48792ab5bc12090cafca3aeda9",
+      "size": 153
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/p/debugcon.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/p/qemu.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/p/qemu.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/p/qmp.transcript.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/p/result.json",
+      "sha256": "68e8dd861bc7609153b9222468a63886790da2be4a083195b5efe7ec546a6c00",
+      "size": 293450
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/p/serial.log",
+      "sha256": "67e2f7797853562f1ee5bf4688e8a668d6457cbe2f6762a6c0a7ff353920a4b3",
+      "size": 282411
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/p.fixture.json",
+      "sha256": "eb7d1c8bf0f5dadc7f26d88677abc7177d9e2909252b9ea747c25460654adc25",
+      "size": 250
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/p.status.json",
+      "sha256": "3c255748d8eeec9a107e233978ffca0397099ccfa48a9a42a8ed153a66e2c53a",
+      "size": 108
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/positive-owner-replay.json",
+      "sha256": "f1521472bc0beadf4b30025718ab2d65e5e2e71ab489d73d859a73f1ec89d5d8",
+      "size": 85
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/r/debugcon.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/r/qemu.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/r/qemu.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/r/qmp.transcript.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/r/result.json",
+      "sha256": "25e14f4b28351c48c4b81997c78ccd1ed3f8e6844085052397f0bd9706c2d6d4",
+      "size": 293455
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/r/serial.log",
+      "sha256": "67e2f7797853562f1ee5bf4688e8a668d6457cbe2f6762a6c0a7ff353920a4b3",
+      "size": 282411
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/s/debugcon.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/s/first-failure.jsonl",
+      "sha256": "79871592a9268efb24c178a4f04afa675dcdf9f30fc6ecc715b617652b0926bd",
+      "size": 94
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/s/qemu.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/s/qemu.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/s/qmp.transcript.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/s/result.json",
+      "sha256": "fa634bb932b9bbca7837e8d78cb7c0b7821982445b218e69e619e89609a9b5c9",
+      "size": 2817
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/s/serial.log",
+      "sha256": "7433f11da85068396ee1b34e178e9870166dbe2bb2fb8bd4674ed3fc55958dd9",
+      "size": 282473
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/s.fixture.json",
+      "sha256": "015d3ec19cf18b558d9fa3e23ac75914080710d685a68b2416bbe55d7ec6c56a",
+      "size": 250
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/s.status.json",
+      "sha256": "a5bede995a6e7ee8dc1bf4762aaeb5f1dd32aecc7ee9a06e61ea097193cc7590",
+      "size": 155
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/hc/wrong-case.json",
+      "sha256": "1dac010da15ad4696ef0944f51bb1b78486355e181226ed2b3e1b233c2d371ec",
+      "size": 4704
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host/case_evaluator.py",
+      "sha256": "5577902e51fdbfbef5245d22ea1961134a81ce33e6b0060f66579322824744dd",
+      "size": 1627
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host/native_diagnostic.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host/native_diagnostic_backend.py",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+      "size": 25398
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host/native_diagnostic_container_owner.py",
+      "sha256": "24ba3d64dc94ade17bd62bec23173da523f168fa2a7147b12aeeba41fea2e661",
+      "size": 61073
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host/native_diagnostic_runner.py",
+      "sha256": "83fd6c16d36c0a1dd581f22d763de3cdc61c1e9a3858e4ed486ee1dfafa45409",
+      "size": 6837
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "size": 9913
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host-source-map.json",
+      "sha256": "5a94ed39dc6536a42c93bdc97aafea178e8c3858312bf68ecf6b9554f4824206",
+      "size": 1898
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host-tests.command.json",
+      "sha256": "69c777272fa1e130caf11dec81c2c7a84816b0770eb0bd8fe10e8f6f70b8d804",
+      "size": 661
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host-tests.status.json",
+      "sha256": "ae7870b2c7551d7a1adf7a837e4523fa7f05a14604ddca39a417ee9900454618",
+      "size": 191
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host-tests.stderr",
+      "sha256": "39d5fdb49e022663aa395356f721cf0db271ce634ae1dde609616f917400aded",
+      "size": 446
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/host-tests.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/native_diagnostic_container_owner.py.host.diff",
+      "sha256": "1d1044357f6d9de17c68c4752d319e2e19e4a47abcded26a45e4f37e17965470",
+      "size": 5168
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/native_diagnostic_runner.py.host.diff",
+      "sha256": "1e1312faeef3b3be5b246b73ed9542db215edd6ddd04796cec65dff053718c98",
+      "size": 1617
+    }
+  ],
+  "runtime_release": false,
+  "source_report": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-reboot-workload-collector-source-20261017-3.json",
+    "sha256": "dfd49e92a92d675aa7c2f616461e6956634ce3fa2d49db0d1cf6356d146f8d2d",
+    "size": 34418
+  },
+  "stage": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-reboot-workload-preparation-20261017-1.json",
+    "sha256": "6d8b697c6d750ada04b704c3d84d3af41ea1d9c896eea9629546393731b039ef",
+    "size": 8634
+  },
+  "status": "PASS_ACTUAL_HOST_CALLSITE_PROTOCOL_PENDING_INDEPENDENT_REVIEW",
+  "task_id": "native-reboot-workload-host-source-20261017-1",
+  "test": {
+    "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/tests/test_case_host.py",
+    "sha256": "c17a77f5411d703047aac412de62b70268e95bf04e8395b412605aaf72753a34",
+    "size": 8210
+  }
+}

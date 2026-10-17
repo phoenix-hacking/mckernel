@@ -1,0 +1,199 @@
+{
+  "accepted_module_build_and_retirement": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-cpu-reacquire-external-modules-result-review-20261017-1.json",
+    "sha256": "0cc6f31e9c8f92696abcd9390c937c6414f0917fc065061bef24c28034bf0ec5",
+    "size": 11103
+  },
+  "application_acceptance": false,
+  "baseline_linux_image_abi": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "current_dispatcher_accounting": {
+    "accepted_application_guests": 14,
+    "accepted_public_sequences": 1,
+    "formal_10cycle_credit": false
+  },
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/stage-once.py",
+      "sha256": "1325ef6da81b72a9db29d7a32d1dc2db5a4e8512fb4434b0cb083a38e8d9982a",
+      "size": 4844
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/stage.stdout",
+      "sha256": "ee348418d7a14ecd9ac1fa85726bd4ec03380250f589000850603dfbb86f5f71",
+      "size": 218
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/stage.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/stage.status.json",
+      "sha256": "f8e76cefb070b7090f008a06f28000f6589bb2b5f221b611eab69c4a0c934209",
+      "size": 231
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/overlay-call.json",
+      "sha256": "e00e09596d73572c4ac5594977479a2a72946d03cd91ca7dddcf035b1a4e543e",
+      "size": 1477
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/parent-plan.json",
+      "sha256": "65141aa3b109bc248f6a10441d28f4f5223f1914521f1e915d79d7ce469e6fdf",
+      "size": 341
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/parent.json",
+      "sha256": "63f0da3fe67dc70d4d28ac9bb58e007aba3f2afb7fcf30b20718f38c5eee3b00",
+      "size": 151
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/stage-result.json",
+      "sha256": "e22bd0396544b845a571f8331283cea8fc21f04ae216cfd2c6094ef67a903c26",
+      "size": 2994
+    }
+  ],
+  "host_integration": {
+    "callers": [
+      "native_diagnostic.py:935 evaluate(manifest,full_observation)",
+      "native_diagnostic_container_owner.py:1021 self.diagnostic.evaluate(manifest,full_observation)"
+    ],
+    "cause": "Defaultunchangedper-workloadtracevalidatorrejectsforeigngeneration. Newcaseconsumerlosslesspartitioncorrect but originalrunner/owner never invokes it.",
+    "no_released_or_default_tool_changes": true,
+    "status": "PENDING_EXPERT_APPROVED_CASE_ONLY_ADAPTER"
+  },
+  "native_postreboot_workload_verified": false,
+  "predecessor": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-reboot-cycle-result-review-20261017-2.json",
+    "sha256": "9c3847933f8cc9e3d175363338e87ff229ef7fcd1912d146219e7c990224efea",
+    "size": 5172
+  },
+  "remaining_growth_reserve": {
+    "after": {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/stage-space-after.json",
+      "sha256": "95ed85912bd56606bdfbbd3f7eb302d84eb006979e81b9b9eac5de94416c4d31",
+      "size": 320
+    },
+    "before": {
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/stage-space-before.json",
+      "sha256": "3c56711fb1b6ffb53bd2c6137d65a9f5f08fa8f2b4b44194006e48c83ade1fb1",
+      "size": 320
+    },
+    "fresh_live_floor_plus_remaining_reserve_required": true,
+    "host_floor_bytes": 17179869184,
+    "included_plan_usage_guard": "UNCHANGED user97percent account stop, no filesystempercentage assertion.",
+    "prestage_total_bytes": 469762048,
+    "ram_explanation": "Frozen2x4GiB memory-backend-ram anonymous, no disk/RAMimage files;8GiBguest/12GiBcontainerunchanged.",
+    "ram_image_disk_growth_bytes": 0,
+    "retained_failed_inputs_already_consumed_before_floor_check": true,
+    "runtime_breakdown_bytes": {
+      "archive": 100663296,
+      "expanded_preservation": 100663296,
+      "logs": 67108864,
+      "metadata_slack": 33554432,
+      "readbacks": 100663296
+    },
+    "runtime_bytes": 402653184,
+    "scratch_floor_bytes": 12884901888,
+    "stage_output_allocated_bytes": 14061568,
+    "staging_budget_bytes": 67108864
+  },
+  "runtime_release": false,
+  "scope": "One newboot/workload/stop/destroy/release/boot/workload case.61members/60unchangedall9fields/soleinitdelta. No additionalnative stop/release, cycles or hosteffects.",
+  "source_candidate": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+  "source_review": {
+    "input": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-reboot-workload-collector-source-20261017-3.json",
+      "sha256": "dfd49e92a92d675aa7c2f616461e6956634ce3fa2d49db0d1cf6356d146f8d2d",
+      "size": 34418
+    },
+    "reviewer": "/root/lifecycle_collector_review",
+    "scope": "Source+reference only; actualLinuxsignal/supervisor/privatepipes/PTY; nativegen2auditmodeled.",
+    "status": "PASS_SOURCE_AND_REFERENCE_PROTOCOL"
+  },
+  "stage": {
+    "authenticated_base": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-preparation-20261017-2/stage/initramfs.cpio.gz",
+      "sha256": "8e912c00b551b2f2106c287c0c95f79ffe07f78e40afa2fc971ddf88eceba3ff",
+      "size": 13101147
+    },
+    "checks": {
+      "all9field_delta_vs_accepted_cycle2": [
+        "init"
+      ],
+      "final_members": 61,
+      "noninit_all9fields_preserved": 60,
+      "nonoverlay_all9fields_vs_produced_base": 55,
+      "nonzero_mtimes": 42,
+      "stage_returncode": 0,
+      "strict_manifest": true
+    },
+    "elapsed_seconds": 9.199881499000185,
+    "manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/manifest.json",
+      "sha256": "22e7b621620d5b526ffcb3ede90fbda74e02a9a066734c8a9cb23a0a4568d551",
+      "size": 5462
+    },
+    "nonce": "a081d2518ca046919ce81c9c9db7f733",
+    "overlay": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/reboot-workload.cpio.gz",
+      "sha256": "4b31c686a44b6cee5cb739106bd2b1b2655290f4f65571391b5e21a71ba8e4eb",
+      "size": 14030888
+    },
+    "overlay_manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-preparation-20261017-1/overlay-manifest.json",
+      "sha256": "0b5d9c93bdaecb3867d53f5b0ee3e0de0b5871c1dbdc9d48c78a3c3c9ef146ac",
+      "size": 19732
+    },
+    "parent": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 114753,
+      "mode": "0o700",
+      "path": "/home/holden/mckernel-work/scratch/ndrw-a081d251",
+      "uid": 1000
+    },
+    "prior_cycle2_manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-preparation-20261017-2/manifest.json",
+      "sha256": "f99e973622a3b7eb459d370f84326631916b18d76a8df0637d086a710284a37f",
+      "size": 5480
+    },
+    "prior_cycle2_overlay": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-preparation-20261017-2/cycle.cpio.gz",
+      "sha256": "c78ae11dbb6c135774993a1ca688994785c9438123946e195bbcc0bbc2238e15",
+      "size": 14029497
+    },
+    "qmp_bytes": 98,
+    "qmp_path": "/home/holden/mckernel-work/scratch/ndrw-a081d251/attempt-a081d2518ca046919ce81c9c9db7f733/qmp.sock",
+    "runtime_release": false,
+    "source_report": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-reboot-workload-collector-source-20261017-3.json",
+      "sha256": "dfd49e92a92d675aa7c2f616461e6956634ce3fa2d49db0d1cf6356d146f8d2d",
+      "size": 34418
+    },
+    "space_after": [
+      {
+        "available_bytes": 18257809408,
+        "floor_bytes": 17179869184,
+        "path": "/",
+        "remaining_growth_reserve_bytes": 402653184
+      },
+      {
+        "available_bytes": 16371654656,
+        "floor_bytes": 12884901888,
+        "path": "/home/holden/mckernel-work/scratch",
+        "remaining_growth_reserve_bytes": 402653184
+      }
+    ],
+    "status": "PASS_COLLECTOR_ONLY_OVERLAY_READY_FOR_REVIEW"
+  },
+  "status": "PASS_COLLECTOR_ONLY_STAGE_EXECUTION_BLOCKED_CASE_HOST_EVALUATOR_INTEGRATION",
+  "task_id": "native-reboot-workload-preparation-20261017-1"
+}

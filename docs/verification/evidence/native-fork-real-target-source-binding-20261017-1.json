@@ -1,0 +1,118 @@
+{
+  "PENDING": true,
+  "accepted_host_base": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+  "base_correction_receipt": {
+    "bytes": 4826,
+    "path": "/home/holden/mckernel-work/scratch/native-fork-real-target-preparation-20261017-1/base-correction1/receipt.json",
+    "sha256": "44466eac5974bb58d5f3e9e88d35124b28648d3e173dd37e47082bf9aa2d7233"
+  },
+  "closure_bytes": 1453121,
+  "closure_files": 63,
+  "closure_sha256": "3b858cb10151398f5580cef5eb87c6697f9e980a8311c81a0c68796818b35254",
+  "compiler_invoked": false,
+  "execution_authorized": false,
+  "fail_closed_requirements": [
+    "CREATE_PPD non-null remains -95",
+    "guest default weak request remains NULL",
+    "HOST_REVOKED/GUEST_DESTROYED genuine producers remain incomplete",
+    "final ACK plus actual final RET must retain ownership until authentic completion; no invented success"
+  ],
+  "fork_authenticated_original_base": "09f438751c28df0f497ed45a6bf6a4c6e0821d7b",
+  "fork_source_report": {
+    "bytes": 22476,
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-fork-carrier-link-source-20261017-1.json",
+    "sha256": "da5237840b2824253ac368f9ff63caf7bbfd8fac9b427a89d446f0d3854efb27"
+  },
+  "frozen_input_receipt": {
+    "bytes": 21977,
+    "path": "/home/holden/mckernel-work/scratch/native-fork-real-target-preparation-20261017-1/attempt1-failure-and-partial-read-receipt.json",
+    "sha256": "0fba02577314be5c42262478fd0ba4644e362e09da160d91c6da17ab170c06ca"
+  },
+  "known_chain_merge": {
+    "all_other_three_way_bodies_unchanged": true,
+    "coherent_final_candidate": true,
+    "common_sources": 17,
+    "conflicts_resolved_by_dispatcher": 1,
+    "new_sources": 3,
+    "root": "/home/holden/mckernel-work/scratch/native-fork-real-target-preparation-20261017-1/frozen-modules",
+    "textual_conflicts": 1
+  },
+  "original_base_overlap": {
+    "bytes": 345,
+    "path": "/home/holden/mckernel-work/scratch/native-fork-real-target-preparation-20261017-1/merge-smp-application-original-base/receipt.json",
+    "sha256": "96a1d1d5c15f31d7d85200e57c60d8fe7e5cc59892716a6bdb299f8e7624fb01"
+  },
+  "original_git_failure_preserved": true,
+  "pending_base": null,
+  "prospective_merge_receipt": {
+    "bytes": 3920,
+    "path": "/home/holden/mckernel-work/scratch/native-fork-real-target-preparation-20261017-1/merge-attempt1/receipt.json",
+    "sha256": "bfdabc091c7f888d65f01c1f7b6720d7cf69cde2fefdd6d0c291007140f3e933"
+  },
+  "real_import_graph": {
+    "actual_Kbuild": [
+      "obj-$(CONFIG_MCKERNEL_IHK_RUST) += ihk.o",
+      "obj-$(CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST) += ihk-smp-x86_64.o",
+      "ihk-smp-x86_64-y := ihk_smp_x86_64.o",
+      "obj-$(CONFIG_MCKERNEL_MCCTRL_RUST) += mcctrl.o"
+    ],
+    "affected_header_consumers": [
+      "ihk.rs via os_runtime.rs",
+      "ihk_smp_x86_64.rs via application_abi",
+      "mcctrl.rs via application ABI"
+    ],
+    "expected_dependency_receipt": "Real .ihk_smp_x86_64.o.d MUST include all3 new files; all3 module command/depinfo and MODPOST required. No fixture/stub substitutes.",
+    "guest_c_headers": "No host C header compile dependency added by the frozen Rust request codec; guest C/header sources remain outside this host-only envelope.",
+    "new_included_modules": {
+      "smp_application.rs": [
+        "smp_fork_link.rs",
+        "smp_fork_ingress.rs"
+      ],
+      "sysfs_memory.rs": [
+        "private_fork_carrier_request_20261017.rs"
+      ]
+    },
+    "parent_reexports": [
+      "smp_service.rs memory ForkPayload/ForkPayloadSeed and callbacks",
+      "smp_memory.rs service ForkPayload/ForkPayloadSeed and callbacks",
+      "smp_application.rs PreparedLinkTicket"
+    ],
+    "selected_config": [
+      "CONFIG_MCKERNEL_IHK_RUST=m",
+      "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST=m",
+      "CONFIG_MCKERNEL_MCCTRL_RUST=m"
+    ],
+    "shared_rust_abi_header": "abi/application.rs",
+    "unchanged_kbuild_obj_m": [
+      "ihk.o",
+      "ihk-smp-x86_64.o",
+      "mcctrl.o"
+    ]
+  },
+  "review_required": [
+    "independent review of exact original09f/d99/frozen-after source merge and accepted import resolution",
+    "merged shutdown/fork ownership semantics",
+    "actual all3 module dependency closure",
+    "exact extended driver closure/source pins",
+    "execution release and fresh live admission"
+  ],
+  "runtime_acceptance": false,
+  "source_candidate_sha": null,
+  "source_capsule": {
+    "bytes": 28476,
+    "path": "/home/holden/mckernel-work/scratch/native-fork-real-target-preparation-20261017-1/frozen-source-receipt.json",
+    "sha256": "e222e33ef34e8f11ed6f5af745c1f8e34397a302b0ad746c05440957b9b6d7ff"
+  },
+  "status": "FROZEN_COHERENT_ISOLATED_SOURCE_PENDING_INDEPENDENT_REVIEW",
+  "supplemental_chain": {
+    "prepared_after_sha256": "884bad9a6b90faf8ba54ba01e049b2ee91e60ec5961189a57b1f72adc8acc9b5",
+    "prepared_backend_report": {
+      "bytes": 6795,
+      "path": "/home/holden/mckernel-work/scratch/fork-prepared-backend-20261017-1/report.json",
+      "sha256": "15459a54118b68f9d18e03c59b14c92dfc127ca4b0598d5f1c0e719ea7259686"
+    },
+    "prepared_original_sha256": "008102ae58ea83312b56b26ad62097dc871bc63a76286bd4d565c00205f2af5f",
+    "role": "Supplemental endpoints only; original authenticated09f is sole merge base. Historical report base1eb is not substituted."
+  },
+  "task_id": "native-fork-real-target-source-binding-20261017-1"
+}

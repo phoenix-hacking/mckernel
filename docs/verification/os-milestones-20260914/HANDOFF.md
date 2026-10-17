@@ -1,34 +1,43 @@
 # Compact dispatcher handoff
 
 
-## Live cursor — 19:14 UTC, FPU image and post-reboot work moving
+## Live cursor — 19:26 UTC, FPU image accepted; terminal cleanup blocks next guests
 
-FPU typed attempt2 passed 6,948-entry validation; materializer0/15.645s and
-metadata preparer0/89.20s. Actual request53734de9 uses explicit isolated942+15cb,
-derivativecd9/materializationfcae; toolchaina68e unchanged. Report162f4a52;
-independent exact execution review/release pending. Failed first tree retained.
-Main process09409cad schedule-only integration independently accepted; outside
-function unchanged, later VM/thread-release bridges preserved. Source review
-adds no native FPU credit. Full512MiB reserve remains mandatory before build.
+One-shot FPU image guard0/213.151351s, configure/build0, newimagea0f50854/7908616B.
+Independent linked-body review proves saveENOMEM reaches panic before scheduling,
+restore/switch; IRQhandling retained. Source explicit942+15cb derivativecd9/fcae,
+not main094 substitution. Artifactreview0dc769b9; guard/owner/eightclient retirement
+canonical53c800 accepted. Exact stoppedCID7b7045 remains with own common/shared
+records; separatecleanup NOTexecuted. Both original process.c.o and explicit
+retained /scratch/native-fp-save-image-object-retention-20261017-1/process.c.o
+are boundd651 (166b1419/319704B), neitherdeletiontarget. No runtime FPU credit.
 
-Post-reboot real signal workload collector report3dfd49e92 independently passed
-125 bindings, unchanged supervision and four original consumers. Ordinary narrow
-overlay staging on CPU6/1GiB now active; separate fresh guest execution review
-required. No second native stop/release authority. Actual apps14, public cycles1/10.
-M07 strengthened YMM helper v2 source/Linux accepted; native enabled-state and
-libc dispatch observations remain open, stage only against eligible image.
+Cleanup narrow nested-path clone firstcandidate14disposabletests passed; review
+caught publishedtestlayout and exactknownowner identity gaps. Preservev1;
+expert-directed single bounded correction active, no rootcleanup yet. Publish
+exactsource/tests and Gitfetchverify only after affectedsourcePASS; then one
+fresh27:4-held observation, exactrelease/review/cleanup. No rawcontainerremove,
+ownershipunlink, loweredfloors or other heavy while retainedcommon/shared exist.
 
-Fork carrier/LINK5 and successor9 actual-body cases independently accepted,
-including immediate LINK before outer return and sealed uncertain retry. Actual
-HOST_REVOKED/GUEST_DESTROYED/final ACK/last-RET access ownership lanes refilled;
-CREATE_PPD remains-95. Early actual Kbuild source preparation uses authenticated
-09f base and immutable20 after inputs, three-way onto d99CPU/shutdown. Git mmap
-failure corrected by command-scoped16MiB window within unchanged256MiB limit;
-original failure retained. Only smp_application import conflict resolved by
-retaining used ptr/NonNull import. No fork compiler or activation has run.
+Post-reboot workload stage61members/solecollectordelta+actualrunner/owner4test
+integration independently passed. Executionproposal2 conditionalPASS5741462;
+metadata-onlyfinalproposal3ae8090 preserves21runtimebindings. No newpush/fetch
+casegate. WaitacceptedFPUterminalcleanup/commonrelease then fresh384MiB-reserved
+admission and exactrelease. AVX/YMM case stagednewimagea0f/d99modules82c;
+typedstdout parser sourceaccepted, privatecaseadapter actualcallsite tests pending.
+Two-casequeue unchanged; actual distinctapps14/publicnativecycles1/10.
 
-Review11 saved; next supervisor19:25UTC. Dated15:25 estimate baseline unchanged.
-Continue after normal checkpoint; choose next fully admitted useful heavy case.
+Fork63v1merge review caught missingv7-v9 ABI2Running/success_status and missing
+forkpayload busyledger. Corrected8actualbodytests+oldnegativecontrols independently
+PASS(c8ba), v263closure9492. RealKbuild63source/11toolprofile independentlyPASS;
+truthful composite-source/tools Gitpublication/fetchbindings pending beforegate.
+No forkcompiler yet. Actualguestnegative-first kind3seq1/destructor2/kind4seq2
+sourcebody PASS622033 adapter-scope; genuineprovider/consumer finalRET joint
+active. CREATE_PPD-95/defaultNULL/finalComplete remain guarded. No activationcredit.
+
+HEAD2ea020a6 pushed/fetched21exactblobs; batchnextsafecheckpoint records/build and
+review log. Accountusage31%, stop97% unchanged. Preserve datedestimate baseline;
+allpracticalrowsOPEN, noformal/physicalrestoration promotion. Continueautonomously.
 
 ## Checkpoint396 — one native public cycle accepted; next useful boundaries queued
 

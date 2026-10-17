@@ -1,0 +1,13 @@
+{
+  "schema": "mckernel.exact-source-publication-check.v1",
+  "status": "EXACT_REVIEWED_BYTES_PRESERVED_WITH_RECORDED_WHITESPACE_FINDINGS",
+  "full_diff_check_exit": 2,
+  "full_diff_check_stdout": "docs/verification/evidence/native-fork-real-target-capsule-20261017-1/modules/smp_startup_entry.S:48: trailing whitespace.\n+\t\ndocs/verification/evidence/native-fork-real-target-capsule-20261017-1/modules/smp_trampoline.S:26: trailing whitespace.\n+mckernel_trampoline_header_load:\t\ndocs/verification/evidence/native-fork-real-target-capsule-20261017-1/modules/smp_trampoline.S:33: trailing whitespace.\n+mckernel_trampoline_cpu_start_body:\t\ndocs/verification/evidence/native-fork-real-target-capsule-20261017-1/modules/smp_trampoline.S:50: trailing whitespace.\n+\t\ndocs/verification/evidence/native-fork-real-target-capsule-20261017-1/modules/smp_trampoline.S:55: trailing whitespace.\n+1:\t\ndocs/verification/evidence/native-fork-real-target-capsule-20261017-1/modules/smp_trampoline.S:56: trailing whitespace.\n+\t\ndocs/verification/evidence/native-fork-real-target-capsule-20261017-1/modules/smp_trampoline.S:78: trailing whitespace.\n+\t\ndocs/verification/evidence/native-fork-real-target-capsule-20261017-1/modules/smp_trampoline.S:82: trailing whitespace.\n+\t\ndocs/verification/evidence/native-fork-real-target-capsule-20261017-1/modules/smp_trampoline.S:101: trailing whitespace.\n+\t\ndocs/verification/evidence/native-fork-real-target-capsule-20261017-1/modules/smp_trampoline.S:124: trailing whitespace.\n+3:\t\ndocs/verification/evidence/native-fork-real-target-capsule-20261017-1/modules/smp_trampoline.S:132: trailing whitespace.\n+\t\ndocs/verification/evidence/native-fork-real-target-capsule-20261017-1/modules/smp_trampoline.S:149: trailing whitespace.\n+\t\nscripts/native_fp_save_image_terminal_cleanup.py:1339: new blank line at EOF.\n",
+  "full_diff_check_stderr": "",
+  "metadata_diff_check_exit": 0,
+  "scope": "Full check reports existing trailing whitespace in two exact compiled-source assembly snapshots and one terminal blank line in the exact independently reviewed cleanup script. Byte-bound publication deliberately preserves those identities; no semantic source edits were made for formatting. All other selected paths pass diff-check.",
+  "cleanup_script_sha256": "cb772ff4090227197702bf24ef22d18b4290d7e0aecd8922cbaad1d30e447588",
+  "cleanup_tests_sha256": "7b3c34585d7314e58955df860aeb11d2b15719e3a79c745412bbfb9ee71dd0a9",
+  "fork_source_closure_sha256": "9492bea44edd92a9d9228838d8739c18691dc120747fda3ead7d2d3b05c01674",
+  "runtime_authority": false
+}

@@ -140,6 +140,13 @@ artifact-only revalidation are recorded in
 needs its own applicable release. Never narrow a frozen full-tree/source
 binding or skip required live admission checks to make reuse convenient.
 
+Exercise a changed collector/oracle through the actual runner and owner replay
+call sites in the existing focused host check, using retained complete captures.
+Keep raw observations unchanged and preserve wire newline bytes in fixtures.
+Assert each negative mutation has its intended unique target and changes bytes.
+This catches composition and fixture mistakes before staging; reuse unchanged
+compiled inputs and check results within their accepted scope.
+
 Prepare at most two upcoming guest cases while one runs. Batch shared setup and
 review of unchanged boundaries. Same-OS application batching requires explicit
 permission in the released case contract, fixed membership, independent oracles,

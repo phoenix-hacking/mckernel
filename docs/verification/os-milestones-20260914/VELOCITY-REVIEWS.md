@@ -13,13 +13,13 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-17T18:54:56Z` (interval 29m00s).
-- Next full review target: `2026-10-17T19:25:00Z` (12:25 America/Los_Angeles).
-- Next review latest target: `2026-10-17T19:55:00Z`; preserve healthy operations.
-- Last included-usage observation: 30%; existing campaign stop remains 97%.
-- Current intervention: prepare actual work after the fresh second boot;
-  finish typed-link FPU materialization/image admission and promote the reviewed
-  AVX payload, while the actual fork producer/receiver joint check proceeds.
+- Last full review: `2026-10-17T19:25:03Z` (interval 30m07s).
+- Next full review target: `2026-10-17T19:55:00Z` (12:55 America/Los_Angeles).
+- Next review latest target: `2026-10-17T20:25:00Z`; preserve healthy operations.
+- Last included-usage observation: 33%; existing campaign stop remains 97%.
+- Current intervention: finish reviewed FPU-build cleanup and fresh admission,
+  then use the next fully admitted post-reboot workload, early real fork compile
+  or AVX case. Final fork revoke/ACK work continues on independent inputs.
 - Current invocation independently accepted app/diagnostic behaviors: 14 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -1014,3 +1014,77 @@ practical-m07-enabled-state-closure-20261017-2.json;
 native-fork-initial-consumer-source-20261017-1.json. Original cycle2 dispatch is
 scratch/native-resource-reboot-cycle-dispatch-20261017-2; trim nonce is
 6d69acc2eccb458ba5fbc17a9f9b1b81, execution_count1.
+
+## Review 12 — 2026-10-17 19:25:03 UTC
+
+Interval: `18:54:56` to `19:25:03` UTC,30m07s. Same live worker498255/start3900845
+and server498257/start3900851; running, no stop. Usage33%, stop97%. Checkpoint
+2ea020a6 is pushed/verified, including the schedule repair. Supervisor starts no
+workload or cleanup and owns no campaign Git integration.
+
+| Measure | Change this interval |
+| --- | --- |
+| Accepted app/diagnostic behaviors | 14 ->14; no new guest result |
+| Accepted public native cycles | 1 ->1; practical progress1/10 |
+| New corrected FPU image | Configure/build success; artifact and retirement reviews accepted |
+| Practical checklist | 3complete/32open; all14milestones remain open |
+
+The typed-link copy succeeded with6,948entries:6,899private regular files and49
+exact links; failed copy preserved. Request preparation completed19:07:07,
+eligibility review19:12:40, execution review19:14:51. Guard launch was reported
+19:15:57; total guard duration213.151351s includes preparation and retirement,
+not just compilation. Artifact review accepted19:20:54; owner/eight-client
+retirement accepted19:22:10. Image SHAa0f508540d03819d45da6de78a849ae1241fa988feb9e1a90d997b667ea1b7eb,
+7,908,616bytes. Linked code checks FP-save failure and panics before scheduler
+preparation/restore/switch. This is the declared942-plus-FPU derivative, not a
+claim that all of current HEAD was built or that native AVX behavior passed.
+
+The reviewer identified process.c.o outside the receipt inventory. Steering
+192153 requested explicit retention; dispatcher confirmed it19:22:20 at the
+reviewed hash/319,704bytes. Both copies are bound by the cleanup proposal. The
+stopped container and authenticated ownership records remain retained. A nested-
+path cleanup adapter passed14disposable filesystem cases; its source and exact
+proposal are under independent review at cutoff. No terminal cleanup/common
+release or next heavy admission has yet been observed.
+
+Post-reboot collector source passed19:07:03. Staging then exposed an integration
+gap: runner and owner still called the default full-stream evaluator. Four
+focused methods exercise both actual host call sites through fresh private
+instances; independent review accepted19:19:34. Proposal3 preserves all21runtime
+bindings of conditionally reviewed proposal2, pending cleanup and fresh admission. It is
+still the d99/942 case, separate from the new FPU image. No post-second-boot
+workload result yet. AVX parser source also passed; native case adapter/release
+and actual feature/state observations remain pending.
+
+Fork's actual carrier/LINK deterministic interleavings passed independent source
+review19:12:00:9selected cases, no native multicore/final-release claim. Early
+Kbuild preparation uses the immutable accepted after snapshots and original WIP
+base09f43875, not fork-modified61030. A bounded read reproduced Git128: the pack
+could not mmap under256MiB. Per-command core.packedGitWindowSize=16m read all17
+base blobs within unchanged limits; no Git mutation. Three-way merge preserves
+d99 CPU/shutdown sources. Independent review caught omitted ABI1/2 startup-state
+handling in three factories and omitted fork-payload shutdown accounting. Both
+corrections passed8actual-body tests plus old-byte controls and review19:18:38.
+The new63-file candidate/11-tool capsule passed7metadata checks and awaits source/
+execution review; no full fork Kbuild yet. Revoke, checked guest destruction,
+final ACK and final publication still need their real joined route; activation
+remains closed. Parallel source work continues against separate inputs.
+
+**Adjustment:** use the existing focused host check to exercise changed consumers
+through both actual runner and owner replay before staging. Preserve wire bytes
+and assert that negative-fixture mutations really change their intended target.
+Keep the next two cases ready; once cleanup and live admission pass, dispatch the
+next useful released operation before report-only work. No new repetition quota,
+broad rehash or unchanged-corpus replay is added. Saved percentage baseline is
+unchanged. Next review19:55UTC, latest20:25.
+
+Anchors under ../evidence/: native_fp_save_thin_materialization_20261017_attempt2.json;
+native-fp-save-thin-image-execution-review-20261017-1.json;
+native-reboot-workload-host-source-20261017-1.json;
+native-reboot-workload-execution-proposal-20261017-3.json;
+native-fork-carrier-link-races-source-20261017-1.json;
+native-fork-real-target-source-independent-review-20261017-1.json;
+practical-m07-avx-native-proposal-draft-20261017-1.json. Build receipt is
+scratch/native-fp-save-thin-preparation-20261017-1/symlink-correction-1/image-owner-work/evidence/receipt.json;
+guard capture is scratch/native-fp-save-thin-image-guard-20261017-c42c0dd52667eed862cb8555416d9912/guard-result.json.
+Correction report: scratch/native-fork-real-target-correction-20261017-1/report.json.
