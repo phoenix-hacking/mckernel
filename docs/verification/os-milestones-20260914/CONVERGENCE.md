@@ -56,16 +56,40 @@ example already identifies the next concrete action.
 
 ## User priority: sustained implementation progress
 
+The user's current priority is a functional, stable McKernel core quickly, with
+real diagnostic application execution before perfect formal verification. Apply
+the following fast diagnostic lane to scheduling and iteration; it does not
+alter formal acceptance counters or grant privileged execution authority.
+Within an already reviewed unprivileged profile, compile and run the smallest
+positive/reproducer immediately, fix the observed code or harness defect, and
+repeat. Do not draft a new packet or commission a new independent review for
+each routine edit, vector, syntax fix or diagnostic record. Keep minimal command,
+input identity, observed result and failure evidence, then consolidate at the
+normal checkpoint. Add a relevant negative before promoting a repaired boundary
+or requesting a wider execution release. A failed observer/evidence writer is a
+harness bug: reproduce and repair it with cheap local tests before another
+one-shot privileged attempt. Never relax root/guest isolation, cleanup, lease
+or the independent execution release to gain speed.
+
+Favor disjoint kernel/Rust repair, current-candidate build/guest-runner work,
+Linux oracle and executable regressions in parallel. Assign reviewers only to
+concrete unsafe/ABI/privileged boundaries or a ready integrated candidate, not
+as a standing fraction of the team. If a selected formal M01-M03 gate is not an
+actual prerequisite of the diagnostic app run, do not let it serialize that run.
+Report real boots, real apps, passing/failing tests and current-candidate fixes;
+packet count and agent activity are not the progress measure.
+
 For each active lane, keep four facts in the existing handoff/task packet:
 the responsible owner, concrete defect or missing behavior, next executable
 check, and downstream work it unlocks. Prefer work that removes an execution
 dependency. Once its actual prerequisites pass, run that next layer promptly.
 
-Begin with the retained M02 descriptor/identity repair and independent M03
-compilable reference/state-construction work. Their accumulated failures call
-for consolidated expert repair and executable regressions. Preserve the
-required Layer-B review and subsequent privileged execution releases. Advance
-the already reviewed M01 source-only task when its inputs are authenticated.
+Advance retained M02 descriptor/identity and M03 pending-free work when they
+block the functional core or have an independent executable regression ready.
+Their accumulated failures call for consolidated code repair and executable
+checks, not more source-only design loops. Preserve required Layer-B and
+privileged execution releases. Advance M01 independently, but do not assume its
+entire formal gate must close before an otherwise safe diagnostic app pilot.
 
 Fill useful slots with implementation and regression work. The suggested lane
 counts are flexible: create an audit/review lane only for a specific decision or
@@ -136,10 +160,13 @@ An unavailable compiler/profile is a recorded NOT_RUN dependency, not a pass.
 
 ## Executable admission, not keyword coverage
 
-Before substantive review, the selected candidate must pass syntax/compile,
-at least one valid positive example, the original failure reproducer, and a
-negative control relevant to the claimed invariant. Where a layer-B run has not
-been released, perform static checks and obtain that bounded release first;
+Before substantive review or a wider execution release, the selected candidate
+must pass syntax/compile, at least one valid positive example, the original
+failure reproducer, and a negative control relevant to the claimed invariant.
+For a diagnostic iteration inside a released cheap profile, begin with the
+smallest positive or reproducer; do not wait for a complete negative matrix.
+Where a layer-B run has not been released, perform static checks and obtain that
+bounded release first;
 do not claim executable readiness while execution is prohibited.
 
 Required practices:
@@ -250,9 +277,11 @@ Use all affinity CPUs (currently seven) for the aggregate build-job budget and
 host capacity. The launcher passes the measured effective child cap over the
 project maximum of eight; verify CLI enforcement via `config/read` before work.
 
-Suggested allocation, only when useful and disjoint: four implementation/test
-lanes, two audit/oracle lanes and two independent review slots. Prioritize the
-critical path and saturate ready work; do not manufacture tasks to fill slots.
+Favor four to six implementation/build/executable-test lanes when useful and
+disjoint; assign one focused reviewer only when a ready boundary needs a
+decision. Use remaining slots for independent code or test work, not standing
+audits. Prioritize the critical path and saturate ready work; do not manufacture
+tasks to fill slots.
 Assign disjoint file ownership and preserve reviewer independence. The dispatcher
 owns integration/Git and one heavy lease: at most one heavy build or guest at once.
 Bounded cheap test processes may overlap within the shared aggregate CPU/RAM

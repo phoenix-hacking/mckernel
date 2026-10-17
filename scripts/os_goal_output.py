@@ -162,6 +162,10 @@ class LiveOutput:
             if method == "turn/completed":
                 self.streamed = {key for key in self.streamed if key[0] != thread}
                 self.sanitizers = {key: value for key, value in self.sanitizers.items() if key[0] != thread}
+                if thread != self.primary and (self.primary is not None or row.get("child")):
+                    # The turn's last output and error are already in the log.
+                    # Close only this viewer; a later turn revives it with a new marker.
+                    row["retired"] = True
         elif method == "thread/status/changed":
             row["status"] = clean_name(data["status"]["type"])
             flags = data["status"].get("activeFlags") or []

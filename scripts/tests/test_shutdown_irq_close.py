@@ -54,7 +54,7 @@ class ShutdownIrqCloseTests(unittest.TestCase):
     def test_exact_route_bodies_execute(self):
         result=self.execute(self.generated_fixture())
         self.assertEqual(result.returncode,0,result.stdout+result.stderr)
-        self.assertIn("19 passed; 0 failed",result.stdout); print(result.stdout,end="")
+        self.assertIn("20 passed; 0 failed",result.stdout); print(result.stdout,end="")
         print("source_sha256", {str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
               for p in (CPU, MEMORY, FIXTURE, Path(__file__))})
 

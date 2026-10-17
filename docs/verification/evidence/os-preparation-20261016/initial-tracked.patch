@@ -1,0 +1,1180 @@
+diff --git a/docs/verification/os-milestones-20260914/CONVERGENCE.md b/docs/verification/os-milestones-20260914/CONVERGENCE.md
+index 1d5d1815..e5142911 100644
+--- a/docs/verification/os-milestones-20260914/CONVERGENCE.md
++++ b/docs/verification/os-milestones-20260914/CONVERGENCE.md
+@@ -56,16 +56,40 @@ example already identifies the next concrete action.
+ 
+ ## User priority: sustained implementation progress
+ 
++The user's current priority is a functional, stable McKernel core quickly, with
++real diagnostic application execution before perfect formal verification. Apply
++the following fast diagnostic lane to scheduling and iteration; it does not
++alter formal acceptance counters or grant privileged execution authority.
++Within an already reviewed unprivileged profile, compile and run the smallest
++positive/reproducer immediately, fix the observed code or harness defect, and
++repeat. Do not draft a new packet or commission a new independent review for
++each routine edit, vector, syntax fix or diagnostic record. Keep minimal command,
++input identity, observed result and failure evidence, then consolidate at the
++normal checkpoint. Add a relevant negative before promoting a repaired boundary
++or requesting a wider execution release. A failed observer/evidence writer is a
++harness bug: reproduce and repair it with cheap local tests before another
++one-shot privileged attempt. Never relax root/guest isolation, cleanup, lease
++or the independent execution release to gain speed.
++
++Favor disjoint kernel/Rust repair, current-candidate build/guest-runner work,
++Linux oracle and executable regressions in parallel. Assign reviewers only to
++concrete unsafe/ABI/privileged boundaries or a ready integrated candidate, not
++as a standing fraction of the team. If a selected formal M01-M03 gate is not an
++actual prerequisite of the diagnostic app run, do not let it serialize that run.
++Report real boots, real apps, passing/failing tests and current-candidate fixes;
++packet count and agent activity are not the progress measure.
++
+ For each active lane, keep four facts in the existing handoff/task packet:
+ the responsible owner, concrete defect or missing behavior, next executable
+ check, and downstream work it unlocks. Prefer work that removes an execution
+ dependency. Once its actual prerequisites pass, run that next layer promptly.
+ 
+-Begin with the retained M02 descriptor/identity repair and independent M03
+-compilable reference/state-construction work. Their accumulated failures call
+-for consolidated expert repair and executable regressions. Preserve the
+-required Layer-B review and subsequent privileged execution releases. Advance
+-the already reviewed M01 source-only task when its inputs are authenticated.
++Advance retained M02 descriptor/identity and M03 pending-free work when they
++block the functional core or have an independent executable regression ready.
++Their accumulated failures call for consolidated code repair and executable
++checks, not more source-only design loops. Preserve required Layer-B and
++privileged execution releases. Advance M01 independently, but do not assume its
++entire formal gate must close before an otherwise safe diagnostic app pilot.
+ 
+ Fill useful slots with implementation and regression work. The suggested lane
+ counts are flexible: create an audit/review lane only for a specific decision or
+@@ -136,10 +160,13 @@ An unavailable compiler/profile is a recorded NOT_RUN dependency, not a pass.
+ 
+ ## Executable admission, not keyword coverage
+ 
+-Before substantive review, the selected candidate must pass syntax/compile,
+-at least one valid positive example, the original failure reproducer, and a
+-negative control relevant to the claimed invariant. Where a layer-B run has not
+-been released, perform static checks and obtain that bounded release first;
++Before substantive review or a wider execution release, the selected candidate
++must pass syntax/compile, at least one valid positive example, the original
++failure reproducer, and a negative control relevant to the claimed invariant.
++For a diagnostic iteration inside a released cheap profile, begin with the
++smallest positive or reproducer; do not wait for a complete negative matrix.
++Where a layer-B run has not been released, perform static checks and obtain that
++bounded release first;
+ do not claim executable readiness while execution is prohibited.
+ 
+ Required practices:
+@@ -250,9 +277,11 @@ Use all affinity CPUs (currently seven) for the aggregate build-job budget and
+ host capacity. The launcher passes the measured effective child cap over the
+ project maximum of eight; verify CLI enforcement via `config/read` before work.
+ 
+-Suggested allocation, only when useful and disjoint: four implementation/test
+-lanes, two audit/oracle lanes and two independent review slots. Prioritize the
+-critical path and saturate ready work; do not manufacture tasks to fill slots.
++Favor four to six implementation/build/executable-test lanes when useful and
++disjoint; assign one focused reviewer only when a ready boundary needs a
++decision. Use remaining slots for independent code or test work, not standing
++audits. Prioritize the critical path and saturate ready work; do not manufacture
++tasks to fill slots.
+ Assign disjoint file ownership and preserve reviewer independence. The dispatcher
+ owns integration/Git and one heavy lease: at most one heavy build or guest at once.
+ Bounded cheap test processes may overlap within the shared aggregate CPU/RAM
+diff --git a/docs/verification/os-milestones-20260914/HANDOFF.md b/docs/verification/os-milestones-20260914/HANDOFF.md
+index a364d1de..5e45e5a2 100644
+--- a/docs/verification/os-milestones-20260914/HANDOFF.md
++++ b/docs/verification/os-milestones-20260914/HANDOFF.md
+@@ -3,7 +3,9 @@
+ ## Latest continuation: checkpoint 356
+ 
+ The 2026-10-16 launcher stop arrived during read-only reconciliation; no worker,
+-cleanup, build or guest was started.  HEAD/fetched remain `a3fe106c...12b7`.
++cleanup, build or guest was started. The resulting fetched checkpoint is
++`42fde3aae0572022324fe9090793a5166059993b`; its predecessor was
++`a3fe106c...12b7`.
+ Scratch is `/dev/loop36`, UUID `2a5768c8-718d-4914-bdc0-6b32c5a92a52`, mounted
+ rw,nodev,nosuid.  The scratch21 container and exclusion bytes are unchanged, but
+ the remount changed live `st_dev` from historical 1831 to 1828 while preserving
+@@ -18,6 +20,14 @@ scratch22 preparation.  Never replay scratch21.  Counts stay 3 builds, 12
+ diagnostic passes, 0/273 formal apps, 6/130 production, 0/7 languages; the OS
+ is incomplete.
+ 
++The watcher has now stopped, the saved goal is paused, and no child agent is
++active. One queued launcher instruction preserves the user's preparation-only
++scope for this stop; reconcile it with any later user instruction before a
++future launcher invocation. The transient validation controls are cgroup v1
++(`cpu`, `memory`, `pids`), with 4 CPU, 12 GiB and 512 task limits. Do not use the
++older `setup-host.sh` size check unchanged: it expects a 60 GiB scratch image,
++while the retained image is now 110 GiB.
++
+ ## Latest continuation: checkpoint 355
+ 
+ Scratch21 consumed its one-shot release and failed before compilation in phase
+diff --git a/docs/verification/os-milestones-20260914/LAUNCH.md b/docs/verification/os-milestones-20260914/LAUNCH.md
+index 0fc8ccb7..c03df5fd 100644
+--- a/docs/verification/os-milestones-20260914/LAUNCH.md
++++ b/docs/verification/os-milestones-20260914/LAUNCH.md
+@@ -51,6 +51,8 @@ read-order text without replacing the objective or thread.
+ | Command suffix | Result |
+ | --- | --- |
+ | `--status` | Print the last saved local snapshot without starting Codex. |
++| `--progress` | Show the current heartbeat, active child count, instruction queue, and last generated engineering dashboard without stopping the runner or starting Codex. |
++| `--instruct 'TEXT'` | Queue a new user instruction for the next active coordinator turn; the runner need not stop. |
+ | `--check` | Inspect effective settings and advertised models without inference. |
+ | `--check-sudo` | Test the private sudo helper with `id -u`, without starting an agent. |
+ | `--dry-run` | Print the command, objective and settings without starting a server. |
+@@ -76,7 +78,8 @@ profile/explicit overrides take precedence with the measured effective cap;
+ `--check` must confirm that cap and injected build environment through CLI
+ `config/read`, without inference. Sizing allows two remote child slots per
+ affinity CPU and a 2-GiB planning share per child. This host's aggressive default
+-is eight children/seven build jobs/24 GiB; remeasure on each invocation.
++is up to eight children/seven build jobs and up to 24 GiB when memory permits;
++remeasure on each invocation.
+ These are preparation instructions; reconcile the implemented launcher before
+ launch. Configuration reads do not prove actual child execution or OS acceptance.
+ 
+@@ -84,8 +87,20 @@ For example:
+ 
+ ```bash
+ python3 /home/holden/mckernel/scripts/run_os_goal.py --status
++python3 /home/holden/mckernel/scripts/run_os_goal.py --progress
++python3 /home/holden/mckernel/scripts/run_os_goal.py --instruct 'Prioritize the next real McKernel application smoke test.'
+ ```
+ 
++`--instruct` writes a private queued message and returns an ID. When the
++coordinator has an active turn, the runner steers that turn and records a
++delivery receipt. A receipt means the app server accepted the message, not
++that the requested engineering result occurred. Messages queued during a
++checkpoint wait for the next launch. A delivery timeout is retained as
++uncertain rather than silently retried. Do not put secrets in command-line
++instructions, since they may appear in shell history or process listings.
++`--progress` reads the saved dashboard as-is and labels its generation time;
++it does not grant acceptance credit or run a new measurement.
++
+ Ctrl+C requests a checkpoint; a second interrupt requests an immediate stop.
+ Clarification requests automatically receive the user's standing instruction to
+ proceed autonomously. This is explicitly identified as an automatic response;
+@@ -126,9 +141,10 @@ children within the effective cap (up to eight); filling all slots is optional.
+ Window smoke testing is separate from these configuration checks.
+ Each run keeps `agents/index.json` and separate thread logs beneath its log
+ directory; `--status` includes each observed thread's log path and window state.
+-Closing a viewer does not stop its agent. Actually closed/shutdown children close
+-their viewers after flushing output. At whole-run exit the remaining viewers
+-stop following and offer Enter to dismiss; a later run may open new windows.
++Closing a viewer does not stop its agent. Child viewers close after their turn
++finishes and its final output is flushed, including failed turns. A resumed child
++gets a new window showing only its new turn; earlier logs remain on disk. At
++whole-run exit, all remaining viewers close after flushing their final output.
+ If the desktop is unavailable or a terminal launch fails, the main log reports
+ the problem and the per-thread logs remain usable.
+ 
+diff --git a/docs/verification/os-milestones-20260914/START.md b/docs/verification/os-milestones-20260914/START.md
+index 91fb4a29..a254a70c 100644
+--- a/docs/verification/os-milestones-20260914/START.md
++++ b/docs/verification/os-milestones-20260914/START.md
+@@ -31,8 +31,9 @@ safe checkpoint after reconciling local/remote changes without discarding WIP.
+    task/gate/case and original prerequisites. Do not repeat a repository-wide
+    audit, replay already-valid work, or give every worker the entire catalog.
+ 3. Prioritize the critical path and saturate independently useful, ready work
+-   within the measured cap: suggested four implementation/test lanes, two audit/
+-   oracle lanes and two independent review slots, only when useful and disjoint.
++   within the measured cap: favor implementation, build and executable-test lanes;
++   use audit/review slots only for a concrete blocking decision. Aim for four or
++   more disjoint implementation/test lanes when they are genuinely ready.
+    Do not manufacture tasks to fill slots. Give each worker an invariant,
+    source bindings, write allowlist, frozen expectations, allowed command/profile,
+    evidence location and cumulative failure-family history. Assign disjoint file
+@@ -43,15 +44,20 @@ safe checkpoint after reconciling local/remote changes without discarding WIP.
+    test evidence, blockers and next executable work. Keep the prepared launcher
+    stable unless a reproduced defect blocks execution, correctness or visibility.
+ 4. Execute cheap admission under a reusable reviewed profile before broad review:
+-   syntax/compile, a real positive, the defect reproducer and a relevant negative.
++   syntax/compile and the smallest real positive or defect reproducer first;
++   add the relevant negative before claiming the repaired boundary is ready.
+    Static keyword checks and named vectors alone establish no semantic behavior.
+-   No source-only packet self-authorizes compilation, root work or a guest.
++   Within a reviewed unprivileged profile, do not make a new packet/review for
++   every edited candidate or vector. No source-only packet self-authorizes work
++   outside its released profile, root work or a guest.
+ 5. Integrate a coherent repair and obtain the appropriate independent boundary/
+    execution review. Launch the next native/root/guest layer as soon as its actual
+    prerequisites pass; do not wait for unrelated whole-OS capabilities.
+ 6. After one failed candidate plus one bounded correction for the same invariant,
+    escalate with the complete current findings and minimal reproducer. Do not
+    reset attempts through packet renaming, new reviewers or launcher recovery.
++   For an infrastructure-only failure, test and repair the observer/validator
++   locally before requesting another one-shot execution release.
+ 7. Preserve original failures, append chronological evidence and keep HANDOFF.md
+    compact. Report executed behavior separately from formal gate/case acceptance.
+    Checkpoint coherent changes about every 30 minutes and before long runs/end;
+@@ -66,6 +72,35 @@ source/evidence bindings at existing checkpoints; the normal progress updater
+ renders both reports. SC1 completion is a scoped notification, never whole-OS
+ completion or permission to omit a required execution/safety check.
+ 
++## Fast path to an application-testable core
++
++The user now explicitly prioritizes the fastest route to a functional, stable
++kernel core. The next user-visible result is a reproducible **diagnostic**
++application run on the current McKernel candidate, not completion of all M01–M04
++acceptance gates. Do not optimize this phase for perfect formal coverage.
++Identify the existing compiled startup argv/environment/stdout-stderr fixtures,
++their exact guest runner and the shortest unmet prerequisite. Prepare the
++current-candidate artifact and independent expected bytes while disjoint workers
++repair kernel/Rust code, the Linux comparison path and relevant M01/M02/M03
++blockers. Prefer code and running tests over another source-only packet. Once
++the applicable reviewed execution release, source bindings, isolation and
++runtime lease are valid, run the smallest positive
++fixture and capture actual output bytes, exit status, kernel log and teardown.
++Then iterate on memory, file, thread and shutdown smokes; retain concise
++regression evidence at normal checkpoints. Expand only after the result is
++understood. Do not label compilation, a host subprocess or a model as a
++McKernel application execution. This pilot grants no
++M04 acceptance credit and bypasses no root/guest isolation or cleanup rule.
++Formal case acceptance still follows its original per-case contract.
++
++At existing checkpoints, report the number of real guest applications executed
++in the work window, the latest executable regression result, elapsed time since
++the last such result, and the exact blocking dependency if the count is zero.
++If two completed dispatch cycles produce no executable result, change the
++technical strategy or move a lane to another dependency-ready behavior; do not
++interrupt a healthy long-running operation or manufacture a result. The target
++is faster observed kernel behavior, not a promised numerical speedup.
++
+ ## Models, ownership and resources
+ 
+ Keep Sol/medium coordination. Use Luna/low for bounded read-only inventories,
+@@ -90,8 +125,14 @@ Aggressive uses all affinity CPUs (currently seven) and
+ `--max-agents N --build-jobs N --memory-gib N` override within host capacity.
+ Only the dispatcher owns compiler-command approval, integration, acceptance,
+ Git and the heavy lease: at most one heavy build or guest at once. Bounded cheap
+-tests share aggregate CPU/RAM budgets with all concurrent work. Build environment
+-settings are injected through `shell_environment_policy.set.KEY` and verified
++tests share aggregate CPU/RAM budgets with all concurrent work.
++Multiple light, isolated Docker checks may overlap only when their exact
++unprivileged profiles have been reviewed, their output roots and owners are
++disjoint, and measured aggregate CPU/RAM/storage headroom remains; two default
++4-CPU/12-GiB containers are not automatically admissible under the seven-job/
++24-GiB aggregate budget. They do not create another heavy build/guest lease.
++Build environment settings are injected through
++`shell_environment_policy.set.KEY` and verified
+ with `config/read`; they are not a cgroup. Pinned guest/privileged profiles need
+ independent resource review before exceeding historical four-CPU/12-GiB envelopes.
+ Retain isolation/timeouts, measured free-space floors and headroom; remeasure
+diff --git a/ihk b/ihk
+index 3114d9e7..21a0d1eb 160000
+--- a/ihk
++++ b/ihk
+@@ -1 +1 @@
+-Subproject commit 3114d9e7101ad52030eb3effa849a5c108972a1f
++Subproject commit 21a0d1eb1705c3ee597aed41358ba4c0a92d5f8c
+diff --git a/scripts/__pycache__/rust-source-retirement-audit.cpython-36.pyc b/scripts/__pycache__/rust-source-retirement-audit.cpython-36.pyc
+deleted file mode 100644
+index cb32bc9935d7cd8c5a42fa99a61e08a71102d714..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 17635
+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
+JMaw7k{|oe?a-jeK
+
+diff --git a/scripts/application-tests/native_diagnostic_container_owner.py b/scripts/application-tests/native_diagnostic_container_owner.py
+index 0a1f9bd8..fbbe6251 100644
+--- a/scripts/application-tests/native_diagnostic_container_owner.py
++++ b/scripts/application-tests/native_diagnostic_container_owner.py
+@@ -40,7 +40,7 @@ QEMU_VERSION_STDOUT = (
+ )
+ SOURCE_HASHES = {
+     RUNNER: "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+-    REPO + "/scripts/application-tests/native_diagnostic.py": "13406216ca903569a194bd316bb245d8abbdbb3b475aa415ffb62cb6f6c49261",
++    REPO + "/scripts/application-tests/native_diagnostic.py": "8af67bcf5015cbf1915a65fdb3ce50d09ed68ea39f3b08fa95fa29625fd7afbc",
+     REPO + "/scripts/application-tests/native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+     REPO + "/scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+ }
+diff --git a/scripts/os_goal_output.py b/scripts/os_goal_output.py
+index dcc505f0..fa194303 100644
+--- a/scripts/os_goal_output.py
++++ b/scripts/os_goal_output.py
+@@ -162,6 +162,10 @@ class LiveOutput:
+             if method == "turn/completed":
+                 self.streamed = {key for key in self.streamed if key[0] != thread}
+                 self.sanitizers = {key: value for key, value in self.sanitizers.items() if key[0] != thread}
++                if thread != self.primary and (self.primary is not None or row.get("child")):
++                    # The turn's last output and error are already in the log.
++                    # Close only this viewer; a later turn revives it with a new marker.
++                    row["retired"] = True
+         elif method == "thread/status/changed":
+             row["status"] = clean_name(data["status"]["type"])
+             flags = data["status"].get("activeFlags") or []
+diff --git a/scripts/os_goal_resources.py b/scripts/os_goal_resources.py
+index 77cefe4c..a4dd20aa 100644
+--- a/scripts/os_goal_resources.py
++++ b/scripts/os_goal_resources.py
+@@ -138,6 +138,9 @@ def resource_instructions(resources):
+         "reconcile existing leases before starting it. All concurrent work shares "
+         "an aggregate {build_jobs}-job/{memory_gib:g}-GiB budget; divide jobs and "
+         "memory among workers, never multiply the budget per agent. "
++        "Multiple light Docker checks may overlap only under their reviewed "
++        "unprivileged profiles, disjoint output roots and measured shared CPU/RAM/"
++        "storage headroom; they do not create another heavy build/guest lease. "
+         "User-authorized host scheduling supersedes older coordinator caps only. "
+         "Preserve reviewed execution profiles: the pinned container has CPUs 2-5 "
+         "(4 CPUs), 12 GiB, no swap, 512 tasks and no network. Guest/root profile "
+diff --git a/scripts/os_goal_windows.py b/scripts/os_goal_windows.py
+index 35711d42..be6388ed 100644
+--- a/scripts/os_goal_windows.py
++++ b/scripts/os_goal_windows.py
+@@ -1,9 +1,9 @@
+ """Per-run agent logs and read-only GNOME terminal followers (stdlib only).
+ 
+-Each new run may open new windows. Old windows stop following at completion or
+-owner death and remain at a dismissal prompt; no user terminals are killed.
+-Closed/shutdown child viewers exit automatically; their historical logs remain.
+-The live-agent limit does not limit finished windows waiting for dismissal.
++Each child turn gets a viewer that exits after its final output is flushed.
++A resumed turn gets a fresh viewer without replaying the prior turn's log.
++Run completion or owner death also closes viewers. Historical logs remain;
++no user terminals are killed.
+ """
+ 
+ import argparse
+@@ -126,13 +126,14 @@ class AgentWindows:
+             path.touch()
+             self.rows[thread] = {"id": thread, "name": "", "path": str(path),
+                                  "closed_path": str(path.with_suffix(".closed")),
+-                                 "generation": 0,
++                                 "generation": 0, "start_byte": 0,
+                                  "status": "unknown", "window_status": "pending_primary"}
+         return self.rows[thread]
+ 
+     def revive(self, thread):
+         row = self.ensure(thread)
+         row["generation"] += 1
++        row["start_byte"] = Path(row["path"]).stat().st_size
+         row.update(closed_path=str(Path(row["path"]).with_suffix(
+             "." + str(row["generation"]) + ".closed")), window_status="pending_primary")
+         row.pop("window_error", None)
+@@ -186,7 +187,7 @@ class AgentWindows:
+                             "--", sys.executable, "-u", str(Path(__file__).resolve()),
+                             "follow", "--log", row["path"], "--owner", str(self.owner_path),
+                             "--complete", str(self.complete_path), "--index", str(self.index_path),
+-                            "--closed", row["closed_path"]]
++                            "--closed", row["closed_path"], "--start-byte", str(row["start_byte"])]
+                     proc = subprocess.Popen(argv, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                                             stderr=errors, start_new_session=True)
+                 except OSError as error:
+@@ -227,13 +228,14 @@ class AgentWindows:
+         self.closed = True
+ 
+ 
+-def follow(log_path, owner_path, complete_path, index_path, closed_path=None):
++def follow(log_path, owner_path, complete_path, index_path, closed_path=None, start_byte=0):
+     """Follow only this run's log. No RPC, inference, shell or worker signalling."""
+     owner = json.loads(owner_path.read_text())
+     closed_path = closed_path if closed_path is not None else log_path.with_suffix(".closed")
+     title = None
+     sanitizer = TerminalText()
+     with log_path.open(encoding="utf-8", errors="replace") as stream:
++        stream.seek(start_byte)
+         while True:
+             if sys.stdout.isatty():
+                 try:
+@@ -259,12 +261,7 @@ def follow(log_path, owner_path, complete_path, index_path, closed_path=None):
+     if child_closed:
+         print("\nChild closed; final output retained in " + str(log_path), flush=True)
+         return
+-    print("\nRun complete or worker exited; stopped following. This is a log viewer only.", flush=True)
+-    if sys.stdin.isatty():
+-        try:
+-            input("Press Enter to close this window. A new run may open new windows. ")
+-        except (EOFError, KeyboardInterrupt):
+-            pass
++    print("\nRun complete or worker exited; final output retained in " + str(log_path), flush=True)
+ 
+ 
+ def main(argv=None):
+@@ -273,8 +270,12 @@ def main(argv=None):
+     for name in ("log", "owner", "complete", "index"):
+         parser.add_argument("--" + name, required=True, type=Path)
+     parser.add_argument("--closed", type=Path, help="This viewer generation's closure marker; default: LOG.with_suffix('.closed')")
++    parser.add_argument("--start-byte", type=int, default=0,
++                        help="Byte offset where this viewer generation begins")
+     args = parser.parse_args(argv)
+-    follow(args.log, args.owner, args.complete, args.index, args.closed)
++    if args.start_byte < 0:
++        parser.error("start-byte must be non-negative")
++    follow(args.log, args.owner, args.complete, args.index, args.closed, args.start_byte)
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/scripts/run_os_goal.py b/scripts/run_os_goal.py
+index ce80f69e..76313978 100644
+--- a/scripts/run_os_goal.py
++++ b/scripts/run_os_goal.py
+@@ -7,6 +7,7 @@ paid/account-metered work. Runtime state stays in the repository's Git directory
+ 
+ import argparse
+ import codecs
++from decimal import Decimal, InvalidOperation
+ import fcntl
+ import hashlib
+ import json
+@@ -48,6 +49,7 @@ OBJECTIVE = (
+ TERMINAL_CODES = {"complete": 0, "paused": 10, "blocked": 20,
+                   "usageLimited": 21, "budgetLimited": 22}
+ LIMIT_ERRORS = {"usageLimitExceeded", "sessionBudgetExceeded"}
++INCLUDED_USAGE_STOP_PERCENT = 95
+ USER_INPUT_METHOD = "item/tool/requestUserInput"
+ AUTONOMY_REPLY = (
+     "Automatic launcher response applying the user's standing instruction; "
+@@ -107,6 +109,58 @@ def atomic_json(path, value):
+         os.close(directory)
+ 
+ 
++def queue_instruction(directory, instruction):
++    """Queue an owner's instruction without touching the running server lease."""
++    if not (directory / "state.json").is_file():
++        raise RuntimeError("No saved OS campaign exists; start the runner first.")
++    if not instruction.strip() or len(instruction.encode("utf-8")) > 8192:
++        raise ValueError("Instruction must be nonempty and at most 8192 UTF-8 bytes.")
++    inbox = directory / "instructions" / "pending"
++    inbox.mkdir(mode=0o700, parents=True, exist_ok=True)
++    ident = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ") + "-" + uuid4().hex
++    atomic_json(inbox / (ident + ".json"),
++                {"id": ident, "submitted_at": utc(), "text": instruction})
++    return ident
++
++
++def progress_report(directory, repo):
++    """Read the live heartbeat and existing engineering dashboard; never infer credit."""
++    state_path = directory / "state.json"
++    state = json.loads(state_path.read_text()) if state_path.is_file() else {}
++    goal = state.get("goal") or {}
++    active = state.get("active_turns") or {}
++    primary = state.get("thread_id")
++    children = len(active) - int(primary in active)
++    agents = ((state.get("settings") or {}).get("resources") or {}).get("max_agents", "?")
++    lines = ["Runner: {} | goal: {} | active child agents: {}/{}".format(
++        state.get("phase", "not_started"), goal.get("status", "none"), children, agents),
++        "Last heartbeat: {}".format(state.get("updated_at", "none"))]
++    control = directory / "instructions"
++    pending = list((control / "pending").glob("*.json"))
++    uncertain = list((control / "sending").glob("*.json"))
++    lines.append("Instructions: {} pending, {} delivery-uncertain".format(len(pending), len(uncertain)))
++    last_instruction = state.get("last_instruction") or {}
++    if last_instruction:
++        lines.append("Last instruction: {} ({})".format(
++            last_instruction.get("id", "?"), last_instruction.get("status", "?")))
++    dashboard = repo / PLAN_REL / "PROGRESS.md"
++    if not dashboard.is_file():
++        lines.append("Progress dashboard is not available.")
++        return "\n".join(lines)
++    lines.append("Dashboard (last generated snapshot; not live acceptance):")
++    for line in dashboard.read_text().splitlines():
++        if (line.startswith("- Dashboard refreshed:")
++                or line.startswith("Engineering snapshot:")
++                or line.startswith("- Native production gates:")
++                or line.startswith("- Earned contractual points:")
++                or line.startswith("- Application catalog:")
++                or line.startswith("- Narrow fault modes:")
++                or line.startswith("- Language gates:")
++                or line.startswith("| M0")):
++            lines.append(line)
++    return "\n".join(lines)
++
++
+ class Lease:
+     def __init__(self, path):
+         self.file = path.open("a+")
+@@ -325,6 +379,45 @@ class Campaign:
+                           agent_event_count=self.output.agent_event_count)
+         atomic_json(self.state_path, self.state)
+ 
++    def deliver_instruction(self):
++        """Steer one active coordinator turn; retain uncertain deliveries for audit."""
++        ident = self.state.get("thread_id")
++        if (not ident or not self.controlled or self.checkpoint_requested or self.stop_reason
++                or not self.goal or self.goal.get("status") != "active"
++                or ident not in self.active):
++            return
++        control = self.directory / "instructions"
++        sending_dir = control / "sending"
++        if any(sending_dir.glob("*.json")):
++            return  # An uncertain earlier delivery must be resolved before newer ones.
++        pending = sorted((control / "pending").glob("*.json"))
++        if not pending:
++            return
++        sending_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
++        source = pending[0]
++        sending = sending_dir / source.name
++        os.replace(source, sending)
++        item = json.loads(sending.read_text())
++        receipt = {"id": item["id"], "thread_id": ident,
++                   "turn_id": self.active[ident], "submitted_at": item["submitted_at"]}
++        try:
++            self.rpc.call("turn/steer", {"threadId": ident,
++                          "expectedTurnId": receipt["turn_id"], "input": [{"type": "text",
++                          "text": "Live user instruction " + item["id"] + ":\n" + item["text"]}]})
++            receipt.update(status="accepted_by_server", delivered_at=utc())
++            delivered = control / "delivered"
++            delivered.mkdir(mode=0o700, parents=True, exist_ok=True)
++            atomic_json(delivered / source.name, receipt)
++            sending.unlink()
++            self.save(last_instruction=receipt)
++            self.output.notice("Delivered live instruction " + item["id"] + " to the coordinator.")
++        except Exception as error:
++            # A timeout may mean the server accepted the steer. Never silently
++            # retry a potentially non-idempotent user instruction.
++            receipt.update(status="delivery_uncertain", error=str(error))
++            self.save(last_instruction=receipt)
++            self.output.notice("Instruction delivery uncertain; inspect " + str(sending))
++
+     def on_signal(self, signum, frame):
+         if (self.stop_reason or "").startswith("signal_"):
+             self.stop_now = True
+@@ -349,10 +442,28 @@ class Campaign:
+             self.stop_now = True
+ 
+     def record_rate_limits(self, limits):
+-        # Purchased credits are a fallback after the plan's included allowance.
+-        # A zero credit balance therefore is not evidence that Codex usage itself
+-        # is exhausted; the server reports that separately as a limit error.
++        previous = self.state.get("last_rate_limits") or {}
+         self.save(last_rate_limits=limits)
++        if self.stop_reason:
++            return
++        primary = (limits or {}).get("primary") or {}
++        used = primary.get("usedPercent")
++        if not isinstance(used, (int, float)) or isinstance(used, bool):
++            self.stop_reason, self.stop_now = "included_usage_unknown", True
++        elif used >= INCLUDED_USAGE_STOP_PERCENT:
++            # Leave room for already-running turns and delayed usage reports.
++            self.stop_reason, self.stop_now = "included_usage_guard", True
++        else:
++            old_balance = (previous.get("credits") or {}).get("balance")
++            new_balance = ((limits or {}).get("credits") or {}).get("balance")
++            if old_balance is not None and new_balance is not None:
++                try:
++                    if Decimal(str(new_balance)) < Decimal(str(old_balance)):
++                        self.stop_reason, self.stop_now = "credit_balance_decreased", True
++                except InvalidOperation:
++                    self.stop_reason, self.stop_now = "credit_balance_unknown", True
++        if self.stop_reason:
++            self.output.notice("Included-usage safety stop: " + self.stop_reason)
+ 
+     def event(self, message):
+         method, data = message.get("method"), message.get("params", {})
+@@ -388,6 +499,8 @@ class Campaign:
+             self.record_failure(data["error"], "server_error", data.get("willRetry", False))
+         elif method == "account/rateLimits/updated":
+             self.record_rate_limits(data.get("rateLimits"))
++        elif method == "account/updated" and data.get("authMode") not in (None, "chatgpt"):
++            self.stop_reason, self.stop_now = "chatgpt_auth_changed", True
+         elif method == "item/agentMessage/delta" and primary:
+             # Preserve the existing dispatcher-only transcript for older consumers.
+             excerpt = data.get("delta", "")
+@@ -397,7 +510,8 @@ class Campaign:
+     def instructions(self):
+         continuation = (
+             "This invocation has no time limit. The user explicitly requests continuous "
+-            "work until the entire OS objective is accepted or account credits are exhausted. "
++            "work until the entire OS objective is accepted or the included-plan "
++            "usage guard stops this invocation; never spend purchased credits. "
+             "Earlier work-window endings, checkpoint pauses and statements that a window "
+             "is authoritative are historical and do not pause this invocation. Continue "
+             "after checkpoints. Repair project-owned prerequisites and pursue independent "
+@@ -434,8 +548,30 @@ class Campaign:
+             "Apply CONVERGENCE.md on every continuation: one failed candidate and one "
+             "bounded correction per failure family before expert escalation. Carry family "
+             "history across resumed turns; never repeat an unchanged deterministic failure. "
+-            "Prioritize executable M02 collector descriptor/identity repairs and independent "
+-            "M03 pending-free admission after confirming the current handoff. Keep worker "
++            "The user's immediate priority is a functional, stable, app-testable "
++            "McKernel core, not perfect formal gate closure. Use a fast diagnostic "
++            "loop: build the smallest current-candidate kernel artifact, run the "
++            "smallest real McKernel startup app, repair the observed failure, and "
++            "repeat for memory, file, thread and shutdown smokes. A diagnostic "
++            "result is never formal application or production acceptance. "
++            "For unprivileged compile/tests inside an already reviewed reusable "
++            "profile, execute promptly; do not create a fresh packet, archive or "
++            "independent review for each edit or test vector. Keep the actual "
++            "command, result and relevant failure evidence. For root, module or "
++            "guest work, retain the applicable independent execution release, "
++            "isolation, resource lease and cleanup requirements. Do not reuse a "
++            "source-only packet as that release. If a one-shot harness attempt "
++            "fails on its own observer or evidence writer, fix that program with "
++            "cheap local regression tests before seeking another privileged run; "
++            "do not send unchanged packet designs through more review cycles. "
++            "Parallelize independent kernel/Rust repair, candidate build binding, "
++            "Linux oracle/diagnostic runner, and bounded regression work across "
++            "disjoint files. Prefer useful implementation/test lanes to audits; "
++            "use the available child slots only for ready independent work. "
++            "Do not wait for unrelated M01-M03 formal acceptance before a safe "
++            "diagnostic app pilot, but honor its actual runtime prerequisites. "
++            "Capture observed app bytes, exit status, kernel log and teardown. "
++            "Keep worker "
+             "write sets disjoint, integrate promptly, close completed children and refill "
+             "available slots with dependency-ready work. Preserve independent final review. "
+             "The user's priority is strong, measurable OS progress. For each active lane "
+@@ -443,11 +579,12 @@ class Campaign:
+             "it unlocks. Use the available slots for implementation and regression tests; "
+             "assign audits or reviews only when they answer a specific blocking question. "
+             "At each existing checkpoint report newly verified behavior, actual tests and "
+-            "evidence, remaining blockers and the next executable step. If two completed "
++            "evidence, the count of real guest apps and current-candidate builds, remaining "
++            "blockers and the next executable step. If two completed "
+             "dispatch cycles produce no technical result, change the repair strategy or "
+             "move to a dependency-ready task; do not interrupt healthy builds or soaks. "
+-            "The prepared launcher is infrastructure: change it further only for a "
+-            "reproduced defect blocking execution, correctness or requested visibility. "
++            "Avoid more launcher or dashboard work unless a reproduced defect "
++            "blocks execution, correctness or requested visibility. "
+             "Never weaken an oracle or count planning, agent activity or documentation "
+             "as implemented OS behavior. Follow all original execution releases. "
+             "Preserve preexisting untracked work. Read all applicable active instructions. "
+@@ -459,7 +596,7 @@ class Campaign:
+             "status tools only under their actual tool rules. Keep CURRENT.md and "
+             "docs/verification/os-milestones-20260914/PROGRESS.md updated and "
+             "commit/push verified checkpoints about every 30 minutes and before long "
+-            "runs. After every accepted packet, diagnosis, or checkpoint, run "
++            "runs. At coherent checkpoints or formal acceptance updates, run "
+             "python3 scripts/update_progress_tracker.py so the intermediary-goal bars, "
+             "task ledger, blockers, evidence paths, and next action reflect the new "
+             "state. On a checkpoint request stop new dispatch, finish bounded work, "
+@@ -487,6 +624,13 @@ class Campaign:
+                   server_start=birth, retryable=False)
+         settings = preflight(self.rpc, self.args, self.repo)
+         self.save(phase="starting", settings=settings, stop_reason=None)
++        account = self.rpc.call("account/read", {"refreshToken": False}).get("account") or {}
++        if account.get("type") != "chatgpt":
++            self.stop_reason, self.stop_now = "chatgpt_auth_required", True
++            self.save(auth_mode=account.get("type"))
++            return
++        self.save(auth_mode="chatgpt")
++        self.record_rate_limits(self.rpc.call("account/rateLimits/read", {}).get("rateLimits"))
+         if self.stop_reason:
+             return
+         params = {"cwd": str(self.repo), "model": self.args.model, "approvalPolicy": "never",
+@@ -631,7 +775,10 @@ class Campaign:
+                 now = time.monotonic()
+                 status = self.goal["status"] if self.goal else None
+                 if self.stop_now:
+-                    code = 21 if self.stop_reason == "quota_exhausted" else 23
++                    code = 21 if self.stop_reason in {"quota_exhausted", "included_usage_guard",
++                                                      "included_usage_unknown", "credit_balance_decreased",
++                                                      "credit_balance_unknown", "chatgpt_auth_required",
++                                                      "chatgpt_auth_changed"} else 23
+                     break
+                 if status in TERMINAL_CODES and not self.checkpoint_requested:
+                     code = TERMINAL_CODES[status]
+@@ -648,6 +795,7 @@ class Campaign:
+                     self.save(retryable=True)
+                     code = 24
+                     break
++                self.deliver_instruction()
+                 self.rpc.pump(timeout=1)
+                 self.output.flush()
+                 now = time.monotonic()
+@@ -687,6 +835,8 @@ def arguments(argv=None):
+     mode.add_argument("--check", action="store_true", help="Inspect local Codex settings/models; no thread or inference")
+     mode.add_argument("--check-sudo", action="store_true", help="Verify private askpass authentication with sudo id -u; no inference")
+     mode.add_argument("--status", action="store_true", help="Read the last saved launcher snapshot; no server")
++    mode.add_argument("--progress", action="store_true", help="Show live runner activity and the last engineering dashboard; no server")
++    mode.add_argument("--instruct", metavar="TEXT", help="Send a live instruction to the coordinator; queues through checkpoints")
+     parser.add_argument("--hours", type=float, default=0, help="Optional work window in hours; 0 means no time limit (default: 0)")
+     parser.add_argument("--grace-seconds", type=float, default=600, help="Reserve up to this many seconds for a checkpoint")
+     parser.add_argument("--model", default="gpt-5.6-sol", help="Dispatcher model; default: gpt-5.6-sol")
+@@ -751,6 +901,13 @@ def main(argv=None):
+                 current["active_turns"] = {}
+         print(json.dumps(current, indent=2))
+         return 0
++    if args.progress:
++        print(progress_report(directory, REPO))
++        return 0
++    if args.instruct is not None:
++        ident = queue_instruction(directory, args.instruct)
++        print("Queued instruction " + ident + "; it will reach the next active coordinator turn.")
++        return 0
+     if args.dry_run:
+         print(json.dumps({"command": shlex.join(server_argv(args, REPO)), "hours": args.hours,
+                           "checkpoint_reserve_seconds": args.grace_seconds, "state_directory": str(directory),
+diff --git a/scripts/tests/test_os_goal_launcher.py b/scripts/tests/test_os_goal_launcher.py
+index 07218096..7828db29 100644
+--- a/scripts/tests/test_os_goal_launcher.py
++++ b/scripts/tests/test_os_goal_launcher.py
+@@ -43,6 +43,9 @@ class FakeRPC:
+         self.turns = {}
+         self.bad_config = False
+         self.bad_environment = False
++        self.account_type = "chatgpt"
++        self.limits = {"primary": {"usedPercent": 0, "windowDurationMins": 10080},
++                       "credits": {"hasCredits": False, "balance": "0"}, "planType": "pro"}
+ 
+     def factory(self, argv, log_dir, event):
+         self.on_event = event
+@@ -84,6 +87,10 @@ class FakeRPC:
+             return {"data": [{"model": model, "supportedReasoningEfforts": [
+                 {"reasoningEffort": effort} for effort in ["low", "medium", "high"]]}
+                 for model in [self.args.model, "gpt-5.6-luna", "gpt-6-astra"]], "nextCursor": None}
++        if method == "account/read":
++            return {"account": {"type": self.account_type}}
++        if method == "account/rateLimits/read":
++            return {"rateLimits": self.limits}
+         if method in ("thread/start", "thread/resume"):
+             if method == "thread/resume" and self.goal["status"] == "active":
+                 self.started()
+@@ -158,6 +165,73 @@ class CampaignTests(unittest.TestCase):
+         self.assertIn('approval_policy="never"', command)
+         self.assertNotIn("--dangerously-bypass-approvals-and-sandbox", command)
+ 
++    def test_live_instruction_is_queued_and_delivered_to_active_coordinator(self):
++        campaign = launcher.Campaign(self.args, self.directory, self.directory)
++        try:
++            campaign.state["thread_id"] = "test-thread"
++            campaign.controlled = True
++            campaign.goal = goal()
++            campaign.active["test-thread"] = "turn-1"
++            campaign.save()
++            ident = launcher.queue_instruction(self.directory, "Prioritize the next app smoke")
++            rpc = FakeRPC(self.args, goal())
++            rpc.on_event = campaign.event
++            rpc.turns["test-thread"] = {"id": "turn-1", "items": [], "status": "inProgress"}
++            campaign.rpc = rpc
++            campaign.deliver_instruction()
++            steering = [params for method, params in rpc.calls if method == "turn/steer"]
++            self.assertEqual(len(steering), 1)
++            self.assertEqual(steering[0]["expectedTurnId"], "turn-1")
++            self.assertIn("Prioritize the next app smoke", steering[0]["input"][0]["text"])
++            receipt = json.loads((self.directory / "instructions" / "delivered" /
++                                  (ident + ".json")).read_text())
++            self.assertEqual(receipt["status"], "accepted_by_server")
++            self.assertFalse(list((self.directory / "instructions" / "pending").glob("*.json")))
++            self.assertFalse(list((self.directory / "instructions" / "sending").glob("*.json")))
++        finally:
++            campaign.output.close()
++
++    def test_live_instruction_waits_during_checkpoint_and_rejects_invalid_text(self):
++        campaign = launcher.Campaign(self.args, self.directory, self.directory)
++        try:
++            campaign.state["thread_id"] = "test-thread"
++            campaign.controlled = True
++            campaign.goal = goal()
++            campaign.active["test-thread"] = "turn-1"
++            campaign.save()
++            with self.assertRaises(ValueError):
++                launcher.queue_instruction(self.directory, "   ")
++            with self.assertRaises(ValueError):
++                launcher.queue_instruction(self.directory, "x" * 8193)
++            ident = launcher.queue_instruction(self.directory, "Continue after checkpoint")
++            campaign.checkpoint_requested = True
++            campaign.rpc = FakeRPC(self.args, goal())
++            campaign.deliver_instruction()
++            self.assertTrue((self.directory / "instructions" / "pending" /
++                             (ident + ".json")).exists())
++            self.assertFalse(campaign.rpc.calls)
++        finally:
++            campaign.output.close()
++
++    def test_progress_report_separates_live_runner_from_saved_dashboard(self):
++        campaign = launcher.Campaign(self.args, self.directory, self.directory)
++        try:
++            campaign.state["thread_id"] = "test-thread"
++            campaign.active.update({"test-thread": "turn-1", "child": "turn-2"})
++            campaign.save(phase="running", goal=goal(), settings={"resources": {"max_agents": 8}})
++            dashboard = self.directory / launcher.PLAN_REL / "PROGRESS.md"
++            dashboard.parent.mkdir(parents=True)
++            dashboard.write_text("- Dashboard refreshed: yesterday\n"
++                                 "- Native production gates: 6/130\n"
++                                 "| M02 | comparison | partial |\n")
++            report = launcher.progress_report(self.directory, self.directory)
++            self.assertIn("active child agents: 1/8", report)
++            self.assertIn("last generated snapshot", report)
++            self.assertIn("- Native production gates: 6/130", report)
++            self.assertIn("| M02 | comparison", report)
++        finally:
++            campaign.output.close()
++
+     def test_default_run_has_no_deadline_or_recovery_limit(self):
+         self.args = launcher.arguments([])
+         self.assertEqual(self.args.hours, 0)
+@@ -193,6 +267,25 @@ class CampaignTests(unittest.TestCase):
+         finally:
+             campaign.output.close()
+ 
++    def test_instructions_prioritize_diagnostic_app_pilot_without_acceptance_credit(self):
++        campaign = launcher.Campaign(self.args, self.directory, self.directory)
++        try:
++            instructions = campaign.instructions()
++            for expected in ("functional, stable, app-testable McKernel core",
++                             "fast diagnostic loop", "smallest real McKernel startup app",
++                             "diagnostic result is never formal application",
++                             "already reviewed reusable profile",
++                             "do not create a fresh packet, archive or",
++                             "independent review for each edit or test vector",
++                             "applicable independent execution release",
++                             "isolation, resource lease and cleanup requirements",
++                             "independent kernel/Rust repair, candidate build binding",
++                             "count of real guest apps and current-candidate builds"):
++                self.assertIn(expected, instructions)
++            self.assertEqual(launcher.OBJECTIVE, goal()["objective"])
++        finally:
++            campaign.output.close()
++
+     def test_new_goal_continues_multiple_turns_without_client_prompt_loop(self):
+         def next_turn(rpc):
+             rpc.completed()
+@@ -262,6 +355,35 @@ class CampaignTests(unittest.TestCase):
+         self.assertEqual(state["last_rate_limits"]["primary"]["usedPercent"], 53)
+         self.assertEqual(state["last_rate_limits"]["credits"]["balance"], "0")
+ 
++    def test_included_limit_guard_stops_before_starting_inference(self):
++        for percent in (95, 100):
++            with self.subTest(percent=percent):
++                rpc = FakeRPC(self.args)
++                rpc.limits["primary"]["usedPercent"] = percent
++                state = self.run_campaign(rpc, 21)
++                self.assertEqual(state["stop_reason"], "included_usage_guard")
++                self.assertFalse(any(m in ("thread/start", "thread/resume", "thread/goal/set")
++                                     for m, _ in rpc.calls))
++                self.assertFalse(watcher.should_restart(21, state))
++
++    def test_api_key_auth_is_rejected_before_inference(self):
++        rpc = FakeRPC(self.args)
++        rpc.account_type = "apiKey"
++        state = self.run_campaign(rpc, 21)
++        self.assertEqual(state["stop_reason"], "chatgpt_auth_required")
++        self.assertFalse(any(m in ("thread/start", "thread/resume") for m, _ in rpc.calls))
++
++    def test_falling_credit_balance_stops_active_campaign(self):
++        def spent(rpc):
++            rpc.emit("account/rateLimits/updated", {"rateLimits": {
++                "primary": {"usedPercent": 3, "windowDurationMins": 10080},
++                "credits": {"hasCredits": True, "balance": "99.5"}, "planType": "pro"}})
++        rpc = FakeRPC(self.args, steps=[spent])
++        rpc.limits["credits"] = {"hasCredits": True, "balance": "100"}
++        state = self.run_campaign(rpc, 21)
++        self.assertEqual(state["stop_reason"], "credit_balance_decreased")
++        self.assertFalse(watcher.should_restart(21, state))
++
+     def test_failed_turn_without_error_event_preserves_credit_exhaustion(self):
+         for info in ("usageLimitExceeded", "sessionBudgetExceeded"):
+             with self.subTest(info=info):
+diff --git a/scripts/tests/test_os_goal_resources.py b/scripts/tests/test_os_goal_resources.py
+index b4fd219b..177d02ef 100644
+--- a/scripts/tests/test_os_goal_resources.py
++++ b/scripts/tests/test_os_goal_resources.py
+@@ -250,7 +250,10 @@ class ResourceTests(unittest.TestCase):
+                          "launcher's process tree", "does not forward these variables",
+                          "automatically resize containers", "currently -j<=4",
+                          "not an enforced cgroup limit", "Do not widen affinity",
+-                         "16/12 GiB", "greater measured packet"):
++                         "16/12 GiB", "greater measured packet",
++                         "Multiple light Docker checks may overlap",
++                         "disjoint output roots", "measured shared CPU/RAM/",
++                         "do not create another heavy build/guest lease"):
+             self.assertIn(expected, text)
+ 
+ 
+diff --git a/scripts/tests/test_os_goal_windows.py b/scripts/tests/test_os_goal_windows.py
+index bc0fd6eb..95080823 100644
+--- a/scripts/tests/test_os_goal_windows.py
++++ b/scripts/tests/test_os_goal_windows.py
+@@ -226,19 +226,57 @@ class WindowTests(unittest.TestCase):
+         self.message(output, "retired-0", "resumed output\n")
+         self.assertIn("resumed output", Path(output.snapshot()["retired-0"]["path"]).read_text())
+ 
+-    def test_turn_completion_preserves_last_message_until_actual_shutdown(self):
++    def test_turn_completion_closes_child_viewer_after_final_output(self):
+         output = self.output()
+         output.primary = "parent"
++        self.started(output, "parent")
+         self.message(output, "child", "last answer")
+         self.event(output, "turn/completed", turn={"id": "t", "status": "completed"})
+         row = output.snapshot()["child"]
+-        self.assertFalse(Path(row["closed_path"]).exists())
++        self.assertTrue(Path(row["closed_path"]).exists())
++        self.assertEqual(row["window_status"], "closed")
++        self.assertEqual(row["status"], "completed")
++        log = Path(row["path"]).read_text()
++        self.assertLess(log.index("last answer"), log.index("Turn completed t"))
++        self.assertFalse(Path(output.snapshot()["parent"]["closed_path"]).exists())
+         self.event(output, "item/completed", thread="parent", item={"id": "close", "type": "collabAgentToolCall",
+                    "tool": "closeAgent", "status": "completed", "receiverThreadIds": ["child"],
+                    "agentsStates": {"child": {"status": "shutdown", "message": "not copied"}}})
+         self.assertTrue(Path(row["closed_path"]).exists())
+-        log = Path(row["path"]).read_text()
+-        self.assertLess(log.index("last answer"), log.index("Thread shutdown"))
++        self.assertLess(log.index("last answer"), Path(row["path"]).read_text().index("Thread shutdown"))
++
++    def test_failed_turn_closes_child_and_new_turn_starts_fresh_viewer(self):
++        output = self.output("on")
++        output.primary = "parent"
++        self.started(output, "child")
++        self.message(output, "child", "first turn output")
++        self.event(output, "turn/completed", turn={"id": "first", "status": "failed",
++                                                   "error": "first failure"})
++        old = output.snapshot()["child"]
++        old_marker = Path(old["closed_path"])
++        self.assertTrue(old_marker.exists())
++        self.assertIn("first failure", Path(old["path"]).read_text())
++
++        self.event(output, "turn/started", turn={"id": "second", "status": "inProgress"})
++        current = output.snapshot()["child"]
++        self.assertEqual(current["generation"], old["generation"] + 1)
++        self.assertNotEqual(current["closed_path"], old["closed_path"])
++        self.assertTrue(old_marker.exists())
++        self.assertFalse(Path(current["closed_path"]).exists())
++        self.assertEqual(self.spawn.call_count, 2)
++        argv = self.spawn.call_args.args[0]
++        self.assertEqual(argv[argv.index("--start-byte") + 1], str(current["start_byte"]))
++        self.assertGreater(current["start_byte"], 0)
++
++        self.message(output, "child", "second turn output")
++        self.event(output, "turn/completed", turn={"id": "second", "status": "completed"})
++        with redirect_stdout(io.StringIO()) as stdout, patch("builtins.input") as prompt:
++            windows.follow(Path(current["path"]), output.agent_owner_path,
++                           output.agent_complete_path, output.agent_index_path,
++                           Path(current["closed_path"]), current["start_byte"])
++        self.assertIn("second turn output", stdout.getvalue())
++        self.assertNotIn("first turn output", stdout.getvalue())
++        prompt.assert_not_called()
+ 
+     def test_retired_child_resume_uses_new_marker_and_window(self):
+         old_process = Mock(poll=Mock(return_value=None))
+@@ -306,7 +344,7 @@ class FollowerTests(unittest.TestCase):
+         windows.atomic_json(self.owner, {"pid": os.getpid(), "birth": windows.process_birth(os.getpid())})
+         windows.atomic_json(self.index, {"agents": [{"path": str(self.log), "name": "initial name"}]})
+ 
+-    def test_appends_then_complete_marker_drains_tail_and_holds_prompt(self):
++    def test_appends_then_complete_marker_drains_tail_and_exits(self):
+         stdout, stdin = io.StringIO(), Mock(isatty=Mock(return_value=True))
+ 
+         def finish(_):
+@@ -318,8 +356,8 @@ class FollowerTests(unittest.TestCase):
+                 patch.object(windows.time, "sleep", side_effect=finish), patch("builtins.input") as prompt:
+             windows.follow(self.log, self.owner, self.complete, self.index)
+         self.assertIn("initial\nfinal\n", stdout.getvalue())
+-        self.assertIn("stopped following", stdout.getvalue())
+-        prompt.assert_called_once()
++        self.assertIn("final output retained", stdout.getvalue())
++        prompt.assert_not_called()
+ 
+     def test_owner_disappearance_or_pid_reuse_stops_without_marker(self):
+         for birth in (None, "different-birth"):
+@@ -367,7 +405,7 @@ class FollowerTests(unittest.TestCase):
+                                 stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=5)
+         self.assertEqual(result.returncode, 0, result.stderr)
+         self.assertIn("initial", result.stdout)
+-        self.assertIn("stopped following", result.stdout)
++        self.assertIn("final output retained", result.stdout)
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/scripts/tests/test_shutdown_cpu_reclaim.py b/scripts/tests/test_shutdown_cpu_reclaim.py
+index 0609c866..73376de8 100644
+--- a/scripts/tests/test_shutdown_cpu_reclaim.py
++++ b/scripts/tests/test_shutdown_cpu_reclaim.py
+@@ -46,6 +46,7 @@ class ShutdownCpuReclaimTests(unittest.TestCase):
+         fence = balanced_item(text, "fn shutdown_journal_blocks_ordinary_use(")
+         methods = (
+             balanced_item(text, "fn verify_owned("),
++            balanced_item(text, "fn has_owned_cpu("),
+             balanced_item(text, "fn change_os("),
+             balanced_item(text, "fn retain_shutdown_failure("),
+             balanced_item(text, "fn prevalidate_shutdown_targets("),
+@@ -67,6 +68,9 @@ class ShutdownCpuReclaimTests(unittest.TestCase):
+             "#[allow(dead_code)]\n" + balanced_item(text, "struct CpuContext {"),
+             "#[allow(dead_code)]\n" + balanced_item(text, "pub(super) struct CpuController {"),
+             balanced_item(text, "pub(super) fn release_os_resources("),
++            balanced_item(text, "pub(super) fn reconcile_shutdown("),
++            balanced_item(text, "pub(super) enum ShutdownResetFailure"),
++            balanced_item(text, "pub(super) fn shutdown_reset_and_reonline_outcome("),
+         ))
+         return support, "\n\n".join(methods)
+ 
+diff --git a/scripts/tests/test_shutdown_irq_close.py b/scripts/tests/test_shutdown_irq_close.py
+index 5ddb2ff1..3be8fb5f 100644
+--- a/scripts/tests/test_shutdown_irq_close.py
++++ b/scripts/tests/test_shutdown_irq_close.py
+@@ -54,7 +54,7 @@ class ShutdownIrqCloseTests(unittest.TestCase):
+     def test_exact_route_bodies_execute(self):
+         result=self.execute(self.generated_fixture())
+         self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+-        self.assertIn("19 passed; 0 failed",result.stdout); print(result.stdout,end="")
++        self.assertIn("20 passed; 0 failed",result.stdout); print(result.stdout,end="")
+         print("source_sha256", {str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
+               for p in (CPU, MEMORY, FIXTURE, Path(__file__))})
+ 

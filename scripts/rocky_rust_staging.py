@@ -520,8 +520,8 @@ AUDITED_SMP_PROVIDER_EXTERN = ('extern "C" {\n'
  '    fn ihk_smp_provider_open_v1(minor: u32) -> i64;\n'
  '    #[link_name = "ihk_smp_provider_close_v1"]\n'
  '    fn ihk_smp_provider_close_v1(receipt: i64);\n'
- '    #[link_name = "ihk_os_create_unbooted_v4"]\n'
- '    fn ihk_os_create_unbooted_v4(\n'
+ '    #[link_name = "ihk_os_create_unbooted_v6"]\n'
+ '    fn ihk_os_create_unbooted_v6(\n'
  '        provider_minor: u32,\n'
  '        owner: *mut core::ffi::c_void,\n'
  '        argument: u64,\n'
@@ -533,6 +533,7 @@ AUDITED_SMP_PROVIDER_EXTERN = ('extern "C" {\n'
  '        application_open: Option<application_abi::Open>,\n'
  '        application_invoke: Option<application_abi::Invoke>,\n'
  '        application_close: Option<application_abi::Close>,\n'
+ '        shutdown: Option<IhkSmpShutdownV6>,\n'
  '    ) -> i64;\n'
  '    #[link_name = "ihk_os_destroy_unbooted_v1"]\n'
  '    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n'
@@ -547,6 +548,12 @@ AUDITED_SMP_PREPARE_BOOT_TYPE = (
 AUDITED_SMP_START_BOOT_TYPE = (
     '// SAFETY: IHK publishes Booting first and retains owners after any start result.\n'
     'type IhkSmpStartBootV3 = unsafe extern "C" fn(u32, u64) -> i32;'
+)
+AUDITED_SMP_SHUTDOWN_TYPE = (
+    '// SAFETY: IHK invokes this under the exact operation lock and generation lease.\n'
+    '// The tagged scalar result distinguishes rollback-safe failure from an effect\n'
+    '// which must remain closed for later reconciliation.\n'
+    'type IhkSmpShutdownV6 = unsafe extern "C" fn(u32, u64) -> i64;'
 )
 AUDITED_SMP_OS_IOCTL_EXTERN = 'unsafe extern "C" fn ihk_smp_os_ioctl_v2(\n    slot: u32,\n    generation: u64,\n    command: u32,\n    argument: u64,\n    compat: u32,\n) -> i64 {'
 AUDITED_SMP_OS_RELEASE_EXTERN = 'unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {'
@@ -587,6 +594,12 @@ AUDITED_SMP_START_BOOT_EXTERN = (
     '// SAFETY: IHK has already published Booting and excludes resource mutation.\n'
     '// The native adapter retains every owner before the first CPU-start effect.\n'
     'unsafe extern "C" fn ihk_smp_start_boot_v3(slot: u32, generation: u64) -> i32 {'
+)
+AUDITED_SMP_SHUTDOWN_EXTERN = (
+    '// SAFETY: IHK supplies the exact generation lease and serializes this call\n'
+    '// with every OS operation. Sender closure completes before any CPU reset;\n'
+    '// all owners remain retained on either failure class.\n'
+    'unsafe extern "C" fn ihk_smp_shutdown_v6(slot: u32, generation: u64) -> i64 {'
 )
 AUDITED_OS_LEASE_CONSTRUCTOR = '    pub(crate) unsafe fn from_ihk_lease_v2(\n        slot: u32,\n        generation: u64,\n    ) -> Result<Self, ResourceError> {\n        let token = Self { slot, generation };\n        token.validate()?;\n        Ok(token)\n    }'
 
@@ -1518,6 +1531,7 @@ def _validate_module(repo_root, module, expected, index):
             AUDITED_SMP_OS_RELEASE_TYPE,
             AUDITED_SMP_PREPARE_BOOT_TYPE,
             AUDITED_SMP_START_BOOT_TYPE,
+            AUDITED_SMP_SHUTDOWN_TYPE,
             AUDITED_SMP_OS_IOCTL_EXTERN,
             AUDITED_SMP_OS_RELEASE_EXTERN,
             AUDITED_SMP_APPLICATION_OPEN_EXTERN,
@@ -1525,6 +1539,7 @@ def _validate_module(repo_root, module, expected, index):
             AUDITED_SMP_APPLICATION_CLOSE_EXTERN,
             AUDITED_SMP_PREPARE_BOOT_EXTERN,
             AUDITED_SMP_START_BOOT_EXTERN,
+            AUDITED_SMP_SHUTDOWN_EXTERN,
             AUDITED_SMP_INIT_CALLBACK_EXTERN,
             AUDITED_SMP_EXIT_CALLBACK_EXTERN,
         )

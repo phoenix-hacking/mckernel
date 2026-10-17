@@ -1,0 +1,91 @@
+{
+  "schema": "mckernel.scratch21-terminal-cleanup-review.v1",
+  "status": "DRAFT_NOT_RELEASED",
+  "execution_command": null,
+  "live_observation": "docs/verification/evidence/os-preparation-20261016/scratch21-live.json",
+  "live_observation_sha256": "2f37c4f52d92ea873288cba818845fb725fb21edb71ca9439c6524c89add0723",
+  "observer": "scripts/inspect_scratch21_cleanup.py",
+  "observer_sha256": "5bdda89a30bd9e8a2b33024e68ec4eb84745820f395670e45592d5169e1618e4",
+  "reference_transaction": {
+    "path": "docs/verification/evidence/native-exact-scratch18-retry2-build-cleanup-20261001.py",
+    "sha256": "01e24b5b5b5a1c69d3c512d196862418f3f4e28d2295a06132aad81795ce3b8a",
+    "reuse_limit": "Reference algorithm only. Its scratch18 paths, exit status 0, historical boot/device and profile cannot be used for scratch21."
+  },
+  "target": {
+    "container_id": "e1f6dd145149c026c46adb82c3f3addb9e3c9e2a12b0d71a6813f00895220ea9",
+    "container_name": "mckernel-exact-57e76f6bf33a48da82047f98242bf019",
+    "owner_nonce": "1439909012a04cf789981b951b34d399",
+    "image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+    "state": "exited",
+    "pid": 0,
+    "exit_code": 1,
+    "oom_killed": false,
+    "dead": false,
+    "retired": true,
+    "cleanup_separately_required": true,
+    "request_lease_absent": true,
+    "owner_pid": 3788091,
+    "owner_starttime": "110575783",
+    "owner_process_absent": true
+  },
+  "filesystem_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+  "observed_live_device": 1828,
+  "retained_exclusions": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+      "device": 1828,
+      "inode": 57687,
+      "mode": "0o600",
+      "uid": 1000,
+      "gid": 1000,
+      "size": 269,
+      "nlink": 1,
+      "sha256": "7be39d1cf3bebcf4e586716badf2e3be366fae928ce2b39ce21fa6db770a7134",
+      "historical_device": 1831
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json",
+      "device": 1828,
+      "inode": 57688,
+      "mode": "0o600",
+      "uid": 1000,
+      "gid": 1000,
+      "size": 269,
+      "nlink": 1,
+      "sha256": "eeb41f3a01bf2b31e5ff15232ba31ab6cf92676b8587963d1faffeace44451f5",
+      "historical_device": 1831
+    }
+  ],
+  "future_output_prefix": "/home/holden/mckernel-work/scratch/native-exact-scratch21-terminal-cleanup-20261016",
+  "fresh_names_required": [
+    ".mutex",
+    ".plan.json",
+    ".journal.jsonl",
+    ".docker-logs.capture",
+    ".attempt.archive",
+    ".shared.archive"
+  ],
+  "requirements": [
+    "Pin UUID plus fresh live st_dev/inodes, current boot and all process/container/evidence identities.",
+    "Acquire preserved root development lock; hold through every mutation and terminal reconciliation.",
+    "Use fresh scratch21 plan/journal/mutex/archive names; retain all original ownership bytes.",
+    "Authenticate complete terminal profile/mounts and capture exact Docker logs before non-force removal.",
+    "Prove exact container absence, atomically exchange exclusions with sentinels, durably archive originals.",
+    "Recheck publisher census and identities before sentinel release; quarantine uncertain retirement.",
+    "Independently review actual cleanup evidence and immutable terminal replay before another workload."
+  ],
+  "remaining_implementation_and_review": [
+    "Implement scratch21-specific exit-1 profile, exact request/driver/candidate/image/mount/label bindings and complete protected-evidence checks.",
+    "Bind fresh filesystem UUID/current boot and live identity; never silently substitute historical st_dev 1831.",
+    "Hold the existing root development lock across census/removal/exchanges/release and uncertain cleanup quarantine.",
+    "Test all crash frontiers, torn/replaced journals/sentinels/locks, false absence, remount/boot and identity drift in disposable fixtures; no live cleanup tests.",
+    "Publish/fetch exact code/tests/proposal, obtain independent source and execution reviews, refresh all live identities immediately before release."
+  ],
+  "not_authorized": [
+    "container removal",
+    "ownership record unlink or release",
+    "scratch21 replay",
+    "build or guest execution"
+  ],
+  "counts_unchanged": true
+}

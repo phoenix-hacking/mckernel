@@ -43,6 +43,9 @@ class FakeRPC:
         self.turns = {}
         self.bad_config = False
         self.bad_environment = False
+        self.account_type = "chatgpt"
+        self.limits = {"primary": {"usedPercent": 0, "windowDurationMins": 10080},
+                       "credits": {"hasCredits": False, "balance": "0"}, "planType": "pro"}
 
     def factory(self, argv, log_dir, event):
         self.on_event = event
@@ -84,6 +87,10 @@ class FakeRPC:
             return {"data": [{"model": model, "supportedReasoningEfforts": [
                 {"reasoningEffort": effort} for effort in ["low", "medium", "high"]]}
                 for model in [self.args.model, "gpt-5.6-luna", "gpt-6-astra"]], "nextCursor": None}
+        if method == "account/read":
+            return {"account": {"type": self.account_type}}
+        if method == "account/rateLimits/read":
+            return {"rateLimits": self.limits}
         if method in ("thread/start", "thread/resume"):
             if method == "thread/resume" and self.goal["status"] == "active":
                 self.started()
@@ -158,6 +165,73 @@ class CampaignTests(unittest.TestCase):
         self.assertIn('approval_policy="never"', command)
         self.assertNotIn("--dangerously-bypass-approvals-and-sandbox", command)
 
+    def test_live_instruction_is_queued_and_delivered_to_active_coordinator(self):
+        campaign = launcher.Campaign(self.args, self.directory, self.directory)
+        try:
+            campaign.state["thread_id"] = "test-thread"
+            campaign.controlled = True
+            campaign.goal = goal()
+            campaign.active["test-thread"] = "turn-1"
+            campaign.save()
+            ident = launcher.queue_instruction(self.directory, "Prioritize the next app smoke")
+            rpc = FakeRPC(self.args, goal())
+            rpc.on_event = campaign.event
+            rpc.turns["test-thread"] = {"id": "turn-1", "items": [], "status": "inProgress"}
+            campaign.rpc = rpc
+            campaign.deliver_instruction()
+            steering = [params for method, params in rpc.calls if method == "turn/steer"]
+            self.assertEqual(len(steering), 1)
+            self.assertEqual(steering[0]["expectedTurnId"], "turn-1")
+            self.assertIn("Prioritize the next app smoke", steering[0]["input"][0]["text"])
+            receipt = json.loads((self.directory / "instructions" / "delivered" /
+                                  (ident + ".json")).read_text())
+            self.assertEqual(receipt["status"], "accepted_by_server")
+            self.assertFalse(list((self.directory / "instructions" / "pending").glob("*.json")))
+            self.assertFalse(list((self.directory / "instructions" / "sending").glob("*.json")))
+        finally:
+            campaign.output.close()
+
+    def test_live_instruction_waits_during_checkpoint_and_rejects_invalid_text(self):
+        campaign = launcher.Campaign(self.args, self.directory, self.directory)
+        try:
+            campaign.state["thread_id"] = "test-thread"
+            campaign.controlled = True
+            campaign.goal = goal()
+            campaign.active["test-thread"] = "turn-1"
+            campaign.save()
+            with self.assertRaises(ValueError):
+                launcher.queue_instruction(self.directory, "   ")
+            with self.assertRaises(ValueError):
+                launcher.queue_instruction(self.directory, "x" * 8193)
+            ident = launcher.queue_instruction(self.directory, "Continue after checkpoint")
+            campaign.checkpoint_requested = True
+            campaign.rpc = FakeRPC(self.args, goal())
+            campaign.deliver_instruction()
+            self.assertTrue((self.directory / "instructions" / "pending" /
+                             (ident + ".json")).exists())
+            self.assertFalse(campaign.rpc.calls)
+        finally:
+            campaign.output.close()
+
+    def test_progress_report_separates_live_runner_from_saved_dashboard(self):
+        campaign = launcher.Campaign(self.args, self.directory, self.directory)
+        try:
+            campaign.state["thread_id"] = "test-thread"
+            campaign.active.update({"test-thread": "turn-1", "child": "turn-2"})
+            campaign.save(phase="running", goal=goal(), settings={"resources": {"max_agents": 8}})
+            dashboard = self.directory / launcher.PLAN_REL / "PROGRESS.md"
+            dashboard.parent.mkdir(parents=True)
+            dashboard.write_text("- Dashboard refreshed: yesterday\n"
+                                 "- Native production gates: 6/130\n"
+                                 "| M02 | comparison | partial |\n")
+            report = launcher.progress_report(self.directory, self.directory)
+            self.assertIn("active child agents: 1/8", report)
+            self.assertIn("last generated snapshot", report)
+            self.assertIn("- Native production gates: 6/130", report)
+            self.assertIn("| M02 | comparison", report)
+        finally:
+            campaign.output.close()
+
     def test_default_run_has_no_deadline_or_recovery_limit(self):
         self.args = launcher.arguments([])
         self.assertEqual(self.args.hours, 0)
@@ -190,6 +264,38 @@ class CampaignTests(unittest.TestCase):
         try:
             self.assertIn("finite work window", campaign.instructions())
             self.assertNotIn("no time limit", campaign.instructions())
+        finally:
+            campaign.output.close()
+
+    def test_startup_instruction_precedes_saved_goal_resume_and_activation(self):
+        self.saved(goal("paused"))
+        self.args.startup_instruction = "Reconcile the old preparation hold before dispatch."
+        rpc = FakeRPC(self.args, goal("paused"), [lambda r: (r.completed(), r.status("complete"))])
+        state = self.run_campaign(rpc, 0)
+        params = next(p for m, p in rpc.calls if m == "thread/resume")
+        self.assertTrue(params["developerInstructions"].startswith("Current user instruction for this invocation"))
+        self.assertIn(self.args.startup_instruction, params["developerInstructions"])
+        methods = [m for m, p in rpc.calls]
+        self.assertLess(methods.index("thread/resume"), methods.index("thread/goal/set"))
+        self.assertEqual(state["goal"]["objective"], launcher.OBJECTIVE)
+        self.assertEqual(state["goal"]["tokensUsed"], 1234)
+
+    def test_instructions_prioritize_diagnostic_app_pilot_without_acceptance_credit(self):
+        campaign = launcher.Campaign(self.args, self.directory, self.directory)
+        try:
+            instructions = campaign.instructions()
+            for expected in ("functional, stable, app-testable McKernel core",
+                             "fast diagnostic loop", "smallest real McKernel startup app",
+                             "diagnostic result is never formal application",
+                             "already reviewed reusable profile",
+                             "do not create a fresh packet, archive or",
+                             "independent review for each edit or test vector",
+                             "applicable independent execution release",
+                             "isolation, resource lease and cleanup requirements",
+                             "independent kernel/Rust repair, candidate build binding",
+                             "count of real guest apps and current-candidate builds"):
+                self.assertIn(expected, instructions)
+            self.assertEqual(launcher.OBJECTIVE, goal()["objective"])
         finally:
             campaign.output.close()
 
@@ -261,6 +367,35 @@ class CampaignTests(unittest.TestCase):
         self.assertIsNone(state["stop_reason"])
         self.assertEqual(state["last_rate_limits"]["primary"]["usedPercent"], 53)
         self.assertEqual(state["last_rate_limits"]["credits"]["balance"], "0")
+
+    def test_included_limit_guard_stops_before_starting_inference(self):
+        for percent in (95, 100):
+            with self.subTest(percent=percent):
+                rpc = FakeRPC(self.args)
+                rpc.limits["primary"]["usedPercent"] = percent
+                state = self.run_campaign(rpc, 21)
+                self.assertEqual(state["stop_reason"], "included_usage_guard")
+                self.assertFalse(any(m in ("thread/start", "thread/resume", "thread/goal/set")
+                                     for m, _ in rpc.calls))
+                self.assertFalse(watcher.should_restart(21, state))
+
+    def test_api_key_auth_is_rejected_before_inference(self):
+        rpc = FakeRPC(self.args)
+        rpc.account_type = "apiKey"
+        state = self.run_campaign(rpc, 21)
+        self.assertEqual(state["stop_reason"], "chatgpt_auth_required")
+        self.assertFalse(any(m in ("thread/start", "thread/resume") for m, _ in rpc.calls))
+
+    def test_falling_credit_balance_stops_active_campaign(self):
+        def spent(rpc):
+            rpc.emit("account/rateLimits/updated", {"rateLimits": {
+                "primary": {"usedPercent": 3, "windowDurationMins": 10080},
+                "credits": {"hasCredits": True, "balance": "99.5"}, "planType": "pro"}})
+        rpc = FakeRPC(self.args, steps=[spent])
+        rpc.limits["credits"] = {"hasCredits": True, "balance": "100"}
+        state = self.run_campaign(rpc, 21)
+        self.assertEqual(state["stop_reason"], "credit_balance_decreased")
+        self.assertFalse(watcher.should_restart(21, state))
 
     def test_failed_turn_without_error_event_preserves_credit_exhaustion(self):
         for info in ("usageLimitExceeded", "sessionBudgetExceeded"):

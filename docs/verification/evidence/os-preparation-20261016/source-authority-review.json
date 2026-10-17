@@ -1,0 +1,26 @@
+{
+  "status": "UNREVIEWED_PARTIAL_CORRECTION_DO_NOT_BUILD",
+  "rust_runtime_source_changed": false,
+  "staging": "PASS_SOURCE_INTEGRITY_ONLY; 4 original readiness blockers remain",
+  "lifecycle": "PASS_SOURCE_ONLY; no module supplied",
+  "ledger": {
+    "self_digest_valid": true,
+    "repository_locks_valid": true,
+    "remaining_blocker": "host-kernel/native-rust/os_runtime.rs:199 extern_function lacks a unique nearby SAFETY comment",
+    "full_ledger_tests": "NOT_RUN: test module eagerly discovers current sources and refuses import at the same blocker",
+    "required_resolution": "Expert ownership review of shutdown-v6 SAFETY binding and all changed unsafe/FFI sites; preserve durable IDs and pending independent-review/compiler statuses. Do not skip or weaken discovery."
+  },
+  "failure_family": "Native source authority/RS-011 current closure; initial failure plus bounded correction retained, expert review required before another correction.",
+  "patch_paths": [
+    "scripts/rocky_rust_staging.py",
+    "scripts/tests/test_rocky_rust_staging.py",
+    "host-kernel/native-rust/ihk-lifecycle-contract-v1.json",
+    "host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json"
+  ],
+  "next_checks": [
+    "python3 -B scripts/native_rust_build_surface_audit.py",
+    "python3 -B scripts/rocky_rust_staging.py --check",
+    "python3 -B scripts/ihk_native_lifecycle_check.py",
+    "python3 -B scripts/native_rust_unsafe_ffi_ledger.py check"
+  ]
+}

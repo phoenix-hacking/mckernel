@@ -35684,3 +35684,39 @@ gmake: *** [Makefile:501: mckernel.img] Error 2
 2026-09-15T02:33:30.344503+00:00 OS launcher test harness: 15 offline tests passed; schema loading failed with FileNotFoundError for /tmp/os-goal-protocol-ci05fpv2/InitializeParams.json. Corrected to v1/InitializeParams.json; retained record docs/verification/os-milestones-20260914/launcher-schema-path-failure.json. No OS runtime credit.
 
 2026-09-15T03:07:33.301027+00:00 OS launcher preparation: wrong generated-schema path, sandbox-blocked sudo --help, and a rejected test-patch context were corrected. Original errors and corrections retained in docs/verification/os-milestones-20260914/launcher-supervision-validation.json. All 27 offline tests and the approved unattended sudo id -u check pass; no model campaign or OS payload started.
+
+Preparation 2026-10-16: ['python3', '-B', 'scripts/native_rust_unsafe_ffi_ledger.py', 'check'] exit 2; RS-011 unsafe/FFI ledger error: RS-011 target or repository lock bindings changed
+; host Python source-only check, no build or guest.
+
+Preparation 2026-10-16 bounded source-authority correction: ['python3', '-B', 'scripts/native_rust_unsafe_ffi_ledger.py', 'check'] exit 2; RS-011 unsafe/FFI ledger error: host-kernel/native-rust/os_runtime.rs:199 extern_function lacks a unique nearby SAFETY comment
+; host source-only check. Expert ownership/inventory review required before another correction or build.
+
+Preparation source regressions: ['python3', '-B', '-m', 'unittest', '-f', 'scripts.tests.test_rocky_rust_staging', 'scripts.tests.test_ihk_native_lifecycle_check', 'scripts.tests.test_native_rust_unsafe_ffi_ledger.LexerAndSiteTests', 'scripts.tests.test_native_rust_unsafe_ffi_ledger.SyntheticClosureTests'] exit 1; Traceback (most recent call last):
+  File "/home/holden/anaconda3/lib/python3.9/runpy.py", line 197, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/home/holden/anaconda3/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/home/holden/anaconda3/lib/python3.9/unittest/__main__.py", line 18, in <module>
+    main(module=None)
+  File "/home/holden/anaconda3/lib/python3.9/unittest/main.py", line 100, in __init__
+    self.parseArgs(argv)
+  File "/home/holden/anaconda3/lib/python3.9/unittest/main.py", line 147, in parseArgs
+    self.createTests()
+  File "/home/holden/anaconda3/lib/python3.9/unittest/main.py", line 158, in createTests
+    self.test = self.testLoader.loadTestsFromNames(self.testNames,
+  File "/home/holden/anaconda3/lib/python3.9/unittest/loader.py", line 220, in loadTestsFromNames
+    suites = [self.loadTestsFromName(name, module) for name in names]
+  File "/home/holden/anaconda3/lib/python3.9/unittest/loader.py", line 220, in <listcomp>
+    suites = [self.loadTestsFromName(name, module) for name in names]
+  File "/home/holden/anaconda3/lib/python3.9/unittest/loader.py", line 154, in loadTestsFromName
+    module = __import__(module_name)
+  File "/home/holden/mckernel/scripts/tests/test_native_rust_unsafe_ffi_ledger.py", line 442, in <module>
+    class LedgerMutationTests(unittest.TestCase):
+  File "/home/holden/mckernel/scripts/tests/test_native_rust_unsafe_ffi_ledger.py", line 449, in LedgerMutationTests
+    ) + tuple(item["path"] for item in ledger.discover(REPO_ROOT)["inputs"])
+  File "/home/holden/mckernel/scripts/native_rust_unsafe_ffi_ledger.py", line 922, in discover
+    sites, tokens, pairs, attrs = discover_sites(relative, raw, text)
+  File "/home/holden/mckernel/scripts/native_rust_unsafe_ffi_ledger.py", line 707, in discover_sites
+    raise LedgerError(
+native_rust_unsafe_ffi_ledger.LedgerError: host-kernel/native-rust/os_runtime.rs:199 extern_function lacks a unique nearby SAFETY comment
+; host Python only, no build/guest.

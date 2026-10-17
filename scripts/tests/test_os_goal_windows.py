@@ -226,19 +226,57 @@ class WindowTests(unittest.TestCase):
         self.message(output, "retired-0", "resumed output\n")
         self.assertIn("resumed output", Path(output.snapshot()["retired-0"]["path"]).read_text())
 
-    def test_turn_completion_preserves_last_message_until_actual_shutdown(self):
+    def test_turn_completion_closes_child_viewer_after_final_output(self):
         output = self.output()
         output.primary = "parent"
+        self.started(output, "parent")
         self.message(output, "child", "last answer")
         self.event(output, "turn/completed", turn={"id": "t", "status": "completed"})
         row = output.snapshot()["child"]
-        self.assertFalse(Path(row["closed_path"]).exists())
+        self.assertTrue(Path(row["closed_path"]).exists())
+        self.assertEqual(row["window_status"], "closed")
+        self.assertEqual(row["status"], "completed")
+        log = Path(row["path"]).read_text()
+        self.assertLess(log.index("last answer"), log.index("Turn completed t"))
+        self.assertFalse(Path(output.snapshot()["parent"]["closed_path"]).exists())
         self.event(output, "item/completed", thread="parent", item={"id": "close", "type": "collabAgentToolCall",
                    "tool": "closeAgent", "status": "completed", "receiverThreadIds": ["child"],
                    "agentsStates": {"child": {"status": "shutdown", "message": "not copied"}}})
         self.assertTrue(Path(row["closed_path"]).exists())
-        log = Path(row["path"]).read_text()
-        self.assertLess(log.index("last answer"), log.index("Thread shutdown"))
+        self.assertLess(log.index("last answer"), Path(row["path"]).read_text().index("Thread shutdown"))
+
+    def test_failed_turn_closes_child_and_new_turn_starts_fresh_viewer(self):
+        output = self.output("on")
+        output.primary = "parent"
+        self.started(output, "child")
+        self.message(output, "child", "first turn output")
+        self.event(output, "turn/completed", turn={"id": "first", "status": "failed",
+                                                   "error": "first failure"})
+        old = output.snapshot()["child"]
+        old_marker = Path(old["closed_path"])
+        self.assertTrue(old_marker.exists())
+        self.assertIn("first failure", Path(old["path"]).read_text())
+
+        self.event(output, "turn/started", turn={"id": "second", "status": "inProgress"})
+        current = output.snapshot()["child"]
+        self.assertEqual(current["generation"], old["generation"] + 1)
+        self.assertNotEqual(current["closed_path"], old["closed_path"])
+        self.assertTrue(old_marker.exists())
+        self.assertFalse(Path(current["closed_path"]).exists())
+        self.assertEqual(self.spawn.call_count, 2)
+        argv = self.spawn.call_args.args[0]
+        self.assertEqual(argv[argv.index("--start-byte") + 1], str(current["start_byte"]))
+        self.assertGreater(current["start_byte"], 0)
+
+        self.message(output, "child", "second turn output")
+        self.event(output, "turn/completed", turn={"id": "second", "status": "completed"})
+        with redirect_stdout(io.StringIO()) as stdout, patch("builtins.input") as prompt:
+            windows.follow(Path(current["path"]), output.agent_owner_path,
+                           output.agent_complete_path, output.agent_index_path,
+                           Path(current["closed_path"]), current["start_byte"])
+        self.assertIn("second turn output", stdout.getvalue())
+        self.assertNotIn("first turn output", stdout.getvalue())
+        prompt.assert_not_called()
 
     def test_retired_child_resume_uses_new_marker_and_window(self):
         old_process = Mock(poll=Mock(return_value=None))
@@ -306,7 +344,7 @@ class FollowerTests(unittest.TestCase):
         windows.atomic_json(self.owner, {"pid": os.getpid(), "birth": windows.process_birth(os.getpid())})
         windows.atomic_json(self.index, {"agents": [{"path": str(self.log), "name": "initial name"}]})
 
-    def test_appends_then_complete_marker_drains_tail_and_holds_prompt(self):
+    def test_appends_then_complete_marker_drains_tail_and_exits(self):
         stdout, stdin = io.StringIO(), Mock(isatty=Mock(return_value=True))
 
         def finish(_):
@@ -318,8 +356,8 @@ class FollowerTests(unittest.TestCase):
                 patch.object(windows.time, "sleep", side_effect=finish), patch("builtins.input") as prompt:
             windows.follow(self.log, self.owner, self.complete, self.index)
         self.assertIn("initial\nfinal\n", stdout.getvalue())
-        self.assertIn("stopped following", stdout.getvalue())
-        prompt.assert_called_once()
+        self.assertIn("final output retained", stdout.getvalue())
+        prompt.assert_not_called()
 
     def test_owner_disappearance_or_pid_reuse_stops_without_marker(self):
         for birth in (None, "different-birth"):
@@ -367,7 +405,7 @@ class FollowerTests(unittest.TestCase):
                                 stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=5)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("initial", result.stdout)
-        self.assertIn("stopped following", result.stdout)
+        self.assertIn("final output retained", result.stdout)
 
 
 if __name__ == "__main__":

@@ -48,9 +48,22 @@ read-order text without replacing the objective or thread.
 
 ## Controls
 
+The prepared dedicated-machine entry point is
+`python3 -B /home/holden/mckernel/scripts/run_os_parallel.py --run`.
+Without `--run` it previews only; `--check` also verifies settings without
+inference. It selects the measured maximum useful child ceiling (currently 12),
+keeps the existing saved campaign and resource/release rules, and supplies the
+reconciled preparation instruction before resume. See
+[PREPARATION-20261016.md](PREPARATION-20261016.md) for blockers and exact commands.
+The underlying `--startup-instruction-file PATH --startup-instruction-sha256 SHA`
+options pin that explicit instruction across preflight and watcher recoveries;
+they do not change the stored objective or authorize any execution release.
+
 | Command suffix | Result |
 | --- | --- |
 | `--status` | Print the last saved local snapshot without starting Codex. |
+| `--progress` | Show the current heartbeat, active child count, instruction queue, and last generated engineering dashboard without stopping the runner or starting Codex. |
+| `--instruct 'TEXT'` | Queue a new user instruction for the next active coordinator turn; the runner need not stop. |
 | `--check` | Inspect effective settings and advertised models without inference. |
 | `--check-sudo` | Test the private sudo helper with `id -u`, without starting an agent. |
 | `--dry-run` | Print the command, objective and settings without starting a server. |
@@ -76,7 +89,8 @@ profile/explicit overrides take precedence with the measured effective cap;
 `--check` must confirm that cap and injected build environment through CLI
 `config/read`, without inference. Sizing allows two remote child slots per
 affinity CPU and a 2-GiB planning share per child. This host's aggressive default
-is eight children/seven build jobs/24 GiB; remeasure on each invocation.
+is up to eight children/seven build jobs and up to 24 GiB when memory permits;
+remeasure on each invocation.
 These are preparation instructions; reconcile the implemented launcher before
 launch. Configuration reads do not prove actual child execution or OS acceptance.
 
@@ -84,7 +98,19 @@ For example:
 
 ```bash
 python3 /home/holden/mckernel/scripts/run_os_goal.py --status
+python3 /home/holden/mckernel/scripts/run_os_goal.py --progress
+python3 /home/holden/mckernel/scripts/run_os_goal.py --instruct 'Prioritize the next real McKernel application smoke test.'
 ```
+
+`--instruct` writes a private queued message and returns an ID. When the
+coordinator has an active turn, the runner steers that turn and records a
+delivery receipt. A receipt means the app server accepted the message, not
+that the requested engineering result occurred. Messages queued during a
+checkpoint wait for the next launch. A delivery timeout is retained as
+uncertain rather than silently retried. Do not put secrets in command-line
+instructions, since they may appear in shell history or process listings.
+`--progress` reads the saved dashboard as-is and labels its generation time;
+it does not grant acceptance credit or run a new measurement.
 
 Ctrl+C requests a checkpoint; a second interrupt requests an immediate stop.
 Clarification requests automatically receive the user's standing instruction to
@@ -126,9 +152,10 @@ children within the effective cap (up to eight); filling all slots is optional.
 Window smoke testing is separate from these configuration checks.
 Each run keeps `agents/index.json` and separate thread logs beneath its log
 directory; `--status` includes each observed thread's log path and window state.
-Closing a viewer does not stop its agent. Actually closed/shutdown children close
-their viewers after flushing output. At whole-run exit the remaining viewers
-stop following and offer Enter to dismiss; a later run may open new windows.
+Closing a viewer does not stop its agent. Child viewers close after their turn
+finishes and its final output is flushed, including failed turns. A resumed child
+gets a new window showing only its new turn; earlier logs remain on disk. At
+whole-run exit, all remaining viewers close after flushing their final output.
 If the desktop is unavailable or a terminal launch fails, the main log reports
 the problem and the per-thread logs remain usable.
 

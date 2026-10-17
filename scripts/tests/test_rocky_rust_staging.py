@@ -303,19 +303,21 @@ macro_rules! áinclude { () => {} }
                     allowed_extern_blocks=(exact,),
                 )
 
-    def test_smp_v4_provider_imports_and_callback_prefixes_are_closed(self):
+    def test_smp_v6_provider_imports_and_callback_prefixes_are_closed(self):
         imports = staging.AUDITED_SMP_PROVIDER_EXTERN
         self.assertEqual(7, imports.count('#[link_name = '))
         import_mutations = {
             "missing": imports.replace(
-                '    #[link_name = "ihk_os_create_unbooted_v4"]\n', "", 1
+                '    #[link_name = "ihk_os_create_unbooted_v6"]\n', "", 1
             ),
             "duplicate": imports + "\n" + imports,
             "signature": imports.replace("callback_abi: u32", "callback_abi: u64", 1),
             "link-name": imports.replace(
-                '"ihk_os_create_unbooted_v4"', '"ihk_os_create_unbooted_v5"', 1
+                '"ihk_os_create_unbooted_v6"', '"ihk_os_create_unbooted_v5"', 1
             ),
-            "v5": imports.replace("ihk_os_create_unbooted_v4", "ihk_os_create_unbooted_v5"),
+            "v5": imports.replace("ihk_os_create_unbooted_v6", "ihk_os_create_unbooted_v5"),
+            "missing-shutdown": imports.replace("        shutdown: Option<IhkSmpShutdownV6>,\n", ""),
+            "shutdown-return": imports.replace("Option<IhkSmpShutdownV6>", "Option<IhkSmpStartBootV3>"),
         }
         for name, mutation in import_mutations.items():
             with self.subTest(import_mutation=name), self.assertRaisesRegex(
@@ -329,11 +331,13 @@ macro_rules! áinclude { () => {} }
         prefixes = (
             (staging.AUDITED_SMP_PREPARE_BOOT_TYPE, "IhkSmpPrepareBootV3", "IhkSmpPrepareBootV4"),
             (staging.AUDITED_SMP_START_BOOT_TYPE, "IhkSmpStartBootV3", "IhkSmpStartBootV4"),
+            (staging.AUDITED_SMP_SHUTDOWN_TYPE, "IhkSmpShutdownV6", "IhkSmpShutdownV5"),
             (staging.AUDITED_SMP_APPLICATION_OPEN_EXTERN, "application_open", "application_open_v2"),
             (staging.AUDITED_SMP_APPLICATION_INVOKE_EXTERN, "application_invoke", "application_invoke_v2"),
             (staging.AUDITED_SMP_APPLICATION_CLOSE_EXTERN, "application_close", "application_close_v2"),
             (staging.AUDITED_SMP_PREPARE_BOOT_EXTERN, "ihk_smp_prepare_boot_v3", "ihk_smp_prepare_boot_v4"),
             (staging.AUDITED_SMP_START_BOOT_EXTERN, "ihk_smp_start_boot_v3", "ihk_smp_start_boot_v4"),
+            (staging.AUDITED_SMP_SHUTDOWN_EXTERN, "ihk_smp_shutdown_v6", "ihk_smp_shutdown_v5"),
         )
         for exact, name, replacement in prefixes:
             mutation = exact.replace(name, replacement, 1)

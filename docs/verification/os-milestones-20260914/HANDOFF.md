@@ -1,9 +1,38 @@
 # Compact dispatcher handoff
 
+## Latest preparation: 2026-10-16, campaign remains paused
+
+The user requested an aggressive autonomous parallel entry point and will run
+it themselves. Exact command, prerequisites, checks and blockers are in
+[PREPARATION-20261016.md](PREPARATION-20261016.md). Start later with:
+
+```bash
+python3 -B /home/holden/mckernel/scripts/run_os_parallel.py --run
+```
+
+Default invocation previews only; `--check` checks settings without inference.
+Measured CLI configuration admits 12 children / 7 shared host jobs / 24 GiB,
+while heavy operations remain serialized with their reviewed 4-CPU/12-GiB/
+512-task limits. The original queued preparation hold remains byte-identical;
+the new startup note reconciles it before resume and is hash-pinned through
+recovery. No campaign, build, guest or cleanup/release was started.
+
+Read-only live scratch21 identity/evidence checks pass, with UUID unchanged,
+device 1828, exclusion inodes 57687/57688 and the exact exit-1 container retained.
+Cleanup is a DRAFT requiring implementation plus independent release; the new
+observer cannot remove anything. Staging/lifecycle source repairs pass their
+121 tests; RS-011's envelope/lock repairs expose a missing shutdown-v6 SAFETY
+binding at `os_runtime.rs:199`. Preserve the two failure stages and obtain
+expert inventory/ownership review; never weaken discovery. The 74 offline
+launcher tests pass. HEAD stays `42fde3aae0572022324fe9090793a5166059993b`;
+all existing WIP/evidence is retained. Counts and acceptance remain unchanged.
+
 ## Latest continuation: checkpoint 356
 
 The 2026-10-16 launcher stop arrived during read-only reconciliation; no worker,
-cleanup, build or guest was started.  HEAD/fetched remain `a3fe106c...12b7`.
+cleanup, build or guest was started. The resulting fetched checkpoint is
+`42fde3aae0572022324fe9090793a5166059993b`; its predecessor was
+`a3fe106c...12b7`.
 Scratch is `/dev/loop36`, UUID `2a5768c8-718d-4914-bdc0-6b32c5a92a52`, mounted
 rw,nodev,nosuid.  The scratch21 container and exclusion bytes are unchanged, but
 the remount changed live `st_dev` from historical 1831 to 1828 while preserving
@@ -17,6 +46,14 @@ source-authority fixes from checkpoint 355, complete cheap checks, and fresh
 scratch22 preparation.  Never replay scratch21.  Counts stay 3 builds, 12
 diagnostic passes, 0/273 formal apps, 6/130 production, 0/7 languages; the OS
 is incomplete.
+
+The watcher has now stopped, the saved goal is paused, and no child agent is
+active. One queued launcher instruction preserves the user's preparation-only
+scope for this stop; reconcile it with any later user instruction before a
+future launcher invocation. The transient validation controls are cgroup v1
+(`cpu`, `memory`, `pids`), with 4 CPU, 12 GiB and 512 task limits. Do not use the
+older `setup-host.sh` size check unchanged: it expects a 60 GiB scratch image,
+while the retained image is now 110 GiB.
 
 ## Latest continuation: checkpoint 355
 

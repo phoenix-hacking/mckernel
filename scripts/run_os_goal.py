@@ -7,6 +7,7 @@ paid/account-metered work. Runtime state stays in the repository's Git directory
 
 import argparse
 import codecs
+from decimal import Decimal, InvalidOperation
 import fcntl
 import hashlib
 import json
@@ -17,6 +18,7 @@ import selectors
 import shlex
 import shutil
 import signal
+import stat
 import subprocess
 import sys
 import tempfile
@@ -48,6 +50,7 @@ OBJECTIVE = (
 TERMINAL_CODES = {"complete": 0, "paused": 10, "blocked": 20,
                   "usageLimited": 21, "budgetLimited": 22}
 LIMIT_ERRORS = {"usageLimitExceeded", "sessionBudgetExceeded"}
+INCLUDED_USAGE_STOP_PERCENT = 95
 USER_INPUT_METHOD = "item/tool/requestUserInput"
 AUTONOMY_REPLY = (
     "Automatic launcher response applying the user's standing instruction; "
@@ -86,6 +89,27 @@ def utc():
     return datetime.now(timezone.utc).isoformat()
 
 
+def read_startup_instruction(path):
+    """Load an explicit invocation note before thread/resume can start work."""
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    try:
+        before = os.fstat(fd)
+        if not stat.S_ISREG(before.st_mode) or before.st_size > 8192:
+            raise ValueError("Startup instruction must be a regular file of at most 8192 bytes")
+        raw = os.read(fd, 8193)
+        after = os.fstat(fd)
+        if (len(raw) != before.st_size or
+                (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns) !=
+                (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns)):
+            raise ValueError("Startup instruction changed during read")
+        note = raw.decode("utf-8")
+        if not note.strip() or "\0" in note:
+            raise ValueError("Startup instruction must be nonempty UTF-8 text without NUL")
+        return note
+    finally:
+        os.close(fd)
+
+
 def say(message):
     print("[os-goal] " + message, flush=True)
 
@@ -105,6 +129,58 @@ def atomic_json(path, value):
         os.fsync(directory)
     finally:
         os.close(directory)
+
+
+def queue_instruction(directory, instruction):
+    """Queue an owner's instruction without touching the running server lease."""
+    if not (directory / "state.json").is_file():
+        raise RuntimeError("No saved OS campaign exists; start the runner first.")
+    if not instruction.strip() or len(instruction.encode("utf-8")) > 8192:
+        raise ValueError("Instruction must be nonempty and at most 8192 UTF-8 bytes.")
+    inbox = directory / "instructions" / "pending"
+    inbox.mkdir(mode=0o700, parents=True, exist_ok=True)
+    ident = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ") + "-" + uuid4().hex
+    atomic_json(inbox / (ident + ".json"),
+                {"id": ident, "submitted_at": utc(), "text": instruction})
+    return ident
+
+
+def progress_report(directory, repo):
+    """Read the live heartbeat and existing engineering dashboard; never infer credit."""
+    state_path = directory / "state.json"
+    state = json.loads(state_path.read_text()) if state_path.is_file() else {}
+    goal = state.get("goal") or {}
+    active = state.get("active_turns") or {}
+    primary = state.get("thread_id")
+    children = len(active) - int(primary in active)
+    agents = ((state.get("settings") or {}).get("resources") or {}).get("max_agents", "?")
+    lines = ["Runner: {} | goal: {} | active child agents: {}/{}".format(
+        state.get("phase", "not_started"), goal.get("status", "none"), children, agents),
+        "Last heartbeat: {}".format(state.get("updated_at", "none"))]
+    control = directory / "instructions"
+    pending = list((control / "pending").glob("*.json"))
+    uncertain = list((control / "sending").glob("*.json"))
+    lines.append("Instructions: {} pending, {} delivery-uncertain".format(len(pending), len(uncertain)))
+    last_instruction = state.get("last_instruction") or {}
+    if last_instruction:
+        lines.append("Last instruction: {} ({})".format(
+            last_instruction.get("id", "?"), last_instruction.get("status", "?")))
+    dashboard = repo / PLAN_REL / "PROGRESS.md"
+    if not dashboard.is_file():
+        lines.append("Progress dashboard is not available.")
+        return "\n".join(lines)
+    lines.append("Dashboard (last generated snapshot; not live acceptance):")
+    for line in dashboard.read_text().splitlines():
+        if (line.startswith("- Dashboard refreshed:")
+                or line.startswith("Engineering snapshot:")
+                or line.startswith("- Native production gates:")
+                or line.startswith("- Earned contractual points:")
+                or line.startswith("- Application catalog:")
+                or line.startswith("- Narrow fault modes:")
+                or line.startswith("- Language gates:")
+                or line.startswith("| M0")):
+            lines.append(line)
+    return "\n".join(lines)
 
 
 class Lease:
@@ -325,6 +401,45 @@ class Campaign:
                           agent_event_count=self.output.agent_event_count)
         atomic_json(self.state_path, self.state)
 
+    def deliver_instruction(self):
+        """Steer one active coordinator turn; retain uncertain deliveries for audit."""
+        ident = self.state.get("thread_id")
+        if (not ident or not self.controlled or self.checkpoint_requested or self.stop_reason
+                or not self.goal or self.goal.get("status") != "active"
+                or ident not in self.active):
+            return
+        control = self.directory / "instructions"
+        sending_dir = control / "sending"
+        if any(sending_dir.glob("*.json")):
+            return  # An uncertain earlier delivery must be resolved before newer ones.
+        pending = sorted((control / "pending").glob("*.json"))
+        if not pending:
+            return
+        sending_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
+        source = pending[0]
+        sending = sending_dir / source.name
+        os.replace(source, sending)
+        item = json.loads(sending.read_text())
+        receipt = {"id": item["id"], "thread_id": ident,
+                   "turn_id": self.active[ident], "submitted_at": item["submitted_at"]}
+        try:
+            self.rpc.call("turn/steer", {"threadId": ident,
+                          "expectedTurnId": receipt["turn_id"], "input": [{"type": "text",
+                          "text": "Live user instruction " + item["id"] + ":\n" + item["text"]}]})
+            receipt.update(status="accepted_by_server", delivered_at=utc())
+            delivered = control / "delivered"
+            delivered.mkdir(mode=0o700, parents=True, exist_ok=True)
+            atomic_json(delivered / source.name, receipt)
+            sending.unlink()
+            self.save(last_instruction=receipt)
+            self.output.notice("Delivered live instruction " + item["id"] + " to the coordinator.")
+        except Exception as error:
+            # A timeout may mean the server accepted the steer. Never silently
+            # retry a potentially non-idempotent user instruction.
+            receipt.update(status="delivery_uncertain", error=str(error))
+            self.save(last_instruction=receipt)
+            self.output.notice("Instruction delivery uncertain; inspect " + str(sending))
+
     def on_signal(self, signum, frame):
         if (self.stop_reason or "").startswith("signal_"):
             self.stop_now = True
@@ -349,10 +464,28 @@ class Campaign:
             self.stop_now = True
 
     def record_rate_limits(self, limits):
-        # Purchased credits are a fallback after the plan's included allowance.
-        # A zero credit balance therefore is not evidence that Codex usage itself
-        # is exhausted; the server reports that separately as a limit error.
+        previous = self.state.get("last_rate_limits") or {}
         self.save(last_rate_limits=limits)
+        if self.stop_reason:
+            return
+        primary = (limits or {}).get("primary") or {}
+        used = primary.get("usedPercent")
+        if not isinstance(used, (int, float)) or isinstance(used, bool):
+            self.stop_reason, self.stop_now = "included_usage_unknown", True
+        elif used >= INCLUDED_USAGE_STOP_PERCENT:
+            # Leave room for already-running turns and delayed usage reports.
+            self.stop_reason, self.stop_now = "included_usage_guard", True
+        else:
+            old_balance = (previous.get("credits") or {}).get("balance")
+            new_balance = ((limits or {}).get("credits") or {}).get("balance")
+            if old_balance is not None and new_balance is not None:
+                try:
+                    if Decimal(str(new_balance)) < Decimal(str(old_balance)):
+                        self.stop_reason, self.stop_now = "credit_balance_decreased", True
+                except InvalidOperation:
+                    self.stop_reason, self.stop_now = "credit_balance_unknown", True
+        if self.stop_reason:
+            self.output.notice("Included-usage safety stop: " + self.stop_reason)
 
     def event(self, message):
         method, data = message.get("method"), message.get("params", {})
@@ -388,6 +521,8 @@ class Campaign:
             self.record_failure(data["error"], "server_error", data.get("willRetry", False))
         elif method == "account/rateLimits/updated":
             self.record_rate_limits(data.get("rateLimits"))
+        elif method == "account/updated" and data.get("authMode") not in (None, "chatgpt"):
+            self.stop_reason, self.stop_now = "chatgpt_auth_changed", True
         elif method == "item/agentMessage/delta" and primary:
             # Preserve the existing dispatcher-only transcript for older consumers.
             excerpt = data.get("delta", "")
@@ -397,7 +532,8 @@ class Campaign:
     def instructions(self):
         continuation = (
             "This invocation has no time limit. The user explicitly requests continuous "
-            "work until the entire OS objective is accepted or account credits are exhausted. "
+            "work until the entire OS objective is accepted or the included-plan "
+            "usage guard stops this invocation; never spend purchased credits. "
             "Earlier work-window endings, checkpoint pauses and statements that a window "
             "is authoritative are historical and do not pause this invocation. Continue "
             "after checkpoints. Repair project-owned prerequisites and pursue independent "
@@ -409,6 +545,9 @@ class Campaign:
             "a new checkpoint/stop request. "
         )
         return (
+            (("Current user instruction for this invocation, loaded before thread resume:\n"
+              + self.args.startup_instruction + "\nEnd current invocation instruction.\n")
+             if getattr(self.args, "startup_instruction", None) else "") +
             "The user invoked scripts/run_os_goal.py for autonomous execution, not planning. "
             + continuation +
             "The user explicitly authorized full filesystem/network access and no "
@@ -434,8 +573,30 @@ class Campaign:
             "Apply CONVERGENCE.md on every continuation: one failed candidate and one "
             "bounded correction per failure family before expert escalation. Carry family "
             "history across resumed turns; never repeat an unchanged deterministic failure. "
-            "Prioritize executable M02 collector descriptor/identity repairs and independent "
-            "M03 pending-free admission after confirming the current handoff. Keep worker "
+            "The user's immediate priority is a functional, stable, app-testable "
+            "McKernel core, not perfect formal gate closure. Use a fast diagnostic "
+            "loop: build the smallest current-candidate kernel artifact, run the "
+            "smallest real McKernel startup app, repair the observed failure, and "
+            "repeat for memory, file, thread and shutdown smokes. A diagnostic "
+            "result is never formal application or production acceptance. "
+            "For unprivileged compile/tests inside an already reviewed reusable "
+            "profile, execute promptly; do not create a fresh packet, archive or "
+            "independent review for each edit or test vector. Keep the actual "
+            "command, result and relevant failure evidence. For root, module or "
+            "guest work, retain the applicable independent execution release, "
+            "isolation, resource lease and cleanup requirements. Do not reuse a "
+            "source-only packet as that release. If a one-shot harness attempt "
+            "fails on its own observer or evidence writer, fix that program with "
+            "cheap local regression tests before seeking another privileged run; "
+            "do not send unchanged packet designs through more review cycles. "
+            "Parallelize independent kernel/Rust repair, candidate build binding, "
+            "Linux oracle/diagnostic runner, and bounded regression work across "
+            "disjoint files. Prefer useful implementation/test lanes to audits; "
+            "use the available child slots only for ready independent work. "
+            "Do not wait for unrelated M01-M03 formal acceptance before a safe "
+            "diagnostic app pilot, but honor its actual runtime prerequisites. "
+            "Capture observed app bytes, exit status, kernel log and teardown. "
+            "Keep worker "
             "write sets disjoint, integrate promptly, close completed children and refill "
             "available slots with dependency-ready work. Preserve independent final review. "
             "The user's priority is strong, measurable OS progress. For each active lane "
@@ -443,11 +604,12 @@ class Campaign:
             "it unlocks. Use the available slots for implementation and regression tests; "
             "assign audits or reviews only when they answer a specific blocking question. "
             "At each existing checkpoint report newly verified behavior, actual tests and "
-            "evidence, remaining blockers and the next executable step. If two completed "
+            "evidence, the count of real guest apps and current-candidate builds, remaining "
+            "blockers and the next executable step. If two completed "
             "dispatch cycles produce no technical result, change the repair strategy or "
             "move to a dependency-ready task; do not interrupt healthy builds or soaks. "
-            "The prepared launcher is infrastructure: change it further only for a "
-            "reproduced defect blocking execution, correctness or requested visibility. "
+            "Avoid more launcher or dashboard work unless a reproduced defect "
+            "blocks execution, correctness or requested visibility. "
             "Never weaken an oracle or count planning, agent activity or documentation "
             "as implemented OS behavior. Follow all original execution releases. "
             "Preserve preexisting untracked work. Read all applicable active instructions. "
@@ -459,7 +621,7 @@ class Campaign:
             "status tools only under their actual tool rules. Keep CURRENT.md and "
             "docs/verification/os-milestones-20260914/PROGRESS.md updated and "
             "commit/push verified checkpoints about every 30 minutes and before long "
-            "runs. After every accepted packet, diagnosis, or checkpoint, run "
+            "runs. At coherent checkpoints or formal acceptance updates, run "
             "python3 scripts/update_progress_tracker.py so the intermediary-goal bars, "
             "task ledger, blockers, evidence paths, and next action reflect the new "
             "state. On a checkpoint request stop new dispatch, finish bounded work, "
@@ -475,7 +637,9 @@ class Campaign:
 
     def begin(self):
         # Admission failures belong to this worker, never the preceding retry.
-        self.save(worker_pid=os.getpid(), server_pid=None, server_start=None, retryable=False)
+        note = getattr(self.args, "startup_instruction", None)
+        self.save(worker_pid=os.getpid(), server_pid=None, server_start=None, retryable=False,
+                  startup_instruction_sha256=hashlib.sha256(note.encode()).hexdigest() if note else None)
         check_resources(launch_resources(self.args, self.repo))
         self.rpc = self.rpc_factory(server_argv(self.args, self.repo), self.log_dir, self.event)
         proc = getattr(self.rpc, "proc", None)
@@ -487,6 +651,13 @@ class Campaign:
                   server_start=birth, retryable=False)
         settings = preflight(self.rpc, self.args, self.repo)
         self.save(phase="starting", settings=settings, stop_reason=None)
+        account = self.rpc.call("account/read", {"refreshToken": False}).get("account") or {}
+        if account.get("type") != "chatgpt":
+            self.stop_reason, self.stop_now = "chatgpt_auth_required", True
+            self.save(auth_mode=account.get("type"))
+            return
+        self.save(auth_mode="chatgpt")
+        self.record_rate_limits(self.rpc.call("account/rateLimits/read", {}).get("rateLimits"))
         if self.stop_reason:
             return
         params = {"cwd": str(self.repo), "model": self.args.model, "approvalPolicy": "never",
@@ -631,7 +802,10 @@ class Campaign:
                 now = time.monotonic()
                 status = self.goal["status"] if self.goal else None
                 if self.stop_now:
-                    code = 21 if self.stop_reason == "quota_exhausted" else 23
+                    code = 21 if self.stop_reason in {"quota_exhausted", "included_usage_guard",
+                                                      "included_usage_unknown", "credit_balance_decreased",
+                                                      "credit_balance_unknown", "chatgpt_auth_required",
+                                                      "chatgpt_auth_changed"} else 23
                     break
                 if status in TERMINAL_CODES and not self.checkpoint_requested:
                     code = TERMINAL_CODES[status]
@@ -648,6 +822,7 @@ class Campaign:
                     self.save(retryable=True)
                     code = 24
                     break
+                self.deliver_instruction()
                 self.rpc.pump(timeout=1)
                 self.output.flush()
                 now = time.monotonic()
@@ -687,6 +862,8 @@ def arguments(argv=None):
     mode.add_argument("--check", action="store_true", help="Inspect local Codex settings/models; no thread or inference")
     mode.add_argument("--check-sudo", action="store_true", help="Verify private askpass authentication with sudo id -u; no inference")
     mode.add_argument("--status", action="store_true", help="Read the last saved launcher snapshot; no server")
+    mode.add_argument("--progress", action="store_true", help="Show live runner activity and the last engineering dashboard; no server")
+    mode.add_argument("--instruct", metavar="TEXT", help="Send a live instruction to the coordinator; queues through checkpoints")
     parser.add_argument("--hours", type=float, default=0, help="Optional work window in hours; 0 means no time limit (default: 0)")
     parser.add_argument("--grace-seconds", type=float, default=600, help="Reserve up to this many seconds for a checkpoint")
     parser.add_argument("--model", default="gpt-5.6-sol", help="Dispatcher model; default: gpt-5.6-sol")
@@ -700,6 +877,10 @@ def arguments(argv=None):
                         help="Separate live desktop window per child (default: auto when a desktop is available); logs always retained")
     parser.add_argument("--token-budget", type=int, help="Explicit total goal budget; omitted preserves the current budget")
     parser.add_argument("--codex", default="codex", help="Path to the local Codex executable")
+    parser.add_argument("--startup-instruction-file", type=Path,
+                        help="Explicit invocation instructions loaded before resuming the saved thread")
+    parser.add_argument("--startup-instruction-sha256",
+                        help="Pin the invocation instructions across preflight and watcher recoveries")
     parser.add_argument("--max-restarts", type=int, default=-1, help="Automatic recoveries; -1 means unlimited, 0 disables (default: -1)")
     parser.add_argument("--restart-delay", type=float, default=5, help="Initial recovery backoff in seconds (default: 5)")
     parser.add_argument("--watchdog-seconds", type=float, default=180, help="Recover a runner with no state heartbeat; 0 disables")
@@ -709,6 +890,12 @@ def arguments(argv=None):
     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument("--recovered", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
+    args.startup_instruction = (read_startup_instruction(args.startup_instruction_file)
+                                if args.startup_instruction_file else None)
+    if args.startup_instruction_sha256 is not None:
+        if (args.startup_instruction is None or
+                hashlib.sha256(args.startup_instruction.encode()).hexdigest() != args.startup_instruction_sha256):
+            parser.error("Startup instruction digest differs; reconcile the changed instruction before resuming")
     if any(value is not None and value <= 0 for value in (args.max_agents, args.build_jobs)):
         parser.error("max-agents and build-jobs must be positive")
     if args.memory_gib is not None and (not math.isfinite(args.memory_gib) or args.memory_gib <= 0):
@@ -751,6 +938,13 @@ def main(argv=None):
                 current["active_turns"] = {}
         print(json.dumps(current, indent=2))
         return 0
+    if args.progress:
+        print(progress_report(directory, REPO))
+        return 0
+    if args.instruct is not None:
+        ident = queue_instruction(directory, args.instruct)
+        print("Queued instruction " + ident + "; it will reach the next active coordinator turn.")
+        return 0
     if args.dry_run:
         print(json.dumps({"command": shlex.join(server_argv(args, REPO)), "hours": args.hours,
                           "checkpoint_reserve_seconds": args.grace_seconds, "state_directory": str(directory),
@@ -762,6 +956,8 @@ def main(argv=None):
                           "stall_seconds": args.stall_seconds,
                           "resources": launch_resources(args, REPO), "policy_sha256": policy_hashes(REPO),
                           "agent_windows": window_capability(args.agent_windows),
+                          "startup_instruction_sha256": (hashlib.sha256(args.startup_instruction.encode()).hexdigest()
+                                                         if args.startup_instruction else None),
                           "permissions": "User-authorized danger-full-access, approval_policy=never; no clarification prompts. Global config unchanged."}, indent=2))
         return 0
     if args.check_sudo:

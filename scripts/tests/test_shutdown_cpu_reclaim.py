@@ -46,6 +46,7 @@ class ShutdownCpuReclaimTests(unittest.TestCase):
         fence = balanced_item(text, "fn shutdown_journal_blocks_ordinary_use(")
         methods = (
             balanced_item(text, "fn verify_owned("),
+            balanced_item(text, "fn has_owned_cpu("),
             balanced_item(text, "fn change_os("),
             balanced_item(text, "fn retain_shutdown_failure("),
             balanced_item(text, "fn prevalidate_shutdown_targets("),
@@ -67,6 +68,9 @@ class ShutdownCpuReclaimTests(unittest.TestCase):
             "#[allow(dead_code)]\n" + balanced_item(text, "struct CpuContext {"),
             "#[allow(dead_code)]\n" + balanced_item(text, "pub(super) struct CpuController {"),
             balanced_item(text, "pub(super) fn release_os_resources("),
+            balanced_item(text, "pub(super) fn reconcile_shutdown("),
+            balanced_item(text, "pub(super) enum ShutdownResetFailure"),
+            balanced_item(text, "pub(super) fn shutdown_reset_and_reonline_outcome("),
         ))
         return support, "\n\n".join(methods)
 

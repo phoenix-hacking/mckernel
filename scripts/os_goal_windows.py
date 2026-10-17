@@ -1,9 +1,9 @@
 """Per-run agent logs and read-only GNOME terminal followers (stdlib only).
 
-Each new run may open new windows. Old windows stop following at completion or
-owner death and remain at a dismissal prompt; no user terminals are killed.
-Closed/shutdown child viewers exit automatically; their historical logs remain.
-The live-agent limit does not limit finished windows waiting for dismissal.
+Each child turn gets a viewer that exits after its final output is flushed.
+A resumed turn gets a fresh viewer without replaying the prior turn's log.
+Run completion or owner death also closes viewers. Historical logs remain;
+no user terminals are killed.
 """
 
 import argparse
@@ -126,13 +126,14 @@ class AgentWindows:
             path.touch()
             self.rows[thread] = {"id": thread, "name": "", "path": str(path),
                                  "closed_path": str(path.with_suffix(".closed")),
-                                 "generation": 0,
+                                 "generation": 0, "start_byte": 0,
                                  "status": "unknown", "window_status": "pending_primary"}
         return self.rows[thread]
 
     def revive(self, thread):
         row = self.ensure(thread)
         row["generation"] += 1
+        row["start_byte"] = Path(row["path"]).stat().st_size
         row.update(closed_path=str(Path(row["path"]).with_suffix(
             "." + str(row["generation"]) + ".closed")), window_status="pending_primary")
         row.pop("window_error", None)
@@ -186,7 +187,7 @@ class AgentWindows:
                             "--", sys.executable, "-u", str(Path(__file__).resolve()),
                             "follow", "--log", row["path"], "--owner", str(self.owner_path),
                             "--complete", str(self.complete_path), "--index", str(self.index_path),
-                            "--closed", row["closed_path"]]
+                            "--closed", row["closed_path"], "--start-byte", str(row["start_byte"])]
                     proc = subprocess.Popen(argv, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
                                             stderr=errors, start_new_session=True)
                 except OSError as error:
@@ -227,13 +228,14 @@ class AgentWindows:
         self.closed = True
 
 
-def follow(log_path, owner_path, complete_path, index_path, closed_path=None):
+def follow(log_path, owner_path, complete_path, index_path, closed_path=None, start_byte=0):
     """Follow only this run's log. No RPC, inference, shell or worker signalling."""
     owner = json.loads(owner_path.read_text())
     closed_path = closed_path if closed_path is not None else log_path.with_suffix(".closed")
     title = None
     sanitizer = TerminalText()
     with log_path.open(encoding="utf-8", errors="replace") as stream:
+        stream.seek(start_byte)
         while True:
             if sys.stdout.isatty():
                 try:
@@ -259,12 +261,7 @@ def follow(log_path, owner_path, complete_path, index_path, closed_path=None):
     if child_closed:
         print("\nChild closed; final output retained in " + str(log_path), flush=True)
         return
-    print("\nRun complete or worker exited; stopped following. This is a log viewer only.", flush=True)
-    if sys.stdin.isatty():
-        try:
-            input("Press Enter to close this window. A new run may open new windows. ")
-        except (EOFError, KeyboardInterrupt):
-            pass
+    print("\nRun complete or worker exited; final output retained in " + str(log_path), flush=True)
 
 
 def main(argv=None):
@@ -273,8 +270,12 @@ def main(argv=None):
     for name in ("log", "owner", "complete", "index"):
         parser.add_argument("--" + name, required=True, type=Path)
     parser.add_argument("--closed", type=Path, help="This viewer generation's closure marker; default: LOG.with_suffix('.closed')")
+    parser.add_argument("--start-byte", type=int, default=0,
+                        help="Byte offset where this viewer generation begins")
     args = parser.parse_args(argv)
-    follow(args.log, args.owner, args.complete, args.index, args.closed)
+    if args.start_byte < 0:
+        parser.error("start-byte must be non-negative")
+    follow(args.log, args.owner, args.complete, args.index, args.closed, args.start_byte)
 
 
 if __name__ == "__main__":

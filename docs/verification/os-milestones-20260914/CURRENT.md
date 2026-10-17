@@ -13913,3 +13913,38 @@ and only then `signal.mask-restore`.  Never replay scratch21.  Counts remain
 three compiled current candidates, 12 bounded diagnostic guest passes, 0/273
 formal applications, 6/130 production gates and 0/7 language gates.  This is a
 temporary restart-ready checkpoint; the OS remains incomplete.
+
+Preparation checkpoint 357, 2026-10-16: user requested preparation only, then
+an aggressive autonomous Python entry point which the user will run later.
+The campaign remains paused/stopped; no active child, build, guest, cleanup or
+execution release was started. HEAD/origin tracking ref remain
+42fde3aae0572022324fe9090793a5166059993b. Existing dirty work and evidence remain.
+
+scripts/run_os_parallel.py previews by default and resumes the same saved goal
+only with --run. A real settings-only preflight (no inference) confirms the
+measured maximum 12-child ceiling, seven shared host jobs and 24 GiB planning
+memory, with the original heavy-operation limits and usage guards. Initial
+resume instructions reconcile the exact retained queued preparation hold before
+goal activation; a SHA-256 option pins the note through watcher recoveries.
+Unknown/uncertain instructions, live saved identities, held leases, mount/control
+drift or insufficient resources refuse launch. No global model/config change.
+
+Read-only scratch21 observation authenticates the exact exit-1 container, all
+five failure hashes, 40 owner-evidence entries and original exclusion bytes at
+live device 1828/inodes 57687/57688. UUID is unchanged; root lock 27:4 is unheld,
+request lease absent, heavy/owner census empty. The cleanup DRAFT is reviewable,
+but its scratch21-specific transaction and independent execution release remain
+required. The observer has no removal or release path. Never replay scratch21.
+
+Staging now validates the actual v6 constructor/shutdown callback; lifecycle
+binds the current runtime contract. Build-surface/staging/lifecycle source checks
+and 121 focused tests pass. RS-011 envelope and stage-manifest lock corrections
+expose a missing nearby SAFETY binding at os_runtime.rs:199; its eager test
+module refuses import there. Initial/correction failures and commands are retained
+and logged in kernel.log. Expert ownership/inventory review is required before
+another correction or build; do not bypass discovery or reassign durable IDs.
+The offline launcher/entry-point suite passes 74 tests. Exact evidence, source
+review patch, cleanup DRAFT, scratch22 prerequisites and next commands are in
+docs/verification/evidence/os-preparation-20261016/ and
+PREPARATION-20261016.md. Counts remain three builds, 12 bounded diagnostics,
+0/273 formal apps, 6/130 production gates and 0/7 languages; the OS is incomplete.

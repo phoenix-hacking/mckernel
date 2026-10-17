@@ -31,8 +31,9 @@ safe checkpoint after reconciling local/remote changes without discarding WIP.
    task/gate/case and original prerequisites. Do not repeat a repository-wide
    audit, replay already-valid work, or give every worker the entire catalog.
 3. Prioritize the critical path and saturate independently useful, ready work
-   within the measured cap: suggested four implementation/test lanes, two audit/
-   oracle lanes and two independent review slots, only when useful and disjoint.
+   within the measured cap: favor implementation, build and executable-test lanes;
+   use audit/review slots only for a concrete blocking decision. Aim for four or
+   more disjoint implementation/test lanes when they are genuinely ready.
    Do not manufacture tasks to fill slots. Give each worker an invariant,
    source bindings, write allowlist, frozen expectations, allowed command/profile,
    evidence location and cumulative failure-family history. Assign disjoint file
@@ -43,15 +44,20 @@ safe checkpoint after reconciling local/remote changes without discarding WIP.
    test evidence, blockers and next executable work. Keep the prepared launcher
    stable unless a reproduced defect blocks execution, correctness or visibility.
 4. Execute cheap admission under a reusable reviewed profile before broad review:
-   syntax/compile, a real positive, the defect reproducer and a relevant negative.
+   syntax/compile and the smallest real positive or defect reproducer first;
+   add the relevant negative before claiming the repaired boundary is ready.
    Static keyword checks and named vectors alone establish no semantic behavior.
-   No source-only packet self-authorizes compilation, root work or a guest.
+   Within a reviewed unprivileged profile, do not make a new packet/review for
+   every edited candidate or vector. No source-only packet self-authorizes work
+   outside its released profile, root work or a guest.
 5. Integrate a coherent repair and obtain the appropriate independent boundary/
    execution review. Launch the next native/root/guest layer as soon as its actual
    prerequisites pass; do not wait for unrelated whole-OS capabilities.
 6. After one failed candidate plus one bounded correction for the same invariant,
    escalate with the complete current findings and minimal reproducer. Do not
    reset attempts through packet renaming, new reviewers or launcher recovery.
+   For an infrastructure-only failure, test and repair the observer/validator
+   locally before requesting another one-shot execution release.
 7. Preserve original failures, append chronological evidence and keep HANDOFF.md
    compact. Report executed behavior separately from formal gate/case acceptance.
    Checkpoint coherent changes about every 30 minutes and before long runs/end;
@@ -65,6 +71,35 @@ reuse separately from production acceptance. Update touched rows and their
 source/evidence bindings at existing checkpoints; the normal progress updater
 renders both reports. SC1 completion is a scoped notification, never whole-OS
 completion or permission to omit a required execution/safety check.
+
+## Fast path to an application-testable core
+
+The user now explicitly prioritizes the fastest route to a functional, stable
+kernel core. The next user-visible result is a reproducible **diagnostic**
+application run on the current McKernel candidate, not completion of all M01–M04
+acceptance gates. Do not optimize this phase for perfect formal coverage.
+Identify the existing compiled startup argv/environment/stdout-stderr fixtures,
+their exact guest runner and the shortest unmet prerequisite. Prepare the
+current-candidate artifact and independent expected bytes while disjoint workers
+repair kernel/Rust code, the Linux comparison path and relevant M01/M02/M03
+blockers. Prefer code and running tests over another source-only packet. Once
+the applicable reviewed execution release, source bindings, isolation and
+runtime lease are valid, run the smallest positive
+fixture and capture actual output bytes, exit status, kernel log and teardown.
+Then iterate on memory, file, thread and shutdown smokes; retain concise
+regression evidence at normal checkpoints. Expand only after the result is
+understood. Do not label compilation, a host subprocess or a model as a
+McKernel application execution. This pilot grants no
+M04 acceptance credit and bypasses no root/guest isolation or cleanup rule.
+Formal case acceptance still follows its original per-case contract.
+
+At existing checkpoints, report the number of real guest applications executed
+in the work window, the latest executable regression result, elapsed time since
+the last such result, and the exact blocking dependency if the count is zero.
+If two completed dispatch cycles produce no executable result, change the
+technical strategy or move a lane to another dependency-ready behavior; do not
+interrupt a healthy long-running operation or manufacture a result. The target
+is faster observed kernel behavior, not a promised numerical speedup.
 
 ## Models, ownership and resources
 
@@ -90,8 +125,14 @@ Aggressive uses all affinity CPUs (currently seven) and
 `--max-agents N --build-jobs N --memory-gib N` override within host capacity.
 Only the dispatcher owns compiler-command approval, integration, acceptance,
 Git and the heavy lease: at most one heavy build or guest at once. Bounded cheap
-tests share aggregate CPU/RAM budgets with all concurrent work. Build environment
-settings are injected through `shell_environment_policy.set.KEY` and verified
+tests share aggregate CPU/RAM budgets with all concurrent work.
+Multiple light, isolated Docker checks may overlap only when their exact
+unprivileged profiles have been reviewed, their output roots and owners are
+disjoint, and measured aggregate CPU/RAM/storage headroom remains; two default
+4-CPU/12-GiB containers are not automatically admissible under the seven-job/
+24-GiB aggregate budget. They do not create another heavy build/guest lease.
+Build environment settings are injected through
+`shell_environment_policy.set.KEY` and verified
 with `config/read`; they are not a cgroup. Pinned guest/privileged profiles need
 independent resource review before exceeding historical four-CPU/12-GiB envelopes.
 Retain isolation/timeouts, measured free-space floors and headroom; remeasure

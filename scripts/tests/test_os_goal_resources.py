@@ -250,7 +250,10 @@ class ResourceTests(unittest.TestCase):
                          "launcher's process tree", "does not forward these variables",
                          "automatically resize containers", "currently -j<=4",
                          "not an enforced cgroup limit", "Do not widen affinity",
-                         "16/12 GiB", "greater measured packet"):
+                         "16/12 GiB", "greater measured packet",
+                         "Multiple light Docker checks may overlap",
+                         "disjoint output roots", "measured shared CPU/RAM/",
+                         "do not create another heavy build/guest lease"):
             self.assertIn(expected, text)
 
 

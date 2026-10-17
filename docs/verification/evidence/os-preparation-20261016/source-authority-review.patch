@@ -1,0 +1,142 @@
+diff --git a/host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json b/host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
+index e3668b1d..7064c2d8 100644
+--- a/host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
++++ b/host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
+@@ -150,7 +150,7 @@
+     },
+     "stage_manifest": {
+       "path": "host-kernel/kbuild/stage-manifest.json",
+-      "sha256": "1d0ecb3c7c3c7fdad6343825b7fcd1ecfd9495ee8313870f32d9273a00e63869"
++      "sha256": "bca531a1d052ec70620457988c85deb3058735351f0309375bc419cbd85e6da5"
+     }
+   },
+   "schema_version": 1,
+@@ -30067,5 +30067,5 @@
+     "config_policy_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-config-policy-v1",
+     "toolchain_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-toolchain-v1"
+   },
+-  "ledger_sha256": "c2ca2f6c7f02b5ffa12250ec1d561ac3963d037881624b6bf2ec59cec9ec04ca"
++  "ledger_sha256": "9a10b1f070345d7697c7595f43f870d50343f3167c6e556fc32afc34d3fc24eb"
+ }
+diff --git a/host-kernel/native-rust/ihk-lifecycle-contract-v1.json b/host-kernel/native-rust/ihk-lifecycle-contract-v1.json
+index 7e9905ca..c4219523 100644
+--- a/host-kernel/native-rust/ihk-lifecycle-contract-v1.json
++++ b/host-kernel/native-rust/ihk-lifecycle-contract-v1.json
+@@ -162,7 +162,7 @@
+     },
+     {
+       "contract_path": "host-kernel/contracts/ihk-os-runtime-v1.json",
+-      "contract_sha256": "c051471f307aff072b20c86c9a4c9b94fb47b983f2695a1ccbb1c91af21ddd7d",
++      "contract_sha256": "92e35534a3b1b69615cda33e526b0616043ab3a3b53b80abd0b1aa664da8688c",
+       "destination": "os_runtime.rs",
+       "kind": "rust_support_module",
+       "path": "host-kernel/native-rust/os_runtime.rs",
+diff --git a/scripts/rocky_rust_staging.py b/scripts/rocky_rust_staging.py
+index 5dc86621..a299ead2 100644
+--- a/scripts/rocky_rust_staging.py
++++ b/scripts/rocky_rust_staging.py
+@@ -520,8 +520,8 @@ AUDITED_SMP_PROVIDER_EXTERN = ('extern "C" {\n'
+  '    fn ihk_smp_provider_open_v1(minor: u32) -> i64;\n'
+  '    #[link_name = "ihk_smp_provider_close_v1"]\n'
+  '    fn ihk_smp_provider_close_v1(receipt: i64);\n'
+- '    #[link_name = "ihk_os_create_unbooted_v4"]\n'
+- '    fn ihk_os_create_unbooted_v4(\n'
++ '    #[link_name = "ihk_os_create_unbooted_v6"]\n'
++ '    fn ihk_os_create_unbooted_v6(\n'
+  '        provider_minor: u32,\n'
+  '        owner: *mut core::ffi::c_void,\n'
+  '        argument: u64,\n'
+@@ -533,6 +533,7 @@ AUDITED_SMP_PROVIDER_EXTERN = ('extern "C" {\n'
+  '        application_open: Option<application_abi::Open>,\n'
+  '        application_invoke: Option<application_abi::Invoke>,\n'
+  '        application_close: Option<application_abi::Close>,\n'
++ '        shutdown: Option<IhkSmpShutdownV6>,\n'
+  '    ) -> i64;\n'
+  '    #[link_name = "ihk_os_destroy_unbooted_v1"]\n'
+  '    fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;\n'
+@@ -548,6 +549,12 @@ AUDITED_SMP_START_BOOT_TYPE = (
+     '// SAFETY: IHK publishes Booting first and retains owners after any start result.\n'
+     'type IhkSmpStartBootV3 = unsafe extern "C" fn(u32, u64) -> i32;'
+ )
++AUDITED_SMP_SHUTDOWN_TYPE = (
++    '// SAFETY: IHK invokes this under the exact operation lock and generation lease.\n'
++    '// The tagged scalar result distinguishes rollback-safe failure from an effect\n'
++    '// which must remain closed for later reconciliation.\n'
++    'type IhkSmpShutdownV6 = unsafe extern "C" fn(u32, u64) -> i64;'
++)
+ AUDITED_SMP_OS_IOCTL_EXTERN = 'unsafe extern "C" fn ihk_smp_os_ioctl_v2(\n    slot: u32,\n    generation: u64,\n    command: u32,\n    argument: u64,\n    compat: u32,\n) -> i64 {'
+ AUDITED_SMP_OS_RELEASE_EXTERN = 'unsafe extern "C" fn ihk_smp_os_release_v2(slot: u32, generation: u64) -> i32 {'
+ AUDITED_SMP_APPLICATION_OPEN_EXTERN = (
+@@ -588,6 +595,12 @@ AUDITED_SMP_START_BOOT_EXTERN = (
+     '// The native adapter retains every owner before the first CPU-start effect.\n'
+     'unsafe extern "C" fn ihk_smp_start_boot_v3(slot: u32, generation: u64) -> i32 {'
+ )
++AUDITED_SMP_SHUTDOWN_EXTERN = (
++    '// SAFETY: IHK supplies the exact generation lease and serializes this call\n'
++    '// with every OS operation. Sender closure completes before any CPU reset;\n'
++    '// all owners remain retained on either failure class.\n'
++    'unsafe extern "C" fn ihk_smp_shutdown_v6(slot: u32, generation: u64) -> i64 {'
++)
+ AUDITED_OS_LEASE_CONSTRUCTOR = '    pub(crate) unsafe fn from_ihk_lease_v2(\n        slot: u32,\n        generation: u64,\n    ) -> Result<Self, ResourceError> {\n        let token = Self { slot, generation };\n        token.validate()?;\n        Ok(token)\n    }'
+ 
+ AUDITED_SMP_INIT_CALLBACK_EXTERN = (
+@@ -1518,6 +1531,7 @@ def _validate_module(repo_root, module, expected, index):
+             AUDITED_SMP_OS_RELEASE_TYPE,
+             AUDITED_SMP_PREPARE_BOOT_TYPE,
+             AUDITED_SMP_START_BOOT_TYPE,
++            AUDITED_SMP_SHUTDOWN_TYPE,
+             AUDITED_SMP_OS_IOCTL_EXTERN,
+             AUDITED_SMP_OS_RELEASE_EXTERN,
+             AUDITED_SMP_APPLICATION_OPEN_EXTERN,
+@@ -1525,6 +1539,7 @@ def _validate_module(repo_root, module, expected, index):
+             AUDITED_SMP_APPLICATION_CLOSE_EXTERN,
+             AUDITED_SMP_PREPARE_BOOT_EXTERN,
+             AUDITED_SMP_START_BOOT_EXTERN,
++            AUDITED_SMP_SHUTDOWN_EXTERN,
+             AUDITED_SMP_INIT_CALLBACK_EXTERN,
+             AUDITED_SMP_EXIT_CALLBACK_EXTERN,
+         )
+diff --git a/scripts/tests/test_rocky_rust_staging.py b/scripts/tests/test_rocky_rust_staging.py
+index 2d10ca84..fb519996 100644
+--- a/scripts/tests/test_rocky_rust_staging.py
++++ b/scripts/tests/test_rocky_rust_staging.py
+@@ -303,19 +303,21 @@ macro_rules! áinclude { () => {} }
+                     allowed_extern_blocks=(exact,),
+                 )
+ 
+-    def test_smp_v4_provider_imports_and_callback_prefixes_are_closed(self):
++    def test_smp_v6_provider_imports_and_callback_prefixes_are_closed(self):
+         imports = staging.AUDITED_SMP_PROVIDER_EXTERN
+         self.assertEqual(7, imports.count('#[link_name = '))
+         import_mutations = {
+             "missing": imports.replace(
+-                '    #[link_name = "ihk_os_create_unbooted_v4"]\n', "", 1
++                '    #[link_name = "ihk_os_create_unbooted_v6"]\n', "", 1
+             ),
+             "duplicate": imports + "\n" + imports,
+             "signature": imports.replace("callback_abi: u32", "callback_abi: u64", 1),
+             "link-name": imports.replace(
+-                '"ihk_os_create_unbooted_v4"', '"ihk_os_create_unbooted_v5"', 1
++                '"ihk_os_create_unbooted_v6"', '"ihk_os_create_unbooted_v5"', 1
+             ),
+-            "v5": imports.replace("ihk_os_create_unbooted_v4", "ihk_os_create_unbooted_v5"),
++            "v5": imports.replace("ihk_os_create_unbooted_v6", "ihk_os_create_unbooted_v5"),
++            "missing-shutdown": imports.replace("        shutdown: Option<IhkSmpShutdownV6>,\n", ""),
++            "shutdown-return": imports.replace("Option<IhkSmpShutdownV6>", "Option<IhkSmpStartBootV3>"),
+         }
+         for name, mutation in import_mutations.items():
+             with self.subTest(import_mutation=name), self.assertRaisesRegex(
+@@ -329,11 +331,13 @@ macro_rules! áinclude { () => {} }
+         prefixes = (
+             (staging.AUDITED_SMP_PREPARE_BOOT_TYPE, "IhkSmpPrepareBootV3", "IhkSmpPrepareBootV4"),
+             (staging.AUDITED_SMP_START_BOOT_TYPE, "IhkSmpStartBootV3", "IhkSmpStartBootV4"),
++            (staging.AUDITED_SMP_SHUTDOWN_TYPE, "IhkSmpShutdownV6", "IhkSmpShutdownV5"),
+             (staging.AUDITED_SMP_APPLICATION_OPEN_EXTERN, "application_open", "application_open_v2"),
+             (staging.AUDITED_SMP_APPLICATION_INVOKE_EXTERN, "application_invoke", "application_invoke_v2"),
+             (staging.AUDITED_SMP_APPLICATION_CLOSE_EXTERN, "application_close", "application_close_v2"),
+             (staging.AUDITED_SMP_PREPARE_BOOT_EXTERN, "ihk_smp_prepare_boot_v3", "ihk_smp_prepare_boot_v4"),
+             (staging.AUDITED_SMP_START_BOOT_EXTERN, "ihk_smp_start_boot_v3", "ihk_smp_start_boot_v4"),
++            (staging.AUDITED_SMP_SHUTDOWN_EXTERN, "ihk_smp_shutdown_v6", "ihk_smp_shutdown_v5"),
+         )
+         for exact, name, replacement in prefixes:
+             mutation = exact.replace(name, replacement, 1)
