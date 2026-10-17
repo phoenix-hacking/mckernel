@@ -1,5 +1,28 @@
 # Compact dispatcher handoff
 
+Current user priority 20261017T130554117286Z-ee81e2040f894282be224a30c0abb57e:
+push every M00-M13 milestone toward its original100% as aggressively and
+accurately as possible. Keep retained compiled native/image baseline critical:
+finish narrow image-retirement recovery, release/run signal.mask-restore, then
+expand memory/files/threads/signals/lifecycle under actual prerequisites. Refill
+useful disjoint implementation/executable-test lanes within shared resources;
+no manufactured audits, repeated historical scans/hashes or launcher work.
+Preserve original acceptance/isolation/ownership and97%included-usage stop.
+Report concrete results and justified estimate deltas; never raise estimates
+for worker activity/commits/docs. Continue after checkpoints.
+
+Live next cursor: corrected retirement sources019875d2 pushed/fetched;
+independent PASS_SOURCE covers all3findings and23Python tests. Exact fresh
+read-only root execution proposal0dbfc67d is under independent execution
+review. No root observation/cleanup yet. Signal stage/overlay completed
+7.08s/8.68s, strict manifest47eb9589 load+59member joinsPASS; exact guest
+proposalc034e4b7 independently PASS_PREPARATION_ONLY, pending actual image
+retirement/cleanup/preflight/final release. Memorycalloc static/Linux reference
+passes six exact lines/emptyerr/exit0 (binary59691094); next memory guest
+preparation follows signal. Lifecycle probe source/test implementation runs
+disjointly. Original failed image quarantine preserved. All formal counters
+and M00-M13 acceptance estimates unchanged; no new guest yet.
+
 Active fresh invocation 20261017T125242Z: startup policies adopted at their
 supplied hashes; launcher498214/worker498255/server498257 confirmed live,
 scratch UUID/boot unchanged, device1828, host20.375GB/scratch19.129GB free.

@@ -1,0 +1,594 @@
+{
+  "application_acceptance": false,
+  "dispatcher_preparation_captures": {
+    "overlay": {
+      "command": {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=150",
+          "--nofile=256",
+          "--fsize=268435456",
+          "--core=0",
+          "/usr/bin/timeout",
+          "-k",
+          "5s",
+          "180s",
+          "/usr/bin/python3",
+          "-B",
+          "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/app",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/init",
+          "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-overlay-20261017-1.cpio.gz",
+          "--collector-sha256",
+          "8089d5b7bcf8166e69cb9ea90fc4614674b4906813a40aa219972c02c7ec5e39",
+          "--mcexec-sha256",
+          "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+          "--payload-sha256",
+          "8be0b167d7267d4ef5aa122f62ebdbd95d6aa0be4f75384b9285d9983683c234",
+          "--base-sha256",
+          "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+          "--base-size",
+          "12347108",
+          "--base-cpio-sha256",
+          "7e69601b68dafb44c945d2998b10ec024a73518303bb505f275490d83e4c6767",
+          "--base-cpio-size",
+          "39677952"
+        ],
+        "authorizer": "dispatcher",
+        "environment": {
+          "HOME": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-overlay-capture-20261017-1/home",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/bin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-overlay-capture-20261017-1/tmp"
+        },
+        "schema": "mckernel.signal-mask-restore-offline-overlay.v1",
+        "scope": "Existing inspected offline file transformer only,1CPU/1GiB; no compiler/root/Docker/guest/payload execution. Fresh O_EXCL output, all errors and partial output retained.",
+        "source_sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d"
+      },
+      "files": {
+        "command.json": {
+          "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-overlay-capture-20261017-1/command.json",
+          "sha256": "466457f671488865d58e76a68934477585ebe746d9f47d2531f1d78b2c63a6dc",
+          "size": 2129
+        },
+        "result.json": {
+          "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-overlay-capture-20261017-1/result.json",
+          "sha256": "6cde5f4ec6c9ea26f094328cbbe5aee974490a634f34d592843ed20e0b6ae2f4",
+          "size": 2198
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-overlay-capture-20261017-1/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "stdout": {
+          "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-overlay-capture-20261017-1/stdout",
+          "sha256": "ac445d4f152ec4aebe771237811a5aaba1babfcadf4e9a9269b7593241aac3ef",
+          "size": 14824
+        }
+      },
+      "result": {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=150",
+          "--nofile=256",
+          "--fsize=268435456",
+          "--core=0",
+          "/usr/bin/timeout",
+          "-k",
+          "5s",
+          "180s",
+          "/usr/bin/python3",
+          "-B",
+          "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/app",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/init",
+          "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-overlay-20261017-1.cpio.gz",
+          "--collector-sha256",
+          "8089d5b7bcf8166e69cb9ea90fc4614674b4906813a40aa219972c02c7ec5e39",
+          "--mcexec-sha256",
+          "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+          "--payload-sha256",
+          "8be0b167d7267d4ef5aa122f62ebdbd95d6aa0be4f75384b9285d9983683c234",
+          "--base-sha256",
+          "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+          "--base-size",
+          "12347108",
+          "--base-cpio-sha256",
+          "7e69601b68dafb44c945d2998b10ec024a73518303bb505f275490d83e4c6767",
+          "--base-cpio-size",
+          "39677952"
+        ],
+        "authorizer": "dispatcher",
+        "elapsed_seconds": 8.683786,
+        "environment": {
+          "HOME": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-overlay-capture-20261017-1/home",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/bin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-overlay-capture-20261017-1/tmp"
+        },
+        "exit_code": 0,
+        "schema": "mckernel.signal-mask-restore-offline-overlay.v1",
+        "scope": "Existing inspected offline file transformer only,1CPU/1GiB; no compiler/root/Docker/guest/payload execution. Fresh O_EXCL output, all errors and partial output retained.",
+        "source_sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+        "status": "PASS"
+      }
+    },
+    "stage": {
+      "command": {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=150",
+          "--nofile=256",
+          "--fsize=268435456",
+          "--core=0",
+          "/usr/bin/timeout",
+          "-k",
+          "5s",
+          "180s",
+          "/usr/bin/python3",
+          "-B",
+          "/home/holden/mckernel/scripts/application-tests/native_diagnostic_stager.py",
+          "--base-root",
+          "/home/holden/mckernel-work/scratch/native-application-signals-signals-guest-20260909-1/root",
+          "--payload",
+          "/home/holden/mckernel-work/scratch/stability-packet001-compile-20260913-1/startup.argv-empty/payload",
+          "--collector",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/init",
+          "--output",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1",
+          "--replacements",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-prep-20261017-1/replacements-proposed.json"
+        ],
+        "authorizer": "dispatcher",
+        "base_regular_bytes": 38183368,
+        "cpu_share": 1,
+        "env": {
+          "HOME": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-capture-20261017-1/home",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/bin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-capture-20261017-1/tmp"
+        },
+        "planning_memory_bytes": 1073741824,
+        "result": "RUNNING",
+        "schema": "mckernel.signal-mask-restore-offline-staging.v1",
+        "scope": "Ordinary offline reviewed file transformer only; no root, Docker, compiler, guest or payload execution. Fresh output only, all failed output retained.",
+        "source_sha256": "d4d29757e34cdc4c8e208b420709d2b4a7c10eb2f8f40c29bfeca3d08f568952"
+      },
+      "files": {
+        "command.json": {
+          "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-capture-20261017-1/command.json",
+          "sha256": "884c6f8603ab1b903a1b619142943557dcd4549e32876035484030870e858ece",
+          "size": 1755
+        },
+        "result.json": {
+          "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-capture-20261017-1/result.json",
+          "sha256": "ad03f9d65461ae7e36525e0f98b24ee1174a74f20196ffa3b7ea261e62292e8f",
+          "size": 1801
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-capture-20261017-1/stderr",
+          "sha256": "135e6243378431387a5997c60ba8fc0054ba4effd71b7c7cbd419225802afda3",
+          "size": 13
+        },
+        "stdout": {
+          "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-capture-20261017-1/stdout",
+          "sha256": "17f6d559241a32b4c5b73b958dd2358bbf86d5e86795330b20c6430ac8751106",
+          "size": 21254
+        }
+      },
+      "result": {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=150",
+          "--nofile=256",
+          "--fsize=268435456",
+          "--core=0",
+          "/usr/bin/timeout",
+          "-k",
+          "5s",
+          "180s",
+          "/usr/bin/python3",
+          "-B",
+          "/home/holden/mckernel/scripts/application-tests/native_diagnostic_stager.py",
+          "--base-root",
+          "/home/holden/mckernel-work/scratch/native-application-signals-signals-guest-20260909-1/root",
+          "--payload",
+          "/home/holden/mckernel-work/scratch/stability-packet001-compile-20260913-1/startup.argv-empty/payload",
+          "--collector",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/init",
+          "--output",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1",
+          "--replacements",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-prep-20261017-1/replacements-proposed.json"
+        ],
+        "authorizer": "dispatcher",
+        "base_regular_bytes": 38183368,
+        "cpu_share": 1,
+        "elapsed_seconds": 7.081681,
+        "env": {
+          "HOME": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-capture-20261017-1/home",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "PATH": "/usr/bin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-capture-20261017-1/tmp"
+        },
+        "exit_code": 0,
+        "planning_memory_bytes": 1073741824,
+        "result": "PASS",
+        "schema": "mckernel.signal-mask-restore-offline-staging.v1",
+        "scope": "Ordinary offline reviewed file transformer only; no root, Docker, compiler, guest or payload execution. Fresh output only, all failed output retained.",
+        "source_sha256": "d4d29757e34cdc4c8e208b420709d2b4a7c10eb2f8f40c29bfeca3d08f568952"
+      }
+    }
+  },
+  "formal_case_credit": false,
+  "manifest": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-manifest-20261017-1.json",
+  "manifest_artifacts": {
+    "bzImage": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+      "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+      "size": 16130048
+    },
+    "initramfs": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+      "sha256": "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+      "size": 12347108
+    },
+    "libc": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/root/lib64/libc.so.6",
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "size": 2339896
+    },
+    "loader": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/root/lib64/ld-linux-x86-64.so.2",
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "size": 930600
+    },
+    "mcexec": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+      "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+      "size": 453352
+    },
+    "mckernel_image": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-942c927b-scratch22-authority3-image1-20261017/evidence/artifacts/mckernel.img",
+      "sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+      "size": 7908256
+    },
+    "native_boot": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/root/bin/native-boot",
+      "sha256": "4558995ea1ae70c8d5a115542e333ad695a54b4b8f450ea717df37fd1e631af3",
+      "size": 30984
+    },
+    "payload": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/app",
+      "sha256": "8be0b167d7267d4ef5aa122f62ebdbd95d6aa0be4f75384b9285d9983683c234",
+      "size": 872056
+    },
+    "root_base": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+      "sha256": "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+      "size": 12347108
+    }
+  },
+  "manifest_sha256": "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da",
+  "member_join_scope": "All 59 final names equal staged inventory; unchanged members match staged hash/size/type/mode; overlay init/apps/app/bin/mcexec match selected compiled bytes/modes; all archive uid/gid zero. Loader verifies all required final members and live overlay source/output identities.",
+  "modules": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/ihk.ko",
+      "sha256": "331f4cc1bd0ecaa4cecc55364fb3e8ce216df3a3cd406f1d05c35112276d1001",
+      "size": 1438632
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/ihk-smp-x86_64.ko",
+      "sha256": "f51d975a7dd36b8e1fba2fd9d850e911f28cd0ad6cd8b292e33095791a4241f2",
+      "size": 11418720
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/mcctrl.ko",
+      "sha256": "4cf6196f9e93fb10b08bc4e5bf75022b0858779a6479910340941006748cd23f",
+      "size": 1914512
+    }
+  ],
+  "new_guest_runs": 0,
+  "overlay_output": {
+    "base_cpio_sha256": "7e69601b68dafb44c945d2998b10ec024a73518303bb505f275490d83e4c6767",
+    "base_cpio_size": 39677952,
+    "gzip": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-overlay-20261017-1.cpio.gz",
+      "sha256": "eb5b1c6aa5d568f8586a8ae8253c80fd3a067d1a820553c5ae6cff9910efaa81",
+      "size": 13276378
+    },
+    "manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-overlay-20261017-1.json",
+      "sha256": "ac445d4f152ec4aebe771237811a5aaba1babfcadf4e9a9269b7593241aac3ef",
+      "size": 14824
+    },
+    "output_identity": {
+      "st_ctime_ns": 1792242060483364201,
+      "st_dev": 1828,
+      "st_gid": 1000,
+      "st_ino": 107778,
+      "st_mode": 33152,
+      "st_mtime_ns": 1792242060483364201,
+      "st_nlink": 1,
+      "st_size": 13276378,
+      "st_uid": 1000
+    },
+    "overlay_cpio_sha256": "0935f10bbd193708ed9e8ab2679b970ec28e08c201157e4f67d099d106f720e4",
+    "sources": {
+      "base": {
+        "identity": {
+          "st_ctime_ns": 1792242022328842148,
+          "st_dev": 1828,
+          "st_gid": 1000,
+          "st_ino": 107769,
+          "st_mode": 33152,
+          "st_mtime_ns": 1792242022328842148,
+          "st_nlink": 1,
+          "st_size": 12347108,
+          "st_uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+        "sha256": "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694"
+      },
+      "collector": {
+        "identity": {
+          "st_ctime_ns": 1792207683521274142,
+          "st_dev": 1828,
+          "st_gid": 1000,
+          "st_ino": 6456990,
+          "st_mode": 33216,
+          "st_mtime_ns": 1792207683521274142,
+          "st_nlink": 1,
+          "st_size": 1021928,
+          "st_uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/init",
+        "sha256": "8089d5b7bcf8166e69cb9ea90fc4614674b4906813a40aa219972c02c7ec5e39"
+      },
+      "mcexec": {
+        "identity": {
+          "st_ctime_ns": 1790608592677842234,
+          "st_dev": 1828,
+          "st_gid": 1000,
+          "st_ino": 147952,
+          "st_mode": 33261,
+          "st_mtime_ns": 1790608592677842234,
+          "st_nlink": 1,
+          "st_size": 453352,
+          "st_uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+        "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b"
+      },
+      "payload": {
+        "identity": {
+          "st_ctime_ns": 1792207683269266455,
+          "st_dev": 1828,
+          "st_gid": 1000,
+          "st_ino": 6456985,
+          "st_mode": 33216,
+          "st_mtime_ns": 1792207683269266455,
+          "st_nlink": 1,
+          "st_size": 872056,
+          "st_uid": 1000
+        },
+        "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/app",
+        "sha256": "8be0b167d7267d4ef5aa122f62ebdbd95d6aa0be4f75384b9285d9983683c234"
+      }
+    }
+  },
+  "payload": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "A",
+      "",
+      "B"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "profile": {
+    "memory_mib": 8192,
+    "name": "native-diagnostic-4vcpu-8192mib",
+    "numa_nodes": 2,
+    "vcpus": 4
+  },
+  "review_prerequisites": [
+    "Independent exact manifest/staging review.",
+    "Current image cleanup/guard retirement authority and source/launcher reuse review as required by dispatcher.",
+    "Fresh reviewed one-shot execution packet and owner/resource/lock/scratch identity preflight before any guest.",
+    "Inherited mask limitation retained: this payload compares SIGUSR1/SIGUSR2 membership only; diagnostic success does not prove arbitrary whole-mask restoration or formal case credit."
+  ],
+  "runtime_release": false,
+  "schema": "mckernel.signal-mask-restore-current942-staging.v1",
+  "stage_output": {
+    "base_root": "/home/holden/mckernel-work/scratch/native-application-signals-signals-guest-20260909-1/root",
+    "collector": {
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/init",
+      "sha256": "8089d5b7bcf8166e69cb9ea90fc4614674b4906813a40aa219972c02c7ec5e39"
+    },
+    "cpio": {
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio",
+      "sha256": "7e69601b68dafb44c945d2998b10ec024a73518303bb505f275490d83e4c6767",
+      "size": 39677952
+    },
+    "gzip": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+      "sha256": "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+      "size": 12347108
+    },
+    "manifest": {
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/manifest.json",
+      "sha256": "daab6d41de9866ca015cbd58766f855a41419686754d3438baaabeba301446f3"
+    },
+    "replacement_inputs": {
+      "bin/mcexec": {
+        "dev": 1828,
+        "final_mode": 493,
+        "final_sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+        "final_size": 453352,
+        "inode": 147952,
+        "mode": 493,
+        "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+        "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+        "size": 453352
+      },
+      "images/mckernel.img": {
+        "dev": 1828,
+        "final_mode": 493,
+        "final_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+        "final_size": 7908256,
+        "inode": 317429,
+        "mode": 493,
+        "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-942c927b-scratch22-authority3-image1-20261017/evidence/artifacts/mckernel.img",
+        "sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+        "size": 7908256
+      },
+      "modules/ihk-smp-x86_64.ko": {
+        "dev": 1828,
+        "final_mode": 420,
+        "final_sha256": "f51d975a7dd36b8e1fba2fd9d850e911f28cd0ad6cd8b292e33095791a4241f2",
+        "final_size": 11418720,
+        "inode": 3957306,
+        "mode": 420,
+        "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/ihk-smp-x86_64.ko",
+        "sha256": "f51d975a7dd36b8e1fba2fd9d850e911f28cd0ad6cd8b292e33095791a4241f2",
+        "size": 11418720
+      },
+      "modules/ihk.ko": {
+        "dev": 1828,
+        "final_mode": 420,
+        "final_sha256": "331f4cc1bd0ecaa4cecc55364fb3e8ce216df3a3cd406f1d05c35112276d1001",
+        "final_size": 1438632,
+        "inode": 3957301,
+        "mode": 420,
+        "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/ihk.ko",
+        "sha256": "331f4cc1bd0ecaa4cecc55364fb3e8ce216df3a3cd406f1d05c35112276d1001",
+        "size": 1438632
+      },
+      "modules/mcctrl.ko": {
+        "dev": 1828,
+        "final_mode": 420,
+        "final_sha256": "4cf6196f9e93fb10b08bc4e5bf75022b0858779a6479910340941006748cd23f",
+        "final_size": 1914512,
+        "inode": 3957311,
+        "mode": 420,
+        "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/mcctrl.ko",
+        "sha256": "4cf6196f9e93fb10b08bc4e5bf75022b0858779a6479910340941006748cd23f",
+        "size": 1914512
+      }
+    },
+    "startup_payload": {
+      "path": "/home/holden/mckernel-work/scratch/stability-packet001-compile-20260913-1/startup.argv-empty/payload",
+      "sha256": "ff227c83b2da598110768e13f5e042b437e049659706b56079cc73f7c818a836"
+    }
+  },
+  "staging": {
+    "base_initramfs": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+      "sha256": "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+      "size": 12347108
+    },
+    "collector": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/init",
+      "sha256": "8089d5b7bcf8166e69cb9ea90fc4614674b4906813a40aa219972c02c7ec5e39",
+      "size": 1021928
+    },
+    "derived_initramfs": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-overlay-20261017-1.cpio.gz",
+      "sha256": "eb5b1c6aa5d568f8586a8ae8253c80fd3a067d1a820553c5ae6cff9910efaa81",
+      "size": 13276378
+    },
+    "overlay_manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-overlay-20261017-1.json",
+      "sha256": "ac445d4f152ec4aebe771237811a5aaba1babfcadf4e9a9269b7593241aac3ef",
+      "size": 14824
+    },
+    "overlay_source": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+      "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+      "size": 26579
+    }
+  },
+  "status": "PASS_STRICT_MANIFEST_AND_59_MEMBER_JOINS",
+  "task_id": "signal-mask-restore-current942-staging-20261017-1",
+  "validated_member_count": 59,
+  "validation": {
+    "address_space_limit_bytes": 1073741824,
+    "backend_called": false,
+    "call": "native_diagnostic.py load_manifest(absolute_manifest_path) only",
+    "container_called": false,
+    "cpu_affinity": [
+      7
+    ],
+    "elapsed_seconds": 0.092185,
+    "loader_source_sha256": "8af67bcf5015cbf1915a65fdb3ce50d09ed68ea39f3b08fa95fa29625fd7afbc",
+    "prepare_attempt_called": false,
+    "qemu_called": false,
+    "result": "PASS",
+    "timeout_seconds": 120
+  }
+}

@@ -14732,3 +14732,31 @@ no new guest app/build or formal acceptance. Counters6/130,350/10000,0/7,0/273;
 12 historical diagnostic passes unchanged. Continue through cleanup to exact
 signal.mask-restore stdout handled=1 observed_blocked=1 restored=1 newline,
 empty stderr, exit0. A source checkpoint does not pause the campaign.
+
+
+## Checkpoint 373 — fresh retirement source and executable guest staging
+
+Current user instruction20261017T130554117286Z-ee81e2040f894282be224a30c0abb57e
+is persisted at HANDOFF top. Critical path remains actual image retirement ->
+cleanup -> signal.mask-restore, then memory/files/threads/signals/lifecycle.
+Correction1 closes all3independent recovery findings. Retained23tests and
+ordinary-UID actual input validationPASS; source019875d2 pushed/fetched exact.
+Original initial19test candidate and syntax-harness failure are archived in
+../evidence/scratch22-image-reconciliation-source-attempts-20261017-1.tar.gz.
+Independent source decision55ea5cce; exact read-only root proposal0dbfc67d
+awaits execution review, not executed.
+
+Actual offline stage7.081681s and overlay8.683786sPASS. Strict signal
+manifest47eb9589 load+59final-member joinsPASS. Prepared execution
+proposal c034e4b7 independently PASS_PREPARATION_ONLY for parent1828/107782
+and nonce6fb44f2a0cd64994af43c47bfc7476ab; missing accepted image
+retirement/cleanup/livepreflight/finalrelease. No image rebuild or guest run.
+Memorycalloc zero source now compiles and actual Linux reference returns all6
+unchanged exact lines/emptyerr/exit0; evidencea568c744/binary59691094.
+Lifecycle probe writer implements real shutdown/status syscall-boundary source
+checks disjointly, no device/runtime execution yet. Formal acceptance remains
+6/130,350/10000,0/7,0/273;12prior guest diagnostic passes unchanged.
+M00-M13 acceptance estimate deltas0: source/protocol/artifact preparation is
+scoped progress, not accepted kernel behavior. Next executable observation is
+reviewed fresh read-only root collector, then archival cleanup and real signal
+guest. Continue autonomously; checkpoint does not pause.

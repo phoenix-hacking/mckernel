@@ -1,0 +1,77 @@
+{
+  "schema": "mckernel.signal-mask-restore-execution-proposal.v1",
+  "status": "NOT_RELEASED",
+  "author": "/root",
+  "execution_count": 1,
+  "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-manifest-20261017-1.json",
+    "size": 5455,
+    "sha256": "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da"
+  },
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "size": 58828,
+    "sha256": "740f507631e9076ef2fd8961206ff69a87abed4c686167348b2dc5ded3ce4034"
+  },
+  "staging_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/signal-mask-restore-current942-staging-20261017-1.json",
+    "size": 25705,
+    "sha256": "6dd4a8ea086759246592e361cae9f2681cdc94b5a5dbf9774e5d62ae57334106"
+  },
+  "nonce": "6fb44f2a0cd64994af43c47bfc7476ab",
+  "parent": {
+    "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-guest-20261017-1",
+    "device": 1828,
+    "inode": 107782,
+    "mode": "0o700",
+    "uid": 1000,
+    "gid": 1000
+  },
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-guest-20261017-1",
+    "--nonce",
+    "6fb44f2a0cd64994af43c47bfc7476ab",
+    "--owner-sha256",
+    "740f507631e9076ef2fd8961206ff69a87abed4c686167348b2dc5ded3ce4034",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-manifest-20261017-1.json",
+    "--manifest-sha256",
+    "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da"
+  ],
+  "prerequisites": {
+    "image_retirement_proof": null,
+    "image_archival_cleanup": null,
+    "independent_execution_review": null,
+    "live_preflight": null
+  },
+  "profile": {
+    "heavy_operations": 1,
+    "cpuset": "2-5",
+    "cpus": 4,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "pids": 512,
+    "network": "none",
+    "guest_vcpus": 4,
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "payload_timeout_seconds": 10,
+    "cleanup_timeout_seconds": 15,
+    "guest_timeout_seconds": 300
+  },
+  "oracle": {
+    "stdout_utf8": "handled=1 observed_blocked=1 restored=1\n",
+    "stderr_hex": "",
+    "exit_code": 0
+  },
+  "scope": "One diagnostic only after actual reviewed image retirement/cleanup and fresh full ownership/resource/mount/isolation preflight. No strict fresh-build or formal acceptance credit. Freeze final release and exact command before sole invocation. No retry under same parent/nonce on failure."
+}
