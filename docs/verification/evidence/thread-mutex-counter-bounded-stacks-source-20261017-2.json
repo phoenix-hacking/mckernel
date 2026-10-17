@@ -1,0 +1,539 @@
+{
+  "adaptation": {
+    "increments_per_worker": 1000,
+    "original_default_stack_artifact_preserved": true,
+    "original_fixture_changed": false,
+    "original_prepared_manifest_changed": false,
+    "pthread_attr_destroy": "checked",
+    "pthread_attr_init": "checked",
+    "pthread_attr_setstack": "checked for each worker",
+    "pthread_join_and_mutex_destroy": "Every join and every mutex destruction checked; failure invokes _Exit(EXIT_FAILURE) before uncertain stack reuse or reinitialization.",
+    "stack_base_alignment_bytes": 4096,
+    "stack_bytes_each": 262144,
+    "static_stack_count": 8,
+    "vectors": [
+      2,
+      4,
+      8
+    ],
+    "worker_and_mutex_checks": "unchanged"
+  },
+  "application_acceptance": false,
+  "artifacts": {
+    "adaptation.diff": {
+      "path": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/adaptation.diff",
+      "sha256": "64ea43eaea9cb27c03ae1abe11ab20479f41c1c6f5193c14f81257db8bc7b819",
+      "size": 1921
+    },
+    "app": {
+      "path": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/app",
+      "sha256": "30c2e77c995fb8722f721c37b41597dcfbe1089c2359022d6a43cfc01e955d52",
+      "size": 1520016
+    },
+    "app.d": {
+      "path": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/app.d",
+      "sha256": "f53a6ef85a57603cc8823bf40b049aa77cc1d43160e2556154575ad37980bd80",
+      "size": 3696
+    },
+    "executed.c": {
+      "path": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/executed.c",
+      "sha256": "04ad36fe0c1a2e87e237e563d022d529d7983192033465db7c65db42907fab9e",
+      "size": 1811
+    },
+    "original.c": {
+      "path": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/original.c",
+      "sha256": "25f9e7a407a02d8d3732ac0391bbfb6dc93d2b92ac6bf80d1e49a9321fbf4a42",
+      "size": 1175
+    }
+  },
+  "authority": "User explicitly resolved original default-stack discrepancy by authorizing a separately named diagnostic adaptation. Dispatcher admitted bounded static compile/Linux reference.",
+  "boundary_checks": {
+    "count": 3,
+    "result": "PASS",
+    "retained_files": {
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/attr-cleanup-destroy-failure/commands.json": {
+        "sha256": "859b06766cb7fd4598341bb5792391893f815ab99dda42c5fb5d16b7fab4fa7f",
+        "size": 1552
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/attr-cleanup-destroy-failure/compile.status": {
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "size": 2
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/attr-cleanup-destroy-failure/compile.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/attr-cleanup-destroy-failure/compile.stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/attr-cleanup-destroy-failure/harness.c": {
+        "sha256": "8f79818d0a0ae658d82982c0db128bfdd59a650a1e5f1f85c46092af7e4cbd99",
+        "size": 1612
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/attr-cleanup-destroy-failure/probe": {
+        "sha256": "7b69113c954f29cde4b11c31664e7924d4d61c6cd44712e1c6cff868f8d1dc29",
+        "size": 922872
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/attr-cleanup-destroy-failure/probe.status": {
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+        "size": 2
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/attr-cleanup-destroy-failure/probe.stderr": {
+        "sha256": "ae3a7fc99f92f78381a52dbfbff41102443800c44120a975e6ac4c91a1ec616e",
+        "size": 28
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/attr-cleanup-destroy-failure/probe.stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/destroy-failure/commands.json": {
+        "sha256": "da8823f05306aa0afb0c4f81c9f339393ef3ffdfbe662fc47798c55a97b75bfc",
+        "size": 1487
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/destroy-failure/compile.status": {
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "size": 2
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/destroy-failure/compile.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/destroy-failure/compile.stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/destroy-failure/harness.c": {
+        "sha256": "8f79818d0a0ae658d82982c0db128bfdd59a650a1e5f1f85c46092af7e4cbd99",
+        "size": 1612
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/destroy-failure/probe": {
+        "sha256": "b41c5a5ea26459d0a7ab63c05809589286327e2b6fdc0f3d98dcb37ecb3525ca",
+        "size": 1509552
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/destroy-failure/probe.status": {
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+        "size": 2
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/destroy-failure/probe.stderr": {
+        "sha256": "d4cf29c69c234fa481c4d368345e9cbfce6505a49e8f27e8f8baf754e58d0cf7",
+        "size": 42
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/destroy-failure/probe.stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/join-failure/commands.json": {
+        "sha256": "5c2a44172d0dc956126526c3cdc7147db0f9b540cd1173614819e7c5c59b7ced",
+        "size": 1472
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/join-failure/compile.status": {
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "size": 2
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/join-failure/compile.stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/join-failure/compile.stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/join-failure/harness.c": {
+        "sha256": "8f79818d0a0ae658d82982c0db128bfdd59a650a1e5f1f85c46092af7e4cbd99",
+        "size": 1612
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/join-failure/probe": {
+        "sha256": "84a86ee54c0fc9e4c9d7ad754ac9200426ced47a51994e547a23950271f19c56",
+        "size": 1491968
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/join-failure/probe.status": {
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+        "size": 2
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/join-failure/probe.stderr": {
+        "sha256": "1b597850fd4a53f2c0836c606e0ce97db6972b92850ebc924580fee87f45ac11",
+        "size": 25
+      },
+      "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests/join-failure/probe.stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      }
+    },
+    "root": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests",
+    "scope": "Actual adapted C main with real pthread_create plus injected join failure, mutex-destroy failure, and attr-init cleanup/destroy failure; exact stderr event sequence excludes next-vector creates, no success stdout, exit1.",
+    "source_sha256": "cf3ee90ef74cd5af10fe7d02dd239af415ae59e68ab8b6cc42f5c68a91283325"
+  },
+  "bounded_correction": {
+    "attempt": 2,
+    "change": "Fail whole process on any failed pthread_join or pthread_mutex_destroy before shared-state reads/reuse/reinitialization. Original v1 artifacts and review evidence remain immutable.",
+    "previous_decision": "BLOCKED_SOURCE_LIFETIME_REVIEW",
+    "previous_evidence": "/home/holden/mckernel/docs/verification/evidence/thread-mutex-counter-bounded-stacks-source-20261017-1.json",
+    "previous_evidence_sha256": "c91ee045a0e3cf73219397c6d4e0366dcf620205050eebe32a888545fa0bbe75",
+    "previous_source": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/source-v1.c",
+    "previous_source_sha256": "4a22b5f107f446c8acd6bed0d79855e591d049f4ddfd195549029cf3066c1840"
+  },
+  "captures": {
+    "adaptation.diff": {
+      "sha256": "64ea43eaea9cb27c03ae1abe11ab20479f41c1c6f5193c14f81257db8bc7b819",
+      "size": 1921
+    },
+    "app": {
+      "sha256": "30c2e77c995fb8722f721c37b41597dcfbe1089c2359022d6a43cfc01e955d52",
+      "size": 1520016
+    },
+    "app-readelf.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "app-readelf.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "app-readelf.stdout": {
+      "sha256": "9ae75372eb16eb37eb3f42da59596dee3d8ecd9e315665a50d2c7fcb115afc1c",
+      "size": 178274
+    },
+    "app.d": {
+      "sha256": "f53a6ef85a57603cc8823bf40b049aa77cc1d43160e2556154575ad37980bd80",
+      "size": 3696
+    },
+    "boundary-tests.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "boundary-tests.stderr": {
+      "sha256": "6594af096d2273612e6a4bc5b47fd50cda9671f6884cd37f99f82ce4fb73591e",
+      "size": 496
+    },
+    "boundary-tests.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "correction-v1-v2.diff": {
+      "sha256": "ee2decdb5b9e97360842338a4c0b6b7a287a05ec9e2c44241b95056d185e4e9f",
+      "size": 1092
+    },
+    "executed.c": {
+      "sha256": "04ad36fe0c1a2e87e237e563d022d529d7983192033465db7c65db42907fab9e",
+      "size": 1811
+    },
+    "expected.stdout": {
+      "sha256": "d7443814b52d2e53d9c3e7f11ffbc3f176e2a1f0cd41f0f5ea3b150a1740c1ec",
+      "size": 51
+    },
+    "linux-reference.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "linux-reference.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "linux-reference.stdout": {
+      "sha256": "d7443814b52d2e53d9c3e7f11ffbc3f176e2a1f0cd41f0f5ea3b150a1740c1ec",
+      "size": 51
+    },
+    "observe.py": {
+      "sha256": "2c3da71ed6a6b40022c6989e6f0ccf8a6ede73b9aa2765429d26cccf748ceca0",
+      "size": 10272
+    },
+    "original-oracle.json": {
+      "sha256": "2c680e8137f3ed36426e611c8cb5f5fc60047630177e29469266a680c2d33e5d",
+      "size": 847
+    },
+    "original.c": {
+      "sha256": "25f9e7a407a02d8d3732ac0391bbfb6dc93d2b92ac6bf80d1e49a9321fbf4a42",
+      "size": 1175
+    },
+    "payload-compile.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "payload-compile.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "payload-compile.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "source-v1.c": {
+      "sha256": "4a22b5f107f446c8acd6bed0d79855e591d049f4ddfd195549029cf3066c1840",
+      "size": 1713
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-static",
+        "-fno-pie",
+        "-no-pie",
+        "-Wl,-z,noexecstack",
+        "-pthread",
+        "-MD",
+        "-MF",
+        "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/app.d",
+        "/home/holden/mckernel/scripts/application-tests/native_thread_mutex_counter_bounded_stacks.c",
+        "-o",
+        "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/app"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2",
+      "elapsed_seconds": 0.089902,
+      "label": "payload-compile",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "timeout_seconds": 60
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "-s",
+        "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/app"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2",
+      "elapsed_seconds": 0.004911,
+      "label": "app-readelf",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "9ae75372eb16eb37eb3f42da59596dee3d8ecd9e315665a50d2c7fcb115afc1c",
+      "timeout_seconds": 10
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/case/work",
+      "elapsed_seconds": 0.002946,
+      "label": "linux-reference",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "d7443814b52d2e53d9c3e7f11ffbc3f176e2a1f0cd41f0f5ea3b150a1740c1ec",
+      "timeout_seconds": 10
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "/home/holden/mckernel/scripts/tests",
+        "-p",
+        "test_native_thread_mutex_counter_bounded_stacks.py",
+        "-v"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "elapsed_seconds": 0.332813,
+      "label": "boundary-tests",
+      "returncode": 0,
+      "stderr_sha256": "6594af096d2273612e6a4bc5b47fd50cda9671f6884cd37f99f82ce4fb73591e",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "timeout_seconds": 90
+    }
+  ],
+  "consumed_inputs_sha256": {
+    "/home/holden/mckernel/scripts/application-tests/native_thread_mutex_counter_bounded_stacks.c": "04ad36fe0c1a2e87e237e563d022d529d7983192033465db7c65db42907fab9e",
+    "/usr/include/alloca.h": "c4d2f51d2f4bfd2ee1ced32cf4c6f0e6f1d562264ce26052aa0510ab6c675630",
+    "/usr/include/endian.h": "043dbd7fc10f60f4efc0c7759bf0d5c202fcecfede131232ac53c62edf93ffda",
+    "/usr/include/features.h": "981a26a502075c066b75617ea8db7623f98935b035e470833c46e53f1dea4e2b",
+    "/usr/include/pthread.h": "1bc615973d0d7c3734a927bd39184cc8601bebb9cc979ca55ceb99c905367765",
+    "/usr/include/sched.h": "0c52c7c3764b45982f2b6048a929c19dfd9200359c880d01b0cb2b0d0723fe75",
+    "/usr/include/stdc-predef.h": "64fdf694f7b3d51ec6c45c06dcb71ebbe9455742d3ea673012016668853d3bff",
+    "/usr/include/stdio.h": "e7d85131c888412c0eaaaca3a7165d86f147c8645993ddf333a5b2500117a478",
+    "/usr/include/stdlib.h": "7ea37adb35a2acc112198f826c7c02ba214c0fd3e3532174870ba2fbc86a83b3",
+    "/usr/include/time.h": "e88cfe6848c864eec16061f3a23a2c37aaa39ef1cf4e271e81b00b9df94ce05d",
+    "/usr/include/x86_64-linux-gnu/bits/byteswap.h": "f68b8ddac8c43067083eb8bcee4309f565bba36805e5dc746732ddb731e744c4",
+    "/usr/include/x86_64-linux-gnu/bits/cpu-set.h": "9a599a7d5538c4c8e4887983f4c819b1f2fc53086c850a807ff8ff8a6e6dce2d",
+    "/usr/include/x86_64-linux-gnu/bits/endian.h": "12b47b421313cf9ddc75afa754101c7034bca71ddb797f4f8ae06fc6c4161517",
+    "/usr/include/x86_64-linux-gnu/bits/endianness.h": "659a7060004eda113671a38852c4d1e9cb97a35932bcd1d8540f98c09c180747",
+    "/usr/include/x86_64-linux-gnu/bits/floatn-common.h": "f127bf11e1c361e585667429b05746eb13f42a6050eea1ae80495ec6f10052e5",
+    "/usr/include/x86_64-linux-gnu/bits/floatn.h": "3309cebe42d8b2dae90dfd5c1bcfcbb497379ed8d2fadfa54361b9397cb4750e",
+    "/usr/include/x86_64-linux-gnu/bits/libc-header-start.h": "42053eaf4d2751e7be1cc8342f4c1c7404a6670c330ca493b7e884b20d6c1747",
+    "/usr/include/x86_64-linux-gnu/bits/long-double.h": "1d92fbb09acd8375debde9c0b4c6dd3e38d096d27159e32a537e3742f6b2cc25",
+    "/usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h": "306fc6a0ccf8eea0e57f0cc4a6a6f0acd7c845c99c42cc509959f9ff8c13b731",
+    "/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h": "bde992d95141320a2f4162d2d1336349b00f36531fb79b4b9d4bb2ec5dfd176b",
+    "/usr/include/x86_64-linux-gnu/bits/sched.h": "a3a56e27f5acdd9f7b0b537fb3f27531b59240c21470fba1ff15231bd71869af",
+    "/usr/include/x86_64-linux-gnu/bits/select.h": "bebcf564c0b0f5298e352bee095128dfe8cf483426bc6d36869043bb4a0e2fae",
+    "/usr/include/x86_64-linux-gnu/bits/select2.h": "0737611741ded5876a746c48f3a54a5f533fa8c24d9d27de75d40adc57253544",
+    "/usr/include/x86_64-linux-gnu/bits/setjmp.h": "3f6eea166e444b00dc94d25356b0d1a898e653c63d9c2bb7cc09bc212a678601",
+    "/usr/include/x86_64-linux-gnu/bits/stdint-intn.h": "c29565a4c6cdbe6134a46ac42d882b5f1c1dadd335657b43e0155d5f235b5a86",
+    "/usr/include/x86_64-linux-gnu/bits/stdio.h": "68f7c4aa205c5043f0b9363f4809851c3d735d17e145051ef3c9e771880ddb4f",
+    "/usr/include/x86_64-linux-gnu/bits/stdio2.h": "f30effdddb33b0a38dee1cd596c1277d0f8f800a0fbfdadb2fe214f33c86129a",
+    "/usr/include/x86_64-linux-gnu/bits/stdio_lim.h": "8b383d348468ce009e52ec801dfb0467f72b0f75496bb840f0ae0ef8a5f399a1",
+    "/usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h": "eb7074a863a17e3e684e83218a82ef7418eeb535f50d6fb5365b5427663f27ae",
+    "/usr/include/x86_64-linux-gnu/bits/stdlib-float.h": "d8d9dd9f0d7dba7b868157cbd25eee2b0ec9404f36a8677a6d614432d85f4721",
+    "/usr/include/x86_64-linux-gnu/bits/stdlib.h": "247ef679da8bb0d582bc84adb873e22e2097ad9cc0c92431142e7bd9d0ac76d1",
+    "/usr/include/x86_64-linux-gnu/bits/struct_mutex.h": "f09453b4d356c8dc577f9b3f0c37b69c0ae76662e2c60be1cbd02b8f91865c51",
+    "/usr/include/x86_64-linux-gnu/bits/struct_rwlock.h": "b596548e86bc3f016b511778bcf88603938b349d7e44eaccf03b8ffb49210a60",
+    "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h": "7ef402713da42e35dc8d50a4838b3fbb8bfe959176dd86dd621ec47ac547b5b6",
+    "/usr/include/x86_64-linux-gnu/bits/thread-shared-types.h": "233b18bdcb7fa4332cebd6b5e6b9e35213538994582e322253459605d53fc273",
+    "/usr/include/x86_64-linux-gnu/bits/time.h": "2f1af538c704ea54e3364fe05ee3f9028c998ba842fc925a1dc767868cc6ea52",
+    "/usr/include/x86_64-linux-gnu/bits/time64.h": "14312d2bcdc321b6691ef167e4768124d9af1ace8bac0142eb1159fac5a1b3b7",
+    "/usr/include/x86_64-linux-gnu/bits/timesize.h": "9c1a1a3517fe96894cf4e09cd362c999faac951caf8e70c3c579506a777b522b",
+    "/usr/include/x86_64-linux-gnu/bits/timex.h": "0e1462ebbb5070579e80a5eb4a59d4a4f715741739b6cf27b2e670634767b41b",
+    "/usr/include/x86_64-linux-gnu/bits/types.h": "69454c580d77b06559520ed59cd14551d626cb494fcf5fd95a29144d79b2538b",
+    "/usr/include/x86_64-linux-gnu/bits/types/FILE.h": "37515f78be386f2edad4746f2947c928f480728c56d9a94e25302ebbdaef3c96",
+    "/usr/include/x86_64-linux-gnu/bits/types/__FILE.h": "26c909942e8a6bc82725e9c402f393aed9e32d94190257ddf71e1b5f819b4e5e",
+    "/usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h": "8afae3abf006beb39fd9d4d4bae38745cdf08a91e6217ddf25833c8d4b04751b",
+    "/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h": "603e58ab31ed75b7e0ab09a2ca94e99955f7fbc63310466321ce27c906227eb4",
+    "/usr/include/x86_64-linux-gnu/bits/types/__locale_t.h": "3263b6f6b2b75c11f881796e09d636b7c2baf6421b52d750b76ace42ffe89153",
+    "/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h": "c561df72d5b987ccbd022059fdb1bcb6899c3e94b403997a0576ef3e1afb0f94",
+    "/usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h": "05291a7d38bb1d0da1ed01c09fe85fa2b1f4d5bc708e06bb930efec672db08d5",
+    "/usr/include/x86_64-linux-gnu/bits/types/clock_t.h": "81e60e8a8d99b28bc723c14b156d7f7fc8ff663d98a857a3f5aea90431f577e3",
+    "/usr/include/x86_64-linux-gnu/bits/types/clockid_t.h": "dcd64d184855b245e5c7acf21910a0aaca590f1faf094e400da5d30551d11eb0",
+    "/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h": "e0f62133861106e467e0454988891e150dc6eb6f4a5098cedcf94a7d37e9aea6",
+    "/usr/include/x86_64-linux-gnu/bits/types/locale_t.h": "19cb01f0a44723edb409ecb6fdabbcdf9bca9733439f46e962a33d4b0f7bb348",
+    "/usr/include/x86_64-linux-gnu/bits/types/sigset_t.h": "3db5ded9d98a694e8c7196a06690b2e816ec6bb82689940d281f6504533f37e1",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h": "4a1aefe381b17ad50add602a8f31c9d4579499064ad3dde703f7f6df48498311",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h": "d6299fbc46fc57e7d14635cd5cf69125710ed021ab7305586c84644a03a39f8e",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h": "32877816a861201f1a8cbec905df10f6ed7cfb62113f5a7c5a53527043c4b5fa",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h": "494c455857a5fe8641d7f034a6892f848f1a2d304791bea3434e209a72d6b1cb",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h": "0909a593d7f6dfae1ca5cef6cf1e62b6a67aaa586e50f6215f3622a47be854d4",
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_tm.h": "e7bdda3f42eb0633850ed150fef0a0cf6193cbba8fa740e7505925424a595566",
+    "/usr/include/x86_64-linux-gnu/bits/types/time_t.h": "08a01b91752dc9dda93eb0f8c571e2c57fbb67b9768f5c23ad180fd0894e97a3",
+    "/usr/include/x86_64-linux-gnu/bits/types/timer_t.h": "d96a2452da0d933941273d11d1048ea525f033306892835b0a7a0999b13853aa",
+    "/usr/include/x86_64-linux-gnu/bits/typesizes.h": "dd38f16bed43eda106684d2af8b57af4373814fd1c4404b37302fdefde7be2e0",
+    "/usr/include/x86_64-linux-gnu/bits/uintn-identity.h": "789cb0b97f2ab1484b9d520ecdb94c93c07d2eb6c34d6c981b8e02785b90c137",
+    "/usr/include/x86_64-linux-gnu/bits/waitflags.h": "4b5a3c68814e83b0f24286101a50c7f8a838ab502c8ee0ab1729e4fc845b0c75",
+    "/usr/include/x86_64-linux-gnu/bits/waitstatus.h": "0b1a7624c450768f914aae61f3c45fb0aa48edd633285a64b6864aebae008703",
+    "/usr/include/x86_64-linux-gnu/bits/wordsize.h": "716d8459074e2a082d65a28192b32eddbfd7587348372395b1c283a723ae4c18",
+    "/usr/include/x86_64-linux-gnu/gnu/stubs-64.h": "bae35edf2e1f5c08d88ff8a5b839e951c42839b855894751efdf94ae69cc0814",
+    "/usr/include/x86_64-linux-gnu/gnu/stubs.h": "ef444295a0a9e8f5c40918399a00cc91ba0bd79774110cdf6e652baa6cfadb2e",
+    "/usr/include/x86_64-linux-gnu/sys/cdefs.h": "3cc074d3fb0761b678ab4d2a6108b5eb02b9b29341e0bae6a0755cfbbd69cf1f",
+    "/usr/include/x86_64-linux-gnu/sys/select.h": "1fe9febd98bdea3ac0cfaa55a06e4bc5e0962783cd4ab22246117c8647c389b1",
+    "/usr/include/x86_64-linux-gnu/sys/types.h": "74ee1354a61ec7c6583e7995174223b69878915465fc36cafbc2d76d7f32262e",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdarg.h": "0b1d4f68c42c238ae96d07e0e9d5868732054fc8ba704c1dde891649ff117483",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdatomic.h": "cff4333dd21347c88344e296fe5a686a222111bfd4b5eff8c2b65b975033eb19",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h": "45e80e1302342753d2f9e5945248fe3af7cf328a99804d2ec561850bbb550f7d"
+  },
+  "draft_oracle_caveat": [
+    "Freeze mutex ABI and canonical vector output before execution."
+  ],
+  "elf_verified": {
+    "no_wx_load": true,
+    "nonexecuting_stack": true,
+    "static_no_interp_no_dynamic": true
+  },
+  "environment": {
+    "HOME": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/home",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "MUTEX_BOUNDARY_TEST_ROOT": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/boundary-tests",
+    "PATH": "/usr/bin:/bin",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/tmp",
+    "TZ": "UTC"
+  },
+  "evidence_root": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2",
+  "formal_case_credit": false,
+  "frozen_inputs_sha256": {
+    "/home/holden/mckernel/scripts/application-tests/cases/thread/thread.mutex-counter.c": "25f9e7a407a02d8d3732ac0391bbfb6dc93d2b92ac6bf80d1e49a9321fbf4a42",
+    "/home/holden/mckernel/scripts/application-tests/native_thread_mutex_counter_bounded_stacks.c": "04ad36fe0c1a2e87e237e563d022d529d7983192033465db7c65db42907fab9e",
+    "/home/holden/mckernel/scripts/application-tests/oracles/thread.mutex-counter.json": "2c680e8137f3ed36426e611c8cb5f5fc60047630177e29469266a680c2d33e5d",
+    "/home/holden/mckernel/scripts/tests/test_native_thread_mutex_counter_bounded_stacks.py": "cf3ee90ef74cd5af10fe7d02dd239af415ae59e68ab8b6cc42f5c68a91283325"
+  },
+  "future_manifest_requirement": {
+    "collector_profile": "ND_FUTEX",
+    "reason": "Dispatcher identified earlier TLS stream-accounting rejection when manifest declared1024 but collector STREAM_LIMIT4096. Preserve original failed artifacts; no manifest is created or edited by this task.",
+    "stderr_limit_bytes": 4096,
+    "stdout_limit_bytes": 4096
+  },
+  "installed_link_inputs_sha256": {
+    "/usr/lib/gcc/x86_64-linux-gnu/9/cc1": "c09275e2d3f811e23d255eac415bfedd9e68ba8b5cf4b261d2fce136b5e8fc99",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/collect2": "5228dbf1e15d16694059023d16e7f13f201ea0d76a82e8837c6483dc21d66682",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/crtbeginT.o": "9fe07384ef0078de4a23fe2acc4137cb5aeeddcc715cf189cc0d985b602d348a",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/crtend.o": "c29d8ba35b3afad85993fa8f64b1a4d91678deaeb0f1cae952f12c0bdd4c83c1",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc.a": "82b6c0bfc28d5314fffaaa2a920516575f347972f685b5805f5749a87a617df0",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc_eh.a": "1dc66e2a55a6cefe1458b4e94f9b321e453a5b7279638cd7d12e1ddf83ec59f8",
+    "/usr/lib/x86_64-linux-gnu/crt1.o": "27daac7b3f9e861ef8df49f45b2a8ffb7130a1899f86efe53c6f84d63fd3cd0d",
+    "/usr/lib/x86_64-linux-gnu/crti.o": "2f1c31070d95f398fe4c1388408e83283cc7e0cee0ebb64882e0b331e8e178e8",
+    "/usr/lib/x86_64-linux-gnu/crtn.o": "a2266079f95b84ccc2162ebbf279bcd78858a748aa1882e0bdb912316c76a58f",
+    "/usr/lib/x86_64-linux-gnu/libc.a": "f9831edeccd3a87eb3fbba795f92bfa83409b3951f05ec40ca5df432b8699127",
+    "/usr/lib/x86_64-linux-gnu/libpthread.a": "2f90e0cb347e80a583aca3536715f93255593c9a1214ddbeba1fcc4055aab019"
+  },
+  "new_guest_runs": 0,
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "6e3d3220636f756e7465725f6f6b3d31206e3d3420636f756e7465725f6f6b3d31206e3d3820636f756e7465725f6f6b3d310a",
+    "stdout_utf8": "n=2 counter_ok=1 n=4 counter_ok=1 n=8 counter_ok=1\n"
+  },
+  "original_source": "/home/holden/mckernel/scripts/application-tests/cases/thread/thread.mutex-counter.c",
+  "production_acceptance": false,
+  "profile_path": "/home/holden/mckernel/docs/verification/evidence/signal-mask-restore-compile-profile-review-20261017.json",
+  "profile_sha256": "320d19452c638e0853d21798628d59387d551ff2b212806e1061d9d0b644ff31",
+  "resources": {
+    "address_space_bytes": 1073741824,
+    "core_bytes": 0,
+    "cpu_affinity": [
+      7
+    ],
+    "cpu_seconds": 150,
+    "file_size_bytes": 67108864,
+    "nofile": 256,
+    "outer_wall_seconds": 180,
+    "serial": true
+  },
+  "review_prerequisites": [
+    "Independent adaptation/source/artifact review before any overlay or guest release.",
+    "Any future ND_FUTEX strict manifest must use4096 bytes for both streams and exact /apps/app argv.",
+    "Formal catalog packet/gates require separately reviewed adaptation authority; no original-case credit assigned."
+  ],
+  "runtime_release": false,
+  "schema": "mckernel.thread-mutex-counter-bounded-stacks-source.v1",
+  "semantic_limits": [
+    "Adapted diagnostic source only; it is not the unchanged released formal case. Exact output/vector/mutex checks retained.",
+    "Explicit aligned stacks and checked pthread attributes resolve source stack setup. Output does not independently measure runtime stack addresses or prove contention ordering.",
+    "Every uncertain join/destruction terminates the whole process; draft mutex ABI caveat remains."
+  ],
+  "source": "/home/holden/mckernel/scripts/application-tests/native_thread_mutex_counter_bounded_stacks.c",
+  "stack_symbol": {
+    "address_hex": "00000000004e1000",
+    "alignment_verified": 4096,
+    "readelf_line": "   200: 00000000004e1000 0x200000 OBJECT  LOCAL  DEFAULT   26 stacks",
+    "size": 2097152
+  },
+  "status": "PASS_CORRECTED_LIFETIME_STATIC_LINUX_REFERENCE_BOUNDARY_TESTS_PENDING_REVIEW",
+  "task_id": "thread-mutex-counter-bounded-stacks-source-20261017-2",
+  "toolchain_bindings": {
+    "assembler": {
+      "path": "/usr/bin/as",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-as",
+      "sha256": "8d45684bbd6420e3e97907257c510f199bb6c5f9b02ea8ee0a590c1a8b662ead"
+    },
+    "gcc": {
+      "path": "/usr/bin/gcc",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    "linker": {
+      "path": "/usr/bin/ld",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f"
+    },
+    "python_capture_runner": {
+      "path": "/home/holden/anaconda3/bin/python3",
+      "resolved_path": "/home/holden/anaconda3/bin/python3.9",
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+    },
+    "readelf": {
+      "path": "/usr/bin/readelf",
+      "sha256": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb"
+    }
+  }
+}

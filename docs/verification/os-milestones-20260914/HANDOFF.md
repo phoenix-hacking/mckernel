@@ -1,46 +1,39 @@
 # Compact dispatcher handoff
 
-Checkpoint379: three independently accepted actualcurrent942 guest diagnostics
-thisinvocation: signal.mask-restore33.352663s,calloc33.677923s,file34.091172s.
-Exactoracles/emptyerr0/procfsempty/McKerneltrace+fullhostretirementPASS.
-No kernel/module/image rebuild; newlyintegratedkernelrepairs0/formalcredit0.
-Formalcounts6/130,350/10000,0/7,0/273 andM00-M13estimatebands unchanged.
+Checkpoint380: FOURdistinctactualcurrent942diagnostics+retirementPASS this
+invocation: signal.mask-restore,calloc,file,TLS2original2/4/8workers. Newkernel
+repairs0/rebuilds0/formalcredit0; counts6/130,350/10000,0/7,0/273 unchanged.
+TLS2PASS33.659458s,55bytesemptyerr0/procfsempty,15main+14workerprocfsnode
+pub-delete pairs;9deliveries8returns3routes;30clients/exactcontainer/root
+retirementPASS. OriginalTLS1FAIL/1024vs4096 preserved, correctedmanifest only
+4096limits; no replaycountedasruntimePASS/no comprehensiveTLSclaim.
 
-TLS1 originalFAIL34.423271s preserved: outerDockerstartattach1 stderr
-native diagnostic failed: stream accounting. Rawframe55expectedbytes/emptyerr/
-wait0/procfsempty reports4096limits vs manifest1024. Independent
-PASS_RETIREMENT;FAIL_HARNESS_CONTRACT, all25clients/owner/containerretired/root
-27:4free. Actualproducer→unchanged-evaluator replay old1024negative/new4096
-positive is evidence replayONLY, not TLS runtimePASS. ONEboundedmanifest
-correction d6f73eca ready; exactoriginalsource/oracle/59map unchanged. Fresh
-/scratch/ndtls-2 dev1828/inode108558 nonce d6f22a2e165c492caefc2005b0dcfd96
-QMP92, separateexecutionreview active. No automaticthirdsamefamilyattempt.
+Nextsole native lifecycle guest exactreleased: /scratch/ndlife-1 dev1828/
+inode108537 nonceccee33a9cb4e45039b2b3da2b134388a QMP93 manifest0540cfd9.
+Probe d8132525/collector8330e259/parser0585f78b; reviewed60map +authoritative
+Running5/Booted3negative +actualprobe→actualCserializer→parserPASS13tests.
+Dualconsumer4vectors8checksPASS+independentreview (actualCpayloadproducer→
+unchangedND.evaluate andcorrectedparser); wronglimit/bytesfailsND/Booted3fails
+life. FinalreleasejoinsTLS2acceptedretirement94fc8a4b. Push/fetch/liveadmission
+thenoneguest, freezeHEAD/source. No actualnativeshutdown/destroy/resources
+restoredyet; keepfailureevidence/probeoneshot/no-rmmod/no-destroy boundaries.
 
-Lifecycle candidate independent60map/staticcollector/probePASS; manifest
-0540cfd9 /scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/manifest.json.
-Originalloaderpin stagefailurebeforecopies retained; solepinrebindpassed.
-WrongRunning3 parsercontract retained/superseded: authoritativeioctlABI
-Running5/Booted3. Correctedparser0585f78b/tests04d5959b independentPASS13tests,
-actualretainedprobe→actualCserializer→parserpositive+5negatives inclBooted3.
-Dualexistingpayloadconsumer+newlifecycleconsumer check underway beforefreeze.
-Freshndlife-1 dev1828/inode108537 nonceccee33a9cb4e45039b2b3da2b134388a
-QMP93, exactone-shotexecutionproposal independentlyapprovedconditional.
-No actualnative shutdown/destroy/resource-restoration claim yet.
+Nextadaptedmutexsource04ad36fe/testcf3ee90e independentPASS; v1unchecked
+joinlivestackreuse correctedfatalprocessjoin/destroyfailbeforelaterreuse.
+Originalcatalogfixture+oracleunchanged; adapted8x262144stacks/2,4,8vectors/
+51byteoracle/3Cboundarytests/LinuxPASS. Strictmanifesta74c2687 ready59joins,
+actualND_FUTEXserializer4096contractPASS; separateexecutionreviewpending.
+Alternate-repeat diagnosticexactbytebridge preparing original16deliveries,
+mainnormalstackrestorationstillunmeasured/formalunaccepted. No kernelpatch
+invented. Keepnexttwoactualreadyguests/independentimplementationlanes useful.
 
-MutexoriginalattrNULL preparation held; newexplicitadapted8x262144aligned
-stacks preservesoriginalsource/assertions/2,4,8vectors/oracle. Independent
-reviewcaughtuncheckedjoin→livestackreuse; oneboundedprocess-fataljoin/destroy
-correction+actualCfailurepath tests underway. No guestadmissionbefore review.
-
-Adopted [VELOCITY.md](VELOCITY.md) and user135713 nextintervaltactic: onecheap
-actualcollectorproducer/serializer→actualconsumer positive+boundarynegative
-beforefreezingnewmode. Threeactualruntimegains above; no2x/3xclaim fromzero
-baseline. Acceptance-to-next-start proxies2m19s/1m58s/2m03s below5mintarget.
-[VELOCITY-REVIEWS.md](VELOCITY-REVIEWS.md) review1 covers13:24:54–13:55:47UTC;
-nextsupervisoryreview14:25UTC/07:25PDT. Supervisorappendsreviewfile; dispatcher
-soleengineering/runtime/Gitowner. No newmonitor/launcher. FreezeHEADunderlive
-owner, keepnexttwo genuinelyreadyguests, refilldisjointactualworkwithin7jobs/
-24GiB andoneheavy4CPU2-5/12GiB/noswap512tasks. Continueaftercheckpoint.
+Adopted [VELOCITY.md](VELOCITY.md), actualproducer/serializer→actualconsumer
+positive+boundarynegative beforefreezingnewmode. Review1checkpointed in
+[VELOCITY-REVIEWS.md](VELOCITY-REVIEWS.md) (13:24:54–13:55:47UTC); next14:25UTC/
+07:25PDT. Supervisorappendsreviewfile, dispatcher soleGit/runtimeowner.
+Handoffproxies2m19s/1m58s/2m03s<5min, no2x/3xfromzerobaseline. Preserve
+originalM00-M13criteria/ownership/7jobs24GiB/oneheavy4CPU2-5/12GiB/noswap512.
+Continueaftercheckpoint; no newmonitor/launcher, no purchasedusage/97%guard.
 
 Current user priority 20261017T130554117286Z-ee81e2040f894282be224a30c0abb57e:
 push every M00-M13 milestone toward its original100% as aggressively and

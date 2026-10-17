@@ -14878,3 +14878,23 @@ Supervisionreview1recorded13:24:54–13:55:47UTC, next14:25UTC/07:25PDT.
 Adoptactualproducer/serializer→actualconsumerpositive+boundarynegative tactic.
 Measuredhandoffproxies2m19s/1m58s/2m03s below5min; no2x/3xfromzerobaseline.
 Originalacceptancecounts androughM00-M13estimatebandsunchanged.
+
+## Checkpoint380 — corrected TLS actual pass; native lifecycle guest released
+
+TLS2actual0/33.659458s/HEADe826e22astable. Independentguest+retirementPASS:
+PID254scheduled,9deliveries8returns3routes/final231/retirement0/release0;
+15procfsnodepub-delete pairs covermain+14workers. Exact55byte2/4/8TLSoracle,
+emptyerr0/procfsempty/bothlimits4096. All5profilesmatch,30clientsreaped/exact
+containerremoved/3lookupsempty/root27:4free/captures+innerresultmatch.
+Fourdistinctactualguestdiagnosticsthisinvocation; originalTLS1FAIL preserved.
+No comprehensiveTLS/observedstackaddress/formalcasecredit, M00-M13bands0delta.
+LifecycledualevaluatoractualCproducerpositive+3negatives=4vectors8checksPASS
+andindependentreviewPASS. Existingpayload+correctedRunning5parserbothrequired;
+wronglimit/bytesfailsND andBooted3failslife. Exactnative-lifecycleguestfinal
+release nowjoins acceptedTLS2retirement; parent1828/108537,nonce
+ccee33a9cb4e45039b2b3da2b134388a,QMP93,manifest0540cfd9. Nextsoleguestafter
+push/fetch/freshadmission, freezeHEAD. Probeoneshutdown/nostatedresource
+restoration/destroy/rmmod. Adaptedmutexjoin/destroyfatalcorrectionreviewPASS,
+3actualCfailuretests+static/LinuxPASS;59map/4096profilepreparationa74c2687ready
+forreview. Alternate-repeat exactbytesbridgepreparationdiagnosticonly; original
+relationaloracle/mainstackrestorationcoverage remainsunaccepted.

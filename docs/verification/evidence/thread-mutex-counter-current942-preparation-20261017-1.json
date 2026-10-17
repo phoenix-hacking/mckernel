@@ -1,0 +1,221 @@
+{
+  "actual_payload_argv": [
+    "/bin/mcexec",
+    "-t",
+    "1",
+    "0",
+    "/apps/app"
+  ],
+  "application_acceptance": false,
+  "collector_preparation": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/thread-tls-isolation-current942-preparation-20261017-1.json",
+    "sha256": "6a48dd1ae43842ef0ee29ecf34534616bc6ee2917eb5cae6633af901b7e2192f",
+    "size": 41297
+  },
+  "collector_selection": {
+    "boot_argv": [
+      "/bin/native-boot",
+      "hidos",
+      "allow_oversubscribe"
+    ],
+    "collector": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/init",
+      "sha256": "ead247cdf56556c7491bd5d8f746c6c668c0c944414ce51392f7caaed895a63a",
+      "size": 1021968
+    },
+    "compiled_source_binding": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e",
+    "host_execution": false,
+    "profile": "ND_FUTEX"
+  },
+  "command": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+    "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/initramfs.cpio.gz",
+    "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/thread.mutex-counter/app",
+    "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/init",
+    "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+    "/home/holden/mckernel-work/scratch/thread-mutex-counter-current942-20261017-1/initramfs.cpio.gz",
+    "--collector-sha256",
+    "ead247cdf56556c7491bd5d8f746c6c668c0c944414ce51392f7caaed895a63a",
+    "--mcexec-sha256",
+    "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+    "--payload-sha256",
+    "d4af491b243b1e3f896bff81fae34c95a3c87248b928951b2b507bcd9c2dc53c",
+    "--base-sha256",
+    "bd503adcd1d45b437eb91902a50b09b9eeb094368ca4085546ef682fd1a5a694",
+    "--base-size",
+    "12347108",
+    "--base-cpio-sha256",
+    "7e69601b68dafb44c945d2998b10ec024a73518303bb505f275490d83e4c6767",
+    "--base-cpio-size",
+    "39677952"
+  ],
+  "draft_oracle_caveat": [
+    "Freeze mutex ABI and canonical vector output before execution."
+  ],
+  "environment": {
+    "HOME": "/home/holden/mckernel-work/scratch/thread-mutex-counter-current942-20261017-1/home",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/holden/mckernel-work/scratch/thread-mutex-counter-current942-20261017-1/tmp",
+    "TZ": "UTC"
+  },
+  "evidence_root": "/home/holden/mckernel-work/scratch/thread-mutex-counter-current942-20261017-1",
+  "formal_case_credit": false,
+  "manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/thread-mutex-counter-current942-20261017-1/manifest.json",
+    "sha256": "d88f114e16a0e28f71ea6a880c491f1455b9a1a5b8dbd79f87bfb3e52b1df8ea",
+    "size": 5486
+  },
+  "new_compiler_runs": 0,
+  "new_guest_runs": 0,
+  "new_payload_reference_runs": 0,
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "6e3d3220636f756e7465725f6f6b3d31206e3d3420636f756e7465725f6f6b3d31206e3d3820636f756e7465725f6f6b3d310a",
+    "stdout_utf8": "n=2 counter_ok=1 n=4 counter_ok=1 n=8 counter_ok=1\n"
+  },
+  "overlay": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/thread-mutex-counter-current942-20261017-1/initramfs.cpio.gz",
+    "sha256": "063e40f5e0c001b8a51544016945510bcf44ce5ea635810b75b55d15f15bff36",
+    "size": 13517588
+  },
+  "overlay_capture": {
+    "elapsed_seconds": 8.762135,
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_sha256": "87b81094025f98777b0ad600c683c9e589f29db2c2e760e9d5c4cbb0afd8c192"
+  },
+  "overlay_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/thread-mutex-counter-current942-20261017-1/overlay-result.json",
+    "sha256": "87b81094025f98777b0ad600c683c9e589f29db2c2e760e9d5c4cbb0afd8c192",
+    "size": 14847
+  },
+  "prior_reference": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/process-thread-static-preparation-20261017.json",
+    "sha256": "f6b962ca1356a4a115af3333bbd18664fc2e463f2821179fb3fa7fe841db4e10",
+    "size": 15822
+  },
+  "production_acceptance": false,
+  "resources": {
+    "address_space_limit_bytes": 1073741824,
+    "core": 0,
+    "cpu_affinity": [
+      7
+    ],
+    "cpu_seconds": 150,
+    "file_size_limit_bytes": 67108864,
+    "nofile": 256,
+    "outer_wall_seconds": 180,
+    "serial_overlay_only": true
+  },
+  "reuse_verification": {
+    "all_vectors_reused_without_reexecution": true,
+    "complete_observation": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/observation.json",
+      "sha256": "031b388a4d2343f17dd7cf96923ac362a7f8db7070293ad8edd91ecafcd80c1d",
+      "size": 43107
+    },
+    "payload": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/thread.mutex-counter/app",
+      "sha256": "d4af491b243b1e3f896bff81fae34c95a3c87248b928951b2b507bcd9c2dc53c",
+      "size": 1508600
+    },
+    "prior_case": {
+      "binary": "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/thread.mutex-counter/app",
+      "binary_sha256": "d4af491b243b1e3f896bff81fae34c95a3c87248b928951b2b507bcd9c2dc53c",
+      "binary_size": 1508600,
+      "depfile_sha256": "918a15e7451d022ffc2314d48636f73adda9691c7b14fd6d93e71f9bfb11e4e2",
+      "elf_verified": {
+        "no_wx_load": true,
+        "nonexecuting_stack": true,
+        "static_no_interp_no_dynamic": true
+      },
+      "expected_exit": 0,
+      "expected_stderr_hex": "",
+      "expected_stdout_hex": "6e3d3220636f756e7465725f6f6b3d31206e3d3420636f756e7465725f6f6b3d31206e3d3820636f756e7465725f6f6b3d310a",
+      "header_dependency_count": 73,
+      "observed_stdout_hex": "6e3d3220636f756e7465725f6f6b3d31206e3d3420636f756e7465725f6f6b3d31206e3d3820636f756e7465725f6f6b3d310a",
+      "oracle": "/home/holden/mckernel/scripts/application-tests/oracles/thread.mutex-counter.json",
+      "reference_runs": 1,
+      "source": "/home/holden/mckernel/scripts/application-tests/cases/thread/thread.mutex-counter.c",
+      "status": "PASS_STATIC_LINUX_REFERENCE"
+    },
+    "prior_compile_and_elf_review": {
+      "no_wx_load": true,
+      "nonexecuting_stack": true,
+      "static_no_interp_no_dynamic": true
+    },
+    "reference_capture": {
+      "stderr": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/thread.mutex-counter.linux-reference.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "stdout": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/thread.mutex-counter.linux-reference.stdout",
+        "sha256": "d7443814b52d2e53d9c3e7f11ffbc3f176e2a1f0cd41f0f5ea3b150a1740c1ec",
+        "size": 51
+      }
+    },
+    "reference_status": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/process-thread-static-preparation-20261017-MIgJ0b/thread.mutex-counter.linux-reference.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "result": "PASS_SELECTED_SOURCE_ORACLE_BINARY_DEPFILE_REFERENCE_AND_COLLECTOR_BINDINGS"
+  },
+  "runtime_prerequisites": [
+    "Independent runtime admission must resolve or explicitly bound default pthread stacks versus catalog262144-byte stack requirement, preserving original fixture and oracle.",
+    "Review original N=2/4/8 worker vectors, ND_FUTEX oversubscribe collector, prior diagnostic outcomes and owner retirement.",
+    "Fresh reviewed one-shot execution packet and live parent/owner/resource/lock/scratch/QMP admission.",
+    "Formal catalog packet/gates remain unchanged and no acceptance counters advanced."
+  ],
+  "runtime_release": false,
+  "schema": "mckernel.thread-mutex-counter-current942-preparation.v1",
+  "scope": "Reuse retained compiled payload/reference and matching-source ND_FUTEX collector; offline overlay and read-only strict manifest loader only. No source edits/compiler/payload replay/root/Docker/guest/Git.",
+  "semantic_limits": [
+    "Unchanged source uses pthread_create attr=NULL and therefore default pthread stacks; catalog thread_stack_bytes=262144 is not enforced by this fixture. No source or runtime override added to conceal this discrepancy.",
+    "Source checks exactly N*1000 increments plus lock/unlock errors and full creation count. It calls join/destroy but does not inspect their return codes.",
+    "No independent contention/ordering trace in frozen output. Static host reference is additive diagnostic preparation; original dynamic/pinned-guest formal obligations and unresolved oracle remain."
+  ],
+  "source_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-current942-20261017-1/manifest.json",
+    "sha256": "15bbc7c6a3a6b3bccaad4c6be08f3804a4916641715a69817105dd4889f917ce",
+    "size": 5462
+  },
+  "status": "PASS_REUSED_REFERENCE_ND_FUTEX_OVERLAY_STRICT_MANIFEST_PREPARATION_ONLY",
+  "task_id": "thread-mutex-counter-current942-preparation-20261017-1",
+  "validation": {
+    "backend_called": false,
+    "call": "native_diagnostic.load_manifest(absolute_manifest_path) only",
+    "elapsed_seconds": 0.094786,
+    "final_member_count": 59,
+    "join_scope": "All members equal TLS final map except apps/app, which joins exact reused mutex binary; loader verifies live required refs and source/output identities.",
+    "loader_source_sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+    "prepare_attempt_called": false,
+    "result": "PASS"
+  },
+  "vectors": [
+    2,
+    4,
+    8
+  ]
+}
