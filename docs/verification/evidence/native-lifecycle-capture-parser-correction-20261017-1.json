@@ -1,0 +1,269 @@
+{
+  "task_id": "native-lifecycle-capture-parser-correction-20261017-1",
+  "status": "READY_FOR_REVIEW",
+  "change": "Correct only lifecycle status_before requirement and returned summary from 3 to pinned public ioctl ABI Running=5. Add explicit rejection of Booted=3.",
+  "authorization": "Dispatcher acknowledged original Running3 packet value was incorrect; public IHK ABI Running5 is authoritative. One bounded semantic correction authorized.",
+  "preservation": {
+    "prior_parser_sha256": "49b8382495ab1f0a2bc7d42abfd8379a2c9071283acdc6979f460c516cb6958a",
+    "prior_tests_sha256": "009272a0b17f7aee6013239faa557a75605a9901e06168cf2162231ac01f758a",
+    "snapshots": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/frozen-before-correction/manifest.json",
+        "sha256": "d9393531a1934e7b58aa4ee867846f398c9ca3eee8c50c0bf3043bf76406eb94",
+        "size": 721
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/frozen-before-correction/native_diagnostic_lifecycle_capture.py",
+        "sha256": "49b8382495ab1f0a2bc7d42abfd8379a2c9071283acdc6979f460c516cb6958a",
+        "size": 7025
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/frozen-before-correction/test_native_diagnostic_lifecycle_capture.py",
+        "sha256": "009272a0b17f7aee6013239faa557a75605a9901e06168cf2162231ac01f758a",
+        "size": 9101
+      }
+    ],
+    "prior_reports": "Original parser pass and crossbody blocker records remain unchanged."
+  },
+  "contract_sources": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/pinned-status.h",
+      "sha256": "fef81cf170da96d41500a572c22e44c272f7110eff815cf43944de0e429d81e7",
+      "size": 995
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/os_registry.rs",
+      "sha256": "b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6",
+      "size": 30435
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "size": 19740
+    }
+  ],
+  "abi_findings": {
+    "IHK_OS_STATUS_BOOTED": 3,
+    "IHK_OS_STATUS_RUNNING": 5,
+    "OsStatus_Running": 5,
+    "native_compile_assert": "os_registry.rs:88 binds OsStatus::Running to IHK_OS_STATUS_RUNNING"
+  },
+  "changed_sources": [
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py",
+      "sha256": "0585f78b80e603c010316418ce307794d59e1d92581b845ec6b2e74e22c8954b",
+      "size": 7025
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/test_native_diagnostic_lifecycle_capture.py",
+      "sha256": "04d5959be64b43888cb983baf267816de3de11cee0b7fbebef4ec2f4321e82f3",
+      "size": 17573
+    }
+  ],
+  "checks": {
+    "focused_tests": 13,
+    "returncode": 0,
+    "elapsed_seconds": 0.237,
+    "command": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=90",
+        "--nofile=256",
+        "--fsize=67108864",
+        "--core=0",
+        "/usr/bin/timeout",
+        "-k",
+        "5s",
+        "120s",
+        "/home/holden/anaconda3/bin/python3.9",
+        "-B",
+        "-m",
+        "unittest",
+        "-f",
+        "-v",
+        "scripts.tests.test_native_diagnostic_lifecycle_capture"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/home",
+        "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/tmp",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "LIFECYCLE_SERIALIZER_STDOUT": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-parser-20261017-1/actual-c-serializer.stdout",
+        "LIFECYCLE_ACTUAL_PROBE_STDOUT": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/probe-running.stdout",
+        "LIFECYCLE_CROSSBODY_EVIDENCE": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1"
+      },
+      "interpreter": {
+        "path": "/home/holden/anaconda3/bin/python3.9",
+        "resolved": "/home/holden/anaconda3/bin/python3.9",
+        "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+        "version": "Python 3.9.12"
+      },
+      "input_sha256": {
+        "scripts/application-tests/native_diagnostic_lifecycle_capture.py": "0585f78b80e603c010316418ce307794d59e1d92581b845ec6b2e74e22c8954b",
+        "scripts/tests/test_native_diagnostic_lifecycle_capture.py": "04d5959be64b43888cb983baf267816de3de11cee0b7fbebef4ec2f4321e82f3",
+        "scripts/application-tests/native_diagnostic_lifecycle_collector.c": "36fa0d55a30f5e943de0b28c6f54e033cf84ff8cc83cdc54c59688e993c44383",
+        "scripts/application-tests/native_diagnostic_lifecycle_probe.c": "18444a0917ed850690cca41be1b9a6090a3ab533c94a0f1ad66892df0625ca44"
+      }
+    },
+    "result": {
+      "returncode": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "45433012acc30a0b30a69a7dc446f91f59071f7dc7016eda48e63c1cb52ba6b6"
+    },
+    "exact_parser_delta": "PASS: only expected status_before and returned summary 3 -> 5",
+    "whitespace": "PASS for the two modified Python files",
+    "frozen_collector_and_probe": "SHA256 unchanged"
+  },
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/command.json",
+      "sha256": "740736c2629f715279db2678d83f1e1a8c9cf268488e1e50de93cc2ad4e76558",
+      "size": 2030
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/001.command.json",
+      "sha256": "c2d245931a87c7d44a03d5d8b6922cb4c3ae7ff1d9d56c1bcdc1b78cc53aae50",
+      "size": 665
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/001.json",
+      "sha256": "cff28e3fd7c9313b916eb194dd3bcefddc90f17400ffa5b0b2aa3773c3f4e1fb",
+      "size": 547
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/001.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/001.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/002.command.json",
+      "sha256": "17c786b9cc0434a4d72f834829421327233a1cb96b237f55105d557e98e1b634",
+      "size": 584
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/002.json",
+      "sha256": "648ba66b1d62a7165924618fdcdb2ce3e1609ed84d1ae9766fcc2f74c1256856",
+      "size": 466
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/002.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/002.stdout",
+      "sha256": "63e3cfb7a552e509695f53306c646409af19a3dd5c74b6794d4815c62382b2d6",
+      "size": 1942
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/actual-crossbody.serial",
+      "sha256": "63e3cfb7a552e509695f53306c646409af19a3dd5c74b6794d4815c62382b2d6",
+      "size": 1942
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/actual-probe-running.stdout",
+      "sha256": "77cbf584af48c02267c6071dde26f780023b44bfbb00a520038ab971bd32bce5",
+      "size": 480
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/collector.c",
+      "sha256": "36fa0d55a30f5e943de0b28c6f54e033cf84ff8cc83cdc54c59688e993c44383",
+      "size": 26673
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/harness",
+      "sha256": "5eef61d86a98b2f9d91888ffa89b69b4edb4b42637054dd74965fb1e535765f7",
+      "size": 35888
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/harness.c",
+      "sha256": "739d486733e5d92f51ee9bf502d5db279d5945b79e7521862f0001c0f12e99c0",
+      "size": 1323
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/negative-booted.serial",
+      "sha256": "58f967bb808544e160da1fa51d9c61a1f8718d61b9c4d7723f90dcc05e98e297",
+      "size": 1942
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/negative-duplicate.serial",
+      "sha256": "4d679894bd813115509122120668f4fdb9f640df2a0c2338a8fa1557b6ce9e18",
+      "size": 3059
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/negative-operation.serial",
+      "sha256": "b6521686eebb6cc339f7ad65d33066587386b3501a87181c9f12539425fdcb2b",
+      "size": 1958
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/negative-order.serial",
+      "sha256": "cb2c56bb07d2afb3646bb58170eaf09e2c0ba2128e17bd283374d5dfee4584fc",
+      "size": 1942
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/negative-parser-results.json",
+      "sha256": "43d0cd30bf728ca71e96b4dbd4a6ae9aeaa158283c153e2b93e8a55dd3dbe938",
+      "size": 261
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/negative-result.serial",
+      "sha256": "08eb0926c8a1a86a0e2929047129085819db44d4382596232f2ec0fe43b24796",
+      "size": 1942
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/compiled-1/positive-parser-result.json",
+      "sha256": "95db3e1ae31d841e6ecf3d9a69a43d2a81a1e2a703e31e8f7c6395d08cc4e602",
+      "size": 224
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/native_diagnostic_lifecycle_capture.py.diff",
+      "sha256": "582e7e5d59d62cfea16784d46c10172683bf1543504db18deed14f2d3b3a40b6",
+      "size": 1068
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/python-version.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/python-version.stdout",
+      "sha256": "7750f5e8f71f71a6eebaaffed28eb4d06c659e7de830931b4ac9d320086b2a73",
+      "size": 14
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/result.json",
+      "sha256": "6d6c64c064632830a401dabc3acf2e4cc155d3a7670d08cb59f9c57ce871b8c5",
+      "size": 196
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/stderr",
+      "sha256": "45433012acc30a0b30a69a7dc446f91f59071f7dc7016eda48e63c1cb52ba6b6",
+      "size": 1905
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-capture-crossbody-20261017-1/attempt-1/test_native_diagnostic_lifecycle_capture.py.diff",
+      "sha256": "106c6d2dfcd123189258f21171082c780bde00a7faba67811524d61b8872b6d0",
+      "size": 10873
+    }
+  ],
+  "acceptance": "Offline code-path verification only; unchanged independent payload/owner/QMP/kernel validation remains mandatory. No runtime, OS destruction, resource restoration or application acceptance.",
+  "blocker": null,
+  "next_task": "Independent exact-source review; separately scoped caller integration."
+}

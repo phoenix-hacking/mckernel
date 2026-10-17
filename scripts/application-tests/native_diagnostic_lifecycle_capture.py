@@ -74,7 +74,7 @@ def _probe(stdout):
     _need("\r" not in text, "unexpected probe carriage return")
     lines = text.split("\n")
     _need(len(lines) == 7 and lines[-1] == "", "missing/extra/truncated probe records")
-    operations = (("open", 0, None), ("status_before", 0x112a03, 3),
+    operations = (("open", 0, None), ("status_before", 0x112a03, 5),
                   ("shutdown", 0x112a02, 0), ("status_after", 0x112a03, 0),
                   ("close", 0, 0))
     for line, (operation, request, result) in zip(lines[:5], operations):
@@ -146,6 +146,6 @@ def validate_lifecycle_capture(serial):
     _need(streams["stderr"] == b"", "unexpected probe stderr")
     _probe(streams["stdout"])
     return {"status": "LIFECYCLE_DIAGNOSTIC_PASS", "transition_observed": True,
-            "status_before": 3, "status_after": 0,
+            "status_before": 5, "status_after": 0,
             "resource_restoration_verified": False, "os_destroyed": False,
             "payload_validation_required": True}

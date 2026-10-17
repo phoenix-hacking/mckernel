@@ -1,0 +1,1449 @@
+{
+  "schema": "mckernel.native-lifecycle-current942-preparation.v1",
+  "task_id": "M05-native-lifecycle-current942-preparation-20261017-2",
+  "status": "PASS_OFFLINE_PREPARATION_PENDING_INDEPENDENT_REVIEW",
+  "authority": "Dispatcher authorized one bounded preparation-driver loader-pin correction after reviewed QMP guard integration; unchanged stager/overlay/loader and frozen guest binaries.",
+  "bounded_correction": {
+    "authorization": "Dispatcher reviewed QMP guard integration source76PASS and independent review; one loader pin correction only; original failure retained.",
+    "original_driver": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/prepare.py",
+    "original_sha256": "ade36144f7de1b104e4fbb59c8ee6f1f1bf8f25b5da83e43a8a27dfa8c671db3",
+    "corrected_sha256": "d0eac05fd19518c37270703967f8d00fd3e808ae7385669b52145e99f339f0d0",
+    "only_delta": {
+      "old_loader_sha256": "8af67bcf5015cbf1915a65fdb3ce50d09ed68ea39f3b08fa95fa29625fd7afbc",
+      "new_loader_sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e"
+    },
+    "review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-diagnostic-qmp-integrated-review-20261017-1.json",
+      "sha256": "1c223565595474b84c530ea910b42dab4e56b8a4e519de19b59590d8287d987c",
+      "record": {
+        "schema": "mckernel.qmp-integrated-independent-review.v1",
+        "decision": "PASS_SOURCE_INTEGRATED_QMP_ADMISSION",
+        "reviewer": "/root/image_retirement_review",
+        "diagnostic_sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+        "owner_sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+        "test_sha256": "6d7fdebda5a064dfbf8f1ddac8e4a771f9db237c575e2475bf643190560a8818",
+        "findings": [
+          "Integrated diagnostic matches reviewed candidate; owner sole implementation change is diagnostic source pin.",
+          "Test imports current owner, asserts file and pin, constructs complete owner and forces oversized encoded endpoint independently of TMPDIR.",
+          "Rejection precedes identity, acquisition, owner queue, backend and evidence side effects."
+        ],
+        "tests": {
+          "exit_code": 0,
+          "passed": 76,
+          "reviewer_rerun": false,
+          "retained": "/home/holden/mckernel-work/scratch/qt-1/integration-final.stderr"
+        },
+        "scope": "Source/admission only; no guest behavior/formal acceptance."
+      }
+    }
+  },
+  "original_failure_preserved": {
+    "report": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-lifecycle-current942-preparation-20261017-1.json",
+      "sha256": "0439afdb32a782eed5a9ccf32229aaac2a21819dad62e6b25210777d5594faba",
+      "size": 5863,
+      "mode": 33152
+    },
+    "scratch_root": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1",
+    "result": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/outer-result.json",
+      "sha256": "62664e3a9d827130e144678d071174c4cbb024a4eb5d3324cdaa84b2195b678c",
+      "size": 238,
+      "mode": 33152
+    },
+    "failure": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/failure.json",
+      "sha256": "b1c89c3f81582d817734bdfeb9e5834ab841ffab9be9682d442b14e1a1145ab0",
+      "size": 789,
+      "mode": 33152
+    },
+    "driver": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/prepare.py",
+      "sha256": "ade36144f7de1b104e4fbb59c8ee6f1f1bf8f25b5da83e43a8a27dfa8c671db3",
+      "size": 12237,
+      "mode": 33152
+    }
+  },
+  "execution": {
+    "outer_command": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=150",
+        "--nofile=256",
+        "--fsize=268435456",
+        "--core=0",
+        "/usr/bin/timeout",
+        "-k",
+        "5s",
+        "180s",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/prepare.py"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/home",
+        "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/tmp",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "cwd": "/home/holden/mckernel",
+      "driver_sha256": "d0eac05fd19518c37270703967f8d00fd3e808ae7385669b52145e99f339f0d0",
+      "scope": "Dispatcher admitted ONE bounded loader-pin correction after reviewed QMP guard integration; original failure preserved. Offline clone/stager/overlay/load_manifest only."
+    },
+    "outer_result": {
+      "returncode": 0,
+      "elapsed_seconds": 16.675333477003733,
+      "stdout_sha256": "45d166b417596896e8503c204befaf762f8dad161d72384fc66a58975dab15a1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stage_command": {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel/scripts/application-tests/native_diagnostic_stager.py",
+        "--base-root",
+        "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/base-root",
+        "--payload",
+        "/home/holden/mckernel-work/scratch/stability-packet001-compile-20260913-1/startup.argv-empty/payload",
+        "--collector",
+        "/home/holden/mckernel-work/scratch/native-lifecycle-collector-static-20261017-1/native-lifecycle-collector",
+        "--output",
+        "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/stage",
+        "--replacements",
+        "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/replacements.json"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/home",
+        "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/tmp",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "cwd": "/home/holden/mckernel"
+    },
+    "stage_result": {
+      "returncode": 0,
+      "elapsed_seconds": 7.38534946499567
+    },
+    "overlay_command": {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+        "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/stage/initramfs.cpio.gz",
+        "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/app",
+        "/home/holden/mckernel-work/scratch/native-lifecycle-collector-static-20261017-1/native-lifecycle-collector",
+        "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+        "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/lifecycle.cpio.gz",
+        "--collector-sha256",
+        "8330e259adcd34136379f0deef2f77ecd5a8a8aba9161c5ba6329e8a0e70f89b",
+        "--mcexec-sha256",
+        "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+        "--payload-sha256",
+        "8be0b167d7267d4ef5aa122f62ebdbd95d6aa0be4f75384b9285d9983683c234",
+        "--base-sha256",
+        "ce143cc250e0c895e3fa0b4367edcd0250369126e97308fef35398c2cf15b21c",
+        "--base-size",
+        "12698893",
+        "--base-cpio-sha256",
+        "0b08a1ee4e96ceb8e2ecd2cb9b26f8dbfb04c9be51c9da72da40f26ba5c40a6f",
+        "--base-cpio-size",
+        "40550912"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/home",
+        "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/tmp",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "cwd": "/home/holden/mckernel"
+    },
+    "overlay_result": {
+      "returncode": 0,
+      "elapsed_seconds": 8.57718685999862
+    },
+    "resources": {
+      "cpu_affinity": [
+        6
+      ],
+      "address_space_bytes": 1073741824,
+      "cpu_seconds": 150,
+      "wall_seconds": 180,
+      "kill_after_seconds": 5,
+      "nofile": 256,
+      "file_size_bytes": 268435456,
+      "core_bytes": 0,
+      "jobs": 1
+    },
+    "environment_scope": "Explicit PATH/LANG/LC_ALL/HOME/TMPDIR/PYTHONDONTWRITEBYTECODE only. Private home/tmp under fresh correction subtree.",
+    "observer_tools": [
+      {
+        "path": "/home/holden/anaconda3/bin/python3.9",
+        "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+        "size": 15880080,
+        "mode": 33277
+      },
+      {
+        "path": "/usr/bin/cpio",
+        "sha256": "c78e65ab0d9309a15f3002dbe8ae5a605a601f6e5475732be0ed4585d79799ae",
+        "size": 165504,
+        "mode": 33261
+      },
+      {
+        "path": "/usr/bin/gzip",
+        "sha256": "a8120e8acfefc520a8a17b8340e2753ee165383f19558aab157178595101ef12",
+        "size": 97496,
+        "mode": 33261
+      }
+    ]
+  },
+  "preparation_result": {
+    "status": "PASS_PREPARATION_ONLY_PENDING_INDEPENDENT_REVIEW",
+    "final_member_count": 60,
+    "manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/manifest.json",
+      "sha256": "0540cfd9488579e59cb2bbd78883633015a14d622bc6fb8c1e26255df5f3b5bb",
+      "size": 5641,
+      "mode": 33152
+    },
+    "overlay": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/lifecycle.cpio.gz",
+      "sha256": "b5e7de21bdbf2de23caa547029434ecbf591f594472dd41c36419462cc4b876c",
+      "size": 13628452,
+      "mode": 33152
+    },
+    "base_addition_diff": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/base-addition-diff.json",
+      "sha256": "774e80302da730b65a7d32d4512f8a6323b4d9ccf65a223427fd6ead256b50f5",
+      "size": 1641,
+      "mode": 33152
+    },
+    "probe_explicit_join": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/probe-explicit-join.json",
+      "sha256": "eb26ed407c79f4679cedb17799cb6719247d95f7f56abfa1863cc361bcf2e498",
+      "size": 1558,
+      "mode": 33152
+    },
+    "strict_manifest_validation": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/strict-manifest-validation.json",
+      "sha256": "a1a496fffe11687031d118fe12139e8af311ba7734690bd69442c9fde1ed42fe",
+      "size": 976,
+      "mode": 33152
+    },
+    "runtime_release": false,
+    "guest_executed": false,
+    "application_acceptance": false
+  },
+  "base_provenance": {
+    "recovered_original_base": "/home/holden/mckernel-work/scratch/native-application-signals-signals-guest-20260909-1/root",
+    "source": "Recovered exact --base-root from retained signal-stage command and matched retained original stage manifest base_root; not a staged tree.",
+    "diff": {
+      "original_base": "/home/holden/mckernel-work/scratch/native-application-signals-signals-guest-20260909-1/root",
+      "recovery_record": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/signal-mask-restore-current942-staging-20261017-1.json",
+        "sha256": "6dd4a8ea086759246592e361cae9f2681cdc94b5a5dbf9774e5d62ae57334106",
+        "size": 25705,
+        "mode": 33152
+      },
+      "retained_stage_manifest": {
+        "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/manifest.json",
+        "sha256": "daab6d41de9866ca015cbd58766f855a41419686754d3438baaabeba301446f3",
+        "size": 19535,
+        "mode": 33152
+      },
+      "source_inventory_count": 55,
+      "clone_inventory_count": 56,
+      "symlinks_or_special_files": 0,
+      "added": [
+        "bin/native-lifecycle-probe"
+      ],
+      "removed": [],
+      "changed": [],
+      "directory_size_scope": "Full raw inventories retain directory sizes. Equality/diff excludes directory allocation size only, while comparing all names/types/modes/uid/gid/file sizes/hashes.",
+      "root_mode": {
+        "original": 16877,
+        "clone": 16832
+      },
+      "probe_source": {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/native-lifecycle-probe",
+        "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+        "size": 872616,
+        "mode": 33216
+      },
+      "probe_added": {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/base-root/bin/native-lifecycle-probe",
+        "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+        "size": 872616,
+        "mode": 33261
+      }
+    },
+    "raw_clone_inventory_differences": {},
+    "raw_probe_addition_existing_row_changes": {},
+    "inventory_counts": {
+      "original": 55,
+      "clone_before": 55,
+      "clone_with_probe": 56,
+      "stager_source": 56,
+      "staged": 60,
+      "final": 60
+    },
+    "inventories": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/original-base-inventory.json",
+        "sha256": "ff50dcdbd55ca06e717a849a20f9d5cb440441e800097c32d846ce133de1d5e6",
+        "size": 10755,
+        "mode": 33152
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/clone-before-addition-inventory.json",
+        "sha256": "ff50dcdbd55ca06e717a849a20f9d5cb440441e800097c32d846ce133de1d5e6",
+        "size": 10755,
+        "mode": 33152
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/clone-after-addition-inventory.json",
+        "sha256": "c35745f5c3728f409b82a4685bd530ff7115d0552f0e27febe5b682582eab2b7",
+        "size": 10978,
+        "mode": 33152
+      }
+    ],
+    "copy_scope": "Fresh ordinary-user copy with exclusive destination creation, no-follow source opens, stable pre/post/named source identity, complete file hash/size/mode/uid/gid comparison; no symlinks or special files accepted. Root/ancestor metadata beyond compared root modes is not claimed identical.",
+    "original_unchanged": "Original and cloned base inventories rechecked after full preparation; original remains byte/mode/name identical to retained source inventory."
+  },
+  "probe_explicit_binding": {
+    "probe_source": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/native-lifecycle-probe",
+      "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+      "size": 872616,
+      "mode": 33216
+    },
+    "clone_file": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/base-root/bin/native-lifecycle-probe",
+      "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+      "size": 872616,
+      "mode": 33261
+    },
+    "stager_source_inventory": {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/native-lifecycle-probe",
+      "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+      "size": 872616,
+      "type": "file",
+      "uid": 1000
+    },
+    "stager_staged_inventory": {
+      "gid": 1000,
+      "mode": 493,
+      "path": "bin/native-lifecycle-probe",
+      "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+      "size": 872616,
+      "type": "file",
+      "uid": 1000
+    },
+    "final_member": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+      "size": 872616,
+      "uid": 0
+    },
+    "final_name_count": 60,
+    "strict_manifest_scope": "Existing strict loader binds known members but does not know lifecycle probe. This explicit source/base/stage/final join supplies the additional probe binding; independent review still required."
+  },
+  "full_final_map": {
+    "apps": {
+      "gid": 0,
+      "mode": 16877,
+      "mtime": 0,
+      "nlink": 2,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "apps/app": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 0,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "8be0b167d7267d4ef5aa122f62ebdbd95d6aa0be4f75384b9285d9983683c234",
+      "size": 872056,
+      "uid": 0
+    },
+    "bin": {
+      "gid": 0,
+      "mode": 16877,
+      "mtime": 0,
+      "nlink": 2,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "bin/bash": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "a59fc4da19d169c175b247bfaf4a21c2ee7c16c3ed2820daa807ab12affe98fc",
+      "size": 1410688,
+      "uid": 0
+    },
+    "bin/dmesg": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "8d98381f576d147789c950da4377464d2dfbb590bd4d7ef8ff9dbc81d74cdbd1",
+      "size": 72088,
+      "uid": 0
+    },
+    "bin/mcd0-ioctl-i386": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "9cae94a48462fe1fd409d572acd2c0dff04decb0c7eacae703aa5876389c24f2",
+      "size": 8416,
+      "uid": 0
+    },
+    "bin/mcd0-ioctl-x86_64": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "dac5c47b17cec8b063329dff21c7318506e1d7a3e05a1f905be53c6483f6fed9",
+      "size": 8512,
+      "uid": 0
+    },
+    "bin/mcexec": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 0,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+      "size": 453352,
+      "uid": 0
+    },
+    "bin/mount": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "3ab3ac4707f4d02f4d46c916e537c38cdaee3b9daa64f91f850decf47bc889d9",
+      "size": 48864,
+      "uid": 0
+    },
+    "bin/native-application-core": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+      "size": 39488,
+      "uid": 0
+    },
+    "bin/native-application-hello": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "fd08a46261fa79fdd16ddb2dce6e7f99c77178b290815c06445277db454851e7",
+      "size": 1264,
+      "uid": 0
+    },
+    "bin/native-boot": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "4558995ea1ae70c8d5a115542e333ad695a54b4b8f450ea717df37fd1e631af3",
+      "size": 30984,
+      "uid": 0
+    },
+    "bin/native-lifecycle-probe": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+      "size": 872616,
+      "uid": 0
+    },
+    "bin/native-os-buildid-i386": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "04b7ad7993ce87fce24108491959374303bd74ea38e85e591dcdce096396e2ce",
+      "size": 29716,
+      "uid": 0
+    },
+    "bin/native-os-buildid-x86_64": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "65f51b8d3324641b6fcd72d79448e15b1cc0fe054f3116d6ceb8ea1b5c56d18b",
+      "size": 30376,
+      "uid": 0
+    },
+    "bin/native-string-i386": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "b2884ecbe15f3dbb763d1192332bfeb0bd78d864984d7b31a6f96a4ca99ea111",
+      "size": 38740,
+      "uid": 0
+    },
+    "bin/native-string-x86_64": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "ba40b85c8620454276f631096b6f807cc4384c5354880e1af43de6e45532495c",
+      "size": 39352,
+      "uid": 0
+    },
+    "bin/stat": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "9f6ffbf89d8463633790130b1d79999e1f5ef72fa63ac128eefc19101116b4d3",
+      "size": 51,
+      "uid": 0
+    },
+    "bin/uname": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "050964cc46affadcf00d817106c47a6bde087fc483fa0643e168a816b76de608",
+      "size": 52,
+      "uid": 0
+    },
+    "case": {
+      "gid": 0,
+      "mode": 16877,
+      "mtime": 0,
+      "nlink": 2,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "case/work": {
+      "gid": 0,
+      "mode": 16877,
+      "mtime": 0,
+      "nlink": 2,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "dev": {
+      "gid": 0,
+      "mode": 16877,
+      "mtime": 0,
+      "nlink": 2,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "images": {
+      "gid": 0,
+      "mode": 16877,
+      "mtime": 0,
+      "nlink": 2,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "images/mckernel.img": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+      "size": 7908256,
+      "uid": 0
+    },
+    "init": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 0,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "8330e259adcd34136379f0deef2f77ecd5a8a8aba9161c5ba6329e8a0e70f89b",
+      "size": 1021992,
+      "uid": 0
+    },
+    "lib": {
+      "gid": 0,
+      "mode": 16877,
+      "mtime": 0,
+      "nlink": 2,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "lib64": {
+      "gid": 0,
+      "mode": 16877,
+      "mtime": 0,
+      "nlink": 2,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "lib64/ld-linux-x86-64.so.2": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "size": 930600,
+      "uid": 0
+    },
+    "lib64/libacl.so.1": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "342a0213a17809ee41816a95c939f11ba25ff92da53ae849bc88cf3da81649aa",
+      "size": 40896,
+      "uid": 0
+    },
+    "lib64/libattr.so.1": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "1369a9dd4a7bcd8d4bf71293b369f6d222a1ea12132d988ed529d796522076a0",
+      "size": 28296,
+      "uid": 0
+    },
+    "lib64/libblkid.so.1": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "6149c97e401f088ee8e4d9681e0498486e41a90b90618b0dafca0b8545230143",
+      "size": 242128,
+      "uid": 0
+    },
+    "lib64/libc.so.6": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "size": 2339896,
+      "uid": 0
+    },
+    "lib64/libcap.so.2": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf",
+      "size": 53168,
+      "uid": 0
+    },
+    "lib64/libcrypto.so.3": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "3da8e54521ce53e2a09d9ca0d1d5c3368b8abba252492cee21affd6146f72d82",
+      "size": 5631152,
+      "uid": 0
+    },
+    "lib64/libgcc_s.so.1": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "cc9c9d070f290bd0b39a7208f8850f6f6cb85491cf6aee80ef4502c3f040c2cb",
+      "size": 186528,
+      "uid": 0
+    },
+    "lib64/liblzma.so.5": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "a1ccc4236761114ffa9efa797501b9f34398a20de75ca0ca22df9410cbe41bde",
+      "size": 215496,
+      "uid": 0
+    },
+    "lib64/libmount.so.1": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "5199b49c7ad1565700fd649e9b13024919192128908536203fe95fff4adadb2c",
+      "size": 333512,
+      "uid": 0
+    },
+    "lib64/libnuma.so.1": {
+      "gid": 0,
+      "mode": 33188,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "be20c2b16781eea6c69d47816bf15869f90f2a009628c310049da1d2f3c31e4e",
+      "size": 62328,
+      "uid": 0
+    },
+    "lib64/libpcre2-8.so.0": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "ac0dcbb0620261d144a5255ce79c30c583593e7a29822df7a529c06922852e94",
+      "size": 665664,
+      "uid": 0
+    },
+    "lib64/libpthread.so.0": {
+      "gid": 0,
+      "mode": 33188,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "f2791d4558ccad3fd23808f206e1b8e861b448b04d1e5cc75ae405e3e028fa1a",
+      "size": 15496,
+      "uid": 0
+    },
+    "lib64/librt.so.1": {
+      "gid": 0,
+      "mode": 33188,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "3edee3d7a74e29d28e4831c37e9ef8330c1702f391302a30d241f6aa579b9afa",
+      "size": 15632,
+      "uid": 0
+    },
+    "lib64/libselinux.so.1": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "79e73dd27d4a90f25969c43c298ad32aa21c718c8508ef86c5a8e6ee083723a9",
+      "size": 200664,
+      "uid": 0
+    },
+    "lib64/libtinfo.so.6": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "3a4bdb43bc49568cec111b5486e6daa6fbca08dc205357b3d737044eb0ab315a",
+      "size": 187296,
+      "uid": 0
+    },
+    "lib64/libz.so.1": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "2fd5dcd6bc0953f3db71958b10c0cdf55ce49e1ceb4ab9d1f869398e39e994eb",
+      "size": 140824,
+      "uid": 0
+    },
+    "lib64/libzstd.so.1": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "250dc1e1302e3eedd9f483c7cb3d52ab15882bf9d12072539cc4f06660b384e1",
+      "size": 729608,
+      "uid": 0
+    },
+    "modules": {
+      "gid": 0,
+      "mode": 16877,
+      "mtime": 0,
+      "nlink": 2,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "modules/ihk-smp-x86_64.ko": {
+      "gid": 0,
+      "mode": 33188,
+      "mtime": 1792244982,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "f51d975a7dd36b8e1fba2fd9d850e911f28cd0ad6cd8b292e33095791a4241f2",
+      "size": 11418720,
+      "uid": 0
+    },
+    "modules/ihk.ko": {
+      "gid": 0,
+      "mode": 33188,
+      "mtime": 1792244982,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "331f4cc1bd0ecaa4cecc55364fb3e8ce216df3a3cd406f1d05c35112276d1001",
+      "size": 1438632,
+      "uid": 0
+    },
+    "modules/mcctrl.ko": {
+      "gid": 0,
+      "mode": 33188,
+      "mtime": 1792244982,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "4cf6196f9e93fb10b08bc4e5bf75022b0858779a6479910340941006748cd23f",
+      "size": 1914512,
+      "uid": 0
+    },
+    "poweroff": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "384607e6e1544a549c793f34a21d8d555879abaa1d532b5e2b9dc5e020dcc569",
+      "size": 4456,
+      "uid": 0
+    },
+    "proc": {
+      "gid": 0,
+      "mode": 16877,
+      "mtime": 0,
+      "nlink": 2,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "sbin": {
+      "gid": 0,
+      "mode": 16877,
+      "mtime": 0,
+      "nlink": 2,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "sbin/insmod": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+      "size": 182088,
+      "uid": 0
+    },
+    "sbin/rmmod": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55",
+      "size": 182088,
+      "uid": 0
+    },
+    "sys": {
+      "gid": 0,
+      "mode": 16877,
+      "mtime": 0,
+      "nlink": 2,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "tmp": {
+      "gid": 0,
+      "mode": 17407,
+      "mtime": 0,
+      "nlink": 2,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "usr": {
+      "gid": 0,
+      "mode": 16877,
+      "mtime": 0,
+      "nlink": 4,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "usr/bin": {
+      "gid": 0,
+      "mode": 16877,
+      "mtime": 0,
+      "nlink": 2,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    },
+    "usr/bin/coreutils": {
+      "gid": 0,
+      "mode": 33261,
+      "mtime": 1792244981,
+      "nlink": 1,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "8e7928bf899599dbe98a4baaf2b5cba78a0b003213ab83104182e31475c068ff",
+      "size": 1347728,
+      "uid": 0
+    },
+    "usr/sbin": {
+      "gid": 0,
+      "mode": 16877,
+      "mtime": 0,
+      "nlink": 2,
+      "rdevmajor": 0,
+      "rdevminor": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 0
+    }
+  },
+  "full_final_map_artifact": {
+    "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/final-map.json",
+    "sha256": "e03c1c575422701c2c7179a9df0ab41ba51d779cc156075f8e3c90473d9029e7",
+    "size": 15087,
+    "mode": 33152
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/manifest.json",
+    "sha256": "0540cfd9488579e59cb2bbd78883633015a14d622bc6fb8c1e26255df5f3b5bb",
+    "size": 5641,
+    "mode": 33152
+  },
+  "manifest_artifacts": {
+    "bzImage": {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+      "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+      "size": 16130048
+    },
+    "initramfs": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/stage/initramfs.cpio.gz",
+      "sha256": "ce143cc250e0c895e3fa0b4367edcd0250369126e97308fef35398c2cf15b21c",
+      "size": 12698893,
+      "mode": 33152
+    },
+    "libc": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/stage/root/lib64/libc.so.6",
+      "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+      "size": 2339896,
+      "mode": 33261
+    },
+    "loader": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/stage/root/lib64/ld-linux-x86-64.so.2",
+      "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+      "size": 930600,
+      "mode": 33261
+    },
+    "mcexec": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+      "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+      "size": 453352
+    },
+    "mckernel_image": {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-942c927b-scratch22-authority3-image1-20261017/evidence/artifacts/mckernel.img",
+      "sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+      "size": 7908256
+    },
+    "native_boot": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/stage/root/bin/native-boot",
+      "sha256": "4558995ea1ae70c8d5a115542e333ad695a54b4b8f450ea717df37fd1e631af3",
+      "size": 30984,
+      "mode": 33261
+    },
+    "payload": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/app",
+      "sha256": "8be0b167d7267d4ef5aa122f62ebdbd95d6aa0be4f75384b9285d9983683c234",
+      "size": 872056
+    },
+    "root_base": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/stage/initramfs.cpio.gz",
+      "sha256": "ce143cc250e0c895e3fa0b4367edcd0250369126e97308fef35398c2cf15b21c",
+      "size": 12698893,
+      "mode": 33152
+    }
+  },
+  "manifest_modules": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/ihk.ko",
+      "sha256": "331f4cc1bd0ecaa4cecc55364fb3e8ce216df3a3cd406f1d05c35112276d1001",
+      "size": 1438632
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/ihk-smp-x86_64.ko",
+      "sha256": "f51d975a7dd36b8e1fba2fd9d850e911f28cd0ad6cd8b292e33095791a4241f2",
+      "size": 11418720
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/mcctrl.ko",
+      "sha256": "4cf6196f9e93fb10b08bc4e5bf75022b0858779a6479910340941006748cd23f",
+      "size": 1914512
+    }
+  ],
+  "manifest_staging": {
+    "base_initramfs": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/stage/initramfs.cpio.gz",
+      "sha256": "ce143cc250e0c895e3fa0b4367edcd0250369126e97308fef35398c2cf15b21c",
+      "size": 12698893,
+      "mode": 33152
+    },
+    "derived_initramfs": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/lifecycle.cpio.gz",
+      "sha256": "b5e7de21bdbf2de23caa547029434ecbf591f594472dd41c36419462cc4b876c",
+      "size": 13628452,
+      "mode": 33152
+    },
+    "collector": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-static-20261017-1/native-lifecycle-collector",
+      "sha256": "8330e259adcd34136379f0deef2f77ecd5a8a8aba9161c5ba6329e8a0e70f89b",
+      "size": 1021992,
+      "mode": 33216
+    },
+    "overlay_source": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+      "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+      "size": 26579,
+      "mode": 33152
+    },
+    "overlay_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/overlay-manifest.json",
+      "sha256": "ebef69b22aae1b152574ae588178e940eccaa30ddcb3c3b61422556131a75932",
+      "size": 19437,
+      "mode": 33152
+    }
+  },
+  "strict_validation": {
+    "status": "PASS",
+    "loader": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440,
+      "mode": 33152
+    },
+    "manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/manifest.json",
+      "sha256": "0540cfd9488579e59cb2bbd78883633015a14d622bc6fb8c1e26255df5f3b5bb",
+      "size": 5641,
+      "mode": 33152
+    },
+    "elapsed_seconds": 0.0885857120010769,
+    "call": "load_manifest only; no prepare_attempt/backend/container/QEMU/guest/payload call",
+    "validated_case_id": "signal.mask-restore",
+    "payload_oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a"
+    },
+    "member_join_count": 60,
+    "probe_binding": "Separate probe-explicit-join.json; not implied by existing loader."
+  },
+  "payload": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "A",
+      "",
+      "B"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024,
+    "stdout_oracle_bytes": 40
+  },
+  "guest_profile": {
+    "memory_mib": 8192,
+    "name": "native-diagnostic-4vcpu-8192mib",
+    "numa_nodes": 2,
+    "vcpus": 4
+  },
+  "frozen_binaries": {
+    "probe": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-static-20261017-1/native-lifecycle-probe",
+      "sha256": "d8132525b6126ee93fc5de4f59ac06eb83ffeb90f85225da585d89060dfb1248",
+      "size": 872616,
+      "mode": 33216
+    },
+    "collector": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-collector-static-20261017-1/native-lifecycle-collector",
+      "sha256": "8330e259adcd34136379f0deef2f77ecd5a8a8aba9161c5ba6329e8a0e70f89b",
+      "size": 1021992,
+      "mode": 33216
+    },
+    "signal_payload": {
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/app",
+      "sha256": "8be0b167d7267d4ef5aa122f62ebdbd95d6aa0be4f75384b9285d9983683c234",
+      "size": 872056,
+      "mode": 33216
+    }
+  },
+  "immutable_tool_sources": [
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_stager.py",
+      "sha256": "d4d29757e34cdc4c8e208b420709d2b4a7c10eb2f8f40c29bfeca3d08f568952",
+      "size": 21899,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+      "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d",
+      "size": 26579,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440,
+      "mode": 33152
+    }
+  ],
+  "capture_files": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/base-addition-diff.json",
+      "sha256": "774e80302da730b65a7d32d4512f8a6323b4d9ccf65a223427fd6ead256b50f5",
+      "size": 1641,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/bounded-correction.json",
+      "sha256": "6d93f2d8f3166b72900592d05fd315e441ea3b683db91455268d53fd4ae2801d",
+      "size": 2030,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/clone-after-addition-inventory.json",
+      "sha256": "c35745f5c3728f409b82a4685bd530ff7115d0552f0e27febe5b682582eab2b7",
+      "size": 10978,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/clone-before-addition-inventory.json",
+      "sha256": "ff50dcdbd55ca06e717a849a20f9d5cb440441e800097c32d846ce133de1d5e6",
+      "size": 10755,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/final-map.json",
+      "sha256": "e03c1c575422701c2c7179a9df0ab41ba51d779cc156075f8e3c90473d9029e7",
+      "size": 15087,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/lifecycle.cpio.gz",
+      "sha256": "b5e7de21bdbf2de23caa547029434ecbf591f594472dd41c36419462cc4b876c",
+      "size": 13628452,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/manifest.json",
+      "sha256": "0540cfd9488579e59cb2bbd78883633015a14d622bc6fb8c1e26255df5f3b5bb",
+      "size": 5641,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/original-base-inventory.json",
+      "sha256": "ff50dcdbd55ca06e717a849a20f9d5cb440441e800097c32d846ce133de1d5e6",
+      "size": 10755,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/outer-command.json",
+      "sha256": "c074864a5c5137a2bc358f08efeab982fbca1c4a47b0832f19473b65a9511819",
+      "size": 1070,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/outer-result.json",
+      "sha256": "8f31d9094804f4a038e82e08a5919daf6184ea0b9388ecbfc9ab12c1eb460976",
+      "size": 237,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/outer.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/outer.stdout",
+      "sha256": "45d166b417596896e8503c204befaf762f8dad161d72384fc66a58975dab15a1",
+      "size": 57,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/overlay-command.json",
+      "sha256": "8f79d3fec4e31377c0ab6ee46c8a36c696c25a998eae78c368643b9e5c7a6ca4",
+      "size": 1662,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/overlay-manifest.json",
+      "sha256": "ebef69b22aae1b152574ae588178e940eccaa30ddcb3c3b61422556131a75932",
+      "size": 19437,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/overlay-result.json",
+      "sha256": "f6cd0db4b85adb67528ded239f89063c4af09a987bd12467bd892d845c9f8386",
+      "size": 61,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/overlay.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/overlay.stdout",
+      "sha256": "f7c50cc3488aafaa18d484da3751f347bdc3f604652abc2ac8c6e31c213eaf8c",
+      "size": 15091,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/preparation-result.json",
+      "sha256": "f0ea2e35d9ad01bb2b31237cdad0cdbb96d37be7b93ade3f44df4164c3e73bb2",
+      "size": 1589,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/prepare.py",
+      "sha256": "d0eac05fd19518c37270703967f8d00fd3e808ae7385669b52145e99f339f0d0",
+      "size": 12237,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/probe-explicit-join.json",
+      "sha256": "eb26ed407c79f4679cedb17799cb6719247d95f7f56abfa1863cc361bcf2e498",
+      "size": 1558,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/replacements.json",
+      "sha256": "fd53ecc223b97bb7d9657d6436554edc948ebac4829cd0b92cd4769ffef21afc",
+      "size": 1463,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/stage-command.json",
+      "sha256": "5540d7ce152caf86601a696f6a2ca667fed50a03b73793e7dab4106854074e23",
+      "size": 1203,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/stage-result.json",
+      "sha256": "c986f787c74427d538c14434d977cdf180d089999dab4512f203bd4a545aa923",
+      "size": 61,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/stage.stderr",
+      "sha256": "6d7cf0187d2a4591cfb7c2c5b138c88e4e9477b71bbfa4525842f5397572b591",
+      "size": 13,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/stage.stdout",
+      "sha256": "7f75825155c1e50df13c2080b969782c58211a1f90c4377e4db8a111289d0677",
+      "size": 21669,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/strict-manifest-validation.json",
+      "sha256": "a1a496fffe11687031d118fe12139e8af311ba7734690bd69442c9fde1ed42fe",
+      "size": 976,
+      "mode": 33152
+    }
+  ],
+  "stage_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/stage/manifest.json",
+    "sha256": "5927474f154dc876f9af0281d522077dccc5ea5a78b1dd4aed9c5e8216656b7d",
+    "size": 19922,
+    "mode": 33152
+  },
+  "archives": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/stage/initramfs.cpio",
+      "sha256": "0b08a1ee4e96ceb8e2ecd2cb9b26f8dbfb04c9be51c9da72da40f26ba5c40a6f",
+      "size": 40550912,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/stage/initramfs.cpio.gz",
+      "sha256": "ce143cc250e0c895e3fa0b4367edcd0250369126e97308fef35398c2cf15b21c",
+      "size": 12698893,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/lifecycle.cpio.gz",
+      "sha256": "b5e7de21bdbf2de23caa547029434ecbf591f594472dd41c36419462cc4b876c",
+      "size": 13628452,
+      "mode": 33152
+    }
+  ],
+  "review_prerequisites": [
+    "Independent complete original-to-clone inventory diff and exact frozen single-file probe addition review.",
+    "Independent exact60member final map review, including complete probe source/base/stager-source/staged/final hash/size/mode binding.",
+    "Independent lifecycle marker/parser contract review and explicit host parser integration/validation before any diagnostic credit.",
+    "Fresh dispatcher execution packet and required source/artifact/resource/ownership/capability preflight before any isolated guest.",
+    "Existing strict manifest loader does not validate lifecycle probe membership itself; explicit probe join is mandatory additional authority."
+  ],
+  "acceptance": {
+    "runtime_release": false,
+    "guest_executed": false,
+    "probe_executed": false,
+    "collector_executed": false,
+    "shutdown_observed": false,
+    "resource_restoration_verified": false,
+    "application_acceptance": false,
+    "formal_case_credit": false,
+    "production_acceptance": false
+  },
+  "blocker": null,
+  "next_task": "Dispatcher independent inventory/map/marker review and separately authorized lifecycle guest admission after the two file-TLS diagnostics."
+}

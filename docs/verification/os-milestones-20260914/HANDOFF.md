@@ -1,65 +1,46 @@
 # Compact dispatcher handoff
 
-Checkpoint378: signal/calloc/file actualcurrent942 diagnostics+retirementPASS
-(3distinctnewbehaviors,formal0). File34.091172s/395bytes/6sizes/emptyerr0,
-59deliveries58returns30routes,all30clients/container/rootretirementverified.
-NextsoleTLS original2/4/8workerguest exactrelease15bbc7c6/parent1828:108285
-/scratch/ndtls-1 nonce918a1c820c0146ccb6a3ffbfb30ee220 QMP92; afterpush/fetch/
-freshlivecheck freezeHEAD. Reviewerfoundnoparserconflict; retainallguards.
-FixtureTLSimmediatecomparison/no barrierlimitsclaim; noformalpromotion.
-Lifecyclecollectorstatic8330e259+parser49b83824 independentlysourcePASS,
-no actualshutdownyet. Baseclone stagefailedbeforecopies oldloaderpin; one
-boundedrebind toreviewed1b439 admitted, failureevidencepreserved. Continue.
+Checkpoint379: three independently accepted actualcurrent942 guest diagnostics
+thisinvocation: signal.mask-restore33.352663s,calloc33.677923s,file34.091172s.
+Exactoracles/emptyerr0/procfsempty/McKerneltrace+fullhostretirementPASS.
+No kernel/module/image rebuild; newlyintegratedkernelrepairs0/formalcredit0.
+Formalcounts6/130,350/10000,0/7,0/273 andM00-M13estimatebands unchanged.
 
-Checkpoint377: calloc actualguest+retirementPASS33.677923s, exact205bytes/
-6sizes/emptyerr0/procfsempty; all30clientsreaped/containerremoved/root27:4free.
-Thisinvocation2distinctactualguestpasses(signal+calloc), formal0 unchanged.
-Next solefileguest exactrelease ready afterpush/fetch/livecheck: parent
-/scratch/ndfile-1 dev1828/inode108269 nonce877ca28b8c5945d293f77c6082917319,
-QMP93,manifestf60d142f owner9084bfd3,395byte6lineoracle. FreezeHEADunderowner.
-NextTLS strictmanifest /scratch/thread-tls-isolation-current942-20261017-1/manifest.json
-15bbc7c6 original2/4/8workers ready, separateadmission required. Lifecycle
-collector source36fa0d55/testbde48903 independentPASS/30injectedCscenarios;
-staticbuild+strictparser proceed, no actualshutdownclaimyet. Continuecampaign.
+TLS1 originalFAIL34.423271s preserved: outerDockerstartattach1 stderr
+native diagnostic failed: stream accounting. Rawframe55expectedbytes/emptyerr/
+wait0/procfsempty reports4096limits vs manifest1024. Independent
+PASS_RETIREMENT;FAIL_HARNESS_CONTRACT, all25clients/owner/containerretired/root
+27:4free. Actualproducer→unchanged-evaluator replay old1024negative/new4096
+positive is evidence replayONLY, not TLS runtimePASS. ONEboundedmanifest
+correction d6f73eca ready; exactoriginalsource/oracle/59map unchanged. Fresh
+/scratch/ndtls-2 dev1828/inode108558 nonce d6f22a2e165c492caefc2005b0dcfd96
+QMP92, separateexecutionreview active. No automaticthirdsamefamilyattempt.
 
-Checkpoint376: actual current942 signal.mask-restore guest2 PASS33.352663s,
-independent PASS_DIAGNOSTIC_GUEST_AND_RETIREMENT. PID255 prepare/schedule/
-12deliveries/11returns/exit_group/cleanupACK/procfsdelete/retirement/release;
-exact40stdoutbytes, emptyerr,exit0,procfsempty. GuestS5 beforehostquit; QEMU-9
-retired/noerrors, exactcontainerremoved/all30clientsreaped/root27:4unheld.
-One new actual guest behavior this invocation; formalacceptance unchanged.
-Rawmachine pendingreviewflags remain immutable; additive decision records credit.
-Next calloc freshparent1828/108118 /scratch/ndcal-1 nonce
-5aab3db8a4bd4ca6857ad0158055b40d QMP92, manifest589a4a86, owner9084bfd3;
-independent exactrelease review underway. Then filef60d142f. TLS original2/4/8
-vectors preparation and separate lifecyclecollector implementation are ready
-independent lanes; no kernelpatch invented. Keep immutable942baseline, no rebuild.
+Lifecycle candidate independent60map/staticcollector/probePASS; manifest
+0540cfd9 /scratch/native-lifecycle-current942-preparation-20261017-1/attempt-2/manifest.json.
+Originalloaderpin stagefailurebeforecopies retained; solepinrebindpassed.
+WrongRunning3 parsercontract retained/superseded: authoritativeioctlABI
+Running5/Booted3. Correctedparser0585f78b/tests04d5959b independentPASS13tests,
+actualretainedprobe→actualCserializer→parserpositive+5negatives inclBooted3.
+Dualexistingpayloadconsumer+newlifecycleconsumer check underway beforefreeze.
+Freshndlife-1 dev1828/inode108537 nonceccee33a9cb4e45039b2b3da2b134388a
+QMP93, exactone-shotexecutionproposal independentlyapprovedconditional.
+No actualnative shutdown/destroy/resource-restoration claim yet.
 
-Checkpoint375: signal guest1 failed BEFORE BOOT: QMP endpoint132encoded
-bytes exceeds107; exit1 after301.856s, zero boot/payload/guest passes and no
-kernel failure. Independent RETIRED_FAILED_PREBOOT accepts actual owner/runner/
-QEMU/all25Docker client retirement, exactcontainer absence and released27:4.
-Original failure evidence preserved. Narrow endpoint admission now integrated:
-diagnostic1b43934a/owner9084bfd3/test6d7fdeb; independent source review PASS.
-Initial integrated7testfailure preserved (actual1 despite outerwrapper0);
-fixture now constructs real currentowner, verifiesimport/pin, deterministic
-oversize and noqueue/evidence/lock/backend sideeffects. Final7+69tests PASS76,
-actual subprocess0/8.35s. Next fresh short parent /scratch/ndmsk-2, nonce
-2eccd0906ac64daeb33b20c971ea9455,92byteQMP; separate review/release then run.
-Unchanged signalmanifest47eb9589; no kernel/module/image rebuild.
-Next two guests ready: callocmanifest589a4a86 and filemanifestf60d142f.
-Static lifecycletool d8132525 compiled; no actual lifecycle execution yet.
+MutexoriginalattrNULL preparation held; newexplicitadapted8x262144aligned
+stacks preservesoriginalsource/assertions/2,4,8vectors/oracle. Independent
+reviewcaughtuncheckedjoin→livestackreuse; oneboundedprocess-fataljoin/destroy
+correction+actualCfailurepath tests underway. No guestadmissionbefore review.
 
-Adopted [VELOCITY.md](VELOCITY.md): target2x/stretch3x are measured experiments,
-not acceptance increases. Consume completed recovery, keep nexttwo eligible
-guests ready, promptly refill genuinely ready disjoint implementation/test
-lanes within shared7jobs/24GiB and oneheavyprofile; no manufactured tasks.
-Supervision cadence30-60minutes and next13:55UTC cursor are in
-[VELOCITY-REVIEWS.md](VELOCITY-REVIEWS.md); supervisingchat appends thatfile,
-dispatcher retains sole Git/runtime ownership. No newmonitorprocess.
-Current priority remains M00-M13 original100%, functionalcore first, real
-behavior/actualbody measures separate from formal gates; all estimates and
-formalcounts unchanged. Continue after checkpoints and freezeHEAD underowner.
+Adopted [VELOCITY.md](VELOCITY.md) and user135713 nextintervaltactic: onecheap
+actualcollectorproducer/serializer→actualconsumer positive+boundarynegative
+beforefreezingnewmode. Threeactualruntimegains above; no2x/3xclaim fromzero
+baseline. Acceptance-to-next-start proxies2m19s/1m58s/2m03s below5mintarget.
+[VELOCITY-REVIEWS.md](VELOCITY-REVIEWS.md) review1 covers13:24:54–13:55:47UTC;
+nextsupervisoryreview14:25UTC/07:25PDT. Supervisorappendsreviewfile; dispatcher
+soleengineering/runtime/Gitowner. No newmonitor/launcher. FreezeHEADunderlive
+owner, keepnexttwo genuinelyreadyguests, refilldisjointactualworkwithin7jobs/
+24GiB andoneheavy4CPU2-5/12GiB/noswap512tasks. Continueaftercheckpoint.
 
 Current user priority 20261017T130554117286Z-ee81e2040f894282be224a30c0abb57e:
 push every M00-M13 milestone toward its original100% as aggressively and

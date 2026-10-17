@@ -14851,3 +14851,30 @@ push/fetch/livecheck; freezeHEAD. Lifecyclecollectorstatic8330e259PASS; strict
 offlineparser49b83824/10tests independentlyPASS. Baseclonepreparationfailed
 BEFOREcopies on historical loaderpin8af vs reviewed1b439; originalretained,
 oneboundedpinrebind correctionadmitted, no productiontoolchange/rebuild.
+
+## Checkpoint379 — three runtime gains; exact TLS harness failure retired
+
+Signal/calloc/file3distinctactualMcKernel diagnosticsindependentlyaccepted
+thisinvocation; no current942rebuild, newkernelrepair0/formalcredit0.
+TLS1 failed34.423271s/HEAD2b68c7adstable. ExactDockerstartattachedstderr
+'native diagnostic failed: stream accounting', actualinnerFAIL; raw55byte
+2/4/8expectedoutput/emptyerr/wait0/procfsempty reports4096 whilemanifest1024.
+IndependentPASS_RETIREMENT;FAIL_HARNESS_CONTRACT: all25clients/owner/exact
+containerremoved/lookupsempty/root27:4free/profileexact. Actualproducer→
+unchangedevaluatorreplayonlylimits4096 reachesPROTOCOL_PASS (reconstructed
+hosttimingbounds); originalFAIL preserved, noTLScredit. ONEboundedfresh
+manifestd6f73eca/correctionregression underway, freshndtls-2nonce
+d6f22a2e165c492caefc2005b0dcfd96,parent1828/108558,QMP92reviewactive.
+Lifecycle60membermanifest0540cfd9 independentlypreparationPASS; static
+collector8330e259/probed8132525. Correctedparser0585f78b requires authoritative
+Running5/Booted3reject (oldwrongcontractretained),13tests+actualprobe-output→
+actualCserializer→parserpositive/5negatives independentPASS. Dualconsumer
+positive/negativebeforefreezelifecyclerelease inprogress. Freshndlife-1
+parent1828/108537 nonceccee33a9cb4e45039b2b3da2b134388a,QMP93 exactexecution
+proposal independentlyapprovedconditional; no nativeshutdownclaimyet.
+Mutexadaptedstacksource preserves original/vectors/oracle; joinfailurelive
+stackreusefoundbyreview, oneboundedfatalfailurecorrectioninprogress.
+Supervisionreview1recorded13:24:54–13:55:47UTC, next14:25UTC/07:25PDT.
+Adoptactualproducer/serializer→actualconsumerpositive+boundarynegative tactic.
+Measuredhandoffproxies2m19s/1m58s/2m03s below5min; no2x/3xfromzerobaseline.
+Originalacceptancecounts androughM00-M13estimatebandsunchanged.
