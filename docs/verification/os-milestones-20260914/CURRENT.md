@@ -14704,3 +14704,31 @@ guarded toolprobe412d46 for requestfa3a2da8, then actual942 image preparation,
 image build and signal.mask-restore. No repeated Linux rebuild. Formal counts
 and12guest diagnostic passes unchanged; one new compiled candidate now also
 has complete passing diagnostic final checks. Continue autonomously.
+
+
+## Checkpoint 372 — image retirement mount-order defect reproduced and repaired
+
+Fresh invocation adopted exact supplied policy hashes and preserved preexisting
+WIP; live launcher498214/worker498255/server498257, boot/UUID/device1828
+match. Source evidence: ../evidence/os-session-adoption-20261017T125242Z.json.
+Independent review found old/fresh image inspections differ only in Mounts
+ordering. Future guard99a216c1/test8d8beab1 compares complete canonical records
+with unique absolute destinations; original predicate reproduction fails and
+all10 corrected Python tests pass. Reviewer image_retirement_review independently
+accepts source; dispatcher records its read-only decision in
+../evidence/scratch22-image-mount-order-correction-20261017-1.json. An initial
+disposable test accidentally entered nonreturning quarantine; owned PID499468
+was identified and stopped, evidence retained; direct predicate test corrects
+that harness issue without touching runtime processes or original quarantine.
+
+Distinct fresh retirement proof implementation is active, owner
+image_reconciliation_impl; next check disposable Python positive/rejection tests,
+then independent source/execution review and fresh root read-only observation.
+The cleanup helper must explicitly consume that new proof, never a fabricated
+old guard-result. Owner signal_guest_binding resolves exact retained payload/
+collector/native/image/base joins independently. Dispatcher owns future root
+cleanup, guest and Git. Native baseline and matching image remain immutable;
+no new guest app/build or formal acceptance. Counters6/130,350/10000,0/7,0/273;
+12 historical diagnostic passes unchanged. Continue through cleanup to exact
+signal.mask-restore stdout handled=1 observed_blocked=1 restored=1 newline,
+empty stderr, exit0. A source checkpoint does not pause the campaign.

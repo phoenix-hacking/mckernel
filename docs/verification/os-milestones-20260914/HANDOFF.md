@@ -1,5 +1,22 @@
 # Compact dispatcher handoff
 
+Active fresh invocation 20261017T125242Z: startup policies adopted at their
+supplied hashes; launcher498214/worker498255/server498257 confirmed live,
+scratch UUID/boot unchanged, device1828, host20.375GB/scratch19.129GB free.
+All prior WIP preserved. Native/image artifacts are reused, not rebuilt.
+Checkpoint372: actual old/fresh image Docker inspections differ only in Mounts
+ordering. Future guard correction99a216c1/test8d8beab1 passes10Python tests and
+independent source review; original direct reproducer fails as expected.
+Evidence: ../evidence/scratch22-image-mount-order-correction-20261017-1.json.
+Original quarantine remains authoritative and unchanged; no guard-result is
+fabricated. A distinct fresh read-only retirement collector and cleanup proof
+variant are being implemented; require independent source/execution review
+before root observation or cleanup. Signal guest bindings proceed separately.
+New guest apps0; formal counters unchanged6/130,350/10000,0/7,0/273.
+Next: fresh exact retirement proof -> reviewed archival cleanup -> matching942
+signal.mask-restore guest, exact stdout/empty stderr/exit0. Continue after this
+source checkpoint; it is not a campaign stop or runtime acceptance.
+
 Fresh-session preparation (2026-10-17): the user's next command is
 `python3 -B /home/holden/mckernel/scripts/run_os_parallel.py --run --fresh-session`.
 This archives the old launcher cursor and starts a new conversation from
