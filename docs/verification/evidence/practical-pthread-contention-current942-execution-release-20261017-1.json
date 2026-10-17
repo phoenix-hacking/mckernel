@@ -1,0 +1,240 @@
+{
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/ndpc-1",
+    "--nonce",
+    "881ffd09d326e29c18c38d680f6014a5",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/practical-pthread-contention-current942-20261017-1/staging/manifest.json",
+    "--manifest-sha256",
+    "5284d293ca731b5df79d723f895bb395a6edf9fd7cc36140eb67bf21d5b59a35"
+  ],
+  "assembly": {
+    "execution_approved": false,
+    "fresh_parent_bound": true,
+    "parent_created": true,
+    "pattern": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-rust-std-current942-execution-proposal-20261017-1.json",
+      "sha256": "06e02724c0d72d8e546c7a5f3a4643a5272b25e956dac860faa03831ccc31195",
+      "size": 10236
+    },
+    "root_called": false,
+    "runtime_called": false,
+    "staged_overlay_manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/practical-pthread-contention-current942-20261017-1/staging/overlay-result.json",
+      "sha256": "ea601201a0c611967bf9a9a92e6ccfec9430963b5a779d855e4e442318ca4bff",
+      "size": 19097
+    },
+    "tests": "One new-oracle protocol-only positive/negative replay; no prior app/source/compile/Linuxreference tests rerun."
+  },
+  "author": "/root/native_shutdown_drain_helpers",
+  "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "execution_count": 1,
+  "frozen_inputs": [
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scripts/application-tests/practical_pthread_contention.c",
+      "sha256": "a2618fdfbb66be21140edba1836df37789ae2af646b85d4eeb49491c16383a79",
+      "size": 4274
+    }
+  ],
+  "interpreter_binding": {
+    "path": "/home/holden/anaconda3/bin/python3",
+    "resolved_path": "/home/holden/anaconda3/bin/python3.9",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "version": "3.9.12 (main, Apr  5 2022, 06:56:58) \n[GCC 7.5.0]"
+  },
+  "manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/practical-pthread-contention-current942-20261017-1/staging/manifest.json",
+    "sha256": "5284d293ca731b5df79d723f895bb395a6edf9fd7cc36140eb67bf21d5b59a35",
+    "size": 5489
+  },
+  "nonce": "881ffd09d326e29c18c38d680f6014a5",
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "7472795f627573793d312074696d65645f6f75743d312068616e646f66663d31206a6f696e65643d3120746c733d310a"
+  },
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828
+  },
+  "parent": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 110181,
+    "mode": "0o700",
+    "path": "/home/holden/mckernel-work/scratch/ndpc-1",
+    "uid": 1000
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "7472795f627573793d312074696d65645f6f75743d312068616e646f66663d31206a6f696e65643d3120746c733d310a"
+    },
+    "stderr_limit_bytes": 4096,
+    "stdout_limit_bytes": 4096
+  },
+  "postjoin_readback": {
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndpc-1.owner-881ffd09d326e29c18c38d680f6014a5",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/ndpc-1/attempt-881ffd09d326e29c18c38d680f6014a5/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndpc-1/attempt-881ffd09d326e29c18c38d680f6014a5",
+        "."
+      ]
+    ],
+    "capture_limit_bytes_per_command": 33554432,
+    "conditions": "Only after joined positive owner/client retirement; verify unchanged canonical exact directories/regular result, use fresh ordinary-UID captures and default tar without dereference.",
+    "requested": true,
+    "timeout_seconds_per_command": 30,
+    "approved": true
+  },
+  "prerequisites": {
+    "independent_execution_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-pthread-contention-current942-execution-review-20261017-1.json",
+      "sha256": "836af669ad7f90b3f3de8635c550c7aeace79fafcd5f0b9d62c7aa6824c8de60",
+      "size": 786
+    },
+    "independent_source_review": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-pthread-contention-source-review-message-20261017-1.json",
+      "sha256": "fa897514474131c530d3e3f4981de11006ec14b099e282443996420366e1700f",
+      "size": 1567
+    },
+    "live_preflight": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-pthread-contention-current942-live-preflight-20261017-1.json",
+      "sha256": "9a762c0388df752240e85173e0c16ba9383ba6b5f4f627085886fc84581df86f",
+      "size": 2557
+    },
+    "preceding_actual_retirement": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-running-lifecycle-strict5-independent-execution-review-20261017-2.json",
+      "sha256": "cfd98fa9a27af696980399e24940f5259ff302b5f73897cf6ef070a0c2f269db",
+      "size": 953
+    }
+  },
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "schema": "mckernel.practical-pthread-contention-execution-proposal.v1",
+  "scope": "One actual held-mutex contention/timeout then handoff/join/TLS diagnostic; assembly grants no execution authority.",
+  "selected_collector": {
+    "artifact": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/init",
+      "sha256": "ead247cdf56556c7491bd5d8f746c6c668c0c944414ce51392f7caaed895a63a",
+      "size": 1021968
+    },
+    "boot_argv": [
+      "/bin/native-boot",
+      "hidos",
+      "allow_oversubscribe"
+    ],
+    "contract": "PASS_PROTOCOL_ONLY retained actual selected constants, positive and limit/bytes negative new-oracle replay",
+    "payload_argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "profile": "ND_FUTEX4096",
+    "retained_final_map_count": 59,
+    "stderr_limit_bytes": 4096,
+    "stdout_limit_bytes": 4096
+  },
+  "semantic_scope": {
+    "not_claimed": [
+      "actual kernel sleep/futex backend instrumentation",
+      "100ms measured lowerbound",
+      "native shutdown/resource restoration",
+      "whole OS acceptance"
+    ],
+    "supported_behavior": "trylock EBUSY + timedlock ETIMEDOUT while main retains primary, subsequent lock counter1/join/TLS."
+  },
+  "staging_evidence": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-pthread-contention-current942-preparation-20261017-1.json",
+    "sha256": "88455a70048c659880abf6d9fb6c2ea079cefac9b7f2c22fc673643fb3f66719",
+    "size": 7414
+  },
+  "static_linking": {
+    "binary": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/practical-pthread-contention-20261017-1/app",
+      "sha256": "15a61053ac8e31dc8acf903c18555d637567f3c7b830b70c4dcb1516e2375015",
+      "size": 1747288
+    },
+    "mode": "Static GNU pthread EXEC; no interpreter/dynamic segment; exact prepared artifact reused without compile or Linux-reference rerun."
+  },
+  "status": "PASS_EXECUTION_RELEASE",
+  "unix_monitor_endpoints": [
+    {
+      "encoded_bytes": 91,
+      "max_bytes": 107,
+      "path": "/home/holden/mckernel-work/scratch/ndpc-1/attempt-881ffd09d326e29c18c38d680f6014a5/qmp.sock"
+    }
+  ],
+  "runtime_release": true,
+  "reviewed_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-pthread-contention-current942-execution-proposal-20261017-1.json",
+    "sha256": "2ddeff3f054375c2f66149368bcb1201d723d97346770e115ea72ba3edc46b13",
+    "size": 8211
+  }
+}

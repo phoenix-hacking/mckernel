@@ -15201,3 +15201,30 @@ failure can restoreRunning. Nine-source closure reviewed, no native acceptance.
 Next source candidate requires its own matched-module compile. Strict5 existing176
 lifecycle finalrelease is separate and next heavy workload; fresh ef59manifest/
 ndnl2-c9a305f5/noncec9a305f5832442e4be5ad81ca696ccb4. No mixed kernelWIP.
+
+## Checkpoint390 — native Running5 observed; matched shutdown compile next
+
+Strict5 helper actually observed5 and payload40bytes/exit0 retired normally.
+Native probe before5→shutdown-16/EBUSY→after8/close0. IRQclose0 and
+reset_reonline0 passed; FIRSTfailed stage reconcile-16. Independent host
+retirement accepted25clients/owner/container/root/QEMU; rawFAIL/scalar
+mask preserved, no successful lifecycle/resource-restoration credit. Corrected
+source942d has reviewed sameclaim/drain/reconcile +runtime effect-boundary
+regressions; next ONEexternal3modulecompile request22db/proposaldd1c.
+Finalpayload1613b7ca independentlyPASS_EXECUTION; source11pins/60files and
+unchanged ownership semantics reviewed. Newcapsulederivation retained, Linux
+basis RO, fivebinds4RO1RW/j2/cpus2-5/12GiB/noLinuxorimagebuild.
+
+Twelfth current942 app accepted: genuine held-mutex EBUSY/ETIMEDOUT then
+handoff/join/TLS,48bytes/exit0/emptyerr,34.743891s, all30clients/owner/container
+retired/rootfree. Result816f6e06/archive04cade16 exactintegerPAX13files. No
+futexsleep/measured100mslowerbound/parallelCPU/native restoration claim.
+Strict5 originalarchive e7dea lost nanosecond PAXprecision; preserved, corrected
+additivearchive0040a16e independently exact13metadataPASS. Runtime evidence
+unchanged. Newconsumer/backendfork actualbody tests execute dormant integration;
+productionCREATE_PPD remains-95 until realbridge/aliasrevocation/finalACK.
+Preparedlease publisher cancellation defect found+corrected, reviewed10Rustcases
+plus2compilercontrols; consumer8cases and processapp LinuxreferencePASS.
+Protectionfault app source/reference lane active, no guest yet. Keep two upcoming
+cases only and all source outside frozen shutdownpackage. Practical statuses/
+original percentages unchanged; no formal certification promotion. Continue.

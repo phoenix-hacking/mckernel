@@ -1,0 +1,220 @@
+{
+  "application_acceptance": false,
+  "checks": {
+    "compiler_or_owner_executed": false,
+    "prior_unchanged_parser14_and_owner30_results_reused": true,
+    "returncode": 0,
+    "selected_tests": 6
+  },
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/selected-tests-command.json",
+      "sha256": "f3351ba7500245c2b604387f602549e0dad3f495877afaf36095c9b47678e6a7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/selected-tests-status.json",
+      "sha256": "2699a2f531f96072f54d8b7f7dfd5c5029b75b6b305c7f5b1f5ac05995dbf164"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/selected-tests.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/selected-tests.stderr",
+      "sha256": "075a2e3ba4456e8efe2e9cdf1dff1fa46adf1ade82596997a3b425898f81ceef"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/prepare.py",
+      "sha256": "6f233dc09e597fbec30c0221faa1167d651bc68fd3c40c1a45bdcf83a6a94bc3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/native_running_external_modules_offline.py.original",
+      "sha256": "218e61afa895a2cb9475f5ecd2be03ed2ae3f0fd09570a05fdb26196769082f9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/native_running_external_modules_owner.py.original",
+      "sha256": "5c9799a8b44d2968dd57a396666548f2ad18227fa4b4291f9ac37c9decbbe961"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/native_running_external_modules_offline.py.diff",
+      "sha256": "89d88a26e99d80b9dd6004d9a212b9a4c4fc0857679e646591469dbb80a34a73"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/native_running_external_modules_owner.py.diff",
+      "sha256": "8165206a5b65d8d82444d4441b7ede3c1a3cc4217b4eebb4425970b89c265770"
+    }
+  ],
+  "formal_case_credit": false,
+  "production_acceptance": false,
+  "proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-external-modules-execution-proposal-20261017-1.json",
+    "sha256": "dd1c77f5f0809935a886c36a8ef0267b13078f26ea8b2049cd54da0b90b25306"
+  },
+  "request": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-external-modules-request-20261017-1.json",
+    "sha256": "22db59405684c11b7214a37cf7edf455cde8525b875761b22d46afb91ef62881"
+  },
+  "status": "READY_FOR_INDEPENDENT_SOURCE_AND_EXECUTION_REVIEW",
+  "summary": {
+    "application_acceptance": false,
+    "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "basis_identity": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 4471486,
+      "mode": 448,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output",
+      "uid": 1000
+    },
+    "bind_mounts": "five exact mounts: four read-only /out /inputs /driver.py /request.json; sole writable /candidate",
+    "candidate_identity": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 110297,
+      "mode": 448,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-23e0839d85fe47c4ab296fbe3f5a384c",
+      "uid": 1000
+    },
+    "candidate_root": "/home/holden/mckernel-work/scratch/nsd-c-23e0839d85fe47c4ab296fbe3f5a384c",
+    "canonical_preparation": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-external-modules-preparation-20261017-1.json",
+      "sha256": "75f9af4fb318afcde2ba1a5030e1587a750a702a4f02719bb48beb0436b48bca"
+    },
+    "capsule_root": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/capsule",
+    "closure_bytes": 1205365,
+    "closure_files": 60,
+    "compiler_or_owner_executed": false,
+    "copied_runtime_sources": [
+      {
+        "original_sha256": "5c9799a8b44d2968dd57a396666548f2ad18227fa4b4291f9ac37c9decbbe961",
+        "path": "scripts/native_running_external_modules_owner.py"
+      },
+      {
+        "original_sha256": "7076a5e1b8c20a0dc7bf6b12be42e884e85feaa0fdbcdf315bd49bbd1d40aab7",
+        "path": "scripts/tests/test_native_running_external_modules_owner.py"
+      },
+      {
+        "original_sha256": "218e61afa895a2cb9475f5ecd2be03ed2ae3f0fd09570a05fdb26196769082f9",
+        "path": "scripts/native_running_external_modules_offline.py"
+      },
+      {
+        "original_sha256": "e9861cf73b0328c9fe2eacb987ea179933146cbeddbc3951405d4e60e89560f4",
+        "path": "scripts/native_rust_exact_mckernel_image_container_owner.py"
+      },
+      {
+        "original_sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+        "path": "scripts/native_rust_exact_build_container_owner.py"
+      },
+      {
+        "original_sha256": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+        "path": "scripts/native_rust_exact_build_offline.py"
+      },
+      {
+        "original_sha256": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+        "path": "scripts/native_rust_exact_disk_build_wrapper.py"
+      },
+      {
+        "original_sha256": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635",
+        "path": "scripts/native_rust_exact_build_image_rebind_probe.py"
+      },
+      {
+        "original_sha256": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b",
+        "path": "scripts/native_rust_exact_build_image_prepare.py"
+      },
+      {
+        "original_sha256": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e",
+        "path": "scripts/native_rust_exact_build_image_rebind.py"
+      },
+      {
+        "original_sha256": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+        "path": "scripts/native_exact_historical_lease_observer.py"
+      }
+    ],
+    "cumulative_baseline_replacements": 10,
+    "driver_sha256": "ae3c61a147b4956b57d1e1fc8a9bd7a2828f4d9fb3cb05df2d0e483b9167fe4e",
+    "historical_observer_path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/capsule/scripts/native_exact_historical_lease_observer.py",
+    "historical_observer_sha256": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "incremental_nine_deltas": [
+      {
+        "candidate_sha256": "5b12bf77664095c966245ac8a1312a41c2fc16dd4a8233abd9e6c602305ecd6d",
+        "parent176_sha256": "33b783c1e34727c0ae2e7202447a0516f7b8841a683b7580805c2b7d4fb0dc54",
+        "path": "ihk_smp_x86_64.rs"
+      },
+      {
+        "candidate_sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2",
+        "parent176_sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+        "path": "smp_application.rs"
+      },
+      {
+        "candidate_sha256": "52b77ecad0d686a57eaa1c5a5385686129eb7ae6af0d014296317ddf6468d7b3",
+        "parent176_sha256": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb",
+        "path": "smp_cpu.rs"
+      },
+      {
+        "candidate_sha256": "655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c",
+        "parent176_sha256": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+        "path": "smp_file_pager.rs"
+      },
+      {
+        "candidate_sha256": "8b2f2074417c8f681fa8972a40bbab3aa25a48f72bc7f145f7d553d64d3217ba",
+        "parent176_sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+        "path": "smp_memory.rs"
+      },
+      {
+        "candidate_sha256": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea",
+        "parent176_sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+        "path": "smp_procfs.rs"
+      },
+      {
+        "candidate_sha256": "cd97c1528602323c43aaf70f528342fc3874fe9da1660cf1a767d27284cb5b5a",
+        "parent176_sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+        "path": "smp_service.rs"
+      },
+      {
+        "candidate_sha256": "d64efe15ff3545e6f21733cdc6dcbf026df370049484a7221a653d502612bfc1",
+        "parent176_sha256": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81",
+        "path": "sysfs_memory.rs"
+      },
+      {
+        "candidate_sha256": "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9",
+        "parent176_sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+        "path": "sysfs_remote.rs"
+      }
+    ],
+    "input_identity": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 110298,
+      "mode": 448,
+      "path": "/home/holden/mckernel-work/scratch/nsd-i-23e0839d85fe47c4ab296fbe3f5a384c",
+      "uid": 1000
+    },
+    "input_root": "/home/holden/mckernel-work/scratch/nsd-i-23e0839d85fe47c4ab296fbe3f5a384c",
+    "nonce": "23e0839d85fe47c4ab296fbe3f5a384c",
+    "old176_tools_and_artifacts_untouched": true,
+    "owner_evidence_root": "/home/holden/mckernel-work/scratch/nsd-o-23e0839d85fe47c4ab296fbe3f5a384c",
+    "owner_schema_unchanged": true,
+    "owner_sha256": "4cd39e2cd2b0da57d375786886835f22f9f380efa0664cbd5014c0caa282d31d",
+    "parent_source_candidate_sha": "1769263c751befa9983d19705833d3d5ac6a1ace",
+    "preparation": {
+      "path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-1/capsule/docs/verification/evidence/native-shutdown-external-modules-preparation-20261017-1.json",
+      "sha256": "75f9af4fb318afcde2ba1a5030e1587a750a702a4f02719bb48beb0436b48bca"
+    },
+    "source_candidate_sha": "942d1218f45f7e9ffab3d8d14768e40b43250af8",
+    "source_sha256": {
+      "scripts/native_exact_historical_lease_observer.py": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+      "scripts/native_running_external_modules_offline.py": "ae3c61a147b4956b57d1e1fc8a9bd7a2828f4d9fb3cb05df2d0e483b9167fe4e",
+      "scripts/native_running_external_modules_owner.py": "4cd39e2cd2b0da57d375786886835f22f9f380efa0664cbd5014c0caa282d31d",
+      "scripts/native_rust_exact_build_container_owner.py": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+      "scripts/native_rust_exact_build_image_prepare.py": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b",
+      "scripts/native_rust_exact_build_image_rebind.py": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e",
+      "scripts/native_rust_exact_build_image_rebind_probe.py": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635",
+      "scripts/native_rust_exact_build_offline.py": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+      "scripts/native_rust_exact_disk_build_wrapper.py": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+      "scripts/native_rust_exact_mckernel_image_container_owner.py": "e9861cf73b0328c9fe2eacb987ea179933146cbeddbc3951405d4e60e89560f4",
+      "scripts/tests/test_native_running_external_modules_owner.py": "22f30b785d02b0ff3b917b2f53f7d884e085aefff15336b8d0bebf09e2e66aba"
+    },
+    "status": "SHUTDOWN_SOURCE_AND_CAPSULE_STAGED_PENDING_SELECTED_TESTS_AND_INDEPENDENT_REVIEW"
+  },
+  "task_id": "native-shutdown-external-modules-tools-preparation-20261017-1"
+}
