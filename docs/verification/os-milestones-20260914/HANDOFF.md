@@ -1,5 +1,53 @@
 # Compact dispatcher handoff
 
+## Current continuation: checkpoint 366, authority1 retired / fresh candidate next
+
+CONTINUE. Exact one-shot observer recovery COMPLETE f50a036e, independently
+accepted3e991dc1. Guard80259/start718109 retired by one pidfd-bound signal;
+original session42395 joined137 (recovery, NOT build success). Initial recovery
+refused before signal on Docker Mounts ordering; sole bounded correction
+3fdb4dde normalizes only that map-derived list, preserves all fields and original
+failure bindings. Independent e732501a source review passes. No uncertain owner
+or recovery quarantine remains; original guard quarantine is retained evidence.
+
+Authority1 terminal cleanup executed once, rc0/empty stderr, resultaf4c3f45
+at scratch/native-exact-scratch22-authority1-cleanup-20261017.execute.stdout.
+Exact stopped container18ce9ef5 removed; exclusion inodes57729/57728 archived
+with original bytes. Failed source/output/evidence remain unchanged. Raw release
+0bf256f9/canonical766ed71b, independent execution review1eede18d; full146MB
+inventory and release retained losslessly in committed gzip archives. Rejected
+jq-rounded inventory release9751284 remains; exact-integer correctionb9cd5693
+matches the original inventory completely. Fresh postcleanup census991ef806
+confirms no target/active container or active ownership path and free rootlock.
+Independent cleanup postflight1373becd plus additive exact-pointer correction
+a54b8f29 pass. The unchanged adapter consumes all actual retirement records:
+PASS_ACTUAL_AUTHORITY1_RETIREMENT (stdout2e0f0c19). First pointer-shape refusal
+f543eef0 is retained; only review annotations moved outside exact pointer fields.
+No repeated root operation or source/oracle relaxation. This is not a build/app
+result. Root lane is quiescent and original failed artifacts remain pinned.
+
+Authority2 readiness adapterdbdc8c67/wrapper564f52cc is committed/fetched in
+dcb53e5c. Independent source1969eb4d passes13 touched tests and actual recovery
+joins. Actual cleanup postflight/validator and fetched disabled source now pass;
+the exact enable flag change produces reviewed wrapper7fab2909. Two focused
+activation tests retain the unreleased negative and prove enabled code still
+requires an exact release before any lock. Fresh preparation draft601952de is in scratch;
+fill actual cleanup/review, enabled controller commit and fresh live bindings,
+then obtain exact preparation release and materialize fresh authority2 names.
+Never replay authority1/21 or mutate retained failed output. Minimal target remains
+d37d2216/tree95cbbdba with only the two reviewed compiler-repair source changes.
+Next: fresh strict native build -> matching image -> signal.mask-restore guest.
+
+Two additional static process.exec-missing/thread.mutex-counter payloads compile
+and pass exact Linux references once each (f6b962ca), alongside earlier signal,
+memory and futex payloads. No McKernel/runtime acceptance. Standing code-first,
+useful disjoint parallelism and immutable passing-baseline reuse directives
+remain active. Preserve all original counters, comparison ranges and failures.
+Counts unchanged3compiled candidates/12diagnosticpasses,0/273formal apps,
+6/130production,0/7language. Host/scratch last29.02/26.44GB free; one heavy/root
+lane,7jobs/24GiB aggregate, original4CPU/12GiB/no-swap/512task limits, GPT6.1 and
+97% included-usage stop remain. Continue after this checkpoint.
+
 ## Current continuation: checkpoint 365, compiler repair / guard recovery pending
 
 CONTINUE. Authority1 fd09933c actual native attempt FAILED: SMP helper used absent

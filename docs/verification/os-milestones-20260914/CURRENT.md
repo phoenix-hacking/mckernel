@@ -14381,3 +14381,67 @@ Counts unchanged3compiled candidates/12diagnosticpasses,0/273formalapps,
 unchanged. Next: exact guard recovery -> independently released terminal cleanup
 -> configure/review fresh authority2 preparation/build -> actual corrected native
 compiler result -> matching image -> signal.mask-restore first new guest.
+
+## Checkpoint 366 — exact observer recovery and authority1 terminal cleanup
+
+CONTINUE; not a pause/completion. Recovery source3fdb4dde/testsd789dd53 passes
+15author/3independent focused checks, e732501a. Initial pre-signal refusal is
+preserved: Docker inspect differed only in Mounts iteration order, all six full
+records identical. Bounded correction sorts unique absolute destinations only,
+captures raw inspect before comparison and binds original three failure files;
+no PIDFD, lock, census, signal or quarantine guard weakened. New release d98bfb1b
+was committed/pushed/fetched5c8da75f. Actual correction rc0 produced COMPLETE
+f50a036e/prepared22864533; independent postflight3e991dc1 verified all nine raw
+captures, unchanged16protected rows, exact sole pidfd signal/exit and lockhandoff.
+Original build session42395 joined137 as expected guard retirement, not build
+PASS. Original stdout/receipt/quarantine and native E0412 failure remain.
+
+Terminal cleanup source15b7f924/test6ff24e9b and full inventorycbf85c1d were
+released only after recovery plus fresh read-only census0ca6a7f5. Independent
+release review1eede18d caught an initial jq serialization defect before runtime:
+large nanosecond integers rounded in rejected9751284. Exact Python-integer
+correctionb9cd5693 compares the entire original inventory equal. Final raw
+release0bf256f9, canonical766ed71b, full gzipf1994699 (losslesscmp0), was
+committed/pushed/fetchedec200ae2. Actual root CPU0/4GiB/nooutertimeout execution
+session92945/PID222318/start1150668 finished rc0, empty stderr, resultaf4c3f45.
+It positively removed exact stopped container18ce9ef5, archived original active
+exclusion inodes57729/57728 (bytes893ebf5f/a3c2eedf), retained all output/evidence,
+and completed nine-event journal718035b4/plan4cc88cf9/full logcaptureaddc2de1.
+Fresh postcleanup read-only census991ef806:44containers, none active or matching
+target ID/name/nonce; original owner/clients/guard absent, lease and two active
+paths absent, sole rootlock27:4 acquired/checked/released. Postflight review is
+pending separately; no downstream heavy execution starts before accepted proof.
+
+Authority2 adapterdbdc8c67/test8afa9a23 (33synthetic) and wrapper564f52cc/test38f7d797
+(6touched) are committed/fetcheddcb53e5c. Independent source1969eb4d passes13
+focused tests and consumes actual recovery up to missing cleanup. It conditionally
+approves ONLY flagFalse->True (expected wrapper7fab2909) after actual cleanup,
+postflight, real validatorPASS and fetched disabledsource; enabledsource then
+must be committed/fetched before final release. Original c943ff75 author record
+was restored byte-exact before commit; new98ab17a5 is additive. Data-only draft
+601952de names fresh authority2, exact minimald37d2216/tree95cbbdba target and
+actual recovery; cleanup/controller/live/review bindings explicitly pending.
+
+Actual Linux references for process.exec-missing and thread.mutex-counter each
+compile once/run once, exact independently predicted stdout, empty stderr/exit0,
+static/noINTERP/noDYNAMIC/noWX/nonexecstack, evidencef6b962ca. Binaries e964ca5a
+(871944B),d4af491b(1508600B). No guest/collector execution or kernel acceptance.
+Standing image-first, code/compiler-first, useful disjoint parallelism and exact
+known-good baseline reuse directives remain. Keep original fourteen low-confidence
+engineering ranges unchanged. Counters remain3compiled candidates/12diagnostic
+passes,0/273formalapps,6/130production,0/7language. Last host/scratch29.02/26.44GB
+free, failedoutputs pinned. Next accepted cleanup -> exact authority2 prepare/
+release -> fresh native compiler -> matching image -> signal.mask-restore.
+
+Checkpoint366 completion addendum: actual independent cleanup postflight1373becd
+accepted all9journal links/original archives/capture and freshcensus. First real
+authority2 validator refused on review pointer annotations, not runtime evidence;
+stderrf543eef0 retained. Additive independent a54b8f29 preserves1373 bytes and
+moves metadata outside exact result/plan/journal/capture path+SHA pointers.
+Unchanged actual adapter now passes complete real recovery+cleanup bindings,
+stdout2e0f0c19, rc0. Disabledsource dcb53 was pushed/fetched with four exact blobs.
+Conditional source activation ONLYFalse->True yields expected wrapper7fab2909.
+Tests keep every original unreleased assertion under explicitFalse mock and add
+enabled-but-missing-release refusal before lock; both pass0.001s. Final enabled
+source checkpoint/fetch and exact preparation execution release are next; no
+preparation or new heavy workload has yet run. Continue, counters unchanged.

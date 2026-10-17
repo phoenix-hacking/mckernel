@@ -657,14 +657,24 @@ raise AssertionError('quarantine escaped')
                     os.close(contender)
 
     def test_unreleased_adapter_refuses_before_release_read_or_lock(self):
-        self.assertIs(M.ADAPTER_RELEASED, False)
-        self.assertEqual(M.ADAPTER_SHA256,
-                         'dbdc8c6711f4502328b37cec4b200d999c102af53f87aa183debbe160379dc0f')
-        with mock.patch.object(M, 'bind_release') as bind, \
+        with mock.patch.object(M, 'ADAPTER_RELEASED', False), \
+                mock.patch.object(M, 'bind_release') as bind, \
                 mock.patch.object(M, 'acquire_development_lock') as acquire:
+            self.assertIs(M.ADAPTER_RELEASED, False)
+            self.assertEqual(M.ADAPTER_SHA256,
+                             'dbdc8c6711f4502328b37cec4b200d999c102af53f87aa183debbe160379dc0f')
             with self.assertRaisesRegex(M.Refusal, 'NOT_RELEASED'):
                 self.invoke()
         bind.assert_not_called()
+        acquire.assert_not_called()
+
+    def test_accepted_adapter_still_requires_release_before_lock(self):
+        self.assertIs(M.ADAPTER_RELEASED, True)
+        with mock.patch.object(M, 'bind_release', side_effect=M.Refusal('missing exact release')) as bind, \
+                mock.patch.object(M, 'acquire_development_lock') as acquire:
+            with self.assertRaisesRegex(M.Refusal, 'missing exact release'):
+                self.invoke()
+        bind.assert_called_once()
         acquire.assert_not_called()
 
     def test_large_canonical_positive_retirement_is_parsed_and_retained(self):

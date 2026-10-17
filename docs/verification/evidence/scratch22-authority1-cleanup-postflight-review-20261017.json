@@ -1,0 +1,116 @@
+{
+  "schema": "scratch22-authority1.cleanup-postflight-review.v1",
+  "decision": "PASS_TERMINAL_CLEANUP_POSTFLIGHT",
+  "reviewer": "/root/cheap_profile_review",
+  "implementation_ownership": false,
+  "executor": "/root",
+  "result": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-cleanup-20261017.execute.stdout",
+    "sha256": "af4c3f45ff0c276c110251fd4f9c8cb88c5e8606bfc3cf6f6a0ea48bb7688d29",
+    "size": 2418,
+    "status": "PASS_EXECUTED",
+    "terminal": true,
+    "executor_reported_exit_code": 0,
+    "executor_reported_stderr_bytes": 0,
+    "executor_reported_session_joined": 92945
+  },
+  "release": {
+    "path": "/home/holden/mckernel-work/scratch/scratch22-authority1-cleanup-execution-release-final-20261017.json",
+    "sha256": "0bf256f97ec65d0a728d59b83ac4d795c24109e7d1a6dc539274b7a68c5d9eaa"
+  },
+  "release_canonical_sha256": "766ed71bef138d854f29c7ed41dfcb4a03352e343222bdd4cdb1be201dc55747",
+  "release_payload_sha256_excluding_only_execution_review": "8f2073fbce615ba0678569c1402257a1f1d47eba23f92f135f2b5f3e4c3621fb",
+  "execution_review": {
+    "path": "docs/verification/evidence/scratch22-authority1-cleanup-execution-independent-review-20261017.json",
+    "sha256": "1eede18d9b3e1e77229d29304cf87d13001458adae64a754d6408be152e3aff5"
+  },
+  "plan": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-terminal-cleanup-20261017.plan.json",
+    "sha256": "4cc88cf9e414811eb365567df6a196c2968312cc4ce80f512b2b91736cf55571",
+    "size": 1938,
+    "device": 1828,
+    "inode": 57793
+  },
+  "plan_canonical_sha256": "4ddeabe4d8d7e6817b9be717993fb34b39962f3aee66d01e4a5ae622e38daab3",
+  "journal": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-terminal-cleanup-20261017.journal.jsonl",
+    "sha256": "718035b4c3d1525a8c0fb0b81cfe1b07fdfc1c4cded5c21fcea2dac74118f965",
+    "size": 2788,
+    "device": 1828,
+    "inode": 57792,
+    "events": 9,
+    "terminal_chain_hash": "ad74d970df82c3dba05c9bd7ed9a77978e6d64b1884f895ef72a684ac1159b9d"
+  },
+  "capture": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-terminal-cleanup-20261017.docker-logs.capture",
+    "sha256": "addc2de165c2fc458da809a0a6536df9e294bc7a2c8358d0ce6e0339b3e3ac07",
+    "size": 78411751,
+    "device": 1828,
+    "inode": 57791
+  },
+  "archives": [
+    {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 57729,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-terminal-cleanup-20261017.attempt.archive",
+      "sha256": "893ebf5f3890953508542eee9e13d1a68af1fbdbfe7e1c2931b19a6c138e54a3",
+      "size": 264,
+      "uid": 1000
+    },
+    {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 57728,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-terminal-cleanup-20261017.shared.archive",
+      "sha256": "a3c2eedff58cdbc79754039d3490aef171164851a192ac23155943e8abc462d3",
+      "size": 264,
+      "uid": 1000
+    }
+  ],
+  "container_absent": true,
+  "exclusions_absent": true,
+  "container_id": "18ce9ef597cfc38f4c661a7a36d80d872d3dfc96f6e93551651bc8f0b31b5aa6",
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "filesystem_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+  "postcleanup_census": {
+    "path": "/home/holden/mckernel-work/scratch/scratch22-authority1-postcleanup-census-20261017.result.json",
+    "sha256": "991ef8064451a1e9076ec67fa654fbee0927e6c0add03549a936b30a11ccfe35",
+    "status": "PASS_READ_ONLY_POSTCLEANUP",
+    "observer": [222664, "1159222"],
+    "root_lock": [27, 4],
+    "container_count": 44,
+    "process": {
+      "path": "/home/holden/mckernel-work/scratch/scratch22-authority1-postcleanup-census-20261017.process.json",
+      "sha256": "6038a8b26373456acf72f258fd1b1168d17bffb1075cde0d596ab9eee7a5b211",
+      "size": 10288
+    },
+    "containers": {
+      "path": "/home/holden/mckernel-work/scratch/scratch22-authority1-postcleanup-census-20261017.containers.jsonl",
+      "sha256": "13a7b2447031416dc9d54189d28db2b796e0a35afbad07ed5b9c746e41efc6af",
+      "size": 68697
+    },
+    "verified": "Saved observer source uses accepted process collector/validator, explicit retired-guard absence, complete Docker census rejecting exact target ID/name/nonce and active states, lease/exclusion absence, and exact boot/root27:4 sole-holder checks before close. Capture sizes and hashes verified independently; both snapshots exclude guard/owner/clients, publishers empty,44containers no target or active container. No root action by reviewer."
+  },
+  "verified_checks": [
+    "Final raw release hash, no-newline canonical release hash, exact accepted payload hash excluding solely execution_review, and actual inline review pointer all match. Actual result/plan/release boot, filesystem, container and publisher-contract joins match.",
+    "Plan is exact canonical JSON plus newline; raw and no-newline canonical plan digests distinguished and verified. Journal inode57792 matches plan; all9 canonical lines have exact legal event/index/sequence, plan identity1828:57793, plan digest, previous link and body hash. Final event is complete/index2.",
+    "Plan, journal, capture and both archives were opened read-only NOFOLLOW/NONBLOCK, streamed in1MiB chunks, and checked against all result metadata/hash fields, stable before/after fd identities/timestamps and final pathname inode. Log capture78411751bytes is complete and hash matches original container log binding.",
+    "Original exclusion inodes57729/57728, exact264byte contents, ownership/mode/singlelink and digests now occupy the two authorized archives. Both active ownership paths are absent in ordinary independent lstat checks and saved fresh root census. Cleanup-specific quarantine absent.",
+    "Reuse exact accepted helper's repeated protected_files full140028/286298inventory checks, positive Docker removal/censuses, unchanged candidate/output/evidence preservation and normal lock-close success path. No duplicated whole-tree metadata traversal, large owner/driver receipt reparsing or replay.",
+    "Fresh postcleanup observer successfully acquired unchanged root27:4 after cleanup, checked sole ownership and stable boot around full census, and closed it. This is observed safe cleanup handoff, not a lease for unrelated future execution."
+  ],
+  "independent_check_profile": "CPU2/4GiBAS/one ordinary Python job; saved receipts/captures, exact release comparison, streamed capture/archive checks and explicit active-path absence only. No root, live proc/Docker/lock action, signal, removal, compiler, guest, network, children or source edits.",
+  "blocking_findings": [],
+  "failed_build_output_and_evidence_preserved": true,
+  "build_status": "FAIL",
+  "cleanup_complete": true,
+  "build_success_claimed": false,
+  "guest_or_application_credit": false,
+  "acceptance_credit": false,
+  "scope": "Accept only this exact completed scratch22-authority1 cleanup. Original failed build and recovery/serialization evidence remain immutable. A fresh separately released attempt may use the retired exclusion names according to its own gate; this record grants no build replay, heavy execution, image or OS acceptance."
+}

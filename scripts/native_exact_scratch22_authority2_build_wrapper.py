@@ -26,7 +26,7 @@ ADAPTER = 'scripts/prepare_native_exact_scratch22_authority2.py'
 # Source candidate only. Actual adapter/repair/cleanup/recovery contracts must be
 # integrated and independently reviewed before a new source release can change
 # these values. No CLI option, environment variable or release JSON enables it.
-ADAPTER_RELEASED = False
+ADAPTER_RELEASED = True
 ADAPTER_SHA256 = 'dbdc8c6711f4502328b37cec4b200d999c102af53f87aa183debbe160379dc0f'
 ANCESTOR = 'docs/verification/evidence/native-exact-candidate-delta-preparation-scratch18-20261001.py'
 CANDIDATE = ROOT / 'mckernel-exact-candidate-scratch-22-authority2'
