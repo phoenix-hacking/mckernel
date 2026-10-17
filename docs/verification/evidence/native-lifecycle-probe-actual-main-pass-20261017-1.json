@@ -1,0 +1,1863 @@
+{
+  "schema": "mckernel.native-lifecycle-probe-actual-main-pass.v1",
+  "task_id": "M05-native-lifecycle-probe-actual-main-pass-20261017-1",
+  "status": "PASS_INJECTED_ACTUAL_MAIN_READY_FOR_REVIEW",
+  "authority": "Dispatcher-inspected source/harness and explicit cheap C compile/injected-run admission; environment-strategy correction to existing validated Python3.9.12 profile explicitly authorized.",
+  "source": [
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_probe.c",
+      "sha256": "18444a0917ed850690cca41be1b9a6090a3ab533c94a0f1ad66892df0625ca44",
+      "size": 4282
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/test_native_diagnostic_lifecycle_probe.py",
+      "sha256": "f41925e09695463d2beab071a8b02b600b9246df26d1ec13ae46b967e4130ff3",
+      "size": 10982
+    }
+  ],
+  "generated_source": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/probe.c",
+      "sha256": "18444a0917ed850690cca41be1b9a6090a3ab533c94a0f1ad66892df0625ca44",
+      "size": 4282
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness.c",
+      "sha256": "b965765cb6bbaf2f77bd89f52b4f00df52f735611c08dc95a8fd3b1624acb121",
+      "size": 3132
+    }
+  ],
+  "headers": [
+    {
+      "git_repository": "ihk",
+      "revision": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "git_path": "linux/include/ihk/ihk_host_user.h",
+      "sha256": "2335260024075a08becbe74651162a950aee8bea603e9a451cb8bcae3aa0ef97",
+      "staged_identity": {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/ihk_host_user.h",
+        "sha256": "2335260024075a08becbe74651162a950aee8bea603e9a451cb8bcae3aa0ef97",
+        "size": 5704
+      }
+    },
+    {
+      "git_repository": "ihk",
+      "revision": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "git_path": "linux/include/ihk/status.h",
+      "sha256": "fef81cf170da96d41500a572c22e44c272f7110eff815cf43944de0e429d81e7",
+      "staged_identity": {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/status.h",
+        "sha256": "fef81cf170da96d41500a572c22e44c272f7110eff815cf43944de0e429d81e7",
+        "size": 995
+      }
+    },
+    {
+      "git_repository": "ihk",
+      "revision": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "git_path": "linux/include/ihk/ihk_monitor.h",
+      "sha256": "6fb530c99848036f8c71f946c01d2f7189e15c3e8a42b9962be980eaf29e3b60",
+      "staged_identity": {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/ihk_monitor.h",
+        "sha256": "6fb530c99848036f8c71f946c01d2f7189e15c3e8a42b9962be980eaf29e3b60",
+        "size": 1575
+      }
+    },
+    {
+      "git_repository": "ihk",
+      "revision": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "git_path": "linux/include/ihk/ihk_debug.h",
+      "sha256": "63160ae79466f721b35bae1f2a8dad1378bcd4b8525045930abfaf4ec47383d7",
+      "staged_identity": {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include/ihk/ihk_debug.h",
+        "sha256": "63160ae79466f721b35bae1f2a8dad1378bcd4b8525045930abfaf4ec47383d7",
+        "size": 919
+      }
+    }
+  ],
+  "tools": {
+    "python": {
+      "invoked_path": "/home/holden/anaconda3/bin/python3",
+      "resolved_path": "/home/holden/anaconda3/bin/python3.9",
+      "identity": {
+        "path": "/home/holden/anaconda3/bin/python3.9",
+        "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+        "size": 15880080
+      }
+    },
+    "cc": {
+      "invoked_path": "/usr/bin/cc",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+      "identity": {
+        "path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+        "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+        "size": 1158288
+      }
+    }
+  },
+  "binary": {
+    "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+    "sha256": "570b7a9abd30500a0c40a97cec7dde00192a64af9d5f529c80fd4d5f4be6d454",
+    "size": 17648
+  },
+  "execution": {
+    "command": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=90",
+        "--nofile=256",
+        "--fsize=67108864",
+        "--core=0",
+        "/usr/bin/timeout",
+        "-k",
+        "5s",
+        "120s",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-f",
+        "scripts.tests.test_native_diagnostic_lifecycle_probe.CompiledActualMain"
+      ],
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+        "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "NATIVE_LIFECYCLE_COMPILE": "1",
+        "NATIVE_LIFECYCLE_EVIDENCE": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3"
+      },
+      "cwd": "/home/holden/mckernel",
+      "scope": "Dispatcher environment-strategy correction: use already validated Python3.9.12 profile for Path.is_relative_to, rather than another source edit. Preserve compiled1 environment caveat and compiled2 Python3.8 import failure. Same frozen C/source/oracle/compiler/resources and private child HOME/TMPDIR; injected syscalls only.",
+      "test_sha256": "f41925e09695463d2beab071a8b02b600b9246df26d1ec13ae46b967e4130ff3",
+      "probe_sha256": "18444a0917ed850690cca41be1b9a6090a3ab533c94a0f1ad66892df0625ca44"
+    },
+    "result": {
+      "exit_code": 0,
+      "elapsed_seconds": 0.1984018700022716,
+      "scope": "Dispatcher environment-strategy correction: use already validated Python3.9.12 profile for Path.is_relative_to, rather than another source edit. Preserve compiled1 environment caveat and compiled2 Python3.8 import failure. Same frozen C/source/oracle/compiler/resources and private child HOME/TMPDIR; injected syscalls only."
+    },
+    "resources": {
+      "cpu_affinity": [
+        6
+      ],
+      "address_space_bytes": 1073741824,
+      "cpu_seconds": 90,
+      "wall_seconds": 120,
+      "kill_after_seconds": 5,
+      "nofile": 256,
+      "file_size_bytes": 67108864,
+      "core_bytes": 0,
+      "per_child_timeout_seconds": 20,
+      "ordering": "One compile, then26serial scenario processes; fail-fast unittest."
+    },
+    "outer_capture": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3-command.json",
+        "sha256": "e7eda621b6d01e1e0ed408cfae438fea7e0338abdc2a0322dc1c28e528a93292",
+        "size": 1429
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3-result.json",
+        "sha256": "997cca4cf5cbc05efac66ec5ef3e0ea8f183c5e27b008ba30189039e05fdc3b0",
+        "size": 401
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3.stderr",
+        "sha256": "0ea3575e1c4b57c29f9e75e0dbf01b1445e4a2abc62b3c91873059ccba6b41e0",
+        "size": 98
+      }
+    ],
+    "steps": [
+      {
+        "argv": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-I",
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/include",
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness.c",
+          "-o",
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_stdout_rows": [],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/001.command.json",
+            "sha256": "9639f66017dab17caae29ae110ec0eb791ec03b197b9037f6d7840d1d6f3e6ca",
+            "size": 717
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/001.json",
+            "sha256": "e45ac6f31ab47551ab8455574d1c11a6296cda5999e13314ab62d285555954f8",
+            "size": 629
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/001.stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/001.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "running",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_stdout_rows": [
+          {
+            "operation": "open",
+            "request": 0,
+            "return": 41,
+            "errno": 0,
+            "linux_result": 41
+          },
+          {
+            "operation": "status_before",
+            "request": 1124867,
+            "return": 5,
+            "errno": 0,
+            "linux_result": 5
+          },
+          {
+            "operation": "shutdown",
+            "request": 1124866,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "status_after",
+            "request": 1124867,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "close",
+            "request": 0,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "result": "PASS",
+            "transition_observed": true,
+            "resource_restoration_verified": false
+          }
+        ],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/002.command.json",
+            "sha256": "13de699548d2a1293991b1e59050cfea4319ed5986c854a32074b64be6a8868a",
+            "size": 427
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/002.json",
+            "sha256": "b7e1dd2b5c9ad88a814a1935b2d78ad03c68cf9027ddb114bdd81e26849af597",
+            "size": 339
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/002.stdout",
+            "sha256": "77cbf584af48c02267c6071dde26f780023b44bfbb00a520038ab971bd32bce5",
+            "size": 480
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/002.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "ready",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_stdout_rows": [
+          {
+            "operation": "open",
+            "request": 0,
+            "return": 41,
+            "errno": 0,
+            "linux_result": 41
+          },
+          {
+            "operation": "status_before",
+            "request": 1124867,
+            "return": 4,
+            "errno": 0,
+            "linux_result": 4
+          },
+          {
+            "operation": "shutdown",
+            "request": 1124866,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "status_after",
+            "request": 1124867,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "close",
+            "request": 0,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "result": "PASS",
+            "transition_observed": true,
+            "resource_restoration_verified": false
+          }
+        ],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/003.command.json",
+            "sha256": "0480f3ba85810086d15566bdcc2806dc4079b6a63daa9b5b20fefa8768e74e11",
+            "size": 425
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/003.json",
+            "sha256": "ad85b87148e9ead67bb06fa3a8cfdbda7e5fd0336377416f6be25948552fdd0d",
+            "size": 337
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/003.stdout",
+            "sha256": "843296a1bb9bf5fcbb201c41a591ba8a2682c77db4331b5d641f545c2ca89977",
+            "size": 480
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/003.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "repeat",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_stdout_rows": [
+          {
+            "operation": "open",
+            "request": 0,
+            "return": 41,
+            "errno": 0,
+            "linux_result": 41
+          },
+          {
+            "operation": "status_before",
+            "request": 1124867,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "shutdown",
+            "request": 1124866,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "status_after",
+            "request": 1124867,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "close",
+            "request": 0,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "result": "PASS",
+            "transition_observed": false,
+            "resource_restoration_verified": false
+          }
+        ],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/004.command.json",
+            "sha256": "35a4820114e0cc216a9c434cbfbfaf41e59224e79e77abab7ad93faad1fc5dbb",
+            "size": 426
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/004.json",
+            "sha256": "85f5e9b4c90091a7dcc95a1b1261944a573303e89b34525d7e146afd94b3c5f3",
+            "size": 338
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/004.stdout",
+            "sha256": "451f9fb5c1fb640ebd1993b8940a21c4493eabe16d6d014e87a23ff255d523ae",
+            "size": 481
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/004.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "retry_shutdown",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 0,
+        "observed_stdout_rows": [
+          {
+            "operation": "open",
+            "request": 0,
+            "return": 41,
+            "errno": 0,
+            "linux_result": 41
+          },
+          {
+            "operation": "status_before",
+            "request": 1124867,
+            "return": 8,
+            "errno": 0,
+            "linux_result": 8
+          },
+          {
+            "operation": "shutdown",
+            "request": 1124866,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "status_after",
+            "request": 1124867,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "close",
+            "request": 0,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "result": "PASS",
+            "transition_observed": true,
+            "resource_restoration_verified": false
+          }
+        ],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/005.command.json",
+            "sha256": "7c21da4c376f79b4361792d00feb5961f5f11d6298a119da4cb2466feb7b3f04",
+            "size": 434
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/005.json",
+            "sha256": "72deeae119491fcc45d06f0e16297aad031196f079eee96f5ded54466eaa7246",
+            "size": 346
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/005.stdout",
+            "sha256": "2e840e4cbac57936051754707ce921f5e8f8943ea9fc0fa23d4dcd5b7c487765",
+            "size": 480
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/005.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "open_errno",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 1,
+        "observed_stdout_rows": [
+          {
+            "operation": "open",
+            "request": 0,
+            "return": -1,
+            "errno": 2,
+            "linux_result": -2
+          }
+        ],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/006.command.json",
+            "sha256": "231fb8b48188d42480b79fd1789b59c8fb31ba589e49f2baf5e6a33bbacc4e4f",
+            "size": 430
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/006.json",
+            "sha256": "c2f4321f58b9a387c3ac7e45ea17890a6f2183665b501271212d91c80e934530",
+            "size": 342
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/006.stdout",
+            "sha256": "1ad85fe549804f6b96565953dd1fff8a102d4fe50bb19b9f18f42f25d59d9d77",
+            "size": 73
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/006.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "before_errno",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 1,
+        "observed_stdout_rows": [
+          {
+            "operation": "open",
+            "request": 0,
+            "return": 41,
+            "errno": 0,
+            "linux_result": 41
+          },
+          {
+            "operation": "status_before",
+            "request": 1124867,
+            "return": -1,
+            "errno": 19,
+            "linux_result": -19
+          },
+          {
+            "operation": "close",
+            "request": 0,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          }
+        ],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/007.command.json",
+            "sha256": "6e85791a1fca094792dfc87f67ddfb78925e52fe3398c93effb3feddf8b49ac7",
+            "size": 432
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/007.json",
+            "sha256": "78ff335e393bc6e5622584792ca6124636ec233ac5b32fe6a56eda0fc9ae72c6",
+            "size": 344
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/007.stdout",
+            "sha256": "8cb7ff1ba60498b6868cb836f91ab6c544834250c748d641ee78714610166d91",
+            "size": 235
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/007.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "busy",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 1,
+        "observed_stdout_rows": [
+          {
+            "operation": "open",
+            "request": 0,
+            "return": 41,
+            "errno": 0,
+            "linux_result": 41
+          },
+          {
+            "operation": "status_before",
+            "request": 1124867,
+            "return": 5,
+            "errno": 0,
+            "linux_result": 5
+          },
+          {
+            "operation": "shutdown",
+            "request": 1124866,
+            "return": -1,
+            "errno": 16,
+            "linux_result": -16
+          },
+          {
+            "operation": "status_after",
+            "request": 1124867,
+            "return": 5,
+            "errno": 0,
+            "linux_result": 5
+          },
+          {
+            "operation": "close",
+            "request": 0,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          }
+        ],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/008.command.json",
+            "sha256": "48b45debaf8c39718e0ec381a1ae15ca7c214162b06fa12aad1407d75e0aed02",
+            "size": 424
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/008.json",
+            "sha256": "b94524194020815ea9279dd16e414f24635ba41067c056c50765f8d3d17c2366",
+            "size": 336
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/008.stdout",
+            "sha256": "df6db5c2b513e8777d23e4874f083beb923cc485a5130d886b52e719512a1cf9",
+            "size": 401
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/008.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "negative_errno",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 1,
+        "observed_stdout_rows": [
+          {
+            "operation": "open",
+            "request": 0,
+            "return": 41,
+            "errno": 0,
+            "linux_result": 41
+          },
+          {
+            "operation": "status_before",
+            "request": 1124867,
+            "return": 5,
+            "errno": 0,
+            "linux_result": 5
+          },
+          {
+            "operation": "shutdown",
+            "request": 1124866,
+            "return": -1,
+            "errno": 5,
+            "linux_result": -5
+          },
+          {
+            "operation": "status_after",
+            "request": 1124867,
+            "return": 8,
+            "errno": 0,
+            "linux_result": 8
+          },
+          {
+            "operation": "close",
+            "request": 0,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          }
+        ],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/009.command.json",
+            "sha256": "acaee022d9afaf02663f7e34f4521f5f1949cd7ab8182623a0bbc40052d43c39",
+            "size": 434
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/009.json",
+            "sha256": "e21fec2db6c5a961e255de6a53b8d3bfa161fe4d464646bbf88f55404dc994ef",
+            "size": 346
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/009.stdout",
+            "sha256": "14aa90a24d82b3bd396eef8bd7302ad8a4ba55c1b2ac7569558fac7e5802b07c",
+            "size": 399
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/009.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "unsupported",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 1,
+        "observed_stdout_rows": [
+          {
+            "operation": "open",
+            "request": 0,
+            "return": 41,
+            "errno": 0,
+            "linux_result": 41
+          },
+          {
+            "operation": "status_before",
+            "request": 1124867,
+            "return": 5,
+            "errno": 0,
+            "linux_result": 5
+          },
+          {
+            "operation": "shutdown",
+            "request": 1124866,
+            "return": -1,
+            "errno": 38,
+            "linux_result": -38
+          },
+          {
+            "operation": "status_after",
+            "request": 1124867,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "close",
+            "request": 0,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          }
+        ],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/010.command.json",
+            "sha256": "e9b44f9b76c077c9a646eaacbe6cdc1e2988a42866b6b9a79e110c5260d81ced",
+            "size": 431
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/010.json",
+            "sha256": "0838e376c235e39da9861ed3938b556d37a7b1c03897cd583f2e0c9f07a32379",
+            "size": 343
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/010.stdout",
+            "sha256": "5df3043a48f726e40e27b7e643a10240df6f2889a8b633167f62c041791d741e",
+            "size": 401
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/010.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "interrupted",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 1,
+        "observed_stdout_rows": [
+          {
+            "operation": "open",
+            "request": 0,
+            "return": 41,
+            "errno": 0,
+            "linux_result": 41
+          },
+          {
+            "operation": "status_before",
+            "request": 1124867,
+            "return": 5,
+            "errno": 0,
+            "linux_result": 5
+          },
+          {
+            "operation": "shutdown",
+            "request": 1124866,
+            "return": -1,
+            "errno": 4,
+            "linux_result": -4
+          },
+          {
+            "operation": "status_after",
+            "request": 1124867,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "close",
+            "request": 0,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          }
+        ],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/011.command.json",
+            "sha256": "2ddeeb8ffaf34e418fdfb71c9a2dcfc434b225e28e42bcd787dd2bd70115ffc8",
+            "size": 431
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/011.json",
+            "sha256": "c9a3c76103b1ed7a499544c4cace3545de0c775d88cce263848b60c7782cc835",
+            "size": 343
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/011.stdout",
+            "sha256": "cb630ad15ca586bdd236f6a838813184ea984e504b2b38aba04aa4db10f65909",
+            "size": 399
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/011.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "after_errno",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 1,
+        "observed_stdout_rows": [
+          {
+            "operation": "open",
+            "request": 0,
+            "return": 41,
+            "errno": 0,
+            "linux_result": 41
+          },
+          {
+            "operation": "status_before",
+            "request": 1124867,
+            "return": 5,
+            "errno": 0,
+            "linux_result": 5
+          },
+          {
+            "operation": "shutdown",
+            "request": 1124866,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "status_after",
+            "request": 1124867,
+            "return": -1,
+            "errno": 5,
+            "linux_result": -5
+          },
+          {
+            "operation": "close",
+            "request": 0,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          }
+        ],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/012.command.json",
+            "sha256": "8045d74383c91a247e4cdc0469606be6bde443f0518ff1cf525efebb1168cba7",
+            "size": 431
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/012.json",
+            "sha256": "59861f0a05b23115a729165279a744ae5613b8de37bb819087d98803efb7e170",
+            "size": 343
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/012.stdout",
+            "sha256": "01a7cdc53e964005f222515622442bfbd40c910d11f51c143a41a781d31f09ed",
+            "size": 399
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/012.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "close_errno",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 1,
+        "observed_stdout_rows": [
+          {
+            "operation": "open",
+            "request": 0,
+            "return": 41,
+            "errno": 0,
+            "linux_result": 41
+          },
+          {
+            "operation": "status_before",
+            "request": 1124867,
+            "return": 5,
+            "errno": 0,
+            "linux_result": 5
+          },
+          {
+            "operation": "shutdown",
+            "request": 1124866,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "status_after",
+            "request": 1124867,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "close",
+            "request": 0,
+            "return": -1,
+            "errno": 4,
+            "linux_result": -4
+          }
+        ],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/013.command.json",
+            "sha256": "3e7c642d9e358894ba3edc2a968d59dd7d8bb99956410e23e9783b974a9abf8f",
+            "size": 431
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/013.json",
+            "sha256": "337d36dde12052d809125dc06d2a3f0f2e67022370e369391c982d15418fe7c8",
+            "size": 343
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/013.stdout",
+            "sha256": "d0e3c7cbdf1ac8b5bdaf1c0fbe661c620f3e26daf3ee8a14f9826dd011b9c358",
+            "size": 399
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/013.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "before_unknown",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 1,
+        "observed_stdout_rows": [
+          {
+            "operation": "open",
+            "request": 0,
+            "return": 41,
+            "errno": 0,
+            "linux_result": 41
+          },
+          {
+            "operation": "status_before",
+            "request": 1124867,
+            "return": 11,
+            "errno": 0,
+            "linux_result": 11
+          },
+          {
+            "operation": "close",
+            "request": 0,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          }
+        ],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/014.command.json",
+            "sha256": "b2173ef0af57c96c391967fa5cbed47434ecc3f1e319613589f4f1962d2d8d04",
+            "size": 434
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/014.json",
+            "sha256": "fd859907e7f5cdb77466d0924f9eaf30b5690659aa898c39edb6d2003e8f640a",
+            "size": 346
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/014.stdout",
+            "sha256": "b31e1232c42be84c78c420de7a4752dd1b8dfd79d7e968302e74b4bf3ea235c4",
+            "size": 233
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/014.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "wrong_after",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 1,
+        "observed_stdout_rows": [
+          {
+            "operation": "open",
+            "request": 0,
+            "return": 41,
+            "errno": 0,
+            "linux_result": 41
+          },
+          {
+            "operation": "status_before",
+            "request": 1124867,
+            "return": 5,
+            "errno": 0,
+            "linux_result": 5
+          },
+          {
+            "operation": "shutdown",
+            "request": 1124866,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "status_after",
+            "request": 1124867,
+            "return": 5,
+            "errno": 0,
+            "linux_result": 5
+          },
+          {
+            "operation": "close",
+            "request": 0,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          }
+        ],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/015.command.json",
+            "sha256": "a038a9173b8ae280a895dd41c23d5981ec9266051c2505bdde3c7e5956d974f3",
+            "size": 431
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/015.json",
+            "sha256": "d317fc617415c5169c6470abcbdbc1b52ddb5ded589d0094583f9ec465c628b8",
+            "size": 343
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/015.stdout",
+            "sha256": "de80a516920a1d5762c7472038ab064547a64ebec4ef34ae42d5d7e8ddcc6a5a",
+            "size": 397
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/015.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "after_unknown",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 1,
+        "observed_stdout_rows": [
+          {
+            "operation": "open",
+            "request": 0,
+            "return": 41,
+            "errno": 0,
+            "linux_result": 41
+          },
+          {
+            "operation": "status_before",
+            "request": 1124867,
+            "return": 5,
+            "errno": 0,
+            "linux_result": 5
+          },
+          {
+            "operation": "shutdown",
+            "request": 1124866,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "status_after",
+            "request": 1124867,
+            "return": 11,
+            "errno": 0,
+            "linux_result": 11
+          },
+          {
+            "operation": "close",
+            "request": 0,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          }
+        ],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/016.command.json",
+            "sha256": "cd8ce73af81f4dd1f31ebbcd38545c0e129e240174b944155ca4e8cc8e87d428",
+            "size": 433
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/016.json",
+            "sha256": "4f6ae377da45fb5ef26112793322b75730d7b2c1ffc41b2f912bc33e698aa885",
+            "size": 345
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/016.stdout",
+            "sha256": "be2dfade15dac5ec432441dd1993b2a958c4f8e936f7cc1bd948136f9bb76726",
+            "size": 399
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/016.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "positive_shutdown",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 1,
+        "observed_stdout_rows": [
+          {
+            "operation": "open",
+            "request": 0,
+            "return": 41,
+            "errno": 0,
+            "linux_result": 41
+          },
+          {
+            "operation": "status_before",
+            "request": 1124867,
+            "return": 5,
+            "errno": 0,
+            "linux_result": 5
+          },
+          {
+            "operation": "shutdown",
+            "request": 1124866,
+            "return": 1,
+            "errno": 0,
+            "linux_result": 1
+          },
+          {
+            "operation": "status_after",
+            "request": 1124867,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          },
+          {
+            "operation": "close",
+            "request": 0,
+            "return": 0,
+            "errno": 0,
+            "linux_result": 0
+          }
+        ],
+        "stderr_text": "",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/017.command.json",
+            "sha256": "a2788ba44a1e69cc592c7b6b9a809e2c54a3d7c74e9561098b1ebb8adb525daf",
+            "size": 437
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/017.json",
+            "sha256": "2af04cbbfbe39bf213443d1b1cd5217ecdeb545d0df65d8aea47e67eb614d013",
+            "size": 349
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/017.stdout",
+            "sha256": "2249dcb1da127fac5e3398f00fde4f4578f056c5d038f1c0d1822b3f4a2ed2e0",
+            "size": 397
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/017.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "invalid"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 2,
+        "observed_stdout_rows": [],
+        "stderr_text": "usage: native-diagnostic-lifecycle-probe DECIMAL_OS_MINOR\n",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/018.command.json",
+            "sha256": "099c9d7ce153c69363fa8c1e9c00efb7eff2b35affe87eea7cbaaf1dab21dd12",
+            "size": 417
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/018.json",
+            "sha256": "45094b8561515dd45a556d99818fa99cfc5eb820cc7e3630154aa38162376b4f",
+            "size": 329
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/018.stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/018.stderr",
+            "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+            "size": 58
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "invalid",
+          ""
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 2,
+        "observed_stdout_rows": [],
+        "stderr_text": "usage: native-diagnostic-lifecycle-probe DECIMAL_OS_MINOR\n",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/019.command.json",
+            "sha256": "ff811e6ee4faaca84c1a59ee151e43e88a164ea6eaaed44038a8d9eb0d96fefe",
+            "size": 425
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/019.json",
+            "sha256": "a770cd2c7287faeefef802c32d97b6d4e6c8c9f6b7c886ecf931af391d809c69",
+            "size": 337
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/019.stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/019.stderr",
+            "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+            "size": 58
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "invalid",
+          "-1"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 2,
+        "observed_stdout_rows": [],
+        "stderr_text": "usage: native-diagnostic-lifecycle-probe DECIMAL_OS_MINOR\n",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/020.command.json",
+            "sha256": "f7ec496d2e586892cf97c15830359a4dcaac05d36924237b331d3b2b425c27ab",
+            "size": 427
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/020.json",
+            "sha256": "e9316182eced6991998cbf2c8214fdde75490a380afd74cba371e4526f25e55b",
+            "size": 339
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/020.stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/020.stderr",
+            "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+            "size": 58
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "invalid",
+          "+1"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 2,
+        "observed_stdout_rows": [],
+        "stderr_text": "usage: native-diagnostic-lifecycle-probe DECIMAL_OS_MINOR\n",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/021.command.json",
+            "sha256": "7eeafa9762fc80a50bfce1399aa4e1b478e0674978aafa3095668cdbc2d1d39e",
+            "size": 427
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/021.json",
+            "sha256": "a962c3f8c4547612d4f0663ed2408692f1da5ff71903e64892f33a5a16a67cb2",
+            "size": 339
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/021.stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/021.stderr",
+            "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+            "size": 58
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "invalid",
+          " 1"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 2,
+        "observed_stdout_rows": [],
+        "stderr_text": "usage: native-diagnostic-lifecycle-probe DECIMAL_OS_MINOR\n",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/022.command.json",
+            "sha256": "48af757a029e454be58b46c783992f549c66ee2d930695360cd6218c06e32e43",
+            "size": 427
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/022.json",
+            "sha256": "97fc1b4d5887ef71c33e1e77fbc23b522b56fe98af6caa75a73a6ee4e6d9cfb2",
+            "size": 339
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/022.stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/022.stderr",
+            "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+            "size": 58
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "invalid",
+          "1x"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 2,
+        "observed_stdout_rows": [],
+        "stderr_text": "usage: native-diagnostic-lifecycle-probe DECIMAL_OS_MINOR\n",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/023.command.json",
+            "sha256": "c1e5238cd8e72d15cc504f3e10707824ac44b228ea06b61bd764d82033c60ccf",
+            "size": 427
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/023.json",
+            "sha256": "b27998809f896432e4d08a0223715d41cee7ba61470924a6541a24ff3d9b5621",
+            "size": 339
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/023.stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/023.stderr",
+            "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+            "size": 58
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "invalid",
+          "../0"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 2,
+        "observed_stdout_rows": [],
+        "stderr_text": "usage: native-diagnostic-lifecycle-probe DECIMAL_OS_MINOR\n",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/024.command.json",
+            "sha256": "51585b67d935d0cc547468ec7eb3659fcb96ecf04ee3feda22257481ef4f8262",
+            "size": 429
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/024.json",
+            "sha256": "54287d846fbce3beccd7853c04c23d5da3cee5df72142c786952af186f3e066f",
+            "size": 341
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/024.stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/024.stderr",
+            "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+            "size": 58
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "invalid",
+          "2147483648"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 2,
+        "observed_stdout_rows": [],
+        "stderr_text": "usage: native-diagnostic-lifecycle-probe DECIMAL_OS_MINOR\n",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/025.command.json",
+            "sha256": "7e0f2da64355fb81ee7f5b8112f603631a73c528f8403de39b133f2113866128",
+            "size": 435
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/025.json",
+            "sha256": "521c44a3354c616438f5124fe9a1088a157f84f3959c696f85727a6d067b33b9",
+            "size": 347
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/025.stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/025.stderr",
+            "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+            "size": 58
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "invalid",
+          "999999999999999999999"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 2,
+        "observed_stdout_rows": [],
+        "stderr_text": "usage: native-diagnostic-lifecycle-probe DECIMAL_OS_MINOR\n",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/026.command.json",
+            "sha256": "cdd29d0b720bf78c5fa3f03ad262dfb293acb8ea567d0c8e19975ced827e8f46",
+            "size": 446
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/026.json",
+            "sha256": "a871eaef800452baefbd5fe141af14530c109db8bac86303946a4b8b2f162e5a",
+            "size": 358
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/026.stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/026.stderr",
+            "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+            "size": 58
+          }
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/harness",
+          "invalid",
+          "12",
+          "12"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "HOME": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/tmp"
+        },
+        "returncode": 2,
+        "observed_stdout_rows": [],
+        "stderr_text": "usage: native-diagnostic-lifecycle-probe DECIMAL_OS_MINOR\n",
+        "files": [
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/027.command.json",
+            "sha256": "f61006ecc0bae4afed6cfcac0e2c341a5a06c8e7e4d34c61c7207ccd7c6e7640",
+            "size": 437
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/027.json",
+            "sha256": "3fd4c77e7c54a86e62f60af938909dec5cf38d478e4ef3361c2b11cab28cf926",
+            "size": 349
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/027.stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          {
+            "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-3/027.stderr",
+            "sha256": "f0dfaec29702ae8093034336fee9af0655d229a61f942a78ee0af31b40fd3f84",
+            "size": 58
+          }
+        ]
+      }
+    ]
+  },
+  "observations": {
+    "compiler_returncode": 0,
+    "operational_scenarios": 16,
+    "invalid_argument_scenarios": 10,
+    "successful_scenarios": [
+      "running",
+      "ready",
+      "repeat",
+      "retry_shutdown"
+    ],
+    "rejected_operational_scenarios": [
+      "open_errno",
+      "before_errno",
+      "busy",
+      "negative_errno",
+      "unsupported",
+      "interrupted",
+      "after_errno",
+      "close_errno",
+      "before_unknown",
+      "wrong_after",
+      "after_unknown",
+      "positive_shutdown"
+    ],
+    "success_oracle": "Exit0, exact open/status_before/shutdown/status_after/close order, shutdown0 and post-status NotBooted0, PASS output; repeat marks transition_observed=false.",
+    "errno_oracle": "Injected open ENOENT2, before ENODEV19, shutdown EBUSY16/EIO5/ENOSYS38/EINTR4, after EIO5 and close EINTR4 are logged with libc return-1/exact errno/reconstructed negative linux_result, and exit1.",
+    "failure_state_oracle": "Failed shutdown still observes status_after and closes; no PASS and no retry. Busy retains Running5; EIO post-effect retains Shutdown8. A shutdown positive1 or non-NotBooted/invalid post-state is rejected.",
+    "argument_oracle": "10 malformed/missing/overflow/extra argument cases exit2 with usage and no open/ioctl/close calls.",
+    "boundary_oracle": "Compiled harness includes byte-for-byte actual probe main under renamed symbol. Only open/ioctl/close replaced. Wrappers assert descriptor41, /dev/mcos12 path, exact flags, zero scalar argument, zero incoming errno and status/shutdown/status request order.",
+    "private_environment": "All27child command records contain only PATH/LANG/LC_ALL plus private canonical owner-only HOME/TMPDIR under evidence root. No inherited credentials, ASKPASS or compiler/loader overrides."
+  },
+  "preserved_history": {
+    "source_failure_record": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-lifecycle-probe-source-20261017-1.json",
+      "sha256": "a832f95832a707e38fecff1059d5955d1aa33f5d1abf29c999592bf41a9f8755",
+      "size": 62646
+    },
+    "compiled_1": {
+      "result": {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-result.json",
+        "sha256": "4d95603742f027a32f11f4866a12123a213d1bcdefb607837ed8565e3d776292",
+        "size": 236
+      },
+      "limitation": "Compile and26scenarios pass; original child env omitted private HOME/TMPDIR. Retained unchanged."
+    },
+    "compiled_2": {
+      "result": {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-2-result.json",
+        "sha256": "94e6ac3886721c00a034169c0d5f24f61293bf86d085a3c4e4215ff25f5c2f85",
+        "size": 236
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/scratch/native-lifecycle-probe-source-20261017-1/compiled-2.stderr",
+        "sha256": "91fdff9255655caf7380712a28806d699bd76b79f63821f1557ea88217dd53c9",
+        "size": 637
+      },
+      "failure": "Host /usr/bin/python3 lacks Path.is_relative_to. setUpClass failed before compilation or scenarios. Retained unchanged."
+    },
+    "strategy_change": "Dispatcher selected existing validated /home/holden/anaconda3/bin/python3 Python3.9.12 instead of further source changes; exact test hash f41925e0 and probe18444a09 preserved."
+  },
+  "scope_and_limits": [
+    "Executable evidence for the actual diagnostic probe main with deterministic injected syscalls; not a duplicated shutdown model.",
+    "Kernel shutdown/provider/admission/registry code was not executed by this harness.",
+    "No live native IHK device, OS teardown, CPU reset, CPU/memory restoration, OS destruction, module unload, application payload or guest execution.",
+    "Probe preserves a single descriptor across observations, but native file-lease/generation behavior is inferred from retained runtime sources, not exercised here.",
+    "No production build, runtime release, formal case credit or application/OS acceptance follows.",
+    "Success on an already NotBooted OS reports no observed transition.",
+    "The current collector, launcher and current942 artifacts are unchanged."
+  ],
+  "acceptance": {
+    "real_native_shutdown_executed": false,
+    "guest_executed": false,
+    "resource_restoration_verified": false,
+    "runtime_release": false,
+    "application_acceptance": false,
+    "production_acceptance": false
+  },
+  "blocker": null,
+  "next_task": "Dispatcher independent guest-tool/source review and separate real native guest execution admission after application completion; retain current shutdown/resource limitations."
+}
