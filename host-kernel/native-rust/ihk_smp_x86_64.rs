@@ -399,7 +399,7 @@ unsafe extern "C" fn ihk_smp_start_boot_v3(slot: u32, generation: u64) -> i32 {
     }
 }
 
-fn shutdown_v6_post_effect(error: kernel::Error) -> i64 {
+fn shutdown_v6_post_effect(error: kernel::error::Error) -> i64 {
     IHK_SMP_SHUTDOWN_V6_POST_EFFECT | (error.to_errno() as u32 as i64)
 }
 
