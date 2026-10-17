@@ -1,0 +1,103 @@
+{
+  "schema": "historical-lease-authority-independent-review.v1",
+  "decision": "PASS_SOURCE_AUTHORITY",
+  "reviewer": "/root/scratch21_source_review",
+  "implementation_author": "/root/scratch21_transaction",
+  "implementation_ownership": false,
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "high",
+  "files_sha256": {
+    "scripts/native_exact_historical_lease_observer.py": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "scripts/native_rust_exact_disk_build_wrapper.py": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+    "scripts/tests/test_native_exact_historical_lease_observer.py": "9040fc798d2a2aed1005bc3cc7c56e602871e2aaa4c19b9cf41b50911073a5d0",
+    "scripts/tests/test_native_rust_exact_disk_build_wrapper.py": "12f78efc7dae524167ad818384ea94d21f720df9f2e34c8386e7157b0121e44b"
+  },
+  "author_record": {
+    "path": "docs/verification/evidence/historical-lease-authority-repair-20261017.json",
+    "sha256": "fe996da1834d48d2f613fb366da89f727a2befbb214f8fd47bdda0048b74884d"
+  },
+  "blocked_predecessor": {
+    "path": "docs/verification/evidence/scratch22-heavy-build-independent-execution-review-20261017.json",
+    "sha256": "5a267e8234f6dd517290353f4e52f2dff8742d2bc2cf11f5680e0ecbdf1ac489",
+    "finding": "S22-HISTORICAL-LEASE-BOOT-1",
+    "failure_history": "One concrete canonical census failure on the old observer, followed by this coherent expert source correction. The separate diagnostic __file__ harness correction and original wrapper SIGQUIT history remain preserved; no history reset or scratch22 replay is authorized."
+  },
+  "authority_generation": {
+    "historical_boot_id": "c733d83b-a5ae-4f91-9ce6-9f8ccf119afd",
+    "historical_device": 1831,
+    "current_boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "current_device": 1828,
+    "filesystem_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "scratch_root": "/home/holden/mckernel-work/scratch",
+    "scratch_root_inode": 2,
+    "scratch_root_mode": "0700",
+    "scratch_root_uid": 1000,
+    "scratch_root_gid": 1000,
+    "block_device": "/dev/loop36",
+    "later_generation_policy": "Every later boot, changed live device/root identity or UUID refuses and requires new exact source/execution review. The original retirement identities remain historical provenance."
+  },
+  "source_review": {
+    "original_catalogs_exact": true,
+    "catalog_comparison": "AST literal comparison against unchanged HEAD proves all seven LEASES tuples and all four EVIDENCE_BINDINGS entries are identical. The canonical wrapper byte diff is solely replacement of HISTORICAL_OBSERVER_SHA256 from fad2dd08...fed0 to the exact reviewed observer SHA256.",
+    "filesystem_bridge": "Descriptor-relative no-symlink traversal pins scratch root and /dev ancestry. Scratch is fixed to current device 1828, inode 2, 0700, uid/gid 1000. The fixed root-owned unique block node is opened read-only and its st_rdev must equal that same scratch st_dev. The exact ext4 primary-superblock magic and UUID authenticate that block identity. Root/block descriptors remain open throughout every lease/evidence read and are checked again afterward.",
+    "bounded_uuid_read": "Each check performs exactly pread(block_fd, 1024, 1024), validates length 1024, magic bytes 0x53 0xef at offset 0x38 and UUID bytes at 0x68. There are two checks in observe(): at entry and after the complete observation. Total block payload read is 2048 bytes from the same fixed [1024,2048) extent.",
+    "lease_boundary": "Every original lease remains a unique immutable root-owned 0600 regular file with its exact original inode/size/hash and current device. Full ioctl flag word is unchanged across the read, pathname identity is rechecked, all four original evidence hashes must match, and each exact historical PID/starttime still present refuses.",
+    "consumer_join": "Only the authenticated observer source pin changes. Existing v1 status/current-boot/seven-row uniqueness and type validation remains; additive authority explanation does not replace any existing row binding.",
+    "side_effects": "No block write, ioctl mutation, arbitrary CLI path, external subprocess, credential read, lease/evidence change, cleanup, compiler, build or guest operation is added. No accepted scratch22 materialization is modified.",
+    "nonblocking_limit": "Mocked block/UUID tests establish source behavior, not live qualification. The exact new read-only block-device profile below is independently approved so the dispatcher can obtain the actual observation next."
+  },
+  "independent_validation": {
+    "command": "timeout 120s taskset -c 7 bash -c 'ulimit -v 1048576; exec python3 -B -m unittest -v scripts.tests.test_native_exact_historical_lease_observer scripts.tests.test_native_rust_exact_disk_build_wrapper.HistoricalObserverBoundaryTests'",
+    "returncode": 0,
+    "observed": "Ran 14 tests in 0.025s; OK",
+    "profile": "One ordinary Python process on CPU7, 1-GiB address-space limit and 120-second timeout; all block/privilege observations mocked, actual regular descriptor tests use disposable files only.",
+    "coverage": [
+      "Valid current UUID/root/block/boot bindings; wrong UUID, magic, length, root inode/device/owner, block type/rdev/owner/link count, changed boot/block/ancestry and read failures refuse.",
+      "Original inode/mode/uid/gid/size/hash, evidence digest and live-owner negatives remain; immutable-bit absence, full flag-word drift and ioctl failure refuse.",
+      "Actual descriptor reads preserve disposable file metadata and reject symlinks/hardlinks; consumer executes the exact authenticated source bytes through its unchanged isolated sudo -A argument profile.",
+      "Current report passes; historical boot, truncated/duplicate rows and wrong row types refuse."
+    ],
+    "additional_static_command_result": "PASS exact seven LEASES and four EVIDENCE_BINDINGS unchanged; consumer diff solely observer SHA pin; exact four-file map and author record match.",
+    "privileged_execution_by_reviewer": false,
+    "broad_source_suites_or_evidence_census_repeated": false
+  },
+  "read_only_execution_profile": {
+    "decision": "PASS_READ_ONLY_PROFILE",
+    "executor": "/root",
+    "newly_authorized_capability": "Only fixed read-only ext4-superblock authentication on /dev/loop36 plus the existing seven-lease/four-retirement-evidence/proc identity reads for the exact authority generation above.",
+    "observer_argv": ["/usr/bin/sudo", "-A", "/usr/bin/python3", "-I", "-B", "-"],
+    "observer_stdin": "Exactly the complete hash-verified 463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51 observer source bytes. Hash the bytes before supplying them; do not execute a mutable unchecked pathname, prepend code, add arguments or override constants.",
+    "standalone_observer_invocations": 1,
+    "allowed_integration_check": {
+      "argv": [
+        "/usr/bin/python3", "-B", "/home/holden/mckernel/scripts/native_rust_exact_disk_build_wrapper.py",
+        "/home/holden/mckernel-work/scratch/native-exact-delta-request-scratch-22.json",
+        "--launcher-aggregate-gib", "16.2158", "--census-only", "--request-sha256",
+        "ac0fedafa61fbf1b10e037933f96cdb5937137a8c81da0099d24b6535673ea8e"
+      ],
+      "invocations": 1,
+      "source_sha256": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+      "scope": "Read-only integration using the repaired MAIN consumer and original retained scratch22 prepared request. No candidate source edit, derived execution request, lock/lease acquisition, build or materialization. The authenticated existing process/container observers and the repaired historical observer are permitted only through their already reviewed bounded census paths."
+    },
+    "block_open_flags": "O_RDONLY|O_NOFOLLOW|O_NONBLOCK|O_CLOEXEC|O_NOATIME, fixed loop36 basename opened relative to a pinned /dev directory",
+    "block_node_requirements": "S_ISBLK, uid0, nlink1, st_rdev1828; complete node identity and pathname rechecked while descriptor remains open.",
+    "block_read_extent": "pread of exactly 1024 bytes at offset1024, twice per observer; never any other block extent or write/open mode.",
+    "file_reads": "Only the exact seven original fixed lease paths and four fixed retirement evidence paths, each bounded to 1 MiB, descriptor-relative NOFOLLOW/NOATIME reads; FS_IOC_GETFLAGS is read-only and must prove unchanged immutable flags.",
+    "time_limits": "Standalone observer <=30 seconds; one canonical read-only census <=180 seconds. These timeout bounds apply only to read-only checks, never to a started build or uncertain quarantine owner.",
+    "resources": "One sequential cheap process lane and <=2-GiB planning RAM within the aggregate seven-job/24-GiB allowance. Keep inherited affinity for census so it can verify CPUs2-5 availability; no affinity widening or system limit change. No full evidence corpus hash or compiler/guest work.",
+    "credentials": "Use inherited approved SUDO_ASKPASS only through sudo -A. No -n, direct helper invocation, private credential read, printed secrets or environment/authority bypass.",
+    "prerequisites": [
+      "Exact source map and author record above remain unchanged; dispatcher publishes/fetches source and binds its check to those exact bytes before executing live code.",
+      "No new external stop or included-usage stop; no competing heavy owner, source rewrite or remount during observations.",
+      "All fixed current boot/device/UUID/root/block/lease/evidence identities must pass. Any unknown state or descriptor/ioctl/read error refuses; do not substitute new values."
+    ],
+    "required_result": "Actual observer must emit schema mckernel.historical-lease-observation.v1, status PASS_READ_ONLY, exact current boot, all seven original authenticated rows and authority explanation; integration must independently emit schema mckernel.heavy-recovery-census.v1/status PASS_READ_ONLY with no active processes/containers and only authenticated historical leases.",
+    "evidence": "Preserve complete stdout/stderr, exit status, exact command and source hashes, current source commit and observed lease rows. A failed observation remains evidence and must not be retried unchanged.",
+    "unreleased": ["Any block write", "Lease modification/removal", "Root cleanup", "Heavy build", "Compiler", "Guest", "Scratch22 replay", "New source materialization"]
+  },
+  "blocking_findings": [],
+  "live_observer_executed": false,
+  "build_execution_released": false,
+  "acceptance_credit": false,
+  "scope_limit": "Exact source authority and the bounded read-only profile only. Runtime observation is the next executable check. The old scratch22 candidate/request/materializations remain immutable; any fresh authority namespace and heavy execution need their own exact accepted preparation/artifact/release bindings."
+}

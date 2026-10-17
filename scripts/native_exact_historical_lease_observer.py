@@ -11,10 +11,18 @@ import os
 from pathlib import Path
 import stat
 import struct
+import uuid
 
 ROOT = Path('/home/holden/mckernel-work/scratch')
 EVIDENCE = Path('/home/holden/mckernel/docs/verification')
-BOOT = 'c733d83b-a5ae-4f91-9ce6-9f8ccf119afd'
+# Original retirement identities remain historical evidence, not mount authority.
+HISTORICAL_BOOT = 'c733d83b-a5ae-4f91-9ce6-9f8ccf119afd'
+HISTORICAL_DEVICE = 1831
+# This single reviewed generation must refuse every later boot/remount until reviewed.
+CURRENT_BOOT = '7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
+CURRENT_DEVICE = 1828
+FILESYSTEM_UUID = '2a5768c8-718d-4914-bdc0-6b32c5a92a52'
+BLOCK_DEVICE = Path('/dev/loop36')
 EVIDENCE_BINDINGS = {
  '675': ('stability-native-exact-retirement-runtime-success-20260929-1.json', 'cdb1eabf257940fbfd91e86accde5bbab342e47b2568261462ed9da06b9f842c'),
  '704': ('stability-native-exact-retirement-704f6654-failure-20260929-1.json', '1e63a02eb9b29f1ec3ec0a4142543ca523720e19c0676f6a30048c3f1b34d7e0'),
@@ -34,6 +42,83 @@ LEASES = (
 
 class Refusal(ValueError): pass
 
+def _directory(path):
+    fds = []
+    try:
+        fd = os.open('/', os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)
+        fds.append(fd)
+        chain = [_directory_identity(os.fstat(fd))]
+        for part in path.parts[1:]:
+            if part in ('.', '..'): raise Refusal('invalid directory path')
+            fd = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=fd)
+            fds.append(fd)
+            chain.append(_directory_identity(os.fstat(fd)))
+        for parent in fds[:-1]: os.close(parent)
+        return fd, chain
+    except BaseException:
+        for fd in reversed(fds): os.close(fd)
+        raise
+
+def _directory_identity(meta):
+    return (meta.st_dev, meta.st_ino, meta.st_mode, meta.st_uid, meta.st_gid)
+
+def _block_identity(meta):
+    return (meta.st_dev, meta.st_ino, meta.st_rdev, meta.st_mode,
+            meta.st_uid, meta.st_gid, meta.st_nlink)
+
+class ScratchBinding:
+    """Pin current mount and fixed backing block descriptor across all observations."""
+    def __enter__(self):
+        self.root_fd = self.block_parent = self.block_fd = None
+        try:
+            self.root_fd, self.root_chain = _directory(ROOT)
+            self.root_identity = _directory_identity(os.fstat(self.root_fd))
+            if self.root_identity != (CURRENT_DEVICE, 2, stat.S_IFDIR | 0o700, 1000, 1000):
+                raise Refusal('current scratch root binding differs')
+            self.block_parent, self.block_chain = _directory(BLOCK_DEVICE.parent)
+            self.block_fd = os.open(BLOCK_DEVICE.name, os.O_RDONLY | os.O_NOFOLLOW |
+                                    os.O_NONBLOCK | os.O_CLOEXEC | os.O_NOATIME, dir_fd=self.block_parent)
+            meta = os.fstat(self.block_fd)
+            if (not stat.S_ISBLK(meta.st_mode) or meta.st_rdev != CURRENT_DEVICE or
+                    meta.st_uid != 0 or meta.st_nlink != 1):
+                raise Refusal('current backing block binding differs')
+            self.block_identity = _block_identity(meta)
+            self.check()
+            return self
+        except BaseException:
+            self.__exit__(None, None, None)
+            raise
+
+    def check(self):
+        if Path('/proc/sys/kernel/random/boot_id').read_text().strip() != CURRENT_BOOT:
+            raise Refusal('current boot identity differs; fresh review required')
+        if _directory_identity(os.fstat(self.root_fd)) != self.root_identity:
+            raise Refusal('current scratch root identity changed')
+        for path, expected in ((ROOT, self.root_chain), (BLOCK_DEVICE.parent, self.block_chain)):
+            fd, chain = _directory(path)
+            os.close(fd)
+            if chain != expected: raise Refusal('current mount ancestry changed')
+        if (_block_identity(os.fstat(self.block_fd)) != self.block_identity or
+                _block_identity(os.stat(BLOCK_DEVICE.name, dir_fd=self.block_parent,
+                                        follow_symlinks=False)) != self.block_identity):
+            raise Refusal('current backing block identity changed')
+        # ext4's primary superblock starts at byte 1024; only this fixed bounded
+        # region is read. Its UUID authenticates the same rdev as scratch st_dev.
+        data = os.pread(self.block_fd, 1024, 1024)
+        if (len(data) != 1024 or data[0x38:0x3a] != b'\x53\xef' or
+                str(uuid.UUID(bytes=data[0x68:0x78])) != FILESYSTEM_UUID):
+            raise Refusal('current ext4 filesystem UUID proof differs')
+        if (_block_identity(os.fstat(self.block_fd)) != self.block_identity or
+                Path('/proc/sys/kernel/random/boot_id').read_text().strip() != CURRENT_BOOT):
+            raise Refusal('current mount or boot changed during UUID read')
+
+    def __exit__(self, *args):
+        for name in ('block_fd', 'block_parent', 'root_fd'):
+            fd = getattr(self, name, None)
+            if fd is not None:
+                os.close(fd)
+                setattr(self, name, None)
+
 def _read(path, immutable=False):
     """Descriptor-relative NOFOLLOW, NOATIME bounded stable regular read."""
     path = Path(path)
@@ -45,7 +130,7 @@ def _read(path, immutable=False):
             if part in ('.', '..'): raise Refusal('invalid path')
             fd = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=fd)
             fds.append(fd)
-        fd = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NOATIME, dir_fd=fd)
+        fd = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NOATIME | os.O_CLOEXEC, dir_fd=fd)
         fds.append(fd)
         before = os.fstat(fd)
         if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size > 1 << 20:
@@ -61,14 +146,25 @@ def _read(path, immutable=False):
         after = os.fstat(fd)
         if before != after or len(data) != before.st_size:
             raise Refusal('file changed while observed')
+        if immutable and struct.unpack('I', fcntl.ioctl(fd, 0x80086601, struct.pack('I', 0)))[0] != flags:
+            raise Refusal('immutable lease flags changed while observed')
+        current = os.stat(path.name, dir_fd=fds[-2], follow_symlinks=False)
+        if (current.st_dev, current.st_ino) != (before.st_dev, before.st_ino):
+            raise Refusal('file pathname changed while observed')
         return data, before
     finally:
         for fd in reversed(fds): os.close(fd)
 
 def observe():
     if os.geteuid() != 0: raise Refusal('privileged read-only observer required')
-    if Path('/proc/sys/kernel/random/boot_id').read_text().strip() != BOOT:
-        raise Refusal('retained boot identity differs; fresh review required')
+    if Path('/proc/sys/kernel/random/boot_id').read_text().strip() != CURRENT_BOOT:
+        raise Refusal('current boot identity differs; fresh review required')
+    with ScratchBinding() as binding:
+        result = _observe_leases()
+        binding.check()
+        return result
+
+def _observe_leases():
     for relative, expected in EVIDENCE_BINDINGS.values():
         data, _ = _read(EVIDENCE / relative)
         if hashlib.sha256(data).hexdigest() != expected: raise Refusal('retirement evidence changed')
@@ -77,7 +173,7 @@ def observe():
         path = ROOT / ('native-exact-build-lease-' + suffix + '.json')
         data, meta = _read(path, immutable=True)
         if ((meta.st_dev, meta.st_ino, meta.st_size, meta.st_mode, meta.st_uid, meta.st_gid)
-                != (1831, inode, size, stat.S_IFREG | 0o600, 0, 0) or
+                != (CURRENT_DEVICE, inode, size, stat.S_IFREG | 0o600, 0, 0) or
                 hashlib.sha256(data).hexdigest() != expected):
             raise Refusal('historical lease binding changed')
         # The exact retained bytes bind the tombstone schema, state, owner and
@@ -91,8 +187,13 @@ def observe():
         rows.append({'path': str(path), 'sha256': expected, 'device': meta.st_dev,
                      'inode': inode, 'size': size, 'pid': pid, 'starttime': start,
                      'evidence_sha256': EVIDENCE_BINDINGS[evidence][1]})
-    return {'schema': 'mckernel.historical-lease-observation.v1', 'boot_id': BOOT,
-            'status': 'PASS_READ_ONLY', 'leases': rows}
+    return {'schema': 'mckernel.historical-lease-observation.v1', 'boot_id': CURRENT_BOOT,
+            'status': 'PASS_READ_ONLY', 'leases': rows,
+            'authority': {'historical_boot_id': HISTORICAL_BOOT,
+                          'historical_device': HISTORICAL_DEVICE,
+                          'current_device': CURRENT_DEVICE, 'filesystem_uuid': FILESYSTEM_UUID,
+                          'block_device': str(BLOCK_DEVICE),
+                          'uuid_proof': 'ext4-primary-superblock-pread-1024-at-1024'}}
 
 def main():
     import sys

@@ -69,7 +69,7 @@ SHARED_HEAVY_LOCK_PATH = DISPATCHER_SCRATCH_ROOT + '/mckernel-heavy-operation.lo
 # Independently reviewed common source contract, enabled with the guest switch.
 # This is not a build, image or guest execution release.
 HEAVY_ENTRY_CONTRACT_RELEASED = True
-HISTORICAL_OBSERVER_SHA256 = 'fad2dd08fdc098c1dcda1d2fa8eaf9fc885f64d4054c9ca85ad71f7a5000fed0'
+HISTORICAL_OBSERVER_SHA256 = '463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51'
 HEAVY_EXECUTABLES = frozenset(('qemu-system-x86_64', 'qemu-system-aarch64',
     'qemu-kvm', 'mcexec', 'firecracker', 'rustc', 'cargo', 'make', 'ninja', 'buildah'))
 HEAVY_SCRIPTS = frozenset(('native_rust_exact_build_container_owner.py',

@@ -910,5 +910,50 @@ acquire_heavy_operation = _acquire_exclusion = _load_owner = run_request = _test
             self.invoke(request)
 
 
+class HistoricalObserverBoundaryTests(unittest.TestCase):
+    def report(self):
+        import native_exact_historical_lease_observer as observer
+        return {'schema': 'mckernel.historical-lease-observation.v1',
+                'status': 'PASS_READ_ONLY', 'boot_id': observer.CURRENT_BOOT,
+                'authority': {'historical_boot_id': observer.HISTORICAL_BOOT,
+                              'historical_device': observer.HISTORICAL_DEVICE,
+                              'current_device': observer.CURRENT_DEVICE,
+                              'filesystem_uuid': observer.FILESYSTEM_UUID},
+                'leases': [{'path': str(observer.ROOT / ('native-exact-build-lease-' + suffix + '.json')),
+                            'sha256': digest, 'device': observer.CURRENT_DEVICE,
+                            'inode': inode, 'size': size, 'pid': pid, 'starttime': start,
+                            'evidence_sha256': observer.EVIDENCE_BINDINGS[evidence][1]}
+                           for suffix, inode, size, digest, pid, start, evidence in observer.LEASES]}
+
+    def test_exact_observer_source_pin_and_current_generation_report(self):
+        source = ROOT / 'scripts/native_exact_historical_lease_observer.py'
+        self.assertEqual(hashlib.sha256(source.read_bytes()).hexdigest(), wrapper.HISTORICAL_OBSERVER_SHA256)
+        report = self.report()
+        result = types.SimpleNamespace(returncode=0, stdout=json.dumps(report).encode())
+        with mock.patch.object(wrapper, '_run_bounded_observer', return_value=result) as run, \
+             mock.patch.object(Path, 'read_text', return_value=report['boot_id']):
+            rows = wrapper._historical_lease_observation()
+        self.assertEqual(len(rows), 7)
+        self.assertEqual(list(rows.values()), report['leases'])
+        self.assertEqual(run.call_args.args[1], source.read_bytes())
+        self.assertEqual(run.call_args.args[0],
+                         ['/usr/bin/sudo', '-A', '/usr/bin/python3', '-I', '-B', '-'])
+
+    def test_historical_report_cannot_replace_current_boot_or_row_shape(self):
+        good = self.report()
+        for change in (lambda row: row.update(boot_id='c733d83b-a5ae-4f91-9ce6-9f8ccf119afd'),
+                       lambda row: row.update(leases=row['leases'][:-1]),
+                       lambda row: row['leases'].__setitem__(1, dict(row['leases'][0])),
+                       lambda row: row['leases'][0].update(device=True),
+                       lambda row: row['leases'][0].update(evidence_sha256=5)):
+            report = copy.deepcopy(good); change(report)
+            result = types.SimpleNamespace(returncode=0, stdout=json.dumps(report).encode())
+            with self.subTest(report=report), \
+                 mock.patch.object(wrapper, '_run_bounded_observer', return_value=result), \
+                 mock.patch.object(Path, 'read_text', return_value=good['boot_id']):
+                with self.assertRaises(wrapper.AdmissionError):
+                    wrapper._historical_lease_observation()
+
+
 if __name__ == "__main__":
     unittest.main()

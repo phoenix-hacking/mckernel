@@ -1,0 +1,103 @@
+{
+  "schema": "scratch22-authority1.build-wrapper-source-evidence.v1",
+  "status": "PASS_DISPOSABLE_TESTS_ONLY",
+  "author": "/root/scratch22_build_wrapper",
+  "model": "gpt-6.1-sol",
+  "scope": "Fresh source-only wrapper adaptation within the existing S22-HISTORICAL-LEASE-BOOT-1 correction. No preparation, build, root operation, Docker, guest, network or Git command was executed by this lane.",
+  "implementation": {
+    "path": "scripts/native_exact_scratch22_authority1_build_wrapper.py",
+    "sha256": "a0439f79cb895dd6696e4005f1b8f7d6d42018ff3481541b43b12ab2ab582fad"
+  },
+  "tests": {
+    "path": "scripts/tests/test_native_exact_scratch22_authority1_build_wrapper.py",
+    "sha256": "b05ee5de853f1b2bbf3c8957c9492a5228a21712e59f6117ee6bb36c4279df58",
+    "command": "timeout 180s taskset -c 6 prlimit --as=2147483648 -- python3 -B -m unittest -v scripts.tests.test_native_exact_scratch22_authority1_build_wrapper",
+    "cases": 33,
+    "exit_code": 0,
+    "reported_seconds": 0.765,
+    "earlier_run": "31 tests passed in 0.735 seconds before two further namespace/old-preparation authority regressions were added.",
+    "profile": "One CPU6 share, 2-GiB planning share and inherited per-process address-space limit, 180-second suite timeout. Disposable Python/files only, one real disposable child at a time. Actual Git/Docker/build calls mocked; no live root/shared lock or production preparation inputs are used."
+  },
+  "exact_base": {
+    "source": {
+      "path": "scripts/native_exact_scratch22_build_wrapper.py",
+      "sha256": "4cd885cb03a34d8e82f184a071c22e656d833eba0c0bcdac43bc790e3bac66a7"
+    },
+    "tests": {
+      "path": "scripts/tests/test_native_exact_scratch22_build_wrapper.py",
+      "sha256": "70e61c0110415bd659ce0ae8fd3a34ba0e580cef089bd65ebe770f7db5a0e039"
+    },
+    "independent_review": {
+      "path": "docs/verification/evidence/scratch22-build-wrapper-correction-independent-review-20261017.json",
+      "sha256": "fe83f6f42bcd9b10673f87f18cf18562d721d30174a9299289712987cb7ad37d",
+      "decision": "PASS_SOURCE"
+    },
+    "all_originals_unchanged": true
+  },
+  "exact_source_delta": [
+    "SELF and TEST now name the new authority1 wrapper/test; ADAPTER names scripts/prepare_native_exact_scratch22_authority1.py. Original private scratch18 preparation ancestor path is unchanged.",
+    "Strict build-release schema is scratch22-authority1.build-execution-release.v1 and strict attempt is scratch22-authority1. Strict preparation schema is scratch22-authority1.preparation-release.v1 with unchanged PASS_PREPARATION_EXECUTION_RELEASE status and execution_released=false requirement.",
+    "Candidate/request/manifest/execution/output/evidence/lease/preparation-log/preparation-terminal names use scratch-22-authority1. Heavy stdout/stderr/terminal/quarantine use native-exact-scratch-22-authority1-heavy-build.*. Only the canonical shared heavy path, root lock and scratch18 owner operational-exclusion ABI slot remain shared.",
+    "Preparation controller source bindings now name the new helper and new helper test. All original helper/controller/ancestor, cleanup, RS-011 source checks/source review and independent preparation review joins remain mandatory.",
+    "preflight additionally calls the actual new adapter.validate_authority_review(REPO, preparation), after original cleanup and RS-011 source checks. Its independent preparation reviewed_inputs map additionally requires authority_review_sha256. No original map entry was removed.",
+    "Quarantine/terminal schema strings and diagnostic/import names reflect scratch22-authority1. No ownership, signal, publication, run, retirement or resource algorithm changed."
+  ],
+  "dependency_contract": {
+    "new_adapter": "scripts/prepare_native_exact_scratch22_authority1.py",
+    "observed_frozen_sha256": "5e002228f09c2df3c712422d94f96f333bbc0df597335203de57350162723717",
+    "binding_policy": "No embedded execution authority or guessed dependency hash. A later independently reviewed release must bind the exact selected new helper and its original private ancestor, as well as this wrapper and test; immutable preparation controller blobs must match actual helper/test/ancestor hashes before import-dependent validation.",
+    "authority_function": "validate_authority_review(source, release)",
+    "authority_record": "Additional authority_review path/hash must select independent PASS_SOURCE_AUTHORITY, implementation_ownership=false, reviewer different from original author. The original author_record path is docs/verification/evidence/historical-lease-authority-repair-20261017.json; its bound files_sha256 map must equal review files_sha256 and checks.status must be PASS. Each of the exact four reviewed file hashes must equal the released target Git blob. Original RS-011 map remains separately mandatory.",
+    "authority_files": [
+      "scripts/native_exact_historical_lease_observer.py",
+      "scripts/native_rust_exact_disk_build_wrapper.py",
+      "scripts/tests/test_native_exact_historical_lease_observer.py",
+      "scripts/tests/test_native_rust_exact_disk_build_wrapper.py"
+    ],
+    "names_match": "Read actual new adapter NAMES and confirmed candidate/request/manifest/log/terminal/lease names match this wrapper exactly. Adapter includes original accepted scratch22 as the seventh retained alias; it owns authenticated seven-to-eight link census/materialization logic, not this wrapper."
+  },
+  "preserved_invariants": {
+    "ast_proof": "test_reviewed_lock_and_execution_bodies_are_mechanically_preserved compares original and new ASTs after mechanical namespace normalization for acquire_development_lock, derive, publish, run_checked, retirement_proven, quarantine_wait, quarantine_root_lock and execute. All match exactly.",
+    "one_shot": "External exact digest-bound independent release, count integer one, fetched source/release bytes and independent canonical release-payload review remain mandatory. No execution release or proposal is created here.",
+    "derivation": "Only preparation_only, executable, execution_released and release_required change; exact derived canonical digest remains externally required.",
+    "root_ownership": "Root flock precedes validation/census/request publication and is inherited by the canonical child. HUP/INT/TERM/QUIT handler setup remains atomic; original caller mask is restored before lock acquisition/child launch. Every started uncertainty quarantines before unlock despite evidence/output/wait failures. No timeout unlock and no SIGKILL-resistant live-flock claim.",
+    "retirement": "Only existing positive current authenticated owner-retirement predicates permit root unlock. Terminal container and shared exclusions stay for separate reviewed cleanup. Failed status never becomes success.",
+    "profile": "One heavy operation; four CPUs2-5, 12GiB RAM, MemorySwap=RAM, 512 tasks, network none, jobs<=4, unchanged owner timeout19800/no outer timeout. Shared campaign7jobs/24GiB and stricter canonical aggregate admission remain unchanged; host16GiB/scratch12GiB floors are retained."
+  },
+  "regressions": [
+    "All original 27 reviewed tests retained with mechanical namespace adaptation, including five serial actual temporary-child/flock scenarios for ordinary signals, broken stdout, failed evidence and interrupted wait.",
+    "Original scratch22 released build and preparation schemas/attempts refuse in the fresh authority1 wrapper.",
+    "Every fresh materialization/capture path contains scratch-22-authority1; self/test/new-adapter filenames match the selected new namespace.",
+    "Additional authority validator is invoked after, and does not replace, original cleanup and RS-011 authority checks; validator refusal prevents canonical prepared-request use.",
+    "Preparation execution review missing authority_review_sha256 refuses even when every original prerequisite digest remains bound.",
+    "Exact ownership/execution AST comparison prevents a namespace adaptation from changing reviewed root-lock/signal/resource/retirement semantics."
+  ],
+  "failure_family_history": [
+    {
+      "family": "S22-LOCK-1",
+      "history": "Original scratch22 independently reproduced SIGQUIT terminating a quarantined owner and releasing its live flock. One bounded correction added four-signal atomic setup; exact corrected source independently passed27tests. Original failed source/tests and BLOCK review remain unchanged, and the corrected algorithm is preserved mechanically here.",
+      "original_review": "docs/verification/evidence/scratch22-build-wrapper-independent-review-20261017.json",
+      "correction_review": "docs/verification/evidence/scratch22-build-wrapper-correction-independent-review-20261017.json"
+    },
+    {
+      "family": "S22-HISTORICAL-LEASE-BOOT-1",
+      "history": "Original scratch22 prepared artifacts were accepted, but the independent canonical read-only heavy census refused its historical observer's old boot/device authority. No build, lease or exclusion acquisition followed. New authority1 sources/wrappers/materializations are part of this same bounded correction; renaming does not reset history or grant another correction budget.",
+      "original_review": {
+        "path": "docs/verification/evidence/scratch22-heavy-build-independent-execution-review-20261017.json",
+        "sha256": "5a267e8234f6dd517290353f4e52f2dff8742d2bc2cf11f5680e0ecbdf1ac489",
+        "decision": "BLOCKED_EXECUTION"
+      },
+      "original_artifact_preservation": "Original scratch22 request/manifest/candidate/output/evidence/log/terminal, prepared-artifact review and denied heavy-build proposal/review are unchanged. No original request or materialization is replayed."
+    }
+  ],
+  "new_test_failures": [],
+  "remaining_prerequisites": [
+    "Independent exact source review of this new wrapper, tests and added authority interface",
+    "Reviewed observer/consumer authority repair, exact source commit/push/fetch and new adapter independent review",
+    "Separately reviewed fresh authority1 preparation release, authenticated retained alias census, actual new prepared artifacts and independent artifact acceptance",
+    "Only then a fresh exact one-shot build proposal/execution review/release with real source, artifact and live identity bindings; dispatcher alone executes"
+  ],
+  "execution_released": false,
+  "preparation_or_build_performed": false,
+  "acceptance_delta": {"current_candidate_builds": 0, "real_guest_apps": 0, "formal_applications": 0, "production_gates": 0}
+}
