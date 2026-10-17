@@ -1,5 +1,57 @@
 # Compact dispatcher handoff
 
+## Checkpoint394 — vector and public resource release work natively
+
+Fourteenth distinct app diagnostic independently accepted: exact77-byte vector
+oracle, emptyerr/exit0,36.247969s, actualworker257/futex202return0, source-bound
+XMM0-15/MXCSR/x87CW/TOP/two80bitvalues aftersyscall/blockinghandoff/signal.
+Resulted0e550a/archive66b8baf1 preserves13files; owner616863/container8b946e80
+and30clients retired/rootfree/QEMUreaped. No AVX/XSAVE/multicore/lifecycle credit.
+M07 now partial with evidence-backed open checks; final libc/Rust/ISA requirements
+remain unclosed. Assessment400e5b19; separate active-source FPU save-allocation
+failure analysis under test, not an observed native regression or feature waiver.
+
+Resource v1 failed34.945444s at assignedCPUquery-16: compiledsuccessfulshutdown
+closes admission and onlystatus bypasses. Failure665d0568/archive1f39 retained.
+Explicit reviewed v2 preserveskernelguard and requires bothOSqueries EBUSY/
+unavailable, notemptyinventories. Rustactualnative/compat0,-16,-16/nobackend→
+actualCmain→realcollector/PTYCRLF→strictparser PASS; originalLF/CRLFhistory retained.
+V2 native independentPASS34.594062s: actual2520bytes, closeOS/destroy0, refreshed
+128MiB node0(96+32MiB) releasedonce, finaldeviceCPU/MEMempty/CPU1online1.
+Resultfce2fbbb/archive7202d466 retains13files; owner618784/containerf088c13b and
+30clients retired/rootfree/QEMUreaped. Repeatedsignaladds0 appbehaviors.
+Onepublicresource-release diagnostic, fullcycles/reboot/whole-restoration0.
+
+Next critical source: case-specific fullcyclecollector uses acceptedv2 then
+freshkernel-log snapshots +same strict5helper secondboot; offlinev2reference8c5a
+independentlyPASS but no runtimeauthority. Separatefullcycleexecutionreviewneeded.
+Fork completion38 provider/60consumer actualbody tests are sourceprerequisites;
+reviewfound durableACKcacheoverwrite and parent-slot dependence on finalACK,
+coherentcorrectionactive. Actualcarrier owner prepared_backend; consumerownsLINK,
+providerownsdispatch/ABI. GenuineIHKpins/claims/replay/finalACK required; CREATE_PPD
+stays-95. AllforkWIP isolated fromcompiled3f7; currentcompiledsource preserved.
+Review8 saved(next17:55UTC); dated15:25percentagebaselineunchanged. Continue.
+
+## Live cursor — resource query contract failure, 17:20UTC
+
+Resource guest1 joined1/34.945444s; independent retirement accepted25clients,
+owner611349/containerc13beef removed/root27:4free, no cleanup errors.
+Strict native stop again5->0->0/close0; resource observedCPU1online/deviceCPU[]/
+deviceMEM128MiB, then OSassignedCPU query0x112a26=-16. Compiled3f7 closes
+admission afterstop and permits status-only bypass; this is a probe capability/
+mock mismatch, not an established new kernel defect. No destroy/release executed.
+Failure665d0568/archive1f39b85e retains13exactfiles. Do not retry unchanged or
+weaken kernel guard. Expert reviewing explicit v2 closed-queryEBUSY contract;
+C/parser/reference correction and separate release pending. Earlier collector
+LF failure and expert terminalCRLF correction remain preserved, not reset.
+
+Next two cases: independently source/Linux-reviewed vector5362705 app staging,
+then corrected resource case when ready. Full reboot-sequence modeled reference
+6677cedb is prepared but its old query assumption is invalid; no guest authority
+or cycle credit. Actual-app count13, quiescent-stop diagnostic1, fullcycles0.
+Fork IHK-owned ConsumerCapsule/Accept and actual codec source lanes continue;
+CREATE_PPD remains-95. HEADeca77 checkpoint393 pushed/fetched14exactblobs.
+
 ## Checkpoint393 — matched shutdown repair works natively
 
 Source3f7b265b matched three-module build2 passed make0/driver0 in18.664067s;
@@ -2599,3 +2651,7 @@ generation controls.  Rust 1.92 passes 66/66 and independent review returns
 `docs/verification/evidence/native-exact-shutdown-effect-boundary-followup-source-checkpoint-20261001.json`.
 SMP v5 wiring, sender stop, IRQ drain, boot-route ownership, CPU reclamation
 and a real shutdown guest remain open; no acceptance counter moves.
+
+FPU actual-body packetacb73548 confirms ignoredsaveENOMEM reaches mockedrestore/switch;
+separate ownedrepair native_fp_save_repair +independentreviewer native_fp_save_review
+active inNEWisolatedsource only. No current3f7/image942 edits/heavy/probe replay.

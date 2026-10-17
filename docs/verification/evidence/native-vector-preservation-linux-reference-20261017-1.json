@@ -1,0 +1,402 @@
+{
+  "task_id": "native_vector_preservation_selected_profile",
+  "status": "LINUX_REFERENCE_PASS_READY_FOR_INDEPENDENT_ABI_REVIEW",
+  "changed_paths": [
+    "scripts/application-tests/native-vector-preservation.c",
+    "scripts/application-tests/native-vector-preservation.S",
+    "scripts/tests/test_native_vector_preservation_20261017.py",
+    "docs/verification/native-vector-preservation-linux-oracle-20261017-1.json"
+  ],
+  "sources": [
+    {
+      "path": "scripts/application-tests/native-vector-preservation.c",
+      "sha256": "1ba82e6d9ce34ef5ebf1f7a7356ddccf33c18d89266ec948c8a42eb6fd50f501",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/final-native-vector-preservation.c"
+    },
+    {
+      "path": "scripts/application-tests/native-vector-preservation.S",
+      "sha256": "1c58e70ad14d6972685884ce121a940cce70e88fbadc885a20867b5d1ccbed5f",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/final-native-vector-preservation.S"
+    },
+    {
+      "path": "scripts/tests/test_native_vector_preservation_20261017.py",
+      "sha256": "3dc67f9f7a822479cccfa0a59ebb01992fe0dcdeea39935c8caaee38d860de47",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/final-test_native_vector_preservation_20261017.py"
+    },
+    {
+      "path": "docs/verification/native-vector-preservation-linux-oracle-20261017-1.json",
+      "sha256": "88f336f3febab1295d0cc70f060892448bde3aa5be593d59538ce3ab9877fe65",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/final-native-vector-preservation-linux-oracle-20261017-1.json"
+    }
+  ],
+  "oracle": {
+    "path": "docs/verification/native-vector-preservation-linux-oracle-20261017-1.json",
+    "sha256": "88f336f3febab1295d0cc70f060892448bde3aa5be593d59538ce3ab9877fe65",
+    "frozen_before_implementation": true,
+    "unchanged_after_original_compile_failure": true
+  },
+  "selected_profile": "x86_64 SSE2 only: distinct 128-bit XMM0..15 patterns; MXCSR0x3fa0; x87 CW0x077f; two exact 80-bit stack values ST0=-3.5 and ST1=1.25 with TOP6. No AVX/XSAVE extension claims.",
+  "checks": {
+    "profile": "CPU7 one job AS1GiB CPU150 nofile256 fsize64MiB core0 wall180; proven Anaconda Python3.9 minimal env private HOME/TMPDIR; existing /usr/bin/gcc static pthread profile with baseline march=x86-64/mno-avx",
+    "attempt1": {
+      "status": "FAIL_COMPILE",
+      "cause": "Fortified write warn_unused_result remains after void cast; -Werror rejected watchdog code before any app ran",
+      "preserved": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1",
+      "runner_issue": "subTest continued identical failing C compiles for two controls; no app execution; corrected to fail-fast before next attempt"
+    },
+    "attempt2": {
+      "status": "PASS",
+      "preserved": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2",
+      "reference_exit": 0,
+      "reference_stdout": "VECTOR_SYSCALL_PASS\nVECTOR_FUTEX_PASS\nVECTOR_SIGNAL_PASS\nVECTOR_PROFILE_PASS\n",
+      "reference_stderr": "",
+      "negative_controls": [
+        {
+          "mutation": "pxor xmm7 at precheck boundary",
+          "exit": 1,
+          "stdout": "VECTOR_FAIL stage=syscall code=8\n"
+        },
+        {
+          "mutation": "load original pre-probe MXCSR at precheck boundary",
+          "exit": 1,
+          "stdout": "VECTOR_FAIL stage=syscall code=18\n"
+        }
+      ],
+      "static": "readelf -W -l: no INTERP; GNU_STACK RW nonexecuting. objdump native_vector_probe: raw syscalls and SSE2 comparisons; no YMM/ZMM registers."
+    },
+    "bounded_correction": "Assign watchdog write result to local and consume it; no flags or frozen oracle changes; runner made fail-fast. One corrected attempt passed."
+  },
+  "boundary_evidence": [
+    "Raw getpid syscall inside same assembly seed/check scope",
+    "Worker raw FUTEX_WAIT_PRIVATE returns0 and main FUTEX_WAKE_PRIVATE returns1: actual kernel queued waiter and pthread context handoff, no timing-only acceptance",
+    "Self tgkill syscall returns0, signal_seen=1, handler overwrites all XMMs and x87 stack/status/MXCSR status, then all interrupted selected state compares exact after signal return"
+  ],
+  "abi_contract": [
+    "No caller-saved XMM assumptions across C/libc calls; seed/check in one assembly function",
+    "Probe saves/restores used r12/r13/r14, restores original x87/MXCSR controls and stack, empties x87 stack before ordinary return",
+    "Handler uses no callee-saved GPRs; restores x87 CW and leaves MXCSR control fields untouched while changing status; leaves x87 stack empty",
+    "Interrupting signal machinery must restore interrupted XMM/x87/MXCSR user state irrespective of ordinary call caller-saved rules",
+    "No production, catalog or manifest edits; no guest authority exercised"
+  ],
+  "toolchain": {
+    "compiler": "/usr/bin/gcc",
+    "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+    "version_capture": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/compiler-version.stdout",
+    "flags": [
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-static",
+      "-fno-pie",
+      "-no-pie",
+      "-march=x86-64",
+      "-mtune=generic",
+      "-mno-avx",
+      "-Wl,-z,noexecstack",
+      "-pthread"
+    ]
+  },
+  "binary": {
+    "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/reference",
+    "sha256": "599495c17869833fd9f80239b58cf7840fe1369f1f963eb0aad4fbed3b1f65ed",
+    "bytes": 1518720
+  },
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/commands.json",
+      "sha256": "e963be10ae1d0d27f5d12bb29018ceac17fe6c84e01c4aa54ac4eb703d7d1ad0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/compiler-version.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/compiler-version.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/compiler-version.stdout",
+      "sha256": "991c86f8d9b66254b3a1d9424592c40c367ae86dd7700c54bdaa80203b40b2ea"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/input-hashes.json",
+      "sha256": "168bb11e105976ce3dc02ebaac0b1f508f4fa841f93a4995a31bab9668626feb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/mxcsr-corruption.S",
+      "sha256": "227b45e6bc7304e6f0b73856bf1f0f6374625c3aeb4c335ed4d2cffbee746e30"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/mxcsr-corruption.compile.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/mxcsr-corruption.compile.stderr",
+      "sha256": "804725ff16c75d0106afab0fe4f77e8f435981130387a7084aee58d3a901a246"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/mxcsr-corruption.compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/native-vector-preservation-linux-oracle-20261017-1.json",
+      "sha256": "88f336f3febab1295d0cc70f060892448bde3aa5be593d59538ce3ab9877fe65"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/native-vector-preservation.S",
+      "sha256": "1c58e70ad14d6972685884ce121a940cce70e88fbadc885a20867b5d1ccbed5f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/native-vector-preservation.c",
+      "sha256": "3947d94c28a5cfd96c12ab70bc95e1533fe1f2028d5d177989e9619cdeea3c61"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/reference.S",
+      "sha256": "1c58e70ad14d6972685884ce121a940cce70e88fbadc885a20867b5d1ccbed5f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/reference.compile.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/reference.compile.stderr",
+      "sha256": "804725ff16c75d0106afab0fe4f77e8f435981130387a7084aee58d3a901a246"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/reference.compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/xmm-corruption.S",
+      "sha256": "950f38be983c354fe31849403a273df382decc6403c1f10d142c03e91fc8e3fb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/xmm-corruption.compile.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/xmm-corruption.compile.stderr",
+      "sha256": "804725ff16c75d0106afab0fe4f77e8f435981130387a7084aee58d3a901a246"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt1/xmm-corruption.compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/commands.json",
+      "sha256": "357a6577ae9201295fbc641a419d4e8d7a54aa811ce5303f13b666b7998f48d3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/compiler-version.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/compiler-version.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/compiler-version.stdout",
+      "sha256": "991c86f8d9b66254b3a1d9424592c40c367ae86dd7700c54bdaa80203b40b2ea"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/input-hashes.json",
+      "sha256": "54f6aef671c2f69822443287c8639c1d7119070ece40f6519f3e6c1b0b4d4cb0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/mxcsr-corruption",
+      "sha256": "f2eb4296edc1bf30eea9cb21bb3931460d6e1874156f23a7087cefc158272159"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/mxcsr-corruption.S",
+      "sha256": "227b45e6bc7304e6f0b73856bf1f0f6374625c3aeb4c335ed4d2cffbee746e30"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/mxcsr-corruption.compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/mxcsr-corruption.compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/mxcsr-corruption.compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/mxcsr-corruption.run.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/mxcsr-corruption.run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/mxcsr-corruption.run.stdout",
+      "sha256": "5a6a94f05bdb2246dc9ddc94f8770dbb4259823d66aaaa0bafa46a84d683291e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/native-vector-preservation-linux-oracle-20261017-1.json",
+      "sha256": "88f336f3febab1295d0cc70f060892448bde3aa5be593d59538ce3ab9877fe65"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/native-vector-preservation.S",
+      "sha256": "1c58e70ad14d6972685884ce121a940cce70e88fbadc885a20867b5d1ccbed5f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/native-vector-preservation.c",
+      "sha256": "1ba82e6d9ce34ef5ebf1f7a7356ddccf33c18d89266ec948c8a42eb6fd50f501"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/reference",
+      "sha256": "599495c17869833fd9f80239b58cf7840fe1369f1f963eb0aad4fbed3b1f65ed"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/reference.S",
+      "sha256": "1c58e70ad14d6972685884ce121a940cce70e88fbadc885a20867b5d1ccbed5f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/reference.compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/reference.compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/reference.compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/reference.probe-disassembly.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/reference.probe-disassembly.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/reference.probe-disassembly.stdout",
+      "sha256": "cb4fb887cb69ba257e3a092a819b9b840cc11f58d46b3dc12965c2bd3d5921a2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/reference.readelf.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/reference.readelf.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/reference.readelf.stdout",
+      "sha256": "3fef23ba5f955702d3a0d58e5542de3aaf741fcf97587012fbe1cfc894875c91"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/reference.run.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/reference.run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/reference.run.stdout",
+      "sha256": "e00e47c81b7c701f83f0a53840e96bc74064541920017fb5750076ad23e2d1d3"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/xmm-corruption",
+      "sha256": "4f33f75add5c4bd52e201e97c3070ceee469c8c165e21d1a2ca1791512018c2e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/xmm-corruption.S",
+      "sha256": "950f38be983c354fe31849403a273df382decc6403c1f10d142c03e91fc8e3fb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/xmm-corruption.compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/xmm-corruption.compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/xmm-corruption.compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/xmm-corruption.run.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/xmm-corruption.run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/xmm-corruption.run.stdout",
+      "sha256": "91da5eb63753854b4cd775ea17e0b0fac202e0c06315a788e10556c82da6d629"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/before-correction-test.py",
+      "sha256": "1b9037158f13d728ac68bf62f5ffac48b2710c4fd69d9facb957fde6f4668442"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/before-correction.c",
+      "sha256": "3947d94c28a5cfd96c12ab70bc95e1533fe1f2028d5d177989e9619cdeea3c61"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/command.json",
+      "sha256": "5c664b9aad8eab21fc5c1d3b8a6c0ba7036bc791eb85fa5db96ecb1f908e27d5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/command2.json",
+      "sha256": "f138590cf017118f1eaf80199387a538148098e38026e23db2062bf921ae8680"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/final-native-vector-preservation-linux-oracle-20261017-1.json",
+      "sha256": "88f336f3febab1295d0cc70f060892448bde3aa5be593d59538ce3ab9877fe65"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/final-native-vector-preservation.S",
+      "sha256": "1c58e70ad14d6972685884ce121a940cce70e88fbadc885a20867b5d1ccbed5f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/final-native-vector-preservation.c",
+      "sha256": "1ba82e6d9ce34ef5ebf1f7a7356ddccf33c18d89266ec948c8a42eb6fd50f501"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/final-test_native_vector_preservation_20261017.py",
+      "sha256": "3dc67f9f7a822479cccfa0a59ebb01992fe0dcdeea39935c8caaee38d860de47"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/frozen-oracle-sha256",
+      "sha256": "2cec29060f4423502b2bd0d1adb17968d4066a1722bd99605f5ef6b08226e85f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/status2",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/stderr",
+      "sha256": "4140d0bb92df5d49297f224acd8c75341efb7b890129caf407a0961b81995db5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/stderr2",
+      "sha256": "91f1bae688fd7f6672192ec81fbd85ee80dfd97a6f33cae605228ed2d10ee90c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/stdout2",
+      "sha256": "00671569968e6e2526c885fb104b847b977a3c049ef3698781e29e25b716cb73"
+    }
+  ],
+  "blocker": null,
+  "next_task": "Independent ABI/oracle/source review; dispatcher may later release exact app/hash for fresh guest when reviewed capabilities and at-most-two guest queue permit. No guest/native acceptance claimed."
+}

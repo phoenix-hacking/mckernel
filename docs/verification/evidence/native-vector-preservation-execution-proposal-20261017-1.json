@@ -1,0 +1,393 @@
+{
+  "application_acceptance": false,
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/ndv-7ed3fd1a",
+    "--nonce",
+    "7ed3fd1ab72e402597376c263165531a",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/manifest.json",
+    "--manifest-sha256",
+    "63fbefdfd139d44ee52859e57a3b7bb6df288d35e20327ac2f008c9fda3aa3e4"
+  ],
+  "assembly": {
+    "compile_or_reference_rerun": false,
+    "execution_approved": false,
+    "fresh_parent_bound": true,
+    "packet_inputs": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/packet-inputs.json",
+      "sha256": "44f30577730ed060f5d9e36457f424e81f6aee2de2e9fc2bae31e58ed40088f1",
+      "size": 3511
+    },
+    "parent_created_by_this_assembly": false,
+    "pattern": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-lifecycle-execution-proposal-20261017-1.json",
+      "sha256": "a5e8d57d7021ea41a10b127146b5544262be713af86f3b537db867d144cba71a",
+      "size": 16818
+    },
+    "runtime_called": false,
+    "scope": "Proposal JSON assembly only from exact stager packet, selected small hash-bound records and existing pattern. No archive corpus rehash, manifest/collector/global/source changes, root/guest/heavy/Git action. Selected JSON bindings and oracle/argv/monitor/profile identities checked.",
+    "tests_replayed": false
+  },
+  "author": "/root/native_shutdown_services",
+  "candidate_sha": "3f7b265b9f90279f5bd36f33f294eaa117609f12",
+  "checkpoint_context": {
+    "head_prefix": "eca77",
+    "status": "Normal checkpoint already verified by dispatcher; no new Git gate, source release or current-working-tree inference."
+  },
+  "collector": {
+    "binary": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/init",
+      "sha256": "268b967064e44a61340e43a23940ef2bba16ad22e3615a6f5d0e7108428890b6",
+      "size": 1021992
+    },
+    "lifecycle_probe_invoked": false,
+    "profile": "Existing accepted ND_CORE_THREADS general collector;1024streamlimits, fixed app threads argv; vector main(void) ignores argument. Same strict5helper6b9 boots hidos allow_oversubscribe for pthreadworker on1McCPU.",
+    "resource40gate_used": false,
+    "source": {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-threads.c",
+      "sha256": "60921bc30463be3fa7bbf49e7589cb23ba31cff0fb56c767075a06927e7d4b70",
+      "size": 23008
+    },
+    "source_changed": false
+  },
+  "collector_boot_argv": [
+    "/bin/native-boot",
+    "hidos",
+    "allow_oversubscribe"
+  ],
+  "execution_count": 1,
+  "failure_policy": "Exactly one fresh attempt after separate release. First new setup/payload/evaluation/retirement failure stops affected execution and preserves all original bytes; no blended retry, changed oracle or automatic kernel diagnosis.",
+  "formal_case_credit": false,
+  "frozen_linux_oracle": {
+    "path": "/home/holden/mckernel/docs/verification/native-vector-preservation-linux-oracle-20261017-1.json",
+    "sha256": "88f336f3febab1295d0cc70f060892448bde3aa5be593d59538ce3ab9877fe65",
+    "size": 2191
+  },
+  "interpreter_binding": {
+    "path": "/home/holden/anaconda3/bin/python3",
+    "resolved_path": "/home/holden/anaconda3/bin/python3.9",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "version": "3.9.12 (main, Apr  5 2022, 06:56:58) \n[GCC 7.5.0]"
+  },
+  "manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/manifest.json",
+    "sha256": "63fbefdfd139d44ee52859e57a3b7bb6df288d35e20327ac2f008c9fda3aa3e4",
+    "size": 5525
+  },
+  "matched_native_modules": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-79b00103de104607b182b374a2a396ae/modules/ihk.ko",
+      "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+      "size": 1440392
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-79b00103de104607b182b374a2a396ae/modules/ihk-smp-x86_64.ko",
+      "sha256": "990104bb9a384db8ffdb4832cc043f94b4abf54d044309ca56cbee02e389161f",
+      "size": 11634760
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-79b00103de104607b182b374a2a396ae/modules/mcctrl.ko",
+      "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+      "size": 1913904
+    }
+  ],
+  "module_source_provenance": {
+    "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "closure_hash_encoding": "SHA256 of UTF-8 JSON relative-path-to-SHA256 map, sorted keys, separators comma/colon",
+    "closure_sha256": "bf4774c6a520e98550d94acdaca80f62434308a0fbeb0e2cf27ddf35cc7d8737",
+    "compatibility_build_id": {
+      "meaning": "Retained baseline ABI compatibility blob; not proof of unchanged compiled source",
+      "path": "ihk-compat-build-id.bin",
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0"
+    },
+    "excluded_working_tree": "Every unreviewed working-tree file; the nine reviewed shutdown deltas over retained176 and carried os_runtime are included",
+    "reviewed_deltas": [
+      {
+        "baseline_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+        "path": "ihk_smp_x86_64.rs",
+        "source_candidate_sha256": "5b12bf77664095c966245ac8a1312a41c2fc16dd4a8233abd9e6c602305ecd6d"
+      },
+      {
+        "baseline_sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+        "path": "os_runtime.rs",
+        "source_candidate_sha256": "65107aafb28868e76640cb2e1862e5d9e36a930a2e9dab850824d5108879225a"
+      },
+      {
+        "baseline_sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+        "path": "smp_application.rs",
+        "source_candidate_sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2"
+      },
+      {
+        "baseline_sha256": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb",
+        "path": "smp_cpu.rs",
+        "source_candidate_sha256": "52b77ecad0d686a57eaa1c5a5385686129eb7ae6af0d014296317ddf6468d7b3"
+      },
+      {
+        "baseline_sha256": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+        "path": "smp_file_pager.rs",
+        "source_candidate_sha256": "655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c"
+      },
+      {
+        "baseline_sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+        "path": "smp_memory.rs",
+        "source_candidate_sha256": "8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525"
+      },
+      {
+        "baseline_sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+        "path": "smp_procfs.rs",
+        "source_candidate_sha256": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea"
+      },
+      {
+        "baseline_sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+        "path": "smp_service.rs",
+        "source_candidate_sha256": "cd97c1528602323c43aaf70f528342fc3874fe9da1660cf1a767d27284cb5b5a"
+      },
+      {
+        "baseline_sha256": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81",
+        "path": "sysfs_memory.rs",
+        "source_candidate_sha256": "d64efe15ff3545e6f21733cdc6dcbf026df370049484a7221a653d502612bfc1"
+      },
+      {
+        "baseline_sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+        "path": "sysfs_remote.rs",
+        "source_candidate_sha256": "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9"
+      }
+    ],
+    "source_candidate_sha": "3f7b265b9f90279f5bd36f33f294eaa117609f12"
+  },
+  "native_boot_running": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/stage/root/bin/native-boot",
+    "sha256": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+    "size": 31208
+  },
+  "nonce": "7ed3fd1ab72e402597376c263165531a",
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "564543544f525f53595343414c4c5f504153530a564543544f525f46555445585f504153530a564543544f525f5349474e414c5f504153530a564543544f525f50524f46494c455f504153530a"
+  },
+  "other_monitor_endpoints": [],
+  "overlay": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/lifecycle.cpio.gz",
+    "sha256": "b7a6cb1a2693a7d81dcc34496845769ba77d43e4c72d386b7c386da508db188e",
+    "size": 13913814
+  },
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828
+  },
+  "parent": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 114702,
+    "mode": "0o700",
+    "path": "/home/holden/mckernel-work/scratch/ndv-7ed3fd1a",
+    "uid": 1000
+  },
+  "payload": {
+    "mode": 33216,
+    "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt3/reference",
+    "sha256": "5362705c4ffc5594a6b7145a25eb824ecd5f96ccf7cd80c0c123596ee0064910",
+    "size": 1518720
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "threads"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "564543544f525f53595343414c4c5f504153530a564543544f525f46555445585f504153530a564543544f525f5349474e414c5f504153530a564543544f525f50524f46494c455f504153530a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "payload_source_review": {
+    "binding": "Exact report2 3d63c5be, corrected assembly1c408f26/testb7a0f839/C1ba82e6d/frozenoracle88f336; signal completion marker precedes every state comparison. Direct independent review supplied dispatcher; no native acceptance.",
+    "decision": "PASS_PAYLOAD_SOURCE_AND_LINUX_REFERENCE",
+    "reviewer": "/root/image_retirement_review"
+  },
+  "postjoin_readback": {
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndv-7ed3fd1a.owner-7ed3fd1ab72e402597376c263165531a",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/ndv-7ed3fd1a/attempt-7ed3fd1ab72e402597376c263165531a/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndv-7ed3fd1a/attempt-7ed3fd1ab72e402597376c263165531a",
+        "."
+      ]
+    ],
+    "capture_limit_bytes_per_command": 33554432,
+    "conditions": "Approved conditional readbacks only after joined positive owner/client retirement. Verify canonical exact nonce-bound directories and regular result unchanged. Fresh ordinary-UID captures; default tar without dereference. Preserve every failed result and socket-omission stderr.",
+    "requested": true,
+    "timeout_seconds_per_command": 30
+  },
+  "predecessor": {
+    "record": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-release-failure-review-20261017-1.json",
+      "sha256": "665d05683f432027b2144427e0a8b18d5308ac8caff8565cdc30187c33eabb5a",
+      "size": 16108
+    },
+    "scope": "Exact failed resource attempt and13-file integer-PAX retention independently accepted; physical owner/client retirement permits subsequent fresh attempt. Original failure retained; no resource-release/restoration/formal success credit. Resource-v2 correction is not this predecessor and is not an added runtime gate.",
+    "status": "ACCEPTED_RETIRED_FAILED_RESOURCE_QUERY_CONTRACT"
+  },
+  "prerequisites": {
+    "dispatcher_one_shot_release": {
+      "scope": "After independent review and live preflight, exact one fresh guest; no automatic launch or queue reservation.",
+      "status": "PENDING"
+    },
+    "independent_selected_stage_and_execution_review": {
+      "reviewer": "/root/signal_guest_execution_review",
+      "scope": "Exact packet44f305/preparation71259/manifest63fb, selected60-member archive and preserved54 nonoverlay9-field/41 nonzero-mtime bindings; unchanged general collector268b/source60921 supervisor\u2192serializer\u2192ND.evaluate protocoljoin and3negative rejects; exact one-shot argv/profile and3conditional readbacks.",
+      "status": "PENDING"
+    },
+    "live_preflight": {
+      "scope": "Fresh parent identity/nonce/QMP path and socket budget, canonical owner/manifest/artifact identities, available scratch/resources, unchanged runtime freeze and root/heavy lock checks; bind separate fresh record before release.",
+      "status": "PENDING_DISPATCHER_LIVE_PREFLIGHT"
+    },
+    "post_execution_owner_result_readback_join": {
+      "scope": "Actual payload/complete-error evaluation, independently positive physical owner/client retirement, exact three conditional bounded readbacks and preserved complete failure/success evidence. No acceptance inferred from preparation.",
+      "status": "PENDING_FUTURE_EXECUTION"
+    }
+  },
+  "production_acceptance": false,
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "retained_bzImage": {
+    "mode": 33188,
+    "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+    "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+    "size": 16130048
+  },
+  "retained_mckernel_image": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-942c927b-scratch22-authority3-image1-20261017/evidence/artifacts/mckernel.img",
+    "sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+    "size": 7908256
+  },
+  "reviewed_linux_reference": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-vector-preservation-linux-reference-20261017-2.json",
+    "sha256": "3d63c5beb530b70a400ee390e732c57fade777d0ba65b308222af0b25a8b8e78",
+    "size": 35083
+  },
+  "runtime_release": false,
+  "scheduling": "Preparation only; no guest queued or started. Dispatcher retains resource/reboot priority, serialized heavy execution and at-most-two queued guests.",
+  "schema": "mckernel.native-vector-preservation-execution-proposal.v1",
+  "scope": "Selected x86_64 SSE2 XMM0..15, MXCSR and two-value x87 preservation across raw syscall, confirmed futex/pthread handoff and delivered SIGUSR1 return. Exact corrected static5362705 payload and frozen77-byte four-line stdout/exit0/empty stderr. Ordinary caller-saved vectors are not assumed across C calls. No AVX/XSAVE/multicore or whole-OS claim. General payload collector only: no lifecycle/resource probe invocation, shutdown/resource inventory/restoration or reboot success required/claimed. All3 modules matched3f7; Linux/image ABI942; unreviewed fork/WIP excluded.",
+  "selected_stage_protocol_join": {
+    "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/protocol/result.json",
+    "sha256": "c2e9162bc7f33a47d16b76445c76a37d57de7c437cb51b9258b679099172143b",
+    "size": 2837
+  },
+  "source_identity": {
+    "all3modules": "3f7b265b9f90279f5bd36f33f294eaa117609f12",
+    "linux_and_image_abi": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "unreviewed_fork_and_kernel_WIP_excluded": true
+  },
+  "stage_checks": {
+    "negative": [
+      "wrongexit",
+      "wrongbytes",
+      "incompleteEOF"
+    ],
+    "no_vector_source_Linux_reference_or_static_app_rerun": true,
+    "positive": "Actual retained Linux output bytes via cat through included unchanged collector supervisor/pipes/frame; newframe+newmanifest evaluated by unchanged ND.evaluate with prior kernel/QMP observation. Protocol-only, no vector guest or hostapp rerun.",
+    "protocol": {
+      "elapsed_seconds": 0.8667198599941912,
+      "returncode": 0
+    },
+    "protocol_join": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/protocol/result.json",
+      "sha256": "c2e9162bc7f33a47d16b76445c76a37d57de7c437cb51b9258b679099172143b",
+      "size": 2837
+    },
+    "stage": {
+      "elapsed_seconds": 17.253530112997396,
+      "returncode": 0
+    },
+    "strict_manifest_load": true
+  },
+  "stage_metadata": {
+    "actual_nonzero_mtime_nonoverlay": 41,
+    "all9fields_untouched_nonoverlay": 54,
+    "final_members": 60,
+    "only_content_nonmtime_deltas_vs_accepted_strict5": [
+      "apps/app",
+      "init"
+    ],
+    "source_view_members": 56
+  },
+  "staging_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-vector-preservation-preparation-20261017-1.json",
+    "sha256": "71259f7b65d95861925c8f710ff1a82f304fb7ec243630546debabb7d0c15d15",
+    "size": 14452
+  },
+  "status": "PENDING_INDEPENDENT_STAGE_EXECUTION_REVIEW_LIVE_PREFLIGHT_AND_ONE_SHOT_RELEASE",
+  "stdout_bytes": 77,
+  "task_id": "native-vector-preservation-execution-proposal-20261017-1",
+  "unix_monitor_endpoints": [
+    {
+      "encoded_bytes": 97,
+      "max_bytes": 107,
+      "path": "/home/holden/mckernel-work/scratch/ndv-7ed3fd1a/attempt-7ed3fd1ab72e402597376c263165531a/qmp.sock"
+    }
+  ]
+}

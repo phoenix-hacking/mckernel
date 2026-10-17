@@ -13,13 +13,13 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-17T16:55:03Z` (interval 30m05s).
-- Next full review target: `2026-10-17T17:25:00Z` (10:25 America/Los_Angeles).
-- Next review latest target: `2026-10-17T17:55:00Z`; preserve healthy operations.
-- Last included-usage observation: 21%; existing campaign stop remains 97%.
-- Current intervention: promote accepted native stop to separately reviewed
-  resource restoration and a complete destroy/release/reboot cycle; reconcile
-  the touched practical checks; continue fork caller/completion and used FPU tests.
+- Last full review: `2026-10-17T17:27:01Z` (interval 31m58s).
+- Next full review target: `2026-10-17T17:55:00Z` (10:55 America/Los_Angeles).
+- Next review latest target: `2026-10-17T18:25:00Z`; preserve healthy operations.
+- Last included-usage observation: 23%; existing campaign stop remains 97%.
+- Current intervention: finish the corrected resource-query contract and its
+  independent review; admit the staged vector app when ready; advance toward
+  a complete destroy/release/reboot cycle while fork completion continues.
 - Current invocation independently accepted current942 app/diagnostic behaviors: 13 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -686,3 +686,73 @@ under scratch/native-shutdown-lifecycle-dispatch-20261017-1. Steering163247 and
 The native result verdict is the independent signal_guest_execution_review
 message completed16:51:55, joined to those raw captures; the execution-review
 JSON is invocation authority, not the result-preservation record.
+
+## Review 8 — 2026-10-17 17:27:01 UTC
+
+Interval: `16:55:03` to `17:27:01` UTC, 31m58s. Same live worker498255/start3900845
+and server498257/start3900851; campaign running, no stop. Usage23%, stop97%.
+HEADeca77d43; compiled native candidate3f7b265b. Supervisor owns no runtime/Git.
+
+**Delivered:** two scoped practical checks now complete: P-M05-01 native
+Ready/Running/shutdown and P-M08-01 matched three-module build/load. All14
+milestones remain open; checklist3complete/30open/2unassessed. Accepted distinct
+app/diagnostic behaviors stay13, with zero new passes this interval. Complete
+stop/destroy/release/reboot cycles stay0. The immutable15:25 percentage baseline
+is unchanged; these closures do not imply a measured whole-OS percentage.
+
+One new resource guest ran17:16:33.397–17:17:08.341,34.945s, and failed at the
+probe contract. Strict native stop again passed5/0/0/close0. CPU1 was online,
+device CPU inventory empty and128MiB/node0 reserved memory visible, but the
+post-stop OS CPU query returnedEBUSY. Successful shutdown deliberately closes
+ordinary backend admission; status queries bypass that guard. The probe stopped
+before the memory query, OSdestroy or device memory release. Independent review
+classified RETIRED_FAILED_RESOURCE_QUERY_CONTRACT at17:19:46. All25clients,
+owner/container/QEMU retired; no resource restoration, new kernel defect or new
+app pass is credited. Preserved result/archive review passed17:21:45.
+
+**Correction:** preserve kernel admission guards and the failed v1 attempt.
+Reviewed v2 requires status0 and exact CPU/MEM query rejection(-1,errno16,
+linux_result-16), explicitly reporting inventories unavailable. Unexpected
+success or another error must stop before effects. Then test close/destroy,
+refresh device reservation, release exact chunks once and require empty device
+pools/CPUonline. At17:26 the compiled runtime's actual status/admission bodies
+returned0,-16,-16 without invoking the ordinary backend; those results passed
+the actual C main and strict v2 parser. Negative query outcomes stop early.
+Static tool compiled/ELF checks passed without host execution. Independent
+source/collector review, fresh proposal/release/live admission remain pending;
+v1 must not be replayed. This resource-only scope still adds no reboot authority.
+
+Parallel progress: the vector/FPU payload passed independent source/Linux
+review, including signal-marker and corruption negatives. Its native stage
+completed at17:26 with60members,54nonoverlay metadata joins, accepted general threads
+collector with oversubscribe, actual serializer/evaluator and3negative controls.
+Proposal ownership transferred; independent execution review started. No native
+vector observation yet. The staged case can use the next fully admitted free
+heavy slot while v2 correction proceeds. Reboot sequence tests remain modeled,
+not native resource or full-cycle results.
+
+Fork's private in-band caller passed independent source review after40C/Rust
+scenarios and4detach cases. Completion implementation has32phase cases; actual
+IHK-owned module-pin construction/cancel/accept hooks are still being added.
+Codec review found its truncation fixture stopped at an adapter; fresh direct
+decoder tests now pass with unchanged production codec, pending review closure.
+Authenticated carrier, real backend/revocation/finalACK integration, full build
+and runtime remain open. Production non-nullCREATE_PPD remains-95.
+
+**Next adjustment:** finish the concrete v2 review, then obtain fresh resource
+execution authority; execute the independently staged vector case as soon as its
+own review/admission is complete. Keep the two-case queue and oneheavy limits.
+After a real destroy/release pass, advance the separately reviewed reboot/full
+cycle. Continue actual fork completion implementation in parallel. This window
+has source and criterion progress but no new native behavior pass and does not
+establish2x/3x velocity. Next review17:55UTC, latest18:25.
+
+Primary anchors under ../evidence/: native-shutdown-lifecycle-result-review-
+20261017-1.json; native-resource-release-failure-review-20261017-1.json;
+native-resource-release-v2-source-20261017-1.json;
+native-resource-release-collector-source-20261017-3.json;
+native-vector-preservation-linux-reference-20261017-2.json;
+native-vector-preservation-preparation-20261017-1.json. Practical check closures
+are in practical-milestones.json. Steering170255,171123 and172002 was accepted
+by the server and adopted. No supervisor workload, cleanup, launcher or shared
+artifact rehash was performed.

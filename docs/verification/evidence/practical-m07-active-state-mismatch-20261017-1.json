@@ -1,0 +1,434 @@
+{
+  "schema": "mckernel.practical-m07-active-state-mismatch.v1",
+  "task_id": "practical-m07-active-state-mismatch-20261017-1",
+  "status": "SOURCE_BODY_SAVE_ENOMEM_CONTINUES_RESTORE_SWITCH_REPRODUCED_READY_FOR_INDEPENDENT_REVIEW",
+  "scope": "First concrete mismatch only. Retained compiled942 image source/provenance, selected producer/context/signal paths and existing libc/compiler bindings; no new guest or frozen runtime input changes.",
+  "compiled_image_binding": {
+    "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+    "receipt": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-942c927b-scratch22-authority3-image1-20261017/evidence/receipt.json",
+      "sha256": "94933dd040da8f19437581048408efb6924c0af985c5a1c2af3c8ccd70f78c2d",
+      "size": 9310
+    },
+    "provenance": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-942c927b-scratch22-authority3-image1-20261017/evidence/provenance.json",
+      "sha256": "73c6c2b0634b018229feb314060705baa6612015c0d291d604729e5747024ff1",
+      "size": 2725311
+    },
+    "compile_database": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-942c927b-scratch22-authority3-image1-20261017/evidence/artifacts/compile_commands.json",
+      "sha256": "64abc0b58258b2319290ca86c91c04136fe3afec920099719b677601176b8d52",
+      "size": 74300
+    },
+    "symbols": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-942c927b-scratch22-authority3-image1-20261017/evidence/symbols.txt",
+      "sha256": "6753d193d32d414713dd4597e9e484221940715680da17d64ef8f90189825b47",
+      "size": 224076
+    },
+    "source_root": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3",
+    "source_paths": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3/arch/x86_64/kernel/cpu.c",
+        "sha256": "115725e4341f34d13d2a8385d87521874af5b7a53923bb0d407d580793a934f9",
+        "size": 93339,
+        "repository_relative_path": "arch/x86_64/kernel/cpu.c",
+        "matches_compiled_provenance_manifest": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3/arch/x86_64/kernel/syscall.c",
+        "sha256": "22be13dd5cbee2f0500ee49fd59b9a56649a940a243f0d529a193a0e465bb07c",
+        "size": 113347,
+        "repository_relative_path": "arch/x86_64/kernel/syscall.c",
+        "matches_compiled_provenance_manifest": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3/arch/x86_64/kernel/context.S",
+        "sha256": "c0becbb484a88f9e615a1fbca6cd2a659e4dc27e322f1cad3a875858ed95f2e7",
+        "size": 1288,
+        "repository_relative_path": "arch/x86_64/kernel/context.S",
+        "matches_compiled_provenance_manifest": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3/arch/x86_64/kernel/include/registers.h",
+        "sha256": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc",
+        "size": 5778,
+        "repository_relative_path": "arch/x86_64/kernel/include/registers.h",
+        "matches_compiled_provenance_manifest": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3/kernel/process.c",
+        "sha256": "6480b1ab121acf17610495682cd9e58cba774427de9695b1ce8dd65a9bc07cb2",
+        "size": 153997,
+        "repository_relative_path": "kernel/process.c",
+        "matches_compiled_provenance_manifest": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3/kernel/rust/x86_cpu_helpers.rs",
+        "sha256": "06198638ade1e3ff18ebffc1c386bbea721d393f6b9189f3e2ce875e92d41803",
+        "size": 69605,
+        "repository_relative_path": "kernel/rust/x86_cpu_helpers.rs",
+        "matches_compiled_provenance_manifest": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3/kernel/rust/native_signal.rs",
+        "sha256": "f0df5a110d9bb9dab8e460513616df0e10964b8554936fa2cb9723ee2eea9d4a",
+        "size": 11621,
+        "repository_relative_path": "kernel/rust/native_signal.rs",
+        "matches_compiled_provenance_manifest": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3/kernel/rust/native_xstate.rs",
+        "sha256": "b0b39e0df8298740f53a6b76c5ce6905dfdd9092328578df18225c4a57e8100e",
+        "size": 2237,
+        "repository_relative_path": "kernel/rust/native_xstate.rs",
+        "matches_compiled_provenance_manifest": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3/kernel/rust/native_fault.rs",
+        "sha256": "771c46717169d52685bea87386dd15afd7f193fc5c9eefbce1544d67788a6025",
+        "size": 2089,
+        "repository_relative_path": "kernel/rust/native_fault.rs",
+        "matches_compiled_provenance_manifest": true
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3/kernel/rust/process_helpers.rs",
+        "sha256": "b3a28ea8b0cd2594305644c224ae718eac384c0709305da315a6b8fd1285d00b",
+        "size": 324283,
+        "repository_relative_path": "kernel/rust/process_helpers.rs",
+        "matches_compiled_provenance_manifest": true
+      }
+    ],
+    "active_process_command": {
+      "directory": "/work/output/build/kernel",
+      "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_NATIVE_CLONE3 -DMCKERNEL_NATIVE_CLONE_TID -DMCKERNEL_NATIVE_FAULT_FIXUP -DMCKERNEL_NATIVE_FUTEX -DMCKERNEL_NATIVE_SIGNAL_STACK -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_PROCESS_HELPERS -I/work/output/build/kernel/include -I/src/kernel/include -I/work/output/build/kernel -I/work/output/build -I/src/ihk/cokernel/smp/x86_64/include -I/src/ihk/cokernel/smp/x86_64 -I/src/ihk/ikc/include -I/src/ihk/linux/include -I/src/lib/include -I/src/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/14/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/process.c.o -c /src/kernel/process.c",
+      "file": "/src/kernel/process.c",
+      "output": "kernel/CMakeFiles/mckernel.img.dir/process.c.o"
+    },
+    "cpu_compile_command": {
+      "directory": "/work/output/build/kernel",
+      "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_NATIVE_CLONE3 -DMCKERNEL_NATIVE_CLONE_TID -DMCKERNEL_NATIVE_FAULT_FIXUP -DMCKERNEL_NATIVE_FUTEX -DMCKERNEL_NATIVE_SIGNAL_STACK -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_X86_CPU_HELPERS -I/work/output/build/kernel/include -I/src/kernel/include -I/work/output/build/kernel -I/work/output/build -I/src/ihk/cokernel/smp/x86_64/include -I/src/ihk/cokernel/smp/x86_64 -I/src/ihk/ikc/include -I/src/ihk/linux/include -I/src/lib/include -I/src/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/14/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o -c /src/arch/x86_64/kernel/cpu.c",
+      "file": "/src/arch/x86_64/kernel/cpu.c",
+      "output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o"
+    },
+    "signal_compile_command": {
+      "directory": "/work/output/build/kernel",
+      "command": "/usr/bin/cc -DIHK_IKC_USE_LINUX_WORK_IRQ -DIHK_OS_MANYCORE -DKERNEL_RAM_VADDR=0xfffffffffe800000 -DMAP_KERNEL_START=0xfffffffffe800000UL -DMCKERNEL_NATIVE_CLONE3 -DMCKERNEL_NATIVE_CLONE_TID -DMCKERNEL_NATIVE_FAULT_FIXUP -DMCKERNEL_NATIVE_FUTEX -DMCKERNEL_NATIVE_SIGNAL_STACK -DMCKERNEL_RUST_ATOMIC_HELPERS -DMCKERNEL_RUST_BITOPS -DMCKERNEL_RUST_LIST_HELPERS -DMCKERNEL_RUST_LOCK_HELPERS -DMCKERNEL_RUST_MCS_RWLOCK_HELPERS -DMCKERNEL_RUST_MC_RWLOCK_HELPERS -DMCKERNEL_RUST_PTE_HELPERS -DMCKERNEL_RUST_REFCOUNT_HELPERS -DMCKERNEL_RUST_SPINLOCK_HELPERS -DPROFILE_ENABLE -D__KERNEL__ -DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS -I/work/output/build/kernel/include -I/src/kernel/include -I/work/output/build/kernel -I/work/output/build -I/src/ihk/cokernel/smp/x86_64/include -I/src/ihk/cokernel/smp/x86_64 -I/src/ihk/ikc/include -I/src/ihk/linux/include -I/src/lib/include -I/src/arch/x86_64/kernel/include -g -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-unused-function -Wno-implicit-fallthrough -Wno-stringop-truncation -ffreestanding -O2 -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/14/include -fno-omit-frame-pointer -mcmodel=large -mno-red-zone -mno-sse -o CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o -c /src/arch/x86_64/kernel/syscall.c",
+      "file": "/src/arch/x86_64/kernel/syscall.c",
+      "output": "kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/syscall.c.o"
+    },
+    "linked_symbols": "Retained symbols list includes schedule, init_fpu, save_fp_regs, copy_fp_regs, restore_fp_regs and native_xstate_validate_result. Working-tree equality for selected architecture files was checked but is not the authority; retained exact source hashes are."
+  },
+  "feature_producer_contract": {
+    "source": "arch/x86_64/kernel/cpu.c:init_fpu lines685-764",
+    "sse_selection": {
+      "march_header": {
+        "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3/ihk/cokernel/smp/x86_64/include/march.h",
+        "sha256": "32984f29c20133f89b2410c922fc291cd675f2942b6128cea55d0e0ff3826f49",
+        "size": 1174
+      },
+      "ihk_gitlink": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "definition": "ENABLE_SSE defined at march.h:39, included by active cpu.c; selected build include path is retained IHK architecture path."
+    },
+    "cr0": "Clears EM/TS and sets MP.",
+    "cr4": "Sets OSFXSR bit9 and OSXMMEXCPT bit10. If CPUID.1:ECX.XSAVE bit26 is present, sets OSXSAVE bit18 and xsave_available=1.",
+    "xcr0": "With XSAVE available, queries CPUID.0D.0; if supported bitmap EAX has bits5,6,7, ORs existing XCR0 with0xe6, otherwise ORs it with0x6. Stores full readback xgetbv(0) as xsave_mask. Source thus enables at least SSE+AVX on selected XSAVE/AVX cpu=max profile; it is not an SSE-only producer.",
+    "size": "Sets xsave_size to CPUID.0D.0:ECX (maximum standard area size for supported state), before enabling the additional XCR0 bits. Allocation rounds configured size to pages.",
+    "application_visibility": "Ordinary application CPUID.1 OSXSAVE and legal XGETBV are the appropriate user-visible observations; reading CR4 directly in CPL3 is not permitted. This lane derives CR4/XCR0 update behavior from active source and does not invent a numeric XCR0 readback from Linux boot logs. Initial inherited XCR0 and direct McKernel user CPUID/XCR0 remain unmeasured.",
+    "profile_limit": "Actual retained QEMU profile is cpu=max,la57=off under TCG q35; Linux boot XSAVE0x21f supports a broader virtual CPU feature set but is not direct McKernel application exposure proof."
+  },
+  "consumer_contract": {
+    "context": "Active C save_fp_regs/check_and_allocate_fp_regs allocate full configured pages and XSAVE with full xsave_mask; restore_fp_regs uses XRSTOR with the same full mask. Default restore uses boot initial_fp_regs if available. Scheduler is actual C schedule() selected with MCKERNEL_RUST_PROCESS_HELPERS and delegates runqueue preparation to Rust, then calls these architecture save/restore functions.",
+    "signal": "Active MCKERNEL_NATIVE_SIGNAL_STACK producer in syscall.c do_signal uses configured get_xsave_size and full get_xsave_mask for XSAVE into a private aligned buffer copied to user frame; native Rust stack placement reserves that size. Sigreturn copies user data into private bounded/aligned storage, validates standard XSAVE header/MXCSR against full mask via native_xstate.rs, then native_xrstor_checked restores it. get_xsave_size/mask Rust exports forward to cpu.c bridge values.",
+    "binding_limit": "These producer/consumer mask and size relationships are source-derived, not a claim all enabled XSAVE components have runtime preservation coverage. Existing5362705 vector pass covers its explicit subset only."
+  },
+  "first_concrete_mismatch": {
+    "classification": "SOURCE_PROVED_ALLOCATION_FAILURE_CONTROL_FLOW_DEFECT",
+    "producer": "cpu.c check_and_allocate_fp_regs lines3231-3254: if started thread lacks fp_regs, NOWAIT page allocation may return NULL, causing -ENOMEM. save_fp_regs lines3261-3284 propagates the error and executes no XSAVE.",
+    "consumer": "process.c schedule active Rust-helper branch lines4377-4404: save_fp_regs(prev) return is discarded; restore_fp_regs(next) and arch_switch_context(prev,next) proceed.",
+    "condition": "Nonidle, nonexited runnable previous thread with fp_regs=NULL and its first save allocation failing. Retained Rust process_thread_alloc_init_body_result zeroes new thread storage; selected create_thread path delegates to process_create_thread_body_result without an explicit FPU preallocation callback. No general invariant proving every runnable thread already has a buffer was established.",
+    "consequence": "In that failure condition live previous FPU/vector state is not saved before switching. A subsequent null-buffer restore selects defaults rather than original values. Source defect is independent of which used xstate components are enabled.",
+    "not_observed": "No actual native ENOMEM or vector corruption was observed here. Existing accepted native vector diagnostic and retirement remain unchanged; the defect is reproduced with allocator/restore/switch boundary injection."
+  },
+  "microtest": {
+    "new_files": [
+      {
+        "path": "/home/holden/mckernel/scripts/tests/test_native_m07_fp_save_failure_20261017.py",
+        "sha256": "519563d46b65f587cb357be9e7c1e33d8bc653143991e17ffb3bff249981dc4e",
+        "size": 3857
+      },
+      {
+        "path": "/home/holden/mckernel/scripts/tests/fixtures/native_m07_fp_save_failure_20261017.c",
+        "sha256": "304d25e17f2bef12f7eb16ec05c2263409116a1083cc163b1f222a6c07c40056",
+        "size": 4149
+      }
+    ],
+    "actual_complete_bodies": [
+      "check_and_allocate_fp_regs",
+      "save_fp_regs",
+      "schedule (complete function, compiler selects actual Rust-helper branch)"
+    ],
+    "boundary_substitutions": [
+      "Kernel NOWAIT allocator always fails and validates expected geometry/flags",
+      "Rust runqueue-preparation callback provides selected previous/next identities; Rust preparation body is not executed in this C microtest",
+      "Restore and context-switch calls are observation-only mocks; no real FPU restore/context switch executes",
+      "fp_regs pointee has placeholder storage, irrelevant to allocation-failure/no-XSAVE paths"
+    ],
+    "hardware_exclusion": "Actual XSAVE assembly remains unchanged in extracted save body but cannot execute: allocation fails before the instruction, or xsave_available=0 in negative control. No privileged instruction/kernel call or context switch executes.",
+    "attempt1": {
+      "status": "FIXTURE_COMPILE_FAILURE",
+      "cause": "Missing PAGE_SHIFT mock constant and mock guard misleading indentation under -Werror; retained generated source/stdout/stderr/status; no production body ran.",
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt1"
+    },
+    "bounded_correction": "Define PAGE_SHIFT12 for exact4096 geometry; split/brace mock guard only. Flags, production bodies and expected mismatch/negative oracle unchanged.",
+    "attempt2": {
+      "status": "PASS_EXPECTED_SOURCE_MISMATCH_REPRODUCTION",
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2",
+      "actual_stdout": "M07_MISMATCH save_errno=-12 allocations=1 restore=1 switch=1\n",
+      "actual_exit": 0,
+      "negative_controls": [
+        {
+          "case": "no-xsave",
+          "stdout": "M07_NO_MISMATCH save_errno=0 allocations=0 restore=1 switch=1\n",
+          "exit": 2
+        },
+        {
+          "case": "no-switch",
+          "stdout": "M07_NO_MISMATCH save_errno=0 allocations=0 restore=0 switch=0\n",
+          "exit": 2
+        }
+      ],
+      "order_assertion": "Observed save return -ENOMEM precedes mocked restore, which precedes mocked switch. Full unchanged scheduler body performs the calls.",
+      "interpretation": "Harness success means known mismatch reproduced; it is not kernel acceptance or a repaired-source PASS."
+    },
+    "command_record": {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/command2.json",
+      "sha256": "3733fbbf958eadd3f186b44aa0800a145ab4575a4b96ced969f2d05916e86c7d",
+      "size": 790
+    }
+  },
+  "selected_compiler_libc_requirements": {
+    "assessment": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-m07-selected-profile-assessment-20261017-1.json",
+      "sha256": "400e5b19c2aee59f5ec58675bfc68da7424f27fbf1856565712604ffa77fca7e",
+      "size": 17889
+    },
+    "source_linux_reference": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-vector-preservation-linux-reference-20261017-2.json",
+      "sha256": "3d63c5beb530b70a400ee390e732c57fade777d0ba65b308222af0b25a8b8e78",
+      "size": 35083
+    },
+    "actual_native_pass": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-vector-preservation-result-review-20261017-1.json",
+      "sha256": "ed0e550ac1b4eeed12294d54140e122455fb0ed06f9a068f3957844a236c0156",
+      "size": 12622
+    },
+    "limits": "Selected GCC9.4 C/assembly flags -march=x86-64/-mno-avx do not constrain prebuilt static-libc IFUNC implementations. Dynamic staged libc/loader identities are pinned but used dispatch requirements and Rust-std/application ISA closure remain unassessed. No static-ELF/no-AVX-probe inference is used to disable apps or advertise SSE-only runtime support."
+  },
+  "smallest_next_boundary": {
+    "engineering_repair": "Guarantee required FPU save storage before a thread can become runnable, or introduce an explicit fail-safe save admission before the Rust scheduler mutates/locks runqueues. Which ownership-correct strategy applies requires expert review of thread creation/publication and scheduler preparation. Do not patch a bare early return after prepare: it can strand runqueue locks/state.",
+    "files_needing_separate_write_contract": [
+      "arch/x86_64/kernel/cpu.c",
+      "kernel/process.c",
+      "kernel/rust/process_helpers.rs (if preparation/publication changes are required)"
+    ],
+    "required_review_invariants": [
+      "No runnable user state can be switched away after failed save",
+      "Allocation failure preserves runnable/runqueue/lock ownership and interrupt state",
+      "Thread initialization/clone/exec/exit retain matching buffer lifetimes; no silent feature disable",
+      "Same exact xsave_mask and sufficient allocation throughout context and signal paths"
+    ],
+    "smallest_exposure_diagnostic": "A separately reviewed tiny McKernel app can record CPUID.1/0D and guarded XGETBV only when OSXSAVE advertised, then bind actual user-visible XCR0/feature requirements to this exact image. No guest release or new diagnostic run is authorized by this record.",
+    "future_tests": "After ownership-correct source candidate review, reuse this failure injection with an oracle requiring no restore/switch on an unsaved previous state while checking runqueue/IRQ ownership; add only enabled-used-state runtime checks needed by the declared practical profile."
+  },
+  "discovery_diagnostics": [
+    {
+      "kind": "READ_ONLY_FILENAME_DISCOVERY",
+      "command": "rg -n 'xsave|fxsave|xrstor|fxrstor|OSXSAVE|XCR0|xsetbv|cpuid|fpu' arch/x86_64/kernel/{setup.c,context.S,signal.c} arch/x86_64/kernel/*.rs",
+      "status": 2,
+      "cause": "Guessed setup.c/signal.c/*.rs absent. Corrected using selected architecture filename list and exact retained source root; no source failure."
+    },
+    {
+      "kind": "READ_ONLY_METADATA_RENDER",
+      "command": "Python JSON parse/render of35,944,852-byte exact-image request under256MiB",
+      "cause": "MemoryError during broad JSON rendering; source/runtime untouched. Corrected to bounded key selection under allowed1GiB; no compiler or semantic failure."
+    }
+  ],
+  "environment": {
+    "cpu_affinity": [
+      7
+    ],
+    "address_space_bytes": 1073741824,
+    "one_job": true,
+    "cpu7_handoff_released": true,
+    "source_artifact_manifest_changes": false,
+    "heavy_root_git_guest_actions": false
+  },
+  "preserved_evidence": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt1/active-process-compile.json",
+      "sha256": "b8084c3aa5b2e433cc6c1e12f6feec7cfbb67dee15449c3c920cbf058d14c6cc",
+      "size": 1391
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt1/actual.c",
+      "sha256": "8c1573daa55249417c0c5db6c11cb96ed89f77a042bbcbc5ac869b56ec4a1188",
+      "size": 15134
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt1/commands.json",
+      "sha256": "da1424dc031619984dfe9e84f8dd384728adaceedfbb6bf8a7396d7e1304f2fa",
+      "size": 369
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt1/compile.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt1/compile.stderr",
+      "sha256": "0b16537d0a5d6a438753f12c61105dce70be1cffc8eaf82b10d92d743b6d64f6",
+      "size": 1518
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt1/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2/active-process-compile.json",
+      "sha256": "b8084c3aa5b2e433cc6c1e12f6feec7cfbb67dee15449c3c920cbf058d14c6cc",
+      "size": 1391
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2/actual",
+      "sha256": "4900c8569aad6d05f6013d70df41268caa4ddfd234dd0bd6ea39fd2d8b759adc",
+      "size": 17448
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2/actual.c",
+      "sha256": "01657f7d9c384b1a96bca3ff6488cef3d1c60c59074f58553df64c3b72ebba41",
+      "size": 15166
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2/actual.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2/actual.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2/actual.stdout",
+      "sha256": "6a9816f0061dc7085477e0a74f09ab0eea8853b93198cca5df7009b185f14260",
+      "size": 61
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2/commands.json",
+      "sha256": "f1eb66d9590c485c0ca3805f60ac35366a92ce5074ae12a518fa709556f458f6",
+      "size": 858
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2/compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2/no-switch.status",
+      "sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2/no-switch.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2/no-switch.stdout",
+      "sha256": "4d5183df6ae773f9d35964a0cf69906fe447c71f8b2f7af630255a97ce406d04",
+      "size": 62
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2/no-xsave.status",
+      "sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2/no-xsave.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/attempt2/no-xsave.stdout",
+      "sha256": "165b5c7055f5f270ed5927c9148aa9bd85ce9a515fe86e2c677313bc0b6f97c5",
+      "size": 62
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/command.json",
+      "sha256": "d5d0a9cb2e30f06eebaf245863eafecbac3c99c1406758ace8d507af7d5b6c89",
+      "size": 790
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/command2.json",
+      "sha256": "3733fbbf958eadd3f186b44aa0800a145ab4575a4b96ced969f2d05916e86c7d",
+      "size": 790
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/native_m07_fp_save_failure_20261017.c",
+      "sha256": "304d25e17f2bef12f7eb16ec05c2263409116a1083cc163b1f222a6c07c40056",
+      "size": 4149
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/status2",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/stderr",
+      "sha256": "9391ec7b39d9153fc65f882939f8fc690f8fe3898cf9c3c9a074fd2b0c4944fb",
+      "size": 2335
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/stderr2",
+      "sha256": "b4704b91783a02f493901bfcb216b3dfe313e64eca8f5b6a12eda96cb6178919",
+      "size": 235
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/stdout2",
+      "sha256": "e7ababd962845da3f062de6bf27f77c6990ba41c53a181387a32e179300812e0",
+      "size": 185
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-m07-fp-save-failure-20261017-1/test_native_m07_fp_save_failure_20261017.py",
+      "sha256": "519563d46b65f587cb357be9e7c1e33d8bc653143991e17ffb3bff249981dc4e",
+      "size": 3857
+    }
+  ],
+  "milestone_effect": "M07 stays partial/open. Concrete save-failure handling is now an engineering blocker in addition to incomplete final-used-state requirements; no percentage or diagnostic count changes.",
+  "production_or_native_acceptance": false,
+  "runtime_authority": false,
+  "blocker": "Unrepaired active942 scheduler failure path; separate expert ownership review/write packet required.",
+  "next_task": "Independent review exact active-source bindings and reproducer; dispatcher records M07 partial/blocker and chooses smallest ownership-correct implementation packet. Preserve current frozen candidates and live resource/fullcycle tasks."
+}

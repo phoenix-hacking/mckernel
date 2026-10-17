@@ -334,9 +334,19 @@
               "path": "docs/verification/evidence/native-core-memory-current942-result-review-20261017-1.json",
               "sha256": "49d4a5b5dc0b7919f4097778fe9f99c75b216afc2345a59db8258eaab312c78f",
               "size": 13664
+            },
+            {
+              "path": "docs/verification/evidence/native-vector-preservation-result-review-20261017-1.json",
+              "sha256": "ed0e550ac1b4eeed12294d54140e122455fb0ed06f9a068f3957844a236c0156",
+              "size": 12622
+            },
+            {
+              "path": "docs/verification/evidence/native-resource-release-v2-result-review-20261017-1.json",
+              "sha256": "fce2fbbb3e3c3fc8e113be97eefd84518e748e24eeab345d816f9be05e6991f2",
+              "size": 13560
             }
           ],
-          "assessment_note": "Complete for these nine independently accepted current942 diagnostic runs only: clients/owner/container/QEMU retired, application procfs/process release observed and root development mutex released. This is guest/runner retirement, not native OS stop/destroy/resource restoration. Matching final-profile runs still require retirement proof."
+          "assessment_note": "Accepted app/diagnostic retirement now includes14distinct application behaviors across current942 and matched3f7 artifacts plus separate native public-release observation. Vector/resource-v2 owner/client/QEMU teardown independently accepted. Final-profile budget and future changed-run retirement remain separate obligations."
         }
       ],
       "current_evidence_summary": "Nine independently accepted current942 diagnostic runs have complete results and verified owner/client/guest retirement. Final-profile timeout/rejection coverage remains open."
@@ -604,7 +614,7 @@
           "assessment_note": "Accepted frozen expected bytes/status are retained, including exact415byte alternate-stack bridge. Final useful-suite Linux comparison coverage is not closed by these narrow diagnostics."
         }
       ],
-      "current_evidence_summary": "Thirteen current942 diagnostics/apps accepted, including useful dynamic-libc C memory and real static Rust std with overlapping threads, file roundtrip and allocation. Final supported-profile suite remains open."
+      "current_evidence_summary": "Fourteen current942 diagnostics/apps accepted, including useful dynamic-libc C memory and real static Rust std with overlapping threads, file roundtrip and allocation. Final supported-profile suite remains open."
     },
     {
       "id": "M05",
@@ -656,9 +666,14 @@
               "path": "docs/verification/evidence/native-shutdown-lifecycle-result-review-20261017-1.json",
               "sha256": "2f8dd8f8e1b38957f38c75f861263b639fa129fcc465fc382a9785e17a99b526",
               "size": 13510
+            },
+            {
+              "path": "docs/verification/evidence/native-resource-release-v2-result-review-20261017-1.json",
+              "sha256": "fce2fbbb3e3c3fc8e113be97eefd84518e748e24eeab345d816f9be05e6991f2",
+              "size": 13560
             }
           ],
-          "assessment_note": "One actual quiescent native stop now passes with accepted app and host-owner retirement. Public CPU/memory inventory, destroy/device release and complete process/mapping/callback/ref restoration still require the separately reviewed resource/cycle observation."
+          "assessment_note": "Actual v2 public trace: strictstop5/0/0/close0, OS inventory attempts exactEBUSY/unavailable, OS0destroy0, refreshed128MiB node0 device memory released once, final device CPU/MEM pools empty and CPU1online. App/host retirement accepted. Full same-guest reboot and complete mapping/callback/ref restoration still open; no physical/generation identity claim."
         },
         {
           "id": "P-M05-03",
@@ -674,7 +689,7 @@
           "assessment_note": "Zero complete accepted native lifecycle cycles in this selected campaign. Ten full cycles remain required; the failed stop is retained and receives no cycle credit."
         }
       ],
-      "current_evidence_summary": "Current3f7b native Running5 -> shutdown0 -> query0/close0 independently passed, including native reconcile success and host retirement. One quiescent stop; resource restoration and complete lifecycle cycles remain0. Next resource parser/collector correction and separately released destroy/release/reboot observation."
+      "current_evidence_summary": "Current3f7 native strict stop and public destroy/device-memory release independently pass. Closed OS CPU/MEM queries are explicitly unavailable/EBUSY; final public device pools empty and CPU1online. Full same-guest reboot/cycles and complete lifetime restoration remain open; cycles0."
     },
     {
       "id": "M06",
@@ -755,26 +770,58 @@
       "id": "M07",
       "scope_id": "practical-kernel-apps-v1-20261017",
       "title": "Used FPU/vector state",
-      "engineering_state": "unmeasured",
+      "engineering_state": "partial",
       "completion_status": "open",
       "exit_condition": "Actually used vector/FPU state survives switching, syscalls and signals.",
       "checks": [
         {
           "id": "P-M07-01",
           "description": "Declare compiler/libc/application vector requirements.",
-          "status": "unassessed",
-          "evidence": [],
-          "assessment_note": "No selected record declares the final compiler/libc/application vector requirements. Retain unassessed; it is not a zero-percent engineering estimate."
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/practical-m07-selected-profile-assessment-20261017-1.json",
+              "sha256": "400e5b19c2aee59f5ec58675bfc68da7424f27fbf1856565712604ffa77fca7e",
+              "size": 17889
+            },
+            {
+              "path": "docs/verification/evidence/native-vector-preservation-result-review-20261017-1.json",
+              "sha256": "ed0e550ac1b4eeed12294d54140e122455fb0ed06f9a068f3957844a236c0156",
+              "size": 12622
+            },
+            {
+              "path": "docs/verification/evidence/practical-m07-active-state-mismatch-20261017-1.json",
+              "sha256": "acb73548a7d2f878dd2b27fa75774d19589bcd57d5cd45e108c4640609659a45",
+              "size": 29784
+            }
+          ],
+          "assessment_note": "Selected C/assembly GCC9.4 baseline x86-64/-mno-avx requirements and exact native profile are declared in the assessment. Static libc, staged dynamic libc/loader and final Rust/application IFUNC/OSXSAVE/XCR0 requirement closure remain unassessed. No whole-libc no-AVX inference or silent profile narrowing."
         },
         {
           "id": "P-M07-02",
           "description": "Run relevant state-preservation checks on the supported CPU/profile.",
-          "status": "unassessed",
-          "evidence": [],
-          "assessment_note": "No selected actual FPU/vector state-preservation coverage is assessed here; module loading and ordinary diagnostics cannot substitute for it."
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/practical-m07-selected-profile-assessment-20261017-1.json",
+              "sha256": "400e5b19c2aee59f5ec58675bfc68da7424f27fbf1856565712604ffa77fca7e",
+              "size": 17889
+            },
+            {
+              "path": "docs/verification/evidence/native-vector-preservation-result-review-20261017-1.json",
+              "sha256": "ed0e550ac1b4eeed12294d54140e122455fb0ed06f9a068f3957844a236c0156",
+              "size": 12622
+            },
+            {
+              "path": "docs/verification/evidence/practical-m07-active-state-mismatch-20261017-1.json",
+              "sha256": "acb73548a7d2f878dd2b27fa75774d19589bcd57d5cd45e108c4640609659a45",
+              "size": 29784
+            }
+          ],
+          "assessment_note": "Exact reviewed payload5362705 passed natively:77-byte four-line oracle, XMM0-15/MXCSR/x87 CW/TOP/two80-bit values across syscall, confirmed blocked futex and signal return, with full retirement. AVX/XSAVE/multicore and final actually-used feature coverage are not accepted. A separate bounded active-source exposure/save-path check is investigating allocation-failure handling; no native failure inferred. Actual compiled942 save/check/fullschedule body reproduces ignored ENOMEM reaching mocked restore/switch; source-level allocation-failure defect is under isolated correction and independent review, without native/hardware corruption claim."
         }
       ],
-      "current_evidence_summary": "No selected final-profile vector requirement or preservation assessment. Unassessed is not0% engineering completion."
+      "current_evidence_summary": "Actual native selected SSE2/XMM0-15, MXCSR and x87 control/TOP/two-value preservation passed across raw syscall, blocked futex and delivered signal. Compiler/libc/final application-visible ISA requirements remain incompletely closed; cpu=max guest Linux capabilities do not prove McKernel/IFUNC selection. Both checks and milestone remain open. Source-bound ignored FPU-save ENOMEM is a concrete open correction; current cycle artifacts remain unchanged."
     },
     {
       "id": "M08",
@@ -1215,7 +1262,7 @@
           "assessment_note": "Native shutdown remains unresolved. Original TLS failure and expected ownership-retained retirement retry remain visible; no unsupported claim of zero remaining lifetime defects."
         }
       ],
-      "current_evidence_summary": "Thirteen distinct diagnostic/app behaviors accepted; original failures and raw captures retained. Native lifecycle and final integrated regression suite remain open."
+      "current_evidence_summary": "Fourteen distinct diagnostic/app behaviors accepted; original failures and raw captures retained. Native lifecycle and final integrated regression suite remain open."
     },
     {
       "id": "M12",
@@ -1479,9 +1526,9 @@
     "signed production/repository/independent external release qualification"
   ],
   "next_actions": [
-    "Finish reviewed resource parser correction and resource-only4096-byte collector producer-to-parser test; release the exact resource guest after independent review and fresh admission.",
-    "Observe separately released complete native boot/workload/stop/destroy/release/boot; full cycles remain0 until observed.",
-    "Continue typed fork completion/backend drain/alias revocation/final ACK integration fail-closed; prepare selected-profile ABI-correct FPU/vector Linux oracle."
+    "Implement/review separately released complete same-guest boot/workload/stop/destroy/release/boot collector; actual v2 public release now passed, full cycles remain0.",
+    "Continue actual fork carrier/producer, LINK, module-pin/cancel/Accept/cache/parent-retirement corrections; CREATE_PPD remains fail-closed.",
+    "Resolve bounded actual application-visible ISA/save-path contract and source-bound save-allocation failure reproducer; no accepted vector rerun or capability weakening."
   ],
   "evidence_reconciliation": {
     "date": "2026-10-17",

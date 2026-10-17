@@ -1,0 +1,318 @@
+{
+  "schema": "mckernel.practical-m07-selected-profile-assessment.v1",
+  "task_id": "practical-m07-selected-profile-assessment-20261017-1",
+  "status": "BOUNDED_ASSESSMENT_READY_FOR_DISPATCHER_REVIEW",
+  "literal_milestone": {
+    "id": "M07",
+    "scope_id": "practical-kernel-apps-v1-20261017",
+    "title": "Used FPU/vector state",
+    "engineering_state": "unmeasured",
+    "completion_status": "open",
+    "exit_condition": "Actually used vector/FPU state survives switching, syscalls and signals.",
+    "checks": [
+      {
+        "id": "P-M07-01",
+        "description": "Declare compiler/libc/application vector requirements.",
+        "status": "unassessed",
+        "evidence": [],
+        "assessment_note": "No selected record declares the final compiler/libc/application vector requirements. Retain unassessed; it is not a zero-percent engineering estimate."
+      },
+      {
+        "id": "P-M07-02",
+        "description": "Run relevant state-preservation checks on the supported CPU/profile.",
+        "status": "unassessed",
+        "evidence": [],
+        "assessment_note": "No selected actual FPU/vector state-preservation coverage is assessed here; module loading and ordinary diagnostics cannot substitute for it."
+      }
+    ],
+    "current_evidence_summary": "No selected final-profile vector requirement or preservation assessment. Unassessed is not0% engineering completion."
+  },
+  "selected_scope": "Existing x86_64 practical profile and exact accepted native vector diagnostic only; declarations concern selected records, not final all-application or all-used-ISA closure.",
+  "recommendations": {
+    "M07": {
+      "engineering_state": "partial",
+      "completion_status": "open",
+      "reason": "A real source-bound native preservation diagnostic now passes switching/blocking futex, raw syscall and delivered signal for explicit SSE2/x87/MXCSR state. Final compiler/libc/application used-state requirements are not closed, so whole-M07 exit condition is not met."
+    },
+    "P-M07-01": {
+      "description": "Declare compiler/libc/application vector requirements.",
+      "status": "open",
+      "assessed_subset": "Selected GCC C/assembly baseline requirements and exact runtime/artifact identities declared below.",
+      "unassessed_remainder": [
+        "Final supported C and Rust-standard-library application/compiler target-feature requirements beyond this selected diagnostic",
+        "Statically linked libc archive/IFUNC selection and any extension state actually used",
+        "Staged dynamic libc/loader runtime dispatch requirements and their McKernel-visible CPUID/HWCAP/XCR0 binding"
+      ],
+      "reason": "Partial declaration is evidence, but does not establish final supported-profile requirement closure. Existing unassessed row can become open with this additive record; do not mark complete."
+    },
+    "P-M07-02": {
+      "description": "Run relevant state-preservation checks on the supported CPU/profile.",
+      "status": "open",
+      "selected_subset_result": "PASS_ACTUAL_NATIVE_VECTOR_PRESERVATION_DIAGNOSTIC_AND_RETIREMENT",
+      "reason": "Actual preservation checks ran on the exact retained profile for the explicitly seeded subset. Their relevance to every actually-used compiler/libc/application state remains unclosed until requirements are declared; no whole-row completion or additional runtime credit is inferred."
+    }
+  },
+  "declared_selected_requirements": {
+    "application": {
+      "identity": {
+        "mode": 33216,
+        "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt3/reference",
+        "sha256": "5362705c4ffc5594a6b7145a25eb824ecd5f96ccf7cd80c0c123596ee0064910",
+        "size": 1518720
+      },
+      "source_hashes": {
+        "scripts/application-tests/native-vector-preservation.c": "1ba82e6d9ce34ef5ebf1f7a7356ddccf33c18d89266ec948c8a42eb6fd50f501",
+        "scripts/application-tests/native-vector-preservation.S": "1c408f2603d4331a73b3c9e24937e0cb009f6708093435ba4823b88cf7bfc2f5",
+        "scripts/tests/test_native_vector_preservation_20261017.py": "b7a0f839675f1389d8b846e7417ff8f4022adde8018afc7414d09cc7f2251c9f",
+        "docs/verification/native-vector-preservation-linux-oracle-20261017-1.json": "88f336f3febab1295d0cc70f060892448bde3aa5be593d59538ce3ab9877fe65"
+      },
+      "assembly_requirement": "x86_64, x87 and SSE2; all128 bits of XMM0..15. Raw syscall ABI and signal-return restore required; ordinary C calls retain SysV caller-saved semantics.",
+      "compiler": {
+        "compiler": "/usr/bin/gcc",
+        "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+        "version_capture": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/compiler-version.stdout",
+        "flags": [
+          "-std=gnu11",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-static",
+          "-fno-pie",
+          "-no-pie",
+          "-march=x86-64",
+          "-mtune=generic",
+          "-mno-avx",
+          "-Wl,-z,noexecstack",
+          "-pthread"
+        ]
+      },
+      "compiler_version": {
+        "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-linux-reference-20261017-1/attempt2/compiler-version.stdout",
+        "sha256": "991c86f8d9b66254b3a1d9424592c40c367ae86dd7700c54bdaa80203b40b2ea",
+        "first_line": "gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0"
+      },
+      "flag_scope": "-march=x86-64 -mtune=generic -mno-avx constrains this compile of C/assembly, not prebuilt static libc objects or IFUNC dispatch. Static ELF/no INTERP and no YMM/ZMM in native_vector_probe prove neither absence of AVX throughout the ELF nor absence of additional runtime state."
+    },
+    "libc": {
+      "payload_linkage": "Exact selected payload is statically linked; its C runtime calls include pthreads, signal setup, syscall wrappers, printf/puts and exit. The static libc archive identity/implementation-selection closure was not retained in report2, so neither exact static-libc vector requirements nor no-AVX closure is declared.",
+      "staged_dynamic_libc": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/stage/root/lib64/libc.so.6",
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "size": 2339896
+      },
+      "staged_loader": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/stage/root/lib64/ld-linux-x86-64.so.2",
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "size": 930600
+      },
+      "staged_identity_scope": "These exact retained dynamic artifacts support the selected application environment, but the static vector payload does not prove their used ISA paths or final supported applications. Do not infer their version/ISA from GCC version or file hash alone.",
+      "ifunc_limit": "Potential feature-dispatched libc implementations are a requirements gap, not proof AVX was executed in this application."
+    },
+    "build_identity": {
+      "module_candidate": "3f7b265b9f90279f5bd36f33f294eaa117609f12",
+      "linux_and_mckernel_image_abi": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+      "module_source_closure": "bf4774c6a520e98550d94acdaca80f62434308a0fbeb0e2cf27ddf35cc7d8737",
+      "matched_modules": [
+        {
+          "mode": 33188,
+          "path": "/home/holden/mckernel-work/scratch/nsd-c-79b00103de104607b182b374a2a396ae/modules/ihk.ko",
+          "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+          "size": 1440392
+        },
+        {
+          "mode": 33188,
+          "path": "/home/holden/mckernel-work/scratch/nsd-c-79b00103de104607b182b374a2a396ae/modules/ihk-smp-x86_64.ko",
+          "sha256": "990104bb9a384db8ffdb4832cc043f94b4abf54d044309ca56cbee02e389161f",
+          "size": 11634760
+        },
+        {
+          "mode": 33188,
+          "path": "/home/holden/mckernel-work/scratch/nsd-c-79b00103de104607b182b374a2a396ae/modules/mcctrl.ko",
+          "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+          "size": 1913904
+        }
+      ],
+      "control_kernel": {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+        "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+        "size": 16130048
+      },
+      "mckernel_image": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/scratch/native-exact-mckernel-image-work-942c927b-scratch22-authority3-image1-20261017/evidence/artifacts/mckernel.img",
+        "sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+        "size": 7908256
+      },
+      "compiler_scope_limit": "Selected GCC9.4 application flags are known; production kernel/image/compiler Rust-target ISA/FPU option closure is not assessed here."
+    },
+    "actual_profile": {
+      "admitted_matches_observed_qemu_argv": true,
+      "qemu_executable": "/usr/libexec/qemu-kvm",
+      "machine": "q35",
+      "acceleration": "tcg,thread=multi",
+      "cpu": "max,la57=off",
+      "smp": "4,sockets=2,cores=2,threads=1",
+      "memory_mib": "8192",
+      "manifest_profile": {
+        "memory_mib": 8192,
+        "name": "native-diagnostic-4vcpu-8192mib",
+        "numa_nodes": 2,
+        "vcpus": 4
+      },
+      "mckernel_selected": "One McKernel CPU,128MiB; same general threads collector uses hidos allow_oversubscribe. No multicore McKernel migration claim.",
+      "feature_observation": {
+        "origin": "Retained guest Linux boot serial, NOT direct McKernel application CPUID/XCR0 capture",
+        "lines": [
+          {
+            "line": 160,
+            "text": "[    0.671478] x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'"
+          },
+          {
+            "line": 161,
+            "text": "[    0.674144] x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'"
+          },
+          {
+            "line": 162,
+            "text": "[    0.674797] x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'"
+          },
+          {
+            "line": 163,
+            "text": "[    0.675007] x86/fpu: Supporting XSAVE feature 0x008: 'MPX bounds registers'"
+          },
+          {
+            "line": 164,
+            "text": "[    0.675212] x86/fpu: Supporting XSAVE feature 0x010: 'MPX CSR'"
+          },
+          {
+            "line": 165,
+            "text": "[    0.675458] x86/fpu: Supporting XSAVE feature 0x200: 'Protection Keys User registers'"
+          },
+          {
+            "line": 166,
+            "text": "[    0.675990] x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256"
+          },
+          {
+            "line": 167,
+            "text": "[    0.676361] x86/fpu: xstate_offset[3]:  960, xstate_sizes[3]:   64"
+          },
+          {
+            "line": 168,
+            "text": "[    0.676547] x86/fpu: xstate_offset[4]: 1024, xstate_sizes[4]:   64"
+          },
+          {
+            "line": 169,
+            "text": "[    0.676786] x86/fpu: xstate_offset[9]: 2688, xstate_sizes[9]:    8"
+          },
+          {
+            "line": 170,
+            "text": "[    0.677008] x86/fpu: Enabled xstate features 0x21f, context size is 2696 bytes, using 'standard' format."
+          }
+        ],
+        "meaning": "Linux reports XSAVE features0x21f including AVX, MPX and protection-key state; cpu=max,la57=off is broader than the seeded SSE2 subset. This does not establish McKernel user exposure, actual libc IFUNC selections, or preserved extended-state support.",
+        "unassessed": "No direct selected McKernel user CPUID+XCR0/HWCAP or whole-library used-path requirement record is joined here."
+      }
+    }
+  },
+  "tested_subset": {
+    "xmm": "All128 bits of XMM0..15, distinct per-register values",
+    "mxcsr": "Exact0x3fa0: masked exceptions, round toward negative infinity, precision sticky flag",
+    "x87_control_word": "Exact0x077f: masked exceptions, extended precision, round toward negative infinity",
+    "x87_stack": "TOP6 and two exact80-bit values: ST0=-3.5, ST1=1.25; checked sign/exponent and64-bit significands",
+    "boundaries": [
+      "raw getpid within one assembly seed/check scope",
+      "raw FUTEX_WAIT_PRIVATE returns0 and actual helper FUTEX_WAKE_PRIVATE returns1, requiring real queued waiter and thread handoff",
+      "raw self-tgkill with completed delivery marker required in assembly BEFORE every state comparison; handler deliberately clobbers caller-saved vectors/x87 and preserves ordinary ABI control fields; signal return restores interrupted seeded state"
+    ],
+    "ordinary_abi": "Probe preserves used callee-saved GPRs and original x87/MXCSR controls, leaves x87 stack empty and restores stack. No caller-saved XMM expectations span ordinary C/libc calls.",
+    "not_tested": [
+      "YMM upper halves, AVX/AVX512, opmask/ZMM or full XSAVE component set",
+      "Complete x87 status/tag/environment/exception behavior; every x87 register or rounding-mode combination",
+      "McKernel multicore migration, mixed application contention or long stress",
+      "All supported compiler/libc/Rust-standard-library application used-state combinations"
+    ]
+  },
+  "actual_result": {
+    "record": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-vector-preservation-result-review-20261017-1.json",
+      "sha256": "ed0e550ac1b4eeed12294d54140e122455fb0ed06f9a068f3957844a236c0156",
+      "size": 12622
+    },
+    "decision": "PASS_ACTUAL_NATIVE_VECTOR_PRESERVATION_DIAGNOSTIC_AND_RETIREMENT",
+    "payload_stdout_hex": "564543544f525f53595343414c4c5f504153530a564543544f525f46555445585f504153530a564543544f525f5349474e414c5f504153530a564543544f525f50524f46494c455f504153530a",
+    "stdout_bytes": 77,
+    "stderr_bytes": 0,
+    "raw_wait_status": 0,
+    "futex": {
+      "delivery": 18,
+      "return_value": 0,
+      "syscall_number": 202
+    },
+    "worker_tid": 257,
+    "worker_procfs_registered_and_deleted": true,
+    "retirement": "Independent owner/client/QEMU/container retirement accepted; thirteen-file preservation accepted. Raw protocol flags remain unchanged.",
+    "scope": "Reuse this already accepted diagnostic and retirement; add zero new launches, zero formal credits and no wholeM07 acceptance."
+  },
+  "evidence": {
+    "practical_source": {
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/practical-milestones.json",
+      "sha256": "da356905c0d11b6d47912cb6b7b3bf772346a21a907f02504c051f51cb64e7f2",
+      "size": 78281
+    },
+    "linux_source_reference": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-vector-preservation-linux-reference-20261017-2.json",
+      "sha256": "3d63c5beb530b70a400ee390e732c57fade777d0ba65b308222af0b25a8b8e78",
+      "size": 35083
+    },
+    "actual_native_result": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-vector-preservation-result-review-20261017-1.json",
+      "sha256": "ed0e550ac1b4eeed12294d54140e122455fb0ed06f9a068f3957844a236c0156",
+      "size": 12622
+    },
+    "manifest": {
+      "path": "/home/holden/mckernel-work/scratch/native-vector-preservation-preparation-20261017-1/manifest.json",
+      "sha256": "63fbefdfd139d44ee52859e57a3b7bb6df288d35e20327ac2f008c9fda3aa3e4",
+      "size": 5525
+    },
+    "preparation": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-vector-preservation-preparation-20261017-1.json",
+      "sha256": "71259f7b65d95861925c8f710ff1a82f304fb7ec243630546debabb7d0c15d15",
+      "size": 14452
+    },
+    "selected_actual_attempt_result": {
+      "archive": "/home/holden/mckernel/docs/verification/evidence/native-vector-preservation-result-review-20261017-1.tar.gz",
+      "archive_sha256": "66b8baf1bf8199147332a00cf97ca2d82b15e7e8216cec497fa221d3c7875064",
+      "member": "attempt-result.json",
+      "sha256": "1574593ff30071ebf3855e566f66711abf6b4345501c01651b369f52b6f714fd",
+      "size": 81727
+    },
+    "serial_source": {
+      "inside_member": "attempt-result.json:observation.serial",
+      "selected_raw_serial_binding": {
+        "bytes": 74222,
+        "sha256": "9825dfab0a7b77551ff513d84d57603302c68e1a903d197ffea69b41d5ffa244"
+      },
+      "feature_line_numbers_are_splitlines_based": true
+    }
+  },
+  "untouched_scope": "No other milestone/check is assessed or changed. Existing statuses and historical percentages remain untouched; unassessed does not mean zero percent. No practical/HANDOFF/CURRENT edits.",
+  "bounded_next_action": "Dispatcher may record the selected C/assembly requirements and native subset PASS now. Close a final supported build/CPU/library used-state declaration from matching retained target flags and actual user feature/dispatch evidence; only if that declaration includes additional state, design the corresponding narrow preservation check. No broad ISA matrix, unchanged rerun or automatic runtime authority follows.",
+  "environment": {
+    "cpu_affinity": [
+      7
+    ],
+    "address_space_limit_bytes": 268435456,
+    "python": "/home/holden/anaconda3/bin/python3",
+    "source_or_consumed_artifact_writes": false,
+    "build_reference_runtime_or_git_actions": false,
+    "new_output_only": "docs/verification/evidence/practical-m07-selected-profile-assessment-20261017-1.json"
+  },
+  "blocker": "Final used-state requirement closure is unassessed; selected native subset evidence is available and does not block ongoing resourcev2 guest.",
+  "runtime_authority": false,
+  "new_diagnostic_launches": 0,
+  "new_formal_credit": 0,
+  "percentage_change": null
+}
