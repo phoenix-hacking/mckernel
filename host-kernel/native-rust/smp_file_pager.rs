@@ -204,6 +204,15 @@ pub(crate) struct Registry {
 }
 
 impl Registry {
+    /// Observe complete pager retirement without discarding retained files.
+    pub(crate) fn shutdown_quiescent(&self) -> Result {
+        let entries = self.entries.lock();
+        if entries.iter().any(Option::is_some) {
+            return Err(EBUSY);
+        }
+        Ok(())
+    }
+
     pub(crate) fn new() -> Result<Arc<Self>> {
         let mut entries = Vec::with_capacity(CAPACITY, GFP_KERNEL)?;
         for _ in 0..CAPACITY {

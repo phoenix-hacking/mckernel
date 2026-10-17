@@ -1147,6 +1147,8 @@ static NEXT_BOOT_EPOCH: AtomicU64 = AtomicU64::new(1);
 const SHUTDOWN_OPEN: u32 = 0;
 const SHUTDOWN_ACTIVE: u32 = 1;
 const SHUTDOWN_RETAINED: u32 = 2;
+const SHUTDOWN_SERVICES_RETIRED: u32 = 3;
+const SHUTDOWN_COMMITTED: u32 = 4;
 
 struct BootEpoch {
     id: u64,
@@ -1162,7 +1164,7 @@ impl BootEpoch {
 
     fn claim(&self) -> Result {
         let previous = self.shutdown.load(Ordering::Acquire);
-        if previous == SHUTDOWN_ACTIVE { return Err(EBUSY); }
+        if !matches!(previous, SHUTDOWN_OPEN | SHUTDOWN_RETAINED) { return Err(EBUSY); }
         self.shutdown.compare_exchange(previous, SHUTDOWN_ACTIVE,
             Ordering::AcqRel, Ordering::Acquire).map_err(|_| EBUSY)?;
         Ok(())
@@ -1191,11 +1193,29 @@ impl ShutdownBoot {
     pub(super) fn owner(&self) -> super::smp_resource::OsToken { self.owner }
     pub(super) fn epoch_id(&self) -> u64 { self.epoch.id }
     pub(super) fn matches_owner(&self, owner: super::smp_resource::OsToken) -> bool {
-        self.owner == owner && self.epoch.shutdown.load(Ordering::Acquire) == SHUTDOWN_ACTIVE
+        self.owner == owner && matches!(self.epoch.shutdown.load(Ordering::Acquire),
+            SHUTDOWN_ACTIVE | SHUTDOWN_SERVICES_RETIRED)
     }
     pub(super) fn same_epoch(&self, other: &Self) -> bool {
         self.matches_owner(other.owner) && other.matches_owner(self.owner)
             && Arc::ptr_eq(&self.epoch, &other.epoch)
+    }
+
+    pub(super) fn close_application_admission(&self) -> Result {
+        self.started.close_application_admission()
+    }
+
+    /// Only the exact current CPU/IRQ witness may retire the retained Runtime.
+    /// The epoch transition follows joins, synchronous callback rundown and
+    /// all ledger checks; no physical owner is removed at this boundary.
+    pub(super) fn retire_services(&self, proof: &super::sysfs_remote::PeerStopped<'_>) -> Result {
+        if !proof.matches_boot(self) { return Err(EIO); }
+        self.revalidate()?;
+        self.started.retire_after_peer_stop(proof)?;
+        self.revalidate()?;
+        self.epoch.shutdown.compare_exchange(SHUTDOWN_ACTIVE, SHUTDOWN_SERVICES_RETIRED,
+            Ordering::AcqRel, Ordering::Acquire).map_err(|_| EIO)?;
+        Ok(())
     }
 
     /// Short revalidation only; callers must release the guard before joins.
@@ -1221,7 +1241,9 @@ impl ShutdownBoot {
 impl Drop for ShutdownBoot {
     fn drop(&mut self) {
         // Never reopen admission after a reset, cancellation or partial stop.
-        self.epoch.shutdown.store(SHUTDOWN_RETAINED, Ordering::Release);
+        if self.epoch.shutdown.load(Ordering::Acquire) != SHUTDOWN_COMMITTED {
+            self.epoch.shutdown.store(SHUTDOWN_RETAINED, Ordering::Release);
+        }
     }
 }
 
@@ -1381,6 +1403,7 @@ impl MemoryContext {
     /// continuing service mappings must have their own retirement proof.
     /// Until that protocol exists, retain those boots as an explicit terminal
     /// post-effect quarantine, including every page and module owner.
+    #[allow(dead_code)] // Legacy fail-closed owner-only regression boundary.
     fn finish_shutdown(
         &mut self,
         owner: super::smp_resource::OsToken,
@@ -1393,7 +1416,8 @@ impl MemoryContext {
         let boot = image.boot.as_mut().ok_or(EIO)?;
         if !boot.started || !boot.prepared.irq.shutdown_drained(owner) { return Err(EIO); }
         // Existing unscoped reconciliation cannot commit across a live claim.
-        if boot.epoch.shutdown.load(Ordering::Acquire) == SHUTDOWN_ACTIVE { return Err(EBUSY); }
+        if matches!(boot.epoch.shutdown.load(Ordering::Acquire),
+            SHUTDOWN_ACTIVE | SHUTDOWN_SERVICES_RETIRED) { return Err(EBUSY); }
         if boot.prepared.continuing.is_some() || boot.prepared.sysfs.is_some() {
             boot.shutdown_terminal = true;
             return Err(EBUSY);
@@ -1413,6 +1437,44 @@ impl MemoryContext {
         self.arguments[owner.slot() as usize] = None;
         Ok(())
     }
+    /// Consume the same live shutdown authority at the CPU+memory commit
+    /// boundary. The legacy owner-only finish guard above remains unchanged:
+    /// this separate path additionally requires actual service/callback/ledger
+    /// retirement from this exact Started Arc and boot epoch.
+    fn finish_shutdown_claim(&mut self, claim: &ShutdownBoot, commit_cpu: impl FnOnce()) -> Result {
+        self.verify()?;
+        self.validate_shutdown_boot(claim)?;
+        if claim.epoch.shutdown.load(Ordering::Acquire) != SHUTDOWN_SERVICES_RETIRED {
+            return Err(EBUSY);
+        }
+        let owner = claim.owner;
+        let image = self.images.get_mut(owner.slot() as usize)
+            .and_then(Option::as_mut).ok_or(EIO)?;
+        let boot = image.boot.as_mut().ok_or(EIO)?;
+        // Sysfs moved into the exact Runtime before BOOT returned. A second
+        // owner or mismatched continuing service cannot borrow its proof.
+        if boot.prepared.sysfs.is_some() || !boot.prepared.continuing.as_ref()
+            .is_some_and(|started| started.same_runtime(&claim.started)) {
+            return Err(EBUSY);
+        }
+        let mut workspace = MemoryWorkspace::new(&mut self.staging).map_err(|_| EIO)?;
+        let mut transaction = self.map.prepare_release_all(owner, &mut workspace).map_err(|_| EIO)?;
+        transaction.begin_external_effects().map_err(|_| EIO)?;
+        if let Err(error) = boot.prepared.irq.release_drained(owner) {
+            transaction.compensated_rollback().map_err(|_| EIO)?;
+            return Err(error);
+        }
+        // No fallible operation remains. Both policy mutexes and Linux
+        // hotplug exclusion span the coupled logical commit, never a join.
+        commit_cpu();
+        transaction.commit().unwrap_or_else(|_| panic!("shutdown claim lost memory preflight"));
+        claim.epoch.shutdown.store(SHUTDOWN_COMMITTED, Ordering::Release);
+        boot.started = false;
+        self.images[owner.slot() as usize] = None;
+        self.arguments[owner.slot() as usize] = None;
+        Ok(())
+    }
+
     const fn new() -> Self {
         Self {
             map: MemoryMap::new(),
@@ -2847,12 +2909,23 @@ pub(super) fn shutdown_close_irq_senders(
 
 /// CPU policy and hotplug locks precede this memory lock. Both logical maps
 /// commit together only after every fallible teardown prerequisite succeeds.
+#[allow(dead_code)] // Actual v6 reconciliation consumes finish_shutdown_claim.
 pub(super) fn finish_shutdown(owner: super::smp_resource::OsToken, commit_cpu: impl FnOnce()) -> Result {
     let published = PUBLISHED.load(Ordering::Acquire);
     if published.is_null() { return Err(ENODEV); }
     // SAFETY: The synchronous exact-generation backend lease pins this owner.
     let mut context = unsafe { &*published }.lock();
     context.finish_shutdown(owner, commit_cpu)
+}
+
+/// The CPU reconciliation caller owns the original live ShutdownBoot and
+/// keeps CPU/hotplug exclusion through this short coupled commit only.
+pub(super) fn finish_shutdown_claim(claim: &ShutdownBoot, commit_cpu: impl FnOnce()) -> Result {
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() { return Err(ENODEV); }
+    // SAFETY: The synchronous provider lease and exact boot claim pin owners.
+    let mut context = unsafe { &*published }.lock();
+    context.finish_shutdown_claim(claim, commit_cpu)
 }
 
 /// The existing boot owner is the sole source of application topology. IHK

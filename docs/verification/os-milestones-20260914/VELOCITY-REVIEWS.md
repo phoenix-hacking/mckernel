@@ -13,16 +13,16 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-17T15:25:11Z` (interval 29m34s).
-- Next full review target: `2026-10-17T15:55:00Z` (08:55 America/Los_Angeles).
-- Next review latest target: `2026-10-17T16:25:00Z`; preserve healthy operations.
-- Last included-usage observation: 17%; existing campaign stop remains 97%.
-- Current intervention: test accepted new modules in the next lifecycle guest;
-  keep useful C/Rust application packets supplied, and perform approved passing-
-  owner readbacks immediately after join to reduce coordinator delay.
-- Current invocation independently accepted diagnostic/app behaviors: 9 (signal,
+- Last full review: `2026-10-17T15:55:14Z` (interval 30m03s).
+- Next full review target: `2026-10-17T16:25:00Z` (09:25 America/Los_Angeles).
+- Next review latest target: `2026-10-17T16:55:00Z`; preserve healthy operations.
+- Last included-usage observation: 18%; existing campaign stop remains 97%.
+- Current intervention: advance ready C-thread admission using its permitted
+  metadata-only joins; correct the reviewed shutdown effect-classification defect
+  with actual runtime-consumer regressions; stage the tested strict-Running helper.
+- Current invocation independently accepted diagnostic/app behaviors: 10 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
-  adapted closed-read, useful dynamic-libc memory application).
+  adapted closed-read, useful dynamic-libc memory application, real Rust std app).
   Old formal scores and estimates remain historical, not the new goal's percentage.
 - No new monitor script, OS timer, engineering dispatcher or workload was started.
 
@@ -459,3 +459,72 @@ No prior practical percentage baseline existed at14:47; do not invent retrospect
 percentage-point gains or subtract the old comprehensive-scope ranges. Current
 estimates are low-confidence engineering judgments; future same-scope deltas need
 concrete evidence. M05 remains the main blocker. This changes no acceptance state.
+
+## Review 5 — 2026-10-17 15:55:14 UTC
+
+Interval: `15:25:11` to `15:55:14` UTC, 30m03s. Same campaign, live worker
+498255/start3900845 and server498257/start3900851; phase running, no stop.
+Included usage18%, existing97% stop. HEAD723d04f1; supervisor owns no runtime/Git.
+
+| Measure | This interval |
+| --- | --- |
+| Actual guest attempts | 2: new-module lifecycle setup and real Rust std app |
+| Newly accepted app behaviors | +1, total10; preceding interval +2 in29m34s |
+| Real Rust std | Launched15:42:24.228, ended15:42:58.421;34.197s outer operation; independently accepted15:45:18 |
+| Failed new-module lifecycle | Launched15:27:50.700, ended15:28:03.594;12.898s; setup failed before app/probe; retirement accepted15:35:05 |
+| New native Running/shutdown/restoration acceptance | 0 |
+| New practical milestone/check closure established | 0; actual C/Rust and overlap evidence added to still-open final-profile checks |
+| Source implementation | Drain helpers independently PASS_SOURCE_PREREQUISITE,7 actual-body cases; provider integration33 Rust cases/5 compile controls, but independent review BLOCKED_SOURCE |
+| Observer correction | StrictRunning5 helper/collector compiled;10 helper cases and4 independent retained-console cases pass,0 skips in final correction |
+
+Rust uses the pinned GNU-static real standard library, not a host-only reference:
+exact144-byte stdout, empty stderr, exit0,8193-byte Vec/checksum/file roundtrip,
+EOF/removal, String/BTreeMap, two worker threads/barrier/mutex counter2000/TLS.
+Native worker lifetimes overlap before either deletion. CPU parallelism,
+sustained blocking contention, measured stack properties and native OS resource
+restoration remain unproved. All30 clients, owner, container and guest retired.
+
+The reviewed passing-owner readbacks now ran in the same command continuation,
+finishing approximately0.06s after owner completion. This removes the prior
+manual readback handoff for this pass, not the independent result decision.
+Lifecycle retirement to Rust launch was7m19.228s, including binding/checkpoint
+work; dispatcher explicitly reported no new admission blocker15:41:38 and
+launched46s later. Exact avoidable seconds cannot be isolated. At this cutoff,
+accepted Rust retirement to next C-thread launch is at least9m56s with no launch
+observed. The earlier conditional review exists; final live admission is underway.
+
+The failed lifecycle packet captured no queried numeric OS status or probe run.
+Its legacy boot helper requiresReady4 while the new backend contract requires
+Running5; this is a source mismatch hypothesis, not an observed kernel result.
+The separate strict5 helper now logs observed/expected status through checked
+kmsg and the collector retains raw boot-result fields. Actual-body tests accept5,
+reject4 and reject logging failures. Earlier wrapper compile failure and skipped
+tests remain preserved without credit. Fresh staging/release is still required.
+
+Provider review found one concrete correctness blocker: after irreversible
+native admission closure, application-busy or early IRQ failure can report
+pre-effect, causing the outer runtime to restore Running with native gates
+closed. Author is correcting the classification or rollback and adding actual
+runtime decode/finish/admission regressions for app-busy,pager-busy,early IRQ.
+The33 passing fixtures do not close this boundary. No second concrete blocker
+was found in same-claim ownership, unlocked joins/removal or paired commit.
+
+**Adjustment:** finish C-thread live admission and execute before noncritical
+reporting; keep provider correction and fresh lifecycle staging parallel. The
+selected C-thread reviewer explicitly confirmed no new push/fetch/commit gate
+for its permitted metadata-only joins. CONVERGENCE/VELOCITY now clarify reuse of
+verified consumed code/artifacts while preserving exact releases, resolved
+conditional references, live identity/resource checks, HEAD freeze and oneheavy.
+Packets explicitly requiring a final release checkpoint remain binding.
+
+Actual results are useful but this window does not establish2x/3x velocity. The
+saved15:25 practical percentage baseline stays immutable; no numerical uplift
+or historical formal acceptance is inferred from test count or scope deferral.
+Next review16:25UTC, latest16:55. Core anchors under ../evidence/:
+`practical-rust-std-current942-result-review-20261017-1.json`,
+`native-running-lifecycle-failure-review-20261017-1.json`,
+`native-shutdown-drain-helpers-source-20261017-1.json`,
+`native-shutdown-integration-source-20261017-1.json`; helper expert result under
+scratch/native-boot-running-prerequisite-20261017-1/observability-expert-3/.
+Steering154855681411 was accepted by server; no supervisor workload or shared
+artifact rehash was performed.

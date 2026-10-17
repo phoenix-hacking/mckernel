@@ -1,0 +1,33 @@
+{
+  "artifact": {
+    "mode": 33216,
+    "path": "/home/holden/mckernel-work/scratch/practical-pthread-contention-20261017-1/app",
+    "sha256": "15a61053ac8e31dc8acf903c18555d637567f3c7b830b70c4dcb1516e2375015",
+    "size": 1747288
+  },
+  "authority": "Independent reviewer direct message delivered to author and coordinator; coordinator explicitly accepted and directed staging.",
+  "caveats": [
+    "CLOCK_REALTIME100ms timeout has no measured lowerbound.",
+    "Does not prove actual kernel sleep/futex backend.",
+    "Internal alarm assumes SIGALRM unblocked; preserve outer10second watchdog."
+  ],
+  "decision": "PASS_SOURCE_ORACLE_STATIC_REFERENCE",
+  "findings": "No blocking lifetime findings: held-primary ordering guarantees busy/timeout before unlock; join checked prior destroy/shared reads; failures _Exit.",
+  "guest_authority": false,
+  "reviewer": "/root/signal_guest_binding",
+  "schema": "mckernel.independent-review-message-capture.v1",
+  "source": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/scripts/application-tests/practical_pthread_contention.c",
+    "sha256": "a2618fdfbb66be21140edba1836df37789ae2af646b85d4eeb49491c16383a79",
+    "size": 4274
+  },
+  "source_evidence": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-pthread-contention-source-linux-20261017-1.json",
+    "sha256": "3231043f319a3130c65b68a8fb651b109203d6fa124387cc8fa9b0186ac36c13",
+    "size": 26061
+  },
+  "stdout_bytes": 48,
+  "stdout_sha256": "cbe80c2ddf7b7b4da256ea6d901aa733342ff0a298f4cc4d3e785a492fa9f0a8"
+}

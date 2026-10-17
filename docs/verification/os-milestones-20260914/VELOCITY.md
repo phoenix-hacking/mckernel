@@ -132,8 +132,12 @@ checkpoint or unrelated milestone closure.
 Use existing `native_diagnostic_stager.py`, `native_diagnostic_overlay.py`,
 `native_diagnostic_batch.py` and strict manifest loading where applicable.
 Keep source changes for the next candidate separate from the immutable current
-runtime stack. A diagnostic module-only reuse path is not yet a released build
-capability; do not invent or assume it. Never narrow a frozen full-tree/source
+runtime stack. The first one-shot diagnostic matched-module reuse build and
+artifact-only revalidation are recorded in
+`native-running-external-modules-attempt-review-20261017-1.json` and
+`native-running-external-modules-artifact-review-20261017-1.json` under
+`docs/verification/evidence/`. Consume their exact scope; a later build still
+needs its own applicable release. Never narrow a frozen full-tree/source
 binding or skip required live admission checks to make reuse convenient.
 
 Prepare at most two upcoming guest cases while one runs. Batch shared setup and
@@ -182,6 +186,11 @@ their owners; a reporting target never interrupts them.
   shared content once per required phase/device/inode, preserving every path's
   identity/race checks and all mandatory consumption checks. Do not replay a
   completed corpus scan or preparation because a new worker joined.
+- Reuse a verified code/artifact checkpoint for record-only diagnostic admission
+  when the selected review permits it, as clarified in CONVERGENCE.md. Resolve
+  all conditional references before execution; explicit final-release push/fetch
+  or `--release-commit` requirements remain binding. When the next packet is fully
+  admitted and its predecessor retired, launch before noncritical reporting.
 - After the original failure plus one bounded correction in the same family,
   change the technical approach or escalate with the small reproducer. Do not
   spend multiple complete cycles on the same bookkeeping/observer mistake.

@@ -1,5 +1,50 @@
 # Compact dispatcher handoff
 
+## Checkpoint389 — Rust/C threads accepted; strict5 lifecycle released
+
+Shutdown correction now independently PASS_SOURCE_INTEGRATION report753fb8d3:
+35Rust/10Python/5compile rejection controls and2 actual-runtime mutants pass.
+All post-BootEpoch-claim failures retain Shutdown and closed admission; no-claim
+failure can restoreRunning. Nine-source closure reviewed, no native acceptance.
+Next source candidate requires its own matched-module compile. Strict5 existing176
+lifecycle finalrelease is separate and next heavy workload; fresh ef59manifest/
+ndnl2-c9a305f5/noncec9a305f5832442e4be5ad81ca696ccb4. No mixed kernelWIP.
+
+
+
+C threads subsequently accepted:36.899022s, exact25bytes/exit37/empty stderr;
+worker TIDs257/258 overlap, PID256 retirement EAGAIN→0/release0, all30clients/
+owner576977/containerd22be84a removed/root27:4free. Result2f4e21d9/archive7db0852d
+preserves all13files. Current accepted diagnostic/app total11; no native cycle
+or formal credit. Correctedstrict5stage ef59f0f3 passed independent metadata/
+single-helper-pin boundary review; fresh execution packet next. New actual
+fork/exec/wait app lane found nonnull CREATE_PPD native mirror prerequisite.
+
+Tenth current942 diagnostic independently accepted: real static GNU Rust1.92 std
+application, 144 exact stdout bytes, empty stderr, exit0, 34.196863s. Vec8193/
+checksum1024005, full file roundtrip/EOF/sync/removal, String/BTreeMap and two
+overlapping worker lifetimes with barrier/mutex2000/TLS/joins passed. Result
+87b307d4/archive38299d4b preserves all13 files. Owner/container/30clients
+retired, root27:4 free; all3 approved readbacks completed in same continuation.
+No native OS restoration or sustained contention claim; practical rows stay open.
+
+Next ready original C threads packet retains immutable942 and reviewed two-guard
+collector variant. Bind Rust predecessor and fresh admission; existing verified
+723d04f1 checkpoint suffices for metadata-only joins under exact review. No new
+push/fetch gate per guest; explicit packet requirements still apply. HEAD freezes
+during guest. StrictRunning5 helper10+actual collector console4 tests pass;
+original compile failure/skipped run retained. Fresh helper-pinned lifecycle stage
+in preparation, no kernel rebuild required for that correction.
+
+Shutdown coherent provider integration:33Rust/5compilecontrols/10Python pass,
+but independent review found actual effect-boundary mismatch: epoch/app admission
+closed yet pre-effect errno could restoreRunning. Candidate frozen, bounded
+correction pending full findings. Source tests are not native acceptance. New
+contended pthread app lane builds deterministic EBUSY/timedwait/handoff reference.
+Recurring supervisor30–60min review remains VELOCITY-REVIEWS.md; immutable dated
+practical estimate baseline retained. Continue useful work after normal saves.
+
+
 
 ## Checkpoint388 — setup failure retired; ready Rust std guest next
 

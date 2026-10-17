@@ -1,0 +1,83 @@
+{
+  "schema": "mckernel.native-core-threads-execution-review.v1",
+  "decision": "PASS_ONE_SHOT_EXECUTION_WITH_METADATA_JOINS",
+  "reviewer": "/root/lifecycle_collector_review",
+  "record_author": "/root/native_lifecycle_probe",
+  "decision_source": "Direct independent reviewer conditional PASS confirmed by dispatcher; all required metadata joins now bound below. No separate reviewer-written JSON.",
+  "reviewed_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-core-threads-current942-execution-proposal-20261017-1.json",
+    "sha256": "d25cc3ea7ca6e693f8798ab17d0aeb049794b76f535839c3bd193872ed1a4804",
+    "size": 12292
+  },
+  "preparation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-core-threads-current942-preparation-20261017-1.json",
+    "sha256": "a2b2bf97e65b5e687cfb99532d7e857f3b1f919ad5399937b059f9a33a15189f",
+    "size": 35946
+  },
+  "preceding_accepted_rust_retirement": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-rust-std-current942-result-review-20261017-1.json",
+    "sha256": "87b307d4f9774cc2d19c2991162901aa3d28cb4875701c080ef1521d78538692",
+    "size": 17748
+  },
+  "preceding_rust_retention_archive": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-rust-std-current942-result-review-20261017-1.tar.gz",
+    "sha256": "38299d4b9f650ced69509f9271bba61a220c16b3989e436544d567d63a87796e",
+    "size": 132641
+  },
+  "live_preflight": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-core-threads-current942-live-preflight-20261017-1.json",
+    "sha256": "33e63ac4f95325477c40bc65a44fc9f95bd695a424b6777f9ba18ab55b400cac",
+    "size": 5580
+  },
+  "verified": [
+    "Original independent review bound all14references and exact60921two-guard variant/268b9670collector/923664a0manifest/1024limits.",
+    "Original argv/profile/nonce/manifest/payload25bytes-exit37/both1024/oversubscribe preserved.",
+    "Accepted immediately preceding Rust actual result87b3/archive38299 joined; no old pending predecessor claim.",
+    "Fresh local preflight uses priorRust4cdd pattern; dispatcher immediate checks and HEAD/sourcefreeze remain required."
+  ],
+  "postjoin_readback": {
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndcth-1.owner-70f0757dac5d474c8bb6f6a495c6e5a4",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/ndcth-1/attempt-70f0757dac5d474c8bb6f6a495c6e5a4/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndcth-1/attempt-70f0757dac5d474c8bb6f6a495c6e5a4",
+        "."
+      ]
+    ],
+    "capture_limit_bytes_per_command": 33554432,
+    "conditions": "Only after joined positive owner/client retirement; verify unchanged canonical exact nonce-bound directories and regular result. Fresh ordinary-UID captures; default tar without dereference.",
+    "requested": true,
+    "timeout_seconds_per_command": 30,
+    "approved": true
+  },
+  "checkpoint_requirement": {
+    "existing_safe_checkpoint": "723d04f1f1005260ebd723776a0eb165a23af80f",
+    "new_commit_push_fetch_or_releasecommit_required": false,
+    "authority": "Reviewer explicitly stated no new commit/push/fetch/releasecommit requirement; dispatcher confirms verified723dcheckpoint sufficient."
+  },
+  "runtime_called": false,
+  "remaining_runtime_conditions": [
+    "Dispatcher maintains exclusive heavy lane and exact source/HEAD/runtime bindings through launch.",
+    "Only the exact one-shot owner argv may execute; preserve any failure without automatic retry.",
+    "Run approved readbacks only after joined positive owner/client retirement, canonical exact directories/regular result, fresh ordinary UID captures and default tar without dereference."
+  ],
+  "scope": "Metadata finalization only; no original proposal/source/manifest or consumed code changes. No thread/app correctness claim until actual independent result review."
+}

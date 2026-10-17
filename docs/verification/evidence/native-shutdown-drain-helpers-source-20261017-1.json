@@ -1,0 +1,182 @@
+{
+  "schema": "mckernel.native-shutdown-drain-helpers-source.v1",
+  "created_utc": "2026-10-17T15:44:32.539901+00:00",
+  "scope": "practical-kernel-apps-v1-20261017/M05 source helpers",
+  "status": "PASS_ACTUAL_BODY_MODEL_ONLY",
+  "author": "/root/native_shutdown_drain_helpers",
+  "expert_adapter_owner": "/root/native_shutdown_epoch_impl",
+  "source_before": {
+    "host-kernel/native-rust/smp_file_pager.rs": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+    "host-kernel/native-rust/smp_procfs.rs": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+    "host-kernel/native-rust/sysfs_memory.rs": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81"
+  },
+  "source_and_tests_after": {
+    "host-kernel/native-rust/smp_file_pager.rs": "655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c",
+    "host-kernel/native-rust/smp_procfs.rs": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea",
+    "host-kernel/native-rust/sysfs_memory.rs": "d64efe15ff3545e6f21733cdc6dcbf026df370049484a7221a653d502612bfc1",
+    "scripts/tests/test_native_shutdown_drain_helpers_20261017.py": "5f5c1c6c75c496511f9d9b8a5eaf7e45fb68a818b60bac6d0be8bb59aff104ae",
+    "scripts/tests/fixtures/native_shutdown_drain_helpers_20261017.rs": "dd0277d1b79d13e9a3256876d4b05422b552d212775e5df3a4cf37de95681ba3"
+  },
+  "raw_root": "/home/holden/mckernel-work/scratch/native-shutdown-drain-helpers-20261017-1",
+  "raw_files": {
+    "smp_procfs.rs": {
+      "sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+      "bytes": 27574
+    },
+    "before.json": {
+      "sha256": "a5f2d5ab24897e68ba8020b0843f60653bf1967b136f23e444c80fa9af13f107",
+      "bytes": 342
+    },
+    "smp_procfs.initial-helper-module-path.rs": {
+      "sha256": "5dad88031a10ca77e6bd1aba0c726b71ba3a22a373c6d15d7adcea6a84ce21ad",
+      "bytes": 28512
+    },
+    "smp_file_pager.rs": {
+      "sha256": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+      "bytes": 13864
+    },
+    "helpers.patch": {
+      "sha256": "103569598470e5cfc31972a7896b24e4260bb0ecf09dca41865eaa7fef3cb000",
+      "bytes": 3243
+    },
+    "module-path-correction.json": {
+      "sha256": "dce8f148e19ef76e18e717ff51eb76a65560bda8a3a745cd16d5aeedd3b677a0",
+      "bytes": 718
+    },
+    "sysfs_memory.rs": {
+      "sha256": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81",
+      "bytes": 25405
+    },
+    "test-correction/compile.stderr": {
+      "sha256": "10164392f69fd4510cb8e2e598fe3758c483607a088fd89ddf6b3651ddc21178",
+      "bytes": 1014
+    },
+    "test-correction/compile.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "test-correction/actual.rs": {
+      "sha256": "5f28537b0e7c5ffc758d966c909d9001ae1cbfce6f83fe5f399f82d24c798b37",
+      "bytes": 11839
+    },
+    "test-correction/compile.status": {
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "bytes": 2
+    },
+    "test/compile.stderr": {
+      "sha256": "d161e15373c7b9c2b833f306f471fac15308786f5a6ac2379dff8e72b17a0d11",
+      "bytes": 309
+    },
+    "test/compile.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "test/actual.rs": {
+      "sha256": "3c41ceafae1d5f6d3855766394e5e700985c19ecc684350a02917d7e98f626a4",
+      "bytes": 11675
+    },
+    "test/compile.status": {
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "bytes": 2
+    },
+    "test-expert-correction/compile.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "test-expert-correction/compile.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "test-expert-correction/run.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "test-expert-correction/actual.rs": {
+      "sha256": "06c3d32eca79491f57db445950d79d424c3ac4596f05aa524b3eed573f434688",
+      "bytes": 12036
+    },
+    "test-expert-correction/actual": {
+      "sha256": "d5a5603ecdf05d084b0aebc581d63565a0463b0d4fd8c7521afe921757a3ba61",
+      "bytes": 6315368
+    },
+    "test-expert-correction/compile.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "test-expert-correction/run.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "test-expert-correction/run.stdout": {
+      "sha256": "fb537e0ba8b4c95482d7c00f44a8443f39dcf781b260126121f6f857818111cb",
+      "bytes": 660
+    }
+  },
+  "contracts": {
+    "pager": "Registry::shutdown_quiescent locks entries and rejects any retained Pager with EBUSY without taking/removing/putting files.",
+    "procfs_remote": "Remote::close_if_quiescent validates scoped proof owner before effects; under slots lock closes active monotonically even if any retained Slot causes EBUSY. Full production open rechecks active under final slots lock. Closed, quarantined, pending, ordinary slots retain all owners.",
+    "procfs_service": "Service::shutdown_quiescent rejects any Published process without removal. Caller owns Service serialization and detach/drop order.",
+    "memory": "Memory::shutdown_quiescent locks ledger and requires requests/responses/payloads optional tags and snoops/procfs/zeroing vectors all empty. Quarantine retains tags in these collections; no separate quarantine collection exists. Fixed spans/extents are retained.",
+    "activate_prerequisite": "Existing activate is startup-only via Started::activate_and_wait and serialized start_os_boot; provider operation mutex excludes BOOT during STOP and boot admission/started guards reject same storage reuse. No reactivation API expansion."
+  },
+  "failures_preserved": [
+    {
+      "path": "test",
+      "family": "drain-test-harness-boundary",
+      "result": "FAIL compile",
+      "cause": "Extraction marker SLOT prefix replaced SLOT_DROP before longer marker.",
+      "bounded_correction": "Sort markers longest first."
+    },
+    {
+      "path": "test-correction",
+      "family": "drain-test-harness-boundary",
+      "result": "FAIL compile",
+      "cause": "Production pub(super) method placed at crate root; std CStr spelling differs from kernel CStr.",
+      "escalation": "Coordinator transferred test adapter to independent high effort integration expert; author prepared nested module and extension trait; expert inspected and ran once, with no further edits."
+    }
+  ],
+  "source_review_correction": {
+    "classification": "source-review-found-module-path-error",
+    "from_sha256": "5dad88031a10ca77e6bd1aba0c726b71ba3a22a373c6d15d7adcea6a84ce21ad",
+    "to_sha256": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea",
+    "from": "super::sysfs_remote::PeerStopped",
+    "to": "crate::sysfs_remote::PeerStopped",
+    "reason": "smp_procfs is a child of smp_memory::service, not crate root",
+    "reviewer": "/root/native_shutdown_epoch_impl",
+    "initial_source_retention": "smp_procfs.initial-helper-module-path.rs",
+    "reconstruction": "Exact prior helper bytes recovered by reversing only reviewed module-path correction; SHA256 matches recorded pre-correction identity.",
+    "pre_correction_acceptance": false
+  },
+  "verification": {
+    "expert_command": "ulimit -v 1048576; exec taskset -c 6 env HOME=/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/home TMPDIR=/home/holden/mckernel-work/scratch/native-shutdown-epoch-source-20261017-1/tmp PATH=/usr/bin:/bin PYTHONDONTWRITEBYTECODE=1 MCKERNEL_DRAIN_HELPERS_OUTPUT=/home/holden/mckernel-work/scratch/native-shutdown-drain-helpers-20261017-1/test-expert-correction /home/holden/anaconda3/bin/python3 -m unittest scripts.tests.test_native_shutdown_drain_helpers_20261017.DrainHelperTests",
+    "compile_flags": [
+      "--edition=2021",
+      "--test",
+      "-Wrust_2018_idioms",
+      "-Dwarnings"
+    ],
+    "rustc": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "compile_status": 0,
+    "run_status": 0,
+    "python_checks": 1,
+    "actual_rust_cases": 7,
+    "runtime_source": "/home/holden/mckernel-work/scratch/native-shutdown-drain-helpers-20261017-1/test-expert-correction/actual.rs",
+    "coverage": [
+      "empty procfs closure and subsequent open rejection",
+      "ordinary, closed, quarantined, pending slot rejection and owner preservation",
+      "invalid proof no admission effects for empty/busy remotes",
+      "deterministic open passes early check, close wins, final open cannot publish",
+      "Published process rejection and owner preservation",
+      "each of six transient ledger collections rejects unchanged; fixed regions survive positive check",
+      "nonempty pager rejects with exact file owner retained"
+    ]
+  },
+  "limitations": [
+    "No kernel module compile or actual native shutdown/lifecycle execution.",
+    "PeerStopped in this focused fixture is a scoped boundary substitute; actual epoch/reset/live-proof producer remains covered by separate integration tests and independent review.",
+    "Std mutex/Arc and Linux allocation substitutes exercise production helper/open/Slot Drop bodies without real Linux callback removal.",
+    "No physical release, CPU ownership restoration, boot-generation acceptance or current942/matched176 modification.",
+    "Independent final integration/ownership review remains required."
+  ],
+  "next_step": "Coordinator integrates these frozen helpers with exact same-claim shutdown source, runs independent boundary review, then current-candidate module compile and eligible native stop/release/reboot execution."
+}

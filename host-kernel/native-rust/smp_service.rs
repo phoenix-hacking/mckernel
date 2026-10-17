@@ -129,7 +129,7 @@ struct Runtime {
     #[pin]
     pending: Mutex<Pending>,
     #[pin]
-    procfs_service: Mutex<procfs::Service>,
+    procfs_service: Mutex<Option<procfs::Service>>,
     #[pin]
     procfs_pending: Mutex<Vec<procfs::Event>>,
     #[pin]
@@ -292,6 +292,7 @@ impl Runtime {
                 }
             };
             let mut service = self.procfs_service.lock();
+            let service = service.as_mut().ok_or(ENODEV)?;
             service.retire();
             if let Some(item) = item {
                 if let Some(completion) = item.completion {
@@ -844,9 +845,8 @@ pub(in super::super) struct Started {
 }
 
 impl Started {
-    /// Unwired stage only: no producer of PeerStopped exists yet. Its future
-    /// producer must bind the active serialized shutdown and boot epoch, not
-    /// merely a reusable OS generation. Never call under resource/service
+    /// The CPU producer binds the active serialized shutdown and boot epoch.
+    /// Never call this stage under resource/service
     /// locks: workers acquire CPU/transport/tree locks and can block in RPCs.
     /// Runtime, trees, channels and every mapping owner remain retained here.
     #[allow(dead_code)]
@@ -862,6 +862,55 @@ impl Started {
             return Err(EBUSY);
         }
         Ok(())
+    }
+
+    pub(super) fn close_application_admission(&self) -> Result {
+        self.runtime.application.shutdown_close_if_quiescent()
+    }
+
+    pub(super) fn same_runtime(&self, other: &Self) -> bool {
+        Arc::ptr_eq(&self.runtime, &other.runtime)
+    }
+
+    /// Stop only a quiescent application/procfs owner. Live requests, retained
+    /// ledgers and callbacks cannot be discarded to make shutdown succeed.
+    /// Each tree is detached under its short mutex, then synchronously removed
+    /// outside every service/resource lock; Linux File/Tree Drop drains callbacks.
+    pub(super) fn retire_after_peer_stop(
+        &self,
+        proof: &super::super::sysfs_remote::PeerStopped<'_>,
+    ) -> Result {
+        let failed = |stage: &'static str, error: Error| {
+            pr_info!("IHK-SMP: shutdown services os={} generation={} stage={} result={}; remaining owners retained\n",
+                self.runtime.memory.owner.slot(), self.runtime.memory.owner.generation(), stage, error.to_errno());
+            error
+        };
+        self.runtime.application.shutdown_quiescent().map_err(|error| failed("application_quiesce", error))?;
+        self.runtime.procfs.close_if_quiescent(proof).map_err(|error| failed("procfs_sessions", error))?;
+        self.stop_workers_after_peer_stop(proof).map_err(|error| failed("workers_remote_drain", error))?;
+        if self.runtime.pending.lock().length != 0
+            || !self.runtime.procfs_pending.lock().is_empty()
+            || !self.runtime.zero_pending.lock().is_empty()
+            || self.runtime.transport.lock().master_reply.is_some() {
+            return Err(failed("pending_work", EBUSY));
+        }
+        // Do not take either namespace owner until all fallible preflights
+        // finish. A busy process keeps the original Service and all callbacks.
+        {
+            let service = self.runtime.procfs_service.lock();
+            if let Some(service) = service.as_ref() {
+                service.shutdown_quiescent().map_err(|error| failed("procfs_processes", error))?;
+            }
+        }
+        let sysfs = self.runtime.service.lock().take();
+        let procfs = self.runtime.procfs_service.lock().take();
+        // No resource/service/transport guard spans Linux callback rundown.
+        drop(sysfs);
+        drop(procfs);
+        if !self.runtime.remote.shutdown_drained(proof)? { return Err(failed("callbacks", EBUSY)); }
+        self.runtime.application.shutdown_quiescent().map_err(|error| failed("application_after_drain", error))?;
+        self.runtime.procfs.close_if_quiescent(proof).map_err(|error| failed("procfs_sessions", error))?;
+        self.runtime.memory.shutdown_quiescent().map_err(|error| failed("memory_ledger", error))
     }
 
     pub(super) fn require_ready(&self) -> Result {
@@ -1129,7 +1178,7 @@ pub(super) fn prepare(
             transport <- new_mutex!(Transport { channels: Vec::new(), master_reply: None }),
             service <- new_mutex!(None),
             pending <- new_mutex!(pending),
-            procfs_service <- new_mutex!(procfs_service),
+            procfs_service <- new_mutex!(Some(procfs_service)),
             procfs_pending <- new_mutex!(procfs_pending),
             zero_pending <- new_mutex!(zero_pending),
         }),

@@ -11,7 +11,7 @@ use super::{
     smp_memory::{ProcfsProcess, ProcfsRemote, SyscallResponse},
     smp_resource::OsToken,
 };
-use core::sync::atomic::{AtomicI32, AtomicUsize, Ordering};
+use core::sync::atomic::{AtomicBool, AtomicI32, AtomicUsize, Ordering};
 use kernel::{
     bindings,
     prelude::*,
@@ -149,6 +149,7 @@ pub(crate) struct Remote {
     changed: CondVar,
     syscall_cursor: AtomicUsize,
     transport_error: AtomicI32,
+    shutdown_closed: AtomicBool,
     pagers: Arc<Pagers>,
     release_token: Token,
     #[pin]
@@ -166,7 +167,7 @@ impl Remote {
         }
         Arc::pin_init(
             pin_init!(Self { owner, procfs, slots <- new_mutex!(slots), changed <- new_condvar!(),
-                syscall_cursor: AtomicUsize::new(0), transport_error: AtomicI32::new(0), pagers, release_token,
+                syscall_cursor: AtomicUsize::new(0), transport_error: AtomicI32::new(0), shutdown_closed: AtomicBool::new(false), pagers, release_token,
                 releases <- new_mutex!(releases) }),
             GFP_KERNEL,
         )
@@ -176,6 +177,7 @@ impl Remote {
         let syscalls = Mailbox::new().map_err(errno)?;
         let mut slots = self.slots.lock();
         self.transport_health()?;
+        if self.shutdown_closed.load(Ordering::Acquire) { return Err(ENODEV); }
         // Late and quarantined requests continue excluding numeric PID reuse.
         if slots
             .iter()
@@ -202,6 +204,28 @@ impl Remote {
             quarantined: false,
         });
         Ok(token)
+    }
+
+    /// Share the reservation mutex with reserve: an Application clone taken
+    /// immediately before shutdown cannot admit a new slot afterward. Busy
+    /// entries remain intact so their existing owners can finish normal cleanup.
+    pub(crate) fn shutdown_close_if_quiescent(&self) -> Result {
+        let slots = self.slots.lock();
+        self.shutdown_closed.store(true, Ordering::Release);
+        if slots.iter().any(Option::is_some) || !self.releases.lock().drained() {
+            return Err(EBUSY);
+        }
+        self.pagers.shutdown_quiescent()
+    }
+
+    /// This is a negative ownership check, never a cancellation/discard path.
+    pub(crate) fn shutdown_quiescent(&self) -> Result {
+        let slots = self.slots.lock();
+        if !self.shutdown_closed.load(Ordering::Acquire)
+            || slots.iter().any(Option::is_some) || !self.releases.lock().drained() {
+            return Err(EBUSY);
+        }
+        self.pagers.shutdown_quiescent()
     }
 
     pub(crate) fn queued_cpu(&self) -> Option<i32> {

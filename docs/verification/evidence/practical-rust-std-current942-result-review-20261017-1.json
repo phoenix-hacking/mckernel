@@ -1,0 +1,497 @@
+{
+  "accepted_current942_diagnostic_count_after": 10,
+  "actual_behavior": {
+    "String_BTreeMap": "files1 rust3 std2 threads1",
+    "Vec_bytes": 8193,
+    "barrier_participants": 3,
+    "checksum": 1024005,
+    "counter": 2000,
+    "file": "create_new PID file,8193-byte write/sync/rewind/full-byte readback,EOF,drop,remove andNotFound check",
+    "parent_TLS": 77,
+    "threads": 2,
+    "worker_TLS": [
+      1000,
+      1001
+    ]
+  },
+  "actual_native_rust_std_execution_verified": true,
+  "application_acceptance": false,
+  "archive": {
+    "format": "gzip/PAX tar; exact9-digit mtime decimal preserved; source dev/inode/nlink/ctime_ns retained as custom PAX metadata",
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-rust-std-current942-result-review-20261017-1.tar.gz",
+    "sha256": "38299d4b9f650ced69509f9271bba61a220c16b3989e436544d567d63a87796e",
+    "size": 132641,
+    "status": "PASS_ALL_13_REGULAR_FILES_BYTE_AND_METADATA_ROUNDTRIP",
+    "verified_members": [
+      "attempt-evidence.tar",
+      "attempt-result.json",
+      "command.json",
+      "owner-evidence.tar",
+      "owner-result.json",
+      "readback-0.stderr",
+      "readback-1.stderr",
+      "readback-2.stderr",
+      "readback-argv.json",
+      "readback-result.json",
+      "result.json",
+      "stderr",
+      "stdout"
+    ]
+  },
+  "binary": {
+    "path": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/app",
+    "sha256": "6d1865a0a8817a7b5beceb883ef34c6275e7d52993f026177159a34d67861e55",
+    "size": 5685960
+  },
+  "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "case_id": "practical.rust-std-app-static",
+  "checks": {
+    "all_13_archive_members_bytes_mode_uid_gid_nsec_mtime_verified": true,
+    "all_13_source_bytes_stable_metadata_unchanged": true,
+    "atime_compared": false,
+    "byte_sha256_readback_joins": true,
+    "exact_original_nested_archives_retained": true,
+    "head_stable": true,
+    "raw_attempt_result_equals_nested_attempt_result": true,
+    "raw_owner_result_semantically_equals_nested_owner_result": true,
+    "same_continuation_readbacks_completed_epoch": 1792251778.4770837,
+    "scope": "Read-only selected captures plus canonical archive/record writes only; no root,Docker,Git,build,guest or runtime replay.",
+    "source_regular_file_count": 13,
+    "stable_metadata_fields": [
+      "st_dev",
+      "st_ino",
+      "st_mode",
+      "st_nlink",
+      "st_uid",
+      "st_gid",
+      "st_size",
+      "st_mtime_ns",
+      "st_ctime_ns"
+    ]
+  },
+  "counter_authority": "Dispatcher identifies this as the tenth independently accepted diagnostic; formal/catalog counters remain unchanged.",
+  "diagnostic_acceptance": true,
+  "dispatch_command": {
+    "argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+      "--attempt-parent",
+      "/home/holden/mckernel-work/scratch/ndstd-1",
+      "--nonce",
+      "ad3658d098c3490682133960758367cf",
+      "--owner-sha256",
+      "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+      "--manifest",
+      "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/staging/manifest.json",
+      "--manifest-sha256",
+      "364191b167b9b63f038f955c5c5d1f29778474f08ea8d03d3748017baa93480c"
+    ],
+    "fetched_blobs_verified": 11,
+    "fetched_checkpoint": "723d04f1f1005260ebd723776a0eb165a23af80f",
+    "host_available_bytes": 19522150400,
+    "launched_at_epoch": 1792251744.227534,
+    "passing_postjoin_readbacks_in_same_continuation": true,
+    "release_sha256": "abd1a27e57860ab0795e5d5cd7ed3dcff4608e57213870945850a2cc2e63fb73",
+    "scratch_available_bytes": 18405142528
+  },
+  "dispatch_result": {
+    "elapsed_seconds": 34.19686325499788,
+    "exit_code": 0,
+    "head_after": "723d04f1f1005260ebd723776a0eb165a23af80f",
+    "head_before": "723d04f1f1005260ebd723776a0eb165a23af80f",
+    "release_sha256": "abd1a27e57860ab0795e5d5cd7ed3dcff4608e57213870945850a2cc2e63fb73",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "environment": {
+    "address_space_limit_bytes": 1073741824,
+    "capture_python": "/home/holden/anaconda3/bin/python3",
+    "cpu_affinity": [
+      6
+    ],
+    "private_HOME": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/home",
+    "private_TMPDIR": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/tmp"
+  },
+  "formal_case_credit": false,
+  "guest_report": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "finished_ns": 30339961513,
+    "procfs_empty": true,
+    "raw_wait_status": 0,
+    "reaped_ns": 30165273668,
+    "started_ns": 29532264445,
+    "streams": {
+      "stderr": {
+        "discarded": 0,
+        "eof": true,
+        "eof_ns": 30040325386,
+        "hex": "",
+        "limit": 4096,
+        "observed": 0,
+        "retained": 0,
+        "truncated": false
+      },
+      "stdout": {
+        "discarded": 0,
+        "eof": true,
+        "eof_ns": 30040355278,
+        "hex": "7665632062797465733d3831393320636865636b73756d3d313032343030350a66696c6520726f756e64747269703d3120656f663d312072656d6f7665643d310a776f7264732066696c65733a3120727573743a33207374643a3220746872656164733a310a746872656164733d3220636f756e7465723d3230303020746c733d3120706172656e745f746c733d310a",
+        "limit": 4096,
+        "observed": 144,
+        "retained": 144,
+        "truncated": false
+      }
+    }
+  },
+  "independent_retirement_findings": {
+    "all_30_clients_positively_reaped_and_absent": true,
+    "both_shared_exclusions": "ENOENT",
+    "container_id": "431e1946656ad7157dd9040873231f35cf159252dbf7f64658a8e16de1aafd67",
+    "container_removal_exit": 0,
+    "container_terminal_Pid": 0,
+    "container_terminal_exit": 0,
+    "final_three_owner_queries_empty": true,
+    "lease_retained": false,
+    "outer_absent": true,
+    "outer_pid": 571284,
+    "owner_absence_verified": true,
+    "root_lock_device_inode": "27:4",
+    "root_lock_free": true
+  },
+  "independent_review": {
+    "decision": "PASS_ACTUAL_NATIVE_RUST_STD_AND_RETIREMENT",
+    "decision_source": "Direct independent reviewer message, confirmed by dispatcher; preservation author is separate from result reviewer.",
+    "kernel_failure_markers": false,
+    "reviewer": "/root/lifecycle_collector_review",
+    "unchanged_evaluator": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e independently replayed PASS"
+  },
+  "independent_runtime_findings": {
+    "all_three_procfs_nodes_deleted": true,
+    "capture_errors": [],
+    "cleanup_errors": [],
+    "exact_procfs_lines": [
+      "<6>[   29.702525] ihk_smp_x86_64: IHK-SMP: application procfs published os=0 generation=1 pid=255 tid=255",
+      "<6>[   29.909522] ihk_smp_x86_64: IHK-SMP: application procfs published os=0 generation=1 pid=255 tid=257",
+      "<6>[   29.942364] ihk_smp_x86_64: IHK-SMP: application procfs published os=0 generation=1 pid=255 tid=256",
+      "<6>[   29.990771] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=255 tid=256",
+      "<6>[   29.992205] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=255 tid=257",
+      "<6>[   30.032293] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=255 tid=255"
+    ],
+    "main_alive_during_overlap": true,
+    "main_delete_seconds": 30.032293,
+    "main_publish_seconds": 29.702525,
+    "native_pid": 255,
+    "process_release_cleanup_errno": 0,
+    "qemu_reaped": true,
+    "qmp_guest_shutdown_before_query_shutdown_and_host_quit": true,
+    "retirement_errno": 0,
+    "retirement_token": 63,
+    "worker_TIDs": [
+      257,
+      256
+    ],
+    "worker_delete_seconds": {
+      "256": 29.990771,
+      "257": 29.992205
+    },
+    "worker_lifetime_overlap_proved": true,
+    "worker_publish_seconds": {
+      "256": 29.942364,
+      "257": 29.909522
+    }
+  },
+  "limitations": [
+    "Bounded GNU-static real Rust std application success under current942 profile; no native OS restoration or whole-OS production acceptance.",
+    "Worker lifetime overlap is observed; CPU parallel execution and sustained mutex contention are not established.",
+    "Requested262144-byte Builder stacks are source-bound; actual stack addresses/sizes are not runtime-measured.",
+    "File::drop closes without exposing close errors. sync_all success is checked, but close-error reporting or crash durability is not proved.",
+    "No formal catalog, Rust/assembly completion or broader stability counters are promoted."
+  ],
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/practical-rust-std-app-static-20261017-2/staging/manifest.json",
+    "sha256": "364191b167b9b63f038f955c5c5d1f29778474f08ea8d03d3748017baa93480c",
+    "size": 5663
+  },
+  "next_task": "Dispatcher may bind this independently accepted bounded Rust std result to the next separately admitted C-thread guest; kernel integration and formal/full-profile obligations continue.",
+  "preparation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-rust-std-app-preparation-20261017-2.json",
+    "sha256": "2edb471d6ba361537f4b32ea2a890eb8914d78c5de571370d0dc70f0e08424cf",
+    "size": 20515
+  },
+  "production_acceptance": false,
+  "raw_attempt_flags": {
+    "application_acceptance": false,
+    "mckernel_application_executed": false,
+    "runtime_blocker": "protocol observation only; independent guest execution review is pending",
+    "status": "PROTOCOL_PASS"
+  },
+  "raw_flags_preserved": "Original protocol flags remain unchanged in full archived results; independent actual execution credit is recorded separately.",
+  "raw_owner_result": {
+    "absence_verified": true,
+    "application_acceptance": false,
+    "container": "431e1946656ad7157dd9040873231f35cf159252dbf7f64658a8e16de1aafd67",
+    "failure": null,
+    "lease_retained": false,
+    "secondary": [],
+    "secondary_omitted": 0,
+    "signal_number": null,
+    "status": "PROTOCOL_PASS"
+  },
+  "readback_result": {
+    "attempt_result_join": true,
+    "completed_at_epoch": 1792251778.4770837,
+    "results": [
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/tar",
+          "--create",
+          "--file=-",
+          "--directory=/home/holden/mckernel-work/scratch/ndstd-1.owner-ad3658d098c3490682133960758367cf",
+          "."
+        ],
+        "returncode": 0,
+        "sha256": "17712f5c07a1878236beb7761206373a5bea9569bb6d353fb0a29f57bfc1ded1",
+        "size": 552960
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/tar",
+          "--create",
+          "--file=-",
+          "--directory=/home/holden/mckernel-work/scratch/ndstd-1/attempt-ad3658d098c3490682133960758367cf",
+          "."
+        ],
+        "returncode": 0,
+        "sha256": "1346810ec21aea1097a7172a05b3881f17ea01e0944e4d05a50e2f989f095753",
+        "size": 399360
+      },
+      {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/cat",
+          "/home/holden/mckernel-work/scratch/ndstd-1/attempt-ad3658d098c3490682133960758367cf/result.json"
+        ],
+        "returncode": 0,
+        "sha256": "e622767f235fea0d26927615e2c72f1bd115204b88a3bb477293a4fb2db7257e",
+        "size": 91241
+      }
+    ],
+    "source_known_positive_owner_exit": true
+  },
+  "readback_result_joined": true,
+  "ready_for_next_reviewed_guest_binding": true,
+  "schema": "mckernel.practical-rust-std-current942-result-review.v1",
+  "source": {
+    "path": "/home/holden/mckernel/scripts/application-tests/practical_rust_std_app.rs",
+    "sha256": "b0c1c255aa954f0dd98fd437f102055cadbc2b73b9f4d541576d09ee7bcc978e",
+    "size": 3872
+  },
+  "source_files": {
+    "attempt-evidence.tar": {
+      "metadata": {
+        "st_ctime_ns": 1792251778457417825,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 109976,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792251778457417825,
+        "st_nlink": 1,
+        "st_size": 399360,
+        "st_uid": 1000
+      },
+      "sha256": "1346810ec21aea1097a7172a05b3881f17ea01e0944e4d05a50e2f989f095753"
+    },
+    "attempt-result.json": {
+      "metadata": {
+        "st_ctime_ns": 1792251778465418071,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 109978,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792251778465418071,
+        "st_nlink": 1,
+        "st_size": 91241,
+        "st_uid": 1000
+      },
+      "sha256": "e622767f235fea0d26927615e2c72f1bd115204b88a3bb477293a4fb2db7257e"
+    },
+    "command.json": {
+      "metadata": {
+        "st_ctime_ns": 1792251744224363944,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 109866,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792251744224363944,
+        "st_nlink": 1,
+        "st_size": 1007,
+        "st_uid": 1000
+      },
+      "sha256": "e4c40ac76eee248fa61386e435be3f26ec2b7a2f6cf21ffcddf1c4133a14e4db"
+    },
+    "owner-evidence.tar": {
+      "metadata": {
+        "st_ctime_ns": 1792251778449417578,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 109974,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792251778449417578,
+        "st_nlink": 1,
+        "st_size": 552960,
+        "st_uid": 1000
+      },
+      "sha256": "17712f5c07a1878236beb7761206373a5bea9569bb6d353fb0a29f57bfc1ded1"
+    },
+    "owner-result.json": {
+      "metadata": {
+        "st_ctime_ns": 1792251778473418317,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 109980,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792251778473418317,
+        "st_nlink": 1,
+        "st_size": 257,
+        "st_uid": 1000
+      },
+      "sha256": "ed571ccf14d1769c5867cd70a97143f3316939fb62883690f2926c6f46d94a6c"
+    },
+    "readback-0.stderr": {
+      "metadata": {
+        "st_ctime_ns": 1792251778441417332,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 109975,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792251778441417332,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "readback-1.stderr": {
+      "metadata": {
+        "st_ctime_ns": 1792251778461417948,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 109979,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792251778461417948,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "readback-2.stderr": {
+      "metadata": {
+        "st_ctime_ns": 1792251778457417825,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 109977,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792251778457417825,
+        "st_nlink": 1,
+        "st_size": 41,
+        "st_uid": 1000
+      },
+      "sha256": "a27b3689ab11da6ff162668a3d1b14ccaa2d78cb34307a70c88d78c7bd93e0bd"
+    },
+    "readback-argv.json": {
+      "metadata": {
+        "st_ctime_ns": 1792251778441417332,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 109973,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792251778441417332,
+        "st_nlink": 1,
+        "st_size": 569,
+        "st_uid": 1000
+      },
+      "sha256": "f2bbf8e45e901745b9972c023ebdffdb60044f654ebe3b935e8a74db9cce87cf"
+    },
+    "readback-result.json": {
+      "metadata": {
+        "st_ctime_ns": 1792251778473418317,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 109981,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792251778473418317,
+        "st_nlink": 1,
+        "st_size": 1249,
+        "st_uid": 1000
+      },
+      "sha256": "5ec3515544ed616c72b0a0342101a9097ed52adb13393a23d905468bc1eeba78"
+    },
+    "result.json": {
+      "metadata": {
+        "st_ctime_ns": 1792251778421416716,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 109972,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792251778421416716,
+        "st_nlink": 1,
+        "st_size": 444,
+        "st_uid": 1000
+      },
+      "sha256": "424716f1635e30f9a3141d02f02db2e6b718e80db0fb2ee9c4b4cf6a7e0eac72"
+    },
+    "stderr": {
+      "metadata": {
+        "st_ctime_ns": 1792251744224363944,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 109868,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792251744224363944,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+      "metadata": {
+        "st_ctime_ns": 1792251744224363944,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 109867,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792251744224363944,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "source_preserved_in_place": true,
+  "source_root": "/home/holden/mckernel-work/scratch/practical-rust-std-current942-dispatch-20261017-1",
+  "status": "PASS_ACTUAL_NATIVE_RUST_STD_AND_RETIREMENT",
+  "stdout_utf8": "vec bytes=8193 checksum=1024005\nfile roundtrip=1 eof=1 removed=1\nwords files:1 rust:3 std:2 threads:1\nthreads=2 counter=2000 tls=1 parent_tls=1\n",
+  "task_id": "practical-rust-std-current942-result-review-20261017-1"
+}

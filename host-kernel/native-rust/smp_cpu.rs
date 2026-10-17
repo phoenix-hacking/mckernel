@@ -1488,6 +1488,7 @@ pub(super) fn shutdown_reset_and_reonline(owner: OsToken) -> Result {
     context.shutdown_reset_and_reonline(owner, &hotplug)
 }
 
+#[allow(dead_code)] // Retained owner-only regression boundary; v6 uses a live claim.
 pub(super) enum ShutdownResetFailure {
     PreEffect(Error),
     PostEffect(Error),
@@ -1496,6 +1497,7 @@ pub(super) enum ShutdownResetFailure {
 /// Classify the existing reset/re-online journal for the v6 effect-aware
 /// shutdown callback. The underlying primitive retains every owner on error;
 /// a recorded INIT attempt is the durable proof that rollback is impossible.
+#[allow(dead_code)] // Retained owner-only regression boundary; v6 uses a live claim.
 pub(super) fn shutdown_reset_and_reonline_outcome(
     owner: OsToken,
 ) -> core::result::Result<(), ShutdownResetFailure> {
@@ -1521,7 +1523,7 @@ pub(super) fn shutdown_reset_and_reonline_outcome(
     }
 }
 
-/// Private-field witness, borrowed only inside with_shutdown_workers_stopped.
+/// Private-field witness, borrowed only inside scoped shutdown orchestration.
 /// It is never Clone/Copy and cannot be created from an OsToken or errno.
 #[allow(dead_code)]
 pub(super) struct StoppedCpus<'boot> {
@@ -1571,6 +1573,102 @@ pub(super) fn with_shutdown_workers_stopped(
     boot.revalidate()
 }
 
+pub(super) struct ShutdownFailure {
+    pub(super) stage: &'static str,
+    pub(super) error: Error,
+    pub(super) post_effect: bool,
+}
+
+impl ShutdownFailure {
+    fn at(stage: &'static str, error: Error, post_effect: bool) -> Self {
+        Self { stage, error, post_effect }
+    }
+}
+
+/// Actual v6 consumer. The synchronous provider callback owns the IHK module
+/// lease and serialized operation from claim acquisition until this returns.
+/// Every post-IRQ failure keeps all remaining physical and logical owners.
+pub(super) fn shutdown_os_boot(
+    boot: super::smp_memory::ShutdownBoot,
+) -> core::result::Result<(), ShutdownFailure> {
+    let owner = boot.owner();
+    // Acquiring this boot claim has already closed native admission. Its Drop
+    // retains that close, so even an IRQ-local PreEffect error is externally
+    // post-effect: IHK must never restore Running/reopen its callback gate.
+    boot.close_application_admission().map_err(|error|
+        ShutdownFailure::at("application_quiesce", error, true))?;
+    super::smp_memory::shutdown_close_irq_senders(owner).map_err(|failure| match failure {
+        super::smp_memory::ShutdownIrqFailure::PreEffect(error) =>
+            ShutdownFailure::at("irq_close", error, true),
+        super::smp_memory::ShutdownIrqFailure::PostEffect(error) =>
+            ShutdownFailure::at("irq_close", error, true),
+    })?;
+    boot.revalidate().map_err(|error| ShutdownFailure::at("epoch_before_reset", error, true))?;
+    {
+        let published = PUBLISHED.load(Ordering::Acquire);
+        if published.is_null() { return Err(ShutdownFailure::at("reset_reonline", ENODEV, true)); }
+        // SAFETY: The synchronous backend lease and boot claim retain this
+        // controller and exact journal. Neither guard escapes to worker joins.
+        let mut guard = unsafe { &*published }.lock();
+        let hotplug = DeviceHotplugGuard::lock();
+        guard.reset_shutdown_boot(&boot, &hotplug)
+            .map_err(|error| ShutdownFailure::at("reset_reonline", error, true))?;
+    }
+    boot.revalidate().map_err(|error| ShutdownFailure::at("epoch_after_reset", error, true))?;
+    {
+        let cpus = StoppedCpus { boot: &boot };
+        let proof = super::sysfs_remote::PeerStopped::after_reset(&cpus);
+        boot.retire_services(&proof)
+            .map_err(|error| ShutdownFailure::at("services_retire", error, true))?;
+    }
+    // The borrowed peer witness is gone; move the SAME live claim into the
+    // coupled logical commit. No owner-only reconstruction is permitted.
+    reconcile_shutdown_boot(boot).map_err(|error| ShutdownFailure::at("reconcile", error, true))
+}
+
+fn reconcile_shutdown_boot(boot: super::smp_memory::ShutdownBoot) -> Result {
+    let owner = boot.owner();
+    let published = PUBLISHED.load(Ordering::Acquire);
+    if published.is_null() { return Err(ENODEV); }
+    // SAFETY: The provider lease retains the module and the claim retains this
+    // exact stopped boot. The CPU -> memory lock order covers only preflight
+    // and the infallible logical commit, never callback removal or a join.
+    let mut guard = unsafe { &*published }.lock();
+    let context = &mut **guard;
+    let hotplug = DeviceHotplugGuard::lock();
+    let count = context.table.assigned_cpus(owner, &mut context.requests).map_err(|_| EIO)?;
+    if count == 0 || context.shutdown_journal.iter().filter(|record| record.recorded).count() != count {
+        return Err(EIO);
+    }
+    {
+        let read = CpuReadGuard::lock();
+        for index in 0..count {
+            let record = context.shutdown_journal[index];
+            if record.boot_epoch != boot.epoch_id() || !record.reset_attempted
+                || !record.online || !record.online_attempted || record.online_status != 0
+                || record.cpu as usize != context.requests[index] { return Err(EIO); }
+            context.validate_shutdown_target(owner, record, true, &read, &hotplug)?;
+        }
+    }
+    let transaction = context.table.prepare_shutdown_online(owner, &context.requests[..count]).map_err(|_| EIO)?;
+    super::smp_memory::finish_shutdown_claim(&boot, || { transaction.commit(); })?;
+    for index in 0..count {
+        let cpu = context.requests[index];
+        context.devices[cpu].take();
+        BLOCK_ONLINE[cpu].store(false, Ordering::Release);
+        context.shutdown_journal[index] = ShutdownCpuJournal::empty();
+    }
+    context.poisoned = false;
+    if !context.has_owned_cpu() { context.pin.take(); }
+    // The final Started Arc can run Thread/Runtime destructors. Even though
+    // each thread is already joined, keep that drop outside dependent locks.
+    drop(hotplug);
+    drop(guard);
+    drop(boot);
+    Ok(())
+}
+
+#[allow(dead_code)] // Retained owner-only regression boundary; v6 uses a live claim.
 pub(super) fn reconcile_shutdown(owner: OsToken) -> Result {
     let published = PUBLISHED.load(Ordering::Acquire);
     if published.is_null() { return Err(ENODEV); }

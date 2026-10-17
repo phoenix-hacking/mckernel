@@ -33,7 +33,7 @@ impl<'boot> PeerStopped<'boot> {
     pub(super) fn after_reset(cpus: &'boot super::smp_cpu::StoppedCpus<'boot>) -> Self {
         Self { cpus }
     }
-    fn matches_owner(&self, owner: super::smp_resource::OsToken) -> bool {
+    pub(super) fn matches_owner(&self, owner: super::smp_resource::OsToken) -> bool {
         self.cpus.matches_owner(owner)
     }
     pub(super) fn matches_boot(&self, boot: &super::smp_memory::ShutdownBoot) -> bool {
@@ -309,6 +309,10 @@ impl AttributeOps for Arc<Attribute> {
 
 impl Drop for Attribute {
     fn drop(&mut self) {
+        // A validated shutdown witness already excluded the peer and closed
+        // this Remote. Namespace removal now drains local callbacks; sending
+        // RELEASE to the stopped guest has no remaining protocol meaning.
+        if self.remote.state.lock().peer_stopped { return; }
         if self.published.load(Ordering::Acquire) && self.client.operations != 0 {
             // File owns this Arc until sysfs_remove_file has drained callbacks.
             // Wait uninterruptibly for release: a signal must not let unlink

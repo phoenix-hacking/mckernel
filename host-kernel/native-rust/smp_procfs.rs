@@ -232,6 +232,24 @@ pub(crate) struct Remote {
 }
 
 impl Remote {
+    /// Close admission only with authority from this boot's stopped peer.
+    /// Busy slots remain owned, including closed, pending and quarantined slots.
+    /// Closure is monotonic even on EBUSY, so a concurrent open cannot publish.
+    pub(super) fn close_if_quiescent(
+        &self,
+        proof: &crate::sysfs_remote::PeerStopped<'_>,
+    ) -> Result {
+        if !proof.matches_owner(self.memory.owner) {
+            return Err(EINVAL);
+        }
+        let slots = self.slots.lock();
+        self.active.store(false, Ordering::Release);
+        if slots.iter().any(Option::is_some) {
+            return Err(EBUSY);
+        }
+        Ok(())
+    }
+
     pub(super) fn new(memory: Arc<Memory>) -> Result<Arc<Self>> {
         let mut slots = Vec::with_capacity(CAPACITY, GFP_KERNEL)?;
         for _ in 0..CAPACITY {
@@ -288,7 +306,7 @@ impl Remote {
         };
         let key = slot.key;
         let mut slots = self.slots.lock();
-        if !context.live.load(Ordering::Acquire) {
+        if !self.active.load(Ordering::Acquire) || !context.live.load(Ordering::Acquire) {
             return Err(ENODEV);
         }
         *slots.iter_mut().find(|slot| slot.is_none()).ok_or(EAGAIN)? = Some(slot);
@@ -648,6 +666,14 @@ fn file<const WRITE: bool>(
 }
 
 impl Service {
+    /// Published process owners must retire through their ordinary lifecycle.
+    pub(super) fn shutdown_quiescent(&self) -> Result {
+        if !self.processes.is_empty() {
+            return Err(EBUSY);
+        }
+        Ok(())
+    }
+
     pub(super) fn new(remote: Arc<Remote>) -> Result<Self> {
         let name = CString::try_from_fmt(fmt!("mcos{}", remote.memory.owner.slot()))?;
         let root = Directory::new(None, &name)?;

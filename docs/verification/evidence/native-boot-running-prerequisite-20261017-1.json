@@ -1,0 +1,277 @@
+{
+  "task_id": "native-boot-running-prerequisite-20261017-1",
+  "status": "STOPPED_FIRST_LOCAL_INTEGRATION_WRAPPER_COMPILE_FAILURE",
+  "cause": "Actual executed455899 legacy boot helper requires public status4 after fullready; new module publishes Running5. Derived from retained executed f9f6 source with hardcoded hidos allow_oversubscribe, not rootfixture.",
+  "bindings": {
+    "retained_record": "/home/holden/mckernel-work/scratch/native-application-signals-signals-guest-20260909-1/record.json",
+    "retained_record_sha256": "636bc24ea13a3636c586b524bcbabbcab3b910423246cc619c78314a1796c955",
+    "source_bindings": [
+      {
+        "retained_source": "/home/holden/mckernel-work/scratch/native-application-signals-signals-guest-20260909-1/boot-probe-source/native-boot.c",
+        "retained_record_path": "/work/native-application-signals-signals-guest-20260909-1/boot-probe-source/native-boot.c",
+        "sha256": "f9f6a0b266ef4a3da40dfe454cf511b7862b5457e42f92361b6a67aed7bb64b0",
+        "size": 10760,
+        "staged": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/source/native-boot.c"
+      },
+      {
+        "retained_source": "/home/holden/mckernel-work/scratch/native-application-signals-signals-guest-20260909-1/boot-probe-source/native-os-resource-assignment.c",
+        "retained_record_path": "/work/native-application-signals-signals-guest-20260909-1/boot-probe-source/native-os-resource-assignment.c",
+        "sha256": "57eb965f63e8aff5ff0e1e9ed72e29b0dedb01772236d6556268d4d157213ae5",
+        "size": 9829,
+        "staged": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/source/native-os-resource-assignment.c"
+      },
+      {
+        "retained_source": "/home/holden/mckernel-work/scratch/native-application-signals-signals-guest-20260909-1/boot-probe-source/native-memory-reservation.c",
+        "retained_record_path": "/work/native-application-signals-signals-guest-20260909-1/boot-probe-source/native-memory-reservation.c",
+        "sha256": "a42f4ec7394c74934a3e3832ae9872c6bc2098e38d834b06f652ab678256f5fb",
+        "size": 14223,
+        "staged": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/source/native-memory-reservation.c"
+      },
+      {
+        "retained_source": "/home/holden/mckernel-work/scratch/native-application-signals-signals-guest-20260909-1/boot-probe-source/native-cpu-reservation.c",
+        "retained_record_path": "/work/native-application-signals-signals-guest-20260909-1/boot-probe-source/native-cpu-reservation.c",
+        "sha256": "babae66b4b53e2982a652781c707743e48a6429df26cd6a18e9ed198ba854807",
+        "size": 8289,
+        "staged": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/source/native-cpu-reservation.c"
+      }
+    ],
+    "legacy_binary": "/home/holden/mckernel-work/scratch/native-application-signals-signals-guest-20260909-1/root/bin/native-boot",
+    "legacy_binary_sha256": "4558995ea1ae70c8d5a115542e333ad695a54b4b8f450ea717df37fd1e631af3",
+    "executed_command": [
+      "cc",
+      "-m64",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-ffreestanding",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-pie",
+      "-nostdlib",
+      "-static",
+      "-no-pie",
+      "-Wl,-e,_start",
+      "-Wl,-z,noexecstack",
+      "-DCPUHP_FAILURE_STATE=234",
+      "-DNATIVE_VDSO_REV3=1",
+      "-DNATIVE_SYSFS_OS=1",
+      "-DNATIVE_SYSFS_SETUP=1",
+      "-DNATIVE_SYSFS_SERVICE=1",
+      "-DNATIVE_MCCTRL_SERVICE=1",
+      "-DBOOT_PREPARE_ONLY=0",
+      "/work/native-application-signals-signals-guest-20260909-1/boot-probe-source/native-boot.c",
+      "-o",
+      "/work/native-application-signals-signals-guest-20260909-1/root/bin/native-boot"
+    ],
+    "running_source": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/source/native-boot-running.c",
+    "running_source_sha256": "6a39824cdcde3ddfa3508d3c229f195f6ecbe5a07d57eb748890d452cc729e03",
+    "replaced_anchor": "    require(call(SYS_IOCTL, os, OS_STATUS, 0) == 4);",
+    "replacement": "    long observed_status = call(SYS_IOCTL, os, OS_STATUS, 0);\n    message(\"NATIVE_BOOT_STATUS \" ARCH_LABEL \" observed=\");\n    if (observed_status < 0) message(\"-\");\n    print_number(observed_status < 0 ? 0UL - (unsigned long)observed_status :\n                 (unsigned long)observed_status);\n    message(\" expected=5\\n\");\n    native_running_status_log(observed_status);\n    require(observed_status == 5);",
+    "no_other_source_changes": true,
+    "inserted_function": "static void native_running_status_log(long observed_status)\n{\n    const char *prefix = \"<6>NATIVE_BOOT_STATUS \" ARCH_LABEL \" observed=\";\n    const char *suffix = \" expected=5\\n\";\n    char record[128], digits[24];\n    unsigned long used = 0, count = 0;\n    unsigned long value = observed_status < 0 ? 0UL - (unsigned long)observed_status :\n                          (unsigned long)observed_status;\n    for (unsigned long i = 0; prefix[i]; i++) record[used++] = prefix[i];\n    if (observed_status < 0) record[used++] = '-';\n    do { digits[count++] = '0' + value % 10; value /= 10; } while (value);\n    while (count) record[used++] = digits[--count];\n    for (unsigned long i = 0; suffix[i]; i++) record[used++] = suffix[i];\n    // Prefix + signed LP64 decimal + suffix fit without truncation.\n    _Static_assert(sizeof(\"<6>NATIVE_BOOT_STATUS \" ARCH_LABEL \" observed=\") +\n                   21 + sizeof(\" expected=5\\n\") <= sizeof(record), \"status log bound\");\n    long log_fd = call(SYS_OPEN, (long)\"/dev/kmsg\", 0xa0001, 0);\n    require(log_fd >= 0);\n    long log_written = call(SYS_WRITE, log_fd, (long)record, (long)used);\n    long log_closed = call(SYS_CLOSE, log_fd, 0, 0);\n    require(log_written == (long)used);\n    require(log_closed == 0);\n}\n\n",
+    "function_anchor": "int main(void)\n{",
+    "collector_original_path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_collector.c",
+    "collector_original_sha256": "36fa0d55a30f5e943de0b28c6f54e033cf84ff8cc83cdc54c59688e993c44383",
+    "collector_variant_path": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/source/native-diagnostic-running-collector.c",
+    "collector_variant_sha256": "27dc6978e90cbca916e3df6b83b8e2c431f03b0ab72a08fe56a4e45d8accceab",
+    "collector_insertion_anchor": "    snprintf(name, sizeof name, \"/case/evidence/%s.stdout\", tag);",
+    "collector_insertion": "    if (!strcmp(tag, \"boot\")) {\n        int log_n = snprintf(record, sizeof record,\n                \"<6>NATIVE_BOOT_HELPER raw_wait_status=%d fault=%d timeout=%d clean=%d child_stage=%d child_errno=%d\\n\",\n                r.status, r.fault, r.timeout, r.clean, r.child_stage, r.child_errno);\n        int log_fd = open(\"/dev/kmsg\", O_WRONLY | O_CLOEXEC | O_NOFOLLOW);\n        if (log_fd < 0) bad = 1;\n        else {\n            if (log_n <= 0 || (size_t)log_n >= sizeof record ||\n                write_all(log_fd, record, (size_t)log_n)) bad = 1;\n            if (close(log_fd)) bad = 1;\n        }\n    }\n",
+    "deployed_collector_sha256": "8330e259adcd34136379f0deef2f77ecd5a8a8aba9161c5ba6329e8a0e70f89b"
+  },
+  "checks_completed": {
+    "strict_freestanding_helper_compile": "PASS",
+    "helper_elf": {
+      "sha256": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+      "size": 31208,
+      "type": "ET_EXEC",
+      "machine": "x86_64",
+      "no_interpreter": true,
+      "no_dynamic_segment": true,
+      "no_wx_load": true,
+      "nonexec_stack": true
+    },
+    "strict_static_collector_compile": "PASS",
+    "actual_helper_tests": 10,
+    "actual_helper_vectors": 9,
+    "legacy_status4": "PASS;status5 rejected",
+    "running_status5": "PASS;status4,0,9,-5 rejected",
+    "helper_kmsg_open_write_faults": "Both rejected;rawIOresults checked"
+  },
+  "first_failure": {
+    "command_capture": {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/actual-main-1/012.command.json",
+      "size": 743,
+      "sha256": "5eb5957460513a9672d55ffd423c0699f409b66fa3d7beb71ab4ed1e70d0312c"
+    },
+    "result": {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/actual-main-1/012.json",
+      "size": 196,
+      "sha256": "d5dd45c858d61616dd6dee0ed630a7b2f8b8846e3a4b6972f9f6ebc51f7000de"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/actual-main-1/012.stderr",
+      "size": 672,
+      "sha256": "d96962c2b64f3992649373bd1fafa2fa00c0bfb5e72e374db25b89a8e5641430"
+    },
+    "diagnosis": "Wrapper-local int n conflicts with hash-exact copied finishblock int n. Additional pre-execution review found klogctl macro alias must be scoped around copied block after earlier undef. Both test-wrapper namespace issues; helper/collector source unchanged.",
+    "pending": "One bounded wrapper correction; run only four pending integration tests using already-passing mock helper binaries."
+  },
+  "execution": {
+    "command": {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3.9",
+        "-B",
+        "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/compile-check.py"
+      ],
+      "cwd": "/home/holden/mckernel",
+      "environment": {
+        "PATH": "/usr/bin:/bin",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "HOME": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/home",
+        "TMPDIR": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/tmp",
+        "TZ": "UTC",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "cpu_affinity": [
+        7
+      ],
+      "address_space_limit_bytes": 1073741824,
+      "cpu_limit_seconds": 150,
+      "wall_timeout_seconds": 180,
+      "driver_sha256": "aef6d322f84f7b13785b41aaa7a92bc6786ac51ff5d7df46066a13b157035c95",
+      "interpreter": {
+        "path": "/home/holden/anaconda3/bin/python3.9",
+        "version": "3.9.12 (main, Apr  5 2022, 06:56:58) \n[GCC 7.5.0]",
+        "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+      }
+    },
+    "result": {
+      "returncode": 1,
+      "elapsed_seconds": 1.465853702997265,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "7b56a37c4fa2d9151e765363bad37c774980911366637c334dcd4850542f4a44"
+    },
+    "subprocesses": [
+      {
+        "argv": [
+          "/usr/bin/gcc",
+          "-m64",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-ffreestanding",
+          "-fno-builtin",
+          "-fno-stack-protector",
+          "-fno-pie",
+          "-nostdlib",
+          "-static",
+          "-no-pie",
+          "-Wl,-e,_start",
+          "-Wl,-z,noexecstack",
+          "-DCPUHP_FAILURE_STATE=234",
+          "-DNATIVE_VDSO_REV3=1",
+          "-DNATIVE_SYSFS_OS=1",
+          "-DNATIVE_SYSFS_SETUP=1",
+          "-DNATIVE_SYSFS_SERVICE=1",
+          "-DNATIVE_MCCTRL_SERVICE=1",
+          "-DBOOT_PREPARE_ONLY=0",
+          "-MD",
+          "-MF",
+          "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/native-boot-running.d",
+          "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/source/native-boot-running.c",
+          "-o",
+          "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/native-boot-running"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "TZ": "UTC",
+          "HOME": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/tmp",
+          "PYTHONDONTWRITEBYTECODE": "1"
+        },
+        "cwd": "/home/holden/mckernel",
+        "timeout_seconds": 45,
+        "returncode": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "argv": [
+          "/usr/bin/gcc",
+          "-std=gnu11",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-static",
+          "-fno-pie",
+          "-no-pie",
+          "-Wl,-z,noexecstack",
+          "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/source/native-diagnostic-running-collector.c",
+          "-o",
+          "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/native-running-collector"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "TZ": "UTC",
+          "HOME": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/tmp",
+          "PYTHONDONTWRITEBYTECODE": "1"
+        },
+        "cwd": "/home/holden/mckernel",
+        "timeout_seconds": 45,
+        "returncode": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "argv": [
+          "/home/holden/anaconda3/bin/python3.9",
+          "-B",
+          "-m",
+          "unittest",
+          "-f",
+          "-v",
+          "scripts.tests.test_native_boot_running",
+          "scripts.tests.test_native_boot_running_observability"
+        ],
+        "environment": {
+          "PATH": "/usr/bin:/bin",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "TZ": "UTC",
+          "HOME": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/home",
+          "TMPDIR": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/tmp",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "NATIVE_BOOT_RUNNING_SOURCE": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/source/native-boot-running.c",
+          "NATIVE_BOOT_RUNNING_BINDINGS": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/bindings.json",
+          "NATIVE_BOOT_RUNNING_EVIDENCE": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/actual-main-1"
+        },
+        "cwd": "/home/holden/mckernel",
+        "timeout_seconds": 90,
+        "returncode": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "949087b8dc2ced4988e492dcc74d39a6ac2c5131c366df6a3deab529e9f26466"
+      }
+    ]
+  },
+  "frozen_failure_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/first-failure-frozen/manifest.json",
+    "size": 21565,
+    "sha256": "bdbd6c497d7b9e4b1ae388ce3303b5f592fc06ccbde56b97ad23f2e5e76aefcd"
+  },
+  "original_deployed_helper_preserved": true,
+  "original_collector8330_preserved": true,
+  "original_failed_guest_preserved": true,
+  "stage_performed": false,
+  "guest_executed": false,
+  "runtime_acceptance": false,
+  "next_task": "Authorized bounded wrapper-only correction, then independent source/actual-body observability review before fresh staging/release."
+}

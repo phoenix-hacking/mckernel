@@ -378,6 +378,18 @@ or rejected WIP explicitly. A scheduled checkpoint with no change needs no
 empty commit. Verify the remote commit and consumed blobs; do not force-push,
 discard local work, publish credentials or overwrite immutable evidence.
 
+For diagnostics whose selected execution review permits metadata-only admission
+amendments, reuse the verified pushed/fetched checkpoint covering all consumed
+code and artifacts. Preserve each exact local proposal, independent release,
+fresh live preflight and predecessor-retirement decision before execution.
+Resolve conditional or `PENDING` references in a clear admission receipt; another
+commit alone does not resolve them. Batch these record-only additions into the
+next normal checkpoint rather than inventing a new push/fetch gate per diagnostic.
+Explicit packet requirements to push/fetch a final release or supply
+`--release-commit` still apply. Changed consumed code, artifacts or profiles need
+their applicable review and checkpoint. Keep HEAD frozen during execution, one
+heavy owner and positive predecessor retirement.
+
 README.md and its line-indexed tasks/maps are unchanged by this policy. Do not
 regenerate them just to mark this instruction update as progress. M00-C's large
 AGENTS.md consolidation remains a separate one-time preservation/review task:

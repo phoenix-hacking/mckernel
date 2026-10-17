@@ -1,0 +1,140 @@
+{
+  "schema": "mckernel.native-core-threads-live-preflight.v1",
+  "status": "PASS_LOCAL_PREFLIGHT",
+  "observed_at_epoch": 1792252494.1900506,
+  "pattern": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-rust-std-current942-live-preflight-20261017-1.json",
+    "sha256": "4cddcfbdfa7ff2f9bea563901318bfa816ad411e98224faaaf49bb39403378f4",
+    "size": 4012
+  },
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "mount": {
+    "target": "/home/holden/mckernel-work/scratch",
+    "source": "/dev/loop36",
+    "fstype": "ext4",
+    "options": "rw,nosuid,nodev,relatime",
+    "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "maj:min": "7:36"
+  },
+  "mount_command": [
+    "/usr/bin/findmnt",
+    "--json",
+    "--target",
+    "/home/holden/mckernel-work/scratch",
+    "--output",
+    "TARGET,SOURCE,FSTYPE,OPTIONS,UUID,MAJ:MIN"
+  ],
+  "scratch_device": 1828,
+  "root_lock": [
+    27,
+    4
+  ],
+  "root_lock_released": true,
+  "host_available_bytes": 19496484864,
+  "scratch_available_bytes": 18355437568,
+  "mem_available_bytes": 30209921024,
+  "floors_bytes": {
+    "host": 18253611008,
+    "scratch": 13958643712,
+    "mem_available": 17179869184
+  },
+  "affinity": [
+    0
+  ],
+  "affinity_scope": "Pinned cheap observer CPU0 only; actual container cpuset2-5 remains owner/dispatcher live admission requirement.",
+  "cgroups": {
+    "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+    "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+    "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+    "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+    "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+  },
+  "sources": {
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+    "/home/holden/mckernel/scripts/application-tests/qmp_capture.py": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+  },
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/manifest.json",
+    "sha256": "923664a0ae87c477d028ad7be5ea8c01a65964846e0010bbd03123f034262951",
+    "size": 5467
+  },
+  "parent": {
+    "path": "/home/holden/mckernel-work/scratch/ndcth-1",
+    "device": 1828,
+    "inode": 109549,
+    "mode": "0o700",
+    "uid": 1000,
+    "gid": 1000
+  },
+  "nonce": "70f0757dac5d474c8bb6f6a495c6e5a4",
+  "parent_empty": true,
+  "evidence_sibling_absent": true,
+  "all_shared_owner_exclusions_absent": {
+    "/home/holden/mckernel-work/scratch/native-running-external-modules.lease.json": true,
+    "/home/holden/mckernel-work/scratch/native-running-external-modules-operational-exclusion.json": true,
+    "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock": true,
+    "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18-image-1.json": true,
+    "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-scratch18.json": true
+  },
+  "active_image_owner_leases": [],
+  "unix_monitor_endpoints": [
+    {
+      "encoded_bytes": 92,
+      "max_bytes": 107,
+      "path": "/home/holden/mckernel-work/scratch/ndcth-1/attempt-70f0757dac5d474c8bb6f6a495c6e5a4/qmp.sock"
+    }
+  ],
+  "qemu_argv": [
+    "/usr/libexec/qemu-kvm",
+    "-machine",
+    "q35",
+    "-accel",
+    "tcg,thread=multi",
+    "-cpu",
+    "max,la57=off",
+    "-smp",
+    "4,sockets=2,cores=2,threads=1",
+    "-m",
+    "8192",
+    "-object",
+    "memory-backend-ram,size=4G,id=ram-node0",
+    "-object",
+    "memory-backend-ram,size=4G,id=ram-node1",
+    "-numa",
+    "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+    "-numa",
+    "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+    "-nic",
+    "none",
+    "-display",
+    "none",
+    "-no-reboot",
+    "-no-shutdown",
+    "-S",
+    "-monitor",
+    "none",
+    "-qmp",
+    "unix:/home/holden/mckernel-work/scratch/ndcth-1/attempt-70f0757dac5d474c8bb6f6a495c6e5a4/qmp.sock,server=on,wait=off",
+    "-serial",
+    "file:/home/holden/mckernel-work/scratch/ndcth-1/attempt-70f0757dac5d474c8bb6f6a495c6e5a4/serial.log",
+    "-debugcon",
+    "file:/home/holden/mckernel-work/scratch/ndcth-1/attempt-70f0757dac5d474c8bb6f6a495c6e5a4/debugcon.log",
+    "-global",
+    "isa-debugcon.iobase=0xe9",
+    "-kernel",
+    "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+    "-initrd",
+    "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/overlay.cpio.gz",
+    "-append",
+    "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+  ],
+  "verified_checkpoint_by_dispatcher": "723d04f1f1005260ebd723776a0eb165a23af80f",
+  "scope": "Ordinary-user read-only source4/owner/manifest/parent/mountUUID/cgroup/floors/shared-path inventory plus reversible nonblocking existing root-lock probe only; no artifact corpus rehash, Docker/root/guest/Git. Dispatcher repeats immediate checks at launch."
+}

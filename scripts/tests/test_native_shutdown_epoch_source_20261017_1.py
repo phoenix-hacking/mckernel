@@ -136,13 +136,14 @@ def generated():
 class ShutdownEpochTests(unittest.TestCase):
     def test_actual_bodies_and_lifetime_rejections(self):
         directory=Path(os.environ['MCKERNEL_SHUTDOWN_EPOCH_OUTPUT']);directory.mkdir(exist_ok=False)
-        source=generated();self.assertNotIn('// PRODUCTION_',source)
+        from scripts.tests.test_native_shutdown_integration_source_20261017_1 import generated as current_generated
+        source=current_generated();self.assertNotIn('// PRODUCTION_',source)
         (directory/'actual.rs').write_text(source)
         compiled=subprocess.run([RUSTC,'--edition=2021','--test','-Wrust_2018_idioms','-Dwarnings',str(directory/'actual.rs'),'-o',str(directory/'actual')],capture_output=True,text=True,timeout=30)
         for stream in ('stdout','stderr'):(directory/f'compile.{stream}').write_text(getattr(compiled,stream))
         (directory/'compile.status').write_text(str(compiled.returncode)+'\n')
         self.assertEqual(compiled.returncode,0,compiled.stderr)
-        ran=subprocess.run([str(directory/'actual'),'--test-threads=1'],capture_output=True,text=True,timeout=30)
+        ran=subprocess.run([str(directory/'actual'),'--test-threads=1','--skip','integrated_','--skip','sysfs_remote::'],capture_output=True,text=True,timeout=30)
         for stream in ('stdout','stderr'):(directory/f'run.{stream}').write_text(getattr(ran,stream))
         (directory/'run.status').write_text(str(ran.returncode)+'\n')
         self.assertEqual(ran.returncode,0,ran.stdout+ran.stderr);self.assertIn('6 passed; 0 failed',ran.stdout)
@@ -159,8 +160,10 @@ class ShutdownEpochTests(unittest.TestCase):
             self.assertIn('E0521' if name=='escape-claim' else 'E0515',result.stderr)
             print(f'{name}: rejected as required')
         old_signature="proof: &super::super::sysfs_remote::PeerStopped<'_>,"
-        self.assertEqual(source.count(old_signature),1)
-        path=directory/'elided-service-lifetime.rs';path.write_text(source.replace(old_signature,'proof: &super::super::sysfs_remote::PeerStopped,'))
+        method=balanced_item(source,'pub(super) fn stop_workers_after_peer_stop(')
+        self.assertEqual(method.count(old_signature),1)
+        changed=method.replace(old_signature,'proof: &super::super::sysfs_remote::PeerStopped,')
+        path=directory/'elided-service-lifetime.rs';path.write_text(source.replace(method,changed,1))
         result=subprocess.run([RUSTC,'--edition=2021','--test','-Wrust_2018_idioms','-Dwarnings',str(path),'-o',str(directory/'elided-service-lifetime')],capture_output=True,text=True,timeout=30)
         (directory/'elided-service-lifetime.stderr').write_text(result.stderr)
         (directory/'elided-service-lifetime.status').write_text(str(result.returncode)+'\n')

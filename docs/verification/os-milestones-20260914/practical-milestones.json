@@ -468,9 +468,19 @@
               "path": "docs/verification/evidence/native-core-memory-current942-result-review-20261017-1.json",
               "sha256": "49d4a5b5dc0b7919f4097778fe9f99c75b216afc2345a59db8258eaab312c78f",
               "size": 13664
+            },
+            {
+              "path": "docs/verification/evidence/practical-rust-std-current942-result-review-20261017-1.json",
+              "sha256": "87b307d4f9774cc2d19c2991162901aa3d28cb4875701c080ef1521d78538692",
+              "size": 17748
+            },
+            {
+              "path": "docs/verification/evidence/native-core-threads-current942-result-review-20261017-1.json",
+              "sha256": "2f4e21d99ebf17acd760c2193ac3872d68bf2d03b9a7d444f82daeff93571d23",
+              "size": 13782
             }
           ],
-          "assessment_note": "Actualcurrent942dynamiclibc corememory PASS; staticrealRuststd compiled/Linuxreference+staged, guestpending. Bothappmodesnotyetcomplete."
+          "assessment_note": "Actual current942 dynamic-libc C memory and original threads, plus static real Rust std applications pass frozen output/exit and retirement. Final supported candidate/profile replay remains open."
         },
         {
           "id": "P-M04-02",
@@ -579,7 +589,7 @@
           "assessment_note": "Accepted frozen expected bytes/status are retained, including exact415byte alternate-stack bridge. Final useful-suite Linux comparison coverage is not closed by these narrow diagnostics."
         }
       ],
-      "current_evidence_summary": "Ninecurrent942 diagnostics includingusefulactualdynamiclibc corememory; Cthreads/Ruststd independentlyreviewedready, stillpendingactualexecution."
+      "current_evidence_summary": "Eleven current942 diagnostics/apps accepted, including useful dynamic-libc C memory and real static Rust std with overlapping threads, file roundtrip and allocation. Final supported-profile suite remains open."
     },
     {
       "id": "M05",
@@ -676,9 +686,19 @@
               "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
               "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
               "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/practical-rust-std-current942-result-review-20261017-1.json",
+              "sha256": "87b307d4f9774cc2d19c2991162901aa3d28cb4875701c080ef1521d78538692",
+              "size": 17748
+            },
+            {
+              "path": "docs/verification/evidence/native-core-threads-current942-result-review-20261017-1.json",
+              "sha256": "2f4e21d99ebf17acd760c2193ac3872d68bf2d03b9a7d444f82daeff93571d23",
+              "size": 13782
             }
           ],
-          "assessment_note": "2/4/8 worker vectors pass, but observed sequential reuse cannot be credited as simultaneous overlap or contention. Genuine overlapping workers/futex contention and required syscall negatives remain open."
+          "assessment_note": "Rust std and original C pthread app independently prove overlapping worker lifetimes, barrier3, mutex counter2000, TLS and joins. Deterministic held-mutex timeout/handoff app passes Linux reference only; guest contention and required syscall negatives remain open."
         },
         {
           "id": "P-M06-03",
@@ -694,7 +714,7 @@
           "assessment_note": "Reviewed version/unsupported-path errors are narrow source/body evidence, not complete safe-error behavior for the final selected application profile."
         }
       ],
-      "current_evidence_summary": "TLS/adapted-mutex2/4/8 vectors and retirement pass; sequential worker reuse proves no overlap. Process fork/exec/wait and contention coverage remain open."
+      "current_evidence_summary": "Rust std proves overlapping worker lifetimes, joins/TLS/mutex counter2000. Deterministic blocking conelevention and process fork/exec/wait remain open."
     },
     {
       "id": "M07",
@@ -1145,7 +1165,7 @@
           "assessment_note": "Native shutdown remains unresolved. Original TLS failure and expected ownership-retained retirement retry remain visible; no unsupported claim of zero remaining lifetime defects."
         }
       ],
-      "current_evidence_summary": "Nine diagnostic behaviors accepted and originals/logs archived; native lifecycle failure and final integrated regressions remain open."
+      "current_evidence_summary": "Eleven distinct diagnostic/app behaviors accepted; original failures and raw captures retained. Native lifecycle and final integrated regression suite remain open."
     },
     {
       "id": "M12",
@@ -1194,9 +1214,19 @@
               "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
               "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
               "size": 17317
+            },
+            {
+              "path": "docs/verification/evidence/practical-rust-std-current942-result-review-20261017-1.json",
+              "sha256": "87b307d4f9774cc2d19c2991162901aa3d28cb4875701c080ef1521d78538692",
+              "size": 17748
+            },
+            {
+              "path": "docs/verification/evidence/native-core-threads-current942-result-review-20261017-1.json",
+              "sha256": "2f4e21d99ebf17acd760c2193ac3872d68bf2d03b9a7d444f82daeff93571d23",
+              "size": 13782
             }
           ],
-          "assessment_note": "Six accepted selected diagnostic launches across separate guests are existing evidence only, not final-profile budget completion. No ten native cycles,100launch final session or60minute mixed workload is proven."
+          "assessment_note": "Eleven distinct accepted diagnostic/app invocations across separate guests are scoped evidence, not completion of final-profile 2boots/10nativecycles/100launches/60minutes."
         },
         {
           "id": "P-M12-02",
@@ -1232,12 +1262,22 @@
               "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
               "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
               "size": 49179
+            },
+            {
+              "path": "docs/verification/evidence/practical-rust-std-current942-result-review-20261017-1.json",
+              "sha256": "87b307d4f9774cc2d19c2991162901aa3d28cb4875701c080ef1521d78538692",
+              "size": 17748
+            },
+            {
+              "path": "docs/verification/evidence/native-core-threads-current942-result-review-20261017-1.json",
+              "sha256": "2f4e21d99ebf17acd760c2193ac3872d68bf2d03b9a7d444f82daeff93571d23",
+              "size": 13782
             }
           ],
-          "assessment_note": "Count each accepted diagnostic invocation once: six selected launches, not calloc sizes or2/4/8 worker vectors. Final bounded campaign launch ledger and accumulating-resource monitoring remain open."
+          "assessment_note": "Eleven accepted diagnostic/app invocations counted once each; vectors are not separate launches. Final-profile accumulating-resource monitoring remains open."
         }
       ],
-      "current_evidence_summary": "Nine selected successful diagnostic invocations are recorded as nine launches, not vectors. Final-profile2boots/10nativecycles/100launches/60minutes remain unproven."
+      "current_evidence_summary": "Eleven successful diagnostic/app invocations, not vectors. Final-profile 2boots/10nativecycles/100launches/60minutes remain unproven."
     },
     {
       "id": "M13",
@@ -1369,10 +1409,9 @@
     "signed production/repository/independent external release qualification"
   ],
   "next_actions": [
-    "Run independently released useful libc memory guest on current942 while staging the accepted3module1769263c candidate for a fresh Running/shutdown probe.",
-    "Run next-module lifecycle probe with authoritative Running5 oracle and stagedshutdown logs; repair actualobserved failure preservingownership.",
-    "Keep reviewed libc barrierthreads and static real Ruststd guest packets ready; no Linux/image rebuild or dynamiclibdl extraction needed.",
-    "Independently review new activeepoch CPU/IRQ proof prerequisite; integrate full callback/application/pager/ledger rundown before native resource restoration/final bounded session."
+    "Run corrected strictRunning5 lifecycle with matched176 modules after fresh independent release; preserve old failedsetup.",
+    "Repair/review actual shutdown irreversible-gate effect classification with runtime-consumer regressions, then smallest matched-module compile.",
+    "Run reviewed deterministic pthread contention after lifecycle; implement fork/exec/wait payload and resolve native nonnull CREATE_PPD mirror prerequisite."
   ],
   "evidence_reconciliation": {
     "date": "2026-10-17",

@@ -38,7 +38,8 @@ class SysfsRemoteShutdownTests(unittest.TestCase):
     def test_actual_bodies(self):
         directory = Path(os.environ['MCKERNEL_SHUTDOWN_TEST_OUTPUT'])
         directory.mkdir(exist_ok=False)
-        source = generated()
+        from scripts.tests.test_native_shutdown_integration_source_20261017_1 import generated as current_generated
+        source = current_generated()
         self.assertNotIn('// PRODUCTION_', source)
         (directory / 'actual.rs').write_text(source)
         compile_result = subprocess.run([RUSTC, '--edition=2021', '--test', '-Wrust_2018_idioms', '-Dwarnings',

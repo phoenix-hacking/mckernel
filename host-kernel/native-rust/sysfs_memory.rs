@@ -99,6 +99,22 @@ pub(super) struct Memory {
 }
 
 impl Memory {
+    /// Retained tags include quarantined claims and must never be discarded.
+    /// Fixed mappings and extents remain owned until the runtime itself retires.
+    pub(super) fn shutdown_quiescent(&self) -> Result {
+        let ledger = self.ledger.lock();
+        if ledger.requests.iter().any(Option::is_some)
+            || ledger.responses.iter().any(Option::is_some)
+            || ledger.payloads.iter().any(Option::is_some)
+            || !ledger.snoops.is_empty()
+            || !ledger.procfs.is_empty()
+            || !ledger.zeroing.is_empty()
+        {
+            return Err(EBUSY);
+        }
+        Ok(())
+    }
+
     /// # Safety
     /// Started BootStorage and its original memory/module owners must retain
     /// every supplied extent and fixed region until all returned views retire.
