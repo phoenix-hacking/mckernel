@@ -66,6 +66,86 @@ class ParallelTests(unittest.TestCase):
         self.assertEqual(path.read_bytes(), raw)
         self.assertEqual(state['active_turns'], {'saved': 'old-turn'})
 
+    def prepared_fresh_seed(self):
+        from os_goal_sessions import prepare_fresh_session
+        state = self.stopped_state_with_retired_turn()
+        state.update(schema_version=1, repo=str(parallel.REPO))
+        state['goal']['objective'] = launcher.OBJECTIVE
+        (self.root / 'state.json').write_text(json.dumps(state))
+        return prepare_fresh_session(
+            self.root, parallel.REPO,
+            lambda path, value: path.write_text(json.dumps(value)),
+            expected_objective=launcher.OBJECTIVE)
+
+    def test_explicit_fresh_bootstrap_resumes_only_valid_prepared_seed(self):
+        seed = self.prepared_fresh_seed()
+        path = self.root / 'state.json'
+        raw = path.read_bytes()
+        self.assertTrue(parallel.stopped_blockers(self.root, seed))
+        self.assertTrue(parallel.stopped_blockers(
+            self.root, seed, allow_blocked_resume=True))
+        for phase in (None, 'stopped'):
+            with self.subTest(phase=phase):
+                state = dict(seed, phase=phase)
+                path.write_text(json.dumps(state))
+                before = path.read_bytes()
+                self.assertEqual(parallel.stopped_blockers(
+                    self.root, state, allow_blocked_resume=True,
+                    allow_fresh_bootstrap=True), [])
+                self.assertEqual(path.read_bytes(), before)
+        path.write_bytes(raw)
+
+    def test_fresh_bootstrap_refuses_unproven_seed_and_wrong_objective(self):
+        seed = self.prepared_fresh_seed()
+        archive = Path(seed['previous_session']['state_path'])
+        for key, value in (('previous_session', {}), ('schema_version', 2),
+                           ('repo', '/different/repo'), ('thread_id', 'unexpected')):
+            with self.subTest(key=key):
+                state = dict(seed, **{key: value})
+                (self.root / 'state.json').write_text(json.dumps(state))
+                self.assertTrue(parallel.stopped_blockers(
+                    self.root, state,
+                    allow_blocked_resume=True, allow_fresh_bootstrap=True))
+        (self.root / 'state.json').write_text(json.dumps(seed))
+        archived_state = json.loads(archive.read_text())
+        archived_state['goal']['objective'] = 'A different objective'
+        archive.write_text(json.dumps(archived_state))
+        self.assertTrue(parallel.stopped_blockers(
+            self.root, seed, allow_blocked_resume=True, allow_fresh_bootstrap=True))
+        self.assertTrue(parallel.stopped_blockers(
+            self.root, {}, allow_blocked_resume=True, allow_fresh_bootstrap=True))
+
+    def test_prepared_fresh_bootstrap_keeps_phase_delivery_process_and_lease_guards(self):
+        seed = self.prepared_fresh_seed()
+        cases = [('phase', phase) for phase in ('running', 'starting', 'ready')]
+        cases += [('resume_instruction', {'status': status})
+                  for status in ('sending', 'delivery_uncertain')]
+        cases += [(key, os.getpid()) for key in ('worker_pid', 'server_pid')]
+        for key, value in cases:
+            with self.subTest(key=key, value=value):
+                state = dict(seed, **{key: value})
+                (self.root / 'state.json').write_text(json.dumps(state))
+                self.assertTrue(parallel.stopped_blockers(
+                    self.root, state,
+                    allow_blocked_resume=True, allow_fresh_bootstrap=True))
+        (self.root / 'state.json').write_text(json.dumps(seed))
+        watch = self.root / 'watcher.json'
+        watch.write_text(json.dumps({'watcher_pid': os.getpid()}))
+        self.assertTrue(parallel.stopped_blockers(
+            self.root, seed, allow_blocked_resume=True, allow_fresh_bootstrap=True))
+        watch.unlink()
+        for name in ('run.lock', 'watch.lock'):
+            with self.subTest(name=name):
+                path = self.root / name
+                path.touch()
+                inode = path.stat().st_ino
+                with path.open('rb') as stream:
+                    parallel.fcntl.flock(stream, parallel.fcntl.LOCK_EX)
+                    failures = parallel.stopped_blockers(
+                        self.root, seed, allow_blocked_resume=True, allow_fresh_bootstrap=True)
+                self.assertTrue(any(name in item for item in failures))
+                self.assertEqual(path.stat().st_ino, inode)
+
     def test_retained_turn_does_not_hide_a_live_worker_server_or_watcher(self):
         for key in ('worker_pid', 'server_pid', 'watcher_pid'):
             with self.subTest(key=key):
@@ -98,6 +178,77 @@ class ParallelTests(unittest.TestCase):
         self.assertIn('/feedback', failures[0])
         self.assertIn('failed-compact-turn', failures[0])
         self.assertNotIn('run the same command', failures[0])
+
+    def test_only_explicit_manual_resume_admits_a_stopped_blocked_goal(self):
+        state = self.stopped_state_with_retired_turn()
+        state.update(goal={'status': 'blocked'}, stop_reason='turn_failed',
+                     last_error={'codexErrorInfo': 'cyberPolicy'})
+        path = self.root / 'state.json'
+        raw = json.dumps(state).encode()
+        path.write_bytes(raw)
+        self.assertTrue(parallel.stopped_blockers(self.root, state))
+        self.assertTrue(parallel.stopped_blockers(
+            self.root, state, allow_blocked_resume=False))
+        self.assertEqual(parallel.stopped_blockers(
+            self.root, state, allow_blocked_resume=True), [])
+        self.assertEqual(path.read_bytes(), raw)
+        self.assertEqual(state, json.loads(raw))
+
+    def test_manual_blocked_resume_preserves_other_admission_guards(self):
+        cases = [
+            ('phase', value) for value in ('running', 'starting', 'ready', None)
+        ] + [
+            ('goal', {'status': value})
+            for value in ('active', 'complete', 'usageLimited', 'budgetLimited', None)
+        ] + [('thread_id', None), ('goal', {})] + [
+            ('resume_instruction', {'status': value})
+            for value in ('sending', 'delivery_uncertain')
+        ]
+        for key, value in cases:
+            with self.subTest(key=key, value=value):
+                state = self.stopped_state_with_retired_turn()
+                state['goal']['status'] = 'blocked'
+                state[key] = value
+                self.assertTrue(parallel.stopped_blockers(
+                    self.root, state, allow_blocked_resume=True))
+        for key in ('worker_pid', 'server_pid'):
+            for value in (None, False, True, 0, -1, '2147483647'):
+                with self.subTest(key=key, value=value):
+                    state = self.stopped_state_with_retired_turn()
+                    state['goal']['status'] = 'blocked'
+                    state[key] = value
+                    self.assertTrue(parallel.stopped_blockers(
+                        self.root, state, allow_blocked_resume=True))
+
+    def test_manual_blocked_resume_refuses_live_processes_and_held_leases(self):
+        for key in ('worker_pid', 'server_pid', 'watcher_pid'):
+            with self.subTest(key=key):
+                state = self.stopped_state_with_retired_turn()
+                state['goal']['status'] = 'blocked'
+                watch = self.root / 'watcher.json'
+                if key == 'watcher_pid':
+                    watch.write_text(json.dumps({'watcher_pid': os.getpid()}))
+                else:
+                    state[key] = os.getpid()
+                try:
+                    self.assertTrue(parallel.stopped_blockers(
+                        self.root, state, allow_blocked_resume=True))
+                finally:
+                    if watch.exists():
+                        watch.unlink()
+        for name in ('run.lock', 'watch.lock'):
+            with self.subTest(name=name):
+                state = self.stopped_state_with_retired_turn()
+                state['goal']['status'] = 'blocked'
+                path = self.root / name
+                path.touch()
+                inode = path.stat().st_ino
+                with path.open('rb') as stream:
+                    parallel.fcntl.flock(stream, parallel.fcntl.LOCK_EX)
+                    failures = parallel.stopped_blockers(
+                        self.root, state, allow_blocked_resume=True)
+                self.assertTrue(any(name in item for item in failures))
+                self.assertEqual(path.stat().st_ino, inode)
 
     def test_retained_turn_still_blocks_for_wrong_phase_goal_or_uncertain_delivery(self):
         for phase in ('running', 'starting', 'ready'):
@@ -218,7 +369,7 @@ class ParallelTests(unittest.TestCase):
                 mock.patch.object(parallel, 'state_directory', return_value=self.root), \
                 mock.patch.object(parallel, 'resolve_resources', return_value=resources) as resolve, \
                 mock.patch.object(parallel, 'check_resources'), \
-                mock.patch.object(parallel, 'stopped_blockers', return_value=list(failures)), \
+                mock.patch.object(parallel, 'stopped_blockers', return_value=list(failures)) as stopped, \
                 mock.patch.object(parallel, 'queue_blockers', return_value=[]), \
                 mock.patch.object(parallel, 'host_blockers', return_value=({}, [])), \
                 mock.patch.object(parallel.subprocess, 'run') as run, \
@@ -233,6 +384,9 @@ class ParallelTests(unittest.TestCase):
                 result = 1
             else:
                 result = parallel.main(argv)
+        stopped.assert_called_once_with(
+            self.root, json.loads(saved_state), allow_blocked_resume='--run' in argv,
+            allow_fresh_bootstrap='--run' in argv and '--fresh-session' in argv)
         self.assertEqual(state_path.read_bytes(), saved_state)
         report, end = json.JSONDecoder().raw_decode(output.getvalue())
         background_launch = output.getvalue()[end:].strip()
@@ -292,6 +446,48 @@ class ParallelTests(unittest.TestCase):
         self.assert_gpt_61_command(command)
         self.assertEqual(run.call_args.args[0], command + ['--check'])
         popen.assert_not_called()
+
+    def test_fresh_session_and_recovery_options_reach_preflight_and_launcher(self):
+        for options, recovery in (([], True), (['--fresh-on-recovery'], True),
+                                  (['--no-fresh-on-recovery'], False)):
+            with self.subTest(options=options):
+                result, _, run, execute, popen, report = self.fake_main(
+                    ['--run', '--fresh-session'] + options)
+                self.assertEqual(result, 0)
+                run.assert_called_once()
+                execute.assert_called_once()
+                command = execute.call_args.args[1]
+                self.assertEqual(run.call_args.args[0], command + ['--check'])
+                self.assertIn('--fresh-session', command)
+                self.assertEqual('--fresh-on-recovery' in command, recovery)
+                self.assertNotIn('--no-fresh-on-recovery', command)
+                self.assertTrue(report['fresh_session_requested'])
+                self.assertEqual(report['fresh_on_recovery'], recovery)
+                self.assertFalse(report['inference_started'])
+                popen.assert_not_called()
+
+    def test_fresh_options_preview_and_check_only_prepare_commands(self):
+        for mode in ([], ['--check']):
+            for options, recovery in (([], True), (['--no-fresh-on-recovery'], False)):
+                with self.subTest(mode=mode, options=options):
+                    result, _, run, execute, popen, report = self.fake_main(
+                        mode + ['--fresh-session'] + options)
+                    self.assertEqual(result, 0)
+                    command = shlex.split(report['command'])
+                    self.assertIn('--fresh-session', command)
+                    self.assertEqual('--fresh-on-recovery' in command, recovery)
+                    self.assertFalse(report['inference_started'])
+                    if mode:
+                        run.assert_called_once()
+                        self.assertEqual(run.call_args.args[0], command + ['--check'])
+                    else:
+                        run.assert_not_called()
+                    execute.assert_not_called()
+                    popen.assert_not_called()
+
+    def test_fresh_recovery_switches_are_mutually_exclusive(self):
+        with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+            parallel.main(['--fresh-on-recovery', '--no-fresh-on-recovery'])
 
     def test_blocker_prevents_preflight_and_execution(self):
         result, _, run, execute, popen, _ = self.fake_main(['--run'], ['live owner'])

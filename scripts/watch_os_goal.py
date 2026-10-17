@@ -1,9 +1,11 @@
-"""Supervise the OS runner; preserve its thread and work window across crashes."""
+"""Supervise the OS runner and preserve its work window across crashes."""
 
+import hashlib
 import json
 import os
 from pathlib import Path
 import signal
+import stat
 import subprocess
 import sys
 import time
@@ -27,14 +29,62 @@ def snapshot(path):
         return {}
 
 
+def watchdog_requested(directory, worker_pid):
+    """Authenticate a persisted hang request for this worker and live parent."""
+    if type(worker_pid) is not int or worker_pid != os.getpid():
+        return False
+    worker_start = process_start(worker_pid)
+    if not isinstance(worker_start, str) or not worker_start.isdigit():
+        return False
+    path = Path(directory) / ("watchdog-request-" + str(worker_pid) + "-" + worker_start + ".json")
+    try:
+        fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+        try:
+            before = os.fstat(fd)
+            if (not stat.S_ISREG(before.st_mode) or before.st_uid != os.getuid()
+                    or before.st_size > 4096):
+                return False
+            raw = os.read(fd, 4097)
+            after = os.fstat(fd)
+            if (len(raw) != before.st_size or before.st_size != after.st_size
+                    or before.st_mtime_ns != after.st_mtime_ns
+                    or before.st_ctime_ns != after.st_ctime_ns):
+                return False
+        finally:
+            os.close(fd)
+        request = json.loads(raw)
+        parent = os.getppid()
+        parent_start = process_start(parent)
+        return (isinstance(request, dict) and type(request.get("schema_version")) is int
+                and request["schema_version"] == 1
+                and type(request.get("watcher_pid")) is int and request["watcher_pid"] == parent
+                and isinstance(parent_start, str) and parent_start.isdigit()
+                and request.get("watcher_start") == parent_start
+                and type(request.get("worker_pid")) is int and request["worker_pid"] == worker_pid
+                and request.get("worker_start") == worker_start
+                and request.get("reason") in {"heartbeat_stalled", "agent_progress_stalled"})
+    except (OSError, ValueError, TypeError):
+        return False
+
+
 def should_restart(code, state, watchdog=False, stopped=False):
     status = (state.get("goal") or {}).get("status")
     if stopped or status in {
             "complete", "usageLimited", "budgetLimited"}:
         return False
     reason = state.get("stop_reason") or ""
+    # Hard service/usage stops retain authority even when a crash leaves a stale
+    # phase or a transport exit code. Never reset a session to retry these.
+    error = state.get("last_error")
+    info = error.get("codexErrorInfo") if isinstance(error, dict) else None
+    stop_classes = ("quota", "credit", "auth", "policy", "included_usage")
+    if any(word in reason.lower() for word in stop_classes):
+        return False
+    if isinstance(info, (str, dict)) and any(
+            word in json.dumps(info).lower() for word in stop_classes):
+        return False
     if code in {21, 22} or reason in {"quota_exhausted", "quota_or_rate_limit",
-                                     "needs_user_input", "goal_cleared"}:
+                                     "needs_user_input", "goal_cleared", "budget_exhausted"}:
         return False
     # A watchdog observation cannot revoke a recorded stop. In particular,
     # signal_* does not prove that this supervisor was the signal's sender.
@@ -43,11 +93,11 @@ def should_restart(code, state, watchdog=False, stopped=False):
     if code in {-signal.SIGINT, -signal.SIGTERM, -signal.SIGHUP} and not watchdog:
         return False
     if reason in {"server_error", "turn_failed"}:
-        error = state.get("last_error")
-        info = error.get("codexErrorInfo") if isinstance(error, dict) else None
         return isinstance(info, str) and info in {"serverOverloaded", "rateLimitExceeded"}
     if reason == "rate_limit":
         return True
+    if reason == "watchdog_recovery":
+        return watchdog
     # Transport recovery may pause the goal during shutdown. Recover only from
     # its positive classification, never from paused/blocked status alone.
     if code == 24 or code == 1 and state.get("retryable") is True:
@@ -134,6 +184,7 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
     started = time.monotonic()
     deadline = started + args.hours * 3600 if args.hours else float("inf")
     restarts = 0
+    recovery_proof = None
     final_code = 1
     log = (directory / "watcher.jsonl").open("a", buffering=1)
 
@@ -159,10 +210,15 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
             if remaining <= 0:
                 final_code = 10
                 break
+            # An explicit fresh first launch is not authorization to reset every
+            # replacement. Fresh recovery has its own opt-in and retirement proof.
+            worker_argv = [value for value in argv if not (restarts and value == "--fresh-session")]
             command = [sys.executable, "-B", str(repo / "scripts/run_os_goal.py"),
-                       *argv, "--worker", "--hours", str(remaining / 3600 if args.hours else 0)]
+                       *worker_argv, "--worker", "--hours", str(remaining / 3600 if args.hours else 0)]
             if restarts:
                 command.append("--recovered")
+                if recovery_proof is not None:
+                    command.extend(["--fresh-recovery-proof", str(recovery_proof)])
             child = subprocess.Popen(command, stdin=subprocess.DEVNULL, start_new_session=True)
             record("worker_started", attempt=restarts + 1)
             heartbeat = time.monotonic()
@@ -207,8 +263,30 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                             record(kind, seconds_without_update=now - heartbeat,
                                    seconds_without_agent_event=now - progress_at, diagnostics=str(capture))
                         finally:
-                            # Even a full log disk must not prevent the stop signal.
-                            child.terminate()
+                            # A dedicated, authenticated request distinguishes our
+                            # checkpoint from an explicit user SIGTERM. Failure
+                            # to persist it retains ordinary signal-stop authority.
+                            requested = False
+                            try:
+                                worker_start = process_start(child.pid)
+                                watcher_start = process_start(os.getpid())
+                                if (not isinstance(worker_start, str) or not worker_start.isdigit()
+                                        or not isinstance(watcher_start, str) or not watcher_start.isdigit()):
+                                    raise ValueError("Watchdog process identity is unresolved")
+                                request = directory / ("watchdog-request-" + str(child.pid)
+                                                       + "-" + worker_start + ".json")
+                                write_json(request, {"schema_version": 1,
+                                    "watcher_pid": os.getpid(), "watcher_start": watcher_start,
+                                    "worker_pid": child.pid, "worker_start": worker_start,
+                                    "reason": kind})
+                                requested = True
+                            except (OSError, ValueError) as error:
+                                print("[os-watch] Watchdog request unavailable: " + str(error), flush=True)
+                            finally:
+                                if requested:
+                                    child.send_signal(signal.SIGUSR1)
+                                else:
+                                    child.terminate()
                         shutdown_at = now + min(args.grace_seconds, 30)
                 elif now >= shutdown_at and killed_at is None:
                     child.kill()
@@ -238,8 +316,28 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                 record("restart_limit_reached", max_restarts=args.max_restarts)
                 break
             restarts += 1
+            recovery_proof = None
+            saved_goal = state.get("goal")
+            has_saved_goal = (isinstance(state.get("thread_id"), str) and bool(state["thread_id"].strip())
+                              and isinstance(saved_goal, dict)
+                              and saved_goal.get("status") in {"active", "paused", "blocked"})
+            if getattr(args, "fresh_on_recovery", False) and has_saved_goal:
+                # The worker verifies this receipt under run.lock before archiving
+                # state. It binds the exact exited worker snapshot to this live
+                # supervisor, after both restart classification and retirement.
+                recovery_proof = directory / ("fresh-recovery-" + str(os.getpid())
+                                               + "-" + str(time.time_ns()) + ".json")
+                write_json(recovery_proof, {
+                    "schema_version": 1, "watcher_pid": os.getpid(),
+                    "watcher_start": process_start(os.getpid()),
+                    "worker_pid": child.pid, "thread_id": state.get("thread_id"),
+                    "state_sha256": hashlib.sha256(state_path.read_bytes()).hexdigest(),
+                    "exit_code": final_code, "watchdog": watchdog, "stopped": False,
+                    "server_retired": True,
+                })
             delay = restart_delay(args.restart_delay, restarts)
-            record("restarting_saved_session", thread_id=state.get("thread_id"), delay_seconds=delay)
+            record("restarting_fresh_session" if recovery_proof else "restarting_saved_session",
+                   thread_id=state.get("thread_id"), delay_seconds=delay)
             until = min(time.monotonic() + delay, deadline)
             while not stop_signals and time.monotonic() < until:
                 time.sleep(max(0, min(0.25, until - time.monotonic())))

@@ -19,7 +19,7 @@ import tempfile
 
 from os_goal_resources import check_resources, resolve_resources
 from run_os_goal import (DEFAULT_DISPATCHER_MODEL, INCLUDED_USAGE_STOP_PERCENT,
-                         is_policy_stop, model_routing, restart_advice)
+                         OBJECTIVE, is_policy_stop, model_routing, restart_advice)
 from os_goal_instructions import reconcile_instructions
 
 REPO = Path(__file__).resolve().parents[1]
@@ -49,11 +49,19 @@ def queue_blockers(directory):
     return []
 
 
-def stopped_blockers(directory, state):
+def stopped_blockers(directory, state, allow_blocked_resume=False, allow_fresh_bootstrap=False):
     failures = []
-    if not state.get('thread_id') or not state.get('goal'):
+    fresh_bootstrap = False
+    if allow_fresh_bootstrap and not state.get('goal'):
+        from os_goal_sessions import validate_prepared_fresh_session
+        try:
+            validate_prepared_fresh_session(directory, REPO, state, expected_objective=OBJECTIVE)
+            fresh_bootstrap = True
+        except (OSError, ValueError) as error:
+            failures.append('Prepared fresh session is invalid: ' + str(error))
+    if not fresh_bootstrap and (not state.get('thread_id') or not state.get('goal')):
         failures.append('A saved campaign and goal are required; this entry point never creates one.')
-    if state.get('phase') != 'stopped':
+    if state.get('phase') != 'stopped' and not (fresh_bootstrap and state.get('phase') is None):
         failures.append('Saved dispatcher must be stopped before launch.')
     if state.get('active_turns') and any(
             type(state.get(key)) is not int or state[key] <= 0
@@ -63,7 +71,12 @@ def stopped_blockers(directory, state):
     # PID and lease checks below establish that no launcher still owns it;
     # saved turn metadata alone is not a live process. The existing launcher
     # resumes the same thread under its own exclusive leases.
-    if (state.get('goal') or {}).get('status') != 'paused':
+    goal_status = (state.get('goal') or {}).get('status')
+    # --run is an explicit manual request. A cached blocked status must not
+    # permanently prevent it from reaching the service, which still evaluates
+    # the request normally. The watcher never automatically retries policy stops.
+    if (not fresh_bootstrap and goal_status != 'paused'
+            and not (allow_blocked_resume and goal_status == 'blocked')):
         failures.append(restart_advice(state) if is_policy_stop(state) else
                         'Saved goal must be paused; inspect its actual status before resuming.')
     if (state.get('resume_instruction') or {}).get('status') in ('sending', 'delivery_uncertain'):
@@ -133,7 +146,7 @@ def read_mount():
 
 
 def launch_command(args, resources):
-    return [sys.executable, '-B', str(REPO / 'scripts/run_os_goal.py'),
+    command = [sys.executable, '-B', str(REPO / 'scripts/run_os_goal.py'),
             '--model', args.model, '--effort', args.effort,
             '--profile', 'aggressive', '--max-agents', str(resources['max_agents']),
             '--build-jobs', str(resources['build_jobs']), '--memory-gib', str(resources['memory_gib']),
@@ -141,6 +154,11 @@ def launch_command(args, resources):
             '--stall-seconds', '0', '--startup-instruction-file', str(NOTE),
             '--startup-instruction-sha256', hashlib.sha256(NOTE.read_bytes()).hexdigest(),
             '--supersede-instruction', HOLD_ID + ':' + HOLD_SHA]
+    if args.fresh_session:
+        command.append('--fresh-session')
+    if args.fresh_on_recovery:
+        command.append('--fresh-on-recovery')
+    return command
 
 
 def main(argv=None):
@@ -150,6 +168,14 @@ def main(argv=None):
     mode.add_argument('--check', action='store_true', help='Also check local CLI settings/models, without inference')
     parser.add_argument('--background', action='store_true',
                         help='With --run, detach the existing watcher and retain its console in a private log')
+    parser.add_argument('--fresh-session', action='store_true',
+                        help='With --run, archive the old state and start a new conversation from Markdown')
+    recovery = parser.add_mutually_exclusive_group()
+    recovery.add_argument('--fresh-on-recovery', dest='fresh_on_recovery',
+                          action='store_true', default=True,
+                          help='Fresh Markdown-guided conversations after classified crashes (default: enabled)')
+    recovery.add_argument('--no-fresh-on-recovery', dest='fresh_on_recovery',
+                          action='store_false', help='Disable fresh conversations after classified crashes')
     parser.add_argument('--agents', type=int, help='Optional smaller ceiling; default is the measured maximum')
     parser.add_argument('--hours', type=float, default=0, help='0: no wall-clock cutoff; optional finite window')
     parser.add_argument('--windows', choices=('auto', 'on', 'off'), default='auto')
@@ -168,7 +194,9 @@ def main(argv=None):
     check_resources(resources)
     directory = state_directory(REPO)
     state = read_json(directory / 'state.json')
-    failures = stopped_blockers(directory, state) + queue_blockers(directory)
+    failures = stopped_blockers(
+        directory, state, allow_blocked_resume=args.run,
+        allow_fresh_bootstrap=args.run and args.fresh_session) + queue_blockers(directory)
     mount, host_failures = host_blockers()
     failures += host_failures
     note = NOTE.read_text()
@@ -179,6 +207,8 @@ def main(argv=None):
         'mode': 'run' if args.run else 'check' if args.check else 'preview',
         'background': args.background,
         'thread_id': state['thread_id'], 'resources': resources,
+        'fresh_session_requested': args.fresh_session,
+        'fresh_on_recovery': args.fresh_on_recovery,
         'model_routing': model_routing(args),
         'included_usage_stop_percent': INCLUDED_USAGE_STOP_PERCENT,
         'scratch': mount, 'startup_instruction_sha256': hashlib.sha256(note.encode()).hexdigest(),

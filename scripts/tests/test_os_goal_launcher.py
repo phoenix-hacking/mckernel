@@ -1261,6 +1261,7 @@ path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
 state={'thread_id':'quiet-thread','worker_pid':os.getpid(),'phase':'running',
        'agent_event_count':1,'goal':{'status':'active'}}
 signal.signal(signal.SIGTERM, signal.SIG_IGN)
+signal.signal(signal.SIGUSR1, signal.SIG_IGN)
 if '--recovered' in sys.argv:
     state['goal']['status']='complete'
 while True:

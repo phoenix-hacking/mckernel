@@ -136,7 +136,7 @@ def restart_advice(state):
                 "Report a suspected false positive with Codex /feedback; "
                 "thread=" + str(failed.get("thread_id") or state.get("thread_id", "unknown"))
                 + "; turn=" + str(failed.get("id", "unknown"))
-                + ". Preserve this run; policy review is required before retrying the rejected request.")
+                + ". Saved work is preserved; service-side checks remain active for any explicit manual resume.")
     return "run the same command to resume unfinished work."
 
 
@@ -485,6 +485,14 @@ class Campaign:
         # Signals retain stop authority even if a retryable error arrived first.
         self.stop_reason = "signal_" + str(signum)
 
+    def on_watchdog(self, signum, frame):
+        from watch_os_goal import watchdog_requested
+        if not watchdog_requested(self.directory, os.getpid()):
+            self.on_signal(signum, frame)
+            return
+        if not self.stop_reason and not self.stop_now:
+            self.stop_reason = "watchdog_recovery"
+
     def remember_goal(self, goal):
         self.goal = goal
         self.save(goal=goal)
@@ -585,9 +593,18 @@ class Campaign:
             "a new checkpoint/stop request. "
         )
         return (
-            (("Current user instruction for this invocation, loaded before thread resume:\n"
+            (("Current user instruction for this invocation, loaded before session activation:\n"
               + self.args.startup_instruction + "\nEnd current invocation instruction.\n")
              if getattr(self.args, "startup_instruction", None) else "") +
+            (("The user explicitly requested a fresh OS development conversation guided by "
+              "Markdown. Read " + PLAN_REL + "/SESSION-HANDOFF.md first, then the current "
+              "goal/start/convergence/handoff files. Prior session state is preserved under "
+              "session-archives; do not load its entire conversation or replay a rejected "
+              "compaction/request. Work on the next independent authorized OS task. "
+              "Preserve prior blocked work for review and keep service checks active. ")
+             if getattr(self.args, "fresh_session", False)
+             or getattr(self.args, "fresh_recovery_proof", None)
+             or self.state.get("previous_session") else "") +
             "The user invoked scripts/run_os_goal.py for autonomous execution, not planning. "
             + continuation +
             "The user explicitly authorized full filesystem/network access and no "
@@ -691,10 +708,74 @@ class Campaign:
             "and continue independent ready work. Never store credentials in the plan or logs."
             + (" This is automatic crash recovery. Read HANDOFF.md, relevant CURRENT.md entries and the previous "
                "run/watcher records first. Reconcile source changes and exact live "
-               "process/runtime leases before any new build or guest. Resume the "
-               "existing thread and acceptance ledger; do not replay completed work."
+               "process/runtime leases before any new build or guest. "
+               + ("Continue from the Markdown handoff in this fresh conversation and preserve "
+                  "the acceptance ledger; do not replay completed or rejected work."
+                  if getattr(self.args, "fresh_recovery_proof", None)
+                  or getattr(self.args, "fresh_session", False)
+                  or self.state.get("previous_session") else
+                  "Resume the existing thread and acceptance ledger; do not replay completed work.")
                if self.args.recovered else "")
         )
+
+    def prepare_fresh_goal(self):
+        """Read only predecessor metadata, pause active continuations, retain allowance."""
+        previous = self.state.get("previous_session")
+        if not previous or self.state.get("thread_id"):
+            return True
+        from os_goal_sessions import validate_prepared_fresh_session
+        validate_prepared_fresh_session(self.directory, self.repo, self.state, expected_objective=OBJECTIVE)
+        if not isinstance(previous, dict) or not isinstance(previous.get("thread_id"), str):
+            raise RuntimeError("Fresh session has no valid predecessor identity")
+        ident = previous["thread_id"]
+        goal = self.rpc.call("thread/goal/get", {"threadId": ident})["goal"]
+
+        def validate(value):
+            if (not isinstance(value, dict) or value.get("objective") != OBJECTIVE
+                    or value.get("status") not in {"active", "paused", "blocked", "complete",
+                                                   "usageLimited", "budgetLimited"}):
+                raise RuntimeError("Archived thread goal is missing, changed, or unsupported; no new thread was started")
+
+        validate(goal)
+        if goal["status"] in {"complete", "usageLimited", "budgetLimited"}:
+            self.remember_goal(goal)
+            return False
+        if goal["status"] == "active":
+            goal = self.rpc.call("thread/goal/set", {"threadId": ident, "status": "paused"})["goal"]
+            validate(goal)
+            if goal["status"] != "paused":
+                raise RuntimeError("Previous goal did not pause; no new thread was started")
+        page = self.rpc.call("thread/turns/list", {
+            "threadId": ident, "limit": 1, "sortDirection": "desc", "itemsView": "notLoaded"})
+        if any(turn.get("status") == "inProgress" for turn in page["data"]):
+            raise RuntimeError("Previous conversation still has an active turn; no new thread was started")
+        # Goal pausing stops future continuations. Observe turn retirement and
+        # then refresh usage so the new allowance includes the final old turn.
+        goal = self.rpc.call("thread/goal/get", {"threadId": ident})["goal"]
+        validate(goal)
+        if goal["status"] in {"complete", "usageLimited", "budgetLimited"}:
+            self.remember_goal(goal)
+            return False
+        if goal["status"] == "active":
+            raise RuntimeError("Previous goal became active again; no new thread was started")
+        budget, used = goal.get("tokenBudget"), goal.get("tokensUsed")
+        if budget is not None and (type(budget) is not int or budget <= 0
+                or type(used) is not int or used < 0):
+            raise RuntimeError("Previous goal has an invalid token allowance; no new thread was started")
+        remaining = None if budget is None else max(0, budget - used)
+        saved = self.state.get("fresh_token_budget")
+        if saved is not None and (type(saved) is not int or saved < 0):
+            raise RuntimeError("Saved fresh token allowance is invalid")
+        caps = [value for value in (remaining, saved, self.args.token_budget) if value is not None]
+        allowance = min(caps) if caps else None
+        # Retain this before thread/start so a crash before goal/set cannot
+        # silently replace the bounded remainder with the original CLI budget.
+        self.save(fresh_token_budget=allowance)
+        if allowance == 0:
+            self.stop_reason, self.stop_now = "budget_exhausted", True
+            self.remember_goal(goal)
+            return False
+        return True
 
     def begin(self):
         # Admission failures belong to this worker, never the preceding retry.
@@ -731,6 +812,8 @@ class Campaign:
             receipts = reconcile_instructions(
                 self.directory, bindings, hashlib.sha256(note.encode()).hexdigest(), execute=True)
             self.save(instruction_reconciliation=receipts)
+        if not self.prepare_fresh_goal():
+            return
         params = {"cwd": str(self.repo), "model": self.args.model, "approvalPolicy": "never",
                   "sandbox": "danger-full-access",
                   "config": {"model_reasoning_effort": self.args.effort},
@@ -748,7 +831,7 @@ class Campaign:
             self.controlled = True
             if goal and (goal["status"] == "complete" or
                          goal["status"] == "usageLimited" and self.args.recovered or
-                         goal["status"] == "budgetLimited" and self.args.token_budget is None):
+                         goal["status"] == "budgetLimited" and (self.args.recovered or self.args.token_budget is None)):
                 self.remember_goal(goal)
                 return
             params.update(threadId=previous_id, excludeTurns=True)
@@ -776,7 +859,7 @@ class Campaign:
                      goal["status"] == "usageLimited" and self.args.recovered):
             self.remember_goal(goal)
             return
-        if goal and goal["status"] == "budgetLimited" and self.args.token_budget is None:
+        if goal and goal["status"] == "budgetLimited" and (self.args.recovered or self.args.token_budget is None):
             self.remember_goal(goal)
             return
         if self.stop_reason:
@@ -810,15 +893,26 @@ class Campaign:
             if not goal or goal["objective"] != OBJECTIVE:
                 raise RuntimeError("Saved goal changed during resume instruction; it was not recreated or replaced")
             if (goal["status"] in {"complete", "usageLimited"} or
-                    goal["status"] == "budgetLimited" and self.args.token_budget is None):
+                    goal["status"] == "budgetLimited" and (self.args.recovered or self.args.token_budget is None)):
                 self.remember_goal(goal)
                 return
         update = {"threadId": ident, "status": "active"}
         if not goal:
             update["objective"] = OBJECTIVE
-        if self.args.token_budget is not None:
-            update["tokenBudget"] = self.args.token_budget
-        if not goal or goal["status"] != "active" or self.args.token_budget is not None:
+        requested_budget = self.args.token_budget
+        if "fresh_token_budget" in self.state:
+            allowance = self.state["fresh_token_budget"]
+            if not goal:
+                requested_budget = allowance
+            elif self.args.recovered:
+                requested_budget = None
+            elif allowance is not None and requested_budget is not None:
+                requested_budget = min(allowance, requested_budget)
+        elif self.args.recovered and goal:
+            requested_budget = None
+        if requested_budget is not None:
+            update["tokenBudget"] = requested_budget
+        if not goal or goal["status"] != "active" or requested_budget is not None:
             # The server continues idle turns. An explicit startup message may
             # already own the first turn; activation must not start a second one.
             goal = self.rpc.call("thread/goal/set", update)["goal"]
@@ -978,6 +1072,11 @@ def arguments(argv=None):
     parser.add_argument("--memory-gib", type=float, help="Aggregate build memory budget; default up to 24 GiB aggressive / 12 balanced")
     parser.add_argument("--agent-windows", choices=["auto", "on", "off"], default="auto",
                         help="Separate live desktop window per child (default: auto when a desktop is available); logs always retained")
+    parser.add_argument("--fresh-session", action="store_true",
+                        help="Explicitly start a fresh conversation from Markdown; archive the previous state")
+    parser.add_argument("--fresh-on-recovery", action="store_true",
+                        help="Use fresh Markdown-guided conversations after classified recoverable crashes")
+    parser.add_argument("--fresh-recovery-proof", type=Path, help=argparse.SUPPRESS)
     parser.add_argument("--token-budget", type=int, help="Explicit total goal budget; omitted preserves the current budget")
     parser.add_argument("--codex", default="codex", help="Path to the local Codex executable")
     parser.add_argument("--startup-instruction-file", type=Path,
@@ -995,6 +1094,8 @@ def arguments(argv=None):
     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument("--recovered", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
+    if args.fresh_recovery_proof and not (args.worker and args.recovered and args.fresh_on_recovery):
+        parser.error("Fresh recovery requires the supervised recovered worker and a watcher proof")
     args.startup_instruction = (read_startup_instruction(args.startup_instruction_file)
                                 if args.startup_instruction_file else None)
     if args.startup_instruction_sha256 is not None:
@@ -1104,9 +1205,19 @@ def main(argv=None):
     directory.mkdir(mode=0o700, parents=True, exist_ok=True)
     lease = Lease(directory / "run.lock")
     try:
+        if args.fresh_session or args.fresh_recovery_proof:
+            from os_goal_sessions import prepare_fresh_session
+            previous = prepare_fresh_session(
+                directory, REPO, atomic_json,
+                recovery=bool(args.fresh_recovery_proof),
+                recovery_proof=args.fresh_recovery_proof,
+                expected_objective=OBJECTIVE)
+            say("Fresh conversation prepared from Markdown; previous state preserved at "
+                + str(previous.get("previous_session", {}).get("state_path", "session-archives")))
         campaign = Campaign(args, REPO, directory)
         for signum in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
             signal.signal(signum, campaign.on_signal)
+        signal.signal(signal.SIGUSR1, campaign.on_watchdog)
         return campaign.run()
     finally:
         lease.close()

@@ -1,6 +1,10 @@
 This is the user's explicit later execution instruction, effective only when
 scripts/run_os_parallel.py --run is invoked. Preparing or previewing that script
-does not resume the campaign. Resume the existing saved thread and objective.
+does not resume the campaign. Normally resume the existing saved thread. The
+user explicitly authorizes --fresh-session to archive its state and start a
+new conversation from SESSION-HANDOFF.md while preserving all project files.
+--fresh-on-recovery starts fresh only after classified ordinary hangs/crashes
+and positive old-process retirement. It does not retry policy/auth/quota stops.
 
 This is the current USER instruction for the new --run invocation: execute the
 unfinished OS work continuously, across checkpoints and days, through effectively
@@ -13,7 +17,8 @@ launcher archives only the exact hash-bound pending original before activation;
 it preserves its bytes and an audit receipt. Never requeue either historical
 instruction or send SIGINT to your watcher because of it. A new external stop
 remains authoritative. Unknown or uncertain instructions
-require reconciliation. Do not change launcher-owned state or create a new goal.
+require reconciliation. Only the launcher owns state and session transitions;
+agents must not edit that state or create competing dispatchers/goals.
 
 This machine is dedicated to this task. Use the measured maximum child-agent
 ceiling supplied by the launcher. The user requires gpt-6.1-sol for the

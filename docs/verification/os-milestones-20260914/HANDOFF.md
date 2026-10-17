@@ -1,11 +1,25 @@
 # Compact dispatcher handoff
 
+Fresh-session preparation (2026-10-17): the user's next command is
+`python3 -B /home/holden/mckernel/scripts/run_os_parallel.py --run --fresh-session`.
+This archives the old launcher cursor and starts a new conversation from
+SESSION-HANDOFF.md and these Markdown instructions. It preserves source,
+artifacts, logs, failures and the blocked old goal. The frontend enables fresh
+conversation recovery for classified ordinary crashes by default; explicit
+signals, included-usage/auth/credit stops and service policy rejections retain
+authority. Recovery never establishes guest/container retirement: reconcile
+the interrupted image guard before any workload. No campaign or workload was
+started during this preparation.
+
 Latest stop 2026-10-17 12:24:24UTC: remote compaction returned cyberPolicy before
 new OS work; goal BLOCKED, worker487903/server487905 absent. This is separate from
 the repaired stale-turn admission bug. Do not automatically retry or rotate
 sessions to replay the rejected request. SESSION-HANDOFF.md contains the concise
-engineering state, report identifiers and next OS step after service review.
+engineering state, report identifiers and next OS step after service acceptance.
 The launcher now reports the actual policy stop instead of advising blind retry.
+An explicit manual --run is admitted despite cached goal status blocked, with
+all live-process/lease guards preserved. No automatic policy retry was enabled;
+the service evaluates any manual resume normally and may reject it again.
 
 Resume preparation after 2026-10-17 07:41UTC: campaign stopped/goal paused on
 child turn cyberPolicy; saved worker23943/server23945 are absent. Retained
