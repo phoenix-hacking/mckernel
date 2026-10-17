@@ -47,6 +47,14 @@ class NativeForkOwnershipTests(unittest.TestCase):
         self.assertNotIn("@WORKER@", source)
         self.assertNotIn("@VMA_OWNERS@", source)
 
+    def test_worker_close_dependency_has_explicit_no_child_adapter(self):
+        source = fixture_source()
+        self.assertIn('assert_eq!(slots.len(), 1, "no-child baseline only");', source)
+        self.assertIn('assert_eq!(entry.key(), parent, "no child entry in this adapter");', source)
+        self.assertIn("backend.worker(4, &mut bytes, false)", source)
+        self.assertIn("assert_eq!(parent.baseline_cancel_calls, 1);", source)
+        self.assertIn("assert_eq!(parent.baseline_cancel_worker, Some(77));", source)
+
     def test_actual_fault_and_worker_reproducers(self):
         compiler = Path(os.environ.get("MCKERNEL_RUSTC_1_92", str(RUSTC)))
         self.assertTrue(compiler.is_file(), "pinned Rust 1.92 compiler required")

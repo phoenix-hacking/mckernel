@@ -190,6 +190,55 @@ impl ForkAdoption {
 }
 // END FORK ADOPTION TRANSITIONS
 
+// BEGIN FORK RESERVATION METADATA
+// Native guest protocol marker. No existing 1-14 operation or launcher UAPI
+// changes, and no new application opcode is routed in this bounded slice.
+#[allow(dead_code)]
+pub(crate) const FORK_NATIVE_MARKER: u64 = u64::from_le_bytes(*b"MCFK0001");
+
+#[allow(dead_code)]
+#[derive(Clone, Copy)]
+pub(crate) struct ForkGeometry {
+    pub(crate) start: u64,
+    pub(crate) length: u64,
+    pub(crate) root: u64,
+}
+
+#[allow(dead_code)]
+pub(crate) struct ForkReservation {
+    pub(crate) token: super::application_rpc::Token,
+    pub(crate) identity: ForkIdentity,
+    pub(crate) cpu: i32,
+    pub(crate) first: super::application_syscall::Request,
+    pub(crate) state: ForkAdoption,
+    pub(crate) return_value: Option<i64>,
+    pub(crate) return_published: bool,
+}
+
+#[allow(dead_code)]
+impl ForkReservation {
+    pub(crate) fn authorize_return(&self, value: i64) -> Result {
+        match self.state.phase() {
+            ForkPhase::Reserved | ForkPhase::AbortRequested => {
+                if !(-4095..0).contains(&value) { return Err(EBUSY); }
+                Ok(())
+            }
+            _ => self.state.authorize_first_return(self.identity, value),
+        }
+    }
+
+    pub(crate) fn observe_publication(&mut self) {
+        if self.return_published { return; }
+        let result = match self.return_value {
+            Some(value) if value > 0 => self.state.first_return_published(self.identity, value),
+            _ => self.state.request_abort(self.identity),
+        };
+        if result.is_err() { let _ = self.state.quarantine(self.identity); }
+        self.return_published = true;
+    }
+}
+// END FORK RESERVATION METADATA
+
 struct Buffers {
     descriptor: BootPages,
     _args: BootPages,

@@ -5,13 +5,15 @@ use super::{
     application_pager::Operation as PagerOperation,
     application_rpc::{Exchange, Token},
     application_syscall::Request,
-    smp_application_image::Preparation,
+    smp_application_image::{Preparation, ForkAdoption, ForkGeometry, ForkIdentity,
+        ForkReservation, FORK_NATIVE_MARKER},
     smp_application_syscall::Mailbox,
     smp_file_pager::{Prepared as PagerFile, Registry as Pagers},
     smp_memory::{ProcfsProcess, ProcfsRemote, SyscallResponse},
     smp_resource::OsToken,
 };
 use core::sync::atomic::{AtomicI32, AtomicUsize, Ordering};
+use core::ptr::{self, NonNull};
 use kernel::{
     bindings,
     prelude::*,
@@ -25,9 +27,190 @@ fn errno(code: i32) -> Error {
     kernel::error::to_result(code).err().unwrap_or(EIO)
 }
 
+// Structural MM and referenced TGID ownership survives close without pinning
+// mm_users (which would cycle through a VMA's application connection).
+struct ForkChildOwner {
+    pid: NonNull<bindings::pid>,
+    mm: NonNull<bindings::mm_struct>,
+    number: i32,
+}
+// SAFETY: Only immutable identity and the Linux owned PID/MM references move.
+unsafe impl Send for ForkChildOwner {}
+// SAFETY: No MM mapping access follows from these shared structural identities.
+unsafe impl Sync for ForkChildOwner {}
+impl ForkChildOwner {
+    fn current() -> Result<Self> {
+        // SAFETY: Linux acquires both references from the live current task.
+        let pid = NonNull::new(unsafe {
+            bindings::get_task_pid(bindings::get_current(), bindings::pid_type_PIDTYPE_TGID)
+        }).ok_or(ESRCH)?;
+        let Some(mm) = NonNull::new(unsafe { bindings::get_task_mm(bindings::get_current()) }) else {
+            unsafe { bindings::put_pid(pid.as_ptr()) };
+            return Err(ESRCH);
+        };
+        let number = unsafe { bindings::pid_nr_ns(pid.as_ptr(), ptr::addr_of_mut!(bindings::init_pid_ns)) };
+        let count = unsafe { AtomicI32::from_ptr(ptr::addr_of_mut!(
+            (*mm.as_ptr()).__bindgen_anon_1.__bindgen_anon_1.mm_count.counter
+        )) };
+        let grabbed = if number > 0 {
+            count.fetch_update(Ordering::Relaxed, Ordering::Relaxed,
+                |value| (value > 0).then(|| value.checked_add(1)).flatten()).map_err(|_| errno(-75))
+        } else { Err(ESRCH) };
+        // SAFETY: End transient mm_users even on failure; only mm_count may
+        // survive publication, matching the established mirror lifetime rule.
+        unsafe { bindings::mmput(mm.as_ptr()) };
+        if let Err(error) = grabbed {
+            unsafe { bindings::put_pid(pid.as_ptr()) };
+            return Err(error);
+        }
+        Ok(Self { pid, mm, number })
+    }
+}
+impl Drop for ForkChildOwner {
+    fn drop(&mut self) {
+        let count = unsafe { AtomicI32::from_ptr(ptr::addr_of_mut!(
+            (*self.mm.as_ptr()).__bindgen_anon_1.__bindgen_anon_1.mm_count.counter
+        )) };
+        let old = count.fetch_sub(1, Ordering::SeqCst);
+        assert!(old > 0);
+        if old == 1 { unsafe { bindings::__mmdrop(self.mm.as_ptr()) }; }
+        unsafe { bindings::put_pid(self.pid.as_ptr()) };
+    }
+}
+
+// BEGIN FORK BACKEND RESERVATION
+struct ChildFork {
+    owner: Arc<ForkChildOwner>,
+    reservation: ForkReservation,
+}
+
+// Caller holds this Remote's slots lock for discovery through publication.
+// All child-owner allocation precedes this function; no guest/root is accessed.
+fn reserve_fork_in_slots(
+    owner: OsToken, slots: &mut [Option<Entry>], parent: Token, child: Token,
+    child_owner: Arc<ForkChildOwner>, geometry: ForkGeometry,
+) -> Result<u64> {
+    if parent == child { return Err(EINVAL); }
+    let parent_index = slots.iter().position(|slot| slot.as_ref().is_some_and(|entry| entry.key() == parent)).ok_or(ENOENT)?;
+    let child_index = slots.iter().position(|slot| slot.as_ref().is_some_and(|entry| entry.key() == child)).ok_or(ENOENT)?;
+    let p = slots[parent_index].as_ref().unwrap();
+    let c = slots[child_index].as_ref().unwrap();
+    if p.closed || p.needs_cleanup || p.quarantined || !p.scheduled
+        || c.closed || c.needs_cleanup || c.quarantined || c.scheduled || c.prepare.is_some()
+        || c.fork.is_some() || c.cleanup.pid() != child_owner.number
+    { return Err(EBUSY); }
+    if p.owner_slot != owner.slot() as i32 || c.owner_slot != owner.slot() as i32
+        || p.owner_generation != owner.generation() || c.owner_generation != owner.generation()
+    {
+        return Err(EACCES);
+    }
+    let parent_pid = p.cleanup.pid();
+    let proof = p.syscalls.unique_delivered(|request| {
+        let args = request.arguments();
+        request.number() == 56 && request.pid() == parent_pid
+            && !matches!(args[0], 1 | 2 | 3)
+            && args[1] == geometry.start && args[2] == geometry.length && args[3] == geometry.root
+            && args[4] != 0 && args[5] == FORK_NATIVE_MARKER
+    }).map_err(errno)?.ok_or(ENOENT)?;
+    let (worker, serial, request) = proof;
+    let nonce = request.arguments()[4];
+    if slots.iter().flatten().filter_map(|entry| entry.fork.as_ref()).any(|fork| {
+        let key = fork.reservation.identity;
+        key.root == geometry.root || key.parent == parent.wire()
+            && (key.delivery == serial || key.nonce == nonce)
+    }) { return Err(EBUSY); }
+    let identity = ForkIdentity {
+        slot: owner.slot(), generation: owner.generation(), parent: parent.wire(),
+        worker, delivery: serial, child: child.wire(), child_pid: child_owner.number,
+        child_mm: child_owner.mm.as_ptr() as usize, root: geometry.root,
+        start: geometry.start, length: geometry.length, nonce,
+    };
+    let state = ForkAdoption::reserve(identity)?;
+    let token = Token::allocate().map_err(errno)?;
+    let result = token.wire();
+    slots[child_index].as_mut().unwrap().fork = Some(ChildFork {
+        owner: child_owner,
+        reservation: ForkReservation { token, identity, cpu: request.cpu(), first: request,
+            state, return_value: None, return_published: false },
+    });
+    Ok(result)
+}
+
+fn child_fork_in_slots(slots: &mut [Option<Entry>], child: Token, token: u64) -> Result<&mut ChildFork> {
+    let entry = slots.iter_mut().flatten().find(|entry| entry.key() == child).ok_or(ENOENT)?;
+    let fork = entry.fork.as_mut().ok_or(ENOENT)?;
+    if fork.reservation.token.wire() != token || fork.reservation.identity.child != child.wire()
+        || fork.owner.number != entry.cleanup.pid()
+        || fork.owner.mm.as_ptr() as usize != fork.reservation.identity.child_mm
+    { return Err(EACCES); }
+    Ok(fork)
+}
+
+fn commit_fork_in_slots(slots: &mut [Option<Entry>], child: Token, token: u64) -> Result {
+    let fork = child_fork_in_slots(slots, child, token)?;
+    fork.reservation.state.adopted(fork.reservation.identity)
+}
+
+fn abort_fork_in_slots(slots: &mut [Option<Entry>], child: Token, token: u64) -> Result {
+    let fork = child_fork_in_slots(slots, child, token)?;
+    fork.reservation.state.request_abort(fork.reservation.identity)
+}
+
+fn abort_parent_forks(slots: &mut [Option<Entry>], parent: Token, worker: Option<u64>) {
+    for fork in slots.iter_mut().flatten().filter_map(|entry| entry.fork.as_mut()) {
+        let identity = fork.reservation.identity;
+        if identity.parent == parent.wire() && worker.is_none_or(|worker| identity.worker == worker) {
+            let _ = fork.reservation.state.request_abort(identity);
+        }
+    }
+}
+
+fn authorize_fork_return(slots: &[Option<Entry>], parent: Token, worker: u64, serial: u64, cpu: i64, value: i64) -> Result {
+    for fork in slots.iter().flatten().filter_map(|entry| entry.fork.as_ref()) {
+        let record = &fork.reservation;
+        if record.identity.parent == parent.wire() && record.identity.worker == worker
+            && record.identity.delivery == serial
+        {
+            if record.cpu as i64 != cpu { return Err(EINVAL); }
+            record.authorize_return(value)?;
+        }
+    }
+    Ok(())
+}
+
+fn record_fork_return(slots: &mut [Option<Entry>], parent: Token, worker: u64, serial: u64, value: i64) {
+    for fork in slots.iter_mut().flatten().filter_map(|entry| entry.fork.as_mut()) {
+        let record = &mut fork.reservation;
+        if record.identity.parent == parent.wire() && record.identity.worker == worker && record.identity.delivery == serial {
+            record.return_value = Some(value);
+        }
+    }
+}
+
+fn observe_fork_publication(slots: &mut [Option<Entry>], parent: Token) {
+    let Some(parent_index) = slots.iter().position(|slot| slot.as_ref().is_some_and(|entry| entry.key() == parent)) else { return; };
+    for index in 0..slots.len() {
+        let completion = slots[index].as_ref().and_then(|entry| entry.fork.as_ref()).and_then(|fork| {
+            let record = &fork.reservation;
+            if record.identity.parent != parent.wire() || record.return_published { return None; }
+            Some(slots[parent_index].as_ref().unwrap().syscalls.returned(record.identity.worker, record.identity.delivery))
+        });
+        if let Some(result) = completion {
+            let record = &mut slots[index].as_mut().unwrap().fork.as_mut().unwrap().reservation;
+            match result {
+                Ok(true) => record.observe_publication(),
+                Ok(false) => {},
+                Err(_) => { let _ = record.state.quarantine(record.identity); },
+            }
+        }
+    }
+}
+// END FORK BACKEND RESERVATION
+
 struct Entry {
     cleanup: Exchange,
     owner_slot: i32,
+    owner_generation: u64,
     prepare: Option<Preparation>,
     schedule: Option<Exchange>,
     retirement: Option<Exchange>,
@@ -38,6 +221,7 @@ struct Entry {
     needs_cleanup: bool,
     closed: bool,
     quarantined: bool,
+    fork: Option<ChildFork>,
 }
 
 impl Entry {
@@ -63,7 +247,7 @@ impl Entry {
         }
     }
     fn release_ready(&self) -> bool {
-        !self.quarantined
+        self.fork.is_none() && !self.quarantined
             && self.cleanup.release_ready()
             && self.syscalls.drained()
             && self.procfs.as_ref().is_none_or(|procfs| procfs.drained())
@@ -92,6 +276,13 @@ impl Entry {
         if let Err(error) = self.syscalls.close() {
             self.quarantined = true;
             return Err(errno(error));
+        }
+        if let Some(fork) = &mut self.fork {
+            // No unpublished-child PID absence or cleanup ACK proves VM safety.
+            // Keep the root identity and structural child owners until the
+            // separately gated revoke/final-destruction protocol is connected.
+            fork.reservation.state.request_abort(fork.reservation.identity)?;
+            return Ok(());
         }
         if !self.scheduled {
             self.schedule = None; // Nothing published can be cancelled here.
@@ -190,6 +381,7 @@ impl Remote {
         *slot = Some(Entry {
             cleanup,
             owner_slot: self.owner.slot() as i32,
+            owner_generation: self.owner.generation(),
             prepare: None,
             schedule: None,
             retirement: None,
@@ -200,6 +392,7 @@ impl Remote {
             needs_cleanup: false,
             closed: false,
             quarantined: false,
+            fork: None,
         });
         Ok(token)
     }
@@ -398,6 +591,7 @@ impl Remote {
 
     fn close_inner(&self, token: Token) {
         let mut slots = self.slots.lock();
+        abort_parent_forks(&mut slots, token, None);
         if let Some(slot) = slots
             .iter_mut()
             .find(|slot| slot.as_ref().is_some_and(|entry| entry.key() == token))
@@ -412,7 +606,7 @@ impl Remote {
                 // Retain its bounded slot until actual OS shutdown is implemented.
                 return;
             }
-            if entry.syscalls.drained()
+            if entry.fork.is_none() && entry.syscalls.drained()
                 && entry.procfs.as_ref().is_none_or(|procfs| procfs.drained())
                 && (entry.prepare.is_none() && entry.cleanup.reserved() || entry.release_ready())
             {
@@ -544,6 +738,7 @@ impl Remote {
             .syscalls
             .publish(cpu, |packet| send(packet).map_err(|e| e.to_errno()))
             .map_err(errno);
+        if matches!(&result, Ok(true)) { observe_fork_publication(&mut slots, token); }
         // `send` above means only queue publication. Notification runs after
         // the response has released its memory, but under the same application
         // mutex as RET completion. Its error must never retry that publication.
@@ -699,6 +894,9 @@ impl Remote {
             let worker = u64::from_le_bytes(bytes[..8].try_into().unwrap());
             let result = entry.syscalls.close_worker(worker);
             entry.quarantined |= entry.syscalls.quarantined();
+            if result.is_ok() || result == Err(-16) {
+                abort_parent_forks(&mut slots, token, Some(worker));
+            }
             result.map_err(errno)
         }
     }
@@ -964,6 +1162,7 @@ impl Remote {
         }
         bytes[48..56].fill(0); // Output: whether the continuing owner accepted the return.
         let mut slots = self.slots.lock();
+        authorize_fork_return(&slots, token, worker, serial, cpu, value)?;
         let entry = slots
             .iter_mut()
             .flatten()
@@ -980,6 +1179,7 @@ impl Remote {
             });
         entry.quarantined |= entry.syscalls.quarantined();
         result.map_err(errno)?;
+        record_fork_return(&mut slots, token, worker, serial, value);
         bytes[48..56].copy_from_slice(&1u64.to_le_bytes());
         loop {
             let entry = slots
@@ -1154,6 +1354,7 @@ impl Remote {
     pub(crate) fn cleanup(&self, token: Token) -> Result {
         {
             let mut slots = self.slots.lock();
+            abort_parent_forks(&mut slots, token, None);
             let entry = slots
                 .iter_mut()
                 .flatten()
@@ -1187,5 +1388,32 @@ impl Remote {
         }
         self.close(token);
         Err(errno(-110))
+    }
+}
+
+// These internal entrypoints deliberately have no application-invoke opcode or
+// mcctrl caller yet. CREATE_PPD remains closed until the VMA transaction and
+// pre-destruction revoke/final-ACK proofs are separately implemented.
+#[allow(dead_code)]
+impl Remote {
+    pub(crate) fn reserve_fork(&self, parent: Token, child: Token, geometry: ForkGeometry) -> Result<u64> {
+        let child_owner = Arc::new(ForkChildOwner::current()?, GFP_KERNEL)?;
+        let mut slots = self.slots.lock();
+        self.transport_health()?;
+        reserve_fork_in_slots(self.owner, &mut slots, parent, child, child_owner, geometry)
+    }
+
+    /// # Safety
+    /// Before calling, the exact child MM transaction must have completed its
+    /// validated infallible VMA owner/PFN commit. No runtime caller exists yet.
+    pub(crate) unsafe fn commit_fork(&self, child: Token, token: u64) -> Result {
+        let mut slots = self.slots.lock();
+        self.transport_health()?;
+        commit_fork_in_slots(&mut slots, child, token)
+    }
+
+    pub(crate) fn abort_fork(&self, child: Token, token: u64) -> Result {
+        let mut slots = self.slots.lock();
+        abort_fork_in_slots(&mut slots, child, token)
     }
 }

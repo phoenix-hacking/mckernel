@@ -155,8 +155,19 @@ impl Mailbox {
 struct Entry {
     token: Token, closed: bool, needs_cleanup: bool, quarantined: bool,
     prepare: Option<Preparation>, syscalls: Mailbox,
+    baseline_cancel_calls: usize, baseline_cancel_worker: Option<u64>,
 }
 impl Entry { fn key(&self) -> Token { self.token } }
+// Explicit no-child baseline adapter for the newly introduced worker-close
+// dependency. This fixture has exactly one parent and cannot represent a child
+// transaction. Real child cancellation is covered by the backend actual bodies.
+fn abort_parent_forks(slots: &mut [Option<Entry>], parent: Token, worker: Option<u64>) {
+    assert_eq!(slots.len(), 1, "no-child baseline only");
+    let entry = slots[0].as_mut().expect("baseline parent remains live");
+    assert_eq!(entry.key(), parent, "no child entry in this adapter");
+    entry.baseline_cancel_calls += 1;
+    entry.baseline_cancel_worker = worker;
+}
 struct Remote { slots: Mutex<Vec<Option<Entry>>> }
 impl Remote {
     @WORKER@
@@ -165,6 +176,7 @@ fn remote(prepare: Option<Preparation>) -> Remote {
     Remote { slots: Mutex(RefCell::new(vec![Some(Entry {
         token: 4, closed: false, needs_cleanup: false, quarantined: false,
         prepare, syscalls: Mailbox { opens: 0, closes: 0 },
+        baseline_cancel_calls: 0, baseline_cancel_worker: None,
     })])) }
 }
 #[test]
@@ -184,6 +196,13 @@ fn prepared_child_control_can_open_worker() {
     assert_eq!(backend.worker(4, &mut bytes, true), Ok(()));
     assert_eq!(u64::from_le_bytes(bytes[8..].try_into().unwrap()), 77);
     assert_eq!(backend.slots.lock()[0].as_ref().unwrap().syscalls.opens, 1);
+    bytes[..8].copy_from_slice(&77u64.to_le_bytes());
+    assert_eq!(backend.worker(4, &mut bytes, false), Ok(()));
+    let slots = backend.slots.lock();
+    let parent = slots[0].as_ref().unwrap();
+    assert_eq!(parent.syscalls.closes, 1);
+    assert_eq!(parent.baseline_cancel_calls, 1);
+    assert_eq!(parent.baseline_cancel_worker, Some(77));
 }
 #[test]
 fn pending_or_failed_preparation_does_not_open_worker() {

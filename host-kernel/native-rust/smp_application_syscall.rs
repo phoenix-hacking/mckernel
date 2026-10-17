@@ -533,6 +533,32 @@ impl<M: ResponseMemory> Mailbox<M> {
         Ok(false)
     }
 
+    /// Immutable discovery under Remote.slots. The predicate must inspect
+    /// local scalar metadata only, with no external calls or reentrancy. A
+    /// copied Request confers no payload access after this guard is released.
+    /// The response claim and ordinary RET stay owned by the original Call.
+    pub(crate) fn unique_delivered(
+        &self,
+        matches: impl Fn(&Request) -> bool,
+    ) -> Result<Option<(u64, u64, Request)>> {
+        if self.closed || self.quarantined { return Err(-32); }
+        let mut found = None;
+        for call in self.calls.iter().flatten() {
+            if call.kernel || call.service || call.cancelled || call.completion.is_some()
+                || call.response.is_none() || !matches(call.delivery.request())
+            { continue; }
+            let Some(worker) = call.worker else { continue; };
+            let serial = call.delivery.serial();
+            if !self.workers.iter().flatten().any(|state| {
+                state.worker == worker && state.delivery == Some(serial)
+            }) || call.delivery.check_return(worker, call.delivery.request().cpu() as i64).is_err()
+            { continue; }
+            if found.is_some() { return Err(-16); }
+            found = Some((worker.wire(), serial.wire(), call.delivery.request().clone()));
+        }
+        Ok(found)
+    }
+
     pub(crate) fn queued_cpu(&self) -> Option<i32> {
         if self.quarantined {
             return None;
