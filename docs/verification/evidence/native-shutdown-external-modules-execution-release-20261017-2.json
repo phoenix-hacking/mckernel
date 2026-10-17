@@ -1,0 +1,62 @@
+{
+  "schema": "mckernel.native-running-external-modules-release.v1",
+  "status": "PASS_EXECUTION_RELEASE",
+  "execution_count": 1,
+  "author": "/root",
+  "activation_conditions": "Only execute after independent exact payload review, source checkpoint pushed/fetched/blob verified, fresh mount/resource/root/shared ownership admission, exclusiveheavy and HEADfreeze. Fields do not themselves claim a build or observed source replay.",
+  "request": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-external-modules-request-20261017-2.json",
+    "sha256": "6550b8a39be0932742310d5c58ad9e6621598ee10d2ccef4acbfff3e832719f1"
+  },
+  "nonce": "79b00103de104607b182b374a2a396ae",
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "fetched_source_verified": true,
+  "terminal_policy": "remove-owned-terminal",
+  "historical_observer": {
+    "path": "/home/holden/mckernel-work/scratch/native-shutdown-external-modules-preparation-20261017-2/capsule/scripts/native_exact_historical_lease_observer.py",
+    "prefix": [
+      "/usr/bin/sudo",
+      "-A",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B"
+    ],
+    "sha256": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "timeout_seconds": 30
+  },
+  "source_sha256": {
+    "scripts/native_exact_historical_lease_observer.py": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "scripts/native_running_external_modules_offline.py": "bfa4ee6813e86a91dd4edd1650774dfb7591c361b4e627a62e57a03820ac7083",
+    "scripts/native_running_external_modules_owner.py": "c7368b3273f29ca96c710290812375b20289b57abfe5ed93dac5d6ce4e1214e7",
+    "scripts/native_rust_exact_build_container_owner.py": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+    "scripts/native_rust_exact_build_image_prepare.py": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b",
+    "scripts/native_rust_exact_build_image_rebind.py": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e",
+    "scripts/native_rust_exact_build_image_rebind_probe.py": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635",
+    "scripts/native_rust_exact_build_offline.py": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+    "scripts/native_rust_exact_disk_build_wrapper.py": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "e9861cf73b0328c9fe2eacb987ea179933146cbeddbc3951405d4e60e89560f4",
+    "scripts/tests/test_native_running_external_modules_owner.py": "22f30b785d02b0ff3b917b2f53f7d884e085aefff15336b8d0bebf09e2e66aba"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-external-modules-independent-source-review-20261017-2.json",
+    "sha256": "a2df87a2b230099dc536c2a2156cc569c6f50cf44adf40487ad45644cde8d211"
+  },
+  "reviewed_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-external-modules-execution-proposal-20261017-2.json",
+    "sha256": "7b2c9f6c16b4c3b1c21235b38cba835e04b39717269bdcc634fab06500d17195"
+  },
+  "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "source_candidate_sha": "3f7b265b9f90279f5bd36f33f294eaa117609f12",
+  "preceding_actual_retirement": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-external-modules-failure-review-20261017-1.json",
+    "sha256": "859e54e3a2bc8dfa3c0c1811ce25343f6d51f278c33b2535f968b31cf937e9c8"
+  },
+  "source_derivation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-external-modules-source-binding-20261017-2.json",
+    "sha256": "09eee698e07dddc3793524ea9b32f9f6e774105a8e9d0f654294db15f114c105"
+  },
+  "execution_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-external-modules-independent-execution-review-20261017-2.json",
+    "sha256": "d1ed5c6bb96a43d700a9ded09e12107fcda8ee2932c38bfeb023c8e571f978a5"
+  }
+}

@@ -15250,3 +15250,29 @@ MMaliasrevoke; one-shotguestdestructor/cachedACK. Allisolated, productionnonnull
 CREATE_PPD stays-95 untilwholecontractreview. Descriptorpublicorder mismatch
 correctedagainstactualCproducer→Rustdecoder; oldincorrectABIcreditretracted.
 Review6 saved; baselinepercentagesunchanged; continueaftercheckpoint.
+
+## Checkpoint392 — actual protection fault passed; corrected module build2 next
+
+Thirteenth actual current942 diagnostic/app independentlyPASS:61frozenbytes,
+emptyerr/exit0,33.690018s. ProgramprovesactualROwriteSIGSEGV/ACCERR/exacttarget/
+unchangedbyte, thenRWwrite+signalmaskrestoration andcheckedunmap. No separate
+faultregisterdump/widerprotectionmatrix claim. All30clients/owner594031/CIDd58b
+removed, PID255 retirement/release0, root27:4free, noerrors. Threeapproved
+readbacks immediatesamecommand. Independentresultrecord preserves rawjoins.
+
+Corrected shutdownbuild2 fullyreviewed: source3f7b265b(memory8785b1be), fresh
+nonce79b00103de104607b182b374a2a396ae,request6550b8a3/proposal7b2c9f6c,final
+releasefaf36971/canonicalpayload520e4889. Only one extraexecution_reviewpointer
+added. Fivebinds4RO1RW/j2/cpus2-5/12GiB/exacthistorical7records observer/60source
+closure1205370B. Failedbuild1 frozen; nofailedone-shot reuse. Save/fetch this
+beforelongbuild2 thenfreshadmit, protectionretirementaccepted. No forkdependency.
+
+Usefulparallelforkcode: provideractualbody20Rust+E0505 withindependentIHK
+AdmissionOwner/OsLease pending64 table (sealed/uncertainholds persist); borrowed
+SAMEatomic seal, noMMcallbacklocks. Consumer22internaljointcases +actualC ABI
+producer→decoder9correctedcases, hostfullMMaliasrevoke underimplementation.
+Guestone-shotcheckeddestructor/cachedACKhelpers reviewed but actualdo_fork
+caller+queuedRET reconciliation remain explicit blockers; originalcallermust
+retainchild untilinbandrevoke/negativeRET/cleanupACK, noOOBUAF/doublefree.
+Allforksourcesisolated; CREATE_PPD stays-95. Nativecycles0; practicalrows/open
+criteria anddatedengineeringpercentagebaseline unchanged. Continue.

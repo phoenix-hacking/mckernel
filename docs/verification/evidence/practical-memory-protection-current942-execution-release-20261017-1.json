@@ -1,0 +1,235 @@
+{
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/ndpr-1",
+    "--nonce",
+    "ae609fc3c5ed0e7bda755dd1b18d9fa6",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/practical-memory-protection-current942-20261017-1/staging/manifest.json",
+    "--manifest-sha256",
+    "5035456c57b3fab717b5b5d8e7046e76eed815eb1d0a430bcae944b5bea08ea4"
+  ],
+  "assembly": {
+    "execution_approved": false,
+    "fresh_parent_bound": true,
+    "parent_created": true,
+    "pattern": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-rust-std-current942-execution-proposal-20261017-1.json",
+      "sha256": "06e02724c0d72d8e546c7a5f3a4643a5272b25e956dac860faa03831ccc31195",
+      "size": 10236
+    },
+    "root_called": false,
+    "runtime_called": false,
+    "staged_overlay_manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/practical-memory-protection-current942-20261017-1/staging/overlay-result.json",
+      "sha256": "36dc69ae9e6220847cd0ae0ac15a931682ac6d84cf694a950f80c8d9a1694613",
+      "size": 19094
+    },
+    "tests": "One exact-oracle actual producer frame compile/execution and protocol positive/limit/bytes/exit negatives; no app/source compile/Linuxreference/handler tests rerun."
+  },
+  "author": "/root/native_shutdown_drain_helpers",
+  "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "execution_count": 1,
+  "frozen_inputs": [
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scripts/application-tests/practical_memory_protection.c",
+      "sha256": "9cb00ff2244a17f8b8c28aed4ad1e3573a878eeedec2c5c72bf0244624b5b448",
+      "size": 4752
+    }
+  ],
+  "interpreter_binding": {
+    "path": "/home/holden/anaconda3/bin/python3",
+    "resolved_path": "/home/holden/anaconda3/bin/python3.9",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "version": "3.9.12 (main, Apr  5 2022, 06:56:58) \n[GCC 7.5.0]"
+  },
+  "manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/practical-memory-protection-current942-20261017-1/staging/manifest.json",
+    "sha256": "5035456c57b3fab717b5b5d8e7046e76eed815eb1d0a430bcae944b5bea08ea4",
+    "size": 5510
+  },
+  "nonce": "ae609fc3c5ed0e7bda755dd1b18d9fa6",
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "6661756c74733d31206163636572723d3120616464726573733d3120726573746f7265645f77726974653d31206d61736b5f726573746f7265643d310a"
+  },
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828
+  },
+  "parent": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 110529,
+    "mode": "0o700",
+    "path": "/home/holden/mckernel-work/scratch/ndpr-1",
+    "uid": 1000
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "6661756c74733d31206163636572723d3120616464726573733d3120726573746f7265645f77726974653d31206d61736b5f726573746f7265643d310a"
+    },
+    "stderr_limit_bytes": 4096,
+    "stdout_limit_bytes": 4096
+  },
+  "postjoin_readback": {
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndpr-1.owner-ae609fc3c5ed0e7bda755dd1b18d9fa6",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/ndpr-1/attempt-ae609fc3c5ed0e7bda755dd1b18d9fa6/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndpr-1/attempt-ae609fc3c5ed0e7bda755dd1b18d9fa6",
+        "."
+      ]
+    ],
+    "capture_limit_bytes_per_command": 33554432,
+    "conditions": "Only after joined positive owner/client retirement; verify unchanged canonical exact directories/regular result, use fresh ordinary-UID captures and default tar without dereference.",
+    "requested": true,
+    "timeout_seconds_per_command": 30,
+    "approved": true
+  },
+  "prerequisites": {
+    "independent_execution_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-memory-protection-current942-execution-review-20261017-1.json",
+      "sha256": "2c61280646f55642dd8d0219ebbec7cb8007fa2dc7a869b33b139e680c25a7a2"
+    },
+    "independent_source_review": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-memory-protection-source-review-message-20261017-1.json",
+      "sha256": "6a53597b8fb5e39303b57ef90514b1011b234e0b1cc919a299efaf32467d3309",
+      "size": 1581
+    },
+    "live_preflight": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-memory-protection-current942-live-preflight-20261017-1.json",
+      "sha256": "3f0ab94bf16a7936fc2cb339b9c4716b085e64a1c15fde90db91c9f2ffabcd78"
+    },
+    "preceding_actual_retirement": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-external-modules-failure-review-20261017-1.json",
+      "sha256": "859e54e3a2bc8dfa3c0c1811ce25343f6d51f278c33b2535f968b31cf937e9c8"
+    }
+  },
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "schema": "mckernel.practical-memory-protection-execution-proposal.v1",
+  "scope": "One actual read-only write fault then restored write/mask diagnostic; assembly grants no execution authority.",
+  "selected_collector": {
+    "artifact": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/init",
+      "sha256": "ead247cdf56556c7491bd5d8f746c6c668c0c944414ce51392f7caaed895a63a",
+      "size": 1021968
+    },
+    "boot_argv": [
+      "/bin/native-boot",
+      "hidos",
+      "allow_oversubscribe"
+    ],
+    "contract": "PASS_PROTOCOL_ONLY actual selected frame body, positive and limit/bytes/exit negative new-oracle replay",
+    "payload_argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "profile": "ND_FUTEX4096",
+    "retained_final_map_count": 59,
+    "stderr_limit_bytes": 4096,
+    "stdout_limit_bytes": 4096
+  },
+  "semantic_scope": {
+    "not_claimed": [
+      "McKernel delivery before actual guest execution",
+      "native shutdown/resource restoration",
+      "whole OS acceptance"
+    ],
+    "supported_behavior": "One actual SIGSEGV/SEGV_ACCERR at exact protected byte, siglongjmp saved-mask restoration, restored RW write/read, original handler/mask restoration and checked unmap."
+  },
+  "staging_evidence": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-memory-protection-current942-preparation-20261017-1.json",
+    "sha256": "b64638aee27441d28417e03e1a0a5ec9eafe78c856af51bf21b8a39565d57c7a",
+    "size": 7811
+  },
+  "static_linking": {
+    "binary": {
+      "mode": 33216,
+      "path": "/home/holden/mckernel-work/scratch/practical-memory-protection-20261017-1/app",
+      "sha256": "a4bbba00f9c3ed174ebe31498be4ab92e0326c439611bb4fababf635de7f3223",
+      "size": 876848
+    },
+    "mode": "Static GNU libc EXEC; no interpreter/dynamic segment; exact prepared artifact reused without compile or Linux-reference rerun."
+  },
+  "status": "PASS_EXECUTION_RELEASE",
+  "unix_monitor_endpoints": [
+    {
+      "encoded_bytes": 91,
+      "max_bytes": 107,
+      "path": "/home/holden/mckernel-work/scratch/ndpr-1/attempt-ae609fc3c5ed0e7bda755dd1b18d9fa6/qmp.sock"
+    }
+  ],
+  "runtime_release": true,
+  "reviewed_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-memory-protection-current942-execution-proposal-20261017-1.json",
+    "sha256": "083d41ce899f1ed8a446cd53295d6565bbeb7228af55da63e617c9c7a4598b19"
+  }
+}
