@@ -14574,3 +14574,25 @@ adapters, not mapping or runtime proof; candidate/build inputs stay immutable.
 Image-first/code-first/useful parallelism/compatible known-good baseline reuse
 preferences persist. Counts unchanged3compiled candidates/12diagnosticpasses,
 0/273formalapps,6/130production,0/7language. No new native success/image/guest.
+
+Current execution update: authority3 preparation session3714/PID254271/start
+1459584 finished once rc0/empty stderr in9m15.90s, peak111952KiB. Prepared
+request8a5ec311, canonical ownerPASS, nine authenticated old aliases ->tenlinks.
+The actual candidate passes all five source/metadata checks and143tests,
+recordd5e1a4c4. Fresh canonical census9fcc4bd1 PASS, no active process/container,
+host28.156GB/scratch25.747GB/RAM29.929GB. Native execution proposal08ed9056
+combines the prepared-artifact and actual privileged execution decision; no
+additional historical-content scan is requested. Compile/link is next.
+
+User's explicit standing direction relayed to every active worker: GET IT
+WORKING FIRST; stop redundant readiness/ledgers/full historical scans/duplicate
+hardlink hashing. Keep routine records to code, exact command/input, actual
+result/error and original failure. Retain concrete unsafe/ABI/privileged review,
+live ownership/isolation/resources, not ceremony for ordinary edits. Consolidate
+notes at checkpoints. Current frozen preparation necessarily did duplicate
+hashing; it completed once unchanged and will not be replayed. Disjoint narrow
+active-census correction1275dac0/reviewab62c5de passes14tinytests; measured tiny
+fixture19contentstreams ->one, no real-corpus rescan. It is off this build's
+critical path; inherited helper phases remain immutable/source-bound. Do not
+run another avoidable duplicate-hash preparation unchanged. Explicit compatible
+read-only-build-tree module diagnostic reuse is proposed, not yet released.

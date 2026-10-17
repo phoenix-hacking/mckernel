@@ -1,5 +1,34 @@
 # Compact dispatcher handoff
 
+Current update: authority3 preparation completed once, rc0/empty stderr,
+9m15.90s, peak111952KiB. Request8a5ec311, nine old aliases ->ten links.
+Actual prepared-candidate five source/metadata checks and143tests PASS
+(d5e1a4c4); canonical live census9fcc4bd1 PASS, no active owner/container,
+host28.156GB/scratch25.747GB. Next is the one native compile/link release,
+then matching image and signal.mask-restore; no extra historical corpus scan.
+
+Standing DIRECT USER priority: GET IT WORKING FIRST. Minimal routine records:
+changed code, exact command/input, actual result/error and retained failure.
+No repeated readiness/ledger work or per-routine-edit review. Never repeat
+avoidable shared-content hashing per hardlink alias; authenticate once per
+necessary phase/dev-inode, retain every path's identity/metadata/race checks,
+and reauthenticate changed/uncertain inputs and actual required consumption
+boundaries. Current pinned preparation necessarily duplicated reads and is now
+finished; do not replay it. Narrow follow-on correction1275dac0 is reviewed
+ab62c5de in disjoint alias-census-optimization-20261017-1,14tinytests PASS;
+do not mutate current release-bound helper or gate this build on it. Historical
+helpers remain immutable. Its scope is the active alias census; inherited
+pre/post-copy checks remain source-bound and must not be silently disabled.
+Before another fresh preparation, address remaining avoidable duplicate reads
+through the bounded correction, not another unchanged historical corpus scan.
+
+No released authority3 module-only CLI exists. Bounded proposed reuse path:
+same pinned Red Hat container/toolchain, compatible control build tree mounted
+read-only, captured module compiler flags/generated bindings, fresh changed-module
+diagnostic output only. It needs explicit scoped execution authority and is not
+strict clean-build evidence; do not repeat the failed rustup/RedHat metadata mix.
+No broad harness rewrite or incremental-path work may delay this candidate.
+
 ## Current continuation: checkpoint 369, fresh corrected preparation next
 
 CONTINUE. Authority2 terminal cleanup completed once rc0/empty stderr,

@@ -1,0 +1,132 @@
+{
+  "schema": "scratch22-authority3.heavy-build-independent-execution-review.v1",
+  "decision": "PASS_EXECUTION",
+  "reviewer": "/root/fork_adoption_boundary_review",
+  "implementation_author": "/root/scratch22_adapter",
+  "release_author": "/root",
+  "implementation_ownership": false,
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "high",
+  "reviewed_release_payload_sha256": "845e01b9ee7a25c459b57b923da1ee44a8fe8433a553dfe9fa2e62500618ad06",
+  "proposal": {
+    "path": "docs/verification/evidence/scratch22-authority3-heavy-build-proposal-20261017.json",
+    "sha256": "08ed9056da0268379ae60b376444b3eb49e6481c98baf9a7a4e73f3254bfc9fb",
+    "attempt": "scratch22-authority3",
+    "execution_count": 1,
+    "payload_semantics": "SHA256 of sorted compact JSON with ensure_ascii=true/allow_nan=false plus newline, excluding ONLY execution_review; computed using the actual wrapper canonical function."
+  },
+  "finalization": {
+    "output": "docs/verification/evidence/scratch22-authority3-heavy-build-execution-release-20261017.json",
+    "only_allowed_change": "Replace execution_review.sha256=PENDING_INDEPENDENT_HASH with this completed review's raw SHA256. All other fields, including the already fixed review path and PASS_EXECUTION_RELEASE status, remain frozen.",
+    "before_execute": "Commit/push/fetch the exact final release and four bound source blobs; provide the exact final release SHA256 and fetched campaign-ref commit. Existing bind_release must pass before ownership or mutation."
+  },
+  "source_sha256": {
+    "scripts/native_exact_scratch22_authority3_build_wrapper.py": "2923abe41a6f573d8b41028fd85d3ae1dc802c2c2df556e23cdbe17045a4288f",
+    "scripts/tests/test_native_exact_scratch22_authority3_build_wrapper.py": "3d23a755dab8522dcaa4293811debb39f85735569a6b344f9fe87d5644db3f8a",
+    "scripts/prepare_native_exact_scratch22_authority3.py": "1f6aa36d4cf64d03ea62989248ed522b8575b1ab56d66cc66c211e9a8260fbf5",
+    "docs/verification/evidence/native-exact-candidate-delta-preparation-scratch18-20261001.py": "23d2dcc45db9e9268456a202e46c0e25e982b13d91413271cf00452d0564a731"
+  },
+  "accepted_bindings_reused": {
+    "preparation_review_sha256": "b244b8b364b9ab58a490ab515789b5c767ac9419c0769767f5d20ce8549f7715",
+    "preparation_release_sha256": "afd132764eaeb2829308871dd4fd308e33915d2a93f2af448937ce886d9d416d",
+    "authority3_source_review_sha256": "254bb987fe43b345b934d65a2c393d68287e22cc4cfe9272c4fabcd6caa42854",
+    "exact_six_file_target_review_sha256": "d55c92fee4a5ab2617063a337ead78f64365d75b68b557dd74e9a21e8a5cc07a",
+    "original_source_checks_sha256": "77c98238bb181b0bab2ee0915f386c9294441fb8d07692995b61a789e6172516",
+    "original_source_review_sha256": "5457654a2b15bdf94e4edf5d163fd4eeb1192da6604996df8646d45328c33213",
+    "scope": "Reuse already accepted source, recovery/cleanup producer joins, preparation protocol and unchanged root-lock/four-signal/capture/retirement algorithms. No historical corpus or source-suite re-audit. New final execution authority is this exact payload, not any consumed prior attempt."
+  },
+  "actual_prepared_artifact_checks": {
+    "result": "PASS_PREPARED_ARTIFACT_AND_EXECUTION_BOUNDARY",
+    "tool_capture": "Reviewer chunk587c9d, exit0, ordinary CPU2/120-second bound/2GiB RSS planning with no AS cap. No privileged operation, build or test suite.",
+    "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "candidate_tree": "07d05c1bb2ea5f4b6a3817ba55cd32afe56c8d59",
+    "candidate_git_head_tree_match": true,
+    "source_checkpoint_blobs_match": "All four current source files equal controller007dace4b576e078c0cf97af10bf3929b5f3037c blobs and proposal digests.",
+    "artifacts_sha256": {
+      "prepared_request": "8a5ec3119d1c319c5aa499706b7a35868606582abf46b0a3c6e0099f556c9c7f",
+      "manifest": "f370b2cc71b1eece1218480f9eccc4d9554c861f3056f74c8c6986efd0e59349",
+      "preparation_log": "8a3d24d57c7affc2b706f64e2b523ecca1385d2ea5a49b59dc15a0e3e78847a9",
+      "preparation_terminal": "dd04921a729c71e620e801ce960c62ce2cebaa999072e9d16cf46900ba1d69d4",
+      "disk_wrapper": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+      "owner": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+      "driver": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a"
+    },
+    "all_seven_small_artifact_bytes_and_live_identity_maps_match": true,
+    "terminal": {
+      "phase": "complete",
+      "returncode": 0,
+      "exception": null,
+      "preparation_only": true,
+      "pid": 254271,
+      "pid_starttime": "1459584",
+      "started_ns": 1792217319346211594,
+      "all_log_process_tuples_match": true,
+      "log_path_and_hash_match": true,
+      "canonical_owner_validation_passed_for_exact_request": true
+    },
+    "preparation_review_exact_19_input_map_and_target_tree_match": true,
+    "derived_request_sha256": "a7804ae6945743eafca6bf6ceeb184e1d75e9c0306ce17354f22fc650f630599",
+    "derivation": "Exact canonical prepared request; only preparation_only=false, executable=true, execution_released=true, release_required=false change. All paths, inputs, limits, floors and timeout unchanged.",
+    "shared_evidence_content_rescans": 0,
+    "shared_evidence_metadata_rescans": 0,
+    "prepared_source_admission": {
+      "path": "/home/holden/mckernel-work/scratch/scratch22-authority3-candidate-source-admission-20261017.json",
+      "sha256": "d5e1a4c49694e299861791d90269a5166a410a0da74a4c3212c548fba8a7743b",
+      "status": "PASS_SOURCE_CHECKS_ONLY",
+      "five_recorded_checks_exit_zero": true,
+      "existing_python_tests": 143,
+      "repeated_by_reviewer": false,
+      "readiness_not_promoted": true
+    }
+  },
+  "live_boundary": {
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "scratch_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "scratch_device": 1828,
+    "mount": "Canonical ext4 rw,nodev,nosuid scratch mount checked read-only.",
+    "candidate_inode": 3946466,
+    "output_inode": 4471486,
+    "evidence_inode": 4471487,
+    "root_lock_identity": [27, 4],
+    "all_fresh_identity_maps_equal_proposal": true,
+    "output_and_evidence_empty": true,
+    "execution_request_lease_exclusions_stdout_stderr_terminal_quarantine_absent": true,
+    "host_free_bytes": 28152307712,
+    "scratch_free_bytes": 25747574784,
+    "memavailable_bytes": 29944176640,
+    "floors_preserved": "Host16GiB/scratch12GiB plus512MiB emergency reserve remain available; no storage/RAM/swap/affinity or aggregate-budget expansion."
+  },
+  "fresh_canonical_census": {
+    "path": "/home/holden/mckernel-work/scratch/scratch22-authority3-canonical-census-20261017.stdout",
+    "sha256": "9fcc4bd1e76c80f39cb6e111b2e46af800e95ff6e3062e572f151661aeb7398a",
+    "status": "PASS_READ_ONLY",
+    "processes": [],
+    "containers": [],
+    "authenticated_historical_leases": 7,
+    "cpus": [0, 2, 3, 4, 5, 6, 7],
+    "boot_and_exact_prepared_request_match": true,
+    "fresh_under_lock_admission_still_required": true
+  },
+  "approved_execution": {
+    "count": 1,
+    "argv_template": [
+      "/usr/bin/python3", "-B", "/home/holden/mckernel/scripts/native_exact_scratch22_authority3_build_wrapper.py",
+      "--release", "/home/holden/mckernel/docs/verification/evidence/scratch22-authority3-heavy-build-execution-release-20261017.json",
+      "--release-sha256", "EXACT_FINAL_RELEASE_RAW_SHA256",
+      "--release-commit", "EXACT_FETCHED_CAMPAIGN_REF_COMMIT_CONTAINING_FINAL_RELEASE_AND_FOUR_SOURCE_BLOBS",
+      "--execute"
+    ],
+    "caller": "Ordinary holden; inherit unchanged launcher CPUs0,2-7. NO outer taskset and NO outer timeout. Root/Docker operations only through reviewed canonical sudo-A paths, never-n or direct credential access.",
+    "container": "Strict-j2; four CPUs pinned2-5;12GiB RAM;MemorySwap12GiB/no extra swap;512tasks;networknone;existing isolation.",
+    "shared_budget": "One heavy build/guest at a time; preserve host aggregate7jobs/24GiB and stricter canonical request aggregate16.2158GiB. Existing owner timeout19800seconds remains.",
+    "admission": "Unchanged fetched-release/source/review validation, positive actual prerequisite joins, current identities/resources, exclusive root lock, compatibility/census and repeated preflight must all pass before publishing the fresh one-shot derived request.",
+    "root_boundary": "Root development flock acquired before admission and inherited by canonical child; atomic HUP/INT/TERM/QUIT deferral and original child mask retained. Started uncertainty must retain nonreturning live root-lock quarantine. Never unlock based solely on child exit or failed parsing.",
+    "captures_and_retirement": "Keep strict128MiB stdout/terminal and16MiB stderr limits; retain exact request, streams/status, terminal, owner/container receipts and build artifacts. Only positively proved current retirement permits unlock. Positive FAIL retirement is not build success. Stopped container and persistent exclusions need separately reviewed cleanup.",
+    "usage": "Preserve launcher97-percent included allowance guard and external stops; no purchased/API-key fallback."
+  },
+  "failure_history": "All scratch21/original22/authority1/authority2 failures and recovery/cleanup captures remain retained. S22-NATIVE-SHUTDOWN-ERROR-PATH-1 type-path failure/correction and S22-DIGEST-COMPANION-1 authority2 phase0 stale-root failure/one bounded metadata correction are not reset. No prior request or materialization is replayed. No unchanged deterministic retry or raw removal is authorized.",
+  "blocking_findings": [],
+  "execution_performed_by_reviewer": false,
+  "acceptance_credit": false,
+  "scope": "Combined actual prepared-artifact and one-shot native execution review only. Prioritize this compiler observation without another readiness cycle or shared-evidence rescan. No cleanup, guest, runtime/application, optional fork, RS011 or production acceptance. After a fresh reviewed build, signal.mask-restore remains the separately released next real diagnostic."
+}
