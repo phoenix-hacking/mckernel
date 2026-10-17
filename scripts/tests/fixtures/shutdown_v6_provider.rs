@@ -8,7 +8,12 @@ const EBUSY: Error = -16;
 // PRODUCTION_EFFECT_TAG
 trait Errno { fn to_errno(self) -> i32; }
 impl Errno for Error { fn to_errno(self) -> i32 { self } }
-mod kernel { pub type Error = i32; }
+mod kernel {
+    pub mod error { pub type Error = i32; }
+    // Historical mutation driver names kernel::Error in its replacement text.
+    // The separate target-export regression deliberately provides no root alias.
+    pub type Error = error::Error;
+}
 mod smp_resource {
     #[derive(Clone, Copy, PartialEq, Eq, Debug)]
     pub struct OsToken { pub slot: u32, pub generation: u64 }
