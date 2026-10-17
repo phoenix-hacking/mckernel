@@ -1,5 +1,42 @@
 # Compact dispatcher handoff
 
+## Current continuation: checkpoint 369, fresh corrected preparation next
+
+CONTINUE. Authority2 terminal cleanup completed once rc0/empty stderr,
+result5d71f4e1, raw release9c229f4f/canonical7d1774ba, independent executionc06e825c.
+Exact stopped container63c2d257 removed; original exclusion inodes57830/57829
+archived with unchanged bytes2174a532/0fcea609. Full nine-event journal0af8c754,
+plan8c32eea3 and complete logb10880fb retained. Saved fresh root census1b8ed3fd
+has44containers, none active/target; owner/guard/clients absent, rootlock27:4 and
+UUID unchanged, complete output1/evidence41inventory and selected bytes unchanged.
+Independent postflight8034ca4a passes exact seven-pointer consumer contract;
+actual new adapter validator PASS, no repeated root operation. Full cleanup
+archive43556db3 passes tar compare0; originals preserved. No failure replay.
+
+Current six-file target942c927b/tree07d05c1b source reviewd55c92fe PASS binds
+55sources/4locks/11checker-import-test sources to actual checked closure,
+all654unsafe-site semantics unchanged. Target anchor is fetched origin/
+scratch22-authority3-source-digestcompanion-20261017. Author090a1304 five checks/
+145tests PASS includes stale digest negative. Old77c/545authorities immutable.
+
+Authority3 adapter1f6aa36d/tests8f4c613d and disabled wrapper2efda8b8/tests3d23a755
+were pushed/fetched f0b794c7, five exact blobs independently matched locally.
+Source review254bb987 independently passes16touched cases. Actual full source
+admissionac1ab520 PASS consumes all old/new cleanup and source authority. Only
+reviewed EXECUTION_ENABLED False->True yields wrapper2923abe4; both unchanged
+activation tests PASS0.002s. New source activation record preserves all bindings.
+Next commit/push/fetch enabled exact sources, then prepare fresh authority3
+release/controller/live identities and materialize once (nine old aliases ->10
+links). Keep controller HEAD stable during preparation. New output directories
+and request names are mandatory; never alter consumed authority2 or scratch21.
+
+Then actual prepared-artifact review/new one-shot native build, matching image,
+first exact signal.mask-restore guest. Preserve known-good compatible artifacts
+once passing, reuse them across payloads. Optional fork actual owner-ref tests
+run disjointly CPU6, isolated branch only; no production changes in candidate.
+Counts unchanged3compiled candidates/12diagnosticpasses,0/273formalapps,
+6/130production,0/7language. No image or new guest has run. Continue autonomously.
+
 ## Current continuation: checkpoint 368, precompiler failure repaired locally
 
 CONTINUE. Authority2 consumed its sole release and stopped before compilation:

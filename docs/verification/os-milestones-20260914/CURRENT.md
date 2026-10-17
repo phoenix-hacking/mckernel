@@ -14497,6 +14497,7 @@ note preserves original cheap authorCPU1 deviation and same15tests PASS0.050s
 on allowedCPU2; future work never widens launcher0,2-7 affinity. No root attempt
 was replayed. All original engineering-estimate ranges/counters stay unchanged:
 3compiled candidates/12diagnosticpasses,0/273formalapps,6/130production,0/7language.
+
 Continue after checkpoint and first image milestone; actual compiler/runtime
 failures select next repair, compatible known-good artifacts reused per payload.
 
@@ -14534,3 +14535,42 @@ modules/image for eligible payload-only tests; rebuild affected changed inputs
 only through fresh output/release names. Useful parallelism and essential
 ownership/resource/isolation/97%usage guards remain. Counters unchanged:
 3compiled candidates/12diagnosticpasses,0/273formalapps,6/130production,0/7language.
+
+## Checkpoint 369 — accepted authority2 cleanup, corrected source admitted
+
+Authority2 cleanup release9c229f4f was committed/pushed/fetched818444ef; exact
+four release/review/source/test blobs verified before execution. Sole CPU0/4GiB
+root transaction session56260 finished rc0/empty stderr, result5d71f4e1. Removed
+only stopped container63c2d257; original exclusion inodes57830/57829 archived
+with original bytes2174a532/0fcea609. Full journal0af8c754/plan8c32eea3/capture
+b10880fb preserved. Read-only postcensus1b8ed3fd under nonblocking rootlock27:4
+confirms44containers noneactive/target; full accepted two-snapshot process check
+proves owner244086/guard243497/allclients absent, no publisher. Original output1/
+evidence41metadata inventory and selected byte joins remain exactly unchanged.
+No active lease/exclusions/quarantine. Independent actual postflight8034ca4a
+passes agreed exact seven-pointer contract; new adapter actual retirement
+validator PASS. Full cleanup archive43556db3 tar compare0, all originals retained.
+
+Independent minimal source reviewd55c92fe binds942c927b/tree07d05c1b exact six
+files, original parentfd099 and55sources/4locks/11checker/import/test source
+closure. Current author090a1304 has five ordered checks/145tests PASS; all654
+unsafe-site semantics and old77c/545authorities unchanged. Target origin anchor
+fetched and all six source blobs matched. No optional fork code enters target.
+
+Fresh authority3 source adapter1f6aa36d/tests8f4c613d, wrapper2efda8b8/tests3d23a755
+and source review254bb987 were pushed/fetched f0b794c7; exact five blobs match.
+Independent16touchedtests PASS0.247s; author36adapter/10wrapper tests PASS.
+Actual full read-only source admissionac1ab520 PASS consumes all concrete source,
+retirement and cleanup generations, no drafts. Only conditionally reviewed
+EXECUTION_ENABLED False->True changes wrapper to2923abe4; two unchanged focused
+activation tests PASS0.002s. Fresh preparation, artifact review and heavy release
+are still required: activation is not workload authority. Next commit/fetch,
+fresh authority3 preparation release and once-only materialization. Keep its
+controller HEAD fixed through terminal and all nine existing alias roots intact.
+
+Optional isolated fork lane now tests actual ForkChildOwner current/Drop bodies,
+structural MM/PID reference lifecycle and failures using explicit fake Linux
+adapters, not mapping or runtime proof; candidate/build inputs stay immutable.
+Image-first/code-first/useful parallelism/compatible known-good baseline reuse
+preferences persist. Counts unchanged3compiled candidates/12diagnosticpasses,
+0/273formalapps,6/130production,0/7language. No new native success/image/guest.
