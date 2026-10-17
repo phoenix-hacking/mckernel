@@ -13,16 +13,17 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-17T15:55:14Z` (interval 30m03s).
-- Next full review target: `2026-10-17T16:25:00Z` (09:25 America/Los_Angeles).
-- Next review latest target: `2026-10-17T16:55:00Z`; preserve healthy operations.
-- Last included-usage observation: 18%; existing campaign stop remains 97%.
-- Current intervention: advance ready C-thread admission using its permitted
-  metadata-only joins; correct the reviewed shutdown effect-classification defect
-  with actual runtime-consumer regressions; stage the tested strict-Running helper.
-- Current invocation independently accepted diagnostic/app behaviors: 10 (signal,
+- Last full review: `2026-10-17T16:24:58Z` (interval 29m44s).
+- Next full review target: `2026-10-17T16:55:00Z` (09:55 America/Los_Angeles).
+- Next review latest target: `2026-10-17T17:25:00Z`; preserve healthy operations.
+- Last included-usage observation: 20%; existing campaign stop remains 97%.
+- Current intervention: freeze/checkpoint the reviewed allocator correction and
+  advance its fresh matched-module build; feed the actual memory-fault app while
+  build admission is pending; continue concrete fork bridge/revocation/destructor work.
+- Current invocation independently accepted diagnostic/app behaviors: 12 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
-  adapted closed-read, useful dynamic-libc memory application, real Rust std app).
+  adapted closed-read, useful dynamic-libc memory application, real Rust std app,
+  useful dynamic-libc threads application, forced pthread contention app).
   Old formal scores and estimates remain historical, not the new goal's percentage.
 - No new monitor script, OS timer, engineering dispatcher or workload was started.
 
@@ -528,3 +529,79 @@ Next review16:25UTC, latest16:55. Core anchors under ../evidence/:
 scratch/native-boot-running-prerequisite-20261017-1/observability-expert-3/.
 Steering154855681411 was accepted by server; no supervisor workload or shared
 artifact rehash was performed.
+
+## Review 6 — 2026-10-17 16:24:58 UTC
+
+Interval: `15:55:14` to `16:24:58` UTC, 29m44s. Same live worker498255/start3900845
+and server498257/start3900851; running, no stop. Usage20%, existing97% stop.
+HEAD64fac038; source integration checkpoint942d1218. Supervisor owns no runtime/Git.
+
+| Actual operation | Launch UTC | Outer duration | Result |
+| --- | --- | --- | --- |
+| Original dynamic-libc C threads | 15:56:06.254 | 36.899s | Independent actual-app/retirement PASS15:57:29; total11 |
+| Strict5 lifecycle with compiled176 modules | 16:03:22.420 | 34.694s | ActualRunning5 and payload PASS; shutdown reconcile-16/after8; retired |
+| Forced pthread contention | 16:08:56.161 | 34.744s | Independent actual-app/retirement PASS16:11:15; total12 |
+| Matched shutdown-module build1 | 16:18:10.570 | 5.883s | Full compilation FAIL E0308; independently retired16:21:37 |
+
+**Delivered:** +2 distinct accepted app behaviors, total12 (preceding interval+1
+in30m03s), plus the first direct nativeRunning5 observation. C threads prove
+overlapping worker lifetimes with barrier/TLS/counter2000/joins and exact25-byte
+stdout/exit37. The contention app proves held-mutexEBUSY andETIMEDOUT, then
+handoff/join/TLS, exact48-byte stdout/exit0. Both have empty stderr and complete
+application/client/owner/container/guest retirement. CPU parallelism, actual
+futex sleeping and sustained contention are not inferred.
+
+Strict5 helper observed5/expected5/raw0; the payload ran with exact40 bytes and
+exit0. Native probe then observed5 -> shutdown-16 ->8, close0. Actual stage logs:
+irq_close0, reset_reonline0, first failed stage reconcile-16. This is concrete
+localization of the existing shutdown failure, not a second distinct defect or a
+successful native cycle. The generic registration error is failure-masked
+procfs_empty, not direct proof of remaining registrations. All25 host clients,
+owner/container/QEMU retired. Earlier archive timestamp/precision failures remain
+preserved; the additive exact-integer metadata correction passed separately.
+
+Reviewed provider/callback integration reached checkpoint942d1218 after35Rust,
+10Python,5compile rejection and2runtime mutation controls. Its full-package build
+then exposed BootEpoch::allocate returning AllocError instead of kernel Error;
+no three-module output set exists. Independent retirement verified14clients plus
+observer, exact container removal and all3ownership-record releases; old seven
+records were authenticated, not removed. The sole-tail Ok(Arc::new(...)?) repair
+passes3actual-body tests, including ENOMEM/no epoch reuse and exhaustion; old
+code reproducesE0308. Independent PASS_SOURCE16:23:25. No corrected build had
+run at cutoff; fresh source checkpoint, exact package and release remain next.
+
+Parallel useful source work: dormant fork consumer/prepared-backend joint suite
+passes22 extracted-body cases; cancellation publication was repaired. Concrete
+module bridge, host alias/TLB revocation and final guest destructorACK are now
+implementation lanes. Production non-nullCREATE_PPD stays-95 until those real
+boundaries pass. Fork/exec/wait app has independent Linux-reference review.
+Memory-protection app independently passes source/Linux review: actual readonly
+write fault with exact address/SEGV_ACCERR, restored permissions/mask and cleanup,
+61-byte oracle plus6handler rejection controls; no native guest yet.
+
+Handoffs: C-thread decision ->strict5 launch5m53s; contention decision ->build
+launch6m56s includes required source/capsule/execution review. Strict5 owner
+readback ->contention launch3m24s starts before final independent review and is
+not an accepted-retirement gap. Exact avoidable portions remain unknown. These
+short mixed windows do not establish2x/3x velocity.
+
+**Next adjustment:** prioritize the corrected matched-module build using retained
+unchanged review/profile scope, new exact source pins and a fresh one-shot release;
+do not wait for fork completion. Use a free heavy slot for the memory-fault app
+while build preparation is pending when its separate release permits it; never
+overlap heavy owners or ownership-sensitive preparation. Keep fork implementation moving
+through actual bridge/revocation/destructor boundaries, not more dormant-only plans.
+No new practical final-profile check closes here (14milestones open;32checks open,
+1previous retirement check complete,2unassessed). Saved percentage baseline is
+unchanged. Next full review16:55UTC, latest17:25.
+
+Anchors under ../evidence/: native-core-threads-current942-result-review-20261017-1,
+practical-pthread-contention-current942-result-review-20261017-1,
+native-running-lifecycle-strict5-independent-execution-review-20261017-2,
+native-shutdown-integration-source-20261017-2,
+native-boot-epoch-allocate-error-source-20261017-1,
+native-fork-consumer-joint-source-20261017-1 and
+practical-memory-protection-source-linux-20261017-1 (all.json). Build diagnostic
+and retirement remain in frozen nsd-c/nsd-o-23e0839d85fe47c4ab296fbe3f5a384c.
+Steering160021956942,161453583905,161950017153 accepted by server; supervisor
+started no workload/cleanup/launcher and performed no shared artifact rehash.

@@ -1159,7 +1159,7 @@ impl BootEpoch {
     fn allocate() -> Result<Arc<Self>> {
         let id = NEXT_BOOT_EPOCH.fetch_update(Ordering::AcqRel, Ordering::Acquire,
             |next| next.checked_add(1)).map_err(|_| EIO)?;
-        Arc::new(Self { id, shutdown: AtomicU32::new(SHUTDOWN_OPEN) }, GFP_KERNEL)
+        Ok(Arc::new(Self { id, shutdown: AtomicU32::new(SHUTDOWN_OPEN) }, GFP_KERNEL)?)
     }
 
     fn claim(&self) -> Result {

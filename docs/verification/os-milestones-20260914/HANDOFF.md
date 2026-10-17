@@ -1,5 +1,28 @@
 # Compact dispatcher handoff
 
+## Checkpoint391 — allocator error conversion corrected; fresh build next
+
+Shutdown externalbuild1 failed make2/E0308 in BootEpoch::allocate,5.882958s;
+threeKO absent. Original942d capsule/partialoutputs retained. Independent
+retirementaccepted14Docker+1fixedobserver/owner587405/CID2d167removed; exact7
+historicalrecords read-onlyauthenticated,3ownedrecordsarchived/released/rootfree.
+Minimal source correction memory8785b1be wraps Arc::new in Ok(...?) preserving
+AllocError→KernelError. Three actual-body tests+originaltailE0308 compile control
+PASS with distincterror types; independentPASS_SOURCE766b/31dc/988d. Newsource
+candidate checkpoint now; preparefresh60closure byONEdeltatoretained942d plus
+newnonce/request/release, reuse unchanged ownership/profile/logic reviews.
+Do notrerunspentbuild1 orwaitforfork. Nativecycles0/appbehaviors12.
+
+Memoryfaultapp Linux actualROwritefault+ACCERR/exactaddress andRWrestore PASS;
+sourcehighreviewPASS, freshcurrent942packet083d pendingexecutionreview/admission.
+Mayrunonlywhilecorrectedbuildnotfullyadmitted andheavyfree. Threeactivefork
+source lanes: realprivateproviderbridge/IHKlifetimehold; mcctrlborrowedseal+full
+MMaliasrevoke; one-shotguestdestructor/cachedACK. Allisolated, productionnonnull
+CREATE_PPD stays-95 untilwholecontractreview. Descriptorpublicorder mismatch
+correctedagainstactualCproducer→Rustdecoder; oldincorrectABIcreditretracted.
+Review6 saved; baselinepercentagesunchanged; continueaftercheckpoint.
+
+
 ## Checkpoint390 — native Running5 observed; matched shutdown compile next
 
 Strict5 helper actually observed5 and payload40bytes/exit0 retired normally.
