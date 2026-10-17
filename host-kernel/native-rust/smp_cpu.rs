@@ -1654,7 +1654,9 @@ fn reconcile_shutdown_boot(boot: super::smp_memory::ShutdownBoot) -> Result {
     super::smp_memory::finish_shutdown_claim(&boot, || { transaction.commit(); })?;
     for index in 0..count {
         let cpu = context.requests[index];
-        context.devices[cpu].take();
+        // Keep the module-owned Linux device reference and original topology.
+        // Shutdown releases the boot assignment, not module discovery state;
+        // a later reserve revalidates this identity before any offline effect.
         BLOCK_ONLINE[cpu].store(false, Ordering::Release);
         context.shutdown_journal[index] = ShutdownCpuJournal::empty();
     }
@@ -1698,7 +1700,9 @@ pub(super) fn reconcile_shutdown(owner: OsToken) -> Result {
     // this remaining owner cleanup is infallible under the CPU mutex.
     for index in 0..count {
         let cpu = context.requests[index];
-        context.devices[cpu].take();
+        // Keep the module-owned Linux device reference and original topology.
+        // Shutdown releases the boot assignment, not module discovery state;
+        // a later reserve revalidates this identity before any offline effect.
         BLOCK_ONLINE[cpu].store(false, Ordering::Release);
         context.shutdown_journal[index] = ShutdownCpuJournal::empty();
     }

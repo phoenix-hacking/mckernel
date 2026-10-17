@@ -608,7 +608,7 @@ mod fixture {
         FINISH_STATUS.store(0, Ordering::Release);
         assert_eq!(finish(&mut context, token()), Ok(()));
         assert!(context.shutdown_journal.iter().all(|r| !r.recorded));
-        assert!(context.devices[1].is_none() && context.devices[2].is_none());
+        assert!(context.devices[1].is_some() && context.devices[2].is_some());
         assert!(context.pin.is_none() && !context.poisoned);
         assert_eq!(context.table.slots[1].state, CpuState::Online);
         assert_eq!(context.table.slots[1].owner, None);

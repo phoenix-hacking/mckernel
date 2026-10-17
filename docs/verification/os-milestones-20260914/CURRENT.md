@@ -15363,3 +15363,31 @@ Review8 saved(next17:55UTC); dated15:25percentagebaselineunchanged. Continue.
 FPU actual-body packetacb73548 confirms ignoredsaveENOMEM reaches mockedrestore/switch;
 separate ownedrepair native_fp_save_repair +independentreviewer native_fp_save_review
 active inNEWisolatedsource only. No current3f7/image942 edits/heavy/probe replay.
+
+
+## Checkpoint395 — CPU second-reservation source repair; native retry pending
+
+First full-cycle attempt retired and independently classified at the second CPU
+reservation, before second OS creation/load/boot. Raw helper failed line213;
+numeric guest errno was not captured. Compiled-source ENODEV is a prediction,
+not an observed errno. Failure0f530ca3/archive d8f8ad95 preserve the exact attempt.
+First shutdown/destroy/public-release passed again; complete cycles remain0.
+
+CPU candidate356853 retains module-owned device/topology references across both
+successful reconciliations; each later reservation still validates current device,
+topology, online state and owner. Module drop retains final device release.
+Independent source review accepted6 actual-body cases and20 affected integration
+cases plus five negative controls. Only two obsolete successful snapshot assertions
+changed; original bytes and post-drop release checks remain. Source/integration
+record native-cpu-reacquire-source-integration-20261017-1.json. No native fix credit.
+
+Next: fresh small matched-module build using the unchanged reviewed Linux/tool
+profile, then separate one-shot full-cycle retry. Draft60file closure3a1922d0,
+onlyCPUchanged; final source-commit/identities/release still required. Host capacity
+is tight (~251MB beyond packet floor at draft observation): bounded targeted-trim
+preparation/review runs independently, floors remain binding. Separate FPU thin
+source materialization preparation must preserve full authority/restoration and
+must not delay CPU retry. Fork typed carrier/LINK/v9 consumers continue isolated;
+CREATE_PPD remains gated. Actual app behaviors14, complete native cycles0;
+practical percentage baseline unchanged. Review9 saved, next review18:25UTC.
+Continue after checkpoint; no launcher/state changes.

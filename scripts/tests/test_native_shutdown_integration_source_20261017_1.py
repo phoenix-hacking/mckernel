@@ -39,7 +39,7 @@ INTEGRATION_TESTS=r'''
         assert_eq!(super::MEMORY_COMMITS.load(Ordering::Acquire),1);
         assert_eq!(super::JOIN_COUNT.load(Ordering::Acquire),3);assert_eq!(super::NAMESPACE_DROPS.load(Ordering::Acquire),2);
         assert!(!super::smp_memory::integration_image_present(token()));assert!(!super::smp_memory::integration_assigned(token()));
-        {let cpu=cpu.lock();for c in [1,2]{assert!(cpu.devices[c].is_none());assert_eq!(cpu.table.slots[c].owner,None);assert_eq!(cpu.table.slots[c].state,CpuState::Online);assert!(!cpu.shutdown_journal[c-1].recorded);}}
+        {let cpu=cpu.lock();for c in [1,2]{assert!(cpu.devices[c].is_some());assert_eq!(cpu.table.slots[c].owner,None);assert_eq!(cpu.table.slots[c].state,CpuState::Online);assert!(!cpu.shutdown_journal[c-1].recorded);}}
         assert_eq!(invoke_provider(),-22);assert_eq!(super::MEMORY_COMMITS.load(Ordering::Acquire),1);assert_eq!(super::NAMESPACE_DROPS.load(Ordering::Acquire),2);
     }
     #[test]fn integrated_active_application_and_pager_are_post_claim_busy_without_discard(){

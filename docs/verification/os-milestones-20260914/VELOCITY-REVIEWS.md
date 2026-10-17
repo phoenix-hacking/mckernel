@@ -13,20 +13,21 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-17T17:27:01Z` (interval 31m58s).
-- Next full review target: `2026-10-17T17:55:00Z` (10:55 America/Los_Angeles).
-- Next review latest target: `2026-10-17T18:25:00Z`; preserve healthy operations.
-- Last included-usage observation: 23%; existing campaign stop remains 97%.
-- Current intervention: finish the corrected resource-query contract and its
-  independent review; admit the staged vector app when ready; advance toward
-  a complete destroy/release/reboot cycle while fork completion continues.
-- Current invocation independently accepted current942 app/diagnostic behaviors: 13 (signal,
+- Last full review: `2026-10-17T17:57:25Z` (interval 30m24s).
+- Next full review target: `2026-10-17T18:25:00Z` (11:25 America/Los_Angeles).
+- Next review latest target: `2026-10-17T18:55:00Z`; preserve healthy operations.
+- Last included-usage observation: 26%; existing campaign stop remains 97%.
+- Current intervention: resolve final cycle source/evidence joins and live
+  admission, then execute the separately released one-cycle case; continue
+  isolated FPU-save repair and actual fork carrier/LINK implementation.
+- Current invocation independently accepted app/diagnostic behaviors: 14 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
   useful dynamic-libc threads application, forced pthread contention app,
-  actual memory-protection fault/recovery app).
-- Separate native3f7b observation: first independently accepted quiescent native
-  shutdown5->0->0/close0; complete stop/destroy/release/reboot cycles remain0.
+  actual memory-protection fault/recovery app, bounded vector-preservation app).
+- Separate native3f7b observations: independently accepted quiescent native
+  shutdown5->0->0/close0 and public destroy/device-memory release; complete
+  stop/destroy/release/reboot cycles remain0.
   Old formal scores and estimates remain historical, not the new goal's percentage.
 - No new monitor script, OS timer, engineering dispatcher or workload was started.
 
@@ -756,3 +757,91 @@ native-vector-preservation-preparation-20261017-1.json. Practical check closures
 are in practical-milestones.json. Steering170255,171123 and172002 was accepted
 by the server and adopted. No supervisor workload, cleanup, launcher or shared
 artifact rehash was performed.
+
+## Review 9 — 2026-10-17 17:57:25 UTC
+
+Interval: `17:27:01` to `17:57:25` UTC,30m24s. Same live worker498255/start3900845
+and server498257/start3900851; running, no stop. Usage26%, stop97%.
+HEAD413462da records the vector and public resource results. Current compiled
+native candidate remains3f7b265b; supervisor owns no runtime/Git.
+
+| Actual operation | Launch UTC | Outer duration | Independent decision |
+| --- | --- | --- | --- |
+| Vector preservation | 17:29:43.076 | 36.248s | PASS17:32:15; distinct app total14 |
+| Public resource-release v2 | 17:33:50.558 | 34.594s | PASS17:36:23; one destroy/release diagnostic |
+
+**Delivered:** +1 distinct app and the first accepted native public resource
+release. Vector output is the exact77-byte four-line oracle, empty stderr/exit0;
+tested XMM0–15, MXCSR and x87 state survives raw syscall, blocked futex and
+delivered signal. Trace records worker257/futex return0. No AVX/XSAVE/multicore
+credit follows. All30clients and owner/container/QEMU retire; lease and root lock are released.
+
+Resource v2 observes strict5/shutdown0/query0/close0, both closed OS inventory
+queries returning exactEBUSY/unavailable, successful OS0destroy, refreshed128MiB
+device reservation, release0, empty final device CPU/memory inventories and
+CPU1online. All four evaluations and complete30client/owner/container/QEMU
+retirement pass. No assigned-OS empty inventory, physical/generation identity,
+full lifetime restoration, reboot or whole-milestone acceptance is inferred.
+Application total stays14; this is a separate resource diagnostic. Original v1
+failure stays preserved. Both result archives pass exact13-file integer-metadata
+retention review.
+
+**Measured handoff:** accepted vector retirement17:32:15 ->resource launch
+17:33:50.558 is95.558s. This is within the five-minute scheduling target and is
+an improvement over previously observed gaps; these few mixed cases do not
+establish2x/3x overall velocity. After resource acceptance, the next case required
+new collector implementation and review, not merely an idle ready-guest slot.
+
+The offline v2 reboot reference passed independent review17:36:32. The one-cycle
+collector then passed six focused methods, actual supervised helper handoff and
+eight rejection captures; a missing raw-file inventory was corrected additively
+without rerun. Stage61members/55nonoverlay metadata joins passes. Execution review
+passed conditionally17:55:03 for exactly one second boot after accepted workload,
+stop/destroy/release, with fresh append-only kernel-log status5 and snapshots.
+Final independent source/protocol/raw-inventory PASS arrived17:56:50: all136raw
+files are bound, reviewed source unchanged. Live admission and final metadata
+joins still precede invocation. Second OS/resources remain until guest shutdown;
+no second native cleanup is authorized. No actual cycle at cutoff; count0.
+
+M07 now records partial native coverage, replacing both unassessed checks with
+open assessments. Current checklist3complete/32open; all14milestones open, no new
+check closure this interval. The focused feature/state trace found an actual
+source defect: save_fp_regs ENOMEM is ignored before restore/switch. The retained
+production-body reproducer proves that control flow using mocked boundaries,
+not hardware corruption. An isolated pre-runqueue fail-stop repair passed independent source review
+17:57:22 after four compilations and42executions across Rust-helper and C fallback
+branches, IRQ states and relevant no-switch/idle/exit paths. Both fixture failures
+remain preserved. Hardware/XSAVE/allocation boundaries are mocked; panic halts
+the calling CPU and can occur before a no-switch selection. Native validation,
+recoverable ENOMEM and whole-guest shutdown are not proved. Frozen cycle
+artifacts are unchanged.
+
+Fork completion's two review findings are corrected and independently accepted
+at17:52:20: separate durable full-key ACK cells survive pending-slot reuse, capacity
+fails before effects, and final ACK survives parent mailbox retirement.41actual-
+body tests pass; completed receipts are limited to64per generation until justified
+authenticated retirement exists. Consumer60case source packet remains separate.
+The actual retained carrier and child-referenced LINK are being implemented under
+an agreed commit/cancel/seal/final-response ownership contract. Carrier tests are
+not yet accepted; production non-nullCREATE_PPD stays-95. No native fork credit.
+
+**Next adjustment:** consume the final cycle evidence closure, complete live
+admission and use its one-shot release once; retain any failure and repair its
+actual first failed boundary.
+Keep FPU correction and carrier/LINK work independent and promote them through
+affected builds/runtime only when reviewed. Reuse unchanged inputs, maintain the
+two-case queue and oneheavy limits. Do not pre-run obsolete final repetitions.
+Saved percentage baseline remains unchanged; no numerical uplift is invented.
+Next review18:25UTC, latest18:55. Steering173320,173542,174049,174917 was accepted
+and adopted;175629 requests the final bounded cycle join. No supervisor workload,
+cleanup, launcher or shared artifact rehash was performed.
+
+Anchors under ../evidence/: native-vector-preservation-result-review-20261017-1.json;
+native-resource-release-v2-result-review-20261017-1.json;
+native-resource-reboot-sequence-source-20261017-2.json;
+native-resource-reboot-cycle-execution-proposal-20261017-1.json;
+practical-m07-selected-profile-assessment-20261017-1.json;
+practical-m07-active-state-mismatch-20261017-1.json;
+native_fp_save_repair_20261017.json. Fork correction report remains
+under scratch/fork-adoption-wip-20261017-1/docs/verification/evidence/
+fork-provider-completion-correction-20261017-1/report.json.

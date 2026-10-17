@@ -1,0 +1,61 @@
+{
+  "schema": "native-cpu-reacquire-source-integration-v1",
+  "status": "PASS_SOURCE_AND_AFFECTED_INTEGRATION_ONLY",
+  "recorded_utc": "2026-10-17T18:15:04.463382+00:00",
+  "author_report": {
+    "path": "/home/holden/mckernel-work/scratch/native-cpu-reacquire-repair-20261017-1/report.json",
+    "sha256": "b6d69dee9725d2c4b9d92b17d58f80837e04fe4e5955479118a928a08f899907",
+    "size": 3904
+  },
+  "production": {
+    "path": "host-kernel/native-rust/smp_cpu.rs",
+    "sha256": "356853344bffaa5b3d625c97eb3928b8908d45abbc94d16902e19bdef45ea90c",
+    "size": 76797
+  },
+  "change": "Keep module-owned Linux CPU-device/topology references across both successful shutdown reconciliation consumers; next reservation still validates exact current identity/topology and ordinary ownership. Module drop retains final device release.",
+  "fixture_contract": "Only two obsolete successful-reconciliation None assertions become Some; post-context-drop release, OS ownership, journal, veto, pin and retirement assertions unchanged. Original bytes retained.",
+  "results": {
+    "author_actual_body_cases": 6,
+    "affected_integration_cases": 20,
+    "unittest_status": 0,
+    "compile_fail_controls": [
+      "E0521",
+      "E0515",
+      "elided_lifetimes_in_paths"
+    ],
+    "effect_mutants": "compile0 then run101 at admission reopened assertion"
+  },
+  "independent_reviewer": "/root/native_cpu_reacquire_review; accepted exact combined bytes/source and five negatives",
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-cpu-reacquire-integration-20261017-1/unittest.stdout",
+      "sha256": "f9deec82a4fdfd529236e2d75b19de33d42f76635de6695e2fd9443b20d84915",
+      "size": 2258
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-cpu-reacquire-integration-20261017-1/unittest.stderr",
+      "sha256": "07faab9ff85f9784ac6dc46a4bd83a4f9e19302bfbc342c8d6ccfcaf02fd406d",
+      "size": 98
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-cpu-reacquire-integration-20261017-1/actual-integration/actual.rs",
+      "sha256": "5e990dc347e24bf9280c69709156bcd31b94237a509e220fadcb3e3060f093d1",
+      "size": 144767
+    },
+    {
+      "path": "scripts/tests/fixtures/shutdown_cpu_reclaim.rs",
+      "sha256": "ef8b0eab3db8a141231b73ea1ce380c418ea2978cb77d2e4abff61808df77fab",
+      "size": 26927
+    },
+    {
+      "path": "scripts/tests/test_native_shutdown_integration_source_20261017_1.py",
+      "sha256": "2ec3df8d6bf516bc46f5b6a84ba415204f8b80855a05f3509c3fba0044c4575b",
+      "size": 22577
+    }
+  ],
+  "preserved_originals": "/home/holden/mckernel-work/scratch/native-cpu-reacquire-integration-20261017-1/original",
+  "native_credit": false,
+  "cycle_count": 0,
+  "failure_result": "docs/verification/evidence/native-resource-reboot-cycle-failure-review-20261017-1.json",
+  "next": "Fresh matched three-module build from checkpointed CPU candidate, then separately released full-cycle retry using unchanged Linux/image inputs; storage/owner admission required."
+}
