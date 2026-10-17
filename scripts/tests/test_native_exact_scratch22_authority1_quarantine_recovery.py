@@ -202,6 +202,70 @@ class RecoveryTests(unittest.TestCase):
                 m.main(['--release', '/not-opened', '--release-sha256', 'b' * 64])
         execute.assert_not_called()
 
+    def terminal_fixture(self):
+        # Exact six-mount shape and destination order retained in inspect-terminal.
+        base = '/home/holden/mckernel-work/scratch/'
+        candidate = base + 'mckernel-exact-candidate-scratch-22-authority1'
+        mounts = [('/src', candidate, False),
+                  ('/assets', base + 'native-exact-assets-16445ab2', False),
+                  ('/out', candidate + '-output', True),
+                  ('/evidence', candidate + '-evidence', True),
+                  ('/driver.py', candidate + '/scripts/native_rust_exact_build_offline.py', False),
+                  ('/inputs.json', base + 'native-exact-inputs-scratch-22-authority1.json', False)]
+        return {'Id': 'a' * 64, 'Args': ['-I', '-B', '/driver.py'],
+                'State': {'Status': 'exited', 'Pid': 0, 'ExitCode': 1, 'OOMKilled': False},
+                'Mounts': [{'Destination': dest, 'Source': source, 'RW': writable,
+                            'Type': 'bind', 'Mode': '', 'Propagation': 'rprivate'}
+                           for dest, source, writable in mounts]}
+
+    def test_actual_six_mount_permutation_only_preserves_exact_comparison(self):
+        retained = self.terminal_fixture()
+        observed = copy.deepcopy(retained)
+        observed['Mounts'] = [observed['Mounts'][i] for i in (3, 4, 5, 0, 1, 2)]
+        self.assertNotEqual(m.canonical(observed), m.canonical(retained))
+        self.assertEqual(m.inspect_comparison(observed), m.inspect_comparison(retained))
+        for mutate in (lambda v: v['Mounts'][0].update(RW=False),
+                       lambda v: v['Mounts'][0].update(Source='/changed'),
+                       lambda v: v['Mounts'][0].update(Extra='changed'),
+                       lambda v: v['Mounts'].pop(),
+                       lambda v: v['Mounts'].append(dict(v['Mounts'][0], Destination='/extra')),
+                       lambda v: v['Args'].reverse(),
+                       lambda v: v['State'].update(ExitCode=0)):
+            changed = copy.deepcopy(observed); mutate(changed)
+            self.assertNotEqual(m.inspect_comparison(changed), m.inspect_comparison(retained))
+        for mutate in (lambda v: v['Mounts'].append(copy.deepcopy(v['Mounts'][0])),
+                       lambda v: v['Mounts'][0].pop('Destination'),
+                       lambda v: v['Mounts'][0].update(Destination=None),
+                       lambda v: v.update(Mounts=None)):
+            changed = copy.deepcopy(observed); mutate(changed)
+            with self.assertRaises(m.Refusal): m.inspect_comparison(changed)
+        self.assertEqual(retained, self.terminal_fixture())  # No fixture mutation.
+
+    def test_snapshot_preserves_raw_inspect_before_mismatch_or_parse_failure(self):
+        retained = self.terminal_fixture()
+        mismatch = copy.deepcopy(retained); mismatch['State']['ExitCode'] = 0
+        for raw in (m.canonical([mismatch]), b'{malformed-json'):
+            with self.subTest(raw=raw), tempfile.TemporaryDirectory() as td:
+                prefix = Path(td) / 'correction1'
+                profile = {'retirement_proof': {'container': {
+                    'id': retained['Id'], 'terminal_path': '/not-read', 'terminal_sha256': 'b' * 64}}}
+                with mock.patch.object(m, 'PREFIX', prefix), \
+                     mock.patch.object(m, 'protected_inputs', return_value={}), \
+                     mock.patch.object(m, 'guard_identity'), \
+                     mock.patch.object(m, 'require_lock_holder', return_value=[]), \
+                     mock.patch.object(m, 'proc_stat', return_value=['0'] * 20), \
+                     mock.patch.object(m, 'process_code', return_value='fixed-code'), \
+                     mock.patch.object(m, 'validate_process_report'), \
+                     mock.patch.object(m, 'root_readonly', side_effect=[b'{}', raw]) as root, \
+                     mock.patch.object(m, 'read_json', return_value=retained):
+                    with self.assertRaises((m.Refusal, json.JSONDecodeError)):
+                        m.snapshot('before1', {}, profile, True)
+                self.assertEqual(root.call_count, 2)
+                self.assertEqual(Path(str(prefix) + '.before1.inspect.json').read_bytes(), raw)
+                self.assertEqual(Path(str(prefix) + '.before1.process.json').read_bytes(), b'{}')
+        self.assertTrue(str(m.PREFIX).endswith('.correction1'))
+        self.assertEqual(len(m.ORIGINAL_FAILURE_SHA256), 3)
+
     def test_future_source_authorization_and_one_shot_gate_are_exact(self):
         files = {str(m.SELF.relative_to(m.REPO)): '1' * 64,
                  str(m.TEST.relative_to(m.REPO)): '2' * 64}
@@ -210,6 +274,7 @@ class RecoveryTests(unittest.TestCase):
                    'status': 'PASS_EXECUTION_RELEASE', 'profile_sha256': m.PROFILE_SHA,
                    'execution_count': 1, 'fetched_source_verified': True,
                    'source_checkpoint': 'a' * 40, 'author': '/author', 'files_sha256': files,
+                   'original_failure_sha256': dict(m.ORIGINAL_FAILURE_SHA256),
                    'source_review': {'path': str(review_path), 'sha256': '3' * 64}}
         review = {'decision': 'PASS_SOURCE', 'implementation_ownership': False,
                   'reviewer': '/independent', 'files_sha256': files,
@@ -223,6 +288,8 @@ class RecoveryTests(unittest.TestCase):
                 return review
             return release
         def identity(path):
+            if str(path) in m.ORIGINAL_FAILURE_SHA256:
+                return {'sha256': m.ORIGINAL_FAILURE_SHA256[str(path)]}, None
             return {'sha256': files[str(path.relative_to(m.REPO))]}, None
         with mock.patch.object(m, 'read_json', side_effect=read), \
              mock.patch.object(m, 'file_identity', side_effect=identity), \
@@ -233,6 +300,10 @@ class RecoveryTests(unittest.TestCase):
              mock.patch.object(m.os, 'sched_getaffinity', return_value={0}), \
              mock.patch.object(m.os.path, 'lexists', return_value=False):
             self.assertEqual(m.bind_release(Path('/disposable-release'), '4' * 64)[0], release)
+            release['original_failure_sha256'] = {}
+            with self.assertRaisesRegex(m.Refusal, 'original recovery failure'):
+                m.bind_release(Path('/disposable-release'), '4' * 64)
+            release['original_failure_sha256'] = dict(m.ORIGINAL_FAILURE_SHA256)
             review['reviewer'] = '/author'
             with self.assertRaisesRegex(m.Refusal, 'independent exact'): m.bind_release(Path('/disposable-release'), '4' * 64)
             review['reviewer'] = '/independent'

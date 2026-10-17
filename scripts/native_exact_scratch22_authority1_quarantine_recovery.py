@@ -27,7 +27,15 @@ PROC_SOURCE = REPO / 'scripts/native_exact_scratch21_terminal_cleanup.py'
 PROC_SOURCE_SHA = '6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed'
 SELF = REPO / 'scripts/native_exact_scratch22_authority1_quarantine_recovery.py'
 TEST = REPO / 'scripts/tests/test_native_exact_scratch22_authority1_quarantine_recovery.py'
-PREFIX = ROOT / 'native-exact-scratch22-authority1-quarantine-recovery-20261017'
+PREFIX = ROOT / 'native-exact-scratch22-authority1-quarantine-recovery-20261017.correction1'
+ORIGINAL_FAILURE_SHA256 = {
+    str(ROOT / 'scratch22-authority1-quarantine-recovery-execution-20261017.stderr'):
+        'a5b9268da8ce645636691b72c2b5848acbaf6611ec244b669da63bcbcd9ec006',
+    str(ROOT / 'native-exact-scratch22-authority1-quarantine-recovery-20261017.before1.process.json'):
+        '921f27731a6fd4d554b83f6f9b3001f5f465677f3bb317ae9bf41544d6a4da2d',
+    str(ROOT / 'scratch22-authority1-recovery-environment-inspect-20261017.json'):
+        '5fb9f8983ca81c5857203e7d6ac290af5a81e9aa74392b1f3d79c1dd267d770f',
+}
 PREPARED = Path(str(PREFIX) + '.prepared.json')
 COMPLETE = Path(str(PREFIX) + '.complete.json')
 QUARANTINE = Path(str(PREFIX) + '.quarantine.json')
@@ -198,6 +206,11 @@ def bind_release(path, expected):
         raise Refusal('independent exact recovery source review required')
     if profile.get('decision') != 'PASS_PROPOSED_PROCESS_RETIREMENT_PROFILE':
         raise Refusal('reviewed process retirement profile required')
+    if release.get('original_failure_sha256') != ORIGINAL_FAILURE_SHA256:
+        raise Refusal('preserved original recovery failure bindings required')
+    for original, digest in ORIGINAL_FAILURE_SHA256.items():
+        if file_identity(Path(original))[0]['sha256'] != digest:
+            raise Refusal('preserved original recovery evidence differs')
     for fixed in (PREPARED, COMPLETE, QUARANTINE):
         if os.path.lexists(fixed):
             raise Refusal('one-shot recovery already materialized')
@@ -360,6 +373,21 @@ def validate_process_report(report, challenge, caller, before):
             raise Refusal('guard has a descendant')
 
 
+def inspect_comparison(value):
+    """Docker's Mounts map has no iteration order; all other data stays exact."""
+    if not isinstance(value, dict) or not isinstance(value.get('Mounts'), list):
+        raise Refusal('Docker inspect Mounts shape differs')
+    destinations = set()
+    for mount in value['Mounts']:
+        if (not isinstance(mount, dict) or not isinstance(mount.get('Destination'), str) or
+                not mount['Destination'].startswith('/') or mount['Destination'] in destinations):
+            raise Refusal('Docker inspect mount destination missing or duplicate')
+        destinations.add(mount['Destination'])
+    result = dict(value)
+    result['Mounts'] = sorted(value['Mounts'], key=lambda mount: mount['Destination'])
+    return canonical(result)
+
+
 def snapshot(label, release, profile, before):
     inputs = protected_inputs(release, profile)
     if before:
@@ -383,14 +411,15 @@ def snapshot(label, release, profile, before):
     container = proof['container']
     raw = root_readonly(['/usr/bin/docker', '--host=unix:///var/run/docker.sock', 'inspect',
                          '--type', 'container', container['id']])
+    capture('inspect.json', raw)  # Preserve even malformed/mismatching observations.
     observed = strict(raw)
     retained = read_json(Path(container['terminal_path']), container['terminal_sha256'])
-    if not isinstance(observed, list) or len(observed) != 1 or canonical(observed[0]) != canonical(retained):
+    if (not isinstance(observed, list) or len(observed) != 1 or
+            inspect_comparison(observed[0]) != inspect_comparison(retained)):
         raise Refusal('exact stopped Docker container differs')
     state = retained['State']
     if state.get('Status') != 'exited' or state.get('Pid') != 0 or state.get('ExitCode') != 1 or state.get('OOMKilled') is not False:
         raise Refusal('retained container is not positively stopped')
-    capture('inspect.json', raw)
     raw = root_readonly(['/usr/bin/docker', '--host=unix:///var/run/docker.sock', 'ps', '-a',
                          '--no-trunc', '--format', '{{json .}}'])
     target, ids = [], set()
@@ -513,6 +542,7 @@ def execute(release_path, checksum):
         target = bind_pidfd(pidfd, profile)
         prepared = dict(schema='scratch22-authority1.quarantine-recovery-prepared.v1',
                         status='PREPARED_PROCESS_RETIREMENT', profile_sha256=PROFILE_SHA,
+                        original_failure_sha256=ORIGINAL_FAILURE_SHA256,
                         release_sha256=checksum, source_checkpoint=release['source_checkpoint'],
                         signal_budget=1, target=target, before=[first, second], build_status='FAIL')
         publish(PREPARED, canonical(prepared))
@@ -530,6 +560,7 @@ def execute(release_path, checksum):
         require_lock_holder(os.getpid())
         record = dict(schema='scratch22-authority1.quarantine-recovery-complete.v1',
                       status='COMPLETE_PROCESS_RECOVERY', profile_sha256=PROFILE_SHA,
+                      original_failure_sha256=ORIGINAL_FAILURE_SHA256,
                       release_sha256=checksum, prepared_sha256=sha(canonical(prepared)),
                       source_checkpoint=release['source_checkpoint'], target=target,
                       sole_signal=signalled, exit_proof=exited, after=after,

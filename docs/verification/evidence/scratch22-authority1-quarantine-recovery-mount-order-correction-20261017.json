@@ -1,0 +1,54 @@
+{
+  "schema": "scratch22-authority1.quarantine-recovery-mount-order-correction.v1",
+  "status": "NOT_RELEASED",
+  "author": "/root/scratch21_transaction",
+  "implementation_ownership": true,
+  "files_sha256": {
+    "scripts/native_exact_scratch22_authority1_quarantine_recovery.py": "3fdb4dde4dbbd5d07d85d68c02e68d4aee3acca45dce12be3479f3252765abd6",
+    "scripts/tests/test_native_exact_scratch22_authority1_quarantine_recovery.py": "d789dd53c4a286402cd9a5b5431b2930441114765e9824b504bb9da1ccb6e458"
+  },
+  "failure_family": "S22-OBSERVER-CAPTURE-BOUND-1",
+  "history": {
+    "attempt": "Original recovery execution refused in before1 snapshot before pidfd_open and before any signal, because Docker inspect Mounts array iteration order differed.",
+    "original_source_checkpoint": "303c",
+    "original_source_sha256": "d189d1e9c1c59632c87ea4402ea49159e87880e01cccd016a25fa59e3934416c",
+    "original_tests_sha256": "653d17e6521379e43f31389b946b4b274f73d52b653891233cd57cebc894f099",
+    "original_author_record_sha256": "06d50379f392fa5e39d9ae676116d711253110cebca3d9ad4124a4a64bdde950",
+    "original_independent_source_review_sha256": "dc18fb271c19bf92d3713db40b1b2fa9fc11bd37906a8fb521295aea3d4c70b3",
+    "preservation": "Original committed source/test/author bytes and original failure captures remain unchanged; original independent review is not approval of this correction. This is the single bounded correction, not a reset or renamed build attempt."
+  },
+  "original_failure_sha256": {
+    "/home/holden/mckernel-work/scratch/scratch22-authority1-quarantine-recovery-execution-20261017.stderr": "a5b9268da8ce645636691b72c2b5848acbaf6611ec244b669da63bcbcd9ec006",
+    "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-quarantine-recovery-20261017.before1.process.json": "921f27731a6fd4d554b83f6f9b3001f5f465677f3bb317ae9bf41544d6a4da2d",
+    "/home/holden/mckernel-work/scratch/scratch22-authority1-recovery-environment-inspect-20261017.json": "5fb9f8983ca81c5857203e7d6ac290af5a81e9aa74392b1f3d79c1dd267d770f"
+  },
+  "diagnosis": {
+    "retained_inspect_sha256": "96ecbeaa6dbf4ad7ea460b270669772e32a0e15104160dc13c3cd7cc6840cbff",
+    "exact_environment_capture_sha256": "5fb9f8983ca81c5857203e7d6ac290af5a81e9aa74392b1f3d79c1dd267d770f",
+    "differing_top_fields": ["Mounts"],
+    "retained_destinations": ["/src", "/assets", "/out", "/evidence", "/driver.py", "/inputs.json"],
+    "observed_destinations": ["/evidence", "/driver.py", "/inputs.json", "/src", "/assets", "/out"],
+    "all_six_complete_mount_records_equal_after_destination_sort": true,
+    "comparison_scope": "Local retained captures only; no new privileged read or live Docker invocation by author. Original mismatching raw inspect was not retained by the original helper; exact-environment independent capture supplies the concrete reproduced shape."
+  },
+  "correction": [
+    "Normalize only the top-level Docker inspect Mounts array by unique absolute string Destination for equality; reject malformed/missing/duplicate destinations and compare every complete mount field. Missing/extra/changed mount records and all other object/array fields remain exact.",
+    "Publish the raw inspect bytes with O_EXCL and fsync before parsing or comparing, so all future malformed or mismatching inspect observations remain preserved.",
+    "Use only fresh fixed .correction1 capture/transaction paths; do not overwrite or consume original names. Require release original_failure_sha256 exact three-object map above and fresh stream hashes, and include the map in durable PREPARED and COMPLETE receipts.",
+    "No changes to pidfd targeting, one-signal budget, prepared-before-signal, full process census, four-signal handling, exact root lock, postflight, indefinite uncertain hold, or retained input guards."
+  ],
+  "checks": {
+    "status": "PASS",
+    "command": "timeout 120s taskset -c 1 bash -c 'ulimit -v 2097152; exec python3 -B -m unittest -v scripts.tests.test_native_exact_scratch22_authority1_quarantine_recovery'",
+    "exit_code": 0,
+    "tests": 15,
+    "duration_seconds": 0.049,
+    "new_regressions": [
+      "Exact actual six-mount permutation passes without mutating fixture; changed source/RW/extra field, missing/extra record, other-array reordering and state drift remain unequal; duplicate/missing/nonstring destinations and wrong Mounts shape refuse.",
+      "Actual snapshot body with mocked observations preserves raw malformed or mismatching inspect and process captures before refusal; no subsequent Docker census occurs.",
+      "Release requires original-failure binding; fresh correction1 namespace remains fixed."
+    ],
+    "scope": "Ordinary single-process mocked/disposable Python checks only. No children, sudo, Docker, network, compiler, Git, target signal or actual root lock."
+  },
+  "next_executable_check": "Independent exact correction source review followed by dispatcher fetched-source checkpoint and new hash-bound correction1 execution release. No execution is authorized by this record."
+}
