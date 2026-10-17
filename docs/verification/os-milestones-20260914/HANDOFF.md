@@ -1,5 +1,16 @@
 # Compact dispatcher handoff
 
+Checkpoint378: signal/calloc/file actualcurrent942 diagnostics+retirementPASS
+(3distinctnewbehaviors,formal0). File34.091172s/395bytes/6sizes/emptyerr0,
+59deliveries58returns30routes,all30clients/container/rootretirementverified.
+NextsoleTLS original2/4/8workerguest exactrelease15bbc7c6/parent1828:108285
+/scratch/ndtls-1 nonce918a1c820c0146ccb6a3ffbfb30ee220 QMP92; afterpush/fetch/
+freshlivecheck freezeHEAD. Reviewerfoundnoparserconflict; retainallguards.
+FixtureTLSimmediatecomparison/no barrierlimitsclaim; noformalpromotion.
+Lifecyclecollectorstatic8330e259+parser49b83824 independentlysourcePASS,
+no actualshutdownyet. Baseclone stagefailedbeforecopies oldloaderpin; one
+boundedrebind toreviewed1b439 admitted, failureevidencepreserved. Continue.
+
 Checkpoint377: calloc actualguest+retirementPASS33.677923s, exact205bytes/
 6sizes/emptyerr0/procfsempty; all30clientsreaped/containerremoved/root27:4free.
 Thisinvocation2distinctactualguestpasses(signal+calloc), formal0 unchanged.

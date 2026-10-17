@@ -14835,3 +14835,19 @@ Scopewrite/seek/readcompare/fstat/EOF, not reopen/checkedclose-unlink. TLS
 2/4/8workerstatic/Linuxreference/ND_FUTEX/59joins/strictmanifest15bbc7c6PASS.
 LifecyclecollectoractualC30injectedscenarios2PythontestsPASS and independent
 source reviewPASS, no runtimeclaim; parser/staticbuild preparation proceeds.
+
+## Checkpoint378 — file diagnostic accepted; original TLS guest released
+
+Fileactual0/34.091172s HEAD09205941stable, independentguest+retirementPASS.
+PID255/59deliveries58returns30routes/exit_group/cleanupACK/procfsdelete/
+retirement/release,395exactstdoutbytes/emptyerr0/procfsempty; all30clients
+container/rootretirementverified. Scopewrite/seek/readcompare/fstat/EOF6sizes
+only,no reopen/checkedclose-unlink. Thisinvocation3distinctnewguestdiagnostics,
+formal0 andM00-M13acceptanceestimatedeltas0. OriginalTLS2/4/8worker/55byte
+oracle manifest15bbc7c6 exactrelease reviewed,parent1828/108285/ndtls-1 nonce
+918a1c820c0146ccb6a3ffbfb30ee220,QMP92,ND_FUTEXallowsoversubscribe. Existing
+traceguardsretained; fixtureimmediateTLSchecklimitsbroaderclaim. Nextguestafter
+push/fetch/livecheck; freezeHEAD. Lifecyclecollectorstatic8330e259PASS; strict
+offlineparser49b83824/10tests independentlyPASS. Baseclonepreparationfailed
+BEFOREcopies on historical loaderpin8af vs reviewed1b439; originalretained,
+oneboundedpinrebind correctionadmitted, no productiontoolchange/rebuild.
