@@ -1,0 +1,21 @@
+{
+  "schema": "mckernel.signal-mask-restore-independent-execution-review.v1",
+  "decision": "PASS_EXECUTION_REVIEW",
+  "reviewer": "/root/signal_guest_execution_review",
+  "proposal_sha256": "7cedc92dea05f6cd7ebc321a7f06b3aab897cf6820c8beae92076f06260c51aa",
+  "bindings_verified": [
+    "Fresh parent1828/108004 uidgid1000 mode700 empty/evidencesiblingabsent",
+    "Newnonce2eccd0906ac64daeb33b20c971ea9455 exact92byteQMP othermonitor disabled",
+    "Owner9084bfd3 diagnostic1b43934a unchangedmanifest47eb9589 andotherpins",
+    "All prerequisite references hashes/sizes match; root27:4 no proc locks entry",
+    "Raw76testPASS exit0, real AF_UNIX107/108 ASCII/nonASCII/admission no-sideeffects",
+    "Prior owner accepted RETIRED_FAILED_PREBOOT, preservedfailure"
+  ],
+  "conditions": [
+    "Single exact argv only",
+    "Fresh prelaunch live resource/ownership/mount/source recheck",
+    "Freeze HEAD and runtime sources during execution",
+    "Failure requires separately reviewed fresh attempt"
+  ],
+  "scope": "Diagnostic only; no runtime pass or formal acceptance yet."
+}
