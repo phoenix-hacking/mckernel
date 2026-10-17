@@ -1,5 +1,27 @@
 # Compact dispatcher handoff
 
+Checkpoint370 continues the live compiler run below; not a pause. User explicitly
+requests immediate console announcement of COMPLETE native PASS (control kernel,
+all three modules, final checks), not bzImage alone. Next: exact terminal cleanup,
+matching image, signal.mask-restore. Authority3 cleanup source8449b4b8 is reviewed
+86a2236a; no cleanup execution yet. Optional fork commit61030a28 has dormant
+source-boundary PASS4d874b72 and actual4Rust tests, no activation/runtime claim.
+File write/read Linux reference passes six lines/empty stderr/exit0; McKernel
+execution remains pending. Keep these changes outside frozen942c927b candidate.
+
+LIVE native build: session54012; rootguard269925/start1544930; canonical owner
+270194/start1549252, nonce1ad4cb62c80241cca1c2b4e56cd61d95, container name
+mckernel-exact-58e9a0e7646742c9a4a87fa387ced61b. Release6df828bf was fetched
+and five exact blobs verified at a1c4073c before sole execution. One heavy lane;
+do not interrupt or clean up until positive terminal retirement. Driver log:
+scratch/mckernel-exact-candidate-scratch-22-authority3-evidence/build/driver.log.
+Matching-image libdwarf input0dd84e6b prepared once in4.05s; no image build yet.
+Follow-on duplicate-read correction now includes inherited preflight/final
+phases (sparse helperc50a0116, review3d8d0a5d), not merely the initial census.
+Keep this corrected helper out of the running release's frozen sources; never
+run another unchanged duplicate-hashing preparation. Minimal records only;
+compiler/link -> matching image -> signal.mask-restore is the critical path.
+
 Current update: authority3 preparation completed once, rc0/empty stderr,
 9m15.90s, peak111952KiB. Request8a5ec311, nine old aliases ->ten links.
 Actual prepared-candidate five source/metadata checks and143tests PASS

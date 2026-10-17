@@ -14536,6 +14536,45 @@ only through fresh output/release names. Useful parallelism and essential
 ownership/resource/isolation/97%usage guards remain. Counters unchanged:
 3compiled candidates/12diagnosticpasses,0/273formalapps,6/130production,0/7language.
 
+## Checkpoint 370 — actual authority3 native compilation running
+
+Candidate942c927b/tree07d05c1b is compiling under its sole reviewed heavy
+release6df828bf, fetched at a1c4073c. Session54012 remains live; rootguard
+269925/start1544930, owner270194/start1549252, nonce1ad4cb62c80241cca1c2b4e56cd61d95,
+container mckernel-exact-58e9a0e7646742c9a4a87fa387ced61b. Source contracts and
+54-case configuration matrix completed; actual C compilation has reached
+drivers and networking. No complete compiler/link/module result yet. Preserve
+frozen candidate, lease, rootlock27:4 and original outputs; no cleanup until
+positive terminal retirement. User requests immediate live announcement of
+full native PASS including control kernel and all three module artifacts,
+not bzImage/configuration alone. Continue directly toward matching image and
+signal.mask-restore afterward. This checkpoint does not pause execution.
+
+Matching-image libdwarf input0dd84e6b prepared once in4.05s. Authority3 terminal
+cleanup helper8449b4b8/tests73e39c5e independently source-reviewed86a2236a;
+16author tests and3new independent controls PASS. Fresh terminal identities,
+release and execution remain required; no cleanup has run. Fresh image-rebind
+data preparation proceeds disjointly, no second heavy owner.
+
+Disjoint optional inherited-VMA transaction has actual3Python/4Rust PASS and
+independent dormant-boundary PASS4d874b72, branch commit61030a28. Concrete
+Linux mmap/VMA write thunks apply-check successfully against pinned source;
+no active native build source was modified. Native ABI/link, exact child/MM
+provenance, caller lock order and final root destruction ACK remain activation
+gates. No CREATE_PPD/runtime integration or acceptance claim. File write/read
+smoke Linux reference passes six exact lines/empty stderr/exit0 in an isolated
+user/mount/network namespace; actual McKernel case remains pending.
+
+Follow-on duplicate-read correction543bfedb covers both active alias census
+and inherited phases, helperc50a0116/test00aeb6bb, independent reviewsab62c5de
+and3d8d0a5d. Authenticate once per verified inode per necessary phase with
+per-path metadata/race checks intact. It stays outside the current frozen
+build; never repeat the old avoidable duplicate-hashing preparation unchanged.
+Keep records minimal and favor real compiler/runtime feedback. Counts remain
+3compiled candidates/12diagnosticpasses,0/273formalapps,6/130production,0/7language.
+Shortest next action: finish native compiler/link/final checks, announce actual
+result immediately, exact terminal cleanup, matching image, signal.mask-restore.
+
 ## Checkpoint 369 — accepted authority2 cleanup, corrected source admitted
 
 Authority2 cleanup release9c229f4f was committed/pushed/fetched818444ef; exact

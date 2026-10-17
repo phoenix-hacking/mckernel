@@ -1,0 +1,43 @@
+{
+  "schema": "mckernel.file-write-read-private-linux-reference.v1",
+  "status": "PASS_LINUX_REFERENCE_ONLY",
+  "preparation": "docs/verification/evidence/file-write-read-static-preparation-20261017.json",
+  "binary": "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/file.write-read/app",
+  "binary_sha256": "3f09a659061b67a1b5d096bf93ad7de8f00d4e92ff26908bfd5b283e3c3fb46a",
+  "capture_root": "/tmp/file-write-read-linux-ref-20261017-W4ZeoG",
+  "observer": "observe.py",
+  "observer_sha256": "0a7778f1560bd4c51bb4e40847398ff6f5cb2a2ae74d70c1f1ff87592eaa2d85",
+  "observation": "observation.json",
+  "observation_sha256": "155cebbcf258f8ff316fbf7ed8a3af2a922ee9958f66db93981165980b5913b3",
+  "namespace_probe": {"argv": ["/usr/bin/unshare", "-Ur", "/usr/bin/true"], "exit_code": 0, "stdout": "", "stderr": ""},
+  "command": "/usr/bin/taskset -c 7 /usr/bin/timeout --signal=TERM --kill-after=5s 120s /usr/bin/prlimit --as=536870912 --cpu=100 --nofile=256 --fsize=67108864 --core=0 -- /usr/bin/env -i PATH=/usr/bin:/bin LANG=C LC_ALL=C TZ=UTC PYTHONDONTWRITEBYTECODE=1 /usr/bin/python3 -B -c 'import os; env=dict(os.environ); env.update({\"PARENT_\"+key.upper():os.readlink(\"/proc/self/ns/\"+key) for key in (\"user\",\"mnt\",\"net\")}); os.execve(\"/usr/bin/unshare\",[\"/usr/bin/unshare\",\"-Ur\",\"-m\",\"-n\",\"/usr/bin/python3\",\"-B\",\"/tmp/file-write-read-linux-ref-20261017-W4ZeoG/observe.py\"],env)'",
+  "isolation": {
+    "uid_map": "0 1000 1",
+    "user_namespace": "user:[4026532887]",
+    "mount_namespace": "mnt:[4026532888]",
+    "network_namespace": "net:[4026532889]",
+    "verified_distinct_from_parent": true,
+    "mounts": "All mount commands ran only after new mount/user namespaces: make-rprivate /; 32MiB nodev/nosuid tmpfs at fresh root; readonly bind of exact static app at root/app. Child chroot then chdir /case/work before exec /app. No proc mount or host /case operation.",
+    "host_root_privilege": false,
+    "sudo_or_docker": false,
+    "mounts_retired": "All namespace commands joined and namespace exited; read-only host /proc/self/mountinfo search contains no capture-root mount. No host mount/unmount performed."
+  },
+  "payload": {
+    "argv": ["/app"],
+    "cwd": "/case/work inside new private tmpfs root",
+    "environment": {"PATH": "/usr/bin:/bin", "LANG": "C", "LC_ALL": "C", "TZ": "UTC", "HOME": "/", "TMPDIR": "/case/work"},
+    "initial_signal_mask": [],
+    "runs": 1,
+    "exit_code": 0,
+    "stdout_sha256": "c8f138d5019081faca3982ee7a6320b417be6f2b819bdd3b827d2915f4fc0451",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_utf8": "bytes=1 written=1 read=1 bad_index=1 size=1 eof=0\nbytes=4095 written=4095 read=4095 bad_index=4095 size=4095 eof=0\nbytes=4096 written=4096 read=4096 bad_index=4096 size=4096 eof=0\nbytes=4097 written=4097 read=4097 bad_index=4097 size=4097 eof=0\nbytes=65553 written=65553 read=65553 bad_index=65553 size=65553 eof=0\nbytes=1048576 written=1048576 read=1048576 bad_index=1048576 size=1048576 eof=0\n",
+    "stderr_utf8": "",
+    "oracle": "Exact bytes frozen in existing static preparation before execution; all six lines matched without changing source/oracle",
+    "temporary_work_empty_after_run": true,
+    "max_concurrent_process_family": "Serial observer plus one mount or payload child, below32-process planning cap"
+  },
+  "failures": [],
+  "source_or_oracle_changed": false,
+  "scope": "Actual Linux reference only; first new McKernel guest remains signal.mask-restore. No McKernel or formal acceptance credit."
+}

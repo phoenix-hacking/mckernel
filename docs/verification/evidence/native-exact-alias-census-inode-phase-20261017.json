@@ -1,0 +1,30 @@
+{
+  "status": "PASS_FOCUSED_SYNTHETIC_TESTS_NOT_INTEGRATED",
+  "worktree": "/home/holden/mckernel-work/scratch/alias-census-optimization-20261017-1",
+  "baseline_helper_sha256": "1f6aa36d4cf64d03ea62989248ed522b8575b1ab56d66cc66c211e9a8260fbf5",
+  "files_sha256": {
+    "scripts/prepare_native_exact_scratch22_authority3.py": "1275dac087c848dedeafdef6a76aad1a07a78892c6a1f608d63b384813e72955",
+    "scripts/tests/test_native_exact_alias_census_inode_phase.py": "e8f8a87f29b82d77e35643bfc245878bcd0a73a99b56e93bec86e2f409b32103"
+  },
+  "change": "Only disjoint active alias_census plus two private helpers; one O_NOFOLLOW dev/inode content stream per call verifies Git blob SHA1 and SHA256 together. Every alias/root metadata checked before and after, including ctime; no cross-call cache. Main active helper and inherited phases untouched.",
+  "command": "taskset -c 6 timeout --kill-after=5s 120s prlimit --as=2147483648 --cpu=110 --nofile=256 --fsize=67108864 --core=0 python3 -B -m unittest -v scripts.tests.test_native_exact_alias_census_inode_phase",
+  "result": {
+    "chunk_id": "5277c5",
+    "wall_time_seconds": 0.167742576,
+    "exit_code": 0,
+    "original_token_count": 485,
+    "output": "test_alias_replaced_during_hash_refuses (scripts.tests.test_native_exact_alias_census_inode_phase.InodePhaseTests) ... ok\ntest_all_alias_metadata_precedes_any_content_read (scripts.tests.test_native_exact_alias_census_inode_phase.InodePhaseTests) ... ok\ntest_growth_during_hash_is_bounded_and_refused (scripts.tests.test_native_exact_alias_census_inode_phase.InodePhaseTests) ... ok\ntest_later_inode_read_cannot_hide_earlier_inode_mutation (scripts.tests.test_native_exact_alias_census_inode_phase.InodePhaseTests) ... ok\ntest_mtime_restored_content_aba_refuses_on_ctime (scripts.tests.test_native_exact_alias_census_inode_phase.InodePhaseTests) ... ok\ntest_no_follow_swap_between_metadata_and_open_refuses (scripts.tests.test_native_exact_alias_census_inode_phase.InodePhaseTests) ... ok\ntest_one_stream_for_nine_aliases_and_second_phase_reads_again (scripts.tests.test_native_exact_alias_census_inode_phase.InodePhaseTests) ... ok\ntest_only_active_census_and_two_private_helpers_changed (scripts.tests.test_native_exact_alias_census_inode_phase.InodePhaseTests) ... ok\ntest_private_single_pass_binds_git_blob_and_sha256 (scripts.tests.test_native_exact_alias_census_inode_phase.InodePhaseTests) ... ok\ntest_root_metadata_drift_after_content_refuses (scripts.tests.test_native_exact_alias_census_inode_phase.InodePhaseTests) ... ok\ntest_symlink_and_mode_and_size_drift_refuse (scripts.tests.test_native_exact_alias_census_inode_phase.InodePhaseTests) ... ok\ntest_tiny_fixture_original_nineteen_streams_become_one (scripts.tests.test_native_exact_alias_census_inode_phase.InodePhaseTests) ... ok\ntest_unknown_link_and_same_bytes_replaced_alias_refuse (scripts.tests.test_native_exact_alias_census_inode_phase.InodePhaseTests) ... ok\ntest_wrong_oid_refuses (scripts.tests.test_native_exact_alias_census_inode_phase.InodePhaseTests) ... ok\n\n----------------------------------------------------------------------\nRan 14 tests in 0.243s\n\nOK\n"
+  },
+  "measurement": {
+    "scope": "tiny disposable fixture only, measured once before user stop-rescans instruction",
+    "payload_bytes": 45056,
+    "aliases": 9,
+    "original_streams": 19,
+    "original_bytes": 856064,
+    "optimized_streams": 1,
+    "optimized_bytes": 45056,
+    "second_call_authenticates_again": true
+  },
+  "retained_failure": "None in this implementation/test family. Parent sparse setup first failed missing private Git info directory, then corrected setup passed; no active state changed.",
+  "limits": "No real corpus scan, build, integration, execution authority or real throughput claim. Scoped independent filesystem-race review separate; current build not gated."
+}
