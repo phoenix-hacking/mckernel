@@ -1,0 +1,32 @@
+{
+  "schema": "mckernel.signal-mask-restore-execution-review.v1",
+  "decision": "PASS_EXECUTION_REVIEW",
+  "reviewer": "/root/signal_guest_execution_review",
+  "implementation_ownership": false,
+  "recorded_by": "dispatcher from independent final reply",
+  "proposal_sha256": "caac3d5be8547ea22ce6150373a34a5e4f117f8cb85e99b8d917e57fb3333d2e",
+  "reviewed_release_payload_sha256": "080d27faa12d4e4ec72fa169624712d0aa55ccbb82dfa37238573a3298e8bf04",
+  "parent_identity": [
+    1828,
+    107782
+  ],
+  "nonce": "6fb44f2a0cd64994af43c47bfc7476ab",
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-guest-20261017-1",
+    "--nonce",
+    "6fb44f2a0cd64994af43c47bfc7476ab",
+    "--owner-sha256",
+    "740f507631e9076ef2fd8961206ff69a87abed4c686167348b2dc5ded3ce4034",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-manifest-20261017-1.json",
+    "--manifest-sha256",
+    "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da"
+  ],
+  "scope": "One exact diagnostic invocation only. Accepted actualretirement/cleanup/livepreflight joins; only reviewpointer filled. Push/fetch and immediate resource/parent/lock recheck, ownerisolation/lifetime/uncertaintycleanup guards required. No reused parent/nonce onfailure. Exact limitedtwo-mask-bit oracle only, no runtime/formalacceptanceclaim."
+}

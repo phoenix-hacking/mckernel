@@ -14760,3 +14760,29 @@ M00-M13 acceptance estimate deltas0: source/protocol/artifact preparation is
 scoped progress, not accepted kernel behavior. Next executable observation is
 reviewed fresh read-only root collector, then archival cleanup and real signal
 guest. Continue autonomously; checkpoint does not pause.
+
+
+## Checkpoint 374 — image retirement/cleanup accepted; signal guest released
+
+Sole fresh root observation312531b8 PASS2.573187s/exit0/emptystreams;
+independent review accepts two288process snapshots,45inactivecontainers,
+exact oldtarget/profile and UUID/device/root before/after under27:4.
+Sole separately released cleanup PASS5.558160s/exit0/emptyerr. Exact9event
+journal, plan/releasechain, all6transactionmembers and original logs/inodes/bytes
+verify; activeexclusions/lease/quarantine absent, root27:4released.
+Independent actualreview47cc7673 PASS_ARCHIVAL_CLEANUP; repeated rawhelper
+censuses were discarded so scope is executedtrustedchecks+transactionevidence,
+not independent rawverificationofeachintermediatecensus. Originalfailedguard
+retirement stayshistoricallyunproven; no evidencewasrewritten.
+
+Signal finalproposalcaac3d5b independently PASS_EXECUTION_REVIEW for exact
+manifest47eb9589,owner740f5076,parent1828/107782,nonce6fb44f2a0cd64994af43c47bfc7476ab.
+Next push/fetchfinalrelease thenliveparent/resource/lock recheck andsoleguest.
+Current942 kernel/modules/image reused; no rebuild. Memorystrictmanifest
+589a4a86+59joinsPASS, readyafter actualsignal. Lifecycleprobeactualmain16
+operational+10invalidarg casesPASS underinjectedsyscallboundary withprivateenv/
+knownPython3.9; originalprofilecaveat/Python3.8failure retained. Staticguesttool
+build CPU6/1GiB and fileoverlayprepCPU7/1GiB canoverlaponeguestCPU2-5/12GiB.
+All formalcounts and M00-M13 acceptanceestimate deltasunchanged; no newguest
+resultyet. User's later131821instruction reservesVELOCITY.md/CONVERGENCE.md
+tosupervisingsession; do notmodify/stagethosepaths orpausecampaignforthem.
