@@ -1,0 +1,11 @@
+{
+  "schema": "scratch22-authority1.cleanup-final-release-binding.v1",
+  "status": "PASS_EXECUTION_RELEASE",
+  "raw_release": {"path": "/home/holden/mckernel-work/scratch/scratch22-authority1-cleanup-execution-release-final-20261017.json", "sha256": "0bf256f97ec65d0a728d59b83ac4d795c24109e7d1a6dc539274b7a68c5d9eaa", "bytes": 146838466},
+  "archive": {"path": "docs/verification/evidence/scratch22-authority1-cleanup-execution-release-final-20261017.json.gz", "sha256": "f1994699f81fe819bedce8ba5b41a957ee2e429c98a686ce1474e0357af4cb67"},
+  "archive_verification": "gzip -d -c ARCHIVE | cmp - RAW: exit0; original raw remains unchanged",
+  "reviewed_payload_excluding_only_execution_review_sha256": "8f2073fbce615ba0678569c1402257a1f1d47eba23f92f135f2b5f3e4c3621fb",
+  "independent_execution_review_sha256": "1eede18d9b3e1e77229d29304cf87d13001458adae64a754d6408be152e3aff5",
+  "finalization": "Python exact integers; input and final payload equality verified after removing only execution_review. No jq rounding, omitted inventory or changed proof.",
+  "scope": "Exactly one separately reviewed authority1 terminal transaction; no build, image or guest execution. Execution and postflight remain pending."
+}

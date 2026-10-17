@@ -1,0 +1,123 @@
+{
+  "schema": "scratch22-authority1.cleanup-execution-independent-review.v1",
+  "recorded_at_utc": "2026-10-17T05:12:22Z",
+  "decision": "PASS_EXECUTION_RELEASE",
+  "status": "PASS",
+  "reviewer": "/root/cheap_profile_review",
+  "model": "gpt-6.1-sol",
+  "implementation_ownership": false,
+  "executor": "/root",
+  "scope": "One exact scratch22-authority1 terminal cleanup after completed independently accepted process recovery. No build, replay, compiler, module, guest, network or acceptance authority.",
+  "review_input": {
+    "path": "/home/holden/mckernel-work/scratch/scratch22-authority1-cleanup-execution-release-review-input-correction1-20261017.json",
+    "sha256": "b9cd569378f9b624a9665a4560475f6214f2a18e9b19834a0c08ebf6265390cb",
+    "size": 146838328,
+    "execution_review": null,
+    "reviewed_payload_sha256": "8f2073fbce615ba0678569c1402257a1f1d47eba23f92f135f2b5f3e4c3621fb",
+    "payload_digest_definition": "SHA256(json.dumps({k:v for k,v in release.items() if k != 'execution_review'},sort_keys=True,separators=(',',':')).encode()); no newline. Exclude solely execution_review, not any other field.",
+    "finalization_rule": "The only permitted change is replacing null execution_review with {status:PASS,reviewer:/root/cheap_profile_review,evidence_sha256:SHA256 of this immutable record}. Use integer-preserving Python JSON, not jq or an IEEE754 intermediary. Recompute and assert reviewed_payload_sha256 unchanged. Freeze final raw release bytes and pass their exact SHA256 to --release-sha256. This record cannot authorize any different payload."
+  },
+  "source": {
+    "git_commit": "5c8da75fa10252451dfaa8473fccb95cad6705b3",
+    "git_tree": "d804e8c0849048987bcd82771d7b47f3d0cc8aa2",
+    "remote_ref_verified": "refs/remotes/origin/codex/local-native-staging-repair equals exact commit",
+    "script": "scripts/native_exact_scratch22_authority1_terminal_cleanup.py",
+    "script_sha256": "15b7f9241741ccaff065819ea6847323d6ce47ac1fc69a3ea87fbdbad9b01098",
+    "tests": "scripts/tests/test_native_exact_scratch22_authority1_terminal_cleanup.py",
+    "tests_sha256": "6ff24e9b6139aa7a0d71d69194f6e9be63396756fbf7a65bfc572ca87442339c",
+    "local_and_committed_blobs_verified": true,
+    "source_review": {
+      "path": "docs/verification/evidence/scratch22-authority1-cleanup-actual-size-independent-review-20261017.json",
+      "sha256": "6073c68102ec1fbbfb63726961b9b48aa39b9e2d1aae97fdd6e1e05581b34841",
+      "actual_decision": "PASS_SOURCE"
+    },
+    "reused_unchanged_baseline": "Accepted transaction, signal deferral, root flock, quarantine, original-inode archival and fault tests; exact actual-size source review6073c681. No repeated whole-core review or privileged test."
+  },
+  "prerequisites": {
+    "process_recovery": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-quarantine-recovery-20261017.correction1.complete.json",
+      "sha256": "f50a036e06aba4a87ac6bf1fad5a472844cbc4f62b11e1fe6542518fe80205f5",
+      "status": "COMPLETE_PROCESS_RECOVERY",
+      "target_pid": 80259,
+      "target_starttime": "718109",
+      "sole_signal": {"syscall": 424, "signal": 9, "returncode": 0},
+      "pidfd_exit_ready": true,
+      "replacement_root_lock": [27, 4]
+    },
+    "independent_recovery_postflight": {
+      "path": "docs/verification/evidence/scratch22-authority1-quarantine-recovery-postflight-review-20261017.json",
+      "sha256": "3e991dc16ba97fc0505f0c6d9cdd2aa486dae58252c0c1f1d1c2aafa2744dbf2",
+      "decision": "PASS_PROCESS_RECOVERY_POSTFLIGHT"
+    },
+    "fresh_census": {
+      "path": "/home/holden/mckernel-work/scratch/scratch22-authority1-cleanup-fresh-census-20261017.result.json",
+      "sha256": "0ca6a7f5d5fda01df1d8a651fdcbc5eabf69028d25bc432e2c998a61f4c879d5",
+      "status": "PASS_READ_ONLY_CENSUS",
+      "observer": [219561, "1116572"],
+      "process_capture_sha256": "f56f140f731b3fa149f05e2e44a8ae8a9c36c9e578b59fbca98f84ebd8d5f273",
+      "inspect_capture_sha256": "9e4ab48b635e6cfbdeb913a1bba5add64e3ae156863bb7513b7fa55038a18167",
+      "containers_capture_sha256": "ce3b32d81ad97854ae89e47e88b309b812a5097fa6ee14fb2b30e485f33fcafa",
+      "verified": "All saved capture sizes and hashes match. Accepted process validator passes offline; both snapshots additionally explicitly exclude guard80259, owner80867 and all eight required absent client/owner IDs. No publishers or guard descendants. Captured inspect equals original terminal except Mounts order; complete45-container capture contains no active container and one exact target. Observer acquires root27:4 exclusively, checks boot/sole holder before and after census, then closes it. Actual cleanup re-acquires and revalidates rather than treating this snapshot as a permanent lease."
+    },
+    "observation": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-cleanup-observation-20261017.json",
+      "sha256": "cbf85c1d574588652e87d11d6870411045fbf5fa062c87b4017c7947769a28c4",
+      "retained_gzip_sha256": "58fab66d6d310e95d31e324e65a3fe0f3d2863f14e5dcf37dfd39209121ee7cf",
+      "embedded_complete_observation_equality": true,
+      "output_entries": 140028,
+      "evidence_entries": 286298,
+      "selected_files": 13,
+      "reuse": "Exact existing lossless observation reused; no live candidate/output/evidence tree traversal by reviewer. Runtime helper retains full identity/inventory/hash checks."
+    }
+  },
+  "identity_scope": {
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "scratch_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "scratch_device": 1828,
+    "root_lock": {"device": 27, "inode": 4, "path": "/run/lock/mckernel-development.lock", "uid": 0, "gid": 0, "mode": "0o644", "nlink": 1},
+    "container_id": "18ce9ef597cfc38f4c661a7a36d80d872d3dfc96f6e93551651bc8f0b31b5aa6",
+    "container_name": "mckernel-exact-154a592e9c9841618a114901cdfd3e17",
+    "image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+    "owner_nonce": "d4ad604bc9cf47a1a1a2b5e4655ebc41",
+    "exit_code": 1,
+    "request_sha256": "520fbc79a87a800e9c2875bdcdd24eb3d4c449a7ba15ec1fd85aa664520cecbe",
+    "attempt_exclusion_inode": 57729,
+    "shared_exclusion_inode": 57728
+  },
+  "execution_profile": {
+    "cpu_affinity": [0],
+    "address_space_bytes": 4294967296,
+    "aggregate_planning_share_gib": 4,
+    "concurrent_jobs": 1,
+    "exclusive_root_lane": true,
+    "outer_timeout": false,
+    "nofile": 256,
+    "core_bytes": 0,
+    "command_template": ["/usr/bin/sudo", "-A", "--", "/usr/bin/taskset", "-c", "0", "/usr/bin/prlimit", "--as=4294967296", "--nofile=256", "--core=0", "--", "/usr/bin/python3.8", "-I", "-B", "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_terminal_cleanup.py", "--release", "FINAL_FROZEN_RELEASE_PATH", "--release-sha256", "FINAL_RAW_RELEASE_SHA256", "--execute"],
+    "environment": "Noninteractive; unrelated Python/loader overrides cleared. SUDO_ASKPASS may be inherited solely for sudo -A, never read or printed. Child root commands use the helper's existing credential-free PATH/LANG/LC_ALL environment. Capture complete stdout/stderr/exit status to fresh retained files.",
+    "safety": "No outer timeout/CPU-limit kill of mutating owner. Keep existing30second child-command limits, HUP/INT/TERM/QUIT deferral before ownership, exclusive root flock, repeated full process/container/publisher checks, original-inode transaction, and nonreturning quarantine for uncertain retirement/publication/unlock. No concurrent heavy build/guest/root transaction. Preserve16GiB host/12GiB scratch free floors and aggregate7job/24GiB limits.",
+    "tools_sha256": {
+      "/usr/bin/python3.8": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+      "/usr/bin/python3": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+      "/usr/bin/taskset": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+      "/usr/bin/prlimit": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c",
+      "/usr/bin/sudo": "aa14020c0639285fc2e4592eaf6a4e8e9c5fa799bc7bda3ee929a0b5593239dc",
+      "/usr/bin/docker": "2e94ad2db8c6c9cfffd02d403eea69a2d0bd14c84eb9dccdcebbcf2a68fcc257",
+      "/usr/bin/findmnt": "d0a7b38954dbe00b6f7c733eb038eeefaf7c4c64bfbb1f346ffe6ce3dfd383bc",
+      "/usr/bin/git": "c3edb15c9715b79fcfb1fa978256cdfc14a9ad72a4a8d5680a9fc5ebc6a57e0e"
+    }
+  },
+  "mount_order": "PASS: unchanged cleanup already normalizes Mounts-only ordering. In-memory reversed-order positive control passes; changed Source negative control refuses. No broader inspect relaxation.",
+  "preserved_failure": {
+    "path": "docs/verification/evidence/scratch22-authority1-cleanup-release-serialization-independent-review-20261017.json",
+    "sha256": "ddd2159cb7f42f8c97a9894148457b825e4e0666000c35f6da52d12f89eb580d",
+    "original_candidate_sha256": "9751284fcad39caed7720bb044edbdeaa0cacb7ae97f195ca43b18aeea6d6e1d",
+    "resolution": "Dispatcher identifies jq number rounding as cause. Corrected candidate produced by integer-preserving Python; full embedded observation equals original and all other payload fields equal preserved original candidate. No runtime attempt or producer source change."
+  },
+  "blocking_findings": [],
+  "reviewer_operations": "Ordinary read-only bounded Python CPU2/4GiB; saved receipt/capture hashes, full parsed observation comparison, selected pure AST validators, local Git blob/ref reads and installed binary hashing. No root, live proc/Docker/lock access, signal, removal, compiler, guest, network or implementation write.",
+  "completion_rule": "This is execution permission, not completion. Accept cleanup only after exact helper COMPLETE receipt, retained plan/journal/log capture, stopped-container positive retirement and exact exclusion archival/removal with preserved candidate/output/evidence; any refusal retains original failure, no unchanged retry. Uncertainty stays quarantined and no downstream heavy action begins until separately checked.",
+  "cleanup_complete_claimed": false,
+  "build_success_claimed": false,
+  "acceptance_credit": false
+}

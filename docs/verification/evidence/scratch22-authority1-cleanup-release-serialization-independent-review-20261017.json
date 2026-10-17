@@ -1,0 +1,33 @@
+{
+  "schema": "scratch22-authority1.cleanup-release-serialization-review.v1",
+  "decision": "BLOCK_EXECUTION_RELEASE",
+  "reviewer": "/root/cheap_profile_review",
+  "implementation_ownership": false,
+  "review_input": {
+    "path": "/home/holden/mckernel-work/scratch/scratch22-authority1-cleanup-execution-release-review-input-20261017.json",
+    "sha256": "9751284fcad39caed7720bb044edbdeaa0cacb7ae97f195ca43b18aeea6d6e1d",
+    "size": 146838328
+  },
+  "original_observation": {
+    "path": "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-cleanup-observation-20261017.json",
+    "sha256": "cbf85c1d574588652e87d11d6870411045fbf5fa062c87b4017c7947769a28c4"
+  },
+  "finding": {
+    "id": "S22-CLEANUP-RELEASE-INTEGER-1",
+    "severity": "blocking deterministic pre-mutation refusal",
+    "description": "The release's embedded observation is not equal to the retained original: nanosecond integer timestamps were rounded in 285604 evidence inventory rows and 139714 output inventory rows. Other thirteen observation fields, all paths and row counts are unchanged. This is consistent with an IEEE754 JSON intermediary and would fail exact runtime inventory comparison.",
+    "example_original_timestamp": "1792210178429211171",
+    "example_release_timestamp": "1792210178429211100",
+    "required_correction": "Preserve this candidate unchanged. Regenerate a new candidate with Python integer-preserving json.load/dump directly from the original raw observation. Prove complete parsed observation equality before requesting final review. No source change, fresh live inventory or root operation is required."
+  },
+  "checks": {
+    "candidate_raw_digest": "PASS",
+    "original_observation_equality": "FAIL",
+    "source_and_tests_at_5c8da75fa10252451dfaa8473fccb95cad6705b3": "PASS exact15b7f924/6ff24e9b blobs and tree d804e8c0849048987bcd82771d7b47f3d0cc8aa2",
+    "recovery_complete_and_independent_postflight": "PASS exact f50a036e06aba4a87ac6bf1fad5a472844cbc4f62b11e1fe6542518fe80205f5 and 3e991dc16ba97fc0505f0c6d9cdd2aa486dae58252c0c1f1d1c2aafa2744dbf2",
+    "fresh_census_result_and_three_capture_digests": "PASS exact 0ca6a7f5d5fda01df1d8a651fdcbc5eabf69028d25bc432e2c998a61f4c879d5, matching saved capture sizes and hashes"
+  },
+  "profile": "Ordinary read-only Python on CPU2 with4GiBAS; no root, live process, Docker, lock, removal, compiler, guest or network operation.",
+  "execution_authority": false,
+  "acceptance_credit": false
+}
