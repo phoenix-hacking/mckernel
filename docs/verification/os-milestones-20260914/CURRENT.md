@@ -15067,3 +15067,38 @@ only, snapshotsWIP; nofirstpackage/provider/toolpin/HEAD edits. Preserve all
 finish_shutdown guards/physicalowners until fullrundown. SupervisorReview3
 cutoff14:55:37 saved,next15:25UTC; usage16%then/97%stop. All14practical rows
 OPEN; onlyboundedP-M02-03closed. Legacyqualification DEFERRED unchanged.
+
+
+## Checkpoint386 — real matched-module compile; corrected artifacts accepted
+
+Actualexternalbuild18.034310s,HEAD2558578c stable: make0/emptyerr with3RUSTC,
+3KOlinks/BTF. Ownerexit1 fromdriverpostcheck '.oactual vs .koexpected' in
+modules.order. OriginalFAIL853a5ff0 retained. IndependentPASS_OWNED_BUILD_RETIREMENT:
+14Docker+1observer normal/finalemptygroups, exactCID9e3f942removed/3empty
+queries/all3ownershiprecordsarchived+released/owner559199gone/root27:4free.
+Reviewe60296b7/archive64b9b57f (188members/42.5MBoriginals) fullypreservesfailure.
+
+ONEboundedvalidatorcorrection source218e61af/testada91f84: pinnedLinuxproducer
+requires3canonical.o rows,invalidsetsreject;14testsPASS. Readonlyactualartifact
+replayb54e0e94 independentlyACCEPTED_ARTIFACTS_ONLY, no rebuild/receiptpromotion.
+ThreeKO hashes51b48a9e/fc7f3d38/6571ac7e matchedoriginalretainedhashes+compiler
+commands/deps/v6export/60sourceclosure; common942ABI/vermagic, source1769263c.
+One actualnewmodulecompile thisinvocation; no newmoduleguest/RunningPASSyet.
+Newlifecycle stage reuse60base/probe8330/d813/parser0585/imagefa668; replace
+ALL3modules only, stagingparallel. Originalshutdownfault notwaived.
+
+NextusefullibcMEMORY guest RELEASED d7975323e5ed13ed942540ccbd86d877b356fccb6
+be3cf1f83bc8b477d1224e5:parentndcmem-1 dev1828/109526,nonce20e8aedfa5344096
+b879c0639cabaf25,QMP93,manifest36fa25c9/collector2d4c8/exact24bytes/exit37.
+Previousbuildactualretirement e602bound. Freshpreflight/oneheavy/headfreeze,
+push/fetchverify thenexecute, all3boundedpostjoinreadbacks approved.
+RealCthreads+Ruststd packets alsoindependentlyconditionalreviewed andready;
+no tinycase expansion. Acceptedcurrent942 diagnostics8; usefulactualC/Rust
+observations stillpending. PracticalrowsallOPEN/legacyformalDEFERREDunchanged.
+
+Epochimplementation nextsourceWIP native_shutdown_epoch_impl: ownedmemory/CPU/
+Remote, activeuniqueepoch/claim/scopedCPUproof, reset/re-online journalbound,
+locksreleasedbeforejoins, originalreleaseguardsretained.6actualbody+2lifetime
+compilefailcontrols and4Remotecompatcases reportedPASS; firstfixtureE0624
+retained. Independentreviewpending; NOTinfirstpackage, no nativecompletion.
+Continuecampaign; nextsupervisory15:25UTC, nocheckpointpause.

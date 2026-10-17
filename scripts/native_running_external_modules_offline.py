@@ -223,14 +223,24 @@ def source_bindings(module, candidate, inputs):
     return {"command_sha256": digest(current_path), "sources": sorted(actual), "saved_command": saved[0]}
 
 
+def module_order(rows):
+    """Linux 6.12 modules.order enumerates object paths, before the .ko link.
+
+    Accept exactly the three canonical object paths for this external build;
+    never reduce foreign paths to basenames or accept alias spellings.
+    """
+    objects = {"/candidate/modules/" + module + ".o": module for module in MODULES.values()}
+    require(len(rows) == 3 and set(rows) == set(objects), "modpost module set mismatch")
+    return [objects[row] for row in rows]
+
+
 def outputs(candidate, inputs):
     directory = candidate / "modules"
     actual = files(directory)
     require({name for name in actual if name.endswith(".ko")} == {name + ".ko" for name in MODULES.values()},
             "missing or unexpected native module")
     order = plain(directory / "modules.order").read_text().splitlines()
-    require(set(order) == {"/candidate/modules/" + name + ".ko" for name in MODULES.values()} and len(order) == 3,
-            "modpost module set mismatch")
+    module_order(order)
     symbols = plain(directory / "Module.symvers").read_text()
     require(re.search(r"\tihk_os_create_unbooted_v6\t/candidate/modules/ihk\t", symbols) is not None,
             "missing rebuilt ihk v6 export")

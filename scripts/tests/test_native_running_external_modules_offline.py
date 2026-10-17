@@ -86,7 +86,7 @@ class ExternalModulesDriverTests(unittest.TestCase):
             text += "source_/candidate/modules/" + crate + ".o := /candidate/modules/" + crate + ".rs\n"
             text += "deps_/candidate/modules/" + crate + ".o := \\\n  /candidate/modules/" + crate + ".rs \\\n"
             (directory / ("." + crate + ".o.cmd")).write_text(text)
-        (directory / "modules.order").write_text("".join("/candidate/modules/" + name + ".ko\n" for name in driver.MODULES.values()))
+        (directory / "modules.order").write_text("".join("/candidate/modules/" + name + ".o\n" for name in driver.MODULES.values()))
         (directory / "Module.symvers").write_text("0x00000000\tihk_os_create_unbooted_v6\t/candidate/modules/ihk\tEXPORT_SYMBOL_GPL\tMCKERNEL_IHK_V1\n")
         return subprocess.CompletedProcess(argv, 0)
 
@@ -190,6 +190,18 @@ class ExternalModulesDriverTests(unittest.TestCase):
         receipt, process = self.run_driver(self.synthetic_process)
         self.assertIn("reference changed", receipt["error"])
         process.assert_not_called()
+
+    def test_actual_linux_612_object_order_and_invalid_sets(self):
+        # Exact raw format emitted by the first real external make (exit0).
+        actual = ["/candidate/modules/ihk.o", "/candidate/modules/ihk-smp-x86_64.o", "/candidate/modules/mcctrl.o"]
+        self.assertEqual(driver.module_order(actual), ["ihk", "ihk-smp-x86_64", "mcctrl"])
+        for rows in [actual[:-1], actual + [actual[0]], [actual[0], actual[0], actual[2]],
+                     [path.replace("/candidate/", "/foreign/") for path in actual],
+                     [path[:-2] + ".ko" for path in actual],
+                     [path.replace("/modules/", "/modules/../modules/") for path in actual],
+                     [actual[0], actual[1], "/candidate/modules/unknown.o"]]:
+            with self.subTest(order=rows), self.assertRaisesRegex(ValueError, "modpost module set mismatch"):
+                driver.module_order(rows)
 
     def test_changed_basis_tool_rejected_before_process(self):
         (self.baseline / "build/fixture-tool").write_bytes(b"changed tool")

@@ -1,0 +1,214 @@
+{
+  "schema": "mckernel.native-running-external-modules-attempt-review.v1",
+  "task_id": "native-running-external-modules-attempt-review-20261017-1",
+  "status": "FAIL_BUILD_POSTCHECK_WITH_PASS_OWNED_BUILD_RETIREMENT",
+  "author": "/root/native_lifecycle_probe",
+  "dispatch_result": {
+    "exit_code": 1,
+    "elapsed_seconds": 18.03431029600324,
+    "head_before": "2558578cfe8e3b3f94f63d8fa046e8aa271be1ed",
+    "head_after": "2558578cfe8e3b3f94f63d8fa046e8aa271be1ed",
+    "release_sha256": "be965961556e0215e3edd745157d1c8459493362d7d6651274734ac13da305fc",
+    "stdout_sha256": "1f4395e9a4a3a87dee1742aebd2ec23a4fa835466b2a8beb29f9ab2cf4895fce",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "dispatch_command": {
+    "argv": [
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel/scripts/native_running_external_modules_owner.py",
+      "--request",
+      "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-request-20261017-3.json",
+      "--request-sha256",
+      "b48d09086974f9b115181d9812ec920465701473638236376b59ed4c6cf5b340",
+      "--release",
+      "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-execution-release-20261017-1.json",
+      "--release-sha256",
+      "be965961556e0215e3edd745157d1c8459493362d7d6651274734ac13da305fc"
+    ],
+    "fetched_checkpoint": "2558578cfe8e3b3f94f63d8fa046e8aa271be1ed",
+    "verified_checkpoint_blobs": 40,
+    "release_sha256": "be965961556e0215e3edd745157d1c8459493362d7d6651274734ac13da305fc",
+    "launched_at_epoch": 1792249870.4840837,
+    "host_available_bytes": 19617652736,
+    "scratch_available_bytes": 18604544000
+  },
+  "original_driver_receipt": {
+    "path": "/home/holden/mckernel-work/scratch/native-running-modules-candidate-2a392fdcffaf426894bed7ed67a33c66/evidence/receipt.json",
+    "sha256": "853a5ff0cc3d5f7d91b6688ccf111d201ba38d86871939402a39b35606c908c6",
+    "size": 20140
+  },
+  "original_owner_receipt": {
+    "path": "/home/holden/mckernel-work/scratch/native-running-modules-owner-2a392fdcffaf426894bed7ed67a33c66/owner-receipt.json",
+    "sha256": "8982be5e5d97da8d589aa301582972f2eb9fa75493f66b2e3f5f3431d2dd6236",
+    "size": 38644
+  },
+  "failure": {
+    "make_returncode": 0,
+    "driver_status": "FAIL",
+    "driver_error": "ValueError: modpost module set mismatch",
+    "modules_order_actual": [
+      "/candidate/modules/ihk.o",
+      "/candidate/modules/ihk-smp-x86_64.o",
+      "/candidate/modules/mcctrl.o"
+    ],
+    "interpretation": "Kbuild completed all3 Rust module objects, MODPOST,3.ko links andBTF; driver then rejected modules.order .o entries against .ko expectation. Original FAIL receipts remain unchanged; existence of modules does not grant artifact acceptance."
+  },
+  "module_outputs_from_original_receipt": {
+    "ihk.ko": {
+      "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+      "bytes": 1440392
+    },
+    "ihk-smp-x86_64.ko": {
+      "sha256": "fc7f3d38a32e806b3f905f283ba0bb4902e14455ad8efd14688f728f2af7e1ab",
+      "bytes": 11424624
+    },
+    "mcctrl.ko": {
+      "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+      "bytes": 1913904
+    }
+  },
+  "source_provenance": {
+    "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "source_candidate_sha": "1769263c751befa9983d19705833d3d5ac6a1ace",
+    "closure_sha256": "cfbb0e4fdf6d55543485de002e5bc8b52bf22f759c3cff9231f76460839dd001",
+    "closure_hash_encoding": "SHA256 of UTF-8 JSON relative-path-to-SHA256 map, sorted keys, separators comma/colon",
+    "reviewed_deltas": [
+      {
+        "path": "ihk_smp_x86_64.rs",
+        "baseline_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+        "source_candidate_sha256": "33b783c1e34727c0ae2e7202447a0516f7b8841a683b7580805c2b7d4fb0dc54"
+      },
+      {
+        "path": "os_runtime.rs",
+        "baseline_sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+        "source_candidate_sha256": "65107aafb28868e76640cb2e1862e5d9e36a930a2e9dab850824d5108879225a"
+      }
+    ],
+    "compatibility_build_id": {
+      "path": "ihk-compat-build-id.bin",
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+      "meaning": "Retained baseline ABI compatibility blob; not proof of unchanged compiled source"
+    },
+    "excluded_working_tree": "Every file outside the two reviewed deltas, including Remote and service-worker WIP"
+  },
+  "independent_retirement_review": {
+    "reviewer": "/root/image_retirement_review",
+    "decision": "PASS_OWNED_BUILD_RETIREMENT",
+    "decision_source": "Final independent reviewer decision relayed by dispatcher in exact task packet, bound to original owner receipt8982be5e and driver receipt853a5ff0.",
+    "docker_clients": 14,
+    "admission_observer_clients": 1,
+    "normal_and_final_client_groups_empty": true,
+    "container_id": "9e3f94236531467b8f032b9a330e99794bcd5b369079a1131edf564f387c5daa",
+    "container_removed": true,
+    "three_final_container_lookups_empty": true,
+    "record_release": "All3 record/archive identities/bytes/hash and fsync proof match; records released.",
+    "owner_pid": 559199,
+    "owner_retired": true,
+    "root_development_mutex": {
+      "device": 27,
+      "inode": 4,
+      "free_after_retirement": true
+    }
+  },
+  "owner_terminal_state": {
+    "status": "FAIL",
+    "build_status": "FAIL",
+    "cleanup_status": "PASS_OWNED_REMOVAL_AND_RECORD_RELEASE",
+    "cleanup_separately_required": false,
+    "retired": true,
+    "terminal_container_retained": false,
+    "client_count": 14,
+    "admission_client_count": 1
+  },
+  "retained_scope_roots": [
+    "/home/holden/mckernel-work/scratch/native-running-modules-owner-2a392fdcffaf426894bed7ed67a33c66",
+    "/home/holden/mckernel-work/scratch/native-running-modules-admission-2a392fdcffaf426894bed7ed67a33c66",
+    "/home/holden/mckernel-work/scratch/native-running-modules-candidate-2a392fdcffaf426894bed7ed67a33c66",
+    "/home/holden/mckernel-work/scratch/native-running-external-modules-dispatch-20261017-1"
+  ],
+  "selected_capture_references": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-running-external-modules-dispatch-20261017-1/command.json",
+      "sha256": "3df23284fd3770a4d1b0f6a3708ce50b3e329ab8488870b7847728cd1945e216",
+      "size": 924
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-running-external-modules-dispatch-20261017-1/result.json",
+      "sha256": "a8216011a264240e2b0170e4bd6f437b91f64aebece9daef08c92a479c17dac6",
+      "size": 444
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-running-external-modules-dispatch-20261017-1/stdout",
+      "sha256": "1f4395e9a4a3a87dee1742aebd2ec23a4fa835466b2a8beb29f9ab2cf4895fce",
+      "size": 31986
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-running-external-modules-dispatch-20261017-1/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-running-modules-candidate-2a392fdcffaf426894bed7ed67a33c66/evidence/make.stdout",
+      "sha256": "d6263ae9593d46e1052cdc0f2ff3e48485c3e19cf927ea72defd93a7a26e3d7d",
+      "size": 852
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-running-modules-candidate-2a392fdcffaf426894bed7ed67a33c66/evidence/make.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-running-modules-candidate-2a392fdcffaf426894bed7ed67a33c66/modules/modules.order",
+      "sha256": "37dd7f929aa1b93bd6fedd148ddd2849c000bf5ff9d8b66676c70602e60d3801",
+      "size": 89
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-running-modules-owner-2a392fdcffaf426894bed7ed67a33c66/ownership-archive.json",
+      "sha256": "132aab6371f25c860339f56c2d30af79c8671f1e64959bee8e96f70e533680c9",
+      "size": 17202
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-running-modules-owner-2a392fdcffaf426894bed7ed67a33c66/postflight-proof.json",
+      "sha256": "37af1ed40c55ab36c5ce13f8ad20fe721a2d98d3115aa620d5c91222f539f103",
+      "size": 13064
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-running-modules-owner-2a392fdcffaf426894bed7ed67a33c66/record-release-authorized.json",
+      "sha256": "ab54c02b77bf0c1d20e9777c4c34e4b4a3ad3c62790804460d76996180b9dee6",
+      "size": 1989
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-running-modules-owner-2a392fdcffaf426894bed7ed67a33c66/record-release-complete.json",
+      "sha256": "a01a49685ee3283f52126ebd1fd3bedb2459e79c15ca92875ffb3d204b5eb54a",
+      "size": 176
+    }
+  ],
+  "archive": {
+    "status": "PENDING_ADDITIVE_RETENTION_RECORD",
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-attempt-review-20261017-1.tar.gz",
+    "record_path": "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-attempt-review-20261017-1-archive.json",
+    "policy": "This review record stays immutable after publication; archive completion/provenance added separately. Original failed captures remain expanded and are not deleted."
+  },
+  "acceptance": {
+    "build_artifacts_accepted": false,
+    "native_modules_loaded": false,
+    "guest_executed": false,
+    "running_publication_runtime_validated": false,
+    "shutdown_runtime_validated": false,
+    "application_acceptance": false,
+    "production_acceptance": false
+  },
+  "environment": {
+    "cpu_affinity": [
+      6
+    ],
+    "address_space_bytes": 1073741824,
+    "root_actions": false,
+    "runtime_actions": false,
+    "source_changes": false,
+    "git_actions": false
+  },
+  "blocker": "Original driver modules.order postcheck failed; corrected offline validation belongs to separate author/review lane.",
+  "next_task": "Dispatcher may reference positive build-owner retirement now; separately review corrected offline validation of exact retained modules before artifact acceptance or any native runtime."
+}
