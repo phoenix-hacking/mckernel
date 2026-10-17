@@ -1,0 +1,122 @@
+{
+  "schema": "scratch22-authority2.preparation-independent-execution-review.v1",
+  "decision": "PASS_PREPARATION_EXECUTION",
+  "reviewer": "/root/fork_adoption_boundary_review",
+  "implementation_author": "/root/scratch22_adapter",
+  "executor": "/root",
+  "implementation_ownership": false,
+  "model": "gpt-6.1-sol",
+  "scope": "One ordinary-user fresh authority2 preparation/materialization through the exact reviewed adapter. No root, Docker, privileged observer/census, compiler, native build, module, guest, network or application execution is released.",
+  "target": "d37d2216a60c6db10442ba8bc238d64fbd59c5ea",
+  "target_tree": "95cbbdba1bdfa58e48ba7edba6a2d0d20259ecc6",
+  "baseline": "fd09933c64adaba32bf975ec96e5d518a42544e9",
+  "controller": "e8c03c82bb59c3cc8720b25cf9c3fa4265f6a54d",
+  "fetched_ref": "refs/remotes/origin/scratch22-authority2-source-errorpath-20261017",
+  "proposal": {
+    "path": "docs/verification/evidence/scratch22-authority2-preparation-review-input-20261017.json",
+    "sha256": "fa279a142e3184375016fd29a3fb091447208467ee08991c6ef13486c8e52229",
+    "status": "PASS_PREPARATION_EXECUTION_RELEASE",
+    "pending_field": "preparation_review.sha256"
+  },
+  "reviewed_inputs_sha256": {
+    "script_sha256": "dbdc8c6711f4502328b37cec4b200d999c102af53f87aa183debbe160379dc0f",
+    "tests_sha256": "8afa9a23f102595bd7c7d97bed2be6e578e9b16325b8cfecf0ebafd05da06f6c",
+    "ancestor_sha256": "23d2dcc45db9e9268456a202e46c0e25e982b13d91413271cf00452d0564a731",
+    "cleanup_sha256": "c5483d3dee5469b44c9c8e531197fdf8a3982f44ffc06d9f8d55affc84515c27",
+    "cleanup_release_sha256": "738951610e6691071c1b1f5dfb46b91a1e55988f7240759f73baf01ef0f0b44d",
+    "cleanup_postflight_sha256": "bb15150fa9f68ce4f79eb28ac20268291ed78c594fcf744ab3d5e4b592b375bc",
+    "source_checks_sha256": "77c98238bb181b0bab2ee0915f386c9294441fb8d07692995b61a789e6172516",
+    "source_review_sha256": "5457654a2b15bdf94e4edf5d163fd4eeb1192da6604996df8646d45328c33213",
+    "authority_review_sha256": "c05e2a266186d085845b4dc6085a2ca201ad14715c8f297bd73fee77ce9c39cd",
+    "repair_review_sha256": "f0a565f2b1a81ed49acea2234fc2b24621a99cab6298c75474b7a20730b6a077",
+    "authority1_recovery_sha256": "f50a036e06aba4a87ac6bf1fad5a472844cbc4f62b11e1fe6542518fe80205f5",
+    "authority1_recovery_review_sha256": "3e991dc16ba97fc0505f0c6d9cdd2aa486dae58252c0c1f1d1c2aafa2744dbf2",
+    "authority1_cleanup_sha256": "af4c3f45ff0c276c110251fd4f9c8cb88c5e8606bfc3cf6f6a0ea48bb7688d29",
+    "authority1_cleanup_review_sha256": "a54b8f2971b4a541e2af9a3bd5eb9df407fb3314d55a5b63398990f5a2f6f2ed"
+  },
+  "mechanical_finalization": {
+    "allowed_change_only": "Replace proposal.preparation_review.sha256 PENDING_INDEPENDENT_HASH with the complete finalized SHA256 of this exact review file. The already selected absolute review path and every other proposal field remain unchanged.",
+    "all_other_proposal_fields_frozen": true,
+    "final_release_binding": "Hash the complete finalized release file and pass that exact external digest to --release-sha256. The pending proposal itself is not executable authority.",
+    "fixed_controller": "Keep HEAD at e8c03c82bb59c3cc8720b25cf9c3fa4265f6a54d through preparation terminal. Sources and anchor are already committed/fetched. This digest-bound review and finalized release may remain uncommitted WIP until terminal, as in the accepted previous preparation protocol; checkpoint the actual result afterward.",
+    "no_new_authority_layer": true
+  },
+  "approved_command_profile": {
+    "argv": ["/usr/bin/python3", "-B", "scripts/prepare_native_exact_scratch22_authority2.py", "--release", "ABSOLUTE_FINALIZED_AUTHORITY2_RELEASE_PATH", "--release-sha256", "EXACT_FINALIZED_AUTHORITY2_RELEASE_FILE_SHA256", "--materialize"],
+    "working_directory": "/home/holden/mckernel",
+    "ordinary_user": "holden",
+    "invocations": 1,
+    "cpu_affinity": [0],
+    "cpu_share": 1,
+    "rss_planning_share_bytes": 2147483648,
+    "virtual_address_space_cap": null,
+    "wall_seconds_maximum": 1200,
+    "cpu_seconds_maximum": 1100,
+    "nofile": 256,
+    "core_bytes": 0,
+    "root_development_lease_required": false,
+    "root_or_sudo": false,
+    "docker": false,
+    "compiler_or_build": false,
+    "guest": false,
+    "network": false,
+    "resource_explanation": "Reuse accepted preparation envelope 2310634b: ordinary Git can map the existing large pack without allocating that size resident. Preserve one CPU and 2-GiB RSS planning share within the aggregate budget, with no RLIMIT_AS cap. The 1200-wall/1100-CPU envelope covers the mandatory full eight-root census and source/manifest/owner validation; it does not expand the serialized heavy/guest profile."
+  },
+  "accepted_baseline": {
+    "path": "docs/verification/evidence/scratch22-authority1-preparation-independent-execution-review-20261017.json",
+    "sha256": "2310634b41bcf66348dd30a37760d8a4010ca2216ca73648bb2a76f4b798b21e",
+    "reuse": "Same reviewed ordinary-user preparation/resource/canonical-owner protocol, with fresh authority2 names, eight retained roots and the independently reviewed exact source repair plus actual authority1 retirement joins. No old attempt or release is replayed."
+  },
+  "independent_read_only_checks": {
+    "status": "PASS_PREPARATION_PROPOSAL_BOUNDARIES",
+    "exit_code": 0,
+    "tool_wall_seconds": 0.9,
+    "profile": "CPU6, one ordinary Python job, 2-GiB RSS planning share with no virtual-AS cap for read-only Git queries. No preparation, root, Docker, compiler, guest, network or full multi-GiB content census.",
+    "checks": [
+      "Exact proposal raw SHA, attempt/schema/target/tree/controller and fourteen-input map match the actual validate_preparation_release contract. The sole pending value is this independent review SHA.",
+      "Actual validate_cleanup passes original scratch21 result/release/postflight and preserved plan/journal/capture/archive identities.",
+      "Actual validate_source_authority and validate_authority_review pass the immutable RS-011 baseline, exact two-file namespace repair and unchanged four-file historical observer authority. No source-suite rerun or ledger rebinding is claimed.",
+      "Actual validate_authority1_retirement passes the real f50/3e991 process recovery and af4/a54 cleanup receipts, release/plan/journal/archive/capture bindings and preserved original failure hashes. No live recovery or cleanup is replayed.",
+      "HEAD/controller and FETCH_HEAD are e8c03c82; target fetched ref resolves exactly to d37d2216, target tree/parent match the proposal and actual raw_delta equals exactly its two M/path/blob rows. Current helper/test/ancestor hashes match exact controller Git blobs.",
+      "Actual live_preparation_boundary passes canonical scratch, boot/device/UUID, ext4 rw/nodev/nosuid and capacity floors.",
+      "The accepted authority1 complete shared snapshot log SHA37ef7d6c is verified and contains486 paths. All are exactly the eligible unchanged large-evidence set in target/baseline trees. Across all eight retained roots,3888 regular-file metadata/path comparisons match authenticated device/inode/mode/size/mtime with nlink8. No shared large file bytes were rehashed.",
+      "All eleven new preparation destinations or required exclusion/lease paths are absent: candidate, metadata-backup, output, evidence, manifest, request, log, terminal, lease, pinned scratch18 operational exclusion and shared heavy-operation lock file.",
+      "inherited_arguments remains signature-complete, execute=false and expected_initial_links8. Exact private-storage budget computed from target blobs plus private metadata/IHK copies is334639363bytes; host/scratch floors plus emergency reserve pass."
+    ],
+    "capacity": {"host_free_bytes": 28951408640, "scratch_free_bytes": 26356002816, "private_bytes_budget": 334639363, "host_floor_bytes": 17179869184, "scratch_floor_bytes": 12884901888, "emergency_bytes": 536870912, "observed_mem_available_kib": 29141076},
+    "live_binding": {"scratch_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52", "scratch_device": 1828, "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb"},
+    "metadata_paths_checked": 3888,
+    "eligible_shared_paths": 486,
+    "current_retained_aliases": 8,
+    "expected_materialized_links": 9,
+    "source_oracle_suites_repeated": false,
+    "full_read_only_prepare_invoked": false,
+    "fabricated_admission_record": false,
+    "reviewer_failures": []
+  },
+  "retained_observation_evidence": {
+    "shared_snapshot_log": {"path": "/home/holden/mckernel-work/scratch/native-exact-candidate-delta-preparation-scratch-22-authority1.log", "sha256": "37ef7d6c70b727e991e34d71977885bff3d3b82103bf888884cadec2c8f5f3a4"},
+    "shared_snapshot_review": {"path": "docs/verification/evidence/scratch22-authority1-prepared-artifact-independent-review-20261017.json", "sha256": "831e6ce47254c20d754537da356bfa92aa4c89c18a66c0eddde014a6352680ba"},
+    "postcleanup_census": {"path": "/home/holden/mckernel-work/scratch/scratch22-authority1-postcleanup-census-20261017.result.json", "sha256": "991ef8064451a1e9076ec67fa654fbee0927e6c0add03549a936b30a11ccfe35"},
+    "observation_limit": "Reuse independently accepted fresh postcleanup root census reporting no active workload/target container and absent ownership paths. Reviewer checks saved receipts and ordinary current destination metadata, not fresh privileged process/container/root-lock state."
+  },
+  "mandatory_execution_checks_preserved": [
+    "The one selected materialize call must revalidate complete finalized release/review hashes, controller HEAD/blob bindings, all original/source/repair/retirement inputs, exact source target/ref/tree/parent/delta and pinned owner-exclusion ABI before inherited preparation.",
+    "The adapter must run its complete eight-root486-file SHA/blob/mode/inode/race census before calling the inherited materializer and before creating its journal or destination. This review's cheaper metadata comparisons do not replace that full census.",
+    "Inherited preparation repeats authenticated admission, exact private budget and capacity, creates only fresh authority2 objects, constructs private Git/IHK inputs and invokes canonical manifest, verify_inputs and BuildOwner.validate with Docker remaining unconstructed.",
+    "Both post-materialization shared checks and canonical non-executable request validation remain mandatory. Success requires PASS_PREPARE_ONLY, canonical_owner_request_validation PASS, execution_released=false and nine authenticated links after adding authority2."
+  ],
+  "required_terminal_observation": [
+    "Capture exact finalized release hash, stdout/stderr/exit, complete fresh log/terminal and actual process identities. Preserve every failure and partial output.",
+    "On success independently review actual candidate target/tree, canonical request/manifest, terminal/log, nine-link shared metadata and lease/exclusion absence before any later heavy build release.",
+    "On failure do not replay or reuse authority2 names or remove partial materializations without exact reconciliation. Preserve all scratch21/original22/authority1 requests, consumed evidence, stopped-attempt history and accepted cleanup/recovery decisions.",
+    "Keep controller HEAD fixed through terminal; checkpoint the actual new outcome afterward. New external stop/included97-percent guard remains authoritative and must retain exact process/evidence state if interrupted."
+  ],
+  "failure_families": "S22-HISTORICAL-LEASE-BOOT-1, S22-OBSERVER-CAPTURE-BOUND-1 and S22-NATIVE-SHUTDOWN-ERROR-PATH-1 retain all prior attempts/corrections. This fresh separately named materialization is not a failure-history reset, build success or native error-family acceptance.",
+  "blocking_findings": [],
+  "materialization_performed_by_reviewer": false,
+  "privileged_census_performed_by_reviewer": false,
+  "build_execution_released": false,
+  "guest_execution_released": false,
+  "acceptance_credit": false
+}

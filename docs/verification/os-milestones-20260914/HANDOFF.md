@@ -1,5 +1,46 @@
 # Compact dispatcher handoff
 
+## Current continuation: checkpoint 367, fresh native build released
+
+CONTINUE. Minimal targetd37d2216/tree95cbbdba is now freshly materialized at
+scratch/mckernel-exact-candidate-scratch-22-authority2. Sole preparation rc0,
+PASS_PREPARE_ONLY/canonical-ownerPASS: request20801991, manifest4866232a,
+terminal852c8ffe/logb55383fd. All486 shared originals preserve bytes across
+nine authenticated alias roots; new output/evidence directories are empty.
+Preparation release0df1470b/review90523f3d consumed once; never rematerialize
+these names. Full raw artifacts retained in archive034ef09e (tar compare0).
+
+One native build is independently released by1d28de9f. Final release
+docs/verification/evidence/scratch22-authority2-heavy-build-execution-release-20261017.json
+SHAd63b01b2, derived fresh requestc38fdd28. Commit/push/fetch exact release+four
+source blobs, then use its fetched campaign commit as --release-commit with
+scripts/native_exact_scratch22_authority2_build_wrapper.py --execute ONCE.
+No outer timeout/CPU0 taskset: inherit launcher affinity0,2-7. Initial CPU0-only
+read-only census refused882c5cdf; removing only that accidental narrowing gives
+PASS_READ_ONLYb3b775a7, seven authenticated historical leases, no heavy process
+or container. Container remains CPUs2-5/12GiB/no-swap/512/nonet/jobs2, one heavy.
+Canonical aggregate16.2158GiB remains stricter than launcher24GiB: share it
+responsibly with control/cheap work. No healthy-build interruption or raw release.
+
+Actual libdwarf data-only preparation is ready for d37: supplemental34db81e1,
+checkout native-exact-mckernel-gitlink-libdwarf-d37d2216-scratch22-authority2-image1-20261017,
+412files/21Gitmetadata,3.62s/162284KiB; all Git children quiescent. Tool rebind
+requestaea8d979 has conditional independent d650086a; do NOT probe until actual
+nativePASS and accepted terminal cleanup. No candidate placeholders changed.
+Next after native result: preserve failure/minimal fix OR matching image path
+then exact signal.mask-restore guest. Reuse immutable passing artifacts across
+eligible payloads; no payload-only kernel rebuild or formal-credit inflation.
+
+Optional fork new teardown tests are pushed/fetched on isolated branch61920300
+(production unchanged):2Python/3newRust PASS, old5filtered,0.510s, evidence7aeb078f.
+File write/read static payload3f09a659 compiled once, reference/guestPENDING;
+/case/work untouched. Older process/thread Linux references remain scoped only.
+Affinity reconciliation notes original cheap authorCPU1 deviation;15tests were
+rechecked on allowedCPU2,0.050s. All future lanes stay within0,2-7.
+Counts unchanged3compiled candidates/12diagnosticpasses,0/273formal apps,
+6/130production,0/7language. This release/checkpoint is not compilation/runtime
+success or OS completion. Preserve userWIP and all old failures/leases/archives.
+
 ## Current continuation: checkpoint 366, authority1 retired / fresh candidate next
 
 CONTINUE. Exact one-shot observer recovery COMPLETE f50a036e, independently

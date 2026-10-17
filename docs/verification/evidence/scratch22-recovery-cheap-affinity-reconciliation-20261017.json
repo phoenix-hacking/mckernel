@@ -1,0 +1,13 @@
+{
+  "schema": "scratch22.recovery-cheap-affinity-reconciliation.v1",
+  "status": "PASS_ALLOWED_AFFINITY_RECHECK",
+  "observed_launcher_affinity": "0,2-7",
+  "original_deviation": "Dispatcher earlier assigned CPU1 to the recovery author's cheap mocked tests. CPU1 was outside the inherited launcher affinity; the original author record and command remain unchanged. This was not an authorized expansion of the campaign envelope.",
+  "correction": "All future tasks use only CPUs0,2-7. Independently accepted correction checks already used CPU6. Dispatcher additionally ran the same complete15 mocked/disposable recovery tests on allowed CPU2,2GiB,60seconds,core0: exit0,15PASS,0.050seconds.",
+  "source_sha256": "3fdb4dde4dbbd5d07d85d68c02e68d4aee3acca45dce12be3479f3252765abd6",
+  "tests_sha256": "d789dd53c4a286402cd9a5b5431b2930441114765e9824b504bb9da1ccb6e458",
+  "stdout_path": "/home/holden/mckernel-work/scratch/recovery-correction-affinity-reconciliation-20261017.stdout",
+  "stderr_path": "/home/holden/mckernel-work/scratch/recovery-correction-affinity-reconciliation-20261017.stderr",
+  "scope": "Cheap source tests only. Actual process recovery and root cleanup remained on reviewed CPU0; neither consumed attempt was replayed. No host affinity, container resources, source/oracle or launcher state was changed.",
+  "acceptance_credit": false
+}

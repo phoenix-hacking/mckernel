@@ -1,0 +1,189 @@
+{
+  "schema": "mckernel.file-write-read-static-preparation.v1",
+  "status": "PASS_STATIC_COMPILE_ONLY_REFERENCE_PENDING",
+  "authority": "Dispatcher explicitly admitted compilation of this exact immutable source under the reused ordinary-user static GCC profile. Host payload execution is outside scope because the source writes absolute /case/work paths.",
+  "reused_profile": "docs/verification/evidence/signal-mask-restore-compile-profile-review-20261017.json",
+  "reused_profile_sha256": "320d19452c638e0853d21798628d59387d551ff2b212806e1061d9d0b644ff31",
+  "reused_observer": "/home/holden/mckernel-work/scratch/memory-futex-static-preparation-20261017-9l2wCV/observe.py",
+  "artifact_root": "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM",
+  "fixed_inputs_sha256": {
+    "scripts/application-tests/cases/file/file.write-read.c": "942927376c8d3707a7d14b0f5bdc353790297ce4bf85fe6db2c34090198f58fd",
+    "scripts/application-tests/oracles/file.write-read.json": "a3262a52829161a9f0ede49d451a72cb7fcddaa857742d6fdc5cec6bf85141bd"
+  },
+  "complete_observation": {
+    "relative_path": "observation.json",
+    "sha256": "d4bf87122dac44e28696b154b21c231cfb7cd4e5225033ff8125cea67a65986a",
+    "observer_relative_path": "observe.py",
+    "observer_sha256": "70a9b0e9b2cfabd6bdbf29995507265776a123c294387b65fa365eb4704ed1ef",
+    "contains": "Complete compile/readelf argv, cwd, sanitized environment, UID/EUID, limits, storage floors and initial mask; all tool/static-link/header source hashes; all 93 consumed dependency hashes and depfile; binary hash/size; raw command stdout/stderr/status paths/hashes; exact expected stdout bytes frozen before compiler. No payload command exists."
+  },
+  "execution": {
+    "resource_wrapper": "/usr/bin/timeout --signal=TERM --kill-after=5s 60s /usr/bin/taskset -c 7 /usr/bin/prlimit --as=2147483648 --cpu=55 --nofile=256 --fsize=67108864 --core=0 -- /usr/bin/env -i PATH=/usr/bin:/bin LC_ALL=C LANG=C TZ=UTC PYTHONDONTWRITEBYTECODE=1 HOME=/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/home TMPDIR=/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/tmp /home/holden/anaconda3/bin/python3 -B /home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/observe.py",
+    "uid": 1000,
+    "euid": 1000,
+    "cpu_affinity": [
+      7
+    ],
+    "one_compile_job": true,
+    "address_space_limit_bytes": 2147483648,
+    "overall_timeout_seconds": 60,
+    "compiler_timeout_seconds": 50,
+    "elf_inspection_timeout_seconds": 10,
+    "start_utc": "2026-10-17T05:22:56.321477+00:00",
+    "end_utc": "2026-10-17T05:22:56.535671+00:00",
+    "environment": {
+      "HOME": "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/home",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "TMPDIR": "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/tmp",
+      "TZ": "UTC"
+    },
+    "initial_signal_mask": [],
+    "free_bytes_before": {
+      "/home/holden/mckernel": 28953403392,
+      "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM": 26356957184
+    },
+    "compiler_invocations": 1,
+    "payload_invocations": 0,
+    "compiler_exit_code": 0,
+    "compiler_stdout_hex": "",
+    "compiler_stderr_hex": "",
+    "readelf_exit_code": 0,
+    "compiler_and_readelf_processes_joined": true
+  },
+  "binary": {
+    "path": "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/file.write-read/app",
+    "sha256": "3f09a659061b67a1b5d096bf93ad7de8f00d4e92ff26908bfd5b283e3c3fb46a",
+    "size": 876952,
+    "depfile_sha256": "01a368012308b6c66759c6d7186fd8759bc095493fe337c533a5189fd89fab33",
+    "header_dependency_count": 93,
+    "elf": {
+      "no_wx_load": true,
+      "nonexecuting_stack": true,
+      "static_no_interp_no_dynamic": true
+    }
+  },
+  "tool_and_static_link_inputs_sha256": {
+    "/home/holden/anaconda3/bin/python3": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "/usr/bin/as": "8d45684bbd6420e3e97907257c510f199bb6c5f9b02ea8ee0a590c1a8b662ead",
+    "/usr/bin/gcc": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+    "/usr/bin/ld": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+    "/usr/bin/readelf": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/cc1": "c09275e2d3f811e23d255eac415bfedd9e68ba8b5cf4b261d2fce136b5e8fc99",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/collect2": "5228dbf1e15d16694059023d16e7f13f201ea0d76a82e8837c6483dc21d66682",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/crtbeginT.o": "9fe07384ef0078de4a23fe2acc4137cb5aeeddcc715cf189cc0d985b602d348a",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/crtend.o": "c29d8ba35b3afad85993fa8f64b1a4d91678deaeb0f1cae952f12c0bdd4c83c1",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc.a": "82b6c0bfc28d5314fffaaa2a920516575f347972f685b5805f5749a87a617df0",
+    "/usr/lib/gcc/x86_64-linux-gnu/9/libgcc_eh.a": "1dc66e2a55a6cefe1458b4e94f9b321e453a5b7279638cd7d12e1ddf83ec59f8",
+    "/usr/lib/x86_64-linux-gnu/crt1.o": "27daac7b3f9e861ef8df49f45b2a8ffb7130a1899f86efe53c6f84d63fd3cd0d",
+    "/usr/lib/x86_64-linux-gnu/crti.o": "2f1c31070d95f398fe4c1388408e83283cc7e0cee0ebb64882e0b331e8e178e8",
+    "/usr/lib/x86_64-linux-gnu/crtn.o": "a2266079f95b84ccc2162ebbf279bcd78858a748aa1882e0bdb912316c76a58f",
+    "/usr/lib/x86_64-linux-gnu/libc.a": "f9831edeccd3a87eb3fbba795f92bfa83409b3951f05ec40ca5df432b8699127"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-static",
+        "-fno-pie",
+        "-no-pie",
+        "-Wl,-z,noexecstack",
+        "-MD",
+        "-MF",
+        "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/file.write-read/app.d",
+        "/home/holden/mckernel/scripts/application-tests/cases/file/file.write-read.c",
+        "-o",
+        "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/file.write-read/app"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/file.write-read",
+      "environment": {
+        "HOME": "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/home",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "PATH": "/usr/bin:/bin",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/tmp",
+        "TZ": "UTC"
+      },
+      "label": "file.write-read.compile",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "timeout_seconds": 50
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/file.write-read/app"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/file.write-read",
+      "environment": {
+        "HOME": "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/home",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "PATH": "/usr/bin:/bin",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/tmp",
+        "TZ": "UTC"
+      },
+      "label": "file.write-read.readelf",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "662fd2ec1a06090f00b3756bf414a162e5341de74615a747270ebf2cebd2060d",
+      "timeout_seconds": 10
+    }
+  ],
+  "frozen_expected_results": {
+    "authority": "Independent canonical lines frozen in the retained observer before compilation. Existing source/oracle bytes remain immutable and draft readiness is not promoted.",
+    "status": "PENDING_ACTUAL_REFERENCE_AND_GUEST",
+    "parameters": {
+      "bytes": [
+        1,
+        4095,
+        4096,
+        4097,
+        65553,
+        1048576
+      ]
+    },
+    "stdout_utf8": "bytes=1 written=1 read=1 bad_index=1 size=1 eof=0\nbytes=4095 written=4095 read=4095 bad_index=4095 size=4095 eof=0\nbytes=4096 written=4096 read=4096 bad_index=4096 size=4096 eof=0\nbytes=4097 written=4097 read=4097 bad_index=4097 size=4097 eof=0\nbytes=65553 written=65553 read=65553 bad_index=65553 size=65553 eof=0\nbytes=1048576 written=1048576 read=1048576 bad_index=1048576 size=1048576 eof=0\n",
+    "stdout_hex": "62797465733d31207772697474656e3d3120726561643d31206261645f696e6465783d312073697a653d3120656f663d300a62797465733d34303935207772697474656e3d3430393520726561643d34303935206261645f696e6465783d343039352073697a653d3430393520656f663d300a62797465733d34303936207772697474656e3d3430393620726561643d34303936206261645f696e6465783d343039362073697a653d3430393620656f663d300a62797465733d34303937207772697474656e3d3430393720726561643d34303937206261645f696e6465783d343039372073697a653d3430393720656f663d300a62797465733d3635353533207772697474656e3d363535353320726561643d3635353533206261645f696e6465783d36353535332073697a653d363535353320656f663d300a62797465733d31303438353736207772697474656e3d3130343835373620726561643d31303438353736206261645f696e6465783d313034383537362073697a653d3130343835373620656f663d300a",
+    "stderr_hex": "",
+    "exit_code": 0,
+    "linux_reference_runs": 0,
+    "guest_runs": 0
+  },
+  "scope": {
+    "source_or_oracle_changes": false,
+    "host_case_work_created_or_modified": false,
+    "payload_executed": false,
+    "collector_compiled_or_executed": false,
+    "root": false,
+    "docker": false,
+    "network": false,
+    "git": false,
+    "children": false
+  },
+  "semantic_limits": "The unchanged source creates a temporary file once, writes, seeks to offset zero, reads/compares, checks fstat and EOF, then closes/unlinks it. It does not reopen the file, so the draft oracle's reopened/read wording is not an observed additional operation.",
+  "failures": [],
+  "bounded_corrections_used": 0,
+  "consumed_inputs_unchanged_after_compilation": true,
+  "next_dependency": "First new guest remains signal.mask-restore. This compiled payload is ready for a later source-bound diagnostic overlay after its runtime prerequisites; preparing another payload does not itself require rebuilding an unchanged accepted kernel/image.",
+  "acceptance_delta": {
+    "mckernel_runtime": 0,
+    "current_candidate_builds": 0,
+    "real_guest_apps": 0,
+    "formal_application_cases": 0,
+    "production_gates": 0
+  }
+}

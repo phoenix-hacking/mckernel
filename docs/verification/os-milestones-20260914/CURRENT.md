@@ -14445,3 +14445,57 @@ Tests keep every original unreleased assertion under explicitFalse mock and add
 enabled-but-missing-release refusal before lock; both pass0.001s. Final enabled
 source checkpoint/fetch and exact preparation execution release are next; no
 preparation or new heavy workload has yet run. Continue, counters unchanged.
+
+## Checkpoint 367 — fresh authority2 prepared, one native build released
+
+Sole authority2 preparation process226889/start1217423/session83465 completed
+rc0/empty stderr. Actual PASS_PREPARE_ONLY, canonical ownerPASS, exact minimal
+d37d2216/tree95cbbdba two-file delta,486 shared paths/initial8links/final9links.
+Prepared request20801991 (inode57812), manifest4866232a(inode57811), terminal
+852c8ffe/logb55383fd(inodes57813/57810) are sealed. Source/preparation controller
+e8c03c82 remained unchanged through terminal. Original failed authority1 source/
+outputs and all eight previous alias roots remain. Full raw preparation/census
+archive034ef09e passes tar comparison; no raw capture removed. Preparation was
+CPU/hash dominated (observed399GB logical reads but5.6GB physical read); disk
+floors were not blocking. This completed preparation is not a compiled kernel.
+
+Initial main-census command incorrectly pinned CPU0, refusing882c5cdf before
+workload. Exact _dispatcher_resources reports required build CPUs unavailable.
+Bounded command correction removes only that narrowing, retaining inherited
+launcher affinity0,2-7; PASS_READ_ONLYb3b775a7,7historical leases, processes[]/
+containers[], host28.632GB/scratch26.073GB/RAM29.935GB. No source, resource guard,
+global affinity or container limit changed. Outer heavy command must inherit
+that original mask; preparation/root-recovery CPU0 profiles remain separate.
+
+Actual seven artifact hashes/identities and fresh candidate/empty-output/empty-
+evidence/rootlock/boot/UUID bindings are in proposal8648ab52. Derived request
+c38fdd28 changes ONLY four release flags from exact prepared request. Source
+7fab2909/30af2e04/dbdc8c67/ancestor23d2 unchanged. Independent1d28de9f accepts
+one exact native build, validates4374metadata paths/nlink9 without corpus rehash,
+all required provenance/retirement/cleanup/preparation joins, fresh isolation and
+capacity, four-signal root guard/positive-retirement quarantine. Final release
+d63b01b2 alters only pending execution-review SHA; excluded payloade40d4d9a is
+byte-semantically unchanged. Next commit/push/fetch exact release and sources,
+executeonce with that fetched commit, no outertimeout or tasksetCPU0. Strict
+fresh output, original container4CPUs2-5/12GiB/noextra swap/512/nonet/jobs2 and
+inherited stricter aggregate16.2158GiB remain. No new build has run at this note.
+
+In parallel, fresh libdwarf supplementalmanifest34db81e1 binds actual new
+base4866232a/d37/ihk3114d9e7 and ab9230b2/tree dcc29777,412files/21metadata;
+3.62s/162284KiB, evidence73af5fb6. All Git children reaped; pinned candidate and
+image placeholders untouched. Tool rebind requestaea8d979 conditionalreview
+d650086a awaits nativePASS+acceptedcleanup; no toolprobe ran. First new guest
+remains exact signal.mask-restore after matching fresh image and review.
+
+Independent isolated fork teardown source tests:2Python/3newRust PASS0.510s,
+old5filtered, prototype production/frozen fixtures unchanged; source61920300
+pushed/fetched exact2blobs, evidence7aeb078f and full /tmp capture retained.
+New static file.write-read binary3f09a659(876952B) compiles once/noWX/nonexecstack;
+six predicted lines frozen, no host execution or /case/work change, evidence
+4d2dc9df. Process/thread referencef6b962ca remains Linux-only. Additive resource
+note preserves original cheap authorCPU1 deviation and same15tests PASS0.050s
+on allowedCPU2; future work never widens launcher0,2-7 affinity. No root attempt
+was replayed. All original engineering-estimate ranges/counters stay unchanged:
+3compiled candidates/12diagnosticpasses,0/273formalapps,6/130production,0/7language.
+Continue after checkpoint and first image milestone; actual compiler/runtime
+failures select next repair, compatible known-good artifacts reused per payload.
