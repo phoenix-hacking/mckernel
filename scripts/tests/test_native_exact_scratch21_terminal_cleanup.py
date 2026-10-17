@@ -1,0 +1,591 @@
+"""Disposable scratch21 transactions only: never Docker, sudo, or a live lock."""
+import copy
+import fcntl
+import importlib.util
+import json
+import os
+from pathlib import Path
+import select
+import signal
+import subprocess
+import sys
+import tempfile
+import unittest
+from unittest import mock
+
+SOURCE = Path(__file__).resolve().parents[1] / 'native_exact_scratch21_terminal_cleanup.py'
+
+
+def load():
+    spec = importlib.util.spec_from_file_location('scratch21_cleanup_test', SOURCE)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+class Crash(BaseException):
+    """Uncatchable process-death frontier, simulated without recover's handler."""
+
+
+class CleanupTests(unittest.TestCase):
+    def setUp(self):
+        self.m = load()
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        m = self.m
+        m.ROOT = Path(self.temp.name) / 'scratch'
+        m.ROOT.mkdir(mode=0o700)
+        m.UID, m.GID = os.getuid(), os.getgid()
+        m.DEVICE = m.ROOT.stat().st_dev
+        m.BOOT_ID = Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+        for name in ('ATTEMPT', 'SHARED', 'MUTEX', 'PLAN', 'JOURNAL', 'CAPTURE',
+                     'QUARANTINE', 'LEASE', 'OUTPUT', 'EVIDENCE'):
+            setattr(m, name, m.ROOT / name.lower())
+        m.ROOT_LOCK = Path(self.temp.name) / 'root-lock'
+        m.ROOT_LOCK.touch(mode=0o644)
+        m.ROOT_LOCK_BINDING = m.observe_identity(m.ROOT_LOCK)
+        for path in (m.ATTEMPT, m.SHARED):
+            path.write_bytes(('original-' + path.name).encode())
+            path.chmod(0o600)
+            m.RECORDS[path] = (m.digest(path.read_bytes()), path.stat().st_ino, path.stat().st_size)
+        for path in (m.OUTPUT, m.EVIDENCE):
+            path.mkdir(mode=0o700)
+        m.TERMINAL = m.EVIDENCE / 'terminal'
+        m.TERMINAL.write_bytes(b'preserved exit-1 terminal')
+        m.TERMINAL.chmod(0o600)
+        m.TERMINAL_SHA = m.digest(m.TERMINAL.read_bytes())
+        m.TERMINAL_INODE = m.TERMINAL.stat().st_ino
+        m.TERMINAL_SIZE = m.TERMINAL.stat().st_size
+        logs = m.EVIDENCE / 'container.log'
+        logs.write_bytes(b'preserved failure log\n')
+        logs.chmod(0o600)
+        m.CAPTURE.write_bytes(logs.read_bytes())
+        m.CAPTURE.chmod(0o600)
+        m.PROTECTED = [m.observe_identity(p) for p in (m.TERMINAL, logs)]
+        m.RELEASE = {'observation': {'owner_evidence_inventory': m.PROTECTED}}
+        m.DIRS = {p: (p.stat().st_ino, p.stat().st_nlink) for p in (m.OUTPUT, m.EVIDENCE)}
+        self.container_present = True
+        self.census = mock.Mock(side_effect=lambda: self.container_present)
+        def docker(args):
+            self.assertEqual(args, ['rm', '--', m.CONTAINER])
+            self.container_present = False
+            return m.CONTAINER.encode() + b'\n'
+        for target, replacement in (('census', self.census), ('validate_mount', mock.Mock()),
+                                    ('quarantine_wait', mock.Mock()), ('print', mock.Mock()),
+                                    ('docker', mock.Mock(side_effect=docker))):
+            patch = mock.patch.object(m, target, replacement, create=True)
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def snapshot(self):
+        return {str(p.relative_to(self.m.ROOT)): (p.lstat().st_ino,
+                p.read_bytes() if p.is_file() else None) for p in self.m.ROOT.rglob('*')}
+
+    def run_crashable(self):
+        tx = self.m.Transaction()
+        try:
+            return tx.run(True)
+        finally:
+            tx.close()
+
+    def test_read_only_and_terminal_replay_are_immutable(self):
+        before = self.snapshot()
+        self.assertEqual(self.m.recover()['status'], 'PASS_VALIDATE_ONLY')
+        self.assertEqual(before, self.snapshot())
+        self.assertEqual(self.m.recover(True)['status'], 'PASS_EXECUTED')
+        before = self.snapshot()
+        for execute in (False, True):
+            self.assertEqual(self.m.recover(execute)['status'], 'PASS_TERMINAL_REPLAY')
+        self.assertEqual(before, self.snapshot())
+        self.assertEqual(len(self.m.JOURNAL.read_bytes().splitlines()), 9)
+        for path, name in zip((self.m.ATTEMPT, self.m.SHARED), self.m.ARCHIVE_NAMES):
+            archive = self.m.ROOT / name
+            self.assertEqual((self.m.digest(archive.read_bytes()), archive.stat().st_ino,
+                              archive.stat().st_size), self.m.RECORDS[path])
+            self.assertFalse(path.exists())
+
+    def test_each_durable_and_filesystem_frontier_recovers(self):
+        for index in range(2):
+            for stage in ('before_exchange', 'exchange', 'after_exchange', 'release', 'rmdir', 'after_release'):
+                with self.subTest(index=index, stage=stage):
+                    case = CleanupTests('test_read_only_and_terminal_replay_are_immutable')
+                    case.setUp()
+                    try:
+                        m = case.m
+                        real_append, real_exchange, real_rmdir = m.Transaction.append, m.rename_exchange, m.os.rmdir
+                        def append(tx, plan, rows, event, move):
+                            real_append(tx, plan, rows, event, move)
+                            if move == index and event == stage:
+                                raise Crash()
+                        def exchange(fd, source, destination):
+                            real_exchange(fd, source, destination)
+                            if stage == 'exchange' and source == (m.ATTEMPT, m.SHARED)[index].name:
+                                raise Crash()
+                        def rmdir(name, **kwargs):
+                            real_rmdir(name, **kwargs)
+                            if stage == 'rmdir' and name == (m.ATTEMPT, m.SHARED)[index].name:
+                                raise Crash()
+                        with mock.patch.object(m.Transaction, 'append', append), \
+                             mock.patch.object(m, 'rename_exchange', exchange), \
+                             mock.patch.object(m.os, 'rmdir', rmdir):
+                            with self.assertRaises(Crash):
+                                case.run_crashable()
+                        self.assertEqual(m.recover(True)['status'], 'PASS_EXECUTED')
+                    finally:
+                        case.doCleanups()
+
+    def test_unbound_preparation_crash_refuses_without_transfer(self):
+        real = self.m.os.mkdir
+        def mkdir(name, *args, **kwargs):
+            real(name, *args, **kwargs)
+            if name == self.m.ARCHIVE_NAMES[0]:
+                raise Crash()
+        with mock.patch.object(self.m.os, 'mkdir', mkdir):
+            with self.assertRaises(Crash):
+                self.run_crashable()
+        before = self.snapshot()
+        with self.assertRaisesRegex(self.m.Refusal, 'unbound-sentinel'):
+            self.m.recover(True)
+        after = self.snapshot()
+        self.assertIsNotNone(after.pop(self.m.QUARANTINE.name, None))
+        self.assertEqual(before, after)
+        self.assertTrue(self.m.ATTEMPT.is_file())
+        self.assertTrue(self.m.SHARED.is_file())
+
+    def test_plan_creation_crash_recovers(self):
+        real = self.m.Transaction.create
+        def create(tx, name, data):
+            real(tx, name, data)
+            if name == self.m.PLAN.name:
+                raise Crash()
+        with mock.patch.object(self.m.Transaction, 'create', create):
+            with self.assertRaises(Crash):
+                self.run_crashable()
+        self.assertEqual(self.m.recover(True)['status'], 'PASS_EXECUTED')
+
+    def test_root_lock_is_held_through_all_mutations_and_quarantine(self):
+        def check_locked():
+            fd = os.open(self.m.ROOT_LOCK, os.O_RDONLY)
+            try:
+                with self.assertRaises(BlockingIOError):
+                    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            finally:
+                os.close(fd)
+        real = self.m.Transaction.append
+        def append(tx, plan, rows, event, index):
+            check_locked()
+            real(tx, plan, rows, event, index)
+            if event == 'after_exchange':
+                raise self.m.Refusal('uncertain')
+        real_create = self.m.Transaction.create
+        def create(tx, name, raw):
+            check_locked()
+            return real_create(tx, name, raw)
+        with mock.patch.object(self.m.Transaction, 'append', append), \
+             mock.patch.object(self.m.Transaction, 'create', create):
+            with self.assertRaisesRegex(self.m.Refusal, 'uncertain'):
+                self.m.recover(True)
+        self.assertTrue(self.m.QUARANTINE.is_file())
+        self.assertTrue(self.m.ATTEMPT.is_dir())
+        self.assertTrue(self.m.SHARED.is_file())
+        with self.assertRaisesRegex(self.m.Refusal, 'quarantined'):
+            self.m.recover(True)
+
+    def test_concurrent_root_lock_refuses_before_transaction(self):
+        fd = os.open(self.m.ROOT_LOCK, os.O_RDONLY)
+        try:
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            before = self.snapshot()
+            with self.assertRaises(BlockingIOError):
+                self.m.recover(True)
+            self.assertEqual(before, self.snapshot())
+        finally:
+            os.close(fd)
+
+    def test_mutex_acquisition_failure_does_not_start_false_quarantine(self):
+        self.m.MUTEX.touch(mode=0o600)
+        fd = os.open(self.m.MUTEX, os.O_RDONLY)
+        try:
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            before = self.snapshot()
+            with self.assertRaisesRegex(self.m.Refusal, 'cleanup-busy'):
+                self.m.recover(True)
+            self.assertEqual(before, self.snapshot())
+            self.m.quarantine_wait.assert_not_called()
+        finally:
+            os.close(fd)
+
+    def test_initial_absence_without_transaction_cannot_transfer_ownership(self):
+        self.container_present = False
+        with self.assertRaisesRegex(self.m.Refusal, 'container-absent-before-plan'):
+            self.m.recover()
+        self.assertTrue(self.m.ATTEMPT.is_file())
+        self.assertTrue(self.m.SHARED.is_file())
+        self.assertFalse(self.m.PLAN.exists())
+
+    def test_root_lock_replacement_and_boot_mount_drift_refuse(self):
+        tx = self.m.Transaction()
+        try:
+            self.m.ROOT_LOCK.rename(self.m.ROOT_LOCK.with_name('retained-lock'))
+            self.m.ROOT_LOCK.touch(mode=0o644)
+            with self.assertRaisesRegex(self.m.Refusal, 'root-lock-replaced'):
+                tx.pinned()
+        finally:
+            tx.close()
+
+    def test_boot_drift_and_remount_refuse_before_mutation(self):
+        for failure in ('boot', 'mount'):
+            with self.subTest(failure=failure):
+                before = self.snapshot()
+                if failure == 'boot':
+                    with mock.patch.object(self.m, 'BOOT_ID', 'other-boot'):
+                        with self.assertRaisesRegex(self.m.Refusal, 'boot-drift'):
+                            self.m.recover(True)
+                else:
+                    with mock.patch.object(self.m, 'validate_mount', side_effect=self.m.Refusal('mount-drift')):
+                        with self.assertRaisesRegex(self.m.Refusal, 'mount-drift'):
+                            self.m.recover(True)
+                self.assertEqual(before, self.snapshot())
+
+    def test_torn_and_replaced_journal_fail_closed(self):
+        self.m.recover(True)
+        raw = self.m.JOURNAL.read_bytes()
+        self.m.JOURNAL.rename(self.m.ROOT / 'retained-journal')
+        self.m.JOURNAL.write_bytes(raw)
+        self.m.JOURNAL.chmod(0o600)
+        with self.assertRaisesRegex(self.m.Refusal, 'plan-binding'):
+            self.m.recover()
+
+    def test_torn_journal_is_retained_with_quarantine(self):
+        self.m.recover(True)
+        self.m.JOURNAL.write_bytes(self.m.JOURNAL.read_bytes()[:-1])
+        raw = self.m.JOURNAL.read_bytes()
+        with self.assertRaisesRegex(self.m.Refusal, 'torn-journal'):
+            self.m.recover(True)
+        self.assertEqual(raw, self.m.JOURNAL.read_bytes())
+        self.assertTrue(self.m.QUARANTINE.exists())
+
+    def test_replaced_mutex_and_plan_refuse(self):
+        self.m.recover(True)
+        for path in (self.m.MUTEX, self.m.PLAN):
+            raw = path.read_bytes()
+            path.rename(path.with_name(path.name + '.preserved'))
+            path.write_bytes(raw)
+            path.chmod(0o600)
+            with self.assertRaises(self.m.Refusal):
+                self.m.recover()
+            path.unlink()  # Disposable fixture only.
+            path.with_name(path.name + '.preserved').rename(path)
+
+    def test_foreign_owner_exchanged_at_race_is_archived_not_deleted(self):
+        real = self.m.rename_exchange
+        saved = self.m.ROOT / 'original-record'
+        def exchange(fd, name, destination):
+            self.m.ATTEMPT.rename(saved)
+            self.m.ATTEMPT.write_bytes(b'foreign-owner')
+            self.m.ATTEMPT.chmod(0o600)
+            real(fd, name, destination)
+        with mock.patch.object(self.m, 'rename_exchange', exchange):
+            with self.assertRaisesRegex(self.m.Refusal, 'file-binding'):
+                self.m.recover(True)
+        self.assertEqual((self.m.ROOT / self.m.ARCHIVE_NAMES[0]).read_bytes(), b'foreign-owner')
+        self.assertEqual(saved.stat().st_ino, self.m.RECORDS[self.m.ATTEMPT][1])
+        self.assertTrue(self.m.ATTEMPT.is_dir())
+        self.assertTrue(self.m.QUARANTINE.exists())
+
+    def test_nonempty_sentinel_and_publisher_keep_barriers(self):
+        real = self.m.Transaction.append
+        def append(tx, plan, rows, event, index):
+            real(tx, plan, rows, event, index)
+            if event == 'release' and index == 0:
+                (self.m.ATTEMPT / 'unknown').write_bytes(b'preserved')
+        with mock.patch.object(self.m.Transaction, 'append', append):
+            with self.assertRaisesRegex(self.m.Refusal, 'sentinel-binding'):
+                self.m.recover(True)
+        self.assertEqual((self.m.ATTEMPT / 'unknown').read_bytes(), b'preserved')
+        self.assertTrue(self.m.SHARED.is_file())
+
+    def test_protected_evidence_and_request_lease_drift_prevent_cleanup(self):
+        self.m.TERMINAL.write_bytes(b'changed')
+        with self.assertRaisesRegex(self.m.Refusal, 'protected-evidence-binding'):
+            self.m.recover(True)
+        self.assertFalse(self.m.PLAN.exists())
+
+    def test_failure_to_prove_absence_preserves_ownership(self):
+        self.census.side_effect = self.m.Refusal('docker-inventory-failed')
+        with self.assertRaisesRegex(self.m.Refusal, 'docker-inventory-failed'):
+            self.m.recover(True)
+        self.assertFalse(self.m.PLAN.exists())
+        self.assertTrue(self.m.SHARED.is_file())
+
+    def test_final_census_precedes_each_release(self):
+        real = self.m.os.rmdir
+        calls = []
+        def rmdir(name, **kwargs):
+            calls.append(self.census.call_count)
+            real(name, **kwargs)
+        with mock.patch.object(self.m.os, 'rmdir', rmdir):
+            self.m.recover(True)
+        self.assertEqual(len(calls), 2)
+        self.assertGreater(calls[1], calls[0])
+
+    def test_logs_must_match_before_nonforce_removal(self):
+        self.m.CAPTURE.unlink()  # Disposable fixture only.
+        with mock.patch.object(self.m, 'run_privileged_large', return_value=b'wrong'):
+            with self.assertRaisesRegex(self.m.Refusal, 'docker-log-mismatch'):
+                self.m.capture_logs(True, execute=True)
+        self.assertFalse(self.m.CAPTURE.exists())
+
+    def test_exact_terminal_removal_is_nonforce_and_absence_is_rechecked(self):
+        answers = iter((True, True))
+        self.census.side_effect = lambda: next(answers, False)
+        with mock.patch.object(self.m, 'docker', return_value=self.m.CONTAINER.encode() + b'\n') as docker:
+            self.assertEqual(self.m.recover(True)['status'], 'PASS_EXECUTED')
+        docker.assert_called_once_with(['rm', '--', self.m.CONTAINER])
+        self.assertGreaterEqual(self.census.call_count, 7)
+
+    def test_quarantine_writer_failure_still_holds_root_lock(self):
+        real_create, real_append = self.m.Transaction.create, self.m.Transaction.append
+        def create(tx, name, data):
+            if name == self.m.QUARANTINE.name:
+                raise OSError('disposable evidence-writer failure')
+            return real_create(tx, name, data)
+        def append(tx, plan, rows, event, index):
+            real_append(tx, plan, rows, event, index)
+            if event == 'after_exchange':
+                raise self.m.Refusal('uncertain-exchange')
+        def retained_lock():
+            fd = os.open(self.m.ROOT_LOCK, os.O_RDONLY)
+            try:
+                with self.assertRaises(BlockingIOError):
+                    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            finally:
+                os.close(fd)
+        with mock.patch.object(self.m.Transaction, 'create', create), \
+             mock.patch.object(self.m.Transaction, 'append', append), \
+             mock.patch.object(self.m, 'quarantine_wait', side_effect=retained_lock) as waiting:
+            with self.assertRaisesRegex(self.m.Refusal, 'uncertain-exchange'):
+                self.m.recover(True)
+        waiting.assert_called_once_with()
+        self.assertTrue(self.m.ATTEMPT.is_dir())
+        self.assertTrue(self.m.SHARED.is_file())
+
+    def exercise_real_child_quarantine(self, frontier=None, termination=None):
+        """Real flock, broken pipe, pending signal and nonreturning child hold."""
+        case = CleanupTests('test_read_only_and_terminal_replay_are_immutable')
+        case.setUp()
+        marker_read, marker_write = os.pipe()
+        control_read, control_write = os.pipe()
+        pid = None
+        reaped = False
+        try:
+            m = case.m
+            real_wait = load().quarantine_wait
+            pid = os.fork()
+            if pid == 0:
+                try:
+                    os.close(marker_read)
+                    os.close(control_write)
+                    # A real pipe with no reader makes ordinary print(...flush=True)
+                    # raise BrokenPipeError. No mock replaces the actual hold body.
+                    broken_read, broken_write = os.pipe()
+                    os.close(broken_read)
+                    sys.stdout = os.fdopen(broken_write, 'w')
+                    m.print = print
+                    real_append, real_create, real_open = m.Transaction.append, m.Transaction.create, os.open
+                    def rendezvous(marker):
+                        mask = signal.pthread_sigmask(signal.SIG_BLOCK, set())
+                        if not m.DEFERRED_SIGNALS <= mask:
+                            raise AssertionError('signals not deferred before mutation')
+                        os.write(marker_write, marker)
+                        if os.read(control_read, 1) != b'C':
+                            raise AssertionError('missing parent continuation')
+                    def opened(path, flags, *args, **kwargs):
+                        if frontier == 'mutation' and path == m.MUTEX.name and flags & os.O_CREAT:
+                            rendezvous(b'M')
+                        return real_open(path, flags, *args, **kwargs)
+                    def create(tx, name, raw):
+                        if name == m.QUARANTINE.name:
+                            if frontier == 'evidence':
+                                rendezvous(b'Q')
+                            raise OSError('disposable quarantine writer failure')
+                        return real_create(tx, name, raw)
+                    def append(tx, plan, rows, event, index):
+                        real_append(tx, plan, rows, event, index)
+                        if event == 'after_exchange' and index == 0:
+                            raise m.Refusal('disposable uncertain exchange')
+                    def held_wait():
+                        os.write(marker_write, b'H')
+                        real_wait()
+                    m.os.open = opened
+                    m.Transaction.create = create
+                    m.Transaction.append = append
+                    m.quarantine_wait = held_wait
+                    m.recover(True)
+                    os.write(marker_write, b'R')
+                    os._exit(91)
+                except BaseException:
+                    os.write(marker_write, b'E')
+                    os._exit(92)
+            os.close(marker_write)
+            marker_write = None
+            os.close(control_read)
+            control_read = None
+            def marker(expected):
+                self.assertTrue(select.select([marker_read], [], [], 5)[0], 'child frontier timed out')
+                self.assertEqual(os.read(marker_read, 1), expected)
+            if frontier:
+                marker(b'M' if frontier == 'mutation' else b'Q')
+                os.kill(pid, termination)
+                os.write(control_write, b'C')
+            marker(b'H')
+            waited, status = os.waitpid(pid, os.WNOHANG)
+            reaped = waited == pid
+            self.assertEqual(waited, 0, 'quarantine child exited: ' + str(status))
+            fd = os.open(m.ROOT_LOCK, os.O_RDONLY)
+            try:
+                with self.assertRaises(BlockingIOError):
+                    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            finally:
+                os.close(fd)
+            proc_status = dict(line.split(':', 1) for line in Path('/proc/' + str(pid) + '/status').read_text().splitlines()
+                               if ':' in line)
+            blocked = int(proc_status['SigBlk'].strip(), 16)
+            for number in m.DEFERRED_SIGNALS:
+                self.assertTrue(blocked & (1 << (number - 1)))
+            if termination:
+                pending = int(proc_status['ShdPnd'].strip(), 16) | int(proc_status['SigPnd'].strip(), 16)
+                self.assertTrue(pending & (1 << (termination - 1)))
+            self.assertTrue(m.ATTEMPT.is_dir())
+            self.assertTrue(m.SHARED.is_file())
+            self.assertEqual(m.SHARED.read_bytes(), b'original-shared')
+            self.assertEqual(len(m.JOURNAL.read_bytes().splitlines()), 2)
+            self.assertFalse(m.QUARANTINE.exists())
+            os.kill(pid, signal.SIGKILL)
+            waited, status = os.waitpid(pid, 0)
+            reaped = True
+            self.assertEqual(waited, pid)
+            self.assertTrue(os.WIFSIGNALED(status))
+            self.assertEqual(os.WTERMSIG(status), signal.SIGKILL)
+            fd = os.open(m.ROOT_LOCK, os.O_RDONLY)
+            try:
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            finally:
+                os.close(fd)
+            self.assertTrue(m.ATTEMPT.is_dir())
+            self.assertEqual(m.SHARED.read_bytes(), b'original-shared')
+            self.assertEqual((m.ROOT / m.ARCHIVE_NAMES[0]).read_bytes(), b'original-attempt')
+            self.assertEqual(len(m.JOURNAL.read_bytes().splitlines()), 2)
+        finally:
+            # SIGKILL applies only to our exact disposable child. It remains an
+            # unavoidable crash frontier; persistent ownership barriers survive.
+            if pid is not None and not reaped:
+                try:
+                    os.kill(pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+                os.waitpid(pid, 0)
+            for fd in (marker_read, marker_write, control_read, control_write):
+                if fd is not None:
+                    os.close(fd)
+            case.doCleanups()
+
+    def test_actual_child_broken_pipe_and_writer_failure_cannot_release_lock(self):
+        self.exercise_real_child_quarantine()
+
+    def test_actual_child_termination_is_deferred_before_first_mutation(self):
+        for number in (signal.SIGHUP, signal.SIGINT, signal.SIGTERM):
+            with self.subTest(signal=number):
+                self.exercise_real_child_quarantine('mutation', number)
+
+    def test_actual_child_termination_during_failed_quarantine_evidence_keeps_lock(self):
+        for number in (signal.SIGHUP, signal.SIGINT, signal.SIGTERM):
+            with self.subTest(signal=number):
+                self.exercise_real_child_quarantine('evidence', number)
+
+    def test_success_and_preflight_refusal_restore_original_signal_mask(self):
+        before = signal.pthread_sigmask(signal.SIG_BLOCK, set())
+        self.assertEqual(self.m.recover(True)['status'], 'PASS_EXECUTED')
+        self.assertEqual(signal.pthread_sigmask(signal.SIG_BLOCK, set()), before)
+        self.m.BOOT_ID = 'changed-boot'
+        with self.assertRaisesRegex(self.m.Refusal, 'boot-drift'):
+            self.m.recover(True)
+        self.assertEqual(signal.pthread_sigmask(signal.SIG_BLOCK, set()), before)
+
+    def test_fresh_regular_owner_after_release_is_never_removed(self):
+        real = self.m.os.rmdir
+        def rmdir(name, **kwargs):
+            real(name, **kwargs)
+            if name == self.m.SHARED.name:
+                self.m.SHARED.write_bytes(b'new-owner')
+                self.m.SHARED.chmod(0o600)
+        with mock.patch.object(self.m.os, 'rmdir', rmdir):
+            self.assertEqual(self.m.recover(True)['status'], 'PASS_EXECUTED')
+        self.assertEqual(self.m.SHARED.read_bytes(), b'new-owner')
+
+    def test_owner_pid_reuse_and_descendant_presence_are_refused(self):
+        def report(rows):
+            return {'schema': 'scratch21.proc.v1', 'uid': 0, 'boot_id': self.m.BOOT_ID,
+                    'challenge': 'fresh-challenge', 'caller': [42, '99'], 'publishers': [],
+                    'snapshots': [[[1, 0, '1'], [42, 1, '99'], *rows]] * 2}
+        self.m.validate_process_report(report([]), 'fresh-challenge', [42, '99'])
+        for rows in ([[self.m.OWNER_PID, 1, 'reused']],
+                     [[99, self.m.OWNER_PID, '2'], [100, 99, '3']]):
+            with self.assertRaises(self.m.Refusal):
+                self.m.validate_process_report(report(rows), 'fresh-challenge', [42, '99'])
+
+    def test_lease_reappearance_and_added_owner_evidence_refuse(self):
+        self.m.LEASE.write_bytes(b'live-lease')
+        with self.assertRaisesRegex(self.m.Refusal, 'lease-or-output-drift'):
+            self.m.recover()
+        self.m.LEASE.unlink()  # Disposable fixture only.
+        (self.m.EVIDENCE / 'unexpected').write_bytes(b'unknown')
+        with self.assertRaisesRegex(self.m.Refusal, 'owner-evidence-inventory-drift'):
+            self.m.recover()
+
+    def test_exit_one_complete_profile_is_frozen(self):
+        m = self.m
+        m.EXPECTED_CONTAINER = json.loads(m.BASELINE.read_bytes())['live']['container']
+        m.validate_container_profile(copy.deepcopy(m.EXPECTED_CONTAINER))
+        for field, value in [('ExitCode', 0), ('Pid', 1), ('OOMKilled', True)]:
+            changed = copy.deepcopy(m.EXPECTED_CONTAINER)
+            changed['State'][field] = value
+            with self.assertRaises(m.Refusal):
+                m.validate_container_profile(changed)
+        changed = copy.deepcopy(m.EXPECTED_CONTAINER)
+        changed['State']['Pid'] = False
+        with self.assertRaises(m.Refusal):
+            m.validate_container_profile(changed)
+        changed = copy.deepcopy(m.EXPECTED_CONTAINER)
+        changed['HostConfig']['Memory'] += 1
+        with self.assertRaises(m.Refusal):
+            m.validate_container_profile(changed)
+
+    def test_absence_requires_successful_complete_inventory(self):
+        original = load()
+        with mock.patch.object(original, 'process_absent'), \
+             mock.patch.object(original, 'docker', return_value=b''):
+            self.assertFalse(original.census())
+        with mock.patch.object(original, 'process_absent'), \
+             mock.patch.object(original, 'docker', side_effect=original.Refusal('uncertain')):
+            with self.assertRaises(original.Refusal):
+                original.census()
+
+    def test_draft_and_missing_independent_release_are_refused(self):
+        with self.assertRaisesRegex(self.m.Refusal, 'cleanup-not-released'):
+            self.m.configure({'schema': 'scratch21.cleanup-release.v1', 'status': 'NOT_RELEASED'}, True)
+
+    def test_root_command_cannot_use_nonroot_or_uncertain_output(self):
+        with mock.patch.object(self.m.os, 'geteuid', return_value=1000):
+            with self.assertRaisesRegex(self.m.Refusal, 'root-execution-required'):
+                self.m.run_privileged(['/usr/bin/true'])
+        for rc, out, err in ((1, b'', b'failure'), (0, b'', b'warning'), (0, b'x'*(self.m.LIMIT+1), b'')):
+            result = subprocess.CompletedProcess([], rc, out, err)
+            with mock.patch.object(self.m.os, 'geteuid', return_value=0), \
+                 mock.patch.object(self.m.subprocess, 'run', return_value=result):
+                with self.assertRaises(self.m.Refusal):
+                    self.m.run_privileged(['/usr/bin/true'])
+
+
+if __name__ == '__main__':
+    unittest.main()
