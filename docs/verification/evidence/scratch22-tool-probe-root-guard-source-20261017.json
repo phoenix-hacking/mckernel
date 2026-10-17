@@ -1,0 +1,50 @@
+{
+  "schema": "mckernel.tool-probe-root-guard-source.v1",
+  "status": "NOT_RELEASED",
+  "author": "/root/scratch21_transaction",
+  "execution_released": false,
+  "acceptance_credit": false,
+  "files_sha256": {
+    "scripts/native_rust_exact_build_image_rebind_probe.py": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635",
+    "scripts/tests/test_native_rust_exact_build_image_rebind_probe.py": "2d2f2815ca7756634861554380c6cd7645c254c9486a45849180f984219ba7f5"
+  },
+  "baseline": {
+    "original_probe_source_sha256": "9634b56f251857141c67b70ce7a0c058470d6ef000a5f041898a91e3a71f6679",
+    "original_26_tests_sha256": "8a3b193b05853779f64aa00a894373c2bf63f82cf1a251d74436a07e9bfaa6e3",
+    "reused_signal_quarantine_source": "scripts/native_exact_scratch22_authority1_build_wrapper.py",
+    "reused_source_sha256": "a0439f79cb895dd6696e4005f1b8f7d6d42018ff3481541b43b12ab2ab582fad",
+    "core_semantics": "The existing execute() body, owned Docker retirement, source-free network-none/no-mount four-CPU/12-GiB profile and existing 26 test methods are unchanged. Main now enters guarded_execute in the same process; no outer execution child or timeout is added.",
+    "original_test_bytes_reconstructible": "Take corrected test bytes before class RootGuardTests; restore the original first import line import os,tempfile,unittest,json,hashlib; append the original if __name__=='__main__': unittest.main() newline. This exact restoration was verified against SHA2568a3b193b05853779f64aa00a894373c2bf63f82cf1a251d74436a07e9bfaa6e3."
+  },
+  "guard_contract": {
+    "lock": "/run/lock/mckernel-development.lock",
+    "expected_device": 27,
+    "expected_inode": 4,
+    "expected_owner": [0, 0],
+    "expected_shape": "Unique empty regular0644; descriptor-relative O_NOFOLLOW ancestry and leaf open with O_RDONLY|O_NOFOLLOW|O_NONBLOCK|O_CLOEXEC; nonblocking exclusive flock before execute/shared-token/container entry.",
+    "signals": "Atomically install the existing CliSignals.receive latch for HUP/INT/TERM/QUIT, preserving owner check()/cleaning semantics. Four handlers remain installed during owner retirement and uncertain quarantine; original handlers/mask restore only after safe root lock closure.",
+    "success": "Require actual target receipt identical to PASS core result, exact candidate/image/lease/shared identities, no Docker client retirement uncertainty, actual target lease and shared exclusion absence, hash-bound exact container-absence proof and shared-release proof, plus final development-lock identity revalidation before unlock.",
+    "uncertainty": "Every entered-core exception, failed receipt publication or unproven postflight holds the root flock indefinitely. Quarantine evidence is best effort; interrupted or exceptional waits cannot return and release ownership. SIGKILL remains an unavoidable crash protected by existing retained ownership tokens.",
+    "test_injection": "Only the Python guarded_execute API accepts a disposable lock path/identity/owner. No command-line lock override or new workload authority exists."
+  },
+  "checks": {
+    "status": "PASS",
+    "command": "timeout 120s taskset -c 6 bash -c 'ulimit -v 2097152; exec python3 -B -m unittest -v scripts.tests.test_native_rust_exact_build_image_rebind_probe'",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr_summary": "Ran 32 tests in 0.301s\n\nOK\n",
+    "resource_profile": "CPU6 / one Python job /2GiB RLIMIT_AS /120seconds; only temporary files, actual disposable flock/fork children and mocked Docker/root operations",
+    "new_coverage": "Busy and wrong inode stop before core entry; symlink leaf/ancestry refusal; actual receipt/proof before successful unlock; core exception, retained shared token, receipt loss and client uncertainty retain the real temporary flock during quarantine. Four actual children receive HUP/INT/TERM/QUIT during owner execution and again during quarantine; failed quarantine writer cannot release the flock or restore terminating handlers early. Main routes through the guard.",
+    "preserved_initial_failure": {
+      "family": "disposable-lock-mode-under-restrictive-umask",
+      "source_sha256": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635",
+      "tests_sha256": "70fa851f6d1705fdd97fb8e5fcda7e74aa3a78f0e42c3c525feda8bd39fb849c",
+      "result": "Ran32tests in0.131s; FAILED(failures=4,errors=6). Development lock identity differs; four child markers E instead of O. All26 existing probe tests passed.",
+      "cause": "The inherited restrictive umask made the disposable touch(mode0644) lock0600; the production0644 check correctly refused it before core entry.",
+      "bounded_correction": "Explicitly chmod the disposable lock0644 after touch. No production guard or existing test assertion changed.",
+      "failed_bytes_reconstructible": "Remove the single exact substring ; self.lock.chmod(0o644) from the corrected test bytes. This exact inverse edit was verified to hash70fa851f6d1705fdd97fb8e5fcda7e74aa3a78f0e42c3c525feda8bd39fb849c. Failed production source bytes are identical to the current source hash."
+    }
+  },
+  "not_performed": ["real development flock acquisition", "sudo", "live Docker", "network", "compiler", "Git", "guest", "active heavy build/root/lease/container mutation"],
+  "next": "Independent concrete patch review, then dispatcher-owned source hash/pin binding and a separately applicable execution release. The active heavy build remains untouched; this source record grants no probe execution authority."
+}

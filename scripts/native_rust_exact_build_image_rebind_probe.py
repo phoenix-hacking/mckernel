@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 import argparse
+import fcntl
 import hashlib
 import json
 import os
 from pathlib import Path
 import re
+import signal
 import stat
+import time
 import uuid
 
 from native_rust_exact_build_container_owner import (
@@ -27,6 +30,9 @@ SHA256 = re.compile(r"^[0-9a-f]{64}$")
 GIT_SHA = re.compile(r"^[0-9a-f]{40}$")
 IMAGE_ID = re.compile(r"^sha256:[0-9a-f]{64}$")
 EXPECTED_PROFILE = request_contract.PROFILE
+DEVELOPMENT_LOCK = Path('/run/lock/mckernel-development.lock')
+DEVELOPMENT_LOCK_IDENTITY = (27, 4)
+DEFERRED_SIGNALS = (signal.SIGHUP, signal.SIGINT, signal.SIGTERM, signal.SIGQUIT)
 
 
 class RebindProbeError(RuntimeError):
@@ -378,16 +384,153 @@ def execute(*, request_path, expected_request_sha256, runner=None, signals=None)
     return final_receipt, result
 
 
+def _development_lock(path, expected_identity, expected_owner, held_fd=None):
+    """Open the preserved lock through safe ancestry, or verify its held inode."""
+    path = Path(path)
+    if not path.is_absolute() or '..' in path.parts:
+        raise RebindProbeError('development lock pathname is not canonical')
+    fds = []
+    try:
+        parent = os.open('/', os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)
+        fds.append(parent)
+        for part in path.parts[1:-1]:
+            parent = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC,
+                             dir_fd=parent)
+            fds.append(parent)
+        fd = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK | os.O_CLOEXEC,
+                     dir_fd=parent)
+        fds.append(fd)
+        meta = os.fstat(fd)
+        linked = os.stat(path.name, dir_fd=parent, follow_symlinks=False)
+        if (not stat.S_ISREG(meta.st_mode) or (meta.st_dev, meta.st_ino) != expected_identity or
+                (meta.st_uid, meta.st_gid) != expected_owner or meta.st_nlink != 1 or
+                stat.S_IMODE(meta.st_mode) != 0o644 or meta.st_size != 0 or
+                (linked.st_dev, linked.st_ino) != expected_identity):
+            raise RebindProbeError('development lock identity differs')
+        if held_fd is not None:
+            held = os.fstat(held_fd)
+            if (held.st_dev, held.st_ino) != expected_identity:
+                raise RebindProbeError('held development lock identity differs')
+            return None
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        fds.pop()
+        return fd
+    finally:
+        for fd in reversed(fds):
+            os.close(fd)
+
+
+def quarantine_wait():
+    while True:
+        try:
+            time.sleep(60)
+        except BaseException:
+            # Diagnostic failures and interrupted waits never surrender ownership.
+            # SIGKILL remains an unavoidable crash; existing shared tokens survive.
+            pass
+
+
+def quarantine_root_lock(lockfd, request_path):
+    try:
+        meta = os.fstat(lockfd)
+        path = Path(request_path)
+        _write_json(path.with_name(path.name + '.root-lock-quarantine.json'), {
+            'schema': 'mckernel.tool-image-rebind-root-quarantine.v1',
+            'status': 'QUARANTINED_ROOT_LOCK_HELD', 'pid': os.getpid(),
+            'root_lock': [meta.st_dev, meta.st_ino],
+            'reason': 'core-entered-without-proven-successful-retirement',
+        })
+    except BaseException:
+        pass
+    quarantine_wait()
+
+
+def _prove_guarded_success(request, receipt, result):
+    target = Path(request['target_evidence_root'])
+    expected_receipt = target / 'image-receipt.json'
+    expected_lease = target.parent / ('.' + target.name + '.lease.json')
+    expected_shared = Path(_SHARED_HEAVY_ENTRY_CONTRACT.SHARED_HEAVY_LOCK_PATH)
+    if (Path(receipt) != expected_receipt or request['target_receipt'] != str(expected_receipt) or
+            result.get('status') != 'PASS' or result.get('retired') is not True or
+            result.get('cleanup_separately_required') is not False or
+            result.get('terminal_container_info') is not None or
+            result.get('terminal_container_info_current') is not True or
+            result.get('client_retirement_unproven', False) is not False or
+            result.get('lease_path') != str(expected_lease) or
+            result.get('shared_heavy_operation', {}).get('path') != str(expected_shared) or
+            result.get('candidate_sha') != request['target_candidate_sha'] or
+            result.get('image_id') != request['image_id'] or
+            os.path.lexists(expected_lease) or os.path.lexists(expected_shared)):
+        raise RebindProbeError('root guard cannot prove successful ownership release')
+    observed, _ = _read_json_snapshot(expected_receipt, 'actual target receipt')
+    if observed != result:
+        raise RebindProbeError('actual target receipt differs from core result')
+    name = result.get('container_name')
+    if not isinstance(name, str) or not name.startswith('mckernel-tool-rebind-'):
+        raise RebindProbeError('root guard target container identity differs')
+    for filename in ('rebind-container-absence.json', 'rebind-shared-release.json'):
+        row = observed.get('evidence', {}).get(filename, {})
+        if not SHA256.fullmatch(str(row.get('sha256', ''))):
+            raise RebindProbeError('root guard terminal proof is missing')
+        proof, _ = _read_json_snapshot(target / filename, filename, row['sha256'])
+        expected = ({'container_name': name, 'absent': True, 'inspect_exit_code': 1,
+                     'stderr': 'Error: No such object: %s\n' % name}
+                    if filename == 'rebind-container-absence.json' else {'released': True})
+        if proof != expected:
+            raise RebindProbeError('root guard terminal proof differs')
+
+
+def guarded_execute(*, request_path, expected_request_sha256,
+                    lock_path=DEVELOPMENT_LOCK, lock_identity=DEVELOPMENT_LOCK_IDENTITY,
+                    lock_owner=(0, 0)):
+    """CLI ownership boundary; test injections never become command-line options."""
+    previous_mask = signal.pthread_sigmask(signal.SIG_BLOCK, DEFERRED_SIGNALS)
+    previous_handlers = {number: signal.getsignal(number) for number in DEFERRED_SIGNALS}
+    signals = CliSignals()
+    lockfd = None
+    entered = core_entered = safe_to_release = False
+    try:
+        signals.__enter__()
+        entered = True
+        # Extend the owner's existing latch to HUP/QUIT without changing its
+        # check()/cleaning behavior or allowing inner handler restoration early.
+        for number in DEFERRED_SIGNALS:
+            signal.signal(number, signals.receive)
+        signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
+        lockfd = _development_lock(lock_path, lock_identity, lock_owner)
+        signals.check()
+        request, _ = _read_json_snapshot(request_path, 'guard request', expected_request_sha256)
+        core_entered = True
+        receipt, result = execute(request_path=request_path,
+                                  expected_request_sha256=expected_request_sha256,
+                                  signals=signals)
+        _prove_guarded_success(request, receipt, result)
+        _development_lock(lock_path, lock_identity, lock_owner, held_fd=lockfd)
+        safe_to_release = True
+        signals.check()
+        return receipt, result
+    finally:
+        if lockfd is not None:
+            if core_entered and not safe_to_release:
+                quarantine_root_lock(lockfd, request_path)
+            fcntl.flock(lockfd, fcntl.LOCK_UN)
+            os.close(lockfd)
+        signal.pthread_sigmask(signal.SIG_BLOCK, DEFERRED_SIGNALS)
+        if entered:
+            signals.__exit__(None, None, None)
+        for number, handler in previous_handlers.items():
+            signal.signal(number, handler)
+        signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--request", required=True)
     parser.add_argument("--expected-request-sha256", required=True)
     args = parser.parse_args(argv)
-    with CliSignals() as signals:
-        receipt, result = execute(
-            request_path=args.request,
-            expected_request_sha256=args.expected_request_sha256,
-            signals=signals)
+    receipt, result = guarded_execute(
+        request_path=args.request,
+        expected_request_sha256=args.expected_request_sha256)
     print(json.dumps({"receipt": str(receipt), "status": result["status"]},
                      sort_keys=True))
     return 0 if result["status"] == "PASS" else 1

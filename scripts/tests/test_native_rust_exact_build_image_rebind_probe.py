@@ -1,4 +1,4 @@
-import os,tempfile,unittest,json,hashlib
+import os,tempfile,unittest,json,hashlib,fcntl,signal,select
 from unittest import mock
 from pathlib import Path
 import sys
@@ -125,5 +125,146 @@ class T(unittest.TestCase):
    f=Path(d)/'x'; f.write_bytes(b'a')
    with self.assertRaises(FileExistsError): p._write_new(f,b'b')
  def test_probe_binding(self): self.assertEqual(p._expected_probe({'target_candidate_sha':'a'*40,'target_evidence_root':'/x'})['target_receipt_candidate_sha'],'a'*40)
+
+class RootGuardTests(unittest.TestCase):
+ def setUp(self):
+  self.temp=tempfile.TemporaryDirectory(); self.addCleanup(self.temp.cleanup)
+  self.root=Path(self.temp.name); self.lock=self.root/'development.lock'; self.lock.touch(mode=0o644); self.lock.chmod(0o644)
+  self.binding=(self.lock.stat().st_dev,self.lock.stat().st_ino)
+  self.target=self.root/'target'; self.shared=self.root/'shared.lock'
+  self.request=self.root/'request.json'
+  self.req={'target_evidence_root':str(self.target),'target_receipt':str(self.target/'image-receipt.json'),
+            'target_candidate_sha':'b'*40,'image_id':'sha256:'+'a'*64}
+  p._write_json(self.request,self.req); self.checksum=hashlib.sha256(self.request.read_bytes()).hexdigest()
+  patch=mock.patch.object(p,'_SHARED_HEAVY_ENTRY_CONTRACT',type('Contract',(),{'SHARED_HEAVY_LOCK_PATH':str(self.shared)})())
+  patch.start(); self.addCleanup(patch.stop)
+ def call(self):
+  return p.guarded_execute(request_path=self.request,expected_request_sha256=self.checksum,
+                           lock_path=self.lock,lock_identity=self.binding,lock_owner=(os.getuid(),os.getgid()))
+ def assert_locked(self):
+  fd=os.open(self.lock,os.O_RDONLY)
+  try:
+   with self.assertRaises(BlockingIOError): fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
+  finally: os.close(fd)
+ def success(self,**kwargs):
+  self.assert_locked()
+  self.target.mkdir(); name='mckernel-tool-rebind-disposable'
+  lease=self.root/('.'+self.target.name+'.lease.json')
+  lease.write_text('owned'); self.shared.write_text('owned')
+  p._write_json(self.target/'rebind-container-absence.json',{'container_name':name,'absent':True,
+                'inspect_exit_code':1,'stderr':'Error: No such object: %s\n'%name})
+  p._write_json(self.target/'rebind-shared-release.json',{'released':True})
+  self.assert_locked()  # Ownership proof still incomplete while these names exist.
+  lease.unlink(); self.shared.unlink()
+  result={'status':'PASS','retired':True,'cleanup_separately_required':False,
+          'terminal_container_info':None,'terminal_container_info_current':True,
+          'client_retirement_unproven':False,'lease_path':str(lease),'container_name':name,
+          'shared_heavy_operation':{'path':str(self.shared)},
+          'candidate_sha':self.req['target_candidate_sha'],'image_id':self.req['image_id'],
+          'evidence':p.inventory(self.target)}
+  receipt=self.target/'image-receipt.json'; p._write_json(receipt,result)
+  self.assert_locked()
+  return receipt,result
+ def test_success_unlocks_only_after_actual_receipt_and_ownership_proofs(self):
+  old_mask=signal.pthread_sigmask(signal.SIG_BLOCK,set())
+  old_handlers={s:signal.getsignal(s) for s in p.DEFERRED_SIGNALS}
+  real=p._prove_guarded_success
+  def proof(*args): self.assert_locked(); return real(*args)
+  with mock.patch.object(p,'execute',side_effect=self.success),mock.patch.object(p,'_prove_guarded_success',side_effect=proof):
+   receipt,result=self.call()
+  self.assertEqual(result['status'],'PASS'); self.assertTrue(receipt.is_file())
+  fd=os.open(self.lock,os.O_RDONLY)
+  try: fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
+  finally: os.close(fd)
+  self.assertEqual(signal.pthread_sigmask(signal.SIG_BLOCK,set()),old_mask)
+  self.assertEqual({s:signal.getsignal(s) for s in p.DEFERRED_SIGNALS},old_handlers)
+ def test_busy_or_wrong_inode_stops_before_execute(self):
+  fd=os.open(self.lock,os.O_RDONLY)
+  try:
+   fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
+   with mock.patch.object(p,'execute') as core:
+    with self.assertRaises(BlockingIOError): self.call()
+    core.assert_not_called()
+  finally: os.close(fd)
+  with mock.patch.object(p,'execute') as core:
+   with self.assertRaisesRegex(p.RebindProbeError,'lock identity'):
+    p.guarded_execute(request_path=self.request,expected_request_sha256=self.checksum,
+                       lock_path=self.lock,lock_identity=(self.binding[0],self.binding[1]+1),lock_owner=(os.getuid(),os.getgid()))
+   core.assert_not_called()
+ def test_symlink_lock_or_ancestor_is_refused(self):
+  alias=self.root/'alias'; alias.symlink_to(self.lock)
+  with self.assertRaises(OSError): p._development_lock(alias,self.binding,(os.getuid(),os.getgid()))
+  ancestor=self.root/'alias-dir'; ancestor.symlink_to(self.root,target_is_directory=True)
+  with self.assertRaises(OSError): p._development_lock(ancestor/self.lock.name,self.binding,(os.getuid(),os.getgid()))
+ def test_unproven_terminal_or_receipt_error_keeps_lock_during_quarantine(self):
+  class Held(BaseException): pass
+  for failure in ('core-exception','shared-left','receipt-lost','client-uncertain'):
+   with self.subTest(failure=failure):
+    case=RootGuardTests(); case.setUp()
+    held_fds=[]; handlers={s:signal.getsignal(s) for s in p.DEFERRED_SIGNALS}
+    old_mask=signal.pthread_sigmask(signal.SIG_BLOCK,set())
+    try:
+     def core(**kwargs):
+      if failure=='core-exception': raise RuntimeError('disposable core exception')
+      receipt,result=case.success(**kwargs)
+      if failure=='shared-left': case.shared.write_text('uncertain shared owner')
+      if failure=='receipt-lost': receipt.unlink()
+      if failure=='client-uncertain': result['client_retirement_unproven']=True
+      return receipt,result
+     def hold(): case.assert_locked(); raise Held()
+     real_quarantine=p.quarantine_root_lock
+     def quarantine(fd,path): held_fds.append(fd); return real_quarantine(fd,path)
+     with mock.patch.object(p,'execute',side_effect=core),mock.patch.object(p,'quarantine_wait',side_effect=hold),mock.patch.object(p,'quarantine_root_lock',side_effect=quarantine):
+      with self.assertRaises(Held): case.call()
+     case.assert_locked()
+    finally:
+     for fd in held_fds: os.close(fd)  # Dispose only the deliberately intercepted test hold.
+     signal.pthread_sigmask(signal.SIG_BLOCK,p.DEFERRED_SIGNALS)
+     for number,handler in handlers.items(): signal.signal(number,handler)
+     signal.pthread_sigmask(signal.SIG_SETMASK,old_mask)
+     case.doCleanups()
+ def test_actual_children_keep_all_four_handlers_and_lock_across_quarantine(self):
+  for number in p.DEFERRED_SIGNALS:
+   with self.subTest(signal=number):
+    case=RootGuardTests(); case.setUp(); readfd,writefd=os.pipe(); continue_read,continue_write=os.pipe()
+    pid=None; reaped=False
+    try:
+     pid=os.fork()
+     if pid==0:
+      try:
+       os.close(readfd); os.close(continue_write)
+       real_wait=p.quarantine_wait
+       def owner(**kwargs):
+        case.assert_locked(); os.write(writefd,b'O')
+        if os.read(continue_read,1)!=b'C': raise RuntimeError('missing test continuation')
+        kwargs['signals'].check()
+        raise RuntimeError('signal latch did not reject')
+       def held(): os.write(writefd,b'H'); real_wait()
+       def writer(*args,**kwargs): raise BrokenPipeError('disposable quarantine writer failure')
+       p.execute=owner; p.quarantine_wait=held; p._write_json=writer
+       case.call(); os._exit(91)
+      except BaseException:
+       os.write(writefd,b'E'); os._exit(92)
+     os.close(writefd); writefd=None; os.close(continue_read); continue_read=None
+     self.assertTrue(select.select([readfd],[],[],5)[0]); self.assertEqual(os.read(readfd,1),b'O')
+     os.kill(pid,number); os.write(continue_write,b'C')
+     self.assertTrue(select.select([readfd],[],[],5)[0]); self.assertEqual(os.read(readfd,1),b'H')
+     case.assert_locked()
+     os.kill(pid,number)  # Handler remains active during uncertain quarantine too.
+     self.assertFalse(select.select([readfd],[],[],0.03)[0])
+     waited,status=os.waitpid(pid,os.WNOHANG); reaped=waited==pid
+     self.assertEqual(waited,0,'quarantine child exited: '+str(status))
+    finally:
+     if pid is not None and not reaped:
+      try: os.kill(pid,signal.SIGKILL)
+      except ProcessLookupError: pass
+      os.waitpid(pid,0)
+     for fd in (readfd,writefd,continue_read,continue_write):
+      if fd is not None: os.close(fd)
+     case.doCleanups()
+ def test_main_routes_only_through_guard(self):
+  with mock.patch.object(p,'guarded_execute',return_value=(Path('/receipt'),{'status':'PASS'})) as guarded,mock.patch('builtins.print'):
+   self.assertEqual(p.main(['--request','/request','--expected-request-sha256','e'*64]),0)
+  guarded.assert_called_once_with(request_path='/request',expected_request_sha256='e'*64)
 
 if __name__=='__main__': unittest.main()
