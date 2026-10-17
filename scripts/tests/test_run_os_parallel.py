@@ -87,6 +87,18 @@ class ParallelTests(unittest.TestCase):
                     state[key] = value
                     self.assertTrue(parallel.stopped_blockers(self.root, state))
 
+    def test_policy_blocked_goal_explains_service_error_without_allowing_retry(self):
+        state = self.stopped_state_with_retired_turn()
+        state.update(goal={'status': 'blocked'}, stop_reason='turn_failed',
+                     last_error={'codexErrorInfo': 'cyberPolicy'},
+                     last_turn={'id': 'failed-compact-turn'})
+        failures = parallel.stopped_blockers(self.root, state)
+        self.assertEqual(len(failures), 1)
+        self.assertIn('service-side', failures[0])
+        self.assertIn('/feedback', failures[0])
+        self.assertIn('failed-compact-turn', failures[0])
+        self.assertNotIn('run the same command', failures[0])
+
     def test_retained_turn_still_blocks_for_wrong_phase_goal_or_uncertain_delivery(self):
         for phase in ('running', 'starting', 'ready'):
             state = self.stopped_state_with_retired_turn()

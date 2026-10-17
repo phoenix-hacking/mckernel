@@ -121,6 +121,25 @@ def say(message):
     print("[os-goal] " + message, flush=True)
 
 
+def is_policy_stop(state):
+    error = state.get("last_error")
+    return (state.get("stop_reason") in {"turn_failed", "server_error"}
+            and isinstance(error, dict) and error.get("codexErrorInfo") == "cyberPolicy")
+
+
+def restart_advice(state):
+    if is_policy_stop(state):
+        failed = state.get("last_turn") or {}
+        if not isinstance(failed, dict):
+            failed = {}
+        return ("service-side cyberPolicy stop; automatic retry is disabled. "
+                "Report a suspected false positive with Codex /feedback; "
+                "thread=" + str(failed.get("thread_id") or state.get("thread_id", "unknown"))
+                + "; turn=" + str(failed.get("id", "unknown"))
+                + ". Preserve this run; policy review is required before retrying the rejected request.")
+    return "run the same command to resume unfinished work."
+
+
 def atomic_json(path, value):
     """Same-directory replace and fsync keep the last complete cursor on a crash."""
     with tempfile.NamedTemporaryFile(mode="w", dir=str(path.parent),
@@ -932,7 +951,7 @@ class Campaign:
                     self.save(phase="stopped", stop_reason=self.stop_reason, exit_code=code)
                     self.output.notice("Stopped: goal reports " + str((self.goal or {}).get("status", "unknown"))
                                        + "; " + (self.stop_reason or "goal status") + ".")
-                    self.output.notice("State: " + str(self.state_path) + "; run the same command to resume unfinished work.")
+                    self.output.notice("State: " + str(self.state_path) + "; " + restart_advice(self.state))
                 finally:
                     self.output.close()
         return code

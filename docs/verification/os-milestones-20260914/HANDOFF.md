@@ -1,5 +1,12 @@
 # Compact dispatcher handoff
 
+Latest stop 2026-10-17 12:24:24UTC: remote compaction returned cyberPolicy before
+new OS work; goal BLOCKED, worker487903/server487905 absent. This is separate from
+the repaired stale-turn admission bug. Do not automatically retry or rotate
+sessions to replay the rejected request. SESSION-HANDOFF.md contains the concise
+engineering state, report identifiers and next OS step after service review.
+The launcher now reports the actual policy stop instead of advising blind retry.
+
 Resume preparation after 2026-10-17 07:41UTC: campaign stopped/goal paused on
 child turn cyberPolicy; saved worker23943/server23945 are absent. Retained
 active_turns is historical metadata, not a live launcher. Parallel entry-point

@@ -18,7 +18,8 @@ import sys
 import tempfile
 
 from os_goal_resources import check_resources, resolve_resources
-from run_os_goal import DEFAULT_DISPATCHER_MODEL, INCLUDED_USAGE_STOP_PERCENT, model_routing
+from run_os_goal import (DEFAULT_DISPATCHER_MODEL, INCLUDED_USAGE_STOP_PERCENT,
+                         is_policy_stop, model_routing, restart_advice)
 from os_goal_instructions import reconcile_instructions
 
 REPO = Path(__file__).resolve().parents[1]
@@ -63,7 +64,8 @@ def stopped_blockers(directory, state):
     # saved turn metadata alone is not a live process. The existing launcher
     # resumes the same thread under its own exclusive leases.
     if (state.get('goal') or {}).get('status') != 'paused':
-        failures.append('Saved goal must be paused; inspect its actual status before resuming.')
+        failures.append(restart_advice(state) if is_policy_stop(state) else
+                        'Saved goal must be paused; inspect its actual status before resuming.')
     if (state.get('resume_instruction') or {}).get('status') in ('sending', 'delivery_uncertain'):
         failures.append('Resume instruction delivery is uncertain; reconcile its saved turn before resuming.')
     for name in ('run.lock', 'watch.lock'):

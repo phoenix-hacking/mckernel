@@ -493,6 +493,81 @@ class CampaignTests(unittest.TestCase):
         self.run_campaign(rpc, 21)
         self.assertFalse(any(m in ("thread/resume", "thread/goal/set") for m, p in rpc.calls))
 
+    def test_policy_failed_turn_notice_recommends_feedback_without_retry(self):
+        self.saved(goal())
+        calls_at_failure = []
+
+        def fail(rpc):
+            rpc.turns.pop("test-thread")
+            rpc.emit("turn/completed", {"threadId": "test-thread", "turn": {
+                "id": "turn-1", "status": "failed", "error": {
+                    "message": "service policy refusal", "codexErrorInfo": "cyberPolicy"}}})
+            calls_at_failure.extend(rpc.calls)
+
+        rpc = FakeRPC(self.args, goal(), steps=[fail])
+        campaign = launcher.Campaign(self.args, self.directory, self.directory, rpc.factory)
+        output = io.StringIO()
+        with redirect_stdout(output):
+            self.assertEqual(campaign.run(), 23)
+        self.assertTrue(rpc.closed)
+        state = json.loads((self.directory / "state.json").read_text())
+        notice = next(line for line in output.getvalue().splitlines() if "State: " in line)
+        self.assertIn("service-side", notice)
+        self.assertIn("/feedback", notice)
+        self.assertIn("test-thread", notice)
+        self.assertIn("turn-1", notice)
+        self.assertNotIn("run the same command", notice)
+        self.assertEqual(state["stop_reason"], "turn_failed")
+        self.assertEqual(state["last_error"]["codexErrorInfo"], "cyberPolicy")
+        self.assertEqual(state["stop_errors"], [])
+        self.assertFalse(state.get("retryable", False))
+        self.assertFalse(watcher.should_restart(23, state))
+        self.assertFalse(watcher.should_restart(23, state, watchdog=True))
+        self.assertEqual(sum(method == "thread/resume" for method, _ in rpc.calls), 1)
+        self.assertFalse(any(method in ("thread/start", "turn/start")
+                             for method, _ in rpc.calls[len(calls_at_failure):]))
+        self.assertFalse(any(method == "thread/goal/set" and params.get("status") == "active"
+                             for method, params in rpc.calls[len(calls_at_failure):]))
+        self.assertFalse(any(method == "thread/resume"
+                             for method, _ in rpc.calls[len(calls_at_failure):]))
+
+    def test_signal_notice_keeps_resume_hint_with_stale_policy_error(self):
+        self.saved(goal())
+        saved = json.loads((self.directory / "state.json").read_text())
+        saved.update(last_error={"codexErrorInfo": "cyberPolicy"},
+                     last_turn={"thread_id": "test-thread", "id": "historical-policy-turn",
+                                "status": "failed"})
+        launcher.atomic_json(self.directory / "state.json", saved)
+        rpc = FakeRPC(self.args, goal(), steps=[lambda r: r.on_event.__self__.on_signal(2, None)])
+        campaign = launcher.Campaign(self.args, self.directory, self.directory, rpc.factory)
+        output = io.StringIO()
+        with redirect_stdout(output):
+            self.assertEqual(campaign.run(), 10)
+        self.assertTrue(rpc.closed)
+        state = json.loads((self.directory / "state.json").read_text())
+        notice = next(line for line in output.getvalue().splitlines() if "State: " in line)
+        self.assertEqual(state["stop_reason"], "signal_2")
+        self.assertIn("run the same command", notice)
+        self.assertNotIn("/feedback", notice)
+
+    def test_restart_advice_only_special_cases_current_policy_stop(self):
+        for reason in ("turn_failed", "server_error"):
+            with self.subTest(reason=reason):
+                advice = launcher.restart_advice({"stop_reason": reason,
+                    "thread_id": "current-thread", "last_error": {"codexErrorInfo": "cyberPolicy"},
+                    "last_turn": {"thread_id": "current-thread", "id": "failed-turn", "status": "failed"}})
+                for expected in ("service-side", "/feedback", "current-thread", "failed-turn"):
+                    self.assertIn(expected, advice)
+                self.assertNotIn("run the same command", advice)
+        for reason, error in (("signal_2", {"codexErrorInfo": "cyberPolicy"}),
+                              ("launcher_error", {"codexErrorInfo": "cyberPolicy"}),
+                              ("turn_failed", {"codexErrorInfo": "serverOverloaded"}),
+                              ("server_error", "cyberPolicy"), ("turn_failed", None)):
+            with self.subTest(reason=reason, error=error):
+                advice = launcher.restart_advice({"stop_reason": reason, "last_error": error})
+                self.assertIn("run the same command", advice)
+                self.assertNotIn("/feedback", advice)
+
     def test_capacity_and_temporary_rate_errors_are_recoverable(self):
         for info, event in (("serverOverloaded", "turn/completed"),
                             ("rateLimitExceeded", "error")):
