@@ -1,5 +1,9 @@
 #![allow(dead_code)]
 use std::sync::atomic::{AtomicI32, AtomicU32, Ordering};
+static LOGS: std::sync::Mutex<Vec<String>> = std::sync::Mutex::new(Vec::new());
+macro_rules! pr_info {
+    ($($arg:tt)*) => { LOGS.lock().unwrap().push(format!($($arg)*)) };
+}
 type Error = i32;
 type Result<T = ()> = std::result::Result<T, Error>;
 const EINVAL: Error = -22;
@@ -19,6 +23,7 @@ mod smp_resource {
     pub struct OsToken { pub slot: u32, pub generation: u64 }
     impl OsToken {
         pub fn slot(self) -> u32 { self.slot }
+        pub fn generation(self) -> u64 { self.generation }
         pub unsafe fn from_ihk_lease_v2(slot: u32, generation: u64) -> Result<Self, ()> {
             if slot > 1 || generation == 0 { Err(()) } else { Ok(Self { slot, generation }) }
         }
@@ -128,6 +133,7 @@ mod retention_drop {
     }
 }
 fn setup() {
+    LOGS.lock().unwrap().clear();
     // Quarantined test owners must not run destructors: production likewise
     // retains their started allocation. This is test-only disposal.
     if let Some(old) = MEMORY.lock().unwrap().take() { std::mem::forget(old); }
@@ -195,4 +201,30 @@ fn retained() {
     assert_eq!(smp_cpu::reconcile_shutdown(OsToken { generation: 10, ..owner() }), Err(EIO)); retained();
     edit(|c| c.images[0].as_mut().unwrap().owner.generation = 10);
     assert_eq!(smp_cpu::reconcile_shutdown(owner()), Err(EIO)); retained();
+}
+
+#[test] fn stage_logs_bind_exact_owner_result_and_callback_effect() {
+    for (scenario, expected) in [
+        (0, vec![("irq_close", 0, "post"), ("reset_reonline", 0, "post"), ("reconcile", 0, "complete")]),
+        (1, vec![("irq_close", EINVAL, "pre")]),
+        (2, vec![("irq_close", EIO, "post")]),
+        (3, vec![("irq_close", 0, "post"), ("reset_reonline", -19, "post")]),
+        (4, vec![("irq_close", 0, "post"), ("reset_reonline", 0, "post"), ("reconcile", EIO, "post")]),
+    ] {
+        setup();
+        match scenario {
+            1 => edit(|c| boot(c).prepared.pre_error = true),
+            2 => edit(|c| boot(c).prepared.post_error = true),
+            3 => RESET_STATUS.store(-19, Ordering::Relaxed),
+            4 => MAP_STATUS.store(-5, Ordering::Relaxed),
+            _ => (),
+        }
+        let result = invoke();
+        assert_eq!(result, match scenario { 0 => 0, 1 => EINVAL as i64, 3 => post(-19), _ => post(EIO) });
+        let logs = LOGS.lock().unwrap();
+        assert_eq!(logs.len(), expected.len());
+        for (actual, (stage, result, effect)) in logs.iter().zip(expected) {
+            assert_eq!(*actual, format!("IHK-SMP: shutdown os=0 generation=9 stage={} result={} effect={}\n", stage, result, effect));
+        }
+    }
 }

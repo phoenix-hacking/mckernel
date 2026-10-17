@@ -1,0 +1,196 @@
+{
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/ndmut-1",
+    "--nonce",
+    "ecf2ba52b89a4d67adfda4d18c3aae6b",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-current942-20261017-1/manifest.json",
+    "--manifest-sha256",
+    "a74c2687e0a49d6d8565075a0fbe70200a8af84c1de88002028f582b3c9833a1"
+  ],
+  "author": "/root",
+  "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "execution_count": 1,
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-current942-20261017-1/manifest.json",
+    "sha256": "a74c2687e0a49d6d8565075a0fbe70200a8af84c1de88002028f582b3c9833a1",
+    "size": 5516
+  },
+  "nonce": "ecf2ba52b89a4d67adfda4d18c3aae6b",
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "6e3d3220636f756e7465725f6f6b3d31206e3d3420636f756e7465725f6f6b3d31206e3d3820636f756e7465725f6f6b3d310a"
+  },
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828
+  },
+  "parent": {
+    "path": "/home/holden/mckernel-work/scratch/ndmut-1",
+    "device": 1828,
+    "inode": 108862,
+    "mode": "0o700",
+    "uid": 1000,
+    "gid": 1000
+  },
+  "prerequisites": {
+    "image_archival_cleanup": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-authority3-image-cleanup-result-review-20261017-1.json",
+      "sha256": "47cc7673788cb9b8c15443eec7f24c07d749b1bfe05875673d2c2b9af72bc15d",
+      "size": 1892
+    },
+    "image_retirement_proof": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-image-fresh-retirement-observation-20261017-1.json",
+      "sha256": "1cdf3af9fa657d160a801bf909f9e5c0e77dd132d3c38b3f1a38482bd1691da8",
+      "size": 1439
+    },
+    "live_preflight": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-live-preflight-20261017-1.json",
+      "size": 4012,
+      "sha256": "ef86ea4c428b8e730113fdffa919c681c68f32c83bab7c6c40d66095856892c6"
+    },
+    "independent_execution_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-execution-review-20261017-1.json",
+      "sha256": "1ff8d160f826112539685471f412eed8352f7a6d4cc2670cf0774c780ca385bd",
+      "size": 2177
+    }
+  },
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "schema": "mckernel.thread-mutex-counter-bounded-stacks-execution-proposal.v1",
+  "scope": "Oneadaptedmutexdiagnostic original2/4/8vectors/1000increments/51byteoracle, checked8x262144alignedstacks/fataluncertainjoin-destroy; originalreleasedcaseunchanged/unaccepted. ActualND_FUTEXcollector4096bothlimits /apps/app allow_oversubscribe. Existing10s diagnosticpayloadtimeoutstricterthancatalog30s; no caseacceptance/repetitioncredit. Reuseimmutablecurrent942 while otherkernel-sourcecandidate develops; no newmodulebuildneeded. Afterpriornative-lifecycleacceptedretirement/freshadmission/exactreview freezeHEAD/runtimebindings; independentfailurekept.",
+  "staging_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-preparation-20261017-1.json",
+    "sha256": "1b5d15fec7a8a890c39291a6f500a91d9fd4be9690372688e77558074abd89c9",
+    "size": 20910
+  },
+  "status": "PASS_EXECUTION_RELEASE",
+  "source_review": {
+    "reviewer": "/root/image_retirement_review",
+    "decision": "PASS_SOURCE_INTEGRATED_QMP_ADMISSION",
+    "diagnostic_sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+    "owner_sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "test_sha256": "6d7fdebda5a064dfbf8f1ddac8e4a771f9db237c575e2475bf643190560a8818",
+    "actual_test_exit": 0,
+    "tests_passed": 76
+  },
+  "unix_monitor_endpoints": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/ndmut-1/attempt-ecf2ba52b89a4d67adfda4d18c3aae6b/qmp.sock",
+      "encoded_bytes": 92,
+      "max_bytes": 107
+    }
+  ],
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "6e3d3220636f756e7465725f6f6b3d31206e3d3420636f756e7465725f6f6b3d31206e3d3820636f756e7465725f6f6b3d310a"
+    },
+    "stderr_limit_bytes": 4096,
+    "stdout_limit_bytes": 4096
+  },
+  "preceding_file_result": {
+    "status": "PASS_DIAGNOSTIC_GUEST_AND_RETIREMENT",
+    "independent_acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+      "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+      "size": 12925
+    }
+  },
+  "postjoin_readback": {
+    "requested": true,
+    "conditions": "Onlyafterjoinedpositiveownerclientretirement exactnoncebounddirectories canonicalunchanged resultregular ordinaryUIDfreshcaptures defaulttar nondereference",
+    "capture_limit_bytes_per_command": 33554432,
+    "timeout_seconds_per_command": 30,
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndmut-1.owner-ecf2ba52b89a4d67adfda4d18c3aae6b",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/ndmut-1/attempt-ecf2ba52b89a4d67adfda4d18c3aae6b/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndmut-1/attempt-ecf2ba52b89a4d67adfda4d18c3aae6b",
+        "."
+      ]
+    ],
+    "approved": true
+  },
+  "adapted_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/thread-mutex-counter-bounded-stacks-independent-review-20261017-2.json",
+    "sha256": "f0e5ab78fe738143488a49997395b352943ddfc946c3bb3dcae79899c83b3f9e",
+    "size": 1110
+  },
+  "previous_native_lifecycle": {
+    "status": "FAIL_NATIVE_STOP_OBSERVATION_AND_RETIRED",
+    "reviewer": "/root/lifecycle_collector_review",
+    "raw_attempt": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-dispatch-20261017-1/attempt-evidence.tar",
+      "sha256": "9114e3714331c1a6ac687a148926e58bd3006c0c45eb32e0aab68e8c43247816",
+      "size": 307200
+    },
+    "owner_result": {
+      "path": "/home/holden/mckernel-work/scratch/native-lifecycle-current942-dispatch-20261017-1/owner-result.json",
+      "sha256": "5315b260c78dbe5cfd2881651ac64342e51c48365f6611e04f458687f8688ba1",
+      "size": 256
+    },
+    "observed": "Ready4 / shutdown-16 / Shutdown8 close0; completehelper399bytes; all25clients/container/rootretired; no rerunorcredit",
+    "independent_failure_and_retirement": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+      "size": 17317,
+      "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da"
+    }
+  }
+}

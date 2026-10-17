@@ -127,7 +127,9 @@ fn control_device_request(cmd: u32, arg: usize) -> Result<isize> {
                     IHK_SMP_CONTROL_DEVICE_MINOR,
                     THIS_MODULE.as_ptr().cast(),
                     arg as u64,
-                    1,
+                    // v6 callback ABI 2 publishes Running only after start
+                    // awaits full guest readiness and all service workers.
+                    2,
                     Some(ihk_smp_os_ioctl_v2),
                     Some(ihk_smp_os_release_v2),
                     Some(ihk_smp_prepare_boot_v3),
@@ -393,6 +395,9 @@ unsafe extern "C" fn ihk_smp_start_boot_v3(slot: u32, generation: u64) -> i32 {
         Ok(owner) => owner,
         Err(_) => return EINVAL.to_errno(),
     };
+    // start_os_boot ends in Started::activate_and_wait: guest status 3,
+    // all three service workers entered, and no recorded runtime error.
+    // Only that success satisfies registration's callback ABI 2 promise.
     match smp_cpu::start_os_boot(owner) {
         Ok(()) => 0,
         Err(error) => error.to_errno(),
@@ -415,20 +420,37 @@ unsafe extern "C" fn ihk_smp_shutdown_v6(slot: u32, generation: u64) -> i64 {
     match smp_memory::shutdown_close_irq_senders(owner) {
         Ok(()) => {}
         Err(smp_memory::ShutdownIrqFailure::PreEffect(error)) => {
+            pr_info!("IHK-SMP: shutdown os={} generation={} stage=irq_close result={} effect=pre\n", slot, generation, error.to_errno());
             return error.to_errno() as i64;
         }
         Err(smp_memory::ShutdownIrqFailure::PostEffect(error)) => {
+            pr_info!("IHK-SMP: shutdown os={} generation={} stage=irq_close result={} effect=post\n", slot, generation, error.to_errno());
             return shutdown_v6_post_effect(error);
         }
     }
 
+    pr_info!("IHK-SMP: shutdown os={} generation={} stage=irq_close result=0 effect=post\n", slot, generation);
     match smp_cpu::shutdown_reset_and_reonline_outcome(owner) {
-        Ok(()) => match smp_cpu::reconcile_shutdown(owner) {
-            Ok(()) => 0,
-            Err(error) => shutdown_v6_post_effect(error),
-        },
-        Err(smp_cpu::ShutdownResetFailure::PreEffect(error)) => shutdown_v6_post_effect(error),
-        Err(smp_cpu::ShutdownResetFailure::PostEffect(error)) => shutdown_v6_post_effect(error),
+        Ok(()) => {
+            pr_info!("IHK-SMP: shutdown os={} generation={} stage=reset_reonline result=0 effect=post\n", slot, generation);
+            match smp_cpu::reconcile_shutdown(owner) {
+                Ok(()) => {
+                    pr_info!("IHK-SMP: shutdown os={} generation={} stage=reconcile result=0 effect=complete\n", slot, generation);
+                    0
+                }
+                Err(error) => {
+                    pr_info!("IHK-SMP: shutdown os={} generation={} stage=reconcile result={} effect=post\n", slot, generation, error.to_errno());
+                    shutdown_v6_post_effect(error)
+                }
+            }
+        }
+        Err(smp_cpu::ShutdownResetFailure::PreEffect(error))
+        | Err(smp_cpu::ShutdownResetFailure::PostEffect(error)) => {
+            // irq_close already crossed the callback's effect boundary even
+            // when reset itself reports no new effect.
+            pr_info!("IHK-SMP: shutdown os={} generation={} stage=reset_reonline result={} effect=post\n", slot, generation, error.to_errno());
+            shutdown_v6_post_effect(error)
+        }
     }
 }
 

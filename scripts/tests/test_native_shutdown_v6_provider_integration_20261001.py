@@ -2,6 +2,8 @@
 """Source-bound checks for the physical STOP v6 provider transaction."""
 
 from pathlib import Path
+from contextlib import nullcontext
+import json
 import os
 import subprocess
 import tempfile
@@ -34,23 +36,40 @@ class NativeShutdownV6ProviderTests(unittest.TestCase):
 
     def execute(self, generated, selected=None):
         rustc = os.environ.get("MCKERNEL_RUSTC_1_92", "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc")
-        with tempfile.TemporaryDirectory(prefix="shutdown-v6-provider-") as directory:
+        retained = os.environ.get("MCKERNEL_OS_RUNTIME_EVIDENCE")
+        workspace = (nullcontext(tempfile.mkdtemp(prefix="shutdown-v6-provider-", dir=retained))
+                     if retained else tempfile.TemporaryDirectory(prefix="shutdown-v6-provider-"))
+        with workspace as directory:
             source, binary = Path(directory) / "fixture.rs", Path(directory) / "fixture"
             source.write_text(generated)
-            result = subprocess.run([rustc, "--edition=2021", "--test", "-Dwarnings", str(source), "-o", str(binary)], capture_output=True, text=True, timeout=30)
+            def captured(label, command):
+                base = Path(directory) / label
+                base.with_suffix(".command.json").write_text(json.dumps(command) + "\n")
+                try:
+                    result = subprocess.run(command, capture_output=True, text=True, timeout=30)
+                except subprocess.TimeoutExpired as error:
+                    base.with_suffix(".stdout").write_bytes(error.stdout or b"")
+                    base.with_suffix(".stderr").write_bytes(error.stderr or b"")
+                    base.with_suffix(".status.json").write_text(json.dumps({"returncode": None, "timeout_seconds": 30}) + "\n")
+                    raise
+                base.with_suffix(".stdout").write_text(result.stdout)
+                base.with_suffix(".stderr").write_text(result.stderr)
+                base.with_suffix(".status.json").write_text(json.dumps({"returncode": result.returncode}) + "\n")
+                return result
+            result = captured("compile", [rustc, "--edition=2021", "--test", "-Dwarnings", str(source), "-o", str(binary)])
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-            return subprocess.run([str(binary), "--test-threads=1"] + ([selected, "--exact"] if selected else []), capture_output=True, text=True, timeout=30)
+            return captured("run", [str(binary), "--test-threads=1"] + ([selected, "--exact"] if selected else []))
 
     def test_production_callback_and_memory_methods_execute_fault_boundaries(self):
         result = self.execute(self.generated())
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn("9 passed; 0 failed", result.stdout)
+        self.assertIn("10 passed; 0 failed", result.stdout)
         print(result.stdout, end="")
 
     def test_compiled_oracles_reject_early_success_and_wrong_generation(self):
         source = self.generated()
         for old, new, selected in (
-            ("Ok(()) => match smp_cpu::reconcile_shutdown(owner)", "Ok(()) => match Ok::<(), kernel::Error>(())", "success_requires_both_logical_commits_and_boot_retirement"),
+            ("match smp_cpu::reconcile_shutdown(owner)", "match Ok::<(), kernel::Error>(())", "success_requires_both_logical_commits_and_boot_retirement"),
             ("if image.owner != owner { return Err(EIO); }", "if false { return Err(EIO); }", "wrong_generation_cannot_close_or_reconcile_foreign_owner"),
             ("boot.started = false;", "boot.started = true;", "success_requires_both_logical_commits_and_boot_retirement"),
             ("Err(error) => Err(ShutdownIrqFailure::PreEffect(error))", "Err(error) => Err(ShutdownIrqFailure::PostEffect(error))", "pre_begin_failure_is_rollback_safe_and_retryable"),
@@ -72,8 +91,10 @@ class NativeShutdownV6ProviderTests(unittest.TestCase):
         self.assertIn("return error.to_errno() as i64;", body)
         self.assertIn("Err(smp_memory::ShutdownIrqFailure::PostEffect(error))", body)
         self.assertIn("return shutdown_v6_post_effect(error);", body)
-        self.assertIn("Err(smp_cpu::ShutdownResetFailure::PreEffect(error)) => shutdown_v6_post_effect(error)", body)
-        self.assertIn("Err(smp_cpu::ShutdownResetFailure::PostEffect(error)) => shutdown_v6_post_effect(error)", body)
+        self.assertIn("Err(smp_cpu::ShutdownResetFailure::PreEffect(error))\n        | Err(smp_cpu::ShutdownResetFailure::PostEffect(error)) => {", body)
+        reset_failure = body.split("| Err(smp_cpu::ShutdownResetFailure::PostEffect(error)) => {", 1)[1]
+        self.assertIn("shutdown_v6_post_effect(error)", reset_failure)
+        self.assertNotIn("error.to_errno() as i64", reset_failure)
 
     def test_mutations_cannot_make_post_effect_failure_rollback_safe(self) -> None:
         source = SOURCE.read_text()

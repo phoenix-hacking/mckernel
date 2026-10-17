@@ -782,12 +782,16 @@ fn create_shutdown_backend(shutdown: Option<unsafe extern "C" fn(u32, u64) -> i3
 }
 
 fn create_shutdown_backend_v6(shutdown: Option<unsafe extern "C" fn(u32, u64) -> i64>) -> i64 {
+    create_shutdown_backend_v6_abi(1, shutdown)
+}
+
+fn create_shutdown_backend_v6_abi(version: u32, shutdown: Option<unsafe extern "C" fn(u32, u64) -> i64>) -> i64 {
     unsafe {
         os_runtime::ihk_os_create_unbooted_v6(
             0,
             THIS_MODULE.as_ptr().cast(),
             u64::MAX,
-            1,
+            version,
             Some(backend_ioctl),
             Some(backend_release),
             Some(backend_prepare_boot),
@@ -798,6 +802,52 @@ fn create_shutdown_backend_v6(shutdown: Option<unsafe extern "C" fn(u32, u64) ->
             shutdown,
         )
     }
+}
+
+#[test]
+fn boot_v6_explicit_running_capability_preserves_legacy_and_failure_states() {
+    with_family(|| {
+        for version in [0, 3, u32::MAX] {
+            assert_eq!(create_shutdown_backend_v6_abi(version, Some(backend_shutdown_v6)), -22);
+            assert_eq!(MODULE_REFS.load(Ordering::SeqCst), 0);
+            assert!(NODES.lock().unwrap().is_empty());
+            assert!(PAGES.lock().unwrap().is_empty());
+        }
+        for version in [1, 2] {
+            for compat in [false, true] {
+                for (prepared, started) in [(-11, 0), (0, -110), (0, 1), (0, 0)] {
+                    BOOT_PREPARE_STATUS.store(prepared, Ordering::SeqCst);
+                    BOOT_START_STATUS.store(started, Ordering::SeqCst);
+                    BOOT_START_CALLS.store(0, Ordering::SeqCst);
+                    SHUTDOWN_V6_STATUS.store(0, Ordering::SeqCst);
+                    assert_eq!(create_shutdown_backend_v6_abi(version, Some(backend_shutdown_v6)), 0);
+                    let mut file = open(0).unwrap();
+                    let result = if prepared != 0 { prepared } else if started > 0 { -5 } else { started };
+                    assert_eq!(status(&mut file, compat, abi::IHK_OS_BOOT), result as i64);
+                    let expected = if prepared != 0 { abi::IHK_OS_STATUS_NOT_BOOTED }
+                        else if started != 0 { abi::IHK_OS_STATUS_FAILED }
+                        else if version == 2 { abi::IHK_OS_STATUS_RUNNING }
+                        else { abi::IHK_OS_STATUS_READY };
+                    for query in [abi::IHK_OS_STATUS, abi::IHK_OS_QUERY_STATUS] {
+                        assert_eq!(status(&mut file, !compat, query), expected as i64);
+                    }
+                    assert_eq!(BOOT_START_CALLS.load(Ordering::SeqCst), if prepared == 0 { 1 } else { 0 });
+                    if prepared == 0 {
+                        // Both Ready and Running must keep the v6 effect fence:
+                        // post-effect failure stays Shutdown and closes admission.
+                        SHUTDOWN_V6_STATUS.store((1_i64 << 62) | (-110_i32 as u32 as i64), Ordering::SeqCst);
+                        assert_eq!(status(&mut file, compat, abi::IHK_OS_SHUTDOWN), -110);
+                        assert_eq!(status(&mut file, !compat, abi::IHK_OS_QUERY_STATUS), abi::IHK_OS_STATUS_SHUTDOWN as i64);
+                        assert_eq!(status(&mut file, compat, abi::IHK_OS_GET_BUILDID), -16);
+                        SHUTDOWN_V6_STATUS.store(0, Ordering::SeqCst);
+                        assert_eq!(status(&mut file, compat, abi::IHK_OS_SHUTDOWN), 0);
+                    }
+                    close(file);
+                    assert_eq!(destroy(0), 0);
+                }
+            }
+        }
+    });
 }
 
 #[test]

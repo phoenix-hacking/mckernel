@@ -14898,3 +14898,29 @@ restoration/destroy/rmmod. Adaptedmutexjoin/destroyfatalcorrectionreviewPASS,
 3actualCfailuretests+static/LinuxPASS;59map/4096profilepreparationa74c2687ready
 forreview. Alternate-repeat exactbytesbridgepreparationdiagnosticonly; original
 relationaloracle/mainstackrestorationcoverage remainsunaccepted.
+
+## Checkpoint381 — native stop failure bound; Running repair source reviewed
+
+Native-lifecycleguestFAIL1/33.968439s/HEADd259fa2astable, originalrawcaptures
+preserved. Probeexact399bytes/cleanreap: Ready4→shutdownEBUSY(-16)→Shutdown8→
+close0. Signalpayload40bytes/exit0, emptyprocfsprerequisitepassedbeforehelper;
+helperfailurepoisonedprocfs_emptyfalse, notproofleakedappnodes. Independent
+PASS_RETIREMENT:25clients/owner532444/exactcontainer4cd09546removed/lookupsempty/
+root27:4unheld. Failure7c53515f/archivee09c5666; firstbusystageunidentified.
+Definitekernelgap: fullnative-readybootpublishesReadywithoutRunningtransition.
+Reviewedsourcefix65107aaf/33b783c1 adds explicitv6ABI2Runningoptin, legacyABI1
+Readyunchanged, failedstartneverRunning; addsboundedshutdownstage/result/effect
+logswithoutguardchanges.70actualruntimebody+10callback/memorytestsPASS/4compiled
+mutationsreject; independentPASS_SOURCE. Notyetbuilt/nativevalidated. Unwired
+sysfsRemote cancellationcomponentunderseparatereview, excludesfirstcandidate.
+Nextcurrent942adaptedmutexseparatelyreleased: manifest a74c2687,parent1828/108862
+ndmut-1 nonceecf2ba52b89a4d67adfda4d18c3aae6b,QMP92,51byteoracle/4096streams.
+Samepacketnowcoversbounded32MiB/30s exactowner+attempttar+resultpostjoinreads.
+Alternate-repeatcorrectedpreparation36ca570c ready; originalmtime0assumption
+failurepreserved, validcompile/ref/overlayreused/all59x9metadataexactwith40base
+nonzerotimestamps. Beforeexecutionbridge/fixtureindependentreviewstillneeded.
+NormalcheckpointupdatesONLY7touchedstable-corerowresult/next/evidence+partial
+M02-C/E,M04-B,M06-A tasknotes; statuses/scoresunchanged andM04-Drepetitionsopen.
+ExplicitknownAnacondaPython3.9/minimalenv nowboundinfuturefocusedpackets; no
+newenvironment/globalharnessrequirements. Fourdistinctguestdiagnostics remain,
+no nativeshutdown/restoration/formalcredit; no M00-M13estimateinflation.

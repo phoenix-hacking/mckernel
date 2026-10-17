@@ -1,5 +1,30 @@
 # Compact dispatcher handoff
 
+Checkpoint381 activecursor: current942adaptedmutex exactrelease+preflight
+approved; nextdispatch afterpush/fetch/livecheck: /scratch/ndmut-1 dev1828/
+inode108862 nonceecf2ba52b89a4d67adfda4d18c3aae6b,QMP92,manifesta74c2687.
+Oneheavy only/HEADfreeze. Readbackpacketincludes32MiB/30s exactowner tar,
+resultcat AND exactattempttar afterjoinedpositiveownerretirement. Reusethis
+patternfuturepackets; no broadreadback/newlive-releasechange.
+
+LifecycleactualFAIL1/33.968439s retained7c53515f/e09c5666: Ready4→shutdown
+-16EBUSY→Shutdown8→close0,399completeprobebytes/emptyerr/cleanreap. Signal
+payload40bytesexit0 buthelperpoisonedprocfsemptyflag, notnodeleakproof.
+All25clients/owner/container/rootretired independently. Noblindretryorcredit.
+Running-publication+stagedshutdownlogs sourcefix independentlyPASS: os_runtime
+65107aaf/ihk_smp33b783c1; explicitv6ABI2fullreadyRunning5, legacyReadykept,
+70+10actualbodytests/4compiledmutationsPASS. Nextcandidate MODULEONLYcompile
+prep reusesretainedROsource/build,all3modulesmatched, neverLinux/image rebuild.
+Excludenewunreviewedsysfs_remote cancellationWIPfromcandidate. Itremainsunwired
+withoutproductionpeerstopproof; guardsmuststay. FirstactualEBUSYstageunknown.
+
+TouchedSC-OBS07/ENV06/CPU06/PROC01,02,05/IO01 latestresults/evidence/nextchecks
+nowcurrent942, sameoriginalstatuses. PartialM02-C/E,M04-B,M06-A evidenceattached;
+M04-DsameOS/freshguestrepetitionsstillopen. Currentacceptednewdiagnostics4
+(signal/calloc/file/TLS), formal0. Bind futurecheapPythoncommands explicitly
+/home/holden/anaconda3/bin/python3 (known3.9) withminimalprivateenv; preserve
+old3.8/nprocprereqfailures, no repeatedenvironmentdiscovery/globalchanges.
+
 Checkpoint380: FOURdistinctactualcurrent942diagnostics+retirementPASS this
 invocation: signal.mask-restore,calloc,file,TLS2original2/4/8workers. Newkernel
 repairs0/rebuilds0/formalcredit0; counts6/130,350/10000,0/7,0/273 unchanged.

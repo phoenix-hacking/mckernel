@@ -158,7 +158,10 @@
     "image_retirement_reconciliation_source": "docs/verification/evidence/scratch22-image-reconciliation-source-review-20261017-1.json",
     "image_retirement_actual_cleanup": "docs/verification/evidence/scratch22-authority3-image-cleanup-result-review-20261017-1.json",
     "qmp_endpoint_admission": "docs/verification/evidence/native-diagnostic-qmp-integrated-review-20261017-1.json",
-    "current942_signal_mask_restore": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json"
+    "current942_signal_mask_restore": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+    "current942_calloc": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+    "current942_file": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+    "current942_tls": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json"
   },
   "areas": [
     {
@@ -444,8 +447,8 @@
       "area": "ENV",
       "title": "Interruption, crash capture and verified cleanup",
       "status": "partial",
-      "result": "Current image retirement recovered by separately reviewed fresh root observation and archival cleanup, both accepted. Signal attempt1 failed beforeboot on132byte QMP pathname and was positively retired. Narrow encoded107byte admission correction passes76integrated tests and independent review. Fresh signal2 actual McKernel mask-restore diagnostic and complete retirement accepted; original failures retained.",
-      "next_check": "Run staged calloc then file diagnostics under fresh exact releases; preserve native lifecycle restoration as separate unfinished requirement, not satisfied by QEMU retirement.",
+      "result": "Current942 signal, calloc, file and TLS diagnostics each have independent actual execution and complete host retirement acceptance. Original preboot QMP and TLS collector-limit failures remain preserved. Native lifecycle attempt reached the probe but failed; native stop/resource restoration remains unproved.",
+      "next_check": "Classify the retained native lifecycle status4/shutdown-EBUSY/status8 failure, repair its actual prerequisite and rerun only under a fresh reviewed release. Do not rerun accepted calloc/file merely from an old cursor; QEMU retirement is not native resource restoration.",
       "evidence": [
         "prep",
         "plan",
@@ -453,7 +456,10 @@
         "image_retirement_reconciliation_source",
         "image_retirement_actual_cleanup",
         "qmp_endpoint_admission",
-        "current942_signal_mask_restore"
+        "current942_signal_mask_restore",
+        "current942_calloc",
+        "current942_file",
+        "current942_tls"
       ],
       "depends_on": []
     },
@@ -563,8 +569,8 @@
       "area": "OBS",
       "title": "Native payload identity and terminal collector",
       "status": "partial",
-      "result": "The current c81 candidate independently passes memory, files, startup, threads and signals diagnostics. Both direct-futex attempts remain FAIL. The bounded record-order correction worked; the second run exposed exhaustion of the host's ordinary trace budget before final exit_group. A bounded source correction now keeps committed non-returning exit_group delivery observable without consuming that budget and passes independent production-body adapter review (12/12) plus 174 diagnostic tests. No rebuilt module or direct-futex runtime PASS exists yet.",
-      "next_check": "Commit/fetch-verify the correction, prepare a fresh exact candidate and separately reviewed three-module build, bind the rebuilt modules, then prepare a new one-shot futex guest packet; continue shutdown separately.",
+      "result": "Current942 signal, six-size calloc, six-size file and original TLS2/4/8 diagnostics bind real McKernel identity, exact terminal bytes/status, procfs cleanup and complete host retirement. TLS2 observes main plus14 worker node lifetimes; its original collector-limit FAIL remains retained. These static diagnostic receipts do not complete formal collector/interpreter/DSO/typed-owner coverage.",
+      "next_check": "Extend the same bound collector to remaining direct-futex, mapped-interpreter/DSO and typed-owner requirements, plus reviewed native lifecycle observations. Reuse accepted current942 artifacts/results instead of rebuilding solely from the historical c81 cursor.",
       "evidence": [
         "history",
         "plan",
@@ -608,7 +614,11 @@
         "native_diag_c81_futex_failure",
         "native_diag_c81_futex_order_prep",
         "native_diag_c81_futex_correction_failure",
-        "native_diag_c81_futex_terminal_trace_source"
+        "native_diag_c81_futex_terminal_trace_source",
+        "current942_signal_mask_restore",
+        "current942_calloc",
+        "current942_file",
+        "current942_tls"
       ],
       "depends_on": []
     },
@@ -1181,11 +1191,12 @@
       "area": "CPU",
       "title": "TLS context isolation",
       "status": "baseline",
-      "result": "Retained thread runs observed isolated TLS and real clone3 children; they do not establish complete integer-register isolation.",
-      "next_check": "Replay per-thread TLS through switches, blocking syscalls, interrupts, signals and retirement; integer-register isolation is separately tracked in SC-CPU-11.",
+      "result": "Current942 TLS2 passes the original2/4/8-worker fixture: exact55-byte output, empty stderr/exit0,15 procfs publications/deletions (main+14 workers), and complete retirement. Immediate TLS comparisons and absence of a barrier/stack-address observation limit this receipt.",
+      "next_check": "Observe TLS across explicit switches, blocking calls, interrupts and signals; retain integer-register isolation and runtime stack-address checks as separate open work. Do not repeat the original fixture as a substitute for those gaps.",
       "evidence": [
         "app",
-        "baseline"
+        "baseline",
+        "current942_tls"
       ],
       "depends_on": [
         "SC-CPU-01"
@@ -1247,11 +1258,12 @@
       "area": "PROC",
       "title": "Process/thread creation and identity generations",
       "status": "baseline",
-      "result": "Real baseline clone3 children and process identities exist; all flag/failure combinations are not qualified.",
-      "next_check": "Replay supported create/exec/wait/join and partial-init rollback; reject unsupported flags without leaked registry nodes or stale identities.",
+      "result": "Current942 TLS2 records main PID254 and14 worker node lifetimes across original2/4/8 vectors, with15 publications/deletions and process retirement. Signal/calloc/file bind their own scheduled process identities. This scoped receipt does not qualify fork/COW/exec/wait or all clone flags/failures.",
+      "next_check": "Extend generation-bound identity observations to supported fork/exec/wait, partial initialization and unsupported-flag rejection with no leaked nodes; preserve the current TLS identity result.",
       "evidence": [
         "app",
-        "baseline"
+        "baseline",
+        "current942_tls"
       ],
       "depends_on": []
     },
@@ -1260,12 +1272,13 @@
       "area": "PROC",
       "title": "Exit, join and child-TID ownership",
       "status": "baseline",
-      "result": "Baseline passed futex/child-TID and thread-node removal checks. The current c81 threads diagnostic also publishes TIDs 255/256/257 and deletes all three procfs nodes, but does not separately trace clear-TID futex wake.",
-      "next_check": "Run the retained direct futex/child-TID diagnostic on c81, then exercise normal exit, concurrent joins/waits, invalid TID pointers and clear-TID wake ownership; no double reap or dangling user pointer.",
+      "result": "Current942 TLS2 observes the main and14 workers published/deleted, terminal exit_group, retirement errno0 and process release0. It does not separately trace clear-TID futex wake or qualify concurrent joins/waits and invalid TID pointers.",
+      "next_check": "Run dependency-ready current942 direct-futex/child-TID coverage, concurrent joins/waits and invalid-pointer ownership checks; preserve accepted scoped thread-exit evidence instead of replaying the stale c81 cursor.",
       "evidence": [
         "baseline",
         "app",
-        "native_diag_c81_threads_signals_prep"
+        "native_diag_c81_threads_signals_prep",
+        "current942_tls"
       ],
       "depends_on": []
     },
@@ -1304,12 +1317,13 @@
       "area": "PROC",
       "title": "Signals, masks, altstack and ordinary sigreturn",
       "status": "baseline",
-      "result": "Baseline signals and ordinary signal ABI suites passed on bound artifacts. The current c81 bounded diagnostic also proves pending blocked SIGUSR1, unblocking and two alternate-stack deliveries with restored action, mask and stack, plus process/pager retirement.",
-      "next_check": "Extend beyond the bounded c81 diagnostic to documented unsupported flags, malformed frames, interruption and recipient-lifetime races without silently broadening signal support.",
+      "result": "Current942 signal.mask-restore passes exactly handled=1 observed_blocked=1 restored=1 plus newline, empty stderr/exit0 and complete retirement. This is the two-mask-bit oracle with inherited-mask limitations; broader historical signal evidence remains scoped to its own artifacts.",
+      "next_check": "Complete original alternate-stack/normal-stack restoration, malformed frame, interruption, recipient lifetime and unsupported flag obligations. Preserve the accepted two-bit result without generalizing it to arbitrary whole-mask restoration.",
       "evidence": [
         "app",
         "baseline",
-        "native_diag_c81_signals"
+        "native_diag_c81_signals",
+        "current942_signal_mask_restore"
       ],
       "depends_on": []
     },
@@ -1656,11 +1670,12 @@
       "area": "IO",
       "title": "Ordinary file and descriptor operations",
       "status": "baseline",
-      "result": "Retained file test passed 8,209-byte create/write/stat/seek/read/EOF/pwrite/pread/fsync/close/reopen/unlink and ENOENT behavior.",
-      "next_check": "Replay existing assertions against the final candidate; verify offsets, partial results and exact data.",
+      "result": "Current942 file.write-read passes sizes1,4095,4096,4097,65553,1048576 with exact395-byte output, empty stderr/exit0 and complete retirement. It checks write/seek/read/compare/fstat/EOF, without reopen or checked close/unlink outcomes; historical broader file receipts retain their own artifact scope.",
+      "next_check": "Complete final-candidate reopen, checked close/unlink, partial I/O, offsets and descriptor lifetime coverage; do not rerun these six accepted size vectors solely from a stale cursor.",
       "evidence": [
         "app",
-        "baseline"
+        "baseline",
+        "current942_file"
       ],
       "depends_on": []
     },

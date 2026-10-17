@@ -259,6 +259,9 @@ fn shutdown_errno(result: i32) -> i32 {
 struct OsBackendBootV3 {
     prepare: OsBackendPrepareBootV3,
     start: OsBackendStartBootV3,
+    // Registration selects publication explicitly: existing callbacks retain
+    // Ready; v6 callback ABI 2 promises the full running-service boundary.
+    success_status: OsStatus,
 }
 
 #[derive(Clone, Copy)]
@@ -384,7 +387,7 @@ impl Admission {
 
     /// Reopen a non-poisoned gate. Only a ShutdownAdmission that changed the
     /// gate from open to closed may call this on a pre-effect failure; a
-    /// successful boot also calls it after Ready is committed.
+    /// successful boot also calls it after its registered success state is committed.
     fn reopen_unpoisoned(&self) {
         loop {
             let current = self.word.load(Ordering::Acquire);
@@ -675,7 +678,7 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v3(
         (1, Some(ioctl), Some(release), Some(prepare), Some(start)) => OsBackend {
             ioctl,
             release,
-            boot: Some(OsBackendBootV3 { prepare, start }),
+            boot: Some(OsBackendBootV3 { prepare, start, success_status: OsStatus::Ready }),
             application: None,
             shutdown: None,
         },
@@ -730,7 +733,7 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v4(
         ) => OsBackend {
             ioctl,
             release,
-            boot: Some(OsBackendBootV3 { prepare, start }),
+            boot: Some(OsBackendBootV3 { prepare, start, success_status: OsStatus::Ready }),
             application: Some(ApplicationCallbacks {
                 open,
                 invoke,
@@ -798,7 +801,7 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v5(
         ) => OsBackend {
             ioctl,
             release,
-            boot: Some(OsBackendBootV3 { prepare, start }),
+            boot: Some(OsBackendBootV3 { prepare, start, success_status: OsStatus::Ready }),
             application: Some(ApplicationCallbacks {
                 open,
                 invoke,
@@ -818,6 +821,10 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v5(
 }
 
 /// Add the effect-aware shutdown callback while preserving the v5 ABI.
+/// Callback ABI 1 preserves Ready on successful start. ABI 2 explicitly
+/// promises start returns zero only after full guest/service readiness, so
+/// success publishes Running. Failure retains the same Failed semantics.
+/// The signatures and shutdown effect contract are identical in both versions.
 /// `shutdown` returns zero for complete success, a signed Linux errno for a
 /// pre-effect failure, or `SHUTDOWN_V6_POST_EFFECT | (errno as u32)` after an
 /// irreversible effect.  The latter keeps admission closed and retains the
@@ -853,7 +860,7 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v6(
         shutdown,
     ) {
         (
-            1,
+            1 | 2,
             Some(ioctl),
             Some(release),
             Some(prepare),
@@ -865,7 +872,11 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v6(
         ) => OsBackend {
             ioctl,
             release,
-            boot: Some(OsBackendBootV3 { prepare, start }),
+            boot: Some(OsBackendBootV3 {
+                prepare,
+                start,
+                success_status: if callback_abi == 2 { OsStatus::Running } else { OsStatus::Ready },
+            }),
             application: Some(ApplicationCallbacks {
                 open,
                 invoke,
@@ -1337,7 +1348,7 @@ unsafe fn os_request(
         // starts. Every uncertain result leaves the instance non-destroyable.
         let started = unsafe { (boot.start)(handle.minor() as u32, handle.generation()) };
         let state = if started == 0 {
-            OsStatus::Ready
+            boot.success_status
         } else {
             OsStatus::Failed
         };
