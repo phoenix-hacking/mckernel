@@ -1,0 +1,95 @@
+{
+  "schema": "mckernel.native-fork-backend-reservation-independent-review.v1",
+  "decision": "HOLD_TOUCHED_FIXTURE_DEPENDENCY",
+  "reviewer": "/root/fork_adoption_boundary_review",
+  "author": "/root/fork_ownership",
+  "model": "gpt-6.1-sol",
+  "independent_of_implementation_author": true,
+  "source_root": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+  "base_commit": "1eb1017dc9f123ef7b5898cffa09c25c2a2e95af",
+  "scope": "The concrete three-source backend reservation change, its new unsafe Linux owner and retained central executable results. One source-demonstrated regression in an existing touched extraction fixture must be corrected before integration. No production ownership-safety defect was found in the still-disabled backend slice.",
+  "author_record": {"path": "docs/verification/evidence/native-fork-backend-reservation-20261017.json", "sha256": "98d4912330c381abce3f5908f60664280bfb517b82f03389656bc9884f86bebd"},
+  "source_sha256": {
+    "host-kernel/native-rust/smp_application.rs": "008102ae58ea83312b56b26ad62097dc871bc63a76286bd4d565c00205f2af5f",
+    "host-kernel/native-rust/smp_application_image.rs": "c41e7f2dc2907032d5a8b36cfa4679cad375e774c4103b9ef27f714c2c079721",
+    "host-kernel/native-rust/smp_application_syscall.rs": "8b477ef7d78b3516fa8e230f116104a2493f8ebf59631165f3781d3f0ca163d0",
+    "host-kernel/native-rust/application_rpc.rs": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+    "host-kernel/native-rust/application_syscall.rs": "03007f44c020c5d0cf797b18568ef8b329fd5cb4e81abe80bb5c542b58020c25",
+    "host-kernel/native-rust/abi/application.rs": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+    "scripts/tests/test_native_fork_backend_reservation_20261017.py": "f99164ba8de4c62eaed26bacb451e22bde83c546fff68b6e8b7506560311ffcb",
+    "scripts/tests/fixtures/native_fork_backend_reservation_20261017.rs": "6a2e5e27b81d8454101cb34efb30cb1945854e3067a19b9692d99dbf5ebecd47",
+    "scripts/tests/test_native_fork_ownership_20261017.py": "f1035bef192fc05e420985ad5d09438adff4fff5fab3195abb03369eaf6379b0",
+    "scripts/tests/fixtures/native_fork_ownership_20261017.rs": "49367dcd8ece7fe45419936604f631bcc9a7e00733facd93c6bf93f7ef4f9c22"
+  },
+  "blocking_finding": {
+    "id": "FBR-FIXTURE-1",
+    "class": "Existing extracted-worker fixture no longer compiles",
+    "production_trigger": "smp_application.rs::Remote::worker now calls abort_parent_forks(&mut slots, token, Some(worker)) after successful or pending worker close.",
+    "consumer": "test_native_fork_ownership_20261017.py::fixture_source extracts that whole production worker body into native_fork_ownership_20261017.rs. The template defines no abort_parent_forks function or adapter. The adoption-transaction suite imports this same boundary_source, so it inherits the unresolved dependency.",
+    "source_only_observation": {"generated_original_fixture_bytes": 13032, "generated_original_fixture_sha256": "825fbb80e5c83b71521c470ba4bfb9c39360ca242204a8f7c6a91527a7e9e345", "abort_parent_forks_call_count": 1, "abort_parent_forks_definition_count": 0},
+    "central_confirmation": "After the source finding, the dispatcher independently compiled the touched original ownership family and retained error E0425 at generated actual_bodies.rs:267: cannot find function abort_parent_forks. The reviewer read that capture and did not invoke a compiler. This is an extraction/compiler regression, not a guest runtime failure. The new five-test backend fixture compiles helper functions but not Remote::worker, so its successful run does not cover this dependency.",
+    "original_failure_capture": {
+      "generated_root": "/home/holden/mckernel-work/scratch/native-fork-ownership-20261017-m6c0m_u7",
+      "stdout": "/home/holden/mckernel-work/scratch/native-fork-backend-inherited-fixture-original-20261017.stdout",
+      "stdout_sha256": "242a76cbf2ae6106fcbafcda983a9d788882a58cb54a7091a92bdb21d5496595",
+      "stderr": "/home/holden/mckernel-work/scratch/native-fork-backend-inherited-fixture-original-20261017.stderr",
+      "stderr_sha256": "634d707fe4cbe0f28fea1672369a1c72a7a544dc167c1b250c02ebb326e16fff"
+    },
+    "smallest_correction": "Extend the existing worker fixture with an explicit cancellation dependency adapter for its no-child-reservation baseline, retaining all original fault/worker assertions. Record/check the parent token and worker passed on successful/pending close; invalid close must not trigger cancellation. The actual backend abort_parent_forks implementation continues to be exercised by the new backend fixture. Do not alter the production worker body merely to satisfy extraction, remove its close branch, or weaken the new actual cancellation tests.",
+    "next_executable_check": "After that bounded fixture correction, run only the touched original worker-boundary and adoption-transaction extraction suites through the reusable cheap profile with fresh captures. Reuse the new backend five-test pass for unchanged production/helper bytes. Update fixed expected test counts only for explicitly added assertions; retain old counts/results as history.",
+    "history": "First integration dependency finding for this backend candidate, confirmed by one dispatcher compiler failure in the original ownership family. No compiler failure occurred in the new backend family. The dispatcher assigned one bounded test-only correction; preserve the failed capture and do not reset this history under a new attempt name."
+  },
+  "production_review": [
+    {
+      "subject": "Unique retained ordinary delivery",
+      "result": "PASS_SCOPED_SOURCE",
+      "detail": "Mailbox::unique_delivered is immutable under Remote.slots and excludes kernel/service/cancelled/completed/unclaimed calls. It requires the same live worker/serial association and actual Delivered phase via check_return. Reserve additionally matches nr56, parent PID, non-phase first flags, exact geometry/root, nonzero nonce and MCFK0001. Multiple matches reject. The original Call retains its response-memory claim and ordinary RET ownership."
+    },
+    {
+      "subject": "Cross-entry reservation publication",
+      "result": "PASS_SCOPED_SOURCE",
+      "detail": "Parent/child tokens differ and resolve in one Remote; entries must have matching exact OS generation/slot, expected schedule/prepare state and child PID. Existing root/parent-delivery/nonce reservations exclude replay. Child PID/MM capture and Arc allocation occur before slots locking; identity validation and unique token allocation precede the single metadata publication. Commit is unsafe/internal with a documented VMA-commit prerequisite, and it has no external caller."
+    },
+    {
+      "subject": "Linux child owner acquisition/destruction",
+      "result": "PASS_SOURCE_PATTERN_NATIVE_UNCOMPILED",
+      "detail": "ForkChildOwner obtains referenced current TGID and transient current mm_users. It adds one checked positive mm_count reference before balancing mmput; missing MM, invalid PID number and increment overflow balance already acquired PID/MM references. Arc allocation failure drops the constructed owner by Rust ownership. Drop performs one SeqCst decrement, calls __mmdrop only for the last structural reference, then balances put_pid. Send/Sync expose immutable identities only. This matches the existing mcctrl_vm::MmIdentity pattern; no long-lived mm_users/VMA cycle is introduced.",
+      "reference": "Pinned generated bindings native-build-base-24a151fe/rust/bindings/bindings_generated.rs expose mm_count.counter and get_task_pid/get_task_mm/mmput/put_pid/pid_nr_ns/__mmdrop. Pinned include/linux/sched/mm.h documents mmgrab does not retain the address space and mmdrop requires the final full barrier.",
+      "limit": "The actual-body fixture replaces ForkChildOwner with a scalar adapter and does not compile or execute current()/Drop or the new Remote methods. Source inspection is not native compiler, Linux reference-rundown or MM access proof. A structural Linux MM reference does not pin guest physical page-table memory or prove a live address space; this slice retains root identity metadata only. Future translation/revoke wiring still needs its real guest-lifetime and memory-range proof."
+    },
+    {
+      "subject": "Ordinary RET, publication and cancellation",
+      "result": "PASS_SCOPED_SOURCE",
+      "detail": "Positive first RET requires the adopted state and exact child PID; negative RET is permitted for reserved/cancelled state without false commit. Recording occurs only after ordinary return_value accepts the result. Publication observation runs under slots only after Mailbox::publish reports actual completion; failed queue send retains the same response/result. Subsequent notification failure retains/quarantines existing transport state rather than retrying publication. Parent/worker close requests cancellation, and child entries with fork metadata cannot use ordinary cleanup/release or PID absence to discard that ownership. No revoke or final destruction ACK is fabricated."
+    }
+  ],
+  "central_execution": {
+    "capture_root": "/home/holden/mckernel-work/scratch/native-fork-backend-reservation-20261017-4jmnat4a",
+    "python_tests_passed": 4,
+    "rust_tests_passed": 5,
+    "compiler_exit": 0,
+    "fixture_exit": 0,
+    "elapsed_seconds": 1.17,
+    "peak_rss_kib": 154704,
+    "swap": 0,
+    "reviewer_rerun": false,
+    "coverage": "Exact full RPC/Request/Response/Mailbox bodies, reservation metadata/transitions and backend helper block execute with explicit Vec, Entry, OS and Linux child-identity adapters. Tests exercise excluded delivery phases, reserve/commit, wrong PID, response-claim retention across failed wake publication, ordinary cancellation -512, root/range/OS/PID/child-state mismatch, replay/token rejection and ambiguous/non-native request rejection.",
+    "not_covered": "Actual Linux owner current/Drop, Remote integration bodies including worker-close wrapper, native module compilation, real child MM/VMA rebind, adopted-root translation, second handshake, host revoke, checked final destructor, scalar ACK and runtime fork."
+  },
+  "capture_sha256": {
+    "actual_bodies.rs": "685ecea850a14b9209076ba24d84b568f720db2aec4fdf4e5d1882a109b6cd77",
+    "run.stdout": "a96418e2208935b2ac1a9c94ab11b2b78cc805f44dcd10f66893e268b0066bcd",
+    "run.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+    "compile.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+    "rustc-version.stdout": "ecda74ca828b18debf1624cb36209a5b844fb1e1c1905ffb3d51b56cc275f96f",
+    "/home/holden/mckernel-work/scratch/native-fork-backend-reservation-central-20261017.stdout": "a2efc13992cd523f0e8c4b6a96efad32c3542dd31fd276b960fbccc75df257d4",
+    "/home/holden/mckernel-work/scratch/native-fork-backend-reservation-central-20261017.stderr": "a4cfdaa6602889c3a3d253e25d5c74cdb1fc7d01bfedf68de8bca143f2e89909"
+  },
+  "readiness": "Integrate after FBR-FIXTURE-1 is corrected and the two directly affected extraction families pass. No broader redesign, repeat of the unchanged new backend compiler run or new execution packet is required by this source finding. Retain CREATE_PPD=-95, no ABI15-17 routing and no external reserve/commit caller.",
+  "implementation_or_main_integration_by_reviewer": false,
+  "native_compile_pass": false,
+  "execution_release": false,
+  "formal_case_credit": false,
+  "runtime_fork_acceptance": false,
+  "campaign_scope": "Reviewer used read-only CPU0 checks and wrote only this new evidence file. No compiler, Docker, root, guest, network, Git, child agent, heavy candidate, resource lease or maintenance lock was touched. The active fd099 native build is independent and remains unaffected."
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "mckernel.fork-backend-inherited-fixture-central-result.v1",
+  "status": "PASS_BOUNDED_FIXTURE_CORRECTION",
+  "failure_family": "FBR-FIXTURE-1",
+  "author_correction_record": "native-fork-backend-inherited-fixture-correction-20261017.json",
+  "author_correction_sha256": "fac6fceed7bd183d2140fb749d9ac4319b5fd667ce2fb256f74927032fc8f3a8",
+  "command": "taskset -c 7 timeout 180 prlimit --as=2147483648 --cpu=150 --nofile=256 --fsize=67108864 --core=0 env -u MCKERNEL_RUSTC_1_92 TMPDIR=/home/holden/mckernel-work/scratch /usr/bin/time -v /usr/bin/python3 -B -m unittest scripts.tests.test_native_fork_ownership_20261017 scripts.tests.test_native_fork_adoption_transaction_20261017",
+  "cwd": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+  "exit_code": 0,
+  "python_tests_passed": 6,
+  "ownership_rust_tests_passed": 4,
+  "adoption_rust_tests_passed": 12,
+  "elapsed_seconds": 0.55,
+  "maximum_rss_kib": 135752,
+  "swaps": 0,
+  "capture_roots": [
+    "/home/holden/mckernel-work/scratch/native-fork-ownership-20261017-imgdngmi",
+    "/home/holden/mckernel-work/scratch/native-fork-adoption-20261017-ymx5ikkx"
+  ],
+  "outer_capture_prefix": "/home/holden/mckernel-work/scratch/native-fork-backend-inherited-fixture-corrected-20261017",
+  "outer_stdout_sha256": "dc187f674e1e7fdab068bdf012ec0bb6ee3c9a46d7a55cd9a80b95bff2af4aaf",
+  "outer_stderr_sha256": "58020a21d934ce617d9a849722da33ee979b880241b7c770eddadac33a299bf4",
+  "unchanged_scope": "The explicit single-parent/no-child adapter tests worker-close invocation only, not actual child cancellation. New backend actual-body tests separately cover cancellation. No production correction, native module compilation or runtime fork acceptance follows.",
+  "formal_acceptance_delta": 0
+}

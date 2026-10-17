@@ -1,0 +1,76 @@
+{
+  "schema": "mckernel.native-fork-backend-reservation-fixture-correction-independent-review.v1",
+  "decision": "PASS_SCOPED_BACKEND_SLICE",
+  "reviewer": "/root/fork_adoption_boundary_review",
+  "author": "/root/fork_ownership",
+  "model": "gpt-6.1-sol",
+  "independent_of_implementation_author": true,
+  "scope": "Close exactly FBR-FIXTURE-1 after the test-only dependency correction and successful central execution of both affected extraction families. Reuse the unchanged three-source ownership review and new backend five-test pass; no broader fork design or compiler repetition.",
+  "original_review": {
+    "path": "docs/verification/evidence/native-fork-backend-reservation-independent-review-20261017.json",
+    "sha256": "9fca4e48d5ae702a92a2b570e139d01235c1fbb0acd431481de4985e7fa7a105",
+    "original_decision": "HOLD_TOUCHED_FIXTURE_DEPENDENCY",
+    "preserved_unchanged": true,
+    "finding": "FBR-FIXTURE-1",
+    "resolution": "CLOSED_BY_ONE_BOUNDED_TEST_CORRECTION"
+  },
+  "source_root": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+  "corrected_inputs_sha256": {
+    "scripts/tests/test_native_fork_ownership_20261017.py": "266fa6e32fe673b7ebd70cb559fbf4ecef7dc3e454b86fdc8021b1f3677db517",
+    "scripts/tests/fixtures/native_fork_ownership_20261017.rs": "7652d200f509c3464842ca16ca91843241f4b507f605c3b67ee9bd5eec7ced96"
+  },
+  "unchanged_inputs_sha256": {
+    "host-kernel/native-rust/smp_application.rs": "008102ae58ea83312b56b26ad62097dc871bc63a76286bd4d565c00205f2af5f",
+    "host-kernel/native-rust/smp_application_image.rs": "c41e7f2dc2907032d5a8b36cfa4679cad375e774c4103b9ef27f714c2c079721",
+    "host-kernel/native-rust/smp_application_syscall.rs": "8b477ef7d78b3516fa8e230f116104a2493f8ebf59631165f3781d3f0ca163d0",
+    "scripts/tests/test_native_fork_adoption_transaction_20261017.py": "df5ed6c6b550d6df9bec50a683d78626529c1566b0fbe6a2eeba70a1a225025e",
+    "scripts/tests/fixtures/native_fork_adoption_transaction_20261017.rs": "6ecfcb36c425577492262c2241d773041f371c4b052ec70016a4bc3912c6990f"
+  },
+  "correction_review": {
+    "result": "PASS",
+    "adapter": "The inherited worker fixture now defines the new abort_parent_forks dependency as an explicitly labelled no-child baseline adapter. It asserts exactly one slot and a live entry whose key matches the supplied parent, then records the cancellation invocation and worker. It cannot represent or claim child transaction cancellation.",
+    "actual_worker_path": "The original prepared-worker test keeps all worker-open/result assertions, then invokes the verbatim production Remote::worker close branch with handle 77. It asserts one mailbox close, one cancellation dependency call and Some(77). This repairs the previously unresolved symbol while exercising the introduced close-branch dependency.",
+    "oracle_preservation": "All four original Rust tests and their fault/worker expectations remain. The driver adds a source assertion for explicit adapter bounds and live close invocation; compiler, retention and test command families remain unchanged. No production body was changed to fit extraction. Actual child cancellation remains covered by the unchanged real backend helper fixture rather than this adapter."
+  },
+  "central_corrected_execution": {
+    "command": "python3 -B -m unittest scripts.tests.test_native_fork_ownership_20261017 scripts.tests.test_native_fork_adoption_transaction_20261017",
+    "python_tests_passed": 6,
+    "ownership_rust_tests_passed": 4,
+    "adoption_rust_tests_passed": 12,
+    "compiler_and_fixture_statuses": "All exit 0",
+    "elapsed_seconds": 0.55,
+    "peak_rss_kib": 135752,
+    "swap": 0,
+    "outer_stdout": "/home/holden/mckernel-work/scratch/native-fork-backend-inherited-fixture-corrected-20261017.stdout",
+    "outer_stdout_sha256": "dc187f674e1e7fdab068bdf012ec0bb6ee3c9a46d7a55cd9a80b95bff2af4aaf",
+    "outer_stderr": "/home/holden/mckernel-work/scratch/native-fork-backend-inherited-fixture-corrected-20261017.stderr",
+    "outer_stderr_sha256": "58020a21d934ce617d9a849722da33ee979b880241b7c770eddadac33a299bf4",
+    "ownership_capture_root": "/home/holden/mckernel-work/scratch/native-fork-ownership-20261017-imgdngmi",
+    "adoption_capture_root": "/home/holden/mckernel-work/scratch/native-fork-adoption-20261017-ymx5ikkx",
+    "ownership_capture_sha256": {
+      "actual_bodies.rs": "13b2c64bd291b87573cb2289c97d9fec06bc6fa78f530f42c133ce0b372e0231",
+      "run.stdout": "f4efd364316a0e0fd0597e1e112c78d10ac59418030ce7e6d57069ba883089e8",
+      "compile.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+      "run.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d"
+    },
+    "adoption_capture_sha256": {
+      "actual_bodies.rs": "f425b66525bdb003231c03b766de9c0bd586ac7a07ee3fe3b9004ed2a3556666",
+      "run.stdout": "495f65e7c04eaa5353fd9e8a22f404736f46b066b74db5b77acbd433b7808333",
+      "compile.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+      "run.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d"
+    },
+    "reviewer_compiler_rerun": false,
+    "unchanged_backend_run": "Reuse the prior central 4 Python/5 Rust PASS in native-fork-backend-reservation-20261017-4jmnat4a, source/capture hashes bound in the original review. It was not repeated."
+  },
+  "integration_decision": "The reviewed dormant backend reservation slice plus this fixture correction is ready for dispatcher integration and the next eligible compiler layer. Keep non-null CREATE_PPD=-95, no external reserve/commit caller and no ABI15-17, live-VMA rebind or ACK integration. No further source correction is requested by this review.",
+  "ownership_limits_carried_forward": "ForkChildOwner current/Drop remains outside the extracted fixture and native-uncompiled. Its source follows the established structural mm_count pattern, but stable Linux PID/MM identity is not guest physical-root lifetime, live address-space access, host-revoke or final-destruction proof. The original review's scoped limits remain in force.",
+  "history": "Preserve the original HOLD JSON and E0425 capture native-fork-ownership-20261017-m6c0m_u7. This is its single bounded correction and verified closure, not a renamed attempt or reset. Existing original runtime -95/raw wait256 and rejected Mirror-only evidence remain unchanged.",
+  "blocking_findings": [],
+  "required_correction": null,
+  "execution_release": false,
+  "native_compile_pass": false,
+  "guest_behavior_verified": false,
+  "runtime_fork_acceptance": false,
+  "formal_case_credit": false,
+  "campaign_scope": "Reviewer performed read-only source/capture checks and wrote only this additive closure record. No compiler, Docker, root, network, Git, child agent, heavy candidate or lease operation was performed. The fd099 native build is unaffected."
+}

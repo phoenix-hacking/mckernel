@@ -1,0 +1,105 @@
+{
+  "schema": "mckernel.native-exact-four-job-preparation.v1",
+  "status": "PATCH_AND_SYNTAX_PASS_SOURCE_AUTHORITY_REBIND_REQUIRED",
+  "author": "/root/scratch22_adapter",
+  "scope": "Later-candidate native kernel/module make job count only; running scratch22-authority1 candidate/container/output/leases remain untouched.",
+  "files_sha256": {
+    ".github/workflows/native-rust-host-modules-exact-build.yml": "90b89122bcf49f9a64032af56df71a333d761444c8f31eecaae1bd0078ef9f5b",
+    "scripts/tests/test_native_exact_four_job_profile_20261017.py": "946b11da0070639ca36fbcfe44893ff10a98df1b109eb3220af3af92708a908a"
+  },
+  "original": {
+    "workflow_sha256": "030822f476e5aaa290b06255d3e874dbf584760e06a221b2dd15ed9332ed8629",
+    "workflow_bytes": 95328,
+    "original_native_owner_sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+    "original_offline_driver_sha256": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+    "preservation": "The diff is reversible; focused test replaces exactly the two changed new lines with original lines and requires the entire restored workflow SHA256 to match original. No other workflow line may differ."
+  },
+  "exact_diff": "--- .github/workflows/native-rust-host-modules-exact-build.yml (original)\n+++ .github/workflows/native-rust-host-modules-exact-build.yml (later candidate)\n@@ -836 +836 @@\n-                -j2 bzImage\n+                -j4 bzImage\n@@ -850 +850 @@\n-                -j2 \"${module_targets[@]}\"\n+                -j4 \"${module_targets[@]}\"\n",
+  "unchanged_profile": {
+    "cpus": 4,
+    "affinity": "2-5",
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids": 512,
+    "network": "none",
+    "additional_changes": false,
+    "note": "Owner entire bytes remain equal to independently reviewed original hash; no affinity/memory/pid/timeout/network/root or concurrency change. Compiler jobs are explicit4, never unbounded nproc."
+  },
+  "motivating_sample": {
+    "path": "/home/holden/mckernel-work/scratch/scratch22-authority1-native-build-resource-sample-20261017T0423Z.json",
+    "observed_values": {
+      "CPUPerc": "200.09%",
+      "MemUsage": "3.03GiB / 12GiB",
+      "MemPerc": "25.25%",
+      "PIDs": "15",
+      "BlockIO": "849MB / 125MB",
+      "NetIO": "0B / 0B"
+    },
+    "container": "18ce9ef597cfc38f4c661a7a36d80d872d3dfc96f6e93551651bc8f0b31b5aa6",
+    "sample_file_mtime": "2026-10-17T04:22:30.718733176Z",
+    "timestamp_caveat": "Filename suffix0423Z is approximate. JSON contains no observation timestamp; file mtime is the only read-only timestamp observed here.",
+    "inference_limit": "One sample, not peak memory/CPU or proof of future throughput improvement. No resampling or modification of the running build was performed."
+  },
+  "verification": {
+    "command": "taskset -c 6 timeout --kill-after=5s 60s prlimit --as=2147483648 --cpu=55 --nofile=128 --fsize=67108864 --core=0 python3 -B -m unittest -v scripts.tests.test_native_exact_four_job_profile_20261017",
+    "exit_code": 0,
+    "cases": 3,
+    "full_combined_stdout_stderr": "test_actual_canonical_workflow_bodies_and_bash_syntax (scripts.tests.test_native_exact_four_job_profile_20261017.FourJobProfile) ... ok\ntest_exactly_two_bounded_make_arguments_changed (scripts.tests.test_native_exact_four_job_profile_20261017.FourJobProfile) ... ok\ntest_original_external_profile_is_byte_identical (scripts.tests.test_native_exact_four_job_profile_20261017.FourJobProfile) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.055s\n\nOK\n",
+    "checks": [
+      "Entire workflow differs only by the two exact -j2 to -j4 arguments, verified by reverse transformation and original complete-file SHA256.",
+      "Existing authenticated native_rust_exact_build_offline.workflow_bodies extracts all five canonical bodies unchanged except the intended compile job arguments; no driver/pin edits.",
+      "All five extracted actual canonical bodies pass /usr/bin/bash --noprofile --norc -n with a clean minimal environment. No shell body is executed.",
+      "External native owner remains byte-identical and its four-CPU/fixed-affinity/12GiB/no-extra-swap/512-task arguments remain exact."
+    ],
+    "compiler_invoked": false,
+    "Docker": false,
+    "root": false,
+    "network": false,
+    "Git": false,
+    "subagents": false
+  },
+  "precise_source_contract_blockers": [
+    {
+      "path": "scripts/native_rust_runtime_evidence.py",
+      "line": 768,
+      "binding": "EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES.build_workflow exact old SHA, blob identity and size"
+    },
+    {
+      "path": "scripts/fp0006_runtime_capture_integration.py",
+      "line": 39,
+      "binding": "EXPECTED_NATIVE_WORKFLOW_SHA256 exact old SHA"
+    },
+    {
+      "path": "host-kernel/contracts/native-rust-runtime-evidence-v1.json",
+      "line": 463,
+      "binding": "repository_workflow_identities.build_workflow exact old SHA/blob/size"
+    },
+    {
+      "path": "host-kernel/contracts/rs006-miscdevice-module-owner-followup-v1.json",
+      "line": 106,
+      "binding": "integrated_consumer_inventory native workflow exact old SHA/size"
+    },
+    {
+      "path": "host-kernel/contracts/fp0006-runtime-capture-integration-v1.json",
+      "line": 88,
+      "binding": "native_workflow exact old SHA/size"
+    }
+  ],
+  "stop_condition_applied": "Packet explicitly forbids broadening source authority/pins/framework if more than two command changes are needed. These exact existing workflow bindings still reference original bytes, so no source-contract closure or later-candidate build eligibility is claimed. Dispatcher notified; none of those five source/contract files was edited or checks rerun.",
+  "failure_family": {
+    "name": "Bounded four-job native workflow build concurrency",
+    "candidate_failures": 0,
+    "bounded_corrections": 0,
+    "source_authority_blocker_preserved": true
+  },
+  "ready_next_action": "Independent review of the two-command diff and concrete existing source-authority pins; dispatcher decides any separately scoped exact rebind before selecting a fresh future candidate. Keep the healthy current two-job build running.",
+  "acceptance": {
+    "actual_throughput_improvement_verified": false,
+    "new_builds": 0,
+    "new_images": 0,
+    "new_guest_apps": 0,
+    "formal_applications": 0,
+    "production_gates": 0,
+    "execution_release": false
+  }
+}

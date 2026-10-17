@@ -1,0 +1,19 @@
+{
+  "schema": "mckernel.native-exact-four-job-proposal-retained.v1",
+  "status": "PROPOSAL_ONLY_PRODUCTION_WORKFLOW_RESTORED",
+  "author_record": "native-exact-four-job-preparation-20261017.json",
+  "author_record_sha256": "6707a9b085823f91be3438e05381d52321e2fca40c2a8f2069a7ba3698c44e10",
+  "reason": "Existing five workflow authority pins make this optional speed change ineligible without a later source-authority version. Do not delay current image path or refresh immutable historical contracts for it.",
+  "preservation": "Author record retains the exact reversible two-line patch, baseline/proposed whole-workflow hashes and all original checks. Dispatcher restored ONLY its own two changed production lines with apply_patch.",
+  "production_workflow_sha256": "030822f476e5aaa290b06255d3e874dbf584760e06a221b2dd15ed9332ed8629",
+  "test_path": "scripts/tests/test_native_exact_four_job_profile_20261017.py",
+  "test_sha256": "61c63467a0e3689a9c8a0c6f941064cf89bd611f69a124cef83fc019b064106e",
+  "test_adaptation": "Added proposed_workflow() to authenticate unchanged production baseline and apply the exact two edits in memory. Both former WORKFLOW.read_text() test consumers now use this disposable proposal; all original assertions remain. Removing that helper and reversing those two substitutions reconstructs author test946b11da0070639ca36fbcfe44893ff10a98df1b109eb3220af3af92708a908a.",
+  "command": "taskset -c 6 timeout 60 prlimit --as=2147483648 --cpu=50 --nofile=128 --fsize=67108864 --core=0 /usr/bin/python3 -B -m unittest scripts.tests.test_native_exact_four_job_profile_20261017",
+  "exit_code": 0,
+  "tests_passed": 3,
+  "duration_seconds_reported": 0.071,
+  "actual_build_profile_unchanged": true,
+  "runtime_or_throughput_claim": false,
+  "acceptance_delta": 0
+}
