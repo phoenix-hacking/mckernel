@@ -1,0 +1,29 @@
+{
+  "schema": "mckernel.fork-backend-reservation-central-result.v1",
+  "status": "PASS_EXTRACTED_ACTUAL_BODIES_NOT_NATIVE_RUNTIME",
+  "source_record": "native-fork-backend-reservation-20261017.json",
+  "source_record_sha256": "98d4912330c381abce3f5908f60664280bfb517b82f03389656bc9884f86bebd",
+  "workspace": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+  "driver_sha256": "f99164ba8de4c62eaed26bacb451e22bde83c546fff68b6e8b7506560311ffcb",
+  "fixture_sha256": "6a2e5e27b81d8454101cb34efb30cb1945854e3067a19b9692d99dbf5ebecd47",
+  "compiler_sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+  "command": "taskset -c 7 timeout 180 prlimit --as=2147483648 --cpu=150 --nofile=256 --fsize=67108864 --core=0 env -u MCKERNEL_RUSTC_1_92 TMPDIR=/home/holden/mckernel-work/scratch /usr/bin/time -v /usr/bin/python3 -B -m unittest scripts.tests.test_native_fork_backend_reservation_20261017",
+  "exit_code": 0,
+  "python_tests_passed": 4,
+  "rust_tests_passed": 5,
+  "elapsed_seconds": 1.17,
+  "maximum_rss_kib": 154704,
+  "swaps": 0,
+  "capture_root": "/home/holden/mckernel-work/scratch/native-fork-backend-reservation-20261017-4jmnat4a",
+  "outer_capture_prefix": "/home/holden/mckernel-work/scratch/native-fork-backend-reservation-central-20261017",
+  "outer_stdout_sha256": "a2efc13992cd523f0e8c4b6a96efad32c3542dd31fd276b960fbccc75df257d4",
+  "outer_stderr_sha256": "a4cfdaa6602889c3a3d253e25d5c74cdb1fc7d01bfedf68de8bca143f2e89909",
+  "limitations": [
+    "Linux PID/MM capture/drop and native module integration are outside this extracted fixture.",
+    "Vec allocation and Linux identity structures are explicit test adapters.",
+    "No external reservation caller or public fork admission is enabled.",
+    "Pinned fd09933c native build candidate is unchanged and excludes this later source work."
+  ],
+  "formal_acceptance_delta": 0,
+  "guest_count_delta": 0
+}

@@ -14240,3 +14240,67 @@ Counts still 3 compiled candidates, 12 bounded diagnostic guest passes,
 has no new native candidate build or guest yet. The comparison baseline
 `engineering-estimate-20261017T025932Z.json` remains unchanged. Continue directly
 to the released compiler attempt; do not stop or claim OS completion here.
+
+### Checkpoint 364 — 2026-10-17T04:18Z: native compiler active; next-image guard implemented
+
+The one-shot authority1 heavy release08954d0a...1881c at fetched41561399 was
+executed once. Pinned source remains fd09933c64adaba32bf975ec96e5d518a42544e9;
+later main source/tool changes do not alter that candidate. Session42395,
+wrapper80259/canonical80867, container18ce9ef597cfc38f4c661a7a36d80d872d3dfc96f6e93551651bc8f0b31b5aa6
+(mckernel-exact-154a592e9c9841618a114901cdfd3e17) owns root lock27:4 and the
+canonical heavy/exclusion records. Actual derived requestSHA520fbc79...cecbe.
+Source-phase Rust52 tests and54-case configuration matrix passed; actual compiler
+now builds kernel/x86/trace/BPF objects. No terminal native success or new guest
+is claimed. Driver log and receipts remain in authority1-evidence/build; running
+receipt initial FAIL is not terminal. Preserve active owner/container/leases,
+do not start another heavy operation, trim or mutate candidate/image mountpoints.
+
+Parallel concrete results: fresh libdwarf gitlink preparation exited0, manifest
+f90ef3831ad03a443b644dee44ab3b2fa91e541c975c8266dcea96ec17efce66; data-only
+tool rebind preparation exited0, requestdc13f4cc7ad37c2511978ef70db3a9e0de7354d61e88203d479e04ac5ad5a1d5.
+Both use fd09933c-scratch22-authority1-image1-20261017 names. Neither starts Docker.
+Probe --help reproduced a stale image-owner heavy-contract hashpin refusal;
+original streams retained, bounded one-field fix8e136f3e passes29 focused tests
+and actual corrected --help. New rootguard6783f371 passes32 tests, including
+four actual disposable child signal/flock/quarantine controls. Existing26 probe
+core tests/semantics unchanged; no real rootlock/Docker touched by tests. Source
+record scratch22-tool-probe-root-guard-source-20261017.json is NOT_RELEASED;
+independent concrete execution review remains separate. Source-reviewed terminal
+cleanup template report8a041383...f8e3 likewise grants no live cleanup authority.
+
+Standing user preference20261017T041656510503Z: responsibly maximize parallelism
+for efficiency. Explicitly approved pinned compiler concurrently with disjoint
+kernel implementation, cheap actual-body tests, data-only next runtime/image
+inputs and focused concrete safety review. Relayed to all three active children;
+carry into every future packet and this handoff. Fill only useful independent
+lanes within shared7jobs/24GiB, not capacity for its own sake. Keep essential
+exclusive heavy/root ownership, immutable candidate inputs, isolation, live
+identities, failure preservation, GPT6.1 low/medium/high and97% reserve unchanged.
+The existing implementation/experiment-first preference remains active; no
+duplicate investigations, repeated accepted checks or busy polling.
+
+Initial isolated fork WIP1eb1017dc9f123ef7b5898cffa09c25c2a2e95af is pushed and
+fetched exactly at origin/codex/fork-adoption-wip-20261017. Backend reservation
+implementation continues independently in that worktree, CPU7/2GiB; gate remains
+disabled and no runtime fork is claimed. Main retains unrelated ihk/pycache WIP.
+Storage remains above admission floors (latest host34.13GB/scratch30.61GB free);
+no new disk bottleneck, reclamation, trim or cleanup requested/performed.
+
+Shortest next action: obtain actual native compiler result, preserve artifacts
+and verify retirement; independently release exact authority1 terminal cleanup.
+Then fresh reviewed tool probe, image prep/build/cleanup, signal.mask-restore
+exact stdout handled=1 observed_blocked=1 restored=1 newline/exit0. Fix first
+real build/runtime failure, do not broaden the matrix first. Counts remain
+3compiled candidates/12diagnostic passes,0/273formal apps,6/130production,
+0/7language. Engineering-estimate-20261017T025932Z.json original ranges unchanged.
+Continue after this checkpoint; no OS completion/pause or acceptance increment.
+
+Checkpoint364 bounded parallel completion: actual central backend-reservation
+driver passes4Python+5Rust tests,1.17s/154704KiB/no swap, retained root
+native-fork-backend-reservation-20261017-4jmnat4a. Exact result is additive
+native-fork-backend-reservation-central-pass-20261017.json; author source record
+98d49123...bebd remains frozen. LinuxPID/MM unsafe ownercapture/drop is outside
+the extracted fixture and undergoing independent review; no publicgate/runtime
+fork is enabled. Tool probe source/release reviewa86c4bd2...8535 now conditionally
+passes corrected pin+actualCLIguard. Activation still waits for actual native
+terminal and independently accepted cleanup/fresh resources/verified checkpoint.

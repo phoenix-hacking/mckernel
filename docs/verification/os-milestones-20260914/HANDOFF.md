@@ -1,5 +1,45 @@
 # Compact dispatcher handoff
 
+## Current continuation: checkpoint 364, native compiler active
+
+CONTINUE, not a stop. Pinned fd09933c candidate is compiling under the sole heavy
+lease. Wrapper PID80259, canonical owner80867, session42395; container
+`18ce9ef597cfc38f4c661a7a36d80d872d3dfc96f6e93551651bc8f0b31b5aa6`
+(`mckernel-exact-154a592e9c9841618a114901cdfd3e17`). Release commit41561399,
+release SHA08954d0a...1881c. Root development lock27:4 is OWNED. Preserve all
+current process/lease/exclusion identities; do not interrupt or start another
+heavy operation. Driver log is scratch/mckernel-exact-candidate-scratch-22-authority1-evidence/build/driver.log.
+Configuration matrix54 cases finished; compiler reached kernel trace/BPF objects
+at04:18Z. Initial running receipt FAIL is not a terminal result. Next observe the
+actual compiler result; after positive retirement independently release exact
+terminal cleanup using the source-reviewed authority1 template. Never raw-remove
+container/exclusions or replay21/original22.
+
+Fresh data-only image inputs are ready: libdwarf manifest f90ef383...fce66 and
+tool-rebind request dc13f4cc...5a1d5, both fd09933c-scratch22-authority1-image1-20261017.
+Actual probe import failed on stale heavy-contract pin; 8e136f3e corrects ONLY
+that pin,29 focused checks PASS. 6783f371 adds required CLI rootflock/four-signal
+quarantine guard,32 tests PASS (including real disposable signal/lock children).
+No probe ran. Independent execution review remains separate and activation needs
+native terminal+accepted cleanup, fresh identity/capacity/ownership checks and
+verified source/release checkpoint. Then probe -> image request/build -> accepted
+image cleanup -> exact signal.mask-restore guest. Do not mutate the active native
+candidate to prepare image mountpoints while its build is running.
+
+Responsibly maximize parallelism for efficiency (standing user instruction
+20261017T041656510503Z): pinned heavy execution concurrently with disjoint later
+kernel fixes, cheap actual-body tests, data-only next-stage inputs and concrete
+safety review. Relay in EVERY future packet. Fill only genuinely ready independent
+lanes, not twelve slots for their own sake. Preserve shared7jobs/24GiB budget,
+4CPU/12GiB/no-swap/512task heavy profile, immutable candidate, root lock/liveleases,
+failure evidence, GPT6.1 low/medium/high routing and97% included-usage stop. Existing
+code/experiment-first preference below remains operative; no repeated accepted
+checks, duplicate investigations or busy polling. Active fork backend reservation
+author fork_ownership uses CPU7/2GiB in isolated worktree; main native candidate
+is untouched. Initial fork WIP1eb1017dc9f123ef7b5898cffa09c25c2a2e95af is pushed/fetched
+at origin/codex/fork-adoption-wip-20261017; later working changes remain isolated.
+Counts and comparison baseline are unchanged; native build still in flight.
+
 ## Current continuation: checkpoint 363, corrected candidate ready for compiler
 
 Pinned image source `fd09933c64adaba32bf975ec96e5d518a42544e9`, tree
