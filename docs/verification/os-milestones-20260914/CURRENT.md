@@ -14924,3 +14924,25 @@ M02-C/E,M04-B,M06-A tasknotes; statuses/scoresunchanged andM04-Drepetitionsopen.
 ExplicitknownAnacondaPython3.9/minimalenv nowboundinfuturefocusedpackets; no
 newenvironment/globalharnessrequirements. Fourdistinctguestdiagnostics remain,
 no nativeshutdown/restoration/formalcredit; no M00-M13estimateinflation.
+
+## Checkpoint382 — adapted mutex accepted; alternate-repeat released
+
+Adaptedmutexactual0/33.581568s/HEAD1769263cstable independentPASS. PID256
+14workerregistration/deletioncycles reusedTID258; exact51byte2/4/8oracle/
+emptyerr0/complete4096streams/procfsempty,9deliveries8returns5routes/final231.
+Retirement-11then0 retained/expectedownershipretry; cleanupACK/processrelease.
+30clients/exactcontainer/rootretirementPASS; all3samepacketboundedreadbacks0.
+ONEadapteddiagnostic, acceptedtotal5/formal0; no14simultaneousworkers/address/
+contention/newpagerclaims. Nextalternate415byte16handlerdiagnostic independently
+released, admitted46728b8a onlyprep-reviewref/assemblymetadataaddsfromreviewed
+fed71b08. Freshndalt-1 parent1828/109032 noncefd091a99f7df4c5a8d5d4768bc5442e6
+QMP92/manifestd9a9; nextpush/fetch/livecheck/soleguest/HEADfreeze.
+Running/logsourcecandidate176 separatefromimmutable942guestartifacts. External
+60filemodulepackage edbb3fd4 reusedretainedROkernelbuild (noLinux/imagebuild),
+offlinedriver13injectedtestsPASS awaitingindependentreview+newnarrowownerprofile;
+no actualmake/containerbuildyet. SysfsRemote4tests+independentreviewPASSunwired,
+workerstop5actualbodytestsPASS reviewpending; BOTHexcludedRunning/logcandidate.
+End-to-endstopstillrequires activeshutdown/reboot-epochproof,admissioncancel,
+joinsoutsidedependentlocks,callbackdrain,ledgers,generationcheckedrelease;
+isolatedcomponentpassesnotclosure. Review2Markdowncheckpointed,next14:55UTC.
+Allstatus/acceptance/estimatebandsunchanged; continuewithoutcheckpointpause.

@@ -11,15 +11,15 @@ This file describes supervision, not OS acceptance or execution authority.
 - Engineering campaign: `01a149eb-f950-7f13-95a2-59dfc2918d49`; sole runtime/Git owner.
 - First baseline recorded: `2026-10-17T13:26:00Z`.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
-- Last full review: `2026-10-17T13:55:47Z` (interval 30m53s after baseline end).
-- Next full review target: `2026-10-17T14:25:00Z` (07:25 America/Los_Angeles).
-- Next review latest target: `2026-10-17T14:55:00Z`; preserve healthy operations.
-- Last included-usage observation: 13%; existing campaign stop remains 97%.
-- Current intervention: reconcile the TLS protocol failure and align actual
-  collector/manifest stream accounting before a fresh released attempt; validate
-  lifecycle ABI records through the actual serializer/parser before runtime.
-- Current invocation independently accepted diagnostic guests: 3 (signal,
-  calloc, file-write/read). Formal acceptance and broad engineering ranges unchanged.
+- Last full review: `2026-10-17T14:25:21Z` (interval 29m34s).
+- Next full review target: `2026-10-17T14:55:00Z` (07:55 America/Los_Angeles).
+- Next review latest target: `2026-10-17T15:25:00Z`; preserve healthy operations.
+- Last included-usage observation: 14%; existing campaign stop remains 97%.
+- Current intervention: keep immutable current942 diagnostic execution moving
+  alongside next-candidate lifecycle repair; reuse proven interpreter/build
+  commands and include bounded postjoin raw readback in execution packets.
+- Current invocation independently accepted diagnostic guests: 4 (signal,
+  calloc, file-write/read, TLS). Formal acceptance and broad engineering ranges unchanged.
 - No new monitor script, OS timer, engineering dispatcher or workload was started.
 
 ## Baseline review — 2026-10-17 13:26 UTC
@@ -160,3 +160,95 @@ lanes remain active. Next review is 14:25 UTC. Independent judgment retains
 M02 50-70%, M04 30-50%, M08 55-75%; results strengthen runtime evidence within
 these broad low-confidence bands. Other milestone estimates remain as previously
 reported. No whole-OS score or formal milestone closure is inferred.
+
+## Review 2 — 2026-10-17 14:25:21 UTC
+
+Interval: `13:55:47` to `14:25:21` UTC, 29m34s. Campaign active; worker and
+app-server PIDs/start identities match saved state. Next review: 14:55 UTC.
+
+| Measure | Review 1 interval | This interval |
+| --- | --- | --- |
+| New independently accepted McKernel diagnostics | 3 | 1: corrected TLS2; invocation total 4 |
+| New runtime attempts | 4 | 2: TLS2 and lifecycle; mutex not launched by cutoff |
+| Native lifecycle failure | None established | Ready4, then shutdown -EBUSY and Shutdown8 |
+| Reviewed production-source change | None confirmed | Running publication plus shutdown-stage logs; committed, not built/runtime-validated |
+| Formal application/production/language acceptance | 0/273, 6/130, 0/7 | Unchanged; points remain 350/10000 |
+| Included weekly usage | 13% | 14%; existing 97% stop unchanged |
+
+TLS2 independently passed at 14:04:48: exact original 55-byte 2/4/8-worker
+oracle, empty stderr, exit0, all 15 main/worker procfs publication/deletion pairs
+and full owner/container retirement. Only the manifest limits changed to the
+actual ND_FUTEX producer's 4096-byte limits. Four regressions bind the real
+collector contract; the original 1024 mismatch is rejected. TLS1 remains FAIL.
+This adds basic TLS/worker evidence, not comprehensive TLS or formal-case credit.
+Clarification to Review 1's conservative pending disposition: TLS1's independent
+retirement/harness-failure decision was already reported at 13:55:10; it grants
+no runtime pass and is retained in its additive failure-review record.
+
+Lifecycle launched 14:07:07.879 and its owner exited1 after 33.968 seconds.
+Independent retirement accepted 14:09:29. Exact raw readback establishes
+Ready(4) -> shutdown -16 -> Shutdown(8) -> close0. Signal payload output/exit0
+passed. The collector maps helper failure onto its procfs result field, so
+"guest registrations remain" does not independently prove leaked registrations.
+Native Running/shutdown failed; the first busy teardown stage is still unknown.
+The failure archive and original 399-byte probe are retained unchanged.
+
+Useful parallel source work: native boot had no Running publication after its
+full-ready handshake. An explicit v6 ABI2 opt-in now publishes Running; older
+versions and failure states retain their behavior. Independent source review
+passed 70 runtime tests, 10 shutdown tests and four rejected semantic mutations.
+HEAD at cutoff is `1769263c` (Running source change and next mutex diagnostic).
+No new module build or native repair verification has occurred. Separately,
+sysfs cancellation passed four actual-body tests, but remains unwired and
+pending independent ownership review. It has no production peer-stop proof
+constructor. Service joins/callback drains and generation/resource ownership
+remain real integration work; do not remove the terminal retention guard.
+
+**Throughput and handoffs:** TLS2 acceptance -> lifecycle launch was 2m19.879s,
+again below five minutes. After lifecycle retirement, no subsequent guest
+launched by cutoff, a 15m52s observed gap. Adapted mutex source/staging already
+passed; execution review completed 14:19:09 with fresh-admission conditions.
+The gap includes necessary failure reconciliation, review and checkpoint work;
+its avoidable portion is not measured. Diagnostic throughput is lower than the
+previous window (one pass versus three). Source repair progressed, but this
+window does not demonstrate doubled/tripled engineering velocity.
+
+**Removed/targeted repeated delays:**
+
+- Future execution packets now include bounded exact nonce-bound attempt tar
+  readback after positive retirement, avoiding a second predictable triage
+  review. Mutex's accepted packet includes three scoped readbacks.
+- Alternate-repeat metadata correction reused compile/reference/overlay and
+  passed all nine fields for 59 members, preserving 40 authentic nonzero base
+  timestamps; actual serializer/evaluator positive and two negatives passed.
+  It remains prepared, not a runtime pass.
+- Multiple lanes rediscovered the same Python3.8 annotation failure. Future
+  packets should use the already passing `/home/holden/anaconda3/bin/python3`
+  and approved environment. Preserve failures, avoid global environment edits.
+- Module packaging copied 60 files (~1.17MiB), then failed an assumed
+  `rust/libkernel.rlib` prerequisite. Correction must follow actual retained
+  compiler dependencies and reuse the staged source package. Do not rebuild
+  Linux/image or copy the full tree to satisfy an invented support filename.
+  The exact external-module invocation remains unproven and unreleased.
+
+**Adjustment:** give the coordinator a ready reviewed next-case packet while
+specialists handle lifecycle source/ownership repair. Launch the next eligible
+current942 diagnostic after its ordinary live admission and release, then keep
+the alternate-repeat review ready. Use a separate frozen next-module candidate;
+no failed lifecycle replay or shared baseline mutation. This overlaps useful
+work rather than increasing simultaneous heavy owners or speculative audits.
+
+Steering receipts `20261017T141124027564Z-d079af5c43474f93a90b4f567165101a`
+and `20261017T141438942839Z-b6747a2b79ae44a9b3a87eecffb3c4a5` were
+accepted by the existing server. Interpreter steering was queued as
+`20261017T141924826117Z-45d27c644957434aa6b3d297ada7dd1f`.
+
+Sources: existing state/console and additive records under `../evidence/`:
+`thread-tls-isolation-current942-result-review-20261017-2.json`,
+`thread-tls-isolation-manifest-correction-20261017-1.json`,
+`native-lifecycle-current942-failure-review-20261017-1.json`,
+`native-running-publication-source-20261017-1.json`,
+`native-sysfs-remote-shutdown-source-20261017-2.json`, and
+`native-running-external-modules-preparation-20261017-1.json`.
+No shared artifact was rehashed for this supervision review. Broad M00-M13
+estimate bands and formal statuses remain unchanged; scoped evidence improves.

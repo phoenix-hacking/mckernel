@@ -1,0 +1,184 @@
+{
+  "schema": "mckernel.signal-alternate-repeat-execution-proposal.v1",
+  "status": "PASS_EXECUTION_RELEASE",
+  "author": "/root",
+  "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "execution_count": 1,
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/ndalt-1",
+    "--nonce",
+    "fd091a99f7df4c5a8d5d4768bc5442e6",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/manifest.json",
+    "--manifest-sha256",
+    "d9a9f6b70ca19bc90110d737123d49cfa5458fd90d9f3cac22b50b4e1468a90b"
+  ],
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/manifest.json",
+    "sha256": "d9a9f6b70ca19bc90110d737123d49cfa5458fd90d9f3cac22b50b4e1468a90b",
+    "size": 6239
+  },
+  "nonce": "fd091a99f7df4c5a8d5d4768bc5442e6",
+  "parent": {
+    "path": "/home/holden/mckernel-work/scratch/ndalt-1",
+    "device": 1828,
+    "inode": 109032,
+    "mode": "0o700",
+    "uid": 1000,
+    "gid": 1000
+  },
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "A",
+      "",
+      "B"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stdout_hex": "68616e646c65723d3120696e5f616c743d696e736964650a68616e646c65723d3220696e5f616c743d696e736964650a68616e646c65723d3320696e5f616c743d696e736964650a68616e646c65723d3420696e5f616c743d696e736964650a68616e646c65723d3520696e5f616c743d696e736964650a68616e646c65723d3620696e5f616c743d696e736964650a68616e646c65723d3720696e5f616c743d696e736964650a68616e646c65723d3820696e5f616c743d696e736964650a68616e646c65723d3920696e5f616c743d696e736964650a68616e646c65723d313020696e5f616c743d696e736964650a68616e646c65723d313120696e5f616c743d696e736964650a68616e646c65723d313220696e5f616c743d696e736964650a68616e646c65723d313320696e5f616c743d696e736964650a68616e646c65723d313420696e5f616c743d696e736964650a68616e646c65723d313520696e5f616c743d696e736964650a68616e646c65723d313620696e5f616c743d696e736964650a64656c69766572793d313620616c745f686974733d31360a",
+      "stderr_hex": ""
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "oracle": {
+    "exit_code": 0,
+    "stdout_hex": "68616e646c65723d3120696e5f616c743d696e736964650a68616e646c65723d3220696e5f616c743d696e736964650a68616e646c65723d3320696e5f616c743d696e736964650a68616e646c65723d3420696e5f616c743d696e736964650a68616e646c65723d3520696e5f616c743d696e736964650a68616e646c65723d3620696e5f616c743d696e736964650a68616e646c65723d3720696e5f616c743d696e736964650a68616e646c65723d3820696e5f616c743d696e736964650a68616e646c65723d3920696e5f616c743d696e736964650a68616e646c65723d313020696e5f616c743d696e736964650a68616e646c65723d313120696e5f616c743d696e736964650a68616e646c65723d313220696e5f616c743d696e736964650a68616e646c65723d313320696e5f616c743d696e736964650a68616e646c65723d313420696e5f616c743d696e736964650a68616e646c65723d313520696e5f616c743d696e736964650a68616e646c65723d313620696e5f616c743d696e736964650a64656c69766572793d313620616c745f686974733d31360a",
+    "stderr_hex": ""
+  },
+  "staging_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/signal-alternate-repeat-current942-preparation-20261017-2.json",
+    "sha256": "36ca570cf3d3d41d8b69a966430a5601d23260d02748463bae1e7aa38b978a6f",
+    "size": 25604
+  },
+  "byte_bridge": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/signal-alternate-repeat-exact-byte-diagnostic-bridge-20261017-1.json",
+    "sha256": "ff6c107aebc2c7ae4df62fa83f9c2a82a049422f43781f53485d92c233ebf93f",
+    "size": 5551
+  },
+  "previous_mutex_actual_retirement": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+    "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+    "size": 17406
+  },
+  "prerequisites": {
+    "image_archival_cleanup": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-authority3-image-cleanup-result-review-20261017-1.json",
+      "sha256": "47cc7673788cb9b8c15443eec7f24c07d749b1bfe05875673d2c2b9af72bc15d",
+      "size": 1892
+    },
+    "image_retirement_proof": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch22-image-fresh-retirement-observation-20261017-1.json",
+      "sha256": "1cdf3af9fa657d160a801bf909f9e5c0e77dd132d3c38b3f1a38482bd1691da8",
+      "size": 1439
+    },
+    "live_preflight": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/signal-alternate-repeat-current942-live-preflight-20261017-1.json",
+      "sha256": "a5b5e5351699a7dd4dfadc53c20ff535823ff73d3541023f26fe53149689ed24",
+      "size": 3930
+    },
+    "independent_execution_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/signal-alternate-repeat-current942-execution-review-20261017-1.json",
+      "size": 2035,
+      "sha256": "33c97537a8252164714f075fc03bd4d755a177fcc2e74ef8c9b02e42e313134a"
+    }
+  },
+  "unix_monitor_endpoints": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/ndalt-1/attempt-fd091a99f7df4c5a8d5d4768bc5442e6/qmp.sock",
+      "encoded_bytes": 92,
+      "max_bytes": 107
+    }
+  ],
+  "postjoin_readback": {
+    "requested": true,
+    "conditions": "Afterjoinedpositiveownerclientretirement canonicalunchangedexactdirs/regularresult freshordinaryUIDcaptures defaulttarnondereference",
+    "capture_limit_bytes_per_command": 33554432,
+    "timeout_seconds_per_command": 30,
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndalt-1.owner-fd091a99f7df4c5a8d5d4768bc5442e6",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/ndalt-1/attempt-fd091a99f7df4c5a8d5d4768bc5442e6/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/ndalt-1/attempt-fd091a99f7df4c5a8d5d4768bc5442e6",
+        "."
+      ]
+    ],
+    "approved": true
+  },
+  "scope": "Oneoriginal16-handleralternate-stackdiagnostic with additivefrozen415bytebridge; releasedsource/oracle/catalogunchangedandunaccepted. Eachhandleraddressin-alt+hitcountonly, no mainnormalstackrestore/generalasyncstdioclaim. Useimmutable942 while nextmodulecandidatebuildprofileprepared; no image/Linuxrebuild. Immediateprelaunchcheck+HEADruntimefreeze, no retrieswithoutfreshreview.",
+  "preparation_decision": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/signal-alternate-repeat-current942-preparation-review-20261017-1.json",
+    "sha256": "1157ab0015563f8f9873e8ab7ab5f073aac16ee0640ccfca6e988642ec4cd84b",
+    "size": 1062
+  },
+  "assembly": {
+    "author": "/root/lifecycle_capture_parser",
+    "source_proposal": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/signal-alternate-repeat-current942-execution-proposal-20261017-1.json",
+      "sha256": "fed71b08142e876bcd90c0c64c9c339dcb29357aaeedf9127a51965d9ba1dea1",
+      "size": 7316
+    },
+    "status": "ASSEMBLED_PENDING_INDEPENDENT_EXECUTION_REVIEW",
+    "execution_approved": false,
+    "runtime_called": false,
+    "scope": "Exact selected small record/source joins and existing parent identity/empty/endpoint checks only. Original argv/profile/postjoin readbacks unchanged. No preparation replay, tests, artifact corpus scan, parent creation, root or guest action."
+  }
+}

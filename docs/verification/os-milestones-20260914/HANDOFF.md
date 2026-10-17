@@ -1,5 +1,22 @@
 # Compact dispatcher handoff
 
+Checkpoint382: acceptedactualcurrent942diagnostics nowFIVE incl adaptedmutex
+33.581568s/51bytes/2,4,8vectors/emptyerr0,14workercyclesreuseTID258, nine
+samples/eightreturns/fiveroutes; retirement-11→0 retained,30clients/container/
+rootretirementPASS. Adaptedcaseformal0/no simultaneous-worker orstackaddress
+claim. Nextsolealternate-repeat executionreleased: ndalt-1 dev1828/109032,
+noncefd091a99f7df4c5a8d5d4768bc5442e6 QMP92,manifestd9a9f6b7,415byte16handler
+bridge. Finaladmitted46728b8a derivedreviewedfed71+permittedmetadataonly;
+push/fetch/livecheck→guest, freezeHEAD. All3postjoinreadscopescapture32MiB/30s.
+Next-moduleprofile/driverworkcontinuesseparate; doNOTwaitforbuildtotest942.
+Externaldriver13mocktestsPASS; 60file1.17MiBpackagebaseline942+2reviewed
+Running/logsourcehashes sourcedat1769263c,ROretainedLinuxbuild,all3matchednew
+mods needed. No make/buildyet. SysfsRemote+workerstopWIPEXCLUDEDfirstcandidate.
+Originalshutdownend-to-end stillneeds active-shutdown/rebootepochpeer-stop
+proof→cancel→joinsoutsideCPU/memorylocks→callbackdrain→ledgers→generation
+checkedrelease; no guardrelaxation/nativecompletionclaim. Review2savedin
+VELOCITY-REVIEWS.md, next14:55UTC; allformalcounts/estimatebands unchanged.
+
 Checkpoint381 activecursor: current942adaptedmutex exactrelease+preflight
 approved; nextdispatch afterpush/fetch/livecheck: /scratch/ndmut-1 dev1828/
 inode108862 nonceecf2ba52b89a4d67adfda4d18c3aae6b,QMP92,manifesta74c2687.
