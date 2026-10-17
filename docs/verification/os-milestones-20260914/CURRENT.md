@@ -13972,3 +13972,77 @@ exclusions remain retained. No workload or execution release ran. Counts stay
 3builds,12bounded diagnostic passes,0/273formal applications,6/130production
 and0/7language gates. Scratch21 cleanup, RS-011 and fresh scratch22 still block
 new runtime artifacts; the OS remains incomplete.
+
+Continuation checkpoint 359, 2026-10-17: explicit new `--run` user authority
+supersedes the two historical preparation stops. The saved thread is unchanged;
+the GPT-6.1 launcher wrapper/worker/server are PID 23902/23943/23945. HEAD and
+the remote branch reconcile to `2fd71645bfae65d9e82feb1f0c7347c7961f0edd`.
+Adopted policy hashes and fresh read-only identity evidence are recorded in
+`../evidence/os-resume-reconciliation-20261017.json`. Preexisting nested-IHK
+work, deleted tracked bytecode and historical untracked files are preserved.
+
+Scratch UUID remains `2a5768c8-718d-4914-bdc0-6b32c5a92a52`, live device 1828;
+scratch21's exact exit-1 container, protected evidence and exclusions at inodes
+57687/57688 match. The request lease is absent; no heavy publisher or root
+development-lock holder was observed. No cleanup execution is yet released.
+Measured capacity is about 34 GiB host/32 GiB scratch and 28 GiB available RAM.
+The measured ceiling is 12 children sharing seven host jobs/24 GiB; the single
+heavy operation retains its reviewed four-CPU/12-GiB limits.
+
+Active disjoint lanes: scratch21 transaction (exact archival cleanup plus
+disposable crash/drift tests), expert RS-011 SAFETY/authority closure, scratch22
+source-only adapter, inherited-MM fork ownership reproducer/repair boundary,
+shutdown actual-body regressions, and signal.mask-restore oracle preparation.
+Independent cheap-profile review covers new extracted-body compiler tests.
+The dispatcher owns Git, integration, execution releases and acceptance.
+Next: review and execute exact scratch21 cleanup; independently review complete
+source authority; push/fetch those sources and prepare wholly fresh scratch22.
+Scratch21 remains consumed and may never be replayed. The next diagnostic after
+a fresh reviewed artifact remains signal.mask-restore with exact output
+`handled=1 observed_blocked=1 restored=1\n` and exit zero. Counts remain three
+compiled candidates, 12 diagnostic passes, 0/273 formal applications, 6/130
+production gates and 0/7 language gates. Work continues; the OS is incomplete.
+
+Continuation checkpoint 360, 2026-10-17: image-first work continues. Frozen
+RS-011 correction independently PASSes source authority: 166 focused tests,
+six source checks, 637 durable IDs conserved and 17 newly inventoried sites.
+Runtime/SMP Rust edits are SAFETY comments only; executable token streams are
+unchanged. Original compiler/review readiness stays pending. Source/check/review
+bindings are in `../evidence/rs011-authority-20261017.json` and its independent
+review. These files await the accepted-cleanup source checkpoint before the
+fresh scratch22 source target is selected.
+
+Regression checkpoint `09f438751c28df0f497ed45a6bf6a4c6e0821d7b` is pushed and
+all ten fetched blobs verified. Four new actual-body lifecycle integration
+scenarios run alongside nine existing provider tests; three compiled mutations
+reject skipped physical stop, downgraded post-effect failure and omitted registry
+irreversibility. Independent scoped review PASSes. Four actual-body fork cases
+prove the inherited-MM fault route and unprepared-child backend gap; production
+fork remains unmodified and missing. Five signal-mask preparation checks pass.
+These are finite source-level results, not new guest/application acceptance.
+
+Scratch22 adapter independently PASSes source preparation with 22 disposable
+tests and a separately gated real materialization entry point. Scratch21 cleanup
+source review found a real quarantine-output/signal lock-retention gap; its
+coherent expert correction is active. Original exact failed code/test bytes are
+retained as `scratch21-cleanup-precorrection-{source,tests}-20261017.txt` in
+evidence. No live cleanup has executed. A disjoint build-wrapper adaptation is
+preparing the fresh build release; broader fork adoption is outside the image
+critical path and requires its reviewed nine-file ownership transaction.
+
+Nearest deliverable: exact versioned working image plus matching modules/tools,
+source/build/boot/app commands and honest tested/missing/broken features.
+Shortest blocker: scratch21 cleanup source correction, independent execution
+release and verified terminal cleanup; then source commit/push/fetch, scratch22
+preparation/build release and signal.mask-restore. Current-window real guest
+applications and new current-candidate builds are both zero. Baseline counts
+stay 3 compiled candidates/12 bounded diagnostic passes, 0/273 formal apps,
+6/130 production and 0/7 language gates. No original obligation is removed.
+
+The supervising chat's additive low-confidence comparison baseline is preserved
+unchanged at `engineering-estimate-20261017T025932Z.json`, SHA-256
+`708a8e4d9851db522dbccf578c541440d71ce328ea40245581f69c02d6430aa1`.
+When the user returns compare all 14 original ranges with evidence-based current
+estimates; scalar deltas must mean estimated range-midpoint changes. No forced
+increase, averaging to whole-OS completion, or acceptance credit. Continue the
+authorized campaign after this checkpoint and the intermediate image milestone.

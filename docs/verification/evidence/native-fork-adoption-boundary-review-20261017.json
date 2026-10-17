@@ -1,0 +1,158 @@
+{
+  "schema": "mckernel.native-fork-adoption-boundary-review.v1",
+  "status": "IMPLEMENTATION_BOUNDARY_SELECTED_RUNTIME_NOT_RELEASED",
+  "reviewer": "/root/fork_adoption_boundary_review",
+  "author_reviewed": "/root/fork_ownership",
+  "independent_of_author": true,
+  "source_head": "2fd71645bfae65d9e82feb1f0c7347c7961f0edd",
+  "production_changes": false,
+  "execution_release": false,
+  "application_acceptance": false,
+  "formal_case_credit": false,
+  "decision": "Implement an explicit adopted-image transaction, per-VMA owners, native pre-destruction revoke barrier and post-destruction acknowledgement. A post-release acknowledgement alone is insufficient: guest physical pages must not be freed while Linux retains an alias or a backend operation can still translate through the child root.",
+  "source_sha256": {
+    "host-kernel/native-rust/abi/application.rs": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+    "host-kernel/native-rust/ihk_smp_x86_64.rs": "ead31123d69508bd678f321137e9fba023621a46cdf86aa3466381b966b52b44",
+    "host-kernel/native-rust/smp_service.rs": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+    "host-kernel/native-rust/smp_application.rs": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+    "host-kernel/native-rust/smp_application_image.rs": "7fb8c862a1793ea4db6f90200adb9f78ee9b9b2abd9899b9ffd4671d647d7985",
+    "host-kernel/native-rust/smp_application_syscall.rs": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55",
+    "host-kernel/native-rust/mcctrl_process.rs": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+    "host-kernel/native-rust/mcctrl_vm.rs": "83630dbe469466c7f69f51feb3a85438e2ae20049346b5e940d89d355f590ab3",
+    "host-kernel/native-rust/application_rpc.rs": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+    "kernel/syscall.c": "1f4836b5deef84b75801e461d4d13f683db2cb74802454f96965e8b7ca011647",
+    "kernel/process.c": "6480b1ab121acf17610495682cd9e58cba774427de9695b1ce8dd65a9bc07cb2",
+    "kernel/process_helpers.c": "c444c9c911b3dd231e6c8d8ae544c82f5d69893506f99bcff4be4ae3216a34f5",
+    "kernel/rust/process_helpers.rs": "b3a28ea8b0cd2594305644c224ae718eac384c0709305da315a6b8fd1285d00b",
+    "executer/user/mcexec.c": "310301305e41bab4eda63026849ee6f166bb6e5d4d6f2c789aa8003e94745056",
+    "executer/include/uprotocol.h": "1770a59cf4486380eb5aa483d3634dc1e4c9c9c16d1bf09865d4ff8f71191e69",
+    "docs/verification/evidence/native-fork-ownership-20261017.json": "ffb770685e75a2a81544922612eb25b99238befe2c9ced1a0c7b91b8aa2c0d09",
+    "scripts/tests/test_native_fork_ownership_20261017.py": "ea08f17efb24a1ff2ba40e41bf667abfc8acf9f5a1d10a7a0a82a0e7feccf54c",
+    "scripts/tests/fixtures/native_fork_ownership_20261017.rs": "7d98826d8e85f9a8feceb2fedff78863d3368676385ea2ef616c17f99188046d"
+  },
+  "linux_reference_root": "/home/holden/mckernel-work/scratch/native-source/linux-6.12.0-211.44.1.el10_2",
+  "linux_reference_sha256": {
+    "mm/util.c": "de20bb293f183c8faaff975fae2e59444f1e63794d4e4d4a1c6f4a38a5e2870a",
+    "mm/mmap.c": "eb389f96f6871408a425c886c8f334f71a98d9c8a4664678ad11d5faee7c3bee",
+    "mm/memory.c": "e97329a3efcf33701c9afb55cbb0f44b500336a4963ba6590d9d79bf9af02650",
+    "kernel/fork.c": "a0dd38fbb599576c8cfcaaffbf556dca11ac24d9ca400047c0a78d1d51f44120",
+    "include/linux/mm.h": "aac2bb23f3a07d0b6ab0e085c2a3fe4b00bc2f53bf5db237e1671ea39f346732"
+  },
+  "verified_existing_execution": {
+    "retained_stdout": "/home/holden/mckernel-work/scratch/native-cheap-20261017-qkXcIW/tmp/native-fork-ownership-20261017-cjg2waus/run.stdout",
+    "rust_result": "4 passed; 0 failed",
+    "observations": [
+      "Verbatim lookup_fault rejects a child-MM VMA with its inherited parent MappingFile with EACCES before LOOKUP. The parent-MM control issues LOOKUP and returns the expected page.",
+      "Verbatim Remote::worker rejects prepare=None and leaves the output handle zero; a successful Preparation control opens a worker; pending and failed Preparation controls reject it."
+    ],
+    "limit": "Existing captured actual-body tests were inspected, not rerun. Their Linux and transport objects are adapters; no real fork or guest acceptance is established."
+  },
+  "ordered_source_findings": [
+    {
+      "source": "kernel/syscall.c::do_fork:7502-7520",
+      "finding": "The first nr56 carries host clone flags, user start, length and newly cloned guest physical root. Its host result is assigned to newproc->pid only after do_syscall returns. The guest child already owns a cloned VM before this call."
+    },
+    {
+      "source": "kernel/syscall.c::do_fork:7530-7601",
+      "finding": "Failures after the first positive host return can reach release_ids before chain_thread. Native CLONE_TID suppresses the two user-TID-store errors, but allocation of mod_clone_arg remains a real pre-link failure. A negative first return reaches destroy_thread directly."
+    },
+    {
+      "source": "kernel/syscall.c::do_fork:7606-7676",
+      "finding": "chain_thread and chain_process precede the second nr56(args0=1,args1=child_tid); runq_add_thread follows its successful return. Second-handshake failure reaches free_mod_clone_arg then release_ids then release_thread. Link observation and runnable publication are different transitions."
+    },
+    {
+      "source": "kernel/syscall.c::do_fork:7683-7707",
+      "finding": "release_ids delegates SIGKILL to the Linux child, then release_thread destroys the guest object. Successful Linux kill submission is not evidence that Linux mappings and in-flight translations have drained. There is no current fork-specific post-destruction notification."
+    },
+    {
+      "source": "executer/user/mcexec.c::mcexec_clone_child_bridge and clone handling",
+      "finding": "The Linux child reopens mcos and invokes non-null CREATE_PPD before worker initialization and the shared semaphore post. Parent host completion and the separate success handshake are therefore both necessary. Worker initialization failure or child death can follow successful adoption but precede the first positive guest return."
+    },
+    {
+      "source": "pinned Linux mm/util.c::vma_set_file:322-332",
+      "finding": "vma_set_file is explicitly valid only during initial VMA setup. It does not provide a safe live-VMA file replacement transaction; using it to replace inherited files is rejected."
+    },
+    {
+      "source": "pinned Linux kernel/fork.c::dup_mmap:725-738 and mm/mmap.c::exit_mmap:1645-1696",
+      "finding": "dup_mmap invokes vm_ops.open on the duplicated VMA before taking its copied file reference. exit_mmap finishes TLB invalidation before removing/closing VMAs. mmap write lock alone does not substitute for the per-VMA write discipline described in include/linux/mm.h::vma_start_write."
+    }
+  ],
+  "vma_owner_decision": {
+    "representation": "Keep vm_file and its Linux mapping interval-tree membership unchanged during adoption. Move fault authority to an Arc<VmaOwner> stored as an owned raw reference in vm_private_data; VmaOwner contains the exact Registration and Mirror. File-private state is only a one-shot bootstrap Option<Arc<VmaOwner>>, consumed by the initial mmap callback after geometry validation, with no retained parent Registration thereafter.",
+    "bootstrap_invariant": "Initial mmap transfers exactly one owner reference to vm_private_data; failed initial mapping balances it through the actual Linux close/error path. Repeated mmap of the same file has no bootstrap owner and rejects. The file remains a module-pinned neutral backing object once bootstrap is consumed.",
+    "clone_invariant": "vm_ops.open increments the copied owner reference without allocation, and close consumes exactly one reference. Same-MM split/open/close and different-MM fork must both be tested. An inherited child owner may retain parent authority temporarily but must reject faults on MM mismatch until adoption; it must never silently retarget the parent.",
+    "adoption_invariant": "Under the referenced child MM write lock and applicable per-VMA write exclusion, prevalidate the complete inherited mirror extent, flags, offsets, vm_ops and exact parent owner provenance, including all fragments and holes. Preallocate child owners and bookkeeping before mutation. Replace each child vm_private_data owner and zap inherited PFNs under that same exclusion. Leave the parent's VMAs, file object and PFNs unchanged. Reject unrelated or partially covered mirrors before the first mutation.",
+    "no_hidden_parent_lifetime": "On successful rebinding, each child VMA releases its inherited parent owner; neutral file state and child image state contain no strong parent Registration/Preparation reference. A temporary cross-entry transaction may retain parent proof only until the observed link or ordered cancellation transition.",
+    "linux_lock_requirement": "Implement the pinned Linux equivalent of vma_start_write before mutating an already linked VMA. If the existing Rust binding surface cannot express the correct exclusion, stop at cheap failing tests and request one exact helper/binding extension; do not emulate it with mmap_lock alone or introduce an unreviewed Linux source patch."
+  },
+  "backend_transaction_decision": {
+    "state": ["Reserved", "AdoptedAwaitFirstReturn", "FirstReturnPublished", "GuestLinkObserved", "Linked", "AbortRequested", "HostRevoked", "GuestDestroyed", "Released", "Quarantined"],
+    "identity": "Bind exact OS generation, parent connection token, retained first Delivered request/worker/serial/response claim, child connection token and referenced Linux TGID/MM, original start/length/root, child PID and a fresh native guest nonce. Numeric PID, descriptor bytes, physical root or a userspace-supplied opaque token alone never authorize adoption.",
+    "discovery": "The child supplies only the unchanged rpgtable_desc. Derive its parent Registration from validated inherited VMA ownership; require one unique live Delivered first nr56 under that parent with exactly matching geometry/root. Extract worker, serial, CPU and native nonce from that retained request. Reject zero or multiple matches and replay. Retain both kernel connection borrows during sibling binding and verify their same runtime/OS generation before using the sibling context.",
+    "image": "Use an explicit Prepared versus Adopted image-owner variant. Adopted owns validated root/range/CPU/credentials and independent cleanup/procfs/mailbox state; it owns no fabricated Preparation or guest PREPARE/SCHEDULE exchange. LOOKUP uses its child root. Generic image-loader TRANSFER remains rejected for Adopted; retained-request-authorized TID and pager transfers keep their own exact validation. START and PREPARE cannot silently reinterpret Adopted state.",
+    "commit": "Preallocate the child Registration, image owner, procfs owner, worker capacity, VMA owners and cancellation tracking before any VMA mutation. Reserve the exact first delivery under Remote.slots. With child MM exclusion held, perform the infallible VMA rebind/zap and seal the backend commit before dropping exclusion or publishing the process registration. No failing allocation, user copy or sleepable external call may follow the first VMA mutation. If commit cannot be made infallible, preserve original owners in a preallocated rollback journal and prove rollback under the same exclusion.",
+    "ret": "Do not consume the first nr56 as a synthetic serviced syscall. Preserve its original ordinary launcher RET and response-memory claim through actual publication; validate any positive result equals the adopted referenced child PID. Negative return, parent worker close, child death and interrupted return enter cancellation. Keep independent transaction metadata after the first response claim is retired.",
+    "link": "Observe and validate the second retained parent nr56 before its userspace copy, correlating child PID, root, nonce and original parent transaction. GuestLinkObserved proves hash linkage but does not prove runq insertion. Preserve ordinary launcher completion so its shared success mechanism still works. Mark Linked only through the defined second RET publication transition, without inventing PREPARE/SCHEDULE success or procfs main-seen evidence.",
+    "ownership": "Use a reaper-owned transaction record that survives either file/process/worker close without an Arc cycle. Parent and child eventually have separate root, MM identity, registration, worker tokens, procfs owner and cleanup/retirement exchanges. Child fork can recursively use its own Adopted root. Closed or quarantined transactions continue excluding PID/token reuse.",
+    "linked_retirement": "Once linked, retain the existing successful cleanup, native retirement query, mailbox drainage, procfs drainage and thread-retired requirements. Never substitute PID-hash absence before proven linkage. Parent retirement must neither free child pages nor wait on the child's independent normal lifetime."
+  },
+  "native_guest_protocol_decision": {
+    "scope": "Native feature-gated do_fork only; legacy request behavior and unchanged mcexec/rpgtable_desc user ABI remain preserved. Fully initialize the native request fields rather than relying on stack leftovers.",
+    "first": "Retain args0=existing host clone flags,args1=start,args2=length,args3=root. Add args4=a nonzero monotonic native fork nonce and args5=a fixed reviewed version marker. Nonce wrap must reject new forks. Save nonce/root/length/PID as scalar locals before destructive cleanup.",
+    "second": "Retain args0=1,args1=child_tid and explicitly populate args2=length,args3=root,args4=nonce,args5=marker. Backend validates against the original transaction before normal userspace delivery. A failed second return still follows ordered cancellation.",
+    "abort_before_release": "Add native nr56 phase args0=2 with child PID if assigned, saved length/root/nonce/marker before every post-first-request guest destruction path, including negative first host return. Intercept this phase in kernel-owned host handling; never forward it to mcexec's generic clone-start branch. Close child admission and drain existing backend translations/copies, then obtain a transient live child MM reference and revoke every child-owned/inherited alias under the correct MM/VMA locks. Return success only after all relevant PFNs/TLBs and in-flight host accesses are revoked. If the MM is already exiting, require exact owner/VMA drainage after Linux unmapping, not merely mm_users==0 or an absent PID.",
+    "barrier_failure": "A failed or uncertain revoke barrier cannot permit guest release_thread to free the cloned VM. Retain/quarantine the non-runnable guest child and transaction; report the error. Do not manufacture abort success, drop the physical-root owner or spin-retry an unchanged failure. Avoid backend-slots/MM-lock inversion: mark admission closed under slots, release slots, revoke the MM, then revalidate the same transaction under slots.",
+    "after_release": "Only after HostRevoked may the guest destroy the child. Send native nr56 phase args0=3 with saved scalar identity after the actual final thread/VM destruction has completed. Host validates the exact nonce/root transaction without dereferencing the now freed root; only this event permits pre-link transaction retirement. A missing ACK retains/quarantines ownership. Duplicate ACK is idempotent only for that same unreused transaction identity.",
+    "destructor_proof": "Source inspection shows process_release_thread_body_result calls procfs deletion, thread destruction and VM release in order; process_release_vm_body_result performs ranges/address-space release only when its refcount reaches zero. Therefore return from void release_thread alone is not a general final-VM proof. The implementation must prove the unpublished fork's exact refcount/chain ownership in actual-body tests and gate ACK on final destruction, or expose an exact final-destructor completion hook. Never force a still-referenced VM's refcount to obtain the ACK. If a hook is required, stop and enumerate its exact process-helper source/ABI extension for independent review.",
+    "why_existing_events_fail": "Linux SIGKILL success is asynchronous; worker readiness proves neither guest linkage nor host alias revocation; native PID retirement query can observe absence before insertion; guest post-release ACK arrives too late to prevent aliases to already freed memory unless the prior revoke barrier succeeded."
+  },
+  "kernel_only_abi_scope": {
+    "selected_operations": "Reserve free command numbers 15=FORK_RESERVE,16=FORK_COMMIT,17=FORK_ABORT in application ABI v1; existing 1-14 remain byte-for-byte compatible. Author must document exact little-endian word layouts and reject wrong lengths/nonzero reserved fields before effects. This selection is source-contract review, not an execution release.",
+    "reserve_fields": "Kernel-retained parent sibling context, copied descriptor start/length/root, current referenced child identity/credentials; output fresh backend transaction token, original request nonce and CPU. A raw sibling pointer is permitted only as a synchronous kernel borrow while both Registration Arcs are retained; backend retains tokens, never the borrowed pointer. No opaque field is added to the user UAPI.",
+    "commit_fields": "Exact backend transaction token plus explicit reserved-zero field, invoked through its child connection. One successful commit; duplicate/cross-connection/wrong-state commit rejects.",
+    "abort_fields": "Exact transaction token, phase (begin/revoked), actual revocation result and reserved-zero field. Begin closes admission and records cancellation but does not release ownership. Revoked accepts success only from the retained mcctrl MM owner after its actual revoke/drain operation; guest phase-3 ACK is independently validated against the saved original request."
+  },
+  "next_implementation_packet": {
+    "owner": "/root/fork_ownership or a newly assigned independent implementation author; reviewer owns no implementation files",
+    "invariant": "No adopted fault uses a parent root, no guest page/root is destroyed while any host alias or operation can access it, and no unpublished child is retired from PID absence.",
+    "production_write_allowlist": [
+      "host-kernel/native-rust/abi/application.rs",
+      "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "host-kernel/native-rust/smp_service.rs",
+      "host-kernel/native-rust/smp_application.rs",
+      "host-kernel/native-rust/smp_application_image.rs",
+      "host-kernel/native-rust/smp_application_syscall.rs",
+      "host-kernel/native-rust/mcctrl_process.rs",
+      "host-kernel/native-rust/mcctrl_vm.rs",
+      "kernel/syscall.c"
+    ],
+    "test_write_allowlist": [
+      "scripts/tests/test_native_fork_ownership_20261017.py",
+      "scripts/tests/fixtures/native_fork_ownership_20261017.rs",
+      "NEW scripts/tests/test_native_fork_adoption_transaction_20261017.py",
+      "NEW scripts/tests/fixtures/native_fork_adoption_transaction_20261017.rs"
+    ],
+    "first_bounded_slice": "Implement the VMA owner representation plus explicit transaction transitions and failure-injection tests first. Keep the incomplete fork gate rejecting safely until all reserve/commit/revoke/destruction proofs are connected. Do not land a partial success path. Preserve the original negative fixture and capture; add changed-candidate controls with distinct expectations rather than deleting the original assertion history.",
+    "next_executable_observation": "Run actual-body cheap Rust/Python tests through the dispatcher's retained unprivileged profile. Verify owner reference balance on initial-map failure/fork/split/close, child faults route to a distinct child root after commit, parent faults remain unchanged, and cancellation blocks destruction until host revocation plus actual final-destruction proof.",
+    "required_vectors": [
+      "Every allocation/capacity/validation failure before first VMA mutation leaves parent and child unchanged and opens no child worker.",
+      "Competing CREATE_PPD calls, identical descriptor replay, mismatched parent/OS/MM/root/range/nonce, ambiguous retained requests and positive RET for another PID reject without publication.",
+      "Child worker open succeeds only for committed adopted state; no fabricated PREPARE/SCHEDULE exists and generic image TRANSFER/START reject adopted state.",
+      "First RET not published, first negative RET, parent worker close, child death before first return, child death before linkage and second-handshake failure retain or cancel the exact original transaction.",
+      "Reordered/duplicate second handshake and abort ACK, nonce/root reuse and parent/child PID reuse cannot retire another transaction.",
+      "A live child fault/transfer delays HostRevoked; host revoke error, MM exit in progress and missing final guest destructor proof prevent guest destruction/retirement.",
+      "Record an event trace proving admission close, operation drainage, PTE/TLB revocation, guest final VM destruction, then ACK; reject every reversed ordering.",
+      "Successful linked parent/child retire independently through their original cleanup/procfs/thread-retirement gates, including parent exit before child and child forking its own child."
+    ],
+    "frozen_oracle": "The original process.fork-exit diagnostic remains unchanged. Actual-body tests are source evidence only; eventual native compile and fresh guest fork-exit need separate dispatcher release and captures.",
+    "resource_share": "One cheap worker CPU, at most 1 GiB for read-only/model tests in the reviewed profile; no root, Docker, native module compile, guest, network, Git, ledger or manifest writes. Dispatcher must explicitly assign any larger compiler share from the shared budget.",
+    "failure_history": "Retain original runtime nr56=-95/raw wait status 256, rejected Mirror-only candidate hashes and existing corrected harness capture from native-fork-ownership-20261017.json. One failed candidate and one bounded correction per failure family, then exact expert escalation; no renamed-history reset.",
+    "stop_condition": "Stop after the concrete cheap transition/ownership checks or at the first unexpressible Linux lock/final-destructor boundary; return exact missing helper and smallest failing observation. No privileged execution and no partial fork acceptance. Do not gate independent scratch22/image source/build work on completion of this broader repair."
+  },
+  "review_limits": [
+    "This record selects the repair boundary and invariants; it does not certify an implementation that does not yet exist.",
+    "No production file, shared manifest/ledger, Git state, container or guest was changed by this reviewer.",
+    "The current unrelated dirty worktree was observed and preserved. The listed fork production sources still match the author's bound inputs at review time.",
+    "Continuous campaign and included-usage guards remain owned by the dispatcher/launcher; this bounded reviewer does not pause or complete the OS objective."
+  ]
+}

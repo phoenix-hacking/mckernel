@@ -1,5 +1,51 @@
 # Compact dispatcher handoff
 
+## Active authorized continuation: checkpoint 359, 2026-10-17
+
+The new user `--run` instruction resumes the existing saved thread and supersedes
+both historical preparation holds. Launcher PIDs are 23902/23943/23945; base
+HEAD/remote is `2fd71645bfae65d9e82feb1f0c7347c7961f0edd`. Exact adopted policy
+hashes and privileged read-only scratch21 reconciliation are in
+`../evidence/os-resume-reconciliation-20261017.json`. Launcher state stays owned
+by the launcher. Preserve nested-IHK and all preexisting WIP.
+
+Scratch UUID/device and exclusion inodes remain unchanged from preparation;
+scratch21 exit-1 container and failure evidence are intact, request lease absent,
+root development lock unheld and no heavy publisher observed. Cleanup is not
+released. Do not replay scratch21 or raw-remove its container/exclusions.
+
+Active owners: `scratch21_transaction` implements exact cleanup and crash tests;
+`rs011_authority` owns SAFETY-only source corrections and authority manifests;
+`scratch22_adapter` owns a new source-only preparation adapter; `fork_ownership`
+owns inherited-MM boundary/reproducer work; `shutdown_actual_bodies` owns new
+extracted-body regressions; `signal_oracle` owns next diagnostic preparation.
+`cheap_profile_review` independently reviews the compiler microtest envelope.
+All use GPT-6.1, disjoint write sets, no recursive agents, and shared seven-job/
+24-GiB resources. Dispatcher retains Git, compiler approval and single heavy
+execution ownership. Next: independently release exact scratch21 cleanup, finish
+and review source authority, push/fetch exact source, then fresh scratch22.
+Next new diagnostic is signal.mask-restore, exact stdout
+`handled=1 observed_blocked=1 restored=1\n`, empty stderr, exit 0.
+Counts remain 3 builds/12 diagnostic passes, 0/273 formal apps, 6/130 production,
+0/7 language gates. Continue after checkpoints until acceptance or a new stop/
+included-usage guard; the OS remains incomplete.
+
+Live priority clarification `20261017T024812921885Z-73ee68c3cb78401fb5492ed55d50cd75`:
+nearest deliverable is a reproducible working McKernel image with matching
+module/tool artifacts, source commit/hashes, build/boot/app commands and an honest
+tested/missing/broken feature list. Scratch21 cleanup and source authority are
+the shortest blockers to scratch22 build/boot. Broader fork work, catalog and
+external exposure do not delay that intermediate image milestone; all original
+acceptance obligations remain. Continue after the milestone and checkpoints.
+
+Later reporting baseline: preserve the additive supervising-chat record
+`engineering-estimate-20261017T025932Z.json` exactly, including its 14 original
+low-confidence ranges. On the user's return compare baseline/current engineering
+ranges, estimated percentage-point changes (a scalar means range-midpoint
+change), and concrete new implementation/test/integration evidence. No forced
+increase, averaging into whole-OS completion, or formal acceptance credit.
+This reporting request does not interrupt the image-first critical path.
+
 ## Latest preparation: GPT-6.1 and continuous launcher, 2026-10-17
 
 Start later with `python3 -B /home/holden/mckernel/scripts/run_os_parallel.py --run --background`.
