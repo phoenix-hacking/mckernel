@@ -14046,3 +14046,48 @@ When the user returns compare all 14 original ranges with evidence-based current
 estimates; scalar deltas must mean estimated range-midpoint changes. No forced
 increase, averaging to whole-OS completion, or acceptance credit. Continue the
 authorized campaign after this checkpoint and the intermediate image milestone.
+
+Continuation checkpoint 361, 2026-10-17: scratch21 terminal cleanup is now
+independently accepted, with no scratch21 replay. The sole reviewed execution
+and approved nonmutating terminal replay both exit zero with empty stderr.
+Stopped container `e1f6dd145149...20ea9` is absent. Original exclusion records
+are archived with unchanged live device 1828, inodes 57688/57687 and original
+hashes; the request, inputs, five failure files and 40 owner-evidence entries
+remain unchanged. Root/mutex locks are available; active exclusions, request
+lease and quarantine are absent. Exact raw streams, nine-row journal, plan,
+Docker log and archives are preserved in
+`../evidence/scratch21-cleanup-runtime-captures-20261017.json`. Independent
+`scratch21-cleanup-postflight-review-20261017.json` returns PASS_CLEANUP, SHA
+`bb15150fa9f68ce4f79eb28ac20268291ed78c594fcf744ab3d5e4b592b375bc`.
+
+Reviewed source authority is committed/pushed/fetched at
+`0a40e44230b9bb19c4e2e3a1109b2797b6c3afe1`, tree
+`5a2a17e3155b61ab3e2f2e18a8bbaceb95a89bb2`; all 12 authority files match the
+independent review and fetched blobs. Nested-IHK WIP and deleted tracked bytecode
+remain preserved and unused. Scratch22 adapter source has independent PASS with
+22 tests. Its build-wrapper correction independently PASSes 27 tests, including
+five actual child/flock signal and output-failure controls; original failed
+wrapper bytes/review remain immutable. No preparation/build execution release
+is inferred from those source results.
+
+Next executable step: generate a fresh scratch22 preparation release binding
+the accepted cleanup result/postflight and exact fetched source above, the live
+UUID/device/boot and six-root evidence alias census; independently review it,
+then run the adapter's ordinary-user --materialize once. Keep HEAD/controller
+fixed across that preparation; checkpoint its hash-bound release/review afterward.
+Use an actual fetched source anchor for the target while later metadata commits
+advance the campaign branch. Prepared-artifact review and a separate one-shot
+four-CPU/12-GiB/jobs<=4 heavy-build release then follow. Next new real diagnostic
+remains signal.mask-restore, exact stdout and exit zero.
+
+The optional fork lane is isolated at
+`/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1`, detached
+`09f43875...21d7b`; no fork patch affects this source target. Sparse-workspace
+recovery and its retained interrupted-copy bytes are recorded in
+`fork-workspace-recovery-20261017.json`. The lane has two production-file WIP
+slices plus targeted tests, leaves CREATE_PPD rejecting, and awaits cheap compiler
+profile extension. Missing VMA write-helper and final guest-VM destruction proof
+prevent full adoption. Broader fork repair does not delay scratch22.
+Current-window real guest apps/new candidate builds remain zero; baseline stays
+3 builds, 12 bounded diagnostic passes, 0/273 formal apps, 6/130 production and
+0/7 language gates. The image-first campaign continues after this checkpoint.

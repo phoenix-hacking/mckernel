@@ -1,5 +1,34 @@
 # Compact dispatcher handoff
 
+## Current continuation: checkpoint 361, cleanup accepted
+
+Scratch21 cleanup and immutable terminal replay exited zero; independent
+PASS_CLEANUP is `../evidence/scratch21-cleanup-postflight-review-20261017.json`
+SHA `bb15150fa9f68ce4f79eb28ac20268291ed78c594fcf744ab3d5e4b592b375bc`.
+The stopped container is removed, original ownership records are archived at
+their original inodes/hashes, all failure/input evidence is unchanged, and root
+lock/exclusion/lease state is clear. Raw evidence is in the runtime-captures
+record. No scratch21 replay or new workload ran.
+
+Exact reviewed/fetched scratch22 source target is
+`0a40e44230b9bb19c4e2e3a1109b2797b6c3afe1`, tree
+`5a2a17e3155b61ab3e2f2e18a8bbaceb95a89bb2`. RS-011 source checks/review PASS;
+original compiler/formal readiness remains pending. Source-reviewed scratch22
+adapter (22 tests) and build wrapper (27 tests) are committed. Next independently
+release ordinary-user preparation, materialize fresh scratch22 once, review
+actual artifact/request, then release the single pinned heavy build. During
+preparation keep controller HEAD fixed; hash-bind release/review WIP and commit
+them immediately afterward. Use an actual fetched target anchor as metadata
+commits advance the campaign branch. All other original release checks remain.
+
+Fork implementation stays in the disjoint sparse worktree recorded by checkpoint
+361 and cannot affect this source target. Its incomplete gate still rejects;
+VMA write-helper and final destruction proof remain explicit blockers. First
+new diagnostic after a reviewed build is signal.mask-restore. Image milestone
+requires exact image/modules/tools, hashes, commands and tested/missing features.
+Counts remain 3 builds/12 diagnostic passes, 0/273 apps, 6/130 production and
+0/7 language gates. Continue; no OS completion or campaign pause is claimed.
+
 ## Active authorized continuation: checkpoint 359, 2026-10-17
 
 The new user `--run` instruction resumes the existing saved thread and supersedes
