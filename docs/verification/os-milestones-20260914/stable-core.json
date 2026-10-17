@@ -155,7 +155,10 @@
     "shutdown_admission": "docs/verification/stability-native-shutdown-admission-source-success-20260928-1.json",
     "rocky_lean_source": "docs/verification/stability-rocky-lean-source-success-20260928-1.json",
     "image_retirement_mount_fix": "docs/verification/evidence/scratch22-image-mount-order-correction-20261017-1.json",
-    "image_retirement_reconciliation_source": "docs/verification/evidence/scratch22-image-reconciliation-source-review-20261017-1.json"
+    "image_retirement_reconciliation_source": "docs/verification/evidence/scratch22-image-reconciliation-source-review-20261017-1.json",
+    "image_retirement_actual_cleanup": "docs/verification/evidence/scratch22-authority3-image-cleanup-result-review-20261017-1.json",
+    "qmp_endpoint_admission": "docs/verification/evidence/native-diagnostic-qmp-integrated-review-20261017-1.json",
+    "current942_signal_mask_restore": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json"
   },
   "areas": [
     {
@@ -441,13 +444,16 @@
       "area": "ENV",
       "title": "Interruption, crash capture and verified cleanup",
       "status": "partial",
-      "result": "Current image retirement guard mount-order defect reproduced and corrected:10Python tests and independent source reviewPASS. Separate fresh recovery source passes23protocol tests and independent review; original quarantine remains unresolved pending root observation/cleanup.",
-      "next_check": "Run separately reviewed fresh read-only root recovery collector, then archival cleanup before exact current942 signal-mask diagnostic; absent PIDs alone and source tests do not prove retirement.",
+      "result": "Current image retirement recovered by separately reviewed fresh root observation and archival cleanup, both accepted. Signal attempt1 failed beforeboot on132byte QMP pathname and was positively retired. Narrow encoded107byte admission correction passes76integrated tests and independent review. Fresh signal2 actual McKernel mask-restore diagnostic and complete retirement accepted; original failures retained.",
+      "next_check": "Run staged calloc then file diagnostics under fresh exact releases; preserve native lifecycle restoration as separate unfinished requirement, not satisfied by QEMU retirement.",
       "evidence": [
         "prep",
         "plan",
         "image_retirement_mount_fix",
-        "image_retirement_reconciliation_source"
+        "image_retirement_reconciliation_source",
+        "image_retirement_actual_cleanup",
+        "qmp_endpoint_admission",
+        "current942_signal_mask_restore"
       ],
       "depends_on": []
     },

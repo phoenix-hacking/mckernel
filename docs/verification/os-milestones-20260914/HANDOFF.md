@@ -1,5 +1,18 @@
 # Compact dispatcher handoff
 
+Checkpoint376: actual current942 signal.mask-restore guest2 PASS33.352663s,
+independent PASS_DIAGNOSTIC_GUEST_AND_RETIREMENT. PID255 prepare/schedule/
+12deliveries/11returns/exit_group/cleanupACK/procfsdelete/retirement/release;
+exact40stdoutbytes, emptyerr,exit0,procfsempty. GuestS5 beforehostquit; QEMU-9
+retired/noerrors, exactcontainerremoved/all30clientsreaped/root27:4unheld.
+One new actual guest behavior this invocation; formalacceptance unchanged.
+Rawmachine pendingreviewflags remain immutable; additive decision records credit.
+Next calloc freshparent1828/108118 /scratch/ndcal-1 nonce
+5aab3db8a4bd4ca6857ad0158055b40d QMP92, manifest589a4a86, owner9084bfd3;
+independent exactrelease review underway. Then filef60d142f. TLS original2/4/8
+vectors preparation and separate lifecyclecollector implementation are ready
+independent lanes; no kernelpatch invented. Keep immutable942baseline, no rebuild.
+
 Checkpoint375: signal guest1 failed BEFORE BOOT: QMP endpoint132encoded
 bytes exceeds107; exit1 after301.856s, zero boot/payload/guest passes and no
 kernel failure. Independent RETIRED_FAILED_PREBOOT accepts actual owner/runner/

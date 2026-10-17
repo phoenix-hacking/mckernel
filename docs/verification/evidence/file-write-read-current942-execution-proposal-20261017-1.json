@@ -1,0 +1,174 @@
+{
+  "application_acceptance": false,
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/ndfile-1",
+    "--nonce",
+    "877ca28b8c5945d293f77c6082917319",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/file-write-read-current942-manifest-20261017-1.json",
+    "--manifest-sha256",
+    "f60d142f0b7a3bcedf059fb77176554b73a3475075961a5227ed101a64bd21ba"
+  ],
+  "author": "/root/signal_guest_binding",
+  "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "draft_oracle_caveat": [
+    "Freeze canonical output and reviewed input/oracle SHA256 before execution."
+  ],
+  "execution_count": 0,
+  "formal_case_credit": false,
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/file-write-read-current942-manifest-20261017-1.json",
+    "sha256": "f60d142f0b7a3bcedf059fb77176554b73a3475075961a5227ed101a64bd21ba",
+    "size": 6176
+  },
+  "next_task": "Dispatcher evaluates preceding signal/memory results, creates fresh parent identity, joins current prerequisites and obtains fresh one-shot execution review/release before invoking proposed argv.",
+  "nonce": "877ca28b8c5945d293f77c6082917319",
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "62797465733d31207772697474656e3d3120726561643d31206261645f696e6465783d312073697a653d3120656f663d300a62797465733d34303935207772697474656e3d3430393520726561643d34303935206261645f696e6465783d343039352073697a653d3430393520656f663d300a62797465733d34303936207772697474656e3d3430393620726561643d34303936206261645f696e6465783d343039362073697a653d3430393620656f663d300a62797465733d34303937207772697474656e3d3430393720726561643d34303937206261645f696e6465783d343039372073697a653d3430393720656f663d300a62797465733d3635353533207772697474656e3d363535353320726561643d3635353533206261645f696e6465783d36353535332073697a653d363535353320656f663d300a62797465733d31303438353736207772697474656e3d3130343835373620726561643d31303438353736206261645f696e6465783d313034383537362073697a653d3130343835373620656f663d300a",
+    "stdout_utf8": "bytes=1 written=1 read=1 bad_index=1 size=1 eof=0\nbytes=4095 written=4095 read=4095 bad_index=4095 size=4095 eof=0\nbytes=4096 written=4096 read=4096 bad_index=4096 size=4096 eof=0\nbytes=4097 written=4097 read=4097 bad_index=4097 size=4097 eof=0\nbytes=65553 written=65553 read=65553 bad_index=65553 size=65553 eof=0\nbytes=1048576 written=1048576 read=1048576 bad_index=1048576 size=1048576 eof=0\n"
+  },
+  "other_monitor_endpoints": [],
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828
+  },
+  "parent": {
+    "actual_parent_identity": null,
+    "identity_admission": "Dispatcher must create and bind fresh device/inode/mode/uid/gid during separate admission; this proposal does not create or reserve the path.",
+    "name_absent_at_preparation_lookup": true,
+    "path": "/home/holden/mckernel-work/scratch/ndfile-1",
+    "status": "PLANNED_NOT_CREATED"
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "A",
+      "",
+      "B"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "62797465733d31207772697474656e3d3120726561643d31206261645f696e6465783d312073697a653d3120656f663d300a62797465733d34303935207772697474656e3d3430393520726561643d34303935206261645f696e6465783d343039352073697a653d3430393520656f663d300a62797465733d34303936207772697474656e3d3430393620726561643d34303936206261645f696e6465783d343039362073697a653d3430393620656f663d300a62797465733d34303937207772697474656e3d3430393720726561643d34303937206261645f696e6465783d343039372073697a653d3430393720656f663d300a62797465733d3635353533207772697474656e3d363535353320726561643d3635353533206261645f696e6465783d36353535332073697a653d363535353320656f663d300a62797465733d31303438353736207772697474656e3d3130343835373620726561643d31303438353736206261645f696e6465783d313034383537362073697a653d3130343835373620656f663d300a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "planned_execution_count": 1,
+  "preparation_checks": {
+    "address_space_limit_bytes": 1073741824,
+    "artifact_corpus_rehashed": false,
+    "backend_or_prepare_attempt_called": false,
+    "cpu_affinity": [
+      7
+    ],
+    "generated_qmp_path_within_107_bytes": true,
+    "live_preflight_performed": false,
+    "manifest_hash_matches_expected": true,
+    "owner_hash_matches_current_pin": true,
+    "selected_reads_only": true
+  },
+  "prerequisites": {
+    "current_image_cleanup_and_retirement_authority": {
+      "inherited_signal_prerequisites_not_asserted": true,
+      "status": "DISPATCHER_MUST_JOIN_CURRENT_ACCEPTED_EVIDENCE"
+    },
+    "final_execution_release": {
+      "status": "PENDING"
+    },
+    "fresh_parent_identity": {
+      "status": "PENDING"
+    },
+    "independent_exact_execution_review": {
+      "status": "PENDING"
+    },
+    "live_preflight": {
+      "status": "PENDING_NOT_RUN"
+    },
+    "memory_diagnostic_order": {
+      "runtime_results_observed_by_this_task": false,
+      "status": "PENDING_AFTER_SIGNAL_AND_MEMORY"
+    },
+    "signal2_result_and_positive_retirement": {
+      "signal2_result_observed_by_this_task": false,
+      "status": "PENDING_DISPATCHER_ADMISSION"
+    }
+  },
+  "production_acceptance": false,
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "proposal_structure_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/signal-mask-restore-current942-execution-proposal-20261017-2.json",
+    "sha256": "7cedc92dea05f6cd7ebc321a7f06b3aab897cf6820c8beae92076f06260c51aa",
+    "size": 4278
+  },
+  "runtime_release": false,
+  "schema": "mckernel.file-write-read-execution-proposal.v1",
+  "scope": "Exactly one future diagnostic under unchanged profile, pending preceding diagnostic outcomes and fresh dispatcher admission. No parent creation, runtime, source changes, staging replay, compiler, root, mounts, live preflight, root lock, Git or acceptance promotion.",
+  "semantic_limits": "The unchanged source creates a temporary file once, writes, seeks to offset zero, reads/compares, checks fstat and EOF, then closes/unlinks it. It does not reopen the file, so the draft oracle's reopened/read wording is not an observed additional operation.",
+  "source_review_context": {
+    "recorded_owner_source_review": {
+      "actual_test_exit": 0,
+      "decision": "PASS_SOURCE_INTEGRATED_QMP_ADMISSION",
+      "diagnostic_sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "owner_sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+      "reviewer": "/root/image_retirement_review",
+      "test_sha256": "6d7fdebda5a064dfbf8f1ddac8e4a771f9db237c575e2475bf643190560a8818",
+      "tests_passed": 76
+    },
+    "scope": "Prior signal2 source-review context only; no independent execution admission for this proposed case.",
+    "source": "/home/holden/mckernel/docs/verification/evidence/signal-mask-restore-current942-execution-proposal-20261017-2.json"
+  },
+  "staging_evidence": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/file-write-read-current942-staging-20261017-1.json",
+    "sha256": "1e05e4c576e555237201f91538593c08dd34a0bce95d50300f8d4e0b691db571",
+    "size": 8201
+  },
+  "status": "PREPARATION_ONLY_PENDING_SIGNAL_RESULT_AND_FRESH_ADMISSION",
+  "task_id": "file-write-read-current942-execution-proposal-20261017-1",
+  "unix_monitor_endpoints": [
+    {
+      "encoded_bytes": 93,
+      "encoding": "os.fsencode on selected UTF-8/ASCII path",
+      "generated_path_only": true,
+      "generation": "planned parent / attempt-<32hexnonce> / qmp.sock",
+      "max_bytes": 107,
+      "path": "/home/holden/mckernel-work/scratch/ndfile-1/attempt-877ca28b8c5945d293f77c6082917319/qmp.sock"
+    }
+  ]
+}

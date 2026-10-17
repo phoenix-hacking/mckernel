@@ -14803,3 +14803,19 @@ review pending. Signalmanifest47eb9589 reused; calloc589a4a86/filef60d142f ready
 Static lifecycletool compiled only, not executed on host/device. Adopted
 VELOCITY.md and30-60minute review cadence, next13:55UTC; supervisor appends
 VELOCITY-REVIEWS.md. No estimate deltas/formal gate increases for these repairs.
+
+## Checkpoint 376 — actual current942 signal diagnostic passed
+
+Fresh signal2 actualexit0/33.352663s,HEAD6ea3b964 stable. Independent
+PASS_DIAGNOSTIC_GUEST_AND_RETIREMENT: realMcKernelPID255 prepared/scheduled,
+12deliveries/11returns/6routes,terminalexit_group/cleanupACK/procfsdelete/
+retirement/release. Exact40stdoutbytes handled=1 observed_blocked=1 restored=1
+plusnewline,emptyerr/wait0/completeuntruncated/procfsempty. GuestS5shutdown
+precedeshostquit; QEMU-9 reaped/noerrors. Containerexited0/noOOM/removed, all30
+clientsreaped/name-label-IDempty/root27:4free/profileexact. Creditone actual
+two-mask-bit diagnostic only; inheritedmasklimitations/formalapplication0
+unchanged. Preserveprebootfailure1/rawpendingreviewflags unchanged.
+Nextcallocmanifest589a4a86/freshndcal-1 parent1828/108118/nonce5aab3db8a4bd4ca6857ad0158055b40d
+QMP92, freshrelease reviewunderway; thenfilef60d142f. OriginalTLS2/4/8worker
+vectors andseparatelifecyclecollectorvariant preparedindisjointlanes. No new
+productionbodyrepair orformalM00-M13closure; acceptanceestimatedeltas0.
