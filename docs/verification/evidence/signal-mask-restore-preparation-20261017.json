@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "status": "PREPARATION_ONLY_CHEAP_REGRESSIONS_PASS",
+  "base_commit": "2fd71645bfae65d9e82feb1f0c7347c7961f0edd",
+  "case_id": "signal.mask-restore",
+  "application_acceptance": false,
+  "production_acceptance": false,
+  "formal_case_credit": false,
+  "new_guest_runs": 0,
+  "new_kernel_builds": 0,
+  "inputs_sha256": {
+    "scripts/application-tests/cases/signal/signal.mask-restore.c": "c5c7803f9d9592151d1c3508d832cd1c26aafca3ac55c420c209b1bc1c740a57",
+    "scripts/application-tests/oracles/signal.mask-restore.json": "9f7f1d39a26e9016331e1ad2032062d84feb72c23540064fe1994dd00dc56759",
+    "scripts/application-tests/native_diagnostic.py": "8af67bcf5015cbf1915a65fdb3ce50d09ed68ea39f3b08fa95fa29625fd7afbc",
+    "scripts/application-tests/native_diagnostic_runner.py": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+    "scripts/application-tests/native_diagnostic_guest_collector.c": "82825cf128689ba8f8a74d9528c1acffb724a9356a2c6192c67c8abe4a74965e",
+    "scripts/application-tests/native_diagnostic_container_owner.py": "740f507631e9076ef2fd8961206ff69a87abed4c686167348b2dc5ded3ce4034",
+    "docs/verification/evidence/native-diagnostic-signal-block-pending-pass-20261001.json": "f1f83acb838d278daffda65f1f9d4298d1b9d5fd486c7155cd0b8569d3b29dcf",
+    "scripts/tests/test_native_signal_mask_restore_20261017.py": "fc5ab8d9cf95e62e4998e655ee66713204f1c91a75519e491c79baa6eab61425"
+  },
+  "oracle": {
+    "stdout_utf8": "handled=1 observed_blocked=1 restored=1\n",
+    "stdout_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+    "stderr_hex": "",
+    "exit_code": 0,
+    "raw_wait_status": 0
+  },
+  "independent_semantics": {
+    "kind": "POSIX signal-mask specification reasoning; not native runtime evidence",
+    "rule": "For zero sa_flags, SIGUSR1 handler entry adds sa_mask (SIGUSR2) and the delivered signal SIGUSR1 to the caller mask; normal signal return restores the saved caller mask.",
+    "payload_observations": [
+      "Handler sees SIGUSR2 blocked and increments handled exactly once.",
+      "After raise returns, SIGUSR1 and SIGUSR2 membership match their respective baseline membership."
+    ],
+    "limitations": [
+      "Automatic SIGUSR1 blocking inside the handler is required by the specification but is not inspected by this frozen payload.",
+      "Exact restoration of arbitrary mask members is not proved: only SIGUSR1 and SIGUSR2 are compared. The checked-in oracle's broad relational assertion and unresolved-expectations field remain unchanged and cannot establish formal acceptance.",
+      "Baseline is queried rather than normalized. SIGUSR1 must initially be unblocked for synchronous handling; SIGUSR2 must initially be unblocked to make the observed_blocked bit evidence of augmentation.",
+      "No nesting, SA_NODEFER, SA_RESETHAND, alternate stack, multithreaded delivery, nonlocal handler exit or pending-signal ordering is tested.",
+      "The unused required set is initialized but never used; it adds no coverage."
+    ],
+    "frozen_input_changes": "none"
+  },
+  "cheap_regression": {
+    "command": "python3 -B -m unittest discover -s scripts/tests -p test_native_signal_mask_restore_20261017.py -v",
+    "result": "5 tests PASS; 0.004 seconds; exit 0",
+    "profile": "Python only; no compiler, Docker, root, network or payload execution; 1 CPU/1 GiB planning share; under 120 seconds",
+    "checks": [
+      "Frozen payload and oracle hashes and exact expected stream bytes.",
+      "Independent set-rule model across eight baseline combinations and explicit whole-mask-restoration counterexample.",
+      "Synthetic collector report satisfies the existing evaluator only as PROTOCOL_PASS with all acceptance/execution booleans false.",
+      "Evaluator rejects missing newline, nonempty stderr, nonzero exit, signal death, retained procfs, missing EOF, truncation and wrong argv.",
+      "Evaluator rejects missing actual route, retirement, process release or procfs deletion markers, missing QMP shutdown and uncertain teardown."
+    ]
+  },
+  "smallest_future_recipe": {
+    "authority": "Not an execution release. Dispatcher must first accept scratch21-specific cleanup, finish reviewed source authority, verify exact commit/push/fetch, build fresh scratch22 artifacts and obtain independent one-shot execution release. Never replay scratch21 or historical diagnostic attempts.",
+    "collector_selection": "Default startup collector, no ND_CORE_* or ND_FUTEX definitions. Its existing extra argv entries are harmless to the frozen int main(void) payload. Reuse an authenticated collector only when its exact source/compiler binding still matches; otherwise dispatcher builds it in its approved compiler profile.",
+    "collector_build_command_template": "/usr/bin/gcc -std=gnu11 -O2 -Wall -Wextra -Werror -static -fno-pie -no-pie -Wl,-z,noexecstack /home/holden/mckernel/scripts/application-tests/native_diagnostic_guest_collector.c -o FRESH_COLLECTOR_OUTPUT/init",
+    "payload_build_command_template": "/usr/bin/gcc -std=gnu11 -O2 -Wall -Wextra -Werror /home/holden/mckernel/scripts/application-tests/cases/signal/signal.mask-restore.c -o FRESH_PAYLOAD_OUTPUT/app",
+    "compiler_note": "These are command shapes only; dispatcher owns compiler approval, exact tool/libc binding and fresh output names. Historical collector attempt 1 could not find static libc in the container; unchanged compiler environments must not repeat it. No compiler was run in this preparation.",
+    "manifest_payload": {
+      "cwd": "/case/work",
+      "argv": ["/bin/mcexec", "-t", "1", "0", "app", "A", "", "B"],
+      "env": {"PATH": "/usr/bin:/bin", "COKERNEL_PATH": "/apps"},
+      "oracle": {
+        "stdout_hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+        "stderr_hex": "",
+        "exit_code": 0
+      },
+      "stdout_limit_bytes": 1024,
+      "stderr_limit_bytes": 1024
+    },
+    "staging": "Use native_diagnostic_overlay.py and the strict schema-1 manifest to bind fresh payload, default collector, exact newly reviewed scratch22 image/modules, mcexec, native_boot, loader/libc, bzImage, base and derived initramfs plus authenticated final member map. Do not rewrite a historical manifest or assert argv ['/apps/signal.mask-restore']: actual default collector launches app A empty-string B from /apps/app.",
+    "reviewed_single_guest_profile": {
+      "container_cpuset": "2-5",
+      "container_cpus": 4,
+      "container_memory_gib": 12,
+      "swap": false,
+      "tasks": 512,
+      "network": false,
+      "isolation": "Existing dropped capabilities/no-new-privileges/read-only inputs/private writable attempt parent",
+      "manifest_profile": {"name": "native-diagnostic-4vcpu-8192mib", "vcpus": 4, "memory_mib": 8192, "numa_nodes": 2},
+      "guest": "q35 TCG; no NIC/display; one McKernel CPU and 128 MiB",
+      "minimum_free_gib": {"host": 16, "scratch": 12},
+      "lease": "Exactly one heavy build/guest; fresh live identities and the existing development lock; shared aggregate budget applies"
+    },
+    "execution_command_template": "/usr/bin/sudo -A /home/holden/anaconda3/bin/python3 -B /home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py --attempt-parent FRESH_REVIEWED_ATTEMPT_PARENT --nonce FRESH_REVIEWED_NONCE --owner-sha256 FRESH_REVIEWED_OWNER_SHA256 --manifest FRESH_BOUND_MANIFEST --manifest-sha256 FRESH_BOUND_MANIFEST_SHA256",
+    "template_rule": "Every uppercase operand must be replaced and independently reviewed against fresh live artifacts before execution. No attempt names or release identities are allocated by this preparation.",
+    "required_evidence": [
+      "Exact artifact/source/tool hashes, manifest/overlay joins, scratch UUID and fresh device/inode, boot/process/container/lock/exclusion identities required by the actual release.",
+      "Unchanged payload stdout bytes including final newline, empty stderr, raw wait status 0; not QEMU host stdout.",
+      "One ND_PAYLOAD report with exact actual argv/env/cwd, ordered guest timestamps, bounded untruncated streams, EOF and zero discarded bytes.",
+      "Kernel serial/debugcon/dmesg without failure markers; actual SCHEDULE, paired sampled syscall delivery/RET/return_route identities, terminal exit_group then normal retirement/process release and procfs publication/deletion.",
+      "Retained procfs_empty=true, payload.stdout/payload.stderr, QMP transcript with terminal shutdown, exact QEMU process group identity/reap, container state/OOM/resource inspection and verified teardown.",
+      "Capture available evidence that initial SIGUSR1 and SIGUSR2 mask bits are clear. Its absence does not prevent the existing diagnostic check, but retain the inherited-mask limitation and do not claim independent augmentation/formal exact-mask acceptance."
+    ],
+    "stop_condition": "Any authority/identity/resource/oracle/route/shutdown/teardown mismatch: preserve original failure, no one-shot retry. One bounded correction per failure family, then expert escalation."
+  },
+  "prior_signal_block_pending": {
+    "status": "Historical DIAGNOSTIC_PASS only",
+    "stdout_utf8": "pending_before=1 pending_after=0 handled=1\n",
+    "replay": false,
+    "scope": "Different signal behavior and old artifacts. It does not establish mask-restore behavior or authorize dual-guest concurrency in this invocation."
+  }
+}

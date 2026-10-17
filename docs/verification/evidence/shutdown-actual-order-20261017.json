@@ -1,0 +1,89 @@
+{
+  "schema": "mckernel.shutdown-actual-order.v1",
+  "status": "PASS_LAYER_B_PENDING_INDEPENDENT_SEMANTIC_REVIEW",
+  "base_commit": "2fd71645",
+  "scope": "Unprivileged sequential extracted-production-body regression; no native, compiler-candidate, guest or formal acceptance increment.",
+  "inputs": {
+    "scripts/tests/test_native_shutdown_v6_actual_order_20261017.py": "77603fd44c5672c6db264317277f98609c7265e98f514483263f895539edf81d",
+    "scripts/tests/fixtures/native_shutdown_v6_actual_order_20261017.rs": "4f636b028380f37171f7b1d0ac9f16ba1a68ed12298f470d6bacd5bd8e4177be",
+    "scripts/tests/test_native_shutdown_v6_provider_integration_20261001.py": "764e7a65d2cd3ecefd4c0ada4901707ad9abd94b8cd6d547bddeb65b0fd28cbd",
+    "scripts/tests/fixtures/shutdown_v6_provider.rs": "2cf0952892bdd0cc2643e2422682249a0307df946fbca2a1f0053c8b8fc3df6a",
+    "host-kernel/native-rust/os_registry.rs": "b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6",
+    "host-kernel/native-rust/os_runtime.rs": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+    "host-kernel/native-rust/smp_memory.rs": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+    "host-kernel/native-rust/ihk_smp_x86_64.rs": "ead31123d69508bd678f321137e9fba023621a46cdf86aa3466381b966b52b44"
+  },
+  "executed_actual_bodies": [
+    "Complete Admission and AdmissionOwner implementations including Drop, ShutdownAdmission commit/Drop",
+    "Complete shutdown_v6_outcome, shutdown_errno and runtime finish_shutdown",
+    "Entire production os_registry module before cfg(test), including begin_shutdown, ShutdownGuard commit/mark_irreversible/Drop and actual atomic word packing",
+    "Complete provider ihk_smp_shutdown_v6 and shutdown_v6_post_effect",
+    "Complete MemoryContext close_irq_senders_for_shutdown and finish_shutdown",
+    "Complete BootStorage Drop"
+  ],
+  "stubbed_boundaries": [
+    "Fixture transaction orchestration replaces os_request; no file/lease/module or operation-lock execution",
+    "CPU physical reset/hotplug and CPU logical transaction are stubs; no smp_cpu production body executes",
+    "Physical IRQ closure/drain and mapping transaction allocation/commit remain boundary stubs",
+    "No concurrent producer/consumer, kernel module, native runtime or guest execution"
+  ],
+  "new_behavior_oracles": [
+    "Shared exact registry/provider slot and generation; success commits NotBooted with admission closed and one CPU/memory/boot retirement",
+    "Pre-effect IRQ refusal restores Running and open admission without reset/release",
+    "Post-effect IRQ refusal retains Shutdown and closed admission; same-generation retry completes",
+    "Live admission owner refuses close without physical effects"
+  ],
+  "execution": {
+    "owner": "dispatcher",
+    "release": "Dispatcher-reported PASS_LAYER_B reusable cheap profile",
+    "resources": "CPU affinity 6; 2 GiB; wall180/cpu150/nofile256/fsize64MiB/core0; max8 processes; sequential compiler/test",
+    "command": "python3 -B -m unittest scripts.tests.test_native_shutdown_v6_actual_order_20261017",
+    "compiler": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc --edition=2021 --test -Dwarnings <variant>.rs -o <variant>",
+    "fixture_command": "<variant> --test-threads=1 [<selected-test> --exact]",
+    "result": "exit0; 2 Python tests PASS; positive fixture 13 passed/0 failed; all3 compiled negative mutations rejected",
+    "root": "/home/holden/mckernel-work/scratch/native-cheap-20261017-dFHbdz",
+    "capture_sha256": "18a9fde142355b8ade286937adf2980974b825e8e24bda811a3a799dc7155fab",
+    "generated_relative_root": "tmp/shutdown-actual-order-f9vuazx4",
+    "all_compile_statuses": 0,
+    "all_compile_stdout_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "variants": {
+      "actual": {
+        "source_sha256": "6ab9f0d00117328ef7d934300c97b92e69f0a1d28d82d0c8a659fd947c867247",
+        "status": 0,
+        "stdout_sha256": "a31e67c47fef171b9218236b5090d702dbe33632ce59dfcb780804f669a34f75",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "omit_physical_stop": {
+        "source_sha256": "79a6cace08675c98aeebad44f80681e86e94a637b3255d1039c12c229673f4e2",
+        "status": -6,
+        "required_diagnostics": ["reconcile before physical reset/reonline", "panic in a function that cannot unwind"],
+        "stdout_sha256": "4d142a6116c31d37f2947680ce46b9d028b0ba2a85e7429b9bcd67ae2a007d95",
+        "stderr_sha256": "5c66e64e0ebbfb9323608fb9c50d26e3b214a86f68861c575b093a4791272d9a"
+      },
+      "post_effect_as_pre_effect": {
+        "source_sha256": "55afde42c1cc7736004d4c2239ed5c6dd7714ebb3d700a98d70336e189b1d288",
+        "status": 101,
+        "required_diagnostics": ["assertion failed: runtime::closed()"],
+        "stdout_sha256": "f3ab680c27dc25bcdc40642290731932b2b18aed7e2a4e168361aaa944ebba93",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "omit_irreversible_publication": {
+        "source_sha256": "2930b9eb35099fbe42cc258aefee17bc8775a3c079ab1a95fc7cdf5b75ef08b4",
+        "status": 101,
+        "required_diagnostics": ["assertion `left == right` failed", "left: Running", "right: Shutdown"],
+        "stdout_sha256": "fbb30c55a64ef5f232ad9de032bb791e2b9cc11ea37fcfc531d84cabf6493741",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "failure_family_history": {
+    "initial_root": "/home/holden/mckernel-work/scratch/native-cheap-20261017-bqo2aT",
+    "initial_capture_sha256": "070c8bac4799d8b12e723c74e84c7a34ceab23e6f3d835e169d16779afea42de",
+    "initial_result": "Harness-only failure: positive13 passed and all mutations rejected; generic assertion-word expectation rejected correct explicit ordering panic/SIGABRT across extern C callback",
+    "bounded_correction": "Driver now requires exact per-mutation exit status and intended diagnostics; production bodies and fixture unchanged",
+    "corrections_used": 1,
+    "preservation": "Both original and corrected roots, all generated source/binaries and raw compiler/run streams/statuses retained; no replay or cleanup"
+  },
+  "next_observation": "Independent semantic boundary review of these exact files; then dependency-ready native/guest shutdown only under fresh current-artifact execution authority. Immediate campaign diagnostic remains signal.mask-restore after scratch cleanup and fresh build release.",
+  "acceptance_delta": {"current_candidate_builds": 0, "real_guest_apps": 0, "formal_application_cases": 0, "production_gates": 0}
+}

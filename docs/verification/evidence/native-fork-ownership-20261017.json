@@ -1,0 +1,132 @@
+{
+  "schema": "mckernel.native-fork-ownership-boundary.v1",
+  "status": "ACTUAL_BODY_NEGATIVE_REPRODUCER_PASS_REPAIR_BOUNDARY_PENDING_REVIEW",
+  "source_head": "2fd71645bfae65d9e82feb1f0c7347c7961f0edd",
+  "owner": "/root/fork_ownership",
+  "production_changes": false,
+  "application_acceptance": false,
+  "production_acceptance": false,
+  "formal_case_credit": false,
+  "failure_history": {
+    "original_runtime_evidence": "docs/verification/evidence/native-diagnostic-dual-new-behavior-failure-20261001.json",
+    "original_runtime_attempt": "/home/holden/mckernel-work/scratch/dual-guest-taifr8lg",
+    "observed_syscall": 56,
+    "observed_return": -95,
+    "raw_wait_status": 256,
+    "rejected_mirror_only_patch_evidence": "docs/verification/evidence/native-diagnostic-signal-block-pending-pass-20261001.json",
+    "rejected_process_sha256": "4582efc49fcea7f7a16ee8fdcc31ac903faf3d271ea65458562d31272129fcff",
+    "rejected_vm_sha256": "2398178f558de8dcf6878d01800ab06c69e0152b832fec01178e2824ed72736d",
+    "expert_result": "No local-only production patch attempted. The assigned two production files cannot supply the absent backend adoption and lifecycle APIs.",
+    "bounded_harness_correction": "The unexecuted initial driver used TemporaryDirectory and did not retain compiler/test streams. Independent profile review rejected its retention behavior. The single correction uses persistent mkdtemp plus per-command bytes/statuses. The corrected driver passed its first compilation and execution."
+  },
+  "source_sha256": {
+    "host-kernel/native-rust/mcctrl_process.rs": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+    "host-kernel/native-rust/mcctrl_vm.rs": "83630dbe469466c7f69f51feb3a85438e2ae20049346b5e940d89d355f590ab3",
+    "host-kernel/native-rust/abi/application.rs": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+    "host-kernel/native-rust/ihk_smp_x86_64.rs": "ead31123d69508bd678f321137e9fba023621a46cdf86aa3466381b966b52b44",
+    "host-kernel/native-rust/smp_service.rs": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+    "host-kernel/native-rust/smp_application.rs": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+    "host-kernel/native-rust/smp_application_image.rs": "7fb8c862a1793ea4db6f90200adb9f78ee9b9b2abd9899b9ffd4671d647d7985",
+    "host-kernel/native-rust/smp_application_syscall.rs": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55",
+    "host-kernel/native-rust/application_syscall.rs": "03007f44c020c5d0cf797b18568ef8b329fd5cb4e81abe80bb5c542b58020c25",
+    "host-kernel/native-rust/application_rpc.rs": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+    "kernel/syscall.c": "1f4836b5deef84b75801e461d4d13f683db2cb74802454f96965e8b7ca011647",
+    "executer/user/mcexec.c": "310301305e41bab4eda63026849ee6f166bb6e5d4d6f2c789aa8003e94745056",
+    "executer/include/uprotocol.h": "1770a59cf4486380eb5aa483d3634dc1e4c9c9c16d1bf09865d4ff8f71191e69"
+  },
+  "executable_reproducer": {
+    "profile_review": "docs/verification/evidence/native-cheap-profile-review-20261017.json",
+    "execution_owner": "dispatcher",
+    "python_command": ["/home/holden/anaconda3/bin/python3", "-B", "-m", "unittest", "scripts.tests.test_native_fork_ownership_20261017", "-v"],
+    "wrapper_profile": {
+      "cpu": 7,
+      "planning_ram_bytes": 2147483648,
+      "rlimit_as_bytes": 2147483648,
+      "rlimit_cpu_seconds": 150,
+      "wall_seconds": 180,
+      "rlimit_nofile": 256,
+      "rlimit_fsize_bytes": 67108864,
+      "rlimit_core_bytes": 0,
+      "environment": "Dispatcher-cleared environment and private HOME/TMPDIR under the capture root; exact reusable constraints are in the profile review. No root, Docker, guest, network or production writes."
+    },
+    "driver": "scripts/tests/test_native_fork_ownership_20261017.py",
+    "driver_sha256": "ea08f17efb24a1ff2ba40e41bf667abfc8acf9f5a1d10a7a0a82a0e7feccf54c",
+    "template": "scripts/tests/fixtures/native_fork_ownership_20261017.rs",
+    "template_sha256": "7d98826d8e85f9a8feceb2fedff78863d3368676385ea2ef616c17f99188046d",
+    "verbatim_bodies": ["mcctrl_vm.rs::lookup_fault", "smp_application.rs::Remote::worker"],
+    "capture_root": "/home/holden/mckernel-work/scratch/native-cheap-20261017-qkXcIW",
+    "generated_root": "/home/holden/mckernel-work/scratch/native-cheap-20261017-qkXcIW/tmp/native-fork-ownership-20261017-cjg2waus",
+    "retained_files_sha256": {
+      "unittest.capture": "58ba3bab256611ea55799138e9e188bb545a6f56c6cd4cee256a7266e4370c1c",
+      "inputs.sha256": "2072d4522818a1dca3f19efc8d84360b207098f6e7eaea8cb37cf65002e04f14",
+      "status": "58304e22a2335464bf6b54991bf5fffa13bc960529269f5fe380c510933ba821",
+      "tmp/native-fork-ownership-20261017-cjg2waus/actual_bodies.rs": "57e6006ce6121ffbefb65cf81cf27edf638dce45c7afd11954cc80070d2075b9",
+      "tmp/native-fork-ownership-20261017-cjg2waus/actual_bodies": "d22d92ae6126e7bf642eecd0a422bc60f5246272293d536a62888bd3c1a0c3fb",
+      "tmp/native-fork-ownership-20261017-cjg2waus/compile.command.json": "f1ada01e1c52ed87e10716c0c79c80ac5626a102548d0e056f8fe7a6447c9774",
+      "tmp/native-fork-ownership-20261017-cjg2waus/compile.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+      "tmp/native-fork-ownership-20261017-cjg2waus/run.command.json": "b9984a983f414adb6a9834d3956d2942d8125b8d505daf8368b263847486fc4c",
+      "tmp/native-fork-ownership-20261017-cjg2waus/run.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+      "tmp/native-fork-ownership-20261017-cjg2waus/run.stdout": "f4efd364316a0e0fd0597e1e112c78d10ac59418030ce7e6d57069ba883089e8",
+      "tmp/native-fork-ownership-20261017-cjg2waus/run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tmp/native-fork-ownership-20261017-cjg2waus/compiler-version.stdout": "ecda74ca828b18debf1624cb36209a5b844fb1e1c1905ffb3d51b56cc275f96f"
+    },
+    "result": {"python_tests_passed": 2, "rust_tests_passed": 4, "failed": 0},
+    "observations": [
+      "The production lookup_fault body rejects a child MM paired with the inherited parent MappingFile before invoking LOOKUP; its parent-MM control invokes LOOKUP and returns the fixture page.",
+      "The production Remote::worker body rejects a newly reserved child with prepare=None, without opening a mailbox worker or emitting a handle.",
+      "A successfully prepared control opens its worker, while pending or failed preparation does not."
+    ],
+    "scope_limit": "Linux VFS/MM objects and backend transport are test adapters. These executions demonstrate the exact unchanged host decision bodies, not kernel module integration, real VM fault delivery, fork implementation or guest acceptance."
+  },
+  "finite_missing_apis": [
+    {
+      "path": "host-kernel/native-rust/abi/application.rs",
+      "need": "Add kernel-only fork reserve/commit/abort operations through the existing retained application connection. A reservation binds exact parent connection and retained delivery, child connection, referenced Linux child identity, validated range and physical root. No user-provided opaque worker/delivery token or unvalidated table is authority. Do not choose opcode values before independent contract review."
+    },
+    {
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "need": "Route the added operations through application_invoke with exact buffer sizes and existing OS/module lease; unknown operations remain rejected."
+    },
+    {
+      "path": "host-kernel/native-rust/smp_service.rs",
+      "need": "Connect fork reservation to the exact runtime memory validator and application Remote. LOOKUP/TRANSFER must resolve an explicit adopted child image owner rather than parent Preparation or a fabricated PREPARE response."
+    },
+    {
+      "path": "host-kernel/native-rust/smp_application.rs",
+      "need": "Own the cross-entry fork reservation, all preallocated child state, commit/rollback, successful guest-link observation, cancellation and retirement under the existing slots lock. New child state must support independent workers/procfs/cleanup without emitting PREPARE or SCHEDULE for the existing guest child. Preserve all existing prepared-image paths."
+    },
+    {
+      "path": "host-kernel/native-rust/smp_application_image.rs",
+      "need": "Represent adopted image geometry/root/CPU and credentials explicitly. Preparation contains a real pending exchange and cannot safely be synthesized as success. Separate adopted ownership from PREPARE buffers, thread target and schedule authorization."
+    },
+    {
+      "path": "host-kernel/native-rust/smp_application_syscall.rs",
+      "need": "Inspect and exclusively reserve the exact retained Delivered nr56 request, matching args1=start,args2=len,args3=root, worker ownership and parent token. Retain the response claim through reservation and ordinary RET publication; reject simultaneous/replayed adoption. Reconcile the second nr56 linkage handshake and cancellation with worker/process close."
+    }
+  ],
+  "existing_reusable_apis": [
+    "application_syscall::Request already exposes number/arguments/pid/requester/cpu/response and immutable retained wire bytes.",
+    "application_rpc::Exchange already supports cleanup_target(cpu,0) and the native retirement query for a successfully linked child PID.",
+    "smp_procfs::Process::new already creates a child-specific token/PID/CPU/credential owner; its existing main-seen and thread-retirement gates must remain required.",
+    "smp_memory::application_connection and IHK's existing open/invoke/close exports already retain the exact OS generation; a new C export is not required by the proposed host contract."
+  ],
+  "assigned_files_required_in_complete_repair": {
+    "host-kernel/native-rust/mcctrl_process.rs": "Decode actual rpgtable,start,len UAPI field order for LP64/compat; validate retained inherited parent provenance plus a referenced child PID/MM; preallocate the unpublished child registration/worker ownership; serialize competing CREATE_PPD; publish only after the backend and VMA transaction has reached its infallible commit point.",
+    "host-kernel/native-rust/mcctrl_vm.rs": "Prevalidate every inherited child VMA under its MM write lock, replace actual child fault ownership and invalidate inherited parent PFNs. Rebinding only Registration.mapping does not affect fault routing. Any per-VMA owner design must implement fork/split/open/close references and remove the inherited file's hidden parent-registration retention; any file-rebind design must preserve Linux mapping interval-tree/file-reference invariants. Choose and review one concrete Linux-compatible design before implementation."
+  },
+  "two_handshake_invariants": {
+    "first": "kernel/syscall.c::do_fork delegates nr56 with clone host flags, child range and newly cloned page-table root BEFORE assigning newproc->pid from the host result. Reserve only the exact Delivered request; descriptor values alone confer no authority.",
+    "second": "After chain_thread and chain_process, the guest delegates another nr56 with args0=1,args1=child_tid BEFORE runq_add_thread. Correlate it to the first retained parent transaction and actual committed child PID. This is the existing success-side proof that guest PID linkage occurred.",
+    "before_second": "An absent guest PID hash is not a retirement proof: the first host return may not yet have installed that PID. Child worker readiness and child scheduled/retired flags must not fabricate that proof.",
+    "independent_lifetimes": "After successful linkage, parent and child own different registration, mirror/MM identity, backend image root, worker tokens, procfs owner and cleanup/retirement exchange. Release the temporary parent fork reservation only at the proven transition; the child must not retain the parent's active cleanup lifetime."
+  },
+  "guest_boundary_decision_required": {
+    "success_path_guest_change": false,
+    "failure_path_candidate": "kernel/syscall.c::do_fork",
+    "reason": "Paths after the first successful host return can go to release_ids/destroy_thread before the second linkage handshake. There is no fork-specific notification after release_thread in the inspected body. Current parent/child backend APIs cannot prove that this unpublished guest child has been destroyed merely from an absent PID hash.",
+    "required_review_decision": "For complete pre-link failure retirement, extend the native guest path with an exact parent-transaction/root-bound post-release acknowledgement unless independent review identifies an existing ordered event that already proves that release. A reserve/abort host opcode alone is insufficient. Preserve the legacy path and original request fields. Any uncertain postpublication failure must retain/quarantine the transaction rather than report complete rollback.",
+    "not_yet_authorized": "No guest or additional host production file was changed. The dispatcher must receive independent boundary review before extending this lane."
+  },
+  "next_executable_observation": "Independently review the finite host/guest boundary, select a concrete VMA owner representation, then add actual-body transaction failure-injection tests for each allocation/validation boundary, competing adoption, retained parent close, child death before linkage, both handshake orders, real parent/child faults and final independent retirement. Keep the original process.fork-exit oracle unchanged for the eventual fresh candidate.",
+  "stop_condition": "This expert lane stops production work at the demonstrated two-file boundary. It must not delay the independently dependency-ready scratch22 source/build path, repeat the rejected Mirror-only design, or claim runtime/fork acceptance."
+}

@@ -1,0 +1,128 @@
+{
+  "schema": "mckernel.native-cheap-profile-review.v1",
+  "recorded_at_utc": "2026-10-17T02:46:51Z",
+  "reviewer": "/root/cheap_profile_review",
+  "model": "gpt-6.1-sol",
+  "implementation_ownership": false,
+  "decision": "PASS_LAYER_B",
+  "scope": "Reusable unprivileged actual-body Rust microtest command profile only; candidate semantic correctness and privileged execution are not released by this decision.",
+  "reviewed_head": "2fd71645bfae65d9e82feb1f0c7347c7961f0edd",
+  "reviewed_inputs_sha256": {
+    "docs/verification/os-milestones-20260914/CONVERGENCE.md": "f3f1363704fc86acac6f3b0bb0028d51a08799f35139e7db0d259dbd6bcf3be5",
+    "docs/verification/evidence/native-shutdown-v6-provider-source-checkpoint-20261001.json": "fbc5705d7a7938bd539761096b7460263a7cbcc46756880d59d564bdcb9c8be3",
+    "scripts/tests/test_native_shutdown_v6_provider_integration_20261001.py": "764e7a65d2cd3ecefd4c0ada4901707ad9abd94b8cd6d547bddeb65b0fd28cbd",
+    "scripts/tests/test_shutdown_cpu_reclaim.py": "c2400a51fa6c5fa4ced24062b0c453d6ab2b1f5367ae1717d751063698cf13b3",
+    "scripts/tests/fixtures/shutdown_v6_provider.rs": "2cf0952892bdd0cc2643e2422682249a0307df946fbca2a1f0053c8b8fc3df6a",
+    "scripts/tests/test_native_shutdown_v6_actual_order_20261017.py": "c414351687c9d5e1247b8c4bb0b9ecebba7beb2100f021ebcc91365f0aaab55b",
+    "scripts/tests/fixtures/native_shutdown_v6_actual_order_20261017.rs": "4f636b028380f37171f7b1d0ac9f16ba1a68ed12298f470d6bacd5bd8e4177be",
+    "scripts/tests/test_native_fork_ownership_20261017.py": "f0eb3602104bd7ef656e289c09c25507049883dba54e747f6de644fe82cbd9b4",
+    "scripts/tests/fixtures/native_fork_ownership_20261017.rs": "7d98826d8e85f9a8feceb2fedff78863d3368676385ea2ef616c17f99188046d",
+    "host-kernel/native-rust/os_registry.rs": "b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6",
+    "host-kernel/native-rust/os_runtime.rs": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+    "host-kernel/native-rust/smp_memory.rs": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+    "host-kernel/native-rust/ihk_smp_x86_64.rs": "ead31123d69508bd678f321137e9fba023621a46cdf86aa3466381b966b52b44",
+    "host-kernel/native-rust/abi/x86_64.rs": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+    "host-kernel/native-rust/mcctrl_vm.rs": "83630dbe469466c7f69f51feb3a85438e2ae20049346b5e940d89d355f590ab3",
+    "host-kernel/native-rust/smp_application.rs": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8"
+  },
+  "tools": {
+    "python": {
+      "path": "/home/holden/anaconda3/bin/python3",
+      "resolved_path": "/home/holden/anaconda3/bin/python3.9",
+      "version": "Python 3.9.12",
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+    },
+    "rustc": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "version": "rustc 1.92.0 (ded5c06cf 2025-12-08)",
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    },
+    "linker_driver": {
+      "path": "/usr/bin/cc",
+      "version": "cc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "dependencies": "Installed local GCC/binutils helpers, Rust standard libraries, system startup objects and system libraries; no downloaded dependencies or build scripts."
+    },
+    "wrappers_sha256": {
+      "/usr/bin/timeout": "91db1e64064f0bf5ee99abda3a054cc6f05748dad2af5a145f890c9172d28d73",
+      "/usr/bin/prlimit": "06a57e4767f1bdfcc8c5a39b4b58decb9366447b007a8bdd9d6b12d1e6698d8c",
+      "/usr/bin/taskset": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c"
+    }
+  },
+  "change_envelope": {
+    "test_entrypoints": [
+      "scripts/tests/test_native_shutdown_v6_actual_order_20261017.py",
+      "scripts/tests/test_native_fork_ownership_20261017.py"
+    ],
+    "fixture_templates": [
+      "scripts/tests/fixtures/native_shutdown_v6_actual_order_20261017.rs",
+      "scripts/tests/fixtures/native_fork_ownership_20261017.rs"
+    ],
+    "candidate_changes": "Changed extracted production bodies and deterministic ordinary in-process test adapters are allowed. Record exact source, template, test, imported-helper and generated fixture hashes for every run. Preserve independent expectations and mutation/compile-fail controls.",
+    "admission": "Dispatcher must inspect each new entrypoint, its transitive repository imports and generated fixture before first execution. Imports may supply read-only extraction helpers only; no unknown import side effects, launchers, build scripts, hardware, host-state mutation, external commands outside this profile or network operations. A changed helper must receive the same bounded inspection. Python 3.9 compatibility is required.",
+    "production_inputs": "Selected source files under /home/holden/mckernel/host-kernel/native-rust and /home/holden/mckernel/kernel/rust, plus the named test/template and admitted extraction helpers; read-only throughout each run. Dispatcher selects and records the exact list before execution."
+  },
+  "commands": {
+    "python": "/home/holden/anaconda3/bin/python3 -B -m unittest <one named entrypoint module or selected case from it>",
+    "compiler": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc --edition=2021 --test -Dwarnings <fresh-root>/<case>/fixture.rs -o <fresh-root>/<case>/fixture",
+    "fixture": "<fresh-root>/<case>/fixture --test-threads=1 [<selected-test> --exact]",
+    "controls": "The same compiler and fixture families may compile/run deliberate bounded mutations and intended compile-fail cases. Assert the intended rejection reason; missing tools, syntax errors and broken imports do not establish a semantic control.",
+    "version_checks": "Pinned python --version, pinned rustc --version, /usr/bin/cc --version and read-only identity/hash checks are permitted.",
+    "wrapper": "Run the one Python process under taskset CPU6, inherited prlimit limits, env -i and an outer timeout of 180 seconds. Terminate only its owned process group on timeout; allow at most five seconds of termination cleanup before killing that same owned group. Record timeout distinctly from test failure."
+  },
+  "environment": {
+    "clear_inherited_environment": true,
+    "PATH": "/usr/bin:/bin",
+    "LC_ALL": "C",
+    "LANG": "C",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "MCKERNEL_RUSTC_1_92": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "HOME_TMPDIR": "Fresh private subdirectories of the exclusive mktemp root /home/holden/mckernel-work/scratch/native-cheap-20261017-XXXXXX",
+    "cwd": "/home/holden/mckernel",
+    "forbidden_inheritance": "Credentials, SUDO_ASKPASS, dynamic-loader overrides, PYTHONPATH/PYTHONHOME, compiler/linker overrides and unrelated launcher environment. Do not read credential files."
+  },
+  "resources": {
+    "cpu_affinity_per_run": {"shutdown": [6], "fork": [7]},
+    "concurrent_profile_runs_maximum": 2,
+    "observed_parent_affinity": "0,2-7",
+    "aggregate_reservation": "Each run reserves one CPU share and 2 GiB planning share; at most two independent runs on CPU6/CPU7 reserve two CPU shares and 4 GiB total, deducted from the dispatcher's shared campaign budget. Use disjoint output roots and no extra heavy-build or guest lease.",
+    "wall_seconds": 180,
+    "termination_cleanup_seconds_maximum": 5,
+    "inherited_rlimit_as_bytes_per_process": 2147483648,
+    "inherited_rlimit_cpu_seconds_per_process": 150,
+    "inherited_rlimit_nofile": 256,
+    "inherited_rlimit_fsize_bytes_per_file": 67108864,
+    "inherited_rlimit_core_bytes": 0,
+    "concurrent_processes_maximum": 8,
+    "child_concurrency": "One compiler or test child family at a time, including its installed linker helpers; no concurrent compiler and fixture. One Python parent. Process count excludes threads; all threads inherit CPU6 affinity.",
+    "process_count_enforcement": "Ensure by the admitted serial command structure and inspect the owned process tree if unexpected descendants appear. RLIMIT_NPROC=8 is not a valid per-run control because it counts all tasks for UID 1000.",
+    "limits_caveat": "AS, CPU and file-size rlimits are inherited per-process/per-file limits, not aggregate memory, aggregate CPU-time or directory quotas. Do not claim stronger enforcement. Keep the aggregate planning share through reviewed small fixtures and dispatcher accounting; stop on unexpected growth rather than widening limits.",
+    "storage": "All generated sources, binaries, HOME/TMPDIR files and captures under the one fresh root. Bound fixture count and capture volume in the admitted serial harness; 64 MiB per-file limit is not permission for unbounded files. Preserve existing 16-GiB host and 12-GiB scratch floors."
+  },
+  "isolation_and_side_effects": {
+    "repository_access": "Read-only by approved command behavior; no claim of an OS-enforced read-only mount or network namespace. These are inspected trusted local fixtures, not a sandbox for arbitrary code.",
+    "outputs": "Fresh exclusive root only; Python bytecode writes disabled. No production or shared manifest/ledger writes by the tests.",
+    "prohibited": ["sudo/root", "credential access", "network", "Docker", "modules", "guest launch", "hardware access", "toolchain installation", "production-state changes", "unreviewed subprocess command families"],
+    "cleanup": "Reconcile only this run's process group and fresh output root. Retain generated sources, exact stdout/stderr, exit statuses, command/environment identities and original failed controls/attempts through the normal evidence checkpoint. No recursive deletion of historical evidence, scratch21 material or unrelated roots. Successful disposable cleanup, if chosen, must leave the retained reproducibility inputs and capture evidence intact."
+  },
+  "rationale": [
+    "CONVERGENCE.md explicitly allows a reusable Layer-B profile covering changed candidate bytes with fresh hashes, without a fresh review for every routine edit or test vector.",
+    "The existing provider test compiles exact extracted production callback/memory methods with deterministic adapters and serialized subprocesses; the accepted source checkpoint already limits this evidence to source-level behavior.",
+    "CPU6 and CPU7 are within the observed allowed affinity. Pinned Python, Rust compiler, local linker and resource wrappers are installed. No compiler/test was executed during this profile review.",
+    "Candidate source changes remain subject to independent ownership/concurrency review before wider execution. Profile approval is not approval of not-yet-written test semantics."
+  ],
+  "blocking_findings": [],
+  "candidate_admission": {
+    "shutdown": "PASS: inspected new driver/template, existing provider extraction imports, complete extracted fault-boundary/provider inputs and runtime/registry items. Serial subprocess family, read-only source reads, bounded generated outputs and retained per-variant streams/status fit this profile. No privileged/host-state/network action appears in the reviewed boundary.",
+    "fork_original": "NOT_RELEASED for this original driver hash: TemporaryDirectory deletes generated Rust and binary even on failure and no compiler/run streams or statuses are retained as files. Keep the root and save these outputs before asserting success, following the reviewed shutdown pattern. This is one bounded evidence-retention correction; no semantic oracle change or wider profile review is needed.",
+    "fork_correction_admission": "Dispatcher may admit the bounded retention-only correction after inspecting its diff and recording the new hash. Original fork template and extracted lookup_fault/worker bodies have been inspected and fit this profile. Do not expand its 2-GiB AS/planning share to 3 GiB without revisiting aggregate resource allocation."
+  },
+  "not_executed": ["new regression entrypoints", "new generated Rust fixtures", "production module/image build", "root or guest execution"],
+  "acceptance": {
+    "layer_b_profile_released": true,
+    "new_behavior_verified_by_this_review": false,
+    "runtime_acceptance": false,
+    "formal_application_acceptance": false,
+    "os_complete": false
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "schema": "mckernel.shutdown-actual-order-independent-review.v1",
+  "status": "PASS_SCOPED_REGRESSION",
+  "reviewer": {
+    "role": "independent semantic reviewer",
+    "agent": "/root/shutdown_regression_review",
+    "implementation_files_owned": [],
+    "test_execution": "No compiler, Rust test, native, Docker, privileged or guest execution was repeated. Read-only source/artifact checks used CPU 6, 1 GiB address-space ceiling and 30 CPU seconds."
+  },
+  "reviewed_evidence": {
+    "path": "docs/verification/evidence/shutdown-actual-order-20261017.json",
+    "sha256": "59b901944c7fd68b2ead46f1121e230160d91a3555d0dd730be817fa04fb0f73",
+    "recorded_status": "PASS_LAYER_B_PENDING_INDEPENDENT_SEMANTIC_REVIEW",
+    "input_hashes": "All eight recorded input SHA256 values independently match the live files.",
+    "additional_inputs": {
+      "scripts/tests/test_shutdown_cpu_reclaim.py": "c2400a51fa6c5fa4ced24062b0c453d6ab2b1f5367ae1717d751063698cf13b3",
+      "host-kernel/native-rust/abi/x86_64.rs": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3"
+    },
+    "positive_generated_source_sha256": "6ab9f0d00117328ef7d934300c97b92e69f0a1d28d82d0c8a659fd947c867247"
+  },
+  "source_and_boundary_findings": [
+    {
+      "check": "Complete selected production items",
+      "result": "PASS",
+      "detail": "All 18 selected runtime, memory and callback items occur verbatim in the retained positive materialization. The whole os_registry module before its cfg(test) module also occurs verbatim. No production substitution slot remains. The extraction helper and callback delimiter were inspected against their current source bodies; their selected boundaries include the complete bodies and Drop implementations."
+    },
+    {
+      "check": "Same-generation transaction",
+      "result": "PASS",
+      "detail": "The fixture obtains the production registry reservation handle, commits it, sets OWNER_GENERATION to that handle's generation, updates both image and IRQ owners, and invokes the callback using that exact slot/generation. Runtime finish_shutdown consumes the guard from that same registry begin_shutdown. The admission object is fixture-owned, with complete production admission methods; this does not test native per-object lease wiring."
+    },
+    {
+      "check": "Meaningful sequential state assertions",
+      "result": "PASS",
+      "detail": "Success requires closed admission, NotBooted publication and one CPU/memory/boot retirement. Pre-effect refusal requires Running with open admission and no physical/reset/retirement effect. Post-effect refusal requires Shutdown with closed admission, retained owners and a successful same-generation retry. An outstanding admission owner makes close fail without physical effects. The physical boundary additionally requires drained IRQ state and closed admission before publishing its observation; reconciliation requires that observation."
+    },
+    {
+      "check": "Production/stub separation",
+      "result": "PASS_SCOPED",
+      "detail": "Actual production code includes admission/guard ownership, atomic registry packing, v6 callback/tag decoding, MemoryContext close/finish and BootStorage Drop. CPU reset/re-online and logical CPU commit are fixture boundaries; physical IRQ operations, map verification/allocation/transactions and the surrounding os_request operation/lease machinery are stubs. The fixture Boot destructor is a separate assertion/counter stub; actual BootStorage Drop runs in the two isolated retention_drop tests."
+    }
+  ],
+  "retained_execution_review": {
+    "corrected_root": "/home/holden/mckernel-work/scratch/native-cheap-20261017-dFHbdz",
+    "original_root": "/home/holden/mckernel-work/scratch/native-cheap-20261017-bqo2aT",
+    "corrected_capture_sha256": "18a9fde142355b8ade286937adf2980974b825e8e24bda811a3a799dc7155fab",
+    "original_capture_sha256": "070c8bac4799d8b12e723c74e84c7a34ceab23e6f3d835e169d16779afea42de",
+    "checks": [
+      "Both capture hashes match. Corrected status is test_exit=0; original status is test_exit=1.",
+      "Every corrected variant's source hash, compile status, compile streams, run status and run stream hashes match the reviewed evidence. Generated binaries and original compiler/run streams/statuses remain present in both roots.",
+      "Positive retained output reports 13 Rust tests passed; corrected Python capture reports two tests and OK.",
+      "All four generated Rust sources are byte-identical across the original and corrected roots."
+    ]
+  },
+  "mutation_review": [
+    {
+      "mutation": "omit_physical_stop",
+      "result": "REJECTED_AS_INTENDED",
+      "exit": -6,
+      "detail": "Exactly one production reset-call match is replaced with a successful value. The selected success test reaches reconcile without PHYSICAL and reports reconcile before physical reset/reonline, followed by panic in a function that cannot unwind across the extern C callback. This is the intended ordering oracle, not an unrelated crash."
+    },
+    {
+      "mutation": "post_effect_as_pre_effect",
+      "result": "REJECTED_AS_INTENDED",
+      "exit": 101,
+      "detail": "Exactly one v6 decoder return changes the post-effect payload classification. The selected post-effect test rejects reopened admission with assertion failed: runtime::closed()."
+    },
+    {
+      "mutation": "omit_irreversible_publication",
+      "result": "REJECTED_AS_INTENDED",
+      "exit": 101,
+      "detail": "Exactly one ShutdownGuard publication changes irreversible from true to false. The selected post-effect test observes rollback to Running instead of required Shutdown."
+    }
+  ],
+  "failure_family_review": {
+    "bounded_corrections_used": 1,
+    "original_failure_preserved": true,
+    "oracle_weakened": false,
+    "detail": "The original driver demanded the generic word assertion, which is absent from the explicit ordering panic and resulting SIGABRT. The corrected driver demands each mutation's exact status and intended diagnostics. All production/fixture materializations remain unchanged; the positive and negative semantic assertions were not relaxed."
+  },
+  "limitations": [
+    "Sequential fixture execution does not test atomic interleavings, lock ordering or native per-OS operation/lease dispatch.",
+    "No production smp_cpu body, physical IRQ drain, real memory map transaction, kernel module, native runtime, guest shutdown or formal application acceptance is established.",
+    "The live-admission case exercises production Admission close/refusal directly; it does not invoke a real live provider callback."
+  ],
+  "execution_authority": "None. This is semantic acceptance of the exact scoped regression, not an execution release.",
+  "fresh_image_build_gate": "This scoped review finds no regression blocker. Unexercised native shutdown is not introduced as a prerequisite for a fresh image build; the dispatcher's existing source/build authority still applies.",
+  "acceptance_delta": {
+    "current_candidate_builds": 0,
+    "real_guest_apps": 0,
+    "formal_application_cases": 0,
+    "production_gates": 0
+  },
+  "blockers": []
+}
