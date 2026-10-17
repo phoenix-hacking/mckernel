@@ -146,6 +146,127 @@ unsafe extern "C" fn vma_close(vma: *mut bindings::vm_area_struct) {
 }
 // END FORK VMA OWNERS
 
+// BEGIN INHERITED VMA TRANSACTION
+// Native thunks are supplied by 0011-mm-export-inherited-vma-write-primitives.
+// They use Linux mmap_write_lock/unlock (including vma_end_write_all) and
+// vma_start_write, not manually replicated semaphore/sequence operations.
+extern "C" {
+    fn mckernel_inherited_mmap_write_lock(mm: *mut bindings::mm_struct);
+    fn mckernel_inherited_mmap_write_unlock(mm: *mut bindings::mm_struct);
+    fn mckernel_inherited_vma_start_write(vma: *mut bindings::vm_area_struct);
+}
+
+struct InheritedMmWrite<'a> {
+    mm: &'a CurrentMm,
+}
+impl Drop for InheritedMmWrite<'_> {
+    fn drop(&mut self) {
+        // SAFETY: The transaction acquired this exact live MM's write lock.
+        unsafe { mckernel_inherited_mmap_write_unlock(self.mm.0.as_ptr()) };
+    }
+}
+
+struct InheritedVmaReplacement {
+    vma: NonNull<bindings::vm_area_struct>,
+    owner: Option<Arc<VmaOwner>>,
+}
+
+#[allow(dead_code)]
+impl Mirror {
+    /// Replace only the current child MM's complete inherited mirror extent.
+    ///
+    /// # Safety
+    /// The parent proof must come from retained backend/VMA
+    /// provenance. `seal` must commit that already-reserved backend transaction
+    /// infallibly under this exclusion, without allocation, sleepable external
+    /// calls, user copies, or publication beforehand. No runtime caller is
+    /// permitted until native ABI and revoke/final-ACK proofs are verified.
+    pub(super) unsafe fn inherit_vmas(
+        parent: &Arc<Self>, parent_registration: &Arc<Registration>,
+        child_registration: Arc<Registration>, start: u64, end: u64,
+        seal: impl FnOnce(&Arc<Self>),
+    ) -> Result<Arc<Self>> {
+        if start != parent.start || end != parent.end || start >= end
+            || start % 4096 != 0 || end % 4096 != 0
+        { return Err(EINVAL); }
+        if ptr::eq(&**parent_registration, &*child_registration)
+            || !parent_registration.same_generation(&child_registration)
+        { return Err(EACCES); }
+        let mm = CurrentMm::get()?;
+        if mm.0 == parent.mm.0 { return Err(EACCES); }
+        let child = Arc::new(Self { mm: MmIdentity::from_current(&mm)?, start, end }, GFP_KERNEL)?;
+        let owner = Arc::new(VmaOwner { registration: child_registration, mirror: child.clone() }, GFP_KERNEL)?;
+        // SAFETY: The referenced live child MM remains retained through unlock.
+        unsafe { mckernel_inherited_mmap_write_lock(mm.0.as_ptr()) };
+        let guard = InheritedMmWrite { mm: &mm };
+        let result = (|| -> Result {
+            let mut address = start;
+            let mut count = 0usize;
+            let mut file = ptr::null_mut();
+            let mut flags = None;
+            // Preflight the entire extent before allocation-dependent journal
+            // publication, any per-VMA write transition, PFN zap or owner swap.
+            while address < end {
+                let vma = unsafe { bindings::find_vma(mm.0.as_ptr(), address) };
+                if vma.is_null() { return Err(EINVAL); }
+                let (first, last, current_flags) = unsafe {
+                    ((*vma).__bindgen_anon_1.__bindgen_anon_1.vm_start,
+                     (*vma).__bindgen_anon_1.__bindgen_anon_1.vm_end,
+                     (*vma).__bindgen_anon_2.__vm_flags)
+                };
+                let required = (bindings::VM_PFNMAP | bindings::VM_DONTEXPAND | bindings::VM_DONTDUMP) as u64;
+                if first != address || last <= first || last > end || last % 4096 != 0
+                    || unsafe { (*vma).vm_mm } != mm.0.as_ptr()
+                    || unsafe { (*vma).vm_file.is_null() }
+                    || unsafe { (*vma).vm_pgoff } != (first - start) / 4096
+                    || current_flags & required != required
+                { return Err(EINVAL); }
+                if count == 0 { file = unsafe { (*vma).vm_file }; flags = Some(current_flags); }
+                if unsafe { (*vma).vm_file } != file || flags != Some(current_flags) { return Err(EACCES); }
+                let inherited = unsafe { vma_owner(vma) }?;
+                if !ptr::eq(&*inherited.registration, &**parent_registration)
+                    || !ptr::eq(&*inherited.mirror, &**parent)
+                { return Err(EACCES); }
+                count = count.checked_add(1).ok_or(EOVERFLOW)?;
+                address = last;
+            }
+            let mut replacements = Vec::with_capacity(count, GFP_KERNEL)?;
+            let mut address = start;
+            while address < end {
+                // Same MM write exclusion preserves the validated VMA set.
+                let vma = NonNull::new(unsafe { bindings::find_vma(mm.0.as_ptr(), address) }).ok_or(EINVAL)?;
+                replacements.push(InheritedVmaReplacement { vma, owner: Some(owner.clone()) }, GFP_KERNEL)?;
+                address = unsafe { (*vma.as_ptr()).__bindgen_anon_1.__bindgen_anon_1.vm_end };
+            }
+            // All fallible work is complete. Exclude every VMA reader before
+            // clearing all inherited aliases; only then publish child owners.
+            for replacement in replacements.iter() {
+                unsafe { mckernel_inherited_vma_start_write(replacement.vma.as_ptr()) };
+            }
+            for replacement in replacements.iter() {
+                let vma = replacement.vma.as_ptr();
+                let first = unsafe { (*vma).__bindgen_anon_1.__bindgen_anon_1.vm_start };
+                let last = unsafe { (*vma).__bindgen_anon_1.__bindgen_anon_1.vm_end };
+                unsafe { bindings::zap_vma_ptes(vma, first, last - first) };
+            }
+            for replacement in replacements.iter_mut() {
+                let vma = replacement.vma.as_ptr();
+                let old = unsafe { (*vma).vm_private_data.cast::<VmaOwner>() };
+                unsafe { (*vma).vm_private_data = Arc::into_raw(replacement.owner.take().unwrap()).cast_mut().cast() };
+                // Parent Arcs above retain Registration/Mirror while this raw
+                // per-VMA owner is balanced; their final release cannot run.
+                unsafe { drop(Arc::from_raw(old)) };
+            }
+            seal(&child);
+            Ok(())
+        })();
+        drop(guard); // Real mmap_write_unlock ends the per-VMA write epoch.
+        result?;
+        Ok(child)
+    }
+}
+// END INHERITED VMA TRANSACTION
+
 impl Mirror {
     pub(super) fn reserve(registration: Arc<Registration>) -> Result<Arc<Self>> {
         let mm = CurrentMm::get()?;

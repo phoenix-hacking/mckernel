@@ -58,6 +58,10 @@ unsafe impl Send for Registration {}
 unsafe impl Sync for Registration {}
 
 impl Registration {
+    pub(super) fn same_generation(&self, other: &Self) -> bool {
+        self.slot == other.slot && self.generation != 0 && self.generation == other.generation
+    }
+
     fn acquire(slot: u32, generation: u64, identity: ProcessId) -> Result<Arc<Self>> {
         let pid = identity.number()?;
         let operation = Box::pin_init(new_mutex!(()), GFP_KERNEL)?;
