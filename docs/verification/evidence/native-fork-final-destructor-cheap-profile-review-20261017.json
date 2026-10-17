@@ -1,0 +1,155 @@
+{
+  "schema": "mckernel.native-fork-final-destructor-cheap-profile-review.v1",
+  "recorded_at_utc": "2026-10-17T03:45:58Z",
+  "decision": "PASS_LAYER_B",
+  "reviewer": "/root/cheap_profile_review",
+  "model": "gpt-6.1-sol",
+  "implementation_ownership": false,
+  "scope": "Minimal extension of the existing isolated CPU7 Rust actual-body test profile to one pinned C object compile/link and ordinary process-local mmap/mprotect/prctl/fork/wait poison controls. No compiler or test execution performed by reviewer; no native kernel/guest or implementation acceptance.",
+  "parent_profiles": [
+    {
+      "path": "docs/verification/evidence/native-cheap-profile-review-20261017.json",
+      "sha256": "cd30aaf1caec5da84a7a34716d837181684f4e8be5a6c959f25bb557dd69309f",
+      "decision": "PASS_LAYER_B"
+    },
+    {
+      "path": "docs/verification/evidence/native-fork-adoption-cheap-profile-extension-20261017.json",
+      "sha256": "b4b40a063cac43aecf6182ba1618a0b0f6c41083ddd4a27e7e24372926bc79da",
+      "decision": "PASS_LAYER_B"
+    }
+  ],
+  "source_root": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1",
+  "independent_contract": {
+    "path": "docs/verification/evidence/native-fork-final-destructor-boundary-review-20261017.json",
+    "sha256": "dbcdcec630b4c0d2c2c5a237732af4a8df936d6c8321caf76c88da2ab1d84467",
+    "decision": "ADDITIVE_CHECKED_RELEASE_CONTRACT_SELECTED",
+    "execution_release": false
+  },
+  "author_record": {
+    "path": "docs/verification/evidence/native-fork-final-destructor-implementation-20261017.json",
+    "sha256": "4f84d8efbd00f5ea26e95626cc1be2dec8932b3929d7da2e15e977f265086700",
+    "status": "ADDITIVE_APIS_STATIC_CHECKS_PASS_COMPILER_PROFILE_PENDING"
+  },
+  "reviewed_inputs_sha256": {
+    "scripts/tests/test_native_fork_final_destructor_20261017.py": "c961af2306fae9b5eec3ecc9effa14799eab2ae70f674ce44b0fd69f8954e8d8",
+    "scripts/tests/fixtures/native_fork_final_destructor_20261017.rs": "ac399d775207ef59ea2c98dc7ee6686719d63d7f85204ccbbc507079f9379bd3",
+    "scripts/tests/fixtures/native_fork_final_destructor_20261017.c": "70b3de3debb9459228f3634a85f670e116c2d06ec018996864f613fc4c895133",
+    "kernel/rust/process_helpers.rs": "4991258b970e49a1998f3605311f08da96a3fcd218ef02e8b8afeb73b6e24911",
+    "kernel/process_helpers.c": "e436497031918d96d386afb7f3cbcc3af1e38692bb627b83dcf4d698c15be6c9",
+    "kernel/include/process_helpers.h": "1e4eceec2c06dcd409d86cbd5e24616684d83e828d62d6ca534e08c4e0a20bcb",
+    "kernel/process.c": "a5b503ad98deb916e30ec70a78fb1ede64adbc7944216b4279943888e6632f3e",
+    "kernel/include/process.h": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+    "host-kernel/native-rust/mcctrl_process.rs": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70"
+  },
+  "external_read_only_input": {
+    "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+    "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "purpose": "The reviewed source-only layout-preservation assertion explicitly reads this main-repository file; it is not written or compiled by this test."
+  },
+  "tools": {
+    "cc": {
+      "path": "/usr/bin/cc",
+      "version": "cc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    "rustc": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "version": "rustc 1.92.0 (ded5c06cf 2025-12-08)",
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1"
+    },
+    "python": {
+      "path": "/home/holden/anaconda3/bin/python3",
+      "version": "Python 3.9.12",
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb"
+    },
+    "new_direct_headers_sha256": {
+      "/usr/include/x86_64-linux-gnu/sys/mman.h": "9ef429fa95b5b1865ec05d032078984ae1afdbe37a4362d7839f07d6c6aa194e",
+      "/usr/include/x86_64-linux-gnu/sys/prctl.h": "db450f90fbc2e37c7e6defe1b1a1d15e553f11fda7b1006c1b8825364d87c2fe",
+      "/usr/include/x86_64-linux-gnu/sys/wait.h": "8217c6eb62cbb576fc2fb7f98711f8b1158d447f2031691b2f4ca758ef4669b5"
+    },
+    "link_helpers": "Existing profile's installed GCC/binutils/linker and Rust standard libraries only. The single -C link-arg is the freshly compiled reviewed object, not an arbitrary external object or linker option."
+  },
+  "inspection": {
+    "entrypoint": "Read the complete driver. Imports are Python standard libraries only and do not launch children at import. The first three unittest cases perform read-only source/body/signature/layout/gate checks; the fourth retains generated Rust/C sources and invokes only the fixed version, C compile, Rust link and test command families.",
+    "five_production_additions": "Read the exact new checked C/Rust helper bodies, all new public checked wrappers/bridges and their callback/prototype declarations in the five selected production files. Read the legacy bodies actually extracted too. They are compiled against explicit local fixture callback adapters, not real kernel bridges/hardware.",
+    "templates_and_generated_source": "Read both complete fixture templates and each extracted callback/body dependency. Static generation (no compiler/test) produces Rust 12046 bytes SHA256 7de6e3be7e6015e50675731b67b3d33a52562ff7feab7348df936f9c966e31f6 and corrected C 25223 bytes SHA256 1c0fe6fc8ec793517c69f4feb4ed79e2a5d9917b20f36b932bdc4cef850adfff, with no unexpanded markers.",
+    "includes": "Generated C includes installed standard assert/errno/signal/stddef/stdio/string/sys-mman/sys-prctl/sys-wait/unistd headers only. Project typedefs/prototypes/bodies are inserted as text, not included by compiler search. No custom include path, build script, plugin, network dependency or kernel header compilation is added.",
+    "local_memory_and_children": "C fixture uses three own anonymous 4096-byte pages per vector and PROT_NONE poisoning, then munmaps them. Its two positive controls fork only from this fixture, read their own inherited PROT_NONE mapping, and waitpid the exact returned child PID. Expected WIFSIGNALED/SIGSEGV is a control result, not a production failure being ignored. No external PID is signalled and no host mapping outside these allocations is modified.",
+    "capture": "mkdtemp retains Rust/C sources, C object, test binary, every command JSON, version/compiler/test stdout/stderr and status before assertions. Timeout outputs/status are retained. No TemporaryDirectory cleanup deletes failed attempt evidence.",
+    "oracle": "The declared fixture checks 46 C vectors and the same 46 Rust vectors in serialized language selections, compares their reports, and separately requires two poison children to terminate with SIGSEGV. The Rust harness expects exactly two test cases; this review does not claim any have executed. Existing independent result/trace/layout contract and closed production fork gate remain unchanged."
+  },
+  "original_block_and_resolution": {
+    "initial_decision": "BLOCKED_LAYER_B",
+    "finding_id": "FD-CORE-1",
+    "invariant": "Expected or defect-detected fixture signals must not invoke host crash collection outside fresh outputs.",
+    "original_c_template_sha256": "d8b773b4be66d852a6d6a9eb8cf05d25b407182feb5dc0779023b651c29d55f1",
+    "live_core_pattern": "|/usr/share/apport/apport -p%p -s%s -c%c -d%d -P%P -u%u -g%g -F%F -- %E",
+    "source_argument": "The original template deliberately SIGSEGVs dumpable children and can SIGSEGV/SIGABRT the fixture parent on a real failed assertion/post-free read. Installed core(5) documents that RLIMIT_CORE is not enforced for cores piped to a program. Core=0 alone therefore does not exclude Apport invocation.",
+    "local_reference": "/usr/share/man/man5/core.5.gz, pipe-to-program section; read-only inspection only.",
+    "original_preservation": "Complete original C template is retained verbatim in author_record.preserved_profile_sideeffect_input.original_template_complete_utf8; independent SHA256 verification matches d8b773b4be66d852a6d6a9eb8cf05d25b407182feb5dc0779023b651c29d55f1. No compiler or crash experiment was used to find this issue.",
+    "dispatcher_authorization": "Dispatcher authorized conditional admission after the exact minimal nondumpable-fixture correction and preserved original bytes, without a host sysctl/root change.",
+    "corrected_template_sha256": "70b3de3debb9459228f3634a85f670e116c2d06ec018996864f613fc4c895133",
+    "exact_diff": "Add installed <sys/prctl.h>; make if(prctl(PR_SET_DUMPABLE,0)!=0) _exit(86) the first statement of both externally invoked C suite and poison-control functions, and repeat it in each poison child before the unchanged volatile protected read. The expected SIGSEGV wait oracle is unchanged.",
+    "resolution": "CLOSED_FOR_EXACT_CORRECTED_TEMPLATE. The fixture parent becomes nondumpable before assertions/protected operations, children inherit that state and explicitly reassert it, and guard failure exits distinctly instead of raising a core-producing assertion. This is unprivileged self-process policy only; no host crash/sysctl setting changes.",
+    "history": "One consolidated profile side-effect finding and one bounded fixture correction; no failed compiler/runtime attempt or failure-family reset."
+  },
+  "commands": {
+    "python": "/home/holden/anaconda3/bin/python3 -B -m unittest scripts.tests.test_native_fork_final_destructor_20261017 [or a selected exact case]",
+    "cc": "/usr/bin/cc -std=c11 -Wall -Wextra -Werror -c <fresh-attempt>/actual_bodies.c -o <fresh-attempt>/actual_c.o",
+    "rustc": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc --edition=2021 --test -Dwarnings <fresh-attempt>/actual_bodies.rs -C link-arg=<fresh-attempt>/actual_c.o -o <fresh-attempt>/actual_bodies",
+    "fixture": "<fresh-attempt>/actual_bodies --test-threads=1 --nocapture",
+    "versions": "Only pinned rustc --version and /usr/bin/cc --version before these compiles.",
+    "environment": "env -i PATH=/usr/bin:/bin LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 MCKERNEL_RUSTC_1_92=<pinned path> HOME=<fresh-private>/home TMPDIR=<fresh-private>/tmp. Retain RUST_TEST_THREADS=1 supplied by the reviewed driver. No credentials, SUDO_ASKPASS, loader/Python/compiler search overrides, network or repository launcher environment."
+  },
+  "resources": {
+    "cpu_affinity": [
+      7
+    ],
+    "cpu_planning_shares": 1,
+    "memory_planning_share_bytes": 2147483648,
+    "inherited_rlimit_as_bytes_per_process": 2147483648,
+    "inherited_rlimit_cpu_seconds_per_process": 150,
+    "inherited_rlimit_nofile": 256,
+    "inherited_rlimit_fsize_bytes_per_file": 67108864,
+    "inherited_rlimit_core_bytes": 0,
+    "outer_wall_seconds": 180,
+    "owned_process_group_cleanup_seconds_maximum": 5,
+    "concurrent_processes_maximum": 8,
+    "compiler_test_families_at_once": 1,
+    "poison_children_at_once": 1,
+    "test_process_accounting": "At runtime the Python capture observer plus one fixture parent plus at most one own poison child is three processes, within the inherited eight-process profile bound. Compiler/linker helper processes run in their separate serial phase.",
+    "scheduling": "Dispatcher centrally reserves one job/2 GiB from the shared seven-job/24-GiB budget and respects heavy-operation serialization. This extension does not reserve another full build/guest share.",
+    "caveat": "Limits are inherited per process/per file, not aggregate cgroup quotas. Do not use shared-user RLIMIT_NPROC as a false per-run cap. Keep all outputs under fresh private scratch evidence roots, original capacity floors and failed-materialization retention."
+  },
+  "reuse": "Routine changed candidate bytes/vectors remain within this reusable actual-body envelope with new hashes/results and unchanged expectations. Dispatcher must preserve the corrected nondumpability guards before fault-sensitive execution and inspect changed helpers/templates for side effects. Changed commands/dependencies/privilege/resources require renewed review; no new profile review for each ordinary vector.",
+  "blocking_findings": [],
+  "prohibited": [
+    "sudo/root",
+    "host sysctl changes",
+    "network",
+    "Docker",
+    "modules",
+    "native kernel/image build",
+    "guest",
+    "toolchain installs",
+    "external PID signalling",
+    "source-root writes during checks",
+    "deleting failed captures",
+    "production fork admission or ACK integration"
+  ],
+  "not_executed": [
+    "C compiler",
+    "Rust compiler",
+    "compiled fixture",
+    "poison children",
+    "native kernel/guest"
+  ],
+  "acceptance": {
+    "layer_b_profile_extension_released": true,
+    "compiler_or_tests_run_by_reviewer": false,
+    "implementation_semantics_accepted": false,
+    "native_runtime_released": false,
+    "formal_application_acceptance": false,
+    "os_complete": false
+  }
+}

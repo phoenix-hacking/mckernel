@@ -1,0 +1,118 @@
+{
+  "schema": "scratch22-authority1.heavy-build-independent-execution-review.v1",
+  "decision": "PASS_EXECUTION",
+  "reviewer": "/root/scratch21_source_review",
+  "implementation_author": "/root/scratch22_build_wrapper",
+  "implementation_ownership": false,
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "high",
+  "reviewed_release_payload_sha256": "7fa58c268ad5fdf7d176232c7358abf5c4b252597ca8e6f541f6349274221097",
+  "proposal": {
+    "path": "docs/verification/evidence/scratch22-authority1-heavy-build-proposal-20261017.json",
+    "sha256": "a44e9d32e9a2e1558ecf0b0727cbcdd84aee118a027bbe68882e0ec54aa4b7b2",
+    "attempt": "scratch22-authority1",
+    "execution_count": 1,
+    "payload_hash_semantics": "SHA256 of sorted compact JSON with ensure_ascii=true/allow_nan=false plus newline, after status becomes PASS_EXECUTION_RELEASE, excluding execution_review only. Independently computed against the exact proposal."
+  },
+  "mechanical_finalization": {
+    "output": "docs/verification/evidence/scratch22-authority1-heavy-build-execution-release-20261017.json",
+    "only_allowed_changes": [
+      "status becomes PASS_EXECUTION_RELEASE",
+      "execution_review becomes an object with path to this exact completed review file and sha256 of its exact completed bytes"
+    ],
+    "all_other_values_unchanged": true,
+    "publication": "Dispatcher must commit/push/fetch exact final release and the four bound source files. Supply final raw release SHA256 and fetched campaign-ref commit through the existing --release-sha256/--release-commit inputs. The production wrapper independently requires exact fetched source/test/adapter/ancestor/release blobs and the review payload hash before any ownership or mutation."
+  },
+  "source_sha256": {
+    "scripts/native_exact_scratch22_authority1_build_wrapper.py": "a0439f79cb895dd6696e4005f1b8f7d6d42018ff3481541b43b12ab2ab582fad",
+    "scripts/tests/test_native_exact_scratch22_authority1_build_wrapper.py": "b05ee5de853f1b2bbf3c8957c9492a5228a21712e59f6117ee6bb36c4279df58",
+    "scripts/prepare_native_exact_scratch22_authority1.py": "5e002228f09c2df3c712422d94f96f333bbc0df597335203de57350162723717",
+    "docs/verification/evidence/native-exact-candidate-delta-preparation-scratch18-20261001.py": "23d2dcc45db9e9268456a202e46c0e25e982b13d91413271cf00452d0564a731"
+  },
+  "accepted_reviews_reused": {
+    "authority1_source": {
+      "path": "docs/verification/evidence/scratch22-authority1-source-independent-review-20261017.json",
+      "sha256": "ab28734ae06ed08f2a967a6cdadc80456c3d925a1ba52a8b5295dec9462dfad0",
+      "decision": "PASS_SOURCE",
+      "scope_reused": "New namespace and additive authority-consumption boundary; corrected ownership/signal/quarantine execution bodies are mechanically preserved from the accepted baseline. Original author33-test and focused independent results were not repeated."
+    },
+    "historical_source_authority": {
+      "path": "docs/verification/evidence/historical-lease-authority-independent-review-20261017.json",
+      "sha256": "c05e2a266186d085845b4dc6085a2ca201ad14715c8f297bd73fee77ce9c39cd",
+      "decision": "PASS_SOURCE_AUTHORITY"
+    },
+    "historical_actual_observation": {
+      "path": "docs/verification/evidence/historical-lease-authority-live-independent-review-20261017.json",
+      "sha256": "14f93f4b8eb66f63b159135f443cb632574fc4d8046c8a0cc5c2d5b93ff8caab",
+      "decision": "PASS_SCOPED_READ_ONLY_OBSERVATION",
+      "scope_reused": "Actual current-generation UUID/device/boot proof and seven immutable historical lease rows; repaired MAIN census observed no heavy process/container. This retained observation is not a substitute for the wrapper's fresh under-lock census."
+    },
+    "actual_prepared_artifact": {
+      "path": "docs/verification/evidence/scratch22-authority1-prepared-artifact-independent-review-20261017.json",
+      "sha256": "831e6ce47254c20d754537da356bfa92aa4c89c18a66c0eddde014a6352680ba",
+      "decision": "PASS_PREPARED_ARTIFACT",
+      "scope_reused": "Completed canonical preparation/log/terminal/process joins, exact target/tree/request/manifest,486 authenticated shared inputs and3888 metadata paths across eight roots, nlink8. No corpus rehash or source suite repeated."
+    }
+  },
+  "actual_artifact_joins_checked": {
+    "candidate_sha": "fd09933c64adaba32bf975ec96e5d518a42544e9",
+    "candidate_tree": "c6c846de121da56a179bcb2178668022b383e4a6",
+    "preparation_release_sha256": "fb4c41b5c220f489a4c6caca10c3b7c6db72a2f7139fafc84c35bf72880ecdbb",
+    "prepared_request_sha256": "c4cd106962884e62dbb248815478816ef5eefb1f60a295e700ad18c9dee63c6a",
+    "manifest_sha256": "6c97693f8feded366d4bbeb940cdbebb3d0608a1ff145d3dc551d92330e2858b",
+    "preparation_terminal_sha256": "1b23775394892871c09a5458f4d6de3e2d76c9bd1c1b04462b6d6e16a1c2ed52",
+    "preparation_log_sha256": "37ef7d6c70b727e991e34d71977885bff3d3b82103bf888884cadec2c8f5f3a4",
+    "candidate_disk_wrapper_sha256": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+    "candidate_owner_sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+    "candidate_driver_sha256": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+    "all_seven_proposal_artifact_hashes_and_live_identities_match": true,
+    "derived_request_sha256": "520fbc79a87a800e9c2875bdcdd24eb3d4c449a7ba15ec1fd85aa664520cecbe",
+    "derivation": "Copy exact canonical prepared request; toggle only preparation_only=false, executable=true, execution_released=true, release_required=false. No input, path, resource or other request field changes.",
+    "image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d"
+  },
+  "fresh_nonmutating_boundary_checks": {
+    "result": "PASS; ordinary check return code0",
+    "filesystem_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "scratch_device": 1828,
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "candidate_inode": 4597519,
+    "output_inode": 5292258,
+    "evidence_inode": 5297467,
+    "root_lock_identity": [27, 4],
+    "existing_root_flock_available": true,
+    "candidate_output_evidence_rootlock_identity_maps_match_proposal": true,
+    "output_and_evidence_empty": true,
+    "execution_request_lease_operational_exclusion_shared_exclusion_stdout_stderr_terminal_quarantine_absent": true,
+    "host_free_bytes": 35618754560,
+    "scratch_free_bytes": 32940957696,
+    "memavailable_bytes": 29854773248,
+    "floors": "Host16GiB and scratch12GiB plus canonical512MiB emergency reserve; pinned12GiB memory available. No storage or memory floor is reduced.",
+    "storage_maintenance_record": "docs/verification/evidence/storage-headroom-restored-20261017T034830Z.json",
+    "heavy_idle_observation": "Reuse accepted actual historical census rather than rerunning privileged observers. Root-lock availability and absent current exclusions/lease were checked now; the canonical wrapper must obtain a fresh strict process/container/lease/resource census under that root lock immediately before publication/start.",
+    "check_profile": "Ordinary read-only Python on CPU0,120-second wall bound and shared2GiB RSS planning share; no virtual-AS cap because Git may map its existing pack. Brief existing-root-flock acquisition only, closed in finally; no root call, compiler, build, guest or census."
+  },
+  "approved_execution": {
+    "count": 1,
+    "argv_template": [
+      "/usr/bin/python3", "-B", "/home/holden/mckernel/scripts/native_exact_scratch22_authority1_build_wrapper.py",
+      "--release", "/home/holden/mckernel/docs/verification/evidence/scratch22-authority1-heavy-build-execution-release-20261017.json",
+      "--release-sha256", "EXACT_FINAL_RELEASE_RAW_SHA256",
+      "--release-commit", "EXACT_FETCHED_CAMPAIGN_REF_COMMIT_CONTAINING_FINAL_RELEASE_AND_BOUND_SOURCES",
+      "--execute"
+    ],
+    "caller": "Dispatcher as ordinary user holden; privileged Docker/observation operations remain inside the reviewed canonical sudo-A paths. No new outer sudo/root execution profile is introduced.",
+    "container": "Four CPUs pinned2-5;12GiB RAM;MemorySwap12GiB/no added swap;512 tasks;networknone;existing unprivileged isolation;job count<=4.",
+    "shared_resources": "One heavy build/guest at a time; seven aggregate host jobs/24GiB total. Request retains stricter inherited canonical aggregate16.2158GiB. No concurrency, affinity, memory, swap or host limit expansion.",
+    "time_policy": "Authenticated owner timeout19800seconds remains. No outer timeout or kill of a healthy build or uncertain live quarantine owner.",
+    "mandatory_admission": "Exact fetched release/source/review blobs, accepted actual preparation/authority joins, fresh current UUID/device/boot/artifact identities, root lock and canonical compatibility/census must all pass before execution request publication. Drift or unknown state refuses.",
+    "ownership": "Root development flock precedes preflight/census and is inherited by canonical child. Atomic HUP/INT/TERM/QUIT deferral, unchanged child mask, persistent shared/operational exclusions and nonreturning uncertainty quarantine remain mandatory.",
+    "credentials": "Use existing inherited SUDO_ASKPASS only via sudo -A; never -n, direct helper calls, credential reads, printed secrets, environment bypass or purchased/API-key billing.",
+    "evidence_and_retirement": "Capture complete wrapper stdout/stderr/status, root wrapper terminal, exact derived request, canonical owner/container identity/receipt and build artifacts/logs. Positive current retirement is required before root unlock; retained stopped container and both exclusions need their own independently reviewed cleanup. Failed build status remains failure even if retirement succeeds."
+  },
+  "failure_policy": "Any admission mismatch, failed census, source drift or uncertain retirement stops this attempt and retains all evidence/materializations/requests. Do not retry unchanged, raw-remove objects or rename the failure family. Started uncertainty preserves the live root-lock quarantine and blocks every new workload.",
+  "preserved_history": "Consumed scratch21 phase0 source-authority failure, original scratch22 prepared candidate/request and historical-observer census refusal, and original SIGQUIT wrapper defect/correction remain immutable. Authority1 is the same historical-authority repair family with exact corrected source, not a reset of attempt history.",
+  "blocking_findings": [],
+  "execution_performed_by_reviewer": false,
+  "acceptance_credit": false,
+  "scope": "One independently bound authority1 native build only, after permitted finalization/publication and all fresh built-in admission gates. No cleanup, guest/application runtime, scratch21/scratch22 replay or formal OS acceptance is granted."
+}

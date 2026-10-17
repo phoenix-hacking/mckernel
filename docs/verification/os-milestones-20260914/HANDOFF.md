@@ -1,5 +1,42 @@
 # Compact dispatcher handoff
 
+## Current continuation: checkpoint 363, corrected candidate ready for compiler
+
+Pinned image source `fd09933c64adaba32bf975ec96e5d518a42544e9`, tree
+`c6c846de121da56a179bcb2178668022b383e4a6`, is pushed/fetched at
+`origin/scratch22-authority1-source-fd09933c`. Historical boot/device authority
+repair passes actual read-only observer+census: seven immutable leases unchanged,
+no heavy process/container. Fresh `scratch-22-authority1` materialization passes
+canonical checks and independent artifact review `831e6ce4...80ba` (475.93s,
+71,108 KiB, eight shared links). Old22 stays preserved/BLOCKED; never replay21.
+Next finalize/push/fetch the one-shot authority1 heavy release, then run its
+single pinned four-CPU/12-GiB/-j<=4 compiler attempt. Use real compiler failures
+to choose the next fix, then matching image and signal.mask-restore guest.
+
+NEW persistent user preference: prioritize code, integration, compiler results
+and bounded real guests over duplicated analysis/packets. Reuse accepted unchanged
+baselines, run narrow reversible/unprivileged experiments promptly, keep deeper
+independent review for unsafe ownership/interfaces and irreversible root actions.
+All host/resource/heavy-lock/identity/failure-preservation guards and final formal
+acceptance remain. Every new worker packet must carry this preference. Do not
+rewrite the pinned startup note, pause or restart after this checkpoint.
+
+Checked final thread/VM APIs are integrated separately at `d9d5162e...6a9b`,
+actual C/Rust compiled bodies PASS 46 vectors/language plus two protected-read
+controls; source-independent scoped review passes. They are NOT in fd09933c and
+do not enable fork. Actual results are `native-fork-final-destructor-central-pass-20261017.json`;
+the precompile author record remains frozen. Optional fork/VMA/ACK integration
+stays off the image critical path. All source WIP remains preserved/visible.
+
+External trim report `storage-headroom-restored-20261017T034830Z.json` recovered
+6.25 GiB actual allocation, host available35.92GB/scratch33.22GB, no files/leases
+deleted or image resize; root lock released. No more trim/cleanup assigned.
+All eight alias roots, old leases, known-good image/module/tool inputs, scratch12
+operational tree and active fork worktree stay pinned; coordinate future storage
+operations with any heavy owner. Counts remain 3 builds/12 diagnostic passes,
+0/273 formal apps, 6/130 production, 0/7 language gates. Comparison baseline
+engineering-estimate-20261017T025932Z.json unchanged. Continue toward image.
+
 ## Current continuation: checkpoint 362, preparation accepted / build census blocked
 
 Scratch22 exact `0a40e442...c3afe1` materialized once and independently passed

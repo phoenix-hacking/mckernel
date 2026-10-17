@@ -14152,3 +14152,91 @@ has no new kernel build or guest yet. The engineering-estimate comparison
 baseline `engineering-estimate-20261017T025932Z.json` remains byte-identical,
 SHA `708a8e4d9851db522dbccf578c541440d71ce328ea40245581f69c02d6430aa1`.
 No completion or pause is claimed: continue the image-first correction path.
+
+Continuation checkpoint 363, 2026-10-17: the boot/remount authority defect is
+repaired and exercised. Source `fd09933c64adaba32bf975ec96e5d518a42544e9`,
+tree `c6c846de121da56a179bcb2178668022b383e4a6`, is pushed/fetched with all
+13 changed blobs verified at `origin/scratch22-authority1-source-fd09933c`.
+The observer now distinguishes original historical identities from the exact
+current boot/device and proves the stable ext4 UUID via a pinned read-only
+block descriptor. Seven original lease bindings and four retirement hashes
+remain unchanged. Fourteen focused tests and independent source/profile review
+pass. Actual standalone observer and repaired MAIN canonical census each ran
+once: exit 0, empty stderr, seven authenticated historical leases, no active
+heavy processes/containers. Runtime capture bundle and independent review are
+`historical-lease-authority-live-20261017.json` and
+`historical-lease-authority-live-independent-review-20261017.json`
+(`14f93f4b...caab`). Original scratch22 remains preserved and BLOCKED; its old
+source/request was not promoted or replayed. This is the same recorded failure
+family S22-HISTORICAL-LEASE-BOOT-1, now corrected rather than renamed away.
+
+Fresh `scratch-22-authority1` materialization completed once: exit 0,
+475.93s wall, 71,108 KiB peak RSS, no swap. Canonical manifest/input/owner
+validation passes; preparation-only flags remain false for execution and all
+486 authenticated shared files now have eight links. Prepared request is
+`c4cd106962884e62dbb248815478816ef5eefb1f60a295e700ad18c9dee63c6a`;
+terminal/log are `1b237753...ed52` / `37ef7d6c...f3a4`. Independent essential
+artifact review PASS is `831e6ce47254c20d754537da356bfa92aa4c89c18a66c0eddde014a6352680ba`.
+The seven raw captures/request/manifest are tar-compared in
+`scratch22-authority1-preparation-captures-20261017.tar.gz`, SHA
+`5513b7166988faffc1d90a98c96a3e3befa326a7ebabc7a84d3a2302a822f754`.
+Full corpus admission remains in the actual materializer; no redundant full
+read-only corpus pass or old source suite was inserted before execution.
+Next: finalize the exact one-shot heavy release, commit/push/fetch it, run the
+single pinned four-CPU/12-GiB/no-swap/512-task/no-network build at jobs<=4, and
+repair the first concrete compiler result. Then matching image build and the
+unchanged signal.mask-restore guest follow their essential execution controls.
+
+Actual new kernel code: additive checked thread/VM final-release APIs and their
+C/Rust body regressions are integrated at
+`d9d5162eec5fdd0ea0a547d8b8de31769bfe6a9b`. Legacy APIs/body bytes/layouts
+are unchanged; strict decrement/error handling and final-free result propagation
+are new. Actual C compile, Rust 1.92 link/test, 4 Python checks and 2 Rust tests
+pass, covering 46 vectors per language plus two protected-page controls.
+Capture root `native-cheap-20261017-sYWtkx` retains every source/object/binary/
+command/stream/status; 1.03s wall, 120,348 KiB peak RSS. Independent
+PASS_SCOPED_API is `native-fork-final-destructor-independent-review-20261017.json`.
+Precompile author evidence stays frozen; actual results are additive in
+`native-fork-final-destructor-central-pass-20261017.json`. The nondumpable
+fixture correction preserves its exact original bytes and prevents Apport side
+effects; no host sysctl changed. Integrated bytes match all nine reviewed
+profile hashes. These later APIs are NOT in the pinned fd09933c image candidate;
+native full-kernel proof and actual fork/ACK integration remain pending, with
+fork admission still rejecting. Optional fork work stays off the image path.
+Isolated-worktree skip bits were cleared only for its five changed kernel files
+so WIP is visible; index SHA moved `1ce07a66...dcfc` to `a7ad8da6...72a5a`,
+without any source-byte change or loss of the earlier six WIP files.
+
+Persistent operating preference (user instruction
+`20261017T034654572237Z-fed6c7c8af6c4ee6bc3e4f13e29cbc7e`): push implementation,
+integration, actual compiler results and real bounded guest behavior promptly.
+Reuse unchanged evidence; narrow checks to touched behavior and essential risks.
+Routine reversible edits/read-only diagnostics/disposable unprivileged tests
+do not need exhaustive proof or a serial independent-review ceremony. Reserve
+deeper independent review for unsafe ownership/kernel interfaces and irreversible
+host/root actions. Keep isolation, actual resource limits, exclusive heavy
+ownership, live identities, immutable failures and original formal acceptance.
+This direction was relayed to every then-active child and included in subsequent
+packets. Do not alter the pinned launcher startup note or restart the campaign.
+
+Storage: the supervising chat's exact additive report
+`storage-headroom-restored-20261017T034830Z.json` records one targeted trim,
+exit 0, root lock released, no deletions/resize/lease changes. Actual backing
+allocation reduction is 6,716,567,552 bytes (6.25 GiB), not the reported 31.2-GiB
+discard coverage; host available rose to 35,921,448,960 bytes. Scratch remains
+33,223,598,080 bytes available. No concrete disk admission or I/O bottleneck is
+observed; remeasure before heavy execution. Preserve all eight shared alias roots
+(15/16/18/17/20/21/22/22-authority1), accepted candidates/metadata, immutable
+historical leases, known-good c81 and scratch18 image/module/tool inputs, scratch12
+operational source/build input and the active isolated fork worktree. No new
+cleanup sweep or trim is requested. Further project-tree reclamation/trim needs
+coordination with the exclusive heavy owner; archive candidates only after exact
+dependency/owner/restoration checks. An unreleased authority1 terminal-cleanup
+template is ready for the future actual stopped-container identity; no cleanup
+has run or been inferred from its tests.
+
+Counts still 3 compiled candidates, 12 bounded diagnostic guest passes,
+0/273 formal apps, 6/130 production gates, 0/7 language gates; this invocation
+has no new native candidate build or guest yet. The comparison baseline
+`engineering-estimate-20261017T025932Z.json` remains unchanged. Continue directly
+to the released compiler attempt; do not stop or claim OS completion here.

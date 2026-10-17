@@ -1,0 +1,73 @@
+{
+  "schema": "scratch22-authority1.prepared-artifact-independent-review.v1",
+  "decision": "PASS_PREPARED_ARTIFACT",
+  "reviewer": "/root/scratch22_adapter_review",
+  "implementation_ownership": false,
+  "model": "gpt-6.1-sol",
+  "scope": "Essential independent boundary check of the actual completed authority1 preparation. Reuses accepted source and preparation reviews. No build, privileged census, compiler, Docker, module, guest or acceptance authority.",
+  "candidate": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority1",
+  "target": "fd09933c64adaba32bf975ec96e5d518a42544e9",
+  "target_tree": "c6c846de121da56a179bcb2178668022b383e4a6",
+  "artifacts_sha256": {
+    "/home/holden/mckernel-work/scratch/native-exact-delta-request-scratch-22-authority1.json": "c4cd106962884e62dbb248815478816ef5eefb1f60a295e700ad18c9dee63c6a",
+    "/home/holden/mckernel-work/scratch/native-exact-inputs-scratch-22-authority1.json": "6c97693f8feded366d4bbeb940cdbebb3d0608a1ff145d3dc551d92330e2858b",
+    "/home/holden/mckernel-work/scratch/native-exact-candidate-delta-preparation-scratch-22-authority1-terminal.json": "1b23775394892871c09a5458f4d6de3e2d76c9bd1c1b04462b6d6e16a1c2ed52",
+    "/home/holden/mckernel-work/scratch/native-exact-candidate-delta-preparation-scratch-22-authority1.log": "37ef7d6c70b727e991e34d71977885bff3d3b82103bf888884cadec2c8f5f3a4",
+    "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-preparation-20261017.stdout": "d9cc9de7e765b8c7a267a65641919e6b761a4dd78e676d7e6b9bcc9f14f6ee9c",
+    "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-preparation-20261017.stderr": "051f317854fefe63aa08b97b3aac9b39e49e0a7d4fce7811547209c3a7ba0f43",
+    "/home/holden/mckernel-work/scratch/native-exact-scratch22-authority1-preparation-20261017.status": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  "actual_result": {
+    "status": "PASS_PREPARE_ONLY",
+    "canonical_owner_request_validation": "PASS",
+    "exit_code": 0,
+    "terminal_phase": "complete",
+    "terminal_exception": null,
+    "terminal_log_hash_matches": true,
+    "all_log_process_identities_match_terminal": true,
+    "pid": 64639,
+    "pid_starttime": "632686",
+    "process_absent_at_review": true,
+    "reported_wall_seconds": 475.93,
+    "reported_maximum_rss_kib": 71108,
+    "reported_swaps": 0
+  },
+  "request_flags": {
+    "preparation_only": true,
+    "executable": false,
+    "execution_released": false,
+    "release_required": true,
+    "operational_exclusion_consumed": false
+  },
+  "essential_checks": [
+    "Candidate HEAD/tree and request/manifest/stdout candidate identities match the exact target/tree above.",
+    "Request manifest path/raw SHA256 matches the actual manifest. Request raw SHA256 matches the canonical-owner-validation log entry. Current driver/owner/provenance hashes match request; manifest driver/IHK gitlink/overlay joins match request.",
+    "Actual log reaches canonical-input-verification and canonical-owner-validated, then complete/returncode0/exceptionnull. Exact terminal/log/stdout/status joins and process identity agree; stdout reports final canonical_owner_request_validation PASS.",
+    "All486 complete-log shared paths match stdout and manifest authenticated SHA256 bindings. For all eight distinct roots, regular-file device/inode/mode/size/mtime_ns matches the authenticated snapshot and nlink=8:3888 cheap metadata-path checks. No shared corpus bytes were rehashed.",
+    "Fresh output and evidence paths agree with request and remain real empty directories. New request lease, pinned scratch18 operational exclusion and shared heavy exclusion are absent. Request remains non-executable and no operational exclusion was consumed."
+  ],
+  "shared_files": 486,
+  "retained_alias_roots": 7,
+  "materialized_roots": 8,
+  "current_shared_nlink": 8,
+  "metadata_paths_checked": 3888,
+  "postflight_capacity": {
+    "host_free_bytes": 35627155456,
+    "scratch_free_bytes": 32941182976,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "emergency_bytes": 536870912
+  },
+  "independent_check": {
+    "exit_code": 0,
+    "profile": "Ordinary read-only Python on CPU0,120-second wall bound/shared2-GiB RSS planning share/no virtual-AS cap for Git pack mapping; no root, Docker, compiler, build, guest, network or execution mutation.",
+    "full_hash_census_repeated": false,
+    "whole_tree_analysis_repeated": false,
+    "source_suites_repeated": false,
+    "new_failures": []
+  },
+  "blocking_findings": [],
+  "next_action": "Dispatcher may checkpoint these exact prepared artifacts and issue the separately reviewed fresh one-shot build release. This record grants no build or privileged census execution authority.",
+  "build_execution_released": false,
+  "acceptance_credit": false
+}

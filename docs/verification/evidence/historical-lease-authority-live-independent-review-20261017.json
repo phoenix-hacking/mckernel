@@ -1,0 +1,138 @@
+{
+  "schema": "historical-lease-authority-live-independent-review.v1",
+  "decision": "PASS_SCOPED_READ_ONLY_OBSERVATION",
+  "reviewer": "/root/scratch21_source_review",
+  "implementation_author": "/root/scratch21_transaction",
+  "executor": "/root",
+  "implementation_ownership": false,
+  "model": "gpt-6.1-sol",
+  "source_commit": "fd09933c64adaba32bf975ec96e5d518a42544e9",
+  "source_review": {
+    "path": "docs/verification/evidence/historical-lease-authority-independent-review-20261017.json",
+    "sha256": "c05e2a266186d085845b4dc6085a2ca201ad14715c8f297bd73fee77ce9c39cd",
+    "unchanged": true
+  },
+  "files_sha256": {
+    "scripts/native_exact_historical_lease_observer.py": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "scripts/native_rust_exact_disk_build_wrapper.py": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+    "scripts/tests/test_native_exact_historical_lease_observer.py": "9040fc798d2a2aed1005bc3cc7c56e602871e2aaa4c19b9cf41b50911073a5d0",
+    "scripts/tests/test_native_rust_exact_disk_build_wrapper.py": "12f78efc7dae524167ad818384ea94d21f720df9f2e34c8386e7157b0121e44b"
+  },
+  "source_binding": "All four current file hashes equal the exact approved map and the fetched origin fd09933c blobs; no source repair or status rewrite was needed during observation.",
+  "retained_capture_bundle": {
+    "path": "docs/verification/evidence/historical-lease-authority-live-20261017.json",
+    "sha256": "8b8918f996cfcb1fa7f85b7a1106674519aabf90fe6979fc3f1227626c133778",
+    "all_seven_hex_captures_match_reviewed_raw_bytes_and_hashes": true
+  },
+  "captures": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/historical-lease-authority-live-20261017.stdout",
+      "size": 2841,
+      "sha256": "37257378a221363ef520fb6130bf316272d219f63a424d921ee3da24d441a1db"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/historical-lease-authority-live-20261017.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/historical-lease-authority-live-20261017.status",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/historical-lease-authority-live-20261017.command.json",
+      "size": 61,
+      "sha256": "24aba542de2873b892466513f5c719495c8dfcf83598dfb33cd34796f6e17f18"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/historical-lease-authority-census-20261017.stdout",
+      "size": 2941,
+      "sha256": "4bcaf48485770badec482efd264a439b818ba2a04d06fca3870ad719b517fccd"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/historical-lease-authority-census-20261017.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/historical-lease-authority-census-20261017.status",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    }
+  ],
+  "observer": {
+    "schema": "mckernel.historical-lease-observation.v1",
+    "status": "PASS_READ_ONLY",
+    "exit_code": 0,
+    "stderr": "",
+    "command": ["/usr/bin/sudo", "-A", "/usr/bin/python3", "-I", "-B", "-"],
+    "stdin_source_sha256": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "authority": {
+      "block_device": "/dev/loop36",
+      "current_device": 1828,
+      "filesystem_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+      "historical_boot_id": "c733d83b-a5ae-4f91-9ce6-9f8ccf119afd",
+      "historical_device": 1831,
+      "uuid_proof": "ext4-primary-superblock-pread-1024-at-1024"
+    },
+    "original_catalog_rows_checked": 7,
+    "row_comparison": "Every row equals the exact source LEASES/EVIDENCE_BINDINGS catalog: fixed path, current device1828, original inode/size/hash, original PID/starttime and exact retirement evidence SHA256. The canonical integration returns the same seven complete rows."
+  },
+  "integration": {
+    "schema": "mckernel.heavy-recovery-census.v1",
+    "status": "PASS_READ_ONLY",
+    "execution_released": false,
+    "exit_code": 0,
+    "stderr": "",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "processes": [],
+    "containers": [],
+    "authenticated_retired_lease_rows": 7,
+    "request": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-delta-request-scratch-22.json",
+      "sha256": "ac0fedafa61fbf1b10e037933f96cdb5937137a8c81da0099d24b6535673ea8e",
+      "normalized_sha256": "97e68b425196ec4891c7e16eee011bdd61fad30047dbcd2b8a0fb89346b2e865",
+      "device": 1828,
+      "inode": 57706,
+      "mode": "0600",
+      "uid": 1000,
+      "gid": 1000
+    },
+    "request_bytes_and_current_identity_match": true,
+    "resources": {
+      "cpus": [0, 2, 3, 4, 5, 6, 7],
+      "host_free": 29222780928,
+      "memory_available": 30532722688,
+      "scratch_free": 33229959168
+    },
+    "resource_check": "Captured host/scratch free exceed the unchanged16/12-GiB request floors plus512-MiB emergency headroom; MemAvailable exceeds pinned12-GiB memory and CPUs2-5 are included. This describes the captured observation, not a permanent lease."
+  },
+  "independent_validation": {
+    "result": "PASS; ordinary read-only validation return code0",
+    "profile": "One ordinary Python process on CPU7 with120-second wall bound; only seven captures below10KiB each, exact four-source Git blobs, existing source catalog and the small retained prepared request were read.",
+    "checks": [
+      "All exact approved source map hashes equal current files and fetched source commit blobs.",
+      "All seven raw capture hashes and sizes recorded; both stderr files are empty and both status files equal0 newline.",
+      "Observer argv equals the separately approved isolated sudo-A stdin-source profile.",
+      "Actual observer current boot/device/stableUUID and historical provenance fields match the exact generation contract.",
+      "All seven observer and integration lease rows exactly equal independently reconstructed original source catalog rows.",
+      "Integration schema/status, execution_released=false, empty process/container arrays, request raw/normalized digests and live request metadata match.",
+      "Captured affinity, RAM and disk capacities satisfy the unchanged pinned request floors."
+    ],
+    "live_observer_or_census_rerun": false,
+    "root_calls_by_reviewer": false,
+    "full_evidence_census_or_tests_repeated": false
+  },
+  "finding_resolution": {
+    "id": "S22-HISTORICAL-LEASE-BOOT-1",
+    "status": "REPAIRED_FOR_EXACT_CURRENT_GENERATION_READ_ONLY_OBSERVATION",
+    "original_failure_preserved": true,
+    "scope": "The actual repaired MAIN historical observer and canonical read-only consumer now authenticate the current mount/boot without altering any original lease/evidence. The old scratch22 candidate still contains its original source and remains immutable; its prior heavy release remains blocked."
+  },
+  "blocking_findings": [],
+  "build_execution_released": false,
+  "acceptance_credit": false,
+  "scope": "Accept only these two captured read-only observations for the reviewed current generation. Fresh source preparation/materialization, actual prepared-artifact approval, refreshed runtime admission and an independent exact heavy-build execution release remain required. No build, guest, scratch22 replay or formal OS acceptance is granted."
+}

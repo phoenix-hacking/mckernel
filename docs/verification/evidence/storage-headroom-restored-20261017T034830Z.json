@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "status": "PASS_TRIM",
+  "observed_at_utc": "2026-10-17T03:48:30.087649+00:00",
+  "author": "supervising chat /root",
+  "user_request": "Assess whether disk pressure slows progress and find safe cleanup opportunities to restore headroom while the autonomous campaign continues.",
+  "scope": "One standard targeted trim of filesystem-free extents; no files or containers removed, no lease/exclusion modifications, no scratch image resize.",
+  "coordination_instruction": "20261017T034829714890Z-1f27ac4904094c858ddb269f6271b7f3",
+  "priority_instruction_accepted": "20261017T034654572237Z-fed6c7c8af6c4ee6bc3e4f13e29cbc7e",
+  "command": [
+    "/usr/sbin/fstrim",
+    "--verbose",
+    "--minimum",
+    "1048576",
+    "/home/holden/mckernel-work/scratch"
+  ],
+  "mount": {
+    "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "source": "/dev/loop36",
+    "fstype": "ext4",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "relatime"
+    ]
+  },
+  "locking": {
+    "path": "/run/lock/mckernel-development.lock",
+    "device": 27,
+    "inode": 4,
+    "acquisition": "existing inode, nofollow, nonblocking exclusive flock",
+    "released_after_command": true
+  },
+  "authentication": "Existing private sudo askpass helper supplied only to sudo; no credential was printed or copied.",
+  "returncode": 0,
+  "stdout": "/home/holden/mckernel-work/scratch: 31.2 GiB (33447108608 bytes) trimmed\n",
+  "stderr": "",
+  "before": {
+    "host_available_bytes": 29205499904,
+    "scratch_available_bytes": 33223598080,
+    "image_device": 66306,
+    "image_inode": 47468427,
+    "image_size": 118111600640,
+    "image_allocated_bytes": 88440885248
+  },
+  "after": {
+    "host_available_bytes": 35921448960,
+    "scratch_available_bytes": 33223598080,
+    "image_device": 66306,
+    "image_inode": 47468427,
+    "image_size": 118111600640,
+    "image_allocated_bytes": 81724317696
+  },
+  "host_available_delta_bytes": 6715949056,
+  "image_allocation_reduction_bytes": 6716567552,
+  "reported_discard_bytes_are_not_reclaimed_bytes": true,
+  "file_deletions": 0,
+  "image_size_unchanged": true,
+  "image_identity_unchanged": true,
+  "disk_performance_observation": {
+    "sample_seconds": 3.0,
+    "nvme_busy_percent": 0.53,
+    "nvme_read_mib_per_second": 0.31,
+    "nvme_write_mib_per_second": 0.0,
+    "scratch_loop_busy_percent": 0.0,
+    "conclusion": "No disk-throughput bottleneck shown by this short idle-period sample; it does not measure future heavy-build latency."
+  },
+  "preserved": [
+    "All current and historical source/build/image/evidence trees, original failures, retained candidate roots, shared hardlink aliases and locks/leases/exclusions.",
+    "Existing scratch22 and fresh authority1 candidate namespaces.",
+    "Active compiler/package caches, tracker index, Codex sessions and launcher logs.",
+    "Other projects, desktop files, Downloads, VirtualBox VMs and personal backups."
+  ],
+  "additional_inventory": {
+    "stale_regenerable_application_cache_bytes_approx": 65052672,
+    "stale_application_caches_deleted": false,
+    "reason": "Only about62 MiB; no need to disturb app caches after recovering6.25 GiB without deleting files.",
+    "large_campaign_storage": {
+      "git_os_autopilot_allocated_bytes": 10517762048,
+      "git_objects_allocated_bytes": 9100476416,
+      "retained_exact_candidates_allocated_bytes": 26782621696
+    },
+    "large_campaign_storage_action": "Preserved; any later compression/reclamation must coordinate with the owning dispatcher, preserve evidence/reconstruction and avoid active log offsets or immutable alias/census inputs."
+  },
+  "next": "Continue image-first code/build progress. Recheck live floors before each heavy run. No broad cleanup or restore is needed for this trim."
+}
