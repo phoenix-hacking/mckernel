@@ -1,0 +1,985 @@
+{
+  "task_id": "native-running-external-modules-preparation-20261017-2",
+  "status": "INPUTS_PREPARED_EXECUTION_NOT_RELEASED",
+  "baseline_candidate": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "tool_image": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+  "references": {
+    "stage_lock": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/stage-lock.json",
+      "sha256": "a902a71e67aa8ca1fd0d317df2dbeffdc5998c5e29010fad44060c36aab2a4d3",
+      "retained_copy": "/home/holden/mckernel-work/scratch/native-running-external-modules-preparation-20261017-1/inputs/baseline-stage-lock.json",
+      "bytes": 8241
+    },
+    "build_environment": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-evidence/build/native-rust-build-evidence/build.environment",
+      "sha256": "ad5591d91bbca9a7d795926ff1890a0faadd4de38dc108673c00cc83d402a35f",
+      "retained_copy": "/home/holden/mckernel-work/scratch/native-running-external-modules-preparation-20261017-1/inputs/baseline-build.environment",
+      "bytes": 170
+    },
+    "build_commands": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-evidence/build/native-rust-build-evidence/build.commands",
+      "sha256": "025ae0a10dab15fa6acbec3d209e5125e467038c89bbf6aa9e80e991646f416e",
+      "retained_copy": "/home/holden/mckernel-work/scratch/native-running-external-modules-preparation-20261017-1/inputs/baseline-build.commands",
+      "bytes": 2081
+    },
+    "config": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/.config",
+      "sha256": "106055ad26cfc19373b1bc52e1dcc24b3eaa7c48125c451be029898b8f696474",
+      "retained_copy": "/home/holden/mckernel-work/scratch/native-running-external-modules-preparation-20261017-1/inputs/baseline.config",
+      "bytes": 260490
+    },
+    "release": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/include/config/kernel.release",
+      "sha256": "42bb1d3c01816ca5d716e59ce1b50f1b96be1e5643d866486b0f6db098d2725a",
+      "retained_copy": "/home/holden/mckernel-work/scratch/native-running-external-modules-preparation-20261017-1/inputs/baseline-kernel.release",
+      "bytes": 40
+    },
+    "kernel_makefile": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/Makefile",
+      "sha256": "96d61309de7b5a043f53f8203c05ea30c27808fc7db06b3503d98105f4fde6f6",
+      "retained_copy": "/home/holden/mckernel-work/scratch/native-running-external-modules-preparation-20261017-1/inputs/kernel-Makefile",
+      "bytes": 70466
+    },
+    "modpost_makefile": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/scripts/Makefile.modpost",
+      "sha256": "c4863ea111f798f9adf5a0ea17db63a398a9ba819ebf4475bbd59209a9d7229a",
+      "retained_copy": "/home/holden/mckernel-work/scratch/native-running-external-modules-preparation-20261017-1/inputs/Makefile.modpost",
+      "bytes": 4854
+    },
+    "build_makefile": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/scripts/Makefile.build",
+      "sha256": "9a4d2a34fb5db30c43db86f14474a9b3135bd877ad2850aedb437d0c7606f9df",
+      "retained_copy": "/home/holden/mckernel-work/scratch/native-running-external-modules-preparation-20261017-1/inputs/Makefile.build",
+      "bytes": 17493
+    },
+    "owner": {
+      "path": "/home/holden/mckernel/scripts/native_rust_exact_build_container_owner.py",
+      "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+      "retained_copy": "/home/holden/mckernel-work/scratch/native-running-external-modules-preparation-20261017-1/inputs/container-owner.py",
+      "bytes": 51420
+    },
+    "workflow": {
+      "path": "/home/holden/mckernel/.github/workflows/native-rust-host-modules-exact-build.yml",
+      "sha256": "030822f476e5aaa290b06255d3e874dbf584760e06a221b2dd15ed9332ed8629",
+      "retained_copy": "/home/holden/mckernel-work/scratch/native-running-external-modules-preparation-20261017-1/inputs/exact-build-workflow.yml",
+      "bytes": 95328
+    },
+    "compiler_ihk": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/drivers/misc/mckernel/.ihk.o.cmd",
+      "sha256": "db2a929e3a8c3e7eaaa5d6cce9dd721b6ac6da05347d54f482a6253fb86b54ef",
+      "retained_copy": "/home/holden/mckernel-work/scratch/native-running-external-modules-preparation-20261017-1/inputs/baseline-ihk.o.cmd",
+      "bytes": 3259
+    },
+    "compiler_ihk_smp_x86_64": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/drivers/misc/mckernel/.ihk_smp_x86_64.o.cmd",
+      "sha256": "bc808d213c5f4a3881bc3fec5c49c0f46933395c6d071f81def8274c13a5ec62",
+      "retained_copy": "/home/holden/mckernel-work/scratch/native-running-external-modules-preparation-20261017-1/inputs/baseline-ihk_smp_x86_64.o.cmd",
+      "bytes": 6153
+    },
+    "compiler_mcctrl": {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/drivers/misc/mckernel/.mcctrl.o.cmd",
+      "sha256": "285ff17f816e40f26e8af94377fa26cc324d7c00ffb81d900af841cea34732f4",
+      "retained_copy": "/home/holden/mckernel-work/scratch/native-running-external-modules-preparation-20261017-1/inputs/baseline-mcctrl.o.cmd",
+      "bytes": 2932
+    }
+  },
+  "closure": [
+    {
+      "path": "Kbuild",
+      "sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
+      "bytes": 371,
+      "baseline_sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/Kbuild",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "Kconfig",
+      "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+      "bytes": 848,
+      "baseline_sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/Kconfig",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "abi/application.rs",
+      "sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+      "bytes": 3171,
+      "baseline_sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/abi/application.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "abi/os_service.rs",
+      "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+      "bytes": 2527,
+      "baseline_sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/abi/os_service.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "abi/sysfs.rs",
+      "sha256": "63b25ac0df5fe3da4c0989196ea9e45e8d57b573e6e7603ca523452b2f19718e",
+      "bytes": 3393,
+      "baseline_sha256": "63b25ac0df5fe3da4c0989196ea9e45e8d57b573e6e7603ca523452b2f19718e",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/abi/sysfs.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "abi/sysfs_request.rs",
+      "sha256": "df5fad1ef6ec305b71c56ea6a89c9ecbce7b089b95730ad591e09909e3ffd8c7",
+      "bytes": 9082,
+      "baseline_sha256": "df5fad1ef6ec305b71c56ea6a89c9ecbce7b089b95730ad591e09909e3ffd8c7",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/abi/sysfs_request.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "abi/vdso.rs",
+      "sha256": "d796e3a0723d6a21096a1455c35a7820437dfc2b99e5bb0e1c1f4db79f1c7d7d",
+      "bytes": 17839,
+      "baseline_sha256": "d796e3a0723d6a21096a1455c35a7820437dfc2b99e5bb0e1c1f4db79f1c7d7d",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/abi/vdso.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "bytes": 19740,
+      "baseline_sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/abi/x86_64.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "application_image.rs",
+      "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+      "bytes": 8356,
+      "baseline_sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/application_image.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "application_pager.rs",
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "bytes": 3196,
+      "baseline_sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/application_pager.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "application_rpc.rs",
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "bytes": 10080,
+      "baseline_sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/application_rpc.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "application_syscall.rs",
+      "sha256": "03007f44c020c5d0cf797b18568ef8b329fd5cb4e81abe80bb5c542b58020c25",
+      "bytes": 15728,
+      "baseline_sha256": "03007f44c020c5d0cf797b18568ef8b329fd5cb4e81abe80bb5c542b58020c25",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/application_syscall.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "device_registry.rs",
+      "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
+      "bytes": 60221,
+      "baseline_sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/device_registry.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "ihk-compat-build-id.bin",
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+      "bytes": 8,
+      "baseline_sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ihk-compat-build-id.bin",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "ihk.rs",
+      "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+      "bytes": 18754,
+      "baseline_sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ihk.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "ihk_ioctl.rs",
+      "sha256": "60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e",
+      "bytes": 10467,
+      "baseline_sha256": "60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ihk_ioctl.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "ihk_mapping.rs",
+      "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+      "bytes": 21943,
+      "baseline_sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ihk_mapping.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "ihk_smp_x86_64.rs",
+      "sha256": "33b783c1e34727c0ae2e7202447a0516f7b8841a683b7580805c2b7d4fb0dc54",
+      "bytes": 36104,
+      "baseline_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "reviewed_replacement": true
+    },
+    {
+      "path": "ikc_master.rs",
+      "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+      "bytes": 26480,
+      "baseline_sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ikc_master.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "ikc_queue.rs",
+      "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      "bytes": 23030,
+      "baseline_sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/ikc_queue.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "mcctrl.rs",
+      "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      "bytes": 8992,
+      "baseline_sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/mcctrl.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "mcctrl_exec.rs",
+      "sha256": "4ebf73c46cf12a05fc76b078fbfcf218190dd372b335f886123125a012ae26b0",
+      "bytes": 8718,
+      "baseline_sha256": "4ebf73c46cf12a05fc76b078fbfcf218190dd372b335f886123125a012ae26b0",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/mcctrl_exec.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "mcctrl_process.rs",
+      "sha256": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+      "bytes": 41389,
+      "baseline_sha256": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/mcctrl_process.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "mcctrl_vm.rs",
+      "sha256": "83630dbe469466c7f69f51feb3a85438e2ae20049346b5e940d89d355f590ab3",
+      "bytes": 16884,
+      "baseline_sha256": "83630dbe469466c7f69f51feb3a85438e2ae20049346b5e940d89d355f590ab3",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/mcctrl_vm.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "os_registry.rs",
+      "sha256": "b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6",
+      "bytes": 30435,
+      "baseline_sha256": "b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/os_registry.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "os_runtime.rs",
+      "sha256": "65107aafb28868e76640cb2e1862e5d9e36a930a2e9dab850824d5108879225a",
+      "bytes": 71539,
+      "baseline_sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/os_runtime.rs",
+      "reviewed_replacement": true
+    },
+    {
+      "path": "os_service.rs",
+      "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+      "bytes": 6907,
+      "baseline_sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/os_service.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "page_allocator.rs",
+      "sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5",
+      "bytes": 21301,
+      "baseline_sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/page_allocator.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "page_owner_registry.rs",
+      "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869",
+      "bytes": 13085,
+      "baseline_sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/page_owner_registry.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "procfs_objects.rs",
+      "sha256": "4d1247a87706e94fa75d7bea667d9349d48b7c525eba99d02688a87f5369411c",
+      "bytes": 19245,
+      "baseline_sha256": "4d1247a87706e94fa75d7bea667d9349d48b7c525eba99d02688a87f5369411c",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/procfs_objects.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_application.rs",
+      "sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+      "bytes": 45009,
+      "baseline_sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_application.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_application_image.rs",
+      "sha256": "7fb8c862a1793ea4db6f90200adb9f78ee9b9b2abd9899b9ffd4671d647d7985",
+      "bytes": 9210,
+      "baseline_sha256": "7fb8c862a1793ea4db6f90200adb9f78ee9b9b2abd9899b9ffd4671d647d7985",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_application_image.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_application_syscall.rs",
+      "sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55",
+      "bytes": 21026,
+      "baseline_sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_application_syscall.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_boot_code.rs",
+      "sha256": "0f94af32383cc6e6108e0203619642eef0e492286131dac4b35d5e1248564a7f",
+      "bytes": 2024,
+      "baseline_sha256": "0f94af32383cc6e6108e0203619642eef0e492286131dac4b35d5e1248564a7f",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_boot_code.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_cpu.rs",
+      "sha256": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb",
+      "bytes": 67220,
+      "baseline_sha256": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_cpu.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_file_pager.rs",
+      "sha256": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+      "bytes": 13864,
+      "baseline_sha256": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_file_pager.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_ikc.rs",
+      "sha256": "4d1cd859dbea602f8232095fc66dd4d337848ea61ad94436da191fb316628b03",
+      "bytes": 12886,
+      "baseline_sha256": "4d1cd859dbea602f8232095fc66dd4d337848ea61ad94436da191fb316628b03",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_ikc.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_image.rs",
+      "sha256": "4f35ec396494fa428c55298c91ffe14aa0142d0282dd37d922f94a901a692689",
+      "bytes": 14324,
+      "baseline_sha256": "4f35ec396494fa428c55298c91ffe14aa0142d0282dd37d922f94a901a692689",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_image.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_loader.rs",
+      "sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+      "bytes": 3194,
+      "baseline_sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_loader.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_memory.rs",
+      "sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+      "bytes": 116888,
+      "baseline_sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_memory.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_procfs.rs",
+      "sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+      "bytes": 27574,
+      "baseline_sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_procfs.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_resource.rs",
+      "sha256": "d4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd",
+      "bytes": 133271,
+      "baseline_sha256": "d4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_resource.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_service.rs",
+      "sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+      "bytes": 40628,
+      "baseline_sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_service.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_startup.rs",
+      "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+      "bytes": 4963,
+      "baseline_sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_startup.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_startup_entry.S",
+      "sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+      "bytes": 1350,
+      "baseline_sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_startup_entry.S",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_topology.rs",
+      "sha256": "6d925fa50279e7eca938fd5b9d0b2a73105ef875793623024c681f40d70d08e6",
+      "bytes": 11189,
+      "baseline_sha256": "6d925fa50279e7eca938fd5b9d0b2a73105ef875793623024c681f40d70d08e6",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_topology.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_trampoline.S",
+      "sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+      "bytes": 3650,
+      "baseline_sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_trampoline.S",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_trampoline.rs",
+      "sha256": "4a110936d52a80664943b5dd605fbf9ad1c99460fe8ff0a16327ca015d2d0bcb",
+      "bytes": 5709,
+      "baseline_sha256": "4a110936d52a80664943b5dd605fbf9ad1c99460fe8ff0a16327ca015d2d0bcb",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_trampoline.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "smp_vdso.rs",
+      "sha256": "dd94d677c97b0c3271c746f1795289fdaadff89e1c08a660bd7659b14466d488",
+      "bytes": 6664,
+      "baseline_sha256": "dd94d677c97b0c3271c746f1795289fdaadff89e1c08a660bd7659b14466d488",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/smp_vdso.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "sysfs_memory.rs",
+      "sha256": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81",
+      "bytes": 25405,
+      "baseline_sha256": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_memory.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "sysfs_objects.rs",
+      "sha256": "2b04c57b43516550f0c3bdaf115b667d4a64393030494e79b553248c42aa7453",
+      "bytes": 13988,
+      "baseline_sha256": "2b04c57b43516550f0c3bdaf115b667d4a64393030494e79b553248c42aa7453",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_objects.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "sysfs_os.rs",
+      "sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+      "bytes": 2451,
+      "baseline_sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_os.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "sysfs_remote.rs",
+      "sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+      "bytes": 8287,
+      "baseline_sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_remote.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "sysfs_rpc.rs",
+      "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+      "bytes": 6833,
+      "baseline_sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_rpc.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "sysfs_setup.rs",
+      "sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+      "bytes": 12683,
+      "baseline_sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_setup.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "sysfs_snoop.rs",
+      "sha256": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+      "bytes": 5515,
+      "baseline_sha256": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_snoop.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "sysfs_tree.rs",
+      "sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+      "bytes": 12276,
+      "baseline_sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_tree.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "sysfs_zeroing.rs",
+      "sha256": "950919a29ab2fb53b0c488cc6e6d01b433f8caa95b27d1a1f32fb0ff3dc8390e",
+      "bytes": 12023,
+      "baseline_sha256": "950919a29ab2fb53b0c488cc6e6d01b433f8caa95b27d1a1f32fb0ff3dc8390e",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/sysfs_zeroing.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "user_string.rs",
+      "sha256": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+      "bytes": 603,
+      "baseline_sha256": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/user_string.rs",
+      "reviewed_replacement": false
+    },
+    {
+      "path": "zero_pages.rs",
+      "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+      "bytes": 4354,
+      "baseline_sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+      "origin": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/zero_pages.rs",
+      "reviewed_replacement": false
+    }
+  ],
+  "closure_files": 60,
+  "closure_bytes": 1174894,
+  "source_copy_method": "Reused original verified ordinary-copy closure unchanged; original driver proved nlink1 and distinct baseline inode. No source recopy or whole-closure rehash in correction.",
+  "excluded_working_tree": "All working-tree files except the two hash-reviewed replacements, including sysfs_remote.rs, smp_service.rs, smp_memory.rs, smp_cpu.rs",
+  "build_support_stat_only": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/Makefile",
+      "bytes": 149,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/.config",
+      "bytes": 260490,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/include/config/auto.conf",
+      "bytes": 129918,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/include/generated/autoconf.h",
+      "bytes": 188928,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/include/generated/rustc_cfg",
+      "bytes": 315138,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/include/generated/utsrelease.h",
+      "bytes": 62,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/include/config/kernel.release",
+      "bytes": 40,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/Module.symvers",
+      "bytes": 810975,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/vmlinux",
+      "bytes": 345265952,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/vmlinux.o",
+      "bytes": 632728000,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/scripts/target.json",
+      "bytes": 545,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/rust/kernel.o",
+      "bytes": 708552,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/rust/libkernel.rmeta",
+      "bytes": 1633186,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/rust/liballoc.rmeta",
+      "bytes": 1317138,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/rust/libmacros.so",
+      "bytes": 12029112,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/tools/objtool/objtool",
+      "bytes": 654688,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/scripts/mod/modpost",
+      "bytes": 84704,
+      "required_read_only": true
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/scripts/basic/fixdep",
+      "bytes": 13776,
+      "required_read_only": true
+    }
+  ],
+  "rust_support_exact_cmd_deps": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/rust/liballoc.rmeta",
+      "sha256": "583e1996905ea2d24756a4e59d60dc4936aa19a7750b99c0326f45ada319954d",
+      "bytes": 1317138,
+      "origin": "actual retained .o.cmd dependency"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/rust/libbindings.rmeta",
+      "sha256": "d2d6892e9adf3da2d32f229ef3038facc4e732da1757f58ec7259c18a4ecf43f",
+      "bytes": 19688412,
+      "origin": "actual retained .o.cmd dependency"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/rust/libbuild_error.rmeta",
+      "sha256": "6ba8796ddf6f417e00bb678de91d0c95765374b2b40e798df005f1e568977fb2",
+      "bytes": 3627,
+      "origin": "actual retained .o.cmd dependency"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/rust/libcompiler_builtins.rmeta",
+      "sha256": "3c2b9f02f87bf6cc7b31dfba4c23c3892afa0a024a1778a76f563c82b0a73290",
+      "bytes": 8868,
+      "origin": "actual retained .o.cmd dependency"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/rust/libcore.rmeta",
+      "sha256": "3f02784957b62d4926aeb9e199e90597db322e2504f571accb848d15725fb2c4",
+      "bytes": 59454428,
+      "origin": "actual retained .o.cmd dependency"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/rust/libkernel.rmeta",
+      "sha256": "f9805c18556598b5fb88cf703d32a43d01668302770417abeae9af8cf0f42388",
+      "bytes": 1633186,
+      "origin": "actual retained .o.cmd dependency"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/rust/libmacros.so",
+      "sha256": "50534a1cde9fb7a839e3324fa6628c3f57d39354bf03d8aef317c4fe71dfee77",
+      "bytes": 12029112,
+      "origin": "actual retained .o.cmd dependency"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/rust/libuapi.rmeta",
+      "sha256": "f9d2f4b4481d5efb3531178e93192e2f8309309c507de371fd5d057e7ad0acad",
+      "bytes": 16740726,
+      "origin": "actual retained .o.cmd dependency"
+    }
+  ],
+  "retained_module_output_inventory": [
+    {
+      "path": "drivers/misc/mckernel/.ihk-smp-x86_64.ko.cmd",
+      "bytes": 272
+    },
+    {
+      "path": "drivers/misc/mckernel/.ihk-smp-x86_64.mod.cmd",
+      "bytes": 186
+    },
+    {
+      "path": "drivers/misc/mckernel/.ihk-smp-x86_64.mod.o.cmd",
+      "bytes": 68114
+    },
+    {
+      "path": "drivers/misc/mckernel/.ihk-smp-x86_64.o.cmd",
+      "bytes": 489
+    },
+    {
+      "path": "drivers/misc/mckernel/.ihk.ko.cmd",
+      "bytes": 228
+    },
+    {
+      "path": "drivers/misc/mckernel/.ihk.mod.cmd",
+      "bytes": 153
+    },
+    {
+      "path": "drivers/misc/mckernel/.ihk.mod.o.cmd",
+      "bytes": 67971
+    },
+    {
+      "path": "drivers/misc/mckernel/.ihk.o.cmd",
+      "bytes": 3259
+    },
+    {
+      "path": "drivers/misc/mckernel/.ihk_smp_x86_64.o.cmd",
+      "bytes": 6153
+    },
+    {
+      "path": "drivers/misc/mckernel/.mcctrl.ko.cmd",
+      "bytes": 240
+    },
+    {
+      "path": "drivers/misc/mckernel/.mcctrl.mod.cmd",
+      "bytes": 162
+    },
+    {
+      "path": "drivers/misc/mckernel/.mcctrl.mod.o.cmd",
+      "bytes": 68010
+    },
+    {
+      "path": "drivers/misc/mckernel/.mcctrl.o.cmd",
+      "bytes": 2932
+    },
+    {
+      "path": "drivers/misc/mckernel/ihk-smp-x86_64.ko",
+      "bytes": 11418720
+    },
+    {
+      "path": "drivers/misc/mckernel/ihk-smp-x86_64.mod",
+      "bytes": 39
+    },
+    {
+      "path": "drivers/misc/mckernel/ihk-smp-x86_64.mod.c",
+      "bytes": 490
+    },
+    {
+      "path": "drivers/misc/mckernel/ihk-smp-x86_64.mod.o",
+      "bytes": 147328
+    },
+    {
+      "path": "drivers/misc/mckernel/ihk-smp-x86_64.o",
+      "bytes": 11342808
+    },
+    {
+      "path": "drivers/misc/mckernel/ihk.ko",
+      "bytes": 1438632
+    },
+    {
+      "path": "drivers/misc/mckernel/ihk.mod",
+      "bytes": 28
+    },
+    {
+      "path": "drivers/misc/mckernel/ihk.mod.c",
+      "bytes": 1925
+    },
+    {
+      "path": "drivers/misc/mckernel/ihk.mod.o",
+      "bytes": 158056
+    },
+    {
+      "path": "drivers/misc/mckernel/ihk.o",
+      "bytes": 1323904
+    },
+    {
+      "path": "drivers/misc/mckernel/ihk_smp_x86_64.o",
+      "bytes": 11065680
+    },
+    {
+      "path": "drivers/misc/mckernel/mcctrl.ko",
+      "bytes": 1914512
+    },
+    {
+      "path": "drivers/misc/mckernel/mcctrl.mod",
+      "bytes": 31
+    },
+    {
+      "path": "drivers/misc/mckernel/mcctrl.mod.c",
+      "bytes": 490
+    },
+    {
+      "path": "drivers/misc/mckernel/mcctrl.mod.o",
+      "bytes": 147288
+    },
+    {
+      "path": "drivers/misc/mckernel/mcctrl.o",
+      "bytes": 1803056
+    }
+  ],
+  "retained_module_output_bytes": 40981156,
+  "free_space": {
+    "host": {
+      "free_bytes": 19776278528,
+      "filesystem_id": 66306
+    },
+    "scratch": {
+      "free_bytes": 18717208576,
+      "filesystem_id": 1828
+    }
+  },
+  "environment": {
+    "KBUILD_BUILD_HOST": "rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP": "Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER": "mckernel",
+    "KBUILD_BUILD_VERSION": "1",
+    "SOURCE_DATE_EPOCH": "1786434034",
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "TZ": "UTC",
+    "BASH_ENV": "",
+    "ENV": "",
+    "GNUMAKEFLAGS": "",
+    "MAKEFILES": "",
+    "MAKEFLAGS": "",
+    "MAKEOVERRIDES": "",
+    "MFLAGS": "",
+    "LD_LIBRARY_PATH": "",
+    "LD_PRELOAD": "",
+    "HOME": "/candidate/home",
+    "TMPDIR": "/candidate/tmp"
+  },
+  "localversion": {
+    "value": "-211.44.1.el10_2.mckernel1.x86_64",
+    "origin": "retained original build.commands; build.environment contains no LOCALVERSION; cross-checked generated kernel.release"
+  },
+  "proposed_external_command": [
+    "/usr/bin/env",
+    "-i",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "BASH_ENV=",
+    "ENV=",
+    "GNUMAKEFLAGS=",
+    "MAKEFILES=",
+    "MAKEFLAGS=",
+    "MAKEOVERRIDES=",
+    "MFLAGS=",
+    "LD_LIBRARY_PATH=",
+    "LD_PRELOAD=",
+    "HOME=/candidate/home",
+    "TMPDIR=/candidate/tmp",
+    "/usr/bin/make",
+    "-C",
+    "/out/source/linux-6.12.0-211.44.1.el10_2",
+    "O=/out/build",
+    "M=/candidate/modules",
+    "ARCH=x86_64",
+    "LLVM=1",
+    "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "-j2",
+    "modules"
+  ],
+  "proposed_mounts": [
+    {
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output",
+      "target": "/out",
+      "read_only": true
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/native-running-external-modules-preparation-20261017-1",
+      "target": "/candidate",
+      "read_only": false
+    }
+  ],
+  "execution_demonstrated": false,
+  "all_three_module_set_required": true,
+  "abi_contract": "ihk provider and native SMP consumer both changed to callback ABI2; rebuild and validate all three together. Old ihk.ko cannot satisfy the newly selected callback version. No mixing into immutable baseline942.",
+  "resources_proposed_for_execution": {
+    "cpus": "2-5",
+    "cpu_limit": 4,
+    "ram_bytes": 12884901888,
+    "make_jobs": 2,
+    "serialization": "Dispatcher only after current mutex guest, reviewed root lock/lease owner and request; this is not an execution release"
+  },
+  "temporary_estimate": {
+    "basis": "flat retained small module output inventory; not a measured external build",
+    "provisional_candidate_disk_budget_bytes": 536870912,
+    "captures_need_separate_budget": true,
+    "kernel_copy_bytes": 0,
+    "tool_image_copy_bytes": 0,
+    "source_copy_bytes": 1174894
+  },
+  "next_driver_contract": {
+    "existing_reusable_mechanics": "BuildOwner exact image/mount inspection, ownership lease and shared reservation, operational exclusion, root-lock admission, bounded wait, positive terminal retirement and exact owned cleanup",
+    "not_reusable_unchanged": "BuildOwner validates full source/assets/output Git roots, hardcodes six mounts, offline driver argv and bzImage+3module receipt; cannot use this external proposal by passing a different driver alone",
+    "minimal_reviewed_extension_needed": "Separate external-module request/driver profile with exact read-only /out basis, writable fresh /candidate, digest-bound closure and support references, immutable tool image, above argv/environment, all3 output/modpost/source/ABI/vermagic oracles, same lease/root-lock/retirement/cleanup guarantees. No owner implementation created in this packet."
+  },
+  "original_failure": {
+    "evidence": "docs/verification/evidence/native-running-external-modules-preparation-20261017-1.json",
+    "sha256": "52e3235237cf5a546e35062b4f6b22b859bf5cd7adc5b01eceeec46fbdeba6e5",
+    "correction": "Single dispatcher-authorized support-name correction: actual command consumes .rmeta files and macros shared library, no libkernel.rlib requirement."
+  },
+  "acceptance": false,
+  "check_result": {
+    "command_path": "/home/holden/mckernel-work/scratch/native-running-external-modules-preparation-20261017-1/correction1.command.json",
+    "environment_path": "/home/holden/mckernel-work/scratch/native-running-external-modules-preparation-20261017-1/environment.json",
+    "returncode": 0,
+    "scope": "One corrected preparation check only, actual retained .cmd Rust metadata and macros dependencies verified; no build/container/root/Git execution.",
+    "profile": {
+      "cpu": 6,
+      "address_space_bytes": 1073741824,
+      "jobs": 1,
+      "cpu_seconds": 150,
+      "wall_seconds": 180,
+      "python": "/home/holden/anaconda3/bin/python3"
+    }
+  },
+  "source_closure_reused_without_recopy_or_rehash": true,
+  "retained_correction_sha256": {
+    "prepare-correction1.py": "3018533fb98c9ff4c6e9669eb8a0ab4c9f44cb87cf575d7019ae9fd8836788c2",
+    "correction1.command.json": "64a268ac04c78c7f57e4bc8cbe49114e5eda00d48f28956a06cb234e058e866f",
+    "correction1.stdout": "8add807c7afa0430a261feedb515a80f6d007c007ee8d263d545115eaf69e0f6",
+    "correction1.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "correction1.status.json": "df4d721d233a2334088d2d2e0110346ae9e509ff46bf0b379fbcfa85c715af4d",
+    "preparation-correction1.json": "a5407229ce453a55e9db0103f55fb3f54d9852bc8f42c1a22058d0d446af4902",
+    "proposed-external-command.json": "c597d8d1cc6785e91b5f9ae8ef5ae8d50ffc305c0f83dbecee8001b6b821061d",
+    "proposed-external-environment.json": "9619703e586c33b7e35b6b5000bc0f26b5481509e8710d0be12552cb1e3570dc",
+    "proposed-mounts.json": "b383540f55a0bd5cd4afdf3636c488aeec4f001151a5d3b35e3a5326f312b335"
+  },
+  "external_kbuild_source_contract": {
+    "Kbuild": "Three obj-m selections come from existing CONFIG_MCKERNEL_IHK_RUST / IHK_SMP_X86_64_RUST / MCCTRL_RUST=m; SMP composite ihk-smp-x86_64-y selects ihk_smp_x86_64.o. One make M=... modules invocation supplies all3 to modpost.",
+    "read_only_basis": "Linux Makefile1818-1827 explicitly treats external-module basis as read-only; actual invocation not demonstrated. No make command has run.",
+    "symbol_universe": "scripts/Makefile.modpost external branch imports retained build/Module.symvers and emits candidate/modules/Module.symvers; modpost external mode distinguishes imported module exports from vmlinux duplicates. No oracle/source filtering proposed.",
+    "required_headers": "Existing generated auto.conf/autoconf.h/rustc_cfg/utsrelease.h and selected kernel headers remain in read-only /out source/build; config/release digest-bound, support paths inventoried.",
+    "future_compiler_identity": "Pinned container Rust1.92 RedHat/LLVM21 metadata set, not host rustup; support .rmeta/.so hashes from actual retained compiler dependencies included."
+  },
+  "blocker": "Separate external-build owner/driver profile and execution review required; existing full BuildOwner cannot admit this request unchanged.",
+  "production_acceptance": false,
+  "formal_case_credit": false
+}

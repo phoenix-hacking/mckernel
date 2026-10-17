@@ -1,0 +1,589 @@
+{
+  "application_acceptance": false,
+  "baseline_dependency_comparison": {
+    "base_manifest": {
+      "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/manifest.json",
+      "sha256": "daab6d41de9866ca015cbd58766f855a41419686754d3438baaabeba301446f3",
+      "size": 19535
+    },
+    "dependencies": {
+      "ld-linux-x86-64.so.2": {
+        "base_members": [
+          "lib64/ld-linux-x86-64.so.2"
+        ],
+        "status": "PRESENT_NAME_ONLY_VERSION_REVIEW_PENDING"
+      },
+      "libc.so.6": {
+        "base_members": [
+          "lib64/libc.so.6"
+        ],
+        "status": "PRESENT_NAME_ONLY_VERSION_REVIEW_PENDING"
+      },
+      "libdl.so.2": {
+        "base_members": [],
+        "status": "MISSING_FROM_RETAINED_BASE"
+      },
+      "libgcc_s.so.1": {
+        "base_members": [
+          "lib64/libgcc_s.so.1"
+        ],
+        "status": "PRESENT_NAME_ONLY_VERSION_REVIEW_PENDING"
+      },
+      "libpthread.so.0": {
+        "base_members": [
+          "lib64/libpthread.so.0"
+        ],
+        "status": "PRESENT_NAME_ONLY_VERSION_REVIEW_PENDING"
+      }
+    },
+    "interpreter_in_inventory": true,
+    "interpreter_member": "lib64/ld-linux-x86-64.so.2",
+    "scope": "Selected exact present base library hashes and DT_VERNEED/DT_VERDEF name comparison only. Version-name presence is necessary, not a complete symbol/ABI or runtime proof. No staged closure created.",
+    "staged": false,
+    "staging_ready": false,
+    "version_checks": {
+      "ld-linux-x86-64.so.2": {
+        "argv": [
+          "/usr/bin/readelf",
+          "--version-info",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/root/lib64/ld-linux-x86-64.so.2"
+        ],
+        "missing_versions": [],
+        "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/root/lib64/ld-linux-x86-64.so.2",
+        "required_versions": [
+          "GLIBC_2.3"
+        ],
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "status": "REQUIRED_VERSION_NAMES_PRESENT",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "d767057eda07e618cbc971b7e48b8bf072cea4d75c389e14cb0927f3e66ad7ea"
+      },
+      "libc.so.6": {
+        "argv": [
+          "/usr/bin/readelf",
+          "--version-info",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/root/lib64/libc.so.6"
+        ],
+        "missing_versions": [],
+        "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/root/lib64/libc.so.6",
+        "required_versions": [
+          "GLIBC_2.2.5",
+          "GLIBC_2.3",
+          "GLIBC_2.3.4",
+          "GLIBC_2.14",
+          "GLIBC_2.16",
+          "GLIBC_2.18",
+          "GLIBC_2.28",
+          "GLIBC_2.30"
+        ],
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "status": "REQUIRED_VERSION_NAMES_PRESENT",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "be2f7cb080d3b06c391109dd471bb66f1dfdb9ea973e39f252eb678b1b102b22"
+      },
+      "libdl.so.2": {
+        "required_versions": [
+          "GLIBC_2.2.5"
+        ],
+        "status": "MISSING_LIBRARY"
+      },
+      "libgcc_s.so.1": {
+        "argv": [
+          "/usr/bin/readelf",
+          "--version-info",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/root/lib64/libgcc_s.so.1"
+        ],
+        "missing_versions": [],
+        "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/root/lib64/libgcc_s.so.1",
+        "required_versions": [
+          "GCC_3.0",
+          "GCC_3.3",
+          "GCC_4.2.0"
+        ],
+        "sha256": "cc9c9d070f290bd0b39a7208f8850f6f6cb85491cf6aee80ef4502c3f040c2cb",
+        "status": "REQUIRED_VERSION_NAMES_PRESENT",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "16c285dc038a0f7909d5613b658d536c9b1f80c9af1e8dac70d2fe4a4e080d02"
+      },
+      "libpthread.so.0": {
+        "argv": [
+          "/usr/bin/readelf",
+          "--version-info",
+          "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/root/lib64/libpthread.so.0"
+        ],
+        "missing_versions": [],
+        "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-stage-20261017-1/root/lib64/libpthread.so.0",
+        "required_versions": [
+          "GLIBC_2.2.5",
+          "GLIBC_2.12"
+        ],
+        "sha256": "f2791d4558ccad3fd23808f206e1b8e861b448b04d1e5cc75ae405e3e028fa1a",
+        "status": "REQUIRED_VERSION_NAMES_PRESENT",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "c90ef27de3db8e03cbbb29efa20eeda2ec5b05bc6116ecba84591899acf732c0"
+      }
+    }
+  },
+  "binary": {
+    "path": "/home/holden/mckernel-work/scratch/practical-rust-std-app-20261017-1/app",
+    "sha256": "6b59e9c9eded3af2ccaf821a5dac0d32316410c23dcd50f3d5578d1173a8bf95",
+    "size": 3935184
+  },
+  "captures": {
+    "app": {
+      "sha256": "6b59e9c9eded3af2ccaf821a5dac0d32316410c23dcd50f3d5578d1173a8bf95",
+      "size": 3935184
+    },
+    "base-ld-linux-x86-64-so-2.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "base-ld-linux-x86-64-so-2.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "base-ld-linux-x86-64-so-2.stdout": {
+      "sha256": "d767057eda07e618cbc971b7e48b8bf072cea4d75c389e14cb0927f3e66ad7ea",
+      "size": 1769
+    },
+    "base-libc-so-6.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "base-libc-so-6.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "base-libc-so-6.stdout": {
+      "sha256": "be2f7cb080d3b06c391109dd471bb66f1dfdb9ea973e39f252eb678b1b102b22",
+      "size": 67760
+    },
+    "base-libgcc_s-so-1.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "base-libgcc_s-so-1.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "base-libgcc_s-so-1.stdout": {
+      "sha256": "16c285dc038a0f7909d5613b658d536c9b1f80c9af1e8dac70d2fe4a4e080d02",
+      "size": 6586
+    },
+    "base-libpthread-so-0.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "base-libpthread-so-0.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "base-libpthread-so-0.stdout": {
+      "sha256": "c90ef27de3db8e03cbbb29efa20eeda2ec5b05bc6116ecba84591899acf732c0",
+      "size": 2332
+    },
+    "executed.rs": {
+      "sha256": "b0c1c255aa954f0dd98fd437f102055cadbc2b73b9f4d541576d09ee7bcc978e",
+      "size": 3872
+    },
+    "expected.stdout": {
+      "sha256": "8dd6a466fcbbec44e3582ddde6433f6f176e4272f54166c127c28c51b1cebfb6",
+      "size": 144
+    },
+    "linux-reference.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "linux-reference.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "linux-reference.stdout": {
+      "sha256": "8dd6a466fcbbec44e3582ddde6433f6f176e4272f54166c127c28c51b1cebfb6",
+      "size": 144
+    },
+    "readelf.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "readelf.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "readelf.stdout": {
+      "sha256": "9d59c8a1eca076bec6e847a1c7ff8f28bc89f31e837319f3f1a94cb8c797ecb1",
+      "size": 7470
+    },
+    "rustc-compile.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "rustc-compile.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "rustc-compile.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "rustc-target-libdir.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "rustc-target-libdir.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "rustc-target-libdir.stdout": {
+      "sha256": "8b36c9ca5b303e2adc9e371f0b74df864993017c2300da33494290526f648ae8",
+      "size": 129
+    },
+    "rustc-version.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "rustc-version.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "rustc-version.stdout": {
+      "sha256": "8f97c91e920ce0d02680e3d01eb87afa0c77290dcd5d19eb901ae194d4700d90",
+      "size": 196
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--version",
+        "--verbose"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/practical-rust-std-app-20261017-1",
+      "elapsed_seconds": 0.00893,
+      "label": "rustc-version",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "8f97c91e920ce0d02680e3d01eb87afa0c77290dcd5d19eb901ae194d4700d90",
+      "timeout_seconds": 10
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--print",
+        "target-libdir"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/practical-rust-std-app-20261017-1",
+      "elapsed_seconds": 0.010368,
+      "label": "rustc-target-libdir",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "8b36c9ca5b303e2adc9e371f0b74df864993017c2300da33494290526f648ae8",
+      "timeout_seconds": 10
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "/home/holden/mckernel/scripts/application-tests/practical_rust_std_app.rs",
+        "-o",
+        "/home/holden/mckernel-work/scratch/practical-rust-std-app-20261017-1/app"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/practical-rust-std-app-20261017-1",
+      "elapsed_seconds": 0.476884,
+      "label": "rustc-compile",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "timeout_seconds": 100
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "-d",
+        "--version-info",
+        "/home/holden/mckernel-work/scratch/practical-rust-std-app-20261017-1/app"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/practical-rust-std-app-20261017-1",
+      "elapsed_seconds": 0.002836,
+      "label": "readelf",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "9d59c8a1eca076bec6e847a1c7ff8f28bc89f31e837319f3f1a94cb8c797ecb1",
+      "timeout_seconds": 10
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/scratch/practical-rust-std-app-20261017-1/app"
+      ],
+      "cwd": "/home/holden/mckernel-work/scratch/practical-rust-std-app-20261017-1/case/work",
+      "elapsed_seconds": 0.005349,
+      "label": "linux-reference",
+      "returncode": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "8dd6a466fcbbec44e3582ddde6433f6f176e4272f54166c127c28c51b1cebfb6",
+      "timeout_seconds": 15
+    }
+  ],
+  "elf": {
+    "dynamic_glibc": true,
+    "interpreter": "/lib64/ld-linux-x86-64.so.2",
+    "needed": [
+      "libgcc_s.so.1",
+      "libpthread.so.0",
+      "libdl.so.2",
+      "libc.so.6",
+      "ld-linux-x86-64.so.2"
+    ],
+    "no_writable_executable_LOAD": true,
+    "nonexecuting_stack": true,
+    "readelf_tool": {
+      "path": "/usr/bin/readelf",
+      "sha256": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb",
+      "size": 658360
+    },
+    "type": "EXEC",
+    "version_requirements": [
+      "GCC_3.0",
+      "GCC_3.3",
+      "GCC_4.2.0",
+      "GLIBC_2.12",
+      "GLIBC_2.14",
+      "GLIBC_2.16",
+      "GLIBC_2.18",
+      "GLIBC_2.2.5",
+      "GLIBC_2.28",
+      "GLIBC_2.3",
+      "GLIBC_2.3.4",
+      "GLIBC_2.30"
+    ]
+  },
+  "environment": {
+    "HOME": "/home/holden/mckernel-work/scratch/practical-rust-std-app-20261017-1/home",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/holden/mckernel-work/scratch/practical-rust-std-app-20261017-1/tmp",
+    "TZ": "UTC"
+  },
+  "evidence_root": "/home/holden/mckernel-work/scratch/practical-rust-std-app-20261017-1",
+  "executed_source_snapshot": {
+    "path": "/home/holden/mckernel-work/scratch/practical-rust-std-app-20261017-1/executed.rs",
+    "sha256": "b0c1c255aa954f0dd98fd437f102055cadbc2b73b9f4d541576d09ee7bcc978e",
+    "size": 3872
+  },
+  "failure_policy": "Preserve every source/output/status; stop first unexpected failure, no unchanged retry.",
+  "file_close_scope": "sync_all is checked and File is dropped before remove_file; File::drop closes but does not report close errors. No close-error check claimed.",
+  "formal_case_credit": false,
+  "independent_expectation": {
+    "checksum": 1024005,
+    "counter": "2 workers each perform1000 mutex-protected increments, expected2000.",
+    "derivation": "37 is coprime to251, so every251-byte cycle sums to251*250/2=31375;8193=32*251+161, and independent Python tail sum=20005; total1024005. Independent direct-sum cross-check agrees.",
+    "freeze_before_run": true,
+    "word_counts": {
+      "files": 1,
+      "rust": 3,
+      "std": 2,
+      "threads": 1
+    }
+  },
+  "installed_target_rlib_bindings": {
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libaddr2line-11d54e777384a9e5.rlib": {
+      "sha256": "98970043a117b4d2df811576b6361fd6133c317289afde5e5a543b48d47d6fe0",
+      "size": 496678
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libadler2-1e0b0d62df36c85c.rlib": {
+      "sha256": "ccf0f034a49184229ebbe28076cdab4ddec41cba814cb95cc178b9cc5216b034",
+      "size": 28942
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/liballoc-06039bcfba61f665.rlib": {
+      "sha256": "b5321132ad2acde51f1add73826c8a9cb2658000292dd8222ccf17190f1351c5",
+      "size": 7639060
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcfg_if-6a40188dd7d989d2.rlib": {
+      "sha256": "ab4e9120ec216a8da245d2d1514cbf28ddd2dcb4b032267979096720f4c371f7",
+      "size": 9462
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcompiler_builtins-3e2e950d4bac10b5.rlib": {
+      "sha256": "36f7c2b99aa385f2727934c20e1f55bc52d753d0f70d8b9f2d80303e677c5df9",
+      "size": 6219550
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcore-5080178c80bf7a93.rlib": {
+      "sha256": "de4903817f11ab71fe15527b3d8f079e5d12380225b082c635d018ef03ed79b5",
+      "size": 62902370
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libgetopts-c8814943458d63c4.rlib": {
+      "sha256": "d76106aed373151f2784efaca839a2171a2920c8260c221275095f1e0e7c026e",
+      "size": 891268
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libgimli-35018e994bad7042.rlib": {
+      "sha256": "57cef6909667bca6af2cd55a883723aba0a3e80e309eaf3f78abe43756c5c7e6",
+      "size": 6112172
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libhashbrown-2ed6a8f06fc51a9d.rlib": {
+      "sha256": "1dba9c1fc1f6dc2d7af8ad24a95002d2fa30b72b1d8256a4b0ec897ce4413986",
+      "size": 1506796
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/liblibc-d25e598578fbf080.rlib": {
+      "sha256": "85a2e7ce4936cd46d4eb4af029bd8d52be690ff4ac81da608154fdf6f605e8a2",
+      "size": 4327384
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libmemchr-09f2ab7e0d97e07a.rlib": {
+      "sha256": "dcce398291df8be1ccbcea1755def798880e6c1c9d2cbc165884c594e46e25fd",
+      "size": 1782902
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libminiz_oxide-5312b588e5cfab93.rlib": {
+      "sha256": "88d84df90c716aa0e6f373085a1cb67741a594c4d520cfefc919833fdd8883ad",
+      "size": 220226
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libobject-2dc10b344e05b569.rlib": {
+      "sha256": "7dec71b0c3ef8bc670c8de189aed66dd876fc900d229178c103bc482b5300ea3",
+      "size": 8817730
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libpanic_abort-e2ab0eec3e5fd91a.rlib": {
+      "sha256": "b1a8cbc861a248f5a37863b13e43b639544a7d41bffd90e8fde65a6725933ee9",
+      "size": 12512
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libpanic_unwind-932f22f820d1e5ec.rlib": {
+      "sha256": "2e592e3a79f23c1de2286167df3c621c07f42e9fe8f9587340dc918806fd71cd",
+      "size": 37082
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libproc_macro-f8e79ba97b69012b.rlib": {
+      "sha256": "c80a80c592850e33c4eba30bb710a0d1cc1468b03312c696df452776e93519f7",
+      "size": 4666716
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libprofiler_builtins-5fea4b1d5095fe92.rlib": {
+      "sha256": "b54864a1839599d96e6502350dad7d5b50281cdc5d75aabcc5c1b109c636daf5",
+      "size": 495564
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_demangle-43b2ff22c18e1125.rlib": {
+      "sha256": "3a0d46bd5bef568924927f3be11fa42b52ac1416459c0aa4dee62ba8b53a26fa",
+      "size": 313446
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_literal_escaper-54d515d7e0ffe0c6.rlib": {
+      "sha256": "4203a311a47c942e4a90a716063e86e4117dd7551f2f77a0047433e82d4d1394",
+      "size": 131020
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_std_workspace_alloc-05b02707a5b2a256.rlib": {
+      "sha256": "c4c39c4cfa0f6791a4c1e43825654c050f9c4e8e4a7b94a366add90e95e0aedb",
+      "size": 6052
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_std_workspace_core-327ea4f353b4eb8c.rlib": {
+      "sha256": "74fbd772edb0fd18d390307fea5e346d1ed5c631cc3f76f77db9e2431c56d3df",
+      "size": 9570
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_std_workspace_std-c7bda3ac2a6b49f7.rlib": {
+      "sha256": "19fbc6ce713812f6f40ae1f42db516914f8e70c436ea0996bfb0ee8bb6d07974",
+      "size": 10760
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libstd-225863f279df55c4.rlib": {
+      "sha256": "ef593cb0824fb7039585eb2d0debc7a650f014be62a911524abf9c57fa0a8e20",
+      "size": 19131558
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libstd_detect-5978f0713dd5442d.rlib": {
+      "sha256": "87044c0b3b922cd011ef9fc55fb1b086160eb27c80393a93b005766c483d55ae",
+      "size": 645552
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libsysroot-85bdb6374f3e9283.rlib": {
+      "sha256": "6d122ce6daa888fb7b9c5a38a84161de470b7023e9dddc5b36c4c370de712d40",
+      "size": 6056
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libtest-6c04d4913014a9fc.rlib": {
+      "sha256": "72c17ba2c408aa0d2c88d3600192419809496cd5f2de9da4397597d39bcc9683",
+      "size": 7393422
+    },
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib/libunwind-94fdfaf0af91a65d.rlib": {
+      "sha256": "90c4333762ef36b45d700e2c9789c486c17591e93fffc08f152efdc04efddde9",
+      "size": 25006
+    }
+  },
+  "new_guest_runs": 0,
+  "oracle": {
+    "exit_code": 0,
+    "stderr_hex": "",
+    "stdout_hex": "7665632062797465733d3831393320636865636b73756d3d313032343030350a66696c6520726f756e64747269703d3120656f663d312072656d6f7665643d310a776f7264732066696c65733a3120727573743a33207374643a3220746872656164733a310a746872656164733d3220636f756e7465723d3230303020746c733d3120706172656e745f746c733d310a",
+    "stdout_utf8": "vec bytes=8193 checksum=1024005\nfile roundtrip=1 eof=1 removed=1\nwords files:1 rust:3 std:2 threads:1\nthreads=2 counter=2000 tls=1 parent_tls=1\n"
+  },
+  "production_acceptance": false,
+  "reference_summary": {
+    "String_BTreeMap_word_count": "files1 rust3 std2 threads1",
+    "Vec_bytes": 8193,
+    "barrier_participants": 3,
+    "case_work_empty_after_remove": true,
+    "counter": 2000,
+    "exit_code": 0,
+    "stderr_empty": true,
+    "stdout_exact": true,
+    "thread_local_checks": "Distinct worker values1000/1001 and parent77 checked after barrier and all joins.",
+    "workers_joined": 2
+  },
+  "resources": {
+    "address_space_limit_bytes": 1073741824,
+    "application_worker_threads": 2,
+    "codegen_units": 1,
+    "core": 0,
+    "cpu_affinity": [
+      6
+    ],
+    "cpu_seconds": 150,
+    "file_size_limit_bytes": 268435456,
+    "nofile": 256,
+    "one_job": true,
+    "outer_wall_seconds": 180,
+    "requested_stack_bytes_each": 262144
+  },
+  "review_prerequisites": [
+    "Independent Rust source/reference review.",
+    "Resolve exact DT_NEEDED/interpreter and symbol-version closure against compatible base libraries before any staging.",
+    "Use oversubscription-capable collector, actual argv and4096 stream limits if ND_FUTEX selected, plus separate execution review before guest.",
+    "Actual Rust std guest runtime, original catalog and whole-OS gates remain unproven."
+  ],
+  "runtime_release": false,
+  "rustc_version_verbose": "rustc 1.92.0 (ded5c06cf 2025-12-08)\nbinary: rustc\ncommit-hash: ded5c06cf21d2b93bffd5d884aa6e96934ee4234\ncommit-date: 2025-12-08\nhost: x86_64-unknown-linux-gnu\nrelease: 1.92.0\nLLVM version: 21.1.3\n",
+  "schema": "mckernel.practical-rust-std-app-preparation.v1",
+  "scope": "Real Rust std application and ordinary host Linux reference only. No no_std substitute, guest, root, Docker, Git or formal acceptance.",
+  "source": {
+    "path": "/home/holden/mckernel/scripts/application-tests/practical_rust_std_app.rs",
+    "sha256": "b0c1c255aa954f0dd98fd437f102055cadbc2b73b9f4d541576d09ee7bcc978e",
+    "size": 3872
+  },
+  "status": "PASS_REAL_RUST_STD_LINUX_REFERENCE_BASE_DEPENDENCY_CLOSURE_BLOCKED",
+  "task_id": "practical-rust-std-app-preparation-20261017-1",
+  "toolchain": {
+    "capture_python": {
+      "path": "/home/holden/anaconda3/bin/python3",
+      "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+      "size": 15880080
+    },
+    "cc": {
+      "path": "/usr/bin/cc",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "size": 1158288
+    },
+    "ld": {
+      "path": "/usr/bin/ld",
+      "sha256": "476b24d5cc1fef54f80412d06e7430b2dcf4e2b6f1525ee17e6eaaf16b28a00f",
+      "size": 1732192
+    },
+    "rustc": {
+      "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+      "size": 654904
+    }
+  }
+}

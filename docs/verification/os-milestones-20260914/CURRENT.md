@@ -15028,3 +15028,42 @@ modes preparation underway; realRuststdapp implementation/compile/reference
 assigned pinnedknownhostRust1.92. Practicaltargetprimary; conciseevidencelinks
 now replace repeatedJSON inexistingrenderer. All14practicalmilestonesOPEN;
 onlyP-M02-03 boundeddiagnosticretirementclosed; no nativeOSrestoration.
+
+
+## Checkpoint385 — eight diagnostics; matched-module build released next
+
+Adapted closed-read actual0/35.097811s/HEAD4230db5b stable independentlyPASS:
+56exactbytes/EBADF/first-last204/emptyerr/procfs empty,PID256-11→0/release0;
+all30clients/outer553606/containerc59b640f/rootretired. Record84a98154/archive
+32fe79a2; total8scopeddiagnostics, no wholebuffer/nativeOSrestoration credit.
+
+NEXTHEAVY matched3module externalbuild independentlyreleased be965961556e0215
+e3edd745157d1c8459493362d7d6651274734ac13da305fc. Request3b48d0908, proposal4
+a71ff9af (preserves stale-request-bind failure3), canonicalreviewpayloada006a3c4.
+Owner5c9799a8/driver8ea1e551/observer463ae558:30owner+13driver tests sourcePASS,
+exact fixedprivilegedseven-record observer/source+execution independentlyPASS.
+No records deleted/ignored, unknown/live/replaced fails; normal/finalcommand
+descendants+rootquarantine retained. Root27:4,nonce2a392fdcffaf426894bed7ed67a33c66,
+4CPU2-5/12GiB/noswap512/nonet,make-j2 externalmodules only/ROretainedLinuxbasis.
+Onlybaseline942+2reviewed1769263c deltas in60filefreshpackage, all3matchedmods
+required. Push/fetch/verifyfreshadmission thenownerCLI request3/release1,
+HEADfrozen. No actualcompiler/build observedyet. Ownerpostflightincludes
+exactownedcontainerremoval andhonestseparate build/cleanup status+archivalrelease.
+
+Usefulappqueue readyAHEAD: libcCOREmemory prep0df94c17/manifest36fa25c9 and
+proposal8ea0a473 independentlyconditionalPASS, original24byteexit37; real
+COREthreads prep a2b2bf97/manifest923664a0/proposald25cc3ea independently
+conditionalPASS; original2workers+barrier/TLS/mutex2000 and2guardcollector
+variant60921bc3 allow_oversubscribe/1024. StaticREALRuststd sourceb0c1c255/
+binary6d1865a0/prep2edb471d/manifest364191b1/proposal06e02724 independent
+staticstage+executionconditionalPASS,144byteoracle/4096, no libdl dependency.
+Samefrozenoracle/source/dynamicreportpreserved; no tiny-diagnosticexpansion.
+Pending all3actualguests, appsource/reference/preparation are notruntimecredit.
+
+Existingstopjoin675fca6d andRemote source independentlyPASS_UNWIRED (review
+alreadydone), 5+4actualbodytests; nextboundedepoch/CPUproof implementation
+native_shutdown_epoch_impl owns smp_memory/smp_cpu/sysfs_remote NEWcandidate
+only, snapshotsWIP; nofirstpackage/provider/toolpin/HEAD edits. Preserve all
+finish_shutdown guards/physicalowners until fullrundown. SupervisorReview3
+cutoff14:55:37 saved,next15:25UTC; usage16%then/97%stop. All14practical rows
+OPEN; onlyboundedP-M02-03closed. Legacyqualification DEFERRED unchanged.

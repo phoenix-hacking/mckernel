@@ -11,15 +11,18 @@ This file describes supervision, not OS acceptance or execution authority.
 - Engineering campaign: `01a149eb-f950-7f13-95a2-59dfc2918d49`; sole runtime/Git owner.
 - First baseline recorded: `2026-10-17T13:26:00Z`.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
-- Last full review: `2026-10-17T14:25:21Z` (interval 29m34s).
-- Next full review target: `2026-10-17T14:55:00Z` (07:55 America/Los_Angeles).
-- Next review latest target: `2026-10-17T15:25:00Z`; preserve healthy operations.
-- Last included-usage observation: 14%; existing campaign stop remains 97%.
-- Current intervention: keep immutable current942 diagnostic execution moving
-  alongside next-candidate lifecycle repair; reuse proven interpreter/build
-  commands and include bounded postjoin raw readback in execution packets.
-- Current invocation independently accepted diagnostic guests: 4 (signal,
-  calloc, file-write/read, TLS). Formal acceptance and broad engineering ranges unchanged.
+- Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
+  `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
+- Last full review: `2026-10-17T14:55:37Z` (interval 30m16s).
+- Next full review target: `2026-10-17T15:25:00Z` (08:25 America/Los_Angeles).
+- Next review latest target: `2026-10-17T15:55:00Z`; preserve healthy operations.
+- Last included-usage observation: 16%; existing campaign stop remains 97%.
+- Current intervention: resolve the exact historical-lease admission mismatch
+  for the next-module build while current942 diagnostics and useful C/Rust app
+  implementation progress independently; delegate next-case packet work early.
+- Current invocation independently accepted diagnostic guests: 7 (signal,
+  calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow).
+  Old formal scores and estimates remain historical, not the new goal's percentage.
 - No new monitor script, OS timer, engineering dispatcher or workload was started.
 
 ## Baseline review — 2026-10-17 13:26 UTC
@@ -252,3 +255,108 @@ Sources: existing state/console and additive records under `../evidence/`:
 `native-running-external-modules-preparation-20261017-1.json`.
 No shared artifact was rehashed for this supervision review. Broad M00-M13
 estimate bands and formal statuses remain unchanged; scoped evidence improves.
+
+## Review 3 — 2026-10-17 14:55:37 UTC
+
+Interval: `14:25:21` to `14:55:37` UTC, 30m16s. Campaign/process identities
+verified live; next review 15:25 UTC. User explicitly changed completion scope
+during this interval; preserve that change across continuation and future launches.
+
+| Measure | Review 2 interval | This interval |
+| --- | --- | --- |
+| New independently accepted McKernel diagnostics | 1 | 3: adapted mutex, alternate-signal, realloc-grow |
+| Invocation total accepted diagnostics | 4 | 7, each with accepted retirement |
+| New runtime attempts | 2 | 3; adapted closed-read reviewed/released next, not launched at cutoff |
+| New matched module build/native repair validation | 0 | 0; build admission remains blocked |
+| Native shutdown/resource-restoration pass | 0 | 0; original Ready4 -> -16 -> Shutdown8 remains open |
+| Included weekly usage | 14% | 16%; stop remains 97% |
+
+**Actual gains:** adapted mutex launched14:25:28.302, owner0/33.582s,
+independently accepted14:29:28. Frozen51-byte2/4/8 vectors pass; fourteen worker
+cycles reuse TID258 and do not establish overlap/contention. Alternate-signal
+launched14:39:36.912, owner0/33.643s, independently accepted14:46:02. Exact415
+bytes and sixteen handler-address/alternate-stack hits pass; normal-stack
+restoration is not proven. Realloc launched14:51:41.547, owner0/33.748s,
+independently accepted14:53:59. Exact25-byte oracle shows the original32-byte
+pattern survives growth to2048, not relocation or added-byte contents. All three
+retain initial process-retirement EAGAIN followed by successful retirement and
+release. Full guest/container/client/owner retirement accepted; no native OS
+restoration credit follows from guest disposal.
+
+**Scheduling:** mutex acceptance -> alternate launch10m08.912s; alternate
+acceptance -> realloc launch5m39.547s. At14:36:23 the dispatcher explicitly
+reported no known alternate runtime admission blocker and late assignment of
+its already assembled proposal to review. Delegating packet assembly and
+assigning the reviewer promptly removed that specific coordinator delay.
+Remaining wall time includes real review, checkpoint/fetch and live admission;
+do not call it all avoidable. Alternate owner result -> independent acceptance
+was5m51.452s, including readback captured14:44:26. Throughput improved from one
+to three accepted behaviors, but short different-workload windows do not prove
+a sustained2x/3x multiplier. Have the next eligible case's reviewer assigned
+while the current guest runs, rather than after its retirement.
+
+**User-authorized rebaseline:** the user explicitly rejected excessive formal
+milestones and huge fuzzing-hour requirements in favor of a solid kernel and
+working application infrastructure. Actual old requirements include100000fuzz
+VM-hours,30000bare-metal node-hours and168-hour Intel/AMD per-class soaks.
+These and broad full-catalog/language/hardware/external certification are now
+deferred from current completion, with all historical contracts/evidence/scores
+preserved. They are not PASS and must not reappear as active finish prerequisites.
+
+PRACTICAL-GOAL.md and practical-milestones.json define the new supported-profile
+M00-M13 goal: useful libc C and Rust std applications, representative core and
+concurrent/process behavior, actual native restoration, one clean pinned recipe
+replay, focused regressions and runnable delivery. The bounded final session is
+two fresh guests, ten complete native cycles,100app launches and60mixed-workload
+minutes. Checks may overlap/reuse matching valid evidence. Known corruption,
+unsafe ownership, failed shutdown and broken required apps remain real defects.
+Rust consumers, isolation/resources, independent changed-boundary review and
+usage/stop safeguards remain intact.
+
+Active GOAL/START/CONVERGENCE/PARALLEL-RESUME/VELOCITY and handoff precedence were
+updated; README's override was appended, preserving all68source-bound task lines.
+JSON/unique IDs/diff checks passed. Independent documentation review found no
+P1/P2 issue. Dispatcher explicitly adopted at14:47:27; practical-scope checkpoint
+`958c6bbc` was pushed/fetch-verified. Existing progress renderer now shows practical
+work first and original counters as historical/deferred. Reconciliation closes
+only P-M02-03 for the six accepted runs available then: one completed,32open,
+two unassessed checks across14open milestone areas. This is not a whole-OS
+percentage, and unassessed is not0%engineering. Seventh run arrived later.
+
+The earlier30–90+day full-roadmap planning guess is not a reliable ETA, especially
+after confirming the enormous old exposure requirements. The practical scope is
+different; forecast from actual lifecycle repairs and useful-app/exit-check
+closure over the next24–48hours, not by rescaling old percentages or counting
+new documents. No date was added as a contractual deadline.
+
+**Critical next work:** Running/log driver13injected tests pass; corrected
+external-module owner23tests and independent source review pass. Review caught
+a real descendant-retirement proof gap, fixed owner-locally with persistent
+uncertainty/negative controls; shared live transport is unchanged. Draft build
+admission still rejects seven preserved historical leases through a blanket glob.
+Author is reusing their existing authenticated historical-retirement contract,
+without deleting records or running cleanup. Resolve that exact source mismatch,
+bind the final request/release, then perform the first actual matched module build.
+No Linux/image rebuild or native repair pass has occurred. Keep new sysfs/worker
+WIP out of this first Running/log candidate.
+
+In parallel, realloc and adapted closed-read preparation/review are complete;
+closed-read's next run covers EBADF and first/last buffer bytes only. Retained
+dynamic-libc native-core memory/thread modes are being prepared. A real Rust std
+application is being implemented and compiled with the pinned toolchain, rather
+than stopping at a source-discovery note. Sysfs cancellation and exactly-once
+worker-stop components still require integration/peer-stop proof and actual
+native validation. One heavy owner remains the cap.
+
+Steering receipts: practical scope
+`20261017T144202597819Z-8d995cad319f40a99d4ee970c0a24488`, completed files
+`20261017T144711682412Z-ccab5ebd78544f0fbc7a2f443f9ef4dc`, and compact report/
+real app implementation
+`20261017T145149287864Z-a89161b6732d43739b7c3386712b9647`.
+
+Sources: existing state/console, three dispatch command/result records, additive
+result reviews for mutex/alternate/realloc under `../evidence/`, practical goal/
+worklist/reconciliation, existing PROGRESS.md, and external-owner reviewer findings
+at14:48:42 and14:54:40. Supervision started no launcher/build/guest/cleanup and
+rehashes no shared execution artifacts. Next adjustment: keep next-case assembly
+and review ahead of the runtime slot while the module admission fix proceeds.

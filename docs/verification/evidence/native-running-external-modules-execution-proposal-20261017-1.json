@@ -1,0 +1,286 @@
+{
+  "application_acceptance": false,
+  "author": "/root/native_running_publication",
+  "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "binds": [
+    {
+      "destination": "/out",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output"
+    },
+    {
+      "destination": "/candidate",
+      "read_only": false,
+      "source": "/home/holden/mckernel-work/scratch/native-running-modules-candidate-2a392fdcffaf426894bed7ed67a33c66"
+    },
+    {
+      "destination": "/inputs",
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/scratch/native-running-modules-inputs-2a392fdcffaf426894bed7ed67a33c66"
+    },
+    {
+      "destination": "/driver.py",
+      "read_only": true,
+      "source": "/home/holden/mckernel/scripts/native_running_external_modules_offline.py"
+    },
+    {
+      "destination": "/request.json",
+      "read_only": true,
+      "source": "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-request-20261017-1.json"
+    }
+  ],
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "build": {
+    "Linux_or_image_build": false,
+    "all_three_matched_modules": [
+      "ihk.ko",
+      "ihk-smp-x86_64.ko",
+      "mcctrl.ko"
+    ],
+    "argv": [
+      "/usr/bin/env",
+      "-i",
+      "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+      "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+      "KBUILD_BUILD_USER=mckernel",
+      "KBUILD_BUILD_VERSION=1",
+      "SOURCE_DATE_EPOCH=1786434034",
+      "PATH=/usr/bin:/bin",
+      "LANG=C",
+      "LC_ALL=C",
+      "TZ=UTC",
+      "BASH_ENV=",
+      "ENV=",
+      "GNUMAKEFLAGS=",
+      "MAKEFILES=",
+      "MAKEFLAGS=",
+      "MAKEOVERRIDES=",
+      "MFLAGS=",
+      "LD_LIBRARY_PATH=",
+      "LD_PRELOAD=",
+      "HOME=/candidate/home",
+      "TMPDIR=/candidate/tmp",
+      "/usr/bin/make",
+      "-C",
+      "/out/source/linux-6.12.0-211.44.1.el10_2",
+      "O=/out/build",
+      "M=/candidate/modules",
+      "ARCH=x86_64",
+      "LLVM=1",
+      "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+      "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+      "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+      "KBUILD_BUILD_USER=mckernel",
+      "KBUILD_BUILD_VERSION=1",
+      "SOURCE_DATE_EPOCH=1786434034",
+      "-j2",
+      "modules"
+    ],
+    "compiler_make_execution_demonstrated": false,
+    "cwd": "/out/build",
+    "environment": {
+      "BASH_ENV": "",
+      "ENV": "",
+      "GNUMAKEFLAGS": "",
+      "HOME": "/candidate/home",
+      "KBUILD_BUILD_HOST": "rocky-10.2-x86_64",
+      "KBUILD_BUILD_TIMESTAMP": "Tue, 11 Aug 2026 07:40:34 +0000",
+      "KBUILD_BUILD_USER": "mckernel",
+      "KBUILD_BUILD_VERSION": "1",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "LD_LIBRARY_PATH": "",
+      "LD_PRELOAD": "",
+      "MAKEFILES": "",
+      "MAKEFLAGS": "",
+      "MAKEOVERRIDES": "",
+      "MFLAGS": "",
+      "PATH": "/usr/bin:/bin",
+      "SOURCE_DATE_EPOCH": "1786434034",
+      "TMPDIR": "/candidate/tmp",
+      "TZ": "UTC"
+    },
+    "make_jobs": 2,
+    "retries": 0
+  },
+  "checks": {
+    "command_capture": "/home/holden/mckernel-work/scratch/native-running-external-modules-request-preparation-20261017-1/command.json",
+    "inputs": 14,
+    "owner_evidence_absent": true,
+    "scope": "One ordinary source-copy pass from already-verified60file package and14selectedrefs; strict request key set compared to frozen owner AST; no repeated baseline corpus hash, no owner execution/client/compiler.",
+    "source_bytes": 1174894,
+    "source_files": 60
+  },
+  "closure_sha256": "cfbb0e4fdf6d55543485de002e5bc8b52bf22f759c3cff9231f76460839dd001",
+  "compatibility_build_id": {
+    "meaning": "Retained ABI compatibility only; not proof of unchanged942 compiled source",
+    "path": "ihk-compat-build-id.bin",
+    "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0"
+  },
+  "driver": {
+    "path": "/home/holden/mckernel/scripts/native_running_external_modules_offline.py",
+    "sha256": "8ea1e55140f64d46d60acfa7796ab1479b0314cee4b21cc74c8d17b0cf205685"
+  },
+  "driver_cli": [
+    "/usr/bin/python3",
+    "/driver.py",
+    "--execute"
+  ],
+  "excluded_working_tree": "All files outside the two reviewed replacements; Remote/service/memory/CPU WIP excluded by locked baseline closure",
+  "execution_authority": false,
+  "execution_count": 1,
+  "formal_case_credit": false,
+  "free_space_at_preparation": {
+    "host": {
+      "device": 66306,
+      "free_bytes": 19694256128
+    },
+    "scratch": {
+      "device": 1828,
+      "free_bytes": 18665717760
+    }
+  },
+  "nonce": "2a392fdcffaf426894bed7ed67a33c66",
+  "owner": {
+    "path": "/home/holden/mckernel/scripts/native_running_external_modules_owner.py",
+    "sha256": "04f81e2c9abf820349395663ba017cfc7a09a128307b4a0cb0183286ad2c73a9"
+  },
+  "owner_cli_template": [
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel/scripts/native_running_external_modules_owner.py",
+    "--request",
+    "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-request-20261017-1.json",
+    "--request-sha256",
+    "d856e8aa0f934578324b3c9dadf8d866ceed7f213d206b49a0da806521937dd2",
+    "--release",
+    "<dispatcher-reviewed-one-shot-release-path>",
+    "--release-sha256",
+    "<exact-reviewed-release-sha256>"
+  ],
+  "ownership": {
+    "acquired": false,
+    "common": "/home/holden/mckernel-work/scratch/native-running-external-modules-operational-exclusion.json",
+    "lease": "/home/holden/mckernel-work/scratch/native-running-external-modules.lease.json",
+    "observed_conflicts": [
+      "/home/holden/mckernel-work/scratch/native-exact-build-lease-f5d8d914-1.json",
+      "/home/holden/mckernel-work/scratch/native-exact-build-lease-76ae20b5-disk-retirement-1.json",
+      "/home/holden/mckernel-work/scratch/native-exact-build-lease-67589154-1.json",
+      "/home/holden/mckernel-work/scratch/native-exact-build-lease-76ae20b5-disk-1.json",
+      "/home/holden/mckernel-work/scratch/native-exact-build-lease-704f6654-1.json",
+      "/home/holden/mckernel-work/scratch/native-exact-build-lease-76ae20b5-1.json",
+      "/home/holden/mckernel-work/scratch/native-exact-build-lease-76ae20b5-disk-validation-2.json"
+    ],
+    "serialization": "Dispatcher waits for current942 mutex guest and all active heavy operations. Live owner rereads boot/mount/identities/free floors/conflicts under authenticated root mutex before acquiring any records.",
+    "shared": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock"
+  },
+  "pending": [
+    "Independent owner source review exact04f81 and runtime closure",
+    "Independent review of this exact request/execution payload",
+    "Dispatcher verified fetched-source checkpoint",
+    "One-shot PASS_EXECUTION_RELEASE JSON authenticating all source pins and both independent reviews",
+    "Fresh live admission and serialized heavy slot"
+  ],
+  "postflight": {
+    "failure_policy": "Preserve original compiler status/streams/partial output. Uncertain client/container/record proof retains/quarantines ownership; no automatic recovery. No forced removal or broad cleanup.",
+    "required": [
+      "Exact admitted name/nonce/containerID",
+      "positive owned terminal state and unchanged full profile",
+      "all Docker client exits reaped",
+      "owned terminal rm by exact ID",
+      "empty id/name/label queries",
+      "all three ownership records snapshot by descriptor and exact bytes archived",
+      "ownership-archive + release-authorized hashes bound to request and reviewed sources before any unlink",
+      "all exact records revalidated before removal and parent fsync",
+      "release-complete proof before root mutex release"
+    ],
+    "terminal_policy": "remove-owned-terminal"
+  },
+  "preparation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-preparation-20261017-2.json",
+    "sha256": "edbb3fd4b779967533b945cb4ac86ca5edf46e45fad68aa722807c6fee2e3fc3"
+  },
+  "production_acceptance": false,
+  "profile": {
+    "candidate_disk_budget_bytes": 536870912,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cpu_limit": 4,
+    "cpu_set": "2-5",
+    "ipc": "private",
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "network": "none",
+    "no_new_privileges": true,
+    "owner_capture_budget_bytes": 67108864,
+    "pids_limit": 512,
+    "read_only_container": true,
+    "timeout_seconds": 1800,
+    "tmpfs": {
+      "/tmp": "rw,nodev,nosuid,size=256m"
+    },
+    "user": "1000:1000"
+  },
+  "request": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-running-external-modules-request-20261017-1.json",
+    "sha256": "d856e8aa0f934578324b3c9dadf8d866ceed7f213d206b49a0da806521937dd2"
+  },
+  "root_mutex": {
+    "acquired": false,
+    "expected_device": 27,
+    "expected_gid": 0,
+    "expected_inode": 4,
+    "expected_uid": 0,
+    "observed": {
+      "device": 27,
+      "gid": 0,
+      "inode": 4,
+      "mode": 420,
+      "path": "/run/lock/mckernel-development.lock",
+      "uid": 0
+    },
+    "path": "/run/lock/mckernel-development.lock"
+  },
+  "schema": "mckernel.native-running-external-modules-execution-proposal.v1",
+  "scratch_mount": {
+    "device": 1828,
+    "major_minor": "7:36",
+    "observed": {
+      "fstype": "ext4",
+      "maj:min": "7:36",
+      "options": "rw,nosuid,nodev,relatime",
+      "target": "/home/holden/mckernel-work/scratch",
+      "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52"
+    },
+    "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52"
+  },
+  "source_candidate_sha": "1769263c751befa9983d19705833d3d5ac6a1ace",
+  "source_deltas": [
+    {
+      "baseline_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+      "path": "ihk_smp_x86_64.rs",
+      "source_candidate_sha256": "33b783c1e34727c0ae2e7202447a0516f7b8841a683b7580805c2b7d4fb0dc54"
+    },
+    {
+      "baseline_sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+      "path": "os_runtime.rs",
+      "source_candidate_sha256": "65107aafb28868e76640cb2e1862e5d9e36a930a2e9dab850824d5108879225a"
+    }
+  ],
+  "source_sha256": {
+    "scripts/native_running_external_modules_offline.py": "8ea1e55140f64d46d60acfa7796ab1479b0314cee4b21cc74c8d17b0cf205685",
+    "scripts/native_running_external_modules_owner.py": "04f81e2c9abf820349395663ba017cfc7a09a128307b4a0cb0183286ad2c73a9",
+    "scripts/native_rust_exact_build_container_owner.py": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+    "scripts/native_rust_exact_build_image_prepare.py": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b",
+    "scripts/native_rust_exact_build_image_rebind.py": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e",
+    "scripts/native_rust_exact_build_image_rebind_probe.py": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635",
+    "scripts/native_rust_exact_build_offline.py": "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a",
+    "scripts/native_rust_exact_disk_build_wrapper.py": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+    "scripts/native_rust_exact_mckernel_image_container_owner.py": "e9861cf73b0328c9fe2eacb987ea179933146cbeddbc3951405d4e60e89560f4",
+    "scripts/tests/test_native_running_external_modules_owner.py": "15397dd52c861a0230f1ec5ca5c803646ffba6c76949b75085d2dff166336266"
+  },
+  "status": "PROPOSAL_PENDING_INDEPENDENT_REVIEW_AND_DISPATCHER_RELEASE",
+  "task_id": "native-running-external-modules-request-preparation-20261017-1",
+  "tool_image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d"
+}
