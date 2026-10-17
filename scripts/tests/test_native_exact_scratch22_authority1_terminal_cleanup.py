@@ -135,5 +135,82 @@ class Authority1CleanupTests(unittest.TestCase):
         self.case.test_actual_child_termination_during_failed_quarantine_evidence_keeps_lock()
 
 
+class ActualSizeTests(unittest.TestCase):
+    def setUp(self):
+        self.case = baseline.CleanupTests()
+        self.case.setUp()
+        self.addCleanup(self.case.doCleanups)
+        self.m = self.case.m
+
+    def sparse(self, name, size):
+        path = self.m.ROOT / name
+        fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        try:
+            os.ftruncate(fd, size)
+        finally:
+            os.close(fd)
+        return path
+
+    def test_actual_owner_receipt_size_streams_hash_in_bounded_chunks(self):
+        size = 89341228
+        path = self.sparse('actual-size-receipt.json', size)
+        expected = hashlib.sha256()
+        remaining = size
+        zero = bytes(1 << 20)
+        while remaining:
+            block = zero[:min(len(zero), remaining)]
+            expected.update(block)
+            remaining -= len(block)
+        real_read = os.read
+        with mock.patch.object(self.m, 'read_bounded', side_effect=AssertionError('buffered selected receipt')), \
+             mock.patch.object(self.m.os, 'read', wraps=real_read) as read:
+            row = self.m.observe_identity(path)
+        self.assertEqual(row['size'], size)
+        self.assertEqual(row['sha256'], expected.hexdigest())
+        self.assertLessEqual(max(call.args[1] for call in read.call_args_list), 1 << 20)
+
+    def test_selected_file_over_finite_stream_limit_is_refused_before_read(self):
+        path = self.sparse('too-large-selected', self.m.PROTECTED_LIMIT + 1)
+        with mock.patch.object(self.m.os, 'read') as read:
+            with self.assertRaisesRegex(self.m.Refusal, 'protected-file-size-bound'):
+                self.m.observe_identity(path)
+        read.assert_not_called()
+
+    def test_observation_documents_exceed_old_limit_but_remain_finitely_bounded(self):
+        size = (32 << 20) + 1
+        path = self.sparse('large-observation.json', size)
+        self.assertEqual(len(self.m.read_bounded(path)), size)
+        with path.open('r+b') as stream:
+            stream.truncate(self.m.DOCUMENT_LIMIT + 1)
+        with mock.patch.object(self.m.os, 'read') as read:
+            with self.assertRaisesRegex(self.m.Refusal, 'bounded-file-shape'):
+                self.m.read_bounded(path)
+        read.assert_not_called()
+
+    def test_complete_inventory_exact_bound_and_overflow_preserve_all_entries(self):
+        root = self.m.ROOT / 'bounded-tree'
+        root.mkdir()
+        for name in ('a', 'b'):
+            (root / name).touch()
+        with mock.patch.object(self.m, 'INVENTORY_LIMIT', 3):
+            self.assertEqual(len(self.m.metadata_inventory(root)), 3)
+            (root / 'c').touch()
+            with self.assertRaisesRegex(self.m.Refusal, 'protected-inventory-bound'):
+                self.m.metadata_inventory(root)
+        self.assertEqual({p.name for p in root.iterdir()}, {'a', 'b', 'c'})
+        self.assertGreater(self.m.INVENTORY_LIMIT, 286298)
+
+    def test_large_saved_log_capture_replays_without_small_transaction_reader(self):
+        payload = b'preserved log\n' * 100000
+        (self.m.EVIDENCE / 'container.log').write_bytes(payload)
+        self.m.CAPTURE.write_bytes(payload)
+        with mock.patch.object(self.m, 'read_at', side_effect=AssertionError('small transaction reader')), \
+             mock.patch.object(self.m, 'run_privileged_large', side_effect=AssertionError('Docker invoked')):
+            self.m.capture_logs(False, execute=False)
+        self.m.CAPTURE.write_bytes(payload + b'drift')
+        with self.assertRaisesRegex(self.m.Refusal, 'retained-capture-bytes'):
+            self.m.capture_logs(False, execute=False)
+
+
 if __name__ == '__main__':
     unittest.main()

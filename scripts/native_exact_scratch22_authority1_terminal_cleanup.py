@@ -59,7 +59,11 @@ PROTECTED = []
 TERMINAL = EVIDENCE / 'inspect-terminal.json'
 TERMINAL_SHA = TERMINAL_INODE = TERMINAL_SIZE = None
 LIMIT = 1 << 20
-PROTECTED_LIMIT = 32 << 20
+# Actual authority1 owner receipt is 89,341,228 bytes; complete inventories cover
+# 140,028 output and 286,298 evidence entries. Keep finite measured headroom.
+PROTECTED_LIMIT = 128 << 20
+DOCUMENT_LIMIT = 256 << 20
+INVENTORY_LIMIT = 400000
 RELEASE = None
 ROOT_LOCK_BINDING = None
 EXPECTED_CONTAINER = None
@@ -86,12 +90,12 @@ def metadata_identity(path):
     return row
 
 def metadata_inventory(root):
-    rows = [metadata_identity(root)]
-    for path in sorted(root.rglob('*')):
-        if len(rows) >= 200000:
+    paths = []
+    for path in root.rglob('*'):
+        if len(paths) + 1 >= INVENTORY_LIMIT:
             raise Refusal('protected-inventory-bound')
-        rows.append(metadata_identity(path))
-    return rows
+        paths.append(path)
+    return [metadata_identity(root)] + [metadata_identity(path) for path in sorted(paths)]
 
 def protected_files():
     """Preserve complete metadata census and only selected published byte joins."""
@@ -110,10 +114,8 @@ def protected_files():
             raise Refusal('selected-artifact-or-receipt-drift:' + row['path'])
 
 def capture_logs(present, execute=False, transaction=None):
-    expected = (EVIDENCE / 'container.log').read_bytes()
+    expected = read_bounded(EVIDENCE / 'container.log', maximum=PROTECTED_LIMIT)
     if os.path.lexists(CAPTURE):
-        if observe_identity(CAPTURE)['sha256'] != digest(expected):
-            raise Refusal('docker-log-capture-binding')
         read_at_path(CAPTURE, expected)
         return
     if not present:
@@ -166,13 +168,13 @@ def parse(raw):
 def identity(meta):
     return (meta.st_dev, meta.st_ino)
 
-def read_bounded(path):
+def read_bounded(path, maximum=DOCUMENT_LIMIT):
     fd, _ = directory(path.parent)
     opened = None
     try:
         opened = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=fd)
         before = os.fstat(opened)
-        if not stat.S_ISREG(before.st_mode) or before.st_size > PROTECTED_LIMIT:
+        if not stat.S_ISREG(before.st_mode) or before.st_size > maximum:
             raise Refusal('bounded-file-shape:' + str(path))
         chunks = []
         remaining = before.st_size + 1
@@ -208,7 +210,21 @@ def observe_identity(path):
                'mode': oct(stat.S_IMODE(meta.st_mode)), 'uid': meta.st_uid,
                'gid': meta.st_gid, 'size': meta.st_size, 'nlink': meta.st_nlink}
         if stat.S_ISREG(meta.st_mode):
-            row['sha256'] = digest(read_bounded(path))
+            if meta.st_size > PROTECTED_LIMIT:
+                raise Refusal('protected-file-size-bound:' + str(path))
+            hashed = hashlib.sha256()
+            remaining = meta.st_size + 1
+            observed = 0
+            while remaining:
+                raw = os.read(fd, min(remaining, 1 << 20))
+                if not raw:
+                    break
+                observed += len(raw)
+                remaining -= len(raw)
+                hashed.update(raw)
+            if observed != meta.st_size:
+                raise Refusal('protected-file-size-raced:' + str(path))
+            row['sha256'] = hashed.hexdigest()
         after = os.fstat(fd)
         fields = ('st_dev', 'st_ino', 'st_mode', 'st_size', 'st_nlink', 'st_uid',
                   'st_gid', 'st_mtime_ns', 'st_ctime_ns')
@@ -222,13 +238,11 @@ def observe_identity(path):
         os.close(parent)
 
 def read_at_path(path, expected):
-    fd, _ = directory(path.parent)
-    try:
-        raw, _ = read_at(fd, path.name)
-        if raw != expected:
-            raise Refusal('retained-capture-bytes')
-    finally:
-        os.close(fd)
+    row = observe_identity(path)
+    if (row['device'] != DEVICE or row['mode'] != '0o600' or row['uid'] != UID or
+            row['gid'] != GID or row['nlink'] != 1 or row['size'] != len(expected) or
+            row.get('sha256') != digest(expected)):
+        raise Refusal('retained-capture-bytes')
 
 def create_at(parent, name, data, on_created=None):
     fd = os.open(name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,

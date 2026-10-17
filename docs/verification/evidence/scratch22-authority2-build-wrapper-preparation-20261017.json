@@ -1,0 +1,87 @@
+{
+  "schema": "scratch22-authority2.build-wrapper-preparation.v1",
+  "status": "SOURCE_CANDIDATE_NOT_RELEASED",
+  "author": "/root/scratch22_build_wrapper",
+  "model": "gpt-6.1-sol",
+  "implementation": {
+    "path": "scripts/native_exact_scratch22_authority2_build_wrapper.py",
+    "sha256": "3b2ddb3794de5941cdbe0743a6555c7ed0edd3319a7e953b12de3aec196576ce"
+  },
+  "tests": {
+    "path": "scripts/tests/test_native_exact_scratch22_authority2_build_wrapper.py",
+    "sha256": "f541d2f60759f6f53c4ab4774407c459202f2921700ab465905994533681878a",
+    "command": "timeout 120s taskset -c 2 prlimit --as=2147483648 -- python3 -B -m unittest -v scripts.tests.test_native_exact_scratch22_authority2_build_wrapper",
+    "cases": 38,
+    "exit_code": 0,
+    "reported_seconds": 1.326,
+    "earlier_run": "37 tests passed in 1.087 seconds before adding started-owner oversize quarantine and extending the large-retirement case to failed build status.",
+    "profile": "One CPU2/job, 2-GiB planning share and inherited per-process address-space limit, 120-second suite timeout. Synthetic temporary files and mocked admission/build calls only; inherited five serial temporary Python child/flock regressions remain. No subagents, compiler, root, Docker, guest, network or Git command. No live capture, candidate, output, guard, lock or lease was accessed."
+  },
+  "base": {
+    "path": "scripts/native_exact_scratch22_authority1_build_wrapper.py",
+    "sha256": "a0439f79cb895dd6696e4005f1b8f7d6d42018ff3481541b43b12ab2ab582fad",
+    "modified": false
+  },
+  "capture_correction": {
+    "family": "S22-OBSERVER-CAPTURE-BOUND-1",
+    "initial_failure": "Actual authority1 full native compiler failed E0412 for kernel::Error. Canonical owner retired with an exited-status-1 container, but the outer guard could not read its large stdout under the 16-MiB default and correctly quarantined because its own retirement observation remained unproved.",
+    "stdout_bytes_reported_by_dispatcher": 80143046,
+    "owner_receipt_bytes_reported_by_dispatcher": 89341228,
+    "source_change": "Add stable_large_capture with finite 128-MiB maximum, used only for build stdout and retained terminal evidence. Default stable_regular, release/source input and stderr bounds remain 16 MiB. Publish keeps its default 16-MiB limit, with an explicit finite 128-MiB choice only for terminal evidence. The embedded large wrapper_result remains intact; no retirement predicate or build-status oracle changes.",
+    "terminal_reason": "Terminal JSON embeds wrapper_result, so fixing stdout parsing alone would leave the terminal publication/readback failing at 16 MiB. Both narrowly scoped terminal capture paths use 128 MiB.",
+    "finite_limit_bytes": 134217728,
+    "default_limit_bytes": 16777216,
+    "memory": "Synthetic result padding is 17 MiB. Over-limit control uses a sparse 128-MiB-plus-one-byte file and refuses before os.read or allocation. No single production bytearray exceeds the finite 128-MiB bound, and no test allocates a bytearray above 300 MB.",
+    "history": "This is the one bounded correction following the actual capture-bound failure, within the same failure family. Authority2 naming does not reset history or authorize repeated unchanged attempts."
+  },
+  "preserved_live_failure_evidence": {
+    "source": "Dispatcher's existing observation/recovery review; this worker did not read or alter these active files/processes.",
+    "guard_pid": 80259,
+    "guard_starttime": "718109",
+    "canonical_owner_pid": 80867,
+    "canonical_owner_reported_state": "terminal/gone; retained container exited 1",
+    "root_lock_device_inode": [27, 4],
+    "quarantine": {
+      "path": "/home/holden/mckernel-work/scratch/native-exact-scratch-22-authority1-heavy-build.root-lock-quarantine.json",
+      "device": 1828,
+      "inode": 57730,
+      "size": 298,
+      "sha256": "d3cbda53da7a302f44817161ed3cad35301e290cafd3ea897bfea5c92dc61a38",
+      "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+      "reason": "build-started-without-positive-terminal-retirement"
+    },
+    "ownership": "Actual guard, root/shared locks, request, captures, owner receipt, terminal container, candidate and outputs remain under the independent recovery review. No recovery action is performed or authorized by this source candidate."
+  },
+  "unreleased_dependencies": {
+    "expected_adapter": "scripts/prepare_native_exact_scratch22_authority2.py",
+    "ADAPTER_RELEASED": false,
+    "ADAPTER_SHA256": null,
+    "execution_guard": "execute calls require_released_adapter before reading a release or acquiring a lock. It refuses NOT_RELEASED while the actual adapter and reviewed source/repair/cleanup/recovery bindings are unavailable. No environment value, CLI flag or release JSON can enable this source candidate.",
+    "remaining_integration": [
+      "Actual frozen authority2 adapter source and its exact independent contract",
+      "Exact current minimal kernel repair commit/tree and actual reviewed source map; no guessed commit or acceptance status",
+      "Accepted authority1 cleanup and independently accepted quarantine recovery proof using actual producer schemas",
+      "Fresh retained alias inventory including authority1 materialization, without reuse or mutation of any prior namespace",
+      "Independent final source/preparation/artifact/execution reviews and externally digest-bound one-shot release"
+    ],
+    "template_limit": "The copied authority1 preflight is an inert source template until these actual contracts are integrated. It does not claim that old authority1 cleanup/source checks satisfy future authority2 prerequisites, and no substitute acceptance schema is invented."
+  },
+  "regressions": [
+    "Synthetic canonical stdout larger than 16 MiB is parsed, positive current retirement is proved by unchanged predicates, and the complete large terminal is published/read back under the finite bound.",
+    "The same large-result path preserves a failed build as failure after positive retirement and releases only the root lock; it never turns compiler failure into success.",
+    "Capture over 128 MiB refuses before allocation/read, and a started-owner oversize observation still quarantines before unlock.",
+    "Default source/release/publication limits remain 16 MiB; an oversized default publication is refused before creating its file.",
+    "NOT_RELEASED refuses before release reads or root-lock acquisition. Existing tests exercise deeper paths only with explicit test-only gate mocks.",
+    "Original signal, real temporary child/flock, unknown retirement, failed stream/evidence, canonical four-flag derivation and independent release-review regressions remain.",
+    "AST comparison permits only mechanical namespace changes, the explicit execution admission guard and exact finite capture/publication/readback substitutions; root-lock, four-signal deferral, indefinite quarantine, positive retirement and reviewed resource behavior remain unchanged."
+  ],
+  "prior_failure_families": [
+    "S22-LOCK-1: original SIGQUIT lock-loss failure and independently reviewed bounded correction are preserved; four-signal setup is unchanged.",
+    "S22-HISTORICAL-LEASE-BOOT-1: original scratch22 read-only census refusal and its reviewed authority1 source repair/materialization remain preserved; no replay or correction-history reset.",
+    "S22-OBSERVER-CAPTURE-BOUND-1: actual failed compiler/canonical retirement and outer capture refusal/quarantine are preserved; this source candidate alone does not resolve live recovery or accept another build."
+  ],
+  "new_test_failures": [],
+  "execution_released": false,
+  "live_recovery_or_build_performed": false,
+  "acceptance_delta": {"current_candidate_builds": 0, "real_guest_apps": 0, "formal_applications": 0, "production_gates": 0}
+}
