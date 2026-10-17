@@ -186,6 +186,11 @@ const _: () = {
     assert!(core::mem::offset_of!(NativeIrqWorkSlot, flags) == 8);
 };
 
+// SAFETY: Linux 6.12 exports irq_work_sync with this opaque pointer ABI.
+// Callers pass an aligned, validated node from the exact retained generation's
+// allocation after closing and draining guest senders. That allocation and
+// callback code remain live through synchronization in sleepable process
+// context, with no callback dependency on a lock held by the caller.
 extern "C" {
     /// GPL-exported Linux irq_work synchronization primitive.  This is used
     /// only after the guest sender gate is closed and each slot is validated.

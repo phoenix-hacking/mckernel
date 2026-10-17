@@ -682,6 +682,10 @@ REVIEWED_RUST_BLOCK_PREFIXES.update({
 /// pre-effect failure, or `SHUTDOWN_V6_POST_EFFECT | (errno as u32)` after an
 /// irreversible effect.  The latter keeps admission closed and retains the
 /// exact generation for reconciliation/retry.
+// SAFETY: Only trusted provider module code may supply the live module owner
+// and ABI-correct, resident, non-unwinding callbacks. create_os acquires the
+// provider module pin before publication and retains it through teardown;
+// shutdown must obey the exact-generation, serialized v6 effect contract above.
 ''',
 })
 
@@ -999,7 +1003,13 @@ REVIEWED_RUST_BLOCK_PREFIXES.update({'IHK SMP OS ioctl callback ABI': "// SAFETY
                                       "// provider's shutdown attempt and return a Linux-style errno result.\n",
  'OS backend shutdown v6 callback type': '/// v6 carries the effect boundary in-band.  Zero is a complete transaction;\n'
                                          '/// a signed Linux errno is pre-effect; the high tag bit marks a post-effect\n'
-                                         '/// failure whose admission and registry state must remain closed.\n',
+                                         '/// failure whose admission and registry state must remain closed.\n'
+                                         '// SAFETY: IHK invokes this resident, non-unwinding scalar-ABI callback with\n'
+                                         '// the exact live generation lease and provider module pin, while holding the\n'
+                                         '// per-OS operation mutex after closing admission and entering Shutdown.\n'
+                                         '// The provider must report every possibly irreversible effect with the v6\n'
+                                         '// post-effect tag, retain affected owners on failure, and never reenter OS\n'
+                                         '// operations or destruction while that mutex is held.\n',
  'OS compat ioctl ABI': "// SAFETY: Linux's compat callback has the same file lifetime as native "
                         'ioctl.\n'
                         '// Zero-extend the top-level user address once before any backend can '

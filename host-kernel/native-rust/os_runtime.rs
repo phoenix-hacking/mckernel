@@ -196,6 +196,12 @@ type OsBackendShutdownV5 = unsafe extern "C" fn(u32, u64) -> i32;
 /// v6 carries the effect boundary in-band.  Zero is a complete transaction;
 /// a signed Linux errno is pre-effect; the high tag bit marks a post-effect
 /// failure whose admission and registry state must remain closed.
+// SAFETY: IHK invokes this resident, non-unwinding scalar-ABI callback with
+// the exact live generation lease and provider module pin, while holding the
+// per-OS operation mutex after closing admission and entering Shutdown.
+// The provider must report every possibly irreversible effect with the v6
+// post-effect tag, retain affected owners on failure, and never reenter OS
+// operations or destruction while that mutex is held.
 type OsBackendShutdownV6 = unsafe extern "C" fn(u32, u64) -> i64;
 
 const SHUTDOWN_V6_POST_EFFECT: i64 = 1_i64 << 62;
@@ -816,6 +822,10 @@ pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v5(
 /// pre-effect failure, or `SHUTDOWN_V6_POST_EFFECT | (errno as u32)` after an
 /// irreversible effect.  The latter keeps admission closed and retains the
 /// exact generation for reconciliation/retry.
+// SAFETY: Only trusted provider module code may supply the live module owner
+// and ABI-correct, resident, non-unwinding callbacks. create_os acquires the
+// provider module pin before publication and retains it through teardown;
+// shutdown must obey the exact-generation, serialized v6 effect contract above.
 #[export_name = "ihk_os_create_unbooted_v6"]
 pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v6(
     provider_minor: u32,
@@ -1273,6 +1283,9 @@ unsafe fn os_request(
                 shutdown_v5_outcome(result)
             }
             OsBackendShutdown::V6(callback) => {
+                // SAFETY: The live lease, operation mutex and module pin retain
+                // this exact generation and callback; admission and registry
+                // are closed, and the v6 tag preserves post-effect ownership.
                 let result = unsafe { callback(handle.minor() as u32, handle.generation()) };
                 shutdown_v6_outcome(result)
             }

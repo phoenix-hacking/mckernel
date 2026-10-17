@@ -45,15 +45,15 @@ class CurrentLedgerTests(unittest.TestCase):
         value = load_committed()
         discovery = ledger.validate_ledger(value, REPO_ROOT)
         self.assertEqual(len(discovery["inputs"]), 55)
-        self.assertEqual(len(discovery["sites"]), 637)
-        self.assertEqual(value["coverage"]["by_crate"], {'ihk': 167, 'ihk_smp_x86_64': 411, 'mcctrl': 89})
-        self.assertEqual(value["coverage"]["by_kind"], {'extern_function': 89,
- 'ffi_export': 40,
- 'foreign_block': 13,
+        self.assertEqual(len(discovery["sites"]), 654)
+        self.assertEqual(value["coverage"]["by_crate"], {'ihk': 173, 'ihk_smp_x86_64': 422, 'mcctrl': 89})
+        self.assertEqual(value["coverage"]["by_kind"], {'extern_function': 93,
+ 'ffi_export': 42,
+ 'foreign_block': 14,
  'global_asm': 2,
  'inline_asm': 2,
  'mutable_static': 2,
- 'unsafe_block': 415,
+ 'unsafe_block': 425,
  'unsafe_function': 34,
  'unsafe_impl': 39,
  'unsafe_trait': 1})
@@ -91,7 +91,7 @@ class CurrentLedgerTests(unittest.TestCase):
         sites = {item["id"]: item for item in value["sites"]}
         self.assertEqual(
             value["coverage"]["site_ids_sha256"],
-            "eee9c941a0a5e83bf7d7c6948876b64c187a81ab0908ffda5934a530e6567bc4",
+            "e5b3118a5e5c5120c6785371df7680c45adaa1feac97b1df24e9fdb30bde9356",
         )
         for site_id in ("RS011-IHK-0015", "RS011-IHK-0016"):
             joined = " ".join(
