@@ -1,0 +1,1283 @@
+{
+  "schema_version": 1,
+  "scope_id": "practical-kernel-apps-v1-20261017",
+  "effective_date": "2026-10-17",
+  "authority": "Explicit user instruction to replace excessive formal milestones with solid kernel and working application infrastructure; large fuzz/exposure requirements rejected.",
+  "active_goal": "PRACTICAL-GOAL.md",
+  "legacy_qualification": {
+    "status": "deferred_from_current_goal",
+    "contracts_preserved": true,
+    "gate_map": "gate-map.json",
+    "case_map": "case-map.json",
+    "task_index": "tasks.json",
+    "formal_counters_are_active_goal_percent": false
+  },
+  "profile": {
+    "architecture": "x86_64",
+    "control_kernel": "existing pinned Rocky/Linux6.12",
+    "native_modules": [
+      "ihk",
+      "ihk-smp-x86_64",
+      "mcctrl"
+    ],
+    "kernel_implementation": "preserve Rust and reviewed assembly",
+    "supported_applications": [
+      "libc-based C",
+      "Rust standard library",
+      "useful file/stream utilities",
+      "representative core regression applications"
+    ],
+    "guest_cpu_memory": "bind actual reviewed manifest; advertise only exercised capabilities",
+    "validation_limits": {
+      "heavy_operations": 1,
+      "cpu_cap": 4,
+      "memory_gib": 12,
+      "swap": false,
+      "task_cap": 512
+    },
+    "unchanged_resource_ownership_isolation_guards": true
+  },
+  "validation_budget": {
+    "fresh_guest_boots": 2,
+    "complete_native_lifecycle_cycles": 10,
+    "successful_application_launches": 100,
+    "mixed_workload_minutes": 60,
+    "checks_may_overlap": true,
+    "reuse_matching_valid_evidence": true,
+    "app_vectors_are_separate_launches": false,
+    "reliability_certification_claim": false
+  },
+  "reporting": {
+    "primary": "practical criterion closures and concrete implemented/tested behavior",
+    "completion_status_values": [
+      "unassessed",
+      "open",
+      "complete"
+    ],
+    "initial_completion_status": "unassessed",
+    "unassessed_means_zero_percent": false,
+    "do_not_rescale_legacy_engineering_estimates": true,
+    "criterion_closure_requires_actual_evidence": true,
+    "owner": "existing engineering dispatcher",
+    "review_cadence_minutes": 30
+  },
+  "milestones": [
+    {
+      "id": "M00",
+      "scope_id": "practical-kernel-apps-v1-20261017",
+      "title": "Preservation and practical workflow",
+      "engineering_state": "partial",
+      "completion_status": "open",
+      "exit_condition": "Recoverable pinned profile/source/artifacts and a concise runnable handoff.",
+      "checks": [
+        {
+          "id": "P-M00-01",
+          "description": "Freeze supported profile and artifact/source identities.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            },
+            {
+              "path": "docs/verification/evidence/scratch22-authority3-artifact-revalidation-independent-review-20261017.json",
+              "sha256": "f7820e8507f4df666b04f16094e35b027da79a925d121b07df477daebe3efd76",
+              "size": 5608
+            }
+          ],
+          "assessment_note": "Current942 source/artifact/profile bindings are recoverable through these accepted run records. Final supported application/features profile and matched new module set are not frozen."
+        },
+        {
+          "id": "P-M00-02",
+          "description": "Keep a recoverable checkpoint and exact next commands.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+              "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+              "size": 17317
+            }
+          ],
+          "assessment_note": "Retained archives, frozen dispatch commands and checkpoint identities exist; concise final-profile build/run handoff and next module-build execution packet remain pending."
+        }
+      ],
+      "current_evidence_summary": "Current942 identities/commands and six accepted diagnostic archives are recoverable. Final supported profile/artifact handoff remains open."
+    },
+    {
+      "id": "M01",
+      "scope_id": "practical-kernel-apps-v1-20261017",
+      "title": "Requests, responses and recovery",
+      "engineering_state": "partial",
+      "completion_status": "open",
+      "exit_condition": "Supported requests and cancellation/errors preserve ownership and recover.",
+      "checks": [
+        {
+          "id": "P-M01-01",
+          "description": "Exercise actual consumed request/response bodies and relevant negatives.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            },
+            {
+              "path": "docs/verification/evidence/native-running-publication-independent-review-20261017-1.json",
+              "sha256": "de20c89c2ed5c27d09a6f6b856b1d0f3f71cf5ad5480d359236bc1a5db39552f",
+              "size": 1133
+            }
+          ],
+          "assessment_note": "Actual native syscall requests/responses serve six selected diagnostics; Running publication/body negatives are source-reviewed only. Relevant request/error coverage for the supported final suite remains incomplete."
+        },
+        {
+          "id": "P-M01-02",
+          "description": "Observe supported guest fault/cancellation recovery without premature release.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+              "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+              "size": 17317
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-failure-review-20261017-1.json",
+              "sha256": "04fee569980a34f5e29f4d7a3396266643ddd78cc63b00fb47c8fb799e8fd17a",
+              "size": 12226
+            }
+          ],
+          "assessment_note": "Known failures and fail-closed retirement are preserved. Supported application cancellation/fault recovery has not been established by these selected records."
+        }
+      ],
+      "current_evidence_summary": "Six native diagnostic request/response paths work; selected failures are preserved. Required final-suite negatives/cancellation recovery remain open."
+    },
+    {
+      "id": "M02",
+      "scope_id": "practical-kernel-apps-v1-20261017",
+      "title": "Execution and comparison runner",
+      "engineering_state": "partial",
+      "completion_status": "open",
+      "exit_condition": "Normal Linux/McKernel execution produces trustworthy results and retirement.",
+      "checks": [
+        {
+          "id": "P-M02-01",
+          "description": "Capture complete streams, raw exit and timeout/failure results.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            },
+            {
+              "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+              "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+              "size": 17317
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-failure-review-20261017-1.json",
+              "sha256": "04fee569980a34f5e29f4d7a3396266643ddd78cc63b00fb47c8fb799e8fd17a",
+              "size": 12226
+            }
+          ],
+          "assessment_note": "Complete bounded streams, raw statuses and retained failure reports are observed. Relevant timeout/failure detection on the declared final runner/profile remains to be reconciled or exercised."
+        },
+        {
+          "id": "P-M02-02",
+          "description": "Test relevant changed-input, abnormal-exit, timeout and stale-owner rejection.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-failure-review-20261017-1.json",
+              "sha256": "04fee569980a34f5e29f4d7a3396266643ddd78cc63b00fb47c8fb799e8fd17a",
+              "size": 12226
+            },
+            {
+              "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+              "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+              "size": 17317
+            }
+          ],
+          "assessment_note": "These actual failures are retained; they do not collectively prove changed-input, abnormal-exit, timeout and stale-owner rejection for the final runner."
+        },
+        {
+          "id": "P-M02-03",
+          "description": "Prove owner/client/guest retirement for actual runs.",
+          "status": "complete",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            }
+          ],
+          "assessment_note": "Complete for these six independently accepted current942 diagnostic runs only: clients/owner/container/QEMU retired, application procfs/process release observed and root development mutex released. This is guest/runner retirement, not native OS stop/destroy/resource restoration. Matching final-profile runs still require retirement proof."
+        }
+      ],
+      "current_evidence_summary": "Six independently accepted current942 diagnostic runs have complete results and verified owner/client/guest retirement. Final-profile timeout/rejection coverage remains open."
+    },
+    {
+      "id": "M03",
+      "scope_id": "practical-kernel-apps-v1-20261017",
+      "title": "Memory and mapping correctness",
+      "engineering_state": "partial",
+      "completion_status": "open",
+      "exit_condition": "Used mappings preserve data/access and prevent unsafe release or reuse.",
+      "checks": [
+        {
+          "id": "P-M03-01",
+          "description": "Exercise used map/protect/unmap operations and invalid-input cases.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            }
+          ],
+          "assessment_note": "Six calloc sizes and six file data/EOF sizes provide narrow exercised data-path evidence; direct map/protect/unmap and invalid-input coverage remains open."
+        },
+        {
+          "id": "P-M03-02",
+          "description": "Fix known failed-invalidation ownership gaps or safely disable optional affected operations.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+              "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+              "size": 17317
+            }
+          ],
+          "assessment_note": "No selected evidence closes failed-invalidation ownership gaps or demonstrates a safely disabled optional operation."
+        },
+        {
+          "id": "P-M03-03",
+          "description": "Retain release ownership on failure.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+              "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+              "size": 17317
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            }
+          ],
+          "assessment_note": "Post-effect Shutdown8 and ownership-retained -11\u21920 application retirement are observed. This does not establish all required mapping/release failure ownership invariants."
+        }
+      ],
+      "current_evidence_summary": "Calloc zeroing and file data-path checks pass narrowly. Direct mapping/protection and failure-ownership closure remain open."
+    },
+    {
+      "id": "M04",
+      "scope_id": "practical-kernel-apps-v1-20261017",
+      "title": "Useful C and Rust applications",
+      "engineering_state": "partial",
+      "completion_status": "open",
+      "exit_condition": "Useful actual applications and representative core regressions work.",
+      "checks": [
+        {
+          "id": "P-M04-01",
+          "description": "Run libc-based C and Rust standard-library applications.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            }
+          ],
+          "assessment_note": "Six focused native diagnostics work on current942. Useful libc application and Rust standard-library coverage together on the supported final profile remain open."
+        },
+        {
+          "id": "P-M04-02",
+          "description": "Run useful file/stream utilities and memory/file/thread/signal regressions.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            }
+          ],
+          "assessment_note": "Representative memory/file/thread/signal diagnostics pass within their recorded limits. Useful file/stream utilities and genuinely overlapping thread/futex coverage remain incomplete."
+        },
+        {
+          "id": "P-M04-03",
+          "description": "Compare frozen independent expected behavior with Linux.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            }
+          ],
+          "assessment_note": "Accepted frozen expected bytes/status are retained, including exact415byte alternate-stack bridge. Final useful-suite Linux comparison coverage is not closed by these narrow diagnostics."
+        }
+      ],
+      "current_evidence_summary": "Six focused behaviors accepted: signal mask, calloc zeroing, file write/read/EOF, TLS, adapted mutex and alternate-stack repeat. Useful C plus Rust standard-library suite remains incomplete."
+    },
+    {
+      "id": "M05",
+      "scope_id": "practical-kernel-apps-v1-20261017",
+      "title": "Native lifecycle and restoration",
+      "engineering_state": "blocked",
+      "completion_status": "open",
+      "exit_condition": "Actual native boot/workload/stop/destroy/release/boot restores resources.",
+      "checks": [
+        {
+          "id": "P-M05-01",
+          "description": "Resolve Ready/Running and post-effect shutdown EBUSY defects.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+              "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+              "size": 17317
+            },
+            {
+              "path": "docs/verification/evidence/native-running-publication-independent-review-20261017-1.json",
+              "sha256": "de20c89c2ed5c27d09a6f6b856b1d0f3f71cf5ad5480d359236bc1a5db39552f",
+              "size": 1133
+            }
+          ],
+          "assessment_note": "Actual native Ready4\u2192shutdown-16\u2192Shutdown8 remains a failure. Running/publication and shutdown-stage logging repairs are independently source-reviewed, not compiled or natively validated in the pending module candidate."
+        },
+        {
+          "id": "P-M05-02",
+          "description": "Observe CPU/memory restoration plus process/mapping/callback/ref retirement.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+              "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+              "size": 17317
+            }
+          ],
+          "assessment_note": "No successful native stop/destroy/release or CPU/memory/mapping/callback/ref restoration is demonstrated; Linux guest disposal is not this proof."
+        },
+        {
+          "id": "P-M05-03",
+          "description": "Complete ten native lifecycle cycles; failures retain ownership and block reuse.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+              "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+              "size": 17317
+            }
+          ],
+          "assessment_note": "Zero complete accepted native lifecycle cycles in this selected campaign. Ten full cycles remain required; the failed stop is retained and receives no cycle credit."
+        }
+      ],
+      "current_evidence_summary": "Actual Ready4\u2192shutdown-16\u2192Shutdown8 failure remains. Running/log source repair reviewed only; no new module compile, successful native cycle or resource restoration."
+    },
+    {
+      "id": "M06",
+      "scope_id": "practical-kernel-apps-v1-20261017",
+      "title": "Processes, threads and used syscalls",
+      "engineering_state": "partial",
+      "completion_status": "open",
+      "exit_condition": "Selected apps have working process creation/exec/wait and thread/syscall semantics.",
+      "checks": [
+        {
+          "id": "P-M06-01",
+          "description": "Exercise process creation/exec/wait required by the selected app infrastructure.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            }
+          ],
+          "assessment_note": "Working pthread fixture launches/joins and process retirement do not establish selected application fork/exec/wait behavior."
+        },
+        {
+          "id": "P-M06-02",
+          "description": "Exercise genuinely overlapping threads/futex contention and required syscall error behavior.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            }
+          ],
+          "assessment_note": "2/4/8 worker vectors pass, but observed sequential reuse cannot be credited as simultaneous overlap or contention. Genuine overlapping workers/futex contention and required syscall negatives remain open."
+        },
+        {
+          "id": "P-M06-03",
+          "description": "Unsupported optional operations fail clearly and safely.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/native-running-publication-independent-review-20261017-1.json",
+              "sha256": "de20c89c2ed5c27d09a6f6b856b1d0f3f71cf5ad5480d359236bc1a5db39552f",
+              "size": 1133
+            }
+          ],
+          "assessment_note": "Reviewed version/unsupported-path errors are narrow source/body evidence, not complete safe-error behavior for the final selected application profile."
+        }
+      ],
+      "current_evidence_summary": "TLS/adapted-mutex2/4/8 vectors and retirement pass; sequential worker reuse proves no overlap. Process fork/exec/wait and contention coverage remain open."
+    },
+    {
+      "id": "M07",
+      "scope_id": "practical-kernel-apps-v1-20261017",
+      "title": "Used FPU/vector state",
+      "engineering_state": "unmeasured",
+      "completion_status": "open",
+      "exit_condition": "Actually used vector/FPU state survives switching, syscalls and signals.",
+      "checks": [
+        {
+          "id": "P-M07-01",
+          "description": "Declare compiler/libc/application vector requirements.",
+          "status": "unassessed",
+          "evidence": [],
+          "assessment_note": "No selected record declares the final compiler/libc/application vector requirements. Retain unassessed; it is not a zero-percent engineering estimate."
+        },
+        {
+          "id": "P-M07-02",
+          "description": "Run relevant state-preservation checks on the supported CPU/profile.",
+          "status": "unassessed",
+          "evidence": [],
+          "assessment_note": "No selected actual FPU/vector state-preservation coverage is assessed here; module loading and ordinary diagnostics cannot substitute for it."
+        }
+      ],
+      "current_evidence_summary": "No selected final-profile vector requirement or preservation assessment. Unassessed is not0% engineering completion."
+    },
+    {
+      "id": "M08",
+      "scope_id": "practical-kernel-apps-v1-20261017",
+      "title": "Native modules and interfaces",
+      "engineering_state": "partial",
+      "completion_status": "open",
+      "exit_condition": "Matched native modules build/load and used ABI/lifetime paths work.",
+      "checks": [
+        {
+          "id": "P-M08-01",
+          "description": "Build/load matching IHK/SMP/mcctrl modules.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            },
+            {
+              "path": "docs/verification/evidence/scratch22-authority3-artifact-revalidation-independent-review-20261017.json",
+              "sha256": "f7820e8507f4df666b04f16094e35b027da79a925d121b07df477daebe3efd76",
+              "size": 5608
+            }
+          ],
+          "assessment_note": "Matched retained current942 modules load and support these diagnostics. Retained-artifact revalidation admission is not a fresh compile; the new Running/log module candidate still awaits build-profile review and compilation."
+        },
+        {
+          "id": "P-M08-02",
+          "description": "Validate used boot/resource/process/mapping/shutdown ABI paths and changed unsafe boundaries.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+              "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+              "size": 17317
+            },
+            {
+              "path": "docs/verification/evidence/native-running-publication-independent-review-20261017-1.json",
+              "sha256": "de20c89c2ed5c27d09a6f6b856b1d0f3f71cf5ad5480d359236bc1a5db39552f",
+              "size": 1133
+            },
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            }
+          ],
+          "assessment_note": "Used boot/resource/process paths have diagnostic evidence, but shutdown fails and changed final unsafe/ABI boundaries remain unvalidated in new matched binaries."
+        }
+      ],
+      "current_evidence_summary": "Retained current942 matched modules/image serve six diagnostics. Candidate176 Running/log module-build profile awaits review; no new module compiled."
+    },
+    {
+      "id": "M09",
+      "scope_id": "practical-kernel-apps-v1-20261017",
+      "title": "Rust and assembly integration",
+      "engineering_state": "partial",
+      "completion_status": "open",
+      "exit_condition": "Preserved Rust consumers and changed language boundaries are tested.",
+      "checks": [
+        {
+          "id": "P-M09-01",
+          "description": "Keep existing Rust consumers active.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            },
+            {
+              "path": "docs/verification/evidence/native-running-publication-independent-review-20261017-1.json",
+              "sha256": "de20c89c2ed5c27d09a6f6b856b1d0f3f71cf5ad5480d359236bc1a5db39552f",
+              "size": 1133
+            }
+          ],
+          "assessment_note": "Existing native Rust consumers remain in the retained working profile. Final changed consumer/artifact integration still needs its matched build/run proof."
+        },
+        {
+          "id": "P-M09-02",
+          "description": "Validate changed consumed Rust/C/assembly boundaries in the final artifact set.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/native-running-publication-independent-review-20261017-1.json",
+              "sha256": "de20c89c2ed5c27d09a6f6b856b1d0f3f71cf5ad5480d359236bc1a5db39552f",
+              "size": 1133
+            },
+            {
+              "path": "docs/verification/evidence/scratch22-authority3-artifact-revalidation-independent-review-20261017.json",
+              "sha256": "f7820e8507f4df666b04f16094e35b027da79a925d121b07df477daebe3efd76",
+              "size": 5608
+            }
+          ],
+          "assessment_note": "Changed Running/log source is reviewed only. Neither retained-artifact admission nor older diagnostic binaries validate changed Rust/C/assembly boundaries in the final artifact set."
+        }
+      ],
+      "current_evidence_summary": "Existing Rust/assembly consumers remain active in retained baseline. Changed final language boundaries await matched artifact validation."
+    },
+    {
+      "id": "M10",
+      "scope_id": "practical-kernel-apps-v1-20261017",
+      "title": "Repeatable runnable build",
+      "engineering_state": "partial",
+      "completion_status": "open",
+      "exit_condition": "Pinned recipe replays a matched runnable artifact set.",
+      "checks": [
+        {
+          "id": "P-M10-01",
+          "description": "Record source/config/toolchain and honest candidate provenance.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            },
+            {
+              "path": "docs/verification/evidence/scratch22-authority3-artifact-revalidation-independent-review-20261017.json",
+              "sha256": "f7820e8507f4df666b04f16094e35b027da79a925d121b07df477daebe3efd76",
+              "size": 5608
+            },
+            {
+              "path": "docs/verification/evidence/native-running-publication-independent-review-20261017-1.json",
+              "sha256": "de20c89c2ed5c27d09a6f6b856b1d0f3f71cf5ad5480d359236bc1a5db39552f",
+              "size": 1133
+            }
+          ],
+          "assessment_note": "Historical pinned source/config/toolchain and diagnostic provenance remain linked. Current source repairs and pending candidate176 are distinguished from compiled/tested current942; final recipe provenance remains open."
+        },
+        {
+          "id": "P-M10-02",
+          "description": "Perform one clean rebuild/replay before final delivery; reuse unchanged Linux dependencies where valid.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/scratch22-authority3-artifact-revalidation-independent-review-20261017.json",
+              "sha256": "f7820e8507f4df666b04f16094e35b027da79a925d121b07df477daebe3efd76",
+              "size": 5608
+            }
+          ],
+          "assessment_note": "This reference is PASS_EXECUTION admission with execution_performed=false, not evidence of a clean rebuild. Final matched recipe rebuild/replay remains required; no extra unchanged-baseline recheck is demanded here."
+        }
+      ],
+      "current_evidence_summary": "Current942 provenance is linked through accepted diagnostic records. Revalidation admission is not a fresh build; one clean final recipe rebuild/replay remains required."
+    },
+    {
+      "id": "M11",
+      "scope_id": "practical-kernel-apps-v1-20261017",
+      "title": "Integrated functional regression",
+      "engineering_state": "partial",
+      "completion_status": "open",
+      "exit_condition": "Relevant regressions and negatives pass without unexplained corruption or retained owners.",
+      "checks": [
+        {
+          "id": "P-M11-01",
+          "description": "Run integrated selected-suite and repaired-boundary regressions.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            },
+            {
+              "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+              "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+              "size": 17317
+            },
+            {
+              "path": "docs/verification/evidence/native-running-publication-independent-review-20261017-1.json",
+              "sha256": "de20c89c2ed5c27d09a6f6b856b1d0f3f71cf5ad5480d359236bc1a5db39552f",
+              "size": 1133
+            }
+          ],
+          "assessment_note": "Six focused behaviors pass, including alternate-repeat. Required repaired lifecycle boundary and integrated selected useful application suite are not yet passing."
+        },
+        {
+          "id": "P-M11-02",
+          "description": "Retain useful kernel diagnostics and every failure.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            },
+            {
+              "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+              "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+              "size": 17317
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-failure-review-20261017-1.json",
+              "sha256": "04fee569980a34f5e29f4d7a3396266643ddd78cc63b00fb47c8fb799e8fd17a",
+              "size": 12226
+            }
+          ],
+          "assessment_note": "These selected run logs, original failures and retention archives are preserved. Keep the broad practical check open until the supported final session retains all of its useful diagnostics and failures."
+        },
+        {
+          "id": "P-M11-03",
+          "description": "Resolve unexplained panic/corruption/lost data/stranded ownership.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+              "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+              "size": 17317
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-failure-review-20261017-1.json",
+              "sha256": "04fee569980a34f5e29f4d7a3396266643ddd78cc63b00fb47c8fb799e8fd17a",
+              "size": 12226
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            }
+          ],
+          "assessment_note": "Native shutdown remains unresolved. Original TLS failure and expected ownership-retained retirement retry remain visible; no unsupported claim of zero remaining lifetime defects."
+        }
+      ],
+      "current_evidence_summary": "Six diagnostic behaviors accepted and originals/logs archived; native lifecycle failure and final integrated regressions remain open."
+    },
+    {
+      "id": "M12",
+      "scope_id": "practical-kernel-apps-v1-20261017",
+      "title": "Bounded repeatability and stress",
+      "engineering_state": "unmeasured",
+      "completion_status": "open",
+      "exit_condition": "Two fresh boots, ten native cycles, 100 app launches and 60-minute mixed workload pass.",
+      "checks": [
+        {
+          "id": "P-M12-01",
+          "description": "Meet bounded session budgets on the declared final profile; overlap checks and reuse matching valid evidence.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            },
+            {
+              "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+              "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+              "size": 17317
+            }
+          ],
+          "assessment_note": "Six accepted selected diagnostic launches across separate guests are existing evidence only, not final-profile budget completion. No ten native cycles,100launch final session or60minute mixed workload is proven."
+        },
+        {
+          "id": "P-M12-02",
+          "description": "Record actual launches separately from vectors and monitor accumulating live resources.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            }
+          ],
+          "assessment_note": "Count each accepted diagnostic invocation once: six selected launches, not calloc sizes or2/4/8 worker vectors. Final bounded campaign launch ledger and accumulating-resource monitoring remain open."
+        }
+      ],
+      "current_evidence_summary": "Six selected successful diagnostic invocations are recorded as six launches, not vectors. Final-profile2boots/10nativecycles/100launches/60minutes remain unproven."
+    },
+    {
+      "id": "M13",
+      "scope_id": "practical-kernel-apps-v1-20261017",
+      "title": "Practical delivery",
+      "engineering_state": "not_started",
+      "completion_status": "open",
+      "exit_condition": "Runnable artifacts, exact commands, capability limits and focused final review are delivered.",
+      "checks": [
+        {
+          "id": "P-M13-01",
+          "description": "Publish concise build/run instructions and tested artifact identities.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            },
+            {
+              "path": "docs/verification/evidence/native-running-publication-independent-review-20261017-1.json",
+              "sha256": "de20c89c2ed5c27d09a6f6b856b1d0f3f71cf5ad5480d359236bc1a5db39552f",
+              "size": 1133
+            }
+          ],
+          "assessment_note": "Existing diagnostic recipes/artifacts are linked; final matched runnable package and concise build/run instructions await new module and lifecycle validation."
+        },
+        {
+          "id": "P-M13-02",
+          "description": "List supported/unsupported capabilities, known limitations and actual results.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+              "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+              "size": 10751
+            },
+            {
+              "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+              "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+              "size": 12255
+            },
+            {
+              "path": "docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+              "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+              "size": 12925
+            },
+            {
+              "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+              "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+              "size": 12788
+            },
+            {
+              "path": "docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+              "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+              "size": 17406
+            },
+            {
+              "path": "docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+              "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+              "size": 49179
+            },
+            {
+              "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+              "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+              "size": 17317
+            }
+          ],
+          "assessment_note": "Actual limitations are retained and summarized here; final supported/unsupported application/capability profile is not delivered."
+        },
+        {
+          "id": "P-M13-03",
+          "description": "Complete focused final correctness/ownership review; announce only scoped completion.",
+          "status": "open",
+          "evidence": [
+            {
+              "path": "docs/verification/evidence/native-running-publication-independent-review-20261017-1.json",
+              "sha256": "de20c89c2ed5c27d09a6f6b856b1d0f3f71cf5ad5480d359236bc1a5db39552f",
+              "size": 1133
+            },
+            {
+              "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
+              "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
+              "size": 17317
+            }
+          ],
+          "assessment_note": "Focused source reviews exist, but final correctness/ownership review and scoped practical completion remain pending."
+        }
+      ],
+      "current_evidence_summary": "Practical worklist now reconciled once with existing evidence. Final runnable package, capability statement and correctness/ownership review remain open."
+    }
+  ],
+  "deferred_scope": [
+    "100000aggregate fuzz VM-hours",
+    "30000bare-metal node-hours",
+    "168-hour Intel/AMD per-class soaks",
+    "100000module/full-lifecycle cycles",
+    "billion-operation quotas",
+    "all273catalog cases and every parameter expansion",
+    "all130production and seven language qualification gates",
+    "allhardware/topology/SMP/vector/HPC variants beyond the declared supported profile",
+    "whole-image zero-C certification",
+    "optional security audits, hardening and broad sanitizer certification",
+    "signed production/repository/independent external release qualification"
+  ],
+  "next_actions": [
+    "Review the frozen candidate176 Running/publication and shutdown-stage-log module build profile, then build one matched IHK/SMP/mcctrl set using reviewed retained Linux dependencies; current942 evidence does not validate these unbuilt repairs.",
+    "With separately reviewed new binaries, observe actual Running status and identify/repair the first post-effect EBUSY stage; retain sysfs/ownership guards and original Ready4\u2192-16\u2192Shutdown8 evidence.",
+    "Verify actual native stop\u2192destroy/release\u2192boot and CPU/memory/process/mapping/callback/ref restoration before awarding native lifecycle-cycle credit.",
+    "Expand useful libc C and Rust standard-library apps, file/stream utilities, mapping/protection and process fork/exec/wait; include genuine overlapping worker/futex contention.",
+    "After the final supported artifact/profile is declared, reuse matching valid evidence and run the bounded2freshboots/10nativecycles/100launches/60minute mixed session plus targeted changed-boundary negatives and resource trends.",
+    "Complete one clean pinned recipe rebuild/replay, concise runnable delivery and focused final correctness/ownership review; preserve old formal contracts/counters as deferred, not passed."
+  ],
+  "evidence_reconciliation": {
+    "date": "2026-10-17",
+    "record": "../evidence/practical-evidence-reconciliation-20261017-1.json",
+    "scope": "One-time reconciliation of selected existing accepted current942 diagnostics; no fresh tests, builds, guest runs or broad evidence audit. Evidence paths are repository-relative.",
+    "accepted_current942_diagnostic_behaviors": 6,
+    "selected_successful_diagnostic_launches": 6,
+    "vectors_are_additional_launches": false,
+    "final_profile_budget_credit_claimed": false,
+    "new_module_compiles": 0,
+    "accepted_complete_native_cycles": 0,
+    "engineering_percentages_rescaled": false,
+    "milestone_rows_complete": 0,
+    "closed_check_scope": "P-M02-03: retirement of six current942 accepted diagnostic runs only. Changed final-profile runs retain their own retirement obligation."
+  }
+}

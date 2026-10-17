@@ -14925,6 +14925,39 @@ ExplicitknownAnacondaPython3.9/minimalenv nowboundinfuturefocusedpackets; no
 newenvironment/globalharnessrequirements. Fourdistinctguestdiagnostics remain,
 no nativeshutdown/restoration/formalcredit; no M00-M13estimateinflation.
 
+## User scope revision — 2026-10-17: practical kernel/application completion
+
+The user explicitly says excessive formal milestones impede engineering and
+wants a solid kernel and working application infrastructure. The user also
+rejects enormous fuzzing-hour requirements. PRACTICAL-GOAL.md and
+practical-milestones.json now define active supported-profile completion.
+This supersedes earlier all-original-M00-M13/all130/sevenlanguage/fullcatalog/
+exposure/externalqualification stopping conditions. Original contracts, scores,
+failures and evidence are preserved as deferred qualification, never marked PASS.
+
+Practical delivery includes useful libc C and Rust std applications, core
+memory/files/process/thread/signal/mapping behavior, actual native restoration,
+one pinned clean build/replay, focused regressions and runnable instructions.
+The bounded final session is two fresh guests, ten native lifecycle cycles,
+100 app launches across the selected suite and one60-minute mixed run; checks
+may overlap and reuse matching valid evidence. No100000fuzzVMhours/30000nodehours/
+per-class168hoursoaks/100000cycle quotas or external boards block this goal.
+
+Five current942 diagnostics are independently accepted (signal/calloc/file/TLS/
+adaptedmutex); the actual lifecycle Ready4→-16→Shutdown8 defect remains open.
+Running/log source repair is reviewed/committed but not natively validated.
+Shutdown cancellation/worker primitives require integration and native proof.
+No correctness/ownership failure is waived. Oneheavy/resource/isolation rules,
+failure retention, GPT6.1 policy and97%included-usage guard stay operative.
+
+The legacy launcher objective string is compatibility metadata; do not edit
+its constant, live state or goal identity to adopt this explicit user revision.
+Reconcile practical evidence once at the next normal checkpoint; unassessed is
+not0%engineering. Update the existing progress renderer to show practical scope
+first and original qualification as deferred; no new monitoring framework.
+Supervisor owns this documentation patch; dispatcher remains soleGit/runtime
+owner. Keep30-minute reviews active (next14:55UTC).
+
 ## Checkpoint382 — adapted mutex accepted; alternate-repeat released
 
 Adaptedmutexactual0/33.581568s/HEAD1769263cstable independentPASS. PID256
@@ -14946,3 +14979,30 @@ End-to-endstopstillrequires activeshutdown/reboot-epochproof,admissioncancel,
 joinsoutsidedependentlocks,callbackdrain,ledgers,generationcheckedrelease;
 isolatedcomponentpassesnotclosure. Review2Markdowncheckpointed,next14:55UTC.
 Allstatus/acceptance/estimatebandsunchanged; continuewithoutcheckpointpause.
+
+
+## Checkpoint383 — practical target adopted; alternate stack accepted
+
+The explicit user scope practical-kernel-apps-v1-20261017 now controls current
+completion: one supported kernel/app profile; legacy qualification is deferred,
+never passed by deferral. Six independently accepted current942 diagnostics now
+include alternate-repeat:33.643262s,415 exact bytes,16 inside handlers/16 hits,
+empty stderr/exit0/procfs empty; retirement -11 then0,30 clients/container/root
+retired. Evidence signal-alternate-repeat-current942-result-review-20261017-1
+.json SHA3e6cc72d and .tar.gz2cf23dcc. Normal-stack restoration remains unproved.
+
+Next sole realloc-grow guest independently released4eb32d8b: original32-byte
+preservation through growth to2048;25-byte oracle,default1024 streams,manifest
+77f5adcd,parentndrlg-1 dev1828/109214,noncec5b5e1a04bd84ff183991071aea8bac4,
+QMP92. Three bounded postjoin captures approved. Push/fetch, fresh admission,
+then execute with HEAD frozen. Adapted closed-read source/Linux/stage independently
+PASS; next packet delegated, original label/signed-char blocker preserved.
+
+Running/log candidate1769263c remains separate from current942. External driver
+13tests+source review PASS; owner18mocktests source BLOCKED on normal-exit
+descendant census, one bounded correction underway before any build. No actual
+module compile yet. Remote cancellation and exact-once worker-stop primitives
+both independently PASS_SOURCE_UNWIRED; no native lifecycle restoration claim.
+Ready4 -> shutdown EBUSY -> Shutdown8 remains unresolved. Practical worklist and
+existing progress renderer are being reconciled without rescaling estimates or
+altering legacy contracts/state. Continue after checkpoint, review cadence14:55UTC.

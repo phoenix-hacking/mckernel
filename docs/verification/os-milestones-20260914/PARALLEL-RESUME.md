@@ -1,3 +1,10 @@
+Current scope override, explicitly requested by the user on 2026-10-17:
+PRACTICAL-GOAL.md and practical-milestones.json define the functional kernel/app
+completion target. Huge fuzz/exposure quotas, per-class week-long soaks and full
+external certification are deferred, not passed. This takes precedence over
+older all-original-requirements text and the legacy saved objective string.
+Adopt at a safe checkpoint; do not restart or edit launcher-owned state for it.
+
 This is the user's explicit later execution instruction, effective only when
 scripts/run_os_parallel.py --run is invoked. Preparing or previewing that script
 does not resume the campaign. Normally resume the existing saved thread. The
@@ -26,12 +33,12 @@ dispatcher and EVERY worker, auditor and independent reviewer. Choose low for
 simple inventories/extraction, medium for coordination/implementation, and high for complex
 repairs and independent safety/ABI/acceptance reviews. Never fall back to an
 older model. Choose the lowest suitable effort; never Max or Ultra. Keep authors and
-reviewers independent. Complete the entire original OS
-objective: all original production, language, application/configuration,
-Rust/assembly, platform, exposure, soak and external qualification requirements.
-Do not stop at an intermediate engineering checkpoint or dilute acceptance.
+reviewers independent. Complete the practical supported-profile kernel and
+application goal, including real apps, native lifecycle restoration, bounded
+regressions, repeatable artifacts and usable delivery. Preserve deferred original
+qualification as historical scope; do not claim it completed by practical checks.
 
-Read GOAL.md, START.md, CONVERGENCE.md, the latest HANDOFF.md, and the latest
+Read GOAL.md, PRACTICAL-GOAL.md, START.md, CONVERGENCE.md, the latest HANDOFF.md, and the latest
 relevant CURRENT.md entries. Read the preparation handoff PREPARATION-20261016.md.
 Reconcile HEAD, dirty/untracked work, launcher identities, mount UUID and live
 leases before any operation. Preserve preexisting WIP and every failed attempt.
@@ -86,16 +93,16 @@ the 16-GiB host/12-GiB scratch floors and any larger packet requirement. Keep th
 110-GiB scratch image; do not run setup-host.sh's obsolete 60-GiB size test.
 
 Prefer the cheapest meaningful executable check, then independent boundary
-review and the next eligible native/guest layer. After a fresh reviewed artifact,
-the next new diagnostic is signal.mask-restore: exact stdout
-handled=1 observed_blocked=1 restored=1 followed by newline, exit 0. Capture
+review and the next eligible native/guest layer. Select the next practical check
+from current HANDOFF.md; do not replay earlier passed signal/memory/file cases
+merely because historical instructions name them. Capture
 streams, logs, exact artifacts and verified teardown. Source/mock success is not
 runtime or formal acceptance. Keep separate counters for real behavior and the
-original acceptance gates; never count worker activity, commits or repeated
-diagnostics as progress toward acceptance.
+deferred original acceptance gates; never count worker activity, commits or
+repeated diagnostics as new practical behavior or formal acceptance.
 
 Continue autonomously after coherent verified checkpoints with no time cutoff,
-until full acceptance or a new explicit stop, selected limit, exhausted included usage, or genuine
+until practical completion or a new explicit stop, selected limit, exhausted included usage, or genuine
 external blocker with no independent ready work. Keep the launcher's existing
 usage/credential guards, recovery classification and healthy-build protections.
 The included-usage stop is 97%, retaining 3% for in-flight work and delayed

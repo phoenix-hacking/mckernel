@@ -43,11 +43,52 @@ def status_word(state: dict) -> str:
     return str(state.get("phase") or state.get("status") or "UNKNOWN").upper()
 
 
+def practical_panel(doc: dict) -> list[str]:
+    """Render recorded practical states without deriving an engineering score."""
+    def cell(value):
+        return str(value).replace("|", "\\|").replace("\n", "<br>")
+
+    lines = ["## Primary target: practical kernel and applications", "",
+             "Scope: `" + doc["scope_id"] + "`. See [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md) "
+             "and [practical-milestones.json](practical-milestones.json).", "",
+             "Closure states below are recorded assessments. Unassessed does not mean "
+             "no engineering progress; no percentage is inferred. Reuse matching valid evidence.", "",
+             "| ID | Practical milestone | Engineering state | Closure state | Exit condition | Current evidence / gap |",
+             "| --- | --- | --- | --- | --- | --- |"]
+    for milestone in doc.get("milestones", []):
+        lines.append("| " + " | ".join(cell(milestone.get(key, "unassessed")) for key in
+                     ("id", "title", "engineering_state", "completion_status", "exit_condition",
+                      "current_evidence_summary")) + " |")
+    lines += ["", "### Practical exit checks", "",
+              "| Check | Required behavior | State | Evidence |", "| --- | --- | --- | --- |"]
+    for milestone in doc.get("milestones", []):
+        for check in milestone.get("checks", []):
+            evidence = "; ".join(cell(json.dumps(item, sort_keys=True) if isinstance(item, dict) else item)
+                                 for item in check.get("evidence", [])) or "not recorded"
+            lines.append("| " + " | ".join((cell(check["id"]), cell(check["description"]),
+                         cell(check.get("status", "unassessed")), evidence)) + " |")
+    budget = doc.get("validation_budget", {})
+    lines += ["", "### Practical final validation targets", "",
+              "; ".join(str(budget.get(key, "unassessed")) + " " + label for key, label in
+                        (("fresh_guest_boots", "fresh guest boots"),
+                         ("complete_native_lifecycle_cycles", "complete native lifecycle cycles"),
+                         ("successful_application_launches", "successful application launches"),
+                         ("mixed_workload_minutes", "minutes of mixed workload"))) + ". "
+              "These are required targets, not results. Checks may overlap and reuse valid evidence; "
+              "application vectors are not separate launches.", "", "### Next practical work", ""]
+    lines += ["- " + cell(action) for action in doc.get("next_actions", [])]
+    return lines + ["", "Original formal qualification is **historical / DEFERRED**. Deferred does not mean passed; "
+                    "its counters below do not define practical completion.", ""]
+
+
 def render(core_doc=None) -> str:
     if core_doc is None:
         core_doc = stable_core_tracker.load_tracker()
         stable_core_tracker.validate(core_doc, root=ROOT)
     core_counts = stable_core_tracker.summarize(core_doc)
+    practical = read_json(TRACKER_DIR / "practical-milestones.json", {})
+    if practical.get("scope_id") != "practical-kernel-apps-v1-20261017":
+        practical = {}
     state = read_json(ROOT / ".git/os-autopilot/state.json", {})
     watcher = read_json(ROOT / ".git/os-autopilot/watcher.json", {})
     gate_map = read_json(TRACKER_DIR / "gate-map.json", {})
@@ -163,6 +204,29 @@ def render(core_doc=None) -> str:
         "- `.git/os-autopilot/state.json` - launcher-owned runtime state; do not edit by hand.",
         "",
     ]
+    if practical:
+        # Keep the established launcher/core content and legacy counter values.
+        # Only the reporting priority and qualification labels change.
+        position = lines.index("## Snapshot")
+        lines[position:position] = practical_panel(practical)
+        lines[3] = "> Active completion follows `PRACTICAL-GOAL.md` and `practical-milestones.json`; " \
+                   "original formal contracts and scores remain historical / DEFERRED."
+        renamed = {"## Acceptance Bars": "## Historical / DEFERRED qualification counters",
+                   "## Intermediary Goal Ladder": "## Historical / DEFERRED qualification ladder",
+                   "## Detailed Work Queue": "## Historical / DEFERRED qualification queue",
+                   "## Current Blockers": "## Historical qualification gaps (DEFERRED)"}
+        lines = [renamed.get(line, line) for line in lines]
+        for index, line in enumerate(lines):
+            if line.startswith("| S"):
+                for state in ("ACTIVE", "NEXT", "NOT STARTED"):
+                    line = line.replace("**" + state + "**", "**DEFERRED (historical " + state + ")**")
+                lines[index] = line
+            elif line.startswith("- The OS objective is not complete:"):
+                lines[index] = "- Original qualification gaps are preserved and deferred; " \
+                               "they do not define the active practical completion condition."
+        position = lines.index("## Source Of Truth") + 2
+        lines[position:position] = ["- `PRACTICAL-GOAL.md` and `practical-milestones.json` - active scoped "
+                                   "completion requirements, recorded check states, evidence and next work."]
     return "\n".join(lines)
 
 

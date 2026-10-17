@@ -645,3 +645,22 @@ production gates/130 and points/10,000, language gates/7, active blocker,
 qualification exposure and token usage if available. Keep these denominators
 separate; there is no defensible single whole-OS percentage from the existing
 historical progress bars.
+
+## Active scope revision — 2026-10-17
+
+The user explicitly replaced excessive formal milestones with a solid kernel
+and working application infrastructure. [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md)
+and [practical-milestones.json](practical-milestones.json) now govern current
+completion. This supersedes this document's earlier all-gates/catalog/language,
+100,000 fuzz VM-hour, 30,000 node-hour, per-class 168-hour soak and external-release
+completion clauses. Those contracts and results remain a deferred qualification
+backlog, not PASSED work or an active prerequisite of the practical deliverable.
+
+The M00-M13 table and original task/gate/case indexes above are preserved at their
+source-bound lines. Use them for relevant technical context; use the practical
+worklist for active routing and progress. Report actual apps, native restoration,
+targeted regressions, bounded repeatability and runnable delivery first. Keep
+original counters clearly historical/deferred. Host/resource/ownership controls,
+independent review of changed privileged/unsafe boundaries, exact failures and
+honest artifact provenance remain operative. This scope revision does not start
+a launcher, build, guest or cleanup.

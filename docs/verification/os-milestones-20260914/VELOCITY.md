@@ -1,11 +1,15 @@
 # Tactical plan for faster verified OS progress
 
-User instruction, 2026-10-17: pursue every original M00-M13 completion condition
-as aggressively and accurately as possible. Target twice the useful engineering
+Latest user instruction, 2026-10-17: complete the practical kernel/application
+goal in [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), replacing excessive formal
+qualification as the active target. Use [practical-milestones.json](practical-milestones.json)
+for current M00-M13 exit checks; old contracts and estimates remain historical.
+Target twice the useful engineering
 throughput, with three times as a stretch experiment. These are targets to test,
 not promised speedups or permission to raise estimated percentages without work.
-This plan changes scheduling and reuse; original contracts, execution releases,
-failure history, machine limits and the 97% included-usage stop still apply.
+The practical scope explicitly defers large fuzz/exposure/soak quotas and broad
+certification. Execution releases, correct behavioral expectations, failure
+history, ownership/machine limits and the 97% included-usage stop still apply.
 
 ## What is slowing the current campaign
 
@@ -57,7 +61,8 @@ its required postflight must be joined before the next owner is admitted.
 
 ## Close milestone conditions in parallel
 
-Use existing task rows and their exit conditions; no new percentage scheme:
+Use the practical worklist's exit checks. Original task rows remain useful
+technical references, not a requirement to finish deferred qualification:
 
 | Milestone group | Closure tactic |
 | --- | --- |
@@ -66,12 +71,11 @@ Use existing task rows and their exit conditions; no new percentage scheme:
 | M04-M05 | Turn the current stack into actual applications and then lifecycle/restoration results. Ready payloads and independent oracles feed the single runtime lane continuously. |
 | M06-M09 | Implement missing process/syscall/vector behavior and Rust/interface closure by affected surface. Integrate tested coherent changes into a next candidate; preserve the working baseline for unrelated diagnostics. |
 | M10-M11 | Advance exact package recipes, reproduction and integration checks when their consumed candidate is ready. Prepare applicable offline inputs in parallel; do not repeatedly package an obsolete candidate. |
-| M12-M13 | Identify required hardware/access and the independent release owner early from existing records. Start required exposure on an eligible frozen candidate as soon as admission permits; prepare release evidence alongside it. Repairs and candidate changes retain the original exposure restart rules. |
+| M12-M13 | Run the practical bounded repeatability/mixed workload on the supported final profile, review unresolved correctness risks and deliver runnable artifacts/commands. Huge exposure quotas, external hardware matrices and production certification are deferred. |
 
-Long soaks still occupy their reviewed runtime resources. Overlap cheap source
-work within the remaining budget or use separately authorized hardware; do not
-run a competing heavy guest on this host. Missing external resources get a named
-owner and recheck condition in the existing cursor, rather than repeated polling.
+The bounded practical mixed run still occupies its reviewed runtime resources.
+Overlap cheap source work within the remaining budget; do not run a competing
+heavy guest. Deferred hardware/exposure is not a current blocking dependency.
 
 ## Keep a small pipeline full
 
@@ -231,9 +235,9 @@ to report the following; add no monitoring project or per-edit ledger:
 2. Distinct repaired production behaviors with actual-body regressions and
    integration per elapsed hour. Keep this separate from guest results and
    infrastructure repairs; raw test-case count is not this measure.
-3. Original milestone/gate conditions actually closed, with evidence. Retain
-   low-confidence engineering ranges until a concrete gain justifies a change;
-   never average overlapping milestones into a whole-OS completion score.
+3. Practical exit checks actually closed, with evidence. Keep original formal
+   counters and earlier broad estimates explicitly historical; do not rescale
+   them or promote deferred gates. Unassessed new checks are not 0% engineering.
 4. The next runtime-slot readiness and elapsed waiting caused by missing inputs,
    integration or review. Separate that avoidable delay from actual execution,
    required admission, retirement and soaks. Note tokens consumed if the existing
@@ -244,8 +248,8 @@ work. The first window establishes a baseline if no valid earlier window exists.
 Target 2x on the chosen behavior-throughput measure, with 3x a stretch; report raw
 counts and durations alongside any ratio. A zero baseline, different workload or
 only one new result cannot support a meaningful multiplier. Record time to first
-new guest result and reduced waiting instead. Mandatory soak durations and
-external hardware/qualification cannot be compressed by adding agents.
+new guest result and reduced waiting instead. The practical bounded validation
+remains meaningful testing; deferred exposure/certification is not a finish gate.
 
 If two existing dispatch cycles produce no new executable observation outside a
 healthy long operation, identify the actual dependency and change the approach

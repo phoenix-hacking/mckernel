@@ -9,12 +9,17 @@ this document is not a claim that the Python harness enforces it.
 
 ## Authority and scope
 
-Read this policy through GOAL.md and START.md. README.md, the original stability
-and production contracts, `final-push.txt`, and each selected case/gate retain
-their scope, dependencies, expectations and acceptance authority. Do not change
-scores, denominators, required repetitions, 168-hour soaks, Rust/assembly closure,
-native modules, the pinned Rocky/Linux target, or external qualification to
-improve throughput. Preserve existing Rust consumers and immutable evidence.
+The user's explicit 2026-10-17 scope revision makes
+[PRACTICAL-GOAL.md](PRACTICAL-GOAL.md) and
+[practical-milestones.json](practical-milestones.json) the active completion
+authority: a solid supported-profile kernel and working application infrastructure.
+The large exposure/soak quotas, full catalog/language/production certification,
+hardware matrices and external release are deferred from this goal. This replaces
+the older prohibition on changing scope; it does not change historical scores or
+turn unrun qualification into PASS. Preserve the original README/task/gate/case
+contracts and evidence as a separately identified qualification backlog.
+Keep the pinned control kernel, matching native artifacts, existing Rust consumers,
+correct behavioral expectations and immutable failures.
 
 This policy supersedes older scheduling, retry, context-loading and checkpoint
 habits only. It does not override execution-release, isolation, ownership,
@@ -49,7 +54,8 @@ Use this cycle:
    results and remaining risks. Review the whole affected boundary, not just the
    newest lines or each finding in isolation.
 5. Integrate and run the next required native/root/guest layer as soon as its
-   actual prerequisites pass. Update acceptance only under the original contract.
+   actual prerequisites pass. Close practical checks against their stated evidence;
+   change historical formal acceptance only under its original contract.
 
 Do not start a second design/history audit when a failing compile or positive
 example already identifies the next concrete action.
@@ -113,9 +119,10 @@ correctness or the requested visibility. Keep bookkeeping at the existing cadenc
 At each existing checkpoint, report newly verified behavior, actual tests with
 evidence, remaining blockers and the next executable step. Report absent results
 honestly. After two completed cycles without a technical result, apply the
-strategy-change rule below; preserve healthy long operations and required soaks.
+strategy-change rule below; preserve healthy operations and the bounded practical run.
 Use the existing handoff/events, with no new reporting framework or invented
-progress quota. Safety, independent review and original acceptance remain intact.
+progress quota. Isolation, ownership, focused independent review and historical
+acceptance integrity remain intact; deferred qualification is not an active gate.
 
 ## Apply the harness at the appropriate layer
 
@@ -131,7 +138,7 @@ Update only relevant rows at existing checkpoints; no new audit/review loop is
 required merely to update the report. Preserve all original acceptance records.
 Unknown coverage is unmeasured, not missing code; documentation and infrastructure
 success never imply kernel runtime success. A declared tested-profile SC1 result
-must be announced explicitly but does not finish the unchanged whole-OS goal.
+must be announced explicitly but does not alone finish the practical goal.
 
 ### Execution layers
 
@@ -146,7 +153,7 @@ Creating a fixture or changing a packet status grants no runtime permission.
 | B: unprivileged executable microtest | A real C/Rust compile, actual helper execution, ordinary subprocess descriptor behavior, positive and negative controls | One reusable reviewed cheap-check profile, pinned tools, disposable outputs, bounded processes/time/storage, no root, modules, guest, hardware, network or production state. |
 | C: actual production build | Full consumed source/body and ABI bindings, real object/module/image, integration and symbol checks | Existing build ownership, resource policy and independently reviewed build packet. |
 | D: privileged infrastructure/runtime | Actual root collector, guest, ownership, cleanup and fault observations | Existing independent execution release, serialized runtime owner and original isolation/cleanup requirements. |
-| E: integrated acceptance | Required paired Linux/McKernel cases, repetitions, pressure, soaks and release evidence | All original global and per-case prerequisites; independent acceptance on exact artifacts. |
+| E: practical completion | Selected real apps, native restoration, targeted regressions, bounded mixed run and runnable delivery | PRACTICAL-GOAL.md exit checks on exact supported artifacts; focused final review. Original qualification claims still require their original contracts. |
 
 Layer names describe evidence, not extra gates. Credit any result only to the
 original contract whose requirements it actually meets. A model-only test,

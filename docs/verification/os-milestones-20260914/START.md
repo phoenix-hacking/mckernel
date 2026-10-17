@@ -1,10 +1,15 @@
 # Dispatcher entry point
 
+Current user scope (2026-10-17): [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md) and
+[practical-milestones.json](practical-milestones.json) replace comprehensive
+qualification as the active completion target. Read them after GOAL.md. Preserve
+the old roadmap as deferred scope; do not recreate long-exposure prerequisites.
+
 Preparation on 2026-09-27 leaves the campaign stopped. A later normal launcher
 invocation is explicit authorization to resume; this preparation hold does not
 stop that invocation. Dedicated-computer scheduling supersedes older
 three-child/workstation scheduling numbers only.
-Use GOAL.md for the unchanged whole-OS objective, CONVERGENCE.md for execution/
+Use GOAL.md for the current practical objective, CONVERGENCE.md for execution/
 review/retry policy, HANDOFF.md for compact routing, and LAUNCH.md for launcher
 controls. Do not reinitialize an existing goal or start a second dispatcher just
 to adopt these instructions.
@@ -27,8 +32,10 @@ safe checkpoint after reconciling local/remote changes without discarding WIP.
    handoff fields are not runtime observations. Record adoption against
    launcher-recorded policy hashes. Do not edit launcher-owned
    state by hand.
-2. Read README.md once, then use the existing planning helper to select the exact
-   task/gate/case and original prerequisites. Do not repeat a repository-wide
+2. Select the next practical exit check from practical-milestones.json. Read
+   README.md once as the preserved qualification roadmap; use its existing helper
+   for a particular original task/gate/case only when relevant to current work.
+   Do not reinstate the whole old backlog as a dependency. Do not repeat a repository-wide
    audit, replay already-valid work, or give every worker the entire catalog.
 3. Prioritize the critical path and saturate independently useful, ready work
    within the measured cap: favor implementation, build and executable-test lanes;
@@ -69,7 +76,7 @@ Read the declared profile and selected rows, not all historical evidence at
 every turn. Report newly implemented/tested/integrated behavior and baseline
 reuse separately from production acceptance. Update touched rows and their
 source/evidence bindings at existing checkpoints; the normal progress updater
-renders both reports. SC1 completion is a scoped notification, never whole-OS
+renders both reports. SC1 completion is a scoped notification, never practical-goal
 completion or permission to omit a required execution/safety check.
 
 ## Fast path to an application-testable core

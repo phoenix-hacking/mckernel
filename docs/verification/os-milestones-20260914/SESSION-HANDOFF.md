@@ -1,5 +1,14 @@
 # OS development session handoff
 
+Active scope revision, 2026-10-17: read [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md)
+and [practical-milestones.json](practical-milestones.json) after GOAL.md.
+The current goal is a solid kernel and working C/Rust application infrastructure
+on one supported local profile, with real native restoration and bounded tests.
+Huge fuzz/exposure quotas, per-class 168-hour soaks and broad certification no
+longer block completion. Preserve original contracts/results as deferred scope.
+Use live state/HANDOFF for current activity; stopped-session details below are
+historical, not authorization to restart a running or policy-stopped campaign.
+
 Use this concise state summary for ordinary session handoffs. Preserve the
 existing blocked campaign and its goal; this file does not authorize replaying a
 policy-rejected request in another session. A fresh-session launch archives the

@@ -43,6 +43,42 @@ class ProgressCoreIntegrationTests(unittest.TestCase):
             ) + " |"
             self.assertIn(row, panel)
 
+    def test_practical_target_is_primary_and_legacy_values_are_deferred(self):
+        practical = dict(scope_id="practical-kernel-apps-v1-20261017", milestones=[dict(
+            id="M05", title="Lifecycle", engineering_state="blocked", completion_status="unassessed",
+            exit_condition="Restore ownership", current_evidence_summary="Known shutdown failure",
+            checks=[dict(id="P-M05-01", description="Resolve shutdown", status="open", evidence=["retained-failure.json"]),
+                    dict(id="P-M05-02", description="Assess restoration", status="unassessed", evidence=[]),
+                    dict(id="P-M05-03", description="Earlier bounded result", status="complete", evidence=[{"path":"result.json","sha256":"a"*64}])])],
+            validation_budget=dict(fresh_guest_boots=2, complete_native_lifecycle_cycles=10,
+                                   successful_application_launches=100, mixed_workload_minutes=60),
+            next_actions=["Run the next reviewed repair"])
+        def read(path, default):
+            if path.name == "practical-milestones.json": return practical
+            if path.name == "gate-map.json": return dict(status_counts={"PASS":2},native_gate_count=130,earned_points=3,total_points=100)
+            return {}
+        with mock.patch.object(progress,"read_json",side_effect=read),mock.patch.object(Path,"write_text") as write:
+            report=progress.render(self.doc)
+        write.assert_not_called()
+        self.assertLess(report.index("## Primary target:"),report.index("## Stable kernel core:"))
+        self.assertLess(report.index("## Stable kernel core:"),report.index("## Historical / DEFERRED qualification counters"))
+        primary=report.split("## Primary target:",1)[1].split("## Snapshot",1)[0]
+        self.assertIn("| M05 | Lifecycle | blocked | unassessed |",primary)
+        self.assertIn("| P-M05-01 | Resolve shutdown | open | retained-failure.json |",primary)
+        self.assertIn("| P-M05-02 | Assess restoration | unassessed | not recorded |",primary)
+        self.assertIn('"sha256": "'+'a'*64+'"',primary)
+        self.assertIn("Run the next reviewed repair",primary)
+        self.assertNotIn("%",primary)
+        self.assertIn(progress.bar(2,130),report)
+        self.assertIn(progress.bar(3,100),report)
+        self.assertIn("DEFERRED (historical ACTIVE)",report)
+
+    def test_absent_practical_file_keeps_existing_render(self):
+        with mock.patch.object(progress,"read_json",return_value={}):report=progress.render(self.doc)
+        self.assertIn("## Acceptance Bars",report)
+        self.assertNotIn("## Primary target:",report)
+        self.assertIn("## Stable kernel core:",report)
+
     def test_default_refresh_writes_only_both_reports_in_disposable_root(self):
         with tempfile.TemporaryDirectory(prefix="mckernel-report-test-") as directory:
             root = Path(directory)

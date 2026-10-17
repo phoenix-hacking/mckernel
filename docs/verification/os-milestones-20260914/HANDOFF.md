@@ -1,5 +1,40 @@
 # Compact dispatcher handoff
 
+
+## Checkpoint383 — practical target adopted; alternate stack accepted
+
+The explicit user scope practical-kernel-apps-v1-20261017 now controls current
+completion: one supported kernel/app profile; legacy qualification is deferred,
+never passed by deferral. Six independently accepted current942 diagnostics now
+include alternate-repeat:33.643262s,415 exact bytes,16 inside handlers/16 hits,
+empty stderr/exit0/procfs empty; retirement -11 then0,30 clients/container/root
+retired. Evidence signal-alternate-repeat-current942-result-review-20261017-1
+.json SHA3e6cc72d and .tar.gz2cf23dcc. Normal-stack restoration remains unproved.
+
+Next sole realloc-grow guest independently released4eb32d8b: original32-byte
+preservation through growth to2048;25-byte oracle,default1024 streams,manifest
+77f5adcd,parentndrlg-1 dev1828/109214,noncec5b5e1a04bd84ff183991071aea8bac4,
+QMP92. Three bounded postjoin captures approved. Push/fetch, fresh admission,
+then execute with HEAD frozen. Adapted closed-read source/Linux/stage independently
+PASS; next packet delegated, original label/signed-char blocker preserved.
+
+Running/log candidate1769263c remains separate from current942. External driver
+13tests+source review PASS; owner18mocktests source BLOCKED on normal-exit
+descendant census, one bounded correction underway before any build. No actual
+module compile yet. Remote cancellation and exact-once worker-stop primitives
+both independently PASS_SOURCE_UNWIRED; no native lifecycle restoration claim.
+Ready4 -> shutdown EBUSY -> Shutdown8 remains unresolved. Practical worklist and
+existing progress renderer are being reconciled without rescaling estimates or
+altering legacy contracts/state. Continue after checkpoint, review cadence14:55UTC.
+
+Active user scope, 2026-10-17: [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md) and
+[practical-milestones.json](practical-milestones.json) now replace comprehensive
+qualification as the completion target. Huge fuzz/node-hour/168-hour quotas,
+all-catalog/language gates and external certification are deferred. Keep real
+kernel/app correctness, native restoration and bounded final validation. Older
+original100% clauses below are historical and superseded. Supervisor owns this
+scope patch; dispatcher adopts it at a safe checkpoint without restarting.
+
 Checkpoint382: acceptedactualcurrent942diagnostics nowFIVE incl adaptedmutex
 33.581568s/51bytes/2,4,8vectors/emptyerr0,14workercyclesreuseTID258, nine
 samples/eightreturns/fiveroutes; retirement-11→0 retained,30clients/container/

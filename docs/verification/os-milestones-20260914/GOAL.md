@@ -1,5 +1,15 @@
 # Autonomous McKernel goal
 
+## Active user scope — practical kernel and applications, 2026-10-17
+
+The user explicitly replaced excessive formal qualification with a solid kernel
+and working application infrastructure. [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md)
+and [practical-milestones.json](practical-milestones.json) now define completion.
+They supersede older all-gates/all-catalog/exposure/soak/external-release clauses,
+including the preserved launcher objective string. Preserve that legacy identity
+for compatible resume; do not change launcher state or restart to adopt scope.
+Original qualification evidence and counters remain deferred, never relabeled PASS.
+
 Preparation on 2026-09-27 leaves the campaign stopped. A later normal launcher
 invocation is explicit authorization to resume; this preparation hold does not
 stop that invocation. Full dedicated-computer, aggressive scheduling supersedes
@@ -44,21 +54,22 @@ The launcher records policy hashes; record the adopted hashes after reading.
 A remote documentation commit is not proof that a local running dispatcher has
 loaded it.
 
-CONVERGENCE.md supersedes older workflow-only scheduling, retry, context-loading
-and checkpoint habits, including completed model-switch stops. README.md,
-`final-push.txt`, the original stability/production/case contracts and independent
-execution releases continue to govern technical scope, safety and acceptance.
+CONVERGENCE.md supersedes older scheduling, retry, context-loading and checkpoint
+habits, including completed model-switch stops. PRACTICAL-GOAL.md governs current
+scope and completion. README.md, `final-push.txt` and original contracts preserve
+the deferred qualification backlog; they govern any original acceptance claim.
+Independent execution releases still govern actual privileged/build/guest work.
 Never treat the planning indexes, a generated dashboard or a source-only packet
 as runtime authority. Preserve all immutable originals and existing Rust consumers.
 
 ## Execution contract
 
-Own one durable whole-OS objective, not a new goal for every packet. Continue
-through dependency-ready work until all 130 production gates, seven language
-gates and required application/configuration coverage meet their original
-acceptance contracts, including native, Rust/assembly, platform, full exposure
-and independent external qualification. All required 168-hour soaks remain.
-No calendar deadline or first-subset completion replaces that objective.
+Continue dependency-ready implementation and validation until the practical
+kernel/application exit checks pass on the declared supported profile. This is
+the user's explicit rebaseline, not permission to claim original qualification.
+Huge fuzz/exposure quotas, 168-hour soaks and full external qualification no longer
+block this goal. Keep actual correctness, meaningful regressions, native lifecycle
+restoration, artifact identity and recoverable delivery as completion requirements.
 
 For each behavior: freeze its invariant and expected result; obtain the cheapest
 valid executable evidence; repair; independently review the affected boundary;
@@ -84,8 +95,9 @@ real external prerequisite is unavailable. Continuous duration is not permission
 to loop on unchanged deterministic failures or repeatedly restate a blocker.
 
 Preserve exact failures, source/test/oracle identities, commands and results.
-Update HANDOFF.md and the existing chronological evidence/events; promote official
-counters only under the original acceptance rules. Commit coherent code/tests,
+Update HANDOFF.md and the existing chronological evidence/events. Report practical
+criterion closures first; promote historical formal counters only under their
+original acceptance rules. Commit coherent code/tests,
 harness changes and reporting separately, verify fetched blobs, and preserve WIP
 at the existing cadence and before long runs or a controlled stop.
 
