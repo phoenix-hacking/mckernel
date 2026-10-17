@@ -1,0 +1,27 @@
+{
+  "schema": "mckernel.independent-source-review.v1",
+  "reviewer": "/root/image_retirement_review",
+  "implementation_ownership": false,
+  "decision": "PASS_SOURCE_ACTUAL_CARRIER_LINK_RACES_UNWIRED",
+  "reviewed_report": {
+    "path": "docs/verification/evidence/native-fork-carrier-link-races-source-20261017-1.json",
+    "sha256": "9cff7db3b98404bb3e359a6d529e65339ac87e1047e65931ea49bfd5cc87d744"
+  },
+  "generated_sha256": "1f22be70252187e9ea2fd997b8672a45026032159b420f7a73675060d39f5262",
+  "verified_bound_rows": 65,
+  "existing_actual_body_cases_passed": 9,
+  "tests_repeated_by_review": 0,
+  "findings": [],
+  "verified_boundaries": [
+    "Actual Slots guard physically drops before immediate-LINK hook; no payload mutable borrow spans unlock.",
+    "HOST stage1 blocks before verifier/MM/kind1/RET and retains owners.",
+    "SEALED uncertain transport retains ownership, blocks abort and retries identical durable key using real cached MM receipt.",
+    "Duplicate RET and repeated same-ticket acceptance have no additional effects."
+  ],
+  "preserved_failure": "Original fixture E0599 Arc Deref failure; bounded fixture-only correction.",
+  "limitations": [
+    "Deterministic interleavings with explicit MM/PID/module/registry/directmap/allocation/constructor adapters.",
+    "No multicore, native, kind3/4, final ACK, normal child release or activation acceptance."
+  ],
+  "runtime_authority": false
+}

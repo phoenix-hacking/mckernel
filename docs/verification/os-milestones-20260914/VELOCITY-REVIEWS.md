@@ -13,13 +13,13 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-17T18:25:56Z` (interval 28m31s).
-- Next full review target: `2026-10-17T18:55:00Z` (11:55 America/Los_Angeles).
-- Next review latest target: `2026-10-17T19:25:00Z`; preserve healthy operations.
-- Last included-usage observation: 28%; existing campaign stop remains 97%.
-- Current intervention: bind accepted CPU-repair modules to the fresh cycle
-  packet and obtain native feedback; continue thin FPU-build preparation,
-  bounded storage recovery and actual fork carrier/LINK integration in parallel.
+- Last full review: `2026-10-17T18:54:56Z` (interval 29m00s).
+- Next full review target: `2026-10-17T19:25:00Z` (12:25 America/Los_Angeles).
+- Next review latest target: `2026-10-17T19:55:00Z`; preserve healthy operations.
+- Last included-usage observation: 30%; existing campaign stop remains 97%.
+- Current intervention: prepare actual work after the fresh second boot;
+  finish typed-link FPU materialization/image admission and promote the reviewed
+  AVX payload, while the actual fork producer/receiver joint check proceeds.
 - Current invocation independently accepted app/diagnostic behaviors: 14 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -27,9 +27,10 @@ This file describes supervision, not OS acceptance or execution authority.
   actual memory-protection fault/recovery app, bounded vector-preservation app).
 - Separate native3f7b observations: independently accepted quiescent native
   shutdown5->0->0/close0 and public destroy/device-memory release; complete
-  stop/destroy/release/reboot cycles remain0.
-- CPU-repair candidate d99edf2f has independently accepted matched modules;
-  its CPU reacquisition and cycle retry have no native acceptance yet.
+  one public stop/destroy/release/reboot cycle is now accepted with d99 modules.
+- CPU-repair candidate d99edf2f has native second-reservation and reboot evidence;
+  practical public-cycle progress1/10. Second-boot workload, complete restoration
+  and remaining repetitions remain open.
   Old formal scores and estimates remain historical, not the new goal's percentage.
 - No new monitor script, OS timer, engineering dispatcher or workload was started.
 
@@ -928,3 +929,88 @@ native_fp_save_thin_preparation_20261017.json;
 native-targeted-trim-preparation-20261017-1.json. Actual build/owner receipts are
 under scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/evidence/receipt.json and
 scratch/nsd-o-a7d84db0d8b54b9b94347fd0aff57594/owner-receipt.json.
+
+## Review 11 — 2026-10-17 18:54:56 UTC
+
+Interval: `18:25:56` to `18:54:56` UTC,29m00s. Same live worker498255/start3900845
+and server498257/start3900851; running, no stop. Usage30%, stop97%. Dispatcher
+reports checkpoint230c9654 pushed/fetch-verified. Supervisor owns no runtime/Git.
+
+| Actual operation | Duration | Independent result |
+| --- | --- | --- |
+| Cycle2, launch18:34:32.244/end18:35:31.190 | 58.947s | One public native cycle accepted18:39:53 |
+| One targeted scratch trim | 0.650s | Trim/retirement accepted18:41:22; backing reduction1.004GiB |
+
+**Delivered:** first accepted native boot/workload/stop/destroy/release/boot
+sequence. Repaired SMP plus unchanged942image observes Running5, shutdown0,
+NotBooted0, public destroy/release and fresh generation2Running5. CPU reacquisition
+now has actual native evidence. Owner/client/container/QEMU retirement passes.
+This gives public-cycle progress1/10, with no second native stop, physical-identity
+or full mapping/callback/reference-restoration claim. App/diagnostic total14 stays
+unchanged; no new distinct application this interval. All14milestones remain open;
+checklist3complete/32open, including P-M05-02/03open.
+
+The fourth consumer initially rejected the log priority. Matched Linux source
+establishes LOG_USER PRI14 for the helper's userspace PRI6 write. A versioned,
+exact-PRI14 correction passes all four consumers on the unchanged actual capture;
+wrong-priority/freshness/status negatives still reject. Original source and failed
+evaluation remain preserved. No new guest was needed for this framing correction.
+
+**Handoff:** module acceptance18:23:57 ->stage ready18:32:42 ->execution review
+18:33:46 ->launch18:34:32.244. Review-to-launch46.244s; artifact-to-launch10m35.244s.
+Two preparation defects caused avoidable work: an unsupported97%host occupancy
+gate and binder field names inconsistent with the accepted receipt. Required
+staging/review also occupied the interval; exact avoidable time is unknown.
+VELOCITY.md now distinguishes included-account usage from disk byte floors plus
+growth reserve. Reuse the corrected binding path. No overall2x/3x claim follows.
+
+Trim reduced actual backing allocation by1,078,071,296bytes, approximately1.004GiB.
+Reported discard19,199,012,864bytes is a separate quantity. One execution, no
+deletion/resize; filesystem/mount/UUID/backing identity, logical size and historical
+leases unchanged. Client groups retired, PIDs absent, mutex27:4free. Post-record
+margins after floors plus576MiBreserve: host1,016,901,632B/scratch3,335,053,312B.
+These are retained measurements; the next admission must remeasure.
+
+Parallel FPU progress: the exact schedule() merge into main passed independent
+review18:53:58, preserving every outside byte and later VM/thread-release bridges.
+No changed source warranted repeating42injected tests. The isolated thin build
+remains unbuilt: first copy stopped on a tracked symlink after4,866files. Original
+authority supports49links; corrected materialization binds exact kinds/link text/
+contained regular targets. Three focused tests, document-tamper and filesystem
+cases pass; frozen review/new copy still pending at cutoff. Failed tree retained.
+This is source preparation, not image/native acceptance.
+
+The new AVX payload passed independent source/Linux review18:51:25. ABI-correct
+helper zeroes all16YMM registers, raw-wakes and verifies every lane; primary uses
+distinct nonzero patterns. Positive and four intended rejection controls pass.
+This repairs the accidental-survival gap. Native CPUID/XCR0, scheduling/state and
+retirement still require its released matched-image case; actual libc dispatch
+remains unobserved. Accepted SSE2 inputs and failed disassembly are preserved.
+
+Fork's initial consumer82case join is independently accepted source-only. Review
+also corrected a mutable payload borrow across READY unlock and unnecessary
+exclusive scope references. Author reported starting the next joint check18:54:20,
+using actual receipt writers, memory ledger and guest C receiver, with stale/
+cancel/earlyLINK controls. No joint result or activation at cutoff; CREATE_PPD
+remains-95.
+
+**Next adjustment:** finish the bounded case that executes a real payload after
+the second boot. Its generation partition must preserve global error checks,
+identity and transient retirementEAGAIN before unique terminal success. Complete
+the typed-link materialization review and separately released image build; prepare
+the reviewed AVX case within the two-case queue. Use the next fully admitted
+useful build/guest under oneheavy ownership while fork integration continues.
+Final repetitions await the coherent supported candidate. Saved percentage
+baseline stays immutable. Next review19:25UTC, latest19:55. Steering183110,
+184222,184622 and185026 reached the campaign. No supervisor workload, cleanup
+or launcher was executed.
+
+Anchors under ../evidence/: native-resource-reboot-cycle-result-review-20261017-2.json;
+native-resource-reboot-cycle-retention-20261017-2.json;
+native-resource-reboot-consumer-correction-20261017-1.json;
+native-targeted-trim-result-review-20261017-1.json;
+native-fp-save-main-integration-20261017-1.json;
+practical-m07-enabled-state-closure-20261017-2.json;
+native-fork-initial-consumer-source-20261017-1.json. Original cycle2 dispatch is
+scratch/native-resource-reboot-cycle-dispatch-20261017-2; trim nonce is
+6d69acc2eccb458ba5fbc17a9f9b1b81, execution_count1.

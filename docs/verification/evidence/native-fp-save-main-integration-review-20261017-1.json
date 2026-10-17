@@ -1,0 +1,35 @@
+{
+  "schema": "mckernel.native-fp-save-main-integration-review.v1",
+  "status": "PASS_EXACT_SCHEDULE_ONLY_SOURCE_INTEGRATION",
+  "reviewer": "/root/native_cpu_reacquire_review",
+  "dispatcher": "/root",
+  "integration_record": {"path": "docs/verification/evidence/native-fp-save-main-integration-20261017-1.json", "sha256": "c54cb59d417768400145392f720a98db56c0f980e69517c231dc223097bed9bd"},
+  "prior_source_evidence": {"path": "docs/verification/evidence/native_fp_save_repair_20261017.json", "sha256": "18d4be0f9954ce09183387d2a9b2b4561510383977212dba76441fc8bebbec67", "previously_reviewed_injected_executions": 42, "executions_repeated_by_this_review": 0},
+  "snapshot_root": "/home/holden/mckernel-work/scratch/native-fp-save-main-integration-20261017-1",
+  "snapshot_sha256": {
+    "process.before.c": "a5b503ad98deb916e30ec70a78fb1ede64adbc7944216b4279943888e6632f3e",
+    "process.after.c": "09409cad5dd2d7a23de33b6e592aa62ea5641272f68ce224181e807bdba7a287",
+    "function.before.c": "2cac504001ec215f80f6095f13a0ff936d5c10be884fad48813f59376e67c777",
+    "function.after.c": "811c142bfb6dde73b7cd3fae9cb271d31770ed7d3f90f8a9da14935ded5a98f6"
+  },
+  "unchanged_dependency_sha256": {"arch/x86_64/kernel/cpu.c": "115725e4341f34d13d2a8385d87521874af5b7a53923bb0d407d580793a934f9", "kernel/rust/sched_helpers.rs": "5f6841a4f17330e4d37510f4467e8747ca183ecf1b2055ebfa8718974f017475"},
+  "verified": {
+    "main_equals_after_snapshot": true,
+    "old_schedule_equals_compiled942_original": true,
+    "new_schedule_equals_accepted15cb_candidate": true,
+    "both_retained_c_and_rust_fixture_bodies_contain_exact_new_schedule": true,
+    "test_generator_and_fixture_unchanged": true,
+    "outside_schedule_bytes_unchanged": true,
+    "outside_prefix_bytes": 133962,
+    "outside_suffix_bytes": 11758,
+    "outside_concatenated_sha256": "e70e27aca3039dd649893dfe3a68cd359fe208ef4c1428a8817d5d2e12de0a85",
+    "later_checked_vm_thread_release_bridges_preserved": true
+  },
+  "decision": "No blocking merge finding. Accepted exact schedule-only integration and unchanged CPU/Rust-helper closure; no new body difference warrants repeating prior injected tests.",
+  "scope": "Static byte-identity integration review only. Separate thin image remains the explicit compiled942-plus-FPU15cb derivative.",
+  "new_tests": 0,
+  "new_builds": 0,
+  "runtime_authority": false,
+  "native_acceptance": false,
+  "current942_image_changed": false
+}

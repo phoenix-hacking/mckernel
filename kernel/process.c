@@ -4366,6 +4366,22 @@ void schedule(void)
 	unsigned long irqstate = 0;
 	static int mcexec_v10_scheduler_logs;
 
+	/* Admission precedes runqueue mutation.  IRQ exclusion pins current and
+	 * its live FPU state until preparation commits a context switch.  A
+	 * failed save cannot return to a sleeping/exiting scheduler caller or
+	 * proceed with an unsaved owner; panic is deliberately fail-stop here.
+	 * no_preempt retains its existing reschedule-only path without a save.
+	 */
+	irqstate = cpu_disable_interrupt_save();
+	if (!ihk_atomic_read(&get_this_cpu_local_var()->no_preempt)) {
+		prev = get_this_cpu_local_var()->current;
+		if (prev && prev != &get_this_cpu_local_var()->idle &&
+		    prev->status != PS_EXITED && save_fp_regs(prev)) {
+			panic("schedule: failed to save floating point state");
+			__builtin_unreachable();
+		}
+	}
+
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 	struct sched_schedule_result schedule_result;
 	int action;
@@ -4373,7 +4389,6 @@ void schedule(void)
 	(void)thread;
 	(void)tmp;
 	(void)switch_ctx;
-	(void)irqstate;
 
 	action = sched_schedule_prepare_body_result(
 			(unsigned long)get_this_cpu_local_var(),
@@ -4392,10 +4407,13 @@ void schedule(void)
 			process_sched_has_signal_bridge,
 			process_sched_runq_log_bridge);
 	if (action != SCHED_SCHEDULE_ACTION_SWITCH) {
+		cpu_restore_interrupt(irqstate);
 		return;
 	}
 
 	v = (struct cpu_local_var *)schedule_result.cpu_addr;
+	/* Preparation observed IRQs already disabled; retain the entry state. */
+	v->runq_irqstate = irqstate;
 	prev = (struct thread *)schedule_result.prev_thread_addr;
 	next = (struct thread *)schedule_result.next_thread_addr;
 	prevpid = schedule_result.prevpid;
@@ -4426,12 +4444,7 @@ void schedule(void)
 		restore_debugreg(next->ptrace_debugreg);
 	}
 
-	/* Take care of floating point registers except for idle process */
-	/* Not to save fp_regs when the process ends */
-	if (prev && (prev != &get_this_cpu_local_var()->idle
-			&& prev->status != PS_EXITED)) {
-		save_fp_regs(prev);
-	}
+	/* The previous live FPU state passed admission before preparation. */
 
 	if (next != &get_this_cpu_local_var()->idle) {
 		restore_fp_regs(next);
@@ -4500,7 +4513,6 @@ void schedule(void)
 		kprintf("%s: WARNING can't schedule() while no preemption, cnt: %d\n",
 			__func__, ihk_atomic_read(&get_this_cpu_local_var()->no_preempt));
 
-		irqstate = cpu_disable_interrupt_save();
 		ihk_mc_spinlock_lock_noirq(
 			&(get_this_cpu_local_var()->runq_lock));
 		v = get_this_cpu_local_var();
@@ -4512,7 +4524,6 @@ void schedule(void)
 		return;
 	}
 
-	irqstate = cpu_disable_interrupt_save();
 	ihk_mc_spinlock_lock_noirq(&(get_this_cpu_local_var()->runq_lock));
 	get_this_cpu_local_var()->runq_irqstate = irqstate;
 	v = get_this_cpu_local_var();
@@ -4599,12 +4610,7 @@ void schedule(void)
 			restore_debugreg(next->ptrace_debugreg);
 		}
 
-		/* Take care of floating point registers except for idle process */
-		/* Not to save fp_regs when the process ends */
-		if (prev && (prev != &get_this_cpu_local_var()->idle
-				&& prev->status != PS_EXITED)) {
-			save_fp_regs(prev);
-		}
+		/* The previous live FPU state passed admission before preparation. */
 
 		if (next != &get_this_cpu_local_var()->idle) {
 			restore_fp_regs(next);

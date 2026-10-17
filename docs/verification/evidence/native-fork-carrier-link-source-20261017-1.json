@@ -1,0 +1,355 @@
+{
+  "schema": 1,
+  "status": "PASS_SOURCE_ACTUAL_CARRIER_LINK_UNWIRED",
+  "runtime_acceptance": false,
+  "production_activation": false,
+  "source_fork_create_result": -95,
+  "guest_prepare_default": "NULL",
+  "raw": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert",
+  "raw_generated_sha256": "a64e3b3b79703a20cdcbd63129f0326f3153257e1c0b71576933e450457739e1",
+  "oracle": {
+    "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/oracle.json",
+    "sha256": "dd9a0ef6fce2c64be1bb385a79409d2933f3807a6c6a895e8f60f270853381d4",
+    "executed_selected_rust_cases": 5,
+    "tests": [
+      "consumer_fixture::actual::actual_memory_ingress_first_and_link_writer_publish_to_original_guest_consumer",
+      "consumer_fixture::actual::actual_wrong_child_mm_vma_rejects_link_before_seal_and_keeps_payload_owner",
+      "consumer_fixture::actual::actual_parent_close_before_ticket_cannot_publish_automatic_negative",
+      "consumer_fixture::actual::actual_stale_generation_rejects_before_payload_or_mm_effect",
+      "consumer_fixture::actual::actual_link_before_first_ret_is_not_a_handoff_permission"
+    ],
+    "external_module_tests": "compiled but filtered; not counted as executed"
+  },
+  "native_sources": [
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/application_syscall.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/application_syscall.rs",
+      "sha256": "5602b9fc586425884ec4fe1dd028747b74ee6b9be3230e2359f7a78e3c994246"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_application_syscall.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/smp_application_syscall.rs",
+      "sha256": "ad239a66f649684674b0923a12492f7afe00a9464e2e576e730b17db36d2914c"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_image.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/smp_image.rs",
+      "sha256": "4f35ec396494fa428c55298c91ffe14aa0142d0282dd37d922f94a901a692689"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_service.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/smp_service.rs",
+      "sha256": "60d970d38887bf4fb217dac149713581cf0ca1d71d01dfd0423494633ad7a8fd"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/mcctrl_process.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/mcctrl_process.rs",
+      "sha256": "d1a9333c5eb548feadb24f07785e9986079c84d97c5002e2fe7270b2b23cba7a"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/private_fork_carrier_request_20261017.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/private_fork_carrier_request_20261017.rs",
+      "sha256": "97d2e03d0651c0570aae9a08ce8f442d1c3ef504b0b7640f556488e1689c72a6"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/ihk_smp_x86_64.rs",
+      "sha256": "786c8e008a8b43ece1281aa47fbfc13acb24fbfbaeb463e5cf91727d672c874a"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_resource.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/smp_resource.rs",
+      "sha256": "d4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_application.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/smp_application.rs",
+      "sha256": "16f301fc3ab429e8352f79a48f98de2b3aa0939397f988e0e99f6ca922d5ee6c"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_memory.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/smp_memory.rs",
+      "sha256": "b713cab756f8199700921cae94b32efd3979e9508be3ac738495273eb60b5b14"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_fork_ingress.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/smp_fork_ingress.rs",
+      "sha256": "c06352c71aeb072ad9cf3c265b038a6583627febfd3387ddf5a5160b12bbdba4"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/application_rpc.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/application_rpc.rs",
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/os_runtime.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/os_runtime.rs",
+      "sha256": "37ae6ed33093708f077bc3e10a236f37b10eb1e9faa1c179dcaa7d42c68e8177"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_fork_link.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/smp_fork_link.rs",
+      "sha256": "69f0ccc64ab389a808b391bd931708769d890a26cd8f6d394ac025f854516e5f"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/ihk_mapping.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/ihk_mapping.rs",
+      "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/mcctrl_vm.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/mcctrl_vm.rs",
+      "sha256": "da7596b172bf8b62ca620f9dc88deb82e6913d1c789c8c80189e464849f983e8"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_application_image.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/smp_application_image.rs",
+      "sha256": "e248f594b64c3546415b16d4b5edd4623ac053c65cfd867b62c3211596865a7e"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/application_pager.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/application_pager.rs",
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/sysfs_memory.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/sysfs_memory.rs",
+      "sha256": "b7ed3edd82862f83948a0c705e279c090319b8306513150d5f08c03723087aa7"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/abi/application.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/sources/abi/application.rs",
+      "sha256": "9dc6ac72e1fbb458798764ffc0e8db2161b4004d6b498324f9647f9434a351c1"
+    }
+  ],
+  "guest_inputs": [
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c",
+      "capture": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest/sources/syscall.c",
+      "sha256": "6f9835b5bf6a3a4630e7cefc89ba3bab0a281baeee58a90e97d806acb6e9a4f9"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/include/process_helpers.h",
+      "capture": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest/sources/process_helpers.h",
+      "sha256": "ec8fe49f4d5ced191f23a585b2d1a618465ab63270e9efb53ef7fa7b331bf24f"
+    },
+    {
+      "source": "/home/holden/mckernel/kernel/include/syscall.h",
+      "capture": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest/sources/syscall.h",
+      "sha256": "459e6d0faec3f1b8366a0d329571ef5ea813042706be11f9423b0399bbba6ffa"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/rust/process_helpers.rs",
+      "capture": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest/sources/process_helpers.rs",
+      "sha256": "b426af7007fca4d093563c985cd6f54de41dfa679de56d33710f8315045b1f8f"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/scripts/tests/fixtures/native_fork_carrier_link_guest_20261017.c",
+      "capture": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest/sources/guest-fixture.c",
+      "sha256": "2559b409792652b69086c2b803348477a96d293991a124ed21b2d258aac612e8"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/scripts/tests/native_fork_carrier_link_guest_source_20261017.py",
+      "capture": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest/sources/guest-generator.py",
+      "sha256": "613771d9d530216c5d68defa2aab4b8fa2d81c8004f6fe01de6187bd1cf6f634"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/include/private_fork_guest_carrier_20261017.h",
+      "capture": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest/sources/private_fork_guest_carrier_20261017.h",
+      "sha256": "4d25358b68b6884b17fb5b698c6b0c71304f99f0e32fdd4fb66858bf20749b79"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/include/private_fork_carrier_request_20261017.h",
+      "capture": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest/sources/private_fork_carrier_request_20261017.h",
+      "sha256": "3140525007b32b4eecaa354a1fd027b69e58595e8198d927185ae37be7f7ff50"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/include/private_fork_wire_20261017.h",
+      "capture": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest/sources/private_fork_wire_20261017.h",
+      "sha256": "fa1a6e96be8096f1cca8312a0eeab67a37181c9012e3659505ec2f9f74656082"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/private_fork_carrier_request_20261017.c",
+      "capture": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest/sources/private_fork_carrier_request_20261017.c",
+      "sha256": "738c9d8d2cb4964ed9d6a60440f83f2d3e457ca306691be633ad75a382473bec"
+    }
+  ],
+  "test_and_scaffold_closure": [
+    {
+      "source": "/home/holden/mckernel/scripts/tests/test_native_fork_carrier_link_20261017.py",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/frozen-source/test_native_fork_carrier_link_20261017.py",
+      "sha256": "5e8d7bcdf06ca04ff6ef646b69f0215942c62f94e347ebce2a786780b43f76b0"
+    },
+    {
+      "source": "/home/holden/mckernel/scripts/tests/fixtures/native_fork_carrier_link_memory_20261017.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/frozen-source/native_fork_carrier_link_memory_20261017.rs",
+      "sha256": "840c95788acc2cc498e0b88af8adf695af44a1420d138e38cfb2d9cdacdf5a68"
+    },
+    {
+      "source": "/home/holden/mckernel/scripts/tests/fixtures/native_fork_carrier_link_consumer_20261017.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/frozen-source/native_fork_carrier_link_consumer_20261017.rs",
+      "sha256": "4db573b2fd78ad6a5128e292e5a14ca2bb7d788cd0d95dc16630bee6a3fadc40"
+    },
+    {
+      "source": "/home/holden/mckernel/scripts/tests/fixtures/native_fork_carrier_link_backend_20261017.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/frozen-source/native_fork_carrier_link_backend_20261017.rs",
+      "sha256": "b259080a5fe194596c373168f9d33461a8d3036077e5abe4b897a3485ec88403"
+    },
+    {
+      "source": "/home/holden/mckernel/scripts/tests/fixtures/native_fork_carrier_link_ihk_20261017.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/frozen-source/native_fork_carrier_link_ihk_20261017.rs",
+      "sha256": "3983e9b83c791659946cfc9cd3557f00882413de477f957d956d184a957afb09"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/oracle.json",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/frozen-source/oracle.json",
+      "sha256": "dd9a0ef6fce2c64be1bb385a79409d2933f3807a6c6a895e8f60f270853381d4"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/docs/verification/evidence/fork-provider-carrier-ingress-20261017-1/payload-borrow-correction/provider-runtime-scaffold.rs",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/frozen-source/provider-runtime-scaffold.rs",
+      "sha256": "4aac9dc46300b2eec19ba74c04da34d7af6464dbd20ceaf3f477e524f1964265"
+    },
+    {
+      "source": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/docs/verification/evidence/fork-provider-carrier-ingress-20261017-1/immutable-scope-correction/closure.json",
+      "snapshot": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/frozen-source/closure.json",
+      "sha256": "b8d42901f23e5b5049c4d878ec3522c87891e40a5acb82f9e08398cdb263fd4d"
+    }
+  ],
+  "results": {
+    "compile-c": 0,
+    "compile-codec": 0,
+    "compile": 0,
+    "run-1": 0,
+    "run-2": 0,
+    "run-3": 0,
+    "run-4": 0,
+    "run-5": 0
+  },
+  "actual_positive_chain": [
+    "real guest carrier create_first_link -> begin -> actual do_fork_inband_claim NEWmarker owned nonce",
+    "actual registered IHK adopt_v2 -> independent AdmissionOwner/OsLease/module consumer capsule before Q/MM",
+    "real Memory::syscall + payload ledger and ForkPayload constructor under authentic SAME original response ticket",
+    "actual provisional ingress -> actual ForkAdoption reservation and preallocated link gate",
+    "actual mcctrl initial constructor + fork_adopt_consumer + Mirror::inherit_vmas + inline seal",
+    "actual IHK Ready -> checked same-slots PreparedForkLease finish -> canonical ADOPTED/PID/sequence1 write",
+    "actual mailbox return validation + Response Completion Release -> C status Acquire -> original do_fork_inband_accept + actual Rust record initializer",
+    "actual second Delivered request -> durable backend ticket -> IHK exact-key resolver -> actual mcctrl fork_verify_link + referenced childMM/full VMA scan + inline CAS seal",
+    "same-ticket Finish -> canonical LINK_READY/0/sequence2 -> actual second RET publication -> C Acquire + original authenticated accept"
+  ],
+  "negative_cases": [
+    "child VMA wrong pgoff rejects LINK before seal, retains response/payload/IHK owner",
+    "parent worker close before ticket cannot publish automatic negative",
+    "stale OS generation rejects before Q/MM effects",
+    "second LINK before first RET publication cannot authorize handoff"
+  ],
+  "explicit_adapters": [
+    "Linux PID/task, MM/VMA/zap/write-lock services use retained previous source fixture; this is not Linux runtime/TLB proof",
+    "kernel Arc/Box/Vec, mutex, registry and module service adapters; actual ownership/phase/callback bodies consumed",
+    "one C-owned process-retained 16MiB direct-map arena; no real guest physical mapping",
+    "C private child constructor/list/ref credits supplied by adapter; actual claim/accept and record initialization consumed",
+    "Memory data-type/method visibility adapted to extracted namespace; proof constructors remain source-bound",
+    "retained test owners intentionally survive test-process exit; no fabricated final ACK or production cleanup called",
+    "each selected case runs in a separate process to preserve the one-shot C initialization contract"
+  ],
+  "history": [
+    {
+      "capture": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test",
+      "result": "C0/codec0; Rust namespace and unused historical import/macro failures",
+      "correction": "fixture-only actual parent namespace reexport and removal of unused imports/macro"
+    },
+    {
+      "capture": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-correction",
+      "result": "C0/codec0; sole Rust private_interfaces on fixture setup helper",
+      "expert": "image_retirement_review authorized ONLY pub(crate) fn entry -> fn entry, no source/oracle/lint weakening"
+    },
+    {
+      "capture": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert",
+      "result": "C0/codec0/Rust0; 5 selected cases pass"
+    }
+  ],
+  "prior_accepted_prerequisite": {
+    "report": "/home/holden/mckernel/docs/verification/evidence/native-fork-initial-consumer-source-20261017-1.json",
+    "sha256": "f7bf9149165db99f12dd86bf65a4bbb8f0608a5f474bef222b22be621d5270e8",
+    "cases": 82,
+    "preserved": true
+  },
+  "remaining_boundaries": [
+    "immediate LINK lookup before outer adoption returns is not exercised by these five cases",
+    "HOST Ready-to-checked-finish suppression race is not exercised",
+    "stale/replayed delivery, post-SEALED copy/transport uncertainty and same-ticket retry vectors remain focused followup",
+    "real host/guest transport activation and actual do_fork syscall path remain disabled",
+    "normal successful child lifecycle transfer and canonical kind3 revoke/kind4 authenticated final destructor ACK sender/receiver still require genuine producers, drain and review",
+    "no full kernel compiler/build or actual guest run acceptance"
+  ],
+  "captures": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/compile-c.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "value": "0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/compile-codec.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "value": "0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "value": "0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/run-1.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "value": "0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/run-2.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "value": "0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/run-3.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "value": "0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/run-4.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "value": "0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/run-5.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "value": "0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/run-1.stdout",
+      "sha256": "9e1a7690732226eed29a1c4f96ca2e7558502810f2035bfaf0a67d18b5397f7a"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/run-2.stdout",
+      "sha256": "4ae8ac5d39080fcdb7caa509ba909e1285c6ffc77e7aeccb979be3a277a69dc2"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/run-3.stdout",
+      "sha256": "66cdd64bc708472fe2f1d00bb918a260e49f6188fe1efe4720ae59a015f3f9b6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/run-4.stdout",
+      "sha256": "a8dd1e920c6115cd137628bbecbc717a5ea68d0cf363dbae1134db13dae279b7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/run-5.stdout",
+      "sha256": "e8462cb5568da9ac0a342e1feb86c60ac27c1aac090f673e31d945ea39fe8176"
+    }
+  ]
+}

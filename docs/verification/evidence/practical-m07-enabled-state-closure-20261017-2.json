@@ -1,0 +1,406 @@
+{
+  "schema": "mckernel.practical-m07-enabled-state-closure-correction.v2",
+  "status": "STRONGER_TWO_SIDED_CONTEXT_ORACLE_LINUX_PASS_PENDING_INDEPENDENT_REVIEW",
+  "previous_record": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-m07-enabled-state-closure-20261017-1.json",
+    "sha256": "6bc33bdd675a9aefd6833f203c4d0d12fb4384b38b33d847c288fee03086a0dd",
+    "size": 48041
+  },
+  "previous_record_unchanged": true,
+  "correction_reason": "Independent reviewer found that baseline helper C did not deliberately overwrite worker YMM upper halves; a blocked boundary could therefore pass missing save/restore by chance. Prior result remains a Linux boundary-survival observation, not a discriminating YMM scheduler preservation proof.",
+  "preserved_before_correction": [
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/before-context-clobber-correction/native-vector-enabled-state.S",
+      "sha256": "e2e4b68570607f5e7df85371e7f7b8601ab00b96a4bc18e9d68af7a50b7660c0",
+      "size": 11595
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/before-context-clobber-correction/native-vector-enabled-state.c",
+      "sha256": "e56ea6b22ec6c9693e688f4d60eefe6c6e29330c4e54c065eb9140a5c663ffd6",
+      "size": 5461
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/before-context-clobber-correction/practical-m07-enabled-state-closure-20261017-1.json",
+      "sha256": "6bc33bdd675a9aefd6833f203c4d0d12fb4384b38b33d847c288fee03086a0dd",
+      "size": 48041
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/before-context-clobber-correction/test_native_vector_enabled_state_20261017.py",
+      "sha256": "81512e5db723b71277647e7a4ef88ec37835c1c3585da21a8e7c0553a887b5fb",
+      "size": 5198
+    }
+  ],
+  "corrected_sources": [
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native-vector-enabled-state.c",
+      "sha256": "0b57c08d617eeb853b8d4d88d536738b7a9d27de88c9a14fbd24be56a6771250",
+      "size": 5725
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native-vector-enabled-state.S",
+      "sha256": "5285071018695f44b48ed68075ffdf834baa31eb3a49d31f8dbfcddc56af9c93",
+      "size": 16244
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/test_native_vector_enabled_state_20261017.py",
+      "sha256": "48a6d41e537dfa0c7f5f16acfdaf0d5053da8366025a0454e25ca09474a93503",
+      "size": 5578
+    }
+  ],
+  "stronger_oracle": {
+    "helper": "New ABI-valid native_enabled_clobber_wake seeds every bit of YMM0..15 to zero, makes raw FUTEX_WAKE_PRIVATE directly, verifies its own complete helper state after syscall, then vzeroupper/returns the actual wake count. No C call intervenes between clobber and wake or wake and helper comparison. No x87/MXCSR/control/callee-saved-GPR state is changed. AVX gate in main dominates worker creation and every helper call.",
+    "worker": "Existing additive AVX worker retains distinct nonzero patterns throughout raw FUTEX_WAIT_PRIVATE and verifies every bit after return0; main still requires raw helper wake1. Original accepted SSE2 files remain unchanged.",
+    "preemption": "If worker runs between helper seed and its wake syscall, both sides have distinct expected live state and helper validates its state on return too. This avoids relying solely on the timing of the helper clobber relative to queued wait. Normal callers assume no live caller-saved vector values across the helper C ABI.",
+    "focused_negative": "After actual helper wake syscall, inject nonzero pattern into helper YMM7 before its comparison. Main observes -98 and prints ENABLED_FAIL stage=futex-wake code=-98; frozen expected stdout includes earlier syscall PASS. This proves helper execution/comparison participates in the oracle. It is boundary injection, not actual kernel fault injection."
+  },
+  "linux_result": {
+    "test_command": "taskset -c7 prlimit --as=1073741824 --cpu=150 --nofile=256 --fsize=67108864 --core=0 env PATH=/usr/bin:/bin PYTHONDONTWRITEBYTECODE=1 LC_ALL=C NATIVE_ENABLED_OUTPUT=/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3 /home/holden/anaconda3/bin/python3 -B -m unittest scripts.tests.test_native_vector_enabled_state_20261017 -v",
+    "test_exit": 0,
+    "test_summary": "1 unittest /5 compiled-and-executed variants PASS in0.560s",
+    "variants": [
+      "reference",
+      "upper-clobber",
+      "helper-clobber-detected",
+      "signal-marker-missing",
+      "wrong-mask"
+    ],
+    "reference_stdout": "ENABLED_CPUID1 ecx=7ffafbbf edx=bfebfbff\nENABLED_XCR0 hi=00000000 lo=000002e7\nENABLED_CPUIDD0 eax=000002e7 ebx=00000a88 ecx=00000a88 edx=00000000\nENABLED_CPUID7 ebx=f2bf27ef ecx=40405f5e edx=bc000610\nENABLED_AUXV hwcap=0000000000000006 hwcap2=0000000000000002\nENABLED_REQUIRED_XCR0=0000000000000007\nENABLED_SYSCALL_PASS\nENABLED_FUTEX_PASS\nENABLED_SIGNAL_PASS\nENABLED_PROFILE_PASS\n",
+    "reference_stderr_bytes": 0,
+    "reference_exit": 0,
+    "frozen_oracle": {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/frozen-oracle.json",
+      "sha256": "68d73e3da4107996a2ea07a4e85a2658de123b18b240a59120790ced7bf8e845",
+      "size": 695
+    },
+    "binary": {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference",
+      "sha256": "5b116839f8cfbb796793d88f7792d21e5e29bd0510d527e8782284ae18239177",
+      "size": 1522832
+    },
+    "candidate_failures": 0,
+    "cpu7_released": true
+  },
+  "dynamic_libc_wording_correction": "Earlier report states dynamic IFUNC shown by symbol/disassembly captures. Only successful readelf symbol capture supports IFUNC presence. Dynamic libc objdump actually failed with unknown type0x13 .relr.dyn / architecture UNKNOWN; raw failure is retained. Do not infer its dispatch branches from failed disassembly. Dynamic resolved dispatch stays OPEN. Accepted Rust static resolver branches and its memchr find_sse2 selection are supported by successful raw disassembly.",
+  "preserved_dynamic_inspection_failure": [
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/dynamic-libc-memcpy.stdout",
+      "sha256": "aa41990ce14455be465a7abb5afcd47426406bc6abd1724b71ef512dd6ac6d55",
+      "size": 144
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/dynamic-libc-memcpy.stderr",
+      "sha256": "fce808778e96160d3317a2d4ac83e0f02f329e0dd8a862210edeeb7fa495ede5",
+      "size": 234
+    }
+  ],
+  "requirements_scope": "All exact C/Rust compiler/artifact/static archive/rlib bindings and active942 CPUID/XCR0 producer/context/signal consumer source predictions remain as in prior record. AVX source enable and possible library variants do not establish actually executed AVX or exact libc IFUNC result. Host Linux XCR0 readbacks do not establish McKernel XCR0.",
+  "remaining": "Independent review of corrected assembly/oracle, separately released next FPU-image guest with exact user CPUID/XGETBV/auxv values and both-sided syscall/futex/signal results. Bind actual required C/Rust/libc ISA dispatch before whole-M07 closure. No feature narrowing or expanded guest authority.",
+  "original_accepted_sources": [
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native-vector-preservation.c",
+      "sha256": "1ba82e6d9ce34ef5ebf1f7a7356ddccf33c18d89266ec948c8a42eb6fd50f501",
+      "size": 4354
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native-vector-preservation.S",
+      "sha256": "1c408f2603d4331a73b3c9e24937e0cb009f6708093435ba4823b88cf7bfc2f5",
+      "size": 6934
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/tests/test_native_vector_preservation_20261017.py",
+      "sha256": "b7a0f839675f1389d8b846e7417ff8f4022adde8018afc7414d09cc7f2251c9f",
+      "size": 5939
+    }
+  ],
+  "captures": [
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/commands.json",
+      "sha256": "65f19a4b66e64c35ad1b2033c2886445df8f26f9bf7b24a12447d3e067f53f6e",
+      "size": 4550
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/frozen-oracle.json",
+      "sha256": "68d73e3da4107996a2ea07a4e85a2658de123b18b240a59120790ced7bf8e845",
+      "size": 695
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/helper-clobber-detected",
+      "sha256": "12df61987e68d1a7247005a39e1781bb365e138415a875afe37d27d41f9d9643",
+      "size": 1522840
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/helper-clobber-detected.S",
+      "sha256": "985beb8659f9b739284b8a43ed754e128393734fb645d1e11655e7e46e26172f",
+      "size": 16245
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/helper-clobber-detected.c",
+      "sha256": "0b57c08d617eeb853b8d4d88d536738b7a9d27de88c9a14fbd24be56a6771250",
+      "size": 5725
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/helper-clobber-detected.compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/helper-clobber-detected.compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/helper-clobber-detected.compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/helper-clobber-detected.run.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/helper-clobber-detected.run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/helper-clobber-detected.run.stdout",
+      "sha256": "ca3b419c3a126153b95c530b7fb7894885bd39935509a25f51879948d01171cb",
+      "size": 359
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/input-hashes.json",
+      "sha256": "316f0dfd27d1498c1190c1be26385675556301ac67c99cf665b26fff247143cc",
+      "size": 393
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/native-vector-enabled-state.S",
+      "sha256": "5285071018695f44b48ed68075ffdf834baa31eb3a49d31f8dbfcddc56af9c93",
+      "size": 16244
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/native-vector-enabled-state.c",
+      "sha256": "0b57c08d617eeb853b8d4d88d536738b7a9d27de88c9a14fbd24be56a6771250",
+      "size": 5725
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference",
+      "sha256": "5b116839f8cfbb796793d88f7792d21e5e29bd0510d527e8782284ae18239177",
+      "size": 1522832
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference.S",
+      "sha256": "5285071018695f44b48ed68075ffdf834baa31eb3a49d31f8dbfcddc56af9c93",
+      "size": 16244
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference.c",
+      "sha256": "0b57c08d617eeb853b8d4d88d536738b7a9d27de88c9a14fbd24be56a6771250",
+      "size": 5725
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference.compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference.compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference.compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference.disassembly.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference.disassembly.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference.disassembly.stdout",
+      "sha256": "55b885875c1d97f3f559763fc269508cb535b84ec25849b1a89c11fd2c256fdc",
+      "size": 23408
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference.elf.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference.elf.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference.elf.stdout",
+      "sha256": "ddf7f645978baa733cd3f10ea69b57a5ef12707344e749543b5000b68bf2907c",
+      "size": 1494
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference.run.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference.run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference.run.stdout",
+      "sha256": "d528bf971808d059108ce5bad91b891da2a69f9e08d660e3021bdcd8f7c68b97",
+      "size": 380
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/signal-marker-missing",
+      "sha256": "9bb3f4cdf1b514e248d4b8b95a2d5418073989f49fd92a5cff517f1c4b370483",
+      "size": 1522840
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/signal-marker-missing.S",
+      "sha256": "49bdb7e7a4f2b19e7f796398c08a56c9796bda9b6311f954d3e30ac780e50fc5",
+      "size": 16261
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/signal-marker-missing.c",
+      "sha256": "0b57c08d617eeb853b8d4d88d536738b7a9d27de88c9a14fbd24be56a6771250",
+      "size": 5725
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/signal-marker-missing.compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/signal-marker-missing.compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/signal-marker-missing.compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/signal-marker-missing.run.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/signal-marker-missing.run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/signal-marker-missing.run.stdout",
+      "sha256": "4d157af99e90cd5b84227b503f2c121efc1ed79a983f2a2bacd008ecf96de2e1",
+      "size": 379
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/test_native_vector_enabled_state_20261017.py",
+      "sha256": "48a6d41e537dfa0c7f5f16acfdaf0d5053da8366025a0454e25ca09474a93503",
+      "size": 5578
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/upper-clobber",
+      "sha256": "3c2f6d70da0950fbbf60f79e6f327e84839edc9f7df5816796f0a2b46eccc32c",
+      "size": 1522832
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/upper-clobber.S",
+      "sha256": "28753c6727caaf8d2520b6cb7e5044b13a5417419b665ea3000ce08309236721",
+      "size": 16226
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/upper-clobber.c",
+      "sha256": "0b57c08d617eeb853b8d4d88d536738b7a9d27de88c9a14fbd24be56a6771250",
+      "size": 5725
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/upper-clobber.compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/upper-clobber.compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/upper-clobber.compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/upper-clobber.run.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/upper-clobber.run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/upper-clobber.run.stdout",
+      "sha256": "adb1d229be07a1f65cabaf6fdb1ac1df7a71c3632ead3562228645bcf02bbd45",
+      "size": 333
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/wrong-mask",
+      "sha256": "7d212935b11fa4573508296af5e9c9b4bd81c38f274b978c1e1d28070a48ff0c",
+      "size": 907728
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/wrong-mask.S",
+      "sha256": "5285071018695f44b48ed68075ffdf834baa31eb3a49d31f8dbfcddc56af9c93",
+      "size": 16244
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/wrong-mask.c",
+      "sha256": "188daab9aa706a7fe4d015f15b17ce835f98c2067a80577ca2df2d388dedef90",
+      "size": 5733
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/wrong-mask.compile.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/wrong-mask.compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/wrong-mask.compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/wrong-mask.run.status",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/wrong-mask.run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/wrong-mask.run.stdout",
+      "sha256": "668211a5c1843a240df26bbc061ac047c9c8ead2b5375c5222d5dd5b68916f89",
+      "size": 113
+    }
+  ],
+  "runtime_authority": false,
+  "new_native_diagnostics": 0,
+  "new_current_candidate_builds": 0,
+  "formal_credit": 0
+}

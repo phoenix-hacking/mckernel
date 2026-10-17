@@ -1,5 +1,35 @@
 # Compact dispatcher handoff
 
+
+## Live cursor — 19:14 UTC, FPU image and post-reboot work moving
+
+FPU typed attempt2 passed 6,948-entry validation; materializer0/15.645s and
+metadata preparer0/89.20s. Actual request53734de9 uses explicit isolated942+15cb,
+derivativecd9/materializationfcae; toolchaina68e unchanged. Report162f4a52;
+independent exact execution review/release pending. Failed first tree retained.
+Main process09409cad schedule-only integration independently accepted; outside
+function unchanged, later VM/thread-release bridges preserved. Source review
+adds no native FPU credit. Full512MiB reserve remains mandatory before build.
+
+Post-reboot real signal workload collector report3dfd49e92 independently passed
+125 bindings, unchanged supervision and four original consumers. Ordinary narrow
+overlay staging on CPU6/1GiB now active; separate fresh guest execution review
+required. No second native stop/release authority. Actual apps14, public cycles1/10.
+M07 strengthened YMM helper v2 source/Linux accepted; native enabled-state and
+libc dispatch observations remain open, stage only against eligible image.
+
+Fork carrier/LINK5 and successor9 actual-body cases independently accepted,
+including immediate LINK before outer return and sealed uncertain retry. Actual
+HOST_REVOKED/GUEST_DESTROYED/final ACK/last-RET access ownership lanes refilled;
+CREATE_PPD remains-95. Early actual Kbuild source preparation uses authenticated
+09f base and immutable20 after inputs, three-way onto d99CPU/shutdown. Git mmap
+failure corrected by command-scoped16MiB window within unchanged256MiB limit;
+original failure retained. Only smp_application import conflict resolved by
+retaining used ptr/NonNull import. No fork compiler or activation has run.
+
+Review11 saved; next supervisor19:25UTC. Dated15:25 estimate baseline unchanged.
+Continue after normal checkpoint; choose next fully admitted useful heavy case.
+
 ## Checkpoint396 — one native public cycle accepted; next useful boundaries queued
 
 Currentd99 CPU repair matchedmodule build independently passed18.148365s;

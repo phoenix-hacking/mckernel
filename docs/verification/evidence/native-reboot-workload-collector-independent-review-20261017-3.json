@@ -1,0 +1,21 @@
+{
+  "schema": "mckernel.independent-source-review.v1",
+  "reviewer": "/root/lifecycle_collector_review",
+  "implementation_ownership": false,
+  "decision": "PASS_SOURCE_AND_REFERENCE_PROTOCOL",
+  "reviewed_report": {
+    "path": "docs/verification/evidence/native-reboot-workload-collector-source-20261017-3.json",
+    "sha256": "dfd49e92a92d675aa7c2f616461e6956634ce3fa2d49db0d1cf6356d146f8d2d"
+  },
+  "verified_bound_rows": 125,
+  "findings": [],
+  "verified_boundaries": [
+    "Collector supervision unchanged; strict second-workload gates.",
+    "Nine-form lossless generation partition and retirement EAGAIN-before-success preserved.",
+    "All four original consumers remain required; retained positives pass and negatives reject."
+  ],
+  "failures_preserved": true,
+  "scope": "Actual Linux payload through collector plus modeled generation-2 native records.",
+  "runtime_authority": false,
+  "next": "Separate staging/execution review and fresh guest evidence."
+}
