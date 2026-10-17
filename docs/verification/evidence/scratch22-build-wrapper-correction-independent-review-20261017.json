@@ -1,0 +1,97 @@
+{
+  "schema": "mckernel.scratch22-build-wrapper-correction-independent-source-review.v1",
+  "recorded_at_utc": "2026-10-17T03:07:27Z",
+  "decision": "PASS_SOURCE",
+  "reviewer": "/root/cheap_profile_review",
+  "model": "gpt-6.1-sol",
+  "implementation_ownership": false,
+  "scope": "Exact corrected scratch22 wrapper source/template and disposable root-lock/signal behavior only; no privileged execution release.",
+  "reviewed_inputs_sha256": {
+    "scripts/native_exact_scratch22_build_wrapper.py": "4cd885cb03a34d8e82f184a071c22e656d833eba0c0bcdac43bc790e3bac66a7",
+    "scripts/tests/test_native_exact_scratch22_build_wrapper.py": "70e61c0110415bd659ce0ae8fd3a34ba0e580cef089bd65ebe770f7db5a0e039",
+    "docs/verification/evidence/scratch22-build-wrapper-20261017.json": "dd49cf7914725f515404b73d4095690de7c5d8251911f99a0d1be6ab464e6d13",
+    "docs/verification/evidence/scratch22-build-wrapper-independent-review-20261017.json": "a0db496460e23695c927ba949e5328481a1121d8af2af807e76c53791bd374e5",
+    "docs/verification/evidence/scratch22-build-wrapper-precorrection-source-20261017.txt": "0b25bf96a754936e374c55ec85bb6cee284b6d41b69b94161b7f9430e47831aa",
+    "docs/verification/evidence/scratch22-build-wrapper-precorrection-tests-20261017.txt": "57b33c5bc24c4de5df3145322b6638908868878c2bae36258a8395efeb2284f6"
+  },
+  "prior_review": {
+    "path": "docs/verification/evidence/scratch22-build-wrapper-independent-review-20261017.json",
+    "sha256": "a0db496460e23695c927ba949e5328481a1121d8af2af807e76c53791bd374e5",
+    "decision": "BLOCKED_SOURCE",
+    "immutable_preserved": true
+  },
+  "author_record": {
+    "path": "docs/verification/evidence/scratch22-build-wrapper-20261017.json",
+    "sha256": "dd49cf7914725f515404b73d4095690de7c5d8251911f99a0d1be6ab464e6d13",
+    "status": "PASS_DISPOSABLE_TESTS_ONLY"
+  },
+  "finding_resolution": {
+    "id": "S22-LOCK-1",
+    "status": "CLOSED_FOR_EXACT_CORRECTED_SOURCE",
+    "history": "One independently reproduced failed candidate followed by this bounded correction; no rename/reset of failure-family history.",
+    "original_violation": "Default SIGQUIT terminated an actually quarantined disposable owner and released its real temporary root flock without positive retirement.",
+    "source_correction": "execute blocks HUP/INT/TERM/QUIT while installing all four deferral handlers before any root-lock acquisition. It restores the original caller signal mask before lock acquisition and canonical child launch. During uncertainty, all four reach the installed deferral handlers; quarantine evidence failures are swallowed and the nonreturning sleep retries after BaseException. Successful safe-release cleanup closes the root flock before atomically restoring original handlers and caller mask.",
+    "real_child_evidence": "The independently rerun suite executes five serial real disposable children through actual execute, real temporary acquire_development_lock, uncertain run_checked and actual quarantine. Each child has unavailable quarantine evidence and a first wait exception. Four children separately survive HUP/INT/TERM/QUIT with independently opened flock contenders blocked. A fifth child has real stdout EPIPE and survives all four ordinary signals while still retaining its real flock. Readiness records prove the signals are unblocked and handlers callable. Tests then kill/reap only those exact owned disposable children and verify temporary locks become available.",
+    "mask_and_healthy_build_boundary": "Original mask is restored before acquiring ownership or invoking the canonical child; no widened child blocked-signal mask or changed heavy-command profile is introduced. Existing deferred-signals reporting remains active.",
+    "sigkill_limit": "No live flock can survive destruction of all its owning processes by SIGKILL. The tests deliberately kill/reap only their own disposable children after verifying ordinary-signal retention. Real crash recovery continues to depend on persistent reviewed exclusions; this review does not claim SIGKILL-resistant live flock ownership."
+  },
+  "independent_checks": [
+    {
+      "command": "taskset -c 0 timeout --kill-after=5s 180s prlimit --as=2147483648 --cpu=150 --nofile=256 --fsize=67108864 --core=0 /home/holden/anaconda3/bin/python3 -B -m unittest -v scripts.tests.test_native_exact_scratch22_build_wrapper",
+      "exit_code": 0,
+      "cases": 27,
+      "reported_seconds": 0.717,
+      "summary": "Ran 27 tests in 0.717s; OK. Includes original 25 cases, atomic signal installation/mask ordering, and five actual child/flock scenarios."
+    },
+    {
+      "kind": "AST and frozen-artifact identity comparison",
+      "exit_code": 0,
+      "stdout": "PASS correction AST changes restricted to execute/quarantine_wait, time import and four-signal constant; all release/preparation/derived-profile/retirement functions unchanged\nPASS original 25 tests retained; two relevant tests added; frozen author evidence/source/test hashes match\n"
+    },
+    {
+      "kind": "Final SHA256 recheck",
+      "exit_code": 0,
+      "result": "Corrected source, tests, author evidence and original immutable blocked review remain byte-identical to the reviewed hashes."
+    }
+  ],
+  "unchanged_reviewed_boundaries": {
+    "external_one_shot_release": "No embedded release. Exact fetched code/tests/adapter/ancestor/release blobs, scratch22 attempt and count 1, external digest and independent execution-review payload binding remain mandatory.",
+    "self_hash_cycle": "Canonical review payload excludes solely execution_review pointer; no self-hash circle is introduced.",
+    "preparation_and_candidate": "Actual completed preparation terminal/log, canonical request, manifest, source target/tree, owner/driver/disk-wrapper and fresh live identity joins remain intact, including actual cleanup/source producer evidence and canonical owner validation.",
+    "derivation_and_namespace": "Only the four release flags change. Fresh scratch22 request/materialization names remain; the scratch18 exclusion filename is the canonical owner ABI slot after accepted scratch21 cleanup, never authority to replay scratch21.",
+    "resources_and_serialization": "Four CPUs 2-5, 12-GiB memory, no added swap, 512 tasks, no network, jobs<=4, aggregate campaign budget/floors, inherited root-lock descriptor and a single heavy owner remain unchanged.",
+    "failure_and_retirement": "No outer build timeout is added. Every started-execution uncertainty remains quarantined before unlock. Only the existing authenticated positive-current retirement receipt permits release; shared exclusions remain for separate reviewed cleanup."
+  },
+  "blocking_findings": [],
+  "resource_profile": {
+    "cpu_affinity": [
+      0
+    ],
+    "address_space_bytes_per_process": 2147483648,
+    "cpu_seconds_limit_per_process": 150,
+    "wall_seconds_per_check": 180,
+    "termination_cleanup_seconds": 5,
+    "real_disposable_children_serial_maximum": 1,
+    "live_root_lock": false,
+    "root": false,
+    "docker": false,
+    "compiler": false,
+    "build": false,
+    "guest": false,
+    "network": false
+  },
+  "remaining_prerequisites": [
+    "Accepted exact scratch21 cleanup and independent postflight.",
+    "Exact source checkpoint commit/push/fetch and separately reviewed scratch22 preparation materialization.",
+    "Independently reviewed actual prepared artifacts, fresh live identities/resources and a separate externally digest-bound one-shot heavy execution release. Dispatcher alone executes."
+  ],
+  "acceptance": {
+    "source_approved": true,
+    "execution_released": false,
+    "privileged_execution_performed": false,
+    "current_candidate_builds": 0,
+    "real_guest_apps": 0,
+    "formal_application_acceptance": false,
+    "os_complete": false
+  }
+}

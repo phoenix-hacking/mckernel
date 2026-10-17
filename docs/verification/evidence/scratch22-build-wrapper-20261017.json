@@ -1,0 +1,140 @@
+{
+  "schema": "scratch22-build-wrapper-source-evidence.v1",
+  "status": "PASS_DISPOSABLE_TESTS_ONLY",
+  "author": "/root/scratch22_build_wrapper",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "high",
+  "implementation": {
+    "path": "scripts/native_exact_scratch22_build_wrapper.py",
+    "sha256": "4cd885cb03a34d8e82f184a071c22e656d833eba0c0bcdac43bc790e3bac66a7"
+  },
+  "tests": {
+    "path": "scripts/tests/test_native_exact_scratch22_build_wrapper.py",
+    "sha256": "70e61c0110415bd659ce0ae8fd3a34ba0e580cef089bd65ebe770f7db5a0e039",
+    "command": "timeout 180s taskset -c 0 prlimit --as=2147483648 -- python3 -B -m unittest -v scripts.tests.test_native_exact_scratch22_build_wrapper",
+    "cases": 27,
+    "returncode": 0,
+    "reported_seconds": 0.714,
+    "profile": "one CPU, two GiB per-process address-space limit, 180-second suite timeout; temporary files, mocked producer/build calls and serial disposable Python children with real temporary flocks only; no Docker, sudo, compiler, production preparation/materialization, network or guest"
+  },
+  "algorithm_reference": {
+    "wrapper": "docs/verification/evidence/native-exact-scratch21-heavy-build-execution-release-v2-20261001.py",
+    "proposal": "docs/verification/evidence/native-exact-scratch21-heavy-build-execution-proposal-v2-20261001.json",
+    "tests": "scripts/tests/test_native_exact_scratch21_heavy_build_execution_release_v2_20261001.py",
+    "changed": false,
+    "policy": "Preserve the reviewed root-development-lock lifetime, inherited descriptor, no outer execution timeout and nonreturning quarantine after started execution without positive current retirement. Extend ordinary termination deferral to HUP/INT/TERM/QUIT after independently reproduced S22-LOCK-1; install atomically before ownership, preserving the canonical child signal mask. No scratch21 prepared, derived or consumed request is reused."
+  },
+  "actual_producer_contracts": {
+    "adapter": "scripts/prepare_native_exact_scratch22.py",
+    "adapter_sha256": "3c3dd179301ee9d16ecf8c9e918fee304ee76cb6a89bc2a987235c1f52ec6663",
+    "source_review": "docs/verification/evidence/scratch22-adapter-independent-review-20261017.json",
+    "preparation_authority": "Consume the existing scratch22.preparation-release.v1 with PASS_PREPARATION_EXECUTION_RELEASE, execution_released=false, exact target/tree/controller and independently reviewed helper/test/ancestor/prerequisite hashes. Revalidate actual cleanup and source producer contracts through the adapter. Preparation controller Git blobs remain checked after the build checkpoint advances HEAD; no historical mutable HEAD observation is required to remain current.",
+    "prepared_artifacts": "The actual inherited preparation Journal.finish terminal has phase=complete, returncode=0, exception=null, preparation_only=true, log path and log_sha256. Bind terminal and log bytes/dev/inode/ownership/mode/link count. Do not replace it with the separate PASS_PREPARE_ONLY stdout result or invent an acceptance status.",
+    "canonical_request": "Actual adapter.validate_prepared_request invokes candidate BuildOwner.validate without Docker construction. Prepared request canonical bytes, path, device/inode identity and digest are independently supplied; only preparation_only, executable, execution_released and release_required change for the derived request."
+  },
+  "source_template_contract": {
+    "execution_enabled_now": false,
+    "embedded_release_authority": false,
+    "build_release_schema": "scratch22.build-execution-release.v1",
+    "build_release_status": "PASS_EXECUTION_RELEASE",
+    "required_external_release_inputs": [
+      "attempt=scratch22; execution_count integer 1; author; exact fetched refs/remotes/origin ref",
+      "source_sha256 mapping for this wrapper, its tests, preparation adapter and unchanged preparation ancestor; fetched release commit includes byte-identical code, tests, adapter, ancestor and release JSON",
+      "execution_review.path/sha256 pointing to independent decision PASS_EXECUTION, implementation_ownership=false, reviewer different from release author, reviewed_release_payload_sha256 binding canonical newline-terminated release payload excluding only execution_review pointer",
+      "preparation_release.path/sha256 for the actual independently reviewed executed preparation release; original cleanup/source reviews and all producer evidence remain mandatory",
+      "candidate_sha, candidate_tree and image_id from the actual prepared artifacts; no defaults from current HEAD or scratch21",
+      "launcher_aggregate_memory_gib identical to prepared request and compatible with existing pinned wrapper profile; no aggregate/resource widening",
+      "derived_request_sha256 for canonical exact prepared object with only four release flags toggled",
+      "artifacts prepared_request, manifest, preparation_terminal, preparation_log, disk_wrapper, owner and driver: each exact path, sha256 and identity {device,inode,uid,gid,mode,nlink}",
+      "live_binding scratch_device/scratch_uuid/boot_id and root_lock/candidate/output/evidence identities {device,inode,uid,gid,mode,nlink}, freshly observed and independently reviewed"
+    ],
+    "container_identity": "Actual canonical owner intentionally generates fresh randomized container name and nonce at execution. Release binds exact owner/driver code, actual image ID and request, never a guessed future container name. Wrapper captures the actual owner receipt and retained current terminal container identity in terminal evidence; cleanup remains separately reviewed.",
+    "frozen_runtime_profile": {
+      "NanoCpus": 4000000000,
+      "CpusetCpus": "2-5",
+      "Memory": 12884901888,
+      "MemorySwap": 12884901888,
+      "PidsLimit": 512,
+      "NetworkMode": "none",
+      "owner_timeout_seconds": 19800,
+      "outer_timeout_seconds": null,
+      "jobs_max": 4,
+      "shared_host_jobs_max": 7,
+      "shared_host_ram_gib_max": 24,
+      "host_storage_floor_gib_min": 16,
+      "scratch_storage_floor_gib_min": 12
+    },
+    "serialization": "Exactly one heavy operation. Root lock precedes validation/census, and passes into the authenticated candidate outer disk wrapper; that wrapper retains existing shared-heavy and operational exclusions. Existing scratch18 exclusion filename is the owner ABI slot and may be reused only after accepted scratch21 cleanup, never by raw unlink.",
+    "retirement": "Preserve existing positive-current-retirement receipt conditions. Unknown stdout, exceptions after execution publication/start, start uncertainty, failed stream capture/fsync or failed terminal evidence publication all enter quarantine before any unlock. Quarantine defers HUP/INT/TERM/QUIT and retains its live root lock through evidence/output/wait exceptions. SIGKILL can kill a flock owner; only existing persistent exclusion barriers survive it, and no live-flock persistence through SIGKILL is claimed. No timed unlock or raw Docker removal exists."
+  },
+  "regressions": [
+    "Only four flags change; prepared executable flags, mismatched derived digest and consumed exclusions refuse",
+    "Real preparation terminal field contract, source/cleanup validator calls and canonical candidate owner validator call are exercised",
+    "Changed inode, terminal failure, occupied execution path and nonempty output refuse",
+    "Exact fetched code/release binding and independent payload review pass; same author, implementation ownership, stale source hash, changed review payload and old attempt release refuse",
+    "Symlinks, unexplained hardlinks, duplicate JSON keys and nonfinite JSON refuse",
+    "Successful execution retains root descriptor through terminal evidence and only then unlocks",
+    "Started execution with malformed stdout, stream-read/start/fsync/evidence failure or explicit uncertain retirement quarantines without unlocking",
+    "Positive retired failed build preserves failure and safely releases root lock while shared exclusions remain for separate cleanup",
+    "Acquisition failure restores installed signal handlers; preflight signal stops publication; signal during publication preserves request and prevents build start",
+    "Quarantine evidence failure still waits; failed stderr open closes earlier stdout descriptor; run_checked passes root lock fd and has no outer timeout",
+    "Actual disposable child calls execute with a real temporary root flock, encounters uncertain run_checked, fails quarantine evidence and has its first quarantine wait interrupted. Each HUP/INT/TERM/QUIT child remains live and an independent contender remains blocked. A fifth child has actual stdout EPIPE as well and survives all four signals. Only the exact owned test child is SIGKILLed/reaped; its temporary flock then becomes available as expected.",
+    "Atomic signal setup blocks four signals while installing deferral handlers, restores caller mask before lock/build, and restores original handlers/mask only after safe lock close; canonical build child does not inherit a widened signal mask"
+  ],
+  "failed_attempts": [
+    {
+      "command": "timeout 180s taskset -c 0 prlimit --as=2147483648 -- python3 -B -m unittest -v scripts.tests.test_native_exact_scratch22_build_wrapper",
+      "cases": 20,
+      "returncode": 1,
+      "reported_seconds": 0.034,
+      "failed_test": "test_symlink_and_unexplained_hardlink_refuse",
+      "original_failure": "AttributeError: 'PosixPath' object has no attribute 'hardlink_to'",
+      "cause": "System Python lacks newer pathlib fixture API; production code was unaffected.",
+      "bounded_correction": "Use os.link in the disposable fixture. No production validation or oracle changed.",
+      "corrected_run": "20 tests passed in 0.050 seconds; expanded suites subsequently passed 22 in 0.063 seconds and 25 in 0.070 seconds."
+    }
+  ],
+  "independent_review_bounded_correction": {
+    "finding": "S22-LOCK-1",
+    "reviewer": "/root/cheap_profile_review",
+    "original_decision": "BLOCK",
+    "original_proof": "Independent real-child temporary-flock test reproduced SIGQUIT's default terminating the quarantined scratch22 owner, releasing its live flock without positive retirement. The original 25 mock/disposable tests passed but did not exercise actual termination delivery.",
+    "original_source": {
+      "path": "docs/verification/evidence/scratch22-build-wrapper-precorrection-source-20261017.txt",
+      "sha256": "0b25bf96a754936e374c55ec85bb6cee284b6d41b69b94161b7f9430e47831aa"
+    },
+    "original_tests": {
+      "path": "docs/verification/evidence/scratch22-build-wrapper-precorrection-tests-20261017.txt",
+      "sha256": "57b33c5bc24c4de5df3145322b6638908868878c2bae36258a8395efeb2284f6",
+      "original_cases": 25,
+      "original_reported_seconds": 0.070,
+      "original_exit_code": 0
+    },
+    "reference_policy": {
+      "path": "scripts/native_exact_scratch21_terminal_cleanup.py",
+      "sha256": "6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed",
+      "use": "Read only; matched four ordinary termination signals and nonreturning quarantine that catches diagnostic/wait exceptions. No cleanup source was changed."
+    },
+    "authorization": "Dispatcher authorized one coherent root-termination correction in the original three-file allowlist plus exact original source/test retention files. This is the bounded correction for S22-LOCK-1, not a new acceptance attempt or reset of family history.",
+    "correction": "Add SIGQUIT deferral. Atomically block HUP/INT/TERM/QUIT while installing handlers before any ownership/mutation, restore caller mask before acquiring root lock and spawning the canonical child, and restore original handlers/mask after safe ownership release only. Quarantine evidence failures are swallowed and its indefinite sleep catches BaseException without printing or escaping.",
+    "tests": "All original 25 tests retained with handler-count expectations extended to four signals; two new tests add atomic-mask ordering and five real child/flock scenarios. 27 tests pass in 0.714 seconds under the original CPU0/2-GiB/180-second profile.",
+    "independent_rereview": "REQUIRED_FOR_CORRECTED_EXACT_SOURCE",
+    "execution_released": false,
+    "sigkill_limit": "No SIGKILL persistence claim: tests deliberately kill/reap only their own temporary child after proving ordinary-signal quarantine retention, then verify its temporary flock is released. Existing persistent runtime exclusion paths, not a dead process flock, protect real crash recovery."
+  },
+  "next_command_template_after_reviewed_prerequisites": [
+    "/usr/bin/python3", "-B", "/home/holden/mckernel/scripts/native_exact_scratch22_build_wrapper.py",
+    "--release", "EXACT_COMMITTED_SCRATCH22_BUILD_RELEASE_PATH",
+    "--release-sha256", "EXTERNALLY_VERIFIED_RELEASE_SHA256",
+    "--release-commit", "FETCHED_COMMIT_CONTAINING_EXACT_RELEASE_CODE_AND_TESTS",
+    "--execute"
+  ],
+  "remaining_prerequisites": [
+    "Independent source/root-lock/execution-boundary review of this wrapper and tests",
+    "Accepted scratch21 terminal cleanup and exact independent postflight, plus reviewed current source authority",
+    "Dispatcher commit/push/fetch verification and separately released scratch22 preparation materialization",
+    "Independently reviewed actual prepared artifacts, fresh live identities/resources and one-shot external heavy-build release; dispatcher alone executes"
+  ],
+  "execution_performed": false,
+  "acceptance_delta": {"current_candidate_builds": 0, "real_guest_apps": 0, "formal_applications": 0, "production_gates": 0}
+}

@@ -1,0 +1,97 @@
+{
+  "schema": "mckernel.scratch22-build-wrapper-independent-source-review.v1",
+  "recorded_at_utc": "2026-10-17T03:04:07Z",
+  "reviewer": "/root/cheap_profile_review",
+  "model": "gpt-6.1-sol",
+  "implementation_ownership": false,
+  "decision": "BLOCKED_SOURCE",
+  "scope": "Exact source-only scratch22 heavy-build wrapper review; no preparation, heavy-build, root or runtime execution release.",
+  "reviewed_inputs_sha256": {
+    "scripts/native_exact_scratch22_build_wrapper.py": "0b25bf96a754936e374c55ec85bb6cee284b6d41b69b94161b7f9430e47831aa",
+    "scripts/tests/test_native_exact_scratch22_build_wrapper.py": "57b33c5bc24c4de5df3145322b6638908868878c2bae36258a8395efeb2284f6",
+    "docs/verification/evidence/scratch22-build-wrapper-20261017.json": "01dfc32ea14044c8b9d9a54b44251e1fe6e49af8722600a838f10308c67161ac",
+    "docs/verification/evidence/native-exact-scratch21-heavy-build-execution-release-v2-20261001.py": "f68e5c6c054ff2fa67c8a9de19b75de89efac3187c0ac11e1c9236e6f8cc574e",
+    "scripts/native_exact_scratch21_terminal_cleanup.py": "6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed",
+    "scripts/prepare_native_exact_scratch22.py": "3c3dd179301ee9d16ecf8c9e918fee304ee76cb6a89bc2a987235c1f52ec6663"
+  },
+  "checks": [
+    {
+      "command": "taskset -c 0 timeout --kill-after=5s 180s prlimit --as=2147483648 --cpu=150 --nofile=256 --fsize=67108864 --core=0 /home/holden/anaconda3/bin/python3 -B -m unittest -v scripts.tests.test_native_exact_scratch22_build_wrapper",
+      "exit_code": 0,
+      "test_cases": 25,
+      "reported_seconds": 0.067,
+      "summary": "Ran 25 tests in 0.067s; OK. Disposable temp files and mocked external commands only."
+    },
+    {
+      "kind": "Actual disposable fork, execute/quarantine and temporary flock signal reproducer",
+      "exit_code": 0,
+      "stdout": "REPRODUCED S22-LOCK-1: actual execute/quarantine path holds disposable root flock; SIGQUIT terminates quarantined owner; waitpid confirms signal 3; independent descriptor reacquires flock without positive retirement\n",
+      "live_resources_accessed": false
+    }
+  ],
+  "blocking_findings": [
+    {
+      "id": "S22-LOCK-1",
+      "severity": "high",
+      "invariant": "After execution starts, uncertain positive-current Docker retirement must retain the root-development flock even when evidence/stdout fails or an ordinary termination signal arrives.",
+      "source_argument": "execute installs deferred handlers only for SIGHUP, SIGINT and SIGTERM. SIGQUIT retains the normal terminating disposition. quarantine_root_lock catches evidence failures and quarantine_wait catches Python exceptions, but a default SIGQUIT terminates the process outside those handlers; its root-lock descriptor closes without positive retirement. The corrected scratch21 cleanup explicitly protects SIGQUIT as part of its ordinary termination set.",
+      "reproducer": {
+        "output_root": "Fresh TemporaryDirectory(prefix='scratch22-review-signal-', dir='/home/holden/mckernel-work/scratch'); removed by its normal context manager after exact child reaping.",
+        "steps": [
+          "Load the exact wrapper through importlib, make a disposable regular root.lock, pipe and fork one child. Set only that child's SIGQUIT disposition to SIG_DFL.",
+          "Patch bind_release/preflight to synthetic reviewed objects and acquire_development_lock to open and LOCK_EX|LOCK_NB the disposable file. Patch the two read-only subprocess calls to their expected status receipts. No real Git, root lock, Docker, sudo or build is invoked.",
+          "Patch publication to a no-op and run_checked to raise OSError('uncertain disposable execution'); retain the real execute finally, quarantine_root_lock and quarantine_wait. Wrap only quarantine_wait to notify the parent through the pipe before entering the real wait.",
+          "Parent waits for quarantine notification and verifies an independently opened descriptor cannot acquire the disposable flock.",
+          "Send SIGQUIT only to this exact child PID, waitpid it, verify WIFSIGNALED and WTERMSIG==SIGQUIT, then acquire the same flock successfully through the independent descriptor.",
+          "Close descriptors and remove only the fresh disposable temporary directory; fallback cleanup targets only this exact owned test child."
+        ],
+        "observed": "Quarantine was entered with real flock held. Child terminated by signal 3. Flock then became available although retirement was never positively proved."
+      },
+      "required_correction": "One bounded correction must protect SIGQUIT together with existing HUP/INT/TERM before root-lock/mutation ownership and throughout uncertain quarantine. Add actual disposable child/real-flock regressions for all four signals at the uncertainty/evidence boundary, including failed evidence output and closed stdout. Keep successful safe-release restoration, canonical child signal behavior, original tests and exact failed source evidence. If pthread_sigmask is introduced, do not accidentally pass a changed blocked signal mask to the canonical build child or silently lose deferred-signal reporting.",
+      "author_coordination": "Dispatcher notified; author /root/scratch22_build_wrapper accepted the bounded correction. Original exact source/tests must be retained; this review is the initial failed candidate, not authority to execute."
+    }
+  ],
+  "nonblocking_boundary_review": {
+    "external_authority": "--execute is required; bind_release consumes an externally supplied exact digest, scratch22 attempt, execution_count integer 1, fetched-origin commit and exact committed code/tests/adapter/ancestor/release bytes. Independent execution review must have a different author, implementation_ownership=false and a canonical release-payload SHA256.",
+    "canonical_review_binding": "The payload excludes solely execution_review. The release does not need to include its own digest/commit, so the review-pointer binding avoids a self-hash cycle.",
+    "actual_preparation_join": "preflight consumes actual preparation schema/status, cleanup/source authority and preparation review, exact preparation controller blobs, target/tree, completed producer Journal terminal and log, prepared request canonical bytes, manifest/owner/driver/disk-wrapper identities and hashes, and the canonical candidate owner's validate path. It does not normalize stdout PASS into preparation authority.",
+    "four_flags": "derive copies the prepared object and changes only preparation_only, executable, execution_released and release_required; externally reviewed derived canonical SHA256 is mandatory.",
+    "namespace": "All new candidate/request/materialization/output/evidence/lease/capture paths use scratch22 names. The inherited scratch18 operational-exclusion filename is the canonical owner's ABI slot and remains subject to accepted scratch21 cleanup. No scratch21 request or materialization is replayed.",
+    "resources": "Limits remain four CPUs 2-5, 12 GiB RAM, MemorySwap equal to RAM (no added swap), 512 tasks and no network. The exact owner/driver/request validation retains jobs<=4 and shared aggregate budget/floors. Wrapper adds no guest concurrency or outer timeout around the authenticated owner.",
+    "lock_and_failure_paths": "The root lock is acquired before preflight/census and inherited by the execution child through pass_fds. Once build_started is true, absent positive current terminal retirement leads to quarantine before unlock, including start/capture/fsync/terminal writer errors. Quarantine evidence is best effort and no print occurs on that critical hold path. This otherwise coherent structure still has S22-LOCK-1's unprotected SIGQUIT.",
+    "retirement_receipt": "retirement_proven preserves the predecessor's authenticated current-retirement receipt predicates and retains shared exclusions for separately reviewed cleanup. Failed build status is not accepted as success even when retirement is proved."
+  },
+  "failure_family": {
+    "name": "scratch22 build-wrapper uncertain-retirement root-lock ownership",
+    "attempt": "initial independently reproduced source candidate failure",
+    "ordinary_correction_budget_remaining": 1,
+    "do_not_reset_by_rename": true
+  },
+  "execution_profile": {
+    "cpu_affinity": [
+      0
+    ],
+    "address_space_bytes": 2147483648,
+    "cpu_seconds_limit": 150,
+    "wall_seconds_limit": 180,
+    "termination_cleanup_seconds": 5,
+    "root": false,
+    "docker": false,
+    "build": false,
+    "guest": false,
+    "network": false,
+    "live_root_or_shared_lock_access": false
+  },
+  "remaining_prerequisites": [
+    "Repair S22-LOCK-1 and independently review the exact frozen correction plus real child/lock evidence.",
+    "Accepted scratch21 cleanup, source commit/push/fetch, independently released scratch22 preparation, actual prepared artifacts/live identities and a separate exact one-shot heavy execution release remain mandatory."
+  ],
+  "acceptance": {
+    "source_approved": false,
+    "execution_released": false,
+    "current_candidate_builds": 0,
+    "real_guest_apps": 0,
+    "formal_application_acceptance": false,
+    "os_complete": false
+  }
+}

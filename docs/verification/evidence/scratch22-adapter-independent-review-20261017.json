@@ -1,0 +1,78 @@
+{
+  "schema": "scratch22-adapter-independent-source-review-v1",
+  "decision": "PASS_SOURCE_PREPARATION",
+  "reviewer": "/root/scratch22_adapter_review",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "high",
+  "implementation_ownership": false,
+  "scope": "Independent source and disposable-regression review of the scratch22 admission/materialization adapter. This is not a preparation execution release, prepared-artifact acceptance, build release or runtime acceptance.",
+  "reviewed_inputs_sha256": {
+    "scripts/prepare_native_exact_scratch22.py": "3c3dd179301ee9d16ecf8c9e918fee304ee76cb6a89bc2a987235c1f52ec6663",
+    "scripts/tests/test_prepare_native_exact_scratch22.py": "71d1c0658fb67b65df761ce5b13f145ccb54a5f0ded64e0e06edf5fbcde1a97f",
+    "docs/verification/evidence/scratch22-adapter-20261017.json": "3daa217f2e6e917613b64030b3c120f10b90cd3c739289d7c22e3ed262364cf1",
+    "docs/verification/evidence/native-exact-candidate-delta-preparation-scratch18-20261001.py": "23d2dcc45db9e9268456a202e46c0e25e982b13d91413271cf00452d0564a731",
+    "scripts/native_exact_scratch21_terminal_cleanup.py": "0ef02b9a63aa9269101fd45a548dd05cc1350ab4d6f7731957fda3b6d20ccff0",
+    "docs/verification/evidence/rs011-authority-20261017.json": "77c98238bb181b0bab2ee0915f386c9294441fb8d07692995b61a789e6172516"
+  },
+  "original_findings": [
+    {
+      "family": "scratch22 preparation usability and actual receipt interfaces",
+      "initial_implementation_sha256": "aa70312a24043a71e5e100302cac7303fe220fd913d2168ff4e8c325c6a3f941",
+      "initial_tests_sha256": "c0b81ee07bf59cf3bac839586f1019918fd99600dc1e2def2304585c973d522a",
+      "finding": "The initial adapter permanently refused execution and provided only read-only admission, leaving no executable scratch22 materialization path after cleanup/source prerequisites.",
+      "resolution": "Dispatcher authorized one bounded correction. --materialize now requires a fresh exact independently reviewed preparation release, then reaches the inherited preparation implementation with execute=true and all arguments explicitly bound. Default admission remains read-only.",
+      "status": "RESOLVED_IN_REVIEWED_SOURCE"
+    },
+    {
+      "family": "scratch22 preparation usability and actual receipt interfaces",
+      "finding": "The initial status=PASS/scope=scratch21-cleanup normalized receipt assumption was incompatible with the actual cleanup transaction outputs and did not join its terminal evidence chain.",
+      "resolution": "The cleanup producer and adapter authors coordinated actual scratch21.cleanup-result.v1 output with unchanged PASS_EXECUTED/PASS_TERMINAL_REPLAY statuses. The adapter consumes that exact terminal result, canonical executed release and plan, complete nine-event journal, retained capture/archive identities, and exact independent cleanup postflight joins. No normalized receipt is required.",
+      "status": "RESOLVED_IN_REVIEWED_SOURCE"
+    }
+  ],
+  "checks": [
+    "Fresh candidate/manifest/request/output/evidence/lease/log/terminal names use scratch22. Only the canonical owner exclusion ABI slot deliberately remains scratch18; no scratch21 request or materialization is reused.",
+    "Every default parameter of inherited prepare is explicitly supplied, including target/old/baseline/source_base/exact_delta and image/IHK/overlay authority constants. Signature comparison refuses a newly unbound inherited default; scratch19's frozen-default failure is covered.",
+    "The released target owner is parsed and must expose the exact scratch18 exclusion slot before inherited preparation. The scratch20 mismatch family remains fail-closed.",
+    "All 486 unchanged large evidence inputs are required across scratch15/16/17/18/20/21. Alias roots and nested paths are canonical, every authenticated path has the same complete snapshot, Git blob/mode matches, and nlink equals the number of distinct retained roots. Unknown links and replaced/symlink aliases refuse. The production count is census-derived; the next link count is derived from it.",
+    "Exact target commit/tree/parent/baseline, origin fetched ref and released A/M path/blob delta are checked. The actual RS-011 author record's five ordered successful checks and twelve relative file identities match the source consumer contract; each is bound to its target Git blob and the independent review's author-record/file-hash joins.",
+    "The actual cleanup producer's result schema, terminal statuses, plan layout, archive tuple ordering and hash-chained journal fields match validate_cleanup. DRAFT or validation-only output, incomplete chain, changed capture, missing postflight or release mismatch cannot supply cleanup authority.",
+    "Materialization requires exact adapter/test/ancestor hashes matching controller Git blobs plus an independent preparation execution review with different author/reviewer, no implementation ownership, exact target/tree and prerequisite hashes. A source-only release cannot select materialization.",
+    "Immediately before inherited materialization, the adapter checks scratch canonical path/device/current boot/ext4 UUID/rw-nodev-nosuid profile and capacity floors. The inherited implementation rechecks all destinations and measured full storage requirements; real live authority remains a later execution-release responsibility.",
+    "The inherited execute path constructs private target Git metadata and exact blobs, authenticates IHK/overlay/image receipt inputs, invokes the actual candidate manifest and driver.verify_inputs, and invokes actual BuildOwner.validate. The adapter revalidates the returned request, enforcing non-executable preparation flags and no Docker construction.",
+    "Original failed test and original source-review findings remain recorded. No oracle, production acceptance count or scratch21 consumed authority was weakened or transferred."
+  ],
+  "independent_tests": [
+    {
+      "command": "timeout 180s taskset -c 0 prlimit --as=2147483648 -- python3 -B -m unittest -v scripts.tests.test_prepare_native_exact_scratch22",
+      "revision": "initial source",
+      "cases": 16,
+      "exit_code": 0,
+      "reported_seconds": 0.062
+    },
+    {
+      "command": "timeout 180s taskset -c 0 prlimit --as=2147483648 -- python3 -B -m unittest -v scripts.tests.test_prepare_native_exact_scratch22",
+      "revision": "reviewed bounded correction",
+      "cases": 22,
+      "exit_code": 0,
+      "reported_seconds": 0.101
+    }
+  ],
+  "remaining_source_blockers": [],
+  "execution_prerequisites": [
+    "Accepted actual scratch21 cleanup execution and independent exact postflight; all original cleanup evidence remains preserved.",
+    "Accepted independent RS-011/source-authority review and dispatcher commit/push/fetch verification of the selected target/tree/parent/delta and preparation controller sources.",
+    "Fresh exact scratch22 preparation execution release with actual prerequisite record paths/hashes, independent preparation execution review and fresh live binding; this review does not supply that release.",
+    "After materialization, independently review the actual prepared artifact and issue the separately required one-shot build release."
+  ],
+  "next_executable_command_after_prerequisites": "python3 -B scripts/prepare_native_exact_scratch22.py --release ACCEPTED_PREPARATION_RELEASE_PATH --release-sha256 EXTERNALLY_VERIFIED_RELEASE_SHA256 --materialize",
+  "materialization_performed": false,
+  "build_or_guest_performed": false,
+  "execution_released": false,
+  "acceptance_delta": {
+    "current_candidate_builds": 0,
+    "real_guest_apps": 0,
+    "formal_applications": 0,
+    "production_gates": 0
+  }
+}
