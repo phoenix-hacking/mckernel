@@ -1,0 +1,56 @@
+{
+  "ELF": {
+    "architecture": "x86_64",
+    "dynamic_section": false,
+    "executable_stack": false,
+    "interpreter": false,
+    "type": "EXEC"
+  },
+  "assembly_review": "Linked call-free live interval,16YMM/64lane checks, peer-ready/progress protocol, control checks, bounded yields and common restoration match reviewed source",
+  "assembly_sha256": "99191c5de5f137d14754cd6baab3d2cf4f2d9146d9fe014b7489045e118e5fa0",
+  "compiler_readelf_returncodes": [
+    0,
+    0
+  ],
+  "decision": "PASS_EXACT_COMPILER_ELF_LINUX_FP_THREAD_ORACLE_ONLY",
+  "executable_sha256": "3488648514aa2d8d5eacfdbdd111ad33f17c2abccfff4755f3ebcefef45ec583",
+  "implementation_ownership": false,
+  "join_sha256": "8f0378de3b314f276453200f7cca0521ff74f8ac5c59bc7e4f88d3f07fefafde",
+  "limitations": [
+    "Negative/failure controls unexecuted",
+    "No stage/native capability/P-M07 completion/signal/multicore/compute-C retirement credit",
+    "No reviewer tests/replays/edits/root/Git"
+  ],
+  "linux": {
+    "all_tracees_exit0": true,
+    "both_affinity_before_after": [
+      7
+    ],
+    "in_interval_peer_progress_and_state_checks": true,
+    "returncode": 0,
+    "stderr_bytes": 0,
+    "stdout_bytes": 254,
+    "stdout_sha256": "52095dafd5235a8c1073248bbda3964f8a7b749722306ceaabf321d2fdcd4816",
+    "unfinished_or_unmatched_yields": 0,
+    "worker_TIDs": [
+      1248082,
+      1248083
+    ],
+    "worker_completed_zero_yields": [
+      64,
+      65
+    ]
+  },
+  "native_acceptance": false,
+  "original_failures_preserved": [
+    "Pre-spawn extra scratch threshold assertion",
+    "Postjoin author whitespace parser assertion"
+  ],
+  "reviewer": "/root/fp_thread_state_source_review_2312",
+  "rust_sha256": "3b805e83b1b5ea479df654c458da3fab84675111465080e79e69e7d354fb01a6",
+  "schema": "mckernel.fp-thread-state.compiler-linux-independent-review.v1",
+  "scope": "Exact ordinary compiler/ELF and positive Linux oneCPU interleaving/state execution only",
+  "source_packet_sha256": "08a378a2590cc45ed19fa4503c437fbaac628c6e7d2da85ec6316a7d9dc2f6fe",
+  "stage_authority": false,
+  "trace_sha256": "d000f38e54d0cf00c98874c4a81c2f11940b1308fea01d79bc74ab85d3bd7deb"
+}

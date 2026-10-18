@@ -16,22 +16,28 @@ Rust conversion unmeasured. Comparison delivered in chat;30-minute monitoring
 continues. Later full-review timing follows the current cursor below.
 
 
-**CURRENT REVIEW49 — 2026-10-18T22:48:16Z:** campaign active.
-22 accepted native behaviors; 13 selected production Rust paths; 11 applicable
-native integration paths; 6 complete / 29 open checks; all 14 milestones open.
-FP image 1e7a1f68 production artifact f4799cc5 is accepted. Non-null FP release
-native proof remains open. Finite29/e6b59b83 (25 copies +4 reuses,58 FD rows) and
-actual adapter6004369d are accepted. Checkpoint214acfab fetched48 includes full
-terminal import closure. Observer/summary joins and five-file FD metadata pass;
-raw-five export/full inventory review and physical cleanup remain pending.
-Selected supported candidate is FP1e7a. Its Rust133B file-case stage/fixture/parent
-and final non-temporal envelope pass; first native app still pending release.
-Private Rust kmsg74 tests/source2288 pass; single-target driver6fixtures/source18978
-and dual-stager4fixtures/sourceafb961 pass, with target build/staging still unrun.
-Pinned make pipe probe and Linux logging-helper compiler/fixtures remain pending.
-Four-hour comparison completed and baseline preserved; M03 estimate60-80 only.
-Usage40%; root49.395GiB/scratch12.818GiB; retained FP owner, no active compiler.
-Next full review23:18:16UTC. No second launcher/background scheduler installed.
+**LATEST ENGINEERING ESTIMATE — cutoff2026-10-18T23:11:44Z:**
+[saved table](practical-engineering-estimate-20261018T231144Z.md) and matching JSON
+record M04 90–95% after all three literal checks independently passed; whole-M04
+final-profile closure remains open. Other bands held; M09 is integration only.
+Measured facts23behaviors/13production/11native and7complete28open of35.
+Earlier immutable baseline, four-hour comparison and review cutoffs are unchanged.
+
+**CURRENT REVIEW50 — 2026-10-18T23:18:36Z:** campaign active.
+23 accepted native behaviors;13 selected production Rust paths;11 applicable
+native integration paths;7 complete/28 open of35 practical checks;all14 whole
+milestones open. FP1e7a Rust file native result efeb2695 and literal M04-02
+89248554 independently pass; all three literal M04 checks complete, final-profile
+closure open. New rough engineering estimate M04 90–95%, other bands held.
+FP terminal physical release accepted; retained container/exclusions absent,
+58 retained and525 protected rows preserved. New FP-thread app compiler/ELF/Linux
+independently pass254B/exit0, two CPU7 workers,64/65 yields; stage/native pending.
+Pinned-make owner/exporter13-runtime/18-total source roles and8synthetic fixtures
+accepted16aa458e; actual request/publication/admission/probe still pending.
+Logging helpers4compiles/24vectors independently accepted; targetihk.ko unbuilt.
+Latest checkpointcccd887b pushed/fetched15. Usage41%;root49.358GiB/scratch12.817GiB;
+no heavy record. User renewed2–3x throughput target; no measured factor claimed.
+Next full review23:48:36UTC. Separate disk investigation is read-only so far.
 
 **MONITORING RESUMED2026-10-18T13:43:18Z:** user explicitly requested this
 chat's polling, steering and30-minute updates. Their foreground campaign resumed
@@ -4043,3 +4049,64 @@ blind cap increases, unchanged-command replay, synthetic native credit, new glob
 audit/framework or weakening of the existing literal functional checks. Preserve
 16/12GiB floors+full growth/reserves,97%stop,scratch21,held exclusions/all dirty and
 failed evidence. Next full review23:18:16UTC.
+
+## Review 50 — 2026-10-18T23:18:36Z
+
+Thirty-minute delivery:22->23 accepted native behaviors and6->7 complete practical
+checks; selected production paths13 and applicable native paths11 held. All14
+whole milestones remain open. Supported FP1e7a actual Rust file case independently
+accepted efeb2695:133B/exit0/empty application stderr, frozen seek/overwrite/truncate/
+zero-extension/cursor/EINVAL/close/remove assertions and positive host retirement.
+No nonnull FP-release or native OS stop/destroy/resource-restoration credit.
+Independent literal M04-02 review89248554 accepts existing selected-suite utility
+and memory/file/thread/signal evidence plus the new FP case. All3literal M04 checks
+now complete; whole M04/final supported-profile delivery remains open.
+
+Saved new immutable practical-engineering-estimate-20261018T231144Z JSON/MD:
+M04 80–90->90–95% (+7.5 midpoint percentage points), other coarse bands held from
+22:04:48 comparison. M09 integration only; whole-kernel Rust conversion unmeasured.
+Older baseline and completed four-hour comparison retain their original cutoffs.
+User received current table and per-row deltas. No overall OS percentage inferred.
+
+FP terminal physical cleanup/postjoin independently accepted a565ec9f. Exact
+releasecc908b2f, cleanup254ab7b8/postjoin4343636f:container and active records absent,
+2original records archived,9journal events,58retained/525protected inventory rows
+unchanged. Root-only extra HEAD equality assertion failed before child creation;
+correct actual consumed commit/tree/blob checks admitted unchanged release. No
+observer/summary/copy/failed-command replay. Original failed15/all17false and
+syscall-DWARF13/full-validity gap remain open. Scratch21 and dirty WIP preserved.
+Checkpointcccd887b pushed/fetched15 selected files, later than214acfab48.
+
+New private Rust/assembly FP-thread case freezes254B oracle. Independent source
+review08a378a2 accepts64bounded rounds, all16YMM registers, distinct valid x87/MXCSR
+controls, actual peer-progress witness inside call-free live-FP interval, original
+controls restored, same confirmed permitted CPU and direct yields. Actual compiler,
+staticELF and Linux reference pass:binary34886485,trace d000f38e,join8f0378de,
+2distinct workerTIDs/CPU7/64and65yields/exit0/empty stderr; all processes joined.
+Independent2312 actual review passed, stage/owner/fresh-parent proposal now next.
+Pre-spawn extra1GiB scratch assertion and author whitespace-parser failure remain
+preserved; no payload failure/replay/oracle weakening. No stage/native/M07 credit.
+
+Pinned-make fresh owner/dispatcher/exporter8synthetic interface fixtures accepted
+by16aa458e source review with13runtime/18total roles. Exact Docker Name comparison
+leading-slash correction preserves original failure. Genuine image/profile/outer
+join/retirement proof remains required before export; no actual probe yet. Existing
+owner already provides terminal retention/release on proved retirement;2310 prepared
+existing readback recipe without inventing a new cleanup gate. Target driver18978
+and dual-stagerafb961 source reviews stand; actualihk.ko build and staging unrun.
+Logging helper actual4compiles+17collector/7bootvectors acceptedf0282759,bootf25a8030/
+init e656e793 retained for later staged native logging; no new compute C.
+
+Near-hour comparison21:17:53->22:18:03 has no increments in these counters;
+22:18:03->23:16 has+1behavior/+1production/+0nativepath/+1check. This is uneven
+throughput, not measured sustained2–3x. Native Rust-path validation remains11.
+User explicitly renewed2–3x goal. Top of VELOCITY.md now prioritizes fixed candidate,
+reused harness/toolchain, ready compiler-to-stage/native handoffs and independent
+module lane; no general framework/global accounting gate. Steering231637/231739
+accepted; subsequent concrete231910 author/reviewer handoff instruction queued.
+
+Usage41%,root49.358GiB/scratch12.817GiB at cutoff; no heavy record. User requested
+space cleanup. Supervisor agent was reactivated only for bounded read-only candidate
+investigation; current mounted identity1828 unchanged. No deletion/trim/resize or
+release executed by this supervisor. Failed TARs, scratch21, active artifacts and
+locks remain excluded. Target next review23:48:36UTC; continuous monitoring active.

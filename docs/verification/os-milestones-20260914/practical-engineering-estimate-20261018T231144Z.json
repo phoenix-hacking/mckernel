@@ -1,0 +1,221 @@
+{
+  "schema": "mckernel.supervisor-engineering-estimate.v1",
+  "created_at": "2026-10-18T23:12:38Z",
+  "factual_evidence_cutoff": "2026-10-18T23:11:44Z",
+  "scope_id": "practical-kernel-apps-v1-20261017",
+  "estimate_policy": "Low-confidence engineering judgment, not measured completion, pass rates, reliability or whole-kernel Rust conversion. All whole milestones remain open. No overall OS score. M09 integration only. Prior immutable baseline and comparison preserved.",
+  "previous_estimate": "milestone-ledger-comparison-20261018T220448Z.json",
+  "accepted_facts": {
+    "distinct_native_behaviors": 23,
+    "selected_production_default_rust_paths": 13,
+    "paths_with_applicable_native_integration_evidence": 11,
+    "practical_checks_complete": 7,
+    "practical_checks_open": 28,
+    "practical_checks_total": 35,
+    "whole_milestones_open": 14,
+    "whole_kernel_rust_conversion_percent": null,
+    "supported_candidate_image_sha256": "1e7a1f689f565e3ba35def32d4f8c9ae729f0e5945c4fbeadee4eb523738a4a2"
+  },
+  "new_evidence": [
+    "docs/verification/evidence/practical-m04-02-literal-check-review-20261018-2.json",
+    "docs/verification/evidence/practical-rust-file-roundtrip-fp-native-result-review-20261018-1.json"
+  ],
+  "milestones": [
+    {
+      "id": "M00",
+      "title": "Preservation and practical workflow",
+      "scope": "practical engineering",
+      "estimated_completion_percent_range": [
+        85,
+        95
+      ],
+      "confidence": "low",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 2,
+      "milestone_status": "open",
+      "assessment": "Held from the 22:04:48 UTC engineering estimate; no new uplift claimed."
+    },
+    {
+      "id": "M01",
+      "title": "Requests, responses and recovery",
+      "scope": "practical engineering",
+      "estimated_completion_percent_range": [
+        55,
+        75
+      ],
+      "confidence": "low",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 2,
+      "milestone_status": "open",
+      "assessment": "Held from the 22:04:48 UTC engineering estimate; no new uplift claimed."
+    },
+    {
+      "id": "M02",
+      "title": "Execution and comparison runner",
+      "scope": "practical engineering",
+      "estimated_completion_percent_range": [
+        80,
+        90
+      ],
+      "confidence": "low",
+      "completed_practical_checks": 1,
+      "total_practical_checks": 3,
+      "milestone_status": "open",
+      "assessment": "Held from the 22:04:48 UTC engineering estimate; no new uplift claimed."
+    },
+    {
+      "id": "M03",
+      "title": "Memory and mapping correctness",
+      "scope": "practical engineering",
+      "estimated_completion_percent_range": [
+        60,
+        80
+      ],
+      "confidence": "low",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 3,
+      "milestone_status": "open",
+      "assessment": "Held from the 22:04:48 UTC engineering estimate; no new uplift claimed."
+    },
+    {
+      "id": "M04",
+      "title": "Useful C and Rust applications",
+      "scope": "practical engineering",
+      "estimated_completion_percent_range": [
+        90,
+        95
+      ],
+      "confidence": "low",
+      "completed_practical_checks": 3,
+      "total_practical_checks": 3,
+      "milestone_status": "open",
+      "assessment": "All three literal M04 checks independently supported, including FP-image Rust file roundtrip; final supported-profile replay, lifecycle restoration and delivery remain separate. Estimate increased from 80-90 to 90-95; no whole-milestone acceptance."
+    },
+    {
+      "id": "M05",
+      "title": "Native lifecycle and restoration",
+      "scope": "practical engineering",
+      "estimated_completion_percent_range": [
+        55,
+        75
+      ],
+      "confidence": "low",
+      "completed_practical_checks": 1,
+      "total_practical_checks": 3,
+      "milestone_status": "open",
+      "assessment": "Held from the 22:04:48 UTC engineering estimate; no new uplift claimed."
+    },
+    {
+      "id": "M06",
+      "title": "Processes, threads and used syscalls",
+      "scope": "practical engineering",
+      "estimated_completion_percent_range": [
+        45,
+        65
+      ],
+      "confidence": "low",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 3,
+      "milestone_status": "open",
+      "assessment": "Held from the 22:04:48 UTC engineering estimate; no new uplift claimed."
+    },
+    {
+      "id": "M07",
+      "title": "Used FPU/vector state",
+      "scope": "practical engineering",
+      "estimated_completion_percent_range": [
+        65,
+        80
+      ],
+      "confidence": "low",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 2,
+      "milestone_status": "open",
+      "assessment": "Held from the 22:04:48 UTC engineering estimate; no new uplift claimed."
+    },
+    {
+      "id": "M08",
+      "title": "Native modules and interfaces",
+      "scope": "practical engineering",
+      "estimated_completion_percent_range": [
+        85,
+        95
+      ],
+      "confidence": "low",
+      "completed_practical_checks": 1,
+      "total_practical_checks": 2,
+      "milestone_status": "open",
+      "assessment": "Held from the 22:04:48 UTC engineering estimate; no new uplift claimed."
+    },
+    {
+      "id": "M09",
+      "title": "Rust and assembly integration",
+      "scope": "integration only",
+      "estimated_completion_percent_range": [
+        85,
+        95
+      ],
+      "confidence": "low",
+      "completed_practical_checks": 1,
+      "total_practical_checks": 2,
+      "milestone_status": "open",
+      "assessment": "Held from the 22:04:48 UTC engineering estimate; no new uplift claimed."
+    },
+    {
+      "id": "M10",
+      "title": "Repeatable runnable build",
+      "scope": "practical engineering",
+      "estimated_completion_percent_range": [
+        70,
+        85
+      ],
+      "confidence": "low",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 2,
+      "milestone_status": "open",
+      "assessment": "Held from the 22:04:48 UTC engineering estimate; no new uplift claimed."
+    },
+    {
+      "id": "M11",
+      "title": "Integrated functional regression",
+      "scope": "practical engineering",
+      "estimated_completion_percent_range": [
+        65,
+        80
+      ],
+      "confidence": "low",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 3,
+      "milestone_status": "open",
+      "assessment": "Held from the 22:04:48 UTC engineering estimate; no new uplift claimed."
+    },
+    {
+      "id": "M12",
+      "title": "Bounded repeatability and stress",
+      "scope": "practical engineering",
+      "estimated_completion_percent_range": [
+        15,
+        30
+      ],
+      "confidence": "low",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 2,
+      "milestone_status": "open",
+      "assessment": "Held from the 22:04:48 UTC engineering estimate; no new uplift claimed."
+    },
+    {
+      "id": "M13",
+      "title": "Practical delivery",
+      "scope": "practical engineering",
+      "estimated_completion_percent_range": [
+        30,
+        50
+      ],
+      "confidence": "low",
+      "completed_practical_checks": 0,
+      "total_practical_checks": 3,
+      "milestone_status": "open",
+      "assessment": "Held from the 22:04:48 UTC engineering estimate; no new uplift claimed."
+    }
+  ]
+}

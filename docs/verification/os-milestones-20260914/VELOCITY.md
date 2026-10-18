@@ -1,5 +1,41 @@
 # Tactical plan for faster verified OS progress
 
+## Current throughput priorities — 2026-10-18 23:17 UTC
+
+The user explicitly renewed the target of twice the useful throughput, with
+three times as a stretch target. Demonstrate this through accepted functional
+coverage and closed practical checks per active hour, with case scope visible.
+Do not substitute agent occupancy, commands, trivial case counts or engineering
+estimate changes for delivery. Near-hour observations:21:17:53->22:18:03 added
+no behaviors, production paths, native paths or checks;22:18:03->23:16 added
+one behavior, one production path and one check, but no native Rust path. This
+does not establish a sustained speedup; applicable native paths remain11.
+
+Keep supported FP image1e7a1f68 fixed for functional testing. Its Rust file
+roundtrip is independently accepted. Advance the already reviewed two-thread
+FP-state case through the existing compiler/Linux/staging/native pipeline,
+then prepare the next concrete uncovered functional requirement in parallel.
+Reuse the accepted harness, toolchain bindings and unchanged source decisions;
+change only the required payload, oracle and consumed profile inputs. Notify
+the waiting independent reviewer immediately after the real join/readbacks.
+Do not commission a general new framework or another global ledger audit.
+
+Keep the Rust kmsg/module prerequisite on a separate implementation/probe/build
+lane. Its actual pinned-make probe and focused ihk.ko build have their own
+required source/publication/admission decisions; they do not block unrelated
+eligible application tests. Prepare the next lane while the single admitted
+heavy owner runs, keeping aggregate CPU/RAM and exact ownership controls.
+
+The FP app stopped before compiler spawn on an extra1GiB scratch-headroom
+assertion; observed free scratch was12.817GiB above a12GiB floor. The dispatcher
+must resolve the actual approved output/growth/capture/emergency budget, rather
+than inventing an extra threshold or dropping an existing requirement. Account
+for the filesystem receiving the outputs; host free space cannot cover scratch
+writes. Proceed only when the real bounded profile fits, otherwise name the
+concrete capacity blocker. Preserve the original refusal and do not rerun
+successful unchanged checks. Root/source publication and final live facts remain
+the coordinator's work; no supervisor launch or cleanup is authorized here.
+
 ## Read terminal results while an owner remains alive
 
 The 2026-10-18 IHK attempt wrote a failed terminal receipt within seconds, while
