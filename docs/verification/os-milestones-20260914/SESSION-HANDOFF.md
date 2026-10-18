@@ -1,5 +1,42 @@
 # OS development session handoff
 
+## Current — FP thread state accepted; genuine make probe joined (2026-10-18 23:54 UTC)
+
+Functional OS/apps and actual compute Rust/reviewed-assembly cutover continue.
+Fixed FP1e7a functional candidate/matched modules preserved.24accepted native
+behaviors/13selected production/11applicable native Rust paths;7complete/28open
+practical checks, all14milestones OPEN. Independent2312 accepts exact254B/
+exit0/empty stderr:two overlapping workers256/257 on one permitted CPU,
+64rounds each/all16YMM/distinct valid controls/peer-progress witness and original
+control restoration. All30Dockerclients/QEMU/container/three TIDs/lease positively
+retired. Canonical practical-fp-thread-state-native-result-review-20261018-1.json
+90fb5143. No nonnullFP release, signal-state, multicore or wholeM07 claim.
+Wrapper wholejoin0/36.376s and owner+3readbacks0. Expired first snapshot/machine
+preserved without child; genuine refresh547d/8255 passed exact independent review.
+Reviewer activation lapse after wholejoin was identified/corrected; preserve
+actual distinction between idle waiting and active review, no replay.
+
+Genuine pinned-make pipe probe now executed ONCE under exactc9421d06 release/
+48556120review/request2f44b0d7 and fresh admitted predecessor90fb5143. Root PID
+1259984/directjoin0/2.481s; ordinary owner group absent/dispatch0/2.442s. Receipt
+PASS/buildPASS/retiredtrue/cleanupPASS_OWNED_REMOVAL_AND_RECORD_RELEASE, no separate
+cleanup/error. Independent2208 actual pipe/image/profile/retirement decision
+PENDING; no actual export/module claim yet. Source d9829e1b pushed/fetched30/
+3cdba170.2200 preparing exact real-evidence export inputs; inner image-auth false
+remains unchanged. Next executable after actual acceptance: separately approved
+actual proof exporter, then exact ihk.ko-only driver request/release/fresh heavy
+admission. Reuse accepted old modules; no repeated IHK compile merely a receipt.
+
+Rust batch387B Linux/ELF/6workers independently acceptedd6c7ee5b. Soleauthor1754
+has source-ready exact3ordinary stage/fixture/parent packet76c086f7/proposal8dfee4d8;
+2330 affected review active. Reuse unchanged compiler/Linux/no replay/new image.
+120duplicate archives(1315868672allocatedB) cleanup proposal2345 active from exact
+supervisor8255bbf8/advisorybe259235; no deletion yet, fresh live/exact release still
+required. All failed evidence/unknown statuses/scratch21/locks/dirtyWIP preserved.
+Original syscall-DWARF13/full-validity and failedFPpostbuild15/all17false remain.
+Excluded execve/forkACK stay excluded.16/12GiB floors+actual working/emergency,
+4CPU/12GiB/noSwap/512task oneheavy, aggregate cheap budgets and97%stop unchanged.
+
 ## Current — FP file native accepted; literal M04-02 closed (2026-10-18 23:06 UTC)
 
 Continuous functional OS/apps plus Rust/reviewed-assembly migration remains active.

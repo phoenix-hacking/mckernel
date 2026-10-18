@@ -23,21 +23,19 @@ final-profile closure remains open. Other bands held; M09 is integration only.
 Measured facts23behaviors/13production/11native and7complete28open of35.
 Earlier immutable baseline, four-hour comparison and review cutoffs are unchanged.
 
-**CURRENT REVIEW50 — 2026-10-18T23:18:36Z:** campaign active.
-23 accepted native behaviors;13 selected production Rust paths;11 applicable
-native integration paths;7 complete/28 open of35 practical checks;all14 whole
-milestones open. FP1e7a Rust file native result efeb2695 and literal M04-02
-89248554 independently pass; all three literal M04 checks complete, final-profile
-closure open. New rough engineering estimate M04 90–95%, other bands held.
-FP terminal physical release accepted; retained container/exclusions absent,
-58 retained and525 protected rows preserved. New FP-thread app compiler/ELF/Linux
-independently pass254B/exit0, two CPU7 workers,64/65 yields; stage/native pending.
-Pinned-make owner/exporter13-runtime/18-total source roles and8synthetic fixtures
-accepted16aa458e; actual request/publication/admission/probe still pending.
-Logging helpers4compiles/24vectors independently accepted; targetihk.ko unbuilt.
-Latest checkpointcccd887b pushed/fetched15. Usage41%;root49.358GiB/scratch12.817GiB;
-no heavy record. User renewed2–3x throughput target; no measured factor claimed.
-Next full review23:48:36UTC. Separate disk investigation is read-only so far.
+**CURRENT REVIEW51 — 2026-10-18T23:50:39Z:** campaign active.
+Accepted counts23 native behaviors/13 production Rust paths/11 applicable native
+paths/7complete28open of35;all14 whole milestones open. FP-thread guest wrapper
+and3readbacks joined0; independent final native/retirement decision still pending.
+Reviewer raw checker passed23:50:21, without canonical acceptance at cutoff.
+Rust387Bbatch compiler/ELF/Linux independently accepted d6c7ee5b;1754 owns staging.
+Make-probe releasec9421d06 and fetched source d9829e1b/30 ready; blocked on FPU
+retirement acceptance.120archive cleanup candidate/advisory verified1.225GiB;
+root cleanup author2345 assigned, no deletion yet. Scratch12.816/root49.300GiB.
+Detected reviewer2312 idle since23:45:28 while parent reported review underway;
+reactivated23:49:37, no guest/readback replay. Worker restarted23:44:55 after
+stored serverOverloaded;current1258039/server1258041,watcher1031359;goal active.
+Usage42%. Next full review2026-10-19T00:20:39Z. No2–3x speedup established.
 
 **MONITORING RESUMED2026-10-18T13:43:18Z:** user explicitly requested this
 chat's polling, steering and30-minute updates. Their foreground campaign resumed
@@ -4110,3 +4108,75 @@ space cleanup. Supervisor agent was reactivated only for bounded read-only candi
 investigation; current mounted identity1828 unchanged. No deletion/trim/resize or
 release executed by this supervisor. Failed TARs, scratch21, active artifacts and
 locks remain excluded. Target next review23:48:36UTC; continuous monitoring active.
+
+## Review 51 — 2026-10-18T23:50:39Z
+
+Accepted counters held23behaviors/13production/11applicable native Rust paths/
+7complete28open checks;all14wholemilestones open at cutoff. Latest engineering
+table231144Z still M04 90–95%,M03 60–80%,otherbands held; M09 integration only.
+No overall OS/language percentage or sustained2–3x claim. User repeatedly renewed
+speed and concrete agent-steering priority. Target is useful accepted coverage
+and practical closures per active hour, with case scope visible.
+
+FP-thread source08a378a2 and actual compiler/Linux passed254B,2workers on one
+CPU/64–65yields. Ordinarystage70c5041f/three commands and actual006b9ffd accepted:
+60records,onlyapps/app changed,allrawbase/untouchedsuffix spans preserved,parent
+1828:757126/1000/0700/empty. Parent-boundaa554f7f accepted exact unchanged owner/
+wrapper/readbacks,8192MiBguest/12GiBcontainer/4CPU/512task/noswap/no-network.
+Initial final admission expired across context handoff; no child used it.
+Only live facts refreshed; genuine final547d032d accepted at16.306ssnapshotage.
+Actual wrapper/direct owner/3readbacks joined0,wrapper36.376s/PID1256503.
+Native254B/FPstate/physical-retirement final decision pending at cutoff; raw
+review checker23:50:21 passes30commandsreaped/3authenticatedemptyfinalqueries/
+actualworker slots6and7/ownerthreadpublication-deletion/QMPshutdown evidence.
+No counters credited before independent final acceptance. Nonnull FP release,
+signals/multicore/x87stack/hardware/full-language obligations remain separate.
+
+Critical-path stall identified through live agent state, not narrative:2312
+STATUSidle since23:45:28.600224 while parent still reported independent review
+underway and held nextprobe. Supervisor234938 instruction supplied exactthread
+andstatus; parent acknowledged inaccurate status and reactivated with completed
+join/readbacks. Actualnewturn23:49:37. No payload/readback replay. Rawpass now
+available. Track this completion-to-reactivation delay separately from reviewer
+CPU/runtime; use followup_task foridleagents, notsend_messagealone.
+
+Rust functional batch is one387Bpayload retaining original133Bfile and156Bmixed
+case bodies and assertions; sevencheckedcloses/fourremovals/sixjoins andearly
+failurepropagation. Source58bd6fc0/profile9529572f passed; actual3ordinarycommands
+joined0. Independent149b403b/d6c7ee5b accepts exact387B/emptyerr/exit0/staticELF,
+complete3104linetrace,771successfulfutexwaits,main+6workerexit0 andemptywork/tmp.
+No native credit.1754 issolepayloadstage/fixture/parent author. Supervisor briefly
+started a private source-prep lane during coordinator compaction; external1754
+had alreadybeen activated before notification arrived, so duplicate immediately
+interrupted androotnotified. No duplicate execution/sharededits occurred.
+Future reviews should keepfullrawfiles andprintboundedwitnesses/counts/predicates;
+2330output1707c82c dumped208513B/3549lines, a concrete context-overhead example.
+No fulltoolchain/historicalcorpus rehash or oldworkload replay requested.
+
+Pinnedmake owner/exporter source16aa458e accepts8syntheticcases/18roles/13runtime.
+Actualrequest2f44b0d7, sourcecheckpointd9829e1b pushed/fetched30/proof3cdba170;
+exactexecution48556120/payload3fd750f4/finalreleasec9421d06 ready. Full78MiBworking
+plus512MiBemergency/16and12GiBfloorbudget fits. Probe notyetlaunched: waitonly
+precedingFPphysicalacceptance andactualfreshowner/resourceadmission. Sourceknown
+owner archives/releases onprovedretirement independentlyofcommandresult. Probe
+doesnotauthorizeproofexport/modulecompile/guest. Focusedihk.ko build stillunrun.
+
+User requested space cleanup. Supervisor author onceverified120specificduplicate
+archives/1315868672allocatedB againstretainedrepo/checkpoint. Manifest8255bbf8
+has79perblobfetchedreceipts and41honestlyscopedexactGitblob/fetchedtreememberships.
+Independentadvisorybe259235 verifiespathconfinement/restoration/receipts andthree
+historicalreferencelocalities; noarchivebyterehashexecutedbyreviewer.790small+
+7largecurrentmetadata show no candidate-directoryref; remainingindirectconsumer/
+freshmount/openFD/exclusions/container/metadata checks belongroot. Cleanupauthor
+2345 assigned. No deletion/trim/resize atcutoff; scratch21/failedoriginals/current
+FP+kmsg/allunmatchedfiles/dirs/locks preserved. Candidate report/sourceonly.
+
+Workerrestart23:44:55 observed in state, stored error serverOverloaded/model at
+capacity; noservice-policy rejection recorded here. Currentworker1258039/start
+16454076/server1258041/start16454082;watcher1031359/start12831221 unchanged.
+Run20261018T234455Z-aaa66654, samecampaignthread. Monitor alreadytracksdynamicrun/
+processes; enhancedprivatepolloutput now surfaces identity/log changes andchanged
+storedserviceerrors, explicitlydistinguishinghistoricalerrors fromnewstops.
+GPT6.1only retained. Goalactive/usage42%,root49.300GiB/scratch12.816GiB;heavyrecord
+absent. Fullreviewwas delayed whilediagnosingconcreteidle/capacityhandoff; next
+target00:20:39UTC. No secondlauncher/root/workload/cleanup executedbysupervisor.

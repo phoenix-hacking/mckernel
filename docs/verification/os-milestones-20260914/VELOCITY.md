@@ -2,6 +2,17 @@
 
 ## Current throughput priorities — 2026-10-18 23:17 UTC
 
+Renewed user priority23:27UTC: finish ready FP-thread actual-result review and
+its eligible native run promptly. Activate an existing free Rust-app author for
+one coherent batched functional payload using the accepted runner and candidate,
+with distinct frozen per-case oracles, meaningful memory/file/thread/error
+coverage, bounded total runtime/capture and stop-on-failure. This is payload
+implementation, not a new framework. Keep the current frozen FP-thread case
+unchanged and independent; batching must fit existing contracts and receive its
+own appropriate review/release. Preserve refused tasks, resource/correctness
+controls and individual acceptance distinctions. Count useful coverage toward
+open checks rather than multiplying trivial case counts.
+
 The user explicitly renewed the target of twice the useful throughput, with
 three times as a stretch target. Demonstrate this through accepted functional
 coverage and closed practical checks per active hour, with case scope visible.
