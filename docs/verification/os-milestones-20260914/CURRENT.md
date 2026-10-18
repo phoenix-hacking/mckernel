@@ -1,5 +1,65 @@
 # Resume cursor
 
+## Current — FP terminal source publication; functional FP candidate (2026-10-18 22:38 UTC)
+
+FP image1e7a1f68 has independent production acceptancef4799cc5:13selected
+production Rust bodies,11applicable native paths,22distinct native behaviors;
+6complete/29open practical checks, all14milestones open. Nonnull release proof
+remains open. Finite29 accepted:29pairs/58FDrows/e6b59b83. Actual six-input
+adapter joined0/.603s and receipt6004369d independently accepted, no replay.
+Populated terminal source/profile302255e3 passes2120;22source/3data closure
+includes seven existing imports verified against actual fetched d115 bytes.
+Canonical publication/fetched proof and exact observer/summary/raw5/cleanup
+releases are next. StoppedCID0a4388eb7a68a381c792ebdae8cdb98fcdc153b1d24ff7facf31d3ef50809b69
+and common/shared ownership remain held; no new heavy owner/guest yet.
+
+Selected functional candidate is this exact FP image7933968bytes, not an inferred
+native pass. Frozen133B Rust file payload/oracle preserved; new FP image-only
+stage/fixture/fresh-parent proposal40db18bd independently approved2123. CPU7:
+2200 one bounded no-effect driver fixture, then1754 three ordinary commands,
+then release for later work. No native authority from ordinary preparation.
+2200 owns private ihk.ko single-target driver/validator;1724 separately owns
+metadata-preserving dual-archive stager. Source/profile review7ff077bd alone
+permits no target build/load/staging. Nonnull FP kmsg proof stays open; ready
+functional app does not depend on it. Preserve failed postbuild15/all17false,
+original syscall-DWARF13 gap, scratch21, dirty WIP and all ownership/resource
+controls. Excluded execve/forkACK stay excluded. Continuous campaign remains active.
+
+## Current — FP production accepted; finite29 accepted; terminal next (2026-10-18 22:24 UTC)
+
+Functional supported-profile OS/apps and compute Rust/reviewed-assembly migration
+continue. Image1e7a1f689f565e3ba35def32d4f8c9ae729f0e5945c4fbeadee4eb523738a4a2
+(7933968bytes) has independent production/default-link acceptancef4799cc5:
+13selected production Rust paths;11applicable native paths/22behaviors unchanged.
+release_fp_regs is unique Rust default152B, actual GCC14/full native+legacy crate/
+header/export/descriptor/body/free-before-null checks pass. Its nonnull native proof
+remains OPEN; reference C remains. Practical checks6complete/29open, all14open.
+Canonical: ../evidence/rust-fp-release-image-actual-result-review-20261018-1.json.
+
+Build221.839s/wholejoin0 and8client retirement are accepted5f9cc1d7. Preserve
+failed postbuild15 SIGXFSZ8MiB capture/all17false and original syscall-DWARF13 gap.
+Fourcopies/1-14 acceptedc425; clean targetedremaining4 plus2pointer windows
+joined0 without replay. Finite29 retentionrelease41c1ab96 ran once0/.477s;
+2120accepts29unique realpairs/58FDrows:25copies+4reuses/48082579bytes,
+manifest e6b59b83. No source/retention success grants physical cleanup.
+
+Next executable boundary: actual6input adapter using reportf479+realretained29,
+then receipt review, populate genuine facts and publish/fetch FULL helper/import
+closure (including fp_authority), exact observer/summary/raw5 and cleanup release.
+StoppedCID0a4388eb7a68a381c792ebdae8cdb98fcdc153b1d24ff7facf31d3ef50809b69
+and common/shared records remain retained; no new heavy owner or guest yet.
+Rootcheckpointd115adc5 pushed/fetched24/proof7d4fc9be; sourcecheckpointd238 distinct.
+
+The ready133B Rust file/seek/truncate/error case keeps its accepted e85a/full-source
+profile and genuine parent1828:756947; final queue release/admission/exactmachine
+review pending. Do not hold it on logging. Nativekmsg ioctl0x112a20 private Rust
+host-control patch e419bfbc/74fixturetests/independent2288c4ee sourcePASS; actual
+focused ihk.ko target/stage proposal private, no module build/load/native claim.
+Keep later Rust source private while an exact tested functional candidate/profile
+is selected through existing contract-permitted reuse, no new framework or gate.
+Excluded execve/forkACK remain excluded. Preserve scratch21, all failures/dirtyWIP,
+rootmutex27:4/110GiBscratch, floor-plus-growth/emergency and97%includedusage stop.
+
 ## Current — FP ordinary preparation accepted; exact build release next (2026-10-18 21:34 UTC)
 
 Functional OS/apps and compute Rust/reviewed-assembly delivery continue. Source
@@ -9,9 +69,18 @@ prepare and actual driver/owner consumer stages independently accepted e4baaf8c.
 Canonical: ../evidence/rust-fp-release-image-actual-ordinary-result-review-20261018-1.json.
 6948 source entries/120574968bytes and actual request/source identity are bound.
 No compiler, heavy build, native or language-retirement credit from this result.
-Next: finalize the exact FP compiler payload/tool publication and independent
-execution decision, then genuinely fresh ownership/capacity admission and one
-production image attempt. No previous one-shot command is replayed.
+Exact tools checkpoint d115adc5 is pushed/fetched24 (proof7d4fc9be). Final
+independent whole-payload PASS binds0a68038c; fullrelease201c5948 launched once
+at21:47:03UTC after actual live checks. Owner1212607/start15746888 and outer
+tool session37055 positively joined0 at21:50:45 in221.839s. Guard/build/prebuild
+review5f9cc1d7 passes; stoppedCID0a4388eb7a68a381c792ebdae8cdb98fcdc153b1d24ff7facf31d3ef50809b69
+and common/shared records remain retained. Postbuild15 hit8MiBSIGXFSZ; fourcopies
+and1-14 independently acceptedc425991b, failed15 preserved. Cleanremaining4
+observations joined0; b69b9ea4 accepts exactactualdescriptor/window data. Next:
+consume independent exacttwo-window release, complete artifactreview, then actual
+finite29 retention/terminalrelease. No oldcommand/copy replay or whole17PASS. H=host-preparation/rust-fp-release-image-preparation-
+20261018-1/heavy-proposal-1; image-guard.status.json and approved ordinary
+postjoin record are the expected completed outputs. No artifact acceptance yet.
 
 Terminal v2 source-only correction is in focused review2120: actual29-role and
 58metadata enforcement plus FP proof joins; real future artifact/typed/postbuild

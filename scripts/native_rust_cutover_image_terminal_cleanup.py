@@ -29,25 +29,37 @@ import subprocess
 import signal
 import time
 
+
+FP_AUTHORITY = Path('/home/holden/mckernel-work/host-preparation/rust-fp-release-terminal-preparation-20261018-1/populated-source-preparation-1/fp_authority.py')
+FP_AUTHORITY_SHA = 'e389dde20e339ed50005ba36ebd641a8244d4d30ddefaeabb2a0b798b93c312b'
+def fp_contract():
+    raw=FP_AUTHORITY.read_bytes()
+    if hashlib.sha256(raw).hexdigest()!=FP_AUTHORITY_SHA:
+        raise RuntimeError('FP authority source bytes differ')
+    import types
+    module=types.ModuleType('_exact_fp_authority');module.__file__=str(FP_AUTHORITY)
+    exec(compile(raw,str(FP_AUTHORITY),'exec'),module.__dict__)
+    return module
+
 REPO = Path('/home/holden/mckernel')
 PUBLISHED_SCRIPT = 'scripts/native_rust_cutover_image_terminal_cleanup.py'
 PUBLISHED_TESTS = 'scripts/tests/test_native_rust_cutover_image_terminal_cleanup.py'
 SELFTEST = REPO / PUBLISHED_TESTS
-NAMESPACE = Path('/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1')
-NAMESPACE_ANCESTRY = [{'path': '/', 'device': 66306, 'inode': 2, 'mode': 16877, 'uid': 0, 'gid': 0}, {'path': '/home', 'device': 66306, 'inode': 45481985, 'mode': 16877, 'uid': 0, 'gid': 0}, {'path': '/home/holden', 'device': 66306, 'inode': 45481986, 'mode': 16877, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work', 'device': 66306, 'inode': 47459822, 'mode': 16893, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/host-preparation', 'device': 66306, 'inode': 47848559, 'mode': 16832, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1', 'device': 66306, 'inode': 47873188, 'mode': 16832, 'uid': 1000, 'gid': 1000}]
-NAMESPACE_BINDING = {'device': 66306, 'inode': 47873188, 'mode': 16832, 'uid': 1000, 'gid': 1000}
+NAMESPACE = Path('/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1')
+NAMESPACE_ANCESTRY = [{'path': '/', 'device': 66306, 'inode': 2, 'mode': 16877, 'uid': 0, 'gid': 0}, {'path': '/home', 'device': 66306, 'inode': 45481985, 'mode': 16877, 'uid': 0, 'gid': 0}, {'path': '/home/holden', 'device': 66306, 'inode': 45481986, 'mode': 16877, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work', 'device': 66306, 'inode': 47459822, 'mode': 16893, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/host-preparation', 'device': 66306, 'inode': 47848559, 'mode': 16832, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1', 'device': 66306, 'inode': 47882540, 'mode': 16832, 'uid': 1000, 'gid': 1000}]
+NAMESPACE_BINDING = {'device': 66306, 'inode': 47882540, 'mode': 16832, 'uid': 1000, 'gid': 1000}
 ROOT = Path('/home/holden/mckernel-work/scratch')
 UUID = '2a5768c8-718d-4914-bdc0-6b32c5a92a52'
 DEVICE = None  # A future, independently reviewed release binds the live device.
 UID = GID = 1000
-PREFIX = 'rust-debugreg-pair-terminal-preparation-20261018-1'
+PREFIX = 'rust-fp-release-terminal-preparation-20261018-1'
 CANDIDATE = None  # Derived only from the exact consumed image request at release validation.
-ATTEMPT = Path('/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/common-exclusion.json')
+ATTEMPT = Path('/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/common-exclusion.json')
 SHARED = ROOT / 'mckernel-heavy-operation.lock'
-REQUEST = Path('/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/image-request.json')
-LEASE = Path('/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/image-lease.json')
-OUTPUT = Path('/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/owner-work')
-EVIDENCE = Path('/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/owner-evidence')
+REQUEST = Path('/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/image-request.json')
+LEASE = Path('/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/image-lease.json')
+OUTPUT = Path('/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/owner-work')
+EVIDENCE = Path('/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/owner-evidence')
 MUTEX = ROOT / (PREFIX + '.mutex')
 PLAN = ROOT / (PREFIX + '.plan.json')
 JOURNAL = ROOT / (PREFIX + '.journal.jsonl')
@@ -57,8 +69,8 @@ ARCHIVE_NAMES = (PREFIX + '.attempt.archive', PREFIX + '.shared.archive')
 ROOT_LOCK = Path('/run/lock/mckernel-development.lock')
 BASELINE_SOURCE_SHA = '6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed'
 NATIVE_BASELINE_SOURCE_SHA = '8449b4b87b2286d4dc3d08e0c5921d2d79e44f17920d0aaee3eae646993fc995'
-KNOWN_TARGET = {'container_id': '975f4cdc00b37cedfbbab20143a447d13d425aa4427542cff9084d400e69da17', 'container_name': 'mckernel-image-63d73ebfa99442de9b3c2ae806af22ab', 'owner_nonce': '95cc3fda929841c3aab34e4d4fe87789', 'owner_pid': 1164186, 'owner_starttime': '14998240'}
-REQUEST_SHA = '1aa8c2ec498efb7a26fad90570a162d4a1db7d6557dd043c991f154e4cb5b826'
+KNOWN_TARGET = {'container_id': '0a4388eb7a68a381c792ebdae8cdb98fcdc153b1d24ff7facf31d3ef50809b69', 'container_name': 'mckernel-image-ca447785f96b4d9f9bd1ecb8d60f24da', 'owner_nonce': '7ca18df136ab45aa90216ab15d68f660', 'owner_pid': 1212607, 'owner_starttime': '15746888'}
+REQUEST_SHA = 'ed91bb7c81144f97a92dbf40e1e8c962e084ce563dcd9aa57ecdd0af2eb4bee0'
 IMAGE_CANDIDATE = '942c927b1ec93cc31284ff498455909d9bb2d0fc'
 ROOT_TERMINAL = None  # Exact future nonce-bound guard-result.json proof.
 CONTAINER = CONTAINER_NAME = OWNER_NONCE = OWNER_PID = OWNER_START = None
@@ -397,28 +409,8 @@ def recovery_proof_binding(binding, obs):
         raise Refusal('image-reconciliation-proof: ' + str(exc)) from exc
 
 def typed_source_binding(request, obs, selected_map):
-    expected = {
-        'source_derivative_sha256': 'c0312c6ae2a36a79490c60dd5ef79d3f72a42fcc9be2091300dd92d6af362aca',
-        'materialization_sha256': '64122a9491e9e388b38c57966af7b816d80c9f75ab4aecb4fe196679a42ca605',
-    }
-    manifest = NAMESPACE / 'thin-inputs.json'
-    receipt_path = NAMESPACE / 'materialization-receipt.json'
-    pins = {str(manifest): '8b66eee475243487636e28da3c4d7be87c6929bc568fb5d3ec58ff429fb27051',
-            str(receipt_path): '6b8a88b35da3c96bc168b43330fa62fea6806cd82c96bce92a56fd1fba722477'}
-    if (request.get('source_identity', {}).get('inode') != 47873338 or
-            any(request.get(key) != value for key, value in expected.items()) or
-            request.get('candidate_identity_scope') != 'base_git_commit_only'):
-        raise Refusal('typed-thin-source-required')
-    for path, sha in pins.items():
-        row = selected_map.get(path)
-        if row is None or row.get('sha256') != sha or digest(read_bounded(Path(path))) != sha:
-            raise Refusal('typed-source-receipt-pin')
-    receipt = parse(read_bounded(receipt_path))
-    if (receipt.get('status') != 'PASS_SOURCE_MATERIALIZATION_ONLY' or
-            receipt.get('source') != str(CANDIDATE) or
-            any(receipt.get(key) != value for key, value in expected.items()) or
-            obs['candidate_root'].get('inode') != 47873338):
-        raise Refusal('typed-materialization-authority')
+    f=fp_contract()
+    return f.typed_source(request,obs,selected_map,f.ACTUAL_TYPED_SOURCE,lambda p:read_bounded(Path(p)))
 
 
 def configure(value, execute=False):
@@ -480,7 +472,7 @@ def configure(value, execute=False):
     client_rows = obs['client_ledger']
     if not isinstance(client_rows, list) or not client_rows or any(set(r) != {'pid', 'status_path', 'status_sha256'} or type(r['pid']) is not int or r['pid'] <= 0 for r in client_rows):
         raise Refusal('positive-client-ledger-required')
-    guard_capture = ROOT / 'native-rust-debugreg-pair-image-guard-20261018-96088e54eaf44fa29ae177e782544806'
+    guard_capture = ROOT / 'native-rust-fp-release-image-guard-20261018-9582bfa72e354a06810bed72e3e36a71'
     if {r['status_path'] for r in client_rows} != {str(p) for p in guard_capture.glob('command-*/status.json')} or any(Path(r['status_path']).parent.parent != guard_capture for r in client_rows):
         raise Refusal('complete-current-guard-client-ledger-required')
     for row in client_rows:
@@ -557,7 +549,7 @@ def configure(value, execute=False):
         raise Refusal('duplicate-selected-file')
     ROOT_TERMINAL = Path(obs[proof_key]['path'])
     if proof_key == 'guard_proof' and (ROOT_TERMINAL.name != 'guard-result.json' or ROOT_TERMINAL.parent.parent != ROOT or
-            ROOT_TERMINAL.parent.name != 'native-rust-debugreg-pair-image-guard-20261018-96088e54eaf44fa29ae177e782544806'):
+            ROOT_TERMINAL.parent.name != 'native-rust-fp-release-image-guard-20261018-9582bfa72e354a06810bed72e3e36a71'):
         raise Refusal('image-guard-proof-path')
     joins = {'driver_path': 'driver_sha256', 'provenance_path': 'provenance_sha256',
              'host_owner_path': 'host_owner_sha256', 'source_manifest': 'source_manifest_sha256',

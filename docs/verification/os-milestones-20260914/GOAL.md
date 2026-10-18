@@ -1,5 +1,30 @@
 # Autonomous McKernel goal
 
+## Current — FP terminal source publication; functional FP candidate (2026-10-18 22:38 UTC)
+
+FP image1e7a1f68 has independent production acceptancef4799cc5:13selected
+production Rust bodies,11applicable native paths,22distinct native behaviors;
+6complete/29open practical checks, all14milestones open. Nonnull release proof
+remains open. Finite29 accepted:29pairs/58FDrows/e6b59b83. Actual six-input
+adapter joined0/.603s and receipt6004369d independently accepted, no replay.
+Populated terminal source/profile302255e3 passes2120;22source/3data closure
+includes seven existing imports verified against actual fetched d115 bytes.
+Canonical publication/fetched proof and exact observer/summary/raw5/cleanup
+releases are next. StoppedCID0a4388eb7a68a381c792ebdae8cdb98fcdc153b1d24ff7facf31d3ef50809b69
+and common/shared ownership remain held; no new heavy owner/guest yet.
+
+Selected functional candidate is this exact FP image7933968bytes, not an inferred
+native pass. Frozen133B Rust file payload/oracle preserved; new FP image-only
+stage/fixture/fresh-parent proposal40db18bd independently approved2123. CPU7:
+2200 one bounded no-effect driver fixture, then1754 three ordinary commands,
+then release for later work. No native authority from ordinary preparation.
+2200 owns private ihk.ko single-target driver/validator;1724 separately owns
+metadata-preserving dual-archive stager. Source/profile review7ff077bd alone
+permits no target build/load/staging. Nonnull FP kmsg proof stays open; ready
+functional app does not depend on it. Preserve failed postbuild15/all17false,
+original syscall-DWARF13 gap, scratch21, dirty WIP and all ownership/resource
+controls. Excluded execve/forkACK stay excluded. Continuous campaign remains active.
+
 ## Current — 2026-10-18 21:10 UTC
 
 Mapping native isolation accepted:22behaviors;12selected production/11applicable

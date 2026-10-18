@@ -5,23 +5,33 @@ from the interactive chat. Read [VELOCITY.md](VELOCITY.md) for the method.
 Preserve completed entries; append new observations and update only this cursor.
 This file describes supervision, not OS acceptance or execution authority.
 
+**FOUR-HOUR COMPARISON COMPLETED — cutoff2026-10-18T22:04:48Z:** original
+18:04:29 ledger hash verified once and baseline preserved. Separate
+[comparison](milestone-ledger-comparison-20261018T220448Z.md) and machine JSON record
+20->22 accepted behaviors,9->12 selected production Rust paths,8->11 applicable
+native paths,6/35->6/35 closed checks. Only M03 engineering estimate moves55-75%
+to60-80% (+5midpoint percentage points), a low-confidence judgment from accepted
+partial-unmap/fault evidence. Other bands held; M09 is integration only, whole-kernel
+Rust conversion unmeasured. Comparison delivered in chat;30-minute monitoring
+continues. Earlier review cutoff/cadence below is unchanged; next22:17:50UTC.
 
-**CURRENT REVIEW46 — 2026-10-18T21:17:53Z:** campaign active;
-22 distinct native behaviors, 6 complete / 29 open checks, all14 milestones open.
-Selected production/default-link Rust paths12; applicable native integration paths11.
-Paired AVXccebfdd9 and threads0b6f871f are accepted with positive retirement.
-New mapping-isolation100B case on retained e85a is independently accepted, adding
-one behavior; no cross-process/multicore/leak/bare-metal or whole memory closure.
-Checkpointf26fc687 pushed/fetched13 preserves paired results. Reviewed release_fp_regs
-patch235685ff is integrated as WIP only; production/native proof remains pending.
-File-backed runnerv2 has independent source/five-case acceptancec23be56c; originals
-preserved and no compiler/parity replay. FP image29-record/328MiB correction is under
-review; separate terminal author1920 prepares executable helpers before compilation.
-Native specialist1724 prepared existing-logging/downstream-stack-free proof; current
-captures lack required non-null trace, no instrumentation/post-slot-log gate invented.
-Usage36%, root49.962GiB/scratch12.819GiB; stop97%. Next full review21:47:53UTC.
-Immutable ledger18:04:29 comparison remains due22:04:29UTC (15:04Pacific).
-No second launcher or background timer is installed.
+
+**CURRENT REVIEW48 — 2026-10-18T22:18:03Z:** campaign active;
+22 distinct native behaviors,6complete/29open checks,all14 whole milestones open.
+Selected production Rust paths12/applicable native11; FP actual artifact report
+still pending despite completed strings/body observations. Guard/build/prebuild
+accepted5f9cc1d7 after221.839s; stoppedCID0a4388eb and ownership records retained.
+Observation15 SIGXFSZ/8MiB and failed outer remain preserved. Four copies/1-14
+accepted; targetedremaining4 and two256B windows joined0 and are reviewed. No replay.
+Finite29 retention draft/adapter actual inputs are being prepared; no retention or
+physical release credited. Native FP proof needs the private Rust kmsg read patch:
+74fixture tests/source review2288c4ee pass; targetKbuild packet preparation active,
+no module compile/native credit. Rust file133B Linux/stage/parent/non-temporal
+case envelope passes; native unrun. Prepared cases remain separately scoped.
+Four-hour comparison COMPLETE at22:04:48: +2behaviors/+3production/+3native paths,
+0check closures; only M03 estimated55-75->60-80 (+5pp rough judgment). Baseline intact.
+Usage38%,root49.487GiB/scratch12.819GiB; one retained owner, stop97%.
+Next full review22:48:03UTC. No second launcher/background scheduler installed.
 
 **MONITORING RESUMED2026-10-18T13:43:18Z:** user explicitly requested this
 chat's polling, steering and30-minute updates. Their foreground campaign resumed
@@ -3799,3 +3809,151 @@ independent frozen Linux oracle, rather than a global percentage audit. Admit ch
 work under aggregate caps; one heavy only. Preserve16/12GiB floors plus full growth/
 reserves,97%stop, scratch21, service-held exclusions and all dirty/failed evidence.
 Next full review21:47:53UTC; immutable ledger comparison22:04:29UTC.
+
+
+## Review 47 — 2026-10-18T21:47:50Z
+
+Metrics remain22 distinct native behaviors,12 selected production Rust paths,
+11 applicable native integration paths,6complete/29open practical checks and
+all14 whole milestones open. Usage37%, root49.656GiB/scratch12.819GiB. No estimated
+range or measured2x/3x uplift. Immutable18:04:29 ledger comparison remains22:04:29.
+
+FP source checkpointd238a583 is pushed/fetched. Actual ordinary sequence finished
+all4 approved commands/zero exits/direct joins; outer123.98s/empty stderr. Reviewer
+2046 acceptse4baaf8c: request/toolchain/receipt/source identity and real driver/owner
+consumers match, source/owner roots remain unlaunched, no exclusions created.
+Supervisor21292765 requested prompt handoff once actual whole join confirmed; root
+confirmed the boundary and delegated full byte/source review. Build author prepared
+the publication capsule while coordinator compacted; no unfinished-output review.
+
+Heavy-only assembly exposed3-field path/hash/bytes pointers against the reused
+2-field guard. Preserved original failures; current guard validates actual ordinary
+result/request/source/independent acceptance and size.1positive/7negative checks
+pass. Reviewer2009 accepted source/capacity after metadata-only declared-I/actual-B
+correction. Source map513f5d3b binds12 tools; checkpointd115adc5e9f718d529d86666c6ab69422ca01f18
+is pushed/fetched24 selected blobs. Finalization joins genuine publication, actual
+ordinary acceptance and physical retirement. Exact final review0a68038c passes;
+its canonical projection excludes only execution_review and INCLUDES newline.
+The final CLI hash separately authenticates the complete release with review ref.
+Root launched one FP image build21:47:03 under4CPU/12GiB/no-swap/512task/no-network.
+Launch checks leave275324928B scratch margin after exact floor/growth/emergency
+allowances. Actual before-make/build result remains unaccepted at cutoff.
+
+Terminal author1920 and reviewer2120 worked before compilation. V2 dd67777a fixes
+missing FP-specific artifact authority and enforces exactly29 unique role/path
+pairs before mutex/output effects plus58 rows before draft creation.6 affected
+fixtures pass; old paired generic PASS and missing/duplicate roles refuse. Full
+future postbuild and typed-source pins remain pending. Source/profile acceptance
+requires later fetched publication of ALL imported helpers, separately from
+runtime source11. Frozen engine semantics/caps/canonical behavior are reused.
+
+The missing postbuild producer/interface was assigned early via21361567:1920 owns
+the small adapter,2046 independent semantic artifact decision,1919 raw captures.
+Interface01d89e6a joins source/29-role/compiler/header/export/descriptor and actual
+linked artifact groups. Adapter corrections authenticate request manifest digest
+and execute exactly the helper bytes hashed.2 affected fixtures and source/profile
+review pass d879b502. Missing genuine observations remain pending; no prebuild PASS
+is promoted to image proof. No new binary-analysis or acceptance role in adapter.
+Descriptor proposal97a9 initially targeted an absent image__verbose section and
+missed possible large-model Rust strings. Preserved original; revised19-command
+proposalcb34ce2c uses actual.data descriptors and actual-pointer-derived bounded
+string ranges, still326MiB within328 reserve. Addresses remain unbound pending
+first genuine readback; independent coverage/execution decisions remain pending.
+Original syscall-DWARF13/full-validity gap/all14passed=false is preserved.
+
+New meaningful P-M04-02 Rust std app prepared by1754: seek/overwrite, shrink-to10,
+extend-to14, unchanged cursor, zero extension, exact data/EOF, invalid seek EINVAL,
+sole-owned checked close and checked unlink/ENOENT. Frozen133B oracle matches Linux,
+empty stderr, real trace confirms operations. Reviewer2123 source/oracle/Linux and
+exact ordinary proposal pass. CPU7 handoff initially had both authors waiting;
+steering21332516 gave1920's final fixture then1754's two commands, explicit real
+join/release between. Actual staging+fixture1545a1bd pass once,26.7MB retained,
+60-entry map/application-only size/hash delta. Specific runner-negative kernel
+marker journal is retained; typed owner-refusal exact message remains unretained
+and unclaimed. No27-rlib broad rehash or replay. Actual empty private parent1828:
+756947 is independently accepted; literal wrapper binding is in progress. Native
+proof remains unrun on retained e85a authority, queued behind current FP heavy cycle.
+
+Next: read real terminal/build status promptly, finish guard and production artifact
+review only after actual joins, and use prepared terminal/report contracts without
+late schema reconstruction. Continue admitted cheap work alongside the one heavy
+operation. Inspect completed current facts without rehashing unchanged broad evidence.
+Preserve full floors/growth/reserves,97%stop, scratch21, service-held exclusions and
+all dirty/failed evidence. Next full review22:17:50UTC; separate four-hour baseline
+comparison22:04:29UTC must use a new comparison file and preserve the original ledger.
+
+
+## Review 48 — 2026-10-18T22:18:03Z
+
+Accepted metrics remain22 distinct native behaviors,12 selected production Rust
+paths,11 applicable native integration paths,6complete/29open checks and all14
+whole milestones open. Usage38%,root49.487GiB/scratch12.819GiB. Separate four-hour
+comparison was delivered at22:06 from cutoff22:04:48; original baseline hashfa25e5f9
+verified once and preserved. Separate milestone-ledger-comparison-20261018T220448Z
+JSON/Markdown record20->22behaviors,9->12production,8->11native,6/35unchanged. Only
+M03 estimate55-75->60-80 (+5midpoint pp), low-confidence engineering judgment for
+new partial-unmap/fault evidence; no measured OS/Rust score. Other bands held.
+
+FP owner1212607/start15746888 and outer tool session37055 joined0,221.839s.
+Independent5f9cc1d7 accepts actual image construction, existing ABI gates, all4full
+selected/fallback CPU/native/legacy Rust phases and4export checks, source/header/
+makefile bindings and8recorded client retirements. Warnings retained. Stopped
+CID0a4388eb7a68a381c792ebdae8cdb98fcdc153b1d24ff7facf31d3ef50809b69 and common/
+shared remain intentionally retained pending terminal release. No native credit.
+
+First postbuild4copies and1-14 captures completed. Command15 readelf-WrS exhausted
+its8MiB stdout cap, joinedSIGXFSZ(-25), tail midway through unrelated.debug_info
+relocations. Original outer exit1/unknown fields remain preserved. Reviewc425991b
+accepts successful prefix/copy identities only; no whole17PASS. Targeted replacement
+Rust headers1MiB and__verbose relocation output avoid irrelevant debug rows. Reviewer
+also caught process19 whole-relocation bound above2MiB; targeted.text bound547528B
+fits1MiB. Revised remaining-only executable/parser passes1positive/8refusals; exact
+release6001f487 permits4new commands, no copies/replay. All4joined0. Reviewb69b9ea4
+accepts descriptor facts and exact256-byte windows wholly inside allocated,
+non-executable.lrodata.str1.1; format pointer/initial flags zero.
+
+Exact two-window release6bc70674 separately approved and bothcommands joined0.
+Raw strings are exactly /src/kernel/rust/x86_cpu_helpers.rs and release_fp_regs,
+NUL-terminated. Reviewer2046 sees actual object/linked body preserving unsigned
+rounding, optional log, class0free then slotclear/noFP-SIMD and normal Rust link-map
+ownership. Final source/role/artifact semantic report remains pending at cutoff;
+production counter must stay12 until actual acceptance. Original syscall-DWARF13/
+full-validity gap remains open; no error suppression or all14/all17 relabel. Finite29
+retention draft and adapter actual-record assembly are prepared in parallel; future
+copy destinations remain unobserved until actual retention. Helper/importer closure
+still needs complete fetched publication before observer execution.
+
+Native proof cannot read McKernel's ring through either current native backend API:
+perOS0x112a20 and device0x112908/09 bothEINVAL. Linuxdmesg is not that evidence.
+Proposed memdebug boot and two perOS controls are Linux guest-helper deltas; no
+McKernel compute C/instrumentation or image rebuild merely for logging. Steering
+21532312 preserves exact archive metadata/order and requires explicit helper/source/
+binary profile deltas. Steering21565881 requests bounded existing read ABI;22010309
+continues concrete backend implementation while independent validation proceeds.
+
+Private Rust kmsg patch +116/-2 routes the existing ioctl through its live file
+lease, uses exact host-owned shared allocation, bounded lock/snapshot, legacy wrap/
+copy-error semantics and generation ownership through teardown.74complete mock
+fixture tests pass; no runtime assertion. Independent source boundary2288c4ee
+finds noP1/P2;8production prefixes/20provenance hashes checked, no test replay.
+Steering22163059 activated actual targetKbuild/module/stage preparation under the
+accepted input/toolchain profile. Compiler/link and native ioctl/teardown remain
+unperformed; no heavy admission before current positive physical release. Keep
+accepted modules and source/artifact authority unchanged. This read support is a
+precise FP-proof prerequisite, not a reason to halt all functional work.
+
+Rust file-roundtrip actual parent and final non-temporal envelope9d1dbf1c pass
+review2123: only observed parent literal/reference bindings differ,5runtime source
+pins/133B oracle/e85a eligibility/frozen source remain unchanged. No native run.
+Private kmsg and prepared file case advance alongside artifact/terminal work.
+User-requested continuous steering remains active; no further4hour alarm scheduled.
+
+Next: close current actual artifact report, execute/review finite29 then exact
+terminal release, and admit useful prepared work under one-heavy. After artifact
+acceptance pin one existing supported image/profile for remaining literal functional
+checks while later Rust implementations stay private; migration stays active.
+Assess existing permitted batching/evidence reuse without weakening oracles,
+raising caps blindly, inventing ownership/retention facts or creating a new framework.
+Measure actual closed checks/cases and handoff wait separately; no2x/3x claim.
+Preserve16/12GiB floors/full growth+reserves,97%stop,scratch21,held exclusions and
+all dirty/failed evidence. Next full review22:48:03UTC.

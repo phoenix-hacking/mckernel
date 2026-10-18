@@ -86,6 +86,19 @@ Do not change signed payload bytes or weaken a gate to repair a scaffold. Child
 RLIMIT_FSIZE does not cap piped stdout captured in an uncapped parent; future private
 check runners must use genuinely bounded captures where their profile requires it.
 
+The four-hour18:04->22:04UTC comparison on2026-10-18 records2 additional accepted
+behaviors and3 production/native Rust-path increments, but no new practical check
+closures. After the current image's actual artifact review, use the existing
+supported-candidate mechanism to hold one exact tested image/profile stable for
+its remaining literal functional checks. Keep later Rust implementations private
+while that bounded session proceeds; active migration continues. Reuse matching
+valid evidence and identify concrete missing execution or code, without another
+global accounting audit. Assess existing contract-permitted regression batching
+with unchanged per-case oracles, failure stops and real retirement, rather than
+introducing a framework or blocking ready work. Count actual launches/cases and
+closed checks separately. Do not lower requirements or confuse a scoped functional
+image checkpoint with whole-kernel Rust/assembly or overall OS completion.
+
 For future checkpoints, assess compatible independently reviewed Rust leaf changes
 for a shared production build/regression cycle where repository rules permit.
 Keep the currently frozen attempt stable. Prepare affected postbuild and terminal
