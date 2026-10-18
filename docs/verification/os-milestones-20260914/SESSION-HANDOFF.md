@@ -1,5 +1,140 @@
 # OS development session handoff
 
+## Physical release accepted; scheduler build finalization — 2026-10-18 15:54 UTC
+
+Independent PASS_EXECUTED80daa92d accepts only exact IHK owner recovery:124 complete
+censuses,46 Docker client closures,13 container-absence cycles,12 journal rows,
+three original records archived/released, ROOT27:4 free, original tool97778 joined.
+Canonical record: evidence/ihk-regular-owner-recovery-result-review-20261018-2.json.
+Original implementation FAIL/latch remains preserved; valid ihk.ko artifact b870a2e2
+is reusable within its IHK-only scope. No new kernel/native credit for recovery.
+
+Next: checkpoint/fetch exact12 scheduler runtime sources, bind this accepted
+physical release, obtain exact independent final image execution decision, then
+fresh admission and the one-shot GCC14 full process.c ABI -> image build. Do not
+repeat ordinary materialization/preparation or the accepted IHK compilation.
+Separate terminal correction is active: image ownership records are host-backed,
+so the copied scratch-only cleanup cannot be executed. High owner1546 is adapting
+per-filesystem atomic archival/record transactions with independent reviewer1543.
+This does not alter the frozen image request or grant cleanup authority.
+AVX/Cthreads conditional preparations have independent d04e3446 source/prep PASS;
+actual new image/staging/execution releases remain pending. No new port backlog.
+
+Functional OS/apps and compute Rust/reviewed assembly remain active; excluded
+execve/forkACK stay excluded. Current counts19 behaviors,8 production/7 applicable
+native Rust paths,6 complete/29 open checks,all14 milestones open. Included usage
+stop97%; one heavy owner and full floors+growth/emergency reserves unchanged.
+Preserve unrelated dirty work, failed evidence, scratch21 and all historical holds.
+
+## Recovery completed; final raw acceptance pending — 2026-10-18 15:43 UTC
+
+Functional OS/apps and live compute-C retirement into Rust/reviewed assembly remain
+active. Rejected execve and service-held fork/ACK work remain excluded.
+
+The new regular-state observer passed (e290e8a9); independent exact recovery
+ac599b69 ran once, returned 0 in 4.840s, and positively joined original tool
+97778 (owner -9). ROOT inode27:4 was subsequently acquired/released ordinarily;
+owner1057705 and outer1057703 are absent and all three active ownership paths are
+absent. Original FAIL receipt/latch remains preserved. Full raw postflight/census,
+journal and archive acceptance is still pending a separately reviewed finite
+readback. Do not admit another heavy owner until that acceptance.
+
+The valid IHK-only artifact remains independently accepted b870a2e2 and retained
+in ihk-valid-artifact-retention-20261018-1; no recompilation is needed for a receipt.
+No new native behavior or practical-check closure is credited for recovery.
+
+Scheduler debug handoff image request dcea118a has completed ordinary materialize,
+prepare and actual owner/driver consumers. Corrected source/profile payload
+860c4306 passed conditional review590de2db: current preparation bindings, actual
+576MiB reserve boundary and optional retained ABI inspector are correct. Exact
+12-source publication is copied (427818B); checkpoint/fetch and final execution
+release remain pending. The one-shot production sequence includes actual pinned
+GCC14 full process.c Thread offset5016/size5568/alignment64 assertions BEFORE image
+make. Ninth Rust debug path remains production/native OPEN.
+
+Next two AVX/Cthreads continuations have actual runner+owner fixture positives
+and changed-capture refusals, endpoints <=99B, final preparation4f1c1634; independent
+review is active. New image artifact/staging/releases remain pending. Terminal
+helper preparation is active separately. Reuse existing oracles and matching
+modules; do not replay accepted native cases or the failed IHK build.
+
+Next executable: reviewed 16MiB exact raw recovery readback -> independent physical
+release acceptance -> coherent pushed/fetched source checkpoint -> exact scheduler
+GCC14 ABI/image release and fresh admission. Host/scratch at last ordinary reading:
+55208157184/13777403904B; remeasure full floors+growth+reserves before execution.
+Counts remain19 distinct native behaviors,8 selected production Rust bodies,
+7 applicable native paths,6 complete/29 open practical checks; all14 milestones
+open. HEAD58672d91 remains frozen until accepted physical release. Preserve dirty
+launcher/IHK WIP, all failed attempts, scratch21 and its locks/exclusions.
+
+## ACTIVE — valid IHK artifact; new owner held, 2026-10-18 15:21 UTC
+
+ActualcorrectedIHKbuild196 completed make0 and strictdriverPASS. Independent
+artifactreviewb870a2e2 acceptsactualihk.ko2,002,664B SHAece10048b39889176705841a842346
+531e71604417de3f8819537109d870a4fe,13Rustdeps/16acceptedtoolflags/33exports.
+Retained29regularfiles4,606,236B verified at host-preparation/ihk-valid-artifact-
+retention-20261018-1/retention-receipt.json. Originalcandidateuntouched. DoNOT
+recompilejusttoreplaceownerreceipt. This isIHK-onlycompilerproof, notnewapp/native.
+
+Owner1057705/start13318764 andnaturalouter1057703/start13318757 (session97778)
+remainheld; ROOT27:4quarantined. NewreceiptFAILretiredfalse/UNCERTAINRECORDS after
+measure rejected transienttmp/GMfifo8 FIFO0600,correctdev/UID/nlink. NewCID
+3e173850a69a0debb2a8aee918cf9ea4f50525d3859e53178c80f934219c5213 retainedexited0.
+All3newownershiprecords areoriginalregularinodes115233/115232/115231, NOToldguards.
+Newregularrecoverypacket host-preparation/ihk-regular-owner-recovery-20261018-2
+isNONRUNNABLE inexpertreview1520. Expertverifiedrealcensusglobal/CLIaliasfixes,
+63failurepins/61artifactpins; concretechildownershipgap afterPopen/startedevidence
+write mustbefixed/testedbeforeobserverrelease. No newrootaction/retry/rawunlink.
+Prior994/partialrecoveryand196failurehistorypreserved; scratch21protected.
+
+GNUmake4.4.1pinned97539f22 source-supporteddefaultFIFOcausality; futureONLYpipe-mode
+proposal jobserver-source-1 stilllacksactualpinnedrecursiveprobe/profile. Inventory
+predicates unchanged. This futureprobe isNOTa prerequisiteforusingvalidIHKartifact
+orcurrentRustimagework; no thirdIHKcompileauthorized.
+
+Approvedordinaryschedulerchain completedONCE: materialize0/12.619s,prepare0/76.386s,
+actualdriver+ownerrequestconsumers0/27.884s, emptyerr. Currentrequest SHA
+ dcea118a2423122d2a1501be998b8d86db75befd60dd9f4bdc2612818d6c8d43
+(toolchaina68e02b3/receiptd612a016), result82290bb3. Sources6948entries/49links.
+Host55270559744B/Scratch13777899520Bafterchain; full512MiBpostprep+64MiBcapture
+reservespass. No compiler/root/lease consumed. FullGCC14ThreadABIthenimagecompile
+proposal active in rust-scheduler-debug-materialization-final-20261018-1/heavy-proposal-1;
+separateexecutionreview/positiveIHKphysicalrecovery/freshadmissionremainrequired.
+Current19behaviors/8productionRust/7applicablenative/6complete29open unchanged.
+HEAD58672d91fetched26+12runtimeproof; maintainfreezeandpreserveunrelateddirtyWIP.
+
+
+## ACTIVE — recovery accepted; next IHK compile packet, 2026-10-18 14:53 UTC
+
+Independent PASS_EXACT_PARTIAL_RECORD_RECOVERY9fb2aede accepted final raw readback:
+all51clientrootsclosed,21newclientsjoined,3originalgensarchived/3activepathsabsent,
+ROOT27:4unlocked, oldtarget/sudoparent/newcontrollerabsent. Originalfailures/latches
+remain historical, not cleared/reinterpreted. Scratch21 untouched.
+
+Checkpoint58672d915c7607f0595b4de87c3e25261c535f6e pushed/fetched:26changedblobs;
+separate12runtime-source fetchedproof PASS at host-preparation/ihk-effective-kbuild-
+repair-20261018-1/final-bindings-1/root-runtime-fetched-verification.json (prefix
+/home/holden/mckernel-work). Unrelateddirty/untrackedlauncher/fork/ihkgitlink WIP
+preserved andexcludedfromcommit. No moreclaimofcurrentquarantinedowner.
+
+OrdinaryIHKstage2d12c8e6passed0/0.112s:17files/419411B,14hostsources+3freshScratch
+inputs. Actualstage/sourceconsumerreview31504096 accepts12exactsourceSHA map.
+Freshnonce196ae0d069494667b4e4e2d610ca506c, hostcandidateinode47853306/dev66306,
+Scratchinputinode115225/dev1828 (newpath/generation, not oldguard). No buildyet.
+Next executable: exactrequest/release finalization at host-preparation/
+ihk-effective-kbuild-repair-20261018-1/execution-final-1 using root-provided-facts.json,
+then independent exactexecutiondecision and fresh admission before oneIHK-onlybuild.
+Proposals remain nonrunnable; neverconsume old994ea5cf attempt or scratch-only781.
+
+Parallel ordinaryscheduler-debug materialization finalization is active in
+host-preparation/rust-scheduler-debug-materialization-final-20261018-1. Existing
+216parity/source review remainsvalid; pinnedGCC14actualCABI/image/native proofopen.
+Currenttotals19behaviors,8productionRust/7applicablenative;6complete29open checks,
+all14milestonesopen. P-M00-02open pending currentrunnablecommand/release. Included
+usage24percent/stop97; ordinaryfacts host55568543744B/scratch13778214912B, notfuture
+admission. No newapplication/percentage/speedupcredit for recovery orstage.
+
+
 ## Physical recovery result — 2026-10-18 14:43 UTC; acceptance pending
 
 Separately reviewed partial observer326cba0f passed0/0.536s (actual72df0224),

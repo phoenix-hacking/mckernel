@@ -6,15 +6,17 @@ Preserve completed entries; append new observations and update only this cursor.
 This file describes supervision, not OS acceptance or execution authority.
 
 
-**CURRENT REVIEW32 —2026-10-18T14:13:30Z:** campaign running/goal active;
-19accepted native behaviors,5complete/30open practical checks,8selected production
-Rust bodies/7applicable native paths. No new acceptance this30m12s interval.
-IHK build failed13:45; its owner remains quarantined. Two independent reviews
-cover the33-check Kbuild correction and21-test finite recovery. Scheduler source/
-parity and ordinary image-preparation reviews passed; actual production ABI,
-compile/link and native proof remain pending. Next full review14:43:30UTC.
-The explicit user foreground restart and monitoring request supersede historical
-stopped banners below. No additional launcher or independent timer was installed.
+**CURRENT REVIEW35 —2026-10-18T15:44:53Z:** campaign active;
+19native behaviors,6complete/29open practical checks,8selected production Rust
+bodies/7applicable native paths, all14milestones open. Recovery returned0/4.84s,
+the original outer session joined, all3ownership paths are absent and ROOT27:4
+was observed acquirable. Final physical-release acceptance remains pending raw
+postflight readback; the bounded reader's cap-only correction is in review.
+Scheduler ordinary preparation completed; corrected image source/profile and
+both AVX/Cthreads continuation preparations have independent conditional passes.
+Actual GCC14 production ABI/image/native proof remains open. Reuse accepted IHK
+artifact. Next full review16:14:53UTC; usage25%, stop97%.
+No second launcher or background timer is installed.
 
 **MONITORING RESUMED2026-10-18T13:43:18Z:** user explicitly requested this
 chat's polling, steering and30-minute updates. Their foreground campaign resumed
@@ -2912,3 +2914,155 @@ measurement; no cleanup/resize/reserve changes are authorized by this record.
 Latest subjective estimate table is practical-engineering-estimate-20261018T134738Z;
 its cutoff precedes this failure and it claims no completed IHK/scheduler build.
 Next full review14:43:30UTC. No background timer or competing dispatcher added.
+
+## Review33 — 2026-10-18 14:43 UTC
+
+Cutoff14:43:50UTC; interval30m20s. Campaign running/goal active, same foreground
+launcher identities. Acceptance19native behaviors(+0),6complete practical checks
+(+1)/29open;14milestones open. Eight selected production Rust bodies/seven
+applicable native paths unchanged. The bounded independent literal review closed
+P-M09-01 using existing accepted default-consumer proof. P-M00-02 remains open
+for the current exact runnable command/release/checkpoint gap; broader Rust
+retirement and final delivery are separate. No numerical speedup claim.
+
+Actual result: partial recovery returned0/2.25s and original tool91805 joined.
+Three active ownership paths absent, completion marker present. Final root
+readback/recovery acceptance was pending at cutoff; no new build was accepted.
+The corrected IHK source/composition/final bindings and ordinary staging profile
+passed independent review. Scheduler source/parity/image-preparation remains
+ready for actual pinned C ABI, compile/link and native checks.
+
+Recovery findings were corrected before its second live operation: full journal
+writes, bounded whole-census retry for disappearance, actual failed post-wait
+boundary, nonthrowing repeated-signal latch and exact partial-state orchestration.
+Fifteen helper plus17orchestrator tests pass, including five real ordinary CLI
+cases. The actual first readback0/.33s captured901120B; independent inspection
+proved60archives/526557B and exact failed-CID removal. All failure versions and
+original uncertainty remain preserved. No old command replay occurred.
+
+Post-cutoff14:53: independently accepted physical recovery proves51old/new
+client closures, all3archived original generations, exact8-row transaction,
+old controller/parent and new controller absence, positive readback retirement,
+and ROOT27:4 unlocked. Original failure latch was not rewritten. New source
+checkpoint58672d915c7607f0595b4de87c3e25261c535f6e pushed/fetched26blobs. Ordinary
+IHK staging passed0/.11s with17files/7directories/419411B; actual12runtime-source
+map accepted315040960eec9710b36815b543e3785bfc7128c45f24bc526a3bfb81e99386ad.
+Exact final build execution review remains; separate scheduler finalization active.
+
+Steering: direct the next lane into a full callable entrypoint/actual CLI tests,
+keep path-only readback derivatives on their accepted engine rather than repeat
+unchanged suites, use an idle reviewer for two literal criteria without delaying
+recovery, and advance the first fully admitted compiler result. No extra audit or
+new reporting framework. Shared-doc writing was deferred during Git checkpoint
+to avoid a fetched-blob race; this record was appended after verified publication.
+
+Storage at cutoff host51.761GiB/Scratch12.832GiB; usage24%, stop97%. Reviewed
+16/12GiB floors, packet reserves and one-heavy cap unchanged. Scratch21 and failed
+attempt evidence retained. Next full review15:13:50UTC. Subjective engineering
+ranges remain the13:47comparison; no additional percentage uplift is inferred.
+
+## Review34 — 2026-10-18 15:14 UTC
+
+Cutoff15:14:38UTC; interval30m48s. Acceptance19native behaviors(+0),6complete
+checks(+0)/29open;14milestones open. Eight selected production Rust bodies/seven
+applicable native paths unchanged. Usage25%; host51.717GiB/Scratch12.832GiB.
+No numerical2x/3x speedup or whole-kernel Rust percentage is inferred.
+
+Physical recovery of the preceding partial case was independently accepted;
+checkpoint58672d91was pushed/fetched26blobs. Corrected IHK staging0/.11s and
+exact execution review passed; real second owner ran under fresh admission.
+The compiler/consumer succeeded: container exited0 at15:02:26.264UTC and logged
+PASS_IHK_STRICT_TOOL_CONSUMER_ONLY. Independent review accepted actual IHK-only
+compiler/artifact evidence after39checks: make0/emptystderr, ihk.ko2002664B,
+13Rustdependencies, accepted objtool/all16flags, ELF/module metadata/33exports.
+Review b870a2e261a66d3f3cb536e7cd16367fcbb262603d3b9a73cc690bd2fe63bd2b under
+host-preparation/ihk-actual-artifact-review-20261018-1. Preservation plan covers
+29regular candidate files/4606236B and excludes tmp. No copies/load/runtime were
+claimed by that review. Matching artifact should be reused where permitted;
+no recompilation solely to obtain another receipt.
+
+Overall owner contract remains FAIL/retiredfalse: diagnostic identified FIFO
+0600 at nsd-c-196ae0d069494667b4e4e2d610ca506c/tmp/GMfifo8, correct device66306,
+failed directory_or_single_link_regular. Docker wait-client retirement unproven;
+owner1057705 keeps the development mutex. Exact current records and failed
+receipt remain preserved. First failure family now has concrete producer evidence
+rather than an unsupported device theory. GNU make4.4.1 is bound by retained
+catalog; GNU documentation supports pipe-style jobservers, but exact image
+runtime support/probe remains pending. Do not relax inventory or replay a third
+build without a demonstrated repair and positive release.
+
+Monitoring improvement: private incremental poll now reads a terminal owner
+receipt while its process remains alive. It detected this FAIL at15:03:34 with
+receipt age67s and exposed the exact FIFO. Root then separated artifact proof
+from owner failure instead of waiting for wrapper completion or discarding the
+successful compile. This is an observed diagnostic improvement, not a claimed
+whole-campaign speedup.
+
+Parallel work: independent artifact review; exact all-regular-state finite recovery
+using prior census/signal fixes; source/pinned-tool investigation of FIFO/jobserver;
+approved ordinary scheduler materialize/prepare/consume. Regular recovery's CLI/
+transaction checks pass; an imported census-test binding mismatch remained after
+one correction and was escalated, not silently retried. Code versus scaffold
+behavior must be resolved by the expert. Frozen prior failures stay immutable.
+
+Next: preserve verified IHK evidence, finish reviewed regular-owner recovery,
+validate only the narrow jobserver change with the pinned minimal tool probe,
+and prioritize the first eligible scheduler actual-C ABI/image operation after
+release. No new IHK compile merely for paperwork. Keep the one-heavy cap and
+combined-storage admission; ordinary source work may overlap only in its approved
+profile. No original service-held work is resumed. Next full review15:44:38UTC.
+
+## Review35 — 2026-10-18 15:44 UTC
+
+Cutoff15:44:53UTC; interval30m15s. Acceptance19native behaviors(+0),6complete
+checks(+0)/29open; all14milestones open. Eight selected production Rust bodies/
+seven applicable native paths unchanged. Usage25%; host51.412GiB/Scratch12.831GiB.
+No new percentage uplift, completion date or numerical2x/3x speedup is inferred.
+
+The accepted IHK artifact was retained as29regular files/4606236B without
+changing the original candidate. Its failed owner remained a separate failure.
+Independent recovery review found a real post-spawn Docker-child ownership gap
+on an initial evidence-write failure. One bounded correction passed12targeted
+actual-method checks; unchanged suites were reused. Independent approval then
+allowed the fresh observer, followed by a separate observation-bound recovery
+release. Recovery returned0/4.84s and the original outer tool session positively
+joined. Fresh ordinary checks found all3active ownership paths absent and
+ROOT27:4acquirable; the readable journal showed all3exchanges/releases in order.
+Final acceptance still awaits complete raw census/Docker/archive evidence.
+The reader's8MiB cap is insufficiently assured for that transfer; a sole-constant
+16MiB derivative and3cap-boundary checks are prepared for independent review.
+The original reader, failed owner receipt, retained container failure and prior
+recovery failures remain evidence; raw success is not final release acceptance.
+
+Scheduler ordinary materialize/prepare/actual-consumer chain completed once
+(12.62s/76.39s/27.88s). Its full GCC14 production-ABI-before-image proposal passed
+conditional source/profile review after one consolidated correction of current
+request/evidence joins, exact576MiB caller reserve and retained optional inspector.
+The final-binding draft is ready, with current publication/HEAD, accepted physical
+release, fresh admission and exact execution decision pending. Production Thread
+ABI assertions are prepared, not compiled. The ninth Rust debug-handoff path
+remains production/native OPEN; prior216case parity proof is retained.
+
+Parallel workers prepared two finite AVX/Cthreads continuation packets. Actual
+runner/owner fixture replays and changed-capture refusals pass; independent
+d04e3446 review accepts source/preparation only. New-image acceptance, staging,
+live admission and individual execution releases remain pending. Terminal helpers
+reuse accepted engines and passed14affected consumer checks; source review is
+active. The optional GNUmake pipe-mode probe has38cheap checks, but no make binary
+ran; it must not delay use of the valid IHK artifact or current scheduler build.
+
+Concrete overhead found:7,562,834bytes of one terminal-preparation worker's output
+in a recent8MiB console window. The incremental supervisor retained its2MiB read
+bound and reported skipped bytes; the complete console file remains unchanged.
+Instruction153911 required targeted discovery, full captures in evidence files
+and concise console status/timing/selected results. Dispatcher acknowledged and
+forwarded it to current lanes. Instruction152903 prioritized recovery-to-compiler
+critical path and readiness of the next2eligible cases. These are scheduling and
+output improvements, not measured whole-campaign speedups. No second launcher,
+privileged action or workload was started by the supervisor.
+
+Next: finish bounded raw transfer and independent physical-release acceptance;
+complete fetched publication/final exact image release and run the first fully
+admitted GCC14 ABI/image operation. Keep reviewed follow-on cases ready in parallel.
+Preserve one-heavy/resource admission,97%stop,scratch21 and held-task exclusions.
+Latest observed checkpoint remains58672d91. Next full review16:14:53UTC.
