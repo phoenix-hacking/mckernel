@@ -22,7 +22,7 @@ def resolve_source(test_file, override=None):
     return Path(test_file).resolve().parents[1] / 'native_rust_cutover_image_terminal_cleanup.py'
 
 
-P=Path('/home/holden/mckernel-work/host-preparation/rust-clear-debugreg-terminal-preparation-20261018-1')
+P=Path('/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-terminal-preparation-20261018-1')
 SOURCE=(resolve_source(__file__, os.environ.get('NATIVE_FP_CLEANUP_TEST_SOURCE'))
         if Path(__file__).resolve().parent.name=='tests' else P/'cleanup.py')
 
@@ -214,7 +214,7 @@ class HostSplitConfigureTests(NestedCleanupTests):
         m.TERMINAL.write_bytes(b'{}')
         source=m.NAMESPACE/'materialized-source';source.mkdir(mode=0o700)
         backup=m.ROOT/'mckernel-exact-candidate-scratch-22-authority3-metadata-backup';backup.mkdir(mode=0o700)
-        guard=m.ROOT/'native-rust-clear-debugreg-image-guard-20261018-e4becbcd4971479f81426b3872cbe27c'
+        guard=m.ROOT/'native-rust-debugreg-pair-image-guard-20261018-96088e54eaf44fa29ae177e782544806'
         status=guard/'command-1/status.json';status.parent.mkdir(parents=True,mode=0o700)
         status.write_bytes(m.canonical(dict(pid=124,state='exited',exit_code=0)));status.chmod(0o600)
         proof=guard/'guard-result.json';proof.write_bytes(b'{}');proof.chmod(0o600)

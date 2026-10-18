@@ -89,6 +89,17 @@ for one future production/native cycle, with independent review and repository
 rules. Current frozen attempts remain stable; this is a throughput experiment,
 not automatic integration or additional native credit.
 
+For new paired templates, bind linked-symbol requirements, selected source paths
+and immediate accepted-baseline descriptions coherently from one pinned role map.
+The19:28 advisory found stale paired symbols/baseline fields, and the19:44 final
+template review found a selected guard/test list pointing to old files. Both were
+corrected before their execution boundaries. Keep heavy-only corrections additive
+when the ordinary packet is already frozen. Distinguish a source-copy blocker from
+a pending final-release obligation; actual request/source/independent-result joins
+must be enforced before build release. Reuse unchanged engine decisions and check
+only the affected new bytes/data. Source-only advisory reports grant no workload
+authority or milestone credit.
+
 The native control kernel, three Rust modules and matching current942 image
 already exist. The native baseline passed diagnostic artifact revalidation;
 strict fresh-build reproducibility and runtime acceptance remain unproved.

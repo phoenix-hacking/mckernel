@@ -1,0 +1,38 @@
+{
+  "author": "/root/debugreg_pair_terminal_prepare_1920",
+  "cleanup": false,
+  "copy": false,
+  "helper_changes": false,
+  "obligations": [
+    {
+      "actual_boot": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+      "id": "bind-three-genuine-boot-identities",
+      "inputs": [
+        "cleanup.py::configure",
+        "observe_reset_image_retirement.py::BOOT",
+        "retention_observer.py::BOOT",
+        "genuine current /proc/sys/kernel/random/boot_id observation"
+      ],
+      "observation": "configure retains boot7bfc... literal while observer and retention BOOT are None",
+      "required_before_release": "At finalization bind configure, observer and retention all three to the same genuine current boot observation; do not treat historical boot literal as future authority",
+      "state": "BOUND_TO_GENUINE_CURRENT_BOOT_RECHECK_AT_FINAL_RELEASE"
+    },
+    {
+      "id": "actual-distinct-direct-join-record-review",
+      "observation": "Existing generic raw5 validator proves returncode0 and direct_child_joined true; it does not itself prove complete actual-record roles or stream metadata",
+      "required_before_release": "Independent actual-record review must enforce exact argv, actual PID, stdout/stderr paths and their actual byte hashes for two distinct genuine observer and summary statuses; verify each role against the released command and actual joined child. No synthetic record or reviewed projection substitutes for these actual statuses",
+      "review_input_state": "Future actual status files do not exist yet; literal review-input pointers only",
+      "review_inputs": [
+        "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-terminal-preparation-20261018-1/dispatcher-observer.status.json",
+        "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-terminal-preparation-20261018-1/dispatcher-readback.status.json"
+      ],
+      "state": "DATA_PENDING"
+    }
+  ],
+  "review_context": "Supervisor source-only advisory accepted20 source hashes and limited AST delta; this record carries obligations and grants no execution authority",
+  "root": false,
+  "runtime": false,
+  "scope": "Functional practical McKernel OS/apps and actual live compute C migration into Rust plus reviewed assembly",
+  "status": "PENDING_FINALIZATION_OBLIGATIONS",
+  "tests_run": false
+}

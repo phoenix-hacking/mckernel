@@ -1,5 +1,51 @@
 # Autonomous McKernel goal
 
+## Current — paired production accepted; finite15 preserved; physical release next (2026-10-18 20:17 UTC)
+
+Functional OS/apps and actual compute Rust/reviewed-assembly cutover continue;
+refused execve and service-held fork/ACK remain excluded. Paired SAVE/RESTORE image
+5f7f43ad (7,933,264B) has independent production/default-link acceptance40713d52:
+12 selected Rust production paths,9 applicable native paths,21 accepted distinct
+native behaviors,6complete/29open checks; all14milestones open. Native proof for
+this new image and hardware DR branches remain pending. No full C retirement claim.
+
+Source3c5434ef/fetched26 and tool7a0c038b/fetched22 remain distinct. Exact image
+release61b9d295 completed0/directjoin203.358s; eight Docker clients retired, stopped
+CID975f4cdc00b37cedfbbab20143a447d13d425aa4427542cff9084d400e69da17 remains
+retained with common/shared records. No new guest/heavy owner until physical release.
+Canonical production review: ../evidence/rust-debugreg-pair-image-actual-result-review-20261018-1.json.
+
+Four retained artifacts and commands1-12 pass. Original syscall-DWARF command13
+failed its strict stderr contract: three LEB diagnostics from host readelf2.34.
+It is preserved and full syscall-DWARF validity remains OPEN; all14passed=false.
+Only unrun original14 was separately released/executed0, clean stderr. Its complete
+C thread/cpu type links plus actual compiled C ABI assertions establish the required
+layout facts; selected symbols, scalar DR bodies, actual scheduler consumers and
+protected previous bodies independently pass. No unchanged image or commands replay.
+
+Finite15 retentionf1e3ff75 completed0/directjoin0.217s; independent actual acceptance
+3a24dfa5 verifies15pairs/30distinct FD identities/bytes/timestamps,11newcopies1,055,009B
+and4existing copies. Authority8656eb1b is a TOP-LEVEL15array, not an envelope.
+../evidence/rust-debugreg-pair-image-retention-result-review-20261018-1.json records it.
+Frozen retention consumed before this checkpoint's canonical cleanup/test publication.
+Next root action is exact fetched-source proof, then independently released finite
+read-only observer/summary/readback, actual result review and separate cleanup.
+Callable proposal: /home/holden/mckernel-work/host-preparation/rust-debugreg-pair-terminal-preparation-20261018-1/observation-summary-raw5-command-proposal.json.
+Publication or source approval alone grants no privileged execution authority.
+
+Paired AVX/threads own-case stages, private parents and six binding-only sources
+completed; actual owner+runner consumers both pass. Ordinary source result31563456
+and parents1828:756602/756603 are ready for conditional runtime review; real physical
+release, exact final machine hashes and fresh60-second snapshots remain pending.
+Mapping-isolation two-fault100B Linux oracle/stages/actual consumers/private parent
+1828:756597 are independently reviewed; native0, e85a authority remains separate.
+Keep paired AVX/threads first. Full captures/maps stay private files, not console.
+
+Preserve original failures, scratch21/container/locks, dirty launcher/IHK, mutex27:4
+and110GiB scratch. One-heavy4CPU/12GiB/noSwap512tasks;16/12GiB floors plus actual
+full growth/reserve and aggregate shares remain. Usage33% last snapshot; stop97%.
+Join notifications precede unrelated coordination; take temporal admission last.
+
 ## Current — e85a native chain and closed-write accepted; paired Rust source integrated (2026-10-18 19:20 UTC)
 
 Functional OS/apps and compute Rust/reviewed-assembly retirement remain active;

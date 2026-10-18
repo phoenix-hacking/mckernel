@@ -6,17 +6,21 @@ Preserve completed entries; append new observations and update only this cursor.
 This file describes supervision, not OS acceptance or execution authority.
 
 
-**CURRENT REVIEW42 — 2026-10-18T19:17:00Z:** campaign active;
+**CURRENT REVIEW44 — 2026-10-18T20:17:31Z:** campaign active;
 21 distinct native behaviors, 6 complete / 29 open checks, all14 milestones open.
-Selected production/default-link Rust paths10; applicable native integration paths9.
-Imagee85a AVX5f56221d and threadse303118f chain/physical retirement accepted.
-Closed-write actual EBADF/24-byte output/exit0 and physical retirement accepted.
-The reviewed private SAVE+RESTORE pair and corrected production-input templates
-pass independent combined review; root is moving into one shared image cycle.
-No production/native credit for the two new leaves before actual build/runtime proof.
-Two delayed completion notifications were closed; root now prioritizes handing
-joined runtime results to the independent reviewer before unrelated preparation.
-Usage32%, stop97%; next full review19:47:00UTC. Immutable milestone ledger saved
+Selected production/default-link Rust paths12; applicable native integration paths9.
+Paired image5f7f43ad has independent selected-artifact acceptance40713d52.
+Original command13 syscall-DWARF failure remains OPEN; all14passed=false.
+Clean separately released command14 and actual compiled C assertions establish
+the required ABI facts. No full DWARF, fallback/legacy or hardware-DR credit.
+Finite15 retention is accepted4430beda, preserving the failed observation.
+Both new-image guest stages/parents/private sources are accepted9cbc429c;
+six-file publication and two actual consumer commands joined0/empty stderr,
+with actual independent review underway. Terminal physical release and all paired
+native credit remain pending. Mapping parent/static conditional envelope passes;
+native queue priority remains paired AVX/threads first.
+Usage34%, root50.034GiB/scratch12.823GiB; stop97%. Next full review20:47:31UTC.
+Immutable milestone ledger saved
 18:04:29UTC; separate four-hour comparison due22:04:29UTC (15:04Pacific).
 No second launcher or background timer is installed.
 
@@ -3524,4 +3528,136 @@ accepted cases. Keep per-case oracles, failure stops, retirement and scope fixed
 avoid a new global milestone audit or percentage credit from a scope reduction.
 Preserve one-heavy, full floors/growth/reserves,97% stop, scratch21, service-held
 exclusions and every failed artifact. Next full review19:47:00UTC; separate ledger
+comparison22:04:29UTC.
+
+## Review 43 — 2026-10-18T19:47:18Z
+
+Thirty-minute metrics remain21 distinct native behaviors,10 selected production
+Rust paths/9 applicable native integration paths,6complete/29open checks and all14
+whole milestones open. Usage33%, root50.161GiB free, scratch12.823GiB. No new
+engineering percentage or2x/3x claim. Immutable milestone ledger18:04:29 remains
+the22:04:29UTC comparison baseline; actual current facts21/10/9/6-of35.
+
+Reviewed SAVE/RESTORE is integrated in exactly syscall.c/x86_cpu_helpers.rs with
+unchanged CMake/default selection and no new compute-C behavior. Source checkpoint
+`3c5434ef57ce82ebbe6a270133fd449718954d8c` is verified/fetched. One-pass generation
+binds6948 entries/49 typed links, libdwarf gitlink and tool-receipt/library closure.
+Both manifest positives/four stale rejections pass. Ordinary source copy12.45s and
+the four-stage sequence completed with real direct waits and no observer errors.
+Independent result68e86596 accepts actual request/toolchain/receipt/source identity
+`[66306,47873338,1000,1000,448]` and driver/owner consumption. The known120CPU/
+150wall preparer profile was reused; historical30CPU failure remains preserved.
+
+During dispatcher compaction the supervisor assigned two GPT-6.1 medium read-only
+advisory reviews in isolated host directories. Terminal reportdf97ff14 covers20
+declared sources and final boot/status/profile obligations. Image report1aec734e
+found paired symbols/selection and immediate-baseline drift, plus status-only
+ordinary prerequisite semantics. Author made heavy-only corrections, preserving
+the original32-row ordinary packet/62 indexed files. New guard requires actual
+request hash, source identity, four joins and independent actual-result acceptance;
+one positive/twelve negative fixtures pass with the first failure preserved.
+Corrected source/profileb32e7750 and real strict late-data joins pass. Advisory
+reviews grant no execution authority; actual current-data decisions remain separate.
+
+Execution tools are frozen at`7a0c038b0cd294b17bd54b2e2f652433ccfb859d`. Exact payload
+14394b67 received approval; external release61b9d295 ran one native image build.
+Actual guard/client review accepts GCC14 CPU/process ABI gates and make image
+exit0, direct join203.358388s, empty guard stderr and eight exited0 Docker clients.
+Stopped CID975f4cdc00b37cedfbbab20143a447d13d425aa4427542cff9084d400e69da17 is
+retained without OOM; lease absent, common/shared identities retained and root
+mutex27:4 reacquired. The retained heavy record denotes pending terminal handling,
+not continuing compilation. Fourteen-command/four-artifact production acceptance
+and all paired native credit remain pending at cutoff.
+
+Postbuild and terminal preparation ran during compilation. Terminal reviewer1943
+found an old selected guard/test list against the corrected source map; author
+preserved the draft, corrected it and checked11 source keys/17 descriptors.
+Packetbf625b1c passes affected source/profile review, reusing the advisory's
+unchanged-engine findings. Current request/source/three boot bindings agree.
+Actual build/artifact/client facts, finite15 retention, publisher proof, outer caps,
+distinct genuine observer/summary joins and exact future releases remain pending.
+
+The new two-page mapping diagnostic compiled and passed its100-byte Linux oracle:
+exact-address ACCERR/MAPERR recovery, adjacent-page preservation, restored write
+access, partial-unmap survival and final cleanup. Both commands joined0/empty stderr.
+Actual reference reviewa06b6220 accepts it. Stage/fixture0fa4b7ea is accepted against
+e85a immutable authority:60 entries, only apps/app size/hash changed, runner/owner
+positives and scoped refusals. OwnerError followed the serial append on the same
+positive fixture, but its exact message/throw site was not captured; this limitation
+is retained. No native fault delivery, partial-unmap or whole-memory-check credit.
+New paired-image authority remains separate. Its native preparation follows the
+current image chain.
+
+Next: bind completed artifacts, run the exact14-command observation and accept
+actual default linked SAVE/RESTORE before changing metrics. Reuse early terminal/
+continuation preparation to release the owner and run the matching AVX/thread
+chain, keeping the mapping test ready. Notify result reviewers immediately after
+real joins/readbacks. Derive selected path lists/descriptions from a pinned role
+map where a targeted reviewed improvement prevents copied-field drift. Keep full
+proofs in files and console output bounded. Preserve all failures, scratch21,
+service-held exclusions, one-heavy, floors/growth/reserves and97% stop. Next full
+review20:17:18UTC; separate ledger comparison22:04:29UTC.
+
+
+## Review 44 — 2026-10-18T20:17:31Z
+
+Selected production/default-link Rust paths increase10->12 through independent
+actual paired SAVE/RESTORE artifact review40713d52, image5f7f43ad. Native integration
+paths remain9, distinct native behaviors21, practical checks6complete/29open and
+all14 whole milestones open. Usage34%, root50.034GiB/scratch12.823GiB. Engineering
+percentage ranges remain held; no measured2x/3x speedup. Immutable18:04:29 ledger
+and its22:04:29UTC comparison deadline remain unchanged.
+
+Original postbuild command13 returned0 but emitted three LEB decode errors from
+hostreadelf2.34 reading actual GCC14 DWARF5. Its empty-stderr contract failed;
+full syscall-DWARF validity and literal all14passed remain OPEN/false. No command
+replay, rebuild, decoder substitution or diagnostic suppression occurred. The
+separately approved previously unrun command14 completed cleanly. Actual compiled
+C ABI assertions plus its process-object C type/member closure establish required
+facts, including Thread.fp_regs4784. Immediate e85a process-object byte identity,
+actual ABI translation-unit compilation/linking, unique Rust SAVE/CLEAR/RESTORE
+ownership, exact scalar bodies and scheduler consumption were independently
+checked. The inspected artifact contract permits this selected acceptance while
+the broader metadata gap remains open. Native/fallback/legacy/hardware DR proof
+remain distinct. Supervisor advisoryfc4ef66d mapped the ABI obligations using
+read-only source/retained captures; it supplied no execution or acceptance authority.
+
+Finite15 retention independently accepted4430beda: all30 single-link identities,
+bytes/metadata/timestamps match; four existing copies reused, eleven new copies
+1,055,009B. Original command13 failed captures remain retained. Source receipt,
+release and actual joined execution agree. Terminal author bound the genuine
+producer shape and prepared exact observer/summary/raw-five proposals. Root's
+first publication projection raised KeyError:target on a capsule repository_path
+row before effects; failure was preserved and the declared row shapes normalized.
+Canonical publication, fetched proof, privileged observer/cleanup and positive
+physical common/shared/container release remain pending at cutoff. A retained
+heavy record still does not mean compilation continues.
+
+Guest continuation proceeded in parallel: reviewer2009 accepted the unchanged
+archive body, actual40713d52 retention joins, both full source closures and exact
+ordinary profiles. Both new-image stages, three parents and six private derivatives
+completed with actual waits0/empty stderr in about38s. Independent result9cbc429c
+accepts actual archive metadata/order preservation with image hash/size-only delta,
+parent identities and generated bytes. It also approves exact follow-on six-file
+publication and two real consumer checks. Worker1724 returned from compaction still
+awaiting that already-issued decision; steering20160409 supplied exact references
+and requested followup_task activation. At20:17 the three follow-on children had
+joined0/empty stderr, result31563456 awaiting independent actual review. No guest
+ran. This closes a concrete avoidable handoff wait, not a claimed whole-campaign
+speedup. Reviewer notification occurred promptly after these real joins/readbacks.
+
+Mapping-isolation ordinary parent creation completed and passed independent review,
+actual result84d59ace. Only the wrapper's literal EXPECTED_PARENT_IDENTITY changed;
+static conditional envelope71c70726 is accepted. Native remains blocked on positive
+physical release, exact final-machine review and genuine fresh admission. Its e85a
+source/image scope is preserved; no newer paired-image or native credit is implied.
+
+Next: finish current terminal publication and exact finite execution/review, then
+run matching paired-image AVX/threads with static joins ready before the60-second
+snapshot. Keep mapping ready behind them. Reuse accepted source/oracle/engine
+proofs; review new data and real fresh identities. Keep future descriptor consumers
+aligned with the actual producer schema to avoid projection-only failures. Use
+one heavy operation, full16/12GiB floors plus growth/reserves, actual independent
+result decisions and97% usage stop. Preserve scratch21, service-held exclusions,
+dirty work and all failures. Next full review20:47:31UTC; separate immutable-ledger
 comparison22:04:29UTC.
