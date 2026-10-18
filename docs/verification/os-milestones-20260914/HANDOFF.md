@@ -1,5 +1,51 @@
 # Compact dispatcher handoff
 
+## Current — paired Rust native chain accepted; mapping next (2026-10-18 20:54 UTC)
+
+Functional supported-profile OS/apps and compute Rust/reviewed-assembly cutover
+continue. Refused execve GO/NO-GO and service-held fork/ACK remain EXCLUDED.
+Current5f7f43ad paired SAVE/RESTORE image now passes independent AVX and threads
+native chains with positive physical retirement: AVX ccebfdd9, threads0b6f871f.
+Both real owners and60Docker clients/QEMU/containers/leases retired. AVX35.256s,
+threads36.988s; final snapshot reviews21.1s/13.9s, then immediate launches.
+21 distinct behaviors unchanged;12 selected production/default Rust paths and
+11 with applicable native workload integration (SAVE/RESTORE +2), not exhaustive
+hardware/nonzero-DR or whole-kernel proof. clear_fp_regs native remains excluded/
+unproved. Practical checks6complete/29open; all14milestones open, no score change.
+
+Terminal69780c22 independently proves exact5f7 build CID/common/shared/lease/
+quarantine/owner8client absence, original records archived and15pairs/30FDrows
+preserved. Cleanup4.675s + approved automatic postjoin0.656s. Observer/summary/raw5
+and metadata originals retained; unused payload2 not replayed. Root's pre-effect
+newline hash assertion is preserved: cleanup canonical JSON has NO newline;
+corrected guard matched frozen6f33 payload before any child. Original syscall-DWARF
+command13 failure/full validity OPEN/all14passed=false remains unchanged; selected
+production proof uses clean14 and actual compiled C ABI assertions.
+
+Canonical actual records: ../evidence/rust-debugreg-pair-{image-terminal,avx-native,
+threads-native-chain}-result-review-20261018-1.json. Cleanup source checkpoint
+093399d5 pushed/fetched; exact published subset33 proof51f0086d retained under
+host-preparation/rust-debugreg-pair-terminal-preparation-20261018-1/.
+
+Next: complete mapping-specific snapshot/assembler affected review, fresh admission
+and exact one-shot release of already accepted e85a/100B mapping-isolation case.
+Latest paired threads retirement is its queue predecessor, not same-image evidence.
+Author1754 owns private mapping-finalization-1; reviewer1935 owns independent review.
+No new image or per-case push gate. Root retains Git/runtime/acceptance ownership.
+
+Next Rust candidate release_fp_regs is PRIVATE/source-reviewed only (628ff015;
+advisorydbfeb018):44 C/Rust vectors/14joined checks; existing bridge/free ABI,
+log->free->null and unchanged C fallback. Production GCC14/full-crate/default-link/
+descriptor and actual non-null allocation->release native evidence remain OPEN.
+Runner PIPE capture limitation preserved; file-backedv2 and5focused actual helper
+checks independently pass c23be56c; signal-race branch source-only, no parity replay. Keep this
+candidate private until current mapping reuse/source-authority boundary is consumed.
+
+One heavy4CPU/12GiB/noSwap/512tasks, aggregate7jobs/23.6714GiB;16/12GiB floors plus
+full growth/emergency; usage35% last genuine snapshot, stop97%. Preserve scratch21,
+all original failures, dirty launcher/IHK, mutex27:4 and110GiB scratch. No numerical
+2x/3x or whole-language-retirement claim. Continue after checkpoint.
+
 ## Current — paired production accepted; finite15 preserved; physical release next (2026-10-18 20:17 UTC)
 
 Functional OS/apps and actual compute Rust/reviewed-assembly cutover continue;
@@ -530,7 +576,7 @@ changes. Next Kbuild composition remains conditional on new metadata review and
 physical release. No native behavior/check closure credited for maintenance.
 
 
-## Current selected Rust cutover paths — 2026-10-18 20:17 UTC
+## Current selected Rust cutover paths — 2026-10-18 20:54 UTC
 
 | Live compute C boundary | Rust default consumer | Accepted scope / next proof |
 | --- | --- | --- |
@@ -544,11 +590,11 @@ physical release. No native behavior/check closure credited for maintenance.
 | cpu.c signal FP reset | Rust checked reset bridge | production492 + NULL x87 native e0d2fd97; wider state branches OPEN |
 | process.c scheduler debug handoff | sched_schedule_debug_handoff | production671a0fa2; applicable native AVX/threads chain36c0abd3 PASS; DR hardware branches unproved, architecture DR C remains |
 | syscall.c clear_debugreg | x86_cpu_helpers.rs clear_debugreg; live scheduler inlines identical six writes | production e85a/dacf4e3f plus scoped native-image AVX/threads e303118f PASS; DR hardware/internal branch and full legacy/fallback OPEN; C reference preserved |
-| syscall.c save_debugreg | x86_cpu_helpers.rs save_debugreg; live Rust scheduler and C ptrace SAVE bridge | production5f7/40713d52 unique Rust default and63B scalar body; e85a native baseline still C; new-image native/hardware/fallback OPEN |
-| syscall.c restore_debugreg | x86_cpu_helpers.rs restore_debugreg; live Rust scheduler | production5f7/40713d52 unique Rust default and47B scalar body; e85a native baseline still C; new-image native/hardware/fallback OPEN |
+| syscall.c save_debugreg | x86_cpu_helpers.rs save_debugreg; live Rust scheduler and C ptrace SAVE bridge | production5f7/40713d52 unique Rust default63B; AVX ccebfdd9 + threads0b6f871f applicable current-image integration PASS; nonzero hardware DR/fallback OPEN |
+| syscall.c restore_debugreg | x86_cpu_helpers.rs restore_debugreg; live Rust scheduler | production5f7/40713d52 unique Rust default47B; AVX ccebfdd9 + threads0b6f871f applicable current-image integration PASS; nonzero hardware DR/fallback OPEN |
 
 These are selected path proofs, not whole-kernel language retirement. New production
-5f7 selects Rust SAVE/RESTORE/CLEAR; e85a remains the accepted native baseline with
+5f7 selects Rust SAVE/RESTORE/CLEAR and has accepted applicable AVX/threads native integration; historical e85a baseline has
 C SAVE/RESTORE. Reference/fallback C and new-image native/hardware obligations remain. No new C
 behavior was added. Functional process support and deferred qualification keep
 their separate status; excluded tasks are not reassigned through this table.

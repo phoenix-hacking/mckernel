@@ -6,22 +6,22 @@ Preserve completed entries; append new observations and update only this cursor.
 This file describes supervision, not OS acceptance or execution authority.
 
 
-**CURRENT REVIEW44 — 2026-10-18T20:17:31Z:** campaign active;
+**CURRENT REVIEW45 — 2026-10-18T20:47:43Z:** campaign active;
 21 distinct native behaviors, 6 complete / 29 open checks, all14 milestones open.
 Selected production/default-link Rust paths12; applicable native integration paths9.
-Paired image5f7f43ad has independent selected-artifact acceptance40713d52.
-Original command13 syscall-DWARF failure remains OPEN; all14passed=false.
-Clean separately released command14 and actual compiled C assertions establish
-the required ABI facts. No full DWARF, fallback/legacy or hardware-DR credit.
-Finite15 retention is accepted4430beda, preserving the failed observation.
-Both new-image guest stages/parents/private sources are accepted9cbc429c;
-six-file publication and two actual consumer commands joined0/empty stderr,
-with actual independent review underway. Terminal physical release and all paired
-native credit remain pending. Mapping parent/static conditional envelope passes;
-native queue priority remains paired AVX/threads first.
-Usage34%, root50.034GiB/scratch12.823GiB; stop97%. Next full review20:47:31UTC.
-Immutable milestone ledger saved
-18:04:29UTC; separate four-hour comparison due22:04:29UTC (15:04Pacific).
+Paired image5f7f43ad selected acceptance40713d52 remains unchanged; original syscall
+command13 DWARF failure and all14passed=false remain preserved.
+Terminal sources093399d5 pushed/fetched33 selected blobs. Actual finite observer,
+summary, raw-five export and physical cleanup/postjoin are independently accepted;
+container/eight clients absent, common/shared archived, root mutex27:4 reacquired.
+AVX exact machinea046d048 launched within60seconds and wrapper/readbacks joined.
+Raw380B/exit0/empty application stderr and30reaps match; final actual review pending.
+Threads follows accepted AVX retirement. Mapping parent/static packet remains queued.
+Private release_fp_regs candidate passes44 parity vectors/module/selected/fallback
+fixtures; advisorydbfeb018 finds no source blocker and records PIPE capture-limit gap.
+Production ABI/default-link/non-null native release still pending; candidate private.
+Usage35%, root50.001GiB/scratch12.821GiB; stop97%. Next full review21:17:43UTC.
+Immutable ledger18:04:29 comparison remains due22:04:29UTC (15:04Pacific).
 No second launcher or background timer is installed.
 
 **MONITORING RESUMED2026-10-18T13:43:18Z:** user explicitly requested this
@@ -3661,3 +3661,72 @@ one heavy operation, full16/12GiB floors plus growth/reserves, actual independen
 result decisions and97% usage stop. Preserve scratch21, service-held exclusions,
 dirty work and all failures. Next full review20:47:31UTC; separate immutable-ledger
 comparison22:04:29UTC.
+
+
+## Review 45 — 2026-10-18T20:47:43Z
+
+Metrics remain12 selected production Rust paths,9 applicable native paths,21 distinct
+native behaviors,6complete/29open practical checks and all14 whole milestones open.
+Usage35%, root50.001GiB/scratch12.821GiB. No engineering range uplift or measured
+2x/3x claim. Immutable18:04:29 ledger comparison remains22:04:29UTC.
+
+Terminal source checkpoint093399d5 is pushed/fetched with33 selected blobs: canonical2,
+capsule18, runtime12 and actual artifact review. The selected proof is not a whole-tree
+claim. Frozen cleanup-copy EOF warning remains recorded; scoped check excluding that
+exact unchanged copy passes. Observer/summary exact release passed and both completed
+with distinct real PID/argv/status/stream-hash joins0/empty stderr,1.47s/0.11s. Independent
+review verified genuine roles,11 source bindings,30 retained rows and8 client ledger
+entries. This closes the earlier advisory's actual-two-record obligation.
+
+Raw-five export initially lacked FD metadata because the summary only emitted hashes.
+A separately reviewed finite read-only helper captured exactly5 root-owned originals,
+433128B, in0.11s. No observer replay. The approved export and ordinary consumer passed;
+archive5/header/hash/size/owner/mode/mtime match and full raw inventories were restored.
+A later payload remained unused; only actual consumed release evidence is credited.
+Cleanup reviewer caught the omitted numeric128MiB fsize cap; caller-only correction
+preserved engine/data. Exact cleanup/postjoin release passed independent review.
+
+First root cleanup assembly failed before child creation because its copied canonical
+hash expression appended a newline. Supervisor read-only check of cleanup.py178-179
+and the selected payload confirmed that omitting execution_review and using NO newline
+hashes exactly to reviewed6f33c1a6. Steering20423794 supplied the precise diagnosis;
+no payload/gate weakening or workload replay. Failure is preserved. Actual cleanup
+returned0/4.67s, conditional postjoin0/0.66s. Independent terminal review accepts full
+9-entry journal/5-member archive, actual commands and streams,30 stable retained rows,
+current boot, container/eight clients absent, common/shared original identities archived
+and root mutex27:4 positively reacquired. Heavy record absent; physical release accepted.
+Original postbuild13/full syscall-DWARF gap/all14passed=false remains unchanged.
+
+Guest staging/consumer acceptance31563456 and conditional wrapper/schema decisions
+were reused. Full non-temporal joins preceded fresh admission. Final AVX machine
+a046d048 passed at snapshot age21.1s and launched immediately within60s. Wrapper
+returned0/~35.18s and all3 readbacks joined. Reviewer2009 sees exact380B typed stdout,
+exit0/empty application stderr and30 client reaps; full stream/lifecycle joins remain
+under review at cutoff. Post-exit Docker kill returned the recorded not-running error;
+final container listings empty. Do not claim AVX/native increment before acceptance.
+Worker1724 prepares thread late-data handoff in parallel; threads still needs accepted
+AVX result/physical retirement. Mapping uses its declared e85a authority and waits
+behind the pair. No new per-case fetched-source gate was added.
+
+Refill initially caused coordinator-side future CPU discovery. Steering20214913 moved
+selection/private work to specialist2022, preserving terminal release priority. Private
+release_fp_regs changes only cpu.c selected guard and x86_cpu_helpers.rs; C fallback
+body and actual callback ABI stay.14 capped child commands alljoined0;44 actual frozen
+C/Rust parity vectors, full helper-module compile and selected/fallback link fixtures
+pass. Supervisor GPT-6.1 medium advisorydbfeb018 checks unsigned-long rounding through
+INT_MAX, optional log/free-before-null, repeated/null release, source default callbacks
+and fixture scope without reruns. No source-semantic blocker under explicit ownership
+preconditions. Child RLIMIT_FSIZE does not cap PIPE/communicate output retained by an
+uncapped parent; correct future runner before reuse, preserve completed actual captures.
+Fresh production C ABI/descriptor assertions, full crate/default-link/fallback/legacy
+and real non-null FP allocation->release native proof remain pending. Candidate stays
+private. Campaign peer2046 performs its required boundary review; no retirement credit.
+
+Next: finish AVX actual acceptance, then final fresh thread admission/run and mapping.
+Prepare export metadata/caller numeric caps and producer-correct canonical conventions
+early next cycle. Delegate future candidate discovery rather than doing it centrally.
+About1.3MiB new console output arrived in two20:47 polls; full proofs belong in files,
+with bounded selected fields/mismatch samples in context. More agent activity is not
+measured throughput. Preserve one-heavy, full floors/growth/reserves,97% stop, scratch21,
+service-held exclusions and all dirty/failed evidence. Next full review21:17:43UTC;
+separate four-hour immutable-ledger comparison22:04:29UTC.

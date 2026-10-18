@@ -1,5 +1,14 @@
 # Autonomous McKernel goal
 
+## Current — 2026-10-18 20:54 UTC
+
+Paired5f7 Rust SAVE/RESTORE production and applicable AVX/threads chains accepted;
+21behaviors,12selected production/11applicable native paths,6/35checks complete.
+Hardware DR/exhaustive paths and full C retirement remain open. Mapping-isolation
+next; private release_fp_regs source candidate follows its safe integration boundary.
+See current HANDOFF.md for exact evidence, commands and ownership. Functional OS/apps
+plus Rust/assembly remain active; refused/held tasks stay excluded. Continue work.
+
 ## Current — paired production accepted; finite15 preserved; physical release next (2026-10-18 20:17 UTC)
 
 Functional OS/apps and actual compute Rust/reviewed-assembly cutover continue;

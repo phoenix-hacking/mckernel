@@ -70,6 +70,22 @@ command returns; both handoffs were closed by explicit steering. Track return-to
 notification latency separately from review time. Preserve the no-unfinished-
 artifact-read rule, and avoid performing the complete independent review twice.
 
+Delegate the next private candidate's discovery as well as implementation. At20:19-
+20:22UTC on2026-10-18 the coordinator investigated the future CPU path centrally
+while current terminal publication waited. Moving that work to a specialist kept
+the ready image's release on the coordinator's critical path. A completed private
+candidate and source review may wait without blocking the active image/native cycle.
+
+Use each accepted producer's actual record shape and canonical encoding. The paired
+terminal cycle needed a finite five-file FD metadata read because the summary only
+contained hashes. Its first cleanup assembly also appended another role's newline
+convention; the unchanged payload matched the reviewed hash without that newline.
+Preserve these pre-effect failures. Prepare the full export metadata and numeric
+caller caps before release; consume the exact review request's declared convention.
+Do not change signed payload bytes or weaken a gate to repair a scaffold. Child
+RLIMIT_FSIZE does not cap piped stdout captured in an uncapped parent; future private
+check runners must use genuinely bounded captures where their profile requires it.
+
 For future checkpoints, assess compatible independently reviewed Rust leaf changes
 for a shared production build/regression cycle where repository rules permit.
 Keep the currently frozen attempt stable. Prepare affected postbuild and terminal
