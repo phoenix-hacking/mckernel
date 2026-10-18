@@ -1,5 +1,50 @@
 # Resume cursor
 
+## Current — tenth Rust production path; terminal release pending (2026-10-18 18:30 UTC)
+
+Functional OS/apps and compute Rust/reviewed-assembly cutover remain active.
+Refused execve and service-held fork/ACK stay excluded. Checkpoint8cdcbf46 is
+pushed/fetched63 blobs; sourcecf035407 remains distinct from tool publication.
+New clear_debugreg image build returned0/200.543s; exact four retained copies and
+14 postbuild commands returned0 with15 direct waits in4.844s. Independent actual
+review dacf4e3f accepts imagee85a1e35 and the tenth selected production/default-link
+Rust path. Canonical review: ../evidence/rust-clear-debugreg-image-actual-result-review-20261018-1.json.
+LLVM inlined the six exact DR writes into the live Rust scheduler handoff; unique
+Rust clear export, selected C clear absence and original scheduler ordering pass.
+No hardware/native clear-path claim. Counts20 native behaviors,10 selected Rust
+production paths/8 applicable native paths,6 complete/29 open practical checks;
+all14 milestones open. Full fallback/legacy TU/crate/image proof remains open.
+
+Current stopped build container10c33a4066452a753193bffe1bf8e744a6eb6580ca305c3218147194e05353a7
+and common/shared exclusions remain retained pending separate physical release.
+Finite15 terminal retention9cae completed0/directwait in0.265s; actual independent
+acceptance708ad056 verifies all30 descriptor/byte/metadata rows. Four copies reused,
+eleven metadata files copied (1,054,734B). Frozen retention engine consumed before
+canonical cleanup+tests publication. Next fetch exact source/capsule, independently
+release finite observer/readback, review actual result, then separately release cleanup. Never replay consumed image,
+source copy, observer, cleanup or guest commands. Original source-copy child status
+remains UNKNOWN; independent validated-tree reuse is separate from retirement.
+
+Next native chain: prepare AVX then Cthreads on accepted e85a image using each case's
+own metadata-preserving image-only base derivation. Root command/runtime authority
+still requires positive terminal release, exact final payload review and fresh live
+admission. Packet: host-preparation/rust-clear-debugreg-image-preparation-20261018-1/
+heavy-proposal-1/postbuild-readonly-1; terminal: rust-clear-debugreg-terminal-preparation-20261018-1;
+guest continuation: rust-clear-debugreg-guest-continuation-20261018-1 (all under
+/home/holden/mckernel-work/). Exact command files/review references stay there.
+
+Closed-write app compiler/Linux24B oracle, ordinary60-entry stage and actual runner/
+owner positive/refusal fixtures independently pass; native0 and new-image join pending.
+One private save_debugreg port has independent source review:69 C/Rust vectors and
+8 compiled mutation controls, no production/native credit. Do not add it to the
+already frozen current image. Preserve scratch21, failed evidence and unrelated WIP;
+one-heavy/full floors+growth+reserve, aggregate budgets and97% included stop apply.
+
+Checkpoint whitespace exception: exact frozen terminal capsule cleanup/retention
+engine retains its reviewed blank EOF; exact saved candidate.patch retains original
+C-reference context whitespace. These three evidence files stay hash-identical;
+active source/docs and other staged files pass the scoped whitespace check.
+
 ## Current — twentieth native behavior; exact clear-debug build publication (2026-10-18 18:05 UTC)
 
 Functional OS/apps + compute Rust/reviewed-assembly remain active; excluded execve

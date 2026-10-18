@@ -52,6 +52,22 @@ not address that dependency. At the inspected 13:17-13:18 UTC snapshot, the
 dispatcher was active and the five specialist lanes had completed. Refill useful
 work as results arrive instead of allowing every lane to converge on one handoff.
 
+An idle specialist needs followup_task to start a new turn; send_message alone
+only queues a message. At18:07UTC on2026-10-18, completed next-Rust and application
+packets awaited review while only the dispatcher was active. Activate those
+bounded independent new-change reviews alongside publication/final build binding.
+Track completed packets awaiting handoff, and refill useful implementation,
+application preparation and review work as each result arrives. Keep unrelated
+review decisions out of a ready build's dependency chain.
+
+For future checkpoints, assess compatible independently reviewed Rust leaf changes
+for a shared production build/regression cycle where repository rules permit.
+Keep the currently frozen attempt stable. Prepare affected postbuild and terminal
+inputs during compilation, and run separately admitted cheap application staging
+in its available CPU lane. Measure accepted functional outcomes per wall hour and
+time waiting for handoffs separately from compiler runtime. Agent occupancy and
+additional preparation alone do not establish a2x/3x throughput improvement.
+
 The native control kernel, three Rust modules and matching current942 image
 already exist. The native baseline passed diagnostic artifact revalidation;
 strict fresh-build reproducibility and runtime acceptance remain unproved.

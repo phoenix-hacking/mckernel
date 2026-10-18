@@ -1,5 +1,45 @@
 # Compact dispatcher handoff
 
+## Current — tenth Rust production path; terminal release pending (2026-10-18 18:30 UTC)
+
+Functional OS/apps and compute Rust/reviewed-assembly cutover remain active.
+Refused execve and service-held fork/ACK stay excluded. Checkpoint8cdcbf46 is
+pushed/fetched63 blobs; sourcecf035407 remains distinct from tool publication.
+New clear_debugreg image build returned0/200.543s; exact four retained copies and
+14 postbuild commands returned0 with15 direct waits in4.844s. Independent actual
+review dacf4e3f accepts imagee85a1e35 and the tenth selected production/default-link
+Rust path. Canonical review: ../evidence/rust-clear-debugreg-image-actual-result-review-20261018-1.json.
+LLVM inlined the six exact DR writes into the live Rust scheduler handoff; unique
+Rust clear export, selected C clear absence and original scheduler ordering pass.
+No hardware/native clear-path claim. Counts20 native behaviors,10 selected Rust
+production paths/8 applicable native paths,6 complete/29 open practical checks;
+all14 milestones open. Full fallback/legacy TU/crate/image proof remains open.
+
+Current stopped build container10c33a4066452a753193bffe1bf8e744a6eb6580ca305c3218147194e05353a7
+and common/shared exclusions remain retained pending separate physical release.
+Finite15 terminal retention9cae completed0/directwait in0.265s; actual independent
+acceptance708ad056 verifies all30 descriptor/byte/metadata rows. Four copies reused,
+eleven metadata files copied (1,054,734B). Frozen retention engine consumed before
+canonical cleanup+tests publication. Next fetch exact source/capsule, independently
+release finite observer/readback, review actual result, then separately release cleanup. Never replay consumed image,
+source copy, observer, cleanup or guest commands. Original source-copy child status
+remains UNKNOWN; independent validated-tree reuse is separate from retirement.
+
+Next native chain: prepare AVX then Cthreads on accepted e85a image using each case's
+own metadata-preserving image-only base derivation. Root command/runtime authority
+still requires positive terminal release, exact final payload review and fresh live
+admission. Packet: host-preparation/rust-clear-debugreg-image-preparation-20261018-1/
+heavy-proposal-1/postbuild-readonly-1; terminal: rust-clear-debugreg-terminal-preparation-20261018-1;
+guest continuation: rust-clear-debugreg-guest-continuation-20261018-1 (all under
+/home/holden/mckernel-work/). Exact command files/review references stay there.
+
+Closed-write app compiler/Linux24B oracle, ordinary60-entry stage and actual runner/
+owner positive/refusal fixtures independently pass; native0 and new-image join pending.
+One private save_debugreg port has independent source review:69 C/Rust vectors and
+8 compiled mutation controls, no production/native credit. Do not add it to the
+already frozen current image. Preserve scratch21, failed evidence and unrelated WIP;
+one-heavy/full floors+growth+reserve, aggregate budgets and97% included stop apply.
+
 ## Current — twentieth native behavior; exact clear-debug build publication (2026-10-18 18:05 UTC)
 
 Functional OS/apps + compute Rust/reviewed-assembly remain active; excluded execve
@@ -363,10 +403,12 @@ physical release. No native behavior/check closure credited for maintenance.
 | cpu.c signal MXCSR mask | Rust mask bridge | production492 + accepted AVX signal chain |
 | cpu.c signal FP reset | Rust checked reset bridge | production492 + NULL x87 native e0d2fd97; wider state branches OPEN |
 | process.c scheduler debug handoff | sched_schedule_debug_handoff | production671a0fa2; applicable native AVX/threads chain36c0abd3 PASS; DR hardware branches unproved, architecture DR C remains |
-| syscall.c clear_debugreg | x86_cpu_helpers.rs clear_debugreg, consumed by scheduler ABI | reviewed source integrated; actual-object partial link PASS; full GCC14/real crate/image/native OPEN; original C reference/fallback preserved |
+| syscall.c clear_debugreg | x86_cpu_helpers.rs clear_debugreg; live scheduler inlines identical six writes | production e85a/dacf4e3f PASS, actual GCC14/native crate/default link; native/hardware and full legacy/fallback OPEN; C reference/fallback preserved |
+| syscall.c save_debugreg | private Rust save_debugreg candidate; actual default not yet integrated | source review f12f5f60,69 parity vectors/8 mutations; full production/native OPEN |
 
 These are selected path proofs, not whole-kernel language retirement. Existing
-architecture save/clear/restore debug-register helpers remain live C. No new C
+architecture save/restore debug-register helpers remain live C; clear is selected Rust
+in e85a with separate native/hardware proof still open. No new C
 behavior was added. Functional process support and deferred qualification keep
 their separate status; excluded tasks are not reassigned through this table.
 

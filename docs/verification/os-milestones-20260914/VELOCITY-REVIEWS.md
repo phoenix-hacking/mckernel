@@ -6,16 +6,18 @@ Preserve completed entries; append new observations and update only this cursor.
 This file describes supervision, not OS acceptance or execution authority.
 
 
-**CURRENT REVIEW39 — 2026-10-18T17:45:57Z:** campaign active;
-19 distinct native behaviors, 6 complete / 29 open checks, all 14 milestones open.
+**CURRENT REVIEW40 — 2026-10-18T18:16:02Z:** campaign active;
+20 distinct native behaviors, 6 complete / 29 open checks, all 14 milestones open.
 Selected production/default-link Rust paths 9; applicable native integration paths 8.
-The AVX/threads chain and positive retirements are independently accepted.
-The new mmap guest ran; actual-result review is active, with no early case credit.
-Reviewed clear_debugreg source is integrated in fetched cf035407 (57 blobs).
-Its ordinary copy wrapper lost the child exit status; that remains UNKNOWN while
-the completed tree is independently validated for reuse. Remaining-only profile
-and child-accounting correction are under review. No new image compiled yet.
-Usage 29%, stop 97%; next full review 18:15:57 UTC.
+Mmap-zero-length actual behavior and positive retirement are independently accepted.
+Clear-debug remaining-only ordinary execution is accepted; original copy child
+status remains UNKNOWN. Source cf035407 and 12 tools at fetched8cdcbf46 are bound.
+Exact build release534a84c2 passed; the image command returned after about201s,
+with completed-receipt/postbuild/artifact acceptance still pending at cutoff.
+Private save_debugreg source review passes69 vectors/eight compiled mutations;
+closed-write Linux reference passes and ordinary staging/fixture profile is approved.
+Usage29%, stop97%; next full review18:46:02UTC. Immutable milestone ledger saved
+18:04:29UTC; separate four-hour comparison due22:04:29UTC (15:04Pacific).
 No second launcher or background timer is installed.
 
 **MONITORING RESUMED2026-10-18T13:43:18Z:** user explicitly requested this
@@ -3337,3 +3339,57 @@ its prepared inspection/terminal machinery. Keep the first ready eligible worklo
 moving without broad audit or unchanged-evidence replay. Preserve resource floors,
 growth/full reserves, one-heavy,97% stop, scratch21, all evidence and service-held
 exclusions. Next full review18:15:57 UTC.
+
+## Review 40 — 2026-10-18T18:16:02Z
+
+Thirty-minute delta: accepted distinct native behaviors19 ->20; selected Rust
+production/default paths9 ->9; paths with applicable native integration8 ->8;
+practical checks6complete/29open unchanged, all14 whole milestones open. Usage29%,
+root free50.758GiB, scratch free12.827GiB. The zero-length mmap review6f34262f
+accepts exact18-byte failure/EINVAL output, empty application stderr, exit0 and
+positive QEMU/30-client/container/lease retirement. It adds one API behavior;
+mapping publication, leaks and the whole memory check remain unproved.
+
+The original ordinary materializer observer failure and UNKNOWN child status are
+preserved. Independent continuation review93a10d2b permits the validated exact
+tree to be reused without copying again. Four remaining stages all exited0 with
+direct waits and empty stderr; actual request/driver/owner acceptance42aed134
+binds their completed results. Source/profile69712f16 passed after a copied
+predecessor metadata block was corrected. Runtime tools were pushed/fetched at
+8cdcbf46 with12 rows verified. Exact image execution decision534a84c2 passed;
+live image owner1126138/start14451954 matched its operation record. The build
+command returned after about201seconds. Completed-receipt binding,14-command
+postbuild observations and independent production artifact acceptance remain
+pending at this cutoff; no tenth production path or new native credit yet.
+
+Parallel useful work produced a private two-file save_debugreg Rust cutover with
+69 actual C/Rust vectors, eight compiled mutation negatives, exact emitted-body
+inspection and independent PASS_SOURCE_BOUNDARY. Full production/native proof
+remains open. File.closed-write compiled and matched its exact24-byte Linux
+oracle with exit0/empty stderr/direct joins. Its unchanged-engine ordinary
+stage/runner-owner fixture profile347980cd is approved; actual staging and native
+execution remain pending. Existing accepted immutable image authority is reused
+within that profile; unbuilt clear-debug code receives no credit.
+
+At18:07 the dispatcher alone was active while two completed packets awaited
+review. The explicit velocity instruction18083364 activated three independent
+reviews together: exact image release, next Rust source and new app staging.
+These reviews completed without making either parallel lane a build prerequisite.
+Continue activating idle agents with followup_task, prepare postbuild/terminal
+inputs during compilation, and assess compatible reviewed Rust leaf changes for
+one future build cycle under repository rules. Preserve the frozen active attempt.
+Measure accepted outcomes and handoff waiting separately from compiler runtime;
+this interval does not establish a2x/3x overall speedup.
+
+The user requested a saved milestone comparison baseline and a four-hour followup.
+Immutable milestone-ledger-20261018T180429Z.md/.json preserve the reported ranges,
+04:35 baseline deltas and current20/9/8/6-of35 accepted facts. Ranges remain held
+from16:30; M09 is integration only. Compare in a separate artifact at22:04:29UTC,
+including actual accepted-result/check deltas. Existing interactive monitoring
+tracks the deadline; no separate background scheduler was launched.
+
+Next: finish actual build/inspection acceptance, finalize the prepared terminal
+continuation, and execute approved closed-write staging in its independent cheap
+lane. Keep useful private implementation/review work flowing while one heavy
+operation owns resources. Preserve all failed evidence, scratch21, service-held
+exclusions, full floors/growth/reserves and97% usage stop. Next full review18:46:02UTC.
