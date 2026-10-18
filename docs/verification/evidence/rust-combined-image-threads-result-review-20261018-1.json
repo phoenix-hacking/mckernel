@@ -1,0 +1,111 @@
+{
+  "schema": "mckernel.rust-combined-image-threads-result-review.v1",
+  "status": "PASS",
+  "reviewer": "/root/rust_threads_actual_review_0650",
+  "recorded_by": "dispatcher from independent reviewer final decision; reviewer made no file edits",
+  "image_sha256": "686215dae696ed9bf259a0792e62802fcb1ba8e0914e98c366b2e8dc793445d9",
+  "actual_acceptance": {
+    "status": "PASS",
+    "raw_wait_status": 9472,
+    "exit_code": 37,
+    "stdout_hex": "4e41544956455f434f5245205041535320746872656164730a",
+    "stdout_bytes": 25,
+    "stderr_bytes": 0,
+    "discarded_bytes": 0,
+    "fixture": "Unchanged original dynamic-libc threads: two workers, TLS, three-party barrier, mutex counter2000 and both joins",
+    "guest_pid": 257,
+    "overlapping_worker_tids": [
+      259,
+      258
+    ],
+    "procfs_deletions": 3,
+    "tid_transfer_bytes": 512,
+    "retirement_token": 530,
+    "cleanup_errno": 0,
+    "preserved_initial_retirement": {
+      "token": 528,
+      "errno": -11,
+      "ownership_retained": true
+    }
+  },
+  "positive_retirement": {
+    "status": "PASS",
+    "owner_pid": 884505,
+    "owner_starttime": 10360006,
+    "owner_returncode": 0,
+    "owner_join_seconds": 37.851920187997166,
+    "distinct_client_identity_reap_receipts": 30,
+    "container_id": "3a209e55f6e1c115edcace7a19860d6500a1c7e0342882052347a65b5a2d99af",
+    "container_removed": true,
+    "successful_container_waits": 3,
+    "final_name_nonce_id_queries_empty": true,
+    "oom": false,
+    "recovery": false,
+    "retained_lease": false,
+    "root_mutex": "27:4 release proven by exact checked zero-exit owner path; no new live observation",
+    "qmp": "guest shutdown before quit; QEMU -9 is reviewed teardown, not app exit"
+  },
+  "native_production_language_retirement": {
+    "status": "SCOPED_NATIVE_PATH_PROOF_PASS",
+    "paths": [
+      "copy_fp_regs -> rust_x86_copy_fp_regs",
+      "schedule -> sched_schedule_fp_admit"
+    ],
+    "separate_threads_regression_pending": false,
+    "whole_kernel_Rust_retirement": false
+  },
+  "distinct_behavior_increment": 0,
+  "distinct_native_behaviors_total": 16,
+  "formal_acceptance_credit": 0,
+  "selected_source_reference_files_verified": 42,
+  "archive_review": {
+    "owner_members": 101,
+    "attempt_members": 7,
+    "validated_in_memory": true,
+    "no_traversal_or_links": true,
+    "expected_warning": "qmp.sock ignored by default tar"
+  },
+  "captures": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-execution-resume-20261018-1/threads-next/owner-join.json",
+      "sha256": "8addef7c3475098b08a34c8924fe0cea313d218898a5ab0e3bfb351c5c5a7004",
+      "size": 885
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-execution-resume-20261018-1/threads-next/readback-1.stdout",
+      "sha256": "8bdf867d2413748167d341275bba71e844526504398ab2fae98a9be2e81bea04",
+      "size": 696320
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-execution-resume-20261018-1/threads-next/readback-2.stdout",
+      "sha256": "fb6d35fd9b2125374ecbf7e7bed1799523ca1fa859bae761fa8a7b4aaedddfe0",
+      "size": 149744
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-execution-resume-20261018-1/threads-next/readback-3.stdout",
+      "sha256": "0ad3859a413b0f777007ee518fa64d09227b335428473ff47d9dec38fec04bd6",
+      "size": 542720
+    }
+  ],
+  "execution_release": {
+    "path": "/home/holden/mckernel-work/scratch/rust-avx-execution-resume-20261018-1/threads-next/execution-release-1.json",
+    "sha256": "f653a78ec8821ef40890aef0b92a165b60990cc746f11a6b461f53556c510916",
+    "size": 1728
+  },
+  "production_default_link_predecessor": {
+    "path": "docs/verification/evidence/rust-combined-image-actual-review-20261018-1.json",
+    "sha256": "1a692e8d5aaf6c1dac839ef77e3bed0c20f90a5359103cc0a4af80447cff1a3a",
+    "size": 18194
+  },
+  "avx_predecessor": {
+    "path": "docs/verification/evidence/rust-combined-image-avx-result-review-20261018-1.json",
+    "sha256": "f47adf0dcf929952cf67b27d7f1e465de4f795283b04fb6b6bbf710ebb15bb52",
+    "size": 11959
+  },
+  "limitations": [
+    "No hardware allocation-failure injection",
+    "No transitive allocator retirement",
+    "No multicore McKernel or whole-OS completion",
+    "No broader qualification or raw protocol acceptance flag changes"
+  ]
+}

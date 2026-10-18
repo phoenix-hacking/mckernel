@@ -4,6 +4,7 @@ completion target. Huge fuzz/exposure quotas, per-class week-long soaks and full
 external certification are deferred, not passed. This takes precedence over
 older all-original-requirements text and the legacy saved objective string.
 Adopt at a safe checkpoint; do not restart or edit launcher-owned state for it.
+Duplicate scope note 20261018T012254595264Z-36e3cdb4d5de43ebb04c1c6b6adc9052 is superseded here; archive its exact bytes.
 
 This is the user's explicit later execution instruction, effective only when
 scripts/run_os_parallel.py --run is invoked. Preparing or previewing that script
@@ -52,12 +53,14 @@ with fresh live identities before guests or cleanup; absent PIDs alone do not
 prove accepted retirement. Preserve all consumed requests and failure evidence.
 Never raw-remove containers, unlink ownership records or reuse attempt names.
 
-The user's immediate priority is a FUNCTIONING OS. Defer optional security audits,
-threat modeling, hardening and report writing that do not unblock the image or
-applications. Fix concrete functional correctness failures and obtain executable
-feedback promptly. Keep routine records minimal and batch normal notes. Retain
-host isolation and ownership/resource checks; platform safeguards remain in force.
-Do not suppress or automatically retry a service-side policy rejection.
+The priority is a FUNCTIONING OS and application infrastructure. State this
+scope in EVERY worker assignment. Defer unrelated security audits, threat
+modeling, hardening and qualification. Implement kernel/app functionality;
+keep memory ownership, recovery, data preservation and host/resource controls.
+Batch routine notes. Checkpoint/fresh-session recovery is for ordinary crashes
+and hangs after positive retirement. Preserve and report service-policy stops;
+do not roll back conversations to resubmit rejected work automatically.
+Platform safeguards remain in force.
 
 Keep the critical path moving while independent workers implement and test real
 kernel behavior. Keep several dependency-ready implementation/test workers

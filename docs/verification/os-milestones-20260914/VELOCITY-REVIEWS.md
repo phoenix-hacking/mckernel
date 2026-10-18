@@ -7,38 +7,46 @@ This file describes supervision, not OS acceptance or execution authority.
 
 ## Current review cursor
 
-- Supervisor chat: `01a1479e-a9c2-7340-8d88-4313fab04738`; user requested resumed
-  steering on2026-10-18. The earlier supervision-goal block at19:41UTC remains
-  historical; this inspection does not change goal-tool state or create a timer.
+- Supervisor chat: `01a1479e-a9c2-7340-8d88-4313fab04738`; user explicitly resumed
+  monitoring/steering on2026-10-18 after the05:20UTC stop. The earlier stop is
+  historical. This cursor records the active interactive request; it does not
+  change goal-tool state or install an independent timer.
 - Engineering campaign: `01a149eb-f950-7f13-95a2-59dfc2918d49`; sole runtime/Git owner.
-- Campaign explicitly resumed by the user at`2026-10-18T01:31:35Z`; running with
-  an active goal at05:05:05UTC. User explicitly requested a stop at05:20UTC;
-  the goal is paused at05:22:35UTC while its final checkpoint completes.
-  Worker760063/start8454148 and server760065/start8454153 were still live at that
-  observation. Run directory:`.git/os-autopilot/runs/20261018T013135Z-08003bf4`.
+- Campaign manually resumed by the user at`2026-10-18T06:15:00Z`; running/active
+  at06:17:24UTC. Worker871794/start10154631 and server871796/start10154636 are
+  live; watcher871752/restarts0. Run directory:
+  `.git/os-autopilot/runs/20261018T061500Z-d7828d0b`.
+  The05:25:30UTC paused checkpoint5f68ea85 and all held evidence remain preserved.
+  A06:04:29UTC startup failed before inference on a stale automatic memory
+  snapshot; [fix7d2f26ba](LAUNCHER-MEMORY-20261018.md) is pushed/fetched verified,
+  with160 offline checks passing. No automatic restart or policy replay added.
   The old19:33UTC stop and its evidence remain in the
   [stop handoff](SUPERVISOR-STOP-20261017T193320Z.md). No automatic policy retry added.
 - First baseline recorded: `2026-10-17T13:26:00Z`.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-18T05:05:05Z`, review19, interval29m34s.
-- The user-requested interactive30-minute loop is now paused at the user's
-  explicit request. The former05:35UTC target is canceled; establish a fresh
-  review boundary only after explicit user resume. No independent OS timer or
-  second dispatcher is installed. Exclude stopped intervals from velocity.
-- Last launcher-reported included usage:10% in the new weekly primary window;
+- Last full review: `2026-10-18T06:45:08Z`, review20, resumed interval30m08s.
+- User explicitly resumed the interactive30-minute loop. First resumed full
+  review target:`2026-10-18T07:15:00Z`, latest07:45UTC, using the06:15 launch
+  baseline below. No independent OS timer or second dispatcher is installed.
+  Exclude the05:25:30-to06:15 stopped interval and failed startup from runtime
+  velocity; do not treat the canceled05:35 target as a missed active review.
+- Last launcher-reported included usage:11% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
-- Last full-review intervention: review19 steering queued as
-  `20261018T050533277245Z-c8a61736df7f468bbf402a0981763a3f`, accepted05:05:34UTC. Host53.517GiB,
-  scratch14.119GiB at cutoff. Three compute Rust ports pass independent source
-  review; the first two are frozen together, materialized and request-prepared,
-  awaiting exact build execution decision. No production Rust cutover is accepted
-  yet. A fourth FPU-save port has just started in private scope. Strict host
-  Kbuild produced all three modules but artifacts remain held on conformance
-  findings; tool-only objtool correction proceeds separately. User's active
-  Rust/assembly goal is persisted in AGENTS and current goal/handoff documents.
-  Old M09 integration estimates are not language-conversion percentages.
+- Current review20:16 native behaviors and3complete/32open checks unchanged,
+  all14milestones open. Five compute Rust ports source-reviewed; two selected in
+  production image686215, whose AVX result is under review. Cleanup is accepted
+  after one pre-transaction refusal and bounded correction. Threads remains
+  next. Private THREE-port composition and host tool-only driver source/profile
+  reviews pass; production preparation/execution remain separate gates. Host
+  53.584GiB/scratch13.901GiB at cutoff. No new-image native retirement, percentage
+  uplift or2x/3x speedup is accepted at this cutoff. User's Rust/assembly priority
+  remains active; M09 integration ranges are not language-conversion percentages.
+- Post-cutoff06:46:22UTC: image686215 AVX result independently PASS, including
+  all preservation stages/exit0 and30-client/container/lease retirement. Scoped
+  native proof for selected Rust copy/admission paths is accepted; threads is
+  next after fresh admission. Distinct behaviors16/checks3complete32open unchanged.
 - Current invocation independently accepted app/diagnostic behaviors: 16 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -1748,3 +1756,125 @@ Final worker/server/watcher exit and fetched checkpoint verification are still
 pending at this entry. Follow CURRENT/HANDOFF for the final saved state and
 exact manual resume prerequisites. Do not resume automatically or mark the OS
 complete. Native behaviors16 and practical checks3complete/32open remain.
+
+Final confirmation05:26UTC: launcher phase stopped, goal paused, stop signal_2,
+stop_errors empty; watcher_stopped/exit10/restarts0. Worker760063, server760065
+and watcher760022 are absent and active-agent list is empty. Checkpoint
+5f68ea85b0579d4cc46fa7a2029c642696de3311 is pushed/fetched-blob verified.
+The [saved pause handoff](PAUSE-20261018T052036Z.md) contains exact continuation
+commands and prerequisites. Container and ownership records remain intentionally
+retained; cleanup and the new image's native proof remain pending. This final
+local supervision confirmation was written after the campaign checkpoint;
+no further engineering, release or workload was started.
+
+## Resumed monitoring baseline — 2026-10-18 06:17 UTC
+
+User manually launched the saved campaign at06:15UTC, then explicitly requested
+maximum useful parallel monitoring and steering from this chat. New invocation
+running/active, worker871794/start10154631, server871796/start10154636,
+watcher871752/restarts0. Included usage10%, existing stop97%. The earlier explicit
+pause and retained stopped container/records remain historical evidence; fresh
+identity checks still govern any cleanup. No second engineering launcher started.
+
+Baseline:16 accepted distinct native behaviors;3complete/32open practical checks;
+all14milestones open. Four compute Rust ports pass source review. First-two-port
+image686215dae696ed9bf259a0792e62802fcb1ba8e0914e98c366b2e8dc793445d9 already
+passes full production build, ABI/default-call/linked-artifact proof, but has no
+native AVX/threads proof. The other two ports have a reviewed private composition.
+Host strict modules compiled but retain objtool/import conformance holds.
+
+At06:17 four useful workers own terminal author/review and AVX author/review.
+The first blocking dependency is ordinary-readable access to the saved root-only
+observer raw evidence. Consume it through the allowed bounded readback scope
+and independent result review; do not replay the consumed observer. Then finish
+exact fresh cleanup/common release and run staged AVX followed by threads.
+Prepare the next eligible Rust image or concrete host tool-control work in an
+otherwise idle cheap lane; keep unrelated host conformance off compatible native
+proof. Reuse unaffected source reviews/artifacts/tests, keep generated maps/diffs
+in files, and activate idle authors for concrete findings rather than only sending
+messages. Ready-to-run gaps target under five minutes after all prerequisites.
+
+Steering20261018T061822083194Z-2b9ae9769a794ab6884b124aae619363 accepted by the
+server06:18:22UTC. Measure actual accepted runtime outputs, default/native Rust
+retirement, practical condition closures and handoff/preparation overhead. Twice
+the useful throughput is the target; three times is a stretch to measure, not a
+claim. No percentage uplift is inferred from parallel activity. First full
+resumed review06:45UTC, latest07:15; continue the interactive loop until the user
+stops it or the agreed usage/real blocking conditions require stopping.
+
+## Review 20 — 2026-10-18 06:45:08 UTC
+
+Resumed interval06:15:00 to06:45:08UTC,30m08s; stopped time excluded. Campaign
+running/active, same871794/871796 identities, watcher871752/restarts0. HEAD7d2f26ba;
+usage10% to11%, stop97%. Host53.584GiB/scratch13.901GiB. Dispatcher context
+compaction started06:45:00; no service stop reported at cutoff.
+
+| Measure | Change this interval |
+| --- | --- |
+| Distinct accepted native behaviors | 16 to16 |
+| Practical checks | 3complete/32open; all14milestones open |
+| Current Rust image | Reused accepted686215; one AVX run launched, result review pending; threads queued |
+| Retained-terminal release | Saved observer readback/review and corrected cleanup independently accepted |
+| Rust source implementation | Four to five source-reviewed ports: restore/default added; native proof still pending |
+| Next image batching | Reviewed private three-port composition replaces separate future cycles for save, cleanup and restore |
+| Host tool lane | Tool-only owner/driver source/profile review passes; actual compiled controls unrun |
+
+The saved observer raw files were root-only. Exact readback released06:21:53
+copied25 files in0.33s without replaying the observer. Cleanup release06:26:09
+was consumed06:26:58,49seconds later. It refused before transaction creation
+because its selected-source map omitted required host_owner_path. The wrapper
+reported nonzero cleanup status as retirement uncertainty; independent review
+separated the facts: process positively retired, all seven transaction paths
+absent, original records held. One bounded correction added an authenticated
+source row while preserving all77 prior rows and gates. Correction released
+06:32:56; cleanup/readback completed6.78s and final review accepted06:37:36.
+All nine journal events, archived original records, common/shared release,
+two root joins and20 unchanged production-object rows pass.
+
+AVX launch was confirmed06:41:40, at most4m04s after accepted cleanup, including
+fresh source/artifact/cgroup/lock/capacity/usage admission. This meets the existing
+five-minute handoff target; it is not a measurement of pure avoidable queue time.
+The AVX result reviewer became active06:43:51. No native acceptance is inferred
+before its decision. Threads has conditional approval with unchanged25-byte
+stdout, empty stderr, exit37 and an accepted-AVX/positive-retirement predecessor
+gate. Both cases reuse image686215 and unchanged compatible d99 host modules.
+
+Useful parallel work: Rust restore/default completed622 controlled parity cases,
+128 concurrent logging calls, compiled instruction/default-wrapper checks and
+independent source review06:34:47. The atomic16-ticket logger intentionally fixes
+the C counter race. No host FPU restore instruction ran in these fixtures.
+Save, post-switch cleanup and restore compose as four reviewed source files;
+five retained objects/eight exports join exactly once. Affected composition
+review passed06:44:28. Fresh three-port metadata and production/native proof are
+still required. Host objtool tool-only driver passes11 artifact-consumer and10
+primitive mock tests with independent source/profile review06:34:17; no Docker,
+tool compilation or module acceptance follows. Existing host conformance holds
+remain. No new compute C behavior was introduced.
+
+**Next adjustments:** before another privileged dispatch, compare the observer's
+selected-file map with the actual consumer's required source closure in the cheap
+profile. Preserve command failure and independently observed retirement as
+separate facts; earlier releases are not widened. Activate ready affected reviews
+and idle authors promptly, reuse unchanged evidence and keep generated maps in
+files. Finish current AVX/threads feedback, then use one coherent three-port
+image preparation/build sequence. Keep host tool work off compatible native
+proof and do not grow another source-only port backlog.
+
+This window produced one new reviewed Rust implementation and removed the
+retained-owner blocker, but accepted runtime count did not increase at cutoff.
+Neither2x nor3x throughput is established; the latest immutable engineering
+estimate remains unchanged. Next full review07:15UTC, latest07:45; keep the
+interactive loop running under the user's explicit resumed request.
+
+Evidence: `../evidence/rust-combined-image-terminal-result-review-20261018-1.json`;
+scratch `rust-image-terminal-resume-review-20261018-1`,
+`rust-fpu-restore-review-20261018-1/review.json`,
+`rust-next-three-port-composition-review-20261018-1/composition-review.json`,
+`native-host-objtool-driver-review-20261018-1/review.json`.
+
+Post-cutoff06:46:22UTC: native AVX independently accepted for exact image686215,
+380-byte stdout/emptyerr/exit0/all stages, with30 clients reaped, exact container
+removed and lease released. Scoped native copy/admission Rust proof passes;
+broader coverage remains open. Evidence:
+`../evidence/rust-combined-image-avx-result-review-20261018-1.json`, SHAf47adf0d.
+This does not retroactively change review20's cutoff or add a distinct behavior.

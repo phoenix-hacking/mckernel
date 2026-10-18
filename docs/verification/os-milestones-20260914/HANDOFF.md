@@ -1,5 +1,31 @@
 # Compact dispatcher handoff
 
+## RESUMED — current execution cursor, 2026-10-18 06:53 UTC
+
+The explicit06:15 launcher resume is active; the05:20 pause below is historical.
+Launcher worker871794/start10154631 and server871796/start10154636 own this run
+(.git/os-autopilot/runs/20261018T061500Z-d7828d0b). No second dispatcher/state edit.
+Functional PRACTICAL-GOAL and actual compute Rust/assembly retirement both apply.
+Image686215 has production ABI/default-link proof1a692e8d and independently
+accepted native AVX/positive retirement f47adf0d. Its Rust copy/admission paths
+have scoped native proof; this is not whole-kernel Rust conversion.
+Threads and full retirement independently PASS958bac9d: exit37, exact25-byte
+stdout, empty stderr, two workers/TLS/barrier/mutex2000/joins;30clients reaped.
+Terminal cleanup/common/shared release42e1d4fa is accepted; exact old CIDae965257
+removed and original records archived. Preserve failed missing-host-owner-row
+refusal and corrected one-shot evidence; do not replay consumed operations.
+Sixteen distinct native behaviors,3complete/32open practical checks,14milestones
+open; no percentage/2x claim. Three-port save/post-switch-cleanup/restore candidate
+composition6dc4b796 passed; new metadata aa5ea6f6 is in independent affected review.
+Next: one coherent three-port image preparation and production build/native
+sequence. Four exact reviewed source files integrated; next-three-port production
+and native proof remain pending; current686215 baseline is retained. Host tool-only source/profile36c63604 is
+accepted; exact execution packet is prepared separately, not a compatible Rust
+gate. Keep one heavy owner, actual16/12GiB floors plus packet growth, aggregate
+budget and usage97% stop. Usage11%; supervisor next07:15UTC/latest07:45. Scratch21,
+root mutex27:4, original failures and all current/reference artifacts preserved.
+
+
 ## PAUSED — explicit user stop, 2026-10-18 05:20 UTC
 
 No new admissions or automatic continuation. All workers stopped; the already
@@ -44,10 +70,11 @@ PRACTICAL-GOAL and AGENTS. No new compute C behavior; preserve working image0821
 
 | C entrypoint/body | Rust replacement | Actual default consumer | Tested artifact | Retirement status |
 | --- | --- | --- | --- | --- |
-| cpu.c copy_fp_regs | rust_x86_copy_fp_regs in x86_cpu_helpers.rs | C copy_fp_regs ABI shim under existing MCKERNEL_RUST_X86_CPU_HELPERS; process.c thread-copy caller | Extracted real Rust/default C objects;64 parity+10negative, source review2b554ad8 | Source/default selection proven; production image/native pending. Original C fallback retained. C save/allocation helper still live. |
-| process.c schedule FPU admission | sched_schedule_fp_admit in sched_helpers.rs | schedule under existing MCKERNEL_RUST_PROCESS_HELPERS, before runqueue prepare | Real Rust/default C objects;16 parity/IRQ/fail-stop, source reviewb952d9d9 | Source/default selection proven; production image/native pending. Original corrected C prelude retained. |
-| process.c post-switch exited-thread cleanup | Private Rust cleanup candidate; patch d69db604 | Proposed default schedule post-switch call; frozen first-two-port image unchanged | 112 parity configurations/224 executions +5 mutation negatives; independent source/ABI review3f684d5b | PASS_SOURCE private; next-candidate production build/link/native pending. Image08210 still executes C continuation. |
-| cpu.c check_and_allocate_fp_regs/save_fp_regs | Private rust_x86_save_fp_regs Rust/assembly candidate; patch83d17c1f | Proposed existing X86_CPU_HELPERS C ABI forwarding; current frozen image unchanged | 480 controlled parity + scheduler/save ENOMEM, copy regression; independent source reviewbaf69f51 | PASS_SOURCE private; next-candidate production compilation/link/native pending. Existing C reference preserved. |
+| cpu.c copy_fp_regs | rust_x86_copy_fp_regs in x86_cpu_helpers.rs | C copy_fp_regs ABI shim under existing MCKERNEL_RUST_X86_CPU_HELPERS; process.c thread-copy caller | Extracted real Rust/default C objects;64 parity+10negative, source review2b554ad8 | Production ABI/full crate/default linked Rust proven in image686215 (review1a692e8d); native AVX f47adf0d and threads958bac9d accepted; scoped Rust path cutover proven. C fallback and save/allocation remain live. |
+| process.c schedule FPU admission | sched_schedule_fp_admit in sched_helpers.rs | schedule under existing MCKERNEL_RUST_PROCESS_HELPERS, before runqueue prepare | Real Rust/default C objects;16 parity/IRQ/fail-stop, source reviewb952d9d9 | Production ABI/full crate/default linked Rust proven in image686215 (review1a692e8d); native AVX f47adf0d and threads958bac9d accepted; scoped Rust path cutover proven. Original corrected C prelude retained. |
+| process.c post-switch exited-thread cleanup | Private Rust cleanup candidate; patch d69db604 | Proposed default schedule post-switch call; frozen first-two-port image unchanged | 112 parity configurations/224 executions +5 mutation negatives; independent source/ABI review3f684d5b | Reviewed bytes integrated after native first-two-port acceptance; next-candidate production/link/native pending. Image686215 still executes C continuation. |
+| cpu.c check_and_allocate_fp_regs/save_fp_regs | Private rust_x86_save_fp_regs Rust/assembly candidate; patch83d17c1f | Proposed existing X86_CPU_HELPERS C ABI forwarding; current frozen image unchanged | 480 controlled parity + scheduler/save ENOMEM, copy regression; independent source reviewbaf69f51 | Reviewed bytes integrated; next-candidate production/link/native pending. C reference preserved. |
+| cpu.c restore_fp_regs/restore_fp_regs_default | rust_x86_restore_fp_regs/default in reviewed private x86_cpu_helpers.rs | Proposed existing X86_CPU_HELPERS forwarding; current686215 unchanged | 622 controlled C/Rust seam cases,128 logger calls, assembly compiled; source reviewda6a438a | Reviewed composition6dc4b796 integrated with save/post-switch cleanup. Production-header/full-crate/default-link/native pending; C reference retained. |
 
 One coherent FOUR-file Rust image candidate is being prepared by
 rust_cutover_image_preparation from immutable08210 source plus only the two

@@ -8,6 +8,10 @@ use crate::abi::{
 };
 
 unsafe extern "C" {
+    fn arch_flush_icache_all();
+    fn release_thread(thread: *mut core::ffi::c_void);
+    fn rusage_num_threads_dec();
+    fn kprintf(format: *const i8, ...) -> CInt;
     fn ihk_mc_get_processor_id() -> CInt;
     fn process_sched_cpu_local_bridge(cpu_id: CInt) -> usize;
     fn process_sched_irq_save_bridge() -> CULong;
@@ -2938,6 +2942,68 @@ unsafe fn sched_write_schedule_result(
                 action,
             },
         );
+    }
+}
+
+/// Optional C-header-bound RUSAGE_DEBUG inputs. No rusage-global layout is
+/// assumed here; the C default consumer forwards the original member addresses.
+#[repr(C)]
+pub struct SchedExitDebug {
+    pub num_threads: *const CULong,
+    pub total_memory_usage: *const CULong,
+    pub memory_stat_rss: *const CLong,
+    pub memory_stat_mapped_file: *const CLong,
+    pub page_sizes: CInt,
+}
+
+/// Complete the exited-thread branch after arch_switch_context returns.
+/// The caller has already unlocked the CURRENT CPU runqueue and restored its
+/// saved entry IRQ state. old_cpu remains the pre-switch v, even after migration.
+/// last is owned/live until release_thread; no field is accessed after release.
+/// Non-null debug is a valid static descriptor with the C build's array bounds.
+#[no_mangle]
+pub unsafe extern "C" fn sched_schedule_exit_cleanup(
+    old_cpu: *mut CpuLocalVar,
+    last: *mut Thread,
+    exited_status: CInt,
+    debug: *const SchedExitDebug,
+) {
+    if last.is_null() || unsafe { read_volatile(&raw const (*last).status) } != exited_status {
+        return;
+    }
+    unsafe {
+        write_volatile(&raw mut (*old_cpu).prevpid, 0);
+        arch_flush_icache_all();
+        release_thread(last.cast());
+        rusage_num_threads_dec();
+    }
+    // release_thread may free last, including its backing pages. Only the
+    // independent accounting inputs are used from this point onward.
+    if !debug.is_null() && unsafe { read_volatile((*debug).num_threads) } == 0 {
+        unsafe {
+            kprintf(
+                b"total_memory_usage=%ld\n\0".as_ptr().cast(),
+                read_volatile((*debug).total_memory_usage),
+            );
+            let mut i: CInt = 0;
+            while i < (*debug).page_sizes {
+                kprintf(
+                    b"memory_stat_rss[%d]=%ld\n\0".as_ptr().cast(),
+                    i,
+                    read_volatile((*debug).memory_stat_rss.add(i as usize)),
+                );
+                i += 1;
+            }
+            i = 0;
+            while i < (*debug).page_sizes {
+                kprintf(
+                    b"memory_stat_mapped_file[%d]=%ld\n\0".as_ptr().cast(),
+                    i,
+                    read_volatile((*debug).memory_stat_mapped_file.add(i as usize)),
+                );
+                i += 1;
+            }
+        }
     }
 }
 

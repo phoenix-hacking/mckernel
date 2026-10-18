@@ -921,12 +921,22 @@
               "path": "docs/verification/evidence/native-fpu-copy-image-artifact-review-20261018-1.json",
               "sha256": "af944ffd139c2b2b2b81d287ea4a826a34296439174a4e611819d7ce0464c28e",
               "size": 16893
+            },
+            {
+              "path": "docs/verification/evidence/rust-combined-image-actual-review-20261018-1.json",
+              "sha256": "1a692e8d5aaf6c1dac839ef77e3bed0c20f90a5359103cc0a4af80447cff1a3a",
+              "size": 18194
+            },
+            {
+              "path": "docs/verification/evidence/rust-combined-image-avx-result-review-20261018-1.json",
+              "sha256": "f47adf0dcf929952cf67b27d7f1e465de4f795283b04fb6b6bbf710ebb15bb52",
+              "size": 11959
             }
           ],
-          "assessment_note": "Native SSE2 and original a0f50854 AVX evidence preserved. The rebuilt image08210bb2 includes allocation fail-stop plus copy_fp_regs extent repair5d939231; linked-body provenance and actual AVX/YMM0-15, selected x87/MXCSR syscall/blocking-futex/signal preservation now independently pass on one McKernel CPU. Actual XCR0=0x21f; stdout380 bytes/empty stderr/exit0 and full30client/QEMU/container/lease retirement. Final compiler/libc IFUNC/used-state, AVX512, multicore and final-profile closure remain open; no whole-M07 acceptance."
+          "assessment_note": "Native SSE2 and original a0f50854 AVX evidence preserved. The rebuilt image08210bb2 includes allocation fail-stop plus copy_fp_regs extent repair5d939231; linked-body provenance and actual AVX/YMM0-15, selected x87/MXCSR syscall/blocking-futex/signal preservation now independently pass on one McKernel CPU. Actual XCR0=0x21f; stdout380 bytes/empty stderr/exit0 and full30client/QEMU/container/lease retirement. Final compiler/libc IFUNC/used-state, AVX512, multicore and final-profile closure remain open; no whole-M07 acceptance. Current Rust-default image686215 also independently passes unchanged AVX with positive retirement f47adf0d; copy/admission ports have scoped native proof. Other used-state/final-profile obligations remain open."
         }
       ],
-      "current_evidence_summary": "Distinct native behaviors16 unchanged by this repeat. Rebuilt CPU-copy image08210bb2 is linked-body reviewed and actually passes the unchanged AVX/YMM/SSE/x87 diagnostic with full retirement. Extent repair is no longer source-only. Whole used-feature/IFUNC, untested vector/multicore and final-profile closure remain open."
+      "current_evidence_summary": "Distinct native behaviors16 unchanged by this repeat. Rebuilt CPU-copy image08210bb2 is linked-body reviewed and actually passes the unchanged AVX/YMM/SSE/x87 diagnostic with full retirement. Extent repair is no longer source-only. Whole used-feature/IFUNC, untested vector/multicore and final-profile closure remain open. Current Rust-default image686215 repeats accepted AVX with scoped copy/admission native proof; distinct behaviors remain16."
     },
     {
       "id": "M08",
@@ -1117,9 +1127,24 @@
               "path": "docs/verification/evidence/native-running-publication-independent-review-20261017-1.json",
               "sha256": "de20c89c2ed5c27d09a6f6b856b1d0f3f71cf5ad5480d359236bc1a5db39552f",
               "size": 1133
+            },
+            {
+              "path": "docs/verification/evidence/rust-combined-image-actual-review-20261018-1.json",
+              "sha256": "1a692e8d5aaf6c1dac839ef77e3bed0c20f90a5359103cc0a4af80447cff1a3a",
+              "size": 18194
+            },
+            {
+              "path": "docs/verification/evidence/rust-combined-image-avx-result-review-20261018-1.json",
+              "sha256": "f47adf0dcf929952cf67b27d7f1e465de4f795283b04fb6b6bbf710ebb15bb52",
+              "size": 11959
+            },
+            {
+              "path": "docs/verification/evidence/rust-combined-image-threads-result-review-20261018-1.json",
+              "sha256": "958bac9d5a85be49477ba890fbcfe5347013145df48402f4cca856e57ac2c1e7",
+              "size": 4308
             }
           ],
-          "assessment_note": "Existing native Rust consumers remain in the retained working profile. Final changed consumer/artifact integration still needs its matched build/run proof. Active 2026-10-18 language priority: CPU FPU copy and scheduler FPU admission now have real Rust implementations/default-selection object tests and independent source review; production image compilation/link/native proof remains pending. Accepted image08210 still executes the corrected C bodies. Existing integration estimates do not measure whole-kernel Rust retirement."
+          "assessment_note": "Current image686215 has independently accepted full-production ABI/default-link proof1a692e8d and unchanged native AVX/retirement f47adf0d for Rust copy_fp_regs and scheduler FPU admission. Original threads and positive retirement independently pass958bac9d. Final artifact set and broader live compute C retirement remain open. Next coherent source-integrated candidate adds reviewed post-switch cleanup, save and restore/default. Host Linux MM compatibility C remains an explicit exception; integration estimates are not whole-kernel conversion scores."
         },
         {
           "id": "P-M09-02",
@@ -1135,12 +1160,27 @@
               "path": "docs/verification/evidence/scratch22-authority3-artifact-revalidation-independent-review-20261017.json",
               "sha256": "f7820e8507f4df666b04f16094e35b027da79a925d121b07df477daebe3efd76",
               "size": 5608
+            },
+            {
+              "path": "docs/verification/evidence/rust-combined-image-actual-review-20261018-1.json",
+              "sha256": "1a692e8d5aaf6c1dac839ef77e3bed0c20f90a5359103cc0a4af80447cff1a3a",
+              "size": 18194
+            },
+            {
+              "path": "docs/verification/evidence/rust-combined-image-avx-result-review-20261018-1.json",
+              "sha256": "f47adf0dcf929952cf67b27d7f1e465de4f795283b04fb6b6bbf710ebb15bb52",
+              "size": 11959
+            },
+            {
+              "path": "docs/verification/evidence/rust-combined-image-threads-result-review-20261018-1.json",
+              "sha256": "958bac9d5a85be49477ba890fbcfe5347013145df48402f4cca856e57ac2c1e7",
+              "size": 4308
             }
           ],
-          "assessment_note": "Changed Running/log source is reviewed only. Neither retained-artifact admission nor older diagnostic binaries validate changed Rust/C/assembly boundaries in the final artifact set. Active 2026-10-18 language priority: CPU FPU copy and scheduler FPU admission now have real Rust implementations/default-selection object tests and independent source review; production image compilation/link/native proof remains pending. Accepted image08210 still executes the corrected C bodies. Existing integration estimates do not measure whole-kernel Rust retirement."
+          "assessment_note": "Current image686215 has independently accepted full-production ABI/default-link proof1a692e8d and unchanged native AVX/retirement f47adf0d for Rust copy_fp_regs and scheduler FPU admission. Original threads and positive retirement independently pass958bac9d. Final artifact set and broader live compute C retirement remain open. Next coherent source-integrated candidate adds reviewed post-switch cleanup, save and restore/default. Host Linux MM compatibility C remains an explicit exception; integration estimates are not whole-kernel conversion scores."
         }
       ],
-      "current_evidence_summary": "Active compute Rust cutover: copy_fp_regs -> rust_x86_copy_fp_regs and schedule FPU admission -> sched_schedule_fp_admit implemented/source-reviewed with default-selection and actual-body tests. Production CPU/Rust objects, linked image and native proof pending. Known-good08210 C paths preserved/live; next process/scheduling boundary is post-switch exited-thread cleanup. Host MM compatibility C explicitly allowed. No language-completion or percentage claim."
+      "current_evidence_summary": "First two compute ports now production/default-linked and native AVX accepted on image686215; original C fallback/reference and known-good08210 preserved. Original threads and positive retirement accepted958bac9d. Next three ports have source/composition approval and exact integration only; production/native proof pending. No whole-Rust, milestone-completion or percentage claim."
     },
     {
       "id": "M10",

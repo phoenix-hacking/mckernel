@@ -1,0 +1,212 @@
+{
+  "actual_acceptance": {
+    "CPUID_D0": {
+      "eax": "0x21f",
+      "ebx": "0xa88",
+      "ecx": "0xa88",
+      "edx": "0"
+    },
+    "XCR0": "0x21f",
+    "case_id": "vector.enabled-avx-preservation",
+    "exercised_stages": [
+      "syscall",
+      "futex wait0/wake1 with distinct live helper patterns",
+      "signal delivered before interrupted state comparisons",
+      "full profile"
+    ],
+    "exit_status": 0,
+    "mckernel_application_executed": true,
+    "native_diagnostic_accepted": true,
+    "raw_wait_status": 0,
+    "required_XCR0_mask": "0x7",
+    "state_coverage": "All256 bits of YMM0-15 plus selected x87 data/control/TOP and MXCSR across exercised boundaries; caller control restoration checked. No whole ISA/IFUNC or AVX512 closure.",
+    "status": "PASS",
+    "stderr_bytes": 0,
+    "stdout_bytes": 380,
+    "stdout_sha256": "9a82eb916caf96e85af3d35adb6cea0eb6757533b865c97381fd931c710660f7",
+    "tested_image_sha256": "686215dae696ed9bf259a0792e62802fcb1ba8e0914e98c366b2e8dc793445d9"
+  },
+  "counts": {
+    "distinct_native_behaviors_total": 16,
+    "formal_acceptance_credit": 0,
+    "new_current_candidate_builds": 0,
+    "new_current_candidate_native_invocations": 1,
+    "new_distinct_native_behaviors": 0,
+    "new_practical_exit_checks": 0
+  },
+  "created_utc": "2026-10-18T06:46:11.289837+00:00",
+  "decision": "PASS_ACTUAL_COMBINED_RUST_IMAGE_AVX_DIAGNOSTIC_AND_POSITIVE_RETIREMENT",
+  "evidence": {
+    "QMP": {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-actual-result-review-20261018-1/attempt/qmp.transcript.json",
+      "sha256": "f50012b18e7e353ffa53f762cedaa254bceaff39942879092c1f826f576adde3",
+      "size": 222310
+    },
+    "actual_result": {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-execution-resume-20261018-1/readback-2.stdout",
+      "sha256": "218cd85c694742a9dc67d34848307fe6725a1b778ad1addd1719d0a11ab2eecc",
+      "size": 83329
+    },
+    "archive_inventory_attempt": {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-actual-result-review-20261018-1/attempt-members.json",
+      "sha256": "01c9aaa94d0d89cd5b2dad764f7eefedac4ffde4c301e67ea92ed0154af89eb3",
+      "size": 517
+    },
+    "archive_inventory_owner": {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-actual-result-review-20261018-1/owner-members.json",
+      "sha256": "b7a386bcd1c12fcc1be964a7ae13662b0a87251b84a2b7d13d9916ef140cf7f9",
+      "size": 7678
+    },
+    "attempt_archive": {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-execution-resume-20261018-1/readback-3.stdout",
+      "sha256": "af1bb53ad7f98595bfd9acc989e7718e1e438fd2d858e62ca53eb646941a522f",
+      "size": 389120
+    },
+    "execution_release": {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-execution-resume-20261018-1/execution-release-1.json",
+      "sha256": "89d068feae0d7a842f4f8a8042d1c49a03d1ad8f8cf47f5f4c96338385b7cb76",
+      "size": 1372
+    },
+    "fresh_preexecution_snapshot": {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-execution-resume-20261018-1/fresh-live-preflight-1.json",
+      "sha256": "fbf4c0aae7a0e5323687cf2af709f4d131f9cd335cb32d75a3060f1f4a652c8b",
+      "size": 3252
+    },
+    "independent_check": {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-actual-result-review-20261018-1/check.py",
+      "sha256": "cf30ea6681ec83613c9d0c3d3f78093507ed54fce90ccb236f959ed78b054c09",
+      "size": 4135
+    },
+    "independent_check_result": {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-actual-result-review-20261018-1/check-result.json",
+      "sha256": "c7c6978d0c4799f0dd5e8923189c7fc34a34cd09c9f0633814cf1cf78349104f",
+      "size": 797
+    },
+    "independent_execution_decision": {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-execution-resume-review-20261018-1/review.json",
+      "sha256": "52639969d6f1c65faab9ea3e248b0dcd4404a7c8dab6971b38fc33a18072dbb2",
+      "size": 9018
+    },
+    "owner_archive": {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-execution-resume-20261018-1/readback-1.stdout",
+      "sha256": "b1361c5cfd151f0f3ffa62ee9c1c75a3ec6c1beae616777f8c7482153fb1799b",
+      "size": 542720
+    },
+    "owner_identity": {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-actual-result-review-20261018-1/owner/owner.json",
+      "sha256": "1d98930fda085637aca715e9a374e60db152b8d95c3ea586300288a1260316d7",
+      "size": 792
+    },
+    "owner_join": {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-execution-resume-20261018-1/owner-join.json",
+      "sha256": "978bf8e3f48ad53a9cdaa3fe98bb6ca6c5761a1f8d321f21494bb61ef1f58f78",
+      "size": 929
+    },
+    "owner_result": {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-actual-result-review-20261018-1/owner/result.json",
+      "sha256": "2a48456720a39cfed23b44ca70cf3928c81475ca786fc55efd151feca189f3cc",
+      "size": 257
+    },
+    "proposal": {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-execution-resume-20261018-1/execution-proposal.json",
+      "sha256": "d40a4980fa4de2c2197f2702ddcac80a97031a11b3efe002e96207dbab1c36dd",
+      "size": 16272
+    },
+    "serial": {
+      "path": "/home/holden/mckernel-work/scratch/rust-avx-actual-result-review-20261018-1/attempt/serial.log",
+      "sha256": "70e39d7e9c8f25aa49a6f571f8c9ab4646955e21d1dcd10ea418eec025be61b3",
+      "size": 74570
+    },
+    "stage_review": {
+      "path": "/home/holden/mckernel-work/scratch/rust-native-preparation-review-20261018-1/actual-preparation-result-review.json",
+      "sha256": "7fd34b35f8caf7408273a1bec02e1b6471f394d4bb907cf96cf5530a9bb5f57b",
+      "size": 4560
+    }
+  },
+  "failure_history": "One independent checker envelope assertion incorrectly compared evaluator projection with runner-added metadata; original checker and failure note preserved. Bounded correction checks exact evaluator fields plus explicit runner metadata and passes. No payload, owner, retirement or evaluator failure.",
+  "formal_acceptance": false,
+  "implementation_ownership": false,
+  "limits": [
+    "No allocation-failure hardware injection, whole-kernel Rust completion, all transitive allocator retirement, multicore, full M07/IFUNC/AVX512 closure or original qualification acceptance.",
+    "This repeated AVX case adds exact-new-image native proof; distinct behavior total remains16. Separate threads regression still requires its own fresh admission and execution release.",
+    "Reviewed artifact/source/default-link proof1a692e8d reused; no new build or broad source corpus replay.",
+    "Root mutex release is proven through exact checked owner zero-exit path and retained client ledger; this reviewer performed no new live root/mutex readback. Fresh next admission must reacquire/reconcile identities."
+  ],
+  "native_production_language_retirement": {
+    "all_transitive_allocator_C_retired": false,
+    "allocation_failure_hardware_proof": false,
+    "image_sha256": "686215dae696ed9bf259a0792e62802fcb1ba8e0914e98c366b2e8dc793445d9",
+    "paths": {
+      "arch/x86_64/kernel/cpu.c:copy_fp_regs": "PASS selected default shim -> linked Rust rust_x86_copy_fp_regs; native pthread clone after initial FP stage exercises successful copy path.",
+      "kernel/process.c:schedule FPU admission": "PASS linked default sched_schedule_fp_admit executes on native scheduling/futex/thread/signal path; Rust object ownership accepted by exact-image artifact review."
+    },
+    "production_default_link_artifact_review": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/rust-combined-image-actual-review-20261018-1.json",
+      "sha256": "1a692e8d5aaf6c1dac839ef77e3bed0c20f90a5359103cc0a4af80447cff1a3a",
+      "size": 18194
+    },
+    "separate_threads_regression_pending": true,
+    "status": "SCOPED_NATIVE_PATH_PROOF_PASS",
+    "whole_kernel_Rust_retirement": false
+  },
+  "next_executable_observation": "Threads may consume this PASS actual AVX/positive-retirement predecessor after exact ref/hash binding, then fresh live admission and its separate approved one-shot execution release. No runtime authority is granted by this result alone.",
+  "positive_retirement": {
+    "OOMKilled": false,
+    "PID_absence_used_as_retirement_proof": false,
+    "QEMU_returncode": -9,
+    "QEMU_returncode_scope": "Reviewed teardown permits0/-TERM/-KILL; guest shutdown and application result precede teardown. This -9 is not the application exit.",
+    "all_exact_pid_start_pairs": true,
+    "authenticated_exact_container_removal": true,
+    "capture_errors": [],
+    "container_id": "2b3614eaa70ec93cbb9b4a723bbd6e25593b08c146e5e6e3ea32e3ad06426a51",
+    "container_state_exit": 0,
+    "direct_owner_physically_joined": true,
+    "direct_owner_returncode": 0,
+    "distinct_Docker_clients_physically_reaped": 30,
+    "final_name_nonce_id_queries_empty": true,
+    "guest_shutdown_before_QMP_quit_and_QEMU_reap": true,
+    "lease_retained": false,
+    "nonce": "f31146fe5256f0cd4c066d72400d7d4b",
+    "owner_identity": {
+      "pgid": 881658,
+      "pid": 881667,
+      "proc_starttime": 10311097,
+      "sid": 881658
+    },
+    "pending_clients_empty": true,
+    "recovery_or_quarantine": false,
+    "root_mutex_identity": {
+      "dev": 27,
+      "ino": 4
+    },
+    "root_mutex_released": true,
+    "source_known_owner_exit_path": true,
+    "status": "PASS",
+    "three_container_wait_statuses": [
+      0,
+      0,
+      0
+    ]
+  },
+  "preserved_checker_failure": {
+    "path": "/home/holden/mckernel-work/scratch/rust-avx-actual-result-review-20261018-1/check-attempt1.failure.txt",
+    "sha256": "4707d788c082300f5eaf129e35379327b5ea32e26b757d8decf6e37e7643ab53",
+    "size": 307
+  },
+  "raw_acceptance_flags_preserved": true,
+  "reviewer": "/root/rust_avx_actual_review_0643",
+  "schema": "mckernel.independent-combined-rust-image-avx-actual-review.v1",
+  "scope": "Functional PRACTICAL-GOAL supported-profile McKernel/apps and actual Rust plus reviewed assembly compute-C retirement. Exact combined first FPU-copy/scheduler-admission image; deferred original qualification remains deferred.",
+  "status": "PASS",
+  "verification_profile": "Unprivileged CPU0/1job/1GiB address space/30CPU/35wall. No root/Docker/guest/new readback/Git action or implementation writes by reviewer.",
+  "verified": [
+    "Execution release89d068fe and selected proposal/source/manifest/stage/artifact/static-decision pins match; fresh preflight records source/artifact admission, identities, scratch UUID and resource floors.",
+    "Both default non-dereferencing tar archives validated before private extraction: relative paths only, no traversal, only directories/regular files,101/7members,462471/380361expanded bytes. Third tar warns only qmp.sock socket ignored as expected.",
+    "Owner-copied inner result equals attempt result and direct result readback byte-for-byte. Every bound raw capture matches both archives; observation serial/debugcon match exact raw bytes.",
+    "Frozen typed AVX adapter/parser and unchanged base evaluator replay equals every evaluator output field; explicit runner envelope cleanup/capture/QEMU metadata also checks. Raw false protocol acceptance flags remain preserved.",
+    "Actual serial PID256 prepared/scheduled, procfs TID256 and258 published/deleted,512-byte TID transfer, final application retirement token26 errno0/processrelease cleanup_errno0 and collector procfs_empty. Earlier token25 errno-11 is the existing retry followed by successful final retirement, not suppressed.",
+    "All30 exact client PID/start identities have physical reap receipts, including exact container removal and three final empty queries; owner checked pending ledger empty and unlocked/closed root27:4 before flush/exit0. No absence-only inference.",
+    "QMP guest shutdown and status shutdown precede quit, QEMU physical reap and container0; state has noOOM/error. Owner and all three approved bounded postjoin readbacks joined0."
+  ]
+}

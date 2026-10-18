@@ -3227,6 +3227,16 @@ release_fp_regs(struct thread *thread)
 	thread->fp_regs = NULL;
 }
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern int rust_x86_save_fp_regs(struct thread *thread,
+		int available, int size, uint64_t mask);
+
+int save_fp_regs(struct thread *thread)
+{
+	return rust_x86_save_fp_regs(thread, xsave_available, xsave_size,
+			xsave_mask);
+}
+#else
 static int
 check_and_allocate_fp_regs(struct thread *thread)
 {
@@ -3282,6 +3292,7 @@ save_fp_regs(struct thread *thread)
 out:
 	return ret;
 }
+#endif
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 extern int rust_x86_copy_fp_regs(struct thread *from, struct thread *to,
@@ -3308,6 +3319,34 @@ int copy_fp_regs(struct thread *from, struct thread *to)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern void rust_x86_restore_default_fp_regs(struct thread *thread,
+		int available, int initial_available, const void *initial,
+		uint64_t mask, int sse_enabled);
+extern void rust_x86_restore_fp_regs(struct thread *thread,
+		int available, int initial_available, const void *initial,
+		uint64_t mask, int sse_enabled);
+#ifdef ENABLE_SSE
+#define RUST_X86_FP_SSE_ENABLED 1
+#else
+#define RUST_X86_FP_SSE_ENABLED 0
+#endif
+
+static void restore_default_fp_regs(struct thread *thread)
+{
+	rust_x86_restore_default_fp_regs(thread, xsave_available,
+			initial_fp_regs_available, initial_fp_regs, xsave_mask,
+			RUST_X86_FP_SSE_ENABLED);
+}
+
+void restore_fp_regs(struct thread *thread)
+{
+	rust_x86_restore_fp_regs(thread, xsave_available,
+			initial_fp_regs_available, initial_fp_regs, xsave_mask,
+			RUST_X86_FP_SSE_ENABLED);
+}
+#undef RUST_X86_FP_SSE_ENABLED
+#else
 static void restore_default_fp_regs(struct thread *thread)
 {
 	static int mcexec_v10_fp_default_logs;
@@ -3366,6 +3405,8 @@ restore_fp_regs(struct thread *thread)
 	// XXX: why release??
 	//release_fp_regs(thread);
 }
+
+#endif
 
 void clear_fp_regs(void)
 {

@@ -1,5 +1,31 @@
 # OS development session handoff
 
+## RESUMED — current execution cursor, 2026-10-18 06:53 UTC
+
+The explicit06:15 launcher resume is active; the05:20 pause below is historical.
+Launcher worker871794/start10154631 and server871796/start10154636 own this run
+(.git/os-autopilot/runs/20261018T061500Z-d7828d0b). No second dispatcher/state edit.
+Functional PRACTICAL-GOAL and actual compute Rust/assembly retirement both apply.
+Image686215 has production ABI/default-link proof1a692e8d and independently
+accepted native AVX/positive retirement f47adf0d. Its Rust copy/admission paths
+have scoped native proof; this is not whole-kernel Rust conversion.
+Threads and full retirement independently PASS958bac9d: exit37, exact25-byte
+stdout, empty stderr, two workers/TLS/barrier/mutex2000/joins;30clients reaped.
+Terminal cleanup/common/shared release42e1d4fa is accepted; exact old CIDae965257
+removed and original records archived. Preserve failed missing-host-owner-row
+refusal and corrected one-shot evidence; do not replay consumed operations.
+Sixteen distinct native behaviors,3complete/32open practical checks,14milestones
+open; no percentage/2x claim. Three-port save/post-switch-cleanup/restore candidate
+composition6dc4b796 passed; new metadata aa5ea6f6 is in independent affected review.
+Next: one coherent three-port image preparation and production build/native
+sequence. Four exact reviewed source files integrated; next-three-port production
+and native proof remain pending; current686215 baseline is retained. Host tool-only source/profile36c63604 is
+accepted; exact execution packet is prepared separately, not a compatible Rust
+gate. Keep one heavy owner, actual16/12GiB floors plus packet growth, aggregate
+budget and usage97% stop. Usage11%; supervisor next07:15UTC/latest07:45. Scratch21,
+root mutex27:4, original failures and all current/reference artifacts preserved.
+
+
 ## PAUSED — explicit user stop, 2026-10-18 05:20 UTC
 
 No new admissions or automatic continuation. All workers stopped; the already

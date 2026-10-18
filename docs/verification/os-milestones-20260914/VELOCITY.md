@@ -166,6 +166,13 @@ the existing metadata consumer before request preparation in the assigned cheap
 profile; this is one affected check, not a new tracking framework. A metadata-only
 correction should reuse a valid source materialization and its accepted evidence.
 
+For an observer/cleanup pair, check the actual cleanup consumer's required source
+closure against the proposed selected-file map before privileged dispatch. A
+missing required source row belongs in the existing cheap validation, not the
+first root invocation. Record a command refusal separately from independently
+positive child/tree retirement; preserve the failed attempt and all original
+gates. Any corrected execution/readback still needs its exact reviewed release.
+
 Assign short nonce-based protocol/execution output roots up front. Preflight all
 canonical generated UNIX endpoint paths before creating archives or attempt
 fixtures; source-workspace paths need not be runtime-output paths. Preserve the

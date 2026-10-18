@@ -4358,6 +4358,26 @@ out_schedule:
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 extern unsigned long sched_schedule_fp_admit(int exited_status);
+/* RUSAGE_DEBUG controls only ABI data forwarding; Rust owns the decision
+ * and output. Addresses preserve the C build's exact rusage layout. */
+struct sched_exit_debug {
+	const unsigned long *num_threads;
+	const unsigned long *total_memory_usage;
+	const long *memory_stat_rss;
+	const long *memory_stat_mapped_file;
+	int page_sizes;
+};
+extern void sched_schedule_exit_cleanup(struct cpu_local_var *old_cpu,
+		struct thread *last, int exited_status,
+		const struct sched_exit_debug *debug);
+#ifdef RUSAGE_DEBUG
+static const struct sched_exit_debug process_sched_exit_debug = {
+	&rusage.num_threads, &rusage.total_memory_usage,
+	rusage.memory_stat_rss, rusage.memory_stat_mapped_file,
+	IHK_MAX_NUM_PGSIZES
+};
+#endif
+
 #endif
 
 void schedule(void)
@@ -4486,30 +4506,13 @@ void schedule(void)
 	ihk_mc_spinlock_unlock_noirq(&(get_this_cpu_local_var()->runq_lock));
 	cpu_restore_interrupt(get_this_cpu_local_var()->runq_irqstate);
 
-	if ((last != NULL) && (last->status == PS_EXITED)) {
-		v->prevpid = 0;
-		arch_flush_icache_all();
-		release_thread(last);
-		rusage_num_threads_dec();
+	/* old v is intentionally distinct from the current CPU after migration.
+	 * The runqueue lock and entry IRQ state have already been restored. */
 #ifdef RUSAGE_DEBUG
-		if (rusage.num_threads == 0) {
-			int i;
-
-			kprintf("total_memory_usage=%ld\n",
-				rusage.total_memory_usage);
-			for (i = 0; i < IHK_MAX_NUM_PGSIZES; i++) {
-				kprintf("memory_stat_rss[%d]=%ld\n", i,
-					rusage.memory_stat_rss[i]);
-			}
-			for (i = 0; i < IHK_MAX_NUM_PGSIZES; i++) {
-				kprintf(
-				   "memory_stat_mapped_file[%d]=%ld\n",
-				    i,
-				    rusage.memory_stat_mapped_file[i]);
-			}
-		}
+	sched_schedule_exit_cleanup(v, last, PS_EXITED, &process_sched_exit_debug);
+#else
+	sched_schedule_exit_cleanup(v, last, PS_EXITED, NULL);
 #endif
-	}
 
 	/* Have we migrated to another core meanwhile? */
 	if (v != get_this_cpu_local_var()) {

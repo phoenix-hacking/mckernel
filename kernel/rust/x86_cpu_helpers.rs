@@ -94,6 +94,7 @@ type X86StackFrameLogFn = unsafe extern "C" fn(CULong, CULong, CULong);
 type X86PrintStackFn = unsafe extern "C" fn(*mut c_void, CULong);
 
 extern "C" {
+    fn kprintf(format: *const i8, ...) -> CInt;
     fn arch_delay(us: CInt);
     fn do_arch_prctl(code: CULong, address: CULong) -> CLong;
     fn x86_lapic_write_bridge(reg: CInt, value: CUInt);
@@ -190,6 +191,182 @@ pub unsafe extern "C" fn read_tsc() -> CULong {
 #[no_mangle]
 pub unsafe extern "C" fn get_xsave_size() -> CInt {
     unsafe { x86_xsave_size_bridge() }
+}
+
+/// Save the current CPU's extended state into the exclusively owned thread slot.
+///
+/// The caller pins execution to the CPU whose state is being saved and owns the
+/// thread and its buffer exclusively until the save completes. XSAVE setup is
+/// boot-stable: a nonzero `available` requires CR4.OSXSAVE, an XCR0-compatible
+/// mask, and a 64-byte-aligned buffer covering the CPUID-reported standard extent.
+/// The kernel compiler and all callees must preserve the no-FP/SIMD profile.
+/// Allocation failure returns before XSAVE; the scheduler must not restore an
+/// unsaved state or progress the context switch after this error.
+///
+/// Preserve the original C gates: nonpositive `size` prevents allocation but
+/// does not disable XSAVE when `available` is nonzero. Such a configuration with
+/// an absent/undersized buffer violates the hardware precondition; this function
+/// does not reinterpret it as a successful skip or silently change the ABI.
+#[no_mangle]
+pub unsafe extern "C" fn rust_x86_save_fp_regs(
+    thread: *mut Thread,
+    available: CInt,
+    size: CInt,
+    mask: CULong,
+) -> CInt {
+    if available != 0 && size > 0 && unsafe { (*thread).fp_regs.is_null() } {
+        let pages = (size as usize + PAGE_SIZE as usize - 1) / PAGE_SIZE as usize;
+        let state = unsafe {
+            x86_alloc_aligned_pages_node_bridge(
+                pages as CInt,
+                PAGE_P2ALIGN,
+                IHK_MC_AP_NOWAIT,
+                -1,
+                IHK_MC_PG_KERNEL,
+                CULong::MAX,
+                CPU_FILE.as_ptr().cast::<i8>() as *mut i8,
+                line!() as CInt,
+            )
+        };
+        if state.is_null() {
+            unsafe { kprintf(b"error: allocating fp_regs pages\n\0".as_ptr().cast()) };
+            return -ENOMEM;
+        }
+        unsafe {
+            core::ptr::write_bytes(state.cast::<u8>(), 0, pages * PAGE_SIZE as usize);
+            (*thread).fp_regs = state;
+        }
+    }
+    if available != 0 {
+        unsafe { x86_save_xstate((*thread).fp_regs, mask) };
+    }
+    0
+}
+
+/// XSAVE writes memory and leaves arithmetic flags unchanged. The full 64-bit
+/// requested mask is split exactly across EDX:EAX; no vector operands are used.
+#[inline(always)]
+unsafe fn x86_save_xstate(state: *mut c_void, mask: CULong) {
+    unsafe {
+        core::arch::asm!(
+            "xsave [{state}]",
+            state = in(reg) state,
+            in("eax") mask as u32,
+            in("edx") (mask >> 32) as u32,
+            options(nostack, preserves_flags),
+        );
+    }
+}
+
+// The old diagnostic counter was a racy C static. A relaxed saturating atomic
+// gives each of the first sixteen calls one ticket without introducing a lock,
+// IRQ changes, allocation, or unbounded logging. It orders no FP/thread memory.
+static X86_FP_DEFAULT_LOGS: core::sync::atomic::AtomicU32 =
+    core::sync::atomic::AtomicU32::new(0);
+
+/// Restore the boot-captured default state, or initialize x87 and optional SSE.
+///
+/// Callers retain CPU/IRQ exclusion and any supplied thread/process lifetimes.
+/// `initial_available != 0` with XSAVE enabled promises a readable, 64-byte
+/// aligned boot image covering the CPUID extent, valid for the stable XCR0 mask.
+/// The pointer is deliberately not used as a new availability gate: malformed
+/// geometry is a caller error, just as for the original C. All callees, including
+/// the diagnostic formatter, must obey the kernel no-FP/SIMD compiler profile.
+#[no_mangle]
+pub unsafe extern "C" fn rust_x86_restore_default_fp_regs(
+    thread: *mut Thread,
+    available: CInt,
+    initial_available: CInt,
+    initial: *const c_void,
+    mask: CULong,
+    sse_enabled: CInt,
+) {
+    use core::sync::atomic::Ordering;
+    if X86_FP_DEFAULT_LOGS
+        .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |count| {
+            if count < 16 { Some(count + 1) } else { None }
+        })
+        .is_ok()
+    {
+        let (pid, tid) = if thread.is_null() {
+            (-1, -1)
+        } else {
+            let process = unsafe { (*thread).proc };
+            let pid = if process.is_null() { -1 } else { unsafe { (*process).pid } };
+            (pid, unsafe { (*thread).tid })
+        };
+        unsafe {
+            kprintf(
+                b"mcexec_v10: fp_default cpu=%d pid=%d tid=%d xsave=%d initial=%d\n\0".as_ptr().cast(),
+                x86_current_cpu_bridge(), pid, tid, available, initial_available,
+            );
+        }
+    }
+    if available != 0 && initial_available != 0 {
+        unsafe { x86_restore_xstate(initial, mask) };
+    } else {
+        unsafe { x86_initialize_fp_state(sse_enabled) };
+    }
+}
+
+/// Restore the exclusively owned thread state, retaining the NULL/no-buffer
+/// default path and the original no-op for a buffered thread without XSAVE.
+/// Never frees, changes, allocates or copies a thread state buffer. In addition
+/// to the default-path requirements, a present buffer covers the boot-stable
+/// CPUID extent and uses the supported standard XSAVE layout and XCR0 mask.
+/// Execution stays on the intended CPU with exclusion held across the restore;
+/// all generated code and callees obey the kernel no-FP/SIMD compiler profile.
+#[no_mangle]
+pub unsafe extern "C" fn rust_x86_restore_fp_regs(
+    thread: *mut Thread,
+    available: CInt,
+    initial_available: CInt,
+    initial: *const c_void,
+    mask: CULong,
+    sse_enabled: CInt,
+) {
+    if thread.is_null() || unsafe { (*thread).fp_regs.is_null() } {
+        unsafe {
+            rust_x86_restore_default_fp_regs(
+                thread, available, initial_available, initial, mask, sse_enabled,
+            );
+        }
+        return;
+    }
+    if available != 0 {
+        unsafe { x86_restore_xstate((*thread).fp_regs, mask) };
+    }
+}
+
+/// XRSTOR consumes the complete EDX:EAX request mask. The ordinary asm memory
+/// effect prevents memory reordering across restore. FP/SIMD registers are not
+/// Rust operands: the entire kernel build excludes their compiler-generated use.
+#[inline(always)]
+unsafe fn x86_restore_xstate(state: *const c_void, mask: CULong) {
+    unsafe {
+        core::arch::asm!(
+            "xrstor [{state}]",
+            state = in(reg) state,
+            in("eax") mask as u32,
+            in("edx") (mask >> 32) as u32,
+            options(nostack, preserves_flags),
+        );
+    }
+}
+
+#[inline(always)]
+unsafe fn x86_initialize_fp_state(sse_enabled: CInt) {
+    unsafe { core::arch::asm!("finit", options(nostack, preserves_flags)); }
+    if sse_enabled != 0 {
+        let default_mxcsr: u32 = 0x1f80;
+        unsafe {
+            core::arch::asm!(
+                "ldmxcsr [{mxcsr}]",
+                mxcsr = in(reg) &default_mxcsr,
+                options(nostack, preserves_flags),
+            );
+        }
+    }
 }
 
 /// Copy the saved state owned by `from` into the independently owned `to` state.
