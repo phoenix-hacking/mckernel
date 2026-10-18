@@ -12,8 +12,10 @@ This file describes supervision, not OS acceptance or execution authority.
   historical; this inspection does not change goal-tool state or create a timer.
 - Engineering campaign: `01a149eb-f950-7f13-95a2-59dfc2918d49`; sole runtime/Git owner.
 - Campaign explicitly resumed by the user at`2026-10-18T01:31:35Z`; running with
-  an active goal at05:05:05UTC. Worker760063/start8454148 and server760065/start8454153
-  are live. Run directory:`.git/os-autopilot/runs/20261018T013135Z-08003bf4`.
+  an active goal at05:05:05UTC. User explicitly requested a stop at05:20UTC;
+  the goal is paused at05:22:35UTC while its final checkpoint completes.
+  Worker760063/start8454148 and server760065/start8454153 were still live at that
+  observation. Run directory:`.git/os-autopilot/runs/20261018T013135Z-08003bf4`.
   The old19:33UTC stop and its evidence remain in the
   [stop handoff](SUPERVISOR-STOP-20261017T193320Z.md). No automatic policy retry added.
 - First baseline recorded: `2026-10-17T13:26:00Z`.
@@ -21,13 +23,13 @@ This file describes supervision, not OS acceptance or execution authority.
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
 - Last full review: `2026-10-18T05:05:05Z`, review19, interval29m34s.
-- User explicitly requested the interactive30-minute supervision loop again.
-  Next full review target:`2026-10-18T05:35:00Z`, latest06:05UTC. Continue the
-  loop in this chat; no independent OS timer or second dispatcher is installed.
-  Exclude the19:33UTC-to01:31UTC stopped interval from velocity.
-- Last launcher-reported included usage:9% in the new weekly primary window;
+- The user-requested interactive30-minute loop is now paused at the user's
+  explicit request. The former05:35UTC target is canceled; establish a fresh
+  review boundary only after explicit user resume. No independent OS timer or
+  second dispatcher is installed. Exclude stopped intervals from velocity.
+- Last launcher-reported included usage:10% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
-- Current intervention: review19 steering queued as
+- Last full-review intervention: review19 steering queued as
   `20261018T050533277245Z-c8a61736df7f468bbf402a0981763a3f`, accepted05:05:34UTC. Host53.517GiB,
   scratch14.119GiB at cutoff. Three compute Rust ports pass independent source
   review; the first two are frozen together, materialized and request-prepared,
@@ -1719,3 +1721,30 @@ Current private packets under scratch:
 `rust-cutover-image-preparation-20261018-1/namespace-correction-1`,
 `native-host-fork-objtool-correction-review-20261018-1/report.json`,
 `rust-combined-native-case-preparation-20261018-1/final-result.json`.
+
+## User-requested pause — 2026-10-18 05:20 UTC
+
+The user explicitly asked to stop and continue later, superseding continuous
+operation and the next30-minute review. Stop instruction
+20261018T052036906046Z-45aa57114d47441ca798185b5930639f was accepted05:20:37UTC.
+Dispatcher acknowledged no new admissions and joined only its already-running
+read-only observer. Workers reported stopping after bounded report writes;
+no native guest for the new Rust image was launched.
+
+The combined image build returned0 in211.349558s. Independent production ABI,
+default Rust routing, final ELF/map and guard retirement review passed all33
+commands. Image686215dae696ed9bf259a0792e62802fcb1ba8e0914e98c366b2e8dc793445d9
+and all ten retained artifacts remain preserved. Native AVX/threads proof and
+terminal cleanup are pending; stopped CIDae9652572cfe1610a2dd07b1f6a9833ab5a849d2d171a2ee47e5fb74e5e1d8d1
+and its ownership/exclusion records are intentionally retained. Scratch21 and
+the development mutex inode must remain untouched. Next-two-port private merge
+passes composition review but has no production/native acceptance.
+
+Goal observed paused05:22:35UTC. One identity-checked SIGINT was delivered via
+pidfd to worker760063/start8454148 to request the launcher's graceful checkpoint;
+no repeat signal was sent. Receipt:
+`.git/os-autopilot/supervisor-user-pause-20261018T0520Z.json`.
+Final worker/server/watcher exit and fetched checkpoint verification are still
+pending at this entry. Follow CURRENT/HANDOFF for the final saved state and
+exact manual resume prerequisites. Do not resume automatically or mark the OS
+complete. Native behaviors16 and practical checks3complete/32open remain.
