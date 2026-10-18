@@ -1,5 +1,50 @@
 # OS development session handoff
 
+## Current — paired ordinary preparation accepted; exact image release next (2026-10-18 19:38 UTC)
+
+Functional OS/apps and actual compute Rust/reviewed-assembly retirement continue;
+refused execve and service-held fork/ACK remain excluded. Source3c5434ef is pushed
+and fetched26, proofd089fe2c retained. The reviewed SAVE/RESTORE pair is integrated
+source only; current e85a remains the accepted10-production/9-applicable-native
+image. Counts21 distinct native behaviors,6complete/29open practical checks and
+all14milestones open are unchanged. Included usage32%, stop97%.
+
+One new ordinary sequence completed all4 exact commands/directjoins0: source
+materialization12.454s, mkdir0.002s, request82.487s and actual driver/owner consumers
+29.231s. Independent actual acceptancec86dd843 binds request1aa8c2ec, toolchain
+a68e02b3, receipt6b8a88b3 and source[66306,47873338,1000,1000,448]. Evidence and
+source proof are under ../evidence/rust-debugreg-pair-image-preparation-evidence-20261018-1/.
+Original missing-unchanged-CMake metadata KeyError and bounded correction remain
+retained. Original frozen32/62 ordinary closure is unchanged. Additive heavy guard
+requires the exact real request/source/four joins/independent acceptance; its
+1positive/12negative tests and changed-source review113cc438 pass. Initial fixture
+aliasing failure remains preserved. Corrected12 tool files are published in
+../evidence/rust-debugreg-pair-image-execution-capsule-20261018-1/ for this checkpoint.
+
+Next root action: push/fetch exact tool checkpoint, then bind its proof and current
+positive retirement into the concrete final release, independent exact review and
+fresh floor-plus-growth admission, then ONE production image build. Current draft:
+/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-image-preparation-20261018-1/
+heavy-proposal-1/late-data-1/review-target-release-payload.json. Its draft is NOT
+execution authority. No heavy owner is currently active; no old consumed command
+may be replayed. Preserve scratch21, all failed evidence, dirty launcher/IHK work,
+root mutex27:4 and the110GiB scratch backing. Full4CPU/12GiB/noSwap/512task isolation,
+16/12GiB floors plus actual growth/reserve and aggregate limits remain unchanged.
+
+Postbuild14/four-artifact and terminal executable helpers are prepared separately;
+actual artifact/CID/owner facts remain pending. Reuse source-only supervisory
+advisories1aec734e/df97ff14; final actual raw5 review must join distinct observer
+and summary argv/PID/stream hashes, not synthetic statuses. Three boot bindings
+must agree with the genuine current boot. Finite retention precedes canonical
+cleanup publication. Guest AVX/threads templates are ready with actual pair-image
+facts pending; no stage or guest authority yet. Root joins finite operations and
+immediately notifies actual-result reviewer before unrelated coordination.
+
+A distinct two-page mapping-isolation payload passed exact compilation/Linux100B
+oracle and independent review: ACCERR/protection restoration, MAPERR after partial
+unmap, adjacent/surviving-page data and cleanup. Native0; stage proposal independent
+review is pending. No new kernel, behavior-count or practical-check credit.
+
 ## Current — e85a native chain and closed-write accepted; paired Rust source integrated (2026-10-18 19:20 UTC)
 
 Functional OS/apps and compute Rust/reviewed-assembly retirement remain active;
