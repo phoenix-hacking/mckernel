@@ -12,7 +12,7 @@ This file describes supervision, not OS acceptance or execution authority.
   historical; this inspection does not change goal-tool state or create a timer.
 - Engineering campaign: `01a149eb-f950-7f13-95a2-59dfc2918d49`; sole runtime/Git owner.
 - Campaign explicitly resumed by the user at`2026-10-18T01:31:35Z`; running with
-  an active goal at02:36:04UTC. Worker760063/start8454148 and server760065/start8454153
+  an active goal at03:05:43UTC. Worker760063/start8454148 and server760065/start8454153
   are live. Run directory:`.git/os-autopilot/runs/20261018T013135Z-08003bf4`.
   The old19:33UTC stop and its evidence remain in the
   [stop handoff](SUPERVISOR-STOP-20261017T193320Z.md). No automatic policy retry added.
@@ -20,20 +20,19 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-18T02:36:04Z`, review14, interval30m40s.
+- Last full review: `2026-10-18T03:05:43Z`, review15, interval29m39s.
 - User explicitly requested the interactive30-minute supervision loop again.
-  Next full review target:`2026-10-18T03:05:00Z`, latest03:35UTC. Continue the
+  Next full review target:`2026-10-18T03:35:00Z`, latest04:05UTC. Continue the
   loop in this chat; no independent OS timer or second dispatcher is installed.
   Exclude the19:33UTC-to01:31UTC stopped interval from velocity.
-- Last launcher-reported included usage:3% in the new weekly primary window;
+- Last launcher-reported included usage:4% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
-- Current intervention:02:32steering accepted as
-  `20261018T023236561980Z-6019f6a738e043cab48f6b59b7bdb371`: exact quarantined-owner
-  recovery, two-file compiler repair and future wait/resource-monitor fix in
-  disjoint lanes. User approved the exact root-reserve change; authorization
-  queued as`20261018T023604635438Z-d9e93ad1863e42f2ab5a7b38e0dd6fae`.
-  Apply only after positive recovery/release, fresh identity and exact execution
-  review. No further user permission needed for this approved count change.
+- Current intervention: review15 steering queued as
+  `20261018T030752832411Z-8c3ea880a9614859ba3b371595d15f22`. Recovery and the
+  user-authorized reserve change are independently accepted. Host54.500GiB,
+  scratch14.905GiB at cutoff. Take the first fully admitted build/runtime without
+  serializing it behind the separate image-schema correction. Actual-consumer
+  checks, short output paths and failure-family classification reduce handoff waste.
 - Current invocation independently accepted app/diagnostic behaviors: 15 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -1301,3 +1300,81 @@ Anchors: ../evidence/native-fork-real-target-build-failure-review-20261018-1.jso
 ../evidence/host-stale-cache-cleanup-20261018-1.json;
 [reserve proposal](HOST-RESERVE-PROPOSAL-20261018.md) and
 ../evidence/host-ext4-reserve-proposal-review-20261018-1.json.
+
+## Review 15 — 2026-10-18 03:05:43 UTC
+
+Interval02:36:04->03:05:43UTC,29m39s. Same live worker/server identities;
+campaign active, no service stop. Included usage4%, stop97%. HEADd23c6ff9
+preserves recovery/capacity results and the corrected native capsule.
+
+| Measure | Change this interval |
+| --- | --- |
+| Accepted native app/diagnostic behaviors | 15->15; no new native pass |
+| Practical checklist | 3complete/32open, unchanged |
+| Quarantined owner | Positive terminal recovery and mutex release independently accepted |
+| User-approved root reserve | Executed once and accepted; about38.13GiB newly accessible, zero allocation reclaimed |
+| Live capacity at cutoff | Host54.500GiB/scratch14.905GiB; floors/reserves unchanged |
+| Third module candidate | Two-file compiler repair and future retirement fix reviewed;75-blob fetched proof and77-copy materialization pass; exact execution decision pending |
+| New FPU image | 6,899regular files+49symlinks copied,141,041,664bytes; request schema correction still pending |
+| File utility | Actual runner/owner protocol accepted; static one-guest proposal accepted conditionally; final admission/release pending |
+
+Recovery initially stopped before owner action because Docker reordered five
+otherwise byte-equivalent complete mount rows. Independent comparison confirmed
+every other field equal. Bounded correction fixes both profile and old/fresh
+observation joins;31checks preserve duplicate/count/destination/field/type
+rejections. New exact release led to accepted recovery: old PID783155 was
+pidfd-bound and joined after controlled retirement, exact stopped container
+removed,31clients retired, and all three records archived/released under a
+12-event journal. Mutex27:4remains intact and unheld. All75other pinned inputs/
+failure generations and the original uncleared transport latch are preserved.
+Successful recovery returned02:54:41; independent result acceptance02:58:56.
+That return-to-review handoff is an improvement target, not proof every second
+was avoidable. No original failed build is relabeled PASS.
+
+The user explicitly authorized the exact reserve change. Reviewed guard ran in
+1.11007s and changed12,495,987->2,499,198reserved blocks. Device/UUID/boot/block
+counts and scratch backing identity remained unchanged; seven clients joined0,
+mutex released, no rollback. Nominal newly accessible40,946,847,744bytes;
+observed availability gain40,946,618,368bytes differs by concurrent229,376bytes
+of allocation. Allocation reclaimed0. Independent acceptance03:01:12. This
+retains9.533684GiB emergency reserve plus the unchanged16GiB workflow floor;
+scratch12GiB and all packet reserves remain. Prior caches/trim already counted
+in review14 are not counted again.
+
+Two-file compiler correction and future wait/resource-monitor proof fix passed
+source review. The latter's ten focused producer/consumer cases preserve failed
+command state and prior uncertainty while proving normal direct-child completion
+when appropriate. Third63-file closure4d31002d/1,453,567bytes, transitive pins,
+real preparation loader and stale-map/size negatives pass. Actual Kbuild still
+needed. New FPU source copy passes, but request preparation reaches another
+hardcoded schema predicate in its private image owner. A patch-generator anchor
+assertion then failed before any change/test; this is a separate fixture failure,
+not a second demonstrated failure of the production schema invariant.
+
+File utility framing and authentic archive pass; earlier long QMP path was fixed
+by assigning a short nonce root. Seven canonical endpoints82-92bytes preflight
+before fixture creation. Actual runner/owner accept positive and reject typed,
+duplicate and actual-corruption fixtures. Accepted archive is reused. Static
+proposal uses98byte real QMP path, matching a0f/d99profile and three approved
+bounded post-join readbacks; no guest run at cutoff.
+
+**Adjustment:** move immediately to the first fully admitted useful build/guest,
+keeping FPU schema repair separate. Consolidate changed bindings and actual
+consumer checks before publication. CONVERGENCE now distinguishes failure
+families by the actual invariant reached; unrelated private generator errors
+do not consume a production repair attempt. Genuine repeated same-invariant
+failures still escalate; no frozen contract or workload replay is waived.
+VELOCITY now asks for endpoint preflight and reviewed exact readbacks in the
+post-join continuation where already permitted. No new framework or broad rehash.
+This interval restored capacity and closed recovery; it adds no native behavior
+or measured2x/3x throughput claim. Next review03:35UTC, latest04:05.
+
+User-requested engineering table is saved separately at
+[03:02:55 comparison](practical-engineering-estimate-20261018T030255Z.md): only
+M05+5pp/M07+10pp versus the previous table, based on the earlier accepted
+second-boot/AVX evidence. No maintenance or unbuilt-source percentage credit.
+Original baseline stays unchanged.
+
+Anchors under ../evidence/: native-fork-quarantine-terminal-recovery-result-review-20261018-1.json;
+host-ext4-reserve-result-review-20261018-1.json;
+native-fork-third-candidate-fetched-source-proof-20261018-1.json.

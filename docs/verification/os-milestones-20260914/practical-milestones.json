@@ -556,9 +556,14 @@
               "path": "docs/verification/evidence/native-core-memory-current942-result-review-20261017-1.json",
               "sha256": "49d4a5b5dc0b7919f4097778fe9f99c75b216afc2345a59db8258eaab312c78f",
               "size": 13664
+            },
+            {
+              "path": "docs/verification/evidence/practical-file-stream-current-a0f-result-review-20261018-1.json",
+              "sha256": "a05ba3f233cf6750bb2b668364a5782c8ea5e7a8881f1dcc10aa9afab89d9b16",
+              "size": 3054
             }
           ],
-          "assessment_note": "Representative memory/file/thread/signal diagnostics pass within their recorded limits. Useful file/stream utilities and genuinely overlapping thread/futex coverage remain incomplete."
+          "assessment_note": "Representative memory/file/thread/signal diagnostics and a standalone libc file/stream utility pass. Utility copies10247 binary bytes, checksum, checked close/reopen/readback/unlink with exact collector proof on a0f/d99. Final supported candidate/profile regression remains open."
         },
         {
           "id": "P-M04-03",
@@ -614,12 +619,17 @@
               "path": "docs/verification/evidence/practical-process-host-reference-review-20261018-1.json",
               "sha256": "dd2c981b6417a481d899a21d501790a7b771b52ceffde94463acec6d0ba7cf70",
               "size": 926
+            },
+            {
+              "path": "docs/verification/evidence/practical-file-stream-current-a0f-result-review-20261018-1.json",
+              "sha256": "a05ba3f233cf6750bb2b668364a5782c8ea5e7a8881f1dcc10aa9afab89d9b16",
+              "size": 3054
             }
           ],
           "assessment_note": "Accepted frozen expected bytes/status are retained, including exact415byte alternate-stack bridge. Final useful-suite Linux comparison coverage is not closed by these narrow diagnostics."
         }
       ],
-      "current_evidence_summary": "Fifteen distinct diagnostic/app behaviors across retained942 and new a0f FPU image, including real C/Rust apps and new AVX state preservation. Process-supervisor fork/exec/wait host reference prepared; native process execution remains gated. Final supported-profile suite open."
+      "current_evidence_summary": "Sixteen distinct native diagnostic/app behaviors across retained942/a0f profiles, including real C/Rust apps, AVX state and useful file utility. Native process fork/exec/wait and final supported-profile suite remain open."
     },
     {
       "id": "M05",

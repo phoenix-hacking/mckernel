@@ -1,42 +1,53 @@
 # Resume cursor
 
-## Active cursor — 2026-10-18 03:03 UTC
+## Active cursor — 2026-10-18 03:15 UTC
 
-The manually resumed practical kernel/app campaign continues. Distinct native
-behaviors remain15; no new guest acceptance or exit-check closure in this interval.
-Original module compiler failures and monitor/quarantine evidence are preserved.
+Manual resumed PRACTICAL-GOAL campaign continues. Distinct native behaviors16:
+new standalone libc file utility passed10247 binary bytes/checksum, checked
+close/reopen/readback/unlink, exact59-byte stdout/emptyerr/exit0 and full30client,
+owner/container/QEMU retirement. Canonical
+[utility result](../evidence/practical-file-stream-current-a0f-result-review-20261018-1.json).
+M04 affected evidence updated; final-profile scope/whole rows remain open.
 
-Exact corrected terminal recovery independently accepted: owner783155 joined-9,
-31clients positively retired, exact stopped CID removed, three records archived
-and released, persistent mutex27:4 released. The first Mounts-order refusal and
-old failed transport latch remain preserved. Canonical result:
-[recovery review](../evidence/native-fork-quarantine-terminal-recovery-result-review-20261018-1.json).
-No active quarantine remains for that owner; HEAD freeze from it has ended.
+Recovery783155 and exact authorized reserve change independently accepted;
+no quarantine remains for that owner. Root reserve2499198blocks retains9.533684GiB;
+nominal accessiblecapacity+40946847744B is not allocationreclaim. Keep16/12GiB
+floors+full packet reserves and97% included-usage stop. Account latest4%.
 
-User-authorized root reserve change executed once and independently accepted:
-12495987->2499198blocks;9.533684GiB emergency reserve retained. Nominal accessible
-capacity increased40946847744B; measured availability+40946618368B, totalfree
--229376B from other growth. Allocation reclaimed0. Root/scratch/boot/backing
-identities unchanged; seven clients and rootmutex released. See
-[reserve result](../evidence/host-ext4-reserve-result-review-20261018-1.json).
-Keep16/12GiB floors, full packet growth reserves and97% included-account stop.
+Source checkpointd23c6ff91bc91c6c8c0529c2570750c964dac7a1 pushed/fetched;75exactthirdcapsule
+blobs verified by native-fork-third-candidate-fetched-source-proof-20261018-1.json
+(1bc329d2), source4d31002d/63files1453567B. Actualone-shot thirdmodule build
+failed3improper_ctypes at mcctrl_vm extern161–163, owner1/22.432241s.
+All14Docker+1observer clients/CID/3records/mutex positivelyretired independently:
+[build failure/retirement](../evidence/native-fork-third-build-failure-retirement-review-20261018-1.json).
+ABIrepair c2bf4376 keeps typedMM/VMA internally, exact3extern opaque pointers and
+8casts; strictactualbody regressions pass, affectedreview active. MatchingLinux
+lacks3customexports; modulelocal companion/Kbuild dependencyproposal underway.
+Do not blindlybuild before coherent export resolution/review; no flag relaxation,
+CREATE_PPD activation or later service-held transport/ACK replay.
 
-Next source candidate4d31002d/63files1453567B is independently source/preparation
-accepted: exact mcctrl_vm errno(-75), unused sysfs wrapper removal, future monitor
-producer/consumer retirement correction with10actual-body tests. Current failed
-owner was never patched/unlatched. Its75source/tool/derivation publication bytes
-are locally saved; fetched proof/finalmaterialization/execution release remain.
-FPU CPU-copy successor materialization/request now authorized within accepted
-ordinary profile after fresh803520512B initial and512MiB post-preparation reserve.
-File utility exactarchive+short actual runner/owner replay accepted; independent
-execution-packet review active. No archive rebuild or old probe replay needed.
-Next useful heavy candidates: corrected early modules, FPU-copy image, or fully
-released file utility. One heavy owner; two-case guest queue remains bounded.
+FPU CPUcopy5d source materialized successfully, receipt7fb242/sourceinode364791,
+6948entries/49typedlinks. First requestprep failed hardcoded schema; affected
+3-gate correction67237 accepted/11tests. Correctedprep killed-9/32.661s with
+CPU30/30, exactcause unknown;72MiB stagedtoolchain a68e preserved. Expertaccepted
+ONE resource-only ordinarypreparer attempt: CPU6/1job/1GiB/120CPU+150wall, fresh
+request/toolchainchild under request-schema-correction-1/resource-attempt-2.
+Old512MiB TOTALplanning exceeded; additive approved cumulative640MiB plan,
+currentestimate546925598B/headroom124163042B. Per-output budgets unchanged.
+Before prep retain floor+108830720remaining+FULL512MiB plusotherreservations;
+afterprep FULL512MiB above16/12floors remains mandatory. Noimageexecutionyet.
 
-Later service-held transport/ACK work stays excluded. Routine private scaffold
-corrections follow VELOCITY.md; no new permission round for unchanged contracts.
-Supervisor recurring30minute cursor remains VELOCITY-REVIEWS.md. Preserve the
-15:25 practical estimate baseline. Continue autonomously after this checkpoint.
+Current source lanes: FPU actualrequest independently passed88.621s/requesta5cb168f/toolchaina68e02,
+fullordinaryretirement accepted(d0d1913f); exactimageguard/release preparation;
+FFI/export correction; secondnative stop afterfreshsecondboot workload collector.
+Two upcoming guestcases maximum: AVX againstfutureCPUcopyimage and second-stop
+observation, pendingartifact/source/protocol/independentexecution releases.
+Do not replay acceptedutility/old signal/memorycases or finalquotas onobsoletepins.
+Same-scope estimated comparison saved at practical-engineering-estimate-20261018T031355Z.md;
+onlyM04+5pp afterutility, no newexit-check closure. Earlierbaseline unchanged.
+Supervisor30minute cadence remains VELOCITY-REVIEWS.md; adopted latest03:07
+failure-family/short-endpoint/readbackclarifications. Preserve original15:25
+percentagebaseline and allfailedattempts. Continue after normal checkpoints.
 
 
 ## Critical cursor — 2026-10-18 02:41 UTC

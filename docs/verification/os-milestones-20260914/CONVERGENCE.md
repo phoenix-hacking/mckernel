@@ -226,6 +226,16 @@ names and commit hashes. An attempt additionally binds source/test/oracle hashes
 command, toolchain/environment, outcome and retained evidence. A source change
 creates a new attempt; it does not erase that family's repair history.
 
+Classify by the invariant actually reached, not by the broad workflow sequence.
+An implementation-script anchor assertion that fails before changing a private
+candidate or exercising its consumer is not a second failure of that consumer's
+production invariant. Preserve it as a fixture/generator failure and correct it
+within the assigned private scope and cheap profile. Missing imports and input-
+count assumptions follow the same rule. This does not reset a real production
+family's history, permit changed golden expectations, expand write authority or
+authorize workload replay. Two failures of the same actual invariant still take
+the expert escalation below.
+
 One initial failed candidate and one bounded correction are the ordinary limit.
 After the second failure, stop sending the same problem through cheap workers.
 Escalate to a capable design/ownership expert with the complete current invariant

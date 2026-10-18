@@ -138,6 +138,15 @@ check. Reuse accepted unaffected evidence. Imported placeholders or a generator'
 own success do not establish that the final preparation/runner/owner can consume
 the packet. Consolidate these affected bindings into one reviewable handoff.
 
+Assign short nonce-based protocol/execution output roots up front. Preflight all
+canonical generated UNIX endpoint paths before creating archives or attempt
+fixtures; source-workspace paths need not be runtime-output paths. Preserve the
+existing socket-path admission bound. For an operation with already-approved
+bounded readbacks, include those exact readbacks in its reviewed continuation
+after positive source-known child/owner retirement and join, then dispatch result
+review promptly. An uncertain/nonzero operation stops that continuation; this
+does not authorize new root reads or automatic cleanup.
+
 ## Reuse artifacts and batch the work that is actually independent
 
 | Change | Cheapest appropriate next action |
