@@ -1,0 +1,41 @@
+{
+  "schema": "mckernel.host-stale-cache-cleanup.v1",
+  "status": "PASS_STALE_INACTIVE_CACHES_REMOVED",
+  "user_authority": "2026-10-18 explicit request to clean disk space",
+  "scope": "Only inactive regenerable application/build caches under .cache; user profiles, mail, installed packages, active caches and all OS project/evidence inputs excluded",
+  "oldest_allowed_cutoff_utc": "2026-06-01T00:00:00Z",
+  "open_handles": "none; lsof exit1 and empty stdout/stderr",
+  "started_at": "2026-10-18T02:31:53.222890+00:00",
+  "targets": [
+    {
+      "path": "/home/holden/.cache/mozilla",
+      "device": 66306,
+      "inode": 45482242,
+      "mode": 448,
+      "files": 342,
+      "allocated_bytes": 49643520
+    },
+    {
+      "path": "/home/holden/.cache/thunderbird",
+      "device": 66306,
+      "inode": 46532429,
+      "mode": 448,
+      "files": 46,
+      "allocated_bytes": 7188480
+    },
+    {
+      "path": "/home/holden/.cache/go-build",
+      "device": 66306,
+      "inode": 45517427,
+      "mode": 509,
+      "files": 15,
+      "allocated_bytes": 1191936
+    }
+  ],
+  "host_available_before": 17792368640,
+  "completed_at": "2026-10-18T02:31:53.264883+00:00",
+  "cache_allocation_reduction_bytes": 58011648,
+  "host_available_after": 17850376192,
+  "observed_host_available_delta_bytes": 58007552,
+  "concurrent_host_writes_may_affect_available_delta": true
+}

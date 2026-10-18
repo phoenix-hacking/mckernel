@@ -1,5 +1,10 @@
 # OS development session handoff
 
+Current manual resume is active (2026-10-18); use the latest HANDOFF.md cursor.
+Terminal recovery and authorized reserve adjustment passed; historical stopped
+banners and signal-first instructions below describe earlier sessions only.
+The separately service-held transport/ACK task remains preserved and excluded.
+
 Active scope revision, 2026-10-17: read [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md)
 and [practical-milestones.json](practical-milestones.json) after GOAL.md.
 The current goal is a solid kernel and working C/Rust application infrastructure

@@ -12,7 +12,7 @@ This file describes supervision, not OS acceptance or execution authority.
   historical; this inspection does not change goal-tool state or create a timer.
 - Engineering campaign: `01a149eb-f950-7f13-95a2-59dfc2918d49`; sole runtime/Git owner.
 - Campaign explicitly resumed by the user at`2026-10-18T01:31:35Z`; running with
-  an active goal at01:35:48UTC. Worker760063/start8454148 and server760065/start8454153
+  an active goal at02:36:04UTC. Worker760063/start8454148 and server760065/start8454153
   are live. Run directory:`.git/os-autopilot/runs/20261018T013135Z-08003bf4`.
   The old19:33UTC stop and its evidence remain in the
   [stop handoff](SUPERVISOR-STOP-20261017T193320Z.md). No automatic policy retry added.
@@ -20,18 +20,20 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-18T02:05:24Z`, review13, first resumed interval.
+- Last full review: `2026-10-18T02:36:04Z`, review14, interval30m40s.
 - User explicitly requested the interactive30-minute supervision loop again.
-  Next full review target:`2026-10-18T02:35:00Z`, latest03:05UTC. Continue the
+  Next full review target:`2026-10-18T03:05:00Z`, latest03:35UTC. Continue the
   loop in this chat; no independent OS timer or second dispatcher is installed.
   Exclude the19:33UTC-to01:31UTC stopped interval from velocity.
-- Last launcher-reported included usage:1% in the new weekly primary window;
+- Last launcher-reported included usage:3% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
-- Current intervention: review13 steering queued as
-  `20261018T020619262399Z-850ab1c5feed4f0d998dd7393ec3f15f`. Prior01:34/01:42
-  steering was accepted. Obtain frozen fork-build feedback; keep FPU-copy image
-  and process-app work parallel, refill useful independent implementation slots,
-  reuse accepted evidence and avoid whole-request pretty-printing.
+- Current intervention:02:32steering accepted as
+  `20261018T023236561980Z-6019f6a738e043cab48f6b59b7bdb371`: exact quarantined-owner
+  recovery, two-file compiler repair and future wait/resource-monitor fix in
+  disjoint lanes. User approved the exact root-reserve change; authorization
+  queued as`20261018T023604635438Z-d9e93ad1863e42f2ab5a7b38e0dd6fae`.
+  Apply only after positive recovery/release, fresh identity and exact execution
+  review. No further user permission needed for this approved count change.
 - Current invocation independently accepted app/diagnostic behaviors: 15 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -1215,3 +1217,87 @@ Canonical anchors under ../evidence/: native-fp-save-terminal-cleanup-result-rev
 native-postreboot-workload-result-review-20261018-1.json;
 native-m07-avx-actual-result-review-20261018-1.json;
 native-fp-copy-extent-source-integration-20261018-1.json.
+
+## Review 14 — 2026-10-18 02:36:04 UTC
+
+Interval02:05:24->02:36:04UTC,30m40s. Same live worker760063/start8454148 and
+server760065/start8454153; campaign active, no service stop. Included usage3%,
+stop97%. HEAD24683024 follows4af0547a/3eb6100c integration and corrected fork
+publication; exact fetched composite proof is retained.
+
+| Measure | Change this interval |
+| --- | --- |
+| Accepted native app/diagnostic behaviors | 15->15; no new runtime pass |
+| Practical checks | 3complete/32open, unchanged; no percentage uplift inferred |
+| Actual fork module builds | Two compiler failures; first positively retired, second quarantined after resource-monitor exception |
+| Compiler repair | First six errno sites pass source review and corrected actual build entry; two remaining issues localized |
+| Useful file utility | Binary/empty-file, target-libc, error and nine source fault controls accepted; native stage held |
+| Disk recovery | 6,483,968bytes trim +72,241,152bytes inactive caches =78,725,120bytes, about75.08MiB allocation reduction |
+| Larger capacity action | User explicitly approved exact root-reserve change; not executed at cutoff |
+
+First actual fork Kbuild failed with six unresolved EOVERFLOW references after
+5.55s; its container/clients/records retired and were independently accepted.
+Six-site errno(-75) correction across five sources preserves checked arithmetic,
+with original negative and actual-width zero/max-1/max controls. Initial next-
+packet preparation missed tool-row source_relative and then stale REPLACEMENTS/
+consumed-byte metadata. Affected correction plus actual load_preparation and
+closure consumer checks passed; corrected bytes were published/fetched and77
+private copies totaling2,019,774bytes materialized. Next build announced02:28:10,
+roughly22minutes after the first failure, including repair/review, publication,
+capacity maintenance and final release. This is not isolated compiler time or
+a measured avoidable-idle total.
+
+The corrected build found mcctrl_vm's remaining EOVERFLOW and an unused three-
+line sysfs_memory wrapper under strict warnings. Narrow advisory repair uses
+existing errno conversion and deletes only the uncalled wrapper; warning flags
+and closed fork activation remain. Postflight fell about300KiB below the full
+floor-plus-reserve predicate. Resource monitoring raised during the wait-client
+path, leaving retirement unproven and a live owner holding mutex27:4. Exact
+stopped CIDa84d19b5 and three ownership records remain retained. No failure
+latch/ledger is reset. Source repair, terminal recovery and a future consumed-
+runner fix now have separate workers. New heavy work waits for reviewed positive
+retirement/release; restored capacity alone does not prove it.
+
+FPU successor validation is now container-self-contained and passes19controls;
+materializer/request source review accepts the CPU-only delta. Its existing
+outer release still requires floors+512MiB after preparation: initial headroom
+803,520,512bytes, about192MBshort before cache recovery. File utility's unchanged
+binary passes exact retained loader/libc and all12version requirements, binary/
+empty copy and three errors. Nine instrumented whole-C-source fault cases pass.
+Producer/verifier sees real changed input/output bytes; strict consumer38controls
+then revealed missing supported CRLF framing. Fix remains pending authentic
+overlay and actual runner/owner replay. These are host/source gains, not native
+process-creation or file-utility acceptance.
+
+The user's disk-cleanup instruction added bounded host maintenance to this
+supervisor's scope. Targeted trim reclaimed6.18MiB, insufficient by itself.
+Inactive pip HTTP cache reclaimed13.57MiB; closed application/Go caches last
+used2023-2025 reclaimed55.32MiB. UID/type/link/date/no-open-handle checks preceded
+removal. Installed packages, user profiles/mail, active Tracker/Conda/current
+compiler/browser caches and every OS input/failure remain preserved. Old failed
+source copies offer only124.7MBgross and lack complete archive/release proof;
+none deleted. Host now16.620GiB, scratch15.062GiB, subject to fresh admission.
+
+Independent reserve proposal review confirms249,919,744blocks at4096bytes,
+old reserve12,495,987 ->2,499,198, retaining9.533684GiB and conditionally exposing
+38.134724GiB. The user answered "Yes, apply the reviewed reserve change";
+instruction023604 conveys explicit authorization of tune2fs -r2499198 on the
+bound root device. Existing proposal files remain historical proposal-only
+records. Exact execution review and positive prior-owner retirement are still
+required;16/12GiB floors, packet reserves and97% usage stop remain. No setting
+changed at cutoff. Accessibility change must not be reported as allocation reclaim.
+
+**Adjustment:** finish exact recovery and the approved capacity operation, keep
+compiler repair and future monitor/retirement correction parallel, and batch all
+consumed source/tool-map/byte-count joins before actual consumer checks and
+publication. Reuse earlier six-site evidence. Avoid more paper-only frameworks
+or repeated corpus hashing. This interval exposed preparation/resource overhead;
+it does not establish doubled/tripled throughput. Next review03:05UTC, latest03:35.
+
+Anchors: ../evidence/native-fork-real-target-build-failure-review-20261018-1.json;
+../evidence/native-fork-errno-rebuild-fetched-source-proof-20261018-1.json;
+../evidence/native-targeted-trim-result-review-20261018-1.json;
+../evidence/host-pip-cache-cleanup-20261018-1.json;
+../evidence/host-stale-cache-cleanup-20261018-1.json;
+[reserve proposal](HOST-RESERVE-PROPOSAL-20261018.md) and
+../evidence/host-ext4-reserve-proposal-review-20261018-1.json.

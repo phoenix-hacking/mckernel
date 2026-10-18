@@ -120,6 +120,24 @@ Git, heavy execution and acceptance updates. Ready results should be reviewed
 and integrated at the next safe boundary, without waiting for a report-only
 checkpoint or unrelated milestone closure.
 
+Within an assigned private write scope and reusable cheap profile, repair routine
+fixture/generator mistakes without another permission round. Missing imports,
+escaped-text anchors, tool/source row shapes and total-input versus Rust-file
+counts are ordinary implementation corrections when the authoritative contract
+is unchanged. Preserve the original failing evidence, make the bounded correction
+and run the affected check, then report the coherent result. A private scaffold
+failure does not itself create a new global readiness gate. Unexpected workload
+effects, uncertain live identities, changes outside the assigned scope and changes
+to frozen privileged/source/artifact contracts still require the existing stop,
+preservation and focused review. Never replay a one-shot workload under this rule.
+
+Before publishing or handing off a changed packet, exercise its existing actual
+consumer where the cheap profile permits: source replacement maps, consumed byte
+counts, closure/schema bindings and runtime file availability belong in that
+check. Reuse accepted unaffected evidence. Imported placeholders or a generator's
+own success do not establish that the final preparation/runner/owner can consume
+the packet. Consolidate these affected bindings into one reviewable handoff.
+
 ## Reuse artifacts and batch the work that is actually independent
 
 | Change | Cheapest appropriate next action |

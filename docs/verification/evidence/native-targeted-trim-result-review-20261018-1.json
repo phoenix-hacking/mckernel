@@ -1,0 +1,38 @@
+{
+  "status": "PASS_ACTUAL_TARGETED_TRIM_AND_RETIREMENT",
+  "reviewer": "/root/postreboot_actual_result_review",
+  "release": {
+    "path": "/home/holden/mckernel-work/scratch/native-targeted-trim-preparation-20261018-1/execution-release.json",
+    "sha256": "5826753585c07b62f3f6203d0d57d80614761c4aa13c55aefd2fdefc3e04df0b"
+  },
+  "archive": {
+    "path": "/home/holden/mckernel-work/scratch/native-targeted-trim-preparation-20261018-1/dispatch-20261018-1/attempt.tar",
+    "sha256": "7024dd020d30b1666913548c6373cd66c75caf3b3e3548f82c3484abae9844a0"
+  },
+  "inner_result_sha256": "a153d2ff983d5308fc5d6e5355e391142c084f899d555a10aeb2bd954a621698",
+  "join": {
+    "path": "/home/holden/mckernel-work/scratch/native-targeted-trim-preparation-20261018-1/dispatch-20261018-1/result.json",
+    "sha256": "359b8449ab85f941a0acb11d8e68948151a2cf43fb608bd07e382304e19ff444"
+  },
+  "readback": {
+    "path": "/home/holden/mckernel-work/scratch/native-targeted-trim-preparation-20261018-1/dispatch-20261018-1/readback-result.json",
+    "sha256": "e5c3ae5476a670fbedb339c712c7f304fc1e013dc42a6319374b0d5240131c60"
+  },
+  "actual_reclaimed_backing_bytes": 6483968,
+  "backing_allocated_before_bytes": 98815672320,
+  "backing_allocated_after_bytes": 98809188352,
+  "host_available_before_bytes": 17788989440,
+  "host_available_after_bytes": 17795473408,
+  "scratch_available_before_bytes": 16179781632,
+  "scratch_available_after_bytes": 16179716096,
+  "advertised_discard_bytes": 1120800768,
+  "verified": [
+    "Backing110GiB/inode47468427/loop36/ext4UUID unchanged; seven historical leases metadata and hashes equal.",
+    "Two289process census snapshots each admission/postflight, no competing publishers.",
+    "Fstrim780931 exit0/emptyerr; directwait plus normal/twofinalgroupchecks empty.",
+    "Wrapper780930 positive mutex27:4 release before joined0; exactreadback0."
+  ],
+  "deletion_or_resize": false,
+  "whole_unrelated_corpus_comparison_claim": false,
+  "native_acceptance": false
+}

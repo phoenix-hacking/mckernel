@@ -1,0 +1,59 @@
+{
+  "schema": "mckernel.host-ext4-reserve-proposal.v1",
+  "status": "PROPOSAL_NOT_AUTHORIZED",
+  "created_utc": "2026-10-18T02:26:37.175872+00:00",
+  "scope": "Functional PRACTICAL-GOAL.md kernel/apps; user-requested read-only host ext4 reserve proposal only. No setting change authorized or executed.",
+  "identity": {
+    "device": "/dev/nvme0n1p2",
+    "mount": "/",
+    "fstype": "ext4",
+    "major_minor": "259:2",
+    "uuid": "983bfa59-3985-4ca8-87af-3675adcfe2b3",
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb"
+  },
+  "capture_root": "/home/holden/mckernel-work/scratch/host-ext4-reserve-proposal-20261018-1",
+  "counts": {
+    "filesystem_blocks": 249919744,
+    "block_bytes": 4096,
+    "old_reserved_blocks": 12495987,
+    "proposed_reserved_blocks": 2499198,
+    "proposed_formula": "ceil(filesystem_blocks/100)",
+    "old_reserved_bytes": 51183562752,
+    "proposed_reserved_bytes": 10236715008,
+    "proposed_reserved_GiB": 9.533683776855469,
+    "reservation_reduction_blocks": 9996789,
+    "conditional_accessible_increase_bytes": 40946847744,
+    "conditional_accessible_increase_GiB": 38.13472366333008
+  },
+  "mounted_projection": {
+    "captured_statvfs": {
+      "f_bsize": 4096,
+      "f_frsize": 4096,
+      "f_blocks": 245715567,
+      "f_bfree": 16842529,
+      "f_bavail": 4342446
+    },
+    "captured_available_bytes": 17786658816,
+    "captured_available_GiB": 16.56511688232422,
+    "projected_available_bytes": 58733506560,
+    "projected_available_GiB": 54.6998405456543,
+    "f_bfree_expected_unchanged_by_reservation_change": true,
+    "caveat": "Projection assumes no concurrent allocation changes. dumpe2fs on-disk Free blocks may lag mounted state; mounted statvfs is the live projection basis. This changes reservation accessibility, not file allocation; it reclaims no allocated bytes."
+  },
+  "proposed_command": "sudo -A /usr/sbin/tune2fs -r 2499198 /dev/nvme0n1p2",
+  "rollback_command": "sudo -A /usr/sbin/tune2fs -r 12495987 /dev/nvme0n1p2",
+  "local_primary_reference": {
+    "path": "/usr/share/man/man8/tune2fs.8.gz",
+    "option": "-r reserved-blocks-count",
+    "text": "Set the number of reserved filesystem blocks."
+  },
+  "preconditions": [
+    "User resolves scope and explicitly authorizes setting change; no automatic execution.",
+    "Freshly verify boot, mount device/UUID/major:minor, block size, total/reserved counts, mounted capacity and owner/lease identities.",
+    "Independent review of exact operation and rollback, using serialized heavy-operation scope; do not overlap a build/guest.",
+    "Preserve 16-GiB host and 12-GiB scratch floors plus packet reserves; included usage stop remains97%.",
+    "Preserve all failed/current files, Conda and Tracker; scratch110-GiB backing image and scratch UUID unchanged."
+  ],
+  "rollback_limits": "Restoring original reserved count restores reservation policy, not bytes consumed by intervening writes. If later free space falls below original reservation, ordinary-user availability may become zero; remeasure and review before rollback.",
+  "execution": "No root command, filesystem mutation, cleanup, archive, Git operation or deletion performed by proposal author."
+}

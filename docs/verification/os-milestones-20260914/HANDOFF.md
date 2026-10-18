@@ -1,5 +1,91 @@
 # Compact dispatcher handoff
 
+## Active cursor — 2026-10-18 03:03 UTC
+
+The manually resumed practical kernel/app campaign continues. Distinct native
+behaviors remain15; no new guest acceptance or exit-check closure in this interval.
+Original module compiler failures and monitor/quarantine evidence are preserved.
+
+Exact corrected terminal recovery independently accepted: owner783155 joined-9,
+31clients positively retired, exact stopped CID removed, three records archived
+and released, persistent mutex27:4 released. The first Mounts-order refusal and
+old failed transport latch remain preserved. Canonical result:
+[recovery review](../evidence/native-fork-quarantine-terminal-recovery-result-review-20261018-1.json).
+No active quarantine remains for that owner; HEAD freeze from it has ended.
+
+User-authorized root reserve change executed once and independently accepted:
+12495987->2499198blocks;9.533684GiB emergency reserve retained. Nominal accessible
+capacity increased40946847744B; measured availability+40946618368B, totalfree
+-229376B from other growth. Allocation reclaimed0. Root/scratch/boot/backing
+identities unchanged; seven clients and rootmutex released. See
+[reserve result](../evidence/host-ext4-reserve-result-review-20261018-1.json).
+Keep16/12GiB floors, full packet growth reserves and97% included-account stop.
+
+Next source candidate4d31002d/63files1453567B is independently source/preparation
+accepted: exact mcctrl_vm errno(-75), unused sysfs wrapper removal, future monitor
+producer/consumer retirement correction with10actual-body tests. Current failed
+owner was never patched/unlatched. Its75source/tool/derivation publication bytes
+are locally saved; fetched proof/finalmaterialization/execution release remain.
+FPU CPU-copy successor materialization/request now authorized within accepted
+ordinary profile after fresh803520512B initial and512MiB post-preparation reserve.
+File utility exactarchive+short actual runner/owner replay accepted; independent
+execution-packet review active. No archive rebuild or old probe replay needed.
+Next useful heavy candidates: corrected early modules, FPU-copy image, or fully
+released file utility. One heavy owner; two-case guest queue remains bounded.
+
+Later service-held transport/ACK work stays excluded. Routine private scaffold
+corrections follow VELOCITY.md; no new permission round for unchanged contracts.
+Supervisor recurring30minute cursor remains VELOCITY-REVIEWS.md. Preserve the
+15:25 practical estimate baseline. Continue autonomously after this checkpoint.
+
+
+## Critical cursor — 2026-10-18 02:41 UTC
+
+Manual resumed practical campaign continues. Native distinctbehaviors15; no new
+guest acceptance since AVX. Correctedearlyfork candidate1cf actually compiled,
+then failed mcctrl_vm EOVERFLOW and unusedcopy_from_guest understrictwarnings.
+Owner783155/start8793049 is LIVEQUARANTINED with rootmutex27:4; samee014nonce,
+CIDa84d19b5dc9a72c158531300c23339798c8c5f0c2cc55515798c5fd259484831
+stopped/retained. Lease/common/shared inodes112839/112838/112837 intact. Do not
+start another heavy, rawremovecontainer, unlinkmutex/records or patchfailedledger.
+Root session63012's parent waits for this owner; preserve it. Exactrelease/source
+andrawclassification are in native-fork-errno-rebuild-quarantine-review-20261018-1.json.
+
+Postflightmonitor missed full16GiB+576MiB threshold by307200B (basefloorintact).
+Waitclient783284 TERMEPERM thennormalwait0, failedstatelatch remains; emptyarray
+alone doesnotprovegroupretirement. Separate high author prepares exactread-only
+rootobserver thenreport-bound controlledownerretirement/CIDremoval/recordarchive
+andrelease packet. /scratch/native-fork-quarantine-terminal-recovery-20261018-1.
+No recoverycommand released yet. OwnerPID/start/mount/clientgroups freshproof
+and independent executiondecision mandatory before any effect.
+
+One targetedtrim independentlypassed:6483968B actualbackingrecovery, distinct
+from1120800768Badvertiseddiscard. Supervisor pip+inactivecache recovery72241152B
+allocation separate, receipts retained. No Conda/Tracker/current/failedinput deletion.
+FailedfirstFPUexpandedsource+prelibdwarf total124678144Bgross may archive-before-
+delete in future but no authenticatedarchive/removalauthority yet; preserve now.
+
+User02:36 explicitlyauthorized exactrootreserve2499198 from12495987 AFTERaccepted
+terminalrecovery/mutexrelease; independentexecutionpacket preparation active,
+no tune2fs mutation yet. Proposalmathreview accepted9.533684GiBretainedreserve/
+38.134724GiBconditionalaccessibility (notallocationreclaim), exactrollbackcount
+conditionalfreshcapacity. Keep16/12GiBfloors+allpacketreserves and97%accountstop.
+
+Independentsourceprogress: expert2filenativefix(actualusizeerrno75+unusedwrapper
+onlydelete) accepted; futuremonitorretirementproducer/consumer10tests underreview,
+originalfailedownerunchanged. Utilitysource+targetlibcLinux+faultcontrols+CRLF
+consumer accepted; authenticarchive andactualrunner/ownerreplay stillpending.
+FPUCPUcopy5d source alreadycheckpointed4af; exactsuccessorauthority/commands
+accepted but source/requestpreparation needs803520512Binitialheadroom and512MiB
+AFTERprep. No waiver from combinedgrowthestimate. Next afterrecovery: approved
+reserveoperation, then firstfullyreleased usefulmodule/image/utility operation.
+
+HEAD2468302425f3ca97981c510efc08fdecd85f26f3 pushed/fetched75sourceproofc9b568;
+HEADFREEZE duringlivequarantine. Batchnextsafecheckpoint afterpositive release,
+including supervisoryReview14/hostcleanup/reserveproposal/newfailure records.
+Continueaftercheckpoint. Service-heldlatertransport/ACK task remains excluded.
+
+
 ## Build feedback — 2026-10-18 02:06 UTC
 
 Exact early fork build released40d77c10 and executed once. Owner1/5.549953s;
