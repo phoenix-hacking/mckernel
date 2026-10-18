@@ -26,13 +26,13 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-18T11:14:54Z`, review29, interval29m39s.
+- Last full review: `2026-10-18T11:45:25Z`, review30, interval30m31s.
 - User explicitly resumed the interactive30-minute loop. Next full
-  review target:`2026-10-18T11:45:00Z`, latest12:15UTC, using the06:15 launch
+  review target:`2026-10-18T12:15:00Z`, latest12:45UTC, using the06:15 launch
   baseline below. No independent OS timer or second dispatcher is installed.
   Exclude the05:25:30-to06:15 stopped interval and failed startup from runtime
   velocity; do not treat the canceled05:35 target as a missed active review.
-- Last launcher-reported included usage:20% in the new weekly primary window;
+- Last launcher-reported included usage:21% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
 - Current review20:16 native behaviors and3complete/32open checks unchanged,
   all14milestones open. Five compute Rust ports source-reviewed; two selected in
@@ -141,14 +141,25 @@ This file describes supervision, not OS acceptance or execution authority.
   review. IHK-only parser source accepted0275e5d2; matched-owner derivative
   23affected checks pass, independent review active. Host52.001GiB/scratch12.836GiB,
   usage20%. No new guest attempt/2x uplift this interval. Next11:45UTC/latest12:15.
-- Current invocation independently accepted app/diagnostic behaviors: 17 (signal,
+- Current review30:18 native behaviors,5complete30open practical checks, all14
+  milestones open. Host physical releaseaf7864d0 accepted11:16:26; reset-image
+  threadsf17870d7 accepted11:21:30 and new empty-file7a7fe0fa accepted11:31:13,
+  dispatcher applied18behaviors11:32:45. IHK-only source published/fetched8812b545,
+  17-file materialization0/.07s, exact executionf72565fb approved; scratch is about
+  235MiB below unchanged floor+1088MiB reserve, so no build. Historical118expanded/
+  642archive cleanup targets already absent; no authorized reclaim yet. Null-
+  fpstate source/ABI/Linux PASS after exit_group correction; native pending.
+  Finite EMPTY finalizer trial independently PASS5712bf7f with all outputs pending.
+  Host51.968GiB/scratch12.833GiB, usage21%. Next12:15UTC/latest12:45; no2x claim.
+- Current invocation independently accepted app/diagnostic behaviors: 18 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
   useful dynamic-libc threads application, forced pthread contention app,
   actual memory-protection fault/recovery app, bounded vector-preservation app,
   AVX/YMM preservation across the exercised syscall/futex/signal boundaries,
   binary file-copy/checksum/close/reopen/readback/unlink utility, mixed Rust/std
-  memory and checked close/reopen/EOF with alternating joined threads).
+  memory and checked close/reopen/EOF with alternating joined threads; empty-file
+  copy/checksum/EOF and checked close/output behavior).
 - Separate native3f7b observations: independently accepted quiescent native
   shutdown5->0->0/close0 and public destroy/device-memory release; complete
   one public stop/destroy/release/reboot cycle is now accepted with d99 modules.
@@ -2659,3 +2670,80 @@ Evidence: host-preparation `practical-selected-suite-independent-review-20261018
 `native-host-objtool-corrected-dispatch-20261018-1/cleanup-python39.status.json`;
 `native-host-objtool-next-module-source-review-20261018-1/corrected-source-review.json`
 (0275e5d2), `native-host-objtool-next-module-consumer-20261018-1/matched-module-packet-proposal-1`.
+
+## Review30 — 2026-10-18 11:45 UTC
+
+Cutoff11:45:25UTC, interval30m31s. Same campaign running/active, original worker/
+server live, no restart/service stop. Host51.968GiB/scratch12.833GiB, usage21%,
+stop97%. Checkpoint8812b545 pushed/fetched28 selected blobs. Source/storage
+originals, scratch21 and ROOTmutex27:4 remain preserved; supervisor runs no workload.
+
+| Measure | Interval result |
+| --- | --- |
+| Distinct native behaviors |17->18; new empty-file behavior, plus repeat threads validation on reset image |
+| Practical checks / milestones |5complete30open unchanged / all14milestones open |
+| Actual native attempts accepted |Two: threadsf17870d7 and empty-file7a7fe0fa |
+| Selected Rust coverage |Eight production-proven/six applicable native-chain bodies; clear-execve and null reset still unproved |
+| IHK pilot |Published, materialized and execution-reviewed; build unlaunched for concrete scratch deficit |
+| Next native preparation |Null-fpstate source/ABI/Linux oracle accepted; ordinary staging preparation active |
+
+Host cleanup/postreadbackaf7864d0 accepted11:16:26 after the Python39 correction:
+nine-event journal, exact original archives, absent ownership/quarantine paths,
+all118files/copies preserved and positive supervisor retirement. The prior Python38
+failure remains intact. This finally releases the host operation; source controls
+were accepted10:44:36, so terminal acceptance took31m50s after that result, against
+4.10s producer time. This is integration delay, not a healthy long compiler run.
+
+Threads actualf17870d7 accepted11:21:30: exact25B/exit37/empty stderr, balanced
+TIDs, no kernel failure markers,30clients reaped and authenticated removal.
+Release->threads acceptance5m04s. Empty-file wrapper dispatched11:24:56 after a
+private memory-field mismatch was corrected before release/effect; admission uses
+the actual owner container limit, not just guest memory_mib. Owner0/37.43s and
+three readbacks pass. Review7a7fe0fa accepted11:31:13: exact55B/exit0/empty stderr,
+zero-byte file checks, two EOF reads, checked closes/output and30clients reaped.
+Dispatcher applied18behaviors11:32:45. Wrapper->independent acceptance6m17s;
+host release->both native acceptances14m47s. One new behavior this interval, not
+a certified2x/3x gain; prior interval had zero attempts, so no useful multiplier.
+P-M04-02 and final-profile coverage remain open; no engineering-percent change.
+
+IHK owner derivative283a56d2 source PASS23affected checks. Twenty canonical
+copies/14existing module paths/12new blobs published in8812b545; fetched28blobs
+verified. Ordinary17-file materialization351a83a3 passed0/.07s; actual17inputs and
+12runtime sources match. Request781461a2 and real owner authentication pass.
+Exact executionf72565fb preserves512MiB candidate+64MiB captures+512MiB emergency.
+Required scratch free14,025,752,576B; measured deficit246,091,776B(~235MiB).
+Both writable paths are on scratch; host free space gives no admission credit.
+Build remains unlaunched. Terminal helpers/source review are being prepared with
+proven Python39 before execution, retaining actual identities as pending.
+
+The bounded storage lane found all118historical expanded targets and642duplicate
+archive targets already absent. One selected image output has only~57MB, below
+the need; no authorized reclaim yet. Assess only the one named old source-copy
+candidate next, without another broad census. If unsuitable, prepare one bounded
+proposal using existing host storage for new writable data while keeping ownership
+transactions on scratch and full per-filesystem floors/growth/emergency bounds.
+That requires applicable source/profile/execution review; no silent relocation,
+cap reduction, image resize or removal of failed/active evidence. Null staging
+continues independently, and a fully admitted guest must not wait on IHK capacity.
+
+New null-fpstate lane uses existing image492 and exact signal-return ABI; source
+confirms NULLfpregs directly reaches Rust reset. Static assembly checks only
+guaranteed x87 FINIT control/status/empty-tag state, not unspecified SSE bytes.
+Review caught collector exit_group requirement before staging. Literal correction
+4af5fb3a preserves original; all7Linux variants pass53Bstdout/exit0/empty stderr.
+Independent source/ABI/oracle review accepts; no native credit. Reuse canonical
+evaluator/collector/current matched modules; bounded stage proposal is in progress.
+
+Finalizer trial freezes3 pending metadata outputs and19 refusal controls, tested
+through actual wrapper/owner consumers. Independent5712bf7f approves EMPTY join
+only: consumed case cannot replay, NULL still needs its own accepted native packet.
+Root keeps fresh facts/one-shot authority/launch; no general orchestration layer.
+Measure actual next-case assembly delay/error change before claiming a speed gain.
+
+**Adjustment:** remove the concrete capacity obstacle through one safe reviewed
+candidate or finite host-placement proposal; keep next eligible native case ready.
+At new independent phases use fresh self-contained worker packets when old
+contexts are large, while retaining frozen evidence and reviewer independence.
+Do not interrupt healthy owners or roll back conversations. Keep result reviewers
+active at handoff, preflight actual schemas/interpreters/mounts once, and reuse
+unchanged proofs. Next full review12:15UTC/latest12:45; continue supervision.

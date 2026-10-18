@@ -1,0 +1,45 @@
+{
+  "acceptance_delta": {
+    "Rust_retirement": 0,
+    "apps": 0,
+    "builds": 0,
+    "native": 0
+  },
+  "capacities": {
+    "candidate": 536870912,
+    "capture": 67108864,
+    "emergency_each": 536870912,
+    "host_floor": 17179869184,
+    "host_includes_scratch_backing": true,
+    "host_required": 18320719872,
+    "scratch_floor": 12884901888,
+    "scratch_required": 13488881664
+  },
+  "changes": [
+    "New nonce-bound candidate_root only is HOST_ROOT direct child; fixed HOST_ROOT node + mount UUID/device admission; exact candidate node device HOST_DEVICE.",
+    "Reuse frozen existing readonly scratch input root and identity; no new input copy, no SDK copy.",
+    "Owner runtime source map resolves changed owner/test locally; other10 canonical entries reused.",
+    "Host reserves candidate512+capture64+emergency512MiB; scratch reserves capture64+emergency512MiB; host also funds scratch sparse backing.",
+    "Output inventory rejects symlink/nonregular/cross-device/hardlinked nodes and enforces original512/64MiB caps."
+  ],
+  "gates_pending": [
+    "Independent source and changed execution profile review",
+    "Independent ordinary 14-file staging release",
+    "Actual new host candidate materialization + exact node binding",
+    "Source publication/fetched blob proof",
+    "New frozen request and one-shot release/exact execution review",
+    "Fresh included usage, both filesystem capacity, live leases and unchanged guarded_execute admission"
+  ],
+  "runtime_effects": false,
+  "scope": "Functional PRACTICAL-GOAL useful kernel/apps AND actual compute C retirement into Rust/reviewed assembly; no compute C expansion.",
+  "status": "PENDING_INDEPENDENT_SOURCE_PROFILE_AND_EXECUTION",
+  "unchanged": [
+    "ROOT scratch identity/UUID7:36 dev1828",
+    "ROOT27:4 guard",
+    "leases/exclusions/owner captures/admission exchange remain scratch",
+    "historical7 lease observer",
+    "seven bind destinations and container profile",
+    "IHK driver/preparation/authority",
+    "normal retirement/client joins/three-record archive/owned removal"
+  ]
+}

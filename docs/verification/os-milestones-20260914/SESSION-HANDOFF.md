@@ -1,5 +1,57 @@
 # OS development session handoff
 
+## Dispatch checkpoint — 2026-10-18 12:00 UTC
+
+ACTIVE functional OS/apps and Rust/reviewed-assembly cutover. Counts remain18
+native behaviors,5complete/30open practical checks,all14milestones open. Current492
+has8selected production Rust bodies/6applicable native-chain proofs; NULL signal
+FP reset and execve-clear still native OPEN. No new estimated percentage credit.
+
+NULL-FP probe: source/ABI/Linux review7b3ca2d7 accepts guaranteed x87 FINIT state
+only, never unspecified SSE boot bytes. Original exit60 preserved; corrected231
+passes7Linux variants/53Bstdout/exit0/empty stderr. Ordinary stage9e357b8e accepts
+60member archive/baseverbatim/onlyinit+appsapp delta and actualrunner+owner2positive/
+8negative checks. Actualparent22e2f688 accepts dev1828/inode755534/UIDGID1000/0700
+empty, receipt df3b18fd and literalwrapper3c91c703. Finalconditionalpacket8cff2976
+is in independent0955 execution review; runtimefalse/live gates pending. Root must
+bind fresh admission/currentpredecessor/realone-shot release before any guest.
+Probe root host-preparation/practical-null-fpstate-probe-20261018-1; do not recreate
+stage/parent or replay consumed commands. Case-specific finalizerNULL5source joins
+are pending independent actualbound review; helper is secondary, never authority.
+
+Old IHK request781461a2/releasef0b733b7 remains UNCONSUMED/CAPACITY BLOCKED:
+Scratch needs14,025,752,576B; actual about13,779,648,512B. All760oldcleanup targets
+absent; named oldsourcecopy141,049,856B insufficient, no deletion/archive performed.
+No resize, trim-as-scratch-fix, reserve reduction or additional corpus census.
+
+User-authorized finite IHK hostcandidate alternative SOURCE/profilePASS9f1e4fdc,
+32author+19focused independent checks; original12source/17files/request/release
+preserved. Actual14hostcandidatefiles+3reusedScratchinputs acceptedbdaf22ce;
+requestfef36881 remains PENDING exact execution/publication proof. Caps unchanged:
+512MiBcandidate+64MiBcaptures+512MiBemergency, host minimum18,320,719,872B and
+Scratch13,488,881,664B. Ownership exchanges and records remainScratch. No new
+SDKcopy/root/observer/build. Newcanonical21rows402586B are staged for normal
+publication; actual12runtime resolution is10oldcanonical+2newowner/test. Fetched
+proof must cover ACTUAL10oldrefs as well as new2. Never mark fetchedTrue until
+realpush/fetch/blob proof. Newexact release is required; never reusef0b733b7.
+Hostsplit root host-preparation/native-ihk-host-writable-split-20261018-1.
+
+Terminal helper source/consumer21af6e4d accepts9body+2exactPython39CLI checks,
+normal integrated owner release+3record archive; no extra post-success root gate.
+Hostsplit needs affected owner-pin/path joins only, actualidentities stillpending.
+EMPTY finite finalizer5712bf7f approves PENDING datajoin only; consumedEMPTY cannot
+rerun. Helpers never invent fresh facts, physical retirement or execution approval.
+
+Prior checkpoint8812b545 pushed/fetched28blobs; root proof publication-binding-1/
+root-actual-fetched-verification.json. Currentnew publication proof will be retained
+under native-ihk-host-writable-split-20261018-1/publication-handoff-1/. Oneheavy,
+aggregate7jobs/23.735GiB,16/12GiBfloors+actualgrowth/emergency,97percent usage stop.
+Lastusage21%; host55,771,111,424B/Scratch13,779,648,512B were measured11:51, not
+fresh admission. Scratch21/allfailedsources/oldrecords/ROOT27:4 preserved. Choose
+first fully admitted useful NULLguest or IHKpilot; neither depends semantically on
+the other. Source/static/mock results are not native or process-creation support.
+
+
 ## Live accepted checkpoint — 2026-10-18 11:33 UTC
 
 Campaign remains ACTIVE under the explicit06:15 resume. Functional supported OS/apps
