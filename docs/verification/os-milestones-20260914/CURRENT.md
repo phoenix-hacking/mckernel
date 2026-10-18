@@ -1,5 +1,15 @@
 # Resume cursor
 
+## PAUSED — explicit user stop, 2026-10-18 05:20 UTC
+
+No new admissions or automatic continuation. All workers stopped; the already
+running finite read-only observer joined0. Container/common/shared records stay
+retained; cleanup and new-image native proof are pending. See
+[exact pause/resume handoff](PAUSE-20261018T052036Z.md) and
+[checkpoint evidence](../evidence/os-user-stop-20261018T052036Z.json).
+Earlier active/continuous banners below are historical until explicit resume.
+
+
 ## Combined Rust image execution cursor — 2026-10-18 05:13 UTC
 
 Both first ports are independently PASS_SOURCE and saved in fetched checkpoint
