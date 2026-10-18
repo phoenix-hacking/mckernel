@@ -853,6 +853,11 @@
               "path": "docs/verification/evidence/native-m07-avx-actual-result-review-20261018-1.json",
               "sha256": "f228f864485e608f7e60d6853886069f5814b129122f6ccf92fd21677a14f0d2",
               "size": 2615
+            },
+            {
+              "path": "docs/verification/evidence/practical-m07-avx-cpu-copy-image-result-review-20261018-1.json",
+              "sha256": "6405dc4064bd9d60889e3f7d5db891567f004d663e4feadfd0f68e0ce06add13",
+              "size": 26304
             }
           ],
           "assessment_note": "Selected C/assembly GCC9.4 baseline x86-64/-mno-avx requirements and exact native profile are declared in the assessment. Static libc, staged dynamic libc/loader and final Rust/application IFUNC/OSXSAVE/XCR0 requirement closure remain unassessed. No whole-libc no-AVX inference or silent profile narrowing."
@@ -896,12 +901,22 @@
               "path": "docs/verification/evidence/native-fp-save-current-artifact-result-review-20261018-1.json",
               "sha256": "7b67cec05a5b710d538ca352a2867433f4e8c66ef4265e96e6c64409bb691373",
               "size": 1149
+            },
+            {
+              "path": "docs/verification/evidence/practical-m07-avx-cpu-copy-image-result-review-20261018-1.json",
+              "sha256": "6405dc4064bd9d60889e3f7d5db891567f004d663e4feadfd0f68e0ce06add13",
+              "size": 26304
+            },
+            {
+              "path": "docs/verification/evidence/native-fpu-copy-image-artifact-review-20261018-1.json",
+              "sha256": "af944ffd139c2b2b2b81d287ea4a826a34296439174a4e611819d7ce0464c28e",
+              "size": 16893
             }
           ],
-          "assessment_note": "Native SSE2 result preserved. New image a0f50854 with fail-stop allocation handling built and actual AVX/YMM0-15 plus selected x87/MXCSR preservation passes syscall/blocking futex/signal paths on one McKernel CPU; exposure XCR0=0x21f, XSAVE size2696. Later copy_fp_regs extent repair5d939231 independently source/actual-body accepted, not in tested image. Final compiler/libc IFUNC/used-state, AVX512 and multicore coverage remain open."
+          "assessment_note": "Native SSE2 and original a0f50854 AVX evidence preserved. The rebuilt image08210bb2 includes allocation fail-stop plus copy_fp_regs extent repair5d939231; linked-body provenance and actual AVX/YMM0-15, selected x87/MXCSR syscall/blocking-futex/signal preservation now independently pass on one McKernel CPU. Actual XCR0=0x21f; stdout380 bytes/empty stderr/exit0 and full30client/QEMU/container/lease retirement. Final compiler/libc IFUNC/used-state, AVX512, multicore and final-profile closure remain open; no whole-M07 acceptance."
         }
       ],
-      "current_evidence_summary": "Native AVX/YMM diagnostic and full retirement accepted; distinct apps15. FPU save fail-stop image tested. Logical extent child-state copy repair source-only; new image required. Whole used-feature/IFUNC and final-profile closure open."
+      "current_evidence_summary": "Distinct native behaviors16 unchanged by this repeat. Rebuilt CPU-copy image08210bb2 is linked-body reviewed and actually passes the unchanged AVX/YMM/SSE/x87 diagnostic with full retirement. Extent repair is no longer source-only. Whole used-feature/IFUNC, untested vector/multicore and final-profile closure remain open."
     },
     {
       "id": "M08",

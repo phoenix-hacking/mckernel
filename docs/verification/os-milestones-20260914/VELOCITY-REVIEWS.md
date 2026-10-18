@@ -12,7 +12,7 @@ This file describes supervision, not OS acceptance or execution authority.
   historical; this inspection does not change goal-tool state or create a timer.
 - Engineering campaign: `01a149eb-f950-7f13-95a2-59dfc2918d49`; sole runtime/Git owner.
 - Campaign explicitly resumed by the user at`2026-10-18T01:31:35Z`; running with
-  an active goal at03:35:39UTC. Worker760063/start8454148 and server760065/start8454153
+  an active goal at04:05:54UTC. Worker760063/start8454148 and server760065/start8454153
   are live. Run directory:`.git/os-autopilot/runs/20261018T013135Z-08003bf4`.
   The old19:33UTC stop and its evidence remain in the
   [stop handoff](SUPERVISOR-STOP-20261017T193320Z.md). No automatic policy retry added.
@@ -20,20 +20,21 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-18T03:35:39Z`, review16, interval29m56s.
+- Last full review: `2026-10-18T04:05:54Z`, review17, interval30m15s.
 - User explicitly requested the interactive30-minute supervision loop again.
-  Next full review target:`2026-10-18T04:05:00Z`, latest04:35UTC. Continue the
+  Next full review target:`2026-10-18T04:35:00Z`, latest05:05UTC. Continue the
   loop in this chat; no independent OS timer or second dispatcher is installed.
   Exclude the19:33UTC-to01:31UTC stopped interval from velocity.
-- Last launcher-reported included usage:6% in the new weekly primary window;
+- Last launcher-reported included usage:7% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
-- Current intervention: review16 steering queued as
-  `20261018T033616075609Z-6119c00dc71f4db293a428cc5bd4e235`. Host54.184GiB,
-  scratch14.642GiB at cutoff. New image guard exited0 and terminal retirement
-  passed; artifact-body review and exact retained-terminal cleanup remain pending.
-  Module driver/owner prepare one conditional C-audit/full-build packet in parallel.
-  Correct ordinary private projection/script errors within their assigned scope;
-  unrelated scaffold failures do not create a production-failure escalation.
+- Current intervention: review17 steering queued as
+  `20261018T040655713139Z-1305772e0e2a4500bf1309f4a845df4a`. Host54.102GiB,
+  scratch14.596GiB at cutoff. New image artifact review and AVX stage accepted;
+  exact observation review now passes, while retained-terminal cleanup and both
+  workload releases remain pending. Conditional66 inputs are published, fetched,
+  materialized and reviewed; corrected capture reserve is656MiB above each floor.
+  Activate idle authors for corrections, supply exact consumer decision shapes,
+  and exercise inherited wrapper limits before the next handoff.
 - Current invocation independently accepted app/diagnostic behaviors: 16 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -1466,3 +1467,85 @@ native-fork-third-build-failure-retirement-review-20261018-1.json.
 Image terminal review binds the owner receipt under
 `scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/image-owner-evidence-084cffb0413a4275bfdd66e3fd6c3368/`
 and `scratch/native-fp-copy-image-guard-20261018-084cffb0413a4275bfdd66e3fd6c3368/guard-result.json`.
+
+## Review 17 — 2026-10-18 04:05:54 UTC
+
+Interval03:35:39 to04:05:54UTC,30m15s. Campaign remains running/active with
+unchanged live worker/server identities and no new service stop. Included usage
+6% to7%; stop97%. HEAD e7ca5e5b is pushed/fetched with90 exact blobs verified.
+Host54.102GiB/scratch14.596GiB; existing floors and outstanding reserves apply.
+
+| Measure | Change this interval |
+| --- | --- |
+| Accepted native behaviors | 16 to16; no new native execution acceptance |
+| Practical checklist and estimates | 3complete/32open, all14milestones open; estimates unchanged |
+| CPU-copy image | Independent artifact/linked-body acceptance; no new-image guest yet |
+| AVX follow-on | Image-only stage and actual consumer checks accepted; final release pending cleanup/admission |
+| Conditional fork modules | 66sources/1,463,836bytes and16RO inputs materialized; source/profile, publication and wrapper reviews pass within stated conditions |
+| Retained image terminal | Still blocks heavy use; read-only observation execution review passes at cutoff, cleanup pending |
+| Throughput experiment | Small next-image data/template prototype; source-only and incomplete transitive closure |
+
+Image08210bb2 is7,908,600bytes. Independent review joins CPU5d/process15cb,
+compiler/dependencies, provenance/link map and retained CPU/process objects.
+The linked copy passes xsave_size to memcpy and bypasses copy on allocation
+failure; save/schedule fail-stop remains. AVX staging changes only image
+hash/size across60 archive members, retaining all other metadata including41
+nonzero mtimes. Strict manifest and actual runner/owner checks pass. These are
+artifact/preparation gains, with zero new distinct runtime behaviors.
+
+The conditional module packet retains the C-audit-before-full-build gate and
+unchanged ownership lifecycle. Publication review caught source_copies63 where
+the actual closure is66. The additive correction passes actual count/missing-row
+negatives;78 published blobs,82 copies and16RO inputs now agree. Final assembly
+also needed the canonical PASS_SOURCE record for all11 runtime files; a prior
+descriptive profile decision was insufficient for the real owner consumer.
+Outer capture accounting was corrected with8MiB per stream, actual overflow
+draining/hold evidence and80MiB added reserve:656MiB total above each floor.
+Actual C compilation, full-module build, linking/modpost and native fork remain
+unproved. Final release still awaits cleanup/predecessor/fresh admission bindings.
+
+Cleanup source review caught a real producer/consumer mismatch: observe_identity
+omits mtime_ns while the new join required it. A correction uses separate stable
+metadata and rechecks all four real object paths postflight, fixes the default
+published test import and binds reviewer/payload exactly. Independent source
+review passes. The observer wrapper then needed actual Python-descendant
+identity, aligned capture paths, private modes, executable archive verification
+and inherited-limit correction. Its exact execution decision passes at04:05:53;
+this grants no cleanup authority. The cleanup wrapper remains under affected
+review, including a separate readback memory-limit correction. No privileged
+observation/cleanup had run at cutoff.
+
+**Measured handoff defect:** consolidated observer findings were available at
+03:46:00; the idle author's follow-up was activated03:50:24,4m24s later. The
+first narrower finding was03:44:28; do not count that whole earlier interval as
+avoidable because review consolidation was still underway. Root/reviewer
+confirmed a queued message had not started the idle turn. The workflow now
+requires explicit followup_task activation and a confirmed running turn before
+waiting. Root adopted this for the next wrapper correction. Fresh short worker
+contexts after normal completion also replace accumulating unrelated tasks.
+Automatic compaction occurred in long-lived review/root contexts; no policy
+error followed. Overlapping waits/compactions are not summed into lost runtime.
+
+**Adjustment:** take the approved observer through fresh admission promptly,
+review its actual result, then consume the prepared exact cleanup and first ready
+AVX/module operation. Keep their final bindings parallel. Provide reviewers the
+actual consumer's decision schema/source map, and test declared outer/inner
+limits together with normal subprocesses. Reuse unaffected results. These rules,
+scalar projections and future packet-data generation are saved in VELOCITY.md.
+The prototype passes four actual-consumer tests but has an unresolved historical
+relative-path reference and unspecified executable continuation; it has no
+authority and must not block current operations.
+
+No new percentage table is manufactured: the immutable
+[03:13:55 comparison](practical-engineering-estimate-20261018T031355Z.md) still
+applies. This interval is dominated by handoff/validation repair, not increased
+kernel runtime throughput. Neither2x nor3x is measured. Next full review04:35UTC,
+latest05:05UTC; keep the interactive loop running.
+
+Current private evidence roots under scratch:
+`native-fpu-copy-image-artifact-review-20261018-1`,
+`m07-avx-cpu-copy-image-preparation-20261018-1`,
+`native-fpu-copy-cleanup-fresh-review-20261018-1`,
+`native-fork-conditional66-materialization-20261018-1`,
+`native-fork-conditional66-release-assembly-20261018-1`,
+`native-fpu-copy-observation-execution-review-20261018-1`.

@@ -1,0 +1,475 @@
+{
+  "actual_execution": {
+    "C_object_recorded_only": {
+      "bytes": 134400,
+      "sha256": "ed1caaa49604b422af6bca7f89b748a73eac7209df3f3f6abebf9525d9f352dd"
+    },
+    "command_delta": {
+      "actual_tokens": 117,
+      "expected_deleted": [
+        {
+          "index": 25,
+          "tokens": [
+            "-Werror"
+          ]
+        },
+        {
+          "indices": [
+            110,
+            112
+          ],
+          "tokens": [
+            "-I/candidate/modules",
+            "-I/candidate/modules"
+          ]
+        }
+      ],
+      "expected_tokens": 120,
+      "only_delta": "Actual deletes expected -Werror at expected index25 and two -I/candidate/modules tokens at expected indices110:112. All remaining ordered shlex tokens equal."
+    },
+    "compiler_c_phase": {
+      "captures": {
+        "stderr": {
+          "bytes": 0,
+          "path": "/candidate/evidence/C-object.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 270,
+          "path": "/candidate/evidence/C-object.stdout",
+          "sha256": "1e574c810100ac9b38b1f790f5353e3ad8933b02a8917cae5a85760b55b360fc"
+        }
+      },
+      "error": "ValueError: C compiler/flags/object binding changed",
+      "full_module_make_started": false,
+      "make_returncode": 0,
+      "status": "FAIL"
+    },
+    "dispatcher_physical_join": "Confirmed directly by root; outer returncode1",
+    "dispatcher_session": 4976,
+    "failure_family": "C command reference transformation does not match actual external-module Kbuild command",
+    "kernel_source_error_observed": false,
+    "module_phase": {
+      "make_returncode": null,
+      "status": "NOT_RUN"
+    },
+    "owner_join": {
+      "capture_bytes": {
+        "stderr": 0,
+        "stdout": 30111
+      },
+      "capture_errors": [],
+      "capture_limit_bytes_per_stream": 8388608,
+      "elapsed_seconds": 4.023104875988793,
+      "joined": true,
+      "pid": 828876,
+      "process_record_error": null,
+      "release_sha256": "90beb667e7b09a30575e91d2b810b351dab84ec7e889dfc0ab768d5c7ee9d076",
+      "returncode": 1,
+      "starttime": "9444981"
+    },
+    "owner_receipt": {
+      "build_status": "FAIL",
+      "cleanup_status": "PASS_OWNED_REMOVAL_AND_RECORD_RELEASE",
+      "error": "offline external-module driver failed",
+      "retired": true,
+      "status": "FAIL",
+      "wait_exit_code": 1
+    },
+    "precise_boundary": "C make returned0 with stderr0 and produced object. saved_command validated its exact output target and C source; strict ccommand_expected token equality failed before dependency/symbol/import audits. Full three-module build, Rust compiler bindings, composite LD, modpost and v6-v9 artifact checks did not run.",
+    "warning_policy": "Absence of -Werror must be resolved explicitly in the corrected compiler contract; successful C make alone does not pass the strict audit."
+  },
+  "application_acceptance": false,
+  "build_accepted": false,
+  "decision": "PASS_RETIREMENT_BUILD_HELD_COMMAND_CONTRACT",
+  "evidence": [
+    {
+      "bytes": 8178,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-conditional66-release-assembly-20261018-1/execution-release.json",
+      "sha256": "90beb667e7b09a30575e91d2b810b351dab84ec7e889dfc0ab768d5c7ee9d076"
+    },
+    {
+      "bytes": 375,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-conditional66-release-assembly-20261018-1/owner-join.json",
+      "sha256": "a533af2491ea0f8dcd081fd21fefbebebd88ae9a53ecd839f060ed01760e9872"
+    },
+    {
+      "bytes": 723,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-conditional66-release-assembly-20261018-1/owner-process.json",
+      "sha256": "a6fc5d22bdd4685658e74d8e96b24df992cac2d475c0a536e496ee031ba599e6"
+    },
+    {
+      "bytes": 30111,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-conditional66-release-assembly-20261018-1/owner.stdout",
+      "sha256": "d688807c1808efd2a22bd996af9887b471d0dfe16dfd40b3305b8d61a05fdc7a"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/scratch/native-fork-conditional66-release-assembly-20261018-1/owner.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 23259,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-54b3448328eca9ff55a3e7a704a52690/evidence/receipt.json",
+      "sha256": "03542d2688b338316709dc838213c4d672df6f4d36afe606df21e453169de1f1"
+    },
+    {
+      "bytes": 8601,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-54b3448328eca9ff55a3e7a704a52690/evidence/C-object-request.json",
+      "sha256": "3132f920946e2b0e0df63e1f697c11438cbd4b862e17c7b41d517ec9ed7e5d7d"
+    },
+    {
+      "bytes": 526,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-54b3448328eca9ff55a3e7a704a52690/evidence/C-object-result.json",
+      "sha256": "726f4ec188107ba1c47bdbd11339faa100e96b347ad03d5f1059c4a1843dac99"
+    },
+    {
+      "bytes": 270,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-54b3448328eca9ff55a3e7a704a52690/evidence/C-object.stdout",
+      "sha256": "1e574c810100ac9b38b1f790f5353e3ad8933b02a8917cae5a85760b55b360fc"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-54b3448328eca9ff55a3e7a704a52690/evidence/C-object.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 16260,
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/ownership-archive.json",
+      "sha256": "b9bdf566e9aa3da134e98bf13e1e9f475504e8fafdddf747633f8e65e858279e"
+    },
+    {
+      "bytes": 2033,
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/record-release-authorized.json",
+      "sha256": "dffb4e79368581cb80fdb1bc4201c545626ecbfe0657a7ced76eb9b0d4a80032"
+    },
+    {
+      "bytes": 176,
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/record-release-complete.json",
+      "sha256": "44f62dfee2b577d07676c459d8b6e070ccff462cdeeaee955b923280f8668182"
+    },
+    {
+      "bytes": 12082,
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/postflight-proof.json",
+      "sha256": "55b7936b01ded40f893fd83d83d0b20283d5a707d56041143507f5ceb734289c"
+    },
+    {
+      "bytes": 8328,
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/inspect-before-start.json",
+      "sha256": "79c6377c148ab87a215181502c876924010460db0751a6d50d559e3463cd03c5"
+    },
+    {
+      "bytes": 8988,
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/inspect-terminal.json",
+      "sha256": "75922dfa26918a40134cb2e3fff3c565443d430b1ba09248da3b824442bd1d68"
+    },
+    {
+      "bytes": 8988,
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/inspect-terminal-fresh.json",
+      "sha256": "7c79ace8928cb59352f3a48139e7e6fdd9b90774edf992a59835634d0b1cdce4"
+    },
+    {
+      "bytes": 66430,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-54b3448328eca9ff55a3e7a704a52690/modules/.mcctrl_vm_write_compat.o.cmd",
+      "sha256": "b1969fb33d9065595f84fec475d6525a4027f1ce0cafb26da2e1b699f3b4a43c"
+    },
+    {
+      "bytes": 89035,
+      "path": "/home/holden/mckernel-work/scratch/nsd-i-54b3448328eca9ff55a3e7a704a52690/baseline-C-mmap_lock.o.cmd",
+      "sha256": "d2c1cac7c0a8d1b09351ec0c1eadf08ad8f98668e9e1576e7d078b9e0733d5fa"
+    },
+    {
+      "bytes": 174,
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/lease.record.raw",
+      "sha256": "800cbc0de810c4b1545fe72245589655b5699d22f23d81e04eedf20bd064c1eb"
+    },
+    {
+      "bytes": 267,
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/common.record.raw",
+      "sha256": "47aa99bb01695ad2c90db85588069e3dee3b08139142489f3ca80da8ae849e9d"
+    },
+    {
+      "bytes": 267,
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/shared.record.raw",
+      "sha256": "0c0e5c16a53251d6196d0a157e7a945ba1ec809c4141126599daa06f68d088ff"
+    }
+  ],
+  "execution_release": {
+    "bytes": 8178,
+    "path": "/home/holden/mckernel-work/scratch/native-fork-conditional66-release-assembly-20261018-1/execution-release.json",
+    "sha256": "90beb667e7b09a30575e91d2b810b351dab84ec7e889dfc0ab768d5c7ee9d076"
+  },
+  "functional_scope": "PRACTICAL-GOAL working kernel and useful applications; unrelated hardening and comprehensive original qualification deferred.",
+  "guest_execution_released": false,
+  "implementation_ownership": false,
+  "manual_readback_decision": {
+    "bytes": 1323,
+    "path": "/home/holden/mckernel-work/scratch/native-fork-conditional66-actual-result-review-20261018-1/manual-readback-decision.json",
+    "sha256": "1c474d03f8dcbc33ec3c451abdec453bb8cfe212206396c74e0f62ca3f94128b"
+  },
+  "next_step": "One bounded compiler-contract correction from actual .cmd/reference delta, cheap focused regression and independent review, then fresh separately released module attempt. This failure does not authorize a guest.",
+  "preservation": {
+    "CREATE_PPD": "Remains closed; no fork activation",
+    "inputs_and_images": "Read-only consumed build inputs and no image build; prior held scratch21 and later ACK/service work remain excluded and unmodified by this review.",
+    "no_retry_or_attempt_reuse": true,
+    "original_failed_attempt_retained": true,
+    "reviewer_mutations": "Only assigned review output directory and canonical JSON"
+  },
+  "production_acceptance": false,
+  "retirement": {
+    "all_client_group_checks_empty": true,
+    "archived_raw_records_exact": true,
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "clients": [
+      {
+        "evidence": {
+          "bytes": 262,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/command-1828633ae6e743e6827c2a90dba5fce2/status.json",
+          "sha256": "e2a77ecbee99280a0d8312d4988d49079301805731a2222604ae4da227623cf4"
+        },
+        "exit_code": 0,
+        "pid": 829184,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 262,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/command-2dc3b6cdf151420cb349662c1fcdbeed/status.json",
+          "sha256": "24e1b35a60249454dd8b28a4209f90909995e99158fc2d05d0cdc9677d169408"
+        },
+        "exit_code": 0,
+        "pid": 828933,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 270,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/command-33f6a21ed0424eba94e5565ba2ac5fc9/status.json",
+          "sha256": "1fb30b59eec98660831c45569228f60307d033fee1ea5f2e33fddd1b3365e7d1"
+        },
+        "exit_code": 0,
+        "pid": 829222,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 1629,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/command-40860b428325494a88f908332a7b5e0d/status.json",
+          "sha256": "3bd26b17fc650f53d77f11b97ac83c412e955915e360a4cc83b4f6876701c0ac"
+        },
+        "exit_code": 0,
+        "pid": 828921,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 326,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/command-45c9ece366db475482c5247201a08118/status.json",
+          "sha256": "6e32b25ad8b8bfdf1e1f2fe67bf4320e668569b79bc3284325bf50727c348b32"
+        },
+        "exit_code": 0,
+        "pid": 829234,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 274,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/command-54ee750cdfe843799779d89920927c23/status.json",
+          "sha256": "7ad31ea4de35d87997a04ce3aee098007848585cf9cedb163a952537cd484201"
+        },
+        "exit_code": 0,
+        "pid": 829005,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 321,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/command-5f065eef21cb41759fd61fd751ee9e19/status.json",
+          "sha256": "23b2e483b1d9b84f165aae4d22d329dd1ebf2a723781cb1269e28db8dfd2b793"
+        },
+        "exit_code": 0,
+        "pid": 828897,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 326,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/command-6582f5cb45674321a5da59d8e5e41039/status.json",
+          "sha256": "6aa6c2ad69b21771930aa0763530a36d952d795a7bb62460841990d158fb21b6"
+        },
+        "exit_code": 0,
+        "pid": 828885,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 272,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/command-7f4b32d3c4814aa79bd438f9e35b5822/status.json",
+          "sha256": "6d968d6db72da0626f86304f72e0745921a9a2fc8e681a6a515525688ff23b5b"
+        },
+        "exit_code": 0,
+        "pid": 829197,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 321,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/command-868e4726cf4f42d1990d9606b2a7b701/status.json",
+          "sha256": "1be17c8c4c9c0b8374215ec53b85d597eed550ce995722824fb852dec1983c15"
+        },
+        "exit_code": 0,
+        "pid": 829246,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 296,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/command-928cc2da9d3b4025a2c097f189a496f8/status.json",
+          "sha256": "81a2de48111ae439c826644ea1a4499339ee54bff8704249ce0efc1dc74d6f3d"
+        },
+        "exit_code": 0,
+        "pid": 828909,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 262,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/command-b6f36730301d4d3fae12bd8c661a92b4/status.json",
+          "sha256": "c00ae28d2e7edc42b2030ba9f68873ac855dba31d43a0f96c4140d1227a28583"
+        },
+        "exit_code": 0,
+        "pid": 829209,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 335,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/command-c0a82c0a044742afb06b6d8bccdbc36e/status.json",
+          "sha256": "19d9eab26fca434c5d562d8e5b7c28dd4c08d5965757347db7671c48df7e1954"
+        },
+        "exit_code": 0,
+        "pid": 829258,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 260,
+          "path": "/home/holden/mckernel-work/scratch/nsd-o-54b3448328eca9ff55a3e7a704a52690/command-c949116a357e40a3a06c1a26b0e25b2b/status.json",
+          "sha256": "35eb3f31de260c1550bacd3919f7d3773ccdda7c619ec8fe2c907974bc4105f3"
+        },
+        "exit_code": 0,
+        "pid": 828945,
+        "state": "exited"
+      },
+      {
+        "evidence": {
+          "bytes": 11328,
+          "path": "/home/holden/mckernel-work/scratch/nsd-a-54b3448328eca9ff55a3e7a704a52690/command-db4d5beb65be47839492e0e5a0799b47/status.json",
+          "sha256": "81a7f4353ec2215c799e055fda8c907b05d0da79a60d346dce3be1f575cb784f"
+        },
+        "exit_code": 0,
+        "pid": 828881,
+        "state": "exited"
+      }
+    ],
+    "container_absence_queries": {
+      "absent": true,
+      "container_id": "2a51792be33c3195c5739a8c48a9e52f6f30f805082d177ba7395b4d59e119f2",
+      "name": "mckernel-external-54b3448328eca9ff55a3e7a704a52690",
+      "nonce": "54b3448328eca9ff55a3e7a704a52690",
+      "queries": [
+        "name",
+        "label",
+        "id"
+      ]
+    },
+    "container_id": "2a51792be33c3195c5739a8c48a9e52f6f30f805082d177ba7395b4d59e119f2",
+    "container_nonce": "54b3448328eca9ff55a3e7a704a52690",
+    "container_state": {
+      "Dead": false,
+      "Error": "",
+      "ExitCode": 1,
+      "FinishedAt": "2026-10-18T04:16:46.525942556Z",
+      "OOMKilled": false,
+      "Paused": false,
+      "Pid": 0,
+      "Restarting": false,
+      "Running": false,
+      "StartedAt": "2026-10-18T04:16:44.940471625Z",
+      "Status": "exited"
+    },
+    "initial_terminal_Config_HostConfig_equal": true,
+    "normalized_mount_rows_equal": true,
+    "owned_record_live_paths_absent_after_positive_release": true,
+    "owned_records": {
+      "common": {
+        "device": 1828,
+        "inode": 113530,
+        "path": "/home/holden/mckernel-work/scratch/native-fork-consolidated-conditional-external-modules-operational-exclusion.json",
+        "record": {
+          "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+          "dev": 1828,
+          "inode": 113530,
+          "pid": 828876,
+          "request_sha256": "18ace2c19d0d2aaa0e0e5837026224eb538c4f6430190d9a8f2ac703c787f4eb",
+          "schema": "mckernel.native-exact-operational-exclusion.v1",
+          "starttime": "9444981"
+        },
+        "sha256": "47aa99bb01695ad2c90db85588069e3dee3b08139142489f3ca80da8ae849e9d",
+        "size": 267
+      },
+      "lease": {
+        "device": 1828,
+        "inode": 113531,
+        "path": "/home/holden/mckernel-work/scratch/native-fork-consolidated-conditional-external-modules.lease.json",
+        "record": {
+          "container_name": "mckernel-external-54b3448328eca9ff55a3e7a704a52690",
+          "nonce": "54e090efcd2d482aa322caf1571fbb5f",
+          "pid": 828876,
+          "starttime": "9444981",
+          "state": "owned"
+        },
+        "sha256": "800cbc0de810c4b1545fe72245589655b5699d22f23d81e04eedf20bd064c1eb",
+        "size": 174
+      },
+      "shared": {
+        "device": 1828,
+        "inode": 113529,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+        "record": {
+          "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+          "device": 1828,
+          "inode": 113529,
+          "kind": "build",
+          "pid": 828876,
+          "request_sha256": "33b2966929a774e315169f414a02b9f0d90c81245d1deafe87eef0ee8bfb5a59",
+          "schema": "mckernel.heavy-operation.v1",
+          "starttime": "9444981"
+        },
+        "sha256": "0c0e5c16a53251d6196d0a157e7a945ba1ec809c4141126599daa06f68d088ff",
+        "size": 267
+      }
+    },
+    "ownership_archive_sha256": "b9bdf566e9aa3da134e98bf13e1e9f475504e8fafdddf747633f8e65e858279e",
+    "root_development_lock": "27:4 root-owned inode validated before and after operation by exact source; receipt printed through guarded normal return proves safe=True path and finally unlock/close before direct owner join. No inference from absent PID alone.",
+    "root_lock_quarantine_taken": false,
+    "terminal_fresh_equal_except_Mounts_order": true
+  },
+  "retirement_accepted": true,
+  "reviewer": "/root/conditional66_actual_build_review",
+  "runtime_distinct_behaviors_unchanged": 16,
+  "schema": "mckernel.native-fork-conditional66-actual-build-result-review.v1",
+  "source_candidate_sha256": "f656e2bd73549af2359520b9af94d5ece8774ceac9e3e26c6d0b5de67ed3abc1",
+  "source_positives": {
+    "all66_retained_source_hashes_match_driver_closure": true,
+    "driver_closure_map_recomputed": true,
+    "driver_reported_closure_bytes": 1463836,
+    "driver_reported_closure_files": 66,
+    "fetched_source_proof": {
+      "bytes": 19064,
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-fork-conditional66-fetched-source-proof-20261018-1.json",
+      "sha256": "811d6beedbe577ce8c06d6407b8a72a64acf21ab23cf7c0ea22a881aa5cdd4df"
+    },
+    "limit": "No Rust compile evidence; source-closure/fetched-source positives remain distinct from executable acceptance."
+  }
+}

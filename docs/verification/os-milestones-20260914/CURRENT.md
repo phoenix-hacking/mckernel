@@ -1,5 +1,68 @@
 # Resume cursor
 
+## Active cursor — 2026-10-18 04:21 UTC
+
+Manual resumed PRACTICAL-GOAL campaign continues. Distinct native behaviors16;
+3 complete / 32 open exit checks; all14 milestone rows remain open. Latest
+included usage7%, stop97%. Keep host16GiB/scratch12GiB floors PLUS actual packet
+reserve; use statvfs f_bavail, not total ext4 free blocks. Last host58.0GB and
+scratch15.6GB available; reserve change remains accepted, not allocation reclaim.
+
+CPU-copy image08210bb2 now has actual AVX/YMM/SSE/x87 syscall, blocking/futex and
+signal diagnostic PASS:380 stdout bytes, empty stderr, exit0, XCR0=0x21f, owner
+35.648761s. All30 clients/QEMU/CID/lease retired independently. This repeat adds
+no distinct behavior. [New-image result](../evidence/practical-m07-avx-cpu-copy-image-result-review-20261018-1.json)
+6405dc40. M07 source-only/new-image-required notes corrected; IFUNC/whole used-state,
+untested vector/multicore and final-profile checks remain open. Latest comparison
+practical-engineering-estimate-20261018T041908Z moves onlyM07 +5pp to50–70%; old
+baselines remain unchanged.
+
+Image terminal cleanup independently accepted: common366878/shared113191 archived
+with original inodes, exact stoppedCID removed,9journal events, all4 protected
+original/retained objects unchanged and root27:4 released. [Cleanup result](../evidence/native-fpu-copy-image-terminal-result-review-20261018-1.json)
+36461074. Observer/readback and cleanup/readback all physically joined0 with actual
+root-script PID/start/UID and positive process-group retirement. No retained image
+ownership blocker remains. All original failed source/wrapper/preparation bytes
+are preserved; source engine da47 unchanged. No cleanup replay is needed.
+
+Conditional66 exact source publication e7ca5e5bfdad2ac7726223459bfb7a1a64fcefe5 /
+treedaaf97cc9a53e24eab86a1609f6680492233e3cb has78 fetched capsule blobs and90total
+publication blobs verified. Source closuref656/66files1463836B,82 materialized
+copies. Actual one-shot owner828876/start9444981 exited1 after4.023105s: Cmake0,
+empty compiler stderr, but strict .cmd checker rejected missing in-tree-Werror
+and two in-tree include tokens. Full3module/Rust phase NOT_RUN. All15 clients,
+CID and3 records positively retired; root27:4 released. [Build result](../evidence/native-fork-conditional66-build-result-review-20261018-1.json)
+efad866d. Ordinary failed-case reads already classified exact logs; no privileged
+readback or build replay is needed for that diagnosis. Current cheap correction
+lane compares authoritative SDK KBUILD_EXTMOD behavior, preserving actual .cmd,
+object and seed. Required warning policy must be resolved explicitly; no silent
+flag relaxation. New source/profile/execution release is required for another build.
+
+Next eligible runtime case: authentic second native stop after second-boot real
+workload on accepted image08210/d99modules. Stage /scratch/native-second-stop-stage-20261018-1
+review8611358f, manifest4b101c14, overlay09ac9ff8; actual runner/owner positive+6
+changed-stage negatives passed. Its own original base8e912 was derived image-only,
+all metadata preserved; global overlay allowlist unchanged. Short empty runtime
+parent /scratch/nsss-71bc8e42/run. Independent source/stage/execution review and
+concrete wrapper assembly active; final predecessor/admission remains required.
+Do not wait for the independent C-command repair to run a fully admitted case.
+
+Future wrapper feedback: separate physical retirement from workload status.
+Success-only old releases stay unchanged. New second-stop review explicitly
+considers minimal exact owner-result probe after join, then full bounded readback
+only with positive absence/lease/client retirement. Preserve uncertainty/holds.
+Review packets must include actual consumer decision schema and full11-source map;
+ordinary wrapper tests must exercise outer/inner inherited limits (soft1/hard2GiB).
+Activate idle correction authors with followup_task and confirm running; queued
+send_message alone is not activation. Reuse unaffected checks. Source-only next-
+image generator prototype is partial and must not gate current work.
+
+Supervisor Review17 and comparison are batched at this normal checkpoint. No2x/3x
+throughput claim. Keep separate source/build/runtime counters, scratch21 and all
+failed evidence; separately service-held later transport/ACK remains excluded and
+CREATE_PPD closed. Continue after checkpoint, one heavy owner, no new launcher.
+
+
 ## Active cursor — 2026-10-18 03:58 UTC
 
 Manual resumed PRACTICAL-GOAL campaign continues: 16 distinct native behaviors,

@@ -149,8 +149,13 @@ fixtures; source-workspace paths need not be runtime-output paths. Preserve the
 existing socket-path admission bound. For an operation with already-approved
 bounded readbacks, include those exact readbacks in its reviewed continuation
 after positive source-known child/owner retirement and join, then dispatch result
-review promptly. An uncertain/nonzero operation stops that continuation; this
-does not authorize new root reads or automatic cleanup.
+review promptly. Uncertain retirement stops that continuation. Existing
+success-only releases still stop on nonzero exit. For a future failed-build
+envelope, explicitly review bounded read-only diagnostic capture after positive
+owner/client retirement and receipt/journal validation, independently of the
+failed workload status. Preserve the failure and authorize no build replay,
+new workload or automatic cleanup. This requires its own exact release; it
+does not expand earlier root-read authority.
 
 ## Reuse artifacts and batch the work that is actually independent
 
@@ -250,6 +255,14 @@ rule. Retain failed prechecks and correct only the demonstrated scope error.
   retained findings, original invariant and one requested decision. Collect
   related findings together. Reuse unchanged source review only within its
   stated envelope; privileged execution still needs its independent decision.
+  Supply the machine-readable decision shape required by the actual consumer,
+  including all selected source bindings. A descriptive profile-review label
+  does not replace the consumer's canonical decision record. Exercise that
+  record through the existing consumer before the final handoff.
+- In affected ordinary-wrapper checks, use the declared outer and inner resource
+  limits together. Verify inherited soft/hard limits, bounded drain behavior and
+  capture reserve accounting with normal subprocesses before privileged use.
+  Keep these checks scoped to changed behavior and reuse unaffected evidence.
 - Start review as soon as the relevant candidate and admission results are
   ready. Other workers continue independent tests. A routine note or unrequested
   inventory must not occupy the exclusive execution path.
