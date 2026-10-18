@@ -6,17 +6,14 @@ Preserve completed entries; append new observations and update only this cursor.
 This file describes supervision, not OS acceptance or execution authority.
 
 
-**CURRENT REVIEW36 — 2026-10-18T16:15:01Z:** campaign active;
-19 accepted native behaviors, 6 complete / 29 open practical checks; all 14
-milestones open. At cutoff the ninth-path artifact decision was pending;
-post-cutoff 16:15:39 acceptance raises selected Rust production/default-link
-proof from 8 to 9, with 7 applicable native paths unchanged. The scheduler
-image operation reports PASS in 201.34 seconds; actual GCC14 CPU/full-process ABI
-assertions pass, and inspection finds the Rust debug-handoff call before FP
-restore/context switch. All 14 postbuild observations and 4 retained copies
-passed in 4.95 seconds. Separate terminal release and native continuation remain
-pending. Private Rust clear_debugreg source review passed; production/native open.
-Next full review 16:45:01 UTC; usage 26%, stop 97%.
+**CURRENT REVIEW38 — 2026-10-18T17:15:37Z:** campaign active;
+19 distinct native behaviors, 6 complete / 29 open checks, all 14 milestones open.
+Selected production/default-link Rust paths 9; last accepted native-path count 7
+pending the complete AVX/threads chain. Physical cleanup is independently accepted.
+Post-cutoff AVX result and positive retirement are accepted; threads is next.
+Private Rust integration inputs/partial link are ready;
+the new mmap-zero-length case passed its compiler/Linux reference only.
+Usage 28%, stop 97%; next full review 17:45:37 UTC.
 No second launcher or background timer is installed.
 
 **MONITORING RESUMED2026-10-18T13:43:18Z:** user explicitly requested this
@@ -3139,3 +3136,141 @@ retained artifacts and positive client retirement. Review SHA256
 Selected production Rust paths 8 -> 9; applicable native paths remain 7.
 Native proof and separate terminal cleanup release are still open. No new
 distinct behavior, practical-check closure or whole-kernel percentage inferred.
+
+## Review37 — 2026-10-18 16:45 UTC
+
+Cutoff 16:45:14 UTC; interval 30m13s. Selected Rust production/default-link paths
+8 -> 9 at 16:15:39 (post-Review36 cutoff), applicable native paths remain 7.
+Distinct native behaviors 19 (+0); practical checks 6 complete (+0), 29 open;
+all 14 milestones open. No new native run this interval. Usage 27%;
+root free 51.185 GiB, scratch free 12.831 GiB.
+
+The scheduler image/default-link acceptance is recorded in independent review
+671a0fa2. All 15 retained artifact pairs were preserved and independently verified:
+22,109,652 original bytes, four prior copies reused, eleven additional files
+requiring 1,054,564 new bytes. Ordinary retention returned 0 in 0.210s, joined
+directly with empty stderr; its authority was consumed before canonical source
+publication. The terminal host/scratch correction passed 39 canonical tests with
+normal imports in 1.756s. Exact two-file source publication passed independent
+35eefd72 review. New checkpoint 2ccf024d was created; fetched commit/tree proof
+and the exact observer payload are being reviewed. Stopped image container and
+records are intentionally retained; no active compilation or uncertain-client
+failure is inferred from the heavy record.
+
+AVX and Cthreads staging passed once in 17.126s / 16.986s. Independent actual-stage
+review afb6695c accepts both 60-entry maps and image-only changes, preserving all
+other archive bytes and metadata. Assets total 60,754,082 bytes; manifests 10,567
+bytes. Modified AVX runner and owner fixtures pass, including two changed-capture
+refusals; Cthreads reuses its canonical consumers. Independent b82fe529 review
+accepts those source/consumer joins and the ordinary parent-creation command.
+Parent creation passed in 0.032s; both final empty 0700 UID/GID1000 parents were
+bound into the proposals. Conditional guest review proceeds in parallel; actual
+terminal release, final machine payload and fresh admission remain prerequisites.
+Cthreads still requires accepted AVX and positive predecessor retirement.
+
+User-requested engineering comparison saved as
+practical-engineering-estimate-20261018T163207Z.md/.json, evidence cutoff16:30:01.
+Only M10 changes from65-80 to70-85 percent as a low-confidence engineering guess
+for accepted compiler/image evidence; other ranges unchanged. No formal check,
+whole-kernel Rust percentage, finish date or campaign speedup is inferred.
+M09 remains integration only.
+
+Concrete steering: a terminal-author failure was only an invalid checks keyword
+to json.dumps after the substantive report was written; requested a print-only
+correction and reuse of completed checks. Continued console-output bounds and
+compact-cursor refresh. Activated guest review during terminal publication, then
+delegated the independently approved ordinary parent creation and actual identity
+binding while checkpoint work continued. No duplicate archive generation or
+additional source-port integration delayed the current image.
+
+The remaining bottleneck is terminal publication/review handoff: operation times
+are seconds while bindings/decisions occupy minutes. Finish the exact observer,
+bounded raw-five preservation and separate cleanup acceptance, then use the
+already-prepared native cases. Source/profile review and metadata preparation
+should remain ahead of each exclusive runtime step. No new broad automation
+project or repeated evidence sweep is required before the first native result.
+
+Shared review-file append was deferred during fetched-source verification to
+avoid altering a file under review. Preserve one-heavy/resource admission, full
+reserves, 97% stop, scratch21, failure evidence and service-held exclusions.
+Next full review 17:15:14 UTC.
+
+Post-cutoff 16:46 UTC: exact root observer and bounded joined summary approved
+under release b0715769c7e1fed21dd1d6e8f2eaa5538aa77a7ca537c1c27f1694aad7e62392.
+Fetched commit 2ccf024d3af66f167b31b7d8fc35c5ed4e0be0e4 and all 52 blobs match.
+Conditional guest review 04d1b4aa accepts actual empty parents and wrapper joins;
+genuine terminal/admission/predecessor and permitted publication facts may be
+added without another static source/fetch review. The final machine payload
+still needs narrow execution/hash-join review. No observer, cleanup or guest
+execution is inferred from these approvals. Deferred report append completed
+after the fetched-source decision, outside the runtime source closure.
+
+## Review38 — 2026-10-18 17:15 UTC
+
+Cutoff 17:15:37 UTC; interval 30m23s. Distinct native behaviors 19 (+0), checks
+6 complete (+0) / 29 open; all 14 milestones open. Production/default-link Rust
+paths 9; prior accepted applicable-native count 7 until the scoped chain completes.
+Usage 28%; root free 51.150 GiB, scratch free 12.830 GiB. No new percentage uplift
+or numerical campaign speedup inferred. Saved engineering estimate remains the
+16:32 comparison, with only its explicitly subjective M10 increase.
+
+Checkpoint 2ccf024d3af66f167b31b7d8fc35c5ed4e0be0e4 and 52 fetched blobs were
+accepted for the exact observer. Observer/summary passed; five-file raw export
+and ordinary consumption passed in 0.123s / 0.055s. Initial cleanup release cad64
+was refused before effects because author was null. The child joined; no cleanup
+or postjoin readback ran under that refused release. Author and reviewer isolated
+the metadata fault, preserved the release/captures, and made a separate corrected
+candidate with nine focused metadata checks. Source/tests were reused.
+
+Corrected release 4bb919bc250c90160c87f3e5c30fc3d6d6d975edbe857cc23dd7814624320a49
+ran successfully in 4.770s; bounded postjoin readback passed in 0.661s. Independent
+physical-release acceptance f2de06e50553ccccef37ea9eb6fbfac33f7b9bacfd55a90330a646a1a6eca353
+verifies five archive members, nine journal events, released ownership names and
+15 retained artifact pairs. The original refusal remains evidence. No active
+image build or unreconciled image-owner hold remains at cutoff.
+
+AVX fixed joins were prechecked while physical release was pending. One admission
+snapshot expired; a preserved new payload changed only the genuine fresh-admission
+reference. Immediate delta/hash review 00d031c4 accepted it at age26.16s; the wrapper
+retained its own <=60s check. No static/source/fetch review was repeated. The root
+launched the exact wrapper. Its owner and all three approved readbacks returned
+successfully; independent result and physical-retirement review are still pending.
+Threads' stage, parent and static recipe remain ready, contingent on accepted AVX
+retirement, its own fresh admission and final machine-payload decision. No early
+new-image native or distinct-behavior credit is assigned.
+
+Two useful cheap lanes overlapped the runtime critical path after the user's
+parallelism instruction. The reviewed private clear_debugreg patch matches the
+accepted scheduler baseline without conflicts. A bounded partial link of the
+real scheduler object, new Rust body and selected fixture resolves exactly one
+clear_debugreg definition. Production syscall.c/GCC14 and real-crate inputs are
+prepared; full compilation, image linking and native proof remain open. No live
+source/artifact changed; integrate at the next safe boundary after this native
+chain rather than starting another competing image now.
+
+The application lane selected the existing unmet memory.mmap-zero-length case
+under P-M03-01. Its bounded GCC9.4 compilation and Linux reference passed with
+EINVAL, exact frozen output, empty stderr and expected status. This observes
+rejection only; absence of publication or leaks is not proved. Native manifest
+and one affected runner/owner fixture proposal are next. The payload is existing
+userland C, with no compute-kernel C expansion. Historical packet restrictions
+remain unchanged; the new exact compiler/reference profile supplies authority.
+
+Dispatcher automatic compaction occupied roughly three minutes and returned
+normally; original watcher/worker/server identities stayed alive. No recovery
+restart or new conversation was launched by the supervisor. Full raw evidence
+was retained, with concise console summaries. Five useful campaign agents were
+active after disjoint prep lanes were filled; no whole-campaign2x/3x claim follows.
+
+Next: finish actual AVX acceptance/retirement and run the prepared threads case;
+advance the new mapping payload/oracle to a native-ready fixture in parallel.
+Then integrate the reviewed Rust candidate and obtain real production/native
+proof. Preserve resource admission/full reserves, one-heavy, 97% stop, scratch21,
+all failures and service-held exclusions. Next full review 17:45:37 UTC.
+
+Post-cutoff 17:17 UTC: independent actual AVX review 91757b5c6eb7a623acd3962024b092992ed52919fe8d98b024481e9e5d1f7999
+accepts image3bfc1dfb scoped smoke execution and positive retirement. Raw exit0,
+380-byte stdout, empty application stderr, exposure/boundary checks, joined
+owner/wrapper, reaped QEMU/all30 clients, exact container removal/absence and
+lease release pass. This record is consumable as the Cthreads predecessor.
+It does not prove each debug-buffer hardware branch or whole-OS stability.

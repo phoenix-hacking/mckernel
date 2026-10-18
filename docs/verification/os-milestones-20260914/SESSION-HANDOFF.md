@@ -1,5 +1,76 @@
 # OS development session handoff
 
+## Current — scheduler native chain accepted; next Rust cutover integrated (2026-10-18 17:30 UTC)
+
+Functional OS/apps and actual compute Rust/reviewed-assembly migration remain active.
+Refused execve and service-held fork/ACK work remain excluded. All original failures,
+scratch21 container/locks and unrelated dirty WIP remain preserved.
+
+Independent current-image3bfc AVX91757b5c and Cthreads36c0abd3 both PASS with
+positive owner/QEMU/30-client/container/lease retirement. Exact new native releases
+8fc7de73 and cc04dcc6 completed wrappers0/35.134s and0/36.990s, with all approved
+postjoin readbacks completed inline. Accepted applicable integration now9 selected
+production Rust defaults/8 native paths; no DR hardware/state-roundtrip/per-helper
+branch claim. Distinct native behaviors19; practical checks6 complete/29 open;
+all14 milestones open. Terminal physical releasef2de06e5 and original null-author
+refusal/corrected4bb919bc transaction are retained in the new native-terminal capsule.
+
+The next reviewed clear_debugreg patch is now integrated in exactly three source
+files; canonical bytes match the private accepted candidate. Partial linking with
+the accepted production Rust object resolves the real scheduler consumer to one
+Rust definition. Full production GCC14 syscall.c, real crate/default link and native
+proof remain OPEN. Original C fallback/reference remains during development.
+
+Next image preparation is private in host-preparation/rust-clear-debugreg-image-
+preparation-20261018-1: ordinary-commands.json plus RESULT.md; final publication
+binding awaits this coherent fetched checkpoint, then exact ordinary profile review
+and real materialize/prepare/driver-owner consumers. No bulk copy/compiler/heavy
+execution has run. Terminal executable helpers are prepared in parallel under
+rust-clear-debugreg-terminal-preparation-20261018-1; only genuine live results and
+identities may stay pending. Do not execute an old one-shot command.
+
+ONE new mmap-zero-length app has exact source/frozen Linux oracle, compile/reference
+PASS and independently accepted ordinary stage/actual runner+owner fixturec12cfdbb.
+It checks failed mmap/EINVAL/exact output only, not leak freedom. Native request/
+parent/wrapper preparation is active; separate review/release and fresh admission
+remain mandatory. It may reuse3bfc only if actual immutable source/runtime authority
+permits, never by weakening full-tree checks. Select first fully admitted useful
+app/build with one heavy owner; no new backlog or reporting gate.
+
+## Current — terminal released; scheduler-image AVX result under review (2026-10-18 17:15 UTC)
+
+Functional OS/apps and live compute-C retirement into Rust/reviewed assembly remain
+active; refused execve and service-held fork/ACK tasks remain excluded.
+Checkpoint2ccf024d is pushed/fetched52 blobs. Ninth Rust production/default-link
+path remains accepted671a0fa2; applicable native continuation is under review.
+
+Exact terminal observer and five-original-file export passed. Cleanupcad64 refused
+before effects because author was null; original release/captures are preserved.
+The bounded author-only correction4bb919bc ran once0/4.770s, followed immediately
+by approved raw postjoin0/0.661s. Independent physical releasef2de06e5 accepts
+container absence, common/shared/lease/quarantine release, ROOT27:4 reacquisition,
+15 retained pairs/30 object rows and the nine-event archival journal.
+Canonical evidence: evidence/rust-scheduler-debug-image-terminal-result-review-20261018-1.json.
+
+AVX final exact payload8fc7de73 passed narrow review00d031c4 after genuine fresh
+admission. Wrapper/owner/three approved readbacks completed0/35.134s; actual native
+result review is active. Tool63080 positively joined. Do not replay that attempt.
+Threads parent1828:755804 and final static recipe04d1b4aa remain ready; next command
+requires accepted current-image AVX+retirement, a fresh <=60s snapshot and its own
+exact final machine-payload/hash decision. Current packet root is
+/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-guest-continuation-20261018-1/
+actual-image-joins-1/consumer-binding-1/final-execution-1/.
+
+Counts remain19 distinct native behaviors,9 selected production/7 applicable native
+Rust paths,6 complete/29 open practical checks,all14 milestones open pending review.
+Private clear_debugreg integration is conflict-free and partial-link checked;
+full GCC14/real-crate/image/native proof stays open, integration follows this chain.
+One zero-length mmap/EINVAL app passed its new bounded Linux reference; native
+staging/runner-owner fixture and separate execution authority remain pending.
+No new heavy owner, image build or excluded-task activation is authorized by this
+cursor. Continue one-heavy/full floor+growth/reserve and97% included-usage guards;
+preserve all original failures, unrelated dirty WIP and scratch21 records/locks.
+
 ## Current — ninth Rust production path; native continuation pending (2026-10-18 16:35 UTC)
 
 Functional OS/apps and actual compute Rust/reviewed-assembly migration remain

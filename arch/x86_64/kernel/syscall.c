@@ -1317,6 +1317,7 @@ restore_debugreg(unsigned long *debugreg)
 	asm("mov %0, %%db7" ::"r" (debugreg[7]));
 }
 
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void
 clear_debugreg(void)
 {
@@ -1332,6 +1333,7 @@ clear_debugreg(void)
 	r = DB7_RESERVED_SET;
 	asm("mov %0, %%db7" ::"r" (r));
 }
+#endif
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void clear_single_step(struct thread *thread)

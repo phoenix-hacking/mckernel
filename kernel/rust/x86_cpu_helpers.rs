@@ -2876,3 +2876,52 @@ pub unsafe extern "C" fn arch_cpu_read_write_register(
         )
     }
 }
+
+// Matches arch/x86_64/kernel/syscall.c's DB6/DB7 reserved-set constants.
+const DB6_RESERVED_SET: CULong = 0xffff_0ff0;
+const DB7_RESERVED_SET: CULong = 0x400;
+
+trait DebugRegisterWriter {
+    /// Caller provides CPU-local privileged execution with debug traps disabled.
+    unsafe fn write<const REG: u8>(&mut self, value: CULong);
+}
+
+struct HardwareDebugRegisterWriter;
+
+impl DebugRegisterWriter for HardwareDebugRegisterWriter {
+    #[inline(always)]
+    unsafe fn write<const REG: u8>(&mut self, value: CULong) {
+        // Side-effecting asm, with a compiler memory barrier and no flag promise.
+        // Each monomorphized call writes only its named register. Never DR4/DR5.
+        match REG {
+            0 => unsafe { core::arch::asm!("mov dr0, {value}", value = in(reg) value, options(nostack)) },
+            1 => unsafe { core::arch::asm!("mov dr1, {value}", value = in(reg) value, options(nostack)) },
+            2 => unsafe { core::arch::asm!("mov dr2, {value}", value = in(reg) value, options(nostack)) },
+            3 => unsafe { core::arch::asm!("mov dr3, {value}", value = in(reg) value, options(nostack)) },
+            6 => unsafe { core::arch::asm!("mov dr6, {value}", value = in(reg) value, options(nostack)) },
+            7 => unsafe { core::arch::asm!("mov dr7, {value}", value = in(reg) value, options(nostack)) },
+            _ => unreachable!(),
+        }
+    }
+}
+
+#[inline(always)]
+unsafe fn clear_debugreg_body<W: DebugRegisterWriter>(writer: &mut W) {
+    unsafe {
+        writer.write::<0>(0);
+        writer.write::<1>(0);
+        writer.write::<2>(0);
+        writer.write::<3>(0);
+        writer.write::<6>(DB6_RESERVED_SET);
+        writer.write::<7>(DB7_RESERVED_SET);
+    }
+}
+
+/// Clear this CPU's debug state using the existing scheduler/ptrace contract.
+/// The caller must run at kernel privilege on the pinned CPU, with the existing
+/// debug exception and scheduler exclusion preconditions. This preserves the
+/// original register order and values; it does not change DR7.GD handling.
+#[no_mangle]
+pub unsafe extern "C" fn clear_debugreg() {
+    unsafe { clear_debugreg_body(&mut HardwareDebugRegisterWriter) };
+}

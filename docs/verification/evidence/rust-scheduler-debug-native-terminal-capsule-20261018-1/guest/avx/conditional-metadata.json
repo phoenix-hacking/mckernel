@@ -1,0 +1,69 @@
+{
+  "schema": "mckernel.scheduler-debug-case-exact-conditional-metadata.v1",
+  "status": "SOURCE_DATA_READY_PENDING_INDEPENDENT_EXACT_RUNTIME_RELEASE",
+  "case": "avx",
+  "proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-guest-continuation-20261018-1/actual-image-joins-1/consumer-binding-1/final-execution-1/avx/execution-proposal.json",
+    "sha256": "ea08a6bd746f49499b83291d47b762326e27b7e1e913d55e2984d598439cac98",
+    "size": 16644,
+    "mode": 33152
+  },
+  "runtime_wrapper": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-guest-continuation-20261018-1/actual-image-joins-1/consumer-binding-1/final-execution-1/avx/dispatch-runtime.py",
+    "sha256": "928d04852ef6f320a18b66d4dbd8368f545b919358e21d02fc57ee8f0a87bd77",
+    "size": 4620,
+    "mode": 33152
+  },
+  "postjoin_readback": {
+    "requested": true,
+    "approved": "CONDITIONAL_ON_EXACT_INDEPENDENT_EXECUTION_RELEASE",
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/sdn-5cf76f33/a.owner-522024c77cba94ea772a70276dbf5b81",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/sdn-5cf76f33/a/attempt-522024c77cba94ea772a70276dbf5b81/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/sdn-5cf76f33/a/attempt-522024c77cba94ea772a70276dbf5b81",
+        "."
+      ]
+    ],
+    "timeout_seconds_per_command": 30,
+    "capture_limit_bytes_per_command": 33554432,
+    "conditions": "Only after direct owner child joins exit0 proving accepted source-known retirement, lease release and complete evidence. Exact root-owned directory/regular single-link result identity checks precede bounded non-dereference readbacks. Failure stops; no retry or cleanup authority inferred."
+  },
+  "parent_identity": {
+    "device": 1828,
+    "inode": 755803,
+    "uid": 1000,
+    "gid": 1000,
+    "mode": "0o700"
+  },
+  "accepted_stage_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-actual-stage-acceptance-20261018-1.json",
+    "sha256": "afb6695c5c8f4a2603b4ba0e8c15663d9f88a9c406059b51eb7bee7e893fa247",
+    "size": 8213
+  },
+  "accepted_consumer_parent_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-consumer-parent-review-20261018-1.json",
+    "sha256": "b82fe529e23dd00866b7d62c79702773310db4d106485bacedfcca91b33e34bc",
+    "size": 11216,
+    "mode": 33152
+  },
+  "runtime_release": false
+}
