@@ -26,13 +26,13 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-18T09:45:09Z`, review26, interval30m19s.
+- Last full review: `2026-10-18T10:15:07Z`, review27, interval29m58s.
 - User explicitly resumed the interactive30-minute loop. Next full
-  review target:`2026-10-18T10:15:00Z`, latest10:45UTC, using the06:15 launch
+  review target:`2026-10-18T10:45:00Z`, latest11:15UTC, using the06:15 launch
   baseline below. No independent OS timer or second dispatcher is installed.
   Exclude the05:25:30-to06:15 stopped interval and failed startup from runtime
   velocity; do not treat the canceled05:35 target as a missed active review.
-- Last launcher-reported included usage:16% in the new weekly primary window;
+- Last launcher-reported included usage:17% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
 - Current review20:16 native behaviors and3complete/32open checks unchanged,
   all14milestones open. Five compute Rust ports source-reviewed; two selected in
@@ -108,6 +108,17 @@ This file describes supervision, not OS acceptance or execution authority.
   Exact shared-token-only recovery and tool-specific admission repair are now
   delegated in parallel. No retry or new workload before accepted recovery and
   corrected release. This is a harness failure, not a kernel/compiler result.
+- Current review27:17 behaviors/4complete31open unchanged, all14milestones open.
+  Host attempt stopped before compiler/container; exact shared-token-only
+  recovery source independently passes, execution awaits bounded fresh root
+  observation/no-kill supervision and release. Admission38/terminal15 checks
+  independently pass, but joint review060554a5 found missing terminal consumption
+  of the new admission proofs and a2MiB raw-budget mismatch; bounded corrections
+  active. Guest actual parent/wrapper checks pass and conditional execution
+  decision is finishing. Host compiler success is no guest dependency: accepted
+  token recovery/free owner and fresh case admission are. Host52.106GiB/
+  scratch12.838GiB, usage17%. No workload/retry/cleanup launched by supervisor;
+  no percentage or2x/3x uplift. Next10:45UTC/latest11:15.
 - Current invocation independently accepted app/diagnostic behaviors: 17 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -2366,3 +2377,88 @@ Evidence: `../evidence/rust-fp-reset-image-actual-review-20261018-1.json`
 (5235bb60), `../evidence/rust-fp-reset-image-terminal-retirement-result-review-20261018-1.json`
 (7feda9d7), `../evidence/rust-fp-reset-native-stage-actual-review-20261018-1.json`
 (7bc876b0); source-frozen host compiler-control execution decision from Review25.
+
+## Review27 — 2026-10-18 10:15 UTC
+
+Cutoff10:15:07UTC, interval29m58s. Same campaign running/active; worker871794/
+start10154631 and server871796/start10154636 remain live. No restart/service stop.
+Host52.106GiB/scratch12.838GiB, included usage17%, existing stop97%. Scratch21,
+original failures, protected exclusions and development mutex27:4 preserved.
+
+| Measure | Interval result |
+| --- | --- |
+| Native behaviors / practical checks | 17 /4complete31open unchanged; all14milestones open |
+| New useful native observations | Zero; last accepted mixed Rust/std behavior08:28:10,1h46m57s before cutoff |
+| Host compiler-control attempt | One producer exit1/0.489s before local lease, receipt, Docker or compiler |
+| Physical retirement / ownership | v2 child closure independently accepted31f17f94; shared token115190 remains held |
+| Recovery | Exact one-record source independently passes24author+14transaction checks; live facts/execution release pending |
+| Admission / terminal repair | Independently reproduced38+15 checks; two concrete joint-interface corrections active |
+| Reset-image native readiness | Actual parent/wrapper checks pass; conditional one-shot AVX then threads decision finishing |
+
+The09:46 host failure is an admission defect, not a kernel/compiler result. The
+stock observer authenticates a different producer ancestry and assumes the
+controller runs on worker CPUs2-5 although the reviewed controller uses CPU0.
+Actual privileged stderr was discarded, so a numeric original cause is unknown;
+do not invent one. v2 dedicated-subreaper/ECHILD proof positively retires the real
+producer and children. The combined outer flag remains false because the tool
+receipt was never created. Preserve both original observations. Only the new
+shared token remains; no local tool lease or container was acquired. No retry,
+raw unlink or new heavy owner is admitted by that retirement classification.
+
+Disjoint recovery and admission lanes run in parallel. Exact recovery source
+reviewb3e091ee passes24author+14independent transaction checks and15 frozen
+inputs; it preserves the original record inode in an archive and retains the
+quarantine sentinel until durable release. Execution still needs fresh privileged
+process/Docker facts, protected-record identities and concrete no-kill supervision.
+A bounded read-only allowlisted snapshot helper is being finished to supply those
+facts before release; it grants no recovery authority itself. No privileged
+recovery executed at cutoff.
+
+Tool admission repairf5294038 separates actual producer ancestry, CPU0 controller
+and CPU2-5 container roles, captures observer streams/status and measures the
+actual mounted scratch separately from host outputs. Terminal rebind keeps atomic
+ownership exchanges on scratch while pinning new host readback files separately.
+Independent joint review060554a5 reproduced53 passing checks but found two gaps:
+the terminal reader did not consume the new admission observer/retirement proofs,
+and its258MiB raw-file cap exceeded the256MiB raw+2MiB manifest accounting by2MiB.
+Authors are making bounded corrections and a connected real-producer/owner-
+admission fixture, with modeled privileged facts labeled. No full corpus replay
+or new general harness is required. Independent delta review and a fresh corrected
+one-shot execution packet remain necessary; consumed releases remain consumed.
+
+Reset AVX/threads ordinary parent commands both returned0. Independent reviewer
+verified live directory identities, frozen source/artifact bindings and literal-
+only wrapper changes. Request71c4d56c corrects only prerequisites/metadata: host
+compiler success is a scheduling preference, never a guest dependency. Conditional
+AVX approval is finishing; threads still requires accepted same-image AVX and
+its physical retirement. Both need accepted token recovery, a free heavy lane
+and fresh case admission. Prepare those decisions while recovery runs. After
+release choose the first fully admitted useful operation; prefer host controls
+when equally ready, but do not idle ready guest execution behind unfinished host
+repair. Do not overlap heavy operations or replay the failed producer.
+
+Read-only storage proposal found110GiB logical/94.423GiB allocated backing and
+about15.577GiB apparent holes, with scratch12.838GiB/host52.113GiB available at
+observation. These are not independent physical budgets. A contingent10GiB
+growth proposal exists but was NOT executed or approved: AGENTS.md:185 explicitly
+says "Do not resize or delete that image." Any future proposal needs explicit
+override, independently reviewed maintenance, accepted recovery/quiescence and
+fresh filesystem feature/health/identity checks. Sparse growth does not reserve
+physical blocks and filesystem growth has no simple online rollback. Continue
+already reviewed host-preparation placement now; no resize work on the critical
+path and no storage change authorized by this review.
+
+**Adjustment:** convert accepted recovery into the first useful executable
+observation, rather than another serial preparation chain. Finish source delta
+review and conditional guest approval in parallel; reuse unchanged inputs and
+actual parent checks. Require the connected consumer fixture for changed proof
+joins, not repeated unrelated hashes. Infrastructure repairs are useful but
+not native/kernel progress; no percentage or2x/3x campaign uplift assigned.
+Next full review10:45UTC/latest11:15; continue interactive supervision.
+
+Evidence: `../evidence/native-host-objtool-failed-attempt-classification-20261018-1.json`
+(31f17f94); host-preparation `native-host-objtool-prelease-independent-review-20261018-1/source-review.json`
+(b3e091ee), `native-host-objtool-admission-repair-20261018-1/HANDOFF.md`
+(f5294038), `native-host-objtool-joint-source-review-20261018-1/review-attempt-1.json`
+(060554a5), `native-host-objtool-terminal-rebind-20261018-1`,
+`rust-fp-reset-native-continuation-20261018-1` (request71c4d56c).

@@ -1,0 +1,329 @@
+{
+  "schema": "mckernel.fp-reset-exact-native-independent-execution-review.v1",
+  "decision": "PASS_CONDITIONAL_ONE_SHOT_EXECUTION_WITH_METADATA_JOINS",
+  "status": "PASS_CONDITIONAL_STATIC_EXECUTION_REVIEW",
+  "runtime_release": false,
+  "reviewer": "/root/reset_native_parent_review_0955",
+  "implementation_ownership": false,
+  "functional_scope": "Working supported-profile kernel/apps AND actual compute-C retirement into Rust/reviewed assembly; no compute-C expansion. Deferred qualification is not passed.",
+  "scoped_request": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/scoped-gates-1/execution-review-request.json",
+    "sha256": "71c4d56cfaaa76f52cf59890cf983c96cae05345e74cdf5f38e8dbd774bec1cd",
+    "size": 5838,
+    "mode": 33152
+  },
+  "preserved_original_request": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/execution-review-request.json",
+    "sha256": "64a2250777a1ab438828debb3ba53866dd2f49d9ba34ca8dca65c19331e6efe0",
+    "size": 4012,
+    "mode": 33152
+  },
+  "accepted_parent_actual_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-native-parent-actual-review-20261018-1.json",
+    "sha256": "14b5f68e4003be6f6990517918bc1d4becb503f0fd85e9c03148ec28ea7af0d8",
+    "size": 7414,
+    "mode": 33152
+  },
+  "accepted_ordinary_parent_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-native-parent-preparation-review-20261018-1.json",
+    "sha256": "daa4f29d330117f4202216e0a3fa7f39791a5a548f30d207565e74d7094e5aca",
+    "size": 17913,
+    "mode": 33152
+  },
+  "accepted_image_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-image-actual-review-20261018-1.json",
+    "sha256": "32eb4d476fd80af7652794b4b5a1de0223cc04545c33db909d7e9375f166d10e",
+    "size": 21952,
+    "mode": 33152
+  },
+  "accepted_stage_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-native-stage-actual-review-20261018-1.json",
+    "sha256": "7bc876b0c5cdf453cd2a1552a57695faf579646a4e13ef82cc37d8450018e532",
+    "size": 19040,
+    "mode": 33152
+  },
+  "accepted_image_terminal_retirement_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-image-terminal-retirement-result-review-20261018-1.json",
+    "sha256": "7feda9d754c945128145441a8df021ffa76d2261e62066626034cc3288fdb09e",
+    "size": 5428,
+    "mode": 33152
+  },
+  "independent_actual_binding_check": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-conditional-independent-review-20261018-1/static-result.json",
+    "sha256": "e2bdd63f91e96cc284a0e6f6244a705a409bd39d398875ec178ea43b88bf9142",
+    "size": 4997,
+    "mode": 33152
+  },
+  "independent_scoped_delta_validation": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-conditional-independent-review-20261018-1/scoped-validation.json",
+    "sha256": "8ba715b2b52a8f01c282409de93ff609448fb7ce171140799cb7264ff4bfe28f",
+    "size": 2635,
+    "mode": 33152
+  },
+  "cases": {
+    "avx": {
+      "decision": "CONDITIONAL_ONE_SHOT_EXECUTION_PASS",
+      "proposal": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/scoped-gates-1/avx/execution-proposal.json",
+        "sha256": "ee25d4a5c07d14fe6306fde5ebafb59d1b42849bb473684fa49a4bd20a29406d",
+        "size": 19542,
+        "mode": 33152
+      },
+      "conditional_metadata_template": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/scoped-gates-1/avx/conditional-metadata-DRAFT.json",
+        "sha256": "0a7a15f32490f40a53661b9d6399a96eaed61a17d6acbc91a38542e285284e0b",
+        "size": 7043,
+        "mode": 33152
+      },
+      "machine_release_template": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/scoped-gates-1/avx/machine-execution-release-DRAFT.json",
+        "sha256": "fd92785e47e1f90f573ec45cf67dbb8127fa3cfc70b630aa216e9ff1ec5c51d1",
+        "size": 3872,
+        "mode": 33152
+      },
+      "runtime_wrapper": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/avx/dispatch-runtime.py",
+        "sha256": "e628bb4f78b350a5059da2966b65bb021464ec39bc87c9bd9e7902f758742e00",
+        "size": 4620,
+        "mode": 33152
+      },
+      "parent": {
+        "path": "/home/holden/mckernel-work/scratch/rfr-d8114052/a",
+        "device": 1828,
+        "inode": 755269,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": "0o700"
+      },
+      "approved_owner_argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel/scratch/rfr-assets-1ef5924f/host-actual1/native_diagnostic_container_owner.py",
+        "--attempt-parent",
+        "/home/holden/mckernel-work/scratch/rfr-d8114052/a",
+        "--nonce",
+        "0c7e17f10ebb9a1db01dd65cdbc32f4f",
+        "--owner-sha256",
+        "77637cd062179f564167dd2cef760bc857d480158fa5271342877c5f736e843d",
+        "--manifest",
+        "/home/holden/mckernel-work/scratch/rfr-manifests-1ef5924f/avx.json",
+        "--manifest-sha256",
+        "80d78132e28ee97650e047eaf7f06529c90cab018a5cb91553afd7412997c3aa"
+      ],
+      "approved_postjoin_readbacks": {
+        "requested": true,
+        "approved": false,
+        "argv": [
+          [
+            "/usr/bin/sudo",
+            "-A",
+            "/usr/bin/tar",
+            "--create",
+            "--file=-",
+            "--directory=/home/holden/mckernel-work/scratch/rfr-d8114052/a.owner-0c7e17f10ebb9a1db01dd65cdbc32f4f",
+            "."
+          ],
+          [
+            "/usr/bin/sudo",
+            "-A",
+            "/usr/bin/cat",
+            "/home/holden/mckernel-work/scratch/rfr-d8114052/a/attempt-0c7e17f10ebb9a1db01dd65cdbc32f4f/result.json"
+          ],
+          [
+            "/usr/bin/sudo",
+            "-A",
+            "/usr/bin/tar",
+            "--create",
+            "--file=-",
+            "--directory=/home/holden/mckernel-work/scratch/rfr-d8114052/a/attempt-0c7e17f10ebb9a1db01dd65cdbc32f4f",
+            "."
+          ]
+        ],
+        "timeout_seconds_per_command": 30,
+        "capture_limit_bytes_per_command": 33554432,
+        "conditions": "Only after wrapper physically joins source-known owner exit0 whose accepted code joins all clients, releases lease and flushes evidence. Canonical exact nonce paths/UID/type/regular-single-link result checks precede default non-dereference tar. Any failed or uncertain owner/physical retirement stops; no readback/retry inferred."
+      },
+      "source_hashes_count": 11,
+      "full_source_closure": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/full-source-closure.json",
+        "sha256": "3a0e8cf5a1b92e4506f27eb5fc9d418e30a80463c9098775597a99df583045d0",
+        "size": 3366,
+        "mode": 33152
+      },
+      "conditional_dispatch_argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/avx/dispatch-runtime.py",
+        "--release",
+        "PENDING_DISPATCHER_FINAL_ONE_SHOT_RELEASE_PATH",
+        "--release-sha256",
+        "PENDING_EXACT_FINAL_RELEASE_SHA256"
+      ],
+      "runtime_release": false
+    },
+    "threads": {
+      "decision": "CONDITIONAL_ONE_SHOT_EXECUTION_PASS",
+      "proposal": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/scoped-gates-1/threads/execution-proposal.json",
+        "sha256": "d7e68727082df67b8ca039483fe7a71ce90965e27c2c0dbffa5b021c2569e63b",
+        "size": 21658,
+        "mode": 33152
+      },
+      "conditional_metadata_template": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/scoped-gates-1/threads/conditional-metadata-DRAFT.json",
+        "sha256": "3dece129be11e2c7b984380c984f8289262543c3922078bf078a838e26bee117",
+        "size": 7294,
+        "mode": 33152
+      },
+      "machine_release_template": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/scoped-gates-1/threads/machine-execution-release-DRAFT.json",
+        "sha256": "fa3bc5b22eba0e954e186ba0a44e9f856faa82c627717bdefadf8ba54527a90d",
+        "size": 3076,
+        "mode": 33152
+      },
+      "runtime_wrapper": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/threads/dispatch-runtime.py",
+        "sha256": "04289da45835760a1ffa6b0a86274e6f8cfd783206b5f1ab3c17cb34a442f217",
+        "size": 4759,
+        "mode": 33152
+      },
+      "parent": {
+        "path": "/home/holden/mckernel-work/scratch/rfr-d8114052/t",
+        "device": 1828,
+        "inode": 755270,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": "0o700"
+      },
+      "approved_owner_argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+        "--attempt-parent",
+        "/home/holden/mckernel-work/scratch/rfr-d8114052/t",
+        "--nonce",
+        "7dda89de1d704a5872d39f5c8e6194c0",
+        "--owner-sha256",
+        "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+        "--manifest",
+        "/home/holden/mckernel-work/scratch/rfr-manifests-1ef5924f/threads.json",
+        "--manifest-sha256",
+        "352ac64f1b56c23ca79e12a0e95d812701985b3902468aef637d68b0bd635a1e"
+      ],
+      "approved_postjoin_readbacks": {
+        "requested": true,
+        "approved": false,
+        "argv": [
+          [
+            "/usr/bin/sudo",
+            "-A",
+            "/usr/bin/tar",
+            "--create",
+            "--file=-",
+            "--directory=/home/holden/mckernel-work/scratch/rfr-d8114052/t.owner-7dda89de1d704a5872d39f5c8e6194c0",
+            "."
+          ],
+          [
+            "/usr/bin/sudo",
+            "-A",
+            "/usr/bin/cat",
+            "/home/holden/mckernel-work/scratch/rfr-d8114052/t/attempt-7dda89de1d704a5872d39f5c8e6194c0/result.json"
+          ],
+          [
+            "/usr/bin/sudo",
+            "-A",
+            "/usr/bin/tar",
+            "--create",
+            "--file=-",
+            "--directory=/home/holden/mckernel-work/scratch/rfr-d8114052/t/attempt-7dda89de1d704a5872d39f5c8e6194c0",
+            "."
+          ]
+        ],
+        "timeout_seconds_per_command": 30,
+        "capture_limit_bytes_per_command": 33554432,
+        "conditions": "Only after wrapper physically joins source-known owner exit0 whose accepted code joins all clients, releases lease and flushes evidence. Canonical exact nonce paths/UID/type/regular-single-link result checks precede default non-dereference tar. Any failed or uncertain owner/physical retirement stops; no readback/retry inferred."
+      },
+      "source_hashes_count": 5,
+      "full_source_closure": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/full-source-closure.json",
+        "sha256": "3a0e8cf5a1b92e4506f27eb5fc9d418e30a80463c9098775597a99df583045d0",
+        "size": 3366,
+        "mode": 33152
+      },
+      "conditional_dispatch_argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/threads/dispatch-runtime.py",
+        "--release",
+        "PENDING_DISPATCHER_FINAL_ONE_SHOT_RELEASE_PATH",
+        "--release-sha256",
+        "PENDING_EXACT_FINAL_RELEASE_SHA256"
+      ],
+      "runtime_release": false
+    }
+  },
+  "execution_order": [
+    "AVX exact reset image492c4a1506a8097d9534560fc9df7e8e35f571f779fdc19b9540e487bbb035d3 once, only after every release gate below passes.",
+    "Threads once only after that exact-image AVX actual native success and positive owner/client/container/common/shared retirement are independently accepted and a new per-thread live admission passes. No automatic dispatch."
+  ],
+  "required_late_release_joins": {
+    "current_held_token_recovery_and_physical_release": {
+      "status": "PENDING",
+      "required": "Bind {status:PASS,ref:{path,sha256,size}} to independently accepted ACTUAL recovery and positive physical release of current shared token dev1828 inode115190 (canonical request11317aca, failed prelease owner955897/start11422134). The reviewed generation transaction must authenticate/archive the exact held record and preserve bytes. Absent PIDs, a missing path, a source-only recovery release or compiler success alone cannot satisfy this gate. No raw unlink or same-attempt retry."
+    },
+    "terminal_cleanup_and_common_shared_release": {
+      "status": "ACCEPTED_AVAILABLE_FOR_EXACT_METADATA_BINDING",
+      "ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-image-terminal-retirement-result-review-20261018-1.json",
+        "sha256": "7feda9d754c945128145441a8df021ffa76d2261e62066626034cc3288fdb09e",
+        "size": 5428,
+        "mode": 33152
+      }
+    },
+    "fresh_live_preflight": {
+      "status": "PENDING",
+      "required": "Fresh<=60s PASS_LIVE_PREEXECUTION_SNAPSHOT from actual checks: boot/mount UUID2a5768c8-718d-4914-bdc0-6b32c5a92a52 and device; root mutex and exclusive heavy accepted/free; current owner/client/container/common/shared records physically released; preserved exclusions reconciled; exact parentdev/inode/UID/GID/mode/empty/canonical; nonce paths absent; actual HEAD/source/artifact/manifest/owner pins; included usage<97%; aggregate7jobs/23.735GiB headroom; one heavy4CPU2-5/12GiB/noSwap/512tasks/noNet;16GiBhost12GiBscratch plus384MiB guest reserve and any larger active reserved packet floor. Fresh RAM/storage measurements mandatory."
+    },
+    "independent_static_execution_decision": {
+      "status": "AVAILABLE_AFTER_FINAL_FILE_HASH",
+      "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-native-execution-review-20261018-1.json",
+      "sha256": "LATE_BOUND_SHA256_OF_THIS_FINAL_REVIEW"
+    },
+    "accepted_current_image_avx_predecessor": {
+      "status": "PENDING_THREADS_ONLY",
+      "required": "Independent accepted AVX actual result for exact492c4a15 image, exact AVX manifest/payload/oracle and positive physical retirement/release. Prior da0f1bf7 AVX evidence cannot satisfy this."
+    },
+    "dispatcher_one_shot_release": {
+      "status": "PENDING",
+      "required": "Only dispatcher may emit exact final per-case source-bound release with statusPASS_EXECUTION_RELEASE,runtime_releasetrue,execution_count1 after every applicable late gate is actually true. This conditional review and author templates are not executable releases."
+    }
+  },
+  "priority_dependency_clarification": "Host-tool operation remains preferred when its complete reviewed operation is ready. Successful host-compiler execution is not a semantic prerequisite for these unrelated native guests. Accepted recovery of the currently held token, positive physical release, a free owner and fresh live admission remain mandatory. Historical +hostobjtool wording in descriptive dispatcher scope is superseded by this explicit current_held_token_recovery_and_physical_release gate; it grants no source/profile exception.",
+  "allowed_final_metadata_derivatives": [
+    "Bind this canonical static-review ref/hash, accepted terminal7feda9d7 ref, accepted parent14b5f68e/receiptbb38f7ce refs, exact actual recovery-result acceptance ref, fresh snapshot ref and threads-only current-image AVX acceptance ref. Preserve originals; emit additive files.",
+    "Set only corresponding pending status/boolean fields toPASS/true after evidence is independently accepted; finalrelease status/runtime_release/execution_count must bePASS_EXECUTION_RELEASE/true/1. Update dependent proposal/metadata/file refs and hashes mechanically.",
+    "Metadata may record verified runtime_wrapper_body_unchanged=true, literal-only source_derivativePASS, common_shared_released=true and postjoin_readback.approved=true, with exact already-reviewed wrapper, owner, parent, receipt and readback bytes. Pending remains pending until each claim is observed.",
+    "required_complete_source_hashes remains mechanically equal to the selected actual owner SOURCE_HASHES plus owner selfhash: AVXstaged11, canonicalthreads5; match full_source_closure and actual bytes immediately before launch. No source-hash-map substitution or widening.",
+    "At final release record the actual current HEAD and source-bound clean/dirty provenance; currentreviewHEAD7725b8fd05f1efa7734716c2d2a58ca0501cd6d1. A later normal evidence-only checkpoint may latebind HEAD only if all reviewed consumer/kernel/tool/config/artifact hashes are unchanged and exact source provenance is retained. Any implementation, consumer-body, oracle, command, resource profile, payload, case, path/nonce or source-map change requires affected independent review.",
+    "Deterministic evidence/ref/hash/status substitutions within these exact fields do not require a new static review handshake. Rehash the complete frozen closure and completed release at immediate admission; source or identity drift stops."
+  ],
+  "approved_readback_rule": "Only after direct owner physically joins exit0 whose exact reviewed source retires all Docker clients, authenticates container absence, releases root lease and flushes evidence; require exact canonical root-owned owner-evidence directory, UID1000attempt and single-link regular result. Execute only the per-case three frozen argv commands, timeout30s and32MiB captures each, default tar without dereference. Preserve all raw streams/command statuses. No readback on failed or uncertain owner.",
+  "owner_lifetime_rule": "Use exact wrapper/owner CLI; no outer killing timeout around the guest owner. Its existing bounded per-command and cleanup controls retain the lock on uncertainty and recover under the same identity. Do not interrupt healthy work or admit another heavy owner until positive release.",
+  "failure_rule": "Each case one fresh released attempt only. First unexpected setup/payload/oracle/retirement failure stops that case, preserves evidence and blocks dependent threads. One failure plus one bounded correction family policy applies; no renamed retry, weakened oracle, automatic cleanup or acceptance inference.",
+  "review_scope_limits": {
+    "guest_executed_by_reviewer": false,
+    "guest_count": 0,
+    "native_behavior_increment": 0,
+    "native_language_retirement_increment": 0,
+    "formal_acceptance_increment": 0,
+    "new_clear_mask_reset_retirement": "No native retirement is claimed here. AVX/threads applicable-chain results still require actual result review; clear_fp_regs execve-clear and null-fpstate reset need their own applicable native proof.",
+    "replayed_passing_corpus": false,
+    "root_Docker_commands_by_reviewer": 0
+  },
+  "review_checks": "Cheap CPU1/1GiB static identity/hash/body/delta checks passed; accepted image/stage/terminal/ordinary/actual-parent evidence reused. No stage rebuild or guest/source corpus replay.",
+  "created_epoch": 1792318550.7556996
+}

@@ -1,5 +1,46 @@
 # Resume cursor
 
+## RESUMED — bounded continuation cursor, 2026-10-18 10:22 UTC
+
+Functional PRACTICAL-GOAL and live compute-C retirement into Rust/reviewed
+assembly remain ACTIVE. No new compute-C behavior or deferred certification
+credit. Current HEAD7725b8fd05f1efa7734716c2d2a58ca0501cd6d1 was pushed/fetched
+with16 verified blobs; proof: host-preparation/checkpoint-host-prelease-failure-
+20261018-1/verification.json. Unrelated launcher/ihk WIP is preserved.
+
+Exact shared token dev1828/inode115190 remains HELD; no guest, compiler or cleanup
+retry is authorized by its absence alone. Failed09:46 producer classification
+31f17f94 establishes positive v2 owner retirement, not release of that token.
+A separate exact read-only snapshot decision is pending before the one-record
+archival recovery release. Supervisor corrections preserve a nonreturning,
+no-signal quarantine hold even if diagnostic writes fail. No privileged snapshot
+or recovery has yet run. All failed source/authority revisions remain retained.
+
+Reset AVX conditional execution reviewf160781a and parent actual review14b5f68e
+PASS. Host compiler success is NOT a guest dependency: after independently
+accepted exact token recovery and physical release, choose the first fully
+reviewed/admitted useful operation, preferring host control when equally ready.
+AVX runs first if corrected host release is unready; threads additionally need
+accepted actual492c4a15 AVX result and retirement. No staging/consumer replay.
+AVX intentionally uses staged11-source owner; threads uses canonical5-source
+owner. Actual ordinary parents dev1828/inodes755269 and755270 remain reserved.
+
+Paired host admission/terminal correction is in independent delta review:
+38 original admission checks,7 connected producer/owner cases and31 corrected
+terminal checks pass. Actual admission_binding consumes all3 real unprivileged
+observer captures; root/Docker/terminal surroundings are explicitly modeled.
+Original pre-container FAIL receipt is immutable. Raw cap256MiB, total258MiB.
+These checks grant no host execution authority or kernel/native completion.
+
+Counts remain17 native behaviors,4complete/31open practical checks, all14milestones
+open. Eight Rust bodies production-proven; five have applicable prior native
+chain, new492 clear/mask/reset branches pending. No percentage or2x/3x claim.
+Latest ordinary statvfs: host55933136896B/scratch13784166400B; fresh packet floor
+plus growth and512MiB emergency admission is still mandatory. Included usage16%
+last reported; stop97%. Preserve scratch21, seven historical leases, ROOT27:4,
+110GiB backing and every original failed attempt. Supervisor Review27 saved;
+next10:45UTC. Continue after this normal checkpoint.
+
 ## RESUMED — live dispatch cursor, 2026-10-18 09:54 UTC
 
 The06:15 explicit resume remains ACTIVE: functional PRACTICAL-GOAL AND actual

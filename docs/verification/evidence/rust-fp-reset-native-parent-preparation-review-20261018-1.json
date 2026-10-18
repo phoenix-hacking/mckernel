@@ -1,0 +1,328 @@
+{
+  "schema": "mckernel.fp-reset-ordinary-parent-independent-review.v1",
+  "status": "PASS_ORDINARY_PARENT_CREATION_RELEASE",
+  "creation_authorized": true,
+  "wrapper_literal_binding_authorized": true,
+  "runtime_release": false,
+  "functional_scope": "Functional supported-profile kernel/apps AND actual live compute-C retirement into Rust/reviewed assembly; no compute-C expansion; broader qualification deferred.",
+  "reviewer": "/root/reset_native_parent_review_0955",
+  "implementation_ownership": false,
+  "created_epoch": 1792317542.6685977,
+  "contract": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/creation-contract.json",
+    "sha256": "7d4be434418626e5d314f319d46e1fb9b8d0f825bacfb469e5d953f8d83fea59",
+    "size": 3287,
+    "mode": 33152
+  },
+  "review_target": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/review-target.json",
+    "sha256": "6427ae68a5c50a46cb9b765ec1bdc4c6e4b3e4d2e3176435ac2145725aa117be",
+    "size": 1512,
+    "mode": 33152
+  },
+  "reviewed_packet": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/parent-preparation-review-packet.json",
+    "sha256": "c8c7add041151695e04b34788ebc1ee732dece910bf7052991c8688cc08d3269",
+    "size": 6328,
+    "mode": 33152
+  },
+  "accepted_inputs": {
+    "accepted_terminal_retirement": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-image-terminal-retirement-result-review-20261018-1.json",
+      "sha256": "7feda9d754c945128145441a8df021ffa76d2261e62066626034cc3288fdb09e",
+      "size": 5428,
+      "mode": 33152
+    },
+    "accepted_actual_image": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-image-actual-review-20261018-1.json",
+      "sha256": "32eb4d476fd80af7652794b4b5a1de0223cc04545c33db909d7e9375f166d10e",
+      "size": 21952,
+      "mode": 33152
+    },
+    "accepted_stage_consumers": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-native-stage-actual-review-20261018-1.json",
+      "sha256": "7bc876b0c5cdf453cd2a1552a57695faf579646a4e13ef82cc37d8450018e532",
+      "size": 19040,
+      "mode": 33152
+    }
+  },
+  "per_case_real_owner_reconciliation": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/threads-route-reconciliation.json",
+    "sha256": "19a9205383be7c08484e31e4d199e4b4d967d82ceb00dd26049724bdc4b94f96",
+    "size": 5705,
+    "mode": 33152
+  },
+  "independent_real_owner_source_proof": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-parent-independent-review-20261018-1/owner-source-proof.json",
+    "sha256": "360524b37cdf1ae55d55d54f45d1ca275646ca43172b28c9fbd70d27692aa245",
+    "size": 3871,
+    "mode": 33152
+  },
+  "decision": {
+    "ordinary_commands": 2,
+    "fresh_directories": 3,
+    "identity_receipts": 1,
+    "literal_wrapper_derivatives": 2,
+    "actual_runtime_parents_created_by_reviewer": 0,
+    "source_consumer_bodies_changed": 0,
+    "guest_execution_authorized": false,
+    "root_Docker_build_archive_copy_authorized": false,
+    "lease_changes_authorized": false
+  },
+  "command_templates": [
+    [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "35s",
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=30",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/create_parents.py",
+      "--proposal",
+      "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-native-parent-preparation-review-20261018-1.json",
+      "--proposal-sha256",
+      "LATE_BOUND_SHA256_OF_THIS_FINAL_REVIEW_FILE"
+    ],
+    [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "35s",
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=30",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bind_parent_literals.py"
+    ]
+  ],
+  "ordinary_source_closure": {
+    "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/create_parents.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/create_parents.py",
+      "sha256": "61f93e4d1d6afdc7a3428375e0c96c5bd6efbfd950a49606a8f9f0461a3a3eb5",
+      "size": 2989,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bind_parent_literals.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bind_parent_literals.py",
+      "sha256": "8b00b9735c5fbc1133b40583713b8d386542b5231d902854f30f83a5767d4eff",
+      "size": 3578,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/creation-contract.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/creation-contract.json",
+      "sha256": "7d4be434418626e5d314f319d46e1fb9b8d0f825bacfb469e5d953f8d83fea59",
+      "size": 3287,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/parent-preparation-review-packet.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/parent-preparation-review-packet.json",
+      "sha256": "c8c7add041151695e04b34788ebc1ee732dece910bf7052991c8688cc08d3269",
+      "size": 6328,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/review-target.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/review-target.json",
+      "sha256": "6427ae68a5c50a46cb9b765ec1bdc4c6e4b3e4d2e3176435ac2145725aa117be",
+      "size": 1512,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/output-authority.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/output-authority.json",
+      "sha256": "9647d63e15b602e56200f252ce7619109ff401578569cdf11901f2639ff04b81",
+      "size": 1499,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/avx/dispatch-runtime.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/avx/dispatch-runtime.py",
+      "sha256": "0764b0d1011f79fc81b70ba57f58799e735cd9ab67267eec0aba427448139511",
+      "size": 4620,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/threads/dispatch-runtime.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/threads/dispatch-runtime.py",
+      "sha256": "2bffb6c98728456d48fe23df8c8f38aa1cfc4529f53dc77f7b3dfcd9d8debd9f",
+      "size": 4759,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/avx/execution-proposal.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/avx/execution-proposal.json",
+      "sha256": "659e3485fcb46c053ccdbb6c8ede3c13798bda8ecc5fe17743b7abe2f3176be9",
+      "size": 19193,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/avx/conditional-metadata-DRAFT.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/avx/conditional-metadata-DRAFT.json",
+      "sha256": "758c21068cff72dec979b1ca8da4ca85119a20c35bf55f8a9fd67af997d5cce5",
+      "size": 6768,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/avx/machine-execution-release-DRAFT.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/avx/machine-execution-release-DRAFT.json",
+      "sha256": "e077f3c040caa6dd70addd8926996a639c09ca4ef11122603e102140f5866449",
+      "size": 3771,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/threads/execution-proposal.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/threads/execution-proposal.json",
+      "sha256": "fb62db4bd8746a30094483bbf0951a8a2b7e6dd5631d7687a8cb245d4cf7bc00",
+      "size": 21313,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/threads/conditional-metadata-DRAFT.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/threads/conditional-metadata-DRAFT.json",
+      "sha256": "fb85589727a56b2fe7b40dc56797c7f6661db16009757c5a3c5bbef8351d18c4",
+      "size": 7023,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/threads/machine-execution-release-DRAFT.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/threads/machine-execution-release-DRAFT.json",
+      "sha256": "5b7dd6a8d1362b7e2f90fe4bc766d2340495f61eb88d9d9dbae160ad2761a5ce",
+      "size": 2975,
+      "mode": 33152
+    }
+  },
+  "before_each_command_rule": [
+    "Use exact reviewed argv with Python -B, CPU0,1GiB AS,30CPU/35wall limits; one ordinary job. No sudo/Docker/guest/heavy command.",
+    "Immediately before invocation, mechanically rehash this review, reviewed packet, contract, both helper files and every ordinary_source_closure input; require exact pinned bytes. Reconcile current boot, mountUUID/device and floors with contract. Stop on drift.",
+    "First command substitutes only the exact final canonical review path and its freshly computed SHA256 into --proposal/--proposal-sha256. This late binding does not edit the review or grant further authority.",
+    "Invoke first command at most once. Preserve all partial parents and exclusive0600 outside-parent receipt on failure. Do not retry, reuse attempt names, unlink receipts or remove ownership records.",
+    "Only if first command exits0 and its exclusive actual receipt is PASS_FRESH_EMPTY_UNUSED_RUNTIME_PARENTS may second exact command run once. Check receipt path canonical/single-link regular UID1000mode0600 and both real parent lstat identities against receipt, UID/GID1000mode0700, empty and canonical.",
+    "Bound wrapper outputs must equal their accepted wrapper byte-for-byte after reversing the single EXPECTED_PARENT_IDENTITY assignment replacement. Parent paths/nonces/endpoints remain exact contract literals. Preserve original source and all six proposal/metadata/template inputs."
+  ],
+  "late_bound_derivative_rule": {
+    "allowed_wrapper_change": "Only EXPECTED_PARENT_IDENTITY literal derived from successful real receipt; all other bytes identical to per-case accepted wrapper.",
+    "allowed_metadata_changes": "Exact actual parent identity/receipt and newly emitted wrapper/proposal/metadata hashes/paths as implemented in pinned bind_parent_literals.py.",
+    "source_machine_fields": "required_complete_source_hashes must mechanically equal selected actual owner SOURCE_HASHES plus exact selected owner self hash: AVX staged77637cd0=11; threads canonical9084bfd3=5. They already match. Never substitute AVX owner for threads; its case_evaluator freezes AVX only.",
+    "review_reuse": "This ordinary decision covers the two source-frozen literal derivatives and machine/receipt hashes produced by the pinned binding. Deterministic receipt/hash substitution alone does not require another ordinary source review. Any consumer-body, oracle, command/profile, path/nonce or source-map change stops for affected review.",
+    "runtime_review": "Separate exact guest execution review, positive host-tool accepted release and fresh live heavy admission remain required; this review does not admit a guest."
+  },
+  "tests": {
+    "profile": "UID1000 CPU0 AS1GiB CPU30s wall35s; reviewer-owned temporary fixtures only",
+    "command": [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "35s",
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=30",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-parent-independent-review-20261018-1/check.py"
+    ],
+    "source": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-parent-independent-review-20261018-1/check.py",
+      "sha256": "e15fb538878572314596fac2c74141997eb40d52ed506f72c1d0566cf29cf0d3",
+      "size": 5237,
+      "mode": 33152
+    },
+    "results": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-parent-independent-review-20261018-1/test-results.json",
+      "sha256": "7124c5c11307ca82f8670cec9f3d68302e3a73929ad820a51781d0ac7fd780ca",
+      "size": 680,
+      "mode": 33152
+    },
+    "passed": 5,
+    "coverage": [
+      "actual unchanged create+bind helpers positive fixture; two wrapper AST bodies preserved",
+      "occupied root refusal before receipt creation",
+      "symlink root refusal before receipt creation",
+      "exclusive occupied receipt preserved; no root created",
+      "injected second mkdir failure preserves first parent and failure receipt"
+    ],
+    "actual_runtime_parent_creations": 0,
+    "guest_count": 0
+  },
+  "preserved_review_corrections": {
+    "preliminary_map_substitution_suggestion": "Rejected after actual consumer inspection; original case-specific owner/maps correct. No author changes made.",
+    "extractor_failure": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-parent-independent-review-20261018-1/source-extractor-first-failure.txt",
+      "sha256": "718a53c1d4a955f233a6bc38e456b6800de46fde1c3118d2646e4e51195af3c0",
+      "size": 219,
+      "mode": 33152
+    },
+    "bounded_correction": "Read-only source extractor now includes real RUNNER constant before SOURCE_HASHES; AVX11 and threads5 verified against proposal/machine/actual bytes."
+  },
+  "pending_gates": {
+    "hostobjtool_recovery_and_positive_accepted_release": "PENDING",
+    "fresh_live_heavy_admission": "PENDING",
+    "exact_guest_execution_release": "PENDING",
+    "current_image_AVX_before_threads": "PENDING"
+  },
+  "endpoint_preflight": {
+    "endpoints": [
+      {
+        "path": "/home/holden/mckernel-work/scratch/rfr-d8114052/a/attempt-0c7e17f10ebb9a1db01dd65cdbc32f4f/qmp.sock",
+        "encoded_bytes": 99,
+        "max_bytes": 107
+      },
+      {
+        "path": "/home/holden/mckernel-work/scratch/rfr-d8114052/t/attempt-7dda89de1d704a5872d39f5c8e6194c0/qmp.sock",
+        "encoded_bytes": 99,
+        "max_bytes": 107
+      }
+    ],
+    "suffixes": [
+      "qmp.sock"
+    ],
+    "max_encoded_bytes": 99,
+    "no_other_unix_monitor_endpoints": true
+  },
+  "write_allowlist": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/rfr-d8114052",
+      "recursive": false,
+      "created_directory_mode": "0700"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rfr-d8114052/a",
+      "recursive": false,
+      "created_directory_mode": "0700"
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rfr-d8114052/t",
+      "recursive": false,
+      "created_directory_mode": "0700"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/parent-identities-actual.json",
+      "recursive": false,
+      "creation": "O_EXCL|O_NOFOLLOW mode0600 outsidefutureattemptparents; failure receipt retained"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound",
+      "recursive": true,
+      "files": "Two literal-only wrappers/diffs +proposal/metadata/machine schemas and exactexecutionrequest"
+    }
+  ],
+  "profile": {
+    "uid": 1000,
+    "cpu": 0,
+    "as_bytes": 1073741824,
+    "cpu_seconds": 30,
+    "wall_seconds": 35,
+    "jobs": 1,
+    "growth_reserve_bytes": 4194304,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888
+  },
+  "runtime_behavior_increment": 0,
+  "native_apps_increment": 0,
+  "formal_acceptance_increment": 0
+}
