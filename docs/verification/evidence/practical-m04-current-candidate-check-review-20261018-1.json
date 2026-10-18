@@ -1,0 +1,144 @@
+{
+  "schema": "mckernel.practical-m04-current-candidate-check-review.v1",
+  "status": "PASS_BOUNDED_LITERAL_CHECK_REVIEW",
+  "created_utc": "2026-10-18T08:30:27.070966+00:00",
+  "reviewer": "/root/practical_m04_literal_check_review_0829",
+  "implementation_ownership": false,
+  "scope": "Functional PRACTICAL-GOAL kernel/apps AND active actual compute-C retirement into Rust plus reviewed assembly; broad original qualification deferred.",
+  "decision_basis": "Only the existing literal P-M04-01 and P-M04-03 checks, their M04 context and selected already accepted current-candidate records. This is a check-closure recommendation, not a new execution/readiness gate.",
+  "image_sha256": "da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f",
+  "checks": [
+    {
+      "id": "P-M04-01",
+      "description": "Run libc-based C and Rust standard-library applications.",
+      "decision": "PASS",
+      "recommended_status": "complete",
+      "sufficient_evidence": [
+        "c_native",
+        "rust_native",
+        "rust_source_linux"
+      ],
+      "reason": "The same current da0f1bf7 image actually runs the unchanged dynamic-libc C threads application and a real Rust standard-library application. Both accepted independent runtime reviews bind exact streams/status, kernel scanning and positive retirement. This satisfies the literal application-language check.",
+      "facts": {
+        "c_payload_sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+        "c_exit": 37,
+        "c_stdout_bytes": 25,
+        "c_stderr_bytes": 0,
+        "c_behavior": "Two overlapping workers, TLS, three-party barrier, mutex counter 2000, both joins; dynamic libc/loader and pager release accepted by c_native.",
+        "rust_payload_sha256": "4ebbe30ec084e47a17f3f03b0f0d42d9a0f122da35db27c95d2145ed970f3a49",
+        "rust_exit": 0,
+        "rust_stdout_bytes": 156,
+        "rust_stderr_bytes": 0,
+        "rust_behavior": "std Vec/file I/O/Arc/Mutex/Condvar/thread joins; three rounds, six worker lifetimes, checked closes/reopens/EOF/unlink and 768 alternating turns."
+      },
+      "limits": "Complete only this literal check for the accepted current candidate. PRACTICAL-GOAL final supported-profile regression/rebuild/delivery requirements remain separately open; those requirements are not additional language-app conjuncts in this check. No whole-M04, all-milestones or whole-kernel Rust claim."
+    },
+    {
+      "id": "P-M04-03",
+      "description": "Compare frozen independent expected behavior with Linux.",
+      "decision": "OPEN",
+      "recommended_status": "open",
+      "sufficient_evidence_for_partial_comparison": [
+        "rust_source_linux",
+        "rust_native",
+        "c_native"
+      ],
+      "reason": "The frozen independent Rust expected output/exit and Linux result exactly match the accepted native Rust result. That is a completed comparison for this payload. The existing M04 context also covers useful file/stream utilities and representative memory/file/thread/signal regressions, and the existing P-M04-03 assessment explicitly says final useful-suite Linux comparison coverage is not closed by narrow diagnostics. These selected C-thread/Rust records do not join Linux comparison coverage for that broader selected suite.",
+      "proven_partial_scope": {
+        "rust_stdout_sha256": "0bc276ed5f3b2588004c90a36ac7de431d5e8e27388a996c72d7b880c21dc2db",
+        "linux_expected_native_stdout_bytes": 156,
+        "linux_and_native_exit": 0,
+        "linux_and_native_stderr_bytes": 0,
+        "independent_checksum_total": 3072270,
+        "linux_oracle_review": "Independent checksum method, frozen expected behavior, positive replay and three negative controls already accepted."
+      },
+      "precise_remaining_scope": "Join the retained frozen independent expected behavior, Linux result and applicable accepted native result for the useful M04 selected suite (file/stream utilities and representative memory/file/thread/signal regressions), with honest candidate/profile applicability. Existing historical comparisons may be reused where applicable; this review does not demand an all-273 catalog, exhaustive parameter matrix or replay of unchanged passing evidence.",
+      "limit": "The remaining coverage is not asserted absent everywhere; it is not established by the selected records. No new formal qualification, certification or universal final-readiness gate is introduced."
+    }
+  ],
+  "contract_snapshot": {
+    "m04_exit_condition": "Useful actual applications and representative core regressions work.",
+    "P-M04-01_prior_assessment": "Actual current942 dynamic-libc C memory and original threads, plus static real Rust std applications pass frozen output/exit and retirement. Final supported candidate/profile replay remains open.",
+    "P-M04-03_prior_assessment": "Accepted frozen expected bytes/status are retained, including exact415byte alternate-stack bridge. Final useful-suite Linux comparison coverage is not closed by these narrow diagnostics.",
+    "interpretation": "Final recipe/profile/regression requirements remain required for practical-goal completion. P-M04-01 can close at its literal current-candidate language-app scope without closing those other requirements. P-M04-03 comparison scope follows the existing selected M04 suite, not merely one newly successful app."
+  },
+  "evidence": {
+    "rust_native": {
+      "path": "docs/verification/evidence/practical-mixed-rust-std-native-result-review-20261018-1.json",
+      "sha256": "0ba31cb8d3f461286a738976444b8cc43cf631660f352298efe62ace945eedb5",
+      "size": 15720
+    },
+    "rust_source_linux": {
+      "path": "docs/verification/evidence/practical-mixed-rust-std-source-linux-review-20261018-1.json",
+      "sha256": "1512621c0fae57e185e818ee0381166e4a9ab608136dc87b8d3f05786baa364f",
+      "size": 7378
+    },
+    "c_native": {
+      "path": "docs/verification/evidence/rust-three-port-image-threads-result-review-20261018-1.json",
+      "sha256": "2a634dfb44d34b8e814cdb1259a22a5e84a48312976419e5eb94ecbb9e641601",
+      "size": 15728
+    },
+    "practical_goal": {
+      "path": "docs/verification/os-milestones-20260914/PRACTICAL-GOAL.md",
+      "sha256": "4dbb761f63bb8e2fef59301c0c16a4ea35dfd2eee01cd7f4864300a978f655c0",
+      "size": 10686
+    },
+    "practical_milestones": {
+      "path": "docs/verification/os-milestones-20260914/practical-milestones.json",
+      "sha256": "f42edd2650e2b68e95109d9f85c5702a6fac66c0ade89feeb5825669df049d91",
+      "size": 97724
+    }
+  },
+  "specific_rust_linux_provenance_verified": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/app.rs",
+      "sha256": "5bce3952f59ea50c5dd7d2385361878cf513bed600aaa0d3d62b45c2907c0886",
+      "size": 4816
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/frozen-oracle.json",
+      "sha256": "237467b2255b7ae16c314ff2dfe75f8b63c8afeb00bf17441a941b4ef97a52d6",
+      "size": 343
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/result.json",
+      "sha256": "14191df522aad0ecd2f234a316c7ed2ac1e7f056006ff96273a81dce776b1c6b",
+      "size": 8975
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/expected.stdout",
+      "sha256": "0bc276ed5f3b2588004c90a36ac7de431d5e8e27388a996c72d7b880c21dc2db",
+      "size": 156
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/linux-reference.stdout",
+      "sha256": "0bc276ed5f3b2588004c90a36ac7de431d5e8e27388a996c72d7b880c21dc2db",
+      "size": 156
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/linux-reference.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/linux-reference.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    }
+  ],
+  "activity": {
+    "new_tests": 0,
+    "new_guests": 0,
+    "new_builds": 0,
+    "distinct_behavior_increment": 0,
+    "distinct_native_behaviors_total_preserved": 17,
+    "deferred_original_formal_acceptance_credit": 0,
+    "new_production_language_retirement_credit": 0,
+    "status_ledgers_modified": false
+  },
+  "limits": [
+    "No implementation edits, root commands, live-resource decisions, artifact corpus rehash, runtime replay or Git operations.",
+    "C source/profile/module compatibility and applicable default-link/native path proof remain the independent reviews already accepted by the dispatcher.",
+    "All other practical checks and deferred original qualification retain their existing state; dispatcher owns status integration."
+  ]
+}

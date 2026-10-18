@@ -457,7 +457,7 @@
         {
           "id": "P-M04-01",
           "description": "Run libc-based C and Rust standard-library applications.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
@@ -513,9 +513,19 @@
               "path": "docs/verification/evidence/native-core-threads-current942-result-review-20261017-1.json",
               "sha256": "2f4e21d99ebf17acd760c2193ac3872d68bf2d03b9a7d444f82daeff93571d23",
               "size": 13782
+            },
+            {
+              "path": "docs/verification/evidence/practical-mixed-rust-std-native-result-review-20261018-1.json",
+              "sha256": "0ba31cb8d3f461286a738976444b8cc43cf631660f352298efe62ace945eedb5",
+              "size": 15720
+            },
+            {
+              "path": "docs/verification/evidence/practical-m04-current-candidate-check-review-20261018-1.json",
+              "sha256": "d50f96fee0919c0a093d3fc0accbb97fb7b2ef49483971407a6f6d4e6ceb2f76",
+              "size": 8999
             }
           ],
-          "assessment_note": "Actual current942 dynamic-libc C memory and original threads, plus static real Rust std applications pass frozen output/exit and retirement. Final supported candidate/profile replay remains open."
+          "assessment_note": "Literal current-candidate requirement independently satisfiedd50f96fe: same da0f1bf7 runs dynamic-libc C threads2a634dfb and actual Rust std mixed app0ba31cb8, both with verified physical retirement. Final-profile replay remains separately required; whole M04 is open."
         },
         {
           "id": "P-M04-02",
@@ -571,9 +581,19 @@
               "path": "docs/verification/evidence/practical-file-stream-current-a0f-result-review-20261018-1.json",
               "sha256": "a05ba3f233cf6750bb2b668364a5782c8ea5e7a8881f1dcc10aa9afab89d9b16",
               "size": 3054
+            },
+            {
+              "path": "docs/verification/evidence/practical-mixed-rust-std-native-result-review-20261018-1.json",
+              "sha256": "0ba31cb8d3f461286a738976444b8cc43cf631660f352298efe62ace945eedb5",
+              "size": 15720
+            },
+            {
+              "path": "docs/verification/evidence/practical-m04-current-candidate-check-review-20261018-1.json",
+              "sha256": "d50f96fee0919c0a093d3fc0accbb97fb7b2ef49483971407a6f6d4e6ceb2f76",
+              "size": 8999
             }
           ],
-          "assessment_note": "Representative memory/file/thread/signal diagnostics and a standalone libc file/stream utility pass. Utility copies10247 binary bytes, checksum, checked close/reopen/readback/unlink with exact collector proof on a0f/d99. Final supported candidate/profile regression remains open."
+          "assessment_note": "Actual mixed Rust std3round memory/file checksum/6checkedcloses/3reopenEOF/6worker lifetimes passes on da0f1bf7. Broader selected utilities and regression scope remains open; no whole-M04 completion."
         },
         {
           "id": "P-M04-03",
@@ -634,12 +654,22 @@
               "path": "docs/verification/evidence/practical-file-stream-current-a0f-result-review-20261018-1.json",
               "sha256": "a05ba3f233cf6750bb2b668364a5782c8ea5e7a8881f1dcc10aa9afab89d9b16",
               "size": 3054
+            },
+            {
+              "path": "docs/verification/evidence/practical-mixed-rust-std-native-result-review-20261018-1.json",
+              "sha256": "0ba31cb8d3f461286a738976444b8cc43cf631660f352298efe62ace945eedb5",
+              "size": 15720
+            },
+            {
+              "path": "docs/verification/evidence/practical-m04-current-candidate-check-review-20261018-1.json",
+              "sha256": "d50f96fee0919c0a093d3fc0accbb97fb7b2ef49483971407a6f6d4e6ceb2f76",
+              "size": 8999
             }
           ],
-          "assessment_note": "Accepted frozen expected bytes/status are retained, including exact415byte alternate-stack bridge. Final useful-suite Linux comparison coverage is not closed by these narrow diagnostics."
+          "assessment_note": "Mixed Rust frozen independent/Linux/native exact156-byte comparison and3corruption controls are proved. Existing M04 selected utility/memory/file/thread/signal suite comparison coverage remains unjoined; independent literal reviewd50f96fe leaves this check open."
         }
       ],
-      "current_evidence_summary": "Sixteen distinct native diagnostic/app behaviors across retained942/a0f profiles, including real C/Rust apps, AVX state and useful file utility. Native process fork/exec/wait and final supported-profile suite remain open."
+      "current_evidence_summary": "Current da0f1bf7 independently passes real dynamic-libc C threads and useful mixed Rust/std application. Literal P-M04-01 complete, selected-suite regressions/Linux comparison still open. One distinct new native behavior brings total17; no formal or language-retirement credit."
     },
     {
       "id": "M05",
@@ -811,9 +841,14 @@
               "path": "docs/verification/evidence/practical-pthread-contention-current942-result-review-20261017-1.json",
               "sha256": "816f6e06fd1015327972fcd9f5be7cc2924686c037cd7cf1e82127fa8206c980",
               "size": 12435
+            },
+            {
+              "path": "docs/verification/evidence/practical-mixed-rust-std-native-result-review-20261018-1.json",
+              "sha256": "0ba31cb8d3f461286a738976444b8cc43cf631660f352298efe62ace945eedb5",
+              "size": 15720
             }
           ],
-          "assessment_note": "Rust std/C worker lifetimes overlap; actual held-mutex EBUSY/ETIMEDOUT and later handoff/join/TLS now pass current942. Actual futex backend sleep/routing and remaining required syscall negatives remain open; fork/exec/wait blocked on native CREATE_PPD bridge."
+          "assessment_note": "New current-candidate Rust mixed app has six worker lifetimes across3overlap windows (observed reused TIDs258/259), joined Condvar work and balanced publication/deletion. Dynamic C TLS/barrier/mutex2000/joins also pass. Required syscall error/profile closure remains open; process create/exec/wait still separate."
         },
         {
           "id": "P-M06-03",
@@ -868,9 +903,14 @@
               "path": "docs/verification/evidence/practical-m07-avx-cpu-copy-image-result-review-20261018-1.json",
               "sha256": "6405dc4064bd9d60889e3f7d5db891567f004d663e4feadfd0f68e0ce06add13",
               "size": 26304
+            },
+            {
+              "path": "docs/verification/evidence/practical-m07-current-requirements-review-20261018-1.json",
+              "sha256": "37d72a774354fac3eb9190132b5c6ad8ac6685327d3be768821519378a8bf47a",
+              "size": 11284
             }
           ],
-          "assessment_note": "Selected C/assembly GCC9.4 baseline x86-64/-mno-avx requirements and exact native profile are declared in the assessment. Static libc, staged dynamic libc/loader and final Rust/application IFUNC/OSXSAVE/XCR0 requirement closure remain unassessed. No whole-libc no-AVX inference or silent profile narrowing."
+          "assessment_note": "Existing independent requirements review identifies precise remaining state-class declaration: eligible MPX3/4 andPKRU9 use in exact libc/loader startup/pthread paths. Actual exposed XCR0=0x21f does not imply use; retained selected dispatch/memchr findings cannot silently transfer to new mixed Rust binary. No whole-library audit/new guest requirement follows."
         },
         {
           "id": "P-M07-02",
@@ -946,7 +986,7 @@
           "assessment_note": "Native SSE2 and original a0f50854 AVX evidence preserved. The rebuilt image08210bb2 includes allocation fail-stop plus copy_fp_regs extent repair5d939231; linked-body provenance and actual AVX/YMM0-15, selected x87/MXCSR syscall/blocking-futex/signal preservation now independently pass on one McKernel CPU. Actual XCR0=0x21f; stdout380 bytes/empty stderr/exit0 and full30client/QEMU/container/lease retirement. Final compiler/libc IFUNC/used-state, AVX512, multicore and final-profile closure remain open; no whole-M07 acceptance. Current Rust-default image686215 also independently passes unchanged AVX with positive retirement f47adf0d; copy/admission ports have scoped native proof. Other used-state/final-profile obligations remain open. Current five-selected-body Rust-default image da0f1bf7 independently passes unchanged AVX33d03860: actual exposure/XCR0 and vector syscall/block/signal stages, exit0/stdout380/empty stderr and all30clients/container/lease positively retired. This is scoped executed behavior, not exhaustive per-body path instrumentation or final-profile closure; threads independently accepted2a634dfb: exit37/exact25B/empty stderr, actual TLS/barrier/mutex2000/joins, process/thread/pager release and full30client/container/lease retirement. Broader live compute C retirement remains active and unfinished."
         }
       ],
-      "current_evidence_summary": "Distinct native behaviors16 unchanged by this repeat. Rebuilt CPU-copy image08210bb2 is linked-body reviewed and actually passes the unchanged AVX/YMM/SSE/x87 diagnostic with full retirement. Extent repair is no longer source-only. Whole used-feature/IFUNC, untested vector/multicore and final-profile closure remain open. Current Rust-default image686215 repeats accepted AVX with scoped copy/admission native proof; distinct behaviors remain16. Current da0f1bf7 native AVX independently accepted33d03860, with complete physical retirement; repeated diagnostic distinct count remains16. Current-image threads review pending. Current da0f1bf7 original threads and physical retirement independently pass2a634dfb. Current-image native chain is complete, used-feature/final-profile obligations remain open."
+      "current_evidence_summary": "Current da0f1bf7 default Rust FPU paths have accepted production/link proof plus unchanged AVX/YMM/SSE/x87/syscall/block/signal and threads native results. New mixed Rust/std also passes (distinct total17). Required MPX/PKRU eligibility/source-bound used-state join and final-profile closure remain open; no whole-M07 acceptance."
     },
     {
       "id": "M08",
@@ -1172,6 +1212,21 @@
               "path": "docs/verification/evidence/rust-three-port-image-threads-result-review-20261018-1.json",
               "sha256": "2a634dfb44d34b8e814cdb1259a22a5e84a48312976419e5eb94ecbb9e641601",
               "size": 15728
+            },
+            {
+              "path": "docs/verification/evidence/practical-mixed-rust-std-native-result-review-20261018-1.json",
+              "sha256": "0ba31cb8d3f461286a738976444b8cc43cf631660f352298efe62ace945eedb5",
+              "size": 15720
+            },
+            {
+              "path": "docs/verification/evidence/rust-fp-reset-source-review-20261018-1.json",
+              "sha256": "1b7c63880c95337150ac180bddc7c9d6ae15ed538a10f5eec2b67458fab3903b",
+              "size": 6260
+            },
+            {
+              "path": "docs/verification/evidence/rust-fp-reset-source-integration-20261018-1.json",
+              "sha256": "53b4cb433df0d978ed849f9d7e4b21f3f9db1c9af0d69d4123b8f8bed3320909",
+              "size": 1424
             }
           ],
           "assessment_note": "Current image686215 has independently accepted full-production ABI/default-link proof1a692e8d and unchanged native AVX/retirement f47adf0d for Rust copy_fp_regs and scheduler FPU admission. Original threads and positive retirement independently pass958bac9d. Final artifact set and broader live compute C retirement remain open. Next coherent source-integrated candidate adds reviewed post-switch cleanup, save and restore/default. Host Linux MM compatibility C remains an explicit exception; integration estimates are not whole-kernel conversion scores. Current five-selected-body Rust-default image da0f1bf7 independently passes unchanged AVX33d03860: actual exposure/XCR0 and vector syscall/block/signal stages, exit0/stdout380/empty stderr and all30clients/container/lease positively retired. This is scoped executed behavior, not exhaustive per-body path instrumentation or final-profile closure; threads independently accepted2a634dfb: exit37/exact25B/empty stderr, actual TLS/barrier/mutex2000/joins, process/thread/pager release and full30client/container/lease retirement. Broader live compute C retirement remains active and unfinished."
@@ -1225,12 +1280,27 @@
               "path": "docs/verification/evidence/rust-three-port-image-threads-result-review-20261018-1.json",
               "sha256": "2a634dfb44d34b8e814cdb1259a22a5e84a48312976419e5eb94ecbb9e641601",
               "size": 15728
+            },
+            {
+              "path": "docs/verification/evidence/practical-mixed-rust-std-native-result-review-20261018-1.json",
+              "sha256": "0ba31cb8d3f461286a738976444b8cc43cf631660f352298efe62ace945eedb5",
+              "size": 15720
+            },
+            {
+              "path": "docs/verification/evidence/rust-fp-reset-source-review-20261018-1.json",
+              "sha256": "1b7c63880c95337150ac180bddc7c9d6ae15ed538a10f5eec2b67458fab3903b",
+              "size": 6260
+            },
+            {
+              "path": "docs/verification/evidence/rust-fp-reset-source-integration-20261018-1.json",
+              "sha256": "53b4cb433df0d978ed849f9d7e4b21f3f9db1c9af0d69d4123b8f8bed3320909",
+              "size": 1424
             }
           ],
           "assessment_note": "Current image686215 has independently accepted full-production ABI/default-link proof1a692e8d and unchanged native AVX/retirement f47adf0d for Rust copy_fp_regs and scheduler FPU admission. Original threads and positive retirement independently pass958bac9d. Final artifact set and broader live compute C retirement remain open. Next coherent source-integrated candidate adds reviewed post-switch cleanup, save and restore/default. Host Linux MM compatibility C remains an explicit exception; integration estimates are not whole-kernel conversion scores. Current five-selected-body Rust-default image da0f1bf7 independently passes unchanged AVX33d03860: actual exposure/XCR0 and vector syscall/block/signal stages, exit0/stdout380/empty stderr and all30clients/container/lease positively retired. This is scoped executed behavior, not exhaustive per-body path instrumentation or final-profile closure; threads independently accepted2a634dfb: exit37/exact25B/empty stderr, actual TLS/barrier/mutex2000/joins, process/thread/pager release and full30client/container/lease retirement. Broader live compute C retirement remains active and unfinished."
         }
       ],
-      "current_evidence_summary": "Five selected compute Rust bodies have production default-link/actual ABI proof87e37ba1 and combined unchanged AVX33d03860 plus threads2a634dfb native diagnostic proof on image da0f1bf7. Original C reference/fallback and known-good images remain preserved. Scoped exercised behavior is not per-branch instrumentation or whole-kernel retirement: broader live compute C migration remains active and unfinished. Current diagnostic repeats add no distinct behavior or formal closure; count16 and practical checks3complete/32open unchanged."
+      "current_evidence_summary": "Five selected Rust bodies have production/default-link ABI proof87e37ba1 plus scoped native AVX33d03860/threads2a634dfb and mixed Rust/std0ba31cb8 on da0f1bf7. Next coherent clear-FP/signal-reset/MXCSR-mask port is independently source-reviewed1b7c6388 and exact two-file integration only; production/new native proof pending. Broader compute C retirement remains active/uncompleted. Distinct behaviors17 and literal practical checks4complete/31open; no whole-kernel or percentage claim."
     },
     {
       "id": "M10",

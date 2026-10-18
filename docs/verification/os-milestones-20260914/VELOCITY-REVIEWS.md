@@ -26,13 +26,13 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-18T07:45:41Z`, review22, interval29m43s.
-- User explicitly resumed the interactive30-minute loop. First resumed full
-  review target:`2026-10-18T08:15:00Z`, latest08:45UTC, using the06:15 launch
+- Last full review: `2026-10-18T08:14:57Z`, review23, interval29m16s.
+- User explicitly resumed the interactive30-minute loop. Next full
+  review target:`2026-10-18T08:45:00Z`, latest09:15UTC, using the06:15 launch
   baseline below. No independent OS timer or second dispatcher is installed.
   Exclude the05:25:30-to06:15 stopped interval and failed startup from runtime
   velocity; do not treat the canceled05:35 target as a missed active review.
-- Last launcher-reported included usage:13% in the new weekly primary window;
+- Last launcher-reported included usage:14% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
 - Current review20:16 native behaviors and3complete/32open checks unchanged,
   all14milestones open. Five compute Rust ports source-reviewed; two selected in
@@ -61,6 +61,15 @@ This file describes supervision, not OS acceptance or execution authority.
   decisions remain pending. Approved ordinary staging is delegated; mixed Rust
   workload passes Linux reference/three corruption controls and is under review.
   Counts16/3complete32open unchanged; host53.052GiB/scratch13.470GiB, usage13%.
+- Current review23: exact terminal cleanup4d75d8e5, AVX33d03860 and threads2a634dfb
+  independently PASS on da0f1bf7 carrying all five reviewed Rust defaults.
+  Production plus applicable native chain proof is accepted; internal branches
+  are not individually instrumented and whole-kernel Rust migration stays open.
+  Cleanup acceptance to both diagnostic acceptances11m10s vs prior14m22s, about22%
+  shorter in this narrow comparison; no campaign2x/3x claim. Mixed Rust/std
+  source/Linux and actual consumer fixture pass; staging release review is
+  finishing. Checkpoint0442eb5f pushed/fetched14files. Counts16/3complete32open
+  unchanged; host53.016GiB/scratch13.457GiB, usage14%.
 - Current invocation independently accepted app/diagnostic behaviors: 16 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -2036,3 +2045,74 @@ Evidence: `../evidence/rust-three-port-image-actual-review-20261018-1.json`
 `rust-three-port-terminal-review-20261018-1`,
 `rust-three-port-native-case-review-20261018-1/staging-only/report.json`,
 `practical-mixed-rust-std-preparation-20261018-1/result.json`.
+
+## Review23 — 2026-10-18 08:15 UTC
+
+Cutoff08:14:57UTC; interval29m16s after Review22. Campaign active, same worker
+871794/start10154631 and server871796/start10154636; no restart or service stop.
+Checkpoint0442eb5f pushed/fetched with14 exact changed blobs verified by the
+dispatcher. Host53.016GiB/scratch13.457GiB; usage14%, existing stop97%.
+
+| Measure | Change this interval |
+| --- | --- |
+| Distinct native behaviors / practical checks | 16 unchanged;3complete/32open, all14milestones open |
+| Selected Rust defaults | Five production-proven; their combined image now passes AVX and threads native chain |
+| Per-helper/exhaustive retirement | No new branch instrumentation, allocation-failure injection or whole-kernel claim |
+| Terminal ownership | Exact cleanup accepted; both exclusions released, stopped container removed, all physical joins positive |
+| Next useful app | Mixed Rust/std source/Linux and changed-contract consumer replay pass; ordinary staging release finishing |
+| Kernel rebuilds | Zero; accepted da0f1bf7 reused |
+
+Actual raw-five-file observation passed07:51:03; exact cleanup source/execution
+review passed07:54:35. Its one attempt and conditional readback completed, then
+independent acceptance08:00:18 verified111 checks, nine journal events, both
+exclusion releases, container absence and20 unchanged retained artifact rows.
+The retained scratch21 case and its locks were not released. Context compaction
+overlapped this final review and delayed the dispatcher until about08:02:41;
+no failure/restart or policy replay occurred.
+
+Fresh admission bound the complete11-source AVX closure, free ownership controls,
+disk floors and runtime reserve. AVX confirmed running08:04:35, at most4m17s
+after cleanup acceptance. Independent PASS33d03860 reported08:08:16: app exit0,
+exact380-byte stdout, empty app stderr, evaluator replay, current image identity,
+30 client retirements, container removal and lease release. Threads was already
+confirmed running08:08:04 after its bound prerequisite; independent PASS2a634dfb
+reported08:11:28: exact25-byte stdout, expected exit37, empty app stderr,
+TLS/barrier/mutex/join behavior and positive teardown. Each owner took about37s;
+all three approved readbacks followed in its reviewed continuation. These repeat
+cases validate the five-default Rust image; distinct behaviors remain16.
+
+Comparable cleanup-acceptance to both-diagnostic-acceptance latency was11m10s,
+versus14m22s for the preceding image:3m12s/about22% shorter. This small stage
+comparison does not establish campaign-wide2x/3x engineering throughput. The
+larger residual cost is serial preparation/review/context handoff, not compiling.
+One AVX checker falsely required all transport stderr empty; a bounded correction
+accepts only the already expected exact tar socket warning on readback3.
+Original failure is preserved; application stderr and acceptance are unchanged.
+
+Mixed Rust/std independently passed Linux source/oracle review and all three
+corruption controls. Native proposal then passed actual runner/owner fixture
+and four refusals after correcting only an overlong private socket-output path.
+No backend existed in that failed fixture. Its independent preparation reviewer
+verified88 references,60-record reused image-only base, preserved metadata and
+collector contract. At cutoff the two ordinary preparation commands are being
+released; actual staging, post-stage consumer checks, execution review and fresh
+live admission remain pending. Do not infer native app credit from this work.
+The host objtool finalization is ready with14 fresh admission fields pending;
+its retained-owner/cleanup cost keeps it behind the near-ready functional app.
+
+**Next:** consume the ordinary staging release once, validate its real manifest
+and changed-contract consumer, then review/admit the mixed Rust guest on da0.
+Overlap independent review and bounded next-case preparation; select the next
+heavy operation by time to usable result including ownership retirement. Reuse
+accepted images/proofs, carry exact downstream raw/transport contracts into
+fixtures, and keep app oracles, identities, resource gates and original failures.
+No percentage uplift is assigned from repeats. Active Rust/assembly migration
+continues; M09 integration ranges are not a conversion percentage. Next full
+review08:45UTC, latest09:15; continue interactive supervision.
+
+Evidence: `../evidence/rust-three-port-image-terminal-result-review-20261018-1.json`
+(4d75d8e5), `../evidence/rust-three-port-image-avx-result-review-20261018-1.json`
+(33d03860), `../evidence/rust-three-port-image-threads-result-review-20261018-1.json`
+(2a634dfb); scratch `practical-mixed-rust-std-review-20261018-1/result.json`,
+`practical-mixed-rust-std-native-preparation-20261018-1/HANDOFF.md`,
+`native-host-objtool-finalization-20261018-1`.

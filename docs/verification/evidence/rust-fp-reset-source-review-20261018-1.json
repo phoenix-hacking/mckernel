@@ -1,0 +1,84 @@
+{
+  "status": "PASS_SOURCE",
+  "utc": "2026-10-18T08:26:00.885088+00:00",
+  "scope": "Functional PRACTICAL-GOAL kernel/apps and actual compute-C retirement into Rust plus reviewed assembly; deferred qualification remains deferred.",
+  "independent_of_author": true,
+  "implementation_files_modified": false,
+  "author_result": "/home/holden/mckernel-work/scratch/rust-fp-reset-cutover-20261018-1/result.json",
+  "author_result_sha256": "412f4cbab9495062f92065b1a2d9e0f0d67731275e187969d296668d381d145f",
+  "patch": "/home/holden/mckernel-work/scratch/rust-fp-reset-cutover-20261018-1/cutover.patch",
+  "patch_sha256": "322611e3adcf0e28f9a151582b9e5c66606a161a57a30c13d4813c617bf933cb",
+  "input_sha256": {
+    "arch/x86_64/kernel/cpu.c": "00ef027750366cb46074c8c536728bac0f9b9f65631d744be71e4c949df76ccb",
+    "kernel/rust/x86_cpu_helpers.rs": "1dd390b7268a2c57903c32c52b14b22dcfc93127644933b0c9519060032c5ab4",
+    "kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "arch/x86_64/kernel/include/registers.h": "43fd6d2e278953684574224927fe65bc514a88c5529d97f688e1e21b1864a6fc",
+    "kernel/rust/tests/run_equivalence.sh": "2f95bf133e7322a9a6f2fd9a9102013f2154f506d099f5c570c752a8e1711a7a",
+    "kernel/rust/native_fault.rs": "771c46717169d52685bea87386dd15afd7f193fc5c9eefbce1544d67788a6025",
+    "arch/x86_64/kernel/include/errno.h": "79e1671f269b7dab1f2e1ea672c402bc03738b85029b6f3b3031efe22dde9157"
+  },
+  "candidate_sha256": {
+    "arch/x86_64/kernel/cpu.c": "1834e76aff9e8dcd9e1f70d80d6b4586a502ad69d3c5e6444d5278fa59e68e18",
+    "kernel/rust/x86_cpu_helpers.rs": "8affc6730fc252564d0c728ef02f61a95e1bc892de0b5250701c4b6044b5d2d0"
+  },
+  "findings": [],
+  "source_conclusions": [
+    "C changes only select existing CPU_HELPERS ABI forwarding and remove the selected default shim/declaration after all its C callers move. Original fallback computation is retained; no new compute-C behavior.",
+    "clear receives the actual embedded CPU-local idle Thread through C, requires it nonnull as before, and selects saved/default using the existing ABI fp_regs field. It adds no Thread mutation, allocation, free or scheduler operation. Existing CPU/IRQ exclusion and pointer lifetimes remain caller requirements.",
+    "Signal reset preserves nonzero availability semantics, unavailable-initial -95 with no lookup/restore, one native_xrstor_checked call on the available path, full unsigned64 mask and exact signed64 result. Only the no-XSAVE path calls the real existing current bridge before the unchanged Rust default body; NULL current remains supported by that body.",
+    "FXSAVE helper uses actual repr(C,align16) I387FxsaveStruct with compile-time size512/align16/offset28 assertions. MaybeUninit reserves the full write extent and only the initialized u32 mask is read. General inline-asm memory effects are retained; nostack and preserves_flags fit FXSAVE. Nonzero SSE selection executes one FXSAVE; SSE0 and zero masks return 0xffbf.",
+    "Retained native object independently disassembled: one FXSAVE through a 512-byte stack allocation, offset28 u32 mask load, no incidental SIMD. Stack alignment uses established SysV call-stack alignment; production no-redzone/no-SIMD profile must remain.",
+    "CMake selects native Rust cfg, native signal C macro and existing fault assembly under the same linux-6.12 profile. Legacy cfg keeps clear without signal exports or checked-XRSTOR import. Four strict combined selected C boundaries use actual contiguous candidate selection and no unused-function suppression."
+  ],
+  "verification": {
+    "independent_checks": 259,
+    "retained_artifacts_hash_verified": 179,
+    "successful_recorded_commands_verified": 46,
+    "retained_actual_body_parity_cases": 2042,
+    "parity_rerun": false,
+    "new_hardware_FP_operations": 0,
+    "new_builds": 0,
+    "new_native_behaviors": 0,
+    "commands_executed": [
+      {
+        "argv": [
+          "/usr/bin/objdump",
+          "-dr",
+          "/home/holden/mckernel-work/scratch/rust-fp-reset-cutover-20261018-1/cfg-check-1/native.o"
+        ],
+        "returncode": 0
+      }
+    ],
+    "checks_file": "/home/holden/mckernel-work/scratch/rust-fp-reset-source-review-20261018-1/checks.json"
+  },
+  "preserved_failure_history": [
+    {
+      "attempt": "check-1",
+      "family": "observer stack-address expectation",
+      "failure": "Observer expected literal displacement0x1c, whereas compiler uses -0x200 frame base and loads -0x1e4",
+      "bounded_correction": "Retain disassembly and assert observed addressing:0x200-0x1e4==28. check-2 passed this point."
+    },
+    {
+      "attempt": "check-2",
+      "family": "fixture placeholder tokenization",
+      "failure": "Naive substring replacement changed FP inside RUST_X86_FP_SSE_ENABLED and TS inside EOPNOTSUPP",
+      "bounded_correction": "Use word-boundary placeholder substitution; check-3/check-4 pass, with no candidate/kernel behavior change."
+    }
+  ],
+  "production_retirement": false,
+  "execution_release": false,
+  "remaining_obligations": [
+    "Dispatcher must materialize the reviewed two-file patch in a new candidate and build with pinned production GCC14/Rust1.92 headers/config and existing one-heavy limits. Confirm actual Thread/CpuLocal/I387FxsaveStruct alignment/offset, real default CPU_HELPERS and native feature selection, no unresolved symbols and linked-image Rust ownership for clear/reset/mask; verify final FXSAVE/default/checked-XRSTOR machine code and no incidental SIMD.",
+    "Separately released actual native candidate execution must cover applicable signal FP reset/mask, AVX/thread state and default/idle behavior with stdout/stderr/status/kernel log and accepted terminal teardown. Mocked hardware-leaf parity and source assembly inspection provide no native execution credit.",
+    "Count these paths retired only after production default consumer, linked artifact and applicable native proof all bind this exact new candidate. Existing accepted da0 image proof does not transfer to the private source candidate."
+  ],
+  "profile": {
+    "cpu": 7,
+    "jobs": 1,
+    "address_space_bytes": 1073741824,
+    "cpu_seconds": 30,
+    "wall_seconds": 35,
+    "root": false,
+    "compile_or_payload_execution": false
+  }
+}

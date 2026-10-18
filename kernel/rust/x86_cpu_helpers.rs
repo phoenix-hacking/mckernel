@@ -369,6 +369,101 @@ unsafe fn x86_initialize_fp_state(sse_enabled: CInt) {
     }
 }
 
+/// Reset the local idle context using its saved state when present.
+///
+/// The caller supplies the actual CPU-local idle thread, pins execution and
+/// retains the same CPU/IRQ exclusion and boot-image lifetimes required by the
+/// existing restore helpers. No allocation or thread-slot mutation occurs.
+#[no_mangle]
+pub unsafe extern "C" fn rust_x86_clear_fp_regs(
+    idle: *mut Thread,
+    available: CInt,
+    initial_available: CInt,
+    initial: *const c_void,
+    mask: CULong,
+    sse_enabled: CInt,
+) {
+    if unsafe { !(*idle).fp_regs.is_null() } {
+        unsafe {
+            rust_x86_restore_fp_regs(
+                idle, available, initial_available, initial, mask, sse_enabled,
+            );
+        }
+    } else {
+        unsafe {
+            rust_x86_restore_default_fp_regs(
+                idle, available, initial_available, initial, mask, sse_enabled,
+            );
+        }
+    }
+}
+
+#[cfg(native_linux_irq_work_v6_12)]
+extern "C" {
+    fn native_xrstor_checked(buffer: *const u8, mask: CULong) -> CLong;
+}
+
+/// Preserve the signal reset's checked-XRSTOR fault recovery and exact status.
+/// The existing current-thread bridge is called only for the no-XSAVE default
+/// restoration path, matching the C selection and retaining lazy lookup. All
+/// CPU exclusion, boot-image extent/alignment and no-FP compiler requirements
+/// of the existing restore helpers and native fault bridge remain in force.
+#[cfg(native_linux_irq_work_v6_12)]
+#[no_mangle]
+pub unsafe extern "C" fn rust_x86_native_signal_reset_fp(
+    available: CInt,
+    initial_available: CInt,
+    initial: *const c_void,
+    mask: CULong,
+    sse_enabled: CInt,
+) -> CLong {
+    if available != 0 {
+        if initial_available == 0 {
+            return -95; // EOPNOTSUPP, matching the existing x86/Linux ABI.
+        }
+        return unsafe { native_xrstor_checked(initial.cast(), mask) };
+    }
+    unsafe {
+        rust_x86_restore_default_fp_regs(
+            x86_current_thread_bridge().cast(), available, initial_available, initial, mask, sse_enabled,
+        );
+    }
+    0
+}
+
+/// Query the hardware MXCSR mask without changing the live FP state. Disabled
+/// SSE and the architectural zero-mask result both retain the 0xffbf fallback.
+#[cfg(native_linux_irq_work_v6_12)]
+#[no_mangle]
+pub unsafe extern "C" fn rust_x86_native_signal_mxcsr_mask(sse_enabled: CInt) -> CUInt {
+    if sse_enabled == 0 {
+        return 0xffbf;
+    }
+    let mask = unsafe { x86_read_mxcsr_mask() };
+    if mask != 0 { mask } else { 0xffbf }
+}
+
+#[cfg(native_linux_irq_work_v6_12)]
+#[inline(always)]
+unsafe fn x86_read_mxcsr_mask() -> CUInt {
+    use crate::abi::I387FxsaveStruct;
+    // Use the production ABI, not a replica. FXSAVE writes mxcsr_mask at byte28
+    // but need not initialize every reserved byte: read only this written u32.
+    const _: () = assert!(size_of::<I387FxsaveStruct>() == 512);
+    const _: () = assert!(core::mem::align_of::<I387FxsaveStruct>() == 16);
+    const _: () = assert!(offset_of!(I387FxsaveStruct, mxcsr_mask) == 28);
+    let mut saved = core::mem::MaybeUninit::<I387FxsaveStruct>::uninit();
+    let pointer = saved.as_mut_ptr();
+    unsafe {
+        core::arch::asm!(
+            "fxsave [{state}]",
+            state = in(reg) pointer,
+            options(nostack, preserves_flags),
+        );
+        core::ptr::addr_of!((*pointer).mxcsr_mask).read()
+    }
+}
+
 /// Copy the saved state owned by `from` into the independently owned `to` state.
 ///
 /// The caller holds both thread lifetimes and exclusive access to the destination

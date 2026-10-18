@@ -1,0 +1,22 @@
+{
+  "status": "PASS_REVIEWED_SOURCE_INTEGRATION_ONLY",
+  "created_utc": "2026-10-18T08:33:13.362185+00:00",
+  "scope": "Functional practical kernel/apps AND active compute C retirement into Rust/reviewed assembly; original qualification deferred.",
+  "independent_source_review": {
+    "path": "docs/verification/evidence/rust-fp-reset-source-review-20261018-1.json",
+    "sha256": "1b7c63880c95337150ac180bddc7c9d6ae15ed538a10f5eec2b67458fab3903b",
+    "size": 6260
+  },
+  "previous_checkpoint": "0442eb5fd79193bd5b9d3811922ac17a7cd2ad27",
+  "integrated_paths": {
+    "arch/x86_64/kernel/cpu.c": "1834e76aff9e8dcd9e1f70d80d6b4586a502ad69d3c5e6444d5278fa59e68e18",
+    "kernel/rust/x86_cpu_helpers.rs": "8affc6730fc252564d0c728ef02f61a95e1bc892de0b5250701c4b6044b5d2d0"
+  },
+  "native_baseline_image": "da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f",
+  "preserved_c_fallbacks": true,
+  "production_default_and_link_proof": false,
+  "native_retirement": false,
+  "new_native_behaviors": 0,
+  "checks": "2042 frozen-C/Rust parity cases, native/legacy cfg selection, four strict combined C boundary compiles; independent179artifact/46command/assembly review. Exact integrated bytes match accepted source.",
+  "next": "Pinned actual production-header/compiler ABI checks before next image compilation; linked default proof, then separately released applicable signal/AVX/thread/default-idle native checks."
+}

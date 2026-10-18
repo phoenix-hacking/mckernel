@@ -187,6 +187,12 @@ and ordinary consumer together under the cheap fixture profile. Preserve stable
 producer field names/types across successor artifact reviews, with new evidence
 added separately, so an unchanged stager does not need a late schema adaptation.
 
+Carry each accepted readback's exact transport-output contract into its result
+fixture. Application stderr and transport stderr are separate observations: an
+explicitly reviewed, exact socket-skipped tar warning must not become a late
+blanket-empty-stderr assertion. Preserve unexpected stderr as a failure and do
+not relax the application's frozen empty-stderr oracle.
+
 Assign short nonce-based protocol/execution output roots up front. Preflight all
 canonical generated UNIX endpoint paths before creating archives or attempt
 fixtures; source-workspace paths need not be runtime-output paths. Preserve the

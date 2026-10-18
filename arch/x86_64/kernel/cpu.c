@@ -3320,9 +3320,6 @@ int copy_fp_regs(struct thread *from, struct thread *to)
 #endif
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-extern void rust_x86_restore_default_fp_regs(struct thread *thread,
-		int available, int initial_available, const void *initial,
-		uint64_t mask, int sse_enabled);
 extern void rust_x86_restore_fp_regs(struct thread *thread,
 		int available, int initial_available, const void *initial,
 		uint64_t mask, int sse_enabled);
@@ -3332,20 +3329,12 @@ extern void rust_x86_restore_fp_regs(struct thread *thread,
 #define RUST_X86_FP_SSE_ENABLED 0
 #endif
 
-static void restore_default_fp_regs(struct thread *thread)
-{
-	rust_x86_restore_default_fp_regs(thread, xsave_available,
-			initial_fp_regs_available, initial_fp_regs, xsave_mask,
-			RUST_X86_FP_SSE_ENABLED);
-}
-
 void restore_fp_regs(struct thread *thread)
 {
 	rust_x86_restore_fp_regs(thread, xsave_available,
 			initial_fp_regs_available, initial_fp_regs, xsave_mask,
 			RUST_X86_FP_SSE_ENABLED);
 }
-#undef RUST_X86_FP_SSE_ENABLED
 #else
 static void restore_default_fp_regs(struct thread *thread)
 {
@@ -3408,6 +3397,18 @@ restore_fp_regs(struct thread *thread)
 
 #endif
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern void rust_x86_clear_fp_regs(struct thread *idle,
+		int available, int initial_available, const void *initial,
+		uint64_t mask, int sse_enabled);
+
+void clear_fp_regs(void)
+{
+	rust_x86_clear_fp_regs(&get_this_cpu_local_var()->idle, xsave_available,
+			initial_fp_regs_available, initial_fp_regs, xsave_mask,
+			RUST_X86_FP_SSE_ENABLED);
+}
+#else
 void clear_fp_regs(void)
 {
 	struct cpu_local_var *v = get_this_cpu_local_var();
@@ -3420,7 +3421,27 @@ void clear_fp_regs(void)
 	}
 }
 
+#endif
+
 #ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern unsigned int rust_x86_native_signal_mxcsr_mask(int sse_enabled);
+extern long rust_x86_native_signal_reset_fp(
+		int available, int initial_available, const void *initial,
+		uint64_t mask, int sse_enabled);
+
+unsigned int arch_native_signal_mxcsr_mask_bridge(void)
+{
+	return rust_x86_native_signal_mxcsr_mask(RUST_X86_FP_SSE_ENABLED);
+}
+
+long arch_native_signal_reset_fp_bridge(void)
+{
+	return rust_x86_native_signal_reset_fp(
+			xsave_available, initial_fp_regs_available, initial_fp_regs,
+			xsave_mask, RUST_X86_FP_SSE_ENABLED);
+}
+#else
 extern long native_xrstor_checked(const unsigned char *buffer, uint64_t mask);
 
 unsigned int arch_native_signal_mxcsr_mask_bridge(void)
@@ -3446,6 +3467,11 @@ long arch_native_signal_reset_fp_bridge(void)
 	restore_default_fp_regs(get_this_cpu_local_var()->current);
 	return 0;
 }
+#endif
+#endif
+
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+#undef RUST_X86_FP_SSE_ENABLED
 #endif
 
 ihk_mc_user_context_t *lookup_user_context(struct thread *thread)

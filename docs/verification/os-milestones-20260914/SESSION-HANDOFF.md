@@ -1,64 +1,86 @@
 # OS development session handoff
 
-## RESUMED — current execution cursor, 2026-10-18 08:12 UTC
+## RESUMED — current execution cursor, 2026-10-18 08:35 UTC
 
-The explicit06:15 launcher resume remains active; earlier05:20 pause is historical.
-One dispatcher, launcher worker871794/start10154631 and server871796/start10154636;
-launcher-owned state/logs .git/os-autopilot/runs/20261018T061500Z-d7828d0b unchanged.
-Functional PRACTICAL-GOAL plus actual compute-C retirement into Rust/reviewed
-assembly apply. No compute-C expansion; Linux control compatibility glue allowed.
+Explicit06:15 launcher resume remains active. Functional PRACTICAL-GOAL and actual
+live compute-C retirement into Rust/reviewed assembly both apply; certification/
+large exposure stay deferred. No compute-C expansion. Launcher worker871794/
+start10154631 and server871796/start10154636 own run20261018T061500Z-d7828d0b;
+state and session transitions are launcher-owned. Earlier05:20 pause is historical.
 
-Current image da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f
-has independent production/default-link/ABI proof87e37ba1. Build0/201.380s,
-14 capture commands0; pinned actual GCC14 alignment assertion and expert schedule
-ordering resolved without patch/rebuild. Five selected Rust bodies production-
-proven; all five now have combined production plus applicable native chain proof. Ten artifact pairs
-retained; exact terminal cleanup/common/shared release independently PASS4d75d8e5
-(111 checks,20 object rows, original exclusion identities, all physical joins).
-Old CID1305fc5a is removed under that exact release. No observer/cleanup replay.
+Current accepted image da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f:
+production/default-link/ABI87e37ba1, AVX33d03860 and Cthreads2a634dfb independently
+pass. Five selected Rust bodies have combined applicable native-chain proof,
+not exhaustive internal-branch or whole-kernel migration completion. Exact old
+image build terminal/common/shared release4d75d8e5 accepted; ten pairs retained.
+Do not replay any consumed build/observer/cleanup/guest attempt.
 
-Current-image AVX independently PASS33d03860: exit0/stdout380/empty stderr,
-actual typed exposure/XCR0 and syscall/futex/signal stages. Threads independently
-PASS2a634dfb: exit37/exact25B/empty stderr/TLS/barrier/mutex2000/joins, actual
-PID255/TIDs257,256 deletion and512-byte TID transfer; initial528/-11 preserved,
-then530/0 and pager/process release. Both owners physically joined0 (36.440s and
-36.882s), all30clients per case retired, exact containers removed and leases
-released. Three approved postjoin readbacks per case completed in the same
-continuation. No new distinct diagnostic credit (16 remains). Exact releases
-AVX30bb100e/threads a5b87845 consumed once; never replay those attempts.
-HEAD83b2169a was frozen through both runs; normal checkpoint may now advance it.
-Full imported source closure11/5, parents r3p-372fb669/a inode626500 and /t626501,
-QMP99bytes; used runtime growth reserve384MiB. Case directories now occupied.
+NEW mixed Rust/std native app independently PASS0ba31cb8: exact156Bstdout/exit0/
+empty stderr;3memory/checksum rounds,6checkedcloses,3reopenEOF,6worker lifetimes
+across3overlap windows,7balanced publications/deletions and final retirement88/0
+after retained87/-11. Static ELF has no dynamic pager claims (N/A). Owner0/35.902s,
+all30clients physically joined, three waits0, exactCIDremoved, lease/root/cgroup
+released. All3approved raw readbacks completed in the same continuation. Case
+rsm-af3afe07/m nonceacdec82dacb685b9b15cfc5032723795 and releaseb68734a6 consumed.
+Stage0/10.417s, actualstrictloader+runner/owner replay0/3.363s (2positive8refusals),
+independent stage/execution05b6343a/98f8171d. Preserve original fixturelongpath
+failure and short-root correction; endpoint99bytes, parentinode627227 nowoccupied.
 
-Mixed Rust/std source/Linux review1512621c passes3 rounds, checkedclose/reopen/EOF,
-6joinedthreads and3corruption controls. Its one-app native proposal f5f50a3a and actual runner/owner fixture with4refusals
-pass; independent ordinary preparation review is active. Real strict staged
-manifest and affected consumer replay remain pending. No native release/credit. Host objtool17-command tool-only packet is
-queued independently and must not delay fully admitted current-image proof.
-Sixteen distinct native behaviors,3complete/32open practical checks, all14milestones
-open. Repeated AVX/threads are new-artifact validation, not new distinct behaviors.
-No percentage or2x/3x claim. Scope estimates are not a Rust conversion score.
+Distinct native behaviors17. Independent literal check reviewd50f96fe closes only
+P-M04-01 (samecandidate dynamic-libc C +real Rust std apps). Practical checks now
+4complete/31open; P-M04-03 selected-suite/Linux comparison remains open. All14
+milestones remain open. No percentage/2x/3x claim, no formal certification credit.
 
-| C body | Production Rust consumer | Artifact/native status |
+| C body | Production Rust consumer | Current retirement/proof scope |
 | --- | --- | --- |
-| cpu.c copy_fp_regs | rust_x86_copy_fp_regs via existing CPU_HELPERS ABI | default/link proved686215 andda0; AVX+threads native686215 acceptedf47adf0d/958bac9d; da0 AVX+threads accepted33d03860/2a634dfb |
-| process.c schedule FPU admission | sched_schedule_fp_admit before runqueue prepare | default/link proved686215 andda0; native686215 scoped accepted; da0 AVX+threads accepted33d03860/2a634dfb |
-| process.c post-switch exited-thread cleanup | sched Rust cleanup after switch/unlock/IRQ restore | default/link/actual ABI and expert ordering provedda0; applicable scoped current-image AVX+threads accepted33d03860/2a634dfb; internal branches not individually instrumented |
-| cpu.c FP allocation/save | rust_x86_save_fp_regs Rust/assembly default ABI | default/link/full extent/ENOMEM proofda0; applicable scoped current-image AVX+threads accepted33d03860/2a634dfb; internal branches not individually instrumented |
-| cpu.c restore/default | Rust restore/default CPU_HELPERS consumer | default/link/XSAVE-XRSTOR/default assembly provedda0; applicable scoped current-image AVX+threads accepted33d03860/2a634dfb; internal branches not individually instrumented |
+| cpu.c copy_fp_regs | rust_x86_copy_fp_regs /existing CPU_HELPERS ABI | production87e37ba1 +AVX33d03860/threads2a634dfb/mixed0ba31cb8 applicable chain; originalC fallback retained |
+| process.c scheduler FP admission | sched_schedule_fp_admit before runqueue prepare | same accepted production/native chain; broader scheduling remains active migration |
+| process.c post-switch exited-thread cleanup | Rust cleanup after switch/unlock/IRQ restore | same accepted chain and manual ordering3f755021; no per-branch counters |
+| cpu.c allocation/save | rust_x86_save_fp_regs | same accepted chain, full-extent/ENOMEM source and link proof; no exhaustive fault injection claim |
+| cpu.c restore/default | Rust restore/default CPU_HELPERS consumer | same accepted chain, reviewed XSAVE/XRSTOR/default assembly |
+| cpu.c clear_fp_regs | next Rust idle saved/default selection | SOURCEPASS1b7c6388; exact root integration only, newproduction/native pending |
+| cpu.c signal MXCSR-mask bridge | next Rust FXSAVE mask-at28/fallback0xffbf | SOURCEPASS1b7c6388;512B/align16 checked; newproduction/native pending |
+| cpu.c signal FP reset bridge | next Rust checked initial/full64mask/status/reset | SOURCEPASS1b7c6388; lazycurrent/-EOPNOTSUPP preserved; newproduction/native pending |
 
-Preserve C reference/fallback and accepted live correctness fixes. This table
-proves selected paths only, not whole-kernel migration. No new port backlog.
-Retain every original failed build/fixture/readback/checker and scratch21.
+Next resetport exact CPU1834e76a/helper8affc673 integrated after current native
+physical joins. Source2042parity cases, native/legacycfg and4strict C boundary
+compiles pass, independentsource review1b7c6388. Cfallback/reference preserved;
+selected now-dead forwarding shim removed to avoid Werror unused-function. New
+thin image preparation private at /home/holden/mckernel-work/scratch/
+rust-fp-reset-image-preparation-20261018-1; no copy/preparer/build released yet.
+Bind pinned actual-GCC/header ABI assertions before next imagemake; do not rebuild
+the accepted da0 merely to change notes. Existing artifacts/source failures retained.
 
-Latest admission host56947621888/scratch14458576896bytes, MemAvailable>=16GiB;
-16/12GiB floors PLUS384MiB runtime reserve. Root mutex dev27/inode4 unchanged.
-Usage13%, stop97%; one heavy CPUs2-5/12GiB/no-swap/512tasks/no-network, aggregate
-7jobs/23.735GiB. Ordinary workers use bounded CPU6/7 cheap profiles. Keep full
-JSON/maps/diffs in files, print selected scalars/counts only. Supervisor Review22
-saved; next08:15UTC/latest08:45. Current AVX/threads physical joins are accepted. Save normal checkpoint,
-include actual canonical records and supervisor notes, push/fetch exact blobs;
-preserve unrelated dirty launcher/ihk/pyc work. Continue after checkpoint.
+Next critical functional prerequisite is host objtool17-command tool-control
+repair for process create/exec/wait infrastructure. Original exact692d364b packet
+has NOTexecuted. Live acquisition HOLD: existing toolowner commandstatus lacks
+positive starttime/tree/group proof, and no compatible tool-terminal generation-
+checked archival/release consumer exists. Imagecleanupengine is incompatible;
+never relabel toolreceipt or bare-unlink leases. Private producer derivative and
+actual two-record adapter are active under disjoint owners:
+/scratch/native-host-objtool-retirement-producer-20261018-1 and
+/scratch/native-host-objtool-terminal-preparation-20261018-1/adapter-implementation
+(fullscratch prefix /home/holden/mckernel-work/scratch). Agree real sidecar schema,
+retain rawreceipt/logs/client proofs even on buildfailure, preserve old692dbytes,
+then affected independent source/exactexecution decision plus fresh live admission.
+No heavy owner currently active; this is concrete missing ownership functionality.
+Excluded/service-held fork/ACK work remains held, never replayed or activated.
+
+M07 fixed-app source consumer reused prior declaration/captures; exact dynamic
+libc/loader startup/pthread MPX/PKRU eligibility remains unproved. Retained pkey_set
+contains rdpkru/wrpkru but reachability is not established. Keep this optional
+scope uncertainty open; no whole-libc audit or new guest displaces functional work.
+
+Prior checkpoint0442eb5fd79193bd5b9d3811922ac17a7cd2ad27 pushed/fetched14blobs,
+proof /home/holden/mckernel-work/scratch/checkpoint-three-port-native-proof-20261018-1/
+verification.json. Next normal source/evidence checkpoint includes new app/P-M04-01
+and resetport integration; preserve unrelated dirty launcher/ihk/deletedpyc work.
+Latest guest admission host56867741696/scratch14403510272bytes, full16/12GiB floors
+PLUS384MiB guest reserve. Root mutex dev27/inode4 and mounted110GiB scratch unchanged;
+preserve scratch21/all historical records. One heavy4CPU/12GiB/noSwap512tasks/noNet;
+aggregate7jobs/23.735GiB, cheap lanes dividedCPU0/6/7. Included usage14%, stop97%.
+Supervisor Review23 saved; next08:45UTC/latest09:15. Fullmaps/diffs/requests stay in
+files, console selectedscalar/count/boundedmismatch only. Continue after checkpoints.
 
 
 ## PAUSED — explicit user stop, 2026-10-18 05:20 UTC
