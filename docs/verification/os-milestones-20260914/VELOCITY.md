@@ -354,7 +354,9 @@ rule. Retain failed prechecks and correct only the demonstrated scope error.
   conversations. Read a particular complete member only when its content is
   needed for the current decision, retaining all original evidence.
 - Before runtime, finalize metadata using the real consumed status values and
-  source-expression forms, and check both pre/post observer entry points. Reuse
+  source-expression forms, and check both pre/post observer entry points under
+  the declared interpreter/version/isolation flags, not the author's ambient
+  Python. Exercise configuration to the no-effect transaction boundary. Reuse
   frozen fixtures and real consumer argument checks; avoid discovering a missing
   post phase or unsupported REPO-plus-literal map only after an operation. Keep
   private pre-effect assembly errors separate from kernel/production failures;

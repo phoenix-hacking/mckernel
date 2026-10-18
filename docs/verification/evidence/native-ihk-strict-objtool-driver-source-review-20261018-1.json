@@ -1,0 +1,172 @@
+{
+  "acceptance_delta": {
+    "Rust_retirement": 0,
+    "apps": 0,
+    "builds": 0,
+    "native": 0
+  },
+  "author_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-host-objtool-next-module-consumer-20261018-1/actual-body-correction-result.json",
+    "sha256": "f5d23aaafb7442ef5517909ee49889082a78e0316d9c4f678b0d1dc0e8ec3703"
+  },
+  "authority_sha256": "a4fc93bf37c9e8b93f35c13e6a8c2b2cb06b499d0b7a5ac56bdad487a71d851d",
+  "compiler_command_guards": [
+    "exact savedcmd target",
+    "RUST_MODFILE environment + rustc executable",
+    "Rust warnings/crate/object/dep-info target",
+    "single exact source assignment",
+    "accepted objtool + frozen16flags exact",
+    "dependency header + exact13candidate source closure + reject old production sources"
+  ],
+  "coverage": "Actual runpy production driver body and frozen helper.modinfo on real retained ELF; subprocess make result, artifact namespace/IHK modules.order and container affinity explicitly modeled. No compiler invocation or native proof.",
+  "driver": {
+    "bytes": 5104,
+    "path": "/home/holden/mckernel-work/host-preparation/native-host-objtool-next-module-consumer-20261018-1/ihk_objtool_consumer.py",
+    "sha256": "af9eeb2dcd1628378c5139dffd148ed5eb0aa9091c47043b912b039c2fd93c78"
+  },
+  "execution_release": false,
+  "holds": "SMP/mcctrl/default CREATE_PPD/service-held transport/ACK remain excluded/closed. Frozen all-three-module ABI contract remains held; no module mixing or broader acceptance.",
+  "independent_rerun_cases": [
+    {
+      "ELF_modinfo_parser": "actual frozen consumer on real retained ihk.ko",
+      "accepted": true,
+      "case": "independent-positive",
+      "compiler_command": "actual retained .ihk.o.cmd except declared accepted-tool/strictflags delta",
+      "driver_stdout": "{\"status\": \"PASS_IHK_STRICT_TOOL_CONSUMER_ONLY\", \"native_acceptance\": false}\n",
+      "error": null,
+      "expected_acceptance": true,
+      "make_mocked": true,
+      "matches_expectation": true,
+      "receipt_status": "PASS_IHK_STRICT_TOOL_CONSUMER_ONLY"
+    },
+    {
+      "ELF_modinfo_parser": "actual frozen consumer on real retained ihk.ko",
+      "accepted": false,
+      "case": "independent-wrong-tool",
+      "compiler_command": "actual retained .ihk.o.cmd except declared accepted-tool/strictflags delta",
+      "driver_stdout": "",
+      "error": "strict accepted tool/flag invocation differs",
+      "expected_acceptance": false,
+      "make_mocked": true,
+      "matches_expectation": true,
+      "receipt_status": "FAIL"
+    },
+    {
+      "ELF_modinfo_parser": "actual frozen consumer on real retained ihk.ko",
+      "accepted": false,
+      "case": "independent-missing-werror",
+      "compiler_command": "actual retained .ihk.o.cmd except declared accepted-tool/strictflags delta",
+      "driver_stdout": "",
+      "error": "strict accepted tool/flag invocation differs",
+      "expected_acceptance": false,
+      "make_mocked": true,
+      "matches_expectation": true,
+      "receipt_status": "FAIL"
+    },
+    {
+      "ELF_modinfo_parser": "actual frozen consumer on real retained ihk.ko",
+      "accepted": false,
+      "case": "independent-extra-candidate-source",
+      "compiler_command": "actual retained .ihk.o.cmd except declared accepted-tool/strictflags delta",
+      "driver_stdout": "",
+      "error": "actual compiler source closure differs",
+      "expected_acceptance": false,
+      "make_mocked": true,
+      "matches_expectation": true,
+      "receipt_status": "FAIL"
+    },
+    {
+      "ELF_modinfo_parser": "actual frozen consumer on real retained ihk.ko",
+      "accepted": false,
+      "case": "independent-noncompiler-rust-command",
+      "compiler_command": "actual retained .ihk.o.cmd except declared accepted-tool/strictflags delta",
+      "driver_stdout": "",
+      "error": "actual Rust compiler required",
+      "expected_acceptance": false,
+      "make_mocked": true,
+      "matches_expectation": true,
+      "receipt_status": "FAIL"
+    },
+    {
+      "ELF_modinfo_parser": "actual frozen consumer on real retained ihk.ko",
+      "accepted": false,
+      "case": "independent-wrong-crate-name",
+      "compiler_command": "actual retained .ihk.o.cmd except declared accepted-tool/strictflags delta",
+      "driver_stdout": "",
+      "error": "exact Rust crate/object/dependency binding required",
+      "expected_acceptance": false,
+      "make_mocked": true,
+      "matches_expectation": true,
+      "receipt_status": "FAIL"
+    },
+    {
+      "ELF_modinfo_parser": "actual frozen consumer on real retained ihk.ko",
+      "accepted": false,
+      "case": "independent-wrong-emit-object",
+      "compiler_command": "actual retained .ihk.o.cmd except declared accepted-tool/strictflags delta",
+      "driver_stdout": "",
+      "error": "exact Rust crate/object/dependency binding required",
+      "expected_acceptance": false,
+      "make_mocked": true,
+      "matches_expectation": true,
+      "receipt_status": "FAIL"
+    },
+    {
+      "ELF_modinfo_parser": "actual frozen consumer on real retained ihk.ko",
+      "accepted": false,
+      "case": "independent-wrong-savedcmd-target",
+      "compiler_command": "actual retained .ihk.o.cmd except declared accepted-tool/strictflags delta",
+      "driver_stdout": "",
+      "error": "exact saved compiler target required",
+      "expected_acceptance": false,
+      "make_mocked": true,
+      "matches_expectation": true,
+      "receipt_status": "FAIL"
+    },
+    {
+      "ELF_modinfo_parser": "actual frozen consumer on real retained ihk.ko",
+      "accepted": false,
+      "case": "independent-wrong-source-assignment",
+      "compiler_command": "actual retained .ihk.o.cmd except declared accepted-tool/strictflags delta",
+      "driver_stdout": "",
+      "error": "exact Rust source assignment required",
+      "expected_acceptance": false,
+      "make_mocked": true,
+      "matches_expectation": true,
+      "receipt_status": "FAIL"
+    },
+    {
+      "ELF_modinfo_parser": "actual frozen consumer on real retained ihk.ko",
+      "accepted": false,
+      "case": "independent-foreign-out-dependency",
+      "compiler_command": "actual retained .ihk.o.cmd except declared accepted-tool/strictflags delta",
+      "driver_stdout": "",
+      "error": "foreign production source dependency",
+      "expected_acceptance": false,
+      "make_mocked": true,
+      "matches_expectation": true,
+      "receipt_status": "FAIL"
+    },
+    {
+      "ELF_modinfo_parser": "actual frozen consumer on real retained ihk.ko",
+      "accepted": false,
+      "case": "independent-missing-deps-header",
+      "compiler_command": "actual retained .ihk.o.cmd except declared accepted-tool/strictflags delta",
+      "driver_stdout": "",
+      "error": "exact saved dependency header required",
+      "expected_acceptance": false,
+      "make_mocked": true,
+      "matches_expectation": true,
+      "receipt_status": "FAIL"
+    }
+  ],
+  "next_executable_observation": "After independent exact execution release and fresh owner/resource reconciliation, stage exactly14frozen inputs in fresh private candidate then run /usr/bin/python3 -B /next-packet/ihk_objtool_consumer.py --execute in reviewed IHK-only profile; retain actual command/depinfo/strict-tool/ko/modinfo/v6-v9exports streams and verified physical retirement.",
+  "reuse_boundary_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-host-objtool-next-module-source-review-20261018-1/initial-boundary-review.json",
+    "sha256": "eebbbca024e7c8155b3ff94639bbefc6e6e802b1ff539d5527d787c80c0ceae6"
+  },
+  "root_compile_container_Git": false,
+  "scope": "Functional PRACTICAL-GOAL kernel/apps plus actual compute C retirement into Rust/reviewed assembly; no compute C expansion.",
+  "source_correction_rounds": 1,
+  "status": "PASS_SOURCE"
+}

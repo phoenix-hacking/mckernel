@@ -1,5 +1,60 @@
 # Resume cursor
 
+## Live accepted checkpoint — 2026-10-18 11:33 UTC
+
+Campaign remains ACTIVE under the explicit06:15 resume. Functional supported OS/apps
+and actual compute-C→Rust/reviewed assembly retirement both apply; no compute-C
+expansion or qualification credit. Distinct native behaviors now18; practical
+checks5complete/30open, all14milestones open. No percentage or2x/3x claim.
+
+Normal host-tool terminal physical release is ACCEPTED af7864d0: exact retained
+118files/10,030,140B preserved, stoppedCID42c9a78b removed, shared115196/local115197
+archived by reviewed transaction, ROOT27:4 released. Original Python3.8 pre-effect
+failure and one Python3.9 correction0/4.200s remain retained; never replay either.
+Earlier held banners below are historical. No raw record unlink occurred.
+
+Current492 threads ACCEPTED f17870d7: exact25B/exit37/empty appstderr, completeEOF,
+30clients reaped, container absence and lease release; owner0/36.875s. Empty-file
+utility ACCEPTED7a7fe0fa (practical-file-stream-empty-native-result-review-20261018-1.json):
+exact55B/exit0/empty appstderr/count0, actual EOF/closes/unlink and30clients reaped,
+container absence/root release. Owner0/37.433s plus3approved readbacks0. This adds
+one behavior17→18, no build/formal gate/full-restoration credit. Consumed parents,
+nonces/releases/captures remain under practical-selected-suite-comparison-20261018-1/
+utility-empty/native-preparation/runtime-preparation; never reuse attempts.
+
+IHK-only pilot canonical publication:20new exact files/402133B from reviewed copy
+plan under native-host-objtool-next-module-consumer-20261018-1/publication-binding-1.
+Driver0275e5d2 and derivative owner283a56d2 independently source-accepted;14of66
+frozen inputs, onlyihk.ko, explicit accepted objtool/strict flags/actual command
+checks. Git publication/fetched proof and ordinary17file materialization remain
+pending until actual receipts; fetchedFalse is honest. SMP/mcctrl/full-three-module,
+thunk/longsymbol/CREATE_PPD and service-held fork/ACK remain excluded.
+
+Next independent source lane: null_fpstate_native_probe_1132 confirms actual
+native_signal.rs/ucontext NULL-fpstate ABI, then prepares smallest app/assembly
+and Linux oracle only if sound. No new image/instrumentation/runtime authority.
+Case-finalization trial0911 privately exercises real schema/profile/source-map
+joins; root alone supplies fresh facts/authority. Missing live gates stay pending.
+
+| C path | Actual Rust default | Evidence / retirement scope |
+| --- | --- | --- |
+| FP copy | rust_x86_copy_fp_regs | production492 and applicable AVX/threads native chain |
+| scheduler FP admission | sched_schedule_fp_admit | production492 and applicable native chain |
+| post-switch exit cleanup | Rust cleanup after switch/unlock/IRQ | production492 and applicable native chain |
+| FP allocation/save | rust_x86_save_fp_regs | production492 and applicable native chain |
+| FP restore/default | Rust restore/default | production492 and applicable native chain |
+| signal MXCSR mask | Rust offset28/fallback0xffbf | production492 and actual AVX signal chain |
+| clear_fp_regs | Rust idle saved/default | production492; execve-clear native OPEN |
+| signal FP reset | Rust checked initial/full64mask | production492; NULL-fpstate native OPEN; bounded probe author active |
+
+Known-good image492c4a15/d99 modules and all C reference/failure evidence remain.
+No whole-kernel or exhaustive per-helper claim. Preserve scratch21, mounted110GiB
+scratch, ROOTmutex inode27:4 and all historical leases. One heavy owner,16/12GiB
+floors plus packet growth/emergency, aggregate7jobs/23.735GiB,97percent usage stop.
+Continue with actual publication/fetch→ordinary materialization→exact build review;
+new null-FP probe has separate oracle/source/native release prerequisites.
+
+
 ## Live acceptance addendum — 2026-10-18 10:53 UTC
 
 P-M04-03 is now COMPLETE under independent final review7224e246: ten exact frozen

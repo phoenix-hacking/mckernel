@@ -1,0 +1,297 @@
+{
+  "schema": "mckernel.fp-reset-threads-actual-independent-result-review.v1",
+  "status": "PASS",
+  "decision": "PASS_EXACT_RESET_IMAGE_THREADS_ACTUAL_AND_POSITIVE_RETIREMENT",
+  "reviewer": "/root/reset_native_parent_review_0955",
+  "implementation_ownership": false,
+  "functional_scope": "Working supported-profile kernel/apps and actual compute-C retirement into Rust/reviewed assembly; no compute-C expansion. Broad qualification remains deferred.",
+  "actual_image": {
+    "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work/output/build/kernel/mckernel.img",
+    "sha256": "492c4a1506a8097d9534560fc9df7e8e35f571f779fdc19b9540e487bbb035d3",
+    "mode": 33261,
+    "size": 7926224
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/rfr-manifests-1ef5924f/threads.json",
+    "sha256": "352ac64f1b56c23ca79e12a0e95d812701985b3902468aef637d68b0bd635a1e",
+    "size": 5219,
+    "mode": 33152
+  },
+  "payload": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/native-application-core",
+    "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+    "size": 39488
+  },
+  "matched_modules": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk.ko",
+      "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+      "size": 1440392,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk-smp-x86_64.ko",
+      "sha256": "82c9021f7491fa8bc6d178fe99e7d4b7b6f90838474a9c91b62ddb8edb3d13f8",
+      "size": 11630064,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/mcctrl.ko",
+      "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+      "size": 1913904,
+      "mode": 33188
+    }
+  ],
+  "nonce": "7dda89de1d704a5872d39f5c8e6194c0",
+  "parent": {
+    "path": "/home/holden/mckernel-work/scratch/rfr-d8114052/t",
+    "device": 1828,
+    "inode": 755270,
+    "uid": 1000,
+    "gid": 1000,
+    "mode": "0o700"
+  },
+  "final_execution_release": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/dispatcher-final-threads-1/machine-execution-release.json",
+    "sha256": "d08c332015c3211fa1a1bd3978c6f7f80826a1d6ac2dea02b2b1e2df4c54f45d",
+    "size": 4454,
+    "mode": 33152
+  },
+  "conditional_execution_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-native-execution-review-20261018-1.json",
+    "sha256": "f160781ab50456bcbb73836f67554199b800ba89bd005ca3dd973f165fbd24a4",
+    "size": 20074,
+    "mode": 33152
+  },
+  "accepted_current_image_AVX_predecessor": {
+    "status": "PASS",
+    "ref": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-avx-native-result-review-20261018-1.json",
+      "sha256": "986bdaa49a4d1983eb9ac22d3b73e1a54ff471851aa402ee8707b952980e2155",
+      "size": 14044
+    }
+  },
+  "actual_verifier_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-conditional-independent-review-20261018-1/threads_actual_check.py",
+    "sha256": "10f0d92cae9280b07f2221cc772d8c84217c94942327b83cd836594c35a4aecd",
+    "size": 9358,
+    "mode": 33152
+  },
+  "actual_verifier_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-conditional-independent-review-20261018-1/threads-actual-result.json",
+    "sha256": "cb0a3051dfefd7b04e42e5742f0deb8e181af290681f6940113db245815df56c",
+    "size": 5206,
+    "mode": 33152
+  },
+  "actual_owner_join": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/threads/owner-join.json",
+    "sha256": "1f27bf60245887322222c4c1a00b714c22e7e184c59afbea43a03ca2671175fa",
+    "size": 884,
+    "mode": 33152
+  },
+  "readbacks": [
+    {
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/threads/readback-1.command.json",
+        "sha256": "7cdafd8392a1af24d78abcada0032f8ac3a825943c04151d76d577d169a9f660",
+        "size": 333,
+        "mode": 33152
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/threads/readback-1.stdout",
+        "sha256": "8db9a2a044df46e89f724c54f73b14f6123624a70df276ec70a1d91fb09968a7",
+        "size": 686080,
+        "mode": 33152
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/threads/readback-1.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "mode": 33152
+      }
+    },
+    {
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/threads/readback-2.command.json",
+        "sha256": "44a12556429d5c469c66b1855a094e5a74cf34985e353bf897c5f96ffbde5101",
+        "size": 294,
+        "mode": 33152
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/threads/readback-2.stdout",
+        "sha256": "ef5dc971f8a5e8914327b075e732e4c5ca2b52b506b46e8bbbb74f41bbe61586",
+        "size": 148864,
+        "mode": 33152
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/threads/readback-2.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "mode": 33152
+      }
+    },
+    {
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/threads/readback-3.command.json",
+        "sha256": "81ee3fe1ed5f799ccca57635d6020160f260ac67d4d1c05bb66dd9636f5960ea",
+        "size": 335,
+        "mode": 33152
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/threads/readback-3.stdout",
+        "sha256": "89643d253288ca38dcfaceff166f9bef6d025e0500290f410d32effdfbfc454e",
+        "size": 532480,
+        "mode": 33152
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/threads/readback-3.stderr",
+        "sha256": "a27b3689ab11da6ff162668a3d1b14ccaa2d78cb34307a70c88d78c7bd93e0bd",
+        "size": 41,
+        "mode": 33152
+      }
+    }
+  ],
+  "native_application": {
+    "actual_native_execution_verified": true,
+    "case_id": "native-core.threads",
+    "raw_wait_status": 9472,
+    "exit_code": 37,
+    "stdout": "NATIVE_CORE PASS threads\n",
+    "stdout_bytes": 25,
+    "stdout_sha256": "cfe15383daf9fc40bcdaf5433bf9bc9b8f3f7001f84ada6131306eb07bcff700",
+    "stderr_bytes": 0,
+    "both_streams_eof": true,
+    "both_streams_discarded": 0,
+    "both_streams_truncated": false,
+    "stream_accounting_and_timestamps": "PASS",
+    "kernel_failure_markers": false,
+    "unchanged_shared_evaluator_replay_on_actual_observation": "PASS",
+    "thread_futex_scope": "Frozen ordinary dynamic-libc pthread/futex smoke passes its exact core application checks, including existing synchronization/TLS/join contract; one McKernel CPU with reviewed allow_oversubscribe. No multicore McKernel or exhaustive futex claim.",
+    "raw_harness_acceptance_flags": "Preserved unchanged; independent actual result review does not rewrite source harness PROTOCOL_PASS/scope flags."
+  },
+  "native_lifecycle": {
+    "scheduled_pid": 256,
+    "published_tids": [
+      "256",
+      "258",
+      "257"
+    ],
+    "deleted_tids": [
+      "257",
+      "258",
+      "256"
+    ],
+    "procfs_empty": true,
+    "retirements": [
+      {
+        "token": 528,
+        "errno": -11
+      },
+      {
+        "token": 530,
+        "errno": 0
+      }
+    ],
+    "final_process_release_cleanup_errno": 0,
+    "syscall_route_delivery_ret_ordering": "PASS unchanged evaluator",
+    "intermediate_EAGAIN_preserved": true
+  },
+  "owner_and_retirement": {
+    "owner_elapsed_seconds": 36.874561835997156,
+    "outer_identity": {
+      "pgid": 987189,
+      "pid": 987194,
+      "proc_starttime": 11976527,
+      "sid": 987189
+    },
+    "owner_join_exit": 0,
+    "owner_source_known_positive_retirement": true,
+    "all_local_clients_physically_reaped": 30,
+    "container": "1adbcc640a16c62bc1361e881ead45b3b9402f8def16fdd601d5ced00e9b6894",
+    "retained_inspect_profiles_verified": 5,
+    "authenticated_rm_exit": 0,
+    "final_authenticated_absence_queries": 3,
+    "owner_failure": null,
+    "owner_secondary_errors": 0,
+    "lease_retained": false,
+    "root_lock_identity": {
+      "device": 27,
+      "inode": 4
+    },
+    "root_lock_release": "Exact reviewed canonical owner zero-exit path authenticated container absence, physically reaped all local clients, released root lease and flushed complete evidence. Fresh live admission remains required for next owner.",
+    "container_state": "exited0; noOOM/paused/restarting/running/dead/error",
+    "qemu_identity": {
+      "pgid": 10,
+      "pid": 10,
+      "sid": 10,
+      "starttime_ticks": 11976643
+    },
+    "qemu_returncode": -9,
+    "qemu_returncode_scope": "Expected source-controlled emulator teardown after QMPshutdown; actual app exited37 and process exactly reaped.",
+    "owner_stdout_bytes": 0,
+    "owner_stderr_bytes": 0,
+    "readback_returncodes": [
+      0,
+      0,
+      0
+    ],
+    "readback_socket_warning": "/usr/bin/tar: ./qmp.sock: socket ignored\n",
+    "readback_warning_scope": "Exact default-tar warning for nonarchivable QMPsocket. All regular owner/guest captures and raw result copies agree; socket was not dereferenced."
+  },
+  "release_joins_verified": {
+    "exact_final_release_sha256": "d08c332015c3211fa1a1bd3978c6f7f80826a1d6ac2dea02b2b1e2df4c54f45d",
+    "accepted_physical_release_before_this_guest": {
+      "status": "PASS",
+      "ref": {
+        "path": "/home/holden/mckernel-work/host-preparation/native-host-objtool-prelease-independent-review-20261018-1/prelease-physical-release.json",
+        "sha256": "42739079bb3797f576707d9d0bc6d29ad6560bca4efda0abbd83dfd1e2bf29d1",
+        "size": 7953,
+        "mode": 33152
+      }
+    },
+    "accepted_prior_image_terminal_retirement": {
+      "status": "PASS",
+      "ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-image-terminal-retirement-result-review-20261018-1.json",
+        "sha256": "7feda9d754c945128145441a8df021ffa76d2261e62066626034cc3288fdb09e",
+        "size": 5428,
+        "mode": 33152
+      }
+    },
+    "live_preexecution_snapshot": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/dispatcher-final-threads-1/live-admission.json",
+      "sha256": "ea77fe60c7f77f397a22e218461523b380fdf308059004212ec9afcd58fbd81e",
+      "size": 2384
+    },
+    "source_closure_entries": 5,
+    "profile": "4CPUs2-5/12GiB/noSwap/512tasks/noNet; guest4vCPU/8GiB/2NUMA;1McKernelCPU",
+    "head": "e46eb98e73e76c0f0b016edbcb35ad59f8c9bd86"
+  },
+  "language_retirement_scope": {
+    "previous_five_selected_FP_Rust_bodies": "Applicable native-chain regression passes on exact492c4a15 image; no per-branch counter or exhaustive fault injection claim.",
+    "signal_MXCSR_mask_Rust_bridge": "Prior exact-image AVX986bdaa4 supplies applicable signal-chain proof; this threads record does not create additional signal-branch coverage.",
+    "clear_fp_regs_execve_clear": "Native proof remains PENDING; not claimed.",
+    "null_fpstate_FP_reset": "Native proof remains PENDING; not claimed.",
+    "whole_kernel_Rust_conversion": "Not claimed."
+  },
+  "next_owner_predecessor_gate": {
+    "status": "PASS_EXACT_CURRENT_IMAGE_THREADS_AND_POSITIVE_RETIREMENT",
+    "scope": "May satisfy the completed-threads predecessor/positive-retirement latejoin in a separately reviewed next guest packet after dispatcher acceptance; fresh live source/resource/lease/parent admission and its exact one-shot release remain required. No automatic execution or new guest authority from this result."
+  },
+  "counter_effect": {
+    "actual_guest_apps_verified_this_record": 1,
+    "repeated_native_behavior_increment": 0,
+    "formal_qualification_increment": 0,
+    "whole_OS_completion": false
+  },
+  "reviewer_execution": {
+    "root_commands": 0,
+    "guest_launches": 0,
+    "passing_corpus_replays": 0,
+    "actual_evidence_evaluator_check": 1,
+    "profile": "CPU1 AS1GiB CPU30s/wall35s",
+    "validator_failures": 0
+  },
+  "created_epoch": 1792322477.6047575
+}

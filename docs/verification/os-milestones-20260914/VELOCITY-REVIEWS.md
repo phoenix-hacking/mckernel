@@ -26,13 +26,13 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-18T10:45:15Z`, review28, interval30m08s.
+- Last full review: `2026-10-18T11:14:54Z`, review29, interval29m39s.
 - User explicitly resumed the interactive30-minute loop. Next full
-  review target:`2026-10-18T11:15:00Z`, latest11:45UTC, using the06:15 launch
+  review target:`2026-10-18T11:45:00Z`, latest12:15UTC, using the06:15 launch
   baseline below. No independent OS timer or second dispatcher is installed.
   Exclude the05:25:30-to06:15 stopped interval and failed startup from runtime
   velocity; do not treat the canceled05:35 target as a missed active review.
-- Last launcher-reported included usage:18% in the new weekly primary window;
+- Last launcher-reported included usage:20% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
 - Current review20:16 native behaviors and3complete/32open checks unchanged,
   all14milestones open. Five compute Rust ports source-reviewed; two selected in
@@ -129,6 +129,18 @@ This file describes supervision, not OS acceptance or execution authority.
   newly held ownership records require separate terminal decisions before threads.
   M04 selected-suite comparison lane active. Host52.056GiB/scratch12.836GiB,
   usage18%. No percentage or2x/3x campaign uplift. Next11:15UTC/latest11:45.
+- Current review29:17 native behaviors unchanged; practical checks5complete30open
+  after literal P-M04-03 comparison closure, all14milestones open. Ten retained
+  frozen expected/Linux/native joins independently match7224e246; this recognizes
+  existing engineering, not a new native behavior. Host retention118files/
+  10,030,140B and exact root observation independently pass. Cleanup first attempt
+  stopped before transaction because Python3.8 lacks Path.is_relative_to; originals
+  unchanged, child retired. One bounded literal Python3.9 correction returned0/
+  4.20s at11:13:48; final physical-release acceptance pending. Empty-file actual
+  staging/runner/owner result accepted; conditional parent/native packet under
+  review. IHK-only parser source accepted0275e5d2; matched-owner derivative
+  23affected checks pass, independent review active. Host52.001GiB/scratch12.836GiB,
+  usage20%. No new guest attempt/2x uplift this interval. Next11:45UTC/latest12:15.
 - Current invocation independently accepted app/diagnostic behaviors: 17 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -2552,3 +2564,98 @@ Evidence: host-preparation `native-host-objtool-prelease-independent-review-2026
 `native-host-objtool-corrected-exact-review-20261018-1/conditional-exact-execution-decision.json`
 (9df88204) and `completed-actual-result-review-corrected-1.json` (5bb30595);
 `../evidence/rust-fp-reset-avx-native-result-review-20261018-1.json` (986bdaa4).
+
+## Review29 — 2026-10-18 11:15 UTC
+
+Cutoff11:14:54UTC, interval29m39s. Same campaign running/active, original worker/
+server identities live, no restart/service stop. Host52.001GiB/scratch12.836GiB,
+usage20%, stop97%. Checkpoint424f8476 pushed/fetched11 changed files, including
+Review28. Scratch21, root mutex27:4, original failures and dirty unrelated work
+preserved; supervisor starts no runtime owner or maintenance.
+
+| Measure | Interval result |
+| --- | --- |
+| Practical checks |4->5complete,31->30open; P-M04-03 literal frozen/Linux comparison closed |
+| Native behaviors / milestone completion |17 unchanged / all14milestones remain open |
+| Actual guest attempts | Zero; last accepted AVX10:39:03,35m51s before cutoff |
+| Host terminal progress |118 retained files/10,030,140B and root observation accepted; corrected cleanup0/4.20s, final review pending |
+| New useful application preparation | Empty-file source, overlay and actual runner/owner staging independently pass; no native credit |
+| Next module consumer | IHK-only parser source accepted;14-source/7-mount/1-artifact owner derivative passes23affected checks, review pending |
+
+Ten utility/memory/file/thread/signal comparisons join frozen independent
+expectations, retained Linux results and accepted native results. All exact bytes
+and statuses match; independent review7224e246 supports literal P-M04-03 only,
+and practical-milestones.json now records complete. Historical image identities
+remain attached. Final-profile regression and broader M04 still remain open.
+This is newly accepted coverage of existing executed engineering, not a payload
+rerun or new behavior. Engineering percentage estimates are unchanged.
+
+The finite host retention copied118 files and independently matches original
+bytes/metadata, source inventories and ownership records, with positive helper
+retirement. Separately released read-only root observation0/0.91s confirms all29
+tracked identities/groups/sessions absent, exact stopped container and source/
+mount/ownership facts. Cleanup/post-readback packet uses preserved no-signal
+quarantine supervision, original-record archival and nine-event journal checks.
+Its first actual command failed during configuration: selected system Python3.8
+lacks Path.is_relative_to. Independent failure classification confirms no
+transaction or changed records/evidence and positive child retirement. The
+reviewer acknowledges the missed interpreter mismatch. Preserve failed command,
+authority and captures; no blind retry or raw ownership removal.
+
+One bounded correction changes only the interpreter to proven Python3.9 and
+fresh capture/transaction literals. Exact -I/-B configuration/execution-body
+checks reach the explicit no-effect transaction boundary and reject two bad
+variants. Fresh execution decision3e1ea3fd and authority56cd738c bind installed
+release983e1579. A private release-field KeyError was corrected before authority
+installation or dispatch. Actual correction dispatched11:13:44 and returned0/
+4.199956s at11:13:48, child joined. Final journal/archive/preservation/physical-
+absence/supervisor proof acceptance is pending at cutoff. Another failure in
+this family requires escalation. No subsequent heavy owner admitted at cutoff.
+
+Host result acceptance10:44:36->cutoff30m18s has produced no next native result;
+the compiler-control command itself took4.10s. Runtime is blocked by terminal
+integration/review and the interpreter defect, not a healthy long build. This
+interval does not establish a2x/3x gain. Keep critical-path latency visible.
+
+The spare M04 lane delivered a concrete empty-file utility continuation with
+exact55Bstdout/empty stderr/exit0/zero counts. Source checker1positive/3negative
+and new validator1positive/5negative pass. Review caught missing standalone
+fixture parents and an unmounted collector-source reference before staging.
+The bounded correction reuses accepted REPO/SCRATCH placement. Two ordinary
+commands pass: strict-loaded overlay preserves the base and adds one empty file;
+actual runner/owner replay passes one positive, three rejected variants and scalar
+corruption. Independent actual review accepts result3d509d2c. Reviewer1046 was
+idle after that completion; supervisor steering explicitly reactivated it with
+followup_task11:05, avoiding further serial waiting. Parent/native packet04b10ee0
+now binds six sources,99Bsocket and three postjoin readbacks. Parent creation,
+conditional execution decision and fresh admission remain pending; no native run.
+
+IHK consumer author reused accepted objtool and strict flags, selected14 frozen
+files from66-file authority,13 compiler dependencies and16 strict flags. Actual
+driver tests exposed seven false acceptances in compiler/crate/target/source/
+dependency validation. One bounded parser correction af9eeb2d independently
+passes retained valid command plus10 rejections; source0275e5d2 accepted10:58:13.
+Existing matched owner requires60sources/3artifacts, so a private bounded
+14source/7mount/1IHK-artifact derivative is implemented;23affected checks pass
+after correcting a modeled Docker State.Status field. Critical lock/retirement/
+archival bodies remain unchanged. Independent derivative review1053 is active.
+Publication, materialization/execution review and actual Kbuild remain pending;
+SMP/mcctrl compilation and held transport/ACK work stay excluded. No module or
+Rust-retirement credit inferred from source tests.
+
+**Adjustment:** finish actual cleanup acceptance, then use prepared threads as
+soon as fresh admission permits; continue empty-file parent/native decisions and
+IHK derivative review in parallel. Exact entrypoint checks must use the declared
+interpreter, version and isolation flags, not merely the author's ambient Python.
+Activate idle result reviewers explicitly before completion handoffs. Reuse
+successful inputs and affected proofs, no generic framework or extra image
+backlog. Batch reporting at normal checkpoint without delaying eligible runtime.
+Next full review11:45UTC/latest12:15; continue interactive supervision.
+
+Evidence: host-preparation `practical-selected-suite-independent-review-20261018-1/review.json`
+(7224e246), `practical-selected-suite-comparison-20261018-1/result.json` and
+`utility-empty/native-preparation` (actual3d509d2c, native packet04b10ee0);
+`native-host-objtool-corrected-exact-review-20261018-1` (Python39 decision3e1ea3fd),
+`native-host-objtool-corrected-dispatch-20261018-1/cleanup-python39.status.json`;
+`native-host-objtool-next-module-source-review-20261018-1/corrected-source-review.json`
+(0275e5d2), `native-host-objtool-next-module-consumer-20261018-1/matched-module-packet-proposal-1`.
