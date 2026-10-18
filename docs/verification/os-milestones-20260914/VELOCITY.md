@@ -88,6 +88,11 @@ than invented audits. Remote worker count does not multiply local CPU/RAM.
 
 Assign a completed candidate's concrete review at the next dispatch opportunity;
 refill its implementation slot with the next ready task in that same cycle.
+For an actionable finding assigned to an idle author, use `followup_task` or the
+equivalent task-activation operation and confirm a running turn before waiting.
+`send_message` queues information without starting an idle worker. A queued
+correction is not active implementation. Reviewers may activate the concrete
+authorized follow-up directly within the agreed owned scope.
 As an operational target, keep avoidable gaps between verified retirement and
 the next fully ready guest below five minutes. This is a scheduling target,
 not a deadline that overrides live admission or interrupts a healthy operation.
@@ -174,6 +179,32 @@ Assert each negative mutation has its intended unique target and changes bytes.
 This catches composition and fixture mistakes before staging; reuse unchanged
 compiled inputs and check results within their accepted scope.
 
+For a changed metadata join, test the actual immutable input rows against the
+actual producer/helper return shape. Do not invent fields in a fixture that the
+real identity helper omits. Exercise changed review/payload bindings with focused
+negative cases and check a published test's normal module import, not only its
+private override. Consolidate these affected checks before the next handoff.
+
+When repeated per-image packet authoring dominates build time, use an otherwise
+idle cheap lane for a bounded next-case template/data-generation experiment.
+Derive counts, selected object fields and reference hashes from frozen actual
+rows; exercise the existing consumers with retained positives and changed-row
+negatives. Keep the accepted engine and identity/ownership/release boundaries.
+Render future drafts only, preserve scratch21 exclusions and active packets,
+and obtain affected review before use. The prototype must never hold up a
+currently ready operation or become a new scheduling framework.
+
+For a build-only candidate, consider one newly reviewed conditional envelope
+instead of separate preparation/release cycles for every compiler phase. The
+current 66-file module proposal first compiles and audits the C object, then
+continues to the complete three-module build only after its actual command,
+header dependencies, thunk definitions and undefined imports pass the strict
+matched-kernel checks. Bind both phases, their evidence and failure propagation
+in the exact new packet; retain one owner/container and the existing admission,
+limits and retirement controls. This is a preparation tactic, not authority to
+expand an existing release. Preserve any explicit intervening review required
+by the selected contract. Build success never grants runtime authority.
+
 Prepare at most two upcoming guest cases while one runs. Batch shared setup and
 review of unchanged boundaries. Same-OS application batching requires explicit
 permission in the released case contract, fixed membership, independent oracles,
@@ -205,6 +236,11 @@ rule. Retain failed prechecks and correct only the demonstrated scope error.
   retained failure-family count and stop condition. Do not copy the dispatcher
   conversation or historical inventories. Use `fork_turns="none"` when the
   available delegation tool supports it, supplying all required packet context.
+  After normal completion/checkpoint of a large worker conversation, use a fresh
+  context for its next task instead of accumulating unrelated assignments until
+  compaction. Carry selected current Markdown/evidence references and accepted
+  unchanged decisions. Do not interrupt healthy work or service checks, roll
+  back rejected requests, or automatically retry a service-policy denial.
 - Keep GPT-6.1 for every role. Use medium effort for ordinary implementation and
   coordination, high for difficult lifetime/ABI/concurrency repairs and concrete
   independent boundary reviews, and low for bounded extraction. Escalate the
@@ -221,6 +257,11 @@ rule. Retain failed prechecks and correct only the demonstrated scope error.
   follow links for necessary original authority. Preserve detailed history and
   original AGENTS.md. Do not repeatedly load every historical handoff into each
   packet or start an instruction-rewrite project before the next guest.
+- Project selected scalar fields, counts and requested bindings from large
+  request/toolchain/catalog records. Keep full documents and detailed reports
+  in files; do not print entire manifests or collection members into model
+  conversations. Read a particular complete member only when its content is
+  needed for the current decision, retaining all original evidence.
 - Batch normal notes and Git saves at existing checkpoints. Keep code/input,
   exact command, actual result/error and retained failure. Authenticate unchanged
   shared content once per required phase/device/inode, preserving every path's

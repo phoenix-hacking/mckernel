@@ -1,0 +1,336 @@
+{
+  "build_evidence": {
+    "actual_stdout_has_cpu_and_process_compile": true,
+    "configure_and_build_exit_zero": true,
+    "dependency_files_retained": [
+      "cpu.c.o.d",
+      "process.c.o.d"
+    ],
+    "link_contract_loads_exact_cpu_and_process_objects": true,
+    "map_text": [
+      " .text          0xfffffffffe814fa0     0x5cae CMakeFiles/mckernel.img.dir/process.c.o",
+      " .text          0xfffffffffe81acc0     0x3721 CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "LOAD CMakeFiles/mckernel.img.dir/process.c.o",
+      "LOAD CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o"
+    ]
+  },
+  "functional_scope": "Practical working kernel and application infrastructure; bounded new image artifact and linked FPU-copy body review.",
+  "identity": {
+    "candidate_identity_scope": "base_git_commit_only",
+    "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "manifest_sha256": "b1271794e4d62730f9e4f0511446e5fc07e03a963a1f3cb747642589436bcf4d",
+    "materialization_sha256": "d944cd144a29cd4a9d39e5b1563ba57f0289ab06b5051e29196ee63cdbbf4521",
+    "source_derivative_sha256": "10d98ee14954c6cb86a5c8529d8ce9eb05adcac113932655a0a8997e5e1e2fed"
+  },
+  "image": {
+    "elf_class": "ELF64",
+    "endianness": "little",
+    "entry": "0xfffffffffe849490",
+    "machine": 62,
+    "output_image_same_sha256": true,
+    "path": "/home/holden/mckernel-work/scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/image-owner-work-084cffb0413a4275bfdd66e3fd6c3368/evidence/artifacts/mckernel.img",
+    "sha256": "08210bb23f137f845fdb94fc0e66ac97a0cbc2d68081d856cdfc92da2d6d3dbf",
+    "size": 7908600,
+    "type": 2
+  },
+  "implementation_ownership": false,
+  "independent_reviewer": "/root/postreboot_actual_result_review",
+  "limits": {
+    "full_isa_or_multicore_acceptance": false,
+    "hardware_corruption_claim": false,
+    "new_image_avx_execution": false,
+    "no_build_guest_root_docker_git_or_implementation_changes": true,
+    "old_image_a0f_excluded": true,
+    "owner_retirement_acceptance": false,
+    "runtime_acceptance": false
+  },
+  "linked_body_findings": [
+    {
+      "address": "0xfffffffffe81dc90",
+      "finding": "After destination allocation success, loads xsave_size at 0xfffffffffe9402c8 into eax, sign-extends to rdx and calls memcpy at 0xfffffffffe872960. Length is the runtime xsave_size, not the former constant sizeof(struct fp_regs)=1088. Allocation error skips memcpy and returns -ENOMEM.",
+      "symbol": "copy_fp_regs"
+    },
+    {
+      "address": "0xfffffffffe81b0d0",
+      "finding": "For available XSAVE and positive xsave_size, allocation rounds xsave_size up to 4096-byte pages; successful allocation zeroes the full rounded page extent. NULL returns -ENOMEM.",
+      "symbol": "check_and_allocate_fp_regs"
+    },
+    {
+      "address": "0xfffffffffe81dc00",
+      "finding": "Checks allocator result before XSAVE; allocation failure returns error without XSAVE.",
+      "symbol": "save_fp_regs"
+    },
+    {
+      "address": "0xfffffffffe819f90",
+      "finding": "Nonzero save_fp_regs result branches at 0xfffffffffe81a008 to 0xfffffffffe81a4e1 and calls panic at 0xfffffffffe879f90 before later scheduling preparation/publication; source retains fail-stop message.",
+      "symbol": "schedule"
+    }
+  ],
+  "local_evidence_inventory": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/consumed-cpu.c",
+      "sha256": "5d93923119ac07f898849977463dc6e13349aa68831ae20e7aa1a6add92736be",
+      "size": 93327
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/consumed-process.c",
+      "sha256": "15cbf76ac6a1466b7a0825e8f2a495887238e9815f587a9babadddb958ede823",
+      "size": 154434
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/cpu-object-check_and_allocate_fp_regs.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/cpu-object-check_and_allocate_fp_regs.txt",
+      "sha256": "36ab9608660a2f843d633fe44dd45fa202b7e9115d7c3dd1efc223fa014f6a58",
+      "size": 5426
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/cpu-object-copy_fp_regs.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/cpu-object-copy_fp_regs.txt",
+      "sha256": "fbbec5c0ff5e1795d2fc23d4e073168b83ffb88c6249723a78d124f84998fc9d",
+      "size": 19070
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/cpu-object-save_fp_regs.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/cpu-object-save_fp_regs.txt",
+      "sha256": "3671f0ee5d91567f202e668ae57854b2f932d0ef9ace4cb1d262af6382e3abc9",
+      "size": 19343
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/cpu.c.o",
+      "sha256": "736ce4f615a386363b267d4ae1381726599c15605bdbd97b895cf09e206c72fb",
+      "size": 177920
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/cpu.c.o.d",
+      "sha256": "74d895d0e7efc67dc9fb2e7aab885ae45be7ab77c5c6efd03e7b64fa6f84ff94",
+      "size": 2129
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/disassembly-commands.json",
+      "sha256": "f15ab17f01d694c22dfd4918c5db6122e0155ecef58bb5ac3a6a4d6c99ae3862",
+      "size": 5139
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/elf-header.txt",
+      "sha256": "7120bd3d1cff3d23eddeb157dd2f0bdcda35ae0be776d11fbffe8e37c89ce1bc",
+      "size": 974
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/image-link-contract.txt",
+      "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428",
+      "size": 759
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/image-link-dependency.d",
+      "sha256": "a10ae257f2d0672f5ce8048b889fd83ee656e715aa87561d769d848f79f53a28",
+      "size": 1290
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/linked-image-check_and_allocate_fp_regs.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/linked-image-check_and_allocate_fp_regs.txt",
+      "sha256": "6a0f13d6a1814d3e26965c43bb21adcd05cfffbcb34e8234808cdec482cb1d39",
+      "size": 4907
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/linked-image-copy_fp_regs.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/linked-image-copy_fp_regs.txt",
+      "sha256": "4f4ba019d5cfb20fabd79f9f6489c7af8dc9fbe96b6587b475aa6c95079e822b",
+      "size": 2205
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/linked-image-save_fp_regs.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/linked-image-save_fp_regs.txt",
+      "sha256": "2b4b41603f7948246aae306bc9a573d245d3f9fef082bb932cc6e16a144a8a32",
+      "size": 2677
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/linked-image-schedule.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/linked-image-schedule.txt",
+      "sha256": "eff5cf75683bdf55465e2c6bf49944a7582762618c89203d8682d3adcbdc65cf",
+      "size": 19811
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/process-object-schedule.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/process-object-schedule.txt",
+      "sha256": "105a3f5929d915f75ec86b8d4e4b6f6ffd15b3303209bbe1d2560d8e6297b176",
+      "size": 48634
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/process.c.o",
+      "sha256": "166b14198aabad05bebf74a93760385f6f7ff451b8c1d7264a2e029138955207",
+      "size": 319704
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/process.c.o.d",
+      "sha256": "c27a4b40aa112394d5a8811aa944a4bcea83303f097eff05a583e9e1f483777a",
+      "size": 2726
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/receipt.json",
+      "sha256": "c232f42a9e9a4d0b8aac7b759cc1f16cc256fb128e41096f54168e61262696d6",
+      "size": 9558
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/retained-objects.json",
+      "sha256": "9dd21595a3bfb2ea2478b79c722150ad38e3d0e73cc4cc06d7040139032bfae4",
+      "size": 1759
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/selected-compile-commands.json",
+      "sha256": "011aca0b61bcaae512bc3610aba4c6eac30c72ca0c293401681a2fb076966f9c",
+      "size": 2863
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/selected-link-map.txt",
+      "sha256": "3ad5ebc2613d5548c64e4068b1d4857bfa97c3a769c89f16c2c82c190c494f95",
+      "size": 298
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/selected-linked-symbols.txt",
+      "sha256": "c17e37929ec8ae20c408809d8dca205656906cc93e13cf652f123b3b038efa40",
+      "size": 254
+    }
+  ],
+  "object_retention": [
+    {
+      "original": {
+        "device": 1828,
+        "inode": 491460,
+        "mode": "0o644",
+        "mtime_ns": 1792294112459921277,
+        "path": "/home/holden/mckernel-work/scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/image-owner-work-084cffb0413a4275bfdd66e3fd6c3368/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+        "sha256": "736ce4f615a386363b267d4ae1381726599c15605bdbd97b895cf09e206c72fb",
+        "size": 177920
+      },
+      "outside_generic_receipt_inventory": true,
+      "retained": {
+        "device": 1828,
+        "inode": 113212,
+        "mode": "0o644",
+        "mtime_ns": 1792294112459921277,
+        "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/cpu.c.o",
+        "sha256": "736ce4f615a386363b267d4ae1381726599c15605bdbd97b895cf09e206c72fb",
+        "size": 177920
+      }
+    },
+    {
+      "original": {
+        "device": 1828,
+        "inode": 491468,
+        "mode": "0o644",
+        "mtime_ns": 1792294112735929324,
+        "path": "/home/holden/mckernel-work/scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/image-owner-work-084cffb0413a4275bfdd66e3fd6c3368/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+        "sha256": "166b14198aabad05bebf74a93760385f6f7ff451b8c1d7264a2e029138955207",
+        "size": 319704
+      },
+      "outside_generic_receipt_inventory": true,
+      "retained": {
+        "device": 1828,
+        "inode": 113213,
+        "mode": "0o644",
+        "mtime_ns": 1792294112735929324,
+        "path": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/process.c.o",
+        "sha256": "166b14198aabad05bebf74a93760385f6f7ff451b8c1d7264a2e029138955207",
+        "size": 319704
+      }
+    }
+  ],
+  "preservation": {
+    "no_cleanup_performed": true,
+    "original_cpu_process_objects_unmodified": true,
+    "retained_outside_generic_receipt_inventory": true
+  },
+  "process_object_identity_note": "process.c.o is a fresh retained copy from this new build path. Its bytes equal unchanged process15cb historical object166b; that older object is excluded as evidence of CPU5d integration. New CPU object736ce4 and linked image08210 provide CPUcopy acceptance.",
+  "receipt": {
+    "path": "/home/holden/mckernel-work/scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/image-owner-work-084cffb0413a4275bfdd66e3fd6c3368/evidence/receipt.json",
+    "phase": "complete",
+    "sha256": "c232f42a9e9a4d0b8aac7b759cc1f16cc256fb128e41096f54168e61262696d6",
+    "status": "PASS"
+  },
+  "schema": "independent-artifact-body-review-v1",
+  "selected_compile_records": "/home/holden/mckernel-work/scratch/native-fpu-copy-image-artifact-review-20261018-1/selected-compile-commands.json",
+  "sources": {
+    "arch/x86_64/kernel/cpu.c": "5d93923119ac07f898849977463dc6e13349aa68831ae20e7aa1a6add92736be",
+    "kernel/process.c": "15cbf76ac6a1466b7a0825e8f2a495887238e9815f587a9babadddb958ede823"
+  },
+  "status": "PASS_ARTIFACT_AND_LINKED_COPY_FP_REGS",
+  "validated_receipt_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/image-owner-work-084cffb0413a4275bfdd66e3fd6c3368/evidence/artifacts/mckernel.img",
+      "sha256": "08210bb23f137f845fdb94fc0e66ac97a0cbc2d68081d856cdfc92da2d6d3dbf",
+      "size": 7908600
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/image-owner-work-084cffb0413a4275bfdd66e3fd6c3368/evidence/artifacts/mckernel.img.map",
+      "sha256": "d083ec3c45e45e08b9a84247d09f479beec3d869faceb5446075a74432e0ff96",
+      "size": 738606
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/image-owner-work-084cffb0413a4275bfdd66e3fd6c3368/evidence/artifacts/compile_commands.json",
+      "sha256": "64abc0b58258b2319290ca86c91c04136fe3afec920099719b677601176b8d52",
+      "size": 74300
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/image-owner-work-084cffb0413a4275bfdd66e3fd6c3368/evidence/provenance.json",
+      "sha256": "9ee03e3654ac6c958f61e5e8bacd9be76e3b9d03e243aa025d2320031c8fd4cf",
+      "size": 9152009
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/image-owner-work-084cffb0413a4275bfdd66e3fd6c3368/evidence/image-link-contract.txt",
+      "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428",
+      "size": 759
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/image-owner-work-084cffb0413a4275bfdd66e3fd6c3368/evidence/image-link-dependency.d",
+      "sha256": "a10ae257f2d0672f5ce8048b889fd83ee656e715aa87561d769d848f79f53a28",
+      "size": 1290
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/image-owner-work-084cffb0413a4275bfdd66e3fd6c3368/evidence/elf-header.txt",
+      "sha256": "7120bd3d1cff3d23eddeb157dd2f0bdcda35ae0be776d11fbffe8e37c89ce1bc",
+      "size": 974
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/image-owner-work-084cffb0413a4275bfdd66e3fd6c3368/evidence/symbols.txt",
+      "sha256": "c43825ecd3ae0d74eb22234590e29538908b212aece164160d8978e79e50d9dd",
+      "size": 224076
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/image-owner-work-084cffb0413a4275bfdd66e3fd6c3368/evidence/build.stdout.log",
+      "sha256": "b7fc15342b904edd5ff55d92b7070b1977305446f1276f897366dfc9db2c3f05",
+      "size": 5770
+    }
+  ]
+}

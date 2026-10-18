@@ -1,5 +1,53 @@
 # Compact dispatcher handoff
 
+## Active cursor — 2026-10-18 03:58 UTC
+
+Manual resumed PRACTICAL-GOAL campaign continues: 16 distinct native behaviors,
+3 complete / 32 open practical exit checks. File-stream utility is accepted;
+no new behavior or check closure is credited for the following build/source work.
+Latest included usage 5%; keep the 97% stop and 16/12 GiB floors plus packet reserves.
+
+The CPU-copy image build and all eight clients are independently retired. New
+image 08210bb23f137f845fdb94fc0e66ac97a0cbc2d68081d856cdfc92da2d6d3dbf
+has accepted linked-body/artifact provenance; it has not run a guest yet.
+[Artifact review](../evidence/native-fpu-copy-image-artifact-review-20261018-1.json)
+and [guard retirement](../evidence/native-fpu-copy-image-guard-retirement-review-20261018-1.json)
+are scoped evidence. Original and retained CPU/process objects remain protected.
+Stopped CID 538cbce3ad31d06b3055ba0dae248f0da762d7edd393af7e7ebbc5f5438542df,
+common inode366878 and shared inode113191 remain held pending exact cleanup.
+No heavy build/guest may start before independently accepted terminal release.
+
+Cleanup observer correction ee79cda8 / helper da47b674 / tests bcfc1ded passed
+independent source review, including actual four object rows/identity shape,
+separate timestamp binding, canonical release negatives and normal published
+import. The published 16-case suite passed. Publish/fetch exact helper/tests,
+then obtain exact observation plus concrete bounded postjoin execution decision;
+observe once, then separately release cleanup. No privileged observation or
+cleanup has run. Preserve initial f021/26 cases and all preparation failures.
+
+The conditional66 compiler envelope has independent source/profile and corrected
+publication preparation PASS: 66 source files, 78 publication blobs, 82 planned
+materialization copies. It conditionally audits the real C object before the
+three-module build in one owner; no execution authority yet. Root publishes exact
+capsule, then verifies fetched blobs before ordinary c/i materialization and final
+execution review. CREATE_PPD remains closed; separately service-held later
+transport/ACK work is excluded. No source-only result is native process support.
+
+Next eligible heavy operations after cleanup: reviewed AVX on image08210 and
+conditional66 build, whichever is fully released/admitted first. Two guest cases
+remain AVX and the separately reviewed second-native-stop observation. Reuse
+accepted artifacts/oracles; do not replay old smokes or final quotas on old pins.
+
+Adopted current supervision notes in VELOCITY.md: selected-field large-record
+reads; fresh small contexts after normal worker completion; preserve/correct
+ordinary private fixture errors within owned scope; use followup_task/new task
+for actionable findings when the author is idle, and confirm a running turn.
+A queued send_message alone does not activate an idle worker. Next-image template
+prototype is source-only and secondary, never a gate for current execution.
+Latest immutable comparison remains practical-engineering-estimate-20261018T031355Z;
+only M04 +5pp there. Continue after the normal checkpoint.
+
+
 ## Active cursor — 2026-10-18 03:15 UTC
 
 Manual resumed PRACTICAL-GOAL campaign continues. Distinct native behaviors16:

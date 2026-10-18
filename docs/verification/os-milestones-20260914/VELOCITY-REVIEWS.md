@@ -12,7 +12,7 @@ This file describes supervision, not OS acceptance or execution authority.
   historical; this inspection does not change goal-tool state or create a timer.
 - Engineering campaign: `01a149eb-f950-7f13-95a2-59dfc2918d49`; sole runtime/Git owner.
 - Campaign explicitly resumed by the user at`2026-10-18T01:31:35Z`; running with
-  an active goal at03:05:43UTC. Worker760063/start8454148 and server760065/start8454153
+  an active goal at03:35:39UTC. Worker760063/start8454148 and server760065/start8454153
   are live. Run directory:`.git/os-autopilot/runs/20261018T013135Z-08003bf4`.
   The old19:33UTC stop and its evidence remain in the
   [stop handoff](SUPERVISOR-STOP-20261017T193320Z.md). No automatic policy retry added.
@@ -20,25 +20,27 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-18T03:05:43Z`, review15, interval29m39s.
+- Last full review: `2026-10-18T03:35:39Z`, review16, interval29m56s.
 - User explicitly requested the interactive30-minute supervision loop again.
-  Next full review target:`2026-10-18T03:35:00Z`, latest04:05UTC. Continue the
+  Next full review target:`2026-10-18T04:05:00Z`, latest04:35UTC. Continue the
   loop in this chat; no independent OS timer or second dispatcher is installed.
   Exclude the19:33UTC-to01:31UTC stopped interval from velocity.
-- Last launcher-reported included usage:4% in the new weekly primary window;
+- Last launcher-reported included usage:6% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
-- Current intervention: review15 steering queued as
-  `20261018T030752832411Z-8c3ea880a9614859ba3b371595d15f22`. Recovery and the
-  user-authorized reserve change are independently accepted. Host54.500GiB,
-  scratch14.905GiB at cutoff. Take the first fully admitted build/runtime without
-  serializing it behind the separate image-schema correction. Actual-consumer
-  checks, short output paths and failure-family classification reduce handoff waste.
-- Current invocation independently accepted app/diagnostic behaviors: 15 (signal,
+- Current intervention: review16 steering queued as
+  `20261018T033616075609Z-6119c00dc71f4db293a428cc5bd4e235`. Host54.184GiB,
+  scratch14.642GiB at cutoff. New image guard exited0 and terminal retirement
+  passed; artifact-body review and exact retained-terminal cleanup remain pending.
+  Module driver/owner prepare one conditional C-audit/full-build packet in parallel.
+  Correct ordinary private projection/script errors within their assigned scope;
+  unrelated scaffold failures do not create a production-failure escalation.
+- Current invocation independently accepted app/diagnostic behaviors: 16 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
   useful dynamic-libc threads application, forced pthread contention app,
   actual memory-protection fault/recovery app, bounded vector-preservation app,
-  AVX/YMM preservation across the exercised syscall/futex/signal boundaries).
+  AVX/YMM preservation across the exercised syscall/futex/signal boundaries,
+  binary file-copy/checksum/close/reopen/readback/unlink utility).
 - Separate native3f7b observations: independently accepted quiescent native
   shutdown5->0->0/close0 and public destroy/device-memory release; complete
   one public stop/destroy/release/reboot cycle is now accepted with d99 modules.
@@ -1378,3 +1380,89 @@ Original baseline stays unchanged.
 Anchors under ../evidence/: native-fork-quarantine-terminal-recovery-result-review-20261018-1.json;
 host-ext4-reserve-result-review-20261018-1.json;
 native-fork-third-candidate-fetched-source-proof-20261018-1.json.
+
+## Review 16 — 2026-10-18 03:35:39 UTC
+
+Interval 03:05:43 to 03:35:39 UTC, 29m56s. Campaign running/active with the
+same live worker/server identities and no new service stop. Included usage
+4% to 6%; stop remains97%. Checkpoint c7cda7a3 is pushed with23 changed blobs
+verified from fetch. Host54.184GiB and scratch14.642GiB remain above the
+unchanged floors and selected growth reserves.
+
+| Measure | Change this interval |
+| --- | --- |
+| Accepted native application/diagnostic behaviors | 15 to16: binary file utility passed |
+| Practical checklist | 3complete/32open; all14milestones open |
+| New CPU-copy image | Build guard exit0 in221.864s; eight-client retirement accepted; linked-body artifact review pending |
+| Image terminal ownership | Stopped container and common/shared records intentionally retained; separate cleanup not released |
+| Third fork-module build | Three strict FFI declaration errors; failed build and positive retirement independently accepted |
+| Next module candidate | Opaque-pointer repair and66-file composite preparation source-reviewed; consolidated conditional driver/owner under review |
+| Next lifecycle test | Second-stop collector/reference and actual runner/owner replays passed; final staging/execution pending |
+| Engineering estimate | Only M04 moves65–80% to70–85% versus the previous table |
+
+The actual standalone libc utility copied10,247 binary bytes across buffers,
+checked its checksum, closed/reopened/read back the file and unlinked its output.
+Unchanged59-byte stdout, empty stderr and exit0 match the oracle. Independent
+collection verifies exact file bytes, closes and unlink; application/pager,
+30Docker clients, owner/container and QEMU retirement pass. This is one new
+native behavior on the existing a0f/d99 profile, not whole-M04 closure or native
+resource-restoration credit. Immutable same-scope comparison:
+[03:13:55 table](practical-engineering-estimate-20261018T031355Z.md).
+Earlier M05/M07 gains and capacity recovery are not counted again.
+
+The third fork build failed at three Rust extern declarations exposing opaque
+lockdep pointees through MM/VMA types. Owner joined1 after22.432s;14Docker
+clients plus one observer, the exact container and three records retired
+positively. The three-declaration/eight-cast source correction preserves typed
+internal ownership. Review also found three absent matched-Linux thunk exports;
+the proposed module-local compatibility source, entry and header extend the
+closure from63 to66 files. A missing aggregate compiler-source field was fixed
+and exercised through the actual owner predicate. No actual C, composite-link,
+modpost or corrected full-module success is established yet.
+
+Request preparation first hit a three-gate schema mismatch, then was killed
+under the original30CPU-second allowance. Both failures and the72,685,013-byte
+stage remain preserved. The reviewed120CPU/150wall-second ordinary attempt
+passed in88.621s with a joined quiet process group. Published request a5cb168f
+and toolchain a68e02b3 passed independent preparation review. The adopted640MiB
+cumulative planning envelope does not reduce the full512MiB post-preparation
+reserve or16/12GiB floors. The new image build then completed; guard/owner/eight
+client retirement is accepted, mutex27:4 positively free. Exact stopped container
+538cbce3 and common/shared records366878/113191 remain retained for separately
+reviewed cleanup. Artifact correctness and a guest run remain separate results.
+
+The second-stop case preserves the accepted first-cycle consumer and adds
+workload-retirement-before-stop/release ordering. Source/reference checks and
+both actual private runner/owner paths accept the positive capture and reject
+changed lifecycle, framing, helper state and original payload bytes. Twelve
+socket plans pass before fixture construction. Reference replay honestly uses
+the old archive/collector; no new native second stop or quota credit follows.
+The unchanged AVX case has a short-path metadata template ready for the new image.
+
+**Adjustment:** the independent reviewer found no frozen requirement for an
+intervening C-result review. Prepare one NEW exact conditional packet: strictly
+audit the real C object, then run the full three-module build only after that
+audit passes. One owner/container/admission/retirement path spans both phases;
+any failure stops, and only the full result may publish owner success. Concrete
+driver/owner bytes still require review. The tactic is saved in VELOCITY.md.
+Console growth of about10MB around03:18 also prompted scalar/count projections
+instead of printing full large records; detailed evidence remains in files.
+
+Cleanup preparation subsequently stopped on list-versus-dictionary projection
+and nested-heredoc parsing errors, with no writes or live effects. These are
+distinct private scaffold failures, not repeated production-invariant failures.
+Instruction033616 asks the same assigned lane to preserve and correct them
+within its cheap scope, then finish the adapter while artifact review proceeds.
+Keep real identity uncertainty and root effects under the original stops.
+
+This interval has one accepted native behavior, one successful image build and
+useful source/protocol work. One behavior in29m56s is a narrow window observation,
+not a steady throughput forecast or evidence of2x/3x acceleration. Next full
+review04:05UTC, latest04:35; continue supervision after this checkpoint.
+
+Anchors under ../evidence/:
+practical-file-stream-current-a0f-result-review-20261018-1.json;
+native-fork-third-build-failure-retirement-review-20261018-1.json.
+Image terminal review binds the owner receipt under
+`scratch/native-fp-copy-image-preparation-20261018-1/preparation-commands-1/image-owner-evidence-084cffb0413a4275bfdd66e3fd6c3368/`
+and `scratch/native-fp-copy-image-guard-20261018-084cffb0413a4275bfdd66e3fd6c3368/guard-result.json`.
