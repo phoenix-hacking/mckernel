@@ -159,6 +159,13 @@ check. Reuse accepted unaffected evidence. Imported placeholders or a generator'
 own success do not establish that the final preparation/runner/owner can consume
 the packet. Consolidate these affected bindings into one reviewable handoff.
 
+When deriving a new candidate from an accepted base, select the current base once
+and derive dependent namespace and supplemental/gitlink scalar bindings from it.
+Avoid copying predecessor identifiers into an otherwise current packet. Exercise
+the existing metadata consumer before request preparation in the assigned cheap
+profile; this is one affected check, not a new tracking framework. A metadata-only
+correction should reuse a valid source materialization and its accepted evidence.
+
 Assign short nonce-based protocol/execution output roots up front. Preflight all
 canonical generated UNIX endpoint paths before creating archives or attempt
 fixtures; source-workspace paths need not be runtime-output paths. Preserve the

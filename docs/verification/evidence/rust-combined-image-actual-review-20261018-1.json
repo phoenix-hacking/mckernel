@@ -1,0 +1,320 @@
+{
+  "acceptance_limits": [
+    "This establishes one full current-candidate production image build and linked default Rust ownership for the two reviewed bodies; it does not establish native behavior on this exact new image.",
+    "No native guest/app run, no ENOMEM injection on hardware, no practical exit-check closure, no final regression or original qualification acceptance.",
+    "Both path language-retirement credits remain pending exact-image applicable native vector/FPU/fork/thread/syscall/signal evidence and its separate execution release.",
+    "Image08210/d99 remains the known-good preserved compatible baseline; its prior native results cannot be relabeled as proof of new Rust bodies.",
+    "Stopped container/common/shared remain retained and separate cleanup is still required before next exclusive heavy operation.",
+    "Actual objects remain preserved at original build paths; this reviewer has not created or authorized a retention copy. Separate terminal-observer lane owns its exact copy authority."
+  ],
+  "actual_artifacts": {
+    "cpu": {
+      "dev": 1828,
+      "inode": 616890,
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "sha256": "6675047b222b693c07447650284e37a98f48ff58aff599b5b91957b11c750bac",
+      "size": 177552,
+      "uid": 1000
+    },
+    "image": {
+      "dev": 1828,
+      "inode": 616908,
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "686215dae696ed9bf259a0792e62802fcb1ba8e0914e98c366b2e8dc793445d9",
+      "size": 7912128,
+      "uid": 1000
+    },
+    "process": {
+      "dev": 1828,
+      "inode": 616898,
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "sha256": "9022f7b9925ee25c0a41f65121db9870408eb700fc02f9cf797fd83b5cc1b109",
+      "size": 319112,
+      "uid": 1000
+    },
+    "rust": {
+      "dev": 1828,
+      "inode": 616881,
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/owner-work/output/build/kernel/rust/mckernel_rust.o",
+      "sha256": "42e47cb46c4dee76467523231a67e7dd46f460d139285f22da078b1ae2887c47",
+      "size": 12604464,
+      "uid": 1000
+    }
+  },
+  "boundary_reasoning": [
+    "Actual production C commands select MCKERNEL_RUST_X86_CPU_HELPERS for cpu.c and MCKERNEL_RUST_PROCESS_HELPERS for process.c, with -g and -mno-sse. ENABLE_RUST_KERNEL=ON. Actual full target Rust recipe invokes pinned /nightly/bin/rustc, panic=abort, no red zone, disabled loop/SLP vectorization and explicit disabled SSE/SSE2/SSE3/SSSE3/SSE4.1/SSE4.2/AVX/AVX2/FMA flags. Configure and complete mckernel.img build both exit0.",
+    "Actual process.c.o real-header DWARF has unambiguous thread size5568 alignment64 fp_regs4784; cpu_local_var size8128 idle64 current7848 no_preempt7976. Inspector9895b766 passes its exact readelf SHA. Rust production Thread size/alignment and CPU-local assertions compile in full crate; actual generated Rust fp_regs operands are0x12b0=4784. abi.rs does not itself contain an explicit fp_regs-offset assertion, so that field-offset proof is generated code plus real C DWARF.",
+    "Final ELF has one definition of each selected entry/helper, no undefined symbols, and map ownership of rust_x86_copy_fp_regs/sched_schedule_fp_admit/prepare/memcpy/memset/panic is rust/mckernel_rust.o. copy_fp_regs is only configuration loads and a tail transfer to the Rust helper; final schedule calls Rust admission before preparation. Corrected C fallback bodies remain preserved and excluded by the actual selected compile flags.",
+    "Final Rust copy uses full runtime positive XSAVE size, rounds allocation to pages, tests allocation before zeroing/publication, returns-12 on allocation failure, publishes destination after zeroing and copies the runtime length. Existing destination/null-source and invalid-lifecycle behavior matches frozen reviewed source. Final clone_thread calls selected copy_fp_regs and any nonzero return branches to existing process_release_fp_regs_result/release_fp_regs cleanup. No live compute-C expansion was introduced.",
+    "Final admission executes pushfq/cli before CPU lookup or shared CPU/thread reads, uses compiled CPU-local offsets, skips no_preempt/null/idle/exited owners, and tests save_fp_regs result before returning entry flags. Nonzero result calls existing Rust panic fail-stop. Global CPU rendezvous is not claimed. Helper and final memcpy/memset bodies inspected contain GPR operations, no FP/SIMD registers/instructions.",
+    "Final copy allocation bridge resolves to the existing _ihk_mc_alloc_aligned_pages_node kernel implementation; copy/zero resolve to final Rust memcpy/memset, not a host libc/compiler-runtime substitution. This review does not claim all transitive allocator code retired from C.",
+    "Exact reviewed guard source prove_retired requires owner receipt equality, retired=true, no unproven Docker client, lease absence, exact common/shared identities and a fresh exact stopped container inspection. Its actual result is PASS with owner receipt3099d53f, CIDae965257; exact wrapper joined child0 and parent physically joined session42261. Postjoin readback records root27:4 reacquired. These are positive accepted retirement evidence; absent PIDs were not used as proof."
+  ],
+  "checks": {
+    "actual_configure_build_receipt_and_output_binding": "PASS",
+    "compiled_Rust_fp_regs_offset": "PASS via actual generated 0x12b0 field loads/stores; abi.rs asserts Thread size/alignment, not an explicit fp_regs offset assertion",
+    "exact_selected_source_and_ABI_recipe_pins": "PASS",
+    "final_ELF_unique_definitions_no_unresolved_symbols": "PASS",
+    "final_default_copy_shim_and_scheduler_admission_calls": "PASS",
+    "final_map_Rust_object_ownership": "PASS",
+    "full_production_Rust_crate_recipe_no_SIMD_flags": "PASS",
+    "production_C_default_selectors_and_no_SSE_debug_flags": "PASS",
+    "real_production_C_header_DWARF_ABI_no_inferred_alignment": "PASS",
+    "selected_Rust_and_copy_zero_closure_GPR_disassembly": "PASS"
+  },
+  "counts": {
+    "new_current_candidate_full_image_builds": 1,
+    "new_distinct_native_behaviors": 0,
+    "new_native_apps": 0,
+    "new_practical_exit_checks": 0,
+    "original_qualification_acceptance": 0,
+    "production_path_language_retirement": 0
+  },
+  "created_utc": "2026-10-18T05:15:38.333881+00:00",
+  "decision": "PASS_ACTUAL_PRODUCTION_IMAGE_ARTIFACT_AND_GUARD_RETIREMENT",
+  "execution_release": {
+    "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/execution-proposal/image-execution-release.json",
+    "sha256": "dee1d84d58b304e8f7c71823e3de0d1c40200a40cccbb4f653d9f1bdd3fb249f"
+  },
+  "execution_review": {
+    "path": "/home/holden/mckernel-work/scratch/rust-combined-image-execution-review-20261018-1/review.json",
+    "sha256": "24e8cda5bafa807a33d57a7b928bde62a5b578ff2cf3645f92f6747ad3e370ed"
+  },
+  "findings": [],
+  "guard_retirement": {
+    "container_id": "ae9652572cfe1610a2dd07b1f6a9833ab5a849d2d171a2ee47e5fb74e5e1d8d1",
+    "decision": "PASS_GUARD_OWNER_AND_INTERNAL_CLIENT_RETIREMENT_ONLY",
+    "exact_guard_source": {
+      "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/execution-proposal/native_exact_scratch22_authority3_image_guard.py",
+      "sha256": "ce635b0b217764db5a21336e8eef999fbe57ae68d29f1a5d509f8ae15d630856"
+    },
+    "fresh_stopped_container_inspection": {
+      "path": "/home/holden/mckernel-work/scratch/native-rust-cutover-image-guard-20261018-2f005fdaeda24f1c91704b6f0ff830c4/inspect-terminal-fresh.json",
+      "sha256": "207191bf2edd081e3a74fa0ca41a9d28d3af7f32f9046db2ce2c4a198d08334f"
+    },
+    "guard_elapsed_seconds": 211.34955802399782,
+    "guard_result": {
+      "path": "/home/holden/mckernel-work/scratch/native-rust-cutover-image-guard-20261018-2f005fdaeda24f1c91704b6f0ff830c4/guard-result.json",
+      "sha256": "db80f405cbf919ea9141b46386f357407c60d8c0bc5deaae004bef06e9e85226"
+    },
+    "guard_wrapper_status": {
+      "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/execution-proposal/image-guard.status.json",
+      "sha256": "4e7981852a059d130370e55dffc39a0381f832f1663fd0845551fcfa85a122d7"
+    },
+    "next_required": "Separate exact finite artifact retention observation/readback and independently reviewed terminal cleanup; preserve every protected original and all failed attempts.",
+    "owner_receipt": {
+      "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/owner-evidence/owner-receipt.json",
+      "sha256": "3099d53f2f1e0846af2de778e0b6376e8a9b12e6df68843a553f323fd2589021"
+    },
+    "postjoin_readback": {
+      "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/execution-proposal/image-guard-postjoin-readback.json",
+      "sha256": "743fae0cbfbeb98e8eac8c1d30966bfb5cc358b2c5101ac6007c0759394afd72"
+    },
+    "stopped_container_and_common_shared_retained": true,
+    "terminal_cleanup_accepted": false
+  },
+  "implementation_ownership": false,
+  "linked_symbols": {
+    "_ihk_mc_alloc_aligned_pages_node": [
+      [
+        "fffffffffe843a00",
+        "T"
+      ]
+    ],
+    "copy_fp_regs": [
+      [
+        "fffffffffe81dc10",
+        "T"
+      ]
+    ],
+    "memcpy": [
+      [
+        "fffffffffe8728a0",
+        "T"
+      ]
+    ],
+    "memset": [
+      [
+        "fffffffffe873530",
+        "T"
+      ]
+    ],
+    "panic": [
+      [
+        "fffffffffe879ed0",
+        "T"
+      ]
+    ],
+    "rust_x86_copy_fp_regs": [
+      [
+        "fffffffffe893c40",
+        "T"
+      ]
+    ],
+    "sched_schedule_fp_admit": [
+      [
+        "fffffffffe895530",
+        "T"
+      ]
+    ],
+    "sched_schedule_prepare_body_result": [
+      [
+        "fffffffffe895610",
+        "T"
+      ]
+    ],
+    "schedule": [
+      [
+        "fffffffffe819f90",
+        "T"
+      ]
+    ]
+  },
+  "metadata": {
+    "CMakeCache.txt": {
+      "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/owner-work/output/build/CMakeCache.txt",
+      "sha256": "2dc15e5e36780c4e5869d16b1a62a94557a61dfc8cf3e2dd732f7e78c183ae36",
+      "size": 26282
+    },
+    "compile_commands.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/owner-work/output/build/compile_commands.json",
+      "sha256": "64abc0b58258b2319290ca86c91c04136fe3afec920099719b677601176b8d52",
+      "size": 74300
+    },
+    "image.map": {
+      "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/owner-work/output/build/kernel/mckernel.img.map",
+      "sha256": "dac6f3722d412bb51ba44ff465cfc91a48f08e33cd02fe721e6095a695af2640",
+      "size": 739042
+    },
+    "link.txt": {
+      "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+      "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428",
+      "size": 759
+    },
+    "receipt.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/owner-work/evidence/receipt.json",
+      "sha256": "5cd2886a17e825a543fc3c0b0dfce2a8d30aa17807c97d115f11e9c8a7f357a0",
+      "size": 9558
+    },
+    "rust-build.make": {
+      "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/owner-work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+      "sha256": "6266a07d0a839c0175e5ca451678d69f78fe413f8a534348f5290f8133a58613",
+      "size": 7967
+    }
+  },
+  "next_executable_observation": "After exact retention and accepted terminal cleanup, use separately released new-image native vector/FPU and pthread/fork diagnostic overlays with compatible d99 host modules; bind image686215dae696ed9bf259a0792e62802fcb1ba8e0914e98c366b2e8dc793445d9 and retain streams/status/kernel logs/positive retirement.",
+  "production_abi": {
+    "limits": "Real C type evidence only; compiled Rust ABI assertions/default macro/link/object identity checks remain separate. No inference of alignment from size or offsets.",
+    "observed": {
+      "cpu_local_var": [
+        {
+          "DIE_offset": "3af2",
+          "alignment": 64,
+          "members": {
+            "current": 7848,
+            "idle": 64,
+            "no_preempt": 7976
+          },
+          "size": 8128
+        }
+      ],
+      "thread": [
+        {
+          "DIE_offset": "269a",
+          "alignment": 64,
+          "members": {
+            "fp_regs": 4784
+          },
+          "size": 5568
+        }
+      ]
+    },
+    "readelf_output": "/home/holden/mckernel-work/scratch/rust-combined-image-actual-review-20261018-1/actual-capture-1/process-dwarf.stdout",
+    "sha256": "06e136f671f46fb542ee7010ebf1633565a0fd06d8eeb1ccb9ae67fbb73836e1",
+    "status": "PASS_ACTUAL_PRODUCTION_DWARF_ABI",
+    "unresolved": []
+  },
+  "reviewer": "/root/rust_combined_image_actual_review",
+  "schema": "mckernel.independent-combined-rust-image-actual-review.v1",
+  "scope": "Functional supported-profile McKernel/apps AND active Rust/reviewed-assembly compute-C retirement. One exact combined FPU-copy/scheduler-admission image production build/link/ABI/default-consumer review. Deferred original qualification remains deferred.",
+  "source_materialization": {
+    "base_candidate_sha_scope": "942c927b denotes preserved base only, not whole current source equivalence",
+    "fetched_source_checkpoint": "98384c9bf1c267f5815cbc6dc71ffccf740cc9f2",
+    "materialization_sha256": "d6c3b6334a7585c6ddeab62a551f64581cd8bed721ce3b181d8764663356ebba",
+    "six_selected_source_pins": {
+      "arch/x86_64/kernel/cpu.c": "736872bdde1af7ad5ed7cdd42ebae9e24a7ca1ba09bc63a2f19abd4f7b9833f1",
+      "kernel/CMakeLists.txt": "0fb8528175443a0cab4b1b12e62a2b9851b918b416f9a235f598cb143f616e35",
+      "kernel/process.c": "74017a5b0b5d0efaf7772b6eefde51401510e61d75a41988e4d4012dd601e43b",
+      "kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "kernel/rust/sched_helpers.rs": "76f99ea7f4e4bf63114735d11c1226d4a8783b6bdb1eeb637e1ca20eb9bd7ba8",
+      "kernel/rust/x86_cpu_helpers.rs": "01c9069e05f171a1e03a432e56c1bd824cd19e48f53f85ba00b285808669dab0"
+    },
+    "source_derivative_sha256": "fcb5abc924db6a0f88c3b240aae01e94c7309b88f2f9aaaca8fdb654c329c969"
+  },
+  "source_reviews": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-fpu-copy-independent-review-20261018-1/review.json",
+      "sha256": "2b554ad8630717c729e31a229d83039f51e40648d3028bb5545298363cf51980"
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/rust-scheduler-fp-admission-source-review-20261018-1.json",
+      "sha256": "b952d9d9872a7dd65f01490bd414275a933ceefe7d391b54c309ae94398c85bb"
+    }
+  ],
+  "validation": {
+    "actual_tools": {
+      "/usr/bin/nm": {
+        "realpath": "/usr/bin/x86_64-linux-gnu-nm",
+        "sha256": "5fb0dd8acc18e3f348ed0acbcada0580dbdddd1eb5de3c8323613af13580032b"
+      },
+      "/usr/bin/objdump": {
+        "realpath": "/usr/bin/x86_64-linux-gnu-objdump",
+        "sha256": "afd9c7433c96cb0f37df99cab98fc860bbbe2bed17f37df66254a8778adfc61d"
+      },
+      "/usr/bin/readelf": {
+        "realpath": "/usr/bin/x86_64-linux-gnu-readelf",
+        "sha256": "41a813335a74480f145fba9400aa7fb5c0ec7ffcaa7af7f33e832dc75eb90ffb"
+      }
+    },
+    "additional_link_closure": {
+      "path": "/home/holden/mckernel-work/scratch/rust-combined-image-actual-review-20261018-1/additional-call-closure-commands.json",
+      "sha256": "1828a168f49361df0b34f656a101d9f7aaa83a9fa4a9830784c2e52a828ba811"
+    },
+    "all_commands_exit0": true,
+    "capture": {
+      "path": "/home/holden/mckernel-work/scratch/rust-combined-image-actual-review-20261018-1/actual-capture-1/capture.json",
+      "sha256": "7a9c49e53bab7fd97da865431fc63298deca5a7115b203a65d015d4b70580866"
+    },
+    "capture_bytes_before_additional_two_commands": 4205488,
+    "collector": {
+      "path": "/home/holden/mckernel-work/scratch/rust-combined-image-actual-review-20261018-1/collect_artifacts.py",
+      "sha256": "a111b0f4d905d68c7f66cdb53550b973dfbb3550bb985df4d2c0215038dd8efa"
+    },
+    "command_count": 33,
+    "input_projection": {
+      "path": "/home/holden/mckernel-work/scratch/rust-combined-image-actual-review-20261018-1/actual-inputs.json",
+      "sha256": "f668833377542de28ef1334780a05792f40f4e00a14aa524716589238cda61b3"
+    },
+    "interpretation": {
+      "path": "/home/holden/mckernel-work/scratch/rust-combined-image-actual-review-20261018-1/interpretation-checks.json",
+      "sha256": "8ae5ef10736d1168a871b4233c9819ed06cc25f47674f668aa76fe8b644736b4"
+    },
+    "profile": "Unprivileged CPU0/1job/1GiB/30CPU35wall; 31 primary commands plus2 additional exact linked call-closure commands. No root/Docker/compiler/build/guest operation by reviewer.",
+    "retained_warning_evidence": {
+      "build_stderr": {
+        "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/owner-work/evidence/build.stderr.log",
+        "sha256": "7581c5a75dbe758dfbcd1642fc7f569729655be9a641b2f9129099b276bc431b"
+      },
+      "tool_versions": {
+        "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/owner-work/evidence/tool-versions.txt",
+        "sha256": "18192b32a3b08b4ebb2a16830d9e4476da10963cce1ce1f04b96a3a20b91d60e"
+      },
+      "warning_limits": "Actual build succeeds with existing disabled-SSE2 target ABI warning, internal-feature/dead-code/redeclared-FFI diagnostics, packed-member and unused-constant warnings, plus RWX segment warning retained. No new selected helper uses FP/vector ABI arguments; no whole-image warning-free or future compiler portability claim."
+    },
+    "source_or_mock_tests_replayed": false
+  }
+}

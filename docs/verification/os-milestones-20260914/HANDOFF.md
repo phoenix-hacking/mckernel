@@ -1,5 +1,30 @@
 # Compact dispatcher handoff
 
+## Combined Rust image execution cursor — 2026-10-18 05:13 UTC
+
+Both first ports are independently PASS_SOURCE and saved in fetched checkpoint
+98384c9bf1c267f5815cbc6dc71ffccf740cc9f2 (23 exact changed blobs verified).
+Proof: /home/holden/mckernel-work/scratch/checkpoint-rust-ports-20261018-1/verification.json
+SHA256 79f33f4bbcf9691afdc42c8e6989ec659a29b7490e06803516a78679adc99a5b.
+Combined materialization0/15.512s, corrected request preparation0/82.925s,
+actual driver+owner request consumers0/30.491s. Original stale supplemental
+binding failure retained; source copy was reused. Request59008679/toolchaina68e02b3.
+Exact execution release dee1d84d58b304e8f7c71823e3de0d1c40200a40cccbb4f653d9f1bdd3fb249f;
+independent review24e8cda5. Guard physically joined0/211.349558s at05:10:32UTC;
+ordinary postjoin/root27:4 reacquisition PASS. New ELF686215dae696ed9bf259a0792e62802fcb1ba8e0914e98c366b2e8dc793445d9.
+Production DWARF/layout check PASS; final artifact/default-link review active.
+Stopped CIDae9652572cfe1610a2dd07b1f6a9833ab5a849d2d171a2ee47e5fb74e5e1d8d1,
+common/shared records remain RETAINED for separately reviewed terminal cleanup;
+lease absent. Do not admit another heavy operation or raw-remove/unlink.
+Exact private packet: /home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1.
+Next: independent actual image result + explicit object retention -> exact terminal
+observer/cleanup/common release -> fresh released AVX then threads guests.
+Known-good08210/d99 remains preserved; host conformance is independent.
+Post-switch exit and FPU-save private ports both PASS_SOURCE; one next private
+composition is being prepared without changing the current image or root sources.
+Native behavior count16 and practical checks3complete/32open remain unchanged;
+no production/native Rust retirement acceptance yet.
+
 ## Active Rust cutover cursor — 2026-10-18 04:48 UTC
 
 User requires functional delivery AND retiring live compute C into Rust/reviewed
@@ -11,7 +36,8 @@ PRACTICAL-GOAL and AGENTS. No new compute C behavior; preserve working image0821
 | --- | --- | --- | --- | --- |
 | cpu.c copy_fp_regs | rust_x86_copy_fp_regs in x86_cpu_helpers.rs | C copy_fp_regs ABI shim under existing MCKERNEL_RUST_X86_CPU_HELPERS; process.c thread-copy caller | Extracted real Rust/default C objects;64 parity+10negative, source review2b554ad8 | Source/default selection proven; production image/native pending. Original C fallback retained. C save/allocation helper still live. |
 | process.c schedule FPU admission | sched_schedule_fp_admit in sched_helpers.rs | schedule under existing MCKERNEL_RUST_PROCESS_HELPERS, before runqueue prepare | Real Rust/default C objects;16 parity/IRQ/fail-stop, source reviewb952d9d9 | Source/default selection proven; production image/native pending. Original corrected C prelude retained. |
-| process.c post-switch exited-thread cleanup | Next bounded Rust scheduling body (not yet implemented) | schedule architecture continuation | Image08210 currently executes C continuation | Next named retirement boundary; no completion credit. |
+| process.c post-switch exited-thread cleanup | Private Rust cleanup candidate; patch d69db604 | Proposed default schedule post-switch call; frozen first-two-port image unchanged | 112 parity configurations/224 executions +5 mutation negatives; independent source/ABI review3f684d5b | PASS_SOURCE private; next-candidate production build/link/native pending. Image08210 still executes C continuation. |
+| cpu.c check_and_allocate_fp_regs/save_fp_regs | Private rust_x86_save_fp_regs Rust/assembly candidate; patch83d17c1f | Proposed existing X86_CPU_HELPERS C ABI forwarding; current frozen image unchanged | 480 controlled parity + scheduler/save ENOMEM, copy regression; independent source reviewbaf69f51 | PASS_SOURCE private; next-candidate production compilation/link/native pending. Existing C reference preserved. |
 
 One coherent FOUR-file Rust image candidate is being prepared by
 rust_cutover_image_preparation from immutable08210 source plus only the two

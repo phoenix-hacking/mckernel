@@ -1,0 +1,150 @@
+{
+  "status": "PASS_SOURCE",
+  "reviewed_at_utc": "2026-10-18T05:11:12.170374+00:00",
+  "reviewer": "independent rust_fpu_save_review; no implementation writes or behavior replay",
+  "scope": "Functional PRACTICAL-GOAL kernel/application infrastructure AND actual live compute C retirement into Rust plus reviewed assembly. No unrelated hardening or deferred qualification.",
+  "baseline": "98384c9bf1c267f5815cbc6dc71ffccf740cc9f2",
+  "author_result": {
+    "path": "/home/holden/mckernel-work/scratch/rust-fpu-save-cutover-20261018-1/result.json",
+    "sha256": "8363a2d62c2166456360d1d05a8d91f743b0bc55e7a12a1f32ec560774be1c9c"
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/scratch/rust-fpu-save-cutover-20261018-1/cutover.patch",
+    "sha256": "83d17c1fc2a4b6187d84329905d23f7d5a56443462382e819e5a706b75f32745",
+    "scope": "Two implementation files; five proposed candidate files below include test-only additions/change."
+  },
+  "candidate_files": {
+    "arch/x86_64/kernel/cpu.c": "3fc42dcf40eb8da65c8dda8f1d13b8abe392e12a7981c4f31d840d47b1f620ef",
+    "kernel/rust/x86_cpu_helpers.rs": "518b4467c0ebba453d8ed4435fdc2b0fcea65342c6481f8dfd7d54bc86b91305",
+    "scripts/tests/test_rust_fpu_copy_cutover_20261018.py": "56c52d01f0c17563419db79f52b3e0732a4f8c7247b4d86f6708a96e15733aa8",
+    "scripts/tests/test_rust_fpu_save_cutover_20261018.py": "69ced216572d72161433928f5975e43c08e4f3aacb62a7d2a1b64539450dae3a",
+    "scripts/tests/fixtures/rust_fpu_save_cutover_20261018.rs": "30e9c304846f5c1c84cc389f779e593d8267d168f39907fc82c77100eddad24b"
+  },
+  "source_sha256": {
+    "arch/x86_64/kernel/cpu.c": "3fc42dcf40eb8da65c8dda8f1d13b8abe392e12a7981c4f31d840d47b1f620ef",
+    "kernel/rust/x86_cpu_helpers.rs": "518b4467c0ebba453d8ed4435fdc2b0fcea65342c6481f8dfd7d54bc86b91305",
+    "kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "kernel/rust/lib.rs": "efe5379e2e81dc15995bca9fb243b9d1cf5ac9074fd7b869dda696a1bc9de723",
+    "kernel/CMakeLists.txt": "0fb8528175443a0cab4b1b12e62a2b9851b918b416f9a235f598cb143f616e35",
+    "kernel/rust/tests/run_equivalence.sh": "2f95bf133e7322a9a6f2fd9a9102013f2154f506d099f5c570c752a8e1711a7a",
+    "kernel/rust/sched_helpers.rs": "76f99ea7f4e4bf63114735d11c1226d4a8783b6bdb1eeb637e1ca20eb9bd7ba8",
+    "scripts/tests/test_rust_fpu_save_cutover_20261018.py": "69ced216572d72161433928f5975e43c08e4f3aacb62a7d2a1b64539450dae3a",
+    "scripts/tests/fixtures/rust_fpu_save_cutover_20261018.rs": "30e9c304846f5c1c84cc389f779e593d8267d168f39907fc82c77100eddad24b"
+  },
+  "findings": [],
+  "boundary_analysis": [
+    {
+      "invariant": "Original fallback and actual default selection",
+      "decision": "PASS_SOURCE",
+      "evidence": "cpu.c only adds MCKERNEL_RUST_X86_CPU_HELPERS ABI forwarding to rust_x86_save_fp_regs(thread,xsave_available,xsave_size,xsave_mask), with original allocator/save bytes in #else. Complete pre-save CPU reconstructs prior 736872bdde1af7ad5ed7cdd42ebae9e24a7ca1ba09bc63a2f19abd4f7b9833f1. Existing ENABLE_RUST_KERNEL default ON, RUST_KERNEL_ENABLED cpu.c macro and lib.rs module select the Rust path. Retained selected.o defines save_fp_regs/imports Rust; actual_save.o defines Rust; fallback.o has no Rust import. Full production consumer/link remains unproved."
+    },
+    {
+      "invariant": "Owned preallocated state, allocation and publication order",
+      "decision": "PASS_SOURCE",
+      "evidence": "Valid aligned live Thread is an unsafe caller precondition, as in existing C. Raw field accesses make no aliasing Rust references. Availability0 returns without touching thread or state. Nonzero availability and positive size allocate only for null fp_regs. Existing state is neither reallocated nor cleared. Successful new state is zeroed across the whole rounded extent before fp_regs publication, then XSAVE. ENOMEM reports original error, preserves null pointer and returns -12 before any XSAVE. No recoverable post-publication error/leak path exists."
+    },
+    {
+      "invariant": "Page arithmetic, geometry and bridge ABI",
+      "decision": "PASS_SOURCE",
+      "evidence": "Positive i32 size converts to usize on x86_64; pages<=524288 and rounded bytes<=2147483648, so addition/product/page-count cast cannot overflow. Existing allocator signature/flags match int,int,unsigned-long,int,int,unsigned-long,char*,int and pointer return; uses pages,0,2,-1,0,ULONG_MAX,diagnostic CPU_FILE,line. Allocator page alignment exceeds required64. A preallocated buffer must cover the boot-stable CPUID standard extent. No new validator is claimed."
+    },
+    {
+      "invariant": "XSAVE asm register, memory and ordering contract",
+      "decision": "PASS_SOURCE",
+      "evidence": "asm uses state in(reg), low32 in eax, high32 in edx and xsave [state]; EAX/EDX cannot overlap independent state input. XSAVE leaves these GPR inputs and arithmetic flags intact. nostack and preserves_flags apply to the instruction; no nomem/readonly/pure suppresses its memory writes or side effects. Compiler therefore sees read/write memory side effects and orders publication/zeroing before XSAVE. Actual pinned Rust1.92 object loads Thread fp_regs at0x12b0, calls memset before store, splits RCX into EDX:EAX at a5/ac and executes single XSAVE at ae. Allocation failure branches to error print/return and bypasses XSAVE. Same non-REX.W XSAVE instruction form as preserved C."
+    },
+    {
+      "invariant": "No accidental FP/SIMD before save",
+      "decision": "PASS_SOURCE",
+      "evidence": "Retained actual save object uses GPR operations and allocator/memset/kprintf calls; it contains no XMM/YMM/ZMM/x87/XRSTOR instructions and exactly one XSAVE. Flags match production no-SIMD recipe. Inherited rustc1.92 disabled-sse2 host ABI warning retained; this ABI uses only pointers and integer scalars. Final linked transitive allocator/memset/kprintf no-FP/SIMD closure must still be checked. Kernel use of FP/SIMD in these callees would corrupt unsaved live state."
+    },
+    {
+      "invariant": "Real Thread ABI and caller exclusion",
+      "decision": "PASS_SOURCE",
+      "evidence": "Rust uses actual repr(C) Thread from abi.rs; fixture asserts size5568/alignment64/fp_regs4784 and object accesses offset4784. C seam fixture uses a stand-in, so production-header C DWARF/ABI binding remains required. Existing sched_schedule_fp_admit disables IRQ before reading current and saving, and panics on nonzero save before runqueue preparation. New retained subprocess links actual admission+save bodies and observes irq-save/cpu-local/allocate/allocation-error/panic only. Other existing clone/idle-init caller contracts and behavior are preserved, not newly certified."
+    },
+    {
+      "invariant": "Controlled oracle is not hardware acceptance",
+      "decision": "PASS_SOURCE",
+      "evidence": "480 vectors compare preserved original C against actual Rust save body with XSAVE leaf replaced by controlled fixture. Full-page zeroing, preallocated bytes/tails, guards, unchanged neighboring Thread bytes, allocation ABI, ENOMEM order and full64bit masks are checked. Nonzero availability with nonpositive size and absent state reaches seam only: invalid hardware geometry, never a valid native positive. Arbitrary masks and tiny sizes are seam vectors, not claims of CPUID-supported XSAVE configurations. No null XSAVE or hardware XSAVE ran."
+    },
+    {
+      "invariant": "Independent copy regression remains bound",
+      "decision": "PASS_SOURCE",
+      "evidence": "Only copy harness change peels preserved save fallback before its unchanged full pre-copy-source SHA256 assertion. It does not alter the copy oracle, expectations or implementation. Retained copy-regression-2 passes64 parity+8invalid configurations+2null pointers. This verifies regression seam/object behavior, not hardware or production proof."
+    },
+    {
+      "invariant": "Language boundary and frozen current image",
+      "decision": "PASS_SOURCE",
+      "evidence": "New implementation is Rust plus reviewed XSAVE assembly. C addition is minimal ABI/config forwarding; original C fallback and accepted restore/release/default paths remain preserved. Optional debug allocation/TID dkprintf traces are omitted; failure kprintf remains. Candidate remains private; current frozen combined first-two-port build/image and separate post-switch-exit candidate were not modified."
+    }
+  ],
+  "evidence_validation": {
+    "save": {
+      "root": "/home/holden/mckernel-work/scratch/rust-fpu-save-cutover-20261018-1/test-3",
+      "manifest_sha256": "86350375bc741a04e285cd8b26126aed903334236df0496d0482fbaf3d93a959",
+      "verified_manifest_files": 65,
+      "command_statuses": {
+        "actual-rust-disassembly.status": "0",
+        "actual-rust-object.status": "0",
+        "actual-rust-symbols.status": "0",
+        "admission-rust-object.status": "0",
+        "fallback-c-object.status": "0",
+        "fallback-symbols.status": "0",
+        "fixture-compile.status": "0",
+        "fixture-run.status": "0",
+        "rust-version.status": "0",
+        "scheduler-enomem-run.status": "0",
+        "seam-rust-disassembly.status": "0",
+        "seam-rust-object.status": "0",
+        "selected-c-object.status": "0",
+        "selected-symbols.status": "0"
+      },
+      "fixture_stdout": "PASS 480 C/Rust save-seam parity cases; full extent, tails, guards, allocation ABI, error order, 64-bit masks; no hardware execution\n",
+      "fixture_stderr_bytes": 0,
+      "scheduler_enomem_stdout": "PASS actual scheduler + actual save body: ENOMEM panics before save/return/progress; IRQ exclusion retained (controlled seam)\n",
+      "scheduler_enomem_stderr_bytes": 0
+    },
+    "copy": {
+      "root": "/home/holden/mckernel-work/scratch/rust-fpu-save-cutover-20261018-1/copy-regression-2",
+      "manifest_sha256": "a1500065e8d4db210b83e1ca9064d98451f35b984c86079a30b159cc49e2761c",
+      "verified_manifest_files": 49,
+      "command_statuses": {
+        "fallback-c-object.status": "0",
+        "fallback-symbols.status": "0",
+        "fixture-compile.status": "0",
+        "fixture-run.status": "0",
+        "rust-disassembly.status": "0",
+        "rust-kernel-object.status": "0",
+        "rust-symbols.status": "0",
+        "rust-version.status": "0",
+        "selected-c-object.status": "0",
+        "selected-symbols.status": "0"
+      },
+      "fixture_stdout": "PASS extent=1 preallocated=false source_absent=false allocation_fail=false\nPASS extent=1 preallocated=false source_absent=false allocation_fail=true\nPASS extent=1 preallocated=false source_absent=true allocation_fail=false\nPASS extent=1 preallocated=false source_absent=true allocation_fail=true\nPASS extent=1 preallocated=true source_absent=false allocation_fail=false\nPASS extent=1 preallocated=true source_absent=false allocation_fail=true\nPASS extent=1 preallocated=true source_absent=true allocation_fail=false\nPASS extent=1 preallocated=true source_absent=true allocation_fail=true\nPASS extent=512 preallocated=false source_absent=false allocation_fail=false\nPASS extent=512 preallocated=false source_absent=false allocation_fail=true\nPASS extent=512 preallocated=false source_absent=true allocation_fail=false\nPASS extent=512 preallocated=false source_absent=true allocation_fail=true\nPASS extent=512 preallocated=true source_absent=false allocation_fail=false\nPASS extent=512 preallocated=true source_absent=false allocation_fail=true\nPASS extent=512 preallocated=true source_absent=true allocation_fail=false\nPASS extent=512 preallocated=true source_absent=true allocation_fail=true\nPASS extent=2696 preallocated=false source_absent=false allocation_fail=false\nPASS extent=2696 preallocated=false source_absent=false allocation_fail=true\nPASS extent=2696 preallocated=false source_absent=true allocation_fail=false\nPASS extent=2696 preallocated=false source_absent=true allocation_fail=true\nPASS extent=2696 preallocated=true source_absent=false allocation_fail=false\nPASS extent=2696 preallocated=true source_absent=false allocation_fail=true\nPASS extent=2696 preallocated=true source_absent=true allocation_fail=false\nPASS extent=2696 preallocated=true source_absent=true allocation_fail=true\nPASS extent=4096 preallocated=false source_absent=false allocation_fail=false\nPASS extent=4096 preallocated=false source_absent=false allocation_fail=true\nPASS extent=4096 preallocated=false source_absent=true allocation_fail=false\nPASS extent=4096 preallocated=false source_absent=true allocation_fail=true\nPASS extent=4096 preallocated=true source_absent=false allocation_fail=false\nPASS extent=4096 preallocated=true source_absent=false allocation_fail=true\nPASS extent=4096 preallocated=true source_absent=true allocation_fail=false\nPASS extent=4096 preallocated=true source_absent=true allocation_fail=true\nPASS extent=4097 preallocated=false source_absent=false allocation_fail=false\nPASS extent=4097 preallocated=false source_absent=false allocation_fail=true\nPASS extent=4097 preallocated=false source_absent=true allocation_fail=false\nPASS extent=4097 preallocated=false source_absent=true allocation_fail=true\nPASS extent=4097 preallocated=true source_absent=false allocation_fail=false\nPASS extent=4097 preallocated=true source_absent=false allocation_fail=true\nPASS extent=4097 preallocated=true source_absent=true allocation_fail=false\nPASS extent=4097 preallocated=true source_absent=true allocation_fail=true\nPASS extent=8192 preallocated=false source_absent=false allocation_fail=false\nPASS extent=8192 preallocated=false source_absent=false allocation_fail=true\nPASS extent=8192 preallocated=false source_absent=true allocation_fail=false\nPASS extent=8192 preallocated=false source_absent=true allocation_fail=true\nPASS extent=8192 preallocated=true source_absent=false allocation_fail=false\nPASS extent=8192 preallocated=true source_absent=false allocation_fail=true\nPASS extent=8192 preallocated=true source_absent=true allocation_fail=false\nPASS extent=8192 preallocated=true source_absent=true allocation_fail=true\nPASS extent=11008 preallocated=false source_absent=false allocation_fail=false\nPASS extent=11008 preallocated=false source_absent=false allocation_fail=true\nPASS extent=11008 preallocated=false source_absent=true allocation_fail=false\nPASS extent=11008 preallocated=false source_absent=true allocation_fail=true\nPASS extent=11008 preallocated=true source_absent=false allocation_fail=false\nPASS extent=11008 preallocated=true source_absent=false allocation_fail=true\nPASS extent=11008 preallocated=true source_absent=true allocation_fail=false\nPASS extent=11008 preallocated=true source_absent=true allocation_fail=true\nPASS extent=12289 preallocated=false source_absent=false allocation_fail=false\nPASS extent=12289 preallocated=false source_absent=false allocation_fail=true\nPASS extent=12289 preallocated=false source_absent=true allocation_fail=false\nPASS extent=12289 preallocated=false source_absent=true allocation_fail=true\nPASS extent=12289 preallocated=true source_absent=false allocation_fail=false\nPASS extent=12289 preallocated=true source_absent=false allocation_fail=true\nPASS extent=12289 preallocated=true source_absent=true allocation_fail=false\nPASS extent=12289 preallocated=true source_absent=true allocation_fail=true\nPASS 64 C/Rust parity cases; 8 invalid configurations; 2 invalid pointers; real Thread ABI\n",
+      "fixture_stderr_bytes": 0
+    }
+  },
+  "failure_history": [
+    "test-1 fixture-only compile failure: duplicate oracle allocation helper and void-pointer XSAVE operand in C stand-in. Renamed oracle helper and used typed512byte fp_regs_struct pointer; test-2 passes. No production-body invariant failure.",
+    "copy-regression-1 import failed before evidence root; original error preserved separately. PYTHONPATH correction passes copy-regression-2.",
+    "test-3 adds real scheduler/save ENOMEM integration to passing fixture; all commands pass. No guest, root, Docker, hardware XSAVE, module or full image build ran."
+  ],
+  "review_operations": "Read-only selected source/oracle/object logs, complete manifest and candidate-byte verification, one report write. No compiler, test-suite replay, hardware, root, Docker, module, guest, production image, Git, launcher or subagent operation.",
+  "acceptance_limits": [
+    "PASS_SOURCE only; no execution release",
+    "No full production cpu.o or complete Rust crate build/ABI proof",
+    "No linked image/default consumer/runtime XSAVE or native cutover proof",
+    "No new native behavior, production retirement credit, practical completion or deferred qualification credit"
+  ],
+  "next_required_observation": [
+    "After actual native feedback for currently frozen first-two-port image, dispatcher may integrate these exact reviewed bytes into a separately bound future candidate; preserve disjoint third post-switch cleanup review.",
+    "Run full production-header cpu.o plus complete Rust crate with actual supported pinned flags; bind C Thread size5568/alignment64/fp_regs4784 against Rust and record macro/config/compile commands.",
+    "Inspect final linked save_fp_regs -> rust_x86_save_fp_regs/default selection and real XSAVE, absence of original allocation/save body in selected cpu.o, allocator/memset/kprintf no-SIMD closure, exact source/image/toolchain hashes.",
+    "Under separate execution release, run existing native vector/thread/fork/syscall/signal diagnostic on that exact future image with real CPUID/XCR0 extent+mask+alignment; capture stdout/stderr/status/kernel log and verified teardown before retirement credit."
+  ],
+  "execution_release": false,
+  "production_retirement": false,
+  "new_native_behaviors": 0,
+  "write_scope": "/home/holden/mckernel-work/scratch/rust-fpu-save-review-20261018-1"
+}

@@ -1,0 +1,49 @@
+{
+  "schema": "mckernel.independent-combined-rust-image-execution-review.v1",
+  "decision": "PASS_EXECUTION",
+  "implementation_ownership": false,
+  "reviewer": "/root/rust_combined_image_execution_review",
+  "reviewed_release_payload_sha256": "b2ddb8967987c1e31a075a63d53f2a56893df1a9595832e4c2570b64a2f19b9d",
+  "reviewed_payload_file": {
+    "path": "/home/holden/mckernel-work/scratch/rust-cutover-image-preparation-20261018-1/execution-proposal/review-target-release-payload.json",
+    "sha256": "5be636db1dc411253397cd5dec4827cc86496264c8ffc63aa9909cc476c64c7f"
+  },
+  "scope": "One functional supported-profile McKernel image build for combined Rust FPU-copy and scheduler admission cutover. New compute implementation remains Rust/reviewed assembly; accepted live C repairs and fallback preserved. No guest, module rebuild, source-only retirement credit or deferred original qualification acceptance.",
+  "consumer_contract": {
+    "release_schema": "fp-save-thin.image-guard-release.v1",
+    "status": "PASS_EXECUTION_RELEASE",
+    "independent_decision": "PASS_EXECUTION",
+    "binding": "Canonical sorted compact JSON plus newline of entire final release excluding only execution_review; guard requires independent reviewer and implementation_ownership false.",
+    "guard_sha256": "ce635b0b217764db5a21336e8eef999fbe57ae68d29f1a5d509f8ae15d630856",
+    "dispatcher_sha256": "4ec6e2266b34d17c60d1ae7688a9fea2b95fad3b0f3ca7dc8a52d4b0e7e9f2ce",
+    "request_sha256": "590086796ab34e9e4cccdba33e2c43abcecfadc4281eeabe9a27096a8d211954",
+    "toolchain_sha256": "a68e02b3b66b8bfbae96bf742dc8702b6e81dd97b92189b87437c3d08fccdf72"
+  },
+  "conditions": [
+    "Root finalizes the exact reviewed payload by adding execution_review only, pins final file SHA256 and substitutes that SHA256 as the sole external dispatcher argument. Other payload changes require affected re-review.",
+    "Immediately before dispatch, preserve fresh live root27:4/mountUUID2a5768c8-718d-4914-bdc0-6b32c5a92a52/dev1828/boot/source493960/currentHEAD98384c9b identities, positive accepted predecessor retirement and current no-heavy ownership reconciliation. Absent PIDs alone never prove retirement.",
+    "Invoke exactly the payload dispatcher_argv with only FINAL_RELEASE_SHA256_EXTERNAL_ARGUMENT replaced. Dispatcher authenticates its own hash, source/request/prerequisite pins, fresh namespace, root lock, f_bavail floors16GiB host/12GiB scratch PLUS full512MiB reserve, MemAvailable16GiB and existing usage guard. Root accounts concurrent aggregate7job24GiB shares; no profile widening.",
+    "One heavy image build only: CPUs2-5/4CPU,12GiB,MemorySwap12GiB(no extra swap),512tasks,networknone,read-only container root,ALLcapdrop,no-new-privileges,jobs4,request timeout19800. No outer timeout interrupts a healthy build; existing guarded signals/retirement/quarantine remain authoritative.",
+    "Execute once. Preserve every failure, partial output and uncertain owner. Do not retry unchanged failures, replay service-policy stops, raw-remove containers or unlink ownership records.",
+    "Require exact guard/direct-child and internal Docker-client retirement evidence. Successful build intentionally retains stopped container plus common/shared records; separate independently reviewed terminal observation/cleanup must preserve/archive exact records and positively retire all observation/readback clients before another heavy operation.",
+    "Artifact acceptance remains separate: retain actual cpu.c.o,process.c.o,full production Rust object,mckernel.img ELF/map/config/compile commands and linked consumers. Verify actual PROCESS_HELPERS/X86_CPU_HELPERS selectors, C DWARF Thread size5568/alignment64/fp_regs4784 and CpuLocalVar consumed offsets against compiled Rust ABI. Missing/ambiguous ABI is PENDING, never inferred or repaired by weakening an oracle.",
+    "Exact new image requires separate native vector/FPU/fork/thread/syscall/signal release and runtime evidence before either path earns language-retirement credit. Baseline08210 image, prior cpu/process objects and compatible d99 host modules remain protected.",
+    "Fetched98384c9b source-port checkpoint79f33f4b is verified; private guard/adapters/dispatcher are SHA-bound local authorities and are not claimed Git-published. Preserve these exact bytes and resulting evidence for the next coherent verified Git checkpoint. Existing included-usage97% stop and no purchased/API-key billing remain operative."
+  ],
+  "validation": {
+    "final_frozen_payload": "29 exact pointer hashes,11 guard source hashes, actual request scalar projection/source inode, resources, toolchain/supplemental/source manifest bindings and currently fresh namespaces PASS; no broad build or consumer replay.",
+    "actual_preparation": "Corrected preparation0/82.924849s; retained actual driver+owner consumer0/30.491494s; exact successful stdout/status/stderr pointers bound in reviewed payload; full512MiB postprep capacity PASS.",
+    "guard_derivative": "All7 function ASTs equal accepted predecessor after exactly3 source/materialization/capture identity literal updates; actual private adapter precedence and11source hashes verified. Root lock, canonical independent decision, ownership, positive retirement and quarantine semantics preserved.",
+    "production_ABI_parser": "Exact9895b766 inspector independent7case bounded check PASS: real prior production DWARF mechanics only, removed alignment, wrong external hash, small valid layout, wrong fp offset, conflicting layout and missing member. No candidate production ABI credit.",
+    "review_profile": "CPU0/onejob/1GiB/30CPU35wall, read-only inputs plus reviewer-owned evidence; no root/Docker/build/guest/admission/ownership/launcher/Git effects.",
+    "evidence_root": "/home/holden/mckernel-work/scratch/rust-combined-image-execution-review-20261018-1",
+    "reviewer_failure": "Private initial verifier incorrectly assumed selector-call adjacency; exact failure retained in reviewer-verifier-failure-1.txt. One corrected actual selector statement check PASS. No implementation or execution change."
+  },
+  "counts": {
+    "new_current_candidate_full_image_builds": 0,
+    "new_native_apps": 0,
+    "new_practical_behavior": 0,
+    "production_language_retirement": 0,
+    "original_qualification": 0
+  }
+}

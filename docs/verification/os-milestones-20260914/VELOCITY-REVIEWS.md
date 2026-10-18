@@ -12,7 +12,7 @@ This file describes supervision, not OS acceptance or execution authority.
   historical; this inspection does not change goal-tool state or create a timer.
 - Engineering campaign: `01a149eb-f950-7f13-95a2-59dfc2918d49`; sole runtime/Git owner.
 - Campaign explicitly resumed by the user at`2026-10-18T01:31:35Z`; running with
-  an active goal at04:35:31UTC. Worker760063/start8454148 and server760065/start8454153
+  an active goal at05:05:05UTC. Worker760063/start8454148 and server760065/start8454153
   are live. Run directory:`.git/os-autopilot/runs/20261018T013135Z-08003bf4`.
   The old19:33UTC stop and its evidence remain in the
   [stop handoff](SUPERVISOR-STOP-20261017T193320Z.md). No automatic policy retry added.
@@ -20,22 +20,23 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-18T04:35:31Z`, review18, interval29m37s.
+- Last full review: `2026-10-18T05:05:05Z`, review19, interval29m34s.
 - User explicitly requested the interactive30-minute supervision loop again.
-  Next full review target:`2026-10-18T05:05:00Z`, latest05:35UTC. Continue the
+  Next full review target:`2026-10-18T05:35:00Z`, latest06:05UTC. Continue the
   loop in this chat; no independent OS timer or second dispatcher is installed.
   Exclude the19:33UTC-to01:31UTC stopped interval from velocity.
-- Last launcher-reported included usage:8% in the new weekly primary window;
+- Last launcher-reported included usage:9% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
-- Current intervention: review18 steering queued as
-  `20261018T043844401053Z-4426c709ba3e4adbb0eabd9c7d5e5f35`. Host53.991GiB,
-  scratch14.535GiB at cutoff. New-image AVX and two-stop lifecycle results pass;
-  retained-terminal cleanup is accepted. C compiled in the conditional66 attempt,
-  but command audit stopped the full module phase. Strict derivative is prepared
-  for its new release. User reaffirmed active McKernel Rust/assembly retirement;
-  live compute C is not fallback-only. FPU-copy Rust task activated post-cutoff
-  at04:36:51; process/scheduling retirement is next. Old M09 integration estimates
-  are not language-conversion percentages.
+- Current intervention: review19 steering queued as
+  `20261018T050533277245Z-c8a61736df7f468bbf402a0981763a3f`, accepted05:05:34UTC. Host53.517GiB,
+  scratch14.119GiB at cutoff. Three compute Rust ports pass independent source
+  review; the first two are frozen together, materialized and request-prepared,
+  awaiting exact build execution decision. No production Rust cutover is accepted
+  yet. A fourth FPU-save port has just started in private scope. Strict host
+  Kbuild produced all three modules but artifacts remain held on conformance
+  findings; tool-only objtool correction proceeds separately. User's active
+  Rust/assembly goal is persisted in AGENTS and current goal/handoff documents.
+  Old M09 integration estimates are not language-conversion percentages.
 - Current invocation independently accepted app/diagnostic behaviors: 16 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -1638,3 +1639,83 @@ Canonical evidence under ../evidence/:
 `native-second-stop-actual-result-review-20261018-1.json`,
 `native-fork-strict-c-command-source-review-20261018-1.json`,
 `practical-m07-current-requirements-review-20261018-1.json`.
+
+## Review 19 — 2026-10-18 05:05:05 UTC
+
+Interval04:35:31 to05:05:05UTC,29m34s. Campaign running/active with unchanged
+worker/server identities and no new service stop. Included usage8% to9%, stop97%.
+HEAD98384c9b; host53.517GiB/scratch14.119GiB. Selected growth reserves and floors
+still apply; scratch capacity is not permission for an unbounded build.
+
+| Measure | Change this interval |
+| --- | --- |
+| Distinct native application behaviors | 16 to16; no new guest result |
+| Practical checklist | 3complete/32open; all14milestones open |
+| Compute Rust implementation | Three independently reviewed source ports; no production retirement accepted yet |
+| Combined first-two-port image | Four-file materialization15.512s; corrected request preparation82.9s; exact execution decision pending |
+| Next native cases | AVX first, threads second; actual consumer/mutation checks pass on modeled retained evidence; fresh image join pending |
+| Strict host-module build | Strict C audit passes118 tokens; full Kbuild returns0 and emits all3modules; artifacts remain held |
+
+FPU copy now has Rust allocation/zero/full-XSAVE-copy behavior through the default
+C ABI shim, with64 real C/Rust parity cases and10 configuration/pointer negatives.
+Scheduler FPU admission has16 parity/IRQ/fail-stop configurations. Both source
+reviews pass and their exact four-file combination is saved in fetched checkpoint
+98384c9bf1c267f5815cbc6dc71ffccf740cc9f2 with23 changed blobs verified. Full target
+headers, production CPU/Rust compilation, linked default selection and native
+vector/thread execution are still required. Other C save/allocation paths remain
+live; neither source-only objects nor default-selector fixtures retire them.
+
+The third private port moves post-switch exited-thread cleanup to Rust. Its112
+C/Rust configurations,224 executions and five mutation controls cover old/current
+CPU distinctions, release lifetime, ordering and conditional debug output.
+Independent review passed05:04:26UTC, with no
+blocking findings. It remains outside the frozen first-two-port image. A fourth
+private FPU-save implementation lane activated05:05:03; assignment is not proof.
+
+Combined preparation initially had a candidate exclusion-path mismatch and then
+a stale supplemental gitlink base-manifest digest. Both failures are preserved.
+Narrow corrected metadata passes the actual consumers and changed/stale-binding
+negatives. The valid source materialization was reused rather than copied again.
+Request preparation now passes, including the full separate512MiB post-prep
+reserve; final driver/owner checks and exact independent release remain pending.
+The native collector supports one app per guest, so the prepared AVX and threads
+cases are sequential guests on this one image. Their97-byte QMP paths are checked.
+
+The parallel strict host attempt completed23.326s of guarded execution: the C
+command audit passed and full Kbuild emitted all three modules. Artifact review
+still holds two missing required Rust thunk imports, composite objtool --werror
+policy and two warnings. All15clients/container/records/root mutex retirement
+are independently accepted. A narrow duplicate-check iterator-to-loop correction
+passes the unchanged nine ownership/race cases for both baseline and candidate,
+plus93,312 conflict-equivalence cases. Source review permits the loop and a narrow
+SDK expect_failed classifier proposal. Actual compiled objtool controls, strict
+module acceptance and fork/exec/wait remain pending. Tool-only execution needs
+its own exact release; it does not widen the old module owner or enable replay.
+The three new MM API C wrappers remain Linux control-plane compatibility glue.
+
+**Adjustment:** derive dependent namespace and supplemental/gitlink scalar
+bindings from one selected current base, then run the existing consumer before
+request preparation. Reuse valid source copies and unaffected evidence. Advance
+the first combined image promptly after its exact decision; keep subsequent Rust
+ports private and unrelated host-tool work off this compatible compute path.
+The active Rust rule and per-path table are now persisted in AGENTS/CURRENT/
+HANDOFF. No extra dispatcher, framework or broad evidence rehash was introduced.
+
+This interval produced three reviewed Rust source ports; runtime output did not increase.
+Neither2x/3x velocity nor a new percentage uplift is established. Preserve the
+latest immutable [engineering estimate](practical-engineering-estimate-20261018T043803Z.md),
+whose M09 range measures integration, not Rust conversion. Review19 steering is
+queued as20261018T050533277245Z-c8a61736df7f468bbf402a0981763a3f and accepted by
+the server at05:05:34UTC. Next full review05:35UTC, latest06:05; continue
+the interactive supervision loop.
+
+Canonical evidence under ../evidence/:
+`native-fork-strict-c-build-result-review-20261018-1.json`,
+`rust-scheduler-fp-admission-source-review-20261018-1.json`,
+`rust-cutover-image-preparation-review-20261018-1.json`.
+Current private packets under scratch:
+`rust-fpu-copy-independent-review-20261018-1/review.json`,
+`rust-post-switch-exit-review-20261018-1/source-review.json`,
+`rust-cutover-image-preparation-20261018-1/namespace-correction-1`,
+`native-host-fork-objtool-correction-review-20261018-1/report.json`,
+`rust-combined-native-case-preparation-20261018-1/final-result.json`.
