@@ -10,6 +10,9 @@ use crate::abi::{
 unsafe extern "C" {
     fn ihk_mc_get_processor_id() -> CInt;
     fn process_sched_cpu_local_bridge(cpu_id: CInt) -> usize;
+    fn process_sched_irq_save_bridge() -> CULong;
+    fn save_fp_regs(thread: *mut core::ffi::c_void) -> CInt;
+    fn panic(message: *const i8) -> !;
     #[link_name = "process_spin_lock_bridge"]
     fn process_spin_lock_bridge_c(lock_addr: CULong) -> CULong;
     #[link_name = "process_spin_unlock_bridge"]
@@ -2936,6 +2939,32 @@ unsafe fn sched_write_schedule_result(
             },
         );
     }
+}
+
+/// Admit a scheduler entry before any runqueue mutation. IRQ exclusion pins
+/// this CPU's current thread and its live FPU state through schedule preparation.
+/// The caller must retain the returned entry flags through a switch, or restore
+/// them on the non-switch path. Saving failure cannot return to its caller:
+/// production panic stops the calling CPU (it is not a global CPU rendezvous).
+#[no_mangle]
+pub unsafe extern "C" fn sched_schedule_fp_admit(exited_status: CInt) -> CULong {
+    let irqstate = unsafe { process_sched_irq_save_bridge() };
+    let cpu_id = unsafe { ihk_mc_get_processor_id() };
+    let cpu = unsafe { process_sched_cpu_local_bridge(cpu_id) } as *mut CpuLocalVar;
+
+    // Match the production ihk_atomic_read's SeqCst observation. No runqueue lock is taken
+    // here: exclusion must span saving the live owner and the existing prepare.
+    if unsafe { AtomicI32::from_ptr(&raw mut (*cpu).no_preempt.counter).load(Ordering::SeqCst) } == 0 {
+        let prev = unsafe { read_volatile(&raw const (*cpu).current) };
+        if !prev.is_null()
+            && prev != unsafe { &raw mut (*cpu).idle }
+            && unsafe { read_volatile(&raw const (*prev).status) } != exited_status
+            && unsafe { save_fp_regs(prev.cast()) } != 0
+        {
+            unsafe { panic(b"schedule: failed to save floating point state\0".as_ptr().cast()) }
+        }
+    }
+    irqstate
 }
 
 #[no_mangle]

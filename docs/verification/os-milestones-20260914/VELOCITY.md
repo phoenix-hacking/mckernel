@@ -11,6 +11,22 @@ The practical scope explicitly defers large fuzz/exposure/soak quotas and broad
 certification. Execution releases, correct behavioral expectations, failure
 history, ownership/machine limits and the 97% included-usage stop still apply.
 
+User clarification,2026-10-18: implement new McKernel compute-kernel behavior in
+Rust or reviewed assembly. Keep Linux control-plane compatibility C within its
+existing allowance; do not add compute-kernel C subsystems or expand C logic as
+the migration strategy. Existing cpu.c/process.c correctness fixes remain
+preserved and their tested linked paths are live, not verification-only fallback.
+Report a concrete exception before integrating a future expansion of compute C.
+Practical M09 integration estimates do not measure whole-kernel Rust conversion.
+The user further reaffirmed that retiring live McKernel C into Rust is active
+work alongside functional delivery; whole-image certification deferral does not
+postpone that cutover. Implement the first bounded known live CPU/FPU path in
+the existing Rust framework, then name process/scheduling retirement work. Track
+C entrypoint, Rust replacement, actual default consumer, tested artifact and
+retirement status in the existing cursor. An unused Rust port is not production
+cutover. Keep the accepted baseline and reference C/evidence intact while the
+replacement passes its affected build and runtime checks.
+
 ## What is slowing the current campaign
 
 The current bottleneck is moving a prepared artifact through ownership recovery,

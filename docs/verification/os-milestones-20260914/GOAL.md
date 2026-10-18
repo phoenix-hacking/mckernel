@@ -1,5 +1,24 @@
 # Autonomous McKernel goal
 
+## Active Rust cutover priority — user instruction 2026-10-18
+
+Functional delivery and retiring live McKernel compute C into Rust plus reviewed
+assembly are both active requirements. The earlier whole-image zero-C deferral
+below must not postpone compute-kernel retirement. Original scope IDs, historical
+tables and qualification evidence remain preserved; large exposure and external
+certification stay deferred. Practical M09 integration estimates are not a
+whole-kernel language-conversion score.
+
+Do not add or expand compute-kernel C behavior. Preserve accepted live cpu.c and
+process.c fixes and the working image while implementing Rust through real
+consumed ABIs. C reference/fallback paths may remain during development; count a
+cutover only with production default selection, linked-artifact ownership and
+applicable native proof. Linux control-plane compatibility C remains allowed;
+the three mcctrl_vm_write_compat.c MM API thunks are host glue. Report any further
+concrete exception before integration. First ports are the live FPU copy path
+and scheduler FPU admission; process/scheduling retirement continues afterward.
+
+
 ## Active user scope — practical kernel and applications, 2026-10-17
 
 The user explicitly replaced excessive formal qualification with a solid kernel

@@ -3,7 +3,7 @@ use core::mem::{offset_of, size_of};
 use core::ptr::{null_mut, read_volatile, write_volatile};
 
 use crate::abi::{
-    CInt, CLong, CULong, IhkOsCpuRegister, X86BasicRegs, X86KernelContext, X86UserContext,
+    CInt, CLong, CULong, IhkOsCpuRegister, Thread, X86BasicRegs, X86KernelContext, X86UserContext,
 };
 
 type CUInt = u32;
@@ -190,6 +190,65 @@ pub unsafe extern "C" fn read_tsc() -> CULong {
 #[no_mangle]
 pub unsafe extern "C" fn get_xsave_size() -> CInt {
     unsafe { x86_xsave_size_bridge() }
+}
+
+/// Copy the saved state owned by `from` into the independently owned `to` state.
+///
+/// The caller holds both thread lifetimes and exclusive access to the destination
+/// slot/buffer. A nonnull source covers `size` initialized bytes; an existing
+/// destination covers the same extent. Source and destination buffers must not
+/// overlap, as for the original memcpy. XSAVE configuration is boot-stable.
+/// New allocations cover whole pages and are zeroed before copying so reserved
+/// state and the page tail never inherit allocator contents. No allocation or
+/// destination change occurs for an absent source. This function never executes
+/// XSAVE/XRSTOR and requires the kernel's no-FP/SIMD compiler profile.
+#[no_mangle]
+pub unsafe extern "C" fn rust_x86_copy_fp_regs(
+    from: *const Thread,
+    to: *mut Thread,
+    available: CInt,
+    size: CInt,
+) -> CInt {
+    if from.is_null() || to.is_null() {
+        return -EINVAL;
+    }
+    let source = unsafe { (*from).fp_regs };
+    if source.is_null() {
+        return 0;
+    }
+    // A saved source cannot exist without a valid XSAVE configuration. Unlike
+    // the C fallback, reject this invalid lifecycle state before any copy.
+    if available == 0 || size <= 0 {
+        return -EINVAL;
+    }
+    let length = size as usize;
+    let pages = (length + PAGE_SIZE as usize - 1) / PAGE_SIZE as usize;
+    let mut destination = unsafe { (*to).fp_regs };
+    if destination.is_null() {
+        destination = unsafe {
+            x86_alloc_aligned_pages_node_bridge(
+                pages as CInt,
+                PAGE_P2ALIGN,
+                IHK_MC_AP_NOWAIT,
+                -1,
+                IHK_MC_PG_KERNEL,
+                CULong::MAX,
+                CPU_FILE.as_ptr().cast::<i8>() as *mut i8,
+                line!() as CInt,
+            )
+        };
+        if destination.is_null() {
+            return -ENOMEM;
+        }
+        unsafe {
+            core::ptr::write_bytes(destination.cast::<u8>(), 0, pages * PAGE_SIZE as usize);
+            (*to).fp_regs = destination;
+        }
+    }
+    unsafe {
+        core::ptr::copy_nonoverlapping(source.cast::<u8>(), destination.cast::<u8>(), length);
+    }
+    0
 }
 
 #[no_mangle]

@@ -4356,6 +4356,10 @@ out_schedule:
 #endif
 }
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+extern unsigned long sched_schedule_fp_admit(int exited_status);
+#endif
+
 void schedule(void)
 {
 	struct cpu_local_var *v;
@@ -4366,6 +4370,9 @@ void schedule(void)
 	unsigned long irqstate = 0;
 	static int mcexec_v10_scheduler_logs;
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+	irqstate = sched_schedule_fp_admit(PS_EXITED);
+#else
 	/* Admission precedes runqueue mutation.  IRQ exclusion pins current and
 	 * its live FPU state until preparation commits a context switch.  A
 	 * failed save cannot return to a sleeping/exiting scheduler caller or
@@ -4381,6 +4388,7 @@ void schedule(void)
 			__builtin_unreachable();
 		}
 	}
+#endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 	struct sched_schedule_result schedule_result;

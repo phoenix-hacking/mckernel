@@ -1,0 +1,109 @@
+{
+  "status": "PASS_SOURCE",
+  "reviewed_at_utc": "2026-10-18T04:44:55.214276+00:00",
+  "reviewer": "independent rust_fpu_copy_independent_review; no implementation writes",
+  "scope": "Functional PRACTICAL-GOAL kernel/application infrastructure and actual Rust/reviewed-assembly compute-kernel cutover. Unrelated hardening and deferred qualification excluded.",
+  "head_at_review": "ba21cb3acc1238d2e7968abe2053df0a2673f136",
+  "inputs": {
+    "author_result": "/home/holden/mckernel-work/scratch/rust-fpu-copy-cutover-20261018-1/result.json",
+    "author_result_sha256": "2a44c104cedc442a664bcc9638a50f56dcde6e8a9eea5f7e47120d99e754c955",
+    "retained_test": "/home/holden/mckernel-work/scratch/rust-fpu-copy-cutover-20261018-1/test-3",
+    "source_sha256": {
+      "arch/x86_64/kernel/cpu.c": "736872bdde1af7ad5ed7cdd42ebae9e24a7ca1ba09bc63a2f19abd4f7b9833f1",
+      "kernel/rust/x86_cpu_helpers.rs": "01c9069e05f171a1e03a432e56c1bd824cd19e48f53f85ba00b285808669dab0",
+      "kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "kernel/rust/lib.rs": "efe5379e2e81dc15995bca9fb243b9d1cf5ac9074fd7b869dda696a1bc9de723",
+      "kernel/CMakeLists.txt": "0fb8528175443a0cab4b1b12e62a2b9851b918b416f9a235f598cb143f616e35",
+      "kernel/process.c": "09409cad5dd2d7a23de33b6e592aa62ea5641272f68ce224181e807bdba7a287",
+      "kernel/rust/tests/run_equivalence.sh": "2f95bf133e7322a9a6f2fd9a9102013f2154f506d099f5c570c752a8e1711a7a",
+      "scripts/tests/test_rust_fpu_copy_cutover_20261018.py": "31b60dfa1eb55c076ca949f35df3d273659620d7acb7a7e1b9a3d4ec571d510a",
+      "scripts/tests/fixtures/rust_fpu_copy_cutover_20261018.rs": "67729e6e79a9a42512bc78ae287387b0cf7792838cd0e39fc0bb2f9241c36260"
+    },
+    "live_source_sha256": {
+      "arch/x86_64/kernel/cpu.c": "736872bdde1af7ad5ed7cdd42ebae9e24a7ca1ba09bc63a2f19abd4f7b9833f1",
+      "kernel/rust/x86_cpu_helpers.rs": "01c9069e05f171a1e03a432e56c1bd824cd19e48f53f85ba00b285808669dab0",
+      "kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "kernel/rust/lib.rs": "efe5379e2e81dc15995bca9fb243b9d1cf5ac9074fd7b869dda696a1bc9de723",
+      "kernel/CMakeLists.txt": "0fb8528175443a0cab4b1b12e62a2b9851b918b416f9a235f598cb143f616e35",
+      "kernel/process.c": "74017a5b0b5d0efaf7772b6eefde51401510e61d75a41988e4d4012dd601e43b",
+      "kernel/rust/tests/run_equivalence.sh": "2f95bf133e7322a9a6f2fd9a9102013f2154f506d099f5c570c752a8e1711a7a",
+      "scripts/tests/test_rust_fpu_copy_cutover_20261018.py": "31b60dfa1eb55c076ca949f35df3d273659620d7acb7a7e1b9a3d4ec571d510a",
+      "scripts/tests/fixtures/rust_fpu_copy_cutover_20261018.rs": "67729e6e79a9a42512bc78ae287387b0cf7792838cd0e39fc0bb2f9241c36260"
+    },
+    "manifest_sha256": "bb8fc40c9120b518617e083a9f6ab603c804d05fb136672c2836188dbb00968d",
+    "verified_manifest_files": 49
+  },
+  "findings": [],
+  "boundary_analysis": [
+    {
+      "invariant": "Default consumer selects real Rust implementation",
+      "decision": "PASS",
+      "evidence": "Existing ENABLE_RUST_KERNEL default ON and RUST_KERNEL_ENABLED cpu.c definition MCKERNEL_RUST_X86_CPU_HELPERS select ABI-only forwarding shim. lib.rs includes x86_cpu_helpers. Retained selected.o defines copy_fp_regs and refers to rust_x86_copy_fp_regs; actual_copy.o defines Rust symbol. Original full CPU source reconstructs SHA256 5d93923119ac07f898849977463dc6e13349aa68831ae20e7aa1a6add92736be; fallback.o has no Rust reference."
+    },
+    {
+      "invariant": "Full runtime extent and page-rounding arithmetic",
+      "decision": "PASS",
+      "evidence": "Positive CInt size converts to usize without sign extension. On x86_64 length <=2147483647, pages <=524288 and pages*4096 <=2147483648; additions/products and CInt page-count cast cannot overflow. Copies length rather than fixed fp_regs_struct extent. The actual supported boot-stable XSAVE extent remains a caller contract."
+    },
+    {
+      "invariant": "Ownership, aliasing and allocation failure",
+      "decision": "PASS",
+      "evidence": "No Rust references over the Thread allocation are manufactured: fp_regs loads/stores use raw field places. Caller retains both lifetimes and exclusive destination ownership; source/destination extent must not overlap, matching original memcpy. Null source performs no allocation/write. Null threads fail -EINVAL. Failed allocation returns -ENOMEM with original destination pointer/data intact. Successful allocation zeroes rounded extent, stores ownership in destination, then copies; no later recoverable error can leak the allocation. Existing buffers retain untouched page tail."
+    },
+    {
+      "invariant": "Allocation ABI and flags",
+      "decision": "PASS",
+      "evidence": "Rust bridge declaration matches production C int/int/unsigned-long/int/int/unsigned-long/char*/int and pointer return. Uses pages,0,2,-1,0,ULONG_MAX,read-only CPU_FILE diagnostic pointer,line; matches existing allocator arguments. Rust source Thread repr(C) and existing assertions compile; fixture additionally asserts size5568 align64 fp_regs4784. C fixture uses a layout stand-in, so production-header/compiler ABI must still bind during exact image build."
+    },
+    {
+      "invariant": "Nonzero errors retain clone cleanup",
+      "decision": "PASS",
+      "evidence": "Only production x86 caller is kernel/process.c clone_thread copy_fp_regs(org,thread), immediately branches any nonzero result to free_fp_regs. That label invokes existing process_release_fp_regs_result(thread,release_fp_regs), then frees thread pages. Null/invalid configuration errors introduce safe rejection for states outside valid saved-source lifecycle; invalid C behavior is not used as an oracle. Parallel scheduler admission modifications are excluded from this review."
+    },
+    {
+      "invariant": "No accidental FP/SIMD or ABI expansion",
+      "decision": "PASS_SOURCE",
+      "evidence": "Exact body compiled by retained pinned rustc1.92 flags; disassembly contains only GPR operations and calls allocator/memset/memcpy. C/Rust extern-C signatures use pointers and i32 only, and actual fixture crosses that ABI successfully. Inherited disabled-sse2 host-target warning is retained, not suppressed: no FP/vector argument or return is involved here. Future compiler upgrade needs explicit target-profile review. Object scan does not certify transitive memcpy/memset implementations; final linked closure must preserve kernel implementations and no-SIMD profile."
+    },
+    {
+      "invariant": "Language boundary and preserved accepted C fixes",
+      "decision": "PASS",
+      "evidence": "New behavior is Rust; C expansion is ABI/config forwarding only. Original corrected C body remains intact in #else; live C check_and_allocate_fp_regs/save_fp_regs/release_fp_regs paths remain in use. No whole-FPU, cpu.c, scheduler or whole-kernel retirement claim is supported."
+    }
+  ],
+  "evidence_validation": {
+    "all_retained_manifest_hashes_match": true,
+    "command_statuses": {
+      "rust-symbols.status": "0",
+      "fixture-compile.status": "0",
+      "fallback-c-object.status": "0",
+      "fallback-symbols.status": "0",
+      "rust-version.status": "0",
+      "selected-symbols.status": "0",
+      "rust-disassembly.status": "0",
+      "selected-c-object.status": "0",
+      "fixture-run.status": "0",
+      "rust-kernel-object.status": "0"
+    },
+    "fixture_stdout_lines": 65,
+    "fixture_stderr_bytes": 0,
+    "retained_cases": "64 C/Rust parity combinations across 1/512/2696/4096/4097/8192/11008/12289 byte extents; allocation/preallocated/null-source/failure combinations; 8 invalid-config pairs plus null-source subchecks; 2 null-thread pointers",
+    "reexecuted_behavior_suite": false,
+    "reason": "Reused immutable passing test-3 logs/objects, verified every manifest hash and reviewed extracted production bodies, oracle and fixture. No concrete behavior gap required replay."
+  },
+  "failure_history": "Author test-1 fixture type-inference error retained; one explicit-signature correction passed test-2; warning cleanup/rustfmt test-3 passed. No production-body failure or repeated unchanged attempt in this lane.",
+  "acceptance_limits": [
+    "Source/default-selection object admission only; no full production cpu.o or Rust kernel crate build",
+    "No matched image/link or guest/native runtime acceptance",
+    "Existing accepted image08210 uses previous corrected C copy; its behavior evidence is not Rust-cutover evidence",
+    "No new distinct app/native behavior, practical milestone closure, or deferred original qualification credit"
+  ],
+  "next_required_observation": [
+    "Dispatcher packages exact frozen CPU and Rust helper bytes into next candidate using existing reviewed build/ownership profile; freeze adjacent scheduler changes separately before combined packaging.",
+    "Compile actual production cpu.o and full mckernel_rust object with supported profile and pinned toolchain; capture actual macro/config and command bytes, prove selected copy_fp_regs calls resolved rust_x86_copy_fp_regs, and bind C Thread fp_regs offset to Rust ABI4784.",
+    "Link matching image and prove Rust body/default consumer plus correct allocator/memcpy/memset closure in final linked artifact; retain image/source/config/toolchain hashes and verified teardown.",
+    "Run next separately admitted native FPU/vector fork/thread/syscall/signal diagnostic on that exact image with complete stdout/stderr/status/kernel log and retirement. Only then claim native Rust FPU-copy cutover behavior."
+  ],
+  "execution_release": false,
+  "write_scope": "This scratch report only; no implementation, Git, Docker, root, module, image or guest operation."
+}

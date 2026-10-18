@@ -2,6 +2,42 @@
 
 Updated: 2026-06-02
 
+## Current user priority — functional OS (2026-10-17)
+
+Build the working kernel and application infrastructure defined by
+`docs/verification/os-milestones-20260914/PRACTICAL-GOAL.md`; its practical scope
+supersedes older comprehensive qualification targets, which remain deferred.
+State this functional scope in every worker assignment. Defer unrelated security
+audits, threat modeling and hardening projects. Prioritize implemented OS features,
+compiler feedback and useful application execution. Preserve memory correctness,
+ownership, host/resource controls and evidence. Ordinary crash recovery may use
+the existing checkpoint/fresh-session mechanism after positive retirement;
+service-policy rejections remain preserved and reported, without automatic
+conversation rollback or replay of rejected work.
+
+## Active functional delivery and Rust cutover — 2026-10-18
+
+Functional delivery AND actual retirement of live McKernel compute C into Rust
+plus reviewed assembly are active objectives. Earlier practical whole-image
+zero-C deferral does not postpone this implementation work. Require production
+default consumer, linked artifact and native proof before claiming a port retired.
+Keep a concise per-path table in the existing handoff; preserve original scope
+IDs/tables and distinguish integration estimates from language-retirement status.
+
+## User language boundary — 2026-10-18
+
+New McKernel compute-kernel functionality must use Rust plus reviewed assembly.
+Do not expand compute-kernel C implementations or add C subsystems. Prefer
+existing tested ABI boundaries. If a repair would expand live compute C,
+prepare and report the concrete exception before integration.
+
+Preserve the accepted correctness fixes in existing `cpu.c` and `process.c`.
+Their linked paths execute in the accepted image; they are not fallback-only
+verification. Do not revert working code or describe practical M09 integration
+estimates as whole-kernel Rust conversion. Linux control-plane compatibility C
+remains allowed, including the three host-side `mcctrl_vm_write_compat.c` MM API
+wrappers. Keep this boundary in future worker assignments.
+
 ## Active stability and complete-verification goal (2026-09-13)
 
 The user has authorized implementation of the full stability/verification

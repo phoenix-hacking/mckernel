@@ -1,5 +1,45 @@
 # Resume cursor
 
+## Active Rust cutover cursor — 2026-10-18 04:48 UTC
+
+User requires functional delivery AND retiring live compute C into Rust/reviewed
+assembly. This supersedes earlier practical zero-C deferral for implementation;
+original IDs/tables/qualification records remain unchanged. See current GOAL,
+PRACTICAL-GOAL and AGENTS. No new compute C behavior; preserve working image08210.
+
+| C entrypoint/body | Rust replacement | Actual default consumer | Tested artifact | Retirement status |
+| --- | --- | --- | --- | --- |
+| cpu.c copy_fp_regs | rust_x86_copy_fp_regs in x86_cpu_helpers.rs | C copy_fp_regs ABI shim under existing MCKERNEL_RUST_X86_CPU_HELPERS; process.c thread-copy caller | Extracted real Rust/default C objects;64 parity+10negative, source review2b554ad8 | Source/default selection proven; production image/native pending. Original C fallback retained. C save/allocation helper still live. |
+| process.c schedule FPU admission | sched_schedule_fp_admit in sched_helpers.rs | schedule under existing MCKERNEL_RUST_PROCESS_HELPERS, before runqueue prepare | Real Rust/default C objects;16 parity/IRQ/fail-stop, source reviewb952d9d9 | Source/default selection proven; production image/native pending. Original corrected C prelude retained. |
+| process.c post-switch exited-thread cleanup | Next bounded Rust scheduling body (not yet implemented) | schedule architecture continuation | Image08210 currently executes C continuation | Next named retirement boundary; no completion credit. |
+
+One coherent FOUR-file Rust image candidate is being prepared by
+rust_cutover_image_preparation from immutable08210 source plus only the two
+independently reviewed ports. Reuse compatible d99 host modules; do not wait for
+unrelated host thunk/objtool conformance. Require full production-header ABI,
+CPU/Rust compilation, final linked default selection and native vector/thread
+execution before claiming retirement. No source-only file or symbol counts.
+
+Host strict-module diagnostic: exact118-token C auditPASS and full3modulemake0;
+artifacts HELD on missing2Rust thunk imports and reviewed composite objtool
+--werror omission plus2warnings. All15clients/CID/records/root27:4 retired:
+[actual result](../evidence/native-fork-strict-c-build-result-review-20261018-1.json)
+1b93565e. Host objtool source repair continues privately; no build replay and no
+fork activation. Three MM C wrappers are Linux control-plane glue, not compute C.
+
+
+## Language boundary adopted — 2026-10-18 04:33 UTC
+
+User explicitly requires new compute-kernel functionality in Rust plus reviewed
+assembly; no compute C expansion or new C subsystem. Existing accepted cpu.c
+and process.c repairs are live linked paths in image08210 and remain preserved.
+A future live compute-C expansion needs a concrete exception reported before
+integration. Host Linux control-plane compatibility C remains allowed (including
+three mcctrl_vm_write_compat.c wrappers). Practical M09 integration estimates do
+not claim whole-kernel Rust conversion. AGENTS.md carries this instruction;
+include it in subsequent worker packets. Current strict host build is unaffected.
+
+
 ## Native second-stop result — 2026-10-18 04:32 UTC
 
 Actual image08210/d99 case accepted: generation1 PID256 and generation2 PID265

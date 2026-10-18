@@ -12,7 +12,7 @@ This file describes supervision, not OS acceptance or execution authority.
   historical; this inspection does not change goal-tool state or create a timer.
 - Engineering campaign: `01a149eb-f950-7f13-95a2-59dfc2918d49`; sole runtime/Git owner.
 - Campaign explicitly resumed by the user at`2026-10-18T01:31:35Z`; running with
-  an active goal at04:05:54UTC. Worker760063/start8454148 and server760065/start8454153
+  an active goal at04:35:31UTC. Worker760063/start8454148 and server760065/start8454153
   are live. Run directory:`.git/os-autopilot/runs/20261018T013135Z-08003bf4`.
   The old19:33UTC stop and its evidence remain in the
   [stop handoff](SUPERVISOR-STOP-20261017T193320Z.md). No automatic policy retry added.
@@ -20,21 +20,22 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-18T04:05:54Z`, review17, interval30m15s.
+- Last full review: `2026-10-18T04:35:31Z`, review18, interval29m37s.
 - User explicitly requested the interactive30-minute supervision loop again.
-  Next full review target:`2026-10-18T04:35:00Z`, latest05:05UTC. Continue the
+  Next full review target:`2026-10-18T05:05:00Z`, latest05:35UTC. Continue the
   loop in this chat; no independent OS timer or second dispatcher is installed.
   Exclude the19:33UTC-to01:31UTC stopped interval from velocity.
-- Last launcher-reported included usage:7% in the new weekly primary window;
+- Last launcher-reported included usage:8% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
-- Current intervention: review17 steering queued as
-  `20261018T040655713139Z-1305772e0e2a4500bf1309f4a845df4a`. Host54.102GiB,
-  scratch14.596GiB at cutoff. New image artifact review and AVX stage accepted;
-  exact observation review now passes, while retained-terminal cleanup and both
-  workload releases remain pending. Conditional66 inputs are published, fetched,
-  materialized and reviewed; corrected capture reserve is656MiB above each floor.
-  Activate idle authors for corrections, supply exact consumer decision shapes,
-  and exercise inherited wrapper limits before the next handoff.
+- Current intervention: review18 steering queued as
+  `20261018T043844401053Z-4426c709ba3e4adbb0eabd9c7d5e5f35`. Host53.991GiB,
+  scratch14.535GiB at cutoff. New-image AVX and two-stop lifecycle results pass;
+  retained-terminal cleanup is accepted. C compiled in the conditional66 attempt,
+  but command audit stopped the full module phase. Strict derivative is prepared
+  for its new release. User reaffirmed active McKernel Rust/assembly retirement;
+  live compute C is not fallback-only. FPU-copy Rust task activated post-cutoff
+  at04:36:51; process/scheduling retirement is next. Old M09 integration estimates
+  are not language-conversion percentages.
 - Current invocation independently accepted app/diagnostic behaviors: 16 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -1549,3 +1550,91 @@ Current private evidence roots under scratch:
 `native-fork-conditional66-materialization-20261018-1`,
 `native-fork-conditional66-release-assembly-20261018-1`,
 `native-fpu-copy-observation-execution-review-20261018-1`.
+
+## Review 18 — 2026-10-18 04:35:31 UTC
+
+Interval04:05:54 to04:35:31UTC,29m37s. Campaign running/active with the same
+worker/server identities and no new service stop. Included usage7% to8%, stop97%.
+HEAD ba21cb3a; host53.991GiB/scratch14.535GiB. Floors and selected reserves remain.
+
+| Measure | Change this interval |
+| --- | --- |
+| Distinct native application behaviors | 16 to16; accepted replays/lifecycle observations add no new app |
+| Practical checklist | 3complete/32open; all14milestones open |
+| Image08210 | Actual AVX/YMM/SSE/x87 replay and full retirement independently accepted |
+| Native lifecycle | Both workloads across reboot, two strict stops and two public releases accepted |
+| Conditional66 build | C compiler succeeds; command audit fails; full Rust/module phase remains unrun |
+| Strict derivative | Explicit KCFLAGS=-Werror in both phases; source/profile/11-file binding reviewed; published/materialized for a new release |
+| Rust retirement | User reaffirmed active compute-kernel migration; no Rust cutover achieved at cutoff |
+
+Read-only observation and exact retained-terminal cleanup completed with separate
+decisions. Cleanup accepted04:10:56 with both original ownership inodes archived,
+all four protected objects unchanged, container absent and mutex free. AVX command
+started04:11:47:51seconds after accepted cleanup, within the five-minute target.
+The owner/readbacks completed in35.65s. Independent acceptance04:14:22 verifies
+380-byte stdout, empty stderr, exit0 and exercised state preservation, plus all
+30clients/QEMU/container/lease retirement. This is repaired-image regression,
+not direct child-copy-tail proof or a seventeenth distinct behavior.
+
+The next module attempt completed04:16:47,2m25s after AVX acceptance, including
+admission and the operation itself. The C target returned0 with empty stderr;
+strict audit expected three in-tree tokens omitted by external-module Kbuild.
+Full Rust/module compilation never started. Positive retirement is independently
+accepted. Failed-owner gating initially withheld readbacks; preserved compiler
+logs later established the cause. The new strict candidate explicitly adds
+KCFLAGS=-Werror in both phases, preserving warning policy. Actual retained C
+command/header/symbol controls and independent source checks pass; owner/driver
+bindings now match. Original failed state is preserved, not relabeled successful.
+
+Second-stop staging initially fed the new image to the overlay's disallowed
+duplicate-image path. Correction reused the accepted image-only base-derivation
+pattern over this case's own base, preserving61 records/43 nonzero timestamps,
+then unchanged build_overlay. Actual runner/owner and changed-binding negatives
+pass. Its new wrapper permits bounded failure captures only after source-known
+positive retirement; uncertainty still holds. Guest running04:27:07 follows the
+conditional decision04:26:04 by63seconds. Acceptance04:30:52 verifies both signal
+workloads, literal status5/shutdown0/query0/close0 stops and both public releases.
+Thirty clients, container and mutex retire. Physical mapping identity,
+callback/reference restoration and final ten-cycle quota remain unproved.
+
+Two immutable same-scope comparisons record subjective engineering changes:
+[04:19:08](practical-engineering-estimate-20261018T041908Z.md) moves onlyM07
+45–65% to50–70% for the built repaired image/native replay;
+[04:38:03](practical-engineering-estimate-20261018T043803Z.md), cutoff04:35:31,
+moves onlyM05 50–70% to55–75% for the second stop/public release. These are
+low-confidence judgments, not measured pass fractions. Earlier M04 gains and
+all prior tables remain unchanged. No whole-OS score is inferred.
+
+M07 requirements review removed an unnecessary exact-IFUNC-offset requirement
+where a justified state-class bound would suffice. AVX-512 is unexposed and
+multicore is outside this retained one-McKernel-CPU profile. The bounded fixed-app
+declaration still leaves MPX/PKRU reachability unresolved; a libc pkey_set body
+does not prove the applications call it. No full M07 acceptance follows.
+
+**User priority correction:** whole-McKernel Rust/assembly retirement is active
+alongside functional delivery. Current cpu.c/process.c paths are live in the
+accepted image. Existing C fixes advanced functionality, not language cutover;
+M09's old80–95% integration estimate is not percent converted to Rust. Preserve
+the baseline/reference C and evidence, implement new compute behavior in Rust
+or reviewed assembly, and do not expand compute C. Three host-side Linux MM
+wrappers remain explicitly distinguished from compute-kernel implementation.
+The dispatcher was instructed to implement the known FPU-copy boundary in its
+existing Rust framework and route the actual default consumer to it; process/
+scheduling retirement follows. Post-cutoff04:36:51, rust_fpu_copy_cutover became
+active. No completed port is claimed from that assignment.
+
+**Next:** keep the real Rust implementation and first fully admitted strict host
+build parallel. Track C entrypoint, Rust replacement, default consumer, tested
+artifact and actual retirement in the existing cursor. New assignments use
+fresh contexts, exact consumer decision records and prompt idle-worker
+activation. No extra framework or broad corpus rehash. Two useful runtime
+observations and a C compilation occurred this interval; no2x/3x throughput
+claim is justified. Next full review05:05UTC, latest05:35; continue the loop.
+
+Canonical evidence under ../evidence/:
+`native-fpu-copy-image-terminal-result-review-20261018-1.json`,
+`practical-m07-avx-cpu-copy-image-result-review-20261018-1.json`,
+`native-fork-conditional66-build-result-review-20261018-1.json`,
+`native-second-stop-actual-result-review-20261018-1.json`,
+`native-fork-strict-c-command-source-review-20261018-1.json`,
+`practical-m07-current-requirements-review-20261018-1.json`.

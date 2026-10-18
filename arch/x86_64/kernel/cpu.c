@@ -3283,6 +3283,15 @@ out:
 	return ret;
 }
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern int rust_x86_copy_fp_regs(struct thread *from, struct thread *to,
+		int available, int size);
+
+int copy_fp_regs(struct thread *from, struct thread *to)
+{
+	return rust_x86_copy_fp_regs(from, to, xsave_available, xsave_size);
+}
+#else
 int copy_fp_regs(struct thread *from, struct thread *to)
 {
 	int ret = 0;
@@ -3297,6 +3306,7 @@ int copy_fp_regs(struct thread *from, struct thread *to)
 	}
 	return ret;
 }
+#endif
 
 static void restore_default_fp_regs(struct thread *thread)
 {

@@ -20,7 +20,7 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 | M06 | Processes, threads and used syscalls | partial | open | Selected apps have working process creation/exec/wait and thread/syscall semantics. | Rust std proves overlapping worker lifetimes, joins/TLS/mutex counter2000. Deterministic blocking conelevention and process fork/exec/wait remain open. |
 | M07 | Used FPU/vector state | partial | open | Actually used vector/FPU state survives switching, syscalls and signals. | Distinct native behaviors16 unchanged by this repeat. Rebuilt CPU-copy image08210bb2 is linked-body reviewed and actually passes the unchanged AVX/YMM/SSE/x87 diagnostic with full retirement. Extent repair is no longer source-only. Whole used-feature/IFUNC, untested vector/multicore and final-profile closure remain open. |
 | M08 | Native modules and interfaces | partial | open | Matched native modules build/load and used ABI/lifetime paths work. | Currentd99 matched three-module build accepted18.148s; newSMP82c9021f loaded, onepublicnativecycle andsecondbootRunning5 passed. IHK/mcctrl bytes unchanged. Fork/currentchangedunsafe andcomplete lifetime obligations still open. |
-| M09 | Rust and assembly integration | partial | open | Preserved Rust consumers and changed language boundaries are tested. | Existing Rust/assembly consumers remain active in retained baseline. Changed final language boundaries await matched artifact validation. |
+| M09 | Rust and assembly integration | partial | open | Existing Rust consumers preserved; live McKernel compute C retired into Rust/reviewed assembly through production default consumers, linked artifacts and native proof; host compatibility exceptions explicit. | Active compute Rust cutover: copy_fp_regs -> rust_x86_copy_fp_regs and schedule FPU admission -> sched_schedule_fp_admit implemented/source-reviewed with default-selection and actual-body tests. Production CPU/Rust objects, linked image and native proof pending. Known-good08210 C paths preserved/live; next process/scheduling boundary is post-switch exited-thread cleanup. Host MM compatibility C explicitly allowed. No language-completion or percentage claim. |
 | M10 | Repeatable runnable build | partial | open | Pinned recipe replays a matched runnable artifact set. | One actual external3module compile using pinned retainedRO Linuxbasis; all3artifacts accepted after validator-onlycorrection. Finalcleanrecipe replay stillrequired. |
 | M11 | Integrated functional regression | partial | open | Relevant regressions and negatives pass without unexplained corruption or retained owners. | Fourteen distinct diagnostic/app behaviors accepted; original failures and raw captures retained. Native lifecycle and final integrated regression suite remain open. |
 | M12 | Bounded repeatability and stress | unmeasured | open | Two fresh boots, ten native cycles, 100 app launches and 60-minute mixed workload pass. | Thirteen successful diagnostic/app invocations, not vectors. Final-profile 2boots/10nativecycles/100launches/60minutes remain unproven. |
@@ -81,8 +81,8 @@ Original formal qualification is **historical / DEFERRED**. Deferred does not me
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-18T04:31:55+00:00`
-- Launcher state heartbeat: `2026-10-18T04:31:53.035643+00:00`
+- Dashboard refreshed: `2026-10-18T04:55:53+00:00`
+- Launcher state heartbeat: `2026-10-18T04:55:48.268274+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `760063`; server PID: `760065`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261018T013135Z-08003bf4`

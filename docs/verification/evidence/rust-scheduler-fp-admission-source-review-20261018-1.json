@@ -1,0 +1,69 @@
+{
+  "schema": "mckernel-independent-source-review-v1",
+  "created_utc": "2026-10-18T04:47:23.204114+00:00",
+  "reviewer": "/root/rust_scheduler_fp_admission_review",
+  "author": "/root/rust_scheduler_fp_admission_cutover",
+  "decision": "PASS_SOURCE",
+  "scope": "Functional supported-profile kernel and apps; independent Rust scheduler FPU-admission unsafe/IRQ/ABI/default-consumer source and extracted-object review. No implementation ownership, no native acceptance.",
+  "language_boundary": "New selected compute-kernel behavior is Rust with existing assembly/ABI bridges. Corrected C prelude remains exact fallback/reference; no expanded C behavior.",
+  "reviewed_packet": {
+    "path": "/home/holden/mckernel-work/scratch/rust-scheduler-fp-admission-cutover-20261018-1/implementation-test-packet.json",
+    "sha256": "8dc9671fa58cb8d2d93de574157181deec6dac7ab8db5d5b81f853c9d33fd82f"
+  },
+  "reviewed_port_table": {
+    "path": "/home/holden/mckernel-work/scratch/rust-scheduler-fp-admission-cutover-20261018-1/port-table-row.json",
+    "sha256": "02500256f8596a591324a302e5654a78a147494d08ab7fcd0dde679e0cbb675d"
+  },
+  "source_sha256": {
+    "kernel/process.c": "74017a5b0b5d0efaf7772b6eefde51401510e61d75a41988e4d4012dd601e43b",
+    "kernel/rust/sched_helpers.rs": "76f99ea7f4e4bf63114735d11c1226d4a8783b6bdb1eeb637e1ca20eb9bd7ba8",
+    "kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "kernel/rust/atomic_helpers.rs": "8acf10a907cede816da8300d36bf967d938cc672dd75dbb3ecc8f3992ec42941",
+    "kernel/rust/process_helpers.rs": "4991258b970e49a1998f3605311f08da96a3fcd218ef02e8b8afeb73b6e24911",
+    "kernel/rust/abort.rs": "443c480129b1191c0cd2b7ccf3663e185f5cb7cb386512854286404e11236d2a",
+    "lib/include/ihk/debug.h": "7315ef758c56c4888242295ed9340b44f649d772b1315502acc49eb6105048dc",
+    "kernel/include/process.h": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+    "kernel/rust/lib.rs": "efe5379e2e81dc15995bca9fb243b9d1cf5ac9074fd7b869dda696a1bc9de723",
+    "kernel/CMakeLists.txt": "0fb8528175443a0cab4b1b12e62a2b9851b918b416f9a235f598cb143f616e35",
+    "kernel/rust/tests/run_equivalence.sh": "2f95bf133e7322a9a6f2fd9a9102013f2154f506d099f5c570c752a8e1711a7a",
+    "scripts/tests/fixtures/rust_scheduler_fp_admission_20261018.rs": "b099a65e51745d0217b878c698ca3533953fe84a1e57b8bbef1c9925d645f9d0",
+    "scripts/tests/test_rust_scheduler_fp_admission_20261018.py": "9a229ef5f3de10adba786b68d6592014d5f4446e3ac0b9de45ecf354ef433ad6"
+  },
+  "evidence": {
+    "root": "/home/holden/mckernel-work/scratch/rust-scheduler-fp-admission-cutover-20261018-1/check-3",
+    "artifact_manifest_sha256": "58973b929966e7433605c0989cc5d088ea3afecafd5e2d4e069a2b2dc917c355",
+    "files_verified": 142,
+    "command_statuses_verified": 40,
+    "parity_case_configurations": 16,
+    "variant_children": 32,
+    "fail_stop_children": 4,
+    "review_replayed_tests": false
+  },
+  "findings": [],
+  "reasoning": [
+    "Existing process_sched_irq_save_bridge disables IRQs before processor lookup, CPU-local lookup, no_preempt/current/status observation or save. Raw pointer formation avoids constructing exclusive Rust references to shared CPU/thread objects. SeqCst AtomicI32 read matches existing ihk_atomic_read and 4-byte aligned CInt counter ABI.",
+    "CPU-local current cannot be locally rescheduled between IRQ exclusion and existing preparation. The port adds no new lock ordering: it takes no runqueue lock before save. Existing remote status and lifetime assumptions are preserved rather than widened.",
+    "Short-circuit tests preserve no_preempt(nonzero including negative), null, idle and exited exclusions. Any nonzero save return invokes the actual nonvariadic panic ABI with a NUL-terminated static message and Rust never return type; no restore, prepare or queue mutation is reachable after failure.",
+    "Existing panic only stops the calling CPU, not all CPUs. This retained limitation is stated and not expanded into global safety acceptance.",
+    "C default path calls the helper exactly once before sched_schedule_prepare_body_result. Nested IRQ-save during preparation sees IRQs already disabled. Non-switch C restore uses original entry flags; switch path replaces runq_irqstate with original entry flags while runqueue lock and IRQ exclusion remain held, preserving existing migration-aware unlock/restore continuation.",
+    "Extern C int/i32, unsigned long/u64 on supported x86_64, pointer/usize/u64 bridge return, and panic const-char-pointer types agree. Complete Rust Thread/CpuLocalVar ABI module and its compile assertions were compiled; retained C fixture asserts matching selected sizes/offsets. Full production C/header compile remains pending.",
+    "Frozen C fallback hash, retained poisoned pre-IRQ fields, all 32 child statuses/streams and complete artifact hashes verify. The inspected Rust object has ordered IRQ-save/local lookup/loads/save/panic and no SIMD instructions. These controls support bounded source/object parity only.",
+    "Default ENABLE_RUST_KERNEL ON, process.c macro definition and sched_helpers module inclusion establish source selection. Extracted selected C object references new helper and fallback does not; complete target linking has not yet established whole-image symbol closure."
+  ],
+  "next_build_conditions": [
+    "Dispatcher packages exact reviewed process.c/sched_helpers.rs and matching separately reviewed FPU-copy cpu.c/x86_cpu_helpers.rs sources; bind complete source, IHK/config and pinned toolchain identities.",
+    "Run full actual target Rust crate and production C compilation with supported profile feature cfgs and existing no-SIMD kernel flags; resolve every symbol without duplicate definitions.",
+    "Inspect linked image/default process schedule consumer and helper/save/panic/IRQ bridge ownership; confirm no fallback C admission executes under default Rust selection.",
+    "Native startup and relevant FPU/scheduling/error evidence require current separately valid heavy execution release, resource lease, complete capture and verified teardown; this review does not release guest/root work."
+  ],
+  "limitations": [
+    "No full target Rust crate or production C build performed by this review.",
+    "No full image link, guest/native run, FPU allocation-failure runtime or cross-CPU stop claim.",
+    "Concurrent arch FPU-copy implementation changes are outside this review and require their independent review.",
+    "No added native apps or current-candidate image builds; deferred qualification remains deferred."
+  ],
+  "counts": {
+    "new_native_apps": 0,
+    "new_current_candidate_image_builds": 0
+  }
+}
