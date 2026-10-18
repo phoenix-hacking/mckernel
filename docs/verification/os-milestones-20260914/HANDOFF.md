@@ -1,5 +1,56 @@
 # Compact dispatcher handoff
 
+## Current — ninth Rust production path; native continuation pending (2026-10-18 16:35 UTC)
+
+Functional OS/apps and actual compute Rust/reviewed-assembly migration remain
+active; refused execve and service-held fork/ACK work remain excluded.
+
+Image3bfc1dfb (7926720B) has independent artifact/default-link/guard-retirement
+PASS671a0fa2. Actual GCC14.3.1 CPU/full process.c ABI checks and make passed;
+new Rust sched_schedule_debug_handoff is linked before FP/context switch.
+Prior CPU object and eleven relevant prior Rust function bodies are unchanged.
+Nine selected production Rust paths; seven applicable native paths. The ninth
+path still needs the current-image AVX/threads native chain; DR hardware-branch
+coverage is not claimed. Architecture debug-register helpers remain live C.
+
+Exact image release87775d43 completed once0/201.340s;14 ordinary inspections and
+four exact artifact copies completed0/4.949s. Retained15-pair authoritycb6768a2
+completed0/0.210s and was consumed BEFORE canonical terminal source publication.
+Four existing artifact copies were reused; eleven extra files total1054564B.
+All original IHK failures remain preserved; IHK-only accepted artifact is reusable.
+
+Canonical host/scratch terminal engine and test are published (source review
+35eefd72); its actual default-import39 tests pass0/1.756s. New checkpoint/fetched
+closure and exact root observer release are next. Stopped CIDcb0d09359623b0aeda23
+f3bce24aadfabb869d615af80c5dc021663ed4f35c25 and common/shared records remain
+intentionally retained, not an uncertain live compiler. No cleanup/new guest
+until their exact reviewed physical release.
+
+AVX and Cthreads ordinary staging passed once17.126s/16.986s; actual acceptance
+afb6695c. Each60-map changes only the image. Modified AVX runner AND owner replay
+passed; finite parent/execution proposals are under independent review. Native
+attempt rootsdn-5cf76f33 remains absent. Use those ready preparations after terminal
+release; do not regenerate archives/oracles. Cthreads guest requires accepted AVX
+and positive predecessor retirement.
+
+Next executable: checkpoint/fetch canonical terminal/source closure -> exact
+root observer + bounded raw readback -> actual review + separately released
+cleanup -> fresh admission and staged AVX, then threads. Terminal packet:
+/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-terminal-preparation-20261018-1/
+final-handoff-refs.json. Guest packet: host-preparation/rust-scheduler-debug-guest-
+continuation-20261018-1/actual-image-joins-1/consumer-binding-1 (same work prefix).
+
+One private next-port candidate clear_debugreg has independent source-boundary
+PASS3c997b60 and meaningful parity/assembly negatives. No current image changes;
+full syscall.c GCC14/real crate link/native proof remain OPEN. Preserve this sole
+independent draft; it must not delay the current native chain.
+
+Counts19 distinct native behaviors,6 complete/29 open practical checks,all14
+milestones open. P-M00-02 remains open solely for current exact next terminal
+command/release; recoverable3f9 checkpoint is verified. No subjective percentage
+or2x/3x acceptance credit. Keep one-heavy/floors+growth+reserves/97% usage stop,
+all failed evidence, unrelated dirty sources and scratch21 container/locks.
+
 ## Physical release accepted; scheduler build finalization — 2026-10-18 15:54 UTC
 
 Independent PASS_EXECUTED80daa92d accepts only exact IHK owner recovery:124 complete
@@ -202,7 +253,7 @@ physical release. No native behavior/check closure credited for maintenance.
 | cpu.c clear_fp_regs | Rust idle saved/default | production492; native OPEN, refused execve task EXCLUDED |
 | cpu.c signal MXCSR mask | Rust mask bridge | production492 + accepted AVX signal chain |
 | cpu.c signal FP reset | Rust checked reset bridge | production492 + NULL x87 native e0d2fd97; wider state branches OPEN |
-| process.c scheduler debug handoff | sched_schedule_debug_handoff | source3ec75f49/216 parity cases; production C ABI, image and native OPEN |
+| process.c scheduler debug handoff | sched_schedule_debug_handoff | production671a0fa2: actual GCC14 C ABI and linked default; native OPEN, architecture DR C remains |
 
 These are selected path proofs, not whole-kernel language retirement. Existing
 architecture save/clear/restore debug-register helpers remain live C. No new C

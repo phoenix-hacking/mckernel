@@ -33,21 +33,21 @@ REPO = Path('/home/holden/mckernel')
 PUBLISHED_SCRIPT = 'scripts/native_rust_cutover_image_terminal_cleanup.py'
 PUBLISHED_TESTS = 'scripts/tests/test_native_rust_cutover_image_terminal_cleanup.py'
 SELFTEST = REPO / PUBLISHED_TESTS
-NAMESPACE = Path('/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1')
-NAMESPACE_ANCESTRY = [{'path': '/', 'device': 66306, 'inode': 2, 'mode': 16877, 'uid': 0, 'gid': 0}, {'path': '/home', 'device': 66306, 'inode': 45481985, 'mode': 16877, 'uid': 0, 'gid': 0}, {'path': '/home/holden', 'device': 66306, 'inode': 45481986, 'mode': 16877, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work', 'device': 66306, 'inode': 47459822, 'mode': 16893, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/scratch', 'device': 1828, 'inode': 2, 'mode': 16832, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1', 'device': 1828, 'inode': 115050, 'mode': 16832, 'uid': 1000, 'gid': 1000}]
-NAMESPACE_BINDING = {'device': 1828, 'inode': 115050, 'mode': 16832, 'uid': 1000, 'gid': 1000}
+NAMESPACE = Path('/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-materialization-final-20261018-1')
+NAMESPACE_ANCESTRY = [{'path': '/', 'device': 66306, 'inode': 2, 'mode': 16877, 'uid': 0, 'gid': 0}, {'path': '/home', 'device': 66306, 'inode': 45481985, 'mode': 16877, 'uid': 0, 'gid': 0}, {'path': '/home/holden', 'device': 66306, 'inode': 45481986, 'mode': 16877, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work', 'device': 66306, 'inode': 47459822, 'mode': 16893, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/host-preparation', 'device': 66306, 'inode': 47848559, 'mode': 16832, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-materialization-final-20261018-1', 'device': 66306, 'inode': 47853343, 'mode': 16832, 'uid': 1000, 'gid': 1000}]
+NAMESPACE_BINDING = {'device': 66306, 'inode': 47853343, 'mode': 16832, 'uid': 1000, 'gid': 1000}
 ROOT = Path('/home/holden/mckernel-work/scratch')
 UUID = '2a5768c8-718d-4914-bdc0-6b32c5a92a52'
 DEVICE = None  # A future, independently reviewed release binds the live device.
 UID = GID = 1000
-PREFIX = 'native-rust-fp-reset-image-terminal-cleanup-20261018-1'
+PREFIX = 'rust-scheduler-debug-terminal-preparation-20261018-1'
 CANDIDATE = None  # Derived only from the exact consumed image request at release validation.
-ATTEMPT = Path('/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/common-exclusion.json')
+ATTEMPT = Path('/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-materialization-final-20261018-1/common-exclusion.json')
 SHARED = ROOT / 'mckernel-heavy-operation.lock'
-REQUEST = Path('/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/image-request.json')
-LEASE = Path('/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/image-lease.json')
-OUTPUT = Path('/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work')
-EVIDENCE = Path('/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-evidence')
+REQUEST = Path('/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-materialization-final-20261018-1/image-request.json')
+LEASE = Path('/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-materialization-final-20261018-1/image-lease.json')
+OUTPUT = Path('/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-materialization-final-20261018-1/owner-work')
+EVIDENCE = Path('/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-materialization-final-20261018-1/owner-evidence')
 MUTEX = ROOT / (PREFIX + '.mutex')
 PLAN = ROOT / (PREFIX + '.plan.json')
 JOURNAL = ROOT / (PREFIX + '.journal.jsonl')
@@ -57,8 +57,8 @@ ARCHIVE_NAMES = (PREFIX + '.attempt.archive', PREFIX + '.shared.archive')
 ROOT_LOCK = Path('/run/lock/mckernel-development.lock')
 BASELINE_SOURCE_SHA = '6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed'
 NATIVE_BASELINE_SOURCE_SHA = '8449b4b87b2286d4dc3d08e0c5921d2d79e44f17920d0aaee3eae646993fc995'
-KNOWN_TARGET = {'container_id': '17a70957ba1e4ea6502fa9cc61cba65e969e4fb57b5de3c02cc279e7234aaa35', 'container_name': 'mckernel-image-aa032869665b4d949f4057c6a41b51c2', 'owner_nonce': '45f45cb206ca4520817f745c30efaedd', 'owner_pid': 939125, 'owner_starttime': '11175844'}
-REQUEST_SHA = 'ef554d370f68c1e47044b34a3e43f270694ba7edd08fbc9e05340181536c89dc'
+KNOWN_TARGET = {'container_id': 'cb0d09359623b0aeda23f3bce24aadfabb869d615af80c5dc021663ed4f35c25', 'container_name': 'mckernel-image-9ec350b7155842b084b554045ce50fba', 'owner_nonce': '5904d62b2c9942b2ad660abb9c3b1e02', 'owner_pid': 1077171, 'owner_starttime': '13649886'}
+REQUEST_SHA = 'dcea118a2423122d2a1501be998b8d86db75befd60dd9f4bdc2612818d6c8d43'
 IMAGE_CANDIDATE = '942c927b1ec93cc31284ff498455909d9bb2d0fc'
 ROOT_TERMINAL = None  # Exact future nonce-bound guard-result.json proof.
 CONTAINER = CONTAINER_NAME = OWNER_NONCE = OWNER_PID = OWNER_START = None
@@ -398,14 +398,14 @@ def recovery_proof_binding(binding, obs):
 
 def typed_source_binding(request, obs, selected_map):
     expected = {
-        'source_derivative_sha256': 'a347b555a2b692d536400e5e10658551dc3b4af8fdbf654e8e99e001a1a44219',
-        'materialization_sha256': '75762fb041ede77b454e53f578a22cf4dcacad6305a9dbb2057562157dc76d41',
+        'source_derivative_sha256': '50f1646c962e2f6a53fb8888a0c18936e410a765844397cc6ef788b0e93d767d',
+        'materialization_sha256': '342b5c248d515b1677d38e8ca5af9938ba0b298af11867653c481fbbfaf17abf',
     }
     manifest = NAMESPACE / 'thin-inputs.json'
     receipt_path = NAMESPACE / 'materialization-receipt.json'
-    pins = {str(manifest): 'b8a519813e0743419c9890ce9ce92d79772e7680df1605f5883e30a853f716c2',
-            str(receipt_path): 'c727938e192ef0032f31e3f5dc003bc4e7fba5f0082907b4217d52398c1a91bd'}
-    if (request.get('source_identity', {}).get('inode') != 628158 or
+    pins = {str(manifest): '08bc683d79365632cbdbe5d65260567b04f07f27f5c4aea14086ff6b09b156c7',
+            str(receipt_path): 'd612a016006d913a11b4d7349b9e63c723aecee9083c0da944061b7351ced869'}
+    if (request.get('source_identity', {}).get('inode') != 47853510 or
             any(request.get(key) != value for key, value in expected.items()) or
             request.get('candidate_identity_scope') != 'base_git_commit_only'):
         raise Refusal('typed-thin-source-required')
@@ -417,7 +417,7 @@ def typed_source_binding(request, obs, selected_map):
     if (receipt.get('status') != 'PASS_SOURCE_MATERIALIZATION_ONLY' or
             receipt.get('source') != str(CANDIDATE) or
             any(receipt.get(key) != value for key, value in expected.items()) or
-            obs['candidate_root'].get('inode') != 628158):
+            obs['candidate_root'].get('inode') != 47853510):
         raise Refusal('typed-materialization-authority')
 
 
@@ -480,7 +480,7 @@ def configure(value, execute=False):
     client_rows = obs['client_ledger']
     if not isinstance(client_rows, list) or not client_rows or any(set(r) != {'pid', 'status_path', 'status_sha256'} or type(r['pid']) is not int or r['pid'] <= 0 for r in client_rows):
         raise Refusal('positive-client-ledger-required')
-    guard_capture = ROOT / 'native-rust-fp-reset-image-guard-20261018-ea67660a5394461d8cdc8a06ca44cadc'
+    guard_capture = ROOT / 'native-rust-scheduler-debug-image-guard-20261018-1fdbb32eb93f4568999f6a1c8d2b06fb'
     if {r['status_path'] for r in client_rows} != {str(p) for p in guard_capture.glob('command-*/status.json')} or any(Path(r['status_path']).parent.parent != guard_capture for r in client_rows):
         raise Refusal('complete-current-guard-client-ledger-required')
     for row in client_rows:
@@ -544,7 +544,7 @@ def configure(value, execute=False):
     if len(records) != 2 or {r['path'] for r in records} != {str(ATTEMPT), str(SHARED)}:
         raise Refusal('exact-exclusions-required')
     for row in records:
-        if (row.get('device') != device or row.get('uid') != UID or row.get('gid') != GID or
+        if (row.get('device') != (NAMESPACE_BINDING['device'] if Path(row['path']) == ATTEMPT else device) or row.get('uid') != UID or row.get('gid') != GID or
                 row.get('mode') != '0o600' or row.get('nlink') != 1 or
                 type(row.get('inode')) is not int or row['inode'] <= 0 or
                 observe_identity(Path(row['path'])) != row):
@@ -557,7 +557,7 @@ def configure(value, execute=False):
         raise Refusal('duplicate-selected-file')
     ROOT_TERMINAL = Path(obs[proof_key]['path'])
     if proof_key == 'guard_proof' and (ROOT_TERMINAL.name != 'guard-result.json' or ROOT_TERMINAL.parent.parent != ROOT or
-            ROOT_TERMINAL.parent.name != 'native-rust-fp-reset-image-guard-20261018-ea67660a5394461d8cdc8a06ca44cadc'):
+            ROOT_TERMINAL.parent.name != 'native-rust-scheduler-debug-image-guard-20261018-1fdbb32eb93f4568999f6a1c8d2b06fb'):
         raise Refusal('image-guard-proof-path')
     joins = {'driver_path': 'driver_sha256', 'provenance_path': 'provenance_sha256',
              'host_owner_path': 'host_owner_sha256', 'source_manifest': 'source_manifest_sha256',
@@ -614,14 +614,29 @@ def configure(value, execute=False):
     PROTECTED = selected
     terminal = selected_map[str(TERMINAL)]
     TERMINAL_SHA, TERMINAL_INODE, TERMINAL_SIZE = terminal['sha256'], terminal['inode'], terminal['size']
-    DIRS = {path: (obs['inventories'][str(path)][0]['inode'],
+    DIRS = {path: (obs['inventories'][str(path)][0]['device'],
+                   obs['inventories'][str(path)][0]['inode'],
                    obs['inventories'][str(path)][0]['nlink']) for path in (OUTPUT, EVIDENCE)}
     validate_mount()
     protected_files()
 
+def path_device(path):
+    # Only the two frozen parents are supported. Never infer authority from a
+    # newly opened object's device or widen this to an arbitrary caller path.
+    if path in (ATTEMPT, OUTPUT, EVIDENCE, TERMINAL) or path in archive_paths()[:1]:
+        return NAMESPACE_BINDING['device']
+    if path in (SHARED, MUTEX, PLAN, JOURNAL, CAPTURE, QUARANTINE) or path in archive_paths()[1:]:
+        return DEVICE
+    raise Refusal('unmapped-fixed-device')
+
+def archive_paths():
+    # renameat2 exchange requires both names on the same filesystem. Each
+    # ownership record retains its archive beside its exact original parent.
+    return tuple(path.parent / name for path, name in zip((ATTEMPT, SHARED), ARCHIVE_NAMES))
+
 def transaction_paths():
     return [str(path) for path in (MUTEX, PLAN, JOURNAL, CAPTURE, QUARANTINE)] + [
-        str(ROOT / name) for name in ARCHIVE_NAMES]
+        str(path) for path in archive_paths()]
 
 def prepare_release(observation, git_commit, git_tree):
     """Bind only a supplied future runtime observation; always emit an unreleased draft."""
@@ -650,7 +665,7 @@ def terminal_result(status, plan):
             'plan_sha256': digest(canonical(plan)),
             'plan': observe_identity(PLAN), 'journal': observe_identity(JOURNAL),
             'capture': observe_identity(CAPTURE),
-            'archives': [observe_identity(ROOT / name) for name in ARCHIVE_NAMES],
+            'archives': [observe_identity(path) for path in archive_paths()],
             'publisher_contract': PUBLISHER_CONTRACT}
 
 def directory(path):
@@ -676,12 +691,15 @@ def exists(fd, name):
     except FileNotFoundError:
         return False
 
-def read_at(fd, name, binding=None):
+def read_at(fd, name, binding=None, *, expected_device=None):
+    expected_device = DEVICE if expected_device is None else expected_device
+    if type(expected_device) is not int or expected_device <= 0:
+        raise Refusal('unbound-file-device')
     opened = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=fd)
     try:
         before = os.fstat(opened)
         if (not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or
-            before.st_dev != DEVICE or before.st_size > LIMIT or
+            before.st_dev != expected_device or before.st_size > LIMIT or
             stat.S_IMODE(before.st_mode) != 0o600 or
             (before.st_uid, before.st_gid) != (UID, GID)):
             raise Refusal('file-shape:' + name)
@@ -943,7 +961,7 @@ class Transaction:
             meta = os.fstat(nfd)
             actual = dict(device=meta.st_dev, inode=meta.st_ino, mode=meta.st_mode, uid=meta.st_uid, gid=meta.st_gid)
             if (actual != NAMESPACE_BINDING or namespace_ancestry() != NAMESPACE_ANCESTRY or nchain != self.namespace_chain or
-                    identity(os.fstat(self.nfd)) != identity(meta) or meta.st_dev != DEVICE):
+                    identity(os.fstat(self.nfd)) != identity(meta) or meta.st_dev != NAMESPACE_BINDING['device']):
                 raise Refusal('namespace-parent-replaced')
         finally:
             os.close(nfd)
@@ -952,15 +970,15 @@ class Transaction:
 
     def preserved(self):
         self.pinned()
-        for path, (inode, nlink) in DIRS.items():
+        for path, (device, inode, nlink) in DIRS.items():
             fd = os.open(path.name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=self.parent_fd(path))
             try:
                 meta = os.fstat(fd)
-                if (identity(meta) != (DEVICE, inode) or meta.st_nlink != nlink or
+                if (identity(meta) != (path_device(path), inode) or device != path_device(path) or meta.st_nlink != nlink or
                     stat.S_IMODE(meta.st_mode) != 0o700 or (meta.st_uid, meta.st_gid) != (UID, GID)):
                     raise Refusal('preserved-directory-binding')
                 if path == EVIDENCE:
-                    read_at(fd, TERMINAL.name, (TERMINAL_SHA, TERMINAL_INODE, TERMINAL_SIZE))
+                    read_at(fd, TERMINAL.name, (TERMINAL_SHA, TERMINAL_INODE, TERMINAL_SIZE), expected_device=path_device(TERMINAL))
                 if identity(os.stat(path.name, dir_fd=self.parent_fd(path), follow_symlinks=False)) != identity(meta):
                     raise Refusal('preserved-directory-raced')
             finally:
@@ -1015,8 +1033,8 @@ class Transaction:
         if exists(self.fd, JOURNAL.name):
             raise Refusal('journal-without-plan')
         for path, archive in zip((ATTEMPT, SHARED), ARCHIVE_NAMES):
-            read_at(self.parent_fd(path), path.name, RECORDS[path])
-            if exists(self.fd, archive):
+            read_at(self.parent_fd(path), path.name, RECORDS[path], expected_device=path_device(path))
+            if exists(self.parent_fd(path), archive):
                 # A crash during preparation has not touched any active record.
                 # Retain unbound preparation, rather than adopt a foreign dir.
                 raise Refusal('unbound-sentinel-preparation')
@@ -1026,7 +1044,7 @@ class Transaction:
         fd = os.open(name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=parent_fd)
         try:
             meta = os.fstat(fd)
-            if (meta.st_dev != DEVICE or list(identity(meta)) != expected or meta.st_nlink != 2 or
+            if (meta.st_dev != expected[0] or os.fstat(parent_fd).st_dev != expected[0] or list(identity(meta)) != expected or meta.st_nlink != 2 or
                 stat.S_IMODE(meta.st_mode) != 0o700 or (meta.st_uid, meta.st_gid) != (UID, GID) or
                 os.listdir(fd)):
                 raise Refusal('sentinel-binding')
@@ -1041,8 +1059,8 @@ class Transaction:
         sentinels = value.get('sentinels') if isinstance(value, dict) else None
         if (not isinstance(sentinels, list) or len(sentinels) != 2 or
             any(not isinstance(row, list) or len(row) != 2 or
-                type(row[0]) is not int or row[0] != DEVICE or
-                type(row[1]) is not int or row[1] <= 0 for row in sentinels) or
+                type(row[0]) is not int or row[0] != path_device(path) or
+                type(row[1]) is not int or row[1] <= 0 for row, path in zip(sentinels, (ATTEMPT, SHARED))) or
             len({tuple(row) for row in sentinels}) != 2):
             raise Refusal('plan-sentinel-binding')
         plan = self.expected_plan(sentinels)
@@ -1053,19 +1071,20 @@ class Transaction:
     def prepare(self):
         self.pristine()
         sentinels = []
-        for archive in ARCHIVE_NAMES:
+        for path, archive in zip((ATTEMPT, SHARED), ARCHIVE_NAMES):
             self.pinned()
-            os.mkdir(archive, 0o700, dir_fd=self.fd)
+            parent = self.parent_fd(path)
+            os.mkdir(archive, 0o700, dir_fd=parent)
             self.mutation_started = True
-            fd = os.open(archive, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=self.fd)
+            fd = os.open(archive, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=parent)
             try:
                 os.fchown(fd, UID, GID)
                 expected = list(identity(os.fstat(fd)))
-                self.sentinel(archive, expected)
+                self.sentinel(archive, expected, parent)
                 os.fsync(fd)
             finally:
                 os.close(fd)
-            os.fsync(self.fd)
+            os.fsync(parent)
             sentinels.append(expected)
         self.create(JOURNAL.name, b'')
         plan = self.expected_plan(sentinels)
@@ -1118,15 +1137,15 @@ class Transaction:
             phase = min(max(len(rows) - 4 * index, 0), 4)
             archive = ARCHIVE_NAMES[index]
             sentinel = plan['sentinels'][index]
-            archived_meta = os.stat(archive, dir_fd=self.fd, follow_symlinks=False)
+            archived_meta = os.stat(archive, dir_fd=self.parent_fd(path), follow_symlinks=False)
             if stat.S_ISDIR(archived_meta.st_mode):
                 if phase not in (0, 1):
                     raise Refusal('exchange-state-regression')
-                self.sentinel(archive, sentinel)
-                read_at(self.parent_fd(path), path.name, RECORDS[path])
+                self.sentinel(archive, sentinel, self.parent_fd(path))
+                read_at(self.parent_fd(path), path.name, RECORDS[path], expected_device=path_device(path))
                 actual.append('before_exchange')
                 continue
-            read_at(self.fd, archive, RECORDS[path])
+            read_at(self.parent_fd(path), archive, RECORDS[path], expected_device=path_device(path))
             if phase == 0:
                 raise Refusal('unplanned-exchange')
             if exists(self.parent_fd(path), path.name):
@@ -1139,7 +1158,7 @@ class Transaction:
                     continue
                 # A fresh ordinary owner may acquire the name after release.
                 # Validate its shape only; never remove or claim its ownership.
-                read_at(self.parent_fd(path), path.name)
+                read_at(self.parent_fd(path), path.name, expected_device=path_device(path))
             if phase < 3:
                 raise Refusal('unauthorized-sentinel-release')
             actual.append('after_release')
@@ -1176,7 +1195,7 @@ class Transaction:
         plan = self.load_plan() if exists(self.fd, PLAN.name) else None
         if plan is None:
             if execute and (exists(self.fd, JOURNAL.name) or any(
-                    exists(self.fd, name) for name in ARCHIVE_NAMES)):
+                    exists(self.parent_fd(path), name) for path, name in zip((ATTEMPT, SHARED), ARCHIVE_NAMES))):
                 self.mutation_started = True  # Prior unbound mutation is uncertain.
             self.pristine()
             rows, actual = [], []
@@ -1224,13 +1243,13 @@ class Transaction:
                 self.append(plan, rows, 'before_exchange', index)
             rows, actual = self.state(plan)
             if actual[index] == 'before_exchange':
-                read_at(self.parent_fd(path), path.name, RECORDS[path])
-                self.sentinel(ARCHIVE_NAMES[index], plan['sentinels'][index])
+                read_at(self.parent_fd(path), path.name, RECORDS[path], expected_device=path_device(path))
+                self.sentinel(ARCHIVE_NAMES[index], plan['sentinels'][index], self.parent_fd(path))
                 self.pinned()
                 # Atomic exchange never vacates the active ownership pathname.
                 # A foreign capture fails validation while its sentinel stays
                 # active; neither object is deleted or speculatively rolled back.
-                rename_exchange(self.parent_fd(path), path.name, ARCHIVE_NAMES[index], self.fd)
+                rename_exchange(self.parent_fd(path), path.name, ARCHIVE_NAMES[index])
                 os.fsync(self.parent_fd(path))
                 os.fsync(self.fd)
             os.fsync(self.fd)
@@ -1298,6 +1317,7 @@ def recover(execute=False):
             signal.pthread_sigmask(signal.SIG_SETMASK, previous_mask)
 
 def main(argv=None):
+    # configure() requires exact independent source/execution releases before effects.
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--release', type=Path)
     parser.add_argument('--release-sha256')

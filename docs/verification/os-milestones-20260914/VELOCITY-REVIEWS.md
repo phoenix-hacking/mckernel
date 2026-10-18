@@ -6,16 +6,17 @@ Preserve completed entries; append new observations and update only this cursor.
 This file describes supervision, not OS acceptance or execution authority.
 
 
-**CURRENT REVIEW35 —2026-10-18T15:44:53Z:** campaign active;
-19native behaviors,6complete/29open practical checks,8selected production Rust
-bodies/7applicable native paths, all14milestones open. Recovery returned0/4.84s,
-the original outer session joined, all3ownership paths are absent and ROOT27:4
-was observed acquirable. Final physical-release acceptance remains pending raw
-postflight readback; the bounded reader's cap-only correction is in review.
-Scheduler ordinary preparation completed; corrected image source/profile and
-both AVX/Cthreads continuation preparations have independent conditional passes.
-Actual GCC14 production ABI/image/native proof remains open. Reuse accepted IHK
-artifact. Next full review16:14:53UTC; usage25%, stop97%.
+**CURRENT REVIEW36 — 2026-10-18T16:15:01Z:** campaign active;
+19 accepted native behaviors, 6 complete / 29 open practical checks; all 14
+milestones open. At cutoff the ninth-path artifact decision was pending;
+post-cutoff 16:15:39 acceptance raises selected Rust production/default-link
+proof from 8 to 9, with 7 applicable native paths unchanged. The scheduler
+image operation reports PASS in 201.34 seconds; actual GCC14 CPU/full-process ABI
+assertions pass, and inspection finds the Rust debug-handoff call before FP
+restore/context switch. All 14 postbuild observations and 4 retained copies
+passed in 4.95 seconds. Separate terminal release and native continuation remain
+pending. Private Rust clear_debugreg source review passed; production/native open.
+Next full review 16:45:01 UTC; usage 26%, stop 97%.
 No second launcher or background timer is installed.
 
 **MONITORING RESUMED2026-10-18T13:43:18Z:** user explicitly requested this
@@ -3066,3 +3067,75 @@ complete fetched publication/final exact image release and run the first fully
 admitted GCC14 ABI/image operation. Keep reviewed follow-on cases ready in parallel.
 Preserve one-heavy/resource admission,97%stop,scratch21 and held-task exclusions.
 Latest observed checkpoint remains58672d91. Next full review16:14:53UTC.
+
+## Review36 — 2026-10-18 16:15 UTC
+
+Cutoff 16:15:01 UTC; interval 30m08s. Native behaviors 19 (+0); practical checks
+6 complete (+0), 29 open; all 14 milestones open. The last accepted Rust totals
+remain 8 production / 7 applicable native while the new artifact decision is
+being recorded. Usage 26%; root free 51.255 GiB, scratch free 12.831 GiB.
+
+Physical recovery of the IHK owner is independently accepted as PASS_EXECUTED:
+124 complete censuses, 46 retired Docker clients, 13 CID-absence cycles, three
+record releases and original outer-session join. All 63 archived failure files
+match; the failed implementation receipt and latch remain unchanged. Acceptance
+canonical SHA 80daa92df8534810580d46caf4070b1d700fe738759d67fed276212e03722fd3.
+The valid IHK artifact remains reusable within its accepted scope.
+
+Checkpoint 3f9c9f5c8f34d161873a437b72fa8d0c30da40ce was pushed/fetch-verified
+for 39 files, including the 12 runtime-source rows. Exact independent image
+execution review passed; fresh admission preceded one scheduler image operation.
+The operation returned 0 / PASS in 201.34 seconds with positive client retirement
+and postjoin mutex reacquisition. The stopped CID and exclusions are intentionally
+retained for separate cleanup; their presence does not mean compilation is active.
+
+Actual GCC14 CPU and full process.c ABI assertions passed before image make.
+The 14 postbuild inspection commands and four retained-artifact copies passed
+in 4.95 seconds, including the actual production process.c.o. Inspection found
+the Rust debug-handoff relocation before FP restore/context switch and the prior
+CPU object unchanged. The independent final artifact/default-link decision is
+still being recorded at cutoff. No ninth-path production or native credit is
+inferred early, and no new-image boot/application acceptance is claimed.
+
+Terminal source review found a genuine host/scratch filesystem mismatch in the
+copied transaction engine. A bounded per-filesystem archive/exchange correction
+and downstream hash joins passed independent source review. Actual terminal
+bindings and retained-byte authority remain pending. Reuse the four retained
+copies and preserve the remaining original artifact files before any cleanup.
+The separate terminal review overlapped the approved retained-container build.
+
+Both AVX/Cthreads source preparations remain accepted; their ordinary staging
+proposal now binds the retained 7,926,720-byte image with one shared image copy.
+Staging/execution releases, fresh admission and physical retirement remain gates.
+An idle worker also produced a private Rust clear_debugreg cutover. Actual-body
+C/Rust parity, six-write assembly checks and four compiled mutation negatives
+pass; independent source-boundary review accepts routing/ABI/assembly. Production
+GCC14 consumption, real-crate linking and native proof are open. Live image and
+repository inputs were unchanged by that private draft.
+
+One bounded P-M00-02 reconciliation reused current proof. It remains OPEN:
+checkpoint 3f9c9f5c is recoverable and old partial holds are resolved, but the next
+terminal command still needs a fresh unconsumed release. Replace the stale reason;
+final-profile delivery is not an added prerequisite. No other check was inflated.
+
+Steering preserved the first approved runtime slot, separated optional terminal
+work from the retained-container build scope, and used idle cheap capacity for
+the real Rust draft. VELOCITY.md now requires preparing the postbuild inspection
+profile during build preparation, with actual artifact identities bound once
+after completion. Use compact current cursors on reassignment, not full historical
+handoff dumps. The measured operation times identify handoff latency as a useful
+target; they do not establish a numerical whole-campaign speedup.
+
+Next: finish artifact acceptance and retained-byte/terminal release, stage the
+reviewed continuations and obtain the first new-image native result. Preserve
+one-heavy/resource admission, full reserves, 97% stop, scratch21, all evidence
+and service-held exclusions. Next full review 16:45:01 UTC.
+
+Post-cutoff 16:15:39 UTC: independent actual-review.json accepts the actual
+production image, GCC14 ABI, ninth Rust default/link path, preserved prior bodies,
+retained artifacts and positive client retirement. Review SHA256
+671a0fa2050c6518ba90b233964c6be19c097bf91fff14d4151e365ee64da96b at
+/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-image-actual-review-20261018-1/actual-review.json.
+Selected production Rust paths 8 -> 9; applicable native paths remain 7.
+Native proof and separate terminal cleanup release are still open. No new
+distinct behavior, practical-check closure or whole-kernel percentage inferred.

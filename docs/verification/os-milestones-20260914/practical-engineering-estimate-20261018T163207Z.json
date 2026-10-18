@@ -1,0 +1,130 @@
+{
+  "schema": "mckernel.supervisor-engineering-estimate.v1",
+  "created_at": "2026-10-18T16:32:07.484634+00:00",
+  "evidence_cutoff": "2026-10-18T16:30:01Z",
+  "confidence": "low",
+  "measured_completion": false,
+  "previous_table": "docs/verification/os-milestones-20260914/practical-engineering-estimate-20261018T134738Z.md",
+  "previous_evidence_cutoff": "2026-10-18T13:44:55Z",
+  "change_basis": "Only M10 rises by a coarse estimated 5 percentage points: independently accepted pinned GCC14 ABI/image/default-link evidence. Final matched recipe replay and native proof remain open. Other ranges unchanged.",
+  "milestones": [
+    {
+      "milestone": "M00",
+      "scope": "practical engineering",
+      "estimate_low_percent": 85,
+      "estimate_high_percent": 95,
+      "midpoint_change_percentage_points": 0
+    },
+    {
+      "milestone": "M01",
+      "scope": "practical engineering",
+      "estimate_low_percent": 55,
+      "estimate_high_percent": 75,
+      "midpoint_change_percentage_points": 0
+    },
+    {
+      "milestone": "M02",
+      "scope": "practical engineering",
+      "estimate_low_percent": 80,
+      "estimate_high_percent": 90,
+      "midpoint_change_percentage_points": 0
+    },
+    {
+      "milestone": "M03",
+      "scope": "practical engineering",
+      "estimate_low_percent": 55,
+      "estimate_high_percent": 75,
+      "midpoint_change_percentage_points": 0
+    },
+    {
+      "milestone": "M04",
+      "scope": "practical engineering",
+      "estimate_low_percent": 80,
+      "estimate_high_percent": 90,
+      "midpoint_change_percentage_points": 0
+    },
+    {
+      "milestone": "M05",
+      "scope": "practical engineering",
+      "estimate_low_percent": 55,
+      "estimate_high_percent": 75,
+      "midpoint_change_percentage_points": 0
+    },
+    {
+      "milestone": "M06",
+      "scope": "practical engineering",
+      "estimate_low_percent": 45,
+      "estimate_high_percent": 65,
+      "midpoint_change_percentage_points": 0
+    },
+    {
+      "milestone": "M07",
+      "scope": "practical engineering",
+      "estimate_low_percent": 65,
+      "estimate_high_percent": 80,
+      "midpoint_change_percentage_points": 0
+    },
+    {
+      "milestone": "M08",
+      "scope": "practical engineering",
+      "estimate_low_percent": 85,
+      "estimate_high_percent": 95,
+      "midpoint_change_percentage_points": 0
+    },
+    {
+      "milestone": "M09",
+      "scope": "integration only",
+      "estimate_low_percent": 85,
+      "estimate_high_percent": 95,
+      "midpoint_change_percentage_points": 0
+    },
+    {
+      "milestone": "M10",
+      "scope": "practical engineering",
+      "estimate_low_percent": 70,
+      "estimate_high_percent": 85,
+      "midpoint_change_percentage_points": 5
+    },
+    {
+      "milestone": "M11",
+      "scope": "practical engineering",
+      "estimate_low_percent": 65,
+      "estimate_high_percent": 80,
+      "midpoint_change_percentage_points": 0
+    },
+    {
+      "milestone": "M12",
+      "scope": "practical engineering",
+      "estimate_low_percent": 15,
+      "estimate_high_percent": 30,
+      "midpoint_change_percentage_points": 0
+    },
+    {
+      "milestone": "M13",
+      "scope": "practical engineering",
+      "estimate_low_percent": 30,
+      "estimate_high_percent": 50,
+      "midpoint_change_percentage_points": 0
+    }
+  ],
+  "accepted_facts": {
+    "distinct_native_behaviors": 19,
+    "practical_checks_complete": 6,
+    "practical_checks_open": 29,
+    "whole_milestones_open": 14,
+    "selected_production_rust_paths": 9,
+    "applicable_native_rust_paths": 7,
+    "image_operation_seconds": 201.34,
+    "image_actual_review_sha256": "671a0fa2050c6518ba90b233964c6be19c097bf91fff14d4151e365ee64da96b"
+  },
+  "limits": [
+    "Not measured completion, pass rates, reliability or time remaining.",
+    "M09 measures integration only; whole-kernel Rust conversion remains unmeasured.",
+    "No overall OS percentage or completion date inferred.",
+    "No new native credit or practical-check closure from preparation."
+  ],
+  "evidence": [
+    "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-image-actual-review-20261018-1/actual-review.json",
+    "docs/verification/os-milestones-20260914/practical-milestones.json"
+  ]
+}

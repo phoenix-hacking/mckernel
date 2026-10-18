@@ -210,6 +210,20 @@ fixtures pass. Leave only observed attempt identities and publication receipts
 for late binding. Enumerate production and mock endpoint paths with the actual
 test-output prefix before their first replay, keeping the existing UNIX limit.
 
+Prepare the postbuild read-only inspection profile alongside the build proposal:
+commands, tools, output bounds, copy destinations and actual consumer joins.
+Leave artifact identities explicitly pending, then bind them once from the
+completed receipt. Reuse the accepted 14-command profile for matching successors
+and review only affected changes. Review36 observed a 201.34-second image run
+and 4.95-second inspection run, with several minutes spent preparing the handoff.
+Reduce that delay while preserving the required completed-owner, admission and
+exact-release boundaries for actual inspection.
+
+On reassignment, reuse already-read policy and the latest compact CURRENT/HANDOFF
+cursor. Open historical sections only to resolve a concrete dependency. Retain
+complete captures in files and print selected findings, timing and paths; avoid
+dumping the full historical handoff into each worker's context.
+
 Before a healthy finite build/guest finishes, activate its existing result
 reviewer and terminal author with the exact output paths and completion contract.
 Ordinary review starts only after the documented completed-output/retirement
