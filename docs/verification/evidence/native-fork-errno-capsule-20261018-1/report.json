@@ -1,0 +1,49 @@
+{
+  "status": "PASS",
+  "toolchain": "rustc 1.92.0 (ded5c06cf 2025-12-08)",
+  "source_root": "/home/holden/mckernel-work/scratch/nsd-c-47f591afb04634de97c05e2e8a405b8b/modules",
+  "files": {
+    "os_runtime.rs": {
+      "before": "7c6fc86d1b6dafc909d69a7c3bf6d4cadbf140738b7ad4fb5bc71d62feaebf16",
+      "after": "df8a38f83c28dfc474ceea46e775f2ec935de0b56fb50cbd3c9921a9faa44893",
+      "sites": 1
+    },
+    "smp_application.rs": {
+      "before": "1652906fde3ae8add769c505a765ba8694ac429bdf56d3b65aa492e64ff607ad",
+      "after": "9d7ed440f33295f6c5d2348b99d56808d38cd8c5ccb73977514ead5243726b39",
+      "sites": 1
+    },
+    "smp_fork_link.rs": {
+      "before": "69f0ccc64ab389a808b391bd931708769d890a26cd8f6d394ac025f854516e5f",
+      "after": "da637b853fb42b0247f5aba8e21dedd63d2f0476b75ebea980dbe15030cb078f",
+      "sites": 2
+    },
+    "smp_fork_ingress.rs": {
+      "before": "c06352c71aeb072ad9cf3c265b038a6583627febfd3387ddf5a5160b12bbdba4",
+      "after": "e58027c1eb0e7b0b2ba3556bd816a3cf22447e1ffb669442f334ea3eba92621b",
+      "sites": 1
+    },
+    "smp_application_image.rs": {
+      "before": "e248f594b64c3546415b16d4b5edd4623ac053c65cfd867b62c3211596865a7e",
+      "after": "09998e15329ad9d73bf2f947524c20dc29992df63bea8c509dd0ce48e66424ac",
+      "sites": 1
+    }
+  },
+  "original_make_stderr_sha256": "554949912eb91e08c13a26811a2cb80c6e94fe646e902571250600b529219770",
+  "kernel_error_api_sha256": "50181273de10264d9aa181ba573ef859945808ebf59b01453939de75f9b47ff2",
+  "kernel_api": "Error::from_errno is crate-private, non-const; use existing errno(-75) conversion",
+  "original_lexical_errors": 6,
+  "positive_expressions": 6,
+  "production_width_bindings": {
+    "u64": 2,
+    "u32": 4
+  },
+  "checks_per_expression": [
+    "0 => 1",
+    "MAX-1 => MAX",
+    "MAX => Error(-75)"
+  ],
+  "limits": "CPU6, one job, 1GiB address space, 30s per invocation",
+  "scope": "Extracted real expressions and errno helpers; object scaffolding and Error representation are doubles. No Kbuild/module/runtime acceptance. Frozen source unchanged.",
+  "next": "Independent diff review, then rebuild fresh frozen candidate via previously reviewed native module Kbuild profile; default CREATE_PPD -95 path untouched."
+}

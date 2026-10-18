@@ -1,0 +1,59 @@
+{
+  "schema": "mckernel.native-fork-errno-source-review.v1",
+  "decision": "PASS_SOURCE",
+  "reviewer": "/root/fork_compile_packet_review",
+  "implementation_ownership": false,
+  "patch_sha256": "e8305c8a7fd8812685f6f94f66a5e7e03714f3b03e0c72499434d8b982edddcc",
+  "report_sha256": "78bacb8c051fc0f068cd6fb415d7a1a1e45d644d2526bad556c1f938644439bc",
+  "files": {
+    "os_runtime.rs": {
+      "before": "7c6fc86d1b6dafc909d69a7c3bf6d4cadbf140738b7ad4fb5bc71d62feaebf16",
+      "after": "df8a38f83c28dfc474ceea46e775f2ec935de0b56fb50cbd3c9921a9faa44893",
+      "sites": 1
+    },
+    "smp_application.rs": {
+      "before": "1652906fde3ae8add769c505a765ba8694ac429bdf56d3b65aa492e64ff607ad",
+      "after": "9d7ed440f33295f6c5d2348b99d56808d38cd8c5ccb73977514ead5243726b39",
+      "sites": 1
+    },
+    "smp_fork_link.rs": {
+      "before": "69f0ccc64ab389a808b391bd931708769d890a26cd8f6d394ac025f854516e5f",
+      "after": "da637b853fb42b0247f5aba8e21dedd63d2f0476b75ebea980dbe15030cb078f",
+      "sites": 2
+    },
+    "smp_fork_ingress.rs": {
+      "before": "c06352c71aeb072ad9cf3c265b038a6583627febfd3387ddf5a5160b12bbdba4",
+      "after": "e58027c1eb0e7b0b2ba3556bd816a3cf22447e1ffb669442f334ea3eba92621b",
+      "sites": 1
+    },
+    "smp_application_image.rs": {
+      "before": "e248f594b64c3546415b16d4b5edd4623ac053c65cfd867b62c3211596865a7e",
+      "after": "09998e15329ad9d73bf2f947524c20dc29992df63bea8c509dd0ce48e66424ac",
+      "sites": 1
+    }
+  },
+  "lexical_original_errors": 6,
+  "corrected_compile_run_exit": [
+    0,
+    0
+  ],
+  "arithmetic_expressions": 6,
+  "actual_widths": {
+    "u32": 4,
+    "u64": 2
+  },
+  "checks_per_expression": [
+    "0->1",
+    "MAX-1->MAX",
+    "MAX->Error(-75)"
+  ],
+  "regression_archive": {
+    "path": "docs/verification/evidence/native-fork-errno-regression-20261018-1.tar.gz",
+    "sha256": "e4d15639c6be267a24f3bdddfed8cc41b46ea1b844582c7b550c9018d8f6a5a6"
+  },
+  "limitations": [
+    "Extracted expression/errno helper scaffolding; no wholebody rollback/ownership proof.",
+    "Fresh actual Kbuild required; no runtime activation."
+  ],
+  "held_transport_task_resumed": false
+}
