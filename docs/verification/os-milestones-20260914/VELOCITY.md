@@ -353,6 +353,12 @@ rule. Retain failed prechecks and correct only the demonstrated scope error.
   in files; do not print entire manifests or collection members into model
   conversations. Read a particular complete member only when its content is
   needed for the current decision, retaining all original evidence.
+- Before runtime, finalize metadata using the real consumed status values and
+  source-expression forms, and check both pre/post observer entry points. Reuse
+  frozen fixtures and real consumer argument checks; avoid discovering a missing
+  post phase or unsupported REPO-plus-literal map only after an operation. Keep
+  private pre-effect assembly errors separate from kernel/production failures;
+  fix the bounded join without replaying the workload or building a new framework.
 - Batch normal notes and Git saves at existing checkpoints. Keep code/input,
   exact command, actual result/error and retained failure. Authenticate unchanged
   shared content once per required phase/device/inode, preserving every path's
