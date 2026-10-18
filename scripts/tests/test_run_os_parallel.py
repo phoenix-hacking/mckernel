@@ -355,7 +355,7 @@ class ParallelTests(unittest.TestCase):
                     self.assertRaises(SystemExit):
                 launcher.arguments(options)
 
-    def fake_main(self, argv, failures=(), preflight_error=None):
+    def fake_main(self, argv, failures=(), preflight_error=None, resource_snapshot=None):
         note = self.root / 'note'
         note.write_text('Reconcile ' + parallel.HOLD_ID)
         state_path = self.root / 'state.json'
@@ -363,8 +363,9 @@ class ParallelTests(unittest.TestCase):
             'active_turns': {}, 'goal': {'status': 'paused', 'objective': launcher.OBJECTIVE,
                                        'tokenBudget': 432100, 'tokensUsed': 1234}}))
         saved_state = state_path.read_bytes()
-        resources = {'cpu_count': 7, 'memory_gib': 24, 'agent_memory_gib': 2,
-                     'max_agents': 12, 'build_jobs': 7}
+        resources = resource_snapshot if resource_snapshot is not None else {
+            'cpu_count': 7, 'memory_gib': 24, 'agent_memory_gib': 2,
+            'max_agents': 12, 'build_jobs': 7}
         with mock.patch.object(parallel, 'NOTE', note), \
                 mock.patch.object(parallel, 'state_directory', return_value=self.root), \
                 mock.patch.object(parallel, 'resolve_resources', return_value=resources) as resolve, \
@@ -446,6 +447,44 @@ class ParallelTests(unittest.TestCase):
         self.assert_gpt_61_command(command)
         self.assertEqual(run.call_args.args[0], command + ['--check'])
         popen.assert_not_called()
+
+    def test_automatic_memory_survives_decrease_between_preflight_and_worker(self):
+        # Actual reported failure: the preview's 23.7309608-GiB automatic
+        # budget exceeded the worker's new 23.7271-GiB ceiling. Exercise the
+        # real child parser/resolver with changing host observations, without
+        # starting a server, inference, watcher, build or guest.
+        available = [27.730960845947266, 27.728, 27.7271]
+        snapshot = {'cpu_count': 7, 'memory_gib': available[0] - 4,
+                    'agent_memory_gib': 2, 'max_agents': 11, 'build_jobs': 7}
+        result, _, run, execute, _, _ = self.fake_main(
+            ['--run'], resource_snapshot=snapshot)
+        self.assertEqual(result, 0)
+        command = execute.call_args.args[1]
+        stages = [run.call_args.args[0][3:], command[3:], command[3:] + ['--worker']]
+        with mock.patch('os_goal_resources._available_memory_gib', side_effect=available), \
+                mock.patch('os_goal_resources.os.sched_getaffinity',
+                           return_value={0, 2, 3, 4, 5, 6, 7}), \
+                mock.patch('os_goal_resources.os.path.ismount', return_value=True), \
+                mock.patch('os_goal_resources.shutil.disk_usage',
+                           return_value=mock.Mock(free=64 * 1024 ** 3)):
+            for options, measured in zip(stages, available):
+                with self.subTest(stage=options[-1]):
+                    args = launcher.arguments(options)
+                    actual = launcher.launch_resources(args, parallel.REPO)
+                    self.assertAlmostEqual(actual['memory_gib'], measured - 4)
+                    self.assertEqual(actual['max_agents'], 11)
+                    self.assertEqual(actual['build_jobs'], 7)
+                    self.assertEqual(actual['memory_reserve_gib'], 4)
+                    launcher.check_resources(actual)
+                    self.assertIs(launcher.launch_resources(args, parallel.REPO), actual)
+
+        # Automatic sizing must not weaken a real explicit-memory override.
+        with mock.patch('os_goal_resources._available_memory_gib', return_value=available[-1]), \
+                mock.patch('os_goal_resources.os.sched_getaffinity',
+                           return_value={0, 2, 3, 4, 5, 6, 7}):
+            args = launcher.arguments(command[3:] + ['--memory-gib', str(snapshot['memory_gib'])])
+            with self.assertRaisesRegex(ValueError, 'memory_gib exceeds'):
+                launcher.launch_resources(args, parallel.REPO)
 
     def test_fresh_session_and_recovery_options_reach_preflight_and_launcher(self):
         for options, recovery in (([], True), (['--fresh-on-recovery'], True),

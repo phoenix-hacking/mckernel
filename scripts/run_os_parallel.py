@@ -146,10 +146,13 @@ def read_mount():
 
 
 def launch_command(args, resources):
+    # Keep memory automatic through preflight, watcher and worker startup. A
+    # MemAvailable-derived float becomes stale as those processes start; each
+    # process resolves its own budget with the existing reserve/ceiling checks.
     command = [sys.executable, '-B', str(REPO / 'scripts/run_os_goal.py'),
             '--model', args.model, '--effort', args.effort,
             '--profile', 'aggressive', '--max-agents', str(resources['max_agents']),
-            '--build-jobs', str(resources['build_jobs']), '--memory-gib', str(resources['memory_gib']),
+            '--build-jobs', str(resources['build_jobs']),
             '--hours', str(args.hours), '--agent-windows', args.windows,
             '--stall-seconds', '0', '--startup-instruction-file', str(NOTE),
             '--startup-instruction-sha256', hashlib.sha256(NOTE.read_bytes()).hexdigest(),
