@@ -1,5 +1,46 @@
 # Autonomous McKernel goal
 
+## Current — FP file native accepted; literal M04-02 closed (2026-10-18 23:06 UTC)
+
+Continuous functional OS/apps plus Rust/reviewed-assembly migration remains active.
+FP1e7a image7933968B is the selected supported functional candidate. Independent
+Rust file case efeb2695 passes133B/exit0:seek/overwrite/shrink/grow/zero-extension,
+EINVAL/cursor integrity, checked close/remove and host retirement.23distinct
+native behaviors;13selected production/11applicable native Rust paths. Nonnull
+release_fp_regs proof remains OPEN. Literal P-M04-02 independently passes89248554
+using accepted selected-suite/mixed/file evidence:7complete/28open practical
+checks. Whole M04 and all14milestone completion statuses remain OPEN. Historical
+regressions do not become current-FP executions; final-profile replay remains.
+
+FP terminal physical release accepted a565ec9f:29retainedpairs/58FDrows,
+525protectedinventoryrows,ninejournal events,container/common/shared/lease/
+quarantine absence. Cleanup5.071s+postjoin.745s; original observer/root-five raw
+bytes/statuses remain retained. Root-only pre-effect extra HEAD equality assertion
+failed before any child; unchanged releasecc908b2f used after actual consumed
+commit/tree/blob checks. No old command replay. Original failed15/all17false and
+syscall-DWARF13/full-validity gap remain OPEN; scratch21 and dirty WIP preserved.
+
+Latest pushed/fetched source214acfab48rows and metadatahelper489ac93e remain
+separate. Native FP file wrapper wholejoined0/34.826s; owner+three approved
+readbacks0;30Docker clients/QEMU/container retired, shared heavy record absent.
+No native McKernel stop/destroy/resource-restoration-cycle credit.
+
+Next executable dependency: private pinned-make-pipe two-file capsule/adapted
+owner/request/exporter preparation, independent exact source/execution release,
+fresh one-heavy admission, then one genuine pinned probe and focused ihk.ko build.
+Source-only probe packet: native-kmsg-read-abi-20261018-1/target-preparation-1/
+pinned-make-pipe-probe-1/REVIEW-PACKET.json(0c611528); profile7a78fa10 permits no
+execution yet. Driver18978f75/stagerafb961f0 source/profile pass, actual module
+and ABI/import evidence pending. Keep new source private until its required
+publication. No target/module/hostload/native substitution authorized by drafts.
+
+Logging helper fourcompiles+17collector/7bootvectors independently acceptedf0282759;
+bootf25a8030/init e656e793 are future stage inputs, not native kmsg evidence.
+Frozen133Bfile case is independent of logging. Aggregate CPU/RAM,4CPU/12GiB/
+noSwap/512task one-heavy,16/12GiB floors+full growth/emergency and97% included
+usage stop remain. Last measured host53017436160B/scratch13762531328B available.
+Root mutex27:4 and110GiB backing unchanged; refused execve/forkACK stay excluded.
+
 ## Current — FP terminal source publication; functional FP candidate (2026-10-18 22:38 UTC)
 
 FP image1e7a1f68 has independent production acceptancef4799cc5:13selected

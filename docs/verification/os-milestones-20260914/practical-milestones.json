@@ -452,7 +452,7 @@
               "size": 1001
             }
           ],
-          "assessment_note": "Post-effect Shutdown8 and ownership-retained -11→0 application retirement are observed. This does not establish all required mapping/release failure ownership invariants."
+          "assessment_note": "Post-effect Shutdown8 and ownership-retained -11\u21920 application retirement are observed. This does not establish all required mapping/release failure ownership invariants."
         }
       ],
       "current_evidence_summary": "Actual current942 allocation/map/protection/unmap app paths plus protected-write SIGSEGV/ACCERR/exactaddress and restored RW write now pass; final supported-candidate memory/ownership session remains open. Current3bfc zero-length anonymous mmap/EINVAL diagnostic passes independently; adds one distinct behavior only."
@@ -541,7 +541,7 @@
         {
           "id": "P-M04-02",
           "description": "Run useful file/stream utilities and memory/file/thread/signal regressions.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
@@ -602,9 +602,24 @@
               "path": "docs/verification/evidence/practical-m04-current-candidate-check-review-20261018-1.json",
               "sha256": "d50f96fee0919c0a093d3fc0accbb97fb7b2ef49483971407a6f6d4e6ceb2f76",
               "size": 8999
+            },
+            {
+              "path": "docs/verification/evidence/practical-m04-02-literal-check-review-20261018-2.json",
+              "sha256": "8924855431d0142efb1e386974191dcfdab64e7151fc8debeb3a68c9e5eb02fa",
+              "size": 1558
+            },
+            {
+              "path": "docs/verification/evidence/practical-rust-file-roundtrip-fp-native-result-review-20261018-1.json",
+              "sha256": "efeb269582790e823f83b999b4d946af9832e61328f1cd7745a45f0ea8a608c2",
+              "size": 3367
+            },
+            {
+              "path": "docs/verification/evidence/practical-selected-suite-comparison-review-20261018-1.json",
+              "sha256": "7224e2460e10be6075a9dcf651ee24d9e1c5f00519196bc908b88f8ea985ee5e",
+              "size": 24800
             }
           ],
-          "assessment_note": "Actual mixed Rust std3round memory/file checksum/6checkedcloses/3reopenEOF/6worker lifetimes passes on da0f1bf7. Broader selected utilities and regression scope remains open; no whole-M04 completion."
+          "assessment_note": "Independent literal review P-M04-02 PASS: accepted selected-suite utility and memory/file/thread/signal regressions plus mixed Rust application and actual FP1e7a133B seek/truncate/error/close/remove case. Matching historical evidence stays historical; no same-image/current-FP regression inference. Final supported-profile replay, lifecycle restoration and delivery remain separate; whole M04 remains open."
         },
         {
           "id": "P-M04-03",
@@ -695,7 +710,7 @@
           "assessment_note": "Independent final review7224e246 verifies ten frozen expected/Linux/accepted-native exact stdout,stderr and exit-status joins across selected utility,memory,file,thread,signal cases on two retained historical images. Mixed Rust156-byte comparison and3corruption controls remain separately proved. Literal frozen-expected/Linux comparison is complete; final-candidate/profile replay,new empty/error utility native coverage and deferred qualification remain separate open obligations. No new native behavior or historical formal acceptance credited. Initial rootcopy against superseded6300 reviewer hash refused before ledger mutation; final7224 bound exactly."
         }
       ],
-      "current_evidence_summary": "Current da0f1bf7 independently passes real dynamic-libc C threads and useful mixed Rust/std application. Literal P-M04-01 complete, selected-suite regressions/Linux comparison still open. One distinct new native behavior brings total17; no formal or language-retirement credit. Current e85a closed-write diagnostic independently passes close0 -> write EBADF, frozen24B/exit0 and physical retirement; distinct native behaviors21. No broader descriptor/leak or new check closure. Independently accepted mapping-isolation e85a/37ed adds exact100B two-page ACCERR/MAPERR, RW restore and partial-unmap survivor behavior with positive retirement; total distinct behaviors22. No whole memory or new exit-check closure inferred."
+      "current_evidence_summary": "All three literal M04 checks independently supported; P-M04-02 now complete using selected-suite and FP1e7a Rust file evidence. Whole-M04/final-profile delivery remains open; historical regression acceptance does not become current-FP execution."
     },
     {
       "id": "M05",
@@ -1339,7 +1354,7 @@
           "assessment_note": "Current5f7 production40713d52 validates selected SAVE/RESTORE default ABI/link/scalar bodies and preserves previous accepted Rust bodies. Full final artifact set/native/fallback/legacy/hardware remains open. Original syscall-DWARF13 failed and all14passed=false; required ABI facts instead established by successful complete process-DWARF14 plus actual compiled C assertions. No failed check relabeled PASS."
         }
       ],
-      "current_evidence_summary": "Image1e7a productionf4799cc5 independently accepts release_fp_regs Rust default152B plus GCC14 selected/fallback CPU/native+legacy crate/header/export/descriptor/free-before-null evidence. Thirteen selected production/default-link paths and eleven applicable native paths;22distinct behaviors. Paired5f7 SAVE/RESTORE AVXccebfdd9/threads0b6f871f scoped native integration preserved; hardware/nonzeroDR/exhaustive/fallback obligations open. release_fp_regs nonnull native and clear_fp_regs native remain open/excluded as applicable; no whole-kernel C retirement. Failed postbuild15 SIGXFSZ/all17false and originalsyscall-DWARF13/full-validity gap preserved; successful targeted alternatives support selected facts only. Finite29 accepted; physical image cleanup still pending. Kmsg host-control source/74fixtures/source-boundaryPASS private, no target/native credit."
+      "current_evidence_summary": "Image1e7a productionf4799cc5 independently accepts release_fp_regs Rust default152B plus GCC14 selected/fallback CPU/native+legacy crate/header/export/descriptor/free-before-null evidence. Thirteen selected production/default-link paths and eleven applicable native paths;22distinct behaviors. Paired5f7 SAVE/RESTORE AVXccebfdd9/threads0b6f871f scoped native integration preserved; hardware/nonzeroDR/exhaustive/fallback obligations open. release_fp_regs nonnull native and clear_fp_regs native remain open/excluded as applicable; no whole-kernel C retirement. Failed postbuild15 SIGXFSZ/all17false and originalsyscall-DWARF13/full-validity gap preserved; successful targeted alternatives support selected facts only. Finite29 accepted; physical image cleanup still pending. Kmsg host-control source/74fixtures/source-boundaryPASS private, no target/native credit. FP1e7a first133B Rust file native app independently accepted efeb2695:23distinctbehaviors,13selectedproduction/11applicable native paths; nonnull release_fp_regs remains unproved."
     },
     {
       "id": "M10",
@@ -1853,7 +1868,7 @@
     "Prepare separately reviewed realpayload execution afterfreshsecondboot, proving rebootedOSserveswork; no secondstop/release or10cyclequota authority fromfirstcycle.",
     "Finish reviewedthinmaterializer exact49tracked-symlink correction preservingfailedpartialtree/fullsourceauthority, then independently release matchingFPUimagebuild.",
     "Close selectedapplication-visible XCR0/libc/Rustrequirements andreview boundedAVX/YMMpreservation extension; currentnativecoverage unchanged.",
-    "Continue actualMemory→ingress→checkedREADY→LINK→guestaccept joins andfinalACK/RET/destructor/revocation; CREATE_PPD remains fail-closed."
+    "Continue actualMemory\u2192ingress\u2192checkedREADY\u2192LINK\u2192guestaccept joins andfinalACK/RET/destructor/revocation; CREATE_PPD remains fail-closed."
   ],
   "evidence_reconciliation": {
     "date": "2026-10-17",

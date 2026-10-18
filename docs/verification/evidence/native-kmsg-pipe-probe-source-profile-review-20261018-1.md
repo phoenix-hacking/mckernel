@@ -1,0 +1,34 @@
+# Pinned GNU make pipe probe source/profile review
+
+Decision: **PASS_SOURCE_PROFILE_PENDING_EXACT_OWNER_AND_EXECUTION_RELEASE**. No P1/P2 defect found in this bounded tool-observation source/profile. This is a functional Rust/assembly OS/apps build prerequisite, not a new kernel behavior, compiler result or runtime acceptance. No probe, tests, host make, Docker, compiler, root, Git, module or guest operation ran for this review.
+
+## Exact reviewed source
+
+Packet SHA256 `0c6115280c12bcc4e0b1c2d0f09179bfa4159c44ff5a8a35241626521f4a7a19`; proposal `3f5fa9fd2277328e2ed43134488301fcdad291b84b546bb939e1b37278a8060f`; Makefile `d36c0f40bf1829f7bf077d6155cb9e2e964bc9b720785e99090ceb352a5c79ff` (394 bytes); probe `41de84025cc90bea8ffbd12d9be7bf53b646c8311b2330df1c9feb901aaeb8e3` (9,401 bytes).
+
+Read complete Makefile/probe/proposal. Verified all four packet file hashes and frozen driver/preparation/prior-review hashes. Frozen preparation still has make_pipe_probe:null. No broad SDK/image inventory or source execution/import occurred. Only additive review files were written.
+
+## Source boundary
+
+1. **Actual selected tool observation:** the source invokes exactly `/usr/bin/make --jobserver-style=pipe -j2 -f /probe/Makefile all` in a clean make environment, after a separate bounded `/usr/bin/make --version` call. It records the actual image-local make binary hash/stat identity/version and rechecks binary/source identity afterward. It invokes no Linux Makefile, IHK target, compiler or SDK. A source image constant does not authenticate the container image.
+
+2. **Recursive pipe proof:** two explicit `+$(MAKE)` branches invoke separate plus-marked Python inspectors. Each requires exactly one numeric --jobserver-auth=R,W, MAKELEVEL2, distinct descriptors >=3, valid anonymous `pipe:[inode]` procfs links, FIFO pipe fstat type, read-only and write-only endpoint access modes, and matching endpoint identity. The parent requires distinct child/submake identities and the same pipe link across branches. Anonymous descriptors are not filesystem FIFO exceptions. The inspectors never consume/return jobserver tokens; read/write proof means observed endpoint access modes, not token I/O or a throughput measurement.
+
+3. **Filesystem/capture checks:** canonical fixed source/work roots, exact two source files, fresh home/tmp and exact eight pre-result output files are required. Inventory rejects symlink/hardlink/nonregular filesystem members, including FIFO. Captures are exclusive regular files; JSON/input reads have explicit size limits and final identity checks. The proposed wrapper's 1-MiB FSIZE limit is essential to cap child writes before post-run reads. Actual observation failures are retained rather than removing outputs or switching tools/styles.
+
+4. **Wait and cleanup interpretation:** make-version and recursive make use direct Popen/wait with five/ten-second bounds. A still-running direct child on cleanup receives owned-process-group TERM then KILL if needed, and is directly joined. Success requires return 0, no timeout and killpg(0) showing the owned group absent. If a direct child has already exited but a residual group remains, the code fails closed rather than reporting retirement; that path relies on the separately reviewed outer container owner for positive complete retirement. Likewise the final wait after KILL is not an absolute wall-time guarantee under kernel stalls. A 35+2-second outer supervisor and exact container/client/process retirement remain mandatory. This inner source is not a standalone replacement for the accepted ownership engine.
+
+5. **No admission-proof shortcut:** inner success is `PASS_RECURSIVE_MAKE_PIPE_OBSERVATION`, image_identity_authenticated:false, observation_only:true. The frozen driver requires a different `PASS_PINNED_MAKE_PIPE_RECIPE` proof, and frozen preparation remains null. Thus neither a self-declared image ID nor this source review can satisfy target admission. Independent actual owner/image/profile/source/stream/result/retirement evidence must be joined before exporting a genuine driver proof. That later exported proof and preparation/source rebindings need affected review; the existing driver and owner remain unchanged and blocked.
+
+## Profile and concrete remaining gates
+
+The proposed resource/isolation envelope is the existing four CPUs 2-5, 12 GiB with memory-swap limit equal to RAM/no actual swap, 512 tasks, no network, private IPC, UID1000:1000, dropped capabilities, read-only root, no-new-privileges, retained tmpfs and normal container init/retirement controls. Inner prlimit is 1-GiB AS/30 CPU seconds/1-MiB files/core0; outer wall 35+2 seconds. Fresh total 16-MiB work/capture growth plus 512-MiB emergency beyond host16/scratch12-GiB floors is an estimate/admission requirement, not a current reservation. All simultaneous work shares the existing aggregate budget.
+
+The old module owner cannot run this different command/two-mount contract unchanged. Before execution:
+
+* Create and bind a fresh read-only source capsule containing exactly Makefile and probe.py. The draft namespace currently includes metadata/README and is not itself the two-file mounted capsule. Bind a fresh work root with only empty home/tmp and all exact source/directory identities.
+* Independently review the concrete adapted owner/request/profile, two exact bind mounts and pinned image/command before start and after join, outer regular-file capture limits, positive container/client/group retirement and exact owned-record archival/release. No such runnable owner or fresh execution release is supplied here.
+* Root must positively retire the current FP operation and honor ready application priority before fresh exclusive-heavy, mount/UUID/lease/quarantine/capacity/usage admission. Allow only the separately released one-shot probe. Unsupported make flags, descriptor inheritance, recipe, inventory, timeout or retirement failures retain original evidence and stop this family; no default-style retry or FIFO waiver follows from this review.
+* If the actual probe passes, independently bind actual immutable image identity, source/make hash/version, exact observed recursive descriptors/status/streams and positive retirement. Only then export the genuine driver proof, add it as an authenticated preparation/input reference and make_pipe_probe, update the exact preparation hashes in driver/owner, and review the affected deltas before any IHK target release.
+
+No synthetic probe suite was supplied or rerun; the first actual tool observation remains pending. This review gives source/profile approval only for the bounded observation and preserves the original FIFO failure family and all excluded work. It grants no IHK build, staging, native observation, practical completion or port-retirement credit.

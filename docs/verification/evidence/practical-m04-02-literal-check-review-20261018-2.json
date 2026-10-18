@@ -1,0 +1,23 @@
+{
+  "accepted_evidence": [
+    "docs/verification/evidence/practical-selected-suite-comparison-review-20261018-1.json",
+    "docs/verification/evidence/practical-mixed-rust-std-native-result-review-20261018-1.json",
+    "docs/verification/evidence/practical-rust-file-roundtrip-fp-native-result-review-20261018-1.json"
+  ],
+  "basis": "Accepted useful10247-byte copy/readback utility plus selected memory/file/thread/signal observations, accepted mixed Rust application, and actual133B Rust FP1e7a file roundtrip. Matching valid evidence reuse expressly permitted; no same-image conjunct in literal check.",
+  "check_id": "P-M04-02",
+  "decision": "PASS_LITERAL_P_M04_02",
+  "implementation_ownership": false,
+  "limitations": [
+    "Historical accepted regressions remain bound to their exact artifacts; no inference they ran on FP1e7a",
+    "Final supported-profile replay/lifecycle restoration/delivery remain separate",
+    "No whole-M04 completion/native restoration/compute-C retirement credit",
+    "Unexecuted utility proposals not accepted"
+  ],
+  "literal_condition": "Run useful file/stream utilities and memory/file/thread/signal regressions.",
+  "missing_executable_observation": null,
+  "new_file_case_sha256": "efeb269582790e823f83b999b4d946af9832e61328f1cd7745a45f0ea8a608c2",
+  "review_method": "Read-only literal contract review using accepted independent decisions; no duplicate captures/tests/edits/runtime",
+  "reviewer": "/root/m04_literal_functional_review_2305",
+  "schema": "mckernel.practical-literal-check-independent-review.v1"
+}

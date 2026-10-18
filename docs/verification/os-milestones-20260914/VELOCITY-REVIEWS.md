@@ -13,25 +13,25 @@ native paths,6/35->6/35 closed checks. Only M03 engineering estimate moves55-75%
 to60-80% (+5midpoint percentage points), a low-confidence judgment from accepted
 partial-unmap/fault evidence. Other bands held; M09 is integration only, whole-kernel
 Rust conversion unmeasured. Comparison delivered in chat;30-minute monitoring
-continues. Earlier review cutoff/cadence below is unchanged; next22:17:50UTC.
+continues. Later full-review timing follows the current cursor below.
 
 
-**CURRENT REVIEW48 — 2026-10-18T22:18:03Z:** campaign active;
-22 distinct native behaviors,6complete/29open checks,all14 whole milestones open.
-Selected production Rust paths12/applicable native11; FP actual artifact report
-still pending despite completed strings/body observations. Guard/build/prebuild
-accepted5f9cc1d7 after221.839s; stoppedCID0a4388eb and ownership records retained.
-Observation15 SIGXFSZ/8MiB and failed outer remain preserved. Four copies/1-14
-accepted; targetedremaining4 and two256B windows joined0 and are reviewed. No replay.
-Finite29 retention draft/adapter actual inputs are being prepared; no retention or
-physical release credited. Native FP proof needs the private Rust kmsg read patch:
-74fixture tests/source review2288c4ee pass; targetKbuild packet preparation active,
-no module compile/native credit. Rust file133B Linux/stage/parent/non-temporal
-case envelope passes; native unrun. Prepared cases remain separately scoped.
-Four-hour comparison COMPLETE at22:04:48: +2behaviors/+3production/+3native paths,
-0check closures; only M03 estimated55-75->60-80 (+5pp rough judgment). Baseline intact.
-Usage38%,root49.487GiB/scratch12.819GiB; one retained owner, stop97%.
-Next full review22:48:03UTC. No second launcher/background scheduler installed.
+**CURRENT REVIEW49 — 2026-10-18T22:48:16Z:** campaign active.
+22 accepted native behaviors; 13 selected production Rust paths; 11 applicable
+native integration paths; 6 complete / 29 open checks; all 14 milestones open.
+FP image 1e7a1f68 production artifact f4799cc5 is accepted. Non-null FP release
+native proof remains open. Finite29/e6b59b83 (25 copies +4 reuses,58 FD rows) and
+actual adapter6004369d are accepted. Checkpoint214acfab fetched48 includes full
+terminal import closure. Observer/summary joins and five-file FD metadata pass;
+raw-five export/full inventory review and physical cleanup remain pending.
+Selected supported candidate is FP1e7a. Its Rust133B file-case stage/fixture/parent
+and final non-temporal envelope pass; first native app still pending release.
+Private Rust kmsg74 tests/source2288 pass; single-target driver6fixtures/source18978
+and dual-stager4fixtures/sourceafb961 pass, with target build/staging still unrun.
+Pinned make pipe probe and Linux logging-helper compiler/fixtures remain pending.
+Four-hour comparison completed and baseline preserved; M03 estimate60-80 only.
+Usage40%; root49.395GiB/scratch12.818GiB; retained FP owner, no active compiler.
+Next full review23:18:16UTC. No second launcher/background scheduler installed.
 
 **MONITORING RESUMED2026-10-18T13:43:18Z:** user explicitly requested this
 chat's polling, steering and30-minute updates. Their foreground campaign resumed
@@ -3957,3 +3957,89 @@ raising caps blindly, inventing ownership/retention facts or creating a new fram
 Measure actual closed checks/cases and handoff wait separately; no2x/3x claim.
 Preserve16/12GiB floors/full growth+reserves,97%stop,scratch21,held exclusions and
 all dirty/failed evidence. Next full review22:48:03UTC.
+
+
+## Review 49 — 2026-10-18T22:48:16Z
+
+Selected production/default Rust paths12->13 via actual FP artifact acceptance
+f4799cc53c2439446584cc1027806a29a6f7818a2de82e4d53abe4b79dcabd73.
+Image1e7a1f689f565e3ba35def32d4f8c9ae729f0e5945c4fbeadee4eb523738a4a2,
+7933968B, binds actual default Rust release_fp_regs, compiled C ABI/header,
+selected/fallback CPU/native/legacy crate/export proof, object/linked bodies,
+descriptor/string evidence and guard retirement. No non-null native or whole
+language-retirement claim. Behaviors22/native11/checks6-of35/all14open unchanged.
+Usage40%, root49.395GiB/scratch12.818GiB. Four-hour comparison remains immutable:
+its earlier22:04:48 cutoff correctly records12 production paths; later13 is separate.
+Only M03 coarse engineering estimate60-80 was revised; no overall OS/Rust score.
+
+Finite29 completed once in0.48s, release41c1ab96. Independent actual retention
+accepts25 copies27006811B +4 reuses, total48082579B, exactly58 stable metadata/
+hash FD rows and correct streams/positive direct join. Manifest e6b59b83 is accepted.
+Reviewer explicitly permits artifact_review:null in this ordinary preservation
+release. Supervision arrows were clarified not to impose an extra semantic gate;
+both actual retained authority and semantic report join in the later adapter.
+
+Actual six-input adapter6004369d independently passes exact argv/PID/streams/joins,
+29 retained pairs, typed-source and15 evidence-status records. Receipt still
+reports artifact_acceptance:false/native:false/helpers_populated:false, correctly
+limiting its role. Populated helpers preserve accepted actual source/postbuild,
+owner/eight-client/CID and retained bindings. Initial15-source map omitted the
+receipt-core/conditional recovery chain; author added7 exact repository dependencies.
+Corrected22-source/3-data closure302255e3/d68c2e98 passes source/profile review.
+The no-effect fd_rows58 value is literal; real FD proof comes from finite29 review.
+No test replay or claim of an additional FD census.
+
+Checkpoint214acfabeee009a51a6af548c22ff5eeccc0a3f8 is pushed/fetched48 selected
+files including the complete import closure. Frozen trailing blank line preserved.
+Exact observer/summary source/profile and payload40c6eee2 pass. Both actual roles
+joined successfully with distinct PID/argv/stream records; summary58 rows match
+retained authority. Full raw inventory remains protected and unreviewed until export.
+Five-hash metadata helper93f313f9 was bound to real summary hashes; actual readback
+74f27629/947f7c8a passes5 root-owned0600/nlink1 files469058B. The author prepares
+unchanged raw-five export against these records; export and cleanup unrun at cutoff.
+StoppedCID/common/shared/root ownership remain retained; heavy-record presence is
+not continuing compilation. Original failed15 and DWARF/full-validity gaps remain.
+
+Root explicitly chose current FP1e7a for functional regressions. Fresh Rust133B
+file variant preserves olde85a packet/parent, binary/oracle/full source authority.
+Three ordinary operations (image-only stage, actual fixture, fresh parent) completed
+once/directjoins0/empty stderr in about19.7s. Independently accepted e07b0d89:
+60-record base, unchanged raw spans/padding/order, image-only size/hash change,
+new base plus exact old overlay suffix, real fixture captures/refusals and parent
+1828:756998,1000/1000,0700,empty. Typed owner-refusal message remains unretained
+and unclaimed. Final non-temporal parent-bound20106f1e passes, five runtime pins
+and wrapper bodies unchanged. First native FP app is still unrun pending physical
+release, fresh admission and exact machine review; no new per-case push gate.
+
+Steering22251405 activated module target review and this candidate-specific case;
+22342521 carried target prerequisites into concrete code;22365239 activated ready
+ordinary commands with explicitCPU7handovers. Module owner2200 corrected one
+fixture-only AST function-name mismatch after5 other checks passed; all6now pass,
+original failure retained. Source18978f75 accepts only2 changed owner bodies/29
+unchanged, source admission, one-module validator and fail-closed probe gate.
+Actual pinned make pipe proof remains unperformed. No target/module build accepted.
+
+Dual archive owner1724 corrected synthetic parsing/output-schema and umask-derived
+mode failures, preserving originals. Four tests now pass including strict manifest,
+raw spans, metadata/order and overlay suffix. Sourceafb961f0 accepts scoped stager,
+not real transformations. Target ihk.ko changes only the host adapter; conditional
+SMP/mcctrl reuse requires actual export/import/ABI verification. Both upstream
+archives and exact real module pins remain future independent release inputs.
+
+Guest helper owner1919 implements separate Linux-side bootmemdebug/perOS controls/
+bounded kmsg capture before teardown; only bin/native-boot and init change. Source
+proposal22e65de0/f9bd0bec is in review. Payload is unchanged existing threads case;
+raw ring/status and payload remain separate. No McKernel compute C/instrumentation
+or image rebuild. Source reviewer sees intended control/read bounds; ordinary
+compiler/fixtures and native evidence remain unrun. Source2200 prepares tiny
+recursive make probe for anonymous pipe/inheritance/noFIFO proof, without a module
+build. Source authority and target SDK/toolchain bindings stay frozen until review.
+
+Next: exact raw-five export/consume and inventory review, then finite cleanup/
+postjoin physical release; use ready FP file app as meaningful candidate validation.
+Finish cheap probe/helper/stager work in parallel with explicit CPU ownership and
+real joins. Current candidate remains fixed while future code is private. No
+blind cap increases, unchanged-command replay, synthetic native credit, new global
+audit/framework or weakening of the existing literal functional checks. Preserve
+16/12GiB floors+full growth/reserves,97%stop,scratch21,held exclusions/all dirty and
+failed evidence. Next full review23:18:16UTC.
