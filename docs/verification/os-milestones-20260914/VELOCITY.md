@@ -1,5 +1,22 @@
 # Tactical plan for faster verified OS progress
 
+## Read terminal results while an owner remains alive
+
+The 2026-10-18 IHK attempt wrote a failed terminal receipt within seconds, while
+its owner deliberately waited in quarantine to retain the development mutex.
+A live owner or held lease alone does not establish that compilation continues.
+When a terminal receipt/capture exists, inspect its selected status, exit and
+retirement fields promptly; do not wait for the outer wrapper to return before
+classifying an already recorded failure. Keep healthy silent operations intact.
+
+Separate compiler failure from client retirement, evidence preservation and
+ownership release. Move disjoint source fixes and cheap regressions forward
+while preparing the existing finite recovery. Fresh identities, independent
+execution review and positive physical retirement still govern release; never
+unlink a held record or infer cleanup from an exited container. Measure actual
+compile time separately from time blocked on quarantine/recovery. Keep manifests
+on disk and print only affected fields, counts and bounded mismatch samples.
+
 Latest user instruction, 2026-10-17: complete the practical kernel/application
 goal in [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), replacing excessive formal
 qualification as the active target. Use [practical-milestones.json](practical-milestones.json)

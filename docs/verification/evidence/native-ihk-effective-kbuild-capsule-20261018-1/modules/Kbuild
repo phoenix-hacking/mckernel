@@ -1,0 +1,6 @@
+# SPDX-License-Identifier: GPL-2.0
+# Private finite IHK-only pilot; not the production three-module Kbuild.
+# Bind tool and flags here so recursive command-line propagation is irrelevant.
+obj-m := ihk.o
+override objtool := /accepted-tool/objtool-after
+override objtool-args := --hacks=jump_label --hacks=noinstr --hacks=skylake --ibt --mcount --mnop --orc --retpoline --rethunk --sls --static-call --uaccess --prefix=16 --werror --link --module

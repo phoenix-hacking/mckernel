@@ -1,0 +1,39 @@
+{
+  "decision": "ACCEPT_CORRECTION_1_SOURCE_ONLY",
+  "reviewer": "/root/sched_debug_boundary_review_1345",
+  "recorded_by": "root dispatcher from completed independent review",
+  "scope": "Functional IHK Linux control-plane build repair only",
+  "source_review_request": {
+    "path": "/home/holden/mckernel-work/host-preparation/ihk-effective-kbuild-repair-20261018-1/source-review-request.json",
+    "sha256": "7efc709dbda8f6e4bf4634bf2fbb0c436f46b8391823ed86f7b97c0b8c6333f7",
+    "bytes": 4501
+  },
+  "changes": [
+    "IHK-only pilot Kbuild selects ihk.o",
+    "GNU override accepted objtool and exact16 flags"
+  ],
+  "unchanged": [
+    "driver",
+    "13 Rust inputs",
+    "environment",
+    "make argv"
+  ],
+  "checks": {
+    "actual_make_expansions": 3,
+    "actual_driver_positive": 1,
+    "actual_driver_negative": 29,
+    "mismatches": 0
+  },
+  "preserved_limitations": [
+    "Propagation-loss cause unresolved",
+    "Environment-only prototype rejected",
+    "No compile/module/objtool/runtime acceptance"
+  ],
+  "runtime_authority": false,
+  "pending": [
+    "positive owner recovery/release",
+    "coherent next source publication",
+    "new exact execution decision",
+    "fresh admission"
+  ]
+}

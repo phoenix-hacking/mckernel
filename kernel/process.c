@@ -4358,6 +4358,7 @@ out_schedule:
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 extern unsigned long sched_schedule_fp_admit(int exited_status);
+extern void sched_schedule_debug_handoff(struct thread *prev, struct thread *next);
 /* RUSAGE_DEBUG controls only ABI data forwarding; Rust owns the decision
  * and output. Addresses preserve the C build's exact rusage layout. */
 struct sched_exit_debug {
@@ -4462,15 +4463,7 @@ void schedule(void)
 		mcexec_v10_scheduler_logs++;
 	}
 
-	if (prev && prev->ptrace_debugreg) {
-		save_debugreg(prev->ptrace_debugreg);
-		if (next->ptrace_debugreg == NULL) {
-			clear_debugreg();
-		}
-	}
-	if (next->ptrace_debugreg) {
-		restore_debugreg(next->ptrace_debugreg);
-	}
+	sched_schedule_debug_handoff(prev, next);
 
 	/* The previous live FPU state passed admission before preparation. */
 

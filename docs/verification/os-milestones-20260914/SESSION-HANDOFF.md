@@ -1,5 +1,111 @@
 # OS development session handoff
 
+## Physical recovery result — 2026-10-18 14:43 UTC; acceptance pending
+
+Separately reviewed partial observer326cba0f passed0/0.536s (actual72df0224),
+then newexactrecover9f94795c passed0/2.253s. Controller1043266/start13044091
+retired throughpidfd; oldtool91805 positively joined (rootreturn-9/1531.223s).
+Allthreeactiveownershippathsareabsent; newcomplete.json reports
+EXACT_PARTIAL_RECORD_TRANSACTION_FINISHED, oldfailure/latchpreserved. No new
+quarantine/failuremarker. Final independent actualjournal/rootrelease/rawabsence
+acceptance remains pending; no newheavy admission yet. Old quarantine banners
+below are historical. ROOTinode27:4 and scratch21 were not unlinked.
+
+NewIHK6filecapsule ordinarily published81846B/hashverified; finalmetadata review
+4558f079 accepted. Callable17row materializer331527c3 is inaffectedreview;
+fetchedproof, actualstaging/identities and heavyexecutionrelease remainpending.
+Currentincludedusage24percent, stop97. No newnativebehavior/estimatecredit.
+
+
+## Literal-check reconciliation — 2026-10-18 14:28 UTC
+
+Independent e94111e2 review closes only P-M09-01: accepted production492 keeps
+eight existing Rust defaults active with seven applicable native proofs.
+Practical checks6complete/29open;19behaviors/all14milestones open unchanged.
+Whole-kernel C retirement/final delivery remain open. P-M00-02 remains OPEN:
+current partial recovery lacks exact reviewed runnable finish/release commands;
+recoverable fetched3b3cadab evidence is retained. Updated PROGRESS generated.
+
+Exact raw readback passed0/0.326s,901120B,positive child/group retirement,
+SHAeb3c8770. Independent rawreview identifies19postflightclients:01..18retired,
+19exit0/empty but postwaitcensusENOENT/no groupmarker. CIDrm04 and FOUR complete
+absence sets05..16 are retained; latest19group closure still needs fresh proof.
+Do not claim all19retired or fullrecordrelease. CurrentROOT1043266 remainsheld.
+
+
+## CURRENT HOLD UPDATE — 2026-10-18 14:19 UTC
+
+Read-only observer0/0.656s passed, independent actual review released exact
+recovery26a8d409. Recovery positively retired original owner1033154 and naturally
+joined outer1033153; tool72458 completed exit247 (owner-9). ROOT27:4 reacquired,
+60 failure pins archived and first two ownership records exchanged into guarded
+archive transaction. Then a disappearing /proc/1043384/stat row caused fail-closed
+quarantine in controller1043266/start13044091, session91805. This is NOT accepted
+common release: first two active records are directory guards, third is original.
+Journal has exchange0/1 complete only; no release-authorized/complete marker.
+Keep newcontroller/ROOT/guards held; no retry, signal or heavy acquisition.
+Independent classification and bounded exact root-only postflight/archive readback
+are active; new partial-transaction finishing source is separate and NONRUNNABLE.
+Original failed IHK/build/recovery evidence remains unchanged. CID removal/absence
+requires raw postflight acceptance; do not infer it from command position alone.
+
+Inventory diagnostic derivative is now independently source accepted: actual
+measure17cases plus7diagnosticcases pass, no predicate/budget/exception/retirement
+changes. Next Kbuild composition remains conditional on new metadata review and
+physical release. No native behavior/check closure credited for maintenance.
+
+
+## ACTIVE — explicit resume; IHK recovery held, 2026-10-18 14:14 UTC
+
+The 13:43 manual launcher invocation supersedes the historical pause below.
+Functional OS/apps and live compute-C retirement into Rust/reviewed assembly
+remain active. Rejected execve GO/NO-GO and held fork/ACK remain excluded.
+No new service refusal or workload replay. Accepted totals: 19 distinct native
+behaviors, 8 selected production Rust bodies/7 applicable native paths;
+5 complete/30 open practical checks, all 14 milestones open.
+
+IHK-only host-split attempt nonce994ea5cf2efa40bd80707e4d3c147019 FAILED
+at13:45:20; it is NOT compiling. Receipt3628fe9a records bounded-output inventory
+failure and unproven client retirement. Exact stopped CIDac20684b030756511a5b821
+cccafb1a9449cce39948e86d29c7e25f0f1ab36be exited1. Owner1033154/start12856143
+quarantines ROOT27:4; outer1033153/start12856140 waits (session72458). No new
+heavy acquisition until independently reviewed positive recovery/release.
+Failure logs: host-preparation/nsd-c-994ea5cf2efa40bd80707e4d3c147019/evidence/
+make.{stdout,stderr} under /home/holden/mckernel-work. Missing ihk_smp_x86_64.o;
+actual command selected three targets and ineffective strict-tool overrides.
+Inventory predicate cause remains unresolved; do not invent a device mismatch.
+
+Next executable step: independently reviewed finite read-only observation from
+host-preparation/ihk-failed-owner-recovery-20261018-1, then a separately released
+PIDFD/start-bound recovery. Prepared21 focused tests pass;60 files/11 client roots/
+three records pinned. The disposable hung mock was positively retired; the live
+owner was untouched. Normal verified archival may precede removal of this NEW
+failed CID; scratch21 remains permanently protected. No raw unlink or old retry.
+Parallel Kbuild-only correction-1 in ihk-effective-kbuild-repair-20261018-1 pins
+IHK target/accepted objtool/16 flags;3 make and30 driver tests pass, independent
+review active. Env-only prototype rejected; propagation cause remains unresolved.
+New source/metadata/execution release required after recovery, not failed replay.
+
+Rust schedule debug-register handoff: process.c -> sched_schedule_debug_handoff
+in kernel/rust/sched_helpers.rs, source review3ec75f49 accepted216 parity cases
+plus selected/fallback consumer compilation/nm. Architecture save/clear/restore
+helpers unchanged. Image preparation review accepts actual-process.c GCC14
+assertion recipe (offset5016/size5568/align64) and thin consumers; actual production
+C ABI/compiler/image/native proof remain pending. No new compute C behavior.
+Four working source/test files remain dirty intentionally; no cutover credit yet.
+Current source HEAD3b3cadab5daff5bcd1ad2a0f75588b8c8fbe0cc6 remains frozen while
+held operation is reconciled; preserve unrelated dirty/untracked work.
+
+Fresh ordinary observation14:13: boot7bfc5687-6c04-4d15-84eb-b92ab9a55dcb,
+launcher1031399/start12831262 and1031401/start12831270, mutexdev27/inode4,
+hostavailable55,614,754,816B; scratch13,778,259,968B. These are observations,
+not future admission. Usage last22%, stop97%. ScratchUUID2a5768c8-718d-4914-
+bdc0-6b32c5a92a52/110GiB backing and scratch21 preserved. Policy hashes adopted:
+GOAL10a8aff2; START4963c62c; CONVERGENCE63a2ff8f; prior HANDOFF03f5f2e7.
+Checkpoint publication waits for safe reconciliation of held live pins, without
+pausing permitted disjoint source/review work. No OS completion/speedup claim.
+
+
 ## PAUSED — launcher stop, 2026-10-18T13:39:14.152731+00:00
 
 Stop new dispatch; no new heavy operation was started in this manual-resume

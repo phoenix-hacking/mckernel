@@ -5,6 +5,48 @@ from the interactive chat. Read [VELOCITY.md](VELOCITY.md) for the method.
 Preserve completed entries; append new observations and update only this cursor.
 This file describes supervision, not OS acceptance or execution authority.
 
+
+**CURRENT REVIEW32 —2026-10-18T14:13:30Z:** campaign running/goal active;
+19accepted native behaviors,5complete/30open practical checks,8selected production
+Rust bodies/7applicable native paths. No new acceptance this30m12s interval.
+IHK build failed13:45; its owner remains quarantined. Two independent reviews
+cover the33-check Kbuild correction and21-test finite recovery. Scheduler source/
+parity and ordinary image-preparation reviews passed; actual production ABI,
+compile/link and native proof remain pending. Next full review14:43:30UTC.
+The explicit user foreground restart and monitoring request supersede historical
+stopped banners below. No additional launcher or independent timer was installed.
+
+**MONITORING RESUMED2026-10-18T13:43:18Z:** user explicitly requested this
+chat's polling, steering and30-minute updates. Their foreground campaign resumed
+13:41:07UTC in the same thread; phase running/goal active, watcher1031359,
+worker1031399/server1031401. Run `.git/os-autopilot/runs/20261018T134107Z-c8d1f024`.
+Review31 is the new monitoring baseline:19accepted behaviors,8selected production
+Rust bodies/7applicable native paths,5complete/30open checks,14milestones open.
+Next full review14:13:18UTC (07:13Pacific). Earlier stopped intervals are excluded
+from runtime velocity. No second launcher, Git owner or background timer added.
+Steering20261018T134422442204Z-a1d56082d15a4f6cb53806ce7f34e75a was accepted
+13:44:22UTC: advance active scheduler Rust parity/consumer tests and focused
+review; complete the independent IHK release/admission/build path in parallel;
+refill only genuinely ready disjoint implementation/test work. Avoid duplicate
+hashing/preparation and report actual executable throughput. Prior service-held
+tasks remain excluded; ordinary host correctness/resource requirements remain.
+At13:44:53 the scheduler author reported216actual C/Rust/consumer parity cases
+PASS; this is local evidence, not production/native retirement. IHK result
+reviewer started13:44:55; new build completion is not yet observed. Host51.92GiB,
+scratch12.832GiB and usage22% are baseline observations, not runtime admission.
+
+**STOPPED2026-10-18T13:40:12Z — explicit user request:** the user wants to
+launch the campaign in another terminal. Goal paused, phase stopped,
+stop_reason signal_2/exit10, active_turns empty; watcher1026439, worker1026442
+and server1026444 are absent. No automatic restart. Checkpoint
+`3b3cadab5daff5bcd1ad2a0f75588b8c8fbe0cc6` pushed/fetched,9blobs verified.
+Accepted19behaviors/7scoped Rust-native paths; practical checks5complete30open.
+No build or guest was launched. User-run foreground command:
+`python3 -B /home/holden/mckernel/scripts/run_os_parallel.py --run --no-fresh-on-recovery`.
+The matching --check passed with no launch blockers and no inference. Latest
+CURRENT/HANDOFF retain the excluded refused tasks and exact next prerequisites.
+Earlier resume banners below are historical. Interactive monitoring is stopped.
+
 **MANUALLY RESUMED2026-10-18T13:32:02Z:** the user explicitly requested a
 restart for functional OS work. Same campaign thread; no fresh session or
 conversation reset. The launcher accepted
@@ -2795,3 +2837,78 @@ absent, ROOT27:4 intact; cleanup_verifiedfalse retained, no privileged new censu
 The12:15 review target is superseded by the service stop. Local stop notes saved;
 no separate schedule, automatic rollback or policy retry added. User's practical
 OS/Rust objective remains unfinished. Service reporting/review is the next step.
+
+## Review31 — 2026-10-18 13:43 UTC (monitoring restart baseline)
+
+User restarted the same saved campaign in their foreground terminal at13:41:07.
+Watcher1031359/start12831221, worker1031399/start12831262,
+server1031401/start12831270; run134107Z-c8d1f024. Supervisor monitoring resumed
+13:43:18. Baseline19accepted native behaviors,5complete/30open practical checks,
+14milestones open,8selected production Rust bodies/7applicable native paths.
+Last checkpoint3b3cadab is pushed/fetched; prior stopped windows are excluded
+from runtime velocity. Usage22%, host~51.92GiB/Scratch12.832GiB; admission still
+needs fresh measurements. Initial steering134422 was accepted: source/parity and
+actual consumer tests in parallel with the independent IHK build path; avoid
+repeated preparation and fill only genuinely ready work.
+
+## Review32 — 2026-10-18 14:13 UTC
+
+Cutoff14:13:30UTC; interval30m12s from monitoring restart baseline. Campaign
+running/goal active, same watcher/worker/server birth identities. Root plus two
+independent reviewers active. Official acceptance remains19behaviors,
+5complete/30open checks,14milestones open: delta0accepted behaviors/0closedchecks.
+Eight selected production Rust bodies/seven applicable native paths unchanged.
+No quantified2x/3x speedup or whole-kernel Rust percentage is established.
+
+Actual engineering output this interval:
+
+- Scheduler debug-handoff actual C/Rust/consumer216-case matrix passed and
+  independent source review passed. Ordinary image/materialization/ABI-command
+  preparation review passed. Real production C Thread layout under pinned GCC14,
+  image compile/link and native proof are still pending; no retirement credit.
+- IHK finite build was attempted. Containerac20684b... exited1 at13:45:19.682UTC;
+  retained log reports IHK make failure, and ihk.o exists without ihk.ko acceptance.
+  The reviewer confirmed unwanted SMP selection and a non-strict saved objtool
+  command. The initial MAKEOVERRIDES-only cause did not reproduce and is rejected;
+  do not repeat it as established cause. Private Kbuild correction explicitly
+  selects IHK and accepted tool/16flags;3GNU Make checks plus30driver tests pass.
+  Independent source review is active; no second compile or acceptance.
+- Owner1033154/start12856143 remains in quarantine_root_lock after inventory
+  refusal and unproven wait-client/group retirement. Receipt statusFAIL,
+  retiredfalse/UNCERTAIN_RECORDS_RETAINED; TERM EPERM appears in wait-client status.
+  Current inventories satisfy expected candidate/evidence devices, so a remount/
+  device-mismatch cause is unsupported. Original capture and all records retained.
+- Private finite recovery and exact inventory-predicate diagnostics pass21local
+  tests and pin60files/11client roots/three records. Independent review is active.
+  No recovery signal, root action, container removal or release was performed by
+  the supervisor. Stock reviewed removal route remains preferred; scratch21 is
+  specifically protected and no new permanent container-retention rule is inferred.
+
+Measured interventions:
+
+1. At13:56 the supervisor inspected the already-written terminal receipt instead
+   of treating a live owner as evidence of compilation. Root acknowledged13:58
+   and split build failure from retirement. This corrected an idle/quarantine
+   wait; no observed build was interrupted.
+2. Scheduler preparation printed~3.4MB of manifests in~74s. Steering135221
+   changed reads to selected fields/bounded output; the next interval emitted
+   only~15KB. This is a local context-output reduction, not a campaign speedup.
+3. Completed author was reactivated for the actual C ABI gap. Two disjoint repair
+   authors then prepared Kbuild and finite recovery fixes concurrently; both
+   completed with passing local checks and moved to focused independent review.
+
+Next execution path: complete the concrete recovery observation/execution review,
+archive retained failures, prove exact live process retirement and positive mutex
+reacquisition, then use the approved container/record release. In parallel finish
+ordinary scheduler source publication/preparation and reviewed IHK correction
+binding. Once exact releases/live admission pass, consume the corrected finite
+IHK build and next candidate ABI/image step promptly; no replays or extra audits.
+Source/mock results remain preparation evidence. Root owns runtime/Git/acceptance.
+
+Storage at cutoff:host51.795GiB/Scratch12.832GiB; floors16/12GiB plus packet growth
+and emergency reserves unchanged. Usage23%, stop97%. New scheduler preparation's
+scratch requirement13,680,351,424B has little remaining headroom and needs a fresh
+measurement; no cleanup/resize/reserve changes are authorized by this record.
+Latest subjective estimate table is practical-engineering-estimate-20261018T134738Z;
+its cutoff precedes this failure and it claims no completed IHK/scheduler build.
+Next full review14:43:30UTC. No background timer or competing dispatcher added.

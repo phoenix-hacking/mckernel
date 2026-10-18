@@ -1,0 +1,317 @@
+{
+  "schema_version": 1,
+  "scope_id": "practical-kernel-apps-v1-20261017",
+  "estimate_id": "practical-engineering-estimate-20261018T134738Z",
+  "created_at_utc": "2026-10-18T13:47:38.570003+00:00",
+  "engineering_evidence_cutoff_utc": "2026-10-18T13:44:55Z",
+  "comparison_baseline": "docs/verification/os-milestones-20260914/practical-engineering-estimate-20261017T152511Z.json",
+  "previous_comparison": "docs/verification/os-milestones-20260914/practical-engineering-estimate-20261018T043803Z.json",
+  "estimate_kind": "subjective engineering-completion ranges for the new practical goal",
+  "confidence": "low",
+  "measured_completion": false,
+  "percentage_definition": "Rough judgment about implementation, targeted tests and integration against PRACTICAL-GOAL.md, not checklist fraction, reliability, elapsed/remaining time or a weighted whole-OS score.",
+  "milestones": [
+    {
+      "id": "M00",
+      "title": "Preservation and practical workflow",
+      "baseline_complete_percent_range": [
+        85,
+        95
+      ],
+      "previous_estimate_percent_range": [
+        85,
+        95
+      ],
+      "estimated_complete_percent_range": [
+        85,
+        95
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0,
+      "estimated_midpoint_change_percentage_points": 0.0,
+      "basis": "Recoverable checkpoints and source/artifact handoffs remain strong; final supported-profile delivery is still open.",
+      "scope_note": null
+    },
+    {
+      "id": "M01",
+      "title": "Requests, responses and recovery",
+      "baseline_complete_percent_range": [
+        50,
+        70
+      ],
+      "previous_estimate_percent_range": [
+        55,
+        75
+      ],
+      "estimated_complete_percent_range": [
+        55,
+        75
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0,
+      "estimated_midpoint_change_percentage_points": 5.0,
+      "basis": "Additional accepted application traffic reuses existing request paths; final negative/cancellation closure has not newly passed.",
+      "scope_note": null
+    },
+    {
+      "id": "M02",
+      "title": "Execution and comparison runner",
+      "baseline_complete_percent_range": [
+        70,
+        85
+      ],
+      "previous_estimate_percent_range": [
+        75,
+        90
+      ],
+      "estimated_complete_percent_range": [
+        80,
+        90
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 2.5,
+      "estimated_midpoint_change_percentage_points": 7.5,
+      "basis": "Three additional accepted native behaviors and retained complete results/physical retirement extend the working execution path; final timeout/rejection coverage remains open.",
+      "scope_note": null
+    },
+    {
+      "id": "M03",
+      "title": "Memory and mapping correctness",
+      "baseline_complete_percent_range": [
+        45,
+        65
+      ],
+      "previous_estimate_percent_range": [
+        55,
+        75
+      ],
+      "estimated_complete_percent_range": [
+        55,
+        75
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0,
+      "estimated_midpoint_change_percentage_points": 10.0,
+      "basis": "Existing map/protect/unmap proof is preserved; no new final-profile ownership/restoration closure in this interval.",
+      "scope_note": null
+    },
+    {
+      "id": "M04",
+      "title": "Useful C and Rust applications",
+      "baseline_complete_percent_range": [
+        45,
+        65
+      ],
+      "previous_estimate_percent_range": [
+        70,
+        85
+      ],
+      "estimated_complete_percent_range": [
+        80,
+        90
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 7.5,
+      "estimated_midpoint_change_percentage_points": 30.0,
+      "basis": "Useful C and real Rust std applications on the matched candidate and independent selected-suite/Linux comparison close P-M04-01 and P-M04-03; final integrated regression remains open.",
+      "scope_note": null
+    },
+    {
+      "id": "M05",
+      "title": "Native lifecycle and restoration",
+      "baseline_complete_percent_range": [
+        15,
+        30
+      ],
+      "previous_estimate_percent_range": [
+        55,
+        75
+      ],
+      "estimated_complete_percent_range": [
+        55,
+        75
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0,
+      "estimated_midpoint_change_percentage_points": 42.5,
+      "basis": "The previously credited second native stop/release remains preserved; no additional final-profile lifecycle completion is credited.",
+      "scope_note": null
+    },
+    {
+      "id": "M06",
+      "title": "Processes, threads and used syscalls",
+      "baseline_complete_percent_range": [
+        30,
+        50
+      ],
+      "previous_estimate_percent_range": [
+        40,
+        60
+      ],
+      "estimated_complete_percent_range": [
+        45,
+        65
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 5.0,
+      "estimated_midpoint_change_percentage_points": 15.0,
+      "basis": "Accepted mixed Rust/std application adds six worker lifetimes across three overlap windows with checked synchronization/publication behavior; process creation/exec/wait remains open.",
+      "scope_note": null
+    },
+    {
+      "id": "M07",
+      "title": "Used FPU/vector state",
+      "baseline_complete_percent_range": [
+        10,
+        30
+      ],
+      "previous_estimate_percent_range": [
+        50,
+        70
+      ],
+      "estimated_complete_percent_range": [
+        65,
+        80
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 12.5,
+      "estimated_midpoint_change_percentage_points": 52.5,
+      "basis": "Current492 has accepted native AVX/thread/signal chain plus NULL-fpstate guaranteed x87 FINIT reset; full used-feature/final-profile coverage and broader reset claims remain open.",
+      "scope_note": null
+    },
+    {
+      "id": "M08",
+      "title": "Native modules and interfaces",
+      "baseline_complete_percent_range": [
+        75,
+        90
+      ],
+      "previous_estimate_percent_range": [
+        85,
+        95
+      ],
+      "estimated_complete_percent_range": [
+        85,
+        95
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0,
+      "estimated_midpoint_change_percentage_points": 7.5,
+      "basis": "Existing matched modules preserved; reviewed IHK host-tool/build preparation is not a newly accepted module artifact.",
+      "scope_note": null
+    },
+    {
+      "id": "M09",
+      "title": "Rust and assembly integration",
+      "baseline_complete_percent_range": [
+        80,
+        95
+      ],
+      "previous_estimate_percent_range": [
+        80,
+        95
+      ],
+      "estimated_complete_percent_range": [
+        85,
+        95
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 2.5,
+      "estimated_midpoint_change_percentage_points": 2.5,
+      "basis": "INTEGRATION ONLY: eight selected Rust bodies production/default-link proved, seven with applicable native-chain proof. Broader live compute-C retirement remains active and unmeasured; pending scheduler port has no production/native credit.",
+      "scope_note": "Integration only; not whole-kernel Rust conversion"
+    },
+    {
+      "id": "M10",
+      "title": "Repeatable runnable build",
+      "baseline_complete_percent_range": [
+        50,
+        70
+      ],
+      "previous_estimate_percent_range": [
+        60,
+        80
+      ],
+      "estimated_complete_percent_range": [
+        65,
+        80
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 2.5,
+      "estimated_midpoint_change_percentage_points": 12.5,
+      "basis": "Additional successful pinned thin-image builds/default-link ABI validation demonstrate repeatable candidate preparation; final clean matched recipe replay remains open.",
+      "scope_note": null
+    },
+    {
+      "id": "M11",
+      "title": "Integrated functional regression",
+      "baseline_complete_percent_range": [
+        50,
+        70
+      ],
+      "previous_estimate_percent_range": [
+        60,
+        75
+      ],
+      "estimated_complete_percent_range": [
+        65,
+        80
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 5.0,
+      "estimated_midpoint_change_percentage_points": 12.5,
+      "basis": "Accepted behavior set expands16 to19 with useful mixed-app, empty-file and NULL-fpstate evidence plus selected Linux comparisons; final integrated regression remains open.",
+      "scope_note": null
+    },
+    {
+      "id": "M12",
+      "title": "Bounded repeatability and stress",
+      "baseline_complete_percent_range": [
+        10,
+        25
+      ],
+      "previous_estimate_percent_range": [
+        15,
+        30
+      ],
+      "estimated_complete_percent_range": [
+        15,
+        30
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0,
+      "estimated_midpoint_change_percentage_points": 5.0,
+      "basis": "Final-profile two boots/ten cycles/100 launches/60-minute mixed session has not newly passed; no uplift for preparation or unrelated diagnostic vectors.",
+      "scope_note": null
+    },
+    {
+      "id": "M13",
+      "title": "Practical delivery",
+      "baseline_complete_percent_range": [
+        25,
+        45
+      ],
+      "previous_estimate_percent_range": [
+        30,
+        50
+      ],
+      "estimated_complete_percent_range": [
+        30,
+        50
+      ],
+      "estimated_midpoint_change_since_previous_percentage_points": 0.0,
+      "estimated_midpoint_change_percentage_points": 5.0,
+      "basis": "New checkpoints preserve runnable next commands; final delivery/capability statement and final correctness review remain open.",
+      "scope_note": null
+    }
+  ],
+  "verified_counters": {
+    "previous_distinct_native_behaviors": 16,
+    "current_distinct_native_behaviors": 19,
+    "previous_complete_checks": 3,
+    "current_complete_checks": 5,
+    "open_checks": 30,
+    "open_milestones": 14,
+    "selected_production_rust_bodies": 8,
+    "selected_applicable_native_paths": 7
+  },
+  "exclusions": [
+    "Pending IHK host-module build is not counted as completed.",
+    "Scheduler local216-case parity is not production/native retirement and gets no completion credit.",
+    "M09 range continues the historical integration-only estimate; full compute-C retirement percentage is unmeasured."
+  ],
+  "sources": [
+    "docs/verification/os-milestones-20260914/HANDOFF.md",
+    "docs/verification/os-milestones-20260914/practical-milestones.json",
+    "docs/verification/evidence/rust-fp-reset-null-fpstate-native-result-review-20261018-1.json",
+    "docs/verification/evidence/practical-selected-suite-comparison-review-20261018-1.json",
+    "docs/verification/os-milestones-20260914/VELOCITY-REVIEWS.md"
+  ]
+}

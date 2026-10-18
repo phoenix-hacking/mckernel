@@ -16,6 +16,9 @@ unsafe extern "C" {
     fn process_sched_cpu_local_bridge(cpu_id: CInt) -> usize;
     fn process_sched_irq_save_bridge() -> CULong;
     fn save_fp_regs(thread: *mut core::ffi::c_void) -> CInt;
+    fn save_debugreg(debugreg: *mut CULong);
+    fn clear_debugreg();
+    fn restore_debugreg(debugreg: *mut CULong);
     fn panic(message: *const i8) -> !;
     #[link_name = "process_spin_lock_bridge"]
     fn process_spin_lock_bridge_c(lock_addr: CULong) -> CULong;
@@ -3004,6 +3007,27 @@ pub unsafe extern "C" fn sched_schedule_exit_cleanup(
                 i += 1;
             }
         }
+    }
+}
+
+/// Transfer the live debug-register state after preparation and before the
+/// architecture context switch. next is non-null; both thread structures and
+/// any debug buffers stay live under the caller's scheduler exclusion. Buffers
+/// may alias. Read next's pointer after saving prev, matching the C sequence.
+#[no_mangle]
+pub unsafe extern "C" fn sched_schedule_debug_handoff(prev: *mut Thread, next: *mut Thread) {
+    if !prev.is_null() {
+        let previous = unsafe { read_volatile(&raw const (*prev).ptrace_debugreg) };
+        if !previous.is_null() {
+            unsafe { save_debugreg(previous) };
+            if unsafe { read_volatile(&raw const (*next).ptrace_debugreg) }.is_null() {
+                unsafe { clear_debugreg() };
+            }
+        }
+    }
+    let following = unsafe { read_volatile(&raw const (*next).ptrace_debugreg) };
+    if !following.is_null() {
+        unsafe { restore_debugreg(following) };
     }
 }
 
