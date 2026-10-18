@@ -1290,6 +1290,7 @@ alloc_debugreg(struct thread *thread)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void
 save_debugreg(unsigned long *debugreg)
 {
@@ -1303,7 +1304,9 @@ save_debugreg(unsigned long *debugreg)
 	asm("mov %%db6, %0" :"=r" (debugreg[6]));
 	asm("mov %%db7, %0" :"=r" (debugreg[7]));
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void
 restore_debugreg(unsigned long *debugreg)
 {
@@ -1316,6 +1319,7 @@ restore_debugreg(unsigned long *debugreg)
 	asm("mov %0, %%db6" ::"r" (debugreg[6]));
 	asm("mov %0, %%db7" ::"r" (debugreg[7]));
 }
+#endif
 
 #ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void

@@ -2925,3 +2925,75 @@ unsafe fn clear_debugreg_body<W: DebugRegisterWriter>(writer: &mut W) {
 pub unsafe extern "C" fn clear_debugreg() {
     unsafe { clear_debugreg_body(&mut HardwareDebugRegisterWriter) };
 }
+
+trait DebugRegisterReader {
+    /// Caller provides the existing CPU-local privileged debug-state exclusion.
+    unsafe fn read<const REG: u8>(&mut self) -> CULong;
+}
+
+struct HardwareDebugRegisterReader;
+
+impl DebugRegisterReader for HardwareDebugRegisterReader {
+    #[inline(always)]
+    unsafe fn read<const REG: u8>(&mut self) -> CULong {
+        let value: CULong;
+        // Keep each read side-effecting and a compiler memory barrier, matching
+        // statement order against the buffer stores. Never read DR4 or DR5.
+        match REG {
+            0 => unsafe { core::arch::asm!("mov {value}, dr0", value = out(reg) value, options(nostack)) },
+            1 => unsafe { core::arch::asm!("mov {value}, dr1", value = out(reg) value, options(nostack)) },
+            2 => unsafe { core::arch::asm!("mov {value}, dr2", value = out(reg) value, options(nostack)) },
+            3 => unsafe { core::arch::asm!("mov {value}, dr3", value = out(reg) value, options(nostack)) },
+            6 => unsafe { core::arch::asm!("mov {value}, dr6", value = out(reg) value, options(nostack)) },
+            7 => unsafe { core::arch::asm!("mov {value}, dr7", value = out(reg) value, options(nostack)) },
+            _ => unreachable!(),
+        }
+        value
+    }
+}
+
+#[inline(always)]
+unsafe fn save_debugreg_body<R: DebugRegisterReader>(debugreg: *mut CULong, reader: &mut R) {
+    unsafe {
+        debugreg.add(0).write(reader.read::<0>());
+        debugreg.add(1).write(reader.read::<1>());
+        debugreg.add(2).write(reader.read::<2>());
+        debugreg.add(3).write(reader.read::<3>());
+        // The C chained assignment stores slot 5 then slot 4, both before DR6.
+        debugreg.add(5).write(0);
+        debugreg.add(4).write(0);
+        debugreg.add(6).write(reader.read::<6>());
+        debugreg.add(7).write(reader.read::<7>());
+    }
+}
+
+/// Save this CPU's debug state through the existing scheduler/ptrace ABI.
+/// debugreg must be aligned, writable and live for eight CULong elements under
+/// the caller's existing exclusion; no Rust reference or ownership is created.
+/// Kernel privilege, CPU pinning and debug exception preconditions are unchanged.
+/// Slots 4 and 5 are zeroed without touching DR4/DR5. DR7.GD handling is unchanged.
+#[no_mangle]
+pub unsafe extern "C" fn save_debugreg(debugreg: *mut CULong) {
+    unsafe { save_debugreg_body(debugreg, &mut HardwareDebugRegisterReader) };
+}
+
+#[inline(always)]
+unsafe fn restore_debugreg_body<W: DebugRegisterWriter>(debugreg: *mut CULong, writer: &mut W) {
+    unsafe {
+        writer.write::<0>(debugreg.add(0).read());
+        writer.write::<1>(debugreg.add(1).read());
+        writer.write::<2>(debugreg.add(2).read());
+        writer.write::<3>(debugreg.add(3).read());
+        writer.write::<6>(debugreg.add(6).read());
+        writer.write::<7>(debugreg.add(7).read());
+    }
+}
+
+/// Restore this CPU's debug state using the existing scheduler contract.
+/// The caller supplies a live aligned eight-element unsigned-long buffer and
+/// kernel privilege on the pinned CPU with existing debug/scheduler exclusion.
+/// Slots 4/5 are ignored; this preserves DR order and existing DR7.GD handling.
+#[no_mangle]
+pub unsafe extern "C" fn restore_debugreg(debugreg: *mut CULong) {
+    unsafe { restore_debugreg_body(debugreg, &mut HardwareDebugRegisterWriter) };
+}

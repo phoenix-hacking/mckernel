@@ -1,0 +1,45 @@
+{
+  "status": "PASS_PRIVATE_PAIR_PREPARATION_ONLY",
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-integration-20261018-1/candidate.patch",
+    "sha256": "7e3d7ae097164612433486479810d0da3100fc2df5f8bf70da97d1bf04daf615",
+    "bytes": 4198
+  },
+  "files": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-integration-20261018-1/candidate/arch/x86_64/kernel/syscall.c",
+      "sha256": "2abee2d3c4813e7fb9769719e6bb07daf944490a3ac199f2762a7015a97d54f1",
+      "bytes": 113482
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-debugreg-pair-integration-20261018-1/candidate/kernel/rust/x86_cpu_helpers.rs",
+      "sha256": "233e1ca36f662d7a9e1126747dbc17ccd0323e27f7750667cf059ac93465ca10",
+      "bytes": 87475
+    }
+  ],
+  "exact_leaf_appends_and_bodies": true,
+  "subprocesses": 19,
+  "all_direct_children_joined": true,
+  "production_builds": 0,
+  "guest_apps": 0,
+  "hardware_execution": false,
+  "failure_history": [
+    "composer guard-newline assumption: retained original; exact insertion-only composition correction passed",
+    "combined fallback fixture missed existing CLEAR constants: original failure retained; exact actual C defines added; affected fallback-only rerun passed",
+    "byte extractor expected .text instead of large-model .ltext: original retained; affected extraction corrected once and passed"
+  ],
+  "host_available": 54253719552,
+  "unexpected_fixture_compile_failures_corrected": 1,
+  "machine_bytes_exactly_match_reviewed": {
+    "save_debugreg": {
+      "exact_machine_bytes_equal": true,
+      "bytes": 63,
+      "sha256": "baa1d05350e73c68e15872e1295d27a1383dc7215ab79f69761b595bd6d180b9"
+    },
+    "restore_debugreg": {
+      "exact_machine_bytes_equal": true,
+      "bytes": 47,
+      "sha256": "9ae0c43f06f1d36925d58296c825c38663286ae11eac34f64f2855930c03e4a8"
+    }
+  }
+}

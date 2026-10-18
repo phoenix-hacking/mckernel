@@ -60,6 +60,16 @@ Track completed packets awaiting handoff, and refill useful implementation,
 application preparation and review work as each result arrives. Keep unrelated
 review decisions out of a ready build's dependency chain.
 
+After an operation's actual direct join and required readbacks complete, notify
+its waiting result reviewer before unrelated preparation. Include exact completed
+capture/status paths and real join/readback results. The parent checks completion,
+status and resource ownership, then delegates the full byte/oracle/retirement
+review promptly. If a join is unfinished, state that specific boundary. At19:02
+and19:12UTC on2026-10-18, reviewers still awaited this notification after observed
+command returns; both handoffs were closed by explicit steering. Track return-to-
+notification latency separately from review time. Preserve the no-unfinished-
+artifact-read rule, and avoid performing the complete independent review twice.
+
 For future checkpoints, assess compatible independently reviewed Rust leaf changes
 for a shared production build/regression cycle where repository rules permit.
 Keep the currently frozen attempt stable. Prepare affected postbuild and terminal
@@ -67,6 +77,17 @@ inputs during compilation, and run separately admitted cheap application staging
 in its available CPU lane. Measure accepted functional outcomes per wall hour and
 time waiting for handoffs separately from compiler runtime. Agent occupancy and
 additional preparation alone do not establish a2x/3x throughput improvement.
+
+Review41 on2026-10-18 measured a200.543s successful image build against roughly
+32minutes in the subsequent inspection/publication/terminal phase. That phase
+contains required work; record pure handoff waiting separately. Use the real
+canonical producer's metadata and wait-record schema early. Preserve original
+records when a declared compatibility receipt is needed, and derive fields from
+actual successful waits. For the next candidate, assess source-reviewed save_debugreg
+and an eligible privately implemented restore_debugreg as compatible leaf changes
+for one future production/native cycle, with independent review and repository
+rules. Current frozen attempts remain stable; this is a throughput experiment,
+not automatic integration or additional native credit.
 
 The native control kernel, three Rust modules and matching current942 image
 already exist. The native baseline passed diagnostic artifact revalidation;

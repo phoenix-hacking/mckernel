@@ -6,17 +6,17 @@ Preserve completed entries; append new observations and update only this cursor.
 This file describes supervision, not OS acceptance or execution authority.
 
 
-**CURRENT REVIEW40 — 2026-10-18T18:16:02Z:** campaign active;
-20 distinct native behaviors, 6 complete / 29 open checks, all 14 milestones open.
-Selected production/default-link Rust paths 9; applicable native integration paths 8.
-Mmap-zero-length actual behavior and positive retirement are independently accepted.
-Clear-debug remaining-only ordinary execution is accepted; original copy child
-status remains UNKNOWN. Source cf035407 and 12 tools at fetched8cdcbf46 are bound.
-Exact build release534a84c2 passed; the image command returned after about201s,
-with completed-receipt/postbuild/artifact acceptance still pending at cutoff.
-Private save_debugreg source review passes69 vectors/eight compiled mutations;
-closed-write Linux reference passes and ordinary staging/fixture profile is approved.
-Usage29%, stop97%; next full review18:46:02UTC. Immutable milestone ledger saved
+**CURRENT REVIEW42 — 2026-10-18T19:17:00Z:** campaign active;
+21 distinct native behaviors, 6 complete / 29 open checks, all14 milestones open.
+Selected production/default-link Rust paths10; applicable native integration paths9.
+Imagee85a AVX5f56221d and threadse303118f chain/physical retirement accepted.
+Closed-write actual EBADF/24-byte output/exit0 and physical retirement accepted.
+The reviewed private SAVE+RESTORE pair and corrected production-input templates
+pass independent combined review; root is moving into one shared image cycle.
+No production/native credit for the two new leaves before actual build/runtime proof.
+Two delayed completion notifications were closed; root now prioritizes handing
+joined runtime results to the independent reviewer before unrelated preparation.
+Usage32%, stop97%; next full review19:47:00UTC. Immutable milestone ledger saved
 18:04:29UTC; separate four-hour comparison due22:04:29UTC (15:04Pacific).
 No second launcher or background timer is installed.
 
@@ -3393,3 +3393,135 @@ continuation, and execute approved closed-write staging in its independent cheap
 lane. Keep useful private implementation/review work flowing while one heavy
 operation owns resources. Preserve all failed evidence, scratch21, service-held
 exclusions, full floors/growth/reserves and97% usage stop. Next full review18:46:02UTC.
+
+## Review 41 — 2026-10-18T18:46:50Z
+
+Thirty-minute delta: selected production/default Rust paths9 ->10; applicable
+native integration8 ->8; distinct accepted native behaviors20 ->20; checks remain
+6complete/29open and all14 whole milestones open. Usage31%, root50.575GiB free,
+scratch12.826GiB. Broad estimated completion ranges are held; the immutable
+18:04:29 milestone ledger remains the four-hour baseline for22:04:29UTC.
+
+Clear_debugreg image e85a1e35 built successfully in200.543s with positive client
+retirement and direct join. Fourteen actual postbuild observations and four copies
+passed in4.84s. Independent artifact decision
+`dacf4e3f08ecc119356471ff7c8c2a7112e3f1f2f96f61086268631f92c4a30f`
+accepts the tenth selected production Rust path,
+six register writes, default linked consumer and preserved previous behavior.
+LLVM inlining is documented; hardware branch and native integration proof remain
+open. The private save_debugreg source decision remains accepted69 vectors/eight
+compiled negatives, without production/native credit.
+
+Finite retention accepted15 originals/thirty descriptor rows. The observer and
+summary passed1.42s/.04s. Original status records use direct_wait; explicit derived
+compatibility receipts supply direct_child_joined to the unchanged exporter,
+binding the originals and their successful waits. No observer replay or invented
+join occurred. All five original raw files and their complete ownership/client/
+artifact observation are independently accepted. Terminal publication checkpoint
+c9a1e1b17aabc96cc604496b8d92940a6689a240 was pushed/fetched with42 changed blobs
+and23 source matches. Exact cleanup returnedPASS_EXECUTED4.81s and approved
+postjoin readback0.65s, both directly joined. Physical transaction/archive/released-
+name/container/artifact acceptance is still under independent review at cutoff;
+the heavy-operation record is absent. Absence alone is not release acceptance.
+
+Both AVX/thread image-only stages preserve complete60-entry maps, metadata and
+order. Actual parents and99-byte endpoints pass. Six additive AVX bindings and
+both real changed-manifest consumers are independently accepted073d781f; the
+11-source AVX/five-source thread contracts and wrapper functions are reused.
+Unsigned final guest payloads are prepared with static joins checked before the
+time-limited admission snapshot. Terminal physical acceptance and exact fresh
+final release remain required. No native guest ran during this interval.
+
+Closed-write Linux reference and first fixture were accepted. The current-image
+derivation073682c4 and changed-consumer evidence are independently accepted:
+only image size/hash changed; all raw record/header metadata and60 final entries
+are preserved. The private ordinary parent exited0, joined and matches owner/mode.
+Its native request awaits the new-image chain and final execution facts. The
+pre-command capture-wrapper SyntaxError and original ordinary copy UNKNOWN
+status are preserved separately; no approved stage/source-copy replay occurred.
+
+Compiler runtime is3.34minutes, while the elapsed postbuild/publication/terminal
+phase spans about32minutes at this cutoff. That phase includes real inspections,
+review and preservation; measure pure handoff waiting separately. The next useful
+velocity tactic is reusable actual metadata/producer schemas, early bounded
+terminal/postbuild preparation and compatible reviewed Rust leaves sharing a future
+build/regression cycle under repository rules. User explicitly requested greater
+velocity. Steering18475372 asks an idle private lane to assess the unclaimed live
+restore_debugreg body and implement actual C/Rust parity if eligible, alongside
+source-reviewed save_debugreg. It preserves the frozen current image and final
+guest gates. No numerical2x/3x improvement or percentage gain is inferred.
+
+Next: accept the physical cleanup, finalize AVX from the prepared static payload
+with its fresh snapshot last, then consume the same-image thread prerequisite and
+ready closed-write case in their exact releases. Keep private implementation and
+affected reviews moving; preserve one-heavy, floors/growth/reserves,97% usage stop,
+scratch21, service-held exclusions and every failed artifact. Next full review
+19:16:50UTC; separate ledger comparison22:04:29UTC.
+
+## Review 42 — 2026-10-18T19:17:00Z
+
+Thirty-minute delta: distinct accepted native behaviors20 ->21; applicable Rust
+native integration paths8 ->9; selected production/default paths10 ->10. Checks
+remain6complete/29open, all14 whole milestones open. Usage32%, root50.515GiB
+free and scratch12.823GiB. No broad percentage increase inferred. The immutable
+18:04:29 milestone ledger and its20/9/8/6-of35 factual baseline remain preserved;
+four-hour comparison due22:04:29UTC. Current facts are21/10/9/6-of35.
+
+Physical clear-debug terminal release was independently accepted after the prior
+cutoff: five originals, nine journal events, thirty artifact rows and released
+ownership names pass. AVX's first final snapshot expired before owner/guest
+effects. Its unchanged source/terminal/consumer decisions were reused; a genuine
+refresh passed at24.1seconds and launched at36.3seconds. The wrapper completed
+34.53seconds with direct joins and three readbacks. Independent review5f56221d
+accepts the original380-byte typed AVX oracle, exit0, complete streams and positive
+QEMU/30-client/container/lease retirement. Review-parser schema/order corrections
+and the pre-effect expired release are preserved; no runtime replay occurred.
+
+Cthreads final review0b6e377a passed at snapshot age31.1seconds. Wrapper36.90s,
+direct joins/empty stderr/inline readbacks completed. Actual final review
+`e303118ff21ddbd190d58e10d5624b7189789f8c91d2c76471f3eeab155b5085`
+accepts the frozen25-byte stdout, expected exit37, exact QEMU command and positive
+retirement. Together with AVX it supports the same-image integration chain and
+ninth applicable native Rust path. No new distinct behavior, direct hardware
+debug-register proof or per-helper branch coverage follows from these replays.
+
+Closed-write source/profilecafde8f8 and all static joins passed before the fresh
+snapshot. Exact final machine87f5f3c3 received narrow independent approval. The
+wrapper completed33.97s with direct joins, empty stderr and completed readbacks.
+Reviewer1530 independently accepts actual successful close, the following write
+returning-9/EBADF, exact24-byte stdout, exit0 and positive application/QEMU/all30
+clients/container/lease retirement. This is one new API behavior; broader file-
+subsystem, resource-cycle and milestone closure remain open. Original protocol-only
+flags and expected retirement diagnostics are preserved.
+
+The private restore_debugreg port passes69 actual C/Rust vectors, eight compiled
+negative controls, emitted-body and symbol checks. Independent source review
+accepts its compatibility with save_debugreg. The coherent two-file composition
+compiles the complete merged module under its declared shim profile, resolves
+three selected debug-register exports once and matches both reviewed leaf machine
+bodies exactly. Selected/fallback fixture checks pass after preserving/correcting
+missing extracted C constants. Combined source/input review passes after two
+oracles were corrected to actual ptrace SAVE routing and selected-artifact coverage.
+Real GCC14/full-crate/image/native and fallback/native/legacy observations remain
+pending. Root kept the pair private until closed-write acceptance, then announced
+integration and one subsequent shared image cycle. No early twelve-path claim.
+
+Two result workers explicitly awaited completion notifications after the supervisor
+had observed execution commands return. Steering19023586 and19123689 closed
+thread and closed-write handoffs. Root confirmed completed paths/statuses and
+committed to notifying independent result reviewers before unrelated preparation.
+Parent checks actual joins/status/resources, then delegates full raw/oracle/
+retirement review promptly. Measure return-to-notification latency and reviewer
+time separately. Do not inspect unfinished evidence or duplicate the full review
+serially in the parent. This concrete workflow repair does not establish a2x/3x
+whole-campaign speedup.
+
+Steering19181608 carries the new21/10/9 metrics, paired production cycle and prompt
+handoff rule. During compilation select one substantive remaining functional exit
+condition from existing practical next-actions and prepare its actual missing code/
+test. Prefer coherent supported-image regression and contract-permitted reuse of
+accepted cases. Keep per-case oracles, failure stops, retirement and scope fixed;
+avoid a new global milestone audit or percentage credit from a scope reduction.
+Preserve one-heavy, full floors/growth/reserves,97% stop, scratch21, service-held
+exclusions and every failed artifact. Next full review19:47:00UTC; separate ledger
+comparison22:04:29UTC.

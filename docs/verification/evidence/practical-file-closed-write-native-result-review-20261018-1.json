@@ -1,0 +1,67 @@
+{
+  "actual_image": {
+    "sha256": "e85a1e356e6d09a119d01bbfa2a5175b084dfda1158e9caff508c6434c9a216e"
+  },
+  "decision": "PASS_ACTUAL_NATIVE_CLOSED_WRITE_AND_RETIREMENT",
+  "distinct_behavior_increment": 1,
+  "evidence": {
+    "attempt_archive_sha256": "0365f21951b030d5fe9ac2a22c30da7efaa268129f4ec81adba00294e31364d0",
+    "owner_archive_sha256": "69f3295a4d79b383b33f71268ad2b58d9faa86fcafd987695d23497d897ee5cb",
+    "owner_join_sha256": "7eaefdbc17a86f0a62cf1ef487cc5d2429b19bb9e56a30964e927aa5f5cb7601",
+    "result_sha256": "a7950ed7be767cd5a2bbb087391ab8803b98678fff364a5f49d50b9aba67bb88",
+    "root_status_sha256": "138adf8c74e3e3aa2f93e4f076504892d341500b73e7f409f4d2c4fc188e3404"
+  },
+  "expected_diagnostics": [
+    "Retirement kill returned1 for already-stopped container.",
+    "Readback tar ignored qmp.sock socket."
+  ],
+  "implementation_ownership": false,
+  "increment_scope": "Checked successful close followed by closed-descriptor write failure/EBADF and frozen output/exit.",
+  "limitations": [
+    "No broader descriptor/write-subsystem, leak, native OS resource-cycle or milestone closure claim.",
+    "Original protocol-only flags remain preserved; this independent record supplies scoped acceptance.",
+    "No counters or implementation/runtime state changed by reviewer."
+  ],
+  "manifest_sha256": "eb41db6f6e66e6879761b3b90514d8e82eee77afeef114c3e39ef4c35de41df2",
+  "native_application_acceptance": true,
+  "observed": {
+    "application_pid": 257,
+    "cleanup_errno": 0,
+    "close_return": 0,
+    "closed_write_return": -9,
+    "complete_EOF_without_truncation_or_discard": true,
+    "openat_return": 5,
+    "procfs_deleted_cleanup_ACK_retirement_and_process_release": true,
+    "raw_wait_status": 0,
+    "stderr_hex": "",
+    "stdout_hex": "77726974652d72657475726e3d2d31206572726e6f3d390a",
+    "unexpected_kernel_failure_markers": 0
+  },
+  "physical_retirement": {
+    "QMP_shutdown_and_quit_observed": true,
+    "cleanup_errors": [],
+    "container_id": "3f9c18866686617e56b9dd46c7152d0108a0ee1965f601f441b2ccd3619cff15",
+    "container_stopped_exit0_no_OOM_removed": true,
+    "dispatcher_direct_join_exit0": true,
+    "docker_clients_reaped": 30,
+    "final_name_label_ID_queries_empty": true,
+    "owner_exit": 0,
+    "owner_lease_retained": false,
+    "owner_physically_joined": true,
+    "positive": true,
+    "qemu_identity": {
+      "pgid": 10,
+      "pid": 10,
+      "sid": 10,
+      "starttime_ticks": 14803499
+    },
+    "qemu_reaped": true,
+    "qemu_returncode": -9
+  },
+  "positive_retirement": true,
+  "raw_joins": "Standalone result equals owner inner result and attempt archive result; capture hashes and duplicate archive bytes match.",
+  "reviewer": "/root/sched_image_execution_review_1530",
+  "schema": "mckernel.closed-write-native-actual-review.v1",
+  "scope": "One closed-write application on accepted e85a image/d99 modules; functional OS/apps and Rust/reviewed-assembly scope.",
+  "status": "PASS"
+}

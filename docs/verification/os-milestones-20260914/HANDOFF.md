@@ -1,5 +1,54 @@
 # Compact dispatcher handoff
 
+## Current — e85a native chain and closed-write accepted; paired Rust source integrated (2026-10-18 19:20 UTC)
+
+Functional OS/apps and compute Rust/reviewed-assembly retirement remain active;
+refused execve and service-held fork/ACK stay excluded. Current e85a production
+dacf4e3f, AVX5f56221d and Cthreadse303118f are independently accepted, with exact
+oracles and all60 client reaps/physical teardown. Terminal230ca21f verifies archived
+ownership, preserved15 pairs/30 descriptor rows and common/shared/lease/CID release.
+Closed-write is newly accepted: close0, subsequent write-9/EBADF, exact24Bstdout,
+empty stderr/exit0, QEMU+30clients/container/lease physically retired. Canonical
+records are ../evidence/rust-clear-debugreg-{avx-native,threads-native-chain,image-terminal}-
+result-review-20261018-1.json and practical-file-closed-write-native-result-review-20261018-1.json.
+
+Counts21 distinct native behaviors,10 selected production Rust paths/9 applicable
+native-image integration paths,6 complete/29 open practical checks; all14 milestones
+remain open. The ninth applicable path is scoped current-image AVX/threads integration,
+not hardware DR-clear or exhaustive per-helper coverage. Original runtime flags and
+failed attempts remain preserved. Included usage31% at last genuine snapshot; stop97%.
+
+Reviewed SAVE+RESTORE pair7e3d7ae0 is now integrated into exactly syscall.c and
+x86_cpu_helpers.rs, matching private reviewed bytes. Current working source hashes
+2abee2d3/233e1ca3; CMake/default selection unchanged. Independent combined review
+c6d01d0e accepts source and corrected command INPUTS only; source69+69 parity/eight
+controls each and merged63/47B object equality are not production/native proof.
+Existing e85a retains live C SAVE/RESTORE until the future matching image is built.
+No new C behavior. Full GCC14/native crate/image/default link and native proof for
+the pair remain OPEN; fallback/legacy and hardware debug-state observations remain
+separately OPEN. Selected14-command inspection does not prove unobserved variants.
+
+Next: source checkpoint/push/fetch -> new rust-debugreg-pair-image-preparation-20261018-1
+ordinary source materialize/prepare/actual consumers -> exact independently reviewed
+one-image build release and fresh admission. Reuse current driver/pinned GCC14
+CPU/process assertions; normal selected syscall/native crate compile in the image.
+Do not silently add compiler hooks or turn supplemental INPUTS into authority.
+Preparer uses the accepted120CPU/150wall reusable profile (historical30CPU timeout
+is preserved), other cheap checks their own exact caps. Image author1919 owns only
+its new host namespace; terminal author1920 prepares executable retention/observer/
+raw5/cleanup from accepted engines in a separate namespace before build completion.
+Both directories are under /home/holden/mckernel-work/host-preparation/.
+
+No current operation remains admitted. Do not reuse consumed guest/build/observer/
+cleanup names or commands. Preserve scratch21/container/locks, mounted110GiB scratch,
+root mutex27:4 and all dirty/untracked work. One-heavy4CPU2-5/12GiB/noSwap512tasks,
+shared aggregate and16/12GiB floors plus full growth/emergency reserves apply.
+After future finite completion, root joins and immediately notifies the waiting
+actual-result reviewer before unrelated preparation; full raw review stays delegated.
+All non-temporal joins and launch argv must be ready before the60-second snapshot;
+a passing final hash decision is followed immediately by launch. AVX snapshot1
+expired before effects and remains preserved; fresh snapshot2 alone was consumed.
+
 ## Current — tenth Rust production path; terminal release pending (2026-10-18 18:30 UTC)
 
 Functional OS/apps and compute Rust/reviewed-assembly cutover remain active.
@@ -403,8 +452,9 @@ physical release. No native behavior/check closure credited for maintenance.
 | cpu.c signal MXCSR mask | Rust mask bridge | production492 + accepted AVX signal chain |
 | cpu.c signal FP reset | Rust checked reset bridge | production492 + NULL x87 native e0d2fd97; wider state branches OPEN |
 | process.c scheduler debug handoff | sched_schedule_debug_handoff | production671a0fa2; applicable native AVX/threads chain36c0abd3 PASS; DR hardware branches unproved, architecture DR C remains |
-| syscall.c clear_debugreg | x86_cpu_helpers.rs clear_debugreg; live scheduler inlines identical six writes | production e85a/dacf4e3f PASS, actual GCC14/native crate/default link; native/hardware and full legacy/fallback OPEN; C reference/fallback preserved |
-| syscall.c save_debugreg | private Rust save_debugreg candidate; actual default not yet integrated | source review f12f5f60,69 parity vectors/8 mutations; full production/native OPEN |
+| syscall.c clear_debugreg | x86_cpu_helpers.rs clear_debugreg; live scheduler inlines identical six writes | production e85a/dacf4e3f plus scoped native-image AVX/threads e303118f PASS; DR hardware/internal branch and full legacy/fallback OPEN; C reference preserved |
+| syscall.c save_debugreg | Rust save_debugreg paired source now integrated | source f12f5f60 and combined c6d01d0e/7e3d7ae0; e85a still C; future production/default/native OPEN |
+| syscall.c restore_debugreg | Rust restore_debugreg paired source now integrated | source dc79856c and combined c6d01d0e/7e3d7ae0; e85a still C; future production/default/native OPEN |
 
 These are selected path proofs, not whole-kernel language retirement. Existing
 architecture save/restore debug-register helpers remain live C; clear is selected Rust
