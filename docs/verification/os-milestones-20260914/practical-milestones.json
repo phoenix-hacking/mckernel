@@ -598,7 +598,7 @@
         {
           "id": "P-M04-03",
           "description": "Compare frozen independent expected behavior with Linux.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
@@ -664,9 +664,19 @@
               "path": "docs/verification/evidence/practical-m04-current-candidate-check-review-20261018-1.json",
               "sha256": "d50f96fee0919c0a093d3fc0accbb97fb7b2ef49483971407a6f6d4e6ceb2f76",
               "size": 8999
+            },
+            {
+              "path": "docs/verification/evidence/practical-selected-suite-comparison-20261018-1.json",
+              "sha256": "f6588f255b9914cc5402c6308597a4db1ce313efb3d1c5f8ac58d627d89e72d7",
+              "size": 31292
+            },
+            {
+              "path": "docs/verification/evidence/practical-selected-suite-comparison-review-20261018-1.json",
+              "sha256": "7224e2460e10be6075a9dcf651ee24d9e1c5f00519196bc908b88f8ea985ee5e",
+              "size": 24800
             }
           ],
-          "assessment_note": "Mixed Rust frozen independent/Linux/native exact156-byte comparison and3corruption controls are proved. Existing M04 selected utility/memory/file/thread/signal suite comparison coverage remains unjoined; independent literal reviewd50f96fe leaves this check open."
+          "assessment_note": "Independent final review7224e246 verifies ten frozen expected/Linux/accepted-native exact stdout,stderr and exit-status joins across selected utility,memory,file,thread,signal cases on two retained historical images. Mixed Rust156-byte comparison and3corruption controls remain separately proved. Literal frozen-expected/Linux comparison is complete; final-candidate/profile replay,new empty/error utility native coverage and deferred qualification remain separate open obligations. No new native behavior or historical formal acceptance credited. Initial rootcopy against superseded6300 reviewer hash refused before ledger mutation; final7224 bound exactly."
         }
       ],
       "current_evidence_summary": "Current da0f1bf7 independently passes real dynamic-libc C threads and useful mixed Rust/std application. Literal P-M04-01 complete, selected-suite regressions/Linux comparison still open. One distinct new native behavior brings total17; no formal or language-retirement credit."

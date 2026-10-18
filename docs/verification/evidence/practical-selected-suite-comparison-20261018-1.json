@@ -1,0 +1,598 @@
+{
+  "status": "PASS_TEN_SELECTED_RETAINED_COMPARISONS_PENDING_INDEPENDENT_LITERAL_REVIEW",
+  "literal_description": "P-M04-03 Compare frozen independent expected behavior with Linux.",
+  "literal_snapshot": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-selected-suite-comparison-20261018-1/literal-check-snapshot.json",
+    "sha256": "135b75c6cc369e38b15809789d07b15ea7582efef785e2b0c10cb678d7bd31ae",
+    "size": 3328
+  },
+  "rows": [
+    {
+      "case_id": "memory.calloc-zero",
+      "category": "memory",
+      "status": "PASS_RETAINED_EXPECTED_LINUX_ACCEPTED_NATIVE_COMPARISON",
+      "stdout_bytes": 205,
+      "stdout_sha256": "a0b9ee89bab3f64adc824dde9bf76561c901f92f18bada09fc478f3927c2f27e",
+      "stderr_bytes": 0,
+      "exit_code": 0,
+      "comparisons": {
+        "stdout": true,
+        "stderr": true,
+        "exit": true
+      },
+      "evidence": {
+        "frozen_admitted_contract": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/memory-calloc-zero-current942-execution-proposal-20261017-1-admitted.json",
+          "sha256": "205f69a81b9b2064857600680e06229a5b1909b7c158bde2ed5d8ef1d41ab311",
+          "size": 5516
+        },
+        "frozen_manifest": {
+          "path": "/home/holden/mckernel-work/scratch/memory-calloc-zero-current942-manifest-20261017-1.json",
+          "sha256": "589a4a8616691093d26b275bba498bd84f646bd8359db6b17f4fb7bb6d1e000d",
+          "size": 5775
+        },
+        "Linux_reference": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/memory-calloc-zero-static-reference-20261017-1.json",
+          "sha256": "a568c744ca37095e2168fc26973806aeffab38e92c1b3fd430d2b75aefd134f4",
+          "size": 16341
+        },
+        "native_accepted_review": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
+          "sha256": "3e1c5304a48e8f3115cc16c62bcd97d0aac833e6de2c3474c4452ab8b954e6aa",
+          "size": 12255
+        },
+        "independent_original_case_oracle": {
+          "path": "/home/holden/mckernel/scripts/application-tests/oracles/memory.calloc-zero.json",
+          "sha256": "ee72669633d6050616f2f8fa7d6057c7c23d4dc746b9f15fc3f6468ef9d202fc",
+          "size": 1216
+        }
+      },
+      "native_image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+      "payload_identity": {
+        "mode": 33216,
+        "path": "/home/holden/mckernel-work/scratch/memory-calloc-zero-static-20261017-1/app",
+        "sha256": "59691094c6caa8858f6a98d91353d178e2c2c59d4e80406274fe5e24cc6fef98",
+        "size": 871888
+      },
+      "candidate_applicability": "Accepted exact historical image only. Current492c4a15 replay not supplied by this comparison; no inferred native pass.",
+      "native_source": "Independently accepted executed-result review; raw protocol flags preserved."
+    },
+    {
+      "case_id": "file.write-read",
+      "category": "file",
+      "status": "PASS_RETAINED_EXPECTED_LINUX_ACCEPTED_NATIVE_COMPARISON",
+      "stdout_bytes": 395,
+      "stdout_sha256": "c8f138d5019081faca3982ee7a6320b417be6f2b819bdd3b827d2915f4fc0451",
+      "stderr_bytes": 0,
+      "exit_code": 0,
+      "comparisons": {
+        "stdout": true,
+        "stderr": true,
+        "exit": true
+      },
+      "evidence": {
+        "frozen_admitted_contract": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/file-write-read-current942-execution-proposal-20261017-1-admitted.json",
+          "sha256": "649206b59b305ce13778bfeb5260e6a5b4da0b4087d7bd802a39abdbd938aedb",
+          "size": 6024
+        },
+        "frozen_manifest": {
+          "path": "/home/holden/mckernel-work/scratch/file-write-read-current942-manifest-20261017-1.json",
+          "sha256": "f60d142f0b7a3bcedf059fb77176554b73a3475075961a5227ed101a64bd21ba",
+          "size": 6176
+        },
+        "Linux_reference": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/native-exact-file-write-read-linux-reference-20261017.json",
+          "sha256": "c9397742648c2fb8fa5cf8ed084ebc95e85049b59d4adc235a90af12aab143bc",
+          "size": 3598
+        },
+        "native_accepted_review": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/file-write-read-current942-result-review-20261017-1.json",
+          "sha256": "fc1f8f837c08bd607e00cb2f3799c5ffab1e8e9463889528fc5884407273b0df",
+          "size": 12925
+        },
+        "independent_original_case_oracle": {
+          "path": "/home/holden/mckernel/scripts/application-tests/oracles/file.write-read.json",
+          "sha256": "a3262a52829161a9f0ede49d451a72cb7fcddaa857742d6fdc5cec6bf85141bd",
+          "size": 903
+        }
+      },
+      "native_image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+      "payload_identity": {
+        "mode": 33216,
+        "path": "/home/holden/mckernel-work/scratch/file-write-read-static-preparation-20261017-hEjTsM/file.write-read/app",
+        "sha256": "3f09a659061b67a1b5d096bf93ad7de8f00d4e92ff26908bfd5b283e3c3fb46a",
+        "size": 876952
+      },
+      "candidate_applicability": "Accepted exact historical image only. Current492c4a15 replay not supplied by this comparison; no inferred native pass.",
+      "native_source": "Independently accepted executed-result review; raw protocol flags preserved."
+    },
+    {
+      "case_id": "thread.tls-isolation",
+      "category": "thread",
+      "status": "PASS_RETAINED_EXPECTED_LINUX_ACCEPTED_NATIVE_COMPARISON",
+      "stdout_bytes": 55,
+      "stdout_sha256": "5ee4522188d9d1248fa07e7895e068fed50791773dcf6a542a2442ab134dffc3",
+      "stderr_bytes": 0,
+      "exit_code": 0,
+      "comparisons": {
+        "stdout": true,
+        "stderr": true,
+        "exit": true
+      },
+      "evidence": {
+        "frozen_admitted_contract": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/thread-tls-isolation-current942-execution-proposal-20261017-2-admitted.json",
+          "sha256": "5ce065febc6759731d04926d5bf35a530a87ea2c9c2ff1663492f68d01f2d94c",
+          "size": 5855
+        },
+        "frozen_manifest": {
+          "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-manifest-correction-20261017-1/manifest.json",
+          "sha256": "d6f73eca708864eb61e9ca23ffba56d73f44e57693fb093abc11317fa723aaca",
+          "size": 5462
+        },
+        "Linux_reference": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/thread-tls-isolation-current942-preparation-20261017-1.json",
+          "sha256": "6a48dd1ae43842ef0ee29ecf34534616bc6ee2917eb5cae6633af901b7e2192f",
+          "size": 41297
+        },
+        "native_accepted_review": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
+          "sha256": "94fc8a4b403f69cb5557679fb831104b36e72720b6fac9c964f23326b30aedbd",
+          "size": 12788
+        },
+        "independent_original_case_oracle": {
+          "path": "/home/holden/mckernel/scripts/application-tests/oracles/thread.tls-isolation.json",
+          "sha256": "2bbde84497f6b165133afdb6fa2e4bacfc503ecc1fc1fd51fab7a66f134fa53d",
+          "size": 882
+        }
+      },
+      "native_image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+      "payload_identity": {
+        "mode": 33216,
+        "path": "/home/holden/mckernel-work/scratch/thread-tls-isolation-static-20261017-1/app",
+        "sha256": "f6bb60e0049d9a166d38eaccc55f96c752bb186675eb03f709bee39bb84c4c73",
+        "size": 1493104
+      },
+      "candidate_applicability": "Accepted exact historical image only. Current492c4a15 replay not supplied by this comparison; no inferred native pass.",
+      "native_source": "Independently accepted executed-result review; raw protocol flags preserved."
+    },
+    {
+      "case_id": "signal.mask-restore",
+      "category": "signal",
+      "status": "PASS_RETAINED_EXPECTED_LINUX_ACCEPTED_NATIVE_COMPARISON",
+      "stdout_bytes": 40,
+      "stdout_sha256": "dcaa9f1bb23dd9194743e50b308030dbb3bae80ade2729e0605663edd28d1033",
+      "stderr_bytes": 0,
+      "exit_code": 0,
+      "comparisons": {
+        "stdout": true,
+        "stderr": true,
+        "exit": true
+      },
+      "evidence": {
+        "frozen_admitted_contract": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/signal-mask-restore-current942-execution-release-20261017-2.json",
+          "sha256": "0ba85a5315b93dbfadaab0ed0833fb417584162ef75f0d35dd46ce678d45e274",
+          "size": 4542
+        },
+        "frozen_manifest": {
+          "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-current942-manifest-20261017-1.json",
+          "sha256": "47eb95897b0a4f2d8b2cb2673c2ed3b3feff11895654ac160c854710cc7582da",
+          "size": 5455
+        },
+        "Linux_reference": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/signal-mask-restore-static-reference-independent-review-20261017.json",
+          "sha256": "4ad0459d4de21da874747ef3eba0eb81bd47a6a7e95a72307b50b7ecff3cbf17",
+          "size": 7627
+        },
+        "native_accepted_review": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
+          "sha256": "cdf22b79380225f43758a1fb6bc51353a8ee95678b94f3c23c91c9f9e950e469",
+          "size": 10751
+        },
+        "independent_original_case_oracle": {
+          "path": "/home/holden/mckernel/scripts/application-tests/oracles/signal.mask-restore.json",
+          "sha256": "9f7f1d39a26e9016331e1ad2032062d84feb72c23540064fe1994dd00dc56759",
+          "size": 828
+        }
+      },
+      "native_image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+      "payload_identity": {
+        "mode": 33216,
+        "path": "/home/holden/mckernel-work/scratch/signal-mask-restore-compile-20261017-nX2kCR/app",
+        "sha256": "8be0b167d7267d4ef5aa122f62ebdbd95d6aa0be4f75384b9285d9983683c234",
+        "size": 872056
+      },
+      "candidate_applicability": "Accepted exact historical image only. Current492c4a15 replay not supplied by this comparison; no inferred native pass.",
+      "native_source": "Independently accepted executed-result review; raw protocol flags preserved."
+    },
+    {
+      "case_id": "practical.file-stream.copy-check",
+      "category": "utility",
+      "status": "PASS_RETAINED_EXPECTED_LINUX_ACCEPTED_NATIVE_COMPARISON",
+      "stdout_bytes": 59,
+      "stdout_sha256": "db29c3645fdd1d06eca1349a93851846886c17856016b99133d511b3c9618488",
+      "stderr_bytes": 0,
+      "exit_code": 0,
+      "comparisons": {
+        "stdout": true,
+        "stderr": true,
+        "exit": true
+      },
+      "evidence": {
+        "independent_fixed_oracle_source": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/practical-file-stream-source-20261018-1/reference.py",
+          "sha256": "ae6b056efb253f460e24d3ff3c4cafe00930090963dfe97258caa3dcd36a7100",
+          "size": 6025
+        },
+        "Linux_reference": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/practical-file-stream-source-20261018-1/report.json",
+          "sha256": "c43e28547c79214a2ba6335daf45a3ec9dcbc0420890cdadb428c71feffcdea0",
+          "size": 20271
+        },
+        "Linux_reference_review": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/practical-file-stream-host-reference-review-20261018-1.json",
+          "sha256": "e3940afb744b7bdee20369b63137d38b7f620cfba2837fde9421350dcf39604f",
+          "size": 1453
+        },
+        "native_accepted_review": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/practical-file-stream-current-a0f-result-review-20261018-1.json",
+          "sha256": "a05ba3f233cf6750bb2b668364a5782c8ea5e7a8881f1dcc10aa9afab89d9b16",
+          "size": 3054
+        }
+      },
+      "native_image_sha256": "a0f508540d03819d45da6de78a849ae1241fa988feb9e1a90d997b667ea1b7eb",
+      "payload_identity": {
+        "sha256": "4e02d0bc16c52c5595a5196bf85b89968e0843de426503839919ee4326e52f91"
+      },
+      "candidate_applicability": "Accepted exact historical image only. Current492c4a15 replay not supplied by this comparison; no inferred native pass.",
+      "native_source": "Independently accepted executed-result review; raw protocol flags preserved."
+    },
+    {
+      "case_id": "memory.realloc-grow",
+      "category": "memory",
+      "status": "PASS_RETAINED_EXPECTED_LINUX_ACCEPTED_NATIVE_COMPARISON",
+      "stdout_bytes": 25,
+      "stdout_sha256": "12fb7c73a3b2e0ddc65598da1b8ffe6c4be55b233d7670809909e97bb6cc2f13",
+      "stderr_bytes": 0,
+      "exit_code": 0,
+      "comparisons": {
+        "stdout": true,
+        "stderr": true,
+        "exit": true
+      },
+      "evidence": {
+        "accepted_native_review": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/memory-realloc-grow-current942-result-review-20261017-1.json",
+          "sha256": "18db331013a808b2fde41fb0bd91dcec957174e70e1f96ee548a998c860ba9a7",
+          "size": 46203
+        },
+        "preparation": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/memory-realloc-grow-current942-preparation-20261017-1.json",
+          "sha256": "539482a3e4025eb1afe14e4978f9baef45c5e0880d727822a0047446130e75f8",
+          "size": 26984
+        },
+        "frozen_manifest": {
+          "path": "/home/holden/mckernel-work/scratch/memory-realloc-grow-current942-20261017-1/manifest.json",
+          "sha256": "77f5adcd604172a3a25475ea83eec2f103ed1c338781ac40c261aa277c8adea7",
+          "size": 5428
+        }
+      },
+      "native_image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+      "payload_identity": {
+        "mode": 33216,
+        "path": "/home/holden/mckernel-work/scratch/memory-realloc-grow-static-20261017-1/app",
+        "sha256": "96f2973990951509feabad738cbb21ae979f99d024efa5f410906bffd7f4001b",
+        "size": 871888
+      },
+      "candidate_applicability": "Accepted exact historical image only; current492 replay is not inferred.",
+      "scope": "Explicit reviewed diagnostic adaptation where named; original catalog oracle/qualification unchanged."
+    },
+    {
+      "case_id": "file.closed-read-adapted",
+      "category": "file",
+      "status": "PASS_RETAINED_EXPECTED_LINUX_ACCEPTED_NATIVE_COMPARISON",
+      "stdout_bytes": 56,
+      "stdout_sha256": "a774f1ac5452ba211d9f4ee0130223afde7d5ba8bdc0f8bcd24994ec56926581",
+      "stderr_bytes": 0,
+      "exit_code": 0,
+      "comparisons": {
+        "stdout": true,
+        "stderr": true,
+        "exit": true
+      },
+      "evidence": {
+        "accepted_native_review": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/file-closed-read-adapted-current942-result-review-20261017-1.json",
+          "sha256": "84a98154798184196e8de08212aa697cdee6796ba1b5181220eeeb688416e204",
+          "size": 47640
+        },
+        "preparation": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/file-closed-read-adapted-current942-preparation-20261017-1.json",
+          "sha256": "1f4381d2ca4940be5b686a2b84245d4810264a5530ed55bfeea09d6a8040479a",
+          "size": 24928
+        },
+        "frozen_manifest": {
+          "path": "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/staging/manifest.json",
+          "sha256": "bc4b4e4f40c17244aee927c015b7b6148a433cdfcb9e4a212ff29a2668166db5",
+          "size": 5530
+        }
+      },
+      "native_image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+      "payload_identity": {
+        "mode": 33216,
+        "path": "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/app",
+        "sha256": "8f7297b35859ca364e0a32afaf013637030b7aecaf4f9d2626e077a7e9d7dd39",
+        "size": 871992
+      },
+      "candidate_applicability": "Accepted exact historical image only; current492 replay is not inferred.",
+      "scope": "Explicit reviewed diagnostic adaptation where named; original catalog oracle/qualification unchanged."
+    },
+    {
+      "case_id": "thread.mutex-counter-bounded-stacks",
+      "category": "thread",
+      "status": "PASS_RETAINED_EXPECTED_LINUX_ACCEPTED_NATIVE_COMPARISON",
+      "stdout_bytes": 51,
+      "stdout_sha256": "d7443814b52d2e53d9c3e7f11ffbc3f176e2a1f0cd41f0f5ea3b150a1740c1ec",
+      "stderr_bytes": 0,
+      "exit_code": 0,
+      "comparisons": {
+        "stdout": true,
+        "stderr": true,
+        "exit": true
+      },
+      "evidence": {
+        "accepted_native_review": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+          "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+          "size": 17406
+        },
+        "preparation": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-preparation-20261017-1.json",
+          "sha256": "1b5d15fec7a8a890c39291a6f500a91d9fd4be9690372688e77558074abd89c9",
+          "size": 20910
+        },
+        "frozen_manifest": {
+          "path": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-current942-20261017-1/manifest.json",
+          "sha256": "a74c2687e0a49d6d8565075a0fbe70200a8af84c1de88002028f582b3c9833a1",
+          "size": 5516
+        },
+        "adapted_source_Linux": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/thread-mutex-counter-bounded-stacks-source-20261017-2.json",
+          "sha256": "5f85ffff91fadeb908a57cd2b71ab7d09086e4657124d3ff4d8ac2d769bb2a01",
+          "size": 31857
+        }
+      },
+      "native_image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+      "payload_identity": {
+        "mode": 33216,
+        "path": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-20261017-1/attempt2/app",
+        "sha256": "30c2e77c995fb8722f721c37b41597dcfbe1089c2359022d6a43cfc01e955d52",
+        "size": 1520016
+      },
+      "candidate_applicability": "Accepted exact historical image only; current492 replay is not inferred.",
+      "scope": "Explicit reviewed diagnostic adaptation where named; original catalog oracle/qualification unchanged."
+    },
+    {
+      "case_id": "signal.alternate-repeat-exact-byte-diagnostic",
+      "category": "signal",
+      "status": "PASS_RETAINED_EXPECTED_LINUX_ACCEPTED_NATIVE_COMPARISON",
+      "stdout_bytes": 415,
+      "stdout_sha256": "461b8c2cbeadf7deb6c34b99269d7c9317d8afd7de9f8ee13ee237963077b3db",
+      "stderr_bytes": 0,
+      "exit_code": 0,
+      "comparisons": {
+        "stdout": true,
+        "stderr": true,
+        "exit": true
+      },
+      "evidence": {
+        "accepted_native_review": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+          "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+          "size": 49179
+        },
+        "preparation": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/signal-alternate-repeat-current942-preparation-20261017-2.json",
+          "sha256": "36ca570cf3d3d41d8b69a966430a5601d23260d02748463bae1e7aa38b978a6f",
+          "size": 25604
+        },
+        "frozen_manifest": {
+          "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/manifest.json",
+          "sha256": "d9a9f6b70ca19bc90110d737123d49cfa5458fd90d9f3cac22b50b4e1468a90b",
+          "size": 6239
+        },
+        "independent_exact_byte_bridge": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/signal-alternate-repeat-exact-byte-diagnostic-bridge-20261017-1.json",
+          "sha256": "ff6c107aebc2c7ae4df62fa83f9c2a82a049422f43781f53485d92c233ebf93f",
+          "size": 5551
+        },
+        "Linux_reference_check": {
+          "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/linux-reference-check.json",
+          "sha256": "1658df1e2d7844512b3ca6fd30916149ea024e1280caf4c3d156a05b70efea50",
+          "size": 224
+        }
+      },
+      "native_image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+      "payload_identity": {
+        "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/app",
+        "sha256": "1e4cf561417c0f0e75ad3ea4addd9d4f19dc4102d08c89eafcd622cd0520aff3",
+        "size": 876936,
+        "mode": 33216
+      },
+      "candidate_applicability": "Accepted exact historical image only; current492 replay is not inferred.",
+      "scope": "Explicit reviewed diagnostic adaptation where named; original catalog oracle/qualification unchanged."
+    },
+    {
+      "case_id": "native-core.memory",
+      "category": "memory",
+      "status": "PASS_RETAINED_EXPECTED_LINUX_ACCEPTED_NATIVE_COMPARISON",
+      "stdout_bytes": 24,
+      "stdout_sha256": "fd482982db547fb56b476aabdc66a2e8066da2e2887a0846aea4692c9e56d82a",
+      "stderr_bytes": 0,
+      "exit_code": 37,
+      "comparisons": {
+        "stdout": true,
+        "stderr": true,
+        "exit": true
+      },
+      "evidence": {
+        "accepted_native_review": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/native-core-memory-current942-result-review-20261017-1.json",
+          "sha256": "49d4a5b5dc0b7919f4097778fe9f99c75b216afc2345a59db8258eaab312c78f",
+          "size": 13664
+        },
+        "preparation": {
+          "path": "/home/holden/mckernel/docs/verification/evidence/native-core-memory-current942-preparation-20261017-1.json",
+          "sha256": "0df94c1709ac7cf036d76f516d1996b9dd5b7628b969a07dda7cd7fd4cc2bb92",
+          "size": 31678
+        },
+        "frozen_manifest": {
+          "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/memory-1/manifest.json",
+          "sha256": "36fa25c946b8537173eaba34ccb640f24c12fb1490b512de0b799ef28d44d0f8",
+          "size": 5460
+        },
+        "retained_Linux_stdout": {
+          "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/linux-reference-memory.log",
+          "sha256": "fd482982db547fb56b476aabdc66a2e8066da2e2887a0846aea4692c9e56d82a",
+          "size": 24
+        }
+      },
+      "native_image_sha256": "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed",
+      "payload_identity": {
+        "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/native-application-core",
+        "sha256": "558d1607e4648321c9537215084e759496937d9591c319a21443f443193fda9a",
+        "size": 39488,
+        "mode": 33261
+      },
+      "candidate_applicability": "Accepted exact historical image only; current492 replay is not inferred.",
+      "scope": "Explicit reviewed diagnostic adaptation where named; original catalog oracle/qualification unchanged."
+    }
+  ],
+  "prior_five_row_comparison": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-selected-suite-comparison-20261018-1/comparison-rows.json",
+    "sha256": "83fc16ce779397611ae2fa63900fd5a8bbef680f8799ea3d45c4fab396457ebf",
+    "size": 12994
+  },
+  "supplemental_small_inputs": {
+    "/home/holden/mckernel/docs/verification/evidence/memory-realloc-grow-current942-result-review-20261017-1.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/memory-realloc-grow-current942-result-review-20261017-1.json",
+      "sha256": "18db331013a808b2fde41fb0bd91dcec957174e70e1f96ee548a998c860ba9a7",
+      "size": 46203
+    },
+    "/home/holden/mckernel/docs/verification/evidence/memory-realloc-grow-current942-preparation-20261017-1.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/memory-realloc-grow-current942-preparation-20261017-1.json",
+      "sha256": "539482a3e4025eb1afe14e4978f9baef45c5e0880d727822a0047446130e75f8",
+      "size": 26984
+    },
+    "/home/holden/mckernel-work/scratch/memory-realloc-grow-current942-20261017-1/manifest.json": {
+      "path": "/home/holden/mckernel-work/scratch/memory-realloc-grow-current942-20261017-1/manifest.json",
+      "sha256": "77f5adcd604172a3a25475ea83eec2f103ed1c338781ac40c261aa277c8adea7",
+      "size": 5428
+    },
+    "/home/holden/mckernel/docs/verification/evidence/file-closed-read-adapted-current942-result-review-20261017-1.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/file-closed-read-adapted-current942-result-review-20261017-1.json",
+      "sha256": "84a98154798184196e8de08212aa697cdee6796ba1b5181220eeeb688416e204",
+      "size": 47640
+    },
+    "/home/holden/mckernel/docs/verification/evidence/file-closed-read-adapted-current942-preparation-20261017-1.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/file-closed-read-adapted-current942-preparation-20261017-1.json",
+      "sha256": "1f4381d2ca4940be5b686a2b84245d4810264a5530ed55bfeea09d6a8040479a",
+      "size": 24928
+    },
+    "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/staging/manifest.json": {
+      "path": "/home/holden/mckernel-work/scratch/file-closed-read-adapted-current942-20261017-1/staging/manifest.json",
+      "sha256": "bc4b4e4f40c17244aee927c015b7b6148a433cdfcb9e4a212ff29a2668166db5",
+      "size": 5530
+    },
+    "/home/holden/mckernel/docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-result-review-20261017-1.json",
+      "sha256": "6941b971ee06faeb2df1c1edd92ff32b769bcb498f4bdbb7bc8f2d4df44d91d7",
+      "size": 17406
+    },
+    "/home/holden/mckernel/docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-preparation-20261017-1.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/thread-mutex-counter-bounded-stacks-current942-preparation-20261017-1.json",
+      "sha256": "1b5d15fec7a8a890c39291a6f500a91d9fd4be9690372688e77558074abd89c9",
+      "size": 20910
+    },
+    "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-current942-20261017-1/manifest.json": {
+      "path": "/home/holden/mckernel-work/scratch/thread-mutex-counter-bounded-stacks-current942-20261017-1/manifest.json",
+      "sha256": "a74c2687e0a49d6d8565075a0fbe70200a8af84c1de88002028f582b3c9833a1",
+      "size": 5516
+    },
+    "/home/holden/mckernel/docs/verification/evidence/thread-mutex-counter-bounded-stacks-source-20261017-2.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/thread-mutex-counter-bounded-stacks-source-20261017-2.json",
+      "sha256": "5f85ffff91fadeb908a57cd2b71ab7d09086e4657124d3ff4d8ac2d769bb2a01",
+      "size": 31857
+    },
+    "/home/holden/mckernel/docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/signal-alternate-repeat-current942-result-review-20261017-1.json",
+      "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
+      "size": 49179
+    },
+    "/home/holden/mckernel/docs/verification/evidence/signal-alternate-repeat-current942-preparation-20261017-2.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/signal-alternate-repeat-current942-preparation-20261017-2.json",
+      "sha256": "36ca570cf3d3d41d8b69a966430a5601d23260d02748463bae1e7aa38b978a6f",
+      "size": 25604
+    },
+    "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/manifest.json": {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/manifest.json",
+      "sha256": "d9a9f6b70ca19bc90110d737123d49cfa5458fd90d9f3cac22b50b4e1468a90b",
+      "size": 6239
+    },
+    "/home/holden/mckernel/docs/verification/evidence/signal-alternate-repeat-exact-byte-diagnostic-bridge-20261017-1.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/signal-alternate-repeat-exact-byte-diagnostic-bridge-20261017-1.json",
+      "sha256": "ff6c107aebc2c7ae4df62fa83f9c2a82a049422f43781f53485d92c233ebf93f",
+      "size": 5551
+    },
+    "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/linux-reference-check.json": {
+      "path": "/home/holden/mckernel-work/scratch/signal-alternate-repeat-preparation-20261017-1/linux-reference-check.json",
+      "sha256": "1658df1e2d7844512b3ca6fd30916149ea024e1280caf4c3d156a05b70efea50",
+      "size": 224
+    },
+    "/home/holden/mckernel/docs/verification/evidence/native-core-memory-current942-result-review-20261017-1.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-core-memory-current942-result-review-20261017-1.json",
+      "sha256": "49d4a5b5dc0b7919f4097778fe9f99c75b216afc2345a59db8258eaab312c78f",
+      "size": 13664
+    },
+    "/home/holden/mckernel/docs/verification/evidence/native-core-memory-current942-preparation-20261017-1.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-core-memory-current942-preparation-20261017-1.json",
+      "sha256": "0df94c1709ac7cf036d76f516d1996b9dd5b7628b969a07dda7cd7fd4cc2bb92",
+      "size": 31678
+    },
+    "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/memory-1/manifest.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/memory-1/manifest.json",
+      "sha256": "36fa25c946b8537173eaba34ccb640f24c12fb1490b512de0b799ef28d44d0f8",
+      "size": 5460
+    },
+    "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/linux-reference-memory.log": {
+      "path": "/home/holden/mckernel-work/scratch/native-application-core-build-20260908-1/linux-reference-memory.log",
+      "sha256": "fd482982db547fb56b476aabdc66a2e8066da2e2887a0846aea4692c9e56d82a",
+      "size": 24
+    }
+  },
+  "categories": [
+    "file",
+    "memory",
+    "signal",
+    "thread",
+    "utility"
+  ],
+  "comparison_mismatches": 0,
+  "all_native_images": [
+    "a0f508540d03819d45da6de78a849ae1241fa988feb9e1a90d997b667ea1b7eb",
+    "fa6685543160fcaa5000b535ec8bd6fc70230465109564c3fb2beecb95bf39ed"
+  ],
+  "current492_native_passes_in_this_join": 0,
+  "new_payload_runs": 0,
+  "new_compiles": 0,
+  "new_guests": 0,
+  "milestone_status_changed": false,
+  "mixedRust_already_accepted_separate_comparison": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/practical-mixed-rust-std-source-linux-review-20261018-1.json",
+    "sha256": "1512621c0fae57e185e818ee0381166e4a9ab608136dc87b8d3f05786baa364f",
+    "size": 7378
+  },
+  "remaining_scope": "No missing Linux result in these ten selected retained cases. Whether this exhausts the literal selected-suite comparison is independent reviewer/dispatcher decision; final supported-candidate regressions and all milestone exit conditions remain separate. Utility empty/error host cases have no accepted native equivalent."
+}

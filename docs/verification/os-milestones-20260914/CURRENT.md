@@ -1,5 +1,38 @@
 # Resume cursor
 
+## Live acceptance addendum — 2026-10-18 10:53 UTC
+
+P-M04-03 is now COMPLETE under independent final review7224e246: ten exact frozen
+expected/Linux/accepted-native comparisons across utility,memory,file,thread and
+signal. Two retained historical images are explicit; this is the literal comparison
+criterion, not final-image regression or comprehensive qualification. Mixed Rust
+156B comparison remains separately proved. Counts now17native behaviors,
+5complete/30open practical checks,all14milestones stillopen. No percentage uplift.
+Canonical comparison/review are practical-selected-suite-comparison-20261018-1.json
+and practical-selected-suite-comparison-review-20261018-1.json. Superseded6300
+review bytes are exactly restored/hash-verified and retained additively by reviewer;
+root refused stale6300 binding before any ledger mutation, then adopted7224.
+
+Tool finite ordinary retention is independently ACCEPTED4643b170:118original+retained
+files/10,030,140B/fullmetadata and3root inventories match, helperv2 retirementpositive.
+Actual0/.611s; no root observation or ownership cleanup yet. ToolCID42c9a78b and
+shared115196/local115197 remain HELD under the normal separately reviewed route.
+Author1005 prepares smallest exact rootobserver/cleanup/postreadback; reviewer1030
+owns newdecisions. Root ready to consume first exact released operation. No guest
+while these records remain held. Threads pendingdrafts retain allknownjoins.
+
+Independent selected empty-file source/checker reviewPASS; author0911 now prepares
+zero-byte overlay/exact55B/zero-count evaluator and actual runner+owner checks with
+current492image, no rebuild/runtime. This is next finite useful case behindthreads.
+IHK-only strictobjtool realmodule consumer14of66files/source driver4023c3a8 is
+prepared and in independent source review1053; SMP/mcctrl/fork/ACK remain excluded,
+all full-three-module/thunk/longsymbol/CREATE_PPD holds preserved. No build authority.
+
+Latest pushed/fetched checkpoint424f84763101f6139b04b718c9af5fa1e2168b3c,
+11blobs/treef3d99313f343b4320606ad3fa92086e0d6b2d935; proof host-preparation/
+checkpoint-reset-avx-host-controls-20261018-1/verification.json. Continue after
+normal checkpoints; oneheavy, floors+growth/emergency and97percent usage stop hold.
+
 ## RESUMED — actual native/control checkpoint, 2026-10-18 10:45 UTC
 
 Functional PRACTICAL-GOAL AND live McKernel compute-C retirement into Rust/reviewed
