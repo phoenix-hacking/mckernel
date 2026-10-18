@@ -1,5 +1,55 @@
 # Resume cursor
 
+## RESUMED — live dispatch cursor, 2026-10-18 09:23 UTC
+
+The explicit06:15 resume remains ACTIVE. Functional PRACTICAL-GOAL and actual
+compute-C retirement into Rust/reviewed assembly apply together. Older pause
+entries remain historical. No compute-C expansion, qualification inflation or
+service-held fork/ACK activation is authorized.
+
+New reset-image guarded build completed0 at09:08:40.995545UTC in208.002s.
+Exact execution reviewce5dea31 and requestef554d37 were consumed once; preserve
+all original files in /home/holden/mckernel-work/scratch/
+rust-fp-reset-image-preparation-20261018-1/execution-proposal. Direct guard join
+and ROOT27:4 reacquisition passed; resultf3b612af/receipte5a5b93a. Actual GCC14
+ABI/layout/default-link/artifact review32eb4d47 independently PASS; image492c4a15
+is7,926,224bytes. Stopped container
+17a70957ba1e4ea6502fa9cc61cba65e969e4fb57b5de3c02cc279e7234aaa35 and its common/
+shared ownership records remain retained. No second heavy owner or cleanup yet.
+
+Exact fifteen-member retention d76688e3 ran once PASS0/.305214s at09:22:05UTC,
+21,950,827bytes retained; manifest0cae4e85 and parentinode115180. Independent result5235bb60 passed21checks/15pairs; canonical engine
+4a6eab3b source is integrated only after all frozen b301 readers joined. Reviewed literal cleanup derivativebc0e95e8 has42ASTs/
+16actual consumer tests PASS; publication/fetch, executable observer/raw-five
+helpers and exact root observation/cleanup decisions remain pending.
+Guest continuation author prepares unchanged AVX/threads joins privately, with
+artifact/terminal acceptance explicitly pending. The three new Rust reset/mask/
+clear paths are production-proven32eb4d47 with native proof pending; AVX/threads do
+not by themselves establish execve-clear or null-fpstate signal-reset coverage.
+The five earlier selected Rust bodies retain their accepted da0 applicable-chain
+proof. C reference/fallback and every original failed attempt stay preserved.
+
+Host objtool producer/terminal correction has independent SOURCEPASS2e0b40b8;
+exact one-shot derivative execution reviewfd77c2aa now PASS, templatead678cb2.
+It is unconsumed and waits for image terminal release plus fresh admission:
+scratch>=13758103552B, host>=18325700608B. These include expanded proof/log/host
+retention growth and the untouched512MiB emergency reserve. Separate cleanup
+will still require actual owner/token/metadata joins and its own exact decision.
+
+Counts remain17 distinct native behaviors,4complete/31open practical checks,
+all14milestones open. No new native or percentage/2x credit from this build.
+Latest read-only capacity host56190525440/scratch13877329920B; boot7bfc5687-
+6c04-4d15-84eb-b92ab9a55dcb and ROOTmutexdev27/inode4 unchanged. Keep16/12GiB
+floors plus packet growth, one4CPU/12GiB/noSwap512-task heavy operation and97%
+included-usage stop. Preserve scratch21, launcher state, unrelated dirty work.
+HEAD9f1d810fd140526d96d575bf38290835fbf876d1 is the verified source checkpoint;
+proof /home/holden/mckernel-work/scratch/checkpoint-mixed-rust-reset-source-
+20261018-1/verification.json. Next safe save publishes the reviewed cleanup derivative only after frozen
+retention result joins finish, with actual fetched source/test proof. Host
+objtool is NEXT heavy operation after terminal release and fresh admission;
+reset AVX/threads stay prepared behind it. Supervisor Review25 saved; next09:45UTC.
+Continue after checkpoints. Full maps/diffs stay in files.
+
 ## RESUMED — current execution cursor, 2026-10-18 08:35 UTC
 
 Explicit06:15 launcher resume remains active. Functional PRACTICAL-GOAL and actual
@@ -38,9 +88,9 @@ milestones remain open. No percentage/2x/3x claim, no formal certification credi
 | process.c post-switch exited-thread cleanup | Rust cleanup after switch/unlock/IRQ restore | same accepted chain and manual ordering3f755021; no per-branch counters |
 | cpu.c allocation/save | rust_x86_save_fp_regs | same accepted chain, full-extent/ENOMEM source and link proof; no exhaustive fault injection claim |
 | cpu.c restore/default | Rust restore/default CPU_HELPERS consumer | same accepted chain, reviewed XSAVE/XRSTOR/default assembly |
-| cpu.c clear_fp_regs | next Rust idle saved/default selection | SOURCEPASS1b7c6388; exact root integration only, newproduction/native pending |
-| cpu.c signal MXCSR-mask bridge | next Rust FXSAVE mask-at28/fallback0xffbf | SOURCEPASS1b7c6388;512B/align16 checked; newproduction/native pending |
-| cpu.c signal FP reset bridge | next Rust checked initial/full64mask/status/reset | SOURCEPASS1b7c6388; lazycurrent/-EOPNOTSUPP preserved; newproduction/native pending |
+| cpu.c clear_fp_regs | next Rust idle saved/default selection | SOURCEPASS1b7c6388 +production32eb4d47; native execve-clear pending |
+| cpu.c signal MXCSR-mask bridge | next Rust FXSAVE mask-at28/fallback0xffbf | SOURCEPASS1b7c6388 +production32eb4d47; native matching signal-chain pending |
+| cpu.c signal FP reset bridge | next Rust checked initial/full64mask/status/reset | SOURCEPASS1b7c6388 +production32eb4d47; native null-fpstate reset pending |
 
 Next resetport exact CPU1834e76a/helper8affc673 integrated after current native
 physical joins. Source2042parity cases, native/legacycfg and4strict C boundary
@@ -81,6 +131,14 @@ preserve scratch21/all historical records. One heavy4CPU/12GiB/noSwap512tasks/no
 aggregate7jobs/23.735GiB, cheap lanes dividedCPU0/6/7. Included usage14%, stop97%.
 Supervisor Review23 saved; next08:45UTC/latest09:15. Fullmaps/diffs/requests stay in
 files, console selectedscalar/count/boundedmismatch only. Continue after checkpoints.
+
+
+Post-checkpoint receipt:9f1d810fd140526d96d575bf38290835fbf876d1 pushed/fetched16
+exact changed blobs; treea7f364fc90e9bf78a134ee87423d5cec5106b2c9. Proof
+/home/holden/mckernel-work/scratch/checkpoint-mixed-rust-reset-source-20261018-1/
+verification.json. Two reset-port root files now committed; thin image private
+preparation must bind this source checkpoint, never substitute old0442after bytes.
+No heavy owner acquired; host tool producer/terminal source repairs remain active.
 
 
 ## PAUSED — explicit user stop, 2026-10-18 05:20 UTC

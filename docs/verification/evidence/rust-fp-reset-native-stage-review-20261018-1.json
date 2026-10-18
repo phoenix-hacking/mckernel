@@ -1,0 +1,402 @@
+{
+  "schema": "mckernel.fp-reset-native-ordinary-stage-independent-review.v1",
+  "decision": "PASS_EXACT_ORDINARY_STAGE_BIND_AND_REPLAY_TEMPLATE_ONLY",
+  "scope": "FUNCTIONAL supported-profile kernel/apps AND actual Rust/reviewed-assembly compute retirement. No compute C expansion. Deferred original qualification remains deferred.",
+  "reviewer": "/root/reset_guest_ordinary_stage_review_0922",
+  "reviewed_at_utc": "2026-10-18T09:23:51.626548+00:00",
+  "implementation_ownership": false,
+  "original_packet": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/ordinary-stage-review-packet.json",
+    "sha256": "3bf296e0f992069aa8a1dced52ff2637a454b7dde50d172b5577cfc57f7a6840",
+    "size": 10254,
+    "mode": 33152
+  },
+  "corrected_packet": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/ordinary-stage-review-packet-correction-1.json",
+    "sha256": "c3d50030c9870c87cdd609e8cf744ec625d9f48115d07099d6cf1795e04bfee6",
+    "size": 11085,
+    "mode": 33152
+  },
+  "original_proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/staging-only-proposal.json",
+    "sha256": "efad2e130414cffe46429f6ca8509c2104206e0464fa48925dd3232483ab17e7",
+    "size": 7538,
+    "mode": 33152
+  },
+  "corrected_proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/staging-only-proposal-correction-1.json",
+    "sha256": "c2a5fdb6accf260ab97231efcfdfcf5cc2a73bb507e4354cf3e1cb2b7b1455ed",
+    "size": 8837,
+    "mode": 33152
+  },
+  "source_derived_output_closure": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/ordinary-output-closure-correction-1.json",
+    "sha256": "f971f3f0e2e19ebf6a4a371c3e6803efc70ab13e2d26c05e3ac412cdee5f7729",
+    "size": 9184,
+    "mode": 33152
+  },
+  "check_program": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-stage-review-20261018-1/check.py",
+    "sha256": "0dcc18c84bacd77cf8514677f2a82a2b5ec3e2b284c9074d4f5881d5a562786b",
+    "size": 6646,
+    "mode": 33152
+  },
+  "check_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-stage-review-20261018-1/check-result.json",
+    "sha256": "6a33c58cd746c049a96d891c4e09514387508b4111471bc2b05d0aab142e4820",
+    "size": 1280,
+    "mode": 33152
+  },
+  "canonical_artifact_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-image-actual-review-20261018-1.json",
+    "sha256": "32eb4d476fd80af7652794b4b5a1de0223cc04545c33db909d7e9375f166d10e",
+    "size": 21952,
+    "mode": 33152
+  },
+  "typed_projection": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/canonical-typed-projection.json",
+    "sha256": "b6153a60ba218e1222de295cfef546aff65cb58e62f6a430e652b4aa47cafe13",
+    "size": 23853,
+    "mode": 33152
+  },
+  "artifact_join": {
+    "canonical_decision": "PASS_ACTUAL_PRODUCTION_IMAGE_ARTIFACT_AND_GUARD_RETIREMENT",
+    "image_sha256": "492c4a1506a8097d9534560fc9df7e8e35f571f779fdc19b9540e487bbb035d3",
+    "image_bytes": 7926224,
+    "request_sha256": "ef554d370f68c1e47044b34a3e43f270694ba7edd08fbc9e05340181536c89dc",
+    "projection": "Original seven-field canonical image metadata retained verbatim; strict manifest ref copies path/sha256/mode and maps bytes to size. No original producer field overwritten.",
+    "retained_producer_to_stager_preflight": "Reused exact retained PASS; not rerun during review.",
+    "common_shared_container_terminal_cleanup": "PENDING_MANDATORY_BEFORE_RUNTIME"
+  },
+  "source_findings": [
+    {
+      "finding": "AVX base derivative",
+      "result": "PASS",
+      "details": "Raw archive body is byte-identical to accepted da0 staging algorithm. Exact accepted manifest28b209bf is bound. Replaces exactly one images/mckernel.img entry; preserves header fields except size and optional newc checksum, padding, order, other raw records and all final parsed metadata. Overlay production uses unchanged source46d41bc0 and unchanged accepted payload/collector/mcexec. Actual final60 replay and image-only size/hash delta are enforced by source and still require actual result review."
+    },
+    {
+      "finding": "Threads derivative",
+      "result": "PASS",
+      "details": "Overlay body is byte-identical to accepted predecessor; strengthens image test to exact492c4a15. New AVX manifest digest is an explicit required argument. Only apps/app size/hash/mode delta is allowed; existing native-core.threads payload contract, collector, argv threads, stdout NATIVE_CORE PASS threads newline, empty stderr and exit37 match accepted retained proposal."
+    },
+    {
+      "finding": "Consumer binder",
+      "result": "PASS_TEMPLATE_PENDING_ACTUAL_MANIFEST_REPLAY",
+      "details": "Three private base modules copied byte-for-byte. Evaluator changes only manifest path/hash; runner changes evaluator hash; owner changes private source locations and evaluator/runner hashes. Binder requires all nonbinding function bodies to remain identical, while actual host/owner tests check production runner and _inner_result with fake backend/QMP, type-collision negatives and raw-envelope tamper rejection. Thread replay checks both unchanged generic consumers against accepted observation. No actual new consumer files or replay results exist yet."
+    },
+    {
+      "finding": "Output closure",
+      "result": "CORRECTED_ONCE_DATA_ONLY",
+      "details": "Original proposal omitted four binder-created root files. Exact correction adds only actual-test_case_cpu_copy_host1.py, actual-test_cpu_copy_owner1.py, check-thread-joins.py and actual-consumer-pins.json; nine allowlist entries now cover all six source-derived commands. Original proposal/packet retained byte-identically. Algorithm sources unchanged; -B prevents bytecode outputs."
+    },
+    {
+      "finding": "Filesystem floor check",
+      "result": "PASS_WITH_EXPLICIT_REAL_SCRATCH_ADMISSION",
+      "details": "Stage code measures host-preparation as its output filesystem; its local variable named scratch is also that host filesystem. Ordinary commands do not write real scratch. Dispatcher must independently measure /home/holden/mckernel-work/scratch before commands, preserving actual12GiB plus192MiB headroom as well as host16GiB plus192MiB. Review observation passes both. This corrects the interpretation without changing the source."
+    }
+  ],
+  "reviewed_source_pins": {
+    "derive_actual_avx.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/derive_actual_avx.py",
+      "sha256": "10818b9fe6b4756ef34aeb1148cbd26a7dc3a60b1e432446e33271fe7aeba6f4",
+      "size": 7045,
+      "mode": 33152
+    },
+    "finalize_preparation.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/finalize_preparation.py",
+      "sha256": "26959f219c57ff23b50fa321afefd487fcb38899d00f7ba1e2232db3077b05a7",
+      "size": 3672,
+      "mode": 33152
+    },
+    "canonical_artifact_consumer.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/canonical_artifact_consumer.py",
+      "sha256": "bbe180f9d1c15eab79cf7d60c96b63bbba7ac6b66c32f54267cf78a172ac7ddb",
+      "size": 3206,
+      "mode": 33152
+    },
+    "bind_actual_consumers.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/bind_actual_consumers.py",
+      "sha256": "4a52dc2e6db624e378099ec4b9f35b4ed18478634b4c7a3f3e6503ddb271f92b",
+      "size": 2887,
+      "mode": 33152
+    },
+    "prepare.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/prepare.py",
+      "sha256": "38b922fb399375f4180781f73b16bbbb1b79b00cc8c5c5b2cfa65144aad7fbdd",
+      "size": 6801,
+      "mode": 33152
+    },
+    "complete_contract.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/complete_contract.py",
+      "sha256": "cb747497dce231b88039d40c27de890fbc038f74af438c9e521b6d6fa4a681b3",
+      "size": 5295,
+      "mode": 33152
+    },
+    "derive_actual_threads.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/derive_actual_threads.py",
+      "sha256": "dd3e4b20b837605f1f381ba90068408ae97ba8327e5b8205a7d6bd106c08e9f2",
+      "size": 3929,
+      "mode": 33152
+    }
+  },
+  "accepted_owner_source_pins": {
+    "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_backend.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_backend.py",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+      "size": 25398,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_container_owner.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_container_owner.py",
+      "sha256": "1b710ae80559e34cba1509337b3af57c91bb8e1a3f027d6b2f2e9a87bd97403d",
+      "size": 60740,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/qmp_capture.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "size": 9913,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_runner.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_runner.py",
+      "sha256": "1013bb846a13dea4f756aa5780381abf25569d2572553545f3f50bc1f099f573",
+      "size": 7050,
+      "mode": 33152
+    },
+    "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/case_evaluator.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/case_evaluator.py",
+      "sha256": "24fd9f0b9d28559732a0326c64fd4881d51962bb3c291c74a80509d406e44146",
+      "size": 4932,
+      "mode": 33152
+    },
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440,
+      "mode": 33152
+    },
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+      "size": 25398,
+      "mode": 33152
+    },
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+      "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+      "size": 58828,
+      "mode": 33152
+    },
+    "/home/holden/mckernel/scripts/application-tests/qmp_capture.py": {
+      "path": "/home/holden/mckernel/scripts/application-tests/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "size": 9913,
+      "mode": 33204
+    },
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py": {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py",
+      "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+      "size": 6005,
+      "mode": 33152
+    }
+  },
+  "thread_contract_pin": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-core-threads-current942-execution-proposal-20261017-1.json",
+    "sha256": "d25cc3ea7ca6e693f8798ab17d0aeb049794b76f535839c3bd193872ed1a4804",
+    "size": 12292,
+    "mode": 33152
+  },
+  "ordinary_profile": {
+    "uid": 1000,
+    "jobs": 1,
+    "cpu": 7,
+    "as_bytes": 1073741824,
+    "cpu_seconds": 30,
+    "wall_seconds": 35,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "additional_stage_headroom_bytes": 201326592,
+    "network": "unused",
+    "root": false,
+    "Docker": false
+  },
+  "resource_review": {
+    "sequential_commands_only": true,
+    "jobs": 1,
+    "cpu": 7,
+    "uid": 1000,
+    "address_space_bytes": 1073741824,
+    "cpu_seconds": 30,
+    "wall_seconds": 35,
+    "network": "unused",
+    "root": false,
+    "Docker": false,
+    "aggregate_share": "One ordinary CPU and1GiB within dispatcher aggregate7job/23.735GiB budget; does not authorize another heavy build or guest. Dispatcher host-objtool heavy priority preserved.",
+    "growth_allowance_bytes": 201326592,
+    "growth_basis": "Three new compressed archives plus small manifests/private sources/bounded mock replay evidence. Accepted base12,744,541B/40,775,416B raw and lifecycle13,917,249B/43,774,428B raw; only5856B image growth and second payload smaller than AVX.192MiB disk allowance exceeds the uncompressed aggregate archive sizes plus bounded replay files. Existing exact ordinary1GiB/30CPU/35wall profile retained; timeout or resource failure preserves partial output and is not retried under same names.",
+    "observed_host_free_bytes": 56085454848,
+    "observed_actual_scratch_free_bytes": 13785567232,
+    "fresh_measurement_required_before_dispatch": true
+  },
+  "execution_template": {
+    "commands_in_order": [
+      [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/derive_actual_avx.py",
+        "--artifact-review",
+        "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-image-actual-review-20261018-1.json",
+        "--artifact-review-sha256",
+        "32eb4d476fd80af7652794b4b5a1de0223cc04545c33db909d7e9375f166d10e"
+      ],
+      [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/derive_actual_threads.py",
+        "--avx-manifest-sha256",
+        "PENDING_ACTUAL_RESET_AVX_STAGED_MANIFEST_SHA256"
+      ],
+      [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/bind_actual_consumers.py"
+      ],
+      [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/actual-test_case_cpu_copy_host1.py"
+      ],
+      [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/actual-test_cpu_copy_owner1.py"
+      ],
+      [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/check-thread-joins.py"
+      ]
+    ],
+    "write_allowlist": [
+      "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/stage-avx",
+      "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/stage-threads",
+      "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/host-actual1",
+      "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/h3",
+      "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/owner-h3",
+      "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/actual-test_case_cpu_copy_host1.py",
+      "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/actual-test_cpu_copy_owner1.py",
+      "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/check-thread-joins.py",
+      "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/actual-consumer-pins.json"
+    ],
+    "dispatcher_capture_paths": "Dispatcher selects separate fresh stdout/stderr/status evidence paths outside source write closure and records exact argv/exit; no capture path or runtime attempt created by this review.",
+    "dynamic_argument": "Replace only PENDING_ACTUAL_RESET_AVX_STAGED_MANIFEST_SHA256 in second command with independently observed SHA256 of successfully staged stage-avx/manifest.json; retain exact resulting argv. No other command substitution allowed.",
+    "prerequisites": [
+      "Dispatcher reconciles actual source pins, exact corrected packet/proposal, retained accepted owner sources, thread contract pin and fresh caller-owned canonical0700 preparation parent; all nine output targets absent before their creating command.",
+      "Fresh host and actual scratch measurements exceed respective16GiB/12GiB floors plus192MiB; one ordinary CPU/1GiB remains within aggregate share. Preserve existing heavy operation lease and host-objtool priority.",
+      "First stage exits0 with fresh stage-result/strict manifest PASS. Second uses that exact manifest hash. Binder waits for both actual stage results. Host replay precedes owner replay because owner copies h3/p. Thread replay follows actual thread staging."
+    ],
+    "stop_condition": "Any actual source/artifact/manifest/parent identity mismatch, insufficient real filesystem headroom, command timeout/nonzero result, unexpected write, or failed strict/result/replay join stops this template. Preserve full streams and partial files; do not reuse output names or erase failure history."
+  },
+  "next_executable_observation": "Dispatcher runs the exact ordinary AVX staging command after fresh ordinary admission, then observes actual image-only archive delta and strict manifest. Actual stage/result/consumer review remains mandatory before later runtime release.",
+  "runtime_gates": {
+    "terminal_common_shared_container_cleanup": "PENDING_MANDATORY_BEFORE_RUNTIME",
+    "actual_stage_independent_review": "PENDING",
+    "actual_modified_owner_runner_replay": "PENDING_ACTUAL_MANIFESTS",
+    "fresh_live_admission": "PENDING",
+    "separate_execution_release": "PENDING",
+    "threads_requires_reset_AVX_actual_PASS_and_positive_retirement": true
+  },
+  "authority": {
+    "ordinary_staging_binding_mock_replays": "PASS_TEMPLATE_FOR_DISPATCHER_EXECUTION_UNDER_REVIEWED_PROFILE",
+    "actual_stage_result_acceptance": false,
+    "runtime_guest_root_Docker_cleanup_build_Git": false,
+    "actual_terminal_common_shared_container_release": "PENDING_MANDATORY_BEFORE_RUNTIME",
+    "fresh_heavy_admission_and_separate_execution_release": "PENDING",
+    "threads_runtime": "ONLY_AFTER_EXACT_RESET_IMAGE_AVX_ACTUAL_PASS_AND_POSITIVE_RETIREMENT",
+    "clear_fp_regs_exec_retirement": "AVX/threads cannot prove sole execve callsite; separate current-image native exec app proof required."
+  },
+  "failure_history": "Original long-endpoint failure and all accepted da0 failures/requests/results preserved. Reserved reset endpoint full encoded length99B verified, no runtime parent/attempt created. One output-closure finding corrected in additive data-only records; original files untouched.",
+  "review_activity": {
+    "bounded_source_contract_checks": 1,
+    "actual_stages_executed": 0,
+    "actual_consumer_replays_executed": 0,
+    "archives_written": 0,
+    "guests": 0,
+    "new_distinct_behavior": 0,
+    "formal_acceptance_credit": 0,
+    "runtime_release": false
+  }
+}

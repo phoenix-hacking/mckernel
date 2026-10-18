@@ -33,21 +33,21 @@ REPO = Path('/home/holden/mckernel')
 PUBLISHED_SCRIPT = 'scripts/native_rust_cutover_image_terminal_cleanup.py'
 PUBLISHED_TESTS = 'scripts/tests/test_native_rust_cutover_image_terminal_cleanup.py'
 SELFTEST = REPO / PUBLISHED_TESTS
-NAMESPACE = Path('/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1')
-NAMESPACE_ANCESTRY = [{'path': '/', 'device': 66306, 'inode': 2, 'mode': 16877, 'uid': 0, 'gid': 0}, {'path': '/home', 'device': 66306, 'inode': 45481985, 'mode': 16877, 'uid': 0, 'gid': 0}, {'path': '/home/holden', 'device': 66306, 'inode': 45481986, 'mode': 16877, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work', 'device': 66306, 'inode': 47459822, 'mode': 16893, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/scratch', 'device': 1828, 'inode': 2, 'mode': 16832, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1', 'device': 1828, 'inode': 114889, 'mode': 16832, 'uid': 1000, 'gid': 1000}]
-NAMESPACE_BINDING = {'device': 1828, 'inode': 114889, 'mode': 16832, 'uid': 1000, 'gid': 1000}
+NAMESPACE = Path('/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1')
+NAMESPACE_ANCESTRY = [{'path': '/', 'device': 66306, 'inode': 2, 'mode': 16877, 'uid': 0, 'gid': 0}, {'path': '/home', 'device': 66306, 'inode': 45481985, 'mode': 16877, 'uid': 0, 'gid': 0}, {'path': '/home/holden', 'device': 66306, 'inode': 45481986, 'mode': 16877, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work', 'device': 66306, 'inode': 47459822, 'mode': 16893, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/scratch', 'device': 1828, 'inode': 2, 'mode': 16832, 'uid': 1000, 'gid': 1000}, {'path': '/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1', 'device': 1828, 'inode': 115050, 'mode': 16832, 'uid': 1000, 'gid': 1000}]
+NAMESPACE_BINDING = {'device': 1828, 'inode': 115050, 'mode': 16832, 'uid': 1000, 'gid': 1000}
 ROOT = Path('/home/holden/mckernel-work/scratch')
 UUID = '2a5768c8-718d-4914-bdc0-6b32c5a92a52'
 DEVICE = None  # A future, independently reviewed release binds the live device.
 UID = GID = 1000
-PREFIX = 'native-rust-three-port-image-terminal-cleanup-20261018-1'
+PREFIX = 'native-rust-fp-reset-image-terminal-cleanup-20261018-1'
 CANDIDATE = None  # Derived only from the exact consumed image request at release validation.
-ATTEMPT = Path('/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/common-exclusion.json')
+ATTEMPT = Path('/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/common-exclusion.json')
 SHARED = ROOT / 'mckernel-heavy-operation.lock'
-REQUEST = Path('/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/image-request.json')
-LEASE = Path('/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/image-lease.json')
-OUTPUT = Path('/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/owner-work')
-EVIDENCE = Path('/home/holden/mckernel-work/scratch/rust-next-three-port-image-preparation-20261018-1/owner-evidence')
+REQUEST = Path('/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/image-request.json')
+LEASE = Path('/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/image-lease.json')
+OUTPUT = Path('/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work')
+EVIDENCE = Path('/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-evidence')
 MUTEX = ROOT / (PREFIX + '.mutex')
 PLAN = ROOT / (PREFIX + '.plan.json')
 JOURNAL = ROOT / (PREFIX + '.journal.jsonl')
@@ -57,8 +57,8 @@ ARCHIVE_NAMES = (PREFIX + '.attempt.archive', PREFIX + '.shared.archive')
 ROOT_LOCK = Path('/run/lock/mckernel-development.lock')
 BASELINE_SOURCE_SHA = '6606af40114eb5b6019438c4127948081d80bbe65144d841e906a7cba84aabed'
 NATIVE_BASELINE_SOURCE_SHA = '8449b4b87b2286d4dc3d08e0c5921d2d79e44f17920d0aaee3eae646993fc995'
-KNOWN_TARGET = {'container_id': '1305fc5a226aed2b4d495723282ce4ed009ad84d4ee7ffc439db7a12a3e7bf4a', 'container_name': 'mckernel-image-de70ec145bcb4491998c09ff9b44858c', 'owner_nonce': 'a358cbe63ec54a80975cce93b7040f9a', 'owner_pid': 893281, 'owner_starttime': '10459071'}
-REQUEST_SHA = '2a20c1a4a4438c4611b0d04f803805b1191dba1fec4c9e93ec096533559a4578'
+KNOWN_TARGET = {'container_id': '17a70957ba1e4ea6502fa9cc61cba65e969e4fb57b5de3c02cc279e7234aaa35', 'container_name': 'mckernel-image-aa032869665b4d949f4057c6a41b51c2', 'owner_nonce': '45f45cb206ca4520817f745c30efaedd', 'owner_pid': 939125, 'owner_starttime': '11175844'}
+REQUEST_SHA = 'ef554d370f68c1e47044b34a3e43f270694ba7edd08fbc9e05340181536c89dc'
 IMAGE_CANDIDATE = '942c927b1ec93cc31284ff498455909d9bb2d0fc'
 ROOT_TERMINAL = None  # Exact future nonce-bound guard-result.json proof.
 CONTAINER = CONTAINER_NAME = OWNER_NONCE = OWNER_PID = OWNER_START = None
@@ -398,14 +398,14 @@ def recovery_proof_binding(binding, obs):
 
 def typed_source_binding(request, obs, selected_map):
     expected = {
-        'source_derivative_sha256': '1d304648a61389c9b4c22cf152316b8a8f78c6e2cb6d1435823b6fb749264018',
-        'materialization_sha256': 'da599464df9c0252b79d8b2a62393a10f9401f9927c9245374b3d5137ca9312a',
+        'source_derivative_sha256': 'a347b555a2b692d536400e5e10658551dc3b4af8fdbf654e8e99e001a1a44219',
+        'materialization_sha256': '75762fb041ede77b454e53f578a22cf4dcacad6305a9dbb2057562157dc76d41',
     }
     manifest = NAMESPACE / 'thin-inputs.json'
     receipt_path = NAMESPACE / 'materialization-receipt.json'
-    pins = {str(manifest): '253708b7e3e77f937fc51df2c352e9b00e2af57d7e3905e411e87182fc4246d5',
-            str(receipt_path): '948f0bd5c84a04d96a83989dbf29df28ae2c370720c87e0a46958a08bb93833b'}
-    if (request.get('source_identity', {}).get('inode') != 618252 or
+    pins = {str(manifest): 'b8a519813e0743419c9890ce9ce92d79772e7680df1605f5883e30a853f716c2',
+            str(receipt_path): 'c727938e192ef0032f31e3f5dc003bc4e7fba5f0082907b4217d52398c1a91bd'}
+    if (request.get('source_identity', {}).get('inode') != 628158 or
             any(request.get(key) != value for key, value in expected.items()) or
             request.get('candidate_identity_scope') != 'base_git_commit_only'):
         raise Refusal('typed-thin-source-required')
@@ -417,7 +417,7 @@ def typed_source_binding(request, obs, selected_map):
     if (receipt.get('status') != 'PASS_SOURCE_MATERIALIZATION_ONLY' or
             receipt.get('source') != str(CANDIDATE) or
             any(receipt.get(key) != value for key, value in expected.items()) or
-            obs['candidate_root'].get('inode') != 618252):
+            obs['candidate_root'].get('inode') != 628158):
         raise Refusal('typed-materialization-authority')
 
 
@@ -480,7 +480,7 @@ def configure(value, execute=False):
     client_rows = obs['client_ledger']
     if not isinstance(client_rows, list) or not client_rows or any(set(r) != {'pid', 'status_path', 'status_sha256'} or type(r['pid']) is not int or r['pid'] <= 0 for r in client_rows):
         raise Refusal('positive-client-ledger-required')
-    guard_capture = ROOT / 'native-rust-next-three-port-image-guard-20261018-5b15453e29954a8d8b2d9ce1754dcaa2'
+    guard_capture = ROOT / 'native-rust-fp-reset-image-guard-20261018-ea67660a5394461d8cdc8a06ca44cadc'
     if {r['status_path'] for r in client_rows} != {str(p) for p in guard_capture.glob('command-*/status.json')} or any(Path(r['status_path']).parent.parent != guard_capture for r in client_rows):
         raise Refusal('complete-current-guard-client-ledger-required')
     for row in client_rows:
@@ -557,7 +557,7 @@ def configure(value, execute=False):
         raise Refusal('duplicate-selected-file')
     ROOT_TERMINAL = Path(obs[proof_key]['path'])
     if proof_key == 'guard_proof' and (ROOT_TERMINAL.name != 'guard-result.json' or ROOT_TERMINAL.parent.parent != ROOT or
-            ROOT_TERMINAL.parent.name != 'native-rust-next-three-port-image-guard-20261018-5b15453e29954a8d8b2d9ce1754dcaa2'):
+            ROOT_TERMINAL.parent.name != 'native-rust-fp-reset-image-guard-20261018-ea67660a5394461d8cdc8a06ca44cadc'):
         raise Refusal('image-guard-proof-path')
     joins = {'driver_path': 'driver_sha256', 'provenance_path': 'provenance_sha256',
              'host_owner_path': 'host_owner_sha256', 'source_manifest': 'source_manifest_sha256',

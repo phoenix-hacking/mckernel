@@ -1,0 +1,422 @@
+{
+  "schema": "mckernel.independent-rust-fp-reset-image-actual-review.v1",
+  "reviewer": "/root/rust_fp_reset_actual_image_review_0910",
+  "implementation_ownership": false,
+  "created_utc": "2026-10-18T09:18:33.569197+00:00",
+  "scope": "Functional PRACTICAL-GOAL kernel/apps AND actual live compute-C retirement into Rust plus reviewed assembly. Preserve five accepted paths, review three new clear/mask/reset default bodies. Broad original qualification deferred; no compute-C expansion.",
+  "decision": "PASS_ACTUAL_PRODUCTION_IMAGE_ARTIFACT_AND_GUARD_RETIREMENT",
+  "actual_artifacts": {
+    "cpu": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "sha256": "4d0c94cfe70cadb8ce0dcc534a43d29f18f07f8738571ff0bdefbd782d6d0c14",
+      "bytes": 171528,
+      "dev": 1828,
+      "inode": 755182,
+      "uid": 1000,
+      "mode": 33188
+    },
+    "image": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "492c4a1506a8097d9534560fc9df7e8e35f571f779fdc19b9540e487bbb035d3",
+      "bytes": 7926224,
+      "dev": 1828,
+      "inode": 755200,
+      "uid": 1000,
+      "mode": 33261
+    },
+    "process": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "sha256": "646b6bec051a616a921fa5fabed10d2370e039b8f4c4720e3056280a06cb9897",
+      "bytes": 319184,
+      "dev": 1828,
+      "inode": 755190,
+      "uid": 1000,
+      "mode": 33188
+    },
+    "rust": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work/output/build/kernel/rust/mckernel_rust.o",
+      "sha256": "6168e7255ae6443f8dafd52edfa665ded14d4ad52e0e91c0202315f408dd9baa",
+      "bytes": 12636632,
+      "dev": 1828,
+      "inode": 755173,
+      "uid": 1000,
+      "mode": 33188
+    }
+  },
+  "metadata": {
+    "0-compile_commands.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work/output/build/compile_commands.json",
+      "bytes": 74300,
+      "sha256": "64abc0b58258b2319290ca86c91c04136fe3afec920099719b677601176b8d52"
+    },
+    "1-CMakeCache.txt": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work/output/build/CMakeCache.txt",
+      "bytes": 26282,
+      "sha256": "2dc15e5e36780c4e5869d16b1a62a94557a61dfc8cf3e2dd732f7e78c183ae36"
+    },
+    "2-link.txt": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+      "bytes": 759,
+      "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428"
+    },
+    "3-build.make": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+      "bytes": 7967,
+      "sha256": "6266a07d0a839c0175e5ca451678d69f78fe413f8a534348f5290f8133a58613"
+    },
+    "4-receipt.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work/evidence/receipt.json",
+      "bytes": 13907,
+      "sha256": "84cd0796c7cba51a2bbc90e932969d7a59a7379edfbb00235c4bc694f7cd3de2"
+    },
+    "5-mckernel.img.map": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work/output/build/kernel/mckernel.img.map",
+      "bytes": 740534,
+      "sha256": "dba889829eca86d30fef8230ad3de075b0c7ed7fdd83b6bd588e3b8827e68ea0"
+    }
+  },
+  "checks": {
+    "frozen_sources_and_unchanged_exact_production_process_object": "PASS",
+    "actual_pinned_GCC14_pre_make_same_production_flags_CPU_process_ABI_assertions": "PASS",
+    "actual_build_receipt_and_artifact_binding": "PASS",
+    "full_production_Rust_no_FP_SIMD_recipe": "PASS",
+    "unique_linked_exports_no_undefined": "PASS",
+    "default_C_consumers_linked_to_unique_full_Rust_bodies_and_no_generated_SIMD": "PASS",
+    "new_reset_clear_mask_actual_operands_fullmask_checked_return_and_default_state": "PASS",
+    "released_actual_C_DWARF_inspector": "PASS",
+    "actual_full_Rust_DWARF_all_affected_sizes_alignments_members": "PASS",
+    "positive_guard_owner_client_retirement_with_stopped_container_records_retained": "PASS"
+  },
+  "source_pins": {
+    "arch/x86_64/kernel/cpu.c": "1834e76aff9e8dcd9e1f70d80d6b4586a502ad69d3c5e6444d5278fa59e68e18",
+    "kernel/process.c": "d87e1f7d73b8f634bc715efbd84ff9d2b5b267231cceabc7aa5cf1562dbfb37b",
+    "kernel/rust/sched_helpers.rs": "59fde97704260b75cf03e7db476ea8cba537c2805476c86981f3f7816f2aa26e",
+    "kernel/rust/x86_cpu_helpers.rs": "8affc6730fc252564d0c728ef02f61a95e1bc892de0b5250701c4b6044b5d2d0",
+    "kernel/rust/abi.rs": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+    "kernel/CMakeLists.txt": "0fb8528175443a0cab4b1b12e62a2b9851b918b416f9a235f598cb143f616e35"
+  },
+  "linked_symbols": {
+    "copy_fp_regs": [
+      {
+        "address": "fffffffffe81d970",
+        "kind": "T"
+      }
+    ],
+    "rust_x86_copy_fp_regs": [
+      {
+        "address": "fffffffffe893a90",
+        "kind": "T"
+      }
+    ],
+    "schedule": [
+      {
+        "address": "fffffffffe819f90",
+        "kind": "T"
+      }
+    ],
+    "sched_schedule_fp_admit": [
+      {
+        "address": "fffffffffe895910",
+        "kind": "T"
+      }
+    ],
+    "sched_schedule_prepare_body_result": [
+      {
+        "address": "fffffffffe8959f0",
+        "kind": "T"
+      }
+    ],
+    "save_fp_regs": [
+      {
+        "address": "fffffffffe81d930",
+        "kind": "T"
+      }
+    ],
+    "rust_x86_save_fp_regs": [
+      {
+        "address": "fffffffffe893ef0",
+        "kind": "T"
+      }
+    ],
+    "restore_fp_regs": [
+      {
+        "address": "fffffffffe81d9a0",
+        "kind": "T"
+      }
+    ],
+    "rust_x86_restore_fp_regs": [
+      {
+        "address": "fffffffffe893dd0",
+        "kind": "T"
+      }
+    ],
+    "sched_schedule_exit_cleanup": [
+      {
+        "address": "fffffffffe8957c0",
+        "kind": "T"
+      }
+    ],
+    "clear_fp_regs": [
+      {
+        "address": "fffffffffe81d9f0",
+        "kind": "T"
+      }
+    ],
+    "rust_x86_clear_fp_regs": [
+      {
+        "address": "fffffffffe893960",
+        "kind": "T"
+      }
+    ],
+    "rust_x86_native_signal_mxcsr_mask": [
+      {
+        "address": "fffffffffe893ba0",
+        "kind": "T"
+      }
+    ],
+    "rust_x86_native_signal_reset_fp": [
+      {
+        "address": "fffffffffe893be0",
+        "kind": "T"
+      }
+    ],
+    "arch_native_signal_mxcsr_mask_bridge": [
+      {
+        "address": "fffffffffe81da70",
+        "kind": "T"
+      }
+    ],
+    "arch_native_signal_reset_fp_bridge": [
+      {
+        "address": "fffffffffe81da90",
+        "kind": "T"
+      }
+    ],
+    "rust_x86_restore_default_fp_regs": [
+      {
+        "address": "fffffffffe893ce0",
+        "kind": "T"
+      }
+    ],
+    "native_xrstor_checked": [
+      {
+        "address": "fffffffffe825f10",
+        "kind": "T"
+      }
+    ]
+  },
+  "guard_retirement": {
+    "image-guard.status.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/execution-proposal/image-guard.status.json",
+      "bytes": 852,
+      "sha256": "020e9f00717f4a0f8d7dc44a6bb5ade120b2126958b7515fb70f47895a53b7bd",
+      "data": {
+        "argv": [
+          "/home/holden/anaconda3/bin/python3",
+          "-B",
+          "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/execution-proposal/native_exact_scratch22_authority3_image_guard.py",
+          "--request",
+          "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/image-request.json",
+          "--request-sha256",
+          "ef554d370f68c1e47044b34a3e43f270694ba7edd08fbc9e05340181536c89dc",
+          "--release",
+          "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/execution-proposal/image-execution-release.json",
+          "--release-sha256",
+          "0ebe6b045d7ecb5d85bec0725f4571345b94bee76a3d9f519076135833c27d98"
+        ],
+        "returncode": 0,
+        "direct_child_joined": true,
+        "no_automatic_retry": true,
+        "elapsed_seconds": 208.0020496119978,
+        "utc": "2026-10-18T09:08:40.995545+00:00"
+      }
+    },
+    "image-guard-postjoin-readback.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/execution-proposal/image-guard-postjoin-readback.json",
+      "bytes": 542,
+      "sha256": "ecb169e7b8cf0dd1d20ed7df67978655138a0b39eea9d25c8311e52461b456ae",
+      "data": {
+        "application_acceptance": false,
+        "cleanup_authorized": false,
+        "common_shared_and_container_retained_for_separate_cleanup": true,
+        "container_id": "17a70957ba1e4ea6502fa9cc61cba65e969e4fb57b5de3c02cc279e7234aaa35",
+        "guard_direct_joined": true,
+        "guard_result_sha256": "f3b612af767a2601f44d2866ffd86fc3751156c0fd830601bd650d24f2de38fc",
+        "owner_receipt_sha256": "e5a5b93ad5588f92039a79768652d3ce2e63b9520e51a5fd56ebfbe92ef2cff6",
+        "root27_4_reacquired_after_join": true,
+        "status": "PASS_ORDINARY_GUARD_POSTJOIN_READBACK_ONLY"
+      }
+    },
+    "guard-result.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-rust-fp-reset-image-guard-20261018-ea67660a5394461d8cdc8a06ca44cadc/guard-result.json",
+      "bytes": 299,
+      "sha256": "f3b612af767a2601f44d2866ffd86fc3751156c0fd830601bd650d24f2de38fc",
+      "data": {
+        "container_id": "17a70957ba1e4ea6502fa9cc61cba65e969e4fb57b5de3c02cc279e7234aaa35",
+        "interrupted_signal": null,
+        "owner_receipt_sha256": "e5a5b93ad5588f92039a79768652d3ce2e63b9520e51a5fd56ebfbe92ef2cff6",
+        "owner_status": "PASS",
+        "retained_for_separate_cleanup": true,
+        "retired": true
+      }
+    },
+    "inspect-terminal-fresh.json": {
+      "path": "/home/holden/mckernel-work/scratch/native-rust-fp-reset-image-guard-20261018-ea67660a5394461d8cdc8a06ca44cadc/inspect-terminal-fresh.json",
+      "bytes": 12546,
+      "sha256": "49814eca4d5d198c05bfe78f911c7cf088c16c4dce509a664fff18c1318a57a1"
+    },
+    "owner": {
+      "receipt_path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-evidence/owner-receipt.json",
+      "receipt_sha256": "e5a5b93ad5588f92039a79768652d3ce2e63b9520e51a5fd56ebfbe92ef2cff6",
+      "owner_nonce": "45f45cb206ca4520817f745c30efaedd",
+      "container_id": "17a70957ba1e4ea6502fa9cc61cba65e969e4fb57b5de3c02cc279e7234aaa35",
+      "container_name": "mckernel-image-aa032869665b4d949f4057c6a41b51c2",
+      "retired": true,
+      "common_shared_container_retained": true,
+      "cleanup_accepted": false
+    }
+  },
+  "evidence": {
+    "collect_artifacts.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-actual-review-20261018-1/collect_artifacts.py",
+      "bytes": 4421,
+      "sha256": "255145c4c5e4aafb1786ef97f4d4c5f970007c02c9cbd39f1786c7fdf7e22e13"
+    },
+    "projection.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-actual-review-20261018-1/projection.json",
+      "bytes": 2213,
+      "sha256": "b158d0bd155147a09205540ebba6bd22f3110cab1f3af622b630b1db2b2cbd68"
+    },
+    "capture.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-actual-review-20261018-1/actual-capture-1/capture.json",
+      "bytes": 16281,
+      "sha256": "6409606104e290b1dc7498a1d42437d682c813870ba902417be720fe4d5588da"
+    },
+    "capture_rust_dwarf.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-actual-review-20261018-1/capture_rust_dwarf.py",
+      "bytes": 1192,
+      "sha256": "2e03061fea326adea8dc965b3a0aa54414fb7f9da22d43adc403104e7863a10b"
+    },
+    "rust-dwarf-info.status.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-actual-review-20261018-1/rust-dwarf-info.status.json",
+      "bytes": 527,
+      "sha256": "1aea1b8fa08cc167ee100c702d0f54e6b76a4b9bebad4dbb77f91700971a0f64"
+    },
+    "actual-Rust-layouts.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-actual-review-20261018-1/actual-Rust-layouts.json",
+      "bytes": 1113,
+      "sha256": "0ce568494acaa7a731d57c38197e4cbe71a4e7ea3eb10216286ef7b09c7438d7"
+    },
+    "production-C-ABI.stdout": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-actual-review-20261018-1/production-C-ABI.stdout",
+      "bytes": 710,
+      "sha256": "35bd36dce119c9b0c95304567c49cf522b2cc8d4b065a45605378c03d406ca57"
+    },
+    "verify_actual.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-actual-review-20261018-1/verify_actual.py",
+      "bytes": 10118,
+      "sha256": "a7cc10fab54940275a055b65a55315f1d1eb83cd8678139e20d5c25eb47b83ff"
+    },
+    "verify_actual.py.attempt-1": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-actual-review-20261018-1/verify_actual.py.attempt-1",
+      "bytes": 10124,
+      "sha256": "e6fa409e9fd03b9c4e6568eeda50424f6d01a456f67320d56e6d7931c095cf89"
+    },
+    "verify-attempt-1.stderr": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-actual-review-20261018-1/verify-attempt-1.stderr",
+      "bytes": 358,
+      "sha256": "47ea76cfd0f8dafb8e32b574dae9472314b41cbe2f1279963025705353ea6b94"
+    },
+    "verify-correction-1.stderr": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-actual-review-20261018-1/verify-correction-1.stderr",
+      "bytes": 304,
+      "sha256": "4618d7e3b2f3c24ccad021f8a2527f27b7aaccfc9feea6380faae9a426ec3ace"
+    },
+    "verify-extract-correction-1.stdout": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-actual-review-20261018-1/verify-extract-correction-1.stdout",
+      "bytes": 185,
+      "sha256": "720cc73391c579208d5ec47c8b5b206a7dd9e42e3b004911e7093489c886d486"
+    },
+    "verify-extract-correction-1.stderr": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-actual-review-20261018-1/verify-extract-correction-1.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "verification.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-actual-review-20261018-1/verification.json",
+      "bytes": 9949,
+      "sha256": "80fe53c22fdfaa533d87e18f84aa5e71180452867e6b6311dee4126df2517e32"
+    },
+    "production-abi-checks.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work/evidence/production-abi-checks.json",
+      "bytes": 4245,
+      "sha256": "69df5d6b35c1d5c306157010e613dbd19b3bdac18bf605502d684e93df20b268"
+    },
+    "provenance.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work/evidence/provenance.json",
+      "bytes": 9153943,
+      "sha256": "682190e9e5b14861aec1934896899986cc79752c016dc2f1e319f58803ffb56c"
+    },
+    "production-abi-cpu.c": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work/output/build/production-abi-cpu.c",
+      "bytes": 1123,
+      "sha256": "8e31891a24714475b3ed39e8edf66ed6f732c5e06ad74b344df33e93fc894741"
+    },
+    "production-abi-process.c": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work/output/build/production-abi-process.c",
+      "bytes": 841,
+      "sha256": "8d414c7d988932dfb9547adf13d05dda969eb662d3e872a6eb2ad7398d12155b"
+    }
+  },
+  "production_ABI": {
+    "status": "PASS_ACTUAL_PRODUCTION_C_AND_FULL_RUST_LAYOUT",
+    "C": "Actual unchanged production process object SHA646b6bec retains independently accepted complete header/type/member evidence and exact schedule ordering. Released DWARF inspector independently passes thread5568/align64/fp4784 and Cpu8128/idle64/current7848/no_preempt7976. Two actual sequential configured-production-GCC14.3.1 syntax-only TUs use exactly the CPU/process production prefix and assert FXSAVE512/alignment16/mask28, all four new/restore function-pointer signatures, native/default selectors, SchedExitDebug40/alignment8/offsets0,8,16,24,32. Both exit0 before sole image build.",
+    "Rust": "Actual full production Rust DWARF independently confirms Thread5568/align64 and tid20/status4184/proc4304/fp_regs4784; Process1728/align64/pid456; CpuLocalVar8128/align64/idle64/current7848/prevpid7864/no_preempt7976; SchedExitDebug40/align8 and all five fields. Exact unchanged abi.rs and full production compilation preserve accepted type identities and const assertions; no layout/alignment inference.",
+    "predecessor_proof": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/rust-three-port-image-actual-review-20261018-1.json",
+      "bytes": 40805,
+      "sha256": "87e37ba180382acc488fe76ad7565ca9f2951a90c9f818bd552efc6790e9656f"
+    },
+    "unresolved": []
+  },
+  "boundary_reasoning": [
+    "Actual production C default selectors, object relocations, final unique exports, final addresses, map ownership and full Rust object prove save/restore/copy and all three new consumers. process.c.o is byte-identical to accepted predecessor; actual schedule object disassembly also byte-identical, preserving independently reviewed switched cleanup ordering/arguments.",
+    "clear_fp_regs forwards actual local idle at CpuLocalVar+64, runtime XSAVE controls, initial image and full64 mask to Rust. Rust tests idle.fp_regs at4784, forwards buffered path to Rust restore, otherwise performs initial XRSTOR with low/high mask or FINIT and SSE-gated MXCSR1f80. No allocation, free or slot mutation is introduced. clear requires nonnull actual local idle as its existing caller contract.",
+    "MXCSR mask helper has512-byte stack storage at an ABI-aligned rbp-relative address, FXSAVE into that area, reads offset28 and returns architectural0xffbf when disabled/zero. Actual CPU adapter passes compiled SSE-enabled1; full Rust crate excludes compiler FP/SIMD register use.",
+    "Signal reset returns-95 when XSAVE initial image is unavailable, forwards initial pointer and complete64-bit mask to unchanged reviewed native_xrstor_checked and preserves its exact return; only no-XSAVE path looks up current thread lazily then restores FINIT/MXCSR defaults. Hardware fault recovery remains in accepted assembly boundary.",
+    "Guard0/directchild joined and root27:4 postjoin reacquisition bind actual guardf3b612af and ownere5a5b93a. Eight guard Docker CLI records exited0; consumed guard validates positive owner/client retirement, absent build lease, exact common/shared records, exact stopped CID/profile and retained ownership. Container/common/shared are still retained; this review grants no cleanup or new root observation.",
+    "No new native execution is inferred from compilation, source parity, symbols, assembly or old da0 native results. clear_fp_regs needs actual execve coverage. Signal MXCSR query and null-fpstate checked reset need applicable native observations distinct from normal AVX/threads."
+  ],
+  "per_path": {
+    "five_prior_Rust_paths": "Current image default/link/ABI preserved. Prior da0 native evidence retained as its exact-image acceptance; current492c4a15 native confirmation pending.",
+    "clear_fp_regs": "PASS_SOURCE_DEFAULT_COMPILE_LINK_ABI; native execve observation PENDING; language retirement not accepted.",
+    "signal_MXCSR_mask": "PASS_SOURCE_DEFAULT_COMPILE_LINK_ABI; applicable native query observation PENDING; language retirement not accepted.",
+    "signal_FP_reset": "PASS_SOURCE_DEFAULT_COMPILE_LINK_ABI; null-fpstate checked reset native observation PENDING; language retirement not accepted."
+  },
+  "reviewer_failure_history": [
+    "Observer expected final receipt phase image-build; actual documented producer uses build. Original script/stderr retained; one bounded phase-label correction preserves exact configure->CPUassert->processassert->build ordering and all zero statuses.",
+    "Observer selected-disassembly extraction omitted three existing wrapper functions. Original selected files and KeyError retained; one bounded extraction correction adds only save/restore/copy wrappers from unchanged captured binutils output. Final verification passes10 checks. No source/artifact/oracle changes."
+  ],
+  "validation": {
+    "profile": "Ordinary read-only host tools/parser CPU6/1CPU/1GiB, <=55wall45CPU per bounded run, finite output caps, sequential. No compiler/Docker/root/guest/build/cleanup/Git execution by reviewer. Host nm/objdump/readelf hashes equal accepted predecessor capture.",
+    "binutils_commands": 14,
+    "additional_Rust_DWARF_commands": 1,
+    "all_observation_children_joined": true,
+    "final_verification_exit": 0,
+    "guard_clients": 8
+  },
+  "counts": {
+    "actual_current_candidate_builds_in_input": 1,
+    "reviewer_builds": 0,
+    "reviewer_native_apps": 0,
+    "new_native_behaviors": 0,
+    "new_practical_acceptance": 0,
+    "new_language_retirements": 0
+  },
+  "acceptance_limits": [
+    "Artifact/default-link/production-ABI and positive guard/client retirement only; stopped container/common/shared retained under separate release.",
+    "No native, formal qualification or whole-kernel migration acceptance.",
+    "Unchanged accepted correctness fixes in cpu.c/process.c remain live production paths."
+  ],
+  "next_executable_observation": "Use exact reviewed image492c4a15 through separately reviewed finite object retention and terminal cleanup; then separately released matching native AVX/threads and targeted execve/null-fpstate signal observations. No build replay."
+}

@@ -1,0 +1,74 @@
+{
+  "actual_artifact_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-image-actual-review-20261018-1.json",
+    "sha256": "32eb4d476fd80af7652794b4b5a1de0223cc04545c33db909d7e9375f166d10e"
+  },
+  "checks": {
+    "passed": 28,
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-retention-review-20261018-1/checks.json",
+    "sha256": "f809e2b94b4077dc4225d7397bc9bff5e93d9377fda34490a541e4a2ceb0db0b"
+  },
+  "decision": "PASS_EXACT_ORDINARY_PARENT_PREREQUISITE_ONLY_FINITE_RETENTION_SOURCE_PASS",
+  "failure_history": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-retention-review-20261018-1/reviewer-helper-failure-history.json",
+    "sha256": "dbbfc3afbb44dff2ebc62165e5162ff5803b2ab8cfd7bedc92b3ffede8676034"
+  },
+  "finalization": "After exact parent receipt, add its path/SHA256/identity as parent_creation in actual release, preserve all original frozen fields/rows, set source_review to exact reviewed source ref and status PASS_EXECUTION_RELEASE. Reviewer then binds exact payload excluding execution_review; no finite copy authorized before that final PASS.",
+  "implementation_ownership": false,
+  "limits": {
+    "artifact_acceptance": true,
+    "cleanup_authorized": false,
+    "copy_authorized": false,
+    "docker": false,
+    "lifecycle_acceptance": false,
+    "native": false,
+    "observation": false,
+    "root": false
+  },
+  "parent_preparation": {
+    "command": [
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "35s",
+      "taskset",
+      "-c",
+      "6",
+      "python3",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/rust-fp-reset-retention-review-20261018-1/prepare_parent.py"
+    ],
+    "mode": "0o700",
+    "one_execution": true,
+    "only_mkdir": "/home/holden/mckernel-work/scratch/rust-fp-reset-terminal-preparation-20261018-1",
+    "ordinary_uid": 1000,
+    "receipt": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-retention-review-20261018-1/parent-creation-receipt.json",
+    "source": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-retention-review-20261018-1/prepare_parent.py",
+      "sha256": "851100a9443eb1801ff52b6a11f4240eb638acea933e339e5c4069cf7bd8897d"
+    },
+    "status": "PASS_EXECUTION_PREREQUISITE_ONLY"
+  },
+  "reviewer": "/root/reset_terminal_retention_review_0915",
+  "schema": "mckernel.rust-image.finite-retention-execution-review.v1",
+  "scope": "Functional PRACTICAL-GOAL kernel/apps AND actual compute C retirement to Rust plus reviewed assembly; preserve ownership, accepted live cpu.c/process.c fixes, and host/resource controls. Original qualification remains deferred.",
+  "source_map": {
+    "engine": {
+      "path": "/home/holden/mckernel/scripts/native_rust_cutover_image_terminal_cleanup.py",
+      "sha256": "b3017b081d0b263f452fc46d96e708441244840337e8bf357b2fbdc580d6aeef"
+    },
+    "join": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-image-terminal-preparation-20261018-1/actual-correction-1/retained_join.py",
+      "sha256": "068bcea5a75fe23f737fb8cc44041dbc010cb064aa042075f4fd03cce5584208"
+    },
+    "observer": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-image-terminal-preparation-20261018-1/actual-correction-1/retention_observer.py",
+      "sha256": "6c97165ebb5cd901047ea9786b7913bcf5004f5a7570322988c50febee3410eb"
+    }
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-retention-review-20261018-1/source-review.json",
+    "sha256": "c82cf04038d0c9ba4d6104cb29c0107fe50c6ec7847bae2d1380a43a823195b5"
+  },
+  "status": "PENDING_PARENT_IDENTITY_FOR_FINAL_RETENTION_PAYLOAD"
+}

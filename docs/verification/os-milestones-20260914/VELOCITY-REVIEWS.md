@@ -26,13 +26,13 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-18T08:14:57Z`, review23, interval29m16s.
+- Last full review: `2026-10-18T09:14:50Z`, review25, interval29m47s.
 - User explicitly resumed the interactive30-minute loop. Next full
-  review target:`2026-10-18T08:45:00Z`, latest09:15UTC, using the06:15 launch
+  review target:`2026-10-18T09:45:00Z`, latest10:15UTC, using the06:15 launch
   baseline below. No independent OS timer or second dispatcher is installed.
   Exclude the05:25:30-to06:15 stopped interval and failed startup from runtime
   velocity; do not treat the canceled05:35 target as a missed active review.
-- Last launcher-reported included usage:14% in the new weekly primary window;
+- Last launcher-reported included usage:15% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
 - Current review20:16 native behaviors and3complete/32open checks unchanged,
   all14milestones open. Five compute Rust ports source-reviewed; two selected in
@@ -70,13 +70,36 @@ This file describes supervision, not OS acceptance or execution authority.
   source/Linux and actual consumer fixture pass; staging release review is
   finishing. Checkpoint0442eb5f pushed/fetched14files. Counts16/3complete32open
   unchanged; host53.016GiB/scratch13.457GiB, usage14%.
-- Current invocation independently accepted app/diagnostic behaviors: 16 (signal,
+- Post-cutoff08:28:10UTC: mixed Rust/std app independently PASS0ba31cb8 with exact
+  156B/exit0/empty stderr, six worker lifetimes and full retirement; distinct
+  native behaviors16->17. P-M04-01 independently PASSd50f96fe; dispatcher applied
+  it by08:35:43, giving4complete/31open checks. M04 suite Linux comparison remains
+  open. FP-reset candidate source PASS1b7c6388 is committed but lacks production/
+  native proof. Tool-only host execution waits for its producer/terminal adapter.
+- Current review24:17 native behaviors and4complete/31open checks; +one useful
+  Rust mixed-app native result and P-M04-01 closure this interval. All14milestones
+  remain open. Next three reset bodies source-reviewed/integrated9f1d810f;
+  ordinary image preparation approved2dc3569a, production/native proof pending.
+  Host producer19 checks/adapter22 tests passed locally, but independent joint
+  review found a live changed-session child incorrectly marked retired; bounded
+  correction is active before any tool build. Host52.646GiB/scratch13.221GiB,
+  usage14%; no2x/3x claim. Next full review09:15UTC/latest09:45.
+- Current review25:17 native behaviors/4complete31open unchanged. Host paired
+  retirement correction independently PASS2e0b40b8 and exact tool execution
+  PASS09:13:16 with split new retention copies on host; no tool run yet. Next
+  reset image guarded build0/208.444s; both production GCC assertions pass, four
+  production artifacts retained. Actual default-link/layout review and terminal
+  release remain pending. Root context maintenance09:09:06-09:12:07 delayed
+  review assignment; terminal/guest preparation now overlaps artifact review.
+  Host52.303GiB/scratch12.898GiB, usage15%. Next09:45UTC/latest10:15.
+- Current invocation independently accepted app/diagnostic behaviors: 17 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
   useful dynamic-libc threads application, forced pthread contention app,
   actual memory-protection fault/recovery app, bounded vector-preservation app,
   AVX/YMM preservation across the exercised syscall/futex/signal boundaries,
-  binary file-copy/checksum/close/reopen/readback/unlink utility).
+  binary file-copy/checksum/close/reopen/readback/unlink utility, mixed Rust/std
+  memory and checked close/reopen/EOF with alternating joined threads).
 - Separate native3f7b observations: independently accepted quiescent native
   shutdown5->0->0/close0 and public destroy/device-memory release; complete
   one public stop/destroy/release/reboot cycle is now accepted with d99 modules.
@@ -2116,3 +2139,144 @@ Evidence: `../evidence/rust-three-port-image-terminal-result-review-20261018-1.j
 (2a634dfb); scratch `practical-mixed-rust-std-review-20261018-1/result.json`,
 `practical-mixed-rust-std-native-preparation-20261018-1/HANDOFF.md`,
 `native-host-objtool-finalization-20261018-1`.
+
+## Review24 — 2026-10-18 08:45 UTC
+
+Cutoff08:45:03UTC; interval30m06s. Campaign remains active with the same live
+worker871794/start10154631 and server871796/start10154636. Local source checkpoint
+9f1d810fd140526d96d575bf38290835fbf876d1 accepts mixed-app evidence and integrates
+the source-reviewed FP-reset cutover. Host52.646GiB/scratch13.221GiB; usage14%,
+existing stop97%. Original evidence, dirty unrelated work and scratch21 retained.
+
+| Measure | Change this interval |
+| --- | --- |
+| Distinct native behaviors | 16->17: one new useful composite Rust/std application |
+| Practical checks | 3complete/32open->4complete/31open; P-M04-01 closed, all14milestones still open |
+| Production/native Rust defaults | Five unchanged; accepted da0 image reused for mixed app |
+| Next compute C retirement | Three FP-clear/signal-mask/reset bodies source-reviewed and integrated; production/native pending |
+| Next image preparation | Ordinary materialization/request preparation approved2dc3569a; no image build yet |
+| Required process-infrastructure step | Host tool compiler control waits on producer/terminal adapter correction and review |
+
+Mixed-app ordinary stage and actual strict-loader/runner/owner replay passed in
+10.417s+3.363s, with two positives/eight refusals. Independent stage/execution
+review05b6343a bound the unchanged five-source consumer,99-byte endpoint, exact
+command and three conditional readbacks. Native run confirmed08:26:01; independent
+actual PASS0ba31cb8 reported08:28:10. Exact156Bstdout/exit0/empty stderr matches
+the frozen Linux oracle. Three memory/checksum rounds, six checked closes, three
+EOF/reopen checks and six worker lifetimes across three overlap windows pass.
+Owner35.902s, all30clients joined, exact container/lease/root/cgroup retirement;
+all approved raw readbacks completed. This is distinct behavior17, not multiple
+separate old cases passing. Static ELF has no dynamic-pager claim.
+
+Independent literal M04 reviewd50f96fe accepted P-M04-01: current-image dynamic-
+libc C and real Rust std applications both run. Dispatcher applied it by08:35:43.
+Selected utility/core-regression Linux-comparison coverage remains open under
+P-M04-03; no whole-M04, percentage, or original qualification closure is inferred.
+The new app and check are useful interval output. Two comparable two-hour
+behavior-throughput windows are still unavailable, so no2x/3x claim is made.
+
+FP-reset candidate source review1b7c6388 accepts2,042 C/Rust parity cases,
+native/legacy selection, four strict C-boundary compiles, lazy lookup, full-width
+masks/status and512B/align16 FXSAVE layout. Three selected bodies are integrated;
+original C fallback/reference remains. Private image preparation review2dc3569a
+passes with13 inherited authority fields unchanged, only intended CPU/helper
+hash changes,78 consumed references and proposed pinned-production ABI checks
+before image make. Actual materialization/compiler/default-link/native proof
+remain separate gates. No new compute-C behavior or new image is claimed.
+
+The prepared host tool has no compatible terminal-release consumer. Parallel
+authors prepared a private real-child evidence producer and an adapter reusing
+the existing two-record transaction:19 producer checks and22 adapter tests pass,
+including nine crash boundaries, quarantine and replay. Independent joint review
+then found a real bug08:44:41: a descendant can change session, remain alive in
+the final census, yet receive positive retirement. Harmless reproduction is
+retained; its child was terminated/reaped. The author is correcting that exact
+failure before any Docker/tool/root execution. Local passing counts did not
+grant runtime release. Compiler logs/nonzero statuses must remain preserved,
+with uncertainty refusing cleanup and ownership release.
+
+One new reviewer dumped3,260,529 console bytes at08:40 (outputc8953c95); specific
+steering was accepted08:40:50. Continue affected review from files and selected
+changed rows/counts; do not repeat validations just to fix output formatting.
+Scratch decreased by0.236GiB this interval. New unbound cheap outputs can prefer
+host capacity when their profiles permit; existing pinned paths stay intact.
+
+**Next:** finish the single producer correction, retain its original reproduction,
+and review the frozen producer/consumer pair. Bind complete raw logs, identities,
+retention and exact release before admitting the17-command host compiler-control
+operation toward the required create/exec/wait gap. Keep next Rust preparation
+moving independently; choose the next executable operation by usable-result and
+retirement latency. No broad inventories, unbounded console output, new framework
+or repeated unchanged checks. Preserve floors plus growth reserve, one heavy
+owner and original release boundaries. Next full review09:15UTC/latest09:45;
+continue interactive supervision.
+
+Evidence: `../evidence/practical-mixed-rust-std-native-result-review-20261018-1.json`
+(0ba31cb8), `../evidence/practical-m04-current-candidate-check-review-20261018-1.json`
+(d50f96fe), `../evidence/rust-fp-reset-source-review-20261018-1.json` (1b7c6388),
+`../evidence/rust-fp-reset-image-preparation-review-20261018-1.json` (2dc3569a);
+scratch `native-host-objtool-retirement-producer-20261018-1/review-packet.json`,
+`native-host-objtool-terminal-preparation-20261018-1/adapter-implementation`.
+
+## Review25 — 2026-10-18 09:15 UTC
+
+Cutoff09:14:50UTC, interval29m47s. Same campaign running/active, worker871794/
+start10154631 and server871796/start10154636 live; no restart or new service stop.
+Host52.303GiB/scratch12.898GiB, usage15%, existing stop97%. Scratch21, consumed
+attempts, original failures and the accepted da0 image remain preserved.
+
+| Measure | Change this interval |
+| --- | --- |
+| Native behaviors / practical checks | 17 and4complete/31open unchanged; all14milestones open |
+| Host retirement harness | One bounded paired correction independently accepted2e0b40b8 |
+| Host compiler-control operation | Exact derivative execution approved09:13:16; not run |
+| Next reset image | Guarded command exit0/208.444s, four production artifacts retained, both production GCC ABI assertions pass |
+| New image runtime credit | None; linked defaults/layout review, terminal release and native execution pending |
+
+The corrected producer establishes a dedicated child subreaper before launching
+commands and requires kernel ECHILD closure after joins. Independent replay
+accepts a real normal child, rejects the retained double-fork/session escape,
+and blocks the next command after uncertainty. Producer24 checks/adapter26 tests
+plus two independent real-proof checks pass. The adapter now joins the real
+ROOT27:4 mutex and full heavy-token device/inode fields and rejects unsafe v1
+proofs. One bounded correction closed all three findings; originals are retained.
+Source review2e0b40b8 grants no runtime authority.
+
+Host derivative execution review09:13:16 binds one producer attempt and finite
+conditional retention. Only new retained copies/manifest move to a proposed host
+destination; production evidence and ownership records stay on scratch. Fixed
+commands retain the64MiB artifact estimate; expanded evidence bounds and the
+512MiB emergency reserve require fresh capacity. Cleanup still needs its own
+decision and actual live identities. This step is ready for admission after the
+current image owner releases, toward the required create/exec/wait gap.
+
+Reset-image exact execution reviewce5dea31 passed08:59:49. Guarded build confirmed
+running09:05:43 and command completed09:08:41, exit0/208.444s. Actual review confirms
+both pre-build GCC14 assertions passed and four production artifacts retained.
+The11 guard sources and42 inputs bind the attempt. Initial live margin about314MB
+remained after floor/emergency reserve/estimated growth. Actual default-Rust calls,
+layouts, artifact identities and physical retirement remain under independent
+review; clear-execve/native branch observation is explicitly pending.
+
+Root compaction09:09:06 to resumed update09:12:07 delayed result-review assignment.
+Host-tool review continued independently. New image terminal packet was prepared
+before completion on host storage, with seven affected-consumer checks,11-source
+closure,15-member retention draft and original raw-five export. Actual terminal
+binding and AVX/threads preparation now run beside artifact review. Future result
+reviewers/terminal authors should be activated before completion with the exact
+completed-output contract; no reading partial artifacts or extra authority.
+
+**Next:** finish current artifact acceptance and exact terminal retention/release.
+Do not starve the now-approved host compiler-control step behind another image:
+once current ownership clears, prefer that required process-infrastructure
+prerequisite when admitted. Preserve any healthy already-running native attempt.
+Keep reset-image native preparation ready and choose by useful-result plus
+retirement latency. No additional kernel-image backlog, repeated inventories or
+large console dumps. Keep production/raw identities, split-storage reserves and
+one heavy owner. No percentage or2x/3x uplift is assigned from this interval.
+Next full review09:45UTC/latest10:15; continue interactive supervision.
+
+Evidence: `../evidence/native-host-objtool-retirement-source-review-20261018-1.json`
+(2e0b40b8), `../evidence/native-host-objtool-derivative-execution-review-20261018-1.json`;
+scratch `rust-fp-reset-image-preparation-20261018-1/execution-proposal`; host
+preparation `rust-fp-reset-image-terminal-preparation-20261018-1`.

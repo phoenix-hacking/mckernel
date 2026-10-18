@@ -1,0 +1,365 @@
+{
+  "ABI_driver_review": {
+    "actual_compile_executed": false,
+    "bounds": "Two sequential syntax-only compiler invocations inside existing single image operation, same pinned container/resources/timeouts; no additional target, module, root, native run or compiler substitution.",
+    "checks": [
+      "FXSAVE size512 alignment16 mxcsr_mask offset28",
+      "exact restore/clear/mask/reset C ABI prototypes",
+      "SchedExitDebug size40 alignment8 offsets0/8/16/24/32",
+      "production Rust helper and native-signal macros"
+    ],
+    "command_contract": "Select exactly one actual configured compile row per actual CPU/process source; require pinned tools cc path and GCC14.3.1 version; preserve selected flags, defines, include paths, cwd and environment; remove only source/-c/dependency/output switches; append -fsyntax-only plus generated include-and-assert fixture.",
+    "decision": "PASS_SOURCE_COMPATIBLE_FOR_LATER_SEPARATELY_RELEASED_IMAGE_ENVELOPE",
+    "failure_behavior": "Any nonzero ABI check raises before image make. First failing ABI-check JSON can remain PENDING, but command exit and terminal driver FAIL preserve the failure; do not interpret PENDING as acceptance.",
+    "insertion_point": "Inside configure success branch after existing modules-end probe and before loop build/mckernel.img command.",
+    "remaining_proof": "Actual configured GCC14 checks, production default consumer/object/link/DWARF evidence and separately released applicable native observations are pending.",
+    "retained_actual_argument_form_observations": [
+      {
+        "GCC14_header_selection": true,
+        "compiler": "/usr/bin/cc",
+        "required_macros": [
+          "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK"
+        ],
+        "separate_output_compile_flags": true,
+        "source": "arch/x86_64/kernel/cpu.c",
+        "unique_absolute_row": true
+      },
+      {
+        "GCC14_header_selection": true,
+        "compiler": "/usr/bin/cc",
+        "required_macros": [
+          "-DMCKERNEL_RUST_PROCESS_HELPERS"
+        ],
+        "separate_output_compile_flags": true,
+        "source": "kernel/process.c",
+        "unique_absolute_row": true
+      }
+    ]
+  },
+  "created_utc": "2026-10-18T08:43:48.454008+00:00",
+  "decision": "PASS_AFFECTED_SOURCE_AND_ORDINARY_PREPARATION_RELEASE",
+  "failure_history": [
+    "Prior next-three namespace and supplemental binding failures preserved in predecessor; joint seams pass here.",
+    "Historical preparer30CPU SIGKILL not repeated: future preparer120CPU150wall.",
+    "generation-failure-1.json: driver-before-owner dependency corrected once; preserved generate-attempt1.py"
+  ],
+  "heavy_build_authorized": false,
+  "implementation_files_modified": [],
+  "independent_of_author": true,
+  "native_guest_or_root_authorized": false,
+  "preparation_release": {
+    "absent_at_review": [
+      "materialized-source",
+      "materialization-journal.jsonl",
+      "image-request.json",
+      "image-toolchain.json",
+      "owner-work",
+      "owner-evidence"
+    ],
+    "allowlisted_outputs": [
+      "materialized-source/**",
+      "materialization-journal.jsonl",
+      "materialization-receipt.json",
+      "owner-work/",
+      "owner-evidence/",
+      "image-toolchain.json",
+      "image-request.json",
+      "preparer private temporary staging directories",
+      "fresh dispatcher captures and consumer receipts"
+    ],
+    "authorized": true,
+    "command_file": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/materializer-commands.json",
+    "command_file_sha256": "7501183c72d747aa692c45d8b1eed8ec824a2bf9b4e57017e45e9a7477234b24",
+    "fresh_live_admission_required": true,
+    "kind": "Unprivileged thin source materialization and data-only request preparation plus actual read-only consumers only.",
+    "limits": {
+      "address_space_bytes": 1073741824,
+      "consumer_cpu_seconds": 30,
+      "consumer_wall_seconds": 35,
+      "cpu_affinity": [
+        7
+      ],
+      "jobs": 1,
+      "materializer_cpu_seconds": 30,
+      "materializer_wall_seconds": 35,
+      "preparer_cpu_seconds": 120,
+      "preparer_wall_seconds": 150
+    },
+    "mandatory_sequence": [
+      "Fresh dispatcher live admission and absence verification",
+      "Materialize once and retain complete streams/status/journal/receipt",
+      "Require full actual source consumer success emitted by materializer",
+      "Create exactly two empty owner roots once",
+      "Prepare exactly once with120CPU150wall profile; its actual owner validation occurs before atomic publications",
+      "Bind actual final request/toolchain hashes and run post-prep driver/owner read-only consumer with actual request hash",
+      "Remeasure floors plus full512MiB remaining reserve and retain actual provenance identities",
+      "Obtain separate exact heavy-operation release before any build"
+    ],
+    "materialize_argv": [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "35s",
+      "/usr/bin/env",
+      "-i",
+      "PATH=/usr/bin:/bin",
+      "LC_ALL=C",
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=30",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/materialize_thin.py"
+    ],
+    "mkdir_request_roots_argv": [
+      "/usr/bin/mkdir",
+      "-m",
+      "700",
+      "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work",
+      "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-evidence"
+    ],
+    "on_failure": "Preserve partial outputs and all streams/status/identities, positively join owned processes, retain failure family; never reuse attempts or replay historical failed30CPU preparer.",
+    "post_preparation_consumer_argv": [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "35s",
+      "/usr/bin/env",
+      "-i",
+      "PATH=/usr/bin:/bin",
+      "LC_ALL=C",
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=30",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/post-prep-consumer.py",
+      "ACTUAL_PUBLISHED_REQUEST_SHA256"
+    ],
+    "prepare_request_argv": [
+      "/usr/bin/env",
+      "-i",
+      "PATH=/usr/bin:/bin",
+      "LC_ALL=C",
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/timeout",
+      "150s",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=120",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/adapters/native_rust_exact_mckernel_image_request_prepare.py",
+      "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/future-prepare-inputs.json",
+      "--request",
+      "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/image-request.json"
+    ]
+  },
+  "production_language_retirement_accepted": false,
+  "required_late_fields_and_consumers": {
+    "actual_provenance_joins_pending": true,
+    "actual_request_fields": [
+      "source_identity",
+      "disk_identity",
+      "backup_identity",
+      "source_manifest_sha256",
+      "toolchain_manifest_sha256",
+      "driver_sha256",
+      "provenance_sha256",
+      "host_owner_sha256",
+      "gitlink_manifest_sha256",
+      "image_receipt_sha256",
+      "toolchain_lock_sha256",
+      "source_derivative_sha256",
+      "materialization_sha256",
+      "candidate_identity_scope",
+      "disk_admission",
+      "toolchain_roots",
+      "mounts",
+      "common_exclusion_path",
+      "lease_path",
+      "attempt_root",
+      "owner_evidence_root",
+      "work_root",
+      "output_root",
+      "evidence_root"
+    ],
+    "closure_requirements": "Actual supplemental libdwarf/root/source-manifest join, full toolchain/kernel/nightly/library/image receipt closures, exact source maps/restoration/metadata, new namespace and absent request output/evidence/attempt/lease/exclusion paths must pass existing real consumer.",
+    "identity_shape": "owner._identity actual path/dev/inode/mode/uid/gid/file_type; source_identity and disk_identity must be fresh identities of actual materialized source, never preview pending objects.",
+    "post_consumer": "post-prep-consumer.py calls actual driver._validate_source then owner._validate_request and rehashes published request unchanged.",
+    "post_consumer_required_fields": [
+      "request_sha256",
+      "manifest_sha256",
+      "toolchain_sha256",
+      "common_exclusion_path",
+      "elapsed_seconds",
+      "builds",
+      "guests",
+      "limits"
+    ],
+    "post_consumer_success_status": "PASS_ACTUAL_DRIVER_AND_OWNER_REQUEST_CONSUMERS",
+    "preview_is_authority": false,
+    "request_aggregate_compatibility": "Existing consumer deliberately retains conservative exact launcher_aggregate_memory_gib16.2158 and12GiB required; broader launcher23.735GiB does not authorize widening this profile.",
+    "request_schema": "mckernel.native-exact-mckernel-image-container-request.v1",
+    "schema_sources": [
+      "adapters/native_rust_exact_mckernel_image_container_owner.py:REQUEST_SCHEMA/_validate_request",
+      "adapters/native_rust_exact_mckernel_image_offline.py:TOOLCHAIN_SCHEMA_V2/_validate_toolchain",
+      "adapters/native_rust_exact_mckernel_image_request_prepare.py:prepare/_publish"
+    ],
+    "separate_execution_review_inputs": "Exact final request/toolchain hashes, actual materialization/source/request-consumer receipts, fresh live ownership/mount/resource reconciliation, exact driver/owner/provenance/tool locks and root/exclusion leases; this review does not fabricate that future release.",
+    "toolchain_schema": "mckernel.native-exact-mckernel-image-toolchain.v2"
+  },
+  "resources": {
+    "fresh_mount_UUID_RAM_storage_ownership_leases_and_other_reserved_growth_required": true,
+    "host_floor_bytes": 17179869184,
+    "initial_above_each_floor_bytes": 790761472,
+    "no_double_counting": "Initial source+preparation growth+remaining512MiB; after preparation spent growth is not added again. Full512MiB still required and any larger next-packet demand wins.",
+    "post_preparation_above_each_floor_bytes": 536870912,
+    "preparation_growth_bytes": 108830720,
+    "scratch_floor_bytes": 12884901888,
+    "source_growth_bytes": 145059840
+  },
+  "reviewed_inputs": {
+    "abi_driver_fragment.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/abi_driver_fragment.py",
+      "sha256": "645a84895312656ae3e813e365fa52e8b30118280a27a47202a675c1c38f652b"
+    },
+    "adapters/native_rust_exact_build_offline.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/adapters/native_rust_exact_build_offline.py",
+      "sha256": "b803532fc1c1a9ca307eef97e132e0525c3ed926ab6e84144e4284472956d357"
+    },
+    "adapters/native_rust_exact_mckernel_image_container_owner.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/adapters/native_rust_exact_mckernel_image_container_owner.py",
+      "sha256": "fea9ae29f67ac520406220d131bf50feaa63e8546dda9f091f9e903ee2580815"
+    },
+    "adapters/native_rust_exact_mckernel_image_offline.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/adapters/native_rust_exact_mckernel_image_offline.py",
+      "sha256": "1589404f1ddca3864da1f8623daa808c9d29bd13c254268117b5aeda86508861"
+    },
+    "adapters/native_rust_exact_mckernel_image_request_prepare.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/adapters/native_rust_exact_mckernel_image_request_prepare.py",
+      "sha256": "4094322fbb3784d288cc29b52e1a96292dbaaf12ca3cf05b6b68dbc256ca9365"
+    },
+    "artifact-sha256.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/artifact-sha256.json",
+      "sha256": "2c3a4b7989239c5c4df36db8d8719c77a85b918b674984aace901b649d363d39"
+    },
+    "future-prepare-inputs.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/future-prepare-inputs.json",
+      "sha256": "b1f080d6f7b2eb96efd7649f9606c70fdcf0bf4b898478f98bbc915822d413f9"
+    },
+    "materialize_thin.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/materialize_thin.py",
+      "sha256": "8ea3f1b8149a576d1be37379d7c926d22976c4e029b16637fd2c625884cbf66c"
+    },
+    "materializer-commands.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/materializer-commands.json",
+      "sha256": "7501183c72d747aa692c45d8b1eed8ec824a2bf9b4e57017e45e9a7477234b24"
+    },
+    "materializer-resource-plan.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/materializer-resource-plan.json",
+      "sha256": "a5dca6ece0e22f068e585989ac71896e80d2c0ec684c2078c1e1a1045841045b"
+    },
+    "metadata-checks.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/metadata-checks.json",
+      "sha256": "af70b73c3c9360217b0eb35fbb468b79a2a2f5ede85e71179e7119b6b71410df"
+    },
+    "packet-checks.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/packet-checks.json",
+      "sha256": "b33efed8edd2a0731c97f0241d0bc0b3b1580df64758a482e72ab7f1880935dc"
+    },
+    "post-prep-consumer.py": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/post-prep-consumer.py",
+      "sha256": "7c46c1fe160af4eba600a2560c1f4fa5868daed66c6237bdbac298d8a5410d96"
+    },
+    "prepreview-request.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/prepreview-request.json",
+      "sha256": "d99368565f75acab95960b4401fedf555fd626bfe1ee176b5e369ca043ca552e"
+    },
+    "publication-binding.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/publication-binding.json",
+      "sha256": "ca200c49223d13656b41c44e8ba8307c80fc67c00b7808729059814dc38b3fd7"
+    },
+    "source-authority.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/source-authority.json",
+      "sha256": "19bb3d577010e683700305b50f92783d9b6e0b3be4e498bab815520f827e76a6"
+    },
+    "thin-inputs.json": {
+      "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/thin-inputs.json",
+      "sha256": "b8a519813e0743419c9890ce9ce92d79772e7680df1605f5883e30a853f716c2"
+    }
+  },
+  "schema": "mckernel.independent-rust-fp-reset-image-preparation-review.v1",
+  "scope": "Functional PRACTICAL-GOAL kernel/apps AND active compute-C retirement into Rust plus reviewed assembly; broad qualification deferred; no compute-C expansion.",
+  "source_findings": {
+    "broad_unchanged_corpus_rehashed": false,
+    "changed_definitions": {
+      "native_rust_exact_build_offline.py": [],
+      "native_rust_exact_mckernel_image_container_owner.py": [],
+      "native_rust_exact_mckernel_image_offline.py": [
+        "_run",
+        "_validate_reset_production_abi"
+      ]
+    },
+    "changed_repository_rows": [
+      "arch/x86_64/kernel/cpu.c",
+      "kernel/rust/x86_cpu_helpers.rs"
+    ],
+    "changed_rows": 2,
+    "inherited_materialized_repository_rows": 6927,
+    "inherited_typed_symlinks": 49,
+    "preserved_complete_repository_authority": true,
+    "replacement_rows": 4,
+    "reused_prior_parser_materializer_restoration_proofs": true,
+    "source_integration": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-source-integration-20261018-1.json",
+      "sha256": "53b4cb433df0d978ed849f9d7e4b21f3f9db1c9af0d69d4123b8f8bed3320909"
+    },
+    "source_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-source-review-20261018-1.json",
+      "sha256": "1b7c63880c95337150ac180bddc7c9d6ae15ed538a10f5eec2b67458fab3903b"
+    },
+    "unchanged_authority_fields": [
+      "base_manifest_bytes_b64",
+      "candidate_identity_scope",
+      "candidate_sha",
+      "gitlinks",
+      "ihk_overlay",
+      "ihk_sha",
+      "materialized_kinds",
+      "materialized_modes",
+      "materialized_symlinks",
+      "omitted_main_git_metadata",
+      "omitted_repository_files",
+      "retained_ihk_git_metadata",
+      "schema"
+    ],
+    "unchanged_preparer_owner_wrapper_files": [
+      "native_rust_exact_mckernel_image_request_prepare.py",
+      "native_rust_exact_build_container_owner.py",
+      "native_rust_exact_build_image_prepare.py",
+      "native_rust_exact_disk_build_wrapper.py"
+    ]
+  },
+  "status": "PASS",
+  "verification": {
+    "actual_compiler_run": false,
+    "builds": 0,
+    "native_apps": 0,
+    "read_only_comparison_pass": true,
+    "request_preparation_run": false,
+    "source_materialization_run": false
+  }
+}

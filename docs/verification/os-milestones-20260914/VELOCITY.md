@@ -187,6 +187,14 @@ and ordinary consumer together under the cheap fixture profile. Preserve stable
 producer field names/types across successor artifact reviews, with new evidence
 added separately, so an unchanged stager does not need a late schema adaptation.
 
+Before a healthy finite build/guest finishes, activate its existing result
+reviewer and terminal author with the exact output paths and completion contract.
+Ordinary review starts only after the documented completed-output/retirement
+receipt, not mere file presence. This lets cheap affected review continue during
+dispatcher context maintenance. Keep waits bounded, avoid polling unfinished
+artifacts, and reserve all privileged observation, release and runtime actions
+for their existing owner and exact decision.
+
 Carry each accepted readback's exact transport-output contract into its result
 fixture. Application stderr and transport stderr are separate observations: an
 explicitly reviewed, exact socket-skipped tar warning must not become a late
@@ -277,6 +285,13 @@ outputs. Remote model work may overlap while local checks await capacity.
 Preserve host/scratch free-space floors; the ready queue is deliberately bounded
 so extra overlays do not consume the runway. Healthy silent builds/soaks retain
 their owners; a reporting target never interrupts them.
+
+For new, unbound cheap fixtures and preparation outputs, prefer the host volume
+when its accepted profile permits and scratch runway is tighter. Keep actual
+scratch/runtime paths required by their contracts. Do not move, relink or rename
+already pinned evidence, weaken ordinary-file identities, or make another full
+source/archive copy merely to fill a ready slot. Admit heavy work only with its
+floor plus required growth reserve; this tactic grants no cleanup authority.
 
 The97% stop measures included account usage. Disk admission uses the selected
 packet's byte floors and growth reserve. Do not convert the account threshold
