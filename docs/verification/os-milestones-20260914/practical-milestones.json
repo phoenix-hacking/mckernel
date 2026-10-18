@@ -403,9 +403,10 @@
               "path": "docs/verification/evidence/practical-memory-protection-current942-independent-result-review-20261017-1.json",
               "sha256": "02bea8dd490489e56429cf7414bdc7a1186ad18a02abd406dd44afb9c9f40b7b",
               "size": 1001
-            }
+            },
+            "docs/verification/evidence/practical-mmap-zero-length-native-result-review-20261018-1.json"
           ],
-          "assessment_note": "Six calloc sizes and six file data/EOF sizes provide narrow exercised data-path evidence; direct map/protect/unmap and invalid-input coverage remains open."
+          "assessment_note": "Six calloc sizes and six file data/EOF sizes provide narrow exercised data-path evidence; direct map/protect/unmap and invalid-input coverage remains open. Additive current3bfc mmap-zero-length native PASS: failed mapping/EINVAL/exact18B/exit0 and physical retirement. No mapping-publication/leak proof; whole check remains open."
         },
         {
           "id": "P-M03-02",
@@ -454,7 +455,7 @@
           "assessment_note": "Post-effect Shutdown8 and ownership-retained -11\u21920 application retirement are observed. This does not establish all required mapping/release failure ownership invariants."
         }
       ],
-      "current_evidence_summary": "Actual current942 allocation/map/protection/unmap app paths plus protected-write SIGSEGV/ACCERR/exactaddress and restored RW write now pass; final supported-candidate memory/ownership session remains open."
+      "current_evidence_summary": "Actual current942 allocation/map/protection/unmap app paths plus protected-write SIGSEGV/ACCERR/exactaddress and restored RW write now pass; final supported-candidate memory/ownership session remains open. Current3bfc zero-length anonymous mmap/EINVAL diagnostic passes independently; adds one distinct behavior only."
     },
     {
       "id": "M04",

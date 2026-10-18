@@ -1,5 +1,43 @@
 # Resume cursor
 
+## Current — twentieth native behavior; exact clear-debug build publication (2026-10-18 18:05 UTC)
+
+Functional OS/apps + compute Rust/reviewed-assembly remain active; excluded execve
+and fork/ACK stay excluded. Mmap-zero-length is independently accepted on3bfc/d99:
+exact18B failed/EINVAL/stdout, empty app stderr, exit0 and complete physical owner/
+QEMU/30-client/container/lease retirement. Canonical result is
+practical-mmap-zero-length-native-result-review-20261018-1.json under ../evidence.
+Counts20 distinct behaviors,9 selected production Rust defaults/8 applicable native
+paths,6 complete/29 open practical checks,all14 milestones open. No leak/publication
+or whole-memory-check credit from this new API diagnostic.
+
+Clear_debugreg source is integrated/fetchedcf035407, production/native stillOPEN.
+Source materializer observer failed after spawning while writing process evidence;
+original child exit/directwait/retirement remainUNKNOWN. No sourcecopy replay.
+Independent validation accepts exact completed6948-entry tree as reusable artifact.
+Remaining-only corrected helper exercised real observer-error/finallywait; validator,
+mkdir, preparer73.86s and realdriver/ownerconsumer27.96s all exited0/directjoined.
+Actualordinary acceptance42aed134 binds requestaecf1e46/source66306:47863589.
+Original failure, streams and unknown status are preserved in ordinary capsule.
+
+One native image proposal has source/profile69712f16 PASS; runtime12 tool rows are
+ready for a NEW fetched tool-publication checkpoint distinct from sourcecf035407.
+Next: finalize that exact publication/accepted-retirement/fresh-live bindings ->
+independent exact payload decision -> one admitted native image compile. Full
+selected syscall.c and native crate compile in this unchanged pipeline; prepared
+14-command postbuild verifies clear symbol/default consumer/sixwrites. Full fallback/
+legacy TU/crate/image proof remainsOPEN; no duplicate image build or silent waiver.
+Heavy packet: /home/holden/mckernel-work/host-preparation/rust-clear-debugreg-image-
+preparation-20261018-1/heavy-proposal-1/RESULT.md and review-target-release-payload.json.
+
+Terminal executable templates are independently source/profile reviewed, with real
+author producer and fresh-prefix corrections tested; live IDs/artifact facts and
+separate retention/observation/cleanup releases remain pending. A single closed-write
+file error app passed its bounded Linux oracle; native staging remains separate.
+One private next save_debugreg Rust/parity lane is active by explicit user request,
+with no current/frozen source mutation or hardware execution. Preserve all failed
+attempts/scratch21/dirty WIP; one-heavy, full floors+growth+reserve,97% included stop.
+
 ## Current — scheduler native chain accepted; next Rust cutover integrated (2026-10-18 17:30 UTC)
 
 Functional OS/apps and actual compute Rust/reviewed-assembly migration remain active.

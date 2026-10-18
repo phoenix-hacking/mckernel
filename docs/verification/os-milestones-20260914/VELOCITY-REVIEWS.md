@@ -6,14 +6,16 @@ Preserve completed entries; append new observations and update only this cursor.
 This file describes supervision, not OS acceptance or execution authority.
 
 
-**CURRENT REVIEW38 — 2026-10-18T17:15:37Z:** campaign active;
+**CURRENT REVIEW39 — 2026-10-18T17:45:57Z:** campaign active;
 19 distinct native behaviors, 6 complete / 29 open checks, all 14 milestones open.
-Selected production/default-link Rust paths 9; last accepted native-path count 7
-pending the complete AVX/threads chain. Physical cleanup is independently accepted.
-Post-cutoff AVX result and positive retirement are accepted; threads is next.
-Private Rust integration inputs/partial link are ready;
-the new mmap-zero-length case passed its compiler/Linux reference only.
-Usage 28%, stop 97%; next full review 17:45:37 UTC.
+Selected production/default-link Rust paths 9; applicable native integration paths 8.
+The AVX/threads chain and positive retirements are independently accepted.
+The new mmap guest ran; actual-result review is active, with no early case credit.
+Reviewed clear_debugreg source is integrated in fetched cf035407 (57 blobs).
+Its ordinary copy wrapper lost the child exit status; that remains UNKNOWN while
+the completed tree is independently validated for reuse. Remaining-only profile
+and child-accounting correction are under review. No new image compiled yet.
+Usage 29%, stop 97%; next full review 18:15:57 UTC.
 No second launcher or background timer is installed.
 
 **MONITORING RESUMED2026-10-18T13:43:18Z:** user explicitly requested this
@@ -3274,3 +3276,64 @@ accepts image3bfc1dfb scoped smoke execution and positive retirement. Raw exit0,
 owner/wrapper, reaped QEMU/all30 clients, exact container removal/absence and
 lease release pass. This record is consumable as the Cthreads predecessor.
 It does not prove each debug-buffer hardware branch or whole-OS stability.
+
+## Review39 — 2026-10-18 17:45 UTC
+
+Cutoff 17:45:57 UTC; interval 30m20s. Selected production Rust defaults 9 (+0);
+applicable native integration paths 7 -> 8. Distinct native behaviors 19 (+0),
+practical checks 6 complete (+0) / 29 open; all 14 milestones open. Usage 29%;
+root free 50.965 GiB, scratch free 12.827 GiB. No new engineering percentage,
+whole-kernel Rust conversion estimate or numerical campaign speedup inferred.
+
+The independently accepted same-image AVX/Cthreads chain is recorded in review
+36c0abd369edad9ae844c8fb0730913d98cdbd0b88a1da27244f932fcbe3e6d0. Cthreads
+matched its expected exit37, exact25-byte stdout and empty application stderr.
+Owner/wrapper joins, all30 client/QEMU reaps, container removal/absence and lease
+release pass. This is scoped integration evidence, not exhaustive helper or DR
+hardware-branch coverage. The earlier accepted AVX review remains91757b5c.
+
+At a safe boundary root applied the reviewed three-file clear_debugreg Rust patch.
+Checkpoint cf035407404dc17a89c8347c4d5a01f48627d385 was pushed/fetch-verified for
+57 blobs, preserving the prior chain, refused cleanup and its correction. New
+image and terminal preparation overlapped. Actual manifest consumers accepted
+the published source map and rejected stale variants; full authority/restoration
+and49 symlinks were preserved. Ordinary preparation profile46f6555d was approved.
+The14-command postbuild profile and future artifact schema were prepared before
+the build. Terminal review caught a stale transaction prefix; its correction
+accepts seven fresh paths and rejects seven old ones. All34 artifact contract
+checks pass. Canonical source, runtime bindings and exact execution remain scoped.
+
+The ordinary execution wrapper failed after spawning the materializer while
+recording its identity. The tree and final receipt exist with empty stderr, but
+the original child exit status was not retained and remains UNKNOWN. Independent
+real-driver read-only validation establishes reusable tree artifacts separately
+from the failed invocation. The corrected helper waits for its child on an injected
+observer failure. A remaining-only continuation omits the copy; final tree identity,
+current-writer and fresh-admission corrections are under review. No copy replay,
+invented join or new image compilation occurred. This uncertainty did not block
+the separate mapping guest.
+
+The memory.mmap-zero-length compile/Linux reference, ordinary stage and actual
+runner/owner fixture are independently accepted. The static payload/oracle and
+complete immutable scheduler-source authority remain bound; native reuse does not
+claim revalidation of the live complete tree or credit for unbuilt clear-debug code.
+Parent creation passed0/.031s, inode756039; the final non-temporal joins passed
+before admission was measured. Final exact review accepted payload4bf678ff at
+snapshot age15.33s. The root launched the guest and completed captures are under
+actual-result/retirement review at cutoff. No early twentieth behavior or mapping
+publication/leak proof is claimed.
+
+VELOCITY.md now carries the concrete lessons: actual author/predicate checks,
+actual fresh transaction paths, real helper/post-spawn fault tests, non-temporal
+joins before the final fresh snapshot, and honest artifact reuse after an unknown
+ordinary child result. These changes preserve the existing execution bounds and
+review contracts. Parallelism produced a completed native chain, integrated Rust
+source, a new application test and next-candidate preparation; it does not establish
+a whole-campaign2x/3x rate. Root remains the only Git/runtime/acceptance owner.
+
+Next: finish actual mapping acceptance, complete the reviewed remaining-only
+ordinary sequence, then run one admitted clear-debug production build and reuse
+its prepared inspection/terminal machinery. Keep the first ready eligible workload
+moving without broad audit or unchanged-evidence replay. Preserve resource floors,
+growth/full reserves, one-heavy,97% stop, scratch21, all evidence and service-held
+exclusions. Next full review18:15:57 UTC.

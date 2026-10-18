@@ -219,6 +219,23 @@ and 4.95-second inspection run, with several minutes spent preparing the handoff
 Reduce that delay while preserving the required completed-owner, admission and
 exact-release boundaries for actual inspection.
 
+Check the actual metadata authorization path before dispatch, including a real
+implementation author. Validate the derivative's actual transaction paths against
+the fresh attempt and reject preserved predecessor mutation paths; keep historical
+proof references intact. Test actual helper return shapes and post-spawn failures.
+Identity or evidence-write errors must still account for and join the child.
+
+Finish non-temporal final-payload joins and accepted predecessor references before
+collecting time-limited admission. Then measure genuine fresh facts, perform the
+permitted narrow delta/hash confirmation and invoke within the existing freshness
+window. Preserve expired snapshots; do not relax the bound or repeat static review.
+
+If an ordinary wrapper loses a child result, keep that status unknown. Independent
+validation may establish reusable output artifacts where the applicable contract
+permits it; bind their actual identity and current-writer evidence into a separately
+reviewed remaining-only continuation. Do not invent exit0 or replay a consumed copy.
+Keep unrelated ready work moving under its own admission and resource constraints.
+
 On reassignment, reuse already-read policy and the latest compact CURRENT/HANDOFF
 cursor. Open historical sections only to resolve a concrete dependency. Retain
 complete captures in files and print selected findings, timing and paths; avoid
