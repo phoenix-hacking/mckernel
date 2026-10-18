@@ -1,5 +1,37 @@
 # OS development session handoff
 
+## Current — mapping accepted; FP release source integrated WIP (2026-10-18 21:10 UTC)
+
+Functional OS/apps and Rust/reviewed-assembly cutover continue; excluded execve/
+fork-ACK work remains excluded. Mapping e85a/manifest37ed independently passes
+100B oracle: exact ACCERR2/MAPERR1 fault targets, restored RW, partial-unmap survivor,
+patterns and final cleanup. Owner34.211s/exit0 plus three readbacks and30clients/
+QEMU/container/lease physically retired. Canonical independent evidence:
+../evidence/practical-mapping-isolation-native-result-review-20261018-1.json.
+22 distinct native behaviors;12 selected production/11 applicable native paths;
+6complete/29open checks unchanged. No broad memory check or hardware proof claimed.
+
+At this safe boundary root applied EXACT private release_fp_regs patch235685ff,
+after original-byte equality; cpu.c67dd7ea5 and x86_cpu_helpers.rs59d0723c equal
+reviewed candidate bytes. Existing C body stays unchanged fallback; default Rust
+symbol/source selected. Source review628ff015 and runner addendumc23be56c accepted;
+this is WIP integration only, production/native FP-release proof still OPEN.
+Image author1919 prepares one corrected source/profile packet: prebuild actual
+GCC14 selected/fallback CPU ABI + full crate/export/descriptor before one image.
+Known role-hash/retention/growth findings are being corrected in additivev2;
+no compiler/materialization/heavy release yet. Native specialist1724 owns actual
+nonnull allocation->release observation, using existing debug/tracking plus a
+sourced downstream thread-stack-free witness; current captures lack those events.
+No direct slot-clear/instrumentation gate invented and no null-only app credit.
+
+Next root action: save/fetch exact FP source checkpoint; consume independently
+reviewed changed ordinary preparation, then exact new build release/fresh admission.
+Current working native image5f7 and mapping e85a artifacts remain retained; source
+integration does not change their acceptance. f26fc687 fetched13/proofbf69cb05
+preserves prior paired AVX/threads/terminal records. Original syscall-DWARF13/full
+validity remains OPEN/all14passed=false. One-heavy/resource/floors/full reserves,
+97%usage stop, scratch21/dirty WIP/mutex27:4/110GiB scratch stay binding. Continue.
+
 ## Current — paired Rust native chain accepted; mapping next (2026-10-18 20:54 UTC)
 
 Functional supported-profile OS/apps and compute Rust/reviewed-assembly cutover

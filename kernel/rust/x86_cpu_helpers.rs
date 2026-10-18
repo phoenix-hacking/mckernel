@@ -2997,3 +2997,53 @@ unsafe fn restore_debugreg_body<W: DebugRegisterWriter>(debugreg: *mut CULong, w
 pub unsafe extern "C" fn restore_debugreg(debugreg: *mut CULong) {
     unsafe { restore_debugreg_body(debugreg, &mut HardwareDebugRegisterWriter) };
 }
+
+// Use the existing dynamic-debug descriptor ABI; flags start disabled as in C.
+#[used]
+#[link_section = "__verbose"]
+static mut RELEASE_FP_REGS_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+    file: concat!(file!(), "\0").as_ptr().cast(),
+    func: b"release_fp_regs\0".as_ptr().cast(),
+    fmt: core::ptr::null(),
+    line_flags: line!() & 0x00ff_ffff,
+};
+
+extern "C" {
+    fn _ihk_mc_free_pages(
+        ptr: *mut c_void, npages: CInt, is_user: CInt, file: *mut i8, line: CInt,
+    );
+}
+
+// This field is consumed directly. The production C assertion is also required.
+const _: () = assert!(offset_of!(Thread, fp_regs) == 4784);
+
+/// Release an exclusively owned thread's extended-state allocation.
+///
+/// `thread` must be valid, writable and exclusively owned through the call,
+/// including the allocator/debug callbacks. Its non-null state buffer must be
+/// the matching allocation for the boot-stable XSAVE size and kernel class.
+/// Free must finish before the slot is cleared; no reentrant release is allowed.
+/// A null buffer is already released. A null thread violates the original ABI.
+#[no_mangle]
+pub unsafe extern "C" fn release_fp_regs(thread: *mut Thread) {
+    if unsafe { (*thread).fp_regs.is_null() } {
+        return;
+    }
+    let size = unsafe { x86_xsave_size_bridge() };
+    // PAGE_SIZE is unsigned long in C: preserve its unsigned addition/shift.
+    let pages = ((size as CULong).wrapping_add(PAGE_SIZE - 1) >> 12) as CInt;
+    let flags = unsafe {
+        read_volatile(core::ptr::addr_of!(RELEASE_FP_REGS_DEBUG.line_flags)) >> 24
+    };
+    if flags != 0 {
+        unsafe { kprintf(b"release_fp_regs: pages=%d\n\0".as_ptr().cast(), pages) };
+    }
+    unsafe {
+        _ihk_mc_free_pages(
+            (*thread).fp_regs, pages, IHK_MC_PG_KERNEL,
+            concat!(file!(), "\0").as_ptr().cast::<i8>() as *mut i8,
+            line!() as CInt,
+        );
+        (*thread).fp_regs = null_mut();
+    }
+}

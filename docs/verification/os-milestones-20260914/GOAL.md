@@ -1,5 +1,13 @@
 # Autonomous McKernel goal
 
+## Current — 2026-10-18 21:10 UTC
+
+Mapping native isolation accepted:22behaviors;12selected production/11applicable
+native Rust paths;6/35checks complete. Reviewed release_fp_regs Rust source now
+integrated WIP only; actual production/default-link/nonnull native proof pending.
+Current runtime owners positively retired. Continue corrected FP image preparation;
+see CURRENT/HANDOFF for exact controls and source/profile holds. No excluded work resumes.
+
 ## Current — 2026-10-18 20:54 UTC
 
 Paired5f7 Rust SAVE/RESTORE production and applicable AVX/threads chains accepted;

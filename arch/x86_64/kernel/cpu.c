@@ -3213,6 +3213,7 @@ struct thread *arch_switch_context(struct thread *prev, struct thread *next)
   @ requires \valid(thread);
   @ ensures thread->fp_regs == NULL;
   @*/
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void
 release_fp_regs(struct thread *thread)
 {
@@ -3226,6 +3227,7 @@ release_fp_regs(struct thread *thread)
 	_ihk_mc_free_pages(thread->fp_regs, pages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 	thread->fp_regs = NULL;
 }
+#endif
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 extern int rust_x86_save_fp_regs(struct thread *thread,
