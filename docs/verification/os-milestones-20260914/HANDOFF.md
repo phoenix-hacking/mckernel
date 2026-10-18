@@ -1,6 +1,6 @@
 # Compact dispatcher handoff
 
-## RESUMED — current execution cursor, 2026-10-18 06:53 UTC
+## RESUMED — current execution cursor, 2026-10-18 07:22 UTC
 
 The explicit06:15 launcher resume is active; the05:20 pause below is historical.
 Launcher worker871794/start10154631 and server871796/start10154636 own this run
@@ -16,13 +16,29 @@ removed and original records archived. Preserve failed missing-host-owner-row
 refusal and corrected one-shot evidence; do not replay consumed operations.
 Sixteen distinct native behaviors,3complete/32open practical checks,14milestones
 open; no percentage/2x claim. Three-port save/post-switch-cleanup/restore candidate
-composition6dc4b796 passed; new metadata aa5ea6f6 is in independent affected review.
-Next: one coherent three-port image preparation and production build/native
-sequence. Four exact reviewed source files integrated; next-three-port production
-and native proof remain pending; current686215 baseline is retained. Host tool-only source/profile36c63604 is
+composition6dc4b796, metadata cd25fe8e and materializer9f33b105 passed.
+Source materialization0/15.801s, request0/82.781s and actual request consumers0/28.904s
+passed. The next three-port image da0f1bf7 built0/201.380s and14actual artifact
+capture commands passed; full production C descriptor alignment assertion is the
+only ABI hold. Rust fullcrate DWARF confirms descriptor40/align8/field offsets;
+manual expert3f755021 proves actual post-switch unlock/IRQ/cleanup order. The
+broken first-address-load checker and all original failures remain preserved.
+Pinned GCC14.3.1 finite assertion companion is in independent exact review;
+hostGCC9 is unsuitable. No kernel patch/newimage rebuild or consumed run replay.
+Ten original/retained artifact pairs (21895505bytes) independently PASS0b4a676d;
+retention is not ABI/native acceptance. Cleanup engine b3017b08 is source-reviewed
+for publication; all16published tests pass. Actual observer/cleanup releases and
+fetched source/test bindings remain separate. Current held CID1305fc5a, owner
+893281/start10459071/noncea358cbe63ec54a80975cce93b7040f9a; guard/8clients retired,
+common/shared records retained. Do not raw-remove/unlink/restart the old build.
+Guest source preparation e1235dc4 and actualimage private joins df75ad58 ready;
+actual staging/runner+owner replay/native release stay gated on exact ABI and
+terminal decisions. Build source checkpointdc207507 fetched17blobs is immutable;
+next safe source-publication checkpoint may advance HEAD after physical join.
+Host tool-only source/profile36c63604 is
 accepted; exact execution packet is prepared separately, not a compatible Rust
 gate. Keep one heavy owner, actual16/12GiB floors plus packet growth, aggregate
-budget and usage97% stop. Usage11%; supervisor next07:15UTC/latest07:45. Scratch21,
+budget and usage97% stop. Usage12%; supervisor next07:45UTC/latest08:15. Scratch21,
 root mutex27:4, original failures and all current/reference artifacts preserved.
 
 

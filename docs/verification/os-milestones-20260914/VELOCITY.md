@@ -173,6 +173,13 @@ first root invocation. Record a command refusal separately from independently
 positive child/tree retirement; preserve the failed attempt and all original
 gates. Any corrected execution/readback still needs its exact reviewed release.
 
+Prepare affected C/Rust ABI fixtures with the actual production translation unit,
+compiler and flags before the image build when possible. DWARF may omit natural
+alignment even when size/offsets are present; a host compiler is not a substitute
+for the pinned producer. Bind the smallest actual-source compile assertion to the
+existing reviewed build/inspection phase, reuse its proof until relevant inputs
+change, and keep ordinary retention/publication work parallel to that check.
+
 Assign short nonce-based protocol/execution output roots up front. Preflight all
 canonical generated UNIX endpoint paths before creating archives or attempt
 fixtures; source-workspace paths need not be runtime-output paths. Preserve the

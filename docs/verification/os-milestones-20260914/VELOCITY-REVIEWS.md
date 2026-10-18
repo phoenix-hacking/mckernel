@@ -26,13 +26,13 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-18T06:45:08Z`, review20, resumed interval30m08s.
+- Last full review: `2026-10-18T07:15:58Z`, review21, interval30m50s.
 - User explicitly resumed the interactive30-minute loop. First resumed full
-  review target:`2026-10-18T07:15:00Z`, latest07:45UTC, using the06:15 launch
+  review target:`2026-10-18T07:45:00Z`, latest08:15UTC, using the06:15 launch
   baseline below. No independent OS timer or second dispatcher is installed.
   Exclude the05:25:30-to06:15 stopped interval and failed startup from runtime
   velocity; do not treat the canceled05:35 target as a missed active review.
-- Last launcher-reported included usage:11% in the new weekly primary window;
+- Last launcher-reported included usage:12% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
 - Current review20:16 native behaviors and3complete/32open checks unchanged,
   all14milestones open. Five compute Rust ports source-reviewed; two selected in
@@ -47,6 +47,13 @@ This file describes supervision, not OS acceptance or execution authority.
   all preservation stages/exit0 and30-client/container/lease retirement. Scoped
   native proof for selected Rust copy/admission paths is accepted; threads is
   next after fresh admission. Distinct behaviors16/checks3complete32open unchanged.
+- Current review21: both AVX and threads pass for686215, giving scoped native
+  proof for two selected Rust bodies. Next three-port image da0f1bf7 built0 in
+  201.4s; default Rust routes observed, final ABI review held on sched_exit_debug
+  alignment omitted by DWARF. Actual-source/pinned-GCC14 fixture is prepared;
+  hostGCC9 is not substituted. Retention and next-guest preparation advance in
+  parallel. Checkpointdc207507 pushed/fetch-verified17files; host53.133GiB and
+  scratch13.536GiB at cutoff. Counts16/3complete32open unchanged. No2x claim.
 - Current invocation independently accepted app/diagnostic behaviors: 16 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -1878,3 +1885,76 @@ removed and lease released. Scoped native copy/admission Rust proof passes;
 broader coverage remains open. Evidence:
 `../evidence/rust-combined-image-avx-result-review-20261018-1.json`, SHAf47adf0d.
 This does not retroactively change review20's cutoff or add a distinct behavior.
+
+## Review 21 — 2026-10-18 07:15:58 UTC
+
+Interval06:45:08 to07:15:58UTC,30m50s. Same running/active campaign and identities;
+no new service stop. Usage11% to12%, stop97%. HEADdc207507; host53.133GiB and
+scratch13.536GiB, with operation-specific floors/growth/reserves still enforced.
+
+| Measure | Change this interval |
+| --- | --- |
+| Distinct native behaviors / practical checks | 16 unchanged;3complete/32open, all14milestones open |
+| Current image686215 | AVX and threads independently pass; scoped native proof for selected Rust copy/admission bodies |
+| Rust source approvals | Five retained; no new source-only feature backlog |
+| Next three-port candidate | Integrated/pushed, prepared, production image built; ABI alignment proof remains pending |
+| Parallel preparation | Terminal and guest static reviews pass during compilation; actual late joins remain gated |
+| Host tool controls | Exact packet conditionally reviewed; no compiled control execution or host-hold closure |
+
+AVX accepted06:46:22: all stages,380-byte stdout/emptyerr/exit0 and30-client,
+container/lease retirement. Threads launched by06:49:36 and independently passed
+by06:51:58: original25-byte oracle/exit37, positive owner/readback/client/container
+retirement. Launch confirmation is3m14s after AVX acceptance, including fresh
+admission, within the five-minute target. These are new-image regressions, not
+two new distinct apps or whole-kernel language conversion. Allocation-failure
+injection, transitive allocator retirement, multicore and broader scope stay open.
+
+Checkpointdc207507c612311b721c515745b35db754915d52 is pushed and verified against
+17 fetched files, preserving unrelated dirty work. It integrates save/allocation,
+post-switch exit cleanup and restore/default from reviewed private sources.
+Fresh metadata/materializer binding checks pass; source copy15.8s, request
+preparation82.8s and actual driver/owner consumers28.9s. Build execution release
+accepted07:05:20; launch confirmed07:05:57,37seconds later. One build returned0
+in201.4s; all14 artifact captures succeed. Image da0f1bf7 remains unaccepted for
+native use pending final ABI/default-link decision and terminal release.
+
+Static terminal review completed07:07:29 and guest review07:08:40 while the build
+ran. The terminal closure includes all16 selected paths/11 build sources and the
+real host owner, with missing/corrupt-row negatives. Ten actual artifact descriptor
+rows/hashes now bind21,895,505bytes; publication/retention source review continues.
+Guest packets reuse accepted payloads/collector and99-byte endpoint paths, with
+actual acceptance/staging/releases explicitly pending. No rebuild is done merely
+for these continuations.
+
+Artifact review observes selected Rust save, restore and exit cleanup, full masks,
+allocation-failure handling, FINIT and SSE defaults. One actual ABI evidence gap
+remains: production DWARF omits sched_exit_debug alignment. The prepared fixture
+includes the real process.c and production flags; it needs pinnedGCC14.3.1 rather
+than the hostGCC9/absent header directory. No kernel change/image rebuild is
+proposed. Keep that exact finite compiler check in focused review, separate from
+already admissible ordinary retention/publication work. Future affected ABI
+fixtures should be bound at preparation and use the production compiler from
+the start, avoiding a late toolchain dependency.
+
+**Next:** finish that alignment proof, final artifact decision and exact terminal
+closure, then reuse the prepared AVX/threads sequence on the three-port image.
+Use idle authors for missing descriptor/data joins without duplicating captures.
+Continue one heavy operation and keep host tool controls behind a fully ready
+image when their retained lease/cleanup would delay it. Scratch planning should
+stay ahead of its12GiB floor plus growth; no unsolicited release/deletion is
+authorized by this note. Enforce bounded JSON/DWARF/diff projections in new tasks;
+full files remain evidence. Do not repeatedly dump generated maps or rehash
+unchanged corpora.
+
+Two native regressions and one combined image build are concrete progress.
+Neither a2x/3x engineering speedup nor a percentage uplift is established; build
+times alone are not that metric. Latest immutable estimate remains unchanged.
+Next full review07:45UTC, latest08:15; continue interactive steering.
+
+Evidence: `../evidence/rust-combined-image-avx-result-review-20261018-1.json`;
+scratch `rust-avx-execution-resume-20261018-1/threads-next`,
+`rust-next-three-port-image-preparation-20261018-1`,
+`rust-three-port-image-execution-review-20261018-1/review.json`,
+`rust-three-port-terminal-review-20261018-1`,
+`rust-three-port-native-case-review-20261018-1/report.json`,
+`rust-three-port-alignment-abi-20261018-1/proposal.json`.
