@@ -1,0 +1,154 @@
+{
+  "schema": "mckernel.practical-m07-current-requirements-independent-review.v1",
+  "status": "PASS_PROPOSED_RECONCILIATION_WITH_EXPLICIT_CORRECTION",
+  "decision_scope": "Independent review of the minimum remaining requirements and coverage join only. The original mandatory IFUNC-offset observation is corrected below; it is not approved as an unconditional practical gate.",
+  "functional_scope": "PRACTICAL-GOAL supported-profile functioning kernel and fixed useful C/Rust applications. Original comprehensive qualification remains deferred, not passed.",
+  "independent_reviewer": "/root/m07_requirements_independent_review",
+  "source_author": "/root/m07_current_requirements_closure",
+  "implementation_ownership": false,
+  "input": {
+    "path": "/home/holden/mckernel-work/scratch/practical-m07-current-requirements-20261018-1/requirements.json",
+    "sha256": "683c3038ceb0c164f80fdba1b42bb6fae92fdf8f058a7e9e2e48a3568d3a19bd",
+    "size": 11861
+  },
+  "verified_selected_input_pins": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-m07-selected-profile-assessment-20261017-1.json",
+      "sha256": "400e5b19c2aee59f5ec58675bfc68da7424f27fbf1856565712604ffa77fca7e",
+      "size": 17889
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-m07-active-state-mismatch-20261017-1.json",
+      "sha256": "acb73548a7d2f878dd2b27fa75774d19589bcd57d5cd45e108c4640609659a45",
+      "size": 29784
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-m07-enabled-state-closure-20261017-1.json",
+      "sha256": "6bc33bdd675a9aefd6833f203c4d0d12fb4384b38b33d847c288fee03086a0dd",
+      "size": 48041
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-m07-avx-cpu-copy-image-result-review-20261018-1.json",
+      "sha256": "6405dc4064bd9d60889e3f7d5db891567f004d663e4feadfd0f68e0ce06add13",
+      "size": 26304
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-fpu-copy-image-artifact-review-20261018-1.json",
+      "sha256": "af944ffd139c2b2b2b81d287ea4a826a34296439174a4e611819d7ce0464c28e",
+      "size": 16893
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-fp-save-current-artifact-result-review-20261018-1.json",
+      "sha256": "7b67cec05a5b710d538ca352a2867433f4e8c66ef4265e96e6c64409bb691373",
+      "size": 1149
+    }
+  ],
+  "observed_worklist": {
+    "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/practical-milestones.json",
+    "sha256": "a7c69375bb2a57a8c4d98db244d2a814eca26824a81120880f24bc8ec30ca8f4",
+    "size": 88619,
+    "modified": false
+  },
+  "accepted_profile_facts": {
+    "image_sha256": "08210bb23f137f845fdb94fc0e66ac97a0cbc2d68081d856cdfc92da2d6d3dbf",
+    "cpu_source_sha256": "5d93923119ac07f898849977463dc6e13349aa68831ae20e7aa1a6add92736be",
+    "cpuid7_ebx": "0x219c43a9",
+    "xcr0_and_cpuid_d0_bitmap": "0x21f",
+    "xstate_extent_bytes": 2696,
+    "avx512": "CPUID7.EBX bit16 clear and xstate bits5/6/7 absent: no current ZMM/opmask requirement. CPU model name is not proof of exposure.",
+    "avx2": "YMM architectural state is already exercised; choosing AVX2 instead of AVX adds no separate xstate component.",
+    "mpx_pkru": "MPX components3/4 and PKRU9 enabled. PKU is reported with OSPKE clear. Neither exposure nor OSPKE alone is used here to conclude actual use or no use.",
+    "multicore": "One assigned McKernel CPU. Four control vCPUs do not create a current practical cross-McKernel-CPU migration requirement.",
+    "no_narrowing": "Retain exact applications, compiler/link flags, full exposure, full0x21f save/copy/restore mask and2696-byte extent."
+  },
+  "concrete_review_finding": {
+    "id": "R1",
+    "severity": "requirements_over_specification",
+    "affected": "minimum_missing_observation.P-M07-01.observation",
+    "finding": "Requiring resolved addresses/offsets for every actually reached IFUNC/dispatch call site is stronger than the literal practical check to declare vector requirements. A state-class upper bound is sufficient when every eligible choice under the fixed profile is contained in already-covered state classes.",
+    "logical_requirement": "For fixed application/compiler/library inputs and unchanged process exposure, declare a justified set R containing all state classes the selected startup/workloads can require; join R to the accepted tested classes C. Exact dispatch identity is needed only where it changes whether R is contained in C or where an unresolved candidate uses an uncovered state class.",
+    "not_yet_proved": "These inputs do not themselves prove every eligible/reachable library path is x87/SSE/YMM-only. The conditional sufficiency argument is not that proof. MPX/PKRU usage remains explicitly unresolved.",
+    "optional_qualification": "Exact IFUNC target offsets, whole-library instruction closure, all ISA variants, broader multicore and unexposed AVX512 coverage may improve qualification but are not unconditional current practical gates."
+  },
+  "minimum_missing_observation": {
+    "P-M07-01": {
+      "status": "open_pending_bounded_state_class_declaration",
+      "minimum": "A source-bound declaration for the exact fixed dynamic C and static Rust workloads of the possible used architectural state classes, with explicit treatment of MPX3/4 and PKRU9. It may conservatively union eligible dispatch variants under the recorded process exposure instead of recording which variant actually resolved.",
+      "sufficient_paths": [
+        "Bounded compiler/application/library source or retained selected-dispatch evidence establishes all relevant eligible paths use only covered x87/SSE/YMM; exact runtime target addresses then are unnecessary.",
+        "If an eligible or reached candidate may use MPX/PKRU, resolve only that distinction by targeted source/call-path or same-profile observation. Record used/unresolved state honestly; do not assume exposure implies use."
+      ],
+      "constraint": "No whole-libc audit, hash corpus, changed binary/flags/profile, new generic trace requirement or unconditional guest queue follows.",
+      "compiler_metadata": "Existing pinned target/build metadata should be reused. Query the exact retained compiler defaults only if an actual state-class uncertainty remains; absent -march=native is not a complete prebuilt-library argument."
+    },
+    "P-M07-02": {
+      "status": "open_pending_requirements_to_coverage_join",
+      "minimum": "Independently join the accepted P-M07-01 state declaration to exact image08210 runtime evidence and reviewed save/copy/signal boundaries. No additional AVX/syscall/futex/signal observation is identified by this review.",
+      "conditional_next_runtime": "Only concrete used state outside the accepted covered set justifies designing its targeted preservation observation. If MPX/PKRU remains unresolved, retain the requirements gap rather than inventing a new runtime requirement or declaring closure.",
+      "retained_limits": "Existing x87 evidence is selected stack/control and MXCSR semantics; it is not exhaustive floating-point environment qualification. No new evidence claim is introduced here."
+    }
+  },
+  "proposed_affected_worklist_reconciliation": {
+    "P-M07-01": {
+      "status": "open",
+      "assessment_note": "Exact fixed C dynamic and Rust static build/library identities are declared. Direct current process exposure is recorded: CPUID7.EBX0x219c43a9, CPUID.D0/XCR0 bitmap0x21f,2696-byte extent. Remaining gap is a bounded used-state-class declaration, especially whether fixed workload paths require MPX/PKRU. A conservative eligible-dispatch state union may suffice; exact IFUNC target offsets are not an unconditional prerequisite. Preserve current apps/flags/features."
+    },
+    "P-M07-02": {
+      "status": "open",
+      "assessment_note": "Exact rebuilt08210 image, allocation fail-stop and full-extent copy binding plus allYMM0-15/SSE and selectedx87/MXCSR preservation across rawsyscall, actualblocking-futex helper handoff and completedsignal return are accepted scoped evidence with verified retirement. Join final state-class requirements to this coverage; no extra guest identified unless a concretely used uncovered class is found. AVX512 is unexposed and McKernel multicore migration outside current one-CPU profile; broader qualification remains deferred/untested."
+    },
+    "M07": {
+      "engineering_state": "partial",
+      "completion_status": "open",
+      "current_evidence_summary": "Current-image scoped preservation passes. Requirements and affected-boundary coverage join remain open. No unconditional AVX512, multicore or exact-IFUNC-offset blocker for the retained profile."
+    },
+    "application": "Dispatcher owns any later ledger edit; this review modifies no shared ledger/status/percentage."
+  },
+  "next_minimal_source_consumer": {
+    "proposed_artifact": "fixed-app-state-class-declaration.json",
+    "inputs": "Reuse exact requirement-input binary/compiler/link/library pins and direct08210 exposure; reuse selected static-libc dispatcher and Rustmemchr findings. Read only selected fixed-app source, relevant retained compiler metadata, and targeted library branch evidence needed to resolve MPX/PKRU state-class use.",
+    "required_fields": [
+      "fixed_input_identity_reference",
+      "profile_exposure_reference",
+      "application_and_compiler_state_requirements",
+      "eligible_library_state_class_union_or_targeted_selection",
+      "MPX_use_status_and_evidence",
+      "PKRU_use_status_and_evidence",
+      "remaining_unresolved_state_classes",
+      "coverage_join_reference"
+    ],
+    "next_executable_observation": "First consume the retained selected-dispatch/compiler/app evidence to declare the state-class superset and identify any concrete MPX/PKRU candidate. Do not start with another guest or all-library disassembly. If the bounded evidence cannot resolve use, return the precise candidate/unresolved distinction for dispatcher selection.",
+    "stop_condition": "Deliver a bounded declaration or one precise remaining state-class uncertainty; do not expand to whole-library qualification."
+  },
+  "preservation": {
+    "original_input_unchanged": true,
+    "historical_failures_preserved": true,
+    "original_acceptance_contracts_preserved": true,
+    "service_policy_stops_preserved": true
+  },
+  "authority": {
+    "M07_completion": false,
+    "new_guest_queue": false,
+    "runtime_release": false,
+    "new_build": false,
+    "shared_ledger_write": false,
+    "Git_actions": false
+  },
+  "accounting": {
+    "new_launches": 0,
+    "new_builds": 0,
+    "new_distinct_behaviors": 0,
+    "formal_credit": 0,
+    "source_only_percentage_credit": 0
+  },
+  "environment": {
+    "cpu": 6,
+    "jobs": 1,
+    "address_space_bytes": 1073741824,
+    "command_seconds": 30,
+    "python": "3.9 -B",
+    "root_docker_guest_build_git_actions": false,
+    "subagents": false
+  },
+  "review_execution_note": "Initial read of literal /scratch alias failed FileNotFoundError without mutation; resolved to the existing /home/holden/mckernel-work/scratch path. Exact input and six selected small evidence JSON pins verified; no corpus hashing or runtime replay."
+}

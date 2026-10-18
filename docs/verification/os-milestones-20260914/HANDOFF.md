@@ -1,5 +1,32 @@
 # Compact dispatcher handoff
 
+## Native second-stop result — 2026-10-18 04:32 UTC
+
+Actual image08210/d99 case accepted: generation1 PID256 and generation2 PID265
+both ran40-byte signal output/emptyerr/status0; both strict native status5 ->
+shutdown0/query0/close0 and public destroy/resource release passed. Exact30clients,
+CIDfc7643ef and lease retired; root27:4 released. [Result](../evidence/native-second-stop-actual-result-review-20261018-1.json)
+47676e99. Distinctbehaviors16 unchanged. No physicalmapping/callback/reference
+restoration or final-cycle-quota closure is inferred.
+
+Next heavy candidate is the reviewed strict C derivative: driver331538eb,
+owner34478c84, preparation05cacc2e; source66closuref656 unchanged. Actual SDK
+KBUILD_EXTMOD explains old117-vs120 command difference. New command preserves
+-Werror explicitly through KCFLAGS in BOTH Cj1 and full3modulej2 phases; old
+unflagged C object is correctly rejected. Actual strict compile remains unrun.
+Independent full11source review88488f96 passed; publisher saves exact78capsule
+blobs plus separate preparation, then fetched proof precedes ordinary82-copy
+materialization and final exact execution review. Reuse accepted controls; no
+unchanged build retry or sourceflag relaxation. Lastnormalcheckpoint85e649ad
+pushed/fetched12blobs. Keep HEAD stable during any active owner.
+
+M07 bounded current-profile review37d72a77 confirms AVX512F is unexposed and the
+one-McKernel-CPU profile creates no automatic multicore requirement. Exact IFUNC
+offsets are optional if eligible-state union is justified. Fixed-app state-class
+declaration remains source-only work; MPX/PKRU use distinctions are not waived.
+Neither M07 check closes yet. No new guest queue is created by that analysis.
+
+
 ## Active cursor — 2026-10-18 04:21 UTC
 
 Manual resumed PRACTICAL-GOAL campaign continues. Distinct native behaviors16;
