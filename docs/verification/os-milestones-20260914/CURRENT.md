@@ -1,5 +1,70 @@
 # Resume cursor
 
+## Build feedback — 2026-10-18 02:06 UTC
+
+Exact early fork build released40d77c10 and executed once. Owner1/5.549953s;
+real IHK/SMP Rust compilation failed six unresolved EOVERFLOW references.
+Failure preserved under nsd-c-47f591.../evidence/make.stderr, owner archive
+under nsd-o-47f591...; independent retirement classification active.
+Bounded private six-site existing errno(-75) correction is assigned; no retry
+or activation. Process-driver integration independently passed host reference.
+Next two useful candidates: corrected early host modules, then CPU-copy image.
+
+## Active manual resume — 2026-10-18 02:05 UTC
+
+The user manually resumed the campaign at01:31UTC. Practical kernel/app scope
+is active; earlier stopped banners below are historical. Preserve the19:33
+service incident and do not replay the separately held transport/ACK task.
+Launcher owns state/session transitions; no agent state edit or restart occurred.
+
+Exact FPU terminal cleanup/common release independently passed(d4d060de).
+Fresh second native boot served the real signal workload with full retirement
+(babc48ea); public lifecycle observations now2, final-profile quota credit remains
+open. AVX/YMM0–15, selected x87/MXCSR preservation passed actual McKernel syscall,
+blocked-futex and signal paths on imagea0f50854; full owner/client/QEMU retirement
+accepted(f228f864). Distinct app diagnostics15; whole M07/IFUNC/AVX512/multicore
+and complete physical/mapping/callback/reference restoration remain open.
+
+CPU copy_fp_regs logical-extent repair5d939231 integrated SOURCE ONLY, with
+actual-body original failures and corrected512/1088/2696-byte controls, independently
+reviewed. Current a0f image does not contain it. Next isolated image preparation
+is metadata-only; exact build closure/reuse and floor-plus-growth capacity required.
+Real process-supervisor C Linux reference and cancellation correction pass;
+actual integrated driver review pending, no native fork claim/activation.
+
+Next heavy: frozen early fork three-module Kbuild closure9492, checkpoint7c2b
+and75fetched blobs verified. Exact final execution decision pending; no held
+transport WIP or CPU5d included. Full576MiB reserve preflight at02:05 has only
+16,928,768B host margin (scratch2,717,204,480B); guard must remeasure, refuse if
+insufficient, and authenticate all seven historical lease identities unchanged.
+Do not lower floors or add trim as a gate if admission passes. Source/image
+preparation and app driver integration continue independently. Usage1%, stop97%.
+
+Duplicate scope note36e3cdb4 was archived by launcher with original SHAe0969e6c,
+receipt retained. Policy adoption hashes supplied at invocation remain recorded:
+GOAL21328454, START4963c62c, CONVERGENCE13080dd4, HANDOFFf145d692
+(the latter predates this additive cursor). Continue after normal checkpoints.
+
+
+Local preparation2026-10-18: launcher failure attribution and paused-stop preview
+are corrected, with157offline tests and independent source review. Functional OS
+scope is explicit in AGENTS.md and the startup note. See the
+[updated estimate comparison](practical-engineering-estimate-20261018T012114Z.md).
+This is preparation only; the service stop below remains unresolved.
+
+## Supervisor stop — 2026-10-17 19:33:20 UTC
+
+Campaign01a149eb stopped on service-side cyberPolicy; worker/server exited,
+zero active turns, usage33%, campaign goal paused. Preserve all state/evidence;
+no autonomous retry, cleanup, build or guest. Read
+[the current stop handoff](SUPERVISOR-STOP-20261017T193320Z.md) for the actual failed
+worker/turn, retained FPU image, pending cleanup and prepared fork/guest packets.
+The footer's feedback identity names a later interrupted reviewer; use the
+incident's actual failed worker. Next action is service review and read-only
+status, then fresh ownership/resource admission before any released operation.
+
+## Earlier cursor — historical, preserved below
+
 State: autonomous execution active. M00-A preservation is complete at pushed
 commit `6c0f9f81339ed3ad90a8d207cdd995184fcc625f`; all 15 source-indexed
 preexisting artifacts were fetched from GitHub and independently matched by size

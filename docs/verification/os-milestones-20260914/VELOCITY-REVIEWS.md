@@ -7,30 +7,44 @@ This file describes supervision, not OS acceptance or execution authority.
 
 ## Current review cursor
 
-- Supervisor chat: `01a1479e-a9c2-7340-8d88-4313fab04738`; supervision goal active.
+- Supervisor chat: `01a1479e-a9c2-7340-8d88-4313fab04738`; user requested resumed
+  steering on2026-10-18. The earlier supervision-goal block at19:41UTC remains
+  historical; this inspection does not change goal-tool state or create a timer.
 - Engineering campaign: `01a149eb-f950-7f13-95a2-59dfc2918d49`; sole runtime/Git owner.
+- Campaign explicitly resumed by the user at`2026-10-18T01:31:35Z`; running with
+  an active goal at01:35:48UTC. Worker760063/start8454148 and server760065/start8454153
+  are live. Run directory:`.git/os-autopilot/runs/20261018T013135Z-08003bf4`.
+  The old19:33UTC stop and its evidence remain in the
+  [stop handoff](SUPERVISOR-STOP-20261017T193320Z.md). No automatic policy retry added.
 - First baseline recorded: `2026-10-17T13:26:00Z`.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-17T19:25:03Z` (interval 30m07s).
-- Next full review target: `2026-10-17T19:55:00Z` (12:55 America/Los_Angeles).
-- Next review latest target: `2026-10-17T20:25:00Z`; preserve healthy operations.
-- Last included-usage observation: 33%; existing campaign stop remains 97%.
-- Current intervention: finish reviewed FPU-build cleanup and fresh admission,
-  then use the next fully admitted post-reboot workload, early real fork compile
-  or AVX case. Final fork revoke/ACK work continues on independent inputs.
-- Current invocation independently accepted app/diagnostic behaviors: 14 (signal,
+- Last full review: `2026-10-18T02:05:24Z`, review13, first resumed interval.
+- User explicitly requested the interactive30-minute supervision loop again.
+  Next full review target:`2026-10-18T02:35:00Z`, latest03:05UTC. Continue the
+  loop in this chat; no independent OS timer or second dispatcher is installed.
+  Exclude the19:33UTC-to01:31UTC stopped interval from velocity.
+- Last launcher-reported included usage:1% in the new weekly primary window;
+  previous stopped window33% is historical. Existing campaign stop remains97%.
+- Current intervention: review13 steering queued as
+  `20261018T020619262399Z-850ab1c5feed4f0d998dd7393ec3f15f`. Prior01:34/01:42
+  steering was accepted. Obtain frozen fork-build feedback; keep FPU-copy image
+  and process-app work parallel, refill useful independent implementation slots,
+  reuse accepted evidence and avoid whole-request pretty-printing.
+- Current invocation independently accepted app/diagnostic behaviors: 15 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
   useful dynamic-libc threads application, forced pthread contention app,
-  actual memory-protection fault/recovery app, bounded vector-preservation app).
+  actual memory-protection fault/recovery app, bounded vector-preservation app,
+  AVX/YMM preservation across the exercised syscall/futex/signal boundaries).
 - Separate native3f7b observations: independently accepted quiescent native
   shutdown5->0->0/close0 and public destroy/device-memory release; complete
   one public stop/destroy/release/reboot cycle is now accepted with d99 modules.
 - CPU-repair candidate d99edf2f has native second-reservation and reboot evidence;
-  practical public-cycle progress1/10. Second-boot workload, complete restoration
-  and remaining repetitions remain open.
+  practical public-cycle progress1/10. The second-boot workload now passes;
+  its acceptance grants no additional final-profile repetition quota credit.
+  Complete restoration and remaining repetitions remain open.
   Old formal scores and estimates remain historical, not the new goal's percentage.
 - No new monitor script, OS timer, engineering dispatcher or workload was started.
 
@@ -1088,3 +1102,116 @@ practical-m07-avx-native-proposal-draft-20261017-1.json. Build receipt is
 scratch/native-fp-save-thin-preparation-20261017-1/symlink-correction-1/image-owner-work/evidence/receipt.json;
 guard capture is scratch/native-fp-save-thin-image-guard-20261017-c42c0dd52667eed862cb8555416d9912/guard-result.json.
 Correction report: scratch/native-fork-real-target-correction-20261017-1/report.json.
+
+## Stop event — 2026-10-17 19:33:20 UTC
+
+Service-side cyberPolicy failed native_shutdown_epoch_impl turn01a14b4b and the
+launcher interrupted the remaining agents. State19:33:21 is stopped, non-retryable,
+exit23, campaign goal paused, no active turns; both launcher processes are absent.
+Usage33%, below97% boundary. The last footer misidentifies the failing worker
+because later interrupted turns overwrite last_turn. Actual failed identities,
+retained work and exact safe commands are saved in
+[SUPERVISOR-STOP-20261017T193320Z.md](SUPERVISOR-STOP-20261017T193320Z.md).
+
+Cleanup source correction passed16cases/review and was published. Its fresh
+read-only observer was approved19:33:08 but did not run; output directory absent.
+FPU stopped container/common/shared records remain intentionally retained.
+Post-reboot guest, AVX guest and real fork Kbuild did not launch. Fork final
+proposal paths were corrected, but its review was interrupted. AVX review found
+strict-type equality and41stage-mtime defects; neither has final acceptance.
+Source work is preserved, not resumed by the supervisor. No new M0 closure or
+percentage change follows. The historical review entries and saved baseline remain.
+
+## Explicit resume and steering — 2026-10-18 01:35 UTC
+
+The user manually restarted the existing campaign and requested aggressive
+parallel engineering again. Live state is running/active; the saved last_error
+still contains the historical service refusal and is not a new refusal. The
+supervisor started no launcher, build, guest or cleanup and changed no runtime state.
+
+Instruction20261018T013447246345Z-624398be8e5842f589c7fd531ea4f1d8 was accepted by
+the server at01:34:47.634UTC. It reiterates the practical kernel/application
+target, GPT-6.1 medium/high, four to six useful independent lanes when ready,
+prompt review/integration, two prepared cases, artifact reuse and no repeated
+broad inventories/hashing or unchanged failure replay. The dispatcher retains
+heavy execution and Git ownership, original resource/admission constraints and
+the97% included-usage stop. Host free is about16.68GiB, scratch15.13GiB;
+packet growth reserves remain necessary.
+
+The resumed FPU read-only observer failed Docker census before cleanup. A
+bounded version probe reproduced a Go virtual-address-space initialization
+failure under the observer's inherited256MiB RLIMIT_AS; the default version
+probe passed. The dispatcher opened a focused resource-repair lane and retained
+independent review. This is an observer/tool compatibility issue, not evidence
+of a new kernel failure. The AVX metadata worker's missing output ancestor was
+reported and the dispatcher explicitly redirected its next step. Post-reboot
+release assembly is complete as a draft; final cleanup/admission joins remain.
+At01:35:48UTC the dispatcher plus three specialist workers were active. No new
+native/guest pass has been accepted in this short resumed interval.
+
+For today's velocity question, distinguish capability from rate. During the
+first roughly two diagnostic hours, accepted behaviors rose0->9. Between the
+15:25 baseline and the19:33 stop they rose9->14, alongside the first accepted
+public native reboot cycle, CPU-reacquisition repair and corrected FPU image.
+Those are substantial integration gains; later hourly diagnostic count did not
+accelerate, and different tasks do not establish an overall2x/3x speedup. Matched
+three-module rebuild invocations took about18seconds; the new image guard took
+213.151seconds including preparation/retirement. Preserve these scopes rather
+than treating them as a whole-OS completion forecast or benchmark ratio.
+
+## Review 13 — 2026-10-18 02:05:24 UTC
+
+First resumed review: user-run campaign01:31:35 to02:05:24UTC,33m49s. Exclude
+the19:33-to01:31 stopped interval. Same live worker760063/start8454148 and
+server760065/start8454153, goal active, no stop. Included usage1%, stop97%.
+HEAD remains7c2b87de; dispatcher owns integration and the next coherent checkpoint.
+
+| Measure | Accepted change this interval |
+| --- | --- |
+| Distinct native app/diagnostic behaviors | 14->15: actual AVX/YMM preservation |
+| Public native lifecycle | Fresh generation2 boot ran signal workload; no extra final-profile quota credit |
+| FPU terminal ownership | Exact stopped-container cleanup/common-record release accepted |
+| Kernel source repair | XSAVE copy extent corrected, independently reviewed and integrated; new image/runtime pending |
+| Process application | Real Linux fork/exec/wait oracle and cancellation correction pass; native CREATE_PPD gated |
+| Practical checklist | Unchanged3complete/32open; all14milestones remain open |
+
+The observer's inherited256MiB virtual-space cap prevented Docker startup.
+Focused correction retains Python's cap, allows2GiB only for fixed Docker
+children and preserves failed diagnostics. One output-parent review finding
+was corrected. Observer/readback passed01:39:51; terminal cleanup took4.238s
+and was independently accepted by01:48:48. Both ownership records were archived,
+46selected files and503/4-entry inventories preserved, and root/cleanup mutexes
+checked unheld. Scratch21 and unrelated retained records remain untouched.
+
+Post-reboot execution followed01:50:13 announcement; independent result review
+passed01:54:46. Exact40byte signal results passed on generation1 andgeneration2,
+with public stop/destroy/release between them and verified teardown. This closes
+the missing actual second-boot workload observation, not complete mapping/callback/
+physical-reference restoration or final repeatability. AVX guest was running
+01:58:59; independent raw acceptance02:01:29. Full YMM0-15 and selected x87/
+control/TOP/MXCSR checks pass across exercised syscall, blocked-futex and signal
+paths on one assigned McKernel CPU. XCR0=0x21f, required mask0x7. Each guest joins
+30Docker-client identities, positive QEMU/container retirement and three bounded
+readbacks. No full ISA/IFUNC/AVX512/multicore credit.
+
+Parallel actual-body regression exposed copy_fp_regs copying1088bytes for a
+2696byte XSAVE extent. Original fails the unchanged oracle; xsave_size copy
+passes extent/canary/ENOMEM/reuse/absent-source controls and source review.
+The accepted AVX imagea0f508 is unchanged and lacks this newer repair. Linux
+process oracle and publication/wait cancellation tests pass; native process
+creation is unproved. Frozen fork source/tool map now has PASS_SOURCE; its exact
+execution decision is the next build prerequisite.
+
+**Adjustment:** obtain frozen fork-build executable feedback without waiting
+for reporting. Overlap new FPU image delta, process-driver review and a concrete
+remaining application/mapping gap when ready. Read only needed fields from the
+35.9MB request, avoiding another full pretty-print under256MiB. Reuse accepted
+reviews and refill disjoint lanes; keep two upcoming cases ready. Host16.578GiB/
+scratch15.093GiB requires full packet growth admission. No broad inventory,
+unchanged replay or supervisor workload introduced. This interval is useful
+progress, not a measured2x/3x overall speedup. Next review02:35UTC, latest03:05.
+
+Canonical anchors under ../evidence/: native-fp-save-terminal-cleanup-result-review-20261018-1.json;
+native-postreboot-workload-result-review-20261018-1.json;
+native-m07-avx-actual-result-review-20261018-1.json;
+native-fp-copy-extent-source-integration-20261018-1.json.

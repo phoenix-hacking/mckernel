@@ -3292,7 +3292,7 @@ int copy_fp_regs(struct thread *from, struct thread *to)
 		if (!ret) {
 			memcpy(to->fp_regs,
 				from->fp_regs,
-				sizeof(fp_regs_struct));
+				xsave_size);
 		}
 	}
 	return ret;

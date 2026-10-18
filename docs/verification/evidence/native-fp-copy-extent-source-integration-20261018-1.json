@@ -1,0 +1,42 @@
+{
+  "schema": "mckernel.native-fpu-copy-extent-source-integration.v1",
+  "status": "PASS_SOURCE_INTEGRATED",
+  "author": "/root/fpu_copy_extent_repair",
+  "independent_reviewer": "/root/fork_compile_packet_review",
+  "old_cpu_sha256": "115725e4341f34d13d2a8385d87521874af5b7a53923bb0d407d580793a934f9",
+  "new_cpu_sha256": "5d93923119ac07f898849977463dc6e13349aa68831ae20e7aa1a6add92736be",
+  "diff": [
+    "- \t\t\t\tsizeof(fp_regs_struct));",
+    "+ \t\t\t\txsave_size);"
+  ],
+  "evidence_manifest": {
+    "path": "/home/holden/mckernel-work/scratch/native-fp-copy-extent-repair-20261018-1/report/hashes.json",
+    "sha256": "04a6531ac8438956c631bd0f8096024a80dd1a26074c0c8c0975b700a6bd8d4b"
+  },
+  "reviewed_evidence_entries": 24,
+  "actual_original_test_exit": 1,
+  "actual_repaired_test_exit": 0,
+  "real_struct_bytes": 1088,
+  "tested_logical_extents": [
+    2696,
+    512,
+    1088
+  ],
+  "verified": [
+    "Full allocated initialized XSAVE extent copied; separate child allocation and existing release/error paths preserved.",
+    "Actual allocator/copy bodies and real header; canaries, allocation failure, destination reuse, absent source and unchanged source.",
+    "Original2696truncation and512logicalovercopy detected; repaired errors0."
+  ],
+  "limitations": [
+    "512/1088 are C extent boundaries, not asserted valid hardware XSAVE configurations.",
+    "Page-rounded allocation means512overcopy is beyond logical extent, not observed allocation overflow.",
+    "No new kernel build, hardware XSAVE/XRSTOR, guestfork, scheduler or app acceptance."
+  ],
+  "existing_image_a0f_unchanged": true,
+  "native_acceptance": false,
+  "retained_regression": {
+    "path": "docs/verification/evidence/native-fp-copy-extent-regression-20261018-1.tar.gz",
+    "sha256": "9d9a5e9694c0854efcefb1e5550744669c30081be374a9de0ca5143fafb96e6b",
+    "size": 57707
+  }
+}

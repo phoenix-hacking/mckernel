@@ -1,5 +1,90 @@
 # Compact dispatcher handoff
 
+## Build feedback — 2026-10-18 02:06 UTC
+
+Exact early fork build released40d77c10 and executed once. Owner1/5.549953s;
+real IHK/SMP Rust compilation failed six unresolved EOVERFLOW references.
+Failure preserved under nsd-c-47f591.../evidence/make.stderr, owner archive
+under nsd-o-47f591...; independent retirement classification active.
+Bounded private six-site existing errno(-75) correction is assigned; no retry
+or activation. Process-driver integration independently passed host reference.
+Next two useful candidates: corrected early host modules, then CPU-copy image.
+
+## Active manual resume — 2026-10-18 02:05 UTC
+
+The user manually resumed the campaign at01:31UTC. Practical kernel/app scope
+is active; earlier stopped banners below are historical. Preserve the19:33
+service incident and do not replay the separately held transport/ACK task.
+Launcher owns state/session transitions; no agent state edit or restart occurred.
+
+Exact FPU terminal cleanup/common release independently passed(d4d060de).
+Fresh second native boot served the real signal workload with full retirement
+(babc48ea); public lifecycle observations now2, final-profile quota credit remains
+open. AVX/YMM0–15, selected x87/MXCSR preservation passed actual McKernel syscall,
+blocked-futex and signal paths on imagea0f50854; full owner/client/QEMU retirement
+accepted(f228f864). Distinct app diagnostics15; whole M07/IFUNC/AVX512/multicore
+and complete physical/mapping/callback/reference restoration remain open.
+
+CPU copy_fp_regs logical-extent repair5d939231 integrated SOURCE ONLY, with
+actual-body original failures and corrected512/1088/2696-byte controls, independently
+reviewed. Current a0f image does not contain it. Next isolated image preparation
+is metadata-only; exact build closure/reuse and floor-plus-growth capacity required.
+Real process-supervisor C Linux reference and cancellation correction pass;
+actual integrated driver review pending, no native fork claim/activation.
+
+Next heavy: frozen early fork three-module Kbuild closure9492, checkpoint7c2b
+and75fetched blobs verified. Exact final execution decision pending; no held
+transport WIP or CPU5d included. Full576MiB reserve preflight at02:05 has only
+16,928,768B host margin (scratch2,717,204,480B); guard must remeasure, refuse if
+insufficient, and authenticate all seven historical lease identities unchanged.
+Do not lower floors or add trim as a gate if admission passes. Source/image
+preparation and app driver integration continue independently. Usage1%, stop97%.
+
+Duplicate scope note36e3cdb4 was archived by launcher with original SHAe0969e6c,
+receipt retained. Policy adoption hashes supplied at invocation remain recorded:
+GOAL21328454, START4963c62c, CONVERGENCE13080dd4, HANDOFFf145d692
+(the latter predates this additive cursor). Continue after normal checkpoints.
+
+
+## Local preparation update — 2026-10-18 01:21 UTC
+
+Launcher diagnostics now retain the actual failed worker/turn separately from
+sibling interruption activity. Preview reports the service stop even for a
+paused goal; legacy state is read without mutation.157offline tests and independent
+source review passed. AGENTS.md and PARALLEL-RESUME.md require functional kernel/app
+scope in every assignment, deferring unrelated security projects. Ordinary crash
+recovery is retained; no service-denial rollback/replay was added. Campaign remains
+stopped. No build, guest, root observation or cleanup was started.
+
+Follow-up queue correction: duplicate scope note20261018T012254595264Z-36e3cdb4d5de43ebb04c1c6b6adc9052
+is now explicitly superseded in the startup note and bound to its exact original
+SHAe0969e6c21990432889029364b5c54c6ebcfad5ae030e67486faa56e060cb4a9.
+Preview and startup share both reconciliation bindings.55targeted offline tests
+and independent review pass; actual preview reports no unexpected-queue blocker.
+Pending bytes/state remain intact; only a later authorized startup performs the
+audited archive. Unknown/changed/sending entries and the service stop remain
+protected. While stopped, place ordinary scope updates in Markdown instead of
+adding an unbound pending note.
+
+The [updated completion comparison](practical-engineering-estimate-20261018T012114Z.md)
+preserves the original baseline. These are low-confidence engineering ranges,
+not acceptance scores; evidence cutoff remains the19:33UTC campaign stop.
+
+## Supervisor stop — 2026-10-17 19:33:20 UTC
+
+Campaign stopped on service-side cyberPolicy in native_shutdown_epoch_impl;
+worker498255/server498257 exited, zero active turns, non-retryable exit23,
+campaign goal paused, usage33%. This supersedes running instructions below.
+Read [the current stop handoff](SUPERVISOR-STOP-20261017T193320Z.md): it preserves
+actual feedback IDs (different from the launcher's footer), exact read-only
+commands, accepted FPU image/object retention and outstanding packet reviews.
+Fresh cleanup observation and cleanup have not run. No later heavy build or guest
+launch was observed after the accepted FPU build. Do not use a fresh session or automatic retry
+to work around the service stop. Resolve it, then revalidate all live identities
+and obtain the still-pending exact releases. Scratch21 remains retained.
+
+Earlier live-cursor sections are historical observations, preserved below.
+
 
 ## Live cursor — 19:26 UTC, FPU image accepted; terminal cleanup blocks next guests
 

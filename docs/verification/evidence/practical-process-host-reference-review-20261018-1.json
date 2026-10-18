@@ -1,0 +1,21 @@
+{
+  "schema": "mckernel.practical-process-host-reference-review.v1",
+  "decision": "PASS_HOST_REFERENCE_DRIVER_INTEGRATION",
+  "author": "/root/process_exec_wait_application",
+  "reviewer": "/root/m07_corrected_case_review",
+  "report": {
+    "path": "/home/holden/mckernel-work/scratch/practical-process-exec-wait-app-20261018-1/integrated-driver-1/report.json",
+    "sha256": "459e8cd9aef37f57b3ef68778257b8d2ff9843e1fa220e763e2c17a2dc448acc"
+  },
+  "verified": [
+    "Existing binary exit37/exact original stdout/empty stderr.",
+    "Publication SIGTERM and in-wait SIGINT through actual driver retain ownership to kill/reap/clear.",
+    "ECHILD and PID/PGID ESRCH after normal and both cancellation executions."
+  ],
+  "native_execution": false,
+  "CREATE_PPD_activation": false,
+  "limitations": [
+    "Host GCC9.4/glibc2.31 only.",
+    "Forced cleanup failures, repeated delivery and daemon containment untested."
+  ]
+}

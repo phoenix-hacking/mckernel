@@ -1,0 +1,48 @@
+{
+  "schema": "mckernel.native-postreboot-workload-result-review.v1",
+  "status": "SUCCESS",
+  "decision": "PASS_ACTUAL_NATIVE_POST_REBOOT_WORKLOAD_AND_RETIREMENT",
+  "reviewer": "/root/postreboot_actual_result_review",
+  "implementation_ownership": false,
+  "release": {
+    "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-release-assembly-20261018-1/execution-release-20261018-1.json",
+    "sha256": "d0a18473d6e5e5fc582cddc95ba00b2f9f341b4a8e3919556e13219c813cbe80",
+    "size": 13884
+  },
+  "owner_archive": {
+    "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-release-assembly-20261018-1/readback-1.stdout",
+    "sha256": "6ac1d2942223e38073047d95058b7cb34d0e9ed3459b994e09e7195fb54b0996",
+    "size": 1126400
+  },
+  "actual_result": {
+    "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-release-assembly-20261018-1/readback-2.stdout",
+    "sha256": "b95815b8a2b9fcbf647ec644bb46128b11c72c61b507dadbf0c6d999c7574480",
+    "size": 295257
+  },
+  "attempt_archive": {
+    "path": "/home/holden/mckernel-work/scratch/native-reboot-workload-release-assembly-20261018-1/readback-3.stdout",
+    "sha256": "7e712f056e66d958f5b479d3186b27b46d0cd706c42512b70a0f4699fa580dc1",
+    "size": 983040
+  },
+  "serial_sha256": "31614d0b89da41b58ec848dd149adf4af52594cf9fc62da0f9ccdb00ed82d31b",
+  "verified": [
+    "Exact40byte signalstdout/emptyerr/exit0 generation1PID254 andgeneration2PID265.",
+    "Running5/shutdown0/query0/close0, OSdestroy and128MiB publicrelease; finaldeviceCPU/MEMempty/CPU1online.",
+    "Freshgen2Running5 beforeactualsecondpayload; procfsdelete/retirementEAGAINthenunique0/processrelease ordered.",
+    "Allfouroriginalconsumers plus4e82 andadapter557 independently replay actualcapture/result byte-identically.",
+    "30 PID/starttime-bound Dockerclients positivelyreaped; threewait0; exactCIDrm0; threefinalqueriesempty.",
+    "Kill1 expectedalready-stoppedstderr; QMPguestshutdown/status/quit andQEMUreap; absenceverified/leasereleased/noquarantine."
+  ],
+  "raw_flags_preserved": {
+    "application_acceptance": false,
+    "mckernel_application_executed": false,
+    "native_execution_verified": false,
+    "full_cycle_verified": false
+  },
+  "distinct_application_behaviors_total": 14,
+  "public_lifecycle_diagnostic_observations_total": 2,
+  "final_profile_repeatability_quota_credit": false,
+  "second_native_stop_or_release": false,
+  "physical_frame_or_complete_mapping_restoration": false,
+  "formal_acceptance": false
+}
