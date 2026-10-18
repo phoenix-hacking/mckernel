@@ -1,0 +1,304 @@
+{
+  "actual_acceptance": {
+    "CPUID_D0": {
+      "eax": "0x21f",
+      "ebx": "0xa88",
+      "ecx": "0xa88",
+      "edx": "0x0"
+    },
+    "XCR0": "0x21f",
+    "case_id": "vector.enabled-avx-preservation",
+    "exercised_stages": [
+      "syscall",
+      "futex wait0/wake1 with distinct live helper patterns",
+      "signal delivered before interrupted state comparisons",
+      "full profile"
+    ],
+    "exit_status": 0,
+    "mckernel_application_executed": true,
+    "native_diagnostic_accepted": true,
+    "raw_wait_status": 0,
+    "required_XCR0_mask": "0x7",
+    "state_coverage": "All256 bits YMM0-15 plus selected x87 data/control/TOP and MXCSR across exercised boundaries; caller control restoration checked. No whole ISA/IFUNC or AVX512 closure.",
+    "status": "PASS",
+    "stderr_bytes": 0,
+    "stdout_bytes": 380,
+    "stdout_sha256": "9a82eb916caf96e85af3d35adb6cea0eb6757533b865c97381fd931c710660f7",
+    "tested_image_sha256": "da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f",
+    "typed_exposure": {
+      "ENABLED_AUXV": {
+        "hwcap": 2,
+        "hwcap2": 0
+      },
+      "ENABLED_CPUID1": {
+        "ecx": 4277678603,
+        "edx": 533462013
+      },
+      "ENABLED_CPUID7": {
+        "ebx": 563889065,
+        "ecx": 2151678476,
+        "edx": 16
+      },
+      "ENABLED_CPUIDD0": {
+        "eax": 543,
+        "ebx": 2696,
+        "ecx": 2696,
+        "edx": 0
+      },
+      "ENABLED_XCR0": {
+        "hi": 0,
+        "lo": 543
+      },
+      "observed_xcr0": 543,
+      "required_xcr0": 7,
+      "scope": "Observed process exposure plus explicit x87/SSE/YMM boundary checks; no whole ISA/IFUNC closure",
+      "supported_xcr0": 543
+    }
+  },
+  "counts": {
+    "distinct_native_behaviors_total": 16,
+    "formal_acceptance_credit": 0,
+    "new_current_candidate_builds": 0,
+    "new_current_candidate_native_invocations": 1,
+    "new_distinct_native_behaviors": 0,
+    "new_practical_exit_checks": 0
+  },
+  "created_utc": "2026-10-18T08:07:44.539871+00:00",
+  "decision": "PASS_ACTUAL_THREE_PORT_RUST_IMAGE_AVX_DIAGNOSTIC_AND_POSITIVE_RETIREMENT",
+  "evidence": {
+    "QMP": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-avx-actual-review-20261018-1/attempt/qmp.transcript.json",
+      "sha256": "4bee184909e51a39a962c1a6e67d33f66a8722530ef1b4e5da70c6c570fd5d3d",
+      "size": 229793
+    },
+    "actual_result_readback": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/avx/readback-2.stdout",
+      "sha256": "f8e5db1da344055dbd5f8d99ba780a02869538abd81ac06a68ce8f412144835f",
+      "size": 83715
+    },
+    "actual_stage_review": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-review-20261018-1/actual-result/report.json",
+      "sha256": "c08469ea3f5f200208175b975651670b7d957ad8f7d23765fdc7a380152968ea",
+      "size": 8345
+    },
+    "archive_inventory_attempt": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-avx-actual-review-20261018-1/attempt-members.json",
+      "sha256": "131cc10398f95cac477fbacf1dc62fdb0738b4b9a6ed82e182ae16cd23e3ac19",
+      "size": 736
+    },
+    "archive_inventory_owner": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-avx-actual-review-20261018-1/owner-members.json",
+      "sha256": "af10209b73005475378f906ef4a7e1a579d1f43c6bd737dae68cc2cf91e9cacb",
+      "size": 8839
+    },
+    "archive_validator": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-avx-actual-review-20261018-1/extract.py",
+      "sha256": "7b6ae45302a434e0641e76dfad4fd7be3644ade3e10e4774dda109f8ff446eda",
+      "size": 1608
+    },
+    "attempt_archive": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/avx/readback-3.stdout",
+      "sha256": "746218584301462c74fb095cd93ef5c91104c9cc861df1d3adcc85efdf133f34",
+      "size": 399360
+    },
+    "container_state": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-avx-actual-review-20261018-1/owner/state.json",
+      "sha256": "f9a6b23b8291f1dd7c53f85a08ee81d7183ddd32202faf851545a17c7023dbe2",
+      "size": 224
+    },
+    "execution_decision": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-review-20261018-1/avx-decision.json",
+      "sha256": "4c3f1b02d3b1df8f4080954a73ccbf49b38484fde95255b69993011c1fec1a80",
+      "size": 5246
+    },
+    "execution_release": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/avx/execution-release-1.json",
+      "sha256": "30bb100e187784fa1517244c8356bc8ffaca8f457187b04b6149e4dd49177967",
+      "size": 4097
+    },
+    "fresh_preflight": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/avx/fresh-live-preflight-1.json",
+      "sha256": "1851b8045676bc7c5f688db0149eb5900fee5426e23e6b35e99d02b73f1e47b5",
+      "size": 2105
+    },
+    "image_artifact_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/rust-three-port-image-actual-review-20261018-1.json",
+      "sha256": "87e37ba180382acc488fe76ad7565ca9f2951a90c9f818bd552efc6790e9656f",
+      "size": 40805
+    },
+    "independent_check_result": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-avx-actual-review-20261018-1/check-result.json",
+      "sha256": "fd0ccc5828a37514462b024850f0e144066671f89dd62db14da231d98724198d",
+      "size": 671
+    },
+    "independent_checker": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-avx-actual-review-20261018-1/check.py",
+      "sha256": "3ed85ed621746bd5ca29b22a3dda51cc67e5743af60d76366c65864a54a72c69",
+      "size": 7078
+    },
+    "initial_container_inspect": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-avx-actual-review-20261018-1/owner/008-inspect.stdout",
+      "sha256": "22c6a7a947b7c0b5c107fe0e22c101b90c881a2ba4ad810c99f785de411c158b",
+      "size": 12330
+    },
+    "original_checker": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-avx-actual-review-20261018-1/check-attempt1.py",
+      "sha256": "adbe045a1af2d014a8be6bc866cf8b1c303da1e93aa0e63adbfa7f9a5f517f98",
+      "size": 7017
+    },
+    "owner_archive": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/avx/readback-1.stdout",
+      "sha256": "a57d5afed17b8f37d75040ea9db8eb805f1799a99333bb50c148bba85cdf0e38",
+      "size": 552960
+    },
+    "owner_identity": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-avx-actual-review-20261018-1/owner/owner.json",
+      "sha256": "618bea69adfde41a687094023c3cc8aa905e7d746039790d0974669cabd9362c",
+      "size": 794
+    },
+    "owner_join": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/avx/owner-join.json",
+      "sha256": "962c9da60c288bdc4edbf4df153b94cb2a6f22ab8d33b1f1c59193de4b48cf50",
+      "size": 973
+    },
+    "owner_result": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-avx-actual-review-20261018-1/owner/result.json",
+      "sha256": "0f253671cf95ed620841cd439eb7dd53ee8f76dc1df2b6b9034f557cf1fb1a61",
+      "size": 257
+    },
+    "preserved_checker_failure": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-avx-actual-review-20261018-1/check-attempt1-failure.txt",
+      "sha256": "81c1f1a9099423e12fc274ba3598dc1a67884a89b4871155dfefdffe5059aea3",
+      "size": 354
+    },
+    "proposal": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/avx/execution-proposal.json",
+      "sha256": "65c01bebf4099daa05a0d1f5398ee4e723cd969f42a2658ffa10c33fd0ae9066",
+      "size": 18255
+    },
+    "readback_1_command": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/avx/readback-1.command.json",
+      "sha256": "9018508d93939d218f3c0cfc3bba139ff6c157ba9d6eb16ddf9c377c0abba25d",
+      "size": 333
+    },
+    "readback_2_command": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/avx/readback-2.command.json",
+      "sha256": "574b5be9b4e752800c45aab4eaae36ba514d6552edbd37bd85246f4d40ca3109",
+      "size": 293
+    },
+    "readback_3_command": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-guest-execution-preparation-20261018-1/avx/readback-3.command.json",
+      "sha256": "980ee7227795b427532c9c4593833e4b10c5133e87205ec25f634cdb944d376d",
+      "size": 335
+    },
+    "serial": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-avx-actual-review-20261018-1/attempt/serial.log",
+      "sha256": "07230096a798c82f08c24b73ed58215f3711bc54f17f2cedb2836446c7eda9ff",
+      "size": 74815
+    },
+    "stage_result": {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/stage-avx/stage-result.json",
+      "sha256": "7edf004289108a4ebb7f1c315594e68b703d5d3d618b91947c663007994142f0",
+      "size": 18297
+    }
+  },
+  "failure_history": "One checker assertion required all readback stderr empty and rejected the exact expected default tar socket-ignored warning on readback3. Original checker and failure note retained; one bounded correction permits only that exact warning for readback3. No payload, evaluator, owner or retirement failure.",
+  "formal_acceptance": false,
+  "implementation_ownership": false,
+  "limits": [
+    "Native exact-image evidence and selected default/link proof do not establish whole-kernel Rust retirement, original qualification, whole ISA/IFUNC/AVX512, multicore or allocation-failure injection.",
+    "No per-helper runtime counters or exhaustive allocation/exit branch proof; final per-path retirement remains separately scoped.",
+    "Repeated diagnostic adds one current-image native invocation and zero new distinct behaviors; total remains16.",
+    "Root mutex/physical container retirement is source-bound to checked owner path and retained client ledger; reviewer performed no new root readback. Threads requires fresh live admission and its own one-shot release."
+  ],
+  "native_production_language_retirement": {
+    "all_transitive_allocator_C_retired": false,
+    "allocation_failure_hardware_proof": false,
+    "image_sha256": "da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f",
+    "new_path_retirement_credit": "Final per-path integration decision remains dispatcher-owned after separately released threads regression; this review supplies exact-new-image native AVX predecessor.",
+    "production_default_link_artifact_review": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/docs/verification/evidence/rust-three-port-image-actual-review-20261018-1.json",
+      "sha256": "87e37ba180382acc488fe76ad7565ca9f2951a90c9f818bd552efc6790e9656f",
+      "size": 40805
+    },
+    "scoped_evidence": "Actual exact-image startup, vector preservation across syscall/futex/thread/signal boundaries and application exit/cleanup validate the linked production default implementation described by independent artifact review. No instruction trace, per-body invocation counter or exhaustive internal branch coverage is claimed. Preserve accepted first-copy and scheduler-admission ports.",
+    "selected_bodies": [
+      "rust_x86_save_fp_regs",
+      "rust_x86_restore_fp_regs",
+      "sched_post_switch_cleanup"
+    ],
+    "separate_threads_regression_pending": true,
+    "status": "SCOPED_EXACT_IMAGE_NATIVE_BEHAVIOR_PROOF_PASS",
+    "whole_kernel_Rust_retirement": false
+  },
+  "next_executable_observation": "Threads may consume this exact PASS AVX result and positive-retirement reference after hash binding, fresh live admission and its separately approved execution release. This report grants no runtime authority.",
+  "positive_retirement": {
+    "OOMKilled": false,
+    "PID_absence_used_as_retirement_proof": false,
+    "QEMU_returncode": -9,
+    "QEMU_returncode_scope": "Reviewed teardown permits0/-TERM/-KILL; actual guest shutdown and valid application result precede QMP quit and physical QEMU reap. -9 is not application exit.",
+    "all_exact_pid_start_pairs": true,
+    "authenticated_exact_container_removal": true,
+    "capture_errors": [],
+    "cgroup_retirement_basis": "Exact constrained container state exited0/runningfalse, three successful waits, authenticated removal, thirty physically joined clients and source-known empty ledger/lease release; no new root-only cgroup or mutex readback by reviewer.",
+    "container_id": "8d5b2712a2232b387579c3f481bae0d4c729af26c92fb9436621f3e969883e73",
+    "container_profile": {
+      "CgroupParent": "/mckernel-dev",
+      "CpusetCpus": "2-5",
+      "Memory": 12884901888,
+      "MemorySwap": 12884901888,
+      "NetworkMode": "none",
+      "PidsLimit": 512,
+      "Privileged": false
+    },
+    "container_state_exit": 0,
+    "direct_owner_elapsed_seconds": 36.44039080799848,
+    "direct_owner_physically_joined": true,
+    "direct_owner_returncode": 0,
+    "distinct_Docker_clients_physically_reaped": 30,
+    "final_name_nonce_id_queries_empty": true,
+    "guest_shutdown_before_QMP_quit_and_QEMU_reap": true,
+    "lease_retained": false,
+    "nonce": "fa302b64592e6f7b0d4ef0a2d67edd28",
+    "owner_identity": {
+      "pgid": 915595,
+      "pid": 915602,
+      "proc_starttime": 10809642,
+      "sid": 915595
+    },
+    "pending_clients_empty": true,
+    "recovery_or_quarantine": false,
+    "root_mutex_identity": {
+      "dev": 27,
+      "gid": 0,
+      "ino": 4,
+      "mode": 420,
+      "nlink": 1,
+      "uid": 0
+    },
+    "root_mutex_released": true,
+    "source_known_owner_exit_path": true,
+    "status": "PASS",
+    "three_container_wait_statuses": [
+      0,
+      0,
+      0
+    ]
+  },
+  "raw_acceptance_flags_preserved": true,
+  "reviewer": "/root/three_port_avx_actual_review_0807",
+  "schema": "mckernel.independent-three-port-rust-image-avx-actual-review.v1",
+  "scope": "Functional PRACTICAL-GOAL supported-profile McKernel/apps and actual compute C to Rust plus reviewed assembly. Selected three-port production default image native validation; original qualification remains deferred.",
+  "status": "PASS",
+  "verification_profile": "Unprivileged CPU6/1job/1GiB address space/30CPU per bounded checker. No root/Docker/guest/new readback/Git/implementation action by reviewer.",
+  "verified": [
+    "Release30bb100e, decision4c3f1b02, source closure, fresh preflight, terminal cleanup and actual-stage consumer review pins join exact proposal and image87e37ba1 artifact review. Complete owner and typed AVX source maps rehashed.",
+    "Default non-dereference archives validated before private extraction: relative nontraversing names, unique members, directories/regular files only;101/7 members,471127/388475expanded bytes. Exact tar socket-ignored warning is preserved.",
+    "Owner-copied inner result equals attempt result and direct result readback byte-for-byte. All capture-binding hashes and sizes agree across both archives; serial/debugcon exactly match observation.",
+    "Frozen typed parser plus unchanged base evaluator replay equals every evaluator field; explicit runner envelope, capture_errors, cleanup and QEMU argv pass. Raw protocol-only flags remain unchanged.",
+    "Exact accepted stage contains only image delta686215->da0f1bf7; final image member, all3matching d99module inputs and compressed initrd hash join actual admitted QEMU command. Runtime serial shows IHK image loaded/boot prepared and actual McKernel PID255 application with TID255/257 publication/deletion,512-byte TID transfer and processrelease cleanup_errno0.",
+    "All30distinct Docker PID/start pairs have physical reap receipts, exact CID removal and three final empty name/nonce/id queries. Source-known _release requires absent container and empty pending/final reap ledgers, unlocks/closes root27:4 before evidence flush and exit0.",
+    "Guest SHUTDOWN and shutdown status precede QMP quit; QEMU physically reaped and container exited0/noOOM/noerror. Dispatcher physically joined owner0 and all three approved readbacks0. Cleanup kill1 means already-stopped exact CID, followed by wait0/inspect/rm0; it is retained and classified."
+  ]
+}

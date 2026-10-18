@@ -180,6 +180,13 @@ for the pinned producer. Bind the smallest actual-source compile assertion to th
 existing reviewed build/inspection phase, reuse its proof until relevant inputs
 change, and keep ordinary retention/publication work parallel to that check.
 
+Bind privileged readbacks to the actual downstream consumer's required original
+bytes before release. A console summary or hash list is not a substitute for raw
+files when that consumer needs them; exercise the complete bounded raw transport
+and ordinary consumer together under the cheap fixture profile. Preserve stable
+producer field names/types across successor artifact reviews, with new evidence
+added separately, so an unchanged stager does not need a late schema adaptation.
+
 Assign short nonce-based protocol/execution output roots up front. Preflight all
 canonical generated UNIX endpoint paths before creating archives or attempt
 fixtures; source-workspace paths need not be runtime-output paths. Preserve the

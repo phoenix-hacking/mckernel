@@ -1,0 +1,189 @@
+{
+  "status": "PASS_INDEPENDENT_SOURCE_LINUX_ORACLE_REVIEW",
+  "source_contract": {
+    "author_root": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1",
+    "source_sha256": "5bce3952f59ea50c5dd7d2385361878cf513bed600aaa0d3d62b45c2907c0886",
+    "binary_sha256": "4ebbe30ec084e47a17f3f03b0f0d42d9a0f122da35db27c95d2145ed970f3a49",
+    "stdout_sha256": "0bc276ed5f3b2588004c90a36ac7de431d5e8e27388a996c72d7b880c21dc2db",
+    "expected_exit": 0,
+    "expected_stderr_bytes": 0,
+    "private_cwd_required": true
+  },
+  "author_artifact_hashes_verified": 27,
+  "independent_checksum_method": "32 complete residue cycles and 161-byte tail",
+  "checksums": [
+    1024005,
+    1024090,
+    1024175
+  ],
+  "checksum_total": 3072270,
+  "replay_positive_count": 1,
+  "replay_negative_count": 3,
+  "linux_futex_wait_call_lines": 771,
+  "blocking_source_findings": 0,
+  "conditions": [
+    "Outer timeout and verified retirement are mandatory; payload has no internal deadline.",
+    "Fresh private cwd; preserve failure leftovers.",
+    "Current da0 AVX/thread/terminal critical path precedes native preparation.",
+    "Existing one-app native preparation and independent execution release remain required.",
+    "Native futex-call count is not the oracle; exact output/exit and kernel-error scan remain mandatory."
+  ],
+  "future_preparation_input_only": true,
+  "native_execution_released": false,
+  "queued_native_cases": 0,
+  "new_guest_runs": 0,
+  "new_kernel_builds": 0,
+  "new_native_behavior_credit": 0,
+  "formal_case_credit": false,
+  "production_acceptance": false,
+  "compute_c_retirement_credit": false,
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/app.rs",
+      "sha256": "5bce3952f59ea50c5dd7d2385361878cf513bed600aaa0d3d62b45c2907c0886",
+      "size": 4816
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/oracle.py",
+      "sha256": "534aa2e0a60c4ece3da3273fd252027b1609d9bc4af2fe6fd0e9a909e539c014",
+      "size": 6373
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/frozen-oracle.json",
+      "sha256": "237467b2255b7ae16c314ff2dfe75f8b63c8afeb00bf17441a941b4ef97a52d6",
+      "size": 343
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/commands.json",
+      "sha256": "084638426a4fbb71078bf5766c7975f7cc1e7899172f15962672b75b3d9ad373",
+      "size": 3043
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/result.json",
+      "sha256": "14191df522aad0ecd2f234a316c7ed2ac1e7f056006ff96273a81dce776b1c6b",
+      "size": 8975
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/prior-profile.json",
+      "sha256": "9172b2408aaff4e797d05679ae29fc97a66b63046b0e5c2b0538b17764bbf018",
+      "size": 3625
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/app",
+      "sha256": "4ebbe30ec084e47a17f3f03b0f0d42d9a0f122da35db27c95d2145ed970f3a49",
+      "size": 5672360
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/expected.stdout",
+      "sha256": "0bc276ed5f3b2588004c90a36ac7de431d5e8e27388a996c72d7b880c21dc2db",
+      "size": 156
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/linux-reference.stdout",
+      "sha256": "0bc276ed5f3b2588004c90a36ac7de431d5e8e27388a996c72d7b880c21dc2db",
+      "size": 156
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/linux-reference.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/linux-reference.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/linux-futex.trace",
+      "sha256": "45eacd82ca2c818b89df7ac97f4161275a6b135acd39497ff976e7f82d6d3b4f",
+      "size": 190138
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/practical-mixed-rust-std-preparation-20261018-1/readelf.stdout",
+      "sha256": "7c58af516d40fc45a32173ea0f12e21a9cce30f8d484db727c3f0ac71194e9cb",
+      "size": 2620
+    }
+  ],
+  "review_artifacts": {
+    "thread.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "REPORT.md": {
+      "sha256": "5bbfe065bd7a63474eeda4d426d2245749b2f32025cdbf3cae7b88027f4b5fb6",
+      "size": 7498
+    },
+    "thread.stderr": {
+      "sha256": "fd9e96a534797b6498cb353ede4f78fe32121f74cfb4970011e5bb45c97a889c",
+      "size": 63
+    },
+    "independent-oracle.json": {
+      "sha256": "3b682c755e08b5b7c2f14421e22b86c26e98e44d2d9bcc53074b2d85ebccb322",
+      "size": 263
+    },
+    "replay-results.json": {
+      "sha256": "bf15ff83f673bb6d84b251e974c313ca203311d5d817b1d80cfa73327c51db7d",
+      "size": 2175
+    },
+    "checksum.stderr": {
+      "sha256": "a6c658f8602215d5d115c259905cb59886c6d897bf9ae0985b5677b51ff9331e",
+      "size": 62
+    },
+    "independent-expected.stdout": {
+      "sha256": "0bc276ed5f3b2588004c90a36ac7de431d5e8e27388a996c72d7b880c21dc2db",
+      "size": 156
+    },
+    "memory.status": {
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size": 2
+    },
+    "checksum.status": {
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size": 2
+    },
+    "normal.stdout": {
+      "sha256": "0bc276ed5f3b2588004c90a36ac7de431d5e8e27388a996c72d7b880c21dc2db",
+      "size": 156
+    },
+    "normal.status": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "size": 2
+    },
+    "normal.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "memory.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "replay.py": {
+      "sha256": "7468b050a34b0387c181150bf335a59d2e8cb5b039a396ace583ac70b7a5aa20",
+      "size": 2586
+    },
+    "source.diff": {
+      "sha256": "25adf0339285cbe490bd62ee3fcb4b86655da363147fd79239e7e884b9c1f421",
+      "size": 8871
+    },
+    "inputs.jsonl": {
+      "sha256": "6f7d8f94194170f0f989da6f6501e7e478ac11dcd712ecbda3920386005599be",
+      "size": 2630
+    },
+    "thread.status": {
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size": 2
+    },
+    "checksum.stdout": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "memory.stderr": {
+      "sha256": "056abf862a35d0fa666d541215dd56232f2f65b1b68428e944952ce5f94d9443",
+      "size": 63
+    },
+    "replay-checksum/mixed-rust-std-910201-0.bin": {
+      "sha256": "6d47eb9a7f55723c1c9f233d30cab08d1ea2359da38cf0ec6f318817ab9d0e88",
+      "size": 8193
+    }
+  }
+}

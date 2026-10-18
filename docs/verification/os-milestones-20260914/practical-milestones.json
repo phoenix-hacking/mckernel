@@ -931,12 +931,22 @@
               "path": "docs/verification/evidence/rust-combined-image-avx-result-review-20261018-1.json",
               "sha256": "f47adf0dcf929952cf67b27d7f1e465de4f795283b04fb6b6bbf710ebb15bb52",
               "size": 11959
+            },
+            {
+              "path": "docs/verification/evidence/rust-three-port-image-avx-result-review-20261018-1.json",
+              "sha256": "33d0386003955ecfb4a5dbd2e17a0c8335adcede3768182968db192fc294b9d0",
+              "size": 16314
+            },
+            {
+              "path": "docs/verification/evidence/rust-three-port-image-threads-result-review-20261018-1.json",
+              "sha256": "2a634dfb44d34b8e814cdb1259a22a5e84a48312976419e5eb94ecbb9e641601",
+              "size": 15728
             }
           ],
-          "assessment_note": "Native SSE2 and original a0f50854 AVX evidence preserved. The rebuilt image08210bb2 includes allocation fail-stop plus copy_fp_regs extent repair5d939231; linked-body provenance and actual AVX/YMM0-15, selected x87/MXCSR syscall/blocking-futex/signal preservation now independently pass on one McKernel CPU. Actual XCR0=0x21f; stdout380 bytes/empty stderr/exit0 and full30client/QEMU/container/lease retirement. Final compiler/libc IFUNC/used-state, AVX512, multicore and final-profile closure remain open; no whole-M07 acceptance. Current Rust-default image686215 also independently passes unchanged AVX with positive retirement f47adf0d; copy/admission ports have scoped native proof. Other used-state/final-profile obligations remain open."
+          "assessment_note": "Native SSE2 and original a0f50854 AVX evidence preserved. The rebuilt image08210bb2 includes allocation fail-stop plus copy_fp_regs extent repair5d939231; linked-body provenance and actual AVX/YMM0-15, selected x87/MXCSR syscall/blocking-futex/signal preservation now independently pass on one McKernel CPU. Actual XCR0=0x21f; stdout380 bytes/empty stderr/exit0 and full30client/QEMU/container/lease retirement. Final compiler/libc IFUNC/used-state, AVX512, multicore and final-profile closure remain open; no whole-M07 acceptance. Current Rust-default image686215 also independently passes unchanged AVX with positive retirement f47adf0d; copy/admission ports have scoped native proof. Other used-state/final-profile obligations remain open. Current five-selected-body Rust-default image da0f1bf7 independently passes unchanged AVX33d03860: actual exposure/XCR0 and vector syscall/block/signal stages, exit0/stdout380/empty stderr and all30clients/container/lease positively retired. This is scoped executed behavior, not exhaustive per-body path instrumentation or final-profile closure; threads independently accepted2a634dfb: exit37/exact25B/empty stderr, actual TLS/barrier/mutex2000/joins, process/thread/pager release and full30client/container/lease retirement. Broader live compute C retirement remains active and unfinished."
         }
       ],
-      "current_evidence_summary": "Distinct native behaviors16 unchanged by this repeat. Rebuilt CPU-copy image08210bb2 is linked-body reviewed and actually passes the unchanged AVX/YMM/SSE/x87 diagnostic with full retirement. Extent repair is no longer source-only. Whole used-feature/IFUNC, untested vector/multicore and final-profile closure remain open. Current Rust-default image686215 repeats accepted AVX with scoped copy/admission native proof; distinct behaviors remain16."
+      "current_evidence_summary": "Distinct native behaviors16 unchanged by this repeat. Rebuilt CPU-copy image08210bb2 is linked-body reviewed and actually passes the unchanged AVX/YMM/SSE/x87 diagnostic with full retirement. Extent repair is no longer source-only. Whole used-feature/IFUNC, untested vector/multicore and final-profile closure remain open. Current Rust-default image686215 repeats accepted AVX with scoped copy/admission native proof; distinct behaviors remain16. Current da0f1bf7 native AVX independently accepted33d03860, with complete physical retirement; repeated diagnostic distinct count remains16. Current-image threads review pending. Current da0f1bf7 original threads and physical retirement independently pass2a634dfb. Current-image native chain is complete, used-feature/final-profile obligations remain open."
     },
     {
       "id": "M08",
@@ -1147,9 +1157,24 @@
               "path": "docs/verification/evidence/rust-three-port-image-build-outcome-20261018-1.json",
               "sha256": "6a47635ac5884476c1faae5951f5678ef256efd262febf9f47e063d4b7b324bd",
               "size": 2519
+            },
+            {
+              "path": "docs/verification/evidence/rust-three-port-image-actual-review-20261018-1.json",
+              "sha256": "87e37ba180382acc488fe76ad7565ca9f2951a90c9f818bd552efc6790e9656f",
+              "size": 40805
+            },
+            {
+              "path": "docs/verification/evidence/rust-three-port-image-avx-result-review-20261018-1.json",
+              "sha256": "33d0386003955ecfb4a5dbd2e17a0c8335adcede3768182968db192fc294b9d0",
+              "size": 16314
+            },
+            {
+              "path": "docs/verification/evidence/rust-three-port-image-threads-result-review-20261018-1.json",
+              "sha256": "2a634dfb44d34b8e814cdb1259a22a5e84a48312976419e5eb94ecbb9e641601",
+              "size": 15728
             }
           ],
-          "assessment_note": "Current image686215 has independently accepted full-production ABI/default-link proof1a692e8d and unchanged native AVX/retirement f47adf0d for Rust copy_fp_regs and scheduler FPU admission. Original threads and positive retirement independently pass958bac9d. Final artifact set and broader live compute C retirement remain open. Next coherent source-integrated candidate adds reviewed post-switch cleanup, save and restore/default. Host Linux MM compatibility C remains an explicit exception; integration estimates are not whole-kernel conversion scores."
+          "assessment_note": "Current image686215 has independently accepted full-production ABI/default-link proof1a692e8d and unchanged native AVX/retirement f47adf0d for Rust copy_fp_regs and scheduler FPU admission. Original threads and positive retirement independently pass958bac9d. Final artifact set and broader live compute C retirement remain open. Next coherent source-integrated candidate adds reviewed post-switch cleanup, save and restore/default. Host Linux MM compatibility C remains an explicit exception; integration estimates are not whole-kernel conversion scores. Current five-selected-body Rust-default image da0f1bf7 independently passes unchanged AVX33d03860: actual exposure/XCR0 and vector syscall/block/signal stages, exit0/stdout380/empty stderr and all30clients/container/lease positively retired. This is scoped executed behavior, not exhaustive per-body path instrumentation or final-profile closure; threads independently accepted2a634dfb: exit37/exact25B/empty stderr, actual TLS/barrier/mutex2000/joins, process/thread/pager release and full30client/container/lease retirement. Broader live compute C retirement remains active and unfinished."
         },
         {
           "id": "P-M09-02",
@@ -1185,12 +1210,27 @@
               "path": "docs/verification/evidence/rust-three-port-image-build-outcome-20261018-1.json",
               "sha256": "6a47635ac5884476c1faae5951f5678ef256efd262febf9f47e063d4b7b324bd",
               "size": 2519
+            },
+            {
+              "path": "docs/verification/evidence/rust-three-port-image-actual-review-20261018-1.json",
+              "sha256": "87e37ba180382acc488fe76ad7565ca9f2951a90c9f818bd552efc6790e9656f",
+              "size": 40805
+            },
+            {
+              "path": "docs/verification/evidence/rust-three-port-image-avx-result-review-20261018-1.json",
+              "sha256": "33d0386003955ecfb4a5dbd2e17a0c8335adcede3768182968db192fc294b9d0",
+              "size": 16314
+            },
+            {
+              "path": "docs/verification/evidence/rust-three-port-image-threads-result-review-20261018-1.json",
+              "sha256": "2a634dfb44d34b8e814cdb1259a22a5e84a48312976419e5eb94ecbb9e641601",
+              "size": 15728
             }
           ],
-          "assessment_note": "Current image686215 has independently accepted full-production ABI/default-link proof1a692e8d and unchanged native AVX/retirement f47adf0d for Rust copy_fp_regs and scheduler FPU admission. Original threads and positive retirement independently pass958bac9d. Final artifact set and broader live compute C retirement remain open. Next coherent source-integrated candidate adds reviewed post-switch cleanup, save and restore/default. Host Linux MM compatibility C remains an explicit exception; integration estimates are not whole-kernel conversion scores."
+          "assessment_note": "Current image686215 has independently accepted full-production ABI/default-link proof1a692e8d and unchanged native AVX/retirement f47adf0d for Rust copy_fp_regs and scheduler FPU admission. Original threads and positive retirement independently pass958bac9d. Final artifact set and broader live compute C retirement remain open. Next coherent source-integrated candidate adds reviewed post-switch cleanup, save and restore/default. Host Linux MM compatibility C remains an explicit exception; integration estimates are not whole-kernel conversion scores. Current five-selected-body Rust-default image da0f1bf7 independently passes unchanged AVX33d03860: actual exposure/XCR0 and vector syscall/block/signal stages, exit0/stdout380/empty stderr and all30clients/container/lease positively retired. This is scoped executed behavior, not exhaustive per-body path instrumentation or final-profile closure; threads independently accepted2a634dfb: exit37/exact25B/empty stderr, actual TLS/barrier/mutex2000/joins, process/thread/pager release and full30client/container/lease retirement. Broader live compute C retirement remains active and unfinished."
         }
       ],
-      "current_evidence_summary": "First two compute ports now production/default-linked and native AVX accepted on image686215; original C fallback/reference and known-good08210 preserved. Original threads and positive retirement accepted958bac9d. Next three ports have source/composition approval and exact integration only; production/native proof pending. No whole-Rust, milestone-completion or percentage claim. Next three-port image da0f1bf7 compiled in201.380s; actual C descriptor alignment evidence held, no new native proof. Preserve artifacts and do not rebuild unchanged image."
+      "current_evidence_summary": "Five selected compute Rust bodies have production default-link/actual ABI proof87e37ba1 and combined unchanged AVX33d03860 plus threads2a634dfb native diagnostic proof on image da0f1bf7. Original C reference/fallback and known-good images remain preserved. Scoped exercised behavior is not per-branch instrumentation or whole-kernel retirement: broader live compute C migration remains active and unfinished. Current diagnostic repeats add no distinct behavior or formal closure; count16 and practical checks3complete/32open unchanged."
     },
     {
       "id": "M10",

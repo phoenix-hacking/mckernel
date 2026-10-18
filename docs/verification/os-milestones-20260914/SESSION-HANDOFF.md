@@ -1,45 +1,64 @@
 # OS development session handoff
 
-## RESUMED — current execution cursor, 2026-10-18 07:22 UTC
+## RESUMED — current execution cursor, 2026-10-18 08:12 UTC
 
-The explicit06:15 launcher resume is active; the05:20 pause below is historical.
-Launcher worker871794/start10154631 and server871796/start10154636 own this run
-(.git/os-autopilot/runs/20261018T061500Z-d7828d0b). No second dispatcher/state edit.
-Functional PRACTICAL-GOAL and actual compute Rust/assembly retirement both apply.
-Image686215 has production ABI/default-link proof1a692e8d and independently
-accepted native AVX/positive retirement f47adf0d. Its Rust copy/admission paths
-have scoped native proof; this is not whole-kernel Rust conversion.
-Threads and full retirement independently PASS958bac9d: exit37, exact25-byte
-stdout, empty stderr, two workers/TLS/barrier/mutex2000/joins;30clients reaped.
-Terminal cleanup/common/shared release42e1d4fa is accepted; exact old CIDae965257
-removed and original records archived. Preserve failed missing-host-owner-row
-refusal and corrected one-shot evidence; do not replay consumed operations.
-Sixteen distinct native behaviors,3complete/32open practical checks,14milestones
-open; no percentage/2x claim. Three-port save/post-switch-cleanup/restore candidate
-composition6dc4b796, metadata cd25fe8e and materializer9f33b105 passed.
-Source materialization0/15.801s, request0/82.781s and actual request consumers0/28.904s
-passed. The next three-port image da0f1bf7 built0/201.380s and14actual artifact
-capture commands passed; full production C descriptor alignment assertion is the
-only ABI hold. Rust fullcrate DWARF confirms descriptor40/align8/field offsets;
-manual expert3f755021 proves actual post-switch unlock/IRQ/cleanup order. The
-broken first-address-load checker and all original failures remain preserved.
-Pinned GCC14.3.1 finite assertion companion is in independent exact review;
-hostGCC9 is unsuitable. No kernel patch/newimage rebuild or consumed run replay.
-Ten original/retained artifact pairs (21895505bytes) independently PASS0b4a676d;
-retention is not ABI/native acceptance. Cleanup engine b3017b08 is source-reviewed
-for publication; all16published tests pass. Actual observer/cleanup releases and
-fetched source/test bindings remain separate. Current held CID1305fc5a, owner
-893281/start10459071/noncea358cbe63ec54a80975cce93b7040f9a; guard/8clients retired,
-common/shared records retained. Do not raw-remove/unlink/restart the old build.
-Guest source preparation e1235dc4 and actualimage private joins df75ad58 ready;
-actual staging/runner+owner replay/native release stay gated on exact ABI and
-terminal decisions. Build source checkpointdc207507 fetched17blobs is immutable;
-next safe source-publication checkpoint may advance HEAD after physical join.
-Host tool-only source/profile36c63604 is
-accepted; exact execution packet is prepared separately, not a compatible Rust
-gate. Keep one heavy owner, actual16/12GiB floors plus packet growth, aggregate
-budget and usage97% stop. Usage12%; supervisor next07:45UTC/latest08:15. Scratch21,
-root mutex27:4, original failures and all current/reference artifacts preserved.
+The explicit06:15 launcher resume remains active; earlier05:20 pause is historical.
+One dispatcher, launcher worker871794/start10154631 and server871796/start10154636;
+launcher-owned state/logs .git/os-autopilot/runs/20261018T061500Z-d7828d0b unchanged.
+Functional PRACTICAL-GOAL plus actual compute-C retirement into Rust/reviewed
+assembly apply. No compute-C expansion; Linux control compatibility glue allowed.
+
+Current image da0f1bf760d5472693ed1d24f0bee717d8bf4c0880d4eb92d98203cd737e814f
+has independent production/default-link/ABI proof87e37ba1. Build0/201.380s,
+14 capture commands0; pinned actual GCC14 alignment assertion and expert schedule
+ordering resolved without patch/rebuild. Five selected Rust bodies production-
+proven; all five now have combined production plus applicable native chain proof. Ten artifact pairs
+retained; exact terminal cleanup/common/shared release independently PASS4d75d8e5
+(111 checks,20 object rows, original exclusion identities, all physical joins).
+Old CID1305fc5a is removed under that exact release. No observer/cleanup replay.
+
+Current-image AVX independently PASS33d03860: exit0/stdout380/empty stderr,
+actual typed exposure/XCR0 and syscall/futex/signal stages. Threads independently
+PASS2a634dfb: exit37/exact25B/empty stderr/TLS/barrier/mutex2000/joins, actual
+PID255/TIDs257,256 deletion and512-byte TID transfer; initial528/-11 preserved,
+then530/0 and pager/process release. Both owners physically joined0 (36.440s and
+36.882s), all30clients per case retired, exact containers removed and leases
+released. Three approved postjoin readbacks per case completed in the same
+continuation. No new distinct diagnostic credit (16 remains). Exact releases
+AVX30bb100e/threads a5b87845 consumed once; never replay those attempts.
+HEAD83b2169a was frozen through both runs; normal checkpoint may now advance it.
+Full imported source closure11/5, parents r3p-372fb669/a inode626500 and /t626501,
+QMP99bytes; used runtime growth reserve384MiB. Case directories now occupied.
+
+Mixed Rust/std source/Linux review1512621c passes3 rounds, checkedclose/reopen/EOF,
+6joinedthreads and3corruption controls. Its one-app native proposal f5f50a3a and actual runner/owner fixture with4refusals
+pass; independent ordinary preparation review is active. Real strict staged
+manifest and affected consumer replay remain pending. No native release/credit. Host objtool17-command tool-only packet is
+queued independently and must not delay fully admitted current-image proof.
+Sixteen distinct native behaviors,3complete/32open practical checks, all14milestones
+open. Repeated AVX/threads are new-artifact validation, not new distinct behaviors.
+No percentage or2x/3x claim. Scope estimates are not a Rust conversion score.
+
+| C body | Production Rust consumer | Artifact/native status |
+| --- | --- | --- |
+| cpu.c copy_fp_regs | rust_x86_copy_fp_regs via existing CPU_HELPERS ABI | default/link proved686215 andda0; AVX+threads native686215 acceptedf47adf0d/958bac9d; da0 AVX+threads accepted33d03860/2a634dfb |
+| process.c schedule FPU admission | sched_schedule_fp_admit before runqueue prepare | default/link proved686215 andda0; native686215 scoped accepted; da0 AVX+threads accepted33d03860/2a634dfb |
+| process.c post-switch exited-thread cleanup | sched Rust cleanup after switch/unlock/IRQ restore | default/link/actual ABI and expert ordering provedda0; applicable scoped current-image AVX+threads accepted33d03860/2a634dfb; internal branches not individually instrumented |
+| cpu.c FP allocation/save | rust_x86_save_fp_regs Rust/assembly default ABI | default/link/full extent/ENOMEM proofda0; applicable scoped current-image AVX+threads accepted33d03860/2a634dfb; internal branches not individually instrumented |
+| cpu.c restore/default | Rust restore/default CPU_HELPERS consumer | default/link/XSAVE-XRSTOR/default assembly provedda0; applicable scoped current-image AVX+threads accepted33d03860/2a634dfb; internal branches not individually instrumented |
+
+Preserve C reference/fallback and accepted live correctness fixes. This table
+proves selected paths only, not whole-kernel migration. No new port backlog.
+Retain every original failed build/fixture/readback/checker and scratch21.
+
+Latest admission host56947621888/scratch14458576896bytes, MemAvailable>=16GiB;
+16/12GiB floors PLUS384MiB runtime reserve. Root mutex dev27/inode4 unchanged.
+Usage13%, stop97%; one heavy CPUs2-5/12GiB/no-swap/512tasks/no-network, aggregate
+7jobs/23.735GiB. Ordinary workers use bounded CPU6/7 cheap profiles. Keep full
+JSON/maps/diffs in files, print selected scalars/counts only. Supervisor Review22
+saved; next08:15UTC/latest08:45. Current AVX/threads physical joins are accepted. Save normal checkpoint,
+include actual canonical records and supervisor notes, push/fetch exact blobs;
+preserve unrelated dirty launcher/ihk/pyc work. Continue after checkpoint.
 
 
 ## PAUSED — explicit user stop, 2026-10-18 05:20 UTC

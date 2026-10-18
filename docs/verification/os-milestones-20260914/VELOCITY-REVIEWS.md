@@ -26,13 +26,13 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-18T07:15:58Z`, review21, interval30m50s.
+- Last full review: `2026-10-18T07:45:41Z`, review22, interval29m43s.
 - User explicitly resumed the interactive30-minute loop. First resumed full
-  review target:`2026-10-18T07:45:00Z`, latest08:15UTC, using the06:15 launch
+  review target:`2026-10-18T08:15:00Z`, latest08:45UTC, using the06:15 launch
   baseline below. No independent OS timer or second dispatcher is installed.
   Exclude the05:25:30-to06:15 stopped interval and failed startup from runtime
   velocity; do not treat the canceled05:35 target as a missed active review.
-- Last launcher-reported included usage:12% in the new weekly primary window;
+- Last launcher-reported included usage:13% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
 - Current review20:16 native behaviors and3complete/32open checks unchanged,
   all14milestones open. Five compute Rust ports source-reviewed; two selected in
@@ -54,6 +54,13 @@ This file describes supervision, not OS acceptance or execution authority.
   hostGCC9 is not substituted. Retention and next-guest preparation advance in
   parallel. Checkpointdc207507 pushed/fetch-verified17files; host53.133GiB and
   scratch13.536GiB at cutoff. Counts16/3complete32open unchanged. No2x claim.
+- Current review22: all five selected Rust bodies now have production proof;
+  two have scoped native validation. New-image ABI passed07:31:10 after exact
+  GCC14 assertion and manual expert ordering proof; no kernel patch/rebuild.
+  Retention/observer completed; separate raw-five-file readback and cleanup
+  decisions remain pending. Approved ordinary staging is delegated; mixed Rust
+  workload passes Linux reference/three corruption controls and is under review.
+  Counts16/3complete32open unchanged; host53.052GiB/scratch13.470GiB, usage13%.
 - Current invocation independently accepted app/diagnostic behaviors: 16 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -1958,3 +1965,74 @@ scratch `rust-avx-execution-resume-20261018-1/threads-next`,
 `rust-three-port-terminal-review-20261018-1`,
 `rust-three-port-native-case-review-20261018-1/report.json`,
 `rust-three-port-alignment-abi-20261018-1/proposal.json`.
+
+## Review 22 — 2026-10-18 07:45:41 UTC
+
+Interval07:15:58 to07:45:41UTC,29m43s. Same campaign running/active with original
+871794/871796 identities, no new service stop. Included usage12% to13%, stop97%.
+Latest reported pushed/fetch-verified terminal checkpoint83b2169a; source
+integrationdc207507 preserved. Host53.052GiB/scratch13.470GiB at cutoff.
+
+| Measure | Change this interval |
+| --- | --- |
+| Distinct native behaviors / practical checks | 16 unchanged;3complete/32open, all14milestones open |
+| Selected production Rust paths | Two to five; new save, restore/default and exit cleanup have full ABI/link proof |
+| Scoped native Rust paths | Two unchanged; three-port image native execution pending |
+| Kernel implementation repair / image rebuild | None required; evidence/checker/finite-owner corrections only |
+| Terminal progress | Ten retained pairs accepted; observer and summary readback completed; raw readback/cleanup pending |
+| Next useful app | Mixed Rust/std compiled and Linux-tested; independent source/oracle review active |
+
+The ordering checker confused a callback address load with a call. Independent
+expert proof confirms switch -> current runqueue unlock -> IRQ restore -> Rust
+cleanup, retaining old-CPU/thread arguments. Original failed checks are preserved;
+no kernel ordering defect was found. Rust DWARF confirms descriptor40bytes/align8.
+The actual-source C fixture required pinnedGCC14.3.1. A pre-execution companion
+review found success marked before final lock/signal checks; the bounded fix
+passes eight mock tests, including both late failures retaining quarantine.
+The exact compiler assertion then passed and its new probe container retired;
+the original build container/records were preserved. Full image ABI/default-link
+review accepted07:31:10, about20m41s after the build completion reported07:10:29.
+This late ABI dependency, rather than another kernel compile, dominated latency.
+
+Ten finite retained pairs/20 descriptors pass independently, totaling21,895,505B.
+Terminal source83b2169a is pushed/fetched. Observer release07:36:17 includes its
+bounded five-file summary readback. The observer and summary are completed at
+cutoff; a separate exact raw-five-file tar readback is now in review to supply
+the downstream consumer's original bytes. Do not count that as observer replay
+or infer cleanup/native admission. The actual readback joins preserve86 selected
+paths,51 required rows,11 sources and10 pairs. Approved ordinary staging was
+delegated to its author with fresh capacity/output checks, removing parent-only
+work. New-image guest packets still require real staged bindings and release.
+
+The next Rust/std payload reuses the earlier verified app and adds useful checked
+close/reopen and alternating joined threads across three bounded rounds. Linux
+reference passes six checked closes, three EOF/reopen checks and six joined
+threads; actual futex calls are retained. Independent Python oracle and three
+memory/checksum/thread corruption controls pass their expected outcomes.
+Independent review is active. No native credit, milestone closure or claim of
+multiple old cases passing comes from this source/oracle result. It is one
+composite application within the existing one-app collector contract; the
+existing diagnostic batch sidecar still sequences separate released owners.
+
+**Next:** finish raw readback/result review and exact cleanup, then the prepared
+AVX/threads on da0f1bf7, followed by the reviewed mixed Rust app when admitted.
+Keep the existing host tool packet queued without blocking that image. Bind
+raw readback to the actual downstream consumer before privilege release;
+summary projections alone cannot replace required original bytes. Retain stable
+producer field types and use additive proof fields so later stagers do not need
+repeated schema repair. Cache actual ABI proof until relevant inputs change;
+put future producer assertions into preparation/build rather than late owner
+creation. Keep small active write sets, concrete independent reviews, bounded
+outputs and one heavy operation. Preserve all failed evidence and scratch21.
+
+The three new production Rust proofs and useful Linux workload are real progress;
+there is no new native acceptance this interval and no measured2x/3x gain.
+Estimated milestone percentages remain unchanged. Next full review08:15UTC,
+latest08:45; continue the interactive loop.
+
+Evidence: `../evidence/rust-three-port-image-actual-review-20261018-1.json`
+(87e37ba1); scratch `rust-three-port-schedule-order-review-20261018-1/review.json`,
+`rust-three-port-alignment-abi-20261018-1`,
+`rust-three-port-terminal-review-20261018-1`,
+`rust-three-port-native-case-review-20261018-1/staging-only/report.json`,
+`practical-mixed-rust-std-preparation-20261018-1/result.json`.
