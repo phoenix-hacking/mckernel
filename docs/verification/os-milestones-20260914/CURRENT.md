@@ -1,5 +1,31 @@
 # Resume cursor
 
+## Current — FP ordinary preparation accepted; exact build release next (2026-10-18 21:34 UTC)
+
+Functional OS/apps and compute Rust/reviewed-assembly delivery continue. Source
+checkpoint d238a583 is pushed/fetched with29 exact blobs (proofc4c2785b).
+FP four-stage ordinary preparation directly joined0 in123.984s; all materialize,
+prepare and actual driver/owner consumer stages independently accepted e4baaf8c.
+Canonical: ../evidence/rust-fp-release-image-actual-ordinary-result-review-20261018-1.json.
+6948 source entries/120574968bytes and actual request/source identity are bound.
+No compiler, heavy build, native or language-retirement credit from this result.
+Next: finalize the exact FP compiler payload/tool publication and independent
+execution decision, then genuinely fresh ownership/capacity admission and one
+production image attempt. No previous one-shot command is replayed.
+
+Terminal v2 source-only correction is in focused review2120: actual29-role and
+58metadata enforcement plus FP proof joins; real future artifact/typed/postbuild
+facts remain pending. It grants no root/retention/cleanup authority. CPU7 final
+fixture joined0 and explicitly handed to1754 for two independently reviewed
+Rust file-roundtrip ordinary staging/fixture commands. Both joined0 and are
+independently accepted; native-parent/conditional packet review is active, no
+native authority. Canonical preparation result:
+../evidence/practical-rust-file-roundtrip-ordinary-result-review-20261018-1.json.
+22behaviors/12selected production/11applicable native Rust paths,6complete/29open
+checks unchanged. Original syscall-DWARF13 failure/full-validity gap remains open.
+Scratch21, dirty launcher/IHK work, all failures, mutex27:4, floor-plus-growth and
+97% included-usage controls remain binding; refused/held tasks remain excluded.
+
 ## Current — mapping accepted; FP release source integrated WIP (2026-10-18 21:10 UTC)
 
 Functional OS/apps and Rust/reviewed-assembly cutover continue; excluded execve/

@@ -6,21 +6,20 @@ Preserve completed entries; append new observations and update only this cursor.
 This file describes supervision, not OS acceptance or execution authority.
 
 
-**CURRENT REVIEW45 — 2026-10-18T20:47:43Z:** campaign active;
-21 distinct native behaviors, 6 complete / 29 open checks, all14 milestones open.
-Selected production/default-link Rust paths12; applicable native integration paths9.
-Paired image5f7f43ad selected acceptance40713d52 remains unchanged; original syscall
-command13 DWARF failure and all14passed=false remain preserved.
-Terminal sources093399d5 pushed/fetched33 selected blobs. Actual finite observer,
-summary, raw-five export and physical cleanup/postjoin are independently accepted;
-container/eight clients absent, common/shared archived, root mutex27:4 reacquired.
-AVX exact machinea046d048 launched within60seconds and wrapper/readbacks joined.
-Raw380B/exit0/empty application stderr and30reaps match; final actual review pending.
-Threads follows accepted AVX retirement. Mapping parent/static packet remains queued.
-Private release_fp_regs candidate passes44 parity vectors/module/selected/fallback
-fixtures; advisorydbfeb018 finds no source blocker and records PIPE capture-limit gap.
-Production ABI/default-link/non-null native release still pending; candidate private.
-Usage35%, root50.001GiB/scratch12.821GiB; stop97%. Next full review21:17:43UTC.
+**CURRENT REVIEW46 — 2026-10-18T21:17:53Z:** campaign active;
+22 distinct native behaviors, 6 complete / 29 open checks, all14 milestones open.
+Selected production/default-link Rust paths12; applicable native integration paths11.
+Paired AVXccebfdd9 and threads0b6f871f are accepted with positive retirement.
+New mapping-isolation100B case on retained e85a is independently accepted, adding
+one behavior; no cross-process/multicore/leak/bare-metal or whole memory closure.
+Checkpointf26fc687 pushed/fetched13 preserves paired results. Reviewed release_fp_regs
+patch235685ff is integrated as WIP only; production/native proof remains pending.
+File-backed runnerv2 has independent source/five-case acceptancec23be56c; originals
+preserved and no compiler/parity replay. FP image29-record/328MiB correction is under
+review; separate terminal author1920 prepares executable helpers before compilation.
+Native specialist1724 prepared existing-logging/downstream-stack-free proof; current
+captures lack required non-null trace, no instrumentation/post-slot-log gate invented.
+Usage36%, root49.962GiB/scratch12.819GiB; stop97%. Next full review21:47:53UTC.
 Immutable ledger18:04:29 comparison remains due22:04:29UTC (15:04Pacific).
 No second launcher or background timer is installed.
 
@@ -3730,3 +3729,73 @@ with bounded selected fields/mismatch samples in context. More agent activity is
 measured throughput. Preserve one-heavy, full floors/growth/reserves,97% stop, scratch21,
 service-held exclusions and all dirty/failed evidence. Next full review21:17:43UTC;
 separate four-hour immutable-ledger comparison22:04:29UTC.
+
+
+## Review 46 — 2026-10-18T21:17:53Z
+
+Thirty-minute delta: applicable native integration paths9->11, distinct behaviors
+21->22; selected production paths remain12. Practical checks6complete/29open and
+all14 whole milestones open. Usage36%, root49.962GiB/scratch12.819GiB. Engineering
+range table remains held for its separate22:04:29UTC immutable-ledger comparison.
+No measured2x/3x throughput or full kernel/language completion claim.
+
+Paired-image AVX ccebfdd9 and threads0b6f871f independently pass exact380B/exit0
+and25B/exit37 oracles, empty application stderr, full streams and positive physical
+retirement of both owners/QEMU/containers/leases and60 clients. Wrappers35.256s/
+36.988s; final snapshot reviews21.1s/13.9s followed immediate launches within60s.
+SAVE/RESTORE now add2 applicable native paths under these workloads. This is not
+hardware/nonzero debug-register branch, exhaustive12-path, fallback/legacy or
+bare-metal proof. Checkpointf26fc687bcdc143dd8b3c736768cdfbaacb76549 is pushed/fetched
+with13 changed blobs verified. Original syscall-DWARF13 failure and all14passed=false
+remain unchanged.
+
+Mapping author1754 and reviewer1935 prepared affected helpers in parallel with
+checkpointing, following steering20521162. They keep current paired retirement
+separate from the retained e85a image/source eligibility. Stubbed helper positives
+and two precise pending-state refusals pass4f292d64. Exact mapping machinead360cf9
+passed genuine final review at27.8s snapshot age. Owner34.211s/exit0 plus3 readbacks
+joined. Independent actual review accepts exact100B/empty application stderr/exit0,
+ACCERR2/MAPERR1 fault-address assertions, restored write access, adjacent-page
+patterns, partial-unmap survivor and final cleanup. All30 clients/QEMU/container/
+lease retired. Canonical practical-mapping-isolation-native-result-review-20261018-1.json
+records scoped evidence; raw fault metadata is enforced by frozen application
+assertions, with no separate fault-register dump. This is behavior22, not broad
+memory, cross-process, multicore/shootdown, allocator-leak or host restoration proof.
+No practical check was relabeled complete from this case.
+
+At the safe consumed-source boundary, root integrated EXACT reviewed FP-release
+patch235685ff; cpu.c67dd7ea5 and Rust59d0723c match candidate bytes. Default-selected
+Rust replacement preserves C fallback and existing ABI; this remains WIP, not
+production/native acceptance. Future check-v2 file-backed capture passes5 focused
+cases and independent addendumc23be56c; all10 raw streams match sizes/hashes. Original
+14checks/44vectors preserved without reruns. Signal-race handling is source-only;
+no whole-process-tree retirement claim. Future usage must respect that exact scope.
+
+Source/profile author1919 and reviewer2046 prepare actual GCC14 selected/fallback
+CPU ABI plus native/legacy full-crate/export/descriptor proof before one image.
+Reviewe1c3f746 found stale raw-five helper hash,19/15 retention-contract mismatch,
+10 omitted proof captures and an unsupported320MiB capture claim. Additivev2 declares
+29 records/328MiB and completed ordinary evidence is now under review. No compiler,
+materialization or heavy release yet. These are changed preparation contracts;
+prior candidate/runner decisions stay accepted. Preserve original failed drafts.
+
+Steering20592182 split native observability from image preparation. Specialist1724
+found existing captures do not prove a non-null FP release. Proposed existing logging
+plus sourced downstream matching thread-stack-free witness can distinguish callback
+entry from returned control flow; packetb4f219a3 is preparation only. No new kernel
+instrumentation or invented direct-slot-clear log gate. Actual matching trace/page/
+class/production-link evidence remains required. Steering21104182 asks the next
+postbuild plan to account for known decoder failure and prepare required clean14/
+ABI alternative bindings early without hiding errors, changing a tool silently or
+replaying failed work. Steering21141458 activated terminal author1920 early for the
+29-member contract, real FD metadata, numeric caller caps, distinct actual statuses
+and correct cleanup canonical projection. Genuine future identities remain pending.
+
+Next: finish affected ordinary packet review, checkpoint/fetch exact source and run
+its actual consumers before a separately reviewed one-shot image release. Keep
+terminal preparation and native proof in parallel. Refill a meaningful remaining
+functional app lane, preferably useful file/stream roundtrip in P-M04-02 with an
+independent frozen Linux oracle, rather than a global percentage audit. Admit cheap
+work under aggregate caps; one heavy only. Preserve16/12GiB floors plus full growth/
+reserves,97%stop, scratch21, service-held exclusions and all dirty/failed evidence.
+Next full review21:47:53UTC; immutable ledger comparison22:04:29UTC.
