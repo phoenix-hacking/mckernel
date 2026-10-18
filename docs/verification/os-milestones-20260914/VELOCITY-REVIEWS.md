@@ -5,6 +5,31 @@ from the interactive chat. Read [VELOCITY.md](VELOCITY.md) for the method.
 Preserve completed entries; append new observations and update only this cursor.
 This file describes supervision, not OS acceptance or execution authority.
 
+**MANUALLY RESUMED2026-10-18T13:32:02Z:** the user explicitly requested a
+restart for functional OS work. Same campaign thread; no fresh session or
+conversation reset. The launcher accepted
+[the scoped instruction](MANUAL-RESUME-20261018T1330Z.md), SHA
+`9a054ac43a77ebd17f1c3f9658a1bf8d838fad4a9beb481713e7c8526a32b92d`.
+Goal active/phase running; watcher1026439, worker1026442, server1026444.
+Run `.git/os-autopilot/runs/20261018T133200Z-6ceff675`.
+Refused execve source GO/NO-GO and prior service-held fork/ACK tasks remain
+excluded. Start with completed NULL-result review and the independent IHK
+host-module build path after its existing admission/release requirements.
+No optional security projects. Prior refusal remains recorded, and further
+policy stops are not automatically retried. GPT-6.1 only, up to11 children,
+7 aggregate jobs/~23.665GiB at launch; one heavy owner. Accepted counts remain
+18behaviors/5complete30open until independent acceptance changes them.
+The earlier stopped interval is excluded from runtime velocity. This record
+installs no background supervisor or 30-minute timer; it records launch only.
+Prelaunch state and exact receipt are retained in
+`.git/os-autopilot/manual-resume-20261018T133140Z/`.
+
+**STOPPED2026-10-18T12:10:08Z:** service-side cyberPolicy refusal, exit23,
+goal paused, zero active turns. No automatic retry. Read the exact
+[stop handoff](SUPERVISOR-STOP-20261018T121008Z.md). Older ACTIVE cursors below
+are historical. Accepted18behaviors/5complete30open; completed NULL checker
+PASS remains pending canonical acceptance. No further workload was started.
+
 ## Current review cursor
 
 - Supervisor chat: `01a1479e-a9c2-7340-8d88-4313fab04738`; user explicitly resumed
@@ -28,11 +53,13 @@ This file describes supervision, not OS acceptance or execution authority.
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
 - Last full review: `2026-10-18T11:45:25Z`, review30, interval30m31s.
 - User explicitly resumed the interactive30-minute loop. Next full
-  review target:`2026-10-18T12:15:00Z`, latest12:45UTC, using the06:15 launch
+  review target was`2026-10-18T12:15:00Z`, latest12:45UTC; the12:10:08 service
+  stop supersedes it. No active review timer; later continuation needs the stop
+  handoff and permitted recovery. Earlier intervals use the06:15 launch
   baseline below. No independent OS timer or second dispatcher is installed.
   Exclude the05:25:30-to06:15 stopped interval and failed startup from runtime
   velocity; do not treat the canceled05:35 target as a missed active review.
-- Last launcher-reported included usage:21% in the new weekly primary window;
+- Last launcher-reported included usage:22% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
 - Current review20:16 native behaviors and3complete/32open checks unchanged,
   all14milestones open. Five compute Rust ports source-reviewed; two selected in
@@ -2747,3 +2774,24 @@ contexts are large, while retaining frozen evidence and reviewer independence.
 Do not interrupt healthy owners or roll back conversations. Keep result reviewers
 active at handoff, preflight actual schemas/interpreters/mounts once, and reuse
 unchanged proofs. Next full review12:15UTC/latest12:45; continue supervision.
+
+## Stop audit — 2026-10-18 12:10 UTC
+
+ServicecyberPolicy refused the later execve source GO/NO-GO worker turn, then
+interrupted dispatcher and both reviewers. Launcher stopped12:10:08, exit23,
+retryablefalse, goalpaused, active_turns0. Watcher/worker/server absent at safe
+post-stop inspection. No rejected-turn replay, state clearing or new launch.
+Details/report IDs/next safe commands in SUPERVISOR-STOP-20261018T121008Z.md.
+
+Counts remain18accepted/5complete30open, all14milestones open. NULL command
+completed0/34.567526s and3readbacks; independent actual checker PASS at12:09:41
+with53B/exit0/empty stderr/no kernel markers/30clients reaped/3absence queries.
+Canonical acceptance was interrupted: no19th behavior/seventh Rust-path promotion.
+IHK hostalternative publication/materialization and conditional execution pass;
+terminal source rebind8b322f7f report written, final admission still pending, no
+build executed. HEAD3734f020; dirty work and all evidence preserved. Heavy record
+absent, ROOT27:4 intact; cleanup_verifiedfalse retained, no privileged new census.
+
+The12:15 review target is superseded by the service stop. Local stop notes saved;
+no separate schedule, automatic rollback or policy retry added. User's practical
+OS/Rust objective remains unfinished. Service reporting/review is the next step.

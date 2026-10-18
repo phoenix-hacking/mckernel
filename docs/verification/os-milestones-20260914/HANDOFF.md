@@ -1,5 +1,66 @@
 # Compact dispatcher handoff
 
+## PAUSED — launcher stop, 2026-10-18T13:39:14.152731+00:00
+
+Stop new dispatch; no new heavy operation was started in this manual-resume
+invocation. All three fresh child agents completed. No owner/container/lease was
+acquired; no execution command was consumed. Launcher alone owns its state and
+future continuation. OS remains unfinished; a subsequent explicit invocation may
+continue eligible work. Preserve all dirty/untracked sources and original failures.
+
+The earlier12:10 cyberPolicy service record remains exact in
+SUPERVISOR-STOP-20261018T121008Z.md (failed thread01a14ec9-6046-7b30-9e7e-f5481a5018f5,
+turn01a14eea-df1d-7281-a6db-aab303c42c2d). Rejected execve GO/NO-GO and held fork/ACK
+remain EXCLUDED: never resume/reassign/rephrase/replay. No new refusal occurred
+in this independent permitted review. Keep service checks active; another refusal
+stops work. This pause is the later launcher instruction, not OS completion.
+
+NEW ACCEPTED publication: rust-fp-reset-null-fpstate-native-result-review-20261018-1.json,
+SHAe0d2fd9794fe4690d833eb050c552236fc4c8af1600cbbb019133dd81eb70d36.
+Fresh independent retained-capture review verified66bindings/rawarchive equality:
+53Bstdout/emptyerr/exit0, twoSIGUSR1 normal-pointer thenNULL reset, x87CW037f/FSW0/
+FTW0, PID257deleted, token12/errno0,30clients reaped, exactCIDremoved/3absencequeries,
+ROOT27:4 release. Original owner0/34.567526s and3readbacks were reused, never rerun.
+Counts now19distinct native behaviors,8selected production Rust bodies/7applicable
+native paths; practical checks unchanged5complete/30open/all14milestones open.
+NULL scope is guaranteedx87 on selectedXSAVEprofile only, not fullSSE/MXCSR/AVX,
+fallback/error branches or whole-kernel retirement. clear-FP native proof remains
+open and its refused GO/NO-GO task excluded. No percentage/speedup credit.
+
+IHKhostsplit fresh review recorded in
+../evidence/ihk-host-writable-manual-resume-execution-review-20261018-1.json.
+Affectedterminal8b322f7f hold resolved; actual12runtime/17materialized/sixhelper
+files/18lifetimebodies and3734f020 fetched proof reconciled. Reviewed unchanged
+payload9359292a; NO new finalexecutionrelease emitted, NO build. Next root step
+ONLY after later explicit continuation: record new release adding exactreviewref,
+then full fresh admission and one finite reviewed owner invocation. All source/
+image/tool/request/candidate/nonce/root/exclusion checks remain mandatory;
+cleanup_verified=false was not changed or overridden. Host minimum18,320,719,872B,
+Scratch13,488,881,664B; unchanged512+64+512MiB caps. Scratch-only781/f0b7 remains
+capacity-blocked/unconsumed. No SMP/mcctrl or held process activation.
+
+Independent next implementation SELECTED, NOT DISPATCHED due this stop:
+schedule() debug-register handoff at kernel/process.c:4465 -> proposed Rust
+sched_schedule_debug_handoff in kernel/rust/sched_helpers.rs. Preserve exact
+save(prev)/conditionalclear/restore(next) call order before restore_fp_regs(next),
+existing next!=NULL assumption, and existing architecture helpers. Proposed write
+set process.c+sched_helpers.rs+newfocusedtest only; no C behavior expansion.
+Next executable check: actual Rust-body vs frozen C-block parity across nullable
+prev/debugstates/sharedpointer cases, selected/fallback compiled consumer/nm
+proving realdefault Rust reference and scheduling order. Fullimage/native proof
+separate. This is independent of excluded tasks. Futex C already omitted/Rust
+selected, so do not create duplicate futex port.
+
+Last ordinary observations (not future admission): hostfree55750660096B,
+Scratchfree13778575360B; usage22percent,
+stop97percent. Current launcher identities{"worker_pid":{"pid":1026442,"start":"12776618"},"server_pid":{"pid":1026444,"start":"12776623"}};
+they are launcher processes expected to retire normally, not retained heavy owners.
+Boot7bfc5687-6c04-4d15-84eb-b92ab9a55dcb; ScratchUUID2a5768c8-718d-4914-bdc0-6b32c5a92a52
+loop36; ROOTmutex27:4 preserved, heavyrecord absent at last check. Scratch21,
+110GiB backing, all failedrecords and exclusions unchanged. No signals, cleanup,
+resize, reservation tuning, launcher edits or goal completion performed.
+
+
 ## Dispatch checkpoint — 2026-10-18 12:00 UTC
 
 ACTIVE functional OS/apps and Rust/reviewed-assembly cutover. Counts remain18

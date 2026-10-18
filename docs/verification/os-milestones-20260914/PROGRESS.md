@@ -18,9 +18,9 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 | M04 | Useful C and Rust applications | partial | open | Useful actual applications and representative core regressions work. | Current da0f1bf7 independently passes real dynamic-libc C threads and useful mixed Rust/std application. Literal P-M04-01 complete, selected-suite regressions/Linux comparison still open. One distinct new native behavior brings total17; no formal or language-retirement credit. |
 | M05 | Native lifecycle and restoration | partial | open | Actual native boot/workload/stop/destroy/release/boot restores resources. | Two public boot/workload/stop/destroy/release/boot observations, latest serves real workload after second boot. No second native stop or complete restoration proof; final-profile ten-cycle budget remains open. |
 | M06 | Processes, threads and used syscalls | partial | open | Selected apps have working process creation/exec/wait and thread/syscall semantics. | Rust std proves overlapping worker lifetimes, joins/TLS/mutex counter2000. Deterministic blocking conelevention and process fork/exec/wait remain open. |
-| M07 | Used FPU/vector state | partial | open | Actually used vector/FPU state survives switching, syscalls and signals. | Current da0f1bf7 default Rust FPU paths have accepted production/link proof plus unchanged AVX/YMM/SSE/x87/syscall/block/signal and threads native results. New mixed Rust/std also passes (distinct total17). Required MPX/PKRU eligibility/source-bound used-state join and final-profile closure remain open; no whole-M07 acceptance. |
+| M07 | Used FPU/vector state | partial | open | Actually used vector/FPU state survives switching, syscalls and signals. | Current492 accepted AVX/vector signal-thread chain plus NULL-fpstate guaranteed x87 FINIT reset on the declared XSAVE profile. Eight selected Rust bodies production-proved, seven applicable native paths. NULL evidence makes no full SSE/MXCSR/AVX reset or fallback/error-branch claim; complete used-feature/final-profile checks remain open. |
 | M08 | Native modules and interfaces | partial | open | Matched native modules build/load and used ABI/lifetime paths work. | Currentd99 matched three-module build accepted18.148s; newSMP82c9021f loaded, onepublicnativecycle andsecondbootRunning5 passed. IHK/mcctrl bytes unchanged. Fork/currentchangedunsafe andcomplete lifetime obligations still open. |
-| M09 | Rust and assembly integration | partial | open | Existing Rust consumers preserved; live McKernel compute C retired into Rust/reviewed assembly through production default consumers, linked artifacts and native proof; host compatibility exceptions explicit. | Five selected Rust bodies have production/default-link ABI proof87e37ba1 plus scoped native AVX33d03860/threads2a634dfb and mixed Rust/std0ba31cb8 on da0f1bf7. Next coherent clear-FP/signal-reset/MXCSR-mask port is independently source-reviewed1b7c6388 and exact two-file integration only; production/new native proof pending. Broader compute C retirement remains active/uncompleted. Distinct behaviors17 and literal practical checks4complete/31open; no whole-kernel or percentage claim. |
+| M09 | Rust and assembly integration | partial | open | Existing Rust consumers preserved; live McKernel compute C retired into Rust/reviewed assembly through production default consumers, linked artifacts and native proof; host compatibility exceptions explicit. | Current492 production/default-link proof32eb4d47 covers eight selected Rust bodies; seven now have applicable native-chain proof, including independently accepted NULL-fpstate x87 reset. The remaining clear-FP path is not native-proved; refused execve GO/NO-GO remains excluded. Broader compute-C retirement remains active. Distinct native behaviors19; practical checks5complete/30open, all14milestones open; no whole-kernel or numerical speedup claim. |
 | M10 | Repeatable runnable build | partial | open | Pinned recipe replays a matched runnable artifact set. | One actual external3module compile using pinned retainedRO Linuxbasis; all3artifacts accepted after validator-onlycorrection. Finalcleanrecipe replay stillrequired. |
 | M11 | Integrated functional regression | partial | open | Relevant regressions and negatives pass without unexplained corruption or retained owners. | Fourteen distinct diagnostic/app behaviors accepted; original failures and raw captures retained. Native lifecycle and final integrated regression suite remain open. |
 | M12 | Bounded repeatability and stress | unmeasured | open | Two fresh boots, ten native cycles, 100 app launches and 60-minute mixed workload pass. | Thirteen successful diagnostic/app invocations, not vectors. Final-profile 2boots/10nativecycles/100launches/60minutes remain unproven. |
@@ -81,11 +81,11 @@ Original formal qualification is **historical / DEFERRED**. Deferred does not me
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-18T11:59:45+00:00`
-- Launcher state heartbeat: `2026-10-18T11:59:45.003705+00:00`
+- Dashboard refreshed: `2026-10-18T13:39:14+00:00`
+- Launcher state heartbeat: `2026-10-18T13:39:13.631436+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
-- Worker PID: `871794`; server PID: `871796`
-- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261018T061500Z-d7828d0b`
+- Worker PID: `1026442`; server PID: `1026444`
+- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261018T133200Z-6ceff675`
 
 ## Stable kernel core: engineering progress
 
