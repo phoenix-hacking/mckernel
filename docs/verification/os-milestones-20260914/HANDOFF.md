@@ -1,54 +1,65 @@
 # Compact dispatcher handoff
 
-## RESUMED — live dispatch cursor, 2026-10-18 09:23 UTC
+## RESUMED — live dispatch cursor, 2026-10-18 09:54 UTC
 
-The explicit06:15 resume remains ACTIVE. Functional PRACTICAL-GOAL and actual
-compute-C retirement into Rust/reviewed assembly apply together. Older pause
-entries remain historical. No compute-C expansion, qualification inflation or
-service-held fork/ACK activation is authorized.
+The06:15 explicit resume remains ACTIVE: functional PRACTICAL-GOAL AND actual
+compute-C retirement into Rust/reviewed assembly. No compute-C expansion,
+qualification inflation, service-held fork/ACK activation or second launcher.
 
-New reset-image guarded build completed0 at09:08:40.995545UTC in208.002s.
-Exact execution reviewce5dea31 and requestef554d37 were consumed once; preserve
-all original files in /home/holden/mckernel-work/scratch/
-rust-fp-reset-image-preparation-20261018-1/execution-proposal. Direct guard join
-and ROOT27:4 reacquisition passed; resultf3b612af/receipte5a5b93a. Actual GCC14
-ABI/layout/default-link/artifact review32eb4d47 independently PASS; image492c4a15
-is7,926,224bytes. Stopped container
-17a70957ba1e4ea6502fa9cc61cba65e969e4fb57b5de3c02cc279e7234aaa35 and its common/
-shared ownership records remain retained. No second heavy owner or cleanup yet.
+CURRENT HEAVY HOLD: host objtool producer ran ONCE09:46:16, exit1/.488891s,
+before tool lease, receipt, Docker creation or compiler command. Stock process
+observer rejected admission; exact root stderr was discarded, so numeric cause
+is unknown. Source shows incompatible generic-wrapper ancestry authentication
+and CPU2-5 caller check versus approved CPU0 controller. Classification31f17f94
+independently verifies actual v2 owner retirement: PID955897/start11422134,
+5known identities,5snapshots, two final subreaper/ECHILD observations. Missing
+receipt makes the outer combined flag false; it does not negate that proof.
 
-Exact fifteen-member retention d76688e3 ran once PASS0/.305214s at09:22:05UTC,
-21,950,827bytes retained; manifest0cae4e85 and parentinode115180. Independent result5235bb60 passed21checks/15pairs; canonical engine
-4a6eab3b source is integrated only after all frozen b301 readers joined. Reviewed literal cleanup derivativebc0e95e8 has42ASTs/
-16actual consumer tests PASS; publication/fetch, executable observer/raw-five
-helpers and exact root observation/cleanup decisions remain pending.
-Guest continuation author prepares unchanged AVX/threads joins privately, with
-artifact/terminal acceptance explicitly pending. The three new Rust reset/mask/
-clear paths are production-proven32eb4d47 with native proof pending; AVX/threads do
-not by themselves establish execve-clear or null-fpstate signal-reset coverage.
-The five earlier selected Rust bodies retain their accepted da0 applicable-chain
-proof. C reference/fallback and every original failed attempt stay preserved.
+ONLY newly held record: /home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock,
+dev1828/inode115190/UID1000/mode0600/nlink1/268B, canonical request11317aca.
+Do NOT raw-unlink/rewrite it, reuse attempt names, rerun consumed producer or
+admit another heavy operation. Original334B2bdf and derivativead678 releases
+are consumed and preserved. Raw four outer files: /home/holden/mckernel-work/
+scratch/native-host-objtool-retirement-producer-20261018-1/
+execution-owner-evidence-attempt-1. Dispatcher captures/admission are in
+/home/holden/mckernel-work/host-preparation/native-host-objtool-dispatch-20261018-1.
+No conditional retention ran. Output/evidence directories are empty and retained.
 
-Host objtool producer/terminal correction has independent SOURCEPASS2e0b40b8;
-exact one-shot derivative execution reviewfd77c2aa now PASS, templatead678cb2.
-It is unconsumed and waits for image terminal release plus fresh admission:
-scratch>=13758103552B, host>=18325700608B. These include expanded proof/log/host
-retention growth and the untouched512MiB emergency reserve. Separate cleanup
-will still require actual owner/token/metadata joins and its own exact decision.
+Two disjoint source lanes ACTIVE, with no privileged execution yet:
+- native-host-objtool-prelease-recovery-20261018-1 under host-preparation:
+  exact one-record archival/generation-checked recovery using existing transaction
+  machinery, positive v2 proof plus fresh root/Docker/mount/mutex checks; needs
+  independent source/exact execution review before any mutation.
+- native-host-objtool-admission-repair-20261018-1 under host-preparation:
+  tool-specific authenticated real-producer ancestry and controller/container CPU
+  roles, unchanged stock protections, captured diagnostics and actual owner CLI
+  regressions. Needs review and a fresh corrected one-shot packet after recovery.
 
-Counts remain17 distinct native behaviors,4complete/31open practical checks,
-all14milestones open. No new native or percentage/2x credit from this build.
-Latest read-only capacity host56190525440/scratch13877329920B; boot7bfc5687-
-6c04-4d15-84eb-b92ab9a55dcb and ROOTmutexdev27/inode4 unchanged. Keep16/12GiB
-floors plus packet growth, one4CPU/12GiB/noSwap512-task heavy operation and97%
-included-usage stop. Preserve scratch21, launcher state, unrelated dirty work.
-HEAD9f1d810fd140526d96d575bf38290835fbf876d1 is the verified source checkpoint;
-proof /home/holden/mckernel-work/scratch/checkpoint-mixed-rust-reset-source-
-20261018-1/verification.json. Next safe save publishes the reviewed cleanup derivative only after frozen
-retention result joins finish, with actual fetched source/test proof. Host
-objtool is NEXT heavy operation after terminal release and fresh admission;
-reset AVX/threads stay prepared behind it. Supervisor Review25 saved; next09:45UTC.
-Continue after checkpoints. Full maps/diffs stay in files.
+Reset image492c4a15 (7,926,224B) production artifact/default-link/ABI PASS32eb4d47;
+eight selected Rust bodies production-proven, five have prior da0 applicable native
+chain proof. Three new clear/mask/reset native paths remain pending. Exact image
+cleanup0/5.036s and inlined postreader0/.642s independently ACCEPTED7feda9d7:
+CID17a70957 absent, common/shared/lease/quarantine released,9journal events,
+15retained pairs/30rows. This completed image operation is not the new held token.
+
+Reset AVX/threads final visible placement and actual runner/owner mock checks
+PASS7bc876b0. Original host-manifest rejection and long private mock socket
+failure retained; only fixture outputs shortened (16endpoints,max91B), all guards/
+oracles unchanged. No archive recopy/rebuild on correction. Two execution drafts
+under host-preparation/rust-fp-reset-native-continuation-20261018-1/
+execution-preparation/result.json489d1c70; ordinary parent-identity/wrapper work
+continues, but guests remain behind accepted host-tool recovery/execution/release.
+
+Counts17 distinct native behaviors,4complete/31open practical checks, all14milestones
+open. No percentage/2x or new native credit. Checkpointc082f50198f5c97f2e6626231a310b71b7729247
+pushed/fetched19blobs incl cleanup engine/test; tree8e8f9d1e7eb6e06180b37fa4df5e9f3c1061e9a0,
+proof host-preparation/checkpoint-reset-image-terminal-source-20261018-1/verification.json.
+Latest host55983439872/scratch13784829952B; host packet scratch minimum13758103552
+leaves26,726,400B beyond floor+832.75MiB reserve. Included usage16%, stop97%.
+Preserve scratch21, historical seven leases/exclusions, mounted110GiB backing,
+ROOTmutex27:4, dirty unrelated launcher/ihk work and every failure. One heavy only;
+cheap lanes CPU0/6/7 within7jobs/23.735GiB. Review26 saved; next10:15UTC.
+Continue after checkpoints; full maps/diffs stay in files, selected scalars only.
 
 ## RESUMED — current execution cursor, 2026-10-18 08:35 UTC
 

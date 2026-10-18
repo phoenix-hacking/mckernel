@@ -1,0 +1,95 @@
+{
+  "application_acceptance": false,
+  "checks": {
+    "actual": {
+      "path": "/home/holden/mckernel-work/host-preparation/reset-terminal-actual-review-0935/actual-checks.json",
+      "sha256": "3eaa89e39065cab4f5ee1042096ec1b828ce3118b459e4f1d876731017d45a99"
+    },
+    "bounded_correction_passed": true,
+    "fd_stable_original_and_retained_rows": 30,
+    "fresh_root_only_selected_rows": [
+      {
+        "device": 1828,
+        "gid": 0,
+        "inode": 755251,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-terminal-preparation-20261018-1/root-observation-fb721daab5434ea0a44f121a6feef322/new-object-metadata.json",
+        "sha256": "5714aa25257127d9c86355c419fa02e98ca282743e6f6c1a8e567c0f2a2246ff",
+        "size": 11217,
+        "uid": 0
+      }
+    ],
+    "fresh_unprivileged_selected_matches": 107,
+    "full_inventory_entries": 510,
+    "full_observation_selected_rows": 108,
+    "independent_full_body": {
+      "path": "/home/holden/mckernel-work/host-preparation/reset-terminal-actual-review-0935/independent-full-body-checks.json",
+      "sha256": "3df4f2eb796e026a473943ca60be179849b74a7ef8e6c9b02c2ec7e5bf6d6115"
+    },
+    "positive_direct_joined_operations": 3,
+    "positive_guard_client_statuses": 8,
+    "preserved_review_harness_failure": {
+      "path": "/home/holden/mckernel-work/host-preparation/reset-terminal-actual-review-0935/attempt-1-failure.json",
+      "sha256": "dd2832015cb6adbfba61e8bd5d1f26e5293b0538076f39ebc7e0def7edcd93b1"
+    },
+    "process_absence_alone_not_retirement": true,
+    "raw_members": 5,
+    "retained_original_bytes": 21950827,
+    "retained_pairs": 15
+  },
+  "cleanup_executed": false,
+  "cleanup_execution_released_in_separate_record": true,
+  "created_utc": "2026-10-18T09:37:06.710367+00:00",
+  "decision": "PASS_EXACT_TERMINAL_OBSERVATION_AND_RAW_FIVE_ACTUAL_RESULT",
+  "findings": [],
+  "helper_source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-image-terminal-helper-source-review-20261018-1.json",
+    "sha256": "0961a2b6bf0fcb0df41184f84e5ce15b225fb851cae57024447762bebfcb74b2"
+  },
+  "implementation_ownership": false,
+  "language_retirement_credit": 0,
+  "native_acceptance": false,
+  "new_practical_behaviors": 0,
+  "observed_root_mutex": {
+    "device": 27,
+    "gid": 0,
+    "inode": 4,
+    "mode": "0o644",
+    "nlink": 1,
+    "path": "/run/lock/mckernel-development.lock",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0,
+    "uid": 0
+  },
+  "observed_target": {
+    "container_id": "17a70957ba1e4ea6502fa9cc61cba65e969e4fb57b5de3c02cc279e7234aaa35",
+    "container_name": "mckernel-image-aa032869665b4d949f4057c6a41b51c2",
+    "exit_code": 0,
+    "image_id": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+    "owner_nonce": "45f45cb206ca4520817f745c30efaedd",
+    "owner_pid": 939125,
+    "owner_starttime": "11175844"
+  },
+  "observer_execution_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-image-terminal-helper-execution-review-20261018-1.json",
+    "sha256": "9875f2ccd41c04bc0c8555865de9336492583cdc047e137df00430be1e9382c2"
+  },
+  "publication": {
+    "path": "/home/holden/mckernel-work/host-preparation/checkpoint-reset-image-terminal-source-20261018-1/verification.json",
+    "sha256": "f741f0faa1857d64618c52c83817b0e374c166eacccb6f7ac092bba5779e0c07"
+  },
+  "raw_join": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-image-terminal-preparation-20261018-1/downstream-2/raw-five-join.json",
+    "sha256": "3595ce726be261bb7f3fdd6b99e3924eee63118c18c9eb82dc51f01c4cf6b2dd"
+  },
+  "remaining_gate": "Actual cleanup is a new operation requiring separate exact execution release and fresh root admission; root-only metadata and full live process/Docker identities remain enforced by unchanged production engine.",
+  "reviewer": "/root/reset_terminal_actual_cleanup_review_0935",
+  "schema": "mckernel.rust-fp-reset-image.terminal-result-review.v1",
+  "scope": "Functional supported-profile kernel/apps AND actual compute C retirement into Rust/reviewed assembly; preserve memory ownership, accepted cpu.c/process.c fixes and host/resource controls. Qualification deferred.",
+  "source_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-image-terminal-source-review-20261018-1.json",
+    "sha256": "bc0e95e8a51d1530473a11aa912eef6603af2673ada216392117b3910d60e940"
+  },
+  "status": "PASS"
+}

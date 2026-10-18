@@ -1,0 +1,289 @@
+{
+  "attempt_result": {
+    "argv": [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=15",
+      "600",
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=1073741824:1073741824",
+      "--cpu=30:30",
+      "--fsize=8388608:8388608",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/retirement_producer.py",
+      "--request",
+      "/home/holden/mckernel-work/scratch/native-host-objtool-driver-20261018-1/request-proposal.json",
+      "--release",
+      "/home/holden/mckernel-work/scratch/native-host-objtool-execution-preparation-20261018-1/owner-release.json",
+      "--derivative-release",
+      "/home/holden/mckernel-work/scratch/native-host-objtool-finalization-20261018-1/derivative-execution-release.json",
+      "--outer-evidence",
+      "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/execution-owner-evidence-attempt-1"
+    ],
+    "direct_child_joined": true,
+    "elapsed_seconds": 0.48889084899565205,
+    "no_retry": true,
+    "returncode": 1,
+    "stderr_bytes": 0,
+    "stdout_bytes": 0,
+    "utc": "2026-10-18T09:46:16.315942+00:00"
+  },
+  "authority": {
+    "cleanup": false,
+    "new_heavy_operation": false,
+    "producer_retry": false,
+    "raw_retention": false,
+    "record_release": false,
+    "root_diagnostic": false
+  },
+  "current_shared_record": {
+    "metadata": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 115190,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+      "sha256": "a41eb454c956af598362cc8eece23afdca70c14234e19ceb0fd2d5c61685a387",
+      "size": 268,
+      "uid": 1000
+    },
+    "owner_matches_raw_proof": true,
+    "request_canonical_sha256": "11317acaaa9096ee9da97f8f361d1d4fd9063d1d16fa5f7b752c9f1455bc5075",
+    "value": {
+      "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+      "device": 1828,
+      "inode": 115190,
+      "kind": "build",
+      "pid": 955897,
+      "request_sha256": "11317acaaa9096ee9da97f8f361d1d4fd9063d1d16fa5f7b752c9f1455bc5075",
+      "schema": "mckernel.heavy-operation.v1",
+      "starttime": "11422134"
+    }
+  },
+  "execution_review_sha256": "fd77c2aa8375f039973a4a722c3f70045b19b0d736939e89e0dc26534b55b6e5",
+  "findings": [
+    {
+      "fact": "Privileged observer caller() authenticates only a Python ancestor running native_rust_exact_disk_build_wrapper.py or exact historical RETRY2_RELEASE_PATH. New producer actors run retirement_producer.py; dispatcher command is inline Python. Generic observer is not an authenticated tool-producer observer.",
+      "id": "F1",
+      "required_repair": "Narrow reviewed tool-specific authenticated ancestry/observer contract, preserving exact boot, caller PID/starttime, source and bounds; do not weaken existing stock caller gate or impersonate accepted filenames.",
+      "runtime_relation": "Strong source explanation for nonzero root observer. Exact stderr was discarded by existing _run_bounded_observer and is unavailable; do not claim observed stderr or credential/policy diagnosis.",
+      "severity": "BLOCKING_COMPATIBILITY",
+      "source": "native_rust_exact_disk_build_wrapper.py165-179"
+    },
+    {
+      "fact": "Resource reconcile reads current caller sched_getaffinity and requires CPUs2-5 subset. Approved outer and owner inherit exactlyCPU0. Even with observer success this unchanged resource reconciliation rejects the approved producer.",
+      "id": "F2",
+      "required_repair": "Separate caller CPU0 profile from fixed container2-5 profile in a reviewed tool-specific contract; retain unchanged container4CPU12GiB/noSwap512tasks/noNet and aggregate planning.",
+      "severity": "BLOCKING_COMPATIBILITY",
+      "source": "native_rust_exact_disk_build_wrapper.py615-631"
+    },
+    {
+      "fact": "Exactly one shared heavy token was acquired before admission error; local tool lease/receipt/sidecar/container never existed. Existing tool cleanup adapter requires two records and an exited actual tool container, so it cannot consume this pre-container failure.",
+      "id": "F3",
+      "required_repair": "Separate one-record pre-container recovery decision with actual record generation and positive owner proof. Do not fabricate tool receipt/second lease/container status, use normal two-record cleanup, raw-unlink, or retry the consumed attempt.",
+      "severity": "RECOVERY_DEPENDENCY"
+    }
+  ],
+  "formal_acceptance_delta": 0,
+  "functional_acceptance_delta": 0,
+  "history": {
+    "bounded_correction_attempts": 0,
+    "observed_failed_candidates": 1,
+    "prior_retirement_source_failure_family_preserved": true,
+    "producer_runtime_attempts": 1,
+    "this_precontainer_failure_family": "tool-producer-stock-dispatcher-reconciliation-contract"
+  },
+  "new_apps": 0,
+  "new_builds": 0,
+  "next_smallest_observations": [
+    "Cheap source-only regression must reproduce new tool actor being rejected by stock observer caller and CPU0 failing stock resource gate, then validate the narrow tool-specific replacement before any heavy retry.",
+    "No root diagnostic is necessary to establish F1/F2 source contract mismatches. If exact missing stderr is required, use a separately reviewed finite diagnostic that captures bounded raw stdout/stderr/returncode and exact inherited resource profile; do not rerun the producer or clear the token.",
+    "Before shared-token recovery: fresh exact root process/descendant census tied to current boot and retired owner PID/starttime/proof; full current Docker census for no attributable producer workload and unknown heavy operations; recheck launcher identities/mountUUID/ROOT27:4/exclusions/quarantines and exact unchanged shared token fullmetadata/bytes.",
+    "Author prepares narrowly scoped one-record recovery consumer/packet using positively classified pre-container state, generation binding and evidence preservation. Existing wrapper _release_exclusion only accepts PASS/retiredtrue/cleanupfalse/terminalNone/currenttrue; those fields must be derived and separately reviewed, never merely synthesized to bypass admission. No recovery authority issued here.",
+    "Only after independent affected source/exact-execution review and successful recovery may a genuinely new reviewed attempt be considered. Preserve current one-shot release/request/failure history and use fresh names; no unchanged retry."
+  ],
+  "outer_manifest_interpretation": {
+    "actual_receipt_sha256": null,
+    "actual_retirement_proven": false,
+    "classification": "Owner/client process closure is positively proved; absent tool receipt makes aggregate producer terminal manifest false. No contradiction and no container-retirement claim.",
+    "predicate": "proof.data.retirement_proven AND receipt.is_file()",
+    "prior_conditional_retention_may_run": false,
+    "producer_source_line": 526,
+    "why": "Prior exact decision requires original terminal receipt/inspect/log evidence; these were never produced. Preserve raw evidence in place; any retention beyond that authority requires an affected finite decision."
+  },
+  "positive_owner_closure": {
+    "direct_wait": {
+      "exit_code": 1,
+      "joined": true
+    },
+    "forced": false,
+    "known_identity_count": 5,
+    "postjoin_observations": 2,
+    "postjoin_raw_child_bytes": [
+      0,
+      0
+    ],
+    "postjoin_waitids": [
+      "ECHILD",
+      "ECHILD"
+    ],
+    "proof": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 755268,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/execution-owner-evidence-attempt-1/owner-proof.json",
+      "sha256": "c559fe6ba98e324d6caafd05a7984ffda91bfab44c0f6c4c82b742c36892131d",
+      "size": 611440,
+      "uid": 1000
+    },
+    "pure_frozen_v2_validator_result": "PASS",
+    "snapshot_count": 5,
+    "snapshot_error_counts": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "uncertainties": [],
+    "validator_source": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 115049,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/retirement_producer.py",
+      "sha256": "760c2764a309481680c80afa30a90d3222a10efe78f14495c102a0415ea28699",
+      "size": 28088,
+      "uid": 1000
+    }
+  },
+  "raw_evidence": [
+    {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 755265,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/execution-owner-evidence-attempt-1/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 755266,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/execution-owner-evidence-attempt-1/stderr",
+      "sha256": "9f3b51c596fe11be108b8065f6f57ce503cf344f60c837f02f12a17f44faafe9",
+      "size": 1667,
+      "uid": 1000
+    },
+    {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 755268,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/execution-owner-evidence-attempt-1/owner-proof.json",
+      "sha256": "c559fe6ba98e324d6caafd05a7984ffda91bfab44c0f6c4c82b742c36892131d",
+      "size": 611440,
+      "uid": 1000
+    },
+    {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 755267,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/scratch/native-host-objtool-retirement-producer-20261018-1/execution-owner-evidence-attempt-1/outer-owner-retirement.json",
+      "sha256": "c7bd61936c5abdea67f71d57964a5bb2d25e12f909347566e6a89a487467db62",
+      "size": 558,
+      "uid": 1000
+    },
+    {
+      "device": 66306,
+      "gid": 1000,
+      "inode": 47849162,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/native-host-objtool-dispatch-20261018-1/producer.status.json",
+      "sha256": "8e987febeff96eeca11bec96d12f2e201bdd7ce5f62a7ebb2274c2c0cd0285a5",
+      "size": 1166,
+      "uid": 1000
+    },
+    {
+      "device": 66306,
+      "gid": 1000,
+      "inode": 47849159,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/native-host-objtool-dispatch-20261018-1/admission.json",
+      "sha256": "05a774439bbc0e9ff761922352782748503f97f13b5fae6c2180c7fa7544a5b8",
+      "size": 1187,
+      "uid": 1000
+    },
+    {
+      "device": 66306,
+      "gid": 1000,
+      "inode": 47849160,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/native-host-objtool-dispatch-20261018-1/producer.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    {
+      "device": 66306,
+      "gid": 1000,
+      "inode": 47849161,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/native-host-objtool-dispatch-20261018-1/producer.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    }
+  ],
+  "review_gap": "Prior derivative execution review did not detect these transitive stock-wrapper caller/resource preconditions. This additive runtime classification corrects that omission without modifying source2e0b/executionfd77, replaying consumed authority or weakening retirement checks.",
+  "reviewer": "/root/host_objtool_derivative_execution_review_0904",
+  "schema": "mckernel.objtool-failed-attempt-classification.v1",
+  "scope": "Functional PRACTICAL-GOAL kernel/apps and active compute C retirement into Rust plus reviewed assembly; no compute C expansion, unrelated qualification deferred.",
+  "source_control_flow": {
+    "acquired_shared_record": "tool_owner.py92 heavy.acquire_heavy_operation",
+    "container_creation_claim": "No container creation command reached on this attempt; current global Docker census remains a separate recovery prerequisite.",
+    "failure": "tool_owner.py94 heavy._dispatcher_reconcile -> wrapper.py639 _dispatcher_processes ->355 _privileged_process_observation ->435 nonzero observer result",
+    "not_reached": [
+      "tool_owner.py95 measure",
+      "tool_owner.py97-98 local tool Lease.acquire and evidence/client work",
+      "tool_owner.py104+ image inspect/create/start/wait/log Docker.call"
+    ],
+    "original_evidence_members": 0,
+    "original_output_members": 0,
+    "tool_local_lease_exists": false,
+    "tool_owner_sha256": "194f4ac133fa8e4aea1e47eea0e13f8757e70f195e629788b9dcb78d6fb5a1cf",
+    "wrapper": {
+      "device": 66306,
+      "gid": 1000,
+      "inode": 47474249,
+      "mode": "0o600",
+      "nlink": 1,
+      "path": "/home/holden/mckernel/scripts/native_rust_exact_disk_build_wrapper.py",
+      "sha256": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+      "size": 57015,
+      "uid": 1000
+    }
+  },
+  "source_review_sha256": "2e0b40b81d9b27dffec3d35e7a43921f87e7c64bb3189ce0073ab6cf01f362ca",
+  "status": "PASS_CLASSIFICATION_RECOVERY_NOT_RELEASED"
+}

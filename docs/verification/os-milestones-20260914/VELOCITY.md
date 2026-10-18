@@ -187,6 +187,12 @@ and ordinary consumer together under the cheap fixture profile. Preserve stable
 producer field names/types across successor artifact reviews, with new evidence
 added separately, so an unchanged stager does not need a late schema adaptation.
 
+A terminal packet is ready before build completion when its actual observer,
+exporter and downstream consumer implementations exist and their affected cheap
+fixtures pass. Leave only observed attempt identities and publication receipts
+for late binding. Enumerate production and mock endpoint paths with the actual
+test-output prefix before their first replay, keeping the existing UNIX limit.
+
 Before a healthy finite build/guest finishes, activate its existing result
 reviewer and terminal author with the exact output paths and completion contract.
 Ordinary review starts only after the documented completed-output/retirement
@@ -292,6 +298,13 @@ scratch/runtime paths required by their contracts. Do not move, relink or rename
 already pinned evidence, weaken ordinary-file identities, or make another full
 source/archive copy merely to fill a ready slot. Admit heavy work only with its
 floor plus required growth reserve; this tactic grants no cleanup authority.
+
+Check the actual owner's location rule before assigning each new storage role.
+The native diagnostic owner requires its manifest under scratch even when a
+staging archive or cheap author workspace can use host capacity. Exercise that
+actual path predicate before staging. Correct a rejected placement with a new
+reviewed manifest copy and exact rebinding; preserve original manifests and
+archives rather than widening the owner contract or repeating passed runner work.
 
 The97% stop measures included account usage. Disk admission uses the selected
 packet's byte floors and growth reserve. Do not convert the account threshold

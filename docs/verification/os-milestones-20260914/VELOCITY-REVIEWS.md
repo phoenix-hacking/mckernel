@@ -26,13 +26,13 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-18T09:14:50Z`, review25, interval29m47s.
+- Last full review: `2026-10-18T09:45:09Z`, review26, interval30m19s.
 - User explicitly resumed the interactive30-minute loop. Next full
-  review target:`2026-10-18T09:45:00Z`, latest10:15UTC, using the06:15 launch
+  review target:`2026-10-18T10:15:00Z`, latest10:45UTC, using the06:15 launch
   baseline below. No independent OS timer or second dispatcher is installed.
   Exclude the05:25:30-to06:15 stopped interval and failed startup from runtime
   velocity; do not treat the canceled05:35 target as a missed active review.
-- Last launcher-reported included usage:15% in the new weekly primary window;
+- Last launcher-reported included usage:16% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
 - Current review20:16 native behaviors and3complete/32open checks unchanged,
   all14milestones open. Five compute Rust ports source-reviewed; two selected in
@@ -92,6 +92,22 @@ This file describes supervision, not OS acceptance or execution authority.
   release remain pending. Root context maintenance09:09:06-09:12:07 delayed
   review assignment; terminal/guest preparation now overlaps artifact review.
   Host52.303GiB/scratch12.898GiB, usage15%. Next09:45UTC/latest10:15.
+- Current review26:17 behaviors/4complete31open unchanged. New image492c4a15
+  artifact PASS32eb4d47, all eight selected bodies production-proven; native
+  applicable-chain proof remains five on da0, three new bodies pending. Retention
+  PASS5235bb60, terminal retirement PASS7feda9d7 at09:40:59. Post-build artifact
+  proof10m12 vs20m41 prior; build completion to terminal acceptance32m18 vs49m49,
+  about35% shorter across that handoff. Corrected guest placement/mock checks
+  independently PASS7bc876b0; exact runtime review and parents pending behind
+  approved host tool admission. Checkpointc082f501 pushed/fetched18files.
+  Host52.139GiB/scratch12.838GiB, usage16%. Next10:15UTC/latest10:45.
+- Post-cutoff09:46:34UTC: approved host producer exited1/0.489s before tool
+  lease/receipt/container creation. Classification31f17f94 verifies positive
+  child retirement but a newly acquired shared token remains HELD. Stock
+  observer ancestry and CPU0 controller/CPUs2-5 reconciliation are incompatible.
+  Exact shared-token-only recovery and tool-specific admission repair are now
+  delegated in parallel. No retry or new workload before accepted recovery and
+  corrected release. This is a harness failure, not a kernel/compiler result.
 - Current invocation independently accepted app/diagnostic behaviors: 17 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -2280,3 +2296,73 @@ Evidence: `../evidence/native-host-objtool-retirement-source-review-20261018-1.j
 (2e0b40b8), `../evidence/native-host-objtool-derivative-execution-review-20261018-1.json`;
 scratch `rust-fp-reset-image-preparation-20261018-1/execution-proposal`; host
 preparation `rust-fp-reset-image-terminal-preparation-20261018-1`.
+
+## Review26 — 2026-10-18 09:45 UTC
+
+Cutoff09:45:09UTC, interval30m19s. Same campaign active, worker871794/start10154631
+and server871796/start10154636 live, no restart/service stop. Checkpointc082f501
+pushed/fetch-verified18 changed files and unchanged cleanup test. Host52.139GiB/
+scratch12.838GiB, usage16%, existing stop97%. Original failures/scratch21 preserved.
+
+| Measure | Interval result |
+| --- | --- |
+| Native behaviors / practical checks | 17 /4complete31open unchanged; all14milestones open |
+| Selected Rust production bodies | Five->eight after reset-image artifact acceptance; three new native proofs pending |
+| New image retention/owner | 15 pairs retained and independently accepted; exact cleanup/terminal acceptance7feda9d7 |
+| Next functional prerequisite | Host compiler-control execution approved; fresh admission in progress, no confirmed start at cutoff |
+| Next native cases | Corrected AVX/threads preparation independently passes; exact proposals ready, parent/wrapper/runtime review pending |
+
+Image492c4a15 artifact review32eb4d47 reported09:18:53 accepts GCC14 assertions,
+actual layouts, default clear/mask/signal-reset Rust consumers and guard/client
+retirement. Applicable native proof still covers the previous five-default image;
+no per-branch, clear-execve or whole-kernel retirement claim. Image7,926,224bytes.
+
+Terminal helper implementation was late despite an earlier generation contract.
+The actual observer/raw-five/consumer helpers were frozen with affected positives
+and22 negatives. Finite15-file retention copied21,950,827bytes once in0.305s;
+independent21-check result5235bb60 accepted all pairs. Publication c082f501 and
+real fetch proof then bound the helpers. Exact observer/summary/raw export joined
+once; the440,320-byte raw transfer and consumer restored all five original files,
+108 selected rows and full cleanup draft. Exact cleanup review0afcb452 covered
+108 rows,510 inventory entries,eight clients,15 pairs and conditional postreader.
+Both commands passed. Terminal result7feda9d7 accepted09:40:59: container absent,
+nine chained journal events, archived ownership records,30 original/retained rows
+preserved and positive closure. No consumed attempt was repeated.
+
+| Comparable stage | Previous image | Reset image |
+| --- | --- | --- |
+| Build completion->artifact acceptance | 20m41s | 10m12s (about51% shorter) |
+| Artifact acceptance->terminal acceptance | 29m08s | 22m06s (about24% shorter) |
+| Build completion->terminal acceptance | 49m49s | 32m18s (about35% shorter) |
+
+These are narrow observed handoff gains, not established2x/3x campaign behavior
+throughput. Prepared production assertions removed the prior late compiler-owner
+dependency; context delay and late helper/publication work still consume time.
+
+Ordinary guest staging exposed an owner location requirement: manifests must be
+under scratch and assets visible through the existing REPO/SCRATCH mounts.
+The correction reuses40,004,269archive bytes on host capacity, with1MiB scratch
+reserve and the832MiB host-tool allowance preserved. Actual strict loads and six
+consumer bindings passed. Nested mock output then exceeded the UNIX limit before
+process creation. Shortened only private fixture paths;16 endpoints now<=91bytes.
+Five host tests, supplemental owner tamper and threads checks pass; independent
+actual preparation7bc876b0 accepted09:41:16. Production guards/oracles unchanged,
+original placement/socket failures retained. No archive copies/tests repeated
+without changed input or failed observation. Exact proposals remain pending fresh
+parents/wrappers and runtime review; host tool retains next-heavy priority.
+
+**Next:** consume host execution approval after fresh reserve/ownership checks,
+activate its existing result reviewer before completion, and use the reviewed
+v2 producer/terminal adapter and host retention split. In spare cheap capacity,
+finish ordinary guest parents/exact wrappers and conditional execution review
+without starting guests before positive host retirement. Future pre-build
+terminal readiness includes runnable tested helpers; actual owner location and
+all mock endpoints belong in first preflight. Keep one heavy owner, floors plus
+growth/emergency reserves, existing oracles and source/identity contracts.
+No percentage uplift inferred. Next full review10:15UTC/latest10:45; continue.
+
+Evidence: `../evidence/rust-fp-reset-image-actual-review-20261018-1.json`
+(32eb4d47), `../evidence/rust-fp-reset-image-retention-result-review-20261018-1.json`
+(5235bb60), `../evidence/rust-fp-reset-image-terminal-retirement-result-review-20261018-1.json`
+(7feda9d7), `../evidence/rust-fp-reset-native-stage-actual-review-20261018-1.json`
+(7bc876b0); source-frozen host compiler-control execution decision from Review25.
