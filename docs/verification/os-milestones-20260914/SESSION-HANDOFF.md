@@ -1,5 +1,73 @@
 # OS development session handoff
 
+## RESUMED — actual native/control checkpoint, 2026-10-18 10:45 UTC
+
+Functional PRACTICAL-GOAL AND live McKernel compute-C retirement into Rust/reviewed
+assembly remain ACTIVE. No compute-C expansion or deferred qualification credit.
+Checkpoint e46eb98e73e76c0f0b016edbcb35ad59f8c9bd86 pushed/fetched8blobs; proof
+host-preparation/checkpoint-reset-conditional-recovery-20261018-1/verification.json.
+
+ACCEPTED: old prelease token dev1828/inode115190 archived with original268B/hash,
+ROOT27:4 reacquired and61protected identities preserved. Actual recovery42739079
+joins all3operations with positive v2 retirement; no original record raw-unlinked.
+Pre-read0/1.098s, mutation0/2.123s, post-read0/1.098s. All captures and superseded
+source/authority/private failures preserved under native-host-objtool-prelease-*
+roots. This old token is DISTINCT from the new normal tool records below.
+
+ACCEPTED actual reset-image AVX986bdaa4: exact492c4a1506a8097d9534560fc9df7e8e35f571f779fdc19b9540e487bbb035d3,
+380B typed+fixedstdout/rawexit0/empty appstderr/completeEOF/no loss; balanced
+PIDs255/257, initial25/-11 then26/0retirement, all30clients reaped, CIDremoved,
+threefinalemptyqueries andlease released. Owner0/35.226s; all3approved inlined
+readbacks0. Exact benign qmp-socket tarwarning preserved. Consumed AVX release
+38deaca3 at continuation/dispatcher-final-avx-1; no replay. No new distinctcase.
+
+ACCEPTED tool-only compiler controls5bb30595: corrected producer0/4.100s, strict
+17frozen commands plus4preflights and5expectedcontrols pass. Actual owner,
+7Docker clients and3admission helpers all positive v2 retirement. No module or
+kernel acceptance. Capture host-preparation/native-host-objtool-corrected-dispatch-
+20261018-1; actual source-interface a778/source-machine5caff/exactreview9df reused.
+
+CURRENT HEAVY HOLD is normal tool terminal retention, not failed prelease recovery:
+CID42c9a78b2fa7694cac10c62e954f2b8b3b87ef60aec8c61f304af08212452cf8,
+name mckernel-objtool-310d1f962446433588836cf2e0909952, stopped/retained.
+Owner974741/start11754147/noncea0c3848000a942e5b347848cfca4b896.
+Shared /home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock:
+dev1828/inode115196/UID1000/mode0600/268B. Local lease under scratch/
+native-host-objtool-admission-runtime-20261018-1/tool-lease.json:
+dev1828/inode115197/UID1000/mode0600/174B. Never unlink/rewrite/reuse records.
+Author1005 binds actual118files/10,030,140rawbytes and executable finite retention/
+observer helpers using accepted adaptera225/engineb301; reviewer1030 owns exact
+new decisions. No copy/root observation/cleanup before its own release. Preserve
+scratch21, old archived115190, all failed attempts and original records.
+
+NEXT: exact tool finite-retention/observer/normal cleanup and accepted physical
+release, then ready reset threads: canonical owner9084/five-source closure,
+wrapper04289,parentdev1828/inode755270. Threads drafts at continuation/
+dispatcher-draft-ready-threads remain runtimefalse; bind accepted AVX986bdaa4,
+current terminal release and fresh60s admission before one-shot execution.
+Do not replay AVX/stage/compiled controls. Independent selected-suite application
+lane joins retained Linux/native oracles for P-M04-03 and prepares only concrete
+empty-file utility gap; no general runner, rebuild or acceptance promotion.
+
+| Live C boundary | Production Rust default | Native proof / remaining scope |
+| --- | --- | --- |
+| copy_fp_regs | rust_x86_copy_fp_regs | accepted applicable AVX/thread/mixed chain; C reference preserved |
+| scheduler FP admission | sched_schedule_fp_admit | accepted applicable native chain; broader scheduler migration open |
+| post-switch exit cleanup | Rust post-switch cleanup | accepted applicable chain; no exhaustive branch counter claim |
+| FP allocation/save | rust_x86_save_fp_regs | accepted applicable chain/full-extent source+link proof |
+| FP restore/default | Rust restore/default | accepted applicable XSAVE/XRSTOR chain |
+| clear_fp_regs | Rust idle saved/default | production492 proven; native execve-clear remains open |
+| signal MXCSR-mask | Rust offset28/fallback0xffbf | production492 + actual AVX986 signal-chain applicable proof |
+| signal FP reset | Rust checked initial/full64mask/reset | production492 proven; native null-fpstate reset remains open |
+
+Counts17distinct native behaviors,4complete/31open practical checks,all14milestones
+open. No percentage or2x/3x claim. Last fresh host55910871040/scratch13782949888B;
+new operation must remeasure exact floor+growth+512MiB emergency where required.
+Included usage18%,stop97%;7aggregate jobs/23.735GiB,one heavy,4CPU/12GiB/noSwap/
+512tasks/noNet. ROOT27:4 and110GiB backing preserved. Launcher871794/start10154631,
+server871796/start10154636/run06:15 remain sole campaign owners. Continue after
+normal checkpoints. Full maps/diffs remain files; scalar/bounded projections only.
+
 ## RESUMED — bounded continuation cursor, 2026-10-18 10:22 UTC
 
 Functional PRACTICAL-GOAL and live compute-C retirement into Rust/reviewed

@@ -1,0 +1,329 @@
+{
+  "schema": "mckernel.fp-reset-avx-actual-independent-result-review.v1",
+  "status": "PASS",
+  "decision": "PASS_EXACT_RESET_IMAGE_AVX_ACTUAL_AND_POSITIVE_RETIREMENT",
+  "reviewer": "/root/reset_native_parent_review_0955",
+  "implementation_ownership": false,
+  "functional_scope": "Working kernel/apps plus actual compute-C retirement into Rust/reviewed assembly; no compute-C expansion. Deferred broad qualification receives no credit.",
+  "actual_image": {
+    "path": "/home/holden/mckernel-work/scratch/rust-fp-reset-image-preparation-20261018-1/owner-work/output/build/kernel/mckernel.img",
+    "sha256": "492c4a1506a8097d9534560fc9df7e8e35f571f779fdc19b9540e487bbb035d3",
+    "mode": 33261,
+    "size": 7926224
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/rfr-manifests-1ef5924f/avx.json",
+    "sha256": "80d78132e28ee97650e047eaf7f06529c90cab018a5cb91553afd7412997c3aa",
+    "size": 5400,
+    "mode": 33152
+  },
+  "payload": {
+    "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference",
+    "sha256": "5b116839f8cfbb796793d88f7792d21e5e29bd0510d527e8782284ae18239177",
+    "size": 1522832,
+    "mode": 33216
+  },
+  "matched_modules": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk.ko",
+      "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+      "size": 1440392,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk-smp-x86_64.ko",
+      "sha256": "82c9021f7491fa8bc6d178fe99e7d4b7b6f90838474a9c91b62ddb8edb3d13f8",
+      "size": 11630064,
+      "mode": 33188
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/mcctrl.ko",
+      "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+      "size": 1913904,
+      "mode": 33188
+    }
+  ],
+  "nonce": "0c7e17f10ebb9a1db01dd65cdbc32f4f",
+  "parent": {
+    "path": "/home/holden/mckernel-work/scratch/rfr-d8114052/a",
+    "device": 1828,
+    "inode": 755269,
+    "uid": 1000,
+    "gid": 1000,
+    "mode": "0o700"
+  },
+  "final_execution_release": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/dispatcher-final-avx-1/machine-execution-release.json",
+    "sha256": "38deaca36db8690a3bb2d62e666892d16eaacff7c707b8e148ac889b519c9201",
+    "size": 4741,
+    "mode": 33152
+  },
+  "conditional_execution_review": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-native-execution-review-20261018-1.json",
+    "sha256": "f160781ab50456bcbb73836f67554199b800ba89bd005ca3dd973f165fbd24a4",
+    "size": 20074,
+    "mode": 33152
+  },
+  "actual_verifier_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-conditional-independent-review-20261018-1/avx_actual_check.py",
+    "sha256": "71650c40d56cc6c4e388aa9d658a9d3e622736b45694c7c6ec4879d6d66ec47a",
+    "size": 9850,
+    "mode": 33152
+  },
+  "actual_verifier_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-conditional-independent-review-20261018-1/avx-actual-result.json",
+    "sha256": "1156bb2e64f7d4c02ca58fdf51c66279bbd638630c3459b435d792eee1068830",
+    "size": 5742,
+    "mode": 33152
+  },
+  "actual_owner_join": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/avx/owner-join.json",
+    "sha256": "dcd07015cf99590fdddf06533862f317b94d0173c3575a55e15a70e48dcf0131",
+    "size": 894,
+    "mode": 33152
+  },
+  "readbacks": [
+    {
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/avx/readback-1.command.json",
+        "sha256": "be0b80a6dd5087f890297efdefb153fd2ba104fb14b914cdcaba085e67dfc126",
+        "size": 333,
+        "mode": 33152
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/avx/readback-1.stdout",
+        "sha256": "9dcb69d1b3d7ffa5bd8c7f5a22dd978e590f683b1c989d17e54c16644a627874",
+        "size": 542720,
+        "mode": 33152
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/avx/readback-1.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "mode": 33152
+      }
+    },
+    {
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/avx/readback-2.command.json",
+        "sha256": "58d2e77966ad8fb3f93da8bf74194a248b48422a92838db7bd224f34871028c9",
+        "size": 294,
+        "mode": 33152
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/avx/readback-2.stdout",
+        "sha256": "c0da3df1f42ad4256a94be7ef101e08bd509a9d849ea090abd11941cda4db53b",
+        "size": 83488,
+        "mode": 33152
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/avx/readback-2.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "mode": 33152
+      }
+    },
+    {
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/avx/readback-3.command.json",
+        "sha256": "2223c8a2af43464a1649ebd11bfb435fe2033ec675707f89df1854abd6b6c8e6",
+        "size": 335,
+        "mode": 33152
+      },
+      "stdout": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/avx/readback-3.stdout",
+        "sha256": "e20f34609693337f927dd4936cf3ef01a119e3abc87cdcce39afb27ffa29f005",
+        "size": 389120,
+        "mode": 33152
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/execution-preparation/parent-preparation/bound/avx/readback-3.stderr",
+        "sha256": "a27b3689ab11da6ff162668a3d1b14ccaa2d78cb34307a70c88d78c7bd93e0bd",
+        "size": 41,
+        "mode": 33152
+      }
+    }
+  ],
+  "native_application": {
+    "actual_native_execution_verified": true,
+    "case_id": "vector.enabled-avx-preservation",
+    "raw_wait_status": 0,
+    "exit_code": 0,
+    "stdout_bytes": 380,
+    "stdout_sha256": "9a82eb916caf96e85af3d35adb6cea0eb6757533b865c97381fd931c710660f7",
+    "stderr_bytes": 0,
+    "typed_exposure_records": 5,
+    "exact_fixed_suffix_lines": 5,
+    "both_streams_eof": true,
+    "both_streams_discarded": 0,
+    "both_streams_truncated": false,
+    "streams_accounting_and_timestamps": "PASS",
+    "exposure": {
+      "ENABLED_CPUID1": {
+        "ecx": 4277678603,
+        "edx": 533462013
+      },
+      "ENABLED_XCR0": {
+        "hi": 0,
+        "lo": 543
+      },
+      "ENABLED_CPUIDD0": {
+        "eax": 543,
+        "ebx": 2696,
+        "ecx": 2696,
+        "edx": 0
+      },
+      "ENABLED_CPUID7": {
+        "ebx": 563889065,
+        "ecx": 2151678476,
+        "edx": 16
+      },
+      "ENABLED_AUXV": {
+        "hwcap": 2,
+        "hwcap2": 0
+      },
+      "required_xcr0": 7,
+      "observed_xcr0": 543,
+      "supported_xcr0": 543,
+      "scope": "Observed process exposure plus explicit x87/SSE/YMM boundary checks; no whole ISA/IFUNC closure"
+    },
+    "kernel_failure_markers": false,
+    "unchanged_shared_evaluator_replay_on_actual_observation": "PASS",
+    "raw_harness_acceptance_flags": "Preserved unchanged; independent actual native review does not rewrite PROTOCOL_PASS/harness-scope flags."
+  },
+  "native_lifecycle": {
+    "scheduled_pid": 255,
+    "published_tids": [
+      "255",
+      "257"
+    ],
+    "deleted_tids": [
+      "257",
+      "255"
+    ],
+    "procfs_empty": true,
+    "retirements": [
+      {
+        "token": 25,
+        "errno": -11
+      },
+      {
+        "token": 26,
+        "errno": 0
+      }
+    ],
+    "final_process_release_cleanup_errno": 0,
+    "syscall_route_delivery_ret_ordering": "PASS unchanged evaluator",
+    "intermediate_EAGAIN_preserved": true
+  },
+  "owner_and_retirement": {
+    "owner_elapsed_seconds": 35.22572305399808,
+    "outer_identity": {
+      "pgid": 971733,
+      "pid": 971737,
+      "proc_starttime": 11707982,
+      "sid": 971733
+    },
+    "owner_join_exit": 0,
+    "owner_source_known_positive_retirement": true,
+    "all_local_clients_physically_reaped": 30,
+    "container": "a6ba41a310487e3b0a29d3ab79670ead2fd1a967e804ad641939ba3be2ab013c",
+    "retained_inspect_profiles_verified": 5,
+    "authenticated_rm_exit": 0,
+    "final_authenticated_absence_queries": 3,
+    "owner_failure": null,
+    "owner_secondary_errors": 0,
+    "lease_retained": false,
+    "root_lock_identity": {
+      "device": 27,
+      "inode": 4
+    },
+    "root_lock_release": "Exact reviewed owner zero-exit path: authenticated absence +allclients physically reaped +rootlease released +evidence flushed. Fresh independent live admission still required before dependent guest.",
+    "container_state": "exited0; noOOM/paused/restarting/running/dead/error",
+    "qemu_identity": {
+      "pgid": 10,
+      "pid": 10,
+      "sid": 10,
+      "starttime_ticks": 11708141
+    },
+    "qemu_returncode": -9,
+    "qemu_returncode_scope": "Expected source-controlled emulator teardown after QMPshutdown; actual payload exited0 and process exactly reaped.",
+    "owner_stdout_bytes": 0,
+    "owner_stderr_bytes": 0,
+    "readback_returncodes": [
+      0,
+      0,
+      0
+    ],
+    "readback_socket_warning": "/usr/bin/tar: ./qmp.sock: socket ignored\n",
+    "readback_warning_scope": "Exact default-tar warning for nonarchivable QMP Unix socket; socket is not dereferenced; all regular guest/owner captures match."
+  },
+  "release_joins_verified": {
+    "exact_final_release_sha256": "38deaca36db8690a3bb2d62e666892d16eaacff7c707b8e148ac889b519c9201",
+    "accepted_token_recovery": {
+      "status": "PASS",
+      "ref": {
+        "path": "/home/holden/mckernel-work/host-preparation/native-host-objtool-prelease-independent-review-20261018-1/prelease-physical-release.json",
+        "sha256": "42739079bb3797f576707d9d0bc6d29ad6560bca4efda0abbd83dfd1e2bf29d1",
+        "size": 7953
+      }
+    },
+    "accepted_prior_image_terminal_retirement": {
+      "status": "PASS",
+      "ref": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/rust-fp-reset-image-terminal-retirement-result-review-20261018-1.json",
+        "sha256": "7feda9d754c945128145441a8df021ffa76d2261e62066626034cc3288fdb09e",
+        "size": 5428,
+        "mode": 33152
+      }
+    },
+    "live_preexecution_snapshot": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-continuation-20261018-1/dispatcher-final-avx-1/live-admission.json",
+      "sha256": "8ffe4b7d9a525d3bfe79b0c78ddb1f4ca5f832fc0c9d09c343fb80b4085fe524",
+      "size": 2439
+    },
+    "source_closure_entries": 11,
+    "profile": "4CPUs2-5/12GiB/noSwap/512tasks/noNet; guest4vCPU/8GiB/2NUMA;1McKernelCPU",
+    "head": "e46eb98e73e76c0f0b016edbcb35ad59f8c9bd86"
+  },
+  "language_retirement_scope": {
+    "signal_MXCSR_mask_Rust_bridge": "Production default/link/ABI32eb4d47 plus this actual same-image signal-chain application gives applicable native-chain proof; no per-branch counter or exhaustive mask-fallback claim.",
+    "previous_five_selected_FP_Rust_bodies": "Same-image applicable native-chain regression passes; repeated regression adds no new distinct-behavior count.",
+    "clear_fp_regs_execve_clear": "Native proof remains PENDING; not claimed here.",
+    "null_fpstate_FP_reset": "Native proof remains PENDING; not claimed here.",
+    "whole_kernel_Rust_conversion": "Not claimed."
+  },
+  "dependent_threads_gate": {
+    "status": "PASS_EXACT_CURRENT_IMAGE_AVX_PREDECESSOR_AND_POSITIVE_RETIREMENT",
+    "scope": "This record may latejoin accepted_current_image_avx_predecessor for exact492c4a15 dependentthreads under f160 conditional decision. Dispatcher acceptance, fresh per-thread live admission and exact one-shot final release remain required. No automatic execution."
+  },
+  "counter_effect": {
+    "actual_guest_apps_verified_this_record": 1,
+    "repeated_native_behavior_increment": 0,
+    "formal_qualification_increment": 0,
+    "whole_OS_completion": false
+  },
+  "reviewer_execution": {
+    "root_commands": 0,
+    "guest_launches": 0,
+    "passing_corpus_replays": 0,
+    "actual_evidence_evaluator_check": 1,
+    "profile": "CPU1 AS1GiB CPU30s/wall35s"
+  },
+  "preserved_reviewer_failure": {
+    "original_validator": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-conditional-independent-review-20261018-1/avx_actual_check-first-failure.py",
+      "sha256": "6f7e08553522aa28a8533eb1e29012a0a2761a0735b7968f6225ad4450c4c174",
+      "size": 9718,
+      "mode": 33152
+    },
+    "failure": {
+      "path": "/home/holden/mckernel-work/host-preparation/rust-fp-reset-native-conditional-independent-review-20261018-1/avx_actual_check-first-failure.txt",
+      "sha256": "43d773337ae5685f73659cfda10e58d4a5dd811cc6b04cf4e9c8416aa3ab688f",
+      "size": 302,
+      "mode": 33152
+    },
+    "bounded_correction": "Permit only frozen readback approved:false->true authorized by f160; all other readback fields exact. Corrected actual evidence check PASS. No guest rerun, source change or oracle change."
+  },
+  "created_epoch": 1792319932.095717
+}

@@ -26,13 +26,13 @@ This file describes supervision, not OS acceptance or execution authority.
 - Baseline interval: `2026-10-17T12:52:42Z` to `2026-10-17T13:24:54Z` (32m12s).
 - Active target: user-rebased [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md), scope
   `practical-kernel-apps-v1-20261017`; comprehensive qualification is deferred.
-- Last full review: `2026-10-18T10:15:07Z`, review27, interval29m58s.
+- Last full review: `2026-10-18T10:45:15Z`, review28, interval30m08s.
 - User explicitly resumed the interactive30-minute loop. Next full
-  review target:`2026-10-18T10:45:00Z`, latest11:15UTC, using the06:15 launch
+  review target:`2026-10-18T11:15:00Z`, latest11:45UTC, using the06:15 launch
   baseline below. No independent OS timer or second dispatcher is installed.
   Exclude the05:25:30-to06:15 stopped interval and failed startup from runtime
   velocity; do not treat the canceled05:35 target as a missed active review.
-- Last launcher-reported included usage:17% in the new weekly primary window;
+- Last launcher-reported included usage:18% in the new weekly primary window;
   previous stopped window33% is historical. Existing campaign stop remains97%.
 - Current review20:16 native behaviors and3complete/32open checks unchanged,
   all14milestones open. Five compute Rust ports source-reviewed; two selected in
@@ -119,6 +119,16 @@ This file describes supervision, not OS acceptance or execution authority.
   token recovery/free owner and fresh case admission are. Host52.106GiB/
   scratch12.838GiB, usage17%. No workload/retry/cleanup launched by supervisor;
   no percentage or2x/3x uplift. Next10:45UTC/latest11:15.
+- Current review28:17 behaviors/4complete31open unchanged, all14milestones open.
+  Original token115190 archival/physical release accepted42739079 at10:31:19;
+  all61 protected identities preserved, ROOT reacquired. Reset-image AVX accepted
+  986bdaa4 at10:39:03: exact380B/exit0/empty stderr/30clients reaped. Applicable
+  selected Rust native-chain proof five->six via signal-MXCSR bridge; execve-clear
+  and null-fpstate reset remain unproved. Corrected host17-command controls
+  accepted5bb30595 at10:44:36, outer producer0/4.10s; stopped container and two
+  newly held ownership records require separate terminal decisions before threads.
+  M04 selected-suite comparison lane active. Host52.056GiB/scratch12.836GiB,
+  usage18%. No percentage or2x/3x campaign uplift. Next11:15UTC/latest11:45.
 - Current invocation independently accepted app/diagnostic behaviors: 17 (signal,
   calloc, file-write/read, TLS, adapted mutex, alternate-signal, realloc-grow,
   adapted closed-read, useful dynamic-libc memory application, real Rust std app,
@@ -2462,3 +2472,83 @@ Evidence: `../evidence/native-host-objtool-failed-attempt-classification-2026101
 (f5294038), `native-host-objtool-joint-source-review-20261018-1/review-attempt-1.json`
 (060554a5), `native-host-objtool-terminal-rebind-20261018-1`,
 `rust-fp-reset-native-continuation-20261018-1` (request71c4d56c).
+
+## Review28 — 2026-10-18 10:45 UTC
+
+Cutoff10:45:15UTC, interval30m08s. Same campaign running/active, worker871794/
+start10154631 and server871796/start10154636 live; no restart/service stop.
+Host52.056GiB/scratch12.836GiB, usage18%, existing stop97%. Latest reported
+checkpoint e46eb98e pushed/fetched eight changed files. Scratch21 and original
+failed attempts remain preserved; no supervisor runtime or storage mutation.
+
+| Measure | Interval result |
+| --- | --- |
+| Distinct native behaviors / practical checks | 17 /4complete31open unchanged; all14milestones open |
+| Actual native attempts | One reset-image AVX attempt, independently accepted; repeatability/new-candidate evidence, not a new behavior |
+| Selected Rust applicable native-chain proof | Five->six through signal-MXCSR bridge; eight production-proven, two reset paths unproved |
+| Shared-token-only recovery | Original115190 inode/bytes archived; independent physical release42739079 accepted10:31:19 |
+| Corrected host controls |17 frozen compiler controls accepted5bb30595 at10:44:36; outer producer0/4.10s |
+| Current runtime blocker | Retained host container/two new ownership records need exact retention/readback/terminal release; threads prepared |
+| Spare useful lane | Existing M04 application author joins frozen Linux/native suite comparisons and names missing execution |
+
+The source-interface correction independently passed a778ece9 without another
+source change or broad test replay: new admission proof joins are consumed by
+the real terminal reader, and256MiB raw+2MiB manifests match the258MiB budget.
+The exact recovery observation used a39-path allowlist. A supervisor retirement
+gap was corrected before privilege;14 affected tests cover durable no-signal
+holds even when marker/diagnostic writes fail. Successful read-only snapshot
+1.10s supplied the61 protected identities and live process/Docker/mount facts.
+Exact release423bee5d then authorized one archival recovery, completed2.12s.
+Separate literal-only post observer preserved the consumed pre observer. Actual
+readback/final independent snapshot1.10s verified original inode115190/bytes,
+five journal events, absent active/quarantine paths, ROOT reacquisition and all61
+identities unchanged. Physical release42739079 accepted10:31:19. The45m03 from
+failed acquisition09:46:16 to accepted release is concrete infrastructure delay,
+not healthy kernel execution or a claimed velocity gain.
+
+AVX conditional decisionf160781a and actual parents/wrappers were ready before
+recovery. Host compiler semantic success was removed as an artificial guest
+dependency. Final private assembly caught unsupported REPO+literal hash syntax
+and a wrong expected post-read status before writing any release or dispatching.
+Both originals are preserved; the final source/artifact/owner/reserve checks
+passed. Exact release38deaca3 dispatched10:33:54. Owner0/35.23s and all three
+approved readbacks passed. Independent actual review986bdaa4 accepted10:39:03:
+380B typed stdout, exit0, empty stderr, complete streams, no failure markers,
+balanced thread retirement, all30clients reaped and authenticated container
+removal. Recovery acceptance->AVX acceptance7m44s; wrapper->acceptance5m09s,
+including35.23s actual owner time. No comparable multiplier is certified.
+Applicable native-chain credit adds signal-MXCSR Rust bridge only; execve-clear
+and null-fpstate reset remain unproved. No exhaustive branch/whole-Rust claim.
+
+The corrected host envelope9df88204 froze17 commands,118references,16 subject
+rows and85 SDK inputs. A source-only consumer receipt5caff7a0 adapts the accepted
+review format without replay. Fresh admission dispatched the corrected producer
+10:41:36, outer return0/4.099786s. Actual result5bb30595 accepted10:44:36 proves
+strict17 controls, including five unchanged expected controls, with captured v2
+proofs for owner/seven Docker clients/three admission helpers. It does not prove
+module/kernel acceptance. The stopped container and two NEW ownership records
+remain retained. Fresh root readbacks, finite retention and independent exact
+cleanup/physical release are pending; original token115190 is already archived.
+Terminal author and actual reviewer are active in parallel. Threads drafts bind
+accepted AVX and retain fresh admission/final release as pending, without restaging.
+
+One spare application lane was activated10:38 after a concrete readiness check:
+P-M04-03 lacks the selected utility/memory/file/thread/signal comparison join.
+Existing frozen Linux references are found; reuse accepted results, identify
+which apply to the current image, and name only real missing executable coverage.
+No repeated passing native cases solely for a table, broad audit or new runner.
+
+**Adjustment:** prioritize actual host terminal release so useful threads/process
+work follows; prepare the next exact source/build consumer while cleanup is in
+review, not afterward. Keep service-held work excluded. Final assembly should
+consume actual status fields/source-expression forms and prove both observer
+phases against the real consumer before the operation; avoid serial discovery
+of metadata-only omissions. Reuse accepted reviews/unchanged inputs and bounded
+cheap profiles. No new image backlog, weakened oracle, second heavy owner or
+percentage inflation. Next full review11:15UTC/latest11:45; continue supervision.
+
+Evidence: host-preparation `native-host-objtool-prelease-independent-review-20261018-1/prelease-physical-release.json`
+(42739079), `native-host-objtool-joint-source-review-20261018-1` (a778ece9),
+`native-host-objtool-corrected-exact-review-20261018-1/conditional-exact-execution-decision.json`
+(9df88204) and `completed-actual-result-review-corrected-1.json` (5bb30595);
+`../evidence/rust-fp-reset-avx-native-result-review-20261018-1.json` (986bdaa4).
