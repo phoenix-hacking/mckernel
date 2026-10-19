@@ -1,0 +1,52 @@
+{
+  "status": "ACTUAL_ONE_ORDINARY_DEBUG_COMMAND_COMPLETED_EXIT0",
+  "provenance": "2345 records original functions.exec exec_command7159b5 completion; no rerun for receipt",
+  "tool_chunk_id": "7159b5",
+  "tool_exit_code": 0,
+  "shell_reported_exit_code": 0,
+  "tool_wall_seconds": 1.7696e-05,
+  "argv": [
+    "taskset",
+    "-c",
+    "7",
+    "nice",
+    "-n",
+    "19",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "30s",
+    "/usr/bin/python3",
+    "-I",
+    "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/mount-view-debug.py",
+    "--output",
+    "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/mount-view-debug-attempt-1"
+  ],
+  "limits": {
+    "AS_KiB": 1048576,
+    "CPU_seconds": 30,
+    "FSIZE_shell_blocks": 32768,
+    "job": 1,
+    "noclobber": true
+  },
+  "pre_capacity": {
+    "host_available_bytes": 52753174528,
+    "scratch_available_bytes": 13758107648
+  },
+  "streams": {
+    "mount-view-debug-command-1.stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/mount-view-debug-command-1.stdout",
+      "sha256": "e7c9b2b813e572215d42843b15fcd467494a5b1e695484f796ab66758ddeaac2",
+      "bytes": 152
+    },
+    "mount-view-debug-command-1.stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/mount-view-debug-command-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "source_sha256": "f25cceeb171aa6af35154ace4f9488b42a9012b7ae0b11a18a32f4d231e56e33",
+  "fixture_sha256": "7fcdd392d2a9d3492e81dccdc02101e30545c479899e3a2495eb4b77519a2b67",
+  "result_sha256": "670969f80041d7d5a25ab745f69f036f0d5b5335616cffc7ab406a2e9c968cda",
+  "retirement": "synchronous exec tool completed0; test source spawns no child; all calls are pure view function or synthetic failure entrypoint/IO; no live exec session returned. PID/start/PGID and independent group census not captured, not invented. CPU7 explicitly released root after completion."
+}

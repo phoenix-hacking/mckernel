@@ -1,0 +1,98 @@
+{
+  "status": "SOURCE_ONLY_FRESH_HIGH_UNSAFE_BOUNDARY_REVIEW_AND_FETCH_REQUIRED",
+  "scope": "One separately released future read-only observation only after consolidated HIGH unsafe boundary PASS, exact fetched source closure and genuinely fresh facts; three prior failed observations retained. No fourth run authorised here.",
+  "argv": [
+    "sudo",
+    "-A",
+    "/usr/bin/python3",
+    "-I",
+    "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/observe-root-view-debug.py",
+    "--release",
+    "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/actual-observation-release-4-PENDING.json",
+    "--release-sha256",
+    "PENDING_GENUINE_RELEASE_SHA256"
+  ],
+  "resource_profile": {
+    "cpu_affinity": "6",
+    "concurrent_root_operations": 1,
+    "job1_python_and_one_serial_readonly_subprocess": true,
+    "wall_timeout_seconds": 90,
+    "termination_grace_seconds": 5,
+    "cpu_limit_seconds_per_process": 60,
+    "address_space_limit_bytes_per_process": 4294967296,
+    "address_space_note": "4GiB virtual-address cap accommodates Go Docker CLI startup; this is not RSS allocation or aggregate physical RAM permission",
+    "aggregate_RSS_planning_bytes": 1073741824,
+    "output_file_cap_bytes_each": 33554432,
+    "open_fd_limit": 4096,
+    "network_command": false,
+    "docker_commands": "only ps -aq --no-trunc and inspect --type container, serial",
+    "archive_hashing": false,
+    "root_side_effects": "only flock on existing persistent27:4; no source-controlled unlink in observe mode",
+    "kill_wait_seconds": 5
+  },
+  "capture": {
+    "stdout": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/actual-observation-4.stdout",
+    "stderr": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/actual-observation-4.stderr",
+    "create": "observe-root.py opens held nofollow BASE descriptor then O_CREAT|O_EXCL|O_NOFOLLOW0600 regular captures; records full fstat metadata on direct join; fsync before launch/result",
+    "receipt": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/actual-observation-4.supervisor.jsonl",
+    "receipt_fields": [
+      "exact argv",
+      "release/source hashes",
+      "live PID/start/boot and process-group identity",
+      "start/end monotonic times",
+      "whole wait status",
+      "capture sizes/sha256",
+      "rootmutex identity and postjoin lock release evidence",
+      "absence of original process identity and original process-group descendants",
+      "actual interpreter/version; capture initial/final metadata and SHA256 computed only for new observation logs"
+    ],
+    "source": "observe-root-view-debug.py; same finite producer body, fresh fixed capturebasenames4"
+  },
+  "retirement": {
+    "supervisor": "observe-root-view-debug.py, same reviewed finite new-session/directwait/groupcensus producer; no effect-mode option",
+    "timeout": "child.wait90s; owned PGID TERM then wait5s; KILL if direct child still live then wait5s; if timed-out direct parent joined but identity-bound session members remain, KILL that session group and inspect for at most5s; preserve uncertainty on any proc race, identity mismatch, incomplete group census or remaining zombie",
+    "join": "direct wait separately recorded; complete root proc-group census rejects all remaining group members and proc races; STOP_UNCERTAIN never claimed retired from absent PID alone",
+    "source_failure": "preserve exit/stderr/partial stdout; source any proc race/completeness failure stops without automatic unchanged retry; independent reviewer decides bounded correction",
+    "mutex": "existing persistent mutex stays; flock releases on normal exit/death; verify underlying27:4 identity and fresh lock availability only after positive group retirement",
+    "prototype_basis": "/home/holden/mckernel-work/host-preparation/practical-rust-functional-batch-20261018-1/stage-fixture-parent-proposal-1/parent-bound-native-preparation-1/dispatch-runtime.py regular x-mode captures + RLIMIT_FSIZE/RLIMIT_CORE + direct command wait; dedicated source adds independently reviewed new-session timeout/retirement checks",
+    "root_wrapper_execution": "wrapper has no effect phase; new source must receive independent source/profile review; genuine observer release/source hashes and live PID/start remain pending"
+  },
+  "real_identities": "PENDING; this producer supplies finite proposed argv/profile, not an actual release or proof of live execution",
+  "actual_child_argv": [
+    "/usr/bin/python3",
+    "-I",
+    "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/exact120.py",
+    "--mode",
+    "observe",
+    "--release",
+    "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/actual-observation-release-4-PENDING.json"
+  ],
+  "wrapper_source_sha256": "f411b1c8d9061e914e41142713becd0b16042a8cf24c5ec5186e26a31760835d",
+  "entrypoint_sha256": "f25cceeb171aa6af35154ace4f9488b42a9012b7ae0b11a18a32f4d231e56e33",
+  "control_registry_sha256": "361e2b5d55a72a737d744fc304911eee498f6832317f36a53706f79c35249db9",
+  "alias_invariant": {
+    "literal_alias": "/var/lib/snapd/hostfs/home/holden/mckernel-work/scratch",
+    "observed_campaign_namespaces": [
+      "mnt:[4026532924]",
+      "mnt:[4026532662]"
+    ],
+    "source_device": "7:36",
+    "source": "/dev/loop36",
+    "fstype": "ext4",
+    "root": "/",
+    "options": [
+      "nodev",
+      "nosuid",
+      "relatime",
+      "rw"
+    ],
+    "superoptions": [
+      "rw"
+    ],
+    "all_views_before_consumers": true,
+    "same_full_task_view_after_census": true,
+    "actual_closure": "all parser/normalizer/task-view definitions in exact120.py, SHA-bound control-record-registry.json; stdlib only; no imported private helper",
+    "propagation": "Recorded kernel optional peer/master metadata, not numeric identity whitelist; full task mountinfo/namespace before-after equality still required"
+  },
+  "canonical_baseline": "Original de9 canonical-only duplicate/propagation/access and disjoint-subtree semantics; no alias is granted by canonical-only views"
+}
