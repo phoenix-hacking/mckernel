@@ -1,6 +1,60 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 68, 2026-10-19T10:58:03Z
+## Current priorities — review 69, 2026-10-19T11:28:46Z
+
+Campaign remains active. Accepted counters are unchanged: 25 native behaviors,
+17 production Rust paths, 11 applicable native paths and 7/35 practical checks.
+The cached e0d3180a image has canonical artifact and retention acceptance, but
+has not run natively. Its driver finished at 10:19:46 UTC; about 69 minutes have
+elapsed without native feedback. No throughput multiplier is established.
+
+Current critical blocker: cleanup refused at reviewed-container-profile after
+its exact release. Postjoin was correctly skipped. Preserve that invocation and
+release, keep physical ownership held, and independently determine effects and
+the exact mismatch against captured container/create/owner evidence before any
+correction. Activate a concrete implementation owner alongside the independent
+reviewer. Do not weaken container identity/profile checks or replay observations.
+
+Terminal publication 0039b202 is pushed/fetched: 105 roles/104 unique files.
+Observer, summary and original-five metadata completed in 2.47/.13/.18 seconds;
+raw-five export completed in .17 seconds and is independently accepted. These
+completed captures remain valid. Any corrected executable must preserve original
+sources/proofs and bind its changed execution sources separately and explicitly.
+
+FP native ordinary stage/fixture/parent is accepted 4b571da9: 21.06 seconds,
+all 60 archive members preserved, only the image changed, full owner-derived
+socket path 103 bytes. The reuse-row schema failure and its bounded correction
+are preserved. Final data has conditional acceptance 82af0bae; physical receipt,
+latest predecessor, fresh snapshot and exact final machine decision remain.
+Do not repeat the accepted preparation or start the snapshot clock early.
+
+New205 source ordinary acceptance cc5fecb5 and corrected guard fixture (one
+positive, 17 refusals) are accepted. Its 12 sources match fetched 8a27bd44;
+no compiler or guest has run. The next postbuild draft already covers 15 captures
+and 37 retention roles: 33 copies, four reuses, 74 FD rows. Review that changed
+boundary now, reusing the corrected parser and existing engine evidence. Prepare
+the repaired-source N3 variant in parallel with strict startup-CPU assertions and
+the correct 37-role contract. Avoid the inherited type/cardinality/profile errors
+before the next build, without fabricating future artifacts or executing a guest.
+
+One heavy operation and all original resource/source/ownership controls remain.
+Usage is 65%; host/scratch availability about 45.875/12.809 GiB. Keep 16/12 GiB
+floors and 97% usage stop. Optional reserve authorization is pending; no mutation.
+Next full review: 11:58:46 UTC.
+
+## Previous priorities — review 68, 2026-10-19T10:58:03Z
+
+Live cursor update, 11:18 UTC: canonical artifact 530a21e6 and retention
+a0d67aa3 are accepted. Terminal publication 0039b202 is pushed/fetched with all
+105 role rows matching; exact observer release, observations/export/cleanup and
+physical acceptance remain next. Native ordinary correction, stage/fixture/parent
+are accepted 4b571da9; final native data is being prepared without a live snapshot.
+No guest has launched. The separate new205 four-stage ordinary run is accepted
+cc5fecb5, and the corrected guard fixture passes one positive plus 17 refusals.
+Its corrected 12-file publication is frozen but not yet launch-authorized.
+Do not relaunch any of those completed ordinary sequences. The immutable review
+68 below is preserved separately in VELOCITY-REVIEWS.md; later results above
+supersede its pending action cursor. Counters still await scoped reconciliation.
 
 Counts remain 25 accepted native behaviors, 17 selected production Rust paths,
 11 applicable native paths and 7/35 practical checks. All whole milestones remain

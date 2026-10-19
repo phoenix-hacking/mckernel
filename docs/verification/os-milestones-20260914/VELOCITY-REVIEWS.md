@@ -4878,3 +4878,40 @@ Usage is 63%; host/scratch availability about 45.92/12.809 GiB. Preserve the
 one-heavy controls, original limits/floors, source separation, all failures and
 97% stop. Optional reserve authorization is pending; no mutation occurred.
 Next full review: 11:28:03 UTC.
+
+
+## Review 69 — 2026-10-19T11:28:46Z
+
+Interval: 10:58:03–11:28:46 UTC. Accepted totals remain 25 native behaviors,
+17 production Rust paths, 11 native paths and 7/35 practical checks; all whole
+milestones stay open. Cached image artifact530a21e6 and retentiona0d67aa3 are
+accepted. The approximately 69-minute build-to-native delay still exceeds target.
+
+Terminal sources are pushed/fetched in 0039b202 (105 roles/104 files). Observer,
+summary and original-five metadata completed in 2.47/.13/.18 seconds; export0/.17s
+and raw-five acceptance passed. An incorrect postjoin empty-stderr assertion was
+corrected before execution: that role reports JSON on stderr, while cleanup
+requires empty stderr. Exact cleanup then refused reviewed-container-profile.
+Postjoin was skipped. Effects/profile diagnosis and fresh independent correction
+remain pending; physical ownership is held and no guest has launched.
+
+Native preparation passed its one bounded reuse-row schema correction. Actual
+stage/fixture/parent joined0/21.06s and independent4b571da9 accepted 60 members,
+image-only changes, unchanged254B oracle and the actual103-byte QEMU path. Final
+case/snapshot data has conditional82af0bae acceptance; current physical receipt,
+fresh snapshot and exact machine release remain. No payload recompile is needed.
+
+New205 ordinary four-stage acceptancecc5fecb5, corrected guard fixture (one
+positive/17 refusals), and fetched12-source8a27bd44 publication are complete.
+The original structured-ownership fixture failure stays preserved. Compiler and
+native proof remain pending. Postbuild/retention preparation now precedes its
+build: 15 captures and37 roles (33 copies/four reuses/74 FD rows), with actual
+artifact identities unresolved. Carry the corrected parser and strict N3 CPU
+oracle forward; independently review these ready source/ordinary boundaries
+while the cleanup expert resolves the critical profile mismatch.
+
+The parallel source/native work advanced and reached seven active lanes, but
+accepted runtime/milestone counters did not move. No global speed claim follows.
+Usage65%; host/scratch about45.875/12.809GiB. Preserve all failures, source
+separation, one-heavy limits, floors, optional reserve hold and97% stop.
+Next full review: 11:58:46 UTC.
