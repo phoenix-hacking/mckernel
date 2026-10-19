@@ -446,6 +446,7 @@ class Campaign:
         self.capacity_children = {}
         self.child_capacity_failures = []
         self.goal = None
+        self.primary_stop_generation = 0
         self.stop_reason = None
         self.stop_now = False
         self.checkpoint_requested = False
@@ -630,6 +631,8 @@ class Campaign:
             self.save(pending_request={"method": method, "params": data})
             self.stop_reason, self.stop_now = "needs_user_input", True
         elif method == "thread/goal/updated" and primary:
+            if data["goal"]["status"] in {"paused", "blocked"}:
+                self.primary_stop_generation += 1
             self.remember_goal(data["goal"])
         elif method == "thread/goal/cleared" and primary:
             self.goal = None
@@ -865,6 +868,23 @@ class Campaign:
             return False
         return True
 
+    def manual_resume_instruction(self, note):
+        previous = (self.state.get("last_instruction") or {}).get("id", "not recorded")
+        return (
+            "EXPLICIT USER RESUME — new manual launcher invocation " + self.log_dir.name + ".\n"
+            "The user has invoked the launcher NOW to resume unfinished functional OS and "
+            "Rust/assembly development. This is a NEW resume instruction: it supersedes "
+            "earlier user stop/pause requests and PAUSED handoff banners from preceding "
+            "invocations. Do not answer that the earlier pause is still in force or wait "
+            "for another resume instruction. Begin the next authorized engineering task.\n"
+            "Preserved prior instruction reference: " + previous + ".\n"
+            "A new stop received during or after this invocation remains authoritative. "
+            "Preserve signal, quota/97% reserve, billing, ownership/resource and service "
+            "controls; do not replay rejected work or expired execution releases. "
+            "The launcher's automatic recovery does not issue this manual authorization.\n"
+            + (("Current invocation scope and execution instructions:\n" + note) if note else "")
+        )
+
     def begin(self):
         # Admission failures belong to this worker, never the preceding retry.
         if (self.state.get("resume_instruction") or {}).get("status") in {"sending", "delivery_uncertain"}:
@@ -953,19 +973,32 @@ class Campaign:
         if self.stop_reason:
             self.remember_goal(goal)
             return
-        if note and previous_id and goal and goal["status"] == "paused" and not self.args.recovered:
+        if previous_id and goal and goal["status"] in {"paused", "blocked"} and not self.args.recovered:
             # A fresh explicit --run is a CURRENT user instruction. Seeding it
             # once before activation fixes stale user-role history without a
             # second dispatcher or an automatic turn/start continuation loop.
+            stop_generation = self.primary_stop_generation
+            resume_goal = dict(goal)
             page = self.rpc.call("thread/turns/list", {
                 "threadId": ident, "limit": 1, "sortDirection": "desc", "itemsView": "notLoaded"})
             if any(turn.get("status") == "inProgress" for turn in page["data"]):
                 raise RuntimeError("A saved turn is still active; reconcile it before a fresh resume instruction")
-            receipt = {"sha256": hashlib.sha256(note.encode()).hexdigest(), "status": "sending"}
+            if self.stop_reason or self.stop_now:
+                return
+            if self.primary_stop_generation != stop_generation:
+                self.stop_reason, self.stop_now = "startup_goal_stopped", True
+                return
+            message = self.manual_resume_instruction(note)
+            message_path = self.log_dir / "manual-resume-instruction.txt"
+            message_path.write_text(message)
+            receipt = {"sha256": hashlib.sha256(note.encode()).hexdigest() if note else None,
+                       "message_sha256": hashlib.sha256(message.encode()).hexdigest(),
+                       "message_path": str(message_path), "invocation": self.log_dir.name,
+                       "status": "sending"}
             self.save(resume_instruction=receipt)
             try:
                 started = self.rpc.call("turn/start", {
-                    "threadId": ident, "input": [{"type": "text", "text": note}]})
+                    "threadId": ident, "input": [{"type": "text", "text": message}]})
             except Exception as error:
                 self.save(resume_instruction=dict(receipt, status="delivery_uncertain"))
                 raise RuntimeError("Resume instruction delivery uncertain; reconcile the saved turn before retry") from error
@@ -980,6 +1013,13 @@ class Campaign:
                 return
             if not goal or goal["objective"] != OBJECTIVE:
                 raise RuntimeError("Saved goal changed during resume instruction; it was not recreated or replaced")
+            if (self.primary_stop_generation != stop_generation or
+                    goal["status"] in {"paused", "blocked"} and
+                    (goal["status"], goal.get("updatedAt")) !=
+                    (resume_goal["status"], resume_goal.get("updatedAt"))):
+                self.remember_goal(goal)
+                self.stop_reason, self.stop_now = "startup_goal_stopped", True
+                return
             if (goal["status"] in {"complete", "usageLimited"} or
                     goal["status"] == "budgetLimited" and (self.args.recovered or self.args.token_budget is None)):
                 self.remember_goal(goal)

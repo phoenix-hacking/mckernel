@@ -781,7 +781,8 @@ class CampaignTests(unittest.TestCase):
         self.assertFalse(any(method == "turn/steer" for method, _ in rpc.calls))
         seeds = [params for method, params in rpc.calls if method == "turn/start"]
         self.assertEqual(len(seeds), 1)
-        self.assertEqual(seeds[0]["input"], [{"type": "text", "text": note}])
+        self.assertIn(note, seeds[0]["input"][0]["text"])
+        self.assertTrue(seeds[0]["input"][0]["text"].startswith("EXPLICIT USER RESUME"))
         self.assertEqual(state["goal"]["objective"], saved_goal["objective"])
         self.assertEqual(state["goal"]["tokenBudget"], saved_goal["tokenBudget"])
 
@@ -800,7 +801,13 @@ class CampaignTests(unittest.TestCase):
                           if method == "thread/goal/set" and params.get("status") == "active")
         self.assertLess(seed_index, activation)
         self.assertEqual(seed["threadId"], "test-thread")
-        self.assertEqual(seed["input"], [{"type": "text", "text": note}])
+        message = seed["input"][0]["text"]
+        self.assertTrue(message.startswith("EXPLICIT USER RESUME"))
+        self.assertIn(note, message)
+        self.assertIn("supersedes earlier user stop/pause requests", message)
+        self.assertEqual(state["resume_instruction"]["message_sha256"],
+                         hashlib.sha256(message.encode()).hexdigest())
+        self.assertEqual(Path(state["resume_instruction"]["message_path"]).read_text(), message)
         self.assertEqual(state["resume_instruction"]["sha256"], digest)
         self.assertEqual(state["resume_instruction"]["turn_id"], "startup-turn-1")
         self.assertEqual(state["resume_instruction"]["status"], "accepted_by_server")
@@ -818,6 +825,55 @@ class CampaignTests(unittest.TestCase):
         self.run_campaign(rpc, 0)
         self.assertTrue(any(method == "thread/resume" for method, _ in rpc.calls))
         self.assertFalse(any(method == "turn/start" for method, _ in rpc.calls))
+
+    def test_manual_resume_without_note_overrides_the_saved_user_pause(self):
+        self.saved(goal("paused"))
+        state_path = self.directory / "state.json"
+        saved = json.loads(state_path.read_text())
+        saved["last_instruction"] = {"id": "user-stop-014328", "status": "accepted_by_server"}
+        launcher.atomic_json(state_path, saved)
+        rpc = FakeRPC(self.args, goal("paused"),
+                      [lambda r: (r.completed(), r.status("complete"))])
+        state = self.run_campaign(rpc, 0)
+        starts = [p for m, p in rpc.calls if m == "turn/start"]
+        self.assertEqual(len(starts), 1)
+        message = starts[0]["input"][0]["text"]
+        self.assertIn("EXPLICIT USER RESUME", message)
+        self.assertIn("user-stop-014328", message)
+        self.assertIn("A new stop received", message)
+        self.assertIsNone(state["resume_instruction"]["sha256"])
+        self.assertEqual(state["resume_instruction"]["message_sha256"],
+                         hashlib.sha256(message.encode()).hexdigest())
+
+    def test_new_pause_or_block_during_manual_resume_prevents_activation(self):
+        for status in ("paused", "blocked"):
+            for event in (True, False):
+                with self.subTest(status=status, event=event):
+                    self.startup_arguments()
+                    self.saved(goal("paused"))
+
+                    class StoppedDuringSeedRPC(FakeRPC):
+                        def call(rpc, method, params, **kwargs):
+                            result = super().call(method, params, **kwargs)
+                            if method == "turn/start":
+                                if event:
+                                    rpc.status(status)
+                                else:
+                                    rpc.goal.update(status=status, updatedAt=3)
+                            return result
+
+                    rpc = StoppedDuringSeedRPC(self.args, goal("paused"))
+                    campaign = launcher.Campaign(self.args, self.directory, self.directory, rpc.factory)
+                    try:
+                        with redirect_stdout(io.StringIO()):
+                            campaign.begin()
+                        self.assertEqual(campaign.stop_reason, "startup_goal_stopped")
+                        self.assertTrue(campaign.stop_now)
+                        self.assertEqual(campaign.goal["status"], status)
+                        self.assertFalse(any(m == "thread/goal/set" for m, _ in rpc.calls))
+                    finally:
+                        rpc.close()
+                        campaign.output.close()
 
     def test_startup_user_message_refuses_an_existing_active_turn(self):
         self.startup_arguments()

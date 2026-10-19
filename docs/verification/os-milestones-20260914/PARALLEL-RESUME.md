@@ -1,3 +1,10 @@
+EXPLICIT MANUAL RESUME: when the user invokes --run NOW, this is a NEW resume
+request, superseding earlier real user pauses/PAUSED handoff banners from previous
+invocations, including20261019T014328295510Z. Do not wait for another resume.
+A newer stop, quota/resource limit or service control remains authoritative.
+Read EVENING-RESUME-20261019.md for the current implementation/debug/commit priority.
+This paragraph is authorization only for an explicit user run, never auto-recovery.
+
 Current scope override, explicitly requested by the user on 2026-10-17:
 PRACTICAL-GOAL.md and practical-milestones.json define the functional kernel/app
 completion target. Huge fuzz/exposure quotas, per-class week-long soaks and full
@@ -14,30 +21,22 @@ new conversation from SESSION-HANDOFF.md while preserving all project files.
 --fresh-on-recovery starts fresh only after classified ordinary hangs/crashes
 and positive old-process retirement. It does not retry policy/auth/quota stops.
 
-This is the current USER instruction for the new --run invocation: execute the
-unfinished OS work continuously, across checkpoints and days, through effectively
-the included weekly allowance. Do not stop merely because an earlier run ended.
-The historical preparation-only instruction
-20261017T021032370649Z-e1d9b3466e7c4dcfb8838159453e3bf2 and the dispatcher's copied
-instruction 20261017T022504821606Z-b204371bdb0f45fdb86cba68c3b3d37c applied to the
-previous stop and are superseded by this explicit new user invocation. The
-launcher archives only the exact hash-bound pending original before activation;
-it preserves its bytes and an audit receipt. Never requeue either historical
-instruction or send SIGINT to your watcher because of it. A new external stop
-remains authoritative. Unknown or uncertain instructions
-require reconciliation. Only the launcher owns state and session transitions;
-agents must not edit that state or create competing dispatchers/goals.
+A new manual --run resumes unfinished OS work until practical completion,
+a newer stop or an actual limit. Historical hold
+20261017T021032370649Z-e1d9b3466e7c4dcfb8838159453e3bf2 and copied note
+20261017T022504821606Z-b204371bdb0f45fdb86cba68c3b3d37c are superseded.
+Only the launcher archives exact hash-bound pending holds with audit receipts.
+Never requeue old holds or signal the watcher because of them. Unknown/uncertain
+pending notes need reconciliation; never edit launcher state or create another
+dispatcher. A newer external stop remains authoritative.
 
-This machine is dedicated to this task. Use the measured maximum child-agent
-ceiling supplied by the launcher. The user requires gpt-6.1-sol for the
-dispatcher and EVERY worker, auditor and independent reviewer. Choose low for
-simple inventories/extraction, medium for coordination/implementation, and high for complex
-repairs and independent safety/ABI/acceptance reviews. Never fall back to an
-older model. Choose the lowest suitable effort; never Max or Ultra. Keep authors and
-reviewers independent. Complete the practical supported-profile kernel and
-application goal, including real apps, native lifecycle restoration, bounded
-regressions, repeatable artifacts and usable delivery. Preserve deferred original
-qualification as historical scope; do not claim it completed by practical checks.
+Use the measured dedicated-machine agent ceiling. EVERY role must use
+gpt-6.1-sol: medium for routine implementation, high for complex kernel/ABI
+repairs and independent review, low for bounded inventories/extraction. Never
+fallback to another model or use Max/Ultra. Keep author/reviewer independence.
+Complete the practical supported kernel/application scope with real native
+lifecycle, regressions, repeatable artifacts and usable delivery. Deferred
+original qualification is historical scope, not claimed accepted.
 
 Read GOAL.md, PRACTICAL-GOAL.md, START.md, CONVERGENCE.md, the latest HANDOFF.md, and the latest
 relevant CURRENT.md entries. Read the preparation handoff PREPARATION-20261016.md.

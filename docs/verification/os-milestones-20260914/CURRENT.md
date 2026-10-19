@@ -1,5 +1,17 @@
 # Resume cursor
 
+## CURRENT — explicit evening resume authorized 2026-10-19T04:43:16.709999+00:00
+
+The user's NEW instruction in [EVENING-RESUME-20261019.md](EVENING-RESUME-20261019.md)
+explicitly rescinds the prior01:43 stop for this invocation. Continue unfinished
+functional OS/Rust work; do not wait for another resume request. The paused section
+below is preserved history, not the current instruction. Runtime activation is
+being repaired/verified; this banner alone is not proof of running workloads.
+Keep subsequent stops, quota/resource controls, fresh execution releases and all
+prior failure evidence. Prioritize implementation, executable debugging and code
+commits; prepare bounded per-CPU application batches inside one admitted guest.
+
+
 ## PAUSED — explicit user stop 2026-10-19 01:43 UTC
 
 User instruction20261019T014328295510Z-5c3c8a5405684f18a87eef59e400584c
