@@ -1,3 +1,27 @@
+## Current — matched SDK native accepted; provider repair and repeatability next
+
+Matched native whole chain passed: owner38.37s, three readers and decoder0;
+independent semantic88121b15 and physicala03e987a accept all three current SDK
+module loads, PID255CPU0/exit0, exact AVX380B/empty stderr/EOF/procfs empty,
+and raw49883/status219/control63 transfers. Latest physical predecessor is a03e;
+no workload remains active. Tested FP1e7a + IHKc396958b/SMPaf234fbc/mcctrl6571ac7e
+is frozen in recipe8fa7b558 and full original/copy manifest e3d8c75a. Current
+60-source/14-IHK/full11-image ABI joins are preserved; zero CRCs alone are not proof.
+
+Artifact acceptance22:16:57.443 to first observed success22:35:59.282 is19.031min;
+actual container exit22:34:16.782 is a separate earlier event. This closes this
+feedback timer only; no overall speedup or new logical/native Rust-path credit.
+Counts stay11/35,25behaviors,17production/14nativeRust; all whole milestones open.
+Evidence: ../evidence/current-host-rust-pair-native-20261019-1/preservation-index.json.
+Full-history/non-null FP and failed-MM-error ownership remain OPEN.
+
+Next executable work: private real ChildFork durable parent-slot transfer,
+one affected actual-body compile/test on admitted CPU6 after coherent endpoint
+resolution; weak prepareNULL/CREATE_PPD-95/runtime holds remain. In parallel,
+existing author prepares repeatability/delivery consumers on the frozen tuple
+(2boots/10cycles/100launches/60min mixed), with explicit caps/oracles/release;
+no new guest authority from preparation. Scratch21/mutex/failures/WIP preserved.
+
 ## Current — matched SDK pair accepted; process Rust app source/reference ready
 
 Fresh matched host Rust pair SDK owner wholejoined0/21.302239s. Independent

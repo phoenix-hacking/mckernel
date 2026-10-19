@@ -1,6 +1,91 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 80, 2026-10-19T22:02:12.515950Z
+## Current priorities — review 81, 2026-10-19T22:32:32.352241Z
+
+Live cursor, 22:38 UTC: independent review 88121b15 accepts the exact three
+matched SDK modules loaded with FP1e7, unchanged typed AVX output (380 bytes,
+exit 0), and bounded raw/status/control transfers (49,883/219/63 bytes).
+Physical a03e987a independently accepts retirement. This is native diagnostic
+and module-load acceptance only: application, negative-MM, full ring history
+and non-null FP ownership credit remain open. Artifact-to-first-observed joined
+native result is 19.03 minutes (22:16:57.443 to 22:35:59.282), now confirmed by
+actual load/guest evidence. The 30-minute feedback target was met for this set.
+Deferred review-81 steering was delivered after the timed sequence closed.
+Checkpoint 0af5d3b1 preserves the Rust process reference. Provider review957f7a37
+identifies premature parent-slot pin release before LINK/ACK; the first Rust
+repair transfers durable ownership into ChildFork. Post-positive revoke remains
+a separate missing transaction; weak prepare/CREATE_PPD/runtime holds remain.
+
+Practical checks increased 9 -> 11/35: independent 0d600890 supports the
+literal P-M06-02 and P-M07-02 using existing accepted thread/futex/error and
+supported-profile FPU/vector records. Dispatcher reconciled them at 22:05.
+This is recognition of existing engineering, not two new native cases.
+Counts remain 25 native behaviors, 17 selected production Rust paths and 14
+with applicable native proof. All whole milestones remain open; engineering
+bands are held, including saved low-confidence M10 80–90%. No overall OS score.
+
+Checkpoint ae8f1b12 is pushed/fetched, including the check reconciliation and
+96-row matching SDK publication. Actual request 2ba04a12 uses the accepted
+60-source closure and 75 materialization rows, retaining mailbox33e7 and current
+kmsg6b736 together. Source/materialization1536cd16 and final releaseb2914e65 bind
+canonical50908672 and physical predecessor080d5bfc. Root used fresh admission.
+Actual closed SDK owner duration is21.2544 seconds (root rounded21.30), exit0.
+Physical69b2fc61 accepts15clients/42emptygroupchecks/container/three records
+retired. Artifactb9ea18d0 accepts all3module/default-consumer/source bindings;
+ABI5d31c1f0 joins that exact set to FP1e7. No native loading or negative-MM proof.
+
+Matched native preparation ran19.41seconds onCPU7. Stage3b801a5a verifies eight
+outputs, all three actual SDK modules and metadata preservation; only SMP bytes
+changed against the previous archive. Existing IHK/mcctrl and image bytes remain.
+Fresh parent/100-byteQMP path and typed-runtime preparation are accepted. The
+snapshot adapter binds the actual latest SDK retirement and complete three-module
+schema, keeping staged-copy descriptors distinct from original artifact identities.
+A fixture omitted a modules directory, then a different terminal fixture caught
+the wrong exception class; originals remain preserved. Only affected fixture
+entries changed, no production predicate relaxation. Corrected terminal fixture
+passed in0.0643seconds. Existing source/engine/ABI checks were reused.
+
+Final data32ae1dea, eight-step capture indexc53ffec8 and mapping revieweb253e82
+are frozen. Only genuine final snapshot and temporal hashes remain late. At this
+review the dispatcher is approaching the snapshot/guard/immediate-launch sequence;
+steering is deferred until the timed window closes. No native result yet.
+Matched SDK artifact accepted22:16:57.443189UTC; current feedback delay15.6minutes,
+target30. Keep this clock separate from older127.6-minute205build handoff and
+98.2-minute first IHK corrected diagnostic chain. No sustained multiplier claim.
+
+Concrete new code: static Rust process/exec/wait fixture with exact235-byte oracle.
+Linux reference passes with two distinct children, exits37/42, successful self-exec,
+missing-execENOENT, pipeEOF, one positive reap and subsequentECHILD per child,
+no owned children. Independent8f43d9d0 binds ownership, artifact and toolchain.
+This is reference-only; no P-M06-01/native credit or guest authorization.
+
+Its actual native blocker is retained CREATE_PPD/provider/alias/final-ACK work.
+The source lane found the caller still reaches a weakNULL prepare function;
+retained carrier handles first/LINK and negative-first cancellation but not the
+complete positive path. More specific gap: revoke helper rewrites only an
+unpublished first return, not after positive return or sealedLINK. That path needs
+a delivered control request and retained response owner. Existing author is
+inactive; current workers coordinate private retained-candidate work and concrete
+Rust transition/body checks. Do not wire an abort-only or incomplete provider
+into the default fork path, invent native credit, or expand compute C.
+
+Next tactics: finish timed matched-set runtime and immediately followup the
+relevant reviewer after wholejoin. Use genuine raw bytes, unchanged typed AVX
+and physical results; no automatic non-nullFP/full-history/negative-MM inference.
+Source workers should deliver the first concrete missing positive-provider
+transition and focused failure/success check using retained machinery, rather
+than another equivalent reference fixture or broad audit. Preserve runtime hold
+until full provider/ACK ownership conditions are met. Prepare final-profile
+repeatability and delivery consumers while their matched prerequisite settles;
+existing practical M12 budget is2boots/10cycles/100launches/60-minute mixed run.
+
+Usage81%,16percentage points to97%stop. Host/scratch44.93/13.664GiB. No sustained
+CPU/RAM bottleneck is shown. Oneheavy4CPU/12GiB/noSwap/512tasks, disjoint ordinary
+CPU6/7 profiles, aggregate reserves and disk/growth floors remain. Preserve source/
+ownership/runtime controls, permanent mutex27:4, Scratch21, failures and WIP.
+Next review: 2026-10-19T23:02:32.352Z.
+
+## Previous priorities — review 80, 2026-10-19T22:02:12.515950Z
 
 Live cursor, 22:05 UTC: dispatcher reconciled accepted existing-evidence
 P-M06-02 and P-M07-02 under decision 0d600890: 11/35 checks complete, 24 open.

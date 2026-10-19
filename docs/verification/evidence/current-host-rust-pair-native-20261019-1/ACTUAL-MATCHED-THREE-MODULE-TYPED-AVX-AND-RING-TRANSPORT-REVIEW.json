@@ -1,0 +1,310 @@
+{
+  "accepted_diagnostic_behavior": true,
+  "actual_guest_runs": 1,
+  "actual_payload_processes": 1,
+  "actual_stage_review": {
+    "bytes": 19129,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-independent-review-20261019-1/ACTUAL-MATCHED-THREE-MODULE-STAGE-REVIEW.json",
+    "sha256": "3b801a5ad9c3b63b4d88783c81ae5863964be0226b36b0d7bbf3590a438fb848"
+  },
+  "actual_typed_source_review": {
+    "bytes": 18284,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-final-review-20261019-1/ACTUAL-TYPED-COMPOSITION-AND-SNAPSHOT-BOUNDARY-REVIEW.json",
+    "sha256": "d191aa908fab83d58e757440e6bf59c60ecbea1ac5f5d4d93a260ac6c5213eaa"
+  },
+  "application_acceptance": false,
+  "attempt_archive": {
+    "bytes": 624640,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-20261019-1/readback-3.stdout",
+    "sha256": "42552ec0b067351c22127acbb30cf36084a76bc31ef75b3cc8051ae9e01120e2"
+  },
+  "attempt_result": {
+    "bytes": 188846,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-20261019-1/readback-2.stdout",
+    "sha256": "5ffa45ff8c5268363f29f959beb8ae086286e3fcd7e52fa63183040cc83d0ec0"
+  },
+  "bounded_ring_transport_acceptance": true,
+  "case": {
+    "EOF_complete": true,
+    "McKernel_CPU": 0,
+    "McKernel_PID": 255,
+    "case_id": "vector.enabled-avx-preservation",
+    "discarded_bytes": 0,
+    "observed_xcr0": 543,
+    "procfs_empty": true,
+    "raw_wait_status": 0,
+    "required_xcr0": 7,
+    "scope": "Original exact10line typedgrammar/exposure gates+unchanged x87/SSE/YMM syscall/futex/signal boundary assertions; no wholeISA/IFUNC closure.",
+    "selected_stdout": {
+      "bytes": 380,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-final-review-20261019-1/native-selected-evidence-1/payload.stdout",
+      "sha256": "9a82eb916caf96e85af3d35adb6cea0eb6757533b865c97381fd931c710660f7"
+    },
+    "stderr_bytes": 0,
+    "stdout_bytes": 380,
+    "stdout_sha256": "9a82eb916caf96e85af3d35adb6cea0eb6757533b865c97381fd931c710660f7",
+    "supported_xcr0": 543,
+    "typed_exposure": {
+      "ENABLED_AUXV": {
+        "hwcap": 2,
+        "hwcap2": 0
+      },
+      "ENABLED_CPUID1": {
+        "ecx": 4277678603,
+        "edx": 533462013
+      },
+      "ENABLED_CPUID7": {
+        "ebx": 563889065,
+        "ecx": 2151678476,
+        "edx": 16
+      },
+      "ENABLED_CPUIDD0": {
+        "eax": 543,
+        "ebx": 2696,
+        "ecx": 2696,
+        "edx": 0
+      },
+      "ENABLED_XCR0": {
+        "hi": 0,
+        "lo": 543
+      }
+    },
+    "typed_prefix_records": 5,
+    "unchanged_fixed_suffix_bytes": 120
+  },
+  "complete_ring_history_proven": false,
+  "compute_C_retirement": false,
+  "decision": "ACCEPT_CURRENT_MATCHED_HOST_RUST_PAIR_NATIVE_DIAGNOSTIC_ONLY",
+  "decoder_result": {
+    "bytes": 1057,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-20261019-1/decode-ring.stdout",
+    "sha256": "101df1abbf502f8ae2f7ebdccfd67f647822cd1d67aafa091219bb9eb3879439"
+  },
+  "decoder_status": {
+    "bytes": 1608,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-20261019-1/decode-ring.status.json",
+    "sha256": "745aa0acab0e6f41da40b1fd2ff1956d7a8abaa97c33d68356f1e1a6b402b603"
+  },
+  "diagnostic_transfer": {
+    "control": {
+      "bytes": 63,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-20261019-1/decoded-mckernel-evidence/fp-debug-control-writes",
+      "sha256": "a991d7c93cac93891df29be55b3489ab01ba530987d592c67601e3945d6ff257"
+    },
+    "endpoint": "/sys/class/mcos/mcos0/sys/kernel/debug/dynamic_debug/control",
+    "framing": {
+      "CRLF_accepted": true,
+      "chunks": {
+        "control": 1,
+        "raw": 98,
+        "status": 1
+      },
+      "limits": {
+        "control": 128,
+        "raw": 262144,
+        "serial": 4194304,
+        "status": 512
+      },
+      "order": [
+        "raw",
+        "status",
+        "control"
+      ],
+      "raw_bytes_identical": true,
+      "terminal_fault_absent": true
+    },
+    "interface": "pointer-only ioctl0x00112a20/full4190208B buffer",
+    "raw": {
+      "bytes": 49883,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-20261019-1/decoded-mckernel-evidence/mckernel-kmsg.raw",
+      "sha256": "24583aa08dd1a5e2bbc1388d6b86d0107fdf8de3b79cde7b5ad54a80f5550adb"
+    },
+    "read_status": {
+      "bytes": 219,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-20261019-1/decoded-mckernel-evidence/mckernel-kmsg.status",
+      "sha256": "6520545b565644a1e5b76cc7cad3ebe54e65c807e57693bdf565d018e35a0bf8"
+    },
+    "status": {
+      "added_terminator": "0",
+      "cap": "4190208",
+      "close_errno": "0",
+      "device": "/dev/mcos0",
+      "ioctl_errno": "0",
+      "ioctl_return": "49883",
+      "nonshifting": "1",
+      "open_errno": "0",
+      "raw_bytes": "49883",
+      "raw_errno": "0",
+      "raw_saved": "1",
+      "request": "0x00112a20",
+      "semantic_acceptance": "0",
+      "transport": "PASS"
+    }
+  },
+  "failed_invalidation_error_path_native_proof": false,
+  "final_machine_review": {
+    "bytes": 7162,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-final-review-20261019-1/FINAL-IHK-LOGGING-NATIVE-MACHINE-REVIEW.json",
+    "sha256": "b887326ce692bd597b62d858a780186c67708cb526d80a87f4ec27badf784303"
+  },
+  "frozen_result_acceptance_fields_preserved": {
+    "application_acceptance": false,
+    "mckernel_application_executed": false,
+    "meaning": "Legacyprotocolfalse fields retained; actualboot/PID/output/moduleload observations independently established here without formal wholeapplication acceptance."
+  },
+  "lifecycle": {
+    "QEMU_returncode": -9,
+    "QMP_terminal_shutdown": true,
+    "capture_errors": [],
+    "cleanup_errors": [],
+    "deadline_met": true,
+    "host_QEMU_direct_reaped": true,
+    "kernel_failure_marker_absent": true
+  },
+  "limitations": [
+    "CurrentmatchedSDK moduleload and normaltypedAVX execution are proven; failed-MM-invalidation error ownership notexercised and notcredited.",
+    "This49883B complete ioctlreturn does not establish whole ringhistory/nooverwrite/non-nullFP lifecycle ownership;2c11 limitation remains.",
+    "No source/kernel edit, guestretry or laterinvocation authority from this result review."
+  ],
+  "machine_release": {
+    "bytes": 2908,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-20261019-1/execution-release.json",
+    "sha256": "c3c4178cf61f6b50cba13c1c7d1d71e438eb51dc504eafcdc1c8fd5dcaf3440d"
+  },
+  "matched_modules": {
+    "current_source_authority": {
+      "bytes": 41117,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/ACTUAL-SOURCE-AUTHORITY-INPUTS.json",
+      "sha256": "932fffc77ba044b3e3071f04bef0d6ae5664a53417bd3cf48489d3c1100167a5"
+    },
+    "exact_create_and_QEMU_argv_verified": true,
+    "module_load_witnesses": {
+      "bytes": 476,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-final-review-20261019-1/native-selected-evidence-1/module-load-witnesses.json",
+      "sha256": "0c4d49fff2b8e9092443de530853a00d786ae925fa8d67644aaa6f28b5511a05"
+    },
+    "original_descriptors": {
+      "ihk": {
+        "ctime_ns": 1792448119127573597,
+        "device": 1828,
+        "gid": 1000,
+        "inode": 629760,
+        "mode": "0o644",
+        "mtime_ns": 1792448119127573597,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-c5280df71731403a97d5520f4dabc378/modules/ihk.ko",
+        "sha256": "c396958bfdb0f22036b469ea2a64e0a6b188b9619ee4105c7879483bb3b9790d",
+        "size": 1475952,
+        "uid": 1000
+      },
+      "ihk-smp-x86_64": {
+        "ctime_ns": 1792448119275577954,
+        "device": 1828,
+        "gid": 1000,
+        "inode": 629762,
+        "mode": "0o644",
+        "mtime_ns": 1792448119271577836,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-c5280df71731403a97d5520f4dabc378/modules/ihk-smp-x86_64.ko",
+        "sha256": "af234fbcd09327a80e12396eebbfbcd30838f88a552fa13ba00a2728a761eeaa",
+        "size": 11632136,
+        "uid": 1000
+      },
+      "mcctrl": {
+        "ctime_ns": 1792448119283578190,
+        "device": 1828,
+        "gid": 1000,
+        "inode": 629761,
+        "mode": "0o644",
+        "mtime_ns": 1792448119283578190,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-c5280df71731403a97d5520f4dabc378/modules/mcctrl.ko",
+        "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+        "size": 1913904,
+        "uid": 1000
+      }
+    },
+    "proof_chain": "Genuine currentSDK originals\u2192accepted exactstagedCOPY full11\u2192fixed archive modulepaths/fullstage hash\u2192actualadmittedinitrd/QEMU\u2192unchangedcollector sequential insmod all3\u2192three Linux lifecycleload witnesses\u2192actualMcKernel payload. No oldmodule substitution.",
+    "retained_descriptors": {
+      "ihk": {
+        "ctime_ns": 1792448685364368643,
+        "device": 1828,
+        "gid": 1000,
+        "inode": 115572,
+        "mode": "0o644",
+        "mtime_ns": 1792448685364368643,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/hp-stage-261019-1/ihk.ko",
+        "sha256": "c396958bfdb0f22036b469ea2a64e0a6b188b9619ee4105c7879483bb3b9790d",
+        "size": 1475952,
+        "uid": 1000
+      },
+      "ihk-smp-x86_64": {
+        "ctime_ns": 1792448685372368882,
+        "device": 1828,
+        "gid": 1000,
+        "inode": 115573,
+        "mode": "0o644",
+        "mtime_ns": 1792448685372368882,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/hp-stage-261019-1/ihk-smp-x86_64.ko",
+        "sha256": "af234fbcd09327a80e12396eebbfbcd30838f88a552fa13ba00a2728a761eeaa",
+        "size": 11632136,
+        "uid": 1000
+      },
+      "mcctrl": {
+        "ctime_ns": 1792448685404369836,
+        "device": 1828,
+        "gid": 1000,
+        "inode": 115574,
+        "mode": "0o644",
+        "mtime_ns": 1792448685404369836,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/hp-stage-261019-1/mcctrl.ko",
+        "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+        "size": 1913904,
+        "uid": 1000
+      }
+    },
+    "sdk_abi_review": {
+      "bytes": 31299,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-THREE-MODULE-ABI-JOIN.json",
+      "sha256": "5d31c1f057127cf4c9fc076f3dc6c675ea4dc11ce4cef69889aab787135bd88c"
+    },
+    "sdk_artifact_review": {
+      "bytes": 40051,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-THREE-MODULE-ARTIFACT-REVIEW.json",
+      "sha256": "b9ea18d03dde21fc3b6f958647358081d9a5f249779b10628e9361f4926e5005"
+    }
+  },
+  "module_load_acceptance": true,
+  "native_status": {
+    "bytes": 1433,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-20261019-1/native-owner.status.json",
+    "sha256": "63516f0f68280b7b63106c284407f5b75e6fa19b4f0da9c8217856ff3893b617"
+  },
+  "new_logical_cases": 0,
+  "nonnull_FP_acceptance": false,
+  "operation_status": "PROTOCOL_PASS",
+  "owner_archive": {
+    "bytes": 768000,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-20261019-1/readback-1.stdout",
+    "sha256": "40bf5b4679b64eaaad2e92854c750bfbc19ddad9a8153453e08edb30d62651ea"
+  },
+  "physical_release": {
+    "bytes": 6606,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-final-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "a03e987a278d06246f33be78672281d3599e7b5e262ef82a7a391df75d575f60"
+  },
+  "reviewer": "two_cpu_end_to_end_review",
+  "runtime_authority": false,
+  "schema": "mckernel.independent-current-host-pair-actual-native-diagnostic-review.v1",
+  "selected_raw_witnesses": {
+    "bytes": 581,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-final-review-20261019-1/native-selected-evidence-1/raw-selected-witnesses.json",
+    "sha256": "29117c3cf4d3fd78a8fcf7cef93d3aa7559bbd77f7daecd599360fb200c6d178"
+  },
+  "status": "PASS_ACTUAL_MATCHED_THREE_MODULE_LOAD_TYPED_AVX_AND_BOUNDED_RING_TRANSPORT",
+  "typed_AVX_diagnostic_acceptance": true,
+  "whole_native_acceptance": false
+}

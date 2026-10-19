@@ -1,0 +1,58 @@
+{
+  "operations": [
+    null,
+    {
+      "role": "readback-1",
+      "profile": "metadata",
+      "argv_template": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--nofile=256",
+        "--core=0",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/hp-p-261019-1/a.owner-f67d721a07f04b4e84430c435311f6e9",
+        "."
+      ],
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-20261019-1/readback-1.stdout",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-20261019-1/readback-1.stderr",
+      "status_path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-20261019-1/readback-1.status.json"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 7,
+      "stream_fsize": 33554432,
+      "parent_wall_seconds": 35,
+      "parent_kill_grace_seconds": 4,
+      "cpu_limits": 30,
+      "as_limit": 1073741824
+    },
+    "native": {
+      "cpu": 7,
+      "stream_fsize": 33554432,
+      "parent_wall_seconds": null,
+      "parent_kill_grace_seconds": null,
+      "cpu_limits": null,
+      "as_limit": null
+    }
+  },
+  "release": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "69b2fc614ffd0478ab49edcda2ad9160e94aa88a18e5bb74892a35687644a5a0",
+    "bytes": 26344
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json"
+}
