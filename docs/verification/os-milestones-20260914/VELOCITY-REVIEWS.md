@@ -5640,3 +5640,86 @@ CPU/RAM bottleneck is shown. Oneheavy4CPU/12GiB/noSwap/512tasks, disjoint ordina
 CPU6/7 profiles, aggregate reserves and disk/growth floors remain. Preserve source/
 ownership/runtime controls, permanent mutex27:4, Scratch21, failures and WIP.
 Next review: 2026-10-19T23:02:32.352Z.
+
+
+## Review 82 — 2026-10-19T23:03:36.655962Z
+
+No additional practical or compute-path closure this interval: 11/35 checks,
+25 distinct native behaviors, 17 selected production Rust paths and 14 with
+applicable native proof. All whole milestones remain open. Engineering bands
+are held, including the saved low-confidence M10 80–90% assessment. A module
+load or source primitive does not automatically add a logical case or Rust port.
+
+The matched SDK set completed a real guest run. Independent semantic review
+88121b15 accepts all three current modules loaded with FP1e7, exact 380-byte AVX
+output, exit 0, empty stderr/procfs and bounded raw/status/control transfer of
+49,883/219/63 bytes. Physical a03e987a accepts owner/QEMU/container/lease retirement.
+Closed owner duration is 38.3278 seconds; readbacks/decoder also joined zero.
+First observed whole join 22:35:59.282, confirmed by actual load/guest evidence,
+is 19.03 minutes after artifact acceptance 22:16:57.443: the 30-minute feedback
+target was met for this tuple. This is a single measured handoff, not sustained
+2x/3x engineering throughput. Formal application/new-case credit, negative-MM
+ownership, full ring history and non-null FP proof remain open.
+
+The exact supported recipe and module manifest are saved under the host-pair
+native directory. Checkpoint 5252ab57 is pushed/fetched with those accepted
+reports and captures. Diagnostic FP1e7 remains its own bounded profile; delivery
+and broader application profiles are not inferred from this one AVX run.
+
+Concrete Rust delivery: the historical parent-pin repair passed a focused body
+check (08f5c012) but did not apply to production; that failure and held branch are
+preserved. Production has no ChildFork/ingress backend. Author then prepared a
+minimal current Entry/Remote pin primitive with cleanup retention, rather than
+importing an incomplete backend. Exact one-file smp_application.rs patch aac4a248
+is independently accepted 83134e83. Three actual-body checks cover identity,
+OS generation, overflow, reserved close, reply/final cleanup and 500-iteration
+retention; all six removal paths honor the pin and unpinned behavior is preserved.
+Patch is integrated and pushed/fetched in 766805fa. No new caller or CREATE_PPD
+activation. Full SDK/default-module/native proof of this changed source is pending;
+this is useful source implementation, not completion of positive process creation.
+
+Next provider work remains a delivered post-positive control request, retained
+response owner and valid terminal release/ACK. Worker also found selectors 2/3
+would enter ordinary Linux-fork allocation. A private launcher guard now routes
+those controls to explicit unavailable RET, with ordinary clone body unchanged;
+source/reply-producer review is active. It creates no fork-sync owner and grants
+no revoke/ACK authority. Such refusal is prerequisite negative behavior, not a
+substitute for a working positive provider. Keep current-source and held-backend
+bases explicit; new compute work remains Rust/reviewed assembly, Linux control
+plane compatibility changes retain their existing boundary.
+
+Lifecycle preparation advances independently. Existing public-release -> strict5
+reboot adapter passed two positives/four refusals. Composed typed-AVX collector
+compiled and passed typed admission 1 positive/11 refusals plus supervised sequence
+1 positive/4 refusals. Exact ordinary review 644f69ba released stage/preflight;
+actual two-command preparation completed in 9.90 seconds. Genuine stage and typed
+parent (101-byte QMP, 18-source closure) are under independent review; snapshot
+adapter draft f6fa5ded separates latest native a03 retirement from SDK69 history.
+No actual lifecycle cycle or full restoration acceptance yet. Existing logger's
+120-second alarm/one launch cannot establish the 60-minute mixed run unchanged.
+
+A spare lane prepares final-profile convergence with already accepted 205 image
+ff4fca45/fa398247 and its corrected two-CPU N3 case. Selected ABI comparison finds
+no mismatch in 12 header/descriptor rows, six public ABI files, 28 layouts and
+accepted import/export evidence. Proposal changes only the module SHA tuple;
+startup CPU checks and both application oracles stay fixed. Review is preparing
+one whole-chain ordinary envelope for two compression stages and host growth.
+Nothing staged/run yet; current FP1e7 cycle retains priority. No new kernel build
+is required simply to reuse this already accepted 205 artifact.
+
+Next tactics: finish the first actual lifecycle cycle, with result/retirement
+reviewer ready before the last snapshot. Prepare the 205 matched-set case in
+parallel and use exact compatibility evidence, without switching frozen FP cases.
+Deliver the next concrete provider request/response ownership transition against
+the proper source context. Compile coherent host-module changes with the existing
+SDK route; a host-only pin change does not by itself require another compute-image
+build. Reuse accepted source/engine/ABI evidence, test changed production boundaries
+once, and checkpoint coherent code/results. Park optional frameworks. The existing
+practical repeatability budget remains 2 boots/10 native cycles/100 actual launches/
+60-minute mixed workload on a declared profile, with real resource observations.
+
+Usage 83%, 14 percentage points to the 97% included-usage stop. Host/scratch about
+44.79/13.648 GiB; no sustained CPU/RAM bottleneck is demonstrated. Keep one heavy
+operation, 4 CPUs/12 GiB/no swap/512 tasks, disjoint admitted CPU6/7 ordinary work,
+aggregate reserves and disk/growth floors, source/ownership/runtime controls,
+permanent mutex 27:4, Scratch21, all failures and dirty work. Next review: 2026-10-19T23:33:36.655962Z.

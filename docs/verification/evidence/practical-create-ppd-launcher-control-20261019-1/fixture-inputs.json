@@ -1,0 +1,42 @@
+{
+  "rows": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/postpositive-revoke-1/base-mcexec_helpers.rs",
+      "sha256": "b77d54434bb75fbd2db5772ad30a2deba111bd21805cf76d289cdb99d2e9665d",
+      "bytes": 251967
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/postpositive-revoke-1/mcexec_helpers.rs",
+      "sha256": "1d86dc8b2709b3dbc6ca8b60ee785ac3410a63a1abdf28e8c789b186bc3f3f31",
+      "bytes": 253331
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/postpositive-revoke-1/actual-control-dispatch.rs",
+      "sha256": "6cabe6d79b732cc3d49ba8ed4625536ccd34d79130e26da6d66902c26c21ed77",
+      "bytes": 15066
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/postpositive-revoke-1/prepare_control_fixture.py",
+      "sha256": "de7a2aa026d675c987bcf2a73a6cb6e4bd5a2e4be82a38943f353f4039070e5f",
+      "bytes": 9791
+    }
+  ],
+  "exact_actual_bodies": [
+    "act_clone_start",
+    "act_clone_complete",
+    "act_private_fork_control",
+    "do_syscall_return",
+    "mcexec_fork_sync_complete_result",
+    "mcexec_fork_sync_remove_node_result"
+  ],
+  "normal_body_after_guard_byte_identical": true,
+  "new_tests": 4,
+  "adapters": [
+    "Linux allocator/mmap/sem/fork/waitpid and errno",
+    "ioctl capture/perror",
+    "C fork-sync global/lock boundary"
+  ],
+  "no_linux_fork_executed": true,
+  "native_authority": false,
+  "success_means": "Recognized control delivered as actual RET descriptor refusal with no allocation/fork, not successful revoke/ACK."
+}

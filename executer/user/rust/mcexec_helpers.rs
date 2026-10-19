@@ -102,6 +102,8 @@ const EAGAIN: i32 = 11;
 const ESRCH: i32 = 3;
 const ERANGE: i32 = 34;
 const ENOSYS: i32 = 38;
+const EOPNOTSUPP: i32 = 95;
+const PRIVATE_FORK_CARRIER_MARKER_V1: u64 = 0x313030434b46434d;
 const X_OK: c_int = 1;
 const SC_OPEN_MAX: c_int = 4;
 const F_GETFD: c_int = 1;
@@ -2025,6 +2027,28 @@ pub unsafe extern "C" fn act_clone_complete(
     }
 }
 
+// Reserved native fork controls are transport requests, never Linux fork()
+// requests. The launcher has no IHK pending-owner claim or receipt writer;
+// routing metadata and RET0 cannot authenticate revoke/destruction authority.
+// Until that actual backend hook exists, return an explicit refusal without
+// allocating a fork-sync owner, spawning a process or touching carrier bytes.
+unsafe fn act_private_fork_control(
+    w: *const McexecSyscallWaitDesc, fd: c_int, cpu: c_int,
+) -> bool {
+    let request = unsafe { &(*w).sr };
+    let selector = request.args[0];
+    if selector != 2 && selector != 3 { return false; }
+    let route_matches = request.number == SYS_CLONE as c_ulong && cpu >= 0
+        && unsafe { (*w).cpu } == cpu as c_ulong
+        && request.args[5] as u64 == PRIVATE_FORK_CARRIER_MARKER_V1;
+    // Selector3 has an existing guest final-ACK shape (stage2). Selector2 has
+    // no authenticated revoke protocol yet; no new wire phase is inferred.
+    let known_shape = selector != 3 || request.args[1] == 2;
+    let result = if route_matches && known_shape { -EOPNOTSUPP } else { -EINVAL };
+    unsafe { do_syscall_return(fd, cpu, result as c_long, 0, 0, 0, 0) };
+    true
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn act_clone_start(
     w: *const McexecSyscallWaitDesc,
@@ -2032,6 +2056,7 @@ pub unsafe extern "C" fn act_clone_start(
     cpu: c_int,
     main_loop_ret: *mut c_long,
 ) -> c_int {
+    if unsafe { act_private_fork_control(w, fd, cpu) } { return 0; }
     let mut rc: c_long = -1;
     let fs = unsafe { mcexec_clone_alloc_fork_sync_bridge() as *mut ForkSync };
 

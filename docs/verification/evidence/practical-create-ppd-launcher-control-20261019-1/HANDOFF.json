@@ -1,0 +1,85 @@
+{
+  "schema": "mckernel.current-launcher-private-fork-control-source-handoff.v1",
+  "status": "PASS_CURRENT_NEGATIVE_CONTROL_RET_PRODUCER_PENDING_INDEPENDENT_FINAL_REVIEW",
+  "functional_scope": "Functional OS/apps and real Rust/reviewed-assembly delivery. Correct current selected launcher dispatch before a reserved native fork control can allocate or invoke Linux fork; no compute C.",
+  "base": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/postpositive-revoke-1/base-mcexec_helpers.rs",
+    "sha256": "b77d54434bb75fbd2db5772ad30a2deba111bd21805cf76d289cdb99d2e9665d",
+    "bytes": 251967
+  },
+  "current_source_at_final_read": {
+    "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+    "sha256": "b77d54434bb75fbd2db5772ad30a2deba111bd21805cf76d289cdb99d2e9665d",
+    "bytes": 251967
+  },
+  "current_equals_base": true,
+  "candidate": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/postpositive-revoke-1/mcexec_helpers.rs",
+    "sha256": "1d86dc8b2709b3dbc6ca8b60ee785ac3410a63a1abdf28e8c789b186bc3f3f31",
+    "bytes": 253331
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/postpositive-revoke-1/private-control-dispatch.patch",
+    "sha256": "361a683f6aa611bd86fe37e0128c09c4b55b4e4209084c99be593ff3b8393681",
+    "bytes": 1979
+  },
+  "real_callsite": "Current executer/user/mcexec.c __NR_clone branch8100: selector1 selects act_clone_complete; every other selector calls Rust act_clone_start. Rust selected dispatcher likewise calls act_clone_start. Guard is before its first allocation.",
+  "implemented": "Exact reserved selectors2/3 are handled without fork-sync allocation, Linux fork or carrier-byte access. Request nr56, actual CPU tag and MCFKC001 marker must match; existing selector3 ACK stage2 is checked. Known routing returns EOPNOTSUPP95 because the real backend hook is unavailable; malformed routing returns EINVAL22. Actual existing do_syscall_return constructs the RET ioctl descriptor with those negative values and zero copy spans. Its failure never falls back into normal clone.",
+  "no_new_authority": "Selector2 has no new phase grammar. Launcher routing/negative RET has no IHK pending-owner claim, full parent/child generation identity, alias/TLB proof, receipt writer or final ACK authority. Every control is refused; no RET0 or synthetic endpoint is produced.",
+  "preservation": "Original act_clone_start body after one guard insertion is byte-identical. act_clone_complete, fork-sync complete/remove helpers and do_syscall_return bodies are byte-identical. Supported normal requests produce0 or CLONE_PARENT-containing flags, not exact2/3. C consumers/fallback remain unchanged.",
+  "actual_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/postpositive-revoke-1/check-1/result.json",
+    "sha256": "59e5bd6af909a4603974848a369d9a1f48828bd9fe3b85c5224de649352bf647",
+    "bytes": 408
+  },
+  "fixture_inputs": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/postpositive-revoke-1/fixture-inputs.json",
+    "sha256": "f02f6450178d6557cc08e588582ae7e23b3d3b92bec222419691951a73b5bdea",
+    "bytes": 1741
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/postpositive-revoke-1/run_control_check.py",
+    "sha256": "c3db172ec1f5ae52694f1999b7d3bf1e3c2e642b77bb7828166d772dda02c521",
+    "bytes": 3849
+  },
+  "actual_check": {
+    "commands": 2,
+    "new_tests": 4,
+    "all_returncodes_zero": true,
+    "all_direct_joined": true,
+    "all_groups_absent": true,
+    "stderr_bytes": 0,
+    "cpu6_released": true,
+    "actual_bodies": [
+      "act_private_fork_control",
+      "act_clone_start",
+      "act_clone_complete",
+      "do_syscall_return",
+      "mcexec_fork_sync_complete_result",
+      "mcexec_fork_sync_remove_node_result"
+    ],
+    "observations": [
+      "Selectors2/3 produce negative actual RET descriptors without allocation/fork and do not modify request bytes.",
+      "Wrong marker, syscall number, CPU and selector3 ACK stage refuse without clone work.",
+      "Normal parent success, child return, fork error, child disappearance, CLONE_PARENT flags and selector1 completion preserve expected result/resource ordering.",
+      "Allocation failures preserve old -1 behavior and cleanup. Failed control ioctl invokes existing error handling and never falls back to fork."
+    ]
+  },
+  "adapters": [
+    "Linux allocator/mmap/semaphore/fork/waitpid/errno and fork-sync locks/global storage",
+    "ioctl capture and perror; actual real device ioctl is not executed"
+  ],
+  "separate_bases": {
+    "old_held_parent_pin_patch": "70dc4e9350762c39b398cc133ed02620437a0e7365eb7022df04926050c4e23e",
+    "current_entry_parent_slot_pin_patch": "aac4a2487618a1d1dae6394e81feb0cec47e56e2b79699c0c8759d6bdcd282cf",
+    "backend_overlay": false
+  },
+  "limits": [
+    "No full current mcexec crate/C selected consumer compile or linked artifact/default production proof; focused exact Rust bodies only.",
+    "No real Linux fork, guest, SDK/module/image build or native operation was performed.",
+    "Positive postpositive revoke transaction remains absent: a real guest control producer and backend fresh delivered-response owner plus IHK pending-owner claim/verified alias-revocation writer are still needed. Existing negative-first RET cannot be overwritten or relabeled.",
+    "Final ACK still needs genuine current launcher/backend/capsule/publication/terminal owner integration; this negative transport response grants none.",
+    "CREATE_PPD remains -95 and guest prepare remains weak NULL; held runtime permissions unchanged."
+  ],
+  "next_action": "Independent reviewer accepts this exact current one-file source/result boundary; root may apply only matching diff and run next eligible normal userland full-consumer compile. Continue real positive control producer/IHK response-owner writer integration separately; no runtime activation follows this result."
+}

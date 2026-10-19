@@ -1,3 +1,27 @@
+## Current source — reserved launcher controls refuse before fork allocation
+
+Exact current Rust launcher patch361a683f is applied to
+executer/user/rust/mcexec_helpers.rs (b77d5443→1d86dc8b). Independent d102e956
+accepts one real-body compile and four focused checks: reserved selectors2/3
+produce negative RET descriptors (-95 valid unsupported/-22 malformed), without
+fork-sync allocation or Linux fork. Normal start/complete dispatch is unchanged.
+This is not positive provider, delivered revoke, final ACK or native transport
+proof. Current NULL/-95 and runtime holds remain; the frozen matched SDK/image
+and launcher binaries are unchanged. Full launcher compilation is pending.
+Evidence: ../evidence/practical-create-ppd-launcher-control-20261019-1/HANDOFF.json.
+
+Next real source transition parks the SAME fresh unpublished response with
+its exact IHK pending-owner claim before any control receipt write; no original
+RET rewriting or selector-derived authority. Host-only current pin compilation
+is prepared through the existing SDK route without rebuilding McKernel.
+
+FP lifecycle ordinary stage and mandatory consumer composition independently
+pass b991b0c6/a05142fe. Final wholecase b431ba93 and lifecycle snapshot packet
+d991c9dd are prepared; exact preclock review then fresh admission/snapshot,
+final guard and immediate owner remain. No native lifecycle operation yet.
+Completed-result review handoffs now always use followup_task, including an
+already active reviewer. No accepted counter changes:11/35,25,17/14.
+
 ## Current source — durable parent-slot retention integrated, not activated
 
 Exact one-file Rust patchaac4a248 is applied to current production

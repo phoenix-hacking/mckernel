@@ -1,0 +1,40 @@
+#endif
+			break;
+		}
+
+		case __NR_clone: {
+#ifdef MCEXEC_RUST_HELPERS
+			int flag = w.sr.args[0];
+
+			if (flag == 1) {
+				act_clone_complete(&w, fd, cpu);
+			}
+			else if (act_clone_start(&w, fd, cpu, &ret)) {
+				return ret;
+			}
+#else
+			struct fork_sync *fs;
+			struct fork_sync_container *fsc = NULL;
+			struct fork_sync_container *fp;
+			struct fork_sync_container *fb;
+			int flag = w.sr.args[0];
+			int rc = -1;
+			pid_t pid;
+
+			if (flag == 1) {
+#ifdef MCEXEC_RUST_HELPERS
+				act_clone_complete(&w, fd, cpu);
+#else
+				pid = w.sr.args[1];
+				rc = 0;
+				pthread_mutex_lock(&fork_sync_mutex);
+				for (fp = fork_sync_top, fb = NULL; fp; fb = fp, fp = fp->next)
+					if (fp->pid == pid)
+						break;
+				if (fp) {
+					fs = fp->fs;
+					if (fb)
+						fb->next = fp->next;
+					else
+						fork_sync_top = fp->next;
+					fs->success = 1;
