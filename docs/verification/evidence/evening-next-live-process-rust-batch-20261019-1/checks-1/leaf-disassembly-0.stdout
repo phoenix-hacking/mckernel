@@ -1,0 +1,81 @@
+
+/home/holden/mckernel-work/host-preparation/evening-next-live-process-rust-batch-20261019-1/checks-1/leaf.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_hash:
+
+Disassembly of section .ltext.process_list_detach_result:
+
+Disassembly of section .ltext.process_list_is_linked_result:
+
+Disassembly of section .ltext.process_release_hash_detach_bridge:
+
+0000000000000000 <process_release_hash_detach_bridge>:
+   0:	48 85 f6             	test   %rsi,%rsi
+   3:	0f 84 cf 00 00 00    	je     d8 <process_release_hash_detach_bridge+0xd8>
+   9:	48 8b 06             	mov    (%rsi),%rax
+   c:	48 85 c0             	test   %rax,%rax
+   f:	0f 94 c1             	sete   %cl
+  12:	48 39 f0             	cmp    %rsi,%rax
+  15:	0f 94 c0             	sete   %al
+  18:	08 c8                	or     %cl,%al
+  1a:	0f 85 b8 00 00 00    	jne    d8 <process_release_hash_detach_bridge+0xd8>
+  20:	55                   	push   %rbp
+  21:	48 89 e5             	mov    %rsp,%rbp
+  24:	41 56                	push   %r14
+  26:	53                   	push   %rbx
+  27:	48 83 e4 c0          	and    $0xffffffffffffffc0,%rsp
+  2b:	48 81 ec 80 00 00 00 	sub    $0x80,%rsp
+  32:	48 8b 47 18          	mov    0x18(%rdi),%rax
+  36:	48 63 8e c8 01 00 00 	movslq 0x1c8(%rsi),%rcx
+  3d:	48 69 d1 1d 38 70 e0 	imul   $0xffffffffe070381d,%rcx,%rdx
+  44:	48 c1 ea 20          	shr    $0x20,%rdx
+  48:	01 ca                	add    %ecx,%edx
+  4a:	89 d7                	mov    %edx,%edi
+  4c:	c1 ef 1f             	shr    $0x1f,%edi
+  4f:	c1 fa 06             	sar    $0x6,%edx
+  52:	01 fa                	add    %edi,%edx
+  54:	8d 3c d2             	lea    (%rdx,%rdx,8),%edi
+  57:	8d 14 fa             	lea    (%rdx,%rdi,8),%edx
+  5a:	29 d1                	sub    %edx,%ecx
+  5c:	48 63 c9             	movslq %ecx,%rcx
+  5f:	48 c1 e1 06          	shl    $0x6,%rcx
+  63:	48 8d 1c 08          	lea    (%rax,%rcx,1),%rbx
+  67:	48 81 c3 c0 04 00 00 	add    $0x4c0,%rbx
+  6e:	48 b9 00 00 00 00 00 	movabs $0x0,%rcx
+  75:	00 00 00 
+			70: R_X86_64_64	process_mcs_writer_lock_bridge
+  78:	48 89 e0             	mov    %rsp,%rax
+  7b:	48 89 df             	mov    %rbx,%rdi
+  7e:	49 89 f6             	mov    %rsi,%r14
+  81:	48 89 c6             	mov    %rax,%rsi
+  84:	ff d1                	callq  *%rcx
+  86:	49 8b 4e 08          	mov    0x8(%r14),%rcx
+  8a:	48 85 c9             	test   %rcx,%rcx
+  8d:	74 2f                	je     be <process_release_hash_detach_bridge+0xbe>
+  8f:	4c 89 f0             	mov    %r14,%rax
+  92:	49 8b 16             	mov    (%r14),%rdx
+  95:	48 85 d2             	test   %rdx,%rdx
+  98:	40 0f 94 c6          	sete   %sil
+  9c:	4c 39 f2             	cmp    %r14,%rdx
+  9f:	40 0f 94 c7          	sete   %dil
+  a3:	40 08 f7             	or     %sil,%dil
+  a6:	75 16                	jne    be <process_release_hash_detach_bridge+0xbe>
+  a8:	48 89 4a 08          	mov    %rcx,0x8(%rdx)
+  ac:	48 89 11             	mov    %rdx,(%rcx)
+  af:	48 c7 00 29 01 10 00 	movq   $0x100129,(%rax)
+  b6:	48 c7 40 08 29 02 20 	movq   $0x200229,0x8(%rax)
+  bd:	00 
+  be:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+  c5:	00 00 00 
+			c0: R_X86_64_64	process_mcs_writer_unlock_bridge
+  c8:	48 89 e6             	mov    %rsp,%rsi
+  cb:	48 89 df             	mov    %rbx,%rdi
+  ce:	ff d0                	callq  *%rax
+  d0:	48 8d 65 f0          	lea    -0x10(%rbp),%rsp
+  d4:	5b                   	pop    %rbx
+  d5:	41 5e                	pop    %r14
+  d7:	5d                   	pop    %rbp
+  d8:	c3                   	retq   
+
+Disassembly of section .ltext.process_release_sibling_detach_bridge:

@@ -1,6 +1,27 @@
 # Tactical plan for faster verified OS progress
 
-## Build completed — review59, 2026-10-19T06:19:11Z
+## Current priorities — review60, 2026-10-19T06:49:55Z
+
+Remaining3 real descriptor reads and strictv3facts PASS. Finish the four exact
+file/function string windows and canonical artifact acceptance, then21retention
+and reviewed terminal physicalrelease. Reuse compiler/4copies/inspections1-13;
+preserve failed14 and originalDWARFgap. Descriptor symbols exist; the oldsection
+name was wrong and Rustzero-address sections must remain distinct. Approve the
+finite4-window set coherently, without per-string packets or another broad audit.
+
+TwoCPU source/ordinary chain fullyaccepted including bothrunnernegativecases;
+prepare genuine finalnative release for next eligible slot. New0eca singleCPU
+continuation's fixedcanonical gate is coded; execution staysclosed pending real
+report/retainedpair. Keep runtime slots exclusive and fill source/code lanes.
+One next coherentRustbatch ports2liveprocessrelease detach callbacks; targeted
+actualC/Rust, bucket,parentcache,poisoning,lock/order checks then integrate/commit.
+Current0eca/materialized35a remainfrozen. No newcomputeC or compiler-per-leaf.
+
+Python --progress practicaldisplay is shipped and verified; source f4a9e440.
+Native/practical counters remain24/13/11 and7of35,all14wholemilestonesopen. Prior
+engineering bands held; nextfullreview07:19UTC. User wants continued evening run.
+
+## Previous build status — review59, 2026-10-19T06:19:11Z
 
 Four-leaf production build independently PASS:10phases,71Cassertions,selected+
 fallback actualC TUs,bothfullRustcrates,guard/dispatcher0 and ownerclientretired.

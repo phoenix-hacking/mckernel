@@ -3382,6 +3382,10 @@ void *process_current_resource_set_bridge(void)
 	return get_this_cpu_local_var()->resource_set;
 }
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_release_hash_detach_bridge(void *resource_set_arg,
+					void *proc_arg);
+#else
 void process_release_hash_detach_bridge(void *resource_set_arg,
 					void *proc_arg)
 {
@@ -3398,7 +3402,11 @@ void process_release_hash_detach_bridge(void *resource_set_arg,
 		mcs_rwlock_writer_unlock(&phash->lock[hash], &lock);
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_release_sibling_detach_bridge(void *proc_arg);
+#else
 void process_release_sibling_detach_bridge(void *proc_arg)
 {
 	struct process *proc = proc_arg;
@@ -3409,6 +3417,7 @@ void process_release_sibling_detach_bridge(void *proc_arg)
 	process_list_detach_result(&proc->siblings_list);
 	mcs_rwlock_writer_unlock(&parent->children_lock, &lock);
 }
+#endif
 
 void process_release_profile_bridge(void *proc_arg)
 {

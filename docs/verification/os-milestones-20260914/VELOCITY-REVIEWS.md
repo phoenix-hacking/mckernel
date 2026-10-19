@@ -23,6 +23,31 @@ final-profile closure remains open. Other bands held; M09 is integration only.
 Measured facts23behaviors/13production/11native and7complete28open of35.
 Earlier immutable baseline, four-hour comparison and review cutoffs are unchanged.
 
+**LATEST FULL REVIEW60 — 2026-10-19T06:49:55Z; next07:19UTC:** campaign
+active;usage51->52%. Four real copies and inspections1-13 independently accepted;
+original14 failed because __verbose is not a linked output section although both
+descriptor symbols exist. V3 preserves distinct zero-address Rust sections and
+reads actual image addresses. Three REAL remaining descriptor observations and
+strictv3facts now PASS; originalfailure preserved, no compiler/copy/1-13 replay.
+Reviewer derives four exact file/function pointer-window checks before canonical
+production artifact acceptance. Retention21/terminalrelease/native still pending.
+
+TwoCPU source+ordinary prerequisites complete:23owner/mountcontrols, actualprivate
+runnerpositive and bothnegativecases independently accepted. Exact app9/reaped
+versus uncertainownership/failed/unreaped behavior retained; no further full
+fixture needed. Real native release fields listed; guest still unrun. New0eca
+native stage gate now hardcodes the agreed canonical report/source/descriptor
+contract; report and retainedpair remain pending. NextliveRustbatch implements
+two process-release list-detach callbacks, with Cfallbacks and existing caller
+boundaries preserved; targetedparity/orderchecks in progress, no newcodecredityet.
+
+Newcheckpoint6c988e93 preserves section-aware observations; f4a9e440 contains
+compiler/census/progressdisplay checkpoint. Python --progress now verified to
+lead canonical7complete28open35total and live runner, with deferredformalpointer.
+Accepted24behaviors/13production/11nativeRust/7of35checks unchanged,14whole
+milestonesopen; engineering bands held. Host46.986GiB/scratch12.813GiB atcutoff;
+no deletion or native execution. No measured2-3x closure speedup yet.
+
 **LATEST FULL REVIEW59 — 2026-10-19T06:19:11Z; next06:49UTC:** four-leaf
 build actually ran06:02:41UTC and dispatcher/guard joined0 (~251s); producer
 completePASS06:05:52 and ownerPASS/clientretirement proved. Independent actual
@@ -4493,3 +4518,29 @@ focused testPASS,lifecycle untouched). Adopt at next suitable checkpoint without
 blocking runtime work. Supervisor cursors should join that campaign-owned save.
 Native/practical counts stay24behaviors/13production/11nativeRust/7of35 until
 original contract acceptance; all prior failures/evidence and scratch21 retained.
+
+
+## Review60 — 2026-10-19T06:49:55Z
+
+Actual remaining-only descriptor reads and v3facts succeeded. Keep original
+14failure, unflattened Rustsection identities and independently accepted capture
+prefix. Finish just four bounded string-pointer windows and canonical report,
+then21-role retention/terminal physicalrelease. Do not rerun build/copies/1-13.
+Define and approve all four window bounds together; no per-string review loop.
+
+TwoCPU source/ordinary chain is now accepted through both exact runner negatives;
+freeze native proposal/final release fields while ownership clearance progresses.
+Newimage0eca oneCPU continuation uses the accepted254B oracle and fixed canonical
+report gate; keep originalFP1e7 twoCPU lane separate until each runtime profile
+is accepted. Guest execution still requires its genuine fresh release/admission.
+
+The next Rust worker is implementing two live process-release detach callbacks,
+not a new validation framework. Allow one coherent futurebatch; use bounded
+symbol/function reads, realC/Rust+consumer checks and actual source integration
+checkpoint once reviewed. No newcomputeC or unbounded private draft queue.
+
+The reviewed twofile progress-display delta is now shipped in f4a9e440 and live
+Python CLI verified. It shows canonical practical counts with source/timestamp
+limits and live runner, avoiding stale formal0/273 and6/130 numbers in the main
+view. It changes no campaign lifecycle or acceptance. All resource/ownership/
+97%controls and every prior failure/exclusion remain preserved. Next07:19UTC.

@@ -1,5 +1,50 @@
 # Resume cursor
 
+## Current — two callback Rust batch integrated as source only (07:05 UTC)
+
+Independent40607413 accepts source integration of process_release hash-detach and
+sibling-detach callbacks. Root applied reviewedpatch2b56b0b1 to actualprocess.c
+and process_helpers.rs, preserving fallback bodies and unrelated lifecycle WIP.
+468parityscenarios/3744C+Rustcalls,73buckets,selected/fallbackconsumers/defaultRust
+relocations/unique linkage pass. Evidence retained in ../evidence/
+evening-next-live-process-rust-batch-20261019-1/. Production GCC14/fullTU+11affected
+layout assertions/bothcrates/newlinkedimage/nativefinal-release remain pending.
+Current35a/0eca build inputs stay frozen in their materialized source; fixedFP1e7
+functional app authority is unchanged. This is not production/native retirement.
+
+Actual four CString windows independently pass7f7ef68c: exact file suffix and two
+logger functions,4directjoins/8streamFDhashes. Canonical selected artifact report
+is being assembled. Finite21source/execution review runs independently using
+accepted owner/guard joins; its observer does not consume canonicalreport, so
+semantic assembly is not an added retention gate. No copies/rootcleanup yet.
+Counters24/13/11,7of35 remain unchanged pending actual acceptance.
+
+## Current — remaining descriptor observations joined; retention next (06:56 UTC)
+
+V3 remaining-three observations plus strict facts independently pass30c61ea8.
+The exact four CString pointer windows then directly joined0 as one admitted
+ordinary set (0.0214s tool time,3780 stdout bytes,total stderr0). Completed
+captures: evening-four-leaf-production-20261019-1/postbuild-consumer-v3/
+actual-pointer-windows-1/completed-four-windows.json in host-preparation.
+Actual CString/canonical artifact review is active; selected production acceptance
+is still pending its decision. Original failed14 and syscall full-DWARF gap remain
+open; compilation,fourcopies and inspections1-13 were not replayed.
+
+Finite21 retention and executable terminal bindings are being finalized against
+actual source11/current stoppedCID. Common/shared ownership remains held; no new
+heavy workload/guest or cleanup admitted. FixedFP1e7 twoCPU app now has all source
+and ordinary prerequisites independently accepted, including two negative runner
+casesa0c86d0c. Its final non-temporal fields are being frozen; actual physical
+predecessor,fresh60s snapshot and one-shot exact release remain pending.
+
+One private next Rust batch implements release_process hash/sibling detach
+callbacks:468 frozen-oracle parity scenarios/3744 C+Rust calls pass, selected and
+fallback consumers/unique linkage pass. Original fixture failures retained; only
+remaining parity commands corrected. No shared source changes yet; independent
+boundary review active, full GCC14/crate/image/native proof pending. CPU7 released.
+Counts remain24behaviors/13production/11nativeRustpaths,7of35 practicalchecks.
+Campaign ACTIVE; functional OS/apps plus Rust/assembly migration continues.
+
 ## Current — real four-leaf compiler build accepted; remaining descriptor inspection
 
 Independent7cea7dc7 accepts one current image build: all10phases PASS,71actual
