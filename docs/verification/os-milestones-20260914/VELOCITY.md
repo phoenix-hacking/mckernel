@@ -1,6 +1,55 @@
 # Tactical plan for faster verified OS progress
 
-## Current velocity priorities — review57, 2026-10-19T05:19:09Z
+## Build completed — review59, 2026-10-19T06:19:11Z
+
+Four-leaf production build independently PASS:10phases,71Cassertions,selected+
+fallback actualC TUs,bothfullRustcrates,guard/dispatcher0 and ownerclientretired.
+Image0eca91b13bd62ab98441104930eda1a63f247fecd939996858b16f90b7480550
+is7,962,040B. Do not rerun compiler. Run the ready14postbuild observations with
+corrected completion/FD/hash consumer, then21-role retention and reviewed terminal
+release. Actual linked-body/native acceptance remains pending; current ownership
+records/container intentionally held. Keep soleheavy/mutex controls.
+
+Prioritize ready real execution over new helper preparation. TwoCPUordinary3/25/6
+accepted; originalFP1e7 native proposal/metadata ready, ownerfixture needs complete
+synthetic inspect schema review. New0eca oneCPUAVX/thread continuation separately
+prepared and gated on postbuild/retainedimage acceptance. Reuse fixed oracles and
+completedarchives; original0700binary and every failedstage preserved.
+
+Source/review lanes remain parallel; ACTUALCPU6source/cleanup andCPU7readbacks/app
+jobs need finite whole-profile handoffs. Full4.1Mchar reviewer dump was caught:
+print status/predicate/counts/<=5witnesses, keep rawrecords on disk. No whole-corpus
+rereads after compaction. Counts24/13/11,7of35,all14milestonesopen unchanged.
+Next fullreview06:49UTC; user explicitly wants continued evening supervision.
+
+## Previous velocity priorities — review58, 2026-10-19T05:49:09Z
+
+Select the first genuinely admitted useful execution. Four-leaf ordinary source/
+request/toolchain/consumer chain is accepted; host-backed build requestbc98516d
+has separate host16GiB/scratch12GiB floors and does not inherit the IHK target's
+extra scratch need. Finish genuine growth/source/ownership/execution review and
+get real compiler feedback when its sole-heavy slot is available. No overlapping
+root cleanup or shared development-mutex work; no budget/floor reduction.
+
+Cleanup55863886 deterministic mount ordering + bounded drift diagnostics has9
+fixtures and focused reviewPASS; old source0c134 preserved. Publish/freeze genuine
+new observation9/apply2 bindings and validated checker before the live clock.
+Retained obs7/8 canonical comparison is useful regression evidence; failed live
+apply difference was unrecorded. No deletion/capacity credit before actual result.
+
+App source and5compile/ELF checks passed. Private base correction preserves all
+records except declared bootstrap payload/sizeCRC and retains canonical overlay
+rules. Measured compression exceeded20s;45s stage/60s outer is a time-only next
+proposal, not replay authority. Execute just remaining admitted commands after
+CPU7 handoff. ACTUAL CPU6 source/cleanup versusCPU7 readbacks/app ownership must
+join between conflicting jobs; parallel source writing/review should not reserve
+idle execution slots. Coherent whole-profile delegation avoids per-command waits.
+
+Accepted native24/production13/nativeRust11 and7of35checks unchanged; all14whole
+milestones open. Prior engineering bands held. Usage49%; next06:19UTC. Root owns
+Git/releases; preserve this cursor with next checkpoint. No new compute C.
+
+## Previous velocity priorities — review57, 2026-10-19T05:19:09Z
 
 Keep three useful paths concurrent: root owns exact cleanup/live releases;
 CPU6 owner executes the complete reviewed four-leaf source binding/materialization/

@@ -272,7 +272,7 @@ class CampaignTests(unittest.TestCase):
         finally:
             campaign.output.close()
 
-    def test_progress_report_separates_live_runner_from_saved_dashboard(self):
+    def test_progress_report_leads_with_practical_checks_and_preserves_live_runner(self):
         campaign = launcher.Campaign(self.args, self.directory, self.directory)
         try:
             campaign.state["thread_id"] = "test-thread"
@@ -283,11 +283,31 @@ class CampaignTests(unittest.TestCase):
             dashboard.write_text("- Dashboard refreshed: yesterday\n"
                                  "- Native production gates: 6/130\n"
                                  "| M02 | comparison | partial |\n")
+            tracker = dashboard.with_name("practical-milestones.json")
+            tracker.write_text(json.dumps({
+                "scope_id": "practical-kernel-apps-v1-20261017", "effective_date": "2026-10-17",
+                "milestones": [{"checks": [{"status": status} for status in
+                                            ("complete", "open", "open", "unassessed")]}]}))
             report = launcher.progress_report(self.directory, self.directory)
+            self.assertTrue(report.startswith("Practical exit checks (recorded): 1 complete, 2 open, 1 unassessed, 4 total."))
             self.assertIn("active child agents: 1/8", report)
-            self.assertIn("last generated snapshot", report)
-            self.assertIn("- Native production gates: 6/130", report)
-            self.assertIn("| M02 | comparison", report)
+            self.assertIn("filesystem time; not an evidence date", report)
+            self.assertIn("Source: " + str(tracker), report)
+            self.assertIn("Historical / DEFERRED qualification", report)
+            self.assertNotIn("6/130", report)
+            self.assertNotIn("| M02 | comparison", report)
+            self.assertNotIn("%", report)
+            for contents in (None, "{", json.dumps({"scope_id": "other"}),
+                             json.dumps({"scope_id": "practical-kernel-apps-v1-20261017",
+                                         "milestones": [{"checks": [{"status": "passed"}]}]})):
+                if contents is None:
+                    tracker.unlink()
+                else:
+                    tracker.write_text(contents)
+                report = launcher.progress_report(self.directory, self.directory)
+                self.assertTrue(report.startswith("Practical exit checks: unavailable"))
+                self.assertIn("active child agents: 1/8", report)
+                self.assertNotIn("6/130", report)
         finally:
             campaign.output.close()
 

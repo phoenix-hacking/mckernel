@@ -1,0 +1,83 @@
+{
+  "status": "PASS_SOURCE_ONLY_BOUNDED_WHOLE_PROCESS_CENSUS_RETRY",
+  "time_unix": 1792389585.5349483,
+  "base_source_sha256": "5586388673348be64bd1e5b1734f60e6f26c87f77bb4ba019a063ea4b808d566",
+  "candidate_sha256": "4fc54b4b7b5b1e9e96b6162e46380d0204face15d254ebbbb44bf5c0a96322c6",
+  "actual_failure_review_sha256": "15d5e1fa8398f798931f829e4150bfbd3d12e2e6f1ead4a5f318de0a5203b089",
+  "selected_functions": [
+    "proc_identity",
+    "process_census",
+    "process_census_once"
+  ],
+  "change_counts": {
+    "new_imports": 1,
+    "new_exception_classes": 1,
+    "maximum_complete_passes": 3,
+    "unchanged_function_or_class_nodes": 32,
+    "focused_fixture_cases": 7
+  },
+  "findings": [
+    "Only stat ENOENT followed by exact PID directory lstat ENOENT yields typed CensusVanished; missing stat on a still-present/reused PID, EACCES, other IO, malformed identity and classification changes refuse",
+    "Retry catches only CensusVanished and discards entire failed pass; no partial identities, failed namespace authentication or unknown mappings are accepted",
+    "Entire original process_census body AST is unchanged as process_census_once, including final full PID set equality and all task namespace/mountinfo/FD/maps/PID/start checks",
+    "Entire module AST matches source558 after removing only errno import/new exception/new wrapper and restoring proc_identity; no candidate/Git/metadata/journal/unlink/freshness/ancestry oracle changes",
+    "The same narrow proc_identity exception outside the retry wrapper still aborts execution; coordinator identity cannot be waived by retry",
+    "Three passes increase worst-case census work at most3x; same fixed supervisor CPU/wall/AS/FD bounds continue to terminate safely. No new processes, Docker calls or ownership changes from retry",
+    "Actual7 fixture results and all recorded hashes/directjoin/empty stderr verified. Kernel-class fixture paths establish retry/reset and refusal boundaries; they are not new native/root/full namespace acceptance",
+    "The original APPLY2 failure alone did not prove PID directory absence; candidate validates that fact on any future actual occurrence before retry. PID1377983 owner/starttime remains unknown"
+  ],
+  "fixture_cases": [
+    "first-PID-vanishes-restart-complete-pass",
+    "later-PID-vanishes-discard-earlier-identities",
+    "EACCES-refuses-no-skip",
+    "ENOENT-stat-with-live-directory-refuses",
+    "changed-start-refuses",
+    "unknown-mount-refuses",
+    "three-full-pass-budget-refuses"
+  ],
+  "runtime_authority": false,
+  "integration_authority": "Independent source boundary PASS; root remains sole integrator under existing campaign authorization",
+  "next": "Preserve source558 and consumedOBS9/APPLY2. New exact source4fc role/capture derivatives, unchanged helper AST, source pins, publication and prevalidated data bindings are needed before any separate fresh root execution. No privileged retry authorized by this report.",
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/exact120.py",
+      "bytes": 38600,
+      "sha256": "5586388673348be64bd1e5b1734f60e6f26c87f77bb4ba019a063ea4b808d566"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-process-census-retry-20261019-1/exact120-candidate.py",
+      "bytes": 39869,
+      "sha256": "4fc54b4b7b5b1e9e96b6162e46380d0204face15d254ebbbb44bf5c0a96322c6"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-process-census-retry-20261019-1/candidate.patch",
+      "bytes": 2428,
+      "sha256": "10f24f9ef5ba76cf4453eba05185df3d3668d8c0eae894e129baa58bf5860fb9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-process-census-retry-20261019-1/fixture.py",
+      "bytes": 4510,
+      "sha256": "f717aee50c0bc535960b56b77c5fa588477baf021c46fcb3376482c46fcf8e94"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-process-census-retry-20261019-1/fixture-result-1.json",
+      "bytes": 1590,
+      "sha256": "0807fe2bd0329b59aecb7c89ac44c5a7b4f2f313c7a5fa6c7e0f98236f52cb94"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-process-census-retry-20261019-1/fixture-command-1.status.json",
+      "bytes": 1891,
+      "sha256": "240beb909351572e3839e5f8bea18e68bd1babb66666d57ccb233a7d36605b0c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-process-census-retry-20261019-1/fixture-command-1.stdout",
+      "bytes": 72,
+      "sha256": "d6034887a6a8ff3b6a3c35d3fed6456b1a49c508e8b98b0743eaf58419e79471"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-process-census-retry-20261019-1/fixture-command-1.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

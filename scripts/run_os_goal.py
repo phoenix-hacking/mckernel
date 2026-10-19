@@ -192,7 +192,7 @@ def queue_instruction(directory, instruction):
 
 
 def progress_report(directory, repo):
-    """Read the live heartbeat and existing engineering dashboard; never infer credit."""
+    """Show canonical practical check states and the live heartbeat; never infer credit."""
     state_path = directory / "state.json"
     state = json.loads(state_path.read_text()) if state_path.is_file() else {}
     goal = state.get("goal") or {}
@@ -211,21 +211,34 @@ def progress_report(directory, repo):
     if last_instruction:
         lines.append("Last instruction: {} ({})".format(
             last_instruction.get("id", "?"), last_instruction.get("status", "?")))
-    dashboard = repo / PLAN_REL / "PROGRESS.md"
-    if not dashboard.is_file():
-        lines.append("Progress dashboard is not available.")
-        return "\n".join(lines)
-    lines.append("Dashboard (last generated snapshot; not live acceptance):")
-    for line in dashboard.read_text().splitlines():
-        if (line.startswith("- Dashboard refreshed:")
-                or line.startswith("Engineering snapshot:")
-                or line.startswith("- Native production gates:")
-                or line.startswith("- Earned contractual points:")
-                or line.startswith("- Application catalog:")
-                or line.startswith("- Narrow fault modes:")
-                or line.startswith("- Language gates:")
-                or line.startswith("| M0")):
-            lines.append(line)
+    tracker = repo / PLAN_REL / "practical-milestones.json"
+    practical = ["Practical exit checks: unavailable (missing, unreadable or invalid tracker)."]
+    try:
+        doc = json.loads(tracker.read_text())
+        if (not isinstance(doc, dict)
+                or doc.get("scope_id") != "practical-kernel-apps-v1-20261017"
+                or not isinstance(doc.get("milestones"), list)):
+            raise ValueError("Unrecognized practical tracker")
+        checks = [check for milestone in doc["milestones"] for check in milestone["checks"]]
+        counts = {status: 0 for status in ("complete", "open", "unassessed")}
+        if not checks:
+            raise ValueError("No practical checks recorded")
+        for check in checks:
+            counts[check["status"]] += 1
+        modified = datetime.fromtimestamp(tracker.stat().st_mtime, timezone.utc).isoformat()
+        practical = [
+            "Practical exit checks (recorded): {complete} complete, {open} open, "
+            "{unassessed} unassessed, {total} total.".format(**counts, total=len(checks)),
+            "Scope: {} | effective date: {}".format(doc["scope_id"], doc.get("effective_date", "not recorded")),
+            "Tracker file modified: {} (filesystem time; not an evidence date).".format(modified),
+            "Recorded check closures do not imply whole-OS or Rust-retirement completion.",
+        ]
+    except (OSError, ValueError, KeyError, TypeError):
+        pass
+    practical.append("Source: {}".format(tracker))
+    lines = practical + [""] + lines
+    lines.append("Historical / DEFERRED qualification: see {} (saved dashboard; "
+                 "formal counters do not define practical completion).".format(repo / PLAN_REL / "PROGRESS.md"))
     return "\n".join(lines)
 
 

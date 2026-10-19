@@ -1,0 +1,171 @@
+{
+  "status": "ACCEPT_FAILED_APPLY2_PROCESS_CENSUS_REFUSAL_AND_POSITIVE_RETIREMENT_NO_DELETION",
+  "time_unix": 1792389533.2794437,
+  "first_predicate": "RuntimeError: pid=1377983 stat read failed errno=2",
+  "failure_phase": "Fresh snapshot process_census, before completed snapshot, projection comparison, journal creation or unlink",
+  "selected_functions": {
+    "proc_identity": 309,
+    "process_census": 440,
+    "main_snapshot_call": 615,
+    "journal_open": 635,
+    "first_unlink": 652
+  },
+  "source_sha256": "5586388673348be64bd1e5b1734f60e6f26c87f77bb4ba019a063ea4b808d566",
+  "wrapper_sha256": "1533bb51ccd6cee013d836d8e7df9f2b745ed5ee724b7b2c6abcd39d9bab2bbd",
+  "actual_release_sha256": "fc916392a51b1622e39eb10ddfba3ee0af3e448696ee39be151538d36ef8efe0",
+  "prior_final_review_sha256": "455c9c2ad5e745df02de1479329e3e1528746030e99a310324b67c445102b9a5",
+  "control_flow_findings": [
+    "Fresh process census failed while reading /proc/1377983/stat; no identity/starttime obtained for that PID",
+    "New bounded changed-key diagnostic and immutable projection comparison were never reached",
+    "Journal creation635 and first unlink652 unreachable on this captured failure path",
+    "Source558 Mounts row normalization was not disproved or exercised through comparison in this attempt"
+  ],
+  "outer": {
+    "pid": 1377946,
+    "direct_joined": true,
+    "returncode": 1,
+    "elapsed_seconds": 4.975719392008614
+  },
+  "engine": {
+    "pid": 1377948,
+    "pgid": 1377948,
+    "starttime": 18678815,
+    "direct_joined": true,
+    "returncode": 1,
+    "whole_group_retired": true,
+    "remaining_group": [],
+    "mutex_identity_preserved_and_available": true,
+    "elapsed_seconds": 4.895760176004842
+  },
+  "known3_readback_commands": [
+    {
+      "name": "stat-before",
+      "pid": 1378144,
+      "direct_joined": true,
+      "returncode": 0
+    },
+    {
+      "name": "raw-0",
+      "pid": 1378146,
+      "direct_joined": true,
+      "returncode": 0
+    },
+    {
+      "name": "raw-1",
+      "pid": 1378148,
+      "direct_joined": true,
+      "returncode": 0
+    },
+    {
+      "name": "raw-2",
+      "pid": 1378150,
+      "direct_joined": true,
+      "returncode": 0
+    },
+    {
+      "name": "stat-after",
+      "pid": 1378152,
+      "direct_joined": true,
+      "returncode": 0
+    }
+  ],
+  "known3_actualFD_metadata_and_source_fstat_hash_joins_verified": true,
+  "raw_bytes": [
+    0,
+    1827,
+    5108
+  ],
+  "journal": {
+    "status": "NOT_CREATED",
+    "exact_ENOENT": true,
+    "probe_direct_joined": true,
+    "probe_returncode": 1,
+    "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/actual-cleanup-apply-2.jsonl"
+  },
+  "post_capacity_available_bytes": {
+    "host": 50737848320,
+    "scratch": 13758107648
+  },
+  "scratch_delta_note": "Parent reports delta0; postcapacity corroborates only. No-unlink conclusion derives from captured pinned-source control flow, not capacity alone.",
+  "no_unlink_in_this_engine_attempt": true,
+  "failure_family": {
+    "family": "Global process census transient proc stat ENOENT during fresh apply snapshot",
+    "actual_failed_attempts_in_family": 1,
+    "prior_apply1_failure": "Fresh immutable snapshot equality preflight; exact differing leaf unretained",
+    "prior_root_observer_failures": 5,
+    "prior_successful_observations": [
+      6,
+      7,
+      8,
+      9
+    ],
+    "unknown": "No start identity or owner established for PID1377983; its absent stat alone is not retirement proof. No failed fresh snapshot or changed projection key retained."
+  },
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply2-20261019-1/apply2-raw-readback-1/result.json",
+      "bytes": 12448,
+      "sha256": "58be7977e1b94a322286818c02a6ce8dd860a4497ec39759133f5dcb60c69338"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply2-20261019-1/apply2-raw-readback-1/raw-0.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply2-20261019-1/apply2-raw-readback-1/raw-1.stdout",
+      "bytes": 1827,
+      "sha256": "f952669bf0caae26b758948a5d25107f04dd54df580e6a1cb4e02fb20d4e9cd1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply2-20261019-1/apply2-raw-readback-1/raw-2.stdout",
+      "bytes": 5108,
+      "sha256": "3049a5dbca0e39bb74b95b435e96441529587fdf5a0cb126ed82e45acecc7a55"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply2-20261019-1/apply2-raw-readback-1/journal-result.json",
+      "bytes": 2488,
+      "sha256": "6fc5f63c3938fb1eedfa135c9f00df04ce13c456157f208e88b42053a60160d7"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply2-20261019-1/apply2-raw-readback-1/journal-stat-before.stderr",
+      "bytes": 188,
+      "sha256": "b2a521981cbb5c248c8d8f59c830733b1edec98a1aaa79a3234ac7d14018fd70"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply2-20261019-1/actual-outer-apply-2.status.json",
+      "bytes": 769,
+      "sha256": "7a9c9cc78bf530c902d323f101d2c8cd9717fb82dda4046347f14bdc218eca02"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply2-20261019-1/actual-post-apply2-capacity.json",
+      "bytes": 51,
+      "sha256": "23db280f420c0c2f3284558ccd5c1b456407cb9bf4707ac354987b5f067e0554"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply2-20261019-1/actual-cleanup-release-2-observation9.json",
+      "bytes": 547186,
+      "sha256": "fc916392a51b1622e39eb10ddfba3ee0af3e448696ee39be151538d36ef8efe0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/FINAL-ACTUAL-OBSERVATION9-APPLY2-RELEASE-DECISION.json",
+      "bytes": 2246,
+      "sha256": "455c9c2ad5e745df02de1479329e3e1528746030e99a310324b67c445102b9a5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/exact120.py",
+      "bytes": 38600,
+      "sha256": "5586388673348be64bd1e5b1734f60e6f26c87f77bb4ba019a063ea4b808d566"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply2-20261019-1/apply-root-two.py",
+      "bytes": 10914,
+      "sha256": "1533bb51ccd6cee013d836d8e7df9f2b745ed5ee724b7b2c6abcd39d9bab2bbd"
+    }
+  ],
+  "cleanup_behavior_counted": false,
+  "apply_retry_authority": false,
+  "new_root_observation_authority": false,
+  "resource_release_scope": "Accept positive physical retirement for THIS owned engine group and wrapper only. Any subsequent build/root operation retains its separate admitted profile, capacity and lease gates.",
+  "next": "Preserve consumed attempt and evidence. Narrow ordinary actual-body process-census race debug may proceed separately. No privileged replay from this report."
+}

@@ -1,0 +1,59 @@
+{
+  "status": "PASS_TWO_REVIEWED_DISPLAY_CHECKS",
+  "source_patch": "supervisor-progress-view-20261019-1/candidate.patch",
+  "changes": "progress_report and one existing display test only",
+  "CPU7_released": true,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "scripts.tests.test_os_goal_launcher.CampaignTests.test_progress_report_leads_with_practical_checks_and_preserves_live_runner"
+      ],
+      "pid": 1395073,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.12545091498759575
+    },
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/usr/bin/python3",
+        "-B",
+        "scripts/run_os_goal.py",
+        "--progress"
+      ],
+      "pid": 1395076,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.06730254800640978
+    }
+  ]
+}

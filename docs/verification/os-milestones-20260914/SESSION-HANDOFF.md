@@ -1,5 +1,58 @@
 # OS development session handoff
 
+## Current — real four-leaf compiler build accepted; remaining descriptor inspection
+
+Independent7cea7dc7 accepts one current image build: all10phases PASS,71actual
+Cassertions, selected/fallbackCPU+process and bothfullRustcrates,8Dockerclients
+retired. Image0eca91b1 (7,962,040B); exactfullhash in acceptedbuildreport.
+Wholeguard250.4904s/session33855joined0. StoppedCIDba93e7765e7e698393d7ab4c024e5a8d0f66d9a8bc2852872ed59c4ce463854f,
+common/shared remain held for separate finite retention/terminalcleanup; no
+secondheavy/guest admitted. This is compiler/imagebuild proof, not completed
+linked-body/default-consumer or native retirement acceptance.
+
+Actualpostbuild fourcopies and inspections1-13 accepted7c8166fc. Command14
+returned1/directjoined because linkedimage has no outputsection named__verbose;
+both32Bdescriptor symbols exist. Facts UNRUN. Preserve originalfailed14, original
+syscallDWARF13/fullvaliditygap and allrawcaptures; do not reruncompile/copies/1-13.
+Remaining-only proof will bind actualimage64B range and two distinctRustsymbol
+sectionindices (3887/3889), fixing address0 conflation in the prior dump parser.
+V2completionreceipt/FDhash strictness remains; correctedexecution not yet granted.
+Ordinarytool session67631 exited1; top-level OS PID/start/stdoutreceipt were not
+captured and stay unknown. All15actualchildreceipts and toolcompletion retained.
+
+Four integrated paths use the existing native destroy-thread consumers:
+
+| C entrypoint | Rust replacement | Actual selected consumer | Tested artifact | Retirement |
+| --- | --- | --- | --- | --- |
+| __release_tid | Rust __release_tid | destroy-thread release callback | 0eca image/C71/fullcrates | Linked/native pending |
+| time-account bridge | Rust process_destroy_thread_time_account_bridge | destroy_thread callbacks | Same accepted build | Linked/native pending |
+| hash-detach bridge | Rust process_destroy_thread_hash_detach_bridge | destroy_thread callbacks | Same accepted build | Linked/native pending |
+| __find_and_replace_tid | Rust __find_and_replace_tid | destroy-thread replacement callback | Same accepted build | Linked/native/UTI-refill witness pending |
+
+Original C reference/fallbacks and accepted earlierfixes remain. AVX/thread alone
+cannot establish UTI-refill replacement. No excluded execve/forkACK activation.
+
+SupportedFP1e7 twoCPUordinaryprototype passed3commands/25checks/6discoveryvectors
+(318616e9); realmetadata parent1828:757473 accepted5dbe0e66. Actualowner+23mock
+mountcontrols and focusedrunnerpositive accepted2437e5d2. Two remainingnegative
+runnercases justjoined0, independentacceptance pending; no guest/native credit.
+Three syntheticfixture failures preserved, no positive/owner replay.
+
+Bounded whole-process-census retry4fc54b4b integrated exactly after7actual
+functiontests and independentd7f34784; original558/0c sources retained. No new
+rootcleanup execution or deletion. Apply2retirement15d5e1fa remains separate.
+User-requested readonlyprogress display now leads7complete28open35total, keeps
+liveheartbeat and labels oldformalqualification deferred. Focuseddisplaytest and
+actual--progress command both0; onlytwofileUIpatch staged, otherlauncherWIPkept.
+
+Metrics24nativebehaviors/13selectedproductionRust/11applicablenativepaths,
+7complete28open/all14milestonesOPEN unchanged. FunctionalOS/apps+actualRust/asm
+migration ACTIVE; checkpoint is not a pause. IHK still needs its greater scratch
+headroom; sourcepreparation/host-backedbuild did not inherit that blocker.
+Evidence: ../evidence/evening-four-leaf-postbuild-v2-20261019-1/ and
+../evidence/evening-compiler-and-functional-checkpoint-20261019-1/.
+
+
 ## Current — four-leaf ordinary preparation accepted; cleanup drift repaired privately
 
 Actual follow-on: the remaining stage command reached its approved20s deadline,

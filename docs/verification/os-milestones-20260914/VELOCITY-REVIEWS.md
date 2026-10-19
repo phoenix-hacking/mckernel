@@ -23,6 +23,57 @@ final-profile closure remains open. Other bands held; M09 is integration only.
 Measured facts23behaviors/13production/11native and7complete28open of35.
 Earlier immutable baseline, four-hour comparison and review cutoffs are unchanged.
 
+**LATEST FULL REVIEW59 — 2026-10-19T06:19:11Z; next06:49UTC:** four-leaf
+build actually ran06:02:41UTC and dispatcher/guard joined0 (~251s); producer
+completePASS06:05:52 and ownerPASS/clientretirement proved. Independent actual
+build reviewPASS:10phases,71Cassertions,selected+fallback actualC TUs,bothfullRust
+crates,6artifact hashes/evidence copies. Image0eca91b13bd62ab98441104930eda1a63f247fecd939996858b16f90b7480550
+is7,962,040B. Publication9a5bcf7a fetched12execution sources/19files. Linked-body
+postbuild,21-role retention/terminal release and native proof still pending;
+heavyrecord/container/ownership intentionally retained, no new workload overlap.
+Facts-consumer completion defect fixed:17entrypoint cases/3FDschema vectors and
+source reviewPASS; actual14-command inspection next. Separate newimage oneCPU
+AVX/thread254B continuation ready, gated on postbuild/retainedimage acceptance.
+
+TwoCPUordinary finalization independently accepted:3commands/25checks/6CPU
+vectors,unchanged387B/254Boracles. Mode0700vs0755 resolved with separate same-byte
+copy and manifest-only finalizer; archives/compiler results reused. Native source
+closure and metadata-only command accepted; actualowner/runner fixture2failures
+were missing synthetic inspect fields, now under complete-contract expert review.
+No guest launched. Cleanupapply2 positively retired pre-journal after vanished
+proc stat; zero deletion/capacity effect. Bounded3-pass retry candidate7cases and
+source reviewPASS remains private/not runtime released. Full4.1Mchar census dump
+caught and bounded-output instruction delivered. Currentaccepted24/13/11 and
+7complete28open/14wholemilestonesOPEN unchanged; prior engineering bands held.
+Usage49->51%;host47.154GiB/scratch12.813GiB. Build progress is real; overall2-3x
+closure speedup remains unmeasured. Next06:49UTC.
+
+**LATEST FULL REVIEW58 — 2026-10-19T05:49:09Z; next06:19UTC:** campaign
+running/goalactive, dispatcher+3workers, usage48->49%. This30-minute interval:
+four-leaf ordinary pipeline independently accepted (6948entries/6899regular/
+49symlinks,5overlays,actual request/toolchain,unchanged driver+owner consumers).
+One consumer-only150s/120CPU correction passed in33.6s; earlier SIGKILL cause
+unproven, no materialization/prepare replay. No production compiler or native yet.
+App5compile/ELF checks passed; private-base bootstrap correction preserves all
+other archive records and canonical overlay rules. Actual stage hit20s deadline;
+expert timing8.48s base/18.24s intermediate/20.02s termination shows final
+compression unfinished. Proposed unchanged-body45s/60s profile needs genuine
+admission; no automatic failed-stage replay. Serializer/evaluator pending.
+
+Apply1 stopped before journal/unlink at fresh-observation-drift; group retired,
+mutex available, scratch delta0. Supervisor offline obs7/8 comparison proves
+all nonprocess data identical after sorting complete mount records:21of44 rows
+had ordering-only differences. Exact failed live difference unretained/unknown.
+Candidate55863886 preserves fields/duplicates/ancestry checks, adds bounded drift
+diagnostics;9actual-function cases and focused reviewPASS, integrated with
+original0c134 retained. Fresh observation9/apply2 pair prepared; new source-bound
+publication/admission/release still required. Host-backed four-leaf request has
+separate host16GiB/scratch12GiB floors, unlike IHK13.125GiB requirement; root
+confirmed no inherited IHK blocker and is finalizing genuine heavy proposal.
+Checkpointb684fd84 pushed/fetched16blobs. Native24/production13/nativeRust11 and
+7complete28open checks unchanged;14wholemilestones open, prior bands held.
+Root47.270GiB/scratch12.813GiB; no2-3x delivered speedup established.
+
 **LATEST FULL REVIEW57 — 2026-10-19T05:19:09Z; next05:49UTC:** campaign
 running/goalactive, sole saved thread; dispatcher plus3active workers. Last31min:
 one additional real Rust teardown leaf committed/pushed/fetched35a497b2;256C/Rust
@@ -4377,3 +4428,68 @@ then genuine final release/apply/readback. After actual capacity recovery run th
 prepared IHK-only target with existing4CPU/12GiB/noSwap/512task/one-heavy limits.
 Do not accumulate new helper-only drafts or repeat unchanged passing checks.
 No new compute C; GPT6.1 only and97%included-usage stop retained.
+
+
+## Review58 — 2026-10-19T05:49:09Z
+
+Actual preparation and failure correction progressed; accepted native and check
+closure deltas remain0. Complete four-leaf ordinary artifacts are independently
+accepted and source35a497b2 remains the latest new compute port. New checkpoint
+b684fd84 preserves the corrected cleanup path; no build or guest started.
+
+Supervisor reproduced an order-sensitive cleanup comparison using retained
+observations7/8 without new privileged work. Complete Docker mount records have
+only order differences for21/44 containers; all nonprocess data matches after
+sorting those lists. New reviewed source55863886 plus bounded diagnostics and9
+fixtures addresses that refusal class, preserving semantic-change rejection.
+Actual failed apply's unrecorded difference remains unknown; failure/journal
+absence/positive retirement and zero capacity delta are independently retained.
+
+Tactical choice: four-leaf work/output/evidence/attempt roots are host-backed;
+actual requestbc98516d declares host16GiB and scratch12GiB floors,4jobs/12GiB.
+Those declared floors fit current capacity; full growth, ownership, source pins
+and execution release must still pass. Root confirms it is independent of the
+IHK target's additional scratch requirement. Finalize a real compiler proposal
+in parallel with cleanup publication instead of waiting on an unrelated floor.
+
+Resource scheduling uses ACTUAL profiles: source preparation/cleanup applyCPU6;
+root readbacksCPU7 conflict with appCPU7. Code writing and static review can
+progress in parallel; running jobs need explicit whole-chain handoffs and joins.
+Do not hold a completed runtime slot through source-only debugging. Root now
+has ready observation9/apply2 and app remaining commands. Finish coherent ready
+operations; no repeated full source/evidence checks or helper-only draft growth.
+
+The app stage's45s/60s proposal follows measured three-pass compression timing,
+not changed acceptance. Preserve prior failed outputs and reuse compile results.
+After genuine approval execute remaining stage/serializer/evaluator as one chain.
+Keep one-heavy4CPU/12GiB/noSwap/512tasks, original reserve floors, fixedFP1e7,
+all scratch21 exclusions and97%included-usage stop. Next full review06:19UTC.
+
+
+## Review59 — 2026-10-19T06:19:11Z
+
+The host-backed alternative unblocked real compiler feedback despite the IHK
+scratch shortage. Four integrated Rust teardown ports pass the complete pinned
+build contract; independently accepted7,962,040B image is build-only acceptance,
+not yet linked-body/native retirement. Actual14-command observations,21-role
+retention and physical release are next. V2 facts consumer now verifies declared
+completion/exit/join receipts and FD/hash bindings; no repeated compiler run needed.
+
+Two native preparations stay parallel: accepted originalFP1e7 with2McKernelCPUs,
+and new0eca image with accepted1CPUAVX/thread workload/oracle. Both remain gated.
+App ordinary archive work is complete after mode-only correction; no recompile or
+recompression. Complete the mocked inspect schema from known accepted owner
+contracts before another entrypoint fixture, rather than adding one field per fail.
+
+Root should delegate the entire ready14-command/consumer/retention chain under
+its actual profile, then promptly hand off terminal cleanup and next eligible
+native run. Keep conflicting CPU6/7jobs serialized, source/review disjoint, no
+idle runtime reservation during code writing. The next decision needs a precise
+unmet predicate if the real observations cannot start. Avoid another broad audit.
+
+Historical formal numbers in Python --progress remain present; the reviewed
+private supervisor-progress-view-20261019-1/candidate.patch is ready (two files,
+focused testPASS,lifecycle untouched). Adopt at next suitable checkpoint without
+blocking runtime work. Supervisor cursors should join that campaign-owned save.
+Native/practical counts stay24behaviors/13production/11nativeRust/7of35 until
+original contract acceptance; all prior failures/evidence and scratch21 retained.

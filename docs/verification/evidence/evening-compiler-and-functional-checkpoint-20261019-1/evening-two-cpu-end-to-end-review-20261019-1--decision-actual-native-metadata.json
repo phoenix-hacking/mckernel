@@ -1,0 +1,109 @@
+{
+  "schema": "mckernel.private-two-cpu-completed-metadata-review.v1",
+  "decision": "PASS_ACTUAL_METADATA_ONLY_PARENT_AND_MANIFEST_BINDING",
+  "source_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-two-cpu-end-to-end-review-20261019-1/decision-native-source.json",
+    "sha256": "12efcf5b1897a18e77c4046fda0bf927c817d637b5068c0690880cbb215461cf",
+    "size": 5114,
+    "mode": 33152
+  },
+  "ordinary_actual_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-two-cpu-end-to-end-review-20261019-1/decision-actual-finalization1.json",
+    "sha256": "318616e9ba33ba36c19d4f232f2d8975363314c4c057a31ac30f5b53efcbf2f9",
+    "size": 5120,
+    "mode": 33152
+  },
+  "evidence": {
+    "conditional-metadata-release.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/native-owner-1/conditional-metadata-release.json",
+      "sha256": "a539fb2d080fb3114ad85ffb8bb67a5057a9052c4ba012f14cf8dc3feb4ffd3e",
+      "size": 2230,
+      "mode": 33152
+    },
+    "metadata-command.status.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/native-owner-1/metadata-command.status.json",
+      "sha256": "9f17138b565f893d08536d6a241aef33374f3aea4b042cb7030e9f482a3f3818",
+      "size": 1279,
+      "mode": 33152
+    },
+    "metadata-command.stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/native-owner-1/metadata-command.stdout",
+      "sha256": "46fe8140a5877b494a0c3beab01658d0d31be26d15f2afb6e4c0b43604030774",
+      "size": 35,
+      "mode": 33152
+    },
+    "metadata-command.stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/native-owner-1/metadata-command.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "mode": 33152
+    },
+    "parent-bound-proposal.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/native-owner-1/parent-bound-proposal.json",
+      "sha256": "e36a0107a8d8f4e31dbf66dac56a954cddbecf7fdf3dcaff8f0abf8741afe74b",
+      "size": 13029,
+      "mode": 33152
+    },
+    "metadata-result.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/native-owner-1/metadata-result.json",
+      "sha256": "4da676f55a88d4b1f2165580ead677dd2c3b301093bad3cae6e6b784f52beae0",
+      "size": 332,
+      "mode": 33152
+    }
+  },
+  "witnesses": [
+    {
+      "id": "EXACT_COMMAND_JOIN",
+      "pid": 1387231,
+      "returncode": 0,
+      "direct_join": true,
+      "elapsed_ns": 34602264,
+      "stdout": "PASS_METADATA_ONLY_PENDING_RUNTIME",
+      "stderr_bytes": 0,
+      "consumed_release_sha256": "a539fb2d080fb3114ad85ffb8bb67a5057a9052c4ba012f14cf8dc3feb4ffd3e",
+      "source_and_proposal_unchanged": true
+    },
+    {
+      "id": "ACTUAL_PARENT_RW_JOIN",
+      "path": "/home/holden/mckernel-work/scratch/tcp-e2e-p-fp1e7-20261019-1/a",
+      "identity": {
+        "device": 1828,
+        "inode": 757473,
+        "uid": 1000,
+        "gid": 1000,
+        "mode": "0o700"
+      },
+      "canonical_private_empty": true,
+      "attempt_and_owner_evidence_absent": true,
+      "RW_mount_join": "Owner source uses exactly str(self.parent); unchanged proposal --attempt-parent binds this actual parent; all7extra mounts remain readonly."
+    },
+    {
+      "id": "MANIFEST_BYTES_AND_AUTHORITY",
+      "manifest": {
+        "path": "/home/holden/mckernel-work/scratch/tcp-e2e-m-fp1e7-20261019-1/manifest.json",
+        "sha256": "62573cde274c985c2dd09a79b978cc4acd10cbf823fe1fb87cdf3895b12cd1dc",
+        "size": 10110,
+        "mode": 33152
+      },
+      "byte_identical_accepted_stage": true,
+      "outside_writable_parent": true,
+      "source_image_authority": "Retained acceptedFP1e7 completeauthority and pair/oracle refs unchanged; no currentGit equivalence."
+    },
+    {
+      "id": "METADATA_ONLY_DELTA",
+      "parent_bound_proposal_changes": "Exactly actualparentidentity and creation receipt; every other proposal field/argv/sourcepin/profile/readbackplan unchanged.",
+      "receipt_within_command_interval": true,
+      "owner_invocations": 0,
+      "Docker_invocations": 0,
+      "root_commands": 0,
+      "guest_runs": 0
+    }
+  ],
+  "fixture_execution_pending": true,
+  "runtime_release": false,
+  "root_release": false,
+  "native_two_cpu_proof": false,
+  "new_acceptance_credit": 0,
+  "reviewer_executions": 0,
+  "next_observation": "One concrete privateentrypoint/mount ordinaryfixture packet pending source approval and CPU7admission; preserve initiala539fb metadatarelease and use separate immutable actualruntimebinding for parent-boundproposal."
+}

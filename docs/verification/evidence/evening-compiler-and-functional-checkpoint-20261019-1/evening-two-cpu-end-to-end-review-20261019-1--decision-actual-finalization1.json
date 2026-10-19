@@ -1,0 +1,135 @@
+{
+  "schema": "mckernel.private-two-cpu-completed-ordinary-finalization-review.v1",
+  "decision": "PASS_ACTUAL_COMPLETED_TWO_CPU_OFFLINE_STAGE_AND_ORDINARY_CONSUMERS",
+  "source_profile_decision": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-two-cpu-end-to-end-review-20261019-1/decision-finalization1.json",
+    "sha256": "1ea864b98eb02cccaf3d13c3888513da333873afb963e1c5d6a41e95e00c82d5",
+    "size": 10755,
+    "mode": 33152
+  },
+  "execution_pins_unchanged": 33,
+  "whole_chain_status": "EXIT0 and CPU7 release reported by dispatcher/author; individual retained statuses independently bound below",
+  "commands": [
+    {
+      "label": "finalize-retained-stage1",
+      "status": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/finalize-retained-stage1.status.json",
+        "sha256": "e57571361f9c29640070e91ae699590bec8419d12a79a88f38a7d6208e5fc724",
+        "size": 1477,
+        "mode": 33152
+      },
+      "pid": 1379762,
+      "pgid": 1379762,
+      "started_unix_ns": 1792389620952640774,
+      "finished_unix_ns": 1792389623120964817,
+      "elapsed_ns": 2168324467
+    },
+    {
+      "label": "c-consumer-finalization1",
+      "status": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/c-consumer-finalization1.status.json",
+        "sha256": "ccddad7e3b64974c8aaa8a3e23c64f7f7dd0a49181b6ca081bb5a9618b7db3e7",
+        "size": 1054,
+        "mode": 33152
+      },
+      "pid": 1379764,
+      "pgid": 1379764,
+      "started_unix_ns": 1792389623123154717,
+      "finished_unix_ns": 1792389623125492846,
+      "elapsed_ns": 2337989
+    },
+    {
+      "label": "contract-fixture-finalization1",
+      "status": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/contract-fixture-finalization1.status.json",
+        "sha256": "53c74aec1b10561b8d3b4d7b5dfa6bac366d6eefda6365818fbf909b44d5b891",
+        "size": 921,
+        "mode": 33152
+      },
+      "pid": 1379765,
+      "pgid": 1379765,
+      "started_unix_ns": 1792389623127220868,
+      "finished_unix_ns": 1792389624544172226,
+      "elapsed_ns": 1416951731
+    }
+  ],
+  "all_four_stderr_empty": true,
+  "completed_checks": 25,
+  "CPU_discovery_vectors": 6,
+  "C_report_bytes": 2558,
+  "stdout_oracle_bytes": [
+    387,
+    254
+  ],
+  "actual_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/stage-finalization1/manifest.json",
+    "sha256": "62573cde274c985c2dd09a79b978cc4acd10cbf823fe1fb87cdf3895b12cd1dc",
+    "size": 10110,
+    "mode": 33152
+  },
+  "stage_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/stage-finalization1/stage-result.json",
+    "sha256": "5250be91a1acc7a1ff6448dcced50f180b2727e58978fe7a1b938ee3d783abe5",
+    "size": 3000,
+    "mode": 33152
+  },
+  "contract_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/contract-fixture-finalization1-result.json",
+    "sha256": "2d55ebac1ee6bd94c142c032c95cf143a58ccf190bee6febff9d09ec57cc4029",
+    "size": 317,
+    "mode": 33152
+  },
+  "whole_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/finalization1-result.json",
+    "sha256": "a3372772f76fa0cab51911c3f0eb3203c150a3f1b3b5c240b11c5adfc19e7ead",
+    "size": 191,
+    "mode": 33152
+  },
+  "archive_sha256": "4d44d008d2934d2bf0bba85c56a4e921180e7b8aff0bdbe4adcd9b14dcfedf6e",
+  "archive_rewrites": 0,
+  "original_0700_boot_preserved": true,
+  "normalized_0755_boot_byte_identical": true,
+  "source_image_authority": "Retained accepted fullFP image1e7a1f68 and matching3modules, not currentGit equivalence",
+  "final_map": {
+    "changed_content_rows": [
+      "apps/app",
+      "bin/native-boot",
+      "init"
+    ],
+    "added_rows": [
+      "apps/app0",
+      "apps/app1"
+    ],
+    "retained_metadata_changes": 0,
+    "member_count": 62
+  },
+  "two_cpu_contract": {
+    "os": 0,
+    "generation": 1,
+    "physical_assignment": [
+      1,
+      2
+    ],
+    "logical_assignment": [
+      0,
+      1
+    ],
+    "default_ikc_linux": 0,
+    "QEMU_vcpus": 4,
+    "QEMU_memory_mib": 8192,
+    "two_separate_supervisors": true,
+    "strict_evaluator_routes_tokens_IKC_QMP_retirement": "passed unchanged syntheticfixtures; not actualnative evidence"
+  },
+  "preserved_actual_failures": 3,
+  "reused_compile_readelf_commands": 5,
+  "new_compiler_commands": 0,
+  "reviewer_replays": 0,
+  "guest_runs": 0,
+  "new_native_apps": 0,
+  "native_two_cpu_proof": false,
+  "runtime_release": false,
+  "root_release": false,
+  "application_acceptance": false,
+  "new_practical_or_formal_acceptance_credit": 0,
+  "next_prerequisite": "Separate concrete native execution release must bind private diagnostic/normalizedmanifest plus exact owner/runner source closure and fresh root resource/identity/retirement/QMP prerequisites."
+}
