@@ -1,0 +1,78 @@
+{
+  "FD_field_names": [
+    "path",
+    "device",
+    "inode",
+    "uid",
+    "gid",
+    "mode",
+    "size",
+    "nlink",
+    "mtime_ns",
+    "ctime_ns",
+    "sha256"
+  ],
+  "actual37_pairs_or_FD_rows": null,
+  "actual37_report_ref": null,
+  "additional_evidence_fields": "Permitted in independent review; required typed disposition/ref/FD joins above cannot be overridden.",
+  "fixed_canonical_contract": {
+    "bytes": 32997,
+    "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-CANONICAL-REPORT-FIXED-CONTRACT-v2.json",
+    "sha256": "56a54c83f7049188650a4afc37ef66ad1ee172f67b709fefe6037c449abd64a8"
+  },
+  "future_actual_review_literals": {
+    "decision": "PASS_ACTUAL_FINITE37_PRESERVATION_ONLY",
+    "schema": "mckernel.independent-new205-finite37-actual-retention-review.v1",
+    "status": "PASS_ACTUAL_FINITE37_33COPY4REUSE_74_FD_BYTE_PAIRS"
+  },
+  "future_actual_review_required_fields": {
+    "actual_FD_rows": "list74 fullengine11 descriptors; exact unique original/retained paths, every row equals corresponding canonical full37pair side across all11 fields",
+    "cleanup_authorized": "bool false",
+    "copy_pairs": "integer33, bool forbidden",
+    "implementation_ownership": "bool false",
+    "native_acceptance": "bool false",
+    "pairs": "integer37, bool forbidden",
+    "physical_release": "bool false",
+    "production_artifact_acceptance": "bool false",
+    "retained_objects": "strict ref3 equal canonical retained_authority.objects_manifest",
+    "retention_result": "strict ref3 equal canonical retained_authority.engine_result",
+    "reuse_pairs": "integer4, bool forbidden",
+    "reviewer": "nonempty string not next_live_process_rust_batch"
+  },
+  "implementation_ownership": false,
+  "new_runtime_gate": false,
+  "primary_pair_clarification": {
+    "actual_artifacts_equals": "existing_primary_pairs.pairs[role].original, NOT retained",
+    "actual_copier_required": "PASS_EXACT_FOUR_ARTIFACT_RETENTION_ONLY, artifacts exactly4roles; source adapter device\u2192dev,size\u2192bytes,octmode\u2192int, remove ONLYnlink; currentretained path/device/inode/bytes/hash equal heldFD.",
+    "full37_reuse_join": "Both original and retained exact full11 equality with same role action=reuse row.",
+    "preserved_primary_properties": [
+      "size",
+      "sha256",
+      "uid",
+      "gid",
+      "mode"
+    ],
+    "unique_exact_roles": [
+      "cpu",
+      "process",
+      "rust",
+      "image"
+    ]
+  },
+  "reason": "v2 specifies separateactual37 acceptance semantics but no schema/status/decision literal. Freeze one agreed shape derived from existing actualfinite21 disposition and FD/ref fields so the consumer never accepts caller-selected labels.",
+  "reviewer": "two_cpu_end_to_end_review",
+  "root_or_cleanup_or_retention_execution_authority": false,
+  "schema": "mckernel.independent-new205-actual37-retention-interface.v1",
+  "scope": "Concrete type for v2 existing requirement separate actual action-specific37 retention acceptance; no execution authority or actual descriptor/result invented. Functional OS/apps Rust delivery.",
+  "status": "SOURCE_INTERFACE_ONLY_NO_ACTUAL_RETENTION_ACCEPTANCE",
+  "strict_ref3": {
+    "bytes": "nonnegative integer excluding bool, equal same verified snapshot byte length",
+    "exact_fields": [
+      "path",
+      "sha256",
+      "bytes"
+    ],
+    "path": "absolute canonical string",
+    "sha256": "64lowercase hex"
+  }
+}
