@@ -1,0 +1,41 @@
+--- /home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/observe-root-identity-debug.py
++++ /home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/observe-root-six.py
+@@ -17,8 +17,9 @@
+ import time
+ import types
+ 
+-BASE = Path('/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1')
+-SOURCE = BASE / 'exact120.py'
++BASE = Path('/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1')
++SOURCE = Path('/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/exact120.py')
++SOURCE_PIN = '0c134ee778b273610ead1ecc507caa038642459c0a065c956b4431c35c755917'
+ CAP = 33554432
+ 
+ 
+@@ -86,7 +87,7 @@
+     source_raw = fixed_small(SOURCE)
+     source_sha = hashlib.sha256(source_raw).hexdigest()
+     own_sha = hashlib.sha256(fixed_small(Path(__file__).resolve())).hexdigest()
+-    if (release['status'] != 'OBSERVATION_RELEASE' or release['source_sha256'] != source_sha or
++    if (release['status'] != 'OBSERVATION_RELEASE' or source_sha != SOURCE_PIN or release['source_sha256'] != source_sha or
+             release['observation_wrapper_sha256'] != own_sha):
+         raise RuntimeError('observation source/release gate')
+     # Execute already pinned source definitions in memory, without import writes.
+@@ -104,7 +105,7 @@
+     child = None
+     began = time.monotonic()
+     try:
+-        for name in ('actual-observation-5.stdout', 'actual-observation-5.stderr', 'actual-observation-5.supervisor.jsonl'):
++        for name in ('actual-observation-6.stdout', 'actual-observation-6.stderr', 'actual-observation-6.supervisor.jsonl'):
+             fd = os.open(name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=directory)
+             opened.append(fd)
+         os.fsync(directory)
+@@ -185,7 +186,7 @@
+         report['elapsed_seconds'] = time.monotonic() - began
+         report['capture_metadata'] = [contract.meta(os.fstat(fd)) for fd in (out, err)]
+         report['capture_sha256'] = []
+-        for index, name in enumerate(('actual-observation-5.stdout', 'actual-observation-5.stderr')):
++        for index, name in enumerate(('actual-observation-6.stdout', 'actual-observation-6.stderr')):
+             readfd = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=directory)
+             try:
+                 if contract.meta(os.fstat(readfd)) != report['capture_metadata'][index] or os.fstat(readfd).st_size > CAP:

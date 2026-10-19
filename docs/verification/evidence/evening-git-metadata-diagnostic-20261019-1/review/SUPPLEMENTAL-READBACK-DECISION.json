@@ -1,0 +1,124 @@
+{
+  "status": "PASS_EXACT_THREE_CAPTURE_FIVE_COMMAND_READBACK_AFTER_WHOLE_JOIN",
+  "execution_performed_by_reviewer": false,
+  "original_execution_decision_sha256": "a613f703b5d2c993db939d0e5dd3b936c630d306138bafb76038ac45a25c3318",
+  "scope": "Only exact three new root600 Git diagnostic captures. Existing accepted five-command stat/cat/stat pattern; no new helper/path-widening or published-source changes.",
+  "allowed_paths": [
+    "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.stdout",
+    "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.stderr",
+    "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.supervisor.jsonl"
+  ],
+  "commands_in_required_serial_order": [
+    {
+      "name": "stat-before",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/stat",
+        "-c",
+        "%d:%i:%u:%g:%f:%h:%s:%y:%z",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.stdout",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.stderr",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.supervisor.jsonl"
+      ]
+    },
+    {
+      "name": "raw-0",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.stdout"
+      ]
+    },
+    {
+      "name": "raw-1",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.stderr"
+      ]
+    },
+    {
+      "name": "raw-2",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.supervisor.jsonl"
+      ]
+    },
+    {
+      "name": "stat-after",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/stat",
+        "-c",
+        "%d:%i:%u:%g:%f:%h:%s:%y:%z",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.stdout",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.stderr",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.supervisor.jsonl"
+      ]
+    }
+  ],
+  "known_outer_join": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/actual-outer-1.status.json",
+    "sha256": "d94ca4ba2d307d2a2e527e55c6d5497713944cd5e857d25fdfc3a60c44db5214",
+    "pid": 1351049,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "summary": {
+      "status": "GIT_METADATA_DIAGNOSTIC_JOINED",
+      "direct_joined": true,
+      "whole_group_retired": true
+    }
+  },
+  "admission_first": "Before ANY readback require root supervisor outer direct wait complete AND supervisor summary direct_joined=true AND whole_group_retired=true. This gate is independent of diagnostic workload returncode; failed-but-positively-retired workloads may export failure evidence. STOP_UNCERTAIN or absent summary is HOLD. Current actual observed outer0+positive summary satisfies this prerequisite only.",
+  "resource_profile": {
+    "cpu_affinity": "7 reserved solely for this serial cheap readback",
+    "jobs": 1,
+    "aggregate_RAM_planning_bytes": 1073741824,
+    "AS_bytes_per_process": 1073741824,
+    "CPU_seconds_per_process": 30,
+    "wall_seconds_per_command": 30,
+    "capture_stdout_cap_bytes_each": 33554432,
+    "capture_stderr_cap_bytes_each": 33554432,
+    "core_bytes": 0,
+    "network": false,
+    "no_archive_or_candidate_body_reads": true,
+    "root_writes": false,
+    "no_signals_cleanup_or_replay": true
+  },
+  "ordinary_output_root": "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-raw-readback-1",
+  "ordinary_capture_rules": [
+    "new directory UID/GID1000 mode0700; must not already exist",
+    "each five-command stdout/stderr plus status created O_CREAT|O_EXCL|O_NOFOLLOW0600 with held actual descriptor",
+    "fstat actual output descriptor before/after command; fsync; reopen O_NOFOLLOW and require same full identity metadata before/after SHA256",
+    "record exact argv,pid,direct wait status,elapsed,full capture metadata,bytes,SHA256; preserve all partial/error files",
+    "enforce finite pipe/output cap before write; any timeout/cap/error retains evidence and stops without signals or automatic retry"
+  ],
+  "source_metadata_rules": [
+    "first stat only exact literal allow3; default GNU stat lstat semantics, no -L",
+    "parse first seven colon fields only; require regular file mode0600 UID0 GID0 nlink1 size<=33554432 for each",
+    "retain complete row including nanosecond mtime/ctime text; require complete stat-before==stat-after bytes and all5 command direct waits0 with empty helper stderr",
+    "root source raw reads are exact cat of sourceknown names after positive producer retirement and no writer/path publisher; this reuses accepted five pattern, not an atomic adversarial read lock",
+    "actual producer-held source FD metadata for stdout/stderr comes from final supervisor capture_metadata; join to source stat fields and raw bytes/SHA256 against capture_sha256",
+    "journal itself has no producer self-hash: require stable pre/post source metadata plus ordinary held FD/reopen/hash and parse full final completed journal; do not invent a nonexistent source FD/self-hash oracle"
+  ],
+  "post_readback_runtime_oracle": [
+    "all five commands directly joined0, helper stderr empty, source metadata identical, ordinary captures FD/hash bound",
+    "final journal status GIT_METADATA_DIAGNOSTIC_JOINED, direct_joined=true,whole_group_retired=true,remaining_group=[],mutex_identity_preserved_and_available=true,returncode0,no timed_out",
+    "final journal source/wrapper/release SHA match exact published sources and fresh release4f0ee03d673c09b0277157d32e207274534d6f899453d9a53ce1d9266f14ec36",
+    "journal capture_metadata/capture_sha256 bind raw0stdout and raw1stderr; raw1 must be empty for actual Git pass",
+    "raw0 exactly one JSON ROOT_GIT_METADATA_ONLY_PASS with rows120/git.objects122 and object-ID digest0757f1ee6142e6dee7aeec67ce4e864f5abc032318e4ca8015881c0327b8aca5",
+    "diagnostic JSON exact source0c134ee7,diagnosticae390c9f,manifest8255bbf8; repository_owner[1000,1000]; blob_bodies_read/cleanup_observation/deletion false"
+  ],
+  "limits": "Readback0 proves evidence transfer only. Workload success follows separate actual raw result review. No cleanup observer/apply/trim, broader export, ownership change, chmod/chown or existing evidence mutation."
+}

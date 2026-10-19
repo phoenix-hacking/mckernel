@@ -1,5 +1,24 @@
 # Resume cursor
 
+## Current executable boundary — Git root-context defect resolved
+
+Actual Git-only runtime independently PASS163ea44:120rows/122objectheaders,
+empty stderr, actualchild1351053/start18308904 joined0/.1379s; outer1351049
+joined0/.2563s; ownedgroupempty and persistentmutex27:4 available. Five exact
+rawreadbacks joined0 with FD/hash/stable source metadata. All5failed full
+observations remain preserved. No files deleted; no fullcensus accepted yet.
+
+Next exact observation6 source/profile independently approved41a96522;
+source0c134 remains unchanged, wrapperb18fa318 changes fixed paths/hash only.
+Publish/fetch closure, then genuine freshboot/coordinator/space/guards and new
+OBSERVATION_RELEASE; only after accepted real snapshot may a separate exact
+apply decision authorize120duplicate unlinks. No oldrelease replay.
+Rust source35a497b2 is pushed/fetched24:four source-integrated teardown ports,
+production/native still pending. Combined four-leaf production checker has
+71actualCassertions and22passing mockproducer cases; real GCC14/fullcrate/image
+remains one future batch. CurrentFP1e7/kernel/modules unchanged.
+
+
 ## Implementation checkpoint — fourth Rust teardown leaf integrated (evening resume)
 
 Real __find_and_replace_tid wrapper and optional debug callback now select Rust

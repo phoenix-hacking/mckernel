@@ -1,0 +1,370 @@
+{
+  "status": "PASS_EXACT_FIVE_READBACK_COMMANDS_JOINED_FD_BOUND",
+  "decision_sha256": "840a7086f7617995e4c1721422400d0df314a4c321c760c292c0649e8bbf2983",
+  "source_stat_rows": [
+    "66306:47991858:0:0:8180:1:549:2026-10-18 21:54:03.664595811 -0700:2026-10-18 21:54:03.664595811 -0700",
+    "66306:47991859:0:0:8180:1:0:2026-10-18 21:54:03.580593143 -0700:2026-10-18 21:54:03.580593143 -0700",
+    "66306:47991860:0:0:8180:1:5302:2026-10-18 21:54:03.720597589 -0700:2026-10-18 21:54:03.720597589 -0700"
+  ],
+  "commands": [
+    {
+      "name": "stat-before",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/stat",
+        "-c",
+        "%d:%i:%u:%g:%f:%h:%s:%y:%z",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.stdout",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.stderr",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.supervisor.jsonl"
+      ],
+      "pid": 1351829,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.08445459100767039,
+      "captures": {
+        "stdout": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-raw-readback-1/stat-before.stdout",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47991930,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792385779170573283,
+            "st_ctime_ns": 1792385779170573283
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47991930,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 305,
+            "st_mtime_ns": 1792385779250572038,
+            "st_ctime_ns": 1792385779250572038
+          },
+          "bytes": 305,
+          "sha256": "563d5b7695fc37c64194cf7951aca4808469cf49e4ffb2083bd25f2bd976ed59"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-raw-readback-1/stat-before.stderr",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47991931,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792385779170573283,
+            "st_ctime_ns": 1792385779170573283
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47991931,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792385779170573283,
+            "st_ctime_ns": 1792385779170573283
+          },
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "name": "raw-0",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.stdout"
+      ],
+      "pid": 1351833,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.006544991018017754,
+      "captures": {
+        "stdout": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-raw-readback-1/raw-0.stdout",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47991933,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792385779254571977,
+            "st_ctime_ns": 1792385779254571977
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47991933,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 549,
+            "st_mtime_ns": 1792385779262571852,
+            "st_ctime_ns": 1792385779262571852
+          },
+          "bytes": 549,
+          "sha256": "d1c4258626ed0a2b48c734587a1498b0ea4c47230e3ad3905e40f0dba3165cd6"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-raw-readback-1/raw-0.stderr",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47991934,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792385779254571977,
+            "st_ctime_ns": 1792385779254571977
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47991934,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792385779254571977,
+            "st_ctime_ns": 1792385779254571977
+          },
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "name": "raw-1",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.stderr"
+      ],
+      "pid": 1351835,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.006480863026808947,
+      "captures": {
+        "stdout": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-raw-readback-1/raw-1.stdout",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47991936,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792385779262571852,
+            "st_ctime_ns": 1792385779262571852
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47991936,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792385779262571852,
+            "st_ctime_ns": 1792385779262571852
+          },
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-raw-readback-1/raw-1.stderr",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47991937,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792385779262571852,
+            "st_ctime_ns": 1792385779262571852
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47991937,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792385779262571852,
+            "st_ctime_ns": 1792385779262571852
+          },
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "name": "raw-2",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.supervisor.jsonl"
+      ],
+      "pid": 1351837,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.006416149990400299,
+      "captures": {
+        "stdout": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-raw-readback-1/raw-2.stdout",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47991939,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792385779270571727,
+            "st_ctime_ns": 1792385779270571727
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47991939,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 5302,
+            "st_mtime_ns": 1792385779274571665,
+            "st_ctime_ns": 1792385779274571665
+          },
+          "bytes": 5302,
+          "sha256": "7142c0ac8b782f40763708790dac38c8ebb991d4249cbdc37489e10a830fa69c"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-raw-readback-1/raw-2.stderr",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47991940,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792385779270571727,
+            "st_ctime_ns": 1792385779270571727
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47991940,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792385779270571727,
+            "st_ctime_ns": 1792385779270571727
+          },
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "name": "stat-after",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/stat",
+        "-c",
+        "%d:%i:%u:%g:%f:%h:%s:%y:%z",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.stdout",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.stderr",
+        "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-only-1.supervisor.jsonl"
+      ],
+      "pid": 1351839,
+      "returncode": 0,
+      "direct_child_joined": true,
+      "elapsed_seconds": 0.006673099007457495,
+      "captures": {
+        "stdout": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-raw-readback-1/stat-after.stdout",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47991942,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792385779278571603,
+            "st_ctime_ns": 1792385779278571603
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47991942,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 305,
+            "st_mtime_ns": 1792385779282571541,
+            "st_ctime_ns": 1792385779282571541
+          },
+          "bytes": 305,
+          "sha256": "563d5b7695fc37c64194cf7951aca4808469cf49e4ffb2083bd25f2bd976ed59"
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/git-metadata-raw-readback-1/stat-after.stderr",
+          "before": {
+            "st_dev": 66306,
+            "st_ino": 47991943,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792385779278571603,
+            "st_ctime_ns": 1792385779278571603
+          },
+          "after": {
+            "st_dev": 66306,
+            "st_ino": 47991943,
+            "st_uid": 1000,
+            "st_gid": 1000,
+            "st_mode": 33152,
+            "st_nlink": 1,
+            "st_size": 0,
+            "st_mtime_ns": 1792385779278571603,
+            "st_ctime_ns": 1792385779278571603
+          },
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  ],
+  "actual_runtime_review": "PENDING_INDEPENDENT"
+}
