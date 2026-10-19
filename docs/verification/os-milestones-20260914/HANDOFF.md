@@ -1,5 +1,27 @@
 # Compact dispatcher handoff
 
+## Current — four new production Rust helpers accepted; terminal release next (07:05 UTC)
+
+Canonical40ea08b7 accepts the35a/0eca image's four new selected Rust helpers:
+__release_tid, destroy-thread time-account, destroy-thread hash-detach, and
+__find_and_replace_tid. Actual default consumers,71Cassertions/bothfullcrates,
+four typed artifacts and four real CString descriptor windows are bound.
+Selected production paths13->17; applicable native paths stay11 and real native
+behaviors24/checks7of35 stay unchanged. Runtime and C-retirement credit remain
+pending; AVX/threads do not prove the UTI-refill replacement consumer.
+Original failed14 and syscall full-DWARF gap remain OPEN, with no build/copy1-13
+replay. Canonical report is retained in ../evidence/
+evening-four-leaf-artifact-and-retention-20261019-1/.
+
+Finite21 separately passes0fb048b0:21fullFDbytepairs/48,593,353B eachside,
+17newcopies27,441,305B+4reuse,0mismatch. Actual command0/.506s,stderr0, directjoin.
+Common/shared/stoppedCID remain retained; no cleanup or newguest authorized yet.
+Terminal executable source/actual caller checks and exact observer/cleanup release
+are next. FixedFP1e7 twoCPU actualsnapshotadapter fixture passes5witnesses;
+independent affected review active, genuine final physical predecessor remains
+pending. Newtwo-callback SOURCEONLY checkpoint44541ca9 is pushed/fetched96files;
+fullproduction/native proof for those two newer callbacks is still pending.
+
 ## Current — two callback Rust batch integrated as source only (07:05 UTC)
 
 Independent40607413 accepts source integration of process_release hash-detach and
