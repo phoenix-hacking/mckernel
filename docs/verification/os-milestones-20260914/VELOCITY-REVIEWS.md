@@ -23,19 +23,21 @@ final-profile closure remains open. Other bands held; M09 is integration only.
 Measured facts23behaviors/13production/11native and7complete28open of35.
 Earlier immutable baseline, four-hour comparison and review cutoffs are unchanged.
 
-**CURRENT REVIEW51 — 2026-10-18T23:50:39Z:** campaign active.
-Accepted counts23 native behaviors/13 production Rust paths/11 applicable native
-paths/7complete28open of35;all14 whole milestones open. FP-thread guest wrapper
-and3readbacks joined0; independent final native/retirement decision still pending.
-Reviewer raw checker passed23:50:21, without canonical acceptance at cutoff.
-Rust387Bbatch compiler/ELF/Linux independently accepted d6c7ee5b;1754 owns staging.
-Make-probe releasec9421d06 and fetched source d9829e1b/30 ready; blocked on FPU
-retirement acceptance.120archive cleanup candidate/advisory verified1.225GiB;
-root cleanup author2345 assigned, no deletion yet. Scratch12.816/root49.300GiB.
-Detected reviewer2312 idle since23:45:28 while parent reported review underway;
-reactivated23:49:37, no guest/readback replay. Worker restarted23:44:55 after
-stored serverOverloaded;current1258039/server1258041,watcher1031359;goal active.
-Usage42%. Next full review2026-10-19T00:20:39Z. No2–3x speedup established.
+**CURRENT REVIEW52 — 2026-10-19T00:23:12Z:** campaign active.
+Accepted24 native behaviors/13 selected production Rust paths/11 applicable native
+paths/7complete28open practical checks; all14whole milestones remain open.
+Since review51: FP-thread state/retirement accepted, adding one behavior; current
+387B Rust regression batch independently accepted without distinct-behavior credit.
+Genuine pinned-make probe/export and proof-bound IHK capsule accepted; source
+checkpoint3c026af1 pushed/fetched94blobs and83mappedrows. IHK build is333697024B
+short of scratch floor plus full reserve. Exact120archive cleanup could recover
+1315868672B, but first read-only observation failed; narrow diagnostic reads
+approved, no deletion yet. Root49.229GiB/scratch12.814GiB; usage44%, heavyrecord
+absent. Capacity failures at00:01:58 and00:13:36 paused the campaign; existing
+watcher resumed00:02:55/00:14:17. Private child-capacity fix11offline testsPASS,
+independent review pending. __release_tid prototype-delta reviewPASS forwarded
+with concrete parallel implementation/materialization/cleanup priorities.
+Next full review2026-10-19T00:53:12Z. No measured2–3x speedup.
 
 **MONITORING RESUMED2026-10-18T13:43:18Z:** user explicitly requested this
 chat's polling, steering and30-minute updates. Their foreground campaign resumed
@@ -4180,3 +4182,40 @@ storedserviceerrors, explicitlydistinguishinghistoricalerrors fromnewstops.
 GPT6.1only retained. Goalactive/usage42%,root49.300GiB/scratch12.816GiB;heavyrecord
 absent. Fullreviewwas delayed whilediagnosingconcreteidle/capacityhandoff; next
 target00:20:39UTC. No secondlauncher/root/workload/cleanup executedbysupervisor.
+
+
+## Review52 — 2026-10-19T00:23:12Z
+
+One newly accepted behavior since review51: supported-image FP thread state
+survives bounded switching/yields. The later combined Rust file/memory/thread/error
+guest passes exact387B and physical retirement; it is current-image regression
+coverage of existing cases, so no second behavior is invented. Counts are24/13/11
+(native behaviors/selected production Rust paths/applicable native paths), with
+7of35 practical checks complete. Whole milestones and nonnull FP-release proof
+remain open.
+
+The actual pinned GNU Make probe and exported proof passed. Proof-bound IHK
+source/profile and small35-file949466B materialization plan passed; checkpoint
+3c026af1 is pushed/fetched with94blobs/83mappedsource-inputrows. The next heavy
+module build lacks333697024B after its real scratch floor and full reserve.
+The exact120duplicatearchive candidate could free1315868672B. Corrected cleanup
+caller passed seven actual proc-boundary fixtures, but the first root read-only
+observation failed. Preserve that failure; inspect only its approved diagnostic
+captures, repair the identified delta locally, and obtain the next exact decision.
+No archive body rehash, broad cleanup search, deletion, resize or trim by supervisor.
+
+The watcher recovered two child model-capacity stops at00:01:58/00:13:36, resuming
+00:02:55/00:14:17. A private launcher proposal isolates only proven direct-child
+serverOverloaded events and preserves primary/policy/quota/pause controls.
+Eleven offline methods pass; independent review remains pending. Actual timeline
+is child error, client goal/set, root pause, then client interrupt; request params
+are absent, so prevention of the historical stops is not claimed.
+
+The private __release_tid missing-prototype correction independently passes;
+seven focused checks remove fixture-injected declarations without replaying prior
+56-case parity. Final advisory was queued to root at00:23:47 along with concrete
+parallel work: cleanup diagnostics, ordinary IHK source materialization where its
+own profile permits, logging continuation, and live Rust integration/next leaf.
+Keep the current FP image fixed and reuse accepted batch/body reviews. Root is
+execution/Git owner. Usage44%, host49.229GiB, scratch12.814GiB; no heavy record.
+No2–3x speedup is established. Monitoring and30-minute reviews continue.

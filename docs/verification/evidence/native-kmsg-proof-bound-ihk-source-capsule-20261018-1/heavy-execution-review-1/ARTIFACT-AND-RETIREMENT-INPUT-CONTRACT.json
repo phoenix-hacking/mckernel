@@ -1,0 +1,122 @@
+{
+  "schema": "mckernel.native-kmsg-ihk-actual-artifact-and-retirement-input-contract.v1",
+  "status": "PREDECLARED_ACTUAL_BODY_READBACK_CONTRACT_NO_OPERATION",
+  "engines": {
+    "owner": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/capsule/scripts/native_running_external_modules_owner.py",
+      "sha256": "349d503862eb333151050d973138dae559652b7a5dc47bc52e06fe7ce14ffa5f"
+    },
+    "driver": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/capsule/scripts/native_running_external_modules_offline.py",
+      "sha256": "e422544777fd750757b660ccf4c1d7829b00098d5af8c95d07802a03b877992b"
+    },
+    "dispatcher": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/dispatch_owner.py",
+      "sha256": "9667a96ca8ef79b70ad9400dc2fdfe27589374406ff2f2bc7555f736e400957e"
+    },
+    "Docker_and_retire": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+      "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+    },
+    "image_shared_heavy": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/capsule/scripts/native_rust_exact_mckernel_image_container_owner.py",
+      "sha256": "e9861cf73b0328c9fe2eacb987ea179933146cbeddbc3951405d4e60e89560f4"
+    },
+    "historical_observer": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/capsule/scripts/native_exact_historical_lease_observer.py",
+      "sha256": "463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51"
+    }
+  },
+  "finite_body_controls": {
+    "make_timeout_seconds": 1800,
+    "owner_Docker_wait_timeout_seconds": 1860,
+    "default_Docker_client_timeout_seconds": 120,
+    "logs_timeout_seconds": 30,
+    "historical_observer_timeout_seconds": 30,
+    "retire": "exact inspect; stop15s/client30; if still running kill/client30; wait30; fresh inspect; each client positively joined",
+    "Docker_client_poll_seconds": 0.1,
+    "disk_budget_poll_seconds": 1,
+    "candidate_budget_bytes": 536870912,
+    "owner_evidence_budget_bytes": 67108864,
+    "inventory_entry_limit_per_budget_tree": 4096,
+    "outer_per_file_RLIMIT_FSIZE_bytes": 33554432,
+    "outer_two_stream_reserve_bytes": 67108864,
+    "outer_success_metadata_cap_per_stream_bytes": 524288,
+    "outer_wall_kill": false,
+    "disk_monitor_semantics": "Existing PollSignals checks tree sizes/free floors about once per second while normal owner commands run. It suspends monitoring while cleaning to preserve retirement. Container make stdout/stderr use direct exclusive files and are covered by candidate budget/time monitoring; no new per-make FSIZE limit is claimed. Final admission reserves full1,207,959,552B above floors.",
+    "capture_semantics": "Docker clients and make write directly to exclusive regular-file stdout/stderr. Source files record statuses before/during/after and retain failures. Outer dispatcher directly waits for owner and records group absence; do not terminate owner while it holds/cleans locks."
+  },
+  "primary_completed_inputs": {
+    "request": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/request.json",
+    "execution_release": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/execution-release-1.json",
+    "dispatch_status": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/actual-dispatch-1/dispatch.status.json",
+    "owner_stdout": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/actual-dispatch-1/owner.stdout",
+    "owner_stderr": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/actual-dispatch-1/owner.stderr",
+    "owner_receipt": "/home/holden/mckernel-work/scratch/nsd-o-895d6e84dc4c47b3a75b6b12f7bcdb0f/owner-receipt.json",
+    "driver_receipt": "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/evidence/receipt.json",
+    "driver_make_request": "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/evidence/request.json",
+    "make_stdout": "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/evidence/make.stdout",
+    "make_stderr": "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/evidence/make.stderr",
+    "Docker_log": "/home/holden/mckernel-work/scratch/nsd-o-895d6e84dc4c47b3a75b6b12f7bcdb0f/docker.log",
+    "container_log": "/home/holden/mckernel-work/scratch/nsd-o-895d6e84dc4c47b3a75b6b12f7bcdb0f/container.log",
+    "inspect_before": "/home/holden/mckernel-work/scratch/nsd-o-895d6e84dc4c47b3a75b6b12f7bcdb0f/inspect-before-start.json",
+    "inspect_terminal": "/home/holden/mckernel-work/scratch/nsd-o-895d6e84dc4c47b3a75b6b12f7bcdb0f/inspect-terminal.json",
+    "inspect_terminal_fresh": "/home/holden/mckernel-work/scratch/nsd-o-895d6e84dc4c47b3a75b6b12f7bcdb0f/inspect-terminal-fresh.json",
+    "postflight": "/home/holden/mckernel-work/scratch/nsd-o-895d6e84dc4c47b3a75b6b12f7bcdb0f/postflight-proof.json",
+    "ownership_archive": "/home/holden/mckernel-work/scratch/nsd-o-895d6e84dc4c47b3a75b6b12f7bcdb0f/ownership-archive.json",
+    "record_release_authorized": "/home/holden/mckernel-work/scratch/nsd-o-895d6e84dc4c47b3a75b6b12f7bcdb0f/record-release-authorized.json",
+    "record_release_complete": "/home/holden/mckernel-work/scratch/nsd-o-895d6e84dc4c47b3a75b6b12f7bcdb0f/record-release-complete.json",
+    "historical_observation": "/home/holden/mckernel-work/scratch/nsd-a-895d6e84dc4c47b3a75b6b12f7bcdb0f/historical-lease-observation.json",
+    "historical_disposition": "/home/holden/mckernel-work/scratch/nsd-a-895d6e84dc4c47b3a75b6b12f7bcdb0f/historical-lease-disposition.json"
+  },
+  "transitive_completed_inputs": {
+    "client_streams_status": "All command-*/stdout,stderr,status.json under owner evidence and admission roots, plus actual normal/cleanup process-group observations; UUID names come only from the actual retained ledgers.",
+    "original_owned_records": [
+      "/home/holden/mckernel-work/scratch/nsd-o-895d6e84dc4c47b3a75b6b12f7bcdb0f/lease.record.raw",
+      "/home/holden/mckernel-work/scratch/nsd-o-895d6e84dc4c47b3a75b6b12f7bcdb0f/common.record.raw",
+      "/home/holden/mckernel-work/scratch/nsd-o-895d6e84dc4c47b3a75b6b12f7bcdb0f/shared.record.raw"
+    ],
+    "compiler_module_inputs": [
+      "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/modules/.ihk.o.cmd",
+      "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/modules/.ihk.ko.cmd",
+      "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/modules/.ihk.mod.cmd",
+      "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/modules/.ihk.mod.o.cmd",
+      "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/modules/ihk.mod.c",
+      "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/modules/ihk.o",
+      "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/modules/ihk.mod.o",
+      "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/modules/Module.symvers",
+      "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/modules/ihk.ko"
+    ],
+    "module_sources": "Exact14 materialized source files from immutable preparation closure, before/after make; thirteen actual compiler deps required.",
+    "actual_hashes_pending": "Read actual completed files once after whole join; do not substitute model output, predicted status, stale before-execution hashes or source success."
+  },
+  "compiler_artifact_boundaries": {
+    "source": "Default ihk Rust consumer includes actual os_runtime source; exact13 dependency set and saved Rust/compiler/objtool command tokens must match accepted tuple.",
+    "target": "Only ihk.ko; normal SDK modpost/modfinal/link path, original14 sources retained, no SMP/mcctrl/image outputs, strict regular/single-link generated allowlist, no filesystem FIFO allowance, no leftover modules.order.",
+    "exports": "Exact21 accepted IHK export CRC/name/kind/namespace rows; accepted-exports.symvers SHA 51e9fbbde9bf571e0015482939526edad144ebb6dd411a2db12cf2bc8600d857",
+    "imports": "Actual new undefined IHK imports must resolve to selected kernel vmlinux export universe and declared import namespaces; new legitimate imports observed, not forced equal to old import list.",
+    "metadata": {
+      "expected": {
+        "author": "McKernel Rust port",
+        "depends": "",
+        "description": "Native Rust IHK host core",
+        "license": "GPL v2",
+        "name": "ihk",
+        "retpoline": "Y",
+        "rhelversion": "10.2",
+        "srcversion": "6F0A7FA5C276DA0175C852C",
+        "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload ",
+        "version": "1.7.0rc4"
+      },
+      "srcversion": "Honest changed source version allowed; all other listed modinfo values exact."
+    },
+    "old_module_pairing": "Keep accepted SMP82c9021f... and mcctrl6571ac7e... immutable. Actual new IHK exports/CRC/Rust ABI/data contracts/vermagic/import namespaces/defaultconsumer and dependency compatibility require independent artifact decision before pairing/staging. No rebuild of unchanged old artifact for receipt."
+  },
+  "net_retirement_boundary": {
+    "normal_or_compiler_failure": "Existing owner finally retires exact admitted CID/profile, captures logs/fresh terminal state, positively joins every Docker and historical client, removes exact owned terminal, proves empty name/label/id queries, archives original three record bytes, writes release-authorized and release-complete before ordinary owner returns. Compiler failure remains failed even if physical cleanup passes.",
+    "success_required": "Direct outer join+group absence; positive owner/container/client/three-record retirement independently joined. Retained artifact and captures remain; terminal container/operation records released automatically.",
+    "uncertainty": "Do not claim absent PIDs or stop/kill returncodes prove retirement. Preserve captures/partial modules/original records and quarantine development lock; no raw Docker rm/unlink/reuse and no extra cleanup handoff gate.",
+    "notification": "After whole direct join, root notifies actual returncode, dispatch status/capture refs, owner/driver receipt refs and cleanup status. Readback/independent actual artifact decision uses these already captured inputs; no added observer operation is needed."
+  },
+  "native_remaining": "Separate accepted archive stager and native0x112a20 success/empty/wrap/error/copyfailure/concurrency/lifetime/teardown observation. Compiler/artifact evidence alone is not native or Rust retirement acceptance."
+}

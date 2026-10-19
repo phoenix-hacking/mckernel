@@ -1,0 +1,13 @@
+# Explicit child turn attribution correction
+
+Decision: **PASS for the corrected private source scope**. The sole blocker in preserved REVIEW.md (`d9d11a0f225c85246c3e1b87523eb7cf0e57ec10ba228875209a451a9ff49e7e`) is resolved. No live execution, recovery, integration or throughput claim is granted.
+
+Reviewed only `/home/holden/mckernel-work/host-preparation/supervisor-child-capacity-isolation-20261019-1/correction-1` (C) and its direct differences from the previously reviewed candidate/tests. Verified C/run_os_goal.py SHA256 `e6c68ae7dce1ea5b9daf398f21145d58ca7fe88602a6ed4126d42473c036131c`; attribution-delta.patch `52b2dc8c1f9c23dd32bfe0e0314a3282d61248ca7338c071f9d97027147ea28a`; result.json `0a56a180cf33192e4ebe47ad5a1105f57969ff2fa5d5f5ab2bdb195c11dfaee3`. Reported full corrected patch pin is `5a7e959d619be5f13ab6ea0235c5cb6c514536e3393b7b6146cbc41ba7ad10af`.
+
+Direct source diff has only two changed lines at651-658: the scoped capacity helper receives raw `data.get('turnId')`, while the existing fatal record_failure retains its old active-turn fallback for attribution. Missing/empty IDs now fail isolation's explicit nonempty-string check even for proven children or existing duplicate rows. Known explicit child turns retain prior behavior. No global stop, goal, map/counter or RPC/retry code changed.
+
+The added test method covers missing/empty IDs across no prior event, earlier exact error and earlier exact failed completion, with duplicates. It requires original fatal handling/unchanged scoped rows and verifies that a later exact child completion preserves the unknown-identity fatal record and stop. Existing fixtures are unchanged. C/result.json reports12 offline methods/0 failures/0 errors in0.029s under the existing finite cheap profile. This reviewer inspected source/result records only and did not rerun/import tests; separate raw test stream files were not supplied in C.
+
+The original review's other conclusions and limits stand: actual installed direct-child shape is supported; root/unknown/policy/quota/auth/user stops and real root paused goal remain authoritative; invocation-local64/16 maps fail closed; no automatic replay/RPC/retry exists. Historical window supports client goal/set before paused before interrupts but cannot establish absolute causation or earlier matching child provenance. Functional OS/apps and Rust/reviewed-assembly delivery are the purpose; provider recovery and measured benefit remain unproved.
+
+Only this additive private note was written. No shared source/state changes, tests/imports, launcher/app-server/inference, compiler/root/cleanup/guest or broad protocol/history reads were performed.

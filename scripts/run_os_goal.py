@@ -127,11 +127,31 @@ def is_policy_stop(state):
             and isinstance(error, dict) and error.get("codexErrorInfo") == "cyberPolicy")
 
 
+def failure_location(state):
+    """Keep failure identity separate from later sibling interruption events."""
+    failure = state.get("last_failure")
+    if (isinstance(failure, dict) and isinstance(failure.get("log_dir"), str)
+            and failure.get("log_dir") == state.get("log_dir")
+            and failure.get("error") == state.get("last_error")):
+        return failure
+    # Older state has no dedicated failure record. A unique failed worker is
+    # stronger evidence than last_turn, which shutdown may have overwritten.
+    agents = state.get("agents")
+    failed = [{"thread_id": ident, "id": agent.get("turn_id")}
+              for ident, agent in (agents.items() if isinstance(agents, dict) else ())
+              if isinstance(agent, dict) and agent.get("status") == "failed"
+              and agent.get("turn_id")]
+    if len(failed) == 1:
+        return failed[0]
+    last = state.get("last_turn")
+    if isinstance(last, dict) and last.get("status") in (None, "failed"):
+        return last
+    return {}
+
+
 def restart_advice(state):
     if is_policy_stop(state):
-        failed = state.get("last_turn") or {}
-        if not isinstance(failed, dict):
-            failed = {}
+        failed = failure_location(state)
         return ("service-side cyberPolicy stop; automatic retry is disabled. "
                 "Report a suspected false positive with Codex /feedback; "
                 "thread=" + str(failed.get("thread_id") or state.get("thread_id", "unknown"))
@@ -423,6 +443,8 @@ class Campaign:
         self.log_dir.mkdir(parents=True, mode=0o700)
         self.rpc_factory, self.rpc = rpc_factory, None
         self.active = {}
+        self.capacity_children = {}
+        self.child_capacity_failures = []
         self.goal = None
         self.stop_reason = None
         self.stop_now = False
@@ -497,8 +519,65 @@ class Campaign:
         self.goal = goal
         self.save(goal=goal)
 
-    def record_failure(self, error, reason, will_retry=False):
-        self.save(last_error=error)
+    def remember_child_provenance(self, data):
+        """Only an observed direct-child activity in the current root turn qualifies."""
+        root = self.state.get("thread_id")
+        item = data.get("item") or {}
+        child, path = item.get("agentThreadId"), item.get("agentPath")
+        if (not root or data.get("threadId") != root or
+                not self.active.get(root) or data.get("turnId") != self.active[root] or
+                item.get("type") != "subAgentActivity" or
+                item.get("kind") not in {"started", "interacted"} or
+                not isinstance(child, str) or not 0 < len(child) <= 128 or child == root or
+                not isinstance(path, str) or not path.startswith("/root/") or
+                len(path.split("/")) != 3 or path.split("/")[-1] in {"", ".", ".."}):
+            return
+        # No provenance is restored from last run's renderer/state snapshots.
+        if child in self.capacity_children or len(self.capacity_children) < 64:
+            self.capacity_children[child] = root
+
+    def record_child_capacity(self, error, reason, thread_id, turn_id):
+        """Record a scoped capacity failure; never retry or call RPC from events."""
+        root = self.state.get("thread_id")
+        if (not isinstance(error, dict) or error.get("codexErrorInfo") != "serverOverloaded" or
+                not isinstance(thread_id, str) or thread_id == root or
+                self.capacity_children.get(thread_id) != root or
+                not isinstance(turn_id, str) or not 0 < len(turn_id) <= 128):
+            return False
+        rows = self.child_capacity_failures
+        prior = next((row for row in rows if row["thread_id"] == thread_id and
+                      row["turn_id"] == turn_id), None)
+        if self.active.get(thread_id) != turn_id and prior is None:
+            return False
+        healthy = (self.controlled and self.goal and self.goal.get("status") == "active"
+                   and root in self.active and not self.stopping)
+        held = (self.stop_reason or self.stop_now or self.checkpoint_requested or
+                self.state.get("last_error") is not None or
+                self.state.get("last_failure") is not None or
+                (self.goal and self.goal.get("status") in TERMINAL_CODES))
+        if not healthy and not held:
+            return False
+        # A late child event must not replace a fatal error, policy hold or user stop.
+        # Original error bytes remain in RPC's existing protocol log.
+        if prior is None:
+            row = {"thread_id": thread_id, "turn_id": turn_id,
+                   "codexErrorInfo": "serverOverloaded", "reason": reason,
+                   "message": str(error.get("message", ""))[:2048],
+                   "recorded_at": utc(), "retry_not_before_unix": time.time() + 60,
+                   "automatic_retry": False, "events": [reason]}
+            rows.append(row)
+            del rows[:-16]
+            self.output.notice("Child capacity unavailable: " + thread_id + "/" + turn_id +
+                               "; preserve work; coordinator may follow up after backoff.")
+        elif reason not in prior["events"]:
+            prior["events"].append(reason)
+        self.save(child_capacity_failures=list(rows))
+        return True
+
+    def record_failure(self, error, reason, will_retry=False, *, thread_id=None, turn_id=None):
+        self.save(last_error=error, last_failure={
+            "thread_id": thread_id, "id": turn_id, "error": error,
+            "reason": reason, "log_dir": str(self.log_dir), "recorded_at": utc()})
         if (self.stop_reason or "").startswith("signal_") or self.stop_reason in {
                 "work_window", "needs_user_input", "goal_cleared"}:
             # A late server error must not turn a requested stop into recovery.
@@ -540,6 +619,8 @@ class Campaign:
         self.output.event(message)
         thread = data.get("threadId")
         primary = thread == self.state.get("thread_id")
+        if method in {"item/started", "item/completed"}:
+            self.remember_child_provenance(data)
         if "id" in message:
             if method == USER_INPUT_METHOD:
                 self.save(last_automatic_input={"thread_id": thread, "request_id": message["id"],
@@ -558,15 +639,22 @@ class Campaign:
             self.last_activity = time.monotonic()
             self.save()
         elif method == "turn/completed":
+            isolated = (data["turn"]["status"] == "failed" and
+                        self.record_child_capacity(data["turn"].get("error"), "turn_failed",
+                                                   thread, data["turn"]["id"]))
             if self.active.get(thread) == data["turn"]["id"]:
                 self.active.pop(thread, None)
             self.last_activity = time.monotonic()
             self.save(last_turn={"thread_id": thread, "id": data["turn"]["id"],
                                  "status": data["turn"]["status"]})
-            if data["turn"]["status"] == "failed":
-                self.record_failure(data["turn"].get("error"), "turn_failed")
+            if data["turn"]["status"] == "failed" and not isolated:
+                self.record_failure(data["turn"].get("error"), "turn_failed",
+                                    thread_id=thread, turn_id=data["turn"]["id"])
         elif method == "error":
-            self.record_failure(data["error"], "server_error", data.get("willRetry", False))
+            turn = data.get("turnId")
+            if not self.record_child_capacity(data["error"], "server_error", thread, turn):
+                self.record_failure(data["error"], "server_error", data.get("willRetry", False),
+                                    thread_id=thread, turn_id=turn or self.active.get(thread))
         elif method == "account/rateLimits/updated":
             self.record_rate_limits(data.get("rateLimits"))
         elif method == "account/updated" and data.get("authMode") not in (None, "chatgpt"):

@@ -1,5 +1,54 @@
 # Compact dispatcher handoff
 
+## Current — corrected cleanup review and proof-bound IHK publication (2026-10-19 00:50 UTC)
+
+Continuous functional OS/apps and Rust/reviewed-assembly migration remain ACTIVE.
+Policy SHA256 values adopted: GOAL6c258b03, START4963c62c, CONVERGENCE63a2ff8f,
+HANDOFFed0c909c; historical stop banners do not stop this invocation.
+Accepted totals remain24 distinct native behaviors,13 selected production Rust
+paths,11 applicable native paths,7complete/28open practical checks; all14milestones
+OPEN. Fixed supported FP1e7 image and matching modules remain unchanged.
+
+IHK-only actual35file/949466B materialization61025b9a is accepted under separate
+ordinary phase reserve e2e4947b. Request6322420c and heavy packet32b26414 are
+published in the next checkpoint; exact independent execution review is active.
+The heavy admission still requires14092861440 scratch bytes; fresh00:48 reading
+13758107648 leaves334753792B short. No target compile/load or module replacement.
+
+First cleanup root observation failed at actual record selection; failure raw
+bytes and independently accepted positive physical retirement e1e6ba30 remain.
+No delete occurred. Consolidated consumer-role selector de9c7fe4/registry361e2b5d
+covers actual control namespaces and external FP guards, preserving31 incident
+directories as evidence. Six actual-body synthetic cases pass7a12328a; expert2312
+review is active. Publish/fetch corrected source, then mint a genuine finite
+observation release using selector-correction-root-observation-profile.json;
+no corrected root attempt2 has run. Separate actual-result and exact120-file
+execution decisions remain mandatory. Potential allocation recovery1315868672B.
+No archive-body rehash, resize, raw ownership unlink or scratch21 cleanup.
+
+Private release-TID917 source/rebase and retention-only21-member correction
+57203a6c pass independent0034 review. Production/compiler/link/native evidence
+remain pending; no current-tree kernel integration. Separate private time-account
+leaf passed32 actualC/Rust cases twice plus selected/fallback/link checks; review
+pending. Logging three-role stager38b2323a passed corrected synthetic tests and
+actual manifest consumer; independent0048 review active; real IHK binding pending.
+CPU7 was released after actual joins; no competing heavy owner is authorized.
+
+Reviewed child-capacity-only isolation5a7e959d is applied to shared run_os_goal.py
+(e6c68ae7), preserving exact prior dirty8b146b2e in the evidence capsule.12 offline
+methods pass; no live RPC/state edit/restart/signal occurred. It applies on a
+later normal worker start. Root/unknown/policy/auth/quota/user stops remain intact;
+no prevention or speedup claim. Current launcher worker1279783/server1279789 was
+observed running; revalidate identities before privileged work. Root mutex27:4,
+boot7bfc5687 and scratchdev1828 remain; scratch21 container/exclusions preserved.
+
+Next executable actions: finish2312 selector review; commit/push/fetch exact
+corrected cleanup/IHK metadata; consume one fresh bounded read-only observation
+under its exact release, then separate reviewed cleanup if accepted. IHK heavy
+build follows only exact review, positive release and full fresh capacity. Keep
+refused execve/fork/ACK excluded and97% included-usage stop unchanged.
+
+
 ## Current — supported Rust batch accepted; cleanup/module source publication (2026-10-19 00:18 UTC)
 
 Functional OS/apps plus actual Rust/reviewed-assembly migration continue. Fixed

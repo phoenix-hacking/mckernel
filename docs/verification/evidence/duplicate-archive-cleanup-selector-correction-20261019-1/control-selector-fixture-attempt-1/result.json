@@ -1,0 +1,70 @@
+{
+  "status": "PASS_ACTUAL_RECORDS_SELECTOR_COMPLETE31_SYNTHETIC_ONLY",
+  "cases": [
+    {
+      "status": "PASS",
+      "case": "complete-current31-and-controls",
+      "expected": null,
+      "error": null,
+      "complete_current_nonregular_sample": 31,
+      "production_body": "records()",
+      "boundary_mocks": false,
+      "inventory_unchanged": true
+    },
+    {
+      "status": "PASS",
+      "case": "unknown-real-control-path",
+      "expected": "unknown declared control path",
+      "error": "RuntimeError(\"unknown declared control path: ['/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/control-selector-fixture-attempt-1/unknown-real-control-path/scratch/native-exact-mckernel-image-lease-unregistered.json']\")",
+      "complete_current_nonregular_sample": 31,
+      "production_body": "records()",
+      "boundary_mocks": false,
+      "inventory_unchanged": true
+    },
+    {
+      "status": "PASS",
+      "case": "known-control-nonregular",
+      "expected": "declared control not regular",
+      "error": "RuntimeError('declared control not regular: /home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/control-selector-fixture-attempt-1/known-control-nonregular/scratch/native-exact-build-lease-67589154-1.json')",
+      "complete_current_nonregular_sample": 31,
+      "production_body": "records()",
+      "boundary_mocks": false,
+      "inventory_unchanged": true
+    },
+    {
+      "status": "PASS",
+      "case": "stale-known-control-identity",
+      "expected": "declared control identity drift",
+      "error": "RuntimeError('declared control identity drift: /home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/control-selector-fixture-attempt-1/stale-known-control-identity/scratch/native-exact-build-lease-67589154-1.json')",
+      "complete_current_nonregular_sample": 31,
+      "production_body": "records()",
+      "boundary_mocks": false,
+      "inventory_unchanged": true
+    },
+    {
+      "status": "PASS",
+      "case": "external-current-fp-guard-present",
+      "expected": "current control must be absent",
+      "error": "RuntimeError('current control must be absent: /home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/control-selector-fixture-attempt-1/external-current-fp-guard-present/current-fp/common-exclusion.json')",
+      "complete_current_nonregular_sample": 31,
+      "production_body": "records()",
+      "boundary_mocks": false,
+      "inventory_unchanged": true
+    },
+    {
+      "status": "PASS",
+      "case": "scoped-evidence-identity-drift",
+      "expected": "scoped evidence identity drift",
+      "error": "RuntimeError('scoped evidence identity drift: /home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/control-selector-fixture-attempt-1/scoped-evidence-identity-drift/scratch/native-diagnostic-signal-block-pending-20261001-1')",
+      "complete_current_nonregular_sample": 31,
+      "production_body": "records()",
+      "boundary_mocks": false,
+      "inventory_unchanged": true
+    }
+  ],
+  "interpreter": "/usr/bin/python3",
+  "version": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+  "real_observer_replayed": false,
+  "unaffected_fixtures_replayed": false,
+  "actual31_contents_read": false
+}
