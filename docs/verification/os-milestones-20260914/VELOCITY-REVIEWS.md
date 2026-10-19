@@ -23,6 +23,23 @@ final-profile closure remains open. Other bands held; M09 is integration only.
 Measured facts23behaviors/13production/11native and7complete28open of35.
 Earlier immutable baseline, four-hour comparison and review cutoffs are unchanged.
 
+**LATEST FULL REVIEW57 — 2026-10-19T05:19:09Z; next05:49UTC:** campaign
+running/goalactive, sole saved thread; dispatcher plus3active workers. Last31min:
+one additional real Rust teardown leaf committed/pushed/fetched35a497b2;256C/Rust
+cases x3 replacements and selected/fallback/link/no-FP checks. Two Rust app
+variants and C control-plane collector compiled; exact387B/254B Linux oracles and
+six actual process-supervision modes independently accepted. No new native credit.
+Actual root Git diagnostic and observation6 independently accepted; observation7
+expired while reviewer corrected schema/atime mistakes. No archive deletion,
+no IHK build, no guest. Check corrected reviewer on retained evidence before
+refresh8; reuse static/fetched proof and keep the live handoff inside120seconds.
+CPU6 source binder has generated mechanical joins6948entries/120595463B,2consumer
+and4negative checks; later materialization/request stages pending. Two-CPU
+end-to-end guest profile implementation continues in parallel. Accepted counters
+24behaviors/13production/11nativeRustpaths/7complete28openchecks:all deltas0;
+14wholemilestones remain open, prior engineering bands held. Usage47->48%;
+root47.532GiB/scratch12.813GiB. No measured2-3x speedup established.
+
 **SUPERVISION RESUMED — 2026-10-19T04:48:16.575393+00:00; review56 baseline:** latest user explicitly
 requested resumed evening work. Same saved thread and sole campaign running,
 run20261019T044732Z-ea212224,watcher1347803/worker1347805/server1347807. Launcher
@@ -4330,3 +4347,33 @@ cancelled; no automatic launch/recovery is authorized by these historical notes.
 Foreground manual resume when the user returns:
 `python3 -B /home/holden/mckernel/scripts/run_os_parallel.py --run --no-fresh-on-recovery`.
 This command was not run to prepare the handoff.
+
+
+## Review57 — 2026-10-19T05:19:09Z
+
+Resumed evening interval began04:47:32UTC; paused time excluded. The launcher
+resume repair5c292417 is runtime-validated by actual parallel engineering and
+source commits, not goal status alone. Root35a497b2 selects Rust for live TID
+replacement while retaining fallbacks and unrelated WIP. Four source-integrated
+teardown leaves share one pending pinned production/image/native validation.
+
+The app lane completed two actual Rust reference binaries, one compiled C
+control-plane collector and six real supervision fixtures; timeout/orphan and
+older-Python API defects were fixed and originals retained. New two-CPU
+stager/collector/evaluator is actual implementation work, not yet native proof.
+
+Critical path remains real scratch reserve:334753792B short for prepared IHK
+build. The corrected Git path passed actual root execution; full observation6
+passed independent review. Observation7 live capture/readbacks joined, then
+expired while the checker assumed decision_sha256 instead of the real schema
+and compared read-mutated atime. No release bytes changed and no files deleted.
+Validate the corrected checker against retained inputs before new live capture;
+reuse complete static review and fetched source proof. The120-second gate stands.
+
+Next: execute the complete ready source-preparation profile under delegated CPU6
+ownership while root handles cleanup; finish two-CPU end-to-end implementation
+and coherent fixtures; refresh only live cleanup facts after checker is ready,
+then genuine final release/apply/readback. After actual capacity recovery run the
+prepared IHK-only target with existing4CPU/12GiB/noSwap/512task/one-heavy limits.
+Do not accumulate new helper-only drafts or repeat unchanged passing checks.
+No new compute C; GPT6.1 only and97%included-usage stop retained.

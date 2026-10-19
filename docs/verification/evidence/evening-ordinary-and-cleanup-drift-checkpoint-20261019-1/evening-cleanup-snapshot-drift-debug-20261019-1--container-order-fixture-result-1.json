@@ -1,0 +1,53 @@
+{
+  "status": "PASS_ACTUAL_CONTAINER_BODY_AND_RETAINED_PROJECTION",
+  "cases": [
+    {
+      "name": "actual-retained7vs8-complete-projection",
+      "status": "PASS",
+      "old_equal": false,
+      "candidate_equal": true
+    },
+    {
+      "name": "changed-Source-refused",
+      "status": "PASS"
+    },
+    {
+      "name": "changed-Destination-refused",
+      "status": "PASS"
+    },
+    {
+      "name": "changed-RW-refused",
+      "status": "PASS"
+    },
+    {
+      "name": "changed-Type-refused",
+      "status": "PASS"
+    },
+    {
+      "name": "missing-row-refused",
+      "status": "PASS"
+    },
+    {
+      "name": "duplicate-count-refused",
+      "status": "PASS"
+    },
+    {
+      "name": "actual-source-ancestry-guard-refuses",
+      "status": "PASS"
+    },
+    {
+      "name": "mismatch-diagnostic-reports-changed-key-and-hash",
+      "status": "PASS"
+    }
+  ],
+  "case_count": 9,
+  "source_sha256": "0c134ee778b273610ead1ecc507caa038642459c0a065c956b4431c35c755917",
+  "candidate_sha256": "5586388673348be64bd1e5b1734f60e6f26c87f77bb4ba019a063ea4b808d566",
+  "changed_existing_functions": [
+    "container_census",
+    "main"
+  ],
+  "root_execution": false,
+  "live_Docker_or_census": false,
+  "actual_failed_apply_cause": "UNKNOWN; this reproduces retained7vs8 ordering-only drift, not unretained failed apply current snapshot."
+}

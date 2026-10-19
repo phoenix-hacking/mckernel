@@ -1,5 +1,52 @@
 # Resume cursor
 
+## Current — four-leaf ordinary preparation accepted; cleanup drift repaired privately
+
+Actual follow-on: the remaining stage command reached its approved20s deadline,
+TERM child directly joined-15 and outer joined1; serializer/evaluator remain
+unrun. No internal stderr exception observed. CPU7 positively released to root.
+Both failed stages/partials are preserved; independent cumulative expert review
+is active before any further attempt. Candidate558 is now integrated exactly in
+the cleanup engine with original0c preserved; observer9/apply2 source/profile and
+new real bindings are awaiting one consolidated independent decision.
+
+Actual four-leaf source materialization/preparation independently passes b9392edf:
+6,948 entries, five frozen lifecycle-preserving overlays, request bc98516d;
+materialize0/9.28s, prepare0/103.23s and unchanged driver/owner consumer0 after
+one reviewed CPU-time correction17a6f. Original pre-stage hash/schema failures
+and first consumer SIGKILL remain preserved. CPU6 released. Real production
+GCC14/full crates/image/default-link/native remain PENDING; source35a497b2 is
+already pushed/fetched. Host-backed image request has its own16GiB host/12GiB
+scratch floors and full-growth admission; unrelated IHK scratch requirement is
+not its dependency. Exact heavy proposal/release is in preparation, not granted.
+
+Cleanup observation8 and five readbacks directly joined; prevalidated checker
+accepted snapshot at0.14s. Apply1 launched at actual39.13s age, then refused
+fresh-observation drift before journal creation/unlink. Engine and outer joined1,
+owned group empty/mutex27:4 available; d0519fe1 independently accepts retirement,
+not cleanup. Scratch delta0, no files deleted. Failed fresh snapshot was not
+emitted, so its differing leaf stays UNKNOWN. Retained7/8 reproduce Docker
+Mounts order-only drift in21/44 containers. Complete-row canonical sorting55863886
+passes nine actual-function/semantic-negative cases and source reviewbaf73e7e;
+original0c134 source/captures remain. New source-bound observer9/apply2 releases
+and fresh120-second live facts are required; never replay consumed/stale roles.
+
+Two-CPU single-guest app implementation has five actual compiled/ELF checks
+passed. First staging stopped at canonical duplicate-boot refusal; original
+partial archive preserved. Reviewed remaining correction derives a new base
+changing only boot payload/size/CRC, preserving record order/metadata and the
+canonical overlay policy. CPU7 explicitly allocated for three remaining ordinary
+commands, once/stop first failure, with independent actual-result review next.
+Two McKernel CPU runtime remains UNPERFORMED; no guest authority from fixtures.
+
+Evidence: ../evidence/evening-ordinary-and-cleanup-drift-checkpoint-20261019-1/.
+Metrics unchanged:24 native behaviors,13 selected production Rust paths,
+11 applicable native paths,7complete28open practical checks, all14milestonesOPEN.
+Current supported FP1e7 artifact and excluded execve/forkACK remain untouched.
+Functional PRACTICAL-GOAL and real Rust/assembly migration remain active. Goal
+is ACTIVE; this source/evidence checkpoint does not pause execution.
+
+
 ## Current — full cleanup observation accepted; apply role prepared
 
 Observation6 actual c7eed9c1 independently accepts full unchanged source oracle:

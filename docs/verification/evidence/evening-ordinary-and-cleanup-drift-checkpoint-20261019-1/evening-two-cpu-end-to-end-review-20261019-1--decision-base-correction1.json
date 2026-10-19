@@ -1,0 +1,150 @@
+{
+  "schema": "mckernel.private-two-cpu-end-to-end-ordinary-review.v1",
+  "decision": "PASS_EXACT_REMAINING_ONLY_BASE_DERIVATION_CORRECTION1",
+  "functional_scope": "Functional OS/apps and Rust plus reviewed assembly; Linux userspace/control helpers only, no compute C expansion.",
+  "reviewed_inputs": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-two-cpu-end-to-end-review-20261019-1/reviewed-inputs-base-correction1.json",
+    "sha256": "70abdf50f5b9cd48fb3531b6a895f3794a5fcae04583ea033606c8e0ed88c4c5",
+    "size": 16083,
+    "mode": 33152
+  },
+  "ordinary_source_review": true,
+  "compile_phase_release": false,
+  "consumer_phase_release": true,
+  "commands": [
+    [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "35s",
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=30",
+      "--core=0",
+      "--nofile=256",
+      "--fsize=33554432",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/remaining_correction1.py",
+      "--phase",
+      "remaining-correction1"
+    ]
+  ],
+  "cwd": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1",
+  "environment": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "TZ": "UTC",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "HOME": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/home",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/tmp"
+  },
+  "external_preconditions": [
+    "Dispatcher explicit CPU7 one-job 1GiB admission; do not overlap a conflicting lease.",
+    "Recheck reviewed source hashes immediately before execution; exact profile does not authorize arbitrary commands.",
+    "Fresh host16GiB and scratch12GiB available plus640MiB reserve/growth.",
+    "Capture outer Unix interval, argv/environment/cwd, streams/status and positively join process owner.",
+    "On first unexpected failure preserve all outputs and stop; one bounded correction then escalate the family.",
+    "All existing stage-1 failure evidence and compiled/generated inputs remain untouched. Fresh stage-correction1, stage-pair-correction1 captures and whole remaining-correction1 captures must be absent.",
+    "The previous ordinary root admission does not allocate a new slot: dispatcher must explicitly admit this exact remaining-only command after measuring fresh floors.",
+    "The unexecuted c-consumer and contract-fixture capture/status names must still be absent; all output creation remains exclusive."
+  ],
+  "limits": {
+    "cpu": 7,
+    "jobs": 1,
+    "address_space_bytes": 1073741824,
+    "wall_seconds": 35,
+    "cpu_seconds": 30,
+    "nofile": 256,
+    "core_bytes": 0,
+    "file_size_bytes": 33554432,
+    "pipeline_seconds": 28,
+    "pipeline_cleanup_reserve_seconds": 3,
+    "private_new_output_bytes": 100663296,
+    "stage_output_bytes": 67108864
+  },
+  "findings": [],
+  "reused_prior_process_cases": 6,
+  "frozen_stdout_bytes": [
+    387,
+    254
+  ],
+  "reviewer_tests": 0,
+  "reviewer_compilations": 0,
+  "guest_runs": 0,
+  "root_release": false,
+  "native_runtime_release": false,
+  "native_two_cpu_proof": false,
+  "acceptance": false,
+  "resolved_findings": [
+    {
+      "id": "CPIO_BOOT_METADATA",
+      "preserved_original": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/stage_pair.before-metadata-correction.py",
+        "sha256": "759028dc51c7c060df426b187406cbe6686dbb7fe39cbe36ae237b3461a3b1b6",
+        "size": 5385,
+        "mode": 33152
+      },
+      "corrected_source": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/stage_pair.py",
+        "sha256": "7684762c01bea85aacac3bd0433ac6ec788887bf1cdf57c5044e45176ac079c5",
+        "size": 6684,
+        "mode": 33152
+      },
+      "resolution": "Replacement copies exact original boot header/name/padding, changes only filesize and CRC where applicable; data padding is recomputed. Canonical parse/replay and unchanged strict metadata validator reject drift."
+    },
+    {
+      "id": "ACTUAL_DUPLICATE_BOOT_BASE_BOUNDARY",
+      "prior_failure": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-cpu-end-to-end-review-20261019-1/actual-stage-failure.json",
+        "sha256": "996070dd2ed19a508c2924e172445eef2f1de53aa8907bb960529de9bdf9d233",
+        "size": 1849,
+        "mode": 33152
+      },
+      "preserved_failed_source": {
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/stage_pair.actual-duplicate-failure.py",
+        "sha256": "7684762c01bea85aacac3bd0433ac6ec788887bf1cdf57c5044e45176ac079c5",
+        "size": 6684,
+        "mode": 33152
+      },
+      "correction": "Derive private base by replacing existing boot record payload/filesize/CRC only. All other raw records/zeros copied, metadata/order reparsed and compared. Manifest initramfs/root_base/staging base all bind actual derived base. Canonical overlay and duplicate allowlist unchanged; appended archive contains only absent app0/app1.",
+      "fresh_output": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/stage-correction1",
+      "fixture_delta": "only stage-1/manifest.json to stage-correction1/manifest.json"
+    }
+  ],
+  "phase_order": "Only remaining_correction1.py: stage-pair-correction1, then never-executed c-consumer, then never-executed contract-fixture. Reuse all five passed compile/readelf results and existing generated diagnostic/stage inputs; no regeneration or compiler replay.",
+  "exact_inner_commands": [
+    [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/stage_pair.py",
+      "--inputs",
+      "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/stage-inputs.json",
+      "--out",
+      "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/stage-correction1"
+    ],
+    [
+      "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/pair-consumer-fixture",
+      "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app0.expected.stdout",
+      "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/app1.expected.stdout"
+    ],
+    [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/contract_fixture.py"
+    ]
+  ],
+  "failure_family_history": {
+    "actual_stage_failures": 1,
+    "bounded_correction": "this request",
+    "on_failure": "Preserve exact outputs and process identities; stop and escalate complete findings. No further automatic correction/relabel/replay."
+  }
+}

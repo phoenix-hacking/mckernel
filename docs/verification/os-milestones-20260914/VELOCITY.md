@@ -1,5 +1,25 @@
 # Tactical plan for faster verified OS progress
 
+## Current velocity priorities — review57, 2026-10-19T05:19:09Z
+
+Keep three useful paths concurrent: root owns exact cleanup/live releases;
+CPU6 owner executes the complete reviewed four-leaf source binding/materialization/
+request-preparation chain; app owner implements and checks the end-to-end two-CPU
+stager/collector/evaluator within one existing guest envelope. Delegate whole
+approved ordinary profiles so root cleanup does not serialize unrelated writes.
+Retain the accepted one-CPU behavior and fail clearly on absent CPU assignments.
+No new McKernel compute C; preserve original source/oracles and failure evidence.
+
+Latest real source35a497b2 is pushed/fetched; actual full production/native remains
+one coherent four-leaf batch. Two Rust app references and collector compiled,
+six real process fixtures accepted. Root Git diagnostic and full observation6
+accepted. Observation7 expired during two reviewer-script errors; validate that
+checker on retained real evidence before refreshing8. Source/fetched/static
+proof is reusable; only fresh live identity/snapshot/release fields need refresh.
+Do not start a freshness clock while still writing the checker or apply wrapper.
+No deletion/build/guest yet. Actual accepted counters remain24/13/11 and7of35;
+all14wholemilestones open. Prior engineering estimate bands held. Next05:49UTC.
+
 ## RESUMED — latest explicit user authorization, 2026-10-19T04:48:16.575393+00:00
 
 The user requested evening-long functional OS development and supervision. The

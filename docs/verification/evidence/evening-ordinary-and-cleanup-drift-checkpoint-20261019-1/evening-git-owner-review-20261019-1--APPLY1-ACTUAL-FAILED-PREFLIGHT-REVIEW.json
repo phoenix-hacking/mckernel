@@ -1,0 +1,142 @@
+{
+  "status": "ACCEPT_FAILED_APPLY1_PREFLIGHT_REFUSAL_AND_POSITIVE_RETIREMENT_NO_DELETION",
+  "first_predicate": "RuntimeError: fresh observation drift",
+  "source_line": 618,
+  "source_sha256": "0c134ee778b273610ead1ecc507caa038642459c0a065c956b4431c35c755917",
+  "wrapper_sha256": "f88d6f1b27828b6063f7e28fb01f9617e41da4478ef42c7b0b97a936e04b039b",
+  "actual_release_sha256": "2158ad247e0d222cc136555baac5b5719a72cad945da14b8e13e33b97da68db0",
+  "prior_final_review_sha256": "23ebecd44c4a7dbe3202118aacf75528740f1028f9fa120312dcb2da9ec4ce85",
+  "control_flow_findings": [
+    "Actual fresh snapshot completed before failed projection comparison",
+    "Current expected_records equality at609 passed",
+    "Releasebytes unchanged at613 and original120second freshness at617 passed",
+    "Nonprocess snapshot exact equality failed at618; failed projection key/leaf not retained",
+    "Journal creation623 and first unlink640 unreachable on captured failure path"
+  ],
+  "outer": {
+    "pid": 1367542,
+    "direct_joined": true,
+    "returncode": 1,
+    "elapsed_seconds": 4.966378557001008
+  },
+  "engine": {
+    "pid": 1367547,
+    "starttime": 18534991,
+    "pgid": 1367547,
+    "direct_joined": true,
+    "returncode": 1,
+    "whole_group_retired": true,
+    "remaining_group": [],
+    "mutex_preserved_available": true,
+    "elapsed_seconds": 4.848440658010077
+  },
+  "known3_readback_commands": [
+    {
+      "name": "stat-before",
+      "pid": 1367746,
+      "direct_joined": true,
+      "returncode": 0
+    },
+    {
+      "name": "raw-0",
+      "pid": 1367748,
+      "direct_joined": true,
+      "returncode": 0
+    },
+    {
+      "name": "raw-1",
+      "pid": 1367750,
+      "direct_joined": true,
+      "returncode": 0
+    },
+    {
+      "name": "raw-2",
+      "pid": 1367752,
+      "direct_joined": true,
+      "returncode": 0
+    },
+    {
+      "name": "stat-after",
+      "pid": 1367754,
+      "direct_joined": true,
+      "returncode": 0
+    }
+  ],
+  "known3_actualFD_metadata_and_source_fstat_hash_joins_verified": true,
+  "raw_bytes": [
+    0,
+    709,
+    5104
+  ],
+  "journal": "NOT_CREATED exactENOENT, originalpath absent, probejoined1 retained",
+  "scratch_available_byte_delta": 0,
+  "host_available_byte_delta": -159744,
+  "no_unlink_in_this_engine_attempt": "Proved pinned controlflow refusal before journal/firstunlink; scratchdelta0 corroborates, not standalone proof. No actual120cleanup acceptance.",
+  "failure_family": {
+    "family": "fresh immutable snapshot equality preflight",
+    "actual_failed_attempts": 1,
+    "prior_root_observer_failures": 5,
+    "prior_successful_observations": [
+      6,
+      7,
+      8
+    ],
+    "unknown": "Which nonprocess snapshot key/leaf drifted is unobserved; do not infer container/mount/Git/parents/unmatched cause from generic error. Records comparison already passed."
+  },
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/apply1-raw-readback-1/result.json",
+      "bytes": 12429,
+      "sha256": "782366efee37f46f1cc8a2da7b527b32fafea225d53fdce5e362ea826b2f7f64"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/apply1-raw-readback-1/raw-0.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/apply1-raw-readback-1/raw-1.stdout",
+      "bytes": 709,
+      "sha256": "da8d26ee6e0ac56b049b6209825eb95ab4eadbb8215a8bfd24ebbc12d189d96b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/apply1-raw-readback-1/raw-2.stdout",
+      "bytes": 5104,
+      "sha256": "cd300e39760e2bf28e002102c68c67106d9e63b1e7a005cd1ff8ab61330ccc9c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/apply1-raw-readback-1/journal-result.json",
+      "bytes": 2292,
+      "sha256": "4bfd72c7fd95bca2242ae385e24c9bf7dd1fbab5c4704e9beb61c59099ce7a58"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/apply1-raw-readback-1/journal-stat-before.stderr",
+      "bytes": 188,
+      "sha256": "2a0d2e34d34db52b6a8170624108660e4916f59bb0a8b62c95b2cb3144b0d4bb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/actual-outer-apply-1.status.json",
+      "bytes": 765,
+      "sha256": "7a539587d625cc0a7e5235be48f905d5e2d28525312ef46cb8cc5eae356fe5fd"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/actual-post-apply-capacity-1.json",
+      "bytes": 302,
+      "sha256": "b5bb8fdfff1dbdce60c4ae69a0615927965a2680272430f47cfad01fbbe08c42"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/actual-cleanup-release-1-observation8.json",
+      "bytes": 368394,
+      "sha256": "2158ad247e0d222cc136555baac5b5719a72cad945da14b8e13e33b97da68db0"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/FINAL-ACTUAL-OBSERVATION8-APPLY1-RELEASE-DECISION.json",
+      "bytes": 2244,
+      "sha256": "23ebecd44c4a7dbe3202118aacf75528740f1028f9fa120312dcb2da9ec4ce85"
+    }
+  ],
+  "cleanup_behavior_counted": false,
+  "apply_retry_authority": false,
+  "new_root_observation_authority": false,
+  "next": "Preserve consumed apply1release/captures/no-journal refusal. Author cheap actual-body reproduction and bounded exact mismatch diagnostic/fix, then independent source boundary decision; never rerun unchanged or weaken equality/freshness/candidate/retained gates."
+}
