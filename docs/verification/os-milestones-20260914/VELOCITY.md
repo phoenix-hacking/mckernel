@@ -1,39 +1,60 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 72, 2026-10-19T17:56:07.640342Z
+## Current priorities — review 73, 2026-10-19T18:27:58Z
 
-The corrected fresh full build is RUNNING: request 8b7b34ed, unchanged kernel
-205410e4, final review 53bd5149. Finish the actual compiler/image result; no new
-image or native acceptance is claimed yet. Physical predecessor 9e0d62b9 is
-accepted. The approved scratch reserve change is DONE with 1.10 GiB measured gain.
-Do not repeat either operation. Preserve the whole failed case and its twelve
-log pairs; producer failure remains failure.
+The corrected full build passed all 16 phases, independently accepted f7352de9.
+Image ff4fca45 is 7,988,768 bytes, from kernel 205410e4 and request 8b7b34ed.
+The producer took 97.724 seconds; the guarded invocation took 259.023 seconds.
+The actual producer finished at 17:57:23.816691 UTC. Native feedback was still
+pending after 30.6 minutes at this review, missing the 30-minute target. Record
+the delay and continue correcting its causes. Do not repeat the successful build.
 
-Keep postbuild and strict N3 preparation ahead of build completion. The terminal
-fresh-request amendment dae57932 needs one affected fixture and targeted review.
-Explicitly update the N3 request pins in parallel, keeping the existing CPU oracle
-and accepted 37-role contract. Use admitted ordinary CPU slots; do not start a
-second heavy job. Then move the actual new image promptly into native feedback.
-No open-ended catalog/history audits or repeated checks of unchanged evidence.
+Live update 18:38 UTC: the corrected four-copy/fifteen-inspection chain completed
+in 6.135 seconds and is independently accepted (0418e0ed). Four complete retained
+byte pairs total 21,226,912 bytes. Finite preservation also completed: 37 roles,
+33 copies and four reuses, 74 descriptor records, exit 0 in 0.559 seconds; accepted
+c88a63f7. The first copier failure and the binder's two-versus-seven-field input
+refusal remain preserved. Neither required a compiler or inspection replay.
 
-[Live velocity dashboard](VELOCITY-METRICS.md): accepted checks, native behaviors,
-Rust paths per wall hour; build-to-native latency; failed-case release latency;
-quota cost; observation gaps. Targets for the next cycle: <=30 minutes from build
-to native feedback and <=10 minutes from failed guard to accepted physical
-release. Previous measured values were ~89 and 43.95 minutes. No active-rate or
-speedup claim is valid across the approximately 299.5-minute observation gap.
-Network failures were logged; fresh work resumed at 17:53 UTC. No missing samples
-or reviews have been invented. Wall/monotonic sampling is now recorded.
+Current semantic dependency: three real affinity calls match their objects and
+image; sys_sched_setaffinity contains the permitted inlined fourth route. The
+facts checker is being corrected only for that actual inline/ELF-relocation form,
+using complete object-to-image byte projections and saved instruction witnesses.
+The other three named-call checks stay strict. Do not recompile or reinspect.
 
-Counters remain 25 native behaviors, 17 production Rust paths, 11 applicable
-native Rust paths and 7 of 35 practical checks. All 14 whole milestones remain
-open and engineering bands are held. The typed-case prototype passed its bounded
-checks but is parked; do not delay actual OS delivery or claim runtime savings.
+The physical observer/raw-five/cleanup/postjoin chain is preconstructed; genuine
+final bindings and its own exact releases remain required. N3 source/profile and
+scratch-manifest corrections pass, keeping the strict CPU oracle. Optional checks
+add no gate. Its owner is checking final corrected facts-producer refs now so a
+necessary small data addendum is ready before genuine staging.
 
-Usage 69%; host/scratch about 45.64/13.91 GiB. Preserve GPT-6.1, appropriate
-medium/high effort, one-heavy 4 CPU/12 GiB/no swap/512 task limits, disk floors and
-actual growth reserves, source/ownership evidence, Scratch21 and permanent mutex.
-Stop at 97% included usage. Next full review: 2026-10-19T18:26:07.640342Z.
+Dispatch ready work explicitly. Root confirmed a completed reviewer was idle
+after packet readiness. Start a completed owner with followup_task, check active
+status, and measure readiness-to-start delay. A message alone does not start a
+turn. Reuse a completed review if it already exists. Keep the present repair
+finite; avoid new frameworks and baseline audits. At the next necessary interface
+change, prefer a pinned callable helper and typed case data over inline-code
+rewrites. Check the actual decorated caller, persist direct child status before
+post-processing, and exclude atime from stable metadata. Measure time saved.
+
+The [velocity dashboard](VELOCITY-METRICS.md) samples every five minutes while
+this supervisor is available. Counters remain 25 native behaviors, 17 production
+Rust paths, 11 applicable native Rust paths, and 7 of 35 practical checks. All 14
+whole milestones remain open. No engineering percentage uplift is claimed. Wall
+rates include the 299.5-minute observation gap; active engineering rate across
+that gap is unknown. Previous completed build-to-native handoff was about 89
+minutes; previous failed-case physical release took 43.95 minutes. Targets remain
+30 minutes and 10 minutes respectively.
+
+The prior failed-case physical release and scratch reserve adjustment are DONE.
+Measured scratch gain was 1.10 GiB; repeat neither operation. The current build's
+stopped container and ownership records remain held pending their own physical
+acceptance. The user authorizes useful CPU/RAM increases: use spare admitted
+lanes, measure saturation/RSS before changing the next profile, and change no
+active limits. Usage is 70%; host/scratch availability is about 45.53/13.91 GiB.
+Keep one heavy workload, current 4 CPU/12 GiB/no swap/512 task limits, aggregate
+host reserve, disk/growth floors, source/ownership/runtime checks, Scratch21 and
+all failed evidence. Stop at 97% included usage. Next review: 18:57:58 UTC.
 
 ## Previous priorities — review 70, 2026-10-19T11:59:02Z
 

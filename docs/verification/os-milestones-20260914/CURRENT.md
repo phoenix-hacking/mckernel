@@ -1,3 +1,55 @@
+## Current — observations and finite37 preserved; semantic/terminal joins (18:41 UTC)
+
+Campaign ACTIVE: functional OS/apps plus Rust/reviewed assembly. Fresh8b build
+f735 remains preserved; do not rebuild or replay consumed releases. Corrected
+four-copy/fifteen-inspection chain wholejoined0/6.135s at18:28:33UTC. Independent
+transport0418e0ed accepts16innerdirect0,32closedstreams and four source/retained
+full11 pairs totaling21,226,912B. Initial copier attempt failed before directory
+creation:0copies/15unrun, because taskset's -c was selected instead of Python's
+-c; original8145/b10/captures and reviewer selector error are preserved b651.
+One actual-inline correction checked4disposablecopies+badpinpremkdirrefusal,
+then exact432a release ran once. No compiler or successful inspection replay.
+
+Finite37 ordinary preservation direct0/.559s is independently acceptedc88a63f7:
+33copies/4reuse,74full11 descriptors,51,947,710Btotal/30,720,798Bnew. Original
+binder DATA refusal ee191 is preserved; exact complete request source descriptor
+replaced the two-field summary without changing any predicate. Corrected binder
+c4aabacf direct0/.353s emitted the genuine authority. CPU6/7 ordinary jobs are
+released except separately admitted current source-generation work.
+
+Actual inline-affinity sourceassociation d254b5dc proves3namedcalls and1inlined
+1287B/16relocation wrapper, including actual lock/mask/unlock-before-migration;
+teardown projection996B/21relocations also matched. The current-case corrected
+facts real entrypoint plus11refusals passed0/5.957s, source3010/result0db42e19.
+Independent semantic/canonical acceptance is still pending; no artifact/native
+credit is inferred from the author's fixture. Full syscall-DWARF gap remains OPEN.
+
+Next owners: next_replace_tid_review finishes actual saved-facts/canonical
+acceptance; next_live_process_rust_batch owns the continuous finite terminal
+chain. Before sourcegen, correct only four inherited observer manifest paths
+from newR to the authoritative pinned A refs; resume_git_owner_review follows
+that affected boundary. N3 owner evening_two_app_batch is preparing the minimal
+V4 facts-producer DATA/literal pin amendment in parallel. Strict startupCPU and
+all oracles remain unchanged. Its optional refusal/profile check60a35063 passed
+0/.565s and adds no image/stage/native prerequisite. Genuine stage/report/current
+physical proof and final fresh60s snapshot/release remain pending.
+
+Preconstructed next terminal command set is V/finite-chain-preparation-1/
+TERMINAL-SIX-OPERATION-COMMANDS.json; use each actual approved stage's argv and
+resource fields, never reconstructed defaults or old releases. Canonical/Git/
+observer/raw5/physical releases retain their actual contracts. CurrentCID7e94ef6a
+is stopped and retained with common/shared records; physical cleanup is UNRUN.
+Scratch21/permanentmutex/exclusions/failures/dirty WIP remain protected.
+
+Driverfinished17:57:23.816691UTC; native-feedback30min target was missed at
+18:27:23.816691UTC. Recorded causes: idle reviewer not activated after freeze,
+then shared taskset/Python-c selection error; report actual subsequent stages,
+not a shifted target or throughput multiplier. Includedusage70%,stop97%.
+Counters held25nativebehaviors/17productionRust/11applicable-native/7of35;
+all14milestones OPEN. New evidence archive01efd13f preserves closed postbuild,
+first failure and preservation review; active facts correction was excluded.
+Continue after checkpoint; no pause or new launcher.
+
 ## Current — corrected fresh image built; postbuild/native handoff (18:10 UTC)
 
 Campaign ACTIVE, functional OS/apps plus Rust/reviewed assembly. No pause/stop.

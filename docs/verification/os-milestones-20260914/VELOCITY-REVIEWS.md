@@ -5043,3 +5043,63 @@ Usage 69%; host/scratch about 45.64/13.91 GiB. One heavy workload at 4 CPUs,
 12 GiB, no swap and 512 tasks; 16/12 GiB disk floors, source authority, ownership,
 all failed evidence, Scratch21 exclusions and the 97% included-usage stop remain.
 Next full review: 2026-10-19T18:26:07.640342Z.
+
+
+## Review 73 — 2026-10-19T18:27:58.725321Z
+
+Corrected fresh FULL build remains accepted f7352de9: all 16 phases pass, source
+205410e4/request8b7b34ed, image ff4fca45 (7,988,768 bytes). Actual producer took
+97.724 seconds; outer guarded invocation259.023 seconds. Producer finished at
+17:57:23.816691 UTC. Native feedback remains pending after 30.6 minutes;
+target is 30 minutes, deadline18:27:23.816691 UTC. Do not restart compilation.
+Linked-artifact acceptance and current stopped-container physical release remain
+pending; preserve the complete successful and prior failed cases.
+
+The fifteen-observation adapter was frozen around18:14. Its reviewer had completed
+a prior turn before packet arrival; root confirmed the dispatch gap. Supervisor
+queued an explicit wakeup at18:17:41; reviewer first observed active18:18:52
+(71 seconds queue-to-observation, not an exact task-start or causal speedup).
+Maintain a ready-task queue: followup_task starts completed owners, whereas a
+message alone does not. Reuse any genuinely completed review rather than repeat it.
+
+First released observation attempt failed in0.115 seconds before any artifact
+copy or inspection. Planner and reviewer both selected taskset's -c rather than
+Python's -c, retaining an old metadata path. All four copies and fifteen tools
+were unrun; first failure is preserved (review b651167c). The meaningful corrective
+regression exercised the real inline body with disposable data: four copies pass,
+wrong hash refuses before directory creation. Regression took0.115 seconds. Exact
+replacement command/capture bindings and release are still being finalized.
+
+Terminal fresh8b amendment16d69325 passed12checks/direct exit0/3.504seconds;
+first atime-related finalizer failure remains preserved. N3 three-ref addendum
+3a1e6a1c and scratch manifest correction4a7d0f57 pass; optional interface/refusal
+fixture60a35063 took0.565seconds with zero forbidden calls. Those optional checks
+add no artifact, cleanup or native prerequisite. Strict CPU oracle stays intact.
+The 37-role finite-preservation/observer/raw-five/cleanup/postjoin command chain
+is preconstructed, with genuine artifact bindings still pending.
+
+Outcome counters remain25 native behaviors/17 production Rust paths/11 applicable
+native Rust paths/7 of35 practical checks. This review interval closed zero new
+practical checks and zero new native behaviors. One actual full-build outcome is
+accepted. Engineering percentage bands remain held, all14milestones OPEN. The
+five-minute dashboard records wall rates, quota, current handoff age and the
+299.5-minute observation gap; no active-time speedup is inferred from that gap.
+
+Strategy: finish this narrow copier correction, execute the finite observations,
+then consume genuine facts/retention and immediately move to native feedback.
+No baseline re-audit, unused resource expansion or framework rewrite in the
+critical lane. On the next unavoidable touched interface, reuse a pinned callable
+helper with typed case data rather than copying functions or rewriting inline
+Python by a bare -c index. Exercise the actual decorated caller once. Stable
+metadata excludes atime; capture direct child status before post-processing.
+Measure whether preparation and review time actually fall. The parked prototype
+has no deployment authority or demonstrated operational speedup.
+
+User authorizes more CPU/RAM when useful. Last short host snapshot had26.67GiB
+available and no memory pressure; no sustained CPU saturation is established.
+Use admitted CPU6/7 ordinary work now; resize no active workload. A larger next
+profile is worthwhile only if measured saturation/RSS predicts a net time saving.
+Keep aggregate host reserve, one-heavy4CPU/12GiB/noSwap/512tasks, disk/growth
+floors, source/ownership checks, Scratch21 and all failed evidence. Usage70%; host/
+scratch45.53/13.91GiB; stop97%. Root checkpoint3a9243ff saves current evidence.
+Next full review:2026-10-19T18:57:58.725321Z.
