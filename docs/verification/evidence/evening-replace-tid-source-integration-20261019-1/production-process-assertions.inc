@@ -1,0 +1,17 @@
+_Static_assert(sizeof(struct process)==1728 && _Alignof(struct process)==64,"Process layout");
+_Static_assert(sizeof(struct thread)==5568 && _Alignof(struct thread)==64,"Thread layout");
+_Static_assert(__builtin_offsetof(struct process,tids)==256,"Process.tids");
+_Static_assert(__builtin_offsetof(struct process,nr_tids)==264,"Process.nr_tids");
+_Static_assert(__builtin_offsetof(struct thread,tid)==20,"Thread.tid");
+_Static_assert(__builtin_types_compatible_p(__typeof__(((struct process*)0)->tids),struct mcexec_tid*),"TID array pointer ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(((struct process*)0)->nr_tids),int),"TID count ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(((struct thread*)0)->tid),int),"thread TID ABI");
+_Static_assert(sizeof(struct mcexec_tid)==16 && _Alignof(struct mcexec_tid)==8,"TID entry layout");
+_Static_assert(__builtin_offsetof(struct mcexec_tid,tid)==0,"TID entry numeric offset");
+_Static_assert(__builtin_offsetof(struct mcexec_tid,thread)==8,"TID entry thread offset");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&__find_and_replace_tid),void(*)(struct process*,struct thread*,int)),"actual replacement prototype");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&process_destroy_thread_replace_tid_bridge),void(*)(void*,void*,int)),"actual destroy consumer ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&process_replace_tid_body_result),int(*)(void*,int,unsigned long,unsigned long,unsigned long,void*,int,int,process_tid_log_fn_t)),"selected helper ABI");
+_Static_assert(__builtin_types_compatible_p(process_tid_log_fn_t,void(*)(int,void*,int)),"logger callback ABI");
+_Static_assert(sizeof(struct ddebug)==32 && _Alignof(struct ddebug)==8,"dynamic debug descriptor ABI");
+_Static_assert(__builtin_offsetof(struct ddebug,fmt)==16,"dynamic debug pointer prefix");

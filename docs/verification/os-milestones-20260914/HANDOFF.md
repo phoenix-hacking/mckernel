@@ -1,5 +1,28 @@
 # Compact dispatcher handoff
 
+## Implementation checkpoint — fourth Rust teardown leaf integrated (evening resume)
+
+Real __find_and_replace_tid wrapper and optional debug callback now select Rust
+through the unchanged destroy-thread replacement bridge. Other three85468476
+ports, C fallbacks and unrelated lifecycle WIP remain preserved. Independent
+source boundary PASS;256 actual C/Rust cases x3replacement attempts plus selected/
+fallback/unique-link/no-FP checks,14commandchildren directly joined0. Integration
+matched reviewed candidate bytes exactly; no unchanged check replay. Evidence:
+../evidence/evening-replace-tid-source-integration-20261019-1/INTEGRATION.json.
+Full pinned GCC14/fullcrate/image/default-link/native UTI-refill proof PENDING;
+counts remain24behaviors/13production/11nativeRust/7complete28open/all14open.
+The next production checker batches allfour leaves rather than separate images.
+
+Git-only diagnostic published e08a136e/fetched24changed+14sourceclosure; actual
+outer1351049 directly joined0/.2563s, wrapper GIT_METADATA_DIAGNOSTIC_JOINED with
+positive groupretired summary. Exact raw-three export/independent actualresult
+review pending; no cleanup observer/apply authority and no files deleted.
+Two-app prototype15sourcefixturecases pass; two actual private Rust variants
+compile/staticELF/Linux exact387B/254B with6directjoinedcommands. These ran
+sequentially on hostCPU7; current McKernel profile has oneCPU, so twoCPU native
+runtime remains refused/pending a separately reviewed exact profile change.
+
+
 ## ACTIVE — explicit manual resume 2026-10-19 04:47 UTC
 
 Instruction20261019T044732Z-ea212224 supersedes the preceding explicit pause for

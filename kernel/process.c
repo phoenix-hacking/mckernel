@@ -474,11 +474,13 @@ static void process_release_tid_log_bridge(int tid, void *thread, int new_tid)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static void process_replace_tid_log_bridge(int tid, void *thread, int new_tid)
 {
 	dkprintf("%s: tid %d (thread %p) has been relaced with tid %d\n",
 		"__find_and_replace_tid", tid, thread, new_tid);
 }
+#endif
 
 void process_release_thread_profile_bridge(void *thread, void *proc)
 {
@@ -3658,6 +3660,9 @@ void __release_tid(struct process *proc, struct thread *thread) {
 #endif
 
 /* Replace tid specified by thread with tid specified by new_tid */
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void __find_and_replace_tid(struct process *proc, struct thread *thread, int new_tid);
+#else
 void __find_and_replace_tid(struct process *proc, struct thread *thread, int new_tid) {
 	process_replace_tid_body_result(proc->tids, proc->nr_tids,
 		sizeof(proc->tids[0]),
@@ -3665,6 +3670,7 @@ void __find_and_replace_tid(struct process *proc, struct thread *thread, int new
 		__builtin_offsetof(struct mcexec_tid, thread),
 		thread, thread->tid, new_tid, process_replace_tid_log_bridge);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 void process_destroy_thread_hash_detach_bridge(void *thread_arg);
