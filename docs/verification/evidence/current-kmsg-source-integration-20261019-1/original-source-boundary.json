@@ -1,0 +1,27 @@
+{
+  "decision": "PASS_SOURCE_BOUNDARY",
+  "findings": [],
+  "scope": "functional per-OS kmsg production Rust adapter; source/ABI/ownership only",
+  "base_commit": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+  "candidate_sha256": "6b736f94751c21a6b745f0476484d516c0de536c1cc2f4e1717eb899bf8be5e7",
+  "patch_sha256": "e419bfbc42c670ea6c10b63f2c757ee6cb20ef3b8181cc9d44c1ee2e248a71ee",
+  "changed_files": [
+    "host-kernel/native-rust/os_runtime.rs"
+  ],
+  "added_lines": 116,
+  "removed_lines": 2,
+  "verified_production_prefixes": 8,
+  "verified_provenance_entries": 20,
+  "existing_fixture_tests": 74,
+  "tests_rerun": 0,
+  "target_builds": 0,
+  "native_runs": 0,
+  "native_credit": 0,
+  "retirement_credit": 0,
+  "required_next": [
+    "separately released exact-target ihk.ko Kbuild with source and default-consumer link binding",
+    "matching accepted producer/coherent mapping and lifecycle binding",
+    "separately released native public-ioctl observation and verified teardown"
+  ],
+  "report_sha256": "2288c4eef7b1bf937335982535ea57e21a59afece441e1bd79307c53491eb57e"
+}

@@ -1,6 +1,85 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 78, 2026-10-19T21:02:05.897177Z
+## Current priorities — review 79, 2026-10-19T21:32:10.547622Z
+
+Live cursor, 21:36 UTC: final check passed and owner was invoked immediately,
+then failed after 36.98 seconds when attached Docker start returned nonzero.
+Pipeline stopped before normal readbacks, without retry. Separate approved
+terminal read reports container absent/lease released. Independent physical
+review and bounded closed-failure log readback are next. Boot/app/ioctl cause
+is not yet classified; no native acceptance. Timed window is closed and deferred
+steering was delivered. Preserve the attempt; correct only its actual failure.
+
+At review time FP was in its timed last-snapshot/assembly/check/launch window.
+Steering was deferred until the window closed. The eight callable steps include
+three readbacks and host decoding. Current failed-owner status is recorded above;
+await closed-failure classification and independent physical review.
+
+Interval gain is full SDK/module validation of the committed Rust ownership fix:
+artifact c514083d, physical 950b862a. All three modules compiled, default-consumer/
+source/SDK bindings accepted, owner21.55seconds,15clients/42emptygroupchecks,
+container/three records retired. Module loading, mixing with current kmsg IHK
+and native failed-invalidation ownership remain unaccepted. Reuse exact frozen
+FP IHK c396 authority separately from the latest SDK retirement predecessor.
+
+Corrected Linux serial transport compiled and passed CRLF/error-export checks.
+Generic120-byte parser versus authentic380-byte typed AVX mismatch was corrected
+by reusing the accepted typed CPUID/XCR0 parser and unchanged oracle. Fresh stage
+passed18.35seconds and is accepted6d421750: only init changed from78ce5004;
+module/boot/metadata/payload/full-source authority unchanged. Host raw retention
+must follow actual frames/status/control receipts, bounded export and decoding.
+
+Actual decorated snapshot adapter passed1positive/2refusals; typed-runtime/SDK
+correctione71d9f20 and projection8004f701 keep IHK75 as module authority andSDK950
+as latest predecessor. Realized owner/runner and101-byteQMP bindings passed.
+Pre-clock review binds stage, typed consumer, reports and final guard. Eight-step
+callable capture indexccbcb0b2 is frozen; only last genuine snapshot/hashes late.
+
+No new count closure:9/35practicalchecks,25nativebehaviors,17productionRustpaths,
+14selectednativeRustpaths;all14wholemilestonesopen. M10 recommended80–90% low
+confidence is pending canonical estimate reconciliation; other bands held.
+IHK artifact-to-native feedback pending70.7minutes, target30. Completed205 kernel
+build-to-first-observed-native remains127.6minutes. No speed multiplier claimed.
+
+A separate lane prepared the exact repository patch for already-built kmsg:
+baseline65107→compiled6b736, all14selectedbaseline files match. No shared change
+yet; current runtime consumes frozen artifacts/reports, so integration can be
+reviewed independently. Preserve the committed mailbox repair and all dirty work.
+
+Ring2c11adb6 still cannot establish complete allocation/release history because
+CAP-1 can conceal overwritten prefix/reuse. Native run's diagnostic collection,
+unchanged AVX and retirement are separate; no proxy non-nullFP/wholeRust credit.
+Review actual data promptly after wholejoin, record timestamp/proof, diagnose the
+first real failure and change only affected source/data. Optional frameworks parked.
+
+Usage78%;19points to97%stop;host/scratch45.15/13.77GiB. Oneheavy4CPU/12GiB/
+noSwap/512tasks, aggregate reserve, disk/growth floors, ownership/source/runtime
+controls, permanent mutex, Scratch21 and every failure remain. One-second sample
+showed27.15GiB available/lowCPU/zeroPSI; no sustained resource shortage proved.
+Next review:2026-10-19T22:02:10.547Z. Steering deferred until timed launch completes.
+
+## Previous priorities — review 78, 2026-10-19T21:02:05.897177Z
+
+Live cursor, 21:20 UTC: SDK build completed 21.55 seconds, receipt PASS; independent
+physical retirement accepted (15 clients joined, 42 empty recorded group checks,
+container/three records removed with matching archives). Three-module artifact
+review remains. The runtime slot is free; FP binds this latest physical proof
+separately from unchanged IHK c396 source authority. Typed runtime metadata check
+passed, actual owner/runner and 101-byte QMP bindings included. Corrected collector
+stage passed 18.35 seconds and is accepted 6d421750: only init changed. Snapshot
+and final exact native guard remain. Short host sample showed 27.15 GiB available,
+low CPU and zero memory/I/O pressure. One second cannot characterize sustained
+compiler utilization or justify more resources.
+
+Live cursor, 21:12 UTC: SDK source materialization accepted 64251613, actual
+request186de2e1; accepted pipe-jobserver recipe retained. Publication proof has
+96 rows; reviewer and owner-data author are binding exact canonical payload and
+launch/admission captures. Heavy compilation remains unrun. Snapshot adapter's
+actual decorated caller passed one positive/two refusals with effects stubbed.
+Logging transport compiled and its CRLF/error-export checks passed. Full fixture
+then found generic120-byte versus typed380-byte AVX-consumer mismatch; rebind
+the previously accepted typed CPUID/XCR0 parser/oracle. No guest or new credit.
+Preserve prior archive and fixture failures; corrected collector needs fresh stage.
 
 Interval delivery: reviewed Rust failed-invalidation repair, portable tests and
 preserved failures pushed/fetched in 36a475ef. Six actual-source cases and the

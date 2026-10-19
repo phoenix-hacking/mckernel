@@ -5434,3 +5434,64 @@ recommendation separately for later delta analysis.
 Usage76%,21points to97%stop;host/scratch45.21/13.84GiB. Keep one-heavy4CPU/
 12GiB/noSwap/512tasks, aggregate reserve, disk/growth floors, ownership/source/runtime
 controls, permanent mutex, Scratch21 and every failure. Next full review: 2026-10-19T21:32:05.897Z.
+
+
+## Review 79 — 2026-10-19T21:32:10.547622Z
+
+No accepted count increase:9/35checks,25nativebehaviors,17productionRustpaths,
+14selectednativeRustpaths;all14wholemilestonesopen. M10 independently recommended
+80–90% lowconfidence remains distinct from the last canonical estimate snapshot.
+This interval delivered full compiler/artifact validation and transport correction,
+not another source-bugfix commit or new native logical case.
+
+SDK source materialization64251613 and request186de2e1 passed75copyoperations.
+Review carried forward already-proven GNU Make4.4.1pipejobserver mode, preserving
+strict special-file inventory and old request/failed drafts. Publication96rows
+and canonical payloade4dd7d4a were independently released67237daa. Root used fresh
+admission; owner21.55seconds reportedPASS. Artifactc514083d reviewed at
+21:20:30.758966UTC accepts all three compiled modules/default-consumer/source/SDK
+bindings. Physical950b862a accepts15joinedclients/42emptygroupchecks/container/
+three ownership records removed with archives. Native load, mixing with current
+kmsg IHK and actual negative-MM behavior remain open. The runtime slot is free.
+
+Linux control-plane transport uses the required full ioctl buffer and bounded
+exports up to256KiB. Larger reads have explicit diagnostic failure without raw
+retention credit. Real CRLF and error-status export defects were fixed before the
+fresh stage. Authentic AVX output includes CPUID/XCR0 typed prefix,380bytes; using
+generic120byte parser caused a fixture failure, preserved. Accepted typed parser
+and oracle were reused. Fresh stage18.35seconds, accepted6d421750, onlyinit changed;
+all other module/boot/metadata/payload/authority proofs reused. No full kernel build.
+
+Snapshot adapter actual decorated caller passed1positive/2refusals. Typed-runtime
+and SDK predecessor correction passed again against actual inputs, before any
+clock. IHK75source authority remains separate from latestSDK950physical proof.
+Composition reviewc9b73f7d is not descriptor29e12f65; exact artifact joins are
+correctly frozen. Realized owner/runner and101BQMPpassed. Eight callable steps
+ccbcb0b2 cover snapshot, assembly, guard, immediate launch, three readbacks and
+decode. At this review root is taking the final snapshot; steering is deferred
+to avoid disturbing this timed window. No guest/result acceptance yet.
+
+IHK artifact accepted20:21:25.936213UTC; native feedback pending70.7minutes, target30.
+Completed205kernel handoff127.6326minutes is first-observed closed execution,
+not exact guest end or later app acceptance. Known outcome inventory includes
+SDKcompile/artifact proof, remains partial and is not CPU utilization. Resource
+sample while operation was reported active showed~7–14%busy cores,27.15GiBavailable
+and zero memory/I/O PSI averages. It is only one second, not sustained utilization.
+Owner had already completed; joined result was handed to reviewer promptly.
+No signals, replay or limit changes were made. More CPU/RAM benefit is unproved.
+
+Ready code integration: already-built kmsg one-file patch65107→6b736, all14selected
+baseline files match. It remains private; active FP uses frozen artifacts/reports
+and no liveos_runtime.rs, so integration can be reviewed without invalidating it.
+Preserve committed36a475efmailbox fix and all WIP. Optional self-retirement and
+constructor experiments stay parked; no operational speedup claimed from them.
+
+After wholejoin, review true raw frames/status and unchanged AVX/retirement
+promptly. Ring2c11adb6 still does not establish complete pointer history or
+non-nullFPownership, independently of diagnostic collection. Record actual first
+feedback/proof, then address only the concrete observed failure, keeping original
+evidence. Source integration/native-error validation remain separate next lanes.
+
+Usage78%,19points to97%stop;host/scratch45.15/13.77GiB. Preserve one-heavy4CPU/
+12GiB/noSwap/512tasks, aggregate reserve, disk/growth floors, source/ownership/runtime
+checks, permanent mutex, Scratch21 and every failure. Next full review:2026-10-19T22:02:10.547Z.

@@ -1,4 +1,75 @@
+## Current — failed logging native physically retired; saved evidence under review
+
+Exact owner83a71c159d6d4a4bb9d9e8731569be63 joined1/36.979892s.
+Independent physical dcb627e8 accepts client/group/container/lease retirement;
+this is the latest exclusive-operation predecessor. Terminal receipt remains
+FAIL/absence_verifiedtrue/lease_retainedfalse. Exact failure-only bf904363
+three readers all joined0/directtrue/groupabsent; closed captures remain in
+host-preparation/current-ihk-native-logging-continuation-20261019-1/readback-*
+and failure-complete-readback-1.json. Do not replay any consumed command.
+
+Closed-byte diagnosis identifies a133B collector control receipt against128B
+export cap/existing63B decoder contract. Export failure maps generic fault to
+procfs_empty=false, causing the guest-registrations refusal; this is NOT proof
+of a registration leak. Raw ioctl returned49795B and raw/status frames completed.
+Payload status0/380B is observed but does not override FAIL. Author is correcting
+the receipt format with actual enable/export/decode checks and unchanged caps. Application/ioctl/nonnull-FP acceptance is NOT granted;
+full-history/same-boot ownership proof remains OPEN under2c11. Next action is
+saved-evidence first-failure classification, then one concrete affected fix and
+cheap check; any future runtime requires a fresh namespace/release/admission.
+
+Reviewed/compiled kmsg source6b736 is integrated in production os_runtime.rs,
+with original74 checks/source boundary2288 and actual module artifactc0ad reused.
+No unchanged tests or build replay. Standalone SDK artifactc514/physical950 remain
+accepted separately, with no module mixing or native MM-error credit. Current
+counts stay9/35 checks,25behaviors,17production and14nativeRust paths; all whole
+milestones OPEN. Scratch21/permanentmutex/failures/preexisting WIP preserved.
+
 # OS development session handoff
+
+## Current terminal — first FP logging attempt failed, no replay
+
+Exactfinalguard passed; LASTsnapshot0/.565s and assembly0/.084s were followed
+immediately by the released owner in the same dispatcher control flow. Owner
+nonce83a71c159d6d4a4bb9d9e8731569be63 joined1/36.979892s, direct/groupabsent,
+closedstderr1713B. Its attached Dockerstart returned nonzero; no boot/application/
+ioctl cause is inferred. Root stopped: normal3readers/decoder did NOT run.
+
+Separately released7f1d terminal-only reader joined0/.1234s, stable root256B
+receiptFAIL/absence_verifiedtrue/lease_retainedfalse/OwnerError. Independent
+physical/failure-only archive decision is pending at current-ihk-logging-native-
+independent-review-20261019-1. Preserve all raw sources/stages/consumed releases;
+no guest or attempt replay. Fullhistory/nonnullFP proof remains OPEN under2c11.
+
+Exact already-reviewed/compiled IHK source6b736 was integrated into production
+os_runtime.rs after owner invocation. Original14/default/4legacy baselines match;
+2288/c0ad source/compiler proof is reused. Activecase consumes frozen manifests,
+artifacts andruntimeclosure, not this mutable file (a1c7d9a8). Nativefeedback is
+still pending classification; no acceptance counter or module substitution is
+claimed. Preserve prior36a ownership source and standaloneSDK artifactc514.
+
+## Current — SDK ownership-fix compiler and physical acceptance
+
+Source closure is pushed/fetched at af3190e1 (96 exact publication rows;
+pre-effect five-ignored-alias refusal preserved). Exact release67237daa/e4dd
+and fresh admission ran request186de2e1 ONCE. SDK owner tool93761 joined0 in
+21.549s, stderr0, group absent; receiptPASS/buildPASS/retiredtrue. Independent
+physical950b862a accepts15clients/42emptygroups/container+record release;
+no additional cleanup. This is the latest exclusive physical predecessor.
+
+Artifactc514083d accepts all3 full-SDK modules, strict compiler/dependency/source
+bindings and actual default CLEAR_DONE→clear_syscall→finish_invalidation route.
+SMPaf234fbc/11632136B contains the emitted consumer; mcctrl6571ac7e is unchanged.
+Generated SDKIHK51b48a9e/1440392B is NOT the current kmsgIHKc396 and grants no
+module substitution or mixed-ABI/native ownership proof. Full native MM-error
+behavior remains OPEN. Counters remain25behaviors/17production/14nativeRust/9of35.
+
+FP serialstage6d421750 (a815 manifest) is accepted. Transport/typedconsumer pure
+compositionc2da and realized runtime bindingc9b pass; rootdid not rerun accepted
+builds/archives. Snapshot owner now adapts genuine SDK950 predecessor separately
+from IHK75 module authority. Final exact case/machine/capture bindings precede
+LAST60s admission/review/immediate launch. No native launch yet; nonnullFP/full
+history proof remains OPEN under2c11. No source/currentHEAD gate is added.
 
 ## SDK next compiler step — source materialized, not executed
 

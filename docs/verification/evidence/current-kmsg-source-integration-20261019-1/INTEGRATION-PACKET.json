@@ -1,0 +1,103 @@
+{
+  "actual_artifact_review": {
+    "bytes": 3338,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/IHK-ACTUAL-ARTIFACT-REVIEW.json",
+    "sha256": "c0ad09a61c82d585d74fa3160028e0f810c4ca4b530a6fce0e488f319eaf3ab4"
+  },
+  "baseline": {
+    "bytes": 71539,
+    "commit": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+    "exact_reviewed_baseline_match": true,
+    "sha256": "65107aafb28868e76640cb2e1862e5d9e36a930a2e9dab850824d5108879225a"
+  },
+  "bounded_error_extensions": [
+    "EBUSY after65536 unsuccessful sharedlock acquisition attempts",
+    "EINVAL before any data access for invalid length/head/tail or invalid ownedbase/outputgeometry"
+  ],
+  "candidate": {
+    "bytes": 77117,
+    "path": "/home/holden/mckernel-work/host-preparation/current-kmsg-source-integration-20261019-1/reviewed-os_runtime.rs",
+    "sha256": "6b736f94751c21a6b745f0476484d516c0de536c1cc2f4e1717eb899bf8be5e7"
+  },
+  "complete_original_catalog_join": {
+    "bytes": 1800936,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/COMPLETE-ORIGINAL-CATALOGS-AND-IHK-ABI-JOIN.json",
+    "rehashed": false,
+    "sha256": "6c53b9083b48ec7bf734660f8b0eb32439c4b582b9b109f7d75ebf859797d1c9"
+  },
+  "consumer_chain": [
+    "CONFIG_MCKERNEL_IHK_RUST=m selects ihk.o through host-kernel/kbuild/Kbuild.in",
+    "ihk.rs mod os_runtime and Ihk init\u2192OsDeviceFamily::register\u2192OS_FOPS",
+    "native os_ioctl and CONFIG_COMPAT os_compat_ioctl\u2192os_request",
+    "IHK_OS_READ_KMSG0x112a20 branch under exactgeneration lease and OsObject.operations\u2192owned KmsgPages::read/snapshot\u2192UserSlice writer"
+  ],
+  "consumer_check_gaps": [
+    "Currentc396 alreadycompiled/defaultlinked exact6b736; source integration itself makes no new build/native claim.",
+    "Original74 suite uses private actual-source mock Linux; no unchanged suite replay.",
+    "SDK51b4 compiled old65107 IHK plus currentownership33e7 SMP; any futurecombined module set needs exactmatching artifactABI authority.",
+    "Public ioctl/native ring writer coherence/lifecycle remains separate FPnative acceptance."
+  ],
+  "cpu_slot_used": false,
+  "functional_scope": "Functional OS/apps Rust delivery; alreadyimplemented hostcontrol Rust; no compute C expansion.",
+  "legacy_assumptions": [
+    "0x112a20 per-OS ioctl",
+    "exact4190208-byte public maximum",
+    "nonshifting snapshot",
+    "wrapped-bottom boundedstrnlen then rawtop",
+    "raw bytecount success",
+    "EINVAL for copy_to_user failure"
+  ],
+  "legacy_sources": {
+    "bytes": 1115,
+    "path": "/home/holden/mckernel-work/host-preparation/current-kmsg-source-integration-20261019-1/legacy-source-bindings.json",
+    "sha256": "1f415992212419d6101e88f47bb78eea96247d8742a9ea98b430dd32c39da869"
+  },
+  "linked_default_consumer": {
+    "native_and_compat_ioctl_actual_tailcalls": true,
+    "production_registration_source": "ihk.rs -> OsDeviceFamily::register -> OS_FOPS",
+    "read_calls_actual_kernel_usercopy_writer": true,
+    "read_command": "0x112a20",
+    "request_calls_kmsg_read": true
+  },
+  "necessary_linked_file_changes": [],
+  "next_integration": [
+    "Root revalidates target65107 then applies integration.patch; resulting target must equal reviewed6b736",
+    "Preserve frozen c396/runtime/privatecandidate/catalog inputs; no source HEAD equality gate"
+  ],
+  "original74_replayed": false,
+  "original74_result": {
+    "bytes": 3227,
+    "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/RESULT.json",
+    "sha256": "d59484b842060503b3ccd6961c1ea48f92d566ab473c84af299311d3eb868b1b"
+  },
+  "original_source_boundary": {
+    "bytes": 1080,
+    "embedded_report_sha256": "2288c4eef7b1bf937335982535ea57e21a59afece441e1bd79307c53491eb57e",
+    "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-boundary-review-20261018-1/RESULT.json",
+    "sha256": "be5d628ff6a4dedee1138f35381b01d5356dbb9c0af9a2c827f75906207ae697"
+  },
+  "patch": {
+    "bytes": 7321,
+    "path": "/home/holden/mckernel-work/host-preparation/current-kmsg-source-integration-20261019-1/integration.patch",
+    "sha256": "e419bfbc42c670ea6c10b63f2c757ee6cb20ef3b8181cc9d44c1ee2e248a71ee"
+  },
+  "repository_target": "/home/holden/mckernel/host-kernel/native-rust/os_runtime.rs",
+  "root_build_guest_action": false,
+  "selected14": {
+    "bytes": 3951,
+    "path": "/home/holden/mckernel-work/host-preparation/current-kmsg-source-integration-20261019-1/selected-consumer-baseline.json",
+    "sha256": "eb532b9dba51e23a3053e608486b02a976d22acb688f77279e50aa8967442bf3"
+  },
+  "shared_source_edited": false,
+  "source_change_lines": {
+    "added": 116,
+    "files": 1,
+    "removed": 2
+  },
+  "source_sdk_artifact": {
+    "bytes": 1475952,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/modules/ihk.ko",
+    "sha256": "c396958bfdb0f22036b469ea2a64e0a6b188b9619ee4105c7879483bb3b9790d"
+  },
+  "status": "EXACT_ONE_FILE_INTEGRATION_READY_PENDING_ACTIVE_CONSUMER_PATH_CONFIRMATION"
+}

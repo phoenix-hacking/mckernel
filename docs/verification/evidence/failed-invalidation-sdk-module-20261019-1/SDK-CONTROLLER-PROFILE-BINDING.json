@@ -1,0 +1,63 @@
+{
+  "additional_heavy_operations": 0,
+  "approved_payload_sha256": "e4dd7d4a9c7e39e92d411264d8baa36ebecd00f609c362f38ae9d7800e628ffa",
+  "capture": {
+    "child_pid_start_and_join_persisted": true,
+    "core_bytes": 0,
+    "cpu_time_limit": "unlimited; no inherited ordinary30CPU cap",
+    "direct_child_wait_required": true,
+    "filebacked_before_popen": true,
+    "fresh_output": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/sdk-module-preparation-1/fresh-owner-pipe-correction-1/actual-sdk-build-1",
+    "fsize_limit_bytes": 33554432,
+    "metadata_success_bytes": 524288,
+    "owned_group_absent_required": true,
+    "parent": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/sdk-module-preparation-1/fresh-owner-pipe-correction-1",
+    "primitive_scope": "Reuse lifetime/filebacked wait-without-outerkill semantics. Its hardcoded349d OWNER_SHA cannot be reused unchanged for SDKb3f6.",
+    "source_primitive": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/dispatch_owner.py:dispatch",
+    "start_new_session": true,
+    "status": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/sdk-module-preparation-1/fresh-owner-pipe-correction-1/actual-sdk-build-1/dispatch.status.json",
+    "stderr": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/sdk-module-preparation-1/fresh-owner-pipe-correction-1/actual-sdk-build-1/owner.stderr",
+    "stdin": "DEVNULL",
+    "stdout": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/sdk-module-preparation-1/fresh-owner-pipe-correction-1/actual-sdk-build-1/owner.stdout",
+    "wait_timeout": null
+  },
+  "controller_profile": {
+    "address_space_bytes": 2147483648,
+    "core_bytes": 0,
+    "cpu": 7,
+    "cpu_time_limit": "unlimited",
+    "jobs": 1,
+    "outer_wait_timeout": null,
+    "start_new_session": true,
+    "stdin": "DEVNULL",
+    "stream_file_limit_bytes": 33554432
+  },
+  "decision": "PASS_EXACT_CONTROLLER_SHARE_FOR_PREVIOUSLY_RELEASED_SDK_OWNER",
+  "dispatch_interface": {
+    "bytes": 7989,
+    "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/sdk-module-preparation-1/fresh-owner-pipe-correction-1/PUBLISHED-DISPATCH-INTERFACE.json",
+    "sha256": "3e597b18e18ed4b0f669676cf2e7f95612d7450225996e3de24e91452fb360bb"
+  },
+  "exact_execution_review": {
+    "bytes": 9992,
+    "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-sdk-independent-review-20261019-1/SDK-EXACT-FINAL-EXECUTION-REVIEW.json",
+    "sha256": "67237daae44784869e3b935e35cc6c733cb2eac5bd50e9913c90d0e121851d32"
+  },
+  "implementation_ownership": false,
+  "new_source_or_workload_executions": 0,
+  "owner_timeouts": {
+    "docker_wait_seconds": 1860,
+    "driver_make_seconds": 1800,
+    "historical_observer_seconds": 30,
+    "outer_wait": null
+  },
+  "payload_modified": false,
+  "requirements": [
+    "Root freshly admits CPU7/onejob/2GiB controller share insideaggregate7jobs/23.5207GiB budget, alongside the one4CPU/12GiB container and any already-admitted ordinary work.",
+    "Use preconstructed directchild/filebacked/fullFD/identity/wait/groupabsence capture semantics; no outertimeout/kill or inherited30CPUcap; ownerretirement mustfinish.",
+    "Existing dispatch_owner.py hardcodes anotherOWNER_SHA and cannotrunthisb3f6unchanged. Root may bind the accepted lifetime primitive to exact reviewedb3f6/request186d/finalrelease without relaxing any gate.",
+    "Root must bind real fullreleaseSHA afterappend; no source/payload/code/proof mutation. All actual underlock freshadmission, usage and history predicates remain."
+  ],
+  "reviewer": "/root/next_replace_tid_review",
+  "schema": "mckernel.independent-sdk-final-controller-profile-binding.v1"
+}

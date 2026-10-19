@@ -1,0 +1,367 @@
+{
+  "actual_assembly_LF_codepoint": 10,
+  "approved_projection": {
+    "bytes": 1981,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-logging-native-independent-review-20261019-1/READBACK3-SOCKET-EXCLUSION-APPROVED-DATA-PROJECTION.json",
+    "sha256": "4d6d7bac3b0dd975d8de7332aeb64229638ac41b8001ac79078c71d13d23d74d"
+  },
+  "base_index": {
+    "bytes": 14677,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/NATIVE-MACHINE-AND-CAPTURE-INDEX-v2.json",
+    "sha256": "ccbcb0b215061a7ec82a70c55c20457d7093f0bf60542387f5f523b966eca0c1"
+  },
+  "caller": {
+    "bytes": 5470,
+    "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/source-generation-final-1/root-run-exact-readonly-stage.py",
+    "sha256": "f2db77ecb55dca665a5d00f9a0f5e8f71deb3e9f6ab27e4bb96851223fb61482"
+  },
+  "caller_index": 1,
+  "caller_uid": 1000,
+  "capture_only_addendum": {
+    "bytes": 5098,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-logging-native-independent-review-20261019-1/READBACK3-SOCKET-EXCLUSION-CAPTURE-ADDENDUM.json",
+    "sha256": "25551d996d9de453620078811e20052a829d22c9af602663008645be5f21fe06"
+  },
+  "decision": "PASS_EXISTING_F2DB_CAPTURE_ONLY_MAPPING_PRESERVE_FINAL_GUARD_AUTHORITY",
+  "exact_semantic_projection_equal": true,
+  "final_config": {
+    "bytes": 14731,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-logging-native-independent-review-20261019-1/FINAL-IHK-LOGGING-CHECK-CONFIG.json",
+    "sha256": "8d740b2fe8723d3eeee868a27c789ba65c053cbf67a31a378ff95c8fbdf7c98a"
+  },
+  "final_guard": {
+    "bytes": 8156,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-logging-native-independent-review-20261019-1/review_final_ihk_logging_release.py",
+    "sha256": "96d83f1b5199830af4fab3d369aef82b0282dbffc0ab362625a09705a2db2577"
+  },
+  "genuine_root_additive_readback3": {
+    "bytes": 1981,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/readback-3-socket-exclusion-capture-DATA.json",
+    "sha256": "4780da1a38503be758f9e253a3897764347a9f46859b74409da1d3ce3642d15c"
+  },
+  "late_substitutions": {
+    "ACTUAL_CLOSED_READBACK3_SHA256": "readback-3 completed status streams.stdout.sha256",
+    "ACTUAL_FINAL_MACHINE_SHA256": "assemble-machine closed stdout sha256 field",
+    "ACTUAL_SNAPSHOT_SHA256": "assemble-machine closed stdout snapshot_sha256 field"
+  },
+  "machine_base_unchanged": {
+    "bytes": 3143,
+    "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/execution-release-PENDING.json",
+    "sha256": "9972a2f970353d38744524dddfb7c960238c382934ad9886cd7254f756ab6958"
+  },
+  "mapping": [
+    {
+      "actual_argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--core=0",
+        "--nofile=256",
+        "--fsize=33554432",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-ihk-native-snapshot-adapter-20261019-1/typed-sdk-correction-1/snapshot_case_adapter.py",
+        "--config-sha256",
+        "2bd7849bcd77ad0258d065ba90696b7445a42d70eede503e4f3322321fe0233b"
+      ],
+      "data": {
+        "bytes": 2193,
+        "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/root-snapshot-capture-DATA.json",
+        "sha256": "f19964eebf386e5cf77c9010ef2dc314a08cf6d0e1bf53d680b6c287f72f4399"
+      },
+      "profile": {
+        "as_limit": 1073741824,
+        "cpu": 7,
+        "cpu_limits": 30,
+        "parent_kill_grace_seconds": 4,
+        "parent_wall_seconds": 35,
+        "stream_fsize": 33554432
+      },
+      "step": "root-snapshot"
+    },
+    {
+      "actual_argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--nofile=256",
+        "--core=0",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "-c",
+        "import hashlib,json,os;from pathlib import Path;p=Path; b=p('/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/execution-release-PENDING.json').read_bytes();assert hashlib.sha256(b).hexdigest()=='9972a2f970353d38744524dddfb7c960238c382934ad9886cd7254f756ab6958';d=json.loads(b);s=p('/home/holden/mckernel-work/host-preparation/current-ihk-native-snapshot-adapter-20261019-1/typed-sdk-correction-1/root-live-preflight-1.json').read_bytes();h=hashlib.sha256(s).hexdigest();v=json.loads(s);assert v['status']=='PASS_LIVE_PREEXECUTION_SNAPSHOT';d.update(status='PASS_EXECUTION_RELEASE',runtime_release=True,fresh_live_preflight=dict(path='/home/holden/mckernel-work/host-preparation/current-ihk-native-snapshot-adapter-20261019-1/typed-sdk-correction-1/root-live-preflight-1.json',sha256=h,bytes=len(s)));o=p('/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/execution-release.json');f=o.open('x');json.dump(d,f,indent=2);f.write('\\n');f.flush();os.fsync(f.fileno());f.close();z=o.read_bytes();print(json.dumps(dict(path=str(o),sha256=hashlib.sha256(z).hexdigest(),bytes=len(z),snapshot_sha256=h)))"
+      ],
+      "data": {
+        "bytes": 3027,
+        "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/assemble-machine-capture-DATA.json",
+        "sha256": "4b5737ac6ef60b78458cda8fcb3bf43f3f3e8c40191d8e9b6f3bd26f4a18fbce"
+      },
+      "profile": {
+        "as_limit": 1073741824,
+        "cpu": 7,
+        "cpu_limits": 30,
+        "parent_kill_grace_seconds": 4,
+        "parent_wall_seconds": 35,
+        "stream_fsize": 33554432
+      },
+      "step": "assemble-machine"
+    },
+    {
+      "actual_argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--nofile=256",
+        "--core=0",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-ihk-logging-native-independent-review-20261019-1/review_final_ihk_logging_release.py",
+        "--config-sha256",
+        "8d740b2fe8723d3eeee868a27c789ba65c053cbf67a31a378ff95c8fbdf7c98a",
+        "--machine-sha256",
+        "ACTUAL_FINAL_MACHINE_SHA256",
+        "--snapshot-sha256",
+        "ACTUAL_SNAPSHOT_SHA256"
+      ],
+      "data": {
+        "bytes": 2208,
+        "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/final-machine-guard-capture-DATA.json",
+        "sha256": "7beac2751f54046239c12876eaeb59e0a74525c97538644d29edecb6e4b49e19"
+      },
+      "profile": {
+        "as_limit": 1073741824,
+        "cpu": 7,
+        "cpu_limits": 30,
+        "parent_kill_grace_seconds": 4,
+        "parent_wall_seconds": 35,
+        "stream_fsize": 33554432
+      },
+      "step": "final-machine-guard"
+    },
+    {
+      "actual_argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/scratch/fplg-host-261019-1/owner.py",
+        "--attempt-parent",
+        "/home/holden/mckernel-work/scratch/fpl-p-261019-1/a",
+        "--nonce",
+        "83a71c159d6d4a4bb9d9e8731569be63",
+        "--owner-sha256",
+        "b7b21c5f8673ba232242c7531143b49c7dfabf0df3f708743c5ca55e816928cc",
+        "--manifest",
+        "/home/holden/mckernel-work/scratch/fplg-serial-261019-1/native-manifest.json",
+        "--manifest-sha256",
+        "a8157ec2f8d99aa4e2e497f5953d8fdb4a6e8024ab7a1534b73a55f212fb599e"
+      ],
+      "data": {
+        "bytes": 2084,
+        "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/native-owner-capture-DATA.json",
+        "sha256": "cbbfd4438b139920a523920f7a51846d27867cf5a625b8a925e0688127e26570"
+      },
+      "profile": {
+        "as_limit": null,
+        "cpu": 7,
+        "cpu_limits": null,
+        "parent_kill_grace_seconds": null,
+        "parent_wall_seconds": null,
+        "stream_fsize": 33554432
+      },
+      "step": "native-owner"
+    },
+    {
+      "actual_argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--nofile=256",
+        "--core=0",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/fpl-p-261019-1/a.owner-83a71c159d6d4a4bb9d9e8731569be63",
+        "."
+      ],
+      "data": {
+        "bytes": 1947,
+        "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/readback-1-capture-DATA.json",
+        "sha256": "d8c6d5493aba7669b6c469aae6da3aeab896ac94f36c45025581f249baa7559c"
+      },
+      "profile": {
+        "as_limit": 1073741824,
+        "cpu": 7,
+        "cpu_limits": 30,
+        "parent_kill_grace_seconds": 4,
+        "parent_wall_seconds": 35,
+        "stream_fsize": 33554432
+      },
+      "step": "readback-1"
+    },
+    {
+      "actual_argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--nofile=256",
+        "--core=0",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/fpl-p-261019-1/a/attempt-83a71c159d6d4a4bb9d9e8731569be63/result.json"
+      ],
+      "data": {
+        "bytes": 1896,
+        "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/readback-2-capture-DATA.json",
+        "sha256": "82fecaafa2e987cb8b25adef1277221c6e0d2cabebf83d60576aaadf00bbeb55"
+      },
+      "profile": {
+        "as_limit": 1073741824,
+        "cpu": 7,
+        "cpu_limits": 30,
+        "parent_kill_grace_seconds": 4,
+        "parent_wall_seconds": 35,
+        "stream_fsize": 33554432
+      },
+      "step": "readback-2"
+    },
+    {
+      "actual_argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--nofile=256",
+        "--core=0",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/fpl-p-261019-1/a/attempt-83a71c159d6d4a4bb9d9e8731569be63",
+        "--exclude=./qmp.sock",
+        "."
+      ],
+      "data": {
+        "bytes": 1981,
+        "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/readback-3-socket-exclusion-capture-DATA.json",
+        "sha256": "4780da1a38503be758f9e253a3897764347a9f46859b74409da1d3ce3642d15c"
+      },
+      "profile": {
+        "as_limit": 1073741824,
+        "cpu": 7,
+        "cpu_limits": 30,
+        "parent_kill_grace_seconds": 4,
+        "parent_wall_seconds": 35,
+        "stream_fsize": 33554432
+      },
+      "step": "readback-3"
+    },
+    {
+      "actual_argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--nofile=256",
+        "--core=0",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/decode_fp_attempt_archive.py",
+        "--archive",
+        "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/readback-3.stdout",
+        "--archive-sha256",
+        "ACTUAL_CLOSED_READBACK3_SHA256",
+        "--output",
+        "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/decoded-mckernel-evidence"
+      ],
+      "data": {
+        "bytes": 2297,
+        "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/decode-ring-capture-DATA.json",
+        "sha256": "d2983f6b35b244a24fe6a9488d265026a704221b801d4ce15d99d89370474286"
+      },
+      "profile": {
+        "as_limit": 1073741824,
+        "cpu": 7,
+        "cpu_limits": 30,
+        "parent_kill_grace_seconds": 4,
+        "parent_wall_seconds": 35,
+        "stream_fsize": 33554432
+      },
+      "step": "decode-ring"
+    }
+  ],
+  "native_authority_added": false,
+  "nonnull_FP_acceptance": false,
+  "only_source_data_change": "Root successor reader3 adds exact --exclude=./qmp.sock. Index0 remainsNone; sameops1stdout/stderr/status/context/profile. Rootadditiveindex may replace only reader3ref/invoke hash/path and record this addendum.",
+  "reviewer": "two_cpu_end_to_end_review",
+  "root_or_guest_runs_by_reviewer": 0,
+  "schema": "mckernel.independent-current-ihk-finite-capture-data-mapping-review.v1",
+  "status": "PASS_EXACT_EIGHT_STEP_CAPTURE_DATA_WITH_READBACK3_SOCKET_EXCLUSION",
+  "stop_on_any_nonzero": true,
+  "success_only_readback": true
+}

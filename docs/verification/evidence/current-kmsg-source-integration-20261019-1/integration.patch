@@ -1,0 +1,159 @@
+--- a/host-kernel/native-rust/os_runtime.rs
++++ b/host-kernel/native-rust/os_runtime.rs
+@@ -12,19 +12,21 @@
+     mem::MaybeUninit,
+     pin::Pin,
+     ptr,
+-    sync::atomic::{AtomicPtr, AtomicU32, Ordering},
++    sync::atomic::{AtomicI32, AtomicPtr, AtomicU32, Ordering},
+ };
+ use kernel::{
+     bindings,
+     error::to_result,
+     prelude::*,
+     sync::{new_mutex, Mutex},
++    uaccess::UserSlice,
+ };
+ 
+ use super::{
+     abi::{
+         IhkKmsgBuffer, IHK_DEVICE_CREATE_OS, IHK_DEVICE_DESTROY_OS, IHK_OS_BOOT,
+-        IHK_OS_GET_BUILDID, IHK_OS_LOAD, IHK_OS_QUERY_STATUS, IHK_OS_SHUTDOWN, IHK_OS_STATUS,
++        IHK_OS_GET_BUILDID, IHK_OS_LOAD, IHK_OS_QUERY_STATUS, IHK_OS_READ_KMSG,
++        IHK_OS_SHUTDOWN, IHK_OS_STATUS,
+     },
+     device_registry::{DeviceHandle, DeviceOsLease, IHK_DEVICE_REGISTRY},
+     ihk_ioctl::IhkIoctlDispatcher,
+@@ -36,6 +38,18 @@
+ const MINOR_MASK: u32 = (1 << MINOR_BITS) - 1;
+ const KMSG_ORDER: u32 = 10;
+ const KMSG_BYTES: usize = 4 << 20;
++const KMSG_DATA_BYTES: usize = KMSG_BYTES - 4096;
++// A stopped guest may retain the inter-kernel lock. Never spin indefinitely.
++const KMSG_LOCK_ATTEMPTS: usize = 65_536;
++
++struct KmsgReadLock<'a>(&'a AtomicI32);
++
++impl Drop for KmsgReadLock<'_> {
++    fn drop(&mut self) {
++        // The guest uses the same 32-bit CAS lock and a final zero store.
++        self.0.store(0, Ordering::Release);
++    }
++}
+ const _: [(); KMSG_BYTES] = [(); core::mem::size_of::<IhkKmsgBuffer>()];
+ const _: [(); KMSG_BYTES] = [(); 4096 << KMSG_ORDER];
+ 
+@@ -147,6 +161,96 @@
+         // length field in place; never put the 4 MiB structure on the stack.
+         unsafe { ptr::addr_of_mut!((*buffer).length).write((KMSG_BYTES - 4096) as i32) };
+         Ok(pages)
++    }
++
++    // Called under OsObject.operations while the caller's exact-generation
++    // OsLease retains this owned allocation. No physical/user address is used
++    // to locate it. Reads remain available after failed boot/shutdown for logs.
++    fn read(&self, argument: usize) -> Result<isize> {
++        // Allocate and initialize before taking the inter-kernel lock. Neither
++        // allocation nor usercopy may sleep while guest writers are excluded.
++        let mut output = Vec::with_capacity(KMSG_DATA_BYTES, GFP_KERNEL)?;
++        for _ in 0..KMSG_DATA_BYTES {
++            output.push(0, GFP_KERNEL)?;
++        }
++        let bytes = self.snapshot(&mut output)?;
++        // Legacy __ihk_os_read_kmsg returns EINVAL for any failed copy_to_user.
++        // UserSlice supplies checked user access, including compat-normalized
++        // addresses; there is no raw user dereference or retained user pointer.
++        UserSlice::new(argument, bytes)
++            .writer()
++            .write_slice(&output[..bytes])
++            .map_err(|_| EINVAL)?;
++        Ok(bytes as isize)
++    }
++
++    fn snapshot(&self, output: &mut [u8]) -> Result<usize> {
++        // Allocation creates a nonzero, page-aligned address; reject a broken
++        // trusted owner before dereferencing, never substitute a physical map.
++        if self.0 == 0 || self.0 % 4096 != 0 || output.len() < KMSG_DATA_BYTES {
++            return Err(EINVAL);
++        }
++        let buffer = self.0 as *mut IhkKmsgBuffer;
++        // SAFETY: KmsgPages owns this live, aligned 4MiB allocation. The guest
++        // sees the identical lock at offset zero and uses atomic CAS(0,1).
++        // No Rust reference to the concurrently mutable whole ring is formed.
++        let lock = unsafe { AtomicI32::from_ptr(ptr::addr_of_mut!((*buffer).lock)) };
++        let mut acquired = false;
++        for _ in 0..KMSG_LOCK_ATTEMPTS {
++            if lock.compare_exchange(0, 1, Ordering::Acquire, Ordering::Relaxed).is_ok() {
++                acquired = true;
++                break;
++            }
++            core::hint::spin_loop();
++        }
++        if !acquired {
++            return Err(EBUSY);
++        }
++        let _lock = KmsgReadLock(lock);
++        // Only guest CPUs write this ring; no Linux IRQ callback reads/writes
++        // it. operations serializes host readers and teardown. IRQ disabling
++        // is therefore unnecessary: no local interrupt can take this lock.
++        // All work below is bounded, allocation-free and does not sleep.
++        // SAFETY: The shared lock excludes guest changes to metadata and data;
++        // volatile reads fetch the shared fields after acquisition. Each index
++        // is checked against the exact allocated data area before pointer use.
++        let (length, head, tail) = unsafe {
++            (ptr::addr_of!((*buffer).length).read_volatile(),
++             ptr::addr_of!((*buffer).head).read_volatile(),
++             ptr::addr_of!((*buffer).tail).read_volatile())
++        };
++        if length != KMSG_DATA_BYTES as i32 || head < 0 || tail < 0
++            || head >= length || tail >= length {
++            return Err(EINVAL);
++        }
++        let (head, tail) = (head as usize, tail as usize);
++        // SAFETY: addr_of forms a raw pointer within the live owned buffer.
++        let data = unsafe { ptr::addr_of!((*buffer).bytes).cast::<u8>() };
++        let (bottom, top) = if head > tail {
++            // Preserve legacy read_kmsg's strnlen on the wrapped bottom span,
++            // including its embedded-NUL behavior; the top span is raw bytes.
++            let mut bottom = 0;
++            while bottom < KMSG_DATA_BYTES - head {
++                // SAFETY: The checked loop bounds remain inside the allocation;
++                // the lock excludes writes until this snapshot has completed.
++                if unsafe { data.add(head + bottom).read_volatile() } == 0 {
++                    break;
++                }
++                bottom += 1;
++            }
++            (bottom, tail)
++        } else {
++            (tail - head, 0)
++        };
++        // SAFETY: The source spans are bounded by validated ring indices and
++        // cannot overlap the independently allocated, sufficiently sized output.
++        // The lock retains the snapshot through both copies. No head/tail shift
++        // occurs: repeated per-OS reads must return the same retained bytes.
++        unsafe {
++            ptr::copy_nonoverlapping(data.add(head), output.as_mut_ptr(), bottom);
++            ptr::copy_nonoverlapping(data, output.as_mut_ptr().add(bottom), top);
++        }
++        Ok(bottom + top)
+     }
+ 
+     fn physical(&self) -> Result<u64> {
+@@ -1258,6 +1362,16 @@
+         };
+     }
+     let _operation = object.operations.lock();
++    if command == IHK_OS_READ_KMSG {
++        // This file's lease pins the full slot/generation and the IHK-owned
++        // kmsg allocation. The operation lock excludes boot/shutdown/release;
++        // guest writers are serialized by the shared ring lock in snapshot.
++        // No provider callback, service admission, or arbitrary mapping occurs.
++        return match object._kmsg.read(argument as usize) {
++            Ok(bytes) => bytes as core::ffi::c_long,
++            Err(error) => error.to_errno() as core::ffi::c_long,
++        };
++    }
+     // Shutdown is the sole operation permitted outside the NotBooted-only
+     // generic gate. It atomically closes admission before publishing the
+     // registry Shutdown/DESTROYING transaction and invoking its callback.

@@ -1,0 +1,68 @@
+{
+  "allowed_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--core=0",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import os,stat,json,hashlib,sys\nfrom pathlib import Path\nSTATUS=Path('/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/native-owner.status.json');EVIDENCE=Path('/home/holden/mckernel-work/scratch/fpl-p-261019-1/a.owner-83a71c159d6d4a4bb9d9e8731569be63');EXPECTED=['/usr/bin/sudo', '-A', '/home/holden/anaconda3/bin/python3', '-I', '-B', '/home/holden/mckernel-work/scratch/fplg-host-261019-1/owner.py', '--attempt-parent', '/home/holden/mckernel-work/scratch/fpl-p-261019-1/a', '--nonce', '83a71c159d6d4a4bb9d9e8731569be63', '--owner-sha256', 'b7b21c5f8673ba232242c7531143b49c7dfabf0df3f708743c5ca55e816928cc', '--manifest', '/home/holden/mckernel-work/scratch/fplg-serial-261019-1/native-manifest.json', '--manifest-sha256', 'a8157ec2f8d99aa4e2e497f5953d8fdb4a6e8024ab7a1534b73a55f212fb599e']\nKEYS=('st_dev','st_ino','st_mode','st_uid','st_gid','st_size','st_nlink','st_mtime_ns','st_ctime_ns')\ndef need(ok,s):\n if not ok:raise ValueError(s)\ndef pairs(rows):\n d={}\n for k,v in rows:need(k not in d,'duplicate JSON key');d[k]=v\n return d\ndef readfd(fd,limit):\n a=os.fstat(fd);need(stat.S_ISREG(a.st_mode) and a.st_nlink==1 and a.st_size<=limit,'regular bounded receipt');raw=os.read(fd,limit+1);b=os.fstat(fd);need(len(raw)==a.st_size and all(getattr(a,k)==getattr(b,k) for k in KEYS),'stable full receipt FD');return raw,a\nneed(len(sys.argv)==2 and len(sys.argv[1])==64,'one actual closed ownerstatus hash')\nfd=os.open(STATUS,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC)\ntry:raw,st=readfd(fd,65536)\nfinally:os.close(fd)\nneed(hashlib.sha256(raw).hexdigest()==sys.argv[1],'actual closed ownerstatus hash');s=json.loads(raw,object_pairs_hook=pairs)\nneed(s['argv']==EXPECTED and type(s['returncode']) is int and s['returncode']!=0 and s['direct_child_joined'] is True and s['process_group_absent'] is True and s.get('observer_error') is None,'completed nonzero exact owner directjoin and group')\nneed(EVIDENCE.is_absolute() and EVIDENCE.resolve()==EVIDENCE,'canonical exact root evidence directory')\np=os.open(EVIDENCE,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)\ntry:\n d=os.fstat(p);need(d.st_uid==d.st_gid==0 and stat.S_IMODE(d.st_mode)==0o700,'root0700 owner evidence')\n f=os.open('result.json',os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=p)\n try:\n  raw,row=readfd(f,65536);named=os.stat('result.json',dir_fd=p,follow_symlinks=False);need(all(getattr(row,k)==getattr(named,k) for k in KEYS),'receipt FD/path join')\n finally:os.close(f)\n need(row.st_uid==row.st_gid==0 and stat.S_IMODE(row.st_mode)==0o600,'root0600 terminal receipt')\n after=os.fstat(p);named=EVIDENCE.lstat();need(all(getattr(d,k)==getattr(after,k)==getattr(named,k) for k in KEYS),'stable root evidence directory')\nfinally:os.close(p)\nv=json.loads(raw,object_pairs_hook=pairs);need(set(v)=={'status','application_acceptance','container','absence_verified','lease_retained','signal_number','failure','secondary','secondary_omitted'},'exact source terminal receipt shape')\nneed(v['status'] in ('FAIL','PROTOCOL_PASS') and v['application_acceptance'] is False and v['absence_verified'] is True and v['lease_retained'] is False,'positive source terminal physical fields')\nprint(json.dumps(dict(status='PASS_CLOSED_OWNER_TERMINAL_RECEIPT_READBACK_ONLY',owner_status_sha256=sys.argv[1],receipt_path=str(EVIDENCE/'result.json'),receipt_sha256=hashlib.sha256(raw).hexdigest(),receipt_bytes=len(raw),receipt=v,independent_physical_acceptance=False,root_mutations=0),sort_keys=True))\n",
+    "BIND_ACTUAL_CLOSED_NONZERO_OWNER_STATUS_SHA256"
+  ],
+  "capture_outputs": {
+    "status": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/failure-terminal-readback-1.status.json",
+    "stderr": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/failure-terminal-readback-1.stderr",
+    "stdout": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/failure-terminal-readback-1.stdout"
+  },
+  "capture_policy_context": {
+    "bytes": 26659,
+    "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-sdk-independent-review-20261019-1/SDK-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "950b862ab18cc8def686f694f8052caf3448572deb9098fb20500868f3f8c6bc"
+  },
+  "decision": "AUTHORIZE_ONE_BOUNDED_TERMINAL_RECEIPT_ONLY_AFTER_EXACT_NONZERO_DIRECTJOIN",
+  "exact_member": "result.json",
+  "exact_root_directory": "/home/holden/mckernel-work/scratch/fpl-p-261019-1/a.owner-83a71c159d6d4a4bb9d9e8731569be63",
+  "existing_caller_index": 1,
+  "max_receipt_bytes": 65536,
+  "only_after": "Existing actual owner capture has closed: exact allowedowner argv, nonzero numeric returncode, direct child joined, ownedgroup absent, observer_errorNone. Root substitutes its genuine completed status SHA only. Never run before owner wholejoin or poll/retry.",
+  "profile": {
+    "as_bytes": 1073741824,
+    "cpu": 7,
+    "cpu_seconds": 30,
+    "jobs": 1,
+    "nofile": 256,
+    "stream_fsize": 33554432,
+    "term_kill_grace": 2,
+    "wall_seconds": 35
+  },
+  "refusal": "Missing/partial/nonroot/changed receipt or failed source physical flags refuse; preserve state. No retry, archives, attempt reads, Docker commands, signalling, mutation or automatic physical release. Independent actual physical review still required.",
+  "required_existing_caller": {
+    "bytes": 5470,
+    "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/source-generation-final-1/root-run-exact-readonly-stage.py",
+    "sha256": "f2db77ecb55dca665a5d00f9a0f5e8f71deb3e9f6ab27e4bb96851223fb61482"
+  },
+  "reviewer": "two_cpu_end_to_end_review",
+  "runtime_authority_added": false,
+  "schema": "mckernel.independent-current-ihk-conditional-failure-terminal-readback-release.v1",
+  "source_contract": {
+    "flush": "lines687-709: only absent+lockNone, after all queued writers; _release requires no pending/finalreap client records",
+    "owner_engine": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_container_owner.py",
+    "owner_sha256": "1b710ae80559e34cba1509337b3af57c91bb8e1a3f027d6b2f2e9a87bd97403d",
+    "publication": "exclusive fsynced file, not rename-atomic; closedowner+stable completeJSON validation required"
+  },
+  "source_or_target_execution_by_reviewer": 0,
+  "status": "PASS_ONE_CONDITIONAL_CLOSED_NONZERO_OWNER_TERMINAL_JSON_READ_ONLY"
+}
