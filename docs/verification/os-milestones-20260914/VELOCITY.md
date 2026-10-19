@@ -1,6 +1,65 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 70, 2026-10-19T11:59:02Z
+## Current priorities — review 71, 2026-10-19T12:30:28Z
+
+Campaign ACTIVE; totals remain25 native behaviors/17 production Rust paths/
+11 native paths/7 of35 practical checks, all whole milestones open. Engineering
+bands supplied to the user remain held; no new percentage-point gains claimed.
+The prior e0d FP-thread application/retirement PASS remains accepted.
+
+New205 failed after9passed commands: relocated full-syscall TU could not resolve
+the existing ../executer/include/uti.h. Producer-only correction adds
+-iquote /src/kernel to both affected compile commands; kernel205 is unchanged.
+Include-resolution regression passed. Owner/8clients positively retired a55469e6
+and genuine mutex proof747a938f accepted. Physical release is still pending.
+Preserve12finite logs/receipts (152117bytes) and the whole partial tree in place.
+Failure adapter's actual argv/mount/negative checks and expert normalization of
+exactly3literals across2functions passed;44other functions unchanged. Both failed
+fixtures remain retained. Finish finite retention and exact failure-only physical
+release without successful-image gates or replaying original observations.
+
+Choose a NEW fresh full request/workspace, with only the2include flags corrected.
+Failed whole guard170.56s bounds the compiler saving from adoption; adoption has
+no implementation and would add contract/seed/cleanup engineering. Preserve the
+old request rather than replay it. Two actual metadata commands0/0 in34.74s,
+request8b7b34ed; independent actual acceptance/final release remain pending.
+Reuse the existing37-role full-build/report contract, update explicit request
+pins, and compile after actual physical/resource prerequisites pass.
+
+User explicitly approved scratch reserve576716→288358 for UUID2a5768c8-718d-
+4914-bdc0-6b32c5a92a52: sudo -A /usr/sbin/tune2fs -r 288358 /dev/loop36.
+Apply through root after failed-case physical release and fresh live identity,
+before the next workload. Keep12GiBfloor/growth/emergency reserves; measure before/
+after statvfs and reserved counts. Potential1.10GiB is not measured recovery.
+Restore command uses-r576716. No deletion/remount/resize or rootNVMe repeat.
+No second permission request for the same authorized operation.
+
+Strict N3 source/profile c1bd4666 passes37-role/74descriptor/102-byte-path checks;
+no actual image/stage/runtime authority. Terminal20checks pass, but independent
+review requires retention success/joins,4uniqueprimaryroles and exact reference
+byte counts; finish these as one affected boundary. Fresh-request pins must be
+updated explicitly. Existing private kernel search found12already-selected Rust
+constructors/ranges; no new port was claimed. Its author now owns the useful
+failure adapter, rather than expanding the audit.
+
+Usage68%; host/scratch about45.689/12.807GiB. Keep4CPU/12GiB/noSwap/512tasks,
+one-heavy,16/12GiBfloors, source authority, all failures/Scratch21 and97%stop.
+Next full review:13:00:28UTC.
+
+## Previous priorities — review 70, 2026-10-19T11:59:02Z
+
+Live cursor update, 12:25 UTC: user explicitly approved scratch reserved blocks
+576716→288358 on UUID2a5768c8-718d-4914-bdc0-6b32c5a92a52 via the reviewed
+sudo -A /usr/sbin/tune2fs -r 288358 /dev/loop36 operation. Root will recheck live
+identity and apply after failed-case physical release, before the next workload,
+retaining12GiBfloor; measure actual gain. Restore command uses-r576716. No change
+has been reported yet. RootNVMe reserve change is already complete; do not repeat.
+Recovery route is a NEW fresh full request/workspace with the two include flags
+corrected. No adoption code exists; failed whole guard170.56s makes new adoption
+engineering slower than the compiler work saved. Original failed request/source/
+objects remain immutable. Seven useful lanes include failure cleanup, fresh
+request, terminal consumer correction and strict N3 review. Producer validation
+and all physical/execution gates still apply.
 
 Live cursor update, 12:15 UTC: the first205 production attempt failed after
 nine successful commands. Its relocated full-syscall fixture omitted the quote

@@ -1,5 +1,42 @@
 # Compact dispatcher handoff
 
+## Current — failure preservation accepted; corrected fresh request ready (12:34 UTC)
+
+Campaign ACTIVE, functional OS/apps plus Rust/reviewed-assembly migration.
+Failed NEW205 attempt902 remains fully preserved in place; retired stopped CID
+6f490dad/common/shared records await separate physical cleanup. Ordinary retention
+completed0/.095s:12copy pairs/24stable FDs/152117B accepted aa3c0e9d; independent
+failure-preservation authority c824617a is installed unchanged. Generated failure
+helpers accepted5f2ca492 after26 cumulative actual caller checks, with both fixture
+failures and expert-only final literal check retained. Exact source publication
+allowlist a556928c binds32real rows/0pending, plus reused accepted import closure.
+Root next: publish/fetch these bytes, released observer/summary/original-five/raw5,
+then separately released cleanup/postjoin and independent physical acceptance.
+Whole failed host tree/partial objects remain preserved, no success-image gate.
+
+Corrected freshFULL request8b7b34ed is actual:2metadata commands0/0/34.74s,
+independently accepted b1c326c8. Same frozen kernel205/materialization/toolchain;
+new driver adds only two -iquote flags. No adoption/seed/oldrequest replay/source
+copy/new compiler occurred. Twelve-row heavy proposal779c4170 is source-reviewing;
+physical release/fetched source/final nonce/machine review/fresh admission remain.
+Future37-role canonical consumer's3affected contract corrections are private;
+its first changed fixture failure is preserved for focused repair, not a gate on
+failure cleanup or compiler execution. Strict N3 CPU oracle c1bd4666 stays intact;
+new actual request pin amendment is explicit future work, no arbitrary data waiver.
+
+User explicitly approved scratch UUID2a5768c8-718d-4914-bdc0-6b32c5a92a52 reserve
+576716->288358 blocks via exact tune2fs-r command. Root will execute after current
+physical release, with fresh loop/backing/mount/UUID identity and measured exact
+before/after counts/statvfs. No filesystem resize/remount/deletion or root-NVMe
+repeat authorized. Keep12GiB scratch workflow floor plus full growth/reserves.
+
+Last source/evidence checkpoint06238370 is pushed/fetched10blobs (proof8f298e1f).
+Accepted counts remain25 distinct native behaviors/17 selected production Rust
+paths/11 applicable native/7of35 practical checks; all14milestones OPEN. E0FP
+native fef728f6/physical8c8ec185 remain accepted as a repeated behavior (increment0).
+One-heavy, actual freshness/ownership, all failures/scratch21/exclusions and97%
+included-usage stop remain. Continue after this checkpoint; no stop is in force.
+
 ## Current — native FP accepted; NEW205 compiler harness failure (12:22 UTC)
 
 Campaign ACTIVE: functional OS/apps and Rust/reviewed-assembly migration.

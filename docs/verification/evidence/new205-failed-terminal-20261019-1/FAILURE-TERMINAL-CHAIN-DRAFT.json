@@ -1,0 +1,272 @@
+{
+  "acceptance": false,
+  "authority": "independent reviewer must bind genuine authority; author DATA stays NOT_RELEASED",
+  "cleanup_gate": "separate actual raw5 and physical cleanup review; canonical cleanup release NO LF; current locked checks remain mandatory",
+  "execution_authorized": false,
+  "genuine_failure_mutex": {
+    "bytes": 1326,
+    "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/heavy-proposal-1/failure-mutex-postjoin-readback-1.json",
+    "sha256": "48436d2f7a3eee5c65fc6622feaaf0bafaa889033628e2bfb9507df12139305d"
+  },
+  "implementation_author": "/root/clone_thread_affinity_rust_repair",
+  "ordered_stages": [
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/observe_failed_retirement.py",
+        "--git-commit",
+        "PENDING_EXACT_FETCHED_SOURCE_COMMIT",
+        "--git-tree",
+        "PENDING_EXACT_FETCHED_SOURCE_TREE",
+        "--observation-release",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/readonly-observation-release.json",
+        "--observation-release-sha256",
+        "PENDING_EXACT_OBSERVER_RELEASE_SHA256",
+        "--failed-authority-sha256",
+        "PENDING_INDEPENDENT_ACTUAL_FAILURE_AUTHORITY_SHA256"
+      ],
+      "cpu_seconds": 30,
+      "docker_child_as": 2147483648,
+      "execution_authorized": false,
+      "file_capture_bytes": 33554432,
+      "metadata_as": 268435456,
+      "output": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/root-observation-new205-failed-observation-1",
+      "outputs_original_five": [
+        "observer-result.json",
+        "observation.json",
+        "cleanup-release-draft.json",
+        "new-object-metadata.json",
+        "ownership.json"
+      ],
+      "role": "read_only_failure_observer",
+      "separate_release": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/readonly-observation-release.json",
+      "wall_seconds": 35
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/readback_observer.py"
+      ],
+      "as_bytes": 1073741824,
+      "cpu_seconds": 30,
+      "execution_authorized": false,
+      "file_capture_bytes": 33554432,
+      "required_prior": "actual observer positive direct join",
+      "role": "distinct_observer_summary",
+      "separate_release": "PENDING_EXACT_SUMMARY_TRANSPORT_RELEASE",
+      "wall_seconds": 35
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/read_original_five_metadata.py",
+        "--expected-hashes",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/actual-original-five-hashes.json",
+        "--expected-hashes-sha256",
+        "PENDING_FIVE_ACTUAL_FILE_HASH_AUTHORITY_SHA256"
+      ],
+      "as_bytes": 1073741824,
+      "cpu_seconds": 30,
+      "execution_authorized": false,
+      "file_capture_bytes": 33554432,
+      "required_prior": "actual distinct summary positive direct join",
+      "role": "five_original_FD_metadata",
+      "separate_release": "PENDING_EXACT_FD_METADATA_TRANSPORT_RELEASE",
+      "wall_seconds": 35
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/export_raw_five.py",
+        "--release",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/raw-five-export-release.json",
+        "--release-sha256",
+        "PENDING_INDEPENDENT_STAGE_RELEASE_SHA256"
+      ],
+      "as_bytes": 1073741824,
+      "cpu_seconds": 30,
+      "execution_authorized": false,
+      "file_capture_bytes": 33554432,
+      "required_prior": "actual observer+summary refs and actual five file hashes",
+      "role": "finite_raw_five_export",
+      "separate_release": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/raw-five-export-release.json",
+      "wall_seconds": 35
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/cleanup_failed.py",
+        "--release",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/physical-cleanup-release.json",
+        "--release-sha256",
+        "PENDING_INDEPENDENT_STAGE_RELEASE_SHA256",
+        "--execute"
+      ],
+      "as_bytes": 2147483648,
+      "cpus": [
+        6
+      ],
+      "execution_authorized": false,
+      "file_capture_bytes": 134217728,
+      "inherited_cpu_limits": [
+        -1,
+        -1
+      ],
+      "jobs": 1,
+      "preserve_in_place": [
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/owner-work/output/build",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/owner-work/evidence"
+      ],
+      "required_prior": "reviewed exact observation+rawfive/FD metadata+fetched source+fresh live census",
+      "role": "physical_cleanup",
+      "separate_release": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/physical-cleanup-release.json",
+      "wall_kill": null
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/postjoin_readback.py",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/physical-cleanup-release.json",
+        "PENDING_EXACT_ROOT_CLEANUP_RELEASE_SHA256",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/actual-cleanup-result.json"
+      ],
+      "as_hard_bytes": 2147483648,
+      "as_soft_bytes": 1073741824,
+      "cpus": [
+        6
+      ],
+      "execution_authorized": false,
+      "expected_FD_cardinality": 24,
+      "file_capture_bytes": 134217728,
+      "inherited_cpu_limits": [
+        -1,
+        -1
+      ],
+      "jobs": 1,
+      "required_prior": "actual cleanup direct join",
+      "role": "cleanup_postjoin_readback",
+      "separate_release": "PENDING_EXACT_POSTJOIN_READBACK_RELEASE",
+      "wall_kill": null
+    }
+  ],
+  "original_dispatcher_success_postjoin_absent": true,
+  "original_five_status": "DECLARED_NOT_OBSERVED",
+  "post_retention_source_generation": [
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/finalize_failed_terminal.py"
+      ],
+      "outputs": [
+        "cleanup_failed.py",
+        "observe_failed_retirement.py",
+        "readback_observer.py",
+        "read_original_five_metadata.py",
+        "export_raw_five.py",
+        "postjoin_readback.py",
+        "failure-helper-source-pins.json"
+      ],
+      "requires": "genuine12pair map; source-only, no root/observer"
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/prepare_failure_authority_data.py",
+        "--retention-status",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/actual-retention-run-1/status.json",
+        "--retention-release",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/retention-execution-release.json",
+        "--retention-review",
+        "PENDING_GENUINE_INDEPENDENT_RETENTION_REVIEW_PATH"
+      ],
+      "outputs": [
+        "FAILED-BUILD-PRESERVATION-AUTHORITY-DRAFT.json"
+      ],
+      "requires": "actualretention direct0, release and independent actual review"
+    }
+  ],
+  "preservation": {
+    "entire_failed_host_case_unchanged": true,
+    "in_place": [
+      "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/owner-work/output/build",
+      "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/owner-work/evidence"
+    ],
+    "log_pairs": 12,
+    "object_metadata_rows": 24
+  },
+  "publication": "exact helper/dependency/authority sources must be published and fetched byte-exact before observer release",
+  "raw_five_gate": "actual original-five FDs + distinct actual observer/summary + metadata/fullhash joins required before typed raw5 release",
+  "retention": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--cpu=30",
+      "--as=1073741824",
+      "--fsize=33554432",
+      "--core=0",
+      "--nofile=256",
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "35s",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/retain_failed_logs.py",
+      "--release",
+      "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/retention-execution-release.json",
+      "--release-sha256",
+      "PENDING_INDEPENDENT_RETENTION_RELEASE_SHA256"
+    ],
+    "capture": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/actual-retention-run-1",
+    "payload": {
+      "bytes": 13046,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/failure-terminal-preparation-1/failed-retention-release-payload-DRAFT.json",
+      "sha256": "b560da4843475337476ac3f44c17c061a1db676af504e91fc927d24e9caa0bf3"
+    },
+    "profile": {
+      "address_space_bytes": 1073741824,
+      "cpu": 6,
+      "cpu_seconds": 30,
+      "full_campaign_reserve_bytes": 671088640,
+      "host_floor_bytes": 17179869184,
+      "jobs": 1,
+      "max_file_bytes": 67108864,
+      "max_total_bytes": 83886080,
+      "scratch_floor_bytes": 12884901888,
+      "wall_seconds": 35
+    }
+  },
+  "schema": "mckernel.new205.failed-terminal-finite-chain-data.v1",
+  "status": "NOT_RELEASED_DATA_ONLY"
+}

@@ -4954,3 +4954,41 @@ engines and genuine evidence; do not create unrelated review/ledger work.
 Usage66%; host/scratch45.772/12.808GiB. One-heavy, resource/floor/source controls,
 all failures/Scratch21, optional reserve hold and97%stop preserved.
 Next full review:12:29:02UTC.
+
+
+## Review 71 — 2026-10-19T12:30:28Z
+
+Interval11:59:02–12:30:28UTC. First205 production attempt passed9commands,
+then failed on a missing quote-include search root in the relocated full-syscall
+fixture. Existing header is present; no kernel ABI defect established. Whole
+guard170.56s. Private2-flag correction and include-resolution regression pass.
+Failed request/source/partialobjects remain immutable. Accepted a55469e6 owner/
+8client retirement and747a938f mutex proof do not imply physical cleanup; that
+remains pending. Finite failure retention:12files/152117bytes, entiretree retained.
+
+Recovery changed to a new full request/workspace. No adoption code exists and
+engineering its new provenance/seed/cleanup contract would exceed the under3min
+compiler saving. Two actual metadata commands passed0/0/34.74s, CPU6released;
+request8b7b34ed awaits actual acceptance and final release. This is a new reviewed
+operation, not replay of a consumed request or any scratch21 work.
+
+Failure-adapter fixture first exposed an argv assumption, then blanket function
+AST equality. Actual layout/6refusals passed; expert review prescribed exactly
+3literal normalizations in2functions, leaving44others identical. Final check
+passed; all failed fixture evidence retained. Finite preservation/physical release
+remain the critical path. Strict N3 source/profile c1bd4666 accepted37roles/
+74descriptors/102-byte QMP path, with original CPU oracle intact and runtime closed.
+Terminal20tests pass; three actual report-acceptance/primary-role/reference-length
+gaps are being corrected together before use. No actual new image accepted.
+
+User approved exact scratch reserve change to288358blocks on loop36/UUID2a5768c8-
+718d-4914-bdc0-6b32c5a92a52. Root acknowledged sequence: physical release, fresh
+live identity, exact operation, measured before/after and unchanged12GiBfloor,
+then next workload. Not performed yet. Original576716 restoration recorded.
+
+Native behaviors25/productionpaths17/nativepaths11/practical7of35 unchanged;
+all14milestones open. User received held low-confidence engineering bands and
+verified+2behaviors/+4productionpaths versus the saved23/13table. No overall
+OS completion or throughput multiplier claim. Usage68%; host/scratch45.689/
+12.807GiB. Preserve all resource/evidence/authority constraints and97%stop.
+Next full review:13:00:28UTC.

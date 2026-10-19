@@ -1,0 +1,25 @@
+def validate_retirement_evidence(reference):
+ need(reference['sha256']==REVIEW_SHA,'fixed actual independent retirement review')
+ review=verify(reference,True)
+ need(review['schema']=='mckernel.independent-new205-failed-producer-and-client-retirement-review.v1' and review['status']=='PASS' and review['decision']=='PASS_ACTUAL_FAILED_PRODUCER_CLASSIFICATION_AND_POSITIVE_CLIENT_RETIREMENT_ONLY','typed actual failure retirement decision')
+ need(review['implementation_ownership'] is False and review['positive_client_retirement'] is True and review['client_count']==8 and review['container_id']==CID,'actual eight client retirement')
+ for flag in ('physical_retirement_accepted','producer_accepted_as_success','production_artifact_acceptance','native_acceptance'):need(review[flag] is False,'no release/acceptance '+flag)
+ need(review['producer_status']=='FAIL' and review['successful_prefix_count']==9,'actual failed producer phase classification')
+ need(review['owner_receipt']['sha256']==OWNER_SHA,'actual owner receipt binding')
+ owner=verify(review['owner_receipt'],True);guard=verify(review['guard_result'],True)
+ need(owner['status']=='FAIL' and owner['exit_code']==1 and owner['retired'] is True and owner['terminal_container_retained'] is True and owner['container_id']==CID,'actual failed stopped owner')
+ need(guard==dict(owner_status='FAIL',owner_receipt_sha256=OWNER_SHA,container_id=CID,retired=True,retained_for_separate_cleanup=True,interrupted_signal=None),'actual failed guard result')
+ for role in ('guard_status','outer_status'):
+  status=verify(review[role],True)
+  need(status['returncode']==1 and status['direct_child_joined'] is True,'actual closed '+role)
+ need(len(review['clients'])==8,'all eight client evidence rows retained')
+ mutex=verify(dict(path=str(N/'heavy-proposal-1/failure-mutex-postjoin-readback-1.json'),sha256='48436d2f7a3eee5c65fc6622feaaf0bafaa889033628e2bfb9507df12139305d'),True)
+ need(mutex['schema']=='mckernel.failed-image.ordinary-postjoin-mutex-readback.v1' and mutex['status']=='PASS_ORDINARY_FAILED_GUARD_MUTEX_POSTJOIN_ONLY','genuine current failure mutex postjoin')
+ need(mutex['root27_4_reacquired_after_join'] is True and mutex['guard_direct_joined'] is True and mutex['guard_returncode']==1,'mutex acquired after failed guard direct join')
+ need(mutex['cleanup_authorized'] is False and mutex['physical_release'] is False and mutex['container_or_records_reobserved'] is False,'mutex-only observation authority')
+ need(mutex['boot_id']==Path('/proc/sys/kernel/random/boot_id').read_text().strip(),'mutex actual boot')
+ lock=mutex['root_lock'];need((lock['device'],lock['inode'],lock['uid'],lock['gid'],stat.S_IMODE(int(lock['mode'],8)),lock['nlink'],lock['size'])==(27,4,0,0,0o644,1,0),'exact persistent root mutex identity')
+ need(mutex['root_lock_sha256']==hashlib.sha256(b'').hexdigest(),'empty persistent root mutex bytes')
+ for role in ('guard_status','outer_status'):
+  need(all(mutex[role][key]==review[role][key] for key in ('path','sha256')),'mutex same actual '+role)
+ return review
