@@ -1,0 +1,147 @@
+{
+  "status": "SOURCE_ONLY_COMBINED_TWO_LEAF_NATIVE_CONTINUATION_NOT_RELEASE",
+  "matching_image": "PENDING combined two-leaf actual production/default consumer/ABI acceptance; neither fixed1e7 nor either separate source packet supplies matching runtime proof",
+  "unchanged_workload": {
+    "payload": {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/attempt3/reference",
+      "sha256": "5b116839f8cfbb796793d88f7792d21e5e29bd0510d527e8782284ae18239177",
+      "size": 1522832,
+      "mode": 33216
+    },
+    "payload_contract": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "app",
+        "threads"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "oracle": {
+        "stdout_hex": "454e41424c45445f52455155495245445f584352303d303030303030303030303030303030370a454e41424c45445f53595343414c4c5f504153530a454e41424c45445f46555445585f504153530a454e41424c45445f5349474e414c5f504153530a454e41424c45445f50524f46494c455f504153530a",
+        "stderr_hex": "",
+        "exit_code": 0
+      },
+      "stderr_limit_bytes": 1024,
+      "stdout_limit_bytes": 1024
+    },
+    "oracle_semantics": "Typed exposure grammar plus exact fixed five-line suffix; actual guest CPUID/XCR0/AUXV values parsed, never frozen to Linux. Empty stderr, raw exited0, stream EOF/accounting and unchanged base lifecycle/error checks required. No guessed native XCR0/IFUNC claims.",
+    "reason": "Existing accepted AVX preservation workload exercises FP state using unchanged frozen oracle; no new diagnostic app/compiler necessary to obtain nonnull release-entry visibility. Allocation/release occurrence must be observed, never inferred from expected workload behavior.",
+    "reuse_only": "No accepted case replay is authorized by this proposal; any candidate-image run requires new exact packet/review."
+  },
+  "accepted_boot_binding": {
+    "binary": {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/native-boot-running",
+      "sha256": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+      "size": 31208,
+      "mode": 33216
+    },
+    "accepted_staged_binary_sha256": "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+    "source": {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/source/native-boot-running.c",
+      "sha256": "6a39824cdcde3ddfa3508d3c229f195f6ecbe5a07d57eb748890d452cc729e03",
+      "size": 12362,
+      "mode": 33152
+    },
+    "compiler_commands": {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/commands.json",
+      "sha256": "1a1898a99861ab3dcec363eee159ee122c6d2ca9a212e88cf31003d72ddb07fe",
+      "size": 3921,
+      "mode": 33152
+    },
+    "bindings": {
+      "path": "/home/holden/mckernel-work/scratch/native-boot-running-prerequisite-20261017-1/bindings.json",
+      "sha256": "e03d02d4815d7f0be71aca51e1c2956f1a4733764c3beb302ac256aca4be4584",
+      "size": 6776,
+      "mode": 33152
+    },
+    "main_contract": "main(void), fixed OS_KARGS string; added collector argv would be ignored. Exactly one source literal adds memdebug, preserves strictRunning5 and helper observability."
+  },
+  "accepted_collector_source": {
+    "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-threads.c",
+    "sha256": "60921bc30463be3fa7bbf49e7589cb23ba31cff0fb56c767075a06927e7d4b70",
+    "size": 23008,
+    "mode": 33152
+  },
+  "control": {
+    "namespace": "Disposable Linux guest, McKernel OS0 generation-owned remote sysfs tree",
+    "endpoint": "/sys/class/mcos/mcos0/sys/kernel/debug/dynamic_debug/control",
+    "write_text": "func process_release_tid_log_bridge +p\n",
+    "write_hex": "66756e632070726f636573735f72656c656173655f7469645f6c6f675f627269646765202b700a",
+    "write_bytes": 39,
+    "syscalls": [
+      "open(endpoint,O_WRONLY|O_CLOEXEC|O_NOFOLLOW)",
+      "write(fd,exact_command_bytes,exact_length)",
+      "close(fd)"
+    ],
+    "failure": "Any short/negative/missing endpoint refuses before app; no host/Linux debugfs alternate; retain write returns"
+  },
+  "workload_command": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "threads"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "stdout_hex": "454e41424c45445f52455155495245445f584352303d303030303030303030303030303030370a454e41424c45445f53595343414c4c5f504153530a454e41424c45445f46555445585f504153530a454e41424c45445f5349474e414c5f504153530a454e41424c45445f50524f46494c455f504153530a",
+      "stderr_hex": "",
+      "exit_code": 0
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "new_compute_source_changes": false,
+  "boot_memdebug_addition_required": false,
+  "log_readback_blocker": {
+    "reference": "/home/holden/mckernel-work/host-preparation/rust-fp-release-native-proof-preparation-20261018-1/public-kmsg-route-decision.json",
+    "sha256": "f5e1fb2f5e3cc42c21f637dda5b5148abef7a08c5cdd125666b8db6c1bf16f56",
+    "status": "CURRENT_SUPPORTED_NATIVE_MODULES_HAVE_NO_SUPPORTED_MCKERNEL_KMSG_READBACK",
+    "detail": "McKernel kprintf logs into separate IHK kmsg ring. Accepted collector only klogctl(3) Linux ring. Native OS_FOPS has no read callback; ihk_smp_os_ioctl_v2 permits buildid/load/KARGS/CPU/MEM commands only and returns EINVAL for IHK_OS_READ_KMSG0x112a20; handles_os exclude it. Enabling descriptors alone does not put these bytes into retained Linux log.",
+    "owner": "Existing root host-infrastructure/native-observation lane; no backend implementation authorized here"
+  },
+  "acceptance": [
+    "Actual candidate full artifacts resolve unchanged destroy callback to Rust __release_tid; actual scalar body and descriptor independently accepted",
+    "At least one real non-main-thread teardown yields __release_tid: tid <actual worker tid> has been released by <thread pointer> through genuine McKernel log route; associate actual worker identity, never infer occurrence from app success",
+    "Existing source/emitted evidence binds log after first-match thread-pointer clear while owning threads_lock held; numericTID/other-slot preservation is source/emitted inference, not direct runtime table read",
+    "Unchanged frozen accepted payload output/exit/error/EOF oracle passes and actual native physical teardown/retirement passes",
+    "Both actual normal callbacks resolve uniquely to composed Rust exports; matched release event can cover time-account normal-path reachability only with accepted actual source/emitted ordering and no alternative bypass",
+    "Retain direct observation versus inferred earlier time-account return/slot update distinctions; do not claim runtime field reads or real hardware lock round-trip from private fixture evidence"
+  ],
+  "refusals": [
+    "No event/null table/no-match-only path",
+    "Linux ring mistaken for McKernel logs",
+    "Oldimage events or descriptors counted against newcandidate",
+    "Ambiguous worker/thread identity or procfs deletion alone used as actual table-clear evidence"
+  ],
+  "physical_resource_profile": {
+    "concurrent_heavy": 1,
+    "cpus": "2-5",
+    "jobs": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "network": "none",
+    "pids": 512
+  },
+  "runtime_release": false,
+  "two_leaf_normal_path_witness": {
+    "source_flow": "process_destroy_thread_body_result unconditionally calls time_account_fn(thread), returns, takes threads_lock and later calls release_tid_fn for eligible nonmain thread",
+    "meaningful_existing_witness": "A genuine source/artifact-bound same-thread __release_tid debug event from the combined candidate establishes execution reached the later release callback; earlier time-account return follows from accepted actual default call/control-flow evidence. This is combined observation plus control-flow inference, not a direct runtime read of time totals.",
+    "required_review": "Both linked exports and default callback bindings, actual lock/conversion/add order and successful normal return path must be independently accepted before using this inference.",
+    "no_new_instrumentation": true,
+    "no_extra_workload": true,
+    "no_direct_numeric_runtime_time_total_claim": true
+  }
+}

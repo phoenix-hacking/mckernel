@@ -1,5 +1,43 @@
 # Resume cursor
 
+## Current — exact alias correction approved; next finite observation (2026-10-19 01:12 UTC)
+
+Functional OS/apps plus Rust/reviewed-assembly migration ACTIVE. Metrics remain
+24distinct native behaviors,13production/11applicable native Rust paths,
+7complete28open practical checks; all14milestones open. FP1e7 remains fixed.
+Checkpoint1e5eacbb pushed/fetched55; corrected original-role selector passed but
+attempt2 failed at namespace bind source. Actual diagnostic/physical retirement
+passes: observer1283884/start16856843 rc1, empty group, mutex27:4 available,
+no deletion. Both failed observations/raw bytes remain preserved.
+
+Bounded ordinary diagnosis and exact6PID readback establish paired canonical
+scratch/Snapd hostfs alias rows in two current namespaces. Historical triggering
+PID is unknown. Source7d2825/wrapper7cd20/profilec9f7 now independently pass2312:
+authenticate per-task mapping before checks, normalize textual consumers,
+retain inode/subtree/container refusals, recheck identity/namespace/mountinfo.
+33 synthetic cases pass; authentic outer tool receipt retained without inventing
+outer PID/group evidence. Next: publish/fetch complete changed closure, mint one
+fresh OBSERVATION_RELEASE using alias-correction-release-template-SOURCE_ONLY.json
+and exact alias-correction-root-observation-profile.json, then actual review.
+No attempt3 has run yet; separate exact120 unlink release remains required.
+
+IHK-only exact heavy decisiond3004b27 binds payload0f2c491b; all static/source/
+actual35file materialization61025 facts accepted. Still held for full scratch
+capacity14092861440B, positive current physical release and genuine fresh live
+admission. No module build/load/replacement. Actual logging stager source-format
+and complete9760/60/60 authority projections pass0048; actual IHK ABI/reuse/stage
+facts stay pending. Private two-leaf TID/time production compositionf5faf9ed
+passes0034;21member/339738624B cap retained. Full C ABI/crates genuinely require
+pinned GCC14.3.1/Rustnightly4CPU12GiB production layer, not ordinary substitutes.
+Next private normal hash-detach Rust leaf has60parity cases after one preserved
+fixture-only duplicate-extern correction; source review pending. No shared
+compute inputs changed or retirement credit from private tests.
+
+Root current launcher1284993/server1284995 observed; revalidate before privileged
+work. Included usage45percent/stop97. Refusedexecve/forkACK excluded; scratch21,
+all failed evidence,110GiB image,16/12GiB floors+growth/emergency preserved.
+
+
 ## Current — corrected cleanup review and proof-bound IHK publication (2026-10-19 00:50 UTC)
 
 Continuous functional OS/apps and Rust/reviewed-assembly migration remain ACTIVE.

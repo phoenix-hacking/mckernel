@@ -1,0 +1,28 @@
+
+_Static_assert(sizeof(struct process)==1728 && _Alignof(struct process)==64,"Process layout");
+_Static_assert(sizeof(struct thread)==5568 && _Alignof(struct thread)==64,"Thread layout");
+_Static_assert(__builtin_offsetof(struct process,tids)==256,"Process.tids");
+_Static_assert(__builtin_offsetof(struct process,nr_tids)==264,"Process.nr_tids");
+_Static_assert(__builtin_offsetof(struct thread,tid)==20,"Thread.tid");
+_Static_assert(__builtin_types_compatible_p(__typeof__(((struct process*)0)->tids),struct mcexec_tid*),"TID array pointer ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(((struct process*)0)->nr_tids),int),"TID count ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(((struct thread*)0)->tid),int),"thread TID ABI");
+_Static_assert(sizeof(struct mcexec_tid)==16 && _Alignof(struct mcexec_tid)==8,"TID entry layout");
+_Static_assert(__builtin_offsetof(struct mcexec_tid,thread)==8,"TID entry thread offset");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&__release_tid),void(*)(struct process*,struct thread*)),"real release entry prototype");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&process_destroy_thread_release_tid_bridge),void(*)(void*,void*)),"real destroy consumer ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&process_release_tid_body_result),int(*)(void*,int,unsigned long,unsigned long,void*,int,process_tid_log_fn_t)),"existing selected helper ABI");
+_Static_assert(__builtin_types_compatible_p(process_tid_log_fn_t,void(*)(int,void*,int)),"logger callback ABI");
+_Static_assert(sizeof(struct ddebug)==32 && _Alignof(struct ddebug)==8,"dynamic debug descriptor ABI");
+_Static_assert(__builtin_offsetof(struct ddebug,fmt)==16,"dynamic debug pointer prefix");
+_Static_assert(__builtin_offsetof(struct thread,proc)==4304,"Thread.proc");
+_Static_assert(__builtin_offsetof(struct thread,system_tsc)==5040,"Thread.system_tsc");
+_Static_assert(__builtin_offsetof(struct thread,user_tsc)==5048,"Thread.user_tsc");
+_Static_assert(__builtin_offsetof(struct process,update_lock)==64,"Process.update_lock");
+_Static_assert(__builtin_offsetof(struct process,stime)==1296,"Process.stime");
+_Static_assert(__builtin_offsetof(struct process,utime)==1312,"Process.utime");
+_Static_assert(sizeof(struct timespec)==16 && _Alignof(struct timespec)==8,"timespec ABI");
+_Static_assert(sizeof(struct mcs_rwlock_node_irqsave)==64 && _Alignof(struct mcs_rwlock_node_irqsave)==64,"lock node ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&process_destroy_thread_time_account_bridge),void(*)(void*)),"real callback ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&tsc_to_ts),void(*)(unsigned long,struct timespec*)),"clock conversion ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&ts_add),void(*)(struct timespec*,const struct timespec*)),"time addition ABI");
