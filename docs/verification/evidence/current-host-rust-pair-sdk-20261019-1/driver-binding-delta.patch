@@ -1,0 +1,47 @@
+--- /home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/sdk-module-preparation-1/fresh-owner-pipe-correction-1/capsule/scripts/native_running_external_modules_offline.py
++++ /home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_running_external_modules_offline.py
+@@ -2,7 +2,7 @@
+ """Frozen CPU reacquisition sources against the compatible942 kernel build basis.
+ 
+ The source package is accepted3f7 closure plus one isolated CPU candidate.
+-Exact root-integrated reviewed source commit is 36a475efe05111caae1b25574ab375cce44b517c.
++Exact root-integrated reviewed source commit is 257ba169b58eebd066281020999ec760bfc2f4e0.
+ Its retained compatibility build-ID blob identifies the existing ABI; it does
+ not identify the new compiled source. A separately reviewed owner is required.
+ 
+@@ -20,14 +20,14 @@
+ import struct
+ import subprocess
+ 
+-PREPARATION_SHA256 = "8e72e2c787fd19c3f3d6ea1c672a735c82bbd9bcf63c6d4937c2ca5441389f75"
++PREPARATION_SHA256 = "0a50fba2215e05e6059320ea7943dc32659b2cfcb29f985e291102a2cdf1318d"
+ BASELINE_SOURCE_SHA = "942c927b1ec93cc31284ff498455909d9bb2d0fc"
+-SOURCE_CANDIDATE_SHA = "36a475efe05111caae1b25574ab375cce44b517c"
++SOURCE_CANDIDATE_SHA = "257ba169b58eebd066281020999ec760bfc2f4e0"
+ BASELINE = "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output"
+ KERNEL = "source/linux-6.12.0-211.44.1.el10_2"
+ RELEASE = "6.12.0-211.44.1.el10_2.mckernel1.x86_64"
+ MODULES = {"ihk": "ihk", "ihk_smp_x86_64": "ihk-smp-x86_64", "mcctrl": "mcctrl"}
+-REPLACEMENTS = {'ihk_smp_x86_64.rs': '5b12bf77664095c966245ac8a1312a41c2fc16dd4a8233abd9e6c602305ecd6d', 'os_runtime.rs': '65107aafb28868e76640cb2e1862e5d9e36a930a2e9dab850824d5108879225a', 'smp_application.rs': '127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2', 'smp_cpu.rs': '356853344bffaa5b3d625c97eb3928b8908d45abbc94d16902e19bdef45ea90c', 'smp_file_pager.rs': '655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c', 'smp_memory.rs': '8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525', 'smp_procfs.rs': '4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea', 'smp_service.rs': 'cd97c1528602323c43aaf70f528342fc3874fe9da1660cf1a767d27284cb5b5a', 'sysfs_memory.rs': 'd64efe15ff3545e6f21733cdc6dcbf026df370049484a7221a653d502612bfc1', 'sysfs_remote.rs': 'fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9', 'smp_application_syscall.rs': '33e7b92712ca90fdc2b88cff234ad2a981f3538fbd38fc705dfc2cde937a7378'}
++REPLACEMENTS = {'ihk_smp_x86_64.rs': '5b12bf77664095c966245ac8a1312a41c2fc16dd4a8233abd9e6c602305ecd6d', 'os_runtime.rs': '6b736f94751c21a6b745f0476484d516c0de536c1cc2f4e1717eb899bf8be5e7', 'smp_application.rs': '127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2', 'smp_cpu.rs': '356853344bffaa5b3d625c97eb3928b8908d45abbc94d16902e19bdef45ea90c', 'smp_file_pager.rs': '655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c', 'smp_memory.rs': '8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525', 'smp_procfs.rs': '4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea', 'smp_service.rs': 'cd97c1528602323c43aaf70f528342fc3874fe9da1660cf1a767d27284cb5b5a', 'sysfs_memory.rs': 'd64efe15ff3545e6f21733cdc6dcbf026df370049484a7221a653d502612bfc1', 'sysfs_remote.rs': 'fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9', 'smp_application_syscall.rs': '33e7b92712ca90fdc2b88cff234ad2a981f3538fbd38fc705dfc2cde937a7378'}
+ 
+ # Selected consumed tools/headers and modpost universe from immutable 942 build.
+ BASIS_DIGESTS = {
+@@ -70,7 +70,7 @@
+     require(digest(plain(path)) == PREPARATION_SHA256, "frozen preparation digest mismatch")
+     result = json.loads(path.read_text())
+     require(result["status"] == "INPUTS_PREPARED_EXECUTION_NOT_RELEASED", "preparation status")
+-    require(result["closure_files"] == 60 and result["closure_bytes"] == 1206425, "closure profile")
++    require(result["closure_files"] == 60 and result["closure_bytes"] == 1212003, "closure profile")
+     changed = {row["path"]: row["sha256"] for row in result["closure"] if row["reviewed_replacement"]}
+     require(changed == REPLACEMENTS, "reviewed replacement set")
+     return result
+@@ -149,7 +149,7 @@
+             "reviewed_deltas": deltas,
+             "compatibility_build_id": {"path": "ihk-compat-build-id.bin", "sha256": sources["ihk-compat-build-id.bin"],
+                                        "meaning": "Retained baseline ABI compatibility blob; not proof of unchanged compiled source"},
+-            "excluded_working_tree": "Every unreviewed working-tree file excluded; retained accepted60 closure plus reviewed mailbox failed-invalidation ownership delta included"}
++            "excluded_working_tree": "Every unreviewed working-tree file excluded; retained accepted60 closure plus reviewed kmsg reader and mailbox failed-invalidation ownership pair included"}
+ 
+ 
+ def plan(manifest):

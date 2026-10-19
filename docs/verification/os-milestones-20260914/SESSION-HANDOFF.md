@@ -1,3 +1,36 @@
+## Literal practical reconciliation — 11/35, no new runtime credit
+
+Independent0d600890 closes only P-M06-02 (real overlapping threads/futex and
+selected error behavior) and P-M07-02 (relevant x87/MXCSR/YMM state checks on
+the declared supported profiles). Existing accepted FP-thread/batch/Condvar/AVX
+and matching205 results are reused with exact image/CPU limits; no guest replay.
+Practical11complete/24open, all14wholemilestones OPEN. Behaviors25 and selected
+Rust production17/native14 unchanged. Compiler/libc used-feature declaration,
+full-history/non-null FP proof, process/exec/wait, final matched delivery and
+remaining compute C cutover retain their separate open conditions.
+
+## Current — corrected kmsg diagnostic accepted; matching host Rust pair next
+
+Current c245 native chain wholejoined0: owner37.249887s, three closed readers0,
+decoder0. Independent physical080d5bfc and semantic404527bd accept exact typed
+AVX380B/exit0 plus raw49670B/status219B/control63B transfer. This is the latest
+exclusive physical predecessor. Original83a FAIL/control133>128 refusal and
+fixture compile failure remain preserved. No replay or kernel rebuild was used;
+only the Linux collector receipt changed to the existing63B decoder contract.
+Full ring history and non-null FP ownership proof remain OPEN; no new logical
+case, formal application, whole milestone or Rust-path credit is claimed.
+Counts remain9/35,25behaviors,17production and14applicable-native Rust paths.
+
+Source257ba169 is pushed/fetched35changedblobs, including production kmsg Rust
+6b736 and separate full-SDK c514 compiler/950 physical proof. Next concrete
+compiler work is one fresh matched full-SDK request for BOTH current host Rust
+fixes (kmsg6b736 +negative-MM ownership33e7), using existing pipe-mode SDK engine
+and unchanged toolchain/ABI boundaries. Prior SDK had old kmsg source; do not
+mix its IHK with other modules silently. Author next_live_process_rust_batch owns
+private current-host-rust-pair-sdk-20261019-1; next_replace_tid_review owns the
+independent affected boundary. No heavy launch until exact release/admission.
+Source/current-source changes do not mutate frozen FP/205 images or old requests.
+
 ## Current — failed logging native physically retired; saved evidence under review
 
 Exact owner83a71c159d6d4a4bb9d9e8731569be63 joined1/36.979892s.

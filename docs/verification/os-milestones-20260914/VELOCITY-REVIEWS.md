@@ -5495,3 +5495,76 @@ evidence. Source integration/native-error validation remain separate next lanes.
 Usage78%,19points to97%stop;host/scratch45.15/13.77GiB. Preserve one-heavy4CPU/
 12GiB/noSwap/512tasks, aggregate reserve, disk/growth floors, source/ownership/runtime
 checks, permanent mutex, Scratch21 and every failure. Next full review:2026-10-19T22:02:10.547Z.
+
+
+## Review 80 — 2026-10-19T22:02:12.515950Z
+
+No count increase this interval: 9/35 practical checks, 25 distinct native
+behaviors, 17 selected production Rust paths and 14 with applicable native proof.
+All whole milestones remain open. Engineering bands are held, with M10's saved
+80–90% low-confidence reassessment retained. No overall OS or Rust-conversion
+percentage is inferred.
+
+Concrete delivery: compiled kmsg source was integrated, pushed and fetched in
+257ba169, with all 35 changed files verified. It preserves the earlier Rust
+failed-invalidation ownership fix. The two fixes have separately accepted full
+SDK/IHK compiler evidence; a single matched module set is now being prepared.
+Old modules remain distinct and are not mixed by assumption.
+
+First native logging attempt failed. Three closed failure readers joined;
+independent physical dcb627e8 and classification 9ffe7afc preserve the actual
+cause: collector saved 133 control bytes against the 128-byte exporter and
+existing 63-byte decoder contract. Export fault aliased procfs_empty=false;
+no real registration leak was established. Real guest boot, payload exit 0 and
+49,795-byte ioctl return are diagnostic evidence only; the attempt stays FAIL.
+
+Affected production save/export/decode check passed one positive and three
+refusals, including original bad receipt. Fixture compile failure is preserved.
+Corrected collector compile/stage/typed-metadata chain completed in 19.20 seconds.
+Stage c71b7042 preserves all 69 raw spans, 60 final entries and unchanged metadata,
+boot helper, module and image, changing only init. Snapshot predecessor adapter
+d1a218dd accepts genuine native retirement and refuses historical SDK schema.
+Existing freshness, resource, identity and live mutex checks are unchanged.
+
+Pre-clock capture mapping 3c5fa906 froze all eight steps. Genuine last snapshot,
+assembly, final guard and immediate owner ran in one root control flow. Closed
+owner status records 37.2069 seconds, exit 0; three readers and decoder also
+joined 0 with groups absent. Physical 080d5bfc accepts all 30 Docker clients,
+QEMU/container/lease retirement and preserved permanent mutex identity. Typed
+AVX/transport diagnostic review 404527bd accepts exact 380-byte output, exit 0,
+empty stderr/procfs, and complete returned snapshot transfer: 49,670 raw bytes,
+219 status bytes, 63 control bytes. It explicitly grants no formal application,
+new logical case, complete history or non-null FP ownership acceptance.
+
+Measured collector diagnosis-to-first-observed successful whole chain is 15.1
+minutes (21:44:29.057 to 21:59:37.781 UTC); first container failure to corrected
+container success is 25.4 minutes. This is one concrete repair loop, not sustained
+2x/3x throughput. IHK artifact-to-first classified failed diagnostic was 83.1
+minutes; artifact-to-first observed corrected chain was 98.2 minutes, missing the
+30-minute target. Completed 205 build-to-first-observed native remains 127.6
+minutes. Preserve the five-hour observation gap in all wall-time comparisons.
+
+Next tactics: finish one matched SDK source set containing both reviewed fixes,
+reuse the accepted 60-file closure and pipe-jobserver recipe, and prepare its
+exact native consumer/result handling concurrently. Compiler and guests remain
+serialized; ordinary source and case preparation may overlap within profiles.
+Existing reviewer is checking M01/M08 literal conditions against accepted saved
+evidence, without rerunning passed work or converting diagnostics into credit.
+Use spare implementation capacity for the next concrete Rust process/thread or
+recovery defect after identifying its failing behavior. Optional constructor and
+self-retirement framework experiments remain parked.
+
+Full ring history/non-null FP remains open under 2c11: a bounded pointer-only
+snapshot does not prove absence of overwritten history or pointer reuse. Fix the
+actual proof/implementation boundary if needed; preserve original requirements.
+Use one focused production-path check per changed boundary, existing authority
+and accepted engine checks elsewhere. Wake relevant completed reviewers with
+followup_task promptly at whole join. Checkpoint new source/test/results once.
+
+Usage 79%, 18 percentage points to 97% stop. Host/scratch 45.00/13.745 GiB; no
+measured CPU/RAM bottleneck supports changing active limits. Keep one heavy
+operation, 4 CPUs/12 GiB/no swap/512 tasks, aggregate reserve and disk/growth
+floors, current ownership/source/runtime controls, permanent mutex, Scratch21,
+all failures and dirty work. Next review: 2026-10-19T22:32:12.515Z.
+
+Review 80 correction, 22:04 UTC: the actual completed literal review targets P-M06-02 and P-M07-02 (decision 0d600890), not M01/M08. The supervisor sent this correction; no extra M01/M08 review was requested. Counters await dispatcher reconciliation; no new runtime case or automatic engineering-band uplift.

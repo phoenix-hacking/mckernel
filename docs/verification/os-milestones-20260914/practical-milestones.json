@@ -452,7 +452,7 @@
               "size": 1001
             }
           ],
-          "assessment_note": "Post-effect Shutdown8 and ownership-retained -11\u21920 application retirement are observed. This does not establish all required mapping/release failure ownership invariants."
+          "assessment_note": "Post-effect Shutdown8 and ownership-retained -11→0 application retirement are observed. This does not establish all required mapping/release failure ownership invariants."
         }
       ],
       "current_evidence_summary": "Actual current942 allocation/map/protection/unmap app paths plus protected-write SIGSEGV/ACCERR/exactaddress and restored RW write now pass; final supported-candidate memory/ownership session remains open. Current3bfc zero-length anonymous mmap/EINVAL diagnostic passes independently; adds one distinct behavior only."
@@ -856,7 +856,7 @@
         {
           "id": "P-M06-02",
           "description": "Exercise genuinely overlapping threads/futex contention and required syscall error behavior.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/thread-tls-isolation-current942-result-review-20261017-2.json",
@@ -887,9 +887,15 @@
               "path": "docs/verification/evidence/practical-mixed-rust-std-native-result-review-20261018-1.json",
               "sha256": "0ba31cb8d3f461286a738976444b8cc43cf631660f352298efe62ace945eedb5",
               "size": 15720
+            },
+            {
+              "path": "docs/verification/evidence/practical-thread-state-literal-review-20261019-1.json",
+              "sha256": "0d6008904ce4a40a831d14549975116e8e6475cc2b8302379dbf1b7d2362ae9d",
+              "size": 11059
             }
           ],
-          "assessment_note": "New current-candidate Rust mixed app has six worker lifetimes across3overlap windows (observed reused TIDs258/259), joined Condvar work and balanced publication/deletion. Dynamic C TLS/barrier/mutex2000/joins also pass. Required syscall error/profile closure remains open; process create/exec/wait still separate."
+          "assessment_note": "New current-candidate Rust mixed app has six worker lifetimes across3overlap windows (observed reused TIDs258/259), joined Condvar work and balanced publication/deletion. Dynamic C TLS/barrier/mutex2000/joins also pass. Required syscall error/profile closure remains open; process create/exec/wait still separate.",
+          "literal_reassessment_note": "Independent0d600890 accepts the literal selected-profile check using existing accepted evidence; exact image/CPU/state limits remain in the additive review. No new guest, logical behavior, Rust-path or whole-milestone credit. The literal conjunction is met: genuine worker overlap and Condvar/futexcontention are observed, including source-bound queuedwait0/wake1; requiredselectedapplication error behavior has real EINVAL/ENOENT/EBADF and typedtimeout results. Matching205 strict2CPU execution additionally confirms overlap/startup/route assertions withoutweakeningoracles. No processcreation/exec/wait condition is stated in thischeck; those remain separatechecks."
         },
         {
           "id": "P-M06-03",
@@ -956,7 +962,7 @@
         {
           "id": "P-M07-02",
           "description": "Run relevant state-preservation checks on the supported CPU/profile.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/practical-m07-selected-profile-assessment-20261017-1.json",
@@ -1022,9 +1028,15 @@
               "path": "docs/verification/evidence/rust-three-port-image-threads-result-review-20261018-1.json",
               "sha256": "2a634dfb44d34b8e814cdb1259a22a5e84a48312976419e5eb94ecbb9e641601",
               "size": 15728
+            },
+            {
+              "path": "docs/verification/evidence/practical-thread-state-literal-review-20261019-1.json",
+              "sha256": "0d6008904ce4a40a831d14549975116e8e6475cc2b8302379dbf1b7d2362ae9d",
+              "size": 11059
             }
           ],
-          "assessment_note": "Native SSE2 and original a0f50854 AVX evidence preserved. The rebuilt image08210bb2 includes allocation fail-stop plus copy_fp_regs extent repair5d939231; linked-body provenance and actual AVX/YMM0-15, selected x87/MXCSR syscall/blocking-futex/signal preservation now independently pass on one McKernel CPU. Actual XCR0=0x21f; stdout380 bytes/empty stderr/exit0 and full30client/QEMU/container/lease retirement. Final compiler/libc IFUNC/used-state, AVX512, multicore and final-profile closure remain open; no whole-M07 acceptance. Current Rust-default image686215 also independently passes unchanged AVX with positive retirement f47adf0d; copy/admission ports have scoped native proof. Other used-state/final-profile obligations remain open. Current five-selected-body Rust-default image da0f1bf7 independently passes unchanged AVX33d03860: actual exposure/XCR0 and vector syscall/block/signal stages, exit0/stdout380/empty stderr and all30clients/container/lease positively retired. This is scoped executed behavior, not exhaustive per-body path instrumentation or final-profile closure; threads independently accepted2a634dfb: exit37/exact25B/empty stderr, actual TLS/barrier/mutex2000/joins, process/thread/pager release and full30client/container/lease retirement. Broader live compute C retirement remains active and unfinished."
+          "assessment_note": "Native SSE2 and original a0f50854 AVX evidence preserved. The rebuilt image08210bb2 includes allocation fail-stop plus copy_fp_regs extent repair5d939231; linked-body provenance and actual AVX/YMM0-15, selected x87/MXCSR syscall/blocking-futex/signal preservation now independently pass on one McKernel CPU. Actual XCR0=0x21f; stdout380 bytes/empty stderr/exit0 and full30client/QEMU/container/lease retirement. Final compiler/libc IFUNC/used-state, AVX512, multicore and final-profile closure remain open; no whole-M07 acceptance. Current Rust-default image686215 also independently passes unchanged AVX with positive retirement f47adf0d; copy/admission ports have scoped native proof. Other used-state/final-profile obligations remain open. Current five-selected-body Rust-default image da0f1bf7 independently passes unchanged AVX33d03860: actual exposure/XCR0 and vector syscall/block/signal stages, exit0/stdout380/empty stderr and all30clients/container/lease positively retired. This is scoped executed behavior, not exhaustive per-body path instrumentation or final-profile closure; threads independently accepted2a634dfb: exit37/exact25B/empty stderr, actual TLS/barrier/mutex2000/joins, process/thread/pager release and full30client/container/lease retirement. Broader live compute C retirement remains active and unfinished.",
+          "literal_reassessment_note": "Independent0d600890 accepts the literal selected-profile check using existing accepted evidence; exact image/CPU/state limits remain in the additive review. No new guest, logical behavior, Rust-path or whole-milestone credit. Relevant real state-preservation checks have run on the supportedselectedCPU/profile: fullYMM0-15 plus selectedx87/MXCSR across syscall/realqueuedfutex/signal, and distinctFPworkerstate/control/peerprogress over64rounds each. Fixed1e7nativeFPthread and matching205strictreplay establish selectedappthreadstate under actualscheduling. OlderwholeISA/IFUNC/finalprofile and per-helperlanguage-retirement disclaimers limit theirclaims; they do not negate that these relevantchecks ran or add a finaldelivery/full-C prerequisite to thisliteralrow."
         }
       ],
       "current_evidence_summary": "Current492 accepted AVX/vector signal-thread chain plus NULL-fpstate guaranteed x87 FINIT reset on the declared XSAVE profile. Eight selected Rust bodies production-proved, seven applicable native paths. NULL evidence makes no full SSE/MXCSR/AVX reset or fallback/error-branch claim; complete used-feature/final-profile checks remain open."
@@ -1921,7 +1933,7 @@
       "Prepare separately reviewed realpayload execution afterfreshsecondboot, proving rebootedOSserveswork; no secondstop/release or10cyclequota authority fromfirstcycle.",
       "Finish reviewedthinmaterializer exact49tracked-symlink correction preservingfailedpartialtree/fullsourceauthority, then independently release matchingFPUimagebuild.",
       "Close selectedapplication-visible XCR0/libc/Rustrequirements andreview boundedAVX/YMMpreservation extension; currentnativecoverage unchanged.",
-      "Continue actualMemory\u2192ingress\u2192checkedREADY\u2192LINK\u2192guestaccept joins andfinalACK/RET/destructor/revocation; CREATE_PPD remains fail-closed."
+      "Continue actualMemory→ingress→checkedREADY→LINK→guestaccept joins andfinalACK/RET/destructor/revocation; CREATE_PPD remains fail-closed."
     ],
     "literal_provenance_20261019": {
       "check": "P-M10-01",

@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/scratch/fplg-host-261019-1/owner.py", line 24, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+  File "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_container_owner.py", line 1213, in main
+    execute_owner(DiagnosticOwner(args.attempt_parent, manifest=args.manifest,
+  File "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_container_owner.py", line 1195, in execute_owner
+    raise owner.failure
+  File "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_container_owner.py", line 1163, in execute_owner
+    owner.run()
+  File "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_container_owner.py", line 1128, in run
+    raise self.failure
+  File "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_container_owner.py", line 1082, in run
+    started = self._call(["start", "--attach", self.container], timeout=deadline)
+  File "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_container_owner.py", line 770, in _call
+    raise failure
+  File "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_container_owner.py", line 733, in _call
+    raise OwnerError("docker command failed: " + argv[0])
+accepted_AVX_owner.OwnerError: docker command failed: start

@@ -1,14 +1,98 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 79, 2026-10-19T21:32:10.547622Z
+## Current priorities — review 80, 2026-10-19T22:02:12.515950Z
 
-Live cursor, 21:36 UTC: final check passed and owner was invoked immediately,
-then failed after 36.98 seconds when attached Docker start returned nonzero.
-Pipeline stopped before normal readbacks, without retry. Separate approved
-terminal read reports container absent/lease released. Independent physical
-review and bounded closed-failure log readback are next. Boot/app/ioctl cause
-is not yet classified; no native acceptance. Timed window is closed and deferred
-steering was delivered. Preserve the attempt; correct only its actual failure.
+Live cursor, 22:05 UTC: dispatcher reconciled accepted existing-evidence
+P-M06-02 and P-M07-02 under decision 0d600890: 11/35 checks complete, 24 open.
+No new runtime case, production/native Rust path or engineering-band increase.
+Matched SDK proposal and compatible all-three-module FP1e7 consumer are being
+prepared in parallel; old modules remain separate until actual artifact/ABI proof.
+
+No count increase this interval: 9/35 practical checks, 25 distinct native
+behaviors, 17 selected production Rust paths and 14 with applicable native proof.
+All whole milestones remain open. Engineering bands are held, with M10's saved
+80–90% low-confidence reassessment retained. No overall OS or Rust-conversion
+percentage is inferred.
+
+Concrete delivery: compiled kmsg source was integrated, pushed and fetched in
+257ba169, with all 35 changed files verified. It preserves the earlier Rust
+failed-invalidation ownership fix. The two fixes have separately accepted full
+SDK/IHK compiler evidence; a single matched module set is now being prepared.
+Old modules remain distinct and are not mixed by assumption.
+
+First native logging attempt failed. Three closed failure readers joined;
+independent physical dcb627e8 and classification 9ffe7afc preserve the actual
+cause: collector saved 133 control bytes against the 128-byte exporter and
+existing 63-byte decoder contract. Export fault aliased procfs_empty=false;
+no real registration leak was established. Real guest boot, payload exit 0 and
+49,795-byte ioctl return are diagnostic evidence only; the attempt stays FAIL.
+
+Affected production save/export/decode check passed one positive and three
+refusals, including original bad receipt. Fixture compile failure is preserved.
+Corrected collector compile/stage/typed-metadata chain completed in 19.20 seconds.
+Stage c71b7042 preserves all 69 raw spans, 60 final entries and unchanged metadata,
+boot helper, module and image, changing only init. Snapshot predecessor adapter
+d1a218dd accepts genuine native retirement and refuses historical SDK schema.
+Existing freshness, resource, identity and live mutex checks are unchanged.
+
+Pre-clock capture mapping 3c5fa906 froze all eight steps. Genuine last snapshot,
+assembly, final guard and immediate owner ran in one root control flow. Closed
+owner status records 37.2069 seconds, exit 0; three readers and decoder also
+joined 0 with groups absent. Physical 080d5bfc accepts all 30 Docker clients,
+QEMU/container/lease retirement and preserved permanent mutex identity. Typed
+AVX/transport diagnostic review 404527bd accepts exact 380-byte output, exit 0,
+empty stderr/procfs, and complete returned snapshot transfer: 49,670 raw bytes,
+219 status bytes, 63 control bytes. It explicitly grants no formal application,
+new logical case, complete history or non-null FP ownership acceptance.
+
+Measured collector diagnosis-to-first-observed successful whole chain is 15.1
+minutes (21:44:29.057 to 21:59:37.781 UTC); first container failure to corrected
+container success is 25.4 minutes. This is one concrete repair loop, not sustained
+2x/3x throughput. IHK artifact-to-first classified failed diagnostic was 83.1
+minutes; artifact-to-first observed corrected chain was 98.2 minutes, missing the
+30-minute target. Completed 205 build-to-first-observed native remains 127.6
+minutes. Preserve the five-hour observation gap in all wall-time comparisons.
+
+Next tactics: finish one matched SDK source set containing both reviewed fixes,
+reuse the accepted 60-file closure and pipe-jobserver recipe, and prepare its
+exact native consumer/result handling concurrently. Compiler and guests remain
+serialized; ordinary source and case preparation may overlap within profiles.
+Existing reviewer is checking P-M06-02/P-M07-02 literal conditions against accepted saved
+evidence, without rerunning passed work or converting diagnostics into credit.
+Use spare implementation capacity for the next concrete Rust process/thread or
+recovery defect after identifying its failing behavior. Optional constructor and
+self-retirement framework experiments remain parked.
+
+Full ring history/non-null FP remains open under 2c11: a bounded pointer-only
+snapshot does not prove absence of overwritten history or pointer reuse. Fix the
+actual proof/implementation boundary if needed; preserve original requirements.
+Use one focused production-path check per changed boundary, existing authority
+and accepted engine checks elsewhere. Wake relevant completed reviewers with
+followup_task promptly at whole join. Checkpoint new source/test/results once.
+
+Usage 79%, 18 percentage points to 97% stop. Host/scratch 45.00/13.745 GiB; no
+measured CPU/RAM bottleneck supports changing active limits. Keep one heavy
+operation, 4 CPUs/12 GiB/no swap/512 tasks, aggregate reserve and disk/growth
+floors, current ownership/source/runtime controls, permanent mutex, Scratch21,
+all failures and dirty work. Next review: 2026-10-19T22:32:12.515Z.
+
+## Previous priorities — review 79, 2026-10-19T21:32:10.547622Z
+
+Live cursor, 21:44 UTC: independent classification 9ffe7afc confirms real
+Linux/McKernel boot, payload exit 0 with 380 bytes, and successful ioctl returning
+49,795 raw bytes. Overall attempt remains FAIL. Actual collector saved a 133-byte
+control receipt against a 128-byte exporter and existing 63-byte decoder contract.
+This export fault aliases procfs_empty=false; an actual registration leak is
+unproven. Correct the receipt producer, retain caps/oracles, and check the actual
+save/export/decode path. Three failure readers joined and independent physical
+dcb627e8 accepts retirement. No old attempt replay. Source checkpoint 257ba169
+pushed/fetched 35 changed files, including already-compiled kmsg source.
+
+IHK artifact-to-first-observed closed diagnostic feedback: 83.1 minutes, based
+on 20:21:25.936 artifact acceptance and 21:44:29.057 classification observation.
+This closes the feedback clock only: application/FP/history acceptance remains
+open and the original failed run is preserved. Saved M10 reassessment now records
+80–90% engineering judgment; other bands remain held.
 
 At review time FP was in its timed last-snapshot/assembly/check/launch window.
 Steering was deferred until the window closed. The eight callable steps include
@@ -37,8 +121,9 @@ callable capture indexccbcb0b2 is frozen; only last genuine snapshot/hashes late
 
 No new count closure:9/35practicalchecks,25nativebehaviors,17productionRustpaths,
 14selectednativeRustpaths;all14wholemilestonesopen. M10 recommended80–90% low
-confidence is pending canonical estimate reconciliation; other bands held.
-IHK artifact-to-native feedback pending70.7minutes, target30. Completed205 kernel
+confidence is now saved in the single-milestone reassessment; other bands held.
+At review time IHK feedback was pending 70.7 minutes; it is closed as failed
+diagnostic feedback above. Completed205 kernel
 build-to-first-observed-native remains127.6minutes. No speed multiplier claimed.
 
 A separate lane prepared the exact repository patch for already-built kmsg:

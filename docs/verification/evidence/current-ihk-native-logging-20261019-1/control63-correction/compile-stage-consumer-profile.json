@@ -1,0 +1,227 @@
+{
+  "cpu": 7,
+  "jobs": 1,
+  "as_bytes": 1073741824,
+  "cpu_seconds": 30,
+  "wall_seconds": 35,
+  "global_driver_seconds": 28,
+  "cleanup_reserve_seconds": 3,
+  "fsize_bytes": 33554432,
+  "unchanged_accepted_profile": "/home/holden/mckernel-work/host-preparation/native-fp-logging-helper-preparation-20261018-1/ordinary-command-proposal.json",
+  "commands": [
+    {
+      "label": "collector-v3-compile",
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-static",
+        "-fno-pie",
+        "-no-pie",
+        "-Wl,-z,noexecstack",
+        "-DND_CORE_THREADS",
+        "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/collector-fp-logging-serial-v3.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/init-serial-v3"
+      ]
+    },
+    {
+      "label": "control-receipt-fresh-stage",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/prepare_control_stage.py"
+      ]
+    },
+    {
+      "label": "actual-typed-consumer-and-short-parent",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/prepare_control_typed_runtime.py"
+      ]
+    }
+  ],
+  "per_command_bounds": true,
+  "host_growth_bytes": 8388608,
+  "scratch_growth_bytes": 71303168,
+  "scope": "One collector compile; existing canonical 3role stager from unchanged upstream, netonlyinit vs6d421; actual typed bindings/wholeargv/freshparent, no execution",
+  "source_pins": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/collector-fp-logging-serial-v3.c",
+      "sha256": "f6f277be0d431a3d229eacdd7c2b121578c37da15e88fd2db15346a788d9d5c6",
+      "bytes": 29243
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/prepare_control_stage.py",
+      "sha256": "9b80117d78d628d6bebb8671fb3ba94fe3425c05c98fe67e4134da3c93d5291a",
+      "bytes": 3509
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/prepare_control_typed_runtime.py",
+      "sha256": "0e69da5894cc3eb0b47ba6d459b30275aaee6d93f20369d048f4d1b7d67a6969",
+      "bytes": 2430
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/stage_logging_serial.py",
+      "sha256": "ecccdd478b28a098a48c3d4d8216d025ac71d9f199513735c257bfd3ae14dc57",
+      "bytes": 21794
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/logging-serial-stage-binding.json",
+      "sha256": "21e7decd81edb87f090a55ed6cf98c030f01c3792ffb840aacf49481d572efbc",
+      "bytes": 3216
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/materialize_typed_runtime_cpu7.py",
+      "sha256": "2a9dc545e1da443e9956069572fb5946703b08a489a60cd826c2ff6ad7618ddb",
+      "bytes": 5329
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/typed_avx.py.in",
+      "sha256": "3d05fd9707970e46760a7f9b4fccbbf9133f373cd1c0600df99f0055c3887698",
+      "bytes": 2433
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/owner.py.in",
+      "sha256": "79fcf3ad1b886b24bbd8bbbcf4d82a3e9ba172d020c61bda83a7a3c8a8e9dcac",
+      "bytes": 1855
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/runner.py.in",
+      "sha256": "9f019f861d5b4f43e1976b0e7c9fb3a4f7a8fe0837fd5e4c9203caaa3dab6ba1",
+      "bytes": 1384
+    },
+    {
+      "path": "/usr/bin/gcc",
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f",
+      "bytes": 1158288
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/fplg-up-261019-1/base.cpio.gz",
+      "sha256": "c5454ffe0cb3ccfd6cbfd52dd8074fd4c01b9f6d748d7a643563cbf264f9828e",
+      "bytes": 12748582
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/fplg-up-261019-1/lifecycle.cpio.gz",
+      "sha256": "f314e0e0c8df5c3506a4c79da55c0e4c237c962e74b6f37b4180f3b910641570",
+      "bytes": 13920744
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/fplg-up-261019-1/overlay-manifest.json",
+      "sha256": "b0b04351be52d2ff77dc7bdd8f17ebcdd84b29e9e730f750ac454665e0b026f2",
+      "bytes": 19378
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/fplg-up-261019-1/native-manifest.json",
+      "sha256": "892c5c4b0a02aaf7fb5a2b0235d3f295ecdd1e576421f371b48ca985c3adc674",
+      "bytes": 5362
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/modules/ihk.ko",
+      "sha256": "c396958bfdb0f22036b469ea2a64e0a6b188b9619ee4105c7879483bb3b9790d",
+      "bytes": 1475952
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/native-fp-logging-helper-preparation-20261018-1/ordinary-output/native-boot",
+      "sha256": "f25a803019a024e4d0e4e056ad2ba9f6b6bf411e81c5252bc59e1a81c1e9d2c8",
+      "bytes": 31072
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/IHK-ACTUAL-ARTIFACT-REVIEW.json",
+      "sha256": "c0ad09a61c82d585d74fa3160028e0f810c4ca4b530a6fce0e488f319eaf3ab4",
+      "bytes": 3338
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/IHK-ACTUAL-SOURCE-CLOSURE-REVIEW.json",
+      "sha256": "095e8b10a619d4eafbd6a5418e6e2c65f3b1d439262c4c9543e118141d1a0377",
+      "bytes": 6271
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-895d6e84dc4c47b3a75b6b12f7bcdb0f/evidence/receipt.json",
+      "sha256": "769f841ad24fcebedbacda1024c6518bec7a1defd605e90cffef3aa62e2fbd5b",
+      "bytes": 10838
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/actual-complete14-source-map.json",
+      "sha256": "565d3283f60ab2d516aa4d7c0157e88d9314df81b552dab3a0123ef0817fc743",
+      "bytes": 1175
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-ihk-module-result-review-20261019-1/FULL-ORIGINAL-AUTHORITY-EXACT-MANIFEST-JOIN-REVIEW.json",
+      "sha256": "1b7e6821d98f2dc32cff3dbd14546c240c81a72780aa7306e046e52696ab3797",
+      "bytes": 6579
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_runner.py",
+      "sha256": "1013bb846a13dea4f756aa5780381abf25569d2572553545f3f50bc1f099f573",
+      "bytes": 7050
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/case_evaluator.py",
+      "sha256": "24fd9f0b9d28559732a0326c64fd4881d51962bb3c291c74a80509d406e44146",
+      "bytes": 4932
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "bytes": 53440
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/native_diagnostic_backend.py",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+      "bytes": 25398
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/rust-three-port-native-case-preparation-20261018-1/host-actual1/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "bytes": 9913
+    },
+    {
+      "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/enabled_stdout.py",
+      "sha256": "4bb20b4866ce43eb9c20f9ab0e9a7a0928f2473b36727cdd7136a5d57c5ca4e7",
+      "bytes": 3048
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py",
+      "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+      "bytes": 6005
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "bytes": 53440
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+      "bytes": 25398
+    },
+    {
+      "path": "/home/holden/mckernel/scripts/application-tests/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "bytes": 9913
+    }
+  ],
+  "fresh_outputs": [
+    "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/init-serial-v3",
+    "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/stage_logging_control_receipt.py",
+    "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/logging-control-stage-binding.json",
+    "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/collector-mode-source-receipt.json",
+    "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/stage-result.json",
+    "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/native-preparation-result.json",
+    "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/typed-native-preparation-result.json",
+    "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/typed_avx.py.in",
+    "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/owner.py.in",
+    "/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/runner.py.in",
+    "/home/holden/mckernel-work/scratch/fplg-control-input-261019-1",
+    "/home/holden/mckernel-work/scratch/fplg-control-261019-1",
+    "/home/holden/mckernel-work/scratch/fplg-hc-261019-1",
+    "/home/holden/mckernel-work/scratch/fpc-p-261019-1"
+  ]
+}

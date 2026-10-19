@@ -1,0 +1,29 @@
+/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/actual-enable-export-harness.c:8:8: error: unknown type name ‘ssize_t’
+    8 | static ssize_t mapped_write(int,const void *,size_t);
+      |        ^~~~~~~
+/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/actual-enable-export-harness.c:10:15: error: conflicting types for ‘mapped_write’
+   10 | #define write mapped_write
+      |               ^~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/actual-enable-export-harness.c:8:16: note: previous declaration of ‘mapped_write’ was here
+    8 | static ssize_t mapped_write(int,const void *,size_t);
+      |                ^~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/actual-enable-export-harness.c:28:16: error: static declaration of ‘mapped_write’ follows non-static declaration
+   28 | static ssize_t mapped_write(int fd,const void *data,size_t length){
+      |                ^~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/actual-enable-export-harness.c:10:15: note: previous declaration of ‘mapped_write’ was here
+   10 | #define write mapped_write
+      |               ^~~~~~~~~~~~
+/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/actual-enable-export-harness.c: In function ‘mapped_write’:
+/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/actual-enable-export-harness.c:30:9: error: implicit declaration of function ‘write’; did you mean ‘pwrite’? [-Werror=implicit-function-declaration]
+   30 |  return write(fd,data,length);
+      |         ^~~~~
+      |         pwrite
+/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/actual-enable-export-harness.c: In function ‘main’:
+/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/actual-enable-export-harness.c:34:28: error: implicit declaration of function ‘atoi’ [-Werror=implicit-function-declaration]
+   34 |  strcpy(root,argv[1]);mode=atoi(argv[2]);
+      |                            ^~~~
+At top level:
+/home/holden/mckernel-work/host-preparation/current-ihk-native-logging-continuation-20261019-1/control-receipt-correction-1/actual-enable-export-harness.c:28:16: error: ‘mapped_write’ defined but not used [-Werror=unused-function]
+   28 | static ssize_t mapped_write(int fd,const void *data,size_t length){
+      |                ^~~~~~~~~~~~
+cc1: all warnings being treated as errors
