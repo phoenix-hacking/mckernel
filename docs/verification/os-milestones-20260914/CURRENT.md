@@ -1,5 +1,29 @@
 # Resume cursor
 
+## ACTIVE — explicit manual resume 2026-10-19 04:47 UTC
+
+Instruction20261019T044732Z-ea212224 supersedes the preceding explicit pause for
+this invocation. Same saved dispatcher01a149eb-f950-7f13-95a2-59dfc2918d49;
+launcher owns state. HEAD5c292417 preserves pause646190dc and Rust source85468476.
+Functional PRACTICAL-GOAL and real Rust/reviewed-assembly migration remain active;
+excluded execve/forkACK and every original failure remain preserved.
+
+Fresh ordinary reconciliation: boot7bfc5687 matches; scratch loop36/ext4 UUID
+2a5768c8-718d-4914-bdc0-6b32c5a92a52,dev1828/inode2; mutex27:4 intact;
+eight named current guards absent. This is not fresh privileged cleanup/guest
+admission. Host51240136704B/scratch13758107648B; IHK requirement14092861440B
+still short334753792B. Included usage47percent, stop97; no paid-credit switch.
+No heavy operation started and no expired release reused.
+
+Next executable work: independent review of retained Git-only UID-drop fix and
+implemented finite diagnostic, followed by its own exact release/fresh admission;
+then new cleanup observation/apply decisions if valid. In parallel: private
+two-app single-guest batch implementation and one next real Rust teardown leaf.
+CPU7 cheap allocation is explicit; all source variants remain private until
+coherent integration. Baseline24behaviors/13production/11native Rust paths,
+7complete28open checks, all14milestones open. No new acceptance credit.
+
+
 ## CURRENT — explicit evening resume authorized 2026-10-19T04:43:16.709999+00:00
 
 The user's NEW instruction in [EVENING-RESUME-20261019.md](EVENING-RESUME-20261019.md)

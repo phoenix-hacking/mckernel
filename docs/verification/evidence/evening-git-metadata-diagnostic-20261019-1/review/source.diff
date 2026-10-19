@@ -1,0 +1,54 @@
+--- source-a75-attempt5-git-failure/exact120.py
++++ exact120.py
+@@ -227,21 +227,48 @@
+     return result
+ 
+ 
++def git_owner_identity():
++    # Bind the actual retained repository owner; never change ownership/config.
++    result = []
++    for path, inode in ((REPO, 47459795), (REPO / '.git', 47459796)):
++        fd, chain = safe_directory(path)
++        try:
++            s = os.fstat(fd)
++            require((s.st_dev, s.st_ino, s.st_uid, s.st_gid) == (66306, inode, 1000, 1000),
++                    'Git repository owner/directory identity changed: ' + str(path))
++            result.append((str(path), s.st_dev, s.st_ino, s.st_uid, s.st_gid, chain))
++        finally:
++            os.close(fd)
++    return result
++
++
++def git_metadata_argv():
++    argv = ['/usr/bin/git', '-c', 'core.packedGitWindowSize=8m', '-c', 'core.packedGitLimit=64m', '-C', str(REPO), 'cat-file',
++            '--batch-check=%(objectname) %(objecttype) %(objectsize)']
++    identity = (os.getuid(), os.geteuid(), os.getgid(), os.getegid())
++    if identity[:2] == (0, 0):
++        return ['/usr/bin/setpriv', '--reuid=1000', '--regid=1000',
++                '--clear-groups', '--no-new-privs'] + argv
++    require(identity == (1000, 1000, 1000, 1000), 'Git caller credentials unsupported')
++    return argv
++
++
+ def git_available(rows):
++    before = git_owner_identity()
+     expected = {}
+     for r in rows:
+         expected[r['restoration']['git_blob']] = ('blob', str(r['restoration']['size']))
+         expected[r['restoration']['git_commit']] = ('commit', None)
+     keys = sorted(expected)
+     data = ('\n'.join(keys) + '\n').encode()
+-    output = run(['/usr/bin/git', '-c', 'safe.directory=' + str(REPO), '-C', str(REPO), 'cat-file', '--batch-check=%(objectname) %(objecttype) %(objectsize)'], data).decode().splitlines()
++    output = run(git_metadata_argv(), data).decode().splitlines()
++    require(git_owner_identity() == before, 'Git repository owner/path raced')
+     require(len(output) == len(keys), 'Git object census')
+     for key, line in zip(keys, output):
+         parts = line.split()
+         kind, size = expected[key]
+         require(len(parts) == 3 and parts[0] == key and parts[1] == kind and (size is None or parts[2] == size), 'Git object unavailable: ' + key)
+-    return {'objects': len(keys), 'object_ids_sha256': digest(data)}
+-
++    return {'objects': len(keys), 'object_ids_sha256': digest(data), 'repository_owner': [1000, 1000]}
+ 
+ def container_census():
+     # Docker API source paths must retain equivalent ancestry refusal. A source

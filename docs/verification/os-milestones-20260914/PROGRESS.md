@@ -81,11 +81,11 @@ Original formal qualification is **historical / DEFERRED**. Deferred does not me
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-19T01:46:58+00:00`
-- Launcher state heartbeat: `2026-10-19T01:46:50.058650+00:00`
+- Dashboard refreshed: `2026-10-19T04:52:03+00:00`
+- Launcher state heartbeat: `2026-10-19T04:51:57.570151+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
-- Worker PID: `1284993`; server PID: `1284995`
-- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261019T005437Z-5e4ad61d`
+- Worker PID: `1347805`; server PID: `1347807`
+- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261019T044732Z-ea212224`
 
 ## Stable kernel core: engineering progress
 

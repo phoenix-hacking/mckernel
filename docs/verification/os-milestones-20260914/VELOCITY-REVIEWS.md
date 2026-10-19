@@ -23,20 +23,28 @@ final-profile closure remains open. Other bands held; M09 is integration only.
 Measured facts23behaviors/13production/11native and7complete28open of35.
 Earlier immutable baseline, four-hour comparison and review cutoffs are unchanged.
 
-**CURRENT REVIEW54 — 2026-10-19T01:23:25Z:** campaign active.
-Three Rust teardown leaves now integrated into two actual production sources,
-unrelated lifecycle WIP preserved. Changed-consumer compile/link checks and one
-consolidated source reviewPASS; source commit not yet observed. Full production/
-image/native proof pending, so counts remain24behaviors/13production/11native/
-7complete28open checks. All14whole milestones open. Cleanup root attempt3 failed
-overgeneralized propagation/cardinality predicates; positively retired,nodelete.
-Corrected real view function now passes27checks acrossALL16retained mountviews/
-278processrecords; final narrow observation review underway,no fourth run.
-Current IHK copy/release metadata/logging projections ready; ~335MB scratch
-shortfall remains. Current worker1284993 active after00:54:37 primary-capacity
-recovery; no live child-isolation event observed. Usage46%,root49.124GiB/
-scratch12.813GiB;noheavy. User01:15priority now implement/test/debug/commit,
-consolidate routine review. Next full review01:53:25Z; no2–3x speedup claimed.
+**SUPERVISION RESUMED — 2026-10-19T04:48:16.575393+00:00; review56 baseline:** latest user explicitly
+requested resumed evening work. Same saved thread and sole campaign running,
+run20261019T044732Z-ea212224,watcher1347803/worker1347805/server1347807. Launcher
+resume repair5c292417 pushed/fetched6files,141offline tests and narrow source
+reviewPASS; exact new resume accepted, real handoff reads observed. Actual new
+engineering results and child parallelism still being verified. Baseline24native
+behaviors/13selectedproductionRustpaths/11applicable nativepaths/7of35checks,
+all14wholemilestonesopen;usage47%,root47.72GiB/scratch12.813GiB. Next substantive
+review05:18UTC (22:18Pacific); earlier paused time excluded. Prior stop record is
+historical and superseded by this new user invocation; any subsequent stop wins.
+
+**HISTORICAL STOP — explicit user request, verified2026-10-19T01:48:16Z:**
+GoalPAUSED/phaseSTOPPED,active_turns empty. Watcher1031359,worker1284993 and
+server1284995 are absent. No heavy workload or active child remains. User stop
+instruction20261019T014328295510Z was delivered. Source milestone85468476 is
+pushed/fetched; final pause checkpoint646190dc74d3865709f712212e72ca29414b96ac
+preserves source, pending Git-owner fix/producer, five failed root observations
+and exact handoff. No duplicate archive deleted; scratch21 and persistent locks
+remain intentionally retained.24nativebehaviors/13production/11nativeRustpaths/
+7complete28openchecks,all14wholemilestonesopen. Usage47%,root49.107GiB/
+scratch12.813GiB. Supervision loop and next01:53review CANCELLED. Resume requires
+new explicit user invocation; read CURRENT.md PAUSED cursor. No automatic resume.
 
 **MONITORING RESUMED2026-10-18T13:43:18Z:** user explicitly requested this
 chat's polling, steering and30-minute updates. Their foreground campaign resumed
@@ -4291,3 +4299,34 @@ monitor skips; root received exact record e60bb9b3 and switched to bounded field
 counts/witnesses, raw files retained. No cache/history reset or corpus rehash.
 Usage45→46%;root49.192→49.124GiB/scratch12.813GiB;noheavy. No milestone estimate
 uplift, new accepted check,2–3x claim,supervisor root/workload/cleanup or state edit.
+
+
+## Review55 — explicit user stop, verified2026-10-19T01:48:16Z
+
+User asked to finish at a breakpoint and return later. Stop instruction01:43:28
+was accepted01:43:29. All bounded child commands completed, CPU7released, no
+new workload/cleanup phase started. Final checkpoint646190dc preserves39staged
+files, including real three-leaf source milestone85468476 (pushed/fetched32blobs),
+pending production-checker code and unreviewed Git-owner correction. Goal became
+paused01:48:02; poll01:48:16 confirms phase stopped,emptyactive_turns and watcher/
+worker/serverabsent. All supervisor agents are completed/interrupted; no timer or
+background monitor remains. Saved PID fields are historical, not live owners.
+
+The fifth cleanup observation1301081/start17150573 retiredrc1/groupempty/mutex
+available; failure is root Git dubious ownership after process_census returned.
+No complete successful observation or actual unlink exists. A bounded ordinary
+Git draft passed7checks after preserved pack-mmap ENOMEM; source0c134ee7 is not
+independently reviewed or root-executed. No sixth root observation authorized.
+Keep fivefailedattempts,scratch21stoppedcontainer/alllocks and WIP. Capacity
+shortfall334753792B still blocks admitted IHK build; never replay old releases.
+
+On later explicit resume: read CURRENT.md/HANDOFF.md PAUSED cursor, review the
+specific Git child owner-drop correction and exact metadata-only command if
+needed, obtain fresh observation/apply decisions, remeasurecapacity, then use
+reviewed IHK release. Three-leaf production checker65Cassertions/15mockedcases
+sourcePASS still needs genuine GCC14/fullcrates/image/native proof. Counts hold
+24/13/11 and7of35; no new completion estimate or2–3x claim. Next scheduled review
+cancelled; no automatic launch/recovery is authorized by these historical notes.
+Foreground manual resume when the user returns:
+`python3 -B /home/holden/mckernel/scripts/run_os_parallel.py --run --no-fresh-on-recovery`.
+This command was not run to prepare the handoff.

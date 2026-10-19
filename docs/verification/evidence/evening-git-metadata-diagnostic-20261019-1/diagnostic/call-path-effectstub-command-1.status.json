@@ -1,0 +1,49 @@
+{
+  "status": "PASS",
+  "exit_code": 0,
+  "direct_joined": true,
+  "root_execution": false,
+  "real_git_execution": false,
+  "resource_profile": {
+    "cpu_affinity": "7",
+    "jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 60,
+    "wall_seconds": 90,
+    "TERM_KILL_grace_seconds": 5,
+    "file_cap_bytes": 33554432,
+    "core_bytes": 0,
+    "nice": 19
+  },
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/nice",
+    "-n",
+    "19",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5",
+    "90",
+    "/bin/bash",
+    "-c",
+    "ulimit -v 1048576; ulimit -t 60; ulimit -f 65536; ulimit -c 0; exec /usr/bin/python3 -I /home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/call-path-effectstub.py"
+  ],
+  "captures": {
+    "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/call-path-effectstub-command-1.stdout": {
+      "bytes": 115,
+      "sha256": "108d64756bfcc15da1a6f5a8a4470b1ba8acaece788e07f7a964a300af94cf97"
+    },
+    "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/call-path-effectstub-command-1.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "/home/holden/mckernel-work/host-preparation/evening-git-metadata-diagnostic-20261019-1/call-path-effectstub-result-1.json": {
+      "bytes": 1832,
+      "sha256": "00cdb2ace60a144b78f9c1ccbfeaf21020376612ee1f79772b308e406696f7b1"
+    }
+  },
+  "CPU7_released": true,
+  "claim_limit": "Actual production main/pinned/git_available call path with privileged/Git effects stubbed; no privileged semantics/runtime acceptance."
+}

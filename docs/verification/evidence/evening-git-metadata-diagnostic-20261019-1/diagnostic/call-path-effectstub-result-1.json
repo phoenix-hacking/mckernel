@@ -1,0 +1,64 @@
+{
+  "status": "PASS_ACTUAL_MAIN_CALL_PATH_EFFECTSTUB",
+  "root_execution": false,
+  "real_git_execution": false,
+  "selected_rows": 120,
+  "selected_objects": 122,
+  "git_calls": [
+    {
+      "argv": [
+        "/usr/bin/setpriv",
+        "--reuid=1000",
+        "--regid=1000",
+        "--clear-groups",
+        "--no-new-privs",
+        "/usr/bin/git",
+        "-c",
+        "core.packedGitWindowSize=8m",
+        "-c",
+        "core.packedGitLimit=64m",
+        "-C",
+        "/home/holden/mckernel",
+        "cat-file",
+        "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+      ],
+      "input_sha256": "0757f1ee6142e6dee7aeec67ce4e864f5abc032318e4ca8015881c0327b8aca5",
+      "objects": 122
+    }
+  ],
+  "production_git_available_used": true,
+  "production_pinned_used": true,
+  "result": {
+    "blob_bodies_read": false,
+    "cleanup_observation": false,
+    "deletion": false,
+    "diagnostic_sha256": "ae390c9f328d082cc9c2ce28e00f4db00cb1c18230343decca0b9aada4cf00ba",
+    "git": {
+      "object_ids_sha256": "0757f1ee6142e6dee7aeec67ce4e864f5abc032318e4ca8015881c0327b8aca5",
+      "objects": 122,
+      "repository_owner": [
+        1000,
+        1000
+      ]
+    },
+    "manifest_sha256": "8255bbf869d9904b8ff0a4d6e2ce6dc5264493db1b2c3f6574ad98c04982956d",
+    "selected_rows": 120,
+    "source_sha256": "0c134ee778b273610ead1ecc507caa038642459c0a065c956b4431c35c755917",
+    "status": "ROOT_GIT_METADATA_ONLY_PASS"
+  },
+  "effect_stubs": [
+    "root uid/euid",
+    "release bytes (fixture only)",
+    "mutex open/stat/flock",
+    "Git process run"
+  ],
+  "actual_reads": [
+    "exact source",
+    "frozen manifest",
+    "frozen advisory",
+    "repository owner directories",
+    "own PID stat",
+    "boot ID"
+  ],
+  "diagnostic_sha256": "ae390c9f328d082cc9c2ce28e00f4db00cb1c18230343decca0b9aada4cf00ba"
+}

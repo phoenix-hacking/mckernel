@@ -1,6 +1,33 @@
 # Tactical plan for faster verified OS progress
 
-## Current delivery priority — direct user instruction, 2026-10-19 01:15 UTC
+## RESUMED — latest explicit user authorization, 2026-10-19T04:48:16.575393+00:00
+
+The user requested evening-long functional OS development and supervision. The
+previous stop below is historical and superseded for this invocation. Same saved
+thread01a149eb-f950-7f13-95a2-59dfc2918d49 is running/goalactive in
+20261019T044732Z-ea212224; watcher1347803,worker1347805,server1347807. Explicit
+manual resume envelope accepted; real handoff/tool reads observed. Launcher fix
+5c292417 is pushed/fetched (6files);66launcher+75parallel/recovery/CLI testsPASS
+and independent narrow lifecycle reviewPASS. New user stops remain authoritative.
+
+Implement → compile/test → debug → commit. Resume disjoint ready Rust source and
+application work alongside the actual capacity/IHK critical path. Follow
+[EVENING-RESUME-20261019.md](EVENING-RESUME-20261019.md) for per-CPU app concurrency
+inside one existing guest envelope; CPU pinning alone does not isolate shared OS
+state. Keep original resource/ownership controls and later stop/quota gates.
+30-minute substantive review resumes; no measured2–3x speedup claimed. Baseline
+24behaviors/13selectedproduction/11nativeRustpaths/7complete28openchecks.
+
+## Historical stop — explicit user request, verified2026-10-19 01:48 UTC
+
+Campaign goalpaused,phase stopped,active_turns empty;watcher1031359,worker1284993
+andserver1284995 absent. No heavy workload or active child. Source85468476 is
+pushed/fetched; final pause checkpoint646190dc preserves WIP, unfinished Git-owner
+fix and exact CURRENT.md/HANDOFF.md. No archive deletion; scratch21/locks retained.
+Monitoring and scheduled review are stopped. Resume only after a new explicit
+user invocation; the delivery policy below applies to that later run.
+
+## Delivery policy for a later resume — user instruction, 2026-10-19 01:15 UTC
 
 Implement → compile/test → debug → commit coherent code. The user explicitly
 rejects review-heavy progress without working implementation. Within an existing
