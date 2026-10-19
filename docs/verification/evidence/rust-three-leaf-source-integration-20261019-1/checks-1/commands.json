@@ -1,0 +1,218 @@
+[
+  {
+    "label": "rust-version",
+    "argv": [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--version"
+    ],
+    "pid": 1294012,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.008867429016390815,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 36,
+        "sha256": "ecda74ca828b18debf1624cb36209a5b844fb1e1c1905ffb3d51b56cc275f96f",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "gcc-version",
+    "argv": [
+      "/usr/bin/gcc",
+      "--version"
+    ],
+    "pid": 1294014,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.0022656820074189454,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 244,
+        "sha256": "991c86f8d9b66254b3a1d9424592c40c367ae86dd7700c54bdaa80203b40b2ea",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "actual-rust-consumer",
+    "argv": [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--crate-type=lib",
+      "-Awarnings",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "debuginfo=2",
+      "-C",
+      "code-model=large",
+      "-C",
+      "relocation-model=static",
+      "-C",
+      "no-redzone=yes",
+      "-C",
+      "force-frame-pointers=yes",
+      "-C",
+      "overflow-checks=off",
+      "-C",
+      "force-unwind-tables=no",
+      "-C",
+      "no-vectorize-loops",
+      "-C",
+      "no-vectorize-slp",
+      "-C",
+      "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+      "--emit=obj",
+      "/home/holden/mckernel-work/host-preparation/rust-three-leaf-source-integration-20261019-1/checks-1/actual-integrated-consumer.rs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/rust-three-leaf-source-integration-20261019-1/checks-1/rust.o"
+    ],
+    "pid": 1294015,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.11503183899912983,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "actual-rust-nm",
+    "argv": [
+      "/usr/bin/nm",
+      "/home/holden/mckernel-work/host-preparation/rust-three-leaf-source-integration-20261019-1/checks-1/rust.o"
+    ],
+    "pid": 1294022,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.017524687020340934,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 1368,
+        "sha256": "32c215e30a3e6abc3148b7909ab927eb2c045a1ea767e6df71b8a142233a1942",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "actual-destroy-consumer",
+    "argv": [
+      "/usr/bin/objdump",
+      "-dr",
+      "--disassemble=destroy_thread",
+      "/home/holden/mckernel-work/host-preparation/rust-three-leaf-source-integration-20261019-1/checks-1/rust.o"
+    ],
+    "pid": 1294023,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.004282829992007464,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 4838,
+        "sha256": "db7950f460c078411e0a48d264cc26d856966c45db8efade2ee21a5a56d26c4f",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "selected-consumer",
+    "argv": [
+      "/usr/bin/gcc",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Werror=implicit-function-declaration",
+      "-fno-pie",
+      "-c",
+      "-DMCKERNEL_RUST_PROCESS_HELPERS",
+      "/home/holden/mckernel-work/host-preparation/rust-three-leaf-source-integration-20261019-1/checks-1/actual-integrated-consumer.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/rust-three-leaf-source-integration-20261019-1/checks-1/selected.o"
+    ],
+    "pid": 1294024,
+    "returncode": 1,
+    "direct_child_joined": true,
+    "seconds": 0.008479443000396714,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 213,
+        "sha256": "d7cee9ca0f3e795414bc87d102000d072ae73f7f13ba17a25ee0a667027d9554",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  }
+]

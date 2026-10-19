@@ -465,12 +465,14 @@ PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_do_migrate_log_bridge(unsigned lo
 		 "do_migrate", tid, old_cpu_id, new_cpu_id);
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static void process_release_tid_log_bridge(int tid, void *thread, int new_tid)
 {
 	(void)new_tid;
 	dkprintf("%s: tid %d has been released by %p\n",
 		"__release_tid", tid, thread);
 }
+#endif
 
 static void process_replace_tid_log_bridge(int tid, void *thread, int new_tid)
 {
@@ -3644,12 +3646,16 @@ release_sigcommon(struct sig_common *sigcommon)
  * Release the TID from the process' TID set corresponding to this thread.
  * NOTE: threads_lock must be held.
  */
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void __release_tid(struct process *proc, struct thread *thread);
+#else
 void __release_tid(struct process *proc, struct thread *thread) {
 	process_release_tid_body_result(proc->tids, proc->nr_tids,
 		sizeof(proc->tids[0]),
 		__builtin_offsetof(struct mcexec_tid, thread),
 		thread, thread->tid, process_release_tid_log_bridge);
 }
+#endif
 
 /* Replace tid specified by thread with tid specified by new_tid */
 void __find_and_replace_tid(struct process *proc, struct thread *thread, int new_tid) {
@@ -3660,6 +3666,9 @@ void __find_and_replace_tid(struct process *proc, struct thread *thread, int new
 		thread, thread->tid, new_tid, process_replace_tid_log_bridge);
 }
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_destroy_thread_hash_detach_bridge(void *thread_arg);
+#else
 void process_destroy_thread_hash_detach_bridge(void *thread_arg)
 {
 	struct thread *thread = thread_arg;
@@ -3676,7 +3685,11 @@ void process_destroy_thread_hash_detach_bridge(void *thread_arg)
 					&lock);
 	}
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_destroy_thread_time_account_bridge(void *thread_arg);
+#else
 void process_destroy_thread_time_account_bridge(void *thread_arg)
 {
 	struct thread *thread = thread_arg;
@@ -3691,6 +3704,7 @@ void process_destroy_thread_time_account_bridge(void *thread_arg)
 	ts_add(&thread->proc->utime, &ats);
 	mcs_rwlock_writer_unlock(&proc->update_lock, &updatelock);
 }
+#endif
 
 void process_destroy_thread_release_tid_bridge(void *proc_arg,
 					       void *thread_arg)

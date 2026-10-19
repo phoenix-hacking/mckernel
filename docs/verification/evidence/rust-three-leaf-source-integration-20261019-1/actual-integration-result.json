@@ -1,0 +1,61 @@
+{
+  "status": "ACTUAL_THREE_LEAF_SOURCE_INTEGRATION_READY_CONSOLIDATED_REVIEW",
+  "time_epoch": 1792372908.657991,
+  "goal": "Functional PRACTICAL-GOAL OS/apps and actual compute C to Rust/reviewed assembly retirement",
+  "changed_paths": [
+    "kernel/process.c",
+    "kernel/rust/process_helpers.rs"
+  ],
+  "before_sha256": {
+    "kernel/process.c": "d190ada53817aca4cc44e916e884e99bad430049393874b649806458b706f3de",
+    "kernel/rust/process_helpers.rs": "4991258b970e49a1998f3605311f08da96a3fcd218ef02e8b8afeb73b6e24911"
+  },
+  "after_sha256": {
+    "kernel/process.c": "7c2cee5f29a659923579ef8664c8fc31d01fe2ec7e19c570dd9ac3cc2e7d18a7",
+    "kernel/rust/process_helpers.rs": "a5ac237dc120af18ee9555874967e0da387e6c62cb92b5f054fdf00ed62a2043"
+  },
+  "patch_sha256": "6d68e554363e461385068134f4197288057f6a298eec666cdd061e770d4d360c",
+  "unrelated_current_lifecycle_WIP_preserved": true,
+  "source_change": "Four unchanged C fallback regions guarded; actual selected declarations added; two old Rust callback externs removed; three exact reviewed Rust bodies appended; unchanged actual destroy_thread callback bindings",
+  "required_check_stages_satisfied": 15,
+  "positive_zero_exit_attempts": 14,
+  "expected_negative_attempts": 1,
+  "preserved_unexpected_fixture_failures": 1,
+  "total_child_attempts": 16,
+  "all_children_direct_joined": true,
+  "first5passes_reused_without_replay": true,
+  "semantic_suites_replayed": false,
+  "outer_initial": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-three-leaf-source-integration-20261019-1/outer-1/actual-integrated-checker.status.json",
+    "sha256": "77c77cfc1e3a238c2ab121130e0328da66dae6be3afcf7b80d7f383498147636",
+    "pid": 1294011,
+    "exit_code": 1,
+    "joined": true
+  },
+  "outer_correction": {
+    "path": "/home/holden/mckernel-work/host-preparation/rust-three-leaf-source-integration-20261019-1/outer-2/actual-consumer-correction.status.json",
+    "sha256": "b872045fdd9a9199db78f7e4cfc13728ed5317da145da5092b9535fc3734fee2",
+    "pid": 1294119,
+    "exit_code": 0,
+    "joined": true,
+    "tool_chunk": "c21802",
+    "tool_wall_seconds": 0.146825787
+  },
+  "checks_scope": [
+    "Byte-identical reviewed body append and exact preservation of current prefix minus two old externs",
+    "Actual current Rust destroy_thread body compiled with three default callback bindings, actual ABI and unchanged selected helper definitions; unrelated external dependencies compile-only declarations",
+    "Actual current C guarded definition/declaration regions, real C release bridge and actual lock bridge bodies compile under selected/fallback; no changed-leaf prototype injected by fixture prelude",
+    "All three selected Rust exports T once/no U in actual ld-r join, fallback C T once each, default consumer disassembly references preserved",
+    "Scalar no-FP/SIMD body observations for all three; expected missing actual selected TID declaration control is rejected"
+  ],
+  "scope_limits": [
+    "HostGCC/minimal C type context and extracted Rust consumer/object only; full actual GCC14 TU/current real crate not built",
+    "No semantic vector replay, hardware/guest/container/root/Git/runtime action",
+    "Full native/legacy production crate, actual C ABI/layout, matched normal image/default artifact and native teardown/positive retirement remain pending"
+  ],
+  "cpu7": "RELEASED immediately after corrected wholejoin; direct handoff2345/root",
+  "review_request": "Root: request single consolidated independent0034 unsafe ABI/source integration review of these exact actual2file bytes/diff and completed captures; reuse accepted individual boundaries and prior semantic evidence",
+  "kernel_acceptance": false,
+  "production_acceptance": false,
+  "language_retirement": false
+}

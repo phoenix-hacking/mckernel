@@ -1,0 +1,43 @@
+{
+  "status": "PASS_BEFORE_SOURCE_ADMISSION",
+  "time_epoch": 1792372605.8712962,
+  "ownership": "Root explicitly assigns only process.c and process_helpers.rs, preserving unrelated currentWIP; noGit",
+  "before": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "sha256": "d190ada53817aca4cc44e916e884e99bad430049393874b649806458b706f3de",
+      "bytes": 156675,
+      "dev": 66306,
+      "inode": 47460752,
+      "mode": 33188,
+      "uid": 1000,
+      "gid": 1000
+    },
+    "kernel/rust/process_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+      "sha256": "4991258b970e49a1998f3605311f08da96a3fcd218ef02e8b8afeb73b6e24911",
+      "bytes": 330687,
+      "dev": 66306,
+      "inode": 47460795,
+      "mode": 33188,
+      "uid": 1000,
+      "gid": 1000
+    }
+  },
+  "exact_C_body_matches": {
+    "tid": 1,
+    "time": 1,
+    "hash": 1,
+    "tid_logger": 1
+  },
+  "old_Rust_callback_declarations": {
+    "process_destroy_thread_time_account_bridge": 1,
+    "process_destroy_thread_hash_detach_bridge": 1
+  },
+  "default_callback_counts": {
+    "process_destroy_thread_time_account_bridge": 1,
+    "process_destroy_thread_hash_detach_bridge": 1,
+    "process_destroy_thread_release_tid_bridge": 1
+  },
+  "current_cpu7_allocation": "Root explicit after prior fixtures joined"
+}

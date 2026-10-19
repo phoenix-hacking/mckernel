@@ -1,0 +1,127 @@
+
+/home/holden/mckernel-work/host-preparation/rust-three-leaf-source-integration-20261019-1/checks-1/rust.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.__release_tid:
+
+Disassembly of section .ltext.destroy_thread:
+
+0000000000000000 <destroy_thread>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	41 57                	push   %r15
+   6:	41 56                	push   %r14
+   8:	41 55                	push   %r13
+   a:	41 54                	push   %r12
+   c:	53                   	push   %rbx
+   d:	48 83 e4 c0          	and    $0xffffffffffffffc0,%rsp
+  11:	48 81 ec 80 00 00 00 	sub    $0x80,%rsp
+  18:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+  1f:	00 00 00 
+			1a: R_X86_64_64	num_processors
+  22:	8b 00                	mov    (%rax),%eax
+  24:	48 83 ec 08          	sub    $0x8,%rsp
+  28:	49 bc 00 00 00 00 00 	movabs $0x0,%r12
+  2f:	00 00 00 
+			2a: R_X86_64_64	process_spin_unlock_bridge
+  32:	49 bd 00 00 00 00 00 	movabs $0x0,%r13
+  39:	00 00 00 
+			34: R_X86_64_64	process_spin_lock_bridge
+  3c:	be d0 10 00 00       	mov    $0x10d0,%esi
+  41:	ba 68 10 00 00       	mov    $0x1068,%edx
+  46:	b9 10 00 00 00       	mov    $0x10,%ecx
+  4b:	41 b8 d8 10 00 00    	mov    $0x10d8,%r8d
+  51:	41 b9 58 14 00 00    	mov    $0x1458,%r9d
+  57:	49 ba 00 00 00 00 00 	movabs $0x0,%r10
+  5e:	00 00 00 
+			59: R_X86_64_64	process_destroy_thread_hash_detach_bridge
+  61:	49 bb 00 00 00 00 00 	movabs $0x0,%r11
+  68:	00 00 00 
+			63: R_X86_64_64	process_mcs_writer_unlock_bridge
+  6b:	48 bb 00 00 00 00 00 	movabs $0x0,%rbx
+  72:	00 00 00 
+			6d: R_X86_64_64	process_mcs_writer_lock_bridge
+  75:	4c 8d 74 24 08       	lea    0x8(%rsp),%r14
+  7a:	49 bf 00 00 00 00 00 	movabs $0x0,%r15
+  81:	00 00 00 
+			7c: R_X86_64_64	process_free_thread_pages_bridge
+  84:	41 57                	push   %r15
+  86:	49 bf 00 00 00 00 00 	movabs $0x0,%r15
+  8d:	00 00 00 
+			88: R_X86_64_64	process_release_sigcommon_bridge
+  90:	41 57                	push   %r15
+  92:	49 bf 00 00 00 00 00 	movabs $0x0,%r15
+  99:	00 00 00 
+			94: R_X86_64_64	release_fp_regs
+  9c:	41 57                	push   %r15
+  9e:	49 bf 00 00 00 00 00 	movabs $0x0,%r15
+  a5:	00 00 00 
+			a0: R_X86_64_64	process_optional_free_bridge
+  a8:	41 57                	push   %r15
+  aa:	41 54                	push   %r12
+  ac:	41 55                	push   %r13
+  ae:	49 bf 00 00 00 00 00 	movabs $0x0,%r15
+  b5:	00 00 00 
+			b0: R_X86_64_64	process_destroy_thread_replace_tid_bridge
+  b8:	41 57                	push   %r15
+  ba:	49 bf 00 00 00 00 00 	movabs $0x0,%r15
+  c1:	00 00 00 
+			bc: R_X86_64_64	process_destroy_thread_release_tid_bridge
+  c4:	41 57                	push   %r15
+  c6:	49 bf 00 00 00 00 00 	movabs $0x0,%r15
+  cd:	00 00 00 
+			c8: R_X86_64_64	process_destroy_thread_time_account_bridge
+  d0:	41 57                	push   %r15
+  d2:	41 52                	push   %r10
+  d4:	41 53                	push   %r11
+  d6:	53                   	push   %rbx
+  d7:	41 56                	push   %r14
+  d9:	50                   	push   %rax
+  da:	68 68 15 00 00       	pushq  $0x1568
+  df:	68 b0 12 00 00       	pushq  $0x12b0
+  e4:	68 a8 13 00 00       	pushq  $0x13a8
+  e9:	68 a0 13 00 00       	pushq  $0x13a0
+  ee:	68 98 13 00 00       	pushq  $0x1398
+  f3:	6a 00                	pushq  $0x0
+  f5:	68 a0 00 00 00       	pushq  $0xa0
+  fa:	6a 20                	pushq  $0x20
+  fc:	6a 00                	pushq  $0x0
+  fe:	68 a8 00 00 00       	pushq  $0xa8
+ 103:	68 00 01 00 00       	pushq  $0x100
+ 108:	68 c0 00 00 00       	pushq  $0xc0
+ 10d:	68 d8 12 00 00       	pushq  $0x12d8
+ 112:	68 00 13 00 00       	pushq  $0x1300
+ 117:	68 6c 14 00 00       	pushq  $0x146c
+ 11c:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+ 123:	00 00 00 
+			11e: R_X86_64_64	process_destroy_thread_body_result
+ 126:	ff d0                	callq  *%rax
+ 128:	48 81 c4 f0 00 00 00 	add    $0xf0,%rsp
+ 12f:	48 8d 65 d8          	lea    -0x28(%rbp),%rsp
+ 133:	5b                   	pop    %rbx
+ 134:	41 5c                	pop    %r12
+ 136:	41 5d                	pop    %r13
+ 138:	41 5e                	pop    %r14
+ 13a:	41 5f                	pop    %r15
+ 13c:	5d                   	pop    %rbp
+ 13d:	c3                   	retq   
+
+Disassembly of section .ltext.process_destroy_thread_hash_detach_bridge:
+
+Disassembly of section .ltext.process_destroy_thread_time_account_bridge:
+
+Disassembly of section .ltext.process_list_detach_result:
+
+Disassembly of section .ltext.process_list_is_linked_result:
+
+Disassembly of section .ltext.process_release_tid_body_result:
+
+Disassembly of section .ltext.process_tid_index_for_thread_result:
+
+Disassembly of section .ltext.process_tid_index_found_result:
+
+Disassembly of section .ltext.process_tid_log_result:
+
+Disassembly of section .ltext.process_tid_release_slot_result:
+
+Disassembly of section .ltext.thread_hash:

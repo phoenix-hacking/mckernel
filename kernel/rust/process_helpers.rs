@@ -127,8 +127,6 @@ unsafe extern "C" {
         handler: *mut c_void,
         arg: *mut c_void,
     ) -> CInt;
-    fn process_destroy_thread_hash_detach_bridge(thread: *mut c_void);
-    fn process_destroy_thread_time_account_bridge(thread: *mut c_void);
     fn process_destroy_thread_release_tid_bridge(proc: *mut c_void, thread: *mut c_void);
     fn process_destroy_thread_replace_tid_bridge(
         proc: *mut c_void,
@@ -11369,4 +11367,142 @@ pub unsafe extern "C" fn process_release_vm_checked_body_result(
     free_vm_fn(vm);
     // vm and proc may be freed. Return a literal scalar without another read.
     1
+}
+
+// This private callback preserves the existing optional dynamic-debug event.
+#[used]
+#[link_section = "__verbose"]
+static mut RELEASE_TID_DEBUG: crate::debug::Ddebug = crate::debug::Ddebug {
+    file: concat!(file!(), "\0").as_ptr().cast(),
+    func: b"process_release_tid_log_bridge\0".as_ptr().cast(),
+    fmt: core::ptr::null(),
+    line_flags: line!() & 0x00ff_ffff,
+};
+
+extern "C" {
+    fn kprintf(format: *const i8, ...) -> CInt;
+}
+
+unsafe extern "C" fn process_release_tid_log_bridge(
+    tid: CInt, thread: *mut c_void, _new_tid: CInt,
+) {
+    let flags = unsafe {
+        core::ptr::read_volatile(core::ptr::addr_of!(RELEASE_TID_DEBUG.line_flags)) >> 24
+    };
+    if flags != 0 {
+        unsafe {
+            kprintf(
+                b"%s: tid %d has been released by %p\n\0".as_ptr().cast(),
+                b"__release_tid\0".as_ptr().cast::<i8>(), tid, thread,
+            );
+        }
+    }
+}
+
+const _: () = {
+    assert!(offset_of!(Process, tids) == 256);
+    assert!(offset_of!(Process, nr_tids) == 264);
+    assert!(offset_of!(Thread, tid) == 20);
+    assert!(size_of::<crate::abi::McexecTid>() == 16);
+    assert!(offset_of!(crate::abi::McexecTid, thread) == 8);
+};
+
+/// Release the first slot referring to this live thread under threads_lock.
+///
+/// Both pointers must be valid and live through the call. The caller holds the
+/// owning process's threads_lock and excludes concurrent/reentrant slot changes.
+/// `tids` is null or covers `nr_tids` entries when that count is positive.
+/// The helper clears only the matched thread pointer, retaining the numeric TID,
+/// and invokes diagnostics after the clear. This does not free thread storage.
+#[no_mangle]
+pub unsafe extern "C" fn __release_tid(proc: *mut Process, thread: *mut Thread) {
+    let _ = unsafe {
+        process_release_tid_body_result(
+            (*proc).tids, (*proc).nr_tids,
+            size_of::<crate::abi::McexecTid>() as CULong,
+            offset_of!(crate::abi::McexecTid, thread) as CULong,
+            thread.cast(), (*thread).tid, Some(process_release_tid_log_bridge),
+        )
+    };
+}
+
+// Reuse existing exported time operations; aliases avoid leaf-batch name clashes.
+extern "C" {
+    #[link_name = "tsc_to_ts"]
+    fn process_teardown_tsc_to_ts(tsc: CULong, ts: *mut crate::abi::TimeSpec);
+    #[link_name = "ts_add"]
+    fn process_teardown_ts_add(dst: *mut crate::abi::TimeSpec, src: *const crate::abi::TimeSpec);
+}
+
+const _: () = {
+    assert!(offset_of!(Thread, proc) == 4304);
+    assert!(offset_of!(Thread, system_tsc) == 5040);
+    assert!(offset_of!(Thread, user_tsc) == 5048);
+    assert!(offset_of!(Process, update_lock) == 64);
+    assert!(offset_of!(Process, stime) == 1296);
+    assert!(offset_of!(Process, utime) == 1312);
+    assert!(size_of::<crate::abi::TimeSpec>() == 16);
+};
+
+/// Accumulate both live thread clocks under the existing process update lock.
+/// The thread and owning process remain valid and stable through synchronous
+/// lock/time callbacks; this callback acquires and releases the same lock once.
+/// Existing initialized clock-rate and timespec arithmetic preconditions apply.
+#[no_mangle]
+pub unsafe extern "C" fn process_destroy_thread_time_account_bridge(thread_arg: *mut c_void) {
+    let thread = thread_arg.cast::<Thread>();
+    let proc = unsafe { (*thread).proc };
+    let mut updatelock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    let mut ats = MaybeUninit::<crate::abi::TimeSpec>::uninit();
+    unsafe {
+        process_mcs_writer_lock_bridge(
+            core::ptr::addr_of_mut!((*proc).update_lock) as CULong,
+            updatelock.as_mut_ptr().cast(),
+        );
+        process_teardown_tsc_to_ts((*thread).system_tsc, ats.as_mut_ptr());
+        process_teardown_ts_add(core::ptr::addr_of_mut!((*(*thread).proc).stime), ats.as_ptr());
+        process_teardown_tsc_to_ts((*thread).user_tsc, ats.as_mut_ptr());
+        process_teardown_ts_add(core::ptr::addr_of_mut!((*(*thread).proc).utime), ats.as_ptr());
+        process_mcs_writer_unlock_bridge(
+            core::ptr::addr_of_mut!((*proc).update_lock) as CULong,
+            updatelock.as_mut_ptr().cast(),
+        );
+    }
+}
+
+const _: () = {
+    assert!(offset_of!(Thread, hash_list) == 0);
+    assert!(offset_of!(Thread, tid) == 20);
+    assert!(offset_of!(CpuLocalVar, resource_set) == 7912);
+    assert!(offset_of!(ResourceSet, thread_hash) == 32);
+    assert!(offset_of!(ThreadHash, lock) == 1216);
+    assert!(size_of::<ThreadHash>() == 5888);
+    assert!(PROCESS_HASH_SIZE == 73);
+};
+
+/// Remove a final-destruction thread from its existing CPU resource-set hash.
+/// The caller owns this live thread's teardown and excludes concurrent mutation
+/// of its list-membership test until the existing hash lock is acquired. On the
+/// linked path, CPU/resource-set/hash storage stays live and CPU binding stable;
+/// TID is nonnegative and selects a valid existing bucket. Adjacent list nodes
+/// stay valid under the hash writer lock. This is one-time detach: poisoned
+/// list entries must not be passed again. No new lock or lifetime policy is added.
+#[no_mangle]
+pub unsafe extern "C" fn process_destroy_thread_hash_detach_bridge(thread_arg: *mut c_void) {
+    let thread = thread_arg.cast::<Thread>();
+    let mut lock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    unsafe {
+        let entry = core::ptr::addr_of_mut!((*thread).hash_list);
+        if process_list_is_linked_result(entry) != 0 {
+            let resource_set = (*get_this_cpu_local_var()).resource_set;
+            let hash = thread_hash((*thread).tid);
+            let lock_addr = core::ptr::addr_of_mut!((*(*resource_set).thread_hash).lock)
+                .cast::<crate::abi::McsRwlockLock>().add(hash as usize) as CULong;
+            process_mcs_writer_lock_bridge(lock_addr, lock.as_mut_ptr().cast());
+            process_list_detach_result(entry);
+            let lock_addr = core::ptr::addr_of_mut!((*(*resource_set).thread_hash).lock)
+                .cast::<crate::abi::McsRwlockLock>().add(hash as usize) as CULong;
+            process_mcs_writer_unlock_bridge(lock_addr, lock.as_mut_ptr().cast());
+        }
+    }
 }
