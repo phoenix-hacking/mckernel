@@ -1,5 +1,55 @@
 # OS development session handoff
 
+## Current — Condvar native accepted; clone-affinity repair integrated (10:14 UTC)
+
+Campaign ACTIVE; functional OS/apps and Rust/reviewed assembly remain the goal.
+Independent Condvar acceptance22f64306 proves exact75-byte stdout, empty stderr,
+exit0, timed-out wait and mutex guard ownership/reacquisition. Owner0/35.6704s,
+three readbacks0, physical retirementdf2186e5 accepted. Expected41-byte tar socket
+omission warning remains captured. Latest physical predecessor is df2186e5;
+container30e172e4 and all owned groups retired, persistent mutex27:4 preserved.
+Counts:25 accepted distinct native behaviors,17 selected production Rust paths,
+11 applicable native paths,7/35 practical checks complete; all14 milestones OPEN.
+
+N3 really ran both apps with frozen387/254-byte outputs, exit0 and1.697s overlap.
+Full N3 stays FAIL: child startup was onCPU0 although its creator was pinnedCPU1.
+Supported EAGAIN retirement retry is independently accepted only as a subtrace;
+no CPU assertion was relaxed. Physical ba80041b already accepted. No guest replay.
+
+Exact independently reviewed clone-affinity patch84ff081d is now integrated into
+kernel/syscall.c plus Rust sched_helpers/process_helpers. Normal CLONE_THREAD
+placement snapshots caller-thread affinity intersected with process eligibility;
+child inherits the same snapshot before publication. Existing reservation lock
+serializes mask copying/writing, released before reservation/migration calls.
+UTI/nonthread routes and C fallback remain.14 focused commands passed across
+4 retained successful commands plus10 expert-directed remaining commands;
+256 mask pairs, actual selected/fallback C consumers and Linux inheritance pass.
+Original preparer/compiler/fallback fixture failures remain preserved. Full
+GCC14/crates/default-linked image and strict native CPU proof remain PENDING.
+No production/native Rust retirement credit from this source integration.
+
+Failed future-four compiler attempt remains FAIL/image UNRUN; positive physical
+release864478cf and failure-only retention are accepted, original491-entry/
+38503317-byte partial build preserved in place. Remaining-image request9f04f3a3
+and retained-prefix acceptance339d896b bind immutable source03a91997, excluding
+this new affinity repair. Exact13-row executable publication/static review is
+next, followed by fresh live resource/ownership admission and its own one-shot
+execution release. Never splice new kernel sources into the cached source graph.
+No seed or new image make has run. Latest Condvar physicaldf2186 is the genuine
+predecessor; old864 proof is historical image-ownership evidence only.
+
+Checkpoint evidence: ../evidence/clone-affinity-condvar-checkpoint-20261019-1/
+manifest.json and four verified archives preserve source/tests, original failures,
+N3 and Condvar joined captures and independent decisions. Previous source and
+terminal archives remain retained. Next executable action is the separately
+released remaining-image MAKE after exact fetched13-source proof and fresh
+admission, or another genuinely fully admitted useful case. One heavy operation,
+4CPU/12GiB/no-swap/512tasks, actual storage growth/emergency reserves and16/12GiB
+floors remain. Optional scratch reserve is NOT authorized and parked. Scratch21,
+failed attempts, mutex/exclusions, service-held tasks and97%usage stop preserved.
+No whole-OS completion, full syscall-DWARF proof or throughput multiplier claim.
+
+
 ## Current — future callback compiler prefix passed; failed-producer physical release pending (09:05 UTC)
 
 Campaign ACTIVE. Actual future-four-callback attempt e9497da4 completed eight

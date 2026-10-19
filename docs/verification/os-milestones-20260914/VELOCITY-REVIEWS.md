@@ -4724,3 +4724,79 @@ not design a new resume framework that costs more than a short fresh compile.
 Keep actual Rust-caller/link proof and all original resource/ownership controls.
 Host/scratch availability is about 46.46/12.811 GiB; included usage is 58%.
 Optional scratch reserve authorization remains pending. Next review: 09:23:31 UTC.
+
+
+## Review 65 — 2026-10-19T09:25:00Z
+
+Interval: 08:53:31–09:25:00 UTC. No new guest workload or practical closure.
+Totals remain 24 native behaviors, 17 selected production Rust paths, 11 native
+Rust paths and 7/35 practical checks. There is no demonstrated throughput
+multiplier or percentage uplift this interval. Runtime remains blocked by the
+failed producer's retained container and common/shared records.
+
+The failure-only route now has verified retention of 11 logs and all 22 FD rows.
+Observer and distinct summary completed. The metadata helper refused before
+reading because the dispatcher supplied 2 GiB instead of its required 1 GiB;
+that failed invocation is retained. Only the remaining metadata/export steps
+were corrected and completed. Their actual review precedes separate cleanup.
+Checkpoint 3564d2b0 is pushed/fetched and preserves the failed compiler prefix
+and corrected release helpers. No successful-image authority is substituted.
+
+The remaining-image request 9f04f3a3 and real owner validator passed with two
+joined ordinary commands. Retained compiler artifacts and the full symbol
+matrix are accepted for reuse. Copy/proof binding and owner cleanup-on-seed-fail
+defects were corrected with affected tests. Fresh roots remain empty; no seed,
+compiler rerun or image make occurred. The original attempt remains unchanged.
+
+Condvar's stage/fixture/parent results are independently accepted (04817602).
+Its native source/profile has conditional approval (aa74c42f); late runtime
+facts and final release remain required. N3's actual consumers and static runtime
+freeze are accepted. Both remain useful next-work candidates after physical
+release; ordinary preparation can continue independently.
+
+Next adjustment: execute directly from the approved per-stage argv/profile data
+through the existing executor. Stop manually reconstructing stage resource
+limits and flags. Finish failure readback/cleanup and give the next ready guest
+prompt feedback before spending its slot on ledger or unrelated future changes.
+Preserve all real source, identity, capacity and one-heavy requirements.
+Host/scratch free capacity is about 46.45/12.811 GiB; included usage is 59%.
+The optional reserve question is pending without mutation authority.
+Next full review: 09:55:00 UTC.
+
+
+## Review 66 — 2026-10-19T09:55:31Z
+
+Interval: 09:25:00–09:55:31 UTC. Failed-build cleanup and physical release are
+independently accepted (864478cf). Container and records released, groups empty,
+mutex free, all 496 inventory rows and 22 retained-log rows preserved. The full
+failed work/evidence trees remain in place. No image was built by that attempt.
+
+N3 executed both real applications: exact 387/254-byte stdout, empty-error/exit
+contracts, 1.697 seconds of overlap and independent physical retirement (ba80041b).
+The original case remains failed. A retirement parser treated supported EAGAIN
+retry attempts as completed retirements; its bounded correction passed four
+positives and 13 refusals using retained evidence. Replay then exposed a separate
+CPU failure: one child startup syscall occurred on CPU0 despite its caller's
+CPU1 affinity. No guest replay or full retrospective acceptance was granted.
+
+A private Rust repair now targets the actual clone placement/inheritance path,
+using a caller-mask snapshot within process eligibility for both initial CPU
+selection and child initialization. The reservation lock is shared with the
+selected affinity writer and released before selection/migration callbacks.
+Focused source/lock/failure-exit and real consumer checks are being prepared.
+The current frozen remaining-image inputs remain unchanged.
+
+Condvar's ordinary, interface and static reviews passed. The latest N3 physical
+predecessor and exact command data are bound; the fresh snapshot, final machine
+decision and actual guest execution remain pending. Its one-CPU case is independent
+of the multi-CPU clone defect. The existing valid assembly is preferred over an
+optional refinement; an escaping concern was checked and found to be a false alarm.
+
+Accepted totals remain 24 behaviors, 17 production paths, 11 native paths and
+7/35 practical checks. No new whole milestone closed. Remaining-image request
+9f04f3a3 and retained compiler proof are ready; seeding/image make have not run.
+Next adjustment: execute the independent ready case while the genuine Rust
+affinity fix and scoped parser correction proceed. Preserve CPU assertions,
+fresh source authority, actual retirement and sole-heavy control. Usage is 60%;
+host/scratch free capacity about 46.46/12.810 GiB. Optional reserve authorization
+is still pending. Next full review: 10:25:31 UTC.

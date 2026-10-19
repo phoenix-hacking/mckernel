@@ -7293,6 +7293,14 @@ long sys_execve(int n, ihk_mc_user_context_t *ctx)
 			syscall_execveat_bridge);
 }
 
+#ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS
+extern int sched_clone_affinity_snapshot_result(unsigned long thread_mask,
+        unsigned long process_mask, unsigned long snapshot,
+        size_t bytes, int nr_cpus);
+extern int sched_clone_affinity_inherit_result(unsigned long child_mask,
+        unsigned long snapshot, size_t bytes);
+#endif
+
 unsigned long do_fork(int clone_flags, unsigned long newsp,
                       unsigned long parent_tidptr, unsigned long child_tidptr,
                       unsigned long tlsblock_base, unsigned long curpc,
@@ -7314,6 +7322,10 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 	unsigned long clone_pthread_start_routine = 0;
 	struct vm_range *range = NULL;
 	int helper_thread = 0;
+#ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS
+    cpu_set_t clone_cpu_set;
+    int inherit_clone_affinity = 0;
+#endif
 	int tid_table_created = 0;
 
 	dkprintf("%s,flags=%08x,newsp=%lx,ptidptr=%lx,"
@@ -7392,9 +7404,23 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 		//cpuid = obtain_clone_cpuid(&oldproc->cpu_set, 1);
 	}
 	else {
-		cpuid = obtain_clone_cpuid(&oldproc->cpu_set,
-				clone_use_last_cpu_result(old->mod_clone,
-					oldproc->uti_use_last_cpu));
+#ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS
+        /* Keep UTI and non-thread clone policy on their existing route. */
+        if ((clone_flags & CLONE_THREAD) && !oldproc->uti_thread_rank &&
+                !old->mod_clone && !oldproc->uti_use_last_cpu) {
+            if (sched_clone_affinity_snapshot_result(
+                    (unsigned long)&old->cpu_set,
+                    (unsigned long)&oldproc->cpu_set,
+                    (unsigned long)&clone_cpu_set,
+                    sizeof(clone_cpu_set), num_processors))
+                return -EAGAIN;
+            inherit_clone_affinity = 1;
+            cpuid = obtain_clone_cpuid(&clone_cpu_set, 0);
+        } else
+#endif
+        cpuid = obtain_clone_cpuid(&oldproc->cpu_set,
+                clone_use_last_cpu_result(old->mod_clone,
+                    oldproc->uti_use_last_cpu));
 		if (cpuid == -1) {
 			kprintf("do_fork,core not available\n");
 			return -EAGAIN;
@@ -7421,6 +7447,16 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 	}
 
 	newproc = new->proc;
+
+#ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS
+    if (inherit_clone_affinity && sched_clone_affinity_inherit_result(
+            (unsigned long)&new->cpu_set, (unsigned long)&clone_cpu_set,
+            sizeof(clone_cpu_set))) {
+        err = -EINVAL;
+        goto destroy_thread;
+    }
+#endif
+
 
 	cpu_set(cpuid, &new->vm->address_space->cpu_set,
 	        &new->vm->address_space->cpu_set_lock);

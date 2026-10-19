@@ -1,6 +1,83 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 64, 2026-10-19T08:53:31Z
+## Current priorities — review 66, 2026-10-19T09:55:31Z
+
+The failed build is physically released (864478cf): container absent, groups
+empty, mutex free, 496 inventory rows and 22 retained-log FD rows preserved.
+All host build/evidence trees remain intact. Its producer still failed before
+image make; no image acceptance or compiler replay is implied by that release.
+
+N3 ran both real Rust apps on the intended parent CPU assignments, with exact
+387/254-byte outputs, exit 0 and 1.697 seconds of overlap. Physical retirement
+passed (ba80041b). The retirement parser confused supported EAGAIN retry attempts
+with completions; its scoped correction passed four positives and 13 refusals.
+Full N3 acceptance remains refused: one FP child startup syscall executed on
+CPU0 while its creating thread was pinned to CPU1. Keep that CPU assertion.
+
+A private Rust clone-affinity lane has identified the inconsistency: placement
+uses the process eligibility mask, while the child mask comes from its creator.
+The candidate snapshots the caller mask within process eligibility, uses it for
+selection, and installs it before publication. It shares the affinity writer's
+reservation lock and releases it before selection/migration callbacks. Focused
+mask, locking, failure-exit and real C-call-site checks remain required. Preserve
+the frozen remaining-image source; do not seed changed code with old proofs.
+
+Condvar remains an independent one-CPU case. Its ordinary results, corrected
+provenance, interface and static envelope are accepted. N3 physical predecessor
+and final command data are bound without a source change; the final checker is
+ready. Root takes the fresh snapshot last, obtains the exact machine decision
+and executes. Do not delay the valid frozen record with optional refinements.
+Continue parser/affinity review alongside actual test feedback.
+
+Remaining-image request 9f04f3a3 and retained compiler artifacts are accepted;
+seeding and image make remain unperformed. Give that operation a separate exact
+release and genuine admission when selected. No unchanged compiler or parity
+replay is authorized merely by a ready proposal. Actual Rust-caller and final
+linked-consumer proof remain mandatory.
+
+Totals stay 24 native behaviors, 17 production Rust paths, 11 native paths and
+7/35 practical checks. No whole-milestone uplift this interval. Usage is 60%;
+host/scratch availability about 46.46/12.810 GiB. Preserve the 97% stop, original
+floors, one-heavy sequencing, all failures and scratch21 exclusions. The optional
+reserve question is pending without mutation authority. Next review: 10:25:31 UTC.
+
+## Previous priorities — review 65, 2026-10-19T09:25:00Z
+
+The failed build still holds the heavy slot through its stopped container and
+common/shared records. Client/owner/guard retirement is accepted. Eleven retained
+logs (22 FD rows) are verified, and the failure observer and summary passed.
+The metadata child first refused an inherited 2 GiB limit where exactly 1 GiB
+was required. Its failure is preserved; only metadata/export were corrected and
+completed. Actual readback review and the separate cleanup release are next.
+
+Prioritize that finite physical-release path, then N3's prepared two-CPU test.
+Use the exact approved argv and per-stage resource fields directly through the
+existing executor; avoid transcribing flags, phase order or common default
+limits. This is a small execution-data correction, not another framework or
+another broad review. Reuse the successful observer/summary and all unchanged
+source decisions. No effects occur before the genuine current release.
+
+The remaining-image request 9f04f3a3 passed the real owner validator; retained
+compiler artifacts and their symbol matrix are independently accepted for reuse.
+Fresh work/evidence roots are empty. The bounded seed and remaining-image packet
+is frozen; no seeding, compiler replay or image make has run. Preserve the failed
+tree in place and bind future effects to the accepted source/profile and fresh
+physical predecessor. Keep the failure-only authority distinct from image PASS.
+
+Condvar's corrected provenance and all three ordinary stage/fixture/parent
+results are accepted. Its native wrapper has conditional source/profile approval;
+genuine predecessor, any remaining interface result, fresh snapshot and exact
+execution release stay late. N3's actual consumers and non-temporal runtime
+freeze are accepted. Continue useful ordinary preparation alongside recovery.
+
+There were no new native behaviors or check closures in this interval. Totals
+remain 24/17/11 and 7/35 practical checks; all 14 whole milestones remain open.
+Host/scratch availability is about 46.45/12.811 GiB; included usage is 59%.
+Keep the 97% stop, unchanged floors, one-heavy controls, all failures and scratch21
+exclusions. The optional filesystem-reserve question remains pending with no
+mutation authority. Next full review: 09:55:00 UTC.
+
+## Previous priorities — review 64, 2026-10-19T08:53:31Z
 
 The four-callback operation at 19adeb42 failed a producer assertion before
 image compilation. Eight compiler steps passed, including both full Rust crates

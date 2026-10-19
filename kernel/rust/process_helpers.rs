@@ -7126,11 +7126,13 @@ pub unsafe extern "C" fn process_clone_thread_base_state_body_result(
 
     let dst = thread.cast::<u8>();
     let src = origin.cast::<u8>();
-    copy_nonoverlapping(
-        src.add(cpu_set_offset as usize),
-        dst.add(cpu_set_offset as usize),
+    if cpu_set_size != 0 && crate::sched_helpers::sched_clone_affinity_inherit_result(
+        dst.add(cpu_set_offset as usize) as usize,
+        src.add(cpu_set_offset as usize) as usize,
         cpu_set_size as usize,
-    );
+    ) < 0 {
+        return -EINVAL;
+    }
     *dst.add(in_kernel_offset as usize).cast::<CInt>() =
         *src.add(in_kernel_offset as usize).cast::<CInt>();
     0

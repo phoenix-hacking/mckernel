@@ -1286,6 +1286,72 @@ unsafe fn sched_affinity_select_thread(
     Ok(thread)
 }
 
+// Serialize supported thread-clone snapshots with selected affinity writers.
+// The reservation provider takes this lock itself, so the caller must release
+// it before obtain_clone_cpuid or sched_request_migrate is invoked.
+unsafe fn sched_affinity_lock() -> CULong {
+    unsafe {
+        process_spin_lock_bridge_c(core::ptr::addr_of_mut!(runq_reservation_lock) as CULong)
+    }
+}
+
+unsafe fn sched_affinity_unlock(irqstate: CULong) {
+    unsafe {
+        process_spin_unlock_bridge_c(
+            core::ptr::addr_of_mut!(runq_reservation_lock) as CULong,
+            irqstate,
+        );
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sched_clone_affinity_snapshot_result(
+    thread_mask: usize,
+    process_mask: usize,
+    snapshot: usize,
+    bytes: SizeT,
+    nr_cpus: CInt,
+) -> CInt {
+    if thread_mask == 0 || process_mask == 0 || snapshot == 0 || bytes == 0
+        || bytes % core::mem::size_of::<CULong>() != 0
+        || nr_cpus <= 0 || (nr_cpus as usize) > bytes.saturating_mul(8)
+    {
+        return -EINVAL;
+    }
+    // All inputs are live syscall-owned native cpu_set_t objects; snapshot is
+    // disjoint stack storage. Process eligibility is stable for this syscall.
+    let irqstate = unsafe { sched_affinity_lock() };
+    unsafe { sched_cpuset_zero(snapshot, bytes) };
+    let mut nonempty = false;
+    for cpu in 0..nr_cpus {
+        if unsafe { sched_cpuset_is_set(thread_mask, bytes, cpu) }
+            && unsafe { sched_cpuset_is_set(process_mask, bytes, cpu) }
+        {
+            unsafe { sched_cpuset_set(snapshot, bytes, cpu) };
+            nonempty = true;
+        }
+    }
+    unsafe { sched_affinity_unlock(irqstate) };
+    if nonempty { 0 } else { -EINVAL }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sched_clone_affinity_inherit_result(
+    child_mask: usize,
+    snapshot: usize,
+    bytes: SizeT,
+) -> CInt {
+    if child_mask == 0 || snapshot == 0 || bytes == 0 {
+        return -EINVAL;
+    }
+    // Destination is private. Source may be the live creator mask in the
+    // initial clone initializer, so serialize every copy with affinity writers.
+    let irqstate = unsafe { sched_affinity_lock() };
+    unsafe { sched_cpuset_copy(child_mask, snapshot, bytes) };
+    unsafe { sched_affinity_unlock(irqstate) };
+    0
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn sched_setaffinity_body_result(
     tid: CInt,
@@ -1374,11 +1440,14 @@ pub unsafe extern "C" fn sched_setaffinity_body_result(
     }
 
     let thread_cpu_set_addr = thread.wrapping_add(offsets.thread_cpu_set_offset);
+    let irqstate = unsafe { sched_affinity_lock() };
     unsafe {
         sched_cpuset_copy(thread_cpu_set_addr, cpu_set_addr, cpuset_size);
     }
     let cpu_id = unsafe { sched_thread_cpu_id(thread, offsets) };
-    if !unsafe { sched_cpuset_is_set(thread_cpu_set_addr, cpuset_size, cpu_id) } {
+    let needs_migrate = !unsafe { sched_cpuset_is_set(thread_cpu_set_addr, cpuset_size, cpu_id) };
+    unsafe { sched_affinity_unlock(irqstate) };
+    if needs_migrate {
         unsafe {
             migrate(cpu_id, thread);
         }
