@@ -1,0 +1,420 @@
+{
+  "status": "PASS_ACTUAL_PROCESS_IDENTITY_CALLER_DEBUG",
+  "results": [
+    {
+      "status": "PASS",
+      "case": "S-to-R",
+      "old_caller": true,
+      "expected_refusal": "process identity changed",
+      "error": "RuntimeError('process identity changed')",
+      "real_child_PID": 1298338,
+      "actual_before_tuple": [
+        17096384,
+        4194304,
+        "S"
+      ],
+      "actual_after_tuple": [
+        17096384,
+        4194304,
+        "R"
+      ],
+      "events": {
+        "actual_before_event": [
+          17096384,
+          4194304,
+          "S"
+        ],
+        "actual_after_event": [
+          17096384,
+          4194304,
+          "R"
+        ]
+      },
+      "identity_stat_input": "real kernel child stat",
+      "production_caller": "process_census",
+      "proc_reader_or_stability_helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "case": "S-to-R",
+      "old_caller": false,
+      "expected_refusal": null,
+      "error": null,
+      "real_child_PID": 1298338,
+      "actual_before_tuple": [
+        17096384,
+        4194304,
+        "S"
+      ],
+      "actual_after_tuple": [
+        17096384,
+        4194304,
+        "R"
+      ],
+      "events": {
+        "actual_before_event": [
+          17096384,
+          4194304,
+          "S"
+        ],
+        "actual_after_event": [
+          17096384,
+          4194304,
+          "R"
+        ]
+      },
+      "identity_stat_input": "real kernel child stat",
+      "production_caller": "process_census",
+      "proc_reader_or_stability_helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "case": "R-to-S",
+      "old_caller": false,
+      "expected_refusal": null,
+      "error": null,
+      "real_child_PID": 1298338,
+      "actual_before_tuple": [
+        17096384,
+        4194304,
+        "R"
+      ],
+      "actual_after_tuple": [
+        17096384,
+        4194304,
+        "S"
+      ],
+      "events": {
+        "actual_before_event": [
+          17096384,
+          4194304,
+          "R"
+        ],
+        "actual_after_event": [
+          17096384,
+          4194304,
+          "S"
+        ]
+      },
+      "identity_stat_input": "real kernel child stat",
+      "production_caller": "process_census",
+      "proc_reader_or_stability_helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "case": "changed-start",
+      "old_caller": false,
+      "expected_refusal": "PID/start identity changed",
+      "error": "RuntimeError(\"process PID/start identity changed pid=1298338 before=(17096384, 4194304, 'S') after=(17096385, 4194304, 'R')\")",
+      "real_child_PID": 1298338,
+      "actual_before_tuple": [
+        17096384,
+        4194304,
+        "S"
+      ],
+      "actual_after_tuple": [
+        17096384,
+        4194304,
+        "R"
+      ],
+      "events": {
+        "actual_before_event": [
+          17096384,
+          4194304,
+          "S"
+        ],
+        "actual_after_event": [
+          17096384,
+          4194304,
+          "R"
+        ]
+      },
+      "identity_stat_input": "synthetic counterexample",
+      "production_caller": "process_census",
+      "proc_reader_or_stability_helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "case": "changed-PID-header",
+      "old_caller": false,
+      "expected_refusal": "PID/header mismatch",
+      "error": "RuntimeError('pid=1298338 proc stat PID/header mismatch')",
+      "real_child_PID": 1298338,
+      "actual_before_tuple": [
+        17096384,
+        4194304,
+        "S"
+      ],
+      "actual_after_tuple": [
+        17096384,
+        4194304,
+        "R"
+      ],
+      "events": {
+        "actual_before_event": [
+          17096384,
+          4194304,
+          "S"
+        ],
+        "actual_after_event": [
+          17096384,
+          4194304,
+          "R"
+        ]
+      },
+      "identity_stat_input": "synthetic counterexample",
+      "production_caller": "process_census",
+      "proc_reader_or_stability_helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "case": "kernel-classification",
+      "old_caller": false,
+      "expected_refusal": "kernel classification changed",
+      "error": "RuntimeError(\"process kernel classification changed pid=1298338 before=(17096384, 4194304, 'S') after=(17096384, 6291456, 'R')\")",
+      "real_child_PID": 1298338,
+      "actual_before_tuple": [
+        17096384,
+        4194304,
+        "S"
+      ],
+      "actual_after_tuple": [
+        17096384,
+        4194304,
+        "R"
+      ],
+      "events": {
+        "actual_before_event": [
+          17096384,
+          4194304,
+          "S"
+        ],
+        "actual_after_event": [
+          17096384,
+          4194304,
+          "R"
+        ]
+      },
+      "identity_stat_input": "synthetic counterexample",
+      "production_caller": "process_census",
+      "proc_reader_or_stability_helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "case": "nonclassification-flags",
+      "old_caller": false,
+      "expected_refusal": "flags changed",
+      "error": "RuntimeError(\"process flags changed pid=1298338 before=(17096384, 4194304, 'S') after=(17096384, 4194368, 'R')\")",
+      "real_child_PID": 1298338,
+      "actual_before_tuple": [
+        17096384,
+        4194304,
+        "S"
+      ],
+      "actual_after_tuple": [
+        17096384,
+        4194304,
+        "R"
+      ],
+      "events": {
+        "actual_before_event": [
+          17096384,
+          4194304,
+          "S"
+        ],
+        "actual_after_event": [
+          17096384,
+          4194304,
+          "R"
+        ]
+      },
+      "identity_stat_input": "synthetic counterexample",
+      "production_caller": "process_census",
+      "proc_reader_or_stability_helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "case": "non-RS-state",
+      "old_caller": false,
+      "expected_refusal": "scan/skip state changed",
+      "error": "RuntimeError(\"process scan/skip state changed pid=1298338 before=(17096384, 4194304, 'S') after=(17096384, 4194304, 'T')\")",
+      "real_child_PID": 1298338,
+      "actual_before_tuple": [
+        17096384,
+        4194304,
+        "S"
+      ],
+      "actual_after_tuple": [
+        17096384,
+        4194304,
+        "R"
+      ],
+      "events": {
+        "actual_before_event": [
+          17096384,
+          4194304,
+          "S"
+        ],
+        "actual_after_event": [
+          17096384,
+          4194304,
+          "R"
+        ]
+      },
+      "identity_stat_input": "synthetic counterexample",
+      "production_caller": "process_census",
+      "proc_reader_or_stability_helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "case": "task-set-race",
+      "old_caller": false,
+      "expected_refusal": "task set raced",
+      "error": "RuntimeError('task set raced')",
+      "real_child_PID": 1298338,
+      "actual_before_tuple": [
+        17096384,
+        4194304,
+        "S"
+      ],
+      "actual_after_tuple": [
+        17096384,
+        4194304,
+        "R"
+      ],
+      "events": {
+        "actual_before_event": [
+          17096384,
+          4194304,
+          "S"
+        ],
+        "actual_after_event": [
+          17096384,
+          4194304,
+          "R"
+        ]
+      },
+      "identity_stat_input": "real kernel child stat",
+      "production_caller": "process_census",
+      "proc_reader_or_stability_helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "case": "namespace-race",
+      "old_caller": false,
+      "expected_refusal": "namespace/mountinfo/start raced",
+      "error": "RuntimeError('task namespace/mountinfo/start raced pid=1298338 process_start=17096384 tid=1298338 before_ns=SYNTHETIC_CANONICAL_NO_ALIAS_AUTHORITY after_ns=CHANGED_CANONICAL_NO_ALIAS_AUTHORITY before_mountsha=c3ba05ea14e3b3a4b14486eeb2f719a975bf1e846ac20e0a190cdefb62dae275 after_mountsha=c3ba05ea14e3b3a4b14486eeb2f719a975bf1e846ac20e0a190cdefb62dae275')",
+      "real_child_PID": 1298338,
+      "actual_before_tuple": [
+        17096384,
+        4194304,
+        "S"
+      ],
+      "actual_after_tuple": [
+        17096384,
+        4194304,
+        "R"
+      ],
+      "events": {
+        "actual_before_event": [
+          17096384,
+          4194304,
+          "S"
+        ],
+        "actual_after_event": [
+          17096384,
+          4194304,
+          "R"
+        ]
+      },
+      "identity_stat_input": "real kernel child stat",
+      "production_caller": "process_census",
+      "proc_reader_or_stability_helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "case": "mountinfo-race",
+      "old_caller": false,
+      "expected_refusal": "namespace/mountinfo/start raced",
+      "error": "RuntimeError('task namespace/mountinfo/start raced pid=1298338 process_start=17096384 tid=1298338 before_ns=SYNTHETIC_CANONICAL_NO_ALIAS_AUTHORITY after_ns=SYNTHETIC_CANONICAL_NO_ALIAS_AUTHORITY before_mountsha=c3ba05ea14e3b3a4b14486eeb2f719a975bf1e846ac20e0a190cdefb62dae275 after_mountsha=cd3d165a5a1ef1cf09ef37d25241ff52a0130b35d1fa6fc8c2e2e3b8cb542745')",
+      "real_child_PID": 1298338,
+      "actual_before_tuple": [
+        17096384,
+        4194304,
+        "S"
+      ],
+      "actual_after_tuple": [
+        17096384,
+        4194304,
+        "R"
+      ],
+      "events": {
+        "actual_before_event": [
+          17096384,
+          4194304,
+          "S"
+        ],
+        "actual_after_event": [
+          17096384,
+          4194304,
+          "R"
+        ]
+      },
+      "identity_stat_input": "real kernel child stat",
+      "production_caller": "process_census",
+      "proc_reader_or_stability_helper_mocks": false
+    },
+    {
+      "status": "PASS",
+      "case": "terminal-transition",
+      "old_caller": false,
+      "expected_refusal": "terminal classification changed",
+      "error": "RuntimeError(\"process terminal classification changed pid=1298338 before=(17096384, 4194304, 'S') after=(17096384, 4228100, 'Z')\")",
+      "real_child_PID": 1298338,
+      "actual_before_tuple": [
+        17096384,
+        4194304,
+        "S"
+      ],
+      "actual_after_tuple": [
+        17096384,
+        4228100,
+        "Z"
+      ],
+      "events": {
+        "actual_before_event": [
+          17096384,
+          4194304,
+          "S"
+        ],
+        "actual_after_event": [
+          17096384,
+          4228100,
+          "Z"
+        ]
+      },
+      "identity_stat_input": "real kernel child stat",
+      "production_caller": "process_census",
+      "proc_reader_or_stability_helper_mocks": false
+    }
+  ],
+  "source_sha256": "b8f5d3e5b91663336b9880a8e57710ae543372211f400aaddbcf96e68d19980a",
+  "old_source_sha256": "f25cceeb171aa6af35154ace4f9488b42a9012b7ae0b11a18a32f4d231e56e33",
+  "mount_functions_unchanged": [
+    "decode_mount",
+    "parse_mounts",
+    "canonical_path",
+    "mount_require",
+    "authenticated_mount_view",
+    "task_view"
+  ],
+  "interpreter": "/usr/bin/python3",
+  "version": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+  "actual_historical_failure_field_known": false,
+  "limit": "Genuine owned-child R/S and zombie transitions observed. Changedstart/PIDheader/kernel/otherflag negatives use explicit synthetic stat counterexamples, not forced OS PIDreuse or kthread conversion.",
+  "root_observer_replayed": false,
+  "new_host_census": false,
+  "unchanged_mount_suites_replayed": false,
+  "owned_child_joined": true,
+  "owned_child_returncode": -15
+}

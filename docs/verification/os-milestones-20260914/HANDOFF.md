@@ -1,5 +1,47 @@
 # Compact dispatcher handoff
 
+## Current — three real Rust source ports committed (2026-10-19 01:29 UTC)
+
+Functional OS/apps plus Rust/reviewed-assembly migration ACTIVE. Actual source
+checkpoint85468476a035f0528c1943e43ba041e4643be333 pushed/fetched32 exact blobs:
+three normal teardown helpers now select Rust through their real consumers.
+C changes are guards/declarations only; C fallback bodies and unrelated current
+lifecycle WIP remain unchanged. Consolidated independent0034 PASS.15 required
+changed-consumer stages across16 joined attempts:14 positive exits, one expected
+missing-prototype negative, one preserved fixture-separator compile failure.
+No semantic parity replay. Full GCC14 TU/layout/current native+legacy crate,
+production link/default-body and native teardown proof remain PENDING.
+
+| C entrypoint | Rust replacement/default consumer | Tested evidence | Retirement |
+|---|---|---|---|
+| __release_tid | same Rust export via existing release-TID destroy bridge | 56x3 prior parity; actual integrated C/Rust consumer and unique export | source integrated; production/native pending |
+| process_destroy_thread_time_account_bridge | same Rust export in unchanged destroy callback table | 32x2 prior parity; integrated actual Rust destroy consumer | source integrated; production/native pending |
+| process_destroy_thread_hash_detach_bridge | same Rust export in unchanged destroy callback table | 60 parity cases; integrated selected/fallback and unique link | source integrated; production/native pending |
+
+Fixed FP1e7 artifact, accepted counters24behaviors/13production/11native Rust
+paths/7complete28open checks and all14open milestones are unchanged by source
+checkpoint. IHK uses separate frozen os_runtime capsule, not these kernel files;
+no invented global HEAD equality gate. Exact IHK heavy decisiond3004b27 remains
+held for full14092861440B scratch requirement; current shortfall is about335MB.
+
+Cleanup mount fix6f4ac72f pushed/fetched13 exact blobs; all16 retained views and
+27 focused checks pass. Exact readonly observation4 nevertheless failed at
+full(starttime,flags,runstate) equality; historical PID/field is unknown. Its
+observer1296374/start17062298 and outer1296370 positively retired; group empty,
+mutex27:4 available, five readbacks/hash/FD joins pass. No files deleted. Local
+actual-caller debug now separates scheduling observations from genuine PID/
+lifecycle/kernel/task/namespace stability; no unchanged fifth run authorized.
+All four failures and original raw files remain. Root remains sole runtime/Git
+owner; CPU7 allocation is explicit. No floors/reserves/quota/exclusions waived.
+
+Next: finish local cleanup caller fix, one required independent privileged
+boundary decision, exact fetched changed source and genuine new release before
+observation/apply. Use released capacity for ready IHK-only build immediately.
+2022 implements existing production checker for integrated three-leaf batch
+privately; actual pinned compiler execution remains heavy-only. Preserve fixed
+FP candidate, scratch21/container/locks, all failed attempts and refused tasks.
+
+
 ## Current — exact alias correction approved; next finite observation (2026-10-19 01:12 UTC)
 
 Functional OS/apps plus Rust/reviewed-assembly migration ACTIVE. Metrics remain
