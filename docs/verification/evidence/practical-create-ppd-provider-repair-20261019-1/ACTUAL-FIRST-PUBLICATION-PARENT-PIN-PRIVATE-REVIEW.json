@@ -1,0 +1,187 @@
+{
+  "actual_commands": [
+    {
+      "command": {
+        "bytes": 616,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/check-1/compile.command.json",
+        "sha256": "6a933f9d584f98d7bd6c2fa258e11f4134f503c1c6d4d0051f81de8f71f453c1"
+      },
+      "elapsed_ns": 2268670438,
+      "pid": 1685432,
+      "role": "compile",
+      "status": {
+        "bytes": 908,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/check-1/compile.status.json",
+        "sha256": "f944bad341ed9521fec14cc0a7986c4c303ae06132f17a05e8bd00003b6287b8"
+      }
+    },
+    {
+      "command": {
+        "bytes": 232,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/check-1/affected-test.command.json",
+        "sha256": "a3e9de524419bc47cc66f7f12799d4029a27cc8ae4221ffb9da19b7d415be392"
+      },
+      "elapsed_ns": 16418472,
+      "pid": 1685460,
+      "role": "affected-test",
+      "status": {
+        "bytes": 490,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/check-1/affected-test.status.json",
+        "sha256": "e1805b12e591dc4d53bbd033bacb5e06a9bf3bf6c27e3a870e9fb39c89d9198b"
+      }
+    }
+  ],
+  "actual_fixture_inputs": {
+    "bytes": 2151,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/focused-fixture-inputs.json",
+    "sha256": "7f1a8bf1891643a9c838984648da8eae5a8fc0b4ed75e771204225b1c08ddaa1"
+  },
+  "actual_result": {
+    "bytes": 272,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/check-1/result.json",
+    "sha256": "1d3a8ea83a3ca1cbe7741231619464d5c8e62ea621894e2cfcf7d772888594e2"
+  },
+  "base_source_pins": {
+    "bytes": 2285,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/base-source-pins.json",
+    "sha256": "5ea3f6038fe453d4016cfd9e358ba44c440a23dcc539f4e60558aa121c793af7"
+  },
+  "closed_stream_FDs": {
+    "affected-test.stderr": {
+      "ctime_ns": 1792449737773395219,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48118817,
+      "mode": "0o600",
+      "mtime_ns": 1792449737773395219,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/check-1/affected-test.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    "affected-test.stdout": {
+      "ctime_ns": 1792449737781395495,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48118816,
+      "mode": "0o600",
+      "mtime_ns": 1792449737781395495,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/check-1/affected-test.stdout",
+      "sha256": "5979be0f975bad784eaac2ae55fc3f0a8046461db7e1e8866669ca9f79719b89",
+      "size": 234,
+      "uid": 1000
+    },
+    "compile.stderr": {
+      "ctime_ns": 1792449735505317207,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48118813,
+      "mode": "0o600",
+      "mtime_ns": 1792449735505317207,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/check-1/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    "compile.stdout": {
+      "ctime_ns": 1792449735505317207,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48118812,
+      "mode": "0o600",
+      "mtime_ns": 1792449735505317207,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/check-1/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    }
+  },
+  "conservative_retention": "Pinned new owners deliberately cannot currently consume terminal pin or remove child entry; this is recoverable retained storage/possible leak, not completed cleanup or liveness. Parent slot cannot be released by ordinary release_ready/close gate while actual reference remains.",
+  "decision": "PASS_PRIVATE_FIRST_PUBLICATION_PARENT_PIN_RETENTION_NO_PRODUCTION_APPLY_AUTHORITY",
+  "exact_allowed_private_source_bytes": [
+    {
+      "bytes": 94555,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/source/host-kernel/native-rust/smp_application.rs",
+      "sha256": "54264c23fcd5533e0fe1eea4638dd232626d673b53b2e84fda07766e9bcbd395"
+    },
+    {
+      "bytes": 21357,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/source/host-kernel/native-rust/smp_fork_ingress.rs",
+      "sha256": "3801c9fbd29a2e4020dfcf04291b2aeea82cb4a8d52bd2c5843fe43743bde951"
+    }
+  ],
+  "exact_applicability": {
+    "current_production_integration_authorized": false,
+    "current_shared_paths_to_replace": [],
+    "private_base": "fork-adoption-wip-20261017-1 exact six-source pins and two candidate files",
+    "prohibited": [
+      "No copying entire retained provider backend into current production",
+      "No overwriting unrelated WIP/frozen SDK inputs",
+      "No strong weak-prepare selection",
+      "No nonnull CREATE_PPD -95 removal",
+      "No new compute C"
+    ],
+    "root_actual_apply_check": "Root reports patch70dc fails current production smp_application context and current smp_fork_ingress.rs absent; accepted as exact integration restriction, reviewer did not run Git."
+  },
+  "implementation_author": "/root/clone_thread_affinity_rust_repair",
+  "implementation_ownership": false,
+  "native_or_production_acceptance": false,
+  "new_behavior_or_cutover_credit": 0,
+  "patch": {
+    "bytes": 6495,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/candidate-first-publication-parent-pin.patch",
+    "sha256": "70dc4e9350762c39b398cc133ed02620437a0e7365eb7022df04926050c4e23e"
+  },
+  "preserved_history": "Six original provider/consumer records and38/60/cacheACK/parent-slot failures retained. Initial private read-only absent helper-file lookup was only path discovery; no target commands or tests were replayed.",
+  "prior_ownership_decision": {
+    "bytes": 11414,
+    "path": "/home/holden/mckernel-work/host-preparation/provider-ownership-review-20261019-1/CREATE-PPD-POSITIVE-PROVIDER-OWNERSHIP-DECISION.json",
+    "sha256": "957f7a37f2fed4c0a4031fe8ace87a583fada5dfa53475eade73516f9f31789e"
+  },
+  "remaining_proof_and_implementation": [
+    "Existing finish_inner is unchanged: sealed-before-writer/drop-error parent lifetime gap remains outside this narrow first-publication target. Do not describe this as all sealed-lifetime repair.",
+    "No authentic postpositive revoke control request/response/IHK pending-owner claim/writer exists; original-first negative helper must not be widened.",
+    "No authenticated retained_parent terminal consumption or normal-handoff endpoint exists. Future endpoint must prove exact identity/phase/publication once and explicitly consume pin under slots without Drop-lock deadlock.",
+    "No full close_inner/parent-death execution, matching SDK/module build or native fork/alias revoke/finalACK proof.",
+    "Current -95/NULL/runtime holds remain HELD. Root must choose actual current-source Rust integration prerequisites separately."
+  ],
+  "reviewed_at": "2026-10-19T22:43:50.912127+00:00",
+  "reviewer": "/root/next_replace_tid_review",
+  "reviewer_target_test_compiler_root_guest_executions": 0,
+  "schema": "mckernel.independent-retained-fork-provider-parent-pin-review.v1",
+  "scope": "Functional OS/apps Rust memory ownership repair within exact retained private provider branch; no currentproduction whole-backend transplant.",
+  "status": "PASS_PRIVATE_RETAINED_PROVIDER_SOURCE_AND_FOCUSED_BODY_ONLY",
+  "test_counts": {
+    "compiler_commands": 1,
+    "new_actualbody_tests": 1,
+    "old_provider38_consumer60_replayed": false,
+    "old_tests_filtered_out": 50,
+    "total_executed_commands": 2
+  },
+  "verified_witnesses": [
+    {
+      "finding": "Actual existing constructor parent count remains retained. Same-slots first receipt attempt and exact parent/child/reservation ownership move into non-Copy ForkParentPin; lease disarms without decrement. Existing child/OS/Remote seals remain.",
+      "function": "PreparedForkLease::finish_with_payload"
+    },
+    {
+      "finding": "Actual call uses exact live lease identity/token; exact parentToken is looked up in existing retained slots under exclusion and countcorroborates existing constructor ownership. Duplicate/wrong identity cannot mint/decrement secondpin. Guard holds Arc<Remote> and no lock-taking Drop.",
+      "function": "retain_fork_parent_pin"
+    },
+    {
+      "finding": "Retained_parent owners return EBUSY before interpreting ACK flags. No new terminal authority or parent-pin decrement; original no-pin owner path unchanged.",
+      "function": "Remote::release_fork_ack"
+    },
+    {
+      "finding": "GuestDestroyed+retained_parent returns EBUSY before mutation; finisher mandatory ? prevents guest_destroyed/acknowledge/alternate slots.take. Generic and ACK removal paths both retain.",
+      "function": "fork_progress_in_slots -> finish_fork_progress_inner"
+    },
+    {
+      "finding": "One new test passes with actual extracted finish/helper/progress/ACK-refusal bodies and preserved Memory/provider/LINK adapters. It executes worker close and Entry::release_ready refusal, not full parent process close_inner or native finalACK.",
+      "function": "focused actual Memory/IHK/READY/positiveRET/failedLINK fixture"
+    }
+  ]
+}

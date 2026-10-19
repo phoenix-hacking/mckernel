@@ -1,0 +1,117 @@
+--- a/host-kernel/native-rust/smp_application.rs
++++ b/host-kernel/native-rust/smp_application.rs
+@@ -114,6 +114,16 @@
+     request: Request,
+ }
+ 
++// A constructor-owned parent Entry pin, not authority reconstructed from a count.
++// No Drop: release must be an explicit authenticated terminal operation under
++// the same slots exclusion; dropping a ChildFork must never reacquire slots.
++struct ForkParentPin {
++    parent: Token,
++    identity: ForkIdentity,
++    reservation: u64,
++    remote: Arc<Remote>,
++}
++
+ struct ChildFork {
+     owner: Arc<ForkChildOwner>,
+     reservation: ForkReservation,
+@@ -121,6 +131,7 @@
+     // Deliberate retention after any sealed outcome. Only an actual revoke,
+     // completed TLB barrier and final guest destruction ACK may break it.
+     retained_remote: Option<Arc<Remote>>,
++    retained_parent: Option<ForkParentPin>,
+     link: Option<fork_link::ForkLinkRecord>,
+     ack: Option<ForkAckRecord>,
+     // A failed UNSEALED payload rollback retains the actual typed lease and
+@@ -214,16 +225,14 @@
+             if result.is_err() { let _ = fork.reservation.state.quarantine(self.identity); }
+             fork.retained_remote = Some(remote.clone());
+         } else { result = Err(EIO); }
+-        if let Some(parent) = slots.iter_mut().flatten().find(|entry| entry.key().wire() == self.identity.parent) {
+-            if let Some(refs) = parent.fork_prepared_parent_refs.checked_sub(1) { parent.fork_prepared_parent_refs = refs; }
+-            else {
+-                parent.quarantined = true;
+-                result = Err(EIO);
+-                if let Ok(fork) = child_fork_in_slots(&mut slots, self.child, self.token) {
+-                    let _ = fork.reservation.state.quarantine(self.identity);
+-                }
+-            }
+-        } else { result = Err(EIO); }
++        // The first return does not end parent-dependent LINK/ACK discovery.
++        // Move this existing constructor pin; never decrement it at publication.
++        if retain_fork_parent_pin(&remote, &mut slots, self.child, self.token, self.identity).is_err() {
++            result = Err(EIO);
++            if let Ok(fork) = child_fork_in_slots(&mut slots, self.child, self.token) {
++                let _ = fork.reservation.state.quarantine(self.identity);
++            }
++        }
+         self.remote = None;
+         drop(slots);
+         result
+@@ -266,6 +275,18 @@
+     fn drop(&mut self) { self.finish_inner(false); }
+ }
+ // END PREPARED FORK LEASE
++
++// Transfer only the exact prepared lease's existing parent-slot reference.
++// Caller holds remote.slots, and retains all MM/IHK owner borrows outside it.
++fn retain_fork_parent_pin(remote: &Arc<Remote>, slots: &mut [Option<Entry>],
++    child: Token, token: u64, identity: ForkIdentity) -> Result {
++    let parent = slots.iter().flatten().find(|entry| entry.key().wire() == identity.parent)
++        .filter(|entry| entry.fork_prepared_parent_refs != 0).ok_or(EIO)?.key();
++    let fork = child_fork_in_slots(slots, child, token)?;
++    if fork.reservation.identity != identity || fork.retained_parent.is_some() { return Err(EACCES); }
++    fork.retained_parent = Some(ForkParentPin { parent, identity, reservation: token, remote: remote.clone() });
++    Ok(())
++}
+ 
+ // Caller holds this Remote's slots lock for discovery through publication.
+ // All child-owner allocation precedes this function; no guest/root is accessed.
+@@ -315,7 +336,7 @@
+     let result = token.wire();
+     slots[parent_index].as_mut().unwrap().fork_prepared_parent_refs = parent_refs;
+     slots[child_index].as_mut().unwrap().fork = Some(ChildFork {
+-        owner: child_owner, seal, retained_remote: None, link: None, ack: None, held_lease: None,
++        owner: child_owner, seal, retained_remote: None, retained_parent: None, link: None, ack: None, held_lease: None,
+         reservation: ForkReservation { token, identity, cpu: request.cpu(), first: request,
+             state, return_value: None, return_published: false },
+     });
+@@ -1856,6 +1877,14 @@
+             let mut slots = self.slots.lock();
+             let index = slots.iter().position(|slot| slot.as_ref().is_some_and(|entry| entry.key() == child)).ok_or(ENOENT)?;
+             let fork = slots[index].as_ref().unwrap().fork.as_ref().ok_or(ENOENT)?;
++            if let Some(pin) = &fork.retained_parent {
++                if pin.parent.wire() != key.parent || pin.identity != key
++                    || pin.reservation != fork.reservation.token.wire()
++                    || !core::ptr::eq(&*pin.remote, self) { return Err(EACCES); }
++                // No reviewed normal-handoff or terminal pin-consumption
++                // endpoint exists yet. Keep this exact parent Entry alive.
++                return Err(EBUSY);
++            }
+             let ack = fork.ack.as_ref().ok_or(EIO)?;
+             if fork.reservation.identity != key || ack.epoch != epoch || !ack.verified
+                 || !ack.accepted || !ack.published || !ack.publication_busy || ack.busy
+@@ -1978,6 +2007,10 @@
+         || fork.owner.mm.as_ptr() as usize != identity.child_mm
+         || !fork.seal.sealed.load(Ordering::Acquire)
+     { return Err(EACCES); }
++    // Positive first-publication pins have no reviewed terminal consumer yet.
++    // Enforce retention at this generic destruction API as well as ACK release,
++    // before changing a phase or permitting any child-slot removal.
++    if stage == FORK_GUEST_DESTROYED_V1 && fork.retained_parent.is_some() { return Err(EBUSY); }
+     if stage == FORK_HOST_REVOKED_V1 {
+         // A sealed LINK grants irreversible same-kind2 handoff permission.
+         // Host abort cannot alter that phase or close admissions afterwards.
+--- a/host-kernel/native-rust/smp_fork_ingress.rs
++++ b/host-kernel/native-rust/smp_fork_ingress.rs
+@@ -338,7 +338,7 @@
+             let marker = slots[ci].as_mut().unwrap().fork_ingress.take().expect("validated ingress marker disappeared");
+             let seal = marker.seal.clone();
+             slots[ci].as_mut().unwrap().fork = Some(ChildFork {
+-                owner: marker.child_owner.clone(), seal: seal.clone(), retained_remote: None,
++                owner: marker.child_owner.clone(), seal: seal.clone(), retained_remote: None, retained_parent: None,
+                 held_lease: None, link: None,
+                 ack: Some(ForkAckRecord::new(scope.epoch)),
+                 reservation: ForkReservation { token, identity, cpu: request.cpu(), first: request.clone(),

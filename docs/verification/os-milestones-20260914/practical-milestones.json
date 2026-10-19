@@ -1113,9 +1113,24 @@
               "path": "docs/verification/evidence/native-resource-reboot-cycle-result-review-20261017-2.json",
               "sha256": "9c3847933f8cc9e3d175363338e87ff229ef7fcd1912d146219e7c990224efea",
               "size": 5172
+            },
+            {
+              "path": "docs/verification/evidence/current-host-rust-pair-native-20261019-1/ACTUAL-MATCHED-THREE-MODULE-TYPED-AVX-AND-RING-TRANSPORT-REVIEW.json",
+              "sha256": "88121b1525ab00f09ae63172544fe78d22369fa41e05b9e81ce4ef0fa8717e61",
+              "size": 12725
+            },
+            {
+              "path": "docs/verification/evidence/current-host-rust-pair-native-20261019-1/CURRENT-HOST-PAIR-ACTUAL-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+              "sha256": "a03e987a278d06246f33be78672281d3599e7b5e262ef82a7a391df75d575f60",
+              "size": 6606
+            },
+            {
+              "path": "docs/verification/evidence/current-host-rust-pair-native-20261019-1/MATCHED-MODULE-MANIFEST.json",
+              "sha256": "e3d8c75acf0e691386415590a6982868bc868b898ae6f1a781e3d1f6081b0e56",
+              "size": 5461
             }
           ],
-          "assessment_note": "Matched source3f7b265b IHK/SMP/mcctrl modules compiled with make0/driver0 in18.664067s and loaded together in the strict native shutdown guest. Exact payload, Running5 and shutdown0 observed. IHK/mcctrl are honestly byte-identical to prior artifacts; SMP changed. Future source integration retains its own build/load obligation. Currentd99 matchedmodule build andload now independently accepted; CPUreacquisition/fullpubliccycle1 works. Fork/carrier andremainingunsafe/ABI obligations remain open."
+          "assessment_note": "Matched source3f7b265b IHK/SMP/mcctrl modules compiled with make0/driver0 in18.664067s and loaded together in the strict native shutdown guest. Exact payload, Running5 and shutdown0 observed. IHK/mcctrl are honestly byte-identical to prior artifacts; SMP changed. Future source integration retains its own build/load obligation. Currentd99 matchedmodule build andload now independently accepted; CPUreacquisition/fullpubliccycle1 works. Fork/carrier andremainingunsafe/ABI obligations remain open. Current joint Rust-fix SDK b9ea18d0/5d31c1f0 now has matching three-module load proof88121b15 and physicala03e987a on fixed FP1e7; no changed-MM-error/fork/full-history/non-null-FP proof follows."
         },
         {
           "id": "P-M08-02",
@@ -1181,7 +1196,7 @@
           "assessment_note": "Current3f7b matched binaries now validate used strict boot/Running/publication/shutdown paths. Resource destroy/release/reboot, dormant fork integration and remaining changed unsafe/ABI boundaries are still open. Currentd99 matchedmodule build andload now independently accepted; CPUreacquisition/fullpubliccycle1 works. Fork/carrier andremainingunsafe/ABI obligations remain open."
         }
       ],
-      "current_evidence_summary": "Currentd99 matched three-module build accepted18.148s; newSMP82c9021f loaded, onepublicnativecycle andsecondbootRunning5 passed. IHK/mcctrl bytes unchanged. Fork/currentchangedunsafe andcomplete lifetime obligations still open."
+      "current_evidence_summary": "Current matched SDK b9ea18d0/ABI5d31c1f0 builds all three modules from the joint kmsg6b736/mailbox33e7 source closure. Actual matching FP1e7 diagnostic88121b15 verifies all three loads, strict AVX output and bounded ring transport; physicala03e987a accepts retirement. Native failed-MM-error ownership and changed fork/provider/complete lifetime boundaries remain open. Separate205 compatibility preparation is not runtime acceptance."
     },
     {
       "id": "M09",

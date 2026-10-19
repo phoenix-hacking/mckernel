@@ -1,3 +1,41 @@
+## Current source — durable parent-slot retention integrated, not activated
+
+Exact one-file Rust patchaac4a248 is applied to current production
+host-kernel/native-rust/smp_application.rs (127829f3→fd375f11). Independent
+83134e83 accepts the current-source boundary: exact OS slot/generation, token,
+Remote identity, checked pin count, and every current slot-removal path. Compile
+and three focused actual-current body checks passed (.265s/.002s), with explicit
+service/std-allocation adapters; full pinned crate/SDK/native proof is pending.
+There are no new callers. Weak prepareNULL/nonnull CREATE_PPD-95 and runtime
+holds remain. This is storage lifetime only, not task/MM/response authority;
+unauthenticated discard deliberately retains the slot/Remote.
+
+Evidence: ../evidence/practical-create-ppd-current-parent-pin-20261019-1/HANDOFF.json.
+Prior held-provider70dc/08f5 source repair and failed production apply are
+preserved separately. Author now works privately on the actual missing
+post-positive control/revoke producer; terminal ACK is not inferred. Matching
+already-tested SDK artifacts retain their original immutable source authority.
+No practical, logical-case or Rust-retirement count changes follow this source
+integration. Lifecycle collector8156 compiled and passed typed-parser plus
+supervised-sequence checks; affected staging/review continues before any guest.
+
+## Current implementation — parent-slot ownership repair
+
+Private retained-provider patch70dc4e93 passed real-source compile and one new
+focused body test (2.269s/.016s); independent08f5c012 accepts first-publication
+parent-pin retention and refusal of unauthenticated removal. Evidence/source
+copies: ../evidence/practical-create-ppd-provider-repair-20261019-1/HANDOFF.json.
+Root read-only apply check failed: current smp_application has no ChildFork and
+smp_fork_ingress is absent. No production overlay or native activation occurred.
+
+The explicit22:44 user steer is now active: author implements a minimal pin and
+cleanup-retention boundary against exact current Entry/Remote and both actual
+slot-removal paths, using supplied four-file current-source pins. Keep current
+nonnull CREATE_PPD usercopy→-95 and weak prepareNULL unchanged. Separate genuine
+post-positive revoke/terminal ACK producer work remains; no fabricated authority.
+Current typed AVX collector→same-guest strict stop/release/reboot composition is
+being implemented privately after offline2positive/4refusal checks passed.
+
 ## Current — matched SDK native accepted; provider repair and repeatability next
 
 Matched native whole chain passed: owner38.37s, three readers and decoder0;

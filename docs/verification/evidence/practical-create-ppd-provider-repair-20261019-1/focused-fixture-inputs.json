@@ -1,0 +1,46 @@
+{
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/actual.rs",
+      "sha256": "1f22be70252187e9ea2fd997b8672a45026032159b420f7a73675060d39f5262",
+      "bytes": 296195
+    },
+    {
+      "path": "/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/smp_fork_ingress.rs",
+      "sha256": "c63a6aa3a898de233f96a7e0d86231a2a4b73538c8b8ebab2d95a975a99b0db1",
+      "bytes": 21252
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/source/host-kernel/native-rust/smp_application.rs",
+      "sha256": "54264c23fcd5533e0fe1eea4638dd232626d673b53b2e84fda07766e9bcbd395",
+      "bytes": 94555
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/source/host-kernel/native-rust/smp_fork_ingress.rs",
+      "sha256": "3801c9fbd29a2e4020dfcf04291b2aeea82cb4a8d52bd2c5843fe43743bde951",
+      "bytes": 21357
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/actual-parent-pin.rs",
+      "sha256": "fce7e43821c5a82ff42bf7939e7fa7798ab8ac54c9c2993441b6638c075d086e",
+      "bytes": 301175
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/fixture-ingress.rs",
+      "sha256": "f7be7c27ebfc142598b1e4c44f51c29de433ff3a8d7784cedccc42333305bb48",
+      "bytes": 21286
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/prepare_focused_fixture.py",
+      "sha256": "89c2bc9f4cf918eb16ca254b0fbcb75acd4e5f76e729f67f28c311c6b12aa0cd",
+      "bytes": 6124
+    }
+  ],
+  "exact_production_methods": [
+    "PreparedForkLease::finish_with_payload",
+    "retain_fork_parent_pin"
+  ],
+  "old_adapter_shape": "Retained actual LINK fixture predates ForkAckRecord; only parent-pin field/init are added to it. No final ACK endpoint is executed.",
+  "full_close_execution": false,
+  "native_authority": false
+}

@@ -38,6 +38,7 @@ struct Entry {
     needs_cleanup: bool,
     closed: bool,
     quarantined: bool,
+    parent_slot_pins: usize,
 }
 
 impl Entry {
@@ -64,6 +65,7 @@ impl Entry {
     }
     fn release_ready(&self) -> bool {
         !self.quarantined
+            && self.parent_slot_pins == 0
             && self.cleanup.release_ready()
             && self.syscalls.drained()
             && self.procfs.as_ref().is_none_or(|procfs| procfs.drained())
@@ -139,6 +141,25 @@ impl Entry {
     }
 }
 
+/// Storage-lifetime pin only: this does not retain a task/MM, an outstanding
+/// response, service admission or fork phase authority. No unauthenticated
+/// release endpoint exists. Discard deliberately retains the counted slot and
+/// Remote allocation; ManuallyDrop neither takes slots nor runs foreign Drop.
+#[allow(dead_code)]
+pub(crate) struct ParentSlotPin {
+    remote: core::mem::ManuallyDrop<Arc<Remote>>,
+    owner: OsToken,
+    parent: Token,
+}
+
+#[allow(dead_code)]
+impl ParentSlotPin {
+    pub(crate) fn matches(&self, remote: &Arc<Remote>, owner: OsToken, parent: Token) -> bool {
+        Arc::ptr_eq(&self.remote, remote) && self.owner.slot() == owner.slot()
+            && self.owner.generation() == owner.generation() && self.parent == parent
+    }
+}
+
 #[pin_data]
 pub(crate) struct Remote {
     owner: OsToken,
@@ -173,6 +194,28 @@ impl Remote {
         )
     }
 
+    /// Acquire only from the exact live connection/OS owner, under the same
+    /// exclusion as reserve, shutdown admission and every slot-removal gate.
+    /// This is internal future-provider storage plumbing, not fork activation.
+    #[allow(dead_code)]
+    pub(crate) fn pin_parent_slot(self: &Arc<Self>, expected_owner: OsToken,
+        parent: Token) -> Result<ParentSlotPin>
+    {
+        let mut slots = self.slots.lock();
+        self.transport_health()?;
+        if self.shutdown_closed.load(Ordering::Acquire) { return Err(ENODEV); }
+        if expected_owner.slot() != self.owner.slot()
+            || expected_owner.generation() != self.owner.generation() { return Err(EACCES); }
+        let entry = slots.iter_mut().flatten().find(|entry| entry.key() == parent).ok_or(ENOENT)?;
+        if entry.owner_slot != self.owner.slot() as i32 { return Err(EACCES); }
+        if entry.closed || entry.needs_cleanup || entry.quarantined { return Err(EBUSY); }
+        let pins = entry.parent_slot_pins.checked_add(1).ok_or_else(|| errno(-75))?;
+        let pin = ParentSlotPin { remote: core::mem::ManuallyDrop::new(self.clone()),
+            owner: self.owner, parent };
+        entry.parent_slot_pins = pins;
+        Ok(pin)
+    }
+
     pub(crate) fn reserve(&self, pid: i32) -> Result<Token> {
         let syscalls = Mailbox::new().map_err(errno)?;
         let mut slots = self.slots.lock();
@@ -202,6 +245,7 @@ impl Remote {
             needs_cleanup: false,
             closed: false,
             quarantined: false,
+            parent_slot_pins: 0,
         });
         Ok(token)
     }
@@ -436,7 +480,8 @@ impl Remote {
                 // Retain its bounded slot until actual OS shutdown is implemented.
                 return;
             }
-            if entry.syscalls.drained()
+            if entry.parent_slot_pins == 0
+                && entry.syscalls.drained()
                 && entry.procfs.as_ref().is_none_or(|procfs| procfs.drained())
                 && (entry.prepare.is_none() && entry.cleanup.reserved() || entry.release_ready())
             {

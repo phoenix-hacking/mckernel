@@ -1,0 +1,102 @@
+{
+  "schema": "mckernel.practical-create-ppd-parent-pin-repair-handoff.v1",
+  "status": "PASS_FOCUSED_ACTUAL_RUST_BODY_PENDING_INDEPENDENT_SOURCE_RESULT_REVIEW",
+  "functional_scope": "Functional OS/apps plus Rust/reviewed assembly. First real positive provider ownership repair; no new compute C.",
+  "source_basis": "Exact retained held candidate /home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1, privately copied; not a whole-file overlay onto current production.",
+  "base_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/base-source-pins.json",
+    "sha256": "5ea3f6038fe453d4016cfd9e358ba44c440a23dcc539f4e60558aa121c793af7",
+    "bytes": 2285
+  },
+  "candidate_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/candidate-source-pins.json",
+    "sha256": "8172e087f3d0486b77d6897da2be20baca960113a4b8481e9fdeb2003f3e12f6",
+    "bytes": 538
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/candidate-first-publication-parent-pin.patch",
+    "sha256": "70dc4e9350762c39b398cc133ed02620437a0e7365eb7022df04926050c4e23e",
+    "bytes": 6495
+  },
+  "changed_files": [
+    "host-kernel/native-rust/smp_application.rs",
+    "host-kernel/native-rust/smp_fork_ingress.rs"
+  ],
+  "repair": "Transfer the existing constructor-owned parent Entry pin into a non-Copy exact-key ChildFork record at positive first-receipt commit, rather than decrementing it at publication. Bind actual parent Token, ForkIdentity, reservation token and actual Arc<Remote>. No Drop reacquires slots.",
+  "ownership_terminal_rule": "Both generic GuestDestroyed progress and ACK release reject a newly retained positive pin before phase/count/removal effects. Current ACK flags/Released do not create terminal release authority; parent pin remains retained until a genuine separately reviewed terminal/handoff endpoint exists. Old no-pin abort owners are unchanged.",
+  "lock_order": "The existing Remote.slots mutex covers parent-key/count validation, child-key/reservation validation and exact pin transfer. No MM/TLB callback, foreign call, allocation or new mutex acquisition is added to this operation. Arc clone retains the already-owned Remote.",
+  "expert_design": {
+    "path": "/home/holden/mckernel-work/host-preparation/provider-ownership-review-20261019-1/CREATE-PPD-POSITIVE-PROVIDER-OWNERSHIP-DECISION.json",
+    "sha256": "957f7a37f2fed4c0a4031fe8ace87a583fada5dfa53475eade73516f9f31789e",
+    "bytes": 11414
+  },
+  "focused_fixture_inputs": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/focused-fixture-inputs.json",
+    "sha256": "7f1a8bf1891643a9c838984648da8eae5a8fc0b4ed75e771204225b1c08ddaa1",
+    "bytes": 2151
+  },
+  "focused_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/check-1/result.json",
+    "sha256": "1d3a8ea83a3ca1cbe7741231619464d5c8e62ea621894e2cfcf7d772888594e2",
+    "bytes": 272
+  },
+  "actual_observation": {
+    "commands": 2,
+    "new_tests": 1,
+    "all_returncodes_zero": true,
+    "all_direct_joined": true,
+    "all_process_groups_absent": true,
+    "elapsed_ns": [
+      2268670438,
+      16418472
+    ],
+    "stderr_bytes": [
+      0,
+      0
+    ],
+    "tool_session": 83361,
+    "outer_returncode": 0,
+    "cpu6_released": true
+  },
+  "checks": [
+    "Actual existing Memory/IHK/scoped MM/READY construction and first receipt transfer exactly one parent pin.",
+    "Actual positive first RET retires its response while exact parent pin remains for LINK discovery.",
+    "Actual failed LINK and existing parent-worker close/cancellation path retain pin.",
+    "Duplicate, wrong-child and stale-parent-token transfer attempts do not create or decrement a pin.",
+    "Both exact generic GuestDestroyed progress and ACK release refuse new pinned owners without changing phase/count."
+  ],
+  "limits": [
+    "The retained LINK fixture predates the later ACK field shape; exact current ACK record declarations and release method are added only to exercise the early retained-owner refusal. No ACK proof flags or final release authority are fabricated.",
+    "Full close_inner is not executed: its actual count-zero removal predicate is source checked, and actual Entry::release_ready is executed. Prepared-task cleanup adapters are outside this focused fixture.",
+    "Original sealed-before-first-receipt-writer finish_inner ownership gap remains outside this narrowly labelled repair.",
+    "A fresh authenticated postpositive revoke control transaction with its own response/pending-owner claim/writer is still absent. Selector2 is not existing authority.",
+    "No complete production crate/GCC14/module/image/native proof, no P-M06-01 closure, and no working full fork activation is claimed.",
+    "The saved test function name ends parent_close, but its executed call is close_worker_actual plus actual release_ready; it does not execute full parent close_inner, parent death or terminal teardown."
+  ],
+  "preserved": [
+    "Current shared/default nonnull CREATE_PPD remains -95 and guest prepare remains weak NULL.",
+    "No shared/held source, accepted cpu.c/process.c, current Mailbox/kmsg or matched SDK/native input was modified.",
+    "Original held-family E0505, descriptor order, cacheACK and parent-slot failures remain preserved; no old suites replayed."
+  ],
+  "next_action": "Independent source/result acceptance and source checkpoint for this private held provider branch only. Root must first integrate/review the complete matching bridge ownership dependency closure onto current production before any safe current consumer join; this patch must not be force-applied or copied wholesale. Full provider activation remains HELD.",
+  "no_more_operations_authorized_by_result": true,
+  "consumer_scope": {
+    "repair_branch": "PRIVATE_RETAINED_HELD_PROVIDER_ONLY",
+    "current_production_join": "NOT_AVAILABLE",
+    "root_reported_git_apply_check": {
+      "return": "FAIL",
+      "output_sha256_prefix": "b1e0fe",
+      "witnesses": [
+        "current production smp_application differs at patch context114",
+        "current production smp_fork_ingress.rs absent"
+      ],
+      "independently_rerun_by_author": false
+    },
+    "current_production_at_author_read": {
+      "smp_application_rs_sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2",
+      "smp_fork_ingress_exists": false,
+      "nonnull_create_ppd_result": -95
+    },
+    "prohibited_integration": "No wholesale backend copy, force-apply, ingress addition, new baseline port/rebuild or activation follows this source check."
+  }
+}

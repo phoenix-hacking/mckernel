@@ -1,0 +1,198 @@
+{
+  "actual_commands": [
+    {
+      "command": {
+        "bytes": 464,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/check-1/compile.command.json",
+        "sha256": "dacdef5db08ec28f607a11a929b231279518e7c825139f635e2ef67f03ee7571"
+      },
+      "elapsed_ns": 264710516,
+      "pid": 1689256,
+      "role": "compile",
+      "status": {
+        "bytes": 739,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/check-1/compile.status.json",
+        "sha256": "ed5efbf5a5d7e0d3864a6f4597f46314b2c83bc5a2b3d178cd8c25b38003bde6"
+      }
+    },
+    {
+      "command": {
+        "bytes": 195,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/check-1/affected-test.command.json",
+        "sha256": "bacebaf31f9122754fd975a8ec0b25a65d6eba79dedc508acd6597827bb5c48b"
+      },
+      "elapsed_ns": 2001757,
+      "pid": 1689269,
+      "role": "affected-test",
+      "status": {
+        "bytes": 452,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/check-1/affected-test.status.json",
+        "sha256": "9ddf370d71e098f399b46e219c19826530257668656eb9fa9af2db1b1d51e9ee"
+      }
+    }
+  ],
+  "actual_fixture_inputs": {
+    "bytes": 1964,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/fixture-inputs.json",
+    "sha256": "fc5641517222e82601f7ff1a474337daaab826ab52ef43ada95c02f89bdf2276"
+  },
+  "actual_result": {
+    "bytes": 344,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/check-1/result.json",
+    "sha256": "67c52c2c8b49b63984030e823534b254f9f6df1c801e8c8e4cd719768740d4b0"
+  },
+  "actual_test_counts": {
+    "compiler_commands": 1,
+    "newtests": 3,
+    "old_held_suites_replayed": false,
+    "test_commands": 1
+  },
+  "adapters_and_limits": {
+    "actual_current_bodies": [
+      "Entry::release_ready",
+      "Entry::request_cleanup",
+      "Remote::pin_parent_slot",
+      "Remote::reserve",
+      "Remote::reply",
+      "Remote::close_inner",
+      "Remote::close",
+      "Remote::cleanup",
+      "Remote::transport_health"
+    ],
+    "explicit_services": [
+      "syscall mailbox drain/close",
+      "procfs rundown",
+      "prepared-image finish",
+      "clock/msleep",
+      "Rust allocation/Arc/mutex/error representation"
+    ],
+    "full_crate_SDK_module_compilation": "PENDING",
+    "matching_native_execution": "PENDING_NOT_AUTHORIZED_BY_THIS_REVIEW",
+    "new_default_caller": "NONE",
+    "release_endpoint": "No decrement/release API exists; deliberate unbounded retention on capability discard. Genuine future terminal owner must define exact release independently.",
+    "scope": "Slot/Remote metadata storage lifetime only. Does not pin guest task/MM, payload/response ownership, service admission, aliases or fork phase. Clock(msleep)/allocation/Arc/mutex/error and prepared/procfs/mailbox services adapted."
+  },
+  "closed_stream_FDs": {
+    "affected-test.stderr": {
+      "ctime_ns": 1792450269483218536,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48119081,
+      "mode": "0o600",
+      "mtime_ns": 1792450269483218536,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/check-1/affected-test.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    "affected-test.stdout": {
+      "ctime_ns": 1792450269483218536,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48119080,
+      "mode": "0o600",
+      "mtime_ns": 1792450269483218536,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/check-1/affected-test.stdout",
+      "sha256": "57562e8832cc57764f16f48400e2781b2de5be87d8afe653833d5c7de238228a",
+      "size": 385,
+      "uid": 1000
+    },
+    "compile.stderr": {
+      "ctime_ns": 1792450269219209849,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48119077,
+      "mode": "0o600",
+      "mtime_ns": 1792450269219209849,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/check-1/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    "compile.stdout": {
+      "ctime_ns": 1792450269219209849,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48119076,
+      "mode": "0o600",
+      "mtime_ns": 1792450269219209849,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/check-1/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    }
+  },
+  "current_source_context": {
+    "bytes": 2228,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-context-1/current-source-pins.json",
+    "sha256": "66aad87068f98b272b4e777391b891e48c5828aea9ccaafeb2dde73ffa1796fd"
+  },
+  "decision": "PASS_EXACT_CURRENT_RUST_PARENT_SLOT_PIN_SOURCE_INTEGRATION_WITHOUT_ACTIVATION",
+  "exact_integration": {
+    "excluded": [
+      "No smp_fork_ingress.rs creation",
+      "No ChildFork/held38-provider/60-consumer backend import",
+      "No CREATE_PPD caller change",
+      "No weak prepare/transport/selector change",
+      "No changes to current immutable SDK/module/image/native inputs"
+    ],
+    "files": 1,
+    "patch": {
+      "bytes": 3534,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/current-parent-slot-pin.patch",
+      "sha256": "aac4a2487618a1d1dae6394e81feb0cec47e56e2b79699c0c8759d6bdcd282cf"
+    },
+    "postimage": {
+      "bytes": 48311,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-source-integration-1/smp_application.rs",
+      "sha256": "fd375f11a43dbd205c08decdff10d94c2bb82935ae2ddfeaf1ea7142a5c70146"
+    },
+    "preimage_sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2",
+    "root_actual_git_apply_check": "Parent reports exact aac4 patch applies to unchanged current source; reviewer executed no Git.",
+    "target": "/home/holden/mckernel/host-kernel/native-rust/smp_application.rs"
+  },
+  "functional_scope": "Functional OS/apps and Rust delivery: minimal real current-source storage lifetime primitive, not retained-provider backend import.",
+  "history": "Held957f/08f5/70dc source+failures stay separate and immutable; no replay/relabel. This current patch resolves the concrete apply/context blocker only.",
+  "holds": {
+    "CREATE_PPD_nonnull": "-95 unchanged",
+    "positive_fork_or_alias_revoke_finalACK": "NOT_ACCEPTED",
+    "runtime": "HELD",
+    "weak_prepare": "No selection change"
+  },
+  "implementation_author": "/root/clone_thread_affinity_rust_repair",
+  "implementation_ownership": false,
+  "new_behavior_or_cutover_counter_credit": 0,
+  "production_or_native_acceptance": false,
+  "reviewed_at": "2026-10-19T22:52:05.830983+00:00",
+  "reviewer": "/root/next_replace_tid_review",
+  "reviewer_compiler_target_root_guest_executions": 0,
+  "schema": "mckernel.independent-current-parent-slot-pin-source-review.v1",
+  "source_authority": "Current live source integration is authorized only for exact127829 preimage to fd375 postimage. Previous SDK/native closures continue pinning immutable127829 copies; no claim old modules include this source or globalHEAD equality prerequisite.",
+  "status": "PASS_CURRENT_SOURCE_AND_THREE_FOCUSED_ACTUAL_BODY_CHECKS",
+  "verified_witnesses": [
+    {
+      "body": "ParentSlotPin and Remote::pin_parent_slot",
+      "fact": "Non-Copy typed token/OSowner/Remote capability; same slots exclusion validates transport, shutdown, exact owner slot+generation, exact token+Entryowner and admission. Checked overflow occurs before count/Arc effects."
+    },
+    {
+      "body": "ManuallyDrop<Arc<Remote>>",
+      "fact": "Discard retains Remote allocation and counted Entry without Drop, mutex reacquisition, foreign cleanup or decrement. Deliberate retained storage; matches boolean confers no fork/destructor/admission authority."
+    },
+    {
+      "body": "Entry::release_ready and Remote::close_inner",
+      "fact": "count0 added to shared release_ready and separately before entire reserved/unprepared fast-close OR. Four reply-removal assignments and final blocking cleanup use release_ready; all six current slot removals protected."
+    },
+    {
+      "body": "Actual current fixture",
+      "fact": "Exact current Entryimpl/reserve/pin/transport/reply/close/cleanup and Exchange compiled/executed. Three tests cover identity/generation/token, closed/cleanup/quarantine/shutdown/transport/overflow no-effects, unpinned vs pinned close/reply/finalcleanup, drop under slots lock and last external Arc retention."
+    },
+    {
+      "body": "Existing default consumer and cleanup",
+      "fact": "request_cleanup algorithm unchanged. Current mcctrl CREATE_PPD24/12-byte usercopy then -95 and all other default callers unchanged; new production caller count0."
+    }
+  ]
+}
