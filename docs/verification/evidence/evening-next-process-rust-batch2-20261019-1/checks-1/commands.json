@@ -1,0 +1,663 @@
+[
+  {
+    "label": "rust-version",
+    "argv": [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--version"
+    ],
+    "pid": 1417575,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.008725201012566686,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 36,
+        "sha256": "ecda74ca828b18debf1624cb36209a5b844fb1e1c1905ffb3d51b56cc275f96f",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "gcc-version",
+    "argv": [
+      "/usr/bin/gcc",
+      "--version"
+    ],
+    "pid": 1417577,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.0023495549976360053,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 244,
+        "sha256": "991c86f8d9b66254b3a1d9424592c40c367ae86dd7700c54bdaa80203b40b2ea",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "ordinary-leaf-object",
+    "argv": [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--crate-type=lib",
+      "-Awarnings",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "debuginfo=2",
+      "-C",
+      "code-model=large",
+      "-C",
+      "relocation-model=static",
+      "-C",
+      "no-redzone=yes",
+      "-C",
+      "force-frame-pointers=yes",
+      "-C",
+      "overflow-checks=off",
+      "-C",
+      "force-unwind-tables=no",
+      "-C",
+      "no-vectorize-loops",
+      "-C",
+      "no-vectorize-slp",
+      "-C",
+      "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+      "--emit=obj",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/extracted.rs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/leaf.o"
+    ],
+    "pid": 1417578,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.06466678899596445,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "ordinary-leaf-nm",
+    "argv": [
+      "/usr/bin/nm",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/leaf.o"
+    ],
+    "pid": 1417585,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.01659887400455773,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 294,
+        "sha256": "14a41c10edfa8daf07796a03a6c0c2b45e5e0df3372c72d18abc17f3e8c1c7eb",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "ordinary-leaf-disassembly-0",
+    "argv": [
+      "/usr/bin/objdump",
+      "-dr",
+      "--disassemble=process_current_resource_set_bridge",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/leaf.o"
+    ],
+    "pid": 1417586,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.004383465013233945,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 696,
+        "sha256": "67d7dad847f6846b2968fcf14ff44f3a62cf23e8862a587adee6273bee66cf2a",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "ordinary-leaf-disassembly-1",
+    "argv": [
+      "/usr/bin/objdump",
+      "-dr",
+      "--disassemble=process_release_final_cleanup_bridge",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/leaf.o"
+    ],
+    "pid": 1417587,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.004322552005760372,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 1756,
+        "sha256": "4f028f344102b231391552ddf5dd9280de4d17dcab1cfb59afbb170446caad78",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "ordinary-c-reference",
+    "argv": [
+      "/usr/bin/gcc",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Werror=implicit-function-declaration",
+      "-fno-pie",
+      "-c",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/reference.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/reference.o"
+    ],
+    "pid": 1417588,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.016468371992232278,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "ordinary-c-selected",
+    "argv": [
+      "/usr/bin/gcc",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Werror=implicit-function-declaration",
+      "-fno-pie",
+      "-c",
+      "-DMCKERNEL_RUST_PROCESS_HELPERS",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/consumer.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/selected.o"
+    ],
+    "pid": 1417591,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.016715340985683724,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "ordinary-c-nm-selected",
+    "argv": [
+      "/usr/bin/nm",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/selected.o"
+    ],
+    "pid": 1417594,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.016662731010001153,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "ordinary-c-fallback",
+    "argv": [
+      "/usr/bin/gcc",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Werror=implicit-function-declaration",
+      "-fno-pie",
+      "-c",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/consumer.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/fallback.o"
+    ],
+    "pid": 1417595,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.0327420879912097,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "ordinary-c-nm-fallback",
+    "argv": [
+      "/usr/bin/nm",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/fallback.o"
+    ],
+    "pid": 1417598,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.016725236986530945,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 816,
+        "sha256": "01dca9f5fc53d00224005e81a5b8662407aa775cc93331c28117f29dad082087",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "ordinary-rust-default-consumer",
+    "argv": [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--crate-type=lib",
+      "-Awarnings",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "debuginfo=2",
+      "-C",
+      "code-model=large",
+      "-C",
+      "relocation-model=static",
+      "-C",
+      "no-redzone=yes",
+      "-C",
+      "force-frame-pointers=yes",
+      "-C",
+      "overflow-checks=off",
+      "-C",
+      "force-unwind-tables=no",
+      "-C",
+      "no-vectorize-loops",
+      "-C",
+      "no-vectorize-slp",
+      "-C",
+      "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+      "--emit=obj",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/consumer.rs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/consumer.o"
+    ],
+    "pid": 1417599,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.1149194999889005,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "ordinary-consumer-disassembly",
+    "argv": [
+      "/usr/bin/objdump",
+      "-dr",
+      "--disassemble=release_process",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/consumer.o"
+    ],
+    "pid": 1417606,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.004416325013153255,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 3006,
+        "sha256": "316b9204f3b0d2a59f44da6d7da95c65fac4cd61010c389ebcd54e2e555a27bb",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "ordinary-unique-link",
+    "argv": [
+      "/usr/bin/ld",
+      "-r",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/selected.o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/consumer.o",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/joined.o"
+    ],
+    "pid": 1417607,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.0044648959883488715,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "ordinary-joined-nm",
+    "argv": [
+      "/usr/bin/nm",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/joined.o"
+    ],
+    "pid": 1417608,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.016536471026483923,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 780,
+        "sha256": "af3d9f9c3b6e5fc28db435de4ba423912e27e959f2619f912cfb05408bdae0bb",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "ordinary-parity-compile",
+    "argv": [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "-Awarnings",
+      "-C",
+      "opt-level=2",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/parity.rs",
+      "-C",
+      "link-arg=/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/reference.o",
+      "-C",
+      "link-arg=-no-pie",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/parity"
+    ],
+    "pid": 1417609,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.2652875979838427,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "ordinary-parity-run",
+    "argv": [
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/parity"
+    ],
+    "pid": 1417624,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "seconds": 0.0024369899765588343,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 123,
+        "sha256": "a1b43288fca23348a75b0fc6e694e84cde593baa9fa1e5d1242e9d3d727b2ef3",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  },
+  {
+    "label": "tofu-leaf-object",
+    "argv": [
+      "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--crate-type=lib",
+      "-Awarnings",
+      "--cfg",
+      "enable_tofu",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "debuginfo=2",
+      "-C",
+      "code-model=large",
+      "-C",
+      "relocation-model=static",
+      "-C",
+      "no-redzone=yes",
+      "-C",
+      "force-frame-pointers=yes",
+      "-C",
+      "overflow-checks=off",
+      "-C",
+      "force-unwind-tables=no",
+      "-C",
+      "no-vectorize-loops",
+      "-C",
+      "no-vectorize-slp",
+      "-C",
+      "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+      "--emit=obj",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/extracted.rs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/tofu/leaf.o"
+    ],
+    "pid": 1417625,
+    "returncode": 1,
+    "direct_child_joined": true,
+    "seconds": 0.06491990500944667,
+    "timed_out": false,
+    "cleanup": [],
+    "capture_method": "direct regular-file child writes",
+    "cap_bytes_per_stream": 33554432,
+    "captures": {
+      "stdout": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "within_cap": true,
+        "cap_reached": false
+      },
+      "stderr": {
+        "bytes": 494,
+        "sha256": "0a48755c2d2f28545ce1c0265af294fed53d27ad4b41a04a133fef9a6139bf6a",
+        "within_cap": true,
+        "cap_reached": false
+      }
+    }
+  }
+]

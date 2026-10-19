@@ -75,9 +75,7 @@ unsafe extern "C" {
     fn process_proc_init_panic_bridge();
     fn process_pt_destroy_bridge(page_table: *mut c_void);
     fn process_release_address_space_action_bridge(asp: *mut c_void);
-    fn process_current_resource_set_bridge() -> *mut c_void;
     fn process_release_profile_bridge(proc: *mut c_void);
-    fn process_release_final_cleanup_bridge(resource_set: *mut c_void);
     fn process_free_thread_pages_bridge(thread: *mut c_void);
     fn process_mckfd_free_bridge(fdp: *mut c_void);
     fn process_mcs_writer_lock_bridge(lock_addr: CULong, node: *mut c_void);
@@ -11471,7 +11469,10 @@ pub unsafe extern "C" fn process_destroy_thread_time_account_bridge(thread_arg: 
 const _: () = {
     assert!(offset_of!(Thread, hash_list) == 0);
     assert!(offset_of!(Thread, tid) == 20);
+    #[cfg(not(enable_tofu))]
     assert!(offset_of!(CpuLocalVar, resource_set) == 7912);
+    #[cfg(enable_tofu)]
+    assert!(offset_of!(CpuLocalVar, resource_set) == 24368);
     assert!(offset_of!(ResourceSet, thread_hash) == 32);
     assert!(offset_of!(ThreadHash, lock) == 1216);
     assert!(size_of::<ThreadHash>() == 5888);
@@ -11615,5 +11616,58 @@ pub unsafe extern "C" fn process_release_sibling_detach_bridge(proc_arg: *mut c_
         process_mcs_writer_lock_bridge(lock_addr, lock.as_mut_ptr().cast());
         process_list_detach_result(core::ptr::addr_of_mut!((*proc).siblings_list));
         process_mcs_writer_unlock_bridge(lock_addr, lock.as_mut_ptr().cast());
+    }
+}
+
+extern "C" {
+    fn hugefileobj_cleanup();
+    #[cfg(enable_tofu)]
+    fn tof_utofu_finalize();
+}
+
+const _: () = {
+    #[cfg(not(enable_tofu))]
+    assert!(offset_of!(CpuLocalVar, resource_set) == 7912);
+    #[cfg(enable_tofu)]
+    assert!(offset_of!(CpuLocalVar, resource_set) == 24368);
+    assert!(offset_of!(ResourceSet, pid1) == 320);
+    assert!(offset_of!(Process, children_list) == 288);
+    assert!(offset_of!(Process, children_lock) == 320);
+    assert!(size_of::<McsRwlockNodeIrqsave>() == 64);
+};
+
+/// Read the current CPU's existing resource-set binding. The CPU-local pointer
+/// returned by the existing ABI remains valid for this synchronous read. The
+/// caller retains CPU affinity and owns the resource-set lifetime; this callback
+/// neither obtains a reference nor interprets a possibly null resource-set value.
+#[no_mangle]
+pub unsafe extern "C" fn process_current_resource_set_bridge() -> *mut c_void {
+    unsafe { (*get_this_cpu_local_var()).resource_set.cast() }
+}
+
+/// Perform existing last-child cleanup under pid1's children reader lock.
+/// The resource set, pid1 process, initialized child-list head and lock storage
+/// remain live, and pid1 stays stable throughout synchronous callbacks. The
+/// cleanup callees retain their existing concurrency/ownership contracts. The
+/// list-empty test is exactly head.next == head; no list mutation/free is added.
+#[no_mangle]
+pub unsafe extern "C" fn process_release_final_cleanup_bridge(resource_set_arg: *mut c_void) {
+    let rset = resource_set_arg.cast::<ResourceSet>();
+    let mut lock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    unsafe {
+        process_mcs_reader_lock_bridge(
+            core::ptr::addr_of_mut!((*(*rset).pid1).children_lock) as CULong,
+            lock.as_mut_ptr().cast(),
+        );
+        let head = core::ptr::addr_of_mut!((*(*rset).pid1).children_list);
+        if (*head).next == head {
+            #[cfg(enable_tofu)]
+            tof_utofu_finalize();
+            hugefileobj_cleanup();
+        }
+        process_mcs_reader_unlock_bridge(
+            core::ptr::addr_of_mut!((*(*rset).pid1).children_lock) as CULong,
+            lock.as_mut_ptr().cast(),
+        );
     }
 }

@@ -4593,3 +4593,49 @@ native packet. For the next compiler cycle, prepare the corrected descriptor
 consumer during compilation, with only actual addresses/identities left late.
 Keep the sole-heavy profile, existing floors, evidence and scratch21 exclusions.
 Next full review: 07:50:02 UTC.
+
+
+## Review 62 — 2026-10-19T07:50:20Z
+
+Interval: 07:20:02–07:50:20 UTC. The first terminal observer refused an inherited
+58-row assertion; 21 retained pairs require 42 rows. Its children, Docker calls,
+process group and mutex were positively retired. The corrected actual conversion
+and observation/draft path passed focused and independent family review. All
+four corrected read-only stages then passed. The exact cleanup and post-join
+readback completed successfully; physical-release acceptance is still pending.
+The failed attempt, original raw files, artifacts and source trees are retained.
+
+New-image ordinary preparation passed after a metadata-only payload projection:
+original builder provenance and both archives are unchanged. Fixture and parent
+commands passed and were accepted. Both native case owners are now active;
+the old FP two-CPU commands are frozen, and the new-image native wrapper is
+being prepared. Actual execution still requires the accepted physical receipt,
+fresh machine snapshot and exact one-shot release.
+
+Two additional live resource/cleanup Rust callbacks passed 126 parity scenarios
+and independent source review. A preexisting TOFU const assertion was corrected
+without changing runtime bodies; both affected compiles passed without replaying
+the semantic scenarios. Shared source files are dirty pending the root checkpoint.
+Production C-layout, complete image and native proof remain separate open work.
+
+New native behaviors: 0. New practical checks closed: 0. Totals remain 24 native
+behaviors, 13 production Rust paths, 11 native Rust paths and 7/35 practical checks.
+Do not infer a throughput multiplier or percentage gain. Six agents are active;
+host/scratch available space is about 46.96/12.813 GiB and included usage is 55%.
+The optional scratch-reserve question remains pending; no setting has changed.
+
+Next adjustment: turn physical release into a real guest result promptly. After
+the next source checkpoint, combine the four future callbacks in one compiler
+cycle and prepare its post-build consumer during compilation. Reuse the corrected
+finite-21 chain and derive cardinalities from bound data; do not regenerate old
+29-pair assumptions. Preserve actual source/identity checks and sole-heavy control.
+Next full review: 08:20:20 UTC.
+
+Follow-up, 07:58 UTC: physical release was accepted. The first two-CPU owner
+invocation subsequently refused a QMP socket path of 113 bytes (limit 107)
+before locks, Docker or any guest launch. Owner joined 1, parent stayed empty,
+and all readbacks were unrun. Root and supervisor initially described the owner
+invocation as a guest launch; that was premature and the user was corrected.
+Actual guest launches this evening: 0. Prepare one shorter-parent correction
+and check all expanded socket paths in both native preparations before the
+fresh snapshot. Reuse accepted artifacts; no compiler or archive replay.

@@ -1,0 +1,41 @@
+
+/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-1/ordinary/leaf.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_current_resource_set_bridge:
+
+Disassembly of section .ltext.process_release_final_cleanup_bridge:
+
+0000000000000000 <process_release_final_cleanup_bridge>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	53                   	push   %rbx
+   5:	48 83 e4 c0          	and    $0xffffffffffffffc0,%rsp
+   9:	48 81 ec 80 00 00 00 	sub    $0x80,%rsp
+  10:	48 89 fb             	mov    %rdi,%rbx
+  13:	bf 40 01 00 00       	mov    $0x140,%edi
+  18:	48 03 bb 40 01 00 00 	add    0x140(%rbx),%rdi
+  1f:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+  26:	00 00 00 
+			21: R_X86_64_64	process_mcs_reader_lock_bridge
+  29:	48 89 e6             	mov    %rsp,%rsi
+  2c:	ff d0                	callq  *%rax
+  2e:	48 8b bb 40 01 00 00 	mov    0x140(%rbx),%rdi
+  35:	48 8d 87 20 01 00 00 	lea    0x120(%rdi),%rax
+  3c:	48 39 87 20 01 00 00 	cmp    %rax,0x120(%rdi)
+  43:	75 13                	jne    58 <process_release_final_cleanup_bridge+0x58>
+  45:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+  4c:	00 00 00 
+			47: R_X86_64_64	hugefileobj_cleanup
+  4f:	ff d0                	callq  *%rax
+  51:	48 8b bb 40 01 00 00 	mov    0x140(%rbx),%rdi
+  58:	48 81 c7 40 01 00 00 	add    $0x140,%rdi
+  5f:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+  66:	00 00 00 
+			61: R_X86_64_64	process_mcs_reader_unlock_bridge
+  69:	48 89 e6             	mov    %rsp,%rsi
+  6c:	ff d0                	callq  *%rax
+  6e:	48 8d 65 f8          	lea    -0x8(%rbp),%rsp
+  72:	5b                   	pop    %rbx
+  73:	5d                   	pop    %rbp
+  74:	c3                   	retq   

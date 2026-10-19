@@ -1,5 +1,42 @@
 # Resume cursor
 
+## Current — physical release accepted; socket preflight correction; two Rust callbacks integrated (08:04 UTC)
+
+Fourleaf C1 cleanup and postjoin independently pass53c0eec4: container absent,
+common/shared records archived and released, nine journal events,42 stable artifact
+rows and positive owned-group/mutex proof. Original observer58-vs42 failure and
+corrected source/fetched proof52ca17a6 remain preserved; no compiler/copy replay.
+Actual selected artifact40ea08b7 accepts four new helpers (17 selected production
+paths total); native11/behaviors24/practical7of35 remain unchanged. Original failed
+postbuild14 and full syscall-DWARF gap remain OPEN.
+
+The first fixed-FP twoCPU OWNER invocation directly joined1 before acquisition:
+actual QMP113B exceeds Linux107B. No guest/backend/Docker/lock acquisition or app
+launch occurred. Classification9acab270 and owner stdout/stderr/join are retained
+under evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/native-owner-1.
+Original parent1828:757473 remains empty; exact owner/nonce process matches0,
+shared record absent. An ordinary rootmutex probe was EACCES, retained honestly;
+actual fresh root admission must prove availability. One fresh short-parent
+correction and full prospective AF_UNIX expansion are in progress; new0eca1CPU
+requestaea01cc3 receives independent affected review in parallel. First fully
+released case gets one heavy slot. Snapshots/releases are never reused.
+
+Two additional Rust callbacks now replace selected C resource lookup/final
+cleanup, preserving C fallback and reader-lock/list-empty/optionalTOFU/cleanup
+order. Source integration review97828543 binds amended patchb77cf07c,126 parity
+scenarios and both affected cfg consumer compiles; the stale TOFU offset assertion
+is corrected. Source evidence: ../evidence/evening-next-process-rust-batch2-20261019-1/.
+Production actual C layout/GCC14/full crate/link/native remain pending. Current
+35a/materialized0eca inputs remain frozen. Four compatible future callbacks will
+share one later production cycle where permitted; no current candidate mutation.
+
+Next: finish actual short-path/pure-preflight decision, bind genuine cleanup53c0
+plus preserved pre-acquisition failure9acab, collect a fresh60s snapshot LAST,
+obtain final exact machine release and launch immediately. Optional scratch
+reserve576716->288358 remains UNAPPLIED without user approval. Campaign ACTIVE;
+no pause at this source checkpoint. Functional OS/apps plus Rust/assembly remains
+the objective, with excluded execve/forkACK untouched.
+
 ## Current — first fourleaf root observer failed; one bounded correction active
 
 Current accepted counts24nativebehaviors/17selectedproductionRust/11applicable

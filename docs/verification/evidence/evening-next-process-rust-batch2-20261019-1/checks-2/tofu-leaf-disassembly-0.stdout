@@ -1,0 +1,18 @@
+
+/home/holden/mckernel-work/host-preparation/evening-next-process-rust-batch2-20261019-1/checks-2/tofu/leaf.o:     file format elf64-x86-64
+
+
+Disassembly of section .ltext.process_current_resource_set_bridge:
+
+0000000000000000 <process_current_resource_set_bridge>:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 b8 00 00 00 00 00 	movabs $0x0,%rax
+   b:	00 00 00 
+			6: R_X86_64_64	get_this_cpu_local_var
+   e:	ff d0                	callq  *%rax
+  10:	48 8b 80 30 5f 00 00 	mov    0x5f30(%rax),%rax
+  17:	5d                   	pop    %rbp
+  18:	c3                   	retq   
+
+Disassembly of section .ltext.process_release_final_cleanup_bridge:

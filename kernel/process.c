@@ -3377,10 +3377,14 @@ hold_process(struct process *proc)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void *process_current_resource_set_bridge(void);
+#else
 void *process_current_resource_set_bridge(void)
 {
 	return get_this_cpu_local_var()->resource_set;
 }
+#endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 void process_release_hash_detach_bridge(void *resource_set_arg,
@@ -3438,6 +3442,9 @@ void process_release_profile_bridge(void *proc_arg)
 #endif
 }
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_release_final_cleanup_bridge(void *resource_set_arg);
+#else
 void process_release_final_cleanup_bridge(void *resource_set_arg)
 {
 	struct resource_set *rset = resource_set_arg;
@@ -3454,6 +3461,7 @@ void process_release_final_cleanup_bridge(void *resource_set_arg)
 	}
 	mcs_rwlock_reader_unlock(&rset->pid1->children_lock, &lock);
 }
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void

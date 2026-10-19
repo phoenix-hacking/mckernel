@@ -1,6 +1,41 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 61, 2026-10-19T07:20:02Z
+## Current priorities — review 62, 2026-10-19T07:50:20Z
+
+Follow-up at 07:58 UTC: physical release is independently accepted, with all 42
+artifact descriptors preserved. The first two-CPU owner invocation then refused
+a 113-byte QMP socket path before locks, Docker or guest launch; the limit is
+107 bytes. The original parent is empty and all readbacks were unrun. Earlier
+guest-running wording was premature and has been corrected. Actual guest
+launches this evening remain zero; owner invocations and guest boots are distinct.
+
+Use one fresh shorter parent and mechanically check every expanded AF_UNIX path
+in the actual owner/QEMU argv before another fresh snapshot. Check the new-image
+wrapper for the same family. Preserve the failed attempt and reuse image,
+payload, archives and unchanged fixtures. Bind the genuine parent and physical
+receipt, then obtain the separate fresh machine release. Case preparation stays
+parallel; actual heavy execution remains exclusive.
+
+The next two process resource/cleanup callbacks passed source review, 126 parity
+scenarios and the two affected consumer compiles. A preexisting TOFU assertion
+is now configuration-aware. The current source files are dirty pending the
+campaign checkpoint; production C-layout, full-image and native proof remain
+open. Preserve WIP and frozen current-image inputs.
+
+Once checkpointed, prepare these four compatible future callbacks for one
+compiler cycle. Reuse the corrected section-aware reader and finite-21 terminal
+machinery. Derive FD cardinality from the bound pair list; do not copy old
+29-pair/58-row assumptions. Freeze actual required symbols and authority joins
+before the next build; only genuine binary observations and live identities
+should remain late. Avoid a new framework or a queue of more private ports.
+
+Recorded totals remain 24 native behaviors, 13 production Rust paths, 11 native
+Rust paths and 7 of 35 practical checks. No native/check uplift this interval;
+all 14 whole milestones and earlier engineering bands are held. The optional
+scratch reserve question is pending with no mutation authority. Usage is 55%;
+the 97% stop and existing floors remain. Next full review: 08:20:20 UTC.
+
+## Previous priorities — review 61, 2026-10-19T07:20:02Z
 
 The four-leaf image has passed independent canonical artifact review, including
 all four descriptor strings. The 21-pair retention operation is accepted: 17 new
