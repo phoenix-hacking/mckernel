@@ -1,5 +1,47 @@
 # OS development session handoff
 
+## Current — native FP accepted; NEW205 compiler harness failure (12:22 UTC)
+
+Campaign ACTIVE: functional OS/apps and Rust/reviewed-assembly migration.
+The remaining-image e0d3180a FP-thread guest completed once in36.10s; independent
+application fef728f6 accepts exact254-byte output/exit0 and both64-round checks.
+Physical review8c8ec185 accepts container/QEMU/30-client/lease retirement. This
+repeats an accepted behavior: distinct increment0. Canonical counts stay25 native
+behaviors/17 selected production Rust paths/11 applicable native paths/7 of35
+practical checks; all14 milestones remain OPEN. Full syscall-DWARF gap stays open.
+
+NEW205 request902f4822 consumed its released invocation once, wholejoin1/170.56s.
+Nine compiler phases passed; selected full syscall compile then failed because
+its generated translation unit lacked the original source quoted-include root:
+../executer/include/uti.h was present in materialized source, but not discoverable
+from /work/output/build/clone-affinity-production/production-syscall.c. No kernel
+ABI defect is established. Corrected private producer adds -iquote /src/kernel
+to both selected/fallback commands; actual bounded saved-include check0/.166s.
+Consumed request/source/output/failure bytes remain unchanged; no retry occurred.
+Independent a55469e6 accepts failed owner/guard/eight-client retirement only.
+Stopped CID6f490dad and common/shared records remain held for separately released
+failure preservation/physical cleanup. Entire failed host case stays preserved.
+Genuine mutex27:4 postjoin reacquisition48436d2f is independently accepted747a938f;
+it does not authorize container/record cleanup or another heavy operation.
+
+Next: clone_thread_affinity_rust_repair finishes the failure-only adapter against
+actual failed identities; next_replace_tid_review owns independent boundary review.
+Root publishes exact changed closure, then consumes only separately approved finite
+preservation/observation/cleanup commands with fresh live gates. In parallel,
+rust_next_teardown_leaf chooses the fastest corrected producer route: prefix reuse
+only if nearly ready, otherwise a NEW full request/workspace with two include flags
+corrected. Existing attempt170.56s bounds prefix savings; avoid extensive adoption
+machinery. No new heavy until genuine physical release and exact fresh admission.
+No successful-image gate belongs on failure release. Existing37-role/74FD report
+and terminal contracts remain; two_cpu_end_to_end_review reviews completed20-check
+terminal implementation. Strict repaired N3 startupCPU oracle remains unchanged.
+
+Retained checkpoint evidence: evidence/remaining-image-native-checkpoint-20261019-1/
+contains three archives/849659B covering native finalization, terminal failures and
+independent reviews. Prior failures, scratch21, stopped permanent container/locks,
+exclusions, dirty WIP and frozen source205 remain preserved. One-heavy/resources,
+16/12GiB floors plus growth/reserves and97% included-usage stop remain mandatory.
+
 ## Current — cached image artifact and retention accepted; terminal publication (11:13 UTC)
 
 Campaign ACTIVE. Remaining request9f04f3a3 consumed its exact release once:

@@ -4915,3 +4915,42 @@ accepted runtime/milestone counters did not move. No global speed claim follows.
 Usage65%; host/scratch about45.875/12.809GiB. Preserve all failures, source
 separation, one-heavy limits, floors, optional reserve hold and97% stop.
 Next full review: 11:58:46 UTC.
+
+
+## Review 70 — 2026-10-19T11:59:02Z
+
+Interval11:28:46–11:59:02UTC. Cached image e0d3180a passes native FP-thread
+applicationfef728f6 and physical retirement8c8ec185: exact254B/empty stderr/exit0,
+two workers with64 FP rounds each. Owner plus3readbacks0; guarded run36.10s.
+All30clients/QEMU/31hostgroups retired, container removed andlease released.
+One real invocation,0distinct-behavior increment. Counters25/17/11/7of35 and
+all14whole milestones remain unchanged pending scoped accounting.
+
+Cleanup mismatch resolved: all17profile fields matched; expected command omitted
+4authentic adopted-phase arguments. Separate correction19b758bd passed16checks;
+44other functions unchanged. Actual cleanup/postjoin6.72/.90s and independent
+6d6ad764 physical acceptance preserve42artifact metadata rows and all old sources,
+observations and failures. No compiler/inspection/observation replay occurred.
+
+First final guard refused beforeowner/guest because snapshot expired: review49.23s,
+then25scommand construction, launch74.21s. Prepared checker~.04s verifies saved
+structure and refuses honest expiry. Second review17.72s plus preconstructed
+launch command succeeded with the original60-second bound. About89min from
+build finish to native feedback missed30min target; no speed multiplier claim.
+
+New20512-source8a27bd44publication, source ordinarycc5fecb5 and guard1positive/
+17refusals remain accepted; no compiler run yet. The postbuild namespace correction
+passed1positive/16refusals.37roles/15captures and actual affinity caller/compiler/
+layout/ownership proof are being frozen into a common report contract, consumed
+by the strict N3 and terminal variants. Actual future artifacts remain pending.
+
+Next adjustment: free final-heavy review from the report-contract bottleneck
+using an available independent peer; run the admitted production iteration.
+Keep next postbuild/native preparation ahead of completion, and give one freed
+kernel author a coherent private Rust implementation batch with an actual cheap
+check, preserving frozen205 and existing compute-C boundaries. Reuse accepted
+engines and genuine evidence; do not create unrelated review/ledger work.
+
+Usage66%; host/scratch45.772/12.808GiB. One-heavy, resource/floor/source controls,
+all failures/Scratch21, optional reserve hold and97%stop preserved.
+Next full review:12:29:02UTC.

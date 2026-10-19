@@ -1,6 +1,78 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 69, 2026-10-19T11:28:46Z
+## Current priorities — review 70, 2026-10-19T11:59:02Z
+
+Live cursor update, 12:15 UTC: the first205 production attempt failed after
+nine successful commands. Its relocated full-syscall fixture omitted the quote
+include path for an existing ../executer/include/uti.h header. This is a producer
+include-path failure; no kernel ABI defect is established and no image passed.
+Private correction adds -iquote /src/kernel to both affected commands. Request,
+frozen source, original failure and partial build remain unchanged. Failed-build
+classification/positive owner+eight-client retirement is accepted a55469e6;
+stopped container and records remain held for failure-only physical release.
+Preserve twelve finite logs/receipts and the partial tree. No compiler retry or
+new heavy operation before independent correction/admission and physical release.
+Review any reuse of unchanged successful phases explicitly; never reuse failed
+affinity objects. The chronological review below remains historical.
+
+The cached e0d3180a image passed its real FP-thread application and physical
+retirement: fef728f6/8c8ec185. Exact254B stdout, empty stderr, exit0, two distinct
+workers and both64-round FP checks; guarded whole invocation36.10s, owner plus
+three readbacks0. QEMU,30 clients and31 host groups retired, container absent,
+lease released. This is a new image proving an existing behavior, so accepted
+totals remain25 behaviors/17 production paths/11 native paths/7 of35 checks.
+All whole milestones remain OPEN; no unsupported language-retirement credit.
+
+The previous cleanup failure is resolved. Ten corrected-source rows match
+19b758bd;16 offline checks passed with44 other functions unchanged. Corrected
+cleanup/postjoin0 in6.72/.90s, physical6d6ad764 accepted,42 metadata rows unchanged.
+Do not replay cleanup or native preparation. Preserve both original failures.
+
+First final native guard refused an expired snapshot before an owner or guest.
+Review age49.23s plus25s command preparation led to launch age74.21s. The prepared
+mechanical checker validates in~.04s and honestly rejects expiry; preconstructing
+commands reduced second review age to17.72s and allowed the successful run.
+Carry this method forward with the original60-second limit. Native feedback took
+about89 minutes after a216-second build, still far beyond the30-minute target.
+No2x/3x throughput claim is justified.
+
+New205 compiler remains UNRUN. Its exact sources/fresh-output guard are published
+8a27bd44; latest physical predecessor8c8ec185 is genuine and available. Finish
+final heavy joins/admission promptly. A freed independent peer can perform the
+final heavy decision while the existing reviewer freezes the postbuild contract.
+Do not delay a fully released production iteration for unrelated drafting.
+
+Before that image completes, settle the one37-role/15-capture interface directly
+between binder, artifact reviewer, terminal and N3 authors. Include the real
+affinity production caller, compiler/layout/source/ownership proof; use a targeted
+callsite witness where needed, without reviving full syscall-DWARF qualification.
+Namespace-corrected binder fixture passes1positive/16refusals, but actual205
+artifacts remain absent. N3 keeps the original strict startupCPU oracle and
+accepted boot helper. Terminal preparation derives command layout from the actual
+reviewed producer and counts from37roles, avoiding the current inherited errors.
+
+Refill one freed kernel implementation lane with one coherent Rust/reviewed-asm
+batch from remaining live compute C, tied to supported thread/application paths
+and a small real check. Keep its candidate private and disjoint from frozen205;
+preserve existing correctness fixes, fallback and C ABI glue. The deliverable is
+working candidate code and focused evidence, not another history or ledger audit.
+No backlog of unrelated private ports or new compute-C implementation.
+
+Usage66%; host/scratch about45.772/12.808GiB. Preserve one-heavy4CPU/12GiB/noSwap/
+512tasks,16/12GiB floors plus growth, all evidence/exclusions and97%stop. Optional
+reserve authority remains pending. Next full review:12:29:02UTC.
+
+## Previous priorities — review 69, 2026-10-19T11:28:46Z
+
+Live cursor update, 11:46 UTC: physical cleanup is complete and independently
+accepted 6d6ad764. Corrected cleanup/postjoin passed 6.72/.90 seconds; exact CID
+absent, records archived, 42 artifact rows unchanged. Do not replay cleanup.
+The first final native guard refused an expired snapshot before any owner or
+guest. A reviewed mechanical late-data check is being prepared before a second
+fresh snapshot; keep the 60-second limit and all non-temporal inputs unchanged.
+FP ordinary preparation and physical acceptance remain valid. New205 sources
+are published, no compiler has run, and its postbuild/N3 source preparation
+continues separately. The chronological review below remains historical.
 
 Campaign remains active. Accepted counters are unchanged: 25 native behaviors,
 17 production Rust paths, 11 applicable native paths and 7/35 practical checks.
