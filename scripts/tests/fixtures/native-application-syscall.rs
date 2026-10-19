@@ -1222,7 +1222,23 @@ fn invalidation_reserves_only_exact_delivery_and_preserves_real_mm_result() {
         for invalid in [1, i64::MAX, -4096, i64::MIN] {
             assert!(queue.finish_invalidation(worker, serial, invalid).is_err());
         }
-        assert_eq!(queue.finish_invalidation(worker, serial, value), Ok(value));
+        if value < 0 {
+            assert_eq!(
+                queue.finish_invalidation(worker, serial, value),
+                Err(value as i32)
+            );
+            assert_eq!(
+                queue.publish(cpu, |_| panic!("failed invalidation publication")),
+                Ok(false)
+            );
+            assert!(ram.claimed.load(Ordering::Acquire));
+            assert_eq!(ram.status(), 0);
+            assert_eq!(ram.releases.load(Ordering::Acquire), 0);
+            assert_eq!(queue.reserve(worker), Err(-16));
+            assert_eq!(queue.finish_invalidation(worker, serial, 0), Ok(0));
+        } else {
+            assert_eq!(queue.finish_invalidation(worker, serial, value), Ok(value));
+        }
         assert!(queue.finish_invalidation(worker, serial, 0).is_err());
         for _ in 0..1024 {
             assert_eq!(queue.publish(cpu, |_| Err(-11)), Err(-11));
@@ -1233,7 +1249,7 @@ fn invalidation_reserves_only_exact_delivery_and_preserves_real_mm_result() {
         assert_eq!(queue.returned(worker, serial), Ok(true));
         assert_eq!(
             i64::from_le_bytes(ram.snapshot()[24..32].try_into().unwrap()),
-            value
+            0
         );
         assert_eq!(
             i32::from_le_bytes(ram.snapshot()[4..8].try_into().unwrap()),

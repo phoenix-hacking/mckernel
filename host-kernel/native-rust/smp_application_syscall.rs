@@ -381,14 +381,27 @@ impl<M: ResponseMemory> Mailbox<M> {
         if !(-4095..=0).contains(&value) {
             return Err(-22);
         }
-        self.calls
+        let call = self
+            .calls
             .iter()
             .flatten()
             .find(|call| call.delivery.serial().wire() == serial)
-            .ok_or(-2)?
-            .delivery
-            .request()
-            .invalidation_range()?;
+            .ok_or(-2)?;
+        call.delivery.request().invalidation_range()?;
+        if value < 0 {
+            if self.quarantined {
+                return Err(-71);
+            }
+            let worker = call.worker.ok_or(-71)?;
+            if !call.kernel || worker.wire() != handle || call.completion.is_some() {
+                return Err(-16);
+            }
+            // An MM error does not prove that the old host PTEs were retired.
+            // Keep this exact kernel reservation and response claim, including
+            // deferred cancellation, until its worker proves a successful clear.
+            // finish_kernel would otherwise prepare and release that response.
+            return Err(value as i32);
+        }
         let mut completed = -512;
         self.finish_kernel(handle, serial, |_, _| {
             completed = value;

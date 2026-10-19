@@ -1,6 +1,93 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 76, 2026-10-19T20:01:40.608988Z
+## Current priorities — review 77, 2026-10-19T20:31:56.191864Z
+
+Live cursor, 20:45 UTC: first real upstream derivation refused before creating
+an output directory. Both producer/stager joins confused output_sha256 (compressed
+archive) with overlay_sha256 (uncompressed appended suffix). Reviewer/owner are
+correcting both against saved actual metadata; preserve the refusal. No guest ran.
+The one-file failed-invalidation Rust repair is independently accepted 06ded67a
+for source integration after six focused cases. Failed MM clear retains claim/
+reservation and blocks premature publication/reuse. Full module/native proof and
+automatic WAIT-loop retry remain unproved; frozen logging inputs are disjoint.
+
+Live cursor, 20:39 UTC: private FP1e7 derivation proposal v2 is ready; actual
+identity plus tiny transformations passed 3 positives/8 refusals in 0.114 seconds,
+CPU7 released. Real archive, genuine stage manifests and non-null FP ring-event
+evaluation remain pending ordinary review/release; no guest yet. The unchanged
+Rust mailbox reproduced the ownership bug: failed clear -14 became an ordinary
+response, publication succeeded and the response claim was released. The private
+repair targets only this transition, retaining the exact reservation; preserve
+successful completion and valid-retry behavior. No fix acceptance is claimed yet.
+
+Interval gains: practical checks 8 → 9/35 (25.7%); selected native Rust paths
+11 → 14. Production paths remain 17 and distinct native behaviors 25. All 14
+whole milestones remain open. M10's independently recommended engineering band
+is 80–90% (low confidence), from 70–85%; canonical estimate reconciliation is
+pending, other bands held. Do not derive engineering percentages from check counts.
+
+Current205 N3 is accepted: application f55c5600, physical 5f83f3ca. One guest,
+two completed apps, exact 387/254-byte outputs/exits 0, 1.353 seconds of overlap,
+all CPUs match including child startup CPU1. This validates the affinity repair;
+new logical cases zero. Whole invocation 44.239 seconds. Native path review
+a9721a27 adds TID release, time accounting and hash detachment; no UTI/non-null FP,
+clear-FP or hardware credit. P-M10-02 is complete 0fb93aa7; no duplicate rebuild.
+
+Build-to-first-observed closed native feedback is 127.6 minutes, versus target 30;
+the timer is closed with accepted invocation proofs. Preserve the distinction
+between actual execution completion, first observed result and later acceptance.
+The dashboard now records gains in native Rust paths as well as practical checks.
+
+IHK module c396958b is accepted c0ad09a6, physical 75a15c7d; 1,475,952 bytes,
+13 compiler inputs, 21 exports, 36 resolved kernel imports; conditional pairing
+with retained SMP/mcctrl accepted. Owner 5.741 seconds, all 15 clients/container/
+three records retired. Full original-authority join 6c53b908 reuses records with
+no source-tree rescan. Module artifact acceptance was 20:21:25.936213 UTC; native
+ioctl feedback remains pending 10.5 minutes after that acceptance.
+
+Critical next work: produce genuine native/overlay manifests for the FP1e7 image
+required by the existing logging contract. Existing AVX stage identifies e85;
+derive the actual image member with the accepted metadata-preserving transform.
+No substitution of image205. Reuse retained helper/stager/authority records.
+Freeze and review only the affected ordinary boundary, generate the archive once,
+then bind genuine stage/module authority and fresh native admission. Prepare the
+existing native result/retirement handling while staging completes.
+
+A separate actor is reproducing and repairing the failed-invalidation ownership
+path using the existing Rust harness, with error/close/cancellation, worker/serial
+identity and success cases. Keep that code private/disjoint until reviewed.
+It is concrete implementation work; avoid another optional framework experiment.
+
+Image self-retirement experiment is PARKED before its 20:41 cap: one saved positive
+and four phase refusals passed. The capture consumer requires joined owner/guard
+and retained container; same-owner retirement conflicts. No production delta,
+deployment or measured saving. Earlier constructor experiments remain parked.
+
+Usage 75%;22 percentage points to 97% stop. Host/scratch 45.28/13.90 GiB. Current
+one heavy operation, 4 CPUs/12 GiB/no swap/512 tasks, aggregate reserve, disk/growth floors,
+ownership/source/runtime controls, permanent mutex, Scratch21 and all failures
+remain. More CPU/RAM requires a measured useful bottleneck; none is established
+for the current source/schema handoffs. Next review: 2026-10-19T21:01:56.191Z.
+
+## Previous priorities — review 76, 2026-10-19T20:01:40.608988Z
+
+Live cursor, 20:27 UTC: image self-retirement experiment PARKED before its cap.
+Actual-source probe passed one saved positive/four phase refusals. Postbuild
+requires joined owner/guard and a retained container, so same-owner retirement
+cannot be reused without changing that contract. No production patch, deployment
+or demonstrated saving. Keep it parked. IHK full authority-record join passed;
+FP logging still needs genuine native/overlay manifests for image 1e7. Historical
+AVX stage identifies e85; derive the image member using the accepted transform.
+Do not substitute image205 or replay the completed N3 test.
+
+Live cursor, 20:23 UTC: IHK artifact accepted c0ad09a6, physical accepted
+75a15c7d. Module c396958b is 1,475,952 bytes; 13 compiler inputs, 21 exports,
+36 resolved kernel imports; conditional retained SMP/mcctrl ABI pairing accepted.
+Owner took 5.741 seconds and self-retired all 15 clients, container and three
+records. Artifact review timestamp: 20:21:25.936213 UTC. Staging/load/native ioctl
+remain unaccepted; non-null FP logging preparation runs separately. No repeated
+full kernel build is needed. Future image self-retirement experiment is private,
+20:41:05 UTC cap, no deployment or demonstrated speed benefit yet.
 
 Live cursor, 20:12 UTC: independent path-delta review a9721a27 confirms applicable
 native Rust paths 11 → 14: TID release, time accounting and thread-hash detachment.

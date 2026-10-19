@@ -1,0 +1,55 @@
+{
+  "close_or_cancel_during_failure": "No cancellation publication until a successful exact clear completion; original ownership remains held.",
+  "frozen_before_candidate": true,
+  "invalid_values": [
+    1,
+    9223372036854775807,
+    -4096,
+    -9223372036854775808
+  ],
+  "negative_MM_values": [
+    -1,
+    -14,
+    -22,
+    -18,
+    -4095
+  ],
+  "negative_expected": {
+    "application_drained": false,
+    "finish_result": "Err(original MM errno)",
+    "publication": "no completion published",
+    "response_claimed": true,
+    "response_releases": 0,
+    "response_status": 0,
+    "worker_reuse": "blocked"
+  },
+  "normal_success": "value0 keeps existing response/cancellation semantics; publication failure retains claim; successful publication releases exactly once.",
+  "ownership_rule": "Only proven successful Mirror.clear (value0) permits ending the exact in-kernel reservation. A valid negative result must preserve response claim and prevent normal or cancellation publication; a later exact successful completion may finish the retained reservation.",
+  "production_claim": false,
+  "quarantine_policy": "No new global quarantine requirement is invented by this ownership oracle.",
+  "repeated_finish": "Negative retries retain one original claim; after successful finish no second completion or release.",
+  "schema": "mckernel.failed-invalidation.focused-ownership-oracle.v1",
+  "source_refs": {
+    "mcctrl_process.rs": {
+      "bytes": 41389,
+      "path": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_process.rs",
+      "sha256": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70"
+    },
+    "mcctrl_vm.rs": {
+      "bytes": 16884,
+      "path": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_vm.rs",
+      "sha256": "83630dbe469466c7f69f51feb3a85438e2ae20049346b5e940d89d355f590ab3"
+    },
+    "smp_application.rs": {
+      "bytes": 46152,
+      "path": "/home/holden/mckernel/host-kernel/native-rust/smp_application.rs",
+      "sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2"
+    },
+    "smp_application_syscall.rs": {
+      "bytes": 21026,
+      "path": "/home/holden/mckernel/host-kernel/native-rust/smp_application_syscall.rs",
+      "sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55"
+    }
+  },
+  "untrusted_finish": "Wrong worker/serial and out-of-range errno must not mutate the valid reservation or prevent its subsequent exact valid completion."
+}

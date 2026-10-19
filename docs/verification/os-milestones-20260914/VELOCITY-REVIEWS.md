@@ -5300,3 +5300,74 @@ Usage 74%, 23 percentage points to 97% stop; host/scratch 45.39/13.91 GiB.
 Keep current one-heavy 4 CPU/12 GiB/no-swap/512 tasks, aggregate reserve,
 disk/growth floors, ownership/source/runtime controls, permanent mutex,
 Scratch21 and every failed attempt. Next full review: 2026-10-19T20:31:40.608Z.
+
+
+## Review 77 — 2026-10-19T20:31:56.191864Z
+
+Accepted interval delta from review76: practical checks 8 → 9/35 (+1, 25.7%);
+selected native Rust paths 11 → 14 (+3). Production paths 17 and distinct native
+behaviors 25 unchanged. Since 10:27:41 UTC the gains are two practical checks and
+three native Rust paths, approximately 0.20/0.30 per wall hour; wall rates include
+the 299.5-minute observation gap/unavailable period. Do not extrapolate this short
+acceptance burst into sustained 2x/3x engineering speed. All 14 whole milestones open.
+
+N3 application f55c5600 and physical 5f83f3ca passed on the matching fresh 205 image:
+one guest/two app processes, exact 387/254-byte outputs/exits 0, 1.353-second overlap,
+all delivered/returned CPUs exact including child startup CPU1. The original
+startup failure is preserved and the strict oracle unchanged. This validates
+the clone-affinity repair without a new logical-case increment. Whole dispatcher
+and three readbacks joined in 44.239 s; all 30 Docker clients reaped, QEMU joined,
+container absent, lease released. Existing kernel/15 inspections/archive were reused.
+
+Path review a9721a27 supports native proof for TID release, time accounting and
+thread hash detachment; production count remains 17. UTI replacement, non-null FP,
+clear-FP and hardware obligations remain open. P-M10-02 clean rebuild plus matching
+native replay is now recorded complete 0fb93aa7. Whole matched-profile delivery
+and other obligations remain separate. A bounded independent M10 engineering
+reassessment recommends 80–90%, low confidence, from 70–85%; canonical estimate
+file is still the October 18 snapshot. Reconcile that one band at a coherent
+checkpoint; do not silently inflate the other thirteen or rewrite old snapshots.
+
+The build-to-native timer closed at 127.6326 minutes from producer finish to first
+observed closed raw execution 20:05:01.771482 UTC. Subsequent native/physical reports
+bind that same invocation. This is not the exact guest-end timestamp or later app
+acceptance time. Collector retains proof and time basis. It records five known
+production/native/module outcomes (a partial inventory) and shows native Rust
+proof gains in the dashboard. No CPU-utilization claim is derived from that inventory.
+
+IHK-only owner reported build PASS in 5.741 s. Artifact c0ad09a6 and physical 75a15c7d
+are accepted; module c396958b/1,475,952 B, 13 compiler inputs, 21 exports, 36 resolved imports.
+Conditional old SMP/mcctrl pairing accepted. All 15 clients joined and owner removed
+container/three records; no separate cleanup. Artifact review timestamp
+20:21:25.936213 UTC. Complete catalog join 6c53b908 verified 9,760/60/60 entries
+against original records and the genuine 14-source IHK map without rescanning
+source trees; the 14-source closure is distinct from 13 actual compiler inputs.
+
+Native ioctl/module-load acceptance remains pending 10.5minutes since IHK artifact
+acceptance. FP logging's exact contract uses image 1e7; inherited AVX manifests
+identify e85. Author is preparing explicit metadata-preserving image derivation
+and genuine native/overlay manifests, retaining historical archives. It must not
+substitute current 205 merely because N3 passed. Only new affected ordinary
+boundaries need fixtures/review; unchanged records and engine proofs are reused.
+
+The 20-minute image self-retirement experiment parked at ~20:26, before the 20:41 cap.
+Actual-source probe passed one saved positive/four refusals: the capture entrypoint
+requires retired owner, joined guard, reacquired mutex and retained container.
+Same-owner self-retirement therefore needs a phase-contract change. No production
+patch/deployment or operational speed benefit. Parked constructors also remain
+parked. Root assigned a real Rust failed-invalidation ownership repair using the
+existing harness; focused error/close/cancel/identity/success cases are next.
+Keep private code disjoint from the current accepted/frozen artifacts.
+
+Tactic: finish genuine FP1e7 stage/manifests once, bind accepted IHK authority, prepare
+native result handling in parallel, use last fresh snapshot and immediate launch.
+Use spare implementation capacity for the concrete ownership defect; no more
+optional framework experiments while this native feedback is pending. Wake the
+existing relevant reviewer with followup_task when the changed boundary is frozen.
+Checkpoint current native/path/check evidence and the M10 estimate recommendation
+without repeating builds or unchanged evidence hashes.
+
+Usage 75%,22percentage points to 97% stop; host/scratch 45.28/13.90 GiB. Preserve the
+one heavy operation, 4 CPUs/12 GiB/no swap/512 tasks, aggregate reserve, disk/growth floors,
+source/ownership/runtime checks, permanent mutex, Scratch21 and all failures.
+Additional resource saturation/benefit remains unproved. Next full review: 2026-10-19T21:01:56.191Z.

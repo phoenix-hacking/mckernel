@@ -1,5 +1,66 @@
 # OS development session handoff
 
+## Current — Rust invalidation ownership integrated; FP1e7 stage completed (2026-10-19)
+
+Campaign ACTIVE: functional OS/apps plus Rust/reviewed assembly. Counters remain
+25 native behaviors / 17 production Rust paths / 14 applicable native Rust paths,
+9/35 practical checks; all whole milestones OPEN. M10 engineering band80–90%
+is low-confidence judgment, separate from acceptance. Latest fetched checkpoint
+5d6f894a remains the prior source boundary; this WIP is not module/native credit.
+
+Actual Rust finish_invalidation now retains the exact worker reservation and
+response on authenticated negative MM results. Exact reviewed source33e7b927,
+independent06ded67a, six focused cases (five initial plus one fixture-corrected)
+are retained in evidence/failed-invalidation-ownership-repair-20261019-1.
+Portable repository fixture now passes six actual-source ownership cases; full
+SDK/module compilation and native MM-error proof remain PENDING. Current live mcctrl error path does not
+automatically retry; later successful clear is Mailbox API support only.
+Frozen FP1e7/oldSMP/mcctrl/module authority is unchanged by this source integration.
+
+IHK artifact c0ad09a6 and physical75a15c7d are independently accepted; request6322
+was consumed once (outer0/5.741s). Module c396958b and complete original catalog
+join6c53b908 are retained in evidence/current-ihk-native-logging-20261019-1.
+No module-load/native ioctl acceptance yet; NEVER replay its old dispatch.
+
+FP upstream metadata correction2c4e/d354 completed0/18.102s with direct join,
+closed streams and absent group. Actual scratch/fplg-up-261019-1 preserves the
+accepted archive transform and exact FP1e7 image. Prior pre-output failure is
+preserved: overlay_sha256 is raw suffix, output_sha256 is whole gzip. Corrected
+upstream/downstream variants passed saved-input4positive/14negative checks.
+Next: independent actual upstream acceptance, genuine full-authority logging
+ordinary stage release, then separately released native FP allocation/release
+proof. Ring evaluator remains bounded and cannot infer thread identity from
+pages-only logs. No new guest or automatic source/artifact promotion.
+
+Sole heavy slot is physically free after IHK75a15c7d. CPU6 portable fixture and
+CPU7 evaluator/ordinary staging use disjoint reviewed cheap profiles; require
+actual joins and explicit releases. Fresh admission/exact runtime release still
+mandatory. Scratch21/permanentmutex/exclusions/failures remain protected.
+
+## Current — IHK-only request consumed, physical retired (20:19 UTC)
+
+Campaign ACTIVE, functional OS/apps and Rust/reviewed assembly. Checkpoint5d6f894a
+pushed/fetched17changedblobs saves strict205 N3 native acceptance and9/35checks,
+25behaviors/17production/14applicable-nativeRust; wholemilestones remain OPEN.
+
+Existing IHK request6322420c/release8f2fad14 under conditionald300 was consumed
+ONCE: outerdispatch0/5.741s/groupabsent, closedstatus8307b95f at
+host-preparation/ihk-current-live-admission-20261019-1/actual-owner-dispatch-1/
+status.json. Statuswritten20:15:18.358317UTC. Atomicownerreceipt at scratch/
+nsd-o-895d6e84dc4c47b3a75b6b12f7bcdb0f/owner-receipt.json says PASS/buildPASS/
+retiredtrue/ownedcontainer+recordremovalPASS. Independentphysical75a15c7d accepts
+15clients/42emptygroupchecks/exact3recordarchives and currentabsence. No separate
+cleanup required. DO NOT replay prior NEXT-COMMAND/nonce/request/output names.
+
+Module artifact/default-consumer/export/oldSMPmcctrl ABI decision is still
+pending at current-ihk-module-result-review-20261019-1. Sourceowner
+evening_two_app_batch prepares the EXISTING metadata-preserving logging stage
+and genuine nonnull FP allocation→release continuation privately, reusing accepted
+helpers/dualarchive machinery. Actualmoduleload/stage/guest/kmsg evidence remain
+separately gated; no kernel rebuild or source authority switch implied. CPU6/7
+and soleheavy slot are physically released; futureadmission remains mandatory.
+Allfailedattempts/Scratch21/permanentmutex/dirtyWIP/exclusions/97%stop preserved.
+
 ## Current — strict repaired205 native accepted; next IHK target (20:15 UTC)
 
 Campaign ACTIVE: functional OS/apps plus actual Rust/reviewed assembly cutover.

@@ -1,13 +1,13 @@
 {
   "schema": "mckernel.supervisor-velocity.v1",
-  "observed_at": "2026-10-19T20:12:24.278043Z",
+  "observed_at": "2026-10-19T20:46:19.148681Z",
   "baseline_at": "2026-10-19T10:27:41Z",
-  "elapsed_wall_hours": 9.745355011944444,
-  "monotonic_ns": 222850847003903,
-  "boottime_ns": 238188974054425,
-  "previous_sample_interval_seconds": 168.358741,
+  "elapsed_wall_hours": 10.310596855833333,
+  "monotonic_ns": 224885717641198,
+  "boottime_ns": 240223844691754,
+  "previous_sample_interval_seconds": 356.879751,
   "largest_observed_sample_gap_minutes": 299.53526335,
-  "interval_wall_minus_monotonic_seconds": 5.130000033659599e-07,
+  "interval_wall_minus_monotonic_seconds": 1.0360000146647508e-06,
   "baseline": {
     "practical_checks": 7,
     "native_behaviors": 25,
@@ -27,10 +27,10 @@
     "native_rust_paths": 3
   },
   "gains_per_wall_hour": {
-    "practical_checks": 0.20522597663694037,
+    "practical_checks": 0.19397519153980675,
     "native_behaviors": 0.0,
     "production_rust_paths": 0.0,
-    "native_rust_paths": 0.3078389649554105
+    "native_rust_paths": 0.2909627873097101
   },
   "known_production_native_events": [
     {
@@ -70,11 +70,21 @@
       "completed_app_processes": 2,
       "new_logical_cases": 0,
       "repair_validated": "clone affinity: child startup CPU1"
+    },
+    {
+      "at": "2026-10-19T20:21:25.936213Z",
+      "kind": "module_artifact_acceptance",
+      "result": "pass_build_artifact_only",
+      "invocation_seconds": 5.741,
+      "proof": "c0ad09a6/75a15c7d",
+      "time_basis": "artifact review timestamp; owner duration rounded to 0.001s",
+      "module_load_acceptance": false,
+      "native_acceptance": false
     }
   ],
-  "known_event_rate_per_wall_hour": 0.41045195327388073,
-  "known_invocation_wall_seconds": 509.9192706559912,
-  "known_invocation_fraction_percent": 1.453453893421835,
+  "known_event_rate_per_wall_hour": 0.48493797884951684,
+  "known_invocation_wall_seconds": 515.6602706559912,
+  "known_invocation_fraction_percent": 1.38924027458284,
   "last_build_to_native_feedback_minutes_approx": 89,
   "build_to_native_target_minutes": 30,
   "pending_build_finished_at": null,
@@ -96,9 +106,9 @@
   "post_guard_hold_target_minutes": 10,
   "last_successful_snapshot_review_age_seconds": 17.72,
   "snapshot_launch_target_seconds": 30,
-  "included_usage_percent": 74.0,
-  "usage_delta_percentage_points": 12.0,
-  "remaining_percentage_points_to_97_stop": 23.0,
+  "included_usage_percent": 76.0,
+  "usage_delta_percentage_points": 14.0,
+  "remaining_percentage_points_to_97_stop": 21.0,
   "notes": [
     "Rates use elapsed wall time since the named baseline, not CPU time.",
     "Confirmed counters come from accepted campaign reports; no OS-percent inference.",
