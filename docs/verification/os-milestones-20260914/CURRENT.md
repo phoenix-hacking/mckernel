@@ -1,3 +1,31 @@
+## Current — bounded public lifecycle accepted; SDK pin compiled, N3 next
+
+The matched FP1e7 typed-payload → strict stop → public CPU/memory release →
+second boot composition independently passes c32f227b and physical9b50f20c.
+Closed owner duration62.1847s. Named-behavior dedup credits exactly one composed
+integration case:26 distinct behaviors,11/35 practical checks,17 production and
+14 selected native Rust paths. Second stop/final restoration and practical
+repeatability quotas remain open. Closed evidence is retained under
+../evidence/current-host-pair-public-cycle-native-20261019-1/.
+
+The new current-parent-pin SDK requestdfe115e7 completed actual owner exit0,
+direct join/group absence and empty stderr in20.7212s. Independent physical
+2adfe769 releases its actual15clients/container/lease/common/shared owners;
+actual full three-module compilation/default-consumer artifact4c177a62 and
+ABI/image join44a3f0cd are accepted. New SMP34ef2724; IHK/mcctrl unchanged.
+No new callers or native credit. Source publication
+8cc8a22f is fetched. Preserve the pre-Popen exclusive-release-install refusal;
+the unchanged helper's existing-release branch then launched exactly once.
+
+Separate205/N3 matched-module stage e4c5475a/manifest4aa72c2a is accepted.
+Its approved CPU6 owner/runner/parent fixture completed exit0/6.004s; native
+snapshot/final machine/release remain pending. Bind latest SDK physical2adfe769
+as execution predecessor while retaining b9ea18d0/5d31c1f0 module authority.
+No new image build or module substitution. Every completed-result handoff uses
+followup_task. The positive-control ownership fixture remains failed after an
+abort; expert-directed distinct worker/response correction awaits CPU6 allocation.
+No provider activation or partial-test pass is claimed.
+
 ## Current source — reserved launcher controls refuse before fork allocation
 
 Exact current Rust launcher patch361a683f is applied to

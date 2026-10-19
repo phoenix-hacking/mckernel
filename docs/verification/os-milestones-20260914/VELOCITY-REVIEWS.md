@@ -5723,3 +5723,88 @@ Usage 83%, 14 percentage points to the 97% included-usage stop. Host/scratch abo
 operation, 4 CPUs/12 GiB/no swap/512 tasks, disjoint admitted CPU6/7 ordinary work,
 aggregate reserves and disk/growth floors, source/ownership/runtime controls,
 permanent mutex 27:4, Scratch21, all failures and dirty work. Next review: 2026-10-19T23:33:36.655962Z.
+
+
+## Review 83 — 2026-10-19T23:35:00.735334Z
+
+Distinct native behaviors increased 25 -> 26. Dispatcher deduplication confirms
+one new composition: typed AVX payload -> strict stop -> public release -> second
+boot. Earlier public-cycle records used a 40-byte signal payload; earlier AVX
+records did not assert the whole sequence. This credits one composed case, not
+individual stages, vectors or launches. Practical checks remain 11/35; selected
+Rust paths remain 17 production/14 native. Whole milestones and engineering bands
+are held. No overall OS or whole-Rust percentage is inferred.
+
+Actual public-cycle diagnostic c32f227b and separate physical 9b50f20c accept
+one guest/one payload/one post-release boot, with exact 380-byte output and empty
+stderr. Closed owner took 62.1847 seconds, outer capture 62.2340 seconds. All30
+clients/QEMU/container/lease retired. First observed joined result23:18:30.576,
+semantic acceptance23:20:45.934. Second stop, full final restoration, ten cycles,
+100 launches, 60-minute mixed workload and non-null FP ownership remain open.
+Do not call this a complete native restoration cycle.
+
+A real handoff stall was found: completed stage reviewer was sent notifications
+without a new task. Root activated it explicitly. The persistent top-of-file rule
+now requires followup_task unconditionally at every closed-result handoff; active
+agents receive the task, completed agents wake. Root adopted it. Lifecycle physical
+and semantic reviewers were activated promptly at whole join. Use this simple
+workflow fix rather than a new monitoring framework or replaying passed stages.
+
+Pin-change SDK request dfe115e7 is independently materialized/accepted fcf9d1f5:
+60-file/1,214,162-byte closure, only smp_application.rs changes from the accepted
+host pair, 75 copies and a two-command0.115-second chain. All groups absent.
+The96-row publication is fetched and the exact build release review has passed.
+Fresh heavy admission/compiler/artifact/native proof remain pending. The private
+control fixture failures are disjoint from this production-source build boundary.
+Current accepted image/module profiles stay frozen while source progresses.
+
+The205 compatibility preparation encountered and fixed two concrete executor
+boundaries. Five ownership tests pass, including a leader exiting while a group
+member survives, receipt/stat failures and asynchronous stop. Initial stage chain
+then refused before outputs because a pinned input was incorrectly subjected to
+the single-link capture rule (actual review20986949). Corrected input reading
+checks exact saved metadata/hash; captures keep single-link constraints. All7
+affected checks passed, review12ae81df. Existing five ownership cases were reused.
+
+Fresh three-command chain passed in50.36seconds under its combined90-second
+budget, all children joined/groups absent. Actual stage reviewe4c5475a confirms
+matched SDK modules, preserved archive metadata, exact accepted205 image and
+unchanged387/254-byte application oracles/startupCPU checks. Native execution is
+still separately gated. Author is binding existing N3 owner/runner; latest physical
+predecessor, final snapshot and machine hashes remain late. Reuse already-built
+ff4fca45/fa398247; do not switch the frozen FP case or rebuild the compute image.
+
+Private provider control parking code is written and source-reviewed in the held
+backend context. It uses a stage-0 pending-owner claim, exact callback/payload
+validation and a fresh response owner, freezes ordinary publication, and refuses
+already parked delivery before legacy RETURN. Restore uncertainty retains original
+claim/response rather than relying on a possibly failing Drop identity check.
+It writes no receipt and grants no MM revocation/terminal ACK or runtime authority.
+
+First test compile had8diagnostics before tests; source/fixture classification
+led to fixture-only corrections: real ACK helper, actualu32counter, read-only test
+accessors and observed Arc counts. Corrected source compiles. First test then
+aborted because concurrent LINK reused worker201 still held by the parked control.
+Earlier assertions are not a test pass. Reviewer is checking a separate real
+worker/response for LINK. Preserve both failed runs; change only the fixture if
+confirmed. Positive provider, full crate/default/native proof remain incomplete;
+weakNULL/CREATE_PPD-95 and release holds are unchanged.
+
+Next tactics: admit the ready pin SDK compiler when its exact source/publication/
+release and one-heavy controls pass, while ordinary205/N3/source work continues.
+Run the accepted205 matched case when its own static bindings and fresh final
+guard are ready, using actual latest physical predecessor separately from module
+authority. Use a free existing lifecycle author to prepare second stop/final public
+release with established CPU/memory inventory witnesses after the accepted second
+boot. Keep original one-iteration proof intact; this must be a fresh explicit
+variant, not an accounting upgrade. Prepare repeatability/delivery consumers from
+a declared tested tuple. Complete the next real provider response-owner transition,
+with distinct concurrent worker identities, before expanding the source scope.
+Source-only SDK changes do not require a compute-image rebuild. Reuse passed
+proofs; checkpoint coherent source/results once. Optional frameworks remain parked.
+
+Usage84%,13percentage points to97%included stop. Host/scratch44.65/13.643GiB.
+No sustained CPU/RAM bottleneck is shown. Preserve oneheavy4CPU/12GiB/noSwap/
+512tasks, disjoint admittedCPU6/7ordinary work, aggregate reserves and disk/growth
+floors, source/ownership/runtime controls, mutex27:4, Scratch21, failures and WIP.
+Next review: 2026-10-20T00:05:00.735334Z.

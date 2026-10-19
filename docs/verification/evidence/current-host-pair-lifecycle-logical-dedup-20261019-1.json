@@ -1,0 +1,56 @@
+{
+  "accepted_case_local_new_logical_cases": 1,
+  "baseline_distinct_native_behaviors": 25,
+  "comparison": [
+    {
+      "difference": "No ordered strict-stop/public-release/second-boot oracle; not the same composed case.",
+      "existing": "AVX380 diagnostic, including matched module replay88121b15",
+      "overlap": "Exact application oracle already accepted"
+    },
+    {
+      "difference": "Both old records use the 40-byte signal-mask workload, not the typed380 threaded AVX workload. Their historical distinct-app count stayed14 and lifecycle observations were tracked separately.",
+      "existing": "public native cycle9c384793 and post-reboot signal workloadbabc48ea",
+      "overlap": "Same native stop/public-release/reboot component consumers"
+    },
+    {
+      "basis": "Baseline14 current942 app diagnostics plus AVX, file utility, mixed Rust std, empty file, NULL x87 reset, mmap EINVAL, closed-write EBADF, mapping isolation, Rust file roundtrip, FP thread-state, Condvar timeout",
+      "difference": "None asserts the complete typed-threaded-workload -> native-stop -> public-release -> second-boot composition. Replayed images, module versions and capture formats alone do not create new logical cases.",
+      "existing": "remaining baseline25 application cases"
+    }
+  ],
+  "distinct_native_behaviors_after": 26,
+  "global_increment_after_dedup": 1,
+  "new_physical_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-lifecycle-physical-review-20261019-1/decision.json",
+    "sha256": "9b50f20c955a2ef082ce275b9336651f8a4aafae4ca459b72e76102bed585f64"
+  },
+  "new_semantic_review": {
+    "bytes": 18017,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-repeatability-independent-review-20261019-1/ACTUAL-FIRST-PUBLIC-CYCLE-NATIVE-DIAGNOSTIC-REVIEW.json",
+    "sha256": "c32f227b0a57bbfdbb8730e66852f7b438f3e6e4d1fc5a344c5b067586a84248"
+  },
+  "new_tests_or_runtime": 0,
+  "normalized_new_behavior": "typed AVX thread workload reaped -> strict native stop 5-to-0 -> public CPU/memory release -> successful second native boot in the same Linux guest",
+  "old_related_evidence": [
+    {
+      "path": "docs/verification/evidence/native-resource-reboot-cycle-result-review-20261017-2.json",
+      "sha256": "9c3847933f8cc9e3d175363338e87ff229ef7fcd1912d146219e7c990224efea",
+      "size": 5172
+    },
+    {
+      "path": "docs/verification/evidence/native-postreboot-workload-result-review-20261018-1.json",
+      "sha256": "babc48ea0f951586074e5aabcdd0915d0b3f1f76669ace8179adc585f07723ab",
+      "size": 2504
+    }
+  ],
+  "outer_capture_seconds": 62.23404623498209,
+  "owner_inner_seconds": 62.18470569001511,
+  "recorded_at": "2026-10-19T23:32:55.402390+00:00",
+  "schema": "mckernel.logical-behavior-dedup.v1",
+  "scope_limits": [
+    "One composed integration behavior only, not one increment per phase or vector.",
+    "No new Rust production/native path, practical check or engineering-band uplift.",
+    "Full restoration, second stop, repetition quotas, non-null FP and complete ring history remain open."
+  ],
+  "status": "PASS_CONTENT_RECONCILIATION"
+}
