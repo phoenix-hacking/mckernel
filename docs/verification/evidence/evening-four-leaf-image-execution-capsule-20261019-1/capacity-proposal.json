@@ -1,0 +1,64 @@
+{
+  "baseline_directory_allowance_bytes": 413696,
+  "baseline_observed_regular_bytes": 57962496,
+  "compiler_planning_bytes": 188399616,
+  "existing_source_request_toolchain_already_allocated": true,
+  "heavy_limits": {
+    "cpus": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "jobs": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "network": "none",
+    "pids": 512,
+    "sole_heavy": true
+  },
+  "new_full_source_copies": 0,
+  "normal_build_and_control_growth_bytes": 67108864,
+  "observations": {
+    "host": {
+      "admission": false,
+      "available_bytes": 50746290176,
+      "filesystem_device": 66306,
+      "margin_bytes": 32497217536,
+      "required_bytes": 18249072640
+    },
+    "scratch": {
+      "admission": false,
+      "available_bytes": 13758107648,
+      "filesystem_device": 1828,
+      "margin_bytes": 269225984,
+      "required_bytes": 13488881664
+    }
+  },
+  "per_filesystem": {
+    "host": {
+      "compiler_and_control_growth_bytes": 188399616,
+      "emergency_reserve_bytes": 536870912,
+      "floor_bytes": 17179869184,
+      "postbuild_growth_bytes": 343932928
+    },
+    "scratch": {
+      "compiler_and_control_growth_bytes": 67108864,
+      "emergency_reserve_bytes": 536870912,
+      "floor_bytes": 12884901888,
+      "postbuild_growth_bytes": 0
+    }
+  },
+  "planning_not_hard_build_file_limit": true,
+  "postbuild_bytes": 343932928,
+  "postbuild_includes_finite_retention_bytes": 83886080,
+  "prebuild_nm_proof_header_full_TU_bytes": 25165824,
+  "scratch_note": "Only64MiB control allowance+512MiB emergency above12GiB floor. Unrelated IHK14092861440-byte requirement is not consumed by this HOST-output image build.",
+  "six_supplemental_compiler_objects_bytes": 37748736,
+  "source_inventory": {
+    "bytes": 2925,
+    "path": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/capacity-proposal.json",
+    "sha256": "3623d41350620feb9f8c2283e6b4311efd77cf6c5f463132ccb0da10811a6c12"
+  },
+  "status": "EXACT_GROWTH_PLANNING_PENDING_FRESH_HEAVY_ADMISSION"
+}
