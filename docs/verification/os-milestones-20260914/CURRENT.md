@@ -1,5 +1,23 @@
 # Resume cursor
 
+## Current — full cleanup observation accepted; apply role prepared
+
+Observation6 actual c7eed9c1 independently accepts full unchanged source oracle:
+120candidates,122Githeaders,44containers,289processes,818taskviews,43controls,
+31scopedrecords,4parents,16unmatched. Both owned child and outer directlyjoined0,
+emptyownedgroup,mutex27:4 preserved/available; five exact FD/hash-bound raw
+readbacks pass. Its originaltimestamp aged beyond120seconds, so APPLY remains
+HOLD from that snapshot. No files deleted and no freshness reset.
+
+Exact separate apply1(f88d6f1b) and refreshobservation7(9852c164) wrappers/profile
+are independently conditionally approved b6cfea61/ea3cd9a1. Publish/fetch both
+before onefreshobservation; immediately postjoin readback+actualsnapshot/final
+applyreleasehash review before apply. Originalsource0c134 unchanged; failure
+exports alwaysreadknownthree and conditionallyjournal, evenon nonzero if
+physicallyretired. JournaloriginalP/actual-cleanup-apply-1.jsonl; all120paths,
+4MiBreleasecap,32MiBjournalcap and original120s gate remain unchanged.
+
+
 ## Current executable boundary — Git root-context defect resolved
 
 Actual Git-only runtime independently PASS163ea44:120rows/122objectheaders,

@@ -1,0 +1,87 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_APPLY_REVIEW_AND_FRESH_RELEASE_REQUIRED",
+  "scope": "Functional OS/apps retained cleanup prerequisite; only frozen120 exact duplicate files. No source mutation, observer replay, trim, directory removal, guest/container mutation. Root dispatcher owns execution.",
+  "argv": [
+    "sudo",
+    "-A",
+    "/usr/bin/python3",
+    "-I",
+    "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/apply-root-one.py",
+    "--release",
+    "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/actual-cleanup-release-1-PENDING.json",
+    "--release-sha256",
+    "PENDING_GENUINE_RELEASE_SHA256"
+  ],
+  "actual_child_argv": [
+    "/usr/bin/python3",
+    "-I",
+    "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/exact120.py",
+    "--mode",
+    "execute",
+    "--release",
+    "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/actual-cleanup-release-1-PENDING.json"
+  ],
+  "wrapper_sha256": "f88d6f1b27828b6063f7e28fb01f9617e41da4478ef42c7b0b97a936e04b039b",
+  "source_sha256": "0c134ee778b273610ead1ecc507caa038642459c0a065c956b4431c35c755917",
+  "resource_profile": {
+    "cpu_affinity": "6",
+    "jobs": 1,
+    "AS_bytes_per_process": 4294967296,
+    "aggregate_RSS_planning_bytes": 1073741824,
+    "CPU_seconds_per_process": 60,
+    "wall_seconds": 90,
+    "TERM_grace_seconds": 5,
+    "KILL_wait_seconds": 5,
+    "file_cap_bytes_each_including_engine_journal": 33554432,
+    "nofile": 4096,
+    "core_bytes": 0,
+    "root_operations": 1,
+    "network": false
+  },
+  "release_schema": "Existing EXECUTION_RELEASE consumer schema exactly; wrapper retains accepted observation_wrapper_sha256 field name for selfhash gate. No generic authority.",
+  "rolemap": {
+    "wrapper_capture_BASE": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1",
+    "production_engine_BASE": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1",
+    "production_SOURCE": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/exact120.py",
+    "engine_journal": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/actual-cleanup-apply-1.jsonl",
+    "release": "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/actual-cleanup-release-1-PENDING.json",
+    "captures": [
+      "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/actual-apply-1.stdout",
+      "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/actual-apply-1.stderr",
+      "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/actual-apply-1.supervisor.jsonl"
+    ],
+    "readback_journal": "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/actual-cleanup-apply-1.jsonl"
+  },
+  "source_closure_sha256": {
+    "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/exact120.py": "0c134ee778b273610ead1ecc507caa038642459c0a065c956b4431c35c755917",
+    "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/control-record-registry.json": "361e2b5d55a72a737d744fc304911eee498f6832317f36a53706f79c35249db9",
+    "/home/holden/mckernel-work/host-preparation/supervisor-scratch-duplicate-cleanup-20261018-1/candidate-manifest.json": "8255bbf869d9904b8ff0a4d6e2ce6dc5264493db1b2c3f6574ad98c04982956d",
+    "/home/holden/mckernel-work/host-preparation/duplicate-archive-cleanup-execution-preparation-20261018-1/observe-root-identity-debug.py": "fce7be3525836bed0a749370b0a5ff409f1814374d0438d398998936cf2da86a",
+    "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation-20261019-1/checkpoint-8e7a-fetched-proof.json": "b2ef2b7a9e7e24171f7fd02c8999d4fdb99569267e7eb43120ab40b149ced9ee",
+    "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/APPLY-ENVELOPE-PREPARATION.json": "909d1b387feb0b8d0723507ffdd8a9a1eeb384d718b7b5def1c206dd745f0b70",
+    "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/apply-root-one.py": "f88d6f1b27828b6063f7e28fb01f9617e41da4478ef42c7b0b97a936e04b039b",
+    "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/raw-readback-continuation.json": "f98dc5af006445a2a626a1df9a8f02f24993ba2ed1d85415928a6e4a73a3c55c",
+    "/home/holden/mckernel-work/host-preparation/evening-cleanup-apply-20261019-1/journal-cap-assessment.json": "69d4f3e2311130b30e292dbee0f585958b1ad5ea8b50723730bada478c382225"
+  },
+  "admission_minimum_available_bytes": {
+    "host": 17985175552,
+    "scratch": 13421772800
+  },
+  "pending": [
+    "independent actual observation6 review",
+    "fresh <=120seconds observation after actual execute snapshot; observation6 may be stale, never modify timestamp",
+    "publication fetched proof of exact current source closure",
+    "genuine final review+new <=4MiB release hash",
+    "current boot/mountUUID/mutex/coordinator/leases/noindirectconsumers/storage/RAM/includedusage",
+    "fresh rawcaptures and journal proof"
+  ],
+  "uncertainty": "No automatic apply retry after timeout/kill/STOP_PARTIAL/missing end evidence. Positive whole-group retirement independent of workloadrc required before inspection. APPLY_JOINED only reports child exit; actual COMPLETE and exact paths need independent acceptance.",
+  "conditional_fresh_observation7": {
+    "wrapper": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation7-20261019-1/observe-root-seven.py",
+    "wrapper_sha256": "9852c164c59ed0c816a2cfd721a54da75f3809facb796cc19b7d1808fe95858b",
+    "profile": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation7-20261019-1/command-profile.json",
+    "profile_sha256": "9f2a720d9f81fd0592df44d815407fc006d7908159457c60f6d0d215a9376f7d",
+    "readback": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation7-20261019-1/raw-readback-continuation.json",
+    "release_template": "/home/holden/mckernel-work/host-preparation/evening-cleanup-observation7-20261019-1/release-template-SOURCE_ONLY.json"
+  }
+}
