@@ -1,5 +1,39 @@
 # Resume cursor
 
+## Current — first fourleaf root observer failed; one bounded correction active
+
+Current accepted counts24nativebehaviors/17selectedproductionRust/11applicable
+nativepaths,7of35checks. Fourleaf artifact40ea08b7 and21retention0fb048 remain
+accepted. Two callback sourcecheckpoint44541ca9 and terminal21sourceclosured4a77223
+are pushed/fetched; current35a/materialized0eca stays frozen.
+
+FIRSTactualreadonlyset observer directlyjoined1, wholetoolsession3487 exit1:
+observe_four_leaf_image_retirement.py:330 still requires58FDrows inherited from
+29pairs; actualfinite21pairs produce42. All8originalclientledger gates and42
+new_object_binding calls returned before this assertion. No newmetadata,
+observation orcleanupdraft wrote afterit; earlierrootnonce/ownership/captures
+mayexist and are retained. Summary/FDmetadata/rawexport UNRUN; no cleanup/native.
+Evidence host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/
+terminal-preparation-1/actual-root-readonly-set-1/{failure.json,observer.status.json,
+observer.stderr,failed-observer-postjoin-facts.json}. ActualownedPGcensus0/no
+procdenials; rootmutex27:4 positivelyreacquired. Independentretirementclassification
+active; do not infer readiness from PIDabsencealone or replayconsumedrelease.
+
+Author owns fresh observer-cardinality-correction-1 source/nonce and dependent
+helpers, preserving originalsource/partialrootoutput. One corrected actualmain
+metadatajoin/draft assembly fixture plus independent finite21projection expert
+review precede any newsourcepublication/release/rootobservation. No unchanged
+compiler,copies1-13,actual21retention or oldrootnonce replay.
+
+New0eca ordinary remainingcorrection independently passes8f2f38fb: metadata-only
+namespaceprojection preserves originalbuilderprovenance+botharchives/full60map;
+fixture/parentdirect0, realparent1828:757493/nonce01cc688cfc76be9f30652b1a64006189.
+Native stillneedsphysicalrelease/freshadmission. FixedFP1e7 twoCPU source/snapshot
+mode/interface allpass3f3a915; finalrawphysicalref/fresh60s snapshot/releasepending.
+Nextprivate two-bodyRustbatch is testready onCPU7; no sharedsourcewrites/credit.
+Optionalscratchreserve576716->288358 proposal remains UNAPPLIED/unauthorized,
+nonblocking. Campaign ACTIVE; no automatic pause at this checkpoint.
+
 ## Current — four new production Rust helpers accepted; terminal release next (07:05 UTC)
 
 Canonical40ea08b7 accepts the35a/0eca image's four new selected Rust helpers:

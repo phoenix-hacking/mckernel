@@ -4544,3 +4544,52 @@ Python CLI verified. It shows canonical practical counts with source/timestamp
 limits and live runner, avoiding stale formal0/273 and6/130 numbers in the main
 view. It changes no campaign lifecycle or acceptance. All resource/ownership/
 97%controls and every prior failure/exclusion remain preserved. Next07:19UTC.
+
+
+## Review 61 — 2026-10-19T07:20:02Z
+
+Interval: 06:49:55–07:20:02 UTC. Two additional live process-release Rust
+callbacks passed focused C/Rust parity and independent source review and were
+integrated, pushed and fetched in 44541ca9. The evidence covers 468 scenarios
+and 3,744 leaf calls, selected/fallback consumers, unique linkage and no-FP
+checks. Their full production-image and native proof remain pending.
+
+The earlier four-helper image passed canonical artifact review, including all
+four descriptor strings and the production consumer bindings. All 21 retained
+artifact pairs passed: 17 actual copies and four reuses. The terminal tools are
+published and fetched in d4a77223. Preserve the original failed observation and
+DWARF gap. Completed build and artifact checks do not need repeating.
+
+New native behaviors: 0. New closed practical exit checks: 0. Recorded totals
+remain 24 behaviors, 13 production Rust paths, 11 native Rust paths and 7 of
+35 practical checks. All 14 whole milestones remain open; engineering bands
+are held. The source progress is real, but this interval does not establish
+a 2x or 3x runtime-throughput improvement. The four-leaf build finished at
+06:05:52 UTC; post-build release remains the dominant delay before a guest.
+
+The supervisor identified and removed an unnecessary dependency between
+ordinary staging and later physical cleanup. The new-image ordinary chain ran
+on CPU7 while terminal work continued. Its first command produced archives,
+then refused a mismatched inherited payload source path. Hash, size and mode
+match; base, collector and mcexec source joins match. The failure, joined child
+and empty process group are preserved. Use a reviewed manifest-only correction
+and unchanged validator, then the unrun fixture and parent commands. Do not
+recompress, rebuild or replay the failed full chain.
+
+The two-CPU snapshot helper is accepted, including explicit publication mode
+and dispatcher readback under restrictive umask. Its static bindings are fixed;
+genuine terminal release, fresh snapshot and final native release remain late.
+Continue both preparations in parallel, but serialize actual heavy execution.
+
+The optional scratch reserve proposal is exact and reviewed for user choice:
+576,716 to 288,358 reserved 4 KiB blocks, nominal 1.10 GiB additional ordinary
+availability. User confirmation is pending; no setting changed. The proposal
+must not block the OS path. Live host/scratch free capacity is about 46.95 and
+12.813 GiB; included usage is 54%, with the 97% stop unchanged.
+
+Next adjustment: finish the finite terminal chain under continuous ownership,
+reuse all accepted observations, and execute the first genuinely admitted
+native packet. For the next compiler cycle, prepare the corrected descriptor
+consumer during compilation, with only actual addresses/identities left late.
+Keep the sole-heavy profile, existing floors, evidence and scratch21 exclusions.
+Next full review: 07:50:02 UTC.

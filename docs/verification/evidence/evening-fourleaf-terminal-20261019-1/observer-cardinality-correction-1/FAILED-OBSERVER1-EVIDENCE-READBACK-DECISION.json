@@ -1,0 +1,49 @@
+{
+  "decision": "PASS_EXACT_ONE_READONLY_FAILED_OBSERVER1_FOUR_JSON_EVIDENCE_READBACK",
+  "reviewer": "resume_git_owner_review",
+  "implementation_ownership": false,
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/FAILED-OBSERVER1-EXACT-FOUR-JSON-READBACK-COMMAND.py",
+    "sha256": "9a3788ac5dd48a144378f6c46b9a37ba74ec57bed4c3ba908d8ca52c258f1790"
+  },
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=16777216",
+    "--core=0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport os,stat,json,hashlib,base64\nROOT=Path('/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/root-observation-four-leaf-observation-actual-1')\nNAMES=('ownership.json','readonly-command-00.json','readonly-command-01.json','readonly-command-02.json')\nassert os.getuid()==os.geteuid()==0 and set(os.sched_getaffinity(0))=={6}\nassert not any(p.is_symlink() for p in (ROOT,*ROOT.parents))\npfd=os.open(ROOT,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW);out=[]\ndef meta(s):return dict(device=s.st_dev,inode=s.st_ino,uid=s.st_uid,gid=s.st_gid,mode=oct(stat.S_IMODE(s.st_mode)),nlink=s.st_nlink,size=s.st_size,mtime_ns=s.st_mtime_ns,ctime_ns=s.st_ctime_ns)\ntry:\n parent=os.fstat(pfd);assert parent.st_uid==0 and parent.st_gid==0 and stat.S_IMODE(parent.st_mode)==0o700\n for name in NAMES:\n  fd=os.open(name,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK,dir_fd=pfd)\n  try:\n   before=os.fstat(fd);assert stat.S_ISREG(before.st_mode) and before.st_uid==before.st_gid==0 and stat.S_IMODE(before.st_mode)==0o600 and before.st_nlink==1 and 0<before.st_size<=1048576\n   raw=b''\n   while True:\n    block=os.read(fd,min(65536,1048577-len(raw)))\n    if not block:break\n    raw+=block;assert len(raw)<=1048576\n   after=os.fstat(fd);named=os.stat(name,dir_fd=pfd,follow_symlinks=False);assert meta(before)==meta(after)==meta(named) and len(raw)==before.st_size\n   out.append(dict(path=str(ROOT/name),metadata=meta(after),sha256=hashlib.sha256(raw).hexdigest(),bytes_base64=base64.b64encode(raw).decode()))\n  finally:os.close(fd)\n assert (os.fstat(pfd).st_dev,os.fstat(pfd).st_ino)==(parent.st_dev,parent.st_ino)==(ROOT.lstat().st_dev,ROOT.lstat().st_ino)\nfinally:os.close(pfd)\nraw=(json.dumps(dict(status='PASS_EXACT_FAILED_OBSERVER_FOUR_EXISTING_JSON_FD_READBACK_ONLY',files=out),sort_keys=True,separators=(',',':'))+'\\n').encode();assert len(raw)<8388608\nos.write(1,raw)\n"
+  ],
+  "allowed_paths": [
+    "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/root-observation-four-leaf-observation-actual-1/ownership.json",
+    "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/root-observation-four-leaf-observation-actual-1/readonly-command-00.json",
+    "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/root-observation-four-leaf-observation-actual-1/readonly-command-01.json",
+    "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/heavy-proposal-1/terminal-preparation-1/root-observation-four-leaf-observation-actual-1/readonly-command-02.json"
+  ],
+  "purpose": "Bind actualobserver rootPID/ownership andthree newreadonlycommand directwait/groupretirement records after failed58cardinality guard; no summary/newmetadata/draft success assumption.",
+  "profile": {
+    "CPU": 6,
+    "jobs": 1,
+    "AS": 1073741824,
+    "CPU_seconds": 30,
+    "wall_seconds": 35,
+    "TERM_KILL_grace": 5,
+    "sourcecap_each": 1048576,
+    "stdoutcap": 8388608,
+    "stderr_expected_bytes": 0
+  },
+  "prerequisite": "Parent wholefailedobserver/tool joined, exactownedgroupretired/rootmutexreacquired; holdrootexclusiveCPU6 slot only for thisonce command.",
+  "capture": "Ordinaryexclusive nofollow0600 heldFD, beforeafterstable9fields/directwait/size/SHA; outputclosed+wholejoined beforeindependentreview.",
+  "stop": "Any missing/shape/hash/auth/IO failure preserveserror; no widerfilelist/discovery/retry.",
+  "cleanup_or_observer_replay_authority": false
+}

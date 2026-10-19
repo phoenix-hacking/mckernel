@@ -1,25 +1,46 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review60, 2026-10-19T06:49:55Z
+## Current priorities — review 61, 2026-10-19T07:20:02Z
 
-Remaining3 real descriptor reads and strictv3facts PASS. Finish the four exact
-file/function string windows and canonical artifact acceptance, then21retention
-and reviewed terminal physicalrelease. Reuse compiler/4copies/inspections1-13;
-preserve failed14 and originalDWARFgap. Descriptor symbols exist; the oldsection
-name was wrong and Rustzero-address sections must remain distinct. Approve the
-finite4-window set coherently, without per-string packets or another broad audit.
+The four-leaf image has passed independent canonical artifact review, including
+all four descriptor strings. The 21-pair retention operation is accepted: 17 new
+copies and four verified reuses. The actual build finished at 06:05:52 UTC;
+terminal physical release is now the dependency before the next native run.
+Keep one author and reviewer responsible for the finite terminal chain through
+publication, observer/raw-five readback and physical release. Group bounded
+read-only calls and reuse unchanged accepted engines and results. Preserve the
+original failed observation, DWARF gap, fresh identities and sole-heavy controls.
 
-TwoCPU source/ordinary chain fullyaccepted including bothrunnernegativecases;
-prepare genuine finalnative release for next eligible slot. New0eca singleCPU
-continuation's fixedcanonical gate is coded; execution staysclosed pending real
-report/retainedpair. Keep runtime slots exclusive and fill source/code lanes.
-One next coherentRustbatch ports2liveprocessrelease detach callbacks; targeted
-actualC/Rust, bucket,parentcache,poisoning,lock/order checks then integrate/commit.
-Current0eca/materialized35a remainfrozen. No newcomputeC or compiler-per-leaf.
+Prepare both native paths in parallel: the two-CPU application case on the
+accepted FP image and the single-CPU continuation on the new 0eca image. Finish
+their static fixes before the terminal release. Do not spend their live snapshot
+windows resolving source or interface issues. The optional scratch reserve
+proposal is nonblocking and must not delay the runtime path or change settings
+without the exact authorization it requires.
 
-Python --progress practicaldisplay is shipped and verified; source f4a9e440.
-Native/practical counters remain24/13/11 and7of35,all14wholemilestonesopen. Prior
-engineering bands held; nextfullreview07:19UTC. User wants continued evening run.
+The two additional process-release Rust callbacks are integrated and pushed in
+44541ca9, with source review and focused parity/consumer checks accepted. Their
+production image and native proof remain pending. Preserve the frozen four-leaf
+build inputs; do not repeat that compiler run or require a compiler per leaf.
+The practical Python progress display is shipped in f4a9e440.
+
+Recorded counters remain 24 native behaviors, 13 production Rust paths, 11 native
+Rust paths and 7 of 35 practical checks. Reconcile any newly earned production
+count at the next natural checkpoint using accepted evidence. All 14 whole
+milestones remain open; no percentage uplift is inferred from preparation.
+New-image ordinary staging ran in parallel with terminal work, produced its
+archives, and stopped on an inherited payload-path mismatch. The payload hash,
+size and mode match. Preserve the failed manifest and review a new manifest-only
+finalizer plus the remaining fixture/parent commands; do not recompress archives.
+The terminal closure is pushed/fetched in d4a77223. Finish its batched observation
+and physical release, then run the first genuinely admitted native packet.
+
+There were no new native behaviors or closed practical checks in this interval.
+Two source callbacks shipped, but that is not a demonstrated 2x guest-throughput
+gain. Before the next compiler cycle, prepare the corrected section-aware
+descriptor reader and exact consumer plan while the compiler runs. Reuse its
+accepted inputs and collect only genuinely late observations after the build.
+The next full review is due at 07:50:02 UTC. Continue evening supervision.
 
 ## Previous build status — review59, 2026-10-19T06:19:11Z
 
