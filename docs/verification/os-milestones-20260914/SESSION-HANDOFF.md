@@ -1,5 +1,49 @@
 # OS development session handoff
 
+## Current — actual0eca FP-thread application and retirement accepted (08:24 UTC)
+
+Independent dbb53e09 accepts actual0eca FPTHREAD: exact254B frozen stdout,
+stderr0/exit0,2realworkers/distinctTIDs on one permitted CPU,64rounds each,
+16YMM/64lanes/peer progress and restored controls. Owner0/35.888s and all3
+readbacks0; expected tar socket-omission warning41B is retained. Physical e43e8ff9
+independently accepts30Dockerclient reaps, QEMUreap, container/lease absence,
+30groups+1SID empty, mutex27:4 positive and shared record absent. No new distinct
+behavior or per-helper C-retirement credit; selected production17/native11,
+behaviors24/checks7of35 remain scoped. UTI-refill/find_replaceTID, directnonnull
+FP-release and original syscall-DWARF/failed14 gaps remain OPEN.
+
+Two real guests ran in this interval: corrected twoCPU diagnostic failed before
+applications; oneCPU0eca FP-thread passed. The earlier113B QMP owner refusal was
+NOT a guest launch. FailedtwoCPU physical retirement independently passesbe68a21e
+(25clients/QEMU/container/lease), with all failure bytes preserved. Source diagnosis:
+postboot generic resource CPU queries return EBUSY; private control-helper and
+collector correction uses sourced preboot assignment and supported running ABI.
+Its6ordinary compiler/readelf/actualfixture commands joined0/1.286s;
+coherent source/stagecall35fb passes. The existing60s metadata-preserving stage
+is now running once onCPU7; no corrected guest yet. A new75B Condvar timeout
+source/oracle/profile passes569152d8, with exact3ordinarycommands queued after
+explicitCPU7release. No new application acceptance is inferred from preparation.
+
+Checkpoint03a91997 pushed/fetched186files ships resource lookup/final-cleanup
+Rust callbacks plus cfg-aware TOFU assertion, source-only. Together with44541ca9
+these form4compatible future callbacks. Exact source codegen+binder2/2 pass;
+actual emitted authority review1f756c1a releases one ordinary4command
+materialize/mkdir/prepare/consume chain. It completed4/4directjoins0,129.326s;
+actualacceptance1b94b6ad binds genuineimage-requeste9497da4 andmaterializationea286.
+One4callback heavyproposal is underfocusedreview;12new executableclosurefiles
+are preserved at this checkpoint, sourcepublication/freshadmission stillpending. ProductionGCC14,
+bothcrates/defaultmachineedges/newimage/native remain pending for those4ports.
+Current35a/0eca and supportedFP1e7 artifacts are frozen; no global moving-HEAD gate.
+
+Evidence retained: ../evidence/evening-fourleaf-native-and-terminal-checkpoint-20261019-1/
+(raw archives/statuses/snapshots/reviews/physicalfacts and terminalC1 results).
+Next: finish actual4command source preparation and one coherent future compiler
+release, while real twoCPU control fix proceeds through changed source/stage
+boundary. First fully admitted useful operation gets the sole heavy slot.
+Optional scratch reserve remains unauthorized/unapplied and nonblocking; IHK
+keeps its actual larger scratch requirement. Functional OS/apps+Rust/assembly,
+97%usage stop, original failures/scratch21/exclusions remain intact. ACTIVE.
+
 ## Current — physical release accepted; socket preflight correction; two Rust callbacks integrated (08:04 UTC)
 
 Fourleaf C1 cleanup and postjoin independently pass53c0eec4: container absent,

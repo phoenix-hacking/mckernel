@@ -1,39 +1,49 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 62, 2026-10-19T07:50:20Z
+## Current priorities — review 63, 2026-10-19T08:21:01Z
 
-Follow-up at 07:58 UTC: physical release is independently accepted, with all 42
-artifact descriptors preserved. The first two-CPU owner invocation then refused
-a 113-byte QMP socket path before locks, Docker or guest launch; the limit is
-107 bytes. The original parent is empty and all readbacks were unrun. Earlier
-guest-running wording was premature and has been corrected. Actual guest
-launches this evening remain zero; owner invocations and guest boots are distinct.
+Two real guest invocations now exist. The short-parent two-CPU guest reached
+McKernel running status and two logical CPUs, but its bootstrap/control query
+failed before either app started. Its physical retirement is independently
+accepted. The new 0eca one-CPU FP-thread case then completed: owner exit 0 in
+35.89 seconds and three readbacks exit 0. Follow-up at 08:27 UTC: the exact
+254-byte oracle, two real 64-round threads and physical retirement are accepted
+(application dbb53e09, physical e43e8ff9). This credits that workload, not UTI
+refill, __replaceTID or non-null FP release. The earlier 113-byte QMP failure was
+an owner invocation only; preserve it separately from these real guests.
 
-Use one fresh shorter parent and mechanically check every expanded AF_UNIX path
-in the actual owner/QEMU argv before another fresh snapshot. Check the new-image
-wrapper for the same family. Preserve the failed attempt and reuse image,
-payload, archives and unchanged fixtures. Bind the genuine parent and physical
-receipt, then obtain the separate fresh machine release. Case preparation stays
-parallel; actual heavy execution remains exclusive.
+Finish the new-image retirement decision promptly. Where evidence permits,
+issue physical acceptance before deeper path-credit/ledger work, then continue
+semantic review against immutable captures while another ready operation runs.
+Application failure does not prevent physical acceptance, as the two-CPU case
+already demonstrated; genuine ownership uncertainty still blocks reuse.
+Both final QMP paths are 101 bytes. The two-CPU control correction compiled and
+passed six ordinary commands plus 16 affected discovery checks. Staging and its
+new native release remain pending. A new Rust Condvar timeout/mutex-ownership
+case is source-only and targets an uncovered P-M06-02 behavior. Preserve the
+already accepted 387-byte batch rather than creating another duplicate variant.
 
-The next two process resource/cleanup callbacks passed source review, 126 parity
-scenarios and the two affected consumer compiles. A preexisting TOFU assertion
-is now configuration-aware. The current source files are dirty pending the
-campaign checkpoint; production C-layout, full-image and native proof remain
-open. Preserve WIP and frozen current-image inputs.
+The two process resource/cleanup callbacks and configuration-aware TOFU assertion
+are shipped in 03a91997, with all 186 fetched files verified. Source review,
+126 parity scenarios and two affected compiles passed. Production C-layout,
+full-image and native proof for these callbacks remain open. Preserve WIP and
+frozen current-image inputs.
 
-Once checkpointed, prepare these four compatible future callbacks for one
-compiler cycle. Reuse the corrected section-aware reader and finite-21 terminal
-machinery. Derive FD cardinality from the bound pair list; do not copy old
-29-pair/58-row assumptions. Freeze actual required symbols and authority joins
-before the next build; only genuine binary observations and live identities
-should remain late. Avoid a new framework or a queue of more private ports.
+The four-callback compiler request is prepared. Codegen/binder and all four
+ordinary materialization/request/consumer stages are independently accepted
+(1b94b6ad; actual request e9497da4). The actual callback argument map is
+8/9/10/17, distinct from capture indices. Heavy source publication, exact
+execution review and admission remain pending. The plan covers 109 ABI assertions
+and 15 post-build observations, reusing existing full Rust objects. Post-build
+adapters are being prepared before compilation finishes. Keep corrected section
+and finite-21 machinery; derive counts from bound data. Avoid a new framework.
 
-Recorded totals remain 24 native behaviors, 13 production Rust paths, 11 native
-Rust paths and 7 of 35 practical checks. No native/check uplift this interval;
+Recorded totals are 24 native behaviors, 17 production Rust paths (up four from
+13, confirmed against artifact review 40ea08b7), 11 native Rust paths and 7 of
+35 practical checks. There is no distinct-native-behavior/check uplift yet;
 all 14 whole milestones and earlier engineering bands are held. The optional
-scratch reserve question is pending with no mutation authority. Usage is 55%;
-the 97% stop and existing floors remain. Next full review: 08:20:20 UTC.
+scratch reserve question is pending with no mutation authority. Usage is 57%;
+the 97% stop and existing floors remain. Next full review: 08:51:01 UTC.
 
 ## Previous priorities — review 61, 2026-10-19T07:20:02Z
 

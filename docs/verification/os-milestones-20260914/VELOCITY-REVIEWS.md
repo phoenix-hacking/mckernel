@@ -4639,3 +4639,49 @@ invocation as a guest launch; that was premature and the user was corrected.
 Actual guest launches this evening: 0. Prepare one shorter-parent correction
 and check all expanded socket paths in both native preparations before the
 fresh snapshot. Reuse accepted artifacts; no compiler or archive replay.
+
+
+## Review 63 — 2026-10-19T08:21:01Z
+
+Interval: 07:50:20–08:21:01 UTC. Two additional resource/cleanup Rust callbacks
+and the TOFU assertion repair shipped in 03a91997; all 186 fetched files were
+verified. The four compatible future callbacks now have a combined compiler
+request. Codegen and binder passed with two direct joins, emitting 6,948 authority
+entries. Materialization and actual compiler execution are still pending.
+
+Owner invocations: three; actual guests: two. The first owner refused the long
+QMP path before acquisition. The corrected two-CPU guest reached McKernel status
+5 and two logical CPUs, then failed bootstrap/control queries before apps ran.
+Its QEMU, 25 Docker clients, container, lease and process groups have independent
+positive retirement acceptance. Keep application failure separate from retirement.
+The author is correcting unsupported post-boot query use in the Linux control
+helper and collector. Existing kernel and application artifacts remain reusable.
+
+The new 0eca one-CPU FP-thread case completed with owner exit 0 in 35.89 seconds
+and all three readbacks exit 0. Exact oracle, native-path credit and physical
+retirement are under independent review. Do not claim accepted new behavior or
+Rust retirement credit early. Both current full QMP paths are 101 bytes, within
+107. The earlier premature guest-launch statement was corrected and preserved.
+
+Recorded totals stay 24 accepted behaviors, 13 production Rust paths, 11 native
+Rust paths and 7/35 practical checks; no new closure or percentage uplift is
+claimed. The source worker avoided rebuilding an already accepted Rust app test
+and is looking for a genuinely uncovered practical condition instead. Available
+host/scratch space is about 46.83/12.811 GiB; included usage is 56%. The optional
+scratch-reserve question is pending and no filesystem setting changed.
+
+Next adjustment: issue physical-retirement acceptance promptly when witnesses
+support it, then allow deeper semantic/path-credit review to continue on immutable
+captures alongside the next ready operation. Preserve actual ownership blocks;
+do not make ledger completion a runtime dependency. Finish the bounded two-CPU
+control correction and ordinary next-source preparation in parallel. Keep one
+heavy owner, original floors, every failure and the 97% stop.
+Next full review: 08:51:01 UTC.
+
+Follow-up, 08:27 UTC: the 0eca FP-thread oracle and physical retirement passed
+independent review (dbb53e09/e43e8ff9). No additional native-path credit was
+claimed. Dispatcher reconciled the four-helper artifact decision to 17 selected
+production Rust paths, up from 13; native paths stay 11 and practical checks 7/35.
+The four-stage ordinary compiler preparation is accepted (1b94b6ad/e9497da4).
+Two-CPU control correction passed six commands and 16 affected checks; staging
+is pending. A source-only Condvar timeout case targets an uncovered requirement.

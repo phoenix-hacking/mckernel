@@ -1,0 +1,277 @@
+{
+  "accepted_ordinary_review": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-continuation-ordinary-review-20261019-1/ACTUAL-CORRECTION-ORDINARY-ACCEPTANCE.json",
+    "sha256": "8f2f38fb4bc97bfcaade0b85dab0e6a006f6e3edf8df1fff5dde854d15fda818",
+    "size": 8183
+  },
+  "actual_image_terminal_physical_release": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/FOURLEAF-C1-ACTUAL-CLEANUP-PHYSICAL-RELEASE-REVIEW.json",
+    "sha256": "53c0eec4505a23f00b47680d6124c3659cb23e7fca5662ed660514baf18c21fd",
+    "size": 11235
+  },
+  "allowed_preparation": {
+    "root_snapshot": {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--core=0",
+        "--nofile=256",
+        "--fsize=33554432",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/root_manual_snapshot.py",
+        "--static-review",
+        "PENDING_ACTUAL_INDEPENDENT_STATIC_REVIEW_PATH",
+        "--static-review-sha256",
+        "PENDING_ACTUAL_INDEPENDENT_STATIC_REVIEW_SHA256",
+        "--predecessor",
+        "PENDING_LATEST_ACCEPTED_PHYSICAL_PREDECESSOR_PATH",
+        "--predecessor-sha256",
+        "PENDING_LATEST_ACCEPTED_PHYSICAL_PREDECESSOR_SHA256",
+        "--snapshot-output",
+        "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/root-live-preflight-1.json",
+        "--publication-output",
+        "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/root-snapshot-publication-1.json"
+      ],
+      "source_only_no_authority": true
+    },
+    "unprivileged_assembly": {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--core=0",
+        "--nofile=256",
+        "--fsize=33554432",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/assemble_final_data.py",
+        "--snapshot",
+        "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/root-live-preflight-1.json",
+        "--snapshot-sha256",
+        "PENDING_ACTUAL_FRESH_SNAPSHOT_SHA256",
+        "--publication",
+        "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/root-snapshot-publication-1.json",
+        "--publication-sha256",
+        "PENDING_ACTUAL_ROOT_PUBLICATION_SHA256",
+        "--output",
+        "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/machine-execution-release-1.json"
+      ],
+      "source_only_no_authority": true
+    }
+  },
+  "artifact_acceptance": {
+    "bytes": 38610,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/FOURLEAF-ACTUAL-PRODUCTION-ARTIFACT-REVIEW.json",
+    "sha256": "40ea08b79452706c126b676d85b8ea0cc38d4466b390ef881f054ffe8788a464"
+  },
+  "conditional_authority": "One exact root snapshot and ordinary assembly under reviewed CPU7/1GiB/30CPU35wall controls after genuine fresh exclusive/root/resource admission. No guest until exact final machine execution decision and coordinator guard verification.",
+  "decision": "PASS_NON_TEMPORAL_FP_THREAD_PARENT_BOUND_CASE_ENVELOPE",
+  "endpoint_count": 1,
+  "endpoint_limit_bytes": 107,
+  "expanded_owner_qemu": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/NATIVE0ECA-EXPANDED-OWNER-QEMU-ARGV.json",
+    "sha256": "bdb031b0a7944cea65499be5dd389c8f5a73d511e640666f33c081783451d59f"
+  },
+  "failure_rule": "Any source/body/profile/oracle/path change or failed snapshot/admission/finalreview stops; no source-only runtime authority or retry; preserve113B pre-acquisition failure9acab.",
+  "final_contract": {
+    "allowed_argv": "Exact python -I-B dispatch-runtime.py --release actualfile --release-sha256 actualwholefilehash; outer affinity7",
+    "coordinator_guard": {
+      "bytes": 1101,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/coordinator-final-launch-guard.py",
+      "sha256": "52cb3a265fc9cd6aa8ea47eb0366b5a94170d62993a2788d1efec277cecdd38e"
+    },
+    "decision": "PASS_EXACT_FOURLEAF0ECA_MACHINE_RELEASE_AND_OWNER_INVOCATION",
+    "machine_projection": "SHA256 sortedcompact JSON plus ONEnewline of ENTIRE parsed machine; no excluded or self-referential review field",
+    "machine_release": "Exact whole file path/SHA256/bytes; every parsed field bound",
+    "schema": "mckernel.independent-fourleaf-native-exact-machine-release-review.v1",
+    "separate_owner_argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+      "--attempt-parent",
+      "/home/holden/mckernel-work/scratch/fl4-p-261019-1/a",
+      "--nonce",
+      "01cc688cfc76be9f30652b1a64006189",
+      "--owner-sha256",
+      "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+      "--manifest",
+      "/home/holden/mckernel-work/scratch/fl4-m-20261019-1/roundtrip/manifest-consumer-projection-1.json",
+      "--manifest-sha256",
+      "c8174672de0fd4a51f095c42415686c530ee3d1c849fa00812dac6e9fb426a24"
+    ],
+    "snapshot_age": "Original source timestamp;0<=age<=60 at review and immediate guard launch; no timestamp reset"
+  },
+  "implementation_ownership": false,
+  "max_endpoint_bytes": 101,
+  "missing_genuine_late_fields": [
+    "Fresh root snapshot and root FD publication exact path/hash/metadata/originalepoch; actual snapshot/assembly directjoins",
+    "Exact assembled machine file path/hash/bytes and whole parsed projection",
+    "Actual final independent machine decision path/hash, then launch guard hash/epoch/argv verification"
+  ],
+  "native_acceptance": false,
+  "non_temporal_result": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/non-temporal-check-result.json",
+    "sha256": "7a3119c4f35e36a879fa836edfc312fc2188a628353acd71d239de76bc4fe1a4",
+    "size": 384
+  },
+  "non_temporal_source": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/check_non_temporal.py",
+    "sha256": "8bb8954aef527f9f71d38277c3a57b688b6b6d22d75ee362f67cc7711175348e",
+    "size": 5540
+  },
+  "nonce": "01cc688cfc76be9f30652b1a64006189",
+  "only_late_fields": [
+    "actual_latest_independent_physical_predecessor_ref",
+    "independent_non_temporal_static_execution_review_ref",
+    "snapshot_output_path",
+    "fresh_snapshot_hash",
+    "machine_release_output_path",
+    "external_final_machine_execution_review_hash"
+  ],
+  "profile": {
+    "native": {
+      "cleanup_timeout_seconds": 15,
+      "cpus": 4,
+      "cpuset": "2-5",
+      "guest_memory_mib": 8192,
+      "guest_numa_nodes": 2,
+      "guest_timeout_seconds": 300,
+      "guest_vcpus": 4,
+      "heavy_operations": 1,
+      "mckernel_cpus": 1,
+      "mckernel_memory_mib": 128,
+      "memory": 12884901888,
+      "memory_swap": 12884901888,
+      "network": "none",
+      "payload_timeout_seconds": 10,
+      "pids": 512
+    },
+    "owner_mounts": "EXACT unchanged REPO read-only + SCRATCH read-only + fresh parent read-write; no 2CPU-profile expansion",
+    "readback": {
+      "capture_each_bytes": 33554432,
+      "commands": 3,
+      "timeout_each": 30
+    },
+    "root_snapshot_and_assembly": {
+      "AS_bytes": 1073741824,
+      "CPU": 7,
+      "CPU_seconds": 30,
+      "file_bytes": 33554432,
+      "guest_or_owner": false,
+      "jobs": 1,
+      "root_snapshot_only_findmnt_flock_capacity_state_and_root_JSON_publication": true,
+      "wall_seconds": 35
+    }
+  },
+  "proposal": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/execution-proposal.json",
+    "sha256": "36af9a2e31bedf70e2e6cbb88bfefe9a706d438f633c3f3d86e2683a2e2d1ff4",
+    "size": 15881
+  },
+  "prospective_parent": {
+    "identity": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 757493,
+      "mode": "0o700",
+      "uid": 1000
+    },
+    "path": "/home/holden/mckernel-work/scratch/fl4-p-261019-1/a"
+  },
+  "queue_reconciliation": {
+    "FP2_guest_launched": false,
+    "later_failed_invocation": {
+      "bytes": 3447,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-cpu-end-to-end-review-20261019-1/decision-actual-native-attempt1-failure.json",
+      "sha256": "9acab2709bb293f7c4515e7903049d73ba5d46b0bc4666faaae73015920ab1c6"
+    },
+    "later_failure_classification": "SOURCE_KNOWN_NONE_BEFORE_ACQUISITION",
+    "latest_actual_physical_predecessor": {
+      "bytes": 11235,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-git-owner-review-20261019-1/FOURLEAF-C1-ACTUAL-CLEANUP-PHYSICAL-RELEASE-REVIEW.json",
+      "sha256": "53c0eec4505a23f00b47680d6124c3659cb23e7fca5662ed660514baf18c21fd"
+    },
+    "scope": "Supersedes only stale queue prose assuming FP2guest. Existing source accepts actual predecessor typedref; no source/proposal/profile edits or fictitious guest acceptance."
+  },
+  "reviewed_request": {
+    "bytes": 17701,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/native-final-request.json",
+    "sha256": "aea01cc355f95659fc5245200cb4f15f3b591181b9eaa4c44d93aa6944085456"
+  },
+  "reviewed_source_packet": {
+    "bytes": 2549,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/native-source-review-packet.json",
+    "sha256": "d0695d1ab276fcf5074498e2ced6fb970fc1d3bc6883b7858b0115a07a429088"
+  },
+  "reviewer": "resume_git_owner_review",
+  "root_snapshot_source": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/root_manual_snapshot.py",
+    "sha256": "e96adbe0e4316c51fba19d5f4deb9a394a85afca34452bd1b3ac9d53f7d1683d",
+    "size": 8099
+  },
+  "runtime_release": false,
+  "runtime_wrapper": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/dispatch-runtime.py",
+    "sha256": "108d7f1f02ab46f60b9e0b908d75eb83aac23ab67c088b36b3b357ad81e59926",
+    "size": 5881
+  },
+  "schema": "mckernel.independent-fourleaf-native-conditional-static-review.v1",
+  "scope": "Functional OS/apps and Rust/reviewed assembly; exactly one0eca image/1McKernelCPU guest under accepted4CPU2-5/12GiB/noSwap/512tasks/noNet owner. No prior FP2guest required.",
+  "source_pins": {
+    "assemble_final_data.py": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/assemble_final_data.py",
+      "sha256": "fd4c161ca4d0bf1a82287b9b533c14cddf8b5f5dfd96548d6072a879e9a53594",
+      "size": 3910
+    },
+    "check_non_temporal.py": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/check_non_temporal.py",
+      "sha256": "8bb8954aef527f9f71d38277c3a57b688b6b6d22d75ee362f67cc7711175348e",
+      "size": 5540
+    },
+    "dispatch-runtime.py": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/dispatch-runtime.py",
+      "sha256": "108d7f1f02ab46f60b9e0b908d75eb83aac23ab67c088b36b3b357ad81e59926",
+      "size": 5881
+    },
+    "root_manual_snapshot.py": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/evening-fourleaf-native-continuation-20261019-1/native-final-preparation-1/root_manual_snapshot.py",
+      "sha256": "e96adbe0e4316c51fba19d5f4deb9a394a85afca34452bd1b3ac9d53f7d1683d",
+      "size": 8099
+    }
+  }
+}
