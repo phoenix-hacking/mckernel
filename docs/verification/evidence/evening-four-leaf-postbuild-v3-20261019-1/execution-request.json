@@ -1,0 +1,35 @@
+{
+  "argv": [
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/bin:/bin",
+    "LC_ALL=C",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/postbuild-consumer-v3/observe_remaining_v3.py",
+    "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/postbuild-consumer-v3/proposal/postbuild-execution-release.json",
+    "SHA256_FROM_ACTUAL_RELEASE_FILE"
+  ],
+  "authority": "PENDING_EXACT_REVIEW_AND_ROOT_RELEASE",
+  "profile": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/postbuild-consumer-v3/proposal/profile.json",
+    "sha256": "f869990c393b415bfa0168f5e6f552ab9cadb9511cd19d0a63a72b14c0397779"
+  },
+  "release_payload": {
+    "path": "/home/holden/mckernel-work/host-preparation/evening-four-leaf-production-20261019-1/postbuild-consumer-v3/proposal/release-payload-DRAFT.json",
+    "sha256": "0df5b3647e0e136e0d2612188d0d47f8d1878daa1c8a9ba8bc23de76a7087b26"
+  }
+}
