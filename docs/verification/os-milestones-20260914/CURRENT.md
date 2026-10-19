@@ -1,3 +1,25 @@
+## Current — matched SDK pair accepted; process Rust app source/reference ready
+
+Fresh matched host Rust pair SDK owner wholejoined0/21.302239s. Independent
+physical69b2fc61 accepts15clients/42emptygroups/container+record release; no
+separate cleanup. Artifactb9ea18d0 and full3module ABI5d31c1f0 accept actual
+IHKc396958b/SMPaf234fbc/mcctrl6571ac7e with current60source/14IHK/full11image
+bindings. MODVERSIONS disabled/zeroCRCs are not standalone compatibility proof.
+Matching module loading/native MM-error proof remain unaccepted until their
+separate exact runtime. Current matched native stage3b801a5a and typed/snapshot
+boundaryd191aa90 are accepted; finalcase/config preparation is active. Last
+physical remains69b; fresh finalsnapshot/review required before a new guest.
+
+Rust app scripts/application-tests/practical_process_exec_wait.rs is exact
+reviewedbaa27 source. Actual3command staticGNU compiler/readelf/Linux reference
+passed0/.542485s:235B/emptyerr/exit0, twochild exits37/42, EOF/positivewait/
+secondECHILD/owned0. Independent8f43d9d0 accepts source/reference only. Native
+P-M06-01 remainsOPEN on authentic CREATE_PPD provider/aliasrevocation/finalACK;
+newprivate provider implementation lane preserves held branches/defaultNULL/-95
+until genuine whole-boundary proof. No held runtime/rejected work replay.
+Practical11/35, nativebehaviors25, productionRust17/nativeRust14 unchanged;
+all14wholemilestonesOPEN. FixedFP/205 artifacts/Scratch21/failures preserved.
+
 ## Literal practical reconciliation — 11/35, no new runtime credit
 
 Independent0d600890 closes only P-M06-02 (real overlapping threads/futex and

@@ -1,0 +1,102 @@
+{
+  "accepted_profile_source": {
+    "bytes": 8421,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-rust-functional-batch-20261018-1/ordinary-compiler-linux-proposal.json",
+    "sha256": "9529572f602d8853194ee92067adb9d15fb4b52f24da9d00312a95620be9cf3c"
+  },
+  "accepted_source_validation_prefix": "/home/holden/mckernel-work/host-preparation/practical-rust-functional-batch-20261018-1",
+  "commands": [
+    {
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-D",
+        "warnings",
+        "-C",
+        "opt-level=1",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "target-feature=+crt-static",
+        "-C",
+        "relocation-model=static",
+        "-C",
+        "link-arg=-no-pie",
+        "-C",
+        "link-arg=-Wl,-z,noexecstack",
+        "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1",
+      "label": "compile",
+      "timeout_seconds": 100
+    },
+    {
+      "argv": [
+        "/usr/bin/readelf",
+        "-W",
+        "-h",
+        "-l",
+        "-d",
+        "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1",
+      "label": "readelf",
+      "timeout_seconds": 10
+    },
+    {
+      "argv": [
+        "/usr/bin/strace",
+        "-f",
+        "-e",
+        "trace=clone,fork,vfork,execve,wait4,exit,exit_group",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/linux-process.trace",
+        "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait",
+        "--observations",
+        "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/observations.json"
+      ],
+      "cwd": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1",
+      "label": "linux-reference",
+      "timeout_seconds": 10
+    }
+  ],
+  "environment": {
+    "HOME": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/home",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/tmp",
+    "TZ": "UTC"
+  },
+  "held_provider_changes": false,
+  "oracle": {
+    "bytes": 1829,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/frozen-oracle.json",
+    "sha256": "ba9e4a70d8756830e2d30da877a26bd14ce0f1ebc852d11ecca248f3f7a690c9"
+  },
+  "resources": {
+    "address_space_limit_bytes": 1073741824,
+    "aggregate_output_acceptance_bytes": 67108864,
+    "core": 0,
+    "cpu_affinity": [
+      6
+    ],
+    "cpu_seconds": 150,
+    "file_size_limit_bytes": 268435456,
+    "jobs": 1,
+    "nofile": 256,
+    "outer_wall_seconds": 180,
+    "profile_basis": "Accepted mixed Rust1.92 GNU-static flags/toolpins/27rlibs/minimalenv and file app ordinary profile, CPU7 only after root allocation; reviewer must accept new exact source/path."
+  },
+  "root_or_native_authority": false,
+  "source": {
+    "bytes": 11038,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait.rs",
+    "sha256": "baa27be71b1ca2e8b3a5856f4e42f5f31aebc51b22350a4b38a8f16eceb16c7d"
+  },
+  "source_validation": "Reuse exact unchanged tool/27rlib/librarycarrier bindings from accepted profile; verify saved validation input pins before actualcompile.",
+  "status": "SOURCE_PREPARED_NO_COMPILER_OR_LINUX_EXECUTION"
+}

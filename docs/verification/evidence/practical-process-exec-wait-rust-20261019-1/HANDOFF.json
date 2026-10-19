@@ -1,0 +1,90 @@
+{
+  "Rust_application_compiles": 1,
+  "actual_result": {
+    "bytes": 9218,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/linux-reference-result.json",
+    "sha256": "8473324029b136bce8e72ead4a5a087788b5bfa113475386784e9355c0b1def6"
+  },
+  "actual_stdout": {
+    "bytes": 235,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/compiler-linux-reference-1/linux-reference/stdout",
+    "sha256": "0e7aa2ed289b122be9c38f44dc284cbb7bda64a662c2b09b4036a030f3f2d17b"
+  },
+  "binary": {
+    "bytes": 5628568,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait",
+    "sha256": "537cb22b2af1f7fca1202afaf45b017364823c185c2ec47474093e51647ba5b8"
+  },
+  "children_created": 2,
+  "children_reaped": 2,
+  "command_failures": 0,
+  "cpu6_released": true,
+  "exact_native_blocker": "Current handoff3154/3180 production nonnull CREATE_PPD stays -95 until separately held real provider bridge, MM alias revocation and final fork ACK whole-contract review/release; execve/forkACK held lanes are not reopened by this reproducer.",
+  "expected_stdout": {
+    "bytes": 235,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/expected.stdout",
+    "sha256": "0e7aa2ed289b122be9c38f44dc284cbb7bda64a662c2b09b4036a030f3f2d17b"
+  },
+  "frozen_at": "2026-10-19T22:21:40.178851+00:00",
+  "functional_scope": "P-M06-01 selected-app process creation/exec/wait/error reproducer; Rust application code only.",
+  "independent_boundary_review": "Pending parent dispatcher assignment; review raw LP64 libc FFI, async-safe postfork path, unreaped-PID signal ownership and reap failure exits.",
+  "kernel_provider_or_compute_C_changes": false,
+  "native_acceptance": false,
+  "new_guest_runs": 0,
+  "next_application_argv": [
+    "<root-selected absolute guest path>/process_exec_wait"
+  ],
+  "next_execution_prerequisites": [
+    "Distinct authorized provider/exec/wait runtime support and held-boundary release, if applicable",
+    "Root-selected matching SDK/module/image and separately reviewed application packet",
+    "Fresh owning process-group supervisor, guest captures and full retirement proof"
+  ],
+  "oracle": {
+    "bytes": 1829,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/frozen-oracle.json",
+    "sha256": "ba9e4a70d8756830e2d30da877a26bd14ce0f1ebc852d11ecca248f3f7a690c9"
+  },
+  "ordinary_command_count": 3,
+  "owned_children_after": 0,
+  "ownership_observations": {
+    "bytes": 332,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/observations.json",
+    "sha256": "b66b903c05291ba0cbad2dc726d7c0d366343bcd43663ae78cd9082288848304"
+  },
+  "practical_row_closed": false,
+  "proposal": {
+    "bytes": 4067,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/ordinary-compiler-linux-proposal.json",
+    "sha256": "c2073759d84ab16f18107c9bacc34451f7c7189f9ab010127327f7d753071f68"
+  },
+  "reference_reproduce_command": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "10s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait"
+  ],
+  "reference_reproduce_is_not_a_release": true,
+  "second_wait_ECHILD_count": 2,
+  "service_held_work_touched": false,
+  "source": {
+    "bytes": 11038,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait.rs",
+    "sha256": "baa27be71b1ca2e8b3a5856f4e42f5f31aebc51b22350a4b38a8f16eceb16c7d"
+  },
+  "source_pins": {
+    "bytes": 1934,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/source-pins.json",
+    "sha256": "b794df4d6efacea31bfb328df0fd1e329c73abf9f7ec69a7d11f2f8cdf328095"
+  },
+  "status": "SOURCE_AND_STATIC_RUST_LINUX_REFERENCE_COMPLETE_NATIVE_PENDING",
+  "stdout_bytes": 235,
+  "trace": {
+    "bytes": 66494,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/linux-process.trace",
+    "sha256": "3da19526399fa040d990eac76b1386c7c2ee08051be09cc09e5fc1c89447803b"
+  }
+}
