@@ -1,0 +1,89 @@
+{
+  "schema": "mckernel.supervisor-velocity.v1",
+  "observed_at": "2026-10-19T18:10:03.318501Z",
+  "baseline_at": "2026-10-19T10:27:41Z",
+  "elapsed_wall_hours": 7.706199583611111,
+  "monotonic_ns": 215510643765327,
+  "boottime_ns": 230848770815723,
+  "previous_sample_interval_seconds": 313.372537,
+  "largest_observed_sample_gap_minutes": 299.53526335,
+  "interval_wall_minus_monotonic_seconds": 3.160000119351025e-07,
+  "baseline": {
+    "practical_checks": 7,
+    "native_behaviors": 25,
+    "production_rust_paths": 17,
+    "native_rust_paths": 11
+  },
+  "last_confirmed_counters": {
+    "practical_checks": 7,
+    "native_behaviors": 25,
+    "production_rust_paths": 17,
+    "native_rust_paths": 11
+  },
+  "delta": {
+    "practical_checks": 0,
+    "native_behaviors": 0,
+    "production_rust_paths": 0,
+    "native_rust_paths": 0
+  },
+  "gains_per_wall_hour": {
+    "practical_checks": 0.0,
+    "native_behaviors": 0.0,
+    "production_rust_paths": 0.0,
+    "native_rust_paths": 0.0
+  },
+  "known_production_native_events": [
+    {
+      "at": "2026-10-19T11:53:46.352736Z",
+      "kind": "native_image_acceptance",
+      "result": "pass",
+      "invocation_seconds": 36.1,
+      "proof": "fef728f6/8c8ec185",
+      "time_basis": "first_observed_acceptance; invocation completed earlier"
+    },
+    {
+      "at": "2026-10-19T12:08:32.445210Z",
+      "kind": "production_attempt",
+      "result": "failed",
+      "invocation_seconds": 170.56,
+      "proof": "a55469e6",
+      "time_basis": "closed guard status; outer duration rounded to 0.01s"
+    },
+    {
+      "at": "2026-10-19T17:57:23.816691Z",
+      "kind": "production_attempt",
+      "result": "pass",
+      "invocation_seconds": 259.02,
+      "proof": "f7352de9",
+      "time_basis": "accepted producer finish; outer invocation includes guard/owner setup",
+      "producer_seconds": 97.7241093,
+      "build_phases_passed": 16
+    }
+  ],
+  "known_event_rate_per_wall_hour": 0.38929695077975196,
+  "known_invocation_wall_seconds": 465.67999999999995,
+  "known_invocation_fraction_percent": 1.6785907781399525,
+  "last_build_to_native_feedback_minutes_approx": 89,
+  "build_to_native_target_minutes": 30,
+  "pending_build_finished_at": "2026-10-19T17:57:23.816691Z",
+  "pending_build_to_native_lower_bound_minutes": 12.6583635,
+  "failed_case_post_guard_hold_minutes": 43.95494821666667,
+  "failed_case_release_pending": false,
+  "failed_case_release_accepted_at": "2026-10-19T12:52:29.742103Z",
+  "failed_case_release_proof": "NEW205-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json:9e0d62b9",
+  "post_guard_hold_target_minutes": 10,
+  "last_successful_snapshot_review_age_seconds": 17.72,
+  "snapshot_launch_target_seconds": 30,
+  "included_usage_percent": 70.0,
+  "usage_delta_percentage_points": 8.0,
+  "remaining_percentage_points_to_97_stop": 27.0,
+  "notes": [
+    "Rates use elapsed wall time since the named baseline, not CPU time.",
+    "Confirmed counters come from accepted campaign reports; no OS-percent inference.",
+    "Known invocation fraction is a partial wall-time inventory, not CPU utilization.",
+    "One native image repeats an existing behavior: distinct behavior increment zero.",
+    "Held-case age stops only after independently accepted physical release.",
+    "Wall rates include unavailable time and observation gaps; they are not active engineering rates.",
+    "No launcher, build, guest, cleanup, quota, filesystem or goal mutation."
+  ]
+}

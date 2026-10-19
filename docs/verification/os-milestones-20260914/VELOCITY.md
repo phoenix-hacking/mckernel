@@ -1,50 +1,39 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 71, 2026-10-19T12:30:28Z
+## Current priorities — review 72, 2026-10-19T17:56:07.640342Z
 
-Campaign ACTIVE; totals remain25 native behaviors/17 production Rust paths/
-11 native paths/7 of35 practical checks, all whole milestones open. Engineering
-bands supplied to the user remain held; no new percentage-point gains claimed.
-The prior e0d FP-thread application/retirement PASS remains accepted.
+The corrected fresh full build is RUNNING: request 8b7b34ed, unchanged kernel
+205410e4, final review 53bd5149. Finish the actual compiler/image result; no new
+image or native acceptance is claimed yet. Physical predecessor 9e0d62b9 is
+accepted. The approved scratch reserve change is DONE with 1.10 GiB measured gain.
+Do not repeat either operation. Preserve the whole failed case and its twelve
+log pairs; producer failure remains failure.
 
-New205 failed after9passed commands: relocated full-syscall TU could not resolve
-the existing ../executer/include/uti.h. Producer-only correction adds
--iquote /src/kernel to both affected compile commands; kernel205 is unchanged.
-Include-resolution regression passed. Owner/8clients positively retired a55469e6
-and genuine mutex proof747a938f accepted. Physical release is still pending.
-Preserve12finite logs/receipts (152117bytes) and the whole partial tree in place.
-Failure adapter's actual argv/mount/negative checks and expert normalization of
-exactly3literals across2functions passed;44other functions unchanged. Both failed
-fixtures remain retained. Finish finite retention and exact failure-only physical
-release without successful-image gates or replaying original observations.
+Keep postbuild and strict N3 preparation ahead of build completion. The terminal
+fresh-request amendment dae57932 needs one affected fixture and targeted review.
+Explicitly update the N3 request pins in parallel, keeping the existing CPU oracle
+and accepted 37-role contract. Use admitted ordinary CPU slots; do not start a
+second heavy job. Then move the actual new image promptly into native feedback.
+No open-ended catalog/history audits or repeated checks of unchanged evidence.
 
-Choose a NEW fresh full request/workspace, with only the2include flags corrected.
-Failed whole guard170.56s bounds the compiler saving from adoption; adoption has
-no implementation and would add contract/seed/cleanup engineering. Preserve the
-old request rather than replay it. Two actual metadata commands0/0 in34.74s,
-request8b7b34ed; independent actual acceptance/final release remain pending.
-Reuse the existing37-role full-build/report contract, update explicit request
-pins, and compile after actual physical/resource prerequisites pass.
+[Live velocity dashboard](VELOCITY-METRICS.md): accepted checks, native behaviors,
+Rust paths per wall hour; build-to-native latency; failed-case release latency;
+quota cost; observation gaps. Targets for the next cycle: <=30 minutes from build
+to native feedback and <=10 minutes from failed guard to accepted physical
+release. Previous measured values were ~89 and 43.95 minutes. No active-rate or
+speedup claim is valid across the approximately 299.5-minute observation gap.
+Network failures were logged; fresh work resumed at 17:53 UTC. No missing samples
+or reviews have been invented. Wall/monotonic sampling is now recorded.
 
-User explicitly approved scratch reserve576716→288358 for UUID2a5768c8-718d-
-4914-bdc0-6b32c5a92a52: sudo -A /usr/sbin/tune2fs -r 288358 /dev/loop36.
-Apply through root after failed-case physical release and fresh live identity,
-before the next workload. Keep12GiBfloor/growth/emergency reserves; measure before/
-after statvfs and reserved counts. Potential1.10GiB is not measured recovery.
-Restore command uses-r576716. No deletion/remount/resize or rootNVMe repeat.
-No second permission request for the same authorized operation.
+Counters remain 25 native behaviors, 17 production Rust paths, 11 applicable
+native Rust paths and 7 of 35 practical checks. All 14 whole milestones remain
+open and engineering bands are held. The typed-case prototype passed its bounded
+checks but is parked; do not delay actual OS delivery or claim runtime savings.
 
-Strict N3 source/profile c1bd4666 passes37-role/74descriptor/102-byte-path checks;
-no actual image/stage/runtime authority. Terminal20checks pass, but independent
-review requires retention success/joins,4uniqueprimaryroles and exact reference
-byte counts; finish these as one affected boundary. Fresh-request pins must be
-updated explicitly. Existing private kernel search found12already-selected Rust
-constructors/ranges; no new port was claimed. Its author now owns the useful
-failure adapter, rather than expanding the audit.
-
-Usage68%; host/scratch about45.689/12.807GiB. Keep4CPU/12GiB/noSwap/512tasks,
-one-heavy,16/12GiBfloors, source authority, all failures/Scratch21 and97%stop.
-Next full review:13:00:28UTC.
+Usage 69%; host/scratch about 45.64/13.91 GiB. Preserve GPT-6.1, appropriate
+medium/high effort, one-heavy 4 CPU/12 GiB/no swap/512 task limits, disk floors and
+actual growth reserves, source/ownership evidence, Scratch21 and permanent mutex.
+Stop at 97% included usage. Next full review: 2026-10-19T18:26:07.640342Z.
 
 ## Previous priorities — review 70, 2026-10-19T11:59:02Z
 

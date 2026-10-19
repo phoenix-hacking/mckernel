@@ -1,5 +1,52 @@
 # Compact dispatcher handoff
 
+## Current — corrected fresh image built; postbuild/native handoff (18:10 UTC)
+
+Campaign ACTIVE, functional OS/apps plus Rust/reviewed assembly. No pause/stop.
+Fresh request8b7b34ed consumed exact53bd/23bb release once: dispatcher0/direct
+join259.023s, closed17:58:22UTC. DriverPASS16commands: C110 selections, syscall
+10/8 with -iquote /src/kernel, actual27-cell/three-vector ABI equality, both full
+Rust proof crates and ONE image MAKE. Imageff4fca45 is7988768B; independent f7352de9
+accepts actualbuild and positiveeight-client retirement. Stopped CID7e94ef6a and
+common/shared ownership remain retained for the normal terminal route. Artifact
+optimizer/default-linked acceptance and strict N3/native proof remain pending.
+Driverfinished17:57:23UTC: next native feedback target18:27; record actual times,
+not an unproved throughput multiplier. The roughly299.5-minute network/sample
+gap is separate from active engineering, not continuous compiler utilization.
+
+Failed902 physical9e0d62b9 accepted; all12log pairs/full failedsource/objects remain.
+User-approved scratch reserve576716->288358 completed after live UUID/loop36/
+backing/mount checks and root27:4 exclusion. Measuredavailable gain1181114368B;
+afteravailable14932893696B,12GiB workflowfloor plus all growth/reserves unchanged.
+Exact result5c6889d8 and before/after/call/exit evidence retained; no resize/delete.
+
+Immediate next executable: rust_next_teardown_leaf implements actual fifteen
+read-only capture planner in freshR/postbuild-execution-preparation-1, reusing
+accepted c5c/380 mechanics, fullfresh f735 proof and genuine late symbol sections.
+resume_git_owner_review owns the focused source/profile/execution decision;
+next_replace_tid_review owns completed source association/artifact report, then
+finite37/terminal acceptance. No compiler/capture replay or adoption claims.
+next_live's fresh8b source/path fixture12checks passed3.504s/exit0, reviewed16d693;
+first atime capture-writer failure preserved with missing oldrc/PID honest. One
+mechanical stable9-field writer correction and one newlyadmitted fixture sufficed.
+Canonical proposal-v3 33bda4d2 corrects exactlythree reference slots; coherent peer
+DATAaddendum pending. N3 owner is awake binding actual8b/pub85c4/current11 while
+preserving strict startupCPU oracle; actualartifact/stage/retirement/livefacts late.
+
+Typed-case prototype is parked, un-deployed: three saved case shapes and ten
+refusals passed after one preserved bounded AST-parser correction. It has no
+runtime authority and no measured handoff-speed gain. Further interface work must
+not block current native delivery. User authorizes useful larger resource profiles
+at later reviewed boundaries if measured saturation/RSS warrants; active4CPU2-5/
+12GiB/noSwap512tasks profile remains unchanged. No sustained per-core/peak-RSS
+bottleneck has been established from the short host snapshot.
+
+Counters held25behaviors/17productionRust/11applicable-native/7of35 practical;
+all14milestones OPEN. No new native/check/language-retirement credit from build.
+Include supervisor VELOCITY-METRICS snapshots at normal checkpoints. Current
+includedusage69%, stop97%; scratch21/exclusions/permanentmutex/failures/dirtyWIP
+preserved. Continue after checkpoint with one-heavy and genuine fresh releases.
+
 ## Current — failure preservation accepted; corrected fresh request ready (12:34 UTC)
 
 Campaign ACTIVE, functional OS/apps plus Rust/reviewed-assembly migration.

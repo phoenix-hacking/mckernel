@@ -4992,3 +4992,54 @@ verified+2behaviors/+4productionpaths versus the saved23/13table. No overall
 OS completion or throughput multiplier claim. Usage68%; host/scratch45.689/
 12.807GiB. Preserve all resource/evidence/authority constraints and97%stop.
 Next full review:13:00:28UTC.
+
+
+## Review 72 — 2026-10-19T17:56:07.640342Z
+
+The corrected fresh full build is RUNNING. Exact final execution review 53bd5149
+accepted payload 23bbfe0b after genuine physical predecessor 9e0d62b9 and actual
+scratch reserve result 5c6889d8. Kernel 205410e4 is unchanged; the new request is
+8b7b34ed with the two producer quote-include corrections. No new image or native
+acceptance is claimed while the guard remains active.
+
+The previous failed guard-to-accepted-physical-release interval was 43.95 minutes;
+cleanup/postjoin themselves took 5.57/0.70 seconds. All twelve log pairs, 24 FD
+metadata rows and the failed host case remain preserved. Scratch reserved blocks
+576716 -> 288358 recovered 1,181,114,368 measured available bytes (1.10 GiB).
+Fresh identities passed; no files were deleted, resized or remounted. Do not
+repeat cleanup or reserve changes. Floors and actual growth reserves remain.
+
+A long observation gap spans the last 12:53 metrics sample to 17:53 UTC, about
+299.5 minutes. Logs contain network-disconnect events at 13:57–14:00 and fresh
+agent work at 17:53. Its whole duration cannot be assigned to active engineering
+or to a single cause. No reviews or samples were fabricated for the missing
+interval. Wall-clock velocity includes this gap; active engineering rate is not
+known. The new sampler records both wall and monotonic clocks prospectively.
+
+Accepted counters remain 25 native behaviors / 17 production Rust paths /
+11 applicable native Rust paths / 7 of 35 practical checks. No percentage uplift
+or 2–3x speedup is claimed. The measured baseline at 10:27:41 still has zero
+additional accepted checks, behaviors or paths. Previous build-to-native latency
+was approximately 89 minutes; next-cycle target is <=30 minutes. Failed guard to
+accepted physical release target is <=10 minutes. Track acceptance, not commits
+or repeated successful behaviors, as outcome throughput.
+
+The fresh terminal consumer amendment dae57932 binds seven wrappers, 37 roles,
+60 capture paths and unchanged 33-copy/4-reuse semantics. Its affected fixture
+awaits admission. Prepare that check and the strict N3 fresh-request pin amendment
+in parallel with this build, using ordinary CPU slots 6/7 under root admission.
+Wake idle useful owners with followup_task, not a message to an idle turn. Reuse
+accepted algorithms and the actual source map; no broad evidence revalidation.
+Keep the real startup CPU oracle and proceed directly to actual postbuild/native
+feedback once its prerequisites pass.
+
+The bounded typed-case prototype passed three saved-case shapes and ten refusals
+after its preserved first failure. It is parked without deployment authority,
+actual engine execution or measured operational time savings. Do not delay the
+running OS cycle for a framework rewrite. Evaluate reuse at a future necessary
+adapter change, with a measured baseline and bounded implementation time.
+
+Usage 69%; host/scratch about 45.64/13.91 GiB. One heavy workload at 4 CPUs,
+12 GiB, no swap and 512 tasks; 16/12 GiB disk floors, source authority, ownership,
+all failed evidence, Scratch21 exclusions and the 97% included-usage stop remain.
+Next full review: 2026-10-19T18:26:07.640342Z.
