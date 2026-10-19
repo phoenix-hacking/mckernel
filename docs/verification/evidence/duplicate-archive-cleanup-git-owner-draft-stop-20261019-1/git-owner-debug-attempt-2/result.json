@@ -1,0 +1,73 @@
+{
+  "status": "PASS_GIT_OWNER_METADATA_BOUNDARY",
+  "checks": [
+    {
+      "case": "ordinary-real-Git-two-object-headers-no-bodies",
+      "status": "PASS",
+      "error": null
+    },
+    {
+      "case": "root-branch-exact-drop-argv-effectstub",
+      "status": "PASS",
+      "error": null
+    },
+    {
+      "case": "mixed-identity-refusal",
+      "status": "PASS",
+      "error": "RuntimeError('Git caller credentials unsupported')"
+    },
+    {
+      "case": "post-Git-owner-path-drift-refusal",
+      "status": "PASS",
+      "error": "RuntimeError('Git repository owner/path raced')"
+    },
+    {
+      "case": "repository-owner-refusal",
+      "status": "PASS",
+      "error": "RuntimeError('Git repository owner/directory identity changed: /home/holden/mckernel')"
+    },
+    {
+      "case": "missing-object-census-refusal",
+      "status": "PASS",
+      "error": "RuntimeError('Git object census')"
+    },
+    {
+      "case": "wrong-object-type-refusal",
+      "status": "PASS",
+      "error": "RuntimeError('Git object unavailable: dc9832264088c06163830411bfa0615888aaf741')"
+    }
+  ],
+  "source_sha256": "0c134ee778b273610ead1ecc507caa038642459c0a065c956b4431c35c755917",
+  "changed_existing_functions": [
+    "git_available"
+  ],
+  "added_functions": [
+    "git_metadata_argv",
+    "git_owner_identity"
+  ],
+  "root_branch_argv": [
+    [
+      "/usr/bin/setpriv",
+      "--reuid=1000",
+      "--regid=1000",
+      "--clear-groups",
+      "--no-new-privs",
+      "/usr/bin/git",
+      "-c",
+      "core.packedGitWindowSize=8m",
+      "-c",
+      "core.packedGitLimit=64m",
+      "-C",
+      "/home/holden/mckernel",
+      "cat-file",
+      "--batch-check=%(objectname) %(objecttype) %(objectsize)"
+    ]
+  ],
+  "root_execution": false,
+  "blob_bodies_read": false,
+  "ordinary_selected_blob": "dc9832264088c06163830411bfa0615888aaf741",
+  "ordinary_selected_commit": "4935a3f20cbe396f917bfaa418580c8dd2db43dc",
+  "version": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+  "interpreter": "/usr/bin/python3",
+  "limit": "Root setpriv effect boundary is stubbed; requires separate finite privileged Git-only diagnostic before full observer. No root/whole census/deletion."
+}

@@ -1,5 +1,81 @@
 # Compact dispatcher handoff
 
+## PAUSED — explicit user stop 2026-10-19 01:43 UTC
+
+User instruction20261019T014328295510Z-5c3c8a5405684f18a87eef59e400584c
+supersedes every older ACTIVE/continuous banner. Finish checkpoint and PAUSE the
+existing goal; no automatic restart/resume. No new build, guest, observation,
+apply/unlink/trim or follow-on phase. No OS-completion claim.
+
+Actual Rust source milestone85468476a035f0528c1943e43ba041e4643be333 is pushed and
+fetched32exactblobs (proof3c24a977). Three teardown leaves __release_tid,
+process_destroy_thread_time_account_bridge and hash_detach_bridge are integrated
+in real kernel/process.c and process_helpers.rs. Unrelated lifecycle WIP and C
+fallbacks preserved.15 required local changed-consumer stages passed across16
+joined attempts including one preserved fixture-separator failure. Full GCC14
+TU/layout/current native+legacy crate, image default-link and native proof remain
+UNPERFORMED. Supported FP1e7 artifact/matched modules remain unchanged. Metrics:
+24distinct native behaviors,13selected production/11applicable native Rust paths,
+7complete28open practical checks; all14milestones OPEN.
+
+Latest completed root attempt5: outer1301077 and observer1301081/start17150573
+joinedrc1, groupempty, mutex27:4 available. Five exact raw readbacks/hash/FD joins
+accepted0118. Failure is Git dubious ownership under root despite safe.directory
+-c; process_census returned but no complete observation was emitted. Attempts1–4
+and all original raw failures remain. NO files deleted, no sixth observer.
+
+Before STOP,2345's first ordinary Git fixture failed ENOMEM on pack mmap under
+1GiB; a bounded correction already joined0/tool66f7a0 with7cases. Currentdraft
+source0c134ee778b273610ead1ecc507caa038642459c0a065c956b4431c35c755917 drops Git child to verified UID/GID1000 and bounds packedGit to
+8MiB windows/64MiB; preserve originalfailure/oldsource. This draft is NOT independently
+reviewed or root-executed. Canonical stop capsule:
+docs/verification/evidence/duplicate-archive-cleanup-git-owner-draft-stop-20261019-1.
+Do not launch any old one-shot or infer root Git-context proof from ordinary/mock
+cases. Exact120 cleanup remains unexecuted. Potential recovery1315868672B only.
+
+IHK-only35file materialization61025b9a and conditional exact release d3004b27 for
+payload0f2c491b remain retained/unconsumed. Fullheavy scratch requirement
+14092861440B vs lastavailable13758107648B:334753792B short. Exact request:
+/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/request.json
+SHA6322420cac5e85e14294e7aafb58c04b86e2e9f7f81278dfb3e3cee08fac8047.
+No module build/load/ABIreuse accepted. Currentcapsule source is separate
+os_runtime; unrelated Rust source commit is not a global HEAD-equality blocker.
+
+Production-three-leaf checker38c1e561 has independent0034 source/control-flow
+PASS:65actualCassertions,15mocked-producer cases, PID1299600directjoin0, no actual
+compiler. Retained in rust-three-leaf-production-checker-stop-20261019-1; actual
+GCC14.3.1/Rustnightly checks require reviewed4CPU12GiB heavy pipeline. No
+unapproved ordinary compiler substitution. Logging source/metadata stager and
+9760/60/60 complete authority projections pass within preparation scope; actual
+newIHKartifact/ABI/reuse/stage/native logging remain pending.
+
+Quiescence: all child local commands directly joined and CPU7released; all known
+8current guards freshly absent (ordinarylstat). No campaign heavy workload/owner
+is active by retained positive retirement and exact current guards. Persistent
+root development mutex27:4 is preserved. Historical scratch21 stopped container
+e1f6dd145149c026c46adb82c3f3addb9e3c9e2a12b0d71a6813f00895220ea9,
+exclusion inodes57687/57688 and all historical locks/leases remain preserved.
+No fresh Docker/global privileged census was run to stop. Scratch mountUUID
+2a5768c8-718d-4914-bdc0-6b32c5a92a52,/dev/loop36,110GiB unchanged. Lastordinary
+capacity host52729319424B/scratch13758107648B; includedusage46percent/stop97.
+Launcher worker1284993/server1284995 are checkpoint-control identities only;
+launcher normal retirement follows goal pause. Never signal/delete them or
+edit launcher state. Preserve unrelated dirty/untracked work and refused
+execve/forkACK exclusions; no service-rejection recovery/replay.
+
+Resume ONLY after a new explicit user invocation, normally SAME saved thread:
+```bash
+python3 -B /home/holden/mckernel/scripts/run_os_parallel.py --run --background
+```
+Do not run that command during shutdown. Read this PAUSED cursor and actual
+retained results first. Next authorized engineering step AFTER userresume:
+finish concrete Git owner-drop source/command review and smallest exact root
+Git-metadata-only decision if required; fresh identities and new observation/
+apply releases before any cleanup. All old expired releases remain consumed or
+unusable, not replayable. Then remeasurefullcapacity and take exact reviewed
+IHKbuild. Production/source/native and formalqualification boundaries stayopen.
+
+
 ## Current — three real Rust source ports committed (2026-10-19 01:29 UTC)
 
 Functional OS/apps plus Rust/reviewed-assembly migration ACTIVE. Actual source

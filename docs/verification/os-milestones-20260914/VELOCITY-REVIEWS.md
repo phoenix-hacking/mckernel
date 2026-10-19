@@ -23,21 +23,20 @@ final-profile closure remains open. Other bands held; M09 is integration only.
 Measured facts23behaviors/13production/11native and7complete28open of35.
 Earlier immutable baseline, four-hour comparison and review cutoffs are unchanged.
 
-**CURRENT REVIEW52 — 2026-10-19T00:23:12Z:** campaign active.
-Accepted24 native behaviors/13 selected production Rust paths/11 applicable native
-paths/7complete28open practical checks; all14whole milestones remain open.
-Since review51: FP-thread state/retirement accepted, adding one behavior; current
-387B Rust regression batch independently accepted without distinct-behavior credit.
-Genuine pinned-make probe/export and proof-bound IHK capsule accepted; source
-checkpoint3c026af1 pushed/fetched94blobs and83mappedrows. IHK build is333697024B
-short of scratch floor plus full reserve. Exact120archive cleanup could recover
-1315868672B, but first read-only observation failed; narrow diagnostic reads
-approved, no deletion yet. Root49.229GiB/scratch12.814GiB; usage44%, heavyrecord
-absent. Capacity failures at00:01:58 and00:13:36 paused the campaign; existing
-watcher resumed00:02:55/00:14:17. Private child-capacity fix11offline testsPASS,
-independent review pending. __release_tid prototype-delta reviewPASS forwarded
-with concrete parallel implementation/materialization/cleanup priorities.
-Next full review2026-10-19T00:53:12Z. No measured2–3x speedup.
+**CURRENT REVIEW54 — 2026-10-19T01:23:25Z:** campaign active.
+Three Rust teardown leaves now integrated into two actual production sources,
+unrelated lifecycle WIP preserved. Changed-consumer compile/link checks and one
+consolidated source reviewPASS; source commit not yet observed. Full production/
+image/native proof pending, so counts remain24behaviors/13production/11native/
+7complete28open checks. All14whole milestones open. Cleanup root attempt3 failed
+overgeneralized propagation/cardinality predicates; positively retired,nodelete.
+Corrected real view function now passes27checks acrossALL16retained mountviews/
+278processrecords; final narrow observation review underway,no fourth run.
+Current IHK copy/release metadata/logging projections ready; ~335MB scratch
+shortfall remains. Current worker1284993 active after00:54:37 primary-capacity
+recovery; no live child-isolation event observed. Usage46%,root49.124GiB/
+scratch12.813GiB;noheavy. User01:15priority now implement/test/debug/commit,
+consolidate routine review. Next full review01:53:25Z; no2–3x speedup claimed.
 
 **MONITORING RESUMED2026-10-18T13:43:18Z:** user explicitly requested this
 chat's polling, steering and30-minute updates. Their foreground campaign resumed
@@ -4219,3 +4218,76 @@ own profile permits, logging continuation, and live Rust integration/next leaf.
 Keep the current FP image fixed and reuse accepted batch/body reviews. Root is
 execution/Git owner. Usage44%, host49.229GiB, scratch12.814GiB; no heavy record.
 No2–3x speedup is established. Monitoring and30-minute reviews continue.
+
+
+## Review53 — 2026-10-19T00:53:25Z
+
+No new accepted native behavior, production/native Rust path or practical-check
+closure since review52:24/13/11 and7of35 remain. The source pipeline advanced:
+private time-accounting Rust leaf passes14commands and32C/Rust cases×two calls;
+its independent review is active. Release-TID source/rebase and corrected21-member
+proof retention pass; actual production and native evidence remain pending.
+
+Cleanup's first root read-only observation failed on a retained directory.
+A later31-directory selector defect was caught before attempt2, not by another
+root run. Consolidated consumer-bound selector/profile now passes expert review
+and6actual local cases, preserving43declared control roles and31incidental
+directories. Corrected root observation/result review/exactapply remain ahead;
+no duplicate archive deleted. The120-file candidate could recover1.225GiB,
+covering the IHK build's ~335MB scratch shortfall. Its35-file949466B preparation
+copy is independently accepted. Logging-stage join passes3synthetic tests;
+authority-gate correction is still under review. No new heavy build/guest.
+
+Three capacity stops interrupted this interval: child36:19→resume37:19,
+primary40:28→41:29, child49:27→50:28. Supervisor supplied exact completed and
+unfinished outcomes to avoid repeating workloads after recovery. Child-capacity
+isolation was corrected after independent detection of missing-turn attribution,
+then integrated by campaign owner with12offline checksPASS. Current normal
+worker1282971/start16847359 starts after integration; no live isolated error or
+speedup is proven. Primary-capacity and explicit/policy/quota stops remain intact.
+
+At cutoff cleanup, IHK publication, time-account review and logging correction
+are active/pending; GPT6.1 remains selected. Usage44→45%, root49.229→49.192GiB,
+scratch12.814→12.813GiB. Current mutable plan now prioritizes these concrete
+bottlenecks and compatible future Rust-port batching. No2–3x claim, milestone
+estimate inflation, supervisor root/workload/cleanup, state edit or second launcher.
+
+
+## Review54 — 2026-10-19T01:23:25Z
+
+Concrete code progress: release-TID, time-account and hash-detach Rust bodies
+are integrated in kernel/process.c and kernel/rust/process_helpers.rs. Original
+C fallbacks and unrelated lifecycle WIP are preserved. Completed changed-consumer
+checks exercise the actual extracted destroy consumer and release bridge, compile
+both C selections, link three unique Rust exports, and reject a deliberately
+missing real declaration. One fixture-separator failure is retained and corrected;
+leaf parity suites were not replayed. Consolidated integration source reviewPASS,
+27file bindings. Integration evidence03c6cbfa; source snapshot7c2cee5f/a5ac237d.
+Source Git checkpoint not yet observed; full GCC14 TU/layout, native/legacy crates,
+image/default-link and native teardown proof remain pending. Production/native
+counters therefore remain24behaviors/13selectedpaths/11nativepaths/7of35checks.
+
+Cleanup observer3 failed strict mount propagation and universal canonical-row
+cardinality, and retired without deletion. Existing retained PID416/PID873 rows
+already reproduce both defects. Supervisor steered actual corrected view-function
+execution over ALL retained topologies rather than another root attempt. New
+local27checks pass16distinct views/278processrecords, preserving unknown/exposure
+refusals. Fresh expert review is active; no fourth observation or apply. Exact120
+candidate1.225GiB could cover IHK ~335MB shortfall, still no space reclaimed.
+
+IHK conditional execution d3004b27/payload0f2c491b and fetched metadata ready;
+35-file copy accepted. Logging authority gate and original catalog projections
+passed focused review; actual module artifact/ABI/conditional reuse/stage pending.
+Three-leaf source work proceeded alongside storage debug. User explicitly renewed
+implementation→test→debug→commit priority at01:15; VELOCITY.md and coordinator
+instruction now consolidate routine review around coherent integration instead
+of each helper/metadata edit. Host-only compiler shortcuts were correctly rejected:
+full proof needs genuine pinned GCC14.3.1/Rust-nightly4CPU12GiB production profile.
+
+Primary-capacity failure00:53:36 recovered00:54:37; current1284993/1284995,watcher
+1031359. Integrated child-isolation loaded, no live child-error handling observed.
+A source-manifest print exceeded5million characters at01:07, causing bounded
+monitor skips; root received exact record e60bb9b3 and switched to bounded fields/
+counts/witnesses, raw files retained. No cache/history reset or corpus rehash.
+Usage45→46%;root49.192→49.124GiB/scratch12.813GiB;noheavy. No milestone estimate
+uplift, new accepted check,2–3x claim,supervisor root/workload/cleanup or state edit.

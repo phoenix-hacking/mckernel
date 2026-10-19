@@ -1,0 +1,56 @@
+{
+  "status": "EXECUTABLE_DRIVER_INPUTS_PENDING_ROOT_HEAVY_ADMISSION",
+  "compose_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/rust-three-leaf-source-integration-20261019-1/production-three-leaf-1/make_production_driver.py"
+  ],
+  "image_owner_inner_argv": [
+    "/usr/bin/python3",
+    "/work/production-adapters/native_rust_exact_mckernel_image_offline.py",
+    "--source-root",
+    "/src",
+    "--candidate-sha",
+    "85468476a035f0528c1943e43ba041e4643be333",
+    "--ihk-sha",
+    "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "--manifest",
+    "/work/production-inputs/thin-inputs.json",
+    "--gitlink-manifest",
+    "/work/production-inputs/gitlink-inputs.json",
+    "--toolchain",
+    "/work/production-inputs/image-toolchain.json",
+    "--output",
+    "/work/output",
+    "--evidence",
+    "/work/evidence",
+    "--jobs",
+    "4",
+    "--timeout",
+    "19800"
+  ],
+  "profile": {
+    "cpus": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "memory_bytes": 12884901888,
+    "jobs": 4,
+    "timeout_seconds": 19800,
+    "inherited_request": "/home/holden/mckernel-work/host-preparation/rust-fp-release-image-preparation-20261018-1/heavy-proposal-1/selected-request-fields.json"
+  },
+  "required_mount_bindings": {
+    "/src": "Fresh source materialization for85468476 including current lifecycle WIP and accepted separate IHK closure",
+    "/work/production-adapters": "composed-adapters, produced by compose_argv",
+    "/work/production-inputs": "Fresh hash-bound manifests for85468476 from existing accepted owner pipeline; old942 manifests must NOT be reused",
+    "/work/output": "Fresh output namespace; never existing accepted FP output",
+    "/work/evidence": "Fresh evidence namespace"
+  },
+  "outer_execution": "Existing reviewed image-owner admission/lease/limits wrapper remains required; inner argv alone does not authorize container or build",
+  "postbuild": "Existing14inspection engine with postbuild-14-INPUTS.json plus postbuild_three_leaf_facts.py;21-member retention unchanged",
+  "compiler_native_facts": "PENDING; no source-only retirement",
+  "ihk": "Existing separate os_runtime14 closure unchanged; no global HEAD equality gate"
+}

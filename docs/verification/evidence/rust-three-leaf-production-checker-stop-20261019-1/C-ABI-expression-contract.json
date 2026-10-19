@@ -1,0 +1,239 @@
+{
+  "source": "Actual committed C TU and included C type declarations only",
+  "fixed_profile_contract": "Existing accepted native x86_64 layout and consumed ABI; full GCC14 evaluation PENDING",
+  "facts": [
+    {
+      "name": "Thread.size",
+      "C_expression": "sizeof(struct thread)",
+      "required_value": 5568
+    },
+    {
+      "name": "Thread.align",
+      "C_expression": "_Alignof(struct thread)",
+      "required_value": 64
+    },
+    {
+      "name": "Thread.hash_list",
+      "C_expression": "__builtin_offsetof(struct thread,hash_list)",
+      "required_value": 0
+    },
+    {
+      "name": "Thread.tid",
+      "C_expression": "__builtin_offsetof(struct thread,tid)",
+      "required_value": 20
+    },
+    {
+      "name": "Thread.proc",
+      "C_expression": "__builtin_offsetof(struct thread,proc)",
+      "required_value": 4304
+    },
+    {
+      "name": "Thread.system_tsc",
+      "C_expression": "__builtin_offsetof(struct thread,system_tsc)",
+      "required_value": 5040
+    },
+    {
+      "name": "Thread.user_tsc",
+      "C_expression": "__builtin_offsetof(struct thread,user_tsc)",
+      "required_value": 5048
+    },
+    {
+      "name": "Process.size",
+      "C_expression": "sizeof(struct process)",
+      "required_value": 1728
+    },
+    {
+      "name": "Process.align",
+      "C_expression": "_Alignof(struct process)",
+      "required_value": 64
+    },
+    {
+      "name": "Process.update_lock",
+      "C_expression": "__builtin_offsetof(struct process,update_lock)",
+      "required_value": 64
+    },
+    {
+      "name": "Process.tids",
+      "C_expression": "__builtin_offsetof(struct process,tids)",
+      "required_value": 256
+    },
+    {
+      "name": "Process.nr_tids",
+      "C_expression": "__builtin_offsetof(struct process,nr_tids)",
+      "required_value": 264
+    },
+    {
+      "name": "Process.stime",
+      "C_expression": "__builtin_offsetof(struct process,stime)",
+      "required_value": 1296
+    },
+    {
+      "name": "Process.utime",
+      "C_expression": "__builtin_offsetof(struct process,utime)",
+      "required_value": 1312
+    },
+    {
+      "name": "CPU.size",
+      "C_expression": "sizeof(struct cpu_local_var)",
+      "required_value": 8128
+    },
+    {
+      "name": "CPU.align",
+      "C_expression": "_Alignof(struct cpu_local_var)",
+      "required_value": 64
+    },
+    {
+      "name": "CPU.resource_set",
+      "C_expression": "__builtin_offsetof(struct cpu_local_var,resource_set)",
+      "required_value": 7912
+    },
+    {
+      "name": "ResourceSet.size",
+      "C_expression": "sizeof(struct resource_set)",
+      "required_value": 384
+    },
+    {
+      "name": "ResourceSet.align",
+      "C_expression": "_Alignof(struct resource_set)",
+      "required_value": 64
+    },
+    {
+      "name": "ResourceSet.thread_hash",
+      "C_expression": "__builtin_offsetof(struct resource_set,thread_hash)",
+      "required_value": 32
+    },
+    {
+      "name": "ThreadHash.size",
+      "C_expression": "sizeof(struct thread_hash)",
+      "required_value": 5888
+    },
+    {
+      "name": "ThreadHash.align",
+      "C_expression": "_Alignof(struct thread_hash)",
+      "required_value": 64
+    },
+    {
+      "name": "ThreadHash.lock",
+      "C_expression": "__builtin_offsetof(struct thread_hash,lock)",
+      "required_value": 1216
+    },
+    {
+      "name": "ThreadHash.bucket_count",
+      "C_expression": "sizeof(((struct thread_hash*)0)->lock)/sizeof(((struct thread_hash*)0)->lock[0])",
+      "required_value": 73
+    },
+    {
+      "name": "ThreadHash.hash_size",
+      "C_expression": "HASH_SIZE",
+      "required_value": 73
+    },
+    {
+      "name": "ThreadHash.bucket_size",
+      "C_expression": "sizeof(((struct thread_hash*)0)->lock[0])",
+      "required_value": 64
+    },
+    {
+      "name": "ThreadHash.bucket_align",
+      "C_expression": "_Alignof(__typeof__(((struct thread_hash*)0)->lock[0]))",
+      "required_value": 64
+    },
+    {
+      "name": "McsNode.size",
+      "C_expression": "sizeof(struct mcs_rwlock_node_irqsave)",
+      "required_value": 64
+    },
+    {
+      "name": "McsNode.align",
+      "C_expression": "_Alignof(struct mcs_rwlock_node_irqsave)",
+      "required_value": 64
+    },
+    {
+      "name": "McsNode.irqsave",
+      "C_expression": "__builtin_offsetof(struct mcs_rwlock_node_irqsave,irqsave)",
+      "required_value": 0
+    },
+    {
+      "name": "TimeSpec.size",
+      "C_expression": "sizeof(struct timespec)",
+      "required_value": 16
+    },
+    {
+      "name": "TimeSpec.align",
+      "C_expression": "_Alignof(struct timespec)",
+      "required_value": 8
+    },
+    {
+      "name": "List.size",
+      "C_expression": "sizeof(struct list_head)",
+      "required_value": 16
+    },
+    {
+      "name": "List.next",
+      "C_expression": "__builtin_offsetof(struct list_head,next)",
+      "required_value": 0
+    },
+    {
+      "name": "List.prev",
+      "C_expression": "__builtin_offsetof(struct list_head,prev)",
+      "required_value": 8
+    },
+    {
+      "name": "TidEntry.size",
+      "C_expression": "sizeof(struct mcexec_tid)",
+      "required_value": 16
+    },
+    {
+      "name": "TidEntry.align",
+      "C_expression": "_Alignof(struct mcexec_tid)",
+      "required_value": 8
+    },
+    {
+      "name": "TidEntry.thread",
+      "C_expression": "__builtin_offsetof(struct mcexec_tid,thread)",
+      "required_value": 8
+    },
+    {
+      "name": "Ddebug.size",
+      "C_expression": "sizeof(struct ddebug)",
+      "required_value": 32
+    },
+    {
+      "name": "Ddebug.align",
+      "C_expression": "_Alignof(struct ddebug)",
+      "required_value": 8
+    },
+    {
+      "name": "List.align",
+      "C_expression": "_Alignof(struct list_head)",
+      "required_value": 8
+    }
+  ],
+  "function_and_member_type_expressions": [
+    "__builtin_types_compatible_p(__typeof__(((struct process*)0)->tids),struct mcexec_tid*)",
+    "__builtin_types_compatible_p(__typeof__(((struct process*)0)->nr_tids),int)",
+    "__builtin_types_compatible_p(__typeof__(((struct thread*)0)->tid),int)",
+    "__builtin_types_compatible_p(__typeof__(((struct thread*)0)->system_tsc),unsigned long)",
+    "__builtin_types_compatible_p(__typeof__(((struct thread*)0)->user_tsc),unsigned long)",
+    "__builtin_types_compatible_p(__typeof__(get_this_cpu_local_var()),struct cpu_local_var*)",
+    "__builtin_types_compatible_p(__typeof__(((struct resource_set*)0)->thread_hash),struct thread_hash*)",
+    "__builtin_types_compatible_p(__typeof__(&__release_tid),void(*)(struct process*,struct thread*))",
+    "__builtin_types_compatible_p(__typeof__(&process_destroy_thread_time_account_bridge),void(*)(void*))",
+    "__builtin_types_compatible_p(__typeof__(&process_destroy_thread_hash_detach_bridge),void(*)(void*))",
+    "__builtin_types_compatible_p(__typeof__(&process_destroy_thread_release_tid_bridge),void(*)(void*,void*))",
+    "__builtin_types_compatible_p(__typeof__(&process_mcs_writer_lock_bridge),void(*)(unsigned long,void*))",
+    "__builtin_types_compatible_p(__typeof__(&process_mcs_writer_unlock_bridge),void(*)(unsigned long,void*))",
+    "__builtin_types_compatible_p(__typeof__(&thread_hash),int(*)(int))",
+    "__builtin_types_compatible_p(__typeof__(&tsc_to_ts),void(*)(unsigned long,struct timespec*))",
+    "__builtin_types_compatible_p(__typeof__(&ts_add),void(*)(struct timespec*,const struct timespec*))",
+    "__builtin_types_compatible_p(__typeof__(&process_release_tid_body_result),int(*)(void*,int,unsigned long,unsigned long,void*,int,process_tid_log_fn_t))",
+    "__builtin_types_compatible_p(__typeof__(&process_list_is_linked_result),int(*)(const struct list_head*))",
+    "__builtin_types_compatible_p(__typeof__(&process_list_detach_result),void(*)(struct list_head*))",
+    "__builtin_types_compatible_p(__typeof__(((struct cpu_local_var*)0)->resource_set),struct resource_set*)",
+    "__builtin_types_compatible_p(__typeof__(((struct thread*)0)->hash_list),struct list_head)",
+    "__builtin_types_compatible_p(__typeof__(((struct thread_hash*)0)->lock[0]),mcs_rwlock_lock_t)",
+    "__builtin_types_compatible_p(__typeof__(((struct process*)0)->update_lock),mcs_rwlock_lock_t)",
+    "__builtin_types_compatible_p(__typeof__(((struct mcs_rwlock_node_irqsave*)0)->irqsave),unsigned long)"
+  ],
+  "mirrored_C_types": false,
+  "injected_leaf_declarations": false
+}

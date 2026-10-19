@@ -1,51 +1,51 @@
 # Tactical plan for faster verified OS progress
 
-## Current throughput priorities — 2026-10-18 23:17 UTC
+## Current delivery priority — direct user instruction, 2026-10-19 01:15 UTC
 
-Renewed user priority23:27UTC: finish ready FP-thread actual-result review and
-its eligible native run promptly. Activate an existing free Rust-app author for
-one coherent batched functional payload using the accepted runner and candidate,
-with distinct frozen per-case oracles, meaningful memory/file/thread/error
-coverage, bounded total runtime/capture and stop-on-failure. This is payload
-implementation, not a new framework. Keep the current frozen FP-thread case
-unchanged and independent; batching must fit existing contracts and receive its
-own appropriate review/release. Preserve refused tasks, resource/correctness
-controls and individual acceptance distinctions. Count useful coverage toward
-open checks rather than multiplying trivial case counts.
+Implement → compile/test → debug → commit coherent code. The user explicitly
+rejects review-heavy progress without working implementation. Within an existing
+reviewed ordinary profile, run the smallest real check immediately and fix the
+observed failure. Do not create a new packet, reviewer turn or approval layer
+for every helper, vector, syntax repair, retention edit or routine metadata
+projection. Consolidate focused review at the coherent integration/new unsafe
+ABI or ownership boundary. Keep root cleanup/guest execution releases, actual
+resource controls and original failure evidence. Do not weaken an oracle.
 
-The user explicitly renewed the target of twice the useful throughput, with
-three times as a stretch target. Demonstrate this through accepted functional
-coverage and closed practical checks per active hour, with case scope visible.
-Do not substitute agent occupancy, commands, trivial case counts or engineering
-estimate changes for delivery. Near-hour observations:21:17:53->22:18:03 added
-no behaviors, production paths, native paths or checks;22:18:03->23:16 added
-one behavior, one production path and one check, but no native Rust path. This
-does not establish a sustained speedup; applicable native paths remain11.
+Land tested code in the actual production source/consumer, preserving unrelated
+WIP. At coherent checkpoints commit/push source with exact checks passed and
+remaining production/native proof; a WIP checkpoint is not acceptance. Do not
+collect an expanding queue of private drafts while waiting for whole-OS closure.
+Release-TID and time-account batch f5faf9ed has source/ABI preparation PASS;
+hash-detach130cbb2a passes60C/Rust cases and linkage after a preserved fixture
+correction. Integrate compatible leaves together, reuse existing proof objects,
+and pay full production/terminal/native overhead once for the coherent batch.
+Fixed FP1e7 artifact remains the functional test baseline until a replacement
+actually passes. Preserve accepted compute C correctness fixes; new compute
+functionality remains Rust/reviewed assembly.
 
-Keep supported FP image1e7a1f68 fixed for functional testing. Its Rust file
-roundtrip is independently accepted. Advance the already reviewed two-thread
-FP-state case through the existing compiler/Linux/staging/native pipeline,
-then prepare the next concrete uncovered functional requirement in parallel.
-Reuse the accepted harness, toolchain bindings and unchanged source decisions;
-change only the required payload, oracle and consumed profile inputs. Notify
-the waiting independent reviewer immediately after the real join/readbacks.
-Do not commission a general new framework or another global ledger audit.
+Immediate execution blocker: scratch ~335MB short of the IHK build's real
+reserve. Exact120archive cleanup can recover1.225GiB. Two failed root observations
+remain preserved; alias correction7d2825e5/33local cases and attempt3 profile
+c9f7baa4 passed focused review. Finish its published-source/fresh-observation/
+result/apply chain, then launch the already prepared IHK-only build once genuine
+admission passes. Its35-file copy, fetched metadata and conditional static release
+are ready. Logging stage authority/format corrections are source-reviewed; actual
+IHK ABI, conditional module reuse and native evidence remain pending. Do not make
+unrelated kernel-source integration depend on unchanged IHK consumed-source pins.
 
-Keep the Rust kmsg/module prerequisite on a separate implementation/probe/build
-lane. Its actual pinned-make probe and focused ihk.ko build have their own
-required source/publication/admission decisions; they do not block unrelated
-eligible application tests. Prepare the next lane while the single admitted
-heavy owner runs, keeping aggregate CPU/RAM and exact ownership controls.
+Keep disjoint implementation/debug lanes active while cleanup runs. After
+ordinary capacity recovery reactivate unfinished idle owners, reusing completed
+outcomes. Integrated child-capacity isolation12offlinePASS is loaded by workers
+started after00:50; live benefit remains unmeasured, primary/unknown/policy/quota/
+userpause stays authoritative. GPT6.1 and97%included-usage stop remain.
 
-The FP app stopped before compiler spawn on an extra1GiB scratch-headroom
-assertion; observed free scratch was12.817GiB above a12GiB floor. The dispatcher
-must resolve the actual approved output/growth/capture/emergency budget, rather
-than inventing an extra threshold or dropping an existing requirement. Account
-for the filesystem receiving the outputs; host free space cannot cover scratch
-writes. Proceed only when the real bounded profile fits, otherwise name the
-concrete capacity blocker. Preserve the original refusal and do not rerun
-successful unchanged checks. Root/source publication and final live facts remain
-the coordinator's work; no supervisor launch or cleanup is authorized here.
+Measure code integrated, real compiler/runtime outcomes, defects fixed, accepted
+functional behavior and blocked minutes. Latest counts24nativebehaviors/13selected
+productionRustpaths/11applicablenativepaths/7of35checks; no2–3x speedup established.
+Full manifests/captures stay on disk: print selected fields/counts/failed predicates
+and a few witnesses. The01:07 e60bb9b3 manifest dump exceeded5million characters;
+prevent repeated context cost without rehash, cache clearing or history reset.
+Campaign owns Git/releases; supervisor monitors/steers and prepares private fixes.
 
 ## Read terminal results while an owner remains alive
 
