@@ -5167,3 +5167,136 @@ No engineering percentage uplift or overall speed multiplier claimed. Quota72%,
 source/ownership/runtime checks, all failures and Scratch21 remain. Approved
 scratch reserve and earlier failed-case cleanup are DONE; do not repeat them.
 Next full review:2026-10-19T19:31:00.299546Z.
+
+
+## Review 75 — 2026-10-19T19:31:26.584457Z
+
+One accepted literal check is newly recorded: P-M10-01, source/config/toolchain
+and honest candidate provenance. Accepted artifact fa398247 and build f7352de9 bind
+source 205410e4, request 8b7b34ed, actual image ff4fca45/7,988,768B and the genuine
+materialization/config/toolchain. The old 942 candidate is explicitly base_git_commit_only;
+failed 902 is preserved and no old compiled inputs or native acceptance are claimed.
+The canonical working ledger is 8/35 (22.9%) versus 7/35 (20.0%) at review 74.
+Checkpoint publication of this ledger remains the campaign root's responsibility.
+P-M00-02 stays open: current repaired next invocation is not yet released.
+All 14 whole milestones remain open and engineering estimate bands are held.
+
+No additional native behavior or accepted production/native Rust path this
+interval: 25/17/11. Since 10:27:41 UTC, one practical check and zero such native/Rust
+gains; about 0.11 practical checks per wall hour. This closure recognizes existing
+accepted evidence and is not an OS feature throughput gain. The observation gap
+and network/host availability caveats remain. No 2x/3x speed multiplier is supported.
+
+N3 ordinary preparation 09532853 is independently accepted: genuine archive,
+kernel structural check, corrected geometry, exact facts-file read-only mount,
+all 84 consumed inputs, owner/runner protocol, reaped fake process and empty parent.
+QMP 103 B. Non-temporal native packet 11804f5a is frozen and ready for its real
+physical predecessor, last fresh snapshot and exact final release. Do not replay
+the accepted archive/normalization/ordinary work.
+
+The terminal source publication 9d56318c had 129 bindings/123 Git files. First actual
+root observer failed on a callback proof dictionary projection before output,
+mutex or Docker effects. That exact function path plus13 refusals passed after a
+six-file correction. A second observer then failed during gathering: the fixed
+eleven-source compiler map had three terminal imports added. It made a partial
+observation and captured three read-only queries. Both consumed invocations,
+direct joins/process-group absences and failures are preserved; neither is an
+accepted observer result. No cleanup/native result followed them.
+
+The expert identified the complete prefix as14files, not the initial 10-file
+proposal. One amended readback passed 0.174 s, direct child joined/group absent.
+Use those genuine inputs for the whole affected consumer path before another
+root release, retaining the exact eleven request roles separately from the outer
+terminal import closure. Source-generation/publication map mistakes, facts-file
+visibility, and the two observer failures add documented harness rework. No new
+kernel defect is established. Avoid claiming a complete failure inventory.
+
+Current build-to-native feedback is pending 94.0 minutes, versus 63.6 at
+review 74 and the 30-minute target. The build itself remains accepted: 16 phases/97.724 s
+producer/259.023 s outer. Build-to-artifact 45.17 minutes. Additional CPUs/RAM are
+authorized when useful, but current evidence shows source/schema/review handoffs
+as the blocker; no sustained CPU saturation or memory pressure has been proved.
+
+Keep terminal correction/effects/source review and N3 final static packet in
+parallel. Wake the existing N3 owner with followup_task after its predecessor is
+available. One spare actor can finish an existing disjoint Rust compute candidate
+with a focused actual check if this does not delay current feedback or change the
+frozen source. No new optional framework or repeated completed baseline audit.
+The private case-data constructor is parked after two pre-output fixture failures;
+full output equality/negative cases and operational speed benefit are unproved.
+
+Quota 73%,24 percentage points to 97% stop; host/scratch 45.36/13.91 GiB. Preserve
+currentone heavy operation, 4 CPUs/12 GiB/no swap/512 tasks, aggregate reserve, disk/growth floors,
+source/ownership/runtime gates, permanent mutex, Scratch21 and every failed case.
+Approved reserve changes and earlier failed-case cleanup are done; repeat neither.
+Next full review: 2026-10-19T20:01:26.584Z.
+
+
+## Review 76 — 2026-10-19T20:01:40.608988Z
+
+No additional practical check or accepted native/Rust path since review 75:
+8/35 practical checks (22.9%), 25 native behaviors, 17 production Rust paths,
+11 applicable native paths. All 14 whole milestones and engineering bands remain
+held. P-M10-01's literal source/config/toolchain recording closure is pushed and
+fetched in 16c00687; 14 changed blobs were verified. It recognizes existing
+accepted evidence and does not represent a new OS feature.
+
+The current build's independent physical release is now accepted 0f832641,
+first observed at 20:00:04 UTC. The exact current build container, common/shared
+records, lease and quarantine are absent; process groups empty; permanent mutex
+can be acquired/released without replacement. The reviewer verified nine journal
+records, two ownership archives and all 74 FD records for the 37 retained pairs.
+Scratch21 and every failure remain retained. Earlier failed902 release and both
+approved filesystem reserve changes remain complete and were not repeated.
+
+Observer repair used the complete genuine saved prefix. Its whole positive path
+reached observation, draft and result construction. One refusal expectation was
+corrected after an earlier valid guard refused; only that affected case reran.
+Whole path coverage is one positive/three refusals; earlier callback-only coverage
+was a separate positive/thirteen refusals. Corrected five-file source publication
+62a218fd is pushed/fetched. Actual observer/summary/FD-metadata passed in
+2.781/0.174/0.173 seconds with direct joins, absent groups and closed captures.
+Raw-five export passed in 0.175 seconds; independent verification matched all
+five files and 624,640 bytes.
+
+Cleanup caller needed the actual postjoin PASS-on-stderr contract, matching role
+and direct unchanged result path. The initial capture directory setup refused
+before any child launched; that failure is preserved. A data-only continuation
+verified the installed release and completed cleanup/postjoin in 6.854/0.966
+seconds. Positive normal-user process/record/mutex readback and the physical
+review followed. No cleanup or partial-observer success was invented.
+
+Native author/reviewer were active alongside the terminal author/reviewer/root.
+The pre-clock review caught snapshot reserve 384 MiB versus stricter live margin
+640 MiB and an owner nonce available in the independent physical archive review,
+not the raw result. The ordered six-step data was not a standalone executable
+CLI; the existing caller's index 1 captures one command without installing
+authority. Per-step command data and final checker remain the launch boundary.
+No snapshot/guest has started at this review. Prepare actual CLI arguments,
+capture directories and the final review before spending the freshness interval.
+
+Build-to-native feedback remains pending 124.3 minutes, target 30.
+Producer 97.724 seconds/outer 259.023 seconds and artifact acceptance latency
+45.17 minutes are unchanged. Physical acceptance is a real dependency closure,
+but no 2x/3x feature-throughput gain is established. Current delay is command,
+schema and review handoff work; no sustained CPU saturation or RAM pressure is
+shown. Additional hardware resources would not resolve these demonstrated errors.
+
+The supervisor collector now accepts a completed native feedback timestamp plus
+proof, distinguishes actual-result versus first-observed timing and stops the
+pending timer without losing artifact timing. Read-only checks cover a completed
+historical observation, pending mode, missing proof, feedback before build and
+future feedback. No synthetic records or workload/launcher state were written.
+
+Next tactic: complete existing-caller N3 binding and late review, launch once,
+retain and classify real feedback. Reuse all accepted build, archive and ordinary
+proofs. Prepare existing result/retirement handling in parallel. After acceptance,
+reconcile literal M00/M10 checks using actual fresh build/native evidence rather
+than stale admission-only notes; do not require duplicate builds for accounting.
+Keep optional frameworks parked; one disjoint actual Rust code task is useful
+only if it does not borrow the critical owner/reviewer or delay feedback.
+
+Usage 74%, 23 percentage points to 97% stop; host/scratch 45.39/13.91 GiB.
+Keep current one-heavy 4 CPU/12 GiB/no-swap/512 tasks, aggregate reserve,
+disk/growth floors, ownership/source/runtime controls, permanent mutex,
+Scratch21 and every failed attempt. Next full review: 2026-10-19T20:31:40.608Z.

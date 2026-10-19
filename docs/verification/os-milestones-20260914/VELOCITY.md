@@ -1,6 +1,152 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 74, 2026-10-19T19:01:00.299546Z
+## Current priorities — review 76, 2026-10-19T20:01:40.608988Z
+
+Live cursor, 20:12 UTC: independent path-delta review a9721a27 confirms applicable
+native Rust paths 11 → 14: TID release, time accounting and thread-hash detachment.
+Production paths remain 17, distinct native behaviors 25, practical checks 9/35.
+UTI replacement, non-null FP release, clear-FP and hardware obligations stay open.
+These counts cover selected paths and do not measure whole-kernel Rust conversion.
+
+Live cursor, 20:11 UTC: bounded independent M10 engineering reassessment recommends
+80–90% (low confidence), from 70–85%, following the fresh build and matching
+two-CPU native replay. Remaining: final supported delivery profile, usable pinned
+recipe and matched image/module manifest with valid dependency reuse. Reuse the
+accepted build/replay when consumed identities match; do not repeat it for scoring.
+This is a proposed engineering-band update, not whole M10 closure or a conversion
+of 2/2 checks to a percentage. Canonical reconciliation is queued; other bands held.
+Campaign native review supports three existing Rust paths (TID release, time
+accounting, hash detachment); recorded total confirmation pending. No UTI or
+unobserved FPU-release credit. IHK's 13 ordinary metadata checks passed and exact
+command is ready; root still owns release installation/live admission/compiler.
+
+Live cursor, 20:09 UTC: actual N3 application PASS f55c5600 and physical PASS
+5f83f3ca. One guest, two completed apps, exact 387/254-byte outputs and exits 0,
+1.353-second overlap; all delivery/return CPUs match, including child startup
+CPU1. Clone-affinity repair is validated; new logical cases zero. Whole invocation
+44.239 seconds. P-M10-02 independently supported 0fb93aa7 and canonical ledger
+now 9/35 (25.7%); all whole milestones remain open. Native/Rust counts are held
+pending the existing per-path reviewer. First observed closed native feedback
+20:05:01 UTC ends build-to-feedback at 127.6 minutes; this is distinct from later
+application acceptance. Existing IHK kmsg build admission is being prepared in
+parallel under root ownership. Do not replay the successful N3 iteration.
+
+Live cursor, 20:04 UTC: all six typed steps and existing index-1 caller argv are
+independently bound (b3fa3102). Actual physical/config binding, fresh snapshot,
+assembly and final guard passed. Root invoked the exact native dispatcher
+immediately; the whole command is active. Guest/application result and physical
+retirement remain unconfirmed. Review the closed execution and all three
+readbacks; repeat no preparation and keep the original startup-CPU assertion.
+
+Independent physical acceptance 0f832641 is complete: current build container,
+ownership records, lease and quarantine absent; groups empty; permanent mutex
+available. Nine journal records, two ownership archives and all 74 retained-file
+FD rows are verified. All 37 pairs and both failed observer attempts are retained.
+Cleanup/postjoin passed in 6.854/0.966 seconds. Repeat no completed terminal stage.
+
+N3 is the critical path: bind genuine physical data and configuration through the
+existing accepted caller, finish the actual per-step command data and capture
+directories, then take the final snapshot, assemble, review and launch immediately.
+The caller's index 1 verifies report bytes and captures a command; it does not
+install a release. The final checker still controls execution. Snapshot reserve
+format (384 MiB) and required live margin (640 MiB above floors) stay distinct.
+Native packet, ordinary acceptance 09532853, image and archive remain unchanged.
+There has been no new guest or native feedback from this image.
+
+Build-to-native delay is 124.3 minutes against the 30-minute target.
+This interval closed physical retirement, with no additional milestone check,
+native behavior or Rust-path acceptance: 8/35 checks, 25 native behaviors,
+17 production Rust paths, 11 applicable native Rust paths. All 14 milestones and
+engineering estimate bands are held. Source/config/toolchain recording P-M10-01
+is saved in pushed/fetched checkpoint 16c00687; correction sources in 62a218fd.
+
+Use the [metrics dashboard](VELOCITY-METRICS.md) for wall rates and observation
+coverage. After real native feedback, record its timestamp/proof and stop this
+pending timer. The collector now supports completed handoffs; read-only positive,
+pending and three invalid-input checks passed without writing synthetic history.
+
+Do not reopen accepted build/inspection/archive/consumer work. Before the snapshot,
+settle every non-temporal CLI argument and capture parent against the actual
+caller; no invented six-step interface. Prepare native-result handling from the
+existing runner contract in parallel. After accepted feedback, reconcile the
+literal clean rebuild/replay and recoverable-next-command checks against actual
+current evidence; do not demand a duplicate build merely because old notes cite
+admission-only evidence. Whole matched-profile delivery remains separate.
+
+Current blockers are command/schema/handoff work; additional CPU/RAM benefit is
+unproved. Preserve the one-heavy 4 CPU/12 GiB/no-swap/512-task profile, aggregate
+reserve, disk/growth floors, source/ownership/runtime checks, permanent mutex,
+Scratch21 and all failures. Optional framework experiments stay parked. Concrete
+disjoint Rust work may advance only without delaying this native feedback.
+Usage 74%; 23 percentage points remain to the 97% stop. Host/scratch approximately
+45.39/13.91 GiB. Next review: 2026-10-19T20:31:40.608Z.
+
+## Previous priorities — review 75, 2026-10-19T19:31:26.584457Z
+
+Live cursor, 20:00 UTC: independent physical acceptance 0f832641 is complete.
+Current build CID, ownership records, lease and quarantine are absent; process
+groups empty, permanent mutex available. Nine journal records, two ownership
+archives and all 74 FD rows verified; all 37 pairs and failed attempts preserved.
+N3 now proceeds through pre-clock physical/config binding, final snapshot,
+exact machine decision and immediate launch using its accepted caller interface.
+No remaining physical gate or native acceptance is claimed here.
+
+Live cursor, 19:54 UTC: raw-five archive independently matched all five files,
+624,640 bytes. Cleanup/postjoin now completed in 6.854/0.966 seconds, children
+joined and groups absent; exact current build CID is reported absent. Independent
+physical acceptance is pending. Preserve the earlier pre-child capture-directory
+refusal. N3 author/reviewer are active with command data and final-delta checks
+prepared; take the last snapshot only after genuine physical acceptance. The
+recorded snapshot reserve and stricter live free-space requirement stay separate.
+
+Live cursor, 19:41 UTC: corrected source publication 62a218fd is pushed/fetched.
+Actual observer, summary and original-five FD metadata stages passed in
+2.781/0.174/0.173 seconds; all direct children joined, groups absent and captures
+closed. Whole saved-path fixture reached cleanup-draft construction with eleven
+compiler sources, three separate terminal imports, 74 FD rows and eight clients.
+Raw-five export and its actual review, then separately released cleanup/postjoin
+and physical acceptance, remain. Reuse these successful captures; N3 packet ready.
+
+Practical checks are now 8/35 (22.9%), up one literal provenance check from
+7/35 (20.0%). P-M10-01 is reconciled in the working canonical ledger using
+accepted reports fa398247/f7352de9. This is source/config/toolchain recording,
+not new native behavior or full M10 closure. All 14 whole milestones remain open;
+25 native behaviors, 17 production Rust paths and 11 native Rust paths are held.
+The next campaign checkpoint must preserve/push the canonical update.
+
+Current build-to-native feedback delay is 94.0 minutes, target 30.
+The accepted producer took 97.724 seconds (outer 259.023); artifact acceptance
+took 45.17 minutes. No resource saturation or 2–3x speedup has been demonstrated.
+
+N3 ordinary stage/consumer/parent is independently accepted 09532853. Frozen
+non-temporal packet 11804f5a binds the genuine archive, owner, manifest, parent,
+full argv and readbacks. Reuse it; do not re-stage or re-run successful consumers.
+After physical retirement, activate its existing owner with followup_task if idle.
+Keep the last fresh snapshot and exact final machine decision at the launch edge.
+
+Both root observer failures are preserved and consumed. First: wrong callback
+dictionary projection, before output/lock/Docker. Its actual validation path plus
+13 refusals passed after correction. Second: during gathering, three terminal
+imports polluted the fixed eleven compiler-source roles. Partial output and
+three read-only captures are preserved; child groups are positively retired.
+A complete 14-file readback passed 0.174 s. Run the complete affected observer path
+against that genuine saved prefix, separate the two source maps, then review and
+publish only changed sources for one fresh observer/summary/metadata release.
+Raw-five, cleanup and postjoin require their genuine preceding outputs and their
+own exact decisions. No weakened checks, synthetic success or replay of releases.
+
+Prioritize current terminal/native work and concrete Rust implementation. Parked
+constructor/framework experiments remain parked. One spare worker may advance an
+existing disjoint Rust compute candidate with a small real check if it does not
+borrow the current owners/reviewer, interfere with frozen 205 or delay native
+feedback. Do not fill slots with duplicate reviews or new harness frameworks.
+
+Usage 73%;24 percentage points remain to 97% stop. Host/scratch 45.36/13.91 GiB.
+Keep one heavy operation, 4 CPUs/12 GiB/no swap/512 tasks, aggregate reserve, disk/growth floors,
+ownership/source/runtime controls, Scratch21 and all failures. Change no active
+limits; more resources require measured benefit. Next review: 2026-10-19T20:01:26.584Z.
+
+## Previous priorities — review 74, 2026-10-19T19:01:00.299546Z
 
 Live cursor, 19:23 UTC: a second root observer invocation failed during gathering:
 three terminal gate imports were added to FULL_SOURCE_SHA256, which must retain

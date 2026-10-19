@@ -1,5 +1,45 @@
 # OS development session handoff
 
+## Current — strict repaired205 native accepted; next IHK target (20:15 UTC)
+
+Campaign ACTIVE: functional OS/apps plus actual Rust/reviewed assembly cutover.
+Matching imageff4fca45/source205 N3 is independently acceptedf55c5600: one real
+guest, two McKernel CPUs, exact387B/254B outputs, exits0, overlap1.353171s and all
+startup/delivery/return CPU assertions. Physical5f83f3ca separately proves30clients,
+QEMU/container/lease retirement; root dispatcher and3readbacks wholejoined0/44.239s.
+Closed-status observation20:03:58UTC; buildfinished17:57:23.816691. Feedback delay
+126.576min vs30min target MISSED. No extra logicalcase credited:25behaviors.
+
+Independentpathreviewa9721a27 raises applicable native Rust11→14 for existing
+production17 rows: __release_tid, process_destroy_thread_time_account_bridge,
+process_destroy_thread_hash_detach_bridge via actual non-main thread joins and
+normal default destruction. __find_and_replace_tid UTI/refill remains native
+pending; no inferred non-null FPU release/clear-FP/hardware or whole-C retirement.
+
+Literal P-M10-02 independently met0fb93aa7 by actual fresh clean buildf735 and
+matching replay; practical9/35complete,26open, all14wholemilestones OPEN. M10
+engineering band80–90%, low confidence, is separate judgment; final supported
+delivery profile/usable pinned recipe/matched image-module manifest remain.
+Other bands held. P-M00-02 still awaits recorded current runnable command/release.
+
+Terminalphysical0f832 accepted after corrected observer2.781s/summary.174s/FD.173s,
+raw5.175s, cleanup6.854s+postjoin.966s. All37pairs/74FD preserved. Both failed
+observer attempts, finalfixture wrong-refusal expectation and pre-spawn capture
+parent failure remain retained. Capture-only DATA resumes did not replay a child;
+no source/argv/release bytes were weakened. Currentterminal container7e94 absent.
+
+Next actual compiler: existing IHK-only kmsg target request6322420c at native-kmsg-
+read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/request.json.
+Current private ihk-current-live-admission-20261019-1/EXACT-NEXT-COMMAND.json binds
+unchanged conditionald300/0f2c payload and exactrelease8f2fad14; root must install
+once then original dispatch_owner.py argv. Its own under-lock fresh usage/source/
+namespace/CPU/RAM/storage/historical-lease gates remain mandatory. Capacity now
+fits14092861440B requirement after authorizedreserve; only ihk.ko build, no load,
+SMP/mcctrl substitution, staging, guest or native ioctl authority. Separate frozen
+os_runtime capsule means no global HEAD equality to mutablekernel205. Do not
+rebuild accepted205 or replay inspections/stages. PreserveScratch21/allfailures,
+WIP/permanentmutex/exclusions/oneheavy/97%stop. Optionalconstructor remains parked.
+
 ## Current — saved observer prefix repair; provenance check closed (19:33 UTC)
 
 Campaign ACTIVE: functional OS/apps and Rust/reviewed assembly. Actual fresh8b

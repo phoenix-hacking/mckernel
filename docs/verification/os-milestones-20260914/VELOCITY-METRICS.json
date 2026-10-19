@@ -1,13 +1,13 @@
 {
   "schema": "mckernel.supervisor-velocity.v1",
-  "observed_at": "2026-10-19T19:30:17.595961Z",
+  "observed_at": "2026-10-19T20:12:24.278043Z",
   "baseline_at": "2026-10-19T10:27:41Z",
-  "elapsed_wall_hours": 9.043498878055555,
-  "monotonic_ns": 220324164921966,
-  "boottime_ns": 235662291972542,
-  "previous_sample_interval_seconds": 309.978376,
+  "elapsed_wall_hours": 9.745355011944444,
+  "monotonic_ns": 222850847003903,
+  "boottime_ns": 238188974054425,
+  "previous_sample_interval_seconds": 168.358741,
   "largest_observed_sample_gap_minutes": 299.53526335,
-  "interval_wall_minus_monotonic_seconds": -6.53999961741647e-07,
+  "interval_wall_minus_monotonic_seconds": 5.130000033659599e-07,
   "baseline": {
     "practical_checks": 7,
     "native_behaviors": 25,
@@ -15,22 +15,22 @@
     "native_rust_paths": 11
   },
   "last_confirmed_counters": {
-    "practical_checks": 8,
+    "practical_checks": 9,
     "native_behaviors": 25,
     "production_rust_paths": 17,
-    "native_rust_paths": 11
+    "native_rust_paths": 14
   },
   "delta": {
-    "practical_checks": 1,
+    "practical_checks": 2,
     "native_behaviors": 0,
     "production_rust_paths": 0,
-    "native_rust_paths": 0
+    "native_rust_paths": 3
   },
   "gains_per_wall_hour": {
-    "practical_checks": 0.1105766709858884,
+    "practical_checks": 0.20522597663694037,
     "native_behaviors": 0.0,
     "production_rust_paths": 0.0,
-    "native_rust_paths": 0.0
+    "native_rust_paths": 0.3078389649554105
   },
   "known_production_native_events": [
     {
@@ -58,18 +58,37 @@
       "time_basis": "accepted producer finish; outer invocation includes guard/owner setup",
       "producer_seconds": 97.7241093,
       "build_phases_passed": 16
+    },
+    {
+      "at": "2026-10-19T20:07:57.898836Z",
+      "kind": "native_image_acceptance",
+      "result": "pass",
+      "invocation_seconds": 44.23927065599128,
+      "proof": "f55c5600/5f83f3ca",
+      "time_basis": "first_observed_acceptance; invocation completed earlier",
+      "guest_count": 1,
+      "completed_app_processes": 2,
+      "new_logical_cases": 0,
+      "repair_validated": "clone affinity: child startup CPU1"
     }
   ],
-  "known_event_rate_per_wall_hour": 0.3317300129576652,
-  "known_invocation_wall_seconds": 465.67999999999995,
-  "known_invocation_fraction_percent": 1.4303706706863473,
+  "known_event_rate_per_wall_hour": 0.41045195327388073,
+  "known_invocation_wall_seconds": 509.9192706559912,
+  "known_invocation_fraction_percent": 1.453453893421835,
   "last_build_to_native_feedback_minutes_approx": 89,
   "build_to_native_target_minutes": 30,
-  "pending_build_finished_at": "2026-10-19T17:57:23.816691Z",
-  "pending_build_to_native_lower_bound_minutes": 92.89632116666667,
-  "pending_build_artifact_accepted_at": "2026-10-19T18:42:33.873575Z",
-  "pending_build_to_artifact_acceptance_minutes": 45.16761473333334,
-  "pending_artifact_to_native_lower_bound_minutes": 47.72870643333333,
+  "pending_build_finished_at": null,
+  "pending_build_to_native_lower_bound_minutes": null,
+  "pending_build_artifact_accepted_at": null,
+  "pending_build_to_artifact_acceptance_minutes": null,
+  "pending_artifact_to_native_lower_bound_minutes": null,
+  "completed_build_finished_at": "2026-10-19T17:57:23.816691Z",
+  "completed_build_to_native_feedback_minutes": 127.63257985,
+  "completed_native_feedback_at": "2026-10-19T20:05:01.771482Z",
+  "completed_native_feedback_proof": "f55c5600e4da70f0e36df234e8cf0ca1ce7e77fcc928a1f4dcd3c13ba3635467/5f83f3ca420f6ca8e2aa97917ca71521aea6e420d81502781a46107cc56125db",
+  "completed_native_feedback_time_basis": "first_observed_result",
+  "completed_build_to_artifact_acceptance_minutes": 45.16761473333334,
+  "completed_artifact_to_native_feedback_minutes": 82.46496511666666,
   "failed_case_post_guard_hold_minutes": 43.95494821666667,
   "failed_case_release_pending": false,
   "failed_case_release_accepted_at": "2026-10-19T12:52:29.742103Z",
@@ -77,14 +96,14 @@
   "post_guard_hold_target_minutes": 10,
   "last_successful_snapshot_review_age_seconds": 17.72,
   "snapshot_launch_target_seconds": 30,
-  "included_usage_percent": 73.0,
-  "usage_delta_percentage_points": 11.0,
-  "remaining_percentage_points_to_97_stop": 24.0,
+  "included_usage_percent": 74.0,
+  "usage_delta_percentage_points": 12.0,
+  "remaining_percentage_points_to_97_stop": 23.0,
   "notes": [
     "Rates use elapsed wall time since the named baseline, not CPU time.",
     "Confirmed counters come from accepted campaign reports; no OS-percent inference.",
     "Known invocation fraction is a partial wall-time inventory, not CPU utilization.",
-    "One native image repeats an existing behavior: distinct behavior increment zero.",
+    "Accepted native replays can validate repairs without increasing distinct logical-case counts.",
     "Held-case age stops only after independently accepted physical release.",
     "Wall rates include unavailable time and observation gaps; they are not active engineering rates.",
     "No launcher, build, guest, cleanup, quota, filesystem or goal mutation."

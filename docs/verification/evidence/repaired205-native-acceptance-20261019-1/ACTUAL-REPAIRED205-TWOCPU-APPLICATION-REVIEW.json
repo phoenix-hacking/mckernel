@@ -1,0 +1,272 @@
+{
+  "actual_completed_app_processes": 2,
+  "actual_guest_count": 1,
+  "all_offloaded_delivered_returned_cpus_exact": true,
+  "application_acceptance": true,
+  "apps": [
+    {
+      "all_delivered_and_returned_cpus_exact": true,
+      "delivered": 65,
+      "finished_ns": 34117834551,
+      "id": 0,
+      "logical_cpu": 0,
+      "physical_cpu": 1,
+      "pid": 256,
+      "procfs": {
+        "deleted": [
+          1232
+        ],
+        "published": [
+          924
+        ]
+      },
+      "raw_wait_status": 0,
+      "reaped_ns": 34117702970,
+      "release_position": 1234,
+      "retirement_attempts": [
+        {
+          "errno": -11,
+          "position": 1231,
+          "token": 178
+        },
+        {
+          "errno": 0,
+          "position": 1233,
+          "token": 179
+        }
+      ],
+      "return_routes": 34,
+      "returned": 64,
+      "started_ns": 31763506557,
+      "streams": {
+        "stderr": {
+          "bytes": 0,
+          "eof": true,
+          "oracle_exact": true,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "truncated": false
+        },
+        "stdout": {
+          "bytes": 387,
+          "eof": true,
+          "oracle_exact": true,
+          "sha256": "e5aab46f5a720bacdbb2fb3cb83d682b02df7261336e79663c79fa78022b9bc4",
+          "truncated": false
+        }
+      },
+      "syscalls": [
+        0,
+        1,
+        3,
+        5,
+        7,
+        8,
+        13,
+        14,
+        63,
+        74,
+        77,
+        87,
+        89,
+        231,
+        257,
+        332
+      ],
+      "workers": {
+        "8": 0,
+        "9": 1
+      }
+    },
+    {
+      "all_delivered_and_returned_cpus_exact": true,
+      "delivered": 21,
+      "finished_ns": 33117847402,
+      "id": 1,
+      "logical_cpu": 1,
+      "physical_cpu": 2,
+      "pid": 255,
+      "procfs": {
+        "deleted": [
+          1182
+        ],
+        "published": [
+          927
+        ]
+      },
+      "raw_wait_status": 0,
+      "reaped_ns": 33117708837,
+      "release_position": 1210,
+      "retirement_attempts": [
+        {
+          "errno": -11,
+          "position": 1181,
+          "token": 125
+        },
+        {
+          "errno": 0,
+          "position": 1209,
+          "token": 154
+        }
+      ],
+      "return_routes": 8,
+      "returned": 20,
+      "started_ns": 31764537694,
+      "streams": {
+        "stderr": {
+          "bytes": 0,
+          "eof": true,
+          "oracle_exact": true,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "truncated": false
+        },
+        "stdout": {
+          "bytes": 254,
+          "eof": true,
+          "oracle_exact": true,
+          "sha256": "52095dafd5235a8c1073248bbda3964f8a7b749722306ceaabf321d2fdcd4816",
+          "truncated": false
+        }
+      },
+      "syscalls": [
+        0,
+        1,
+        3,
+        5,
+        7,
+        13,
+        14,
+        63,
+        89,
+        157,
+        186,
+        231,
+        257
+      ],
+      "workers": {
+        "10": 1,
+        "12": 0
+      }
+    }
+  ],
+  "container_profile": {
+    "cpus": 4,
+    "cpuset": "2-5",
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "network": "none",
+    "pids": 512
+  },
+  "decision": "PASS_ONE_MATCHING_NEW205_GUEST_TWO_DISJOINT_CPU_APPLICATIONS_EXACT_ORACLES_AND_RETIREMENT",
+  "deferred_original_qualification": false,
+  "evidence": {
+    "actual_ordinary_acceptance": {
+      "bytes": 12253,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-fresh8b-independent-review-20261019-1/ACTUAL-ORDINARY-STAGE-CONSUMER-PARENT-ACCEPTANCE.json",
+      "sha256": "09532853a76bd72ea944dcd08cdd61aaf905c7eebec938a99fa57e69e094ff1d"
+    },
+    "attempt_archive": {
+      "bytes": 491520,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/readback-3.stdout",
+      "sha256": "a099c7c94d777da42fffc390f02e744a79dba92a8b7b7eb325337018a5e21dea"
+    },
+    "direct_result": {
+      "bytes": 121059,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/readback-2.stdout",
+      "sha256": "1b048020449d179ce8e3c0013fa50a9632a5e1e58b1d255bffd42de8e7d5f301"
+    },
+    "execution_release": {
+      "bytes": 2891,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/execution-release.json",
+      "sha256": "170857294fa81d9496c6d18d58cc9558ad1dc307c43a9120a0856b63f35cffd2"
+    },
+    "full_trace_analysis": {
+      "bytes": 4224,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-fresh8b-independent-review-20261019-1/ACTUAL-REPAIRED205-APPLICATION-TRACE-DETAILS.json",
+      "sha256": "2ae858d0112df81a30d0adc27a1748ebe7b0adee0e540e3c8545472ac89e34a7"
+    },
+    "outer_status": {
+      "bytes": 1286,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/native-pipeline.status.json",
+      "sha256": "509378692df757e72792face8dbaaab285979000cf2df4e4cccfe00934eb3fd0"
+    },
+    "owner_join": {
+      "bytes": 918,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/owner-join.json",
+      "sha256": "1ef9a725f27c0c452f1c423ff025d5f9b87cb5bfc1068ef27c85471cd4573825"
+    },
+    "physical_retirement": {
+      "bytes": 6276,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-fresh8b-independent-review-20261019-1/ACTUAL-REPAIRED205-TWOCPU-PHYSICAL-RETIREMENT-REVIEW.json",
+      "sha256": "5f83f3ca420f6ca8e2aa97917ca71521aea6e420d81502781a46107cc56125db"
+    },
+    "read_only_analysis_source": {
+      "bytes": 10324,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-fresh8b-independent-review-20261019-1/analyze_completed_native_capture.py",
+      "sha256": "0afebb3e0730f5f18a8eaf15fff0394d4e10dab579746f3bd872b2b49f9375d1"
+    },
+    "root_archive": {
+      "bytes": 696320,
+      "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/readback-1.stdout",
+      "sha256": "d15cee4d7a60090a7e3b0ffd1c72addfe9599b8aee368c4aef28b619b7918ad6"
+    }
+  },
+  "full_source_manifest_sha256": "d3495242284b653ef10de9f4f70706fc0ea118696189aa957305ce8bf5df8098",
+  "kernel_image_bytes": 7988768,
+  "kernel_image_sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+  "leader_procfs_publish_delete_each_exact_once": true,
+  "mckernel_application_executed": true,
+  "native_acceptance": true,
+  "new_logical_application_cases": 0,
+  "new_runtime_release": false,
+  "overlap_ns": 1353171143,
+  "per_pid_exit_group_only_one": true,
+  "post_exit_eagain_attempts_then_single_success_and_release": true,
+  "procfs_empty": true,
+  "qmp_unix_bytes": 103,
+  "raw_diagnostic_result_flags": {
+    "application_acceptance": false,
+    "mckernel_application_executed": false,
+    "runtime_blocker": "protocol observation only; independent guest execution review is pending",
+    "status": "PROTOCOL_PASS"
+  },
+  "reviewer": "two_cpu_end_to_end_review",
+  "schema": "mckernel.independent-repaired205-two-cpu-actual-application-review.v1",
+  "scope": "Actual supported two-McKernel-CPU execution of existing Rust file/thread batch and FPthread exact cases on the matching fresh205 callback+clone-affinity image. This is independent actual acceptance of completed retained bytes; it does not rewrite diagnostic results or count repeated logical cases.",
+  "separate_failure_history_preserved": [
+    "N1 pre-acquisition QMP113B refusal",
+    "N2 unsupported postboot resource queries guest failure",
+    "N3 old clone-affinity CPU0 startup trace failure",
+    "current ordinary staging/geometry/visibility failure family"
+  ],
+  "source_request_sha256": "8b7b34ede927594675ad8cd303c24c233f4dcdaaa414c5a4c1171adc1139cbe1",
+  "startup_prctl_157_cpu1_proven": true,
+  "status": "PASS_ACTUAL_REPAIRED205_TWOCPU_RUST_BATCH_AND_FPTHREAD",
+  "strict_startup_cpu_check_unchanged": true,
+  "two_cpu_readback": {
+    "channel_count": 2,
+    "default_ikc_linux_cpu": 0,
+    "distinct_cookies_and_disjoint_queues": true,
+    "generation": 1,
+    "logical_mckernel_cpus": [
+      0,
+      1
+    ],
+    "os": 0,
+    "physical_host_cpus": [
+      1,
+      2
+    ],
+    "queue_bytes_each": 16384
+  },
+  "unchanged_oracles_bytes": [
+    387,
+    254
+  ],
+  "vm_profile": {
+    "memory_mib": 8192,
+    "numa_nodes": 2,
+    "vcpus": 4
+  },
+  "whole_kernel_rust_conversion": false,
+  "whole_os_acceptance": false
+}
