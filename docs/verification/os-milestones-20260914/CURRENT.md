@@ -1,41 +1,44 @@
 # Resume cursor
 
-## Current — FP thread state accepted; genuine make probe joined (2026-10-18 23:54 UTC)
+## Current — supported Rust batch accepted; cleanup/module source publication (2026-10-19 00:18 UTC)
 
-Functional OS/apps and actual compute Rust/reviewed-assembly cutover continue.
-Fixed FP1e7a functional candidate/matched modules preserved.24accepted native
-behaviors/13selected production/11applicable native Rust paths;7complete/28open
-practical checks, all14milestones OPEN. Independent2312 accepts exact254B/
-exit0/empty stderr:two overlapping workers256/257 on one permitted CPU,
-64rounds each/all16YMM/distinct valid controls/peer-progress witness and original
-control restoration. All30Dockerclients/QEMU/container/three TIDs/lease positively
-retired. Canonical practical-fp-thread-state-native-result-review-20261018-1.json
-90fb5143. No nonnullFP release, signal-state, multicore or wholeM07 claim.
-Wrapper wholejoin0/36.376s and owner+3readbacks0. Expired first snapshot/machine
-preserved without child; genuine refresh547d/8255 passed exact independent review.
-Reviewer activation lapse after wholejoin was identified/corrected; preserve
-actual distinction between idle waiting and active review, no replay.
+Functional OS/apps plus actual Rust/reviewed-assembly migration continue. Fixed
+FP1e7 candidate/matching modules preserved.24accepted native behaviors,
+13selected production/11applicable native Rust paths,7complete28open checks,
+all14milestones OPEN. Current387B Rust file/memory/thread/error batch independently
+passes44506d60 onFP1e7:main+sixworkers/threeoverlappingpairs, allsourceassertions,
+full65delivery64returnjoin/token129/cleanup0 and30clients/QEMU/container/lease
+positively retired. It repeats accepted bodies coherently:ONEnewguest, ZERO
+newdistinctbehavior/language-retirement/checkcredit. Actualwrapper36.314s.
 
-Genuine pinned-make pipe probe now executed ONCE under exactc9421d06 release/
-48556120review/request2f44b0d7 and fresh admitted predecessor90fb5143. Root PID
-1259984/directjoin0/2.481s; ordinary owner group absent/dispatch0/2.442s. Receipt
-PASS/buildPASS/retiredtrue/cleanupPASS_OWNED_REMOVAL_AND_RECORD_RELEASE, no separate
-cleanup/error. Independent2208 actual pipe/image/profile/retirement decision
-PENDING; no actual export/module claim yet. Source d9829e1b pushed/fetched30/
-3cdba170.2200 preparing exact real-evidence export inputs; inner image-auth false
-remains unchanged. Next executable after actual acceptance: separately approved
-actual proof exporter, then exact ihk.ko-only driver request/release/fresh heavy
-admission. Reuse accepted old modules; no repeated IHK compile merely a receipt.
+Genuine GNU Make4.4.1 pipeprobe and physicalrelease accepted5467aeca; actual
+proofexport accepted7142fb62/proof462e6fd3, innerimage-authfalse unchanged. IHK-only
+proof-bound capsule db75d9d7/source0ebfcb51/8actualchecks0/.215s is ready for exact
+sourcepublication/fetchedproof and35file949466B scratchmaterialization. No module
+build/load/ABIreuse yet. Full targetgrowth+emergency1207959552B ABOVE12GiB scratch
+floor is a real heavy-admission dependency; latest scratch capacity is recorded
+in pending publication/observation captures. Do not waive reserve or silently
+reinterpret host availability as scratch capacity. Exact120duplicatearchive
+cleanup may free1315868672B; no archivebodyrehash, resize, prune or deletion yet.
 
-Rust batch387B Linux/ELF/6workers independently acceptedd6c7ee5b. Soleauthor1754
-has source-ready exact3ordinary stage/fixture/parent packet76c086f7/proposal8dfee4d8;
-2330 affected review active. Reuse unchanged compiler/Linux/no replay/new image.
-120duplicate archives(1315868672allocatedB) cleanup proposal2345 active from exact
-supervisor8255bbf8/advisorybe259235; no deletion yet, fresh live/exact release still
-required. All failed evidence/unknown statuses/scratch21/locks/dirtyWIP preserved.
-Original syscall-DWARF13/full-validity and failedFPpostbuild15/all17false remain.
-Excluded execve/forkACK stay excluded.16/12GiB floors+actual working/emergency,
-4CPU/12GiB/noSwap/512task oneheavy, aggregate cheap budgets and97%stop unchanged.
+Cleanup candidate8255/advisorybe259/240metadatajoins remain valid. Actualcaller
+c172 and finiteobserve79aac/profile02c8 have independent READONLY source/profile
+PASS689ea409 after two pre-effect sourcefindings corrected:Python3.8suffix and
+scanner-selfFD exemption. Original4syntheticcases and7actualselfproc cases kept.
+Rootfull-hostread-onlyobservation, exactactualdecision and separateapplyrelease
+are NEXT; no realunlinkauthority fromsourcePASS. Publish/fetch full83source/input
+rows first. Expected immutable archived Makefile/command/test whitespace retained,
+not stripped to change reviewed source hashes. No hidden all-checks-pass claim.
+
+Private __release_tid leaf8270f238 has old56x3semanticparity and7focused actual
+selected/fallback/prototype-negative/linkchecks. Declarationfix corrects prior
+fixture-injectedprototypegap; original2734/512133 preserved. Sourceadvisorydelta/
+production/native proof pending; current FPkernel untouched. CPU7ordinary lanes
+are free after joinedfixtures; root oneheavy slot free after44506d60. Current
+launcher worker1269722/start16630278, server1269724/start16630284 observed fresh
+following userauthorizedcapacityrecovery; no launcherstate edits/newconversation.
+Preserve scratch21/container/locks, allfailedWIP, refusedexecve/forkACK exclusions,
+4CPU12GiB/noSwap512task limits,16/12floors+truegrowth and97%includedusage stop.
 
 ## Current — FP file native accepted; literal M04-02 closed (2026-10-18 23:06 UTC)
 

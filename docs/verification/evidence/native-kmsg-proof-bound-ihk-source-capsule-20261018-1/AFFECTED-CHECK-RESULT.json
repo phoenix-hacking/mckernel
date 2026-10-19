@@ -1,0 +1,66 @@
+{
+  "status": "PASS_PRIVATE_EIGHT_ACTUAL_DRIVER_OWNER_CONSUMER_TESTS",
+  "actual_status": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/checks-1/affected-driver-owner.status.json",
+    "sha256": "5c3fab244cf7cce50f16f6088a55c9028164617054eddc7d1ef6d2fff931ee41"
+  },
+  "pid": 1266639,
+  "direct_child_joined": true,
+  "returncode": 0,
+  "seconds": 0.21515241099405102,
+  "tests": 8,
+  "CPU7": "RELEASED",
+  "caps": {
+    "cpu": 7,
+    "jobs": 1,
+    "address_space_bytes": 1073741824,
+    "cpu_seconds": 30,
+    "wall_seconds": 35,
+    "kill_grace_seconds": 2,
+    "stream_bytes": 1048576,
+    "namespace_bytes": 33554432
+  },
+  "capture_method": "Direct child writes to exclusive regular files; original accepted check-v2 runner unchanged",
+  "coverage": [
+    "Exact ihk.ko pipe argv and missing/wrong-proof errors; genuine accepted proof consumed",
+    "Actual retained saved Rust/objtool13-source/dependency command positives and strict negatives",
+    "Actual files() FIFO rejection without filesystem FIFO creation",
+    "Actual accepted ELF imports/kernel namespaces/exact21 export boundaries",
+    "Actual driver execute() missing-proof refusal before make",
+    "Owner legacy function AST preservation",
+    "Actual owner validate_request accepts exact copied21-file RO input directory including proof, rejects removed proof",
+    "Actual owner authenticate accepts bound full11source/review documents and rejects missing source role; synthetic authority fixture-only"
+  ],
+  "source_changes": {
+    "native_running_external_modules_offline.py": {
+      "original": {
+        "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/implementation-1/driver.py",
+        "sha256": "17798aaebf7d77e3cbda85e3e1b9b238a37ad9ed3fbcc4f80a8150d058ccf4ea"
+      },
+      "current": {
+        "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/capsule/scripts/native_running_external_modules_offline.py",
+        "sha256": "e422544777fd750757b660ccf4c1d7829b00098d5af8c95d07802a03b877992b"
+      },
+      "only_change": "Exact preparation SHA256 constant",
+      "all_function_and_class_AST_bodies_unchanged": true
+    },
+    "native_running_external_modules_owner.py": {
+      "original": {
+        "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/implementation-1/native_running_external_modules_owner.py",
+        "sha256": "9c1fbfa38d1a9c63b993866c6bc5226b87b98df6f532b6d11ed929a11936b32c"
+      },
+      "current": {
+        "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/capsule/scripts/native_running_external_modules_owner.py",
+        "sha256": "349d503862eb333151050d973138dae559652b7a5dc47bc52e06fe7ce14ffa5f"
+      },
+      "only_change": "Exact preparation SHA256 constant",
+      "all_function_and_class_AST_bodies_unchanged": true
+    }
+  },
+  "target_compiles": 0,
+  "Docker": false,
+  "root": false,
+  "guest": false,
+  "native_acceptance": false,
+  "original_failure_history": "implementation-1/driver-checks-1 original six-case fixture AST-name failure preserved; one correction passed driver-checks-2. No new failure in this capsule suite."
+}

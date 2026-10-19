@@ -1,0 +1,32 @@
+{
+  "schema": "mckernel.rust-functional-batch-independent-stage-source-review.v1",
+  "status": "PASS_CONDITIONAL_ORDINARY_SEQUENCE_ONLY",
+  "reviewer": "/root/rust_batch_source_review_2330",
+  "request_sha256": "76c086f7dbfb4a81a72288212d873a636eebe53f87b4529ea050f64cf846faae",
+  "proposal_sha256": "8dfee4d88026cb180d01d22ce14c916ee6cff655667e2a2d30395ba4cc7fff66",
+  "binding_sha256": "de88932b5c52add31fa5a3c26c9601694871807052caf52c80de790c31892a30",
+  "stage_source_sha256": "df978f413def417a2ffb4c475654b217c69f5c9134b880b00b42dd881036bd31",
+  "fixture_source_sha256": "9d69b79e71df8a7be28dce88773d465c4cc640cc9f312872419d7c97bb640eed",
+  "parent_source_sha256": "963836425f3c448cacb7aef774be2dca94d89e90c7c0c21f061e04c479bb5183",
+  "actual_linux_review_sha256": "d6c7ee5bffc4f473809c96324e6fe3b5b9dacda89618ca56a23f72b3a589c184",
+  "findings": [],
+  "ordinary_commands_permitted": 3,
+  "execution_order": [
+    "stage.py",
+    "fixture.py",
+    "create_parent.py"
+  ],
+  "conditions": [
+    "Explicit exclusive root CPU7 allocation and fresh admission before execution",
+    "One job;1GiB address space;30CPU seconds;35s wall+2s grace per command",
+    "Stage/fixture32MiBfile limit;parent1MiB;exact proposal env/writeallowlist",
+    "Host16GiB/scratch12GiB floors plus specified576MiBreserve/growth andaggregate controls",
+    "Fresh roots/exclusivecaptures/direct physicaljoins;stopfirstfailurepreservepartials"
+  ],
+  "stage_executed": false,
+  "fixture_executed": false,
+  "parent_created": false,
+  "native_release": false,
+  "runtime_release": false,
+  "reviewer_wrote_files": false
+}
