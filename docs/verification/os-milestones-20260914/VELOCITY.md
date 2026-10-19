@@ -1,6 +1,47 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 63, 2026-10-19T08:21:01Z
+## Current priorities — review 64, 2026-10-19T08:53:31Z
+
+The four-callback operation at 19adeb42 failed a producer assertion before
+image compilation. Eight compiler steps passed, including both full Rust crates
+and both GCC14 process compilations with 109 ABI assertions. Selected C properly
+has zero definitions and zero unresolved references for release_process; the
+selected Rust crates define it and all four callbacks. The private correction
+passed saved-capture regression with the three real symbol tables and six
+mutation refusals. Kernel source and later linked-consumer checks are unchanged.
+
+Owner, guard and eight Docker clients have independent positive retirement
+acceptance (def58a4f). The stopped container and common/shared records remain
+held. Prepare and review the bounded failed-producer retention/physical-release
+route using actual terminal facts. Preserve all host source, partial compiler
+outputs and failure evidence. Do not demand a successful image report from an
+operation that never built an image. No cleanup, remaining-build continuation
+or spent-release replay is authorized by this cursor.
+
+N3 two-CPU staging and actual ordinary consumers are accepted. Its exact
+non-temporal runtime packet is frozen (39f6f27b); only the genuine predecessor,
+fresh snapshot and final release remain late. Condvar Linux timeout and corrected
+binary provenance are accepted; stage/fixture/parent completed with three joins
+and exit 0 in 12.41 seconds, awaiting independent result review. Continue those
+ordinary lanes while failure recovery is prepared; give the next heavy slot to
+the first genuinely admitted useful operation after physical release.
+
+For the corrected build, reuse valid outputs where the existing contract permits;
+otherwise choose a bounded fresh-workspace correction with the same configured
+container paths. Do not invent a resume framework to avoid a short compile, or
+replay unchanged semantic/source reviews. Actual Rust-caller and linked-consumer
+proof stays required. Keep the ready 15-observation/finite-21 success preparation
+for the next real image; the current failure needs its own honest scope.
+
+The 0eca FP-thread workload and physical retirement are accepted. Recorded totals
+are 24 distinct native behaviors, 17 selected production Rust paths (up four),
+11 native Rust paths and 7/35 practical checks. No additional path/whole-milestone
+credit is implied. Preserve all exclusions, actual floors, one-heavy controls and
+97% included-usage stop. Usage is 58%; host/scratch availability is about
+46.46/12.811 GiB. The optional reserve question is still pending without mutation
+authority. Next full review: 09:23:31 UTC.
+
+## Previous priorities — review 63, 2026-10-19T08:21:01Z
 
 Two real guest invocations now exist. The short-parent two-CPU guest reached
 McKernel running status and two logical CPUs, but its bootstrap/control query

@@ -1,5 +1,48 @@
 # Compact dispatcher handoff
 
+## Current — future callback compiler prefix passed; failed-producer physical release pending (09:05 UTC)
+
+Campaign ACTIVE. Actual future-four-callback attempt e9497da4 completed eight
+compiler steps plus configuration; image make was UNRUN. Producer incorrectly
+required an unresolved selected-C release_process symbol although both selected
+C definition and its C bridge are excluded. Saved actual symbols support D0/U0;
+the default Rust entrypoint remains present. Original producer/failure bytes stay
+immutable. Source correction and fresh-workspace remaining-image proposal are
+private; no replay of the passed prefix or consumed request is authorized.
+
+Owner/guard/client retirement def58a4f passes, but stopped CID dadedd81537c and
+common/shared ownership records remain held. Independent failure-only retention
+726fc790 accepts eleven exact log pairs (139525 bytes); the entire original
+491-entry/38503317-byte partial build and evidence remain preserved in place.
+Failure-only executable observer/cleanup and their independent review are the
+current critical path. No success-image artifact gate applies to this failure
+route. Exact root releases, genuine observations and physical acceptance remain
+required before a new heavy owner. Permanent scratch21 is untouched.
+
+Corrected twoCPU N3 ordinary consumer/parent acceptance233c7c6c and final static
+freeze39f6f27b pass; actual QMP101B. Latest failed-build physical receipt/CID,
+fresh60-second snapshot and final machine release are the remaining runtime
+facts. Fixed supported FP1e7a payload/oracles remain unchanged. Condvar75B source,
+Linux timed-futex result and corrected compile provenance fc5a496f pass; its three
+ordinary stage/fixture/parent commands joined0/12.41s and actual04817602 accepts
+them. Native preparation may proceed privately while physical release finishes.
+Neither case has run from these new packets.
+
+Accepted counts remain24 distinct native behaviors,17 selected production Rust
+paths,11 applicable native paths and7/35 practical checks. All14 milestones are
+OPEN. Original failed postbuild14/full syscall-DWARF and direct nonnull FP-release
+proof remain OPEN. HEAD19adeb42 is pushed/fetched; source03a91997 and all frozen
+0eca/35a inputs remain preserved. Optional scratch reserve change is unapproved
+and parked. No whole-OS completion or measured multiplier is claimed.
+
+Next executable sequence: freeze/review/publish the failure-only helper closure;
+consume its exact observer/raw-five and separate cleanup/postjoin releases;
+accept physical absence/ownership release; late-bind N3 and collect its fresh
+snapshot LAST, then launch immediately after exact final approval. Remaining-only
+image MAKE requires its own corrected serialized request, ownership review and
+fresh admission, without repeating the accepted compiler prefix. Functional
+OS/apps plus Rust/reviewed assembly;97% usage stop and exclusions remain active.
+
 ## Current — actual0eca FP-thread application and retirement accepted (08:24 UTC)
 
 Independent dbb53e09 accepts actual0eca FPTHREAD: exact254B frozen stdout,

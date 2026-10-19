@@ -4685,3 +4685,42 @@ production Rust paths, up from 13; native paths stay 11 and practical checks 7/3
 The four-stage ordinary compiler preparation is accepted (1b94b6ad/e9497da4).
 Two-CPU control correction passed six commands and 16 affected checks; staging
 is pending. A source-only Condvar timeout case targets an uncovered requirement.
+
+
+## Review 64 — 2026-10-19T08:53:31Z
+
+Interval: 08:21:01–08:53:31 UTC. Selected production Rust proof is reconciled
+to 17 paths, up four from 13. The 0eca FP-thread workload and physical retirement
+are independently accepted. Distinct native behaviors remain 24, native paths
+11 and practical checks 7/35; all whole milestones remain open.
+
+The next four-callback operation was published at 19adeb42 and admitted under
+the existing limits. Eight compiler steps passed, including both full Rust crates
+and both GCC14 process selections with 109 ABI assertions. It then failed an
+incorrect producer expectation of one C reference to release_process. The Rust
+selection excludes both C function and C caller; zero/zero is correct. Both Rust
+crates define release_process and the four callbacks once. No image build ran.
+The bounded correction passed saved-capture regression and six mutation refusals.
+
+Positive owner, guard and eight-client retirement is accepted (def58a4f).
+Stopped container and common/shared records remain held pending a genuine
+failed-producer retention and physical release. All partial outputs are preserved.
+Do not convert compiler-prefix success into image acceptance or replay the
+consumed attempt. Use the exact failed-producer contract rather than a success
+image gate whose required image does not exist.
+
+N3's control-ABI correction, archive, actual ordinary consumers and final static
+freeze are accepted; full QMP path is 101 bytes. Condvar compiled and demonstrated
+a real timed-futex ETIMEDOUT on Linux. Its omitted precompile library check remains
+recorded; a fresh verified compile produced identical bytes, allowing reuse of
+the ELF/Linux observations with independent acceptance. No replay of those tests.
+Its three stage/fixture/parent commands then joined zero in 12.41 seconds;
+independent stage-result review is pending.
+
+Next adjustment: finish bounded failure retention/physical release, then the first
+genuinely admitted next workload. Keep N3 ready and Condvar ordinary work parallel
+with the producer correction. Reuse the compiler prefix where supported, but do
+not design a new resume framework that costs more than a short fresh compile.
+Keep actual Rust-caller/link proof and all original resource/ownership controls.
+Host/scratch availability is about 46.46/12.811 GiB; included usage is 58%.
+Optional scratch reserve authorization remains pending. Next review: 09:23:31 UTC.
