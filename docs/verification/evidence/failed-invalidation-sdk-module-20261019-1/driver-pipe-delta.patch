@@ -1,0 +1,54 @@
+--- /home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/sdk-module-preparation-1/fresh-owner-proposal-1/capsule/scripts/native_running_external_modules_offline.py
++++ /home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/sdk-module-preparation-1/fresh-owner-pipe-correction-1/capsule/scripts/native_running_external_modules_offline.py
+@@ -20,7 +20,7 @@
+ import struct
+ import subprocess
+ 
+-PREPARATION_SHA256 = "3d880922325dbb1424d8c96beea862bb0a69179bb07b7280afdf2b2ed5ce7186"
++PREPARATION_SHA256 = "8e72e2c787fd19c3f3d6ea1c672a735c82bbd9bcf63c6d4937c2ca5441389f75"
+ BASELINE_SOURCE_SHA = "942c927b1ec93cc31284ff498455909d9bb2d0fc"
+ SOURCE_CANDIDATE_SHA = "36a475efe05111caae1b25574ab375cce44b517c"
+ BASELINE = "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output"
+@@ -155,6 +155,8 @@
+ def plan(manifest):
+     command = manifest["proposed_external_command"]
+     require(command[-2:] == ["-j2", "modules"], "external target changed")
++    require(command.count("--jobserver-style=pipe") == 1 and
++            command[-3:] == ["--jobserver-style=pipe", "-j2", "modules"], "exact pipe jobserver argv")
+     require(command.count("M=/candidate/modules") == 1 and "O=/out/build" in command,
+             "external output binding changed")
+     require(command[command.index("-C") + 1] == "/out/" + KERNEL, "kernel source binding")
+@@ -164,6 +166,25 @@
+             "writable_mounts": ["/candidate"], "all_three_modules_required": list(MODULES.values()),
+             "application_acceptance": False, "execution_release": False,
+             "source_provenance": source_provenance(manifest)}
++
++
++def pipe_probe(manifest, inputs):
++    # Same pinned GNU make/image and accepted recipe as the actual IHK pipe proof.
++    row = manifest.get("make_pipe_probe")
++    require(isinstance(row, dict), "pinned make pipe recipe observation required")
++    path = plain(inputs / row["input_name"])
++    require(digest(path) == row["sha256"], "pipe probe drift")
++    proof = json.loads(path.read_text())
++    require(proof["status"] == "PASS_PINNED_MAKE_PIPE_RECIPE" and
++            proof["image_id"] == "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d" and
++            proof["make_path"] == "/usr/bin/make", "pinned make probe identity")
++    require(proof["returncode"] == 0 and proof["direct_child_joined"] is True and
++            proof["pipe_jobserver_observed"] is True and proof["fifo_count"] == 0,
++            "pipe recipe proof")
++    require(proof["argv"] == ["/usr/bin/make", "--jobserver-style=pipe", "-j2", "-f", "/probe/Makefile", "all"],
++            "exact bounded recipe probe")
++    require(proof["make_sha256"] == "97539f226fb36b8a39b147b6efe50a44f50c65773f7ad7013c0dc1e633f11362" and
++            digest(plain(Path("/usr/bin/make"))) == proof["make_sha256"], "actual pinned make binary")
+ 
+ 
+ def modinfo(path):
+@@ -271,6 +292,7 @@
+                 "candidate root has unbound content")
+         manifest = load_preparation(preparation)
+         receipt["source_sha256"] = validate(manifest, baseline, candidate, inputs)
++        pipe_probe(manifest, inputs)
+         receipt["source_provenance"] = source_provenance(manifest)
+         request = plan(manifest)
+         save(evidence / "request.json", request)

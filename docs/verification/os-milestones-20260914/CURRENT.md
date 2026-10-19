@@ -1,12 +1,27 @@
 ## Current — IHK-only request consumed, physical retired (20:19 UTC)
 
+## SDK next compiler step — source materialized, not executed
+
+Actual request186de2e1/nonce da8ae6efc9334673b1d71949e4b3bb00 is materialized
+and independently accepted64251613. Candidate/input identities1828:115468/115469
+are fresh0700; no owner/container/build yet. Source11map/75copyrows preserve
+60-source SDK closure with only mailbox33e7 changed. Proven GNU Make4.4.1 pipe
+jobserver flag/proof462e6f is carried forward; strict inventory remains intact.
+Full SDK compilation is separate from current FP native preparation. Its generated
+old IHK source65107 is not current kmsg modulec396 and grants no substitution.
+Heavy release still requires actual fetched source publication, exact independent
+canonical decision and fresh single-slot admission. First fully admitted useful
+operation may run; no blanket wait for the FP case. Native transport correction
+and imported typed AVX case bindings remain in their disjoint ordinary lanes.
+
 ## Current — Rust invalidation ownership integrated; FP1e7 stage completed (2026-10-19)
 
 Campaign ACTIVE: functional OS/apps plus Rust/reviewed assembly. Counters remain
 25 native behaviors / 17 production Rust paths / 14 applicable native Rust paths,
 9/35 practical checks; all whole milestones OPEN. M10 engineering band80–90%
-is low-confidence judgment, separate from acceptance. Latest fetched checkpoint
-5d6f894a remains the prior source boundary; this WIP is not module/native credit.
+is low-confidence judgment, separate from acceptance. Source checkpoint36a475ef is pushed/fetched27changedblobs (proof at host-preparation/
+failed-invalidation-ownership-repair-20261019-1/checkpoint-36a475ef-fetched-proof.json).
+This source/test checkpoint is not module/native error-path credit.
 
 Actual Rust finish_invalidation now retains the exact worker reservation and
 response on authenticated negative MM results. Exact reviewed source33e7b927,
@@ -27,10 +42,14 @@ closed streams and absent group. Actual scratch/fplg-up-261019-1 preserves the
 accepted archive transform and exact FP1e7 image. Prior pre-output failure is
 preserved: overlay_sha256 is raw suffix, output_sha256 is whole gzip. Corrected
 upstream/downstream variants passed saved-input4positive/14negative checks.
-Next: independent actual upstream acceptance, genuine full-authority logging
-ordinary stage release, then separately released native FP allocation/release
-proof. Ring evaluator remains bounded and cannot infer thread identity from
-pages-only logs. No new guest or automatic source/artifact promotion.
+Actual upstream e5535af7 and three-role logging stage78ce5004 are accepted;
+logging stage0/18.403s preserves60entries/69rawspans. Next: exact native diagnostic
+packet/release, last fresh admission and real ioctl/AVX/retirement feedback. Ring evaluator2c11 is insufficient to prove complete allocation/release history
+(CAP-1 overwrite/embedded-NUL gap); nonnullFP proof remains OPEN. Diagnostic
+raw collection and unchanged AVX/retirement can proceed under separate release. Native review465893ab found the guest-only ring/status/control files lack host
+transport. Owner is implementing a bounded distinct ASCII export/decoder within
+the existing4MiB serial contract, plus the genuine1e7/IHK snapshot case adapter.
+No native launch/release yet; original stage/draft remain preserved.
 
 Sole heavy slot is physically free after IHK75a15c7d. CPU6 portable fixture and
 CPU7 evaluator/ordinary staging use disjoint reviewed cheap profiles; require

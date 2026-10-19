@@ -1,6 +1,63 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 77, 2026-10-19T20:31:56.191864Z
+## Current priorities — review 78, 2026-10-19T21:02:05.897177Z
+
+Interval delivery: reviewed Rust failed-invalidation repair, portable tests and
+preserved failures pushed/fetched in 36a475ef. Six actual-source cases and the
+changed existing test pass. Negative MM clear retains its reservation/response;
+full SDK/module/native error-path proof and automatic retry remain unproved.
+No extra practical/native-path closure: 9/35 checks, 25 native behaviors,
+17 production Rust paths, 14 selected native Rust paths; all whole milestones open.
+
+FP1e7 upstream and logging stages passed in 18.10/18.40 seconds. Logging acceptance
+78ce5004 verifies seven outputs, 60 entries and exactly three changed members.
+Reuse those artifacts as the preserved baseline. Native preflight then found
+guest-local ring files were never exported to the host. Implement bounded serial
+transport/host decoding for raw bytes, status and receipts, separate from payload
+stdout. Any changed collector stage needs its own reviewed variant; preserve
+78ce5004. The other native blocker is the case snapshot adapter; reuse pinned
+collection functions and exercise the actual caller with effects stubbed.
+
+Native boundary 465893ab conditionally accepts existing engine, parent and 101-byte
+QMP path. The next diagnostic run checks log collection, unchanged AVX and retirement.
+Evaluator 2c11adb6 cannot prove complete FP allocation/release history: CAP-1
+occupancy may hide overwritten prefix and pointer reuse. Keep full-history,
+same-boot and non-null FP ownership credit open; no synthetic native acceptance.
+
+IHK c396958b artifact/physical/ABI/full-catalog joins remain accepted.
+Artifact-to-native feedback is pending 40.7 minutes, beyond 30-minute target.
+Keep its timing separate from the completed205 build-to-first-observed-native
+handoff (127.6 minutes). Current delay is source/transport/schema work, with no
+demonstrated CPU/RAM shortage or sustained throughput multiplier.
+
+Fresh SDK module validation for the Rust fix has a source-bound owner/capsule
+proposal: retained 60-source basis, only reviewed mailbox33e7 changed. Carry the
+already accepted GNU Make4.4.1 pipe-jobserver flag/proof into a separate proposal;
+keep strict special-file inventory. Review/materialize actual request and admit
+one heavy compiler operation when free while ordinary transport work continues.
+Do not replay spent requests or change frozen FP artifacts.
+
+Self-retirement/constructor experiments stay parked. Finish concrete fixes and
+the diagnostic run, preparing result/retirement handling in parallel. M10's
+recommended engineering band remains80–90% (low confidence), pending canonical
+reconciliation; other bands held. Save current comparison snapshot privately.
+Usage76%;21 points to97%stop. Host/scratch45.21/13.84GiB. Preserve one heavy,
+4CPU/12GiB/noSwap/512tasks, aggregate reserve, disk/growth floors, source/ownership/
+runtime checks, permanent mutex, Scratch21 and all failures. Next review: 2026-10-19T21:32:05.897Z.
+
+## Previous priorities — review 77, 2026-10-19T20:31:56.191864Z
+
+Live cursor, 20:57 UTC: Rust ownership fix and portable tests pushed/fetched
+36a475ef. Six actual-source cases plus the corrected existing test pass; full
+module/native and automatic retry remain unproved. Fresh SDK-module owner/request
+preparation reuses the retained 60-source basis with only mailbox33e7 changed.
+Current frozen FP inputs remain untouched. Logging stage passed 18.40 seconds,
+independently accepted 78ce5004: seven outputs, 60 entries, exactly native-boot,
+init and ihk.ko changed; metadata/payload oracle/authority preserved. Native packet
+is for diagnostic log collection, unchanged AVX and retirement. Ring evaluator
+2c11adb6 is insufficient: CAP-1 occupancy can conceal overwritten prefix/history.
+Full history, same-boot association and non-null FP ownership credit remain open.
+Prepare native packet and SDK source validation in parallel; heavy runs serialize.
 
 Live cursor, 20:45 UTC: first real upstream derivation refused before creating
 an output directory. Both producer/stager joins confused output_sha256 (compressed

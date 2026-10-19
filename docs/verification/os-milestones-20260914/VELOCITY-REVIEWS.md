@@ -5371,3 +5371,66 @@ Usage 75%,22percentage points to 97% stop; host/scratch 45.28/13.90 GiB. Preserv
 one heavy operation, 4 CPUs/12 GiB/no swap/512 tasks, aggregate reserve, disk/growth floors,
 source/ownership/runtime checks, permanent mutex, Scratch21 and all failures.
 Additional resource saturation/benefit remains unproved. Next full review: 2026-10-19T21:01:56.191Z.
+
+
+## Review 78 — 2026-10-19T21:02:05.897177Z
+
+No additional check or selected native-path acceptance this interval:9/35 checks,
+25 behaviors,17 production Rust paths,14 native Rust paths; all14whole milestones
+remain open. Concrete code delivery is the failed-invalidation Rust fix and
+portable tests, pushed/fetched36a475ef. Six cases compile/run against actual repo
+Rust1.92 sources; the changed old test also passes. Preserve original failure and
+the corrected busy-worker expectation. Failed MM clear retains the exact claim/
+response and blocks premature publication/reuse. Full module/native proof and
+automatic WAIT-loop retry remain open. This is a real source fix, not a new port.
+
+First upstream archive refused before output creation due whole-compressed hash
+versus appended-suffix hash. Both upstream and downstream joins were corrected
+against saved actual data:4positive/14negative checks passed. Fresh upstream
+operation passed18.10seconds; logging stage passed18.40seconds. Actual acceptance
+78ce5004 verifies seven outputs/60entries/three changed roles (native-boot,init,
+ihk.ko), all other metadata and bytes preserved, unchanged payload oracle and
+full source/module authority joins. No build or original archive replay needed.
+
+Native preflight found a genuine transport defect: collector stored ring files
+inside the guest without exporting them before shutdown. Linux control-plane
+serial framing/host decoder must retain raw bytes, status and receipts separately
+from app stdout. Original accepted archive is preserved; any changed collector
+uses a new reviewed stage variant. Existing native boundary465893ab accepts the
+engine,parent,101B QMP path conditionally. Case snapshot adapter is also pending;
+reuse collection functions and test the effect-stubbed actual entrypoint first.
+These are the current native blockers, not kernel/compiler failures.
+
+Ring evaluator2c11adb6 is insufficient for complete history: an overwritten
+CAP-1 prefix can remain newline-terminated and pass, hiding pointer history.
+The2positive/17negative fixture is format-only evidence. Same-boot AVX/procfs/
+retirement joins and full history remain required for ownership credit.
+The next separately declared diagnostic collection run retains the unchanged AVX
+and retirement oracle; it does not close non-null FP or whole Rust acceptance.
+
+IHK artifact accepted20:21:25.936213UTC; native ioctl feedback pending
+40.7minutes (target30). Previous205 build-to-first-observed native127.6minutes is
+completed, with actual invocation/acceptance proof and explicit observation basis.
+NoCPU/RAM saturation is shown and no2x/3x claim is supported. Native/check counts
+alone do not capture the delivered source bugfix, so report it explicitly without
+inflating acceptance.
+
+The fresh SDK module proposal reuses the60-source accepted basis, changing only
+mailbox33e7. Source-binding check passed; original owner/request/output preserved.
+Review caught the same GNU Make4.4.1 FIFO hazard as the earlier SDK: carry accepted
+pipe-jobserver mode and its existing proof into the new variant rather than relax
+the inventory or repeat a known failure. Materialization, independent release and
+sole-heavy admission remain. Compilation can use the free heavy slot while ordinary
+transport/adapter work proceeds; never overlap a native guest/heavy operation.
+
+Next tactics: finish host transport and actual adapter check; derive the changed
+collector stage once; bind genuine stage/authority, last snapshot, exact release
+and immediate diagnostic run. Complete focused source/module validation in parallel
+where profiles permit. Optional frameworks remain parked. Reconcile M10's bounded
+80–90% recommendation at a coherent checkpoint, hold other thirteen bands and
+all whole milestones. Private current comparison snapshot records source and
+recommendation separately for later delta analysis.
+
+Usage76%,21points to97%stop;host/scratch45.21/13.84GiB. Keep one-heavy4CPU/
+12GiB/noSwap/512tasks, aggregate reserve, disk/growth floors, ownership/source/runtime
+controls, permanent mutex, Scratch21 and every failure. Next full review: 2026-10-19T21:32:05.897Z.
