@@ -1,5 +1,34 @@
 # Compact dispatcher handoff
 
+## Current — cached image artifact and retention accepted; terminal publication (11:13 UTC)
+
+Campaign ACTIVE. Remaining request9f04f3a3 consumed its exact release once:
+image MAKE0/216.04s; original nine phases adopted without recompilation.
+Image e0d3180a (7968952 bytes), owner/guard/eight clients retired; stopped
+container66a9804b and ownership records remain held until exact physical cleanup.
+Independent canonical artifact530a21e6 accepts selected production-image facts;
+finite21 retentiona0d67aa3 accepts21 pairs/42 FD rows. Saved15 observations and
+optimizer-aware facts12 checks passed; original failed facts/pre-effect assembly
+and full syscall-DWARF gap remain preserved. No new native proof from these facts.
+
+Six terminal helpers independently source-reviewed c87758fe are published with
+105 semantic rows/104 unique files (eight existing scripts unchanged). Root must
+finish exact fetched proof, actual observer/summary/original-five FD/raw5 joins,
+then separately released cleanup/postjoin and independent physical acceptance.
+No guest while current physical ownership remains held. FP254B continuation's
+first ordinary stage refused before writes on a genuine reuse-row schema;
+review19b87944 approves one bounded correction with full descriptor joins.
+CPU7 owner executes corrected stage/fixture/parent once with fresh admission.
+
+New205 repaired-source preparation completed four ordinary commands and has
+independent cc5fecb5 acceptance; its fresh source graph reuses no old objects.
+Cheap guard fixture failed on structured ownership versus inherited false;
+original failure preserved, narrow source correction pending boundary decision.
+No new205 compiler or guest has run. Clone-affinity repair remains source-only.
+Accepted counters remain25 behaviors/17 production paths/11 native paths/7 of35
+checks pending scoped accounting; all14 milestones remain OPEN. One heavy owner,
+full resource/freshness controls, scratch21, failures, exclusions and97% stop stay.
+
 ## Current — Condvar native accepted; clone-affinity repair integrated (10:14 UTC)
 
 Campaign ACTIVE; functional OS/apps and Rust/reviewed assembly remain the goal.

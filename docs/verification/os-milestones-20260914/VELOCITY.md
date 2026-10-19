@@ -1,6 +1,85 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 66, 2026-10-19T09:55:31Z
+## Current priorities — review 68, 2026-10-19T10:58:03Z
+
+Counts remain 25 accepted native behaviors, 17 selected production Rust paths,
+11 applicable native paths and 7/35 practical checks. All whole milestones remain
+open. This interval advanced the image handoff, not accepted runtime coverage.
+
+The cached 03a image is e0d3180a (7,968,952 bytes). All four copies and 15
+inspection commands completed. Finite preservation is independently accepted
+(a0d67aa3): 21 pairs, 42 FD/hash rows, zero mismatches. The first inspection
+release failed before effects because its hash included a null field omitted by
+the producer; the corrected data-only release ran without changing the producer.
+
+The saved-capture facts consumer needed coherent corrections for disassembler
+names, compiler inlining, the existing nm API and relocatable descriptor fields.
+Its complete positive and all 11 relevant refusals passed on saved genuine bytes;
+the executed facts are accepted. Original failures remain preserved. Canonical
+artifact joins, terminal observations/physical release and native feedback remain
+pending. The driver finished at 10:19:46 UTC: the 30-minute build-to-native target
+was missed, with about 38 minutes elapsed. Do not claim a throughput multiplier.
+
+Finish canonical joins and the prepared finite terminal chain directly. Keep the
+native consumer ready for genuine report values. Retain these saved captures as
+regression inputs for the corrected parser; reuse its accepted interpretation in
+the next source image instead of rediscovering these assumptions after a build.
+Do not replay the passed compilation, copies or inspection commands.
+
+The separate 205410e4 callbacks-plus-affinity packet has seven frozen overlays,
+28 authority references and 6,948 entries. A source-copy binding gap and stale
+metadata were corrected. Two metadata commands passed in 2.4599 seconds, with
+CPU6 released. The four-stage ordinary release is 58cae8a7; activate its specific
+owner promptly through followup_task after fresh CPU6 admission. Materialization,
+new compiler outputs, linked-image acceptance and strict N3 CPU proof are pending.
+Keep the current cached source separate; old objects cannot validate the repair.
+
+One heavy operation, source/ownership controls, original CPU/RAM/task limits,
+16/12 GiB floors and 97% usage stop remain. Usage is 63%; host/scratch availability
+about 45.92/12.809 GiB. Optional reserve permission is still pending; no change.
+Next full review: 11:28:03 UTC.
+
+## Previous priorities — review 67, 2026-10-19T10:27:41Z
+
+Condvar is independently accepted on McKernel (22f64306) with physical
+retirement df2186e5: exact 75-byte result, empty stderr, exit 0 and all 30 Docker
+clients/QEMU/container retired. Accepted native behaviors are now 25; selected
+production/native Rust paths remain 17/11 and practical checks 7/35.
+
+The clone-affinity repair passed independent source review and 14 focused checks,
+including 256 mask pairs, high/tail/error cases, child-mask installation, lock
+ordering, actual C consumers and Linux inheritance. It is integrated and pushed
+in 205410e4. Preparation/fixture failures are preserved. Full production crate,
+link and strict native startup-CPU verification remain pending; N3 stays failed.
+
+The separate cached 03a remaining-image operation completed with exit 0 in
+216 seconds. It adopted nine validated phases without replay and ran one MAKE.
+All 491 seed entries committed, all eight clients retired, and all 17 fresh
+evidence files plus 12 output/copy descriptors matched. Image: 7,968,952 bytes.
+Build/client retirement is accepted. The stopped container and ownership records
+are held for actual 15-capture inspection, canonical artifact acceptance,
+21-role retention and physical cleanup. No new production/native credit yet.
+
+Finish the exact inspection command set now; reuse the accepted engines and
+seven path checks. Report and native-consumer authors should settle the fixed
+role cardinality and phase-adoption fields before capture completion. Keep one
+owner/reviewer following the entire finite inspection/preservation/release
+chain. Do not repeat compiler steps or create per-field review loops.
+
+Prepare the next coherent source image from 205410e4 separately, combining the
+four callbacks and affinity fix. It needs a new source identity and fresh outputs
+for changed dependencies; never claim the cached 03a build validates the fix or
+silently carry old Rust/C objects across the changed graph. Reuse unchanged
+toolchain/engine contracts and carry the strict N3 CPU oracle through to runtime.
+Keep this source preparation parallel to current inspection, under actual CPU
+and storage admission. No second heavy operation while the current one is held.
+
+No whole milestone closed. Usage is 62%; host/scratch availability is about
+46.35/12.809 GiB. Keep original floors, one-heavy controls, the 97% stop and all
+evidence/exclusions. Optional reserve authorization remains pending; no setting
+changed. Next full review: 10:57:41 UTC.
+
+## Previous priorities — review 66, 2026-10-19T09:55:31Z
 
 The failed build is physically released (864478cf): container absent, groups
 empty, mutex free, 496 inventory rows and 22 retained-log FD rows preserved.

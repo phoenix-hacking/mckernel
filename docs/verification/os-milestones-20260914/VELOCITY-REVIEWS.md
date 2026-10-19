@@ -4800,3 +4800,81 @@ affinity fix and scoped parser correction proceed. Preserve CPU assertions,
 fresh source authority, actual retirement and sole-heavy control. Usage is 60%;
 host/scratch free capacity about 46.46/12.810 GiB. Optional reserve authorization
 is still pending. Next full review: 10:25:31 UTC.
+
+
+## Review 67 — 2026-10-19T10:27:41Z
+
+Interval: 09:55:31–10:27:41 UTC. One new native behavior is accepted: Condvar
+timeout with mutex ownership, exact 75-byte stdout, empty stderr and exit 0
+(22f64306). Physical retirement passed (df2186e5), including QEMU, container and
+30 Docker clients. Total accepted native behaviors: 25, up from 24. Production
+Rust paths remain 17, native paths 11 and practical checks 7/35; all whole
+milestones remain open. No overall throughput multiplier is inferred.
+
+The real N3 clone-affinity defect has a reviewed Rust repair, integrated and
+shipped in 205410e4. Fourteen focused checks passed, covering 256 mask pairs,
+high/tail/error cases, child initialization, locking, actual C consumers and Linux
+inheritance. Stale private preparation and fixture-only warnings were corrected
+and preserved. Production compiler, linked-image and unchanged native CPU-oracle
+proof remain pending. Original N3 full acceptance is still refused.
+
+The frozen cached 03a remaining-image operation completed successfully in
+216 seconds after fresh admission. It adopted nine accepted phases and executed
+one image MAKE, without replaying the compiler prefix. Seed journal: 491 committed
+entries. Eight Docker clients retired; 17 fresh evidence files and 12 output/copy
+descriptors match. The 7,968,952-byte image has build/client-retirement acceptance,
+with actual postbuild inspection, artifact and physical release still pending.
+Stopped container and ownership records remain intentionally held.
+
+The active build was not interrupted or changed to include the affinity patch.
+The next 205410e4 source pipeline is now separately assigned. It must establish
+a new identity and recompile affected dependencies, while reusing valid unchanged
+toolchain and engine evidence. This keeps one coherent repaired-source image in
+the next kernel round rather than accumulating unrelated private ports.
+
+Next adjustment: finish the current exact 15-observation release/capture chain
+promptly, with canonical role/phase fields agreed directly between reviewers and
+native consumers. Retention stays 17 copies plus four reuses. Reuse accepted
+source/path/engine checks; no compiler replay or per-field packet loop. Prepare
+205410e4 in parallel and retain one-heavy sequencing. Usage is 62%; host/scratch
+availability about 46.35/12.809 GiB. Optional reserve consent is pending.
+Next full review: 10:57:41 UTC.
+
+
+## Review 68 — 2026-10-19T10:58:03Z
+
+Interval: 10:27:41–10:58:03 UTC. Accepted totals are unchanged: 25 distinct native
+behaviors, 17 production Rust paths, 11 native paths and 7/35 practical checks.
+All whole milestones remain open; no percentage or throughput increase is inferred.
+
+All four artifact copies and 15 inspection commands completed for cached image
+e0d3180a (7,968,952 bytes). Initial release metadata included a null hash field
+that the producer excludes; it refused before any copy or inspection. A data-only
+correction ran the unchanged producer. Retention independently passed a0d67aa3:
+21 original/retained pairs, 42 verified FD/hash rows and zero mismatches.
+
+The following facts check exposed incorrect assumptions about displayed symbol
+names, inlined teardown code, the nm API and zero pointer slots in relocatable
+descriptor sections. The repaired consumer proves actual targets, body bytes,
+lock/list phases and relocated strings. The complete saved-capture check and
+11 relevant negative cases passed; executed facts are accepted. No compilation,
+copy or inspection was repeated. Canonical artifact joins and physical release
+remain pending, with the stopped build and records intentionally held.
+
+The driver finished at 10:19:46 UTC. About 38 minutes have elapsed without native
+feedback, missing the 30-minute phase target. Terminal preparation was explicitly
+assigned to a freed worker while the facts repair continued. Carry the corrected
+parser and saved real regression captures into the next image to avoid repeating
+this handoff defect family. Finish the canonical/terminal/native chain next.
+
+The separate 205410e4 source preparation generated seven frozen overlays and
+28 references against a 6,948-entry authority. Review caught a double-read copy
+binding gap and stale metadata; both were corrected. Two actual metadata commands
+joined0/0 in 2.4599 seconds, CPU6 released. Four-stage ordinary release 58cae8a7
+is ready; promptly activate its owner with fresh CPU6 admission. Compiler/native
+proof of the real affinity repair remains pending; full original N3 is still FAIL.
+
+Usage is 63%; host/scratch availability about 45.92/12.809 GiB. Preserve the
+one-heavy controls, original limits/floors, source separation, all failures and
+97% stop. Optional reserve authorization is pending; no mutation occurred.
+Next full review: 11:28:03 UTC.

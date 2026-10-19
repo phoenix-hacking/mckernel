@@ -1,0 +1,40 @@
+{
+  "C_fallback": {
+    "each_definition_count": 1,
+    "each_unresolved_count": 0,
+    "release_process_definition": 1
+  },
+  "C_selected": {
+    "each_definition_count": 0,
+    "each_unresolved_count": 0,
+    "release_process_definition": 0,
+    "release_process_unresolved": 0
+  },
+  "Rust_native_and_legacy": {
+    "each_definition_count": 1,
+    "release_process_definition": 1
+  },
+  "actual_current_Rust_default_consumer": {
+    "file": "kernel/rust/process_helpers.rs",
+    "function": "release_process",
+    "required_Some_arguments": [
+      "process_release_hash_detach_bridge",
+      "process_release_sibling_detach_bridge",
+      "process_current_resource_set_bridge",
+      "process_release_final_cleanup_bridge"
+    ],
+    "source_sha256": "5da4ddd8bb92b99eed111600871b18457ed8b6c524786644966250a610decdfb"
+  },
+  "image_requirements": {
+    "default_consumer_machine_edges": "PENDING actual callback directtarget or function-address relocation association; sourceSome alone not linked acceptance",
+    "each_definition_count": 1,
+    "release_process_definition": 1
+  },
+  "retirement": false,
+  "symbols": [
+    "process_release_hash_detach_bridge",
+    "process_release_sibling_detach_bridge",
+    "process_current_resource_set_bridge",
+    "process_release_final_cleanup_bridge"
+  ]
+}
