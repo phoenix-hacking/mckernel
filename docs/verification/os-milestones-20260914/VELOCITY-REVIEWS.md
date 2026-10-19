@@ -5103,3 +5103,67 @@ Keep aggregate host reserve, one-heavy4CPU/12GiB/noSwap/512tasks, disk/growth
 floors, source/ownership checks, Scratch21 and all failed evidence. Usage70%; host/
 scratch45.53/13.91GiB; stop97%. Root checkpoint3a9243ff saves current evidence.
 Next full review:2026-10-19T18:57:58.725321Z.
+
+
+## Review 74 — 2026-10-19T19:01:00.299546Z
+
+Native feedback remains pending 63.6 minutes after the actual producer finish.
+The 30-minute target was missed. Accepted full build f7352de9 remains unchanged:
+16 phases PASS, producer97.724s, outer259.023s, image ff4fca45 (7,988,768 bytes).
+Canonical artifact report fa398247 was created18:42:33.873575 UTC:45.17 minutes
+from producer finish to artifact acceptance. It binds the real four affinity
+routes, including1,287 linked bytes/16relocations for the allowed inline route.
+The actual corrected entrypoint and11refusals passed in5.96s; no compiler or
+inspection replay was needed. Current physical and native acceptance are pending.
+
+Completed and accepted ordinary work: four copies/fifteen inspections6.135s
+(0418e0ed),37-role preservation0.559s/c88a63f7 (33copies,4reuses,74descriptors),
+corrected full-descriptor binder0.353s, terminal source generation0.709s after
+one complete126-path check, and N3 V4 join0.666s. The hard prior-producer pin was
+found proactively and amended before staging; unchanged engine predicates and
+prior fixture results were reused. Actual executable work remains much shorter
+than case preparation, dispatch and review latency. No CPU/RAM shortage is shown.
+
+N3 normalization passed. First staging failed by applying a Linux userspace ELF
+check to the high-half kernel; its failed directory was empty and preserved.
+A scoped kernel structural check passed the genuine image and15malformed cases
+in0.115s, preserving collector/application checks. Remaining-only stage passed
+in31.37s and produced the genuine archive. Consumer then refused stale expected
+-initrd pointing to the earlier failed stage. No guest ran. Correct that exact
+argv data, retain archive/normalization, and use one new remaining-only consumer
+release. Do not recompress or re-stage successful artifacts.
+
+The generated-source publication assembly made two finite-copy-set assumptions;
+both refusals are preserved. The expert review resumed after ordinary compaction
+and is checking exact missing approved rows, eight unchanged tracked imports,
+and the observer constant-loading interface. Do not duplicate a completed review
+or recopy unchanged imports. Current source-publication/root preparation and N3
+consumer correction remain independent lanes.
+
+Known postbuild harness friction includes at least seven recorded failures or
+refusals: capture-finalizer atime, Python/taskset -c selection, partial source
+identity, two publication-set assumptions, userspace/kernel ELF confusion, and
+stale -initrd. Inline predicate and inherited-path corrections were caught before
+root effects. Count this as harness rework, not kernel defects or milestone gains.
+Use complete authoritative rows, explicit source/work/stage namespaces and actual
+decorated entrypoints. Derive expected argv from the genuine stage data. A cheap
+structural check on the real produced image can start while semantic artifact
+review continues, without granting staging/guest authority or synthetic approval.
+
+A private constructor implementation is active, deadline19:07:38UTC. It uses the
+existing case-data format and joins source/work namespaces, four metadata roles,
+selected paths, complete37pairs and final producer refs. It must freeze reviewable
+source/results by that cap or park with an exact gap. No engine rewrite, deployment
+or claimed speed benefit until independently reviewed and used. Current consumer,
+publication, physical release and native execution keep priority. Longer term,
+reuse pinned callable engines with case JSON instead of regenerating executable
+source for every data change; measure a necessary case before broader work.
+
+Accepted outcome counters remain25 native behaviors/17 production Rust paths/
+11 applicable native Rust paths/7of35practical checks; all14milestones OPEN.
+No engineering percentage uplift or overall speed multiplier claimed. Quota72%,
+25percentage points remain to97%stop. Host/scratch45.38/13.91GiB. Current4CPU/
+12GiB/noSwap/512task one-heavy limits, aggregate reserve, disk/growth floors,
+source/ownership/runtime checks, all failures and Scratch21 remain. Approved
+scratch reserve and earlier failed-case cleanup are DONE; do not repeat them.
+Next full review:2026-10-19T19:31:00.299546Z.

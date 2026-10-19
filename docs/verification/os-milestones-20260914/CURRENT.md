@@ -1,3 +1,41 @@
+## Current — saved observer prefix repair; provenance check closed (19:33 UTC)
+
+Campaign ACTIVE: functional OS/apps and Rust/reviewed assembly. Actual fresh8b
+artifact fa398247 and build f7352de9, finite37 c88a63f7 and N3 ordinary09532853
+remain accepted. No rebuild, inspection, archive or passed Linux replay.
+Literal P-M10-01 provenance recording is complete from independently assessed
+actual source/config/toolchain/candidate records:8/35 checks complete,27open;
+all14 whole milestones remain OPEN. Counts25 native behaviors/17 selected
+production Rust/11 applicable native Rust paths unchanged. P-M00-02 remains OPEN.
+
+Two consumed observer releases failed. First9b refused callback-proof shape
+before effects (direct1/.582s); corrected d7 reached partial observation then
+refused compiler-source cardinality14 rather than11 (direct1/1.375s).
+Both direct children joined and process groups are absent; current stoppedCID
+7e94ef6a/common/shared remain HELD, no physical release or new guest inferred.
+Partial root observation remains retained. Summary/raw5/cleanup are UNRUN.
+Closed failure/readback evidence archive fd55d1e2 retains21 files; no failures
+or original source variants removed.
+
+Exact amended14-file readback1225927c completed0/.174s with groupabsent and
+closed streams, status37bc583f at source-generation-final-1/
+actual-failed-observer-readback-1/status.json. Original10-file release remains
+unconsumed. next_live_process_rust_batch and resume_git_owner_review now own
+ONE whole saved-prefix main-continuation check: exact compiler source11 plus
+separate terminal imports3, real37pairs and current metadata interfaces, genuine
+14 captured prefix bodies, explicit test-only effect stubs. New nonce/output,
+changed-source publication/fetch and a new exact independent release are required
+before another observer. No blind third root attempt or old release reuse.
+
+N3 archive31.371s and corrected complete consumer5.375s are accepted; frozen
+non-temporal index11804f5a has all real static/ordinary inputs. Activate owner
+and final reviewer when actual physical acceptance arrives; bind only genuine
+predecessor, fresh identities/admission and final60s snapshot/hash/release late,
+then launch immediately. Strict startupCPU oracle unchanged. User30min feedback
+target expired18:27:23; driver finished17:57:23.816691UTC. Miss remains recorded.
+Optional constructor is parked, no deployment/time-saving claim. Preserve
+Scratch21, mutex, all evidence/WIP/exclusions, resource floors and97%usage stop.
+
 ## Current — observations and finite37 preserved; semantic/terminal joins (18:41 UTC)
 
 Campaign ACTIVE: functional OS/apps plus Rust/reviewed assembly. Fresh8b build

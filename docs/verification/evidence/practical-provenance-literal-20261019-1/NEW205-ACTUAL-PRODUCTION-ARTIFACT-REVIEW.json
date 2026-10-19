@@ -1,0 +1,4321 @@
+{
+  "actual_artifacts": {
+    "cpu": {
+      "ctime_ns": 1792432599768105127,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48115427,
+      "mode": "0o644",
+      "mtime_ns": 1792432599768105127,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+      "sha256": "8f53fae270a167da2576b9ab27da5e91bbf1b6ca2c088495ec12520d9691c12f",
+      "size": 169984,
+      "uid": 1000
+    },
+    "image": {
+      "ctime_ns": 1792432601156129712,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48115445,
+      "mode": "0o755",
+      "mtime_ns": 1792432601156129712,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+      "size": 7988768,
+      "uid": 1000
+    },
+    "process": {
+      "ctime_ns": 1792432600152111929,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48115435,
+      "mode": "0o644",
+      "mtime_ns": 1792432600152111929,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+      "sha256": "3aaa288a2726fa3dc956d99c2e86482bfada69ec40db59ca67e4b33ffb0e9dac",
+      "size": 304392,
+      "uid": 1000
+    },
+    "rust": {
+      "ctime_ns": 1792432599264096200,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48115418,
+      "mode": "0o644",
+      "mtime_ns": 1792432599264096200,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/rust/mckernel_rust.o",
+      "sha256": "eb59974cd3b5ed6d945062118bdb7397737dafa8c749cf0f8d182829ca5bf8ff",
+      "size": 12763768,
+      "uid": 1000
+    }
+  },
+  "affinity_default_witnesses": {
+    "callers": {
+      "C_clone_thread_to_Rust_initializer": {
+        "machine_witness": {
+          "body_sha256": "f32eedb710552c36738860f3597bf78dddb978adbd3ade69e4c5b358db05d803",
+          "caller": "clone_thread",
+          "callsite": {
+            "decoded_target": 18446744073684907248,
+            "instruction": "callq *%rax",
+            "offset": 195,
+            "register_dataflow": [
+              {
+                "instruction": "mov $0x80,%ecx",
+                "offset": 163
+              },
+              {
+                "instruction": "mov $0x1230,%edx",
+                "offset": 168
+              },
+              {
+                "instruction": "mov %r14,%rsi",
+                "offset": 173
+              },
+              {
+                "instruction": "mov %rbx,%rdi",
+                "offset": 176
+              },
+              {
+                "instruction": "movabs $0xfffffffffe87f4f0,%rax",
+                "offset": 179
+              },
+              {
+                "instruction": "mov $0x13cc,%r8d",
+                "offset": 189
+              },
+              {
+                "instruction": "callq *%rax",
+                "offset": 195
+              },
+              {
+                "instruction": "test %eax,%eax",
+                "offset": 197
+              },
+              {
+                "instruction": "js fffffffffe816bac <clone_thread+0x4ac>",
+                "offset": 199
+              }
+            ]
+          },
+          "image_start": 18446744073684477696,
+          "size": 3006,
+          "target": "process_clone_thread_base_state_body_result",
+          "target_address": 18446744073684907248
+        },
+        "provider": "process_clone_thread_base_state_body_result",
+        "source": "kernel/process.c::clone_thread",
+        "source_association": {
+          "bytes": 30339,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-INDEPENDENT-LINKED-SOURCE-ASSOCIATIONS.json",
+          "sha256": "d254b5dc3a36d52b8a3c20745f4ed61a16b07d5c55955f0390e3ee6068975d17"
+        }
+      },
+      "Rust_initializer_to_mask_inherit": {
+        "machine_proof": {
+          "bytes": 43166,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-AFFINITY-PROVIDER-SOURCE-ANALYSIS.json",
+          "sha256": "01ad1210add8d9a95b4f1601eb993a8017e895411e464c0ae454a7294f62b63c"
+        },
+        "provider": "sched_clone_affinity_inherit_result",
+        "source": "kernel/rust/process_helpers.rs::process_clone_thread_base_state_body_result",
+        "source_association": "The current clone_thread C caller passes childrdi/creatorrsi/cpu_set offset0x1230/bytes128/priority offset0x13cc. The actual Rust initializer forms child+offset and creator+offset, passes bytes unchanged and calls the unique sched_clone_affinity_inherit_result at0xfffffffffe894e70 before copying sched priority or returning. The actual inherit body is a complete relocated object/image match and uses the frozen3510 serialized copy implementation. The snapshot provider is also a complete current object/image match, including all lock/unlock local-provider relocations. Combined with the separately accepted source implementation, C110/layout27 and actual do_fork snapshot\u2192reservation\u2192private-child inherit CFG, this proves live creator/snapshot masks are serialized and initialized before publication."
+      },
+      "Rust_sys_sched_setaffinity_to_body": {
+        "machine_witness": {
+          "body_sha256": "a78ff08d2933d2b0733ee2b446f747f940d8bbe3e90ec80ecc8970ad8bce311a",
+          "caller": "sys_sched_setaffinity",
+          "control_flow_explanation": "The frozen Rust syscall wrapper specializes sched_setaffinity_body_result with typed offsets and Some providers; no call to its exported name is asserted. The complete 1287-byte object body, with all 16 ABS64 relocations applied, equals the linked wrapper. Current object sections146/148 bind local affinity lock/unlock FUNC symbols and their unique final text addresses. The copy count is min(len,128), short inputs are zero-filled, and the loop intersects the copied user mask with process.cpu_set at0x480; empty intersection releases the held thread and returns EINVAL. The target is held through the writer: thread pointerrbx and stack-filtered mask feed 16 qword writes at0x1230..0x12a8 under the lock acquired at0x3da. Current cpu_id is read at0x49b. The invalid-CPU edge falls through unlock0x4b5 then migration0x4c7. The valid-CPU edge jumps to0x4df, loads the corresponding maskword, unlocks at0x4fd, then bt/jae0x503 branches back to migration0x4b7 only if the CPU is excluded; otherwise0x505 jumps directly to release0x4c9. Both paths pass the held threadrbx and saved cpu_idr14 to migration and release it afterward. Numeric instruction order is not execution order; these branch edges prove unlock precedes migration on every migration path.",
+          "image_start": 18446744073685063616,
+          "machine_form": "INLINE_LOCKED_MASK_AND_MIGRATION",
+          "object_image_projection": {
+            "all_bytes_matched": true,
+            "image_start": 18446744073685063616,
+            "linked_bytes_sha256": "a78ff08d2933d2b0733ee2b446f747f940d8bbe3e90ec80ecc8970ad8bce311a",
+            "object_start": 0,
+            "relocation_count": 16,
+            "relocations": [
+              {
+                "addend": 0,
+                "address": 18446744073685795280,
+                "kind": "X86_64_64",
+                "offset": 54,
+                "provider": "locals"
+              },
+              {
+                "addend": 0,
+                "address": 18446744073685244388,
+                "kind": "X86_64_64",
+                "offset": 67,
+                "provider": "num_processors"
+              },
+              {
+                "addend": 0,
+                "address": 18446744073685786736,
+                "kind": "X86_64_64",
+                "offset": 123,
+                "provider": "clv"
+              },
+              {
+                "addend": 0,
+                "address": 18446744073684413520,
+                "kind": "X86_64_64",
+                "offset": 413,
+                "provider": "syscall_copy_from_user_bridge"
+              },
+              {
+                "addend": 0,
+                "address": 18446744073684458784,
+                "kind": "X86_64_64",
+                "offset": 452,
+                "provider": "sched_find_thread_bridge"
+              },
+              {
+                "addend": 0,
+                "address": 18446744073684458800,
+                "kind": "X86_64_64",
+                "offset": 529,
+                "provider": "sched_thread_unlock_bridge"
+              },
+              {
+                "addend": 0,
+                "address": 18446744073684458912,
+                "kind": "X86_64_64",
+                "offset": 556,
+                "provider": "sched_hold_thread_bridge"
+              },
+              {
+                "addend": 0,
+                "address": 18446744073684458800,
+                "kind": "X86_64_64",
+                "offset": 588,
+                "provider": "sched_thread_unlock_bridge"
+              },
+              {
+                "addend": 0,
+                "address": 18446744073684458912,
+                "kind": "X86_64_64",
+                "offset": 603,
+                "provider": "sched_hold_thread_bridge"
+              },
+              {
+                "addend": 0,
+                "address": 18446744073684458800,
+                "kind": "X86_64_64",
+                "offset": 618,
+                "provider": "sched_thread_unlock_bridge"
+              },
+              {
+                "addend": 0,
+                "address": 18446744073684458928,
+                "kind": "X86_64_64",
+                "offset": 935,
+                "provider": "sched_release_thread_bridge"
+              },
+              {
+                "addend": 0,
+                "address": 18446744073684559904,
+                "kind": "X86_64_64",
+                "offset": 978,
+                "provider": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers19sched_affinity_lock"
+              },
+              {
+                "addend": 0,
+                "address": 18446744073684560080,
+                "kind": "X86_64_64",
+                "offset": 1194,
+                "provider": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers21sched_affinity_unlock"
+              },
+              {
+                "addend": 0,
+                "address": 18446744073684458944,
+                "kind": "X86_64_64",
+                "offset": 1209,
+                "provider": "sched_request_migrate_bridge"
+              },
+              {
+                "addend": 0,
+                "address": 18446744073684458928,
+                "kind": "X86_64_64",
+                "offset": 1227,
+                "provider": "sched_release_thread_bridge"
+              },
+              {
+                "addend": 0,
+                "address": 18446744073684560080,
+                "kind": "X86_64_64",
+                "offset": 1266,
+                "provider": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers21sched_affinity_unlock"
+              }
+            ],
+            "section_provider_joins": [
+              {
+                "provider_address": 18446744073684559904,
+                "provider_symbol": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers19sched_affinity_lock",
+                "relocation_target": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers19sched_affinity_lock",
+                "section_index": 146,
+                "section_symbol": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers19sched_affinity_lock"
+              },
+              {
+                "provider_address": 18446744073684560080,
+                "provider_symbol": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers21sched_affinity_unlock",
+                "relocation_target": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers21sched_affinity_unlock",
+                "section_index": 148,
+                "section_symbol": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers21sched_affinity_unlock"
+              },
+              {
+                "provider_address": 18446744073684560080,
+                "provider_symbol": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers21sched_affinity_unlock",
+                "relocation_target": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers21sched_affinity_unlock",
+                "section_index": 148,
+                "section_symbol": ".ltext._RNvNtCsbVRkTr4hvpt_13mckernel_rust13sched_helpers21sched_affinity_unlock"
+              }
+            ],
+            "size": 1287,
+            "symbol": "sys_sched_setaffinity"
+          },
+          "semantic_witnesses": {
+            "control_and_callback_dataflow": [
+              {
+                "instruction": "movabs $0xfffffffffe811d20,%rax",
+                "offset": 450
+              },
+              {
+                "instruction": "callq *%rax",
+                "offset": 463
+              },
+              {
+                "instruction": "movabs $0xfffffffffe811da0,%rax",
+                "offset": 554
+              },
+              {
+                "instruction": "callq *%rax",
+                "offset": 567
+              },
+              {
+                "instruction": "movabs $0xfffffffffe811da0,%rax",
+                "offset": 601
+              },
+              {
+                "instruction": "callq *%rax",
+                "offset": 614
+              },
+              {
+                "instruction": "movabs $0xfffffffffe811d30,%rax",
+                "offset": 616
+              },
+              {
+                "instruction": "callq *%rax",
+                "offset": 629
+              },
+              {
+                "instruction": "mov 0x10d0(%rbx),%rax",
+                "offset": 631
+              },
+              {
+                "instruction": "movabs $0xfffffffffe811dc0,%rax",
+                "offset": 1207
+              },
+              {
+                "instruction": "mov %r14d,%edi",
+                "offset": 1217
+              },
+              {
+                "instruction": "mov %rbx,%rsi",
+                "offset": 1220
+              },
+              {
+                "instruction": "movabs $0xfffffffffe811db0,%rax",
+                "offset": 1225
+              },
+              {
+                "instruction": "mov %rbx,%rdi",
+                "offset": 1235
+              },
+              {
+                "instruction": "callq *%rax",
+                "offset": 1238
+              }
+            ],
+            "lock_acquire": [
+              {
+                "instruction": "movabs $0xfffffffffe82a820,%rax",
+                "offset": 976
+              },
+              {
+                "instruction": "callq *%rax",
+                "offset": 986
+              }
+            ],
+            "mask_validation_and_write": [
+              {
+                "instruction": "cmp $0x80,%rcx",
+                "offset": 395
+              },
+              {
+                "instruction": "cmovb %rcx,%rdx",
+                "offset": 407
+              },
+              {
+                "instruction": "callq *%rcx",
+                "offset": 434
+              },
+              {
+                "instruction": "mov (%r9,%r14,1),%r10",
+                "offset": 866
+              },
+              {
+                "instruction": "bt %rcx,%r10",
+                "offset": 870
+              },
+              {
+                "instruction": "mov 0x480(%rax,%r9,1),%r10",
+                "offset": 876
+              },
+              {
+                "instruction": "bt %rcx,%r10",
+                "offset": 884
+              },
+              {
+                "instruction": "or %rdi,(%r9,%rsi,1)",
+                "offset": 898
+              },
+              {
+                "instruction": "mov %rcx,0x1230(%rbx)",
+                "offset": 995
+              },
+              {
+                "instruction": "mov %rcx,0x12a8(%rbx)",
+                "offset": 1172
+              },
+              {
+                "instruction": "mov 0x10(%rbx),%r14d",
+                "offset": 1179
+              }
+            ],
+            "unlock_before_migration": [
+              {
+                "instruction": "movabs $0xfffffffffe82a8d0,%rcx",
+                "offset": 1192
+              },
+              {
+                "instruction": "mov %rax,%rdi",
+                "offset": 1202
+              },
+              {
+                "instruction": "callq *%rcx",
+                "offset": 1205
+              },
+              {
+                "instruction": "callq *%rax",
+                "offset": 1223
+              },
+              {
+                "instruction": "movabs $0xfffffffffe82a8d0,%rcx",
+                "offset": 1264
+              },
+              {
+                "instruction": "mov %rax,%rdi",
+                "offset": 1274
+              },
+              {
+                "instruction": "callq *%rcx",
+                "offset": 1277
+              },
+              {
+                "instruction": "jae fffffffffe8a5c77 <sys_sched_setaffinity+0x4b7>",
+                "offset": 1283
+              },
+              {
+                "instruction": "jmp fffffffffe8a5c89 <sys_sched_setaffinity+0x4c9>",
+                "offset": 1285
+              }
+            ]
+          },
+          "size": 1287,
+          "target": "sched_setaffinity_body_result",
+          "target_address": 18446744073685004528
+        },
+        "provider": "sched_setaffinity_body_result",
+        "source": "kernel/rust/syscall_policy.rs::sys_sched_setaffinity",
+        "source_association": {
+          "bytes": 30339,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-INDEPENDENT-LINKED-SOURCE-ASSOCIATIONS.json",
+          "sha256": "d254b5dc3a36d52b8a3c20745f4ed61a16b07d5c55955f0390e3ee6068975d17"
+        }
+      },
+      "do_fork_snapshot_reserve_inherit": {
+        "machine_witnesses": [
+          {
+            "body_sha256": "c6d531102f052afc2398b9283756e03302c2648e64e3050e8607070348a04607",
+            "caller": "do_fork",
+            "callsite": {
+              "decoded_target": 18446744073684996304,
+              "instruction": "callq *%rax",
+              "offset": 4249,
+              "register_dataflow": [
+                {
+                  "instruction": "mov (%rax),%r8d",
+                  "offset": 4215
+                },
+                {
+                  "instruction": "lea -0xb0(%rbp),%rdx",
+                  "offset": 4218
+                },
+                {
+                  "instruction": "lea 0x480(%r15),%rsi",
+                  "offset": 4225
+                },
+                {
+                  "instruction": "lea 0x1230(%rbx),%rdi",
+                  "offset": 4232
+                },
+                {
+                  "instruction": "movabs $0xfffffffffe8950d0,%rax",
+                  "offset": 4239
+                },
+                {
+                  "instruction": "callq *%rax",
+                  "offset": 4249
+                },
+                {
+                  "instruction": "test %eax,%eax",
+                  "offset": 4251
+                },
+                {
+                  "instruction": "jne fffffffffe8101c0 <do_fork+0x1310>",
+                  "offset": 4253
+                },
+                {
+                  "instruction": "lea -0xb0(%rbp),%rdx",
+                  "offset": 4259
+                },
+                {
+                  "instruction": "xor %esi,%esi",
+                  "offset": 4266
+                },
+                {
+                  "instruction": "movabs $0xfffffffffe821d70,%rax",
+                  "offset": 4268
+                },
+                {
+                  "instruction": "mov %rdx,%rdi",
+                  "offset": 4278
+                },
+                {
+                  "instruction": "callq *%rax",
+                  "offset": 4281
+                },
+                {
+                  "instruction": "movl $0x1,-0x1f8(%rbp)",
+                  "offset": 4283
+                },
+                {
+                  "instruction": "mov %eax,-0x1c4(%rbp)",
+                  "offset": 4293
+                },
+                {
+                  "instruction": "jmpq fffffffffe80f075 <do_fork+0x1c5>",
+                  "offset": 4299
+                }
+              ]
+            },
+            "image_start": 18446744073684446896,
+            "size": 5786,
+            "target": "sched_clone_affinity_snapshot_result",
+            "target_address": 18446744073684996304
+          },
+          {
+            "body_sha256": "c6d531102f052afc2398b9283756e03302c2648e64e3050e8607070348a04607",
+            "caller": "do_fork",
+            "callsite": {
+              "decoded_target": 18446744073684995696,
+              "instruction": "callq *%rax",
+              "offset": 746,
+              "register_dataflow": [
+                {
+                  "instruction": "lea -0xb0(%rbp),%rsi",
+                  "offset": 716
+                },
+                {
+                  "instruction": "mov $0x80,%edx",
+                  "offset": 723
+                },
+                {
+                  "instruction": "lea 0x1230(%r12),%rdi",
+                  "offset": 728
+                },
+                {
+                  "instruction": "movabs $0xfffffffffe894e70,%rax",
+                  "offset": 736
+                },
+                {
+                  "instruction": "callq *%rax",
+                  "offset": 746
+                },
+                {
+                  "instruction": "test %eax,%eax",
+                  "offset": 748
+                },
+                {
+                  "instruction": "je fffffffffe80f1f8 <do_fork+0x348>",
+                  "offset": 750
+                }
+              ]
+            },
+            "image_start": 18446744073684446896,
+            "size": 5786,
+            "target": "sched_clone_affinity_inherit_result",
+            "target_address": 18446744073684995696
+          }
+        ],
+        "provider_bodies": {
+          "bytes": 43166,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-AFFINITY-PROVIDER-SOURCE-ANALYSIS.json",
+          "sha256": "01ad1210add8d9a95b4f1601eb993a8017e895411e464c0ae454a7294f62b63c"
+        },
+        "providers": [
+          "sched_clone_affinity_snapshot_result",
+          "obtain_clone_cpuid",
+          "sched_clone_affinity_inherit_result"
+        ],
+        "source": "kernel/syscall.c::do_fork",
+        "source_association": {
+          "bytes": 30339,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-INDEPENDENT-LINKED-SOURCE-ASSOCIATIONS.json",
+          "sha256": "d254b5dc3a36d52b8a3c20745f4ed61a16b07d5c55955f0390e3ee6068975d17"
+        }
+      }
+    },
+    "export_matrix": {
+      "process_clone_thread_base_state_body_result": {
+        "default_image": {
+          "definition_count": 1,
+          "definition_types": [
+            "T"
+          ],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "fallback-process": {
+          "definition_count": 0,
+          "definition_types": [],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 1
+        },
+        "fallback-syscall": {
+          "definition_count": 0,
+          "definition_types": [],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "legacy-rust": {
+          "definition_count": 1,
+          "definition_types": [
+            "T"
+          ],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "native-rust": {
+          "definition_count": 1,
+          "definition_types": [
+            "T"
+          ],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "selected-process": {
+          "definition_count": 0,
+          "definition_types": [],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 1
+        },
+        "selected-syscall": {
+          "definition_count": 0,
+          "definition_types": [],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        }
+      },
+      "sched_clone_affinity_inherit_result": {
+        "default_image": {
+          "definition_count": 1,
+          "definition_types": [
+            "T"
+          ],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "fallback-process": {
+          "definition_count": 0,
+          "definition_types": [],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "fallback-syscall": {
+          "definition_count": 0,
+          "definition_types": [],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "legacy-rust": {
+          "definition_count": 1,
+          "definition_types": [
+            "T"
+          ],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "native-rust": {
+          "definition_count": 1,
+          "definition_types": [
+            "T"
+          ],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "selected-process": {
+          "definition_count": 0,
+          "definition_types": [],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "selected-syscall": {
+          "definition_count": 0,
+          "definition_types": [],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 1
+        }
+      },
+      "sched_clone_affinity_snapshot_result": {
+        "default_image": {
+          "definition_count": 1,
+          "definition_types": [
+            "T"
+          ],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "fallback-process": {
+          "definition_count": 0,
+          "definition_types": [],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "fallback-syscall": {
+          "definition_count": 0,
+          "definition_types": [],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "legacy-rust": {
+          "definition_count": 1,
+          "definition_types": [
+            "T"
+          ],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "native-rust": {
+          "definition_count": 1,
+          "definition_types": [
+            "T"
+          ],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "selected-process": {
+          "definition_count": 0,
+          "definition_types": [],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "selected-syscall": {
+          "definition_count": 0,
+          "definition_types": [],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 1
+        }
+      },
+      "sched_setaffinity_body_result": {
+        "default_image": {
+          "definition_count": 1,
+          "definition_types": [
+            "T"
+          ],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "fallback-process": {
+          "definition_count": 0,
+          "definition_types": [],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "fallback-syscall": {
+          "definition_count": 0,
+          "definition_types": [],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "legacy-rust": {
+          "definition_count": 1,
+          "definition_types": [
+            "T"
+          ],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "native-rust": {
+          "definition_count": 1,
+          "definition_types": [
+            "T"
+          ],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "selected-process": {
+          "definition_count": 0,
+          "definition_types": [],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        },
+        "selected-syscall": {
+          "definition_count": 0,
+          "definition_types": [],
+          "raw_proof": {
+            "bytes": 44125,
+            "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+            "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+          },
+          "undefined_count": 0
+        }
+      }
+    },
+    "layout_authority": {
+      "affinity_receipt": {
+        "bytes": 10888,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/clone-affinity-production-checks.json",
+        "sha256": "163b8c0afb34e04c103d8bc68487b8205ab1ed0ca583df14ef4d0d4dc2b30e6b"
+      },
+      "cell_count": 27,
+      "cells": [
+        128,
+        8,
+        5568,
+        64,
+        1728,
+        64,
+        4304,
+        4348,
+        4344,
+        16,
+        4656,
+        5068,
+        456,
+        464,
+        468,
+        1152,
+        72,
+        8,
+        0,
+        8,
+        16,
+        24,
+        32,
+        40,
+        48,
+        56,
+        64
+      ],
+      "common_sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+      "encoding": "27_u64_le",
+      "vectors": {
+        "actual_Rust": {
+          "ctime_ns": 1792432584819840358,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115396,
+          "mode": "0o644",
+          "mtime_ns": 1792432584819840358,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/actual-rust-layout.bin",
+          "sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+          "size": 216,
+          "uid": 1000
+        },
+        "fallback_C": {
+          "ctime_ns": 1792432584811840216,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115395,
+          "mode": "0o644",
+          "mtime_ns": 1792432584811840216,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/fallback-syscall.bin",
+          "sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+          "size": 216,
+          "uid": 1000
+        },
+        "selected_C": {
+          "ctime_ns": 1792432584803840074,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115394,
+          "mode": "0o644",
+          "mtime_ns": 1792432584803840074,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/selected-syscall.bin",
+          "sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+          "size": 216,
+          "uid": 1000
+        }
+      }
+    },
+    "observation_refs": {
+      "completion": {
+        "bytes": 20074,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/observation-1/completed-command-receipt.json",
+        "sha256": "a78a8ecb1e95d8b9f4633d5080a681684abdc8912ab097d36f926e3365434cc1"
+      },
+      "image_disassembly": {
+        "bytes": 14077774,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/observation-1/captures/image-objdump.txt",
+        "sha256": "f564190d7cb39a172f59aa8cb3bdb759425e00ad74b77e97bb75e2523659895c"
+      },
+      "provider_source_analysis": {
+        "bytes": 43166,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-AFFINITY-PROVIDER-SOURCE-ANALYSIS.json",
+        "sha256": "01ad1210add8d9a95b4f1601eb993a8017e895411e464c0ae454a7294f62b63c"
+      }
+    },
+    "optimizer_source_association": {
+      "bytes": 30339,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-INDEPENDENT-LINKED-SOURCE-ASSOCIATIONS.json",
+      "sha256": "d254b5dc3a36d52b8a3c20745f4ed61a16b07d5c55955f0390e3ee6068975d17"
+    },
+    "source_files": {
+      "kernel/rust/process_helpers.rs": "e6b80f8a93298ddf5a1570fb00b528a515c6676b01af6de92f985a9ad5cca786",
+      "kernel/rust/sched_helpers.rs": "3510ce13fc4653311fa98f68ba472c8eb64e330ddf41b8ae691b81dc6563e70e",
+      "kernel/syscall.c": "90732f8aac62d1221f56d9c56d059e597f82dbd7ac22f8f1ef531f074e90161c"
+    }
+  },
+  "compiler_proofs": {
+    "C110": {
+      "bytes": 6925,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/release-tid-production-checks.json",
+      "sha256": "a09b22da93d9953f97394536ca0367ab1658b4ec1d812d3c8b924facf57a53d2"
+    },
+    "build_acceptance": {
+      "bytes": 18372,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-BUILD-AND-CLIENT-RETIREMENT-REVIEW.json",
+      "sha256": "f7352de9e6aaf2ed6de5928cbb94c55c7b2a2ca6a7598c9d79d2bc933e6dbf98"
+    },
+    "driver_receipt": {
+      "bytes": 35607,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/receipt.json",
+      "sha256": "4be2ccc9c38c604ee2aae760b6e7193bf045693ecc96cec2c24fa5e60be0211c"
+    },
+    "fullcpu_selected_fallback": {
+      "bytes": 4245,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/production-abi-checks.json",
+      "sha256": "d3a212ad2b1a7fb34c2dbd474649bc161f2d4cef55f0d9934e72fabd8c556dba"
+    },
+    "fullcrate_legacy": {
+      "bytes": 12543416,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/release-fp-regs-production/legacy-mckernel_rust.o",
+      "sha256": "a00bb706caf4a111c49afb7db116905c9cf4880a677238c7e0c426bec31d4a56"
+    },
+    "fullcrate_native": {
+      "bytes": 12763768,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/release-fp-regs-production/native-mckernel_rust.o",
+      "sha256": "eb59974cd3b5ed6d945062118bdb7397737dafa8c749cf0f8d182829ca5bf8ff"
+    },
+    "image_build": {
+      "bytes": 35607,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/receipt.json",
+      "sha256": "4be2ccc9c38c604ee2aae760b6e7193bf045693ecc96cec2c24fa5e60be0211c"
+    },
+    "layout27": {
+      "affinity_receipt": {
+        "bytes": 10888,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/clone-affinity-production-checks.json",
+        "sha256": "163b8c0afb34e04c103d8bc68487b8205ab1ed0ca583df14ef4d0d4dc2b30e6b"
+      },
+      "cell_count": 27,
+      "cells": [
+        128,
+        8,
+        5568,
+        64,
+        1728,
+        64,
+        4304,
+        4348,
+        4344,
+        16,
+        4656,
+        5068,
+        456,
+        464,
+        468,
+        1152,
+        72,
+        8,
+        0,
+        8,
+        16,
+        24,
+        32,
+        40,
+        48,
+        56,
+        64
+      ],
+      "common_sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+      "encoding": "27_u64_le",
+      "vectors": {
+        "actual_Rust": {
+          "ctime_ns": 1792432584819840358,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115396,
+          "mode": "0o644",
+          "mtime_ns": 1792432584819840358,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/actual-rust-layout.bin",
+          "sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+          "size": 216,
+          "uid": 1000
+        },
+        "fallback_C": {
+          "ctime_ns": 1792432584811840216,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115395,
+          "mode": "0o644",
+          "mtime_ns": 1792432584811840216,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/fallback-syscall.bin",
+          "sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+          "size": 216,
+          "uid": 1000
+        },
+        "selected_C": {
+          "ctime_ns": 1792432584803840074,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115394,
+          "mode": "0o644",
+          "mtime_ns": 1792432584803840074,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/selected-syscall.bin",
+          "sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+          "size": 216,
+          "uid": 1000
+        }
+      }
+    },
+    "no_old_compiled_artifacts_adopted": true,
+    "ordinary_acceptance": {
+      "bytes": 10804,
+      "path": "/home/holden/mckernel-work/host-preparation/fresh-full-metadata-independent-review-20261019-1/FRESH-FULL-ACTUAL-METADATA-ACCEPTANCE.json",
+      "sha256": "b1c326c806826a9beab284467d032eb52b2f716a14673be396c71ee227aa40e5"
+    },
+    "syscall_fallback_C8": {
+      "bytes": 10888,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/clone-affinity-production-checks.json",
+      "sha256": "163b8c0afb34e04c103d8bc68487b8205ab1ed0ca583df14ef4d0d4dc2b30e6b"
+    },
+    "syscall_selected_C10": {
+      "bytes": 10888,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/clone-affinity-production-checks.json",
+      "sha256": "163b8c0afb34e04c103d8bc68487b8205ab1ed0ca583df14ef4d0d4dc2b30e6b"
+    }
+  },
+  "compute_C_retirement": false,
+  "created_at": "2026-10-19T18:42:33.873575+00:00",
+  "decision": "PASS_ACTUAL_NEW205_PRODUCTION_IMAGE_ARTIFACT_AND_GUARD_RETIREMENT",
+  "evidence": {
+    "compiler_phase_joins": {
+      "bytes": 44125,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json",
+      "sha256": "289284002c6da28627ce52c9bb8a7e178b000c6ad9c24252bfabad896f04abf6"
+    },
+    "descriptor_source_analysis": {
+      "bytes": 10373,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-DESCRIPTOR-ELF-ANALYSIS.json",
+      "sha256": "7eb56d23518c4fda5b66999409d68bd2c2d9173e7e248fc429d495194909c69f"
+    },
+    "facts_acceptance": {
+      "bytes": 5571,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-SAVED-FACTS-ACCEPTANCE.json",
+      "sha256": "8944165ab70f3013a30577cabef0b5729a8f24118d1e05ae08569baa5c7697cf"
+    },
+    "finite37_acceptance": {
+      "bytes": 92014,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-terminal-adapter-independent-review-20261019-1/ACTUAL-FINITE37-RETENTION-ACCEPTANCE.json",
+      "sha256": "c88a63f788655d9ce65d2e1f22e799578e1abddd09e903050d53c34b54710c7e"
+    },
+    "fixed_contract": {
+      "bytes": 33269,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/NEW205-FRESH8B-CANONICAL-CONTRACT-PROPOSAL-v3.json",
+      "sha256": "33bda4d2cacee6408ab8bf51be77a8244da775d7a169adb7d0581cd5c7946472"
+    },
+    "source_association": {
+      "bytes": 30339,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-INDEPENDENT-LINKED-SOURCE-ASSOCIATIONS.json",
+      "sha256": "d254b5dc3a36d52b8a3c20745f4ed61a16b07d5c55955f0390e3ee6068975d17"
+    },
+    "transport_acceptance": {
+      "bytes": 45407,
+      "path": "/home/holden/mckernel-work/host-preparation/fresh-full-postbuild15-independent-review-20261019-1/ACTUAL-FOUR-COPY15-TRANSPORT-ACCEPTANCE.json",
+      "sha256": "0418e0ed6f2ec2b8844573570dbd2ae581c5e124ec10e8611701c0c99cfda6a6"
+    }
+  },
+  "existing_primary_pairs": {
+    "copier_receipt": {
+      "bytes": 4047,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/retention-result.json",
+      "sha256": "2e8f1b2c15fd34b44648c321a73cc8a26caf7589501fba3635945afa453d9bc4"
+    },
+    "count": 4,
+    "pairs": [
+      {
+        "original": {
+          "ctime_ns": 1792432599768105127,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115427,
+          "mode": "0o644",
+          "mtime_ns": 1792432599768105127,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+          "sha256": "8f53fae270a167da2576b9ab27da5e91bbf1b6ca2c088495ec12520d9691c12f",
+          "size": 169984,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434507716852696,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115621,
+          "mode": "0o644",
+          "mtime_ns": 1792432599768105127,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/cpu.artifact",
+          "sha256": "8f53fae270a167da2576b9ab27da5e91bbf1b6ca2c088495ec12520d9691c12f",
+          "size": 169984,
+          "uid": 1000
+        },
+        "role": "cpu"
+      },
+      {
+        "original": {
+          "ctime_ns": 1792432600152111929,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115435,
+          "mode": "0o644",
+          "mtime_ns": 1792432600152111929,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+          "sha256": "3aaa288a2726fa3dc956d99c2e86482bfada69ec40db59ca67e4b33ffb0e9dac",
+          "size": 304392,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434507720852771,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115622,
+          "mode": "0o644",
+          "mtime_ns": 1792432600152111929,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/process.artifact",
+          "sha256": "3aaa288a2726fa3dc956d99c2e86482bfada69ec40db59ca67e4b33ffb0e9dac",
+          "size": 304392,
+          "uid": 1000
+        },
+        "role": "process"
+      },
+      {
+        "original": {
+          "ctime_ns": 1792432599264096200,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115418,
+          "mode": "0o644",
+          "mtime_ns": 1792432599264096200,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/rust/mckernel_rust.o",
+          "sha256": "eb59974cd3b5ed6d945062118bdb7397737dafa8c749cf0f8d182829ca5bf8ff",
+          "size": 12763768,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434507760853517,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115623,
+          "mode": "0o644",
+          "mtime_ns": 1792432599264096200,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/rust.artifact",
+          "sha256": "eb59974cd3b5ed6d945062118bdb7397737dafa8c749cf0f8d182829ca5bf8ff",
+          "size": 12763768,
+          "uid": 1000
+        },
+        "role": "rust"
+      },
+      {
+        "original": {
+          "ctime_ns": 1792432601156129712,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115445,
+          "mode": "0o755",
+          "mtime_ns": 1792432601156129712,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/mckernel.img",
+          "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+          "size": 7988768,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434507784853966,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115624,
+          "mode": "0o755",
+          "mtime_ns": 1792432601156129712,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/image.artifact",
+          "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+          "size": 7988768,
+          "uid": 1000
+        },
+        "role": "image"
+      }
+    ]
+  },
+  "four_callback_witnesses": {
+    "actual_old_four_leaf_proofs": [
+      {
+        "all_bytes_matched": true,
+        "image_start": 18446744073684982032,
+        "linked_bytes_sha256": "3103e81a0b9467e9c0ed12a425acf981e4860d8242c0a084e60e4429d6907208",
+        "object_start": 0,
+        "relocation_count": 21,
+        "relocations": [
+          {
+            "addend": 0,
+            "address": 18446744073685795280,
+            "kind": "X86_64_64",
+            "offset": 67,
+            "provider": "locals"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685244388,
+            "kind": "X86_64_64",
+            "offset": 80,
+            "provider": "num_processors"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685786736,
+            "kind": "X86_64_64",
+            "offset": 127,
+            "provider": "clv"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684476640,
+            "kind": "X86_64_64",
+            "offset": 158,
+            "provider": "process_mcs_writer_lock_bridge"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684476656,
+            "kind": "X86_64_64",
+            "offset": 168,
+            "provider": "process_mcs_writer_unlock_bridge"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684472128,
+            "kind": "X86_64_64",
+            "offset": 425,
+            "provider": "process_optional_free_bridge"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684490640,
+            "kind": "X86_64_64",
+            "offset": 442,
+            "provider": "process_release_profile_bridge"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684474912,
+            "kind": "X86_64_64",
+            "offset": 469,
+            "provider": "process_free_thread_pages_bridge"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685786744,
+            "kind": "X86_64_64",
+            "offset": 489,
+            "provider": "cpu_local_var_initialized"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685795280,
+            "kind": "X86_64_64",
+            "offset": 520,
+            "provider": "locals"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685244388,
+            "kind": "X86_64_64",
+            "offset": 545,
+            "provider": "num_processors"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685786736,
+            "kind": "X86_64_64",
+            "offset": 580,
+            "provider": "clv"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684472096,
+            "kind": "X86_64_64",
+            "offset": 659,
+            "provider": "process_mckfd_free_bridge"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685786744,
+            "kind": "X86_64_64",
+            "offset": 708,
+            "provider": "cpu_local_var_initialized"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684472128,
+            "kind": "X86_64_64",
+            "offset": 721,
+            "provider": "process_optional_free_bridge"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685795280,
+            "kind": "X86_64_64",
+            "offset": 749,
+            "provider": "locals"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685244388,
+            "kind": "X86_64_64",
+            "offset": 774,
+            "provider": "num_processors"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685786736,
+            "kind": "X86_64_64",
+            "offset": 809,
+            "provider": "clv"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684476672,
+            "kind": "X86_64_64",
+            "offset": 863,
+            "provider": "process_mcs_reader_lock_bridge"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684777344,
+            "kind": "X86_64_64",
+            "offset": 904,
+            "provider": "hugefileobj_cleanup"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684476688,
+            "kind": "X86_64_64",
+            "offset": 931,
+            "provider": "process_mcs_reader_unlock_bridge"
+          }
+        ],
+        "size": 996,
+        "symbol": "release_process"
+      },
+      {
+        "all_bytes_matched": true,
+        "image_start": 18446744073684490816,
+        "linked_bytes_sha256": "d41f39142cbd42323597c6f91659a387aee2ee2d54823d40f37b15ca32478fdc",
+        "object_start": 18752,
+        "relocation_count": 1,
+        "relocations": [
+          {
+            "addend": 0,
+            "address": 18446744073684657376,
+            "kind": "X86_64_64",
+            "offset": 2,
+            "provider": "__release_tid"
+          }
+        ],
+        "size": 12,
+        "symbol": "process_destroy_thread_release_tid_bridge"
+      },
+      {
+        "all_bytes_matched": true,
+        "image_start": 18446744073684490832,
+        "linked_bytes_sha256": "29da2426d40a12dd34fcc70f17c6771b2044e7085cd6877dd8fb4542ac02d47c",
+        "object_start": 18768,
+        "relocation_count": 1,
+        "relocations": [
+          {
+            "addend": 0,
+            "address": 18446744073684643760,
+            "kind": "X86_64_64",
+            "offset": 2,
+            "provider": "__find_and_replace_tid"
+          }
+        ],
+        "size": 12,
+        "symbol": "process_destroy_thread_replace_tid_bridge"
+      }
+    ],
+    "callbacks": [
+      {
+        "argument_index_from_frozen_Rust_source": 8,
+        "consumer": "release_process",
+        "index_convention": "zero-based-body-result-argument",
+        "machine_argument_slot_independently_decoded": false,
+        "machine_default_body_form": "INLINED_PHASES_PROVEN_BY_COMPLETE_RELOCATION_PROJECTION",
+        "symbol": "process_current_resource_set_bridge"
+      },
+      {
+        "argument_index_from_frozen_Rust_source": 9,
+        "consumer": "release_process",
+        "index_convention": "zero-based-body-result-argument",
+        "machine_argument_slot_independently_decoded": false,
+        "machine_default_body_form": "INLINED_PHASES_PROVEN_BY_COMPLETE_RELOCATION_PROJECTION",
+        "symbol": "process_release_hash_detach_bridge"
+      },
+      {
+        "argument_index_from_frozen_Rust_source": 10,
+        "consumer": "release_process",
+        "index_convention": "zero-based-body-result-argument",
+        "machine_argument_slot_independently_decoded": false,
+        "machine_default_body_form": "INLINED_PHASES_PROVEN_BY_COMPLETE_RELOCATION_PROJECTION",
+        "symbol": "process_release_sibling_detach_bridge"
+      },
+      {
+        "argument_index_from_frozen_Rust_source": 17,
+        "consumer": "release_process",
+        "index_convention": "zero-based-body-result-argument",
+        "machine_argument_slot_independently_decoded": false,
+        "machine_default_body_form": "INLINED_PHASES_PROVEN_BY_COMPLETE_RELOCATION_PROJECTION",
+        "symbol": "process_release_final_cleanup_bridge"
+      }
+    ],
+    "source_argument_map": {
+      "process_current_resource_set_bridge": 8,
+      "process_release_final_cleanup_bridge": 17,
+      "process_release_hash_detach_bridge": 9,
+      "process_release_sibling_detach_bridge": 10
+    },
+    "source_association": {
+      "bytes": 30339,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-INDEPENDENT-LINKED-SOURCE-ASSOCIATIONS.json",
+      "sha256": "d254b5dc3a36d52b8a3c20745f4ed61a16b07d5c55955f0390e3ee6068975d17"
+    },
+    "whole_default_machine_source_association": {
+      "complete_object_image_projection": {
+        "all_bytes_matched": true,
+        "image_start": 18446744073684982032,
+        "linked_bytes_sha256": "3103e81a0b9467e9c0ed12a425acf981e4860d8242c0a084e60e4429d6907208",
+        "object_start": 0,
+        "relocation_count": 21,
+        "relocations": [
+          {
+            "addend": 0,
+            "address": 18446744073685795280,
+            "kind": "X86_64_64",
+            "offset": 67,
+            "provider": "locals"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685244388,
+            "kind": "X86_64_64",
+            "offset": 80,
+            "provider": "num_processors"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685786736,
+            "kind": "X86_64_64",
+            "offset": 127,
+            "provider": "clv"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684476640,
+            "kind": "X86_64_64",
+            "offset": 158,
+            "provider": "process_mcs_writer_lock_bridge"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684476656,
+            "kind": "X86_64_64",
+            "offset": 168,
+            "provider": "process_mcs_writer_unlock_bridge"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684472128,
+            "kind": "X86_64_64",
+            "offset": 425,
+            "provider": "process_optional_free_bridge"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684490640,
+            "kind": "X86_64_64",
+            "offset": 442,
+            "provider": "process_release_profile_bridge"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684474912,
+            "kind": "X86_64_64",
+            "offset": 469,
+            "provider": "process_free_thread_pages_bridge"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685786744,
+            "kind": "X86_64_64",
+            "offset": 489,
+            "provider": "cpu_local_var_initialized"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685795280,
+            "kind": "X86_64_64",
+            "offset": 520,
+            "provider": "locals"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685244388,
+            "kind": "X86_64_64",
+            "offset": 545,
+            "provider": "num_processors"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685786736,
+            "kind": "X86_64_64",
+            "offset": 580,
+            "provider": "clv"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684472096,
+            "kind": "X86_64_64",
+            "offset": 659,
+            "provider": "process_mckfd_free_bridge"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685786744,
+            "kind": "X86_64_64",
+            "offset": 708,
+            "provider": "cpu_local_var_initialized"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684472128,
+            "kind": "X86_64_64",
+            "offset": 721,
+            "provider": "process_optional_free_bridge"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685795280,
+            "kind": "X86_64_64",
+            "offset": 749,
+            "provider": "locals"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685244388,
+            "kind": "X86_64_64",
+            "offset": 774,
+            "provider": "num_processors"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073685786736,
+            "kind": "X86_64_64",
+            "offset": 809,
+            "provider": "clv"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684476672,
+            "kind": "X86_64_64",
+            "offset": 863,
+            "provider": "process_mcs_reader_lock_bridge"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684777344,
+            "kind": "X86_64_64",
+            "offset": 904,
+            "provider": "hugefileobj_cleanup"
+          },
+          {
+            "addend": 0,
+            "address": 18446744073684476688,
+            "kind": "X86_64_64",
+            "offset": 931,
+            "provider": "process_mcs_reader_unlock_bridge"
+          }
+        ],
+        "size": 996,
+        "symbol": "release_process"
+      },
+      "configuration": "ACTUAL_NON_TOFU_ONLY",
+      "control_flow_explanation": "The current 996-byte default release_process is a complete 21-ABS64 object-to-linked-image match. Only the final refcount decrement falls through the teardown. The CPU-local getter loads resource_set at0x1ee8. Hash detachment preserves null/self-list guards, signed pid modulo73 and 64-byte bucket selection plus0x4c0; writer-lock provider is captured inr13, unlock inr12. Neighbor stores and two poison values occur between calls0x102/0x139. Sibling linkage at0x180 is detached and poisoned under parent.children_lock (parent+0x140), bracketed0x151/0x19d. The captured resource_set survives inr12. After unchanged profile/thread/mckfd/free phases, final cleanup obtains pid1 from resource_set+0x140, reader-locks its child list at+0x140, tests list head+0x120 for self equality, calls hugefileobj_cleanup only when empty, and always reader-unlocks. Non-TOFU build contains no TOFU-finalize call; no TOFU machine acceptance is claimed. Pointer lifetime and lock ownership come from the accepted actual-source/ABI review, current C110 proof and these exact caller dataflow/control-flow witnesses; unused callback export existence is not the association proof.",
+      "linked_body_sha256": "3103e81a0b9467e9c0ed12a425acf981e4860d8242c0a084e60e4429d6907208",
+      "machine_argument_slot_independently_decoded": false,
+      "order": [
+        "current_resource_set",
+        "hash_detach",
+        "sibling_detach",
+        "final_cleanup"
+      ],
+      "source_argument_map": {
+        "process_current_resource_set_bridge": 8,
+        "process_release_final_cleanup_bridge": 17,
+        "process_release_hash_detach_bridge": 9,
+        "process_release_sibling_detach_bridge": 10
+      },
+      "source_consumer": "kernel/rust/process_helpers.rs::release_process -> process_release_process_body_result with 18 arguments and fixed Some callbacks; profile is argument11",
+      "typed_phase_witnesses": {
+        "current_resource_set": [
+          {
+            "instruction": "lock decl 0x1a0(%rdi)",
+            "offset": 36
+          },
+          {
+            "instruction": "jne fffffffffe891cc2 <release_process+0x3b2>",
+            "offset": 43
+          },
+          {
+            "instruction": "movabs $0xfffffffffe956070,%rcx",
+            "offset": 125
+          },
+          {
+            "instruction": "mov (%rcx),%rcx",
+            "offset": 135
+          },
+          {
+            "instruction": "imul $0x1fc0,%rax,%rax",
+            "offset": 138
+          },
+          {
+            "instruction": "mov 0x1ee8(%rcx,%rax,1),%rbx",
+            "offset": 145
+          }
+        ],
+        "final_cleanup": [
+          {
+            "instruction": "mov %rbx,%r12",
+            "offset": 606
+          },
+          {
+            "instruction": "callq *%r8",
+            "offset": 845
+          },
+          {
+            "instruction": "mov $0x140,%edi",
+            "offset": 848
+          },
+          {
+            "instruction": "add 0x140(%r12),%rdi",
+            "offset": 853
+          },
+          {
+            "instruction": "movabs $0xfffffffffe816300,%rax",
+            "offset": 861
+          },
+          {
+            "instruction": "callq *%rax",
+            "offset": 876
+          },
+          {
+            "instruction": "mov 0x140(%r12),%rdi",
+            "offset": 878
+          },
+          {
+            "instruction": "lea 0x120(%rdi),%rax",
+            "offset": 886
+          },
+          {
+            "instruction": "cmp %rax,0x120(%rdi)",
+            "offset": 893
+          },
+          {
+            "instruction": "jne fffffffffe891caa <release_process+0x39a>",
+            "offset": 900
+          },
+          {
+            "instruction": "movabs $0xfffffffffe85f980,%rax",
+            "offset": 902
+          },
+          {
+            "instruction": "callq *%rax",
+            "offset": 912
+          },
+          {
+            "instruction": "mov 0x140(%r12),%rdi",
+            "offset": 914
+          },
+          {
+            "instruction": "add $0x140,%rdi",
+            "offset": 922
+          },
+          {
+            "instruction": "movabs $0xfffffffffe816310,%rax",
+            "offset": 929
+          },
+          {
+            "instruction": "callq *%rax",
+            "offset": 944
+          }
+        ],
+        "hash_detach": [
+          {
+            "instruction": "test %rax,%rax",
+            "offset": 176
+          },
+          {
+            "instruction": "je fffffffffe891a4c <release_process+0x13c>",
+            "offset": 179
+          },
+          {
+            "instruction": "cmp %r15,%rax",
+            "offset": 185
+          },
+          {
+            "instruction": "je fffffffffe891a4c <release_process+0x13c>",
+            "offset": 188
+          },
+          {
+            "instruction": "movslq 0x1c8(%r15),%rcx",
+            "offset": 194
+          },
+          {
+            "instruction": "imul $0xffffffffe070381d,%rcx,%rdx",
+            "offset": 201
+          },
+          {
+            "instruction": "shr $0x20,%rdx",
+            "offset": 208
+          },
+          {
+            "instruction": "lea (%rdx,%rdx,8),%esi",
+            "offset": 224
+          },
+          {
+            "instruction": "lea (%rdx,%rsi,8),%edx",
+            "offset": 227
+          },
+          {
+            "instruction": "sub %edx,%ecx",
+            "offset": 230
+          },
+          {
+            "instruction": "lea (%rax,%rcx,1),%r14",
+            "offset": 239
+          },
+          {
+            "instruction": "add $0x4c0,%r14",
+            "offset": 243
+          },
+          {
+            "instruction": "callq *%r13",
+            "offset": 258
+          },
+          {
+            "instruction": "mov 0x8(%r15),%rax",
+            "offset": 261
+          },
+          {
+            "instruction": "mov (%r15),%rcx",
+            "offset": 270
+          },
+          {
+            "instruction": "mov %rax,0x8(%rcx)",
+            "offset": 283
+          },
+          {
+            "instruction": "mov %rcx,(%rax)",
+            "offset": 287
+          },
+          {
+            "instruction": "movq $0x100129,(%r15)",
+            "offset": 290
+          },
+          {
+            "instruction": "movq $0x200229,0x8(%r15)",
+            "offset": 297
+          },
+          {
+            "instruction": "callq *%r12",
+            "offset": 313
+          }
+        ],
+        "sibling_detach": [
+          {
+            "instruction": "mov $0x140,%r14d",
+            "offset": 316
+          },
+          {
+            "instruction": "add 0x110(%r15),%r14",
+            "offset": 322
+          },
+          {
+            "instruction": "callq *%r13",
+            "offset": 337
+          },
+          {
+            "instruction": "mov 0x188(%r15),%rax",
+            "offset": 340
+          },
+          {
+            "instruction": "mov 0x180(%r15),%rcx",
+            "offset": 352
+          },
+          {
+            "instruction": "lea 0x180(%r15),%rdx",
+            "offset": 364
+          },
+          {
+            "instruction": "cmp %rdx,%rcx",
+            "offset": 371
+          },
+          {
+            "instruction": "mov %rax,0x8(%rcx)",
+            "offset": 376
+          },
+          {
+            "instruction": "mov %rcx,(%rax)",
+            "offset": 380
+          },
+          {
+            "instruction": "movq $0x100129,0x180(%r15)",
+            "offset": 383
+          },
+          {
+            "instruction": "movq $0x200229,0x188(%r15)",
+            "offset": 394
+          },
+          {
+            "instruction": "callq *%r12",
+            "offset": 413
+          }
+        ]
+      }
+    }
+  },
+  "guard_retirement": {
+    "build_acceptance": {
+      "bytes": 18372,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-BUILD-AND-CLIENT-RETIREMENT-REVIEW.json",
+      "sha256": "f7352de9e6aaf2ed6de5928cbb94c55c7b2a2ca6a7598c9d79d2bc933e6dbf98"
+    },
+    "client_joins": {
+      "all_finite_clients_exited_zero": true,
+      "docker_wait_client_exit": 0,
+      "docker_wait_stdout": "0\n",
+      "guard_direct_child_joined": true,
+      "guard_duration_seconds": 258.6875815879903,
+      "guard_retired": true,
+      "guard_returncode": 0,
+      "outer_direct_child_joined": true,
+      "outer_duration_seconds": 259.02306419602246,
+      "outer_process_group_absent": true,
+      "outer_returncode": 0,
+      "owner_retired": true,
+      "root27_4_reacquired_after_guard_join": true,
+      "terminal_exit": 0,
+      "terminal_oom_killed": false,
+      "terminal_pid": 0,
+      "terminal_running": false,
+      "transport_retirement_basis": "Completed finite child transport status under accepted owned-client joining implementation plus direct whole guard/outer joins; no reviewer root/procfs command."
+    },
+    "container_id": "7e94ef6a130b9d5474f2a13a3139b02de47e828b966eab6d6d31b87258953489",
+    "guard_result": {
+      "bytes": 299,
+      "path": "/home/holden/mckernel-work/scratch/native-rust-four-callback-affinity-quote-full-image-guard-5145f5be17f14069ab17f4ff0b368419/guard-result.json",
+      "sha256": "c45996084c4135b9a34876444fa6c5d80aa7716ef2c4f25e1b1acc08d09f8e56"
+    },
+    "guard_status": {
+      "bytes": 1104,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/image-guard.status.json",
+      "sha256": "93838d8836aaa5bf1a3a79878aa67a7ce3303f0a43ffb90ef2fdffe7f287efbe"
+    },
+    "owner_nonce": "1b1ae0248cec4ea69b48bf12d9a3743a",
+    "owner_receipt": {
+      "bytes": 19601,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-evidence/owner-receipt.json",
+      "sha256": "90dd5b893c85756946e246cfc54f190123ea05f21491f18fb18e3b8d160415de"
+    },
+    "physical_cleanup_state": "REQUIRES_SEPARATE_ACCEPTED_CLEANUP",
+    "postjoin_readback": {
+      "bytes": 542,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/image-guard-postjoin-readback.json",
+      "sha256": "595b9994141465969ed5750de4773db00241c82e140103e21f789ae1765e3eac"
+    },
+    "retired": true
+  },
+  "implementation_ownership": false,
+  "limitations": [
+    "Native/runtime and whole compute-C retirement require separate actual McKernel execution; strict initial child CPU1 remains required.",
+    "Current fresh8b stopped container/common/shared remain held for separate physical cleanup.",
+    "Only actual non-TOFU configuration and exact frozen205 full-source authority are accepted.",
+    "Original full syscall DWARF gap remains OPEN_NO_REPLAY_NO_WAIVER; bounded ELF string/relocation proofs are separately declared.",
+    "Original failed902, initial four-copy failure, typed pending metadata, and original facts producer remain preserved. Corrected actual facts source3010 has independent current acceptance; no backdated original producer identity or compiler/capture replay."
+  ],
+  "native_acceptance": false,
+  "phase_status": {
+    "guard_retirement": "PASS_POSITIVE_CLIENT_OWNER_GUARD_RETIREMENT",
+    "postbuild_facts": "PASS_ACTUAL_NEW205_OPTIMIZED_DEFAULT_CONSUMERS_AND_DESCRIPTORS",
+    "production_compilers": "PASS_FULL_FRESH_C110_SYSCALL_C10_C8_LAYOUT27_TWO_CRATES",
+    "production_image": "PASS_ACTUAL_NEW205_SUPPORTED_IMAGE_BUILD",
+    "retention": "PASS_ACTUAL_ACTION_SPECIFIC_37_ROLES_33COPY_4REUSE",
+    "runtime": "NOT_GRANTED",
+    "source": "BOUND_ACTUAL_NEW205_REQUEST_AND_MATERIALIZATION"
+  },
+  "postbuild_facts": {
+    "capture_contract": {
+      "bytes": 26383,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/capture-contract-draft.json",
+      "sha256": "877988af19cf69113e083d624777c19603a34ee08ccad391405f4b95eb179fb1"
+    },
+    "completion": {
+      "bytes": 20074,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/observation-1/completed-command-receipt.json",
+      "sha256": "a78a8ecb1e95d8b9f4633d5080a681684abdc8912ab097d36f926e3365434cc1"
+    },
+    "default_machine_proofs": {
+      "provider_source_analysis": {
+        "bytes": 43166,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-AFFINITY-PROVIDER-SOURCE-ANALYSIS.json",
+        "sha256": "01ad1210add8d9a95b4f1601eb993a8017e895411e464c0ae454a7294f62b63c"
+      },
+      "relocated_bodies": [
+        {
+          "all_bytes_matched": true,
+          "image_start": 18446744073684982032,
+          "linked_bytes_sha256": "3103e81a0b9467e9c0ed12a425acf981e4860d8242c0a084e60e4429d6907208",
+          "object_start": 0,
+          "relocation_count": 21,
+          "relocations": [
+            {
+              "addend": 0,
+              "address": 18446744073685795280,
+              "kind": "X86_64_64",
+              "offset": 67,
+              "provider": "locals"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073685244388,
+              "kind": "X86_64_64",
+              "offset": 80,
+              "provider": "num_processors"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073685786736,
+              "kind": "X86_64_64",
+              "offset": 127,
+              "provider": "clv"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073684476640,
+              "kind": "X86_64_64",
+              "offset": 158,
+              "provider": "process_mcs_writer_lock_bridge"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073684476656,
+              "kind": "X86_64_64",
+              "offset": 168,
+              "provider": "process_mcs_writer_unlock_bridge"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073684472128,
+              "kind": "X86_64_64",
+              "offset": 425,
+              "provider": "process_optional_free_bridge"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073684490640,
+              "kind": "X86_64_64",
+              "offset": 442,
+              "provider": "process_release_profile_bridge"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073684474912,
+              "kind": "X86_64_64",
+              "offset": 469,
+              "provider": "process_free_thread_pages_bridge"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073685786744,
+              "kind": "X86_64_64",
+              "offset": 489,
+              "provider": "cpu_local_var_initialized"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073685795280,
+              "kind": "X86_64_64",
+              "offset": 520,
+              "provider": "locals"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073685244388,
+              "kind": "X86_64_64",
+              "offset": 545,
+              "provider": "num_processors"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073685786736,
+              "kind": "X86_64_64",
+              "offset": 580,
+              "provider": "clv"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073684472096,
+              "kind": "X86_64_64",
+              "offset": 659,
+              "provider": "process_mckfd_free_bridge"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073685786744,
+              "kind": "X86_64_64",
+              "offset": 708,
+              "provider": "cpu_local_var_initialized"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073684472128,
+              "kind": "X86_64_64",
+              "offset": 721,
+              "provider": "process_optional_free_bridge"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073685795280,
+              "kind": "X86_64_64",
+              "offset": 749,
+              "provider": "locals"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073685244388,
+              "kind": "X86_64_64",
+              "offset": 774,
+              "provider": "num_processors"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073685786736,
+              "kind": "X86_64_64",
+              "offset": 809,
+              "provider": "clv"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073684476672,
+              "kind": "X86_64_64",
+              "offset": 863,
+              "provider": "process_mcs_reader_lock_bridge"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073684777344,
+              "kind": "X86_64_64",
+              "offset": 904,
+              "provider": "hugefileobj_cleanup"
+            },
+            {
+              "addend": 0,
+              "address": 18446744073684476688,
+              "kind": "X86_64_64",
+              "offset": 931,
+              "provider": "process_mcs_reader_unlock_bridge"
+            }
+          ],
+          "size": 996,
+          "symbol": "release_process"
+        },
+        {
+          "all_bytes_matched": true,
+          "image_start": 18446744073684490816,
+          "linked_bytes_sha256": "d41f39142cbd42323597c6f91659a387aee2ee2d54823d40f37b15ca32478fdc",
+          "object_start": 18752,
+          "relocation_count": 1,
+          "relocations": [
+            {
+              "addend": 0,
+              "address": 18446744073684657376,
+              "kind": "X86_64_64",
+              "offset": 2,
+              "provider": "__release_tid"
+            }
+          ],
+          "size": 12,
+          "symbol": "process_destroy_thread_release_tid_bridge"
+        },
+        {
+          "all_bytes_matched": true,
+          "image_start": 18446744073684490832,
+          "linked_bytes_sha256": "29da2426d40a12dd34fcc70f17c6771b2044e7085cd6877dd8fb4542ac02d47c",
+          "object_start": 18768,
+          "relocation_count": 1,
+          "relocations": [
+            {
+              "addend": 0,
+              "address": 18446744073684643760,
+              "kind": "X86_64_64",
+              "offset": 2,
+              "provider": "__find_and_replace_tid"
+            }
+          ],
+          "size": 12,
+          "symbol": "process_destroy_thread_replace_tid_bridge"
+        }
+      ],
+      "source_association": {
+        "bytes": 30339,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-INDEPENDENT-LINKED-SOURCE-ASSOCIATIONS.json",
+        "sha256": "d254b5dc3a36d52b8a3c20745f4ed61a16b07d5c55955f0390e3ee6068975d17"
+      }
+    },
+    "descriptors": {
+      "image_RELEASE_TID_DEBUG": {
+        "address": 18446744073685243904,
+        "bytes_hex": "f3f58efeffffffff17f68efeffffffff0000000000000000712c000000000000",
+        "flags": 0,
+        "fmt_null": true,
+        "line": 11377,
+        "ndx": 3,
+        "pointer_encoding": "ACTUAL_LINKED_NONZERO_POINTERS",
+        "size": 32,
+        "symbol": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers17RELEASE_TID_DEBUG"
+      },
+      "image_REPLACE_TID_DEBUG": {
+        "address": 18446744073685243936,
+        "bytes_hex": "f3f58efeffffffff36f68efeffffffff0000000000000000fe2c000000000000",
+        "flags": 0,
+        "fmt_null": true,
+        "line": 11518,
+        "ndx": 3,
+        "pointer_encoding": "ACTUAL_LINKED_NONZERO_POINTERS",
+        "size": 32,
+        "symbol": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers17REPLACE_TID_DEBUG"
+      },
+      "rust_RELEASE_TID_DEBUG": {
+        "address": 0,
+        "bytes_hex": "000000000000000000000000000000000000000000000000712c000000000000",
+        "flags": 0,
+        "fmt_null": true,
+        "line": 11377,
+        "ndx": 3903,
+        "pointer_encoding": "UNAPPLIED_ET_REL_ZERO_RELOCATION_PLACEHOLDERS",
+        "size": 32,
+        "symbol": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers17RELEASE_TID_DEBUG"
+      },
+      "rust_REPLACE_TID_DEBUG": {
+        "address": 0,
+        "bytes_hex": "000000000000000000000000000000000000000000000000fe2c000000000000",
+        "flags": 0,
+        "fmt_null": true,
+        "line": 11518,
+        "ndx": 3905,
+        "pointer_encoding": "UNAPPLIED_ET_REL_ZERO_RELOCATION_PLACEHOLDERS",
+        "size": 32,
+        "symbol": "_RNvNtCsbVRkTr4hvpt_13mckernel_rust15process_helpers17REPLACE_TID_DEBUG"
+      }
+    },
+    "facts_output": {
+      "bytes": 29262,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/facts-inline-correction-1/actual-positive-fixture-facts.json",
+      "sha256": "33f97009f34398a91305ade3e95fd3cec8b5aa4d29114a4433bac0a4b4f1e31b"
+    },
+    "facts_source": {
+      "bytes": 14327,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/facts-inline-correction-1/derive_new205_facts_inline_corrected.py",
+      "sha256": "3010b9db89fdeff8b2910efda5baabd311b59697834c859111390f9db3456a63"
+    },
+    "independent_facts_acceptance": {
+      "bytes": 5571,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-SAVED-FACTS-ACCEPTANCE.json",
+      "sha256": "8944165ab70f3013a30577cabef0b5729a8f24118d1e05ae08569baa5c7697cf"
+    },
+    "linked_string_windows": {
+      "bytes": 10373,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-DESCRIPTOR-ELF-ANALYSIS.json",
+      "sha256": "7eb56d23518c4fda5b66999409d68bd2c2d9173e7e248fc429d495194909c69f"
+    },
+    "operation_count": 15,
+    "original_failures": {
+      "first_fourcopy": {
+        "bytes": 1293,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/actual-readonly15-run-1/status.json",
+        "sha256": "bd063bc844d8dfe2632d9360147142aa48c7dc68af0e62e63c724a76b73c84e7"
+      },
+      "full_DWARF_gap": "OPEN_NO_REPLAY_NO_WAIVER",
+      "historical_failed902": {
+        "bytes": 21449,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-ACTUAL-FAILED-BUILD-AND-CLIENT-RETIREMENT-REVIEW.json",
+        "sha256": "a55469e628dbec12ffefcec85f18770d89aa1a8383d3fb7d7104fbc4a9e1a8dc"
+      }
+    },
+    "release": {
+      "bytes": 11104,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/observation-1/resolved15-release.json",
+      "sha256": "6f7f3f507fd29ec8a6ceab3d69fed325a0ceeac162650d9131337448f474a9cb"
+    },
+    "resolved_plan": {
+      "bytes": 47443,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/observation-1/resolved15-command-plan.json",
+      "sha256": "1df8937a0210e068240664d4c72a3e574bf95ebd95f0428017028c3172f23ffb"
+    }
+  },
+  "production_artifact_acceptance": true,
+  "retained_authority": {
+    "copy_count": 33,
+    "engine_result": {
+      "bytes": 254,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/result.json",
+      "sha256": "8f5fd75654f8f171918be1e43395d7ea2b31f589c31258439aadf72c2a5ec3d6"
+    },
+    "independent_review": {
+      "bytes": 92014,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-terminal-adapter-independent-review-20261019-1/ACTUAL-FINITE37-RETENTION-ACCEPTANCE.json",
+      "sha256": "c88a63f788655d9ce65d2e1f22e799578e1abddd09e903050d53c34b54710c7e"
+    },
+    "metadata_rows": 74,
+    "objects_manifest": {
+      "bytes": 35800,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/retained-objects.json",
+      "sha256": "57412d6f5b1ca5387d34bcb2494d6fbea177a7fd4288b37abbdc31ff693d30f5"
+    },
+    "original_authorities": [
+      {
+        "action": "copy",
+        "kind": "CMakeCache.txt",
+        "original": {
+          "ctime_ns": 1792432551311246842,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115041,
+          "mode": "0o644",
+          "mtime_ns": 1792432551311246842,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/CMakeCache.txt",
+          "sha256": "2dc15e5e36780c4e5869d16b1a62a94557a61dfc8cf3e2dd732f7e78c183ae36",
+          "size": 26282,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/CMakeCache.txt"
+      },
+      {
+        "action": "copy",
+        "kind": "build.make",
+        "original": {
+          "ctime_ns": 1792432551347247479,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115254,
+          "mode": "0o644",
+          "mtime_ns": 1792432551347247479,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+          "sha256": "6266a07d0a839c0175e5ca451678d69f78fe413f8a534348f5290f8133a58613",
+          "size": 7967,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/build.make"
+      },
+      {
+        "action": "copy",
+        "kind": "build.stderr.log",
+        "original": {
+          "ctime_ns": 1792432601100128721,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48114897,
+          "mode": "0o644",
+          "mtime_ns": 1792432601100128721,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/build.stderr.log",
+          "sha256": "b2ac87dbbcfd0849b84cc95eb922706743e06c513a5f79b5b523137eb465d657",
+          "size": 58182,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/build.stderr.log"
+      },
+      {
+        "action": "copy",
+        "kind": "build.stdout.log",
+        "original": {
+          "ctime_ns": 1792432601172129996,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48114896,
+          "mode": "0o644",
+          "mtime_ns": 1792432601172129996,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/build.stdout.log",
+          "sha256": "5c1e10b493ed6bc9535617d393152955d34b1aac07f530cefca6868b341c18a1",
+          "size": 5770,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/build.stdout.log"
+      },
+      {
+        "action": "copy",
+        "kind": "compile_commands.json",
+        "original": {
+          "ctime_ns": 1792432551359247692,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115070,
+          "mode": "0o644",
+          "mtime_ns": 1792432551359247692,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/compile_commands.json",
+          "sha256": "bde9afd2f387b35a211f20866b3148d95bf6653f87095ebdeea431ebd2706eff",
+          "size": 74332,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/compile_commands.json"
+      },
+      {
+        "action": "reuse",
+        "kind": "cpu.c.o",
+        "original": {
+          "ctime_ns": 1792432599768105127,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115427,
+          "mode": "0o644",
+          "mtime_ns": 1792432599768105127,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+          "sha256": "8f53fae270a167da2576b9ab27da5e91bbf1b6ca2c088495ec12520d9691c12f",
+          "size": 169984,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/cpu.artifact",
+        "retained_authority": {
+          "ctime_ns": 1792434507716852696,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115621,
+          "mode": "0o644",
+          "mtime_ns": 1792432599768105127,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/cpu.artifact",
+          "sha256": "8f53fae270a167da2576b9ab27da5e91bbf1b6ca2c088495ec12520d9691c12f",
+          "size": 169984,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "link.txt",
+        "original": {
+          "ctime_ns": 1792432551351247551,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115270,
+          "mode": "0o644",
+          "mtime_ns": 1792432551351247551,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+          "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428",
+          "size": 759,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/link.txt"
+      },
+      {
+        "action": "reuse",
+        "kind": "mckernel.img",
+        "original": {
+          "ctime_ns": 1792432601156129712,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115445,
+          "mode": "0o755",
+          "mtime_ns": 1792432601156129712,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/mckernel.img",
+          "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+          "size": 7988768,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/image.artifact",
+        "retained_authority": {
+          "ctime_ns": 1792434507784853966,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115624,
+          "mode": "0o755",
+          "mtime_ns": 1792432601156129712,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/image.artifact",
+          "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+          "size": 7988768,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "mckernel.img.map",
+        "original": {
+          "ctime_ns": 1792432601156129712,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115444,
+          "mode": "0o644",
+          "mtime_ns": 1792432601156129712,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/mckernel.img.map",
+          "sha256": "1ac8576bc673e0ac61e9e142d9b23e1a08d6a44bb164b41d25e28edcc055a3d0",
+          "size": 745088,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/mckernel.img.map"
+      },
+      {
+        "action": "reuse",
+        "kind": "mckernel_rust.o",
+        "original": {
+          "ctime_ns": 1792432599264096200,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115418,
+          "mode": "0o644",
+          "mtime_ns": 1792432599264096200,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/rust/mckernel_rust.o",
+          "sha256": "eb59974cd3b5ed6d945062118bdb7397737dafa8c749cf0f8d182829ca5bf8ff",
+          "size": 12763768,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/rust.artifact",
+        "retained_authority": {
+          "ctime_ns": 1792434507760853517,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115623,
+          "mode": "0o644",
+          "mtime_ns": 1792432599264096200,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/rust.artifact",
+          "sha256": "eb59974cd3b5ed6d945062118bdb7397737dafa8c749cf0f8d182829ca5bf8ff",
+          "size": 12763768,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "reuse",
+        "kind": "process.c.o",
+        "original": {
+          "ctime_ns": 1792432600152111929,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115435,
+          "mode": "0o644",
+          "mtime_ns": 1792432600152111929,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+          "sha256": "3aaa288a2726fa3dc956d99c2e86482bfada69ec40db59ca67e4b33ffb0e9dac",
+          "size": 304392,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/process.artifact",
+        "retained_authority": {
+          "ctime_ns": 1792434507720852771,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115622,
+          "mode": "0o644",
+          "mtime_ns": 1792432600152111929,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/process.artifact",
+          "sha256": "3aaa288a2726fa3dc956d99c2e86482bfada69ec40db59ca67e4b33ffb0e9dac",
+          "size": 304392,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "production-abi-checks.json",
+        "original": {
+          "ctime_ns": 1792432551715253998,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115361,
+          "mode": "0o644",
+          "mtime_ns": 1792432551715253998,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/production-abi-checks.json",
+          "sha256": "d3a212ad2b1a7fb34c2dbd474649bc161f2d4cef55f0d9934e72fabd8c556dba",
+          "size": 4245,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/production-abi-checks.json"
+      },
+      {
+        "action": "copy",
+        "kind": "production-abi-cpu.c",
+        "original": {
+          "ctime_ns": 1792432551567251376,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115358,
+          "mode": "0o644",
+          "mtime_ns": 1792432551567251376,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/production-abi-cpu.c",
+          "sha256": "8e31891a24714475b3ed39e8edf66ed6f732c5e06ad74b344df33e93fc894741",
+          "size": 1123,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/production-abi-cpu.c"
+      },
+      {
+        "action": "copy",
+        "kind": "production-abi-process.c",
+        "original": {
+          "ctime_ns": 1792432551631252510,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115360,
+          "mode": "0o644",
+          "mtime_ns": 1792432551631252510,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/production-abi-process.c",
+          "sha256": "7d06c58fb258d63ac9f9d6001215a1465f473eee6f8ec96cabe469d48102bf14",
+          "size": 158917,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/production-abi-process.c"
+      },
+      {
+        "action": "copy",
+        "kind": "receipt.json",
+        "original": {
+          "ctime_ns": 1792432643816885337,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115263,
+          "mode": "0o644",
+          "mtime_ns": 1792432643812885267,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/receipt.json",
+          "sha256": "4be2ccc9c38c604ee2aae760b6e7193bf045693ecc96cec2c24fa5e60be0211c",
+          "size": 35607,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/receipt.json"
+      },
+      {
+        "action": "copy",
+        "kind": "release-fallback-cpu.o",
+        "original": {
+          "ctime_ns": 1792432552571269160,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115365,
+          "mode": "0o644",
+          "mtime_ns": 1792432552571269160,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/release-fp-regs-production/fallback-cpu.o",
+          "sha256": "a5b0976f667eef1c7814fc401eb78b43e454e894b3085d13b47ada8fa0a834a8",
+          "size": 202888,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/release-fallback-cpu.o"
+      },
+      {
+        "action": "copy",
+        "kind": "release-fallback-process.o",
+        "original": {
+          "ctime_ns": 1792432581247777088,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115380,
+          "mode": "0o644",
+          "mtime_ns": 1792432581247777088,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/release-tid-production/fallback-process.o",
+          "sha256": "642bdca840286d77076f04cf97fa302598772102dfcb2feb0823e7d7dae5593a",
+          "size": 450656,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/release-fallback-process.o"
+      },
+      {
+        "action": "copy",
+        "kind": "release-legacy-mckernel_rust.o",
+        "original": {
+          "ctime_ns": 1792432579611748110,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115370,
+          "mode": "0o644",
+          "mtime_ns": 1792432579611748110,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/release-fp-regs-production/legacy-mckernel_rust.o",
+          "sha256": "a00bb706caf4a111c49afb7db116905c9cf4880a677238c7e0c426bec31d4a56",
+          "size": 12543416,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/release-legacy-mckernel_rust.o"
+      },
+      {
+        "action": "copy",
+        "kind": "release-native-mckernel_rust.o",
+        "original": {
+          "ctime_ns": 1792432566103508848,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115369,
+          "mode": "0o644",
+          "mtime_ns": 1792432566103508848,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/release-fp-regs-production/native-mckernel_rust.o",
+          "sha256": "eb59974cd3b5ed6d945062118bdb7397737dafa8c749cf0f8d182829ca5bf8ff",
+          "size": 12763768,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/release-native-mckernel_rust.o"
+      },
+      {
+        "action": "copy",
+        "kind": "release-selected-cpu.o",
+        "original": {
+          "ctime_ns": 1792432552075260374,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115363,
+          "mode": "0o644",
+          "mtime_ns": 1792432552075260374,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/release-fp-regs-production/selected-cpu.o",
+          "sha256": "c411b4975b290f1c534a42d029652a28d9fa8c934fef5bd2c7fbc866ccefaaf8",
+          "size": 169984,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/release-selected-cpu.o"
+      },
+      {
+        "action": "copy",
+        "kind": "release-selected-process.o",
+        "original": {
+          "ctime_ns": 1792432580347761147,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115378,
+          "mode": "0o644",
+          "mtime_ns": 1792432580347761147,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/release-tid-production/selected-process.o",
+          "sha256": "9f476dea72e5086eba80d16df0384ac9e0ff67a20f8f3f45721ce579184a39a6",
+          "size": 304536,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/release-selected-process.o"
+      },
+      {
+        "action": "copy",
+        "kind": "clone-affinity-production-checks.json",
+        "original": {
+          "ctime_ns": 1792432585015843829,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115411,
+          "mode": "0o644",
+          "mtime_ns": 1792432585015843829,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/clone-affinity-production-checks.json",
+          "sha256": "163b8c0afb34e04c103d8bc68487b8205ab1ed0ca583df14ef4d0d4dc2b30e6b",
+          "size": 10888,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/clone-affinity-production-checks.json"
+      },
+      {
+        "action": "copy",
+        "kind": "release-tid-production-checks.json",
+        "original": {
+          "ctime_ns": 1792432581419780135,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115389,
+          "mode": "0o644",
+          "mtime_ns": 1792432581419780135,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/release-tid-production-checks.json",
+          "sha256": "a09b22da93d9953f97394536ca0367ab1658b4ec1d812d3c8b924facf57a53d2",
+          "size": 6925,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/release-tid-production-checks.json"
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-production-syscall.c",
+        "original": {
+          "ctime_ns": 1792432581427780277,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115390,
+          "mode": "0o644",
+          "mtime_ns": 1792432581427780277,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/production-syscall.c",
+          "sha256": "ff50269a3dbd9f99d2bbfda2534a96438469c723681f907162ebbc359f70da9b",
+          "size": 838418,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-production-syscall.c"
+      },
+      {
+        "action": "copy",
+        "kind": "actual-affinity-layout.rs",
+        "original": {
+          "ctime_ns": 1792432584675837807,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115392,
+          "mode": "0o644",
+          "mtime_ns": 1792432584675837807,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/actual-affinity-layout.rs",
+          "sha256": "83dbc0236cb29e10b83fb0f51817e86151b6583ea71592c4985522a6036cb3de",
+          "size": 2111,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/actual-affinity-layout.rs"
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-selected-syscall.o",
+        "original": {
+          "ctime_ns": 1792432583119810246,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115391,
+          "mode": "0o644",
+          "mtime_ns": 1792432583119810246,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/selected-syscall.o",
+          "sha256": "d94ab124331f009be6b9c40498ebd0a2fa40b95bdd12332e09f3a81f10e2d10a",
+          "size": 832344,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-selected-syscall.o"
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-selected-syscall.bin",
+        "original": {
+          "ctime_ns": 1792432584803840074,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115394,
+          "mode": "0o644",
+          "mtime_ns": 1792432584803840074,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/selected-syscall.bin",
+          "sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+          "size": 216,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-selected-syscall.bin"
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-fallback-syscall.o",
+        "original": {
+          "ctime_ns": 1792432584659837524,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115393,
+          "mode": "0o644",
+          "mtime_ns": 1792432584659837524,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/fallback-syscall.o",
+          "sha256": "c2742c5117bf7409649c329447920aff944272984fbe60ea03676631cbed5566",
+          "size": 830760,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-fallback-syscall.o"
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-fallback-syscall.bin",
+        "original": {
+          "ctime_ns": 1792432584811840216,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115395,
+          "mode": "0o644",
+          "mtime_ns": 1792432584811840216,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/fallback-syscall.bin",
+          "sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+          "size": 216,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-fallback-syscall.bin"
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-actual-rust-layout.o",
+        "original": {
+          "ctime_ns": 1792432584751839153,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115398,
+          "mode": "0o644",
+          "mtime_ns": 1792432584751839153,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/actual-rust-layout.o",
+          "sha256": "e732dab2515bf863c7af7090a3024d4ba7e4bd34a1e5aa2a55664f8f628b122d",
+          "size": 2480,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-actual-rust-layout.o"
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-actual-rust-layout.bin",
+        "original": {
+          "ctime_ns": 1792432584819840358,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115396,
+          "mode": "0o644",
+          "mtime_ns": 1792432584819840358,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/actual-rust-layout.bin",
+          "sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+          "size": 216,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-actual-rust-layout.bin"
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-selected-syscall.nm",
+        "original": {
+          "ctime_ns": 1792432584835840641,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115397,
+          "mode": "0o644",
+          "mtime_ns": 1792432584835840641,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/selected-syscall.nm",
+          "sha256": "577702d6c2ca777a8d0c43baa61ebcb2fbf374e6586ef6d40c9aaadf821a0cd2",
+          "size": 55852,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-selected-syscall.nm"
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-fallback-syscall.nm",
+        "original": {
+          "ctime_ns": 1792432584859841066,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115401,
+          "mode": "0o644",
+          "mtime_ns": 1792432584859841066,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/fallback-syscall.nm",
+          "sha256": "53108b7d00f0e32a30d6442ee070176d0b49a37cdbaf6aa197d1cad90a89741f",
+          "size": 55700,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-fallback-syscall.nm"
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-selected-process.nm",
+        "original": {
+          "ctime_ns": 1792432584887841562,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115403,
+          "mode": "0o644",
+          "mtime_ns": 1792432584887841562,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/selected-process.nm",
+          "sha256": "8aa01b80c1a0bf40cf9fd803f8ccb9280e81b204cf8033edc1f944d12ac321c7",
+          "size": 24629,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-selected-process.nm"
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-fallback-process.nm",
+        "original": {
+          "ctime_ns": 1792432584907841917,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115405,
+          "mode": "0o644",
+          "mtime_ns": 1792432584907841917,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/fallback-process.nm",
+          "sha256": "749dd27cc4b6a0f6ee1e960f5ef269cae8e54e4efa8a543c0eeff52d05ce380b",
+          "size": 35108,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-fallback-process.nm"
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-native-rust.nm",
+        "original": {
+          "ctime_ns": 1792432584935842413,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115407,
+          "mode": "0o644",
+          "mtime_ns": 1792432584935842413,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/native-rust.nm",
+          "sha256": "d1c3f6c8832b0b02293a0b25844ba6de4d52883c9a01c3a9ede08e8533c1b7ab",
+          "size": 237012,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-native-rust.nm"
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-legacy-rust.nm",
+        "original": {
+          "ctime_ns": 1792432584983843263,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115409,
+          "mode": "0o644",
+          "mtime_ns": 1792432584983843263,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/legacy-rust.nm",
+          "sha256": "1f93b80cecc7d5cd5494098b012c25bc456318fdc4ddd16329bc9f4ef2d9b713",
+          "size": 234403,
+          "uid": 1000
+        },
+        "retained": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-legacy-rust.nm"
+      }
+    ],
+    "pairs": [
+      {
+        "action": "copy",
+        "kind": "CMakeCache.txt",
+        "original": {
+          "ctime_ns": 1792432551311246842,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115041,
+          "mode": "0o644",
+          "mtime_ns": 1792432551311246842,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/CMakeCache.txt",
+          "sha256": "2dc15e5e36780c4e5869d16b1a62a94557a61dfc8cf3e2dd732f7e78c183ae36",
+          "size": 26282,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961021917641,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115768,
+          "mode": "0o600",
+          "mtime_ns": 1792432551311246842,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/CMakeCache.txt",
+          "sha256": "2dc15e5e36780c4e5869d16b1a62a94557a61dfc8cf3e2dd732f7e78c183ae36",
+          "size": 26282,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "build.make",
+        "original": {
+          "ctime_ns": 1792432551347247479,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115254,
+          "mode": "0o644",
+          "mtime_ns": 1792432551347247479,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel_rust_obj.dir/build.make",
+          "sha256": "6266a07d0a839c0175e5ca451678d69f78fe413f8a534348f5290f8133a58613",
+          "size": 7967,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961021917641,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115769,
+          "mode": "0o600",
+          "mtime_ns": 1792432551347247479,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/build.make",
+          "sha256": "6266a07d0a839c0175e5ca451678d69f78fe413f8a534348f5290f8133a58613",
+          "size": 7967,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "build.stderr.log",
+        "original": {
+          "ctime_ns": 1792432601100128721,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48114897,
+          "mode": "0o644",
+          "mtime_ns": 1792432601100128721,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/build.stderr.log",
+          "sha256": "b2ac87dbbcfd0849b84cc95eb922706743e06c513a5f79b5b523137eb465d657",
+          "size": 58182,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961025917759,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115770,
+          "mode": "0o600",
+          "mtime_ns": 1792432601100128721,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/build.stderr.log",
+          "sha256": "b2ac87dbbcfd0849b84cc95eb922706743e06c513a5f79b5b523137eb465d657",
+          "size": 58182,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "build.stdout.log",
+        "original": {
+          "ctime_ns": 1792432601172129996,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48114896,
+          "mode": "0o644",
+          "mtime_ns": 1792432601172129996,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/build.stdout.log",
+          "sha256": "5c1e10b493ed6bc9535617d393152955d34b1aac07f530cefca6868b341c18a1",
+          "size": 5770,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961025917759,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115771,
+          "mode": "0o600",
+          "mtime_ns": 1792432601172129996,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/build.stdout.log",
+          "sha256": "5c1e10b493ed6bc9535617d393152955d34b1aac07f530cefca6868b341c18a1",
+          "size": 5770,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "compile_commands.json",
+        "original": {
+          "ctime_ns": 1792432551359247692,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115070,
+          "mode": "0o644",
+          "mtime_ns": 1792432551359247692,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/compile_commands.json",
+          "sha256": "bde9afd2f387b35a211f20866b3148d95bf6653f87095ebdeea431ebd2706eff",
+          "size": 74332,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961025917759,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115772,
+          "mode": "0o600",
+          "mtime_ns": 1792432551359247692,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/compile_commands.json",
+          "sha256": "bde9afd2f387b35a211f20866b3148d95bf6653f87095ebdeea431ebd2706eff",
+          "size": 74332,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "reuse",
+        "kind": "cpu.c.o",
+        "original": {
+          "ctime_ns": 1792432599768105127,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115427,
+          "mode": "0o644",
+          "mtime_ns": 1792432599768105127,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/__/arch/x86_64/kernel/cpu.c.o",
+          "sha256": "8f53fae270a167da2576b9ab27da5e91bbf1b6ca2c088495ec12520d9691c12f",
+          "size": 169984,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434507716852696,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115621,
+          "mode": "0o644",
+          "mtime_ns": 1792432599768105127,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/cpu.artifact",
+          "sha256": "8f53fae270a167da2576b9ab27da5e91bbf1b6ca2c088495ec12520d9691c12f",
+          "size": 169984,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "link.txt",
+        "original": {
+          "ctime_ns": 1792432551351247551,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115270,
+          "mode": "0o644",
+          "mtime_ns": 1792432551351247551,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/link.txt",
+          "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428",
+          "size": 759,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961029917877,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115773,
+          "mode": "0o600",
+          "mtime_ns": 1792432551351247551,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/link.txt",
+          "sha256": "d9d50ed84770a8bff5af2371e19245200d99d61fe3cda28e880bd88e6669e428",
+          "size": 759,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "reuse",
+        "kind": "mckernel.img",
+        "original": {
+          "ctime_ns": 1792432601156129712,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115445,
+          "mode": "0o755",
+          "mtime_ns": 1792432601156129712,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/mckernel.img",
+          "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+          "size": 7988768,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434507784853966,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115624,
+          "mode": "0o755",
+          "mtime_ns": 1792432601156129712,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/image.artifact",
+          "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+          "size": 7988768,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "mckernel.img.map",
+        "original": {
+          "ctime_ns": 1792432601156129712,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115444,
+          "mode": "0o644",
+          "mtime_ns": 1792432601156129712,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/mckernel.img.map",
+          "sha256": "1ac8576bc673e0ac61e9e142d9b23e1a08d6a44bb164b41d25e28edcc055a3d0",
+          "size": 745088,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961065918938,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115774,
+          "mode": "0o600",
+          "mtime_ns": 1792432601156129712,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/mckernel.img.map",
+          "sha256": "1ac8576bc673e0ac61e9e142d9b23e1a08d6a44bb164b41d25e28edcc055a3d0",
+          "size": 745088,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "reuse",
+        "kind": "mckernel_rust.o",
+        "original": {
+          "ctime_ns": 1792432599264096200,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115418,
+          "mode": "0o644",
+          "mtime_ns": 1792432599264096200,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/rust/mckernel_rust.o",
+          "sha256": "eb59974cd3b5ed6d945062118bdb7397737dafa8c749cf0f8d182829ca5bf8ff",
+          "size": 12763768,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434507760853517,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115623,
+          "mode": "0o644",
+          "mtime_ns": 1792432599264096200,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/rust.artifact",
+          "sha256": "eb59974cd3b5ed6d945062118bdb7397737dafa8c749cf0f8d182829ca5bf8ff",
+          "size": 12763768,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "reuse",
+        "kind": "process.c.o",
+        "original": {
+          "ctime_ns": 1792432600152111929,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115435,
+          "mode": "0o644",
+          "mtime_ns": 1792432600152111929,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/process.c.o",
+          "sha256": "3aaa288a2726fa3dc956d99c2e86482bfada69ec40db59ca67e4b33ffb0e9dac",
+          "size": 304392,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434507720852771,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115622,
+          "mode": "0o644",
+          "mtime_ns": 1792432600152111929,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/postbuild-readonly-1/retained-artifacts/process.artifact",
+          "sha256": "3aaa288a2726fa3dc956d99c2e86482bfada69ec40db59ca67e4b33ffb0e9dac",
+          "size": 304392,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "production-abi-checks.json",
+        "original": {
+          "ctime_ns": 1792432551715253998,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115361,
+          "mode": "0o644",
+          "mtime_ns": 1792432551715253998,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/production-abi-checks.json",
+          "sha256": "d3a212ad2b1a7fb34c2dbd474649bc161f2d4cef55f0d9934e72fabd8c556dba",
+          "size": 4245,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961125920708,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115775,
+          "mode": "0o600",
+          "mtime_ns": 1792432551715253998,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/production-abi-checks.json",
+          "sha256": "d3a212ad2b1a7fb34c2dbd474649bc161f2d4cef55f0d9934e72fabd8c556dba",
+          "size": 4245,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "production-abi-cpu.c",
+        "original": {
+          "ctime_ns": 1792432551567251376,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115358,
+          "mode": "0o644",
+          "mtime_ns": 1792432551567251376,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/production-abi-cpu.c",
+          "sha256": "8e31891a24714475b3ed39e8edf66ed6f732c5e06ad74b344df33e93fc894741",
+          "size": 1123,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961125920708,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115776,
+          "mode": "0o600",
+          "mtime_ns": 1792432551567251376,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/production-abi-cpu.c",
+          "sha256": "8e31891a24714475b3ed39e8edf66ed6f732c5e06ad74b344df33e93fc894741",
+          "size": 1123,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "production-abi-process.c",
+        "original": {
+          "ctime_ns": 1792432551631252510,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115360,
+          "mode": "0o644",
+          "mtime_ns": 1792432551631252510,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/production-abi-process.c",
+          "sha256": "7d06c58fb258d63ac9f9d6001215a1465f473eee6f8ec96cabe469d48102bf14",
+          "size": 158917,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961129920826,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115777,
+          "mode": "0o600",
+          "mtime_ns": 1792432551631252510,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/production-abi-process.c",
+          "sha256": "7d06c58fb258d63ac9f9d6001215a1465f473eee6f8ec96cabe469d48102bf14",
+          "size": 158917,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "receipt.json",
+        "original": {
+          "ctime_ns": 1792432643816885337,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115263,
+          "mode": "0o644",
+          "mtime_ns": 1792432643812885267,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/receipt.json",
+          "sha256": "4be2ccc9c38c604ee2aae760b6e7193bf045693ecc96cec2c24fa5e60be0211c",
+          "size": 35607,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961133920944,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115778,
+          "mode": "0o600",
+          "mtime_ns": 1792432643812885267,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/receipt.json",
+          "sha256": "4be2ccc9c38c604ee2aae760b6e7193bf045693ecc96cec2c24fa5e60be0211c",
+          "size": 35607,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "release-fallback-cpu.o",
+        "original": {
+          "ctime_ns": 1792432552571269160,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115365,
+          "mode": "0o644",
+          "mtime_ns": 1792432552571269160,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/release-fp-regs-production/fallback-cpu.o",
+          "sha256": "a5b0976f667eef1c7814fc401eb78b43e454e894b3085d13b47ada8fa0a834a8",
+          "size": 202888,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961133920944,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115779,
+          "mode": "0o600",
+          "mtime_ns": 1792432552571269160,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/release-fallback-cpu.o",
+          "sha256": "a5b0976f667eef1c7814fc401eb78b43e454e894b3085d13b47ada8fa0a834a8",
+          "size": 202888,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "release-fallback-process.o",
+        "original": {
+          "ctime_ns": 1792432581247777088,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115380,
+          "mode": "0o644",
+          "mtime_ns": 1792432581247777088,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/release-tid-production/fallback-process.o",
+          "sha256": "642bdca840286d77076f04cf97fa302598772102dfcb2feb0823e7d7dae5593a",
+          "size": 450656,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961137921061,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115780,
+          "mode": "0o600",
+          "mtime_ns": 1792432581247777088,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/release-fallback-process.o",
+          "sha256": "642bdca840286d77076f04cf97fa302598772102dfcb2feb0823e7d7dae5593a",
+          "size": 450656,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "release-legacy-mckernel_rust.o",
+        "original": {
+          "ctime_ns": 1792432579611748110,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115370,
+          "mode": "0o644",
+          "mtime_ns": 1792432579611748110,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/release-fp-regs-production/legacy-mckernel_rust.o",
+          "sha256": "a00bb706caf4a111c49afb7db116905c9cf4880a677238c7e0c426bec31d4a56",
+          "size": 12543416,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961173922123,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115781,
+          "mode": "0o600",
+          "mtime_ns": 1792432579611748110,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/release-legacy-mckernel_rust.o",
+          "sha256": "a00bb706caf4a111c49afb7db116905c9cf4880a677238c7e0c426bec31d4a56",
+          "size": 12543416,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "release-native-mckernel_rust.o",
+        "original": {
+          "ctime_ns": 1792432566103508848,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115369,
+          "mode": "0o644",
+          "mtime_ns": 1792432566103508848,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/release-fp-regs-production/native-mckernel_rust.o",
+          "sha256": "eb59974cd3b5ed6d945062118bdb7397737dafa8c749cf0f8d182829ca5bf8ff",
+          "size": 12763768,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961269924954,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115782,
+          "mode": "0o600",
+          "mtime_ns": 1792432566103508848,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/release-native-mckernel_rust.o",
+          "sha256": "eb59974cd3b5ed6d945062118bdb7397737dafa8c749cf0f8d182829ca5bf8ff",
+          "size": 12763768,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "release-selected-cpu.o",
+        "original": {
+          "ctime_ns": 1792432552075260374,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115363,
+          "mode": "0o644",
+          "mtime_ns": 1792432552075260374,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/release-fp-regs-production/selected-cpu.o",
+          "sha256": "c411b4975b290f1c534a42d029652a28d9fa8c934fef5bd2c7fbc866ccefaaf8",
+          "size": 169984,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961333926841,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115783,
+          "mode": "0o600",
+          "mtime_ns": 1792432552075260374,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/release-selected-cpu.o",
+          "sha256": "c411b4975b290f1c534a42d029652a28d9fa8c934fef5bd2c7fbc866ccefaaf8",
+          "size": 169984,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "release-selected-process.o",
+        "original": {
+          "ctime_ns": 1792432580347761147,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115378,
+          "mode": "0o644",
+          "mtime_ns": 1792432580347761147,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/release-tid-production/selected-process.o",
+          "sha256": "9f476dea72e5086eba80d16df0384ac9e0ff67a20f8f3f45721ce579184a39a6",
+          "size": 304536,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961337926959,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115784,
+          "mode": "0o600",
+          "mtime_ns": 1792432580347761147,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/release-selected-process.o",
+          "sha256": "9f476dea72e5086eba80d16df0384ac9e0ff67a20f8f3f45721ce579184a39a6",
+          "size": 304536,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "clone-affinity-production-checks.json",
+        "original": {
+          "ctime_ns": 1792432585015843829,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115411,
+          "mode": "0o644",
+          "mtime_ns": 1792432585015843829,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/clone-affinity-production-checks.json",
+          "sha256": "163b8c0afb34e04c103d8bc68487b8205ab1ed0ca583df14ef4d0d4dc2b30e6b",
+          "size": 10888,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961341927077,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115785,
+          "mode": "0o600",
+          "mtime_ns": 1792432585015843829,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/clone-affinity-production-checks.json",
+          "sha256": "163b8c0afb34e04c103d8bc68487b8205ab1ed0ca583df14ef4d0d4dc2b30e6b",
+          "size": 10888,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "release-tid-production-checks.json",
+        "original": {
+          "ctime_ns": 1792432581419780135,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115389,
+          "mode": "0o644",
+          "mtime_ns": 1792432581419780135,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/release-tid-production-checks.json",
+          "sha256": "a09b22da93d9953f97394536ca0367ab1658b4ec1d812d3c8b924facf57a53d2",
+          "size": 6925,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961341927077,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115786,
+          "mode": "0o600",
+          "mtime_ns": 1792432581419780135,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/release-tid-production-checks.json",
+          "sha256": "a09b22da93d9953f97394536ca0367ab1658b4ec1d812d3c8b924facf57a53d2",
+          "size": 6925,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-production-syscall.c",
+        "original": {
+          "ctime_ns": 1792432581427780277,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115390,
+          "mode": "0o644",
+          "mtime_ns": 1792432581427780277,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/production-syscall.c",
+          "sha256": "ff50269a3dbd9f99d2bbfda2534a96438469c723681f907162ebbc359f70da9b",
+          "size": 838418,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961345927195,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115787,
+          "mode": "0o600",
+          "mtime_ns": 1792432581427780277,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-production-syscall.c",
+          "sha256": "ff50269a3dbd9f99d2bbfda2534a96438469c723681f907162ebbc359f70da9b",
+          "size": 838418,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "actual-affinity-layout.rs",
+        "original": {
+          "ctime_ns": 1792432584675837807,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115392,
+          "mode": "0o644",
+          "mtime_ns": 1792432584675837807,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/actual-affinity-layout.rs",
+          "sha256": "83dbc0236cb29e10b83fb0f51817e86151b6583ea71592c4985522a6036cb3de",
+          "size": 2111,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961353927431,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115788,
+          "mode": "0o600",
+          "mtime_ns": 1792432584675837807,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/actual-affinity-layout.rs",
+          "sha256": "83dbc0236cb29e10b83fb0f51817e86151b6583ea71592c4985522a6036cb3de",
+          "size": 2111,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-selected-syscall.o",
+        "original": {
+          "ctime_ns": 1792432583119810246,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115391,
+          "mode": "0o644",
+          "mtime_ns": 1792432583119810246,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/selected-syscall.o",
+          "sha256": "d94ab124331f009be6b9c40498ebd0a2fa40b95bdd12332e09f3a81f10e2d10a",
+          "size": 832344,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961357927549,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115789,
+          "mode": "0o600",
+          "mtime_ns": 1792432583119810246,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-selected-syscall.o",
+          "sha256": "d94ab124331f009be6b9c40498ebd0a2fa40b95bdd12332e09f3a81f10e2d10a",
+          "size": 832344,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-selected-syscall.bin",
+        "original": {
+          "ctime_ns": 1792432584803840074,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115394,
+          "mode": "0o644",
+          "mtime_ns": 1792432584803840074,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/selected-syscall.bin",
+          "sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+          "size": 216,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961361927667,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115790,
+          "mode": "0o600",
+          "mtime_ns": 1792432584803840074,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-selected-syscall.bin",
+          "sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+          "size": 216,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-fallback-syscall.o",
+        "original": {
+          "ctime_ns": 1792432584659837524,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115393,
+          "mode": "0o644",
+          "mtime_ns": 1792432584659837524,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/fallback-syscall.o",
+          "sha256": "c2742c5117bf7409649c329447920aff944272984fbe60ea03676631cbed5566",
+          "size": 830760,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961365927785,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115791,
+          "mode": "0o600",
+          "mtime_ns": 1792432584659837524,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-fallback-syscall.o",
+          "sha256": "c2742c5117bf7409649c329447920aff944272984fbe60ea03676631cbed5566",
+          "size": 830760,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-fallback-syscall.bin",
+        "original": {
+          "ctime_ns": 1792432584811840216,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115395,
+          "mode": "0o644",
+          "mtime_ns": 1792432584811840216,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/fallback-syscall.bin",
+          "sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+          "size": 216,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961373928021,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115792,
+          "mode": "0o600",
+          "mtime_ns": 1792432584811840216,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-fallback-syscall.bin",
+          "sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+          "size": 216,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-actual-rust-layout.o",
+        "original": {
+          "ctime_ns": 1792432584751839153,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115398,
+          "mode": "0o644",
+          "mtime_ns": 1792432584751839153,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/actual-rust-layout.o",
+          "sha256": "e732dab2515bf863c7af7090a3024d4ba7e4bd34a1e5aa2a55664f8f628b122d",
+          "size": 2480,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961373928021,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115793,
+          "mode": "0o600",
+          "mtime_ns": 1792432584751839153,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-actual-rust-layout.o",
+          "sha256": "e732dab2515bf863c7af7090a3024d4ba7e4bd34a1e5aa2a55664f8f628b122d",
+          "size": 2480,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-actual-rust-layout.bin",
+        "original": {
+          "ctime_ns": 1792432584819840358,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115396,
+          "mode": "0o644",
+          "mtime_ns": 1792432584819840358,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/actual-rust-layout.bin",
+          "sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+          "size": 216,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961377928139,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115794,
+          "mode": "0o600",
+          "mtime_ns": 1792432584819840358,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-actual-rust-layout.bin",
+          "sha256": "a81f747e8b4c6ca15b13bc540fb7981d29956be0ea7068ea17611b41fc637baa",
+          "size": 216,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-selected-syscall.nm",
+        "original": {
+          "ctime_ns": 1792432584835840641,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115397,
+          "mode": "0o644",
+          "mtime_ns": 1792432584835840641,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/selected-syscall.nm",
+          "sha256": "577702d6c2ca777a8d0c43baa61ebcb2fbf374e6586ef6d40c9aaadf821a0cd2",
+          "size": 55852,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961377928139,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115795,
+          "mode": "0o600",
+          "mtime_ns": 1792432584835840641,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-selected-syscall.nm",
+          "sha256": "577702d6c2ca777a8d0c43baa61ebcb2fbf374e6586ef6d40c9aaadf821a0cd2",
+          "size": 55852,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-fallback-syscall.nm",
+        "original": {
+          "ctime_ns": 1792432584859841066,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115401,
+          "mode": "0o644",
+          "mtime_ns": 1792432584859841066,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/fallback-syscall.nm",
+          "sha256": "53108b7d00f0e32a30d6442ee070176d0b49a37cdbaf6aa197d1cad90a89741f",
+          "size": 55700,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961381928257,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115796,
+          "mode": "0o600",
+          "mtime_ns": 1792432584859841066,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-fallback-syscall.nm",
+          "sha256": "53108b7d00f0e32a30d6442ee070176d0b49a37cdbaf6aa197d1cad90a89741f",
+          "size": 55700,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-selected-process.nm",
+        "original": {
+          "ctime_ns": 1792432584887841562,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115403,
+          "mode": "0o644",
+          "mtime_ns": 1792432584887841562,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/selected-process.nm",
+          "sha256": "8aa01b80c1a0bf40cf9fd803f8ccb9280e81b204cf8033edc1f944d12ac321c7",
+          "size": 24629,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961381928257,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115797,
+          "mode": "0o600",
+          "mtime_ns": 1792432584887841562,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-selected-process.nm",
+          "sha256": "8aa01b80c1a0bf40cf9fd803f8ccb9280e81b204cf8033edc1f944d12ac321c7",
+          "size": 24629,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-fallback-process.nm",
+        "original": {
+          "ctime_ns": 1792432584907841917,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115405,
+          "mode": "0o644",
+          "mtime_ns": 1792432584907841917,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/fallback-process.nm",
+          "sha256": "749dd27cc4b6a0f6ee1e960f5ef269cae8e54e4efa8a543c0eeff52d05ce380b",
+          "size": 35108,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961385928375,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115798,
+          "mode": "0o600",
+          "mtime_ns": 1792432584907841917,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-fallback-process.nm",
+          "sha256": "749dd27cc4b6a0f6ee1e960f5ef269cae8e54e4efa8a543c0eeff52d05ce380b",
+          "size": 35108,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-native-rust.nm",
+        "original": {
+          "ctime_ns": 1792432584935842413,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115407,
+          "mode": "0o644",
+          "mtime_ns": 1792432584935842413,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/native-rust.nm",
+          "sha256": "d1c3f6c8832b0b02293a0b25844ba6de4d52883c9a01c3a9ede08e8533c1b7ab",
+          "size": 237012,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961385928375,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115799,
+          "mode": "0o600",
+          "mtime_ns": 1792432584935842413,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-native-rust.nm",
+          "sha256": "d1c3f6c8832b0b02293a0b25844ba6de4d52883c9a01c3a9ede08e8533c1b7ab",
+          "size": 237012,
+          "uid": 1000
+        }
+      },
+      {
+        "action": "copy",
+        "kind": "affinity-legacy-rust.nm",
+        "original": {
+          "ctime_ns": 1792432584983843263,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115409,
+          "mode": "0o644",
+          "mtime_ns": 1792432584983843263,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/clone-affinity-production/legacy-rust.nm",
+          "sha256": "1f93b80cecc7d5cd5494098b012c25bc456318fdc4ddd16329bc9f4ef2d9b713",
+          "size": 234403,
+          "uid": 1000
+        },
+        "retained": {
+          "ctime_ns": 1792434961389928493,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48115800,
+          "mode": "0o600",
+          "mtime_ns": 1792432584983843263,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/affinity-legacy-rust.nm",
+          "sha256": "1f93b80cecc7d5cd5494098b012c25bc456318fdc4ddd16329bc9f4ef2d9b713",
+          "size": 234403,
+          "uid": 1000
+        }
+      }
+    ],
+    "reuse_count": 4,
+    "role_count": 37
+  },
+  "reviewer": "/root/next_replace_tid_review",
+  "runtime_acceptance": false,
+  "schema": "mckernel.independent-four-callback-affinity-image-actual-review.v1",
+  "scope": "Functional OS/apps plus actual Rust/reviewedassembly migration; one fresh205 image with four release callbacks and changed CLONE_THREAD creator-affinity/defaultscheduler boundary. No borrowed03a object or machine witness credit.",
+  "source11": {
+    "authority": {
+      "bytes": 8885,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/source-sha256.json",
+      "sha256": "70227f83c4eccb4022b2d52eff0300930d0e602e2aac31fa049c3a68176ff6bd"
+    },
+    "count": 11,
+    "declared_host_owner": {
+      "bytes": 51420,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py",
+      "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+    },
+    "executed_image_owner": {
+      "bytes": 84436,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/native_rust_exact_mckernel_image_container_owner.py",
+      "sha256": "fb8b20096ad9788f140d6727d0a4a505cb3f26d98439b19bb1d35a2a40e71a19"
+    },
+    "guard": {
+      "bytes": 20830,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/native_exact_scratch22_authority3_image_guard_corrected.py",
+      "sha256": "c96bb184ce6f0fe19cfff03cc62b5675885d7101ac79787c51469c95379a7f46"
+    },
+    "publication": {
+      "bytes": 3955,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/dispatcher-publication-proof.json",
+      "sha256": "702347fec131eef6166a9bcc2ca685fc0fdf7e26ee1c3b697d7ee92d27cf25ba"
+    },
+    "request_lineage": {
+      "driver_receipt": {
+        "bytes": 35607,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/receipt.json",
+        "sha256": "4be2ccc9c38c604ee2aae760b6e7193bf045693ecc96cec2c24fa5e60be0211c"
+      },
+      "guard_result": {
+        "bytes": 299,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-four-callback-affinity-quote-full-image-guard-5145f5be17f14069ab17f4ff0b368419/guard-result.json",
+        "sha256": "c45996084c4135b9a34876444fa6c5d80aa7716ef2c4f25e1b1acc08d09f8e56"
+      },
+      "owner_receipt": {
+        "bytes": 19601,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-evidence/owner-receipt.json",
+        "sha256": "90dd5b893c85756946e246cfc54f190123ea05f21491f18fb18e3b8d160415de"
+      },
+      "postjoin_readback": {
+        "bytes": 542,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/image-guard-postjoin-readback.json",
+        "sha256": "595b9994141465969ed5750de4773db00241c82e140103e21f789ae1765e3eac"
+      },
+      "request": {
+        "bytes": 35945925,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json",
+        "sha256": "8b7b34ede927594675ad8cd303c24c233f4dcdaaa414c5a4c1171adc1139cbe1"
+      }
+    },
+    "source_sha256": {
+      "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+      "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_image_prepare.py": "45cb12e0fd58d164468badfb99a3ed922e65e06046bf38b4a50e27e18595a27b",
+      "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_image_rebind.py": "f10ab116e55a24e8db7a8157d71efdd01198ba3453a8141bc8bbf596eda6b61e",
+      "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_image_rebind_probe.py": "412d46de7e078746a7ec979a13ccb25753d6fa34708610932e35be8f02a89635",
+      "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_offline.py": "637dd014f318921fc8fe4adf274cc7656526be73eb3a4a43d590781e3726de83",
+      "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_disk_build_wrapper.py": "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1",
+      "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_mckernel_image_request_prepare.py": "4094322fbb3784d288cc29b52e1a96292dbaaf12ca3cf05b6b68dbc256ca9365",
+      "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/native_exact_scratch22_authority3_image_guard_corrected.py": "c96bb184ce6f0fe19cfff03cc62b5675885d7101ac79787c51469c95379a7f46",
+      "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/test_fresh_full_metadata_joins.py": "1f5dd1f051f5fe5efad7da04d7e2fd0d2c2eae9046b851a891a48483c3e8fe5d",
+      "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/native_rust_exact_mckernel_image_container_owner.py": "fb8b20096ad9788f140d6727d0a4a505cb3f26d98439b19bb1d35a2a40e71a19",
+      "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/native_rust_exact_mckernel_image_offline.py": "b32d9c9c606e379f5d1be99d7cd42e93f7b55d86c45744c3d5891a54a50b3244"
+    }
+  },
+  "source_authority": {
+    "actual_file_pins": {
+      "kernel/rust/process_helpers.rs": "e6b80f8a93298ddf5a1570fb00b528a515c6676b01af6de92f985a9ad5cca786",
+      "kernel/rust/sched_helpers.rs": "3510ce13fc4653311fa98f68ba472c8eb64e330ddf41b8ae691b81dc6563e70e",
+      "kernel/syscall.c": "90732f8aac62d1221f56d9c56d059e597f82dbd7ac22f8f1ef531f074e90161c"
+    },
+    "candidate_identity_scope": "base_git_commit_only",
+    "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "code_checkpoint": "205410e43e19456ec98777dd6392940707061324",
+    "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "manifest": {
+      "bytes": 6717521,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json",
+      "sha256": "d3495242284b653ef10de9f4f70706fc0ea118696189aa957305ce8bf5df8098"
+    },
+    "materialization_receipt": {
+      "bytes": 483,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json",
+      "sha256": "e2f4361997676db57505dacf2125e513f47b1013844e616070da56fff721a425"
+    },
+    "materialization_sha256": "a6c5602304214426c70a73823607ed58f6cc5d475457051b477271bd4d48ffcc",
+    "request": {
+      "bytes": 35945925,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json",
+      "sha256": "8b7b34ede927594675ad8cd303c24c233f4dcdaaa414c5a4c1171adc1139cbe1"
+    },
+    "source_derivative_sha256": "46ef55bc149a7c17cafc7b082e4774561980452e9d89f1d34e2096e7b9a2107e",
+    "source_identity": {
+      "dev": 66306,
+      "file_type": 16384,
+      "gid": 1000,
+      "inode": 48016248,
+      "mode": 448,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialized-source",
+      "uid": 1000
+    }
+  },
+  "source_request_bindings": {
+    "manifest": {
+      "bytes": 6717521,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json",
+      "sha256": "d3495242284b653ef10de9f4f70706fc0ea118696189aa957305ce8bf5df8098"
+    },
+    "materialization_receipt": {
+      "bytes": 483,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json",
+      "sha256": "e2f4361997676db57505dacf2125e513f47b1013844e616070da56fff721a425"
+    },
+    "request": {
+      "bytes": 35945925,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json",
+      "sha256": "8b7b34ede927594675ad8cd303c24c233f4dcdaaa414c5a4c1171adc1139cbe1"
+    }
+  },
+  "status": "PASS"
+}

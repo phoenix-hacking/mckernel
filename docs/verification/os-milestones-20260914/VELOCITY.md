@@ -1,60 +1,82 @@
 # Tactical plan for faster verified OS progress
 
-## Current priorities — review 73, 2026-10-19T18:27:58Z
+## Current priorities — review 74, 2026-10-19T19:01:00.299546Z
 
-The corrected full build passed all 16 phases, independently accepted f7352de9.
-Image ff4fca45 is 7,988,768 bytes, from kernel 205410e4 and request 8b7b34ed.
-The producer took 97.724 seconds; the guarded invocation took 259.023 seconds.
-The actual producer finished at 17:57:23.816691 UTC. Native feedback was still
-pending after 30.6 minutes at this review, missing the 30-minute target. Record
-the delay and continue correcting its causes. Do not repeat the successful build.
+Live cursor, 19:23 UTC: a second root observer invocation failed during gathering:
+three terminal gate imports were added to FULL_SOURCE_SHA256, which must retain
+the request's exact eleven compiler sources. Keep terminal imports in the outer
+closure. Preserve both consumed observer attempts; review actual effects and the
+whole remaining consumer boundary before another privileged invocation. The
+callback correction passed its actual validation path plus thirteen refusals,
+but that alone did not cover this later map check. N3's ordinary stage/consumer/
+parent is independently accepted 09532853; its non-temporal packet is frozen.
 
-Live update 18:38 UTC: the corrected four-copy/fifteen-inspection chain completed
-in 6.135 seconds and is independently accepted (0418e0ed). Four complete retained
-byte pairs total 21,226,912 bytes. Finite preservation also completed: 37 roles,
-33 copies and four reuses, 74 descriptor records, exit 0 in 0.559 seconds; accepted
-c88a63f7. The first copier failure and the binder's two-versus-seven-field input
-refusal remain preserved. Neither required a compiler or inspection replay.
+Live cursor, 19:15 UTC: corrected N3 remaining consumer passed owner/runner,
+PROTOCOL_PASS, exact report, reaped fake process and empty native parent; actual
+QMP path is 103 bytes. Independent actual-result review is active. The terminal
+observer's first root invocation failed before output/lock/Docker capture: its
+validator treated the callback proof block as the callback list. Direct join and
+process-group absence are recorded. Preserve the consumed release and failure;
+correct that projection against the accepted report, validate the real report
+through the affected predicate, then obtain a fresh exact release. No guest ran.
+Do not repeat the build, archive, inspections or successful ordinary stages.
 
-Current semantic dependency: three real affinity calls match their objects and
-image; sys_sched_setaffinity contains the permitted inlined fourth route. The
-facts checker is being corrected only for that actual inline/ELF-relocation form,
-using complete object-to-image byte projections and saved instruction witnesses.
-The other three named-call checks stay strict. Do not recompile or reinspect.
+The optional case-data constructor is PARKED after two pre-output fixture
+failures; no deployment or speed benefit is established. Do not start another
+optional optimization before current native feedback. A narrow independent
+literal review supports P-M10-01 from accepted source/config/toolchain/provenance
+records; canonical reconciliation is requested, so counters remain 7/35 for now.
+P-M00-02 stays open pending a fresh exact repaired invocation. Usage is 73%.
 
-The physical observer/raw-five/cleanup/postjoin chain is preconstructed; genuine
-final bindings and its own exact releases remain required. N3 source/profile and
-scratch-manifest corrections pass, keeping the strict CPU oracle. Optional checks
-add no gate. Its owner is checking final corrected facts-producer refs now so a
-necessary small data addendum is ready before genuine staging.
+Native feedback is pending 63.6 minutes after producer completion, missing
+the 30-minute target. The full build and canonical artifact are accepted:
+f7352de9 / fa398247; kernel 205410e4, request 8b7b34ed, image ff4fca45,
+7,988,768 bytes. Build driver took 97.724 seconds, outer invocation 259.023 seconds.
+Build-to-artifact acceptance took 45.17 minutes. Repeat no build or inspection.
 
-Dispatch ready work explicitly. Root confirmed a completed reviewer was idle
-after packet readiness. Start a completed owner with followup_task, check active
-status, and measure readiness-to-start delay. A message alone does not start a
-turn. Reuse a completed review if it already exists. Keep the present repair
-finite; avoid new frameworks and baseline audits. At the next necessary interface
-change, prefer a pinned callable helper and typed case data over inline-code
-rewrites. Check the actual decorated caller, persist direct child status before
-post-processing, and exclude atime from stable metadata. Measure time saved.
+N3 normalization and corrected staging PASSED; the genuine archive took 31.37
+seconds to stage. Consumer refused a stale expected -initrd path referring to
+the earlier failed stage. Correct only the actual consumer argv data and obtain
+a remaining-only release; preserve and reuse the archive and normalization.
+No guest has run. Kernel structural validation is fixed and passes the actual
+image plus 15 malformed variants; collector/application checks stay unchanged.
 
-The [velocity dashboard](VELOCITY-METRICS.md) samples every five minutes while
-this supervisor is available. Counters remain 25 native behaviors, 17 production
-Rust paths, 11 applicable native Rust paths, and 7 of 35 practical checks. All 14
-whole milestones remain open. No engineering percentage uplift is claimed. Wall
-rates include the 299.5-minute observation gap; active engineering rate across
-that gap is unknown. Previous completed build-to-native handoff was about 89
-minutes; previous failed-case physical release took 43.95 minutes. Targets remain
-30 minutes and 10 minutes respectively.
+Ordinary source generation passed after its 126-path check. Its publication
+completion and observer constant-loading interface are under exact finite review.
+Preserve both assembly refusals; reuse eight unchanged tracked imports and copy
+only missing approved rows. Continue terminal observer/raw-five/cleanup/postjoin
+preparation in parallel with the N3 consumer correction. Native launch requires
+its own positive physical predecessor and fresh admission.
 
-The prior failed-case physical release and scratch reserve adjustment are DONE.
-Measured scratch gain was 1.10 GiB; repeat neither operation. The current build's
-stopped container and ownership records remain held pending their own physical
-acceptance. The user authorizes useful CPU/RAM increases: use spare admitted
-lanes, measure saturation/RSS before changing the next profile, and change no
-active limits. Usage is 70%; host/scratch availability is about 45.53/13.91 GiB.
-Keep one heavy workload, current 4 CPU/12 GiB/no swap/512 task limits, aggregate
-host reserve, disk/growth floors, source/ownership/runtime checks, Scratch21 and
-all failed evidence. Stop at 97% included usage. Next review: 18:57:58 UTC.
+Preservation is accepted c88a63f7: 37 pairs, 74 descriptor records, 33 copies and
+four reuses in 0.559 seconds. Transport 0418e0ed passed four copies and fifteen
+inspections in 6.135 seconds. All four affinity machine paths are proven,
+including the valid inline form. Do not reopen those proofs or replay tools.
+
+Use the [five-minute velocity dashboard](VELOCITY-METRICS.md) to assess outcome
+rates, handoff latency, quota and observation coverage. At least seven postbuild
+harness failures/refusals explain avoidable rework; these are not kernel defects
+or completed checks. Keep complete authoritative descriptors and explicit source,
+work and stage namespaces. Derive actual argv from genuine stage data. Start a
+cheap real-image structural check while artifact analysis continues when its
+ordinary profile permits it; this grants no staging/guest authority.
+
+The private case-data constructor must freeze a result by 19:07:38 UTC or park
+with its concrete gap. It uses the existing format; no engine rewrite or automatic
+deployment. Keep it off the critical path. On subsequent necessary changes,
+prefer pinned callable engines with typed case data to per-case source generation.
+Measure preparation/review time before claiming improvement. Explicitly start
+ready completed owners with followup_task and verify activity; reuse existing
+completed reviews. Avoid generic audits and duplicated unchanged-file checks.
+
+Counters: 25 native behaviors, 17 production Rust paths, 11 applicable native
+Rust paths, 7 of 35 practical checks. All 14 milestones remain open; engineering
+bands are held. Usage 72%; stop at 97%, leaving 25 percentage points for the run.
+Host/scratch about 45.38/13.91 GiB. Keep current one-heavy 4 CPU/12 GiB/no swap/
+512 task limits, aggregate reserve, disk/growth floors, source/ownership/runtime
+checks, Scratch21 and every failure. More CPU/RAM is authorized when measured
+useful; change no active limits. Prior failed-case cleanup and approved scratch
+reserve are complete; repeat neither. Next review: 2026-10-19T19:31:00.299546Z.
 
 ## Previous priorities — review 70, 2026-10-19T11:59:02Z
 
