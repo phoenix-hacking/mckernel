@@ -441,8 +441,11 @@ pub(crate) unsafe extern "C" fn process_fork_owned_caller_current_v1(
         request_lifetime: PhantomData };
     (*out).error = match escaped.offload() {
         OwnedOffloadReturn::ReceiptObserved { owner, .. } => {
-            // A verified first receipt is not the missing terminal handoff.
-            drop(owner); EBUSY
+            // Consume the actual next selector2 producer with its separately
+            // owned request. This remains observation, never terminal handoff.
+            let mut observation=super::ControlObservation::ZERO;
+            let error=super::process_fork_guest_control_submit_current_v1(owner.handle(),&mut observation);
+            drop(owner); if error==0 { EBUSY } else { error }
         },
         OwnedOffloadReturn::Uncertain { owner, .. } => owner.error,
     };

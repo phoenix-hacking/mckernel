@@ -1,0 +1,189 @@
+{
+  "argv": [
+    "/usr/bin/env",
+    "-i",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "PATH=/usr/bin:/bin",
+    "LANG=C",
+    "LC_ALL=C",
+    "TZ=UTC",
+    "BASH_ENV=",
+    "ENV=",
+    "GNUMAKEFLAGS=",
+    "MAKEFILES=",
+    "MAKEFLAGS=",
+    "MAKEOVERRIDES=",
+    "MFLAGS=",
+    "LD_LIBRARY_PATH=",
+    "LD_PRELOAD=",
+    "HOME=/candidate/home",
+    "TMPDIR=/candidate/tmp",
+    "/usr/bin/make",
+    "-C",
+    "/out/source/linux-6.12.0-211.44.1.el10_2",
+    "O=/out/build",
+    "M=/candidate/modules",
+    "ARCH=x86_64",
+    "LLVM=1",
+    "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "--jobserver-style=pipe",
+    "-j2",
+    "modules"
+  ],
+  "cwd": "/out/build",
+  "environment": {
+    "BASH_ENV": "",
+    "ENV": "",
+    "GNUMAKEFLAGS": "",
+    "HOME": "/candidate/home",
+    "KBUILD_BUILD_HOST": "rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP": "Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER": "mckernel",
+    "KBUILD_BUILD_VERSION": "1",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "LD_LIBRARY_PATH": "",
+    "LD_PRELOAD": "",
+    "MAKEFILES": "",
+    "MAKEFLAGS": "",
+    "MAKEOVERRIDES": "",
+    "MFLAGS": "",
+    "PATH": "/usr/bin:/bin",
+    "SOURCE_DATE_EPOCH": "1786434034",
+    "TMPDIR": "/candidate/tmp",
+    "TZ": "UTC"
+  },
+  "timeout_seconds": 1800,
+  "read_only_mounts": [
+    "/out",
+    "/inputs"
+  ],
+  "writable_mounts": [
+    "/candidate"
+  ],
+  "all_three_modules_required": [
+    "ihk",
+    "ihk-smp-x86_64",
+    "mcctrl"
+  ],
+  "application_acceptance": false,
+  "execution_release": false,
+  "source_provenance": {
+    "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "source_candidate_sha": "4653021e24eb1b670eed44de67e45dfaf105521b749be9528009458288f9ded8",
+    "closure_sha256": "b9b29def2878b276bb5233c5092cb9cb8f9cb8eeba02efd0b0dd2e542f5718dd",
+    "closure_hash_encoding": "SHA256 of UTF-8 JSON relative-path-to-SHA256 map, sorted keys, separators comma/colon",
+    "reviewed_deltas": [
+      {
+        "path": "Kbuild",
+        "baseline_sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
+        "source_candidate_sha256": "7e38447e3c72f3fbaf0847b9010a7c76102a11c9bf826c71603e4ba072895750"
+      },
+      {
+        "path": "abi/application.rs",
+        "baseline_sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+        "source_candidate_sha256": "fd6381de7e0f0b08a11076b297e724445f87a5742843289d533a2ac75c49c6d7"
+      },
+      {
+        "path": "application_syscall.rs",
+        "baseline_sha256": "03007f44c020c5d0cf797b18568ef8b329fd5cb4e81abe80bb5c542b58020c25",
+        "source_candidate_sha256": "06d2ce8be9dde684d49ab7223a50cd2549334efbc7b8f0b8714825ba7af6ec3c"
+      },
+      {
+        "path": "ihk_smp_x86_64.rs",
+        "baseline_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+        "source_candidate_sha256": "56734fbfb9bfe9a2ce233999aa758d1fa3d574918c472ffe2cbfd9ac12f2076c"
+      },
+      {
+        "path": "mcctrl_process.rs",
+        "baseline_sha256": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+        "source_candidate_sha256": "d5ed9e63106d3ef860f6ca16799c3700bea937a9003bafb6d4f5acf3e5681a96"
+      },
+      {
+        "path": "mcctrl_rust.rs",
+        "baseline_sha256": null,
+        "source_candidate_sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030"
+      },
+      {
+        "path": "mcctrl_vm.rs",
+        "baseline_sha256": "83630dbe469466c7f69f51feb3a85438e2ae20049346b5e940d89d355f590ab3",
+        "source_candidate_sha256": "15fd3cc0c809a16045d8f4b4b4f8ca77e808c6b3259458aedcaecbe296e2f124"
+      },
+      {
+        "path": "mcctrl_vm_write_compat.c",
+        "baseline_sha256": null,
+        "source_candidate_sha256": "dcbe065ede329b51b41abcaf0563015532920fe6a34391c7bf77ed1c2f0abdf0"
+      },
+      {
+        "path": "mcctrl_vm_write_compat.h",
+        "baseline_sha256": null,
+        "source_candidate_sha256": "ff25bb43907149fc9303b0dd0a7db1c84b9fc2c6f49f1922f18ca9c32b57c527"
+      },
+      {
+        "path": "os_runtime.rs",
+        "baseline_sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+        "source_candidate_sha256": "a4d2489f7a810d1e618c6fe473d390e9bab205581b6c844e10a9a033c8e5e11f"
+      },
+      {
+        "path": "private_fork_carrier_request_20261017.rs",
+        "baseline_sha256": null,
+        "source_candidate_sha256": "97d2e03d0651c0570aae9a08ce8f442d1c3ef504b0b7640f556488e1689c72a6"
+      },
+      {
+        "path": "smp_application.rs",
+        "baseline_sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+        "source_candidate_sha256": "1b67465e9620ece6bcdacdf6e38e66b667e6ec392695891b6ffc2288bf96fc96"
+      },
+      {
+        "path": "smp_application_image.rs",
+        "baseline_sha256": "7fb8c862a1793ea4db6f90200adb9f78ee9b9b2abd9899b9ffd4671d647d7985",
+        "source_candidate_sha256": "914cf6b9dac1b4327a69656fd1ca14f5067ee98d47c909c4c952e5047199c34a"
+      },
+      {
+        "path": "smp_application_syscall.rs",
+        "baseline_sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55",
+        "source_candidate_sha256": "fce280eb8a9e898597a64cf082b4c088269c1e647d4d64767253abd3cb2abba6"
+      },
+      {
+        "path": "smp_fork_ingress.rs",
+        "baseline_sha256": null,
+        "source_candidate_sha256": "c88ce822511e091e47e36c4067c97e28323b14f12b5589f82ac23e2ff9096fc1"
+      },
+      {
+        "path": "smp_fork_link.rs",
+        "baseline_sha256": null,
+        "source_candidate_sha256": "dcbfae5a403b78d0993228a95fc37887bb59f2deb89eabc65d969a705ed738e3"
+      },
+      {
+        "path": "smp_memory.rs",
+        "baseline_sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+        "source_candidate_sha256": "b713cab756f8199700921cae94b32efd3979e9508be3ac738495273eb60b5b14"
+      },
+      {
+        "path": "smp_service.rs",
+        "baseline_sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+        "source_candidate_sha256": "6498f934079184c8c16eb9ee9b7c46e6071c6cd3b920e55a232bfb0f22cd3907"
+      },
+      {
+        "path": "sysfs_memory.rs",
+        "baseline_sha256": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81",
+        "source_candidate_sha256": "b7ed3edd82862f83948a0c705e279c090319b8306513150d5f08c03723087aa7"
+      }
+    ],
+    "compatibility_build_id": {
+      "path": "ihk-compat-build-id.bin",
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+      "meaning": "Retained baseline ABI compatibility blob; not proof of unchanged compiled source"
+    },
+    "excluded_working_tree": "Every unreviewed working-tree file excluded; exact66file retained fullcrate target plus R10; current-main integration/default activation excluded"
+  }
+}

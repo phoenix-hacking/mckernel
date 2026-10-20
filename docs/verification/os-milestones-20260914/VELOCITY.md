@@ -1,5 +1,30 @@
 # Tactical plan for faster verified OS progress
 
+Live update2026-10-20T04:22Z: whole M04 is now COMPLETE by independentd82180bd
+on its accepted declared application/regression profiles. Wholecomplete M00/M04/M10;
+checks14/35,26behaviors,17/14Rust unchanged. This recognizes existing evidence,
+not new current205 runtime; historical engineering90-95 band is not automatically
+rewritten. Raw new-run wholeclosure+1; one heterogeneous sample is no sustained
+4xengineering proof. Current metrics are in VELOCITY-WINDOW.json/MD.
+
+SDK retained artifacts independently acceptedef3a7487 after0.168sreadonly followup;
+original driverFAIL and warnings preserved. Diagnostic secondnativefailedround7
+pair_run/safetrue, no round7apps; physical801872bbaccepted. Captured rawlog318779B
+versus262144Bdiscovery cap supports visibility/refusal, exact originalbranch still
+unproven. Saved-byte reproducer and retained startup-proof correction pass14cases;
+independente3e4ccce keeps originalassignment identity, authenticatedround0routes,
+ordered-byte-subset/currentCPU/sysfs/ioctl checks and conflict/reorder/dup refusals.
+No newguest/4xthroughput acceptance yet. Continue stage/native withoutrebuild.
+
+Current77native+legacyRustcrate objects nowindependently acceptedb429d369 with
+physical1a45165c after32.06sowner. That frozenac009batch EXCLUDES newer callerpatch.
+Callertransfer sourcecompiled16tests, source0c926e7a, integratedactivationDISABLED,
+pushed/fetched50c17ac7. Next77Rust+1pinnedCcontext snapshot is prepared separately;
+fullkernel/link/native/default/ACK stillopen. NextRustsource lane fixes pending
+controlstate retaining a pointer to a stack request. Keep actual caller/lifetime
+implementation advancing; do not replace it with documentation or optional mocks.
+
+
 Persistent rules: whole join -> followup_task, even for a completed actor. Keep
 independent implementation/review ownership and small file handoffs. Reuse passed
 checks and exact accepted executors. Current quota is100%included/0reserve; actual

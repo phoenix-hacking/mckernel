@@ -1,3 +1,31 @@
+## Current — caller crate joined; corrected twenty-launch native next
+
+Caller78-manifest request28e1c7df complete native+legacy owner joined0 in
+32.6889128685s. Independent positive physical43eae5cb frees the heavy slot;
+object/source acceptance follows against immutable captures. Counts mean76Rust
+files+CMake+Ccallercontext; rustc does not compile that Ccontext. Earlier77
+snapshot objects independently pass b429d369/physical1a45165c. All warning
+streams remain retained, with no link/default/provider/native credit.
+
+Durable selector2 control-request source c820f875 is integrated after ownership
+review26d6ad51:4compiles+6new+16unchanged tests pass. Actual Carrier/PENDING
+owns the control allocation before publication and retains both transactions
+after uncertain returns. This newer source is NOT included in callercrate3.
+Macro/default activation, positive host taskMM/response/revoke/finalACK/native
+remain open. Source/evidence checkpoint50c17ac7 is pushed/fetched for prior
+caller code; the new two-file integration is included in this checkpoint.
+
+Collector route correction e3e4ccce passes14 actual cases and source review;
+remaining native n/errno were not observed, so exact original branch remains
+unproven. Fresh init-only stage+consumer17.98994s actualca838541 passes;
+archive metadata/oracles remain strict. Native author/reviewer bind physical
+43eae5cb and complete static argv/adapter checks before snapshot-last/release.
+No completed build/stage/workload is replayed. No20/4x acceptance yet.
+
+14/35checks; wholeM00/M04/M10 complete on declared accepted profiles;
+26behaviors/17productionRust/14nativeRust hold. Active100included/0reserve,
+no paid/API, oneheavy, source/resource/ownership controls and failures preserved.
+
 ## Current — whole-crate owner joined0; caller source integrated
 
 Frozen77-source ac009 native+legacy crate owner joined0 in32.058925867s;

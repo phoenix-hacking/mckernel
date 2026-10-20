@@ -40,12 +40,25 @@ impl ControlObservation {
     const ZERO:Self=Self{identity:GuestIdentity::ZERO,epoch:0,worker:0,delivery:0,
         response:0,state:IDLE,error:0};
 }
+// This owns the exact submitted control request allocation. No implicit Drop
+// frees a request whose publication/retirement may remain uncertain.
+struct ControlRequestSlot { request:NonNull<SyscallRequest> }
+impl ControlRequestSlot {
+    unsafe fn allocate()->Result<Self,i32>{
+        let raw=crate::mem_helpers::kmalloc(size_of::<SyscallRequest>() as i32,0).cast::<SyscallRequest>();
+        let request=NonNull::new(raw).ok_or(ENOMEM)?;
+        write(raw,SyscallRequest{rtid:0,ttid:0,valid:0,number:NR_CLONE,args:[0;6]});
+        Ok(Self{request})
+    }
+    unsafe fn free_private(self){crate::mem_helpers::kfree(self.request.as_ptr().cast());}
+}
 struct ControlPending {
+    owned_request:Option<ControlRequestSlot>,
     request:usize,thread:usize,cpu:i32,args:[u64;6],state:u32,error:i32,
     observation:ControlObservation,
 }
 impl ControlPending {
-    const ZERO:Self=Self{request:0,thread:0,cpu:0,args:[0;6],state:IDLE,error:0,
+    const ZERO:Self=Self{owned_request:None,request:0,thread:0,cpu:0,args:[0;6],state:IDLE,error:0,
         observation:ControlObservation::ZERO};
 }
 
@@ -234,24 +247,33 @@ pub(crate) unsafe extern "C" fn process_fork_guest_control_submit_current_v1(han
     if out.is_null(){return EINVAL;}
     let cls=crate::cls::get_this_cpu_local_var();if cls.is_null(){return EACCES;}
     let thread=(*cls).current;if thread.is_null(){return EACCES;}let cpu=(*thread).cpu_id;if cpu<0{return EACCES;}
-    let mut request=SyscallRequest{rtid:0,ttid:0,valid:0,number:NR_CLONE,args:[0;6]};
-    let address=addr_of_mut!(request)as usize;
+    let mut slot=match ControlRequestSlot::allocate(){Ok(slot)=>Some(slot),Err(error)=>return error};
+    let request=slot.as_ref().unwrap().request;
+    let address=request.as_ptr()as usize;
     let prepared=registry::visit(handle,|pointer|{
         let c=&mut*pointer.as_ptr();
         if c.handle!=handle||c.parent!=thread as usize||c.phase!=FIRST_POSITIVE
             ||!carrier_geometry(c,&c.identity)||c.control.state!=IDLE{return EBUSY;}
-        request.args=[2,c.identity.child_pid as u64,c.length,c.root,c.physical,MARKER];
-        c.control=ControlPending{request:address,thread:thread as usize,cpu,args:request.args,
+        (*request.as_ptr()).args=[2,c.identity.child_pid as u64,c.length,c.root,c.physical,MARKER];
+        c.control=ControlPending{owned_request:slot.take(),request:address,
+            thread:thread as usize,cpu,args:(*request.as_ptr()).args,
             state:PENDING,error:0,observation:ControlObservation::ZERO};0
     });
-    if prepared!=0{return prepared;}
+    if prepared!=0{
+        if let Some(slot)=slot{slot.free_private();}
+        else{drop(SubmitGuard{handle,armed:true});}
+        return prepared;
+    }
     let mut guard=SubmitGuard{handle,armed:true};
     // No registry guard or mutable Carrier reference survives into FFI. The
     // synchronous actual wait re-enters the observer with the SAME request.
-    let actual=do_syscall(addr_of_mut!(request),cpu);
+    // Carrier owns this allocation before PENDING and retains it on every
+    // observed/uncertain return, independently of this function's stack.
+    let actual=do_syscall(request.as_ptr(),cpu);
     let mut observation=ControlObservation::ZERO;
     let result=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();
-        if c.control.request!=address||c.control.thread!=thread as usize||c.control.cpu!=cpu{return EACCES;}
+        if c.control.request!=address||c.control.thread!=thread as usize||c.control.cpu!=cpu
+            ||c.control.owned_request.as_ref().is_none_or(|slot|slot.request!=request){return EACCES;}
         if actual!=0{return transport_error(actual);}
         if c.control.state!=OBSERVED{return if c.control.error!=0{c.control.error}else{EIO};}
         observation=c.control.observation;0

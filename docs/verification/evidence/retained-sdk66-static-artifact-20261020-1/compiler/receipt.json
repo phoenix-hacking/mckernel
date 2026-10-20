@@ -1,0 +1,609 @@
+{
+  "status": "FAIL",
+  "application_acceptance": false,
+  "production_acceptance": false,
+  "make_returncode": 0,
+  "preparation_sha256": "f642daedc6c3fbbb3b46b98860ca745e83856d258e8a36a225d31f8b987711ea",
+  "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+  "source_candidate_sha": "4653021e24eb1b670eed44de67e45dfaf105521b749be9528009458288f9ded8",
+  "source_sha256": {
+    "Kbuild": "7e38447e3c72f3fbaf0847b9010a7c76102a11c9bf826c71603e4ba072895750",
+    "Kconfig": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+    "abi/application.rs": "fd6381de7e0f0b08a11076b297e724445f87a5742843289d533a2ac75c49c6d7",
+    "abi/os_service.rs": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+    "abi/sysfs.rs": "63b25ac0df5fe3da4c0989196ea9e45e8d57b573e6e7603ca523452b2f19718e",
+    "abi/sysfs_request.rs": "df5fad1ef6ec305b71c56ea6a89c9ecbce7b089b95730ad591e09909e3ffd8c7",
+    "abi/vdso.rs": "d796e3a0723d6a21096a1455c35a7820437dfc2b99e5bb0e1c1f4db79f1c7d7d",
+    "abi/x86_64.rs": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+    "application_image.rs": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+    "application_pager.rs": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+    "application_rpc.rs": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+    "application_syscall.rs": "06d2ce8be9dde684d49ab7223a50cd2549334efbc7b8f0b8714825ba7af6ec3c",
+    "device_registry.rs": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
+    "ihk-compat-build-id.bin": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+    "ihk.rs": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+    "ihk_ioctl.rs": "60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e",
+    "ihk_mapping.rs": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+    "ihk_smp_x86_64.rs": "56734fbfb9bfe9a2ce233999aa758d1fa3d574918c472ffe2cbfd9ac12f2076c",
+    "ikc_master.rs": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+    "ikc_queue.rs": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+    "mcctrl.rs": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+    "mcctrl_exec.rs": "4ebf73c46cf12a05fc76b078fbfcf218190dd372b335f886123125a012ae26b0",
+    "mcctrl_process.rs": "d5ed9e63106d3ef860f6ca16799c3700bea937a9003bafb6d4f5acf3e5681a96",
+    "mcctrl_rust.rs": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+    "mcctrl_vm.rs": "15fd3cc0c809a16045d8f4b4b4f8ca77e808c6b3259458aedcaecbe296e2f124",
+    "mcctrl_vm_write_compat.c": "dcbe065ede329b51b41abcaf0563015532920fe6a34391c7bf77ed1c2f0abdf0",
+    "mcctrl_vm_write_compat.h": "ff25bb43907149fc9303b0dd0a7db1c84b9fc2c6f49f1922f18ca9c32b57c527",
+    "os_registry.rs": "b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6",
+    "os_runtime.rs": "a4d2489f7a810d1e618c6fe473d390e9bab205581b6c844e10a9a033c8e5e11f",
+    "os_service.rs": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+    "page_allocator.rs": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5",
+    "page_owner_registry.rs": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869",
+    "private_fork_carrier_request_20261017.rs": "97d2e03d0651c0570aae9a08ce8f442d1c3ef504b0b7640f556488e1689c72a6",
+    "procfs_objects.rs": "4d1247a87706e94fa75d7bea667d9349d48b7c525eba99d02688a87f5369411c",
+    "smp_application.rs": "1b67465e9620ece6bcdacdf6e38e66b667e6ec392695891b6ffc2288bf96fc96",
+    "smp_application_image.rs": "914cf6b9dac1b4327a69656fd1ca14f5067ee98d47c909c4c952e5047199c34a",
+    "smp_application_syscall.rs": "fce280eb8a9e898597a64cf082b4c088269c1e647d4d64767253abd3cb2abba6",
+    "smp_boot_code.rs": "0f94af32383cc6e6108e0203619642eef0e492286131dac4b35d5e1248564a7f",
+    "smp_cpu.rs": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb",
+    "smp_file_pager.rs": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+    "smp_fork_ingress.rs": "c88ce822511e091e47e36c4067c97e28323b14f12b5589f82ac23e2ff9096fc1",
+    "smp_fork_link.rs": "dcbfae5a403b78d0993228a95fc37887bb59f2deb89eabc65d969a705ed738e3",
+    "smp_ikc.rs": "4d1cd859dbea602f8232095fc66dd4d337848ea61ad94436da191fb316628b03",
+    "smp_image.rs": "4f35ec396494fa428c55298c91ffe14aa0142d0282dd37d922f94a901a692689",
+    "smp_loader.rs": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+    "smp_memory.rs": "b713cab756f8199700921cae94b32efd3979e9508be3ac738495273eb60b5b14",
+    "smp_procfs.rs": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+    "smp_resource.rs": "d4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd",
+    "smp_service.rs": "6498f934079184c8c16eb9ee9b7c46e6071c6cd3b920e55a232bfb0f22cd3907",
+    "smp_startup.rs": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+    "smp_startup_entry.S": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+    "smp_topology.rs": "6d925fa50279e7eca938fd5b9d0b2a73105ef875793623024c681f40d70d08e6",
+    "smp_trampoline.S": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+    "smp_trampoline.rs": "4a110936d52a80664943b5dd605fbf9ad1c99460fe8ff0a16327ca015d2d0bcb",
+    "smp_vdso.rs": "dd94d677c97b0c3271c746f1795289fdaadff89e1c08a660bd7659b14466d488",
+    "sysfs_memory.rs": "b7ed3edd82862f83948a0c705e279c090319b8306513150d5f08c03723087aa7",
+    "sysfs_objects.rs": "2b04c57b43516550f0c3bdaf115b667d4a64393030494e79b553248c42aa7453",
+    "sysfs_os.rs": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+    "sysfs_remote.rs": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+    "sysfs_rpc.rs": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+    "sysfs_setup.rs": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+    "sysfs_snoop.rs": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+    "sysfs_tree.rs": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+    "sysfs_zeroing.rs": "950919a29ab2fb53b0c488cc6e6d01b433f8caa95b27d1a1f32fb0ff3dc8390e",
+    "user_string.rs": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+    "zero_pages.rs": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def"
+  },
+  "source_provenance": {
+    "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+    "source_candidate_sha": "4653021e24eb1b670eed44de67e45dfaf105521b749be9528009458288f9ded8",
+    "closure_sha256": "b9b29def2878b276bb5233c5092cb9cb8f9cb8eeba02efd0b0dd2e542f5718dd",
+    "closure_hash_encoding": "SHA256 of UTF-8 JSON relative-path-to-SHA256 map, sorted keys, separators comma/colon",
+    "reviewed_deltas": [
+      {
+        "path": "Kbuild",
+        "baseline_sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3",
+        "source_candidate_sha256": "7e38447e3c72f3fbaf0847b9010a7c76102a11c9bf826c71603e4ba072895750"
+      },
+      {
+        "path": "abi/application.rs",
+        "baseline_sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+        "source_candidate_sha256": "fd6381de7e0f0b08a11076b297e724445f87a5742843289d533a2ac75c49c6d7"
+      },
+      {
+        "path": "application_syscall.rs",
+        "baseline_sha256": "03007f44c020c5d0cf797b18568ef8b329fd5cb4e81abe80bb5c542b58020c25",
+        "source_candidate_sha256": "06d2ce8be9dde684d49ab7223a50cd2549334efbc7b8f0b8714825ba7af6ec3c"
+      },
+      {
+        "path": "ihk_smp_x86_64.rs",
+        "baseline_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+        "source_candidate_sha256": "56734fbfb9bfe9a2ce233999aa758d1fa3d574918c472ffe2cbfd9ac12f2076c"
+      },
+      {
+        "path": "mcctrl_process.rs",
+        "baseline_sha256": "148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70",
+        "source_candidate_sha256": "d5ed9e63106d3ef860f6ca16799c3700bea937a9003bafb6d4f5acf3e5681a96"
+      },
+      {
+        "path": "mcctrl_rust.rs",
+        "baseline_sha256": null,
+        "source_candidate_sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030"
+      },
+      {
+        "path": "mcctrl_vm.rs",
+        "baseline_sha256": "83630dbe469466c7f69f51feb3a85438e2ae20049346b5e940d89d355f590ab3",
+        "source_candidate_sha256": "15fd3cc0c809a16045d8f4b4b4f8ca77e808c6b3259458aedcaecbe296e2f124"
+      },
+      {
+        "path": "mcctrl_vm_write_compat.c",
+        "baseline_sha256": null,
+        "source_candidate_sha256": "dcbe065ede329b51b41abcaf0563015532920fe6a34391c7bf77ed1c2f0abdf0"
+      },
+      {
+        "path": "mcctrl_vm_write_compat.h",
+        "baseline_sha256": null,
+        "source_candidate_sha256": "ff25bb43907149fc9303b0dd0a7db1c84b9fc2c6f49f1922f18ca9c32b57c527"
+      },
+      {
+        "path": "os_runtime.rs",
+        "baseline_sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+        "source_candidate_sha256": "a4d2489f7a810d1e618c6fe473d390e9bab205581b6c844e10a9a033c8e5e11f"
+      },
+      {
+        "path": "private_fork_carrier_request_20261017.rs",
+        "baseline_sha256": null,
+        "source_candidate_sha256": "97d2e03d0651c0570aae9a08ce8f442d1c3ef504b0b7640f556488e1689c72a6"
+      },
+      {
+        "path": "smp_application.rs",
+        "baseline_sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+        "source_candidate_sha256": "1b67465e9620ece6bcdacdf6e38e66b667e6ec392695891b6ffc2288bf96fc96"
+      },
+      {
+        "path": "smp_application_image.rs",
+        "baseline_sha256": "7fb8c862a1793ea4db6f90200adb9f78ee9b9b2abd9899b9ffd4671d647d7985",
+        "source_candidate_sha256": "914cf6b9dac1b4327a69656fd1ca14f5067ee98d47c909c4c952e5047199c34a"
+      },
+      {
+        "path": "smp_application_syscall.rs",
+        "baseline_sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55",
+        "source_candidate_sha256": "fce280eb8a9e898597a64cf082b4c088269c1e647d4d64767253abd3cb2abba6"
+      },
+      {
+        "path": "smp_fork_ingress.rs",
+        "baseline_sha256": null,
+        "source_candidate_sha256": "c88ce822511e091e47e36c4067c97e28323b14f12b5589f82ac23e2ff9096fc1"
+      },
+      {
+        "path": "smp_fork_link.rs",
+        "baseline_sha256": null,
+        "source_candidate_sha256": "dcbfae5a403b78d0993228a95fc37887bb59f2deb89eabc65d969a705ed738e3"
+      },
+      {
+        "path": "smp_memory.rs",
+        "baseline_sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+        "source_candidate_sha256": "b713cab756f8199700921cae94b32efd3979e9508be3ac738495273eb60b5b14"
+      },
+      {
+        "path": "smp_service.rs",
+        "baseline_sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+        "source_candidate_sha256": "6498f934079184c8c16eb9ee9b7c46e6071c6cd3b920e55a232bfb0f22cd3907"
+      },
+      {
+        "path": "sysfs_memory.rs",
+        "baseline_sha256": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81",
+        "source_candidate_sha256": "b7ed3edd82862f83948a0c705e279c090319b8306513150d5f08c03723087aa7"
+      }
+    ],
+    "compatibility_build_id": {
+      "path": "ihk-compat-build-id.bin",
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+      "meaning": "Retained baseline ABI compatibility blob; not proof of unchanged compiled source"
+    },
+    "excluded_working_tree": "Every unreviewed working-tree file excluded; exact66file retained fullcrate target plus R10; current-main integration/default activation excluded"
+  },
+  "error": "ValueError: MM provider D/U mismatch: mcctrl_rust.o:mckernel_inherited_mmap_write_lock",
+  "retained_files": {
+    "..module-common.o.cmd": {
+      "sha256": "695f6a7dd0e07ee5515c519ccd4cfb133459b98432b27f8370a6d2396e3c2760",
+      "bytes": 69610
+    },
+    ".Module.symvers.cmd": {
+      "sha256": "d51df6f479e04662a155e1fd23c7b33c55a0bb1c4708d10701bea9c40ba09fa5",
+      "bytes": 174
+    },
+    ".ihk-smp-x86_64.ko.cmd": {
+      "sha256": "7ddc80a757107121cae37d848dc841a804933b9ee5f2e7b704347d1bc41c3c60",
+      "bytes": 279
+    },
+    ".ihk-smp-x86_64.mod.cmd": {
+      "sha256": "0da0a5795dd94ac689493589a4c6a50c133f391112fe7a7d4afd99aef0ee1a26",
+      "bytes": 177
+    },
+    ".ihk-smp-x86_64.mod.o.cmd": {
+      "sha256": "68039fd437b4d6e9f98a5afa3d5383d12e3c7ee9c4081132779301a6fb49f17d",
+      "bytes": 68076
+    },
+    ".ihk-smp-x86_64.o.cmd": {
+      "sha256": "145c08396f301a4c4fe176d5fc54ac67e44437fd6f433600a5a452a454c5b895",
+      "bytes": 465
+    },
+    ".ihk.ko.cmd": {
+      "sha256": "d8529a57c2845927a9cb2d9a0957280e1d79b155fb90899600db9e89a9eebbf8",
+      "bytes": 235
+    },
+    ".ihk.mod.cmd": {
+      "sha256": "2c938c6eda63eb12eb739db444c4bf0d1b9583b90f72a605394fa1bbb1a5e7e3",
+      "bytes": 144
+    },
+    ".ihk.mod.o.cmd": {
+      "sha256": "8adaa5885313848bf11e7bf99df6671c4396a1a0e71241bc60fe0e4bd0c7a2e6",
+      "bytes": 67933
+    },
+    ".ihk.o.cmd": {
+      "sha256": "fe3319e019ceb141a534092e29014bf4bf817b34072d5848813e5ebe810c8b44",
+      "bytes": 2598
+    },
+    ".ihk_smp_x86_64.o.cmd": {
+      "sha256": "7da662dc3cf24d93fbe768c3f3d69b35649d0adaae6f70622575aaff1dd7725f",
+      "bytes": 4246
+    },
+    ".mcctrl.ko.cmd": {
+      "sha256": "a0f003a30ccae9f4266a68140755c1878ba7f5cb1bb62b8959c430753e14055c",
+      "bytes": 247
+    },
+    ".mcctrl.mod.cmd": {
+      "sha256": "2b0a64c2e59e088ed176ccdb0a80a0177254769685a5f2e7850f19d223634f1e",
+      "bytes": 183
+    },
+    ".mcctrl.mod.o.cmd": {
+      "sha256": "40c350bc7f1809fce0f9f63e50f55c681fa9d3fa59e90fc2da00b895ded7fd0b",
+      "bytes": 67972
+    },
+    ".mcctrl.o.cmd": {
+      "sha256": "48b2b0090374effdc46b4ca404992be7e313f2654221fc07d0966d4845d911b8",
+      "bytes": 425
+    },
+    ".mcctrl_rust.o.cmd": {
+      "sha256": "0c8fe7db98cd716b7e85f061304ea29e14e2e728144002b1b2a4ab65e3f91064",
+      "bytes": 2221
+    },
+    ".mcctrl_vm_write_compat.o.cmd": {
+      "sha256": "b1969fb33d9065595f84fec475d6525a4027f1ce0cafb26da2e1b699f3b4a43c",
+      "bytes": 66430
+    },
+    ".module-common.o": {
+      "sha256": "4705cc63feab14d0d90dccf2a4d0b2b4d839760fa4d2da17a315eabfa2047fa7",
+      "bytes": 4896
+    },
+    ".modules.order.cmd": {
+      "sha256": "ee24a3a2aa444ff05ad428556f59c61fa2e72821cb64b6cb4a0ad7ea5d31a50d",
+      "bytes": 200
+    },
+    "Kbuild": {
+      "sha256": "7e38447e3c72f3fbaf0847b9010a7c76102a11c9bf826c71603e4ba072895750",
+      "bytes": 502
+    },
+    "Kconfig": {
+      "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+      "bytes": 848
+    },
+    "Module.symvers": {
+      "sha256": "972d9a7b93f09949dece25f6ad873dfcc62d38ff5c2b76bef709102f79ddb148",
+      "bytes": 3957
+    },
+    "abi/application.rs": {
+      "sha256": "fd6381de7e0f0b08a11076b297e724445f87a5742843289d533a2ac75c49c6d7",
+      "bytes": 16033
+    },
+    "abi/os_service.rs": {
+      "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+      "bytes": 2527
+    },
+    "abi/sysfs.rs": {
+      "sha256": "63b25ac0df5fe3da4c0989196ea9e45e8d57b573e6e7603ca523452b2f19718e",
+      "bytes": 3393
+    },
+    "abi/sysfs_request.rs": {
+      "sha256": "df5fad1ef6ec305b71c56ea6a89c9ecbce7b089b95730ad591e09909e3ffd8c7",
+      "bytes": 9082
+    },
+    "abi/vdso.rs": {
+      "sha256": "d796e3a0723d6a21096a1455c35a7820437dfc2b99e5bb0e1c1f4db79f1c7d7d",
+      "bytes": 17839
+    },
+    "abi/x86_64.rs": {
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "bytes": 19740
+    },
+    "application_image.rs": {
+      "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+      "bytes": 8356
+    },
+    "application_pager.rs": {
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "bytes": 3196
+    },
+    "application_rpc.rs": {
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "bytes": 10080
+    },
+    "application_syscall.rs": {
+      "sha256": "06d2ce8be9dde684d49ab7223a50cd2549334efbc7b8f0b8714825ba7af6ec3c",
+      "bytes": 19623
+    },
+    "device_registry.rs": {
+      "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
+      "bytes": 60221
+    },
+    "ihk-compat-build-id.bin": {
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+      "bytes": 8
+    },
+    "ihk-smp-x86_64.ko": {
+      "sha256": "9171256698256662c60b54464d05517c56f6657e5804ba476f2213f26e27c64e",
+      "bytes": 13820328
+    },
+    "ihk-smp-x86_64.mod": {
+      "sha256": "b1f07507318d34fd2d1058c85371a5e25be09e49407fb514218183c09c0856e6",
+      "bytes": 36
+    },
+    "ihk-smp-x86_64.mod.c": {
+      "sha256": "3e6b32a083f6f01d01cd8f8404e43eca0671ed7ed37a59a50554c090eb1e0d2f",
+      "bytes": 463
+    },
+    "ihk-smp-x86_64.mod.o": {
+      "sha256": "9d637d10fff9ecb5b4a0049e0392b404226fb1101baa45d79d2159df50969b12",
+      "bytes": 147168
+    },
+    "ihk-smp-x86_64.o": {
+      "sha256": "87cadea86aec5765d183aa2df7d77f23ec4d31aed6a25d3c76a1a678e2664fdd",
+      "bytes": 13758400
+    },
+    "ihk.ko": {
+      "sha256": "023b8098f58e68a0c1d80c9cfcfaa91ba57d48b13740b161d89f5b8c1556dccf",
+      "bytes": 2368072
+    },
+    "ihk.mod": {
+      "sha256": "c71e3ea72a8a71a4409045158a5d35d25e4fff03f27dbd515c5a23115bd55534",
+      "bytes": 25
+    },
+    "ihk.mod.c": {
+      "sha256": "f1182f3f97823efcfb61c16d1617f1d465ad1ee05c80bc97ac1ab5d020870244",
+      "bytes": 3377
+    },
+    "ihk.mod.o": {
+      "sha256": "2d6c372320b50b4c6052ab6625fa9e913fd46c3f9bedf5e73f326c5c61091ac5",
+      "bytes": 168464
+    },
+    "ihk.o": {
+      "sha256": "41a774f76914c8677486ff603aef0d307014e5a7c88489e57688efc74bb31ace",
+      "bytes": 2264776
+    },
+    "ihk.rs": {
+      "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+      "bytes": 18754
+    },
+    "ihk_ioctl.rs": {
+      "sha256": "60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e",
+      "bytes": 10467
+    },
+    "ihk_mapping.rs": {
+      "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+      "bytes": 21943
+    },
+    "ihk_smp_x86_64.o": {
+      "sha256": "3613b58f61129ab18f585a5fc89d53d5e67b0e2ae14e9ecd99e52e6dd73aeec8",
+      "bytes": 13410840
+    },
+    "ihk_smp_x86_64.rs": {
+      "sha256": "56734fbfb9bfe9a2ce233999aa758d1fa3d574918c472ffe2cbfd9ac12f2076c",
+      "bytes": 42937
+    },
+    "ikc_master.rs": {
+      "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+      "bytes": 26480
+    },
+    "ikc_queue.rs": {
+      "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      "bytes": 23030
+    },
+    "mcctrl.ko": {
+      "sha256": "c3ca5052aa93e129702c21cf5ac9adf1831d516327f749c068faa55a951f5716",
+      "bytes": 2171208
+    },
+    "mcctrl.mod": {
+      "sha256": "5dde494c7ae2b6c69aa8b7c087b8893660b23e7e24a4a2fa64cd71591fa1cbc4",
+      "bytes": 77
+    },
+    "mcctrl.mod.c": {
+      "sha256": "8b3fc3fb3cab05642152af5267f2347b4809db84cdee12b83f15509dc4bb7095",
+      "bytes": 463
+    },
+    "mcctrl.mod.o": {
+      "sha256": "38190f97ff61572cac0f004cddd361f3335b29184ed55bf98e9efc4db39d4c56",
+      "bytes": 147128
+    },
+    "mcctrl.o": {
+      "sha256": "e634ae994d932bb7bc1ffba8bffc8b5dae794dc76f53ca450b954758c61202dc",
+      "bytes": 2063008
+    },
+    "mcctrl.rs": {
+      "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      "bytes": 8992
+    },
+    "mcctrl_exec.rs": {
+      "sha256": "4ebf73c46cf12a05fc76b078fbfcf218190dd372b335f886123125a012ae26b0",
+      "bytes": 8718
+    },
+    "mcctrl_process.rs": {
+      "sha256": "d5ed9e63106d3ef860f6ca16799c3700bea937a9003bafb6d4f5acf3e5681a96",
+      "bytes": 77258
+    },
+    "mcctrl_rust.o": {
+      "sha256": "c095dfb09ea5cb40f73968fc4c55e4b00271da06ff9bbfb6e74fce7d5182060a",
+      "bytes": 1899264
+    },
+    "mcctrl_rust.rs": {
+      "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      "bytes": 8992
+    },
+    "mcctrl_vm.rs": {
+      "sha256": "15fd3cc0c809a16045d8f4b4b4f8ca77e808c6b3259458aedcaecbe296e2f124",
+      "bytes": 37272
+    },
+    "mcctrl_vm_write_compat.c": {
+      "sha256": "dcbe065ede329b51b41abcaf0563015532920fe6a34391c7bf77ed1c2f0abdf0",
+      "bytes": 480
+    },
+    "mcctrl_vm_write_compat.h": {
+      "sha256": "ff25bb43907149fc9303b0dd0a7db1c84b9fc2c6f49f1922f18ca9c32b57c527",
+      "bytes": 368
+    },
+    "mcctrl_vm_write_compat.o": {
+      "sha256": "ed1caaa49604b422af6bca7f89b748a73eac7209df3f3f6abebf9525d9f352dd",
+      "bytes": 134400
+    },
+    "modules.order": {
+      "sha256": "37dd7f929aa1b93bd6fedd148ddd2849c000bf5ff9d8b66676c70602e60d3801",
+      "bytes": 89
+    },
+    "os_registry.rs": {
+      "sha256": "b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6",
+      "bytes": 30435
+    },
+    "os_runtime.rs": {
+      "sha256": "a4d2489f7a810d1e618c6fe473d390e9bab205581b6c844e10a9a033c8e5e11f",
+      "bytes": 187331
+    },
+    "os_service.rs": {
+      "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+      "bytes": 6907
+    },
+    "page_allocator.rs": {
+      "sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5",
+      "bytes": 21301
+    },
+    "page_owner_registry.rs": {
+      "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869",
+      "bytes": 13085
+    },
+    "private_fork_carrier_request_20261017.rs": {
+      "sha256": "97d2e03d0651c0570aae9a08ce8f442d1c3ef504b0b7640f556488e1689c72a6",
+      "bytes": 1984
+    },
+    "procfs_objects.rs": {
+      "sha256": "4d1247a87706e94fa75d7bea667d9349d48b7c525eba99d02688a87f5369411c",
+      "bytes": 19245
+    },
+    "smp_application.rs": {
+      "sha256": "1b67465e9620ece6bcdacdf6e38e66b667e6ec392695891b6ffc2288bf96fc96",
+      "bytes": 96170
+    },
+    "smp_application_image.rs": {
+      "sha256": "914cf6b9dac1b4327a69656fd1ca14f5067ee98d47c909c4c952e5047199c34a",
+      "bytes": 20044
+    },
+    "smp_application_syscall.rs": {
+      "sha256": "fce280eb8a9e898597a64cf082b4c088269c1e647d4d64767253abd3cb2abba6",
+      "bytes": 31954
+    },
+    "smp_boot_code.rs": {
+      "sha256": "0f94af32383cc6e6108e0203619642eef0e492286131dac4b35d5e1248564a7f",
+      "bytes": 2024
+    },
+    "smp_cpu.rs": {
+      "sha256": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb",
+      "bytes": 67220
+    },
+    "smp_file_pager.rs": {
+      "sha256": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+      "bytes": 13864
+    },
+    "smp_fork_ingress.rs": {
+      "sha256": "c88ce822511e091e47e36c4067c97e28323b14f12b5589f82ac23e2ff9096fc1",
+      "bytes": 21415
+    },
+    "smp_fork_link.rs": {
+      "sha256": "dcbfae5a403b78d0993228a95fc37887bb59f2deb89eabc65d969a705ed738e3",
+      "bytes": 50011
+    },
+    "smp_ikc.rs": {
+      "sha256": "4d1cd859dbea602f8232095fc66dd4d337848ea61ad94436da191fb316628b03",
+      "bytes": 12886
+    },
+    "smp_image.rs": {
+      "sha256": "4f35ec396494fa428c55298c91ffe14aa0142d0282dd37d922f94a901a692689",
+      "bytes": 14324
+    },
+    "smp_loader.rs": {
+      "sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+      "bytes": 3194
+    },
+    "smp_memory.rs": {
+      "sha256": "b713cab756f8199700921cae94b32efd3979e9508be3ac738495273eb60b5b14",
+      "bytes": 116637
+    },
+    "smp_procfs.rs": {
+      "sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+      "bytes": 27574
+    },
+    "smp_resource.rs": {
+      "sha256": "d4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd",
+      "bytes": 133271
+    },
+    "smp_service.rs": {
+      "sha256": "6498f934079184c8c16eb9ee9b7c46e6071c6cd3b920e55a232bfb0f22cd3907",
+      "bytes": 58967
+    },
+    "smp_startup.rs": {
+      "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+      "bytes": 4963
+    },
+    "smp_startup_entry.S": {
+      "sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+      "bytes": 1350
+    },
+    "smp_topology.rs": {
+      "sha256": "6d925fa50279e7eca938fd5b9d0b2a73105ef875793623024c681f40d70d08e6",
+      "bytes": 11189
+    },
+    "smp_trampoline.S": {
+      "sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+      "bytes": 3650
+    },
+    "smp_trampoline.rs": {
+      "sha256": "4a110936d52a80664943b5dd605fbf9ad1c99460fe8ff0a16327ca015d2d0bcb",
+      "bytes": 5709
+    },
+    "smp_vdso.rs": {
+      "sha256": "dd94d677c97b0c3271c746f1795289fdaadff89e1c08a660bd7659b14466d488",
+      "bytes": 6664
+    },
+    "sysfs_memory.rs": {
+      "sha256": "b7ed3edd82862f83948a0c705e279c090319b8306513150d5f08c03723087aa7",
+      "bytes": 34142
+    },
+    "sysfs_objects.rs": {
+      "sha256": "2b04c57b43516550f0c3bdaf115b667d4a64393030494e79b553248c42aa7453",
+      "bytes": 13988
+    },
+    "sysfs_os.rs": {
+      "sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+      "bytes": 2451
+    },
+    "sysfs_remote.rs": {
+      "sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+      "bytes": 8287
+    },
+    "sysfs_rpc.rs": {
+      "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+      "bytes": 6833
+    },
+    "sysfs_setup.rs": {
+      "sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+      "bytes": 12683
+    },
+    "sysfs_snoop.rs": {
+      "sha256": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+      "bytes": 5515
+    },
+    "sysfs_tree.rs": {
+      "sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+      "bytes": 12276
+    },
+    "sysfs_zeroing.rs": {
+      "sha256": "950919a29ab2fb53b0c488cc6e6d01b433f8caa95b27d1a1f32fb0ff3dc8390e",
+      "bytes": 12023
+    },
+    "user_string.rs": {
+      "sha256": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+      "bytes": 603
+    },
+    "zero_pages.rs": {
+      "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+      "bytes": 4354
+    }
+  }
+}
