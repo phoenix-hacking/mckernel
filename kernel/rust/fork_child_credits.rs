@@ -5,6 +5,7 @@
 //! A checked extra parent Thread reference pins storage only. Dropping any
 //! owner deliberately retains its obligations, without locking or freeing.
 use core::marker::PhantomData;
+use core::mem::size_of;
 use core::ptr::{addr_of_mut, NonNull};
 use core::sync::atomic::{AtomicI32, Ordering};
 use crate::abi::{Process, ProcessVm, SyscallRequest, Thread};
@@ -98,12 +99,34 @@ impl ChildCredits {
     }
 }
 
+/// Owns the storage of the exact initial request, independently of the C
+/// caller's stack or the parent Thread pin. No implicit Drop frees this slot.
+/// It is either freed after private cancellation, or retained in the Carrier.
+pub(crate) struct ForkRequestSlot { request: NonNull<SyscallRequest> }
+impl ForkRequestSlot {
+    unsafe fn allocate(flags: u64, start: u64, length: u64, root: u64) -> Result<Self, i32> {
+        if matches!(flags, 1 | 2 | 3) || !super::geometry(root, start, length) {
+            return Err(EINVAL);
+        }
+        let raw = crate::mem_helpers::kmalloc(size_of::<SyscallRequest>() as i32, 0)
+            .cast::<SyscallRequest>();
+        let request = NonNull::new(raw).ok_or(super::ENOMEM)?;
+        // This is the original request, initialized in its retained allocation;
+        // no existing/borrowed request is copied or later replaced for offload.
+        core::ptr::write(raw, SyscallRequest { rtid: 0, ttid: 0, valid: 0,
+            number: NR_CLONE, args: [flags, start, length, root, 0, 0] });
+        Ok(Self { request })
+    }
+    unsafe fn free_private(self) { crate::mem_helpers::kfree(self.request.as_ptr().cast()); }
+}
+
 #[must_use]
 pub(crate) struct PrivateFork<'request> {
     handle: Handle,
     request: NonNull<SyscallRequest>,
     original_args: [u64; 6],
     credits: Option<ChildCredits>,
+    request_storage: Option<ForkRequestSlot>,
     retained: bool,
     request_lifetime: PhantomData<&'request mut SyscallRequest>,
 }
@@ -132,13 +155,36 @@ impl<'request> PrivateFork<'request> {
     pub(crate) unsafe fn create(
         request: &'request mut SyscallRequest, credits: ChildCredits,
     ) -> Result<Self, CreateFailure> {
-        let original_args = request.args;
+        Self::create_raw(NonNull::from(request), credits, None)
+    }
+
+    /// Normal-fork caller preparation: request bytes originate in owned heap
+    /// storage, which follows the SAME request into the Carrier before begin.
+    /// The lifetime parameter borrows no caller storage and no reference escapes.
+    /// All child-credit constructor premises of `create` still apply.
+    pub(crate) unsafe fn create_owned(
+        credits: ChildCredits, flags: u64, start: u64, length: u64, root: u64,
+    ) -> Result<Self, CreateFailure> {
+        let slot = match ForkRequestSlot::allocate(flags, start, length, root) {
+            Ok(slot) => slot, Err(error) => return Err(CreateFailure { error, credits }),
+        };
+        Self::create_raw(slot.request, credits, Some(slot))
+    }
+
+    unsafe fn create_raw(
+        request: NonNull<SyscallRequest>, credits: ChildCredits,
+        request_storage: Option<ForkRequestSlot>,
+    ) -> Result<Self, CreateFailure> {
+        let original_args = request.as_ref().args;
         let mut handle = Handle::EMPTY;
         let error = super::process_fork_guest_carrier_create_current_v1(
-            request, credits.parent.as_ptr(), credits.child.as_ptr(), &mut handle);
-        if error != 0 { return Err(CreateFailure { error, credits }); }
-        Ok(Self { handle, request: NonNull::from(request), original_args,
-            credits: Some(credits), retained: false, request_lifetime: PhantomData })
+            request.as_ptr(), credits.parent.as_ptr(), credits.child.as_ptr(), &mut handle);
+        if error != 0 {
+            if let Some(slot) = request_storage { slot.free_private(); }
+            return Err(CreateFailure { error, credits });
+        }
+        Ok(Self { handle, request, original_args, credits: Some(credits), request_storage,
+            retained: false, request_lifetime: PhantomData })
     }
 
     unsafe fn validate(&self, carrier: &Carrier) -> bool {
@@ -148,7 +194,9 @@ impl<'request> PrivateFork<'request> {
             && carrier.parent == credits.parent.as_ptr() as usize
             && carrier.child == credits.child.as_ptr() as usize
             && carrier.request == self.request.as_ptr() as usize
-            && carrier.owned_credits.is_none() && request.number == NR_CLONE
+            && carrier.owned_credits.is_none() && carrier.owned_request.is_none()
+            && self.request_storage.as_ref().is_none_or(|slot| slot.request == self.request)
+            && request.number == NR_CLONE
             && request.args == carrier.initial_args
     }
 
@@ -178,7 +226,10 @@ impl<'request> PrivateFork<'request> {
         // The validation above proves this current-parent release cannot be a
         // last-reference destructor; no child/process/VM/CPU credit is changed.
         match credits.cancel_unpublished() {
-            Ok(returned) => Ok(returned),
+            Ok(returned) => {
+                if let Some(slot) = self.request_storage.take() { slot.free_private(); }
+                Ok(returned)
+            },
             Err(credits) => {
                 self.credits = Some(credits);
                 self.retained = true;
@@ -194,6 +245,7 @@ impl<'request> PrivateFork<'request> {
         let rc = registry::visit(self.handle, |mut pointer| {
             if !self.validate(pointer.as_ref()) { return EACCES; }
             pointer.as_mut().owned_credits = self.credits.take();
+            pointer.as_mut().owned_request = self.request_storage.take();
             0
         });
         if rc != 0 {
@@ -243,6 +295,7 @@ impl EscapedFork<'_> {
                 || local.is_null() || (*local).current != credits.parent.as_ptr()
                 || c.parent != credits.parent.as_ptr() as usize
                 || c.child != credits.child.as_ptr() as usize
+                || c.owned_request.as_ref().is_some_and(|slot| slot.request != self.request)
                 || c.cpu < 0 || (*credits.parent.as_ptr()).cpu_id != c.cpu
                 || !credits.still_private() || c.phase != super::SUBMITTED
                 || c.error != 0 || self.request.as_ref().number != NR_CLONE

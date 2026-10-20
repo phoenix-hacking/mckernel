@@ -1,3 +1,24 @@
+## Current — real SDK build feedback and owned request storage
+
+SDK make completed0 and produced all3modules. Frozen driver FAIL remains:
+Rust-leaf import expectation was U1 for every MM wrapper, actual vector is0/1/0;
+C/composite/final definitions are unique/U0. Positive CREATE_PPD/MM consumer
+paths are deliberately unselected. Actuallaterartifact gates remain pending;
+separate remaining-only read-only validation is prepared, not a rebuild.
+Physicalc253218d passes15clients/42groups/CID/record retirement.
+
+Current Rust owned-request allocation/retention is integrated after independent
+2ee769b1:2compiles,6newtests and4unchanged borrowed-API tests passed. Together
+withfd236/898a primitive+ownedoffload it retains actual request/child/VM/CPU
+storage after publication uncertainty. Normal Ccaller/cleanup replacement,
+new fullnative+legacy crate/link/default/provider/task-MM/revoke/ACK/native
+proof are still pending. Source-only checkpoint is not a retired live path.
+
+Diagnostic init stage/consumer313459d8 passes; freshnativecase/sourcepreparation
+continues against same tested205 modules, latestexclusivepredecessorc253218d.
+No unchanged failed20replay. Literal14/35,M00/M10 complete, behaviors26 and
+selectedRust17/14 hold. Newmanual100included/0reserve is active; no paid/API.
+
 ## Current manual run — source integrated, SDK compiler inputs ready
 
 Invocation20261020T033802 uses verified100% included allowance/0%reserve,
