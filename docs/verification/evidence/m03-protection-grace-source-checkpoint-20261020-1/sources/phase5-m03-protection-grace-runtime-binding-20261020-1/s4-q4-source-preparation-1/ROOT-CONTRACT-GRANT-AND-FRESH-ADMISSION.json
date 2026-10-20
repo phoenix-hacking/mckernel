@@ -1,0 +1,170 @@
+{
+  "CPU6_pinned_userspace_conflicts": [],
+  "CPU6_stable_PF_KTHREAD_exclusions": [
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "cpuhp/6",
+      "flags": 69238848,
+      "pid": 49,
+      "start": "14"
+    },
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "idle_inject/6",
+      "flags": 69238848,
+      "pid": 50,
+      "start": "14"
+    },
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "migration/6",
+      "flags": 69238848,
+      "pid": 51,
+      "start": "14"
+    },
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "ksoftirqd/6",
+      "flags": 69238848,
+      "pid": 52,
+      "start": "14"
+    },
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "kworker/6:0H-events_highpri",
+      "flags": 69238880,
+      "pid": 54,
+      "start": "14"
+    },
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "kworker/6:1H-events_highpri",
+      "flags": 69238880,
+      "pid": 229,
+      "start": "66"
+    },
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "kworker/6:0-events_freezable",
+      "flags": 69238880,
+      "pid": 2113535,
+      "start": "30818515"
+    },
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "kworker/6:2-events",
+      "flags": 69238880,
+      "pid": 2157251,
+      "start": "31439902"
+    },
+    {
+      "affinity": [
+        6
+      ],
+      "comm": "kworker/6:1-events",
+      "flags": 69238880,
+      "pid": 2177249,
+      "start": "31731021"
+    }
+  ],
+  "MemAvailable_bytes": 28823068672,
+  "admitted": true,
+  "capacity": {
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1": {
+      "available_bytes": 43724185600,
+      "minimum_bytes": 18887655424
+    },
+    "/home/holden/mckernel-work/scratch": {
+      "available_bytes": 14153932800,
+      "minimum_bytes": 14026801152
+    }
+  },
+  "created_epoch": 1792519910.017466,
+  "exact_outer_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/run_contract_checks_once.py"
+  ],
+  "exact_two_commands": [
+    [
+      "/home/holden/anaconda3/bin/python3.9",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/check_contract_actual_caller.py",
+      "positive"
+    ],
+    [
+      "/home/holden/anaconda3/bin/python3.9",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/check_contract_actual_caller.py",
+      "changed_report_mode"
+    ]
+  ],
+  "fresh_outputs": [
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/contract-check-capture-1",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/contract-check-outer-capture-1",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/ACTUAL-CONTRACT-CHECKS-CLOSED-HANDOFF.json"
+  ],
+  "kernel_thread_mask": 2097152,
+  "proposal": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/CONTRACT-CHECK-PROPOSAL.json",
+    "sha256": "584ef69d08abbc3cb015718e3eab5ccf9602b54c7dcaf7eb4554eb992e209594",
+    "size": 4152
+  },
+  "review": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/S4-Q4-WHOLE-SOURCE-TWO-CONTRACT-CHECK-ORDINARY-REVIEW-CORRECTED.json",
+    "sha256": "f88a8233941d7834076eff12bd3df764b7c2e4435ab56924821465c8401d6cb2",
+    "size": 9657
+  },
+  "root_grant": "One exact wrapper for two no-effect actual-LASTcaller positive/changedmodeidentity vectors under f88 review; at most once, no otherCPU6grant until positive join; no main/root/exec/socket/Popen calls in child vectors.",
+  "runtime_source_pins_checked": 203,
+  "schema": "mckernel.S4-contract-two-check-root-grant-fresh-admission.v1",
+  "scratch_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+  "service": {
+    "limitPercent": 100,
+    "phase": "running",
+    "purchased_API_billing_forbidden": true,
+    "stop_reason": null,
+    "usedPercent": 33
+  },
+  "source_freeze": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/S4-Q4-SOURCE-FREEZE.json",
+    "sha256": "3ce819188bdb2bd4a1c34c428ca52b027e85a640c5f12f8b1b1cdd2f619b0829",
+    "size": 10424
+  },
+  "source_rows_checked": 25
+}

@@ -1,3 +1,26 @@
+## Current — Exit7 LAST schema refusal preserved; whole-caller correction in progress
+
+Exit7 S3/Q3 source was committed/pushed/fetched in 6f668c82 (124 files).
+Its final19 passed, but the one root7 invocation stopped at LAST before live
+collection or native effects: KeyError actual_owner_clock_or_backend_effects.
+The genuine ea768 report uses clocks_or_host_effects and checked whole/join/wait
+receipts. Independent pre-effect retirement ae8d39c0 preserves this failure;
+62ba remains the latest native physical predecessor. No guest ran in this attempt.
+
+The retained author owns one whole-interface correction and four actual-caller
+positive/refusal checks under conditional review73828013. Fresh S5/Q5 outputs
+remain unrun. The M03 S4 consumer already uses genuine ebd6 fact names: no source
+correction is justified. Its full-static-joins check source5ab7200e is ready for
+publication, then genuine final19 bindings and ordinary checks before privilege.
+Both accepted grace stages/normalizations, apps, kernel and modules are reused.
+
+One-time128MiB growth user approval is retained at manual-reset-resume receipt
+SCRATCH128-USER-APPROVAL-20261020T181435Z.json. Mutation remains blocked by the
+current higher-priority invocation no-resize instruction; preparation only.
+Two private Rust regression lanes cover real worker delivery isolation and
+finalACK uncertainty retention; no default/native or ACK credit is inferred.
+Counts remain15/35, wholeM00/M04/M10,27 native behaviors,Rust17/14.
+
 ## Current — both grace stages/normalizations accepted; Exit7 publishes first
 
 Accepted collector source b338/static37b3 keeps the existing five-second grace,

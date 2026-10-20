@@ -1,0 +1,20 @@
+--- /home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-delta-20261020-1/runtime-next-preparation-1/expert-correction-1/runtime-source-1/native_diagnostic_runner.py
++++ /home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/runtime-source-1/native_diagnostic_runner.py
+@@ -46,7 +46,7 @@
+ 
+ def _runtime():
+     """Load source-local modules lazily, keeping import side effects absent."""
+-    diagnostic = _module("native_diagnostic_runner_diagnostic", _HERE / "native_diagnostic.py")
++    diagnostic = _module("native_diagnostic_runner_diagnostic", Path('/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/native_diagnostic.py'))
+     backend = _backend_module()
+     return diagnostic, backend
+ 
+@@ -96,7 +96,7 @@
+     # Share the lifecycle's total conversion, including CLI errors before
+     # runtime loading. Loading this source-local module has no runtime effects.
+     try:
+-        diagnostic = _module("native_diagnostic_runner_failure", _HERE / "native_diagnostic.py")
++        diagnostic = _module("native_diagnostic_runner_failure", Path('/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/native_diagnostic.py'))
+         return diagnostic.failure_text(exc)
+     except BaseException:
+         return "<exception metadata unavailable>"
