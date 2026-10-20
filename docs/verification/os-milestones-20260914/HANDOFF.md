@@ -1,3 +1,39 @@
+## Current — twenty strict launches accepted; current-v6 provider compiler next
+
+Independent c20d9480 + physical0ddf5181 accept10rounds/20 real app launches.
+Matching outer owner69.736821965s against frozen2/44.160327 yields6.332426x
+applications per owner second, exceeding4x. Closed feedback04:38:43.353223Z;
+final static confirmation to whole closed result152.939s. This is not overall
+engineering speed. No new distinct behaviors, Rust paths or literal checks;
+14/35checks,wholeM00/M04/M10 complete,26behaviors,Rust17production/14native.
+M12 final-profile2boots/10cycles/100launches/60minute mixed budget remains open.
+
+Durable guest control sourcec5f114d3 is pushed/fetched; fullnative+legacy
+batch4 requestf1cdf64b owner joined0/31.502804s. Independent objects c542a3c5
+and positive physical efeac6bc accept exact78-source snapshot only. Actual
+completion04:49:04.250879Z; parent readback04:50:57.114641Z gives112.864s upper
+bound on completion-to-review-notification (reviewer was woken before readback).
+Short subsequent compiler observations should be awaited through terminal return.
+
+Primary functional blocker P-M06-01: current-v6 nonnull CREATE_PPD returns-95
+before real child adoption. Private phase1 current-v6 route is approved7185bd4e
+for source/compiler investigation only; real61-source SDK preparation d63a8f8b
+and runtime11 e241f82f pass. Exact97 consumed publication rows are included in
+this checkpoint for fetched proof, then canonical release/fresh admission/actual
+SDK compiler. This is current-v6, not the held66 fork-v2 source. No activation.
+
+Private phase2 adds real coupled VMA transfer/seal/Registration source, but
+review found final per-VMA owner drop may invoke cleanup under MM teardown;
+ordinary mmap paths also change despite fork gatefalse. Integration/runtime is
+HELD for a real lifetime/deferred-release correction and actual kernel ABI/link.
+It is NOT part of frozen61 compiler candidate. Backend child inherited-root and
+worker readiness, positive parent RETURN/MCFKW receipt, alias revoke/finalACK,
+and genuine current guest producer strong-prepare/root/childCPU remain missing.
+Source expert continues concrete fixes; no invented ACK or native fork replay.
+
+100%included/0reserve; no paid/API. Preserve all failed source/observer/export
+attempts, Scratch21, mutex27:4, source/ownership and one-heavy resource controls.
+
 ## Current — caller crate joined; corrected twenty-launch native next
 
 Caller78-manifest request28e1c7df complete native+legacy owner joined0 in

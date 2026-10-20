@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=256",
+    "--fsize=33554432",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/owned-caller-fullcrate-3/prepare_dirty_source.py"
+  ],
+  "pid": 1827983,
+  "start": 26742120,
+  "returncode": 0,
+  "direct_child_joined": true,
+  "process_group_absent": true,
+  "elapsed_seconds": 0.058760881423950195,
+  "compiler_started": false
+}

@@ -1,0 +1,97 @@
+"""Finite evidence export. No workloads, root reads, binaries or catalog replay."""
+from pathlib import Path
+import gzip,hashlib,io,json,os,resource,stat,tarfile,time
+O=Path(__file__).resolve().parent
+H=Path('/home/holden/mckernel-work/host-preparation');B=H/'current-host-pair-205-launch-expansion-20261020-1';N=B/'failure-diagnostic-1';C=N/'route-proof-correction-1';D=C/'stage-preparation-1';Q=D/'native-packet-1';R=H/'current-host-pair-205-launch-expansion-diagnostic-semantic-review-20261020-1';P=H/'current-host-pair-205-launch-expansion-physical-review-20261020-1';P2=P/'route-proof-correction-1';R0=B/'failure-diagnostic-1-independent-review'
+assert os.geteuid()==1000 and os.sched_getaffinity(0)=={7}
+assert resource.getrlimit(resource.RLIMIT_AS)==(1<<30,1<<30) and resource.getrlimit(resource.RLIMIT_CPU)==(30,30) and resource.getrlimit(resource.RLIMIT_FSIZE)==(32<<20,32<<20)
+state=json.loads(Path('/home/holden/mckernel/.git/os-autopilot/state.json').read_text());assert state['phase']=='running' and state.get('stop_reason') is None and state['last_rate_limits']['primary']['usedPercent']<100
+for path,floor in [(O,16*(1<<30)),(Path('/home/holden/mckernel-work/scratch'),12*(1<<30))]:
+ s=os.statvfs(path);assert s.f_bavail*s.f_frsize>=floor+(640<<20)+(64<<20)
+mem=int(next(x.split()[1] for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')))*1024;assert mem>=2<<30
+fields=('st_dev','st_ino','st_uid','st_gid','st_mode','st_nlink','st_size','st_mtime_ns','st_ctime_ns')
+def ref(p):
+ p=Path(p);b=p.read_bytes();return dict(path=str(p),sha256=hashlib.sha256(b).hexdigest(),bytes=len(b))
+def write_json(p,v):
+ with p.open('x') as f:json.dump(v,f,sort_keys=True,indent=2);f.write('\n')
+semantic=R/'ACTUAL-TWENTY-LAUNCH-NATIVE-SEMANTIC-AND-THROUGHPUT-REVIEW.json';physical=P2/'ACTUAL-CORRECTED-TWENTY-LAUNCH-PHYSICAL-RETIREMENT-REVIEW.json'
+assert ref(semantic)['sha256']=='c20d9480191b8c4e19a59e667fe73840def9a396ac91ffd281cfac981970fb79'
+assert ref(physical)['sha256']=='0ddf5181e3cbb55fd033563eeff91ab6fc2fb2b0243306d02cf3a67372a639cb'
+expected={}
+def gather(v):
+ if isinstance(v,dict):
+  if isinstance(v.get('path'),str) and isinstance(v.get('sha256'),str) and len(v['sha256'])==64:expected.setdefault(v['path'],v)
+  for x in v.values():gather(x)
+ elif isinstance(v,list):
+  for x in v:gather(x)
+for directory in [R,P,P2,R0]:
+ for p in directory.glob('*.json'):gather(json.loads(p.read_bytes()))
+manifest0=json.loads((D/'stage-launches-1/manifest.json').read_bytes());gather(manifest0)
+selected={};binary_descriptors=[]
+def select_tree(root,label,skip_native=False):
+ for p in sorted(root.rglob('*')):
+  if not p.is_file() or p.is_symlink() or '__pycache__' in p.parts:continue
+  rel=p.relative_to(root)
+  if skip_native and 'native-packet-1' in rel.parts:continue
+  if p.name=='lifecycle.cpio.gz' or p.name in ('collector','original','corrected','body','actual-body','collector-launch-expansion','pair-init-0755'):
+   row=expected.get(str(p))
+   if row is None:row=ref(p)
+   binary_descriptors.append({'role':'descriptor_only_not_copied','ref':row});continue
+  selected[str(p)]=(p,label+'/'+str(rel))
+select_tree(C,'route-proof-correction')
+for root,label in [(N/'candidate','failure-diagnostic-source'),(N/'fixtures','failure-diagnostic-fixtures'),(N/'check-1','failure-diagnostic-check-1'),(N/'check-2','failure-diagnostic-check-2'),(N/'actual-failure-triage-1','original-diagnostic-failed-inputs'),(B/'candidate','original-failed20-source')]:select_tree(root,label)
+for p in N.iterdir():
+ if p.is_file():selected[str(p)]=(p,'failure-diagnostic-preparation/'+p.name)
+select_tree(N/'stage-preparation-1/ordinary-chain-capture-1','failure-diagnostic-ordinary-captures')
+for p in (N/'stage-preparation-1').iterdir():
+ if p.is_file() and p.suffix in ('.py','.json'):selected[str(p)]=(p,'failure-diagnostic-stage-preparation/'+p.name)
+for p in (N/'stage-preparation-1/stage-launches-1').iterdir():
+ if p.is_file() and p.suffix=='.json':selected[str(p)]=(p,'failure-diagnostic-stage-descriptors/'+p.name)
+for directory,label in [(R,'independent-semantic'),(P2,'independent-physical-accepted'),(R0,'independent-diagnostic-failure'),(P,'independent-original20-failure')]:
+ for p in directory.iterdir():
+  if p.is_file() and p.suffix in ('.json','.md','.py'):selected[str(p)]=(p,label+'/'+p.name)
+for p in [B/'FROZEN-LAUNCH-ORACLE.json',B/'ACTUAL-OFFLINE-HANDOFF.json',B/'ORIGINAL-SOURCE-REFS.json']:
+ selected[str(p)]=(p,'original-authority/'+p.name)
+for name in ['app0.rs','app1.rs']:
+ p=H/'evening-two-app-batch-20261019-1'/name;selected[str(p)]=(p,'application-sources/'+name)
+# Failed archives stay exactly referenced; accepted archive bytes are selected
+# above from their already-closed ordinary readable capture files.
+failed=[]
+for directory,prefix in [(P,'root-readback-'),(R0,'DIAGNOSTIC-FAILURE-READBACK-')]:
+ rows=[]
+ for i in range(1,4):
+  status=json.loads((directory/(prefix+str(i)+'.status.json')).read_bytes())
+  if 'inner_status' in status:status=json.loads(Path(status['inner_status']).read_bytes())
+  row=status['streams']['stdout'];assert 'path' in row and 'sha256' in row and 'metadata' in row;rows.append(row)
+ failed.append({'role':'original_failed_attempt_full_archives_retained_at_exact_refs','archives':rows})
+for field in ('artifacts','staging'):
+ for role,row in manifest0[field].items():
+  if isinstance(row,dict) and 'path' in row:binary_descriptors.append({'role':role,'ref':row})
+for row in manifest0['modules']:binary_descriptors.append({'role':'tested205_module','ref':row})
+for row in manifest0['pair']['apps']:binary_descriptors.append({'role':'unchanged_Rust_application_payload','ref':row['payload']})
+start=time.monotonic();copied=[];archive=O/'evidence.tar.gz'
+class Reader:
+ def __init__(self,f):self.f=f;self.h=hashlib.sha256();self.n=0
+ def read(self,n=-1):
+  b=self.f.read(n);self.h.update(b);self.n+=len(b);return b
+with archive.open('xb') as af,gzip.GzipFile(filename='',mode='wb',fileobj=af,mtime=0,compresslevel=6) as gz,tarfile.open(fileobj=gz,mode='w|') as tar:
+ for p,member in selected.values():
+  fd=os.open(p,os.O_RDONLY|os.O_CLOEXEC|os.O_NOFOLLOW)
+  with os.fdopen(fd,'rb') as f:
+   before=os.fstat(f.fileno());assert stat.S_ISREG(before.st_mode) and before.st_size<=32<<20
+   info=tarfile.TarInfo(member);info.size=before.st_size;info.mode=stat.S_IMODE(before.st_mode);info.uid=before.st_uid;info.gid=before.st_gid;info.mtime=int(before.st_mtime)
+   reader=Reader(f);tar.addfile(info,reader);after=os.fstat(f.fileno());named=p.lstat();assert all(getattr(before,k)==getattr(after,k)==getattr(named,k) for k in fields) and reader.n==before.st_size
+   digest=reader.h.hexdigest();authority=expected.get(str(p))
+   if authority:assert digest==authority['sha256'] and authority.get('bytes',authority.get('size',reader.n))==reader.n
+   copied.append(dict(source=str(p),member=member,sha256=digest,bytes=reader.n,mode=oct(info.mode)))
+ # Serial and result are exported only from the accepted immutable archive and
+ # direct closed result readback, never by opening protected live attempt paths.
+ with tarfile.open(Q/'captures/06-readback-3/stdout','r:') as source:
+  source_member=source.getmember('./serial.log');assert source_member.isfile();stream=source.extractfile(source_member);data=stream.read();assert len(data)==source_member.size
+ serial_authority=json.loads(semantic.read_bytes())['serial'];assert hashlib.sha256(data).hexdigest()==serial_authority['sha256'] and len(data)==serial_authority['bytes']
+ for name,data,source_desc in [('accepted/serial.log',data,serial_authority),('accepted/result.json',(Q/'captures/05-readback-2/stdout').read_bytes(),json.loads(semantic.read_bytes())['actual_result'])]:
+  info=tarfile.TarInfo(name);info.size=len(data);info.mode=0o600;tar.addfile(info,io.BytesIO(data));copied.append(dict(source=source_desc,member=name,sha256=hashlib.sha256(data).hexdigest(),bytes=len(data),mode='0o600'))
+assert archive.stat().st_size<32<<20
+manifest={'schema':'mckernel.retained-accepted-twenty-launch-evidence-export.v1','scope':'Accepted tested205 functional application infrastructure;20 strict real apps, measured6.332426077885669x outer-owner baseline throughput. No new logical OS behavior or compute-C retirement credit.','source_semantic_acceptance':ref(semantic),'source_physical_acceptance':ref(physical),'archive':ref(archive),'files':copied,'descriptor_only_artifacts':binary_descriptors,'original_failed_attempts':failed,'input_correction_and_refusal_history_preserved':True,'stage_kernel_module_binaries_copied':False,'full_toolchain_catalog_replayed_or_rehashed':False,'guest_runs_by_exporter':0,'elapsed_seconds':time.monotonic()-start,'exporter':ref(Path(__file__))}
+write_json(O/'manifest.json',manifest)
+print(json.dumps({'files':len(copied),'bytes':sum(x['bytes'] for x in copied),'manifest_sha256':ref(O/'manifest.json')['sha256']}))

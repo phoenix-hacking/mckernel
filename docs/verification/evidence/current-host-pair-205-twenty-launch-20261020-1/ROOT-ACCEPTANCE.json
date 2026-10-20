@@ -1,0 +1,38 @@
+{
+  "schema": "mckernel.root-supported-profile-twenty-launch-acceptance.v1",
+  "decision": "ACCEPT_EXACT_SUPPORTED_PROFILE_EXECUTION_AND_POSITIVE_PHYSICAL_RETIREMENT",
+  "created_utc": "2026-10-20T04:54:43.974110+00:00",
+  "independent_reviews": [
+    {
+      "path": "docs/verification/evidence/current-host-pair-205-twenty-launch-20261020-1/ACTUAL-TWENTY-LAUNCH-NATIVE-SEMANTIC-AND-THROUGHPUT-REVIEW.json",
+      "sha256": "c20d9480191b8c4e19a59e667fe73840def9a396ac91ffd281cfac981970fb79",
+      "size": 15853
+    },
+    {
+      "path": "docs/verification/evidence/current-host-pair-205-twenty-launch-20261020-1/ACTUAL-CORRECTED-TWENTY-LAUNCH-PHYSICAL-RETIREMENT-REVIEW.json",
+      "sha256": "0ddf5181e3cbb55fd033563eeff91ab6fc2fb2b0243306d02cf3a67372a639cb",
+      "size": 23246
+    }
+  ],
+  "successful_real_application_launches": 20,
+  "rounds": 10,
+  "owner_wall_seconds": 69.7368219649943,
+  "frozen_baseline": {
+    "launches": 2,
+    "owner_wall_seconds": 44.160327
+  },
+  "applications_per_owner_second_ratio": 6.332426077885669,
+  "target_4x_met": true,
+  "new_distinct_behaviors": 0,
+  "new_production_rust_paths": 0,
+  "new_native_rust_paths": 0,
+  "new_literal_checks": 0,
+  "whole_goal_acceptance": false,
+  "limits": [
+    "Generic diagnostic flags remain unchanged; no broad formal qualification or default-provider activation.",
+    "Exact declared image/module/stage/profile only; no implicit reuse against a future changed SDK.",
+    "M12 final-profile 2 boots/10 cycles/100 launches/60-minute mixed workload remains open.",
+    "Application throughput is not overall engineering throughput.",
+    "Both original failed attempts and export refusal remain preserved."
+  ]
+}

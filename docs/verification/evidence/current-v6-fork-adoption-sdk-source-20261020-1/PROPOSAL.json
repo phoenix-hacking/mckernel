@@ -1,0 +1,111 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/prepare_fullmodule_inputs.py"
+      ],
+      "source": {
+        "bytes": 6795,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/prepare_fullmodule_inputs.py",
+        "sha256": "9530643b8e237001b3dbec7457c242a99b173378643ffb5148a4b3f6fa69290c"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/materialize_request.py",
+        "--materialize"
+      ],
+      "source": {
+        "bytes": 3383,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/materialize_request.py",
+        "sha256": "d97f7b1cc821447e3df39d023b8caa34ae99e1f1cb832fa0b914f5ac390e6396"
+      }
+    }
+  ],
+  "compiler_executed": false,
+  "counts": {
+    "copy_rows": 76,
+    "runtime": 11,
+    "source": 61
+  },
+  "default_activation": false,
+  "fresh_namespace": {
+    "candidate": "/home/holden/mckernel-work/scratch/nsd-c-4a4ba51b41e540a7b6fe5370713d5448",
+    "evidence": "/home/holden/mckernel-work/scratch/nsd-o-4a4ba51b41e540a7b6fe5370713d5448",
+    "inputs": "/home/holden/mckernel-work/scratch/nsd-i-4a4ba51b41e540a7b6fe5370713d5448",
+    "nonce": "4a4ba51b41e540a7b6fe5370713d5448"
+  },
+  "functional_scope": "Functional supported OS/apps plus active Rust/reviewed assembly compute cutover; full SDK compile feedback only",
+  "heavy_profile": {
+    "cpu_count": 4,
+    "cpus": "2-5",
+    "jobserver": "pipe",
+    "make_jobs": 2,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "network": "none",
+    "one_heavy": true,
+    "pids_limit": 512
+  },
+  "heavy_recipe_reused_from": "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/ORDINARY-CHAIN-PROPOSAL.json",
+  "held66_sources_mixed": false,
+  "materialization_executed": false,
+  "ordinary_profile": {
+    "address_space_bytes": 1073741824,
+    "core_bytes": 0,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "grace_seconds": 2,
+    "jobs": 1,
+    "stream_bytes": 33554432,
+    "wall_seconds": 35
+  },
+  "release_prerequisites": [
+    "Current-v6 route independent source review",
+    "Exact preparation/driver/owner adaptation independent source review",
+    "Root fresh CPU6/floors/UUID/pins/namespace admission for two ordinary commands",
+    "Actual61/76/11 request acceptance and source publication/fetch",
+    "Fresh sole-heavy/resource/physical predecessor binding and canonical one-time compiler release"
+  ],
+  "schema": "mckernel.current-v6-route-sdk-preparation-proposal.v1",
+  "sdk_dependency_questions": [
+    "current_fork_task_mm.rs real Linux bindings get_current/get_task_pid/get_pid_task/get_task_mm/put_task_struct/mmput/__mmdrop and nested mm_count layout",
+    "current_fork_task_mm.rs prelude EOVERFLOW availability; earlier held SDK compiler rejected this constant, no silent fix applied"
+  ],
+  "source_plan": {
+    "bytes": 23221,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/SOURCE-PLAN.json",
+    "sha256": "fa81c613887b23b9b29535975f78410e33a245b7e28a36ec03af1b90e772eb86"
+  },
+  "status": "SOURCE_ONLY_PROPOSAL_UNRUN"
+}
