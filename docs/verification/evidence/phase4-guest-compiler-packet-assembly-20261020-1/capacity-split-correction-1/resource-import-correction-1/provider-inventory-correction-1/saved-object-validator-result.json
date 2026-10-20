@@ -1,0 +1,102 @@
+{
+  "actual_saved_object": {
+    "actual_relocatable_link_proof": false,
+    "bytes": 13094728,
+    "elf_class": 64,
+    "elf_data": "little",
+    "exact_boundary_symbols": {
+      "clone_thread": {
+        "defined_functions": 0,
+        "undefined": 1
+      },
+      "process_fork_cancel_constructed_current_v1": {
+        "defined_functions": 1,
+        "undefined": 0
+      },
+      "process_fork_construct_current_v1": {
+        "defined_functions": 1,
+        "undefined": 0
+      },
+      "process_fork_guest_carrier_begin_current_v1": {
+        "defined_functions": 1,
+        "undefined": 0
+      },
+      "process_fork_guest_carrier_cancel_current_v1": {
+        "defined_functions": 1,
+        "undefined": 0
+      },
+      "process_fork_guest_carrier_create_current_v1": {
+        "defined_functions": 1,
+        "undefined": 0
+      },
+      "process_fork_guest_carrier_retain_current_v1": {
+        "defined_functions": 1,
+        "undefined": 0
+      },
+      "process_fork_guest_control_submit_current_v1": {
+        "defined_functions": 1,
+        "undefined": 0
+      },
+      "process_fork_owned_caller_current_v1": {
+        "defined_functions": 1,
+        "undefined": 0
+      },
+      "process_fork_owned_caller_current_v2": {
+        "defined_functions": 1,
+        "undefined": 0
+      },
+      "release_cpuid": {
+        "defined_functions": 1,
+        "undefined": 0
+      },
+      "release_process_checked": {
+        "defined_functions": 1,
+        "undefined": 0
+      },
+      "release_process_vm_checked": {
+        "defined_functions": 1,
+        "undefined": 0
+      },
+      "release_thread_checked": {
+        "defined_functions": 1,
+        "undefined": 0
+      }
+    },
+    "machine": 62,
+    "path": "/home/holden/mckernel-work/host-preparation/phase4-guest-compiler-packet-assembly-20261020-1/capacity-split-correction-1/resource-import-correction-1/work/output/build/current-guest-control-fullcrate-1/native-mckernel_rust.o [saved validator selection native-mckernel_rust.o]",
+    "section_count": 4101,
+    "sha256": "3d39b4561722c1d0b4eef4a81e9c17806180ec92e6f5a478adddd8013200951e",
+    "symbol_presence_is_activation": false,
+    "type": "ET_REL"
+  },
+  "compiler_executed": false,
+  "linked_artifact_acceptance": false,
+  "negative_controls": [
+    {
+      "case": "release_cpuid undefined",
+      "refused": true
+    },
+    {
+      "case": "clone_thread wrongly defined",
+      "refused": true
+    },
+    {
+      "case": "Rust object cannot stand in for C provider",
+      "refused": true
+    },
+    {
+      "case": "duplicate release_cpuid provider",
+      "refused": true
+    }
+  ],
+  "nm_witnesses": {
+    "clone_thread": [
+      "                 U clone_thread"
+    ],
+    "release_cpuid": [
+      "0000000000000000 T release_cpuid"
+    ]
+  },
+  "source_mutation": false,
+  "status": "PASS"
+}

@@ -1,3 +1,32 @@
+## Latest compiler feedback — whole native Rust PASS; inventory expectation corrected next
+
+Root actual fresh guest compiler owner returned1/17.391955s, direct child joined,
+process group absent, observer_error null (start1792481976.095021,
+finish1792481993.4869754). First real native whole Rust compile returned0/14.414044s
+and produced native-mckernel_rust.o. Driver then refused release_cpuid D1/U0 against
+its incorrect U1 expectation; legacy Rust and three actual C compiles never ran.
+Frozen sched_helpers.rs exports release_cpuid; real selected process.c command
+sets MCKERNEL_RUST_PROCESS_HELPERS, disabling its C fallback. No kernel source or
+compiler repair is needed for this failure. Original request/object/diagnostics
+stay preserved; saved-object/provider-negative validation and new genuine authority
+precede remaining execution. Independent physical330aa6e3 accepts13clients,
+container removal and3record retirement; latest exclusive predecessor is330aa6e3. No final
+link/default/native child or full five-object acceptance follows from this prefix.
+
+The corrected inventory passes the saved actual native object; four refusal
+controls pass with the duplicate control explicitly not isolated from a missing-
+constructor predicate. Fresh full-five request uses existing driver shape because
+no remaining-only mode exists; no custom adoption protocol is introduced. Frozen
+phase5 source independently passes eda1c6be for compiler investigation only, with
+C/Rust FAM offsets, libc child-TID and runtime lifetime integration holds intact.
+
+The accepted HOST66 twenty-app evidence and fourteen-row import correction were
+pushed/fetched5e3a4b5e. Real import entrypoint probe passed before root execution.
+Private phase5 libc fork producer is now exactly bound:0x01200011 includes
+CHILD_SETTID/CLEARTID; the earlier SIGCHLD17-only admission cannot serve the retained
+app. A separate Rust child-TID/prepublication/exit-clear correction is in progress;
+prior runtime candidate/review stays frozen. Counts and activation holds unchanged.
+
 ## Current — HOST66 strict twenty accepted; actual guest compiler next
 
 HOST66 matched three-module normal ABI/collector guest is independently accepted:
