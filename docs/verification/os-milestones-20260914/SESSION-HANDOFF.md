@@ -1,3 +1,24 @@
+## Current — cleanup quarantined before plan; exact holder retirement in review
+
+Failure cleanup holds permanent27:4 and transaction mutex1828:116137 after a
+Refusal. Independent44305e1 proves only transaction mutex/quarantine creation:
+plan,journal,both archives and Docker-log capture absent; original common/shared,
+stopped CID and protected4+570 inventories remain intact. No root signal or
+record/container release has occurred. Exact PID/start-bound holder retirement
+is being reviewed; it grants no unlink or next-heavy clearance by itself.
+Original tool91614 remains unjoined until that controlled retirement.
+
+Rust source repair shipped/fetched1cc1d2fc. Actual fresh6959 materialization and
+binder passed[0,0]/10.126s; parser/proof probe passed ten refusals including both
+actual old panic references. Source672181a8/runtime6c92d139/static0b8555ab accept
+one fresh-workspace object/nm/image route. Actual repaired compile/link/image
+remain unproved; no heavy launch before real physical prerequisites.
+M03 actual normalization/fullargv d426c5a7 passes188paths/34ROroots/QMP101B on
+its separate tested HOST66 tuple. Target P-M03-01 uses strict73B invalid-protect
+and data-preservation oracle. Child-run/exit/wait targets P-M06-01 after genuine
+matching image/modules. All runtime releases/snapshots remain pending.
+Counts15/35,whole3,26behaviors,17/14Rust held;100% included/zero reserve.
+
 ## Current — checked Rust link repair integrated; production relink remains
 
 Independent36a9132f accepts four exact Rust sources, four syntax checks and four

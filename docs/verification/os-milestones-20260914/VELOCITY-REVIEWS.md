@@ -6578,3 +6578,7 @@ No criterion, milestone, native-behavior or Rust-path uplift. Added accepted M03
 ## Review 104 — 2026-10-20T10:58:24.166859+00:00
 
 No formal/native/Rust-path uplift. Corrected three-module SDK and physical retirement accepted; twelve-file Rust/Kbuild patch integrated default OFF. Two M03 infrastructure candidates accepted; real staging/native pending. Leading counts 29 candidates, 19 compiler batches, two native batches. Image final execution packet is under review. SDK packet-to-owner 172.416s, finish-to-physical 111.471s, finish-to-artifacts 459.160s. Prior active guidance: /home/holden/mckernel-work/host-preparation/manual-reset-resume-20261020T033358Z/VELOCITY-exact-before-review104.md. Next review 2026-10-20T11:28:24.166859+00:00.
+
+## Review 105 — 2026-10-20T11:29:56.700287+00:00
+
+Formal/native/Rust-path counts unchanged. Image ran 206.876s, passed 15 commands, failed final LD on Rust core panic helpers; stopped container and records retained. Four-file Rust repair independently accepted and integrated; production object/link pending. M03 corrected offline stage accepted without recompression. Leading counts 30 candidates, 20 compiler batches, two native batches. Existing failure terminal chain is the heavy-lane blocker. Completion-status watcher prepared to reduce delayed failure handoff. Prior active guidance: /home/holden/mckernel-work/host-preparation/manual-reset-resume-20261020T033358Z/VELOCITY-exact-before-review105.md. Next review 2026-10-20T11:59:56.700287+00:00.

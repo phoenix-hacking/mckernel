@@ -1,0 +1,171 @@
+{
+  "actual_evidence": [
+    {
+      "bytes": 1371,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/actual-nm-source-probe-capture-1/whole.json",
+      "sha256": "4fabc73ab7fb3928790088b250c8ee7a5944c642e538fead2904c53a19f67283"
+    },
+    {
+      "bytes": 828,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/actual-nm-source-probe-capture-1/initial-command-and-admission.json",
+      "sha256": "802bd538d29ad5a5fe621f714ed48242e95691792f6d28f7d149994dc0085be3"
+    },
+    {
+      "bytes": 4464,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/ACTUAL-NM-AND-SOURCE-PROJECTION-RESULT.json",
+      "sha256": "157e87386a48d082a8fc5d6321322b55fdf26ca21b57403143f7ce417d4a788e"
+    },
+    {
+      "bytes": 5884,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/check_actual_nm_and_source_projection.py",
+      "sha256": "2f4add1c416045f96e32b660db32f298952078b9e8e4a31094420d2afe3fb15b"
+    },
+    {
+      "bytes": 3724,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/run_actual_nm_source_probe_once.py",
+      "sha256": "fb2495c4169801fbf470b124ac30318c1aecfc06111e31f22511680519f45a98"
+    },
+    {
+      "bytes": 1173,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/saved-failed-production-nm-capture-1/closed-record.json",
+      "sha256": "db8d6c735fd79339c2a5c278dd989ddd6d51099e7ed9a5f1591fddb0505e28a5"
+    }
+  ],
+  "actual_probe": {
+    "actual_source_projection": {
+      "driver_sha256": "319790fd648ea82c7ef3adc129cc9cc329c08ea23beed105fdfeeb6770f09d9a",
+      "gitlink_manifest_sha256": "4e47b1d85c79206e5d2874507bb94b6ceafb56d093c2a124387037d4b72a726e",
+      "source_manifest_sha256": "5d29c81ca765b8ac9f8b2e112b55d614e319bfa0114fced151473b54c7170177",
+      "status": "PASS_DETERMINISTIC_REQUEST_CROSSREFS_ONLY"
+    },
+    "closed_streams": true,
+    "direct_child_joined": true,
+    "group_absent": true,
+    "pure_refusals": 10,
+    "repaired_final_link_proof": false,
+    "repaired_production_object_proof": false,
+    "returncode": 0,
+    "saved_failed_targeted_rows": 2,
+    "stale_supplement_refusal": "gitlink base manifest hash differs",
+    "status": "PASS_ACTUAL_HELPER_AND_SAVED_FAILURE_METADATA_PROBE",
+    "stderr_empty": true
+  },
+  "created_at": "2026-10-20T11:43:05.468432+00:00",
+  "decision": "ACCEPT_EXACT_FRESH_FULL_OBJECT_NM_LINK_DRIVER_AND_SOURCE_BOUND_REQUEST_ONLY",
+  "findings": [
+    "New real CMake mckernel_rust_obj target runs after all retained configure/preflights and before final mckernel.img in the same fresh build/workspace. No old compiled object is adopted and no separate heavy crate cycle is introduced.",
+    "The added observer uses pinned production nm --undefined-only --demangle on actual build/kernel/rust/mckernel_rust.o. It requires stable ELF64 little-endian x86-64 ET_REL bytes/descriptor, owned command rc0/empty stderr/bounded output, valid U/w/v rows and exactly one undefined clone_thread. It rejects either observed panic_bounds_check or unwrap_failed family in raw or demangled symbol names.",
+    "The final Rust-object SHA must equal the prelink nm proof object SHA after full image/link validation. Driver receipt inventories the proof JSON and raw nm streams. Owner requires exact proof status, empty forbidden vector, clone_thread witness and same artifact SHA; unchanged inventory verification authenticates all evidence members.",
+    "All prior production ABI/provider/link checks and9 artifact validations/copy keys remain. Driver main is the sole existing function changed plus2 new helper functions; owner output validator is the sole existing function changed. Runtime methods and physical cleanup are retained, with pins/fresh paths advanced.",
+    "Actual cheap owned probe AST-extracts exact driver error/_fail/parser helpers. U/w/v positive passes;10 refusals include each target family raw+demangled, empty/missing/duplicate provider, malformed/defined rows and genuine saved failed production-object metadata. The old object still exposes both observed panic symbols; filtering those two rows is explicitly only an oracle positive control, not repaired compiler evidence.",
+    "Actual pure current source/candidate/IHK/supplement/driver crossrefs and current thin canonical contract pass. Reusing historical supplement refuses. Source-bound actual proposal is precisely316efbc6, with independently accepted actual materialization672181a8. Historical191 overlay lineage is retained;4 explicit successor records update effective4 entries rather than adding source objects.",
+    "Expected full success is18 command rows: configure plus14 retained preflight rows, production object1, nm1 and finalbuild1. Physical client/group counts must derive from actual owner archives, not these compiler row counts."
+  ],
+  "finite_delta": {
+    "added_object_and_nm_rows": 2,
+    "artifact_keys": [
+      "CMakeCache.txt",
+      "build.make",
+      "compile_commands.json",
+      "mcexec",
+      "mcexec-rust-build.make",
+      "mcexec_helpers.o",
+      "mckernel.img",
+      "mckernel.img.map",
+      "mckernel_rust.o"
+    ],
+    "driver_added_functions": [
+      "_no_core_panic_undefined",
+      "_validate_production_rust_panic_refs"
+    ],
+    "driver_changed_functions": [
+      "_run"
+    ],
+    "expected_artifact_count": 9,
+    "expected_success_command_rows": 18,
+    "final_build_rows": 1,
+    "materialized_entries": 6959,
+    "owner_changed_functions": [
+      "_validate_driver_result"
+    ],
+    "retained_configure_and_preflight_command_rows": 15,
+    "source_replacements": 4
+  },
+  "functional_scope": "Functional supported OS/apps plus active compute-C retirement into Rust/reviewed assembly.",
+  "guard_final_binding_required": {
+    "basis_ref": {
+      "bytes": 26525129,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/source-materialization-1/image-request-SOURCE-BOUND-PROPOSAL.json",
+      "sha256": "316efbc61f1a0253903a18d68e0e77948a9075a12f71c477fef41884630af541"
+    },
+    "runtime_ref": "Bind complete descriptor of this genuine report using existing exact reviewed_request_proposal equality and only allowed late live fields; retain full guard body and ownership controls.",
+    "source_ref": {
+      "bytes": 7637,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-panic-free-full-image-driver-independent-review-20261020-1/ACTUAL-FOUR-DELTA-6959-SOURCE-MATERIALIZATION-AND-IDENTITY-BINDING-REVIEW.json",
+      "sha256": "672181a8a0634ee8a8d613a5874050587074b364d8afb12a8025a16ce567c53c"
+    }
+  },
+  "holds": [
+    "Unsupported-core-symbol check covers exactly the2 observed families; final productionLD remains necessary to catch any other unavailable helper.",
+    "No production object/nm/LD/image success, native/load/default fork/exec/exit/wait, parent-exit final-retirement or finalACK authority.",
+    "Prior failed image, earlier fixture failures and all original evidence remain preserved."
+  ],
+  "implementation_ownership": false,
+  "independent_reviewer": "/root/sdk66_boundary_review",
+  "not_execution_release": true,
+  "prior_actual_source_acceptance": {
+    "bytes": 7637,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-panic-free-full-image-driver-independent-review-20261020-1/ACTUAL-FOUR-DELTA-6959-SOURCE-MATERIALIZATION-AND-IDENTITY-BINDING-REVIEW.json",
+    "sha256": "672181a8a0634ee8a8d613a5874050587074b364d8afb12a8025a16ce567c53c"
+  },
+  "prior_runtime_boundary": {
+    "bytes": 10563,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-production-link-image-independent-review-20261020-1/SUCCESSOR-GITLINK-NINE-COPY-OBSERVER-RUNTIME-AND-REQUEST-BINDING-REVIEW.json",
+    "sha256": "1f3eeac83021268bd97de9d52814ad7324a2d33855b6f0243840375cde8b5397"
+  },
+  "remaining_execution_prerequisites": [
+    "Publish/fetch exact changed source/runtime/metadata allowlist and bind genuine proof; source checkpoint1cc1d2fc alone does not publish the new producer.",
+    "Freeze source/owner/guard bindings using these genuine reports and actual6959 request, with current valid physical predecessor.",
+    "Root obtains fresh live backup/disk UUID/device identities, measured aggregate memory/storage including retained failed image/growth/reserves, sole-heavy/resource leases and current usage; final request/canonical release and independent execution review remain separate.",
+    "One authorized actual full production pipeline must produce its own new Rust object, bounded pinned-nm proof, same-workspace successful finalLD and unchanged9 artifact checks. No current success follows from saved metadata or fixture tests."
+  ],
+  "reviewed_driver": {
+    "bytes": 135622,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/native_rust_exact_mckernel_image_offline.py",
+    "sha256": "319790fd648ea82c7ef3adc129cc9cc329c08ea23beed105fdfeeb6770f09d9a"
+  },
+  "reviewed_image_owner": {
+    "bytes": 88771,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/native_rust_exact_mckernel_image_container_owner.py",
+    "sha256": "1068b4b10106343dc69156626f940b23a504c059cc6669f56106b2129176561c"
+  },
+  "reviewed_request_proposal": {
+    "bytes": 26525129,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/source-materialization-1/image-request-SOURCE-BOUND-PROPOSAL.json",
+    "sha256": "316efbc61f1a0253903a18d68e0e77948a9075a12f71c477fef41884630af541"
+  },
+  "reviewed_runtime_adapter": {
+    "bytes": 41115,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/native_rust_exact_build_offline.py",
+    "sha256": "28fc9080fa00b59fc8a607b56079e9fe966c12c7b1a7a1e414b42c8c9885fd6e"
+  },
+  "reviewed_source_manifest": {
+    "bytes": 6770622,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/thin-inputs.json",
+    "sha256": "5d29c81ca765b8ac9f8b2e112b55d614e319bfa0114fced151473b54c7170177"
+  },
+  "reviewed_supplemental_manifest": {
+    "bytes": 96783,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/gitlink-inputs.json",
+    "sha256": "4e47b1d85c79206e5d2874507bb94b6ceafb56d093c2a124387037d4b72a726e"
+  },
+  "reviewer": "/root/sdk66_boundary_review",
+  "reviewer_operations": "Read-only finite source/AST diffs, actual closed source/probe/stream/journal metadata equality and four changed materialized Rust hashes; new private reports only. No tests/import execution/compiler/root/Docker/Git/sourcecopy/shared edits.",
+  "schema": "mckernel.independent-current-image.successor-runtime-request-bindings.v1",
+  "source_handoff": {
+    "bytes": 6709,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/FRESH-FULL-PRODUCTION-RUST-NM-LINK-PROPOSAL.json",
+    "sha256": "25ae92015b668a060333929b8d24d328030b7d6e012f59716ba77ac1cfbd7232"
+  },
+  "status": "PASS_EXACT_FULL_RUNTIME_ADAPTER_OWNER_AND_REQUEST_BINDINGS_ONLY"
+}

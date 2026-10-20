@@ -1,0 +1,101 @@
+{
+  "base_source": {
+    "bytes": 22636,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/controlled-quarantine-recovery-1/bounded-proc-read-correction-1/current_quarantine_pidfd_recovery.py",
+    "sha256": "80a4396c6e508ef98be4252878a4bfa559c94d84a423f84deb72915876cf947d"
+  },
+  "capture_source": {
+    "bytes": 2720,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/holder-retirement-preparation-1/capture_holder_two.py",
+    "sha256": "e93456ad16b6f71e9b235c19edd5a08f811d6e0145e829e494b5a1e23f296eb5"
+  },
+  "fetched_source_proof": null,
+  "operations": [
+    {
+      "actual_direct_wait_path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/holder-retirement-preparation-1/actual-retire-target-capture-1/direct-join.json",
+      "actual_status_path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/holder-retirement-preparation-1/actual-retire-target-capture-1/status.json",
+      "actual_stderr_path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/holder-retirement-preparation-1/actual-retire-target-capture-1/stderr",
+      "actual_stdout_path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/holder-retirement-preparation-1/actual-retire-target-capture-1/stdout",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--fsize=33554432",
+        "--core=0",
+        "--cpu=unlimited:unlimited",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/holder-retirement-preparation-1/retire_exact_cleanup_holder.py",
+        "--release",
+        "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/holder-retirement-preparation-1/holder-retirement-release.json",
+        "--sha256",
+        "BIND_GENUINE_EXACT_RECOVERY_RELEASE_SHA256",
+        "--retire-target"
+      ],
+      "capture_directory": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/holder-retirement-preparation-1/actual-retire-target-capture-1",
+      "cpu": 7,
+      "profile": {
+        "address_space_bytes": 1073741824,
+        "core": 0,
+        "cpu": 7,
+        "jobs": 1,
+        "no_outer_timeout_or_kill": true,
+        "required_inherited_cpu_unlimited": true,
+        "stream_cap_bytes": 33554432
+      },
+      "role": "retire-target",
+      "stream_cap_bytes": 33554432
+    },
+    {
+      "actual_direct_wait_path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/holder-retirement-preparation-1/actual-verify-after-root-joins-capture-1/direct-join.json",
+      "actual_status_path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/holder-retirement-preparation-1/actual-verify-after-root-joins-capture-1/status.json",
+      "actual_stderr_path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/holder-retirement-preparation-1/actual-verify-after-root-joins-capture-1/stderr",
+      "actual_stdout_path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/holder-retirement-preparation-1/actual-verify-after-root-joins-capture-1/stdout",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--fsize=33554432",
+        "--core=0",
+        "--cpu=unlimited:unlimited",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/holder-retirement-preparation-1/retire_exact_cleanup_holder.py",
+        "--release",
+        "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/holder-retirement-preparation-1/holder-retirement-release.json",
+        "--sha256",
+        "BIND_GENUINE_EXACT_RECOVERY_RELEASE_SHA256",
+        "--verify-after-root-joins"
+      ],
+      "capture_directory": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/holder-retirement-preparation-1/actual-verify-after-root-joins-capture-1",
+      "cpu": 7,
+      "profile": {
+        "address_space_bytes": 1073741824,
+        "core": 0,
+        "cpu": 7,
+        "jobs": 1,
+        "no_outer_timeout_or_kill": true,
+        "required_inherited_cpu_unlimited": true,
+        "stream_cap_bytes": 33554432
+      },
+      "role": "verify-after-root-joins",
+      "stream_cap_bytes": 33554432
+    }
+  ],
+  "phase2_external_prerequisite": "Root originaltoolsession91614 WHOLE JOIN and originalcaptureparent2016997 retirement before invocation; this caller cannot attestroottoolsession.",
+  "source_checkpoint": null,
+  "status": "PRECONSTRUCTED_HOLDER2_ONLY_NO_EXECUTION",
+  "token_or_container_release_authorized": false
+}
