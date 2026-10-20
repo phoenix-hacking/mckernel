@@ -1,0 +1,89 @@
+{
+  "SDK_config": {
+    "bytes": 260490,
+    "path": "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/prepared-inputs/baseline.config",
+    "sha256": "106055ad26cfc19373b1bc52e1dcc24b3eaa7c48125c451be029898b8f696474"
+  },
+  "SMP_expected_extra_dependencies": [
+    "smp_fork_ingress.rs",
+    "smp_fork_link.rs",
+    "private_fork_carrier_request_20261017.rs"
+  ],
+  "actual_failed_compiler_review": {
+    "bytes": 5179,
+    "path": "/home/holden/mckernel-work/host-preparation/held-host-control-fullmodule-independent-review-20261019-1/HELD-HOST-CONTROL-SDK-ACTUAL-FIRST-COMPILER-FAILURE-REVIEW.json",
+    "sha256": "6391100983441b51c9b8b21dd46972ec108f8df5176fb84cf91e6df632b2976c"
+  },
+  "compiler_calls": 0,
+  "compiler_correction_patch": {
+    "bytes": 2238,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-1/runtime-correction.patch",
+    "sha256": "16234e625b94b99e9bfa05fa7328f53e218c7f060494682648a2bc2466fdaacf"
+  },
+  "current_source_files_written": 0,
+  "first_current_integration_unavailable_API": {
+    "concrete_consumer": {
+      "bytes": 42930,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/source/host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "sha256": "7c3ccf8787f47712ef19230bd356e60d7b65fd60b731d07ad8a8547553317b64"
+    },
+    "meaning": "Current accepted host module set does not provide held v12/control-receipt ABI; wholesale R10 overlay is prohibited. Private retained fullcrate supplies it for compile-only feedback.",
+    "missing_exports": [
+      "ihk_os_create_unbooted_v12",
+      "ihk_os_application_prepare_fork_control_receipt_v1"
+    ],
+    "provider_source": {
+      "bytes": 77117,
+      "path": "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/source-modules/os_runtime.rs",
+      "sha256": "6b736f94751c21a6b745f0476484d516c0de536c1cc2f4e1717eb899bf8be5e7"
+    }
+  },
+  "full_module_set": [
+    "ihk.ko",
+    "ihk-smp-x86_64.ko",
+    "mcctrl.ko"
+  ],
+  "make_pipe_proof": {
+    "bytes": 4863,
+    "path": "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/prepared-inputs/make-pipe-proof.json",
+    "sha256": "462e6fd3dc0db4de7b03370d12b1c50db31156737f072b8859352a9c2ce97cf5"
+  },
+  "no_fake_prototypes_or_test_Arc_adapters": true,
+  "receipt_callback": {
+    "actual_declaration": "pub(crate) type ForkPrepareControlReceiptV1 = unsafe extern \"C\" fn(\n    *mut c_void, u64, u64, i64, i64, Option<ForkControlReceiptResolveV1>, *mut c_void,\n) -> i32;",
+    "source": {
+      "bytes": 16033,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/source/host-kernel/native-rust/abi/application.rs",
+      "sha256": "fd6381de7e0f0b08a11076b297e724445f87a5742843289d533a2ac75c49c6d7"
+    }
+  },
+  "required_provider_exports": [
+    "ihk_os_create_unbooted_v6",
+    "ihk_os_create_unbooted_v12",
+    "ihk_os_application_prepare_fork_control_v1",
+    "ihk_os_application_prepare_fork_control_receipt_v1"
+  ],
+  "schema": "mckernel.held-control-sdk.actual-production-abi-inputs.v1",
+  "source_plan": {
+    "bytes": 29951,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-1/fresh-fullmodule-attempt-1/SOURCE-PLAN.json",
+    "sha256": "532346ce270169d2e0bbd136c715033e8969426c333041b728c71d186ebf5307"
+  },
+  "status": "DECLARATIONS_ONLY_FULL_SDK_COMPILER_PENDING",
+  "v12_consumer": {
+    "actual_declaration": "fn ihk_os_create_unbooted_v12(\n        provider_minor: u32,\n        owner: *mut core::ffi::c_void,\n        argument: u64,\n        callback_abi: u32,\n        ioctl: Option<IhkSmpOsIoctlV2>,\n        release: Option<IhkSmpOsReleaseV2>,\n        prepare: Option<IhkSmpPrepareBootV3>,\n        start: Option<IhkSmpStartBootV3>,\n        application_open: Option<application_abi::Open>,\n        application_invoke: Option<application_abi::Invoke>,\n        application_close: Option<application_abi::Close>,\n        shutdown: Option<IhkSmpShutdownV6>,\n        application_adopt_fork: Option<application_abi::ForkAdoptV1>,\n        application_fork_progress: Option<application_abi::ForkProgressV1>,\n        application_adopt_fork_scoped: Option<application_abi::ForkAdoptScopedV1>,\n        application_prepare_fork_link: Option<application_abi::ForkPrepareLinkV1>,\n        application_fork_progress_payload: Option<application_abi::ForkProgressPayloadV1>,\n        application_prepare_fork_ack: Option<application_abi::ForkPrepareAckV1>,\n        application_fork_publication_verify: Option<application_abi::ForkPublicationVerifyV1>,\n        application_release_fork_ack: Option<application_abi::ForkReleaseAckV1>,\n        application_prepare_fork_control: Option<application_abi::ForkPrepareControlV1>,\n        application_prepare_fork_control_receipt: Option<application_abi::ForkPrepareControlReceiptV1>,\n    ) -> i64;",
+    "source": {
+      "bytes": 42930,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/source/host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "sha256": "7c3ccf8787f47712ef19230bd356e60d7b65fd60b731d07ad8a8547553317b64"
+    }
+  },
+  "v12_provider": {
+    "actual_declaration": "pub(crate) unsafe extern \"C\" fn ihk_os_create_unbooted_v12(\n    provider_minor: u32,\n    owner: *mut c_void,\n    argument: u64,\n    callback_abi: u32,\n    ioctl: Option<OsBackendIoctlV2>,\n    release: Option<OsBackendReleaseV2>,\n    prepare: Option<OsBackendPrepareBootV3>,\n    start: Option<OsBackendStartBootV3>,\n    open: Option<super::application_abi::Open>,\n    invoke: Option<super::application_abi::Invoke>,\n    close: Option<super::application_abi::Close>,\n    shutdown: Option<OsBackendShutdownV6>,\n    adopt_fork: Option<super::application_abi::ForkAdoptV1>,\n    fork_progress: Option<super::application_abi::ForkProgressV1>,\n    adopt_fork_scoped: Option<super::application_abi::ForkAdoptScopedV1>,\n    prepare_fork_link: Option<super::application_abi::ForkPrepareLinkV1>,\n    fork_progress_payload: Option<super::application_abi::ForkProgressPayloadV1>,\n    prepare_fork_ack: Option<super::application_abi::ForkPrepareAckV1>,\n    fork_publication_verify: Option<super::application_abi::ForkPublicationVerifyV1>,\n    release_fork_ack: Option<super::application_abi::ForkReleaseAckV1>,\n    prepare_fork_control: Option<super::application_abi::ForkPrepareControlV1>,\n    prepare_fork_control_receipt: Option<super::application_abi::ForkPrepareControlReceiptV1>,\n) -> i64",
+    "source": {
+      "bytes": 187331,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-1/source/host-kernel/native-rust/os_runtime.rs",
+      "sha256": "a4d2489f7a810d1e618c6fe473d390e9bab205581b6c844e10a9a033c8e5e11f"
+    }
+  }
+}
