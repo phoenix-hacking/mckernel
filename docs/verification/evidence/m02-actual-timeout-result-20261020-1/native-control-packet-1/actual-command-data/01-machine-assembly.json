@@ -1,0 +1,72 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "metadata",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--nofile=256",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/current-sources/machine_assembly_caller.py",
+        "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/machine-base.json",
+        "577216cfc203ddd8d6401fb9b85f2693afe2aa4d8127e2d490d142cbb2b659aa",
+        "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/root-live-preflight-1.json",
+        "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/execution-release.json",
+        "0fc26068c9aca60b8205ea2266fd153ed38fc3cbc229b5fbb3d11fa9f573b326"
+      ],
+      "profile": "metadata",
+      "role": "machine-assembly",
+      "status_path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/captures/01-machine-assembly/status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/captures/01-machine-assembly/stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/captures/01-machine-assembly/stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 122294,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/M02-CORRECTED-CURRENT-CONTRACT-SEVEN-CALLER-CONDITIONAL-NATIVE-RELEASE.json",
+    "sha256": "2e40ca2c0c2ce23305f50341fdef25d4c81661a72b9d7439dd0cfe8496571750"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/M02-CORRECTED-CURRENT-CONTRACT-SEVEN-CALLER-CONDITIONAL-NATIVE-RELEASE.json"
+}

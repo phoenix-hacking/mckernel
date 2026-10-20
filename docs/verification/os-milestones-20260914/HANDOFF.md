@@ -1,3 +1,73 @@
+## Current — practical M02 complete on tested205/HOST66; next ownership gap
+
+Independent3784b544 accepts P-M02-02 and the exact M02 exit on the declared
+immutable-source runner profile. Genuine changed-input refusals, observed
+backend/lifecycle-deadline failure rejection and actual publicCLI stale prior
+source-owner pin rejection satisfy its relevant scope. The negative uses real
+main1192 before rootUID/backend/clock/lease; expectedrc1, stdout0, exact790B
+refusal, fully joined/retired. This does not claim stale livePID/container/lease
+race or corrupted guest-output-oracle coverage. P-M02-01 separately passed54b2:
+normal Exit7 raw1792/exact24B+24B/EOF plus complete current timeout/failure
+captures. P03 physicala5a44c1d accepted. Literal ledger now18/35 and whole
+M00/M02/M04/M10 complete; nativebehaviors28 and Rust17/14 unchanged.
+
+Current source40 native attempt stays FAIL: lifecycle TimeoutError after QMP
+RESUME,789query-status running replies; cleanup host-QMP-quit39.95379s later,
+not app-specific timeout or normal guest powerdown. No new completed app/Rust
+path/default/fork/ACK credit and no unchanged replay. All streams/failures and
+full physical proof are preserved under evidence/m02-actual-timeout-result-20261020-1/;
+two original tar payloads remain external with exact capture identities.
+
+The79-file evidence copy is independently accepted, outer2280769 and inner
+2280772 joined/groupsabsent/streamsclosed; CPU7 released. Exact publicCLI
+negative outer2282196/inner2282198 likewise closed and CPU6 released. No active
+heavy or ordinary lease is retained for editing/review. The private fixed-copy
+candidate has six finite fixture outcomes plus corrected Python3.8 SOURCE-AST
+observer acceptance only; no deployment/runtime boundary/speedup claim.
+
+Next bounded independent decision maps only existing36a475ef failed-invalidation
+Rust ownership fix/matching artifacts to P-M03-02/P03, naming a concrete missing
+observation or code transition; P-M03-01 stays complete. SDK diagnostic module
+build remains blocked: latest scratch14149410816B is10559488B below unchanged
+14159970304B gate. Developer no-resize/delete remains authoritative; approval
+retained without execution/bypass. PPD initialCREATE_PPD -22 diagnostic source
+is integrated/pushed but matching compiler/native stage observation is pending.
+M07 state-changing candidate remains parked on uniform temporalPKE0 authority.
+
+## Current — M02 physical retirement accepted; expiry and literal checks pending
+
+Independent a5a44c1d accepts physical retirement only for the current40-second
+M02 observation:25Dockerclients, exactcontainer/QEMU and all reader/native
+capture joins; fresh scoped host census has zero matches/denials, three records
+absent and permanent mutex27:4 retained. Report:
+/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/ACTUAL-M02-FAILED-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json.
+Root reservations may release; this grants no retry/application/timeout credit.
+
+Semantic expiry phase/cause and P-M02-01/P02 literal decisions remain with the
+same reviewer. The79-file closed evidence publication finished0 at22:06:46Z,
+outer2280769/start33145068 positively joined/groupabsent/streamsclosed; CPU7
+released. Actual copy acceptance pending. Both protected archives remain external
+with exact closed identities. Counts16/35,whole3,native28,Rust17/14 unchanged.
+
+## Current — M02 timeout owner closed; final physical and expiry verdict pending
+
+The source-owned 40-second observation ran at21:53:46Z after LAST/machine/guard,
+without a model gap after guard. Owner rc1 after42.644926s is preserved; direct
+child joined, group absent and observer error null. No application or timeout
+acceptance follows from rc/wall time alone. Preliminary receipt/QEMU decision
+2dd37907 accepts atomic container absence, lease release and exact QEMU cleanup.
+
+All three exact released readbacks closed0 at22:01:48–22:01:49Z with positive
+outer/inner retirement and closed streams; CPU6 is released. Current closed
+captures are under m02-current-contract-whole-binding-correction-20261020-1/
+native-control-packet-1/captures/04-readback-1,05-readback-2,06-readback-3.
+Root receipt is native-runtime-review-preparation-1/postjoin-inspection-1/
+ROOT-THREE-ARCHIVE-READERS-CLOSED-RESULT-1.json. The retained reviewer now owns
+final physical retirement and exact expiry phase/cause from complete archives.
+No unchanged native replay; no heavy release or new credit before that decision.
+Assess literal P-M02-01 independently of P02's changed-input/stale-owner gaps.
+Counts remain16/35,whole3,native28,Rust17/14 pending accepted evidence.
+
 ## Current — corrected M02 production metadata accepted; native release pending
 
 Independentc925db40 accepts real e7x parent/preflight, exact13/13/162/42argv,

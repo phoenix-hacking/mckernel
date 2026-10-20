@@ -283,14 +283,14 @@
       "id": "M02",
       "scope_id": "practical-kernel-apps-v1-20261017",
       "title": "Execution and comparison runner",
-      "engineering_state": "partial",
-      "completion_status": "open",
+      "engineering_state": "complete",
+      "completion_status": "complete",
       "exit_condition": "Normal Linux/McKernel execution produces trustworthy results and retirement.",
       "checks": [
         {
           "id": "P-M02-01",
           "description": "Capture complete streams, raw exit and timeout/failure results.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
@@ -341,14 +341,19 @@
               "path": "docs/verification/evidence/exit7-grace-native-runtime-checkpoint-20261020-1/closed-correction-v1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-EXIT7-GRACE-CORRECTED-LAST-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
               "sha256": "ebbcee573fdd199d482e46ce6409ed642e1d890d4cd8f6fe9f37b5c051eba4b3",
               "size": 25264
+            },
+            {
+              "path": "docs/verification/evidence/m02-actual-timeout-result-20261020-1/independent-decisions/ACTUAL-M02-LIFECYCLE-EXPIRY-AND-LITERAL-P01-P02-DISPOSITION.json",
+              "sha256": "54b2e7f13e797d83efd38a4abc0b05693e98883c5d50d017a5b7125a211ae5e3",
+              "size": 13991
             }
           ],
-          "assessment_note": "Complete bounded streams, raw statuses and retained failure reports are observed. Relevant timeout/failure detection on the declared final runner/profile remains to be reconciled or exercised. Additive tested205/HOST66 accepted Exit7 slice690a88b1 with physicalebbcee: genuine raw1792/app exit7, exact24B stdout+24B stderr, complete EOF/no truncation, retirement retry followed by0/release/powerdown. One distinct behavior27\u219228; remaining timeout/changed-input/stale-owner coverage is not supplied by this slice."
+          "assessment_note": "Complete bounded streams, raw statuses and retained failure reports are observed. Relevant timeout/failure detection on the declared final runner/profile remains to be reconciled or exercised. Additive tested205/HOST66 accepted Exit7 slice690a88b1 with physicalebbcee: genuine raw1792/app exit7, exact24B stdout+24B stderr, complete EOF/no truncation, retirement retry followed by0/release/powerdown. One distinct behavior27\u219228; remaining timeout/changed-input/stale-owner coverage is not supplied by this slice. Independent54b2e7f accepts this literal capture obligation: same-manifest tested205/HOST66 Exit7 raw1792/exact24B+24B/EOF plus current complete host-runner lifecycle TimeoutError capture and physicala5a44c1d. Actual expiry follows QMP resume with running status; cleanup is host-QMP-quit, not app timeout or guest powerdown. P02 changed-input/stale-owner obligations and whole M02 remain separately adjudicated."
         },
         {
           "id": "P-M02-02",
           "description": "Test relevant changed-input, abnormal-exit, timeout and stale-owner rejection.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/thread-tls-isolation-current942-failure-review-20261017-1.json",
@@ -369,9 +374,14 @@
               "path": "docs/verification/evidence/exit7-grace-native-runtime-checkpoint-20261020-1/closed-correction-v1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-EXIT7-GRACE-CORRECTED-LAST-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
               "sha256": "ebbcee573fdd199d482e46ce6409ed642e1d890d4cd8f6fe9f37b5c051eba4b3",
               "size": 25264
+            },
+            {
+              "path": "docs/verification/evidence/m02-actual-timeout-result-20261020-1/independent-decisions/ACTUAL-M02-STALE-SOURCE-OWNER-REFUSAL-AND-PRACTICAL-CRITERIA-CLOSURE.json",
+              "sha256": "3784b544cdc323dcbed85a8f81e01329b3b28b532f6b9c93d45d049ecb581784",
+              "size": 15838
             }
           ],
-          "assessment_note": "These actual failures are retained; they do not collectively prove changed-input, abnormal-exit, timeout and stale-owner rejection for the final runner. Additive tested205/HOST66 accepted Exit7 slice690a88b1 with physicalebbcee: genuine raw1792/app exit7, exact24B stdout+24B stderr, complete EOF/no truncation, retirement retry followed by0/release/powerdown. One distinct behavior27\u219228; remaining timeout/changed-input/stale-owner coverage is not supplied by this slice."
+          "assessment_note": "These actual failures are retained; they do not collectively prove changed-input, abnormal-exit, timeout and stale-owner rejection for the final runner. Additive tested205/HOST66 accepted Exit7 slice690a88b1 with physicalebbcee: genuine raw1792/app exit7, exact24B stdout+24B stderr, complete EOF/no truncation, retirement retry followed by0/release/powerdown. One distinct behavior27\u219228; remaining timeout/changed-input/stale-owner coverage is not supplied by this slice. Independent3784b544 accepts declared supported runner scope: genuine sameowner5a6f changed-manifest/mount/deadline refusals, actual backend abnormal exit/lifecycle deadline rejection, and actual public CLI stale prior source-owner SHA rejection before effects. Source-owner binding only; no stale livePID/container/lease race or injected guest output/raw-status corruption claim."
         },
         {
           "id": "P-M02-03",
@@ -447,7 +457,19 @@
           "assessment_note": "Accepted app/diagnostic retirement now includes14distinct application behaviors across current942 and matched3f7 artifacts plus separate native public-release observation. Vector/resource-v2 owner/client/QEMU teardown independently accepted. Final-profile budget and future changed-run retirement remain separate obligations. Additive tested205/HOST66 accepted Exit7 slice690a88b1 with physicalebbcee: genuine raw1792/app exit7, exact24B stdout+24B stderr, complete EOF/no truncation, retirement retry followed by0/release/powerdown. One distinct behavior27\u219228; remaining timeout/changed-input/stale-owner coverage is not supplied by this slice."
         }
       ],
-      "current_evidence_summary": "Nine independently accepted current942 diagnostic runs have complete results and verified owner/client/guest retirement. Final-profile timeout/rejection coverage remains open."
+      "current_evidence_summary": "Independent3784b544 maps the exact M02 exit to trustworthy tested205/HOST66 normal Exit7 captures and retirement, current declared lifecycle-deadline failure capture and physicala5a44c1d, and relevant actual changed-input/stale-source-owner rejection. Practical M02 complete for this immutable-source runner profile; no new app, native behavior, Rust path, activation or other-profile qualification. The native timeout attempt remains FAIL and retained.",
+      "assessment_history": [
+        {
+          "engineering_state": "partial",
+          "completion_status": "open",
+          "current_evidence_summary": "Nine independently accepted current942 diagnostic runs have complete results and verified owner/client/guest retirement. Final-profile timeout/rejection coverage remains open."
+        }
+      ],
+      "exit_condition_evidence": {
+        "path": "docs/verification/evidence/m02-actual-timeout-result-20261020-1/independent-decisions/ACTUAL-M02-STALE-SOURCE-OWNER-REFUSAL-AND-PRACTICAL-CRITERIA-CLOSURE.json",
+        "sha256": "3784b544cdc323dcbed85a8f81e01329b3b28b532f6b9c93d45d049ecb581784",
+        "size": 15838
+      }
     },
     {
       "id": "M03",

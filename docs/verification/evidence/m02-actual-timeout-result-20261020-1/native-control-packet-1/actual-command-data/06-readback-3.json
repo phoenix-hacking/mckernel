@@ -1,0 +1,71 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "reader",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--nofile=256",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/e7x-261020-1/p/attempt-9f4e40f8cddc77b663857859b24427ab",
+        "--exclude=./qmp.sock",
+        "."
+      ],
+      "profile": "reader",
+      "role": "readback-3",
+      "status_path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/captures/06-readback-3/status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/captures/06-readback-3/stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/captures/06-readback-3/stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 122294,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/M02-CORRECTED-CURRENT-CONTRACT-SEVEN-CALLER-CONDITIONAL-NATIVE-RELEASE.json",
+    "sha256": "2e40ca2c0c2ce23305f50341fdef25d4c81661a72b9d7439dd0cfe8496571750"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/M02-CORRECTED-CURRENT-CONTRACT-SEVEN-CALLER-CONDITIONAL-NATIVE-RELEASE.json"
+}

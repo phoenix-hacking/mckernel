@@ -1,0 +1,270 @@
+{
+  "P_M02_01": {
+    "decision": "PASS_LITERAL_CHECK",
+    "literal": "Capture complete streams, raw exit and timeout/failure results.",
+    "normal_capture": {
+      "WEXITSTATUS": 7,
+      "WIFEXITED": true,
+      "complete_EOF_not_truncated_zero_discarded": true,
+      "normal_retirement_release_powerdown": true,
+      "raw_wait_status": 1792,
+      "source": "690a88b1 plus physicalebbcee, samea29 manifest/tested205/HOST66",
+      "stderr_bytes": 24,
+      "stdout_bytes": 24
+    },
+    "rationale": "The literal capture obligation is met by genuine successful rawstatus/dualstream and genuine current declared runner timeout/failure captures. It does not require calling this an application timeout, proving P02 rejection variants, or another workload replay.",
+    "recommended_dispatcher_status": "complete",
+    "timeout_failure_capture": {
+      "complete_serial_debugcon_QMP_QEMU_streams_exported": true,
+      "exact_outer_owner_failure_stream_and_exit1_preserved": true,
+      "no_capture_errors_or_truncation_observed": true,
+      "original_lifecycle_TimeoutError_and_first_failure_bytes_preserved": true,
+      "source": "Current actual M02 immutable40 runner and physicala5a44",
+      "source_owned_cleanup_and_all_ownership_retires": true
+    }
+  },
+  "P_M02_02": {
+    "actual_abnormal_backend_exit_rejection": "Actual archived009-start client is reaped rc1, stderr native diagnostic failed:absolute deadline expired, and current owner raises OwnerError:docker command failed:start, exit1. This is observed abnormal backend-exit rejection; it is not a claim of a deliberately corrupted guest raw-exit oracle test.",
+    "actual_timeout_rejection": "Current runner records lifecycleTimeoutError, fails native observation and propagates failure instead of acceptance; source-owned cleanup is independently retired.",
+    "broader_unproven_scope": "No claim of stale livePID/container/lease-owner injection, or corrupted guest-output/rawexit oracle rejection, is made by the proposed sourcepin check. Preserve these scope distinctions during dispatcher reconciliation.",
+    "decision": "OPEN_PENDING_RELEVANT_STALE_OWNER_BINDING_OBSERVATION_AND_FINAL_SCOPE_RECONCILIATION",
+    "exact_remaining_short_observation": "Real current owner public CLI must reject a genuine stale prior owner-source SHA before UID/constructor/backend/clock/lease. Sourcepin staleness is relevant to this declared immutable-source owner binding; it is distinct from live PID/container/lease reuse.",
+    "existing_changed_input": "Genuine7c195 actual sameowner5a6f real no-effect engine/sourceclosure refuses stale manifestSHA, missing ownerreadonlymount and inside40\u219241 drift; current51be actual same-body loader/sourcepin refusals are additional evidence, not live-owner rejection.",
+    "literal": "Test relevant changed-input, abnormal-exit, timeout and stale-owner rejection.",
+    "no_new_live_owner_race_requirement_invented": true,
+    "whole_check_not_predeclared_complete": true
+  },
+  "actual_attempt_archive": {
+    "bytes": 317440,
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/captures/06-readback-3/stdout",
+    "sha256": "00353351cb38ea4f20996d19645ef21574c0b64254cd8ad52ac9a1c8045ecda2"
+  },
+  "actual_native_status": {
+    "bytes": 1614,
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/captures/03-native-owner/status.json",
+    "sha256": "187827008449df229a4b0dddb830795eb71197fdb749c323c1a8b3077c2d4426"
+  },
+  "actual_native_stderr": {
+    "bytes": 1874,
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/captures/03-native-owner/stderr",
+    "sha256": "0f4a93d45a446c56d8037fc44b8fc4c545d8615a03992a92a76e48cae64ae80f"
+  },
+  "actual_owner_archive": {
+    "bytes": 337920,
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/captures/04-readback-1/stdout",
+    "sha256": "689d281fc030c56c71a55cd73298d163bd0e05e9dfc902bb32323731ef005388"
+  },
+  "actual_result_CAT": {
+    "bytes": 2942,
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/captures/05-readback-2/stdout",
+    "sha256": "1981f904bec5f5fcd95283e1a503c0cc4a57b657d1544b9068957f3cda66d5a9"
+  },
+  "application_acceptance_for_current_timeout": false,
+  "conditional_one_cheap_negative": {
+    "decision": "PASS_CONDITIONAL_ONE_REAL_CURRENT_OWNER_CLI_STALE_SOURCE_PIN_NEGATIVE_ONLY",
+    "exact_argv": [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "15s",
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=1073741824:1073741824",
+      "--cpu=10:10",
+      "--fsize=33554432:33554432",
+      "--core=0:0",
+      "--nofile=256:256",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/source-closure-1/native_diagnostic_container_owner.py",
+      "--owner-sha256",
+      "6181fb4190eee90b873f34b66bf2ea319288e187824935010032d091187aa13c",
+      "--attempt-parent",
+      "/home/holden/mckernel-work/scratch/e7x-261020-1/p",
+      "--nonce",
+      "9f4e40f8cddc77b663857859b24427ab",
+      "--manifest",
+      "/home/holden/mckernel-work/scratch/e7gn-261020-1/manifest.json",
+      "--manifest-sha256",
+      "a29a79dce7219bee2f5dee2915bcbe30eb98b66aec77bc4c9ddb82af38606aee"
+    ],
+    "execution_count": 1,
+    "existing_evidence": {
+      "bytes": 6993,
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/p02-negative-preparation-1/EXISTING-P02-GUARD-AND-REFUSAL-EVIDENCE.json",
+      "sha256": "18abbff31e85ae45328d51be194b83eba35a39ced09c076075eea2635fe1af9a"
+    },
+    "limits": "Actual negative remains unrun here; source-only conditional review is not rejection acceptance or wholeP02 credit. Expectedrc1/stdout0/exactOwnerError reviewed owner identity; forbidden root outer owner required proves correct earlier guard. Any mismatch stops and is retained.",
+    "oracle": {
+      "backend_invocations": 0,
+      "closed_streams": true,
+      "direct_child_joined": true,
+      "process_group_absent": true,
+      "returncode": 1,
+      "stderr_forbidden": [
+        "root outer owner required"
+      ],
+      "stderr_required": "OwnerError: reviewed owner identity",
+      "stdout_bytes": 0
+    },
+    "outer_limit_condition": "Root applies existing reviewed CPU6/AS1GiB/CPU10/FS32MiB/core0/nofile256 preexec to outer timeout too, uses pinned990807 owned capture and exact15s+2 bound, accounts helper/code/shared RAM and all active leases. No source or new wrapper/framework.",
+    "profile": {
+      "AS_bytes": 1073741824,
+      "CORE_bytes": 0,
+      "CPU_seconds": 10,
+      "FSIZE_bytes": 33554432,
+      "NOFILE": 256,
+      "cpu": 6,
+      "jobs": 1,
+      "kill_grace_seconds": 2,
+      "ordinary_capture": "Existing reviewed990807 owned capture; expectedrc1 preserved, no new helper/framework",
+      "resource_admission": "Root fresh CPU6/shared budget/serviceincluded<100/host16GiB/scratch12GiB plus all actual growth and active leases; no heavy permission or reservation",
+      "uidgid": 1000,
+      "wall_seconds": 15
+    },
+    "proposal": {
+      "bytes": 7185,
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/p02-negative-preparation-1/ONE-REAL-OWNER-CLI-STale-PIN-NEGATIVE-PROPOSAL.json",
+      "sha256": "30e0273fc28f91bcc90cf1ab7afbc47bba0078b7d4519945eae8d3764353f7c2"
+    },
+    "prospective_capture": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/p02-negative-preparation-1/actual-stale-owner-source-pin-negative-capture-1",
+    "root_fresh_ordinary_grant_required": true,
+    "root_grant": null,
+    "source_predicate": "Actual current5a6f main1192 checks _digest(SELF)==provided ownerSHA before inside/rootUID/constructor/backend/signals/clock/lease. Genuineprior6181 differs; run real native interpreter/currentabsolutefile with only that ownerSHA substitution and remove sudo."
+  },
+  "created_utc": "2026-10-20T22:09:54.379975+00:00",
+  "current_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/e7gn-261020-1/manifest.json",
+    "sha256": "a29a79dce7219bee2f5dee2915bcbe30eb98b66aec77bc4c9ddb82af38606aee",
+    "size": 5796
+  },
+  "decision": "ACCEPT_CURRENT_RUNNER_LIFECYCLE_TIMEOUT_FAILURE_CAPTURE_AND_LITERAL_P01_WITH_GENUINE_SAME_MANIFEST_NORMAL_RAW1792_DUALSTREAM_EVIDENCE_KEEP_P02_REJECTION_ADJUDICATION_SEPARATE",
+  "expiry_classification": {
+    "confirmed": "Absolute source40 host runner lifecycle deadline expired after actual RESUME and before any completed payload report or guest shutdown; cleanup sent QMP quit and positively reaped QEMU.",
+    "not_proven": [
+      "Application-specific deadline expiration",
+      "Normal post-app retirement timeout",
+      "New completed app or expected rawexit/24B streams in this run"
+    ],
+    "observed_progress": "Captured serial reaches Linux /init handoff and debugcon contains startup marks. This proves bootstrap progress; it does not identify a specific blocked init command or prove a McKernel app start/exit.",
+    "producer_flag_warning": "mckernel_application_executed/application_acceptance false are deliberately producer flags; genuine normal690 also has them false. They are not used to assert that no app instruction executed."
+  },
+  "expiry_facts": {
+    "QEMU_final_returncode": -9,
+    "QMP_transcript": {
+      "bytes": 269342,
+      "member": "./qmp.transcript.json",
+      "records": 1587,
+      "sha256": "c286444fbdc4dc0abda0760b6c1c364847e4f1428b8db099a37bb378ad2cd64e"
+    },
+    "RESUME": {
+      "data": null,
+      "event": "RESUME",
+      "monotonic": 315335.468095308,
+      "timestamp": {
+        "microseconds": 899114,
+        "seconds": 1792533228
+      }
+    },
+    "SHUTDOWN": {
+      "data": {
+        "guest": false,
+        "reason": "host-qmp-quit"
+      },
+      "event": "SHUTDOWN",
+      "monotonic": 315375.421885795,
+      "timestamp": {
+        "microseconds": 852890,
+        "seconds": 1792533268
+      }
+    },
+    "capture_errors": [],
+    "cleanup": {
+      "errors": [],
+      "reaped": true
+    },
+    "cleanup_quit": {
+      "execute": "quit",
+      "id": 792,
+      "monotonic": 315375.42159264
+    },
+    "complete_ND_PAYLOAD_reports": 0,
+    "debugcon_bytes": 152,
+    "first_failure": {
+      "error": "absolute deadline expired",
+      "phase": "lifecycle",
+      "type": "TimeoutError"
+    },
+    "first_failure_member": {
+      "bytes": 85,
+      "path": "./first-failure.jsonl",
+      "sha256": "9d765cea8d16bdc3a067648b8acec30688592f131923599288a8d9423264d108"
+    },
+    "guest_initiated_SHUTDOWN_seen": false,
+    "last_query_status": {
+      "monotonic": 315375.413444854,
+      "reply": {
+        "running": true,
+        "status": "running"
+      }
+    },
+    "qemu_stderr_bytes": 0,
+    "qemu_stdout_bytes": 0,
+    "query_status_reply_count": 789,
+    "query_status_values": [
+      "running"
+    ],
+    "result_status": "FAIL",
+    "seconds_RESUME_to_cleanup_quit": 39.953497331996914,
+    "seconds_RESUME_to_host_shutdown": 39.95379048702307,
+    "serial_bytes": 29398,
+    "serial_last_line": "[    8.124120] Run /init as init process"
+  },
+  "implementation_ownership": false,
+  "native_runtime_retry_authorized": false,
+  "new_production_default_activation": false,
+  "new_real_guest_apps_accepted": 0,
+  "new_selected_Rust_path_credit": false,
+  "normal_same_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/e7gn-261020-1/manifest.json",
+    "sha256": "a29a79dce7219bee2f5dee2915bcbe30eb98b66aec77bc4c9ddb82af38606aee",
+    "size": 5796
+  },
+  "normal_same_tuple_physical": {
+    "bytes": 25264,
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/exit7-grace-native-runtime-checkpoint-20261020-1/closed-correction-v1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-EXIT7-GRACE-CORRECTED-LAST-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "ebbcee573fdd199d482e46ce6409ed642e1d890d4cd8f6fe9f37b5c051eba4b3"
+  },
+  "normal_same_tuple_semantic": {
+    "bytes": 8608,
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/exit7-grace-native-runtime-checkpoint-20261020-1/closed-correction-v1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-EXIT7-GRACE-NATIVE-DUALSTREAM-RAW1792-AND-NORMAL-RETIREMENT-SEMANTIC-REVIEW.json",
+    "sha256": "690a88b1f82ac3661b5b58cb13f73e4fae12ce555e4f4ee43ff25e72d2274597"
+  },
+  "physical_retirement": {
+    "bytes": 64657,
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/ACTUAL-M02-FAILED-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "a5a44c1d43ff74f2a777583b243a3c20a4102f855f4ffefa31ccccbf5e31eeb8"
+  },
+  "root_operations_by_reviewer": 0,
+  "runtime_release": null,
+  "schema": "mckernel.independent-actual-M02-lifecycle-expiry-and-literal-P01-P02-disposition.v1",
+  "scope": "Functional supported-profile OS/apps plus active Rust/reviewed assembly compute cutover. Literal practical checks assessed from actual current evidence, without adding deferred qualification requirements or inventing app execution.",
+  "status": "PASS_LITERAL_P_M02_01_CAPTURE_OBLIGATION_P_M02_02_NOT_YET_COMPLETE",
+  "tests_executed_by_reviewer": 0,
+  "whole_M02_acceptance": false
+}

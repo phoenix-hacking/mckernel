@@ -1,0 +1,143 @@
+{
+  "actual_current_owner": {
+    "bytes": 107637,
+    "mode": 33216,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/source-closure-1/native_diagnostic_container_owner.py",
+    "sha256": "5a6f6fb51043438d438d01f37e8d0705857036536b7dba1c235dbd89e05dd1ff"
+  },
+  "actual_native_owner_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/source-closure-1/native_diagnostic_container_owner.py",
+    "--owner-sha256",
+    "5a6f6fb51043438d438d01f37e8d0705857036536b7dba1c235dbd89e05dd1ff",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/e7x-261020-1/p",
+    "--nonce",
+    "9f4e40f8cddc77b663857859b24427ab",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/e7gn-261020-1/manifest.json",
+    "--manifest-sha256",
+    "a29a79dce7219bee2f5dee2915bcbe30eb98b66aec77bc4c9ddb82af38606aee"
+  ],
+  "actual_result": null,
+  "changed_fields": [
+    "Remove sudo -A to stay ordinary uid1000; all source-owned root/backend work unreachable by source predicate below.",
+    "Replace only --owner-sha256 current5a6f6fb51043438d438d01f37e8d0705857036536b7dba1c235dbd89e05dd1ff with genuine prior owner SHA6181fb4190eee90b873f34b66bf2ea319288e187824935010032d091187aa13c. Preserve actual interpreter/currentabsoluteownerfile, parent,usednonce,manifest path+digest."
+  ],
+  "criterion": "P-M02-02, only if independent reviewer finds a relevant stale-source-owner rejection gap.",
+  "earliest_predicate": {
+    "before": [
+      "root UID assertion",
+      "DiagnosticOwner constructor",
+      "DockerBackend construction",
+      "execute_owner/signals",
+      "clock start",
+      "development mutex/lease acquisition",
+      "filesystem evidence writes",
+      "Docker/QEMU/guest/backend call"
+    ],
+    "call_path": "Actual native runtime interpreter -B actual absolute source file -> real __main__ -> main(argparse) -> need(owner identity). Whole real module loader, no extracted function/global injection.",
+    "line": 1192,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/source-closure-1/native_diagnostic_container_owner.py",
+    "predicate": "HEX.fullmatch(args.owner_sha256) and _digest(SELF)==args.owner_sha256",
+    "refusal": "reviewed owner identity"
+  },
+  "exact_negative_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "15s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=10:10",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/source-closure-1/native_diagnostic_container_owner.py",
+    "--owner-sha256",
+    "6181fb4190eee90b873f34b66bf2ea319288e187824935010032d091187aa13c",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/e7x-261020-1/p",
+    "--nonce",
+    "9f4e40f8cddc77b663857859b24427ab",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/e7gn-261020-1/manifest.json",
+    "--manifest-sha256",
+    "a29a79dce7219bee2f5dee2915bcbe30eb98b66aec77bc4c9ddb82af38606aee"
+  ],
+  "existing_evidence": {
+    "bytes": 6993,
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/p02-negative-preparation-1/EXISTING-P02-GUARD-AND-REFUSAL-EVIDENCE.json",
+    "sha256": "18abbff31e85ae45328d51be194b83eba35a39ced09c076075eea2635fe1af9a"
+  },
+  "failure_history": "Retained stale dfe26/590 loader-pin failure and accepted corrected full current51be fixture. No source/loader extraction, monkeypatch, sourcecopy or automatic failure replay proposed.",
+  "fresh_source_guard": "Before any run root must verify true currentowner5a6f byteidentity and old6181digest differs, actual currentruntime interpreter/sourcepath; exact candidate/refusal never enters later root/main branch.",
+  "independent_clause_decision": null,
+  "meaning": "If observed, proves rejection of a genuinely older owner-source pin by the real current runtime CLI before effects. Does not prove stale runtime lease/process/container-owner rejection or whole P02/native acceptance.",
+  "oracle": {
+    "backend_invocations": 0,
+    "closed_streams": true,
+    "direct_child_joined": true,
+    "process_group_absent": true,
+    "returncode": 1,
+    "stderr_forbidden": [
+      "root outer owner required"
+    ],
+    "stderr_required": "OwnerError: reviewed owner identity",
+    "stdout_bytes": 0
+  },
+  "profile": {
+    "AS_bytes": 1073741824,
+    "CORE_bytes": 0,
+    "CPU_seconds": 10,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "cpu": 6,
+    "jobs": 1,
+    "kill_grace_seconds": 2,
+    "ordinary_capture": "Existing reviewed990807 owned capture; expectedrc1 preserved, no new helper/framework",
+    "resource_admission": "Root fresh CPU6/shared budget/serviceincluded<100/host16GiB/scratch12GiB plus all actual growth and active leases; no heavy permission or reservation",
+    "uidgid": 1000,
+    "wall_seconds": 15
+  },
+  "prospective_capture": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/p02-negative-preparation-1/actual-stale-owner-source-pin-negative-capture-1",
+  "retained_ancestry_review": {
+    "bytes": 6943,
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/M02-IMMUTABLE40-TIMEOUT-SOURCE-BODY-CHECK-REVIEW.json",
+    "sha256": "fa6a993cc7fac8a5f75b3fb8ab55ccda890368e0e7b7783fa39d9e8a9a764199"
+  },
+  "retained_genuine_stale_owner": {
+    "bytes": 107529,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-grace-retry-binding-20261020-1/runtime-source-1/native_diagnostic_container_owner.py",
+    "sha256": "6181fb4190eee90b873f34b66bf2ea319288e187824935010032d091187aa13c"
+  },
+  "reviewed_profile_basis": {
+    "CPU_seconds": 10,
+    "address_space_bytes": 1073741824,
+    "core_bytes": 0,
+    "cpu_affinity": [
+      6
+    ],
+    "file_size_bytes": 33554432,
+    "jobs": 1,
+    "method": "Reuse already reviewed unprivileged ordinary capture; exact command with fresh exclusive capture root and recorded directwait/groupabsence/closed streams; no new wrapper needed",
+    "nofile": 256,
+    "owned_wall_seconds": 15
+  },
+  "root_grant": null,
+  "runtime_release": null,
+  "scope": "Functional supported-profile OS/apps plus live compute-C retirement to Rust/reviewed assembly; P-M02-02 relevant changed-input/stale-owner boundary selection remains independent reviewer decision.",
+  "status": "OPTIONAL_ONE_REAL_OWNER_CLI_STALE_SOURCE_PIN_NEGATIVE_PROPOSAL_UNRUN",
+  "stop": "Do not execute until independent reviewer decides exact missingclause and root grants this one ordinary command. If existing evidence suffices, park. Any unexpected return/refusal/loader/resource identity stops and preserves evidence; no automatic correction/retry."
+}
