@@ -11,9 +11,14 @@ P-M02-01/02 still need their remaining timeout/rejection observations.
 
 M03 Q4final19 and actual whole-static/saved62ba check05f05c8b pass; those saved
 roles grant no current runtime authority. Its next binding uses genuine positive
-S5 physical ebbcee, not failure-specific a217. Positive-reader actual two-check acceptance33f023 and affected S6/Q6 source
-review348c74 pass. The52-file successor is frozen for publication; final19
-metadata and genuinely fresh LAST/machine/release remain pending.
+S5 physical ebbcee, not failure-specific a217. Positive-reader actual two-check acceptance33f023 passes. The52-file S6 source
+was published313c233f, but its materializer still selected packet4; reviewer
+9cedaa15 withdrew that materializer release before any invocation. Original
+source/publication remain preserved. The corrected tuple-derived helper c807 passed actual generation-path fixture
+checks: Q6 positive plus stale4/changed-parent/collision pre-write refusals.
+Review a838 accepts fixture/source only; the25-file affected delta is frozen
+for publication. Genuine new fetched proof is required before real DATA. No kernel/stage/normalization or
+saved05f replay is needed; final19 and fresh runtime joins remain pending.
 No kernel/module/app/stage/normalization recompilation is needed for M03.
 
 Two focused actual Rust body regressions passed independentd74ed0be (one host
