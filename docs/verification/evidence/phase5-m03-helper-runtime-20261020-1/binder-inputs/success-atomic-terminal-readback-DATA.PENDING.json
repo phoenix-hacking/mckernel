@@ -1,0 +1,45 @@
+{
+  "operations": [
+    null,
+    {
+      "argv_template": [
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--nofile=256",
+        "--core=0",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/usr/bin/sudo",
+        "-A",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "-c",
+        "import os, stat, json, hashlib, sys\nfrom pathlib import Path\nSTATUS = Path('/home/holden/mckernel-work/host-preparation/phase5-m03-helper-retry-seven-step-preparation-20261020-1/captures/03-native-owner/status.json')\nEVIDENCE = Path('/home/holden/mckernel-work/scratch/m03hp-261020-1/p.owner-e3d0a23c3da76e14ff25f1a810a996e0')\nEXPECTED = ['/usr/bin/sudo', '-A', '/home/holden/anaconda3/bin/python3', '-B', '/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic_container_owner.py', '--owner-sha256', '07bbd06326a1c4e08a4a54592fe15a40cb0e34015426acf220495a4c0c281932', '--attempt-parent', '/home/holden/mckernel-work/scratch/m03hp-261020-1/p', '--nonce', 'e3d0a23c3da76e14ff25f1a810a996e0', '--manifest', '/home/holden/mckernel-work/scratch/m03hr-261020-1/manifest.json', '--manifest-sha256', 'd1a54eaec4e9c94e972acb30e633ed99bb9938e246d1ee2d79408fe1fac9b624']\nKEYS = ('st_dev', 'st_ino', 'st_mode', 'st_uid', 'st_gid', 'st_size', 'st_nlink', 'st_mtime_ns', 'st_ctime_ns')\n\ndef need(ok, s):\n    if not ok:\n        raise ValueError(s)\n\ndef pairs(rows):\n    d = {}\n    for (k, v) in rows:\n        need(k not in d, 'duplicate JSON key')\n        d[k] = v\n    return d\n\ndef readfd(fd, limit):\n    a = os.fstat(fd)\n    need(stat.S_ISREG(a.st_mode) and a.st_nlink == 1 and (a.st_size <= limit), 'regular bounded receipt')\n    raw = os.read(fd, limit + 1)\n    b = os.fstat(fd)\n    need(len(raw) == a.st_size and all((getattr(a, k) == getattr(b, k) for k in KEYS)), 'stable full receipt FD')\n    return (raw, a)\nneed(len(sys.argv) == 2 and len(sys.argv[1]) == 64, 'one actual closed ownerstatus hash')\nfd = os.open(STATUS, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC)\ntry:\n    (raw, st) = readfd(fd, 65536)\nfinally:\n    os.close(fd)\nneed(hashlib.sha256(raw).hexdigest() == sys.argv[1], 'actual closed ownerstatus hash')\ns = json.loads(raw, object_pairs_hook=pairs)\nneed(s['argv'] == EXPECTED and type(s['returncode']) is int and (s['returncode'] == 0) and (s['direct_child_joined'] is True) and (s['process_group_absent'] is True) and (s.get('observer_error') is None), 'completed zero exact owner directjoin and group')\nneed(EVIDENCE.is_absolute() and EVIDENCE.resolve() == EVIDENCE, 'canonical exact root evidence directory')\np = os.open(EVIDENCE, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)\ntry:\n    d = os.fstat(p)\n    need(d.st_uid == d.st_gid == 0 and stat.S_IMODE(d.st_mode) == 448, 'root0700 owner evidence')\n    f = os.open('result.json', os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=p)\n    try:\n        (raw, row) = readfd(f, 65536)\n        named = os.stat('result.json', dir_fd=p, follow_symlinks=False)\n        need(all((getattr(row, k) == getattr(named, k) for k in KEYS)), 'receipt FD/path join')\n    finally:\n        os.close(f)\n    need(row.st_uid == row.st_gid == 0 and stat.S_IMODE(row.st_mode) == 384, 'root0600 terminal receipt')\n    after = os.fstat(p)\n    named = EVIDENCE.lstat()\n    need(all((getattr(d, k) == getattr(after, k) == getattr(named, k) for k in KEYS)), 'stable root evidence directory')\nfinally:\n    os.close(p)\nv = json.loads(raw, object_pairs_hook=pairs)\nneed(set(v) == {'status', 'application_acceptance', 'container', 'absence_verified', 'lease_retained', 'signal_number', 'failure', 'secondary', 'secondary_omitted'}, 'exact source terminal receipt shape')\nneed(v['status'] == 'PROTOCOL_PASS' and v['application_acceptance'] is False and (v['absence_verified'] is True) and (v['lease_retained'] is False), 'positive source terminal physical fields')\nprint(json.dumps(dict(status='PASS_CLOSED_OWNER_TERMINAL_RECEIPT_READBACK_ONLY', owner_status_sha256=sys.argv[1], receipt_path=str(EVIDENCE / 'result.json'), receipt_sha256=hashlib.sha256(raw).hexdigest(), receipt_bytes=len(raw), receipt=v, independent_physical_acceptance=False, root_mutations=0), sort_keys=True))\n",
+        null
+      ],
+      "profile": "metadata",
+      "role": "failure-terminal-receipt-readback",
+      "status_path": "/home/holden/mckernel-work/host-preparation/phase5-m03-helper-retry-seven-step-preparation-20261020-1/success-atomic-readback-capture-1/status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/phase5-m03-helper-retry-seven-step-preparation-20261020-1/success-atomic-readback-capture-1/stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/phase5-m03-helper-retry-seven-step-preparation-20261020-1/success-atomic-readback-capture-1/stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": null,
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/phase5-m03-helper-retry-seven-step-preparation-20261020-1/success-readback-release.json"
+}

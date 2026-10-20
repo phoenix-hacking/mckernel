@@ -1,0 +1,61 @@
+{
+  "schema": "mckernel.m03-native-failure-physical-ordinary-check.v1",
+  "outer_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/run_physical_check_once.py"
+  ],
+  "source_pins": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_failure_physical_projection.py",
+      "sha256": "ba5d3ea283eefb8f5e8249a8e703a10f4ffaeae15b8bfe4e51f379e8e6b45656",
+      "bytes": 12683
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/NATIVE-FAILURE-PHYSICAL-CONTEXT.json",
+      "sha256": "e447e5be04965f946413a0498aade1bee7f7021145c3c6ef5fcfe21f83a66f12",
+      "bytes": 2243
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/machine_assembly.py",
+      "sha256": "dc24d56d234d42f295d9ad7bf193ef1bba7db9ed61480b3a9600df183d9f375a",
+      "bytes": 1609
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/check_native_failure_physical.py",
+      "sha256": "9ac7db5d7f30b3296162073df0c214db358f28036e461f5c7f937d309b893d38",
+      "bytes": 2111
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/run_physical_check_once.py",
+      "sha256": "229d117239258cb5cee48d04798f4c440dc9b88476d571099b809b372d176048",
+      "bytes": 2602
+    }
+  ],
+  "effects": "new private physical-check-1 only; read closed actual report/captures; no root/guest/snapshot/stage",
+  "cases": 4,
+  "profile": {
+    "cpu": 6,
+    "jobs": 1,
+    "AS": 1073741824,
+    "CPU": 30,
+    "wall": 35,
+    "kill_grace": 2,
+    "stream_cap": 33554432
+  },
+  "required_admission": "existing Running/included/UUID/floors+growth/5GiB RAM/shared absence/CPU6 exclusivity; established fresh guards"
+}
