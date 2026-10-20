@@ -1,0 +1,17 @@
+"""Pinned existing owner with explicit current cycle consumer/source closure."""
+import hashlib,importlib.util
+from pathlib import Path
+PATH=Path(@OWNER_PATH@)
+if hashlib.sha256(PATH.read_bytes()).hexdigest()!=@OWNER_SHA@:raise ValueError('pinned owner')
+spec=importlib.util.spec_from_file_location('accepted_single_pair_owner',PATH);base=importlib.util.module_from_spec(spec);spec.loader.exec_module(base)
+base.SELF=str(Path(__file__).resolve());base.RUNNER=str(Path(__file__).resolve().parent/'native_diagnostic_runner.py')
+base.SOURCE_HASHES=@SOURCE_HASHES@
+base.EXTRA_READONLY=@EXTRA_READONLY@
+def bound_manifest(path,digest):
+ base._manifest_identity(path,digest)
+ for source,expected in base.SOURCE_HASHES.items():base.need(base._digest(source)==expected,'source identity drift: '+source)
+ source=Path(__file__).resolve().parent/'native_diagnostic.py';s=importlib.util.spec_from_file_location('owner_bound_complete_cycles',source);m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+ return m,m.load_manifest(path)
+base.bound_manifest=bound_manifest
+globals().update({k:v for k,v in vars(base).items() if not k.startswith('__')})
+if __name__=='__main__':raise SystemExit(base.main())

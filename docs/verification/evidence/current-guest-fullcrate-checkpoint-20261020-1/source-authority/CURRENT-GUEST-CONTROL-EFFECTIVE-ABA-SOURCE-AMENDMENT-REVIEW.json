@@ -1,0 +1,70 @@
+{
+  "activation": false,
+  "created_at_utc": "2026-10-20T01:35:09.581203+00:00",
+  "current_three_existing_base_files_exact": true,
+  "decision": "PASS_EXACT_INITIAL_DISCOVERY_PHYSICAL_IDENTITY_AMENDMENT_FOR_CURRENT_FULL_CRATE_COMPILE_SOURCE",
+  "effective_full_crate_proposal": {
+    "bytes": 5694,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/FULL-CRATE-COMPILE-PROPOSAL-FINAL-2.json",
+    "sha256": "b8c0ec6af651c932ad3efa40ee27e5ee796fe23c9369cc9ea0e0118efe7c2a82"
+  },
+  "effective_handoff": {
+    "bytes": 3069,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/CURRENT-GUEST-HANDOFF-FINAL.json",
+    "sha256": "2eaae7d56e2f07a5ac9b5d8313b103bcc5f96e1301440611e9dc4c8c6cdc0a86"
+  },
+  "effective_outputs": {
+    "kernel/CMakeLists.txt": {
+      "bytes": 22828,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/source-final-2/kernel/CMakeLists.txt",
+      "sha256": "7fce842a6cf968c7fd6d79b3cc70ae8fa41217d4533c722edcfa41e784ae1198"
+    },
+    "kernel/rust/fork_control_guest.rs": {
+      "bytes": 14894,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/source-final-2/kernel/rust/fork_control_guest.rs",
+      "sha256": "39463152363b5dcac613c2715a1a86b5a9e266722fa15da6b14eeafcaa0fcf0e"
+    },
+    "kernel/rust/fork_control_registry.rs": {
+      "bytes": 8131,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/source-final-2/kernel/rust/fork_control_registry.rs",
+      "sha256": "246838be1f3a2d71cef7e975de8d17f908bfb89010bd5be9741b81b452830113"
+    },
+    "kernel/rust/lib.rs": {
+      "bytes": 2012,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/source-final-2/kernel/rust/lib.rs",
+      "sha256": "4e8d34dc3173aa1c9402ffd437738c6074fcec8a354dc91b6aa8f79d5348ba9c"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "bytes": 695262,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/source-final-2/kernel/rust/syscall_policy.rs",
+      "sha256": "11f46d4be9c7daab86bea7a6d289476dd87abd46f3ceb3fa9622581751417b3b"
+    }
+  },
+  "effective_patch": {
+    "bytes": 24735,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-guest-control-FINAL-2.patch",
+    "sha256": "5d591c6e4a11683bc8988a0ecb929733e6f7f2a8848a35f64b1e344ec06792fc"
+  },
+  "effective_source_pins": {
+    "bytes": 3914,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/CURRENT-GUEST-SOURCE-PINS-FINAL-2.json",
+    "sha256": "749cbb3f719afb555f577587950b68bd7fba6761854768159743bc20d723648c"
+  },
+  "exact_delta": "Initial candidate discovery adds actual request args4 == immutable carrier physical, alongside saved request address/parent/SUBMITTED. Pending-control identity and subsequent complete validation are byte-identical.",
+  "full_crate_execution_release": false,
+  "implementation_author": "clone_thread_affinity_rust_repair",
+  "implementation_ownership": false,
+  "limits_inherited_unchanged": true,
+  "normal_do_fork_constructor_callers": 0,
+  "other_four_files_identical": true,
+  "ownership_reason": "Old escaped allocations never free or reuse their physical storage; a later stack request can reuse its address. Requiring actual carrier PA prevents the old initial owner from intercepting/retaining the new request before its genuine carrier is visited. No opaque host field or protocol authority is inferred.",
+  "prior_review": {
+    "bytes": 8203,
+    "path": "/home/holden/mckernel-work/host-preparation/provider-ownership-review-20261019-1/CURRENT-GUEST-CONTROL-FINAL-PRODUCER-OBSERVER-SOURCE-REVIEW.json",
+    "sha256": "7dc670b0b4921f214ca80c6a5be667d845ce262b235e17510f2d866b1f1a45d8"
+  },
+  "reviewer": "next_replace_tid_review",
+  "reviewer_analysis_note": "First private literal-comparison assertion assumed different line wrapping and failed before output; bounded actual diff showed only the agreed predicate. Matcher corrected to actual wrapping; no target source/test/compiler execution or source correction resulted.",
+  "schema": "mckernel.current-guest-control.exact-source-amendment-review.v1",
+  "tests_or_compiler_by_reviewer": 0
+}

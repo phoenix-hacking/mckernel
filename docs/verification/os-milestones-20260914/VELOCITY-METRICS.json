@@ -1,13 +1,13 @@
 {
   "schema": "mckernel.supervisor-velocity.v1",
-  "observed_at": "2026-10-20T01:43:42.335453Z",
+  "observed_at": "2026-10-20T02:43:43.529585Z",
   "baseline_at": "2026-10-19T10:27:41Z",
-  "elapsed_wall_hours": 15.267037625833334,
-  "monotonic_ns": 242728904413243,
-  "boottime_ns": 258067031463789,
-  "previous_sample_interval_seconds": 319.642551,
+  "elapsed_wall_hours": 16.267369329166666,
+  "monotonic_ns": 246330098546054,
+  "boottime_ns": 261668225596559,
+  "previous_sample_interval_seconds": 312.252709,
   "largest_observed_sample_gap_minutes": 299.53526335,
-  "interval_wall_minus_monotonic_seconds": 4.4200004367667134e-07,
+  "interval_wall_minus_monotonic_seconds": -4.880000119555916e-07,
   "baseline": {
     "practical_checks": 7,
     "native_behaviors": 25,
@@ -15,22 +15,22 @@
     "native_rust_paths": 11
   },
   "last_confirmed_counters": {
-    "practical_checks": 12,
+    "practical_checks": 14,
     "native_behaviors": 26,
     "production_rust_paths": 17,
     "native_rust_paths": 14
   },
   "delta": {
-    "practical_checks": 5,
+    "practical_checks": 7,
     "native_behaviors": 1,
     "production_rust_paths": 0,
     "native_rust_paths": 3
   },
   "gains_per_wall_hour": {
-    "practical_checks": 0.3275029591555802,
-    "native_behaviors": 0.06550059183111603,
+    "practical_checks": 0.4303092810125921,
+    "native_behaviors": 0.06147275443037029,
     "production_rust_paths": 0.0,
-    "native_rust_paths": 0.1965017754933481
+    "native_rust_paths": 0.18441826329111088
   },
   "known_production_native_events": [
     {
@@ -275,11 +275,59 @@
       "throughput_scope": "one matched diagnostic comparison; not overall engineering speedup",
       "repeatability_quotas_met": false,
       "whole_native_acceptance": false
+    },
+    {
+      "at": "2026-10-20T01:52:26.583713Z",
+      "kind": "retained_host_fullmodule_sdk_failed_compile_and_physical_retirement",
+      "result": "failed_missing_source_errno_and_callback_scope_integration",
+      "invocation_seconds": 4.0,
+      "duration_precision": "approximate dispatcher report",
+      "proof": "63911009/7a2dd8db",
+      "time_basis": "first_observed_final_reviews; approximate compiler duration, not exact outer owner duration",
+      "compiler_failures": [
+        "missing carrier-request Rust source",
+        "undeclared EOVERFLOW",
+        "callback comparisons outside variable scope"
+      ],
+      "physical_retirement_verified": true,
+      "clients_reaped": 15,
+      "empty_process_group_checks": 42,
+      "ownership_records_released": 3,
+      "container_absent": true,
+      "module_artifact_acceptance": false,
+      "current_production_activation": false,
+      "native_acceptance": false
+    },
+    {
+      "at": "2026-10-20T02:10:23.643354Z",
+      "kind": "native_two_complete_payload_lifecycle_cycle_acceptance",
+      "result": "pass_two_mckernel_incarnations_four_payload_launches_stops_public_releases",
+      "invocation_seconds": 71.21,
+      "duration_precision": "dispatcher rounded owner wall time",
+      "proof": "ed6ef1e5/d97ba774",
+      "time_basis": "first_observed_semantic_acceptance; rounded completed owner wall time",
+      "linux_guest_count": 1,
+      "mckernel_lifecycle_cycles": 2,
+      "observed_generations": [
+        1,
+        2
+      ],
+      "completed_app_processes": 4,
+      "strict_stops": 2,
+      "public_cpu_memory_releases": 2,
+      "physical_retirement_verified": true,
+      "clients_reaped": 30,
+      "new_logical_cases": 0,
+      "full_restoration_verified": false,
+      "full_generation_restoration_verified": false,
+      "repeatability_quotas_met": false,
+      "nonnull_fp_acceptance": false,
+      "whole_native_acceptance": false
     }
   ],
-  "known_event_rate_per_wall_hour": 1.0480094692978565,
-  "known_invocation_wall_seconds": 954.668756251026,
-  "known_invocation_fraction_percent": 1.7369824593643797,
+  "known_event_rate_per_wall_hour": 1.1065095797466653,
+  "known_invocation_wall_seconds": 1029.878756251026,
+  "known_invocation_fraction_percent": 1.7585967743354032,
   "last_build_to_native_feedback_minutes_approx": 89,
   "build_to_native_target_minutes": 30,
   "pending_build_finished_at": null,
@@ -301,9 +349,12 @@
   "post_guard_hold_target_minutes": 10,
   "last_successful_snapshot_review_age_seconds": 17.72,
   "snapshot_launch_target_seconds": 30,
-  "included_usage_percent": 92.0,
-  "usage_delta_percentage_points": 30.0,
-  "remaining_percentage_points_to_97_stop": 5.0,
+  "included_usage_percent": 95.0,
+  "usage_delta_percentage_points": 33.0,
+  "requested_included_usage_stop_percent": 100,
+  "active_included_usage_stop_percent": 97.0,
+  "remaining_percentage_points_to_100_target": 5.0,
+  "remaining_percentage_points_to_active_stop": 2.0,
   "notes": [
     "Rates use elapsed wall time since the named baseline, not CPU time.",
     "Confirmed counters come from accepted campaign reports; no OS-percent inference.",

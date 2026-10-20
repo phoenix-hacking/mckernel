@@ -1,0 +1,250 @@
+{
+  "schema": "mckernel.independent-selected205-two-complete-cycle-stage-and-mandatory-consumer-ordinary-review.v1",
+  "status": "PASS",
+  "decision": "PASS_EXACT_TWO_ORDINARY_SELECTED205_CYCLE_STAGE_AND_MANDATORY_CONSUMER_PREPARATION_STEPS_ONLY",
+  "implementation_ownership": false,
+  "functional_scope": "Functional OS/apps plus Rust/reviewed assembly; user/Linux-control archive and owner preparation only. No kernel/module change.",
+  "actual_offline_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-independent-review-20261019-1/ACTUAL-TWO-COMPLETE-CYCLE-OFFLINE-REVIEW.json",
+    "sha256": "cb527bce8fae9f4f6aa810687b628f3c01e75415a7dd791a6b92eaaff201c14c",
+    "bytes": 26589
+  },
+  "source_index": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/STAGE-AND-CONSUMER-INDEX.json",
+    "sha256": "9d75cc19e146cdcefcb0ee8c9dba32edc557993b2597d87f6bceedf540927573",
+    "bytes": 1957
+  },
+  "proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/EXACT-STAGE-AND-CONSUMER-PROPOSAL.json",
+    "sha256": "cf10c8d1c8c2ec32e576ac3f4bf4613d7e654bdef62a829957bc2026589034e0",
+    "bytes": 4474
+  },
+  "execution_profile": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/EXECUTION-PROFILE.json",
+    "sha256": "2573ad1b93863ee116e923d07186c4d265878ed06a11162501bec14a665c56e8",
+    "bytes": 2950
+  },
+  "source_authorities": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/SOURCE-AUTHORITIES.json",
+    "sha256": "c7a0a2b420358ad353a6b404e0e0f729c19d51b15bb8ae18fb2b696f6b6592fb",
+    "bytes": 19035
+  },
+  "source_authority_count": 44,
+  "source_identity_mismatches": [],
+  "allowed_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=3",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--core=0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/run_stage_and_consumer.py",
+    "--profile",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/EXECUTION-PROFILE.json",
+    "--profile-sha256",
+    "2573ad1b93863ee116e923d07186c4d265878ed06a11162501bec14a665c56e8"
+  ],
+  "commands": [
+    {
+      "role": "stage",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/stage_cycles.py",
+        "--binding",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/STAGE-INPUTS.json",
+        "--binding-sha256",
+        "50ddfc8cec42bd26a307b3af1cc0384e1f7e9d58f208aac0c3aaa859d7f98986"
+      ]
+    },
+    {
+      "role": "typed-cycle-consumer-and-parent",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/prepare_cycles.py",
+        "--binding",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/PREPARATION-INPUTS.json",
+        "--binding-sha256",
+        "d53a83284c5b43c04e3b9a650c60aec6a010d9b8c38b9b899af86d238eab5e67"
+      ]
+    }
+  ],
+  "profile": {
+    "schema": "mckernel.selected205.two-complete-cycle-exact-ordinary-profile.v1",
+    "status": "SOURCE_ONLY_NO_EXECUTION_ALLOCATION",
+    "source_authorities": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/SOURCE-AUTHORITIES.json",
+      "sha256": "c7a0a2b420358ad353a6b404e0e0f729c19d51b15bb8ae18fb2b696f6b6592fb",
+      "bytes": 19035
+    },
+    "tool_paths": [
+      {
+        "path": "/usr/bin/taskset",
+        "resolved": "/usr/bin/taskset"
+      },
+      {
+        "path": "/usr/bin/prlimit",
+        "resolved": "/usr/bin/prlimit"
+      },
+      {
+        "path": "/usr/bin/timeout",
+        "resolved": "/usr/bin/timeout"
+      },
+      {
+        "path": "/home/holden/anaconda3/bin/python3",
+        "resolved": "/home/holden/anaconda3/bin/python3.9"
+      }
+    ],
+    "commands": [
+      {
+        "role": "stage",
+        "argv": [
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/stage_cycles.py",
+          "--binding",
+          "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/STAGE-INPUTS.json",
+          "--binding-sha256",
+          "50ddfc8cec42bd26a307b3af1cc0384e1f7e9d58f208aac0c3aaa859d7f98986"
+        ]
+      },
+      {
+        "role": "typed-cycle-consumer-and-parent",
+        "argv": [
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/prepare_cycles.py",
+          "--binding",
+          "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/PREPARATION-INPUTS.json",
+          "--binding-sha256",
+          "d53a83284c5b43c04e3b9a650c60aec6a010d9b8c38b9b899af86d238eab5e67"
+        ]
+      }
+    ],
+    "capture_root": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/ordinary-captures-1",
+    "fresh_outputs": [
+      "/home/holden/mckernel-work/scratch/cyc205-stage-261019-1",
+      "/home/holden/mckernel-work/scratch/cyc205-src-261019-1",
+      "/home/holden/mckernel-work/scratch/cyc205-m-261019-1",
+      "/home/holden/mckernel-work/scratch/cyc205-p",
+      "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/ordinary-captures-1"
+    ],
+    "cpu": 7,
+    "jobs": 1,
+    "as_bytes": 1073741824,
+    "cpu_seconds": 30,
+    "outer_wall_seconds": 35,
+    "global_work_seconds": 28,
+    "cleanup_seconds": 3,
+    "stream_fsize": 33554432,
+    "host_growth_bytes": 8388608,
+    "scratch_growth_bytes": 67108864,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "reserve_bytes": 671088640,
+    "RAM_min_available_bytes": 5368709120,
+    "stage_acceptance": false,
+    "native_acceptance": false
+  },
+  "sources": {
+    "stage_cycles.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/stage_cycles.py",
+      "sha256": "ed2815e21b9a044879401fec1661ffb197ee8e650137646a0bee1660ec86fab6",
+      "bytes": 8880
+    },
+    "prepare_cycles.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/prepare_cycles.py",
+      "sha256": "d46cb9ddde7b2e0ea9fe29db56ec72c82355f7e73fab4caf252e7e5898e5f5d1",
+      "bytes": 11055
+    },
+    "native_diagnostic.py.in": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/native_diagnostic.py.in",
+      "sha256": "622a8df5f3831fa24f4469bf6fda0b64d06f9c1a4742a988867277cbc12ccd5d",
+      "bytes": 4795
+    },
+    "native_diagnostic_runner.py.in": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/native_diagnostic_runner.py.in",
+      "sha256": "874777807a3779f1a07859f114a4ede6a813c4e3ab5aabecc6cacde9a480ba98",
+      "bytes": 588
+    },
+    "native_diagnostic_container_owner.py.in": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/native_diagnostic_container_owner.py.in",
+      "sha256": "514ed99f6c24552167d603bab7aae7ddd1a07c1122d7278a574bfb8539e3dcbe",
+      "bytes": 1199
+    },
+    "run_stage_and_consumer.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/run_stage_and_consumer.py",
+      "sha256": "5ecfbdc9e4ff0e303d068c2181b83db3aa51d4282003f11229ef6ed188ff81e1",
+      "bytes": 5101
+    }
+  },
+  "bindings": {
+    "STAGE-INPUTS.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/STAGE-INPUTS.json",
+      "sha256": "50ddfc8cec42bd26a307b3af1cc0384e1f7e9d58f208aac0c3aaa859d7f98986",
+      "bytes": 5353
+    },
+    "PREPARATION-INPUTS.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/PREPARATION-INPUTS.json",
+      "sha256": "d53a83284c5b43c04e3b9a650c60aec6a010d9b8c38b9b899af86d238eab5e67",
+      "bytes": 14856
+    },
+    "PROSPECTIVE-FULL-ARGV-NOT-PREFLIGHT.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/PROSPECTIVE-FULL-ARGV-NOT-PREFLIGHT.json",
+      "sha256": "acccc4f90a4a42decf32a4ef4c6c968ae1630d3057f19d4a6f8f3f58c8db55ce",
+      "bytes": 2469
+    }
+  },
+  "affected_boundary": {
+    "stage": "Pinned unchanged04e3 cap16 raw-span transform changes only existing boot and suffix init; original newc metadata/header semantics and every unaffected raw span checked by actual code. Single new CPU2 public-release helper encoded with existing archive encoder. RAW/output64MiB limits unchanged. Compressed output SHA and raw suffix SHA remain distinct.",
+    "tuple": "Exact ff4f NEW205 +c396/af234/6571, unchanged frozen387B/254B pair payloads, strict startup CPUs and stop helper. No oldFP1e7 substitution or alternate round-loop body.",
+    "compiled_originals": "Source-bound full11 original boot/collector/release binaries remain0700; new stage copies use exact same bytes and0755 matching executable members. All44 selected current source/metadata inputs verified.",
+    "mandatory_consumer": "Runtime ND imports pinned accepted original host observer and preserves process/QMP/deadline/error/retirement gates; only pair-body delegation requires full05bb cycle oracle. Exact runtime-case binds collector, boot, release and stager hashes; mandatory raw48B/real generation/strict CPU/2pair/2stop/2public-release protocol cannot be replaced by one-pair proxy.",
+    "source_visibility": "Original source-hash closure is extended by exact runtime sources, accepted source-generation proof and mandatory oracle. Existing root owner/runner CLI remain imported; whole consumed current source/artifact path set is checked under explicit inherited/additional readonly roots.",
+    "typed_fixture": "Prospective second ordinary step runs actual generated owner CLI and runner CLI only through explicit modeled two-cycle stream and forbidden real subprocess/socket/exec factories, and requires exact full modeled report/clean cleanup. Fresh real native parent remains empty and owner evidence absent. This is protocol composition only.",
+    "parent_and_geometry": "Fresh scratch/cyc205-p/a parent, nonce4ca75a609b4b42b2b30d243a930e2f51. Whole prospective QEMU argv computed from accepted current command with only fixed new attempt/initrd and checked again against actual owner before later runtime. One AF_UNIX QMP95B; monitor none. Actual geometry/parent identity remain genuine outputs of the planned consumer command.",
+    "caller": "Imports existing pinned3f588 direct-join capture primitive only, not sibling round logic. True childjoin/group absence/errors/timeouts checked before advancing. Added exactly one success condition requiring already stable captured stderr.size0; all prior caller bytes unchanged. Shared28s work/30CPU and35s+3 outer, per-source1GiB/32MiB, root-independent ordinary lifetime unchanged."
+  },
+  "AF_UNIX_prospective_endpoints": [
+    {
+      "option": "-qmp",
+      "path": "/home/holden/mckernel-work/scratch/cyc205-p/a/attempt-4ca75a609b4b42b2b30d243a930e2f51/qmp.sock",
+      "encoded_bytes": 95
+    }
+  ],
+  "pending_actuals": [
+    "Stage manifest/archive/result identities and metadata preservation acceptance.",
+    "Actual generated owner/runner mandatory-consumer report, full source map, fresh parent identity and whole QEMU argv.",
+    "Current latest physical predecessor/fresh runtime snapshot and independent exact native release."
+  ],
+  "execution_conditions": [
+    "Root must explicitly allocate CPU7 for this one-job two-command chain, separate from sibling3round/native work, and perform genuine fresh usage/capacity/affinity admission. No allocation arises from this review.",
+    "Run exact sequential commands once; first command failure or nonempty stderr stops chain and preserves every output/status/stream. No automatic source correction/retry.",
+    "Preserve original sources, prior9d75 predecessor draft925/943 and both earlier ordinary compiler failures. Source compiler/model acceptance is not native-cycle or restoration acceptance."
+  ],
+  "source_checks_only_by_reviewer": true,
+  "actual_stage_accepted": false,
+  "actual_typed_preparation_accepted": false,
+  "root_or_native_authority": false,
+  "native_cycles_accepted": 0,
+  "payload_launches_accepted": 0,
+  "full_restoration_verified": false,
+  "quota_credit": false,
+  "remaining_source_profile_blockers": []
+}

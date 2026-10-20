@@ -1,0 +1,251 @@
+{
+  "activation_or_ACK_authority": false,
+  "actual_native_legacy_crate_review": {
+    "bytes": 82165,
+    "path": "/home/holden/mckernel-work/host-preparation/current-guest-fullcrate-owner-independent-review-20261020-1/ACTUAL-NATIVE-AND-LEGACY-CURRENT-FULLCRATE-OBJECT-REVIEW.json",
+    "sha256": "82f8a3f2524acad016f2afb083994f53a21ca439afa2f54d974b660b13dfc8e3"
+  },
+  "compiler_command_file": {
+    "bytes": 2697,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/compiler-commands.json",
+    "sha256": "69cffbe8b6af4d8a6f54b6842e462926b2e8199ae2d96271bb07438054f340a7",
+    "stable_fd": {
+      "st_ctime_ns": 1792460640240021282,
+      "st_dev": 66306,
+      "st_gid": 1000,
+      "st_ino": 48125225,
+      "st_mode": 33152,
+      "st_mtime_ns": 1792460640240021282,
+      "st_nlink": 1,
+      "st_size": 2697,
+      "st_uid": 1000
+    }
+  },
+  "constructor_callers": 0,
+  "effective_ABA_amendment": {
+    "bytes": 4691,
+    "path": "/home/holden/mckernel-work/host-preparation/provider-ownership-review-20261019-1/CURRENT-GUEST-CONTROL-EFFECTIVE-ABA-SOURCE-AMENDMENT-REVIEW.json",
+    "sha256": "2655c5ef2c560e5bf960b549e568c14001036ccf707c488df8688969043e60c4"
+  },
+  "first_owned_child_transition": {
+    "current_callsite": "kernel/syscall.c:7538-7551 non-CLONE_VM request1 preparation and do_syscall",
+    "existing_cleanup": "kernel/syscall.c:7732-7743 destroy_thread resets refs/releases thread then releases reserved cpuid",
+    "failure_contract": "before begin, cancel must return unchanged credits for existing destroy_thread/release_cpuid; after possible publication, uncertain errors retain those credits and must not execute unconditional release_thread/release_cpuid",
+    "missing": "move exact private child Thread/process/VM and reserved cpuid credits from do_fork local cleanup ownership into a Rust-owned non-Copy carrier before begin/publication; parent lifetime must remain genuinely owned",
+    "rust_constructor": "kernel/rust/fork_control_guest.rs:87 process_fork_guest_carrier_create_current_v1",
+    "scope": "identify only; no new implementation or activation begun"
+  },
+  "git_operations": 0,
+  "original_detailed_source_review": {
+    "bytes": 8203,
+    "path": "/home/holden/mckernel-work/host-preparation/provider-ownership-review-20261019-1/CURRENT-GUEST-CONTROL-FINAL-PRODUCER-OBSERVER-SOURCE-REVIEW.json",
+    "sha256": "7dc670b0b4921f214ca80c6a5be667d845ce262b235e17510f2d866b1f1a45d8"
+  },
+  "patch": {
+    "bytes": 24735,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-integration-1/current-guest-control.patch",
+    "sha256": "5d591c6e4a11683bc8988a0ecb929733e6f7f2a8848a35f64b1e344ec06792fc"
+  },
+  "pending": [
+    "C/GCC14 actual default consumer build",
+    "linked image/module/native proof",
+    "normal do_fork constructor ownership transfer",
+    "host positive provider and final ACK/terminal pin release"
+  ],
+  "repository_writes": 0,
+  "root_next": "root alone performs current apply-check and integrates exact five-file patch preserving all other WIP",
+  "rows": [
+    {
+      "actual_compiled_overlay": {
+        "bytes": 22828,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/source/kernel/CMakeLists.txt",
+        "sha256": "7fce842a6cf968c7fd6d79b3cc70ae8fa41217d4533c722edcfa41e784ae1198",
+        "stable_fd": {
+          "st_ctime_ns": 1792460640036014567,
+          "st_dev": 66306,
+          "st_gid": 1000,
+          "st_ino": 48125222,
+          "st_mode": 33152,
+          "st_mtime_ns": 1792460640036014567,
+          "st_nlink": 1,
+          "st_size": 22828,
+          "st_uid": 1000
+        }
+      },
+      "build_glue_only_not_exercised_by_direct_rustc": true,
+      "current_base": {
+        "bytes": 22705,
+        "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+        "sha256": "dc265d048afefeccaba550a3174b7fe39908bb3552c66cd05e67f64194928789"
+      },
+      "integration_output": {
+        "bytes": 22828,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-integration-1/overlay/kernel/CMakeLists.txt",
+        "sha256": "7fce842a6cf968c7fd6d79b3cc70ae8fa41217d4533c722edcfa41e784ae1198"
+      },
+      "relative": "kernel/CMakeLists.txt",
+      "reviewed_output": {
+        "bytes": 22828,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/source-final-2/kernel/CMakeLists.txt",
+        "sha256": "7fce842a6cf968c7fd6d79b3cc70ae8fa41217d4533c722edcfa41e784ae1198"
+      }
+    },
+    {
+      "actual_compiled_overlay": {
+        "bytes": 14894,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/source/kernel/rust/fork_control_guest.rs",
+        "sha256": "39463152363b5dcac613c2715a1a86b5a9e266722fa15da6b14eeafcaa0fcf0e",
+        "stable_fd": {
+          "st_ctime_ns": 1792460640036014567,
+          "st_dev": 66306,
+          "st_gid": 1000,
+          "st_ino": 48125220,
+          "st_mode": 33152,
+          "st_mtime_ns": 1792460640036014567,
+          "st_nlink": 1,
+          "st_size": 14894,
+          "st_uid": 1000
+        }
+      },
+      "build_glue_only_not_exercised_by_direct_rustc": false,
+      "current_base": null,
+      "integration_output": {
+        "bytes": 14894,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-integration-1/overlay/kernel/rust/fork_control_guest.rs",
+        "sha256": "39463152363b5dcac613c2715a1a86b5a9e266722fa15da6b14eeafcaa0fcf0e"
+      },
+      "relative": "kernel/rust/fork_control_guest.rs",
+      "reviewed_output": {
+        "bytes": 14894,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/source-final-2/kernel/rust/fork_control_guest.rs",
+        "sha256": "39463152363b5dcac613c2715a1a86b5a9e266722fa15da6b14eeafcaa0fcf0e"
+      }
+    },
+    {
+      "actual_compiled_overlay": {
+        "bytes": 8131,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/source/kernel/rust/fork_control_registry.rs",
+        "sha256": "246838be1f3a2d71cef7e975de8d17f908bfb89010bd5be9741b81b452830113",
+        "stable_fd": {
+          "st_ctime_ns": 1792460640036014567,
+          "st_dev": 66306,
+          "st_gid": 1000,
+          "st_ino": 48125221,
+          "st_mode": 33152,
+          "st_mtime_ns": 1792460640036014567,
+          "st_nlink": 1,
+          "st_size": 8131,
+          "st_uid": 1000
+        }
+      },
+      "build_glue_only_not_exercised_by_direct_rustc": false,
+      "current_base": null,
+      "integration_output": {
+        "bytes": 8131,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-integration-1/overlay/kernel/rust/fork_control_registry.rs",
+        "sha256": "246838be1f3a2d71cef7e975de8d17f908bfb89010bd5be9741b81b452830113"
+      },
+      "relative": "kernel/rust/fork_control_registry.rs",
+      "reviewed_output": {
+        "bytes": 8131,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/source-final-2/kernel/rust/fork_control_registry.rs",
+        "sha256": "246838be1f3a2d71cef7e975de8d17f908bfb89010bd5be9741b81b452830113"
+      }
+    },
+    {
+      "actual_compiled_overlay": {
+        "bytes": 2012,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/source/kernel/rust/lib.rs",
+        "sha256": "4e8d34dc3173aa1c9402ffd437738c6074fcec8a354dc91b6aa8f79d5348ba9c",
+        "stable_fd": {
+          "st_ctime_ns": 1792460640028014304,
+          "st_dev": 66306,
+          "st_gid": 1000,
+          "st_ino": 48125165,
+          "st_mode": 33152,
+          "st_mtime_ns": 1792460640028014304,
+          "st_nlink": 1,
+          "st_size": 2012,
+          "st_uid": 1000
+        }
+      },
+      "build_glue_only_not_exercised_by_direct_rustc": false,
+      "current_base": {
+        "bytes": 1961,
+        "path": "/home/holden/mckernel/kernel/rust/lib.rs",
+        "sha256": "efe5379e2e81dc15995bca9fb243b9d1cf5ac9074fd7b869dda696a1bc9de723"
+      },
+      "integration_output": {
+        "bytes": 2012,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-integration-1/overlay/kernel/rust/lib.rs",
+        "sha256": "4e8d34dc3173aa1c9402ffd437738c6074fcec8a354dc91b6aa8f79d5348ba9c"
+      },
+      "relative": "kernel/rust/lib.rs",
+      "reviewed_output": {
+        "bytes": 2012,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/source-final-2/kernel/rust/lib.rs",
+        "sha256": "4e8d34dc3173aa1c9402ffd437738c6074fcec8a354dc91b6aa8f79d5348ba9c"
+      }
+    },
+    {
+      "actual_compiled_overlay": {
+        "bytes": 695262,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/source/kernel/rust/syscall_policy.rs",
+        "sha256": "11f46d4be9c7daab86bea7a6d289476dd87abd46f3ceb3fa9622581751417b3b",
+        "stable_fd": {
+          "st_ctime_ns": 1792460640032014436,
+          "st_dev": 66306,
+          "st_gid": 1000,
+          "st_ino": 48125196,
+          "st_mode": 33152,
+          "st_mtime_ns": 1792460640032014436,
+          "st_nlink": 1,
+          "st_size": 695262,
+          "st_uid": 1000
+        }
+      },
+      "build_glue_only_not_exercised_by_direct_rustc": false,
+      "current_base": {
+        "bytes": 695080,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "2edc424e01e3bb3acc7542432dde8fa0f977884558d3525efb0354acbc3c04ea"
+      },
+      "integration_output": {
+        "bytes": 695262,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-integration-1/overlay/kernel/rust/syscall_policy.rs",
+        "sha256": "11f46d4be9c7daab86bea7a6d289476dd87abd46f3ceb3fa9622581751417b3b"
+      },
+      "relative": "kernel/rust/syscall_policy.rs",
+      "reviewed_output": {
+        "bytes": 695262,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/source-final-2/kernel/rust/syscall_policy.rs",
+        "sha256": "11f46d4be9c7daab86bea7a6d289476dd87abd46f3ceb3fa9622581751417b3b"
+      }
+    }
+  ],
+  "schema": "mckernel.current-guest-control.root-integration-index.v1",
+  "source_identity": "0789b3095ba22f201ad115046f956e6053c6fe8ff70ae47d62ffc0f67bd393e2",
+  "source_manifest": {
+    "bytes": 18656,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/source-manifest.json",
+    "sha256": "c45ebb2cee3eb4c392fa9200f7bb9b738cf7c06ec3140590517a801063c30508",
+    "stable_fd": {
+      "st_ctime_ns": 1792460640036014567,
+      "st_dev": 66306,
+      "st_gid": 1000,
+      "st_ino": 48125223,
+      "st_mode": 33152,
+      "st_mtime_ns": 1792460640036014567,
+      "st_nlink": 1,
+      "st_size": 18656,
+      "st_uid": 1000
+    }
+  },
+  "source_pins": {
+    "bytes": 3914,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/CURRENT-GUEST-SOURCE-PINS-FINAL-2.json",
+    "sha256": "749cbb3f719afb555f577587950b68bd7fba6761854768159743bc20d723648c"
+  },
+  "status": "EXACT_CURRENT_BASES_AND_ALL_PATCH_HUNKS_MATCH_REVIEWED_COMPILED_RUST_OVERLAY",
+  "tests_or_compilers_replayed": 0
+}

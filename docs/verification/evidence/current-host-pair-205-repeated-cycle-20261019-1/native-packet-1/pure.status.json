@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=3",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--core=0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/check_actual_snapshot_inputs.py"
+  ],
+  "pid": 1760526,
+  "start_ticks": "25782452",
+  "returncode": 0,
+  "seconds": 0.8837836449965835,
+  "direct_join": true,
+  "streams_closed": true,
+  "owned_group_absent": true
+}

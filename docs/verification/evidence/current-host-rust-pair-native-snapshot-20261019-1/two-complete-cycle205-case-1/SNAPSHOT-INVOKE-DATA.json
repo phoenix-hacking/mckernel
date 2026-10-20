@@ -1,0 +1,70 @@
+{
+  "schema": "mckernel.two-complete-cycle205-exact-snapshot-invocation-data.v1",
+  "producer": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/root_manual_snapshot_two_cycle.py",
+    "sha256": "59a8abc22dad250da6f9698209974f0448f3feed5e80a801634f5d836c8c00eb",
+    "bytes": 8447
+  },
+  "authored_bindings": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/two-complete-cycle205-case-1/fresh-snapshot-bindings.json",
+    "sha256": "8ed26f126345a90589d16bc4fd64b67c6ea139a400b410e9094b79472c1165ce",
+    "bytes": 4599
+  },
+  "consumed_bindings": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/fresh-snapshot-bindings.json",
+    "sha256": "8ed26f126345a90589d16bc4fd64b67c6ea139a400b410e9094b79472c1165ce",
+    "bytes": 4599
+  },
+  "bindings": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/fresh-snapshot-bindings.json",
+    "sha256": "8ed26f126345a90589d16bc4fd64b67c6ea139a400b410e9094b79472c1165ce",
+    "bytes": 4599
+  },
+  "terminal": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-physical-review-20261020-1/decision.json",
+    "sha256": "33e1d2c5e000b789f9adf0595e02a5e50075cbe54a61e6154f267a92bb9ca196"
+  },
+  "root_snapshot_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=256",
+    "--fsize=33554432",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/root_manual_snapshot_two_cycle.py",
+    "--bindings-sha256",
+    "8ed26f126345a90589d16bc4fd64b67c6ea139a400b410e9094b79472c1165ce",
+    "--terminal",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-physical-review-20261020-1/decision.json",
+    "--terminal-sha256",
+    "33e1d2c5e000b789f9adf0595e02a5e50075cbe54a61e6154f267a92bb9ca196"
+  ],
+  "root_snapshot_output": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/two-complete-cycle205-case-1/root-live-preflight-1.json",
+  "root_capture_outputs": {
+    "stdout": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/two-complete-cycle205-case-1/captures/snapshot-1.stdout",
+    "stderr": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/two-complete-cycle205-case-1/captures/snapshot-1.stderr",
+    "status.json": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/two-complete-cycle205-case-1/captures/snapshot-1.status.json"
+  },
+  "snapshot_summary_contract": {
+    "required_status": "PASS_LIVE_PREEXECUTION_SNAPSHOT",
+    "path_must_equal": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/two-complete-cycle205-case-1/root-live-preflight-1.json",
+    "sha256_field": "sha256",
+    "crosscheck_actual_OUTPUT_whole_file": true
+  },
+  "data_only": true,
+  "source_owner": "evening_two_app_batch",
+  "snapshot_minted": false
+}

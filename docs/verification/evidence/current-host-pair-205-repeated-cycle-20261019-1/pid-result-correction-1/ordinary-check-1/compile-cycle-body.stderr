@@ -1,0 +1,13 @@
+In file included from /home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/collector-two-complete-cycles.c:3,
+                 from /home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/cycle-body.c:4:
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/collector-base-with-pid.c: In function ‘make_pipe’:
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/collector-base-with-pid.c:137:9: error: implicit declaration of function ‘pipe2’; did you mean ‘pipe’? [-Werror=implicit-function-declaration]
+  137 |     if (pipe2(p, O_CLOEXEC)) return -1;
+      |         ^~~~~
+      |         pipe
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/collector-base-with-pid.c: In function ‘frozen_FP_main_never_called’:
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/collector-base-with-pid.c:1032:16: error: implicit declaration of function ‘syncfs’; did you mean ‘sync’? [-Werror=implicit-function-declaration]
+ 1032 |     else { if (syncfs(evidence_fd)) good = 0; if (close(evidence_fd)) good = 0; }
+      |                ^~~~~~
+      |                sync
+cc1: all warnings being treated as errors

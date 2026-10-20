@@ -1,0 +1,286 @@
+{
+  "ABI_inputs": {
+    "bytes": 7628,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/fresh-fullmodule-attempt-1/ABI-COMPILE-INPUTS.json",
+    "sha256": "ff8e9a6691a247f6304bc9e92bb9a0f169f623350439e6959f33e1c30988d663"
+  },
+  "actual_compiler_failure_review": {
+    "bytes": 5179,
+    "path": "/home/holden/mckernel-work/host-preparation/held-host-control-fullmodule-independent-review-20261019-1/HELD-HOST-CONTROL-SDK-ACTUAL-FIRST-COMPILER-FAILURE-REVIEW.json",
+    "sha256": "6391100983441b51c9b8b21dd46972ec108f8df5176fb84cf91e6df632b2976c"
+  },
+  "actual_per_crate_dependency_delta": {
+    "bytes": 4552,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-1/TRANSITIVE-CRATE-DEPENDENCIES.json",
+    "sha256": "19959555ef7266799452251df127fe861e2daac4c02e2f522d94903130e66ba3"
+  },
+  "actual_transitive_dependency_resolution": {
+    "bytes": 36274,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-1/TRANSITIVE-SOURCE-PLAN.json",
+    "sha256": "b1a47c1c604de7dc243d17774783a6e4a8892caf3463b7fdeb08e457f627a20a"
+  },
+  "author": "rust_next_teardown_leaf",
+  "automatic_third_compiler_authorized": false,
+  "compiler_failure_observed": "Actual correction1 fullSDK:8 EOVERFLOWprelude omissions+1wrong kernel::Error namespace; previous decoder/runtime-scope errors disappeared",
+  "corrected_compile_executed": false,
+  "correction_patch": {
+    "bytes": 5359,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/expert-sdk-api-correction.patch",
+    "sha256": "d444e78581d9035e9de127f0a23cd5982fea8aee51e057a02cc1f044100a8daa"
+  },
+  "correction_sources": [
+    {
+      "bytes": 50011,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/source/host-kernel/native-rust/smp_fork_link.rs",
+      "sha256": "dcbfae5a403b78d0993228a95fc37887bb59f2deb89eabc65d969a705ed738e3"
+    },
+    {
+      "bytes": 21415,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/source/host-kernel/native-rust/smp_fork_ingress.rs",
+      "sha256": "c88ce822511e091e47e36c4067c97e28323b14f12b5589f82ac23e2ff9096fc1"
+    },
+    {
+      "bytes": 96170,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/source/host-kernel/native-rust/smp_application.rs",
+      "sha256": "1b67465e9620ece6bcdacdf6e38e66b667e6ec392695891b6ffc2288bf96fc96"
+    },
+    {
+      "bytes": 20044,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/source/host-kernel/native-rust/smp_application_image.rs",
+      "sha256": "914cf6b9dac1b4327a69656fd1ca14f5067ee98d47c909c4c952e5047199c34a"
+    },
+    {
+      "bytes": 37098,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/source/host-kernel/native-rust/mcctrl_vm.rs",
+      "sha256": "b2fa00ae426f2817e8c6d8f47810a98ee32f5ccea98bc9505a9fdb7c317d8a76"
+    },
+    {
+      "bytes": 42937,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/source/host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "sha256": "56734fbfb9bfe9a2ce233999aa758d1fa3d574918c472ffe2cbfd9ac12f2076c"
+    }
+  ],
+  "counts": {
+    "compiler_corrected_R10_files": 5,
+    "compiler_corrected_other_base_files": 2,
+    "engine_catalog": 11,
+    "materialization_rows": 78,
+    "original_R10_selection": 10,
+    "publication_rows_later": 99,
+    "source_bytes": 1543517,
+    "source_files": 63,
+    "transitive_modules": 3,
+    "unchanged_R10_files": 5
+  },
+  "current_integration": {
+    "blocked_API": "Current accepted IHK lacks v12/control-receipt ABI; selected current integration belongs to separate provider/registry lane",
+    "preserve": [
+      "36aMailbox",
+      "currentParentSlotPin",
+      "kmsg lifecycle"
+    ],
+    "whole_old_R10_apply": false
+  },
+  "driver_deltas": [
+    "Exact63source/new72e691contentidentity/replacementpins; no newimports/dependencies",
+    "StrictSMP3extra .cmd deps and exactIHK/mcctrl sets unchanged from correction1",
+    "Expert-only8checkedoverflow errno translations through existingrealhelpers+actualkernelbindings",
+    "shutdown_v6_post_effect parameter type only kernel::error::Error; flagpacking/body/callers unchanged",
+    "Previous actualdecoder andruntimecallbackscope correction retained; no objectadoption",
+    "All ownership/container/pipeGNUmake-j2/toolchain/profile guards inherited unchanged"
+  ],
+  "expert_disposition": {
+    "bytes": 7122,
+    "path": "/home/holden/mckernel-work/host-preparation/held-host-control-fullmodule-independent-review-20261019-1/HELD-HOST-CONTROL-CORRECTED-SDK-COMPILER-EXPERT-DISPOSITION.json",
+    "sha256": "8112b72d22e77fbfcbba7b04f41428ae6c7480b4602004126d4f53004ef59fa1"
+  },
+  "failure_family": "Two actual failed fullSDKattempts preserved; this is explicitly expert-directed SDK API repair2, not automatic thirdcompiler authority",
+  "functional_scope": "Functional OS/apps and Rust delivery; complete retained IHK/mcctrl SDK compile target, not current-main source integration/default activation",
+  "future_namespace": {
+    "actual_request_sha256": null,
+    "candidate": "/home/holden/mckernel-work/scratch/nsd-c-8a7c56ed47114575bef3f93b0e315f79",
+    "evidence": "/home/holden/mckernel-work/scratch/nsd-o-8a7c56ed47114575bef3f93b0e315f79",
+    "inputs": "/home/holden/mckernel-work/scratch/nsd-i-8a7c56ed47114575bef3f93b0e315f79",
+    "nonce": "8a7c56ed47114575bef3f93b0e315f79",
+    "physical_identities": null
+  },
+  "heavy": {
+    "argv": [
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/fresh-fullmodule-attempt-1/capsule/scripts/native_running_external_modules_owner.py",
+      "--request",
+      "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/fresh-fullmodule-attempt-1/request.json",
+      "--request-sha256",
+      null,
+      "--release",
+      "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/fresh-fullmodule-attempt-1/execution-release.json",
+      "--release-sha256",
+      null
+    ],
+    "capture_parent": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/fresh-fullmodule-attempt-1",
+    "container_profile": {
+      "candidate_disk_budget_bytes": 536870912,
+      "cap_drop": [
+        "ALL"
+      ],
+      "cpu_limit": 4,
+      "cpu_set": "2-5",
+      "ipc": "private",
+      "memory_bytes": 12884901888,
+      "memory_swap_bytes": 12884901888,
+      "network": "none",
+      "no_new_privileges": true,
+      "owner_capture_budget_bytes": 67108864,
+      "pids_limit": 512,
+      "read_only_container": true,
+      "timeout_seconds": 1800,
+      "tmpfs": {
+        "/tmp": "rw,nodev,nosuid,size=256m"
+      },
+      "user": "1000:1000"
+    },
+    "controller_existing_profile": "CPU7/1job/2GiBAS;CPUunlimited/FSIZE32MiB/core0, exactreview/rootadmission required",
+    "fresh_output": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/fresh-fullmodule-attempt-1/actual-sdk-build-1",
+    "make_argv": [
+      "/usr/bin/env",
+      "-i",
+      "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+      "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+      "KBUILD_BUILD_USER=mckernel",
+      "KBUILD_BUILD_VERSION=1",
+      "SOURCE_DATE_EPOCH=1786434034",
+      "PATH=/usr/bin:/bin",
+      "LANG=C",
+      "LC_ALL=C",
+      "TZ=UTC",
+      "BASH_ENV=",
+      "ENV=",
+      "GNUMAKEFLAGS=",
+      "MAKEFILES=",
+      "MAKEFLAGS=",
+      "MAKEOVERRIDES=",
+      "MFLAGS=",
+      "LD_LIBRARY_PATH=",
+      "LD_PRELOAD=",
+      "HOME=/candidate/home",
+      "TMPDIR=/candidate/tmp",
+      "/usr/bin/make",
+      "-C",
+      "/out/source/linux-6.12.0-211.44.1.el10_2",
+      "O=/out/build",
+      "M=/candidate/modules",
+      "ARCH=x86_64",
+      "LLVM=1",
+      "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+      "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+      "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+      "KBUILD_BUILD_USER=mckernel",
+      "KBUILD_BUILD_VERSION=1",
+      "SOURCE_DATE_EPOCH=1786434034",
+      "--jobserver-style=pipe",
+      "-j2",
+      "modules"
+    ],
+    "owner": {
+      "bytes": null,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/fresh-fullmodule-attempt-1/capsule/scripts/native_running_external_modules_owner.py",
+      "sha256": null
+    },
+    "wait_timeout": null
+  },
+  "no_mock_or_projection_only_fixture_added": true,
+  "old_objects_reused": false,
+  "ordinary_capture": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/fresh-fullmodule-attempt-1/actual-source-preparation-1",
+  "ordinary_commands": [
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/fresh-fullmodule-attempt-1/prepare_fullmodule_inputs.py"
+      ],
+      "source": {
+        "bytes": 8290,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/fresh-fullmodule-attempt-1/prepare_fullmodule_inputs.py",
+        "sha256": "54cb76e47dce1a2f3b520222fffd60832e47cdad033f3095f1aa8cef1f9d53b3"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/fresh-fullmodule-attempt-1/materialize_request.py",
+        "--materialize"
+      ],
+      "source": {
+        "bytes": 3383,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/fresh-fullmodule-attempt-1/materialize_request.py",
+        "sha256": "f68716a268b3a367f627b6e995536496e1b2c504cb95d141a198d03dc30dbf25"
+      }
+    }
+  ],
+  "ordinary_profile_each": {
+    "address_space_bytes": 1073741824,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "finite_growth_allowance_bytes": 8388608,
+    "grace_seconds": 2,
+    "jobs": 1,
+    "stream_bytes": 33554432,
+    "wall_seconds": 35
+  },
+  "previous_actual_physical_retirement": {
+    "bytes": 28173,
+    "path": "/home/holden/mckernel-work/host-preparation/held-host-control-fullmodule-independent-review-20261019-1/HELD-HOST-CONTROL-CORRECTED-SDK-FAILED-BUILD-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "0e3d62a04117f946470e736547cc3e29845b502f76395c587f7cf57290523e86"
+  },
+  "previous_failed_request": {
+    "bytes": 2638,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-1/fresh-fullmodule-attempt-1/request.json",
+    "sha256": "db6141e5ac5b0e210f827bf02d9a53a9acb4f9de254e9a72dfc4c312f5720052"
+  },
+  "required_before_any_effect": [
+    "Root CPU6 grant/fresh floor+reserve+growth/usage/boot/loop/source+absence admission",
+    "Independent source/actualmaterialization+realrequestconsumer acceptance",
+    "Root98sourcepublication/fetch and independentexactheavyrelease",
+    "Soleheavy free/fresh12GiB4CPUadmission; no moduleload/guest permission"
+  ],
+  "schema": "mckernel.held-host-control-fullmodule.expert-correction2-executable-proposal.v1",
+  "source_delta": {
+    "bytes": 1367,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/SOURCE-DELTA.json",
+    "sha256": "b83eda411f976b8267f356ba5e5de11b7d89f6b59c3b92e36c2e05de96c1d09e"
+  },
+  "source_plan": {
+    "bytes": 35111,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-2/fresh-fullmodule-attempt-1/SOURCE-PLAN.json",
+    "sha256": "d675504ec45c1733b91bbe5be8f61d2b8dac48365e9ac6debcdafb72a22ac992"
+  },
+  "status": "EXPERT_DIRECTED_SOURCE_ONLY_UNRUN_NEW_ROOT_REQUEST_AND_RELEASE_REQUIRED"
+}

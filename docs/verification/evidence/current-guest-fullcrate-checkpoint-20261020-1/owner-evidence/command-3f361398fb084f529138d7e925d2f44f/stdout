@@ -1,0 +1,338 @@
+[
+    {
+        "Id": "3d724c052c9a9e12caa06d060e9a3f7e23364c7a5adeb9b5ccd1a74c021085ee",
+        "Created": "2026-10-20T02:23:26.563752483Z",
+        "Path": "/usr/bin/python3",
+        "Args": [
+            "/driver.py",
+            "--execute"
+        ],
+        "State": {
+            "Status": "created",
+            "Running": false,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 0,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "0001-01-01T00:00:00Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+        "ResolvConfPath": "",
+        "HostnamePath": "",
+        "HostsPath": "",
+        "LogPath": "",
+        "Name": "/mckernel-current-guest-fullcrate-0d4d19809d88",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "none",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": [
+                "ALL"
+            ],
+            "CgroupnsMode": "host",
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": true,
+            "SecurityOpt": [
+                "no-new-privileges"
+            ],
+            "Tmpfs": {
+                "/tmp": "rw,nodev,nosuid,size=256m"
+            },
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 12884901888,
+            "NanoCpus": 4000000000,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "2-5",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 12884901888,
+            "MemorySwappiness": null,
+            "OomKillDisable": false,
+            "PidsLimit": 512,
+            "Ulimits": [],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "Mounts": [
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/source",
+                    "Target": "/src",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+                    "Target": "/nightly",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/compile_driver_ready.py",
+                    "Target": "/driver.py",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/source-manifest.json",
+                    "Target": "/inputs.json",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/compiler-commands.json",
+                    "Target": "/commands.json",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/work",
+                    "Target": "/work"
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/owned_capture_helpers.py",
+                    "Target": "/owned-capture.py",
+                    "ReadOnly": true
+                },
+                {
+                    "Type": "bind",
+                    "Source": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py",
+                    "Target": "/accepted-host-owner.py",
+                    "ReadOnly": true
+                }
+            ],
+            "MaskedPaths": [
+                "/proc/asound",
+                "/proc/acpi",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/sys/firmware",
+                "/sys/devices/virtual/powercap"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ],
+            "Init": true
+        },
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/38aa37f374cc1b02d8a169c1d11b3e842081a3af31b3944e12fe743bfe246fc1-init/diff:/var/lib/docker/overlay2/7dfdeca53dbb9dd0b2a42681dfe546347648e0f11b7b03876404223be540f39f/diff:/var/lib/docker/overlay2/2a23ddce6067a5847fc046c77f050a037a224c752e9e6ff2d7d56ac9162e8982/diff",
+                "MergedDir": "/var/lib/docker/overlay2/38aa37f374cc1b02d8a169c1d11b3e842081a3af31b3944e12fe743bfe246fc1/merged",
+                "UpperDir": "/var/lib/docker/overlay2/38aa37f374cc1b02d8a169c1d11b3e842081a3af31b3944e12fe743bfe246fc1/diff",
+                "WorkDir": "/var/lib/docker/overlay2/38aa37f374cc1b02d8a169c1d11b3e842081a3af31b3944e12fe743bfe246fc1/work"
+            },
+            "Name": "overlay2"
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/source-manifest.json",
+                "Destination": "/inputs.json",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/compiler-commands.json",
+                "Destination": "/commands.json",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/work",
+                "Destination": "/work",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/owned_capture_helpers.py",
+                "Destination": "/owned-capture.py",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py",
+                "Destination": "/accepted-host-owner.py",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/source",
+                "Destination": "/src",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu",
+                "Destination": "/nightly",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/compile_driver_ready.py",
+                "Destination": "/driver.py",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+            "Hostname": "3d724c052c9a",
+            "Domainname": "",
+            "User": "1000:1000",
+            "AttachStdin": false,
+            "AttachStdout": true,
+            "AttachStderr": true,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "container=oci"
+            ],
+            "Cmd": [
+                "/driver.py",
+                "--execute"
+            ],
+            "Image": "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+            "Volumes": null,
+            "WorkingDir": "/",
+            "Entrypoint": [
+                "/usr/bin/python3"
+            ],
+            "OnBuild": null,
+            "Labels": {
+                "io.buildah.version": "1.43.1",
+                "license": "BSD-3-Clause",
+                "mckernel.owner": "0d4d19809d884beb9037798341df16c6",
+                "name": "rockylinux",
+                "org.opencontainers.image.authors": "Lukas Magauer, Neil Hanlon, Louis Abel",
+                "org.opencontainers.image.licenses": "BSD-3-Clause",
+                "org.opencontainers.image.source": "https://git.resf.org/sig_core/rocky-kiwi-descriptions/src/branch/r10",
+                "org.opencontainers.image.title": "rockylinux",
+                "org.opencontainers.image.vendor": "Rocky Enterprise Software Foundation",
+                "org.opencontainers.image.version": "10",
+                "summary": "Rocky Linux Base image",
+                "vendor": "Rocky Enterprise Software Foundation",
+                "version": "10"
+            }
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "",
+            "SandboxKey": "",
+            "Ports": {},
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "none": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "MacAddress": "",
+                    "NetworkID": "",
+                    "EndpointID": "",
+                    "Gateway": "",
+                    "IPAddress": "",
+                    "IPPrefixLen": 0,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DriverOpts": null,
+                    "DNSNames": null
+                }
+            }
+        }
+    }
+]

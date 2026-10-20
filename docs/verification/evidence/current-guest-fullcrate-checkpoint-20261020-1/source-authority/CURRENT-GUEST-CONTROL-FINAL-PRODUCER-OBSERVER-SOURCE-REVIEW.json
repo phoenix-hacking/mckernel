@@ -1,0 +1,102 @@
+{
+  "activation_authorized": false,
+  "compiler_tests_runtime_by_reviewer": 0,
+  "created_at_utc": "2026-10-20T01:33:42.212241+00:00",
+  "decision": "PASS_CURRENT_GUEST_FINAL_SCOPED_OWNERSHIP_AND_ACTUAL_ACQUIRE_CONSUMER_SOURCE_FOR_FULL_CRATE_COMPILE_ONLY",
+  "effective_delta": {
+    "checked_error_narrowing": "Required: i32::try_from then strictly negative, otherwise EPROTO. Both actual RET error paths use it. V1 direct i64 as i32 could turn a malformed -2^32 into zero; do not compile/integrate V1. Original record remains historical, this final source is effective.",
+    "internal_ABI": "Five existing uniquely named current_v1 entrypoints gain no_mangle/externC only; reprC Handle16/Observation128/packedIdentity88 stay exact. No C caller/header/compute body added; emitted symbols are dormant bodies, not default activation.",
+    "other_four_files_byte_identical_to_v1": true,
+    "postprepare_fields": "nr56 path requires actual requester TID, ttid0 from syscall_target_tid_result, valid0 from syscall_send_prepare_result; invariant request args and actual response Acquire checks retained.",
+    "source_difference_whitelist_exhaustive": true
+  },
+  "functional_scope": "Functional OS/apps and Rust/reviewed assembly. Current guest source compiler integration only; no compute C expansion or provider activation.",
+  "handoff": {
+    "bytes": 2897,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/CURRENT-GUEST-HANDOFF.json",
+    "sha256": "08221574a5985ae7e4f1b65ff0eea7a4a12a6e87116c4a7c6372a1de2e7035b5"
+  },
+  "implementation_author": "clone_thread_affinity_rust_repair",
+  "implementation_ownership": false,
+  "integration_condition": "Root may stage only this matching current five-file delta for separately admitted complete native/legacy crate compilation. Current normal do_fork constructor route stays absent. Source review does not authorize a heavy execution or runtime activation.",
+  "next_meaningful_check": "Full current native and legacy Rust crates with complete real current ABI/dependencies and CMake source list; no new projected standalone fixture. Exact command/profile/compiler release remains root-owned and separately reviewed.",
+  "old_failure_families_preserved": true,
+  "outputs": {
+    "kernel/CMakeLists.txt": {
+      "bytes": 22828,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/source-final/kernel/CMakeLists.txt",
+      "sha256": "7fce842a6cf968c7fd6d79b3cc70ae8fa41217d4533c722edcfa41e784ae1198"
+    },
+    "kernel/rust/fork_control_guest.rs": {
+      "bytes": 14839,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/source-final/kernel/rust/fork_control_guest.rs",
+      "sha256": "20498f1e24dcb0351051846261e5990ec916bb1cec3fe8381302916dd2e342c5"
+    },
+    "kernel/rust/fork_control_registry.rs": {
+      "bytes": 8131,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/source-final/kernel/rust/fork_control_registry.rs",
+      "sha256": "246838be1f3a2d71cef7e975de8d17f908bfb89010bd5be9741b81b452830113"
+    },
+    "kernel/rust/lib.rs": {
+      "bytes": 2012,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/source-final/kernel/rust/lib.rs",
+      "sha256": "4e8d34dc3173aa1c9402ffd437738c6074fcec8a354dc91b6aa8f79d5348ba9c"
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "bytes": 695262,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/source-final/kernel/rust/syscall_policy.rs",
+      "sha256": "11f46d4be9c7daab86bea7a6d289476dd87abd46f3ceb3fa9622581751417b3b"
+    }
+  },
+  "patch": {
+    "bytes": 24679,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-guest-control-FINAL.patch",
+    "sha256": "d4286405e3156afe14169c99ab0a98681e96adf3adfd86998c6c4c59b3a5f97a"
+  },
+  "pending": [
+    "Actual full current crate compilation and complete SDK/private-module compiler results.",
+    "Genuine current normal private-child owner construction route and strong initial provider registration; zero normal constructor callers means no practical activation yet.",
+    "Current-main selective host provider integration preserving mailbox repair, parent pin and kmsg; no wholesale old backend copy.",
+    "Actual matched guest transport/consumer and lifecycle proof, genuine revoke permit/final ACK/terminal ownership; no native or retirement accounting credit."
+  ],
+  "prior_review": {
+    "bytes": 6105,
+    "path": "/home/holden/mckernel-work/host-preparation/provider-ownership-review-20261019-1/CURRENT-GUEST-CONTROL-PRODUCER-OBSERVER-SOURCE-REVIEW.json",
+    "sha256": "e878d87f832ae277b6a90415391e177c0140c49708ca9944020ab552b6d225f0"
+  },
+  "proposed_full_crate_check": {
+    "bytes": 5690,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/FULL-CRATE-COMPILE-PROPOSAL-FINAL.json",
+    "sha256": "38f9c3552a817406ffed1d16f698458be0d6bd7e512633007809c66c291649f8"
+  },
+  "reviewer": "next_replace_tid_review",
+  "schema": "mckernel.current-rust-guest-control.producer-observer-source-review.v1",
+  "source_or_mock_is_native": false,
+  "source_pins": {
+    "bytes": 3904,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/CURRENT-GUEST-SOURCE-PINS-FINAL.json",
+    "sha256": "f85c29e74b3d4cc15edc99e93daecb4011e198532fc923d8a8da3fd49294829d"
+  },
+  "witnesses": [
+    {
+      "boundary": "Construction",
+      "finding": "Unsafe constructor requires actual current parent and distinct private child/process/VM with reserved CPU and caller-held child/task/MM credits. Checks genuine current ABI pointer relationships and unscheduled child metadata; allocates immovable heap carrier and initializes exact MCFKQ001 header. Numeric handle/refcount does not mint lifetime ownership. No normal do_fork caller exists."
+    },
+    {
+      "boundary": "Registry and FFI",
+      "finding": "64-entry exact epoch registry uses current linked cpu_pause; callbacks run after registry unlock under busy exclusion. Private cancel is sole freeing route; escaped/retained allocations never free. Submit builds actual stack SyscallRequest and stores only numeric matching metadata; callback and mutable Carrier borrow end before actual do_syscall, permitting the real wait observer to reenter safely."
+    },
+    {
+      "boundary": "Actual outer reply",
+      "finding": "Only insertion in actual syscall_offload_wait_reply is immediately after OUTER status Acquire loop, outside all nested-return handling. Exact current do_syscall owns the same stack Response; observer binds current request pointer/thread/cpu/invariant args/rtid, actual Response physical span and nonoverlap, and completed status. It does not rewrite actual ret/status."
+    },
+    {
+      "boundary": "Receipt binding",
+      "finding": "Initial MCFKQ001 matches actual retained host RequestDescriptor decoder; first MCFKW001 kind1/sequence1 positive PID and packed88-byte key match actual host writer. MCFKR001 validates full initial key/geometry/nonce and same actual Response physical; opaque host epoch/worker/delivery first bind occurs only after that genuine Acquire. Guest registry epoch is not IHK epoch, and host worker token is not Linux stid."
+    },
+    {
+      "boundary": "Failure and scope",
+      "finding": "Errors set carrier/pending retained state; armed submission guard retains on unexpected return, mismatch or missing observation. Successful observation returns copied metadata only, without task publication, destruction permit, HOST_REVOKED phase, ACK or terminal credit. Private cancellation caller must keep original Request live and never publish its now-stale carrier arguments after cancellation."
+    }
+  ]
+}

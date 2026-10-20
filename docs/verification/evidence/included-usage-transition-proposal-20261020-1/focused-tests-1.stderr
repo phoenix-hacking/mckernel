@@ -1,0 +1,25 @@
+........
+======================================================================
+FAIL: test_included_usage_through_99_percent_uses_full_included_allowance (__main__.CampaignTests) (percent=99)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "scripts/tests/test_os_goal_launcher.py", line 467, in test_included_usage_through_99_percent_uses_full_included_allowance
+    state = self.run_campaign(rpc, 0)
+  File "scripts/tests/test_os_goal_launcher.py", line 166, in run_campaign
+    self.assertEqual(campaign.run(), expected)
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_included_usage_through_99_percent_uses_full_included_allowance (__main__.CampaignTests) (percent=99.9)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "scripts/tests/test_os_goal_launcher.py", line 467, in test_included_usage_through_99_percent_uses_full_included_allowance
+    state = self.run_campaign(rpc, 0)
+  File "scripts/tests/test_os_goal_launcher.py", line 166, in run_campaign
+    self.assertEqual(campaign.run(), expected)
+AssertionError: 1 != 0
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.515s
+
+FAILED (failures=2)

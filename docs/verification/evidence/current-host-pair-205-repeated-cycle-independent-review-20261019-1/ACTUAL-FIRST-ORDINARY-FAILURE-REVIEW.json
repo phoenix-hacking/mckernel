@@ -1,0 +1,130 @@
+{
+  "schema": "mckernel.independent-selected205-two-cycle-ordinary-first-failure.v1",
+  "status": "FAIL",
+  "decision": "FAIL_COLLECTOR_RESULT_PID_INTERFACE_BEFORE_REMAINING_CHECKS",
+  "implementation_ownership": false,
+  "source_profile_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-independent-review-20261019-1/SOURCE-AND-EXACT-ORDINARY-CHECK-REVIEW.json",
+    "sha256": "e86f19b0588d5b1cbb19abaca82d1c323be1409959aac771b47fd5aa8b14d73f",
+    "bytes": 8150
+  },
+  "outer_status": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary.status.json",
+    "sha256": "02824a40a507d46cf8cfd507934a008c5e741063b0660336ae9cd232e61d0a5e",
+    "bytes": 617,
+    "fd_metadata": {
+      "dev": 66306,
+      "ino": 48122985,
+      "mode": 33152,
+      "uid": 1000,
+      "gid": 1000,
+      "nlink": 1,
+      "size": 617,
+      "mtime_ns": 1792458045590951069,
+      "ctime_ns": 1792458045590951069
+    }
+  },
+  "outer_stdout": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary.stdout",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "fd_metadata": {
+      "dev": 66306,
+      "ino": 48122975,
+      "mode": 33152,
+      "uid": 1000,
+      "gid": 1000,
+      "nlink": 1,
+      "size": 0,
+      "mtime_ns": 1792458045050934858,
+      "ctime_ns": 1792458045050934858
+    }
+  },
+  "outer_stderr": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary.stderr",
+    "sha256": "38836d127c9f0a62d9ea91694587492275f73f598a8999406c4841a09f5604dd",
+    "bytes": 791,
+    "fd_metadata": {
+      "dev": 66306,
+      "ino": 48122976,
+      "mode": 33152,
+      "uid": 1000,
+      "gid": 1000,
+      "nlink": 1,
+      "size": 791,
+      "mtime_ns": 1792458045586950949,
+      "ctime_ns": 1792458045586950949
+    }
+  },
+  "admission": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary-admission.json",
+    "sha256": "7d550d0491c2e09022d7e39ad72dc224b8cd498c03d222d9c4b860c5d948a473",
+    "bytes": 463
+  },
+  "compiler_statuses": {
+    "boot": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary-check-1/compile-boot.status.json",
+      "sha256": "a5ca7971f37c589977bdbbac2165efdfab0612eaf942a08463d6b03b9b31bf87",
+      "bytes": 888,
+      "fd_metadata": {
+        "dev": 66306,
+        "ino": 48122981,
+        "mode": 33152,
+        "uid": 1000,
+        "gid": 1000,
+        "nlink": 1,
+        "size": 888,
+        "mtime_ns": 1792458045518948908,
+        "ctime_ns": 1792458045518948908
+      }
+    },
+    "collector": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary-check-1/compile-collector.status.json",
+      "sha256": "9faf72a421c6a051c6424f791047e7f116751bb994470fd71af1c6b306465fd6",
+      "bytes": 604,
+      "fd_metadata": {
+        "dev": 66306,
+        "ino": 48122984,
+        "mode": 33152,
+        "uid": 1000,
+        "gid": 1000,
+        "nlink": 1,
+        "size": 604,
+        "mtime_ns": 1792458045586950949,
+        "ctime_ns": 1792458045586950949
+      }
+    }
+  },
+  "compiler_stderr": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary-check-1/compile-collector.stderr",
+    "sha256": "5e5296bf44dd15dd346996b8424a29d8f57e36635e753622a6798ffb27bd64c4",
+    "bytes": 1995,
+    "fd_metadata": {
+      "dev": 66306,
+      "ino": 48122983,
+      "mode": 33152,
+      "uid": 1000,
+      "gid": 1000,
+      "nlink": 1,
+      "size": 1995,
+      "mtime_ns": 1792458045554949988,
+      "ctime_ns": 1792458045554949988
+    }
+  },
+  "classification": {
+    "completed_compilers": 2,
+    "successful_compilers": 1,
+    "failed_compilers": 1,
+    "remaining_compilers_unrun": 3,
+    "body_and_oracle_checks_unrun": true,
+    "stage_or_native_effects": false,
+    "outer_group_absent": true,
+    "timeout_or_unknown_join": false
+  },
+  "cause": "New pair code expects struct result.pid, but included immutable FP933e supervisor result has no PID member. Compiler refuses both publish_pair and cycle_pair_ok before any body execution.",
+  "bounded_correction_prescription": "Separately named private Linux-control base variant may add actual pid_t result.pid and assign positive child PID immediately after successful supervise fork. Preserve all other supervisor/body/deadline/cleanup semantics; new pair code and raw saved result must consume that same struct. Do not remove PID guard or fabricate PID from indices or owner identity. Freeze corrected source/interface pins and obtain changed-input ordinary decision before one admitted correction.",
+  "preservation": "Original failed candidate, input pins, source/profile decision, compiler outputs and captures remain unchanged; first boot compile PASS is exact historical compile evidence, not runtime evidence.",
+  "native_cycles_accepted": 0,
+  "ordinary_checks_accepted": false,
+  "runtime_authority": false
+}

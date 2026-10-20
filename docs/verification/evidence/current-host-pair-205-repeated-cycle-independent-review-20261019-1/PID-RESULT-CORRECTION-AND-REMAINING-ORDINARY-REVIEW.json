@@ -1,0 +1,111 @@
+{
+  "schema": "mckernel.independent-selected205-two-cycle-pid-correction-ordinary-review.v1",
+  "status": "PASS",
+  "decision": "PASS_ONE_BOUNDED_PID_RESULT_INTERFACE_CORRECTION_AND_REMAINING_ORDINARY_CHECKS",
+  "implementation_ownership": false,
+  "functional_scope": "Functional OS/apps plus Rust/reviewed assembly; private Linux-control instrumentation only.",
+  "initial_source_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-independent-review-20261019-1/SOURCE-AND-EXACT-ORDINARY-CHECK-REVIEW.json",
+    "sha256": "e86f19b0588d5b1cbb19abaca82d1c323be1409959aac771b47fd5aa8b14d73f",
+    "bytes": 8150
+  },
+  "actual_first_failure": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-independent-review-20261019-1/ACTUAL-FIRST-ORDINARY-FAILURE-REVIEW.json",
+    "sha256": "56294a3a33a63d835d8495d23326106d113c69c541498faaa9eb0fe65a62bf1c",
+    "bytes": 5226
+  },
+  "correction_index": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/CORRECTION-INDEX.json",
+    "sha256": "c4488056fd75da275ee5311139886ab118db68f5ae4d65a923fe948bc7f6e2dd",
+    "bytes": 2422
+  },
+  "ordinary_proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/ORDINARY-CHECK-PROPOSAL.json",
+    "sha256": "c4b2c0c5ffce5d36a0b29799ff67b9c8bd75dedcc793cd98c19560e0370045ab",
+    "bytes": 3410
+  },
+  "input_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/ORDINARY-INPUT-PINS.json",
+    "sha256": "964aaa112aaba3723605174a99fe77a5e88f389fc1876261de6428461ea1f44d",
+    "bytes": 9681
+  },
+  "input_count": 41,
+  "input_mismatches": [],
+  "allowed_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=3",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/test_cycle_sources.py"
+  ],
+  "profile": {
+    "cpu": 7,
+    "jobs": 1,
+    "as_bytes": 1073741824,
+    "cpu_seconds": 30,
+    "outer_wall_seconds": 35,
+    "global_work_seconds": 28,
+    "cleanup_seconds": 3,
+    "stream_fsize": 33554432,
+    "host_growth_bytes": 8388608,
+    "scratch_growth_bytes": 0,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "reserve_bytes": 671088640
+  },
+  "fresh_outputs": [
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/ordinary-check-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/ordinary-admission.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/ordinary.stdout",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/ordinary.stderr",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/ordinary.status.json"
+  ],
+  "verified_delta": {
+    "base_original": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/collector-typed-avx-final-release.c",
+      "sha256": "933e93a71618417e821e1fc43a2d28303948c5e6a7ec699c479ecf477d822add",
+      "bytes": 48622
+    },
+    "base_variant": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/collector-base-with-pid.c",
+      "sha256": "4b0e0c516fda73c91095e2a8a8008861030a15ce26dd58f20af21db4cd62053f",
+      "bytes": 48672
+    },
+    "only_base_changes": [
+      "Add pid_t pid to result struct.",
+      "After fork succeeds, parent with child>0 assigns actual fork child PID to that same result."
+    ],
+    "all_other_base_bytes_identical": true,
+    "new_collector": "Only include paths rebound to separate PID base and original exact pair include sources. Cycle sequence, CPU/generation/assignment/payload guards unchanged.",
+    "harness": "Original actual sequence body and partial effects model retained; added actual inherited supervise call to a trivial selfchild whose reported getpid must equal result.pid, with clean status/EOF/retirement. No PID1 or guest main runs.",
+    "remaining_chain": "Reuse frozen successful boot compiler binary/status. Execute4remaining compilers, actual supervisor PID check, original body/resource/model/parser checks with inherited9marker refusals.",
+    "oracle_unchanged": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/cycle_oracle.py",
+      "sha256": "05bba58841990cf01907a2b9dbc38cc95822dfb18cef1ee0e53906b4165c112e",
+      "bytes": 10190
+    }
+  },
+  "conditions": [
+    "Root CPU7 allocation and genuine fresh admission remain required. Same one-job1GiB30CPU35wall32MiB profile, fresh correction outputs only.",
+    "This is the one bounded correction after first actual failed candidate. Any further failed corrected consumer requires expert cumulative classification before another attempt.",
+    "Capture all completed joins/streams and release CPU7 immediately at wholejoin. No stage/root/native permission from this source/check decision."
+  ],
+  "actual_check_results_pending": true,
+  "native_execution_authority": false,
+  "stage_authority": false,
+  "native_cycles_accepted": 0,
+  "quota_credit": false,
+  "remaining_source_profile_blockers": []
+}

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/test_cycle_sources.py", line 36, in <module>
+    run('compile-cycle-body',common+['-DND_CORE_THREADS',str(C/'cycle-body.c'),'-o',str(OUT/'cycle-body')])
+  File "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/test_cycle_sources.py", line 28, in run
+    need(rc==expected and (OUT/(label+'.stderr')).stat().st_size==0,'expected clean child '+label)
+  File "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/pid-result-correction-1/test_cycle_sources.py", line 6, in need
+    if not ok:raise AssertionError(label)
+AssertionError: expected clean child compile-cycle-body

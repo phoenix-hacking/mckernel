@@ -107,8 +107,11 @@ Continue autonomously after coherent verified checkpoints with no time cutoff,
 until practical completion or a new explicit stop, selected limit, exhausted included usage, or genuine
 external blocker with no independent ready work. Keep the launcher's existing
 usage/credential guards, recovery classification and healthy-build protections.
-The included-usage stop is 97%, retaining 3% for in-flight work and delayed
-account reports; never switch to purchased credits or API-key billing.
+The effective included-usage stop for this invocation remains97%, as required
+by its developer instruction. The later user request for100% and its reviewed
+source proposal are retained, but cannot override that invocation constraint.
+Do not hand off to a100% controller under the current instruction. Purchased
+credits/API-key billing and actual service-quota bypass remain forbidden.
 For unavailable hardware or independent external qualification, record the exact
 missing resource, owner and recheck condition; do not claim 100% or spin inference
 to restate it. Preserve exact next commands and prerequisites in the handoff.

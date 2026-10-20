@@ -2979,6 +2979,8 @@ pub unsafe extern "C" fn syscall_offload_wait_reply(
             send_syscall(addr_of_mut!(nested_response), cpu, response);
         }
     }
+    // Only the OUTER completed response is observed; nested returns stay inside the loop.
+    crate::fork_control_guest::observe_fork_control_reply(request, response, cpu, thread);
 }
 
 #[no_mangle]

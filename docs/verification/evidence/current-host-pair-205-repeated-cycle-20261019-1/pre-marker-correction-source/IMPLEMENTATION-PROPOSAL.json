@@ -1,0 +1,118 @@
+{
+  "schema": "mckernel.selected205.two-complete-pair-lifecycle-source-proposal.v1",
+  "status": "SOURCE_ONLY_UNCOMPILED_UNRUN",
+  "functional_scope": "FunctionalOS/apps+Rust/reviewedassembly; LinuxcontrolC only, no computeC expansion",
+  "selected_recipe_index": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/usable-profile-1/INDEX.json",
+    "sha256": "c70bee2927db0ced7ef1f03a3cb9a49e91ae85566a81b37762d83ba48947d58b",
+    "bytes": 1575
+  },
+  "selected_recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/usable-profile-1/USABLE-TESTED-PROFILE-RECIPE.json",
+    "sha256": "8fbd21f08080fc450391462c7e60dbbfaa2c5c24b5df16a2b615513cd8c4e4b5",
+    "bytes": 9460
+  },
+  "selected_tuple_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/usable-profile-1/MATCHED-IMAGE-MODULE-AND-APP-MANIFEST.json",
+    "sha256": "0f80ec37d15488b3365573222ad6ff811d795fb54b95d375b192f10049cb97c5",
+    "bytes": 13868
+  },
+  "selected_native_semantics": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/ACTUAL-205-TWO-CPU-AND-RUST-PAIR-NATIVE-DIAGNOSTIC-REVIEW.json",
+    "sha256": "d67e215390a78c991077b671ff9205ecaa9ec925a320414154795106acdc8bc7",
+    "bytes": 27300
+  },
+  "component_artifact_and_ABI": "Unchanged b9ea/5d31 c396/af234/6571; ff4f205,387/254apporacles; neverFP1e7substitution/newSDK34efadoption",
+  "source_files": {
+    "collector-two-complete-cycles.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/candidate/collector-two-complete-cycles.c",
+      "sha256": "28c57fcbed271432354887f2cb776026ff40d364d5548f08bbf9423db6610688",
+      "bytes": 13444
+    },
+    "native-boot-two-cycles.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/candidate/native-boot-two-cycles.c",
+      "sha256": "3d877c3ecf894ce968716b3c23f82aa355a74f4943ec4cf7586d951b5ac74c2d",
+      "bytes": 15795
+    },
+    "native-resource-release-two.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/candidate/native-resource-release-two.c",
+      "sha256": "7e86fd33ad94d2862cf4630cb390f3549e46cc8b8b7baf77598ac98c5b70c7fd",
+      "bytes": 8888
+    },
+    "pair_assignment.h": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/candidate/pair_assignment.h",
+      "sha256": "7939bc9871ac16ad49b9904cf81f96e8350195291cb299126bfa8b75ae7f432f",
+      "bytes": 2998
+    },
+    "pair_collector_cycles.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/candidate/pair_collector_cycles.inc",
+      "sha256": "7665cdbd4b10071eda6adfc1df76f0896af9bb541c7edb74ed4f0c87a7fdfd80",
+      "bytes": 4027
+    },
+    "pair_runtime_cycles.inc": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/candidate/pair_runtime_cycles.inc",
+      "sha256": "b36b107ee8b3b47a1bec3b81a1909a6d970c2dad2519c05b52e9db320d689e00",
+      "bytes": 4500
+    }
+  },
+  "oracle": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/cycle_oracle.py",
+    "sha256": "f282424e9b4b8e3682aa3ecd0ef898037ccc2d879b1af1442e7da64346b9e0e7",
+    "bytes": 9958
+  },
+  "generation_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/GENERATION-SOURCE-CONTRACT.json",
+    "sha256": "be9ba04f545916c8b415eed5d27fb1950dd0675fa8cc062c5c4462cf98d29e6d",
+    "bytes": 2898
+  },
+  "sequence": [
+    "moduleloadonce",
+    "cycle0freshdir+challenge/prebootprefix->actual2CPUboot/48Bassignment/501OSincarnation",
+    "cycle0bothrealunchangedpayloads/EOF/status/oracles/allstartupCPU/retirement",
+    "cycle0strictstop5to0/destroy/CPU1+CPU2online/MEM128to0",
+    "cycle1newdir+differentchallenge/prebootprefix->actualnew2CPUboot/48Bassignment/differentobservedincarnation",
+    "cycle1bothrealunchangedpayloads/EOF/status/oracles/allstartupCPU/retirement",
+    "cycle1strictstop5to0/destroy/CPU1+CPU2online/MEM128to0",
+    "separateVMphysicalretirement"
+  ],
+  "stops_on_first_failure": true,
+  "actual_expected_generation_is_never_cycle_plus_one": true,
+  "same120s_global_alarm": true,
+  "all_helpers_share_remaining_deadline": true,
+  "boot_timeout60s_each": "sameacceptedbound, notseparate120sgrant",
+  "perpair_timeout15s": "sameonepairAPI;perapp10sunchanged",
+  "ordinary_oracle_scope": "ActualeffectstubnewCsequence1+8, actualnewCPU2helper1+2, oneoriginalgeneration1equivalence+syntheticgenerationcontext andfullyMODELEDtwo-cycleoracle/refusals. Nativecredit0.",
+  "full_restoration_unproven": [
+    "physicalframeidentity",
+    "mapping/callback/referencequiescence",
+    "completegenerationrestoration"
+  ],
+  "logging_scope": "120sPID1loggerunchanged; boundedpercycleLinux501/applicationtrace<=262144raw each viaASCIIhex<=4MiBserial; no McKernelringhistory/nonnullFPcredit. No fp_debugcontrol/ringexport added tothis205prototype.",
+  "measured_prior_one_guest_observation_seconds": 37.06580904501607,
+  "two_complete_cycles_observed": false,
+  "budgets": "Two60sbootworstbounds pluspayloads cannot allrunatmaximuminside120; commondeadline refusesexcess. No capincrease orguaranteedtwocyclefit; actualtimingpending.",
+  "native_authority": false,
+  "repeat_quota_credit": false,
+  "future_queue_predecessor": null,
+  "actual48B_assignment_export": "Exact validated runtime struct copied once after source-owned fresh preboot501/GETCPU2 checks; full48B wire emittedpercycle, hostjoins magic/nonce/os/count/generation/physicalCPUs with identityandstrictnew501trace. No pathinference/reconstructedpartialidentity.",
+  "focused_checks": {
+    "actual_C_sequence": {
+      "positive": 1,
+      "refusals": 8,
+      "prefix_vectors": 3,
+      "actual_pair_serializer": true
+    },
+    "actual_CPU2_public_helper": {
+      "positive": 1,
+      "refusals": 2
+    },
+    "generation1_original_body_equivalence": true,
+    "synthetic_generation_positive": 1,
+    "synthetic_wrong_generation_refusal": true,
+    "fully_modeled_two_cycles": {
+      "positive": 1,
+      "refusals": 13,
+      "no_actual_native_or_runtime_credit": true
+    }
+  }
+}

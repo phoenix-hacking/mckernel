@@ -1,0 +1,79 @@
+{
+  "schema": "mckernel.selected205.two-complete-cycle-exact-ordinary-profile.v1",
+  "status": "SOURCE_ONLY_NO_EXECUTION_ALLOCATION",
+  "source_authorities": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/SOURCE-AUTHORITIES.json",
+    "sha256": "870711ac4015ec3d89baf6a46cc8ab7a5dedd8a23937c6ddc26a2db33e59809d",
+    "bytes": 19035
+  },
+  "tool_paths": [
+    {
+      "path": "/usr/bin/taskset",
+      "resolved": "/usr/bin/taskset"
+    },
+    {
+      "path": "/usr/bin/prlimit",
+      "resolved": "/usr/bin/prlimit"
+    },
+    {
+      "path": "/usr/bin/timeout",
+      "resolved": "/usr/bin/timeout"
+    },
+    {
+      "path": "/home/holden/anaconda3/bin/python3",
+      "resolved": "/home/holden/anaconda3/bin/python3.9"
+    }
+  ],
+  "commands": [
+    {
+      "role": "stage",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/stage_cycles.py",
+        "--binding",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/STAGE-INPUTS.json",
+        "--binding-sha256",
+        "50ddfc8cec42bd26a307b3af1cc0384e1f7e9d58f208aac0c3aaa859d7f98986"
+      ]
+    },
+    {
+      "role": "typed-cycle-consumer-and-parent",
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/prepare_cycles.py",
+        "--binding",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/PREPARATION-INPUTS.json",
+        "--binding-sha256",
+        "9067efdd3ecb809e39363c3193b3a8d69af47894ab91640e1351b0b6f3a27425"
+      ]
+    }
+  ],
+  "capture_root": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/ordinary-captures-1",
+  "fresh_outputs": [
+    "/home/holden/mckernel-work/scratch/cyc205-stage-261019-1",
+    "/home/holden/mckernel-work/scratch/cyc205-src-261019-1",
+    "/home/holden/mckernel-work/scratch/cyc205-m-261019-1",
+    "/home/holden/mckernel-work/scratch/cyc205-p",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/stage-preparation-1/ordinary-captures-1"
+  ],
+  "cpu": 7,
+  "jobs": 1,
+  "as_bytes": 1073741824,
+  "cpu_seconds": 30,
+  "outer_wall_seconds": 35,
+  "global_work_seconds": 28,
+  "cleanup_seconds": 3,
+  "stream_fsize": 33554432,
+  "host_growth_bytes": 8388608,
+  "scratch_growth_bytes": 67108864,
+  "host_floor_bytes": 17179869184,
+  "scratch_floor_bytes": 12884901888,
+  "reserve_bytes": 671088640,
+  "RAM_min_available_bytes": 5368709120,
+  "stage_acceptance": false,
+  "native_acceptance": false
+}

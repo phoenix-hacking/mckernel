@@ -1,0 +1,66 @@
+{
+  "status": "SOURCE_ONLY_UNRUN",
+  "accepted_original_result": {
+    "bytes": 121540,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/05-readback-2/stdout",
+    "sha256": "58a4946ebe471b650d62be2e4bb59e047ba316cba8e9070eb4c7273722737fb8"
+  },
+  "exact_rebindings": {
+    "old_attempt": "/home/holden/mckernel-work/scratch/cp205p-261019-1/p/attempt-645f24de220946959adc1bed7c658493",
+    "new_attempt": "/home/holden/mckernel-work/scratch/cyc205-p/a/attempt-4ca75a609b4b42b2b30d243a930e2f51",
+    "old_initrd": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/stage205-current-pair-1/lifecycle.cpio.gz",
+    "new_initrd": "/home/holden/mckernel-work/scratch/cyc205-stage-261019-1/lifecycle.cpio.gz"
+  },
+  "qemu_argv": [
+    "/usr/libexec/qemu-kvm",
+    "-machine",
+    "q35",
+    "-accel",
+    "tcg,thread=multi",
+    "-cpu",
+    "max,la57=off",
+    "-smp",
+    "4,sockets=2,cores=2,threads=1",
+    "-m",
+    "8192",
+    "-object",
+    "memory-backend-ram,size=4G,id=ram-node0",
+    "-object",
+    "memory-backend-ram,size=4G,id=ram-node1",
+    "-numa",
+    "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+    "-numa",
+    "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+    "-nic",
+    "none",
+    "-display",
+    "none",
+    "-no-reboot",
+    "-no-shutdown",
+    "-S",
+    "-monitor",
+    "none",
+    "-qmp",
+    "unix:/home/holden/mckernel-work/scratch/cyc205-p/a/attempt-4ca75a609b4b42b2b30d243a930e2f51/qmp.sock,server=on,wait=off",
+    "-serial",
+    "file:/home/holden/mckernel-work/scratch/cyc205-p/a/attempt-4ca75a609b4b42b2b30d243a930e2f51/serial.log",
+    "-debugcon",
+    "file:/home/holden/mckernel-work/scratch/cyc205-p/a/attempt-4ca75a609b4b42b2b30d243a930e2f51/debugcon.log",
+    "-global",
+    "isa-debugcon.iobase=0xe9",
+    "-kernel",
+    "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+    "-initrd",
+    "/home/holden/mckernel-work/scratch/cyc205-stage-261019-1/lifecycle.cpio.gz",
+    "-append",
+    "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+  ],
+  "AF_UNIX_endpoints": [
+    {
+      "option": "-qmp",
+      "path": "/home/holden/mckernel-work/scratch/cyc205-p/a/attempt-4ca75a609b4b42b2b30d243a930e2f51/qmp.sock",
+      "encoded_bytes": 95
+    }
+  ],
+  "actual_validation_pending": true
+}

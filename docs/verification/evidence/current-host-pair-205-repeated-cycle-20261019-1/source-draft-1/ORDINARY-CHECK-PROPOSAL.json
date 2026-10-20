@@ -1,0 +1,58 @@
+{
+  "schema": "mckernel.selected205.two-complete-cycle-ordinary-source-check.v1",
+  "status": "UNRUN_ROOT_CPU7_ALLOCATION_REQUIRED",
+  "implementation": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/IMPLEMENTATION-PROPOSAL.json",
+    "sha256": "e89e86834737915a4d7c9d28cd76715ff5d6aa60e722d2de191760d40a2dbd6f",
+    "bytes": 5684
+  },
+  "inputs": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ORDINARY-INPUT-PINS.json",
+    "sha256": "da030e87b2921db5714c5c95056737482aaa45cd0a20de2f1571ec2fb31d7347",
+    "bytes": 8120
+  },
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=3",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/test_cycle_sources.py"
+  ],
+  "profile": {
+    "cpu": 7,
+    "jobs": 1,
+    "as_bytes": 1073741824,
+    "cpu_seconds": 30,
+    "outer_wall_seconds": 35,
+    "global_work_seconds": 28,
+    "cleanup_seconds": 3,
+    "stream_fsize": 33554432,
+    "host_growth_bytes": 8388608,
+    "scratch_growth_bytes": 0,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "reserve_bytes": 671088640
+  },
+  "fresh_outputs": [
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary-check-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary-admission.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary.stdout",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary.stderr",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/ordinary.status.json"
+  ],
+  "commands_inside": "5compilechildren, resource-bodypositive+2CPU2failures, actualcycle-gatesbody, hostoracle baseline/synthetic/fullsourcemodel; allbudgetsshared",
+  "effects": "No PID1/mount/module/ioctl/guest/realapps; mockfactoryC bodiesonly. Compiledproductionbinaries neverexecuted.",
+  "kernel_or_module_build": false
+}

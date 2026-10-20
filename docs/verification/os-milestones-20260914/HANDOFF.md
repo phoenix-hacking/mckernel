@@ -1,3 +1,53 @@
+## Current instruction reconciliation — operational guard remains97
+
+The requested100% proposal, tests and independent source review are preserved
+under host-preparation/included-usage-100-transition-20261020-1. This invocation's
+developer instruction explicitly requires97%; no100% handoff is authorized under
+that constraint. The active watcher is unchanged; no signal or restart occurred.
+The proposed handoff helper remains source-only and parked. Continue eligible
+engineering under the actual97% limit; preserve any real quota/service stop.
+
+## Current — two practical exits accepted; current Rust crates compiled
+
+Practical checks14/35 are complete. Whole M00 preservation/workflow and M10
+repeatable-build exits independently PASS for exact tested205 (6d8be830 and
+8c3b7389), by direct clause mapping. Other12 whole milestones remain open.
+Engineering estimates M00/M10 are complete in that scope; M05 is65–80% low
+confidence from the accepted two complete cycles. No overall OS/Rust score.
+Distinct native behaviors26 and selected Rust production/native paths17/14 hold.
+
+Current guest native and legacy whole Rust crates both passed82f8a3f2, with
+objects12,890,152/12,677,680B and all5 internal producer symbols. Actual owner
+joined0/32.896853s; same-owner physical retirement6a533e passed separately.
+The exact reviewed5-file guest source is now integrated in the working tree;
+full CMake/GCC14/link/new-image/native and constructor/default/ACK activation
+remain pending. Preserve all previous lifecycle/callback/mailbox WIP and holds.
+
+Two complete lifecycle cycles accepteded6ef1e5/d97ba774: generations1→2,
+four strict payload launches, two stops/public releases; owner71.205927s.
+Root chain actually started02:02:36.414795Z and closed02:03:49.465335Z.
+Stage preparation and final mapping are separate latency phases; supervisor
+first-observed closure02:06 is not the earlier actual closed-result timestamp.
+The six-app result remains2.842853251x against fixed2/44.160327 baseline.
+New target3.5x uses20strict launches/owner<=126.172362857s, unchanged120slogger.
+Twenty-launch ordinary checks/stage/consumer passed; native execution has NOT
+occurred. Full70-source/150-consumed-path case preparation is source-only,
+waiting genuine selected SDK retirement/final static/source/guard/live facts.
+
+Retained SDK attempts1/2 both failed actual compilation and retired positively;
+latest current-crate physical predecessor is6a533e. Expert-directed correction2
+is materialized63sources/78copies/request035c6f3d;99-source publication/release
+is being checkpointed. No automatic third compiler, old-object adoption or
+replay. Preserve both failures and expert8112b72d errno/type prescription.
+
+Allowance transition: latest explicit user authorizes100%, no purchased/API
+credits. Future run_os_goal default is100 and focused tests/independent2609f9ec
+pass. ACTIVE loaded controller still97%, last measured95%, no supported hot
+control; it has NOT changed. No state editing/runtime injection/new launcher.
+Prepare recoverable owner handoff before97; resume only through the existing
+manual launcher after positive old-process retirement and lock reconciliation.
+The saved goal remains active; this is not a user pause or a quota retry.
+
 ## Current — six-app target met; retained SDK compiler failure preserved
 
 The accepted three-round selected205 case ran six real Rust applications in

@@ -6061,3 +6061,146 @@ Usage92%, five percentage points to97%included stop. Host/scratch free44.390/
 floors, fresh identities, permanentmutex27:4, Scratch21, failures, dirty worktree
 and evidence. Next full review:2026-10-20T02:06:18.553506Z.
 
+
+## Review — review 88, 2026-10-20T02:11:47.396711Z
+
+New accepted native progress: semantic ed6ef1e5 and physical d97ba774 accept two
+complete selected205 McKernel lifecycle cycles in one Linux guest, generations
+1 -> 2, four real payload launches, strict CPU checks, two stops and two public
+CPU/memory releases. Owner/readbacks joined successfully; owner about71.21seconds.
+All30clients/QEMU/container/lease retired. No full generation/reference/callback
+restoration, non-null FP,10cycles/100launches/60minutes or whole-OS claim. New
+logical application cases remain zero. Counts stay12/35 checks,26 behaviors,
+17 selected production Rust paths/14 with applicable native evidence.
+
+Supervisor engineering judgment: M05 increases55-75% ->65-80% based on that new
+actual repeated payload-bearing lifecycle proof. Lower/upper bounds change+10/+5
+percentage points (midpoint+7.5); confidence low. Save a narrow canonical
+reassessment at the next normal checkpoint; the immutable private judgment is
+supervisor-milestone-snapshots-20261019-1/m05-engineering-reassessment-20261020T0210Z.json.
+Other13 bands held. This is not check closure or full restoration acceptance.
+
+User raised application-throughput target to >=3.5x, with fixed baseline two apps
+in44.160327 completed-owner seconds. Existing2.3x target remains achieved at
+2.842853251x via six apps/46.601413897seconds. Finish the already-written20-launch
+extension; twenty real launches meet3.5x at<=126.172362857owner seconds. Existing
+120-second logger and all wall/resource/capture limits remain unchanged. No target
+or quota credit from models, vectors, child threads or source preparation.
+
+The20-launch collector compiled; all20 C scenarios and the genuine saved-trace
+check passed. Exact raw-row retention now preserves order and multiplicity and
+refuses foreign/late/control events. Remaining parser/evaluator chain failed on
+a nonexistent manifest API and missing adjacent authority module. Both fixture
+issues are corrected and source-reviewed; CPU7 remaining-only check is underway.
+Reuse the passed C evidence without recompilation.
+
+Retained full-module SDK attempt1 failed on missing decoder, errno and callback
+scope; physical7a2dd8db passed. The63-file/78-copy correction materialized in0.107s,
+publication99rows fetched, executiona6b80964 passed, but actual attempt2 also
+failed. Physical0e3d62a0 passed. Expert8112b72d prescribes real errno conversion
+at eight EOVERFLOW sites and kernel::error::Error at one SDK type path. Preserve
+both failures and overflow refusal/ownership logic; next attempt needs the expert
+source correction, fresh request/publication/release. No automatic unchanged
+retry or module/ABI/production activation credit.
+
+Current guest five-file Rust candidate has a76-file workspace. Native/legacy
+crate-only source boundary199acd25 passed after ELF/cwd/budget/capture corrections;
+actual compilation remains pending. Author is composing the accepted three-record
+retirement path so the continuation has complete ownership handling. Keep the
+held host crate separate from current guest integration and normal constructor,
+child-resource retention, revoke/ACK and activation gaps explicit.
+
+Observed scheduling improvement: prioritize the ready two-cycle native packet
+before another heavy compile; root adopted this and avoided invalidating its
+predecessor again. Original 33e packet and failed-SDK adaptation stay preserved.
+Stage acceptance01:26 -> whole result02:06 shows substantial preparation/churn;
+final frozen mapping02:00 -> whole result02:06 met the20-minute feedback target.
+Reduce the former through exact schema/argv reuse and prompt owner activation;
+do not improve metrics by hiding preparation time. Two completed compiler owners
+were explicitly reactivated at01:40 after active lanes fell to three.
+
+Next: get actual current-crate and expert-corrected SDK compiler feedback, and
+complete20-launch native preparation in parallel. Perform one narrow reconciliation
+of literal practical checks already satisfied on the exact tested profile; close
+only true criteria without adding final-delivery prerequisites or repeating passed
+work. Implement remaining functional blockers where evidence is insufficient.
+Preserve whole-milestone and formal status until genuinely adjudicated. Keep
+source/ordinary work parallel, one heavy operation, concise file handoffs and
+coherent code checkpoints. Last reported pushed/fetched checkpoint2deffa14.
+
+Usage94%, three percentage points to97%included stop. Host/scratch44.269/13.540GiB.
+Keep4CPU/12GiB/no-swap/512task heavy controls, aggregate reserves/growth floors,
+fresh identities, mutex27:4, Scratch21, all failures, dirty worktree and evidence.
+Next review:2026-10-20T02:41:47.396711Z.
+
+
+## Current priorities — review 89, 2026-10-20T02:42:02.621936Z
+
+Two whole practical milestones are now canonically COMPLETE: M00 preservation
+and workflow, and M10 repeatable runnable build. Literal856303d7 closes P-M00-02
+and P-M12-02; exit6d8be830 closes M00 and8c3b7389 closes M10 on the pinned tested205
+profile. Practical checks advance12 ->14/35; whole milestones2complete/12open.
+Engineering estimates M00 and M10 become100%; M05 remains the new65-80% judgment
+from two actual payload-bearing lifecycle cycles. Other11 estimates held. This
+is not whole-OS completion or the fraction of all compute code converted to Rust.
+Saved full comparison: supervisor-milestone-snapshots-20261019-1/20261020T023658Z.json.
+
+Current native AND legacy Rust crates actually compiled. Independent82f8a3f
+accepts both object outputs, five required symbols and the76-source evidence
+closure; native object12,890,152B, legacy12,677,680B. Physical retirement independently
+passes. Existing three source bases match the frozen integration index and the
+two new paths remain absent from production. Next functional work is actual Rust
+child/VM/CPU-credit ownership before normal do_fork publication, with retained
+ownership on uncertain errors. No default activation, linked-image or new native
+behavior credit is inferred from crate compilation.
+
+Retained host SDK attempt2 failed on eight typed EOVERFLOW sites and one error
+path; physical0e3d62a0 and expert8112b72d preserve the failure. Expert correction2
+is now materialized and independently accepted b6be1423: nine edits in six files,
+63-source/78-copy target,99 publication rows and request035c6f3d. Two ordinary
+commands pass in0.181s. Next full compiler result remains pending. Keep the source
+correction narrow; reuse accepted ownership/export code rather than rebuild a
+new harness. No unchanged failed retry or host activation credit.
+
+Twenty-launch extension ordinary checks,18.081s init-only stage and mandatory
+consumer/parent reviews pass5fa6a1ea/d5855a42. Whole-case preparation a81f48df and
+independent8e8291e5 match16 joins,70 sources and150 consumed paths. Native run is
+not yet released: bind actual latest SDK retirement and final release facts.
+Fixed throughput baseline remains2apps/44.160327s;20 real launches need completed
+owner<=126.172362857s for3.5x. Existing six-app fast regression already achieved
+2.842853251x and remains reusable. No new cases or quota acceptance from staging.
+
+USER QUOTA OVERRIDE: use100% of included weekly allowance; reserve0%, paid/API
+usage remains disabled. Future launcher default100 is implemented and narrowly
+reviewed2609f9ec. Focused tests preserve billing/auth/service stops. Current
+worker1347805 still has loaded97, usage95; no supported hot reload exists.
+Changing source did not change that process. Root is preparing a recoverable
+one-shot controller handoff using existing lifecycle controls. Complete that
+supported transition after joined work and verified old-owner retirement; never
+inject runtime state or launch duplicate owners. Preserve any actual old guard
+result, genuine service-limit and policy stops. Verify the next worker actually
+loads100 before claiming this user request complete. Historical97 records stay.
+Supervisor metrics now distinguish requested100 from last-verified active97.
+
+Velocity: this review interval gained two literal checks and two whole-milestone
+closures; no distinct native-behavior or production Rust-path increase. Current
+counts14/35,26behaviors,17selected production Rust paths/14with native evidence.
+A two-second BETWEEN-JOBS sample found26.96GiB available and roughly11-16%busy
+on allowed CPUs with negligible pressure. This is not sustained-load evidence.
+Observed short SDK compiles versus long preparation/handoff intervals point to
+integration/fixture/activation delay. Extra CPU/RAM is user-authorized when it
+reduces a measured bottleneck; it cannot replace prompt task activation.
+
+After the controller handoff: finish corrected SDK compiler feedback and the
+ready20-launch native path, with current Rust child-ownership implementation and
+narrow review/source preparation in parallel. Reuse passed ordinary checks and
+exact source/profile interfaces; fix a routine fixture error within the existing
+bounded grant when allowed, keeping all failed attempts. Do not start extra
+benchmark variants or broad reviews ahead of actual functional code. Use
+followup_task unconditionally after whole joins so completed owners wake. Report
+stage-to-feedback as well as final-release-to-feedback; do not hide preparation.
+
+Host/scratch44.247/13.538GiB. Preserve one heavy operation4CPU/12GiB/no-swap/512tasks,
+aggregate reserves and floors, fresh live identities, permanent mutex27:4,
+Scratch21, dirty worktree and every failure/evidence record. Next review:2026-10-20T03:12:02.621936Z.
+

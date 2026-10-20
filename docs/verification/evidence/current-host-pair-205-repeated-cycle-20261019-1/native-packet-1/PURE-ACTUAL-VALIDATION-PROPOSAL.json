@@ -1,0 +1,62 @@
+{
+  "schema": "mckernel.selected205.two-complete-cycle-pure-actual-snapshot-input-validation.v1",
+  "status": "UNRUN_ROOT_CPU7_ALLOCATION_REQUIRED",
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=3",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--core=0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/check_actual_snapshot_inputs.py"
+  ],
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/check_actual_snapshot_inputs.py",
+    "sha256": "067613876d090275cc05d656c6820caa6b5dd3873e303cae216c6bf9693668bb",
+    "bytes": 2426
+  },
+  "producer": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/root_manual_snapshot_two_cycle.py",
+    "sha256": "59a8abc22dad250da6f9698209974f0448f3feed5e80a801634f5d836c8c00eb",
+    "bytes": 8447
+  },
+  "inputs": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/PURE-VALIDATION-INPUT-PINS.json",
+    "sha256": "3fc7869dec7bd477a4acddf225a061287ca03c0b09c2f6bcd41f24e4dfcdea67",
+    "bytes": 2975
+  },
+  "pin_count": 11,
+  "profile": {
+    "cpu": 7,
+    "jobs": 1,
+    "as_bytes": 1073741824,
+    "cpu_seconds": 30,
+    "outer_wall_seconds": 35,
+    "fsize_bytes": 33554432,
+    "host_growth_bytes": 1048576,
+    "scratch_growth_bytes": 0,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "reserve_bytes": 671088640
+  },
+  "fresh_outputs": [
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/pure-admission.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/pure.stdout",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/pure.stderr",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/pure.status.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/native-packet-1/actual-pure-validation-result.json"
+  ],
+  "scope": "Actual completecase/e74/2cd/33e roles and inherited terminal constraints only. Original different-schema negative on SAME genuine whole33e. No fabricatedinputshape, main/staticreview/live/root/syscalls/factories/guest.",
+  "stage_or_native_acceptance": false
+}

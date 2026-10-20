@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/test_cycle_sources.py", line 33, in <module>
+    run('compile-collector',common+['-DND_CORE_THREADS',str(Q/'candidate/collector-two-complete-cycles.c'),'-o',str(OUT/'collector')])
+  File "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/test_cycle_sources.py", line 28, in run
+    need(rc==expected and (OUT/(label+'.stderr')).stat().st_size==0,'expected clean child '+label)
+  File "/home/holden/mckernel-work/host-preparation/current-host-pair-205-repeated-cycle-20261019-1/test_cycle_sources.py", line 6, in need
+    if not ok:raise AssertionError(label)
+AssertionError: expected clean child compile-collector

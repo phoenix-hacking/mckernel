@@ -17,6 +17,8 @@ mod cls_helpers;
 mod debug;
 mod devobj;
 mod fileobj;
+mod fork_control_guest;
+mod fork_control_registry;
 mod freeze;
 mod futex;
 mod gencore;
