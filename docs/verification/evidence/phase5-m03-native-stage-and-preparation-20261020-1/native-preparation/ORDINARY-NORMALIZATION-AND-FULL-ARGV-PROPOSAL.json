@@ -1,0 +1,89 @@
+{
+  "status": "SOURCE_ONLY_REQUIRES_AFFECTED_REVIEW_AND_ROOT_FRESH_ORDINARY_GRANT",
+  "functional_scope": "Functional OS/apps plus Rust/reviewed assembly compute retirement",
+  "source_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/manifest.json",
+    "sha256": "e414ac0854bf705da2603bde1c630904f8877f14ca3645c1d1c146627e4f333e",
+    "size": 5861,
+    "mode": 33152
+  },
+  "actual_stage_acceptance": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-ACTUAL-CANONICAL-MANIFEST-AND-EXISTING-ARCHIVE-OFFLINE-STAGE-ACCEPTANCE.json",
+    "sha256": "729c4dabd2d94223736fec87a96571f1fd865bb0f92937e94509d74a223372bd",
+    "size": 13472,
+    "mode": 33152
+  },
+  "input_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/readonly-payload-correction-1/INPUT-PINS.json",
+    "sha256": "7ab1cc19f496fd96ead671fc8088c7e6d2fad804a6e2aacc6da416d4772b18ad",
+    "size": 4595,
+    "mode": 33152
+  },
+  "outer_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/readonly-payload-correction-1/run_prepare_once.py"
+  ],
+  "profile": {
+    "cpu": 6,
+    "jobs": 1,
+    "address_space_bytes": 1073741824,
+    "cpu_seconds": 30,
+    "wall_seconds": 35,
+    "kill_grace_seconds": 2,
+    "per_stream_bytes": 33554432,
+    "core_bytes": 0,
+    "nofile": 256,
+    "minimum_MemAvailable_bytes": 5368709120,
+    "minimum_host_available_bytes": 18887655424,
+    "minimum_scratch_available_bytes": 14026801152,
+    "metadata_growth_bytes": 1048576,
+    "scratch_UUID": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "fresh_root_aggregate_admission_required": true
+  },
+  "prospective_paths": {
+    "manifest": "/home/holden/mckernel-work/scratch/m03nm-261020-1/manifest.json",
+    "parent": "/home/holden/mckernel-work/scratch/m03np-261020-1/p",
+    "attempt": "/home/holden/mckernel-work/scratch/m03np-261020-1/p/attempt-dc1eebe62d5f494f83b36e4f44e255cb",
+    "qmp_socket": "/home/holden/mckernel-work/scratch/m03np-261020-1/p/attempt-dc1eebe62d5f494f83b36e4f44e255cb/qmp.sock",
+    "qmp_bytes": 101,
+    "AF_UNIX_limit_bytes": 107
+  },
+  "outputs": [
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/readonly-payload-correction-1/ACTUAL-BINDING.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/readonly-payload-correction-1/ACTUAL-NATIVE-PREFLIGHT.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/readonly-payload-correction-1/ordinary-capture-1",
+    "/home/holden/mckernel-work/scratch/m03nm-261020-1",
+    "/home/holden/mckernel-work/scratch/m03np-261020-1"
+  ],
+  "archive_writes": 0,
+  "tests_replayed": 0,
+  "root_operations": 0,
+  "guest_runs": 0,
+  "latest_exclusive_predecessor": null,
+  "snapshot": null,
+  "runtime_release": null,
+  "failure_family_history": "Original stage schema refusal preserved; canonical eight-key metadata completion accepted729c. This new operation only normalizes that accepted complete document and performs accepted actual owner verifier. No archive regeneration or old body fixture replay.",
+  "changed_source_boundary": "Exact-file payload readonly bind added to private owner plus private SELF; verifier routes to this owner, accepted RUNNER/diagnostic/backend/capture unchanged. Original ecefa source-only proposal preserved; static coverage found sole missing payload and no workload started.",
+  "owner_delta": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/readonly-payload-correction-1/owner-and-verifier.patch",
+    "sha256": "f182035fcbaa43b176966fad014d057a87fee5d07d6d58ee01c5cdfd2e166e90",
+    "size": 47569,
+    "mode": 33152
+  }
+}

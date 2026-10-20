@@ -1,0 +1,14 @@
+--- a/cleanup_failed_image.py
++++ b/cleanup_failed_image.py
+@@ -1208,7 +1208,10 @@
+     def run(self, execute):
+         if os.path.lexists(QUARANTINE):
+             raise Refusal('quarantined-independent-reconciliation-required')
+-        if execute and not exists(self.fd, MUTEX.name):
++        if (execute and
++                not any(exists(self.fd, path.name) for path in (MUTEX, PLAN, JOURNAL, CAPTURE, QUARANTINE)) and
++                not any(exists(self.parent_fd(path), name)
++                        for path, name in zip((ATTEMPT, SHARED), ARCHIVE_NAMES))):
+             self.preflight_fresh()
+         self.lock(execute)
+         protected_files()

@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/stage_m03.py", line 129, in <module>
+    print(json.dumps(stage(json.loads(Path(args.collector_ref).read_bytes()), args.output)))
+  File "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/stage_m03.py", line 111, in stage
+    nd._validate_manifest(m)
+  File "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/source/scripts/application-tests/native_diagnostic.py", line 211, in _validate_manifest
+    _keys(obj, ("schema_version", "kind", "case_id", "artifacts", "modules", "profile", "payload", "staging"))
+  File "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/source/scripts/application-tests/native_diagnostic.py", line 77, in _keys
+    _need(set(obj) == set(required) | set(optional), "manifest keys differ")
+  File "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/source/scripts/application-tests/native_diagnostic.py", line 72, in _need
+    raise DiagnosticError(message)
+m03_typed_evaluator.DiagnosticError: manifest keys differ

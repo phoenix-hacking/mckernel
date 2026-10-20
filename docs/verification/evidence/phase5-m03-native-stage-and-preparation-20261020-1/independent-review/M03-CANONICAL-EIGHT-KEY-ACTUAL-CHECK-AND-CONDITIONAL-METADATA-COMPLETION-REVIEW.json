@@ -1,0 +1,229 @@
+{
+  "actual_corrected_document_and_existing_archive_validation_acceptance": true,
+  "actual_facts": {
+    "all15recorded_identities_unchanged_at_review": true,
+    "canonical_top_keys": 8,
+    "complete_original_prefix_unchanged": true,
+    "derived_raw_bytes": 67594972,
+    "guest_runs": 0,
+    "metadata_completion_runs": 0,
+    "negative_cases": [
+      {
+        "case": "extra-pair-key",
+        "error": "manifest keys differ",
+        "status": "EXPECTED_REFUSAL"
+      },
+      {
+        "case": "changed-derived-mode",
+        "error": "derived_initramfs size/mode drift",
+        "status": "EXPECTED_REFUSAL"
+      }
+    ],
+    "only_final_changed_members": [
+      "apps/app",
+      "init"
+    ],
+    "original_full_prefix_bytes": 60505816,
+    "recompression": false,
+    "reference_roles": 17,
+    "retained_derived_records": 74,
+    "retained_final_members": 62,
+    "unique_reference_files": 15
+  },
+  "actual_local_validation": {
+    "CPU6_released_reported_by_root_and_author": true,
+    "closed_streams": true,
+    "direct_child_joined": true,
+    "direct_join": {
+      "bytes": 258,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/local-check-capture-1/direct-join.json",
+      "sha256": "cd755253c2ce8855daeba02f985539dd8aebe3f5014bd619afd79b00af7f2b03"
+    },
+    "direct_wait": {
+      "bytes": 82,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/local-check-capture-1/direct-wait.json",
+      "sha256": "a44bd81b9617b480a553720149bdd23c316ae089c9f2415ec4e77d768dcc6d05"
+    },
+    "elapsed_seconds": 1.5168779619853012,
+    "errors": null,
+    "owned_group_absent": true,
+    "result": {
+      "bytes": 7459,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/LOCAL-CHECK-RESULT.json",
+      "sha256": "5e460963ea098c7b9c7c26c07893d1a642fa5a51c23c6ca968cf3e932b5f5074"
+    },
+    "returncode": 0,
+    "stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/local-check-capture-1/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout": {
+      "bytes": 120,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/local-check-capture-1/stdout",
+      "sha256": "ecd221587bd933c1522395fb2d43c060e62dc907cc5b680bf48d3e805f74c32c"
+    },
+    "whole": {
+      "bytes": 1296,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/local-check-capture-1/whole.json",
+      "sha256": "a6b612fb5207eaf3f1c9f8a317b6fe000868fd964069acc8a3259d4620ffb3b9"
+    }
+  },
+  "actual_metadata_completion_acceptance": false,
+  "admission_conditions": [
+    "Root grants CPU6 slot within aggregate7job/23.3099GiB; one heavy remains sole heavy. Reserve full12GiBheavy+1GiBordinary+4GiBhostcontrol conservatively if overlapping.",
+    "Retain host16GiB/scratch12GiB floors+512MiB emergency guards and ADD current heavy remaining disk growth/other live reservations. Only3 metadata outputs and root-owned bounded captures may grow; original archive/overlay stay in place unchanged.",
+    "Root checks exact source/proposal/input/check-result refs and all3 output absences immediately before this once-only invocation. Stop/preserve failure; no unchanged retry or recompression."
+  ],
+  "canonical_document_proposal": {
+    "bytes": 5861,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/MANIFEST-DATA.PROPOSAL.json",
+    "sha256": "e414ac0854bf705da2603bde1c630904f8877f14ca3645c1d1c146627e4f333e"
+  },
+  "conditional_remaining_completion": {
+    "capture_budget_bytes": 67108864,
+    "commands": 1,
+    "control_budget_bytes": 2097152,
+    "exact_outer_argv": [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2",
+      "35",
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=1073741824:1073741824",
+      "--cpu=30:30",
+      "--fsize=33554432:33554432",
+      "--core=0:0",
+      "--nofile=256:256",
+      "/home/holden/anaconda3/bin/python3.9",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/complete_existing.py",
+      "--validation-sha256",
+      "5e460963ea098c7b9c7c26c07893d1a642fa5a51c23c6ca968cf3e932b5f5074"
+    ],
+    "expected_returncodes": [
+      0
+    ],
+    "host_total_growth_and_emergency_reserve_bytes": 536870912,
+    "inner_argv": [
+      "/home/holden/anaconda3/bin/python3.9",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/complete_existing.py",
+      "--validation-sha256",
+      "5e460963ea098c7b9c7c26c07893d1a642fa5a51c23c6ca968cf3e932b5f5074"
+    ],
+    "negative_case_replay": false,
+    "new_archives": 0,
+    "new_metadata_payload_budget_bytes": 65536,
+    "new_outputs": [
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/manifest.json",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/stage-result.json",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/COMPLETION-RESULT.json"
+    ],
+    "outputs_absent_at_review": true,
+    "profile": "ordinary CPU6 only/1job/1GiBAS/30CPU/35+2wall/32MiBperfile/core0/nofile256",
+    "required_validation": {
+      "bytes": 7459,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/LOCAL-CHECK-RESULT.json",
+      "sha256": "5e460963ea098c7b9c7c26c07893d1a642fa5a51c23c6ca968cf3e932b5f5074"
+    },
+    "root_fresh_CPU6_aggregate_and_disk_growth_grant_required": true,
+    "root_must_capture_positive_direct_join_groupabsence_and_closedstreams": true,
+    "same_prior_heavy_exclusion_applies": true,
+    "scratch_extra_emergency_bytes": 536870912,
+    "scratch_new_output_growth_bytes": 0,
+    "source": {
+      "bytes": 2572,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/complete_existing.py",
+      "sha256": "cf075879e3d8194d5ec8f648a2d3784821eb6c0acb380c5c6103d1a400e198c1"
+    }
+  },
+  "decision": "PASS_ACTUAL_COMPLETE_M03_MANIFEST_ARCHIVE_AND_TWO_REFUSALS_CONDITIONAL_ONE_METADATA_COMPLETION_ONLY",
+  "functional_scope": "Functional supported McKernel OS/apps plus Rust/reviewed-assembly compute cutover; bounded private metadata correction only.",
+  "future_attempt_parent_nonce_predecessor_or_runtime_release": null,
+  "implementation_ownership": false,
+  "inputs": {
+    "bytes": 2971,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/INPUTS.json",
+    "sha256": "edc7df7e114aae07bed6df6fbe335c977141d284e7d2bf8dc53a04238116cd9f"
+  },
+  "kernel_module_image_default_or_ACK_acceptance": false,
+  "next": "Root may execute exact remaining metadata-only command once under fresh admission; return3 outputs and closed capture for actual completion acceptance before any scratch/parent/nonce/native binding.",
+  "preserved_actual_first_failure_review": {
+    "bytes": 7667,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-REAL-ARCHIVE-STAGE-FIRST-ACTUAL-FAILURE-AND-ORDINARY-RETIREMENT-REVIEW.json",
+    "sha256": "57b4a7d7dda8bd897dca765f711ade10a0ddb4fc4b43f6cf50cc388c48e67a7e"
+  },
+  "proposal": {
+    "bytes": 5610,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/LOCAL-CHECK-AND-REMAINING-COMPLETION-PROPOSAL.json",
+    "sha256": "8026567a44c30e6ebce45f436d6374c827be75c86bfe718f1e30da94fd6048ea"
+  },
+  "reviewed_at": "2026-10-20T11:23:54.680480+00:00",
+  "reviewer": "/root/resume20_physical",
+  "reviewer_actions": "Read bounded correction source/actual closed validation captures; independently compare canonical document values and current recorded identities; publish additive source/actual-check/conditional completion decision. No jobs, validators/tests, decompression/recompression, root, guest, Git or shared source effects.",
+  "schema": "mckernel.independent-m03-canonical-manifest-correction-and-conditional-completion-review.v1",
+  "source_files": [
+    {
+      "bytes": 1958,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/manifest_only.py",
+      "sha256": "b7b0e44b2a814eebc3cd3e8de3c9d658d57786fbcfa1cc31176d51c69a8604e3"
+    },
+    {
+      "bytes": 5135,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/check_existing.py",
+      "sha256": "ed5b7a5cd90a70fe32dfd87bcf3a4412133e94dc35ae93dcfdfeb09f28e72d0e"
+    },
+    {
+      "bytes": 2572,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/complete_existing.py",
+      "sha256": "cf075879e3d8194d5ec8f648a2d3784821eb6c0acb380c5c6103d1a400e198c1"
+    },
+    {
+      "bytes": 2225,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/run_local_check_once.py",
+      "sha256": "148224f4c8bd8362a2c65f8042d4e954ba7a3246adf6b22019983fa068386ef2"
+    }
+  ],
+  "source_findings": [
+    "Constructor explicitly builds all8 canonical keys from genuine ten-round parent, exact M03 binding, production collector and existing archive/overlay rows. Only inherited pair/pair_rounds metadata is removed relative to intended M03 stage document; all artifact/module/profile/payload/staging values equal the previously intended authority.",
+    "Accepted M03 evaluator, original archive engine and stage source remain unchanged. The correction introduces no schema allowance, oracle change, tuple substitution or source branch that could count a failed syscall as success. Full17ref roles retain exact paths/modes/content authority.",
+    "Actual check reads full stable regular NOFOLLOW/CLOEXEC/NONBLOCK FDs, validates exact current full typed manifest and all17ref roles, then uses accepted parse/replay and retained-map functions against immutable BASE prefix and saved tail/final maps. Checks prior file identities again after the complete boundary.",
+    "Meaningful negatives retain unchanged strict validator: extra pair_rounds refuses manifest keys differ; changed derived archive mode refuses derived_initramfs size/mode drift. These exercise the actual observed schema defect and retained identity join without weakening validation.",
+    "Completion binds the exact actual validation hash, reconstructs the same document through full authority(), requires identical17-role identities and saved archive/overlay/proposal descriptors, then creates only3 NEW JSON files O_EXCL/NOFOLLOW0600. Emitted manifest is reread by unchanged typed loader before success records. No negative cases, archive generation, copying, chmod or compression runs in completion."
+  ],
+  "stage_native_application_or_whole_M03_acceptance": false,
+  "status": "PASS",
+  "witnesses": [
+    {
+      "bytes": 5610,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/LOCAL-CHECK-AND-REMAINING-COMPLETION-PROPOSAL.json",
+      "sha256": "8026567a44c30e6ebce45f436d6374c827be75c86bfe718f1e30da94fd6048ea"
+    },
+    {
+      "bytes": 7459,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/LOCAL-CHECK-RESULT.json",
+      "sha256": "5e460963ea098c7b9c7c26c07893d1a642fa5a51c23c6ca968cf3e932b5f5074"
+    },
+    {
+      "bytes": 1296,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/local-check-capture-1/whole.json",
+      "sha256": "a6b612fb5207eaf3f1c9f8a317b6fe000868fd964069acc8a3259d4620ffb3b9"
+    },
+    {
+      "bytes": 5861,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/MANIFEST-DATA.PROPOSAL.json",
+      "sha256": "e414ac0854bf705da2603bde1c630904f8877f14ca3645c1d1c146627e4f333e"
+    },
+    {
+      "bytes": 2572,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/complete_existing.py",
+      "sha256": "cf075879e3d8194d5ec8f648a2d3784821eb6c0acb380c5c6103d1a400e198c1"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "actual_body_cases": {
+    "bytes": 980,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-cleanup-refusal-diagnostic-successor-20261020-1/diagnostic-body-result-1.json",
+    "sha256": "1f1117d43b087677d884ae700ab3499673bea9c610809669f9d1abe484164085"
+  },
+  "actual_checks": {
+    "bytes": 1496,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-cleanup-refusal-diagnostic-successor-20261020-1/ordinary-check-result-1.json",
+    "sha256": "f2ab51dcc521eb0b64ade9f9942a5b436f3f7393254b8eec764ffa6d41c808c5"
+  },
+  "actual_counts": {
+    "CPU6_released": true,
+    "commands": 2,
+    "groups_absent": 2,
+    "no_effect_cases": 3,
+    "positive_waits": 2,
+    "returncodes": [
+      0,
+      0
+    ]
+  },
+  "actual_waits": [
+    {
+      "bytes": 116,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-cleanup-refusal-diagnostic-successor-20261020-1/diagnostic-private-source-syntax-1.wait-status.json",
+      "sha256": "80405601f236c36fe8f1a855def1c249a65b82d838dabc5114ae5da186825719"
+    },
+    {
+      "bytes": 115,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-cleanup-refusal-diagnostic-successor-20261020-1/diagnostic-three-no-effect-bodies-1.wait-status.json",
+      "sha256": "e3cd771158d9de3921c81367fa3806c6a59afaa6e8e3d2eb0293a1e6410a2bbf"
+    }
+  ],
+  "checked_handoff": {
+    "bytes": 1958,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-cleanup-refusal-diagnostic-successor-20261020-1/CHECKED-DIAGNOSTIC-HANDOFF.json",
+    "sha256": "47c98e68a6d75a52f710669309a79568d0b8100ab0365c03d6de1ac95891e204"
+  },
+  "created_at": "2026-10-20T11:51:09.337076+00:00",
+  "decision": "ACCEPT_PRIVATE_ADDITIVE_QUARANTINE_DIAGNOSTIC_ONLY_NO_DEPLOYMENT_AUTHORITY",
+  "deployment_allowed": false,
+  "deployment_prerequisites": [
+    "Positive independent retirement of current cleanup holder, including retained locks/records/process groups; absence alone insufficient.",
+    "Separate root-authorized source/deployment release binding this private successor and complete exact release-family/marker context. No current release-family hashes were rewritten."
+  ],
+  "findings": [
+    "Whole original module AST is unchanged except the additive recover diagnostic branch and new quarantine_diagnostic helper. Exact Transaction class, MUTEX/CAPTURE mutation_started latches, signal deferral/restoration, checks, quarantine pathname and fixed quarantine_wait are unchanged.",
+    "Diagnostic uses exact Refusal type and exact one-string args only; unknown exception __str__/__repr__ are never requested and message remains omitted. Refusal UTF-8 is capped384 bytes, filenames384 and function names96; at most128 traceback frames are visited. No locals/owners/record bytes are emitted, only code location and line metadata.",
+    "Locations select deepest matching source and transaction frame among visited frames plus last visited origin; traceback_truncated explicitly distinguishes a capped traversal. Diagnostic construction failure adds only diagnostic_error_type, then follows the same existing marker/create/hold path.",
+    "Existing marker schema/release digest/error_type/requires fields remain and only diagnostic is added to the one existing tx.create. This creates no new success/release/retirement path; marker failure remains caught and fixed hold still follows.",
+    "Actual closed source syntax and AST-projected actual recover/Transaction.run checks both rc0 with positive waits, absent owned groups and authenticated stdout/stderr hashes; stderr empty. Three cases cover real source/transaction/origin line, Unicode oversize cap and non-Refusal formatter trap. Each asserts exactly one marker create before fixed hold.",
+    "Filesystem/acquisition/signal/create/hold are explicit no-effect adapters. Sourcefreeze UNRUN is preserved historical source-freeze status; actual closed results are separately bound. No live cleanup module was imported or recovery/root/Docker/guest/owned-record mutation performed."
+  ],
+  "functional_scope": "Functional supported OS/apps plus active compute-C retirement into Rust/reviewed assembly; this change is control-harness diagnostics only.",
+  "implementation_ownership": false,
+  "independent_reviewer": "/root/sdk66_boundary_review",
+  "limitations": [
+    "No injected failure case directly executes diagnostic-construction fallback; source review confirms it remains inside existing protected marker path.",
+    "Traceback128-frame cap and unknown exceptions beyond supplied formatter-trap case are source boundedness findings, not broad exception-fuzz acceptance.",
+    "No actual live recovery, physical holder retirement, deployment or release-family acceptance. Existing live defe6823 remains immutable."
+  ],
+  "original_live_source": {
+    "bytes": 76895,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/cleanup_failed_image.py",
+    "sha256": "defe682396ef6790d72a1d3841030d0a0122c21e506fec507cc75e41c9847a1f"
+  },
+  "parked_followon": "PARKED-PREFLIGHT-FOLLOWON.md is excluded and grants no code or execution authority.",
+  "patch": {
+    "bytes": 2985,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-cleanup-refusal-diagnostic-successor-20261020-1/DIAGNOSTIC-ONLY.patch",
+    "sha256": "07304d90b53109606538b40b9982ec779f07e56dd823fc7dff91425d762f0bf7"
+  },
+  "private_successor": {
+    "bytes": 78867,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-cleanup-refusal-diagnostic-successor-20261020-1/cleanup_failed_image.py",
+    "sha256": "13e1b2125381033c4c512f519bae2e8d157ae470f3d8a9bae415c3e1d7217fb5"
+  },
+  "reviewer": "/root/sdk66_boundary_review",
+  "reviewer_operations": "Read-only focused patch/AST equality and closed two-command/three-case records; new private report only. No implementation/test/compiler/root/Docker/Git/recovery/deployment.",
+  "schema": "mckernel.independent-cleanup.refusal-diagnostic-source-actual.v1",
+  "source_freeze": {
+    "bytes": 2693,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-cleanup-refusal-diagnostic-successor-20261020-1/SOURCE-FREEZE.json",
+    "sha256": "1395bdf54dd195a72bffd2fd786e54afb00900883fc0154c9db1f881d588d446"
+  },
+  "status": "PASS_DIAGNOSTIC_ONLY_SOURCE_AND_NO_EFFECT_BODY_CASES",
+  "test_source": {
+    "bytes": 6068,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-cleanup-refusal-diagnostic-successor-20261020-1/check_diagnostic_bodies.py",
+    "sha256": "449ac1dae4b635c9d1cb47551bed0b1b5622c2ee0314e6f29e2880e1ca691a34"
+  }
+}

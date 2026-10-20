@@ -1,3 +1,21 @@
+## Current — holder retired; records still block heavy execution
+
+Actual878f296b independently accepts exact holder-only retirement: two modes
+0/.204s and0/.185s, original tool91614 wholejoined247/sudo-9, same27:4 and
+1828:116137 reacquired. Both records, stopped CID and old mutex/quarantine remain
+preserved. This does not clear heavy ownership. A separately reviewed root
+read-only probe then passed all seven original current predicates; the historical
+Refusal remains unresolved. No original attempt is replayed.
+
+A fresh transaction successor combines bounded diagnostics469a2ab9 with read-only
+checks before first mutex creation. Root caught a pre-review entry-guard defect:
+prior partial state must follow original latch/quarantine behavior; one bounded
+correction and focused vectors are underway. All existing post-lock checks/latches
+remain required. Next: actual finite terminal clearance, then first genuinely
+admitted M03 P-M03-01 native case or repaired object/nm/image iteration.
+M03 d426 actual argv/normalization and image49-row proof711460ff at7c4ae600 are
+ready; neither receives runtime credit. Counts15/35,whole3,26,17/14 held.
+
 ## Current — cleanup quarantined before plan; exact holder retirement in review
 
 Failure cleanup holds permanent27:4 and transaction mutex1828:116137 after a

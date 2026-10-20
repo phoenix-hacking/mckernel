@@ -1,0 +1,95 @@
+{
+  "actual_completion_runs": 0,
+  "actual_validation": {
+    "bytes": 7459,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/LOCAL-CHECK-RESULT.json",
+    "sha256": "5e460963ea098c7b9c7c26c07893d1a642fa5a51c23c6ca968cf3e932b5f5074"
+  },
+  "conditional_commands": 1,
+  "decision": "PASS_EXACT_REMAINING_METADATA_WRAPPER_BOUND_TO_SAME_ACCEPTED_ONE_COMMAND_DECISION",
+  "exact_inner_argv": [
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/complete_existing.py",
+    "--validation-sha256",
+    "5e460963ea098c7b9c7c26c07893d1a642fa5a51c23c6ca968cf3e932b5f5074"
+  ],
+  "exact_outer_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/run_remaining_completion_once.py"
+  ],
+  "functional_scope": "Functional OS/apps plus Rust/reviewed-assembly compute cutover; same single M03 metadata-only completion boundary.",
+  "implementation_ownership": false,
+  "mechanical_findings": [
+    "Late-frozen remaining proposal adds the accepted capture wrapper around the SAME cf075879 completion command and SAME5e460963 actual validation. No new source variant, tests, negative replay, archive transform or extra completion command.",
+    "Wrapper uses the same admitted owned_capture helper/limits as actual joined local validation, with fresh remaining-completion-capture-1. Child command equals prior36b13 conditional decision; CPU6/1GiBAS/30CPU/35+2outer/33child/32MiBperfile/core0/nofile256 are unchanged.",
+    "Same included-usage/floors/emergency guards; root still owns fresh CPU6/aggregate/heavyremaininggrowth admission under prior decision. Wrapper2GiB MemAvailable guard alone is not aggregate permission.",
+    "All3 metadata output files and new capture directory absent at review. Command executes exactly once, persists direct-wait/direct-join then closes/hashes streams; no runtime/native effect or release."
+  ],
+  "native_execution_authorized": false,
+  "outputs_absent_at_review": true,
+  "outputs_required_absent": [
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/manifest.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/stage-result.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/COMPLETION-RESULT.json",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/remaining-completion-capture-1"
+  ],
+  "remaining_proposal": {
+    "bytes": 6110,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/REMAINING-METADATA-COMPLETION-PROPOSAL.json",
+    "sha256": "84bd3de20c728f59a01a78957f2312d93dd23652cf87cf85ddd335042480da2d"
+  },
+  "reviewed_at": "2026-10-20T11:24:25.224956+00:00",
+  "reviewer": "/root/resume20_physical",
+  "reviewer_effects": "Read bounded source/data and publish additive mechanical join only; no execution.",
+  "schema": "mckernel.independent-m03-remaining-metadata-capture-wrapper-mechanical-join.v1",
+  "status": "PASS",
+  "whole_source_actual_check_and_conditional_decision": {
+    "bytes": 13035,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-CANONICAL-EIGHT-KEY-ACTUAL-CHECK-AND-CONDITIONAL-METADATA-COMPLETION-REVIEW.json",
+    "sha256": "36b13d116370b9fbc116fbef7abda6f773583948b31b2718af4aeab1cb77407f"
+  },
+  "witnesses": [
+    {
+      "bytes": 13035,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-CANONICAL-EIGHT-KEY-ACTUAL-CHECK-AND-CONDITIONAL-METADATA-COMPLETION-REVIEW.json",
+      "sha256": "36b13d116370b9fbc116fbef7abda6f773583948b31b2718af4aeab1cb77407f"
+    },
+    {
+      "bytes": 6110,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/REMAINING-METADATA-COMPLETION-PROPOSAL.json",
+      "sha256": "84bd3de20c728f59a01a78957f2312d93dd23652cf87cf85ddd335042480da2d"
+    },
+    {
+      "bytes": 2263,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/run_remaining_completion_once.py",
+      "sha256": "a9ee06fc793bb259593962ccb9407238c46176104e9ce4336db0124c625b8edd"
+    },
+    {
+      "bytes": 7459,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/LOCAL-CHECK-RESULT.json",
+      "sha256": "5e460963ea098c7b9c7c26c07893d1a642fa5a51c23c6ca968cf3e932b5f5074"
+    }
+  ],
+  "wrapper": {
+    "bytes": 2263,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/run_remaining_completion_once.py",
+    "sha256": "a9ee06fc793bb259593962ccb9407238c46176104e9ce4336db0124c625b8edd"
+  }
+}

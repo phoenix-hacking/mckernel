@@ -1,0 +1,123 @@
+{
+  "actual_document_proposal": {
+    "bytes": 5861,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/MANIFEST-DATA.PROPOSAL.json",
+    "sha256": "e414ac0854bf705da2603bde1c630904f8877f14ca3645c1d1c146627e4f333e"
+  },
+  "actual_local_checks": [
+    "Full stricttyped actual canonical8key manifest17refroles/path/modes/hashes andoriginal9fieldoverlayidentities",
+    "Existing acceptedCPIOparse/replay/final-map+retained_map; full original60.5MBprefix identical; exacttailSHA andinit/apps/app-only finalchanges",
+    "Extra pair_rounds key refused specificallymanifestkeys differ",
+    "Changedderivedarchive mode refused specificallyderived_initramfs size/mode drift"
+  ],
+  "app_oracle_changed": false,
+  "inputs": {
+    "bytes": 2971,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/INPUTS.json",
+    "sha256": "edc7df7e114aae07bed6df6fbe335c977141d284e7d2bf8dc53a04238116cd9f"
+  },
+  "local_check_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/run_local_check_once.py"
+  ],
+  "native_acceptance": false,
+  "original_archive": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-stage-1/m03.cpio.gz",
+    "sha256": "c5646f37031bc9b2ba5472064d9e267d797fe8ec6f9a3978c750a63707e7bfbe",
+    "size": 21330345
+  },
+  "original_failure": {
+    "actual_join": {
+      "bytes": 115,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-M03-archive-stage-1.wait-status.json",
+      "sha256": "f6c6816a4378ba47d2837faa45372c64de230958bfed71455b1b88fd6df99c53"
+    },
+    "actual_result": {
+      "bytes": 1081,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-stage-ordinary-result-1.json",
+      "sha256": "07e2bee35f52a7dee7e46f9146ff44d70032e7c4d93fb566ba8dfd6ccc8cd3eb"
+    },
+    "actual_stderr": {
+      "bytes": 1210,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-M03-archive-stage-1.stderr",
+      "sha256": "bd465df71698218de9fb0d04980ab6fd149820f704f5df25069dcbe573319b83"
+    },
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-stage-ordinary-result-1.json",
+    "reason": "Strict manifest top-levelkeys differ: inheritedpair/pair_rounds",
+    "returncode": 1
+  },
+  "original_overlay": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-stage-1/overlay-manifest.json",
+    "sha256": "e502c2dfc1c4af2c8a0853b4e80f8210bf6bd7960ba21cf7ae492d7250f7badf",
+    "size": 20044
+  },
+  "preserve_original_failed_stage": true,
+  "profile": {
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 30,
+    "app_guest_root_or_Docker": false,
+    "core": 0,
+    "cpu": 6,
+    "host_extra_reserve_bytes": 536870912,
+    "jobs": 1,
+    "kill_after_seconds": 2,
+    "new_archives": 0,
+    "nofile": 256,
+    "per_file_bytes": 33554432,
+    "scratch_guard_bytes": 536870912,
+    "scratch_new_writes": 0,
+    "wall_seconds": 35
+  },
+  "remaining_completion_argv_template": [
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/complete_existing.py",
+    "--validation-sha256",
+    null
+  ],
+  "remaining_completion_scope": "After actual localcheck andONEaffectedpeerdecision/rootgrant, verify exactcheckresultSHA/current17refroles andstableidentities, publish only NEWmanifest/stage-result/completion-result; no recompression or passednegativecase replay",
+  "schema": "mckernel.m03.manifest-only-whole-boundary-correction.proposal.v1",
+  "scope": "Functional OS/apps plus Rust cutover; only canonical8key metadata correction; old archive/stage/source/validator immutable",
+  "source_files": [
+    {
+      "bytes": 1958,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/manifest_only.py",
+      "sha256": "b7b0e44b2a814eebc3cd3e8de3c9d658d57786fbcfa1cc31176d51c69a8604e3"
+    },
+    {
+      "bytes": 5135,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/check_existing.py",
+      "sha256": "ed5b7a5cd90a70fe32dfd87bcf3a4412133e94dc35ae93dcfdfeb09f28e72d0e"
+    },
+    {
+      "bytes": 2572,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/complete_existing.py",
+      "sha256": "cf075879e3d8194d5ec8f648a2d3784821eb6c0acb380c5c6103d1a400e198c1"
+    },
+    {
+      "bytes": 2225,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/run_local_check_once.py",
+      "sha256": "148224f4c8bd8362a2c65f8042d4e954ba7a3246adf6b22019983fa068386ef2"
+    }
+  ],
+  "status": "SOURCE_PREPARED_LOCAL_CHECK_UNRUN_COMPLETION_NOT_AUTHORIZED",
+  "strict_validator_changed": false
+}

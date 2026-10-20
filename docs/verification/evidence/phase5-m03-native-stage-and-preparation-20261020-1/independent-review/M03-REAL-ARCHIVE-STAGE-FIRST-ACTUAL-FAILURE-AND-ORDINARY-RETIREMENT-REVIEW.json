@@ -1,0 +1,138 @@
+{
+  "actual_complete_stage_acceptance": false,
+  "actual_result": {
+    "bytes": 1081,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-stage-ordinary-result-1.json",
+    "sha256": "07e2bee35f52a7dee7e46f9146ff44d70032e7c4d93fb566ba8dfd6ccc8cd3eb"
+  },
+  "actual_stderr": {
+    "bytes": 1210,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-M03-archive-stage-1.stderr",
+    "sha256": "bd465df71698218de9fb0d04980ab6fd149820f704f5df25069dcbe573319b83"
+  },
+  "actual_stdout": {
+    "bytes": 0,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-M03-archive-stage-1.stdout",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "actual_wait_status": {
+    "bytes": 115,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-M03-archive-stage-1.wait-status.json",
+    "sha256": "f6c6816a4378ba47d2837faa45372c64de230958bfed71455b1b88fd6df99c53"
+  },
+  "conditional_release": {
+    "bytes": 11212,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-REAL-ARCHIVE-STAGE-ORDINARY-CONDITIONAL-EXECUTION-REVIEW.json",
+    "sha256": "2774345ce7d5679799137cb30d3ae57437639ab0d9d392cf70d3b762e00e8f76"
+  },
+  "decision": "REFUSE_ACTUAL_M03_STAGE_ACCEPTANCE_PRESERVE_GENERATED_ARCHIVE_AND_FIRST_FAILURE",
+  "facts": {
+    "64MiB_stage_budget_exceeded_by_observed_outputs": false,
+    "Linux_reference_replays": 0,
+    "actual_real_archive_stage_attempts": 1,
+    "guest_runs": 0,
+    "manifest_json_present": false,
+    "native_owner_root_or_module_effects": 0,
+    "output_file_32MiB_limit_exceeded": false,
+    "real_app_runs": 0,
+    "retained_output_total_bytes": 21350389,
+    "stage_result_json_present": false,
+    "successful_complete_stage_results": 0
+  },
+  "first_actual_predicate": {
+    "error": "DiagnosticError: manifest keys differ",
+    "inherited_extra_top_level_keys": [
+      "pair",
+      "pair_rounds"
+    ],
+    "location": "stage_m03.py111 -> typed native_diagnostic.py211 _validate_manifest -> _keys77",
+    "mechanism": "stage() deep-copies accepted pair-batch parent then changes payload/case/staging. pair and pair_rounds remain top-level; strict M03 single-app validator requires exactly8 keys.",
+    "required_top_level_keys": [
+      "artifacts",
+      "case_id",
+      "kind",
+      "modules",
+      "payload",
+      "profile",
+      "schema_version",
+      "staging"
+    ],
+    "source_or_oracle_weakening_required": false
+  },
+  "functional_scope": "Functional supported McKernel OS/apps plus Rust/reviewed-assembly compute cutover; current private userspace offline archive stage failure only.",
+  "future_attempt_parent_or_nonce_bound": false,
+  "implementation_ownership": false,
+  "minimal_next_repair": "Author should construct the exact canonical8-key M03 manifest, dropping only inherited pair metadata while preserving strict schema and full typed tuple/archive/oracle checks. Inspect all remaining actual manifest joins from saved archive/overlay before a bounded correction. Prepare a fresh manifest-only completion proposal reusing immutable retained archive rather than replaying compression; root must grant it separately.",
+  "native_application_whole_M03_default_or_ACK_acceptance": false,
+  "native_request_or_execution_release": null,
+  "ordinary_child_retirement": {
+    "CPU6_released_reported_by_author": true,
+    "capture_hashes_match_closed_record": true,
+    "observed_owned_group_absent": true,
+    "outer_direct_exec_tool_join_rc1_reported_by_author": true,
+    "outer_independent_PGID_observation_claimed": false,
+    "outer_stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-stage-outer-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "outer_stdout": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-stage-outer-1.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pid": 2006894,
+    "positive_wait": true,
+    "recorded_elapsed_seconds": 14.842576053983066,
+    "returncode": 1
+  },
+  "proposal": {
+    "bytes": 6945,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/REAL-ARCHIVE-STAGE-ORDINARY-PROPOSAL.json",
+    "sha256": "8818b2522e3b491b9734110ee6080a8ba5df97732bb9a53b197bd32e24170ab2"
+  },
+  "retained_partial_output_authority": "Sizes/path existence observed; this review neither decompresses/revalidates nor grants acceptance to the new archive. Overlay-manifest is readable, but manifest.json and stage-result.json were not published. The source reached strict manifest validation after derive/overlay writing; this control-flow fact is not independent full-stage acceptance.",
+  "retained_partial_outputs": {
+    "m03.cpio.gz": {
+      "bytes": 21330345,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-stage-1/m03.cpio.gz"
+    },
+    "overlay-manifest.json": {
+      "bytes": 20044,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-stage-1/overlay-manifest.json"
+    }
+  },
+  "review_limit_and_history": "Prior source03fe and conditional277 reports remain immutable. Their synthetic checks exercised consumed derive/retained-map bodies, not full real-parent stage() completion. This actual parent-schema integration gap was not caught by that earlier source/synthetic review. First real-stage failure preserved; no unchanged retry or recompression by reviewer.",
+  "reviewed_at": "2026-10-20T11:14:41.697218+00:00",
+  "reviewer": "/root/resume20_physical",
+  "reviewer_actions": "Read already-closed wait/streams/result and saved small overlay JSON plus source/control-flow/schema facts; publish additive failure/refusal report only. No process actions, tests, decompression/recompression, root, guest, Git or source edits.",
+  "schema": "mckernel.independent-m03-real-stage-actual-failure-review.v1",
+  "status": "FAIL_STAGE_SCHEMA_JOIN_WITH_POSITIVE_ORDINARY_CHILD_RETIREMENT",
+  "witnesses": [
+    {
+      "bytes": 1081,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-stage-ordinary-result-1.json",
+      "sha256": "07e2bee35f52a7dee7e46f9146ff44d70032e7c4d93fb566ba8dfd6ccc8cd3eb"
+    },
+    {
+      "bytes": 115,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-M03-archive-stage-1.wait-status.json",
+      "sha256": "f6c6816a4378ba47d2837faa45372c64de230958bfed71455b1b88fd6df99c53"
+    },
+    {
+      "bytes": 1210,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/real-M03-archive-stage-1.stderr",
+      "sha256": "bd465df71698218de9fb0d04980ab6fd149820f704f5df25069dcbe573319b83"
+    },
+    {
+      "bytes": 6339,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/stage_m03.py",
+      "sha256": "192382b11461d5e2641b62ad00e14801331059c27f43d132a35aefcd45f0140b"
+    },
+    {
+      "bytes": 20044,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-stage-1/overlay-manifest.json",
+      "sha256": "e502c2dfc1c4af2c8a0853b4e80f8210bf6bd7960ba21cf7ae492d7250f7badf"
+    }
+  ]
+}
