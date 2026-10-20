@@ -1,0 +1,131 @@
+{
+  "actual_failed_request": {
+    "bytes": 2638,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-1/fresh-fullmodule-attempt-1/request.json",
+    "sha256": "db6141e5ac5b0e210f827bf02d9a53a9acb4f9de254e9a72dfc4c312f5720052"
+  },
+  "actual_make_plan": {
+    "bytes": 6388,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-56c27304ced14214a861219db4c59e50/evidence/request.json",
+    "sha256": "71694e13a481e48dd996f61d32848674c1bdbc7ecb491b98105331c14e40f538"
+  },
+  "actual_sdk_selected_source_witnesses": [
+    {
+      "finding": "code macro wraps negative crate::bindings errno into Error, but no EOVERFLOW declaration; Error and to_result are public in error module.",
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/rust/kernel/error.rs"
+    },
+    {
+      "line": 36,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/rust/kernel/prelude.rs",
+      "text": "pub use super::error::{code::*, Error, Result};"
+    },
+    {
+      "line": 6141,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/rust/bindings/bindings_generated.rs",
+      "source_authority": "Existing exact942 SDK source/support validation consumed before actualmake; selected read only, no baseline/toolchain rehash.",
+      "text": "pub const EOVERFLOW: u32 = 75;"
+    }
+  ],
+  "actual_source_review": {
+    "bytes": 97146,
+    "path": "/home/holden/mckernel-work/host-preparation/held-host-control-fullmodule-independent-review-20261019-1/HELD-HOST-CONTROL-CORRECTED-SDK-ACTUAL-MATERIALIZATION-ACCEPTANCE.json",
+    "sha256": "65a8bebbb04140c1e97552611e065e87a8c42ac0aa9e7a76be2cca911937521c"
+  },
+  "compiler_result": {
+    "complete_three_module_artifacts_accepted": false,
+    "driver_status": "FAIL",
+    "make_returncode": 2,
+    "undefined_overflow_diagnostics": 8,
+    "wrong_error_type_diagnostics": 1
+  },
+  "created_at_utc": "2026-10-20T02:11:27.414846+00:00",
+  "decision": "EXPERT_CONCRETE_SDK_ERRNO_AND_TYPE_REPAIR_REQUIRED_NO_AUTOMATIC_THIRD_ATTEMPT",
+  "driver_receipt": {
+    "bytes": 20148,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-56c27304ced14214a861219db4c59e50/evidence/receipt.json",
+    "sha256": "ee243614fb8280367d67131d08dbaf9c258c4bb816218817ffac10ac998190bd"
+  },
+  "failure_family": {
+    "actual_failed_fullmodule_attempts": 2,
+    "automatic_retry": false,
+    "bounded_correction_review": {
+      "bytes": 12626,
+      "path": "/home/holden/mckernel-work/host-preparation/held-host-control-fullmodule-independent-review-20261019-1/HELD-HOST-CONTROL-SDK-COMPILER-CORRECTION-ORDINARY-AND-CONDITIONAL-HEAVY-REVIEW.json",
+      "sha256": "5f5b9483998975ac5d6938047eac4c035444804c156fd8182d87e5cf9c386f0a"
+    },
+    "corrected_source_identity": "d642697bbe7157d28f1861590e770598abcdcfbd3929b2d61a40562bb3918ba9",
+    "expert_escalation": true,
+    "first_failed_candidate_review": {
+      "bytes": 5179,
+      "path": "/home/holden/mckernel-work/host-preparation/held-host-control-fullmodule-independent-review-20261019-1/HELD-HOST-CONTROL-SDK-ACTUAL-FIRST-COMPILER-FAILURE-REVIEW.json",
+      "sha256": "6391100983441b51c9b8b21dd46972ec108f8df5176fb84cf91e6df632b2976c"
+    },
+    "first_source_identity": "03f9c016c259eb3ce10bb5ad61905ffe20409466df68f114211b329a5cc55de6",
+    "old_failures_and_current_candidate_preserved": true
+  },
+  "functional_scope": "Functional OS/apps and actual complete Rust SDK integration; private held target with production/default activation excluded.",
+  "implementation_ownership": false,
+  "limits": [
+    "Actual first missingdecoder/os_runtime diagnostics no longer appear; no full crate/module acceptance follows merely from their disappearance.",
+    "No source change, target/compiler/root/guest/test by reviewer; no module mixing/current-main activation/revoke/finalACK/native credit.",
+    "Physical0e3d is positive and independent; same original build/source/log evidence remains retained."
+  ],
+  "make_stderr": {
+    "bytes": 4937,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-56c27304ced14214a861219db4c59e50/evidence/make.stderr",
+    "sha256": "e7e96db9cc33419060c29c553a5e184dd5c30d212db588790984af8d18f6d5de"
+  },
+  "make_stdout": {
+    "bytes": 341,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-56c27304ced14214a861219db4c59e50/evidence/make.stdout",
+    "sha256": "0df6d0c7d68aa673a71fe0c76b06dff2b0f02dd2e0d33803740b2aba397e2d61"
+  },
+  "minimal_overflow_repair": {
+    "new": ".checked_add(1).ok_or_else(|| errno(-(kernel::bindings::EOVERFLOW as i32)))?",
+    "old": ".checked_add(1).ok_or(EOVERFLOW)?",
+    "preserve": [
+      "checked_add overflow refusal",
+      "existing pre-effect counter/state semantics",
+      "current locks/owner/response/MM/journal/parent-pin retention",
+      "all callback/descriptor/closure checks and exported ABI signatures"
+    ],
+    "scope": "All8diagnosed sites only; existing local errno converts actual C errno to kernel Error. Link/ingress inherit existing parent errno via super::*; fully qualified bindings works in image module without importing a new typed constant."
+  },
+  "next": "Author freezes one coherent exact9site SDK API correction in private source. Independent changed-byte decision and root own fresh request/publication/canonical/execution/admission before any further full SDK build; no equivalent projection/baselinebody replay and no assumed compiler pass.",
+  "overflow_root_cause": "Pinned SDK prelude reexports only declared error::code typed constants; EOVERFLOW is not declared there. Actual generated bindings define EOVERFLOW:u32=75. Ordinary body shim exposed a broader constant set, so its success did not compile the actual SDK surface.",
+  "overflow_sites": {
+    "mcctrl_vm.rs": [
+      241
+    ],
+    "smp_application.rs": [
+      335,
+      1813
+    ],
+    "smp_application_image.rs": [
+      158
+    ],
+    "smp_fork_ingress.rs": [
+      253
+    ],
+    "smp_fork_link.rs": [
+      127,
+      151,
+      507
+    ]
+  },
+  "physical_acceptance": {
+    "bytes": 28173,
+    "path": "/home/holden/mckernel-work/host-preparation/held-host-control-fullmodule-independent-review-20261019-1/HELD-HOST-CONTROL-CORRECTED-SDK-FAILED-BUILD-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "0e3d62a04117f946470e736547cc3e29845b502f76395c587f7cf57290523e86"
+  },
+  "reviewer": "next_replace_tid_review",
+  "schema": "mckernel.held-control-sdk.corrected-build-expert-family-disposition.v1",
+  "source_identity": "d642697bbe7157d28f1861590e770598abcdcfbd3929b2d61a40562bb3918ba9",
+  "type_repair": {
+    "line": 549,
+    "new": "kernel::error::Error",
+    "old": "kernel::Error",
+    "scope": "Parameter type resolution only. Existing kernel prelude imports same Error; preserve low32 errno packing, IHK_SMP_SHUTDOWN_V6_POST_EFFECT flag and all caller classifications.",
+    "source": "ihk_smp_x86_64.rs"
+  }
+}

@@ -1,3 +1,22 @@
+## Current — SDK compiler feedback closed; twenty-launch case next
+
+Source checkpoint01538f00 is pushed/fetched. All5 integrated guest-control
+source files match fetched bytes; native/legacy Rust crates passed82f8a3f2,
+with linking/default activation/CREATE_PPD/revoke/finalACK still pending.
+
+Expert-corrected SDK attempt2 (request035c6f3d) closed rootrc1 in22.514764s,
+with direct join/group absence/no observer error. Actual make failed2 at three
+Rust improper-ctypes extern declarations involving lockdep_map_p; earlier
+errno/type diagnostics are gone. Preserve this new failure and both prior runs.
+Independent physical67aca252 passes15clients/42groups/3record release and exact
+CID absence. Compiler FAIL is separate from accepted physical retirement.
+No automatic fourth compile; one private Rust pointer-ABI correction is pending.
+
+Twenty-launch stage/consumer remain accepted and unchanged. Its native packet
+is binding genuine67aca252 as latest physical predecessor while retaining the
+existing tested image/modules. No twenty-launch runtime or3.5x result yet.
+The operational97% included guard remains;100% controller proposal is parked.
+
 ## Current instruction reconciliation — operational guard remains97
 
 The requested100% proposal, tests and independent source review are preserved
