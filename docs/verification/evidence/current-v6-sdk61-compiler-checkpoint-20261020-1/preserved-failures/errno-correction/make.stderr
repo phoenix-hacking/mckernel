@@ -1,0 +1,27 @@
+error: method `with_active_child` is never used
+   --> /candidate/modules/smp_application.rs:180:19
+    |
+179 | impl PreparedForkIngress {
+    | ------------------------ method in this implementation
+180 |     pub(crate) fn with_active_child<T>(&self,
+    |                   ^^^^^^^^^^^^^^^^^
+    |
+    = note: `-D dead-code` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(dead_code)]`
+
+error: method `request` is never used
+  --> /candidate/modules/smp_application_syscall.rs:51:19
+   |
+46 | impl<M: ResponseMemory> ForkResponse<M> {
+   | --------------------------------------- method in this implementation
+...
+51 |     pub(crate) fn request(&self) -> &Request { &self.request }
+   |                   ^^^^^^^
+
+error: aborting due to 2 previous errors
+
+make[3]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/scripts/Makefile.build:284: /candidate/modules/ihk_smp_x86_64.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/Makefile:1990: /candidate/modules] Error 2
+make[1]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/Makefile:242: __sub-make] Error 2
+make: *** [Makefile:242: __sub-make] Error 2

@@ -1,0 +1,43 @@
+{
+  "acceptance": false,
+  "automatic_retry": false,
+  "classification": "NEW_DEAD_CODE_DENIED_WARNINGS_FAMILY",
+  "diagnostic_witnesses": [
+    {
+      "component": "PreparedForkIngress::with_active_child",
+      "error": "method never used; -D dead-code implied by -D warnings",
+      "line": 180,
+      "source": "smp_application.rs"
+    },
+    {
+      "component": "ForkResponse::request",
+      "error": "method never used",
+      "line": 51,
+      "source": "smp_application_syscall.rs"
+    }
+  ],
+  "driver_error": "ValueError: external make failed",
+  "expert_disposition_required_before_further_compiler": true,
+  "frozen_sources_changed": false,
+  "make_returncode": 2,
+  "prior_EOVERFLOW_diagnostic_absent": true,
+  "receipt": {
+    "bytes": 20125,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-4d70b50a3c47420ba9a90c6f5485a401/evidence/receipt.json",
+    "sha256": "5bccd0c67c728ba24fb661a2ef91f7085c4139c281912b9e9767274cbc31b911"
+  },
+  "remaining_gates": "Later compile/link/ABI/module gates unrun; no default/native/nonnullCREATE_PPD/MMseal acceptance",
+  "schema": "mckernel.current-v6-sdk.correction1-first-failure.v1",
+  "scope": "Functional OS/apps plus active Rust compute cutover; frozenphase1 diagnostic only",
+  "source_author_notified": true,
+  "stderr": {
+    "bytes": 1191,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-4d70b50a3c47420ba9a90c6f5485a401/evidence/make.stderr",
+    "sha256": "2479f43216aa1ad54360ffbbfc5f1525b2168ded0b3d308249a73c42f83eabbf"
+  },
+  "stdout": {
+    "bytes": 341,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-4d70b50a3c47420ba9a90c6f5485a401/evidence/make.stdout",
+    "sha256": "0df6d0c7d68aa673a71fe0c76b06dff2b0f02dd2e0d33803740b2aba397e2d61"
+  }
+}

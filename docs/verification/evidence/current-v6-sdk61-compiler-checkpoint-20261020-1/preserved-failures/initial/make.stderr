@@ -1,0 +1,30 @@
+error[E0425]: cannot find value `EOVERFLOW` in this scope
+  --> /candidate/modules/current_fork_task_mm.rs:62:42
+   |
+62 |         if grabbed.is_err() { return Err(EOVERFLOW); }
+   |                                          ^^^^^^^^^ not found in this scope
+   |
+help: consider importing this constant
+   |
+ 4 + use crate::smp_application::bindings::EOVERFLOW;
+   |
+
+error[E0425]: cannot find value `EOVERFLOW` in this scope
+   --> /candidate/modules/smp_application.rs:314:61
+    |
+314 |         let pins = pe.parent_slot_pins.checked_add(1).ok_or(EOVERFLOW)?;
+    |                                                             ^^^^^^^^^ not found in this scope
+    |
+help: consider importing this constant
+    |
+  4 + use crate::smp_application::bindings::EOVERFLOW;
+    |
+
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0425`.
+make[3]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/scripts/Makefile.build:284: /candidate/modules/ihk_smp_x86_64.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/Makefile:1990: /candidate/modules] Error 2
+make[1]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/Makefile:242: __sub-make] Error 2
+make: *** [Makefile:242: __sub-make] Error 2

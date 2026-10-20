@@ -1,0 +1,48 @@
+{
+  "acceptance": false,
+  "automatic_retry": false,
+  "classification": "RUST_E0425_MISSING_TYPED_EOVERFLOW_TWO_SITES",
+  "correction_proposal": [
+    "Parent .ok_or(errno(-(bindings::EOVERFLOW as i32)))?",
+    "Child Err(super::errno(-(bindings::EOVERFLOW as i32)))"
+  ],
+  "diagnostic_witnesses": [
+    {
+      "error": "E0425 cannot find value EOVERFLOW in this scope",
+      "expression": "Err(EOVERFLOW)",
+      "line": 62,
+      "source": "current_fork_task_mm.rs"
+    },
+    {
+      "error": "E0425 cannot find value EOVERFLOW in this scope",
+      "expression": "checked_add(1).ok_or(EOVERFLOW)?",
+      "line": 314,
+      "source": "smp_application.rs"
+    },
+    {
+      "existing_typed_error_helper": "errno(code:i32)->Error via kernel::error::to_result(code).err().unwrap_or(EIO)",
+      "line": 28,
+      "source": "smp_application.rs"
+    }
+  ],
+  "driver_error": "ValueError: external make failed",
+  "frozen_sources_changed": false,
+  "make_returncode": 2,
+  "receipt": {
+    "bytes": 20125,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-4a4ba51b41e540a7b6fe5370713d5448/evidence/receipt.json",
+    "sha256": "5bedaf3b35a91892d80fae1e55cb1137a9763b4319727649e617085b11189759"
+  },
+  "schema": "mckernel.current-v6-sdk.first-compiler-failure.v1",
+  "scope": "Functional OS/apps and Rust compute cutover; exact frozen phase1 diagnostic",
+  "stderr": {
+    "bytes": 1290,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-4a4ba51b41e540a7b6fe5370713d5448/evidence/make.stderr",
+    "sha256": "851e3f961b3c43739f671362bb5a2de2abbd41841195d2088b2a14f7f3c2f625"
+  },
+  "stdout": {
+    "bytes": 341,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-4a4ba51b41e540a7b6fe5370713d5448/evidence/make.stdout",
+    "sha256": "0df6d0c7d68aa673a71fe0c76b06dff2b0f02dd2e0d33803740b2aba397e2d61"
+  }
+}

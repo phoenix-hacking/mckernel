@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/deadcode-correction-1/prepare_fullmodule_inputs.py"
+  ],
+  "pid": 1855616,
+  "starttime": "27122819"
+}

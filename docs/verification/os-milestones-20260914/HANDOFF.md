@@ -1,3 +1,19 @@
+## Accepted current-v6 SDK compiler checkpoint — next composite backend
+
+Current61 phase1 request454e5882 now independently passes all three modules ac8f7bc3
+and physical retirementd2f2a41e; outer0/21.760153532s, compiler stderr0, actual source
+bindings13/46/9. Evidence current-v6-sdk61-compiler-checkpoint-20261020-1 preserves
+both original failed compiler attempts. No module load/default/native adoption credit.
+
+Next coherent backend13-source closure59f9/93a9 includes deferred-close8980 and
+parent-close5567 corrections. Separate real composite64/79/11 preparation passed
+three ordinary commands/2positive+4negative fixtures; exact request115dd978 and
+source proposal16a385f4 are in independent review. It links the three EXISTING Linux
+MM wrappers through actual mcctrl composite Kbuild; no held66/v12 source mixing.
+New source/build release and fresh root admission remain required. Later selector2
+revoke/finalACK implementation is active privately; no invented receipt/activation.
+Counts held14/35,26behaviors,Rust17/14; wholeM00/M04/M10 complete.
+
 ## Live compiler/debug cursor — SDK61 dead-code correction
 
 The first errno correction compiled past both EOVERFLOW failures, then failed on
