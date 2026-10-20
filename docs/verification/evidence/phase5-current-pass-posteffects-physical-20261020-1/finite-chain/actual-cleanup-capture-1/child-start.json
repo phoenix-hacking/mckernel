@@ -1,0 +1,27 @@
+{
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=134217728:134217728",
+    "--cpu=unlimited:unlimited",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/cleanup_pass_image.py",
+    "--release",
+    "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/finite-chain-preparation-1/cleanup-execution-release.json",
+    "--release-sha256",
+    "204ba1b010b1bcdf4651f643a23f101809dc1556ade4b7203344e453746b7cfc",
+    "--execute"
+  ],
+  "pid": 2069456,
+  "proc_start_ticks": "30125118",
+  "process_group": 2069456
+}

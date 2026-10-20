@@ -1,0 +1,190 @@
+{
+  "actual_retirement": null,
+  "actual_state_classification": {
+    "bytes": 12968,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-production-link-image-independent-review-20261020-1/CURRENT-PASS-POST-EFFECTS-ACTUAL-STATE-CLASSIFICATION-REVIEW.json",
+    "sha256": "cf73ae35349dfb34bbea36977429f6cc257dfb1c2c2accae7383f5c58cfb3e65"
+  },
+  "after_state_source": {
+    "bytes": 10231,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/post-effects-quarantine-recovery-preparation-1/observe_exact_post_effect_after_retirement.py",
+    "sha256": "0ba539e47bfe3b20e0faee9d8bf96ee5284b737405e1fd13a1df246eab26474d"
+  },
+  "capture_helper": {
+    "bytes": 2720,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/post-effects-quarantine-recovery-preparation-1/capture_holder_two.py",
+    "sha256": "e93456ad16b6f71e9b235c19edd5a08f811d6e0145e829e494b5a1e23f296eb5"
+  },
+  "case": {
+    "bytes": 16491,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/post-effects-quarantine-recovery-preparation-1/HOLDER-RETIREMENT-CASE.json",
+    "sha256": "1202d232b8063d02bdb19160043cfe5c23e88914f8af0c347b7e963ee7cff1f4"
+  },
+  "cleanup_replay_authorized": false,
+  "container_removal_authorized": false,
+  "decision": "PASS_EXECUTION",
+  "implementation_ownership": false,
+  "journal_complete": false,
+  "native_acceptance": false,
+  "operations": [
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--fsize=33554432",
+        "--cpu=unlimited:unlimited",
+        "--core=0:0",
+        "--nofile=256:256",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/post-effects-quarantine-recovery-preparation-1/retire_exact_post_effect_holder.py",
+        "--release",
+        "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/post-effects-quarantine-recovery-preparation-1/holder-retirement-release.json",
+        "--sha256",
+        "BIND_GENUINE_FINAL_RECOVERY_RELEASE_SHA256",
+        "--retire-target"
+      ],
+      "capture_directory": "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/post-effects-quarantine-recovery-preparation-1/actual-retire-target-capture-1",
+      "cpu": 7,
+      "profile": {
+        "as_soft_hard": [
+          1073741824,
+          1073741824
+        ],
+        "core": 0,
+        "cpu": 7,
+        "jobs": 1,
+        "no_outer_timeout_or_kill": true,
+        "nofile": 256,
+        "outer_grace_kill": null,
+        "outer_wall_kill": null,
+        "required_inherited_cpu_limits": [
+          -1,
+          -1
+        ],
+        "required_inherited_cpu_unlimited": true,
+        "stream_fsize": 33554432
+      },
+      "role": "retire-target",
+      "stream_cap_bytes": 33554432
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--fsize=33554432",
+        "--cpu=unlimited:unlimited",
+        "--core=0:0",
+        "--nofile=256:256",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/post-effects-quarantine-recovery-preparation-1/retire_exact_post_effect_holder.py",
+        "--release",
+        "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/post-effects-quarantine-recovery-preparation-1/holder-retirement-release.json",
+        "--sha256",
+        "BIND_GENUINE_FINAL_RECOVERY_RELEASE_SHA256",
+        "--verify-after-root-joins"
+      ],
+      "capture_directory": "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/post-effects-quarantine-recovery-preparation-1/actual-verify-after-root-joins-capture-1",
+      "cpu": 7,
+      "profile": {
+        "as_soft_hard": [
+          2147483648,
+          2147483648
+        ],
+        "core": 0,
+        "cpu": 7,
+        "jobs": 1,
+        "no_outer_timeout_or_kill": true,
+        "nofile": 256,
+        "outer_grace_kill": null,
+        "outer_wall_kill": null,
+        "required_inherited_cpu_limits": [
+          -1,
+          -1
+        ],
+        "required_inherited_cpu_unlimited": true,
+        "stream_fsize": 33554432
+      },
+      "role": "verify-after-root-joins",
+      "stream_cap_bytes": 33554432
+    }
+  ],
+  "payload_author": "/root",
+  "payload_without_execution_review": {
+    "author": "/root",
+    "case": {
+      "bytes": 16491,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/post-effects-quarantine-recovery-preparation-1/HOLDER-RETIREMENT-CASE.json",
+      "sha256": "1202d232b8063d02bdb19160043cfe5c23e88914f8af0c347b7e963ee7cff1f4"
+    },
+    "cleanup_replay_authorized": false,
+    "execution_count": 1,
+    "fetched_source_verified": false,
+    "schema": "mckernel.phase5.cleanup-holder-pidfd-release.v1",
+    "shared_release_authorized": false,
+    "signal_budget": 1,
+    "source": {
+      "bytes": 23106,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/post-effects-quarantine-recovery-preparation-1/retire_exact_post_effect_holder.py",
+      "sha256": "08c721fce2639b53ae0c7891c2e842486e93826dbd4c3cca3c0054b2746d5829"
+    },
+    "source_checkpoint": null,
+    "status": "PASS_EXECUTION_RELEASE"
+  },
+  "physical_release": false,
+  "quarantine_retained": true,
+  "quarantine_unlink_authorized": false,
+  "required_sequence": [
+    "Root fills ONLY this report full3 descriptor as execution_review in exact de9a payload, serializes/hashes releaseonce. Replace only explicit final-release SHA placeholders in reviewed mode argv. Final release remains fetched_source_verified:false/source_checkpoint:null; do not manufacture publication or change other fields.",
+    "Fresh current root/source/boot/resource/usage/CPU7 admission first. Mode1 must positively rebind exact PID/start/UID/GID/exe/argv/parent/7FDs/one task/no children and sole27:4+116152 holder; bind same pidfd before soleSIGKILL and require positive exit readiness. No numericPID/group signal fallback, repeated signal or automaticretry.",
+    "Root must positively wholejoin original toolsession72922 AND original capture2069454. Original eff9 capture must directly join sudo2069456/start30125118 with nonzero result, close streams/groupabsence/fullstableFD capture hashes. Preserve all failedoriginalbytes. ONLY then invoke mode2; parentPIDabsence alone is insufficient.",
+    "Mode2 must return0 with exact originaldirectwait/status joins, PIDabsence, same27:4+1828:116152 reacquired/released and actualafter-state positivechecks/currentCIDabsence/3releasednamenamesabsent/sevenrawFDunchanged. Preserve actualnewproofs/after-state; all Q/mutex/archive/plan/journal/log files stayretained, journalremains8/transactioncompletefalse.",
+    "Use exact copiede934 two-modecapture: normalUID1000 wrapper invoking sudo-A child, CPU7 exclusive grant, FS32MiB, inheritedCPU(-1,-1), no outertimeout/kill; mode1AS1GiB, mode2AS2GiB, nofile256/core0. Any uncertainty aftersignal uses existing recovery quarantine holder rather than returning falseclearance.",
+    "This conditional execution review is not physicalacceptance. Future exact existingquarantine-recovery-physical.v1/PASS/PASS_PHYSICAL_RETIREMENT_ONLY report with scope CURRENT_IMAGE_POST_EFFECTS_QUARANTINE_RECOVERY_ONLY needs actual2closedmodes/originalwholejoin/freshafterstate+bothlocks and explicitQretained/journalfalse. No successfultransaction9event fiction or nativecredit."
+  ],
+  "reviewed_payload": {
+    "bytes": 830,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/post-effects-quarantine-recovery-preparation-1/PENDING-HOLDER-RELEASE-WITHOUT-EXECUTION-REVIEW.json",
+    "sha256": "de9a6ecf63a1672c456bfe9c844f359e5039e7f32c044123262705c5f9f32e10"
+  },
+  "reviewed_release_payload_bytes": 830,
+  "reviewed_release_payload_sha256": "de9a6ecf63a1672c456bfe9c844f359e5039e7f32c044123262705c5f9f32e10",
+  "reviewer": "/root/owned_offload_review",
+  "schema": "mckernel.independent-current-image.cleanup-holder-pidfd-execution-review.v1",
+  "scope": "CURRENT_IMAGE_POST_EFFECTS_QUARANTINE_RECOVERY_ONLY",
+  "shared_release_authorized": false,
+  "signal_budget": 1,
+  "source": {
+    "bytes": 23106,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/post-effects-quarantine-recovery-preparation-1/retire_exact_post_effect_holder.py",
+    "sha256": "08c721fce2639b53ae0c7891c2e842486e93826dbd4c3cca3c0054b2746d5829"
+  },
+  "source_findings": [
+    "Original e042 boundedEOF/no-follow file/proc helpers, pidfd open/bind/sole SIGKILL/exit readiness primitives and lock predicates unchanged. Current source08c721 changes only exact2069459/start30125126/parent2069456:start30125118/outer2069454/transaction1828:116152/currentcase/raw7/PASSlabels plus read-only after-state invocation.",
+    "Case1202 protects seven exact original transaction files, full11FD metadata and O_EXCL rawcopies matched independently to actualclosed27c1 base64bytes; currentcleanup204ba/4ef/statecf73/78selected74finite/2inventories4+577 remain bound. Source/case/checkpoint data stays truthful unpushed/NULL; no Git mutation is a runtime prerequisite for this exact controlledretirement.",
+    "After-source0ba539 is reviewed439d read-only state capture with only bound original process absence replacing liveidentity, seven fullFD equal prior27c1, final PIDabsence/boot and explicitafterstatus. It still validates original8-eventjournal, archived2records, freshall78selected/74finite/full2inventories/sourcebackup/protected directories, and exactCIDinspect.",
+    "Mode2 runs after-state while holding both exact mutexes, refuses any failedcheck/active-name reappearance/CIDabsence failure/filedrift, stores exact after-state and returns its SHA+base64. No complete event append, Qunlink, record/container removal, cleanup/postjoin replay or authorityrelease API exists. Existing e934 capture bytehash exact and both decorated operation profiles now include mandatory no_outer_timeout_or_kill:true and required_inherited_cpu_unlimited:true; argv has exact CPU7/FS32MiB/unlimitedCPU."
+  ],
+  "status": "PASS",
+  "transaction_complete": false,
+  "whole_two_mode_proposal": {
+    "bytes": 4381,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-pass-image-terminal-20261020-1/post-effects-quarantine-recovery-preparation-1/HOLDER-TWO-MODE-PROPOSAL.json",
+    "sha256": "ba316bff86493ce5ebd95611b5585ed0facad53db8e8ee41012a02afd3a2c04a"
+  }
+}

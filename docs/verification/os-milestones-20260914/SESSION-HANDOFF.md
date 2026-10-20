@@ -1,3 +1,23 @@
+## Current — post-effects physical ownership clearance accepted; M03 next
+
+Independent0e99ddd8 accepts exact pidfd holder retirement, original tool72922
+whole join, parent/group retirement and reacquisition of both permanent27:4 and
+transaction1828:116152 locks. Fresh after-state ddba834d verifies all78 selected
+files,74 finite objects and inventories4/577 unchanged, original archives exact,
+current CID absent and lease/common/shared names absent. Quarantine remains
+retained and the journal has eight events: transaction completion is NOT claimed.
+Original cleanup refusal and held source remain preserved. This physical-only
+scope permits separately reviewed fresh admission; it grants no native result.
+
+M03 owns the next CPU6 ordinary window for its complete actual-report consumer,
+focused saved-result checks and final19 preparation. Root retains fetched source,
+LAST snapshot and native execution authority. Child235B stage ccc7b03d and exit7
+source/profile a44c remain conditional and unrun; no second ordinary grant or
+heavy owner overlaps the M03 reservation. Private engine diagnostic8cb retains
+all rejection predicates and awaits its seven-case fixture. Counts15/35,whole3,
+26behaviors,17/14Rust unchanged;100%included/zero reserve. Checkpoint c5172ffe
+preserves the earlier closed evidence; current physical evidence export follows.
+
 ## Current — PASS-image cleanup held after final-census refusal
 
 The actual read-only preflight passed 0/2.042s with no mutation. Exact reviewed
