@@ -61,6 +61,22 @@ impl ChildCredits {
     pub(super) fn destruction_complete(&self)->bool {
         self.constructor.is_some_and(|graph|unsafe {graph.as_ref().destroyed()})
     }
+    pub(super) unsafe fn prepare_runtime_retirement(&mut self)->Result<constructed::RuntimeRetirementPermit,i32>{
+        self.constructor.ok_or(EACCES)?.as_mut().prepare_runtime_retirement()
+    }
+    pub(super) fn retirement_complete(&self,runtime:bool)->bool{
+        self.constructor.is_some_and(|graph|unsafe {
+            if runtime{graph.as_ref().runtime_destroyed()}else{graph.as_ref().destroyed()}
+        })
+    }
+    pub(super) unsafe fn release_runtime_after_ack(self)->Result<(),Self>{
+        if !self.retirement_complete(true){return Err(self);}
+        // runq_add already consumed the reservation. There is no CPU release
+        // here and no second release of any original constructor edge.
+        let graph=self.constructor.unwrap();
+        crate::process_helpers::release_thread(self.parent.as_ptr());
+        crate::mem_helpers::kfree(graph.as_ptr().cast());Ok(())
+    }
     pub(super) unsafe fn release_after_ack(self)->Result<(),Self> {
         if !self.destruction_complete(){return Err(self);}
         // No child/VM/Process pointer is used after checked final destruction.

@@ -1,3 +1,30 @@
+## Current — coherent runtime lifetime source integrated; five actual compilers pass
+
+Exact nine-file runtime retirement consumer and frozen-identity producer are now
+integrated into production sources with activation OFF. All nine immediate root
+preimages matched accepted inputs; exact reviewed replacement bytes and source
+whitespace checks pass. Independent78509230 permits this source checkpoint and
+accepts both full Rust profiles plus selected/fallback whole syscall.c and actual
+process.c provider: five artifacts and four actual [164,168,4,4,8] FAM witnesses.
+Rust warnings remain recorded; C captures have empty stderr. No actual link,
+new image, default activation, native child execution or final ACK is claimed.
+Old36951 post-free lookup producer stays rejected; corrected63c950 identity is
+captured before release and completed without a post-free pointer lookup.
+
+Owner0/39.168274s joined; independent physical237e52bd accepts13 clients, exact
+container removal and three authenticated record releases, preserving mutex27:4.
+The next compiler route is a coherent current opt-in image. Its old producer
+source locks/header mapping are being corrected in one private successor;
+existing checked defaultOFF glue/forwarding is reused. Accepted HOST66 provider
+has CURRENT_FORK_ADOPTION_ENABLED=false and returns-95; a separate defaultOFF
+host opt-in build route is required before positive native CREATE_PPD/adoption.
+The existing child-run/known-exit/parent-wait oracle remains unchanged. No replay
+of passed mcexec/guest5/FAM/compiler artifacts is needed for accounting.
+
+Counts15/35, whole M00/M04/M10,26 behaviors,17 production/14 native Rust paths
+remain held. Continuous functional OS/apps plus actual Rust cutover;100% included,
+zero reserve, real service/source/runtime/resource/ownership controls unchanged.
+
 ## Current — real mcexec link accepted; retirement compiler publication fetched
 
 Independent648c56e8 accepts six real launcher C/Rust/assembly/archive/ranlib/PIE

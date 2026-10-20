@@ -82,6 +82,8 @@ pub(crate) struct Carrier {
     owned_request:Option<child_credits::ForkRequestSlot>,
     identity:GuestIdentity,control:ControlPending,revoke:ControlObservation,
     retired_control:Option<ControlRequestSlot>,host_start:runnable::StartPending,bytes:[u8;128],runtime_committed:bool,
+    runtime_wait_reaped:bool,
+    runtime_publish_completed:bool,
 }
 unsafe extern "C" { fn do_syscall(request:*mut SyscallRequest,cpu:CInt)->CLong; }
 
@@ -147,7 +149,7 @@ unsafe fn create_private_carrier_current(
         start:original[1],length:original[2],phase:SUBMITTED,error:0,
         owned_credits:None,owned_request:None,
         identity:GuestIdentity::ZERO,control:ControlPending::ZERO,revoke:ControlObservation::ZERO,
-        retired_control:None,host_start:runnable::StartPending::ZERO,runtime_committed:false,bytes:[0;128]});
+        retired_control:None,host_start:runnable::StartPending::ZERO,runtime_committed:false,runtime_wait_reaped:false,runtime_publish_completed:false,bytes:[0;128]});
     let physical=crate::x86_memory_helpers::virt_to_phys(addr_of_mut!((*raw).bytes).cast::<c_void>())as u64;
     if physical==0||physical%8!=0||physical.checked_add(128).is_none(){crate::mem_helpers::kfree(raw.cast());return Err(EINVAL);}
     let handle=match registry::insert_private(pointer){Ok(handle)=>handle,Err((error,pointer))=>{
@@ -261,6 +263,11 @@ impl Drop for SubmitGuard{fn drop(&mut self){if !self.armed{return;}
 /// observation only, never a revoke permit, final ACK or runnable child.
 #[no_mangle]
 pub(crate) unsafe extern "C" fn process_fork_guest_control_submit_current_v1(handle:Handle,out:*mut ControlObservation)->CInt{
+    submit_control_current(handle,out,false)
+}
+/// Runtime has a distinct admission path. Reusing selector2 wire bytes does
+/// not reuse the private unpublished-child destruction authority.
+unsafe fn submit_control_current(handle:Handle,out:*mut ControlObservation,runtime:bool)->CInt{
     if out.is_null(){return EINVAL;}
     let cls=crate::cls::get_this_cpu_local_var();if cls.is_null(){return EACCES;}
     let thread=(*cls).current;if thread.is_null(){return EACCES;}let cpu=(*thread).cpu_id;if cpu<0{return EACCES;}
@@ -269,7 +276,9 @@ pub(crate) unsafe extern "C" fn process_fork_guest_control_submit_current_v1(han
     let address=request.as_ptr()as usize;
     let prepared=registry::visit(handle,|pointer|{
         let c=&mut*pointer.as_ptr();
-        if c.handle!=handle||c.parent!=thread as usize||c.phase!=FIRST_POSITIVE
+        let eligible=if runtime{c.phase==WAIT_REAPED&&runnable::runtime_retirement_ready(c)}
+            else{c.phase==FIRST_POSITIVE&&!c.runtime_committed};
+        if c.handle!=handle||c.parent!=thread as usize||!eligible
             ||!carrier_geometry(c,&c.identity)||c.control.state!=IDLE{return EBUSY;}
         (*request.as_ptr()).args=[2,c.identity.child_pid as u64,c.length,c.root,c.physical,MARKER];
         c.control=ControlPending{owned_request:slot.take(),request:address,

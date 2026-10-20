@@ -3050,7 +3050,12 @@ pub unsafe extern "C" fn sched_schedule_exit_cleanup(
     unsafe {
         write_volatile(&raw mut (*old_cpu).prevpid, 0);
         arch_flush_icache_all();
+        // Freeze the existing slot/epoch while last is still live. An
+        // untracked Thread must remain untracked if release frees its address.
+        let exit_token = crate::fork_control_registry::capture_runtime_exit_before_release(last as usize);
         release_thread(last.cast());
+        // Never relook up or dereference last after the ordinary edge release.
+        let _ = crate::fork_control_registry::complete_runtime_exit_after_release(exit_token);
         rusage_num_threads_dec();
     }
     // release_thread may free last, including its backing pages. Only the

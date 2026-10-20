@@ -5,7 +5,8 @@ use super::*;
 pub(super) unsafe fn destroy_and_ack_current(handle:Handle)->i32 {
     // This request allocation precedes every destructive guest effect.
     let mut slot=match ControlRequestSlot::allocate(){Ok(slot)=>Some(slot),Err(error)=>return error};
-    let request=slot.as_ref().unwrap().request;let mut permit=None;let mut cpu=-1;let mut parent=0;
+    let request=slot.as_ref().unwrap().request;let mut permit=None;let mut runtime_permit=None;
+    let mut runtime=false;let mut cpu=-1;let mut parent=0;
     let prepared=registry::visit(handle,|pointer|{
         let c=&mut*pointer.as_ptr();
         let cls=crate::cls::get_this_cpu_local_var();
@@ -16,18 +17,25 @@ pub(super) unsafe fn destroy_and_ack_current(handle:Handle)->i32 {
             Ok(observation)if observation.epoch==c.revoke.epoch&&observation.worker==c.revoke.worker
                 &&observation.delivery==c.revoke.delivery=>{},_=>return EACCES,
         }
+        runtime=c.runtime_committed;
+        if runtime&&!runnable::runtime_retirement_ready(c){return EACCES;}
         let Some(credits)=c.owned_credits.as_mut()else{return EACCES;};
-        permit=match credits.prepare_revoked_destruction(){Ok(permit)=>Some(permit),Err(error)=>return error};
+        if runtime{
+            runtime_permit=match credits.prepare_runtime_retirement(){Ok(permit)=>Some(permit),Err(error)=>return error};
+        }else{
+            permit=match credits.prepare_revoked_destruction(){Ok(permit)=>Some(permit),Err(error)=>return error};
+        }
         cpu=c.control.cpu;parent=c.parent;c.phase=DESTRUCTING;0
     });
     if prepared!=0 {if let Some(slot)=slot{slot.free_private();}return prepared;}
     // No registry lock or Carrier reference survives a destructive callback.
-    let destroyed=permit.take().unwrap().destroy();
+    let destroyed=if runtime{runtime_permit.take().unwrap().destroy()}else{permit.take().unwrap().destroy()};
     let rebound=registry::visit(handle,|pointer|{
         let c=&mut*pointer.as_ptr();
         if c.phase!=DESTRUCTING||c.owned_credits.is_none(){return EACCES;}
         if destroyed.is_err(){c.phase=RETAINED;c.error=EBUSY;return EBUSY;}
-        if !c.owned_credits.as_ref().unwrap().destruction_complete(){c.phase=RETAINED;return EBUSY;}
+        if !c.owned_credits.as_ref().unwrap().retirement_complete(runtime){c.phase=RETAINED;return EBUSY;}
+        if runtime&&!runnable::runtime_retirement_ready(c){c.phase=RETAINED;c.error=EACCES;return EACCES;}
         // The saved real revoke receipt binds nonce, original request/root,
         // opaque epoch and delivery. Only the checked graph can reach here.
         c.bytes[..8].copy_from_slice(b"MCFKD001");
@@ -51,7 +59,8 @@ pub(super) unsafe fn destroy_and_ack_current(handle:Handle)->i32 {
         if c.phase!=FINAL_ACK||c.control.state!=OBSERVED||c.control.request!=request.as_ptr() as usize
             ||c.control.thread!=parent||c.control.cpu!=cpu
             ||c.control.owned_request.as_ref().is_none_or(|slot|slot.request!=request)
-            ||c.owned_credits.as_ref().is_none_or(|credits|!credits.destruction_complete()){return EACCES;}
+            ||c.owned_credits.as_ref().is_none_or(|credits|!credits.retirement_complete(runtime))
+            ||(runtime&&!c.host_start.completed()){return EACCES;}
         expected=Some(pointer);0
     });
     if observed!=0{return observed;}
@@ -61,7 +70,9 @@ pub(super) unsafe fn destroy_and_ack_current(handle:Handle)->i32 {
     // No new observer can obtain a Carrier borrow; all three real calls have
     // acquired their actual completed Responses. Destruction is outside locks.
     let c=pointer.as_mut();let credits=c.owned_credits.take().unwrap();
-    if let Err(credits)=credits.release_after_ack(){c.owned_credits=Some(credits);guard.armed=false;return EBUSY;}
+    let released=if runtime{credits.release_runtime_after_ack()}else{credits.release_after_ack()};
+    if let Err(credits)=released{c.owned_credits=Some(credits);guard.armed=false;return EBUSY;}
+    if runtime{c.host_start.free_after_ack();}
     if let Some(slot)=c.owned_request.take(){slot.free_completed();}
     if let Some(slot)=c.retired_control.take(){slot.free_completed();}
     if let Some(slot)=c.control.owned_request.take(){slot.free_completed();}

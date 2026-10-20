@@ -407,6 +407,7 @@ unsafe extern "C" {
 }
 
 const EINVAL: CInt = 22;
+const EBUSY: CInt = 16;
 const EACCES: CInt = 13;
 const EFAULT: CInt = 14;
 const ENOMEM: CInt = 12;
@@ -9985,6 +9986,25 @@ pub unsafe extern "C" fn release_thread_checked(thread: *mut Thread) -> CInt {
     )
 }
 
+/// Consume the retained runtime Thread edge once. Return 2 ONLY after the
+/// actual Thread, VM and nested Process destructors report final destruction.
+/// Any other result consumes possible edges but grants no retry or ACK.
+pub(crate) unsafe fn release_thread_runtime_final_checked(thread:*mut Thread)->CInt {
+    process_release_thread_checked_body_result(
+        thread.cast(), offset_of!(Thread,refcount) as CULong,
+        offset_of!(Thread,vm) as CULong, offset_of!(Thread,proc) as CULong,
+        None, Some(process_release_thread_profile_bridge),
+        Some(process_procfs_delete_thread_bridge), Some(process_destroy_thread_bridge),
+        Some(process_release_vm_final_checked_bridge),
+    )
+}
+unsafe extern "C" fn process_release_vm_final_checked_bridge(vm:*mut c_void)->CInt {
+    release_process_vm_final_checked(vm.cast())
+}
+unsafe extern "C" fn process_release_process_final_checked_bridge(proc:*mut c_void)->CInt {
+    release_process_checked(proc.cast())
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn flush_process_memory(vm: *mut ProcessVm) {
     process_flush_memory_debug_bridge(vm.cast(), 0);
@@ -10126,6 +10146,35 @@ pub unsafe extern "C" fn release_process_vm_checked(vm: *mut ProcessVm) -> CInt 
         Some(process_policy_free_bridge),
         Some(process_free_vm_bridge),
     )
+}
+
+unsafe fn release_process_vm_final_checked(vm: *mut ProcessVm) -> CInt {
+    let result = process_release_vm_checked_inner(
+        vm.cast(),
+        offset_of!(ProcessVm, refcount) as CULong,
+        offset_of!(ProcessVm, proc) as CULong,
+        offset_of!(Process, mckfd) as CULong,
+        offset_of!(Process, mckfd_lock) as CULong,
+        offset_of!(Mckfd, next) as CULong,
+        offset_of!(Mckfd, close_cb) as CULong,
+        offset_of!(ProcessVm, free_cb) as CULong,
+        offset_of!(ProcessVm, opt) as CULong,
+        offset_of!(ProcessVm, address_space) as CULong,
+        offset_of!(Process, pid) as CULong,
+        offset_of!(Process, vm) as CULong,
+        offset_of!(ProcessVm, vm_range_numa_policy_tree) as CULong,
+        offset_of!(VmRangeNumaPolicy, policy_rb_node) as CULong,
+        None,
+        Some(process_spin_lock_bridge),
+        Some(process_spin_unlock_bridge),
+        Some(process_flush_vm_bridge),
+        Some(process_free_all_ranges_bridge),
+        Some(process_detach_address_space_bridge),
+        Some(ProcessReleaseRoute::FinalChecked(process_release_process_final_checked_bridge)),
+        Some(process_policy_free_bridge),
+        Some(process_free_vm_bridge),
+    );
+    match result { 0 => 0, 2 => 1, error if error < 0 => error, _ => -EBUSY }
 }
 
 #[no_mangle]
@@ -10591,6 +10640,22 @@ pub unsafe extern "C" fn process_release_vm_detach_process_result(
         .cast::<*mut c_void>()) = core::ptr::null_mut();
     let _ = process_release_process_action_result(proc, Some(release_fn));
     1
+}
+
+/// Cache all inputs before the possibly final Process callback. The result is
+/// the real callback result, never inferred from the former reference count.
+unsafe fn process_release_vm_detach_final_checked(
+    vm:*mut c_void,address_space_offset:CULong,proc_offset:CULong,
+    pid_offset:CULong,proc_vm_offset:CULong,detach:ProcessDetachAddressSpaceFn,
+    release:ProcessVmReleaseCheckedFn,
+)->CInt {
+    let address_space=field_ptr(vm,address_space_offset);
+    let proc=field_ptr(vm,proc_offset);
+    if proc.is_null(){return -EINVAL;}
+    let pid=*(proc.cast::<u8>().add(pid_offset as usize).cast::<CInt>());
+    let _=process_detach_address_space_pid_result(address_space,pid,Some(detach));
+    *proc.cast::<u8>().add(proc_vm_offset as usize).cast::<*mut c_void>()=core::ptr::null_mut();
+    release(proc)
 }
 
 #[no_mangle]
@@ -11376,6 +11441,63 @@ pub unsafe extern "C" fn process_release_vm_checked_body_result(
     policy_free_fn: Option<ProcessPolicyFreeFn>,
     free_vm_fn: Option<ProcessFreeFn>,
 ) -> CInt {
+    process_release_vm_checked_inner(
+        vm,
+        refcount_offset,
+        proc_offset,
+        proc_mckfd_offset,
+        proc_mckfd_lock_offset,
+        mckfd_next_offset,
+        mckfd_close_offset,
+        vm_free_cb_offset,
+        vm_opt_offset,
+        vm_address_space_offset,
+        proc_pid_offset,
+        proc_vm_offset,
+        vm_policy_tree_offset,
+        policy_node_offset,
+        dec_fn,
+        lock_fn,
+        unlock_fn,
+        flush_fn,
+        free_ranges_fn,
+        detach_fn,
+        release_process_fn.map(ProcessReleaseRoute::Existing),
+        policy_free_fn,
+        free_vm_fn,
+    )
+}
+
+// Distinct Rust-only route: no legacy C callback or result encoding changes.
+enum ProcessReleaseRoute {
+    Existing(ProcessReleaseProcessFn),
+    FinalChecked(ProcessVmReleaseCheckedFn),
+}
+unsafe fn process_release_vm_checked_inner(
+    vm: *mut c_void,
+    refcount_offset: CULong,
+    proc_offset: CULong,
+    proc_mckfd_offset: CULong,
+    proc_mckfd_lock_offset: CULong,
+    mckfd_next_offset: CULong,
+    mckfd_close_offset: CULong,
+    vm_free_cb_offset: CULong,
+    vm_opt_offset: CULong,
+    vm_address_space_offset: CULong,
+    proc_pid_offset: CULong,
+    proc_vm_offset: CULong,
+    vm_policy_tree_offset: CULong,
+    policy_node_offset: CULong,
+    dec_fn: Option<ProcessRefDecAndTestFn>,
+    lock_fn: Option<ProcessSpinLockFn>,
+    unlock_fn: Option<ProcessSpinUnlockFn>,
+    flush_fn: Option<ProcessVmActionFn>,
+    free_ranges_fn: Option<ProcessVmActionFn>,
+    detach_fn: Option<ProcessDetachAddressSpaceFn>,
+    release_process_fn: Option<ProcessReleaseRoute>,
+    policy_free_fn: Option<ProcessPolicyFreeFn>,
+    free_vm_fn: Option<ProcessFreeFn>,
+) -> CInt {
     if vm.is_null() {
         return -EINVAL;
     }
@@ -11411,15 +11533,26 @@ pub unsafe extern "C" fn process_release_vm_checked_body_result(
     }
     flush_fn(vm);
     free_ranges_fn(vm);
-    process_release_vm_detach_process_result(
-        vm, vm_address_space_offset, proc_offset, proc_pid_offset, proc_vm_offset,
-        detach_fn, release_process_fn,
-    );
+    let nested = match release_process_fn.unwrap() {
+        ProcessReleaseRoute::Existing(release) => {
+            process_release_vm_detach_process_result(
+                vm, vm_address_space_offset, proc_offset, proc_pid_offset, proc_vm_offset,
+                detach_fn, Some(release),
+            );
+            0 // Legacy callback cannot report final Process destruction.
+        },
+        ProcessReleaseRoute::FinalChecked(release) => process_release_vm_detach_final_checked(
+            vm, vm_address_space_offset, proc_offset, proc_pid_offset, proc_vm_offset,
+            detach_fn.unwrap(), release,
+        ),
+    };
     let policy_root = vm.cast::<u8>().wrapping_add(vm_policy_tree_offset as usize).cast::<RbRoot>();
     process_vm_policy_drain_free_result(policy_root, policy_node_offset, policy_free_fn);
     free_vm_fn(vm);
-    // vm and proc may be freed. Return a literal scalar without another read.
-    1
+    // No read of either dead allocation follows the callbacks. Existing
+    // callers retain their original 0/1 contract; only the distinct checked
+    // route can report 2 for final VM AND nested Process destruction.
+    if nested < 0 { nested } else if nested == 1 { 2 } else { 1 }
 }
 
 // This private callback preserves the existing optional dynamic-debug event.

@@ -7313,6 +7313,7 @@ struct owned_fork_caller_outcome {
 extern struct thread *process_fork_construct_current_v1(struct thread *,
         unsigned long, unsigned long, int, int, void **);
 extern int process_fork_cancel_constructed_current_v1(void *);
+extern int process_fork_runtime_drain_current_v1(void);
 extern int process_fork_owned_caller_runnable_current_v2(struct thread *, struct thread *,
         int, unsigned long, void *, int, int, unsigned long, struct owned_fork_caller_outcome *);
 #endif
@@ -27171,6 +27172,12 @@ long syscall(int num, ihk_mc_user_context_t *ctx)
 	}
 
 	cpu_enable_interrupt();
+
+#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
+	/* Current live-parent process context; rejection and IRQ enable precede
+	 * Rust's unlocked, non-reentrant retirement drain. */
+	(void)process_fork_runtime_drain_current_v1();
+#endif
 
 	if (get_this_cpu_local_var()->current->ptrace) {
 		arch_ptrace_syscall_event(get_this_cpu_local_var()->current,

@@ -9,6 +9,13 @@ pub(super) struct StartPending {
 impl StartPending {
     pub(super) const ZERO:Self=Self{owned_request:None,request:0,thread:0,cpu:-1,
         args:[0;6],state:IDLE,error:0,response:0,stid:0};
+    pub(super) fn completed(&self)->bool{
+        self.state==OBSERVED&&self.response!=0&&self.stid>0&&self.owned_request.is_some()
+    }
+    pub(super) unsafe fn free_after_ack(&mut self){
+        // The terminal consumer validates completed() before destruction.
+        if let Some(slot)=self.owned_request.take(){slot.free_completed();}
+    }
 }
 
 #[derive(Clone,Copy)]
@@ -107,15 +114,17 @@ pub(super) unsafe fn start_and_publish(handle:Handle,options:RunOptions)->i32 {
         let admitted=admit(c.parent as *mut Thread,c.child as *mut Thread,options);
         if admitted!=0{return admitted;}
         let Some(credits)=c.owned_credits.as_mut()else{return EACCES;};
+        let bound=registry::bind_runtime_exit(handle,c.child);
+        if bound!=0{return bound;}
         match credits.prepare_runtime(){Ok(owner)=>{permit=Some(owner);pid=c.identity.child_pid;c.runtime_committed=true;c.phase=RUNTIME_PUBLISHING;0},Err(error)=>error}
     });
     if prepared!=0{return prepared;}
     // No registry/publication/MM lock is held across lifecycle callbacks.
     let published=permit.unwrap().publish(pid,options.parent_cpu,options.flags,options.child_tid);
     let _=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();
-        if published==0{if c.phase==RUNTIME_PUBLISHING{c.phase=RUNTIME_PUBLISHED;}}
+        if published==0{c.runtime_publish_completed=true;if c.phase==RUNTIME_PUBLISHING{c.phase=RUNTIME_PUBLISHED;}}
         else{c.phase=RETAINED;c.error=published;}0});
-    if published==0{pid}else{published}
+    if published==0{let _=process_fork_runtime_drain_current_v1();pid}else{published}
 }
 
 /// Called only by the real wait-zombie body after its actual host wait4 result,
@@ -157,5 +166,48 @@ pub(crate) unsafe fn prepare_wait_reap(thread:*mut Thread,parent:*mut crate::abi
 pub(crate) unsafe fn finish_wait_reap(handle:Handle,error:i32){
     let _=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();
         if c.phase!=WAIT_REAP_PENDING{return EACCES;}
-        if error==0{c.phase=WAIT_REAPED;}else{c.phase=RETAINED;c.error=error;}0});
+        if error==0{c.runtime_wait_reaped=true;c.phase=WAIT_REAPED;}else{c.phase=RETAINED;c.error=error;}0});
+    // The caller has released the actual parent/children/hash locks. If the
+    // scheduler event is later, the next real syscall entry retries in the
+    // original parent context. Neither wait nor its return implies quiescence.
+    let _=process_fork_runtime_drain_current_v1();
+}
+
+pub(super) unsafe fn runtime_retirement_ready(c:&Carrier)->bool{
+    let local=crate::cls::get_this_cpu_local_var();
+    if local.is_null()||(*local).current as usize!=c.parent{return false;}
+    let parent=(*local).current;
+    if parent.is_null()||(*parent).proc.is_null()
+        ||(*parent).status&(8|16)!=0||(*(*parent).proc).status&(8|16)!=0
+        ||crate::x86_cpu_helpers::cpu_interrupt_disabled()!=0{return false;}
+    c.runtime_committed&&c.runtime_publish_completed&&c.runtime_wait_reaped&&c.error==0&&c.host_start.completed()
+        &&registry::runtime_exit_observed(c.handle,c.child)==Ok(true)
+        &&carrier_geometry(c,&c.identity)
+}
+
+/// Called at a real current-parent syscall entry, and after the unlocked
+/// successful wait commit. One bounded pass, no scheduler-context offload,
+/// no spinning on busy visitors, and no change to the original syscall result.
+#[no_mangle]
+pub(crate) unsafe extern "C" fn process_fork_runtime_drain_current_v1()->i32{
+    let local=crate::cls::get_this_cpu_local_var();if local.is_null(){return EACCES;}
+    let parent=(*local).current;
+    // Real process.h defines PS_ZOMBIE=8, PS_EXITED=16. The original storage
+    // pin is not permission to run a transaction after either exit frontier.
+    if parent.is_null()||(*parent).proc.is_null()
+        ||(*parent).status&(8|16)!=0||(*(*parent).proc).status&(8|16)!=0
+        ||crate::x86_cpu_helpers::cpu_interrupt_disabled()!=0{return EACCES;}
+    let _active=match registry::claim_parent_drain(parent as usize){Ok(active)=>active,Err(error)=>return error};
+    let mut handles=[Handle::EMPTY;registry::CAPACITY];registry::snapshot_handles(&mut handles);
+    let mut completed=0;
+    for handle in handles{if handle.epoch==0{continue;}
+        let ready=registry::visit(handle,|pointer|{let c=&*pointer.as_ptr();
+            if c.parent==parent as usize&&c.phase==WAIT_REAPED&&c.control.state==IDLE
+                &&runtime_retirement_ready(c){1}else{0}});
+        if ready!=1{continue;}
+        let mut observed=ControlObservation::ZERO;
+        if submit_control_current(handle,&mut observed,true)!=0{continue;}
+        if destroy_and_ack_current(handle)==0{completed+=1;}
+    }
+    completed
 }

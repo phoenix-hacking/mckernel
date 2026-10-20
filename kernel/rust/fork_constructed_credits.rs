@@ -11,7 +11,7 @@ const _:()={assert!(core::mem::offset_of!(crate::abi::AddressSpace,nslots)==164)
     assert!(core::mem::offset_of!(crate::abi::AddressSpace,nslots)+size_of::<crate::abi::CInt>()==168);};
 #[derive(Clone,Copy,Debug,Eq,PartialEq)]
 enum Stage {Constructed,Permitted,FirstConsumed,ThreadVmDestroyed,Destroyed,
-    RuntimePrepared,RuntimePublished,Uncertain}
+    RuntimePrepared,RuntimePublished,RuntimeRetiring,RuntimeDestroyed,Uncertain}
 pub(super) struct ConstructedFork {
     parent:NonNull<Thread>,child:NonNull<Thread>,process:NonNull<Process>,vm:NonNull<ProcessVm>,
     reserved_cpu:i32,stage:Stage,runtime_pin:bool,
@@ -89,6 +89,28 @@ impl ConstructedFork {
         self.stage=Stage::Destroyed;Ok(())
     }
     pub(super) fn destroyed(&self)->bool{self.stage==Stage::Destroyed}
+    pub(super) fn runtime_destroyed(&self)->bool{self.stage==Stage::RuntimeDestroyed}
+    /// The Carrier consumer has already joined actual wait, exact scheduler
+    /// receipt and the actual host revoke response. This does not recreate
+    /// any original constructor edge surrendered to runtime.
+    pub(super) fn prepare_runtime_retirement(&mut self)->Result<RuntimeRetirementPermit,i32>{
+        if self.stage!=Stage::RuntimePublished||!self.runtime_pin{return Err(EBUSY);}
+        self.stage=Stage::RuntimeRetiring;
+        Ok(RuntimeRetirementPermit{graph:NonNull::from(self)})
+    }
+}
+pub(crate) struct RuntimeRetirementPermit{graph:NonNull<ConstructedFork>}
+impl RuntimeRetirementPermit {
+    pub(crate) unsafe fn destroy(mut self)->Result<(),i32>{
+        let graph=self.graph.as_mut();
+        if graph.stage!=Stage::RuntimeRetiring||!graph.runtime_pin{return Err(EBUSY);}
+        // A possibly destructive error never restores a releasable pin or
+        // allows reading the dead child/VM/Process again.
+        graph.runtime_pin=false;graph.stage=Stage::Uncertain;
+        let child=graph.child.as_ptr();
+        if crate::process_helpers::release_thread_runtime_final_checked(child)!=2{return Err(EBUSY);}
+        graph.stage=Stage::RuntimeDestroyed;Ok(())
+    }
 }
 /// The original graph is surrendered before the first discoverable list
 /// insertion. The additional Thread pin remains Carrier-owned across exit
