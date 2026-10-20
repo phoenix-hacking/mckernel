@@ -1,3 +1,20 @@
+## Live compiler/debug cursor — SDK61 dead-code correction
+
+The first errno correction compiled past both EOVERFLOW failures, then failed on
+unused private with_active_child and ForkResponse::request under unchanged -Dwarnings.
+Closed outer1/6.419093609s at epoch1792473553.9056625; independent physicald1e5d778
+and classification7e184ec0 are retained. No artifact/default/native credit.
+The high-author bounded correction removes exactly those two unused accessors;
+real observe_preparation/active-MM ownership and all warning flags remain unchanged.
+Fresh deadcode-correction-1 source preparation223fd5f2 passed61/76/11 with CPU6 released;
+exact97 publication/final execution review and fresh root admission are next.
+
+Private backend parent-close defect is independently corrected556738c3: original
+re-wait reproduced; corrected close refuses before preparation and retains owner.
+Deferred final-close lifetime8980d55e remains source-PASS. Coherent corrected backend
+closure is being frozen for actual SDK ABI/link feedback; defaults/native/revoke/ACK
+remain unproved. Keep the two completed compiler failures and all raw captures.
+
 ## Current SDK61 compiler feedback — 2026-10-20
 
 The canonical current-v6 phase1 SDK61 attempt closed at epoch1792473182.7571697:

@@ -1,0 +1,99 @@
+{
+  "compiler_error_count": 2,
+  "compiler_errors": [
+    {
+      "column": 19,
+      "kind": "dead_code_denied",
+      "line": 180,
+      "method": "with_active_child",
+      "source": "smp_application.rs",
+      "witness": "error: method `with_active_child` is never used\n   --> /candidate/modules/smp_application.rs:180:19\n    |\n179 | impl PreparedForkIngress {\n    | ------------------------ method in this implementation\n180 |     pub(crate) fn with_active_child<T>(&self,\n    |                   ^^^^^^^^^^^^^^^^^\n    |\n    = note: `-D dead-code` implied by `-D warnings`\n    = help: to override `-D warnings` add `#[allow(dead_code)]`"
+    },
+    {
+      "column": 19,
+      "kind": "dead_code_denied",
+      "line": 51,
+      "method": "request",
+      "source": "smp_application_syscall.rs",
+      "witness": "error: method `request` is never used\n  --> /candidate/modules/smp_application_syscall.rs:51:19\n   |\n46 | impl<M: ResponseMemory> ForkResponse<M> {\n   | --------------------------------------- method in this implementation\n...\n51 |     pub(crate) fn request(&self) -> &Request { &self.request }\n   |                   ^^^^^^^\n\nerror: aborting due to 2 previous errors"
+    }
+  ],
+  "compiler_receipt": {
+    "bytes": 20125,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-4d70b50a3c47420ba9a90c6f5485a401/evidence/receipt.json",
+    "sha256": "5bccd0c67c728ba24fb661a2ef91f7085c4139c281912b9e9767274cbc31b911"
+  },
+  "decision": "ACCEPT_EXACT_NEW_DEAD_CODE_COMPILER_FAILURE_CLASSIFICATION_ONLY",
+  "execution_release": {
+    "bytes": 5494,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/compiler-correction-1/execution-release.json",
+    "sha256": "7e508fbda2589a7eeb24661af0ad33505d4af8056ad21cb001646a7de84c6683"
+  },
+  "failure_family": "NEW phase1 dormant preparation API dead_code lint denied by existing-Dwarnings: two methods, not recurrence of missingEOVERFLOW.",
+  "first_failed_driver_predicate": "make returncode must equal0; actual2 raises ValueError external make failed before lateroutputs",
+  "functional_scope": "Functional supported OS/apps AND compute-C retirement into Rust/reviewed assembly; frozenphase1 current61 compiler investigation only",
+  "implementation_ownership": false,
+  "make_returncode": 2,
+  "make_stderr": {
+    "bytes": 1191,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-4d70b50a3c47420ba9a90c6f5485a401/evidence/make.stderr",
+    "sha256": "2479f43216aa1ad54360ffbbfc5f1525b2168ded0b3d308249a73c42f83eabbf"
+  },
+  "make_stdout": {
+    "bytes": 341,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-4d70b50a3c47420ba9a90c6f5485a401/evidence/make.stdout",
+    "sha256": "0df6d0c7d68aa673a71fe0c76b06dff2b0f02dd2e0d33803740b2aba397e2d61"
+  },
+  "next_step": "Source owner/expert may prepare one bounded source-local disposition for these2dormantmethods under falsegate, retaining warningpolicy and no artificial runtimeconsumer/activation. Require exactchangedsource and freshrequest/release review before any further compiler attempt; no automatic retry authorized.",
+  "not_accepted": [
+    "Compiler/linkedmodule/default/native/nonnullCREATE_PPD/MMseal/ACK/application/computeCretirement acceptance",
+    "Globalwarning/dead-code policy relaxation or invented consumer",
+    "Unchangedsource replay/automaticbuild retry",
+    "Phase2source inclusion"
+  ],
+  "outer_status": {
+    "bytes": 1938,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/compiler-correction-1/actual-sdk-build-1/dispatch.status.json",
+    "sha256": "23bb4e84bb4e84664e089e140e341e66cf2f98b1ba8271584e36028077cd29f5"
+  },
+  "owner_returncode": 1,
+  "physical_review": {
+    "bytes": 26873,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-independent-review-20261020-1/COMPILER-CORRECTION1-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "d1e5d778cc3913dad1c59de8be8da3e3358b855080531ba289ada5da9440813a"
+  },
+  "prior_failure_disposition": "Previous2E0425 EOVERFLOW diagnostics absent after exacttypederrno correction; this is compiler diagnostic progress only, not linked module or native MM success.",
+  "request": {
+    "bytes": 2443,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/compiler-correction-1/request.json",
+    "sha256": "6911675211ac66d5fdf281b923f6bb0f6219c99963fea79118f7ba8eeaa43b60"
+  },
+  "reviewed_at": "2026-10-20T05:20:06.868632+00:00",
+  "reviewer": "/root/sdk66_boundary_review",
+  "reviewer_tests_compiler_root_guest_execution": 0,
+  "schema": "mckernel.independent-current-v6-sdk.correction1-compiler-failure-classification.v1",
+  "scope_findings": [
+    "Actualnewrequest691/release7e508fcd executed once; all3Rustmodule compile commands logged but SMPcompile aborted.",
+    "Exact first2compilererrors are unusedwith_active_child and ForkResponse::request; strict-Dwarnings remains unchanged. Failure is compiler-unused code, no evidence of runtime kernel failure.",
+    "No make0, linkedall3ko, finalexport/import/CMD/modinfo/vermagic acceptance. Knownbindings/mm_count/runtime safety remain unproven by failedwholecrate.",
+    "Originalfirstcurrent61failedrequest751 and correctedrequest691/currentcaptures retained. Independentphysicalretirementd1e5 is positive and separate from compilerFAIL."
+  ],
+  "source_actual_review": {
+    "bytes": 9598,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-independent-review-20261020-1/COMPILER-CORRECTION1-SOURCE-AND-ACTUAL-REQUEST-REVIEW.json",
+    "sha256": "e648a4d6a3dbb7b451299d0ad7bea61cfc3017ba61b5144ece2404978a726d16"
+  },
+  "source_refs": {
+    "smp_application.rs": {
+      "bytes": 55636,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-4d70b50a3c47420ba9a90c6f5485a401/modules/smp_application.rs",
+      "sha256": "4a40342a4788545a4051b4d849eb4181ae7e6a744229f2e8340ccc0cb777db2b"
+    },
+    "smp_application_syscall.rs": {
+      "bytes": 26374,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-4d70b50a3c47420ba9a90c6f5485a401/modules/smp_application_syscall.rs",
+      "sha256": "d68aee5849291c7be0774ec82062a06a8f12023652e882ce2d0e87e3c5e1e64e"
+    }
+  },
+  "status": "FAIL_COMPILER_PRESERVED"
+}
