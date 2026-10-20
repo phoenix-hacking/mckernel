@@ -1,3 +1,22 @@
+## Pipeline update — child normalization and timeout preflight accepted
+
+Child actual normalization/empty parent/whole-owner argument preflight passed
+1.1086s and independent ad8bbaba. Raw-stage f36e91a6, private owner7a073,
+sole evaluator7de, 39 consumed paths/29 readonly roots and QMP97B join.
+No owner/Docker/guest ran. The existing child static19/seven-step packet is
+preparing; matching enabled-host/image/235B oracle stays unchanged.
+
+M02 timeout-owner mount/source closure passed corrected actual preflight
+0.8077s, independent7c195a77. Initial609B AST comparison failure is preserved:
+selected Python3.8 omitted synthetic Constant.kind; parsed-node correction
+retains whole-AST equality and refuses unrelated40-to41 mutation. All owner,
+create/inside/QEMU and missing-mount/stale-manifest joins pass; CPU6 released.
+A truthful fresh runtime namespace, publication, metadata and actual40s timeout
+case remain future. No native timeout acceptance from these cheap checks.
+Current498 positive physical-family two-check binding is separately admitted;
+no report or future outcome is fabricated. Latest native counts stay16/35,
+three whole milestones,28 distinct behaviors,Rust17/14.
+
 ## Current — M03 used mapping criterion complete; next child and timeout preparations
 
 M03 Q6 completed all seven commands and three readbacks once. Owner rc0 took

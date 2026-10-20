@@ -1,0 +1,11 @@
+--- /home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/source/scripts/application-tests/native_diagnostic_stager.py
++++ /home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/native_diagnostic_stager.py
+@@ -34,7 +34,7 @@
+ LIBC = "lib64/libc.so.6"
+ REPLACEMENT_PATHS = frozenset(("images/mckernel.img", "modules/ihk.ko",
+                                "modules/ihk-smp-x86_64.ko", "modules/mcctrl.ko"))
+-MCEEXEC_REPLACEMENT_PATHS = REPLACEMENT_PATHS | frozenset(("bin/mcexec",))
++MCEEXEC_REPLACEMENT_PATHS = REPLACEMENT_PATHS | frozenset(("bin/mcexec", "bin/native-boot"))
+ 
+ class StagerError(ValueError):
+     pass

@@ -1,0 +1,47 @@
+{
+  "status": "SOURCE_READY_UNRUN_REQUIRES_FRESH_DISPATCHER_ORDINARY_GRANT_AFTER_METADATA_QUEUE",
+  "functional_scope": "Supported-profile functional OS/apps plus actual compute-C retirement into Rust/reviewed assembly; Linux control-plane collector maintenance only",
+  "source_freeze": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/SOURCE-FREEZE.json",
+    "sha256": "0175fdb4ebb5bf8b075f45acc1fd4ecaf944d84a9b21f2fc4bd094f5daccd182"
+  },
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/native_diagnostic_guest_collector.c",
+    "sha256": "3090f3a3ac6fd47918b621688f4474f23a68fc041894060b5ee008b4acabebeb"
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/run_checks_once.py",
+    "sha256": "03547f5c76d6c9a600937799660ee88ad38d1f57afbb542f954972412d44bf9a"
+  },
+  "outer_argv": [
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824",
+    "--cpu=40",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/run_checks_once.py"
+  ],
+  "profile": "CPU6 one serial child; aggregate1GiBAS including observer; child960MiBAS30CPU; whole35wall+2groupretirement; filebacked32MiBstream; core0nofile256; fresh MemAvailable6GiB (2GiB grant+4GiB reserve), host16GiB+128MiB growth/scratch12GiB+0growth",
+  "checks": [
+    "Existing 28 actual startup-header vectors; accepted exact nonce/48Bassignment/rank/capacity/sysfs ABI, modeled Linux resources",
+    "Four extracted actual main startup-order success/challenge-failure/boot-failure/assignment-failure paths; child /bin/mcexec argv and /apps/app unchanged",
+    "Existing actual helper exporter body groups: helper stdout/stderr/status retention with unstarted payload timestamps0, firstfailure priority, boundedomission, unsafe refusal, distinct startup phase refusal",
+    "Existing seven extracted actual retirement-loop vectors including immediate empty, late registration and unreadable directory refusal, full5s grace and unchanged outerdeadline",
+    "Static compile -DND_PROCESS_EXEC_WAIT using exact accepted handshake headers; no app/Linuxreference replay"
+  ],
+  "commands": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/COMMANDS.json",
+  "failure_history": "Original child235B scenario/native stage never run. Generic startup handshake failure/evidencewriter zero-timestamp loss/retirement earlybreak already reproduced and accepted in e56/e44/b338; preserve original failures. This private child applicability candidate unrun; one failed candidate plus one bounded correction maximum before escalation.",
+  "no_effects": [
+    "No root/Docker/module/image/app build or guest",
+    "No changes to old childstage/observer/app/oracle/Linuxreference/M03/Exit7",
+    "No production or default activation, native acceptance, destructorACK or typed postexitproducer claim"
+  ]
+}

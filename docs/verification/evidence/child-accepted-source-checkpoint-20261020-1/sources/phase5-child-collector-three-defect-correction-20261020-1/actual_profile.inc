@@ -1,0 +1,3 @@
+#if defined(ND_M03_MPROTECT_UNALIGNED) || defined(ND_PROCESS_EXEC_WAIT)
+#define ND_PAIR_STARTUP 1
+#endif

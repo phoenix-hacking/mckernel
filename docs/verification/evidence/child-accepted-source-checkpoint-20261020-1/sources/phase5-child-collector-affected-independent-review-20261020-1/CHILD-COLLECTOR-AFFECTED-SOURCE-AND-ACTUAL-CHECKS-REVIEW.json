@@ -1,0 +1,550 @@
+{
+  "schema": "mckernel.child-collector-affected-source-and-actual-check-independent-review.v1",
+  "status": "PASS_SOURCE_AND_NINE_AFFECTED_ORDINARY_CHECKS_STATIC_CHILD_ARTIFACT_ONLY",
+  "reviewer": "/root/exit7_retirement_defect",
+  "scope": "Functional supported-profile OS/apps plus compute-C retirement into Rust/reviewed assembly; permitted existing Linux collector control-plane maintenance",
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/native_diagnostic_guest_collector.c",
+    "sha256": "3090f3a3ac6fd47918b621688f4474f23a68fc041894060b5ee008b4acabebeb",
+    "bytes": 28590,
+    "mode": 33152
+  },
+  "source_freeze": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/SOURCE-FREEZE.json",
+    "sha256": "0175fdb4ebb5bf8b075f45acc1fd4ecaf944d84a9b21f2fc4bd094f5daccd182",
+    "bytes": 2843,
+    "mode": 33152
+  },
+  "proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ORDINARY-CHECK-PROPOSAL.json",
+    "sha256": "cb2602337b287e1496658edeba195c8a3abac94d37655233f28586da69afff35",
+    "bytes": 3204,
+    "mode": 33152
+  },
+  "accepted_generic_collector_base": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-retirement-defect-20261020-1/native_diagnostic_guest_collector.c",
+    "sha256": "b338983b34abfd349be683d86a4f32b79bb81f1f521377c3813cb86d84d024e2",
+    "bytes": 28376,
+    "mode": 33152
+  },
+  "actual_whole": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/whole.json",
+    "sha256": "a7689a084a4719ed28171bdfa3aff067363bfadd46a0874eba2f82640aeaecd0",
+    "bytes": 10467,
+    "mode": 33152
+  },
+  "compiled_child_collector": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/process-exec-wait-collector",
+    "sha256": "cd97f91bfd865820f83c29ec9dc17260e58e3ab1f08e5e9bc16601826e419ac0",
+    "bytes": 1025824,
+    "mode": 33216
+  },
+  "exact_changes": [
+    "Adds ND_PAIR_STARTUP when existing M03 or ND_PROCESS_EXEC_WAIT is selected",
+    "Widens only5 existing startup guards: refusalstate, localrefusalexport, sharedheaderinclude, preparechallenge, assignmentreadback"
+  ],
+  "whole_source_reversal_matches_b338": true,
+  "actual_function_bodies_verified": [
+    "helper_timeout_ms",
+    "append",
+    "stream_json",
+    "frame",
+    "publish",
+    "helper_failure_tag",
+    "remember_helper_failure",
+    "helper_failure_frame",
+    "publish_helper_failure",
+    "refuse_startup",
+    "publish_diagnostic",
+    "helper",
+    "now_ns",
+    "bounded_deadline",
+    "retired_at"
+  ],
+  "actual_main_startup_substring_verified": true,
+  "actual_grace_loop_substring_verified": true,
+  "existing_headers_byte_identical": true,
+  "header_refs": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/candidate/nd_pair_startup.h",
+      "sha256": "41e4c96c3ba718fa7414b027ff7819aab699d544b51305792fb6660b6bd62587",
+      "bytes": 2319,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/candidate/pair_assignment.h",
+      "sha256": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643",
+      "bytes": 3010,
+      "mode": 33152
+    }
+  ],
+  "actual_commands": [
+    {
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/00-pair_startup-compile/command.json",
+        "sha256": "70d3e5e52541bdcf3d408d1acd415c72be2a62a9b93e0cb847258b8ba8e961d4",
+        "bytes": 402,
+        "mode": 33152
+      },
+      "status": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/00-pair_startup-compile/status.json",
+        "sha256": "1f66b6e5c6bf3c61911e94d6770509877dc7b9c6a2b04daa7afdd73d3ef9e389",
+        "bytes": 1136,
+        "mode": 33152
+      },
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792521736687723157,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48388956,
+          "mode": "0o600",
+          "mtime_ns": 1792521736687723157,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/00-pair_startup-compile/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792521736687723157,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48388955,
+          "mode": "0o600",
+          "mtime_ns": 1792521736687723157,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/00-pair_startup-compile/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        }
+      },
+      "direct_child_joined": true,
+      "group_absent": true
+    },
+    {
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/01-pair_startup-test/command.json",
+        "sha256": "ba8337b9bdf0243e083ab3946a7c1730e77afc731e488ffa64242f42513565d7",
+        "bytes": 200,
+        "mode": 33152
+      },
+      "status": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/01-pair_startup-test/status.json",
+        "sha256": "f34a3ef2ec558f65f8cd330b6efdd685276653c90eec4361d0d53f58d4f57c57",
+        "bytes": 1130,
+        "mode": 33152
+      },
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792521736875729137,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48388965,
+          "mode": "0o600",
+          "mtime_ns": 1792521736875729137,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/01-pair_startup-test/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792521736879729264,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48388964,
+          "mode": "0o600",
+          "mtime_ns": 1792521736879729264,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/01-pair_startup-test/stdout",
+          "sha256": "09d8275bf93258cecb0091dc4e1fc8fbca505129bbe87799a0c9dd36075c38ca",
+          "size": 79,
+          "uid": 1000
+        }
+      },
+      "direct_child_joined": true,
+      "group_absent": true
+    },
+    {
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/02-startup_order-compile/command.json",
+        "sha256": "cec7a2841f0d9e9f3194757c3b6fecdacd5ee1c28f4b6bc1224604c003eef634",
+        "bytes": 431,
+        "mode": 33152
+      },
+      "status": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/02-startup_order-compile/status.json",
+        "sha256": "d061c76e087f8d97c1bff2c397b023af67903aab9b19649084096110e0891727",
+        "bytes": 1138,
+        "mode": 33152
+      },
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792521736903730027,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48388973,
+          "mode": "0o600",
+          "mtime_ns": 1792521736903730027,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/02-startup_order-compile/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792521736903730027,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48388972,
+          "mode": "0o600",
+          "mtime_ns": 1792521736903730027,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/02-startup_order-compile/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        }
+      },
+      "direct_child_joined": true,
+      "group_absent": true
+    },
+    {
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/03-startup_order-test/command.json",
+        "sha256": "0defbbccb9a7d2823052f66a742fa04b2c5b6c76629fbc753a36b68b2d6e32b4",
+        "bytes": 202,
+        "mode": 33152
+      },
+      "status": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/03-startup_order-test/status.json",
+        "sha256": "53c275677ebdade065ce40042d0d7039b7d626480eea320966d82ca785b9eff3",
+        "bytes": 1134,
+        "mode": 33152
+      },
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792521736979732445,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48388982,
+          "mode": "0o600",
+          "mtime_ns": 1792521736979732445,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/03-startup_order-test/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792521736983732573,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48388981,
+          "mode": "0o600",
+          "mtime_ns": 1792521736983732573,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/03-startup_order-test/stdout",
+          "sha256": "6c46ab31d5a77c14f978ac67f1814d10788e0ee3ec21730803035fc1a8732424",
+          "size": 54,
+          "uid": 1000
+        }
+      },
+      "direct_child_joined": true,
+      "group_absent": true
+    },
+    {
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/04-helper_export-compile/command.json",
+        "sha256": "de57b4ef551129e5438008b0ff6b7467c358f4acf07d9e681398ea3b0c52573e",
+        "bytes": 431,
+        "mode": 33152
+      },
+      "status": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/04-helper_export-compile/status.json",
+        "sha256": "1eb3a39e859fac3e9a3138bb9e580e5263ff7ab4b1d4b84c686edb08f9152494",
+        "bytes": 1138,
+        "mode": 33152
+      },
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792521737003733209,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48388990,
+          "mode": "0o600",
+          "mtime_ns": 1792521737003733209,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/04-helper_export-compile/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792521737003733209,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48388989,
+          "mode": "0o600",
+          "mtime_ns": 1792521737003733209,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/04-helper_export-compile/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        }
+      },
+      "direct_child_joined": true,
+      "group_absent": true
+    },
+    {
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/05-helper_export-test/command.json",
+        "sha256": "5f5247adc7035ef4fa0f7f4ffd3cb62ad560b9bb659db30c0d2df88868976fda",
+        "bytes": 332,
+        "mode": 33152
+      },
+      "status": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/05-helper_export-test/status.json",
+        "sha256": "d92091d90696af663e6ddfbabbf73d04bb4fb1606e32b620c688f23880af0873",
+        "bytes": 1134,
+        "mode": 33152
+      },
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792521737175738680,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48388999,
+          "mode": "0o600",
+          "mtime_ns": 1792521737175738680,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/05-helper_export-test/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792521737175738680,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48388998,
+          "mode": "0o600",
+          "mtime_ns": 1792521737175738680,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/05-helper_export-test/stdout",
+          "sha256": "75a2fa06bd86a604df4178f1e824845c7442b58226fa172901075357171e6ecb",
+          "size": 77,
+          "uid": 1000
+        }
+      },
+      "direct_child_joined": true,
+      "group_absent": true
+    },
+    {
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/06-retirement_window-compile/command.json",
+        "sha256": "37f57ab37e936623d4ae24000f6f45064ed942dd25156e9acc3f604e279760e6",
+        "bytes": 417,
+        "mode": 33152
+      },
+      "status": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/06-retirement_window-compile/status.json",
+        "sha256": "4df043da6686e972be50ac76a64d83eda5a2c851c8fc6f48c4c4e745faa1d06c",
+        "bytes": 1146,
+        "mode": 33152
+      },
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792521737203739570,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48389014,
+          "mode": "0o600",
+          "mtime_ns": 1792521737203739570,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/06-retirement_window-compile/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792521737203739570,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48389013,
+          "mode": "0o600",
+          "mtime_ns": 1792521737203739570,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/06-retirement_window-compile/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        }
+      },
+      "direct_child_joined": true,
+      "group_absent": true
+    },
+    {
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/07-retirement_window-test/command.json",
+        "sha256": "d757ca5312f3deae234be891b3b04f430db8c690e879588cfce66f68d62b4aa0",
+        "bytes": 210,
+        "mode": 33152
+      },
+      "status": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/07-retirement_window-test/status.json",
+        "sha256": "3f3ce7d51059515fca963191ddbd7fa6cfe179a14a5bf3877a6b9d8220502958",
+        "bytes": 1142,
+        "mode": 33152
+      },
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792521737299742624,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48389023,
+          "mode": "0o600",
+          "mtime_ns": 1792521737299742624,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/07-retirement_window-test/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792521737299742624,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48389022,
+          "mode": "0o600",
+          "mtime_ns": 1792521737299742624,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/07-retirement_window-test/stdout",
+          "sha256": "a21fdfcf0b1bd1091b82f2b6a9d4fc553da6f09c34ea989982a16da5bedfea93",
+          "size": 92,
+          "uid": 1000
+        }
+      },
+      "direct_child_joined": true,
+      "group_absent": true
+    },
+    {
+      "command": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/08-child-collector-static-compile/command.json",
+        "sha256": "e2e9fcfd232724c5a5d8bc67ad8b48af3e9021272156cb1cb8451154f3960985",
+        "bytes": 641,
+        "mode": 33152
+      },
+      "status": {
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/08-child-collector-static-compile/status.json",
+        "sha256": "df49c2d9f8f78748fdad5f294f1f2334baceba8893bf150759c2b98adb200957",
+        "bytes": 1156,
+        "mode": 33152
+      },
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792521737323743387,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48389031,
+          "mode": "0o600",
+          "mtime_ns": 1792521737323743387,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/08-child-collector-static-compile/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792521737323743387,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48389030,
+          "mode": "0o600",
+          "mtime_ns": 1792521737323743387,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ordinary-check-1/08-child-collector-static-compile/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        }
+      },
+      "direct_child_joined": true,
+      "group_absent": true
+    }
+  ],
+  "static_compile_child_selection": true,
+  "counts": {
+    "commands": 9,
+    "header_vectors": 28,
+    "actual_startup_order_paths": 4,
+    "grace_vectors": 7,
+    "static_child_collectors": 1,
+    "guest_runs": 0,
+    "stage_runs": 0
+  },
+  "elapsed_seconds": 1.0004596440121531,
+  "boot_API_boundary": {
+    "required_existing_producer": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two-0755",
+      "sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5",
+      "bytes": 35784,
+      "mode": 33261
+    },
+    "source": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two.c",
+      "sha256": "ab4446ac49920a73c5cc0c13852fa65e312725c93dd241b0ced5e4fc4ba33341",
+      "bytes": 14917,
+      "mode": 33152
+    },
+    "shared_assignment_header": {
+      "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/pair_assignment.h",
+      "sha256": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643",
+      "bytes": 3010,
+      "mode": 33152
+    },
+    "observed_source_contract": "Collector stores16byte nonzero challenge before boot; existing producer reads exactchallenge, boots CPUs1/2+hidos allow_oversubscribe, publishes48byte0600 exactnonce/os0/generation1/count2 assignment after runningcount2/routeproof; collector validatesnonce/metadata/routes/generation/count/sysfs before payload",
+    "old_child_base_boot_binding_insufficient": true,
+    "future_stage_must_explicitly_bind4312": true,
+    "new_bootstrap_or_framework": false
+  },
+  "unchanged_app_contract": {
+    "stdout_bytes": 235,
+    "stderr_bytes": 0,
+    "parent_exit": 0,
+    "child_exits": [
+      37,
+      42
+    ],
+    "payload_argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "oracle_and_linux_reference": "Retained original accepted references; no application/source/reference edits in this collector change"
+  },
+  "limits": [
+    "Mocks verify affected control flow and source-body behavior; no actual challenge/boot/assignment/module/app execution by this review",
+    "Real child application behavior, current enabled module/image ABI activation, CREATE_PPD/MMseal/childcredits and final retirement ACK remain unproved natively",
+    "Live-parent child scenario supplies no delegated postexit Request/Response/orphan Process-edge acceptance",
+    "Future stage must replace originald1c collector and old30984Bboot with exactacceptedcd97 collector and existing4312boot under separately reviewed source/artifact/manifest joins"
+  ],
+  "witnesses": [
+    "Fullsource equalsacceptedb338 after exactlyreversingmacro+5guards; helper/grace functions preserved",
+    "Actual9commands matchsavedargv/status and allclosedstreams; all0/joined/groupabsent",
+    "Header28/startuporder4/helperexport/grace7 tests passed; extractedbody/source matches verified",
+    "Staticcompile explicitlyND_PROCESS_EXEC_WAIT and ELFcd97 matchesclosedartifact; childargv remainsabsolute/bin/mcexec and/apps/app",
+    "Existing4312boot shareschallenge/48Bassignment API; futurestage explicitbinding required"
+  ],
+  "source_edits": false,
+  "new_tests_executed": false,
+  "stage_release": false,
+  "root_or_guest_release": false,
+  "native_acceptance": false,
+  "implementation_ownership": false
+}
