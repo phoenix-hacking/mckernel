@@ -1,0 +1,17 @@
+/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/actual-parent-pin.rs lines=6204
+1725     pub(crate) fn prepared(&self) -> bool { self.prepared }
+1953 #[path="/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/smp_resource.rs"] mod smp_resource;
+1954 #[path="/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/smp_image.rs"] mod smp_image;
+1955 #[path="/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/ihk_mapping.rs"] mod ihk_mapping;
+1956 #[path="/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/application_pager.rs"] mod application_pager;
+1969   #[path="/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/private_fork_carrier_request_20261017.rs"] mod fork_carrier_request;
+3068 #[path="/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/sources/smp_fork_link.rs"] mod fork_link; pub(crate) use fork_link::PreparedLinkTicket;
+3069 #[path="/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/fixture-ingress.rs"] mod fork_ingress;
+4296 struct ForkProviderClaim {
+4311 enum ForkClaimLookup { Pending(ForkProviderClaim), Completed }
+4312 impl ForkProviderClaim {
+4473 impl Drop for ForkProviderClaim {
+4809         let mut claim = match ForkProviderClaim::acquire(object, key, child_context, 0)? {
+4921         let claim = match ForkProviderClaim::acquire(object, key, child.backend.context.as_ptr() as usize, 0)? {
+4967         let claim = match ForkProviderClaim::acquire(object, key, child.backend.context.as_ptr() as usize, 0)? {
+5002         let mut claim = match ForkProviderClaim::acquire(object, key, child.backend.context.as_ptr() as usize, stage)? {

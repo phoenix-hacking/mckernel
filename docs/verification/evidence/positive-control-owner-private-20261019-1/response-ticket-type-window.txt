@@ -1,0 +1,41 @@
+
+pub(crate) struct Mailbox<M: ResponseMemory> {
+    calls: Vec<Option<Call<M>>>,
+    workers: Vec<Option<WorkerState>>,
+    closed: bool,
+    quarantined: bool,
+    completion_cursor: usize,
+}
+
+/// Owns the SAME unpublished response while the IHK-pinned payload constructor
+/// runs outside Remote.slots. It is never a copied Request granting memory.
+#[must_use = "restore the exact response before ending the ingress freeze"]
+pub(crate) struct ForkIngressResponse<M: ResponseMemory> {
+    response: Option<Response<M>>,
+    request: Request,
+    worker: u64,
+    serial: u64,
+}
+impl<M: ResponseMemory> ForkIngressResponse<M> {
+    pub(crate) fn request(&self) -> &Request { &self.request }
+    pub(crate) fn response(&mut self) -> Result<&mut Response<M>> { self.response.as_mut().ok_or(-71) }
+}
+impl<M: ResponseMemory> Drop for ForkIngressResponse<M> {
+    fn drop(&mut self) {
+        // An exceptional lost ticket cannot unmap the original response while
+        // the call still names it. The real scoped provider must retain its
+        // independent IHK owner and publication freeze on this uncertainty.
+        if let Some(response) = self.response.take() { core::mem::forget(response); }
+    }
+}
+
+impl<M: ResponseMemory> Mailbox<M> {
+    pub(crate) fn new() -> Result<Self> {
+        // The pinned kernel maps its payload-free AllocError to ENOMEM.
+        let mut calls = Vec::with_capacity(CAPACITY, GFP_KERNEL).map_err(|_| -12)?;
+        let mut workers = Vec::with_capacity(CAPACITY, GFP_KERNEL).map_err(|_| -12)?;
+        for _ in 0..CAPACITY {
+            calls.push(None, GFP_KERNEL).map_err(|_| -12)?;
+            workers.push(None, GFP_KERNEL).map_err(|_| -12)?;
+        }
+        Ok(Self {

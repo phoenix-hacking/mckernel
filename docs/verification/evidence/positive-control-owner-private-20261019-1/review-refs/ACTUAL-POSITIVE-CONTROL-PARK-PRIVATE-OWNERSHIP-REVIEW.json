@@ -1,0 +1,974 @@
+{
+  "accepted_interface": {
+    "bytes": 12972,
+    "path": "/home/holden/mckernel-work/host-preparation/provider-ownership-review-20261019-1/POSITIVE-CONTROL-PARK-OWNERSHIP-INTERFACE-DECISION.json",
+    "sha256": "0c4fc97cdaf491d0cf9734ef6f1386aa4bee5d1c5c6e6f7e499c5844a116ec71"
+  },
+  "actual_body_bindings": {
+    "bytes": 3646,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-body-bindings-isolated.json",
+    "sha256": "64b0707a2ec97269a136ba218d1ad8290c360e28a52712f4af8ae9c0ff0b0fb7"
+  },
+  "actual_fixture": {
+    "bytes": 331473,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-control-park-isolated.rs",
+    "sha256": "57bfc75367d8c6f98d1b7651c18b533d73c656928c5141ccda663df870f366ed"
+  },
+  "actual_proposal": {
+    "bytes": 8659,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-after-erratum-command.json",
+    "sha256": "73aaf57083dfd92cbf4ada72cd1be74cab125daf2eb146d9ad51948315914196"
+  },
+  "actual_result": {
+    "bytes": 466,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/result.json",
+    "sha256": "b40258571a7e881be7525bdd7079c92d9108fb2a3af95b56c632cefadd709868"
+  },
+  "actual_whole": {
+    "bytes": 15066,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check-after-erratum.status.json",
+    "sha256": "1de65218f702e286af2bdd97ce34b323c13189aa3dd07160b1b3db0c4dd9d0b2"
+  },
+  "changed_source_count": 8,
+  "command_count": 9,
+  "commands": [
+    {
+      "argv": [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "-Wrust_2018_idioms",
+        "-Dwarnings",
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-control-park-isolated.rs",
+        "-C",
+        "link-arg=/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest.o",
+        "-C",
+        "link-arg=/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/codec.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual"
+      ],
+      "direct_join": true,
+      "elapsed_ns": 2418932040,
+      "group_absent": true,
+      "pid": 1714617,
+      "returncode": 0,
+      "status": {
+        "bytes": 1243,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/compile.status.json",
+        "sha256": "65567d66ef5584c48c16c187e4a75ed8eb2b0ff781739ee56d832836a0691631"
+      },
+      "streams": {
+        "stderr": {
+          "ctime_ns": 1792453945122395910,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120349,
+          "mode": "0o600",
+          "mtime_ns": 1792453945122395910,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/compile.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792453945122395910,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120348,
+          "mode": "0o600",
+          "mtime_ns": 1792453945122395910,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/compile.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        }
+      }
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_fresh_response_parked_once_and_blocks_link_return_removal",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "direct_join": true,
+      "elapsed_ns": 16358157,
+      "group_absent": true,
+      "pid": 1714646,
+      "returncode": 0,
+      "status": {
+        "bytes": 822,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-1.status.json",
+        "sha256": "1fb5aa9887e14e5dcee2083844a09d1e4402ca2e60b6171e277201f5bed18e0b"
+      },
+      "streams": {
+        "stderr": {
+          "ctime_ns": 1792453947542471749,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120353,
+          "mode": "0o600",
+          "mtime_ns": 1792453947542471749,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-1.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792453947550472000,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120352,
+          "mode": "0o600",
+          "mtime_ns": 1792453947550472000,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-1.stdout",
+          "sha256": "1b754f1c216dbc9d73e9ea719afe719f1b1e8e74753dac2469c622803a4501f3",
+          "size": 224,
+          "uid": 1000
+        }
+      }
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_geometry",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "direct_join": true,
+      "elapsed_ns": 16650293,
+      "group_absent": true,
+      "pid": 1714648,
+      "returncode": 0,
+      "status": {
+        "bytes": 830,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-2.status.json",
+        "sha256": "74f6228e739a67f48f1e890f22f1be4a7da966dfceccd4b3b95933008bf35386"
+      },
+      "streams": {
+        "stderr": {
+          "ctime_ns": 1792453947558472251,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120357,
+          "mode": "0o600",
+          "mtime_ns": 1792453947558472251,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-2.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792453947566472502,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120356,
+          "mode": "0o600",
+          "mtime_ns": 1792453947566472502,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-2.stdout",
+          "sha256": "1e66b2f7980d9572bc3bbe3f12e1c9f8d6740af4ed2a5636b2ee50bb955a8083",
+          "size": 232,
+          "uid": 1000
+        }
+      }
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_epoch",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "direct_join": true,
+      "elapsed_ns": 8004596,
+      "group_absent": true,
+      "pid": 1714650,
+      "returncode": 0,
+      "status": {
+        "bytes": 826,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-3.status.json",
+        "sha256": "662aac0d5e5d31adfc46687d0868bbacfa6f7df578a37560cf87f90a01c9b4e4"
+      },
+      "streams": {
+        "stderr": {
+          "ctime_ns": 1792453947578472878,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120361,
+          "mode": "0o600",
+          "mtime_ns": 1792453947578472878,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-3.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792453947582473003,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120360,
+          "mode": "0o600",
+          "mtime_ns": 1792453947582473003,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-3.stdout",
+          "sha256": "dd39eb62b6cb0bad4346d361129f0385c1cdf613f7475c3e2a60cec4ce343865",
+          "size": 229,
+          "uid": 1000
+        }
+      }
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_pending_phase",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "direct_join": true,
+      "elapsed_ns": 7975087,
+      "group_absent": true,
+      "pid": 1714652,
+      "returncode": 0,
+      "status": {
+        "bytes": 834,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-4.status.json",
+        "sha256": "35adf1b5f26a851e722636880953fbf2a79134bd1e70296c3527f657770a3cf2"
+      },
+      "streams": {
+        "stderr": {
+          "ctime_ns": 1792453947586473129,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120365,
+          "mode": "0o600",
+          "mtime_ns": 1792453947586473129,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-4.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792453947590473254,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120364,
+          "mode": "0o600",
+          "mtime_ns": 1792453947590473254,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-4.stdout",
+          "sha256": "d682c69e7b27edef5b6c6cfa56e5b8f379c573bcce6fda6f5890c88fd017c3aa",
+          "size": 237,
+          "uid": 1000
+        }
+      }
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_overflow",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "direct_join": true,
+      "elapsed_ns": 8047256,
+      "group_absent": true,
+      "pid": 1714654,
+      "returncode": 0,
+      "status": {
+        "bytes": 829,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-5.status.json",
+        "sha256": "69e6e677fbced8e97dd6a29384327fbe89a0736ba81e99ff24af5b16f50c7c1f"
+      },
+      "streams": {
+        "stderr": {
+          "ctime_ns": 1792453947594473379,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120370,
+          "mode": "0o600",
+          "mtime_ns": 1792453947594473379,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-5.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792453947602473630,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120369,
+          "mode": "0o600",
+          "mtime_ns": 1792453947602473630,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-5.stdout",
+          "sha256": "8e3b1c1039de8ffd908e88e97bda4e667623dc2d1b04ee58af7ec8970eb5f67f",
+          "size": 232,
+          "uid": 1000
+        }
+      }
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_restore_conflict_retains_exact_claim_and_response_after_close_phase",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "direct_join": true,
+      "elapsed_ns": 8026648,
+      "group_absent": true,
+      "pid": 1714656,
+      "returncode": 0,
+      "status": {
+        "bytes": 831,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-6.status.json",
+        "sha256": "80249bde09ce63defafbfedf9d31c6f70b151fcbc25f424d54877d0f6866935d"
+      },
+      "streams": {
+        "stderr": {
+          "ctime_ns": 1792453947602473630,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120374,
+          "mode": "0o600",
+          "mtime_ns": 1792453947602473630,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-6.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792453947610473881,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120373,
+          "mode": "0o600",
+          "mtime_ns": 1792453947610473881,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-6.stdout",
+          "sha256": "16f9888fc3f135e5da17b1547ae45751c06eda453b3907b737a4bf03dcd11310",
+          "size": 234,
+          "uid": 1000
+        }
+      }
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_restore_conflict_retains_exact_claim_and_response_after_close_epoch",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "direct_join": true,
+      "elapsed_ns": 7907215,
+      "group_absent": true,
+      "pid": 1714658,
+      "returncode": 0,
+      "status": {
+        "bytes": 831,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-7.status.json",
+        "sha256": "6505e061c51a15f669d3d1701c4c3cf4fcc68d77c19a20c46abf8104a7abbb28"
+      },
+      "streams": {
+        "stderr": {
+          "ctime_ns": 1792453947610473881,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120378,
+          "mode": "0o600",
+          "mtime_ns": 1792453947610473881,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-7.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792453947618474131,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120377,
+          "mode": "0o600",
+          "mtime_ns": 1792453947618474131,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-7.stdout",
+          "sha256": "88573226dd910c5ddd501aea757ca7d8232d187aa03856866b8f2aeec6be18ca",
+          "size": 234,
+          "uid": 1000
+        }
+      }
+    },
+    {
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_ordinary_first_return_passes_without_pin_or_payload_effect",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "direct_join": true,
+      "elapsed_ns": 7979083,
+      "group_absent": true,
+      "pid": 1714660,
+      "returncode": 0,
+      "status": {
+        "bytes": 822,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-8.status.json",
+        "sha256": "2ab79e328b4a9bc78196418be92d7f08454dfb89da34a5e6b1044901b9a4c1bf"
+      },
+      "streams": {
+        "stderr": {
+          "ctime_ns": 1792453947618474131,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120382,
+          "mode": "0o600",
+          "mtime_ns": 1792453947618474131,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-8.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792453947626474382,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48120381,
+          "mode": "0o600",
+          "mtime_ns": 1792453947626474382,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-8.stdout",
+          "sha256": "51c740c434bf6044bab5ab155c7b20b7825c4e68896db668d36ab614b7644dfe",
+          "size": 225,
+          "uid": 1000
+        }
+      }
+    }
+  ],
+  "compute_C_retirement": false,
+  "decision": "PASS_PRIVATE_PARK_ONLY_CONTROL_OWNER_SOURCE_AND_EIGHT_ACTUAL_BODY_SCENARIOS",
+  "exact_source_projection_rows": [
+    {
+      "exact": true,
+      "item": "fn acquire_control(",
+      "sha256": "cb2bb6192cc51af638c775a259c2aa18db39dd58d76e741135277e51bea5388f",
+      "source": "os_runtime.rs"
+    },
+    {
+      "exact": true,
+      "item": "fn restore_control(",
+      "sha256": "10d3e703ff16d5b85847a8949125470a3128d498c660d4ca18dec797a75dd505",
+      "source": "os_runtime.rs"
+    },
+    {
+      "exact": true,
+      "item": "unsafe extern \"C\" fn resolve_fork_control_scope(",
+      "sha256": "90da8d991bccac2acf7b562b4ae10790fe4aa0ddb7a43ca6a99eb18eb2332804",
+      "source": "os_runtime.rs"
+    },
+    {
+      "exact": true,
+      "item": "pub(crate) unsafe extern \"C\" fn prepare_fork_control_application(",
+      "sha256": "e6d185d77414842822af0907be6ef5cb8306363c6c6cd2104c1cd54345dba061",
+      "source": "os_runtime.rs"
+    },
+    {
+      "exact": true,
+      "item": "pub(in super::super) unsafe fn prepare_fork_control(",
+      "sha256": "10dc15531b28db0fa2b73713b42a3f354c54a12ed9d11ddd7a68461f2ba143af",
+      "source": "smp_service.rs"
+    },
+    {
+      "exact": true,
+      "item": "unsafe extern \"C\" fn park_fork_control_scope(",
+      "sha256": "1715a7cf5d0cecab3aca37bd70b8bd3c6969fd47a92e965b7c5a6271b9a94818",
+      "source": "smp_service.rs"
+    },
+    {
+      "exact": true,
+      "item": "unsafe extern \"C\" fn application_prepare_fork_control(",
+      "sha256": "7b36283863579e86697e714efaaa4d75fb7a2ea0839ed12cd2297a0aed178a4f",
+      "source": "ihk_smp_x86_64.rs"
+    },
+    {
+      "exact": true,
+      "item": "fn fork_publication_frozen(",
+      "sha256": "f50b820547d0223cd7a002e60af1d7ad2a956d24d7a2b193fc170ad1bea44dcc",
+      "source": "smp_application.rs"
+    },
+    {
+      "exact": true,
+      "item": "fn authorize_fork_return(",
+      "sha256": "01bf11860b08d5617bd9b009439617285949af70db8f790477755da0cdbdcb09",
+      "source": "smp_application.rs"
+    },
+    {
+      "exact": true,
+      "item": "fn fork_progress_in_slots(",
+      "sha256": "9f9ca69d9db86440f32fb3dcb82ce53b8ca43060b7b6f6ead606a65abd172d40",
+      "source": "smp_application.rs"
+    },
+    {
+      "exact": true,
+      "item": "pub(crate) fn release_fork_ack(",
+      "sha256": "d26c0c508e28a327a7fe45fa79add72f3a4f6df264fb54c515474bd321657c2c",
+      "source": "smp_application.rs"
+    },
+    {
+      "exact": true,
+      "sha256": "3db67f935b2305a8a71e63db096cb589fe535e7487bc3c44686135eb4a2e7427",
+      "source": "smp_fork_link.rs",
+      "whole_source_prefix": true
+    },
+    {
+      "exact": true,
+      "item": "fn authorize_fork_ack_return(",
+      "sha256": "11d0eba2f082a243ae1c07d210000f9126c0e510a16fb11c1649949ab061c2f4",
+      "source": "smp_application.rs"
+    }
+  ],
+  "failure_history": [
+    {
+      "bytes": 1980,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check.status.json",
+      "sha256": "7c4b5c6a0c957496c2ff3591de220ce85ddf7ea80ea955af2271d15515693266"
+    },
+    {
+      "bytes": 4018,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check-correction.status.json",
+      "sha256": "77d0c6bd6454d66659f28d7efadcfa01dc699c973f34497b7a618bdf166bbe90"
+    },
+    {
+      "bytes": 4019,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check-expert.status.json",
+      "sha256": "627b06d229b89c82512e716c023ef3ea3e71783e692553a6e9bb0c1561c8ab0f"
+    },
+    {
+      "bytes": 4114,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check-isolated.status.json",
+      "sha256": "668c449245413a7c491ee03d3e53c15979fb6a1037639b2db712b74302f0fbbb"
+    }
+  ],
+  "fixture_scope": {
+    "actual_Mailbox_Memory_IHK_READY_firstRET": true,
+    "actual_final_ACK_endpoint_executed": false,
+    "existing_guest_codec_objects": true,
+    "explicit_service_and_allocation_adapters": true,
+    "fresh_control_and_LINK_response_spans": true,
+    "full_close_body_executed": false,
+    "no_error_suppression": true,
+    "one_initialized_arena_per_process": true,
+    "test_only_retain_on_unwind": true
+  },
+  "functional_scope": "Functional OS/apps Rust ownership implementation in private retained-provider branch; no compute C expansion, current default provider activation or native credit.",
+  "history_disposition": "All four failures retained; earlier reviewer Mailbox-firstresponse interpretation explicitly retracted. Corrected fixture preserves actual admission and all8 original logical scenarios; zero production patch changes across attempts.",
+  "implementation_author": "/root/clone_thread_affinity_rust_repair",
+  "implementation_ownership": false,
+  "independently_matched_actual_items": 13,
+  "integration_boundary": {
+    "current_production_join": "No current branch full backend/ChildFork ingress join exists. This patch is not an overlay onto current main, and no frozenSDK source or artifact may be substituted.",
+    "current_production_overlay_allowed": false,
+    "current_weak_prepare_NULL_and_create_nonnull_EOPNOTSUPP_unchanged": true,
+    "private_retained_provider_only": true,
+    "runtime_holds_lifted": false,
+    "source_checkpoint_allowed": true
+  },
+  "native_acceptance": false,
+  "new_actual_scenarios": 8,
+  "new_logical_native_cases": 0,
+  "old51_replayed": false,
+  "ownership_findings": [
+    "Strict control-only acquire atomically validates exact pending key/epoch/context/initialized capsule+payload and forbidden attempted/revoked/released/completed states under IHK table lock, then takes BUSY claim. HOST_REVOKED mutation/receipt reservation is not used as validation.",
+    "Descriptor binds actual current ChildFork identity/epoch, current parent/worker/delivery/CPU/response, carrier physical/root/length and preLINK gate. Incoming scalar -95 is ignored as authority. Same exact parked retry is refused before unique_delivered/ordinary return fallthrough.",
+    "Scoped IHK resolver lends only the original initialized payload metadata; no raw claim/payload/ticket pointer escapes. Under Remote.slots revalidation and checked count precede moving the SAME unpublished fresh Response into durable ChildFork.control plus counted parent pin. No fallible step follows the move; no new ForkPayloadSeed/original RET rewrite/receipt write.",
+    "Parked control freezes LINK, ordinary publication/RETURN and both generic progress/removal and ACK removal paths. Actual duplicate, fresh concurrent LINK and publication/removal refusal checks preserve owner state.",
+    "Control-specific restore returns BUSY to PENDING only on same identity/epoch/owner. Conflict cannot mutate a replacement owner; original claim/capsule/module pins are deliberately retained via forget after dropping table guard. Exact phase mismatch quarantines current original entry; backend parked response is quarantined/retained. Both phase and epoch injected conflicts retain original strong owners and response through actual close_worker."
+  ],
+  "patch": {
+    "bytes": 41054,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/positive-control-park.patch",
+    "sha256": "aab9404923e7f1db13df3deb6b74b252d87ac97f3d783459085fc5917a27f04b"
+  },
+  "pending_obligations": [
+    "Complete matching private v11 registration/preRETURN/defaultcaller fullSDK/module compilation with exact new ABI closure and all actual callback types.",
+    "Authentic guest selector2 producer plus actual delivered current launcher/host hook matching all owner identities, separate activation review; existing negative refusal remains.",
+    "Real MM invalidation/verifier and original payload writer transition, authenticated revoke receipt, guest alias revoke and finalACK terminal release before any control completion or counted parent-pin decrement.",
+    "Current-source integration of required backend pieces through a concrete reviewed minimal join; retain deliberate pin/claim leaks on uncertainty and sealed-before-firstwriter Drop gap outside this scoped patch.",
+    "Separate actual native execution/lifecycle and positive terminal owner cleanup evidence; standalone adapters do not prove hardware or native branch hits."
+  ],
+  "provider_activation": false,
+  "receipt_publication": false,
+  "registration_source_review": {
+    "additive_v11": true,
+    "distinct_control_callback_types": true,
+    "full_closure_equality_at_five_sites": true,
+    "full_registration_and_preRETURN_crate_compiled": false,
+    "parked_result_maps_to_EBUSY": true,
+    "preRETURN_control_before_LINK_ACK_RETURN": true,
+    "v10_signature_defaultNone_preserved": true
+  },
+  "reviewed_at": "2026-10-19T23:54:13.374445+00:00",
+  "reviewer": "/root/next_replace_tid_review",
+  "reviewer_erratum": {
+    "bytes": 3195,
+    "path": "/home/holden/mckernel-work/host-preparation/provider-ownership-review-20261019-1/POSITIVE-CONTROL-PUBLISHED-RESPONSE-REVIEWER-ERRATUM.json",
+    "sha256": "96f9686b506b6400a3fcaf7e592781b2b0a08afb41c1c43c9ee847480cac75e6"
+  },
+  "reviewer_target_tests_compilers_root": 0,
+  "revoke_or_ACK_authority": false,
+  "scenario_oracles": [
+    {
+      "scenario": "actual_control_fresh_response_parked_once_and_blocks_link_return_removal",
+      "status": {
+        "bytes": 822,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-1.status.json",
+        "sha256": "1fb5aa9887e14e5dcee2083844a09d1e4402ca2e60b6171e277201f5bed18e0b"
+      }
+    },
+    {
+      "scenario": "actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_geometry",
+      "status": {
+        "bytes": 830,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-2.status.json",
+        "sha256": "74f6228e739a67f48f1e890f22f1be4a7da966dfceccd4b3b95933008bf35386"
+      }
+    },
+    {
+      "scenario": "actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_epoch",
+      "status": {
+        "bytes": 826,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-3.status.json",
+        "sha256": "662aac0d5e5d31adfc46687d0868bbacfa6f7df578a37560cf87f90a01c9b4e4"
+      }
+    },
+    {
+      "scenario": "actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_pending_phase",
+      "status": {
+        "bytes": 834,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-4.status.json",
+        "sha256": "35adf1b5f26a851e722636880953fbf2a79134bd1e70296c3527f657770a3cf2"
+      }
+    },
+    {
+      "scenario": "actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_overflow",
+      "status": {
+        "bytes": 829,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-5.status.json",
+        "sha256": "69e6e677fbced8e97dd6a29384327fbe89a0736ba81e99ff24af5b16f50c7c1f"
+      }
+    },
+    {
+      "scenario": "actual_control_restore_conflict_retains_exact_claim_and_response_after_close_phase",
+      "status": {
+        "bytes": 831,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-6.status.json",
+        "sha256": "80249bde09ce63defafbfedf9d31c6f70b151fcbc25f424d54877d0f6866935d"
+      }
+    },
+    {
+      "scenario": "actual_control_restore_conflict_retains_exact_claim_and_response_after_close_epoch",
+      "status": {
+        "bytes": 831,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-7.status.json",
+        "sha256": "6505e061c51a15f669d3d1701c4c3cf4fcc68d77c19a20c46abf8104a7abbb28"
+      }
+    },
+    {
+      "scenario": "actual_control_ordinary_first_return_passes_without_pin_or_payload_effect",
+      "status": {
+        "bytes": 822,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-8.status.json",
+        "sha256": "2ab79e328b4a9bc78196418be92d7f08454dfb89da34a5e6b1044901b9a4c1bf"
+      }
+    }
+  ],
+  "schema": "mckernel.independent-positive-control-park-private-source-and-actual-body-review.v1",
+  "source_pins": {
+    "bytes": 3156,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/source-pins.json",
+    "sha256": "a0090b102c2ecc271ae69992929f9ef3345106b6b09d6e8ae7604065c9962dda"
+  },
+  "status": "PASS_PRIVATE_PARK_ONLY_SOURCE_AND_FOCUSED_BODY_EVIDENCE",
+  "sum_child_elapsed_ns": 2499880375,
+  "unchanged_mailbox_source_count": 1,
+  "whole_stream_FDs": [
+    {
+      "ctime_ns": 1792453947630474507,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120344,
+      "mode": "0o600",
+      "mtime_ns": 1792453947630474507,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check-after-erratum.stdout",
+      "sha256": "fef42b2524741f2cc4ce2185a6a9bafbedffab116fac5a24673deaa51ce9eab8",
+      "size": 436,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453945086394782,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120345,
+      "mode": "0o600",
+      "mtime_ns": 1792453945086394782,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check-after-erratum.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453947566472502,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120356,
+      "mode": "0o600",
+      "mtime_ns": 1792453947566472502,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-2.stdout",
+      "sha256": "1e66b2f7980d9572bc3bbe3f12e1c9f8d6740af4ed2a5636b2ee50bb955a8083",
+      "size": 232,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453947626474382,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120381,
+      "mode": "0o600",
+      "mtime_ns": 1792453947626474382,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-8.stdout",
+      "sha256": "51c740c434bf6044bab5ab155c7b20b7825c4e68896db668d36ab614b7644dfe",
+      "size": 225,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453947582473003,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120360,
+      "mode": "0o600",
+      "mtime_ns": 1792453947582473003,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-3.stdout",
+      "sha256": "dd39eb62b6cb0bad4346d361129f0385c1cdf613f7475c3e2a60cec4ce343865",
+      "size": 229,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453947590473254,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120364,
+      "mode": "0o600",
+      "mtime_ns": 1792453947590473254,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-4.stdout",
+      "sha256": "d682c69e7b27edef5b6c6cfa56e5b8f379c573bcce6fda6f5890c88fd017c3aa",
+      "size": 237,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453947602473630,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120369,
+      "mode": "0o600",
+      "mtime_ns": 1792453947602473630,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-5.stdout",
+      "sha256": "8e3b1c1039de8ffd908e88e97bda4e667623dc2d1b04ee58af7ec8970eb5f67f",
+      "size": 232,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453947610473881,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120373,
+      "mode": "0o600",
+      "mtime_ns": 1792453947610473881,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-6.stdout",
+      "sha256": "16f9888fc3f135e5da17b1547ae45751c06eda453b3907b737a4bf03dcd11310",
+      "size": 234,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453947550472000,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120352,
+      "mode": "0o600",
+      "mtime_ns": 1792453947550472000,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-1.stdout",
+      "sha256": "1b754f1c216dbc9d73e9ea719afe719f1b1e8e74753dac2469c622803a4501f3",
+      "size": 224,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453945122395910,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120348,
+      "mode": "0o600",
+      "mtime_ns": 1792453945122395910,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453947618474131,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120377,
+      "mode": "0o600",
+      "mtime_ns": 1792453947618474131,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-7.stdout",
+      "sha256": "88573226dd910c5ddd501aea757ca7d8232d187aa03856866b8f2aeec6be18ca",
+      "size": 234,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453947602473630,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120374,
+      "mode": "0o600",
+      "mtime_ns": 1792453947602473630,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-6.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453947558472251,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120357,
+      "mode": "0o600",
+      "mtime_ns": 1792453947558472251,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-2.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453947594473379,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120370,
+      "mode": "0o600",
+      "mtime_ns": 1792453947594473379,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-5.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453947578472878,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120361,
+      "mode": "0o600",
+      "mtime_ns": 1792453947578472878,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-3.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453947542471749,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120353,
+      "mode": "0o600",
+      "mtime_ns": 1792453947542471749,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-1.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453945122395910,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120349,
+      "mode": "0o600",
+      "mtime_ns": 1792453945122395910,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453947618474131,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120382,
+      "mode": "0o600",
+      "mtime_ns": 1792453947618474131,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-8.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453947586473129,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120365,
+      "mode": "0o600",
+      "mtime_ns": 1792453947586473129,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-4.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    },
+    {
+      "ctime_ns": 1792453947610473881,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 48120378,
+      "mode": "0o600",
+      "mtime_ns": 1792453947610473881,
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/check-5/scenario-7.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "uid": 1000
+    }
+  ]
+}

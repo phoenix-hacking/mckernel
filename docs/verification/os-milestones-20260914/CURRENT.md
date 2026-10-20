@@ -1,3 +1,55 @@
+## Accepted matched 205 configuration and private Rust control-owner checkpoint
+
+Strict205/N3 native semantics d67e2153 and physical7d869a4f independently PASS.
+The real applications ran on their assigned CPUs0/1, including startup, with
+exact387/254-byte outputs, exits0 and1.620779456s overlap. All three frozen SDK
+modules matched the accepted205 image. This is one additional supported-profile
+proof, not a new logical case or Rust-path retirement. Counts remain26 distinct
+behaviors,11/35 checks,17 production/14 selected native Rust paths. Closed evidence:
+../evidence/current-host-pair-205-native-20261019-1/retained-source-map.json.
+
+Private response-parking code and eight passing actual-body ownership scenarios
+are now preserved as a source/WIP checkpoint; current production activation is
+not authorized. The next private transition must use a genuine module-pinned MM
+revoke verifier outside locks before any scoped control-receipt write. MM errors
+retain ownership; uncertain writes quarantine it. The old first-RET abort writer
+cannot supply postpositive delivery authority. Final ACK and native creation/exec
+remain open. Preserve every original failure and reviewer erratum.
+
+Second-stop/final-public-release ordinary stage and mandatory consumer are
+admitted onCPU7 under5f0dabd3. Native execution still needs actual-stage acceptance,
+source/caller bindings and genuine fresh final release. Latest exclusive-operation
+predecessor is7d869a4f; module authority stays frozen separately. Tested205 recipe
+and practical repeatability consumers are being prepared privately, without a
+new kernel build, module substitution or quota credit.
+
+## Current — 205 matched-module native wholejoined; private response parking checked
+
+The accepted205 kernel with frozen matched SDK b9ea18d0/5d31c1f0 completed its
+strict two-CPU native owner in44.1603s and all three readbacks exited0. Exact
+seven-stage fresh2 chain is wholejoined; independent physical and strict
+startupCPU/application387/254-byte oracle reviews are pending. Original snapshot
+and failed pre-owner hash-projection attempt remain preserved; fresh2 used the
+parsed producer descriptor hash, then guard→immediate owner in one control flow.
+No new behavior, Rust path or practical-check credit is inferred from exit0.
+
+Private held-provider patchaab94049 parks the same fresh authenticated control
+response with its exact pending-owner claim and durable parent-slot retention.
+One actual-body compile and eight isolated ownership scenarios pass; independent
+64aa6f3d accepts private park-only source scope. The source checkpoint under
+../evidence/positive-control-owner-private-20261019-1/ preserves all four failed
+attempts and the reviewer erratum. Current production still lacks the complete
+ChildFork/ingress integration. Default prepareNULL/CREATE_PPD-95, delivered
+control receipt, MM revoke, final ACK, full module compilation and native holds
+remain; no activation or port-retirement credit. No new compute C was added.
+
+The second-stop/final public-release variant has an admitted CPU7 ordinary
+compile/fixture chain; no new stage or guest is authorized yet. Latest accepted
+counts remain26 behaviors,11/35 practical checks,17 production/14 native Rust
+paths, all14 whole milestones open. Continue with actual native decisions,
+then the next exact eligible functional/lifecycle case. No replay of accepted
+build, stage, inspections or first lifecycle iteration.
+
 ## Current — bounded public lifecycle accepted; SDK pin compiled, N3 next
 
 The matched FP1e7 typed-payload → strict stop → public CPU/memory release →

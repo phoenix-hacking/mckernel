@@ -1,0 +1,79 @@
+1
+from pathlib import Path
+import hashlib,json,sys
+sys.path.insert(0,'/home/holden/mckernel')
+from scripts.tests.test_shutdown_cpu_reclaim import balanced_item
+Q=Path(__file__).resolve().parent
+RAW=Path('/home/holden/mckernel-work/scratch/native-fork-carrier-link-races-20261017-1/test-correction/actual.rs')
+ING=RAW.parent/'sources/smp_fork_ingress.rs'
+S=(Q/'source/host-kernel/native-rust/smp_application.rs').read_text()
+old=RAW.read_text();s=old
+assert hashlib.sha256(RAW.read_bytes()).hexdigest()=='1f22be70252187e9ea2fd997b8672a45026032159b420f7a73675060d39f5262'
+assert hashlib.sha256(ING.read_bytes()).hexdigest()=='c63a6aa3a898de233f96a7e0d86231a2a4b73538c8b8ebab2d95a975a99b0db1'
+def item(src,needle):return balanced_item(src,needle)
+def replace(a,b):
+ global s
+ assert s.count(a)==1,(a[:60],s.count(a));s=s.replace(a,b,1)
+replace('struct ChildFork {',item(S,'struct ForkParentPin {')+'\n'+item(S,'struct ForkAckRecord {')+'\n#[derive(Clone)]\n'+item(S,'struct ForkAckDelivery {')+'\nstruct ChildFork {')
+replace('    retained_remote: Option<Arc<Remote>>,\n    link:', '    retained_remote: Option<Arc<Remote>>,\n    retained_parent: Option<ForkParentPin>,\n    ack: Option<ForkAckRecord>,\n    link:')
+replace(item(s,'pub(crate) unsafe fn finish_with_payload('),item(S,'pub(crate) unsafe fn finish_with_payload('))
+replace(item(s,'fn fork_progress_in_slots('),item(S,'fn fork_progress_in_slots('))
+replace('impl PreparedForkLease {','impl Remote { '+item(S,'pub(crate) fn release_fork_ack(')+' }\nimpl PreparedForkLease {')
+replace('// Caller holds this Remote\'s slots lock for discovery through publication.\n',item(S,'fn retain_fork_parent_pin(')+'\n// Caller holds this Remote\'s slots lock for discovery through publication.\n')
+replace('owner: child_owner, seal, retained_remote: None, link: None, held_lease: None,','owner: child_owner, seal, retained_remote: None, retained_parent: None, ack: None, link: None, held_lease: None,')
+ing=ING.read_text();needle='owner: marker.child_owner.clone(), seal: seal.clone(), retained_remote: None,';assert ing.count(needle)==1;ing=ing.replace(needle,needle+' retained_parent: None, ack: None,',1)
+p=Q/'fixture-ingress.rs';p.write_text(ing)
+# Only an existing source path binding changes; all adapter function bodies stay frozen.
+path=str(ING);assert path in s;s=s.replace(path,str(p))
+needle='pub(crate) fn fork_present(remote:&Remote)->bool{remote.slots.lock()[1].as_ref().unwrap().fork.is_some()}'
+helpers='''
+pub(crate) fn check_parent_pin(remote:&Arc<Remote>, parent:Token, child:Token) {
+ let mut slots=remote.slots.lock();
+ let p=slots.iter().flatten().find(|e|e.key()==parent).unwrap();
+ assert_eq!(p.fork_prepared_parent_refs,1);
+ assert!(!p.release_ready());
+ let fork=slots.iter().flatten().find(|e|e.key()==child).unwrap().fork.as_ref().unwrap();
+ let pin=fork.retained_parent.as_ref().expect("positive first return lost parent Entry pin");
+ assert_eq!(pin.parent,parent); assert_eq!(pin.identity,fork.reservation.identity);
+ assert_eq!(pin.reservation,fork.reservation.token.wire()); assert!(Arc::ptr_eq(&pin.remote,remote));
+ let key=pin.identity;let token=pin.reservation;
+ assert_eq!(retain_fork_parent_pin(remote,&mut slots,child,token,key),Err(EACCES));
+ let mut bad=key;bad.parent=Token::allocate().unwrap().wire();
+ assert_eq!(retain_fork_parent_pin(remote,&mut slots,child,token,bad),Err(EIO));
+ let mut bad=key;bad.child=parent.wire();
+ assert!(retain_fork_parent_pin(remote,&mut slots,child,token,bad).is_err());
+ assert_eq!(slots.iter().flatten().find(|e|e.key()==parent).unwrap().fork_prepared_parent_refs,1);
+ let phase=slots.iter().flatten().find(|e|e.key()==child).unwrap().fork.as_ref().unwrap().reservation.state.phase();
+ drop(slots);
+ assert_eq!(remote.begin_fork_progress(child,key,crate::application_abi::FORK_GUEST_DESTROYED_V1),Err(EBUSY));
+ assert_eq!(remote.release_fork_ack(child,key,1),Err(EBUSY));
+ let slots=remote.slots.lock();
+ assert_eq!(slots.iter().flatten().find(|e|e.key()==child).unwrap().fork.as_ref().unwrap().reservation.state.phase(),phase);
+ assert_eq!(slots.iter().flatten().find(|e|e.key()==parent).unwrap().fork_prepared_parent_refs,1);
+}
+'''
+replace(needle,needle+helpers)
+needle='#[test]fn actual_memory_ingress_first_and_link_writer_publish_to_original_guest_consumer()'
+test='''#[test]fn actual_durable_parent_pin_survives_positive_first_ret_failed_link_and_parent_close(){
+ let mut j=Joined::new();assert_eq!(j.adopt(),0);
+ crate::smp_application::check_parent_pin(&j.remote,j.parent,j.child);
+ j.first_return();crate::smp_application::check_parent_pin(&j.remote,j.parent,j.child);
+ j.mm.children[1].vm_pgoff+=1;let(rc,w,_)=j.link();assert!(rc<0);
+ crate::smp_application::check_parent_pin(&j.remote,j.parent,j.child);
+ crate::smp_application::close_worker_actual(&j.remote,j.parent,w);
+ crate::smp_application::check_parent_pin(&j.remote,j.parent,j.child);
+ assert_eq!(crate::provider_runtime::retained(),1);j.retain();
+}
+'''
+replace(needle,test+needle)
+# Exact selected production removal gate is frozen; full close requires adapters
+# outside this fixture's prepared-task scope and is not claimed as executed.
+base=(Q/'base/host-kernel/native-rust/smp_application.rs').read_text();close=item(base,'fn close_inner(')
+assert 'entry.fork_prepared_parent_refs == 0 && entry.syscalls.drained()' in close
+(Q/'actual-parent-pin.rs').write_text(s)
+rows=[]
+for p in [RAW,ING,Q/'source/host-kernel/native-rust/smp_application.rs',Q/'source/host-kernel/native-rust/smp_fork_ingress.rs',Q/'actual-parent-pin.rs',Q/'fixture-ingress.rs',Q/'prepare_focused_fixture.py']:
+ rows.append({'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size})
+(Q/'focused-fixture-inputs.json').write_text(json.dumps({'inputs':rows,'exact_production_methods':['PreparedForkLease::finish_with_payload','retain_fork_parent_pin'],'old_adapter_shape':'Retained actual LINK fixture predates ForkAckRecord; only parent-pin field/init are added to it. No final ACK endpoint is executed.','full_close_execution':False,'native_authority':False},indent=2)+'\n')
+print('fixture_sources',len(rows),'new_tests',1)
+101

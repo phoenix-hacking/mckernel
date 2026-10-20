@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/write_control.py", line 41, in <module>
+    t=once(t,'            let ack = fork.ack.as_ref().ok_or(EIO)?;','            if fork.control.is_some() { return Err(EBUSY); }\n            let ack = fork.ack.as_ref().ok_or(EIO)?;')
+  File "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/write_control.py", line 7, in once
+    assert t.count(a)==1,(a[:80],t.count(a));return t.replace(a,b,1)
+AssertionError: ('            let ack = fork.ack.as_ref().ok_or(EIO)?;', 2)

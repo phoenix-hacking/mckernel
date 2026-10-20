@@ -1,0 +1,40 @@
+pub(crate) fn arguments(&self) -> [u64; 6] {
+        core::array::from_fn(|index| {
+            let offset = 24 + index * 8;
+            u64::from_le_bytes(self.bytes[offset..offset + 8].try_into().unwrap())
+        })
+    }
+
+pub(crate) fn has_private_fork_response( notfound
+
+pub(crate) fn unique_delivered(
+        &self,
+        matches: impl Fn(&Request) -> bool,
+    ) -> Result<Option<(u64, u64, Request)>> {
+        if self.closed || self.quarantined { return Err(-32); }
+        let mut found = None;
+        for call in self.calls.iter().flatten() {
+            if call.kernel || call.service || call.cancelled || call.completion.is_some()
+                || call.response.is_none() || !matches(call.delivery.request())
+            { continue; }
+            let Some(worker) = call.worker else { continue; };
+            let serial = call.delivery.serial();
+            if !self.workers.iter().flatten().any(|state| {
+                state.worker == worker && state.delivery == Some(serial)
+            }) || call.delivery.check_return(worker, call.delivery.request().cpu() as i64).is_err()
+            { continue; }
+            if found.is_some() { return Err(-16); }
+            found = Some((worker.wire(), serial.wire(), call.delivery.request().clone()));
+        }
+        Ok(found)
+    }
+
+struct ApplicationCallbacks {
+    open: super::application_abi::Open,
+    invoke: super::application_abi::Invoke,
+    close: super::application_abi::Close,
+    adopt_fork: Option<super::application_abi::ForkAdoptV1>,
+    fork_progress: Option<super::application_abi::ForkProgressV1>,
+    adopt_fork_scoped: Option<super::application_abi::ForkAdoptScopedV1>,
+    prepare_fork_link: Option<super::application_abi::ForkPrepareLinkV1>,
+}

@@ -1,0 +1,489 @@
+3118
+}
+use smp_application::*;
+mod application_abi{// SPDX-License-Identifier: GPL-2.0
+//! Versioned, kernel-only application connection to the exact SMP OS owner.
+
+use core::ffi::c_void;
+
+pub(crate) const VERSION: u32 = 1;
+pub(crate) const CLEANUP: u32 = 1;
+pub(crate) const PREPARE: u32 = 2;
+pub(crate) const LOOKUP: u32 = 3;
+pub(crate) const TRANSFER: u32 = 4;
+pub(crate) const WORKER_OPEN: u32 = 5;
+pub(crate) const WORKER_CLOSE: u32 = 6;
+pub(crate) const WAIT_SYSCALL: u32 = 7;
+pub(crate) const COPIED_SYSCALL: u32 = 8;
+pub(crate) const RETURN_SYSCALL: u32 = 9;
+pub(crate) const START: u32 = 10;
+pub(crate) const PAGER_SYSCALL: u32 = 11;
+pub(crate) const CLEAR_SYSCALL: u32 = 12;
+pub(crate) const CLEAR_DONE: u32 = 13;
+pub(crate) const TID_TRANSFER: u32 = 14;
+
+// TID_TRANSFER: worker/delivery/physical/direction in 32 kernel-only bytes,
+// followed by the complete copied launcher TID array. The backend checks the
+// exact Delivered nr-186 request, count and destination before any guest write.
+// This does not complete the syscall; the original launcher RET still owns its
+// result. Handles are taken only from the referenced current Linux worker.
+
+// CLEAR: 40 kernel-only bytes: worker, delivery, accepted output, start, end.
+// BEGIN returns the checked range from the retained nr-11 request and reserves
+// in-kernel ownership. DONE replaces start with the actual Mirror::clear result
+// and clears end; acceptance transfers completion to the continuing pump.
+// The caller must retain its worker/MM/connection through the actual clear and
+// submit DONE on both success and error. No user pointer or range is an input.
+
+// PAGER: 32 kernel-only bytes, worker/delivery, accepted output, actual result.
+// It consumes the exact reserved WAIT packet before any userspace copy. Its
+// payload addresses come only from that retained packet, never from this ABI.
+
+// Kernel-only buffers: WORKER_OPEN/CLOSE 16 bytes (tid/handle, output handle);
+// WAIT 96 bytes (worker, delivery, original 80-byte copyout); COPIED 24 bytes
+// (worker, delivery, successful-copy flag); RETURN 72 bytes (worker, delivery,
+// cpu, value, copy destination/length, accepted output flag, up to 16 data bytes).
+// Handles originate in the backend and remain attached to referenced Linux
+// worker/MM owners. None of these handles are accepted from the user UAPI.
+
+
+5151
+    MODEL.with(|m| { let mut m=m.borrow_mut(); m.valid=m.valid&&m.locked&&unsafe{(*vma).vm_mm==m.mm}; unsafe { (*vma).writing=true; } m.events.push("write"); });
+}
+mod application_abi { pub(super) use crate::application_abi::*; }
+mod mcctrl_process {pub(super) use super::actual::ForkClaim;pub(super) use super::actual::completion::{ForkLinkBinding,BorrowedLinkSeal,ReferencedChildMm};}
+mod mcctrl_vm {pub(super) use super::actual::{ForkRevocation,ForkLinkReceipt};}
+mod wire {
+    pub fn put_word(b:&mut[u8],o:usize,v:u64)->Result<(),i32> { b[o..o+8].copy_from_slice(&v.to_le_bytes()); Ok(()) }
+    pub fn word(b:&[u8],o:usize)->Result<u64,i32> { Ok(u64::from_le_bytes(b[o..o+8].try_into().unwrap())) }
+}
+thread_local!{static CURRENT_PID:Cell<(i32,usize)>=const{Cell::new((102,2))};static USER_SPAN:Cell<(usize,usize)>=const{Cell::new((0,0))};}
+struct ProcessId{number:i32,identity:usize}
+impl ProcessId{fn current()->Result<Self>{CURRENT_PID.with(|p|{let(n,id)=p.get();Ok(Self{number:n,identity:id})})}fn same(&self,other:&Self)->bool{self.identity==other.identity}fn number(&self)->Result<i32>{if self.number>0{Ok(self.number)}else{Err(ESRCH)}}}
+struct UserSlice{address:usize,bytes:usize}
+impl UserSlice{fn new(address:usize,bytes:usize)->Self{Self{address,bytes}}fn reader(self)->Self{self}fn read_slice(self,output:&mut[u8])->Result{USER_SPAN.with(|s|{let(address,bytes)=s.get();if self.address!=address||self.bytes>bytes||output.len()!=self.bytes{return Err(EFAULT);}output.copy_from_slice(unsafe{std::slice::from_raw_parts(address as *const u8,self.bytes)});Ok(())})}}
+struct FixtureContext(i32);
+impl FixtureContext{fn as_ptr(&self)->*mut c_void{crate::provider_runtime::connection_context(self.0)}}
+struct Registration { fork_accepted:AtomicBool,context:FixtureContext,fork:Mutex<Option<actual::ForkClaim>>,slot:u32, generation:u64, pid:i32,physical:u64,calls:Cell<usize>,_pid:ProcessId,mapping:Mutex<Option<Arc<actual::Mirror>>>,armed:AtomicBool }
+fn registration(slot:u32,generation:u64,physical:u64)->Registration{let parent=physical==0x9000;Registration{fork_accepted:AtomicBool::new(false),context:FixtureContext(if parent{101}else{102}),fork:Mutex(RefCell::new(None)),slot,generation,pid:if parent{101}else{102},physical,calls:Cell::new(0),_pid:ProcessId{number:if parent{101}else{102},identity:if parent{1}else{2}},mapping:Mutex(RefCell::new(None)),armed:AtomicBool::new(false)}}
+impl Registration {
+    pub(super) fn same_generation(&self, other: &Self) -> bool {
+        self.slot == other.slot && self.generation != 0 && self.generation == other.generation
+    }
+    pub(super) fn validate_inherited_child(&self, parent: &Self) -> Result {
+        if !self.same_generation(parent) {
+            return Err(EACCES);
+        }
+        let current = ProcessId::current()?;
+        if !self._pid.same(&current) || self._pid.same(&parent._pid)
+            || current.number()? != self.pid
+        {
+            return Err(EACCES);
+        }
+        Ok(())
+    }
+    fn acquire(slot:u32,generation:u64,pid:ProcessId)->Result<Arc<Self>>{let mut r=registration(slot,generation,0x19000);r.pid=pid.number()?;r._pid=pid;Arc::new(r,0)}
+    fn invoke(&self, command:u32, bytes:&mut[u8])->Result { assert_eq!(command,3); self.calls.set(self.calls.get()+1); wire::put_word(bytes,16,self.physical)?; wire::put_word(bytes,24,3) }
+}
+struct VmOperations(()); static VM_OPERATIONS:VmOperations=VmOperations(());
+struct FaultPage { vma:*mut bindings::vm_area_struct,address:u64,physical:u64,permissions:u64 }
+struct ThisModule;static THIS_MODULE:ThisModule=ThisModule;impl ThisModule{fn as_ptr(&self)->*mut c_void{crate::provider_runtime::consumer_module()}}
+mod actual{
+use super::*;use crate::ToErrno;
+struct CurrentMm(NonNull<bindings::mm_struct>);
+impl CurrentMm {
+    fn get() -> Result<Self> {
+        // SAFETY: The current task remains valid; Linux acquires mm_users.
+        let mm = unsafe { bindings::get_task_mm(bindings::get_current()) };
+
+3825
+
+    #[derive(Clone,Copy)]
+    struct ApplicationCallbacks {
+    open: super::application_abi::Open,
+    invoke: super::application_abi::Invoke,
+    close: super::application_abi::Close,
+    adopt_fork: Option<super::application_abi::ForkAdoptV1>,
+    fork_progress: Option<super::application_abi::ForkProgressV1>,
+    adopt_fork_scoped: Option<super::application_abi::ForkAdoptScopedV1>,
+    prepare_fork_link: Option<super::application_abi::ForkPrepareLinkV1>,
+}
+    #[derive(Clone,Copy)]
+    struct Backend {application:Option<ApplicationCallbacks>}
+    struct OsObject {admission:Admission,backend:Option<Backend>,forks:Mutex<ForkPendingTable>}
+    static OS_OBJECTS:[AtomicPtr<OsObject>;4]=[const{AtomicPtr::new(ptr::null_mut())};4];
+    struct BackendApplication {
+    context: ptr::NonNull<c_void>,
+    callbacks: ApplicationCallbacks,
+}
+
+// SAFETY: The registered callback contract supplies a concurrency-safe opaque
+// owner. Only invoke borrows it; final Drop follows the last such borrow.
+unsafe impl Send for BackendApplication {}
+// SAFETY: The same registered opaque owner permits shared references; invoke
+// serializes its callback contract, and final Drop follows every such borrow.
+unsafe impl Sync for BackendApplication {}
+
+impl Drop for BackendApplication {
+    fn drop(&mut self) {
+        // SAFETY: This successful open is uniquely owned and its OS/module
+        // lease is the later-dropping field of ApplicationConnection.
+        unsafe { (self.callbacks.close)(self.context.as_ptr()) };
+    }
+}
+
+struct ApplicationConnection {
+    backend: BackendApplication,
+    // BackendApplication drops first so its close callback retains admission;
+    // this owner then drops before the exact OS lease/module release.
+    _admission: AdmissionOwner,
+    _lease: OsLease<'static>,
+}
+
+    fn to_result(status:i32)->Result{if status<0{Err(status)}else{Ok(())}}
+    mod bindings {#[allow(non_camel_case_types)]pub(crate) struct module;}
+    static CONSUMER_MODULE:bindings::module=bindings::module;
+    static MODULE_PINS:AtomicU32=AtomicU32::new(0);
+
+3832
+    fork_progress: Option<super::application_abi::ForkProgressV1>,
+    adopt_fork_scoped: Option<super::application_abi::ForkAdoptScopedV1>,
+    prepare_fork_link: Option<super::application_abi::ForkPrepareLinkV1>,
+}
+    #[derive(Clone,Copy)]
+    struct Backend {application:Option<ApplicationCallbacks>}
+    struct OsObject {admission:Admission,backend:Option<Backend>,forks:Mutex<ForkPendingTable>}
+    static OS_OBJECTS:[AtomicPtr<OsObject>;4]=[const{AtomicPtr::new(ptr::null_mut())};4];
+    struct BackendApplication {
+    context: ptr::NonNull<c_void>,
+    callbacks: ApplicationCallbacks,
+}
+
+// SAFETY: The registered callback contract supplies a concurrency-safe opaque
+// owner. Only invoke borrows it; final Drop follows the last such borrow.
+unsafe impl Send for BackendApplication {}
+// SAFETY: The same registered opaque owner permits shared references; invoke
+// serializes its callback contract, and final Drop follows every such borrow.
+unsafe impl Sync for BackendApplication {}
+
+impl Drop for BackendApplication {
+    fn drop(&mut self) {
+        // SAFETY: This successful open is uniquely owned and its OS/module
+        // lease is the later-dropping field of ApplicationConnection.
+        unsafe { (self.callbacks.close)(self.context.as_ptr()) };
+    }
+}
+
+struct ApplicationConnection {
+    backend: BackendApplication,
+    // BackendApplication drops first so its close callback retains admission;
+    // this owner then drops before the exact OS lease/module release.
+    _admission: AdmissionOwner,
+    _lease: OsLease<'static>,
+}
+
+    fn to_result(status:i32)->Result{if status<0{Err(status)}else{Ok(())}}
+    mod bindings {#[allow(non_camel_case_types)]pub(crate) struct module;}
+    static CONSUMER_MODULE:bindings::module=bindings::module;
+    static MODULE_PINS:AtomicU32=AtomicU32::new(0);
+    static MODULE_GET_FAIL:AtomicBool=AtomicBool::new(false);
+    static MODULE_ARC_FAIL_AFTER_GET:AtomicBool=AtomicBool::new(false);
+    static MODULE_EVENTS:std::sync::Mutex<std::vec::Vec<&'static str>>=std::sync::Mutex::new(std::vec::Vec::new());
+    unsafe fn try_module_get(_: *mut c_void)->bool{
+        LOCK_DEPTH.with(|depth|assert_eq!(depth.get(),0));
+        if MODULE_GET_FAIL.swap(false,Ordering::SeqCst){MODULE_EVENTS.lock().unwrap().push("get_failed");return false;}
+        MODULE_PINS.fetch_add(1,Ordering::SeqCst);MODULE_EVENTS.lock().unwrap().push("get");if MODULE_ARC_FAIL_AFTER_GET.swap(false,Ordering::SeqCst){ARC_FAIL_NEXT.store(true,Ordering::SeqCst);}true
+
+5039
+unsafe extern "C" fn invoke(_: *mut c_void,_:u32,_:*mut u8,_:usize)->i64{0}
+unsafe extern "C" fn close(context:*mut c_void){unsafe{drop(std::boxed::Box::from_raw(context.cast::<smp_memory::Application>()))}}
+fn callbacks()->ApplicationCallbacks{ApplicationCallbacks{open,invoke,close,adopt_fork:Some(application_adopt_fork),fork_progress:Some(application_fork_progress),adopt_fork_scoped:Some(application_adopt_fork_scoped),prepare_fork_link:Some(application_prepare_fork_link)}}
+pub(crate) struct Connections{parent:std::boxed::Box<ApplicationConnection>,child:std::boxed::Box<ApplicationConnection>,object:std::boxed::Box<OsObject>}
+impl Connections{pub(crate) fn raw(&mut self)->(*mut c_void,*mut c_void){(ptr::from_mut(&mut*self.parent).cast(),ptr::from_mut(&mut*self.child).cast())}}
+pub(crate) fn connections(remote:Arc<Remote>,p:Token,c:Token)->Connections{
+ assert!(OS_OBJECTS[0].load(Ordering::Acquire).is_null());
+ let mut object=std::boxed::Box::new(OsObject{admission:Admission::new(),backend:Some(Backend{application:Some(callbacks())}),forks:Mutex::new(ForkPendingTable::new())});OS_OBJECTS[0].store(ptr::from_mut(&mut*object),Ordering::Release);
+ let runtime=Arc::new(BridgeRuntime{application:remote},0).unwrap();let handle=OsHandle{minor:0,generation:2};
+ let make=|app:smp_memory::Application|std::boxed::Box::new(ApplicationConnection{backend:BackendApplication{context:NonNull::new(std::boxed::Box::into_raw(std::boxed::Box::new(app)).cast()).unwrap(),callbacks:callbacks()},_admission:object.admission.enter().unwrap(),_lease:OS_REGISTRY.acquire(handle).unwrap()});
+ let parent=make(smp_memory::Application::fixture(runtime.clone(),p));let child=make(smp_memory::Application::fixture(runtime,c));Connections{parent,child,object}
+}
+pub(crate) fn consumer_module()->*mut c_void{ptr::addr_of!(CONSUMER_MODULE).cast_mut().cast()}
+pub(crate) fn retained()->usize{let raw=OS_OBJECTS[0].load(Ordering::Acquire);if raw.is_null(){return 0;}unsafe{&*raw}.forks.lock().entries.iter().flatten().count()}
+// All successful/uncertain carriers remain retained. No fabricated final ACK
+// teardown is called to make test counters balance.
+pub(crate) fn retain_connections(c:Connections){OS_OBJECTS[0].store(ptr::null_mut(),Ordering::Release);std::mem::forget(c);}
+thread_local!{static CONNECTION_CONTEXTS:std::cell::Cell<(*mut c_void,*mut c_void)>=const{std::cell::Cell::new((ptr::null_mut(),ptr::null_mut()))};}
+pub(crate) fn set_connection_contexts(p:*mut c_void,c:*mut c_void){CONNECTION_CONTEXTS.with(|v|v.set((p,c)));}
+pub(crate) fn connection_context(pid:i32)->*mut c_void{CONNECTION_CONTEXTS.with(|v|{let(p,c)=v.get();if pid==101{p}else{c}})}
+
+
+pub(crate) fn current_key()->application_abi::ForkIdentityV1{let raw=OS_OBJECTS[0].load(Ordering::Acquire);let table=unsafe{&*raw}.forks.lock();table.entries.iter().flatten().find_map(|e|e.identity).unwrap()}
+
+}
+#[allow(dead_code, non_camel_case_types)]
+mod consumer_fixture {
+use std::{cell::{Cell, RefCell, RefMut}, ffi::c_void, pin::Pin, ptr::{self, NonNull}, sync::atomic::{AtomicBool, AtomicI32, Ordering}};
+type Result<T = ()> = std::result::Result<T, i32>;
+const ESRCH: i32 = -3; const EINVAL: i32 = -22; const EACCES: i32 = -13;
+const EBUSY:i32=-16; const EFAULT:i32=-14; const EIO:i32=-5;
+const EOVERFLOW: i32 = -75; const GFP_KERNEL: u32 = 0;
+fn errno(code: i32) -> i32 { code }
+mod kernel { pub mod error { pub fn to_result(code:i32)->Result<(),i32>{if code<0{Err(code)}else{Ok(())}} } }
+thread_local! { static ALLOCATION: Cell<(usize, usize)> = const { Cell::new((0,0)) }; }
+fn allocate() -> Result { ALLOCATION.with(|a| { let (n, fail) = a.get(); a.set((n+1,fail)); if n+1 == fail { Err(-12) } else { Ok(()) } }) }
+struct Arc<T>(std::sync::Arc<T>);
+impl<T> Arc<T> {
+    fn new(value: T, _: u32) -> Result<Self> { allocate()?; Ok(Self(std::sync::Arc::new(value))) }
+    fn into_raw(this: Self) -> *const T { std::sync::Arc::into_raw(this.0) }
+    unsafe fn from_raw(raw: *const T) -> Self { Self(unsafe { std::sync::Arc::from_raw(raw) }) }
+    fn strong_count(this: &Self) -> usize { std::sync::Arc::strong_count(&this.0) }
+}
+impl<T> Clone for Arc<T> { fn clone(&self) -> Self { Self(self.0.clone()) } }
+impl<T> std::ops::Deref for Arc<T> { type Target = T; fn deref(&self) -> &T { &self.0 } }
+struct ArcBorrow<'a,T> { raw: *const T, lifetime: std::marker::PhantomData<&'a T> }
+impl<'a,T> ArcBorrow<'a,T> { unsafe fn from_raw(raw: *const T) -> Self { Self { raw, lifetime: std::marker::PhantomData } } }
+
+5042
+pub(crate) struct Connections{parent:std::boxed::Box<ApplicationConnection>,child:std::boxed::Box<ApplicationConnection>,object:std::boxed::Box<OsObject>}
+impl Connections{pub(crate) fn raw(&mut self)->(*mut c_void,*mut c_void){(ptr::from_mut(&mut*self.parent).cast(),ptr::from_mut(&mut*self.child).cast())}}
+pub(crate) fn connections(remote:Arc<Remote>,p:Token,c:Token)->Connections{
+ assert!(OS_OBJECTS[0].load(Ordering::Acquire).is_null());
+ let mut object=std::boxed::Box::new(OsObject{admission:Admission::new(),backend:Some(Backend{application:Some(callbacks())}),forks:Mutex::new(ForkPendingTable::new())});OS_OBJECTS[0].store(ptr::from_mut(&mut*object),Ordering::Release);
+ let runtime=Arc::new(BridgeRuntime{application:remote},0).unwrap();let handle=OsHandle{minor:0,generation:2};
+ let make=|app:smp_memory::Application|std::boxed::Box::new(ApplicationConnection{backend:BackendApplication{context:NonNull::new(std::boxed::Box::into_raw(std::boxed::Box::new(app)).cast()).unwrap(),callbacks:callbacks()},_admission:object.admission.enter().unwrap(),_lease:OS_REGISTRY.acquire(handle).unwrap()});
+ let parent=make(smp_memory::Application::fixture(runtime.clone(),p));let child=make(smp_memory::Application::fixture(runtime,c));Connections{parent,child,object}
+}
+pub(crate) fn consumer_module()->*mut c_void{ptr::addr_of!(CONSUMER_MODULE).cast_mut().cast()}
+pub(crate) fn retained()->usize{let raw=OS_OBJECTS[0].load(Ordering::Acquire);if raw.is_null(){return 0;}unsafe{&*raw}.forks.lock().entries.iter().flatten().count()}
+// All successful/uncertain carriers remain retained. No fabricated final ACK
+// teardown is called to make test counters balance.
+pub(crate) fn retain_connections(c:Connections){OS_OBJECTS[0].store(ptr::null_mut(),Ordering::Release);std::mem::forget(c);}
+thread_local!{static CONNECTION_CONTEXTS:std::cell::Cell<(*mut c_void,*mut c_void)>=const{std::cell::Cell::new((ptr::null_mut(),ptr::null_mut()))};}
+pub(crate) fn set_connection_contexts(p:*mut c_void,c:*mut c_void){CONNECTION_CONTEXTS.with(|v|v.set((p,c)));}
+pub(crate) fn connection_context(pid:i32)->*mut c_void{CONNECTION_CONTEXTS.with(|v|{let(p,c)=v.get();if pid==101{p}else{c}})}
+
+
+pub(crate) fn current_key()->application_abi::ForkIdentityV1{let raw=OS_OBJECTS[0].load(Ordering::Acquire);let table=unsafe{&*raw}.forks.lock();table.entries.iter().flatten().find_map(|e|e.identity).unwrap()}
+
+}
+#[allow(dead_code, non_camel_case_types)]
+mod consumer_fixture {
+use std::{cell::{Cell, RefCell, RefMut}, ffi::c_void, pin::Pin, ptr::{self, NonNull}, sync::atomic::{AtomicBool, AtomicI32, Ordering}};
+type Result<T = ()> = std::result::Result<T, i32>;
+const ESRCH: i32 = -3; const EINVAL: i32 = -22; const EACCES: i32 = -13;
+const EBUSY:i32=-16; const EFAULT:i32=-14; const EIO:i32=-5;
+const EOVERFLOW: i32 = -75; const GFP_KERNEL: u32 = 0;
+fn errno(code: i32) -> i32 { code }
+mod kernel { pub mod error { pub fn to_result(code:i32)->Result<(),i32>{if code<0{Err(code)}else{Ok(())}} } }
+thread_local! { static ALLOCATION: Cell<(usize, usize)> = const { Cell::new((0,0)) }; }
+fn allocate() -> Result { ALLOCATION.with(|a| { let (n, fail) = a.get(); a.set((n+1,fail)); if n+1 == fail { Err(-12) } else { Ok(()) } }) }
+struct Arc<T>(std::sync::Arc<T>);
+impl<T> Arc<T> {
+    fn new(value: T, _: u32) -> Result<Self> { allocate()?; Ok(Self(std::sync::Arc::new(value))) }
+    fn into_raw(this: Self) -> *const T { std::sync::Arc::into_raw(this.0) }
+    unsafe fn from_raw(raw: *const T) -> Self { Self(unsafe { std::sync::Arc::from_raw(raw) }) }
+    fn strong_count(this: &Self) -> usize { std::sync::Arc::strong_count(&this.0) }
+}
+impl<T> Clone for Arc<T> { fn clone(&self) -> Self { Self(self.0.clone()) } }
+impl<T> std::ops::Deref for Arc<T> { type Target = T; fn deref(&self) -> &T { &self.0 } }
+struct ArcBorrow<'a,T> { raw: *const T, lifetime: std::marker::PhantomData<&'a T> }
+impl<'a,T> ArcBorrow<'a,T> { unsafe fn from_raw(raw: *const T) -> Self { Self { raw, lifetime: std::marker::PhantomData } } }
+impl<T> std::ops::Deref for ArcBorrow<'_,T> { type Target=T; fn deref(&self)->&T { unsafe { &*self.raw } } }
+impl<T> From<ArcBorrow<'_,T>> for Arc<T> {
+    fn from(borrow:ArcBorrow<'_,T>)->Self { let value=std::mem::ManuallyDrop::new(unsafe { Arc::from_raw(borrow.raw) }); Arc::clone(&value) }
+
+4844
+/// only the registered backend derives a child key from the owned delivery.
+#[export_name = "ihk_os_application_prepare_fork_link_v1"]
+pub(crate) unsafe extern "C" fn prepare_fork_link_application(
+    parent: *mut c_void, worker: u64, serial: u64, cpu: i64, value: i64,
+) -> i32 {
+    let result = (|| -> Result {
+        if parent.is_null() { return Err(EINVAL); }
+        let parent = unsafe { &*parent.cast::<ApplicationConnection>() };
+        let handle = parent._lease.handle();
+        let raw = OS_OBJECTS[handle.minor()].load(Ordering::Acquire);
+        if raw.is_null() { return Err(EIO); }
+        let object = unsafe { &*raw };
+        let registered = object.backend.and_then(|backend| backend.application).ok_or(ENODEV)?;
+        let callbacks = parent.backend.callbacks;
+        if callbacks.open as usize != registered.open as usize
+            || callbacks.invoke as usize != registered.invoke as usize
+            || callbacks.close as usize != registered.close as usize
+            || callbacks.adopt_fork.map(|f| f as usize) != registered.adopt_fork.map(|f| f as usize)
+            || callbacks.fork_progress.map(|f| f as usize) != registered.fork_progress.map(|f| f as usize)
+            || callbacks.adopt_fork_scoped.map(|f| f as usize) != registered.adopt_fork_scoped.map(|f| f as usize)
+            || callbacks.prepare_fork_link.map(|f| f as usize) != registered.prepare_fork_link.map(|f| f as usize)
+        { return Err(EACCES); }
+        let Some(prepare) = registered.prepare_fork_link else { return Ok(()); };
+        let mut scope = ForkLinkResolverScope {
+            object: ptr::from_ref(object), slot: handle.minor() as u32, generation: handle.generation(),
+        };
+        let status = unsafe { prepare(parent.backend.context.as_ptr(), worker, serial, cpu, value,
+            Some(resolve_fork_link_scope), ptr::from_mut(&mut scope).cast()) };
+        if status > 0 || status < -4095 { return Err(errno(-71)); }
+        to_result(status)
+    })();
+    result.map_or_else(|e| e.to_errno(), |()| 0)
+}
+
+/// # Safety
+/// The caller has an independent LIVE file/callback module owner through
+/// return into consumer text. consumer_module is that exact THIS_MODULE, never
+/// a userspace value. Constructor seed is borrowed until callback return; its
+/// transferred context retains the exact Registration. No owned module lease
+/// crosses this ABI. All callbacks are module-resident immutable identities.
+#[export_name = "ihk_os_application_attach_fork_capsule_v1"]
+pub(crate) unsafe extern "C" fn attach_fork_capsule_application(
+    child: *mut c_void,
+    identity: *const super::application_abi::ForkIdentityV1,
+    consumer_module: *mut c_void,
+    construct: Option<super::application_abi::ForkCapsuleConstructV1>,
+    seed: *mut c_void,
+
+2961
+// This completion boundary covers ONLY the original unpublished first RET.
+// Running/second-link teardown requires its separately authenticated protocol.
+fn fork_progress_in_slots(
+    owner: OsToken, slots: &mut [Option<Entry>], child: Token,
+    identity: ForkIdentity, stage: u32,
+) -> Result<(Option<usize>, usize)> {
+    use super::application_abi::{FORK_HOST_REVOKED_V1, FORK_GUEST_DESTROYED_V1};
+    if identity.slot != owner.slot() || identity.generation != owner.generation()
+        || identity.child != child.wire()
+    { return Err(EACCES); }
+    let child_index = slots.iter().position(|slot| slot.as_ref().is_some_and(|entry| entry.key() == child)).ok_or(ENOENT)?;
+    let entry = slots[child_index].as_mut().unwrap();
+    let fork = entry.fork.as_mut().ok_or(ENOENT)?;
+    if fork.reservation.identity != identity || fork.owner.number != entry.cleanup.pid()
+        || fork.owner.mm.as_ptr() as usize != identity.child_mm
+        || !fork.seal.sealed.load(Ordering::Acquire)
+    { return Err(EACCES); }
+    // Positive first-publication pins have no reviewed terminal consumer yet.
+    // Enforce retention at this generic destruction API as well as ACK release,
+    // before changing a phase or permitting any child-slot removal.
+    if stage == FORK_GUEST_DESTROYED_V1 && fork.retained_parent.is_some() { return Err(EBUSY); }
+    if stage == FORK_HOST_REVOKED_V1 {
+        // A sealed LINK grants irreversible same-kind2 handoff permission.
+        // Host abort cannot alter that phase or close admissions afterwards.
+        if let Some(link) = &fork.link { link.cancel_if_open()?; }
+        // Close ACTUAL existing service admission before drain. Every current
+        // prepare/start/worker/wait/with_prepared path observes this gate under
+        // the same slots mutex. No child image was prepared or scheduled at
+        // this original-first-RET boundary; foreign active state fails closed.
+        entry.needs_cleanup = true;
+        if fork.reservation.state.phase() != ForkPhase::Quarantined {
+            fork.reservation.state.request_abort(identity)?;
+        }
+        entry.syscalls.close().map_err(errno)?;
+    } else if stage != FORK_GUEST_DESTROYED_V1 { return Err(EINVAL); }
+    if !entry.needs_cleanup || entry.scheduled || entry.prepare.is_some()
+        || entry.procfs.is_some() || !entry.syscalls.drained()
+    { return Err(EBUSY); }
+    fork.reservation.state.revoke_drained(identity)?;
+    let first = fork.reservation.first.clone();
+    let value = fork.reservation.return_value;
+    let published = fork.reservation.return_published;
+    if stage == FORK_GUEST_DESTROYED_V1 {
+        fork.reservation.state.permit_guest_destroy(identity)?;
+        if !published || value != Some(super::application_abi::FORK_ABORT_RETURN_V1) { return Err(EBUSY); }
+        // Publication retained the authenticated full child key and terminal
+        // value. The parent's normally retired mailbox is no longer needed.
+
+3077
+ let remote=Arc::new(Remote{owner:memory.owner,slots:Mutex::new(vec![Some(p),Some(c)]),transport_failed:AtomicBool::new(false),release_token:Token::allocate().unwrap(),releases:Mutex::new(Mailbox::new().unwrap())},0).unwrap();(remote,pt,ct,w,s)
+}
+pub(crate) fn delivered(remote:&Remote,parent:Token,memory:&Arc<crate::smp_memory::storage::Memory>,request:Request)->(u64,u64){let mut slots=remote.slots.lock();let p=slots.iter_mut().flatten().find(|p|p.key()==parent).unwrap();let w=p.syscalls.open_worker(201).unwrap();p.syscalls.admit(request,|r|memory.syscall(r)).unwrap();let(s,_)=p.syscalls.reserve(w).unwrap().unwrap();p.syscalls.copied(w,s,true).unwrap();(w,s)}
+pub(crate) fn return_actual(remote:&Remote,parent:Token,w:u64,s:u64,cpu:i64,value:i64)->Result{let mut slots=remote.slots.lock();authorize_fork_return(&slots,parent,w,s,cpu,value)?;let p=slots.iter_mut().flatten().find(|p|p.key()==parent).unwrap();p.syscalls.return_value(w,s,cpu,value,|_|Ok(())).map_err(errno)?;record_fork_return(&mut slots,parent,w,s,value);Ok(())}
+pub(crate) fn phase(remote:&Remote)->ForkPhase{remote.slots.lock()[1].as_ref().unwrap().fork.as_ref().unwrap().reservation.state.phase()}
+pub(crate) fn scheduled(remote:&Remote)->bool{remote.slots.lock()[1].as_ref().unwrap().scheduled}
+// This is test-process retention, never a final runtime release protocol.
+pub(crate) fn retain_fixture(remote:Arc<Remote>){std::mem::forget(remote);}
+pub(crate) fn close_worker_actual(remote:&Remote,parent:Token,worker:u64){let mut slots=remote.slots.lock();let p=slots.iter_mut().flatten().find(|p|p.key()==parent).unwrap();assert_eq!(p.syscalls.close_worker(worker),Err(EBUSY));abort_parent_forks(&mut slots,parent,Some(worker));}
+pub(crate) fn corrupt_generation(remote:&Remote){remote.slots.lock()[1].as_mut().unwrap().owner_generation+=1;}
+pub(crate) fn fork_present(remote:&Remote)->bool{remote.slots.lock()[1].as_ref().unwrap().fork.is_some()}
+pub(crate) fn check_parent_pin(remote:&Arc<Remote>, parent:Token, child:Token) {
+ let mut slots=remote.slots.lock();
+ let p=slots.iter().flatten().find(|e|e.key()==parent).unwrap();
+ assert_eq!(p.fork_prepared_parent_refs,1);
+ assert!(!p.release_ready());
+ let fork=slots.iter().flatten().find(|e|e.key()==child).unwrap().fork.as_ref().unwrap();
+ let pin=fork.retained_parent.as_ref().expect("positive first return lost parent Entry pin");
+ assert_eq!(pin.parent,parent); assert_eq!(pin.identity,fork.reservation.identity);
+ assert_eq!(pin.reservation,fork.reservation.token.wire()); assert!(Arc::ptr_eq(&pin.remote,remote));
+ let key=pin.identity;let token=pin.reservation;
+ assert_eq!(retain_fork_parent_pin(remote,&mut slots,child,token,key),Err(EACCES));
+ let mut bad=key;bad.parent=Token::allocate().unwrap().wire();
+ assert_eq!(retain_fork_parent_pin(remote,&mut slots,child,token,bad),Err(EIO));
+ let mut bad=key;bad.child=parent.wire();
+ assert!(retain_fork_parent_pin(remote,&mut slots,child,token,bad).is_err());
+ assert_eq!(slots.iter().flatten().find(|e|e.key()==parent).unwrap().fork_prepared_parent_refs,1);
+ let phase=slots.iter().flatten().find(|e|e.key()==child).unwrap().fork.as_ref().unwrap().reservation.state.phase();
+ drop(slots);
+ assert_eq!(remote.begin_fork_progress(child,key,crate::application_abi::FORK_GUEST_DESTROYED_V1),Err(EBUSY));
+ assert_eq!(remote.release_fork_ack(child,key,1),Err(EBUSY));
+ let slots=remote.slots.lock();
+ assert_eq!(slots.iter().flatten().find(|e|e.key()==child).unwrap().fork.as_ref().unwrap().reservation.state.phase(),phase);
+ assert_eq!(slots.iter().flatten().find(|e|e.key()==parent).unwrap().fork_prepared_parent_refs,1);
+}
+
+
+
+pub(crate) fn transport_failure(remote:&Remote,on:bool){remote.transport_failed.store(on,Ordering::Relaxed);}
+pub(crate) fn cancel_child(remote:&Remote,child:Token)->Result{let mut slots=remote.slots.lock();let token=slots.iter().flatten().find(|e|e.key()==child).unwrap().fork.as_ref().unwrap().reservation.token.wire();abort_fork_in_slots(&mut slots,child,token)}
+
+}
+use smp_application::*;
+mod application_abi{// SPDX-License-Identifier: GPL-2.0
+//! Versioned, kernel-only application connection to the exact SMP OS owner.
+
+use core::ffi::c_void;
+
+2300
+    descriptor: fork_carrier_request::RequestDescriptor,
+}
+impl ForkPayload {
+    pub(crate) fn descriptor(&self) -> &fork_carrier_request::RequestDescriptor { &self.descriptor }
+    pub(crate) fn physical(&self) -> u64 { self.tag.span.physical }
+    pub(crate) fn original_response(&self) -> u64 { self.original_response }
+    pub(crate) fn owner(&self) -> OsToken { self.memory.owner }
+
+    /// Caller supplies the exact pinned capsule's exclusive borrow. The real
+    /// backend must independently authorize each direction/phase/sequence.
+    pub(crate) fn copy_to_guest(&mut self, bytes: &[u8; 128]) -> Result {
+        self.copy(bytes.as_ptr().cast_mut(), true)
+    }
+    pub(crate) fn copy_from_guest(&mut self, bytes: &mut [u8; 128]) -> Result {
+        self.copy(bytes.as_mut_ptr(), false)
+    }
+    fn copy(&mut self, bytes: *mut u8, to_guest: bool) -> Result {
+        let ledger = self.memory.ledger.lock();
+        if !ledger.fork_payloads.get(self.slot).and_then(Option::as_ref)
+            .is_some_and(|old| old.serial == self.tag.serial && old.span == self.tag.span)
+        { return Err(EIO); }
+        // SAFETY: The IHK capsule and original Memory owners retain the whole
+        // mapped span. The unique tag excludes every host alias. This exclusive
+        // borrow and actual delivery/RET ordering exclude peer byte access.
+        // These are byte operations; no reference to shared guest bytes exists.
+        for index in 0..128 { unsafe {
+            let peer = (self.address as *mut u8).add(index);
+            if to_guest { ptr::write_volatile(peer, ptr::read(bytes.add(index))); }
+            else { ptr::write(bytes.add(index), ptr::read_volatile(peer)); }
+        }}
+        Ok(())
+    }
+}
+
+/// # Safety
+/// Called ONLY by IHK's exact initializing payload attach, under its genuine
+/// independent pending owner, with a live unique ForkPayloadSeed and output.
+/// Output remains owned by IHK, never by the SMP borrowed pointer. On failure
+/// no mapping/tag/context was published; on success IHK must retain it until
+/// safe unsealed rollback, or true final ACK PLUS its actual RET publication
+/// receipt and completion of every last response access. All SMP borrows must
+/// end before either consuming cleanup; stage2 acceptance alone is insufficient.
+pub(crate) unsafe extern "C" fn fork_payload_construct(
+    seed: *mut core::ffi::c_void, out: *mut *mut core::ffi::c_void,
+) -> i32 {
+    let result = (|| -> Result {
+        if seed.is_null() || out.is_null() { return Err(EINVAL); }

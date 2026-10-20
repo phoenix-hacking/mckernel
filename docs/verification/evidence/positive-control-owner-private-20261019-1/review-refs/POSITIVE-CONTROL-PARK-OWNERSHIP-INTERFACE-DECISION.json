@@ -1,0 +1,150 @@
+{
+  "conflict_and_failure_rules": {
+    "LINK_race": "IHK BUSY serializes IHK capsule use, but backend LINK may have a pending ticket. Revalidate actual link busy/gate/second fields under slots and freeze them atomically with control installation; do not widen existing LINK irreversible semantics.",
+    "close_race": "Before transfer revalidation rejects closed/cancelled delivery. After transfer close may cancel/mark owner but cannot consume pending response or remove the exact pinned parent/child entry. No parent-death retry authority is created.",
+    "duplicates": "Same already-parked delivery returns busy/idempotent retained status; never takes another Response or increments another pin. Foreign worker/serial/request/key/epoch/control refuses with no ownership transfer.",
+    "failure_retention": "No response-restore retry after uncertain ownership move. If restoring to Mailbox is ever added, it must precede publication-pin release, be exact once, and respect actual restore method potentially moving response before later cancellation error."
+  },
+  "decision": "USE_STRICT_STAGE0_PENDING_CLAIM_AND_DISTINCT_SCOPED_CONTROL_PARK_CONTINUATION",
+  "exact_order": [
+    "Under slots, discover actual delivered request and snapshot full existing child identity/epoch/carrier tuple. Keep only scalar immutable snapshot in synchronous stack ticket; move no Response and expose no payload pointer yet.",
+    "Release slots. IHK resolver authenticates connection and obtains strict actual pending stage0 BUSY claim; clone/pin actual owner/capsule/payload. No IHK table lock spans provider continuation or MM/foreign calls.",
+    "Scoped continuation reacquires slots and revalidates EVERYTHING from discovery including real delivery, child state, open/no-busy LINK, cancellation and control uniqueness. A concurrent LINK/close/cancel or stale epoch causes refusal before transfer.",
+    "Preallocate fallible durable-control storage before transfer; reserve actual extra parent publication/slot pin under slots, then take SAME fresh response via actual Mailbox method and atomically install durable ChildFork.control that owns response ticket, exact request/worker/serial/identity/epoch and Remote/parent retention. Roll back exact provisional pin on pre-transfer failure only; no general decrement authority.",
+    "While slots is still held, new control marker must freeze all LINK admissions/finish/publication and conflicting controls; fork_ingress_pending alone freezes ordinary Mailbox return but does NOT freeze LINK. No marker/phase is itself receipt authority.",
+    "End every payload/descriptor/shared-reference borrow and release slots before callback returns. No pointer to IHK scope, raw claim, stack ticket, mutable payload writer, or temporary descriptor is stored in ChildFork.control.",
+    "IHK claim.restore only after successful ownership installation. If restore or later structural check fails, retain/quarantine both pending IHK owner and durable backend control/response/parent pin; never drop ticket, restore normal publication or free original payload.",
+    "PreRETURN hook returns EBUSY on parked state and does not invoke normal RETURN_SYSCALL. Original positive RET and initial payload capsule remain untouched; no receipt bytes, MM revoke, root destruction, finalACK or pin release occur."
+  ],
+  "functional_scope": "Functional OS/apps and Rust delivery: one real unpublished fresh-response ownership transition; no provider activation or receipt/native proof.",
+  "held_limits": {
+    "MM_or_alias_revoke": false,
+    "NULL_minus95_runtime_holds": "HELD",
+    "current_shared_integration": false,
+    "execution_release": false,
+    "finalACK_or_destructor_release": false,
+    "native_or_counter_credit": 0,
+    "new_compute_C": false,
+    "reviewer_tests_build_root_guest": 0,
+    "source_implementation_acceptance": false
+  },
+  "implementation_author": "/root/clone_thread_affinity_rust_repair",
+  "implementation_ownership": false,
+  "minimum_distinct_interface": {
+    "descriptor_fields_required": "version/bytes/reserved; full backend-derived ForkIdentityV1; exact existing provider epoch; fresh control worker/delivery/cpu; exact carrier physical/root/length/nonce metadata; no borrowed pointer that survives callback.",
+    "names": [
+      "ForkPrepareControlV1",
+      "ForkControlResolveV1",
+      "ForkControlParkV1",
+      "ForkControlDescriptorV1",
+      "ihk_os_application_prepare_fork_control_v1"
+    ],
+    "park_callback": "Only SAME trusted backend continuation and stack ticket under scoped IHK claim; existing payload context may be read-borrowed to validate owner/physical/immutable descriptor. No mutable writer needed or permitted in this park-only phase; no claim/payload/reference pointer escapes.",
+    "provider_prepare_arguments": "Existing live application connection plus worker, serial, cpu and observed launcher return value; actual provider derives the matched Delivered Request and ChildFork identity.",
+    "resolver_scope": "Actual registered SMP provider derives descriptor. Genuine IHK export authenticates live parent connection/OS/provider callback closure and pins every current callback/module/OS object throughout synchronous return. Child context is looked up by exact backend key then revalidated under IHK claim; never caller-supplied bare context.",
+    "return_mapping": "Internal NotControl passes ordinary return. Durable Parked maps to -EBUSY before standard RETURN invocation; status0 inside a scoped callback only reports construction completion, never guest RET0 or revoke permission. Errors remain exact errors, not allow-legacy-publication fallback.",
+    "semantics": "New internal typed callback path, not aliases or reinterpretation of LINK/ACK descriptors/callbacks. Exact FFI layout/registration version and size assertions belong to actual upcoming source, not invented fixed binary offsets in this decision."
+  },
+  "next_focused_check_after_actual_source_and_root_profile": {
+    "failures": [
+      "Wrong generation/key/epoch/physical or stale delivery refuses before move",
+      "Duplicate or concurrent LINK/busy/SEALED control cannot create second owner/pin",
+      "Parent close/cancel race before transfer refuses; after transfer retains exact owner",
+      "Post-install claim.restore failure quarantines and retains response/pins with no legacy publish",
+      "Existing negative refusal and ordinary clone/LINK/ACK behavior remain unchanged unless matching private new control path"
+    ],
+    "positive": "Actual delivered selector2 response plus existing real IHK pending capsule/claim -> exact durable backend control owner, publication frozen, IHK prior PENDING restored, original RET/payload unchanged, hook refuses normal publication. This is owner parking only, not successful revoke.",
+    "scope": "One actual current private owner-construction path and targeted failures only; no38/60/old9 replay, no new guest/root/compile by reviewer."
+  },
+  "reviewed_at": "2026-10-19T23:15:31.807100+00:00",
+  "reviewer": "/root/next_replace_tid_review",
+  "schema": "mckernel.independent-positive-fork-control-park-interface.v1",
+  "selected_actual_sources": [
+    {
+      "bytes": 162713,
+      "path": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/os_runtime.rs",
+      "sha256": "9865c752bb3c1b3924e201f0809dbaa38bcd06acf3f5ddbe0037b0aef058c308"
+    },
+    {
+      "bytes": 29396,
+      "path": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_application_syscall.rs",
+      "sha256": "520b8d4fcef193afc8c21966071dcaa08a5e5c7c704e658423313b2d8156abff"
+    },
+    {
+      "bytes": 92657,
+      "path": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_application.rs",
+      "sha256": "ecb2d908881f3b011a108419ccc1c446de6450ad9f0d469705663e9d78289905"
+    },
+    {
+      "bytes": 55689,
+      "path": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_service.rs",
+      "sha256": "5b7d4158787670cdeaf76bb64744478236dd2015ca1302ec524a5bfa1dd7a129"
+    },
+    {
+      "bytes": 75803,
+      "path": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/mcctrl_process.rs",
+      "sha256": "53eab0f8392121433ecc763974036897608122c392e9deb7794dda0705ebb1d9"
+    },
+    {
+      "bytes": 14346,
+      "path": "/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/abi/application.rs",
+      "sha256": "6dc718d91e97d7ef0c9af63adc2d29a1e80f2bd81a9cd3a672b33c8cc34eb65f"
+    }
+  ],
+  "selected_findings": [
+    {
+      "body": "ForkProviderClaim::acquire stage0",
+      "finding": "Actual stage0 clones pending owner/capsule/payload and marks BUSY without reserving new completion receipt or setting attempted. Generic stage0 also permits phases too broad for this new operation; strict wrapper validation required."
+    },
+    {
+      "body": "ForkProviderClaim::acquire HOST_REVOKED",
+      "finding": "This may reserve durable completion receipt, return already-completed, and set entry.attempted=true. It is not a validation-only primitive and must not underpin the park-only transition."
+    },
+    {
+      "body": "Mailbox::take_fork_ingress_response / restore",
+      "finding": "Actual methods move the SAME Response only for exact live worker/serial/full Request with no completion/kernel/service/cancellation. take sets fork_ingress_pending, so normal Mailbox return refuses it. Caller must retain publication/parent ownership. Drop leaks response rather than freeing uncertain storage; that alone is not durable recovery."
+    },
+    {
+      "body": "ForkProviderClaim::restore / Drop",
+      "finding": "restore rechecks actual exact BUSY epoch/key/owner and restores previous phase. Unrestored active Drop quarantines the pending owner; post-park errors must preserve durable control/response/parent ownership."
+    },
+    {
+      "body": "Registration::return_syscall",
+      "finding": "Actual hook runs after descriptor/worker delivery decode but before LINK/ACK helpers and standard invoke(RETURN_SYSCALL). Ordinary returns must pass unchanged. Parked control returns EBUSY without consuming original delivery; syscall scalar -95 from current launcher is not ownership or phase proof."
+    }
+  ],
+  "separate_accepted_prerequisites": {
+    "current_launcher_refusal": {
+      "bytes": 8488,
+      "path": "/home/holden/mckernel-work/host-preparation/provider-ownership-review-20261019-1/CURRENT-LAUNCHER-CONTROL-REFUSAL-SOURCE-REVIEW.json",
+      "sha256": "d102e95605cfa578ceea5a9153bbf3e55dfc56915eaa5b3ac13f560e4f1f2ca6"
+    },
+    "current_parent_pin": {
+      "bytes": 9752,
+      "path": "/home/holden/mckernel-work/host-preparation/provider-ownership-review-20261019-1/CURRENT-PARENT-SLOT-PIN-SOURCE-INTEGRATION-REVIEW.json",
+      "sha256": "83134e83e443fbf3ee38e9feda0435da72e0e45060d682c8664ee4ce8251719a"
+    },
+    "held_parent_pin": {
+      "bytes": 9900,
+      "path": "/home/holden/mckernel-work/host-preparation/provider-ownership-review-20261019-1/ACTUAL-FIRST-PUBLICATION-PARENT-PIN-PRIVATE-REVIEW.json",
+      "sha256": "08f5c012961cf15416eb1cf4bf55127e2a1c681d975799ce7279c1bd6658468f"
+    },
+    "not_a_combined_current_backend_overlay": true
+  },
+  "status": "SOURCE_INTERFACE_DECISION_ONLY_NOT_IMPLEMENTATION_OR_EXECUTION_ACCEPTANCE",
+  "strict_control_claim": {
+    "IHK_required": [
+      "Prior phase exactly FORK_PROVIDER_PENDING(1), reject phase0/BUSY/QUARANTINED/HOST_REVOKED",
+      "Exact identity+childcontext+provider epoch, actual owner/capsule/payload present and stable under exclusive BUSY claim",
+      "No host_revoked/guest_released/final_published state; initialized actual payload/capsule/consumer module and OS owners retained"
+    ],
+    "backend_required": [
+      "Actual parent connection Token and same owner slot/generation; not closed/cleanup/quarantined or shutdown/transport error",
+      "Unique actual Delivered nr56 selector2 NEWmarker request at exact parent worker/serial/cpu; full Request equality, response still unpublished and not cancelled/completed/kernel/service",
+      "Existing actual ChildFork key/epoch/carrier metadata match request; original positive first RET published with childpid and phase FirstReturnPublished",
+      "PreLINK only: actual gate OPEN, no LINK second/busy/SEALED receipt or current control owner. Do not infer this from an arbitrary status or selector",
+      "All control bytes/geometry are routing metadata only. No new selector2 wire phase or caller-provided full-key proof is invented here. A future genuine guest Rust producer and its wire grammar must be separately source-bound."
+    ],
+    "implementation": "Narrow acquire_control wrapper around actual acquire(stage0), with atomic/rechecked validation before callback. Do not call begin_link_attempt or any progress verifier/finish helper."
+  }
+}

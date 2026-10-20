@@ -1,0 +1,370 @@
+
+smp_service.rs:1072
+    pub(in super::super) unsafe fn prepare_fork_ack(
+        &self, worker: u64, serial: u64, cpu: i64, value: i64,
+        resolve: super::super::application_abi::ForkAckResolveV1, context: *mut core::ffi::c_void,
+    ) -> Result {
+        let Some(mut ticket) = self.started.runtime.application.begin_fork_ack(
+            self.token, worker, serial, cpu, value,
+        )? else { return Ok(()); };
+        let descriptor = ticket.descriptor();
+        let status = unsafe { resolve(context, &descriptor, Some(Self::verify_fork_ack_scope),
+            Some(Self::finish_fork_ack_scope), core::ptr::from_mut(&mut ticket).cast()) };
+        if status > 0 || status < -4095 { return Err(errno(-71)); }
+        kernel::error::to_result(status)
+    }
+    unsafe extern "C" fn verify_fork_ack_scope(ticket: *mut core::ffi::c_void,
+        payload: *mut core::ffi::c_void) -> i32 {
+        if ticket.is_null() { return EINVAL.to_errno(); }
+        let Some(payload) = core::ptr::NonNull::new(payload.cast::<memory::ForkPayload>()) else { return EINVAL.to_errno(); };
+        let ticket = unsafe { &mut *ticket.cast::<super::super::smp_application::PreparedForkAck>() };
+        unsafe { ticket.verify(payload) }.map_or_else(|e| e.to_errno(), |()| 0)
+    }
+    unsafe extern "C" fn finish_fork_ack_scope(ticket: *mut core::ffi::c_void) -> i32 {
+        if ticket.is_null() { return EINVAL.to_errno(); }
+        let ticket = unsafe { &mut *ticket.cast::<super::super::smp_application::PreparedForkAck>() };
+        ticket.finish().map_or_else(|e| e.to_errno(), |()| 0)
+    }
+    fn finalization_key(identity: super::super::application_abi::ForkIdentityV1)
+        -> Result<super::super::smp_application_image::ForkIdentity> {
+        if identity.reserved0 != 0 || identity.reserved1 != 0 { return Err(EINVAL); }
+        Ok(super::super::smp_application_image::ForkIdentity {
+            slot: identity.slot, generation: identity.generation, parent: identity.parent,
+            worker: identity.worker, delivery: identity.delivery, child: identity.child,
+            child_pid: identity.child_pid, child_mm: identity.child_mm as usize,
+            root: identity.root, start: identity.start, length: identity.length, nonce: identity.nonce,
+        })
+    }
+    /// # Safety
+    /// IHK selected this exact registered verifier and lends the real packet
+    /// worker's non-Copy publication receipt synchronously under its OS pin.
+    pub(in super::super) unsafe fn verify_fork_ack_publication(&self,
+        identity: super::super::application_abi::ForkIdentityV1, epoch: u64,
+        receipt: *mut core::ffi::c_void) -> Result {
+        let key = Self::finalization_key(identity)?;
+        unsafe { self.started.runtime.application.verify_fork_ack_publication(self.token, key, epoch, receipt) }
+    }
+    pub(in super::super) fn release_fork_ack(&self,
+        identity: super::super::application_abi::ForkIdentityV1, epoch: u64) -> Result {
+        self.started.runtime.application.release_fork_ack(self.token, Self::finalization_key(identity)?, epoch)
+    }
+    // END PRIVATE FORK PROVIDER APPLICATION
+
+    pub(in super::super) fn cleanup(&self) -> Result {
+        self.started.runtime.application.cleanup(self.token)
+    }
+
+    pub(in super::super) fn worker(&self, bytes: &mut [u8], open: bool) -> Result {
+        self.started
+            .runtime
+            .application
+            .worker(self.token, bytes, open)
+    }
+
+    pub(in super::super) fn wait_syscall(&self, bytes: &mut [u8]) -> Result {
+        self.started
+            .runtime
+            .application
+            .wait_syscall(self.token, bytes)
+    }
+
+    pub(in super::super) fn copied_syscall(&self, bytes: &[u8]) -> Result {
+        self.started
+            .runtime
+            .application
+            .copied_syscall(self.token, bytes)
+    }
+
+    pub(in super::super) fn transfer_tids(&self, bytes: &mut [u8]) -> Result {
+        self.started
+            .runtime
+            .application
+            .transfer_tids(self.token, bytes)
+    }
+
+    pub(in super::super) fn clear_syscall(&self, bytes: &mut [u8], finish: bool) -> Result {
+        self.started
+            .runtime
+
+os_runtime.rs:1133
+pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v10(
+    provider_minor: u32,
+    owner: *mut c_void,
+    argument: u64,
+    callback_abi: u32,
+    ioctl: Option<OsBackendIoctlV2>,
+    release: Option<OsBackendReleaseV2>,
+    prepare: Option<OsBackendPrepareBootV3>,
+    start: Option<OsBackendStartBootV3>,
+    open: Option<super::application_abi::Open>,
+    invoke: Option<super::application_abi::Invoke>,
+    close: Option<super::application_abi::Close>,
+    shutdown: Option<OsBackendShutdownV6>,
+    adopt_fork: Option<super::application_abi::ForkAdoptV1>,
+    fork_progress: Option<super::application_abi::ForkProgressV1>,
+    adopt_fork_scoped: Option<super::application_abi::ForkAdoptScopedV1>,
+    prepare_fork_link: Option<super::application_abi::ForkPrepareLinkV1>,
+    fork_progress_payload: Option<super::application_abi::ForkProgressPayloadV1>,
+    prepare_fork_ack: Option<super::application_abi::ForkPrepareAckV1>,
+    fork_publication_verify: Option<super::application_abi::ForkPublicationVerifyV1>,
+    release_fork_ack: Option<super::application_abi::ForkReleaseAckV1>,
+) -> i64 {
+    let backend = match (
+        callback_abi,
+        ioctl,
+        release,
+        prepare,
+        start,
+        open,
+        invoke,
+        close,
+        shutdown,
+    ) {
+        (
+            1 | 2,
+            Some(ioctl),
+            Some(release),
+            Some(prepare),
+            Some(start),
+            Some(open),
+            Some(invoke),
+            Some(close),
+            Some(shutdown),
+        ) => OsBackend {
+            ioctl,
+            release,
+            boot: Some(OsBackendBootV3 { prepare, start, success_status: if callback_abi == 2 { OsStatus::Running } else { OsStatus::Ready } }),
+            application: Some(ApplicationCallbacks {
+                open,
+                invoke,
+                close,
+                adopt_fork,
+                fork_progress,
+                adopt_fork_scoped,
+                prepare_fork_link,
+                fork_progress_payload,
+                prepare_fork_ack,
+                fork_publication_verify,
+                release_fork_ack,
+            }),
+            shutdown: Some(OsBackendShutdown::V6(shutdown)),
+        },
+        _ => return EINVAL.to_errno() as i64,
+    };
+    // SAFETY: The validated trusted owner is retained through create_os's
+    // initial reference, and every v6 callback remains resident for the
+    // complete OS lifetime exactly as with v6. The optional private adoption
+    // callback adds no public operation or ownership-bearing Rust ABI.
+    match unsafe { create_os(provider_minor, owner.cast(), argument, Some(backend)) } {
+        Ok(minor) => minor as i64,
+        Err(error) => error.to_errno() as i64,
+    }
+}
+
+/// # Safety
+/// The owner is the live, control-file-pinned native SMP module.
+// SAFETY: The caller pins its Linux SMP module throughout this call. Registry
+// reservations and owned allocations below exclude partially initialized opens.
+unsafe fn create_os(
+    provider_minor: u32,
+    owner: *mut bindings::module,
+    argument: u64,
+    backend: Option<OsBackend>,
+) -> Result<usize> {
+    let class = OS_CLASS.load(Ordering::Acquire);
+
+smp_fork_link.rs:356
+pub(super) fn publication_frozen(slots: &mut [Option<Entry>], parent: Token, cpu: i32) -> bool {
+    let Some(pi) = slots.iter().position(|s| s.as_ref().is_some_and(|e| e.key() == parent)) else { return false; };
+    let parent_pid = slots[pi].as_ref().unwrap().cleanup.pid();
+    for ci in 0..slots.len() {
+        let Some(record) = slots[ci].as_ref().and_then(|e| e.fork.as_ref()).and_then(|f| f.link.as_ref()) else { continue; };
+        if record.identity.parent != parent.wire() { continue; }
+        let key = record.identity;
+        let physical = record.physical;
+        let second = record.second.clone();
+        let published = record.published;
+        let ready = record.sealed() && record.receipt_written && record.return_accepted;
+        // Discovery includes queued and cancelling calls BEFORE begin_link can
+        // capture a ticket. A close may queue -512 on a different guest CPU.
+        let unexpected = slots[pi].as_ref().unwrap().syscalls.has_fork_link_response(cpu, |r| {
+            let a = r.arguments();
+            r.pid() == parent_pid && a[1] == key.child_pid as u64 && a[2] == key.length
+                && a[3] == key.root && a[4] == physical && a[5] == CARRIER_MARKER
+                && (published || second.as_ref().is_none_or(|d| r != &d.request))
+        });
+        if unexpected { return true; }
+        let Some(d) = second else { continue; };
+        if d.cpu != cpu || published { continue; }
+        if !ready { return true; }
+        if slots[pi].as_mut().unwrap().syscalls.check_fork_abort(d.worker, d.serial, &d.request, Some(0)).is_err() { return true; }
+    }
+    false
+}
+pub(super) fn observe_publication(slots: &mut [Option<Entry>], parent: Token) {
+    let Some(pi) = slots.iter().position(|s| s.as_ref().is_some_and(|e| e.key() == parent)) else { return; };
+    for ci in 0..slots.len() {
+        let second = slots[ci].as_ref().and_then(|e| e.fork.as_ref()).and_then(|f| f.link.as_ref()).filter(|r| r.identity.parent == parent.wire() && r.receipt_written && r.return_accepted && !r.published).and_then(|r| r.second.clone());
+        let Some(d) = second else { continue; };
+        if slots[pi].as_ref().unwrap().syscalls.returned(d.worker, d.serial) != Ok(true) { continue; }
+        let c = slots[ci].as_mut().unwrap();let fork = c.fork.as_mut().unwrap();let record = fork.link.as_mut().unwrap();
+        if record.sealed() && fork.reservation.state.second_return_published(record.identity, 0).is_ok() {
+            record.published = true;
+            // Actual guest child syscalls can be admitted only after the real
+            // second response publication, under this same slots mutex.
+            c.scheduled = true;
+        }
+
+smp_application.rs:127
+struct ChildFork {
+    owner: Arc<ForkChildOwner>,
+    reservation: ForkReservation,
+    seal: Arc<PreparedForkSeal>,
+    // Deliberate retention after any sealed outcome. Only an actual revoke,
+    // completed TLB barrier and final guest destruction ACK may break it.
+    retained_remote: Option<Arc<Remote>>,
+    retained_parent: Option<ForkParentPin>,
+    link: Option<fork_link::ForkLinkRecord>,
+    ack: Option<ForkAckRecord>,
+    // A failed UNSEALED payload rollback retains the actual typed lease and
+    // its publication freeze for later exact reconciliation, never a raw lease.
+    held_lease: Option<PreparedForkLease>,
+}
+
+// This capability cannot be copied or manufactured from the diagnostic token.
+// Immutable authority and the preallocated seal survive child-MM exclusion.
+// BEGIN PREPARED FORK LEASE
+pub(crate) struct PreparedForkLease {
+    remote: Option<Arc<Remote>>,
+    seal: Arc<PreparedForkSeal>,
+    child: Token,
+    token: u64,
+    identity: ForkIdentity,
+}
+
+// This view cannot outlive or be copied independently of the exclusive lease
+// borrow. Only the SAME preallocated atomic is lent to the synchronous bridge.
+pub(crate) struct PreparedForkBorrow<'lease> {
+    pub(crate) identity: ForkIdentity,
+    pub(crate) sealed: &'lease AtomicBool,
+}
+
+#[allow(dead_code)]
+impl PreparedForkLease {
+    pub(crate) fn borrow_seal(&mut self) -> PreparedForkBorrow<'_> {
+        PreparedForkBorrow { identity: self.identity, sealed: &self.seal.sealed }
+    }
+
+    /// The consumer calls this exactly at its infallible VMA owner/PFN commit.
+    /// No lock, allocation, callback, destructor or cancellation processing is
+    /// permitted here. Repeated stores do not weaken the exclusive capability.
+    pub(crate) fn seal(&mut self) {
+        self.seal.sealed.store(true, Ordering::Release);
+    }
+
+    /// Call after MM unlock, local publication and publication-guard release.
+    pub(crate) fn finish(mut self) {
+        self.finish_inner(true);
+    }
+
+    /// Retain an unsealed lease after an uncertain payload rollback. This is
+    /// recoverable exact-key storage; its prepared state and parent pin remain.
+    pub(crate) fn retain_prepared(self) -> core::result::Result<(), Self> {
+        let Some(remote) = self.remote.as_ref().cloned() else { return Err(self); };
+        let mut slots = remote.slots.lock();
+        let Ok(fork) = child_fork_in_slots(&mut slots, self.child, self.token) else { return Err(self); };
+        if fork.reservation.identity != self.identity || !Arc::ptr_eq(&fork.seal, &self.seal)
+            || !fork.reservation.state.prepared() || fork.held_lease.is_some()
+        { return Err(self); }
+        fork.retained_remote = Some(remote.clone());
+        fork.held_lease = Some(self);
+        drop(slots);
+        Ok(())
+    }
+
+os_runtime.rs:104
+    pub(super) unsafe fn acquire(module: *mut bindings::module) -> Result<Self> {
+        if module.is_null() {
+            return Err(EINVAL);
+        }
+        // SAFETY: The caller keeps this Linux module allocation live for the call.
+        if !unsafe { try_module_get(module.cast()) } {
+            return Err(EBUSY);
+        }
+        Ok(Self(module))
+    }
+}
+
+impl Drop for ProviderModule {
+    fn drop(&mut self) {
+        // SAFETY: This unique owner balances one successful try_module_get.
+        // No callback into that module may continue after this final put.
+        unsafe { module_put(self.0.cast()) };
+    }
+}
+
+#[must_use = "the allocation must remain owned for the OS lifetime"]
+struct KmsgPages(usize);
+
+impl KmsgPages {
+    fn allocate() -> Result<Self> {
+        // No highmem flags: get_free_pages_noprof supplies a directly mapped x86_64
+        // allocation. NORETRY/NOWARN make fragmented-memory failure bounded.
+        // Use generated enum bits for flags without Rust const helpers in 6.12.
+        let flags = bindings::GFP_KERNEL
+            | bindings::__GFP_ZERO
+            | (1 << bindings::___GFP_COMP_BIT)
+            | (1 << bindings::___GFP_NORETRY_BIT)
+            | (1 << bindings::___GFP_NOWARN_BIT);
+        // SAFETY: The fixed order is ten (4 MiB), the flags are Linux GFP
+        // constants, and this process-context allocation holds no spinlock.
+        let address = unsafe { get_free_pages_noprof(flags, KMSG_ORDER) };
+        if address == 0 {
+            return Err(ENOMEM);
+        }
+        let pages = Self(address);
+        let buffer = address as *mut IhkKmsgBuffer;
+        // SAFETY: The allocation is zeroed, directly mapped, exclusively
+        // owned, page-aligned and exactly the ABI size. Initialize only the
+        // length field in place; never put the 4 MiB structure on the stack.
+        unsafe { ptr::addr_of_mut!((*buffer).length).write((KMSG_BYTES - 4096) as i32) };
+        Ok(pages)
+    }
+
+    fn physical(&self) -> Result<u64> {
+        // SAFETY: get_free_pages_noprof without HIGHMEM returned this owned
+        // x86 direct-map allocation. Linux fixes the base before module init.
+        let base = unsafe { bindings::page_offset_base };
+        let physical = (self.0 as u64).checked_sub(base).ok_or(EIO)?;
+        physical.checked_add(KMSG_BYTES as u64).ok_or(EIO)?;
+        if physical % 4096 != 0 {
+            return Err(EIO);
+        }
+        Ok(physical)
+    }
+}
+
+impl Drop for KmsgPages {
+    fn drop(&mut self) {
+        // SAFETY: Exactly this base address and order came from the successful
+        // allocation; no mapping, user reference or co-kernel access escaped.
+        unsafe { free_pages(self.0, KMSG_ORDER) };
+    }
+}
+
+// SAFETY: Only IHK invokes these callbacks with a live OsLease or an exclusive
+// DestroyGuard, respectively. The owning SMP module must keep the callbacks
+// resident, accept the exact scalar ABI and borrow user addresses only during
+// ioctl. The release callback must finish all resource cleanup before success,
+// and leave the OS usable on failure. Neither callback may reenter OS ioctls
+// or destruction while the per-OS operation lock is held.
+type OsBackendIoctlV2 = unsafe extern "C" fn(u32, u64, u32, u64, u32) -> i64;
+// SAFETY: The exclusive destruction guard proves this exact slot/generation
+// has no open references. Success returns its resources before minor reuse.
+type OsBackendReleaseV2 = unsafe extern "C" fn(u32, u64) -> i32;
+
+// SAFETY: Preparation receives only a live OS identity and IHK-owned physical
+// kmsg scalars. It must finish every fallible preparation without starting a
+// CPU or publishing guest work. All retained storage belongs to this generation.
+type OsBackendPrepareBootV3 = unsafe extern "C" fn(u32, u64, u64, u64) -> i32;
+// SAFETY: IHK publishes Booting first. Success requires full backend readiness;

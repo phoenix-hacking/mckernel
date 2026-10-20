@@ -1,0 +1,71 @@
+}
+
+/// # Safety
+/// The live child and proof context are retained through return. Stage1 uses
+/// ONLY the IHK-owned capsule's registered verifier/context. Stage2 proof comes
+/// ONLY from authenticated original in-band final destruction, never a host
+/// receipt. Final release is initiated outside MCCTRL, or the caller retains a
+/// separate live file/callback module owner until return into consumer text.
+#[export_name = "ihk_os_application_fork_progress_v1"]
+pub(crate) unsafe extern "C" fn fork_progress_application(
+    child: *mut c_void,
+    identity: *const super::application_abi::ForkIdentityV1,
+    stage: u32,
+    verify: Option<super::application_abi::ForkVerifyV1>,
+    context: *mut c_void,
+) -> i32 {
+    use super::application_abi::{FORK_HOST_REVOKED_V1, FORK_GUEST_DESTROYED_V1};
+    let result = (|| -> Result {
+        if identity.is_null() || !matches!(stage, FORK_HOST_REVOKED_V1 | FORK_GUEST_DESTROYED_V1)
+        { return Err(EINVAL); }
+        let key = unsafe { *identity };
+        let (child, object, registered) = unsafe { fork_application_binding(child, key) }?;
+        let progress = registered.fork_progress.ok_or(ENODEV)?;
+        let mut claim = match ForkProviderClaim::acquire(object, key, child.backend.context.as_ptr() as usize, stage)? {
+            ForkClaimLookup::Completed => return Ok(()),
+            ForkClaimLookup::Pending(claim) => claim,
+        };
+        let (host_verify, capsule_context, accept) = {
+            let capsule = claim.capsule.as_ref().ok_or(ENODEV)?;
+            let context = capsule.context.load(Ordering::Acquire);
+            if context.is_null() { return Err(EIO); }
+            (capsule.verify, context, capsule.accept)
+        };
+        if stage == FORK_HOST_REVOKED_V1 {
+            // Independent capsule Arc/module/Registration and OS/provider
+            // ownership survive last fd closure or any attempted error.
+            let status = if let Some(payload) = claim.payload.as_ref() {
+                let callback = registered.fork_progress_payload.ok_or(ENODEV)?;
+                let payload_context = payload.context.load(Ordering::Acquire);
+                if payload_context.is_null() { return Err(EIO); }
+                unsafe { callback(child.backend.context.as_ptr(), &key, stage,
+                    Some(host_verify), capsule_context, payload_context) }
+            } else {
+                unsafe { progress(child.backend.context.as_ptr(), &key, stage, Some(host_verify), capsule_context) }
+            };
+            if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+            return claim.finish(stage);
+        }
+        // Carrier transactions accept guest destruction only through the
+        // actual owned selector3 ticket and later final-publication endpoint.
+        if claim.payload.is_some() { return Err(EBUSY); }
+        if !claim.guest_released {
+            let verify = verify.ok_or(EINVAL)?;
+            let status = unsafe { progress(child.backend.context.as_ptr(), &key, stage, Some(verify), context) };
+            if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+            claim.mark_guest_released()?;
+        }
+        // ACK_RECEIVED is durable and receipt capacity was reserved before
+        // Remote's irreversible transition. Retry executes ONLY Accept here.
+        let status = unsafe { accept(capsule_context, &key) };
+        if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
+        claim.finish(stage)
+    })();
+    result.map_or_else(|error| error.to_errno(), |()| 0)
+}
+// END PRIVATE FORK IHK PROVIDER BRIDGE
+
+// SAFETY: Immutable relocation with the same module lifetime and namespace.
+#[export_name = "__export_symbol_ihk_os_application_adopt_fork_v1"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]

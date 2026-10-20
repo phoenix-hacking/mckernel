@@ -1,0 +1,44 @@
+{
+  "status": "READY_NOT_RUN",
+  "production_source_unchanged": true,
+  "first_failure": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/whole-check.status.json",
+  "retained_inputs": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/first-failed-inputs/archive-map.json",
+  "changes": [
+    {
+      "needle": "fn authorize_fork_return(",
+      "count": 1
+    },
+    {
+      "needle": "->(usize,bool,bool,ForkPhase,u64)",
+      "count": 1
+    },
+    {
+      "needle": "parent_count(remote:&Remote,n:usize)",
+      "count": 1
+    },
+    {
+      "needle": "parent_count(&j.remote,usize::MAX)",
+      "count": 1
+    },
+    {
+      "needle": "f.link.as_ref().unwrap().last_sequence)",
+      "count": 1
+    },
+    {
+      "needle": "(p.fork_prepared_parent_refs,f.control.is_some(),false,",
+      "count": 1
+    },
+    {
+      "needle": "struct Arc<T>{inner:std::sync::Arc<T>}",
+      "count": 1
+    },
+    {
+      "needle": "assert_eq!(state.0,2);assert!(state.1);\n  crate::smp_application::check_control_owned",
+      "count": 1
+    }
+  ],
+  "new_source_dependency": {
+    "name": "authorize_fork_ack_return",
+    "sha256": "11d0eba2f082a243ae1c07d210000f9126c0e510a16fb11c1649949ab061c2f4"
+  }
+}

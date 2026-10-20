@@ -1,0 +1,12 @@
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_fork_link.rs:112:        let proof = p.syscalls.unique_delivered(|request| {
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_fork_link.rs:282:        let proof = p.syscalls.unique_delivered(|r| r == &self.second.request).map_err(errno)?.ok_or(EBUSY)?;
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_application_syscall.rs:47:pub(crate) struct ForkIngressResponse<M: ResponseMemory> {
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_application_syscall.rs:53:impl<M: ResponseMemory> ForkIngressResponse<M> {
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_application_syscall.rs:57:impl<M: ResponseMemory> Drop for ForkIngressResponse<M> {
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_application_syscall.rs:590:    pub(crate) fn take_fork_ingress_response(&mut self, handle: u64, serial: u64,
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_application_syscall.rs:591:        expected: &Request) -> Result<ForkIngressResponse<M>>
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_application_syscall.rs:601:        Ok(ForkIngressResponse { response: Some(response), request: expected.clone(), worker: handle, serial })
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_application_syscall.rs:606:    pub(crate) fn restore_fork_ingress_response(&mut self, ticket: &mut ForkIngressResponse<M>) -> Result {
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_application_syscall.rs:623:        self.has_private_fork_response(cpu, 1, matches)
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_application_syscall.rs:627:    pub(crate) fn has_private_fork_response(&self, cpu: i32, selector: u64,
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/host-kernel/native-rust/smp_application_syscall.rs:659:    pub(crate) fn unique_delivered(

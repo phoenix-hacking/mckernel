@@ -1,0 +1,124 @@
+--- expert-failed-fixture.rs
++++ isolated-scenario-fixture.rs
+@@ -1472,6 +1472,9 @@
+     /// Freeze-only observer for an authenticated carrier's second clone. It
+     /// includes queued and automatically cancelled responses before a link
+     /// ticket exists; matching grants no publication or lifecycle authority.
++    #[cfg(test)] pub(crate) fn fixture_response_identity_held(&self,physical:u64)->bool{
++        self.calls.iter().flatten().any(|call|call.delivery.request().response()==physical)
++    }
+ pub(crate) fn has_private_fork_response(&self, cpu: i32, selector: u64,
+         matches: impl Fn(&Request) -> bool) -> bool {
+         self.calls.iter().flatten().any(|call| {
+@@ -3110,6 +3113,9 @@
+ pub(crate) fn delivered_concurrent_link(remote:&Remote,parent:Token,memory:&Arc<crate::smp_memory::storage::Memory>,request:Request)->(u64,u64){
+  let mut slots=remote.slots.lock();let p=slots.iter_mut().flatten().find(|p|p.key()==parent).unwrap();
+  assert_eq!(p.syscalls.open_worker(201),Err(EBUSY));let w=p.syscalls.open_worker(202).unwrap();
++ assert!(p.syscalls.fixture_response_identity_held(0x1b00000));
++ assert!(p.syscalls.fixture_response_identity_held(0x1c00000));
++ assert_eq!(request.response(),0x1d00000);assert!(!p.syscalls.fixture_response_identity_held(request.response()));
+  p.syscalls.admit(request,|r|memory.syscall(r)).unwrap();let(s,_)=p.syscalls.reserve(w).unwrap().unwrap();p.syscalls.copied(w,s,true).unwrap();(w,s)
+ }
+ pub(crate) fn delivered(remote:&Remote,parent:Token,memory:&Arc<crate::smp_memory::storage::Memory>,request:Request)->(u64,u64){let mut slots=remote.slots.lock();let p=slots.iter_mut().flatten().find(|p|p.key()==parent).unwrap();let w=p.syscalls.open_worker(201).unwrap();p.syscalls.admit(request,|r|memory.syscall(r)).unwrap();let(s,_)=p.syscalls.reserve(w).unwrap().unwrap();p.syscalls.copied(w,s,true).unwrap();(w,s)}
+@@ -6437,9 +6443,10 @@
+  // Distinct authentic fixture Linux worker and matching Request requester.
+  bytes[52..56].copy_from_slice(&202i32.to_le_bytes());bytes[56..64].copy_from_slice(&1u64.to_le_bytes());
+  bytes[64..72].copy_from_slice(&56u64.to_le_bytes());for(n,a)in args.iter().enumerate(){bytes[72+n*8..80+n*8].copy_from_slice(&a.to_le_bytes());}
+- // first_return() proved zero response claims, then parkedcontrol owns ONLY
+- // 0x1c00000. Admit below must itself prove 0x1b00000 is available again.
+- bytes[120..128].copy_from_slice(&0x1b00000u64.to_le_bytes());crate::Request::decode(&bytes,1).unwrap()
++ // The immutable original fixture initializes a16MiB arena at0x1000000.
++ // Retained delivery identities1b/1c stay reserved regardless of Memoryclaims.
++ // Third response1d is disjoint, aligned, and inside the initialized arena.
++ bytes[120..128].copy_from_slice(&0x1d00000u64.to_le_bytes());crate::Request::decode(&bytes,1).unwrap()
+ }
+ 
+ fn control_request(change:Option<(usize,u64)>)->crate::Request {
+@@ -6457,9 +6464,9 @@
+  assert_eq!(crate::smp_memory::storage::claims(&j.memory),(1,1));let(lw,ls)=crate::smp_application::delivered_concurrent_link(&j.remote,j.parent,&j.memory,concurrent_link_request());assert!(unsafe{crate::provider_runtime::prepare_fork_link_application(p,lw,ls,0,0)}<0);assert_eq!(crate::smp_application::control_state(&j.remote),state);
+  j.retain();
+ }
+-#[test]fn actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer(){
+- // Independent real owner/claim instances; each failure retains unchanged real response.
+- for case in 0..4 {
++#[test]fn actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_geometry(){
++ let case=0;
++
+   let mut j=RetainedJoined::new();assert_eq!(j.adopt(),0);j.first_return();
+   let old=crate::provider_runtime::control_pending_state();let r=control_request(if case==0{Some((3,0x29000))}else{None});
+   if case==1{crate::provider_runtime::alter_control_pending(None,Some(old.3+1));}
+@@ -6467,10 +6474,47 @@
+   if case==3{crate::smp_application::parent_count(&j.remote,u32::MAX);}
+   let before=crate::smp_application::control_state(&j.remote);let pending=crate::provider_runtime::control_pending_state();
+   let(rc,_,_)=control(&mut j,r);assert!(rc<0,"case {case}");assert_eq!(crate::smp_application::control_state(&j.remote),before);assert_eq!(crate::provider_runtime::control_pending_state(),pending);j.retain();
+- }
+-}
+-#[test]fn actual_control_restore_conflict_retains_exact_claim_and_response_after_close(){
+- for replace_epoch in [false,true] {
++ 
++}
++#[test]fn actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_epoch(){
++ let case=1;
++
++  let mut j=RetainedJoined::new();assert_eq!(j.adopt(),0);j.first_return();
++  let old=crate::provider_runtime::control_pending_state();let r=control_request(if case==0{Some((3,0x29000))}else{None});
++  if case==1{crate::provider_runtime::alter_control_pending(None,Some(old.3+1));}
++  if case==2{crate::provider_runtime::alter_control_pending(Some(2),None);}
++  if case==3{crate::smp_application::parent_count(&j.remote,u32::MAX);}
++  let before=crate::smp_application::control_state(&j.remote);let pending=crate::provider_runtime::control_pending_state();
++  let(rc,_,_)=control(&mut j,r);assert!(rc<0,"case {case}");assert_eq!(crate::smp_application::control_state(&j.remote),before);assert_eq!(crate::provider_runtime::control_pending_state(),pending);j.retain();
++ 
++}
++#[test]fn actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_pending_phase(){
++ let case=2;
++
++  let mut j=RetainedJoined::new();assert_eq!(j.adopt(),0);j.first_return();
++  let old=crate::provider_runtime::control_pending_state();let r=control_request(if case==0{Some((3,0x29000))}else{None});
++  if case==1{crate::provider_runtime::alter_control_pending(None,Some(old.3+1));}
++  if case==2{crate::provider_runtime::alter_control_pending(Some(2),None);}
++  if case==3{crate::smp_application::parent_count(&j.remote,u32::MAX);}
++  let before=crate::smp_application::control_state(&j.remote);let pending=crate::provider_runtime::control_pending_state();
++  let(rc,_,_)=control(&mut j,r);assert!(rc<0,"case {case}");assert_eq!(crate::smp_application::control_state(&j.remote),before);assert_eq!(crate::provider_runtime::control_pending_state(),pending);j.retain();
++ 
++}
++#[test]fn actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer_overflow(){
++ let case=3;
++
++  let mut j=RetainedJoined::new();assert_eq!(j.adopt(),0);j.first_return();
++  let old=crate::provider_runtime::control_pending_state();let r=control_request(if case==0{Some((3,0x29000))}else{None});
++  if case==1{crate::provider_runtime::alter_control_pending(None,Some(old.3+1));}
++  if case==2{crate::provider_runtime::alter_control_pending(Some(2),None);}
++  if case==3{crate::smp_application::parent_count(&j.remote,u32::MAX);}
++  let before=crate::smp_application::control_state(&j.remote);let pending=crate::provider_runtime::control_pending_state();
++  let(rc,_,_)=control(&mut j,r);assert!(rc<0,"case {case}");assert_eq!(crate::smp_application::control_state(&j.remote),before);assert_eq!(crate::provider_runtime::control_pending_state(),pending);j.retain();
++ 
++}
++#[test]fn actual_control_restore_conflict_retains_exact_claim_and_response_after_close_phase(){
++ let replace_epoch=false;
++
+   let mut j=RetainedJoined::new();assert_eq!(j.adopt(),0);j.first_return();let r=control_request(None);
+   let(w,s)=crate::smp_application::delivered(&j.remote,j.parent,&j.memory,r.clone());
+   let old=crate::provider_runtime::control_pending_state();let counts=crate::provider_runtime::pending_owner_counts();let memory=crate::smp_memory::storage::claims(&j.memory);
+@@ -6480,7 +6524,21 @@
+   assert_eq!(crate::smp_memory::storage::claims(&j.memory),memory);let state=crate::smp_application::control_state(&j.remote);assert_eq!(state.0,2);assert!(state.1&&state.2);
+   crate::smp_application::check_control_owned(&j.remote,j.parent,j.child,w,s,&r);
+   crate::smp_application::close_worker_actual(&j.remote,j.parent,w);assert_eq!(crate::smp_memory::storage::claims(&j.memory),memory);let after=crate::smp_application::control_state(&j.remote);assert_eq!(after.0,2);assert!(after.1);j.retain();
+- }
++ 
++}
++#[test]fn actual_control_restore_conflict_retains_exact_claim_and_response_after_close_epoch(){
++ let replace_epoch=true;
++
++  let mut j=RetainedJoined::new();assert_eq!(j.adopt(),0);j.first_return();let r=control_request(None);
++  let(w,s)=crate::smp_application::delivered(&j.remote,j.parent,&j.memory,r.clone());
++  let old=crate::provider_runtime::control_pending_state();let counts=crate::provider_runtime::pending_owner_counts();let memory=crate::smp_memory::storage::claims(&j.memory);
++  assert_eq!(unsafe{crate::provider_runtime::park_with_restore_conflict(&j.remote,j.parent,w,s,replace_epoch)},-5);
++  let after=crate::provider_runtime::control_pending_state();assert_eq!(after.0,if replace_epoch{4}else{2});assert_eq!(after.3,old.3+u64::from(replace_epoch));assert_eq!((after.1,after.2),(old.1,old.2));
++  assert_eq!(crate::provider_runtime::pending_owner_counts(),(counts.0+1,counts.1+1,counts.2+1));
++  assert_eq!(crate::smp_memory::storage::claims(&j.memory),memory);let state=crate::smp_application::control_state(&j.remote);assert_eq!(state.0,2);assert!(state.1&&state.2);
++  crate::smp_application::check_control_owned(&j.remote,j.parent,j.child,w,s,&r);
++  crate::smp_application::close_worker_actual(&j.remote,j.parent,w);assert_eq!(crate::smp_memory::storage::claims(&j.memory),memory);let after=crate::smp_application::control_state(&j.remote);assert_eq!(after.0,2);assert!(after.1);j.retain();
++ 
+ }
+ #[test]fn actual_control_ordinary_first_return_passes_without_pin_or_payload_effect(){
+  let mut j=RetainedJoined::new();assert_eq!(j.adopt(),0);let before=crate::provider_runtime::control_pending_state();let state=crate::smp_application::control_state(&j.remote);

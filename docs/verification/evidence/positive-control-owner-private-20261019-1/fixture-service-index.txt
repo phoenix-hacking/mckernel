@@ -1,0 +1,98 @@
+mod smp_application { at 2436
+mod smp_application {use super::*;use crate::smp_memory::SyscallResponse;use crate::consumer_fixture::bindings;
+struct ForkChildOwner {
+    pid: NonNull<bindings::pid>,
+    mm: NonNull<bindings::mm_struct>,
+    number: i32,
+}
+// SAFETY: Only immutable identity and the Linux owned PID/MM references move.
+unsafe impl Send for ForkChildOwner {}
+// SAFETY: No MM mapping access follows from these shared structural identities.
+unsafe impl Sync for ForkChildOwner {}
+impl ForkChildOwner {
+    fn current() -> Result<Self> {
+        // SAFETY: Linux acquires both references from the live current task.
+        let pid = NonNull::new(unsafe {
+            bindings::get_task_pid(bindings::get_current(), bindings::pid_type_PIDTYPE_TGID)
+        }).ok_or(ESRCH)?;
+        let Some(mm) = NonNull::new(unsafe { bindings::get_task_mm(bindings::get_current()) }) else {
+            unsafe { bindings::put_pid(pid.as_ptr()) };
+            return Err(ESRCH);
+        };
+        let number = unsafe { bindings::pid_nr_ns(pid.as_ptr(), ptr::addr_of_mut!(bindings::init_pid_ns)) };
+        let count = unsafe { AtomicI32::from_ptr(ptr::addr_of_mut!(
+            (*mm.as_ptr()).__bindgen_anon_1.__bindgen_anon_1.mm_count.counter
+        )) };
+        let grabbed = if number > 0 {
+            count.fetch_update(Ordering::Relaxed, Ordering::Relaxed,
+                |value| (value > 0).then(|| value.checked_add(1)).flatten()).map_err(|_| errno(-75))
+        } else { Err(ESRCH) };
+        // SAFETY: End transient mm_users even on failure; only mm_count may
+        // survive publication, matching the established mirror lifetime rule.
+        unsafe { bindings::mmput(mm.as_ptr()) };
+        if let Err(error) = grabbed {
+            unsafe { bindings::put_pid(pid.as_ptr()) };
+            return Err(error);
+    
+
+struct ForkPayloadScopeV1 { at 3341
+struct ForkPayloadScopeV1 {
+    pub(crate) version: u32,
+    pub(crate) bytes: u32,
+    pub(crate) slot: u32,
+    pub(crate) reserved0: u32,
+    pub(crate) generation: u64,
+    pub(crate) epoch: u64,
+    pub(crate) context: *mut c_void,
+    pub(crate) attach: Option<ForkPayloadAttachV1>,
+}
+pub(crate) type ForkAdoptScopedV1 = unsafe extern "C" fn(
+    *mut c_void, *mut c_void, *const ForkGeometryV1, *mut ForkPayloadScopeV1,
+    Option<ForkAdoptConsumerV1>, *mut c_void,
+) -> i32;
+// END PRIVATE FORK PAYLOAD CAPSULE ABI V1
+}
+struct BridgeRuntime{application:Arc<Remote>}
+mod memory{pub(crate) mod service{use crate::*;pub(crate) use crate::smp_memory::storage as memory;struct Started{runtime:Arc<BridgeRuntime>}
+pub(in super::super) struct Application {
+    started: Started,
+    token: application_rpc::Token,
+}
+
+table.entries[index] = Some(ForkPendingEntry { at 4041
+table.entries[index] = Some(ForkPendingEntry {
+            owner: owner.clone(), identity: None, epoch, phase: 0,
+            host_revoked: false, guest_released: false, attempted: false, receipt_index: None, capsule: None, payload: None, child_context,
+        });
+        drop(table);
+        Ok(Self { object: ptr::from_ref(object), index, epoch, owner, active: true })
+    }
+    fn bind_identity(&self, identity: super::application_abi::ForkIdentityV1) -> Result {
+        // SAFETY: Our owner lease pins the object/table until this Arc drops.
+        let object = unsafe { &*self.object };
+        let mut table = object.forks.lock();
+        let entry = table.entries[self.index].as_mut().ok_or(EIO)?;
+        if entry.epoch != self.epoch || !Arc::ptr_eq(&entry.owner, &self.owner)
+            || entry.phase != 0 || entry.identity.is_some()
+        { return Err(EIO); }
+        entry.identity = Some(identity);
+        Ok(())
+    }
+    fn retain(mut self, quarantined: bool) {
+        let object = unsafe { &*self.object };
+        let mut table = object.forks.lock();
+        if let Some(entry) = table.entries[self.index].as_mut() {
+            if entry.epoch == self.epoch && Arc::ptr_eq(&entry.owner, &self.owner) {
+                if self.active && entry.phase == 0 {
+                    entry.phase = if quarantined { FORK_PROVIDER_QUARANTINED } else { FORK_PROVIDER_PENDING };
+                } else if !self.active && quarantined && entry.phase == FORK_PROVIDER_PENDING {
+                    // Scoped ready may publish before backend return. Never
+                    // overwrite a concurrent BUSY/advanced completion claim.
+                    entry.phase = FORK_PROVIDER_QUARANTINED;
+                }
+            }
+        }
+        self.active = false;
+    }
+}
+impl Drop for Fork

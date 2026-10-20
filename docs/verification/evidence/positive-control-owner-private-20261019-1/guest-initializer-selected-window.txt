@@ -1,0 +1,163 @@
+/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest/sources/guest-fixture.c:94
+};
+static int list_empty(struct list_head *head) { return head->next == head && head->prev == head; }
+@PRIVATE@
+@CLAIM@
+@ACCEPT@
+
+static struct syscall_request guest_request;
+static struct process guest_parent, guest_child_process;
+static struct process_vm guest_child_vm;
+static struct thread guest_parent_thread, guest_child_thread;
+static struct process_fork_guest_carrier_handle guest_handle;
+static struct process_fork_inband_owner *guest_owner;
+static int initialized, request_stage;
+static void empty_list(struct list_head *head) { head->next = head; head->prev = head; }
+
+int fork_carrier_guest_initialize(void)
+{
+    if (initialized) return -EALREADY;
+    void *allocation = NULL;
+    if (posix_memalign(&allocation, 4096, GUEST_ARENA_BYTES)) return -ENOMEM;
+    guest_arena = allocation;
+    memset(guest_arena, 0, GUEST_ARENA_BYTES);
+    initialized = 1; /* Even failure retains the sole arena; no unsafe retry. */
+    guest_parent.pid = 101;
+    guest_parent_thread.proc = &guest_parent;
+    guest_child_process.vm = &guest_child_vm;
+    guest_child_process.main_thread = &guest_child_thread;
+    guest_child_process.parent = &guest_parent;
+    guest_child_process.refs = 2; guest_child_process.pid = -1;
+    guest_child_vm.proc = &guest_child_process; guest_child_vm.refs = 1;
+    guest_child_thread.proc = &guest_child_process;
+    guest_child_thread.vm = &guest_child_vm; guest_child_thread.refs = 2;
+    empty_list(&guest_child_thread.hash_list); empty_list(&guest_child_thread.siblings_list);
+    empty_list(&guest_child_process.hash_list); empty_list(&guest_child_process.siblings_list);
+    empty_list(&guest_child_process.threads_list);
+    guest_request = (struct syscall_request) {
+        .rtid = 101, .ttid = 0, .valid = 1, .number = 56,
+        .args = { 0, 0, 0x8000, 0x19000, 0, 0 },
+    };
+    int rc = process_fork_guest_carrier_create_first_link(&guest_request, &guest_handle);
+    if (rc) return rc;
+    rc = process_fork_guest_carrier_begin(guest_handle, &guest_owner);
+    if (rc) return rc;
+    rc = do_fork_inband_claim(guest_owner, &guest_parent_thread, &guest_child_thread,
+        0, 0, &guest_request);
+    if (!rc) {
+        assert(guest_owner->credits == 0xf && guest_child_thread.refs == 2
+            && guest_child_process.refs == 2 && guest_child_vm.refs == 1);
+        request_stage = 1;
+    }
+    return rc;
+}
+unsigned char *fork_carrier_guest_arena(void) { return guest_arena; }
+size_t fork_carrier_guest_arena_bytes(void) { return GUEST_ARENA_BYTES; }
+unsigned long fork_carrier_guest_physical_base(void) { return GUEST_PHYSICAL_BASE; }
+const struct syscall_request *fork_carrier_guest_request(void) { return &guest_request; }
+unsigned long fork_carrier_guest_response_physical(int stage)
+{
+    return stage == 1 ? GUEST_PHYSICAL_BASE + FIRST_RESPONSE_OFFSET
+        : stage == 2 ? GUEST_PHYSICAL_BASE + SECOND_RESPONSE_OFFSET : 0;
+}
+int fork_carrier_guest_accept(int stage, long result)
+{
+    if (!guest_owner || stage != request_stage || (stage != 1 && stage != 2)) return -EINVAL;
+    size_t offset = stage == 1 ? FIRST_RESPONSE_OFFSET : SECOND_RESPONSE_OFFSET;
+    struct syscall_response *response = (void *)(guest_arena + offset);
+    /* Adapter for the real do_syscall completion observation. The host's
+     * actual Completion::publish Release must precede every backing read. */
+    if (__atomic_load_n(&response->status, __ATOMIC_ACQUIRE) != 1) return -EAGAIN;
+    if (response->ret != result) return -EACCES;
+    int rc = do_fork_inband_accept(guest_owner, stage, result);
+    assert(guest_owner->credits == 0xf && guest_child_thread.refs == 2
+        && guest_child_process.refs == 2 && guest_child_vm.refs == 1);
+    return rc;
+}
+int fork_carrier_guest_second_request(void)
+{
+    if (!guest_owner || request_stage != 1 || !guest_owner->bound
+        || __atomic_load_n(&guest_owner->record->phase, __ATOMIC_ACQUIRE) != 2)
+        return -EBUSY;
+
+/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest/actual_guest.c:472
+    } else if (!owner->bound || memcmp(&key, &owner->record->identity, sizeof(key))) {
+        return -EACCES;
+    }
+    return result > 0 && stage == 2 ? -EINVAL : result < 0 ? (int)result : 0;
+}
+
+static struct syscall_request guest_request;
+static struct process guest_parent, guest_child_process;
+static struct process_vm guest_child_vm;
+static struct thread guest_parent_thread, guest_child_thread;
+static struct process_fork_guest_carrier_handle guest_handle;
+static struct process_fork_inband_owner *guest_owner;
+static int initialized, request_stage;
+static void empty_list(struct list_head *head) { head->next = head; head->prev = head; }
+
+int fork_carrier_guest_initialize(void)
+{
+    if (initialized) return -EALREADY;
+    void *allocation = NULL;
+    if (posix_memalign(&allocation, 4096, GUEST_ARENA_BYTES)) return -ENOMEM;
+    guest_arena = allocation;
+    memset(guest_arena, 0, GUEST_ARENA_BYTES);
+    initialized = 1; /* Even failure retains the sole arena; no unsafe retry. */
+    guest_parent.pid = 101;
+    guest_parent_thread.proc = &guest_parent;
+    guest_child_process.vm = &guest_child_vm;
+    guest_child_process.main_thread = &guest_child_thread;
+    guest_child_process.parent = &guest_parent;
+    guest_child_process.refs = 2; guest_child_process.pid = -1;
+    guest_child_vm.proc = &guest_child_process; guest_child_vm.refs = 1;
+    guest_child_thread.proc = &guest_child_process;
+    guest_child_thread.vm = &guest_child_vm; guest_child_thread.refs = 2;
+    empty_list(&guest_child_thread.hash_list); empty_list(&guest_child_thread.siblings_list);
+    empty_list(&guest_child_process.hash_list); empty_list(&guest_child_process.siblings_list);
+    empty_list(&guest_child_process.threads_list);
+    guest_request = (struct syscall_request) {
+        .rtid = 101, .ttid = 0, .valid = 1, .number = 56,
+        .args = { 0, 0, 0x8000, 0x19000, 0, 0 },
+    };
+    int rc = process_fork_guest_carrier_create_first_link(&guest_request, &guest_handle);
+    if (rc) return rc;
+    rc = process_fork_guest_carrier_begin(guest_handle, &guest_owner);
+    if (rc) return rc;
+    rc = do_fork_inband_claim(guest_owner, &guest_parent_thread, &guest_child_thread,
+        0, 0, &guest_request);
+    if (!rc) {
+        assert(guest_owner->credits == 0xf && guest_child_thread.refs == 2
+            && guest_child_process.refs == 2 && guest_child_vm.refs == 1);
+        request_stage = 1;
+    }
+    return rc;
+}
+unsigned char *fork_carrier_guest_arena(void) { return guest_arena; }
+size_t fork_carrier_guest_arena_bytes(void) { return GUEST_ARENA_BYTES; }
+unsigned long fork_carrier_guest_physical_base(void) { return GUEST_PHYSICAL_BASE; }
+const struct syscall_request *fork_carrier_guest_request(void) { return &guest_request; }
+unsigned long fork_carrier_guest_response_physical(int stage)
+{
+    return stage == 1 ? GUEST_PHYSICAL_BASE + FIRST_RESPONSE_OFFSET
+        : stage == 2 ? GUEST_PHYSICAL_BASE + SECOND_RESPONSE_OFFSET : 0;
+}
+int fork_carrier_guest_accept(int stage, long result)
+{
+    if (!guest_owner || stage != request_stage || (stage != 1 && stage != 2)) return -EINVAL;
+    size_t offset = stage == 1 ? FIRST_RESPONSE_OFFSET : SECOND_RESPONSE_OFFSET;
+    struct syscall_response *response = (void *)(guest_arena + offset);
+    /* Adapter for the real do_syscall completion observation. The host's
+     * actual Completion::publish Release must precede every backing read. */
+    if (__atomic_load_n(&response->status, __ATOMIC_ACQUIRE) != 1) return -EAGAIN;
+    if (response->ret != result) return -EACCES;
+    int rc = do_fork_inband_accept(guest_owner, stage, result);
+    assert(guest_owner->credits == 0xf && guest_child_thread.refs == 2
+        && guest_child_process.refs == 2 && guest_child_vm.refs == 1);
+    return rc;
+}
+int fork_carrier_guest_second_request(void)
+{
+    if (!guest_owner || request_stage != 1 || !guest_owner->bound
+        || __atomic_load_n(&guest_owner->record->phase, __ATOMIC_ACQUIRE) != 2)
+        return -EBUSY;

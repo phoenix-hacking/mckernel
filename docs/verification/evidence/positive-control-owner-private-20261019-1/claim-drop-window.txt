@@ -1,0 +1,12 @@
+impl Drop for ForkProviderClaim {
+    fn drop(&mut self) {
+        if !self.active { return; }
+        let object = unsafe { &*self.object };
+        let mut table = object.forks.lock();
+        if let Some(entry) = table.entries[self.index].as_mut() {
+            if entry.epoch == self.epoch && entry.identity == Some(self.identity)
+                && Arc::ptr_eq(&entry.owner, &self.owner) && entry.phase == FORK_PROVIDER_BUSY
+            { entry.phase = FORK_PROVIDER_QUARANTINED; }
+        }
+    }
+}

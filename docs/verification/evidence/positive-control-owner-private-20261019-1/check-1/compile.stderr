@@ -1,0 +1,80 @@
+error[E0425]: cannot find function `authorize_fork_ack_return` in this scope
+    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-control-park.rs:2934:5
+     |
+2934 |     authorize_fork_ack_return(slots, parent, worker, serial, cpu, value)?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0308]: mismatched types
+    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-control-park.rs:3136:3
+     |
+3136 |  (p.fork_prepared_parent_refs,f.control.is_some(),false,f.reservation.state.phase(),f.link.as_ref().unwrap().last_sequence)
+     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `usize`, found `u32`
+     |
+help: you can convert a `u32` to a `usize` and panic if the converted value doesn't fit
+     |
+3136 |  (p.fork_prepared_parent_refs.try_into().unwrap(),f.control.is_some(),false,f.reservation.state.phase(),f.link.as_ref().unwrap().last_sequence)
+     |                              ++++++++++++++++++++
+
+error[E0616]: field `last_sequence` of struct `ForkLinkRecord` is private
+    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-control-park.rs:3136:110
+     |
+3136 |  (p.fork_prepared_parent_refs,f.control.is_some(),false,f.reservation.state.phase(),f.link.as_ref().unwrap().last_sequence)
+     |                                                                                                              ^^^^^^^^^^^^^ private field
+
+error[E0308]: mismatched types
+    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-control-park.rs:3138:119
+     |
+3138 | pub(crate) fn parent_count(remote:&Remote,n:usize){remote.slots.lock()[0].as_mut().unwrap().fork_prepared_parent_refs=n;}
+     |                                                    ------------------------------------------------------------------ ^ expected `u32`, found `usize`
+     |                                                    |
+     |                                                    expected due to the type of this binding
+
+error[E0599]: no function or associated item named `strong_count` found for struct `Arc<_>` in the current scope
+    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-control-park.rs:5333:201
+     |
+1946 | struct Arc<T>{inner:std::sync::Arc<T>}
+     | ------------- function or associated item `strong_count` not found for this struct
+...
+5333 | pub(crate) fn pending_owner_counts()->(usize,usize,usize){let raw=OS_OBJECTS[0].load(Ordering::Acquire);let table=unsafe{&*raw}.forks.lock();let e=table.entries.iter().flatten().next().unwrap();(Arc::strong_count(&e...
+     |                                                                                                                                                                                                         ^^^^^^^^^^^^ function or associated item not found in `Arc<_>`
+     |
+note: if you're trying to build a new `Arc<_>`, consider using `Arc::<T>::new` which returns `std::result::Result<Arc<_>, AllocError>`
+    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-control-park.rs:1948:5
+     |
+1948 |     fn new(value:T,_:u32)->std::result::Result<Self,AllocError>{if ARC_FAIL_NEXT.swap(false,Ordering::SeqCst){drop(value);return Err(Allo...
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no function or associated item named `strong_count` found for struct `Arc<_>` in the current scope
+    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-control-park.rs:5333:229
+     |
+1946 | struct Arc<T>{inner:std::sync::Arc<T>}
+     | ------------- function or associated item `strong_count` not found for this struct
+...
+5333 | pub(crate) fn pending_owner_counts()->(usize,usize,usize){let raw=OS_OBJECTS[0].load(Ordering::Acquire);let table=unsafe{&*raw}.forks.lock();let e=table.entries.iter().flatten().next().unwrap();(Arc::strong_count(&e.owner),Arc::strong_count(e....
+     |                                                                                                                                                                                                                                     ^^^^^^^^^^^^ function or associated item not found in `Arc<_>`
+     |
+note: if you're trying to build a new `Arc<_>`, consider using `Arc::<T>::new` which returns `std::result::Result<Arc<_>, AllocError>`
+    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-control-park.rs:1948:5
+     |
+1948 |     fn new(value:T,_:u32)->std::result::Result<Self,AllocError>{if ARC_FAIL_NEXT.swap(false,Ordering::SeqCst){drop(value);return Err(Allo...
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no function or associated item named `strong_count` found for struct `Arc<_>` in the current scope
+    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-control-park.rs:5333:276
+     |
+1946 | struct Arc<T>{inner:std::sync::Arc<T>}
+     | ------------- function or associated item `strong_count` not found for this struct
+...
+5333 | pub(crate) fn pending_owner_counts()->(usize,usize,usize){let raw=OS_OBJECTS[0].load(Ordering::Acquire);let table=unsafe{&*raw}.forks.lock();let e=table.entries.iter().flatten().next().unwrap();(Arc::strong_count(&e.owner),Arc::strong_count(e.capsule.as_ref().unwrap()),Arc::strong_count(e....
+     |                                                                                                                                                                                                                                                                                    ^^^^^^^^^^^^ function or associated item not found in `Arc<_>`
+     |
+note: if you're trying to build a new `Arc<_>`, consider using `Arc::<T>::new` which returns `std::result::Result<Arc<_>, AllocError>`
+    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/actual-control-park.rs:1948:5
+     |
+1948 |     fn new(value:T,_:u32)->std::result::Result<Self,AllocError>{if ARC_FAIL_NEXT.swap(false,Ordering::SeqCst){drop(value);return Err(Allo...
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: aborting due to 7 previous errors
+
+Some errors have detailed explanations: E0308, E0425, E0599, E0616.
+For more information about an error, try `rustc --explain E0308`.

@@ -1,0 +1,69 @@
+        self.quarantine_transport(&mut slots, errno(recorded));
+        drop(slots);
+        self.changed.notify_all();
+        first.is_ok()
+    }
+
+    fn finish_publication(
+        &self,
+        slots: &mut [Option<Entry>],
+        published: Result<bool>,
+        notify: impl FnOnce() -> Result,
+    ) -> Result<bool> {
+        match published {
+            Ok(true) => match notify() {
+                Ok(()) => Ok(true),
+                Err(error) => {
+                    pr_err!("IHK-SMP: application transport failure os={} generation={} phase=postpublication_notify errno={}\n",
+                        self.owner.slot(), self.owner.generation(), error.to_errno());
+                    self.quarantine_transport(slots, error);
+                    Err(error)
+                }
+            },
+            Ok(false) => Ok(false),
+            Err(error) if error == EBUSY || error == EAGAIN => Ok(false),
+            Err(error) => {
+                pr_err!("IHK-SMP: application transport failure os={} generation={} phase=prepublication errno={}\n",
+                    self.owner.slot(), self.owner.generation(), error.to_errno());
+                self.quarantine_transport(slots, error);
+                Err(error)
+            }
+        }
+    }
+
+    pub(crate) fn notify_syscalls(&self) {
+        self.changed.notify_all();
+    }
+
+    pub(crate) fn worker(&self, token: Token, bytes: &mut [u8], open: bool) -> Result {
+        if bytes.len() != 16 {
+            return Err(EINVAL);
+        }
+        let mut slots = self.slots.lock();
+        let entry = slots
+            .iter_mut()
+            .flatten()
+            .find(|entry| entry.key() == token)
+            .ok_or(ENOENT)?;
+        if open {
+            if entry.closed || entry.needs_cleanup || entry.quarantined || entry.fork_ingress.is_some() {
+                return Err(EBUSY);
+            }
+            if let Some(prepare) = entry.prepare.as_ref() {
+                kernel::error::to_result(prepare.result().ok_or(EBUSY)?)?;
+            } else if !entry.scheduled || !entry.fork.as_ref().is_some_and(|fork|
+                fork.reservation.state.phase() == ForkPhase::Linked)
+            { return Err(EINVAL); }
+            let tid = i64::from_le_bytes(bytes[..8].try_into().unwrap());
+            let tid = i32::try_from(tid).map_err(|_| EINVAL)?;
+            let worker = entry.syscalls.open_worker(tid).map_err(errno)?;
+            bytes[8..16].copy_from_slice(&worker.to_le_bytes());
+            Ok(())
+        } else {
+            let worker = u64::from_le_bytes(bytes[..8].try_into().unwrap());
+            let result = entry.syscalls.close_worker(worker);
+            entry.quarantined |= entry.syscalls.quarantined();
+            if result.is_ok() || result == Err(-16) {
+                abort_parent_forks(&mut slots, token, Some(worker));
+            }
+            result.map_err(errno)

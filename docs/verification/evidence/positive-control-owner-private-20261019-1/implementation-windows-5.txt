@@ -1,0 +1,124 @@
+smp_application_syscall.rs:55
+impl<M: ResponseMemory> ForkIngressResponse<M> {
+    pub(crate) fn request(&self) -> &Request { &self.request }
+    pub(crate) fn response(&mut self) -> Result<&mut Response<M>> { self.response.as_mut().ok_or(-71) }
+}
+impl<M: ResponseMemory> Drop for ForkIngressResponse<M> {
+    fn drop(&mut self) {
+        // An exceptional lost ticket cannot unmap the original response while
+        // the call still names it. The real scoped provider must retain its
+        // independent IHK owner and publication freeze on this uncertainty.
+        if let Some(response) = self.response.take() { core::mem::forget(response); }
+    }
+}
+
+impl<M: ResponseMemory> Mailbox<M> {
+    pub(crate) fn new() -> Result<Self> {
+        // The pinned kernel maps its payload-free AllocError to ENOMEM.
+        let mut calls = Vec::with_capacity(CAPACITY, GFP_KERNEL).map_err(|_| -12)?;
+        let mut workers = Vec::with_capacity(CAPACITY, GFP_KERNEL).map_err(|_| -12)?;
+        for _ in 0..CAPACITY {
+            calls.push(None, GFP_KERNEL).map_err(|_| -12)?;
+
+smp_application_syscall.rs:554
+        Ok(call)
+    }
+    pub(crate) fn check_fork_abort(&mut self, handle: u64, serial: u64,
+        expected: &Request, expected_value: Option<i64>) -> Result
+    {
+        let call = self.fork_abort_call(handle, serial, expected)?;
+        if let Some(completion) = &mut call.completion {
+            let old = expected_value.unwrap_or(-512);
+            if expected_value.is_none() && !call.cancelled { return Err(-71); }
+            completion.reconcile_fork_unpublished(expected, old, None)
+        } else {
+            if expected_value.is_some() { return Err(-71); }
+            call.response.as_mut().ok_or(-16)?.check_fork_unpublished(expected)
+        }
+    }
+    pub(crate) fn reconcile_fork_abort(&mut self, handle: u64, serial: u64,
+        expected: &Request, expected_value: Option<i64>) -> Result
+    {
+        self.check_fork_abort(handle, serial, expected, expected_value)?;
+        let call = self.fork_abort_call(handle, serial, expected)?;
+
+smp_fork_ingress.rs:260
+            });
+            slots[pi].as_mut().unwrap().fork_prepared_parent_refs = refs;
+            match slots[pi].as_mut().unwrap().syscalls.take_fork_ingress_response(worker, serial, &request).map_err(errno) {
+                Ok(ticket) => Ok((token, ticket)),
+                Err(error) => {
+                    slots[pi].as_mut().unwrap().fork_prepared_parent_refs -= 1;
+                    let removed = slots[ci].as_mut().unwrap().fork_ingress.take();
+                    drop(slots); drop(removed);
+                    Err(error)
+                }
+            }
+        })();
+        let (token, mut ticket) = match initial {
+            Ok(value) => value,
+            Err(error) => {
+                // No MM/Q read/borrow exists and no marker remains. Actual IHK
+                // validates its own scope before declaring pre-effect rollback.
+                let _ = unsafe { ihk_os_application_abort_fork_payload_v1(scope_pointer) };
+                return Err(error);
+            }
+
+smp_application.rs:94
+// Preallocated before MM adoption. The actual initializing IHK scope supplies
+// epoch; neither wire bytes nor a later caller may reconstruct this owner.
+struct ForkAckRecord {
+    epoch: u64,
+    delivery: Option<ForkAckDelivery>,
+    busy: bool,
+    verified: bool,
+    accepted: bool,
+    published: bool,
+    publication_busy: bool,
+}
+impl ForkAckRecord {
+    fn new(epoch: u64) -> Self {
+        Self { epoch, delivery: None, busy: false, verified: false,
+            accepted: false, published: false, publication_busy: false }
+    }
+}
+#[derive(Clone)]
+struct ForkAckDelivery {
+    worker: u64,
+
+os_runtime.rs:3594
+pub(crate) static APPLICATION_PREPARE_FORK_ACK_V1_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0", namespace: *b"MCKERNEL_IHK_V1\0", padding: [0; 4],
+    symbol: prepare_fork_ack_application as *const () as *const u8,
+};
+
+// SAFETY: Module-resident additive private finalization callback relocation.
+#[export_name = "__export_symbol_ihk_os_application_publish_fork_ack_v1"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub(crate) static APPLICATION_PUBLISH_FORK_ACK_V1_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0", namespace: *b"MCKERNEL_IHK_V1\0", padding: [0; 4],
+    symbol: publish_fork_ack_application as *const () as *const u8,
+};
+
+os_runtime.rs:3563
+    namespace: *b"MCKERNEL_IHK_V1\0",
+    padding: [0; 4],
+    symbol: ihk_os_create_unbooted_v10 as *const () as *const u8,
+};
+
+// SAFETY: Linux modpost reads this immutable relocation for the module lifetime.
+#[export_name = "__export_symbol_ihk_os_destroy_unbooted_v1"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]
+pub(crate) static IHK_OS_DESTROY_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0",
+    namespace: *b"MCKERNEL_IHK_V1\0",
+    padding: [0; 4],
+    symbol: ihk_os_destroy_unbooted_v1 as *const () as *const u8,
+};
+
+// SAFETY: Immutable data-only modpost relocation for this module's lifetime.
+#[export_name = "__export_symbol_ihk_os_with_kobject_v1"]
+#[link_section = ".export_symbol"]
+#[used(compiler)]

@@ -1,0 +1,26 @@
+{
+  "production_source_unchanged": true,
+  "same_failure_family": true,
+  "reviewed_tests": [
+    "actual_control_fresh_response_parked_once_and_blocks_link_return_removal",
+    "actual_control_wrong_identity_epoch_phase_and_overflow_have_no_transfer",
+    "actual_control_restore_conflict_retains_exact_claim_and_response_after_close",
+    "actual_control_ordinary_first_return_passes_without_pin_or_payload_effect"
+  ],
+  "concurrent_link": {
+    "held_control_worker": 201,
+    "held_control_response": "0x1c00000",
+    "link_worker": 202,
+    "link_wire_requester": 202,
+    "link_response": "0x1b00000",
+    "requires_actual_claims_before_admit": [
+      1,
+      1
+    ],
+    "uses_actual_mailbox_admit_reserve_copied": true,
+    "assert_duplicate201_refused": true
+  },
+  "other_tests": "Each iteration owns freshJoined/realREADY; no additional concurrentdelivery; original_request and delivered helpers unchanged",
+  "unwind_guard": "Test-only unconditional ownership retention, no catch/suppress/acceptance or productionDrop change",
+  "prior_archive": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/positive-control-owner-1/second-failed-inputs/archive-map.json"
+}

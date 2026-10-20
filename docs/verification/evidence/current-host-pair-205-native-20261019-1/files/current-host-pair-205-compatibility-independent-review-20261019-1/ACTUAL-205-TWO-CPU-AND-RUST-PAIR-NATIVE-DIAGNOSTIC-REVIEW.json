@@ -1,0 +1,708 @@
+{
+  "FPthread_254_payload_oracle_diagnostic_acceptance": true,
+  "IKC_control_channels": [
+    {
+      "bytes": 16384,
+      "cookie": 1,
+      "logical_CPU": 0,
+      "physical_host_CPU": 1,
+      "receive": 77070336,
+      "reference": 2,
+      "remote_cookie": 18446612686398753664,
+      "send": 4328751104
+    },
+    {
+      "bytes": 16384,
+      "cookie": 3,
+      "logical_CPU": 1,
+      "physical_host_CPU": 2,
+      "receive": 77103104,
+      "reference": 4,
+      "remote_cookie": 18446612686398836768,
+      "send": 4328808448
+    }
+  ],
+  "IKC_four_queue_ranges_disjoint": true,
+  "McKernel_CPUs": 2,
+  "QEMU_direct_reaped": true,
+  "QEMU_returncode_after_shutdown": -9,
+  "QMP_shutdown_event": {
+    "data": {
+      "guest": true,
+      "reason": "guest-shutdown"
+    },
+    "event": "SHUTDOWN",
+    "timestamp": {
+      "microseconds": 759562,
+      "seconds": 1792454191
+    }
+  },
+  "QMP_shutdown_observed": true,
+  "accepted_diagnostic_behavior": true,
+  "actual_application_invocations": 2,
+  "actual_attempt_archive": {
+    "bytes": 491520,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/06-readback-3/stdout",
+    "sha256": "650ffb8b0ab487574acc95851a275fa5ed69901c9bb2b9914dd7aa6a8c94063f"
+  },
+  "actual_final_guard": {
+    "bytes": 6097,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/fresh2/FINAL-205-MATCHED-SDK-NATIVE-MACHINE-REVIEW.json",
+    "sha256": "301f3bf7333697bfe451333a45265cc76bd034d07ad42a7c95366a0d99102c6f"
+  },
+  "actual_guest_runs": 1,
+  "actual_machine_release": {
+    "bytes": 2203,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/execution-release.json",
+    "sha256": "f62d48ae7679a5e12d175c57cca82339492877ab4b11e1d7cc29e80875c2c587"
+  },
+  "actual_ordinary_consumer_review": {
+    "bytes": 11884,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/ACTUAL-NATIVE-CONSUMER-PARENT-AND-NONTEMPORAL-REVIEW.json",
+    "sha256": "bfd81bc4a638bccc21bc02ed5fffac6c8844ca00e340465193b72cd26dcb53a7"
+  },
+  "actual_overlap_ns": 1620779456,
+  "actual_owner_archive": {
+    "bytes": 706560,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/04-readback-1/stdout",
+    "sha256": "cbd2b2ae0235673f14c0abccc6995d500f86b91ac5d6efb483c08c1e4f327875"
+  },
+  "actual_result_json": {
+    "bytes": 121540,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/05-readback-2/stdout",
+    "sha256": "58a4946ebe471b650d62be2e4bb59e047ba316cba8e9070eb4c7273722737fb8"
+  },
+  "actual_stage_review": {
+    "bytes": 10220,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/ACTUAL-THREE-STAGE-AND-STRICT-205-IDENTITY-REVIEW.json",
+    "sha256": "e4c5475a11db6535c0456ce93f0f763c57284706d5394e1df6402cfd6bdb2a03"
+  },
+  "all_initial_and_later_syscall_samples_on_assigned_CPU": true,
+  "all_retirement_attempt_tokens_global_unique": true,
+  "application_acceptance": false,
+  "apps": [
+    {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "-c",
+        "0",
+        "0",
+        "/apps/app0"
+      ],
+      "clean": true,
+      "cpu": 0,
+      "cwd": "/case/two-app/work0",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PAIR_CPU": "0",
+        "PATH": "/usr/bin:/bin"
+      },
+      "exit_status": 0,
+      "fault": false,
+      "finished_ns": 35114302474,
+      "id": 0,
+      "leader_procfs_delete_line": 1235,
+      "leader_procfs_publish_line": 930,
+      "pid": 257,
+      "reaped_ns": 35114193242,
+      "release_line": 1237,
+      "retirement_attempts": [
+        {
+          "errno": -11,
+          "line": 1234,
+          "token": 178
+        },
+        {
+          "errno": 0,
+          "line": 1236,
+          "token": 179
+        }
+      ],
+      "started_ns": 32494963145,
+      "streams": {
+        "stderr": {
+          "bytes": 0,
+          "discarded": 0,
+          "eof": true,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "truncated": false
+        },
+        "stdout": {
+          "bytes": 387,
+          "discarded": 0,
+          "eof": true,
+          "sha256": "e5aab46f5a720bacdbb2fb3cb83d682b02df7261336e79663c79fa78022b9bc4",
+          "truncated": false
+        }
+      },
+      "syscalls": {
+        "all_delivered_and_returned_on_assigned_CPU": true,
+        "all_routes_correspond_and_ordered": true,
+        "delivered": 65,
+        "exit_delivery_line": 1231,
+        "initial_worker_prctl": [],
+        "opposite_launcher_routes": 28,
+        "returned": 64,
+        "worker_route_assignments": {
+          "12": 0,
+          "13": 1
+        }
+      },
+      "timeout": false
+    },
+    {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "-c",
+        "1",
+        "0",
+        "/apps/app1"
+      ],
+      "clean": true,
+      "cpu": 1,
+      "cwd": "/case/two-app/work1",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PAIR_CPU": "1",
+        "PATH": "/usr/bin:/bin"
+      },
+      "exit_status": 0,
+      "fault": false,
+      "finished_ns": 34115896811,
+      "id": 1,
+      "leader_procfs_delete_line": 1189,
+      "leader_procfs_publish_line": 926,
+      "pid": 256,
+      "reaped_ns": 34115742601,
+      "release_line": 1230,
+      "retirement_attempts": [
+        {
+          "errno": -11,
+          "line": 1191,
+          "token": 129
+        },
+        {
+          "errno": 0,
+          "line": 1227,
+          "token": 174
+        }
+      ],
+      "started_ns": 32494446878,
+      "streams": {
+        "stderr": {
+          "bytes": 0,
+          "discarded": 0,
+          "eof": true,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "truncated": false
+        },
+        "stdout": {
+          "bytes": 254,
+          "discarded": 0,
+          "eof": true,
+          "sha256": "52095dafd5235a8c1073248bbda3964f8a7b749722306ceaabf321d2fdcd4816",
+          "truncated": false
+        }
+      },
+      "syscalls": {
+        "all_delivered_and_returned_on_assigned_CPU": true,
+        "all_routes_correspond_and_ordered": true,
+        "delivered": 21,
+        "exit_delivery_line": 1179,
+        "initial_worker_prctl": [
+          {
+            "cpu": 1,
+            "delivery": 91,
+            "line": 1101,
+            "worker": 9
+          },
+          {
+            "cpu": 1,
+            "delivery": 104,
+            "line": 1129,
+            "worker": 7
+          }
+        ],
+        "opposite_launcher_routes": 13,
+        "returned": 20,
+        "worker_route_assignments": {
+          "7": 0,
+          "9": 1
+        }
+      },
+      "timeout": false
+    }
+  ],
+  "boot_status_expected": 5,
+  "boot_status_observed": 5,
+  "both_apps_exit_zero_exact_oracles": true,
+  "capture_mapping": {
+    "bytes": 46145,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/FINAL-SEVEN-ROOT-CALL-DATA.json",
+    "sha256": "5660ee2b5bc07392c2120607a580563432cb726d10eb3fe823dd7159af9a06ad"
+  },
+  "capture_mapping_acceptance": {
+    "bytes": 4917,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/fresh2/FRESH2-SEVEN-ROW-CAPTURE-AND-CONFIG-REVIEW.json",
+    "sha256": "84b008211ae55aa7d40f8d480cc91454bda41733521cecc89d5cc021a507b7cb"
+  },
+  "completed_command_statuses": [
+    {
+      "captures": {
+        "stderr": {
+          "metadata": {
+            "ctime_ns": 1792454147000730657,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48120444,
+            "mode": 384,
+            "mtime_ns": 1792454147000730657,
+            "nlink": 1,
+            "size": 0,
+            "uid": 1000
+          },
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/00-LAST-snapshot/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "metadata": {
+            "ctime_ns": 1792454147984761572,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48120443,
+            "mode": 384,
+            "mtime_ns": 1792454147984761572,
+            "nlink": 1,
+            "size": 264,
+            "uid": 1000
+          },
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/00-LAST-snapshot/stdout",
+          "sha256": "419889eb845140f070f3ec220449fd5d425ea23f7d9d9b6582c381b326aef47a"
+        }
+      },
+      "direct_joined": true,
+      "inner_status": {
+        "bytes": 2318,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/00-LAST-snapshot/status.json",
+        "sha256": "4fec16f4e7d8071e5c8b208684ae9b56aeae11a33cacdb67624857d49699cd89"
+      },
+      "outer_status": {
+        "bytes": 940,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/root-seven2-LAST-snapshot.status.json",
+        "sha256": "7f9f92fe6c60e1edfeb0d5729df8b15da4f1591f306f7eb93afe032096d0e828"
+      },
+      "owned_group_absent": true,
+      "returncode": 0,
+      "role": "LAST-snapshot",
+      "seconds": 1.0727703860029578
+    },
+    {
+      "captures": {
+        "stderr": {
+          "metadata": {
+            "ctime_ns": 1792454148068764211,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48120456,
+            "mode": 384,
+            "mtime_ns": 1792454148068764211,
+            "nlink": 1,
+            "size": 0,
+            "uid": 1000
+          },
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/01-machine-assembly/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "metadata": {
+            "ctime_ns": 1792454148104765342,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48120455,
+            "mode": 384,
+            "mtime_ns": 1792454148104765342,
+            "nlink": 1,
+            "size": 235,
+            "uid": 1000
+          },
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/01-machine-assembly/stdout",
+          "sha256": "eefa2e116bc02b312a901cb4ed5379f5515d198f7588840a4424e952eae3b371"
+        }
+      },
+      "direct_joined": true,
+      "inner_status": {
+        "bytes": 2877,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/01-machine-assembly/status.json",
+        "sha256": "83ad1351cc11ee3c101f4030d8eb18ae12c5f81035c4e9cc70f1cba73aa8b7fe"
+      },
+      "outer_status": {
+        "bytes": 945,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/root-seven2-machine-assembly.status.json",
+        "sha256": "6fccac0d518c3615d52294b53102d3e19d023e9c482bb37f694630c13a258cd0"
+      },
+      "owned_group_absent": true,
+      "returncode": 0,
+      "role": "machine-assembly",
+      "seconds": 0.11638650900567882
+    },
+    {
+      "captures": {
+        "stderr": {
+          "metadata": {
+            "ctime_ns": 1792454148188767981,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48120468,
+            "mode": 384,
+            "mtime_ns": 1792454148188767981,
+            "nlink": 1,
+            "size": 0,
+            "uid": 1000
+          },
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/02-final-guard/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "metadata": {
+            "ctime_ns": 1792454148224769112,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48120467,
+            "mode": 384,
+            "mtime_ns": 1792454148224769112,
+            "nlink": 1,
+            "size": 992,
+            "uid": 1000
+          },
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/02-final-guard/stdout",
+          "sha256": "7738d4a17597234ffb35cdf6d6684fbbea04960767099644d06c966bee98b8d1"
+        }
+      },
+      "direct_joined": true,
+      "inner_status": {
+        "bytes": 1665,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/02-final-guard/status.json",
+        "sha256": "eadc5d82fa1f576f8827e15a224837fc5aadf0b108570028f22fb459c9affd49"
+      },
+      "outer_status": {
+        "bytes": 938,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/root-seven2-final-guard.status.json",
+        "sha256": "d9957b846621f9313124ef8b170ed27b9c51511a7bcda34eb4e8c1111cd4c962"
+      },
+      "owned_group_absent": true,
+      "returncode": 0,
+      "role": "final-guard",
+      "seconds": 0.11704836497665383
+    },
+    {
+      "captures": {
+        "stderr": {
+          "metadata": {
+            "ctime_ns": 1792454148300771500,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48120480,
+            "mode": 384,
+            "mtime_ns": 1792454148300771500,
+            "nlink": 1,
+            "size": 0,
+            "uid": 1000
+          },
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/03-native-owner/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "metadata": {
+            "ctime_ns": 1792454148300771500,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48120479,
+            "mode": 384,
+            "mtime_ns": 1792454148300771500,
+            "nlink": 1,
+            "size": 0,
+            "uid": 1000
+          },
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/03-native-owner/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "direct_joined": true,
+      "inner_status": {
+        "bytes": 1599,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/03-native-owner/status.json",
+        "sha256": "98dce6c865d873c48f85c171f722eb11f34ea77e76782c8905579b7700a2d61b"
+      },
+      "outer_status": {
+        "bytes": 867,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/root-seven2-native-owner.status.json",
+        "sha256": "6809a41838c91107833a4ffb21e00b7bb9726f98ed2592767a3ade0f03a00afa"
+      },
+      "owned_group_absent": true,
+      "returncode": 0,
+      "role": "native-owner",
+      "seconds": 44.160327223013155
+    },
+    {
+      "captures": {
+        "stderr": {
+          "metadata": {
+            "ctime_ns": 1792454192466159300,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48120787,
+            "mode": 384,
+            "mtime_ns": 1792454192466159300,
+            "nlink": 1,
+            "size": 0,
+            "uid": 1000
+          },
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/04-readback-1/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "metadata": {
+            "ctime_ns": 1792454192554162066,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48120786,
+            "mode": 384,
+            "mtime_ns": 1792454192554162066,
+            "nlink": 1,
+            "size": 706560,
+            "uid": 1000
+          },
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/04-readback-1/stdout",
+          "sha256": "cbd2b2ae0235673f14c0abccc6995d500f86b91ac5d6efb483c08c1e4f327875"
+        }
+      },
+      "direct_joined": true,
+      "inner_status": {
+        "bytes": 1381,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/04-readback-1/status.json",
+        "sha256": "2fc36d1b7af5ce3f1e38c10378b4c686a98e3595fbfe92a7bb7de8f95bed0b71"
+      },
+      "outer_status": {
+        "bytes": 939,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/root-seven2-readback-1.status.json",
+        "sha256": "f58aae1bbe063832dd32e4b03454f5ce5ab5a8843317c06279152a9abc99a6e0"
+      },
+      "owned_group_absent": true,
+      "returncode": 0,
+      "role": "readback-1",
+      "seconds": 0.17051015800097957
+    },
+    {
+      "captures": {
+        "stderr": {
+          "metadata": {
+            "ctime_ns": 1792454192638164706,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48120798,
+            "mode": 384,
+            "mtime_ns": 1792454192638164706,
+            "nlink": 1,
+            "size": 0,
+            "uid": 1000
+          },
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/05-readback-2/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "metadata": {
+            "ctime_ns": 1792454192718167221,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48120797,
+            "mode": 384,
+            "mtime_ns": 1792454192718167221,
+            "nlink": 1,
+            "size": 121540,
+            "uid": 1000
+          },
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/05-readback-2/stdout",
+          "sha256": "58a4946ebe471b650d62be2e4bb59e047ba316cba8e9070eb4c7273722737fb8"
+        }
+      },
+      "direct_joined": true,
+      "inner_status": {
+        "bytes": 1357,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/05-readback-2/status.json",
+        "sha256": "5104a35ff6d3bd2db6d24d7c7f0aa38282c0c9227a8f180ba74f88717e36b954"
+      },
+      "outer_status": {
+        "bytes": 939,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/root-seven2-readback-2.status.json",
+        "sha256": "0ec3a51dcba688638be1a7b364e421b46ad03fd1857a09206a9ff08ac27b4cef"
+      },
+      "owned_group_absent": true,
+      "returncode": 0,
+      "role": "readback-2",
+      "seconds": 0.16972923200228252
+    },
+    {
+      "captures": {
+        "stderr": {
+          "metadata": {
+            "ctime_ns": 1792454192806169987,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48120809,
+            "mode": 384,
+            "mtime_ns": 1792454192806169987,
+            "nlink": 1,
+            "size": 0,
+            "uid": 1000
+          },
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/06-readback-3/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "metadata": {
+            "ctime_ns": 1792454192894172753,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48120808,
+            "mode": 384,
+            "mtime_ns": 1792454192894172753,
+            "nlink": 1,
+            "size": 491520,
+            "uid": 1000
+          },
+          "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/06-readback-3/stdout",
+          "sha256": "650ffb8b0ab487574acc95851a275fa5ed69901c9bb2b9914dd7aa6a8c94063f"
+        }
+      },
+      "direct_joined": true,
+      "inner_status": {
+        "bytes": 1406,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/06-readback-3/status.json",
+        "sha256": "aba65f1f09dd542f56ab8a123222632b1383f49e9cd4d9316fb55d453935079c"
+      },
+      "outer_status": {
+        "bytes": 939,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/root-seven2-readback-3.status.json",
+        "sha256": "0d8637b67fb238205ffb247fc2aeff99ce407540255d32c0ff92e772fd407a05"
+      },
+      "owned_group_absent": true,
+      "returncode": 0,
+      "role": "readback-3",
+      "seconds": 0.16918657699716277
+    }
+  ],
+  "compute_C_retirement": false,
+  "compute_image_SHA256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+  "compute_image_bytes": 7988768,
+  "decision": "ACCEPT_ONE_GUEST_TWO_CPU_CONCURRENT_RUST_BATCH_AND_FPTHREAD_DIAGNOSTIC_CONFIGURATION_ONLY",
+  "full_FP_provider_proof": false,
+  "guest_app_wall_ns": 2619855596,
+  "host_assignment": [
+    1,
+    2
+  ],
+  "host_observation_seconds": 37.06580904501607,
+  "immutable_component_module_authority": {
+    "bytes": 31299,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-THREE-MODULE-ABI-JOIN.json",
+    "sha256": "5d31c1f057127cf4c9fc076f3dc6c675ea4dc11ce4cef69889aab787135bd88c"
+  },
+  "implementation_ownership": false,
+  "live_HEAD_or_new_parent_SDK_artifact_adopted": false,
+  "logical_assignment": [
+    0,
+    1
+  ],
+  "module_SHA256s": [
+    "c396958bfdb0f22036b469ea2a64e0a6b188b9619ee4105c7879483bb3b9790d",
+    "af234fbcd09327a80e12396eebbfbcd30838f88a552fa13ba00a2728a761eeaa",
+    "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972"
+  ],
+  "module_load_acceptance": true,
+  "module_load_witnesses": {
+    "ihk": {
+      "line": 862,
+      "text": "<6>[    7.992383] ihk: lifecycle=load version=1.7.0rc4 abi=1 parameters=0 dependencies=0"
+    },
+    "ihk-smp-x86_64": {
+      "line": 865,
+      "text": "<6>[    8.422525] ihk_smp_x86_64: lifecycle=load parameters=6 dependency=ihk import_namespace=MCKERNEL_IHK_V1"
+    },
+    "mcctrl": {
+      "line": 867,
+      "text": "<6>[    8.663287] mcctrl: lifecycle=load foundation=1 parameters=0 declared_dependencies=1 ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api"
+    }
+  },
+  "native_manifest": {
+    "bytes": 10501,
+    "path": "/home/holden/mckernel-work/scratch/cp205m-261019-1/manifest.json",
+    "sha256": "4aa72c2a5a759bda71c4a0e8e33499068261346113ec2c9fd19d4669b3f8e41d"
+  },
+  "new_Rust_retired_paths": 0,
+  "new_logical_cases": 0,
+  "new_supported_native_configuration_proof": 1,
+  "nonnull_FP_acceptance": false,
+  "physical_review_reused_without_duplicate_census": true,
+  "prior_failure_preservation": [
+    "Original QMP-length/no-guest, old postboot-generic-ioctl, wrong-startupCPU, source-reader hardlink, snapshot1/captured-stdout-hash assembly failure and all fixture failures remain retained. No failed prior native is promoted.",
+    "Sameimage/module/payload/source proofs reused; no targetcompiler/staging/guest replay by reviewer."
+  ],
+  "procfs_empty": true,
+  "raw_capture_bindings": {
+    "debugcon.log": {
+      "bytes": 152,
+      "sha256": "bd87db779e6878802fa64fdee99f2eb08dee1529bbea800a65356f051e186685"
+    },
+    "qemu.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "qemu.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "qmp.transcript.json": {
+      "bytes": 249805,
+      "sha256": "e5408ccc25a4fbc81396ebb0dc1308aaef2607f90efee06c50b10be3b35d86da"
+    },
+    "serial.log": {
+      "bytes": 111092,
+      "sha256": "823eb3230d08dfdce37dc3369498ea975ef2ab61aeaaed6cb31552d1518ae2a1"
+    }
+  },
+  "raw_result_original_protocol_only_flags_preserved": {
+    "application_acceptance": false,
+    "mckernel_application_executed": false,
+    "runtime_blocker": "protocol observation only; independent guest execution review is pending"
+  },
+  "reviewer": "two_cpu_end_to_end_review",
+  "ring_history_or_nonoverwrite_proof": false,
+  "root_owner_and_attempt_capture_bytes_identical": true,
+  "root_owner_and_attempt_result_bytes_identical": true,
+  "schema": "mckernel.independent-current-host-pair205-actual-two-cpu-native-diagnostic-review.v1",
+  "scope": "Independent real backend/capture review establishes one actual sameguest twoCPU diagnostic execution of frozen Rust batch387 and FPthread254 on accepted205 image and frozen matchedmodule tuple. Original transport result remains protocolonly; this report credits bounded actual diagnostic behavior, not catalogqualification, full FP provider, stability quotas, Rustpath retirement or wholeOS completion.",
+  "selected_ABI_source_compatibility": {
+    "bytes": 23965,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/ABI-SOURCE-AND-CONDITIONAL-ORDINARY-REVIEW.json",
+    "sha256": "2a2381ddefb57185bc2715989f66e3072b4709e749e3796789f97dfe8f019936"
+  },
+  "separate_positive_physical_review": {
+    "bytes": 16123,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-physical-review-20261019-1/decision.json",
+    "sha256": "7d869a4f69a7d840a14bd18b4638f0a5043354ac246a1d5c57adf9e23f75001c"
+  },
+  "status": "PASS_ACTUAL_MATCHED_SDK_205_TWO_CPU_STARTUP_AND_BOTH_RUST_APP_ORACLES",
+  "strict_two_CPU_configuration_diagnostic_acceptance": true,
+  "typed_Rust_batch_387_diagnostic_acceptance": true,
+  "whole_OS_acceptance": false,
+  "whole_native_acceptance": false,
+  "whole_pipeline": {
+    "bytes": 2111,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/root-seven-whole-2.json",
+    "sha256": "ed6c6253e712c796001ece414573cc17294c2dfad5ad66e1e810cc3e986ecab5"
+  }
+}

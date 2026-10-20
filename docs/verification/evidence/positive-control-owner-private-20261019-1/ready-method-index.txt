@@ -1,0 +1,11 @@
+1882:const FORK_PROVIDER_PENDING: u32 = 1;
+1883:const FORK_PROVIDER_QUARANTINED: u32 = 2;
+2034:                    entry.phase = if quarantined { FORK_PROVIDER_QUARANTINED } else { FORK_PROVIDER_PENDING };
+2035:                } else if !self.active && quarantined && entry.phase == FORK_PROVIDER_PENDING {
+2038:                    entry.phase = FORK_PROVIDER_QUARANTINED;
+2058:                    table.entries[self.index].as_mut().unwrap().phase = FORK_PROVIDER_QUARANTINED;
+2102:unsafe fn abort_fork_payload_scope(raw: *mut ForkPayloadScopeStack, rollback_ready: bool) -> Result {
+2233:pub(crate) unsafe extern "C" fn ready_fork_payload_application(
+2256:        entry.phase = FORK_PROVIDER_PENDING;
+2444:    fn final_release_ready(&self) -> Result {
+2522:            { entry.phase = FORK_PROVIDER_QUARANTINED; }

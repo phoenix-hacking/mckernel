@@ -1,0 +1,100 @@
+                { Ok(()) } else { Err(EACCES) };
+        }
+        fork.link = Some(ForkLinkRecord { identity, physical: payload.physical(),
+            original_response: payload.original_response(), last_sequence: 0,
+            gate, second: None, busy: false, receipt_written: false,
+            revoked_receipt_written: false,
+            return_accepted: false, published: false });
+        Ok(())
+    }
+    /// Recognizes only an actual Delivered second clone. Ordinary/legacy RETs
+    /// are unchanged. No guest buffer or caller-supplied child key is read.
+    pub(crate) fn begin_fork_link(self: &Arc<Self>, parent: Token, worker: u64,
+        serial: u64, cpu: i64, value: i64) -> Result<Option<PreparedLinkTicket>> {
+        let mut slots = self.slots.lock();
+        self.transport_health()?;
+        let pi = slots.iter().position(|s| s.as_ref().is_some_and(|e| e.key() == parent)).ok_or(ENOENT)?;
+        let p = slots[pi].as_ref().unwrap();
+        let proof = p.syscalls.unique_delivered(|request| {
+            request.number() == 56 && request.arguments()[0] == 1
+                && request.arguments()[5] == CARRIER_MARKER
+        }).map_err(errno)?;
+        let Some((actual_worker, actual_serial, request)) = proof else { return Ok(None); };
+        if actual_worker != worker || actual_serial != serial { return Ok(None); }
+        if p.closed || p.needs_cleanup || p.quarantined || !p.scheduled { return Err(EBUSY); }
+        if p.owner_slot != self.owner.slot() as i32 || p.owner_generation != self.owner.generation() { return Err(EACCES); }
+        if request.pid() != p.cleanup.pid() || request.cpu() as i64 != cpu || value != 0 { return Err(EACCES); }
+        let args = request.arguments();
+        let ci = slots.iter().position(|s| s.as_ref().and_then(|e| e.fork.as_ref()).is_some_and(|f| {
+            let k = f.reservation.identity;
+            k.parent == parent.wire() && k.child_pid as i64 == args[1] as i64
+        })).ok_or(ENOENT)?;
+        if ci == pi { return Err(EACCES); }
+        let parent_refs = p.fork_prepared_parent_refs.checked_add(1).ok_or(EOVERFLOW)?;
+        let c = slots[ci].as_mut().unwrap();
+        if c.closed || c.needs_cleanup || c.quarantined || c.prepare.is_some() { return Err(EBUSY); }
+        if c.owner_slot != self.owner.slot() as i32 || c.owner_generation != self.owner.generation() { return Err(EACCES); }
+        let child = c.key();
+        let fork = c.fork.as_mut().unwrap();
+        let key = fork.reservation.identity;
+        if key.slot != self.owner.slot() || key.generation != self.owner.generation()
+            || key.child != child.wire() || fork.owner.number != key.child_pid
+            || fork.owner.mm.as_ptr() as usize != key.child_mm || args[2] != key.length
+            || args[3] != key.root || !fork.reservation.return_published
+            || fork.reservation.return_value != Some(key.child_pid as i64)
+            || !matches!(fork.reservation.state.phase(), ForkPhase::FirstReturnPublished | ForkPhase::GuestLinkObserved)
+        { return Err(EACCES); }
+        let record = fork.link.as_mut().ok_or(EBUSY)?;
+        if record.identity != key || record.physical != args[4] || record.last_sequence == 0 || record.busy || record.published { return Err(EBUSY); }
+        let gate_state = record.gate.load(Ordering::Acquire);
+        if !matches!(gate_state, 0 | 2) { return Err(EBUSY); }
+        let second = LinkDelivery { worker, serial, cpu: request.cpu(), request: request.clone() };
+        if let Some(old) = record.second.as_ref() {
+            if !request_matches(old, worker, serial, cpu, &request) { return Err(EACCES); }
+        } else {
+            if gate_state != 0 { return Err(EACCES); }
+            record.last_sequence = record.last_sequence.checked_add(1).ok_or(EOVERFLOW)?;
+            record.second = Some(second.clone());
+        }
+        record.busy = true;
+        let ticket = PreparedLinkTicket { remote: self.clone(), child,
+            gate: record.gate.clone(), identity: key, second,
+            physical: record.physical, sequence: record.last_sequence };
+        slots[pi].as_mut().unwrap().fork_prepared_parent_refs = parent_refs;
+        Ok(Some(ticket))
+    }
+}
+
+/// The checked adoption finisher holds the SAME slots lock across its exact
+/// lease/seal validation, finish_lease transition and this first receipt write.
+/// No caller-supplied counter or prior-write assertion creates sequence1.
+pub(super) fn commit_adopted_fork_carrier_in_slots(owner: OsToken,
+    slots: &mut [Option<Entry>], child: Token, identity: ForkIdentity,
+    payload: &mut ForkPayload) -> Result {
+    if identity.slot != owner.slot() || identity.generation != owner.generation() { return Err(EACCES); }
+    let p = slots.iter().flatten().find(|e| e.key().wire() == identity.parent).ok_or(EBUSY)?;
+    if p.closed || p.needs_cleanup || p.quarantined || !p.scheduled
+        || p.owner_slot != owner.slot() as i32 || p.owner_generation != owner.generation() { return Err(EBUSY); }
+    let parent_pid = p.cleanup.pid();
+    let c = slots.iter_mut().flatten().find(|e| e.key() == child).ok_or(EBUSY)?;
+    if c.closed || c.needs_cleanup || c.quarantined || c.owner_slot != owner.slot() as i32
+        || c.owner_generation != owner.generation() { return Err(EBUSY); }
+    let fork = c.fork.as_mut().ok_or(EBUSY)?;
+    let first = fork.reservation.first.clone();
+    let args = first.arguments();
+    if fork.reservation.identity != identity || identity.child != child.wire()
+        || fork.owner.number != identity.child_pid || fork.owner.mm.as_ptr() as usize != identity.child_mm
+        || !fork.seal.sealed.load(Ordering::Acquire) || fork.reservation.state.prepared()
+        || fork.reservation.state.phase() != ForkPhase::AdoptedAwaitFirstReturn
+        || fork.reservation.return_published || fork.reservation.return_value.is_some()
+        || first.number() != 56 || first.pid() != parent_pid || first.cpu() != fork.reservation.cpu
+        || matches!(args[0], 1 | 2 | 3)
+        || args[1] != identity.start || args[2] != identity.length || args[3] != identity.root
+        || args[5] != CARRIER_MARKER
+    { return Err(EBUSY); }
+    let record = fork.link.as_mut().ok_or(EBUSY)?;
+    if record.identity != identity || record.physical != args[4]
+        || !payload_matches(payload, identity, record.physical, record.original_response)
+        || record.gate.load(Ordering::Acquire) != 0 || record.second.is_some()
+    { return Err(EACCES); }
+    if record.last_sequence == 1 { return Ok(()); }
