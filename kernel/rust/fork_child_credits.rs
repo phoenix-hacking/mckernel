@@ -20,6 +20,7 @@ pub(crate) struct ChildCredits {
     process: NonNull<Process>,
     vm: NonNull<ProcessVm>,
     reserved_cpu: i32,
+    private_child_cpu: i32,
 }
 
 /// Exactly the original caller's cleanup obligation, returned once. No new
@@ -42,6 +43,22 @@ impl ChildCredits {
     pub(crate) unsafe fn acquire(
         parent: *mut Thread, child: *mut Thread, reserved_cpu: i32,
     ) -> Result<Self, i32> {
+        Self::acquire_with_private_cpu(parent, child, reserved_cpu, reserved_cpu)
+    }
+
+    /// Actual do_fork boundary: clone_thread initializes child.cpu_id to zero;
+    /// only runq publication assigns the separately reserved CPU. This unsafe
+    /// transfer takes the exact caller-owned reservation, never inferring it
+    /// from the unpublished child's numeric cpu_id or acquiring another CPU.
+    pub(crate) unsafe fn acquire_from_caller(
+        parent: *mut Thread, child: *mut Thread, reserved_cpu: i32,
+    ) -> Result<Self, i32> {
+        Self::acquire_with_private_cpu(parent, child, reserved_cpu, 0)
+    }
+
+    unsafe fn acquire_with_private_cpu(
+        parent: *mut Thread, child: *mut Thread, reserved_cpu: i32, private_child_cpu: i32,
+    ) -> Result<Self, i32> {
         let parent = NonNull::new(parent).ok_or(EINVAL)?;
         let child = NonNull::new(child).ok_or(EINVAL)?;
         if parent == child || reserved_cpu < 0 { return Err(EINVAL); }
@@ -55,7 +72,7 @@ impl ChildCredits {
             || (*process.as_ptr()).main_thread != child.as_ptr()
             || (*process.as_ptr()).vm != vm.as_ptr()
             || (*vm.as_ptr()).proc != process.as_ptr().cast()
-            || (*child.as_ptr()).cpu_id != reserved_cpu
+            || (*child.as_ptr()).cpu_id != private_child_cpu
             || !(*child.as_ptr()).sched_list.next.is_null()
             || !(*child.as_ptr()).sched_list.prev.is_null()
         { return Err(EACCES); }
@@ -72,7 +89,7 @@ impl ChildCredits {
                 Err(actual) => old = actual,
             }
         }
-        Ok(Self { parent, child, process, vm, reserved_cpu })
+        Ok(Self { parent, child, process, vm, reserved_cpu, private_child_cpu })
     }
 
     unsafe fn still_private(&self) -> bool {
@@ -80,7 +97,7 @@ impl ChildCredits {
         !current.is_null() && (*current).current == self.parent.as_ptr()
             && (*self.child.as_ptr()).proc == self.process.as_ptr()
             && (*self.child.as_ptr()).vm == self.vm.as_ptr()
-            && (*self.child.as_ptr()).cpu_id == self.reserved_cpu
+            && (*self.child.as_ptr()).cpu_id == self.private_child_cpu
             && (*self.process.as_ptr()).main_thread == self.child.as_ptr()
             && (*self.process.as_ptr()).vm == self.vm.as_ptr()
             && (*self.vm.as_ptr()).proc == self.process.as_ptr().cast()
@@ -339,4 +356,95 @@ impl EscapedFork<'_> {
 impl RetainedFork {
     pub(crate) fn handle(&self) -> Handle { self.handle }
     pub(crate) fn caller_cleanup_allowed(&self) -> bool { false }
+}
+
+
+/// C glue receives disposition metadata only. Actual post-transfer owners stay
+/// in the existing durable Carrier registry; no pointer into a C stack is kept.
+#[repr(C)]
+pub(crate) struct CallerForkOutcome {
+    pub(crate) disposition: u32,
+    pub(crate) error: i32,
+    pub(crate) handle: Handle,
+}
+const _: () = {
+    assert!(size_of::<CallerForkOutcome>() == 24);
+    assert!(core::mem::offset_of!(CallerForkOutcome, disposition) == 0);
+    assert!(core::mem::offset_of!(CallerForkOutcome, error) == 4);
+    assert!(core::mem::offset_of!(CallerForkOutcome, handle) == 8);
+};
+const CALLER_KEEPS_CREDITS: u32 = 0;
+const RUST_RETAINS_CREDITS: u32 = 1;
+
+/// # Safety
+/// The exact current do_fork caller exclusively owns the successful unpublished
+/// non-CLONE_VM constructor and reserved CPU cleanup credits. `out` is writable
+/// metadata storage. This boundary never grants runnable-child or host task/MM
+/// authority: even an observed positive receipt returns a retained error.
+/// C must use disposition to bypass all destroy/refcount-reset/CPU cleanup when
+/// Rust owns credits. The macro-gated C proposal remains disabled by default.
+#[no_mangle]
+pub(crate) unsafe extern "C" fn process_fork_owned_caller_current_v1(
+    parent: *mut Thread, child: *mut Thread, reserved_cpu: i32, host_flags: u64,
+    out: *mut CallerForkOutcome,
+) -> i32 {
+    if out.is_null() { return EINVAL; }
+    core::ptr::write(out, CallerForkOutcome { disposition: CALLER_KEEPS_CREDITS,
+        error: EINVAL, handle: Handle::EMPTY });
+    if parent.is_null() || child.is_null() || reserved_cpu < 0 || (*child).vm.is_null() {
+        return 0;
+    }
+    let vm = &*(*child).vm;
+    if vm.address_space.is_null() { return 0; }
+    let Some(length) = vm.region.user_end.checked_sub(vm.region.user_start) else { return 0; };
+    let root = crate::x86_memory_helpers::virt_to_phys((*vm.address_space).page_table) as u64;
+    // Every allocation happens while C still owns cleanup. The exact request
+    // originates in retained storage; this is never a copy of request1.
+    let slot = match ForkRequestSlot::allocate(host_flags, vm.region.user_start, length, root) {
+        Ok(slot) => slot, Err(error) => { (*out).error = error; return 0; },
+    };
+    let mut pointer = match super::create_private_carrier_current(slot.request.as_ptr(), parent, child) {
+        Ok(pointer) => pointer,
+        Err(error) => { slot.free_private(); (*out).error = error; return 0; },
+    };
+    let handle = pointer.as_ref().handle;
+    pointer.as_mut().owned_request = Some(slot);
+    let credits = match ChildCredits::acquire_from_caller(parent, child, reserved_cpu) {
+        Ok(credits) => credits,
+        Err(error) => {
+            // This private handle has never escaped this producer, and private
+            // entries cannot be discovered by observers. No credit transferred.
+            match registry::cancel(handle) {
+                Ok(mut pointer) => {
+                    let slot = pointer.as_mut().owned_request.take().unwrap();
+                    crate::mem_helpers::kfree(pointer.as_ptr().cast()); slot.free_private();
+                },
+                Err(_) => {
+                    // Request ownership is already durable. On unexpected
+                    // busy/refusal, do not dereference a possibly busy Carrier.
+                    // C still owns all child/VM/CPU cleanup; none transferred.
+                    let _ = registry::retain(handle); (*out).handle = handle;
+                },
+            }
+            (*out).error = error; return 0;
+        },
+    };
+    // The private-producer exclusion above is still intact: finish ownership
+    // initialization directly, just like the actual carrier constructor does.
+    pointer.as_mut().owned_credits = Some(credits);
+    (*out).disposition = RUST_RETAINS_CREDITS; (*out).handle = handle;
+    let request = pointer.as_ref().owned_request.as_ref().unwrap().request;
+    if let Err(error) = registry::begin(handle) {
+        let _ = registry::retain(handle); (*out).error = error; return 0;
+    }
+    let escaped = EscapedFork { handle, request,
+        request_lifetime: PhantomData };
+    (*out).error = match escaped.offload() {
+        OwnedOffloadReturn::ReceiptObserved { owner, .. } => {
+            // A verified first receipt is not the missing terminal handoff.
+            drop(owner); EBUSY
+        },
+        OwnedOffloadReturn::Uncertain { owner, .. } => owner.error,
+    };
+    0
 }

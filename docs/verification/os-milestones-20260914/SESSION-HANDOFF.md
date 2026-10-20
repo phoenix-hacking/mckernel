@@ -1,3 +1,26 @@
+## Current — whole-crate owner joined0; caller source integrated
+
+Frozen77-source ac009 native+legacy crate owner joined0 in32.058925867s;
+compiler result is CRATE_OBJECT_COMPILE_PASS. Independent artifact/physical
+review is active, with no default/link/native activation credit yet. Exact
+request ecc50d16 and owned-request-fullcrate-2 captures remain immutable.
+
+Newer caller patch3b0006b9 was independently accepted0c926e7a and integrated
+as exact d511d6b6/31c569bb/298ef328 bytes. Three Rust compiles,6new caller,
+6owned-request and4borrowed tests pass; selected C shadow-branch object reused.
+Request storage installation precedes credit acquisition; failed cancellation
+never dereferences a possibly busy Carrier. Posttransfer retained disposition
+bypasses old C cleanup. Activation macro stays undefined. This newer caller
+was NOT in the just-completed77-source crate snapshot; its full production C,
+crate/link/default/provider/taskMM/revoke/finalACK/native holds remain explicit.
+
+Diagnostic round7 failed case has positive physical acceptance801872bb;
+all atomic+3readbacks closed0,25clients retired, no owned processes, mutex27:4
+retained. Independent semantic4191a12f preserves FAIL and route-visibility
+hypothesis only. Actual bounded byte/function correction is running separately.
+No20-launch/4x acceptance. M04 exact declared-profile exit d82180bd is saved in
+fetched0eb050b2;14/35checks,wholeM00/M04/M10 complete,26behaviors,Rust17/14.
+
 ## Current — diagnostic round7 failure captured; whole-crate compile queued
 
 The new diagnostic owner closed1 after61.015636s. All eight framed raw exports

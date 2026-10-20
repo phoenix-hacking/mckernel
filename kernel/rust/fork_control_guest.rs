@@ -91,31 +91,43 @@ fn carrier_geometry(carrier:&Carrier,identity:&GuestIdentity)->bool{
 pub(crate) unsafe extern "C" fn process_fork_guest_carrier_create_current_v1(
     request:*mut SyscallRequest,parent:*mut Thread,child:*mut Thread,out:*mut Handle,
 )->CInt{
-    if request.is_null()||parent.is_null()||child.is_null()||out.is_null()||parent==child{return EINVAL;}
+    if out.is_null(){return EINVAL;}
+    match create_private_carrier_current(request,parent,child){
+        Ok(pointer)=>{write(out,pointer.as_ref().handle);0},Err(error)=>error,
+    }
+}
+
+/// Private producer initialization authority only. On success the registry owns
+/// the allocation, but this unique producer may finish direct initialization
+/// before begin makes it discoverable. No handle/pointer escapes that interval.
+unsafe fn create_private_carrier_current(
+    request:*mut SyscallRequest,parent:*mut Thread,child:*mut Thread,
+)->Result<NonNull<Carrier>,i32>{
+    if request.is_null()||parent.is_null()||child.is_null()||parent==child{return Err(EINVAL);}
     let current=crate::cls::get_this_cpu_local_var();
-    if current.is_null()||(*current).current!=parent{return EACCES;}
+    if current.is_null()||(*current).current!=parent{return Err(EACCES);}
     let proc=(*child).proc;let parent_proc=(*parent).proc;
     if proc.is_null()||parent_proc.is_null()||proc==parent_proc||(*child).vm.is_null()
         ||(*child).vm==(*parent).vm
         ||(*proc).parent!=parent_proc||(*proc).main_thread!=child
         ||(*proc).vm!=(*child).vm||(*(*child).vm).proc!=proc.cast::<c_void>()
         ||(*child).cpu_id<0||!(*child).sched_list.next.is_null()||!(*child).sched_list.prev.is_null()
-    {return EACCES;}
+    {return Err(EACCES);}
     let original=(*request).args;
     if (*request).number!=NR_CLONE||matches!(original[0],1|2|3)
-        ||!geometry(original[3],original[1],original[2]){return EINVAL;}
-    let Ok(bytes)=i32::try_from(size_of::<Carrier>())else{return EINVAL;};
+        ||!geometry(original[3],original[1],original[2]){return Err(EINVAL);}
+    let Ok(bytes)=i32::try_from(size_of::<Carrier>())else{return Err(EINVAL);};
     let raw=crate::mem_helpers::kmalloc(bytes,0).cast::<Carrier>();
-    let Some(pointer)=NonNull::new(raw)else{return ENOMEM;};
+    let Some(pointer)=NonNull::new(raw)else{return Err(ENOMEM);};
     write(raw,Carrier{handle:Handle::EMPTY,parent:parent as usize,child:child as usize,
         request:request as usize,cpu:(*parent).cpu_id,initial_args:original,physical:0,nonce:0,root:original[3],
         start:original[1],length:original[2],phase:SUBMITTED,error:0,
         owned_credits:None,owned_request:None,
         identity:GuestIdentity::ZERO,control:ControlPending::ZERO,bytes:[0;128]});
     let physical=crate::x86_memory_helpers::virt_to_phys(addr_of_mut!((*raw).bytes).cast::<c_void>())as u64;
-    if physical==0||physical%8!=0||physical.checked_add(128).is_none(){crate::mem_helpers::kfree(raw.cast());return EINVAL;}
+    if physical==0||physical%8!=0||physical.checked_add(128).is_none(){crate::mem_helpers::kfree(raw.cast());return Err(EINVAL);}
     let handle=match registry::insert_private(pointer){Ok(handle)=>handle,Err((error,pointer))=>{
-        crate::mem_helpers::kfree(pointer.as_ptr().cast());return error;}};
+        crate::mem_helpers::kfree(pointer.as_ptr().cast());return Err(error);}};
     // Private entries are excluded from discovery; no pointer has escaped.
     (*raw).handle=handle;(*raw).physical=physical;(*raw).nonce=handle.epoch;
     let frame=&mut(*raw).bytes;frame[..8].copy_from_slice(b"MCFKQ001");
@@ -123,7 +135,7 @@ pub(crate) unsafe extern "C" fn process_fork_guest_carrier_create_current_v1(
     frame[12..16].copy_from_slice(&128u32.to_le_bytes());frame[16..20].copy_from_slice(&1u32.to_le_bytes());
     put(frame,24,handle.epoch);put(frame,32,original[3]);put(frame,40,original[1]);put(frame,48,original[2]);
     (*request).args[4]=physical;(*request).args[5]=MARKER;(*raw).initial_args=(*request).args;
-    write(out,handle);0
+    Ok(pointer)
 }
 /// Mark nonfreeable BEFORE actual request publication. No callback/lifetime
 /// authority is inferred from the handle, and no strong default hook is added.

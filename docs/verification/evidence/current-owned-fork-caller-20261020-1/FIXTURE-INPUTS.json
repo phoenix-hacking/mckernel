@@ -1,0 +1,195 @@
+{
+  "actual_layouts": "whole current abi.rs, distinct real Thread/Process/ProcessVm/CpuLocalVar objects",
+  "actual_release": "14 unchanged production release and actual thread initializer helpers",
+  "adapters": [
+    "CLS current pointer",
+    "Linux allocator for actual Carrier and SyscallRequest layouts, records exact allocation/deallocation",
+    "pointer physical-address adapter",
+    "unexecuted destructor bridges fail closed",
+    "do_syscall adapter asserts exact request/args/CPU then either returns or drives unchanged production observer"
+  ],
+  "new_C_compute": 0,
+  "new_tests": 6,
+  "not_proven": [
+    "real CPU reservation acquisition/release",
+    "guest offload/hardware",
+    "current do_fork caller integration",
+    "last-reference destructor"
+  ],
+  "observer": "whole guest/registry production bodies plus actual Acquire helper; response/frame transport adapter",
+  "old_tests_replayed": 0,
+  "rows": [
+    {
+      "actual_source": {
+        "bytes": 76151,
+        "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      "fixture": {
+        "bytes": 76151,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-owned-fork-caller-1/fixture/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      "whole_module_equal": true
+    },
+    {
+      "actual_source": {
+        "bytes": 8131,
+        "path": "/home/holden/mckernel/kernel/rust/fork_control_registry.rs",
+        "sha256": "246838be1f3a2d71cef7e975de8d17f908bfb89010bd5be9741b81b452830113"
+      },
+      "fixture": {
+        "bytes": 8131,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-owned-fork-caller-1/fixture/fork_control_registry.rs",
+        "sha256": "246838be1f3a2d71cef7e975de8d17f908bfb89010bd5be9741b81b452830113"
+      },
+      "whole_module_equal": true
+    },
+    {
+      "actual_source": {
+        "bytes": 15707,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-owned-fork-caller-1/source/kernel/rust/fork_control_guest.rs",
+        "sha256": "31c569bb25d97f1f44e07b5347989d402d5194d48e4dd7e746f1e90bf0dbff53"
+      },
+      "fixture": {
+        "bytes": 15707,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-owned-fork-caller-1/fixture/fork_control_guest.rs",
+        "sha256": "31c569bb25d97f1f44e07b5347989d402d5194d48e4dd7e746f1e90bf0dbff53"
+      },
+      "whole_module_equal": true
+    },
+    {
+      "actual_source": {
+        "bytes": 21908,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-owned-fork-caller-1/source/kernel/rust/fork_child_credits.rs",
+        "sha256": "e59d7d4c22c2c2b3a909657b42fbff51d50a56bdc235d891e7bb5b1a56a6e2e6"
+      },
+      "appended_test_only": {
+        "bytes": 10816,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-owned-fork-caller-1/caller_tests.rs",
+        "sha256": "429ea36bb60d95d6b0555191893d0669aa7aa50f9efb174e9b3aab207af34b9e"
+      },
+      "fixture": {
+        "bytes": 32724,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-owned-fork-caller-1/fixture/fork_child_credits.rs",
+        "sha256": "6e5c46d72b6f1fd90ab3033210388c067b6c818dda871286de200177337d0eee"
+      },
+      "production_prefix_byte_equal": true
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_ref_release_should_destroy_result",
+      "sha256": "68ec02cdbef6dfe1cfe26c7edb8ad16d3328cb688b0315674ad2f399375ba9ae",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_ref_dec_and_test_result",
+      "sha256": "fb5e2c50912502c04d4c7fbb29dfaae13c8ab32cd7095d38af644aceae36c83d",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_ref_atomic_at",
+      "sha256": "ae25a1a38969c96a71ffeb8a8ebe7ae99fe6b3861a2bec91f957003caa47a081",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_ref_dec_and_test_direct_result",
+      "sha256": "62aa384bc118b756fb4dde303642930e2fc197e907378b1e6353ffdbc554a789",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "field_ptr",
+      "sha256": "5eee6b6707ebadfbd1f88427b05a50816abc11f76421049b9b80cab2319d9781",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_thread_profile_result",
+      "sha256": "ccb99c56c70f1ccc43ad943ac9a385613c66e40f398d8cb90bbe108976edddbf",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_thread_action_result",
+      "sha256": "9c0668a8fe6f5bb46beeb7508d411a9395670f401cc615a4b2a7d424d7cafc3e",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_vm_action_result",
+      "sha256": "7ae272f125c47fd80cf4b1c16344acafdd3d48c63e8fed1d48fb8472ec6d37fa",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_release_thread_body_result",
+      "sha256": "0cff54ad4dece33e745d5093075874850ea5b0105eb521331404752960facb8a",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "release_thread",
+      "sha256": "7e95d7296dcfad7abdf7919191623904f153e94f32bb22e5de30ea5e5cfd4004",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_ref_set_result",
+      "sha256": "2629007b6fc6caeed86b66adef5be6a9b672c3eeb4f35cb4d577c20de59b6165",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_ref_set_direct_result",
+      "sha256": "31a0fb8030a36a32b581ca30653a0f7c2a430354f32b3fdc0a00e2e2a3942835",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_list_head_init",
+      "sha256": "2e87175832ce843654c665cb538de6616e13111bd0e173ae57aea5da9714203b",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_thread_alloc_init_body_result",
+      "sha256": "26dcb5902bb4082b8cb62568848ef7cc283bf7a531f51e14f647521090456d00",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "cpu_pause",
+      "sha256": "ce7b9211f2921a0f0068a1e55134b41fc17a49b4e1fd7dd57d70c35166fb7915",
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "arch_barrier",
+      "sha256": "44bac6af678e4cb6294341d046c5e21c6278e27cfa31d9860f64c73ef704e308",
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "smp_load_acquire_ulong",
+      "sha256": "aff19a2ad996cfc52e4a3c73b0edb475419086dcd4f82ae5ad48e0fc989d70ff",
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "clone_host_parent_flags_result",
+      "sha256": "d9da57e29eacb0aefc66bea64b0a02d4a7cfef09f8f5ea4fbf6765d7884219db",
+      "source": "/home/holden/mckernel/kernel/rust/syscall_policy.rs"
+    },
+    {
+      "exact_new_declaration_sha256": "fb7e5a3c893e323983cf869c4e43e8b3ff9e3113b219eab15b5fd5c8687fc0d3",
+      "exact_owned_branch_sha256": "a4824f8c3f1921fe5f0fce1532a8c017933590cb6592a3d1adedfc1c4ca3376b",
+      "limitations": "selected new C branch only, exact proposal declaration and existing clone helper prototype; shadow parent/cleanup/continuation counters; not full production C/fallback/GCC14/actual destructor proof",
+      "source": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-owned-fork-caller-1/source/kernel/syscall.c"
+    }
+  ],
+  "schema": "mckernel.actual-current-owned-caller-fixture.v1"
+}

@@ -7301,6 +7301,19 @@ extern int sched_clone_affinity_inherit_result(unsigned long child_mask,
         unsigned long snapshot, size_t bytes);
 #endif
 
+/* Private integration proposal: no build profile defines this activation gate.
+ * Metadata describes ownership only; Rust keeps all transferred resources.
+ */
+#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
+struct owned_fork_caller_outcome {
+    unsigned int disposition;
+    int error;
+    struct { unsigned int slot, reserved; unsigned long epoch; } handle;
+};
+extern int process_fork_owned_caller_current_v1(struct thread *, struct thread *,
+        int, unsigned long, struct owned_fork_caller_outcome *);
+#endif
+
 unsigned long do_fork(int clone_flags, unsigned long newsp,
                       unsigned long parent_tidptr, unsigned long child_tidptr,
                       unsigned long tlsblock_base, unsigned long curpc,
@@ -7535,6 +7548,21 @@ retry_tid:
 	}
 	/* fork() a new process on the host */
 	else {
+#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
+        struct owned_fork_caller_outcome outcome;
+        err = process_fork_owned_caller_current_v1(old, new, cpuid,
+                clone_host_parent_flags_result(clone_flags,
+                    oldproc->ppid_parent->pid), &outcome);
+        if (err)
+            goto destroy_thread;
+        if (outcome.disposition == 0) {
+            err = outcome.error;
+            goto destroy_thread;
+        }
+        /* Existing registry owns request/parent/child/VM/reserved CPU. A first
+         * positive receipt supplies no runnable/cleanup authority. */
+        return outcome.error;
+#else
 		request1.number = __NR_clone;
 		request1.args[0] = 0;
 		request1.args[1] = new->vm->region.user_start;
@@ -7560,6 +7588,7 @@ retry_tid:
 		   oldproc->monitoring_event->attr.inherit){
 			newproc->monitoring_event = oldproc->monitoring_event;
 		}
+#endif
 	}
 
 	if (clone_parent_tid_store_needed_result(clone_flags)) {
