@@ -1,3 +1,25 @@
+## Current — exit7 metadata namespace correction; native not launched
+
+The first final19 metadata attempt failed on a template/output collision;
+failed handoff f9f43c83 and every partial output remain preserved. The single
+bounded correction uses fresh native-control-packet-2 and
+non-temporal-source-correction-1 namespaces. Independent817fa7e4 accepts
+literal-only changes,85 full references and19 outputs disjoint from250 inputs
+and old outputs. Root granted one corrected CPU6 metadata run after fresh
+admission; no LAST or native release is granted by that ordinary approval.
+The old137 fetched-source proof covers old sources only; three changed locator
+sources require a small append-only fetched publication before LAST. Derive the
+actual owner watch path from corrected generated step3, preserving the old path.
+Accepted exit7 app compilation, stage45fa0822 and normalizationff480f08 must not
+repeat. App expectation remains exit7/raw1792,24B stdout and24B stderr.
+
+The next retained61B protection case has actual ordinary acceptance e828c693;
+static next-case preparation may proceed with future physical fields unbound.
+Counts remain15/35,three whole milestones,27 behaviors,Rust17/14. SDK capacity
+remains blocked; the old32.5MB reclaim candidate is parked. A read-only capacity
+proposal is being prepared at user request; no resize/loop/reserve/mount or
+cleanup mutation is authorized. Preserve Scratch21, all evidence and floors.
+
 ## Current — M03 native slice accepted; exit7 source frozen; Request Rust integrated
 
 Accepted semantic b7aa10fc and physical6f42d3c7 prove one new native Rust app
