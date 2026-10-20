@@ -11,9 +11,9 @@ P-M02-01/02 still need their remaining timeout/rejection observations.
 
 M03 Q4final19 and actual whole-static/saved62ba check05f05c8b pass; those saved
 roles grant no current runtime authority. Its next binding uses genuine positive
-S5 physical ebbcee, not failure-specific a217. Minimal positive-reader successor
-and genuine positive/changed-FD checks are under conditional81f31445 ordinary
-review; future LAST/machine/release remain unbound until actual joins pass.
+S5 physical ebbcee, not failure-specific a217. Positive-reader actual two-check acceptance33f023 and affected S6/Q6 source
+review348c74 pass. The52-file successor is frozen for publication; final19
+metadata and genuinely fresh LAST/machine/release remain pending.
 No kernel/module/app/stage/normalization recompilation is needed for M03.
 
 Two focused actual Rust body regressions passed independentd74ed0be (one host

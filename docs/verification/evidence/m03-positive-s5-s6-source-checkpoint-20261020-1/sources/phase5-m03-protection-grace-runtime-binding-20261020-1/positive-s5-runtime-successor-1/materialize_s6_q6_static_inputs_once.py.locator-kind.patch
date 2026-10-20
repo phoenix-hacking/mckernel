@@ -1,0 +1,22 @@
+--- /home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/non-temporal-source-4/materialize_s4_q4_static_inputs_once.py
++++ /home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/non-temporal-source-6/materialize_s6_q6_static_inputs_once.py
+@@ -18,7 +18,7 @@
+ def m03_contract():
+  import importlib.util
+  p=Path(__file__).resolve().parent/'m03_protection_normalization_contract.py'
+- assert p.parent==Path('/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/non-temporal-source-4') and p.resolve()==p
++ assert p.parent==Path('/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/non-temporal-source-6') and p.resolve()==p
+  assert hashlib.sha256(p.read_bytes()).hexdigest()=='2a90a35fff7480997996547cd16ddef61ccab1928a806aa7c68f7557d0fb1953'
+  spec=importlib.util.spec_from_file_location('exact_m03_protection_contract',p)
+  m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+@@ -43,8 +43,8 @@
+  command=load(SOURCE/'FINAL19-CHILD-COMMAND.PENDING.json')
+  assert command['argv'][4:6]==[a['path'],a['sha256']]
+  command_ref=write(SOURCE/'FINAL19-CHILD-COMMAND.REVIEW-PENDING.json',command)
+- p=load(D/'S4-Q4-SOURCE-SCAFFOLD-PROPOSAL.json')
++ p=load(D/'S6-Q6-SOURCE-SCAFFOLD-PROPOSAL.json')
+  p.update(status='FROZEN_FINITE_FINAL19_PENDING_WHOLE_MAPPING_REVIEW_AND_ROOT_GRANT',actual_normalization_acceptance=a,fetched_source_proof=proof,child_command_template=command_ref,source_pins=[ref(q) for q in sorted(SOURCE.glob('*.py'))]+[command_ref,cref,ref(Q/'FINAL-SEVEN-ROOT-CALL-DATA.PENDING.json'),ref(Q/'MANUAL-READBACK-CONTRACT.json')],static_decision=None,root_grant=None,execution_review=None)
+- pr=write(D/'S4-Q4-FINAL19-MATERIALIZED-PROPOSAL.json',p)
++ pr=write(D/'S6-Q6-FINAL19-MATERIALIZED-PROPOSAL.json',p)
+  print(json.dumps(dict(proposal=pr,static_inputs=cref,source_count=len(hashes),steps=len(load(Q/'FINAL-SEVEN-ROOT-CALL-DATA.PENDING.json')['steps']),expected_outputs=len(p['final19_outputs']),executions=0)))
+ if __name__=='__main__':main()

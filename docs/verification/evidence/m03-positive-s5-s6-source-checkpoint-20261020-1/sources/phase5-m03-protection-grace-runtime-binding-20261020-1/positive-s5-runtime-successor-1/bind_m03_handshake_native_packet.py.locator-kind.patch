@@ -1,0 +1,29 @@
+--- /home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/non-temporal-source-4/bind_m03_handshake_native_packet.py
++++ /home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/non-temporal-source-6/bind_m03_handshake_native_packet.py
+@@ -4,13 +4,13 @@
+ """
+ from pathlib import Path
+ import ast,copy,hashlib,json,os,stat,sys
+-SOURCE=Path(__file__).resolve().parent;D=Path('/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/native-control-packet-4');Q=D;N=D;I=D;OLD=Path('/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1');OQ=OLD/'native-packet-1';OR=OQ;H=Path('/home/holden/mckernel-work/host-preparation')
++SOURCE=Path(__file__).resolve().parent;D=Path('/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/native-control-packet-6');Q=D;N=D;I=D;OLD=Path('/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/host66-probe-1/stage-preparation-1');OQ=OLD/'native-packet-1';OR=OQ;H=Path('/home/holden/mckernel-work/host-preparation')
+ 
+ 
+ def m03_contract():
+  import importlib.util
+  p=Path(__file__).resolve().parent/'m03_protection_normalization_contract.py'
+- assert p.parent==Path('/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/s4-q4-source-preparation-1/non-temporal-source-4') and p.resolve()==p
++ assert p.parent==Path('/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-runtime-successor-1/non-temporal-source-6') and p.resolve()==p
+  assert hashlib.sha256(p.read_bytes()).hexdigest()=='2a90a35fff7480997996547cd16ddef61ccab1928a806aa7c68f7557d0fb1953'
+  spec=importlib.util.spec_from_file_location('exact_m03_protection_contract',p)
+  m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+@@ -64,8 +64,8 @@
+ need(ref(decoderref['path'])==decoderref,'reviewed known-kind decoder full source descriptor')
+ spec=importlib.util.spec_from_file_location('exact_m03_latest_physical',decoderref['path']);decoder=importlib.util.module_from_spec(spec);spec.loader.exec_module(decoder)
+ whole_ref=c['physical_consumer_actual_acceptance'];need(type(whole_ref) is dict,'genuine current native-failure whole-consumer acceptance remains unresolved');need(ref(whole_ref['path'])==whole_ref,'complete genuine whole-consumer acceptance descriptor')
+-whole=load(whole_ref['path']);need(whole['schema']=='mckernel.independent-native-positive-physical-actual-five-witness-review.v1' and whole['status']=='PASS_SOURCE_AND_ACTUAL_WHOLE_CONSUMER_CHECKS_ONLY' and whole['decision']=='PASS_EXACT_CURRENT_NATIVE_OWNER_PHYSICAL_CONSUMER_AND_FIVE_WITNESS_CHECKS' and whole['genuine_current_physical']==ref(P),'exact accepted SDK whole decoder/physical tuple')
+-proposal_ref=whole['reviewed_proposal'];need(ref(proposal_ref['path'])==proposal_ref,'complete SDK source proposal descriptor');need(load(proposal_ref['path'])['physical_projection']==dict(path=decoderref['path'],sha256=decoderref['sha256'],size=decoderref['bytes'],mode=Path(decoderref['path']).stat().st_mode),'complete exact reviewed current physical projection typed role')
++whole=load(whole_ref['path']);need(whole['schema']=='mckernel.independent-native-positive-physical-actual-two-witness-review.v1' and whole['status']=='PASS_SOURCE_AND_ACTUAL_WHOLE_CONSUMER_CHECKS_ONLY' and whole['decision']=='PASS_EXACT_CURRENT_POSITIVE_NATIVE_OWNER_PHYSICAL_CONSUMER_AND_TWO_WITNESS_CHECKS' and whole['genuine_current_physical']==ref(P) and whole['source']==decoderref,'exact accepted SDK whole decoder/physical tuple')
++proposal_ref=whole['reviewed_proposal'];need(ref(proposal_ref['path'])==proposal_ref,'complete SDK source proposal descriptor');need(load(proposal_ref['path'])['candidate_projection']==dict(path=decoderref['path'],sha256=decoderref['sha256'],size=decoderref['bytes'],mode=Path(decoderref['path']).stat().st_mode),'complete exact reviewed current physical projection typed role')
+ predecessor=decoder.project(physical,ref(P));need(predecessor==whole['actual_projection'],'complete genuine actual projection unchanged')
+ if physical_pending:predecessor={key:(value if key=='filesystem_uuid' else None) for key,value in predecessor.items()}
+ need(physical_pending or all(not os.path.lexists(predecessor[k]) for k in ['lease_path','common_exclusion','shared_heavy']),'released predecessor records absent')
