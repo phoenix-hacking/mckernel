@@ -1,0 +1,51 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-independent-functional-slice-20261020-1/run_ordinary_check_once.py"
+  ],
+  "commands": {
+    "bytes": 2871,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-independent-functional-slice-20261020-1/CHECK-COMMANDS.json",
+    "sha256": "4d23383b5fc603a30da12f53e1b449bc1250c7df04c8c0bf53a8dcca00c01606"
+  },
+  "failure_policy": "One failed candidate plus one bounded correction then expert; preserve all outputs, no unchanged retry",
+  "native_prerequisite": "Independent source/Linux/staticELF acceptance then new single-app sourcebinding; no guest authorized here",
+  "oracle": {
+    "bytes": 73,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-independent-functional-slice-20261020-1/expected.stdout",
+    "sha256": "ed373b840d0c0cf1eeaff3a88c50770d7f999b90ebdfa404b9e964737085dc1a"
+  },
+  "profile": {
+    "bytes": 7226,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-independent-functional-slice-20261020-1/ORDINARY-CHECK-PROFILE.json",
+    "sha256": "4d2a63d7f8df4bfa2f8cdd988e1ff9c2b949e1d781fac380b514a6c8df0b7caf"
+  },
+  "runner": {
+    "bytes": 4991,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-independent-functional-slice-20261020-1/run_ordinary_check_once.py",
+    "sha256": "4e57cf5dc498e96bad0151d2489b41a2cbc081ee5e2d9682802ee222887cc661"
+  },
+  "scope": "Functional OS/apps plus Rust cutover; distinct M03 unaligned mprotect diagnostic only",
+  "source": {
+    "bytes": 3404,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-independent-functional-slice-20261020-1/mprotect_unaligned.rs",
+    "sha256": "8773be69598e42fc5214b774bdd998ed30aeafdcb740aacd95608c4fca0fce39"
+  },
+  "status": "RUNNABLE_PREPARATION_ONLY_NOT_EXECUTED",
+  "tools": "Exact Rust1.92.0 x86_64-unknown-linux-gnu staticGNU compiler/link recipe retained from accepted twoapp387/254 runs;6executablepins plus accepted 9staticlinkinputs/27rlib bindingrecord reused; no new toolchain installation or wholetoolchain hashing"
+}

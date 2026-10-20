@@ -1,3 +1,13 @@
+## 2026-10-20 — distinct M03 diagnostic has actual Linux reference
+
+Independent7cf263f3 accepts source8773be69, frozen73-byte oracle, static
+x86-64 ELF and one Linux reference: all three commands0,0.232487s,
+empty stderr, positive direct joins/groups absent. Unaligned mprotect returns
+EINVAL while8192 mapped bytes and writeability survive, then checked unmap.
+Binary3382f50e/5613712B stays descriptor-only in Git. No native launch or
+practical/whole-M03 credit. Exact33 source/evidence publication files retained
+under evidence/phase5-m03-unaligned-mprotect-source-linux-20261020-1.
+
 ## 2026-10-20 — image pre-common quarantine diagnosis
 
 Current opt-in image invocation is quarantined before common/lease/container
