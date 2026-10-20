@@ -460,7 +460,7 @@
         {
           "id": "P-M03-01",
           "description": "Exercise used map/protect/unmap operations and invalid-input cases.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/memory-calloc-zero-current942-result-review-20261017-1.json",
@@ -492,9 +492,19 @@
               "path": "docs/verification/evidence/m03-authenticated-handshake-native-runtime-20261020-1/independent-review/ACTUAL-M03-AUTHENTICATED-HANDSHAKE-UNALIGNED-MPROTECT-NATIVE-SLICE-SEMANTIC-REVIEW.json",
               "sha256": "b7aa10fca87703fd94ae60d9f26e728514c8f15d8341e515a87a2ce1a2ef5058",
               "size": 12578
+            },
+            {
+              "path": "docs/verification/evidence/m03-q6-native-runtime-checkpoint-20261020-1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-PROTECTION-GRACE-NATIVE-SEMANTIC-AND-LITERAL-P-M03-01-REVIEW.json",
+              "sha256": "ebec559801d70a62a7ecab1f2c8c4c1e281457c8c3ab47a81b542890bdbc65b8",
+              "size": 11763
+            },
+            {
+              "path": "docs/verification/evidence/m03-q6-native-runtime-checkpoint-20261020-1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-PROTECTION-GRACE-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+              "sha256": "498cd4a7dbedb9de21a3f41e5c97136b9a556c488e72b0da2a6047536beff8da",
+              "size": 25167
             }
           ],
-          "assessment_note": "Six calloc sizes and six file data/EOF sizes provide narrow exercised data-path evidence; direct map/protect/unmap and invalid-input coverage remains open. Additive current3bfc mmap-zero-length native PASS: failed mapping/EINVAL/exact18B/exit0 and physical retirement. No mapping-publication/leak proof; whole check remains open. Additive tested205/HOST66 native slice b7aa10fc with physical6f42: unaligned mprotect returns EINVAL, preserves8192 bytes, permits write and checked unmap; exact73B/emptyerr/exit0. This is one distinct behavior (26 to27), not broad valid-protection coverage or whole-check closure."
+          "assessment_note": "Six calloc sizes and six file data/EOF sizes provide narrow exercised data-path evidence; direct map/protect/unmap and invalid-input coverage remains open. Additive current3bfc mmap-zero-length native PASS: failed mapping/EINVAL/exact18B/exit0 and physical retirement. No mapping-publication/leak proof; whole check remains open. Additive tested205/HOST66 native slice b7aa10fc with physical6f42: unaligned mprotect returns EINVAL, preserves8192 bytes, permits write and checked unmap; exact73B/emptyerr/exit0. This is one distinct behavior (26 to27), not broad valid-protection coverage or whole-check closure. Additive current tested205/HOST66 Q6 strict61B valid-protection PASS ebec5598 with physical498cd4a7: actual RO-write SIGSEGV/SEGV_ACCERR at exact target, unchanged byte, RW restoration/write and checked unmap. Exact tuple matches b7aa invalid-operation/map/unmap evidence; independent review closes this literal used-operation/input criterion. Same logical protection behavior as prior02bea: no distinct-behavior increase. Other M03 ownership checks and whole M03 remain open."
         },
         {
           "id": "P-M03-02",
@@ -543,7 +553,7 @@
           "assessment_note": "Post-effect Shutdown8 and ownership-retained -11\u21920 application retirement are observed. This does not establish all required mapping/release failure ownership invariants."
         }
       ],
-      "current_evidence_summary": "Actual current942 allocation/map/protection/unmap app paths plus protected-write SIGSEGV/ACCERR/exactaddress and restored RW write now pass; final supported-candidate memory/ownership session remains open. Current3bfc zero-length anonymous mmap/EINVAL diagnostic passes independently; adds one distinct behavior only."
+      "current_evidence_summary": "Actual current942 allocation/map/protection/unmap app paths plus protected-write SIGSEGV/ACCERR/exactaddress and restored RW write now pass; final supported-candidate memory/ownership session remains open. Current3bfc zero-length anonymous mmap/EINVAL diagnostic passes independently; adds one distinct behavior only. Current tested205/HOST66 valid protection ebec5598 plus matching b7aa invalid-input/map/unmap evidence completes P-M03-01. Failed-invalidation and release-on-failure ownership obligations remain open."
     },
     {
       "id": "M04",
@@ -2045,9 +2055,9 @@
     "signed production/repository/independent external release qualification"
   ],
   "next_actions": [
-    "Advance existing frozen IHK kmsg module request6322420c to fresh exact admission/execution under its own reviewed capsule; prior scratch headroom blocker is resolved by authorized reserve, but current release/live gates still apply. No kernel205 image rebuild is required for this host-control module.",
-    "Preserve the accepted fresh205 full build f735, artifactfa398, finite37c88a, physical0f832 and strict matching N3 nativef55c/physical5f83. Never replay spent requests or rebuild for the now-complete literal clean-rebuild accounting check.",
-    "Continue dependency-ready functional checks on supported matching artifacts with frozen individual oracles and actual retirement; leave later Rust source private until a coherent compiler cycle. Excluded execve and service-held fork/ACK tasks remain excluded."
+    "Finish existing child actual raw-stage normalization/parent/whole-owner source closure, then matching opt-in image/module live-parent child-run/known-exit/parent-wait native preparation under genuine release and fresh admission. No default/final-ACK authority from source-only proof.",
+    "Finish minimal M02 timeout-owner whole-source/mount closure, reusing accepted Exit7 app/kernel/modules/collector and actual body result; classify actual timeout phase and prove positive retirement before any literal closure.",
+    "Preserve accepted Q6/b7aa current-tuple memory evidence and all failures. P-M03-02/03 remain open. SDK source compilation remains blocked by fixed capacity gate and higher-priority no-resize instruction; do not replay parked cleanup searches or weaken floors."
   ],
   "evidence_reconciliation": {
     "date": "2026-10-17",
@@ -2188,6 +2198,28 @@
       ],
       "criterion_and_whole_remain_open": true,
       "original_failed_attempts_preserved": true
+    },
+    "m03_valid_protection_criterion_20261020": {
+      "criterion": "P-M03-01",
+      "status": "complete",
+      "semantic_review": {
+        "path": "docs/verification/evidence/m03-q6-native-runtime-checkpoint-20261020-1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-PROTECTION-GRACE-NATIVE-SEMANTIC-AND-LITERAL-P-M03-01-REVIEW.json",
+        "sha256": "ebec559801d70a62a7ecab1f2c8c4c1e281457c8c3ab47a81b542890bdbc65b8",
+        "size": 11763
+      },
+      "physical_review": {
+        "path": "docs/verification/evidence/m03-q6-native-runtime-checkpoint-20261020-1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-PROTECTION-GRACE-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+        "sha256": "498cd4a7dbedb9de21a3f41e5c97136b9a556c488e72b0da2a6047536beff8da",
+        "size": 25167
+      },
+      "checks_complete": 16,
+      "whole_milestones_complete": 3,
+      "distinct_native_behaviors": 28,
+      "new_unique_behavior_credit": 0,
+      "accepted_current_tuple_native_batch_delta": 1,
+      "production_Rust_paths": 17,
+      "native_Rust_paths": 14,
+      "whole_M03": "open"
     }
   }
 }

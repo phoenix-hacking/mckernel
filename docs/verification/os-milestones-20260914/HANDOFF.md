@@ -1,3 +1,36 @@
+## Current — M03 used mapping criterion complete; next child and timeout preparations
+
+M03 Q6 completed all seven commands and three readbacks once. Owner rc0 took
+42.965845s. Independent physical498cd4a7 proves client/QEMU/container/group and
+record retirement, retaining permanent mutex27:4. Strict semantic ebec5598
+accepts exact61B/empty stderr/exit0: protected write faults at the expected
+address, original byte survives, RW restoration permits the checked write,
+and mapping unmaps. Same tested205/HOST66 tuple as accepted b7aa10fc's invalid
+mprotect/EINVAL/8192-byte preservation/map/unmap slice. Together these CLOSE
+literal P-M03-01:16/35 checks. P-M03-02/03 and whole M03 remain OPEN.
+Deduplication205311dd records the same logical protection behavior as prior02bea:
+28 distinct behaviors, three whole milestones and Rust17/14 stay unchanged.
+This is one additional accepted current-tuple native batch, not language credit.
+
+Latest physical predecessor is498cd4a7, not S5 ebbcee or an image-cleanup report.
+Closed Q6 root-tool session51811 receipt64256797 and all failed predecessors
+remain retained. Accepted source checkpoints09d95/313c and fetched77-row proof
+reuse unchanged app/kernel/modules/stage/normalization; no passing replay needed.
+
+M02 actual inside-argv/no-effect check b68b0739 passed0.168s and independent
+5f9e9072, CPU6 released. New immutable timeout successor must add its genuine
+SELF prefix to read-only mounts and bind all source siblings consistently;
+old8f3a body result alone grants no whole-owner/native timeout authority.
+Child six-artifact archive39edf and raw-kind consumer42a916b3 are accepted;
+actual normalization/parent/whole-owner closure is preparing independently.
+Child opt-in image/SDK/mcexec tuple stays separate from tested205/HOST66.
+Post-parent-exit delegation and default/native/final-ACK holds remain real.
+
+SDK growth approval/proposal remain preserved but non-executable under the
+current higher-priority no-resize instruction. Keep fixed capacity gates,
+Scratch21, all failed evidence, one-heavy and aggregate resource controls.
+Included usage100%/zero reserve; service/auth/billing stops remain authoritative.
+
 ## Current — Exit7 accepted native behavior28; M03 positive-predecessor join next
 
 S5/Q5 completed the exact seven-step chain once: LAST/machine/guard, owner0,
