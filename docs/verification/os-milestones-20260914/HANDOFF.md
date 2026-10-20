@@ -1,3 +1,46 @@
+## Current — corrected host modules accepted; exact source integrated
+
+SDK artifact3d2651e6 and physical7929aa52 accept all three matching modules,
+MODULE/explicit-ON flags, real provider imports/exports and actual compiler
+bindings. Root integrated the exact twelve reviewed Rust/Kbuild files after
+all10 preimages+2absences matched, preserving comments and unrelated WIP.
+Default source activation stays OFF; no module loading/native child/finalACK
+credit. Original SDK MODULE and exporter failures remain retained alongside
+the corrected21.003474s owner result. Counts15/35,whole3,26,17/14 held.
+
+Image successor17 source/control rows now match exact fresh-request profile
+and accepted runtime1f3eeac8. Next: genuine fetched publication proof, actual
+read-only snapshot, exact final release and sole image owner. Materialized6959
+sources/toolchain and prior42+4 source proofs are reused, with no new source
+copy or baseline replay. Latest physical predecessor is SDK7929aa52.
+
+## Current — quarantined attempt retired; corrected SDK compiled
+
+Independent49282d9f accepts the finite image-quarantine recovery: sole bound
+pidfd retirement, original wrapper joins, same mutex27:4 reacquisition and
+exact shared-token authenticated release. Original image2d1d remains a failed
+pre-common attempt with no compiler/container creation; both recovery attempts
+and raw records are retained. The partial proc seq-file reader correction is
+scoped to the recovery helper only; image lock code remains unchanged.
+
+Corrected enabled-host SDK owner completed0/21.003474s with direct/group joins.
+Physical7929aa52 releases its slot; matching three-module artifact checks passed
+in the existing reviewer, with exact artifact report being finalized. No module
+loading, native child, default activation or final ACK is claimed. Image successor
+has corrected supplemental manifest, nine copy keys and bounded exception record;
+pure cross-reference probe passed. Its final profile names the fresh request.
+Exact17 source/control rows are being published;6959 materialized source entries
+and accepted toolchain bytes are reused. Next: fetched17 proof, genuine root
+snapshot/final review and one image owner. SDK artifact acceptance then permits
+exact conditional twelve-file host integration with fresh preimages.
+
+M03 Rust source/ELF/Linux7cf263f3 shipped6c41ddbb; typed observer/stager03fe26ac
+passed seven affected groups with first fixture failure retained. No M03 native
+or whole credit. Parent-exit retained-safety probe passes; terminal progress is
+OPEN pending genuine pre-close owned control transfer. It is parked and does
+not block the narrower live-parent child235B scenario. Counts15/35,whole3,
+26behaviors,17production/14nativeRust unchanged;100% included/zero reserve.
+
 ## Current — image attempt quarantined before container creation
 
 The current opt-in image attempt entered explicit guard quarantine while holding

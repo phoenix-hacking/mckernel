@@ -14,6 +14,8 @@ use kernel::{
     sync::{new_mutex, Arc, Mutex},
     uaccess::UserSlice,
 };
+#[path="current_fork_host.rs"]
+mod current_fork_host;
 
 // SAFETY: IHK is the real namespaced module dependency. These operations use
 // only kernel-owned output/connection storage and retain exact OS/backend owners.
@@ -35,10 +37,12 @@ extern "C" {
         geometry:*const super::application_abi::ForkGeometryV3,
         consumer:Option<super::application_abi::ForkAdoptConsumerV4>,context:*mut c_void)->i32;
     fn ihk_os_application_close_v1(context: *mut c_void);
+    fn ihk_os_application_fork_control_current_v1(parent:*mut c_void,child:*mut c_void,
+        call:*mut super::application_abi::ForkControlCallV1)->i32;
 }
 
-// The reviewed capability is incomplete: existing defaults still return -95.
-const CURRENT_FORK_ADOPTION_ENABLED:bool=false;
+// Default OFF. Only the hash-bound, separately released SDK opt-in may set this cfg.
+const CURRENT_FORK_ADOPTION_ENABLED:bool=cfg!(mckernel_current_fork_adoption_opt_in);
 struct RegistrationReservation<'a>(&'a Process);
 impl Drop for RegistrationReservation<'_>{fn drop(&mut self){self.0.registration_pending.store(false,Ordering::Release);}}
 struct CurrentForkAdoptAttempt<'a> {
@@ -90,6 +94,9 @@ pub(super) struct Registration {
     operation: Pin<Box<Mutex<()>>>,
     mapping: Pin<Box<Mutex<Option<Arc<Mirror>>>>>,
     workers: Pin<Box<Mutex<Vec<Arc<HostWorker>>>>>,
+    // Preallocated parent-owned routing references span worker handoff. Keys
+    // only select an owned connection; every use needs paired provider auth.
+    control_children:Pin<Box<Mutex<Vec<(u64,Arc<Registration>)>>>>,
     // Mirror files can outlive all mcos file bindings and their Process owner.
     // Retain the referenced PID independently for that complete lifetime.
     _pid: ProcessId,
@@ -116,6 +123,7 @@ impl Registration {
         let operation = Box::pin_init(new_mutex!(()), GFP_KERNEL)?;
         let mapping = Box::pin_init(new_mutex!(None), GFP_KERNEL)?;
         let workers = Box::pin_init(new_mutex!(Vec::with_capacity(64, GFP_KERNEL)?), GFP_KERNEL)?;
+        let control_children=Box::pin_init(new_mutex!(Vec::with_capacity(64,GFP_KERNEL)?),GFP_KERNEL)?;
         let mut context = ptr::null_mut();
         // SAFETY: mcctrl pins IHK, and this output remains exclusively borrowed
         // until the checked open transfers its independently leased connection.
@@ -140,6 +148,7 @@ impl Registration {
                 operation,
                 mapping,
                 workers,
+                control_children,
                 _pid: identity,
             },
             GFP_KERNEL,
@@ -271,6 +280,12 @@ impl Registration {
             let serial = u64::from_le_bytes(bytes[8..16].try_into().unwrap());
             if serial == 0 {
                 return Err(EIO);
+            }
+            if image::word(&bytes,40).map_err(errno)?==56
+                &&matches!(image::word(&bytes,48).map_err(errno)?,2|3)
+                &&image::word(&bytes,88).map_err(errno)?==0x313030434b46434d {
+                self.fork_control_current(&worker,&bytes)?;
+                continue;
             }
             if image::word(&bytes, 40).map_err(errno)? == 9 {
                 // mmap numbers in this protocol are kernel file/device-pager

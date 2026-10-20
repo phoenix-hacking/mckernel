@@ -614,6 +614,15 @@ impl SyscallResponse {
         self.pager_copy(0,&mut bytes,true)
     }
 
+    pub(crate) fn current_fork_control_frame(&mut self,request:&SyscallRequest)->Result<[u8;128]> {
+        let a=request.arguments();
+        if request.number()!=56||!matches!(a[0],2|3)||a[5]!=0x313030434b46434d{return Err(EACCES);}
+        self.read_current_fork_carrier(request)
+    }
+    pub(crate) fn write_fork_control_frame(&mut self,bytes:&mut[u8;128])->Result {
+        self.pager_copy(0,bytes,true)
+    }
+
     pub(crate) fn prepare_pager(&mut self, request: &SyscallRequest) -> Result {
         let operation = crate::application_pager::Operation::decode(request).map_err(errno)?;
         let Some((physical, bytes, to_guest)) = operation.payload() else {

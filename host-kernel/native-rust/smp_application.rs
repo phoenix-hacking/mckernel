@@ -21,6 +21,8 @@ use kernel::{
 #[path = "current_fork_task_mm.rs"]
 mod current_fork_task_mm;
 use current_fork_task_mm::ChildTaskMm;
+#[path="current_fork_control.rs"]
+mod current_fork_control;
 
 pub(crate) const CAPACITY: usize = 64;
 const PUBLICATION_TIMEOUT_SECONDS: u64 = 5;
@@ -52,6 +54,10 @@ struct Entry {
 
 impl Entry {
     fn backend_ready(&self)->Result {
+        // This mutex also covers every inherited-root read. Installing the
+        // owned revoke capsule therefore closes admission and drains all
+        // earlier backend accesses before the out-of-lock Linux MM callback.
+        if self.fork_ingress.as_ref().is_some_and(|owner|owner.host_revoke.is_some()){return Err(EBUSY);}
         if let Some(image)=&self.prepare{return kernel::error::to_result(image.result().ok_or(EBUSY)?).map(|_|());}
         if self.inherited_root.as_ref().is_some_and(|image|image.control_cpu>=0)&&self.fork_ingress.as_ref().is_some_and(|f|f.sealed.load(Ordering::Acquire)){return Ok(());}
         Err(EINVAL)
@@ -199,6 +205,7 @@ pub(crate) struct PreparedForkIngress {
     first_return_committed:bool,
     first_return_published:bool,
     lease:core::mem::ManuallyDrop<Option<BackendForkLeaseV4>>,
+    host_revoke:Option<current_fork_control::OwnedRevoke>,
 }
 struct BackendForkLeaseV4 {owner:*mut core::ffi::c_void,release:super::application_abi::ForkLeaseReleaseV4}
 // The originating IHK owner explicitly permits transfer; Drop is outside locks.
@@ -365,7 +372,7 @@ impl Remote {
             child_task: core::mem::ManuallyDrop::new(child_task),
             response: core::mem::ManuallyDrop::new(response), parent, child, finished: false,
             response_location:ForkResponseLocation::Ticket,
-            sealed:AtomicBool::new(false),carrier_nonce:0,first_return_written:false,first_return_committed:false,first_return_published:false,lease:core::mem::ManuallyDrop::new(None),
+            sealed:AtomicBool::new(false),carrier_nonce:0,first_return_written:false,first_return_committed:false,first_return_published:false,lease:core::mem::ManuallyDrop::new(None),host_revoke:None,
         })
     }
 

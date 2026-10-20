@@ -84,3 +84,25 @@ pub(crate) type Invoke = unsafe extern "C" fn(*mut c_void, u32, *mut u8, usize) 
 // SAFETY: Called once after all invocations end. Close destroys the connection
 // before IHK drops its lease. Published work must retain independent ownership.
 pub(crate) type Close = unsafe extern "C" fn(*mut c_void);
+
+// Explicit current control ABI. The v6 callback table and v4 adoption ABI are
+// unchanged. An owned capsule transfers before revoke; no scalar creates one.
+pub(crate) const FORK_CONTROL_CURRENT_V1:u32=18;
+#[repr(C)]
+#[derive(Clone,Copy,Debug,Eq,PartialEq)]
+pub(crate) struct ForkControlIdentityV1 {
+    pub slot:u32,pub child_pid:i32,pub generation:u64,pub parent:u64,
+    pub worker:u64,pub delivery:u64,pub child:u64,pub child_mm:u64,
+    pub root:u64,pub start:u64,pub length:u64,pub nonce:u64,
+}
+#[repr(C)]
+#[derive(Clone,Copy)]
+pub(crate) struct ForkRevokeClaimV1 {pub identity:ForkControlIdentityV1,pub carrier:u64}
+pub(crate) type ForkRevokeV1=unsafe extern "C" fn(*mut c_void,*const ForkRevokeClaimV1)->i32;
+pub(crate) type ForkAcceptV1=unsafe extern "C" fn(*mut c_void)->i32;
+#[repr(C)]
+pub(crate) struct ForkControlCallV1 {
+    pub version:u32,pub bytes:u32,pub child:*mut c_void,pub worker:u64,pub delivery:u64,
+    pub owner:*mut c_void,pub revoke:Option<ForkRevokeV1>,pub accept:Option<ForkAcceptV1>,
+    pub release:Option<ForkLeaseReleaseV4>,
+}

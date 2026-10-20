@@ -7,7 +7,7 @@ use core::{
     mem::{align_of, size_of, MaybeUninit,ManuallyDrop},
     pin::Pin,
     ptr::{self, NonNull},
-    sync::atomic::{AtomicI32,AtomicPtr,Ordering},
+    sync::atomic::{AtomicBool,AtomicI32,AtomicPtr,Ordering},
 };
 use kernel::{bindings, prelude::*, sync::{new_mutex,Arc,ArcBorrow,Mutex}};
 
@@ -99,6 +99,7 @@ pub(super) struct Mirror {
     mm: MmIdentity,
     pub(super) start: u64,
     pub(super) end: u64,
+    admission:AtomicBool,foreign_alias_seen:AtomicBool,
 }
 // Each VMA owns a raw Arc. The file transfers its bootstrap once, so a
 // shared inherited file does not permanently retain a parent's application.
@@ -110,7 +111,7 @@ struct DeferredVmaOwner {
     // Last field: all application/MM reference destructors retain this module.
     _module:DeferredModule,
 }
-struct DeferredModule(*mut c_void);
+pub(super) struct DeferredModule(*mut c_void);
 unsafe impl Send for DeferredModule {}
 unsafe impl Sync for DeferredModule {}
 extern "C" {
@@ -118,7 +119,7 @@ extern "C" {
     fn module_put(module:*mut c_void);
 }
 impl DeferredModule {
-    fn acquire()->Result<Self> {
+    pub(super) fn acquire()->Result<Self> {
         let module:*mut c_void=super::THIS_MODULE.as_ptr().cast();
         if !unsafe {try_module_get(module)} {return Err(ENODEV);}
         Ok(Self(module))
@@ -182,6 +183,9 @@ unsafe extern "C" fn vma_open(vma:*mut bindings::vm_area_struct) {
     // Linux copied a live original VMA. Its raw reference remains borrowed,
     // and this new VMA takes an independent increment for split/fork lifetime.
     if let Ok(owner)=unsafe {vma_owner(vma)} {
+        if unsafe {(*vma).vm_mm}!=owner.mirror.mm.0.as_ptr(){
+            owner.mirror.foreign_alias_seen.store(true,Ordering::Release);
+        }
         let owned:Arc<VmaOwner>=owner.into();
         unsafe {(*vma).vm_private_data=Arc::into_raw(owned).cast_mut().cast()};
     }
@@ -234,7 +238,8 @@ impl Mirror {
         child_registration.validate_current_fork_child(parent_registration)?;
         let mm=CurrentMm::get()?;
         if mm.0==parent.mm.0||mm.0.as_ptr() as u64!=expected_mm{return Err(EACCES);}
-        let child=Arc::new(Self{mm:MmIdentity::from_current(&mm)?,start,end},GFP_KERNEL)?;
+        let child=Arc::new(Self{mm:MmIdentity::from_current(&mm)?,start,end,
+            admission:AtomicBool::new(true),foreign_alias_seen:AtomicBool::new(false)},GFP_KERNEL)?;
         let replacement=VmaOwner::new(child_registration,child.clone())?;
         unsafe {mckernel_inherited_mmap_write_lock(mm.0.as_ptr().cast())};
         let write=InheritedWrite(&mm);
@@ -302,6 +307,7 @@ impl Mirror {
                 mm: MmIdentity::from_current(&mm)?,
                 start: 0,
                 end,
+                admission:AtomicBool::new(true),foreign_alias_seen:AtomicBool::new(false),
             },
             GFP_KERNEL,
         )?;
@@ -381,6 +387,53 @@ impl Mirror {
             bindings::vm_munmap(self.start, (self.end - self.start) as usize)
         })
         .map(|_| ())
+    }
+
+    pub(super) fn revoke_fork_aliases(self:&Arc<Self>,claim:&super::application_abi::ForkRevokeClaimV1)->Result {
+        let identity=claim.identity;
+        if identity.child_mm!=self.mm.0.as_ptr() as u64||identity.start!=self.start
+            ||identity.start.checked_add(identity.length)!=Some(self.end)||identity.generation==0
+            ||identity.root==0||identity.root%4096!=0||identity.parent==0||identity.child==0
+            ||identity.parent==identity.child||identity.worker==0||identity.delivery==0
+            ||identity.nonce==0||identity.child_pid<=0||claim.carrier==0||claim.carrier%8!=0{return Err(EACCES);}
+        // Monotonic closure. No PID disappearance or scalar return proves MM
+        // retirement. The structural pin only permits this guarded mmget.
+        self.admission.store(false,Ordering::Release);
+        let users=unsafe {AtomicI32::from_ptr(ptr::addr_of_mut!(
+            (*self.mm.0.as_ptr()).__bindgen_anon_1.mm_users.counter))};
+        users.fetch_update(Ordering::Acquire,Ordering::Relaxed,|n|
+            if n>0{n.checked_add(1)}else{None}).map_err(|_|EBUSY)?;
+        let mm=CurrentMm(self.mm.0);
+        unsafe {mckernel_inherited_mmap_write_lock(mm.0.as_ptr().cast())};
+        let guard=InheritedWrite(&mm);
+        let result=(||->Result {
+            if self.foreign_alias_seen.load(Ordering::Acquire){return Err(EBUSY);}
+            // Include split/moved aliases throughout this MM. Preflight all,
+            // exclude per-VMA readers, then zap (including Linux TLB finish).
+            for pass in 0..3 {
+                let mut address=0;
+                loop {
+                    let vma=unsafe {bindings::find_vma(mm.0.as_ptr(),address)};
+                    if vma.is_null(){break;}
+                    let(first,last)=unsafe {((*vma).__bindgen_anon_1.__bindgen_anon_1.vm_start,
+                        (*vma).__bindgen_anon_1.__bindgen_anon_1.vm_end)};
+                    if first<address||last<=first||last%4096!=0
+                        ||unsafe {(*vma).vm_mm}!=mm.0.as_ptr(){return Err(EBUSY);}
+                    if unsafe {(*vma).vm_ops}==&VM_OPERATIONS.0 {
+                        let owner=unsafe {vma_owner(vma)}.map_err(|_|EBUSY)?;
+                        if ptr::eq(&*owner.mirror,&**self) {
+                            if first%4096!=0||unsafe {(*vma).vm_file.is_null()}
+                                ||unsafe {(*vma).__bindgen_anon_2.__vm_flags}&bindings::VM_PFNMAP as u64==0{return Err(EBUSY);}
+                            if pass==1{unsafe {mckernel_inherited_vma_start_write(vma.cast())};}
+                            if pass==2{unsafe {bindings::zap_vma_ptes(vma,first,last-first)};}
+                        }
+                    }
+                    address=last;
+                }
+            }
+            Ok(())
+        })();
+        drop(guard);drop(mm);result
     }
 
     pub(super) fn clear(&self, start: u64, end: u64) -> Result {
@@ -475,7 +528,7 @@ unsafe fn lookup_fault(vmf: *mut bindings::vm_fault, write: bool) -> Result<Faul
     let mirror = &private.mirror;
     // SAFETY: The same locked live VMA remains valid while its MM identity is
     // compared against the MappingFile owner before any request is issued.
-    if unsafe { (*vma).vm_mm } != mirror.mm.0.as_ptr()
+    if !mirror.admission.load(Ordering::Acquire)||unsafe { (*vma).vm_mm } != mirror.mm.0.as_ptr()
         || address < mirror.start
         || address >= mirror.end
     {

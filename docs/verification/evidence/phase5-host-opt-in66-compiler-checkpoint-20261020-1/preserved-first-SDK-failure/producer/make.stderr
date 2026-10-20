@@ -1,0 +1,44 @@
+error: unexpected `cfg` condition name: `MODULE`
+   --> /candidate/modules/mcctrl_rust.rs:146:7
+    |
+146 | #[cfg(MODULE)]
+    |       ^^^^^^
+    |
+    = help: expected names are: `mckernel_current_fork_adoption_opt_in` and 31 more
+    = help: to expect this configuration use `--check-cfg=cfg(MODULE)`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg.html> for more information about checking conditional configuration
+    = note: `-D unexpected-cfgs` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(unexpected_cfgs)]`
+
+error: unexpected `cfg` condition name: `MODULE`
+   --> /candidate/modules/mcctrl_rust.rs:152:11
+    |
+152 | #[cfg(not(MODULE))]
+    |           ^^^^^^
+    |
+    = help: to expect this configuration use `--check-cfg=cfg(MODULE)`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg.html> for more information about checking conditional configuration
+
+error: unexpected `cfg` condition name: `MODULE`
+   --> /candidate/modules/mcctrl_rust.rs:158:1
+    |
+158 | / module! {
+159 | |     type: McctrlModule,
+160 | |     name: "mcctrl",
+161 | |     license: "GPL v2",
+162 | | }
+    | |_^
+    |
+    = note: using a cfg inside a macro will use the cfgs from the destination crate and not the ones from the defining crate
+    = help: try referring to `module` crate for guidance on how handle this unexpected cfg
+    = help: to expect this configuration use `--check-cfg=cfg(MODULE)`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg.html> for more information about checking conditional configuration
+    = note: this error originates in the macro `module` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: aborting due to 3 previous errors
+
+make[3]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/scripts/Makefile.build:284: /candidate/modules/mcctrl_rust.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/Makefile:1990: /candidate/modules] Error 2
+make[1]: *** [/out/source/linux-6.12.0-211.44.1.el10_2/Makefile:242: __sub-make] Error 2
+make: *** [Makefile:242: __sub-make] Error 2

@@ -1740,6 +1740,38 @@ pub(crate) static APPLICATION_ADOPT_CURRENT_V4_EXPORT:IhkExportSymbolRecord=IhkE
 };
 
 /// # Safety
+/// Both connections and the exclusive typed call remain owned through this
+/// synchronous invocation. The provider retains any transferred capsule.
+#[export_name="ihk_os_application_fork_control_current_v1"]
+pub(crate) unsafe extern "C" fn fork_control_application_current_v1(
+    parent:*mut c_void,child:*mut c_void,call:*mut super::application_abi::ForkControlCallV1)->i32 {
+    let result=(||->Result {
+        if parent.is_null()||child.is_null()||parent==child||call.is_null(){return Err(EINVAL);}
+        let parent=unsafe {&*parent.cast::<ApplicationConnection>()};
+        let child=unsafe {&*child.cast::<ApplicationConnection>()};
+        if parent._lease.handle()!=child._lease.handle(){return Err(EACCES);}
+        let a=parent.backend.callbacks;let b=child.backend.callbacks;
+        if a.open as usize!=b.open as usize||a.invoke as usize!=b.invoke as usize
+            ||a.close as usize!=b.close as usize{return Err(EACCES);}
+        let call=unsafe {&mut *call};
+        if call.version!=1||call.bytes as usize!=core::mem::size_of_val(call)||!call.child.is_null(){return Err(EINVAL);}
+        call.child=child.backend.context.as_ptr();
+        let status=unsafe {(a.invoke)(parent.backend.context.as_ptr(),
+            super::application_abi::FORK_CONTROL_CURRENT_V1,ptr::from_mut(call).cast(),core::mem::size_of_val(call))};
+        call.child=ptr::null_mut();
+        if status>0||status< -4095{return Err(errno(-71));}
+        kernel::error::to_result(status as i32)?;Ok(())
+    })();result.map_or_else(|e|e.to_errno(),|()|0)
+}
+#[export_name="__export_symbol_ihk_os_application_fork_control_current_v1"]
+#[link_section=".export_symbol"]
+#[used(compiler)]
+pub(crate) static APPLICATION_FORK_CONTROL_CURRENT_V1_EXPORT:IhkExportSymbolRecord=IhkExportSymbolRecord{
+    license:*b"GPL\0",namespace:*b"MCKERNEL_IHK_V1\0",padding:[0;4],
+    symbol:fork_control_application_current_v1 as *const () as *const u8,
+};
+
+/// # Safety
 /// Return the unique successful open after all concurrent invocations end.
 #[export_name = "ihk_os_application_close_v1"]
 pub(crate) unsafe extern "C" fn close_application(context: *mut c_void) {

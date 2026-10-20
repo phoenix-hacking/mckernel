@@ -586,6 +586,55 @@ impl<M: ResponseMemory> Mailbox<M> {
         Ok(())
     }
 
+    pub(crate) fn finish_fork_kernel_retained(
+        &mut self,
+        handle: u64,
+        serial: u64,
+        result: impl FnOnce(&Request, &mut M) -> Result<i64>,
+    ) -> Result {
+        if self.quarantined {
+            return Err(-71);
+        }
+        let call = self
+            .calls
+            .iter_mut()
+            .flatten()
+            .find(|call| call.delivery.serial().wire() == serial)
+            .ok_or(-2)?;
+        let worker = call.worker.ok_or(-71)?;
+        if !call.kernel || worker.wire() != handle || call.completion.is_some() {
+            return Err(-16);
+        }
+        if self.closed || call.cancelled {
+            // A cancellation publication is not a successful control ACK.
+            // Keep the exact kernel reservation and Response for retention;
+            // this transaction has already performed irreversible effects.
+            return Err(-32);
+        }
+        let value = result(
+            call.delivery.request(),
+            call.response.as_mut().ok_or(-71)?.memory_mut(),
+        )?;
+        // This control-only endpoint publishes exactly ACK0. A failed frame
+        // write must not be converted into an ordinary error RET and then
+        // mistaken for ACK publication by returned().
+        if value != 0 { return Err(-71); }
+        call.delivery
+            .begin_return(worker, call.delivery.request().cpu() as i64)?;
+        match call.response.take().ok_or(-71)?.prepare_retained(worker.tid(), value) {
+            Ok(completion) => {
+                call.kernel=false;
+                call.completion = Some(completion);
+            }
+            Err((response,error)) => {
+                call.response=Some(response);
+                self.quarantined = true;
+                return Err(error);
+            }
+        }
+        Ok(())
+    }
+
     pub(crate) fn return_value(
         &mut self,
         handle: u64,

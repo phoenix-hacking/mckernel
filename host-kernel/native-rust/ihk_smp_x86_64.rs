@@ -265,6 +265,15 @@ unsafe extern "C" fn application_invoke(
                 unsafe {application.adopt_current_fork(child,call)}
             }
         }
+    } else if command==application_abi::FORK_CONTROL_CURRENT_V1 {
+        if buffer.is_null()||bytes!=core::mem::size_of::<application_abi::ForkControlCallV1>()
+            ||buffer as usize%core::mem::align_of::<application_abi::ForkControlCallV1>()!=0{Err(EINVAL)}else{
+            let call=unsafe {&mut *buffer.cast::<application_abi::ForkControlCallV1>()};
+            if call.version!=1||call.bytes as usize!=bytes||call.child.is_null(){Err(EINVAL)}else{
+                let child=unsafe {&*call.child.cast::<smp_memory::Application>()};
+                unsafe {application.fork_control_current(child,call)}
+            }
+        }
     } else if command == application_abi::CLEANUP && buffer.is_null() && bytes == 0 {
         application.cleanup()
     } else if !buffer.is_null()
