@@ -1,3 +1,35 @@
+## Current — handshake corrected; SDK accepted; carrier Rust integrated
+
+The second M03 attempt remains FAIL after13.795762s. Its newly exported boot
+status proves exit1 at native-boot-two.c:21 opening missing pair.challenge,
+before reservation ioctl or application startup. Classification35d58d74 and
+physical791ea5c2 preserve exact failed evidence; no kernel reservation defect
+or application behavior is claimed.
+
+The corrected collector prepares the existing authenticated challenge before
+boot and verifies assignment before payload. Five commands passed in0.778768s:
+28 startup vectors, affected helper/local export tests and static compilation.
+Independent e56cfa5f accepts this bounded source/body result. Separate owners
+prepare init-only staging, current SDK physical binding and fresh retry data;
+future stage/snapshot/release/native outputs remain unbound. The tested M03
+205/HOST66 source tuple stays unchanged. Optional failure automation is deferred.
+
+Paired-lease SDK50557 completed21.109116s; artifact24dcfae2 accepts three modules
+and physical5a872af9 is the latest heavy retirement. New MCCTRLd74ef800 is not
+substituted into M03. Scratch13.184GiB is below this SDK caller's13.1875GiB
+future-launch threshold; every next operation retains its full fresh budget.
+
+Root integrated current_fork_host.rs5a686331 at exact10c8 preimage after review
+6f7168fe: the original defect witness and eight candidate cases passed. Only
+the caller-private carrier reservation rolls back on proved negative unchanged
+no-transfer outcomes. Request recovery, delegated execution, ACK, default and
+native proof remain open. This source change is absent from built SDK50557.
+IKC source99d7/e3f3 remains integrated with production/native proof pending.
+
+Counts15/35, wholeM00/M04/M10,26 behaviors and Rust17/14 are unchanged.
+Continuous100%included/zeroreserve; paid/API forbidden. All WIP, failures,
+Scratch21 and permanent mutex27:4 are preserved. No heavy workload is active.
+
 ## Current — reviewed IKC Rust correction integrated; M03 retry controls produced
 
 Two reviewed Rust files are integrated after six commands passed: native6 and

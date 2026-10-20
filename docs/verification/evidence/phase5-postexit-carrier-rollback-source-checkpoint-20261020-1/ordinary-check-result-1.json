@@ -1,0 +1,92 @@
+{
+  "profile": "CPU6 / 1job /1GiBAS /30CPU /35+2wall /32MiBperstream",
+  "rustc_sha256": "f8d033fd72e878ec60493788c8bffec2e6c154dcab6f0cb4c145af8ada26a7ed",
+  "results": [
+    {
+      "environment": {
+        "RUSTC_BOOTSTRAP": "1"
+      },
+      "name": "original-witness-compile-1",
+      "command": [
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "debuginfo=0",
+        "-C",
+        "linker=/usr/bin/x86_64-linux-gnu-gcc-9",
+        "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/fixture-1/actual-baseline.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/original-tests-1"
+      ],
+      "pid": 2117224,
+      "exit_code": 0,
+      "elapsed": 0.365860576974228,
+      "positive_wait": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "093cd6cb182e28ae9100d33fe6c982513bbe9e5d47ca815261643f4ca650953b"
+    },
+    {
+      "environment": {
+        "RUSTC_BOOTSTRAP": "1"
+      },
+      "name": "original-witness-cases-1",
+      "command": [
+        "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/original-tests-1",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "pid": 2117234,
+      "exit_code": 0,
+      "elapsed": 0.002528331009671092,
+      "positive_wait": true,
+      "stdout_sha256": "700599bebb81a588ba91e25caa15ee362fe694b0ae3d4654a6b8f478081d2cc9",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "environment": {
+        "RUSTC_BOOTSTRAP": "1"
+      },
+      "name": "rollback-actual-compile-1",
+      "command": [
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "debuginfo=0",
+        "-C",
+        "linker=/usr/bin/x86_64-linux-gnu-gcc-9",
+        "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/fixture-1/actual-pair.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/rollback-tests-1"
+      ],
+      "pid": 2117236,
+      "exit_code": 0,
+      "elapsed": 0.4155563040403649,
+      "positive_wait": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "2af50156308189c8c8ae1315cbc78f206fced6a00d7fc3f5f0432b84d29e08e5"
+    },
+    {
+      "environment": {
+        "RUSTC_BOOTSTRAP": "1"
+      },
+      "name": "rollback-actual-cases-1",
+      "command": [
+        "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/rollback-tests-1",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "pid": 2117246,
+      "exit_code": 0,
+      "elapsed": 0.004442699020728469,
+      "positive_wait": true,
+      "stdout_sha256": "3fa819770ad6940e086e5b0df0cde421bdf9fb7c716691d098fa50976ab0972e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

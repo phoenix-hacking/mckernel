@@ -5,7 +5,7 @@ use super::super::application_abi::{ForkControlCallV1,ForkRevokeClaimV1,ForkPrep
 // A zero carrier is private pending state, never a lookup key. The row is
 // minted only by the authenticated v4 adoption callback before any MM effect.
 pub(super) struct ForkChildRoute {
-    carrier:u64,child:Arc<Registration>,geometry:ForkGeometryV3,
+    carrier:u64,carrier_capsule:usize,child:Arc<Registration>,geometry:ForkGeometryV3,
     child_mm:u64,response:u64,nonce:u64,
 }
 impl ForkChildRoute {
@@ -14,6 +14,12 @@ impl ForkChildRoute {
             &&self.child.pid==proof.child_pid&&self.child_mm==proof.child_mm
             &&self.response==proof.response&&self.nonce==proof.nonce
     }
+}
+// A move-only witness for the exact row reserved by this synchronous call.
+// The capsule allocation stays live until either transfer or private rollback;
+// its address distinguishes this attempt, never supplies delivery authority.
+struct ForkCarrierBinding {
+    parent:usize,child:Arc<Registration>,carrier:u64,capsule:usize,response:u64,nonce:u64,
 }
 struct HostRevoke {
     child:Arc<Registration>,mirror:Arc<Mirror>,revoked:AtomicBool,
@@ -49,7 +55,7 @@ impl Registration {
         if paired.is_some()||children.len()>=64||children.iter().any(|row|
             Arc::ptr_eq(&row.child,self)||row.child.pid==self.pid){return Err(EBUSY);}
         // Capacity was allocated before IHK open. This push cannot grow it.
-        children.push(ForkChildRoute{carrier:0,child:self.clone(),geometry:proof.geometry,
+        children.push(ForkChildRoute{carrier:0,carrier_capsule:0,child:self.clone(),geometry:proof.geometry,
             child_mm:proof.child_mm,response:proof.response,nonce:proof.nonce},GFP_KERNEL)?;
         *paired=Some(parent.clone());Ok(())
     }
@@ -71,11 +77,26 @@ impl Registration {
         if matching.next().is_some(){return Err(EACCES);}
         Ok(row.child.clone())
     }
-    fn bind_fork_carrier(&self,child:&Arc<Self>,carrier:u64)->Result {
+    fn bind_fork_carrier(&self,child:&Arc<Self>,carrier:u64,capsule:usize)->Result<ForkCarrierBinding> {
         let mut children=self.control_children.lock();
-        if carrier==0||children.iter().any(|row|row.carrier==carrier){return Err(EBUSY);}
-        let row=children.iter_mut().find(|row|Arc::ptr_eq(&row.child,child)&&row.carrier==0).ok_or(EACCES)?;
-        row.carrier=carrier;Ok(())
+        if carrier==0||capsule==0||children.iter().any(|row|row.carrier==carrier){return Err(EBUSY);}
+        let row=children.iter_mut().find(|row|Arc::ptr_eq(&row.child,child)
+            &&row.carrier==0&&row.carrier_capsule==0).ok_or(EACCES)?;
+        row.carrier=carrier;row.carrier_capsule=capsule;
+        Ok(ForkCarrierBinding{parent:self as *const Self as usize,child:child.clone(),carrier,
+            capsule,response:row.response,nonce:row.nonce})
+    }
+    // ONLY the synchronous caller's intact negative return may consume this
+    // witness. OwnedRevoke::take clears all four capsule fields before effects;
+    // it never returns/restores them, including on callback/publication errors.
+    // No Drop rollback: transferred, partial and unknown returns retain the row.
+    fn cancel_untransferred_fork_carrier(&self,binding:ForkCarrierBinding)->Result {
+        if binding.parent!=self as *const Self as usize{return Err(EACCES);}
+        let mut children=self.control_children.lock();
+        let row=children.iter_mut().find(|row|Arc::ptr_eq(&row.child,&binding.child)
+            &&row.carrier==binding.carrier&&row.carrier_capsule==binding.capsule
+            &&row.response==binding.response&&row.nonce==binding.nonce).ok_or(EACCES)?;
+        row.carrier=0;row.carrier_capsule=0;Ok(())
     }
     pub(super) fn fork_control_current(&self,worker:&HostWorker,bytes:&[u8;96])->Result {
         let word=|at|u64::from_le_bytes(bytes[at..at+8].try_into().unwrap());
@@ -103,7 +124,7 @@ impl Registration {
         let mut call=ForkControlCallV1{version:1,bytes:core::mem::size_of::<ForkControlCallV1>() as u32,
             child:ptr::null_mut(),worker:worker.handle,delivery:serial,owner:ptr::null_mut(),
             revoke:None,accept:None,release:None};
-        let mut original=ptr::null_mut();
+        let mut original=ptr::null_mut();let mut binding=None;
         if selector==2 {
             let mirror=child.mapping.lock().clone().ok_or(EACCES)?;
             let module=super::super::mcctrl_vm::DeferredModule::acquire()?;
@@ -112,13 +133,23 @@ impl Registration {
             call.revoke=Some(revoke);call.accept=Some(accept);call.release=Some(release);
             // Bind only this authenticated adoption's existing owned row.
             // Failure/uncertain provider publication keeps the pair and key.
-            if let Err(error)=self.bind_fork_carrier(&child,carrier){unsafe {release(original)};return Err(error);}
+            match self.bind_fork_carrier(&child,carrier,original as usize){
+                Ok(owned)=>binding=Some(owned),Err(error)=>{unsafe {release(original)};return Err(error);}
+            }
         }
         let status=unsafe {ihk_os_application_fork_control_current_v1(self.context.as_ptr(),child.context.as_ptr(),&mut call)};
         if !original.is_null()&&call.owner==original&&call.revoke.map(|f|f as usize)==Some(revoke as usize)
             &&call.accept.map(|f|f as usize)==Some(accept as usize)&&call.release.map(|f|f as usize)==Some(release as usize){
-            // No transfer/effect occurred. Balance the actual original box.
-            unsafe {release(original)};
+            // The complete original capsule stayed caller-owned throughout
+            // this synchronous negative return. No provider may retain an
+            // untransferred capsule: the current consumer takes it before any
+            // revoke/accept/publication effect. Release only outside row locks.
+            // Success with an untouched capsule is inconsistent; retain its key.
+            if status<0&&call.version==1&&call.bytes==core::mem::size_of::<ForkControlCallV1>() as u32
+                &&call.child.is_null()&&call.worker==worker.handle&&call.delivery==serial {
+                let cancelled=match binding.take(){Some(owned)=>self.cancel_untransferred_fork_carrier(owned),None=>Err(EACCES)};
+                unsafe {release(original)};cancelled?;
+            }else{unsafe {release(original)};return Err(errno(-71));}
         }else if !call.owner.is_null()||call.revoke.is_some()||call.accept.is_some()||call.release.is_some(){
             // Unknown transfer is deliberately retained, never reconstructed.
             return Err(errno(-71));

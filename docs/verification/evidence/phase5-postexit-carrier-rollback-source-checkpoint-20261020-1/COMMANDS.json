@@ -1,0 +1,56 @@
+[
+  {
+    "name": "original-witness-compile-1",
+    "argv": [
+      "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--test",
+      "-C",
+      "codegen-units=1",
+      "-C",
+      "debuginfo=0",
+      "-C",
+      "linker=/usr/bin/x86_64-linux-gnu-gcc-9",
+      "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/fixture-1/actual-baseline.rs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/original-tests-1"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "original-witness-cases-1",
+    "argv": [
+      "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/original-tests-1",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "rollback-actual-compile-1",
+    "argv": [
+      "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--test",
+      "-C",
+      "codegen-units=1",
+      "-C",
+      "debuginfo=0",
+      "-C",
+      "linker=/usr/bin/x86_64-linux-gnu-gcc-9",
+      "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/fixture-1/actual-pair.rs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/rollback-tests-1"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "rollback-actual-cases-1",
+    "argv": [
+      "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/rollback-tests-1",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "expected_exit": 0
+  }
+]

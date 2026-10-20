@@ -1,0 +1,70 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/prepare_fullmodule_inputs.py"
+      ],
+      "label": "generate"
+    },
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/materialize_request.py",
+        "--materialize"
+      ],
+      "label": "materialize"
+    }
+  ],
+  "controller": {
+    "pause_reason": null,
+    "phase": "running",
+    "stop_reason": null,
+    "usedPercent": 22
+  },
+  "growth_reserved_bytes": 134217728,
+  "host_available_bytes": 44233326592,
+  "inherited_nofile_limit": 256,
+  "memory_available_bytes": 29050814464,
+  "pins_verified": true,
+  "proposal_sha256": "efa4489842b86babd4e4e10abebe6f6482f19018d1cc1d08943ef68672aa2ee1",
+  "review_sha256": "6c876d383fa07ade05744f010e5af39578edcc2a36d0bbe7072eb3cd8646d2b5",
+  "scratch_available_bytes": 14207574016,
+  "scratch_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+  "shared_absence_checked": [
+    "mckernel-heavy-operation.lock",
+    "native-exact-candidate-operational-exclusion-scratch18-image-1.json",
+    "native-phase5-paired-lease-external-modules.lease.json",
+    "native-phase5-paired-lease-external-modules-operational-exclusion.json"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "status": "PRIVATE_SOURCE_AND_FIXTURE_FROZEN_UNRUN",
+  "scope": "Functional OS/apps plus live Rust/reviewed assembly cutover. One host Rust exact-attempt private carrier rollback; no compute C, no independent delegated executor, no activation.",
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/source/host-kernel/native-rust/current_fork_host.rs",
+    "sha256": "5a68633144eb60f941a73ceff9f2d5b0d30c7b9c1c1d0c25d5e8135dfde959b4",
+    "bytes": 10844
+  },
+  "baseline": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/original/host-kernel/native-rust/current_fork_host.rs",
+    "sha256": "10c8acac4006f7e1bdfdfb2a0c5fe1c90b46ac8d3c28ffe46d9a31c27fa4a473",
+    "bytes": 8512
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/CARRIER-ROLLBACK.patch",
+    "sha256": "82b90160e986c1fb1828bacb62610859d00e77b7168ca87be3e6c2d4e1251428",
+    "bytes": 6572
+  },
+  "contract_sources": [
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/current_fork_control.rs",
+      "sha256": "9810cb58a1166e4a72455d2d3c3e294eace0d723bea0c586e5d7891844370c9f",
+      "bytes": 9799
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/os_runtime.rs",
+      "sha256": "4acedfe7e50e51183f0e58d3ab9fd9225eccf4bd5bfdb4101a49e4a201fd55f5",
+      "bytes": 83075
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/abi/application.rs",
+      "sha256": "80183a0d743aa266fa8931f6cd1915de1e7de7ea9cfb26c3215db4505b711ec5",
+      "bytes": 5785
+    }
+  ],
+  "baseline_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/BASELINE-PINS.json",
+    "sha256": "57f259b71cf452c582e299aadfa1cab0ba355f89b22f8a1c5634aa6c56efce6d",
+    "bytes": 411
+  },
+  "production_caller": "Registration::fork_control_current selector2 -> bind_fork_carrier -> synchronous ihk_os_application_fork_control_current_v1 -> intact negative tuple and unchanged call -> cancel_untransferred_fork_carrier; original errno preserved.",
+  "private_proof": "Exact original allocation plus revoke/accept/release tuple returned unchanged by exclusive synchronous call, negative result and unchanged version/size/child/worker/serial; actual provider OwnedRevoke::take clears all four before effects and has no restore path. Capsule pointer only distinguishes row attempt; no Request/ACK authority.",
+  "binding": "Move-only witness pins exact child Arc; row installation and rollback require exact parent address, child Arc, carrier, still-live capsule allocation, original response and nonce. Original paired slot/generation are immutable and pinned by Arcs. Concurrent duplicates cannot overwrite row.",
+  "retention": "Transferred/null capsule, partial tuple, changed call, uncertain publication, inconsistent success, rollback mismatch retain row and paired owners. No Drop rollback.",
+  "remaining_open": [
+    "Independent pre-exit executor/transport with genuine fresh Request+Response; no current supported primitive supplies it",
+    "Parent-exit orphan Process edge progress",
+    "Full current module/ABI/native/ACK acceptance"
+  ],
+  "failure_history": "New bounded defect candidate; no tests run. Original baseline witness prepared and preserved separately. No replay of parked parent-exit expected red."
+}
