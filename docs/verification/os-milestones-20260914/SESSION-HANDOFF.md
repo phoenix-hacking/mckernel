@@ -1,3 +1,34 @@
+## Current — six-app target met; retained SDK compiler failure preserved
+
+The accepted three-round selected205 case ran six real Rust applications in
+46.601413897 owner seconds. Semantic65be31f9 and physical33e1d2c5 establish
+strict per-round CPU/output/exit/overlap, distinct identities and retirement.
+Against the fixed two-app/44.160327-second baseline, successful launches per
+owner wall second improved2.842853251x, exceeding the user's2.3x target.
+This is application batching throughput; no overall engineering multiplier.
+Counts remain26 distinct behaviors,12/35 practical checks,17 selected production
+Rust paths and14 selected native Rust paths. All14 whole milestones remain open.
+
+SDK source publication614dd622 is pushed/fetched; genuine98-row proof65659f0b
+binds the separate PRIVATE retained full-module target, not current/default
+provider activation. Its exact released compiler invocation joined rc1 in
+3.961861s, with group absent and no observer error. Actual make diagnostics:
+missing private_fork_carrier_request_20261017.rs, undeclared EOVERFLOW, and
+out-of-scope callbacks/registered. Preserve the complete consumed attempt under
+host-preparation/practical-create-ppd-provider-repair-20261019-1/
+host-control-fullmodule-integration-1; original author owns one coherent private
+closure/source correction. Independent physical acceptance is pending; do not
+launch another heavy operation until its genuine decision exists.
+
+Next executable work: finish two-complete-cycle205 final data/review, bind the
+latest actual physical predecessor after SDK retirement, then fresh snapshot,
+exact guard and immediate owner. Current guest native/legacy whole-crate source
+materialization76files/3.38MB joined0 separately; its crate-only owner contract
+is being completed, no compiler or constructor/native acceptance yet. Preserve
+all provider constructor/revoke/finalACK/default activation holds. Launch-count
+expansion is source-only in a separate private namespace. No healthy workload
+is running; campaign remains ACTIVE, included usage92%, stop97%.
+
 ## Current — four real Rust applications accepted in one 205 boot
 
 Independent semantic33de5fc5 and physicaldb3dacce PASS the fixed two-round

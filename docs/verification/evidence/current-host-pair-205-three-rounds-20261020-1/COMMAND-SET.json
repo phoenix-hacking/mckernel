@@ -1,0 +1,67 @@
+{
+  "AS_bytes": 1073741824,
+  "CPU": 7,
+  "CPU_seconds": 30,
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=3",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/check_three_rounds.py"
+  ],
+  "capture_executor": {
+    "bytes": 14757,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/ordinary-envelope-1/run_three_commands_source_bound.py",
+    "sha256": "37e5d4fcf0d5ad196627a1c60831ff4887a14a8fa89c9ebe29c82387faf1d6c4"
+  },
+  "cleanup_seconds": 3,
+  "compiler": {
+    "bytes": 1158288,
+    "path": "/usr/bin/gcc",
+    "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+  },
+  "compiler_authority": {
+    "bytes": 4686,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/OFFLINE-INPUT-PINS.json",
+    "sha256": "224c05bd646c2c90dab60eb50212bd376255b18d816332c1dbaba8b74be8ec3e"
+  },
+  "file_bytes": 33554432,
+  "fresh_paths": [
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-check-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-capture-1"
+  ],
+  "global_work_seconds": 28,
+  "growth_per_filesystem_bytes": 67108864,
+  "host_floor_bytes": 17179869184,
+  "jobs": 1,
+  "not_authorized": [
+    "native",
+    "root",
+    "Docker",
+    "module",
+    "guest",
+    "kernel build"
+  ],
+  "production_boundary_stubs": [
+    "pair_run actual applications",
+    "klogctl actual kernel messages",
+    "procfs retired_at",
+    "monotonic fixture clock"
+  ],
+  "reserve_per_filesystem_bytes": 671088640,
+  "scope": "OFFLINE_FIXED_THREE_ROUNDS_ONLY",
+  "scratch_floor_bytes": 12884901888,
+  "wall_seconds": 35
+}

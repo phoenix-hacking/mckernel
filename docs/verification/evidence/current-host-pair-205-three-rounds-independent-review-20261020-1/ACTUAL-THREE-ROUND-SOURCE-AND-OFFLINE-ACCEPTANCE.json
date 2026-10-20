@@ -1,0 +1,277 @@
+{
+  "Python_strict_refusals": [
+    {
+      "name": "missing-third-round",
+      "reason": "exact three-round evidence"
+    },
+    {
+      "name": "duplicate-round",
+      "reason": "exact three-round evidence"
+    },
+    {
+      "name": "cross-round-duplicate-PID",
+      "reason": "three-round unique PID"
+    },
+    {
+      "name": "handoff-before-first-reap",
+      "reason": "sequential round handoff"
+    },
+    {
+      "name": "wrong-round-index",
+      "reason": "three-round boundary identity"
+    },
+    {
+      "name": "false-procfs-handoff",
+      "reason": "three-round boundary identity"
+    },
+    {
+      "name": "wrong-third-oracle",
+      "reason": "pair stream oracle"
+    },
+    {
+      "name": "missing-third-EOF",
+      "reason": "pair stream accounting"
+    },
+    {
+      "name": "wrong-third-startup-CPU",
+      "reason": "pair actual CPU mismatch"
+    },
+    {
+      "name": "cross-round-token-reuse",
+      "reason": "three-round fresh retirement tokens"
+    },
+    {
+      "name": "foreign-application",
+      "reason": "three-round global schedules"
+    },
+    {
+      "name": "unknown-round-marker",
+      "reason": "unknown three-round wire marker"
+    },
+    {
+      "name": "two-boots",
+      "reason": "one actual OS boot assignment"
+    },
+    {
+      "name": "third-start-before-second-END",
+      "reason": "sequential round handoff"
+    },
+    {
+      "name": "round-count-not-a-duration-knob",
+      "reason": "missing/duplicate pair report"
+    }
+  ],
+  "actual_C_case_names": [
+    "three-round-success",
+    "first-oracle-stops-later",
+    "second-oracle-stops-third",
+    "third-PID-reuse",
+    "third-token-reuse",
+    "third-startup-CPU",
+    "third-byte-oracle",
+    "third-workspace-handoff",
+    "second-procfs-refuses-third"
+  ],
+  "actual_C_scenarios": 9,
+  "actual_closed_direct_status_count": 12,
+  "actual_compile_commands": 2,
+  "actual_full_evaluator_positive": {
+    "completed_apps": 6,
+    "completed_rounds": 3,
+    "exact_stdout_bytes_per_round": [
+      387,
+      254
+    ],
+    "first_and_second_failure_stop_later": true,
+    "status": "PROTOCOL_PASS",
+    "strict_CPUs_per_round": [
+      0,
+      1
+    ],
+    "synthetic_PIDs": [
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006
+    ],
+    "third_identity_token_CPU_oracle_workspace_and_procfs_failures_refused": true
+  },
+  "actual_guest_runs": 0,
+  "actual_outer_status": {
+    "bytes": 1069,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-capture-1/status.json",
+    "sha256": "389bd885cbb504e7c922907be66eb89fba0c0d78f0414e4c66f5b42f3a5f70e5"
+  },
+  "actual_result": {
+    "bytes": 29433,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-check-1/result.json",
+    "sha256": "277caafdfbf1f1c76096effc12616b5b7e09801a086064d143c2a72cf9321059"
+  },
+  "all_actual_outer_inner_statuses": [
+    {
+      "bytes": 1069,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-capture-1/status.json",
+      "sha256": "389bd885cbb504e7c922907be66eb89fba0c0d78f0414e4c66f5b42f3a5f70e5"
+    },
+    {
+      "bytes": 1545,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-check-1/compile-three-rounds/status.json",
+      "sha256": "c2e89a5efe78c575da7b5de3cb0241c089d82965e70f5f4175968047d9e199f6"
+    },
+    {
+      "bytes": 1514,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-check-1/compile-actual-body/status.json",
+      "sha256": "5f6aa3ab81c17426c5777899faf1b51cc552c45fb6b67402c29a409e768fc70a"
+    },
+    {
+      "bytes": 1356,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-check-1/actual-body-0/status.json",
+      "sha256": "009163f6f73c0156d3fe402ec58eee6d07148453cc8ff10c761b4e2d570ec8b4"
+    },
+    {
+      "bytes": 1353,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-check-1/actual-body-1/status.json",
+      "sha256": "28289bcd296fd00a424de45b2268e429db0a47cdf1ae9bfcf89ff6521fc091a2"
+    },
+    {
+      "bytes": 1354,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-check-1/actual-body-8/status.json",
+      "sha256": "31e34517eb297ed8c3e904d03d8a7730545c03618ca21ce5a5c67f1c582b9217"
+    },
+    {
+      "bytes": 1359,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-check-1/actual-body-12/status.json",
+      "sha256": "0f18e3faa768b53fd5bab7d897fe4f2dc4ec721e1bc950df448b6f22d524fa8a"
+    },
+    {
+      "bytes": 1358,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-check-1/actual-body-13/status.json",
+      "sha256": "b4e389500cf4505b640d8c32cd0fa721925e06347f4bb3f405291d3be87a1f07"
+    },
+    {
+      "bytes": 1355,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-check-1/actual-body-14/status.json",
+      "sha256": "906ce87be796f7dd36347431ebd1677e08593322b24a3f2a510cfddb2e23e8fb"
+    },
+    {
+      "bytes": 1359,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-check-1/actual-body-15/status.json",
+      "sha256": "7ae2101572ffb493f9ec102e91bf0c9f7dd408c75605a4e296c47060dbed71e7"
+    },
+    {
+      "bytes": 1359,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-check-1/actual-body-16/status.json",
+      "sha256": "284eca6e979e088a91d9eef689e99c35626c6170e7532c5f7b5f3ded955b2ea5"
+    },
+    {
+      "bytes": 1357,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-check-1/actual-body-17/status.json",
+      "sha256": "7e05ca3cd14aba16c2ca16c1df8d6da30128a8568812bade7225b4b712189686"
+    }
+  ],
+  "all_direct_joined_owned_groups_absent_streams_closed": true,
+  "all_stderr_bytes": 0,
+  "all_stream_FD_identity_size_hash_checks_passed": true,
+  "command_set": {
+    "bytes": 2085,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/COMMAND-SET.json",
+    "sha256": "22341606d8b1f7c590cfb94ddc7bc051f2b3eb5719f119952c9774382a649033"
+  },
+  "compiled_collector": {
+    "bytes": 1038568,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/ordinary-check-1/collector-three-rounds",
+    "sha256": "36e09ecadcd426026aac97972dda0813996019741f8512437dc779bee8c1c35b"
+  },
+  "decision": "ACCEPT_THREE_ROUND_SOURCE_AND_ORDINARY_RESULTS_ONLY_NO_STAGE_NATIVE_OR_THROUGHPUT_AUTHORITY",
+  "executed_oracle_preserved": {
+    "bytes": 3744,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/FROZEN-ROUND-ORACLE.json",
+    "sha256": "105efeb4ea5de23415d7b7b23728bd53ae57d6f28d242a9d4a55af9069ad08bc"
+  },
+  "implementation_ownership": false,
+  "input_pins": {
+    "bytes": 6554,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/CHECK-INPUT-PINS.json",
+    "sha256": "60135278d8a1401c2b0615aa91ff9c1871e920b048421b53eb1137b94198fdcc"
+  },
+  "native_runtime_authority": false,
+  "native_throughput_target": {
+    "actual_native_ratio": null,
+    "baseline_completed_owner_seconds": 44.160327,
+    "baseline_real_apps": 2,
+    "not_a_workload_kill_timeout": true,
+    "required_owner_app_throughput_ratio": 2.3,
+    "six_app_owner_limit_seconds": 57.6004265,
+    "six_real_apps_required": true
+  },
+  "new_Rust_retired_paths": 0,
+  "new_logical_cases": 0,
+  "oracle_prose_scope_addendum": {
+    "bytes": 2186,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/THREE-ROUND-SCOPE-ORACLE-ADDENDUM.json",
+    "sha256": "c34efd04a8bbe042ade384d2c507ac4601c4c6266b53b89a2488f8232b8d09cb"
+  },
+  "ordinary_profile": {
+    "AS_bytes": 1073741824,
+    "CPU": 7,
+    "CPU_seconds": 30,
+    "cleanup_seconds": 3,
+    "file_bytes": 33554432,
+    "growth_each_filesystem_bytes": 67108864,
+    "host_floor_bytes": 17179869184,
+    "jobs": 1,
+    "reserve_each_filesystem_bytes": 671088640,
+    "scratch_floor_bytes": 12884901888,
+    "shared_work_seconds": 28,
+    "wall_seconds": 35
+  },
+  "proposal": {
+    "bytes": 3287,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1/IMPLEMENTATION-PROPOSAL.json",
+    "sha256": "fd908d924827c4cedd762add943429ace5ab7be906f382d5de917ffd581b17be"
+  },
+  "real_application_launches": 0,
+  "remaining_boundary": "Actual changedcollector initstage+strict owner/runner/fullparent must be concretely reviewed/accepted; actuallatestphysical/freshLAST60s/exactfinalmachine/rootadmission still mandatory before native. No old source/image/module/helper suite replay required.",
+  "repeatability_quota_acceptance": false,
+  "reused_accepted_ancestor_native": {
+    "bytes": 22579,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1/ACTUAL-TWO-ROUND-FOUR-APP-NATIVE-DIAGNOSTIC-REVIEW.json",
+    "sha256": "33de5fc5aeeb0e9d84de4dd91d675998809af287ad402fbf23efeebca506654a"
+  },
+  "reused_accepted_ancestor_offline": {
+    "bytes": 14135,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1/ACTUAL-FIXED-TWO-ROUND-OFFLINE-ACCEPTANCE.json",
+    "sha256": "94c7158043efe7aac83cc44e0a70220431035e898dfe42ec59e996bc91dcc10b"
+  },
+  "reviewer": "two_cpu_end_to_end_review",
+  "schema": "mckernel.independent-current-host-pair205-fixed-three-round-source-and-actual-offline-review.v1",
+  "scope": "functional OS/apps plus Rust and reviewed assembly; Linux usercollector C only, exact fixed3 same-OS application-pair rounds",
+  "source_changes": [
+    "Fixed Linux collector compile selector TWO\u2192THREE and3loop bound/completioncount; unchanged128-byte evidence buffer and original defaultonepair/ownership helpers.",
+    "Global leaderPID array/cap4\u21926; retirementtoken array/cap48\u219272, preserving perPID12attempt bound and global freshness.",
+    "Strict manifest pair_rounds remains exact typeint fixedliteral3; no duration/countparameter interface.",
+    "Strict wholeparser requires3START/PAIR/END and1COMPLETE,6distinctPIDs/globalfresh tokens; each round still delegates unchanged original _pair_body/_pair_trace.",
+    "Later START position must follow immediately previous END via ends[round_index-1], with priorend monotonic time; fixes3rdround wire-order boundary.",
+    "Original assignment header/oracle header bytes unchanged; fixed ff4 image/currentb9-5d modules/Rust387+254bytes remain unchanged futurestage inputs."
+  ],
+  "source_review_notes": {
+    "C_actual_shared_save_write_result_bodies_reused": true,
+    "actual_pin_count": 27,
+    "explicit_stub_boundaries": [
+      "pair_run actual applications",
+      "klogctl actual kernel log",
+      "procfs retired_at",
+      "monotonic fixture clock"
+    ],
+    "oracle_scope": "Executed numeric/schema/cases/apps fixed3 were correct; inherited two-round/four-PID requirements prose explicitly superseded by additive c34ef/current explicit user three-round request. Original consumed105/pins preserved; no fixture rerun or algorithm change.",
+    "original_onepair_checker_AST_unchanged": true,
+    "source_pin_mismatches": 0,
+    "unchanged_helpers_reused_not_retested": true
+  },
+  "stage_acceptance": false,
+  "status": "PASS_FIXED_THREE_ROUND_SOURCE_AND_ACTUAL_COLLECTOR_BODY_STRICT_EVALUATOR_OFFLINE",
+  "throughput_credit": false,
+  "whole_elapsed_seconds": 1.7657546359987464
+}

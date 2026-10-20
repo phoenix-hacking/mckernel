@@ -6,7 +6,135 @@ and wakes a completed one. `send_message` alone can leave completed reviewers
 idle. Include exact closed output/report paths and the narrow next review; do
 not replay completed work. Check actual active state if the handoff goes quiet.
 
-## Current priorities — review 85, 2026-10-20T00:35:44.078306Z
+Persistent application-throughput target: >=2.3x successful real launches per
+completed native owner wall second. Fixed baseline: 2 apps / 44.160327 seconds.
+Six launches must complete in <=57.6004265 seconds. Preserve strict oracles and
+retirement; no overall engineering-speedup claim. More CPUs are user-authorized
+when a concrete reviewed profile and measurement justify the change.
+
+Persistent application-throughput result: target achieved 2026-10-20. Six real
+Rust launches / 46.601413897 owner seconds = 2.842853251x the fixed baseline.
+Semantic 65be31f9, physical 33e1d2c5, join 88aa54e8. Reuse this fast regression
+batch; target completion is not whole-OS or whole-engineering completion.
+
+## Current priorities — review 87, 2026-10-20T01:36:18.553506Z
+
+User target achieved: actual six-app native semantic 65be31f9, physical33e1d2c5
+and join88aa54e8 accept three same-OS pair rounds with exact outputs, strict
+CPU/startup/routing, overlap, distinct identities, exit and retirement handoffs.
+Six launches in46.601413897seconds versus fixed two/44.160327 gives2.842853251x
+applications per completed owner wall second, exceeding2.3x. Owner includes
+cleanup but excludes setup/readbacks. This single-profile batching comparison is
+not overall engineering velocity. The existing CPU profile achieved it; no CPU
+increase was required. Stage acceptance first observed01:16:35, whole result
+01:28:16, semantic01:32:40; the20-minute feedback target was met even when timed
+from stage acceptance. Preserve all exact denominators and failed drafts.
+
+Counts stay12/35 practical checks,26 distinct native behaviors,17 selected
+production Rust paths/14 with applicable native evidence. No whole milestone or
+engineering-band change is inferred from repeated apps. Source/results checkpoint
+f50290e5 is recoverable; a799-row six-app addendum is frozen,442 prior rows reused
+without rehash and357 new records. Keep large archives/binaries descriptor-only.
+
+The separate two-complete-cycle205 candidate has ordinary acceptance cb527bce,
+actual stage e74e06a9 and mandatory consumer2cd16673 after a26.735-second chain.
+Both payload pairs, fresh per-cycle generation/challenges, strict CPU1/2 and final
+public inventories are required. Native execution is still pending producer,
+latest physical-schema binding and final guard/capture data. Actual parent759510,
+QMP95bytes and latest predecessor33e are available. Reuse the actual schema;
+do not infer field aliases from another report. No source or model cycle counts.
+
+Retained host full-module preparation is accepted8ad1ab48:62-file target,
+77 actual copies, two zero-exit source commands in0.115seconds, fresh request
+98541d11,11 runtime sources and98-row publication. Publication/execution release,
+compiler and full-module artifact proof remain pending. This is the retained
+host crate plus ten-file receipt overlay; current IHK lacks those exports and
+current activation stays held. Do not merge private compile credit with production.
+
+Current guest producer/observer source is accepted7dc670b0 plus2655c5ef amendment.
+Five-file patch5d591c6e/source pins749cbb3f and36-file checkpoint6ff1a1cc are frozen.
+The Rust carrier registry and reply observer use actual ABI pointer types, checked
+spans, distinct guest/IHK epochs and the real post-Acquire response identity.
+Malformed negative transport must not truncate into success. Full native/legacy
+crate commands are prepared but unrun. Normal fork constructor handoff, child
+resource retention on errors, host integration and activation are unfinished.
+
+Next: publish/checkpoint coherent reviewed sources and obtain the ready full-module
+and current full-crate compiler feedback, while finishing the actual two-cycle
+native packet. Reuse the accepted three-round batch for fast regression rather
+than more benchmark-only variants. Have the freed batch author prepare a bounded
+launch-count extension toward the real M12 workload, preserving per-round evidence
+and stream/deadline capacity. Avoid blocking a near-ready compile behind the hour
+mixed run. One heavy operation at a time; keep source and admitted ordinary work
+parallel. New independent tasks should use focused file/Markdown handoffs instead
+of inheriting the whole campaign chat, after current tasks close; preserve every
+source authority, failure and held state. Do not rotate/retry a service-policy stop.
+Continue exact argv reuse, immediate follow-up tasks and consolidated diagnostics.
+
+Usage92%, five percentage points to97%included stop. Host/scratch free44.390/
+13.547GiB. Preserve heavy4CPU/12GiB/no-swap/512tasks, aggregate reserves/growth
+floors, fresh identities, permanentmutex27:4, Scratch21, failures, dirty worktree
+and evidence. Next full review:2026-10-20T02:06:18.553506Z.
+
+## Previous priorities — review 86, 2026-10-20T01:06:06.018859Z
+
+Counts held: 12/35 practical checks, 26 distinct native behaviors, 17 selected
+production Rust paths/14 with applicable native evidence. All whole milestones
+remain open and engineering bands are held. The immutable four-hour comparison
+(21:02 -> 01:02) records +3 checks, +1 distinct behavior and no selected Rust-path
+increase. Source-only/private progress is not production cutover.
+
+Actual two-round native acceptance 33de5fc5 plus physical db3dacce confirms one
+boot, four real Rust launches, exact 387/254-byte oracles in each round, distinct
+identities, strict CPU startup/routing, overlap, retirement and clean handoff.
+Completed owner took 46.255768 seconds versus 44.160327 for two apps: 1.9093976x
+applications per owner wall second. This is a measured single-profile batching
+comparison, not overall engineering speedup or M12 quota closure. Stage acceptance
+first observed 00:45:45, whole native result 00:55:12, semantic acceptance 00:59:30.
+All 30 clients/QEMU/container/lease retired. Matching source/results are pushed
+and fetched at f50290e5; prior unchanged checkpoint rows were reused.
+
+New explicit user target: >=2.3x application throughput. The fixed baseline stays
+two strict-oracle launches in 44.160327 completed-owner seconds. The six-launch,
+three-round variant needs <=57.6004265 seconds. It is being implemented in a new
+prefix, reusing accepted images/modules/apps, CPU/output checks and actual fresh
+retirement identities. Third-round errors must refuse success. User permits
+additional CPUs; batching is first because observed fixed setup dominates. Any
+larger CPU profile still needs its concrete resource/isolation review and the
+same declared denominator. No resource increase or target success is inferred.
+
+Private Rust response delivery passed independent fa1d3ea0: compile and all four
+actual-body scenarios, 11 source bindings, real waiting, targeted publication,
+send-failure retry and conservative retention. Missing helper/accessor projections
+and incorrect guest-requester/wake-state expectations caused retained fixture
+failures; production was unchanged for those corrections. Guest consumption,
+coherent current-module integration, native proof and final ACK remain open. Move
+the next implementation toward the real guest callsite and full compilation;
+identify the actual missing consumer/owner boundary rather than indefinitely
+projecting more private helpers. Preserve current activation/release holds.
+
+The separate two-cycle candidate has actual PID capture, per-cycle fresh challenge
+and observed generation, two real payloads per cycle, CPU1/2 and public inventory
+checks, inherited raw/decoded kernel-error refusals, and the unchanged deadline.
+Its ordinary chain passed in 2.218 seconds after two retained compiler failures;
+independent actual-result review is active. No stage/native-cycle credit yet.
+
+Next: run reviewed six-app and payload-bearing two-cycle variants through the
+existing one-heavy path, preparing the next packet while each executes. Retain the
+20-minute static-ready-to-native target and report actual blockers. Keep Rust guest
+integration and admitted CPU6/7 ordinary code checks moving in parallel. Reuse
+passed compiles and complete structures/helpers; consolidate fixture diagnostics.
+Use exact frozen argv/data fields, immediate follow-up tasks and coherent commits.
+After real cycle acceptance, scale useful cycles/launches/duration toward the
+bounded M12 budget, scheduling a long mixed run after any near-ready required
+kernel/module compile. No broad review or new framework for unchanged work.
+
+Usage 90%, seven percentage points to the 97% included stop. Host/scratch free
+44.438/13.584 GiB. Preserve one heavy 4-CPU/12-GiB/no-swap/512-task operation,
+aggregate reserves and growth floors, fresh identities, permanent mutex 27:4,
+Scratch21, failures, dirty worktree and evidence. Next review: 01:36:06 UTC.
+
+## Previous priorities — review 85, 2026-10-20T00:35:44.078306Z
 
 Practical checks increased 11 -> 12/35: P-M00-01 accepted for the exact tested
 profile (4d28cbe5). Distinct native behaviors remain 26; selected Rust paths remain
