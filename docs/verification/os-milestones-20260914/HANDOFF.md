@@ -1,3 +1,19 @@
+## Current — fresh image authentication successor ready for final admission
+
+The first repaired-image invocation closed1/1.158s before compiler/owner/Docker
+entry. Guard authentication retained two stale derivative/materialization pins;
+independent3bcb9415 accepts restricted pre-core process/FD release. Original
+request/release/captures remain consumed and preserved. No image compile occurred.
+
+Exact two-pin correction passed four real-authority prefix outcomes035668c1 /
+253ae68a, including both changed-pin refusals. Fresh attempt2 source controls,
+namespace and existing empty work roots are reviewed under bdfbe998; source6959
+and compiler inputs remain unchanged. Root publishes the23 small control rows,
+then takes the fresh snapshot and obtains one exact execution release.
+M03 complete genuine-terminal consumer now passes four cases b2bad4f1 after its
+preserved first tuple-type failure; whole native binding and execution remain.
+Counts15/35,whole3,26behaviors,17/14Rust held. No heavy job is running.
+
 ## Current — physical clearance accepted; repaired image final admission next
 
 Independent d55efb73 accepts actual cleanup0/5.176s, corrected read-only
