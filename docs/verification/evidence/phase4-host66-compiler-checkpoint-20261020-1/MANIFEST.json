@@ -1,0 +1,1781 @@
+{
+  "binary_or_toolchain_copies": 0,
+  "compilers": 0,
+  "copied_bytes": 704846,
+  "copied_files": 60,
+  "functional_scope": "Functional OS/apps plus Rustcutover; exactcurrent-v6phase4host66compile evidence only",
+  "genuine_independent_refs": [
+    {
+      "bytes": 26946,
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/independent/HOST66-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+      "sha256": "a6614e9c584912790423266097f898badfe4014a6c82a13a0ea0004b5c366672",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-independent-review-20261020-1/HOST66-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json"
+    }
+  ],
+  "limitations": [
+    "Originalcomposite64E0308compilerFAIL remainsfailedandpreserved.",
+    "Compiler/static module evidence only, no moduleload/default/CREATE_PPD/MMseal/ACK/native acceptance.",
+    "Only genuine available independent reports copied; absent artifact acceptance is not fabricated."
+  ],
+  "module_binary_descriptors": {
+    "ihk": {
+      "bytes": 1527808,
+      "compiler_bound_source_count": 13,
+      "modinfo": {
+        "author": "McKernel Rust port",
+        "depends": "",
+        "description": "Native Rust IHK host core",
+        "license": "GPL v2",
+        "name": "ihk",
+        "retpoline": "Y",
+        "rhelversion": "10.2",
+        "srcversion": "56185ED204C089769025BCB",
+        "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload ",
+        "version": "1.7.0rc4"
+      },
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk.ko",
+      "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c"
+    },
+    "ihk-smp-x86_64": {
+      "bytes": 12210104,
+      "compiler_bound_source_count": 47,
+      "modinfo": {
+        "depends": "ihk",
+        "import_ns": "MCKERNEL_IHK_V1",
+        "license": "Dual BSD/GPL",
+        "name": "ihk_smp_x86_64",
+        "parm": "ihk_ikc_irq_core:Target CPU of IHK IKC IRQ",
+        "parmtype": "ihk_ikc_irq_core:uint",
+        "retpoline": "Y",
+        "rhelversion": "10.2",
+        "srcversion": "87FECE0FFDAE834FE1C2D3D",
+        "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload "
+      },
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk-smp-x86_64.ko",
+      "sha256": "c6a9db8eaa2ec5f7898b021b6835d20e4359a5f4a1209b5b28fd9559cd03387f"
+    },
+    "mcctrl": {
+      "bytes": 2368472,
+      "compiler_bound_source_count": 10,
+      "modinfo": {
+        "depends": "ihk",
+        "import_ns": "MCKERNEL_IHK_V1",
+        "license": "GPL v2",
+        "name": "mcctrl",
+        "retpoline": "Y",
+        "rhelversion": "10.2",
+        "srcversion": "4F7E4F9F9D409374F9A2823",
+        "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload "
+      },
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/mcctrl.ko",
+      "sha256": "4e2f1e5b11cad8a9fbfaca4ae6671a2f3fa16ef3c8c651357506d93c7edf4fa9"
+    }
+  },
+  "producer_status": {
+    "direct_child_joined": true,
+    "elapsed_seconds": 20.604649305343628,
+    "observer_error": null,
+    "process_group_absent": true,
+    "returncode": 0
+  },
+  "producer_stderr_bytes": 0,
+  "rows": [
+    {
+      "bytes": 4601,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137380,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 4601,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/run/execution-release-FINAL-PAYLOAD.json",
+      "sha256": "2df40517155f2f503b072e0410c11a6b137471118ac7b15920acae3208fa688c",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/execution-release-FINAL-PAYLOAD.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477759769248803,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137317,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477759769248803,
+        "st_nlink": 1,
+        "st_size": 4601,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 4839,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137381,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 4839,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/run/execution-release.json",
+      "sha256": "e1fb9f5d11c0cf5fbb173081992af9f0dcf4c5016c07dda6dd63f819ee4ac0cf",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/execution-release.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477940806136165,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137351,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477940806136165,
+        "st_nlink": 1,
+        "st_size": 4839,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 238,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137382,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 238,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/run/ROOT-FINAL-EXECUTION-REVIEW-REF.json",
+      "sha256": "97b15812f877234766e31ce3b1992da60ccccafba88337f89ff21509c6607e4e",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/ROOT-FINAL-EXECUTION-REVIEW-REF.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477901729048931,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137335,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477901729048931,
+        "st_nlink": 1,
+        "st_size": 238,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 3368,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137383,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 3368,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/run/FINAL-EXECUTION-DELTA-PACKET.json",
+      "sha256": "8378ba254ebd9202e09ca2639d1f9166ddf90fcec6d326988a7cb5e93fd7928a",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/FINAL-EXECUTION-DELTA-PACKET.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477759769248803,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137320,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477759769248803,
+        "st_nlink": 1,
+        "st_size": 3368,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 7226,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137384,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 7226,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/run/ACTUAL-PHASE4-HOST66-COMPACT-RESULT.json",
+      "sha256": "b30b7601e734fa0b2da23630e73aa5e69450e8b751d127921c64d09c4163357d",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/ACTUAL-PHASE4-HOST66-COMPACT-RESULT.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478089970418154,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137367,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478089970418154,
+        "st_nlink": 1,
+        "st_size": 7226,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 49480,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137385,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 49480,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/run/root-source-fetched-proof-family-shape-1.json",
+      "sha256": "1e9b2b0f235094b797235911b19e6f107c48ddc63c24d0889ae171abad590eb4",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/root-source-fetched-proof-family-shape-1.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477697047657443,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137313,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477697047657443,
+        "st_nlink": 1,
+        "st_size": 49480,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 568,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137387,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 568,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/outer/admission.json",
+      "sha256": "2662947560f3ecff985e80297f150133984cf7088268ce47d809e9017a60abed",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/actual-sdk-build-1/admission.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477940806136165,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137353,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477940806136165,
+        "st_nlink": 1,
+        "st_size": 568,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 675,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137388,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 675,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/outer/child.json",
+      "sha256": "f14ac40493de3700915209b402463fbbaa332016d21c3abfd332bd57dbc95aba",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/actual-sdk-build-1/child.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477940806136165,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137356,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477940806136165,
+        "st_nlink": 1,
+        "st_size": 675,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 1764,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137389,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 1764,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/outer/dispatch.status.json",
+      "sha256": "17185fc5d7b1d2a3ca446d684f6bf1f624c948dadc1a68d5fc689d7333baa09d",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/actual-sdk-build-1/dispatch.status.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477961410715704,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137357,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477961410715704,
+        "st_nlink": 1,
+        "st_size": 1764,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 0,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137390,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/outer/dispatch.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/actual-sdk-build-1/dispatch.stderr",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477940806136165,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137355,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477940806136165,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 68331,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137391,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 68331,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/outer/dispatch.stdout",
+      "sha256": "7b40844c5449d588ff7ded570a96c4291eee36f48d37742a3ec4c8236ca90546",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/actual-sdk-build-1/dispatch.stdout",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477961402715478,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137354,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477961402715478,
+        "st_nlink": 1,
+        "st_size": 68331,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 622,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137394,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 622,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/source-commands/generator/status.json",
+      "sha256": "59668129a933d629e1b84dde847445fda32a18ba7466d7fa7daa881b341b8d80",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/actual-source-preparation-1/generator/status.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477261956384367,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137024,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477261956384367,
+        "st_nlink": 1,
+        "st_size": 622,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 551,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137395,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 551,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/source-commands/generator/closed-streams.json",
+      "sha256": "2a99240ee235ab94fc60db3ff73a3dbefa6a098aee716b319361bdf1ab456f61",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/actual-source-preparation-1/generator/closed-streams.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477261956384367,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137025,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477261956384367,
+        "st_nlink": 1,
+        "st_size": 551,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 192,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137396,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 192,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/source-commands/generator/stdout",
+      "sha256": "8f287c94f61d84496de4b153d6d4d5b680ba4a4d336ca236bc44f72b9dfa1ac0",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/actual-source-preparation-1/generator/stdout",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477261952384229,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48136917,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477261952384229,
+        "st_nlink": 1,
+        "st_size": 192,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 0,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137397,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/source-commands/generator/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/actual-source-preparation-1/generator/stderr",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477261908382716,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48136918,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477261908382716,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 637,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137399,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 637,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/source-commands/materializer/status.json",
+      "sha256": "a2d7a00aa1f92896fce8d9388ca28099a9fbb4a865c8991098c0f2a72fbae5e4",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/actual-source-preparation-1/materializer/status.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477262012386292,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137030,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477262012386292,
+        "st_nlink": 1,
+        "st_size": 637,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 551,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137400,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 551,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/source-commands/materializer/closed-streams.json",
+      "sha256": "cd3f11cd4a81f92a719cebf698b163da62a5eaad2f2f0b8449f5c2feb213eeb3",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/actual-source-preparation-1/materializer/closed-streams.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477262012386292,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137031,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477262012386292,
+        "st_nlink": 1,
+        "st_size": 551,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 289,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137401,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 289,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/source-commands/materializer/stdout",
+      "sha256": "71177e997f4a674e5ea47398d1a73b40cad1df2bc2b93d259a2c70e7e482e37c",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/actual-source-preparation-1/materializer/stdout",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477262008386154,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137027,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477262008386154,
+        "st_nlink": 1,
+        "st_size": 289,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 0,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137402,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/source-commands/materializer/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/actual-source-preparation-1/materializer/stderr",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477261956384367,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137028,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477261956384367,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 38789,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137404,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 38789,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/compiler/receipt.json",
+      "sha256": "cb9accc99e0f75d1d23922835ba101397f2279b21f400899836c876d4d7072f1",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/evidence/receipt.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477960134679692,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880937,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477960134679692,
+        "st_nlink": 1,
+        "st_size": 38789,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 8196,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137405,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 8196,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/compiler/request.json",
+      "sha256": "3e1a364c90bde06ddeadcdcf511941884d66cc6455661a58f3ebd018ca440ce9",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/evidence/request.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477942122173055,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880903,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477942122173055,
+        "st_nlink": 1,
+        "st_size": 8196,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 949,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137406,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 949,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/compiler/make.stdout",
+      "sha256": "d938b4b56720f0424cfeeab8fbb12d43d2b136ed42c28fedb2700b2f10ce684e",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/evidence/make.stdout",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477960006676079,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880904,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477960006676079,
+        "st_nlink": 1,
+        "st_size": 949,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 0,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137407,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/compiler/make.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/evidence/make.stderr",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477942122173055,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880905,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477942122173055,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 69610,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137409,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 69610,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/..module-common.o.cmd",
+      "sha256": "695f6a7dd0e07ee5515c519ccd4cfb133459b98432b27f8370a6d2396e3c2760",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/..module-common.o.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477959150651932,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880934,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477959150651932,
+        "st_nlink": 1,
+        "st_size": 69610,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 174,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137410,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 174,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.Module.symvers.cmd",
+      "sha256": "d51df6f479e04662a155e1fd23c7b33c55a0bb1c4708d10701bea9c40ba09fa5",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.Module.symvers.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477958618636927,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880930,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477958618636927,
+        "st_nlink": 1,
+        "st_size": 174,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 279,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151500236214,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137411,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151500236214,
+        "st_nlink": 1,
+        "st_size": 279,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.ihk-smp-x86_64.ko.cmd",
+      "sha256": "7ddc80a757107121cae37d848dc841a804933b9ee5f2e7b704347d1bc41c3c60",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.ihk-smp-x86_64.ko.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477959774669535,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880942,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477959774669535,
+        "st_nlink": 1,
+        "st_size": 279,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 177,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137412,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 177,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.ihk-smp-x86_64.mod.cmd",
+      "sha256": "0da0a5795dd94ac689493589a4c6a50c133f391112fe7a7d4afd99aef0ee1a26",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.ihk-smp-x86_64.mod.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477942834193021,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880907,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477942834193021,
+        "st_nlink": 1,
+        "st_size": 177,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 68076,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137413,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 68076,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.ihk-smp-x86_64.mod.o.cmd",
+      "sha256": "68039fd437b4d6e9f98a5afa3d5383d12e3c7ee9c4081132779301a6fb49f17d",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.ihk-smp-x86_64.mod.o.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477959690667165,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880938,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477959690667165,
+        "st_nlink": 1,
+        "st_size": 68076,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 465,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137414,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 465,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.ihk-smp-x86_64.o.cmd",
+      "sha256": "145c08396f301a4c4fe176d5fc54ac67e44437fd6f433600a5a452a454c5b895",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.ihk-smp-x86_64.o.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477958586636025,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880917,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477958586636025,
+        "st_nlink": 1,
+        "st_size": 465,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 235,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137415,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 235,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.ihk.ko.cmd",
+      "sha256": "d8529a57c2845927a9cb2d9a0957280e1d79b155fb90899600db9e89a9eebbf8",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.ihk.ko.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477959710667729,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880939,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477959710667729,
+        "st_nlink": 1,
+        "st_size": 235,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 144,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137416,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 144,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.ihk.mod.cmd",
+      "sha256": "2c938c6eda63eb12eb739db444c4bf0d1b9583b90f72a605394fa1bbb1a5e7e3",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.ihk.mod.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477947294318204,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880920,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477947294318204,
+        "st_nlink": 1,
+        "st_size": 144,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 67933,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137417,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 67933,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.ihk.mod.o.cmd",
+      "sha256": "8adaa5885313848bf11e7bf99df6671c4396a1a0e71241bc60fe0e4bd0c7a2e6",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.ihk.mod.o.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477959166652383,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880935,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477959166652383,
+        "st_nlink": 1,
+        "st_size": 67933,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 2598,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137418,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 2598,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.ihk.o.cmd",
+      "sha256": "fe3319e019ceb141a534092e29014bf4bf817b34072d5848813e5ebe810c8b44",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.ihk.o.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477944518240265,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880910,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477944518240265,
+        "st_nlink": 1,
+        "st_size": 2598,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 4193,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137419,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 4193,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.ihk_smp_x86_64.o.cmd",
+      "sha256": "4caacb292d4fe9298875c75ab360b8e5fd9af4a58066bf602dccd988f12bf912",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.ihk_smp_x86_64.o.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477958498633543,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880916,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477958498633543,
+        "st_nlink": 1,
+        "st_size": 4193,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 247,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137420,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 247,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.mcctrl.ko.cmd",
+      "sha256": "a0f003a30ccae9f4266a68140755c1878ba7f5cb1bb62b8959c430753e14055c",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.mcctrl.ko.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477959862672017,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880943,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477959862672017,
+        "st_nlink": 1,
+        "st_size": 247,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 183,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137421,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 183,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.mcctrl.mod.cmd",
+      "sha256": "2b0a64c2e59e088ed176ccdb0a80a0177254769685a5f2e7850f19d223634f1e",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.mcctrl.mod.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477944522240377,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880911,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477944522240377,
+        "st_nlink": 1,
+        "st_size": 183,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 67972,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137422,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 67972,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.mcctrl.mod.o.cmd",
+      "sha256": "40c350bc7f1809fce0f9f63e50f55c681fa9d3fa59e90fc2da00b895ded7fd0b",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.mcctrl.mod.o.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477959726668181,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880941,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477959726668181,
+        "st_nlink": 1,
+        "st_size": 67972,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 425,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137423,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 425,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.mcctrl.o.cmd",
+      "sha256": "48b2b0090374effdc46b4ca404992be7e313f2654221fc07d0966d4845d911b8",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.mcctrl.o.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477947326319103,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880922,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477947326319103,
+        "st_nlink": 1,
+        "st_size": 425,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 2265,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137424,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 2265,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.mcctrl_rust.o.cmd",
+      "sha256": "f62f80c96f4afcec4f00f16f35ac13760eeb0df48b6d35bf91239536dc047ed7",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.mcctrl_rust.o.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477946718302026,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880914,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477946718302026,
+        "st_nlink": 1,
+        "st_size": 2265,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 66430,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137425,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 66430,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.mcctrl_vm_write_compat.o.cmd",
+      "sha256": "b1969fb33d9065595f84fec475d6525a4027f1ce0cafb26da2e1b699f3b4a43c",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.mcctrl_vm_write_compat.o.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477947290318091,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880918,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477947290318091,
+        "st_nlink": 1,
+        "st_size": 66430,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 200,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137426,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 200,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/.modules.order.cmd",
+      "sha256": "ee24a3a2aa444ff05ad428556f59c61fa2e72821cb64b6cb4a0ad7ea5d31a50d",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/.modules.order.cmd",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477958586636025,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880925,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477958586636025,
+        "st_nlink": 1,
+        "st_size": 200,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 2199,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137427,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 2199,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/Module.symvers",
+      "sha256": "c5c3512252124e23817e102c5b366dcfd9b2216c57288b6980ede99e87329d83",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/Module.symvers",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477958618636927,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880929,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477958618636927,
+        "st_nlink": 1,
+        "st_size": 2199,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 36,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137428,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 36,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/ihk-smp-x86_64.mod",
+      "sha256": "b1f07507318d34fd2d1058c85371a5e25be09e49407fb514218183c09c0856e6",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk-smp-x86_64.mod",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477942834193021,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880906,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477942834193021,
+        "st_nlink": 1,
+        "st_size": 36,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 463,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137429,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 463,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/ihk-smp-x86_64.mod.c",
+      "sha256": "0476ea87774acced38dc764ddd04cea692bb8c8f85dc4cf7617e1bdb5de26d93",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk-smp-x86_64.mod.c",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477958618636927,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880927,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477958618636927,
+        "st_nlink": 1,
+        "st_size": 463,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 25,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137430,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 25,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/ihk.mod",
+      "sha256": "c71e3ea72a8a71a4409045158a5d35d25e4fff03f27dbd515c5a23115bd55534",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk.mod",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477947294318204,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880915,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477947294318204,
+        "st_nlink": 1,
+        "st_size": 25,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 2061,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137431,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 2061,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/ihk.mod.c",
+      "sha256": "3c4c7bca2f48d791c117b020fcf07d1f83f63ca208eb27b7e78928f39fc4ee09",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk.mod.c",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477958618636927,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880926,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477958618636927,
+        "st_nlink": 1,
+        "st_size": 2061,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 77,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137432,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 77,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/mcctrl.mod",
+      "sha256": "5dde494c7ae2b6c69aa8b7c087b8893660b23e7e24a4a2fa64cd71591fa1cbc4",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/mcctrl.mod",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477944522240377,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880908,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477944522240377,
+        "st_nlink": 1,
+        "st_size": 77,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 463,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137433,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 463,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/mcctrl.mod.c",
+      "sha256": "1c16ed5086ebc7d2e4d72fdbc54a1d9434a2a493ece83c554ccb5a8758f28322",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/mcctrl.mod.c",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477958618636927,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880928,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477958618636927,
+        "st_nlink": 1,
+        "st_size": 463,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 89,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137434,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 89,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/generated-text/modules.order",
+      "sha256": "37dd7f929aa1b93bd6fedd148ddd2849c000bf5ff9d8b66676c70602e60d3801",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/modules.order",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477958586636025,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880923,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792477958586636025,
+        "st_nlink": 1,
+        "st_size": 89,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 83527,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137436,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 83527,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/owner/owner-receipt.json",
+      "sha256": "15da718c41496f467a98c060c01c81927b3815942e2624831dc04a07b5221cb5",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-o-f850b277dcea4b13b4f3730c62f6126b/owner-receipt.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477961402715478,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 116042,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477961402715478,
+        "st_nlink": 1,
+        "st_size": 83527,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 16289,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137437,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 16289,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/owner/ownership-archive.json",
+      "sha256": "5d94d198e0f65479b1a62e20f62dc9377f8fc8a9764aaa4cc2bbf3b2306802ab",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-o-f850b277dcea4b13b4f3730c62f6126b/ownership-archive.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477961390715139,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 116054,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477961390715139,
+        "st_nlink": 1,
+        "st_size": 16289,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 2025,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137438,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 2025,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/owner/record-release-authorized.json",
+      "sha256": "f455a806597867dc4ee5ae0da8f22e93fee9085fee934e887372b80fa6250044",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-o-f850b277dcea4b13b4f3730c62f6126b/record-release-authorized.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477961390715139,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 116055,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477961390715139,
+        "st_nlink": 1,
+        "st_size": 2025,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 176,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137439,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 176,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/owner/lease.record.raw",
+      "sha256": "44235ab27c3f09c54bb144732a6dff39d9d0baa612267d8171e6f4b196282512",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-o-f850b277dcea4b13b4f3730c62f6126b/lease.record.raw",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477961382714913,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 116051,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477961382714913,
+        "st_nlink": 1,
+        "st_size": 176,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 269,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137440,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 269,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/owner/common.record.raw",
+      "sha256": "c6fab99c88e4b79cc9d0fa26068f35cf588853c1ba365ccc06e404d21e6b8752",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-o-f850b277dcea4b13b4f3730c62f6126b/common.record.raw",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477961386715026,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 116052,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477961386715026,
+        "st_nlink": 1,
+        "st_size": 269,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 269,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137441,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 269,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/owner/shared.record.raw",
+      "sha256": "b0bcf47337ffcde90c6cba529b753fee50cdd7c8cfdb864da3489b93295145eb",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-o-f850b277dcea4b13b4f3730c62f6126b/shared.record.raw",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792477961386715026,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 116053,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792477961386715026,
+        "st_nlink": 1,
+        "st_size": 269,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 2365,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137443,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 2365,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/original-failure/first-compiler-failure.json",
+      "sha256": "afbe6e7b9231c4560231c6caaad91765c71539640bd4361ba73c74e136d22b9e",
+      "source_path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/ACTUAL-COMPOSITE64-FIRST-COMPILER-FAILURE.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792474620172346117,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48135798,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792474620172346117,
+        "st_nlink": 1,
+        "st_size": 2365,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 22192,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137444,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 22192,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/original-failure/receipt.json",
+      "sha256": "2837fec20f0583438ee85b28571d8b562275eb10365c163a3b44fa50d6a67515",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-6c3023d47a774750a79a1da6c20e1234/evidence/receipt.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792474558405572830,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880595,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792474558405572830,
+        "st_nlink": 1,
+        "st_size": 22192,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 346,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137445,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 346,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/original-failure/make.stdout",
+      "sha256": "c5d3153b5180210c06fcbc04037a34e8bc4f912818d7b025f24e5c0127729507",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-6c3023d47a774750a79a1da6c20e1234/evidence/make.stdout",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792474558361570837,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880590,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792474558361570837,
+        "st_nlink": 1,
+        "st_size": 346,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 1557,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137446,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 1557,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/original-failure/make.stderr",
+      "sha256": "094c2061c35e7abcfa6dba7f066920427f3944e978e4cea8e7633353cf0bd124",
+      "source_path": "/home/holden/mckernel-work/scratch/nsd-c-6c3023d47a774750a79a1da6c20e1234/evidence/make.stderr",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792474558361570837,
+        "st_dev": 1828,
+        "st_gid": 1000,
+        "st_ino": 880591,
+        "st_mode": 33188,
+        "st_mtime_ns": 1792474558361570837,
+        "st_nlink": 1,
+        "st_size": 1557,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 26946,
+      "destination_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478151504236333,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137448,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478151504236333,
+        "st_nlink": 1,
+        "st_size": 26946,
+        "st_uid": 1000
+      },
+      "repository_path": "docs/verification/evidence/phase4-host66-compiler-checkpoint-20261020-1/independent/HOST66-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+      "sha256": "a6614e9c584912790423266097f898badfe4014a6c82a13a0ea0004b5c366672",
+      "source_path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-independent-review-20261020-1/HOST66-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+      "source_stable_metadata_excluding_atime": {
+        "st_ctime_ns": 1792478048845218663,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48137363,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792478048845218663,
+        "st_nlink": 1,
+        "st_size": 26946,
+        "st_uid": 1000
+      }
+    }
+  ],
+  "schema": "mckernel.current-v6.selected-compiler-checkpoint-export.v1",
+  "source_plan_sha256": "163912f16212f4d8b477570f5ceea95ac08e4a598faeb5084b64d544608ddfbb",
+  "source_publication": {
+    "allowlist": {
+      "bytes": 42421,
+      "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/publication-allowlist.json",
+      "sha256": "27796e525984fad41528f4926ed02d3c22056f6d3a169d16b010f396a91e08bd"
+    },
+    "commit": "5dd901b77d3c3bc208218404662dbdd9c4a373c1",
+    "proof": {
+      "bytes": 49480,
+      "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/root-source-fetched-proof-family-shape-1.json",
+      "sha256": "1e9b2b0f235094b797235911b19e6f107c48ddc63c24d0889ae171abad590eb4"
+    },
+    "source_count": 105
+  },
+  "tests": 0
+}

@@ -1,0 +1,134 @@
+{
+  "actual_C_ABI_regions": {
+    "real_C_bridges": {
+      "bytes": 326,
+      "end_line": 5881,
+      "path": "/home/holden/mckernel/executer/user/mcexec.c",
+      "sha256": "527dfce00ae71e96e23ddccbe32ec7c333c1ab56ce53a939a2e3cf16ca3a4e13",
+      "start_line": 5861
+    },
+    "real_C_child_wait": {
+      "bytes": 511,
+      "end_line": 5994,
+      "path": "/home/holden/mckernel/executer/user/mcexec.c",
+      "sha256": "0cbb1537766b306f890e076375a409aba21ea15a631628ff51d2b30e747285fd",
+      "start_line": 5962
+    },
+    "real_C_prototypes": {
+      "bytes": 172,
+      "end_line": 471,
+      "path": "/home/holden/mckernel/executer/user/mcexec.c",
+      "sha256": "9600970f544282ef6475b46e1994610b15b916ca39e44fa1e8199fc52cecbf97",
+      "start_line": 468
+    },
+    "real_C_sync_prefix": {
+      "bytes": 217,
+      "end_line": 654,
+      "path": "/home/holden/mckernel/executer/user/mcexec.c",
+      "sha256": "6b10fdeb44bf7875a3d938d640d7b173a2f48343d5f4f4f7460d7a392b03a3dc",
+      "start_line": 641
+    },
+    "real_Rust_RET_descriptor": {
+      "bytes": 516,
+      "end_line": 1048,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/source/executer/user/rust/mcexec_helpers.rs",
+      "sha256": "d600f6087043137f325bc00ae33c7ffb906728e81e5fda2271785912cd3bfea6",
+      "start_line": 1019
+    }
+  },
+  "added_constant": {
+    "actual_header": "/usr/include/asm-generic/errno-base.h:14",
+    "kind": "existingLinuxerrno",
+    "name": "ECHILD",
+    "value": 10
+  },
+  "capture": {
+    "bytes": 2326,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/selector1-test-result-2.json",
+    "sha256": "a24e7b07cad2072607a280d82939588c73614e6756828fb578a1b8adce86f35b"
+  },
+  "changed_function_count": 2,
+  "compute_C_retirement_acceptance": false,
+  "current_integration_base": {
+    "bytes": 253331,
+    "path": "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs",
+    "sha256": "1d86dc8b2709b3dbc6ca8b60ee785ac3410a63a1abdf28e8c789b186bc3f3f31"
+  },
+  "decision": "PASS_SOURCE_INTEGRATION_EXACT_SELECTOR1_PRODUCER_ONLY",
+  "default_activation_acceptance": false,
+  "findings": [
+    "Exactpatch against currentproduction mcexec_helpers.rs changesonly2functionbodies and addsECHILD10. FourreprCrequest/wait/sync-prefix/container declarations unchanged. No Ccompute or Cimplementation added; actualexistingMCEXEC_RUST_HELPERS Ccaller and Rustmainloop selector1 bothcallthisactualact_clone_complete symbol.",
+    "Full-widthunsignedlong requestPID converted withi32::try_from andpositiveguard beforelistlock; zero/negative-equivalent/overflow cannottruncate toanotherownedPID. Invalidrequestreturns-EINVAL22 through existingc_longRETdescriptor withoutlistmutation.",
+    "Underexistingfork_sync_mutex, helperfinds exactpositivePID. Nullfs returns-EINVAL beforeunlink/success, preservingnode forrepair. MissingPID returns0; producer translatesonlythis to-ECHILD10, preservingotherowners. Helpernegativeerrors propagateunchanged; exactly1 denotescommittedowner, not arbitrarypositivevalue.",
+    "Matchedvalidnode isunlinked once, successfieldcommitted, exactfs/node pointersreturned. Producerunmapsparentfs thenfreesdetachednode whilelistlockheld, unlocks, andonlythenqueuesRET0. A duplicatecompletionafterdetachmentfindsnomatchandcannotfreethenodeagain. No useofdetachedpointersafterfree.",
+    "RealCproviders/prototypes andproductionRustsignatures verifieddirectly: CintPID/intresult/voiddoublepointeroutputs, voidmutex/unmap/freebridges, existingfork_sync_top linkname. RustForkSync usesonlyunchangedtwo-intprefix; Cbridge computesfullsizeofincludingsem_t. Cchildretainsitsownsharedmapping andreadsvolatile success; parentmunmapdoesnotunmapchildmapping. No fixtureinjectedmask/prototypeusedasproductionABIproof.",
+    "ExistingEINVAL22 andnewlocalECHILD10 availableinactualsource; Linuxerrnoheader10corroborated. core::ffi c_int/c_long/c_ulong actualtypes and productionedition2021 supportTryFrom withoutnewimport; nofullcrate/type/linksuccessinferred fromthissourcecheck.",
+    "Threeactualcommandswholejoined0: wholefilesyntaxnormalparser plusactual2bodytestcompile and5tests. Exact2bodies/4typeprefixes occurverbatiminfixture. Mutex/unmap/free/RET areexplicitadapters; tests establishselecteddisposition/listownershiplogic only, not realpthread/MM/ioctl/nativeeffects. OriginalASTtree32MiBSIGXFSZ evidencewriterfailure retained; boundednormal-outputsyntaxcorrection changedno candidatecode."
+  ],
+  "functional_scope": "Functional supportedOS/apps AND actualcomputeC retirement intoRust/reviewedassembly; existingnr56selector1host-startproducer firstfix only",
+  "implementation_ownership": false,
+  "integration_authority": {
+    "precondition": "Currentsharedmcexec_helpers.rs stillmatchesrecordedbase beforeapply; preserveunrelateddirtywork and originalfailures.",
+    "root_or_runtime_release": false,
+    "scope": "Exactpatch4c13972d/actual2bodies+ECHILDconstant only; rootownsapply/build/checkpoint.",
+    "source_integration_accepted": true
+  },
+  "native_acceptance": false,
+  "new_blocking_source_defects_found": 0,
+  "patch": {
+    "bytes": 3241,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/selector1-start-disposition.patch",
+    "sha256": "4c13972d02cb584b60ad73debc5235d8af3ba04409179e385fa2c3a1d49f68e9"
+  },
+  "preserved_first_capture": {
+    "bytes": 928,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/selector1-test-result-1.json",
+    "sha256": "a55cd24cd3e8492c5301fd6c8076e2650df92efa45cc192e0dd1eb7510715a77"
+  },
+  "preserved_initial_failure": {
+    "bytes": 344,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/SYNTAX-OUTPUT-FAILURE-1.json",
+    "sha256": "01c8845a2c5fe5bbd46082103ce4128def7380b52b85fcdb6f28767454e5f636"
+  },
+  "real_C_ABI_link_acceptance": false,
+  "receipt": {
+    "bytes": 3128,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/SELECTOR1-PRODUCER-RECEIPT.json",
+    "sha256": "7e030002cb3c6b9f9aa4d89d3f616ec429151548f2a6ed78031685d0e6a97208"
+  },
+  "remaining_obligations": [
+    "ActualwholeproductionmcexecRustcrate compile/link withselectedCbridges and currentUAPI/sizeof/prototype bindings remainsrequired; bodyfixturesandnormalparserarenotthatproof.",
+    "Actualnativehostsync producer/RETstatusacquisition and childstart behavior under matchingmodule/kernelinputs remainunproven; do_syscall_return onlylogsioctlfailure and suppliesno newphysicalpublicationguarantee here.",
+    "Existingvoidmunmap/freebridges supplyno measuredcleanupresult; RET0 meanssyncsuccesscommittedandownerconsumed bytheseactualcalls, not independentphysicalretirement.",
+    "Separatekernelrunnabletransfer/parentwait/exit/forkACK/defaultactivation source isexplicitlyexcluded; no speculativecode reviewed orapproved."
+  ],
+  "reviewed_at": "2026-10-20T06:58:24.897692+00:00",
+  "reviewer": "/root/sdk66_boundary_review",
+  "reviewer_tests_compiler_root_guest_git": 0,
+  "runnable_child_acceptance": false,
+  "schema": "mckernel.independent-phase5.selector1-producer-source-integration-review.v1",
+  "source": {
+    "bytes": 253930,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/source/executer/user/rust/mcexec_helpers.rs",
+    "sha256": "80e59ae27fe87bdced4e08bd3bdb580185b439311a4fba1daaade7308630afc8"
+  },
+  "source_binding": {
+    "bytes": 1654,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/TEST-SOURCE-BINDING.json",
+    "sha256": "e23c58586cb69a6fc85f976e7dec4802d50e8b2218a29c5f2fb1d88c8addda98"
+  },
+  "status": "PASS_SOURCE_AND_FOCUSED_BODY_EVIDENCE_NO_PRODUCTION_LINK_OR_NATIVE_ACCEPTANCE",
+  "test_cases": [
+    "success_consumes_exact_owner_once",
+    "missing_pid_keeps_other_owner",
+    "malformed_sync_refuses_before_unlink",
+    "invalid_or_truncated_pid_never_commits",
+    "helper_invalid_output_keeps_owner"
+  ],
+  "tests": {
+    "bytes": 6970,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/selector1_actual_body_tests.rs",
+    "sha256": "87428c3d96640f28c192a549e6088a05eb7146e9ebe6c195914ef9cc96be6496"
+  },
+  "whole_mcexec_compiler_acceptance": false
+}

@@ -1,0 +1,205 @@
+{
+  "actual_MM_provider_proof": {
+    "artifacts": {
+      "command_bindings": {
+        "C_cmd_sha256": "b1969fb33d9065595f84fec475d6525a4027f1ce0cafb26da2e1b699f3b4a43c",
+        "composite_cmd_sha256": "48b2b0090374effdc46b4ca404992be7e313f2654221fc07d0966d4845d911b8",
+        "members": [
+          "/candidate/modules/mcctrl_rust.o",
+          "/candidate/modules/mcctrl_vm_write_compat.o"
+        ]
+      },
+      "mcctrl.ko": {
+        "bytes": 2368472,
+        "sha256": "4e2f1e5b11cad8a9fbfaca4ae6671a2f3fa16ef3c8c651357506d93c7edf4fa9",
+        "symbols": {
+          "mckernel_inherited_mmap_write_lock": {
+            "definitions": 1,
+            "undefined": 0
+          },
+          "mckernel_inherited_mmap_write_unlock": {
+            "definitions": 1,
+            "undefined": 0
+          },
+          "mckernel_inherited_vma_start_write": {
+            "definitions": 1,
+            "undefined": 0
+          }
+        }
+      },
+      "mcctrl.o": {
+        "bytes": 2262360,
+        "sha256": "9f0911f54d737628610d2b4769867923f8c41e1ee6827d08fbb629825e8187a4",
+        "symbols": {
+          "mckernel_inherited_mmap_write_lock": {
+            "definitions": 1,
+            "undefined": 0
+          },
+          "mckernel_inherited_mmap_write_unlock": {
+            "definitions": 1,
+            "undefined": 0
+          },
+          "mckernel_inherited_vma_start_write": {
+            "definitions": 1,
+            "undefined": 0
+          }
+        }
+      },
+      "mcctrl_rust.o": {
+        "bytes": 2090816,
+        "sha256": "5ed91ece08f2dcdd058ba1118c7f2b0633665b955089f42d64cf2ed9b3cb129d",
+        "symbols": {
+          "mckernel_inherited_mmap_write_lock": {
+            "definitions": 0,
+            "undefined": 1
+          },
+          "mckernel_inherited_mmap_write_unlock": {
+            "definitions": 0,
+            "undefined": 1
+          },
+          "mckernel_inherited_vma_start_write": {
+            "definitions": 0,
+            "undefined": 1
+          }
+        }
+      },
+      "mcctrl_vm_write_compat.o": {
+        "bytes": 134400,
+        "sha256": "ed1caaa49604b422af6bca7f89b748a73eac7209df3f3f6abebf9525d9f352dd",
+        "symbols": {
+          "mckernel_inherited_mmap_write_lock": {
+            "definitions": 1,
+            "undefined": 0
+          },
+          "mckernel_inherited_mmap_write_unlock": {
+            "definitions": 1,
+            "undefined": 0
+          },
+          "mckernel_inherited_vma_start_write": {
+            "definitions": 1,
+            "undefined": 0
+          }
+        }
+      }
+    },
+    "module_load": false,
+    "status": "PASS_ACTUAL_COMPOSITE_MM_PROVIDER_SYMBOLS"
+  },
+  "compiler_calls_in_this_extraction": 0,
+  "driver_status": "BUILD_ARTIFACT_CHECKS_PASS",
+  "first_real_diagnostic": null,
+  "limitations": [
+    "Independent physical and artifact review pending; rc0 alone never accepts objects",
+    "Originalcomposite64 E0308compilerfailure retained unchanged",
+    "Guest/kernel7/default/ACK/native scopes remain unproved"
+  ],
+  "make_returncode": 0,
+  "modules": {
+    "ihk": {
+      "bytes": 1527808,
+      "compiler_bound_source_count": 13,
+      "modinfo": {
+        "author": "McKernel Rust port",
+        "depends": "",
+        "description": "Native Rust IHK host core",
+        "license": "GPL v2",
+        "name": "ihk",
+        "retpoline": "Y",
+        "rhelversion": "10.2",
+        "srcversion": "56185ED204C089769025BCB",
+        "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload ",
+        "version": "1.7.0rc4"
+      },
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk.ko",
+      "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c"
+    },
+    "ihk-smp-x86_64": {
+      "bytes": 12210104,
+      "compiler_bound_source_count": 47,
+      "modinfo": {
+        "depends": "ihk",
+        "import_ns": "MCKERNEL_IHK_V1",
+        "license": "Dual BSD/GPL",
+        "name": "ihk_smp_x86_64",
+        "parm": "ihk_ikc_irq_core:Target CPU of IHK IKC IRQ",
+        "parmtype": "ihk_ikc_irq_core:uint",
+        "retpoline": "Y",
+        "rhelversion": "10.2",
+        "srcversion": "87FECE0FFDAE834FE1C2D3D",
+        "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload "
+      },
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk-smp-x86_64.ko",
+      "sha256": "c6a9db8eaa2ec5f7898b021b6835d20e4359a5f4a1209b5b28fd9559cd03387f"
+    },
+    "mcctrl": {
+      "bytes": 2368472,
+      "compiler_bound_source_count": 10,
+      "modinfo": {
+        "depends": "ihk",
+        "import_ns": "MCKERNEL_IHK_V1",
+        "license": "GPL v2",
+        "name": "mcctrl",
+        "retpoline": "Y",
+        "rhelversion": "10.2",
+        "srcversion": "4F7E4F9F9D409374F9A2823",
+        "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload "
+      },
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/mcctrl.ko",
+      "sha256": "4e2f1e5b11cad8a9fbfaca4ae6671a2f3fa16ef3c8c651357506d93c7edf4fa9"
+    }
+  },
+  "owner_observations": {
+    "absence_queries": [
+      "name",
+      "label",
+      "id"
+    ],
+    "admission_clients": 1,
+    "all_clients_reaped": true,
+    "all_groups_empty": true,
+    "build_status": "PASS",
+    "cleanup_status": "PASS_OWNED_REMOVAL_AND_RECORD_RELEASE",
+    "container_absent": true,
+    "group_checks": 42,
+    "normal_clients": 14,
+    "status": "PASS"
+  },
+  "producer_status": {
+    "direct_child_joined": true,
+    "elapsed_seconds": 20.604649305343628,
+    "observer_error": null,
+    "process_group_absent": true,
+    "returncode": 0
+  },
+  "scope": "Current-v6phase4host66 only; sourceandRust/C/link checks observed, no module/native/default/ACKruntime acceptance",
+  "source_identity": "722e3028b1e6fef1c3b56821d5147a8c6228ac2b46db104f8c92d0af7af91fa5",
+  "status": "ACTUAL_DRIVER_ARTIFACT_CHECKS_PASS_INDEPENDENT_ACCEPTANCE_PENDING",
+  "stderr_bytes": 0,
+  "witnesses": [
+    {
+      "bytes": 1764,
+      "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/actual-sdk-build-1/dispatch.status.json",
+      "sha256": "17185fc5d7b1d2a3ca446d684f6bf1f624c948dadc1a68d5fc689d7333baa09d"
+    },
+    {
+      "bytes": 38789,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/evidence/receipt.json",
+      "sha256": "cb9accc99e0f75d1d23922835ba101397f2279b21f400899836c876d4d7072f1"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/evidence/make.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 949,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/evidence/make.stdout",
+      "sha256": "d938b4b56720f0424cfeeab8fbb12d43d2b136ed42c28fedb2700b2f10ce684e"
+    },
+    {
+      "bytes": 83527,
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-f850b277dcea4b13b4f3730c62f6126b/owner-receipt.json",
+      "sha256": "15da718c41496f467a98c060c01c81927b3815942e2624831dc04a07b5221cb5"
+    }
+  ]
+}

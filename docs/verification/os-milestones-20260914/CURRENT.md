@@ -1,22 +1,37 @@
-## Current checkpoint — gated task/MM source committed; native ABI probe dispatched
+## Current — selector1 source integrated; HOST66 native and guest ABI next
 
-Source f54687108de2affd0b78c067c40cf66c1e26e609 is pushed/fetched: exact reviewed
-phase3 task/MM overlay, allocator conversion and narrow production staging/Kbuild
-closure; 28 focused tests and matching composite64 SDK module acceptance retained.
-Updated production-stager build, default activation and positive CREATE_PPD/ACK
-remain unproved. Phase4 b2cd8c8f/3edb1a36 is privately preparing real host/guest compiler
-feedback; no phase4 source integrated or native authority inferred.
+Actualsource selector1 start disposition now returns success ONLY after matching,
+positive full-width PID commit/detach once; missing/malformed owner returns error.
+Exactpatch4c13972d integrated into executer/user/rust/mcexec_helpers.rs SHA80e59ae2;
+independentced7cddf and5actual-body tests PASS. Original32MiB AST-print SIGXFSZ
+retained; bounded normalized syntax correction and actual two-body compile/tests
+all0. Fullmcexec build/link and real child execution remain unproved. Author owns
+separate private runtime-transfer/parent-wait slice; no invented runnable authority.
 
-M07 literal declaration P-M07-01 independently accepted c0399202 using conservative
-all-enabled-state declaration c18d0f14; 15/35 checks. Whole M07 remains OPEN:
-MPX3/4 and PKRU9 use/preservation join is unresolved, with no invented nonuse.
-Whole M00/M04/M10 remain complete; behaviors26, selected Rust production/native17/14.
+HOST66 actual3-module artifact b11c68ea +physicala6614e9c accepted; outer0/20.604649s,
+66sources/81inputs,bindings13/47/10,unique IHK control provider and MM C definitions.
+Published105inputs5dd901b7 fetched. No guest/default/ACK/runtime proof follows.
+Guest five-object source159+whole205C/config are materialized529810c1; published207
+inputs9bf25238 fetched. Original all-filesystem1,543,503,872B growth guard lacks
+scratch capacity (146,931,712B short at sample). Capacity-only new case source/fixture
+uses enforced HOST fullbudget and scratch3bounded directrecords+640MiB emergency;
+affected review/newauthority/freshactualchecks PENDING. No compiler yet, no floorcut.
 
-Native ABI probe stage+consumer3c9724ee and static a5f22/final19 closure17397ea4
-are accepted. Exact seven-step c71fed68 runner dispatched once after final closure;
-actual snapshot/guard/guest/readbacks and independent physical/semantic result are
-pending. It tests module ABI/load + unchanged strict20 apps, not positive fork/ACK.
-No archive/compiler replay; latest prior physical1b999870 preserved.
+Original normal-ABI case FAIL/round0 remains immutable; independentphysical4b36bfdf
+passed350.972s after wholejoin. Hostsource29551917 shows powerdown before EAGAINretry.
+Collector correction preserves strictsuccess and existingdeadlines;11bodycases and
+staticcompile pass5d6179cb. New completeHOST66+collector stage/consumer43d17911 pass
+0/27.023065s,exact4payloadchanges,243paths,QMP101B,empty0700parent. No stage replay.
+Native metadata decoder failed twice before publication; both sources/logs retained.
+Expert explicitwholeHOST66 adapter f78ebae7 passes actuala661+4identity/retirement
+controls; independentaffectedreview/pending19bindings/LASTsnapshot/release/native
+stillrequired. No image/kernel/app oracle change or nativecredit.
+
+Source f5468710 pushed/fetched (phase3 task/MM +28test productionbuildwiring).
+M07 declaration c0399202/8b9453f6 accepted:15/35checks;wholeM07 stillOPEN dueunknown
+empiricalMPX/PKRUjoin. WholeM00/M04/M10complete;26behaviors; selectedcomputeRust17/14.
+Activeincludedusage100%/zeroreserve, oneheavy/resources/floors/mutex27:4/Scratch21,
+allfailures and dirtyWIP preserved. ContinuefunctionalOS+Rust implementation.
 
 ## Current production source landed for checkpoint; native ABI probe next
 

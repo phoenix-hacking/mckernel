@@ -90,6 +90,7 @@ const MPOL_NODEMASK_NONLOCAL: i32 = 2;
 const MPOL_NODEMASK_ALL: i32 = 3;
 
 const EINVAL: i32 = 22;
+const ECHILD: i32 = 10;
 const ENOENT: i32 = 2;
 const EBADF: i32 = 9;
 const ENOEXEC: i32 = 8;
@@ -2002,28 +2003,28 @@ pub unsafe extern "C" fn act_clone_complete(
     fd: c_int,
     cpu: c_int,
 ) {
-    let pid = unsafe { (*w).sr.args[1] as c_int };
+    // Selector1 commits the host child's existing fork-sync owner. A missing
+    // owner cannot be reported as successful child start to the guest.
+    let pid = match i32::try_from(unsafe { (*w).sr.args[1] }) {
+        Ok(pid) if pid > 0 => pid,
+        _ => { unsafe { do_syscall_return(fd, cpu, -EINVAL as c_long, 0, 0, 0, 0) }; return; }
+    };
     let mut fs: *mut ForkSync = core::ptr::null_mut();
     let mut node: *mut ForkSyncContainer = core::ptr::null_mut();
-
     unsafe {
         mcexec_fork_sync_lock_bridge();
-        if mcexec_fork_sync_complete_result(
-            core::ptr::addr_of_mut!(MCEXEC_FORK_SYNC_TOP),
-            pid,
-            &mut fs,
-            &mut node,
-        ) > 0
-        {
-            if !fs.is_null() {
-                mcexec_fork_sync_munmap_bridge(fs as *mut c_void);
-            }
-            if !node.is_null() {
-                mcexec_fork_sync_free_bridge(node as *mut c_void);
-            }
+        let completed = mcexec_fork_sync_complete_result(
+            core::ptr::addr_of_mut!(MCEXEC_FORK_SYNC_TOP), pid, &mut fs, &mut node,
+        );
+        if completed == 1 {
+            // The producer checked both pointers before changing success or
+            // unlinking. These are the exact detached owner, consumed once.
+            mcexec_fork_sync_munmap_bridge(fs.cast());
+            mcexec_fork_sync_free_bridge(node.cast());
         }
         mcexec_fork_sync_unlock_bridge();
-        do_syscall_return(fd, cpu, 0, 0, 0, 0, 0);
+        let result = if completed == 1 { 0 } else if completed < 0 { completed } else { -ECHILD };
+        do_syscall_return(fd, cpu, result as c_long, 0, 0, 0, 0);
     }
 }
 
@@ -8187,7 +8188,7 @@ pub unsafe extern "C" fn mcexec_fork_sync_complete_result(
     fs_out: *mut *mut ForkSync,
     node_out: *mut *mut ForkSyncContainer,
 ) -> i32 {
-    if top.is_null() || fs_out.is_null() || node_out.is_null() {
+    if top.is_null() || fs_out.is_null() || node_out.is_null() || pid <= 0 {
         return -EINVAL;
     }
 
@@ -8201,6 +8202,10 @@ pub unsafe extern "C" fn mcexec_fork_sync_complete_result(
     while !current.is_null() {
         let next = unsafe { (*current).next };
         if unsafe { (*current).pid } == pid {
+            // Refuse before effects: no live sync object means no child-start
+            // producer, and the list owner must remain available for repair.
+            let fs = unsafe { (*current).fs };
+            if fs.is_null() { return -EINVAL; }
             if prev.is_null() {
                 unsafe {
                     *top = next;
@@ -8211,12 +8216,7 @@ pub unsafe extern "C" fn mcexec_fork_sync_complete_result(
                 }
             }
 
-            let fs = unsafe { (*current).fs };
-            if !fs.is_null() {
-                unsafe {
-                    (*fs).success = 1;
-                }
-            }
+            unsafe { (*fs).success = 1; }
             unsafe {
                 *fs_out = fs;
                 *node_out = current;
