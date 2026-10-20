@@ -1,0 +1,30 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/materialize_request.py",
+    "--materialize"
+  ],
+  "pid": 1864433,
+  "start": 27216453,
+  "returncode": 0,
+  "direct_child_joined": true,
+  "process_group_absent": true,
+  "elapsed_seconds": 0.05308656097622588,
+  "compiler_calls": 0
+}

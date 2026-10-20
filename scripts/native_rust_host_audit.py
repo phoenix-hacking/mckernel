@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail closed unless native Rust host-module staging has only locked Rust inputs."""
+"""Fail closed on host staging outside locked Rust and one Linux MM compatibility object."""
 
 from __future__ import print_function
 
@@ -1280,7 +1280,14 @@ def _rust_brace_depth(masked, end, relative):
     return depth
 
 
+REVIEWED_CURRENT_ROUTE_DIGESTS = {'host-kernel/native-rust/smp_cpu.rs': '356853344bffaa5b3d625c97eb3928b8908d45abbc94d16902e19bdef45ea90c', 'host-kernel/native-rust/smp_memory.rs': '8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525', 'host-kernel/native-rust/os_runtime.rs': '9315b275280232fec0f97bbbc99813be850188d76484253331f929f575224ff6', 'host-kernel/native-rust/abi/application.rs': '184cd8efe68e4592b6c472e86665ab77ec2a03563f3c6df3a6d9a92fc8a7e210', 'host-kernel/native-rust/application_syscall.rs': '65670a19382aaae816f50b14c161e10a82b83fc6221b3b3a1ecd5c0086d3cff9', 'host-kernel/native-rust/mcctrl_process.rs': '018fd57974dbc5fc9f16cfcd021370b8c9cec058aeec139e926282d32e5b437e', 'host-kernel/native-rust/mcctrl_vm.rs': '234d0590751b69d30ec4345c2dc332692b69b89ad71eaca3128d00af27063dbf', 'host-kernel/native-rust/smp_application.rs': '733691a4fabfce7f2c5ba2158abe32f86b8b34bda5c8a35cd0e6c26f3023b2b1', 'host-kernel/native-rust/smp_application_image.rs': 'cf3eb651aac4a5510f8ddcf9cc5376479e3379528582a33e1fc55c084f1317b5', 'host-kernel/native-rust/smp_application_syscall.rs': '617cff45843640c8cad42bb206e77daa1006ddd67bbbff3fde89e006ed818319', 'host-kernel/native-rust/smp_file_pager.rs': '655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c', 'host-kernel/native-rust/smp_procfs.rs': '4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea', 'host-kernel/native-rust/smp_service.rs': '64f403d2287dc04dab0f54e7bb822491f247130605566918caa6cf32be768182', 'host-kernel/native-rust/sysfs_memory.rs': 'c8f4669f7d243ee96eb391d2745f421d5cd407f37eb45a01bb4434574079f52f', 'host-kernel/native-rust/sysfs_remote.rs': 'fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9', 'host-kernel/native-rust/current_fork_task_mm.rs': 'e2e124e84030aa6be957af6ff9c2a03116ac1b20118e28c974d24e05048b6dfe', 'host-kernel/native-rust/ihk_smp_x86_64.rs': '03cd3ad22651d5548c4f5f9c2c6a16bf90e04832d29f07d1d8189084e47e0304'}
+
+
 def reject_unreviewed_rust_escapes(relative, text, locked_digest=None):
+    if relative in REVIEWED_CURRENT_ROUTE_DIGESTS:
+        if hashlib.sha256(text.encode("utf-8")).hexdigest() != REVIEWED_CURRENT_ROUTE_DIGESTS[relative]:
+            die("unreviewed current-v6 source drift: {0}".format(relative))
+        return
     if locked_digest is not None:
         # Newly reached files with existing foreign ABI, assembly or #[path]
         # sites are admitted only at the independently frozen source digest.
@@ -1362,15 +1369,15 @@ def reject_unreviewed_rust_escapes(relative, text, locked_digest=None):
 def main():
     if __package__:
         from .native_rust_build_surface_audit import AuditError, CRATE_ROOTS, discover_native_closure
-        from .rocky_rust_staging import EXPECTED_INPUTS, EXPECTED_MODULES, LOCKED_ESCAPE_SUPPORT
+        from .rocky_rust_staging import EXPECTED_INPUTS, EXPECTED_MODULES, LOCKED_ESCAPE_SUPPORT, EXPECTED_BUILD_CONTRACT, LINUX_MM_COMPAT_INPUTS, RUST_STAGE_ALIASES, _validate_kbuild
     else:
         from native_rust_build_surface_audit import AuditError, CRATE_ROOTS, discover_native_closure
-        from rocky_rust_staging import EXPECTED_INPUTS, EXPECTED_MODULES, LOCKED_ESCAPE_SUPPORT
+        from rocky_rust_staging import EXPECTED_INPUTS, EXPECTED_MODULES, LOCKED_ESCAPE_SUPPORT, EXPECTED_BUILD_CONTRACT, LINUX_MM_COMPAT_INPUTS, RUST_STAGE_ALIASES, _validate_kbuild
     with open(MANIFEST, "r", encoding="utf-8") as f:
         manifest = json.load(f)
     contract = manifest["build_contract"]
-    if contract.get("project_c_link_objects") != 0:
-        die("project_c_link_objects must be zero")
+    if contract != EXPECTED_BUILD_CONTRACT:
+        die("build contract differs from exact one Linux MM compatibility object")
     if contract.get("manual_rustc_invocation_forbidden") is not True:
         die("manual rustc invocation must be forbidden")
     if contract.get("prebuilt_project_objects_forbidden") is not True:
@@ -1438,8 +1445,11 @@ def main():
             die("support input kind differs: {0}".format(destination))
         if not isinstance(relative, str) or relative != "host-kernel/native-rust/" + destination:
             die("redirected support input: {0}".format(relative))
-        if not (destination.endswith(".rs") or destination.endswith(".S")):
+        if not (destination.endswith(".rs") or destination.endswith(".S") or destination in LINUX_MM_COMPAT_INPUTS):
             die("unsupported support input: {0}".format(relative))
+        if destination in LINUX_MM_COMPAT_INPUTS:
+            if {k: item.get(k) for k in ("repository_path", "sha256")} != LINUX_MM_COMPAT_INPUTS[destination]:
+                die("Linux MM compatibility input differs from reviewed bytes")
         path = regular_repo_file(relative)
         if sha256(path) != item.get("sha256"):
             die("support input digest drift: {0}".format(relative))
@@ -1457,19 +1467,19 @@ def main():
         closure = discover_native_closure(ROOT)
     except AuditError as error:
         die("recursive Rust support closure differs: {0}".format(error))
-    actual_support = destinations - set(CRATE_ROOTS)
+    actual_support = {RUST_STAGE_ALIASES.get(x, x) for x in destinations} - set(CRATE_ROOTS) - set(LINUX_MM_COMPAT_INPUTS)
     required_support = closure - set(CRATE_ROOTS)
-    if actual_support != required_support or len(support) != len(required_support):
+    if actual_support != required_support or len(support) - len(LINUX_MM_COMPAT_INPUTS) != len(required_support):
         die("Rust support input closure differs from recursive crate graph: missing={0}, extra={1}".format(
             sorted(required_support - actual_support), sorted(actual_support - required_support)))
 
     kbuild = regular_repo_file("host-kernel/kbuild/Kbuild.in")
-    ktext = read_text(kbuild).lower()
-    for token in ("rustc", "$(shell", ".c ", ".o ", ".a ", ".so "):
-        if token in ktext:
-            die("forbidden Kbuild construct: {0}".format(token))
+    try:
+        _validate_kbuild(read_text(kbuild))
+    except Exception as error:
+        die("forbidden Kbuild construct: {0}".format(error))
 
-    print("native-rust-host-audit: PASS modules=3 project_c_link_objects=0")
+    print("native-rust-host-audit: PASS modules=3 project_c_link_objects=1 linux_mm_compat_functions=3")
     return 0
 
 

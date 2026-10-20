@@ -102,13 +102,34 @@ class NativeRustBuildSurfaceAuditTests(unittest.TestCase):
         closure = audit.discover_native_closure(self.repo)
         manifest = self.load_manifest()
         native_inputs = {item["destination"] for item in manifest["inputs"]
-                         if item["destination"] not in audit.AUTHORITATIVE_INPUTS}
+                         if item["destination"] not in set(audit.AUTHORITATIVE_INPUTS) | {"mcctrl_vm_write_compat.c", "mcctrl_vm_write_compat.h"}}
         self.assertEqual(closure - set(audit.CRATE_ROOTS), native_inputs)
-        self.assertEqual(57, len(closure))
+        self.assertEqual(58, len(closure))
         self.assertIn("smp_trampoline.S", closure)
         self.assertIn("smp_startup_entry.S", closure)
         self.assertNotIn("ihk-compat-build-id.bin", closure)
         audit.audit(self.repo)
+
+    def test_only_two_exact_linux_mm_compat_inputs_are_admitted(self):
+        original = self.load_manifest()
+        for name in ("mcctrl_vm_write_compat.c", "mcctrl_vm_write_compat.h"):
+            manifest = json.loads(json.dumps(original))
+            manifest["inputs"] = [item for item in manifest["inputs"] if item["destination"] != name]
+            self.write_manifest(manifest)
+            with self.assertRaises(audit.AuditError):
+                audit.audit(self.repo)
+        manifest = json.loads(json.dumps(original))
+        item = next(item for item in manifest["inputs"] if item["destination"] == "mcctrl_vm_write_compat.c")
+        item["sha256"] = "0" * 64
+        self.write_manifest(manifest)
+        with self.assertRaises(audit.AuditError):
+            audit.audit(self.repo)
+        manifest = json.loads(json.dumps(original))
+        manifest["inputs"].append(dict(destination="extra.c", kind="linux_mm_compat_source",
+                                      repository_path="host-kernel/native-rust/extra.c", sha256="0"*64))
+        self.write_manifest(manifest)
+        with self.assertRaises(audit.AuditError):
+            audit.audit(self.repo)
 
     def test_dependency_macro_alias_or_forwarding_fails_closed(self):
         relative = "host-kernel/native-rust/smp_service.rs"

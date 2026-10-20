@@ -473,8 +473,8 @@ macro_rules! áinclude { () => {} }
     def test_every_recursive_source_is_staged_at_its_exact_path_and_no_extra_is_accepted(self):
         plan = self.plan()
         closure = surface.discover_native_closure(self.repo)
-        self.assertEqual(closure, {item["destination"] for item in plan["files"]
-                                   if item["destination"] not in ("Kbuild", "Kconfig")})
+        self.assertEqual(closure, {staging.RUST_STAGE_ALIASES.get(item["destination"], item["destination"]) for item in plan["files"]
+                                   if item["destination"] not in {"Kbuild", "Kconfig"} | set(staging.LINUX_MM_COMPAT_INPUTS)})
         kernel = os.path.join(self.temporary, "complete-closure-kernel")
         os.makedirs(os.path.join(kernel, "drivers", "misc"))
         target = staging.stage_for_evidence(plan, kernel)
@@ -482,7 +482,7 @@ macro_rules! áinclude { () => {} }
             with self.subTest(relative=relative):
                 self.assertEqual(
                     digest(os.path.join(self.repo, "host-kernel", "native-rust", relative)),
-                    digest(os.path.join(target, relative)),
+                    digest(os.path.join(target, "mcctrl_rust.rs" if relative == "mcctrl.rs" else relative)),
                 )
         self.assertEqual(target, staging.verify_evidence_stage(plan, kernel))
         self.assertTrue(os.path.isfile(os.path.join(target, "ihk-compat-build-id.bin")))
@@ -512,6 +512,43 @@ macro_rules! áinclude { () => {} }
         with open(assembly, "ab") as stream:
             stream.write(b"\n# drift\n")
         with self.assertRaisesRegex(staging.ValidationError, "digest mismatch"):
+            self.plan()
+
+    def test_exact_linux_mm_composite_alias_stages_real_bytes(self):
+        plan = self.plan()
+        kernel = os.path.join(self.temporary, "composite-kernel")
+        os.makedirs(os.path.join(kernel, "drivers", "misc"))
+        target = staging.stage_for_evidence(plan, kernel)
+        self.assertEqual(digest(os.path.join(self.repo, "host-kernel/native-rust/mcctrl.rs")),
+                         digest(os.path.join(target, "mcctrl_rust.rs")))
+        self.assertFalse(os.path.exists(os.path.join(target, "mcctrl.rs")))
+        self.assertTrue(os.path.isfile(os.path.join(target, "current_fork_task_mm.rs")))
+        for name, expected in staging.LINUX_MM_COMPAT_INPUTS.items():
+            self.assertEqual(expected["sha256"], digest(os.path.join(target, name)))
+        self.assertEqual(1, plan["manifest"]["build_contract"]["project_c_link_objects"])
+        with open(os.path.join(target, "Kbuild")) as stream:
+            self.assertIn("mcctrl-y := mcctrl_rust.o mcctrl_vm_write_compat.o\n", stream.read())
+
+    def test_linux_mm_compat_missing_changed_or_extra_input_is_rejected(self):
+        original = copy.deepcopy(self.manifest)
+        for name in staging.LINUX_MM_COMPAT_INPUTS:
+            self.manifest = copy.deepcopy(original)
+            self.manifest["inputs"] = [r for r in self.manifest["inputs"] if r["destination"] != name]
+            self.write_manifest()
+            with self.assertRaises(staging.ValidationError):
+                self.plan()
+        self.manifest = copy.deepcopy(original)
+        self.manifest["inputs"].append(dict(destination="extra.c", kind="linux_mm_compat_source",
+                                            repository_path="host-kernel/native-rust/extra.c", sha256="0"*64))
+        self.write_manifest()
+        with self.assertRaises(staging.ValidationError):
+            self.plan()
+        self.manifest = copy.deepcopy(original)
+        self.write_manifest()
+        source = os.path.join(self.repo, "host-kernel/native-rust/mcctrl_vm_write_compat.c")
+        with open(source, "a") as stream:
+            stream.write("\nvoid unreviewed_provider(void) {}\n")
+        with self.assertRaises(staging.ValidationError):
             self.plan()
 
     def test_stage_lock_binds_crate_roots_and_target_identity(self):

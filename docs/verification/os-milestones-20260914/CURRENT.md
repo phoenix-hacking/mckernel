@@ -1,3 +1,27 @@
+## Current production source landed for checkpoint; native ABI probe next
+
+Exact gated current-v6 task/MM preparation, child-VMA adoption, deferred owner lifetime
+and parent-close/readiness correction are integrated into actual host-kernel sources.
+The13-source overlay plus sole allocator correction matches accepted composite64 SDK
+code: independent dfe1cc38/physical1b999870, all3 modules, realC bridge D1/U0,stderr0.
+Production build wiring now stages unchanged mcctrl.rs as mcctrl_rust.rs and exactly
+one existing Linux compatibility C object (3MM helpers), with current_task_mm closure,
+hash locks and narrow unknown-C/object refusals. Independent fcfd2e6e accepts the
+source/build-wiring checkpoint;28 targeted tests PASS14.128s. Two earlier unittest
+selector discovery failures are retained, not counted as executed production tests.
+Build through the updated production stager and native/default adoption remain pending.
+
+Native ABI baseline: real3-module replacement stage independentlyPASS6d4b3ca5 with
+all other bytes/order/metadata preserved. Its original consumer failed before launch
+on3readonly metadata files. Exact3FILE-bind amendment9f54f126 is admitted for ONE fresh
+consumer-only invocation; accepted archives/image205/apps/oracles are reused. No guest
+has launched in this case. After actualconsumer/static native release, snapshot LAST.
+Earliest positive parent-close/CREATE_PPD observation separately needs matching genuine
+owned guest caller/constructor graph +reviewed safe abort/retirement; currentphase4
+corrected22-source b2cd8c8f and its actualbody tests are in independentownership review.
+No runnable-fork/finalACK/native credit. M07 used-state declaration belongs supervisor.
+Counters held14/35,26behaviors,Rust17production/14native;M00/M04/M10 complete.
+
 ## Accepted current-v6 SDK compiler checkpoint — next composite backend
 
 Current61 phase1 request454e5882 now independently passes all three modules ac8f7bc3

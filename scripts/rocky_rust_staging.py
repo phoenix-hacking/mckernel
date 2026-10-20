@@ -48,15 +48,17 @@ EXPECTED_DESTINATION = {
     "parent_kbuild_integration": "drivers/misc/Makefile",
     "parent_kconfig_integration": "drivers/misc/Kconfig",
 }
-EXPECTED_BUILD_CONTRACT = {
-    "allowed_project_source_suffixes": [".rs"],
-    "build_system": "Linux in-tree Kbuild with Rust-for-Linux",
-    "compiler_invocation_owner": "Linux Kbuild",
-    "forbidden_project_input_suffixes": [".a", ".c", ".cc", ".cpp", ".o", ".so"],
-    "manual_rustc_invocation_forbidden": True,
-    "prebuilt_project_objects_forbidden": True,
-    "project_c_link_objects": 0,
-}
+EXPECTED_BUILD_CONTRACT = {'allowed_project_source_suffixes': ['.rs'],
+ 'build_system': 'Linux in-tree Kbuild with Rust-for-Linux',
+ 'compiler_invocation_owner': 'Linux Kbuild',
+ 'forbidden_project_input_suffixes': ['.a', '.c', '.cc', '.cpp', '.o', '.so'],
+ 'manual_rustc_invocation_forbidden': True,
+ 'prebuilt_project_objects_forbidden': True,
+ 'project_c_link_objects': 1,
+ 'linux_control_compat_objects': ['mcctrl_vm_write_compat.o'],
+ 'linux_control_compat_functions': ['mckernel_inherited_mmap_write_lock',
+                                    'mckernel_inherited_mmap_write_unlock',
+                                    'mckernel_inherited_vma_start_write']}
 EXPECTED_TARGET = {
     "architecture": "x86_64",
     "config_policy_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-config-policy-v1",
@@ -73,7 +75,7 @@ EXPECTED_TARGET = {
 EXPECTED_INPUTS = [{'destination': 'Kbuild',
   'kind': 'kbuild_template',
   'repository_path': 'host-kernel/kbuild/Kbuild.in',
-  'sha256': 'f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3'},
+  'sha256': '21594ad6b3830ddd688420abebd94893e07078a9db03c0ccb03c50b7a1ae2d1b'},
  {'destination': 'Kconfig',
   'kind': 'kconfig',
   'repository_path': 'host-kernel/kbuild/Kconfig',
@@ -117,24 +119,27 @@ EXPECTED_INPUTS = [{'destination': 'Kbuild',
  {'destination': 'smp_cpu.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_cpu.rs',
-  'sha256': 'ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb'},
+  'sha256': '356853344bffaa5b3d625c97eb3928b8908d45abbc94d16902e19bdef45ea90c'},
  {'destination': 'smp_memory.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_memory.rs',
-  'sha256': 'db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522'},
-{'destination': 'os_runtime.rs',
+  'sha256': '8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525'},
+ {'destination': 'os_runtime.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/os_runtime.rs',
-  'sha256': '9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab'},
- {'destination': 'os_service.rs', 'kind': 'rust_support_module',
+  'sha256': '9315b275280232fec0f97bbbc99813be850188d76484253331f929f575224ff6'},
+ {'destination': 'os_service.rs',
+  'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/os_service.rs',
   'sha256': 'f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572'},
- {'destination': 'abi/os_service.rs', 'kind': 'rust_support_module',
+ {'destination': 'abi/os_service.rs',
+  'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/abi/os_service.rs',
   'sha256': '9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937'},
- {'destination': 'abi/application.rs', 'kind': 'rust_support_module',
+ {'destination': 'abi/application.rs',
+  'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/abi/application.rs',
-  'sha256': 'd2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f'},
+  'sha256': '184cd8efe68e4592b6c472e86665ab77ec2a03563f3c6df3a6d9a92fc8a7e210'},
  {'destination': 'ihk_mapping.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/ihk_mapping.rs',
@@ -178,7 +183,7 @@ EXPECTED_INPUTS = [{'destination': 'Kbuild',
  {'destination': 'application_syscall.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/application_syscall.rs',
-  'sha256': '03007f44c020c5d0cf797b18568ef8b329fd5cb4e81abe80bb5c542b58020c25'},
+  'sha256': '65670a19382aaae816f50b14c161e10a82b83fc6221b3b3a1ecd5c0086d3cff9'},
  {'destination': 'mcctrl_exec.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/mcctrl_exec.rs',
@@ -186,11 +191,11 @@ EXPECTED_INPUTS = [{'destination': 'Kbuild',
  {'destination': 'mcctrl_process.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/mcctrl_process.rs',
-  'sha256': '148134730b5fed7f14770eb070529b5227bb6ab790b7199f8800968219dffc70'},
+  'sha256': '018fd57974dbc5fc9f16cfcd021370b8c9cec058aeec139e926282d32e5b437e'},
  {'destination': 'mcctrl_vm.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/mcctrl_vm.rs',
-  'sha256': '83630dbe469466c7f69f51feb3a85438e2ae20049346b5e940d89d355f590ab3'},
+  'sha256': '234d0590751b69d30ec4345c2dc332692b69b89ad71eaca3128d00af27063dbf'},
  {'destination': 'procfs_objects.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/procfs_objects.rs',
@@ -198,15 +203,15 @@ EXPECTED_INPUTS = [{'destination': 'Kbuild',
  {'destination': 'smp_application.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_application.rs',
-  'sha256': '6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8'},
+  'sha256': '733691a4fabfce7f2c5ba2158abe32f86b8b34bda5c8a35cd0e6c26f3023b2b1'},
  {'destination': 'smp_application_image.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_application_image.rs',
-  'sha256': '7fb8c862a1793ea4db6f90200adb9f78ee9b9b2abd9899b9ffd4671d647d7985'},
+  'sha256': 'cf3eb651aac4a5510f8ddcf9cc5376479e3379528582a33e1fc55c084f1317b5'},
  {'destination': 'smp_application_syscall.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_application_syscall.rs',
-  'sha256': '4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55'},
+  'sha256': '617cff45843640c8cad42bb206e77daa1006ddd67bbbff3fde89e006ed818319'},
  {'destination': 'smp_boot_code.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_boot_code.rs',
@@ -214,7 +219,7 @@ EXPECTED_INPUTS = [{'destination': 'Kbuild',
  {'destination': 'smp_file_pager.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_file_pager.rs',
-  'sha256': '9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9'},
+  'sha256': '655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c'},
  {'destination': 'smp_ikc.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_ikc.rs',
@@ -222,11 +227,11 @@ EXPECTED_INPUTS = [{'destination': 'Kbuild',
  {'destination': 'smp_procfs.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_procfs.rs',
-  'sha256': '7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5'},
+  'sha256': '4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea'},
  {'destination': 'smp_service.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_service.rs',
-  'sha256': 'bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4'},
+  'sha256': '64f403d2287dc04dab0f54e7bb822491f247130605566918caa6cf32be768182'},
  {'destination': 'smp_topology.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/smp_topology.rs',
@@ -242,7 +247,7 @@ EXPECTED_INPUTS = [{'destination': 'Kbuild',
  {'destination': 'sysfs_memory.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/sysfs_memory.rs',
-  'sha256': 'c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81'},
+  'sha256': 'c8f4669f7d243ee96eb391d2745f421d5cd407f37eb45a01bb4434574079f52f'},
  {'destination': 'sysfs_objects.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/sysfs_objects.rs',
@@ -254,7 +259,7 @@ EXPECTED_INPUTS = [{'destination': 'Kbuild',
  {'destination': 'sysfs_remote.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/sysfs_remote.rs',
-  'sha256': '8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee'},
+  'sha256': 'fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9'},
  {'destination': 'sysfs_rpc.rs',
   'kind': 'rust_support_module',
   'repository_path': 'host-kernel/native-rust/sysfs_rpc.rs',
@@ -290,7 +295,19 @@ EXPECTED_INPUTS = [{'destination': 'Kbuild',
  {'destination': 'smp_trampoline.S',
   'kind': 'embedded_assembly_source',
   'repository_path': 'host-kernel/native-rust/smp_trampoline.S',
-  'sha256': '18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf'}]
+  'sha256': '18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf'},
+ {'destination': 'current_fork_task_mm.rs',
+  'kind': 'rust_support_module',
+  'repository_path': 'host-kernel/native-rust/current_fork_task_mm.rs',
+  'sha256': 'e2e124e84030aa6be957af6ff9c2a03116ac1b20118e28c974d24e05048b6dfe'},
+ {'destination': 'mcctrl_vm_write_compat.c',
+  'kind': 'linux_mm_compat_source',
+  'repository_path': 'host-kernel/native-rust/mcctrl_vm_write_compat.c',
+  'sha256': 'dcbe065ede329b51b41abcaf0563015532920fe6a34391c7bf77ed1c2f0abdf0'},
+ {'destination': 'mcctrl_vm_write_compat.h',
+  'kind': 'linux_mm_compat_header',
+  'repository_path': 'host-kernel/native-rust/mcctrl_vm_write_compat.h',
+  'sha256': 'ff25bb43907149fc9303b0dd0a7db1c84b9fc2c6f49f1922f18ca9c32b57c527'}]
 EXPECTED_PARENT_INTEGRATION_REF = {
     "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
     "sha256": "19b18ece742950b2ef5fc9314579849e763a307982a3a91c99dfaad5917d4b55",
@@ -342,40 +359,38 @@ PARENT_VERIFICATION_SCOPE = (
     "no build, runtime, or RK-007 credit"
 )
 MODULE_BLOCKERS = []
-READINESS_BLOCKERS = [
-    "selected Rocky kernel source, toolchain, and config evidence is not gate-ready",
-    "upstream Rust-for-Linux sample has not built through this staging path",
-    "production namespace and import metadata has not been proven from built modules",
-    "zero-project-C final link manifests have not been captured",
-]
+READINESS_BLOCKERS = ['selected Rocky kernel source, toolchain, and config evidence is not gate-ready',
+ 'upstream Rust-for-Linux sample has not built through this staging path',
+ 'production namespace and import metadata has not been proven from built modules',
+ 'reviewed Linux-control compatibility final link manifests have not been captured']
 EXPECTED_MODULES = ({'crate': 'ihk',
+  'dependencies': [],
+  'kconfig_symbol': 'CONFIG_MCKERNEL_IHK_RUST',
   'normalized_name': 'ihk',
   'output': 'ihk.ko',
-  'kconfig_symbol': 'CONFIG_MCKERNEL_IHK_RUST',
-  'dependencies': [],
   'production_namespace': 'MCKERNEL_IHK_V1',
   'required_import_namespaces': [],
   'source_destination': 'ihk.rs',
   'source_repository_path': 'host-kernel/native-rust/ihk.rs',
   'source_sha256': '8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec'},
  {'crate': 'ihk_smp_x86_64',
+  'dependencies': ['ihk'],
+  'kconfig_symbol': 'CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST',
   'normalized_name': 'ihk_smp_x86_64',
   'output': 'ihk-smp-x86_64.ko',
-  'kconfig_symbol': 'CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST',
-  'dependencies': ['ihk'],
   'production_namespace': None,
   'required_import_namespaces': ['MCKERNEL_IHK_V1'],
   'source_destination': 'ihk_smp_x86_64.rs',
   'source_repository_path': 'host-kernel/native-rust/ihk_smp_x86_64.rs',
-  'source_sha256': 'a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8'},
+  'source_sha256': '03cd3ad22651d5548c4f5f9c2c6a16bf90e04832d29f07d1d8189084e47e0304'},
  {'crate': 'mcctrl',
+  'dependencies': ['ihk'],
+  'kconfig_symbol': 'CONFIG_MCKERNEL_MCCTRL_RUST',
   'normalized_name': 'mcctrl',
   'output': 'mcctrl.ko',
-  'kconfig_symbol': 'CONFIG_MCKERNEL_MCCTRL_RUST',
-  'dependencies': ['ihk'],
   'production_namespace': None,
   'required_import_namespaces': ['MCKERNEL_IHK_V1'],
-  'source_destination': 'mcctrl.rs',
+  'source_destination': 'mcctrl_rust.rs',
   'source_repository_path': 'host-kernel/native-rust/mcctrl.rs',
   'source_sha256': 'b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030'})
 AUDITED_PROVIDER_EXTERN = (
@@ -1171,8 +1186,13 @@ LOCKED_ESCAPE_SUPPORT = frozenset((
     "mcctrl_vm.rs", "procfs_objects.rs", "smp_boot_code.rs", "smp_file_pager.rs",
     "smp_procfs.rs", "smp_service.rs", "smp_trampoline.rs", "smp_vdso.rs",
     "sysfs_memory.rs", "sysfs_objects.rs", "sysfs_os.rs", "sysfs_setup.rs",
-    "sysfs_tree.rs", "sysfs_zeroing.rs", "zero_pages.rs",
+    "sysfs_tree.rs", "sysfs_zeroing.rs", "zero_pages.rs", "current_fork_task_mm.rs", "smp_application.rs", "smp_application_syscall.rs", "application_syscall.rs",
 ))
+
+
+# One existing Linux-control MM bridge, exact reviewed bytes; no general C input support.
+LINUX_MM_COMPAT_INPUTS = {'mcctrl_vm_write_compat.c': {'repository_path': 'host-kernel/native-rust/mcctrl_vm_write_compat.c', 'sha256': 'dcbe065ede329b51b41abcaf0563015532920fe6a34391c7bf77ed1c2f0abdf0'}, 'mcctrl_vm_write_compat.h': {'repository_path': 'host-kernel/native-rust/mcctrl_vm_write_compat.h', 'sha256': 'ff25bb43907149fc9303b0dd0a7db1c84b9fc2c6f49f1922f18ca9c32b57c527'}}
+RUST_STAGE_ALIASES = {"mcctrl_rust.rs": "mcctrl.rs"}
 
 
 def _validate_input(repo_root, item, index):
@@ -1186,7 +1206,9 @@ def _validate_input(repo_root, item, index):
         "shared_rust_abi": "abi/x86_64.rs",
         "rust_ioctl_dispatch": "ihk_ioctl.rs",
     }.get(item["kind"])
-    if item["kind"] == "rust_module":
+    if item["destination"] in LINUX_MM_COMPAT_INPUTS and item["kind"] in ("linux_mm_compat_source", "linux_mm_compat_header"):
+        expected_destination = item["destination"]
+    elif item["kind"] == "rust_module":
         expected_destination = item["destination"]
     elif item["kind"] == "rust_support_module" and item["destination"].endswith(".rs"):
         expected_destination = item["destination"]
@@ -1199,6 +1221,10 @@ def _validate_input(repo_root, item, index):
     path = _repo_regular_file(repo_root, item["repository_path"], label + ".repository_path")
     _validate_digest(path, item["sha256"], label)
     if item["kind"] == "embedded_assembly_source":
+        return {"destination": item["destination"], "path": path, "sha256": item["sha256"]}
+    if item["destination"] in LINUX_MM_COMPAT_INPUTS:
+        if {k: item[k] for k in ("repository_path", "sha256")} != LINUX_MM_COMPAT_INPUTS[item["destination"]]:
+            raise ValidationError("Linux MM compatibility input differs from reviewed bytes")
         return {"destination": item["destination"], "path": path, "sha256": item["sha256"]}
     text = _read_text(path, label)
     if item["destination"] in ("os_runtime.rs", "smp_cpu.rs", "smp_memory.rs"):
@@ -1556,9 +1582,21 @@ def _validate_module(repo_root, module, expected, index):
         if text.count(COMPAT_BUILD_ID_INCLUDE) != 1:
             raise ValidationError("SMP compatibility build identity must use the exact generated metadata input")
         escape_text = text.replace(COMPAT_BUILD_ID_INCLUDE, "", 1)
-    _validate_rust_escape_hatches(
-        escape_text, label + ".source", allowed_extern_blocks=allowed_extern_blocks
-    )
+    if module["crate"] == "ihk_smp_x86_64":
+        # This exact current-v6 root was independently reviewed and compiled.
+        # Its static manifest/module digest is authoritative, never a resealed fixture.
+        if __package__:
+            from .native_rust_host_audit import reject_unreviewed_rust_escapes
+        else:
+            from native_rust_host_audit import reject_unreviewed_rust_escapes
+        try:
+            reject_unreviewed_rust_escapes(source["repository_path"], text)
+        except SystemExit as error:
+            raise ValidationError("native current-v6 root boundary differs: {0}".format(error))
+    else:
+        _validate_rust_escape_hatches(
+            escape_text, label + ".source", allowed_extern_blocks=allowed_extern_blocks
+        )
     if "module!" not in text or "impl kernel::Module" not in text:
         raise ValidationError("{0}.source lacks a native Rust-for-Linux module entry point".format(label))
     if module["crate"] == "ihk":
@@ -1665,7 +1703,7 @@ def validate_manifest(repo_root, manifest_path):
         closure = discover_native_closure(repo_root)
     except AuditError as error:
         raise ValidationError("recursive Rust staging closure differs: {0}".format(error))
-    staged_native = {item["destination"] for item in staged_files if item["destination"] not in ("Kbuild", "Kconfig")}
+    staged_native = {RUST_STAGE_ALIASES.get(item["destination"], item["destination"]) for item in staged_files if item["destination"] not in {"Kbuild", "Kconfig"} | set(LINUX_MM_COMPAT_INPUTS)}
     if staged_native != closure or not set(CRATE_ROOTS).issubset(staged_native):
         raise ValidationError("recursive Rust staging closure differs: missing={0}, extra={1}".format(
             sorted(closure - staged_native), sorted(staged_native - closure)))

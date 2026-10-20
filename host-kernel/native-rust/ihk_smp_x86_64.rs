@@ -256,7 +256,16 @@ unsafe extern "C" fn application_invoke(
 ) -> i64 {
     // SAFETY: The exact successful open remains live until final close.
     let application = unsafe { &*context.cast::<smp_memory::Application>() };
-    let result = if command == application_abi::CLEANUP && buffer.is_null() && bytes == 0 {
+    let result = if command==application_abi::FORK_ADOPT_CURRENT_V4 {
+        if buffer.is_null()||bytes!=core::mem::size_of::<application_abi::ForkAdoptCallV4>()
+            ||buffer as usize%core::mem::align_of::<application_abi::ForkAdoptCallV4>()!=0{Err(EINVAL)}else{
+            let call=unsafe {&mut *buffer.cast::<application_abi::ForkAdoptCallV4>()};
+            if call.version!=4||call.bytes as usize!=bytes||call.child.is_null(){Err(EINVAL)}else{
+                let child=unsafe {&*call.child.cast::<smp_memory::Application>()};
+                unsafe {application.adopt_current_fork(child,call)}
+            }
+        }
+    } else if command == application_abi::CLEANUP && buffer.is_null() && bytes == 0 {
         application.cleanup()
     } else if !buffer.is_null()
         && bytes > 0

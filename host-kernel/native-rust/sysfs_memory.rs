@@ -582,6 +582,38 @@ pub(crate) struct SyscallResponse {
 }
 
 impl SyscallResponse {
+    pub(crate) fn validate_fork_root(&self,request:&SyscallRequest,root:u64)->Result {
+        if request.number()!=56||request.arguments()[3]!=root||root==0||root%4096!=0{return Err(EACCES);}
+        // Range/mapping validation is subordinate to the actual retained
+        // original delivery/child-credit/root owner. It grants no authority.
+        self.memory.address(root,4096)?;Ok(())
+    }
+    fn read_current_fork_carrier(&mut self,request:&SyscallRequest)->Result<[u8;128]> {
+        let args=request.arguments();
+        if request.number()!=56||args[5]!=0x313030434b46434d{return Err(EACCES);}
+        if self.payload.is_none(){self.prepare_payload(args[4],128,true)?;}
+        let(tag,address,writable)=self.payload.ok_or(EIO)?;
+        if !writable||tag.span.physical!=args[4]
+            ||tag.span.end.checked_sub(tag.span.physical)!=Some(128){return Err(EACCES);}
+        // The same exclusive response-owned span permits both initial reads
+        // and the eventual first receipt write; ordinary pager rights remain
+        // unchanged. No peer byte is written before the original RET is bound.
+        let mut bytes=[0;128];
+        for(i,b)in bytes.iter_mut().enumerate(){*b=unsafe {ptr::read_volatile((address as *const u8).add(i))};}
+        Ok(bytes)
+    }
+    pub(crate) fn current_fork_carrier(&mut self,request:&SyscallRequest)->Result<u64> {
+        let bytes=self.read_current_fork_carrier(request)?;
+        request.current_fork_carrier(&bytes).map_err(errno)
+    }
+    pub(crate) fn write_first_fork_receipt(&mut self,request:&SyscallRequest,
+        receipt:&crate::application_syscall::ForkFirstReceipt)->Result {
+        let nonce=self.current_fork_carrier(request)?;
+        if nonce!=receipt.nonce{return Err(EACCES);}
+        let mut bytes=request.first_fork_receipt(receipt).map_err(errno)?;
+        self.pager_copy(0,&mut bytes,true)
+    }
+
     pub(crate) fn prepare_pager(&mut self, request: &SyscallRequest) -> Result {
         let operation = crate::application_pager::Operation::decode(request).map_err(errno)?;
         let Some((physical, bytes, to_guest)) = operation.payload() else {

@@ -198,6 +198,15 @@ impl Preparation {
         ))
     }
 
+    /// Inherited fork policy is available only from a real acknowledged
+    /// parent Preparation. This never manufactures another PREPARE ACK.
+    pub(crate) fn inherited_policy(&self,start:u64,end:u64)->Result<(u32,u32)> {
+        kernel::error::to_result(self.result.ok_or(EBUSY)?)?;
+        if wire::word(&self.original,wire::USER_START).map_err(errno)?!=start
+            ||wire::word(&self.original,wire::USER_END).map_err(errno)?!=end{return Err(EACCES);}
+        self.procfs_credentials()
+    }
+
     pub(crate) fn copy_result(&self, output: &mut [u8]) -> Result {
         kernel::error::to_result(self.result.ok_or(EBUSY)?)?;
         output

@@ -39,6 +39,18 @@ class NativeRustKconfigPolicyTests(unittest.TestCase):
         for symbol in policy.SYMBOLS[1:]:
             self.assertEqual((policy.PROVIDER,), result["dependencies"][symbol])
 
+    def test_composite_rejects_missing_reordered_or_foreign_members(self):
+        with open(KBUILD) as stream:
+            original = stream.read()
+        line = "mcctrl-y := mcctrl_rust.o mcctrl_vm_write_compat.o\n"
+        for replacement in ("", "mcctrl-y := mcctrl_rust.o\n",
+                            "mcctrl-y := mcctrl_vm_write_compat.o mcctrl_rust.o\n",
+                            "mcctrl-y := mcctrl_rust.o arbitrary.o\n",
+                            "mcctrl-y := mcctrl_rust.o mcctrl_vm_write_compat.o extra.o\n"):
+            with self.subTest(replacement=replacement):
+                with self.assertRaises(policy.KconfigPolicyError):
+                    policy.validate_native_rust_kbuild(original.replace(line, replacement))
+
     def test_repository_kbuild_is_exact_and_comment_safe(self):
         with open(KBUILD, "r") as stream:
             original = stream.read()
@@ -48,6 +60,7 @@ class NativeRustKconfigPolicyTests(unittest.TestCase):
                 "obj-$(CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST) += ihk-smp-x86_64.o",
                 "ihk-smp-x86_64-y := ihk_smp_x86_64.o",
                 "obj-$(CONFIG_MCKERNEL_MCCTRL_RUST) += mcctrl.o",
+                "mcctrl-y := mcctrl_rust.o mcctrl_vm_write_compat.o",
             ),
             policy.validate_native_rust_kbuild(original),
         )

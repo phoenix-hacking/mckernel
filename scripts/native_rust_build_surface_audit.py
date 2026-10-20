@@ -67,6 +67,7 @@ EXPECTED_KBUILD_LINES = (
     "obj-$(CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST) += ihk-smp-x86_64.o",
     "ihk-smp-x86_64-y := ihk_smp_x86_64.o",
     "obj-$(CONFIG_MCKERNEL_MCCTRL_RUST) += mcctrl.o",
+    "mcctrl-y := mcctrl_rust.o mcctrl_vm_write_compat.o",
 )
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
@@ -406,9 +407,9 @@ def _check_manifest(repo):
     manifest = _read_json(manifest_path)
     inputs = manifest.get("inputs")
     if __package__:
-        from .rocky_rust_staging import EXPECTED_INPUTS, EXPECTED_MODULES
+        from .rocky_rust_staging import EXPECTED_INPUTS, EXPECTED_MODULES, LINUX_MM_COMPAT_INPUTS
     else:
-        from rocky_rust_staging import EXPECTED_INPUTS, EXPECTED_MODULES
+        from rocky_rust_staging import EXPECTED_INPUTS, EXPECTED_MODULES, LINUX_MM_COMPAT_INPUTS
     expected_inputs = dict(AUTHORITATIVE_INPUTS)
     closure = discover_native_closure(repo)
     expected_inputs.update(dict(
@@ -425,6 +426,7 @@ def _check_manifest(repo):
     expected_order = [item["destination"] for item in EXPECTED_INPUTS]
     if actual_order != expected_order:
         raise AuditError("stage manifest input order differs from hard-locked canonical sequence")
+    expected_inputs.update({name: row["repository_path"] for name, row in LINUX_MM_COMPAT_INPUTS.items()})
     by_destination = {}
     for index, item in enumerate(inputs):
         if not isinstance(item, dict):
@@ -453,6 +455,10 @@ def _check_manifest(repo):
             "abi/x86_64.rs": "shared_rust_abi", "ihk_ioctl.rs": "rust_ioctl_dispatch",
             "ikc_queue.rs": "rust_module", "ikc_master.rs": "rust_module",
         }.get(destination)
+        if destination in LINUX_MM_COMPAT_INPUTS:
+            expected_kind = "linux_mm_compat_source" if destination.endswith(".c") else "linux_mm_compat_header"
+            if {k: item.get(k) for k in ("repository_path", "sha256")} != LINUX_MM_COMPAT_INPUTS[destination]:
+                raise AuditError("Linux MM compatibility source differs from reviewed bytes")
         if expected_kind is None:
             expected_kind = "embedded_assembly_source" if destination.endswith(".S") else "rust_support_module"
         if item.get("kind") != expected_kind:

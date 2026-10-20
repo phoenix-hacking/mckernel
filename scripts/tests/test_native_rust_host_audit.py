@@ -114,6 +114,27 @@ class NativeRustHostAuditTests(unittest.TestCase):
     def test_integrated_repository_closure_passes(self):
         self.assertEqual(0, host_audit.main())
 
+    def test_only_exact_linux_mm_compat_source_and_alias_are_admitted(self):
+        for suffix in ("c", "h"):
+            relative = "host-kernel/native-rust/mcctrl_vm_write_compat." + suffix
+            with self.subTest(source=relative):
+                self.append_resealed_source(relative, "\n/* resealed drift */\n")
+                with self.assertRaises(SystemExit):
+                    host_audit.main()
+        self.write_resealed_source("host-kernel/native-rust/mcctrl.rs",
+                                   self.original_files["host-kernel/native-rust/mcctrl.rs"].decode("utf-8"))
+        value = self.load_manifest()
+        value["modules"][2]["source"]["destination"] = "mcctrl.rs"
+        self.write_manifest(value)
+        with self.assertRaises(SystemExit):
+            host_audit.main()
+
+    def test_resealed_current_task_mm_binding_cannot_gain_escape_surface(self):
+        self.append_resealed_source("host-kernel/native-rust/current_fork_task_mm.rs",
+                                    '\nextern "C" { fn injected_provider(); }\n')
+        with self.assertRaises(SystemExit):
+            host_audit.main()
+
     def test_manifest_input_order_and_module_roots_are_exact(self):
         value = self.load_manifest()
         value["inputs"][2], value["inputs"][3] = value["inputs"][3], value["inputs"][2]

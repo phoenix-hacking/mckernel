@@ -31,7 +31,52 @@ extern "C" {
         buffer: *mut u8,
         bytes: usize,
     ) -> i64;
+    fn ihk_os_application_adopt_current_v4(parent:*mut c_void,child:*mut c_void,
+        geometry:*const super::application_abi::ForkGeometryV3,
+        consumer:Option<super::application_abi::ForkAdoptConsumerV4>,context:*mut c_void)->i32;
     fn ihk_os_application_close_v1(context: *mut c_void);
+}
+
+// The reviewed capability is incomplete: existing defaults still return -95.
+const CURRENT_FORK_ADOPTION_ENABLED:bool=false;
+struct RegistrationReservation<'a>(&'a Process);
+impl Drop for RegistrationReservation<'_>{fn drop(&mut self){self.0.registration_pending.store(false,Ordering::Release);}}
+struct CurrentForkAdoptAttempt<'a> {
+    process:&'a Arc<Process>,parent:&'a Arc<Registration>,child:&'a Arc<Registration>,
+    mirror:&'a Arc<Mirror>,geometry:super::application_abi::ForkGeometryV3,
+    called:bool,published:bool,
+}
+unsafe extern "C" fn current_fork_adopted_v4(context:*mut c_void,
+    descriptor:*const super::application_abi::ForkSealV4)->i32 {
+    let result=(||->Result {
+        if context.is_null()||descriptor.is_null(){return Err(EINVAL);}
+        let attempt=unsafe {&mut *context.cast::<CurrentForkAdoptAttempt<'_>>()};
+        if attempt.called{return Err(EINVAL);}attempt.called=true;
+        let scope=unsafe {&*descriptor};let proof=&scope.prepared;let seal=scope.seal.ok_or(EACCES)?;
+        if scope.context.is_null()||proof.reserved!=0||proof.geometry!=attempt.geometry
+            ||proof.child_pid!=attempt.child.pid||proof.child_mm==0||proof.response==0||proof.nonce==0
+            ||!attempt.process.registration_pending.load(Ordering::Acquire){return Err(EACCES);}
+        attempt.child.validate_current_fork_child(attempt.parent)?;
+        if attempt.process.registration.lock().is_some()||attempt.child.mapping.lock().is_some(){return Err(EINVAL);}
+        let end=attempt.geometry.start.checked_add(attempt.geometry.length).ok_or(EINVAL)?;
+        // Actual owned Request/Response, current task/active MM, durable IHK
+        // lease and reserved child slot remain with the synchronous provider.
+        // No publication/provider lock spans MM lock/unlock or mm_users Drop.
+        let child_mirror=unsafe {Mirror::inherit_vmas(attempt.mirror,attempt.parent,
+            attempt.child.clone(),attempt.geometry.start,end,proof.child_mm,
+            |_|seal(scope.context))}?;
+        // The process reservation and private child Registration exclude every
+        // competing creator. All fallible effects finished before MM transfer.
+        {
+            let mut publication=attempt.process.registration.lock();
+            let mut mapping=attempt.child.mapping.lock();
+            assert!(publication.is_none()&&mapping.is_none());
+            *mapping=Some(child_mirror);
+            attempt.child.armed.store(true,Ordering::Release);
+            *publication=Some(attempt.child.clone());
+        }
+        attempt.published=true;Ok(())
+    })();result.map_or_else(|e|e.to_errno(),|()|0)
 }
 
 pub(super) struct Registration {
@@ -58,6 +103,14 @@ unsafe impl Send for Registration {}
 unsafe impl Sync for Registration {}
 
 impl Registration {
+    pub(super) fn validate_current_fork_child(&self,parent:&Self)->Result {
+        let current=ProcessId::current()?;
+        if self.slot!=parent.slot || self.generation==0 || self.generation!=parent.generation
+            || self._pid.same(&parent._pid) || !self._pid.same(&current)
+            || current.number()?!=self.pid {return Err(EACCES);}
+        Ok(())
+    }
+
     fn acquire(slot: u32, generation: u64, identity: ProcessId) -> Result<Arc<Self>> {
         let pid = identity.number()?;
         let operation = Box::pin_init(new_mutex!(()), GFP_KERNEL)?;
@@ -667,6 +720,7 @@ struct Process {
     executable: Mutex<Option<Executable>>,
     #[pin]
     registration: Mutex<Option<Arc<Registration>>>,
+    registration_pending:AtomicBool,
     // Field destruction closes the executable and application before this PID.
     pid: ProcessId,
 }
@@ -826,6 +880,9 @@ unsafe extern "C" fn reap(context: *mut c_void) -> i32 {
     context.entered.store(true, Ordering::Release);
     let mut cursor = 0usize;
     while !unsafe { bindings::kthread_should_stop() } {
+        // Drain final VMA references in this existing sleepable owner. Never
+        // hold the registry/process/publication/MM locks across destructors.
+        super::mcctrl_vm::drain_deferred_vma_owners();
         let mut batch: [Option<Arc<Process>>; 16] = core::array::from_fn(|_| None);
         {
             let entries = context.table.lock();
@@ -873,6 +930,9 @@ unsafe extern "C" fn reap(context: *mut c_void) -> i32 {
         // no registry mutex or borrowed process state is held across this delay.
         unsafe { bindings::msleep(10) };
     }
+    // Every deferred node independently pins THIS_MODULE; module exit cannot
+    // race a queued node. Join is complete only after this final detached drain.
+    super::mcctrl_vm::drain_deferred_vma_owners();
     0
 }
 
@@ -901,7 +961,7 @@ impl Binding {
         let process = Arc::pin_init(
             try_pin_init!(Process {
                 slot, generation, executable <- new_mutex!(None),
-                registration <- new_mutex!(None), pid,
+                registration <- new_mutex!(None),registration_pending:AtomicBool::new(false), pid,
             }),
             GFP_KERNEL,
         )?;
@@ -999,6 +1059,29 @@ impl Context {
         })
     }
 
+    fn adopt_current_fork_v4(&self,descriptor:&[u8;24],compat:bool)->Result<isize> {
+        let word=|at|u64::from_le_bytes(descriptor[at..at+8].try_into().unwrap());
+        let (start,length,root)=if compat{let integer=|at|u32::from_le_bytes(descriptor[at..at+4].try_into().unwrap()) as u64;
+            (integer(0),integer(4),integer(8))}else{(word(0),word(8),word(16))};
+        let end=start.checked_add(length).ok_or(EINVAL)?;
+        if root==0||root%4096!=0||start%4096!=0||length==0||length%4096!=0{return Err(EINVAL);}
+        let process=self.process()?;let current=ProcessId::current()?;
+        if !process.pid.same(&current){return Err(EACCES);}
+        process.registration_pending.compare_exchange(false,true,Ordering::AcqRel,Ordering::Acquire).map_err(|_|EBUSY)?;
+        let _reservation=RegistrationReservation(&process);
+        if process.registration.lock().is_some(){return Err(EINVAL);}
+        let (mirror,parent)=Mirror::inherited_registration(start,end)?;
+        if parent.slot!=self.slot||parent.generation!=self.generation||self.generation==0||parent._pid.same(&current){return Err(EACCES);}
+        let child=Registration::acquire(self.slot,self.generation,current)?;
+        let geometry=super::application_abi::ForkGeometryV3{root,start,length};
+        let mut attempt=CurrentForkAdoptAttempt{process:&process,parent:&parent,child:&child,mirror:&mirror,geometry,called:false,published:false};
+        let status=unsafe {ihk_os_application_adopt_current_v4(parent.context.as_ptr(),child.context.as_ptr(),
+            &geometry,Some(current_fork_adopted_v4),ptr::from_mut(&mut attempt).cast())};
+        kernel::error::to_result(status)?;
+        if !attempt.called||!attempt.published{return Err(errno(-71));}Ok(0)
+    }
+
+
     pub(super) fn create_process(&self, argument: usize, compat: bool) -> Result<isize> {
         if argument != 0 {
             // Legacy non-null CREATE_PPD also clears Linux mirror VMAs after
@@ -1009,9 +1092,11 @@ impl Context {
             UserSlice::new(argument, bytes)
                 .reader()
                 .read_slice(&mut descriptor[..bytes])?;
+            if CURRENT_FORK_ADOPTION_ENABLED {return self.adopt_current_fork_v4(&descriptor,compat);}
             return Err(kernel::error::to_result(-95).unwrap_err());
         }
         let process = self.process()?;
+        if process.registration_pending.load(Ordering::Acquire){return Err(EBUSY);}
         if process.registration.lock().is_some() {
             return Err(EINVAL);
         }
@@ -1020,6 +1105,7 @@ impl Context {
             Registration::acquire(self.slot, self.generation, ProcessId::current()?)?;
         {
             let mut published = process.registration.lock();
+            if process.registration_pending.load(Ordering::Acquire){return Err(EBUSY);}
             if published.is_some() {
                 return Err(EINVAL);
             }

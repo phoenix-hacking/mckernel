@@ -47,6 +47,7 @@ KBUILD_LINES = (
     "obj-$(CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST) += ihk-smp-x86_64.o",
     "ihk-smp-x86_64-y := ihk_smp_x86_64.o",
     "obj-$(CONFIG_MCKERNEL_MCCTRL_RUST) += mcctrl.o",
+    "mcctrl-y := mcctrl_rust.o mcctrl_vm_write_compat.o",
 )
 
 
@@ -198,4 +199,4 @@ def validate_native_rust_kbuild(text):
         raise KconfigPolicyError(
             "Kbuild must contain only the locked header and ordered three-module graph"
         )
-    return tuple(line for line in KBUILD_LINES if line.startswith(("obj-", "ihk-")))
+    return tuple(line for line in KBUILD_LINES if line.startswith(("obj-", "ihk-", "mcctrl-")))

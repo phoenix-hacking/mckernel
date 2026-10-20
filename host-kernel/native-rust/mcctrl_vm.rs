@@ -4,11 +4,12 @@
 use super::{application_image as wire, mcctrl_process::Registration};
 use core::{
     ffi::{c_char, c_void},
-    mem::{align_of, size_of, MaybeUninit},
+    mem::{align_of, size_of, MaybeUninit,ManuallyDrop},
+    pin::Pin,
     ptr::{self, NonNull},
-    sync::atomic::{AtomicI32, Ordering},
+    sync::atomic::{AtomicI32,AtomicPtr,Ordering},
 };
-use kernel::{bindings, prelude::*, sync::Arc};
+use kernel::{bindings, prelude::*, sync::{new_mutex,Arc,ArcBorrow,Mutex}};
 
 // SAFETY: This exported Linux API borrows static operations and transfers one
 // file reference. It retains operations.owner on success and leaves priv owned
@@ -99,12 +100,186 @@ pub(super) struct Mirror {
     pub(super) start: u64,
     pub(super) end: u64,
 }
-struct MappingFile {
-    registration: Arc<Registration>,
-    mirror: Arc<Mirror>,
+// Each VMA owns a raw Arc. The file transfers its bootstrap once, so a
+// shared inherited file does not permanently retain a parent's application.
+// The one shared VmaOwner can be referenced by any number of copied VMAs.
+// Only its final Drop queues ONE separately preallocated node. The close
+// callback therefore cannot call Registration cleanup, MM release or a service.
+struct DeferredVmaOwner {
+    registration:Arc<Registration>,mirror:Arc<Mirror>,next:AtomicPtr<DeferredVmaOwner>,
+    // Last field: all application/MM reference destructors retain this module.
+    _module:DeferredModule,
+}
+struct DeferredModule(*mut c_void);
+unsafe impl Send for DeferredModule {}
+unsafe impl Sync for DeferredModule {}
+extern "C" {
+    fn try_module_get(module:*mut c_void)->bool;
+    fn module_put(module:*mut c_void);
+}
+impl DeferredModule {
+    fn acquire()->Result<Self> {
+        let module:*mut c_void=super::THIS_MODULE.as_ptr().cast();
+        if !unsafe {try_module_get(module)} {return Err(ENODEV);}
+        Ok(Self(module))
+    }
+}
+impl Drop for DeferredModule {fn drop(&mut self){unsafe {module_put(self.0)};}}
+static DEFERRED_VMA_OWNERS:AtomicPtr<DeferredVmaOwner>=AtomicPtr::new(ptr::null_mut());
+struct VmaOwner {deferred:ManuallyDrop<Box<DeferredVmaOwner>>}
+impl core::ops::Deref for VmaOwner {
+    type Target=DeferredVmaOwner;
+    fn deref(&self)->&DeferredVmaOwner {&self.deferred}
+}
+impl VmaOwner {
+    fn new(registration:Arc<Registration>,mirror:Arc<Mirror>)->Result<Arc<Self>> {
+        // Every fallible allocation/module acquisition precedes mmap/VMA seal.
+        let module=DeferredModule::acquire()?;
+        let node=Box::new(DeferredVmaOwner{registration,mirror,
+            next:AtomicPtr::new(ptr::null_mut()),_module:module},GFP_KERNEL)?;
+        Ok(Arc::new(Self{deferred:ManuallyDrop::new(node)},GFP_KERNEL)?)
+    }
+}
+impl Drop for VmaOwner {
+    fn drop(&mut self) {
+        let node=Box::into_raw(unsafe {ManuallyDrop::take(&mut self.deferred)});
+        let mut observed=DEFERRED_VMA_OWNERS.load(Ordering::Acquire);
+        loop {
+            // This unique node has never been queued before. Published nodes
+            // are immutable until the existing reaper's acquire detach.
+            unsafe {(*node).next.store(observed,Ordering::Relaxed)};
+            match DEFERRED_VMA_OWNERS.compare_exchange_weak(observed,node,Ordering::Release,Ordering::Acquire) {
+                Ok(_)=>break,Err(next)=>observed=next,
+            }
+        }
+        // No allocation, blocking lock, owner Drop or service invocation here.
+    }
+}
+/// Existing mcctrl reaper ONLY, with no table/publication/MM locks held.
+/// Queue drain means deferred reference release; it never means a guest ACK.
+/// Registration/Runtime's existing retirement/quarantine owners remain binding.
+pub(super) fn drain_deferred_vma_owners() {
+    let mut node=DEFERRED_VMA_OWNERS.swap(ptr::null_mut(),Ordering::AcqRel);
+    while !node.is_null() {
+        let owner=unsafe {Box::from_raw(node)};
+        node=owner.next.load(Ordering::Relaxed);
+        // Final Registration::Drop, possible cleanup and mm_count Drop now
+        // occur solely in the existing sleepable reaper context, outside MM.
+        drop(owner);
+    }
 }
 
+struct MappingFile { bootstrap:Pin<Box<Mutex<Option<Arc<VmaOwner>>>>> }
+
+unsafe fn vma_owner<'a>(vma:*mut bindings::vm_area_struct)->Result<ArcBorrow<'a,VmaOwner>> {
+    if vma.is_null() || unsafe {(*vma).vm_ops}!=&VM_OPERATIONS.0 {return Err(EACCES);}
+    let raw=unsafe {(*vma).vm_private_data.cast::<VmaOwner>()};
+    if raw.is_null(){return Err(EACCES);}
+    // Caller keeps the live VMA and its ownership stable through this borrow.
+    Ok(unsafe {ArcBorrow::from_raw(raw)})
+}
+unsafe extern "C" fn vma_open(vma:*mut bindings::vm_area_struct) {
+    // Linux copied a live original VMA. Its raw reference remains borrowed,
+    // and this new VMA takes an independent increment for split/fork lifetime.
+    if let Ok(owner)=unsafe {vma_owner(vma)} {
+        let owned:Arc<VmaOwner>=owner.into();
+        unsafe {(*vma).vm_private_data=Arc::into_raw(owned).cast_mut().cast()};
+    }
+}
+unsafe extern "C" fn vma_close(vma:*mut bindings::vm_area_struct) {
+    let raw=unsafe {(*vma).vm_private_data.cast::<VmaOwner>()};
+    unsafe {(*vma).vm_private_data=ptr::null_mut()};
+    if !raw.is_null(){unsafe {drop(Arc::from_raw(raw))};}
+}
+// EXISTING permitted Linux control-plane wrapper providers, never compute-C.
+extern "C" {
+    fn mckernel_inherited_mmap_write_lock(mm:*mut c_void);
+    fn mckernel_inherited_mmap_write_unlock(mm:*mut c_void);
+    fn mckernel_inherited_vma_start_write(vma:*mut c_void);
+}
+struct InheritedWrite<'a>(&'a CurrentMm);
+impl Drop for InheritedWrite<'_> {
+    fn drop(&mut self){unsafe {mckernel_inherited_mmap_write_unlock(self.0.0.as_ptr().cast())};}
+}
+struct VmaReplacement {vma:NonNull<bindings::vm_area_struct>,owner:Option<Arc<VmaOwner>>}
+
 impl Mirror {
+    /// Borrow actual inherited VMA provenance; geometry is only a filter.
+    pub(super) fn inherited_registration(start:u64,end:u64)->Result<(Arc<Self>,Arc<Registration>)> {
+        if start>=end || start%4096!=0 || end%4096!=0{return Err(EINVAL);}
+        let mm=CurrentMm::get()?;
+        let sem=unsafe {ptr::addr_of_mut!((*mm.0.as_ptr()).__bindgen_anon_1.mmap_lock)};
+        unsafe {bindings::down_read(sem)};
+        let result=(||->Result<(Arc<Self>,Arc<Registration>)> {
+            let vma=unsafe {bindings::find_vma(mm.0.as_ptr(),start)};
+            if vma.is_null() || unsafe {(*vma).__bindgen_anon_1.__bindgen_anon_1.vm_start}!=start{return Err(EACCES);}
+            let owner=unsafe {vma_owner(vma)}?;
+            if owner.mirror.mm.0==mm.0 || owner.mirror.start!=start || owner.mirror.end!=end{return Err(EACCES);}
+            Ok((owner.mirror.clone(),owner.registration.clone()))
+        })();
+        unsafe {bindings::up_read(sem)};
+        result
+    }
+
+    /// # Safety
+    /// Caller owns an actual authenticated original-delivery/backend/root/
+    /// child-task/MM scope, preallocated durable retention and publication
+    /// reservations. The seal is infallible, nonblocking and allocation-free.
+    /// NO provider/publication lock may span this function: CurrentMm drops
+    /// after write unlock, before any local Registration publication lock.
+    pub(super) unsafe fn inherit_vmas(parent:&Arc<Self>,parent_registration:&Arc<Registration>,
+        child_registration:Arc<Registration>,start:u64,end:u64,expected_mm:u64,
+        seal:impl FnOnce(&Arc<Self>))->Result<Arc<Self>> {
+        if start!=parent.start || end!=parent.end || start>=end || start%4096!=0 || end%4096!=0{return Err(EINVAL);}
+        child_registration.validate_current_fork_child(parent_registration)?;
+        let mm=CurrentMm::get()?;
+        if mm.0==parent.mm.0||mm.0.as_ptr() as u64!=expected_mm{return Err(EACCES);}
+        let child=Arc::new(Self{mm:MmIdentity::from_current(&mm)?,start,end},GFP_KERNEL)?;
+        let replacement=VmaOwner::new(child_registration,child.clone())?;
+        unsafe {mckernel_inherited_mmap_write_lock(mm.0.as_ptr().cast())};
+        let write=InheritedWrite(&mm);
+        let result=(||->Result {
+            let mut address=start;let mut count=0usize;let mut file=ptr::null_mut();let mut flags=None;
+            while address<end {
+                let vma=unsafe {bindings::find_vma(mm.0.as_ptr(),address)};
+                if vma.is_null(){return Err(EACCES);}
+                let (first,last,current_flags)=unsafe {((*vma).__bindgen_anon_1.__bindgen_anon_1.vm_start,
+                    (*vma).__bindgen_anon_1.__bindgen_anon_1.vm_end,(*vma).__bindgen_anon_2.__vm_flags)};
+                let required=(bindings::VM_PFNMAP|bindings::VM_DONTEXPAND|bindings::VM_DONTDUMP) as u64;
+                if first!=address || last<=first || last>end || last%4096!=0
+                    || unsafe {(*vma).vm_mm}!=mm.0.as_ptr() || unsafe {(*vma).vm_file.is_null()}
+                    || unsafe {(*vma).vm_pgoff}!=(first-start)/4096 || current_flags&required!=required{return Err(EACCES);}
+                if count==0{file=unsafe {(*vma).vm_file};flags=Some(current_flags);}
+                if unsafe {(*vma).vm_file}!=file || flags!=Some(current_flags){return Err(EACCES);}
+                let inherited=unsafe {vma_owner(vma)}?;
+                if !ptr::eq(&*inherited.registration,&**parent_registration)
+                    || !ptr::eq(&*inherited.mirror,&**parent){return Err(EACCES);}
+                count=count.checked_add(1).ok_or_else(||errno(-75))?;address=last;
+            }
+            // All allocations and reference acquisitions finish before any
+            // per-VMA write, PFN zap, owner swap or authenticated seal effect.
+            let mut plan=Vec::with_capacity(count,GFP_KERNEL)?;address=start;
+            while address<end {
+                let vma=NonNull::new(unsafe {bindings::find_vma(mm.0.as_ptr(),address)}).ok_or(EACCES)?;
+                plan.push(VmaReplacement{vma,owner:Some(replacement.clone())},GFP_KERNEL)?;
+                address=unsafe {(*vma.as_ptr()).__bindgen_anon_1.__bindgen_anon_1.vm_end};
+            }
+            for item in plan.iter(){unsafe {mckernel_inherited_vma_start_write(item.vma.as_ptr().cast())};}
+            for item in plan.iter(){let vma=item.vma.as_ptr();let(first,last)=unsafe {
+                ((*vma).__bindgen_anon_1.__bindgen_anon_1.vm_start,(*vma).__bindgen_anon_1.__bindgen_anon_1.vm_end)};
+                unsafe {bindings::zap_vma_ptes(vma,first,last-first)};
+            }
+            for item in plan.iter_mut(){let vma=item.vma.as_ptr();let old=unsafe {(*vma).vm_private_data.cast::<VmaOwner>()};
+                unsafe {(*vma).vm_private_data=Arc::into_raw(item.owner.take().unwrap()).cast_mut().cast()};
+                // Parent Registration/Mirror arguments retain both fields, so
+                // this balance cannot invoke their final destructors under MM.
+                unsafe {drop(Arc::from_raw(old))};
+            }
+            seal(&child);Ok(())
+        })();
+        drop(write);drop(mm);result?;Ok(child)
+    }
+
     pub(super) fn reserve(registration: Arc<Registration>) -> Result<Arc<Self>> {
         let mm = CurrentMm::get()?;
         // SAFETY: mm_users retains the MM. Read-locking protects find_vma and
@@ -130,13 +305,8 @@ impl Mirror {
             },
             GFP_KERNEL,
         )?;
-        let private = Box::new(
-            MappingFile {
-                registration,
-                mirror: mirror.clone(),
-            },
-            GFP_KERNEL,
-        )?;
+        let initial=VmaOwner::new(registration,mirror.clone())?;
+        let private=Box::new(MappingFile{bootstrap:Box::pin_init(new_mutex!(Some(initial)),GFP_KERNEL)?},GFP_KERNEL)?;
         let private = Box::into_raw(private);
         // SAFETY: The immutable operation table is module-resident. The private
         // owner transfers only if Linux returns a successful referenced file.
@@ -244,7 +414,7 @@ impl Mirror {
                         {
                             return Err(EINVAL);
                         }
-                        let private = &*(*(*vma).vm_file).private_data.cast::<MappingFile>();
+                        let private = vma_owner(vma)?;
                         if !ptr::eq(&*private.mirror, self) {
                             return Err(EACCES);
                         }
@@ -265,21 +435,18 @@ impl Mirror {
 
 // SAFETY: Linux retains file/module and holds mmap's write lock. The only
 // creator of this file supplied the complete MappingFile object above.
-unsafe extern "C" fn mmap(file: *mut bindings::file, vma: *mut bindings::vm_area_struct) -> i32 {
-    let private = unsafe { &*(*file).private_data.cast::<MappingFile>() };
-    let mirror = &private.mirror;
-    // SAFETY: Linux lends the live VMA exclusively to this mmap callback.
+unsafe extern "C" fn mmap(file:*mut bindings::file,vma:*mut bindings::vm_area_struct)->i32 {
+    let private=unsafe {&*(*file).private_data.cast::<MappingFile>()};
+    let mut bootstrap=private.bootstrap.lock();
+    let Some(owner)=bootstrap.as_ref()else{return EINVAL.to_errno();};let mirror=&owner.mirror;
     unsafe {
-        if (*vma).vm_mm != mirror.mm.0.as_ptr()
-            || (*vma).__bindgen_anon_1.__bindgen_anon_1.vm_start != mirror.start
-            || (*vma).__bindgen_anon_1.__bindgen_anon_1.vm_end != mirror.end
-            || (*vma).vm_pgoff != 0
-        {
-            return EINVAL.to_errno();
-        }
-        (*vma).__bindgen_anon_2.__vm_flags |=
-            (bindings::VM_PFNMAP | bindings::VM_DONTEXPAND | bindings::VM_DONTDUMP) as u64;
-        (*vma).vm_ops = &VM_OPERATIONS.0;
+        if (*vma).vm_mm!=mirror.mm.0.as_ptr()
+            || (*vma).__bindgen_anon_1.__bindgen_anon_1.vm_start!=mirror.start
+            || (*vma).__bindgen_anon_1.__bindgen_anon_1.vm_end!=mirror.end
+            || (*vma).vm_pgoff!=0 || !(*vma).vm_private_data.is_null(){return EINVAL.to_errno();}
+        (*vma).__bindgen_anon_2.__vm_flags|=(bindings::VM_PFNMAP|bindings::VM_DONTEXPAND|bindings::VM_DONTDUMP) as u64;
+        (*vma).vm_ops=&VM_OPERATIONS.0;
+        (*vma).vm_private_data=Arc::into_raw(bootstrap.take().unwrap()).cast_mut().cast();
     }
     0
 }
@@ -304,7 +471,7 @@ unsafe fn lookup_fault(vmf: *mut bindings::vm_fault, write: bool) -> Result<Faul
     };
     // SAFETY: lookup_fault's caller retains the locked live VMA and file;
     // mmap installed a non-null MappingFile private_data of this exact type.
-    let private = unsafe { &*(*(*vma).vm_file).private_data.cast::<MappingFile>() };
+    let private=unsafe {vma_owner(vma)}?;
     let mirror = &private.mirror;
     // SAFETY: The same locked live VMA remains valid while its MM identity is
     // compared against the MappingFile owner before any request is issued.
@@ -409,6 +576,8 @@ static VM_OPERATIONS: VmOperations = VmOperations({
     // SAFETY: Null optional callbacks are valid; all supplied code is retained.
     let mut operations: bindings::vm_operations_struct =
         unsafe { MaybeUninit::zeroed().assume_init() };
+    operations.open=Some(vma_open);
+    operations.close=Some(vma_close);
     operations.fault = Some(fault);
     operations.pfn_mkwrite = Some(pfn_mkwrite);
     operations.mprotect = Some(mprotect);

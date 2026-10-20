@@ -19,6 +19,36 @@ pub(crate) const CLEAR_SYSCALL: u32 = 12;
 pub(crate) const CLEAR_DONE: u32 = 13;
 pub(crate) const TID_TRANSFER: u32 = 14;
 
+// Explicit preparation-only extension over the existing v6 Invoke callback.
+// It never grants VMA adoption, a positive clone result, runnable credit or ACK.
+#[repr(C)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct ForkGeometryV3 { pub root:u64, pub start:u64, pub length:u64 }
+#[repr(C)]
+pub(crate) struct ForkPreparedV3 {
+    pub geometry: ForkGeometryV3, pub child_pid:i32, pub reserved:u32,
+    pub child_mm:u64, pub response:u64, pub nonce:u64,
+}
+// v4 adds an actual owned lease transfer and an infallible one-shot seal.
+// Frozen v3 preparation remains separate evidence. This ABI grants no final ACK,
+// runnable credit, root destruction or a fabricated positive clone response.
+pub(crate) const FORK_ADOPT_CURRENT_V4:u32=16;
+pub(crate) type ForkSealCommitV4=unsafe extern "C" fn(*mut c_void);
+pub(crate) type ForkLeaseReleaseV4=unsafe extern "C" fn(*mut c_void);
+#[repr(C)]
+pub(crate) struct ForkSealV4 {
+    pub prepared:ForkPreparedV3,pub seal:Option<ForkSealCommitV4>,pub context:*mut c_void,
+}
+pub(crate) type ForkAdoptConsumerV4=unsafe extern "C" fn(*mut c_void,*const ForkSealV4)->i32;
+#[repr(C)]
+pub(crate) struct ForkAdoptCallV4 {
+    pub version:u32,pub bytes:u32,pub child:*mut c_void,pub geometry:ForkGeometryV3,
+    pub consumer:Option<ForkAdoptConsumerV4>,pub context:*mut c_void,
+    // Real preallocated IHK lease object. Provider takes it by nulling BOTH
+    // fields, before any seal/VMA effect. It is never a numeric lease token.
+    pub lease:*mut c_void,pub release_lease:Option<ForkLeaseReleaseV4>,
+}
+
 // TID_TRANSFER: worker/delivery/physical/direction in 32 kernel-only bytes,
 // followed by the complete copied launcher TID array. The backend checks the
 // exact Delivered nr-186 request, count and destination before any guest write.

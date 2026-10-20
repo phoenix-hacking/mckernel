@@ -978,6 +978,13 @@ impl Application {
         Ok(Self { started, token })
     }
 
+
+    pub(in super::super) unsafe fn adopt_current_fork(&self,child:&Self,
+        call:&mut super::super::application_abi::ForkAdoptCallV4)->Result {
+        if !Arc::ptr_eq(&self.started.runtime,&child.started.runtime){return Err(EACCES);}
+        unsafe {self.started.runtime.application.adopt_current_fork(self.token,child.token,call)}
+    }
+
     pub(in super::super) fn cleanup(&self) -> Result {
         self.started.runtime.application.cleanup(self.token)
     }
@@ -1060,8 +1067,8 @@ impl Application {
             return Err(EINVAL);
         }
         let runtime = &self.started.runtime;
-        runtime.application.with_prepared(self.token, |image| {
-            let page = application_image::translate(image.page_table, address, |physical| {
+        runtime.application.with_page_table(self.token, |page_table| {
+            let page = application_image::translate(page_table, address, |physical| {
                 runtime
                     .memory
                     .application_word(physical)

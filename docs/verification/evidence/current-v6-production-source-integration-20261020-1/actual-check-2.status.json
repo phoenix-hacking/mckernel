@@ -1,0 +1,27 @@
+{
+  "returncode": 0,
+  "direct_child_joined": true,
+  "process_group_absent": true,
+  "seconds": 2.7727898370067123,
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "scripts.tests.test_rocky_rust_staging.RockyRustStagingTests.test_repository_checkpoint_has_bound_crate_roots_but_is_not_gate_ready",
+    "scripts.tests.test_native_rust_host_audit.NativeRustHostAuditTests.test_integrated_repository_closure_passes"
+  ]
+}

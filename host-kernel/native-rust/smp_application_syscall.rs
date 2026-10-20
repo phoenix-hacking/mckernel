@@ -29,7 +29,33 @@ struct Call<M: ResponseMemory> {
     kernel: bool,
     service: bool,
     transferred: bool,
+    fork_parked: bool,
     publication_since: Option<u64>,
+}
+
+#[derive(Clone,Copy,Debug,Eq,PartialEq)]
+pub(crate) enum ForkRestoreDisposition {Mailbox,MailboxNeedsCancellation}
+
+/// Move-only ownership of the ORIGINAL Response, never a reconstructed claim.
+/// A discarded/uncertain ticket deliberately retains its memory owner. Only
+/// restore_fork_response may return it to normal cancellation/publication.
+#[must_use]
+pub(crate) struct ForkResponse<M: ResponseMemory> {
+    response: core::mem::ManuallyDrop<Option<Response<M>>>,
+    request: Request,
+    worker: u64,
+    serial: u64,
+}
+impl<M: ResponseMemory> ForkResponse<M> {
+    pub(crate) fn with_memory<T>(&mut self,
+        operation:impl FnOnce(&Request,&mut M)->Result<T>) -> Result<T> {
+        operation(&self.request,self.response.as_mut().ok_or(-71)?.memory_mut())
+    }
+    pub(crate) fn check_unpublished(&mut self)->Result {
+        self.response.as_mut().ok_or(-71)?.check_unpublished(&self.request)
+    }
+    pub(crate) fn route(&self)->(u64,u64){(self.worker,self.serial)}
+    pub(crate) fn request(&self) -> &Request { &self.request }
 }
 
 pub(crate) struct Mailbox<M: ResponseMemory> {
@@ -56,6 +82,10 @@ impl<M: ResponseMemory> Mailbox<M> {
             quarantined: false,
             completion_cursor: 0,
         })
+    }
+
+    pub(crate) fn has_open_worker(&self)->bool {
+        !self.closed&&!self.quarantined&&self.workers.iter().any(Option::is_some)
     }
 
     pub(crate) fn open_worker(&mut self, tid: i32) -> Result<u64> {
@@ -188,6 +218,7 @@ impl<M: ResponseMemory> Mailbox<M> {
             kernel: false,
             service: false,
             transferred: false,
+            fork_parked: false,
             publication_since: None,
         };
         if let Some(service) = service {
@@ -317,6 +348,7 @@ impl<M: ResponseMemory> Mailbox<M> {
             .find(|call| call.delivery.serial().wire() == serial)
             .ok_or(-2)?;
         if call.kernel
+            || call.fork_parked
             || call.service
             || call.cancelled
             || call.transferred
@@ -339,12 +371,91 @@ impl<M: ResponseMemory> Mailbox<M> {
         Ok(())
     }
 
+    /// The caller must already own the authenticated parent connection and
+    /// referenced child task/MM. Matching geometry is never that authority.
+    pub(crate) fn unique_delivered_fork(
+        &self, matches: impl Fn(&Request) -> bool,
+    ) -> Result<Option<(u64, u64, Request)>> {
+        if self.closed || self.quarantined { return Err(-32); }
+        let mut found = None;
+        for call in self.calls.iter().flatten() {
+            if call.kernel || call.service || call.cancelled || call.fork_parked
+                || call.completion.is_some() || call.response.is_none()
+                || !matches(call.delivery.request()) { continue; }
+            let Some(worker) = call.worker else { continue; };
+            let serial = call.delivery.serial();
+            if !self.workers.iter().flatten().any(|state| {
+                state.worker == worker && state.delivery == Some(serial)
+            }) || call.delivery.check_return(worker, call.delivery.request().cpu() as i64).is_err() {
+                continue;
+            }
+            if found.is_some() { return Err(-16); }
+            found = Some((worker.wire(), serial.wire(), call.delivery.request().clone()));
+        }
+        Ok(found)
+    }
+
+    pub(crate) fn park_fork_response(&mut self, handle: u64, serial: u64,
+        expected: &Request) -> Result<ForkResponse<M>> {
+        if self.closed || self.quarantined { return Err(-32); }
+        if !self.workers.iter().flatten().any(|state| {
+            state.worker.wire() == handle && state.delivery.map(Token::wire) == Some(serial)
+        }) { return Err(-16); }
+        let call = self.calls.iter_mut().flatten()
+            .find(|call| call.delivery.serial().wire() == serial).ok_or(-2)?;
+        let worker = call.worker.ok_or(-71)?;
+        if worker.wire() != handle || call.delivery.request() != expected { return Err(-13); }
+        if expected.number() != 56 || call.kernel || call.service || call.cancelled
+            || call.fork_parked || call.completion.is_some() { return Err(-16); }
+        call.delivery.check_return(worker, expected.cpu() as i64)?;
+        call.response.as_mut().ok_or(-71)?.check_unpublished(expected)?;
+        let response = call.response.take().ok_or(-71)?;
+        call.fork_parked = true;
+        Ok(ForkResponse { response: core::mem::ManuallyDrop::new(Some(response)),
+            request: expected.clone(), worker: handle, serial })
+    }
+
+    /// All checks precede ownership transfer. Failure leaves the same ticket
+    /// intact and the mailbox parked. The outer owner retains both on error.
+    pub(crate) fn restore_fork_response(&mut self, ticket: &mut ForkResponse<M>) -> Result<ForkRestoreDisposition> {
+        if self.quarantined { return Err(-71); }
+        if !self.workers.iter().flatten().any(|state| {
+            state.worker.wire() == ticket.worker && state.delivery.map(Token::wire) == Some(ticket.serial)
+        }) { return Err(-16); }
+        let call = self.calls.iter_mut().flatten()
+            .find(|call| call.delivery.serial().wire() == ticket.serial).ok_or(-2)?;
+        let worker = call.worker.ok_or(-71)?;
+        if worker.wire() != ticket.worker || call.delivery.request() != &ticket.request
+            || !call.fork_parked || call.response.is_some() || call.completion.is_some()
+            || call.kernel || call.service { return Err(-16); }
+        call.delivery.check_return(worker, ticket.request.cpu() as i64)?;
+        ticket.response.as_mut().ok_or(-71)?.check_unpublished(&ticket.request)?;
+        call.response = Some(ticket.response.take().ok_or(-71)?);
+        call.fork_parked = false;
+        // Response ownership is now definitively in THIS mailbox. A later
+        // cancellation failure must never be described as an intact ticket.
+        Ok(if self.closed||call.cancelled {ForkRestoreDisposition::MailboxNeedsCancellation}
+            else {ForkRestoreDisposition::Mailbox})
+    }
+
+    pub(crate) fn resume_fork_cancellation(&mut self,handle:u64,serial:u64)->Result {
+        if self.quarantined{return Err(-71);}
+        let call=self.calls.iter_mut().flatten().find(|c|c.delivery.serial().wire()==serial).ok_or(-2)?;
+        if call.worker.map(Worker::wire)!=Some(handle)||call.fork_parked{return Err(-16);}
+        if !self.closed&&!call.cancelled{return Ok(());}
+        if let Err(error)=Self::cancel_call(call){self.quarantined=true;return Err(error);}
+        Ok(())
+    }
+
     /// Convert the exact reserved WAIT delivery into in-kernel work. Close
     /// cannot complete or reuse its response while that work accesses memory.
     pub(crate) fn begin_kernel(&mut self, handle: u64, serial: u64) -> Result<Request> {
         if self.closed || self.quarantined {
             return Err(-32);
         }
+        if self.calls.iter().flatten().any(|call| {
+            call.delivery.serial().wire() == serial && call.fork_parked
+        }) { return Err(-16); }
         self.copied(handle, serial, true)?;
         let call = self
             .calls
@@ -501,7 +612,7 @@ impl<M: ResponseMemory> Mailbox<M> {
             .flatten()
             .find(|call| call.delivery.serial().wire() == serial)
             .ok_or(-2)?;
-        if call.kernel {
+        if call.kernel || call.fork_parked {
             return Err(-16);
         }
         call.delivery.check_return(worker.worker, cpu)?;
@@ -517,11 +628,10 @@ impl<M: ResponseMemory> Mailbox<M> {
         copy(call.delivery.request())?;
         call.delivery.begin_return(worker.worker, cpu)?;
         let response = call.response.take().ok_or(-71)?;
-        match response.prepare(worker.worker.tid(), value) {
-            Ok(completion) => call.completion = Some(completion),
-            Err(error) => {
-                self.quarantined = true;
-                return Err(error);
+        match response.prepare_retained(worker.worker.tid(),value) {
+            Ok(completion)=>call.completion=Some(completion),
+            Err((response,error))=>{
+                call.response=Some(response);self.quarantined=true;return Err(error);
             }
         }
         Ok(())
@@ -650,15 +760,21 @@ impl<M: ResponseMemory> Mailbox<M> {
         if call.completion.is_some() {
             return Ok(());
         }
-        if call.kernel {
+        if call.kernel || call.fork_parked {
             call.cancelled = true;
             return Ok(());
         }
         call.delivery.cancel()?;
-        let response = call.response.take().ok_or(-71)?;
-        call.completion = Some(response.prepare(0, -512)?);
-        call.cancelled = true;
-        Ok(())
+        let response=call.response.take().ok_or(-71)?;
+        match response.prepare_retained(0,-512) {
+            Ok(completion)=>call.completion=Some(completion),
+            Err((response,error))=>{
+                // Keep the original claim/root/module owner in quarantine;
+                // an unsuccessful response preparation never consumes it.
+                call.response=Some(response);call.cancelled=true;return Err(error);
+            }
+        }
+        call.cancelled=true;Ok(())
     }
 
     pub(crate) fn drained(&self) -> bool {

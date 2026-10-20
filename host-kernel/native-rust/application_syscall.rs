@@ -29,6 +29,14 @@ pub(crate) struct Request {
     bytes: [u8; REQUEST_BYTES],
 }
 
+/// Metadata built only by the exact sealed backend owner. No field grants
+/// a root/task/MM/runnable/revoke/final-ACK permit; Request owns its provenance.
+pub(crate) struct ForkFirstReceipt {
+    pub slot:u32,pub generation:u64,pub parent:u64,pub worker:u64,pub delivery:u64,
+    pub child:u64,pub child_pid:i32,pub child_mm:u64,pub root:u64,pub start:u64,pub length:u64,
+    pub nonce:u64,pub response:u64,
+}
+
 impl Request {
     /// The queue consumer supplies the exact OS generation and acquires packet
     /// publication before decoding. The existing producer leaves osnum zero.
@@ -106,6 +114,43 @@ impl Request {
             return Err(-22);
         }
         Ok((start, end))
+    }
+
+    /// Current MCFKC001 args[4] is a physical carrier, never the nonce.
+    /// Called only after the original Response owner claims and copies it.
+    pub(crate) fn current_fork_carrier(&self, bytes:&[u8;128]) -> Result<u64,i32> {
+        let args=self.arguments();
+        let word=|at|u64::from_le_bytes(bytes[at..at+8].try_into().unwrap());
+        if self.number()!=56 || matches!(args[0],1|2|3) || args[5]!=0x313030434b46434d
+            || args[4]==0 || args[4]%8!=0 || args[4].checked_add(128).is_none()
+            || bytes[..8]!=*b"MCFKQ001" || bytes[8..12]!=[1,0,56,0]
+            || u32::from_le_bytes(bytes[12..16].try_into().unwrap())!=128
+            || u32::from_le_bytes(bytes[16..20].try_into().unwrap())!=1
+            || bytes[20..24]!=[0;4] || word(24)==0 || word(32)!=args[3]
+            || word(40)!=args[1] || word(48)!=args[2] || bytes[56..].iter().any(|b|*b!=0)
+            || args[3]==0 || args[3]%4096!=0 || args[1]%4096!=0
+            || args[2]==0 || args[2]%4096!=0 || args[1].checked_add(args[2]).is_none()
+        {return Err(-13);}
+        Ok(word(24))
+    }
+
+    pub(crate) fn first_fork_receipt(&self,key:&ForkFirstReceipt)->Result<[u8;128],i32> {
+        let a=self.arguments();
+        if self.number()!=56||matches!(a[0],1|2|3)||a[5]!=0x313030434b46434d
+            ||key.generation==0||key.parent==0||key.worker==0||key.delivery==0
+            ||key.child==0||key.child==key.parent||key.child_pid<=0||key.child_mm==0||key.nonce==0
+            ||key.response!=self.response()||key.root!=a[3]||key.start!=a[1]||key.length!=a[2]
+            ||key.root==0||key.root%4096!=0||key.start%4096!=0||key.length==0
+            ||key.length%4096!=0||key.start.checked_add(key.length).is_none(){return Err(-13);}
+        let mut out=[0;128];out[..8].copy_from_slice(b"MCFKW001");out[8..12].copy_from_slice(&[1,0,40,0]);
+        out[12..16].copy_from_slice(&128u32.to_le_bytes());out[16..20].copy_from_slice(&1u32.to_le_bytes());
+        out[24..32].copy_from_slice(&1u64.to_le_bytes());out[32..40].copy_from_slice(&(key.child_pid as u64).to_le_bytes());
+        out[40..44].copy_from_slice(&key.slot.to_le_bytes());out[44..48].copy_from_slice(&key.child_pid.to_le_bytes());
+        for(at,value)in[(48,key.generation),(56,key.parent),(64,key.worker),(72,key.delivery),(80,key.child),
+            (88,key.child_mm),(96,key.root),(104,key.start),(112,key.length),(120,key.nonce)] {
+            out[at..at+8].copy_from_slice(&value.to_le_bytes());
+        }
+        Ok(out)
     }
 
     /// Existing settid/act_gettid exchange: the launcher copies count i32 TIDs
@@ -393,12 +438,33 @@ impl<M: ResponseMemory> Response<M> {
         })
     }
 
+    /// Observe only the original response before parking it for fork work.
+    /// This does not grant fork authority or publish any protocol word.
+    pub(crate) fn check_unpublished(&mut self, expected: &Request) -> Result<(), i32> {
+        if &self.request != expected { return Err(-13); }
+        let address = self.memory.address();
+        // SAFETY: Response owns this exact aligned complete mapping claim.
+        let status = unsafe { AtomicU64::from_ptr(address.add(8).cast()) };
+        let state = unsafe { AtomicU64::from_ptr(address.add(16).cast()) };
+        if status.load(Ordering::Acquire) != 0 || !matches!(state.load(Ordering::Acquire), 0 | 2) {
+            return Err(-71);
+        }
+        Ok(())
+    }
+
     /// Claim the guest's wake state exactly once. On a protocol error the outer
     /// owner must retain/quarantine the mapping, never fabricate completion.
-    pub(crate) fn prepare(mut self, servicing_tid: i32, value: i64) -> Result<Completion<M>, i32> {
+    pub(crate) fn prepare(self,servicing_tid:i32,value:i64)->Result<Completion<M>,i32> {
+        self.prepare_retained(servicing_tid,value).map_err(|(_owner,error)|error)
+    }
+
+    /// Cancellation/rollback callers preserve the actual original response
+    /// on EVERY failed publication preparation, including a changed peer state.
+    pub(crate) fn prepare_retained(mut self, servicing_tid:i32,value:i64)
+        -> Result<Completion<M>,(Self,i32)> {
         // Original host cancellation and in-kernel services use stid zero.
         if servicing_tid < 0 {
-            return Err(-22);
+            return Err((self,-22));
         }
         // SAFETY: The constructor's exclusive response claim and retained
         // mapping cover all these aligned fields for this complete operation.
@@ -408,7 +474,7 @@ impl<M: ResponseMemory> Response<M> {
         // independently aligned state word at byte offset 16 for this operation.
         let state = unsafe { AtomicU64::from_ptr(address.add(16).cast()) };
         if status.load(Ordering::Acquire) != 0 || !matches!(state.load(Ordering::Acquire), 0 | 2) {
-            return Err(-71);
+            return Err((self,-71));
         }
         // Preserve ttid, fault_address, the guest-only pde_data and all guards.
         // SAFETY: The exclusive response claim keeps these two aligned writable
@@ -420,12 +486,12 @@ impl<M: ResponseMemory> Response<M> {
         let wake = match state.compare_exchange(0, 1, Ordering::AcqRel, Ordering::Acquire) {
             Ok(_) => None,
             Err(2) => {
-                state
-                    .compare_exchange(2, 1, Ordering::AcqRel, Ordering::Acquire)
-                    .map_err(|_| -71)?;
+                if state.compare_exchange(2,1,Ordering::AcqRel,Ordering::Acquire).is_err() {
+                    return Err((self,-71));
+                }
                 Some(self.request.wake())
             }
-            Err(_) => return Err(-71),
+            Err(_) => return Err((self,-71)),
         };
         Ok(Completion {
             response: Some(self),

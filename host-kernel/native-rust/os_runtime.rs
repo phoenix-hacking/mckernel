@@ -1680,6 +1680,65 @@ pub(crate) unsafe extern "C" fn invoke_application(
     }
 }
 
+struct ApplicationForkLeaseV4 {_admission:AdmissionOwner,_lease:OsLease<'static>}
+unsafe extern "C" fn release_application_fork_lease_v4(owner:*mut c_void) {
+    unsafe {drop(Box::from_raw(owner.cast::<ApplicationForkLeaseV4>()))};
+}
+/// # Safety
+/// Exact live successful paired connections, exclusive caller storage, and
+/// resident synchronous consumer code. Scope transfers a genuine IHK lease
+/// object before any irreversible MM effect; no locks span the callback.
+#[export_name="ihk_os_application_adopt_current_v4"]
+pub(crate) unsafe extern "C" fn adopt_current_application_v4(
+    parent:*mut c_void,child:*mut c_void,geometry:*const super::application_abi::ForkGeometryV3,
+    consumer:Option<super::application_abi::ForkAdoptConsumerV4>,context:*mut c_void)->i32 {
+    let result=(||->Result {
+        if parent.is_null()||child.is_null()||parent==child||geometry.is_null(){return Err(EINVAL);}
+        let parent=unsafe {&*parent.cast::<ApplicationConnection>()};
+        let child=unsafe {&*child.cast::<ApplicationConnection>()};let handle=parent._lease.handle();
+        if handle!=child._lease.handle(){return Err(EACCES);}
+        let geometry=unsafe {*geometry};let consumer=consumer.ok_or(EINVAL)?;
+        if geometry.root==0||geometry.root%4096!=0||geometry.start%4096!=0||geometry.length==0
+            ||geometry.length%4096!=0||geometry.start.checked_add(geometry.length).is_none(){return Err(EINVAL);}
+        let lease=OS_REGISTRY.acquire(handle).map_err(|e|errno(e.errno()))?;
+        let raw=OS_OBJECTS[handle.minor()].load(Ordering::Acquire);if raw.is_null(){return Err(EIO);}
+        let object=unsafe {&*raw};let registered=object.backend.and_then(|b|b.application).ok_or(ENODEV)?;
+        for cb in [parent.backend.callbacks,child.backend.callbacks] {
+            if cb.open as usize!=registered.open as usize||cb.invoke as usize!=registered.invoke as usize
+                ||cb.close as usize!=registered.close as usize{return Err(EACCES);}
+        }
+        let status=OS_REGISTRY.snapshot(handle).map_err(|e|errno(e.errno()))?.status;
+        if !matches!(status,OsStatus::Ready|OsStatus::Running){return Err(EBUSY);}
+        let admission=object.admission.enter()?;
+        let owner=Box::into_raw(Box::new(ApplicationForkLeaseV4{_admission:admission,_lease:lease},GFP_KERNEL)?);
+        let mut call=super::application_abi::ForkAdoptCallV4{version:4,
+            bytes:core::mem::size_of::<super::application_abi::ForkAdoptCallV4>() as u32,
+            child:child.backend.context.as_ptr(),geometry,consumer:Some(consumer),context,
+            lease:owner.cast(),release_lease:Some(release_application_fork_lease_v4)};
+        let result=unsafe {(registered.invoke)(parent.backend.context.as_ptr(),
+            super::application_abi::FORK_ADOPT_CURRENT_V4,ptr::from_mut(&mut call).cast(),
+            core::mem::size_of::<super::application_abi::ForkAdoptCallV4>())};
+        if call.lease==owner.cast() && call.release_lease.map(|f|f as usize)==Some(release_application_fork_lease_v4 as usize){
+            // Provider never took ownership; no MM capability could be sealed.
+            unsafe {release_application_fork_lease_v4(owner.cast())};
+            if result==0{return Err(errno(-71));}
+        }else if !call.lease.is_null()||call.release_lease.is_some(){
+            // Unknown transfer: retain the real owner rather than reconstruct
+            // or release it from output scalar claims.
+            return Err(errno(-71));
+        }
+        if result>0||result< -4095{return Err(errno(-71));}
+        kernel::error::to_result(result as i32)?;Ok(())
+    })();result.map_or_else(|e|e.to_errno(),|()|0)
+}
+#[export_name="__export_symbol_ihk_os_application_adopt_current_v4"]
+#[link_section=".export_symbol"]
+#[used(compiler)]
+pub(crate) static APPLICATION_ADOPT_CURRENT_V4_EXPORT:IhkExportSymbolRecord=IhkExportSymbolRecord{
+    license:*b"GPL\0",namespace:*b"MCKERNEL_IHK_V1\0",padding:[0;4],
+    symbol:adopt_current_application_v4 as *const () as *const u8,
+};
+
 /// # Safety
 /// Return the unique successful open after all concurrent invocations end.
 #[export_name = "ihk_os_application_close_v1"]

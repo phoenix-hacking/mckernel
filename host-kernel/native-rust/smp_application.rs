@@ -18,6 +18,10 @@ use kernel::{
     sync::{new_condvar, new_mutex, Arc, CondVar, Mutex},
 };
 
+#[path = "current_fork_task_mm.rs"]
+mod current_fork_task_mm;
+use current_fork_task_mm::ChildTaskMm;
+
 pub(crate) const CAPACITY: usize = 64;
 const PUBLICATION_TIMEOUT_SECONDS: u64 = 5;
 
@@ -25,6 +29,9 @@ fn errno(code: i32) -> Error {
     kernel::error::to_result(code).err().unwrap_or(EIO)
 }
 
+// Real inherited-root view, never a fabricated successful Preparation/Exchange.
+// It is published only with the exact sealed PreparedForkIngress owner.
+struct InheritedRoot {root:u64,start:u64,end:u64,uid:u32,gid:u32,control_cpu:i32,nonce:u64}
 struct Entry {
     cleanup: Exchange,
     owner_slot: i32,
@@ -39,9 +46,21 @@ struct Entry {
     closed: bool,
     quarantined: bool,
     parent_slot_pins: usize,
+    fork_ingress:Option<PreparedForkIngress>,
+    inherited_root:Option<InheritedRoot>,
 }
 
 impl Entry {
+    fn backend_ready(&self)->Result {
+        if let Some(image)=&self.prepare{return kernel::error::to_result(image.result().ok_or(EBUSY)?).map(|_|());}
+        if self.inherited_root.as_ref().is_some_and(|image|image.control_cpu>=0)&&self.fork_ingress.as_ref().is_some_and(|f|f.sealed.load(Ordering::Acquire)){return Ok(());}
+        Err(EINVAL)
+    }
+    fn inherited_policy(&self,start:u64,end:u64)->Result<(u32,u32)> {
+        if let Some(image)=&self.prepare{return image.inherited_policy(start,end);}
+        self.backend_ready()?;let image=self.inherited_root.as_ref().ok_or(EINVAL)?;
+        if image.start!=start||image.end!=end{return Err(EACCES);}Ok((image.uid,image.gid))
+    }
     fn key(&self) -> Token {
         self.cleanup.token()
     }
@@ -160,6 +179,93 @@ impl ParentSlotPin {
     }
 }
 
+/// Prepared original response plus exact live child task/MM identity.
+/// Discard retains every durable owner; only rollback can release the pins.
+/// This does not grant a seal, successful fork, final ACK, or runnable credit.
+#[must_use]
+#[derive(Clone,Copy,Eq,PartialEq)]
+enum ForkResponseLocation {Ticket,Mailbox,MailboxQuarantined}
+pub(crate) struct PreparedForkIngress {
+    remote: core::mem::ManuallyDrop<Arc<Remote>>,
+    child_task: core::mem::ManuallyDrop<ChildTaskMm>,
+    response: core::mem::ManuallyDrop<super::smp_application_syscall::ForkResponse<SyscallResponse>>,
+    parent: Token,
+    child: Token,
+    finished: bool,
+    response_location:ForkResponseLocation,
+    sealed:AtomicBool,
+    carrier_nonce:u64,
+    first_return_written:bool,
+    first_return_committed:bool,
+    first_return_published:bool,
+    lease:core::mem::ManuallyDrop<Option<BackendForkLeaseV4>>,
+}
+struct BackendForkLeaseV4 {owner:*mut core::ffi::c_void,release:super::application_abi::ForkLeaseReleaseV4}
+// The originating IHK owner explicitly permits transfer; Drop is outside locks.
+unsafe impl Send for BackendForkLeaseV4 {}
+unsafe impl Sync for BackendForkLeaseV4 {}
+impl Drop for BackendForkLeaseV4 {fn drop(&mut self){unsafe {(self.release)(self.owner)};}}
+unsafe extern "C" fn commit_fork_seal_v4(context:*mut core::ffi::c_void) {
+    // This pointer borrows a preallocated, stack-stable actual provider owner
+    // through the synchronous callback only. No allocation/lock/foreign Drop.
+    unsafe {&*context.cast::<AtomicBool>()}.store(true,Ordering::Release);
+}
+impl PreparedForkIngress {
+    unsafe fn adopt_scope_v4(&mut self,call:&super::application_abi::ForkAdoptCallV4)->Result {
+        let callback=call.consumer.ok_or(EINVAL)?;let active=self.child_task.active()?;
+        let child_pid=self.child_task.tgid();let child_mm=active.identity() as u64;
+        let sealed=core::ptr::from_ref(&self.sealed).cast_mut().cast();
+        let nonce_out=&mut self.carrier_nonce;
+        self.response.with_memory(|request,memory|{
+            let nonce=memory.current_fork_carrier(request).map_err(|e|e.to_errno())?;
+            *nonce_out=nonce;
+            let scope=super::application_abi::ForkSealV4 {
+                prepared:super::application_abi::ForkPreparedV3 {geometry:call.geometry,
+                    child_pid,reserved:0,child_mm,response:request.response(),nonce},
+                seal:Some(commit_fork_seal_v4),context:sealed};
+            let status=unsafe {callback(call.context,&scope)};
+            if status>0||status< -4095 {return Err(-71);}
+            if status==0 {Ok(())}else{Err(status)}
+        }).map_err(errno)
+    }
+
+
+
+    /// A failed rollback preserves this owner for quarantine/reconciliation.
+    /// It never infers an ACK or successful publication from a return code.
+    pub(crate) fn rollback(&mut self) -> Result {
+        if self.finished || self.sealed.load(Ordering::Acquire) { return Err(EINVAL); }
+        if self.response_location!=ForkResponseLocation::Ticket{return Err(errno(-71));}
+        {
+            let mut slots = self.remote.slots.lock();
+            let p = slots.iter().position(|slot| slot.as_ref().is_some_and(|e| e.key() == self.parent)).ok_or(ENOENT)?;
+            let c = slots.iter().position(|slot| slot.as_ref().is_some_and(|e| e.key() == self.child)).ok_or(ENOENT)?;
+            if p == c || slots[p].as_ref().unwrap().parent_slot_pins == 0
+                || slots[c].as_ref().unwrap().parent_slot_pins == 0 { return Err(EINVAL); }
+            let disposition=slots[p].as_mut().unwrap().syscalls.restore_fork_response(&mut self.response).map_err(errno)?;
+            self.response_location=ForkResponseLocation::Mailbox;
+            if disposition==super::smp_application_syscall::ForkRestoreDisposition::MailboxNeedsCancellation {
+                let (worker,serial)=self.response.route();
+                if slots[p].as_mut().unwrap().syscalls.resume_fork_cancellation(worker,serial).is_err(){
+                    self.response_location=ForkResponseLocation::MailboxQuarantined;
+                    return Err(errno(-71));
+                }
+            }
+            slots[p].as_mut().unwrap().parent_slot_pins -= 1;
+            slots[c].as_mut().unwrap().parent_slot_pins -= 1;
+            self.finished = true;
+        }
+        // Linux/task/MM/Remote Drop occurs after all provider locks end.
+        unsafe {
+            core::mem::ManuallyDrop::drop(&mut self.lease);
+            core::mem::ManuallyDrop::drop(&mut self.child_task);
+            core::mem::ManuallyDrop::drop(&mut self.response);
+            core::mem::ManuallyDrop::drop(&mut self.remote);
+        }
+        Ok(())
+    }
+}
+
 #[pin_data]
 pub(crate) struct Remote {
     owner: OsToken,
@@ -216,6 +322,104 @@ impl Remote {
         Ok(pin)
     }
 
+    /// Inputs must come from exact borrowed IHK parent/child application
+    /// connections, with the SAME live OS/module lease. Geometry only filters
+    /// an already owned delivery; it never manufactures that authority.
+    /// This preparatory producer cannot seal VMAs or publish Registration.
+    pub(crate) fn prepare_fork_ingress(self: &Arc<Self>, expected_owner: OsToken,
+        parent: Token, child: Token, matches: impl Fn(&Request) -> bool,
+    ) -> Result<PreparedForkIngress> {
+        if parent == child || expected_owner.slot() != self.owner.slot()
+            || expected_owner.generation() != self.owner.generation() { return Err(EACCES); }
+        let child_pid = {
+            let slots = self.slots.lock();
+            slots.iter().flatten().find(|e| e.key() == child).ok_or(ENOENT)?.cleanup.pid()
+        };
+        // All task/MM acquisition and reference cleanup happen outside slots.
+        let child_task = ChildTaskMm::current(child_pid)?;
+        let mut slots = self.slots.lock();
+        self.transport_health()?;
+        if self.shutdown_closed.load(Ordering::Acquire) { return Err(ENODEV); }
+        let p = slots.iter().position(|slot| slot.as_ref().is_some_and(|e| e.key() == parent)).ok_or(ENOENT)?;
+        let c = slots.iter().position(|slot| slot.as_ref().is_some_and(|e| e.key() == child)).ok_or(ENOENT)?;
+        let pe = slots[p].as_ref().unwrap();
+        let ce = slots[c].as_ref().unwrap();
+        if pe.owner_slot != self.owner.slot() as i32 || ce.owner_slot != self.owner.slot() as i32
+            || ce.cleanup.pid() != child_task.tgid() { return Err(EACCES); }
+        if pe.closed || pe.needs_cleanup || pe.quarantined || !pe.scheduled
+            || ce.closed || ce.needs_cleanup || ce.quarantined || ce.scheduled || ce.prepare.is_some()
+            || ce.parent_slot_pins != 0 || ce.fork_ingress.is_some() || ce.inherited_root.is_some() { return Err(EBUSY); }
+        let pins = pe.parent_slot_pins.checked_add(1).ok_or(errno(-(bindings::EOVERFLOW as i32)))?;
+        let parent_pid = pe.cleanup.pid();
+        let (worker, serial, request) = pe.syscalls.unique_delivered_fork(|request| {
+            request.number() == 56 && request.pid() == parent_pid && matches(request)
+        }).map_err(errno)?.ok_or(ENOENT)?;
+        // No allocation/identity check follows this first ownership effect.
+        let response = slots[p].as_mut().unwrap().syscalls
+            .park_fork_response(worker, serial, &request).map_err(errno)?;
+        slots[p].as_mut().unwrap().parent_slot_pins = pins;
+        slots[c].as_mut().unwrap().parent_slot_pins = 1;
+        drop(slots);
+        Ok(PreparedForkIngress {
+            remote: core::mem::ManuallyDrop::new(self.clone()),
+            child_task: core::mem::ManuallyDrop::new(child_task),
+            response: core::mem::ManuallyDrop::new(response), parent, child, finished: false,
+            response_location:ForkResponseLocation::Ticket,
+            sealed:AtomicBool::new(false),carrier_nonce:0,first_return_written:false,first_return_committed:false,first_return_published:false,lease:core::mem::ManuallyDrop::new(None),
+        })
+    }
+
+
+    fn prepare_inherited_backend(&self,owner:&mut PreparedForkIngress,
+        geometry:super::application_abi::ForkGeometryV3)->Result<(InheritedRoot,Arc<ProcfsProcess>)> {
+        let end=geometry.start.checked_add(geometry.length).ok_or(EINVAL)?;
+        let(uid,gid)={let slots=self.slots.lock();let parent=slots.iter().flatten().find(|e|e.key()==owner.parent).ok_or(ENOENT)?;
+            parent.inherited_policy(geometry.start,end)?};
+        let control_cpu=owner.response.with_memory(|request,memory|{
+            memory.validate_fork_root(request,geometry.root).map_err(|e|e.to_errno())?;Ok(request.cpu())
+        }).map_err(errno)?;
+        // This CPU routes existing procfs control exchanges. It never claims
+        // the child's execution CPU or releases the guest's reserved CPU credit.
+        let procfs=ProcfsProcess::new(self.procfs.clone(),owner.child,owner.child_task.tgid(),control_cpu,uid,gid)?;
+        Ok((InheritedRoot{root:geometry.root,start:geometry.start,end,uid,gid,control_cpu,nonce:0},procfs))
+    }
+
+    pub(crate) unsafe fn adopt_current_fork(self:&Arc<Self>,parent:Token,child:Token,
+        call:&mut super::application_abi::ForkAdoptCallV4)->Result {
+        if call.lease.is_null()||call.release_lease.is_none()||call.consumer.is_none(){return Err(EINVAL);}
+        let geometry=call.geometry;
+        let mut owner=self.prepare_fork_ingress(self.owner,parent,child,|request|{
+            let a=request.arguments();!matches!(a[0],1|2|3)&&a[1]==geometry.start&&a[2]==geometry.length
+                &&a[3]==geometry.root&&a[4]!=0&&a[4]%8==0&&a[4].checked_add(128).is_some()
+                &&a[5]==0x313030434b46434d
+        })?;
+        let(mut image,procfs)=match self.prepare_inherited_backend(&mut owner,geometry) {
+            Ok(prepared)=>prepared,Err(error)=>{
+                if owner.rollback().is_err(){return Err(errno(-71));}return Err(error);
+            }
+        };
+        // Ownership transfer of the actual preallocated IHK object precedes
+        // all callback/MM effects. No numeric ACK substitutes for this owner.
+        let lease=BackendForkLeaseV4{owner:call.lease,release:call.release_lease.take().unwrap()};
+        *owner.lease=Some(lease);call.lease=core::ptr::null_mut();
+        let observation=unsafe {owner.adopt_scope_v4(call)};
+        if owner.sealed.load(Ordering::Acquire) {
+            // prepare_fork_ingress reserves the exact entry via both counted
+            // pins and empty fork_ingress; removal is impossible. No fallible
+            // operation or allocation follows irreversible MM publication.
+            let mut slots=self.slots.lock();
+            let entry=slots.iter_mut().flatten().find(|e|e.key()==child).expect("reserved fork child lost");
+            assert!(entry.fork_ingress.is_none()&&entry.inherited_root.is_none()&&entry.procfs.is_none());
+            image.nonce=owner.carrier_nonce;assert!(image.nonce!=0);
+            entry.inherited_root=Some(image);entry.procfs=Some(procfs);
+            entry.fork_ingress=Some(owner);drop(slots);
+            if observation.is_err(){return Err(errno(-71));}
+            return Ok(());
+        }
+        if owner.rollback().is_err(){return Err(errno(-71));}
+        observation.and(Err(errno(-71)))
+    }
+
     pub(crate) fn reserve(&self, pid: i32) -> Result<Token> {
         let syscalls = Mailbox::new().map_err(errno)?;
         let mut slots = self.slots.lock();
@@ -246,6 +450,8 @@ impl Remote {
             closed: false,
             quarantined: false,
             parent_slot_pins: 0,
+            fork_ingress:None,
+            inherited_root:None,
         });
         Ok(token)
     }
@@ -327,11 +533,10 @@ impl Remote {
             .flatten()
             .find(|entry| entry.cleanup.pid() == pid)
             .ok_or(ENOENT)?;
-        let image = entry.prepare.as_ref().ok_or(EINVAL)?;
+        entry.backend_ready()?;
         if entry.quarantined || cpu < 0 {
             return Err(EINVAL);
         }
-        kernel::error::to_result(image.result().ok_or(EBUSY)?)?;
         entry.procfs.as_ref().cloned().ok_or(EIO)
     }
 
@@ -757,12 +962,12 @@ impl Remote {
             if entry.closed || entry.needs_cleanup || entry.quarantined {
                 return Err(EBUSY);
             }
-            let prepare = entry.prepare.as_ref().ok_or(EINVAL)?;
-            kernel::error::to_result(prepare.result().ok_or(EBUSY)?)?;
+            entry.backend_ready()?;
             let tid = i64::from_le_bytes(bytes[..8].try_into().unwrap());
             let tid = i32::try_from(tid).map_err(|_| EINVAL)?;
             let worker = entry.syscalls.open_worker(tid).map_err(errno)?;
             bytes[8..16].copy_from_slice(&worker.to_le_bytes());
+            self.changed.notify_all();
             Ok(())
         } else {
             let worker = u64::from_le_bytes(bytes[..8].try_into().unwrap());
@@ -1010,6 +1215,42 @@ impl Remote {
             .map_err(errno)
     }
 
+    fn prepare_owned_parent_return(&self,slots:&mut [Option<Entry>],parent:Token,child_index:usize,
+        worker:u64,serial:u64,cpu:i64,value:i64,length:u64)->Result {
+        let parent_index=slots.iter().position(|e|e.as_ref().is_some_and(|e|e.key()==parent)).ok_or(ENOENT)?;
+        if parent_index==child_index{return Err(EACCES);}
+        let(p,c)=if parent_index<child_index {let(a,b)=slots.split_at_mut(child_index);
+            (a[parent_index].as_mut().ok_or(ENOENT)?,b[0].as_mut().ok_or(ENOENT)?)}else{
+            let(a,b)=slots.split_at_mut(parent_index);(b[0].as_mut().ok_or(ENOENT)?,a[child_index].as_mut().ok_or(ENOENT)?)};
+        if p.closed||p.needs_cleanup||p.quarantined||c.closed||c.needs_cleanup||c.quarantined{return Err(EBUSY);}
+        c.backend_ready()?;
+        if !c.syscalls.has_open_worker(){return Err(EBUSY);}
+        let image=c.inherited_root.as_ref().ok_or(EINVAL)?;let owner=c.fork_ingress.as_mut().ok_or(EINVAL)?;
+        if !owner.sealed.load(Ordering::Acquire)||owner.first_return_written||owner.first_return_committed||owner.first_return_published
+            ||owner.response_location!=ForkResponseLocation::Ticket||owner.parent!=parent
+            ||owner.response.route()!=(worker,serial)||owner.response.request().cpu() as i64!=cpu
+            ||value!=owner.child_task.tgid() as i64||value<=0||length!=0{return Err(EACCES);}
+        owner.response.check_unpublished().map_err(errno)?;
+        let receipt=super::application_syscall::ForkFirstReceipt {
+            slot:self.owner.slot(),generation:self.owner.generation(),parent:owner.parent.wire(),worker,delivery:serial,
+            child:owner.child.wire(),child_pid:owner.child_task.tgid(),child_mm:owner.child_task.identity(),
+            root:image.root,start:image.start,length:image.end-image.start,nonce:image.nonce,
+            response:owner.response.request().response(),
+        };
+        owner.response.with_memory(|request,memory|memory.write_first_fork_receipt(request,&receipt).map_err(|e|e.to_errno())).map_err(errno)?;
+        owner.first_return_written=true;
+        // The original response returns to its exact mailbox, never a new
+        // response/RET0. Any later error records mailbox ownership and retains
+        // task/MM/root/IHK owners; it cannot replay the carrier as fresh input.
+        let disposition=p.syscalls.restore_fork_response(&mut owner.response).map_err(errno)?;
+        owner.response_location=ForkResponseLocation::Mailbox;
+        if disposition==super::smp_application_syscall::ForkRestoreDisposition::MailboxNeedsCancellation {
+            if p.syscalls.resume_fork_cancellation(worker,serial).is_err(){owner.response_location=ForkResponseLocation::MailboxQuarantined;}
+            return Err(errno(-71));
+        }
+        Ok(())
+    }
+
     pub(crate) fn return_syscall(
         &self,
         token: Token,
@@ -1033,6 +1274,25 @@ impl Remote {
         }
         bytes[48..56].fill(0); // Output: whether the continuing owner accepted the return.
         let mut slots = self.slots.lock();
+        let owned_child=loop {
+            let child=slots.iter().position(|e|e.as_ref().and_then(|e|e.fork_ingress.as_ref()).is_some_and(|f|
+                f.parent==token&&f.response.route()==(worker,serial)));
+            let Some(child)=child else {break None;};
+            // CondVar waits release slots: parent close/cleanup/quarantine can
+            // make this return impossible while the child remains live/unready.
+            // Revalidate parent BEFORE every possible child-readiness wait.
+            let parent=slots.iter().flatten().find(|entry|entry.key()==token).ok_or(ENOENT)?;
+            if parent.closed||parent.needs_cleanup||parent.quarantined{return Err(EBUSY);}
+            let entry=slots[child].as_ref().ok_or(ENOENT)?;
+            if entry.closed||entry.needs_cleanup||entry.quarantined{return Err(EBUSY);}
+            if !entry.syscalls.has_open_worker(){
+                // The actual child worker must have opened against its adopted
+                // MM/registration. No synthetic ready flag replaces that fact.
+                if self.changed.wait_interruptible(&mut slots){return Err(EINTR);}continue;
+            }
+            self.prepare_owned_parent_return(&mut slots,token,child,worker,serial,cpu,value,length)?;
+            break Some(child);
+        };
         let entry = slots
             .iter_mut()
             .flatten()
@@ -1049,6 +1309,9 @@ impl Remote {
             });
         entry.quarantined |= entry.syscalls.quarantined();
         result.map_err(errno)?;
+        if let Some(child)=owned_child {
+            slots[child].as_mut().unwrap().fork_ingress.as_mut().unwrap().first_return_committed=true;
+        }
         bytes[48..56].copy_from_slice(&1u64.to_le_bytes());
         loop {
             let entry = slots
@@ -1060,6 +1323,11 @@ impl Remote {
                 return Err(errno(-71));
             }
             if entry.syscalls.returned(worker, serial).map_err(errno)? {
+                if let Some(child)=owned_child {
+                    slots[child].as_mut().unwrap().fork_ingress.as_mut().unwrap().first_return_published=true;
+                }
+                // A real first positive return is still not a runnable,
+                // revoke/final-ACK, terminal release or scheduled-task receipt.
                 return Ok(());
             }
             // The return is committed: complete its real publication before
@@ -1199,6 +1467,13 @@ impl Remote {
                 return Err(EINTR);
             }
         }
+    }
+
+    pub(crate) fn with_page_table<T>(&self,token:Token,use_root:impl FnOnce(u64)->Result<T>)->Result<T> {
+        let slots=self.slots.lock();let entry=slots.iter().flatten().find(|e|e.key()==token).ok_or(ENOENT)?;
+        if entry.closed||entry.needs_cleanup||entry.quarantined{return Err(EBUSY);}entry.backend_ready()?;
+        let root=if let Some(image)=&entry.prepare{image.page_table}else{entry.inherited_root.as_ref().ok_or(EINVAL)?.root};
+        use_root(root)
     }
 
     pub(crate) fn with_prepared<T>(
