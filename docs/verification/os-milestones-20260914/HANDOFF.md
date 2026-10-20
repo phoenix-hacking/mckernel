@@ -1,3 +1,21 @@
+## Current — PASS-image cleanup held after final-census refusal
+
+The actual read-only preflight passed 0/2.042s with no mutation. Exact reviewed
+release204ba1b0 then ran once. Cleanup entered quarantine at its final census
+(cleanup_pass_image.py:1302); published diagnostic72ba2ee2 reports only the
+root-command refusal. It does not establish the underlying child error. Holder
+2069459/start30125126 remains live under sudo2069456, boot7bfc5687. Plan, journal,
+log and both record archives exist; their complete effects await the existing
+independent exact-state reconciliation. Permanent mutex27:4 and every original
+source/capture/transaction remain preserved. No cleanup replay, postjoin, native
+or next-heavy release is authorized from this state.
+
+Artifactb4f2eb58 and sourcepairdb1feac7 remain accepted in their separate scopes.
+M03 final19/LAST/native stays held. Its current-report binding is being prepared
+without future result assertions; child235B stage source/profile review and the
+private engine child-diagnostic correction proceed without compiler jobs. Counts
+15/35,whole3,26behaviors,17/14Rust unchanged;100%included/zero reserve.
+
 ## Current — repaired image artifacts accepted; PASS-case physical clearance next
 
 Independent b4f2eb58 accepts the real fresh image build: all18 commands and
