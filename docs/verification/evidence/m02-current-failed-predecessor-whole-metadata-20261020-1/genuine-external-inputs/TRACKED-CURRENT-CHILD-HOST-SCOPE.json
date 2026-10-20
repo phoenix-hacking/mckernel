@@ -1,0 +1,1135 @@
+{
+  "closed_root_original_tool": {
+    "bytes": 1189,
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/ROOT-ORIGINAL-SESSION23240-WHOLEJOIN.json",
+    "sha256": "abcf1657151e7f01ce07d461a8a55da8504492ff628a92337e71ee7225359fd4"
+  },
+  "container_cgroup_parent": "/mckernel-dev",
+  "created_utc": "2026-10-20T21:02:07.960941+00:00",
+  "current_attempt": "/home/holden/mckernel-work/scratch/cn-261020a/p/attempt-3fb382d0b40d95ef1e658b8097a8f63c",
+  "current_container_id": "023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c",
+  "current_nonce": "3fb382d0b40d95ef1e658b8097a8f63c",
+  "current_owner_evidence": "/home/holden/mckernel-work/scratch/cn-261020a/p.owner-3fb382d0b40d95ef1e658b8097a8f63c",
+  "exact_cgroup_or_command_identifiers": [
+    "023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c",
+    "3fb382d0b40d95ef1e658b8097a8f63c"
+  ],
+  "expected_fresh_record": {
+    "boot_id": null,
+    "complete_scan": null,
+    "matches": null,
+    "permanent_mutex": null,
+    "permission_denials": null,
+    "persistent_paths": null,
+    "scan_finished_utc": null,
+    "scan_started_utc": null
+  },
+  "namespace_only_not_host_identity": {
+    "argv": [
+      "/usr/libexec/qemu-kvm",
+      "-machine",
+      "q35",
+      "-accel",
+      "tcg,thread=multi",
+      "-cpu",
+      "max,la57=off",
+      "-smp",
+      "4,sockets=2,cores=2,threads=1",
+      "-m",
+      "8192",
+      "-object",
+      "memory-backend-ram,size=4G,id=ram-node0",
+      "-object",
+      "memory-backend-ram,size=4G,id=ram-node1",
+      "-numa",
+      "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+      "-numa",
+      "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+      "-nic",
+      "none",
+      "-display",
+      "none",
+      "-no-reboot",
+      "-no-shutdown",
+      "-S",
+      "-monitor",
+      "none",
+      "-qmp",
+      "unix:/home/holden/mckernel-work/scratch/cn-261020a/p/attempt-3fb382d0b40d95ef1e658b8097a8f63c/qmp.sock,server=on,wait=off",
+      "-serial",
+      "file:/home/holden/mckernel-work/scratch/cn-261020a/p/attempt-3fb382d0b40d95ef1e658b8097a8f63c/serial.log",
+      "-debugcon",
+      "file:/home/holden/mckernel-work/scratch/cn-261020a/p/attempt-3fb382d0b40d95ef1e658b8097a8f63c/debugcon.log",
+      "-global",
+      "isa-debugcon.iobase=0xe9",
+      "-kernel",
+      "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+      "-initrd",
+      "/home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/stage-attempt-1/initramfs.cpio.gz",
+      "-append",
+      "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+    ],
+    "pgid": 10,
+    "pid": 10,
+    "returncode": -9,
+    "sid": 10,
+    "starttime_ticks": 32663138
+  },
+  "namespace_scope_rule": "QEMU PID10/start32663138 are containernamespace values only. Neverinsert ashostPID/birth. CurrentCID/cgroup/nonce scan covers possible untrackedcontainer-hosttranslation.",
+  "no_root_job_or_actual_scan_yet": true,
+  "permanent_mutex": {
+    "device": 27,
+    "gid": 0,
+    "inode": 4,
+    "mode": "0o644",
+    "nlink": 1,
+    "path": "/run/lock/mckernel-development.lock",
+    "uid": 0
+  },
+  "persistent_paths_to_inspect": [
+    "/home/holden/mckernel-work/scratch/native-phase5-paired-lease-external-modules.lease.json",
+    "/home/holden/mckernel-work/scratch/native-phase5-paired-lease-external-modules-operational-exclusion.json",
+    "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock"
+  ],
+  "physical_report": {
+    "bytes": 40161,
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-affected-independent-review-20261020-1/ACTUAL-CHILD-FAILED-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "4d34fd3c6437c78446b9336d4c7444360ae21e3b991f959aa53ed9a30b1f785b"
+  },
+  "schema": "mckernel.child-current-physical-host-scan-scope.v1",
+  "scope": "Functional OS/apps plus Rust/reviewedassembly; freshcurrentre-admission supplement, nohistoricalzero.",
+  "status": "SOURCE_DERIVED_FROZEN_SCOPE_NO_ACTUAL_SCAN",
+  "tracked_host_PGIDs": [
+    2247170,
+    2247187,
+    2247662,
+    2247665,
+    2247669,
+    2247675,
+    2247681,
+    2247687,
+    2247693,
+    2247699,
+    2247705,
+    2247711,
+    2247717,
+    2247898,
+    2247904,
+    2247910,
+    2247916,
+    2247922,
+    2247929,
+    2247935,
+    2247942,
+    2247948,
+    2247954,
+    2247960,
+    2247966,
+    2247972,
+    2247978,
+    2247984,
+    2247990,
+    2249042,
+    2249786,
+    2249792,
+    2249798
+  ],
+  "tracked_host_SIDs": [
+    2247170,
+    2247187,
+    2247662,
+    2247665,
+    2249042,
+    2249786,
+    2249792,
+    2249798
+  ],
+  "tracked_host_identity_rows": [
+    {
+      "group_session_authority": "existing71ae Popenstart_new_session=True gives initialPGID/SID=childPID; directclosedstatusPID/birthactual",
+      "pgid": 2247170,
+      "pid": 2247170,
+      "role": "LAST-snapshot",
+      "sid": 2247170,
+      "source": {
+        "bytes": 1947,
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/snapshot.status.json",
+        "sha256": "c49a64687bf589be5b72505b6ab3a9d41a4e0e272032b6f3d3ab04e5143b2d27"
+      },
+      "starttime_ticks": 32657392
+    },
+    {
+      "group_session_authority": "existing71ae Popenstart_new_session=True gives initialPGID/SID=childPID; directclosedstatusPID/birthactual",
+      "pgid": 2247187,
+      "pid": 2247187,
+      "role": "machine-assembly",
+      "sid": 2247187,
+      "source": {
+        "bytes": 2385,
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/captures/01-machine-assembly/status.json",
+        "sha256": "cc589dea0f2f4965b5180743939502e58f998bead6255382473674d061cb909c"
+      },
+      "starttime_ticks": 32657449
+    },
+    {
+      "group_session_authority": "existing71ae Popenstart_new_session=True gives initialPGID/SID=childPID; directclosedstatusPID/birthactual",
+      "pgid": 2247662,
+      "pid": 2247662,
+      "role": "final-guard",
+      "sid": 2247662,
+      "source": {
+        "bytes": 1857,
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/captures/02-final-guard/status.json",
+        "sha256": "afa1b697a9b272b99923912ee5afde696747704d80651a3a6443d8edb04b3f90"
+      },
+      "starttime_ticks": 32662945
+    },
+    {
+      "group_session_authority": "existing71ae Popenstart_new_session=True gives initialPGID/SID=childPID; directclosedstatusPID/birthactual",
+      "pgid": 2247665,
+      "pid": 2247665,
+      "role": "native-owner",
+      "sid": 2247665,
+      "source": {
+        "bytes": 1735,
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/captures/03-native-owner/status.json",
+        "sha256": "d3add81c5f30569a70522b1fafeb5599b87e503a2e5880e379d9ca61fe0d9772"
+      },
+      "starttime_ticks": 32662957
+    },
+    {
+      "group_session_authority": "directarchivedowneridentity",
+      "pgid": 2247665,
+      "pid": 2247668,
+      "role": "actualLinuxowner",
+      "sid": 2247665,
+      "source": {
+        "bytes": 1735,
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/captures/03-native-owner/status.json",
+        "sha256": "d3add81c5f30569a70522b1fafeb5599b87e503a2e5880e379d9ca61fe0d9772"
+      },
+      "starttime_ticks": 32662964
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247669,
+      "pid": 2247669,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "name=^/mckernel-native-diagnostic-3fb382d0b40d95ef1e658b8097a8f63c$"
+        ]
+      },
+      "starttime_ticks": 32663006
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247675,
+      "pid": 2247675,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "label=mckernel.native-diagnostic.owner=3fb382d0b40d95ef1e658b8097a8f63c"
+        ]
+      },
+      "starttime_ticks": 32663007
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247681,
+      "pid": 2247681,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "image",
+          "inspect",
+          "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94"
+        ]
+      },
+      "starttime_ticks": 32663008
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247687,
+      "pid": 2247687,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "create",
+          "--pull=never",
+          "--attach=stdout",
+          "--attach=stderr",
+          "--init",
+          "--name",
+          "mckernel-native-diagnostic-3fb382d0b40d95ef1e658b8097a8f63c",
+          "--label",
+          "mckernel.native-diagnostic.owner=3fb382d0b40d95ef1e658b8097a8f63c",
+          "--cpus=4",
+          "--cpuset-cpus=2-5",
+          "--cgroup-parent=/mckernel-dev",
+          "--memory=12g",
+          "--memory-swap=12g",
+          "--pids-limit=512",
+          "--cap-drop=ALL",
+          "--security-opt=no-new-privileges",
+          "--read-only",
+          "--network=none",
+          "--user=1000:1000",
+          "--ulimit",
+          "core=0",
+          "--ulimit",
+          "nofile=4096:4096",
+          "--tmpfs",
+          "/tmp:rw,nodev,nosuid,size=256m",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel,dst=/home/holden/mckernel,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/scratch,dst=/home/holden/mckernel-work/scratch,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two-0755,dst=/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two-0755,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-source-1,dst=/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-source-1,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-child-collector-affected-independent-review-20261020-1/ACTUAL-CHILD-RAW-CONSUMER-FIVE-CHECK-ACCEPTANCE.json,dst=/home/holden/mckernel-work/host-preparation/phase5-child-collector-affected-independent-review-20261020-1/ACTUAL-CHILD-RAW-CONSUMER-FIVE-CHECK-ACCEPTANCE.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-child-collector-affected-independent-review-20261020-1/ACTUAL-CHILD-SIX-ARTIFACT-OFFLINE-STAGE-ACCEPTANCE.json,dst=/home/holden/mckernel-work/host-preparation/phase5-child-collector-affected-independent-review-20261020-1/ACTUAL-CHILD-SIX-ARTIFACT-OFFLINE-STAGE-ACCEPTANCE.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-child-collector-affected-independent-review-20261020-1/CHILD-COLLECTOR-AFFECTED-SOURCE-AND-ACTUAL-CHECKS-REVIEW.json,dst=/home/holden/mckernel-work/host-preparation/phase5-child-collector-affected-independent-review-20261020-1/CHILD-COLLECTOR-AFFECTED-SOURCE-AND-ACTUAL-CHECKS-REVIEW.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ACTUAL-NINE-COMMAND-CLOSED-HANDOFF.json,dst=/home/holden/mckernel-work/host-preparation/phase5-child-collector-three-defect-correction-20261020-1/ACTUAL-NINE-COMMAND-CLOSED-HANDOFF.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/UNCHANGED-APP-PAYLOAD.json,dst=/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/UNCHANGED-APP-PAYLOAD.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-observer-independent-review-20261020-1/SINGLE-APP-OBSERVER-STAGER-ACTUAL-FIVE-CHECKS-AND-EIGHT-GROUPS-REVIEW.json,dst=/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-observer-independent-review-20261020-1/SINGLE-APP-OBSERVER-STAGER-ACTUAL-FIVE-CHECKS-AND-EIGHT-GROUPS-REVIEW.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/ACTUAL-ORDINARY-CLOSED-HANDOFF.json,dst=/home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/ACTUAL-ORDINARY-CLOSED-HANDOFF.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/collector-0755,dst=/home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/collector-0755,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/stage-attempt-1/initramfs.cpio,dst=/home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/stage-attempt-1/initramfs.cpio,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/stage-attempt-1/initramfs.cpio.gz,dst=/home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/stage-attempt-1/initramfs.cpio.gz,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/stage-attempt-1/manifest.json,dst=/home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/stage-attempt-1/manifest.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/stage-attempt-1/root/lib64/ld-linux-x86-64.so.2,dst=/home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/stage-attempt-1/root/lib64/ld-linux-x86-64.so.2,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/stage-attempt-1/root/lib64/libc.so.6,dst=/home/holden/mckernel-work/host-preparation/phase5-current-child-three-fix-stage-preparation-20261020-1/stage-attempt-1/root/lib64/libc.so.6,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-independent-review-20261020-1/ACTUAL-REAL-MCEXEC6-LINUX-ARTIFACT-DEPENDENCY-AND-PHYSICAL-ACCEPTANCE.json,dst=/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-independent-review-20261020-1/ACTUAL-REAL-MCEXEC6-LINUX-ARTIFACT-DEPENDENCY-AND-PHYSICAL-ACCEPTANCE.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/executer/user/mcexec,dst=/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/compiler-attempt-1/work/output/build/executer/user/mcexec,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-current-image-child-native-stage-20261020-1/EXACT-ACCEPTED-ABI-AND-SOURCE-ROW-JOIN.json,dst=/home/holden/mckernel-work/host-preparation/phase5-current-image-child-native-stage-20261020-1/EXACT-ACCEPTED-ABI-AND-SOURCE-ROW-JOIN.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-independent-review-20261020-1/ACTUAL-MODULE-CFG-ON-HOST66-THREE-MODULE-FFI-LINK-ARTIFACT-REVIEW.json,dst=/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-independent-review-20261020-1/ACTUAL-MODULE-CFG-ON-HOST66-THREE-MODULE-FFI-LINK-ARTIFACT-REVIEW.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/full-image-attempt-2/owner-work/output/build/kernel/mckernel.img,dst=/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/panic-free-full-image-correction-1/full-image-attempt-2/owner-work/output/build/kernel/mckernel.img,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-panic-free-full-image-driver-independent-review-20261020-1/ACTUAL-AUTH-CORRECTED-ATTEMPT2-FULL-IMAGE-NM-LINK-NINE-ARTIFACT-REVIEW.json,dst=/home/holden/mckernel-work/host-preparation/phase5-panic-free-full-image-driver-independent-review-20261020-1/ACTUAL-AUTH-CORRECTED-ATTEMPT2-FULL-IMAGE-NM-LINK-NINE-ARTIFACT-REVIEW.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/expected.stderr,dst=/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/expected.stderr,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/expected.stdout,dst=/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/expected.stdout,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/frozen-oracle.json,dst=/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/frozen-oracle.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/linux-reference-result.json,dst=/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/linux-reference-result.json,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait,dst=/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait.rs,dst=/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait.rs,readonly",
+          "--mount",
+          "type=bind,src=/home/holden/mckernel-work/scratch/cn-261020a/p,dst=/home/holden/mckernel-work/scratch/cn-261020a/p",
+          "--env",
+          "HOME=/tmp",
+          "--env",
+          "TMPDIR=/tmp",
+          "--env",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "--workdir=/home/holden/mckernel-work/scratch/cn-261020a/p",
+          "--entrypoint=/usr/bin/python3",
+          "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-source-1/native_diagnostic_container_owner.py",
+          "--inside",
+          "--owner-sha256",
+          "7a0730da326bf66052234f5f3139f58befafaea9c478fde081d0f57b2ef7f4cc",
+          "--manifest",
+          "/home/holden/mckernel-work/scratch/cs-261020a/manifest.json",
+          "--manifest-sha256",
+          "f36e91a6a2e4942ad830645142784183be29ce0ad9c2826b7c3410de3c661b74",
+          "--attempt-parent",
+          "/home/holden/mckernel-work/scratch/cn-261020a/p",
+          "--nonce",
+          "3fb382d0b40d95ef1e658b8097a8f63c"
+        ]
+      },
+      "starttime_ticks": 32663009
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247693,
+      "pid": 2247693,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "name=^/mckernel-native-diagnostic-3fb382d0b40d95ef1e658b8097a8f63c$"
+        ]
+      },
+      "starttime_ticks": 32663015
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247699,
+      "pid": 2247699,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "label=mckernel.native-diagnostic.owner=3fb382d0b40d95ef1e658b8097a8f63c"
+        ]
+      },
+      "starttime_ticks": 32663017
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247705,
+      "pid": 2247705,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "id=023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c"
+        ]
+      },
+      "starttime_ticks": 32663019
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247711,
+      "pid": 2247711,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "inspect",
+          "023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c"
+        ]
+      },
+      "starttime_ticks": 32663020
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247717,
+      "pid": 2247717,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "start",
+          "--attach",
+          "023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c"
+        ]
+      },
+      "starttime_ticks": 32663022
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247898,
+      "pid": 2247898,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "wait",
+          "023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c"
+        ]
+      },
+      "starttime_ticks": 32667025
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247904,
+      "pid": 2247904,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "logs",
+          "--timestamps",
+          "023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c"
+        ]
+      },
+      "starttime_ticks": 32667026
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247910,
+      "pid": 2247910,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "inspect",
+          "023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c"
+        ]
+      },
+      "starttime_ticks": 32667028
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247916,
+      "pid": 2247916,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "name=^/mckernel-native-diagnostic-3fb382d0b40d95ef1e658b8097a8f63c$"
+        ]
+      },
+      "starttime_ticks": 32667030
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247922,
+      "pid": 2247922,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "label=mckernel.native-diagnostic.owner=3fb382d0b40d95ef1e658b8097a8f63c"
+        ]
+      },
+      "starttime_ticks": 32667032
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247929,
+      "pid": 2247929,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "id=023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c"
+        ]
+      },
+      "starttime_ticks": 32667033
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247935,
+      "pid": 2247935,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "inspect",
+          "023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c"
+        ]
+      },
+      "starttime_ticks": 32667034
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247942,
+      "pid": 2247942,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "stop",
+          "--time=2",
+          "023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c"
+        ]
+      },
+      "starttime_ticks": 32667036
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247948,
+      "pid": 2247948,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "kill",
+          "023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c"
+        ]
+      },
+      "starttime_ticks": 32667037
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247954,
+      "pid": 2247954,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "wait",
+          "023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c"
+        ]
+      },
+      "starttime_ticks": 32667038
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247960,
+      "pid": 2247960,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "logs",
+          "--timestamps",
+          "023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c"
+        ]
+      },
+      "starttime_ticks": 32667040
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247966,
+      "pid": 2247966,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "inspect",
+          "023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c"
+        ]
+      },
+      "starttime_ticks": 32667041
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247972,
+      "pid": 2247972,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "rm",
+          "--force",
+          "023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c"
+        ]
+      },
+      "starttime_ticks": 32667043
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247978,
+      "pid": 2247978,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "name=^/mckernel-native-diagnostic-3fb382d0b40d95ef1e658b8097a8f63c$"
+        ]
+      },
+      "starttime_ticks": 32667044
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247984,
+      "pid": 2247984,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "label=mckernel.native-diagnostic.owner=3fb382d0b40d95ef1e658b8097a8f63c"
+        ]
+      },
+      "starttime_ticks": 32667046
+    },
+    {
+      "group_session_authority": "directactualcommandrecord",
+      "pgid": 2247990,
+      "pid": 2247990,
+      "role": "actualDockerclient",
+      "sid": 2247665,
+      "source": {
+        "archive": {
+          "bytes": 235520,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/stdout",
+          "sha256": "f409a831960d233ce4971781088431aad7147f4d5510b04df00e16094f00002b"
+        },
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/docker",
+          "ps",
+          "-aq",
+          "--no-trunc",
+          "--filter",
+          "id=023e37a8608171eb4fbde1732128e94ea98ee1548a2deb05525e0e99bb1d564c"
+        ]
+      },
+      "starttime_ticks": 32667047
+    },
+    {
+      "group_session_authority": "existing71ae Popenstart_new_session=True gives initialPGID/SID=childPID; directclosedstatusPID/birthactual",
+      "pgid": 2249042,
+      "pid": 2249042,
+      "role": "current-atomic-owner-receipt-and-identity-readonly",
+      "sid": 2249042,
+      "source": {
+        "bytes": 1647,
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/failure-atomic-receipt-capture-1/status.json",
+        "sha256": "9cc0ea12288d5bf9be788e01934afb2a793ee124daff33b9c944116bdff237ad"
+      },
+      "starttime_ticks": 32684993
+    },
+    {
+      "group_session_authority": "existing71ae Popenstart_new_session=True gives initialPGID/SID=childPID; directclosedstatusPID/birthactual",
+      "pgid": 2249786,
+      "pid": 2249786,
+      "role": "joined-failure-readback-1",
+      "sid": 2249786,
+      "source": {
+        "bytes": 1555,
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-1/status.json",
+        "sha256": "99ed4df5da58bc7422b722b60d88d16a5e21dfd13da12c02ee44c0dab7831205"
+      },
+      "starttime_ticks": 32694549
+    },
+    {
+      "group_session_authority": "existing71ae Popenstart_new_session=True gives initialPGID/SID=childPID; directclosedstatusPID/birthactual",
+      "pgid": 2249792,
+      "pid": 2249792,
+      "role": "joined-failure-readback-2",
+      "sid": 2249792,
+      "source": {
+        "bytes": 1529,
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-2/status.json",
+        "sha256": "b89d6aaec16a9d00b3ad0aa540ae6c85f2f7d1a0f287feec4687d5623cb9bc60"
+      },
+      "starttime_ticks": 32694567
+    },
+    {
+      "group_session_authority": "existing71ae Popenstart_new_session=True gives initialPGID/SID=childPID; directclosedstatusPID/birthactual",
+      "pgid": 2249798,
+      "pid": 2249798,
+      "role": "joined-failure-readback-3",
+      "sid": 2249798,
+      "source": {
+        "bytes": 1580,
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/joined-failure-readbacks-1/readback-3/status.json",
+        "sha256": "ca9fe96989b8967615f31547f91d0dc325be24476b6ec8cacbdc33735e55742f"
+      },
+      "starttime_ticks": 32694584
+    }
+  ],
+  "tracked_host_pid_start_tuples": [
+    [
+      2247170,
+      32657392
+    ],
+    [
+      2247187,
+      32657449
+    ],
+    [
+      2247662,
+      32662945
+    ],
+    [
+      2247665,
+      32662957
+    ],
+    [
+      2247668,
+      32662964
+    ],
+    [
+      2247669,
+      32663006
+    ],
+    [
+      2247675,
+      32663007
+    ],
+    [
+      2247681,
+      32663008
+    ],
+    [
+      2247687,
+      32663009
+    ],
+    [
+      2247693,
+      32663015
+    ],
+    [
+      2247699,
+      32663017
+    ],
+    [
+      2247705,
+      32663019
+    ],
+    [
+      2247711,
+      32663020
+    ],
+    [
+      2247717,
+      32663022
+    ],
+    [
+      2247898,
+      32667025
+    ],
+    [
+      2247904,
+      32667026
+    ],
+    [
+      2247910,
+      32667028
+    ],
+    [
+      2247916,
+      32667030
+    ],
+    [
+      2247922,
+      32667032
+    ],
+    [
+      2247929,
+      32667033
+    ],
+    [
+      2247935,
+      32667034
+    ],
+    [
+      2247942,
+      32667036
+    ],
+    [
+      2247948,
+      32667037
+    ],
+    [
+      2247954,
+      32667038
+    ],
+    [
+      2247960,
+      32667040
+    ],
+    [
+      2247966,
+      32667041
+    ],
+    [
+      2247972,
+      32667043
+    ],
+    [
+      2247978,
+      32667044
+    ],
+    [
+      2247984,
+      32667046
+    ],
+    [
+      2247990,
+      32667047
+    ],
+    [
+      2249042,
+      32684993
+    ],
+    [
+      2249786,
+      32694549
+    ],
+    [
+      2249792,
+      32694567
+    ],
+    [
+      2249798,
+      32694584
+    ]
+  ]
+}

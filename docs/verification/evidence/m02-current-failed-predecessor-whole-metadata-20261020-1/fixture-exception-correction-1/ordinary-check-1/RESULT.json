@@ -1,0 +1,48 @@
+{
+  "actual_M02_terminal_joins": true,
+  "actual_same_reader_projection": true,
+  "cases": [
+    {
+      "case": "current_M02_terminal_wrong_physical_SHA",
+      "exception_type": "ValueError",
+      "reason": "whole genuine current report/FD",
+      "refused": true
+    },
+    {
+      "case": "current_M02_terminal_wrong_decoder_source",
+      "exception_type": "Refusal",
+      "reason": "exact selected known-kind physical decoder",
+      "refused": true
+    },
+    {
+      "case": "stale_physical_FD",
+      "exception_type": "ValueError",
+      "reason": "full actual raw record identity",
+      "refused": true
+    },
+    {
+      "case": "stale_original_tool_FD",
+      "exception_type": "ValueError",
+      "reason": "full actual raw record identity",
+      "refused": true
+    },
+    {
+      "case": "missing_genuine_census_supplement",
+      "exception_type": "ValueError",
+      "reason": "genuine complete current host census supplement remains unbound",
+      "refused": true
+    },
+    {
+      "case": "native_metadata_authority_swap",
+      "exception_type": "ValueError",
+      "reason": "distinct genuine native and metadata authority roles",
+      "refused": true
+    }
+  ],
+  "fixture_only": true,
+  "guest_runs": 0,
+  "production_parent_created": false,
+  "root_operations": 0,
+  "runtime_release": null,
+  "status": "PASS_CURRENT_CHILD_FAILURE_READER_AND_ACTUAL_M02_TERMINAL_BODY_SOURCE_CHECK_ONLY"
+}
