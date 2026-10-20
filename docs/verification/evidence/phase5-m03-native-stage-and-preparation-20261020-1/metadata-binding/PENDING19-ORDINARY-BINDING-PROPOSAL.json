@@ -1,0 +1,94 @@
+{
+  "status": "FROZEN_ORDINARY_PENDING19_REQUIRES_ROOT_GRANT_AND_SOURCE_FETCH",
+  "functional_scope": "Functional OS/apps plus Rust/reviewed assembly compute cutover",
+  "criterion": "P-M03-01 selected73B Rust unaligned-mprotect case only",
+  "outer_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "60s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=55",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/metadata-binding-1/run_bind_once.py"
+  ],
+  "command": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/metadata-binding-1/COMMAND.json",
+    "sha256": "388254859f8b6476cd703170422e4f462fdb4c0d7414a9ab8c01e3547f233114",
+    "bytes": 756
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/metadata-binding-1/run_bind_once.py",
+    "sha256": "f873640f8c63a957a61ab08046354ee198331f0c2b73653213cc913f2c835457",
+    "bytes": 2536
+  },
+  "pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/metadata-binding-1/INPUT-PINS.json",
+    "sha256": "57f52e574198fc79d2d8157f8c8670f8201c392b18516582c5c9d9ac25d92e77",
+    "bytes": 3711
+  },
+  "actual_whole_consumer_acceptance": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-ACTUAL-COMPLETE-CURRENT-TERMINAL-CONSUMER-AND-FOUR-CASE-ACCEPTANCE.json",
+    "sha256": "b2bad4f14ecc86112897efcbb7bbd9b3fcfd4cca12b73ac8943fd8f5b4daff13",
+    "bytes": 9142
+  },
+  "actual_preparation_acceptance": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-ACTUAL-NORMALIZED-MANIFEST-FRESH-PARENT-AND-FULL-ARGV-ACCEPTANCE.json",
+    "sha256": "d426c5a7a231e0154c558f6e4808e4673130e9aa05c7222a6f2d1958c4430b26",
+    "bytes": 12109
+  },
+  "genuine_latest_physical": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-production-link-image-independent-review-20261020-1/ACTUAL-FAILED-IMAGE-SUCCESSOR-CLEANUP-PHYSICAL-RELEASE-REVIEW.json",
+    "sha256": "d55efb73f89ab110386dedbfc176081a32a4b0b4b28cb6f3176b0d94b23aa9ef",
+    "bytes": 12528
+  },
+  "decoder": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/terminal_physical_projection_plan.py",
+    "sha256": "05ba4a2944e4550cc5bc2c8c1a5df20085a2c93234a46a1efbb701487289493f",
+    "bytes": 23842
+  },
+  "binder": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/bind_m03_native_packet_plan.py",
+    "sha256": "4edeb376acef1b9595fece62fade6cbf62bbb47df1f1c5e88d26dc621acd7843",
+    "bytes": 21273
+  },
+  "profile": {
+    "cpu": 6,
+    "jobs": 1,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 55,
+    "wall_seconds": 60,
+    "kill_grace_seconds": 2,
+    "perstream_bytes": 33554432,
+    "core_bytes": 0,
+    "nofile": 256,
+    "minimum_MemAvailable_bytes": 5368709120,
+    "minimum_host_available_bytes": 18887655424,
+    "minimum_scratch_available_bytes": 14026801152,
+    "growth_bytes": 67108864
+  },
+  "outputs": {
+    "metadata_count": 19,
+    "suffix": ".PENDING-STATIC-CORRECTED",
+    "root": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1",
+    "closedcapture": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/metadata-binding-1/ordinary-capture-1"
+  },
+  "no_old59_28_or_images_rehash": true,
+  "no_fourcase_or_stage_fixture_replay": true,
+  "current_projection_rechecked_as_binding_authority": true,
+  "snapshot": null,
+  "runtime_release": null,
+  "root_operations": 0,
+  "guest_runs": 0,
+  "source_publication_fetch_pending": true
+}
