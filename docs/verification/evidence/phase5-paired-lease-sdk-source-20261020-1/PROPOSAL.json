@@ -1,0 +1,230 @@
+{
+  "author": "/root/resume_sdk66",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/prepare_fullmodule_inputs.py"
+      ],
+      "label": "generate"
+    },
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/materialize_request.py",
+        "--materialize"
+      ],
+      "label": "materialize"
+    }
+  ],
+  "compilers_executed": 0,
+  "estimated_write_growth_upper_bound_bytes": 8388608,
+  "execution_authorized": false,
+  "expected_materialization_copies": 81,
+  "expected_publication_rows": 105,
+  "expected_runtime_files": 11,
+  "functional_scope": "Functional supported OS/apps AND Rust/reviewedassembly compute cutover; unchanged3LinuxcompatCwrappers allowed",
+  "future_build": {
+    "fresh_module_bytes_required": true,
+    "make_recipe": [
+      "/usr/bin/env",
+      "-i",
+      "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+      "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+      "KBUILD_BUILD_USER=mckernel",
+      "KBUILD_BUILD_VERSION=1",
+      "SOURCE_DATE_EPOCH=1786434034",
+      "PATH=/usr/bin:/bin",
+      "LANG=C",
+      "LC_ALL=C",
+      "TZ=UTC",
+      "BASH_ENV=",
+      "ENV=",
+      "GNUMAKEFLAGS=",
+      "MAKEFILES=",
+      "MAKEFLAGS=",
+      "MAKEOVERRIDES=",
+      "MFLAGS=",
+      "LD_LIBRARY_PATH=",
+      "LD_PRELOAD=",
+      "HOME=/candidate/home",
+      "TMPDIR=/candidate/tmp",
+      "/usr/bin/make",
+      "-C",
+      "/out/source/linux-6.12.0-211.44.1.el10_2",
+      "O=/out/build",
+      "M=/candidate/modules",
+      "ARCH=x86_64",
+      "LLVM=1",
+      "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+      "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+      "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+      "KBUILD_BUILD_USER=mckernel",
+      "KBUILD_BUILD_VERSION=1",
+      "SOURCE_DATE_EPOCH=1786434034",
+      "MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN=1",
+      "--jobserver-style=pipe",
+      "-j2",
+      "modules"
+    ],
+    "no_isolated_I": true,
+    "old_changed_objects_must_not_be_reused": true,
+    "owner_flags": [
+      "-B"
+    ],
+    "owner_interpreter": "/home/holden/anaconda3/bin/python3",
+    "profile": "Same accepted4CPU2-5/12GiB/no-swap512tasks/nonetwork/read-only pipejobserverj2; rootheavyrelease required",
+    "provider_and_ABI_expectations": "Same genuineadopt_current_v4/control_current_v1 exports+actualRustleafreferences; no new ABI/header/Cbody; exact3MMproviderD1/U0STT_FUNC and2membercanonicalmcctrl unchanged",
+    "savedcmd_mode": "Exactlyone MODULE+customcheckcfg; explicitmake1 and namedcfgON required; strict-Dwarnings preserved"
+  },
+  "future_namespace": {
+    "candidate": "/home/holden/mckernel-work/scratch/nsd-c-84bf6ac7d3e849a1b625f9e2076c3580",
+    "evidence": "/home/holden/mckernel-work/scratch/nsd-o-84bf6ac7d3e849a1b625f9e2076c3580",
+    "inputs": "/home/holden/mckernel-work/scratch/nsd-i-84bf6ac7d3e849a1b625f9e2076c3580",
+    "nonce": "84bf6ac7d3e849a1b625f9e2076c3580"
+  },
+  "genuine_future_prerequisites": [
+    "Separate ordinaryprofile CPUslot/admission grant before generator/materializer",
+    "Affected actual66/81/11/request/runtime review after sourcewholejoin",
+    "Exact105publication/fetch proof; latestgenuinephysicalroot-ownedlate",
+    "Canonical finiteexecutionreview+rootheavyadmission/onceexecution"
+  ],
+  "growth_reservation_bytes": 134217728,
+  "holds": [
+    "DefaultOFF/unconfiguredsource and explicitONprivateSDK only",
+    "PostexitGuestRequest producer/orphanedge/normalwaitOPEN",
+    "No native/MM/CREATE_PPD/ACK claim from pairedlease8fixturecases or preparation"
+  ],
+  "host_floor_bytes": 17179869184,
+  "input_pins": [
+    {
+      "bytes": 31075,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/SOURCE-PLAN.json",
+      "sha256": "32429a63cf96ceed51b102fc43a3c2caeab934bb788fd111866c7fdaf6f792e0"
+    },
+    {
+      "bytes": 7882,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/prepare_fullmodule_inputs.py",
+      "sha256": "256ba4f9359f4489158a8e2305a71ee6d93ea45674e76361a3a60cc773163ede"
+    },
+    {
+      "bytes": 3120,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/materialize_request.py",
+      "sha256": "d4e07f13187d8045a3a4f25feb7ec8fa9d517992a32f0f53b644ba9468937ca1"
+    },
+    {
+      "bytes": 27203,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/native_running_external_modules_offline.opt-in.template.py",
+      "sha256": "449f8dd7128eb163157791301ab4d1a8a0c75c680cbc3bbad9bdfff5000019fb"
+    }
+  ],
+  "materializers_executed": 0,
+  "new_source_files": 2,
+  "priority": "M03firstnative and alreadyacceptedimage+SDK3d childprobe stayindependent; thisfutureproposal mustnotblock them",
+  "profile": {
+    "address_space_bytes": 1073741824,
+    "core_bytes": 0,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "grace_seconds": 2,
+    "jobs": 1,
+    "stream_bytes": 33554432,
+    "wall_seconds": 35
+  },
+  "required_capture": "Reuse accepted ownedcapture; initialargv/measuredadmission/statusFIRST separatefromCLOSEDfinalstatus; stableFD excludingatime/directjoin/groupabsence; releaseCPU6wholechain",
+  "retained_engine": {
+    "original14_ABI_baseline_inputs": "Existing accepted originalSDK14 in samegenerator oldSDK materialization rows; no changedheaders/toolidentity/layout/ABI",
+    "parent_enabled_request": {
+      "bytes": 2464,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/request.json",
+      "sha256": "c3ff2a6d73984f5a0901418ad7e21c87ebc645c1dce1d5365150e75855e06ab7"
+    },
+    "parent_index": {
+      "bytes": 3525,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/CAPSULE-AND-MATERIALIZATION-INDEX.json",
+      "sha256": "5c4ff30832a529f849c19fbc6063c50b643581cacb624f4d21230497511e6f70"
+    },
+    "parent_make_pipe_proof": {
+      "bytes": 4863,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/check-cfg-module-correction-1/prepared-inputs/make-pipe-proof.json",
+      "sha256": "462e6fd3dc0db4de7b03370d12b1c50db31156737f072b8859352a9c2ce97cf5"
+    },
+    "parent_original_proposal": {
+      "bytes": 2779,
+      "path": "/home/holden/mckernel-work/host-preparation/failed-invalidation-ownership-repair-20261019-1/sdk-module-preparation-1/fresh-owner-pipe-correction-1/FINAL-SOURCE-PROPOSAL.json",
+      "sha256": "99b1b831bb8e5c1be547ff460de7ded4f353b54c20b2681c4c191e93f8730710"
+    },
+    "parent_profile": {
+      "candidate_disk_budget_bytes": 536870912,
+      "cap_drop": [
+        "ALL"
+      ],
+      "cpu_limit": 4,
+      "cpu_set": "2-5",
+      "ipc": "private",
+      "memory_bytes": 12884901888,
+      "memory_swap_bytes": 12884901888,
+      "network": "none",
+      "no_new_privileges": true,
+      "owner_capture_budget_bytes": 67108864,
+      "pids_limit": 512,
+      "read_only_container": true,
+      "timeout_seconds": 1800,
+      "tmpfs": {
+        "/tmp": "rw,nodev,nosuid,size=256m"
+      },
+      "user": "1000:1000"
+    }
+  },
+  "retained_unchanged_source_pins": 64,
+  "schema": "mckernel.paired-lease-sdk.two-source-command-and-compiler-proposal.v1",
+  "scratch_floor_bytes": 12884901888,
+  "scratch_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+  "sequence": "Futuregrant only; sequentialonce stopfirstfailure, no betweencommandreview",
+  "shared_writes": 0,
+  "source_bytes": 1311488,
+  "source_files": 66,
+  "source_identity": "50557b7836fd42a49ad3f356e75fa5aeb49dce71b27657dc19e721d4dc89e263",
+  "source_plan": {
+    "bytes": 31075,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/SOURCE-PLAN.json",
+    "sha256": "32429a63cf96ceed51b102fc43a3c2caeab934bb788fd111866c7fdaf6f792e0"
+  },
+  "source_receipt": {
+    "bytes": 2892,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/EXACT-TWO-OVERLAY-SOURCE-RECEIPT.json",
+    "sha256": "2c922166b5bbac36330609b6e362086bb37d5454fbee265aeefb839e3a26da5f"
+  },
+  "status": "PREPARED_EXACT_TWO_OVERLAY_FUTURE_SOURCE_ONLY_NO_EXECUTION",
+  "tests_executed": 0
+}
