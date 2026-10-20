@@ -1,0 +1,153 @@
+{
+  "actual_bodies": {
+    "bytes": 7953,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/actual_helper_export_bodies.inc",
+    "sha256": "7393a710fcae018e4769503b4a406f5a5a759fe1f24973464f886eba9bc6e333"
+  },
+  "actual_cases": {
+    "bytes": 279,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/check-1/FOCUSED-FIVE-CASE-RESULT.json",
+    "sha256": "4df72261f41fb472681cd29c5e4c245ebd74a858938b4aa9828a84361f579f34"
+  },
+  "actual_checks": {
+    "CPU_seconds": 0.500683,
+    "cases": [
+      "missing-main",
+      "empty-main",
+      "success-no-spurious-frame",
+      "invalid-cap-and-full-frame-budget",
+      "unsafe-handoff"
+    ],
+    "closed_streams": 3,
+    "commands": 3,
+    "elapsed_seconds": 0.48471863800659776,
+    "exact_production_function_bodies_verified": [
+      "helper_timeout_ms",
+      "append",
+      "stream_json",
+      "frame",
+      "publish",
+      "helper_failure_tag",
+      "remember_helper_failure",
+      "helper_failure_frame",
+      "publish_helper_failure",
+      "publish_diagnostic",
+      "helper"
+    ],
+    "frame_bytes": {
+      "empty-main.frame": 499,
+      "frame-cap-omission.frame": 509,
+      "missing-main.frame": 529,
+      "success.frame": 461,
+      "unsafe.frame": 0
+    },
+    "groups_absent": 3,
+    "guest_runs": 0,
+    "historical_failed_helper_identity": null,
+    "modeled_helper_bytes": true,
+    "positive_direct_joins": 3,
+    "returncodes": [
+      0,
+      0,
+      0
+    ]
+  },
+  "actual_whole": {
+    "bytes": 3532,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/check-1/whole.json",
+    "sha256": "93b357b0cd9e0f269e49f71ba590fee444a16e1ac43d2c7974fda56641f9badd"
+  },
+  "application_acceptance": false,
+  "base": {
+    "bytes": 23723,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/source/scripts/application-tests/native_diagnostic_guest_collector.c",
+    "sha256": "db6c439396ac4d6918d30c89c3423ca0fe99830c6b1943708dc8ce19cd2f50e7"
+  },
+  "collector": {
+    "bytes": 1021376,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/check-1/collector",
+    "sha256": "d4d81860d5753ed729c784eac4e861d6f7a4aebb35b16cb43bfe588ff494ed5d"
+  },
+  "decision": "PASS_FIRST_REAL_PREPAYLOAD_HELPER_FAILURE_SINGLE_FRAME_EXPORT_AND_FIVE_CASE_STATIC_COLLECTOR",
+  "fixture": {
+    "bytes": 4451,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/test_helper_export.c",
+    "sha256": "611602cc763ae80afb4584aeee31e91a304ad138b9041a8acbf6b8f55bb5971b"
+  },
+  "heavy_execution_authorized": false,
+  "implementation_ownership": false,
+  "limitations": [
+    "Fixture stubs supervisor/save/write and supplies modeled helper bytes. No claim to recover historical helper stderr or prove real helper success.",
+    "Failures before an allowlisted helper, console-open failure, or unsafe cleanup can still lack this helper frame. No complete early-failure export claim.",
+    "Static ND_M03_MPROTECT_UNALIGNED compile is not native ABI/module/application proof."
+  ],
+  "milestone_acceptance": false,
+  "native_execution_authorized": false,
+  "next": "Exact static collector may be input to separately reviewed init-only stage and changed native diagnostic attempt. Root admission/release/fresh identities remain required; preserve original M03 failure.",
+  "outer_join": {
+    "bytes": 94,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/outer-1.join.json",
+    "sha256": "15385169ff5ed632d3d51017a84d362d4f128fd0962e37049388f371cfdbdb0c"
+  },
+  "patch": {
+    "bytes": 5419,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/helper-failure-export.patch",
+    "sha256": "296cbe1c3b4f72f628d9c0e39f3dc951599ca54a301eef72febda2fa2a0b8e64"
+  },
+  "production_default_activation": false,
+  "proposal": {
+    "bytes": 3116,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/SOURCE-AND-ORDINARY-CHECK-PROPOSAL.json",
+    "sha256": "043b4b79ed26758260f684357117bc0e359db97c446da8fb02b55fa96350b7f1"
+  },
+  "reviewed_at": "2026-10-20T14:42:44.727615+00:00",
+  "reviewer": "/root/resume20_physical",
+  "revoke_or_final_ACK_acceptance": false,
+  "runner": {
+    "bytes": 4757,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/run_checks_once.py",
+    "sha256": "9786455b404288c91685bd299f84489e157524d49a144e53b362f8d4ea1ba36c"
+  },
+  "schema": "mckernel.independent-m03-prepayload-helper-failure-export-source-and-actual-check-review.v1",
+  "scope": "Functional OS/apps plus Rust/reviewed-assembly cutover. Existing Linux userland collector evidence-only correction; no compute-kernel C change.",
+  "source": {
+    "bytes": 26899,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/candidate/native_diagnostic_guest_collector.c",
+    "sha256": "4d204530a80832a38425d04f386b64b3310fa0871903980ae99abcbcb9f7307b"
+  },
+  "source_findings": [
+    "Only first failed allowlisted actual load-ihk/load-smp/load-mcctrl/boot helper is retained, by value including inline stream arrays, genuine supervisor status/timestamps/child fault, and evidence-save-failure flag after all helper save attempts. Later failures cannot replace it.",
+    "Literal allowlisted tags have static lifetime; no borrowed stack stream pointer or ownership transfer. Unsafe cleanup suppresses publication.",
+    "For unstarted payload only, one ND_HELPER_FAIL frame replaces old unstarted ND_PAYLOAD frame. Successful helper/payload route uses unchanged publish. No extra frame or success acceptance generated.",
+    "M03 stream1024B each, frame4096B, PIPE_BUF atomic write and all deadlines unchanged. Fallback explicitly marks omitted stream hex while retaining original captured byte counts and actual status/helper identity. Invalid kept/observed bounds refuse.",
+    "Evaluator and strict73B stdout/EINVAL/data/write/unmap/exit oracle unchanged; ND_HELPER_FAIL is failure evidence only."
+  ],
+  "status": "PASS_SOURCE_AND_ACTUAL_FOCUSED_CHECKS_ONLY",
+  "witnesses": [
+    {
+      "bytes": 3532,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/check-1/whole.json",
+      "sha256": "93b357b0cd9e0f269e49f71ba590fee444a16e1ac43d2c7974fda56641f9badd"
+    },
+    {
+      "bytes": 529,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/check-1/vectors/missing-main.frame",
+      "sha256": "1c7eb87f8fa44bbea15dbe0d24c33a6300f770354515a971743ab0ddb1eb39f9"
+    },
+    {
+      "bytes": 499,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/check-1/vectors/empty-main.frame",
+      "sha256": "c490a708f8ac617c8044b6e9748c6516243bd0d96be24cbac37ba6272c5e4742"
+    },
+    {
+      "bytes": 509,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/check-1/vectors/frame-cap-omission.frame",
+      "sha256": "21bcf4256698a7c39b74e2701c3369e48dae5e7e31639d899d9f3bacb595ebe5"
+    },
+    {
+      "bytes": 446,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/check-1/compile-current-collector/command.json",
+      "sha256": "c9ccddabe5284e49ad257bcb78f1e08bb7ba33053dfe4b09ebf1d3dfe549dd4b"
+    }
+  ]
+}

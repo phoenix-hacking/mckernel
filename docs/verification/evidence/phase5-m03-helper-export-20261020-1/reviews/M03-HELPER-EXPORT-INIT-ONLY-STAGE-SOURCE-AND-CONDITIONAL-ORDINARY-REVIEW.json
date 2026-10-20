@@ -1,0 +1,128 @@
+{
+  "accepted_helper_collector": {
+    "bytes": 7840,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-FIRST-PREPAYLOAD-HELPER-FAILURE-EXPORT-SOURCE-AND-ACTUAL-FIVE-CASE-REVIEW.json",
+    "sha256": "e44cf5901b85cbc2a1abba51eff03ac5689c347ed75d59a09f512e94e67bc94d"
+  },
+  "accepted_whole_stage": {
+    "bytes": 13472,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-ACTUAL-CANONICAL-MANIFEST-AND-EXISTING-ARCHIVE-OFFLINE-STAGE-ACCEPTANCE.json",
+    "sha256": "729c4dabd2d94223736fec87a96571f1fd865bb0f92937e94509d74a223372bd"
+  },
+  "admission_conditions": [
+    "Root explicit ordinary grant and CPU6 handoff; no current census/sole-publisher or conflicting operation.",
+    "Fresh usage<100/running/no stop, boot and scratch UUID2a5768c8-718d-4914-bdc0-6b32c5a92a52, shared heavy path ENOENT.",
+    "AS1GiB/one job/CPU6/55CPU/child60+2wall/outer67/FS32MiB/core0/nofile256, host16GiB+256MiB fullgrowth/scratch12GiB read-only/MemAvailable5GiB; parent accounts all concurrent work.",
+    "Exact source descriptors and absent stage/capture outputs checked before effect; no compile, app, guest, Docker or scratch writes."
+  ],
+  "application_acceptance": false,
+  "binding": {
+    "bytes": 4038,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/M03-FROZEN-CASE-BINDING.json",
+    "sha256": "0659cc7b9a66b0b0345cb7df31e613bea6a66a354aa5a4adb5c3ecdc50689fad"
+  },
+  "decision": "PASS_EXACT_INIT_ONLY_RETAINED_PREFIX_AND_STRICT_MANIFEST_STAGE_SOURCE_PROFILE",
+  "evaluator": {
+    "bytes": 58161,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/candidate/native_diagnostic.py",
+    "sha256": "1f9f46a3b3d7ed89b064bb91b32a63bd82259706216dee0799c81fdf8a5dc149"
+  },
+  "exact_child_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/stage_m03_init_only.py",
+    "--collector-ref",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/ACCEPTED-COLLECTOR-REF.json",
+    "--output",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/native-stage-1"
+  ],
+  "exact_outer_argv": [
+    "/usr/bin/timeout",
+    "-k",
+    "2",
+    "67",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=55:55",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/run_init_only_stage_once.py"
+  ],
+  "guest_runs": 0,
+  "implementation_ownership": false,
+  "native_execution_authorized": false,
+  "new_tests": 0,
+  "next": "Run exact single stage once under root admission, then accept completed stage/manifest/map/prefix outputs before normalizing fresh parent/native tuple.",
+  "ordinary_profile": {
+    "as_bytes": 1073741824,
+    "capture_budget_bytes": 67108864,
+    "core_bytes": 0,
+    "cpu": 6,
+    "cpu_seconds": 55,
+    "emergency_bytes": 67108864,
+    "fsize_bytes": 33554432,
+    "host_floor_bytes": 17179869184,
+    "host_full_growth_bytes": 268435456,
+    "jobs": 1,
+    "kill_after_seconds": 2,
+    "nofile": 256,
+    "scratch_floor_bytes": 12884901888,
+    "scratch_writes": false,
+    "stage_output_budget_bytes": 67108864,
+    "wall_seconds": 60
+  },
+  "packet": {
+    "bytes": 7257,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/COMPLETE-INIT-ONLY-STAGE-PACKET.json",
+    "sha256": "be4cc2db4855956e6beba336b42be9425b5f59da3e2e54888a9cb261e287d6aa"
+  },
+  "parent_manifest": {
+    "bytes": 5861,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/manifest.json",
+    "sha256": "e414ac0854bf705da2603bde1c630904f8877f14ca3645c1d1c146627e4f333e"
+  },
+  "production_default_activation": false,
+  "resource_assessment": "Accepted complete c564 BASE raw about67.6MiB, unchanged app and one1MiB collector plus canonical tail fit existing1GiB RAM profile. Compressed derivative expected within32MiB; cap violation must fail-retain, never widen automatically. Host256MiB reserve covers64MiB stage+64MiB captures+64MiB emergency+spare.",
+  "reviewed_at": "2026-10-20T14:48:46.738372+00:00",
+  "reviewer": "/root/resume20_physical",
+  "revoke_or_final_ACK_acceptance": false,
+  "runner": {
+    "bytes": 5340,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/run_init_only_stage_once.py",
+    "sha256": "147d7f2eaec3e746b4a7bd8105ecf6de51f01700ef503f9f445cf5aa8a179d3b"
+  },
+  "schema": "mckernel.independent-m03-helper-export-init-only-stage-conditional-ordinary-review.v1",
+  "scope": "Functional OS/apps plus Rust/reviewed-assembly cutover; unprivileged one-command offline init-only derivative, no runtime/native release.",
+  "source_findings": {
+    "archive": "Same accepted derive/retained_map/overlay engine verifies whole BASE final map then appends canonical standard overlay. Decompressed old archive is byte-identical prefix of decompressed derivative. Every other final member bytes/mode/metadata unchanged. Compressed output is recompressed; no compressed-prefix identity claim.",
+    "collector_mode": "Original d4d8180700 collector is read-only input; overlay emits canonical0755 init. No source chmod or extra executable copy.",
+    "evaluator_delta": "Only M03_CASE_BINDING.accepted_stage_base replaced a029 HOST66 original with exact accepted complete c564 M03 stage; all other AST and binding fields identical.",
+    "output": "Fresh private native-stage-1, O_EXCL0600 JSON, derived file32MiB FSIZE safety and total64MiB stage cap; existing failures retained.",
+    "stage_delta": "Only immutable parent/schema/base/evaluator routing and source hash guards changed. CHANGED restricts final map bytes/size to init only.",
+    "unchanged_AST_functions": [
+      "load",
+      "ref",
+      "exact",
+      "retained_map",
+      "derive",
+      "write",
+      "js"
+    ],
+    "whole_manifest": "Deep copy of strict complete e4148-key parent, exact unchanged artifacts/modules/profile/payload; replaces staging with full5roles and invokes unchanged strict M03 validator before manifest publication."
+  },
+  "stage_engine": {
+    "bytes": 6790,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/stage_m03_init_only.py",
+    "sha256": "a7bf02cdc25db002068bf3c6a96b93a1a818365322e60f1e433f215e28c8b5f6"
+  },
+  "stage_executed": false,
+  "status": "PASS_CONDITIONAL_ORDINARY_EXECUTION"
+}
