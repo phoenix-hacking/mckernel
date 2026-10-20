@@ -1,3 +1,37 @@
+## Current — HOST66 strict twenty accepted; actual guest compiler next
+
+HOST66 matched three-module normal ABI/collector guest is independently accepted:
+semantic041ee767 and positive physical9abe4a40. Exact ten rounds/twenty distinct
+PID launches pass CPU/output/exit/trace/retirement oracles; whole owner0/72.003017s.
+The actual scheduled EAGAIN retry completes before round END within unchanged
+15s/5s/120s bounds. This repeats accepted logical behavior: no new behavior,
+compute-Rust path, default provider activation, constructor or final-ACK credit.
+Full physical descriptors/pins are retained; expert known-kind adapter f78ebae7
+and genuine-positive/four-negative controls replace inherited schema assumptions.
+Original two metadata failures and composite64 collector failure remain unchanged.
+Closed evidence: evidence/current-v6-host66-native-checkpoint-20261020-1,
+288 selected files/10446854 raw bytes; archive1645461B; export0/.320299s joined.
+
+Five actual guest objects remain next: native/legacy whole Rust crates, selected/
+fallback whole syscall.c and actual process.c constructor provider. Immutable159
+materialized files and207 fetched inputs are reused. Capacity split11e6359c and
+final9014a3f4 were reviewed; first root invocation failed before ownership/Docker/
+release/compiler on missing resource import. Original source and failure stay.
+Import-only fresh variant actual capacity_snapshot probe passes0/.037687s with
+HOST1543503872B/SCRATCH771751936B budgets, full floors/emergency intact; changed
+source publication/final authority and fresh admission precede actual compilers.
+
+Private phase5 child-run/wait candidate preserves a retained runtime Thread pin
+through real publication/exit/wait and has five focused body tests passing after
+preserved compile/layout failures. Independent coherent ownership review is active;
+real C flexible-array offsets, whole production compilation, selected libc fork
+flags and eventual runtime/ACK proofs remain holds. No runtime source integrated.
+Selector1 producer source80e59ae2 is already shipped8b23819c with five body checks.
+
+Counts remain15/35, whole M00/M04/M10 complete,26 behaviors,17 production/14 native
+selected Rust paths. Continue functional OS/apps plus actual Rust cutover under
+100% included/zero reserve, one-heavy/floors/ownership/mutex27:4/Scratch21 controls.
+
 ## Current — selector1 source integrated; HOST66 native and guest ABI next
 
 Actualsource selector1 start disposition now returns success ONLY after matching,
