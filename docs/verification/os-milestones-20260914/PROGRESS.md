@@ -15,7 +15,7 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 | M01 | Requests, responses and recovery | partial | open | Supported requests and cancellation/errors preserve ownership and recover. | Nine native diagnostic request/response paths work; selected failures are preserved. Required final-suite negatives/cancellation recovery remain open. |
 | M02 | Execution and comparison runner | partial | open | Normal Linux/McKernel execution produces trustworthy results and retirement. | Nine independently accepted current942 diagnostic runs have complete results and verified owner/client/guest retirement. Final-profile timeout/rejection coverage remains open. |
 | M03 | Memory and mapping correctness | partial | open | Used mappings preserve data/access and prevent unsafe release or reuse. | Actual current942 allocation/map/protection/unmap app paths plus protected-write SIGSEGV/ACCERR/exactaddress and restored RW write now pass; final supported-candidate memory/ownership session remains open. Current3bfc zero-length anonymous mmap/EINVAL diagnostic passes independently; adds one distinct behavior only. |
-| M04 | Useful C and Rust applications | partial | open | Useful actual applications and representative core regressions work. | All three literal M04 checks independently supported; P-M04-02 now complete using selected-suite and FP1e7a Rust file evidence. Whole-M04/final-profile delivery remains open; historical regression acceptance does not become current-FP execution. |
+| M04 | Useful C and Rust applications | complete | complete | Useful actual applications and representative core regressions work. | Independent d82180bd maps useful actual C/Rust applications and representative selected core regressions to declared accepted profile evidence. Exact M04 exit complete; historical profiles remain artifact-bound. No current205 execution, final delivery, new behavior or Rust retirement is inferred; engineering estimate is not automatically set to100. |
 | M05 | Native lifecycle and restoration | partial | open | Actual native boot/workload/stop/destroy/release/boot restores resources. | Two public boot/workload/stop/destroy/release/boot observations, latest serves real workload after second boot. No second native stop or complete restoration proof; final-profile ten-cycle budget remains open. |
 | M06 | Processes, threads and used syscalls | partial | open | Selected apps have working process creation/exec/wait and thread/syscall semantics. | Rust std proves overlapping worker lifetimes, joins/TLS/mutex counter2000. Deterministic blocking conelevention and process fork/exec/wait remain open. |
 | M07 | Used FPU/vector state | partial | open | Actually used vector/FPU state survives switching, syscalls and signals. | Current492 accepted AVX/vector signal-thread chain plus NULL-fpstate guaranteed x87 FINIT reset on the declared XSAVE profile. Eight selected Rust bodies production-proved, seven applicable native paths. NULL evidence makes no full SSE/MXCSR/AVX reset or fallback/error-branch claim; complete used-feature/final-profile checks remain open. |
@@ -80,8 +80,8 @@ Original formal qualification is **historical / DEFERRED**. Deferred does not me
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-20T03:59:57+00:00`
-- Launcher state heartbeat: `2026-10-20T03:59:57.298818+00:00`
+- Dashboard refreshed: `2026-10-20T04:16:34+00:00`
+- Launcher state heartbeat: `2026-10-20T04:16:25.649898+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `1809072`; server PID: `1809074`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261020T033802Z-7e98c273`

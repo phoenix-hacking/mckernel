@@ -1,3 +1,31 @@
+## Current — diagnostic round7 failure captured; whole-crate compile queued
+
+The new diagnostic owner closed1 after61.015636s. All eight framed raw exports
+completed; failure marker is round7/pair_run/safe=true, with no round7 schedule.
+Case remains FAIL, with no20-launch or4x credit. The saved318779-byte log and
+262144-byte discovery boundary suggest lost startup-route visibility; exact
+branch reproduction is underway, not a proven kernel defect. Atomic receipt
+and all three failure-only readers closed0/joined/group-absent. Independent
+physical acceptance is pending; no new heavy operation until it passes.
+
+SDK remaining-only static artifact review ef3a7487 accepted all three built
+modules, unique final wrapper definitions and no unresolved wrapper references.
+Original driver FAIL/import0/1/0 and warnings remain preserved. This does not
+activate positive CREATE_PPD/MM/default/native paths and requires no rebuild.
+
+Source checkpoint ac009b7687a8 is pushed/fetched. Private caller correction
+installs owned request storage before credit acquisition, avoiding a Carrier
+access after failed cancellation; final focused tests run onCPU6. The queued
+77-source native+legacy crate request ecc50d16 remains frozen at ac009b76;
+update only its genuine latest physical predecessor before fresh admission.
+Normal caller/default/provider/task-MM/revoke/finalACK/native proof remains open.
+
+M04 exact exit independently accepted d82180bd on its declared historical
+application/regression profiles. Counts hold14/35 checks; wholeM00/M04/M10
+complete,26behaviors and selectedRust17/14. No current205 execution inferred.
+100% included allowance/0reserve is active; no paid/API. Preserve all failures,
+Scratch21, mutex27:4, source authority and existing one-heavy/resource floors.
+
 ## Current — real SDK build feedback and owned request storage
 
 SDK make completed0 and produced all3modules. Frozen driver FAIL remains:

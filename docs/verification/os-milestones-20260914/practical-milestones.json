@@ -500,7 +500,7 @@
               "size": 1001
             }
           ],
-          "assessment_note": "Post-effect Shutdown8 and ownership-retained -11\u21920 application retirement are observed. This does not establish all required mapping/release failure ownership invariants."
+          "assessment_note": "Post-effect Shutdown8 and ownership-retained -11→0 application retirement are observed. This does not establish all required mapping/release failure ownership invariants."
         }
       ],
       "current_evidence_summary": "Actual current942 allocation/map/protection/unmap app paths plus protected-write SIGSEGV/ACCERR/exactaddress and restored RW write now pass; final supported-candidate memory/ownership session remains open. Current3bfc zero-length anonymous mmap/EINVAL diagnostic passes independently; adds one distinct behavior only."
@@ -509,8 +509,8 @@
       "id": "M04",
       "scope_id": "practical-kernel-apps-v1-20261017",
       "title": "Useful C and Rust applications",
-      "engineering_state": "partial",
-      "completion_status": "open",
+      "engineering_state": "complete",
+      "completion_status": "complete",
       "exit_condition": "Useful actual applications and representative core regressions work.",
       "checks": [
         {
@@ -758,7 +758,19 @@
           "assessment_note": "Independent final review7224e246 verifies ten frozen expected/Linux/accepted-native exact stdout,stderr and exit-status joins across selected utility,memory,file,thread,signal cases on two retained historical images. Mixed Rust156-byte comparison and3corruption controls remain separately proved. Literal frozen-expected/Linux comparison is complete; final-candidate/profile replay,new empty/error utility native coverage and deferred qualification remain separate open obligations. No new native behavior or historical formal acceptance credited. Initial rootcopy against superseded6300 reviewer hash refused before ledger mutation; final7224 bound exactly."
         }
       ],
-      "current_evidence_summary": "All three literal M04 checks independently supported; P-M04-02 now complete using selected-suite and FP1e7a Rust file evidence. Whole-M04/final-profile delivery remains open; historical regression acceptance does not become current-FP execution."
+      "current_evidence_summary": "Independent d82180bd maps useful actual C/Rust applications and representative selected core regressions to declared accepted profile evidence. Exact M04 exit complete; historical profiles remain artifact-bound. No current205 execution, final delivery, new behavior or Rust retirement is inferred; engineering estimate is not automatically set to100.",
+      "assessment_history": [
+        {
+          "engineering_state": "partial",
+          "completion_status": "open",
+          "current_evidence_summary": "All three literal M04 checks independently supported; P-M04-02 now complete using selected-suite and FP1e7a Rust file evidence. Whole-M04/final-profile delivery remains open; historical regression acceptance does not become current-FP execution."
+        }
+      ],
+      "exit_condition_evidence": {
+        "path": "docs/verification/evidence/practical-m04-exit-review-20261020-1/decision.json",
+        "sha256": "d82180bd4bb6db11e3ecd6f07ac2f2433be3ed2a3df9a1209c37ee576841410a",
+        "size": 3857
+      }
     },
     {
       "id": "M05",
@@ -2009,7 +2021,7 @@
       "Prepare separately reviewed realpayload execution afterfreshsecondboot, proving rebootedOSserveswork; no secondstop/release or10cyclequota authority fromfirstcycle.",
       "Finish reviewedthinmaterializer exact49tracked-symlink correction preservingfailedpartialtree/fullsourceauthority, then independently release matchingFPUimagebuild.",
       "Close selectedapplication-visible XCR0/libc/Rustrequirements andreview boundedAVX/YMMpreservation extension; currentnativecoverage unchanged.",
-      "Continue actualMemory\u2192ingress\u2192checkedREADY\u2192LINK\u2192guestaccept joins andfinalACK/RET/destructor/revocation; CREATE_PPD remains fail-closed."
+      "Continue actualMemory→ingress→checkedREADY→LINK→guestaccept joins andfinalACK/RET/destructor/revocation; CREATE_PPD remains fail-closed."
     ],
     "literal_provenance_20261019": {
       "check": "P-M10-01",
