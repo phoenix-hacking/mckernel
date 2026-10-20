@@ -1,0 +1,91 @@
+{
+  "activities": {
+    "Docker": 0,
+    "compilers": 0,
+    "root": 0,
+    "shared_source_edits": 0,
+    "tests": 0
+  },
+  "basis_identity": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 4471486,
+    "mode": 448,
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output",
+    "uid": 1000
+  },
+  "existing_authority": {
+    "accepted_sdk_capsule": {
+      "bytes": 64709,
+      "path": "/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/capsule/docs/verification/evidence/current-v6-phase4-host-sdk-20261020-1.json",
+      "sha256": "300729870bb1e57dec4b00790c162d246cf9a35b1f37e674c69f5a6d01cba721"
+    },
+    "accepted_utsrelease_hash_matched": true,
+    "kernel_release_ref": {
+      "bytes": 40,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/include/config/kernel.release",
+      "sha256": "42bb1d3c01816ca5d716e59ce1b50f1b96be1e5643d866486b0f6db098d2725a"
+    },
+    "localversion": {
+      "origin": "retained original build.commands; build.environment contains no LOCALVERSION; cross-checked generated kernel.release",
+      "value": "-211.44.1.el10_2.mckernel1.x86_64"
+    },
+    "previous_accepted_build": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-shutdown-external-modules-result-review-20261017-2.json",
+      "sha256": "da6123b6c840ca2302e0e431bdd88fb82c6cd0a5ec592ffea20f3f31a5fb4876"
+    },
+    "proof_limit": "Existing capsule/accepted-build references establish the retained Linux basis identity. This particular version.h leaf is newly directly hashed here; no claim its leaf hash appeared in the old proof.",
+    "read_only_basis_mount": {
+      "read_only": true,
+      "source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output",
+      "target": "/out"
+    },
+    "utsrelease_ref": {
+      "bytes": 62,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/include/generated/utsrelease.h",
+      "sha256": "46ec981be727b5e16bad989d768363964e8d4362fecb7661ee0bacdead15bbf0"
+    }
+  },
+  "identity": {
+    "LINUX_VERSION_CODE": 396288,
+    "LINUX_VERSION_MAJOR": 6,
+    "LINUX_VERSION_PATCHLEVEL": 12,
+    "LINUX_VERSION_SUBLEVEL": 0,
+    "RHEL_MAJOR": 10,
+    "RHEL_MINOR": 2,
+    "RHEL_RELEASE": "211.44.1",
+    "retained_kernel_release": "6.12.0-211.44.1.el10_2.mckernel1.x86_64"
+  },
+  "leaf": {
+    "bytes": 375,
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/include/generated/uapi/linux/version.h",
+    "sha256": "3cc5d7cfe76eb7db13aac6d42be01cd2c5f8da0caaae154798a8d0115bb95571"
+  },
+  "leaf_stable_metadata_excluding_atime": {
+    "st_ctime_ns": 1792218710328395657,
+    "st_dev": 1828,
+    "st_gid": 1000,
+    "st_ino": 4687361,
+    "st_mode": 33188,
+    "st_mtime_ns": 1792218710328395657,
+    "st_nlink": 1,
+    "st_size": 375,
+    "st_uid": 1000
+  },
+  "no_privileged_export_needed": true,
+  "prefix_mapping": {
+    "copy_exact_bytes_only": true,
+    "fresh_container_include_prefix": "/src/.kernel-sdk",
+    "fresh_source_relative_leaf": ".kernel-sdk/include/generated/uapi/linux/version.h",
+    "no_macro_or_uname_substitution": true,
+    "old_container_include_prefix": "/out/build",
+    "old_host_basis_prefix": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build",
+    "only_C_include_rebind": "-I/out/build becomes -I/src/.kernel-sdk",
+    "original_cpp_include": "include/generated/uapi/linux/version.h",
+    "source_count_after": 21,
+    "source_count_before": 20
+  },
+  "schema": "mckernel.mcexec.genuine-generated-linux-version-source-binding.v1",
+  "scope": "Functional OS/apps plus Rustcutover; bounded genuine missing generated header source fact only",
+  "status": "GENUINE_EXISTING_ACCEPTED_LINUX_BASIS_LEAF_BOUND"
+}
