@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: GPL-2.0
+
+# Staged as drivers/misc/mckernel/Kbuild in the selected Rocky kernel tree.
+# Linux Kbuild owns every Rust compiler and module linker invocation.
+
+obj-$(CONFIG_MCKERNEL_IHK_RUST) += ihk.o
+obj-$(CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST) += ihk-smp-x86_64.o
+ihk-smp-x86_64-y := ihk_smp_x86_64.o
+obj-$(CONFIG_MCKERNEL_MCCTRL_RUST) += mcctrl.o
+
+# Canonical mcctrl.ko, unchanged Rust root under a distinct Kbuild leaf.
+mcctrl-y := mcctrl_rust.o mcctrl_vm_write_compat.o
+# Recognize the explicit capability cfg even in the default-OFF build.
+RUSTFLAGS_mcctrl_rust.o += --check-cfg 'cfg(mckernel_current_fork_adoption_opt_in)'
+ifneq ($(MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN),)
+ifneq ($(MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN),0)
+ifneq ($(MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN),1)
+$(error MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN must be empty, 0 or 1)
+endif
+endif
+endif
+ifeq ($(MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN),1)
+RUSTFLAGS_mcctrl_rust.o += --cfg mckernel_current_fork_adoption_opt_in
+endif

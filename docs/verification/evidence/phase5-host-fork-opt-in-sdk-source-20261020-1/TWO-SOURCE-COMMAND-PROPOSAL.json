@@ -1,0 +1,164 @@
+{
+  "actual_guard_acceptance": {
+    "bytes": 32657,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-independent-review-20261020-1/ACTUAL-HOST-OPT-IN-FINITE-GUARD-RESULT-REVIEW.json",
+    "sha256": "82a0fb08bddeabb08dd7a3850b8da1dfabc5ae77f5f5b29aa83ba75162c79f14"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/prepare_fullmodule_inputs.py"
+      ],
+      "label": "generate"
+    },
+    {
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/materialize_request.py",
+        "--materialize"
+      ],
+      "label": "materialize"
+    }
+  ],
+  "compiler_recipe": "Reuse accepted owner/pipejobserver j2,4CPU12GiB no-swap512tasks; root release/publication/reviews pending",
+  "copy_rows": 81,
+  "estimated_new_written_bytes_upper_bound": 8388608,
+  "execution_authorized": false,
+  "expected_fullmodule_mode": {
+    "actual_saved_cmd_checked_by_real_driver": true,
+    "make_assignment": "MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN=1",
+    "perleaf": "RUSTFLAGS_mcctrl_rust.o",
+    "preparation_bool": true,
+    "required_cfg": "mckernel_current_fork_adoption_opt_in",
+    "required_check_cfg": "cfg(mckernel_current_fork_adoption_opt_in)"
+  },
+  "future_namespace": {
+    "candidate": "/home/holden/mckernel-work/scratch/nsd-c-3e1cf8539a774a9389e19f471828676b",
+    "evidence": "/home/holden/mckernel-work/scratch/nsd-o-3e1cf8539a774a9389e19f471828676b",
+    "inputs": "/home/holden/mckernel-work/scratch/nsd-i-3e1cf8539a774a9389e19f471828676b",
+    "nonce": "3e1cf8539a774a9389e19f471828676b"
+  },
+  "headroom": {
+    "additional_growth_bytes": 134217728,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "scratch_uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52"
+  },
+  "inherited_plan_limitations": "Historical literal constantfalse/undefinedcfg lines describe accepted base only; candidate const uses namedcfg. No positive backend/native/ACK proof follows from guard.",
+  "input_pins": [
+    {
+      "bytes": 28690,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/SOURCE-PLAN.json",
+      "sha256": "20b5d6f908649e7d45287ae3acaf054856d5305ca53b474e589d5389bbf2c7d6"
+    },
+    {
+      "bytes": 7186,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/prepare_fullmodule_inputs.py",
+      "sha256": "7e595a3e4734916ab4845d3a0cc9c5ad0f9c8e8ecee270c9dfbc60b4cd87bbed"
+    },
+    {
+      "bytes": 3120,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/materialize_request.py",
+      "sha256": "57b474232dc7465eed1f492debe0686d8615e0fca391a9b8c84c462b796c51d0"
+    },
+    {
+      "bytes": 26953,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/native_running_external_modules_offline.opt-in.template.py",
+      "sha256": "b2d9b4923856a8247902c361c3d0b6bab1bcefa72a1c2edbd71518e937d4a14c"
+    },
+    {
+      "bytes": 8370,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/owned_capture_helpers.py",
+      "sha256": "789ece578303153fe08b378b437638dc2a393793e8bebb225e31cdf2e97c9175"
+    },
+    {
+      "bytes": 2325,
+      "path": "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/request.json",
+      "sha256": "dfe115e7ee260cbcff82833dfcf4c5dce41834f679806697d859d2b960587b66"
+    },
+    {
+      "bytes": 3213,
+      "path": "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/CAPSULE-AND-MATERIALIZATION-INDEX.json",
+      "sha256": "7060dcea2617832cdfcc98a74e037aa064d6eabba2f076bc87313733ad3fdc57"
+    },
+    {
+      "bytes": 57298,
+      "path": "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/capsule/docs/verification/evidence/current-parent-pin-sdk-preparation-20261019-1.json",
+      "sha256": "d84e7d8ff3b3cb2b8a25439eb9a52c86d4282756b11a6641adf862e2439e73ce"
+    },
+    {
+      "bytes": 29601,
+      "path": "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/materialization-files.json",
+      "sha256": "751df643251ca4f9887e8b05d2b39a8c93ceb785cd9c9667fb1d06090894a191"
+    },
+    {
+      "bytes": 1369,
+      "path": "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/source-sha256.json",
+      "sha256": "087d80a17bf7c1d9acdb6beb07ea6884b5dbb60ba40cecc187a669bd60d7e271"
+    }
+  ],
+  "new_capture_root": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/actual-source-preparation-1",
+  "no_shared_edits": true,
+  "profile": {
+    "address_space_bytes": 1073741824,
+    "core_bytes": 0,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "grace_seconds": 2,
+    "jobs": 1,
+    "stream_bytes": 33554432,
+    "wall_seconds": 35
+  },
+  "provider_import_expectation_ON": "Real mcctrl Rustleaf must reference existing ihk_os_application_adopt_current_v4 and fork_control_current_v1; final IHK providers unique definitions, no undefined final references. Existing MM wrapper arities/unique defs unchanged.",
+  "publication_selection": "After actual source materialization: exact66source+15preparedinputs+11runtime and finite consumed metadata; explicit Kbuild/buildid/.cmd ignored rows included; no binary/toolchain copies",
+  "required_capture_rule": "Immutable initial-admission.json with actual argv, measured admission and pins separate from CLOSED final status; stableFD streams/directjoin/groupabsence; releaseCPU6wholechain",
+  "reserved_growth_bytes": 134217728,
+  "root_preimage_map": {
+    "bytes": 4871,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/CURRENT-ROOT-TWO-SOURCE-PREIMAGE-MAP.json",
+    "sha256": "2296b533d60a5aae3db1a8fc7669094ee4631fbdb81fb676d0000376d1a2fd09"
+  },
+  "runtime_sources": 11,
+  "schema": "mckernel.host-opt-in.two-source-command-proposal.v1",
+  "scope": "FunctionalOS/apps+Rustcutover; source generation/materialization only, no compiler/root/runtime",
+  "sequence": "once sequential stopfirstfailure; no intercommand review",
+  "source_bytes": 1307635,
+  "source_files": 66,
+  "source_guard_review": {
+    "bytes": 8832,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-independent-review-20261020-1/HOST-OPT-IN-SOURCE-AND-FINITE-ORDINARY-GUARD-REVIEW.json",
+    "sha256": "60d77597aef2bb779b9bce43f65c68de58eac62896f2aea44470a2b784202527"
+  },
+  "source_identity": "67de40d619bdbcbc3c7fcc05c32a6750d1e4e919d3ebb07af3fb28aab4e93eaa"
+}
