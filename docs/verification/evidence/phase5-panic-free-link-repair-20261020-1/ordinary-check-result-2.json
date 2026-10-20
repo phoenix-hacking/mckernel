@@ -1,0 +1,52 @@
+{
+  "profile": "CPU6 / 1job /1GiBAS /30CPU /35+2wall /32MiBperstream",
+  "rustc_sha256": "f8d033fd72e878ec60493788c8bffec2e6c154dcab6f0cb4c145af8ada26a7ed",
+  "results": [
+    {
+      "environment": {
+        "RUSTC_BOOTSTRAP": "1"
+      },
+      "name": "panic-free-actual-body-compile-2",
+      "command": [
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--cfg",
+        "native_linux_irq_work_v6_12",
+        "--test",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "debuginfo=0",
+        "-C",
+        "linker=/usr/bin/x86_64-linux-gnu-gcc-9",
+        "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/fixture-2/actual-phase5.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/panic-free-tests-2"
+      ],
+      "pid": 2010237,
+      "exit_code": 0,
+      "elapsed": 0.8164042959688231,
+      "positive_wait": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "51df8e4e465b0e8e0d979c919d5a5f4067f1d3245c1c8e75af7143ce25061d51"
+    },
+    {
+      "environment": {
+        "RUSTC_BOOTSTRAP": "1"
+      },
+      "name": "panic-free-four-affected-cases-2",
+      "command": [
+        "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/panic-free-tests-2",
+        "panic_free_",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "pid": 2010247,
+      "exit_code": 0,
+      "elapsed": 0.004535198037046939,
+      "positive_wait": true,
+      "stdout_sha256": "f5e8451f7f39421b7d9c8d76df412457fae0c6f8fa931d59d212de3ec8fc52d5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

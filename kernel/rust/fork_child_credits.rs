@@ -9,7 +9,7 @@ use core::mem::size_of;
 use core::ptr::{addr_of_mut, NonNull};
 use core::sync::atomic::{AtomicI32, Ordering};
 use crate::abi::{Process, ProcessVm, SyscallRequest, Thread};
-use super::{registry, Carrier, Handle, EACCES, EBUSY, EINVAL, NR_CLONE};
+use super::{registry, Carrier, Handle, EACCES, EBUSY, EINVAL, EIO, NR_CLONE};
 
 const EOVERFLOW: i32 = -75;
 #[path="fork_constructed_credits.rs"]
@@ -73,14 +73,14 @@ impl ChildCredits {
         if !self.retirement_complete(true){return Err(self);}
         // runq_add already consumed the reservation. There is no CPU release
         // here and no second release of any original constructor edge.
-        let graph=self.constructor.unwrap();
+        let Some(graph)=self.constructor else{return Err(self);};
         crate::process_helpers::release_thread(self.parent.as_ptr());
         crate::mem_helpers::kfree(graph.as_ptr().cast());Ok(())
     }
     pub(super) unsafe fn release_after_ack(self)->Result<(),Self> {
         if !self.destruction_complete(){return Err(self);}
         // No child/VM/Process pointer is used after checked final destruction.
-        let graph=self.constructor.unwrap();
+        let Some(graph)=self.constructor else{return Err(self);};
         constructed::release_cpuid(self.reserved_cpu);
         crate::process_helpers::release_thread(self.parent.as_ptr());
         crate::mem_helpers::kfree(graph.as_ptr().cast());Ok(())
@@ -282,9 +282,18 @@ impl<'request> PrivateFork<'request> {
             0
         });
         if rc != 0 { return Err(PrivateFailure { error: rc, owner: self }); }
+        let credits = match self.credits.take() {
+            Some(credits) => credits,
+            None => {
+                self.retained = true;
+                let _ = registry::retain(self.handle);
+                return Err(PrivateFailure { error: EIO, owner: self });
+            }
+        };
         let pointer = match registry::cancel(self.handle) {
             Ok(pointer) => pointer,
             Err(error) => {
+                self.credits = Some(credits);
                 self.retained = true;
                 let _ = registry::retain(self.handle);
                 return Err(PrivateFailure { error, owner: self });
@@ -292,7 +301,6 @@ impl<'request> PrivateFork<'request> {
         };
         // Cancel returned this allocation only after releasing registry lock.
         crate::mem_helpers::kfree(pointer.as_ptr().cast());
-        let credits = self.credits.take().unwrap();
         // The validation above proves this current-parent release cannot be a
         // last-reference destructor; no child/process/VM/CPU credit is changed.
         match credits.cancel_unpublished() {
@@ -501,6 +509,7 @@ unsafe fn owned_caller_current(
     let slot = match ForkRequestSlot::allocate(host_flags, vm.region.user_start, length, root) {
         Ok(slot) => slot, Err(error) => { (*out).error = error; return 0; },
     };
+    let request = slot.request;
     let mut pointer = match super::create_private_carrier_current(slot.request.as_ptr(), parent, child) {
         Ok(pointer) => pointer,
         Err(error) => { slot.free_private(); (*out).error = error; return 0; },
@@ -515,8 +524,9 @@ unsafe fn owned_caller_current(
             // entries cannot be discovered by observers. No credit transferred.
             match registry::cancel(handle) {
                 Ok(mut pointer) => {
-                    let slot = pointer.as_mut().owned_request.take().unwrap();
-                    crate::mem_helpers::kfree(pointer.as_ptr().cast()); slot.free_private();
+                    let slot = pointer.as_mut().owned_request.take();
+                    crate::mem_helpers::kfree(pointer.as_ptr().cast());
+                    if let Some(slot) = slot { slot.free_private(); }
                 },
                 Err(_) => {
                     // Request ownership is already durable. On unexpected
@@ -532,7 +542,6 @@ unsafe fn owned_caller_current(
     // initialization directly, just like the actual carrier constructor does.
     pointer.as_mut().owned_credits = Some(credits);
     (*out).disposition = RUST_RETAINS_CREDITS; (*out).handle = handle;
-    let request = pointer.as_ref().owned_request.as_ref().unwrap().request;
     if let Err(error) = registry::begin(handle) {
         let _ = registry::retain(handle); (*out).error = error; return 0;
     }

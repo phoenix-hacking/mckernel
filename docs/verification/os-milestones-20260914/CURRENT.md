@@ -1,3 +1,17 @@
+## Current — checked Rust link repair integrated; production relink remains
+
+Independent36a9132f accepts four exact Rust sources, four syntax checks and four
+new ownership/lifetime body tests (17 old cases filtered). Root fresh preimages
+matched and exact source bytes are integrated, preserving activation and ABI.
+The original fixture API failure and its one correction remain retained. Actual
+production object panic-symbol absence and kernel LD are unproved. Existing
+producer requires a fresh workspace; one coherent object/nm/image successor is
+being prepared with all changed dependencies rebuilt, no prefix-adoption scheme.
+Failure-chain30 source blobs pushed/fetched90408f16; observer-only release is
+exactly reviewed, while actual cleanup and next-heavy authority remain pending.
+M03 manifest-only completion passed0/.550s using the original compressed archive;
+independent actual-stage acceptance is closing. No native or counter uplift.
+
 ## Current — image final link failed; Rust repair and finite preservation active
 
 The real image owner closed FAIL at 2026-10-20T11:02:33Z after206.876s.

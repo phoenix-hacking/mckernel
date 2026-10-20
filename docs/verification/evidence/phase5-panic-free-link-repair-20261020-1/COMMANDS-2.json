@@ -1,0 +1,32 @@
+[
+  {
+    "name": "panic-free-actual-body-compile-2",
+    "argv": [
+      "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--cfg",
+      "native_linux_irq_work_v6_12",
+      "--test",
+      "-C",
+      "codegen-units=1",
+      "-C",
+      "debuginfo=0",
+      "-C",
+      "linker=/usr/bin/x86_64-linux-gnu-gcc-9",
+      "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/fixture-2/actual-phase5.rs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/panic-free-tests-2"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "panic-free-four-affected-cases-2",
+    "argv": [
+      "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/panic-free-tests-2",
+      "panic_free_",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "expected_exit": 0
+  }
+]

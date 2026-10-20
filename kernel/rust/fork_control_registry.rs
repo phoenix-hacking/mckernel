@@ -177,10 +177,10 @@ pub(crate) fn begin(handle: Handle) -> Result<NonNull<Carrier>, i32> {
         match (&mut *REGISTRY.state.get()).matching(handle) {
             None => Err(ENOENT),
             Some(slot) if slot.busy || slot.phase != Phase::Private => Err(EBUSY),
-            Some(slot) => {
-                slot.phase = Phase::Escaped;
-                Ok(slot.carrier.unwrap())
-            }
+            Some(slot) => match slot.carrier {
+                Some(carrier) => { slot.phase = Phase::Escaped; Ok(carrier) }
+                None => Err(EIO),
+            },
         }
     };
     REGISTRY.unlock();
@@ -200,7 +200,7 @@ pub(crate) fn cancel(handle: Handle) -> Result<NonNull<Carrier>, i32> {
                 slot.phase = Phase::Retained;
                 Err(EBUSY)
             }
-            Some(slot) => Ok(slot.carrier.take().unwrap()),
+            Some(slot) => slot.carrier.take().ok_or(EIO),
         }
     };
     REGISTRY.unlock();
@@ -231,7 +231,7 @@ pub(crate) unsafe fn detach_terminal(handle:Handle,expected:NonNull<Carrier>)->R
     if !handle.valid(){return Err(EINVAL);}
     REGISTRY.lock();
     let result=match (&mut *REGISTRY.state.get()).matching(handle){
-        Some(slot) if !slot.busy&&slot.phase!=Phase::Private&&slot.carrier==Some(expected)=>Ok(slot.carrier.take().unwrap()),
+        Some(slot) if !slot.busy&&slot.phase!=Phase::Private&&slot.carrier==Some(expected)=>slot.carrier.take().ok_or(EIO),
         Some(_)=>Err(EBUSY),None=>Err(ENOENT),
     };
     REGISTRY.unlock();result
@@ -252,7 +252,10 @@ pub(crate) unsafe fn visit(handle: Handle, callback: impl FnOnce(NonNull<Carrier
         match (&mut *REGISTRY.state.get()).matching(handle) {
             None => Err(ENOENT),
             Some(slot) if slot.busy => Err(EBUSY),
-            Some(slot) => { slot.busy = true; Ok(slot.carrier.unwrap()) }
+            Some(slot) => match slot.carrier {
+                Some(carrier) => { slot.busy = true; Ok(carrier) }
+                None => Err(EIO),
+            },
         }
     };
     REGISTRY.unlock();
@@ -279,9 +282,11 @@ pub(crate) fn snapshot_handles(out: &mut [Handle; CAPACITY]) -> usize {
     REGISTRY.lock();
     let mut count = 0;
     unsafe {
+        let mut destinations = out.iter_mut();
         for (index, slot) in (&*REGISTRY.state.get()).slots.iter().enumerate() {
             if slot.carrier.is_some() && slot.phase != Phase::Private {
-                out[count] = Handle { slot: index as u32, reserved: 0, epoch: slot.epoch };
+                let Some(destination) = destinations.next() else { break; };
+                *destination = Handle { slot: index as u32, reserved: 0, epoch: slot.epoch };
                 count += 1;
             }
         }

@@ -1,0 +1,10 @@
+warning: static variable `cpu_local_var_initialized` should have an upper case name
+  --> /home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/fixture-2/actual-phase5.rs:15:13
+   |
+15 |  static mut cpu_local_var_initialized:CInt=1;
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to upper case: `CPU_LOCAL_VAR_INITIALIZED`
+   |
+   = note: `#[warn(non_upper_case_globals)]` on by default
+
+warning: 1 warning emitted
+

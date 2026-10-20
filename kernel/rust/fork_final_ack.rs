@@ -4,8 +4,8 @@ use super::*;
 
 pub(super) unsafe fn destroy_and_ack_current(handle:Handle)->i32 {
     // This request allocation precedes every destructive guest effect.
-    let mut slot=match ControlRequestSlot::allocate(){Ok(slot)=>Some(slot),Err(error)=>return error};
-    let request=slot.as_ref().unwrap().request;let mut permit=None;let mut runtime_permit=None;
+    let slot=match ControlRequestSlot::allocate(){Ok(slot)=>slot,Err(error)=>return error};
+    let request=slot.request;let mut slot=Some(slot);let mut permit=None;let mut runtime_permit=None;
     let mut runtime=false;let mut cpu=-1;let mut parent=0;
     let prepared=registry::visit(handle,|pointer|{
         let c=&mut*pointer.as_ptr();
@@ -29,12 +29,22 @@ pub(super) unsafe fn destroy_and_ack_current(handle:Handle)->i32 {
     });
     if prepared!=0 {if let Some(slot)=slot{slot.free_private();}return prepared;}
     // No registry lock or Carrier reference survives a destructive callback.
-    let destroyed=if runtime{runtime_permit.take().unwrap().destroy()}else{permit.take().unwrap().destroy()};
+    let destroyed=if runtime{
+        match runtime_permit.take(){Some(permit)=>Some(permit.destroy()),None=>None}
+    }else{
+        match permit.take(){Some(permit)=>Some(permit.destroy()),None=>None}
+    };
+    let Some(destroyed)=destroyed else{
+        if let Some(slot)=slot{slot.free_private();}
+        let _=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();c.phase=RETAINED;c.error=EIO;0});
+        let _=registry::retain(handle);return EIO;
+    };
     let rebound=registry::visit(handle,|pointer|{
         let c=&mut*pointer.as_ptr();
-        if c.phase!=DESTRUCTING||c.owned_credits.is_none(){return EACCES;}
+        if c.phase!=DESTRUCTING{return EACCES;}
+        let Some(credits)=c.owned_credits.as_ref()else{return EACCES;};
         if destroyed.is_err(){c.phase=RETAINED;c.error=EBUSY;return EBUSY;}
-        if !c.owned_credits.as_ref().unwrap().retirement_complete(runtime){c.phase=RETAINED;return EBUSY;}
+        if !credits.retirement_complete(runtime){c.phase=RETAINED;return EBUSY;}
         if runtime&&!runnable::runtime_retirement_ready(c){c.phase=RETAINED;c.error=EACCES;return EACCES;}
         // The saved real revoke receipt binds nonce, original request/root,
         // opaque epoch and delivery. Only the checked graph can reach here.
@@ -64,12 +74,17 @@ pub(super) unsafe fn destroy_and_ack_current(handle:Handle)->i32 {
         expected=Some(pointer);0
     });
     if observed!=0{return observed;}
-    let mut pointer=match registry::detach_terminal(handle,expected.unwrap()){
+    let Some(expected)=expected else{let _=registry::retain(handle);return EIO;};
+    let mut pointer=match registry::detach_terminal(handle,expected){
         Ok(pointer)=>pointer,Err(error)=>return error,
     };
     // No new observer can obtain a Carrier borrow; all three real calls have
     // acquired their actual completed Responses. Destruction is outside locks.
-    let c=pointer.as_mut();let credits=c.owned_credits.take().unwrap();
+    let c=pointer.as_mut();let Some(credits)=c.owned_credits.take()else{
+        // Detach already removed discovery. Keep this allocation and every
+        // request; missing credits grant no destructor/free/positive return.
+        c.phase=RETAINED;c.error=EIO;guard.armed=false;return EIO;
+    };
     let released=if runtime{credits.release_runtime_after_ack()}else{credits.release_after_ack()};
     if let Err(credits)=released{c.owned_credits=Some(credits);guard.armed=false;return EBUSY;}
     if runtime{c.host_start.free_after_ack();}

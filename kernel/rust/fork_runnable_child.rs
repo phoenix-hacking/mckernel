@@ -44,6 +44,10 @@ pub(super) unsafe fn observe_start(c:&mut Carrier,context:&ReplyContext)->i32 {
     let physical=crate::x86_memory_helpers::virt_to_phys(context.response.cast::<c_void>())as u64;
     let end=physical.checked_add(size_of::<SyscallResponse>()as u64);
     let carrier_end=c.physical.checked_add(128);
+    let disjoint=match (end,carrier_end){
+        (Some(end),Some(carrier_end))=>!(physical<carrier_end&&c.physical<end),
+        _=>false,
+    };
     let frame=snapshot(c);
     let valid=c.phase==FIRST_POSITIVE&&c.error==0&&c.parent==context.thread as usize
         &&request.number==NR_CLONE&&request.args==c.host_start.args&&request.args[0]==1
@@ -52,8 +56,7 @@ pub(super) unsafe fn observe_start(c:&mut Carrier,context:&ReplyContext)->i32 {
         &&request.ttid==0&&request.valid==0&&context.cpu==c.host_start.cpu&&context.cpu>=0
         &&physical!=0&&physical%8==0&&response.stid>0
         &&crate::x86_cpu_helpers::smp_load_acquire_ulong(addr_of!(response.status))==1
-        &&end.is_some()&&carrier_end.is_some()
-        &&!(physical<carrier_end.unwrap()&&c.physical<end.unwrap())
+        &&disjoint
         &&crate::x86_memory_helpers::virt_to_phys(addr_of_mut!(c.bytes).cast::<c_void>())as u64==c.physical
         &&frame[..8]==*b"MCFKW001"&&word(&frame,24)==1
         &&word(&frame,32)==c.identity.child_pid as u64&&key(&frame)==c.identity
@@ -75,8 +78,8 @@ impl Drop for StartGuard {
 unsafe fn submit_start(handle:Handle)->i32 {
     let local=crate::cls::get_this_cpu_local_var();if local.is_null(){return EACCES;}
     let parent=(*local).current;if parent.is_null(){return EACCES;}let cpu=(*parent).cpu_id;
-    let mut slot=match ControlRequestSlot::allocate(){Ok(slot)=>Some(slot),Err(error)=>return error};
-    let request=slot.as_ref().unwrap().request;
+    let slot=match ControlRequestSlot::allocate(){Ok(slot)=>slot,Err(error)=>return error};
+    let request=slot.request;let mut slot=Some(slot);
     let prepared=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();
         if c.handle!=handle||c.phase!=FIRST_POSITIVE||c.error!=0||c.parent!=parent as usize
             ||c.host_start.state!=IDLE||!carrier_geometry(c,&c.identity){return EACCES;}
@@ -120,7 +123,11 @@ pub(super) unsafe fn start_and_publish(handle:Handle,options:RunOptions)->i32 {
     });
     if prepared!=0{return prepared;}
     // No registry/publication/MM lock is held across lifecycle callbacks.
-    let published=permit.unwrap().publish(pid,options.parent_cpu,options.flags,options.child_tid);
+    let Some(permit)=permit else{
+        let _=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();c.phase=RETAINED;c.error=EIO;0});
+        let _=registry::retain(handle);return EIO;
+    };
+    let published=permit.publish(pid,options.parent_cpu,options.flags,options.child_tid);
     let _=registry::visit(handle,|pointer|{let c=&mut*pointer.as_ptr();
         if published==0{c.runtime_publish_completed=true;if c.phase==RUNTIME_PUBLISHING{c.phase=RUNTIME_PUBLISHED;}}
         else{c.phase=RETAINED;c.error=published;}0});
