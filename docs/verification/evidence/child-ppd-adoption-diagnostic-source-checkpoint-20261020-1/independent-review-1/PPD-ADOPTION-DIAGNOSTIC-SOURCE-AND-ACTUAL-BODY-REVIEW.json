@@ -1,0 +1,206 @@
+{
+  "actual_body_source": {
+    "bytes": 13491,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/actual.rs",
+    "sha256": "5ec57f150dd9da1f609b79f27a27e036d7750d24665af744a779c99e3c32c7b7"
+  },
+  "actual_body_source_freeze": {
+    "bytes": 1058,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/SOURCE-FREEZE.json",
+    "sha256": "f4a24fddca431e9ea533e52be89ac51be3ec83d438fc124be784cd7dbae7e828"
+  },
+  "actual_closed_feedback": {
+    "bytes": 8967,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/ACTUAL-BODY-CLOSED-RESULT.json",
+    "sha256": "123dbb5b18e9b8f7b7efe34fffa7b1a6a446ea1e6dc3770bc90d673fbc1b3d43"
+  },
+  "actual_compile_command": {
+    "bytes": 515,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/compile.command.json",
+    "sha256": "f268c39a2a9f4ce414712ea4a711019d3f100309cece182074bc5240e7e2e1d8"
+  },
+  "actual_compile_wait": {
+    "bytes": 145,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/compile.wait.json",
+    "sha256": "79234db8ea15805240dd3b09a0a243d771268d7e3ec4acce48dd6878b212d646"
+  },
+  "actual_result": {
+    "bytes": 176,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/RESULT.json",
+    "sha256": "02117dfebfd9df6b50c45f5a9149571296d85ee579e09dc727dd03fabfe17b1e"
+  },
+  "actual_streams": [
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/compile.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/compile.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 339,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/test.stdout",
+      "sha256": "2e583d1ed7ed94f749c7c7b11e4ccb670ed10d66a8877ab0cba2a1407921458f"
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/test.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "actual_test_command": {
+    "bytes": 211,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/test.command.json",
+    "sha256": "ef109345f5e54145ccae0b451390611b5652e4056778111f4186070ec324637f"
+  },
+  "actual_test_wait": {
+    "bytes": 147,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/capture-2/test.wait.json",
+    "sha256": "73cf575e722d1689c41ac182e2aaf806ec88dc0365a9536749966c3a15735abd"
+  },
+  "current_repository_source_observation": {
+    "bytes": 48806,
+    "path": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_process.rs",
+    "sha256": "eb019c90f8935b68c2efbb418abb0d7905b2b9bd0e8dba2940aebbe2117c565c"
+  },
+  "decision": "PASS_BEHAVIOR_PRESERVING_ADOPTION_FAILURE_DIAGNOSTIC_FOR_GUARDED_METHOD_ONLY_INTEGRATION",
+  "findings": [
+    {
+      "evidence": "LP64/compat decoding and all original geometry/identity/pending/registration/inherited/child/IHK/callback checks are identical and execute in original order and count. Closure ?/return exits only the immediately invoked closure, then original Result is returned unchanged. No error conversion/ignore/default/synthetic publication is introduced.",
+      "result": "PASS",
+      "topic": "Error and effect preservation"
+    },
+    {
+      "evidence": "Original process/current/_reservation/mirror/parent/child/attempt remain same nested order in closure. Success and every fallible exit drop in same reverse owner order. No additional Arc clone, connection open/close, MM/callback/provider action, lock or atomic mutation. Existing pending compare_exchange/order and reservation Release reset unchanged. IHK synchronous stack attempt and all referenced owners remain live through its call.",
+      "result": "PASS",
+      "topic": "RAII and ownership"
+    },
+    {
+      "evidence": "Failure log occurs after closure-owned lock temporaries, reservation and owners have dropped. Only self slot/generation, static stage str, copied decoded u64 geometry/compat/i32 child PID and copied Error errno are formatted. No ownership is inferred from numeric PID; zero explicitly means no acquired child registration snapshot. No borrowed registration/mirror or descriptor pointer escapes into log.",
+      "result": "PASS",
+      "topic": "Logging closure and lifetime"
+    },
+    {
+      "evidence": "Added code performs stack scalar stores and existing kernel printk only; no new allocation, wait, mutex, provider call, publication or atomic transition. No newly held lock/reservation spans logging. Original ioctl adoption already uses GFP_KERNEL/mutex operations and retains its existing sleepable-context requirements; this patch does not authorize invocation from atomic context. Logging may add ordinary printk timing/serialization; it does not establish real-time timing identity.",
+      "result": "PASS_WITH_EXISTING_CONTEXT",
+      "topic": "Concurrency and atomic context"
+    },
+    {
+      "evidence": "Exact SDK Linux print.rs281 pr_err forwards to print_macro141, core format_args match retains temporaries through call_printk98/_printk. rust_fmt_argument18 uses RawFormatter; no new Rust heap buffer in added call. Args are primitives/staticstr only. Error is Copy at error.rs90; to_errno125 returns original i32 by value. Existing module prelude/pr_err usages and __LOG_PREFIX contract retained. Test harness pr_err/Error/SDK operations are explicit adapters, so actual production macro expansion/module link is still unproved.",
+      "result": "PASS_SOURCE_CONTRACT_ONLY",
+      "topic": "Real macro/toolchain interface"
+    },
+    {
+      "evidence": "Tested b1b3 and latest eb019 have byte-identical adoption method43e0c768; private26c901 and latest546bb802 have identical reviewed method799b976e. Verified each full postimage equals its own full preimage replacing exactly that one method, and current repository eb019 method remains exact preimage. Latest paired-lease callback/fields/acquire additions outside method are preserved; replacing mutable repository with older26c901 would revert them and is not eligible.",
+      "result": "PASS_GUARDED_METHOD_ONLY",
+      "topic": "Current integration preimage"
+    },
+    {
+      "evidence": "Pinned Rust1.92 compile0 and test0; positive waits and groups absent, four streams closed with compiler stdout/stderr0 and teststderr0/teststdout339B. Three tests exercise25 pre/post scenarios:23error+2success; exact errno, dependency trace, pending state, reservation/owner drop counts, IHK and callback effects match; exactly one expected failure log and no success log. Both methods byte-extracted exactly from reviewed sources. First unused-macro packaging compile failure remains retained; only unused fixture macro removed, unchanged method bodies/oracles.",
+      "result": "PASS_ADAPTER_ONLY",
+      "topic": "Closed actual checks"
+    }
+  ],
+  "fixture_packaging_correction": {
+    "bytes": 1649,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/BOUNDED-CORRECTION-RECEIPT.json",
+    "sha256": "840dbeac62d27f416e23bfc4bd028b98429a27b6e48e272cbaea91478ca994b6"
+  },
+  "implementation_ownership": false,
+  "integration_conditions": [
+    "Dispatcher may apply only reviewed diagnostic method hunk after checking exact current method43e0c768 and preserving every outside current byte. Do not replace mutable repository with old full26c901 source. For immutable next SDK source staging, reviewed latest546bb802 may replace exact retained eb019 row only with full source-identity update.",
+    "Existing four c75 carrier/request overlays remain unchanged; next plan is five overlays plus61retained=66sources. Diagnostic is not a functional repair or newly accepted PPD/child path.",
+    "Full current SDK compile/link using real kernel macro/environment, unique definitions and no unresolved references for all three modules remains necessary before any runtime. Actual body test is not this module proof.",
+    "Fixed scratch capacity and current admission blocker remain authoritative; no resize, threshold waiver, rejected command replay or unchanged heavy retry.",
+    "A separately released fresh native attempt with strict235B/empty stderr/exit0 and complete physical retirement is necessary to observe descriptor/first failed stage. If stage ihk-adopt fails, outer metadata alone does not identify provider/callback/MM substage; no guessed semantic repair."
+  ],
+  "latest_method_only_patch": {
+    "bytes": 4190,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/LATEST-SDK-PPD-ADOPTION-FAILURE-OBSERVATION.patch",
+    "sha256": "6d765a097666d0467997d77e43d810669c167eafcfef16f8759303aaeca0344c"
+  },
+  "latest_overlay_prerequisites": {
+    "bytes": 3325,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/LATEST-SDK-FIFTH-OVERLAY-PREREQUISITES.json",
+    "sha256": "b40315f9499c98893b4ce872e46ee16e8e539259378e2607199b044edbc800a7"
+  },
+  "latest_preserving_postimage": {
+    "bytes": 49776,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/mcctrl_process.latest-sdk-diagnostic.rs",
+    "sha256": "546bb80299d2635683059357c388042db9f6317d437df2bf2ea12f1a1a01a8af"
+  },
+  "latest_retained_preimage": {
+    "bytes": 48806,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-paired-lease-sdk-preparation-20261020-1/source/host-kernel/native-rust/mcctrl_process.rs",
+    "sha256": "eb019c90f8935b68c2efbb418abb0d7905b2b9bd0e8dba2940aebbe2117c565c"
+  },
+  "limits": {
+    "CREATE_PPD_success": false,
+    "default_activation": false,
+    "final_ACK": false,
+    "full_module_compile": false,
+    "live_Rust_path_retirement": false,
+    "native_application_acceptance": false,
+    "parent_close_ACK": false,
+    "production_callback_MM_IHK_execution": false,
+    "production_macro_compile": false,
+    "semantic_repair": false,
+    "whole_OS_acceptance": false
+  },
+  "method_postimage": {
+    "bytes": 2725,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/post-method.rs",
+    "sha256": "799b976ee626cf1da0a572d5fe8ab7c1bccf8a79a7bee3038bb4ae67ad1274d2"
+  },
+  "method_preimage": {
+    "bytes": 1755,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/fixture-packaging-correction-1/pre-method.rs",
+    "sha256": "43e0c768af6a40ce213cb01d3d0563c488673ed77dc21498a7395e18c024015d"
+  },
+  "preserved_first_failure": {
+    "bytes": 2855,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/body-regression-1/capture-1/compile.stderr",
+    "sha256": "e80d34888aee09220b07a6dc8c3246157c7df672497e0cd48cd97139d6f0d430"
+  },
+  "real_kernel_macro_sources": {
+    "error": {
+      "bytes": 12261,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/rust/kernel/error.rs",
+      "sha256": "50181273de10264d9aa181ba573ef859945808ebf59b01453939de75f9b47ff2"
+    },
+    "print": {
+      "bytes": 12862,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/rust/kernel/print.rs",
+      "sha256": "94908b9f0df412929bcf7078f728096f86bd1b9bc22af79da38bf65a5d59fea2"
+    }
+  },
+  "reviewed_patch": {
+    "bytes": 4190,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/PPD-ADOPTION-FAILURE-OBSERVATION.patch",
+    "sha256": "0b3307bc7708e04b031ecfa20c4b2efa33a65aae3dd95040df0b2e5ef6d11164"
+  },
+  "reviewer_effects": {
+    "archive_reads": 0,
+    "builds": 0,
+    "guest_runs": 0,
+    "root_operations": 0,
+    "source_edits": 0,
+    "tests": 0
+  },
+  "schema": "mckernel.independent-rust-ppd-adoption-diagnostic-source-and-actual-body-review.v1",
+  "scope": "Functional supported-profile McKernel OS/apps plus live compute-C retirement into Rust/reviewed assembly. Focused Rust error-stage/descriptor/PID diagnostic review only; no semantic PPD repair.",
+  "status": "PASS_SOURCE_AND_EXACT_ADAPTER_BODY_CHECKS_ONLY",
+  "tested_diagnostic_postimage": {
+    "bytes": 49070,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/mcctrl_process.diagnostic.rs",
+    "sha256": "26c9013eaaf3fabb71816aa6295a143a09bd84217178ece8acb4e832a5bf9372"
+  },
+  "tested_preimage": {
+    "bytes": 48100,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-host-fork-adoption-opt-in-20261020-1/source-modules/mcctrl_process.rs",
+    "sha256": "b1b3a7f5fe0e70ff614edc51e5aa22559c0efd827aa5353a7da3c00d0a3c53a5"
+  }
+}

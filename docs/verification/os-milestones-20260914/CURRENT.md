@@ -1,3 +1,37 @@
+## Current — CHILD CREATE_PPD failure diagnosed; M02 predecessor supplement
+
+CHILD native owner failed after41.020494s. Saved evidence337be670 shows
+parent start, host MCEXEC_UP_CREATE_PPD returning-22, app fork errno71/exit1,
+13B stdout/121B stderr; child exec/wait was not reached. Physical4d34fd3c
+accepts retirement only:25Docker clients,container,QEMU and groups retired.
+All failed streams, atomic receipt and three archives remain preserved.
+
+The tested enabled module already contains initial PPD/adoption code. Its
+internal rejection stage is unresolved; c75's four later selector2/3 overlays
+do not fix that initial boundary. Root integrated the independently reviewed
+method-only diagnostic eb019c90->546bb802, preserving paired-lease changes.
+Review84ef7697 and actual-body receipt123dbb5b bind three differential tests,
+25scenarios, positive joins/group absence and CPU6 release. Original malformed
+fixture compile and its one bounded packaging correction remain retained.
+This is diagnostic source, not a semantic repair,module or native acceptance.
+Evidence: /home/holden/mckernel-work/host-preparation/phase5-child-first-native-failure-source-diagnosis-20261020-1/ROOT-METHOD-ONLY-INTEGRATION.json.
+
+M02 corrected production metadata cb20d01c remains accepted; no app/kernel/
+module recompile is needed. Its old742 release is unconsumed but latest physical
+predecessor is now4d34. Fresh time-qualified census supplement542b48dd is accepted:34 host births,
+33 groups,8 sessions,zero matches/permission denials,mutex27:4 and three absent
+ownership paths. Root once-command closed0/.085186s;CPU6 released. This proves
+current re-admission only; no historical zero is invented.
+The coherent failure-reader/context and actual LAST terminal join must pass
+before new final release/fresh snapshot/native. M02 has next eligible heavy slot.
+
+Counts remain16/35 checks,three whole,28 behaviors,Rust17/14. Included100%/zero
+reserve; actual service stops authoritative. SDK five-overlay/61retained=66
+full-module compilation remains blocked by14159970304B scratch admission and
+current developer no-resize instruction. User growth approval remains retained,
+not executable. Preserve dirty WIP,Scratch21,mutex and all failures. Ordinary
+CPU6/7 leases cover actual execution/closure only; no reservation while editing.
+
 ## Current — both corrected production metadata paths closed
 
 M02 corrected production metadata ran once under pinned Python3.8: rc0,
