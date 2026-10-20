@@ -1,3 +1,48 @@
+## Current — exit7 physical accepted; collector grace defect under repair
+
+Exact failed exit7 packet2 remains FAIL. Atomic plus three readbacks all closed
+PASS; physical62ba148e proves container/clients/QEMU/groups/leases retired with
+permanent mutex preserved. Root wholejoin-to-physical-report elapsed318.178s.
+The saved typed frame shows raw1792/exit7 and exact24B stdout+24B stderr with
+EOF/no truncation/procfs empty. Strict evaluator correctly refuses missing final
+retirement/release: only retirement errno=-11 is recorded. Fresh high source
+analysis identifies collector early break on empty procfs before HOST66's
+one-second retry deadline. A private existing-five-second-grace correction and
+seven actual-body check proposals are frozen; no integration or guest retry is
+granted. Keep strict actual retirement0/release/powerdown requirements intact.
+
+Next61B protection normalization failed before outputs on a33-character nonce;
+full closed failure1aa304e4 and independent275aaa77 remain preserved. Fresh
+concise high worker owns one complete active-tuple DATA correction, no retry
+authorized yet. All accepted app/stage/kernel/module inputs remain frozen.
+
+The read-only capacity observation closed0/0.236792s under review72e31427,
+identity before/after unchanged. Superblock confirms UUID/4096B blocks/
+28835840 blocks/288358 reserved blocks, resize_inode and64bit features. Exact
+installed-kernel eligibility/recovery review remains pending; no resize,
+loop/mount/reserve or filesystem mutation is authorized. Counts stay15/35,
+three whole milestones,27 native behaviors and selected Rust17/14.
+
+## Current — exit7 packet2 owner failed; manual failure readbacks next
+
+Corrected metadata9c223e87 and independent2444a6b5 passed; locator delta was
+pushed/fetched5ffd47b9. Exact root executor6413 ran once. LAST, machine assembly
+and guard passed; native-owner closed rc1/38.085867s, direct child joined,
+process group absent and observer error null. The seven-step chain stopped at
+native-owner, so success readbacks did not run. Closed outer stderr reports
+attached Docker start nonzero; helper/application cause remains unproved pending
+manual atomic receipt/three archives. Existing data author and physical reviewer
+are active on that already-supported failure branch. Preserve packet1 collision,
+packet2 failed owner, all source/proofs, and do not retry or count success.
+Actual completed owner status: phase5-exit7-native-data-20261020-1/
+native-control-packet-2/captures/03-native-owner/status.json under host-preparation.
+Root wholejoin receipt9c007e78 records tool6413 closed exit1; physical retirement
+still needs its independent exact decision. App expectation remains exit7/raw1792.
+
+Next61B protection source preparation is independent and has no native grant.
+Capacity proposal is read-only; no resize is authorized. Counts remain15/35,
+three whole milestones,27 native behaviors and selected Rust17/14.
+
 ## Current — exit7 metadata namespace correction; native not launched
 
 The first final19 metadata attempt failed on a template/output collision;
@@ -5,10 +50,12 @@ failed handoff f9f43c83 and every partial output remain preserved. The single
 bounded correction uses fresh native-control-packet-2 and
 non-temporal-source-correction-1 namespaces. Independent817fa7e4 accepts
 literal-only changes,85 full references and19 outputs disjoint from250 inputs
-and old outputs. Root granted one corrected CPU6 metadata run after fresh
-admission; no LAST or native release is granted by that ordinary approval.
+and old outputs. The one corrected CPU6 metadata run closed PASS in0.22309s, with19 outputs
+and182 references checked; CPU6 is released. Independent actual acceptance is
+pending; no LAST or native release is granted by that ordinary result.
 The old137 fetched-source proof covers old sources only; three changed locator
-sources require a small append-only fetched publication before LAST. Derive the
+sources are published and fetched in5ffd47b9, with separate eight-row proof
+c2cf67c1 alongside the original137-row proof. Derive the
 actual owner watch path from corrected generated step3, preserving the old path.
 Accepted exit7 app compilation, stage45fa0822 and normalizationff480f08 must not
 repeat. App expectation remains exit7/raw1792,24B stdout and24B stderr.
