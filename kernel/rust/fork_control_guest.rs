@@ -1,7 +1,12 @@
-//! Current guest carrier and receipt observer. No task-publication, revoke
-//! permit, final ACK, or terminal-release API is provided by this module.
+//! Current owned carrier, real revoke receipt and checked-destructor ACK.
+//! The native selection remains disabled. No runnable-child API is provided.
 #[path="fork_child_credits.rs"]
 pub(crate) mod child_credits;
+#[path="fork_final_ack.rs"]
+mod final_ack;
+#[path="fork_runnable_child.rs"]
+pub(crate) mod runnable;
+use final_ack::destroy_and_ack_current;
 use core::ffi::c_void;
 use core::mem::size_of;
 use core::ptr::{addr_of, addr_of_mut, read_volatile, write, NonNull};
@@ -12,6 +17,9 @@ const EINVAL:i32=-22;const EACCES:i32=-13;const EBUSY:i32=-16;
 const ENOMEM:i32=-12;const EIO:i32=-5;const EPROTO:i32=-71;
 const NR_CLONE:u64=56;const MARKER:u64=0x313030434b46434d;
 const SUBMITTED:u32=0;const FIRST_POSITIVE:u32=1;const RETAINED:u32=3;
+const HOST_REVOKED:u32=4;const DESTRUCTING:u32=5;const GUEST_DESTROYED:u32=6;const FINAL_ACK:u32=7;
+const HOST_STARTED:u32=8;const RUNTIME_PUBLISHED:u32=9;
+const RUNTIME_PUBLISHING:u32=10;const WAIT_REAP_PENDING:u32=11;const WAIT_REAPED:u32=12;
 const IDLE:u32=0;const PENDING:u32=1;const OBSERVED:u32=2;
 
 // This is the packed guest identity (88 bytes), not ForkIdentityV1's 96-byte
@@ -51,6 +59,7 @@ impl ControlRequestSlot {
         Ok(Self{request})
     }
     unsafe fn free_private(self){crate::mem_helpers::kfree(self.request.as_ptr().cast());}
+    unsafe fn free_completed(self){crate::mem_helpers::kfree(self.request.as_ptr().cast());}
 }
 struct ControlPending {
     owned_request:Option<ControlRequestSlot>,
@@ -71,7 +80,8 @@ pub(crate) struct Carrier {
     physical:u64,nonce:u64,root:u64,start:u64,length:u64,phase:u32,error:i32,
     owned_credits:Option<child_credits::ChildCredits>,
     owned_request:Option<child_credits::ForkRequestSlot>,
-    identity:GuestIdentity,control:ControlPending,bytes:[u8;128],
+    identity:GuestIdentity,control:ControlPending,revoke:ControlObservation,
+    retired_control:Option<ControlRequestSlot>,host_start:runnable::StartPending,bytes:[u8;128],runtime_committed:bool,
 }
 unsafe extern "C" { fn do_syscall(request:*mut SyscallRequest,cpu:CInt)->CLong; }
 
@@ -136,7 +146,8 @@ unsafe fn create_private_carrier_current(
         request:request as usize,cpu:(*parent).cpu_id,initial_args:original,physical:0,nonce:0,root:original[3],
         start:original[1],length:original[2],phase:SUBMITTED,error:0,
         owned_credits:None,owned_request:None,
-        identity:GuestIdentity::ZERO,control:ControlPending::ZERO,bytes:[0;128]});
+        identity:GuestIdentity::ZERO,control:ControlPending::ZERO,revoke:ControlObservation::ZERO,
+        retired_control:None,host_start:runnable::StartPending::ZERO,runtime_committed:false,bytes:[0;128]});
     let physical=crate::x86_memory_helpers::virt_to_phys(addr_of_mut!((*raw).bytes).cast::<c_void>())as u64;
     if physical==0||physical%8!=0||physical.checked_add(128).is_none(){crate::mem_helpers::kfree(raw.cast());return Err(EINVAL);}
     let handle=match registry::insert_private(pointer){Ok(handle)=>handle,Err((error,pointer))=>{
@@ -174,16 +185,21 @@ fn first_receipt(carrier:&mut Carrier,frame:&[u8;128],result:i64)->Result<(),i32
     carrier.identity=identity;carrier.phase=FIRST_POSITIVE;Ok(())
 }
 fn control_receipt(carrier:&Carrier,frame:&[u8;128],response:u64)->Result<ControlObservation,i32>{
-    if frame[..8]!=*b"MCFKR001"{return Err(EPROTO);}
+    let final_ack=carrier.control.args[0]==3;
+    if frame[..8]!=if final_ack{*b"MCFKA001"}else{*b"MCFKR001"}{return Err(EPROTO);}
     let identity=key(frame);let epoch=word(frame,8);let worker=word(frame,16);let delivery=word(frame,24);
     if identity!=carrier.identity||!carrier_geometry(carrier,&identity)||epoch==0||worker==0
         ||delivery==0||delivery==identity.delivery||word(frame,32)!=response{return Err(EACCES);}
+    if final_ack&&(carrier.phase!=GUEST_DESTROYED||epoch!=carrier.revoke.epoch
+        ||delivery==carrier.revoke.delivery){return Err(EACCES);}
     Ok(ControlObservation{identity,epoch,worker,delivery,response,state:OBSERVED,error:0})
 }
 
 struct ReplyContext{request:*mut SyscallRequest,response:*mut SyscallResponse,cpu:i32,thread:*mut Thread}
 unsafe fn observe_one(pointer:NonNull<Carrier>,context:&ReplyContext)->i32{
     let carrier=&mut*pointer.as_ptr();
+    let started=runnable::observe_start(carrier,context);
+    if started!=0{return started;}
     let control=carrier.control.state==PENDING&&carrier.control.request==context.request as usize
         &&carrier.control.thread==context.thread as usize;
     let first=carrier.phase==SUBMITTED&&carrier.request==context.request as usize
@@ -215,6 +231,7 @@ unsafe fn observe_one(pointer:NonNull<Carrier>,context:&ReplyContext)->i32{
             // First bind of opaque IHK epoch/worker/delivery, ONLY after the
             // exact actual response Acquire. Registry epoch is unrelated.
             carrier.control.observation=observation;carrier.control.state=OBSERVED;
+            if carrier.control.args[0]==3{carrier.phase=FINAL_ACK;}
         },Err(e)=>error=e}}
     }
     if error!=0{carrier.error=error;carrier.phase=RETAINED;carrier.control.error=error;carrier.control.state=RETAINED;return error;}
@@ -276,10 +293,11 @@ pub(crate) unsafe extern "C" fn process_fork_guest_control_submit_current_v1(han
             ||c.control.owned_request.as_ref().is_none_or(|slot|slot.request!=request){return EACCES;}
         if actual!=0{return transport_error(actual);}
         if c.control.state!=OBSERVED{return if c.control.error!=0{c.control.error}else{EIO};}
-        observation=c.control.observation;0
+        observation=c.control.observation;c.revoke=observation;c.phase=HOST_REVOKED;0
     });
     if result!=0{return result;}
     write(out,observation);guard.armed=false;0
 }
 
-const _:()={assert!(size_of::<GuestIdentity>()==88);assert!(size_of::<ControlObservation>()==128);};
+const _:()={assert!(size_of::<GuestIdentity>()==88);assert!(size_of::<ControlObservation>()==128);
+    assert!(core::mem::offset_of!(Carrier,bytes)%8==0);};

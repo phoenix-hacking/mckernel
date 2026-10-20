@@ -2665,14 +2665,18 @@ pub unsafe extern "C" fn __runq_add_thread(thread: *mut Thread, cpu_id: CInt) {
 
 #[no_mangle]
 pub unsafe extern "C" fn runq_add_thread(thread: *mut Thread, cpu_id: CInt) {
+    let _ = runq_add_thread_checked(thread, cpu_id);
+}
+
+pub(crate) unsafe fn runq_add_thread_checked(thread: *mut Thread, cpu_id: CInt) -> CInt {
     if thread.is_null() {
-        return;
+        return -EINVAL;
     }
     let cpu_addr = unsafe { process_sched_cpu_local_bridge(cpu_id) };
     let reservation_lock_addr =
         core::ptr::addr_of_mut!(runq_reservation_lock) as *mut IhkSpinlock as usize;
     let offsets = sched_runqueue_offsets();
-    let _ = unsafe {
+    unsafe {
         sched_runq_add_thread_body_result(
             thread as usize,
             cpu_addr,
@@ -2696,7 +2700,7 @@ pub unsafe extern "C" fn runq_add_thread(thread: *mut Thread, cpu_id: CInt) {
             Some(process_sched_interrupt_bridge),
             Some(process_sched_runq_log_bridge),
         )
-    };
+    }
 }
 
 #[no_mangle]

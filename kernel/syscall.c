@@ -7310,8 +7310,11 @@ struct owned_fork_caller_outcome {
     int error;
     struct { unsigned int slot, reserved; unsigned long epoch; } handle;
 };
-extern int process_fork_owned_caller_current_v1(struct thread *, struct thread *,
-        int, unsigned long, struct owned_fork_caller_outcome *);
+extern struct thread *process_fork_construct_current_v1(struct thread *,
+        unsigned long, unsigned long, int, int, void **);
+extern int process_fork_cancel_constructed_current_v1(void *);
+extern int process_fork_owned_caller_runnable_current_v2(struct thread *, struct thread *,
+        int, unsigned long, void *, int, int, unsigned long, struct owned_fork_caller_outcome *);
 #endif
 
 unsigned long do_fork(int clone_flags, unsigned long newsp,
@@ -7340,6 +7343,9 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
     int inherit_clone_affinity = 0;
 #endif
 	int tid_table_created = 0;
+#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
+    void *owned_fork_constructor = NULL;
+#endif
 
 	dkprintf("%s,flags=%08x,newsp=%lx,ptidptr=%lx,"
 		"ctidptr=%lx,tls=%lx,curpc=%lx,cursp=%lx",
@@ -7440,8 +7446,14 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 		}
 	}
 
-	new = clone_thread(old, curpc,
-	                    newsp ? newsp : cursp, clone_flags);
+#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
+    if (!(clone_flags & CLONE_VM))
+        new = process_fork_construct_current_v1(old, curpc,
+                newsp ? newsp : cursp, clone_flags, cpuid, &owned_fork_constructor);
+    else
+#endif
+        new = clone_thread(old, curpc,
+                            newsp ? newsp : cursp, clone_flags);
 	
 	if (!new) {
 		err =  -ENOMEM;
@@ -7550,17 +7562,19 @@ retry_tid:
 	else {
 #ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
         struct owned_fork_caller_outcome outcome;
-        err = process_fork_owned_caller_current_v1(old, new, cpuid,
+        err = process_fork_owned_caller_runnable_current_v2(old, new, cpuid,
                 clone_host_parent_flags_result(clone_flags,
-                    oldproc->ppid_parent->pid), &outcome);
+                    oldproc->ppid_parent->pid), owned_fork_constructor,
+                clone_flags, parent_cpuid, child_tidptr, &outcome);
         if (err)
             goto destroy_thread;
         if (outcome.disposition == 0) {
             err = outcome.error;
             goto destroy_thread;
         }
-        /* Existing registry owns request/parent/child/VM/reserved CPU. A first
-         * positive receipt supplies no runnable/cleanup authority. */
+        /* Rust transfers a supported child's constructor graph only after
+         * the actual selector1 response and retains a separate runtime pin.
+         * All uncertain paths remain owned; the default gate is undefined. */
         return outcome.error;
 #else
 		request1.number = __NR_clone;
@@ -7759,6 +7773,14 @@ release_ids:
 	}
 
 destroy_thread:
+#ifdef MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION
+    if (owned_fork_constructor) {
+        int cancel = process_fork_cancel_constructed_current_v1(owned_fork_constructor);
+        if (cancel)
+            return cancel;
+        goto release_cpuid;
+    }
+#endif
 	if (!(clone_flags & CLONE_VM)) {
 		/* in case of fork, destroy struct process */
 		ihk_atomic_set(&new->proc->refcount, 1);

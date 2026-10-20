@@ -1,0 +1,365 @@
+{
+  "C_boundary": "kernel/syscall.c changes gated declarations/calls/ownership transfer glue to Rust constructors/runnable caller; no new C compute implementation/subsystem. Existing default C fallback and accepted cpu.c/process.c paths are untouched.",
+  "activities": {
+    "compilers": 0,
+    "root_operations": 0,
+    "shared_edits": 0,
+    "tests": 0
+  },
+  "authority_refs": [
+    {
+      "bytes": 8735,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/libc-child-tid-correction-1/WHOLE-CONSUMER-COMPILER-HANDOFF.json",
+      "sha256": "bf1ae7d6eb72f9fd743118a99e1c78e47295e7025e7d8ce0ff28e4df05d15af1"
+    },
+    {
+      "bytes": 5796,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/RUNTIME-SOURCE-CLOSURE.json",
+      "sha256": "6b7759a07b76e7774e622fba201e991205f1867fc326fb7037e92911d60dbd17"
+    },
+    {
+      "bytes": 21101,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-correction-1/RECEIPT.json",
+      "sha256": "b2cd8c8f04d3be6f0fb5b464ff0526ffd327e7cbf66edd42383d727b65892083"
+    },
+    {
+      "bytes": 21037,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-1/RECEIPT.json",
+      "sha256": "aa455c5b46ba4d2f0188fd963900ab2ce8e7b75bc83a8299b2c6dd4f4e982642"
+    },
+    {
+      "bytes": 2132,
+      "path": "/home/holden/mckernel-work/host-preparation/phase4-guest-compiler-preparation-20261020-1/OVERLAY-INPUTS.json",
+      "sha256": "1fe87844072e1f45cdc8e6191ca1bd8dd5c723d7d549e7af1246122e2a148171"
+    },
+    {
+      "bytes": 53165,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/source-manifest.json",
+      "sha256": "feb3a86c6f3830ac192ab165cb81a61d2e56d18dc53f3f3cb81647900502c8cc"
+    }
+  ],
+  "conflicts": [],
+  "default_gate": "MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION remains undefined; no enabling macro/flag added",
+  "excluded": [
+    "Derived kernel/rust/lib.rs FAM witness suffix",
+    "Derived compiler assertion suffix/header evidence",
+    "160/205 snapshot wholesale replacement",
+    "Unrelated current-root WIP",
+    "Phase5 exit/quiescence source candidate outside frozen accepted closure"
+  ],
+  "extra_phase4_paths_outside_phase5_nine": [
+    "kernel/rust/fork_control_registry.rs",
+    "kernel/rust/fork_final_ack.rs"
+  ],
+  "patches": {
+    "01-current-to-phase4-prerequisites.patch": {
+      "bytes": 25677,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-source-integration-preparation-20261020-1/01-current-to-phase4-prerequisites.patch",
+      "sha256": "0b974e3c8d440fae8cf06554bce3d3b9b42626e9a4572b2cab09504d4524e169"
+    },
+    "02-phase4-to-phase5-final-nine.patch": {
+      "bytes": 33237,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-source-integration-preparation-20261020-1/02-phase4-to-phase5-final-nine.patch",
+      "sha256": "7820d0598a2916f7c6b6258682fa2573779305a80693a3832d56340e8237ee13"
+    },
+    "CURRENT-TO-FINAL-SEMANTIC11.patch": {
+      "bytes": 51066,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-source-integration-preparation-20261020-1/CURRENT-TO-FINAL-SEMANTIC11.patch",
+      "sha256": "f238dc1083e29d84509984c416c4dce499a728061a9a1f99bf83212d66709c8f"
+    }
+  },
+  "phase4_prerequisite_paths": 8,
+  "phase5_effective_paths": 9,
+  "root_apply_prerequisite": "Recheck each exact current preimage or requiredabsence; apply ordered01then02 or combinedsemantic11 once; root owns source writes/Git. No global HEAD predicate.",
+  "rows": [
+    {
+      "accepted_materialized160": {
+        "bytes": 23076,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/materialized-source/kernel/CMakeLists.txt",
+        "sha256": "b141d09ad4d717171d9fca51b8ffefec65573f266652bc0d93129bd2a03ec40e"
+      },
+      "classification": "PHASE4_PREREQUISITE_PLUS_PHASE5_TID_OR_PARENT_DELTA",
+      "current": {
+        "bytes": 22888,
+        "exists": true,
+        "sha256": "ac06743fa03fbd3d268682b1affe7aeaa66618377d1607c37efd358ca18a8c7e"
+      },
+      "expected_known_base": {
+        "bytes": 22888,
+        "path": "/home/holden/mckernel/kernel/CMakeLists.txt",
+        "sha256": "ac06743fa03fbd3d268682b1affe7aeaa66618377d1607c37efd358ca18a8c7e"
+      },
+      "final": {
+        "bytes": 23076,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/source/kernel/CMakeLists.txt",
+        "sha256": "b141d09ad4d717171d9fca51b8ffefec65573f266652bc0d93129bd2a03ec40e"
+      },
+      "known_base_matches": true,
+      "phase4_prerequisite": true,
+      "phase5_effective_nine": true,
+      "relative": "kernel/CMakeLists.txt"
+    },
+    {
+      "accepted_materialized160": {
+        "bytes": 27379,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/materialized-source/kernel/rust/fork_child_credits.rs",
+        "sha256": "af821338218c6848504a2e066369180f2b9ca2568a9fa847a10166b8d6ee3eb1"
+      },
+      "classification": "PHASE4_PREREQUISITE_PLUS_PHASE5_TID_OR_PARENT_DELTA",
+      "current": {
+        "bytes": 22248,
+        "exists": true,
+        "sha256": "732e3b3b27321766d529d58d9979d18db7c5f746e1add81dc96593104e3d6052"
+      },
+      "expected_known_base": {
+        "bytes": 22248,
+        "path": "/home/holden/mckernel/kernel/rust/fork_child_credits.rs",
+        "sha256": "732e3b3b27321766d529d58d9979d18db7c5f746e1add81dc96593104e3d6052"
+      },
+      "final": {
+        "bytes": 27379,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/libc-child-tid-correction-1/source/kernel/rust/fork_child_credits.rs",
+        "sha256": "af821338218c6848504a2e066369180f2b9ca2568a9fa847a10166b8d6ee3eb1"
+      },
+      "known_base_matches": true,
+      "phase4_prerequisite": true,
+      "phase5_effective_nine": true,
+      "relative": "kernel/rust/fork_child_credits.rs"
+    },
+    {
+      "accepted_materialized160": {
+        "bytes": 9220,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/materialized-source/kernel/rust/fork_constructed_credits.rs",
+        "sha256": "3a50857d2003d83b8aa67aba02df8e14332be0e30c52cfbfd44b8ae933e9a58d"
+      },
+      "classification": "PHASE4_PREREQUISITE_PLUS_PHASE5_TID_OR_PARENT_DELTA",
+      "current": {
+        "bytes": 0,
+        "exists": false,
+        "sha256": null
+      },
+      "expected_known_base": null,
+      "final": {
+        "bytes": 9220,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/libc-child-tid-correction-1/source/kernel/rust/fork_constructed_credits.rs",
+        "sha256": "3a50857d2003d83b8aa67aba02df8e14332be0e30c52cfbfd44b8ae933e9a58d"
+      },
+      "known_base_matches": true,
+      "phase4_prerequisite": true,
+      "phase5_effective_nine": true,
+      "relative": "kernel/rust/fork_constructed_credits.rs"
+    },
+    {
+      "accepted_materialized160": {
+        "bytes": 18116,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/materialized-source/kernel/rust/fork_control_guest.rs",
+        "sha256": "dcaf9427ea60fcf3b3affee4be67d7239720315e35721497c391cd6f0b000f00"
+      },
+      "classification": "PHASE4_PREREQUISITE_PLUS_PHASE5_TID_OR_PARENT_DELTA",
+      "current": {
+        "bytes": 16896,
+        "exists": true,
+        "sha256": "b42f449dcfcbbd95a0028acc597308cb5f06a5e008443acadbf6af9a4712b326"
+      },
+      "expected_known_base": {
+        "bytes": 16896,
+        "path": "/home/holden/mckernel/kernel/rust/fork_control_guest.rs",
+        "sha256": "b42f449dcfcbbd95a0028acc597308cb5f06a5e008443acadbf6af9a4712b326"
+      },
+      "final": {
+        "bytes": 18116,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/source/kernel/rust/fork_control_guest.rs",
+        "sha256": "dcaf9427ea60fcf3b3affee4be67d7239720315e35721497c391cd6f0b000f00"
+      },
+      "known_base_matches": true,
+      "phase4_prerequisite": true,
+      "phase5_effective_nine": true,
+      "relative": "kernel/rust/fork_control_guest.rs"
+    },
+    {
+      "accepted_materialized160": {
+        "bytes": 8909,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/materialized-source/kernel/rust/fork_control_registry.rs",
+        "sha256": "74e28b0a32aec74ee94898f2a6ff13cb16f5a17125cd932219d9c82959dd1601"
+      },
+      "classification": "EARLIER_UNINTEGRATED_PHASE4_PREREQUISITE_ONLY",
+      "current": {
+        "bytes": 8131,
+        "exists": true,
+        "sha256": "246838be1f3a2d71cef7e975de8d17f908bfb89010bd5be9741b81b452830113"
+      },
+      "expected_known_base": {
+        "bytes": 8131,
+        "path": "/home/holden/mckernel/kernel/rust/fork_control_registry.rs",
+        "sha256": "246838be1f3a2d71cef7e975de8d17f908bfb89010bd5be9741b81b452830113"
+      },
+      "final": {
+        "bytes": 8909,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-correction-1/source/kernel/rust/fork_control_registry.rs",
+        "sha256": "74e28b0a32aec74ee94898f2a6ff13cb16f5a17125cd932219d9c82959dd1601"
+      },
+      "known_base_matches": true,
+      "phase4_prerequisite": true,
+      "phase5_effective_nine": false,
+      "relative": "kernel/rust/fork_control_registry.rs"
+    },
+    {
+      "accepted_materialized160": {
+        "bytes": 4136,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/materialized-source/kernel/rust/fork_final_ack.rs",
+        "sha256": "9b8beb08284bd42ca1be31757208021ca2a5ad4f3f6f71aae337b0d7a985290f"
+      },
+      "classification": "EARLIER_UNINTEGRATED_PHASE4_PREREQUISITE_ONLY",
+      "current": {
+        "bytes": 0,
+        "exists": false,
+        "sha256": null
+      },
+      "expected_known_base": null,
+      "final": {
+        "bytes": 4136,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-correction-1/source/kernel/rust/fork_final_ack.rs",
+        "sha256": "9b8beb08284bd42ca1be31757208021ca2a5ad4f3f6f71aae337b0d7a985290f"
+      },
+      "known_base_matches": true,
+      "phase4_prerequisite": true,
+      "phase5_effective_nine": false,
+      "relative": "kernel/rust/fork_final_ack.rs"
+    },
+    {
+      "accepted_materialized160": {
+        "bytes": 9575,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/materialized-source/kernel/rust/fork_runnable_child.rs",
+        "sha256": "d05b0e3288012590701a4edce88860a36b781cc21745e14a156de47927306ae2"
+      },
+      "classification": "PHASE5_PARENT_OR_TID_ONLY",
+      "current": {
+        "bytes": 0,
+        "exists": false,
+        "sha256": null
+      },
+      "expected_known_base": null,
+      "final": {
+        "bytes": 9575,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/libc-child-tid-correction-1/source/kernel/rust/fork_runnable_child.rs",
+        "sha256": "d05b0e3288012590701a4edce88860a36b781cc21745e14a156de47927306ae2"
+      },
+      "known_base_matches": true,
+      "phase4_prerequisite": false,
+      "phase5_effective_nine": true,
+      "relative": "kernel/rust/fork_runnable_child.rs"
+    },
+    {
+      "accepted_materialized160": {
+        "bytes": 346362,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/materialized-source/kernel/rust/process_helpers.rs",
+        "sha256": "dfba4ecf09402f96e615282f7f06a6220368a285c68af96ee2efd9d7ed42d08e"
+      },
+      "classification": "PHASE4_PREREQUISITE_PLUS_PHASE5_TID_OR_PARENT_DELTA",
+      "current": {
+        "bytes": 343876,
+        "exists": true,
+        "sha256": "e6b80f8a93298ddf5a1570fb00b528a515c6676b01af6de92f985a9ad5cca786"
+      },
+      "expected_known_base": {
+        "bytes": 343876,
+        "path": "/home/holden/mckernel/kernel/rust/process_helpers.rs",
+        "sha256": "e6b80f8a93298ddf5a1570fb00b528a515c6676b01af6de92f985a9ad5cca786"
+      },
+      "final": {
+        "bytes": 346362,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/source/kernel/rust/process_helpers.rs",
+        "sha256": "dfba4ecf09402f96e615282f7f06a6220368a285c68af96ee2efd9d7ed42d08e"
+      },
+      "known_base_matches": true,
+      "phase4_prerequisite": true,
+      "phase5_effective_nine": true,
+      "relative": "kernel/rust/process_helpers.rs"
+    },
+    {
+      "accepted_materialized160": {
+        "bytes": 168119,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/materialized-source/kernel/rust/sched_helpers.rs",
+        "sha256": "74a0b3aeb5a972bbb7b63d365aa9371a9375a21b77876bdcb232b8a534493299"
+      },
+      "classification": "PHASE5_PARENT_OR_TID_ONLY",
+      "current": {
+        "bytes": 167974,
+        "exists": true,
+        "sha256": "3510ce13fc4653311fa98f68ba472c8eb64e330ddf41b8ae691b81dc6563e70e"
+      },
+      "expected_known_base": {
+        "bytes": 167974,
+        "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "sha256": "3510ce13fc4653311fa98f68ba472c8eb64e330ddf41b8ae691b81dc6563e70e"
+      },
+      "final": {
+        "bytes": 168119,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/source/kernel/rust/sched_helpers.rs",
+        "sha256": "74a0b3aeb5a972bbb7b63d365aa9371a9375a21b77876bdcb232b8a534493299"
+      },
+      "known_base_matches": true,
+      "phase4_prerequisite": false,
+      "phase5_effective_nine": true,
+      "relative": "kernel/rust/sched_helpers.rs"
+    },
+    {
+      "accepted_materialized160": {
+        "bytes": 696999,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/materialized-source/kernel/rust/syscall_policy.rs",
+        "sha256": "7bed3b6f62d7c305693e7e0370d0e6f9f08d1125b66c39d148c1a0af5e00f6fe"
+      },
+      "classification": "PHASE5_PARENT_OR_TID_ONLY",
+      "current": {
+        "bytes": 695262,
+        "exists": true,
+        "sha256": "11f46d4be9c7daab86bea7a6d289476dd87abd46f3ceb3fa9622581751417b3b"
+      },
+      "expected_known_base": {
+        "bytes": 695262,
+        "path": "/home/holden/mckernel/kernel/rust/syscall_policy.rs",
+        "sha256": "11f46d4be9c7daab86bea7a6d289476dd87abd46f3ceb3fa9622581751417b3b"
+      },
+      "final": {
+        "bytes": 696999,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/source/kernel/rust/syscall_policy.rs",
+        "sha256": "7bed3b6f62d7c305693e7e0370d0e6f9f08d1125b66c39d148c1a0af5e00f6fe"
+      },
+      "known_base_matches": true,
+      "phase4_prerequisite": false,
+      "phase5_effective_nine": true,
+      "relative": "kernel/rust/syscall_policy.rs"
+    },
+    {
+      "accepted_materialized160": {
+        "bytes": 837676,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/materialized-source/kernel/syscall.c",
+        "sha256": "98a879c59118bf9ec5c58b13514c1cc4b9e98d0862e45e2756ad0cd760bde796"
+      },
+      "classification": "PHASE4_PREREQUISITE_PLUS_PHASE5_TID_OR_PARENT_DELTA",
+      "current": {
+        "bytes": 836663,
+        "exists": true,
+        "sha256": "298ef328d184339f3cf780ef0dafcc0007c3b0c906d9e01560f6c088e25a10c4"
+      },
+      "expected_known_base": {
+        "bytes": 836663,
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "sha256": "298ef328d184339f3cf780ef0dafcc0007c3b0c906d9e01560f6c088e25a10c4"
+      },
+      "final": {
+        "bytes": 837676,
+        "path": "/home/holden/mckernel-work/host-preparation/phase5-runnable-child-parent-wait-20261020-1/libc-child-tid-correction-1/source/kernel/syscall.c",
+        "sha256": "98a879c59118bf9ec5c58b13514c1cc4b9e98d0862e45e2756ad0cd760bde796"
+      },
+      "known_base_matches": true,
+      "phase4_prerequisite": true,
+      "phase5_effective_nine": true,
+      "relative": "kernel/syscall.c"
+    }
+  ],
+  "schema": "mckernel.phase5.ordered-semantic-source-integration-preparation.v1",
+  "scope": "Functional OS/apps plus Rust compute cutover; root-only gated source integration preparation",
+  "semantic_union_count": 11,
+  "status": "EXACT_KNOWN_PREIMAGES_AND_ACCEPTED_FINAL_SEMANTIC11_BOUND_NO_SHARED_WRITES"
+}

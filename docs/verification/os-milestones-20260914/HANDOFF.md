@@ -1,3 +1,30 @@
+## Source checkpoint — eleven real phase5 paths integrated, activation off
+
+Root applied exact ordered phase4 prerequisites plus phase5/TID semantic union:
+11 paths, every live preimage matched its known base, no unknown WIP conflict;
+all final source bytes equal accepted160 semantic rows. Independent328e56c6 allows
+this gated source checkpoint. The registry/final-ACK phase4 companions are explicit,
+not omitted from the nine-file phase5 overlay. No FAM witness append, frozen image,
+module artifact, or private lifetime-consumer patch was copied into production.
+MCKERNEL_NATIVE_FORK_OWNED_TRANSACTION remains undefined; no default activation.
+Actual guest5/FAM/physical28cde65c remains exact object-level proof, not final link,
+mcexec, new image or native child proof. Git whitespace check passes.
+
+Real mcexec six-command dependency/build/link preparation progresses independently;
+its bounded helper/materializer commands pass, but actual C.d/link.d/compiler remain
+unrun until their separate review/publication/release. Retirement candidate1 passed
+two syntax checks then failed fixture import compilation; no tests ran. Its single
+coupled correction addresses real exited-parent/IRQ entry and same-parent recursive
+drain blockers as well as fixture imports. The quiescence producer's36951 source
+integration permission is superseded by additive ABA correction ec792ffa: snapshot
+exact slot/epoch/child before ordinary release, complete only that identity after;
+None must never perform a post-free fresh lookup. Old source/tests remain retained.
+Neither unsafe lifetime delta is part of this eleven-path checkpoint.
+
+Counts remain15/35, whole M00/M04/M10,26 behaviors,17/14 selected Rust paths.
+Continue functional OS/apps plus actual Rust cutover;100% included/zero reserve,
+all source/runtime/resource/mutex/Scratch21 controls and failures remain preserved.
+
 ## Accepted — all five real objects and physical retirement; phase5 next
 
 Independent4b398812 accepts all five actual compiler stages and physical retirement:

@@ -12,6 +12,8 @@ use crate::abi::{Process, ProcessVm, SyscallRequest, Thread};
 use super::{registry, Carrier, Handle, EACCES, EBUSY, EINVAL, NR_CLONE};
 
 const EOVERFLOW: i32 = -75;
+#[path="fork_constructed_credits.rs"]
+pub(super) mod constructed;
 
 #[must_use = "private child/VM/CPU credits must be cancelled or retained"]
 pub(crate) struct ChildCredits {
@@ -21,6 +23,7 @@ pub(crate) struct ChildCredits {
     vm: NonNull<ProcessVm>,
     reserved_cpu: i32,
     private_child_cpu: i32,
+    constructor:Option<NonNull<constructed::ConstructedFork>>,
 }
 
 /// Exactly the original caller's cleanup obligation, returned once. No new
@@ -34,6 +37,38 @@ pub(crate) struct CallerCredits {
 }
 
 impl ChildCredits {
+    pub(super) unsafe fn runtime_processes_match(&self,parent:*mut Process,child:*mut Process)->bool {
+        self.process.as_ptr()==child&&(*self.parent.as_ptr()).proc==parent
+    }
+    pub(super) unsafe fn prepare_runtime(&mut self)->Result<constructed::RuntimePermit,i32> {
+        if !self.still_private(){return Err(EACCES);}
+        let mut graph=self.constructor.ok_or(EACCES)?;
+        if !graph.as_ref().matches(self.parent.as_ptr(),self.child.as_ptr(),self.reserved_cpu){return Err(EACCES);}
+        graph.as_mut().prepare_runtime()
+    }
+    unsafe fn acquire_constructed(parent:*mut Thread,child:*mut Thread,cpu:i32,token:*mut core::ffi::c_void)->Result<Self,i32> {
+        let graph=NonNull::new(token.cast::<constructed::ConstructedFork>()).ok_or(EINVAL)?;
+        if !graph.as_ref().matches(parent,child,cpu){return Err(EACCES);}
+        let mut credits=Self::acquire_from_caller(parent,child,cpu)?;
+        credits.constructor=Some(graph);Ok(credits)
+    }
+
+    pub(super) unsafe fn prepare_revoked_destruction(&mut self)->Result<constructed::DestructionPermit,i32> {
+        if !self.still_private(){return Err(EACCES);}
+        let mut graph=self.constructor.ok_or(EACCES)?;
+        graph.as_mut().permit()
+    }
+    pub(super) fn destruction_complete(&self)->bool {
+        self.constructor.is_some_and(|graph|unsafe {graph.as_ref().destroyed()})
+    }
+    pub(super) unsafe fn release_after_ack(self)->Result<(),Self> {
+        if !self.destruction_complete(){return Err(self);}
+        // No child/VM/Process pointer is used after checked final destruction.
+        let graph=self.constructor.unwrap();
+        constructed::release_cpuid(self.reserved_cpu);
+        crate::process_helpers::release_thread(self.parent.as_ptr());
+        crate::mem_helpers::kfree(graph.as_ptr().cast());Ok(())
+    }
     /// # Safety
     /// Caller exclusively owns the successful non-CLONE_VM constructor's
     /// unpublished child/process/VM and exact reserved CPU cleanup credits.
@@ -89,7 +124,7 @@ impl ChildCredits {
                 Err(actual) => old = actual,
             }
         }
-        Ok(Self { parent, child, process, vm, reserved_cpu, private_child_cpu })
+        Ok(Self { parent, child, process, vm, reserved_cpu, private_child_cpu,constructor:None })
     }
 
     unsafe fn still_private(&self) -> bool {
@@ -108,6 +143,7 @@ impl ChildCredits {
     /// Only a credit owner that has never entered Carrier can call this.
     /// The actual parent reference release runs outside every registry guard.
     pub(crate) unsafe fn cancel_unpublished(self) -> Result<CallerCredits, Self> {
+        if self.constructor.is_some(){return Err(self);}
         if !self.still_private() { return Err(self); }
         let returned = CallerCredits { child: self.child, process: self.process,
             vm: self.vm, reserved_cpu: self.reserved_cpu };
@@ -121,6 +157,7 @@ impl ChildCredits {
 /// It is either freed after private cancellation, or retained in the Carrier.
 pub(crate) struct ForkRequestSlot { request: NonNull<SyscallRequest> }
 impl ForkRequestSlot {
+    pub(super) unsafe fn free_completed(self){crate::mem_helpers::kfree(self.request.as_ptr().cast());}
     unsafe fn allocate(flags: u64, start: u64, length: u64, root: u64) -> Result<Self, i32> {
         if matches!(flags, 1 | 2 | 3) || !super::geometry(root, start, length) {
             return Err(EINVAL);
@@ -388,9 +425,54 @@ pub(crate) unsafe extern "C" fn process_fork_owned_caller_current_v1(
     parent: *mut Thread, child: *mut Thread, reserved_cpu: i32, host_flags: u64,
     out: *mut CallerForkOutcome,
 ) -> i32 {
+    owned_caller_current(parent,child,reserved_cpu,host_flags,core::ptr::null_mut(),out,None)
+}
+/// Exact constructor-issued opaque token, consumed only when disposition1
+/// transfers all obligations to the durable Carrier. C never sees its fields.
+#[no_mangle]
+pub(crate) unsafe extern "C" fn process_fork_owned_caller_current_v2(
+    parent:*mut Thread,child:*mut Thread,reserved_cpu:i32,host_flags:u64,
+    constructor:*mut core::ffi::c_void,out:*mut CallerForkOutcome,
+) ->i32 {
+    if constructor.is_null(){return EINVAL;}
+    owned_caller_current(parent,child,reserved_cpu,host_flags,constructor,out,None)
+}
+/// Disabled callsite's vanilla-fork runtime route. Existing v1/v2 keep their
+/// safe-abort behavior; this route cannot treat a first receipt as run credit.
+#[no_mangle]
+pub(crate) unsafe extern "C" fn process_fork_owned_caller_runnable_current_v1(
+    parent:*mut Thread,child:*mut Thread,reserved_cpu:i32,host_flags:u64,
+    constructor:*mut core::ffi::c_void,flags:i32,parent_cpu:i32,out:*mut CallerForkOutcome,
+)->i32 {
+    if flags!=17 {
+        if out.is_null(){return EINVAL;}
+        core::ptr::write(out,CallerForkOutcome{disposition:CALLER_KEEPS_CREDITS,error:EINVAL,handle:Handle::EMPTY});
+        return 0;
+    }
+    owned_caller_current(parent,child,reserved_cpu,host_flags,constructor,out,
+        Some(super::runnable::RunOptions{flags,parent_cpu,child_tid:0}))
+}
+/// Current libc's child-TID pointer is the original syscall argument, borrowed
+/// only while the constructor graph owns the unpublished child's exact VM.
+#[no_mangle]
+pub(crate) unsafe extern "C" fn process_fork_owned_caller_runnable_current_v2(
+    parent:*mut Thread,child:*mut Thread,reserved_cpu:i32,host_flags:u64,
+    constructor:*mut core::ffi::c_void,flags:i32,parent_cpu:i32,child_tid:u64,out:*mut CallerForkOutcome,
+)->i32 {
+    owned_caller_current(parent,child,reserved_cpu,host_flags,constructor,out,
+        Some(super::runnable::RunOptions{flags,parent_cpu,child_tid}))
+}
+unsafe fn owned_caller_current(
+    parent:*mut Thread,child:*mut Thread,reserved_cpu:i32,host_flags:u64,
+    constructor:*mut core::ffi::c_void,out:*mut CallerForkOutcome,run:Option<super::runnable::RunOptions>,
+) -> i32 {
     if out.is_null() { return EINVAL; }
     core::ptr::write(out, CallerForkOutcome { disposition: CALLER_KEEPS_CREDITS,
         error: EINVAL, handle: Handle::EMPTY });
+    if let Some(options)=run {
+        let admitted=super::runnable::admit(parent,child,options);
+        if admitted!=0||constructor.is_null(){(*out).error=if admitted!=0{admitted}else{EACCES};return 0;}
+    }
     if parent.is_null() || child.is_null() || reserved_cpu < 0 || (*child).vm.is_null() {
         return 0;
     }
@@ -409,7 +491,8 @@ pub(crate) unsafe extern "C" fn process_fork_owned_caller_current_v1(
     };
     let handle = pointer.as_ref().handle;
     pointer.as_mut().owned_request = Some(slot);
-    let credits = match ChildCredits::acquire_from_caller(parent, child, reserved_cpu) {
+    let credits = match if constructor.is_null(){ChildCredits::acquire_from_caller(parent, child, reserved_cpu)}
+        else{ChildCredits::acquire_constructed(parent,child,reserved_cpu,constructor)} {
         Ok(credits) => credits,
         Err(error) => {
             // This private handle has never escaped this producer, and private
@@ -441,11 +524,21 @@ pub(crate) unsafe extern "C" fn process_fork_owned_caller_current_v1(
         request_lifetime: PhantomData };
     (*out).error = match escaped.offload() {
         OwnedOffloadReturn::ReceiptObserved { owner, .. } => {
+            if let Some(options)=run {
+                let result=super::runnable::start_and_publish(owner.handle(),options);
+                drop(owner);
+                if result>0{(*out).disposition=3;}
+                result
+            } else {
             // Consume the actual next selector2 producer with its separately
             // owned request. This remains observation, never terminal handoff.
             let mut observation=super::ControlObservation::ZERO;
             let error=super::process_fork_guest_control_submit_current_v1(owner.handle(),&mut observation);
-            drop(owner); if error==0 { EBUSY } else { error }
+            if error!=0{drop(owner);error}else if constructor.is_null(){drop(owner);EBUSY}else{
+                let terminal=super::destroy_and_ack_current(owner.handle());drop(owner);
+                if terminal==0{(*out).disposition=2;-11}else{terminal}
+            }
+            }
         },
         OwnedOffloadReturn::Uncertain { owner, .. } => owner.error,
     };

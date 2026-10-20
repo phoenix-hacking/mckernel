@@ -1,0 +1,49 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "-k",
+    "2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/evidence-export-1/run_export_once.py"
+  ],
+  "binary_copies": 0,
+  "binary_descriptors": 5,
+  "files": 106,
+  "profile": "CPU6/1job/1GiBAS/30CPU/35+2wall/32MiB/core0/nofile256",
+  "report": {
+    "bytes": 23625,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-independent-review-20261020-1/ACTUAL-PHASE5-GUEST5-FAM-AND-PHYSICAL-REVIEW.json",
+    "sha256": "28cde65c396fc20b4135accd85ccbf97c792e8b429c0a42911c09ab0ae34a562"
+  },
+  "runner": {
+    "bytes": 1694,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/evidence-export-1/run_export_once.py",
+    "sha256": "20265de39a2d74ca3e297e448f8c7dd989f71e589373fffa92ca063bc6d5c9c0"
+  },
+  "schema": "mckernel.closed-phase5-guest-five-object-FAM-export-command-proposal.v1",
+  "selection": {
+    "bytes": 34481,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/evidence-export-1/SELECTION.json",
+    "sha256": "6cdd51366ae250457b294454bc598e143c33f76d6d742eb3eafd20b08daf1673"
+  },
+  "status": "FROZEN_NO_JOB_PENDING_ROOT_CPU6_GRANT",
+  "text_bytes": 318586,
+  "writer": {
+    "bytes": 4997,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/evidence-export-1/export.py",
+    "sha256": "2f4f7de64202d83ad596a31bf809f3df3db96f01bd82b86bac0089f729a2b4fb"
+  }
+}

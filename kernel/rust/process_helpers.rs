@@ -9802,26 +9802,30 @@ pub unsafe extern "C" fn hold_thread(thread: *mut Thread) -> CInt {
 
 #[no_mangle]
 pub unsafe extern "C" fn chain_process(proc: *mut Process) {
+    let _ = chain_process_checked(proc);
+}
+
+pub(crate) unsafe fn chain_process_checked(proc: *mut Process) -> CInt {
     if proc.is_null() || (*proc).parent.is_null() {
-        return;
+        return -EINVAL;
     }
 
     let cpu = get_this_cpu_local_var();
     if cpu.is_null() || (*cpu).resource_set.is_null() {
-        return;
+        return -EINVAL;
     }
     let phash = (*(*cpu).resource_set).process_hash;
     if phash.is_null() {
-        return;
+        return -EINVAL;
     }
     let hash = process_hash((*proc).pid);
     if hash < 0 || hash as usize >= PROCESS_HASH_SIZE {
-        return;
+        return -EINVAL;
     }
 
     let parent = (*proc).parent;
     let mut lock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
-    let _ = process_chain_process_body_result(
+    process_chain_process_body_result(
         &raw mut (*proc).siblings_list,
         &raw mut (*parent).children_list,
         (&raw mut (*parent).children_lock) as *mut _ as CULong,
@@ -9831,32 +9835,57 @@ pub unsafe extern "C" fn chain_process(proc: *mut Process) {
         lock.as_mut_ptr().cast(),
         Some(process_mcs_writer_lock_bridge),
         Some(process_mcs_writer_unlock_bridge),
-    );
+    )
+}
+
+/// The real wait body already removed the child-list entry while holding the
+/// parent's children lock. Remove the retained process from hash discovery
+/// before consuming the original wait-owned Process edge. Self links allow
+/// the existing eventual final-release callbacks to observe no membership.
+pub(crate) unsafe fn unpublish_waited_process(proc:*mut Process)->CInt {
+    if proc.is_null(){return -EINVAL;}
+    let local=get_this_cpu_local_var();
+    if local.is_null()||(*local).resource_set.is_null(){return -EINVAL;}
+    let phash=(*(*local).resource_set).process_hash;
+    let hash=process_hash((*proc).pid);
+    if phash.is_null()||hash<0||hash as usize>=PROCESS_HASH_SIZE{return -EINVAL;}
+    let mut lock=MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    let lock_addr=(&raw mut (*phash).lock[hash as usize])as CULong;
+    process_mcs_writer_lock_bridge(lock_addr,lock.as_mut_ptr().cast());
+    let entry=&raw mut (*proc).hash_list;
+    let result=if process_list_is_linked_result(entry)==0{-EINVAL}else{
+        process_list_detach_result(entry);(*entry).next=entry;(*entry).prev=entry;0
+    };
+    process_mcs_writer_unlock_bridge(lock_addr,lock.as_mut_ptr().cast());result
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn chain_thread(thread: *mut Thread) {
+    let _ = chain_thread_checked(thread);
+}
+
+pub(crate) unsafe fn chain_thread_checked(thread: *mut Thread) -> CInt {
     if thread.is_null() || (*thread).proc.is_null() || (*thread).vm.is_null() {
-        return;
+        return -EINVAL;
     }
 
     let cpu = get_this_cpu_local_var();
     if cpu.is_null() || (*cpu).resource_set.is_null() {
-        return;
+        return -EINVAL;
     }
     let thash = (*(*cpu).resource_set).thread_hash;
     if thash.is_null() {
-        return;
+        return -EINVAL;
     }
     let hash = thread_hash((*thread).tid);
     if hash < 0 || hash as usize >= PROCESS_HASH_SIZE {
-        return;
+        return -EINVAL;
     }
 
     let proc = (*thread).proc;
     let vm = (*thread).vm;
     let mut lock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
-    let _ = process_chain_thread_body_result(
+    process_chain_thread_body_result(
         &raw mut (*thread).siblings_list,
         &raw mut (*proc).threads_list,
         (&raw mut (*proc).threads_lock) as *mut _ as CULong,
@@ -9869,7 +9898,7 @@ pub unsafe extern "C" fn chain_thread(thread: *mut Thread) {
         Some(process_mcs_writer_lock_bridge),
         Some(process_mcs_writer_unlock_bridge),
         None,
-    );
+    )
 }
 
 #[no_mangle]
@@ -10013,6 +10042,32 @@ pub unsafe extern "C" fn release_process(proc: *mut Process) {
         Some(process_optional_free_bridge),
         Some(process_release_final_cleanup_bridge),
     );
+}
+
+
+// Additive checked wrapper: returns the existing actual destructor result.
+#[no_mangle]
+pub unsafe extern "C" fn release_process_checked(proc: *mut Process) -> CInt {
+    process_release_process_body_result(
+        proc.cast(),
+        offset_of!(Process, refcount) as CULong,
+        offset_of!(Process, tids) as CULong,
+        offset_of!(Process, main_thread) as CULong,
+        offset_of!(Process, mckfd) as CULong,
+        offset_of!(Process, mckfd_lock) as CULong,
+        offset_of!(Mckfd, next) as CULong,
+        None,
+        Some(process_current_resource_set_bridge),
+        Some(process_release_hash_detach_bridge),
+        Some(process_release_sibling_detach_bridge),
+        Some(process_release_profile_bridge),
+        Some(process_free_thread_pages_bridge),
+        Some(process_spin_lock_bridge),
+        Some(process_spin_unlock_bridge),
+        Some(process_mckfd_free_bridge),
+        Some(process_optional_free_bridge),
+        Some(process_release_final_cleanup_bridge),
+    )
 }
 
 #[no_mangle]

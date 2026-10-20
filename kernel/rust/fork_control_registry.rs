@@ -183,6 +183,21 @@ pub(crate) fn retain(handle: Handle) -> Result<(), i32> {
     result
 }
 
+/// # Safety
+/// The unique current producer has acquired the SAME final ACK Response and
+/// positively checked its constructor graph destruction. No observer/transport
+/// retains a Carrier borrow. This only detaches metadata; destruction runs
+/// outside this lock. Stale snapshots can no longer discover the allocation.
+pub(crate) unsafe fn detach_terminal(handle:Handle,expected:NonNull<Carrier>)->Result<NonNull<Carrier>,i32>{
+    if !handle.valid(){return Err(EINVAL);}
+    REGISTRY.lock();
+    let result=match (&mut *REGISTRY.state.get()).matching(handle){
+        Some(slot) if !slot.busy&&slot.phase!=Phase::Private&&slot.carrier==Some(expected)=>Ok(slot.carrier.take().unwrap()),
+        Some(_)=>Err(EBUSY),None=>Err(ENOENT),
+    };
+    REGISTRY.unlock();result
+}
+
 /// Execute one exclusive, scoped carrier callback outside the registry lock.
 /// Reentrant visits/cancel/retain/begin on this handle see EBUSY. A callback that
 /// does not return leaves the allocation busy and retained by the registry.

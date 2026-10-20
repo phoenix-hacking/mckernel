@@ -18150,6 +18150,35 @@ pub unsafe extern "C" fn wait_process_zombie_body_result(
         ret,
     );
 
+    // A retained owned-fork runtime pin keeps Process storage alive. Reaping
+    // that child must remove discoverability before the normal wait edge is
+    // consumed, rather than leave a pinned zombie on pid1's child list.
+    let owned_reap=crate::fork_control_guest::runnable::prepare_wait_reap(
+        thread.cast(),parent_proc.cast(),child_proc.cast(),child_pid,options,ret,
+    );
+    if let crate::fork_control_guest::runnable::WaitReap::Retained(error)=owned_reap {
+        unlock_fn(parent_children_lock,parent_children_lock_node);return error;
+    }
+    if let crate::fork_control_guest::runnable::WaitReap::Prepared(handle)=owned_reap {
+        if parent_update_lock_node.is_null(){
+            crate::fork_control_guest::runnable::finish_wait_reap(handle,-EINVAL);
+            unlock_fn(parent_children_lock,parent_children_lock_node);return -EINVAL;
+        }
+        let parent_update_lock=field_ptr::<c_void>(parent,offsets.proc_update_lock_offset);
+        lock_fn(parent_update_lock,parent_update_lock_node);
+        wait_process_accumulate_child_rusage(parent,child,offsets);
+        wait_process_fill_rusage(child,rusage,offsets);
+        unlock_fn(parent_update_lock,parent_update_lock_node);
+        let siblings=field_ptr::<crate::abi::AbiListHead>(child,offsets.proc_siblings_list_offset);
+        list_detach_fn(siblings.cast());
+        (*siblings).next=siblings;(*siblings).prev=siblings;
+        unlock_fn(parent_children_lock,parent_children_lock_node);
+        let removed=crate::process_helpers::unpublish_waited_process(child_proc.cast());
+        if removed==0{release_process_fn(child_proc);}
+        crate::fork_control_guest::runnable::finish_wait_reap(handle,removed);
+        return ret;
+    }
+
     let reparent_needed =
         wait_process_reparent_needed_result(options, (parent_field == ppid_parent) as CInt) != 0;
     if reparent_needed {
