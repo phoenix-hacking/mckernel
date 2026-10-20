@@ -1,3 +1,36 @@
+## Current — physical clearance accepted; repaired image final admission next
+
+Independent d55efb73 accepts actual cleanup0/5.176s, corrected read-only
+postjoin0/1.486s, five-member retention and nine-event journal. Root93888 proves
+same permanent27:4 acquired/released,14 retired process IDs absent and exact
+lease/new quarantine/common/shared names ENOENT. Original records are archived;
+all prior failed sources/captures and old transaction mutex/quarantine remain.
+The original postjoin failure cause remains unknown; bounded diagnostic-only
+correction preserves every refusal and both census snapshots. No cleanup replay.
+
+Repaired object/nm/image request has closed source/materialization/publication
+and physical bindings; final fresh root snapshot and exact execution review
+remain. M03 source helper passed three actual cases, but whole-report decoder
+still needs its precise root-UID/internal-vs-external release-role correction.
+No guest or build is running at this checkpoint. Counts15/35,whole3,26,17/14 held.
+
+## Current — cleanup completed; read-only postjoin diagnosis pending
+
+Exact conditional review7aacf3d2 bound release0905b3ae. Fresh preflight passed
+0/1.842s with no mutation or new mutex. Fresh root admission verified same27:4,
+scratch UUID,17%usage and storage/memory floors plus1GiB reserve. One cleanup
+completed0/5.176s, PASS_EXECUTED, container absent, common/shared records archived;
+exact2473B stdout is preserved as actual-cleanup-result.json. Original failed
+attempt, old mutex/quarantine and all58 protected selections remain retained.
+
+Separate postjoin failed1/.301s before output: its census subprocess refusal
+suppressed child returncode/stderr. Independentb8a98b97 accepts the closed
+cleanup effects and preserves the failure; physical acceptance and next-heavy
+clearance remain false. Diagnose only that read-only path; never replay cleanup.
+M03 decoder receives the genuine7aacf authority tuple; repaired object/nm/image
+packet remains frozen and fetched. Actual native/build results remain unbound.
+Counts15/35,whole3,26behaviors,17/14Rust held;100%included/zero reserve.
+
 ## Current — holder retired; records still block heavy execution
 
 Actual878f296b independently accepts exact holder-only retirement: two modes

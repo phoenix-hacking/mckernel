@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/postjoin_readback.py", line 97, in <module>
+    if __name__=='__main__':main()
+  File "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/postjoin_readback.py", line 58, in main
+    bind_readback(m,r);need(not census_at_2g(m),'original CID reappeared')
+  File "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/postjoin_readback.py", line 23, in census_at_2g
+    try:return m.census()
+  File "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/cleanup_failed_image.py", line 856, in census
+    process_absent()
+  File "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/cleanup_failed_image.py", line 849, in process_absent
+    raw = run_privileged(['/usr/bin/python3', '-I', '-B', '-c', PROC_CODE, challenge, str(caller[0]), caller[1]])
+  File "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/cleanup_failed_image.py", line 796, in run_privileged
+    return root_command(args, LIMIT)
+  File "/home/holden/mckernel-work/host-preparation/phase5-image-postbuild-terminal-preparation-20261020-1/failure-case-1/successor-cleanup-preparation-1/entry-guard-correction-1/cleanup_failed_image.py", line 808, in root_command
+    raise Refusal('root-command-failed:' + args[0])
+_readback_cleanup_failed_image.Refusal: root-command-failed:/usr/bin/python3
