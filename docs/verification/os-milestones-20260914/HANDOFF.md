@@ -1,3 +1,23 @@
+## Current checkpoint — gated task/MM source committed; native ABI probe dispatched
+
+Source f54687108de2affd0b78c067c40cf66c1e26e609 is pushed/fetched: exact reviewed
+phase3 task/MM overlay, allocator conversion and narrow production staging/Kbuild
+closure; 28 focused tests and matching composite64 SDK module acceptance retained.
+Updated production-stager build, default activation and positive CREATE_PPD/ACK
+remain unproved. Phase4 b2cd8c8f/3edb1a36 is privately preparing real host/guest compiler
+feedback; no phase4 source integrated or native authority inferred.
+
+M07 literal declaration P-M07-01 independently accepted c0399202 using conservative
+all-enabled-state declaration c18d0f14; 15/35 checks. Whole M07 remains OPEN:
+MPX3/4 and PKRU9 use/preservation join is unresolved, with no invented nonuse.
+Whole M00/M04/M10 remain complete; behaviors26, selected Rust production/native17/14.
+
+Native ABI probe stage+consumer3c9724ee and static a5f22/final19 closure17397ea4
+are accepted. Exact seven-step c71fed68 runner dispatched once after final closure;
+actual snapshot/guard/guest/readbacks and independent physical/semantic result are
+pending. It tests module ABI/load + unchanged strict20 apps, not positive fork/ACK.
+No archive/compiler replay; latest prior physical1b999870 preserved.
+
 ## Current production source landed for checkpoint; native ABI probe next
 
 Exact gated current-v6 task/MM preparation, child-VMA adoption, deferred owner lifetime

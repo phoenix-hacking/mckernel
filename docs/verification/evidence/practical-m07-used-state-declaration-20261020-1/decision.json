@@ -1,0 +1,138 @@
+{
+  "accounting": {
+    "new_Rust_retirement_credit": 0,
+    "new_builds": 0,
+    "new_guests": 0,
+    "new_launches": 0,
+    "new_native_behaviors": 0,
+    "new_tests": 0,
+    "shared_edits": 0
+  },
+  "at": "2026-10-20T06:20:07.746939+00:00",
+  "authority": {
+    "ledger_edits_owner": "/root",
+    "library_audit": false,
+    "new_build": false,
+    "new_guest": false,
+    "new_test": false,
+    "shared_ledger_writes": false,
+    "source_disassembly_reinspection": false,
+    "subagents": false
+  },
+  "coverage_join": {
+    "actual_evidence_reused": "Exactledger completedP-M07-02: fullYMM0-15 and selectedx87/MXCSR over syscall, realqueuedfutex/signal; distinctFPworkerstate/control/peerprogress64rounds andmatching205strictreplay under originalidentity/CPUlimits. No newruntime/stateclass credit.",
+    "observed_selected_state_class_ids": [
+      0,
+      1,
+      2
+    ],
+    "required_conservative_component_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      9
+    ],
+    "structural_witnesses": [
+      "Exactff4f normal path fullEDX:EAX XSAVE@fe894ba1, configuredextent copy@fe894778, fullmaskXRSTOR@fe894a0a; no1088byte truncation/class7mask narrowing.",
+      "Exactff4f signal XSAVE@fe823df5, configuredcopyto-user, fullmask/fullsize validator and XRSTOR@fe82597a; no observedMPX/PKRU mask/extent exclusion.",
+      "These are reusedlinkedartifactdataflow witnesses; reviewer performed no disassembly orsource/binary reinspection. They justify generic mechanism support, not hardwareobserved preservation of eachenabledcomponent."
+    ],
+    "structurally_supported_component_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      9
+    ],
+    "unresolved_requirements_to_empirical_join_ids": [
+      3,
+      4,
+      9
+    ]
+  },
+  "decisions": {
+    "M07": {
+      "adjudicated_status": "open",
+      "engineering_state": "partial_preserved",
+      "exact_unmet_clause": "Actually used ... state survives switching, syscalls and signals: forMPXcomponents3/4 andPKRUcomponent9 the needed requirements-to-preservation coveragejoin remains unresolved.",
+      "literal_exit": "Actually used vector/FPU state survives switching, syscalls and signals.",
+      "missing_fact": "Either establish, by bounded retained relevant-path/eligibility evidence, that theseclasses are not actuallyrequired for the fixedsupported workloads, OR supply applicable same-profile preservation evidence for any oftheseclasses that remainrequired. Presentrecord has neither an actual-use/nonuse determination nor observed noninitialcomponent preservation. Structuralfullmask/fullcopy/fullrestore support isnot such an empiricalobservation.",
+      "mpx_empirical_preservation": "unknown_preserved",
+      "next_obligation": "Keepa single bounded MPX3/4+PKRU9 requirements-to-coverage obligation. Dispatcher may first consume existing targeted evidence to resolve actualeligibility/use; only a concreteuncovered requiredclass justifies a targeted preservationobservation. No unconditionalnewguest, full-libraryaudit, changedflags/profile, exactIFUNCoffset census or newframework is required bythisdecision.",
+      "pkru_empirical_preservation": "unknown_preserved",
+      "previous_status": "open",
+      "reason": "Conservative requirements declaration and complete linkedmask/extent mechanism are meaningful evidence, but they do not resolve whether eligibleMPX3/4 orPKRU9 are actuallyused and do not observe noninitialMPX/PKRU state surviving the switching/syscall/signal boundaries. Existingactualcoverage covers YMM/SSE plus selectedx87/MXCSR. Thus the newlydeclared possible-usedclasses are not yet joined to empiricalpreservation or a boundedexclusion from actualrequirements; completing2literalchecks doesnotautomatically establish the wholeexit.",
+      "structural_support_accepted": true
+    },
+    "P-M07-01": {
+      "adjudicated_status": "complete",
+      "empirical_preservation_credit": false,
+      "literal": "Declare compiler/libc/application vector requirements.",
+      "mpx_actual_use": "unknown_preserved",
+      "pkru_actual_use": "unknown_preserved",
+      "previous_status": "open",
+      "reason": "The pinned compiler/application/library identities now have an explicit justified architectural upper-bound requirement: preserve every enabled user-xstate component in actual process XCR0. Known0x21f profile conservatively includes x87(0),SSE/MXCSR(1),YMMupper(2),MPXBNDREGS(3),MPXBNDCSR(4),PKRU(9). This declares possible requirements honestly; the literalrow doesnot require proving exactIFUNC choices or actualMPX/PKRU use/nonuse.",
+      "source_bound_basis": [
+        {
+          "fact": "Fixed GCC14.3.1 dynamicC and Rust1.92static/current205 mixedapps, exactlibc/loader and flags remain bound. ExactFPthread knownYMM0-15/x87CW/MXCSR use is included; all eligible library variants remain required under fullXCR0 rule.",
+          "reference": "conservative_declaration.rule + compiler_and_application_declaration"
+        },
+        {
+          "fact": "Priorindependentreview allows a justified state-class upperbound; exactdispatchoffsets are not a literalpractical requirement. Newdeclaration explicitly handles previouslyunresolved MPX3/4 andPKRU9 byincludingthem, without declaringabsence.",
+          "reference": "primary_requirements_review.concrete_review_finding.logical_requirement + minimum_missing_observation.P-M07-01"
+        },
+        {
+          "fact": "Exactacceptedff4fimage/fa398artifact and staticC/mixedRust inputs bound. Fullruntime mask/extent is retained; no flags/features/binaries narrowed. Historical08210XCR0readback isnot relabeled as newff4f empiricalexposure.",
+          "reference": "conservative_declaration.identity_references + exact_ff4f_linked_mechanism"
+        }
+      ]
+    },
+    "P-M07-02": {
+      "adjudicated_status": "complete_preserved",
+      "literal": "Run relevant state-preservation checks on the supported CPU/profile.",
+      "reason": "Existingrelevant supported-profile checks already ran and remaincomplete. No replay/newruntime behavior/stateclass credit supplied by thisadjudication."
+    }
+  },
+  "functional_scope": "Functional supported-profile kernel/apps AND actual compute-C retirement into Rust/reviewed assembly; exact accepted205 ff4fca45/fa398247 scope only.",
+  "implementation_ownership": false,
+  "inputs": {
+    "conservative_declaration": {
+      "bytes": 13075,
+      "path": "/home/holden/mckernel-work/host-preparation/supervisor-m07-used-state-declaration-20261020-1/CONSERVATIVE-STATE-DECLARATION.json",
+      "sha256": "c18d0f14be9ba16a4e1495ebe69f33fc7a497caa17ce5819db5f62cf6c21ad1e"
+    },
+    "exact_ledger": {
+      "bytes": 8550,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-m07-used-state-declaration-20261020-1/EXACT-M07-LEDGER-INPUT.json",
+      "sha256": "28da1073d5a523a6740e41ebf5aea196f6d8bf934f348445fe7d29bdb4046c46"
+    },
+    "primary_requirements_review": {
+      "bytes": 11284,
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-m07-current-requirements-review-20261018-1.json",
+      "sha256": "37d72a774354fac3eb9190132b5c6ad8ac6685327d3be768821519378a8bf47a"
+    },
+    "task": {
+      "bytes": 2458,
+      "path": "/home/holden/mckernel-work/host-preparation/practical-m07-used-state-declaration-20261020-1/RECONCILIATION-TASK.json",
+      "sha256": "80cfa3b3d4667d39aa099dfb819569c491e18ab3af54d075378cfcb73ae0ddb9"
+    }
+  },
+  "preservation": {
+    "original_failures_and_scores_unchanged": true,
+    "unknown_MPX_PKRU_empirical_preservation_preserved": true,
+    "unknown_MPX_PKRU_use_preserved": true
+  },
+  "reviewer": "/root/sdk66_boundary_review",
+  "schema": "mckernel.independent-practical-m07.requirements-to-coverage-adjudication.v1",
+  "scope_limits": [
+    "One assignedMcKernelCPU; no newcrossCPUmigration requirement.",
+    "No AVX512advertisement/credit under recorded0x21f; no unconditionalAVX512test.",
+    "No newff4fCPUID/XCR0readback claim; currentimplementation genericruntime mask/extent support reused.",
+    "No fullNULL-fpstateSSE/MXCSR/AVXreset or exhaustiveFPUenvironment qualification inferred.",
+    "No currentcomposite/module/phase4native acceptance, newapplication/Rustretirement credit, wholeOScompletion or numericalengineeringband promotion."
+  ],
+  "status": "PASS_LITERAL_REQUIREMENTS_DECLARATION_WHOLE_M07_OPEN"
+}

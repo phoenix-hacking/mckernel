@@ -500,7 +500,7 @@
               "size": 1001
             }
           ],
-          "assessment_note": "Post-effect Shutdown8 and ownership-retained -11→0 application retirement are observed. This does not establish all required mapping/release failure ownership invariants."
+          "assessment_note": "Post-effect Shutdown8 and ownership-retained -11\u21920 application retirement are observed. This does not establish all required mapping/release failure ownership invariants."
         }
       ],
       "current_evidence_summary": "Actual current942 allocation/map/protection/unmap app paths plus protected-write SIGSEGV/ACCERR/exactaddress and restored RW write now pass; final supported-candidate memory/ownership session remains open. Current3bfc zero-length anonymous mmap/EINVAL diagnostic passes independently; adds one distinct behavior only."
@@ -984,7 +984,7 @@
         {
           "id": "P-M07-01",
           "description": "Declare compiler/libc/application vector requirements.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/practical-m07-selected-profile-assessment-20261017-1.json",
@@ -1015,9 +1015,19 @@
               "path": "docs/verification/evidence/practical-m07-current-requirements-review-20261018-1.json",
               "sha256": "37d72a774354fac3eb9190132b5c6ad8ac6685327d3be768821519378a8bf47a",
               "size": 11284
+            },
+            {
+              "path": "docs/verification/evidence/practical-m07-used-state-declaration-20261020-1/CONSERVATIVE-STATE-DECLARATION.json",
+              "sha256": "c18d0f14be9ba16a4e1495ebe69f33fc7a497caa17ce5819db5f62cf6c21ad1e",
+              "size": 13075
+            },
+            {
+              "path": "docs/verification/evidence/practical-m07-used-state-declaration-20261020-1/decision.json",
+              "sha256": "c0399202d46c2d2172e06bb0853d9f37082603b3488fad9efb6cf5eb58a107e3",
+              "size": 8349
             }
           ],
-          "assessment_note": "Existing independent requirements review identifies precise remaining state-class declaration: eligible MPX3/4 andPKRU9 use in exact libc/loader startup/pthread paths. Actual exposed XCR0=0x21f does not imply use; retained selected dispatch/memchr findings cannot silently transfer to new mixed Rust binary. No whole-library audit/new guest requirement follows."
+          "assessment_note": "Independent c0399202 accepts conservative source-bound requirements declaration for all enabled user xstate (known XCR0=0x21f: x87, SSE/MXCSR, YMM, MPX3/4 and PKRU9). Actual MPX/PKRU use/nonuse and empirical preservation remain unresolved. Whole M07 exit is separately OPEN; no runtime or whole-milestone credit from this declaration."
         },
         {
           "id": "P-M07-02",
@@ -2026,7 +2036,7 @@
       "Prepare separately reviewed realpayload execution afterfreshsecondboot, proving rebootedOSserveswork; no secondstop/release or10cyclequota authority fromfirstcycle.",
       "Finish reviewedthinmaterializer exact49tracked-symlink correction preservingfailedpartialtree/fullsourceauthority, then independently release matchingFPUimagebuild.",
       "Close selectedapplication-visible XCR0/libc/Rustrequirements andreview boundedAVX/YMMpreservation extension; currentnativecoverage unchanged.",
-      "Continue actualMemory→ingress→checkedREADY→LINK→guestaccept joins andfinalACK/RET/destructor/revocation; CREATE_PPD remains fail-closed."
+      "Continue actualMemory\u2192ingress\u2192checkedREADY\u2192LINK\u2192guestaccept joins andfinalACK/RET/destructor/revocation; CREATE_PPD remains fail-closed."
     ],
     "literal_provenance_20261019": {
       "check": "P-M10-01",
