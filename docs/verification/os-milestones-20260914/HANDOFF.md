@@ -1,3 +1,54 @@
+## Latest executable feedback — M02 fixture closed; CHILD snapshot binding correction
+
+M02 corrected whole-helper fixture ran once under exact /usr/bin/python3.8:
+caller rc0,1.690769484s,empty stderr,direct child joined,group absent,streams
+closed and CPU6 released. Actual parent/materializer/binder generation and
+fixture-only LAST body/results are with the retained reviewer. Evidence:
+/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/runtime-data-preparation-1/correction-1/actual-full-fixture-capture-1/whole.json.
+No productionparent/fetchedproof/native acceptance follows from fixture success.
+
+CHILD final19 ordinary command closed successfully, but reviewer6e1f39ec found
+its generated snapshot repaired_image_sha256 inherited old ff4fca45 instead of
+genuine normalized CHILD image1f4dde2f. Runtime is REFUSED; no snapshot/guest ran.
+Author owns one coherent producer/current-tuple correction with actual non-effect
+snapshot validation, genuine digest positive and olddigest refusal, in a fresh
+candidate. Original19 outputs and successful capture remain immutable evidence.
+No unchanged artifact compile or source-proof rehash is needed.
+
+Private future reader candidate CPU7 check closed two genuine/eight refusal
+vectors,joined/group absent/streamsclosed/CPU7 released; independent actual
+review remains separate from deployment. Formal counts remain16/35,whole3,
+28 behaviors,Rust17/14. First-ready useful native case remains priority.
+
+## Pipeline update — CHILD final19 closed; M02 Python3.8 correction awaiting actual fixture
+
+CHILD final19 executed once under its exact pinned Python3.9.12 and accepted
+48aa3af5 command: rc0,0.154264518s,402B stdout,empty stderr, direct child joined,
+process group absent and streams closed. CPU6 released. Evidence:
+/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/ROOT-OUTER-FINAL19-1/whole.json.
+Retained reviewer is checking the19 generated controls; publication/final
+privileged release/fresh LAST/native remain future. No guest ran in this step.
+Complete319 fetched proof6659c3f9 binds26 roles at926ec2cd; reuse unchanged inputs.
+
+M02 first current whole-metadata invocation failed after its genuine private
+parent/preflight: premature pending-seed read before creation; exact nested
+Python3.8 also cannot execute removesuffix. Original parent,partialoutputs,
+source and captures remain preserved; failure review8c7bd6d2. One coherent
+correction-1 fixture proposal f62c1e7f is awaiting independent source/profile
+review and root admission. It must execute actual parent/materializer/binder/
+LAST-join bodies under pinned3.8 with original-failure/refusal regressions.
+Fixture facts cannot authorize production. No interpreter substitution or
+unchanged production replay; next production namespace must be fresh.
+
+CPU7 completed three exact reviewed source copies with positive inner/outer
+retirement; no CPU lease remains during editing/publication/review. CHILD and
+M02 current source checkpoints926ec2cd/8fc783dd are pushed/fetched. Optional
+private data-driven reader check is independent and not a current-case gate.
+Formal acceptance remains16/35 checks,three whole,28 behaviors,Rust17/14.
+SDK capacity remains blocked by fixed admission and higher-priority no-resize;
+user approval is retained,not executable. Included100%/zero reserve; preserve
+all real service,source,ownership,resource and strict runtime controls.
+
 ## Pipeline update — child normalization and timeout preflight accepted
 
 Child actual normalization/empty parent/whole-owner argument preflight passed
