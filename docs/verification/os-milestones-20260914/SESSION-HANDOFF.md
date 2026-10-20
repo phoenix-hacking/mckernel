@@ -1,3 +1,27 @@
+## Current correction — complete M02 loader fixture accepted; production still unrun
+
+The real e7w metadata attempt failed in1.1875s: LAST retained the old dfe26
+contract pin while its sibling contract was5900686a. All19 files, freshparent,
+49 unused runtime paths and closed failure captures remain immutable; CPU6
+released. Reviewa001120d records the coupled-source defect and missed review.
+
+One fresh private correction in /home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1
+fixes the LAST import pin and coupled source/data identities. Actual complete
+loader fixture passed2.481289s: real productionloader→parent/verifier→nested
+Python3.8 binder→19/49→generatedLAST fullfixturestatic/currentterminal joins,
+plus four exactrefusals. Independent51be12ce accepts fixture-only coverage;
+outer/innergroups retired,streamsclosed,CPU6released. No synthetic fetched
+proof or extracted-method coverage substitutes for the actual module loaders.
+SourceBYTEHOLD65f3 and17role6b312 are ready for finitepublication. Conditional
+productionreview297f1018 awaits genuinefetchedproof and fresh rootgrant for
+e7x real productionstatic_joins(False); no native authority or acceptedcheck.
+
+Private fixed publication helper completed two copies/four exactrefusals with
+positive retirement; the final Python3.8 deadlineobserver failed on ast.unparse.
+Six-case acceptance only, observerparked/no wholepacketPASS/deployment/timegain.
+M07 state-changing candidate remains parked on uniform temporalCR4.PKE0 proof.
+Counts remain16/35,whole3,native28,Rust17/14. M02 gets next admittedheavy slot.
+
 ## Next action — M02 current failed-predecessor body accepted (21:17 UTC)
 
 Independent89872f13 accepts the current CHILD failure reader plus actual M02

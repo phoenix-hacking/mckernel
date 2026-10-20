@@ -1,0 +1,41 @@
+{
+  "admission": "Root lane held CPU6/noheavy/noLAST; unrelated optional3GiB/3jobs counted conservatively: MemAvailable>=15GiB andtotal7jobs.",
+  "deadline": "GNU timeout gives enforceable outer40s TERM plus2s KILL grace; existing owned990 inner30s unchanged. Dispatcher retains positive outer PID/start/PGID/directwait/groupabsence/closedstreams.",
+  "exact_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "40s",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=35:35",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/run_actual_generation_fixture_owned_once.py"
+  ],
+  "original_proposal": {
+    "bytes": 6118,
+    "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/WHOLE-CONTRACT-BINDING-CORRECTION-PROPOSAL.json",
+    "sha256": "61472e65d11d124de770e456ae533823083479e19cb1e0b5837f179fb9b1daec"
+  },
+  "outer_deadline_seconds": 40,
+  "outer_kill_grace_seconds": 2,
+  "profile_unchanged": true,
+  "prose_clarification": "Six sibling generation .py files total: LAST changed, other five .py byte-identical. Seventh generation file is CURRENT context JSON. Parent producer DATA_SHA/parent locator changes only.",
+  "root_grant": null,
+  "runtime_release": null,
+  "source_freeze_unchanged": {
+    "bytes": 4980,
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/CORRECTED-SOURCE-DATA-FREEZE.json",
+    "sha256": "65f3cb9352d2387243d73fac11b5e4fc8c45e9fd38c74b14b5e87c07fdf7749c"
+  },
+  "status": "PENDING_MATCHING_INDEPENDENT_PASS_ADDITIVE_EXACT_OUTER_DEADLINE_BINDING"
+}
