@@ -1,0 +1,76 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "snapshot",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--core=0",
+        "--nofile=256",
+        "--fsize=33554432",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/source/root_manual_snapshot_child.py",
+        "--bindings-sha256",
+        "e6ffa9796190088423b41f47e06fe4d6f852d0cf2db4e0566f87eb0cc619a641",
+        "--terminal",
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-PROTECTION-GRACE-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+        "--terminal-sha256",
+        "498cd4a7dbedb9de21a3f41e5c97136b9a556c488e72b0da2a6047536beff8da"
+      ],
+      "profile": "snapshot",
+      "role": "LAST-snapshot",
+      "status_path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/snapshot.status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/snapshot.stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/snapshot.stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 28369,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-affected-independent-review-20261020-1/CHILD-CORRECTED19-CONDITIONAL-SOURCE-DATA-PROFILE-DECISION.json",
+    "sha256": "9f76b41f6d77ac1d0331be12dede059d7d2da5da9e5e20f491961620e1449909"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-affected-independent-review-20261020-1/CHILD-CORRECTED19-CONDITIONAL-SOURCE-DATA-PROFILE-DECISION.json"
+}

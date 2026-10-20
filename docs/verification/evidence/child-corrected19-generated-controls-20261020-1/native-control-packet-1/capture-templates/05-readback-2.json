@@ -1,0 +1,67 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "reader",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--nofile=256",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/cn-261020a/p/attempt-3fb382d0b40d95ef1e658b8097a8f63c/result.json"
+      ],
+      "profile": "reader",
+      "role": "readback-2",
+      "status_path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/captures/05-readback-2/status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/captures/05-readback-2/stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/native-control-packet-1/captures/05-readback-2/stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 28369,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-affected-independent-review-20261020-1/CHILD-CORRECTED19-CONDITIONAL-SOURCE-DATA-PROFILE-DECISION.json",
+    "sha256": "9f76b41f6d77ac1d0331be12dede059d7d2da5da9e5e20f491961620e1449909"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/phase5-child-collector-affected-independent-review-20261020-1/CHILD-CORRECTED19-CONDITIONAL-SOURCE-DATA-PROFILE-DECISION.json"
+}
