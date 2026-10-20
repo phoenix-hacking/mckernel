@@ -1,0 +1,314 @@
+{
+  "report_path": "/home/holden/mckernel/docs/verification/evidence/practical-provenance-literal-20261019-1/NEW205-ACTUAL-PRODUCTION-ARTIFACT-REVIEW.json",
+  "report_sha256": "fa39824773f75a0e44303afcdcaf52a26fa8249bd7d0fe1d066c3dd2b6dd9813",
+  "refs": [
+    {
+      "key": ".affinity_default_witnesses.callers.C_clone_thread_to_Rust_initializer.source",
+      "value": "kernel/process.c::clone_thread"
+    },
+    {
+      "key": ".affinity_default_witnesses.callers.C_clone_thread_to_Rust_initializer.source_association.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-INDEPENDENT-LINKED-SOURCE-ASSOCIATIONS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.callers.Rust_initializer_to_mask_inherit.machine_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-AFFINITY-PROVIDER-SOURCE-ANALYSIS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.callers.Rust_initializer_to_mask_inherit.source",
+      "value": "kernel/rust/process_helpers.rs::process_clone_thread_base_state_body_result"
+    },
+    {
+      "key": ".affinity_default_witnesses.callers.Rust_initializer_to_mask_inherit.source_association",
+      "value": "The current clone_thread C caller passes childrdi/creatorrsi/cpu_set offset0x1230/bytes128/priority offset0x13cc. The actual Rust initializer forms child+offset and creator+offset, passes bytes unchanged and calls the unique sched_clone_affinity_inherit_result at0xfffffffffe894e70 before copying sched priority or returning. The actual inherit body is a complete relocated object/image match and uses the frozen3510 serialized copy implementation. The snapshot provider is also a complete current object/image match, including all lock/unlock local-provider relocations. Combined with the separately accepted source implementation, C110/layout27 and actual do_fork snapshot\u2192reservation\u2192private-child inherit CFG, this proves live creator/snapshot masks are serialized and initialized before publication."
+    },
+    {
+      "key": ".affinity_default_witnesses.callers.Rust_sys_sched_setaffinity_to_body.source",
+      "value": "kernel/rust/syscall_policy.rs::sys_sched_setaffinity"
+    },
+    {
+      "key": ".affinity_default_witnesses.callers.Rust_sys_sched_setaffinity_to_body.source_association.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-INDEPENDENT-LINKED-SOURCE-ASSOCIATIONS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.callers.do_fork_snapshot_reserve_inherit.provider_bodies.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-AFFINITY-PROVIDER-SOURCE-ANALYSIS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.callers.do_fork_snapshot_reserve_inherit.source",
+      "value": "kernel/syscall.c::do_fork"
+    },
+    {
+      "key": ".affinity_default_witnesses.callers.do_fork_snapshot_reserve_inherit.source_association.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-INDEPENDENT-LINKED-SOURCE-ASSOCIATIONS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.process_clone_thread_base_state_body_result.default_image.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.process_clone_thread_base_state_body_result.fallback-process.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.process_clone_thread_base_state_body_result.fallback-syscall.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.process_clone_thread_base_state_body_result.legacy-rust.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.process_clone_thread_base_state_body_result.native-rust.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.process_clone_thread_base_state_body_result.selected-process.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.process_clone_thread_base_state_body_result.selected-syscall.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_clone_affinity_inherit_result.default_image.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_clone_affinity_inherit_result.fallback-process.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_clone_affinity_inherit_result.fallback-syscall.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_clone_affinity_inherit_result.legacy-rust.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_clone_affinity_inherit_result.native-rust.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_clone_affinity_inherit_result.selected-process.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_clone_affinity_inherit_result.selected-syscall.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_clone_affinity_snapshot_result.default_image.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_clone_affinity_snapshot_result.fallback-process.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_clone_affinity_snapshot_result.fallback-syscall.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_clone_affinity_snapshot_result.legacy-rust.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_clone_affinity_snapshot_result.native-rust.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_clone_affinity_snapshot_result.selected-process.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_clone_affinity_snapshot_result.selected-syscall.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_setaffinity_body_result.default_image.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_setaffinity_body_result.fallback-process.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_setaffinity_body_result.fallback-syscall.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_setaffinity_body_result.legacy-rust.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_setaffinity_body_result.native-rust.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_setaffinity_body_result.selected-process.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.export_matrix.sched_setaffinity_body_result.selected-syscall.raw_proof.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.observation_refs.completion.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/observation-1/completed-command-receipt.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.observation_refs.provider_source_analysis.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-AFFINITY-PROVIDER-SOURCE-ANALYSIS.json"
+    },
+    {
+      "key": ".affinity_default_witnesses.optimizer_source_association.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-INDEPENDENT-LINKED-SOURCE-ASSOCIATIONS.json"
+    },
+    {
+      "key": ".compiler_proofs.driver_receipt.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/receipt.json"
+    },
+    {
+      "key": ".evidence.compiler_phase_joins.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-ACTUAL-DRIVER-PHASE-JOINS.json"
+    },
+    {
+      "key": ".evidence.descriptor_source_analysis.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-DESCRIPTOR-ELF-ANALYSIS.json"
+    },
+    {
+      "key": ".evidence.source_association.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-INDEPENDENT-LINKED-SOURCE-ASSOCIATIONS.json"
+    },
+    {
+      "key": ".four_callback_witnesses.source_association.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-INDEPENDENT-LINKED-SOURCE-ASSOCIATIONS.json"
+    },
+    {
+      "key": ".four_callback_witnesses.whole_default_machine_source_association.control_flow_explanation",
+      "value": "The current 996-byte default release_process is a complete 21-ABS64 object-to-linked-image match. Only the final refcount decrement falls through the teardown. The CPU-local getter loads resource_set at0x1ee8. Hash detachment preserves null/self-list guards, signed pid modulo73 and 64-byte bucket selection plus0x4c0; writer-lock provider is captured inr13, unlock inr12. Neighbor stores and two poison values occur between calls0x102/0x139. Sibling linkage at0x180 is detached and poisoned under parent.children_lock (parent+0x140), bracketed0x151/0x19d. The captured resource_set survives inr12. After unchanged profile/thread/mckfd/free phases, final cleanup obtains pid1 from resource_set+0x140, reader-locks its child list at+0x140, tests list head+0x120 for self equality, calls hugefileobj_cleanup only when empty, and always reader-unlocks. Non-TOFU build contains no TOFU-finalize call; no TOFU machine acceptance is claimed. Pointer lifetime and lock ownership come from the accepted actual-source/ABI review, current C110 proof and these exact caller dataflow/control-flow witnesses; unused callback export existence is not the association proof."
+    },
+    {
+      "key": ".four_callback_witnesses.whole_default_machine_source_association.source_consumer",
+      "value": "kernel/rust/process_helpers.rs::release_process -> process_release_process_body_result with 18 arguments and fixed Some callbacks; profile is argument11"
+    },
+    {
+      "key": ".guard_retirement.client_joins.transport_retirement_basis",
+      "value": "Completed finite child transport status under accepted owned-client joining implementation plus direct whole guard/outer joins; no reviewer root/procfs command."
+    },
+    {
+      "key": ".limitations.4",
+      "value": "Original failed902, initial four-copy failure, typed pending metadata, and original facts producer remain preserved. Corrected actual facts source3010 has independent current acceptance; no backdated original producer identity or compiler/capture replay."
+    },
+    {
+      "key": ".postbuild_facts.completion.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/observation-1/completed-command-receipt.json"
+    },
+    {
+      "key": ".postbuild_facts.default_machine_proofs.provider_source_analysis.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-FRESH8B-AFFINITY-PROVIDER-SOURCE-ANALYSIS.json"
+    },
+    {
+      "key": ".postbuild_facts.default_machine_proofs.source_association.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1/NEW205-INDEPENDENT-LINKED-SOURCE-ASSOCIATIONS.json"
+    },
+    {
+      "key": ".postbuild_facts.facts_source.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/facts-inline-correction-1/derive_new205_facts_inline_corrected.py"
+    },
+    {
+      "key": ".postbuild_facts.resolved_plan.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/observation-1/resolved15-command-plan.json"
+    },
+    {
+      "key": ".retained_authority.objects_manifest.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/retained-objects.json"
+    },
+    {
+      "key": ".retained_authority.original_authorities.4.original.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/compile_commands.json"
+    },
+    {
+      "key": ".retained_authority.original_authorities.4.retained",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/compile_commands.json"
+    },
+    {
+      "key": ".retained_authority.pairs.4.original.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/output/build/compile_commands.json"
+    },
+    {
+      "key": ".retained_authority.pairs.4.retained.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/retained-production-objects/compile_commands.json"
+    },
+    {
+      "key": ".source11.authority.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/source-sha256.json"
+    },
+    {
+      "key": ".source11.declared_host_owner.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py"
+    },
+    {
+      "key": ".source11.executed_image_owner.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/native_rust_exact_mckernel_image_container_owner.py"
+    },
+    {
+      "key": ".source11.guard.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/native_exact_scratch22_authority3_image_guard_corrected.py"
+    },
+    {
+      "key": ".source11.publication.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/dispatcher-publication-proof.json"
+    },
+    {
+      "key": ".source11.request_lineage.driver_receipt.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/receipt.json"
+    },
+    {
+      "key": ".source11.request_lineage.guard_result.path",
+      "value": "/home/holden/mckernel-work/scratch/native-rust-four-callback-affinity-quote-full-image-guard-5145f5be17f14069ab17f4ff0b368419/guard-result.json"
+    },
+    {
+      "key": ".source11.request_lineage.owner_receipt.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-evidence/owner-receipt.json"
+    },
+    {
+      "key": ".source11.request_lineage.postjoin_readback.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/image-guard-postjoin-readback.json"
+    },
+    {
+      "key": ".source11.request_lineage.request.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json"
+    },
+    {
+      "key": ".source_authority.manifest.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json"
+    },
+    {
+      "key": ".source_authority.materialization_receipt.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json"
+    },
+    {
+      "key": ".source_authority.request.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json"
+    },
+    {
+      "key": ".source_authority.source_identity.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialized-source"
+    },
+    {
+      "key": ".source_request_bindings.manifest.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json"
+    },
+    {
+      "key": ".source_request_bindings.materialization_receipt.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json"
+    },
+    {
+      "key": ".source_request_bindings.request.path",
+      "value": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json"
+    }
+  ]
+}

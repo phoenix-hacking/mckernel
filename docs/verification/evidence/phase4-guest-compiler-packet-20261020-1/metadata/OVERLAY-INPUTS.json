@@ -1,0 +1,57 @@
+{
+  "scope": "source-only compiler preparation; no execution grant yet",
+  "phase4_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase4-revoke-ack-correction-1/RECEIPT.json",
+    "sha256": "b2cd8c8f04d3be6f0fb5b464ff0526ffd327e7cbf66edd42383d727b65892083"
+  },
+  "before_overlay": [
+    {
+      "path": "kernel/rust/fork_child_credits.rs",
+      "sha256": "eae6f0c2ccbaac1b888ac8e7735382bdc6edac2169c4ccdb89593e23855a2dc5",
+      "bytes": 24924
+    },
+    {
+      "path": "kernel/rust/fork_constructed_credits.rs",
+      "sha256": "baa2d9947b0131e0ae20b22c2972d6c56043d001ad6cbf55b184f06da61ee31b",
+      "bytes": 5176
+    },
+    {
+      "path": "kernel/rust/fork_control_guest.rs",
+      "sha256": "608bd52f8828cf5092d7f58ecfe1ac70ae1e14065f18a611960c2a766626b949",
+      "bytes": 17643
+    },
+    {
+      "path": "kernel/rust/fork_control_registry.rs",
+      "sha256": "74e28b0a32aec74ee94898f2a6ff13cb16f5a17125cd932219d9c82959dd1601",
+      "bytes": 8909
+    },
+    {
+      "path": "kernel/rust/fork_final_ack.rs",
+      "sha256": "9b8beb08284bd42ca1be31757208021ca2a5ad4f3f6f71aae337b0d7a985290f",
+      "bytes": 4136
+    },
+    {
+      "path": "kernel/rust/process_helpers.rs",
+      "sha256": "00626748ed9aac49a425823f7de446adcca6accd140943ee709a42e6d9ad3d97",
+      "bytes": 344883
+    },
+    {
+      "path": "kernel/syscall.c",
+      "sha256": "4278e76398f8bd36a8d9c8f22cba3dcac1768f0b37420b7c6bba52356c8c0e07",
+      "bytes": 837496
+    },
+    {
+      "path": "kernel/include/process.h",
+      "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+      "bytes": 26602
+    },
+    {
+      "path": "kernel/CMakeLists.txt",
+      "sha256": "ac06743fa03fbd3d268682b1affe7aeaa66618377d1607c37efd358ca18a8c7e",
+      "bytes": 22888
+    }
+  ],
+  "CMake_delta": "only add two newly consumed Rust module dependencies; no options/macros/default changes",
+  "new_CMake_sha256": "bd02587b2eb12c96c95daf3da99f94e63df4430bdce09ac66501cd1cfee03f3a",
+  "compiler_profile": "pending exact existing guest owner engine references; no tool/profile guessed"
+}
