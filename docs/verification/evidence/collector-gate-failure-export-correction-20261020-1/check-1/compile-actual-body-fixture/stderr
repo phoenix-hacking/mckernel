@@ -1,0 +1,7 @@
+In file included from /home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/test_failure_export.c:19:
+/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/actual_finish_bodies.inc: In function ‘baseline_finish’:
+/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/actual_finish_bodies.inc:39:13: error: implicit declaration of function ‘klogctl’; did you mean ‘ioctl’? [-Werror=implicit-function-declaration]
+   39 |     int n = klogctl(3, kernel_log, sizeof kernel_log);
+      |             ^~~~~~~
+      |             ioctl
+cc1: all warnings being treated as errors

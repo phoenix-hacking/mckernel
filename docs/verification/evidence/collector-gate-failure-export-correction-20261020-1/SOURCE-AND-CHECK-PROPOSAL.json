@@ -1,0 +1,113 @@
+{
+  "actual_body_fixture": {
+    "bytes": 3582,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/actual_finish_bodies.inc",
+    "sha256": "ee89e4b03332c5ee1a4aeb414a61f509181d32bee24e403e55f4b2fc884868a5"
+  },
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/run_checks_once.py"
+  ],
+  "base_acceptance": {
+    "bytes": 12404,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/COLLECTOR-DRAIN-CORRECTION1-SOURCE-AND-ACTUAL-ELEVEN-CASES-REVIEW.json",
+    "sha256": "5d6179cb58df4928dcf5061ec7a21712085c3798e16b73bbf33a109a18f0d042"
+  },
+  "changed_sources": [
+    {
+      "base": {
+        "bytes": 24161,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_collector.c",
+        "sha256": "b4c019d216ab12d41559fcdb9ea3c9f9380201e8f9d4434847ec254118731431"
+      },
+      "candidate": {
+        "bytes": 24489,
+        "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/candidate/pair_collector.c",
+        "sha256": "fa044ae1994e6da4b20766d9b133acebb8881528dd718b268b2cf53984a883ed"
+      }
+    },
+    {
+      "base": {
+        "bytes": 12059,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_trace_retention.inc",
+        "sha256": "acb8163419236147da3c330f26e8dabb67c0e4802d9bdcd2c247d1cded40a468"
+      },
+      "candidate": {
+        "bytes": 12080,
+        "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/candidate/pair_trace_retention.inc",
+        "sha256": "56fbc60937a4be373a42a44670df573add73cf2b5b5e12e2fec653262507c2e9"
+      }
+    }
+  ],
+  "fixture": {
+    "bytes": 4454,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/test_failure_export.c",
+    "sha256": "287b79f6e2108458169691ff2a2730f9b0f42841bc431afc05aed117cea4c792"
+  },
+  "fixture_adapters": [
+    "exact baseline exporter renamed baseline_failure_export",
+    "exact baseline/current finish blocks wrapped as functions; only /case/evidence/kernel.log mapped through fixture PAIR_ROOT",
+    "klogctl(3) unavailable or empty injected; saved raw transport and O_EXCL/authentication APIs unchanged",
+    "fixture context PIDs explicitly0/0 because failed64 actual mapping unknown"
+  ],
+  "focused_cases": [
+    "baseline+corrected missing main",
+    "baseline+corrected empty main",
+    "missing main without saved gate refuses",
+    "empty main without saved gate refuses",
+    "unsafe handoff suppresses raw export"
+  ],
+  "invariants": [
+    "strict success parser/round/global/app deadlines unchanged",
+    "same1MiB perraw/2MiB retained prefix budget and32MiB capture caps",
+    "same safe-owner/initialized/console checks; no fabricated completion",
+    "one saved gate snapshot replaces only optional later snapshot in existing failure transport"
+  ],
+  "patch": {
+    "bytes": 2767,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/failure-export-order.patch",
+    "sha256": "74d3a0a5b7c876489277ad49bfd0517f7b544a767a69af6ae6804cbc0a9e35df"
+  },
+  "profile": {
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 30,
+    "commands": 3,
+    "core": 0,
+    "cpu": 6,
+    "guest_runs": 0,
+    "jobs": 1,
+    "kill_after_seconds": 2,
+    "nofile": 256,
+    "old_eleven_cases_replayed": false,
+    "per_stream_bytes": 33554432,
+    "wall_seconds": 35
+  },
+  "retained_failure_raw": {
+    "bytes": 79295,
+    "meaning": "Actual retained postfailure snapshot from closed composite64 failure; original gate input and actual PID mapping were not captured, and are not invented by this fixture",
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/failure-classification-1/trace-reproducer-1/current-raw.bin",
+    "sha256": "a11eddb148e2a9d34281d3e239b56b4081e1f2bf75696c121e405bed467eb721"
+  },
+  "runner": {
+    "bytes": 3096,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/run_checks_once.py",
+    "sha256": "ffcc7e4e9e9d9859b98847d6ad9e6a77d7455d666cecbc661d8fb46fec144b6e"
+  },
+  "scope": "Functional OS/apps plus active Rust/reviewed assembly compute-C cutover; permitted Linux userland collector failure transport only",
+  "status": "SOURCE_PREPARED_NO_CHECK_EXECUTED"
+}

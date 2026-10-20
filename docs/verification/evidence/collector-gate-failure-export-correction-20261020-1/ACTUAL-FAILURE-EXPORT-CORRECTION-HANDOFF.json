@@ -1,0 +1,129 @@
+{
+  "CPU6_released_directly_to_current_crate_batch_prepare": true,
+  "actual_body_fixture": {
+    "bytes": 3582,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/actual_finish_bodies.inc",
+    "sha256": "ee89e4b03332c5ee1a4aeb414a61f509181d32bee24e403e55f4b2fc884868a5"
+  },
+  "all_commands0": true,
+  "all_direct_children_joined": true,
+  "all_groups_absent": true,
+  "all_stderr_empty": true,
+  "all_streams_closed": true,
+  "base_acceptance": {
+    "bytes": 12404,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/COLLECTOR-DRAIN-CORRECTION1-SOURCE-AND-ACTUAL-ELEVEN-CASES-REVIEW.json",
+    "sha256": "5d6179cb58df4928dcf5061ec7a21712085c3798e16b73bbf33a109a18f0d042"
+  },
+  "changed_sources": [
+    {
+      "base": {
+        "bytes": 24161,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_collector.c",
+        "sha256": "b4c019d216ab12d41559fcdb9ea3c9f9380201e8f9d4434847ec254118731431"
+      },
+      "candidate": {
+        "bytes": 24489,
+        "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/candidate/pair_collector.c",
+        "sha256": "fa044ae1994e6da4b20766d9b133acebb8881528dd718b268b2cf53984a883ed"
+      }
+    },
+    {
+      "base": {
+        "bytes": 12059,
+        "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/collector-drain-correction-1/candidate/pair_trace_retention.inc",
+        "sha256": "acb8163419236147da3c330f26e8dabb67c0e4802d9bdcd2c247d1cded40a468"
+      },
+      "candidate": {
+        "bytes": 12080,
+        "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/candidate/pair_trace_retention.inc",
+        "sha256": "56fbc60937a4be373a42a44670df573add73cf2b5b5e12e2fec653262507c2e9"
+      }
+    }
+  ],
+  "corrected_fixture": {
+    "bytes": 4501,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/test_failure_export_corrected.c",
+    "sha256": "42ca09a8f375a9d3f87d19064e5396128ec9be56970f416888f71b9dc27a0c84"
+  },
+  "corrected_runner": {
+    "bytes": 3106,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/run_checks_corrected_once.py",
+    "sha256": "5ec998e6d8cb2840287e79e9f496cc155aec2015a29847771b7d64c4ad87d101"
+  },
+  "elapsed_seconds": 1.1201186149846762,
+  "five_case_output": {
+    "bytes": 297,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/check-2/actual-body-fixture/stdout",
+    "sha256": "e81e8d3731e43a54025a67f63cd2bc24d83a2a3237effe4c218c7806906d2cf5"
+  },
+  "fixture_adapters": [
+    "exact baseline exporter renamed baseline_failure_export",
+    "exact baseline/current finish blocks wrapped as functions; only /case/evidence/kernel.log mapped through fixture PAIR_ROOT",
+    "klogctl(3) unavailable or empty injected; saved raw transport and O_EXCL/authentication APIs unchanged",
+    "fixture context PIDs explicitly0/0 because failed64 actual mapping unknown"
+  ],
+  "focused_cases": [
+    "baseline+corrected missing main",
+    "baseline+corrected empty main",
+    "missing main without saved gate refuses",
+    "empty main without saved gate refuses",
+    "unsafe handoff suppresses raw export"
+  ],
+  "native_or_kernel_or_guest_execution": false,
+  "old_eleven_cases_replayed": false,
+  "original_compile_failure": {
+    "bytes": 1245,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/check-1/whole.json",
+    "sha256": "cb3e33577a2c1f2fbdb0dc30447b8ae2517e389fe93b85de1b6e4a955056df27"
+  },
+  "original_failed_fixture": {
+    "bytes": 4454,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/test_failure_export.c",
+    "sha256": "287b79f6e2108458169691ff2a2730f9b0f42841bc431afc05aed117cea4c792"
+  },
+  "original_proposal": {
+    "bytes": 5014,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/SOURCE-AND-CHECK-PROPOSAL.json",
+    "sha256": "c6852e6fec4fef6af9dbf461f9cf20adf20a0904cdbf465a471153b373bc4658"
+  },
+  "patch": {
+    "bytes": 2767,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/failure-export-order.patch",
+    "sha256": "74d3a0a5b7c876489277ad49bfd0517f7b544a767a69af6ae6804cbc0a9e35df"
+  },
+  "profile": {
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 30,
+    "commands": 3,
+    "core": 0,
+    "cpu": 6,
+    "guest_runs": 0,
+    "jobs": 1,
+    "kill_after_seconds": 2,
+    "nofile": 256,
+    "old_eleven_cases_replayed": false,
+    "per_stream_bytes": 33554432,
+    "wall_seconds": 35
+  },
+  "retained_failure_raw": {
+    "bytes": 79295,
+    "meaning": "Actual retained postfailure snapshot from closed composite64 failure; original gate input and actual PID mapping were not captured, and are not invented by this fixture",
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/failure-classification-1/trace-reproducer-1/current-raw.bin",
+    "sha256": "a11eddb148e2a9d34281d3e239b56b4081e1f2bf75696c121e405bed467eb721"
+  },
+  "scope": "Functional OS/apps plus active Rust/reviewed assembly compute-C cutover; permitted Linux userland collector failure transport only",
+  "static_collector": {
+    "bytes": 1043696,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/check-2/collector",
+    "sha256": "f672d2872f2bbbfbf3c8a686ec2932494b090ed35d9fd973df92cf4769262b10"
+  },
+  "static_collector_mode": "0o700",
+  "status": "ACTUAL_SOURCE_AND_FOCUSED_CHECKS_PASS_PENDING_INDEPENDENT_REVIEW",
+  "strict_success_oracles_and_deadlines_unchanged": true,
+  "whole": {
+    "bytes": 3486,
+    "path": "/home/holden/mckernel-work/host-preparation/collector-gate-failure-export-correction-20261020-1/check-2/whole.json",
+    "sha256": "de468bc32cefe8f1f6030b85105925b8b0af74d62fd9e3cd5f6037c4b6788a1b"
+  }
+}

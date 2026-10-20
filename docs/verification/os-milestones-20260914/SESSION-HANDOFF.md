@@ -1,3 +1,30 @@
+## Current — real mcexec link accepted; retirement compiler publication fetched
+
+Independent648c56e8 accepts six real launcher C/Rust/assembly/archive/ranlib/PIE
+producer steps, five artifacts,250 C and18 canonical link dependencies. Final
+Linux PIE689dcad2 is394656 bytes. Corrected saved-artifact oracle437c917e passed
+with two isolated ELF refusals; no successful compiler was replayed. Original
+outer/driver symbol-inventory FAIL stays unchanged. Physical973bbb2f passes exact
+client/container/group and authenticated three-record retirement. This closes
+launcher compilation/link only; no program execution, new kernel image, native
+child/default activation or final ACK is claimed.
+
+Retirement160-source materialization and conditionalb0429193 remain accepted:
+source3fd9d199 plus frozen-identity ABA producer63c950cf,9 changed/151 reused.
+Old36951 producer integration remains rejected. Exact31 publication rows shipped
+and fetched82c1997f; final caller/release bindings use physical973bbb2f. Five real
+whole-consumer compiles are next after the existing fresh admission. No new image
+or whole-crate acceptance follows from source/body fixtures alone.
+
+Independent2bc41dbc accepts saved-gate export ordering, five focused cases and
+static compile. Missing/empty later main capture no longer suppresses valid saved
+gate bytes; unsafe/missing-gate refusals remain. Integration is a fresh private
+producer variant; frozen HOST66 inputs remain untouched. Retained79295-byte
+snapshot is not fabricated original gate/PID evidence. Opt-in image routing
+stays OFF by default; two configuration checks/eight CMake cases pass, with
+coherent changed-boundary review pending. Counts15/35, whole3,26 behaviors,
+17 production/14 native Rust paths remain unchanged;100% included/zero reserve.
+
 ## Source checkpoint — eleven real phase5 paths integrated, activation off
 
 Root applied exact ordered phase4 prerequisites plus phase5/TID semantic union:
