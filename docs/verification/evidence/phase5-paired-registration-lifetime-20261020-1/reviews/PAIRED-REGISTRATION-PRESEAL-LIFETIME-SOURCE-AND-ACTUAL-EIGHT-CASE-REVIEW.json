@@ -1,0 +1,175 @@
+{
+  "actual_author_result": {
+    "bytes": 2596,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/PAIR-LIFETIME-ACTUAL-RESULT.json",
+    "sha256": "e301bbbde0471ce30eb6faa397ebe6a075e840256c6b6e7d73ae459a4fd0cd40"
+  },
+  "actual_check_scope": {
+    "adapters": "Explicit std Arc/Mutex/Vec/Box/ProcessId/Mirror/IHK provider-auth adapters, not current Linux ABI.",
+    "cases": [
+      "pending identity and zero-key refusal",
+      "capacity64 and no-growth bind",
+      "exact private rollback proof",
+      "no-effect/uncertain/refused provider publication retains both",
+      "cross-worker authentic adapter ACK exact once",
+      "reused table PID refused",
+      "final child drop releases parent after ACK",
+      "concurrent duplicate reservation and carrier claim"
+    ],
+    "command_exit_codes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "commands": 4,
+    "compiler_stderr": "One retained fixture private_interfaces warning; all commands exit0, not an empty-stderr claim.",
+    "fixture_case_command": 1,
+    "fixture_compile": 1,
+    "full_current_fork_host_prefix_exact": true,
+    "new_tests": 8,
+    "old_tests_replayed": 0,
+    "production_callback_and_constructor": "Source inspected/pinned; not actually executed under Linux MM.",
+    "syntax_checks": 2
+  },
+  "actual_eight_case_stdout": {
+    "bytes": 874,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/pair-eight-affected-cases-1.stdout",
+    "sha256": "5949e4e27d38c86d17e53a3ad5294dd3fc0f5258bcda9bdd84fd1ba8124cafa6"
+  },
+  "actual_fixture_adapter": {
+    "bytes": 5626,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/fixture-1/actual-pair.rs",
+    "sha256": "1a9e9585f82c7de706a5fbe9b4b7166f27e6fa0599e57ffb957d6ea2b00744f3"
+  },
+  "actual_four_command_capture": {
+    "bytes": 3267,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/ordinary-check-result-1.json",
+    "sha256": "1ac659d7c8202acbfc9456d0a71d23ce312b7dff25ed8494013303c964832913"
+  },
+  "actual_full_module_prefix_fixture": {
+    "bytes": 14240,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/fixture-1/current_fork_host.rs",
+    "sha256": "e7f89ef6aef4dc58377de0df071bfa65795cda71f99be0fc3adba01ed81b465a"
+  },
+  "actual_join_statuses": [
+    {
+      "elapsed": 0.03297443798510358,
+      "exit_code": 0,
+      "owned_group_absent": true,
+      "pid": 2057126,
+      "positive_wait": true
+    },
+    {
+      "elapsed": 0.01653130300110206,
+      "exit_code": 0,
+      "owned_group_absent": true,
+      "pid": 2057129,
+      "positive_wait": true
+    },
+    {
+      "elapsed": 0.46734712697798386,
+      "exit_code": 0,
+      "owned_group_absent": true,
+      "pid": 2057132,
+      "positive_wait": true
+    },
+    {
+      "elapsed": 0.004590462020132691,
+      "exit_code": 0,
+      "owned_group_absent": true,
+      "pid": 2057187,
+      "positive_wait": true
+    }
+  ],
+  "changed_sources": [
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/source/host-kernel/native-rust/mcctrl_process.rs",
+      "sha256": "eb019c90f8935b68c2efbb418abb0d7905b2b9bd0e8dba2940aebbe2117c565c",
+      "size": 48806
+    },
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/source/host-kernel/native-rust/current_fork_host.rs",
+      "sha256": "10c8acac4006f7e1bdfdfb2a0c5fe1c90b46ac8d3c28ffe46d9a31c27fa4a473",
+      "size": 8512
+    }
+  ],
+  "decision": "PASS_SCOPED_PRESEAL_PAIRED_REGISTRATION_LEASE_AND_EXACT_OWNED_ROUTE_CORRECTION_WITH_OPEN_POSTEXIT_PROGRESS_HOLDS",
+  "default_gate_remains_off": true,
+  "findings": {
+    "ABI_and_compute_boundary": "No ABI definition/default gate or compute C change. New route/Option fields are Rust-private; real current kernel compiler/ABI/provider linkage remains a later layer.",
+    "ack_and_parent_lifetime": "Only successful authenticated provider selector3 removes exact child+carrier route once, outside-lock row drop. Child retains actual parent Arc until final child lifetime ends; ACK breaks the mutual route cycle, not arbitrary parent ownership. Failed/replayed ACK cannot remove a different pending row.",
+    "capacity_and_pending_key": "Parent routes preallocate capacity64 before IHK open; reservation rejects len64/duplicate child or PID; zero is private pending state, selector3 never accepts zero; no route growth after seal.",
+    "existing_fallible_allocation": "Selector2 HostRevoke/DeferredModule allocation remains fallible before provider effect; this patch does not claim that path allocation-free.",
+    "locking_and_destructors": "Both reservation/cancellation lock parent.control_children then child.fork_parent. Selection/identity checks release locks before provider work. Removed row and parent pin drop outside locks; caller Arcs prevent final destructors during reservation error.",
+    "preseal_ownership": "Authenticated v4 callback reserves typed parent route and independent child->parent Registration Arc before inherit_vmas/MM/seal. Geometry/child/taskMM/response/nonce proof and distinct same-generation contexts constrain the pair.",
+    "provider_identity": "Route supplies exact owned child; optional Process table entry checks stable ProcessId and registration identity, never creates an alternate owner. Paired parent Arc/context/slot/generation checked. Actual unchanged provider authenticates Request/worker/delivery/MCFK carrier/frame and original child owner before revoke/ACK authority. Storage pointer alone grants none.",
+    "rollback": "Only explicit inherit_vmas Err cancels exact zero-carrier child/proof and paired parent. Inspected current production inherit_vmas: every fallible return precedes first VMA/MM/seal effect. Failed exact cancellation retains the pair; no uncertainty Drop rollback.",
+    "uncertainty_and_cycles": "Once pair reserved, failed/uncertain provider publication retains both leases and carrier. This intentionally retains a cycle until authentic ACK; no liveness guarantee or capacity recovery credit claimed. Documented provider no-effect refusal balances original HostRevoke box only."
+  },
+  "functional_scope": "Functional supported OS/apps plus active compute-C retirement to Rust/reviewed assembly",
+  "implementation_ownership": false,
+  "integration_scope": "This two-source storage/route correction is acceptable for current compiler/source integration investigation. It does not close parent-exit functional progress or enable runtime.",
+  "native_execution_authorized": false,
+  "next": "Root may integrate exact two-source correction and bind future compiler investigation. Author continues explicit postexit delegated producer/orphan Process edge implementation separately; no native activation from this source/adapter pass.",
+  "original_current_production_two_source_hashes_match": true,
+  "original_two_sources_pins": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/ORIGINAL-TWO-SOURCE-PINS.json",
+    "sha256": "d2b5b10706691943c514e066494841f13d4259e53bc8a92e0f106e30c538ed89",
+    "size": 720
+  },
+  "patch": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/PAIRED-CONNECTION-LIFETIME.patch",
+    "sha256": "07121c761fdd6c27f980336ae6963204742daffe8cd59b4af01dee24dddf093b",
+    "size": 11307
+  },
+  "real_Linux_MM_callback_executions": 0,
+  "real_provider_ACK_or_native_parent_exit_credit": false,
+  "remaining_open": [
+    "Independent authenticated delegated GuestRequest/control producer after guest PS_EXITED.",
+    "Normal wait/orphan Process edge ledger and terminal progress after parent exit.",
+    "Real current Linux kernel crate/module/ABI and provider linkage for these exact sources.",
+    "Positive native parent/child revoke/destructor/final ACK/default activation proof."
+  ],
+  "reviewed_at": "2026-10-20T13:12:53.566507+00:00",
+  "reviewer": "/root/resume20_physical",
+  "reviewer_actions": "Read-only exact two-source/patch/base comparison, relevant existing Mirror/provider control contracts, completed four-command/eight-case evidence; additive independent report only. No implementation, job, test, root or guest effects.",
+  "schema": "mckernel.independent-parent-exit-paired-registration-source-review.v1",
+  "source_freeze": {
+    "bytes": 2358,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/SOURCE-FREEZE.json",
+    "sha256": "f85f12b10e3df336fc2ede5d962e95392e412953be2c907f21cd161ca5749851"
+  },
+  "status": "PASS_SOURCE_AND_ACTUAL_EIGHT_ADAPTER_BODY_CASES_ONLY",
+  "witnesses": [
+    {
+      "bytes": 2358,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/SOURCE-FREEZE.json",
+      "sha256": "f85f12b10e3df336fc2ede5d962e95392e412953be2c907f21cd161ca5749851"
+    },
+    {
+      "bytes": 2596,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/PAIR-LIFETIME-ACTUAL-RESULT.json",
+      "sha256": "e301bbbde0471ce30eb6faa397ebe6a075e840256c6b6e7d73ae459a4fd0cd40"
+    },
+    {
+      "bytes": 11307,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/PAIRED-CONNECTION-LIFETIME.patch",
+      "sha256": "07121c761fdd6c27f980336ae6963204742daffe8cd59b4af01dee24dddf093b"
+    },
+    {
+      "bytes": 14240,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/fixture-1/current_fork_host.rs",
+      "sha256": "e7f89ef6aef4dc58377de0df071bfa65795cda71f99be0fc3adba01ed81b465a"
+    },
+    {
+      "bytes": 874,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/pair-eight-affected-cases-1.stdout",
+      "sha256": "5949e4e27d38c86d17e53a3ad5294dd3fc0f5258bcda9bdd84fd1ba8124cafa6"
+    }
+  ]
+}

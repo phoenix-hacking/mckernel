@@ -66,9 +66,19 @@ unsafe extern "C" fn current_fork_adopted_v4(context:*mut c_void,
         // Actual owned Request/Response, current task/active MM, durable IHK
         // lease and reserved child slot remain with the synchronous provider.
         // No publication/provider lock spans MM lock/unlock or mm_users Drop.
-        let child_mirror=unsafe {Mirror::inherit_vmas(attempt.mirror,attempt.parent,
+        attempt.child.reserve_fork_pair(attempt.parent,proof)?;
+        let inherited=unsafe {Mirror::inherit_vmas(attempt.mirror,attempt.parent,
             attempt.child.clone(),attempt.geometry.start,end,proof.child_mm,
-            |_|seal(scope.context))}?;
+            |_|seal(scope.context))};
+        // inherit_vmas documents every Err before its first MM/seal effect.
+        // No Drop rollback: an uncertain publication retains both connections.
+        let child_mirror=match inherited {
+            Ok(mirror)=>mirror,
+            Err(error)=>{
+                attempt.child.cancel_private_fork_pair(attempt.parent,proof)?;
+                return Err(error);
+            }
+        };
         // The process reservation and private child Registration exclude every
         // competing creator. All fallible effects finished before MM transfer.
         {
@@ -96,7 +106,9 @@ pub(super) struct Registration {
     workers: Pin<Box<Mutex<Vec<Arc<HostWorker>>>>>,
     // Preallocated parent-owned routing references span worker handoff. Keys
     // only select an owned connection; every use needs paired provider auth.
-    control_children:Pin<Box<Mutex<Vec<(u64,Arc<Registration>)>>>>,
+    control_children:Pin<Box<Mutex<Vec<current_fork_host::ForkChildRoute>>>>,
+    // Real paired connection lease, installed before the authenticated MM seal.
+    fork_parent:Pin<Box<Mutex<Option<Arc<Registration>>>>>,
     // Mirror files can outlive all mcos file bindings and their Process owner.
     // Retain the referenced PID independently for that complete lifetime.
     _pid: ProcessId,
@@ -124,6 +136,7 @@ impl Registration {
         let mapping = Box::pin_init(new_mutex!(None), GFP_KERNEL)?;
         let workers = Box::pin_init(new_mutex!(Vec::with_capacity(64, GFP_KERNEL)?), GFP_KERNEL)?;
         let control_children=Box::pin_init(new_mutex!(Vec::with_capacity(64,GFP_KERNEL)?),GFP_KERNEL)?;
+        let fork_parent=Box::pin_init(new_mutex!(None),GFP_KERNEL)?;
         let mut context = ptr::null_mut();
         // SAFETY: mcctrl pins IHK, and this output remains exclusively borrowed
         // until the checked open transfers its independently leased connection.
@@ -149,6 +162,7 @@ impl Registration {
                 mapping,
                 workers,
                 control_children,
+                fork_parent,
                 _pid: identity,
             },
             GFP_KERNEL,

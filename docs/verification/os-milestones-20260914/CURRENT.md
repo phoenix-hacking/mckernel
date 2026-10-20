@@ -1,3 +1,23 @@
+## Current — repaired image artifacts accepted; PASS-case physical clearance next
+
+Independent b4f2eb58 accepts the real fresh image build: all18 commands and
+nine artifacts pass; production Rust8e14826d equals its nm proof, with neither
+rejected panic import. Kernel image1f4dde2f is8,418,992B; actual mcexec689dcad2
+is394,656B. Whole owner closed0/288.989s, eight clients retired. This is compiler/
+artifact acceptance only: container/common/shared remain retained, no new native
+or default/ACK acceptance. PASS-case finite source reviewe0e64 and its ordinary
+callback023a pass; root now publishes exact33 sources/data before reviewed
+observation/preservation/cleanup/postjoin. No successful cleanup is replayed.
+
+Two host Rust sources are integrated gate-OFF under db1feac7 after four checks/
+eight new adapter-body tests. Pre-seal paired connections and exact owned routes
+are source-only; full SDK/ABI/native and delegated postexit/orphan progress stay
+open. M03 complete consumer b2bad and pending19 metadata pass; final19 is
+correctly blocked by the retained global shared record. Child235B staging is
+being bound to this image plus accepted SDK3d/mcexec648, with a real64MiB archive
+profile review. Source new SDK pair preparation remains independent and unrun.
+Counts15/35,whole3,26behaviors,17/14Rust held;100%included/zero reserve.
+
 ## Current — fresh image authentication successor ready for final admission
 
 The first repaired-image invocation closed1/1.158s before compiler/owner/Docker

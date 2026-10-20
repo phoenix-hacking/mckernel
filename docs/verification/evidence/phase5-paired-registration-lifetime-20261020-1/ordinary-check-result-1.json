@@ -1,0 +1,86 @@
+{
+  "profile": "CPU6 / 1job /1GiBAS /30CPU /35+2wall /32MiBperstream",
+  "rustc_sha256": "f8d033fd72e878ec60493788c8bffec2e6c154dcab6f0cb4c145af8ada26a7ed",
+  "results": [
+    {
+      "environment": {
+        "RUSTC_BOOTSTRAP": "1"
+      },
+      "name": "syntax-mcctrl-process-1",
+      "command": [
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-Zunpretty=normal",
+        "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/source/host-kernel/native-rust/mcctrl_process.rs"
+      ],
+      "pid": 2057126,
+      "exit_code": 0,
+      "elapsed": 0.03316471696598455,
+      "positive_wait": true,
+      "stdout_sha256": "455428d349babd9a173fca7675112f6cb95c617bce546768d4fa5dad1313ea35",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "environment": {
+        "RUSTC_BOOTSTRAP": "1"
+      },
+      "name": "syntax-current-fork-host-1",
+      "command": [
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "-Zunpretty=normal",
+        "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/source/host-kernel/native-rust/current_fork_host.rs"
+      ],
+      "pid": 2057129,
+      "exit_code": 0,
+      "elapsed": 0.01673351600766182,
+      "positive_wait": true,
+      "stdout_sha256": "2fc0de4ca6491125d12fffac441c0b5b4c9e58632d46b5ed016e3e7040d5cd82",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "environment": {
+        "RUSTC_BOOTSTRAP": "1"
+      },
+      "name": "pair-actual-body-compile-1",
+      "command": [
+        "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "-C",
+        "codegen-units=1",
+        "-C",
+        "debuginfo=0",
+        "-C",
+        "linker=/usr/bin/x86_64-linux-gnu-gcc-9",
+        "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/fixture-1/actual-pair.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/pair-tests-1"
+      ],
+      "pid": 2057132,
+      "exit_code": 0,
+      "elapsed": 0.46757833095034584,
+      "positive_wait": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "9a6f030affc726fdde1a81003a9d820068db73b03a3c934e9043f3e78442609e"
+    },
+    {
+      "environment": {
+        "RUSTC_BOOTSTRAP": "1"
+      },
+      "name": "pair-eight-affected-cases-1",
+      "command": [
+        "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/pair-tests-1",
+        "pair_",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "pid": 2057187,
+      "exit_code": 0,
+      "elapsed": 0.004800848022568971,
+      "positive_wait": true,
+      "stdout_sha256": "5949e4e27d38c86d17e53a3ad5294dd3fc0f5258bcda9bdd84fd1ba8124cafa6",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

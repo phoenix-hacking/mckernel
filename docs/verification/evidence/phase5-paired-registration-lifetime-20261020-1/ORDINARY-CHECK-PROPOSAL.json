@@ -1,0 +1,70 @@
+{
+  "status": "SOURCE_READY_UNRUN_REQUIRES_ROOT_CPU6_GRANT",
+  "source_freeze": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/SOURCE-FREEZE.json",
+    "sha256": "f85f12b10e3df336fc2ede5d962e95392e412953be2c907f21cd161ca5749851",
+    "size": 2358,
+    "mode": 33152
+  },
+  "commands": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/COMMANDS.json",
+    "sha256": "4d7b70eabf2740eb167be1b34275ef5b13b98095c69b6d1149157617fcdf6e71",
+    "size": 1664,
+    "mode": 33152
+  },
+  "input_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/CHECK-PINS.json",
+    "sha256": "23210fc2d397aef572e30fb1c96a315f63fa414424d6597e18f6530b7557d934",
+    "size": 2747,
+    "mode": 33152
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/run-pair-checks-1.py",
+    "sha256": "620bb1c4955b4707d2cfb2b274ad076dadfa0e7d0b938044680dc4c11d596312",
+    "size": 4234,
+    "mode": 33152
+  },
+  "capture_ancestor": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/run-panic-free-checks-1.py",
+    "sha256": "c35c2ed0196f586201e62c3e462773b250f2bcc00bb3f2c16c216abd78bf514e",
+    "size": 3661,
+    "mode": 33152
+  },
+  "outer_argv": [
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/run-pair-checks-1.py"
+  ],
+  "expected_exits": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "profile": "CPU6/1job1GiBAS30CPU35+2wall32MiBperfile/core0nofile256/statusFIRST/directwait/groupabsence/fresh2GiBMemAvailable/host16GiB+scratch12GiB+512MiB",
+  "affected_tests": 8,
+  "prior_tests_replayed": 0,
+  "no_effects": "No root/Docker/module/guest/sourceintegration/activation. Source syntax and std ownership fixture only.",
+  "cases": [
+    "Concurrent private reservation and same-carrier race; zero key never routes",
+    "Exact child PID/root/length identity and duplicate/reused PID refusal",
+    "64-row no-growth capacity; 65th refusal retains caller owners",
+    "Exact initial response/MM/nonce private rollback; bound row cannot rollback",
+    "No-effect refusal/uncertain partial publication retain both leases",
+    "Cross-worker authenticated adapter ACK removes exact row once",
+    "Unrelated current table registration cannot replace owned child",
+    "Actual Arc lifetime: parent survives file owner drop until acknowledged child teardown"
+  ],
+  "failure_history": "First source candidate and new fixture unrun; old parked parent-exit expected red retained separately. Unsupported postexit delegated producer remains OPEN."
+}

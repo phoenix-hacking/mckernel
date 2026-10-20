@@ -1,0 +1,50 @@
+[
+  {
+    "name": "syntax-mcctrl-process-1",
+    "argv": [
+      "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "-Zunpretty=normal",
+      "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/source/host-kernel/native-rust/mcctrl_process.rs"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "syntax-current-fork-host-1",
+    "argv": [
+      "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "-Zunpretty=normal",
+      "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/source/host-kernel/native-rust/current_fork_host.rs"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "pair-actual-body-compile-1",
+    "argv": [
+      "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--test",
+      "-C",
+      "codegen-units=1",
+      "-C",
+      "debuginfo=0",
+      "-C",
+      "linker=/usr/bin/x86_64-linux-gnu-gcc-9",
+      "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/fixture-1/actual-pair.rs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/pair-tests-1"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "pair-eight-affected-cases-1",
+    "argv": [
+      "/home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/pair-tests-1",
+      "pair_",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "expected_exit": 0
+  }
+]

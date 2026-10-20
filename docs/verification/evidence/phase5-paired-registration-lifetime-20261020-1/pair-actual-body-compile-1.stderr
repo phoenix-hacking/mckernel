@@ -1,0 +1,15 @@
+warning: type `process::Error` is more private than the item `DeferredModule::acquire`
+  --> /home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/fixture-1/actual-pair.rs:29:73
+   |
+29 | pub(crate) mod mcctrl_vm {pub struct DeferredModule;impl DeferredModule{pub fn acquire()->super::Result<Self>{Ok(Self)}}}
+   |                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ associated function `DeferredModule::acquire` is reachable at visibility `pub(crate)`
+   |
+note: but type `process::Error` is only usable at visibility `pub(self)`
+  --> /home/holden/mckernel-work/host-preparation/phase5-parent-exit-rust-lifetime-correction-20261020-1/fixture-1/actual-pair.rs:7:42
+   |
+7  | #[derive(Clone,Copy,Debug,PartialEq,Eq)] struct Error(i32);
+   |                                          ^^^^^^^^^^^^
+   = note: `#[warn(private_interfaces)]` on by default
+
+warning: 1 warning emitted
+
