@@ -1,0 +1,70 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "-k",
+    "2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-retirement-whole-consumer-compiler-preparation-20261020-1/run_materialization_once.py"
+  ],
+  "authority": "Ordinarysource materialization only. No compiler/root/Docker/guest/defaultactivation. Heavy proposal remains separatelyunreleased.",
+  "fresh_at_execution": [
+    "CPU6 exclusive dispatchergrant",
+    "usage<100/running/no actualstop",
+    "18GiB MemAvailable and16GiB host/12GiB scratch floors plus exactrunner growthreserves",
+    "fresh target/capture paths and exactinputpins"
+  ],
+  "materializer": {
+    "bytes": 2363,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-retirement-whole-consumer-compiler-preparation-20261020-1/materialize_sources.py",
+    "sha256": "29f26418aa11a89a4247fa69b84fdd4c8d0ed5d649c8ae8f3300f5703d21fc25"
+  },
+  "normalizer": "Accepted exact29f264: posixnormpath, reject absolute/escape/NUL/normalizedcollision; exactinput/output appendpins; no targetexists reuse",
+  "output_absence_at_source_preparation": {
+    "compiler-attempt-1": true,
+    "materialization-result.json": true,
+    "materialized-source": true,
+    "source-materialization-capture-1": true
+  },
+  "profile": {
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 30,
+    "FSIZE_bytes": 33554432,
+    "core": 0,
+    "cpu": 6,
+    "jobs": 1,
+    "kill_seconds": 2,
+    "nofile": 256,
+    "wall_seconds": 35
+  },
+  "proposal": {
+    "bytes": 2353,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-retirement-whole-consumer-compiler-preparation-20261020-1/ORDINARY-MATERIALIZATION-PROPOSAL.json",
+    "sha256": "5edb697b98b1f1d8e1a47f431c0d1e650fd76818961bb5c3faff950c2aa7633e"
+  },
+  "runner": {
+    "bytes": 1749,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-retirement-whole-consumer-compiler-preparation-20261020-1/run_materialization_once.py",
+    "sha256": "a028132ef01e5a26880696406f672fe8e31ac48fc1287d8fd97e07300f73af23"
+  },
+  "source": {
+    "bytes": 53125,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-retirement-whole-consumer-compiler-preparation-20261020-1/source-manifest.json",
+    "sha256": "64d40ff5c050983f082980c3fe3b64c04b127faa7ac4adc6f1caf2b71c35de2b"
+  },
+  "source_bytes": 4864550,
+  "source_count": 160,
+  "status": "READY_FROZEN_NO_EXECUTION_GRANT"
+}
