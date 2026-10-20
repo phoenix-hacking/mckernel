@@ -1,0 +1,69 @@
+{
+  "operations": [
+    null,
+    {
+      "argv_template": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--nofile=256",
+        "--core=0",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-independent-review-20261019-1/review_final_ihk_logging_release.py",
+        "--config-sha256",
+        "ac81b4076493313057cd31414e988b1e00e85cd7a98ce5e11402d0c67976b6a8",
+        "--machine-sha256",
+        "d07b5a9c97f1f06064d02dd82a20380c36c17e24a811e80fb29c29c49a4270ac",
+        "--snapshot-sha256",
+        "97f86bca23c78357bbfc351a6d4faaa03b6a776af4499020e00aeb418b72c6b2"
+      ],
+      "profile": "metadata",
+      "role": "final-guard",
+      "status_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/final-guard.status.json.retry2",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/final-guard.stderr.retry2",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/final-guard.stdout.retry2"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "as_limit": 1073741824,
+      "cpu": 7,
+      "cpu_limits": 30,
+      "parent_kill_grace_seconds": 4,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "as_limit": null,
+      "cpu": 7,
+      "cpu_limits": null,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "snapshot_metadata": {
+      "as_limit": 1073741824,
+      "cpu": 6,
+      "cpu_limits": 30,
+      "parent_kill_grace_seconds": 4,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 16123,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-physical-review-20261019-1/decision.json",
+    "sha256": "7d869a4f69a7d840a14bd18b4638f0a5043354ac246a1d5c57adf9e23f75001c"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-physical-review-20261019-1/decision.json"
+}

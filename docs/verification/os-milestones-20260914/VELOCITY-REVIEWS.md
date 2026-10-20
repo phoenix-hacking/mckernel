@@ -5808,3 +5808,123 @@ No sustained CPU/RAM bottleneck is shown. Preserve oneheavy4CPU/12GiB/noSwap/
 512tasks, disjoint admittedCPU6/7ordinary work, aggregate reserves and disk/growth
 floors, source/ownership/runtime controls, mutex27:4, Scratch21, failures and WIP.
 Next review: 2026-10-20T00:05:00.735334Z.
+
+## Review — review 84, 2026-10-20T00:05:23.128801Z
+
+Counts remain 26 distinct native behaviors, 11/35 practical checks and 17 selected
+production Rust paths/14 with applicable native evidence. This interval added a
+tested configuration and useful source integration, not another logical case or
+retired compute-C path. Hold whole-milestone closure and engineering bands.
+
+Matched205/N3 native diagnostic passed d67e2153, with separate physical retirement
+7d869a4f. One guest ran two Rust apps on distinct McKernel CPUs, exact387/254-byte
+oracles, zero exits, strict startup/syscall CPU checks and1.62-second overlap.
+Inner owner took44.117725seconds; all three readbacks joined. All30clients/QEMU,
+container and lease retired. Module authority stays b9ea18d0/5d31c1f0; image is
+ff4fca45. The newer pin SDK is NOT silently substituted. A reusable tested recipe
+and source-only M12 preparation are saved. One boot/two apps does not meet stress
+quotas, positive-provider authority or whole-native/application acceptance.
+
+Current-production pin SDK compiled all three modules in20.721162seconds; artifact
+4c177a62, physical2adfe769 and FP1e7 ABIjoin44a3f0cd passed. Pin remains inactive
+with no callers; no module-load, provider or compute-C-retirement credit. This is
+a separate source/module profile from the just-tested205 matched pair.
+
+Private park-only control ownership passed independent64aa6f3d after compile and
+all8 isolated actual-body scenarios, nine children joined in2.50seconds. Four
+failures and reviewer erratum96f9686b remain preserved. Latest failure was the
+incorrect added fixture assertion, not an established production defect: identity
+was removed but published status remained set. Next source work is the legitimate
+receipt transition using real typed revoke proof and the same response owner;
+parking alone never grants release/receipt/terminal-ACK authority. Default/current
+activation and full-module/native proof are still separate work.
+
+Second-stop/final-public-release variant passed actual offline37f251c5: two
+compiles,9gate scenarios,2modeled positives and9refusals. Its two-command stage
+chain passed in10.03seconds; actual stage7f4ca1ea and typed compositionc3e32571
+preserve61members with onlyinit changed, retained oracle and19source bindings.
+Native case/capture composition is underway. This extends accepted c32f227b
+through second stop and final release; do not promote it before actual execution.
+
+Observed avoidable delay: root supplied a captured-summary file hash where the
+assembler required the snapshot hash declared in that summary. Assembly refused
+before any owner/guest; failure retained. Parsed-field correction with fresh paths
+passed84b00821; original source/oracles/build were reused. Carry this exact parsed
+output projection into subsequent cases, rather than inventing another framework.
+Closed-result reviews woke promptly through unconditionalfollowup_task; retain the
+persistent rule above. Do not replay accepted compiles/fixtures/stages.
+
+Next tactics: finish the small final-release binding and seek actual native feedback
+within20minutes of a ready static packet, recording any concrete blocker. On
+acceptance, use the existing tested tuple and consumers for bounded repeatability
+before expanding duration: M12 needs2freshboots/10cycles/100real launches/60-minute
+mixed workload; the current120-second/one-launch collector cannot claim that.
+Use existing free authors for driver/consumer code while provider source advances.
+Run the reviewed source, correct real failures and checkpoint coherent changes;
+keep delivery recipe explicit about tested/inactive profiles. No extra broad review,
+new monitoring framework or rebuild merely because mutableHEAD advanced.
+
+Usage86%,11percentage points to97%included stop; host/scratch44.521/13.588GiB.
+No sustained CPU/RAM bottleneck is established. Preserve oneheavy4CPU/12GiB/
+noSwap/512tasks, admittedCPU6/7ordinary lanes, reserves/growth floors, fresh live
+identities, permanentmutex27:4, Scratch21, failures, dirtyworktree and all evidence.
+Next review: 2026-10-20T00:35:23.128801Z.
+
+
+## Review — review 85, 2026-10-20T00:35:44.078306Z
+
+Practical checks increased 11 -> 12/35: P-M00-01 accepted for the exact tested
+profile (4d28cbe5). Distinct native behaviors remain 26; selected Rust paths remain
+17 production/14 with applicable native evidence. All whole milestones stay open;
+engineering bands are held. A check fraction is not an engineering percentage.
+
+The final-release native diagnostic passed semantic 60492285 and physical
+12002bac. Actual sequence: one typed payload, two strict stops, two public
+releases, one reboot, destroy return zero, CPU 1 online and final empty device CPU
+and memory inventories. Inner/outer owner took 63.8087/63.8550 seconds; all
+readbacks and decoder passed, all 30 clients/QEMU/container/lease retired. Owner
+completed at 00:20:41, about 15 minutes after static readiness around 00:06;
+the 20-minute feedback target was met. Full restoration, repetition quotas and
+non-null FP proof remain open. No new logical case is counted.
+
+Private receipt transition passed 5b21a833: compilation plus three isolated
+real-verifier/Mirror/writer body scenarios, with nine source-body bindings.
+Success verifies before exact receipt writing; MM refusal writes nothing;
+uncertain copying retains ownership. The first failure was a fixture expecting
+parent ownership after inheritance installed the child. Preserve that failure and
+correction. Current/default integration, guest delivery/consumption, publication,
+final ACK and native proof remain unfinished. The same response is still parked;
+source work now targets exact-call completion/publication with retained ownership
+on failure, not the unsafe generic preparation path.
+
+Two-round collector production compiles succeeded. Consolidated fixture fixes
+(header, modeled clock and lifetimes) then passed 16 C scenarios, evaluator
+positive and 14 refusals; independent 94c71580. This is offline validation only.
+Stage/native preparation reuses the tested 205 image, matched b9/5d modules,
+Rust applications and strict per-round oracles. No image rebuild is needed.
+
+Avoidable delays remain: a completed snapshot author needed explicit follow-up
+for a correction, and root used the wrong machine-hash placeholder in a guard
+call. Both failed before an owner; the corrected guard ran within the original
+snapshot window. Use exact frozen argv/field names and parsed output summaries;
+do not hand-rename keys. Apply the persistent follow-up rule to source corrections
+as well as result review. Consolidate fixture corrections; reuse passed compiler
+outputs and inspect closed diagnostics before another bounded run.
+
+Next: obtain real two-round native feedback within 20 minutes once its static
+packet is ready. Continue the Rust exact-response delivery/consumer transition
+in parallel. Activate a freed lifecycle author to prepare a bounded repeated-cycle
+extension from the accepted stop/release/reboot/final-release implementation,
+with focused ordinary checks on the free admitted lane. This should be executable
+reuse, not another framework. Keep useful source work moving while a single heavy
+operation runs; do not fill agents with repeated broad reviews. After acceptance,
+measure actual cycles/launches/duration toward M12's two boots, 10 cycles,
+100 real launches and 60-minute mixed workload. Source and fixtures earn no quotas.
+Checkpoint coherent accepted source/results and preserve tested/inactive tuples.
+
+Usage 88%, nine percentage points to the 97% included stop. Host/scratch free
+44.511/13.585 GiB; no sustained CPU/RAM bottleneck established. Preserve the
+4-CPU/12-GiB/no-swap/512-task heavy profile, explicit CPU6/7 ordinary grants,
+reserves/growth floors, fresh live identities, mutex 27:4, Scratch21, failures,
+dirty worktree and evidence. Next review: 2026-10-20T01:05:44.078306Z.
+

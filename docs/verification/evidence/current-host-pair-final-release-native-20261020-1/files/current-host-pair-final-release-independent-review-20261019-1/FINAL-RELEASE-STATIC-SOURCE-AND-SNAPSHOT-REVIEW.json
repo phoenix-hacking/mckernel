@@ -1,0 +1,271 @@
+{
+  "allowed_snapshot_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=256",
+    "--fsize=33554432",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/snapshot_case_adapter-prior-argv-correction-1.py",
+    "--config-sha256",
+    "b8c2bd87e4c4d54519a6b90b242e753c3fe9dbd2230426d4c16a3c2d5310ea0f"
+  ],
+  "application_acceptance": false,
+  "blocking_findings": [],
+  "component_sdk_history": {
+    "bytes": 26344,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "69b2fc614ffd0478ab49edcda2ad9160e94aa88a18e5bb74892a35687644a5a0"
+  },
+  "conditions": [
+    "Root fresh aggregate admission then exactCPU6/1GiB30CPU/35s+2grace32MiB snapshot.",
+    "Genuine original epoch0..60s, exact15fields, usage<97,memory>=16GiB,16/12GiB floors+640MiB actualheadroom.",
+    "Exact machinebase and conditionalmetadata must be fixed in current96d config before clock; only status,runtime_release,fresh_live_preflight change after actualsnapshot.",
+    "Exact guard with actual wholemachine/snapshot hashes must PASS immediately before exactownerargv in same controlflow within original60s.",
+    "Metadata/snapshot outerprlimit AS1GiBCPU30; native separatecontroller AS/CPUunlimited/noouterkill, no leaked limits.",
+    "Owner nonzero stops normalreaders; separatefailure-onlyauthority required; preserve allattempts."
+  ],
+  "corrected_prior_snapshot_argv_hash": "8ee265b5b7377476aabec87b0e673e71c36c368575fe57529999eafded09c016",
+  "decision": "PASS_EXACT_CURRENT_PAIR_FINAL_STOP_PUBLIC_RELEASE_NON_TEMPORAL_AND_SNAPSHOT_BOUNDARY",
+  "final_release_contract": {
+    "first_physical_provenance": {
+      "bytes": 9063,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-lifecycle-physical-review-20261019-1/decision.json",
+      "sha256": "9b50f20c955a2ef082ce275b9336651f8a4aafae4ca459b72e76102bed585f64"
+    },
+    "first_semantics": {
+      "bytes": 18017,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-repeatability-independent-review-20261019-1/ACTUAL-FIRST-PUBLIC-CYCLE-NATIVE-DIAGNOSTIC-REVIEW.json",
+      "sha256": "c32f227b0a57bbfdbb8730e66852f7b438f3e6e4d1fc5a344c5b067586a84248"
+    },
+    "fixed_tuple_provenance": {
+      "bytes": 31594,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-repeatability-20261019-1/NATIVE-NONTEMPORAL-PROPOSAL.json",
+      "sha256": "b431ba93e430ae86c1bb05841aaef86cf76ba80b8634264d0ce37f47496049db"
+    },
+    "future_queue_predecessor": null,
+    "mandatory_consumers": {
+      "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/final_release_capture.py": {
+        "bytes": 5059,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/final_release_capture.py",
+        "sha256": "112d41f52587f342659f94905edc1fc20c94aeb76d035e2d3bb75ddbb625bd32"
+      },
+      "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-decoder-20261017-2/reboot_capture.py": {
+        "bytes": 7120,
+        "path": "/home/holden/mckernel-work/scratch/native-resource-reboot-cycle-decoder-20261017-2/reboot_capture.py",
+        "sha256": "eb9fa1106ec8caead27eaae37202c38bdae05c854cf61d533e89f86e18257cb5"
+      },
+      "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/resource_capture.py": {
+        "bytes": 4146,
+        "path": "/home/holden/mckernel-work/scratch/native-resource-release-collector-20261017-1/transport-correction1/resource_capture.py",
+        "sha256": "e66e014f4b67854f05457770a42250fb5e0929e0da304bdbc2b7366b6bde9240"
+      },
+      "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py": {
+        "bytes": 7025,
+        "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_lifecycle_capture.py",
+        "sha256": "0585f78b80e603c010316418ce307794d59e1d92581b845ec6b2e74e22c8954b"
+      },
+      "/home/holden/mckernel/scripts/application-tests/native_resource_reboot_sequence.py": {
+        "bytes": 4238,
+        "path": "/home/holden/mckernel/scripts/application-tests/native_resource_reboot_sequence.py",
+        "sha256": "53dace6e984b28b2236c91c69906c202399fed2cac88cff260db1f504e62191c"
+      },
+      "/home/holden/mckernel/scripts/application-tests/native_resource_release_capture.py": {
+        "bytes": 5649,
+        "path": "/home/holden/mckernel/scripts/application-tests/native_resource_release_capture.py",
+        "sha256": "9c628074de9ae897e82f15c2f4438d2558c2a10fde6a0d5a288b8964eddfcc76"
+      }
+    },
+    "not_proven": [
+      "physical-frame identity",
+      "mapping/callback/reference quiescence",
+      "generation identity",
+      "full ring history",
+      "nonnullFPownership",
+      "process provider/exec",
+      "tenfullcycles",
+      "hundredlaunches",
+      "sixtyminmixed"
+    ],
+    "public_witnesses": [
+      "both strictstop transitions Running5->NotBooted0",
+      "both destroy return0",
+      "CPU1online/unowned before publicrelease",
+      "deviceMEM128MiB node0 then deviceCPU+MEMempty afterrelease"
+    ],
+    "queue_policy": "Root-selected genuine current physical late; latest supplied2057d869 is independent of unchanged FP1e7/b9/5d artifacts.",
+    "required_order": [
+      "typed380-exact",
+      "first strict Running5/shutdown0/NotBooted0",
+      "first destroy/public CPU-MEMrelease",
+      "strict secondboot392",
+      "second strict Running5/shutdown0/NotBooted0",
+      "final destroy/public CPU-MEMrelease",
+      "VMteardown separate physicalreview"
+    ],
+    "schema": "mckernel.current-pair-final-stop-public-release-contract.v1",
+    "scope": "One bounded sameguest typedAVX lifecycle: firststop/publicrelease/reboot/secondstop/finalpublicrelease; no secondapp",
+    "timer_budget": {
+      "PID1_global_alarm_seconds": 120,
+      "all_helpers_share_global_deadline": true,
+      "boot_helper_milliseconds": 60000,
+      "new_final_record_bytes_max": 16384,
+      "ordinary_helper_milliseconds": 10000,
+      "payload_milliseconds": 10000,
+      "procfs_milliseconds": 5000,
+      "rawexport_bytes_max": 262144,
+      "serial_UTF8_bytes_max": 4194304
+    }
+  },
+  "full_restoration_verified": false,
+  "handoff_gap": "Correction prescription was initially message-only to a completed sourceowner; root positively identified idle owner and reactivated with followup_task. This was inactive handoff delay, not active coding. No root attempt/clock occurred during gap.",
+  "implementation_ownership": false,
+  "latest_native_physical": {
+    "bytes": 16123,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-physical-review-20261019-1/decision.json",
+    "sha256": "7d869a4f69a7d840a14bd18b4638f0a5043354ac246a1d5c57adf9e23f75001c"
+  },
+  "native_acceptance": false,
+  "physical_release": false,
+  "preclock_finding": {
+    "bytes": 1606,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-independent-review-20261019-1/PRE-CLOCK-PRIOR-SNAPSHOT-ARGV-SHAPE-FINDING.json",
+    "sha256": "6a2c9cd24a86dbc3532929aa48776c7be35a03437078b0f4f59d22d27a404a75"
+  },
+  "queue_context_bindings": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/fresh-snapshot-bindings.json",
+    "sha256": "37fa988add4ed7d1c1c8a2a6e9bb8c647db7eae532732006211179415a7d7a5d"
+  },
+  "queue_context_producer": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/root_manual_snapshot_current_parent_sdk.py",
+    "sha256": "926c8437a415ff6d8d1bf1dac4aa74ceee082e6c2f9ae4ed7dc99107f7762132"
+  },
+  "repeat_quota_credit": false,
+  "reviewed_source_delta": [
+    "Only decorate changes from accepted1188 lifecycle adapter; other function ASTs unchanged. Pinned live collect_live/validate_live/publish/main remain inherited.",
+    "Fixed actual7f4/c3e schemas, full4671 contract, mandatory7/source19, originalhost-ref3 to retainedscratch-full11 oracle joined.",
+    "Latest native2057d869 uses actual schema/decision/root_owner_receipt257 without invented status or terminal_receipt.14actual closed joins and fixed45identities/44PG/1SID/0matches/0denials verified.",
+    "SDK69 module authority is separate from actual prior205 queue37fa/source926c/SDK2ad context; whole previous real argv canonical8ee265 authenticates its Python-c producer invocation. Only false directpathmembership was corrected.",
+    "Fresh live rootmutex/container/coordination/resource admission remains mandatory; historical physical record is not fresh reacquisition."
+  ],
+  "runtime_release": false,
+  "schema": "mckernel.independent-current-host-pair-final-release-final-static-review.v1",
+  "snapshot_adapter": {
+    "bytes": 25451,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/snapshot_case_adapter-prior-argv-correction-1.py",
+    "sha256": "6095feb3eabd02395046d117af487de4a8ddda789aa4c74b67211c2ac0495943"
+  },
+  "snapshot_bindings": {
+    "bytes": 7132,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/fresh-snapshot-bindings.json",
+    "sha256": "55d3a15db81d6fd281c3ca205a0284bdef686c87213c19097676b748c86276c9"
+  },
+  "snapshot_capture": {
+    "status.json": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/captures/snapshot-1.status.json",
+    "stderr": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/captures/snapshot-1.stderr",
+    "stdout": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/captures/snapshot-1.stdout"
+  },
+  "snapshot_config": {
+    "bytes": 1304,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/adapter-config.json",
+    "sha256": "b8c2bd87e4c4d54519a6b90b242e753c3fe9dbd2230426d4c16a3c2d5310ea0f"
+  },
+  "snapshot_equal": {
+    "accepted_actual_stage_fixture_parent_review": {
+      "bytes": 25343,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-independent-review-20261019-1/ACTUAL-FINAL-RELEASE-STAGE-REVIEW.json",
+      "sha256": "7f4ca1eaf7b488ec3a622cc41f383da20a2c0952997820cad4a3f3a5a70408f6"
+    },
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "cgroup": {
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+      "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+    },
+    "current_predecessor_container_absent": true,
+    "exclusive_heavy_accepted": true,
+    "guest_profile": {
+      "memory_mib": 8192,
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "heavy_profile": {
+      "cpus": 4,
+      "cpuset": "2-5",
+      "memory": 12884901888,
+      "memory_swap": 12884901888,
+      "network": "none",
+      "pids": 512
+    },
+    "image_id": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "independent_static_execution_decision": {
+      "bytes": 25343,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-independent-review-20261019-1/ACTUAL-FINAL-RELEASE-STAGE-REVIEW.json",
+      "sha256": "7f4ca1eaf7b488ec3a622cc41f383da20a2c0952997820cad4a3f3a5a70408f6"
+    },
+    "non_temporal_join_result": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/NATIVE-NONTEMPORAL-PROPOSAL.json",
+      "sha256": "04b35f6b7b2616a57789d051759f0af37242ad2b3d58d92ab97034aec563cc96"
+    },
+    "parent_identity": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 759275,
+      "mode": "0o700",
+      "uid": 1000
+    },
+    "released_paths_absent": [
+      "/home/holden/mckernel-work/scratch/native-current-parent-pin-sdk-external-modules-operational-exclusion.json",
+      "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock"
+    ],
+    "root_mutex_snapshot_free": true,
+    "status": "PASS_LIVE_PREEXECUTION_SNAPSHOT",
+    "terminal_acceptance": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-physical-review-20261019-1/decision.json",
+      "sha256": "7d869a4f69a7d840a14bd18b4638f0a5043354ac246a1d5c57adf9e23f75001c"
+    }
+  },
+  "snapshot_observed": false,
+  "snapshot_output": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/root-live-preflight-1.json",
+  "snapshot_packet": {
+    "bytes": 7677,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/FINAL-RELEASE-SNAPSHOT-DATA-CORRECTION-1-PACKET.json",
+    "sha256": "15fad720106c736e4576bf03c7c5852a87033e8a95463445bbf3e8eee94cdc66"
+  },
+  "snapshot_projection": {
+    "bytes": 6047,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/finalrelease-case-1/SNAPSHOT-STATIC-EQUALITY-AND-CAPPED-ARGV-CORRECTION-1.json",
+    "sha256": "7120f184108d96e5366e6073867fd9db598befc764cad1f5a8b5edb1a978cb24"
+  },
+  "stage_acceptance": {
+    "bytes": 25343,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-independent-review-20261019-1/ACTUAL-FINAL-RELEASE-STAGE-REVIEW.json",
+    "sha256": "7f4ca1eaf7b488ec3a622cc41f383da20a2c0952997820cad4a3f3a5a70408f6"
+  },
+  "status": "PASS_FINAL_RELEASE_STATIC_SOURCE_DATA_AND_EXACT_ROOT_SNAPSHOT_ONLY",
+  "typed_composition": {
+    "bytes": 23029,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-independent-review-20261019-1/ACTUAL-TYPED-FINAL-RELEASE-COMPOSITION-REVIEW.json",
+    "sha256": "c3e32571e5ffb3516f658756432b2285de1b139d654106de0ad76619a905c2ed"
+  },
+  "whole_case": {
+    "bytes": 41846,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/NATIVE-NONTEMPORAL-PROPOSAL.json",
+    "sha256": "04b35f6b7b2616a57789d051759f0af37242ad2b3d58d92ab97034aec563cc96"
+  }
+}

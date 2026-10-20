@@ -1,13 +1,13 @@
 {
   "schema": "mckernel.supervisor-velocity.v1",
-  "observed_at": "2026-10-19T23:59:36.333860Z",
+  "observed_at": "2026-10-20T00:38:03.122414Z",
   "baseline_at": "2026-10-19T10:27:41Z",
-  "elapsed_wall_hours": 13.532037183333333,
-  "monotonic_ns": 236482902819764,
-  "boottime_ns": 251821029870483,
-  "previous_sample_interval_seconds": 334.264393,
+  "elapsed_wall_hours": 14.172811781666667,
+  "monotonic_ns": 238789691374210,
+  "boottime_ns": 254127818424652,
+  "previous_sample_interval_seconds": 342.547058,
   "largest_observed_sample_gap_minutes": 299.53526335,
-  "interval_wall_minus_monotonic_seconds": 9.709999631013488e-07,
+  "interval_wall_minus_monotonic_seconds": -1.3700002909899922e-07,
   "baseline": {
     "practical_checks": 7,
     "native_behaviors": 25,
@@ -15,22 +15,22 @@
     "native_rust_paths": 11
   },
   "last_confirmed_counters": {
-    "practical_checks": 11,
+    "practical_checks": 12,
     "native_behaviors": 26,
     "production_rust_paths": 17,
     "native_rust_paths": 14
   },
   "delta": {
-    "practical_checks": 4,
+    "practical_checks": 5,
     "native_behaviors": 1,
     "production_rust_paths": 0,
     "native_rust_paths": 3
   },
   "gains_per_wall_hour": {
-    "practical_checks": 0.2955948129470543,
-    "native_behaviors": 0.07389870323676358,
+    "practical_checks": 0.3527881465601471,
+    "native_behaviors": 0.07055762931202943,
     "production_rust_paths": 0.0,
-    "native_rust_paths": 0.22169610971029072
+    "native_rust_paths": 0.21167288793608827
   },
   "known_production_native_events": [
     {
@@ -194,11 +194,49 @@
       "module_load_acceptance": false,
       "native_acceptance": false,
       "compute_C_retirement": false
+    },
+    {
+      "at": "2026-10-20T00:03:02.373401Z",
+      "kind": "matched_205_two_cpu_native_diagnostic_acceptance",
+      "result": "pass_one_guest_two_cpu_concurrent_rust_diagnostic_configuration",
+      "invocation_seconds": 44.117725480988156,
+      "proof": "d67e2153/7d869a4f",
+      "time_basis": "first_observed_acceptance; duration is closed inner owner only",
+      "guest_count": 1,
+      "completed_app_processes": 2,
+      "new_logical_cases": 0,
+      "compute_C_retirement": false,
+      "image_sha256_prefix": "ff4fca45",
+      "module_authority": "b9ea18d0/5d31c1f0",
+      "application_acceptance": false,
+      "whole_native_acceptance": false
+    },
+    {
+      "at": "2026-10-20T00:25:31.360066Z",
+      "kind": "native_second_stop_final_public_release_diagnostic_acceptance",
+      "result": "pass_typed_payload_two_stops_two_public_releases_one_reboot_final_inventory",
+      "invocation_seconds": 63.80869925400475,
+      "outer_owner_seconds": 63.854995617002714,
+      "proof": "60492285/12002bac",
+      "time_basis": "first_observed_acceptance; duration is closed inner owner only",
+      "static_packet_ready_at_approx": "2026-10-20T00:06:00Z",
+      "owner_completed_at_rounded": "2026-10-20T00:20:41Z",
+      "ready_to_native_feedback_target_minutes": 20,
+      "ready_to_native_feedback_target_met": true,
+      "guest_count": 1,
+      "completed_app_processes": 1,
+      "strict_stops": 2,
+      "public_releases": 2,
+      "reboots": 1,
+      "new_logical_cases": 0,
+      "full_restoration_verified": false,
+      "repetition_quotas_met": false,
+      "nonnull_fp_acceptance": false
     }
   ],
-  "known_event_rate_per_wall_hour": 0.8867844388411629,
-  "known_invocation_wall_seconds": 753.8851495890476,
-  "known_invocation_fraction_percent": 1.5475315262245595,
+  "known_event_rate_per_wall_hour": 0.987806810368412,
+  "known_invocation_wall_seconds": 861.8115743240405,
+  "known_invocation_fraction_percent": 1.689093933277004,
   "last_build_to_native_feedback_minutes_approx": 89,
   "build_to_native_target_minutes": 30,
   "pending_build_finished_at": null,
@@ -220,9 +258,9 @@
   "post_guard_hold_target_minutes": 10,
   "last_successful_snapshot_review_age_seconds": 17.72,
   "snapshot_launch_target_seconds": 30,
-  "included_usage_percent": 86.0,
-  "usage_delta_percentage_points": 24.0,
-  "remaining_percentage_points_to_97_stop": 11.0,
+  "included_usage_percent": 88.0,
+  "usage_delta_percentage_points": 26.0,
+  "remaining_percentage_points_to_97_stop": 9.0,
   "notes": [
     "Rates use elapsed wall time since the named baseline, not CPU time.",
     "Confirmed counters come from accepted campaign reports; no OS-percent inference.",

@@ -1,0 +1,135 @@
+{
+  "schema": "mckernel.current-pair-final-public-release-stage-and-typed-ordinary.v1",
+  "status": "UNRUN_INDEPENDENT_AFFECTED_REVIEW_AND_ROOT_ALLOCATION_REQUIRED",
+  "commands": [
+    [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/stage_final_release.py",
+      "--binding",
+      "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/STAGE-BINDING-CONSUMED-SOURCES.json",
+      "--binding-sha256",
+      "696dec0fdc14f601d532ad95813850d2bf949b7f665f6c9000dae273d2d86158"
+    ],
+    [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/prepare_final_release_runtime.py"
+    ]
+  ],
+  "source_pins": {
+    "stage_final_release.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/stage_final_release.py",
+      "sha256": "d173b3983ebc9dad010399f8c893bcb9ec949d9004b2509048c6d36af0f26e47",
+      "bytes": 7691
+    },
+    "STAGE-BINDING-CONSUMED-SOURCES.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/STAGE-BINDING-CONSUMED-SOURCES.json",
+      "sha256": "696dec0fdc14f601d532ad95813850d2bf949b7f665f6c9000dae273d2d86158",
+      "bytes": 3618
+    },
+    "prepare_final_release_runtime.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/prepare_final_release_runtime.py",
+      "sha256": "5ab87bd4a39e9d76ffd846eff666e92ddbadaa672afb5a38fe3bb58191891642",
+      "bytes": 2355
+    },
+    "typed_avx.py.in": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/typed_avx.py.in",
+      "sha256": "c6b284d20ee7835a421ea628617be0e550b3c5ac221b2b69b6d65533856f3bab",
+      "bytes": 3548
+    },
+    "owner.py.in": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/owner.py.in",
+      "sha256": "20d93b032e4b6ed2380c77a42f1f70cad9ff47488d67f793d594ba4a7f325fec",
+      "bytes": 2885
+    },
+    "runner.py.in": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/runner.py.in",
+      "sha256": "9f019f861d5b4f43e1976b0e7c9fb3a4f7a8fe0837fd5e4c9203caaa3dab6ba1",
+      "bytes": 1384
+    },
+    "collector-typed-avx-final-release.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/collector-typed-avx-final-release.c",
+      "sha256": "933e93a71618417e821e1fc43a2d28303948c5e6a7ec699c479ecf477d822add",
+      "bytes": 48622
+    },
+    "collector-final-release": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/collector-final-release",
+      "sha256": "3ab61c219ba9ca93601a33eb10cd8a5df252e983145c98d37703055da5597139",
+      "bytes": 1034488
+    },
+    "final_release_capture.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/final_release_capture.py",
+      "sha256": "112d41f52587f342659f94905edc1fc20c94aeb76d035e2d3bb75ddbb625bd32",
+      "bytes": 5059
+    },
+    "FINAL-RELEASE-CONTRACT.json": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/FINAL-RELEASE-CONTRACT.json",
+      "sha256": "46715881f8176747ea675b12033abfb1c8c0444b8055388aeb91ce1b2afa59b0",
+      "bytes": 4431
+    }
+  },
+  "all_input_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/NEXT-ORDINARY-INPUT-PINS.json",
+    "sha256": "9e88b637b0ba741dcaf0aa04bda6b24395b371524772fb827e05c36fac74eb64",
+    "bytes": 5225
+  },
+  "profile": {
+    "cpu": 7,
+    "jobs": 1,
+    "as_bytes": 1073741824,
+    "cpu_seconds": 30,
+    "outer_wall_seconds": 35,
+    "global_seconds": 28,
+    "cleanup_seconds": 3,
+    "stream_fsize": 33554432,
+    "host_growth_bytes": 8388608,
+    "scratch_growth_bytes": 67108864,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "reserve_bytes": 671088640
+  },
+  "fresh_outputs": [
+    "/home/holden/mckernel-work/scratch/hpf-stage-261019-1",
+    "/home/holden/mckernel-work/scratch/hpf-host-261019-1",
+    "/home/holden/mckernel-work/scratch/hpf-p-261019-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/native-preparation-result.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/typed-native-preparation-result.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/stage.stdout",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/stage.stderr",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/stage.status.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/typed-prep.stdout",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/typed-prep.stderr",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/typed-prep.status.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/stage-ordinary-admission.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/ordinary-chain-result.json"
+  ],
+  "actual_offline_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-independent-review-20261019-1/ACTUAL-OFFLINE-FINAL-STOP-AND-RELEASE-REVIEW.json",
+    "sha256": "37f251c561532b6d4e7c82c133590038f37899270477802d60291ab364636fd3",
+    "bytes": 8925
+  },
+  "actual_closed_refs": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/ACTUAL-OFFLINE-CLOSED-RESULT-REFS.json",
+    "sha256": "75b6d66e73f31bdf22f705df011fda133138b7241fe005597d92d31785fd0f70",
+    "bytes": 8506
+  },
+  "stage_delta": {
+    "base": "retained gzip byteidentical no recompression",
+    "init": "only member changed; metadata-preserving cap16engine",
+    "member_set": "61 unchanged; publicprobe already present",
+    "external_final_consumer": "exact112d0755-not-required Python source copied0600 under scratchRO, pinnedruntime source",
+    "collector_mode": "retain0700original; exclusive byteidentical0755 stagecopy",
+    "module_image_boot_payload": "exact unchanged b9/5d+1e7 tuple"
+  },
+  "runtime_policy": "Only existing materializer bound_manifest,runner.bind,full inside/create/QEMUargv/AF_UNIX<=107; no subprocess/guest/root/lease effects. Newemptyparent/nonce created once. Real futurephysical/snapshot/finalguard authority remainlate.",
+  "contract": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-20261019-1/FINAL-RELEASE-CONTRACT.json",
+    "sha256": "46715881f8176747ea675b12033abfb1c8c0444b8055388aeb91ce1b2afa59b0",
+    "bytes": 4431
+  },
+  "native_authority": false,
+  "compute_C_expansion": false
+}

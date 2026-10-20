@@ -1,0 +1,45 @@
+{
+  "CPU_grant": "PENDING",
+  "C_scenarios": 16,
+  "Python_refusals": 14,
+  "actualproductioncompiles_reused": 2,
+  "command_set": {
+    "bytes": 2562,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/COMMAND-SET-3.json",
+    "sha256": "ce0fc530ae0fe84d7a56e341ee4c1b9198a4c48375b070944db1d02b310082be"
+  },
+  "cumulative_family": [
+    "initialproductionformatfailure",
+    "fixed2compilePASS_fixturemissingpollfailure",
+    "expertwholefixturepoll100mstimingandsharedconcurrentepochcorrection"
+  ],
+  "fixes": [
+    "poll.h exact extractedwrite_all dependency",
+    "100ms explicitfakeclock tick <unchanged2swritebudget",
+    "one launch_base for both explicitlystubbed concurrent apps"
+  ],
+  "fixture": {
+    "bytes": 6461,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_two_round_body.c",
+    "sha256": "97c338999840370b93bd038c35c9bff6f0ef2d35c9417905243559957d228c93"
+  },
+  "input_pins": {
+    "bytes": 8009,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/CHECK-INPUT-PINS-3.json",
+    "sha256": "022c2f42b35702f67ad4d9a509333c580b41e6cad22723905197a17ccb189a08"
+  },
+  "native_and_repeatability_quotas": "UNRUN",
+  "new_regression": "actualwrite_all nonblockingfullpipe EAGAIN deadline -1; allpipeFDsclosed",
+  "production_source_unchanged": {
+    "bytes": 23710,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.c",
+    "sha256": "c0534ae319b76afe6fb6a2e84541e39d0fbeae6bcb9765dfc42ee20111df75b5"
+  },
+  "remaining_compile": 1,
+  "runner": {
+    "bytes": 9767,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/check_two_rounds_expert_corrected.py",
+    "sha256": "48bdce3b54823502d0140908f4e227a95ef36f2096567be3cf597920b75d9a11"
+  },
+  "status": "SOURCE_ONLY_REMAINING_CHECKS_UNRUN"
+}

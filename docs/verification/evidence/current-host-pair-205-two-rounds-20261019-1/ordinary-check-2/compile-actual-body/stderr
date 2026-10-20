@@ -1,0 +1,29 @@
+In file included from /home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_two_round_body.c:45:
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_shared_functions.inc: In function ‘write_all’:
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_shared_functions.inc:38:20: error: variable ‘f’ has initializer but incomplete type
+   38 |             struct pollfd f = {fd, POLLOUT, 0};
+      |                    ^~~~~~
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_shared_functions.inc:38:32: error: excess elements in struct initializer [-Werror]
+   38 |             struct pollfd f = {fd, POLLOUT, 0};
+      |                                ^~
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_shared_functions.inc:38:32: note: (near initialization for ‘f’)
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_shared_functions.inc:38:36: error: ‘POLLOUT’ undeclared (first use in this function)
+   38 |             struct pollfd f = {fd, POLLOUT, 0};
+      |                                    ^~~~~~~
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_shared_functions.inc:38:36: note: each undeclared identifier is reported only once for each function it appears in
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_shared_functions.inc:38:36: error: excess elements in struct initializer [-Werror]
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_shared_functions.inc:38:36: note: (near initialization for ‘f’)
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_shared_functions.inc:38:45: error: excess elements in struct initializer [-Werror]
+   38 |             struct pollfd f = {fd, POLLOUT, 0};
+      |                                             ^
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_shared_functions.inc:38:45: note: (near initialization for ‘f’)
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_shared_functions.inc:38:27: error: storage size of ‘f’ isn’t known
+   38 |             struct pollfd f = {fd, POLLOUT, 0};
+      |                           ^
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_shared_functions.inc:39:17: error: implicit declaration of function ‘poll’ [-Werror=implicit-function-declaration]
+   39 |             if (poll(&f, 1, 5) < 0 && errno != EINTR) return -1;
+      |                 ^~~~
+/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_shared_functions.inc:38:27: error: unused variable ‘f’ [-Werror=unused-variable]
+   38 |             struct pollfd f = {fd, POLLOUT, 0};
+      |                           ^
+cc1: all warnings being treated as errors

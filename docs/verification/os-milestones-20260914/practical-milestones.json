@@ -35,7 +35,27 @@
       "swap": false,
       "task_cap": 512
     },
-    "unchanged_resource_ownership_isolation_guards": true
+    "unchanged_resource_ownership_isolation_guards": true,
+    "active_supported_tested_profile_20261020": {
+      "profile_id": "tested205-ff4f-current-host-c396-af234-6571-two-cpu-20261019",
+      "status": "FROZEN_TESTED_PROFILE_IDENTITIES",
+      "recipe": {
+        "path": "docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/USABLE-TESTED-PROFILE-RECIPE.json",
+        "sha256": "8fbd21f08080fc450391462c7e60dbbfaa2c5c24b5df16a2b615513cd8c4e4b5",
+        "size": 9460
+      },
+      "matched_manifest": {
+        "path": "docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/MATCHED-IMAGE-MODULE-AND-APP-MANIFEST.json",
+        "sha256": "0f80ec37d15488b3365573222ad6ff811d795fb54b95d375b192f10049cb97c5",
+        "size": 13868
+      },
+      "independent_freeze_review": {
+        "path": "docs/verification/evidence/current-host-pair-205-native-20261019-1/P-M00-01-SUPPORTED-PROFILE-FREEZE-REVIEW.json",
+        "sha256": "4d28cbe56d8ed6716c6e45183b6c841fae88578611d577c6a26e751817eae1ff",
+        "size": 10037
+      },
+      "scope": "Exact accepted205 two-CPU image/module/app configuration. Prior profile entries remain historical. FP1e7 diagnostic and inactive parent-pin SDK remain separate; final delivery, unsupported features and repetition budgets are not accepted by this freeze."
+    }
   },
   "validation_budget": {
     "fresh_guest_boots": 2,
@@ -83,7 +103,7 @@
         {
           "id": "P-M00-01",
           "description": "Freeze supported profile and artifact/source identities.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
@@ -119,9 +139,24 @@
               "path": "docs/verification/evidence/scratch22-authority3-artifact-revalidation-independent-review-20261017.json",
               "sha256": "f7820e8507f4df666b04f16094e35b027da79a925d121b07df477daebe3efd76",
               "size": 5608
+            },
+            {
+              "path": "docs/verification/evidence/current-host-pair-205-native-20261019-1/P-M00-01-SUPPORTED-PROFILE-FREEZE-REVIEW.json",
+              "sha256": "4d28cbe56d8ed6716c6e45183b6c841fae88578611d577c6a26e751817eae1ff",
+              "size": 10037
+            },
+            {
+              "path": "docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/USABLE-TESTED-PROFILE-RECIPE.json",
+              "sha256": "8fbd21f08080fc450391462c7e60dbbfaa2c5c24b5df16a2b615513cd8c4e4b5",
+              "size": 9460
+            },
+            {
+              "path": "docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/MATCHED-IMAGE-MODULE-AND-APP-MANIFEST.json",
+              "sha256": "0f80ec37d15488b3365573222ad6ff811d795fb54b95d375b192f10049cb97c5",
+              "size": 13868
             }
           ],
-          "assessment_note": "Current942 source/artifact/profile bindings are recoverable through these accepted run records. Final supported application/features profile and matched new module set are not frozen."
+          "assessment_note": "Exact tested205 ff4fca45 with matching c396958b/af234fbc/6571ac7e modules, strict two-CPU app/oracle/runtime and source/artifact identities are frozen in the retained recipe/manifest and independently accepted4d28cbe5. Literal profile-freeze criterion only; P-M00-02, wholeM00, final delivery and M12 quotas remain open."
         },
         {
           "id": "P-M00-02",
@@ -452,7 +487,7 @@
               "size": 1001
             }
           ],
-          "assessment_note": "Post-effect Shutdown8 and ownership-retained -11→0 application retirement are observed. This does not establish all required mapping/release failure ownership invariants."
+          "assessment_note": "Post-effect Shutdown8 and ownership-retained -11\u21920 application retirement are observed. This does not establish all required mapping/release failure ownership invariants."
         }
       ],
       "current_evidence_summary": "Actual current942 allocation/map/protection/unmap app paths plus protected-write SIGSEGV/ACCERR/exactaddress and restored RW write now pass; final supported-candidate memory/ownership session remains open. Current3bfc zero-length anonymous mmap/EINVAL diagnostic passes independently; adds one distinct behavior only."
@@ -1948,7 +1983,7 @@
       "Prepare separately reviewed realpayload execution afterfreshsecondboot, proving rebootedOSserveswork; no secondstop/release or10cyclequota authority fromfirstcycle.",
       "Finish reviewedthinmaterializer exact49tracked-symlink correction preservingfailedpartialtree/fullsourceauthority, then independently release matchingFPUimagebuild.",
       "Close selectedapplication-visible XCR0/libc/Rustrequirements andreview boundedAVX/YMMpreservation extension; currentnativecoverage unchanged.",
-      "Continue actualMemory→ingress→checkedREADY→LINK→guestaccept joins andfinalACK/RET/destructor/revocation; CREATE_PPD remains fail-closed."
+      "Continue actualMemory\u2192ingress\u2192checkedREADY\u2192LINK\u2192guestaccept joins andfinalACK/RET/destructor/revocation; CREATE_PPD remains fail-closed."
     ],
     "literal_provenance_20261019": {
       "check": "P-M10-01",
@@ -1993,6 +2028,18 @@
       "production_rust_paths": 17,
       "native_rust_paths": 14,
       "whole_milestones_open": 14
+    },
+    "supported_profile_freeze_20261020": {
+      "check": "P-M00-01",
+      "status": "complete",
+      "review": {
+        "path": "docs/verification/evidence/current-host-pair-205-native-20261019-1/P-M00-01-SUPPORTED-PROFILE-FREEZE-REVIEW.json",
+        "sha256": "4d28cbe56d8ed6716c6e45183b6c841fae88578611d577c6a26e751817eae1ff",
+        "size": 10037
+      },
+      "new_native_logical_cases": 0,
+      "new_rust_paths": 0,
+      "scope": "One literal check completed; no whole milestone or M12 quota closure."
     }
   }
 }

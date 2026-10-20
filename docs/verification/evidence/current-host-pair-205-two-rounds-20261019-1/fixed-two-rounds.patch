@@ -1,0 +1,392 @@
+--- original/pair_collector.c
++++ candidate/pair_collector.c
+@@ -454,8 +454,21 @@
+     remain_pid1();
+ }
+ 
++#ifndef PAIR_ROOT
++#define PAIR_ROOT "/case"
++#endif
++#if defined(ND_PAIR_TWO_ROUNDS)
++static unsigned pair_active_round;
++static char pair_evidence_dir[128];
++#endif
+ #include "pair_runtime.inc"
++#if defined(ND_PAIR_TWO_ROUNDS)
++#include "pair_two_round_support.inc"
++#endif
+ #include "pair_collector.inc"
++#if defined(ND_PAIR_TWO_ROUNDS)
++#include "pair_two_round_run.inc"
++#endif
+ 
+ int main(void)
+ {
+@@ -499,6 +512,10 @@
+ #else
+     if (helper("boot", "/bin/native-boot", (char *const[]){"/bin/native-boot",NULL}, &safe)) { good = 0; goto finish; }
+ #endif
++#if defined(ND_PAIR_TWO_ROUNDS)
++    if(pair_run_two_rounds(console,&safe,&empty))good=0;
++    if(!safe)remain_pid1();
++#else
+     if(pair_run(&safe))good=0;
+     if(!safe)remain_pid1(); /* retain both ownership domains; no shared teardown */
+     if(pair_load_results())good=0;
+@@ -512,6 +529,7 @@
+         if (state < 0) break;
+         struct timespec t = {0, 10000000}; nanosleep(&t, NULL);
+     }
++#endif
+ finish:;
+     /* native-boot deliberately retains the nested OS. Its modules/resources
+      * remain until this disposable Linux guest powers off; never rmmod the
+@@ -537,7 +555,12 @@
+     if (!good || !safe) payload.fault = 1;
+     payload.finished = now_ns();
+     if (console >= 0 && safe) {
++#if defined(ND_PAIR_TWO_ROUNDS)
++        static const char complete[]="ND_PAIR_ROUNDS_COMPLETE {\"rounds\":2,\"os\":0,\"generation\":1,\"procfs_empty\":true}\n";
++        int publication = good && empty ? write_all(console,complete,sizeof complete-1) : -1;
++#else
+         int publication = publish_pair(console, empty && good);
++#endif
+         if (publication) payload.fault = 1;
+     }
+     if (saved_level >= 0 && klogctl(8, NULL, saved_level)) {
+--- original/pair_collector.inc
++++ candidate/pair_collector.inc
+@@ -25,17 +25,33 @@
+     int good=!r.fault && !r.timeout && r.clean && r.status==0 &&
+         r.out.eof && r.err.eof && r.out.observed==r.out.kept &&
+         r.err.observed==r.err.kept;
++#if defined(ND_PAIR_TWO_ROUNDS)
++    snprintf(name,sizeof name,"%s/app%d.stdout",pair_evidence_dir,i);
++#else
+     snprintf(name,sizeof name,PAIR_ROOT "/evidence/app%d.stdout",i);
++#endif
+     if(save_file(name,r.out.data,r.out.kept))good=0;
++#if defined(ND_PAIR_TWO_ROUNDS)
++    snprintf(name,sizeof name,"%s/app%d.stderr",pair_evidence_dir,i);
++#else
+     snprintf(name,sizeof name,PAIR_ROOT "/evidence/app%d.stderr",i);
++#endif
+     if(save_file(name,r.err.data,r.err.kept))good=0;
+     int n=snprintf(status,sizeof status,
+         "{\"app\":%d,\"cpu\":%d,\"raw_wait_status\":%d,\"clean\":%d,\"fault\":%d,\"timeout\":%d,\"started_ns\":%llu,\"finished_ns\":%llu}\n",
+         i,cpu,r.status,r.clean,r.fault,r.timeout,
+         (unsigned long long)r.started,(unsigned long long)r.finished);
++#if defined(ND_PAIR_TWO_ROUNDS)
++    snprintf(name,sizeof name,"%s/app%d.status.json",pair_evidence_dir,i);
++#else
+     snprintf(name,sizeof name,PAIR_ROOT "/evidence/app%d.status.json",i);
++#endif
+     if(n<0 || (size_t)n>=sizeof status || save_file(name,status,(size_t)n))good=0;
++#if defined(ND_PAIR_TWO_ROUNDS)
++    snprintf(name,sizeof name,"%s/app%d.result",pair_evidence_dir,i);
++#else
+     snprintf(name,sizeof name,"/case/evidence/app%d.result",i);
++#endif
+     if(save_file(name,&r,sizeof r))good=0;
+     /* clean=0 must propagate separately even when evidence writing failed. */
+     return !r.clean ? 2 : !good;
+@@ -47,8 +63,12 @@
+     pid_t owners[2]={-1,-1};
+     *safe=1; /* no children exist on capability refusal */
+     if(cpus[0]<0 || cpus[1]<0 || cpus[0]>=1024 || cpus[1]>=1024 || cpus[0]==cpus[1])return 77;
++#if defined(ND_PAIR_TWO_ROUNDS)
++    if(pair_round_workdirs())return 1;
++#else
+     if(mkdir(PAIR_ROOT "/two-app",0700) || mkdir(PAIR_ROOT "/two-app/work0",0700) ||
+        mkdir(PAIR_ROOT "/two-app/work1",0700))return 1;
++#endif
+     uint64_t started=now_ns();
+     if(!started)return 1;
+     uint64_t end=bounded_deadline(started+15000*MS,0);
+--- original/pair_runtime.inc
++++ candidate/pair_runtime.inc
+@@ -53,7 +53,11 @@
+ static int pair_load_results(void)
+ {
+     for(int i=0;i<2;i++) {
++#if defined(ND_PAIR_TWO_ROUNDS)
++        char p[PATH_MAX];snprintf(p,sizeof p,"%s/app%d.result",pair_evidence_dir,i);
++#else
+         char p[128];snprintf(p,sizeof p,"/case/evidence/app%d.result",i);
++#endif
+         int fd=open(p,O_RDONLY|O_NOFOLLOW|O_CLOEXEC|O_NONBLOCK);if(fd<0)return -1;
+         struct stat s;int ok=!fstat(fd,&s) && S_ISREG(s.st_mode) && s.st_size==(off_t)sizeof(struct result);
+         size_t pos=0;while(ok && pos<sizeof(struct result)) {
+--- original/native_diagnostic.py
++++ candidate/native_diagnostic.py
+@@ -1013,8 +1013,10 @@
+ def _validate_manifest(obj):
+     if "pair" not in obj:
+         return _one_validate_manifest(obj)
+-    _need(set(obj)=={"schema_version","kind","case_id","artifacts","modules","profile","payload","staging","pair"},"pair manifest keys")
+-    base=_one_validate_manifest({k:v for k,v in obj.items() if k!="pair"})
++    round_case="pair_rounds" in obj
++    if round_case:_need(type(obj["pair_rounds"]) is int and obj["pair_rounds"]==2,"fixed two-round manifest")
++    _need(set(obj)=={"schema_version","kind","case_id","artifacts","modules","profile","payload","staging","pair"}|({"pair_rounds"} if round_case else set()),"pair manifest keys")
++    base=_one_validate_manifest({k:v for k,v in obj.items() if k not in ("pair","pair_rounds")})
+     _need(base["profile"]["name"]==PROFILE_RETAINED,"pair retains4vCPU8192MiB envelope")
+     _need(tuple(r["sha256"] for r in base["modules"])==PAIR_MODULE_SHAS,"matching fixed FP modules")
+     p=obj["pair"]
+@@ -1050,7 +1052,7 @@
+         _need(hashlib.sha256(bytes.fromhex(a["oracle"]["stdout_hex"])).hexdigest()==expected_shas[i],"frozen pair output oracle")
+         _need(type(a["timeout_ms"]) is int and a["timeout_ms"]==10000 and type(a["stdout_limit_bytes"]) is int and a["stdout_limit_bytes"]==1024 and type(a["stderr_limit_bytes"]) is int and a["stderr_limit_bytes"]==1024,"pair finite bounds")
+     _need(p["apps"][0]["payload"]==base["artifacts"]["payload"],"primary app alias")
+-    return {**base,"pair":p}
++    return {**base,"pair":p,**({"pair_rounds":2} if round_case else {})}
+ 
+ def build_command(manifest,attempt):
+     plan=_one_build_command(manifest,attempt)
+@@ -1208,4 +1210,63 @@
+           not BAD_MARKERS.search(serial + "\n" + observation["debugcon"]), "kernel failure marker")
+     _need(observation["qmp"] == {"status": "shutdown"}, "QMP terminal status")
+     _need(observation["teardown"] is True, "teardown uncertain")
+-    return _pair_body(manifest,observation)
++    return _pair_rounds_body(manifest,observation) if manifest.get("pair_rounds")==2 else _pair_body(manifest,observation)
++
++def _pair_rounds_body(manifest,observation):
++    """Fixed two rounds; retain the original one-pair checker for each view."""
++    _need(type(manifest.get('pair_rounds')) is int and manifest['pair_rounds']==2,'fixed two-round case')
++    serial=observation['serial'];lines=serial.splitlines()
++    _need(not any(line.startswith(('ND_PAIR_ROUND_','ND_PAIR_ROUNDS_')) and not line.startswith(('ND_PAIR_ROUND_START ','ND_PAIR_ROUND_END ','ND_PAIR_ROUND_FAIL ','ND_PAIR_ROUNDS_COMPLETE ')) for line in lines),'unknown two-round wire marker')
++    _need(not any(line.startswith('ND_PAYLOAD ') for line in lines),'foreign one-app report')
++    def records(prefix):
++        return [(i,json.loads(line[len(prefix):],object_pairs_hook=_pairs)) for i,line in enumerate(lines) if line.startswith(prefix)]
++    starts=records('ND_PAIR_ROUND_START ');ends=records('ND_PAIR_ROUND_END ');pairs=records('ND_PAIR ');complete=records('ND_PAIR_ROUNDS_COMPLETE ')
++    _need(len(starts)==len(ends)==len(pairs)==2 and len(complete)==1,'exact two-round evidence')
++    _need(not any(line.startswith('ND_PAIR_ROUND_FAIL') for line in lines),'failed pair round')
++    _keys(complete[0][1],('rounds','os','generation','procfs_empty'))
++    _need(complete[0][1]=={'rounds':2,'os':0,'generation':1,'procfs_empty':True} and all(type(complete[0][1][k]) is int for k in ('rounds','os','generation')),'two-round completion identity')
++    pids=[]
++    for _,report in pairs:
++        _need(type(report.get('apps')) is list and len(report['apps'])==2,'two-round apps')
++        for app in report['apps']:
++            pid=app.get('pid');_need(type(pid) is int and pid>0 and pid not in pids,'two-round unique PID');pids.append(pid)
++    schedules=re.findall(r'application SCHEDULE os=(\d+) generation=(\d+) pid=(\d+) cpu=(\d+)\b',serial)
++    expected={('0','1',str(pid),str(i%2)) for i,pid in enumerate(pids)}
++    _need(len(schedules)==4 and set(schedules)==expected,'two-round global schedules')
++    for line in lines:
++        for name in ('delivered','returned','return_route'):
++            marker='application_syscall='+name+' '
++            if marker in line:
++                match=re.search(re.escape(marker)+r'os=(\d+) generation=(\d+) pid=(\d+) ',line)
++                _need(match is not None and match.groups()[:2]==('0','1') and int(match.group(3)) in pids,'two-round foreign syscall')
++    tokenrows=re.findall(r'application retirement os=0 generation=1 pid=(\d+) token=(\d+) errno=-?\d+\s*$',serial,re.MULTILINE)
++    _need(tokenrows and all(int(pid) in pids and 0<int(token)<2**64 for pid,token in tokenrows),'two-round token domain')
++    _need(len(tokenrows)==len({int(token) for _,token in tokenrows}),'two-round fresh retirement tokens')
++    boot='NATIVE_PAIR_CPU os=0 generation=1 assigned_host=1,2 logical=0,1 default_ikc_linux=0'
++    _need(sum(boot in line for line in lines)==1,'one actual OS boot assignment')
++    validated=[];previous_end=None
++    for round_index in range(2):
++        start_at,start=starts[round_index];end_at,end=ends[round_index];report_at,report=pairs[round_index]
++        for boundary in (start,end):
++            _keys(boundary,('round','time_ns','procfs_empty'))
++            _need(type(boundary['round']) is int and boundary['round']==round_index and type(boundary['time_ns']) is int and boundary['time_ns']>0 and boundary['procfs_empty'] is True,'two-round boundary identity')
++        _need(start_at<report_at<end_at<complete[0][0] and start['time_ns']<end['time_ns'],'two-round serial/timestamp order')
++        if round_index:
++            _need(ends[0][0]<start_at and previous_end<=start['time_ns'],'sequential round handoff')
++        current=pids[round_index*2:round_index*2+2];other=set(pids)-set(current);view=[]
++        for line in lines:
++            if line.startswith(('ND_PAIR ','ND_PAIR_ROUND_','ND_PAIR_ROUNDS_')):continue
++            # Exclude only the fully identified other round. Unknown or malformed
++            # schedule/syscall rows were refused globally above, not filtered.
++            if any(marker in line for marker in ('application SCHEDULE ','application_syscall=','application retirement ','application_process=release ','application procfs ')):
++                found=re.search(r'os=0 generation=1 pid=(\d+)\b',line)
++                if found is not None and int(found.group(1)) in other:continue
++            view.append(line)
++        view.append('ND_PAIR '+json.dumps(report,separators=(',',':')))
++        observed=dict(observation,serial='\n'.join(view)+'\n');checked=_pair_body(manifest,observed)
++        _need(all(start['time_ns']<=app['started_ns']<=app['finished_ns']<=end['time_ns'] for app in report['apps']),'round result inside handoff bounds')
++        validated.append({'round':round_index,'start':start,'end':end,'guest_report':checked['guest_report'],'pair_metrics':checked['pair_metrics'],'trace_projection_excludes_only_known_other_round_PIDs':sorted(other)})
++        previous_end=end['time_ns']
++    elapsed=max(app['finished_ns'] for _,r in pairs for app in r['apps'])-min(app['started_ns'] for _,r in pairs for app in r['apps'])
++    return {'schema_version':1,'kind':'native-diagnostic-result','case_id':manifest['case_id'],'status':'PROTOCOL_PASS','application_acceptance':False,'mckernel_application_executed':False,'guest_report':{'os':0,'generation':1,'rounds':validated,'procfs_empty':True},'observation':observation,'runtime_blocker':DIAGNOSTIC_LIMITATION,'pair_metrics':{'completed_rounds':2,'completed_apps':4,'wall_ns':elapsed,'apps_per_wall_minute':240_000_000_000/elapsed}}
++
+--- /dev/null
++++ candidate/pair_two_round_support.inc
+@@ -0,0 +1,135 @@
++/* Fixed two-round Linux collector support. No kernel/worker ownership policy. */
++#include "pair_round_oracles.h"
++static struct stat pair_workspace[3];
++static int pair_seen_pids[4], pair_seen_pid_count;
++static unsigned long long pair_seen_tokens[48];
++static unsigned pair_seen_token_count;
++static int pair_round_workdirs(void)
++{
++    static const char *paths[]={PAIR_ROOT "/two-app",PAIR_ROOT "/two-app/work0",PAIR_ROOT "/two-app/work1"};
++    if(pair_active_round==0)for(int i=0;i<3;i++)if(mkdir(paths[i],0700))return -1;
++    for(int i=0;i<3;i++) {
++        struct stat s;
++        if(lstat(paths[i],&s) || !S_ISDIR(s.st_mode) || s.st_uid!=geteuid() ||
++           s.st_gid!=getegid() || (s.st_mode&07777)!=0700)return -1;
++        if(pair_active_round==0)pair_workspace[i]=s;
++        else if(s.st_dev!=pair_workspace[i].st_dev || s.st_ino!=pair_workspace[i].st_ino ||
++                s.st_uid!=pair_workspace[i].st_uid || s.st_gid!=pair_workspace[i].st_gid ||
++                s.st_mode!=pair_workspace[i].st_mode || s.st_nlink!=pair_workspace[i].st_nlink)return -1;
++        if(i) {
++            DIR *d=opendir(paths[i]);if(!d)return -1;
++            struct dirent *e;int bad=0;errno=0;
++            while((e=readdir(d)))if(strcmp(e->d_name,".") && strcmp(e->d_name,".."))bad=1;
++            if(errno)bad=1;
++            if(closedir(d))bad=1;
++            if(bad)return -1;
++        }
++    }
++    return 0;
++}
++static int pair_round_streams(void)
++{
++    const unsigned char *expected[]={pair_round_stdout_0,pair_round_stdout_1};
++    const size_t lengths[]={sizeof pair_round_stdout_0,sizeof pair_round_stdout_1};
++    if(pair_os!=0 || pair_generation!=1 || pair_host_cpus[0]!=1 || pair_host_cpus[1]!=2)return -1;
++    for(int i=0;i<2;i++) {
++        struct result *r=&pair_results[i];
++        if(r->pid<=0 || r->status || r->fault || r->timeout || !r->clean ||
++           !r->out.eof || !r->err.eof || r->out.kept!=lengths[i] ||
++           r->out.observed!=lengths[i] || r->err.kept || r->err.observed ||
++           memcmp(r->out.data,expected[i],lengths[i]) || !r->started ||
++           r->started>r->reaped || r->reaped>r->finished ||
++           r->out.eof_ns<r->started || r->out.eof_ns>r->finished ||
++           r->err.eof_ns<r->started || r->err.eof_ns>r->finished)return -1;
++        for(int j=0;j<pair_seen_pid_count;j++)if(pair_seen_pids[j]==r->pid)return -1;
++        if(pair_seen_pid_count>=4)return -1;
++        pair_seen_pids[pair_seen_pid_count++]=r->pid;
++    }
++    return pair_results[0].started<pair_results[1].reaped &&
++           pair_results[1].started<pair_results[0].reaped?0:-1;
++}
++struct pair_round_delivery { unsigned long long worker,serial;unsigned number;int returned,routed,launcher; };
++static int pair_round_trace(const char *log,int pid,int cpu)
++{
++    struct pair_round_delivery calls[256];unsigned count=0,exits=0,attempts=0;
++    int schedules=0,published=0,deleted=0,releases=0,last_errno=-1,terminal=0;
++    for(const char *p=log;*p;) {
++        const char *end=strchr(p,'\n');size_t n=end?(size_t)(end-p):strlen(p);
++        if(n>=512) {const char *app=strstr(p,"application");if(app && (!end || app<end))return -1;p=end?end+1:p+n;continue;}
++        char line[512];memcpy(line,p,n);line[n]=0;
++        p=end?end+1:p+n;
++        char *mark;unsigned osid=0;unsigned long generation=0;int found=0,c=-1,used=0;
++        if((mark=strstr(line,"application_syscall="))) {
++            char kind[24];int offset=0;
++            if(sscanf(mark,"application_syscall=%23s os=%u generation=%lu pid=%d %n",kind,&osid,&generation,&found,&offset)!=4)return -1;
++            if(found!=pid)continue;
++            if(osid || generation!=1)return -1;
++            unsigned long long worker=0,serial=0;unsigned number=0;long value=0;int launcher=-1;
++            char *tail=mark+offset;struct pair_round_delivery *d=NULL;
++            if(!strcmp(kind,"delivered")) {
++                if(sscanf(tail,"worker=%llu delivery=%llu cpu=%d number=%u%n",&worker,&serial,&c,&number,&used)!=4 || tail[used] || !worker || !serial || c!=cpu || terminal || number==60 || count==256)return -1;
++                for(unsigned j=0;j<count;j++)if(calls[j].worker==worker && calls[j].serial==serial)return -1;
++                calls[count++]=(struct pair_round_delivery){worker,serial,number,0,0,-1};
++                if(number==231){terminal=1;exits++;}
++            } else {
++                if(!strcmp(kind,"returned")) {
++                    if(sscanf(tail,"worker=%llu delivery=%llu cpu=%d value=%ld%n",&worker,&serial,&c,&value,&used)!=4 || tail[used] || c!=cpu || terminal)return -1;
++                } else if(!strcmp(kind,"return_route")) {
++                    if(sscanf(tail,"worker=%llu delivery=%llu launcher_cpu=%d guest_cpu=%d%n",&worker,&serial,&launcher,&c,&used)!=4 || tail[used] || c!=cpu || launcher<0 || launcher>1 || launcher==cpu || terminal)return -1;
++                } else return -1;
++                for(unsigned j=0;j<count;j++)if(calls[j].worker==worker && calls[j].serial==serial)d=&calls[j];
++                if(!d || d->number==231 || d->returned)return -1;
++                if(!strcmp(kind,"returned"))d->returned=1;
++                else {if(d->routed)return -1;d->routed=1;d->launcher=launcher;}
++            }
++        } else if((mark=strstr(line,"application SCHEDULE "))) {
++            if(sscanf(mark,"application SCHEDULE os=%u generation=%lu pid=%d cpu=%d%n",&osid,&generation,&found,&c,&used)!=4)return -1;
++            if(found==pid){if(osid || generation!=1 || c!=cpu || mark[used] || ++schedules!=1)return -1;}
++        } else if((mark=strstr(line,"application retirement "))) {
++            unsigned long long token=0;int error=0;
++            if(sscanf(mark,"application retirement os=%u generation=%lu pid=%d token=%llu errno=%d%n",&osid,&generation,&found,&token,&error,&used)!=5)return -1;
++            if(found!=pid)continue;
++            if(osid || generation!=1 || mark[used] || !terminal || !token || last_errno==0 || (error!=-11 && error!=0) || ++attempts>12 || pair_seen_token_count==48)return -1;
++            for(unsigned j=0;j<pair_seen_token_count;j++)if(pair_seen_tokens[j]==token)return -1;
++            pair_seen_tokens[pair_seen_token_count++]=token;last_errno=error;
++        } else if((mark=strstr(line,"application_process=release "))) {
++            int error=0;
++            if(sscanf(mark,"application_process=release os=%u generation=%lu pid=%d cleanup_errno=%d%n",&osid,&generation,&found,&error,&used)!=4)return -1;
++            if(found==pid && (osid || generation!=1 || mark[used] || error || last_errno!=0 || ++releases!=1))return -1;
++        } else if((mark=strstr(line,"application procfs "))) {
++            char op[16];int tid=-1;
++            if(sscanf(mark,"application procfs %15s os=%u generation=%lu pid=%d tid=%d%n",op,&osid,&generation,&found,&tid,&used)!=5)return -1;
++            if(found==pid) {
++                if(osid || generation!=1 || tid<=0 || mark[used])return -1;
++                if(strcmp(op,"published") && strcmp(op,"deleted"))return -1;
++                /* Thread TIDs are genuine rows; only leader rows prove the
++                 * original strict pair leader publication/deletion counts. */
++                if(tid==pid) {if(!strcmp(op,"published"))published++;else deleted++;}
++            }
++        }
++    }
++    if(!count || exits!=1 || !attempts || last_errno || releases!=1 || schedules!=1 || published!=1 || deleted!=1)return -1;
++    for(unsigned j=0;j<count;j++)if(calls[j].number!=231) {
++        if(!calls[j].returned)return -1;
++        int slot=calls[j].routed?calls[j].launcher:cpu;
++        for(unsigned k=0;k<j;k++)if(calls[k].worker==calls[j].worker && calls[k].number!=231 &&
++            (calls[k].routed?calls[k].launcher:cpu)!=slot)return -1;
++    }
++    return 0;
++}
++static int pair_round_gate(void)
++{
++    static char log[262145];int n=klogctl(3,log,sizeof log-1);
++    if(n<=0 || n==(int)sizeof log-1)return -1;
++    log[n]=0;
++    if(pair_round_streams())return -1;
++    /* No application from another PID/domain may hide between rounds. */
++    for(const char *p=log;*p;p++)if(!strncmp(p,"application_syscall=",20) || !strncmp(p,"application SCHEDULE ",21)) {
++        const char *end=strchr(p,'\n'),*id=strstr(p," pid=");int pid=0;unsigned j=0;
++        if(!id || (end && id>=end) || sscanf(id," pid=%d",&pid)!=1)return -1;
++        for(;j<(unsigned)pair_seen_pid_count;j++)if(pair_seen_pids[j]==pid)break;
++        if(j==(unsigned)pair_seen_pid_count)return -1;
++    }
++    for(int i=0;i<2;i++)if(pair_round_trace(log,pair_results[i].pid,i))return -1;
++    return 0;
++}
+--- /dev/null
++++ candidate/pair_two_round_run.inc
+@@ -0,0 +1,37 @@
++/* Exactly two rounds, one already-booted OS. No repeat/duration interface. */
++static int pair_round_empty(void)
++{
++    uint64_t begin=now_ns(),end=bounded_deadline(begin+5000*MS,0);
++    while(begin) {
++        uint64_t current=now_ns();if(!current || current>=end)return 0;
++        int state=retired_at("/proc/mcos0");if(state==1)return 1;if(state<0)return 0;
++        struct timespec pause={0,10000000};nanosleep(&pause,NULL);
++    }
++    return 0;
++}
++static int pair_round_mark(int fd,const char *kind,unsigned round,uint64_t stamp,int empty)
++{
++    char b[256];int n=snprintf(b,sizeof b,"ND_PAIR_ROUND_%s {\"round\":%u,\"time_ns\":%llu,\"procfs_empty\":%s}\n",kind,round,(unsigned long long)stamp,empty?"true":"false");
++    return n<0 || (size_t)n>=sizeof b || write_all(fd,b,(size_t)n)?-1:0;
++}
++static int pair_run_two_rounds(int console,int *safe,int *empty)
++{
++    pair_seen_pid_count=0;pair_seen_token_count=0;*empty=0;
++    for(pair_active_round=0;pair_active_round<2;pair_active_round++) {
++        *safe=1;
++        if(!pair_round_empty())return -1;
++        int n=snprintf(pair_evidence_dir,sizeof pair_evidence_dir,PAIR_ROOT "/evidence/round%u",pair_active_round);
++        if(n<0 || (size_t)n>=sizeof pair_evidence_dir || mkdir(pair_evidence_dir,0700))return -1;
++        uint64_t start=now_ns();if(!start || pair_round_mark(console,"START",pair_active_round,start,1))return -1;
++        if(pair_run(safe) || !*safe || pair_load_results())return -1;
++        if(!pair_round_empty() || pair_round_gate())return -1;
++        uint64_t finish=now_ns();
++        if(!finish || finish<start || pair_results[0].started<start || pair_results[1].started<start ||
++           pair_results[0].finished>finish || pair_results[1].finished>finish)return -1;
++        if(publish_pair(console,1) || pair_round_mark(console,"END",pair_active_round,finish,1))return -1;
++        char name[PATH_MAX],row[160];n=snprintf(name,sizeof name,"%s/round.json",pair_evidence_dir);
++        int size=snprintf(row,sizeof row,"{\"round\":%u,\"started_ns\":%llu,\"finished_ns\":%llu,\"procfs_empty\":true}\n",pair_active_round,(unsigned long long)start,(unsigned long long)finish);
++        if(n<0 || (size_t)n>=sizeof name || size<0 || (size_t)size>=sizeof row || save_file(name,row,(size_t)size))return -1;
++    }
++    *empty=1;return 0;
++}
+--- /dev/null
++++ candidate/pair_round_oracles.h
+@@ -0,0 +1,3 @@
++/* Exact unchanged app byte oracles; frozen before implementation. */
++static const unsigned char pair_round_stdout_0[] = {98,97,116,99,104,32,98,101,103,105,110,32,99,97,115,101,115,61,50,32,109,105,120,101,100,95,114,111,117,110,100,115,61,51,10,114,117,115,116,45,102,105,108,101,45,114,111,117,110,100,116,114,105,112,32,105,110,105,116,105,97,108,61,49,54,32,111,118,101,114,119,114,105,116,101,61,52,32,115,104,114,105,110,107,61,49,48,32,103,114,111,119,61,49,52,32,122,101,114,111,115,61,52,32,116,97,105,108,61,97,97,98,98,99,99,32,105,110,118,97,108,105,100,95,115,101,101,107,61,50,50,32,99,117,114,115,111,114,61,49,52,32,99,104,101,99,107,101,100,95,99,108,111,115,101,61,49,32,114,101,109,111,118,101,100,61,49,10,109,105,120,101,100,32,114,111,117,110,100,115,61,51,32,98,121,116,101,115,95,101,97,99,104,61,56,49,57,51,32,99,104,101,99,107,115,117,109,95,116,111,116,97,108,61,51,48,55,50,50,55,48,10,102,105,108,101,115,61,51,32,99,104,101,99,107,101,100,95,99,108,111,115,101,115,61,54,32,114,101,111,112,101,110,101,100,61,51,32,101,111,102,61,51,32,114,101,109,111,118,101,100,61,51,10,106,111,105,110,101,100,95,116,104,114,101,97,100,115,61,54,32,116,117,114,110,115,95,101,97,99,104,61,49,50,56,32,99,111,117,110,116,101,114,95,116,111,116,97,108,61,55,54,56,10,98,97,116,99,104,32,112,97,115,115,32,99,97,115,101,115,61,50,32,99,104,101,99,107,101,100,95,99,108,111,115,101,115,61,55,32,114,101,109,111,118,101,100,61,52,32,106,111,105,110,101,100,95,116,104,114,101,97,100,115,61,54,10};
++static const unsigned char pair_round_stdout_1[] = {70,80,84,72,82,69,65,68,32,118,49,32,116,104,114,101,97,100,115,61,50,32,115,97,109,101,95,112,101,114,109,105,116,116,101,100,95,99,112,117,61,49,32,100,105,115,116,105,110,99,116,95,116,105,100,61,49,10,116,104,114,101,97,100,48,32,114,111,117,110,100,115,61,54,52,32,121,109,109,95,108,97,110,101,115,61,54,52,32,112,101,101,114,95,112,114,111,103,114,101,115,115,61,54,52,32,121,105,101,108,100,95,109,105,110,61,54,52,32,99,111,110,116,114,111,108,115,61,48,55,55,102,47,51,102,56,48,32,114,101,115,116,111,114,101,100,61,49,10,116,104,114,101,97,100,49,32,114,111,117,110,100,115,61,54,52,32,121,109,109,95,108,97,110,101,115,61,54,52,32,112,101,101,114,95,112,114,111,103,114,101,115,115,61,54,52,32,121,105,101,108,100,95,109,105,110,61,54,52,32,99,111,110,116,114,111,108,115,61,48,98,55,102,47,53,102,56,48,32,114,101,115,116,111,114,101,100,61,49,10,70,80,84,72,82,69,65,68,32,80,65,83,83,10};

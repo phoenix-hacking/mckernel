@@ -1,3 +1,36 @@
+## Current accepted checkpoint — supported profile frozen; repeatability next
+
+P-M00-01 is complete by independent4d28cbe5: the exact tested205 two-CPU image,
+matching c396958b/af234fbc/6571ac7e modules, app/oracle/source/runtime identities
+and usable recipe are frozen. Practical checks12/35; distinct behaviors26;
+production/native Rust paths17/14. All14 whole milestones remain open.
+P-M00-02 and M12 quotas are not closed by this identity freeze. The inactive
+parent-pin SDK34ef and FP1e7 diagnostic profile remain separate configurations.
+
+Final public-cycle extension60492285/physical12002bac passes two strict stops,
+two public-release protocols, one reboot and final empty device CPU/memory
+inventories. It extends the named c32 behavior without adding a logical case.
+Full mapping/reference/generation restoration, non-null FP history and repeat
+quotas remain unproved. Actual native feedback closed00:20:41UTC, about15minutes
+after the00:06 static packet; source/caller refusals are preserved separately.
+Latest accepted exclusive-operation predecessor is physical12002bac.
+
+Private Rust receipt-writer346cbd3a/5b21a833 passes compile and three real-body
+MM success/error/conservative-copy scenarios. Linux MM primitives are explicit
+adapters; current production overlay, full v12 compilation, guest consumption,
+RET/final ACK and native activation remain held. Next private implementation
+repairs the exact retained response queue/publication path; generic prepare
+and restore cannot provide its uncertainty-retention guarantee.
+
+The fixed two-round205 collector/parser has actual compile/body/evaluator
+acceptance94c71580 (16 C scenarios, evaluator positive and14 refusals), preserving
+the original one-pair case. Stage/owner/runner/parent preparation is active;
+no new native launches or M12 quota credit from offline checks. A separate
+bounded two-cycle source extension targets the selected205 tuple using the
+already accepted two-CPU helper, preserving the original FP case. Root owns
+fresh runtime releases and one-heavy admission. Continue implementation and
+actual tests; checkpoint does not pause the campaign.
+
 ## Accepted matched 205 configuration and private Rust control-owner checkpoint
 
 Strict205/N3 native semantics d67e2153 and physical7d869a4f independently PASS.

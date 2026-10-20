@@ -1,0 +1,30 @@
+pub(super) struct ForkControlOwner {
+    descriptor: super::super::application_abi::ForkControlV1,
+    request: Request,
+    _response: super::super::smp_application_syscall::ForkIngressResponse<SyscallResponse>,
+    _parent: ForkParentPin,
+    quarantined: bool,
+}
+pub(crate) struct PreparedControlTicket {
+    remote: Arc<Remote>, parent: Token, child: Token,
+    descriptor: super::super::application_abi::ForkControlV1,
+    request: Request, parked: bool,
+}
+
+// Call only with SAME Remote slots guard. This validates metadata, not a revoke
+// receipt. Exact current ChildFork and first-publication state supply authority.
+fn control_snapshot(remote: &Remote, slots: &[Option<Entry>], parent: Token,
+    worker: u64, serial: u64, cpu: i64,
+) -> Result<Option<(Token, super::super::application_abi::ForkControlV1, Request)>> {
+    remote.transport_health()?;
+    let p = slots.iter().flatten().find(|e| e.key() == parent).ok_or(ENOENT)?;
+    // A parked call no longer appears in unique_delivered because the SAME
+    // Response has moved. Reject its exact retry before legacy RETURN hooks.
+    for f in slots.iter().flatten().filter_map(|e| e.fork.as_ref()) {
+        let Some(control) = &f.control else { continue; };
+        let d = control.descriptor;
+        if d.identity.parent != parent.wire() || d.worker != worker || d.delivery != serial { continue; }
+        if d.cpu as i64 != cpu || d.identity != host_key(f.reservation.identity)
+            || f.ack.as_ref().is_none_or(|ack| ack.epoch != d.epoch)
+            || control.request.number() != 56 || control.request.arguments()[0] != 2
+            || control.request.arguments()[5] != CARRIER_MARKER

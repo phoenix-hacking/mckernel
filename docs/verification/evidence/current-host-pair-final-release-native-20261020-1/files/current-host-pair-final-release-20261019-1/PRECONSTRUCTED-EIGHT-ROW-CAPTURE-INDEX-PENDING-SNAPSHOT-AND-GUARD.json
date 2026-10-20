@@ -1,0 +1,25 @@
+{
+  "status": "NON_TEMPORAL_CAPTURE_TEMPLATES_PENDING_GENUINE_SNAPSHOT_DATA_AND_REVIEWER_CONFIG",
+  "wholecase_sha256": "04b35f6b7b2616a57789d051759f0af37242ad2b3d58d92ab97034aec563cc96",
+  "ordered_names": [
+    "root-snapshot",
+    "assemble-machine",
+    "final-guard",
+    "native-owner",
+    "readback-1",
+    "readback-2",
+    "readback-3",
+    "decode-ring"
+  ],
+  "unresolved_rows": [
+    "root-snapshot requires actualsnapshotprojection",
+    "assemble-machine requires finalmachinebase",
+    "final-guard requires reviewerCFGsha"
+  ],
+  "declared_late_only_substitutions": {
+    "snapshot_sha256": "PARSED root-snapshot CLOSED stdout.sha256, crosschecked against exactsnapshotfilebytes",
+    "machine_sha256": "PARSED assembly CLOSED stdout.sha256, crosschecked against exactmachinefilebytes",
+    "decode_archive_sha256": "actualreadback3 CLOSED stdoutbytes sha256"
+  },
+  "outer_capture_requirement": "f2db UID1000. metadata/snapshot outerAS1GiB/CPU30; nativeouter unlimitedAS/CPU/noouterkill. f2db onlyenactsaffinity/FSIZE/wall, doesnotapplyAS/CPUprofilekeys. Actualmetadataargv includes itsown prlimits. ImmediatelyguardPASS parsedstatus/hash/allowed_argv thenexactowner launch in samecontrolflow <=60seconds; no model/Git hop."
+}

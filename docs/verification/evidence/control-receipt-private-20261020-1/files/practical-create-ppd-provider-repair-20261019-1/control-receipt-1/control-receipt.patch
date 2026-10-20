@@ -1,0 +1,689 @@
+--- a/host-kernel/native-rust/abi/application.rs
++++ b/host-kernel/native-rust/abi/application.rs
+@@ -306,3 +306,16 @@
+ pub(crate) type ForkPrepareControlV1 = unsafe extern "C" fn(
+     *mut c_void, u64, u64, i64, i64, Option<ForkControlResolveV1>, *mut c_void,
+ ) -> i32;
++
++// Distinct park-resume receipt ABI. Real registered MM verifier is mandatory;
++// neither a selector nor a scalar return constructs HostAliasesRevokedControl.
++pub(crate) const FORK_CONTROL_RECEIPT_UNCERTAIN_V1: i32 = 2;
++pub(crate) type ForkControlResumeV1 = unsafe extern "C" fn(
++    *mut c_void, Option<ForkVerifyV1>, *mut c_void, *mut c_void,
++) -> i32;
++pub(crate) type ForkControlReceiptResolveV1 = unsafe extern "C" fn(
++    *mut c_void, *const ForkControlV1, Option<ForkControlResumeV1>, *mut c_void,
++) -> i32;
++pub(crate) type ForkPrepareControlReceiptV1 = unsafe extern "C" fn(
++    *mut c_void, u64, u64, i64, i64, Option<ForkControlReceiptResolveV1>, *mut c_void,
++) -> i32;
+--- a/host-kernel/native-rust/ihk_smp_x86_64.rs
++++ b/host-kernel/native-rust/ihk_smp_x86_64.rs
+@@ -123,7 +123,7 @@
+             // THIS_MODULE. IHK acquires its own module reference before the
+             // instance becomes live; the raw scalar argument is never a pointer.
+             let result = unsafe {
+-                ihk_os_create_unbooted_v11(
++                ihk_os_create_unbooted_v12(
+                     IHK_SMP_CONTROL_DEVICE_MINOR,
+                     THIS_MODULE.as_ptr().cast(),
+                     arg as u64,
+@@ -145,6 +145,7 @@
+                     Some(application_fork_publication_verify),
+                     Some(application_release_fork_ack),
+                     Some(application_prepare_fork_control),
++                    Some(application_prepare_fork_control_receipt),
+                 )
+             };
+             if result < 0 {
+@@ -209,8 +210,8 @@
+     fn ihk_smp_provider_open_v1(minor: u32) -> i64;
+     #[link_name = "ihk_smp_provider_close_v1"]
+     fn ihk_smp_provider_close_v1(receipt: i64);
+-    #[link_name = "ihk_os_create_unbooted_v11"]
+-    fn ihk_os_create_unbooted_v11(
++    #[link_name = "ihk_os_create_unbooted_v12"]
++    fn ihk_os_create_unbooted_v12(
+         provider_minor: u32,
+         owner: *mut core::ffi::c_void,
+         argument: u64,
+@@ -232,6 +233,7 @@
+         application_fork_publication_verify: Option<application_abi::ForkPublicationVerifyV1>,
+         application_release_fork_ack: Option<application_abi::ForkReleaseAckV1>,
+         application_prepare_fork_control: Option<application_abi::ForkPrepareControlV1>,
++        application_prepare_fork_control_receipt: Option<application_abi::ForkPrepareControlReceiptV1>,
+     ) -> i64;
+     #[link_name = "ihk_os_destroy_unbooted_v1"]
+     fn ihk_os_destroy_unbooted_v1(provider_minor: u32, minor: u64) -> i64;
+@@ -381,6 +383,18 @@
+     unsafe { child.fork_progress_payload(*identity, stage, verify, context, payload) }.map_or_else(|e| e.to_errno(), |()| 0)
+ }
+ 
++
++unsafe extern "C" fn application_prepare_fork_control_receipt(
++    parent: *mut core::ffi::c_void, worker: u64, serial: u64, cpu: i64, value: i64,
++    resolver: Option<application_abi::ForkControlReceiptResolveV1>, context: *mut core::ffi::c_void,
++) -> i32 {
++    if parent.is_null() { return EINVAL.to_errno(); }
++    let Some(resolver) = resolver else { return EINVAL.to_errno(); };
++    let parent = unsafe { &*parent.cast::<smp_memory::Application>() };
++    unsafe { parent.prepare_fork_control_receipt(worker, serial, cpu, value, resolver, context) }
++        .map_or_else(|error| error.to_errno(), |handled| i32::from(handled))
++}
++
+ unsafe extern "C" fn application_prepare_fork_control(
+     parent: *mut core::ffi::c_void, worker: u64, serial: u64, cpu: i64, value: i64,
+     resolver: Option<application_abi::ForkControlResolveV1>, context: *mut core::ffi::c_void,
+--- a/host-kernel/native-rust/mcctrl_process.rs
++++ b/host-kernel/native-rust/mcctrl_process.rs
+@@ -57,6 +57,7 @@
+         link: Option<super::application_abi::ForkCapsuleLinkV1>) -> i32;
+     fn ihk_os_application_prepare_fork_link_v1(parent: *mut c_void,
+         worker: u64, serial: u64, cpu: i64, value: i64) -> i32;
++    fn ihk_os_application_prepare_fork_control_receipt_v1(parent: *mut core::ffi::c_void, worker: u64, serial: u64, cpu: i64, value: i64) -> i32;
+     fn ihk_os_application_prepare_fork_control_v1(parent: *mut core::ffi::c_void, worker: u64, serial: u64, cpu: i64, value: i64) -> i32;
+     fn ihk_os_application_prepare_fork_ack_v1(parent: *mut c_void,
+         worker: u64, serial: u64, cpu: i64, value: i64) -> i32;
+@@ -858,6 +859,15 @@
+         // returns are unchanged; only the new carrier's second clone can seal
+         // LINK. A failure leaves the delivery owned for exact retry.
+         let value = image::word(&bytes, 24).map_err(errno)? as i64;
++        // Resume ONLY an already owned control response; a receipt never
++        // grants standard RET, legacy HOST_REVOKED or final ACK permission.
++        match unsafe { ihk_os_application_prepare_fork_control_receipt_v1(
++            self.context.as_ptr(), worker.handle, serial, cpu, value,
++        ) } {
++            0 => {}, 1 => return Err(EBUSY),
++            error if (-4095..0).contains(&error) => return Err(errno(error)),
++            _ => return Err(errno(-71)),
++        }
+         // Park a genuine fresh selector2 delivery before any legacy return
+         // hook. The incoming launcher -95 is not authority. Parked MUST stop
+         // ordinary RETURN; it cannot manufacture RET0 or a revoke receipt.
+--- a/host-kernel/native-rust/os_runtime.rs
++++ b/host-kernel/native-rust/os_runtime.rs
+@@ -270,6 +270,7 @@
+     fork_publication_verify: Option<super::application_abi::ForkPublicationVerifyV1>,
+     release_fork_ack: Option<super::application_abi::ForkReleaseAckV1>,
+     prepare_fork_control: Option<super::application_abi::ForkPrepareControlV1>,
++    prepare_fork_control_receipt: Option<super::application_abi::ForkPrepareControlReceiptV1>,
+ }
+ 
+ #[derive(Clone, Copy)]
+@@ -749,6 +750,7 @@
+                 fork_publication_verify: None,
+                 release_fork_ack: None,
+                 prepare_fork_control: None,
++                prepare_fork_control_receipt: None,
+             }),
+             shutdown: None,
+         },
+@@ -826,6 +828,7 @@
+                 fork_publication_verify: None,
+                 release_fork_ack: None,
+                 prepare_fork_control: None,
++                prepare_fork_control_receipt: None,
+             }),
+             shutdown: Some(OsBackendShutdown::V5(shutdown)),
+         },
+@@ -898,6 +901,7 @@
+                 fork_publication_verify: None,
+                 release_fork_ack: None,
+                 prepare_fork_control: None,
++                prepare_fork_control_receipt: None,
+             }),
+             shutdown: Some(OsBackendShutdown::V6(shutdown)),
+         },
+@@ -970,6 +974,7 @@
+                 fork_publication_verify: None,
+                 release_fork_ack: None,
+                 prepare_fork_control: None,
++                prepare_fork_control_receipt: None,
+             }),
+             shutdown: Some(OsBackendShutdown::V6(shutdown)),
+         },
+@@ -1043,6 +1048,7 @@
+                 fork_publication_verify: None,
+                 release_fork_ack: None,
+                 prepare_fork_control: None,
++                prepare_fork_control_receipt: None,
+             }),
+             shutdown: Some(OsBackendShutdown::V6(shutdown)),
+         },
+@@ -1118,6 +1124,7 @@
+                 fork_publication_verify: None,
+                 release_fork_ack: None,
+                 prepare_fork_control: None,
++                prepare_fork_control_receipt: None,
+             }),
+             shutdown: Some(OsBackendShutdown::V6(shutdown)),
+         },
+@@ -1197,6 +1204,7 @@
+                 fork_publication_verify,
+                 release_fork_ack,
+                 prepare_fork_control: None,
++                prepare_fork_control_receipt: None,
+             }),
+             shutdown: Some(OsBackendShutdown::V6(shutdown)),
+         },
+@@ -1276,6 +1284,88 @@
+                 fork_publication_verify,
+                 release_fork_ack,
+                 prepare_fork_control,
++                prepare_fork_control_receipt: None,
++            }),
++            shutdown: Some(OsBackendShutdown::V6(shutdown)),
++        },
++        _ => return EINVAL.to_errno() as i64,
++    };
++    // SAFETY: The validated trusted owner is retained through create_os's
++    // initial reference, and every v6 callback remains resident for the
++    // complete OS lifetime exactly as with v6. The optional private adoption
++    // callback adds no public operation or ownership-bearing Rust ABI.
++    match unsafe { create_os(provider_minor, owner.cast(), argument, Some(backend)) } {
++        Ok(minor) => minor as i64,
++        Err(error) => error.to_errno() as i64,
++    }
++}
++
++/// # Safety
++/// Same module ownership as v8, plus borrowed payload/continuation contracts.
++#[export_name = "ihk_os_create_unbooted_v12"]
++pub(crate) unsafe extern "C" fn ihk_os_create_unbooted_v12(
++    provider_minor: u32,
++    owner: *mut c_void,
++    argument: u64,
++    callback_abi: u32,
++    ioctl: Option<OsBackendIoctlV2>,
++    release: Option<OsBackendReleaseV2>,
++    prepare: Option<OsBackendPrepareBootV3>,
++    start: Option<OsBackendStartBootV3>,
++    open: Option<super::application_abi::Open>,
++    invoke: Option<super::application_abi::Invoke>,
++    close: Option<super::application_abi::Close>,
++    shutdown: Option<OsBackendShutdownV6>,
++    adopt_fork: Option<super::application_abi::ForkAdoptV1>,
++    fork_progress: Option<super::application_abi::ForkProgressV1>,
++    adopt_fork_scoped: Option<super::application_abi::ForkAdoptScopedV1>,
++    prepare_fork_link: Option<super::application_abi::ForkPrepareLinkV1>,
++    fork_progress_payload: Option<super::application_abi::ForkProgressPayloadV1>,
++    prepare_fork_ack: Option<super::application_abi::ForkPrepareAckV1>,
++    fork_publication_verify: Option<super::application_abi::ForkPublicationVerifyV1>,
++    release_fork_ack: Option<super::application_abi::ForkReleaseAckV1>,
++    prepare_fork_control: Option<super::application_abi::ForkPrepareControlV1>,
++    prepare_fork_control_receipt: Option<super::application_abi::ForkPrepareControlReceiptV1>,
++) -> i64 {
++    let backend = match (
++        callback_abi,
++        ioctl,
++        release,
++        prepare,
++        start,
++        open,
++        invoke,
++        close,
++        shutdown,
++    ) {
++        (
++            1 | 2,
++            Some(ioctl),
++            Some(release),
++            Some(prepare),
++            Some(start),
++            Some(open),
++            Some(invoke),
++            Some(close),
++            Some(shutdown),
++        ) => OsBackend {
++            ioctl,
++            release,
++            boot: Some(OsBackendBootV3 { prepare, start, success_status: if callback_abi == 2 { OsStatus::Running } else { OsStatus::Ready } }),
++            application: Some(ApplicationCallbacks {
++                open,
++                invoke,
++                close,
++                adopt_fork,
++                fork_progress,
++                adopt_fork_scoped,
++                prepare_fork_link,
++                fork_progress_payload,
++                prepare_fork_ack,
++                fork_publication_verify,
++                release_fork_ack,
++                prepare_fork_control,
++                prepare_fork_control_receipt,
+             }),
+             shutdown: Some(OsBackendShutdown::V6(shutdown)),
+         },
+@@ -2463,6 +2553,22 @@
+         if result.is_err() { core::mem::forget(self); }
+         result
+     }
++
++    // An uncertain control write retains the exact original claim irrespective
++    // of a mismatched/reused table cell; never quarantine a foreign replacement.
++    fn retain_control_uncertain(self) {
++        {
++            let object = unsafe { &*self.object };
++            let mut table = object.forks.lock();
++            if let Some(entry) = table.entries[self.index].as_mut() {
++                if entry.epoch == self.epoch && entry.identity == Some(self.identity)
++                    && Arc::ptr_eq(&entry.owner, &self.owner)
++                { entry.phase = FORK_PROVIDER_QUARANTINED; }
++            }
++        }
++        // No table/Remote/MM guard or foreign callback/destructor spans forget.
++        core::mem::forget(self);
++    }
+     fn begin_link_attempt(&mut self) -> Result {
+         let object = unsafe { &*self.object };
+         let mut table = object.forks.lock();
+@@ -2863,6 +2969,7 @@
+                 || callbacks.fork_publication_verify.map(|callback| callback as usize) != registered.fork_publication_verify.map(|callback| callback as usize)
+                 || callbacks.release_fork_ack.map(|callback| callback as usize) != registered.release_fork_ack.map(|callback| callback as usize)
+             || callbacks.prepare_fork_control.map(|f| f as usize) != registered.prepare_fork_control.map(|f| f as usize)
++            || callbacks.prepare_fork_control_receipt.map(|f|f as usize) != registered.prepare_fork_control_receipt.map(|f|f as usize)
+             { return Err(EACCES); }
+         }
+         let snapshot = OS_REGISTRY.snapshot(handle).map_err(|error| errno(error.errno()))?;
+@@ -2979,6 +3086,7 @@
+             || d.second_worker == 0 || d.second_delivery == 0 || d.second_cpu < 0
+             || d.carrier_physical == 0 || d.carrier_sequence == 0 || d.gate.is_null()
+             || callbacks.prepare_fork_control.map(|f| f as usize) != registered.prepare_fork_control.map(|f| f as usize)
++            || callbacks.prepare_fork_control_receipt.map(|f|f as usize) != registered.prepare_fork_control_receipt.map(|f|f as usize)
+         { return Err(EACCES); }
+         let before = (d.version, d.bytes, d.identity, d.second_worker, d.second_delivery,
+             d.second_cpu, d.reserved, d.carrier_physical, d.carrier_sequence, d.gate);
+@@ -3020,6 +3128,95 @@
+     result.map_or_else(|e| e.to_errno(), |()| 0)
+ }
+ 
++
++unsafe extern "C" fn resolve_fork_control_receipt_scope(
++    context: *mut c_void, descriptor: *const super::application_abi::ForkControlV1,
++    resume: Option<super::application_abi::ForkControlResumeV1>, ticket: *mut c_void,
++) -> i32 {
++    let result = (|| -> Result {
++        use super::application_abi::{ForkControlV1, VERSION};
++        if context.is_null() || descriptor.is_null() || ticket.is_null() { return Err(EINVAL); }
++        let resume = resume.ok_or(EINVAL)?;
++        let scope = unsafe { &*context.cast::<ForkLinkResolverScope>() };
++        let before = unsafe { *descriptor }; let key = before.identity;
++        if before.version != VERSION || before.bytes as usize != core::mem::size_of::<ForkControlV1>()
++            || before.reserved != 0 || key.reserved0 != 0 || key.reserved1 != 0
++            || key.slot != scope.slot || key.generation != scope.generation || before.epoch == 0
++            || key.parent == 0 || key.child == 0 || key.parent == key.child || key.worker == 0
++            || key.delivery == 0 || key.nonce == 0 || key.child_pid <= 0 || key.child_mm == 0
++            || before.worker == 0 || before.delivery == 0 || before.cpu < 0
++            || before.physical == 0 || before.response == 0
++        { return Err(EACCES); }
++        let object = unsafe { &*scope.object };
++        let child_context = {
++            let table = object.forks.lock();
++            table.entries.iter().flatten().find(|e| e.identity == Some(key) && e.epoch == before.epoch)
++                .map(|e| e.child_context).ok_or(ENOENT)?
++        };
++        let claim = ForkProviderClaim::acquire_control(object, key, child_context, before.epoch)?;
++        let capsule = claim.capsule.as_ref().ok_or(ENODEV)?;
++        let payload = claim.payload.as_ref().ok_or(ENODEV)?;
++        let consumer_context = capsule.context.load(Ordering::Acquire);
++        let payload_context = payload.context.load(Ordering::Acquire);
++        if consumer_context.is_null() || payload_context.is_null() { return Err(EIO); }
++        // The SAME exact BUSY claim owns both contexts. Registered backend code
++        // freezes its owner BEFORE invoking this actual module-pinned verifier;
++        // only then may it materialize an exclusive short payload borrow.
++        let status = unsafe { resume(ticket, Some(capsule.verify), consumer_context, payload_context) };
++        if unsafe { *descriptor } != before {
++            claim.retain_control_uncertain(); return Err(errno(-71));
++        }
++        match status {
++            0 => claim.restore_control(),
++            super::application_abi::FORK_CONTROL_RECEIPT_UNCERTAIN_V1 => {
++                claim.retain_control_uncertain(); Err(EIO)
++            },
++            error if (-4095..0).contains(&error) => {
++                claim.restore_control()?; Err(errno(error))
++            },
++            _ => { claim.retain_control_uncertain(); Err(errno(-71)) },
++        }
++    })();
++    result.map_or_else(|error| error.to_errno(), |()| 0)
++}
++
++#[export_name = "ihk_os_application_prepare_fork_control_receipt_v1"]
++pub(crate) unsafe extern "C" fn prepare_fork_control_receipt_application(
++    parent: *mut c_void, worker: u64, serial: u64, cpu: i64, value: i64,
++) -> i32 {
++    let result = (|| -> Result<bool> {
++        if parent.is_null() { return Err(EINVAL); }
++        let parent = unsafe { &*parent.cast::<ApplicationConnection>() };
++        let handle = parent._lease.handle();
++        let raw = OS_OBJECTS[handle.minor()].load(Ordering::Acquire);
++        if raw.is_null() { return Err(EIO); }
++        let object = unsafe { &*raw };
++        let registered = object.backend.and_then(|b| b.application).ok_or(ENODEV)?;
++        let callbacks = parent.backend.callbacks;
++        if callbacks.open as usize != registered.open as usize
++            || callbacks.invoke as usize != registered.invoke as usize
++            || callbacks.close as usize != registered.close as usize
++            || callbacks.adopt_fork.map(|f| f as usize) != registered.adopt_fork.map(|f| f as usize)
++            || callbacks.fork_progress.map(|f| f as usize) != registered.fork_progress.map(|f| f as usize)
++            || callbacks.adopt_fork_scoped.map(|f| f as usize) != registered.adopt_fork_scoped.map(|f| f as usize)
++            || callbacks.prepare_fork_link.map(|f| f as usize) != registered.prepare_fork_link.map(|f| f as usize)
++            || callbacks.fork_progress_payload.map(|f| f as usize) != registered.fork_progress_payload.map(|f| f as usize)
++            || callbacks.prepare_fork_ack.map(|f| f as usize) != registered.prepare_fork_ack.map(|f| f as usize)
++            || callbacks.fork_publication_verify.map(|f| f as usize) != registered.fork_publication_verify.map(|f| f as usize)
++            || callbacks.release_fork_ack.map(|f| f as usize) != registered.release_fork_ack.map(|f| f as usize)
++            || callbacks.prepare_fork_control.map(|f| f as usize) != registered.prepare_fork_control.map(|f| f as usize)
++            || callbacks.prepare_fork_control_receipt.map(|f|f as usize) != registered.prepare_fork_control_receipt.map(|f|f as usize)
++        { return Err(EACCES); }
++        let Some(prepare) = registered.prepare_fork_control_receipt else { return Ok(false); };
++        let mut scope = ForkLinkResolverScope { object: ptr::from_ref(object), slot: handle.minor() as u32,
++            generation: handle.generation() };
++        match unsafe { prepare(parent.backend.context.as_ptr(), worker, serial, cpu, value,
++            Some(resolve_fork_control_receipt_scope), ptr::from_mut(&mut scope).cast()) } {
++            0 => Ok(false), 1 => Ok(true), e if (-4095..0).contains(&e) => Err(errno(e)), _ => Err(errno(-71)),
++        }
++    })();
++    result.map_or_else(|e| e.to_errno(), |parked| i32::from(parked))
++}
+ 
+ unsafe extern "C" fn resolve_fork_control_scope(
+     context: *mut c_void, descriptor: *const super::application_abi::ForkControlV1,
+@@ -3097,6 +3294,7 @@
+             || callbacks.fork_publication_verify.map(|f| f as usize) != registered.fork_publication_verify.map(|f| f as usize)
+             || callbacks.release_fork_ack.map(|f| f as usize) != registered.release_fork_ack.map(|f| f as usize)
+             || callbacks.prepare_fork_control.map(|f| f as usize) != registered.prepare_fork_control.map(|f| f as usize)
++            || callbacks.prepare_fork_control_receipt.map(|f|f as usize) != registered.prepare_fork_control_receipt.map(|f|f as usize)
+         { return Err(EACCES); }
+         let Some(prepare) = registered.prepare_fork_control else { return Ok(false); };
+         let mut scope = ForkLinkResolverScope { object: ptr::from_ref(object), slot: handle.minor() as u32,
+@@ -3185,6 +3383,7 @@
+             || callbacks.fork_publication_verify.map(|f| f as usize) != registered.fork_publication_verify.map(|f| f as usize)
+             || callbacks.release_fork_ack.map(|f| f as usize) != registered.release_fork_ack.map(|f| f as usize)
+             || callbacks.prepare_fork_control.map(|f| f as usize) != registered.prepare_fork_control.map(|f| f as usize)
++            || callbacks.prepare_fork_control_receipt.map(|f|f as usize) != registered.prepare_fork_control_receipt.map(|f|f as usize)
+         { return Err(EACCES); }
+         let Some(prepare) = registered.prepare_fork_ack else { return Ok(()); };
+         let mut scope = ForkLinkResolverScope { object: ptr::from_ref(object),
+@@ -3297,6 +3496,7 @@
+             || callbacks.fork_publication_verify.map(|f| f as usize) != registered.fork_publication_verify.map(|f| f as usize)
+             || callbacks.release_fork_ack.map(|f| f as usize) != registered.release_fork_ack.map(|f| f as usize)
+             || callbacks.prepare_fork_control.map(|f| f as usize) != registered.prepare_fork_control.map(|f| f as usize)
++            || callbacks.prepare_fork_control_receipt.map(|f|f as usize) != registered.prepare_fork_control_receipt.map(|f|f as usize)
+         { return Err(EACCES); }
+         let Some(prepare) = registered.prepare_fork_link else { return Ok(()); };
+         let mut scope = ForkLinkResolverScope {
+@@ -3844,3 +4044,18 @@
+     license: *b"GPL\0", namespace: *b"MCKERNEL_IHK_V1\0", padding: [0; 4],
+     symbol: ihk_os_create_unbooted_v11 as *const () as *const u8,
+ };
++
++#[export_name = "__export_symbol_ihk_os_application_prepare_fork_control_receipt_v1"]
++#[link_section = ".export_symbol"]
++#[used(compiler)]
++pub(crate) static APPLICATION_CONTROL_RECEIPT_V1_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
++    license: *b"GPL\0", namespace: *b"MCKERNEL_IHK_V1\0", padding: [0; 4],
++    symbol: prepare_fork_control_receipt_application as *const () as *const u8,
++};
++#[export_name = "__export_symbol_ihk_os_create_unbooted_v12"]
++#[link_section = ".export_symbol"]
++#[used(compiler)]
++pub(crate) static IHK_OS_CREATE_V12_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
++    license: *b"GPL\0", namespace: *b"MCKERNEL_IHK_V1\0", padding: [0; 4],
++    symbol: ihk_os_create_unbooted_v12 as *const () as *const u8,
++};
+--- a/host-kernel/native-rust/smp_application.rs
++++ b/host-kernel/native-rust/smp_application.rs
+@@ -25,7 +25,7 @@
+ 
+ #[path = "smp_fork_link.rs"]
+ mod fork_link;
+-pub(crate) use fork_link::{PreparedLinkTicket, PreparedControlTicket};
++pub(crate) use fork_link::{PreparedLinkTicket, PreparedControlTicket, PreparedControlReceiptTicket, ControlReceiptOutcome};
+ #[path = "smp_fork_ingress.rs"]
+ mod fork_ingress;
+ 
+--- a/host-kernel/native-rust/smp_fork_link.rs
++++ b/host-kernel/native-rust/smp_fork_link.rs
+@@ -405,6 +405,7 @@
+     _response: super::super::smp_application_syscall::ForkIngressResponse<SyscallResponse>,
+     _parent: ForkParentPin,
+     quarantined: bool,
++    receipt: ControlReceiptRecord,
+ }
+ pub(crate) struct PreparedControlTicket {
+     remote: Arc<Remote>, parent: Token, child: Token,
+@@ -510,7 +511,7 @@
+             d.worker, d.delivery, &self.request).map_err(errno)?;
+         let owner = ForkControlOwner { descriptor: d, request: self.request.clone(), _response: response,
+             _parent: ForkParentPin { parent: self.parent, identity: key, reservation, remote: self.remote.clone() },
+-            quarantined: false };
++            quarantined: false, receipt: ControlReceiptRecord::new() };
+         slots[pi].as_mut().unwrap().fork_prepared_parent_refs = count;
+         slots[ci].as_mut().unwrap().fork.as_mut().unwrap().control = Some(owner);
+         self.parked = true;
+@@ -549,3 +550,181 @@
+     { return Err(EBUSY); }
+     Ok(())
+ }
++
++// Source-only postpositive receipt contract. Existing guest MCFKW001 consumers
++// do not accept this frame. A future authenticated delivery/consumer is required.
++struct HostAliasesRevokedControl {
++    descriptor: super::super::application_abi::ForkControlV1,
++}
++struct ControlReceiptRecord {
++    frozen: bool,
++    proof: Option<HostAliasesRevokedControl>,
++    journal: Option<[u8; 128]>,
++    written: bool,
++    uncertain: bool,
++    write_error: Option<i32>,
++}
++impl ControlReceiptRecord {
++    fn new() -> Self { Self { frozen: false, proof: None, journal: None,
++        written: false, uncertain: false, write_error: None } }
++}
++pub(crate) struct PreparedControlReceiptTicket {
++    remote: Arc<Remote>, parent: Token, child: Token,
++    descriptor: super::super::application_abi::ForkControlV1,
++    request: Request,
++}
++pub(crate) enum ControlReceiptOutcome { Written, Uncertain }
++
++fn control_receipt_bytes(d: super::super::application_abi::ForkControlV1) -> [u8; 128] {
++    let k = d.identity;
++    let mut bytes = [0u8; 128];
++    bytes[..8].copy_from_slice(b"MCFKR001");
++    for (offset, value) in [(8,d.epoch),(16,d.worker),(24,d.delivery),(32,d.response),
++        (48,k.generation),(56,k.parent),(64,k.worker),(72,k.delivery),(80,k.child),
++        (88,k.child_mm),(96,k.root),(104,k.start),(112,k.length),(120,k.nonce)] {
++        bytes[offset..offset+8].copy_from_slice(&value.to_le_bytes());
++    }
++    bytes[40..44].copy_from_slice(&k.slot.to_le_bytes());
++    bytes[44..48].copy_from_slice(&k.child_pid.to_le_bytes());
++    bytes
++}
++
++// SAME slots exclusion throughout scalar validation. No IHK/MM callback runs
++// here. This is a resume of one durable owner, never a new Delivered discovery.
++fn control_receipt_snapshot(remote: &Remote, slots: &[Option<Entry>], parent: Token,
++    worker: u64, serial: u64, cpu: i64,
++) -> Result<Option<(Token, super::super::application_abi::ForkControlV1, Request)>> {
++    remote.transport_health()?;
++    let p = slots.iter().flatten().find(|e| e.key() == parent).ok_or(ENOENT)?;
++    let found = slots.iter().flatten().find(|e| e.fork.as_ref().and_then(|f|f.control.as_ref())
++        .is_some_and(|c| c.descriptor.identity.parent == parent.wire()
++            && c.descriptor.worker == worker && c.descriptor.delivery == serial));
++    let Some(c) = found else { return Ok(None); };
++    let f = c.fork.as_ref().unwrap(); let control = f.control.as_ref().unwrap();
++    let d = control.descriptor; let k = f.reservation.identity;
++    if p.closed || p.needs_cleanup || p.quarantined || !p.scheduled
++        || c.closed || c.quarantined || c.scheduled || c.prepare.is_some() || c.procfs.is_some()
++        || !c.syscalls.drained() || control.quarantined || control.receipt.uncertain
++    { return Err(EBUSY); }
++    if p.owner_slot != remote.owner.slot() as i32 || p.owner_generation != remote.owner.generation()
++        || c.owner_slot != remote.owner.slot() as i32 || c.owner_generation != remote.owner.generation()
++        || k.slot != remote.owner.slot() || k.generation != remote.owner.generation()
++        || k.parent != parent.wire() || k.child != c.key().wire() || d.identity != host_key(k)
++        || d.cpu as i64 != cpu || d.epoch == 0 || f.ack.as_ref().is_none_or(|ack|ack.epoch != d.epoch)
++        || f.owner.number != k.child_pid || f.owner.mm.as_ptr() as usize != k.child_mm
++        || !f.seal.sealed.load(Ordering::Acquire) || f.reservation.state.prepared()
++        || !f.reservation.return_published || f.reservation.return_value != Some(k.child_pid as i64)
++        || f.reservation.state.phase() != ForkPhase::FirstReturnPublished
++    { return Err(EACCES); }
++    let r = &control.request; let args = r.arguments();
++    if r.number() != 56 || r.pid() != p.cleanup.pid() || r.cpu() != d.cpu || r.response() != d.response
++        || args[0] != 2 || args[1] != k.child_pid as u64 || args[2] != k.length
++        || args[3] != k.root || args[4] != d.physical || args[5] != CARRIER_MARKER
++        || control._response.request() != r || control._parent.parent != parent
++        || control._parent.identity != k || control._parent.reservation != f.reservation.token.wire()
++        || !core::ptr::eq(&*control._parent.remote, remote)
++    { return Err(EACCES); }
++    let link = f.link.as_ref().ok_or(EBUSY)?;
++    if link.identity != k || link.physical != d.physical || link.last_sequence != 1
++        || link.busy || link.second.is_some() || link.published || link.receipt_written
++        || link.revoked_receipt_written
++        || link.gate.load(Ordering::Acquire) != u8::from(control.receipt.frozen)
++        || c.needs_cleanup != control.receipt.frozen
++    { return Err(EBUSY); }
++    Ok(Some((c.key(), d, r.clone())))
++}
++impl Remote {
++    pub(crate) fn begin_fork_control_receipt(self: &Arc<Self>, parent: Token, worker: u64,
++        serial: u64, cpu: i64, _value: i64) -> Result<Option<PreparedControlReceiptTicket>> {
++        let slots = self.slots.lock();
++        let Some((child, descriptor, request)) = control_receipt_snapshot(self, &slots, parent, worker, serial, cpu)?
++            else { return Ok(None); };
++        Ok(Some(PreparedControlReceiptTicket { remote: self.clone(), parent, child, descriptor, request }))
++    }
++}
++impl PreparedControlReceiptTicket {
++    pub(crate) fn descriptor(&self) -> super::super::application_abi::ForkControlV1 { self.descriptor }
++    fn indexes(&self, slots: &[Option<Entry>]) -> Result<(usize, usize)> {
++        let d = self.descriptor;
++        let Some((child, actual, request)) = control_receipt_snapshot(&self.remote, slots,
++            self.parent, d.worker, d.delivery, d.cpu as i64)? else { return Err(EACCES); };
++        if child != self.child || actual != d || request != self.request { return Err(EACCES); }
++        let pi = slots.iter().position(|e|e.as_ref().is_some_and(|e|e.key()==self.parent)).ok_or(ENOENT)?;
++        let ci = slots.iter().position(|e|e.as_ref().is_some_and(|e|e.key()==self.child)).ok_or(ENOENT)?;
++        Ok((pi, ci))
++    }
++    fn freeze(&self) -> Result<bool> {
++        let mut slots = self.remote.slots.lock();
++        let (_, ci) = self.indexes(&slots)?;
++        let child = slots[ci].as_mut().unwrap();
++        let fork = child.fork.as_mut().unwrap(); let control = fork.control.as_mut().unwrap();
++        if control.receipt.written {
++            if !control.receipt.frozen
++                || control.receipt.proof.as_ref().is_none_or(|proof|proof.descriptor != self.descriptor)
++                || control.receipt.journal != Some(control_receipt_bytes(self.descriptor))
++            { return Err(EIO); }
++            return Ok(true);
++        }
++        if !control.receipt.frozen {
++            // Actual gate closure precedes the real MM callback. No sealed
++            // LINK can race it; every begin/link/removal path also sees control.
++            fork.link.as_ref().unwrap().cancel_if_open()?;
++            control.receipt.frozen = true; child.needs_cleanup = true;
++            child.syscalls.close().map_err(errno)?;
++        }
++        Ok(false)
++    }
++    /// # Safety
++    /// ONLY the exact live IHK BUSY control claim calls this trusted registered
++    /// continuation with its module-pinned capsule.verify and payload contexts.
++    /// No Slots/table/MM guard crosses verify; mutable payload exists only in
++    /// write_verified after actual MM proof and exact slots-held revalidation.
++    pub(crate) unsafe fn resume(&self, verify: super::super::application_abi::ForkVerifyV1,
++        context: *mut core::ffi::c_void, payload: NonNull<ForkPayload>) -> Result<ControlReceiptOutcome> {
++        if self.freeze()? { return Ok(ControlReceiptOutcome::Written); }
++        let status = unsafe { verify(context, &self.descriptor.identity) };
++        if status != 0 { return Err(errno(if (-4095..0).contains(&status) { status } else { -71 })); }
++        // This non-Copy authority has no public constructor and is created
++        // ONLY after the actual registered Mirror revoke verifier succeeds.
++        let proof = HostAliasesRevokedControl { descriptor: self.descriptor };
++        unsafe { self.write_verified(proof, payload) }
++    }
++    unsafe fn write_verified(&self, proof: HostAliasesRevokedControl,
++        mut payload: NonNull<ForkPayload>) -> Result<ControlReceiptOutcome> {
++        let mut slots = self.remote.slots.lock(); let (_, ci) = self.indexes(&slots)?;
++        let f = slots[ci].as_mut().unwrap().fork.as_mut().unwrap();
++        let k = f.reservation.identity; let original = f.link.as_ref().unwrap().original_response;
++        let control = f.control.as_mut().unwrap();
++        if proof.descriptor != self.descriptor || !control.receipt.frozen
++            || control.receipt.written || control.receipt.uncertain || control.receipt.journal.is_some()
++        { return Err(EBUSY); }
++        // Validate SAME fresh response is still unpublished, without writing a
++        // result or converting launcher0/-95 into a permission.
++        control._response.response().map_err(errno)?.check_fork_unpublished(&self.request).map_err(errno)?;
++        let payload = unsafe { payload.as_mut() };
++        if !payload_matches(payload, k, self.descriptor.physical, original) { return Err(EACCES); }
++        let bytes = control_receipt_bytes(self.descriptor);
++        control.receipt.proof = Some(proof); control.receipt.journal = Some(bytes);
++        match payload.copy_to_guest(&bytes) {
++            Ok(()) => { control.receipt.written = true; Ok(ControlReceiptOutcome::Written) },
++            Err(error) => {
++                // Any error is conservatively uncertain, even a pre-copy
++                // failure. Keep the exact immutable journal and actual owners;
++                // no unverified replay/overwrite or first-RET rollback exists.
++                control.receipt.uncertain = true; control.receipt.write_error = Some(error.to_errno());
++                control.quarantined = true;
++                Ok(ControlReceiptOutcome::Uncertain)
++            },
++        }
++    }
++    pub(crate) fn quarantine(&self) {
++        let mut slots = self.remote.slots.lock();
++        if let Some(c) = slots.iter_mut().flatten().find(|e|e.key()==self.child) {
++            if let Some(control) = c.fork.as_mut().and_then(|f|f.control.as_mut()) {
++                if control.descriptor == self.descriptor && control.request == self.request {
++                    control.quarantined = true; c.quarantined = true;
++                }
++            }
++        }
++    }
++}
+--- a/host-kernel/native-rust/smp_service.rs
++++ b/host-kernel/native-rust/smp_service.rs
+@@ -1141,6 +1141,39 @@
+         let ticket = unsafe { &mut *ticket.cast::<super::super::smp_application::PreparedControlTicket>() };
+         let payload = unsafe { &*payload.cast::<memory::ForkPayload>() };
+         unsafe { ticket.park(payload) }.map_or_else(|e| e.to_errno(), |()| 0)
++    }
++
++    /// The actual parent preRETURN receipt hook; success still parks RET.
++    pub(in super::super) unsafe fn prepare_fork_control_receipt(
++        &self, worker: u64, serial: u64, cpu: i64, value: i64,
++        resolve: super::super::application_abi::ForkControlReceiptResolveV1, context: *mut core::ffi::c_void,
++    ) -> Result<bool> {
++        let Some(mut ticket) = self.started.runtime.application.begin_fork_control_receipt(
++            self.token, worker, serial, cpu, value,
++        )? else { return Ok(false); };
++        let descriptor = ticket.descriptor();
++        let status = unsafe { resolve(context, &descriptor, Some(Self::resume_fork_control_scope),
++            core::ptr::from_mut(&mut ticket).cast()) };
++        if status != 0 {
++            ticket.quarantine();
++            return Err(errno(if (-4095..0).contains(&status) { status } else { -71 }));
++        }
++        Ok(true)
++    }
++    unsafe extern "C" fn resume_fork_control_scope(ticket: *mut core::ffi::c_void,
++        verify: Option<super::super::application_abi::ForkVerifyV1>,
++        context: *mut core::ffi::c_void, payload: *mut core::ffi::c_void,
++    ) -> i32 {
++        if ticket.is_null() || context.is_null() { return EINVAL.to_errno(); }
++        let Some(verify) = verify else { return EINVAL.to_errno(); };
++        let Some(payload) = core::ptr::NonNull::new(payload.cast::<memory::ForkPayload>()) else { return EINVAL.to_errno(); };
++        let ticket = unsafe { &*ticket.cast::<super::super::smp_application::PreparedControlReceiptTicket>() };
++        match unsafe { ticket.resume(verify, context, payload) } {
++            Ok(super::super::smp_application::ControlReceiptOutcome::Written) => 0,
++            Ok(super::super::smp_application::ControlReceiptOutcome::Uncertain) =>
++                super::super::application_abi::FORK_CONTROL_RECEIPT_UNCERTAIN_V1,
++            Err(error) => error.to_errno(),
++        }
+     }
+     // END PRIVATE FORK PROVIDER APPLICATION
+ 
