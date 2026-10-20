@@ -1,0 +1,101 @@
+{
+  "status": "ROOT_CONDITIONAL_GRANT_EXECUTOR_FREEZE_PENDING",
+  "profile": {
+    "host_only": true,
+    "affinity": [
+      6
+    ],
+    "jobs": 1,
+    "address_space_bytes": 1073741824,
+    "cpu_seconds": 30,
+    "wall_seconds_total": 30,
+    "fsize_bytes": 33554432,
+    "core_bytes": 0,
+    "network": false,
+    "root": false,
+    "scratch_growth_bytes": 0,
+    "whole_wall_grace_seconds": 6,
+    "mem_available_min_bytes": 5368709120
+  },
+  "capture_reuse": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/run_checks_once.py",
+  "capture_note": "Reuse accepted owned_capture and retirement checks; adapt inputs/fresh outputs only. Existing P2 script hardcodes P2 inputs, no-heavy assertion and boot id: do not replay unchanged. Root must reconcile fresh aggregate SDK heavy CPU2-5/12GiB and current leases/headroom.",
+  "floors": {
+    "host_free_gib": 16,
+    "scratch_free_gib": 12,
+    "host_growth_budget_mib": 128,
+    "aggregate_growth_reserve_mib": 640
+  },
+  "commands": [
+    [
+      "/usr/bin/gcc",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fno-pie",
+      "-no-pie",
+      "-Wl,-z,noexecstack",
+      "-DND_M03_MPROTECT_UNALIGNED",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/test_pair_startup.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/check-1/startup-fixture"
+    ],
+    [
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/check-1/startup-fixture"
+    ],
+    [
+      "/usr/bin/gcc",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fno-pie",
+      "-no-pie",
+      "-Wl,-z,noexecstack",
+      "-DND_M03_MPROTECT_UNALIGNED",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/test_helper_export.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/check-1/export-fixture"
+    ],
+    [
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/check-1/export-fixture",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/check-1/vectors"
+    ],
+    [
+      "/usr/bin/gcc",
+      "-std=gnu11",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fno-pie",
+      "-no-pie",
+      "-Wl,-z,noexecstack",
+      "-DND_M03_MPROTECT_UNALIGNED",
+      "-static",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/candidate/native_diagnostic_guest_collector.c",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/check-1/collector"
+    ]
+  ],
+  "per_command_wall_seconds": 10,
+  "failure_policy": "Preserve all errors. One candidate plus one bounded correction per family; stop on compile/fixture failure and report before changed repeat.",
+  "checks": [
+    "28 actual startup-header vectors with modeled Linux resources",
+    "actual helper/export bodies: retain prior cases plus local prepare/readback distinct refusal and real helper precedence",
+    "one real static current collector compile; no boot/helper/kernel/module rebuild"
+  ],
+  "oracles_unchanged": [
+    "strict 73B app oracle",
+    "image205",
+    "HOST66",
+    "modules",
+    "boot4312f9a8/35784B",
+    "deadlines",
+    "retirement"
+  ],
+  "future_stage": null,
+  "future_runtime_release": null
+}

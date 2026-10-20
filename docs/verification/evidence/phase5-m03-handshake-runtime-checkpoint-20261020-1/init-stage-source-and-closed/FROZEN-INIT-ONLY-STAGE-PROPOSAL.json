@@ -1,0 +1,211 @@
+{
+  "accepted_collector": {
+    "mode": 33216,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/check-1/collector",
+    "sha256": "9fafdd45c0934d95555fd85ee542bbd417e2b3e6e126d2a27d565f48be2fec57",
+    "size": 1025768
+  },
+  "accepted_recipe_actual": {
+    "bytes": 6885,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-ACTUAL-INIT-ONLY-HELPER-EXPORT-OFFLINE-STAGE-ACCEPTANCE.json",
+    "sha256": "59402e8f51b84b705109fd0dd83d75d56fd092beb0b365b7b57289e17b1f6943"
+  },
+  "accepted_recipe_review": {
+    "bytes": 7174,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-HELPER-EXPORT-INIT-ONLY-STAGE-SOURCE-AND-CONDITIONAL-ORDINARY-REVIEW.json",
+    "sha256": "d4cf67c32204685249ec601b9b9a995e9842042ef37abbcddbe503d9a8fbb530"
+  },
+  "allowed_final_map_deltas": {
+    "init": [
+      "size",
+      "sha256"
+    ]
+  },
+  "application_launches": 0,
+  "base_archive": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-stage-1/m03.cpio.gz",
+    "sha256": "c5646f37031bc9b2ba5472064d9e267d797fe8ec6f9a3978c750a63707e7bfbe",
+    "size": 21330345
+  },
+  "base_overlay_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-stage-1/overlay-manifest.json",
+    "sha256": "e502c2dfc1c4af2c8a0853b4e80f8210bf6bd7960ba21cf7ae492d7250f7badf",
+    "size": 20044
+  },
+  "binding": {
+    "bytes": 4038,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/M03-FROZEN-CASE-BINDING.json",
+    "sha256": "0659cc7b9a66b0b0345cb7df31e613bea6a66a354aa5a4adb5c3ecdc50689fad"
+  },
+  "canonical_overlay": {
+    "bytes": 26579,
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+    "sha256": "46d41bc0727fa77e4126e739f25352c53eadf2e1fa8e23ef06a6e46c9b3ba27d"
+  },
+  "closed_collector_result": {
+    "bytes": 3065,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/CLOSED-FIVE-COMMAND-RESULT.json",
+    "sha256": "8865d826f2eb0995f814fcd897cfb33c264420eb031b3d9d1265bdae8e30e364"
+  },
+  "collector_ref": {
+    "bytes": 256,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/ACCEPTED-COLLECTOR-REF.json",
+    "sha256": "71f26b6c3452e22f19899d87ec3c4f5dc841b0589d3caa41f336771a76ec8145"
+  },
+  "evaluator": {
+    "bytes": 58161,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/candidate/native_diagnostic.py",
+    "sha256": "1f9f46a3b3d7ed89b064bb91b32a63bd82259706216dee0799c81fdf8a5dc149"
+  },
+  "exact_child_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/stage_m03_init_only.py",
+    "--collector-ref",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/ACCEPTED-COLLECTOR-REF.json",
+    "--output",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/native-stage-1"
+  ],
+  "exact_delta": [
+    "Stage engine and recipe unchanged in behavior; engine used in place with original HERE binding.",
+    "Collector-ref now exact accepted 9fafdd45 original0700 compiled collector; canonical overlay emits0755 init.",
+    "Runner and stage/capture output roots relocated to fresh owned prefix; runner source pins updated for new collector ref and additionally pin closed result, source/actual review and collector.",
+    "No profile expansion: collector grows4392bytes versus prior d4d81860, still below1MiB; existing32MiB individual/64MiB stage/256MiB host fullgrowth limits retained."
+  ],
+  "exact_outer_argv": [
+    "/usr/bin/timeout",
+    "-k",
+    "2",
+    "67",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=55:55",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/run_init_only_stage_once.py"
+  ],
+  "failure_history_preserved": [
+    {
+      "bytes": 7667,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-REAL-ARCHIVE-STAGE-FIRST-ACTUAL-FAILURE-AND-ORDINARY-RETIREMENT-REVIEW.json",
+      "sha256": "57b4a7d7dda8bd897dca765f711ade10a0ddb4fc4b43f6cf50cc388c48e67a7e"
+    },
+    {
+      "bytes": 18590,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-NATIVE-FAILURE-PHYSICAL-RETIREMENT-REVIEW.json",
+      "sha256": "39cd2e2f5a061fe1ef50e72f693a7ad741f39ea5e0d77514b8c2d4e686f56934"
+    },
+    {
+      "bytes": 17878,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-HELPER-EXPORT-RETRY-FAILURE-PHYSICAL-RETIREMENT-REVIEW.json",
+      "sha256": "791ea5c2f3d543f6e05a505bf53f3cca72a9dad40f3885ef3aa548559a23743e"
+    }
+  ],
+  "functional_scope": "Functional supported-profile McKernel OS/apps plus active compute C retirement into Rust/reviewed assembly; existing Linux userland collector only.",
+  "future_output_paths": {
+    "capture": "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/actual-init-only-stage-capture-1",
+    "stage": "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/native-stage-1"
+  },
+  "future_outputs": null,
+  "guest_runs": 0,
+  "next_executable_observation": "Exactly one reviewed ordinary stage invocation; inspect rc/direct join/group absence/closed streams and immutable full output references, then separate review. Future metadata/native guest work requires separate release.",
+  "ordinary_profile": {
+    "as_bytes": 1073741824,
+    "capture_budget_bytes": 67108864,
+    "core_bytes": 0,
+    "cpu": 6,
+    "cpu_seconds": 55,
+    "emergency_bytes": 67108864,
+    "fsize_bytes": 33554432,
+    "host_floor_bytes": 17179869184,
+    "host_full_growth_bytes": 268435456,
+    "jobs": 1,
+    "kill_after_seconds": 2,
+    "nofile": 256,
+    "scratch_floor_bytes": 12884901888,
+    "scratch_writes": false,
+    "stage_output_budget_bytes": 67108864,
+    "wall_seconds": 60
+  },
+  "ownership": "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1",
+  "parent_manifest": {
+    "bytes": 5861,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/manifest-key-correction-1/manifest.json",
+    "sha256": "e414ac0854bf705da2603bde1c630904f8877f14ca3645c1d1c146627e4f333e"
+  },
+  "prerequisites": [
+    "Focused independent source/profile review of this frozen packet and runner.",
+    "Root explicit ordinary grant and CPU6 handoff; no conflicting census/sole-publisher/heavy operation; root accounts aggregate CPU/RAM.",
+    "Fresh included usage<100 running/no pause/no stop; no paid/API billing, no automatic service-policy retry.",
+    "Fresh boot identity pinned by recipe, scratch UUID and current mount identity; host16GiB+256MiB, scratch12GiB/read-only, MemAvailable5GiB; output roots absent."
+  ],
+  "recipe": {
+    "bytes": 5340,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/run_init_only_stage_once.py",
+    "sha256": "147d7f2eaec3e746b4a7bd8105ecf6de51f01700ef503f9f445cf5aa8a179d3b"
+  },
+  "required_invariants": [
+    "Original complete c564 decompressed archive prefix byte-identical",
+    "All62 final member names and metadata preserved; only init bytes/size change",
+    "Strict e414 eight-key manifest and1f9 evaluator checks before publication",
+    "Original collector mode0700 unchanged; canonical init0755"
+  ],
+  "runner": {
+    "bytes": 6016,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/run_init_only_stage_once.py",
+    "sha256": "8554f6b3376704939cd2b5d5f7edf330eca2325b52cd66d8ae5d13476a6542fb"
+  },
+  "runtime_release": null,
+  "schema": "mckernel.m03-authenticated-handshake-init-only-stage-proposal.v1",
+  "source_and_actual_collector_review": {
+    "bytes": 9566,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-AUTHENTICATED-BOOT-HANDSHAKE-SOURCE-AND-ACTUAL-ORDINARY-CHECK-REVIEW.json",
+    "sha256": "e56cfa5feca094efaddd7ef7bba7a0a1d48c524644c924e1db034c35ee35b9f8"
+  },
+  "stage_engine": {
+    "bytes": 6790,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/stage_m03_init_only.py",
+    "sha256": "a7bf02cdc25db002068bf3c6a96b93a1a818365322e60f1e433f215e28c8b5f6"
+  },
+  "stage_executed": false,
+  "status": "FROZEN_SOURCE_ONLY_PENDING_INDEPENDENT_REVIEW_AND_ROOT_ORDINARY_GRANT",
+  "stop_condition": "No stage effect before root ordinary grant. Any admission mismatch stops. One bounded invocation only; preserve partial outputs and all failed stage/native cases; no automatic retry, root/guest/build or acceptance claim.",
+  "tuple_and_oracle": "Same tested205/HOST66 image/modules/native_boot/mcexec/app and strict M03 oracle. No SDK module substitution, build or compute-kernel C change.",
+  "witnesses": [
+    {
+      "bytes": 3065,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/CLOSED-FIVE-COMMAND-RESULT.json",
+      "sha256": "8865d826f2eb0995f814fcd897cfb33c264420eb031b3d9d1265bdae8e30e364"
+    },
+    {
+      "bytes": 9566,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-AUTHENTICATED-BOOT-HANDSHAKE-SOURCE-AND-ACTUAL-ORDINARY-CHECK-REVIEW.json",
+      "sha256": "e56cfa5feca094efaddd7ef7bba7a0a1d48c524644c924e1db034c35ee35b9f8"
+    },
+    {
+      "bytes": 6790,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/stage_m03_init_only.py",
+      "sha256": "a7bf02cdc25db002068bf3c6a96b93a1a818365322e60f1e433f215e28c8b5f6"
+    },
+    {
+      "bytes": 6016,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/run_init_only_stage_once.py",
+      "sha256": "8554f6b3376704939cd2b5d5f7edf330eca2325b52cd66d8ae5d13476a6542fb"
+    },
+    {
+      "bytes": 256,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/ACCEPTED-COLLECTOR-REF.json",
+      "sha256": "71f26b6c3452e22f19899d87ec3c4f5dc841b0589d3caa41f336771a76ec8145"
+    }
+  ]
+}

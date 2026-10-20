@@ -1,0 +1,29 @@
+--- accepted/machine_assembly_caller.py
++++ proposed/machine_assembly_caller.py
+@@ -1,9 +1,9 @@
+-"""Existing machine assembly with explicit native-failure predecessor semantics."""
++"""Existing machine assembly with explicit current SDK predecessor semantics."""
+ from pathlib import Path
+ import hashlib,json,sys,time
+-SCOPE='M03_NATIVE_FAILURE_PHYSICAL_RETIREMENT_ONLY'
++SCOPE='CURRENT_V6_SDK_PHYSICAL_RETIREMENT_ONLY'
+ def predecessor_contract(ref):
+- return dict(status='PASS_PHYSICAL_RETIREMENT_ONLY',scope=SCOPE,new_native_persistent_ownership_record_files=0,ref=ref)
++ return dict(status='PASS_PHYSICAL_RETIREMENT_ONLY',scope=SCOPE,released_sdk_owned_record_files=3,ref=ref)
+ def assemble(base,snapshot,now,snapshot_ref):
+  assert snapshot['status']=='PASS_LIVE_PREEXECUTION_SNAPSHOT' and 0<=now-snapshot['time_epoch']<=60 and snapshot['parent_identity']==base['parent_identity']
+  assert base['execution_count']==1 and base['runtime_release'] is False and base['fresh_live_preflight'] is None
+--- accepted/root_manual_snapshot_m03.py
++++ proposed/root_manual_snapshot_m03.py
+@@ -52,9 +52,9 @@
+ def terminal_joins(t,b):
+     source=Path(b['physical_projection_source']['path'])
+     need(hashlib.sha256(source.read_bytes()).hexdigest()==b['physical_projection_source']['sha256'],'exact selected known-kind physical decoder')
+-    spec=importlib.util.spec_from_file_location('exact_host66_physical_projection',source)
++    spec=importlib.util.spec_from_file_location('exact_current_sdk_physical_projection',source)
+     decoder=importlib.util.module_from_spec(spec);spec.loader.exec_module(decoder)
+-    need(decoder.project(t,b['physical_review'])==b['physical_predecessor'],'complete genuine native-failure physical projection')
++    need(decoder.project(t,b['physical_review'])==b['physical_predecessor'],'complete genuine current SDK physical projection')
+     need(t==checked(b['physical_review']),'whole selected terminal report retained without role projection')
+     need(b['root_lock_identity']==dict(device=27,inode=4,uid=0,gid=0,mode='0o644'),'permanent root mutex identity; live check remains required')
+ def collect_live(b,proposal,owner):
