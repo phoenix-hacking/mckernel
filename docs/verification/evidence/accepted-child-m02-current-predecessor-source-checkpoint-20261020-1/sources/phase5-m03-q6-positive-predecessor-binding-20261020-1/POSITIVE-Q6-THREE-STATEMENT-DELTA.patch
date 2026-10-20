@@ -1,0 +1,29 @@
+--- /home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-predecessor-binding-1/native_positive_s5_physical_projection.py
++++ /home/holden/mckernel-work/host-preparation/phase5-m03-q6-positive-predecessor-binding-20261020-1/native_positive_q6_physical_projection.py
+@@ -10,7 +10,7 @@
+ s=importlib.util.spec_from_file_location('accepted_full_fd_reader',p);R=importlib.util.module_from_spec(s);s.loader.exec_module(R)
+ read_bytes=R.read_bytes;checked=R.checked;captured_bytes=R.captured_bytes;tar_members=R.tar_members
+ SCHEMA='mckernel.independent-actual-m03-native-physical-retirement-review.v1'
+-CONTEXT_REF={'path': '/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-runtime-binding-20261020-1/positive-s5-predecessor-binding-1/NATIVE-POSITIVE-S5-PHYSICAL-CONTEXT.json', 'sha256': 'a907bb3c54473f3e8e89b026c8a17b2b1e488ab40029baf93f96fe29492c05a0', 'bytes': 1710}
++CONTEXT_REF={'path': '/home/holden/mckernel-work/host-preparation/phase5-m03-q6-positive-predecessor-binding-20261020-1/NATIVE-POSITIVE-Q6-PHYSICAL-CONTEXT.json', 'sha256': '6627cdb3c1b932b777373585af9a2523d8833bfc779d7aef4e481996acc0433e', 'bytes': 2603}
+ 
+ def kind(t):
+  need(t['schema']==SCHEMA and t['status']=='PASS' and t['decision']=='PASS_PHYSICAL_RETIREMENT_M03_NATIVE_OWNER_ONLY','exact native-positive physical kind')
+@@ -32,7 +32,7 @@
+   need(c['returncode']==(1 if name=='./023-kill.json' else 0),'retain truthful already-exited kill result')
+  need(owner['./result.json']!=attempt['./result.json'] and json.loads(attempt['./result.json'],object_pairs_hook=R.no_duplicates)==result,'distinct whole owner and guest result roles')
+  need(result['qemu_evidence']==t['qemu_evidence'] and result['admitted_qemu_argv']==t['qemu_evidence']['argv'] and result['cleanup']==t['cleanup']==dict(reaped=True,errors=[]) and result['capture_errors']==t['capture_errors']==[],'actual namespace QEMU argv/reap/cleanup')
+- q=t['qemu_evidence'];need(q['pid']==q['pgid']==q['sid']==10 and q['starttime_ticks']==31890738 and q['returncode']==-9,'namespace QEMU birth kept separate from host identities')
++ q=t['qemu_evidence'];need(q['pid']==q['pgid']==q['sid']==9 and q['starttime_ticks']==32133813 and q['returncode']==-9,'namespace QEMU birth kept separate from host identities')
+  terminal=json.loads(owner['./026-inspect.stdout'],object_pairs_hook=R.no_duplicates)[0];state=terminal['State']
+  need(terminal['Id']==t['container_id'] and terminal['Name']=='/'+t['actual_owner_name'] and terminal['Config']['Labels']['mckernel.native-diagnostic.owner']==t['case_nonce'] and state['Status']=='exited' and state['Running'] is False and state['Pid']==state['ExitCode']==0 and state['OOMKilled'] is False,'actual exact terminal CID/name/owner/state')
+  rm=json.loads(owner['./027-rm.json']);need(rm['argv'][-3:]==['rm','--force',t['container_id']] and rm['returncode']==0,'same exact CID removal')
+@@ -54,7 +54,7 @@
+  for row in inner+outer:R.status_join(row,0)
+  need(all(captured_bytes(row['streams']['stderr'])==b'' for row in inner),'all actual inner stderr empty')
+  whole=checked(t['actual_whole']);need(whole['status']=='PASS_WHOLE_JOINED_RELEASED_CHAIN' and whole['failed_stage'] is None and len(whole['rows'])==7 and [r['status_path'] for r in whole['rows']]==[r['path'] for r in t['outer_statuses']] and all(r['returncode']==0 for r in whole['rows']),'actual complete seven-stage pipeline')
+- join=checked(t['actual_root_tool_join']);need(join['schema']=='mckernel.root.actual-original-tool-wholejoin.v1' and join['status']=='PASS_ORIGINAL_WHOLE_COMMAND_JOIN' and join['session_id']==38344 and join['initial_tool_chunk']=='190eb0' and join['final_tool_chunk']=='3ffcc3' and join['tool_exit_code']==0 and join['tool_session_completed'] is True and join['whole']==t['actual_whole'] and join['native_or_application_acceptance'] is False,'positive original tool wholejoin evidence')
++ join=checked(t['actual_root_tool_join']);need(join['schema']=='mckernel.root.actual-original-tool-wholejoin.v1' and join['status']=='PASS_ORIGINAL_WHOLE_COMMAND_JOIN' and join['session_id']==51811 and join['initial_tool_chunk']=='8a6bec' and join['final_tool_chunk']=='a3a778' and join['tool_exit_code']==0 and join['tool_session_completed'] is True and join['whole']==t['actual_whole'] and join['native_or_application_acceptance'] is False,'positive original tool wholejoin evidence')
+  raw={k:captured_bytes(v) for k,v in t['archived_record_FDs'].items()}
+  need([captured_bytes(row['streams']['stdout']) for row in inner[4:]]==[raw['owner'],raw['result'],raw['attempt']],'all three full archived stream FD identities')
+  owner=tar_members(raw['owner'],f['owner_archive_regular_files']);attempt=tar_members(raw['attempt'],f['attempt_archive_regular_files'])
