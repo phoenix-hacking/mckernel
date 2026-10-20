@@ -1,3 +1,20 @@
+## Current — corrected M02 production metadata accepted; native release pending
+
+Independentc925db40 accepts real e7x parent/preflight, exact13/13/162/42argv,
+19controls/49unusedpaths, pinnedPython3.8 binder and productionstatic_joins
+(False). Actual1.148677s; outer2271134+inner2271136 joined/groupsabsent,
+streamsclosed,CPU6released. Genuine326sourceproofc0fd9eed covers17roles at
+pushed/fetched0e6f9d79. PriorfailedS/e7w/19outputs and fixturefailures retained.
+
+Actual35controlspublication closed0 at21:46:42Z with outer2272709 and inner
+2272711 positive retirement;37repofiles accepted. Separate nativeDATA overlay
+6690e817/freeze f2c45b91 binds allseven existing71ae calls, fullactualc925 and
+source/parent/physical4d34+542, unchanged679477248B reserve/60sfreshness/40s
+owner. Independentnativeexecutionreview and finalfreshadmission remainpending;
+metadata297f is not runtimeauthority. Watch actualgenerated ownerstatus:
+/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/captures/03-native-owner/status.json.
+No guest has run in this corrected case. No native/check/count credit yet.
+
 ## Current correction — complete M02 loader fixture accepted; production still unrun
 
 The real e7w metadata attempt failed in1.1875s: LAST retained the old dfe26

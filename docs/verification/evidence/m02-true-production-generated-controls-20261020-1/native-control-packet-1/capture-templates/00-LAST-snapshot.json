@@ -1,0 +1,76 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "snapshot",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--core=0",
+        "--nofile=256",
+        "--fsize=33554432",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/current-sources/root_manual_snapshot_m03.py",
+        "--bindings-sha256",
+        "692caae0f6c33b5abd65266287be1077ed529f00cdf866e71597cadd81d8683d",
+        "--terminal",
+        "/home/holden/mckernel-work/host-preparation/phase5-child-collector-affected-independent-review-20261020-1/ACTUAL-CHILD-FAILED-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+        "--terminal-sha256",
+        "4d34fd3c6437c78446b9336d4c7444360ae21e3b991f959aa53ed9a30b1f785b"
+      ],
+      "profile": "snapshot",
+      "role": "LAST-snapshot",
+      "status_path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/snapshot.status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/snapshot.stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/snapshot.stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 27498,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/M02-CORRECTED-CURRENT-CONTRACT-PRODUCTION-METADATA-CONDITIONAL-ORDINARY-REVIEW.json",
+    "sha256": "297f101848b402b9e6714253ab3dbe56087ba60b0ee4292e40fb48c0798acc31"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/M02-CORRECTED-CURRENT-CONTRACT-PRODUCTION-METADATA-CONDITIONAL-ORDINARY-REVIEW.json"
+}
