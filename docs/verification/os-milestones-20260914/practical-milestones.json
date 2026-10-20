@@ -331,9 +331,19 @@
               "path": "docs/verification/evidence/thread-tls-isolation-current942-failure-review-20261017-1.json",
               "sha256": "04fee569980a34f5e29f4d7a3396266643ddd78cc63b00fb47c8fb799e8fd17a",
               "size": 12226
+            },
+            {
+              "path": "docs/verification/evidence/exit7-grace-native-runtime-checkpoint-20261020-1/closed-correction-v1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-EXIT7-GRACE-NATIVE-DUALSTREAM-RAW1792-AND-NORMAL-RETIREMENT-SEMANTIC-REVIEW.json",
+              "sha256": "690a88b1f82ac3661b5b58cb13f73e4fae12ce555e4f4ee43ff25e72d2274597",
+              "size": 8608
+            },
+            {
+              "path": "docs/verification/evidence/exit7-grace-native-runtime-checkpoint-20261020-1/closed-correction-v1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-EXIT7-GRACE-CORRECTED-LAST-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+              "sha256": "ebbcee573fdd199d482e46ce6409ed642e1d890d4cd8f6fe9f37b5c051eba4b3",
+              "size": 25264
             }
           ],
-          "assessment_note": "Complete bounded streams, raw statuses and retained failure reports are observed. Relevant timeout/failure detection on the declared final runner/profile remains to be reconciled or exercised."
+          "assessment_note": "Complete bounded streams, raw statuses and retained failure reports are observed. Relevant timeout/failure detection on the declared final runner/profile remains to be reconciled or exercised. Additive tested205/HOST66 accepted Exit7 slice690a88b1 with physicalebbcee: genuine raw1792/app exit7, exact24B stdout+24B stderr, complete EOF/no truncation, retirement retry followed by0/release/powerdown. One distinct behavior27\u219228; remaining timeout/changed-input/stale-owner coverage is not supplied by this slice."
         },
         {
           "id": "P-M02-02",
@@ -349,9 +359,19 @@
               "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
               "sha256": "7c53515fc55152f419172e81bb6f0abb72c81a0e64c2cc35f0cd4c9f3e49d4da",
               "size": 17317
+            },
+            {
+              "path": "docs/verification/evidence/exit7-grace-native-runtime-checkpoint-20261020-1/closed-correction-v1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-EXIT7-GRACE-NATIVE-DUALSTREAM-RAW1792-AND-NORMAL-RETIREMENT-SEMANTIC-REVIEW.json",
+              "sha256": "690a88b1f82ac3661b5b58cb13f73e4fae12ce555e4f4ee43ff25e72d2274597",
+              "size": 8608
+            },
+            {
+              "path": "docs/verification/evidence/exit7-grace-native-runtime-checkpoint-20261020-1/closed-correction-v1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-EXIT7-GRACE-CORRECTED-LAST-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+              "sha256": "ebbcee573fdd199d482e46ce6409ed642e1d890d4cd8f6fe9f37b5c051eba4b3",
+              "size": 25264
             }
           ],
-          "assessment_note": "These actual failures are retained; they do not collectively prove changed-input, abnormal-exit, timeout and stale-owner rejection for the final runner."
+          "assessment_note": "These actual failures are retained; they do not collectively prove changed-input, abnormal-exit, timeout and stale-owner rejection for the final runner. Additive tested205/HOST66 accepted Exit7 slice690a88b1 with physicalebbcee: genuine raw1792/app exit7, exact24B stdout+24B stderr, complete EOF/no truncation, retirement retry followed by0/release/powerdown. One distinct behavior27\u219228; remaining timeout/changed-input/stale-owner coverage is not supplied by this slice."
         },
         {
           "id": "P-M02-03",
@@ -412,9 +432,19 @@
               "path": "docs/verification/evidence/native-resource-release-v2-result-review-20261017-1.json",
               "sha256": "fce2fbbb3e3c3fc8e113be97eefd84518e748e24eeab345d816f9be05e6991f2",
               "size": 13560
+            },
+            {
+              "path": "docs/verification/evidence/exit7-grace-native-runtime-checkpoint-20261020-1/closed-correction-v1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-EXIT7-GRACE-NATIVE-DUALSTREAM-RAW1792-AND-NORMAL-RETIREMENT-SEMANTIC-REVIEW.json",
+              "sha256": "690a88b1f82ac3661b5b58cb13f73e4fae12ce555e4f4ee43ff25e72d2274597",
+              "size": 8608
+            },
+            {
+              "path": "docs/verification/evidence/exit7-grace-native-runtime-checkpoint-20261020-1/closed-correction-v1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-EXIT7-GRACE-CORRECTED-LAST-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+              "sha256": "ebbcee573fdd199d482e46ce6409ed642e1d890d4cd8f6fe9f37b5c051eba4b3",
+              "size": 25264
             }
           ],
-          "assessment_note": "Accepted app/diagnostic retirement now includes14distinct application behaviors across current942 and matched3f7 artifacts plus separate native public-release observation. Vector/resource-v2 owner/client/QEMU teardown independently accepted. Final-profile budget and future changed-run retirement remain separate obligations."
+          "assessment_note": "Accepted app/diagnostic retirement now includes14distinct application behaviors across current942 and matched3f7 artifacts plus separate native public-release observation. Vector/resource-v2 owner/client/QEMU teardown independently accepted. Final-profile budget and future changed-run retirement remain separate obligations. Additive tested205/HOST66 accepted Exit7 slice690a88b1 with physicalebbcee: genuine raw1792/app exit7, exact24B stdout+24B stderr, complete EOF/no truncation, retirement retry followed by0/release/powerdown. One distinct behavior27\u219228; remaining timeout/changed-input/stale-owner coverage is not supplied by this slice."
         }
       ],
       "current_evidence_summary": "Nine independently accepted current942 diagnostic runs have complete results and verified owner/client/guest retirement. Final-profile timeout/rejection coverage remains open."
@@ -2127,6 +2157,37 @@
       "selected_native_Rust_paths": 14,
       "criterion_and_whole_remain_open": true,
       "two_prior_pre_app_failures_preserved": true
+    },
+    "exit7_dualstream_native_slice_20261020": {
+      "semantic": {
+        "path": "docs/verification/evidence/exit7-grace-native-runtime-checkpoint-20261020-1/closed-correction-v1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-EXIT7-GRACE-NATIVE-DUALSTREAM-RAW1792-AND-NORMAL-RETIREMENT-SEMANTIC-REVIEW.json",
+        "sha256": "690a88b1f82ac3661b5b58cb13f73e4fae12ce555e4f4ee43ff25e72d2274597",
+        "size": 8608
+      },
+      "physical": {
+        "path": "docs/verification/evidence/exit7-grace-native-runtime-checkpoint-20261020-1/closed-correction-v1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-EXIT7-GRACE-CORRECTED-LAST-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+        "sha256": "ebbcee573fdd199d482e46ce6409ed642e1d890d4cd8f6fe9f37b5c051eba4b3",
+        "size": 25264
+      },
+      "distinct_behavior_reconciliation": {
+        "path": "docs/verification/evidence/exit7-grace-native-runtime-checkpoint-20261020-1/closed-correction-v1/sources/phase5-exit7-grace-native-runtime-20261020-1/ROOT-DISTINCT-NATIVE-BEHAVIOR-RECONCILIATION.json",
+        "sha256": "6480bb967668cb8a230630074928edaf0683721ede5e9f87ebde0e4e4cd4967c",
+        "size": 2314
+      },
+      "case_id": "startup.nonzero-dualstream.rust.exit7",
+      "native_behavior_increment": 1,
+      "accepted_native_behaviors": 28,
+      "accepted_native_batch_increment": 1,
+      "selected_production_Rust_paths": 17,
+      "selected_native_Rust_paths": 14,
+      "practical_checks_complete": 15,
+      "whole_milestones_complete": [
+        "M00",
+        "M04",
+        "M10"
+      ],
+      "criterion_and_whole_remain_open": true,
+      "original_failed_attempts_preserved": true
     }
   }
 }

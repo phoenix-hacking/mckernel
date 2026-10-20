@@ -1,0 +1,32 @@
+{
+  "status": "READY_UNRUN_REQUIRES_DISPATCHER_CPU6_GRANT",
+  "outer_argv": [
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824",
+    "--cpu=40",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/run-check-1.py",
+    "/home/holden/mckernel-work/host-preparation/phase5-host-postexit-delivery-source-20261020-1/response-counter-correction-1/capture-2"
+  ],
+  "profile": "CPU6; one serial direct child; aggregate 1GiB AS; child 960MiB AS; 30CPU; compile35wall/test15wall+2; 32MiB files; core0; nofile256",
+  "source_freeze_sha256": "fe4d4616b887710577c991d0641b6207ad9fc68564ec3a10d3d55c6d048fd67e",
+  "runner_sha256": "c31fcd9007e1cc74af14fe6f6bc4d6b32f40109e693c9ed2d93a9c17572365e1",
+  "checks": [
+    "compile exact current Request/Response/Delivery/Mailbox/control bodies with retained std adapters",
+    "two genuine Worker tokens own disjoint reserved real Requests/Responses; swapped worker/serial tuples refuse before capsule take, callback, response publication or ownership release",
+    "unchanged original tuple remains usable by actual begin_kernel and Response publisher; second reservation remains intact; no selector3/ACK run"
+  ],
+  "production_source_changes": 0,
+  "native_runs": 0,
+  "failure_history": "Original compile0/test101 preserved ../capture-1; first bounded test-adapter correction separates response/capsule release counters and expects actual published response release1, retained capsule release0. No production changes; no next correction without escalation.",
+  "downstream_consumer": "Root paired-postexit-delivery owner / exact typed pre-PS_EXITED Request+Response capability producer, if separately assigned; current SDK/frozen M03 remain unchanged."
+}

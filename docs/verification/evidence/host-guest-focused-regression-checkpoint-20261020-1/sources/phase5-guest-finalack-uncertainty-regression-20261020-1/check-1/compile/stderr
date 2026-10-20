@@ -1,0 +1,9 @@
+error[E0616]: field `request` of struct `ForkRequestSlot` is private
+   --> /home/holden/mckernel-work/host-preparation/phase5-guest-finalack-uncertainty-regression-20261020-1/fixture/fork_control_guest.rs:319:49
+    |
+319 |  result=Some([c.owned_request.as_ref().unwrap().request.as_ptr()as usize,
+    |                                                 ^^^^^^^ private field
+
+error: aborting due to 1 previous error
+
+For more information about this error, try `rustc --explain E0616`.

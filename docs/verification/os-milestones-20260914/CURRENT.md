@@ -1,3 +1,28 @@
+## Current — Exit7 accepted native behavior28; M03 positive-predecessor join next
+
+S5/Q5 completed the exact seven-step chain once: LAST/machine/guard, owner0,
+three readbacks0. Native owner closed46.590439s; whole chain48.310106s.
+Independent physical ebbcee573fdd proves30clients, QEMU/container/groups/records
+retired with permanent27:4 retained. Strict semantic690a88b1f82a accepts actual
+app exit7/raw1792/exact24B stdout+24B stderr/EOF, retry-11 then retirement0,
+application release0 and powerdown. Root6480bb96 deduplicates ONE new behavior:
+27→28 and one native batch. Checks15/35/wholeM00,M04,M10/Rust17/14 stay held.
+P-M02-01/02 still need their remaining timeout/rejection observations.
+
+M03 Q4final19 and actual whole-static/saved62ba check05f05c8b pass; those saved
+roles grant no current runtime authority. Its next binding uses genuine positive
+S5 physical ebbcee, not failure-specific a217. Minimal positive-reader successor
+and genuine positive/changed-FD checks are under conditional81f31445 ordinary
+review; future LAST/machine/release remain unbound until actual joins pass.
+No kernel/module/app/stage/normalization recompilation is needed for M03.
+
+Two focused actual Rust body regressions passed independentd74ed0be (one host
+worker-delivery case and three guest finalACK cases), with both fixture failures
+preserved. Production files unchanged; delegated post-exit producer still open.
+Child collector source3090/staticcd97 passed nine checks and independent51419762;
+its future235B child stage must explicitly bind existing pairboot4312, no native
+or runnable/finalACK claim. Child stage preparation is separate from M03 priority.
+
 ## Current — Exit7 LAST schema refusal preserved; whole-caller correction in progress
 
 Exit7 S3/Q3 source was committed/pushed/fetched in 6f668c82 (124 files).

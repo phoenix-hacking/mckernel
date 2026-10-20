@@ -1,0 +1,76 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "snapshot",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--core=0",
+        "--nofile=256",
+        "--fsize=33554432",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-exit7-grace-retry-binding-20261020-1/last-static-interface-correction-1/non-temporal-source-5/root_manual_snapshot_m03.py",
+        "--bindings-sha256",
+        "99a54a2ae9c66cb5d4430aa792c58349199f7a3b4d681aa97bf03c2354c2af7b",
+        "--terminal",
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-EXIT7-NATIVE-FAILURE-PHYSICAL-RETIREMENT-REVIEW.json",
+        "--terminal-sha256",
+        "62ba148e03291d001de685dc589caf13fe9bad8e5a94ff00d90543fd8e935882"
+      ],
+      "profile": "snapshot",
+      "role": "LAST-snapshot",
+      "status_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-grace-retry-binding-20261020-1/last-static-interface-correction-1/native-control-packet-5/snapshot.status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-grace-retry-binding-20261020-1/last-static-interface-correction-1/native-control-packet-5/snapshot.stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-grace-retry-binding-20261020-1/last-static-interface-correction-1/native-control-packet-5/snapshot.stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 11338,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/EXIT7-CURRENT-LAST-CORRECTED-NATIVE-SOURCE-AND-NONTEMPORAL-RELEASE.json",
+    "sha256": "36881a41440d4e2808c7318e21e8d749507a7dfa77e755962615bbceb4747a16"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/EXIT7-CURRENT-LAST-CORRECTED-NATIVE-SOURCE-AND-NONTEMPORAL-RELEASE.json"
+}

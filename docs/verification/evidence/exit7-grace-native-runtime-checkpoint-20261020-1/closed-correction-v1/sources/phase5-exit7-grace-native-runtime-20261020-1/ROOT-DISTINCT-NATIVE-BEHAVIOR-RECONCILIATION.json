@@ -1,0 +1,44 @@
+{
+  "P_M02_01_complete": false,
+  "P_M02_02_complete": false,
+  "accepted_native_batch_increment": 1,
+  "after_behaviors": 28,
+  "before_behaviors": 27,
+  "case_id": "startup.nonzero-dualstream.rust.exit7",
+  "deduplication": {
+    "baseline25_comparison": {
+      "bytes": 3148,
+      "path": "docs/verification/evidence/current-host-pair-lifecycle-logical-dedup-20261019-1.json",
+      "sha256": "12439454268a1c9ae752fbbce439d4645f26a79899ecc0eb88f17147ef3d3ee2"
+    },
+    "prior27_reconciliation": {
+      "bytes": 1942,
+      "path": "docs/verification/evidence/m03-authenticated-handshake-native-runtime-20261020-1/ROOT-DISTINCT-NATIVE-BEHAVIOR-RECONCILIATION.json",
+      "sha256": "c47526574544b819c049dd54a58c98ec4930687eeb43b92090e8d5cf554e46bb"
+    },
+    "reason": "Prior baseline diagnostics and lifecycle composition do not exercise this exact Rust nonzero-exit/dualstream case. Historical exit37 or success-stream cases do not establish exact exit7 raw1792 with 24-byte stdout and stderr plus complete EOF and normal retirement/release. This is one logical slice, not separate counts for streams/status/retry assertions. Previous failed Exit7 attempts had no accepted behavior credit; the collector correction or repeated image/module alone earns no increment."
+  },
+  "increment": 1,
+  "native_default_or_final_ACK_credit": false,
+  "physical_review": {
+    "bytes": 25264,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-EXIT7-GRACE-CORRECTED-LAST-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "ebbcee573fdd199d482e46ce6409ed642e1d890d4cd8f6fe9f37b5c051eba4b3"
+  },
+  "practical_checks_complete": 15,
+  "selected_native_Rust_paths": 14,
+  "selected_production_Rust_paths": 17,
+  "semantic_review": {
+    "bytes": 8608,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-EXIT7-GRACE-NATIVE-DUALSTREAM-RAW1792-AND-NORMAL-RETIREMENT-SEMANTIC-REVIEW.json",
+    "sha256": "690a88b1f82ac3661b5b58cb13f73e4fae12ce555e4f4ee43ff25e72d2274597"
+  },
+  "status": "PASS_ONE_DISTINCT_NEW_NATIVE_BEHAVIOR",
+  "utc": "2026-10-20T18:44:19.313964+00:00",
+  "whole_M02_complete": false,
+  "whole_milestones_complete": [
+    "M00",
+    "M04",
+    "M10"
+  ]
+}
