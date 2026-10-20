@@ -288,6 +288,18 @@ impl Delivery {
         Ok(())
     }
 
+    /// Restore only this exact pre-effect kernel admission to its original
+    /// reserved WAIT-copy state. The mailbox caller must hold the same lock
+    /// continuously since begin_kernel and prove no transfer/publication.
+    pub(crate) fn rollback_kernel_copy(
+        &mut self, worker: Worker, expected: &Request,
+    ) -> Result<(), i32> {
+        if self.request != *expected { return Err(-13); }
+        if self.phase != Phase::Delivered(worker) { return Err(-16); }
+        self.phase = Phase::Copying(worker);
+        Ok(())
+    }
+
     pub(crate) fn check_return(&self, worker: Worker, cpu: i64) -> Result<(), i32> {
         if self.phase != Phase::Delivered(worker) {
             return Err(-16);

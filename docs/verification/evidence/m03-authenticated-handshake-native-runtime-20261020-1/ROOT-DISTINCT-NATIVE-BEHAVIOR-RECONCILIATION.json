@@ -1,0 +1,36 @@
+{
+  "status": "PASS_ONE_DISTINCT_NEW_NATIVE_BEHAVIOR",
+  "utc": "2026-10-20T16:37:40.702898+00:00",
+  "case_id": "memory.mprotect-unaligned",
+  "semantic_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-AUTHENTICATED-HANDSHAKE-UNALIGNED-MPROTECT-NATIVE-SLICE-SEMANTIC-REVIEW.json",
+    "sha256": "b7aa10fca87703fd94ae60d9f26e728514c8f15d8341e515a87a2ce1a2ef5058",
+    "bytes": 12578
+  },
+  "physical_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-AUTHENTICATED-HANDSHAKE-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "6f42d3c7ff5de8deef7ea84e55b0499d6c3dc07186034ebf5674264a4ef3b203",
+    "bytes": 26204
+  },
+  "before_behaviors": 26,
+  "increment": 1,
+  "after_behaviors": 27,
+  "accepted_native_batch_increment": 1,
+  "deduplication": {
+    "prior_RO_fault_RW_restoration": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-memory-protection-current942-independent-result-review-20261017-1.json",
+      "sha256": "02bea8dd490489e56429cf7414bdc7a1186ad18a02abd406dd44afb9c9f40b7b",
+      "bytes": 1001
+    },
+    "prior_zero_length_mmap_EINVAL": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/practical-mmap-zero-length-native-result-review-20261018-1.json",
+      "sha256": "6f34262f4f9472e6b82d6057502b8852fd8810963bab45242a98bf0adca41bf7",
+      "bytes": 2497
+    },
+    "reason": "The accepted first unaligned mprotect EINVAL plus 8192-byte preservation/write/checked-unmap slice differs from prior valid protection/fault restoration and zero-length mmap. Its assertions are one logical behavior. First two attempts did not start the app and remain failed."
+  },
+  "selected_production_Rust_paths": 17,
+  "selected_native_Rust_paths": 14,
+  "P_M03_01_complete": false,
+  "whole_M03_complete": false
+}

@@ -1,0 +1,73 @@
+{
+  "status": "MATERIALIZED_UNRUN",
+  "reviewed_source_freeze_sha256": "31fa9ac1aab8a4fb5a646e3454ac0b0175f450fba5012cdc54d45670b4fa9ba9",
+  "variants": [
+    "original",
+    "candidate"
+  ],
+  "scope": "Functional OS/apps plus Rust/reviewed assembly cutover. Actual complete Request/Response/Delivery/Mailbox/current-fork-control bodies; explicit std/physical-memory and outer Entry/ChildTaskMm adapters. No native ACK or executor proof.",
+  "files": [
+    {
+      "path": "harness-1/application.rs",
+      "sha256": "80183a0d743aa266fa8931f6cd1915de1e7de7ea9cfb26c3215db4505b711ec5",
+      "bytes": 5785
+    },
+    {
+      "path": "harness-1/application_rpc.rs",
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "bytes": 10080
+    },
+    {
+      "path": "harness-1/candidate/actual.rs",
+      "sha256": "2ef9f234f02262f3e0e7df91ef0bdd8c36edab2c1672209cb51bab12147c211d",
+      "bytes": 17039
+    },
+    {
+      "path": "harness-1/candidate/application_syscall.rs",
+      "sha256": "b56600c4e02337f5e16c659723320f0779de54c97b5331c85d1f29d0b3f6d1fa",
+      "bytes": 20555
+    },
+    {
+      "path": "harness-1/candidate/current_fork_control.rs",
+      "sha256": "df606a373c7a10d920b3c8ae2c28b5bf9478a39ad911a9a7dfc4715ebd98b842",
+      "bytes": 10664
+    },
+    {
+      "path": "harness-1/candidate/smp_application_syscall.rs",
+      "sha256": "07d94c5e579e142ccd9c859b415714b8f8613dd7fe69762f4010fb06f9d22412",
+      "bytes": 33609
+    },
+    {
+      "path": "harness-1/original/actual.rs",
+      "sha256": "6d49857d3ec4d5c61bdc2cc85bdb7826dbd1ae7ae39a9d3180b0fdbc0a2c46c8",
+      "bytes": 17038
+    },
+    {
+      "path": "harness-1/original/application_syscall.rs",
+      "sha256": "7679c28f11ce489733c36bdfe948f09e73b9001358dc0caebd466cc1f882327c",
+      "bytes": 20009
+    },
+    {
+      "path": "harness-1/original/current_fork_control.rs",
+      "sha256": "b9b36338dfdd30901a047e7fad9ae8bcca1f5563674521a9cbfb3229b0f60128",
+      "bytes": 9883
+    },
+    {
+      "path": "harness-1/original/smp_application_syscall.rs",
+      "sha256": "fb2f142fbbaa4b3727caf492f57aebbaf44972d4bf2700330d134faadc7408c5",
+      "bytes": 32198
+    },
+    {
+      "path": "harness-1/production-frame-read-write.rs",
+      "sha256": "0b998addfc8d74e8924a8146644e8a72932d48ed9b790b1664e765e908ab0ed1",
+      "bytes": 1300
+    },
+    {
+      "path": "harness-1/production-provider-metadata.rs",
+      "sha256": "647f62aa5c5c1e4a1590205d660cc66aa32fff05aa0e78c53dbdd34af578ff90",
+      "bytes": 967
+    }
+  ],
+  "preparation_version": 2,
+  "supersedes_manifest_sha256": "0408c6a6bc7361911b8130fe0b99d7307e161a9fe2298cf165f113727305b1b3"
+}

@@ -1,0 +1,62 @@
+{
+  "status": "PASS_FOR_CONDITIONAL_ORDINARY_COMPILE_AND_ACTUAL_BODY_TEST_CHAIN",
+  "reviewed_at_utc": "2026-10-20T16:28:33.979359+00:00",
+  "source_review_sha256": "af2551e7e2e2e7b534121a800d9cbbba77a77fdfd8c785dbdc374cb5eb90502d",
+  "scope": "Functional OS/apps plus active Rust/reviewed assembly cutover; Request admission rollback adapter-body evidence only",
+  "source_freeze_sha256": "31fa9ac1aab8a4fb5a646e3454ac0b0175f450fba5012cdc54d45670b4fa9ba9",
+  "patch_sha256": "603b8514db3cbd288a94360474a20e53ab0706e6053246f7c2a52b4cca6c969b",
+  "harness_supplement_sha256": "b952488a2eab1c6a5d26a1cab42025954627f059cb981c891c5b1fdd1f082857",
+  "harness_freeze_sha256": "9bf7313f7ff315c46aed57c1b7d82cba0cb76914acaa76de19b01be0cfa9d6a5",
+  "runner_sha256": "c13ca47aaf881ece6426562e73621e6c5b81eb7cac09b964f7cb043c70594fb6",
+  "frozen_records_and_complete_production_prefixes": "MATCH",
+  "command": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/python3",
+    "/home/holden/mckernel-work/host-preparation/phase5-request-admission-negative-rollback-20261020-1/run-harness.py",
+    "/home/holden/mckernel-work/host-preparation/phase5-request-admission-negative-rollback-20261020-1/harness-run-20261020-1"
+  ],
+  "output_fresh_at_review": true,
+  "profile": {
+    "affinity_cpus": [
+      6
+    ],
+    "direct_children_serial": 1,
+    "memory_plan_bytes": 1073741824,
+    "child_RLIMIT_AS_bytes": 1006632960,
+    "observer_planning_headroom_bytes": 67108864,
+    "codegen_units": 1,
+    "test_threads": 1,
+    "compile_timeout_seconds": 60,
+    "test_timeout_seconds": 30,
+    "timeout_SIGTERM_grace_seconds": 5,
+    "native_root_module_guest": false,
+    "network_needed": false
+  },
+  "execution_prerequisites": [
+    "root dispatcher grants ordinary command after positive M03 CPU6 release and native clock window clear",
+    "root checks current aggregate memory/storage/isolation and no conflicting lease",
+    "frozen inputs unchanged and proposed output absent"
+  ],
+  "observations": [
+    "one expected original stranded-admission witness",
+    "five candidate test functions, with actual state0 and state2 permitted retry",
+    "same payload tag/address/rights retained through repeated refusal and retry",
+    "refusal snapshots Delivery phase and all worker/delivery reservations",
+    "independent retained Response request mismatch, non-kernel and finite transition/refusal cases",
+    "selector2 and selector3 complete actual provider flow uses actual mailbox/Response publication in explicit test transport adapter",
+    "negative transferred callback retains kernel/capsule and no release",
+    "timeout unconditionally fails after captured streams/wait/group record; signal process-exit race tolerated"
+  ],
+  "history": "v1 unrun preparation gaps corrected without compiling; prior v1 retained under preparation-v1; no failed compiler/test candidate exists yet",
+  "stop_conditions": [
+    "first compiler or test failure, timeout, count mismatch, or surviving group stops chain without automatic retry",
+    "one failed candidate plus one bounded family correction before expert escalation",
+    "real service/auth/billing/policy stop remains terminal"
+  ],
+  "tests_run_by_reviewer": false,
+  "root_dispatch_grant_created": false,
+  "integration_acceptance": false,
+  "native_ACK_executor_acceptance": false
+}

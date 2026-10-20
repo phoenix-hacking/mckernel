@@ -467,6 +467,31 @@ impl<M: ResponseMemory> Mailbox<M> {
         Ok(call.delivery.request().clone())
     }
 
+    /// Only the same-lock pre-transfer fork-control refusal path may call
+    /// this. It restores the reservation owned before begin_kernel; it neither
+    /// constructs a Response nor publishes, cancels, releases or requeues one.
+    /// Every refusal leaves the in-kernel reservation and its owners retained.
+    pub(crate) fn rollback_fork_kernel_admission(
+        &mut self, handle: u64, serial: u64, expected: &Request,
+    ) -> Result {
+        if self.closed || self.quarantined { return Err(-32); }
+        let worker = self.workers.iter().flatten()
+            .find(|state| state.worker.wire() == handle).ok_or(-2)?;
+        if worker.delivery.map(Token::wire) != Some(serial) { return Err(-16); }
+        let worker = worker.worker;
+        let call = self.calls.iter_mut().flatten()
+            .find(|call| call.delivery.serial().wire() == serial).ok_or(-2)?;
+        if call.worker != Some(worker) || call.delivery.request() != expected
+            || expected.number() != 56 { return Err(-13); }
+        if !call.kernel || call.cancelled || call.service || call.transferred
+            || call.fork_parked || call.completion.is_some()
+            || call.publication_since.is_some() { return Err(-16); }
+        call.response.as_mut().ok_or(-71)?.check_unpublished(expected)?;
+        call.delivery.rollback_kernel_copy(worker, expected)?;
+        call.kernel = false;
+        Ok(())
+    }
+
     pub(crate) fn begin_invalidation(&mut self, handle: u64, serial: u64) -> Result<(u64, u64)> {
         let range = self
             .calls

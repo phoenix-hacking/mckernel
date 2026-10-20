@@ -1,0 +1,99 @@
+{
+  "capture_engine": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/run_two_commands_source_bound_corrected.py",
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "size": 14753
+  },
+  "census_engine": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+    "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1",
+    "size": 51420
+  },
+  "commands": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/PROPOSED-TWO-COMMANDS.json",
+    "sha256": "de705b267b0772195ef4fb1b840de3e1d5f1209db32737172e365e6ad0f4c936",
+    "size": 989
+  },
+  "executions": 0,
+  "failure_stop": "First command failure; accepted capture handles STOP signals, TERM2/KILL2/directwait2, preserves partial capture, groups and failed result. No unchanged retry.",
+  "future_CPU6_grant": null,
+  "outer_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=8s",
+    "100s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=80",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/run_exit7_two_commands_once.py"
+  ],
+  "profile": {
+    "STOP_signals": [
+      "SIGTERM",
+      "SIGINT",
+      "SIGALRM",
+      "SIGXCPU"
+    ],
+    "aggregate_checked_CPU_seconds": 80,
+    "aggregate_planned_CPU_upper_seconds": 73,
+    "as_bytes": 1073741824,
+    "child_CPU_seconds": [
+      8,
+      55
+    ],
+    "child_wall_seconds": [
+      10,
+      60
+    ],
+    "closed_stream_max_bytes": 33554432,
+    "control_budget_bytes": 2097152,
+    "core_bytes": 0,
+    "cpu": 6,
+    "fsize_bytes": 33554432,
+    "host_floor_bytes": 17179869184,
+    "host_growth_bytes": 268435456,
+    "jobs": 1,
+    "memavailable_floor_bytes": 5368709120,
+    "nofile": 256,
+    "outer_KILL_after_TERM_seconds": 8,
+    "outer_TERM_seconds": 100,
+    "outer_to_work_timer_margin_seconds": 16,
+    "parent_CPU_hard_seconds": 80,
+    "parent_CPU_soft_seconds": 10,
+    "per_failed_child_retirement_seconds": 6,
+    "scratch_floor_bytes": 12884901888,
+    "stage_budget_bytes": 67108864,
+    "whole_capture_max_bytes": 134217728,
+    "wrapper_signal_timer_seconds": 84
+  },
+  "required_absent_paths": [
+    "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-capture-1",
+    "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1"
+  ],
+  "source_freeze": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/SOURCE-FREEZE.json",
+    "sha256": "8fb04fb8553a71c3b8ee433b2c7d3d698853936bce1c13cd080b1f7d20524839",
+    "size": 1978
+  },
+  "status": "SOURCE_ONLY_NO_EXECUTION_BEFORE_ROOT_CPU6_GRANT",
+  "wrapper": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/run_exit7_two_commands_once.py",
+    "sha256": "a54b1f0f48d3b55f080bed64eb533f8436bdea99a486ae88395c99a8c3464bd3",
+    "size": 5022
+  }
+}

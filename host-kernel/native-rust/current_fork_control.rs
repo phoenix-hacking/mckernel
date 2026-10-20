@@ -67,28 +67,42 @@ impl Remote {
             // worker. No current user pointer or claimed MM creates authority.
             let request=slots[p].as_mut().unwrap().syscalls.begin_kernel(worker,serial).map_err(errno)?;
             let args=request.arguments();let selector=args[0];
-            if request.number()!=56||request.cpu()!=cpu||request.requester()!=original.requester()
-                ||request.target()!=0||args[2]!=key.length||args[3]!=key.root||args[4]!=carrier
-                ||args[5]!=0x313030434b46434d||!matches!(selector,2|3)
-                ||(selector==2&&args[1]!=key.child_pid as u64)||(selector==3&&args[1]!=2){return Err(EACCES);}
-            let frame=slots[p].as_mut().unwrap().syscalls.with_kernel_memory(worker,serial,|r,m|
-                m.current_fork_control_frame(r).map_err(|e|e.to_errno())).map_err(errno)?;
-            if !matches_identity(&frame,&key){return Err(EACCES);}
-            let claim=ForkRevokeClaimV1{identity:key,carrier};
-            let owner=slots[c].as_mut().unwrap().fork_ingress.as_mut().unwrap();
-            let capsule=if selector==2 {
-                if owner.host_revoke.is_some()||frame[..8]!=*b"MCFKW001"||frame[8..12]!=[1,0,40,0]
-                    ||frame[12..16]!=128u32.to_le_bytes()||frame[16..20]!=1u32.to_le_bytes()
-                    ||frame[20..24]!=[0;4]||word(&frame,24)!=1||word(&frame,32)!=key.child_pid as u64{return Err(EACCES);}
-                let mut host=OwnedRevoke::take(call)?;host.phase=ControlPhase::Revoking;
-                let capsule=(host.owner,host.revoke,host.accept);owner.host_revoke=Some(host);capsule
-            }else{
-                if !call.owner.is_null()||call.revoke.is_some()||call.accept.is_some()||call.release.is_some(){return Err(EINVAL);}
-                let host=owner.host_revoke.as_mut().ok_or(EACCES)?;
-                if host.phase!=ControlPhase::Revoked||frame[..8]!=*b"MCFKD001"||word(&frame,8)!=host.epoch
-                    ||word(&frame,16)!=host.worker||word(&frame,24)!=host.delivery||word(&frame,32)!=host.response{return Err(EACCES);}
-                host.phase=ControlPhase::AckPending;(host.owner,host.revoke,host.accept)
+            // This closure has no foreign callback or write/publication. All
+            // errors precede OwnedRevoke::take (which itself fails only before
+            // transfer), or selector3's phase transition. Keep this exact slots
+            // guard throughout admission, validation and any rollback.
+            let capsule=(||->Result<_>{
+                if request.number()!=56||request.cpu()!=cpu||request.requester()!=original.requester()
+                    ||request.target()!=0||args[2]!=key.length||args[3]!=key.root||args[4]!=carrier
+                    ||args[5]!=0x313030434b46434d||!matches!(selector,2|3)
+                    ||(selector==2&&args[1]!=key.child_pid as u64)||(selector==3&&args[1]!=2){return Err(EACCES);}
+                let frame=slots[p].as_mut().unwrap().syscalls.with_kernel_memory(worker,serial,|r,m|
+                    m.current_fork_control_frame(r).map_err(|e|e.to_errno())).map_err(errno)?;
+                if !matches_identity(&frame,&key){return Err(EACCES);}
+                let owner=slots[c].as_mut().unwrap().fork_ingress.as_mut().unwrap();
+                if selector==2 {
+                    if owner.host_revoke.is_some()||frame[..8]!=*b"MCFKW001"||frame[8..12]!=[1,0,40,0]
+                        ||frame[12..16]!=128u32.to_le_bytes()||frame[16..20]!=1u32.to_le_bytes()
+                        ||frame[20..24]!=[0;4]||word(&frame,24)!=1||word(&frame,32)!=key.child_pid as u64{return Err(EACCES);}
+                    let mut host=OwnedRevoke::take(call)?;host.phase=ControlPhase::Revoking;
+                    let capsule=(host.owner,host.revoke,host.accept);owner.host_revoke=Some(host);Ok(capsule)
+                }else{
+                    if !call.owner.is_null()||call.revoke.is_some()||call.accept.is_some()||call.release.is_some(){return Err(EINVAL);}
+                    let host=owner.host_revoke.as_mut().ok_or(EACCES)?;
+                    if host.phase!=ControlPhase::Revoked||frame[..8]!=*b"MCFKD001"||word(&frame,8)!=host.epoch
+                        ||word(&frame,16)!=host.worker||word(&frame,24)!=host.delivery||word(&frame,32)!=host.response{return Err(EACCES);}
+                    host.phase=ControlPhase::AckPending;Ok((host.owner,host.revoke,host.accept))
+                }
+            })();
+            let capsule=match capsule {
+                Ok(capsule)=>capsule,
+                Err(error)=>{
+                    slots[p].as_mut().unwrap().syscalls
+                        .rollback_fork_kernel_admission(worker,serial,&request).map_err(errno)?;
+                    return Err(error);
+                }
             };
+            let claim=ForkRevokeClaimV1{identity:key,carrier};
             (slots,request,key,claim,selector,capsule)
         };
         // Exact provider owner and child pins exclude movement/removal; only

@@ -1,0 +1,24 @@
+{
+  "status": "BOUNDED_PREPARATION_CORRECTION_PENDING",
+  "supplement_sha256": "1d091a678c034de2b0ddb97217930eaed07d17a7560b5580a144ae2b58f635dc",
+  "harness_freeze_sha256": "0408c6a6bc7361911b8130fe0b99d7307e161a9fe2298cf165f113727305b1b3",
+  "verified": "all listed harness files and all six production prefixes match",
+  "source_review_unchanged": true,
+  "source_blockers": [],
+  "corrections": [
+    "add state=0 permitted rollback/retry",
+    "snapshot Delivery phase and worker.delivery on refusal",
+    "compare payload tag/address/rights across retry",
+    "timeout always fails after wait evidence; tolerate process-exit signal race"
+  ],
+  "profile_suitable_conditionally": {
+    "cpu": 6,
+    "serial_children": 1,
+    "memory_plan_bytes": 1073741824,
+    "child_address_space_bytes": 1006632960,
+    "compile_timeout_seconds": 60,
+    "test_timeout_seconds": 30
+  },
+  "tests_run": false,
+  "native_acceptance": false
+}

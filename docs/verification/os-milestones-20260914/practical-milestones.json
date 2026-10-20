@@ -452,9 +452,19 @@
               "sha256": "02bea8dd490489e56429cf7414bdc7a1186ad18a02abd406dd44afb9c9f40b7b",
               "size": 1001
             },
-            "docs/verification/evidence/practical-mmap-zero-length-native-result-review-20261018-1.json"
+            "docs/verification/evidence/practical-mmap-zero-length-native-result-review-20261018-1.json",
+            {
+              "path": "docs/verification/evidence/m03-authenticated-handshake-native-runtime-20261020-1/independent-review/ACTUAL-M03-AUTHENTICATED-HANDSHAKE-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+              "sha256": "6f42d3c7ff5de8deef7ea84e55b0499d6c3dc07186034ebf5674264a4ef3b203",
+              "size": 26204
+            },
+            {
+              "path": "docs/verification/evidence/m03-authenticated-handshake-native-runtime-20261020-1/independent-review/ACTUAL-M03-AUTHENTICATED-HANDSHAKE-UNALIGNED-MPROTECT-NATIVE-SLICE-SEMANTIC-REVIEW.json",
+              "sha256": "b7aa10fca87703fd94ae60d9f26e728514c8f15d8341e515a87a2ce1a2ef5058",
+              "size": 12578
+            }
           ],
-          "assessment_note": "Six calloc sizes and six file data/EOF sizes provide narrow exercised data-path evidence; direct map/protect/unmap and invalid-input coverage remains open. Additive current3bfc mmap-zero-length native PASS: failed mapping/EINVAL/exact18B/exit0 and physical retirement. No mapping-publication/leak proof; whole check remains open."
+          "assessment_note": "Six calloc sizes and six file data/EOF sizes provide narrow exercised data-path evidence; direct map/protect/unmap and invalid-input coverage remains open. Additive current3bfc mmap-zero-length native PASS: failed mapping/EINVAL/exact18B/exit0 and physical retirement. No mapping-publication/leak proof; whole check remains open. Additive tested205/HOST66 native slice b7aa10fc with physical6f42: unaligned mprotect returns EINVAL, preserves8192 bytes, permits write and checked unmap; exact73B/emptyerr/exit0. This is one distinct behavior (26 to27), not broad valid-protection coverage or whole-check closure."
         },
         {
           "id": "P-M03-02",
@@ -2093,6 +2103,30 @@
       "new_native_logical_cases": 0,
       "new_rust_paths": 0,
       "scope": "One literal check completed; no whole milestone or M12 quota closure."
+    },
+    "m03_unaligned_native_slice_20261020": {
+      "semantic": {
+        "path": "docs/verification/evidence/m03-authenticated-handshake-native-runtime-20261020-1/independent-review/ACTUAL-M03-AUTHENTICATED-HANDSHAKE-UNALIGNED-MPROTECT-NATIVE-SLICE-SEMANTIC-REVIEW.json",
+        "sha256": "b7aa10fca87703fd94ae60d9f26e728514c8f15d8341e515a87a2ce1a2ef5058",
+        "size": 12578
+      },
+      "physical": {
+        "path": "docs/verification/evidence/m03-authenticated-handshake-native-runtime-20261020-1/independent-review/ACTUAL-M03-AUTHENTICATED-HANDSHAKE-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+        "sha256": "6f42d3c7ff5de8deef7ea84e55b0499d6c3dc07186034ebf5674264a4ef3b203",
+        "size": 26204
+      },
+      "distinct_behavior_reconciliation": {
+        "path": "docs/verification/evidence/m03-authenticated-handshake-native-runtime-20261020-1/ROOT-DISTINCT-NATIVE-BEHAVIOR-RECONCILIATION.json",
+        "sha256": "c47526574544b819c049dd54a58c98ec4930687eeb43b92090e8d5cf554e46bb",
+        "size": 1942
+      },
+      "native_behavior_increment": 1,
+      "accepted_native_behaviors": 27,
+      "accepted_native_batch_increment": 1,
+      "selected_production_Rust_paths": 17,
+      "selected_native_Rust_paths": 14,
+      "criterion_and_whole_remain_open": true,
+      "two_prior_pre_app_failures_preserved": true
     }
   }
 }

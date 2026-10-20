@@ -1,0 +1,7 @@
+Prepared exit7 continuation; all execution remains unrun. Current collector9faf is reused exactly, retaining preboot challenge, authenticated assignment and helper export. The evaluator has one private immutable binding-data assignment change; every predicate body remains unchanged. Historic M03 hook names remain to keep the code delta inspectable.
+
+The two-command proposal checks unchanged function AST and one accepted/13 rejected bindings, then reuses the existing derive body to stage the retained Rust exit7 binary as a fresh0755 same-byte copy. The current accepted handshake archive is the base; init stays byte-identical and only apps/app changes in the final archive map. The original0700 app is preserved. Neither command has run.
+
+Before execution dispatcher must supply fresh CPU6/resource/service admission and existing owned-capture runner binding. Existing runtime owner/normalization cannot be reused unchanged: imports/SOURCE_HASHES, readonly exact paths and case bindings need a finite source-bound regeneration around this evaluator and actual stage. Reuse the established manual seven-step/atomic/three-readback route; do not add a collector or failure framework. Future snapshot, parent, nonce, release and result remain null. Physical6f42 is a separate predecessor reference, never application/source authority.
+
+P-M02-02 timeout, rejected/changed-input and stale-owner obligations remain open. No criterion credit, guest success or Rust language retirement claim follows from preparation. All prior M03 failures remain retained.

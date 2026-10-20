@@ -1,3 +1,47 @@
+## Current — M03 native slice accepted; exit7 source frozen; Request Rust integrated
+
+Accepted semantic b7aa10fc and physical6f42d3c7 prove one new native Rust app
+behavior: unaligned mprotect EINVAL,8192-byte preservation, write and checked
+unmap; exact73B stdout/empty stderr/exit0. Rootdedupc4752657 records26→27,
+one accepted native batch. Selected Rust paths remain17 production/14 native;
+15/35 checks and wholeM00/M04/M10 remain held. Both earlier pre-app failed
+M03 attempts and all their evidence are preserved, not replayed or relabeled.
+P-M03-01/wholeM03 stay OPEN. Exact remaining used-operation delta is the retained
+61B RO precise writefault/unchangedbyte/RWrestore/write app on current205/HOST66;
+source/binary match old authority, no recompilation required, no old-profile
+result transfer without a consumed-source/artifact equivalence join.
+
+Exit7 is the ready next native path on the same205/HOST66 tuple. Collector9faf
+is unchanged. Actual14 binding vectors plus app-only offline stage passed18.585s
+and review45fa0822. Actual normalizationff480f08 passed204 consumed paths,
+52 read-only roots and99B QMP path. Nativepositive6f42 physical-consumer five
+witnesses passed5d8a0c9b. Source publication is frozen137files/1123251B after
+one preserved copy-race failure and one bounded append-only correction; no
+frozen bytes remain mutable. Next: root fetched proof, fresh DATA-only materializer,
+one finitefinal19 command/review, LAST snapshot and exact guard/native release.
+Native has NOT run. Declared application exit is7/raw1792 with exact24B stdout
+and24B stderr; successful owner exit0 would not mean application exit0.
+Prospective actual step3 status is phase5-exit7-native-data-20261020-1/
+native-control-packet-1/captures/03-native-owner/status.json under host-preparation;
+verify against final generated step3 before launch. Manual failure readbacks
+remain the existing route; optional automation is outside the launch path.
+
+Root integrated three Request-admission Rust files after original stranded-state
+witness1 and candidate5 actual-body tests passed; independentec8381d0 and root
+receiptc2a1105f bind exact pre/postimages. Rollback is same-lock/exact-request,
+pre-transfer only; uncertainty retains owners. Carrier5a686331 is already shipped.
+All four new host Rust bodies remain absent from accepted SDK50557. Fresh coherent
+66-source SDKc75aec8e is prepared; all three modules are required because Request
+files compile in SMP. The fixed owner requires scratch14159970304B; measured
+14154797056B leaves5173248B gap. Floors/backend/reserve are unchanged. One old
+32.5MB duplicate archive remains UNQUALIFIED pending current consumer/ownership
+proof; no cleanup is released and no evidence/locks/quarantine are touched.
+
+Continuous100%included/zeroreserve; paid/API billing forbidden. Preserve WIP,
+Scratch21/exclusions and permanent mutex27:4. No heavy workload is currently live.
+Existing reviewers stay responsible through next final binding, wholejoin,
+physical-first and strict declared dualstream/exit7 semantic review.
+
 ## Current — handshake corrected; SDK accepted; carrier Rust integrated
 
 The second M03 attempt remains FAIL after13.795762s. Its newly exported boot

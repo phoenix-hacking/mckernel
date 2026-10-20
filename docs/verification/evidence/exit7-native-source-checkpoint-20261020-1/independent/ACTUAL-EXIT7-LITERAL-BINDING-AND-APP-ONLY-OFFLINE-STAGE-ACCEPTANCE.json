@@ -1,0 +1,212 @@
+{
+  "accepted_Linux_app_slice": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-nonzero-dualstream-app-independent-review-20261020-1/ACTUAL-STATIC-EXIT7-DUALSTREAM-LINUX-ARTIFACT-AND-RAW-WAIT-ACCEPTANCE.json",
+    "sha256": "23f27320ad0bdb65db0fd79880893bb4f16c5c85eef29289f04cbb5046da8c2d",
+    "size": 10751
+  },
+  "actual_command_statuses": [
+    {
+      "bytes": 1100,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-capture-1/00-command/status.json",
+      "sha256": "428fd556114d330c4ebf3de34a58ab91a8ee960713cc056316361d695faebb87"
+    },
+    {
+      "bytes": 1097,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-capture-1/01-command/status.json",
+      "sha256": "1c36c21efee83c651cbbef580a8102c94fbb2b86ce73cdfe31c964ccbce0e5b4"
+    }
+  ],
+  "actual_handoff": {
+    "bytes": 3317,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ACTUAL-TWO-COMMAND-CLOSED-HANDOFF.json",
+    "sha256": "c17ca4356b7cd66e2c74aebde0ad9ac7a188998ff96ff0e1d12d94405e48f475"
+  },
+  "actual_stage_result": {
+    "bytes": 821,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/stage-result.json",
+    "sha256": "b7edbebb9e423e64dff15399019723b468d4fbc025028c3e4ad36f89001cf35e"
+  },
+  "actual_whole": {
+    "bytes": 2361,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-capture-1/whole.json",
+    "sha256": "093c8efa967e6ede483ec7c5ee43e328674b8a405010e2e02d527f521656a91b"
+  },
+  "archive": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/exit7.cpio.gz",
+    "sha256": "c8fbd37ecefb905831101baee1dbd8f0585d4b982644d5b1024b7dc503c16bac",
+    "size": 26037494
+  },
+  "collector": {
+    "mode": 33216,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/check-1/collector",
+    "sha256": "9fafdd45c0934d95555fd85ee542bbd417e2b3e6e126d2a27d565f48be2fec57",
+    "size": 1025768
+  },
+  "decision": "PASS_ACTUAL_EXIT7_LITERAL_BINDING_AND_APP_ONLY_OFFLINE_STAGE",
+  "facts": {
+    "CPU6_released": true,
+    "actual_binding_accepts": 1,
+    "actual_changed_tuple_refusals": 13,
+    "actual_ordinary_commands": 2,
+    "actual_stage_output_files": 5,
+    "all_capture_and_retirement_errors_null": true,
+    "all_inner_direct_joined": true,
+    "all_inner_groups_absent": true,
+    "all_stderr_empty": true,
+    "all_streams_closed": true,
+    "archive_bytes": 26037494,
+    "changed_final_map_members": [
+      "apps/app"
+    ],
+    "command_returncodes": [
+      0,
+      0
+    ],
+    "compiler_runs": 0,
+    "file_limit_bytes": 33554432,
+    "final_map_members": 62,
+    "guest_runs": 0,
+    "init_bytes_and_metadata_unchanged": true,
+    "init_sha256": "9fafdd45c0934d95555fd85ee542bbd417e2b3e6e126d2a27d565f48be2fec57",
+    "only_changed_final_map_fields": [
+      "size",
+      "sha256"
+    ],
+    "original_complete_decompressed_prefix_unchanged": true,
+    "original_payload_mode_preserved": "0700",
+    "outer_group_census_not_invented": true,
+    "output_file_full_reference_joins": 5,
+    "prefix_evidence": "Actual unchanged derive() checks complete decompressed base prefix and final-map equality before recorded rc0. Reviewer did not rerun large decompression/recompression.",
+    "private_payload_copy_mode": "0755",
+    "root_operations": 0,
+    "stage_bytes": 31674086,
+    "stage_limit_bytes": 67108864,
+    "stream_full_ninefield_identity_and_hash_joins": 4,
+    "strict_manifest_keys": [
+      "artifacts",
+      "case_id",
+      "kind",
+      "modules",
+      "payload",
+      "profile",
+      "schema_version",
+      "staging"
+    ],
+    "tool_whole_join": {
+      "chunk_id": "da8e88",
+      "exit_code": 0,
+      "positive_join": true,
+      "session_id": 34211
+    },
+    "whole_aggregate_CPU_seconds": 18.5273,
+    "whole_elapsed_seconds": 18.58458897395758,
+    "whole_function_AST_except_exact_binding_unchanged": true
+  },
+  "findings": [
+    "Actual first command passed complete module AST comparison outside one case-data literal, one exact exit7 binding and thirteen specific wrong-case/oracle/argv/payload/image/mcexec/modules/profile/base refusals. This proves the changed source binding only; modeled binding candidates are not actual application runs.",
+    "Actual second command used existing retained-header archive derive and strict full current evaluator. New manifestdc8c is exactly eight keys; selected case/payload contract matches accepted exit7 artifact/oracle, while tested205/HOST66/ee1f/nativeboot/profile remain unchanged.",
+    "All62 final names and member metadata are preserved; only apps/app size/hash differ. Init remains exact native-tested9faf collector including fresh challenge/authenticated assignment/helper-export. Accepted source28ad remains0700, new private copy samebytes0755. Full prior4a18 decompressed archive prefix is retained.",
+    "Both ordinary direct waits/groups/closedstreams/errors were positive and captured. Full output references, four stream identities and exact bound source/proposal are joined. No stage/fixture/compiler/root or guest replay was performed by reviewer.",
+    "This is a new explicit exit7 app-only stage kind, not the historical M03 init-only kind. Future normalizer must bind this exact schema/status/decision and full stage roles in one narrow changed-boundary source adaptation, preserving strict validators, source/RO pins and no-effect fullargv checks."
+  ],
+  "full_actual_native_argv_acceptance": false,
+  "implementation_ownership": false,
+  "latest_exclusive_predecessor": null,
+  "native_execution_authorized": false,
+  "native_exit7_acceptance": false,
+  "next": "Prepare source-bound existing owner/verifier/evaluator imports, full source map and exact read-only coverage for this exit7 stage, then one ordinary byte-copy normalization/fresh parent/full argv. Bind genuine latest6f42 physical through accepted5d8a known-kind consumer before final native controls. No new collector, app compile, oracle replay or archive recompression is needed.",
+  "normalization_and_fresh_parent_acceptance": false,
+  "overlay_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/overlay-manifest.json",
+    "sha256": "b1276df7cf3e22ccf6c7247481f11f469b9b47a061711d930a55876924eb3841",
+    "size": 20028
+  },
+  "parent": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/native-stage-1/manifest.json",
+    "sha256": "e3622db14fd3bf2d942edb6800c869448cb8c3384904f90d8f16c79b4a786c8b",
+    "size": 5749
+  },
+  "payload": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/app-0755",
+    "sha256": "28adfaff668facb3ca1f27b4800d56ed6bc3669b9fcac35279ab198819d7ca1f",
+    "size": 5610856
+  },
+  "private_evaluator": {
+    "bytes": 58102,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/native_diagnostic.py",
+    "sha256": "641a045c529346d212a4a0507534507b441deb2843f85f72061515395a6126d3"
+  },
+  "production_default_activation": false,
+  "reviewed_at": "2026-10-20T16:50:23.678490+00:00",
+  "reviewer": "/root/resume20_physical",
+  "revoke_or_final_ACK": false,
+  "runtime_release": null,
+  "schema": "mckernel.independent-actual-exit7-app-only-offline-stage-acceptance.v1",
+  "scope": "Functional supported-profile OS/apps plus active compute C retirement into Rust/reviewed assembly; exact exit7 evaluator binding and offline app-only stage, no native execution.",
+  "serial_envelope": {
+    "bytes": 3547,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/SERIAL-CAPTURE-ENVELOPE.json",
+    "sha256": "b29fb960d95eb92fbe8ea9c69ea03ec2b865b9d912ef3ab4b561b6bec89a4d26"
+  },
+  "snapshot": null,
+  "source_binding_data": {
+    "bytes": 7758,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/INPUT-AND-DECLARED-DATA.json",
+    "sha256": "dc6eae381760f21f4c2cdc5b081af855e1a82e492ea417456ba921daf2ad44db"
+  },
+  "source_conditional_review": {
+    "bytes": 9825,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/EXIT7-LITERAL-BINDING-APP-ONLY-STAGE-AND-SERIAL-ORDINARY-PROFILE-REVIEW.json",
+    "sha256": "799ac6ac3e571f32b2ccdf2e2b9fa3c2e0f7646f1933129468e71da839428cc8"
+  },
+  "source_proposal": {
+    "bytes": 5419,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/FINITE-CONTINUATION-PROPOSAL.json",
+    "sha256": "216abfab3947947bc04e72b4e79aa96479f70e4f32df1d648c6b6fe3538fd447"
+  },
+  "stage_manifest": {
+    "bytes": 5708,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/manifest.json",
+    "sha256": "dc8c04d13e216e3044aafad9e592eabbd31bfb3e8033404d108f4e48c578a886"
+  },
+  "status": "PASS",
+  "strict_oracle": {
+    "exit_code": 7,
+    "stderr_hex": "6e6f6e7a65726f207374646572722066697865642d76310a",
+    "stdout_hex": "6e6f6e7a65726f207374646f75742066697865642d76310a"
+  },
+  "whole_P_M02_02_acceptance": false,
+  "witnesses": [
+    {
+      "bytes": 3317,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ACTUAL-TWO-COMMAND-CLOSED-HANDOFF.json",
+      "sha256": "c17ca4356b7cd66e2c74aebde0ad9ac7a188998ff96ff0e1d12d94405e48f475"
+    },
+    {
+      "bytes": 2361,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-capture-1/whole.json",
+      "sha256": "093c8efa967e6ede483ec7c5ee43e328674b8a405010e2e02d527f521656a91b"
+    },
+    {
+      "bytes": 5708,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/manifest.json",
+      "sha256": "dc8c04d13e216e3044aafad9e592eabbd31bfb3e8033404d108f4e48c578a886"
+    },
+    {
+      "bytes": 821,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/stage-result.json",
+      "sha256": "b7edbebb9e423e64dff15399019723b468d4fbc025028c3e4ad36f89001cf35e"
+    },
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/overlay-manifest.json",
+      "sha256": "b1276df7cf3e22ccf6c7247481f11f469b9b47a061711d930a55876924eb3841",
+      "size": 20028
+    }
+  ]
+}

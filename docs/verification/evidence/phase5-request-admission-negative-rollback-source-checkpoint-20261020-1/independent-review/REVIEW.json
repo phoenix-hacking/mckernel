@@ -1,0 +1,21 @@
+{
+  "status": "CONDITIONAL_FINITE_TEST_PASS",
+  "scope": "Functional OS/apps plus actual Rust/reviewed assembly cutover; exact pre-transfer Request rollback only",
+  "patch_sha256": "603b8514db3cbd288a94360474a20e53ab0706e6053246f7c2a52b4cca6c969b",
+  "source_freeze_sha256": "31fa9ac1aab8a4fb5a646e3454ac0b0175f450fba5012cdc54d45670b4fa9ba9",
+  "source_and_live_preimage_check": "MATCH",
+  "source_blockers": [],
+  "tests_run": false,
+  "integration_accepted": false,
+  "native_or_ack_accepted": false,
+  "profile": "Conditional on dispatcher ordinary admission; no resource grant created; preserve CPU6 reservation",
+  "required_test_refinements": [
+    "retain adapter payload claim after successful read and rejected identity",
+    "independent retained Response/request mismatch refusal",
+    "kernel=false refusal",
+    "both allowed unpublished states and forbidden status/state",
+    "negative post-transfer callback retains capsule and kernel; no rollback/release"
+  ],
+  "review_sha256": "af2551e7e2e2e7b534121a800d9cbbba77a77fdfd8c785dbdc374cb5eb90502d",
+  "reviewed_at_utc": "2026-10-20T16:17:12.560576+00:00"
+}

@@ -6621,3 +6621,13 @@ No criterion/native/compiler uplift. Source catalogue39 (20 OS /19 infrastructur
 ## Review 113 — 2026-10-20T15:43:56.523265+00:00
 
 Counts unchanged:15/35,whole3,native26,Rust17/14. Catalogue41 (21 OS/20 infrastructure),compiler22,native batches2. Two source changes accepted this interval: native report/assembly/CLI7f12 and integrated two-file IKCf16; six commands/six native/four legacy body groups pass. M03 final19/117-file publication/snapshot/guard passed; changed owner failed13.795762s. Manual failure readbacks and new helper diagnosis/physical review are next. Optional automation deferred, mandatory predicates retained. Fresh selector2 rollback candidate/source review ready; actual tests unrun. Prior /home/holden/mckernel-work/host-preparation/manual-reset-resume-20261020T033358Z/VELOCITY-exact-before-review113.md. Next 2026-10-20T16:13:56.523265+00:00.
+
+
+## Review 114 — 2026-10-20T16:14:48.328017+00:00
+
+No milestone/native uplift. Catalogue43 sources (22 OS /21 infrastructure),23 compiler batches,2 native batches;15/35 checks,whole3,native26,Rust17/14 unchanged. SDK three modules/FFI/link and physical retirement independently accepted24dcfae2/5a872af9 after21.109116s. Carrier rollback6f7168fe integrated/pushed. M03 exact failure is missing preboot challenge producer, not CPU-reservation defect; fix e56cfa5f passes28 startup vectors/five commands/static compile. Init-only stage passes16.91s; SDK physical adapter and retry data/normalization proceed in parallel. New request-admission Rust rollback task is private/unrun. Next corrected M03 native slot; no optional harness blocker. Prior /home/holden/mckernel-work/host-preparation/manual-reset-resume-20261020T033358Z/VELOCITY-exact-before-review114.md. Next 2026-10-20T16:44:48.328017+00:00.
+
+
+## Review 115 — 2026-10-20T16:46:27.042219+00:00
+
+Native behavior26→27 and batches2→3: M03 unaligned mprotect/data8192/write/unmap accepted b7aa10fc, physical6f42d3c7, owner37.562365s. P-M03-01/M03 remain open;15/35 checks,whole3,Rust17/14 held. Catalogue45sources(23OS/22infra),23compiler batches. Request three-file Rust rollback ec8381d0 passes original witness+five cases/four commands; current-crate/native/ACK pending. Exit7 reuses collector with private binding/physical changes under review. Fresh SDK c75aec8e has4overlays/62pins; scratch short5,173,248B; finite read-only reclaim prep queued, no release/lower floor. Last90min source5(3.33/h),compiler1,native1; no check/whole uplift this review. Prior /home/holden/mckernel-work/host-preparation/manual-reset-resume-20261020T033358Z/VELOCITY-exact-before-review115.md. Next 2026-10-20T17:16:27.042219+00:00.

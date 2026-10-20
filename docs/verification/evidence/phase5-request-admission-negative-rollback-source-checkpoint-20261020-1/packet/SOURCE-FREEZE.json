@@ -1,0 +1,75 @@
+{
+  "status": "PRIVATE_SOURCE_PROPOSAL_UNRUN",
+  "scope": "Functional OS/apps plus Rust/reviewed assembly cutover; same-lock pre-transfer Request admission rollback, no native/executor/ACK acceptance.",
+  "files": [
+    {
+      "path": "PREIMAGES.json",
+      "sha256": "6033a78d3a9a2abb09269a5e1bc9e0f37b9088a3038bf72742c04687f415acb6",
+      "bytes": 857
+    },
+    {
+      "path": "PROPOSAL.txt",
+      "sha256": "f47b2c861f7bf1dd8a56a88116ad9268f56cc8862c7c16bbae54bf44852a89e7",
+      "bytes": 5871
+    },
+    {
+      "path": "REQUEST-ADMISSION-ROLLBACK.patch",
+      "sha256": "603b8514db3cbd288a94360474a20e53ab0706e6053246f7c2a52b4cca6c969b",
+      "bytes": 7728
+    },
+    {
+      "path": "original/host-kernel/native-rust/application_syscall.rs",
+      "sha256": "65670a19382aaae816f50b14c161e10a82b83fc6221b3b3a1ecd5c0086d3cff9",
+      "bytes": 19764
+    },
+    {
+      "path": "original/host-kernel/native-rust/current_fork_control.rs",
+      "sha256": "9810cb58a1166e4a72455d2d3c3e294eace0d723bea0c586e5d7891844370c9f",
+      "bytes": 9799
+    },
+    {
+      "path": "original/host-kernel/native-rust/smp_application_syscall.rs",
+      "sha256": "e9374097d50f30c4bc7a8cb586ce6b175fd683276e3d189309c853e3c89563eb",
+      "bytes": 29754
+    },
+    {
+      "path": "source/host-kernel/native-rust/application_syscall.rs",
+      "sha256": "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0",
+      "bytes": 20310
+    },
+    {
+      "path": "source/host-kernel/native-rust/current_fork_control.rs",
+      "sha256": "89e3c6a26826ef48c2d5420759e462cebe12e2ffe437b9cb5a83627d37699304",
+      "bytes": 10580
+    },
+    {
+      "path": "source/host-kernel/native-rust/smp_application_syscall.rs",
+      "sha256": "38e9816b37f72bc85a7631ef1c78cd240efc8cd3f00148c3b0eba36059fa669e",
+      "bytes": 31165
+    }
+  ],
+  "contracts": [
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/os_runtime.rs",
+      "sha256": "4acedfe7e50e51183f0e58d3ab9fd9225eccf4bd5bfdb4101a49e4a201fd55f5",
+      "bytes": 83075,
+      "role": "read-only provider/ABI/frame read contract"
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/abi/application.rs",
+      "sha256": "80183a0d743aa266fa8931f6cd1915de1e7de7ea9cfb26c3215db4505b711ec5",
+      "bytes": 5785,
+      "role": "read-only provider/ABI/frame read contract"
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/sysfs_memory.rs",
+      "sha256": "8b83394ac88938849c9309f8b54dca7758c4d7750d85db38a2e4fe32b2b84540",
+      "bytes": 28332,
+      "role": "read-only provider/ABI/frame read contract"
+    }
+  ],
+  "pinned_provider_contract": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-source-next-20261020-1/checkpoint-export-1/contract-source/host-kernel/native-rust/current_fork_control.rs",
+  "tests_run": false,
+  "shared_source_edits": false,
+  "failure_history": "No candidate execution yet. Accepted eight caller-carrier body cases are separate and not repeated."
+}
