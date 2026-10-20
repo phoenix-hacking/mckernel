@@ -1,0 +1,292 @@
+{
+  "status": "SOURCE_ONLY_NO_EXECUTION_GRANT",
+  "scope": "Functional supported-profile OS/apps plus compute-C retirement into Rust/reviewed assembly",
+  "owner": "exit7_retirement_defect",
+  "commands": [
+    [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/phase5-exit7-retirement-defect-20261020-1/stage-preparation-1/binding-correction-1/stage_exit7_init_only.py"
+    ]
+  ],
+  "profile": {
+    "cpu": 6,
+    "jobs": 1,
+    "address_space_bytes": 1073741824,
+    "CPU_seconds": 55,
+    "child_wall_seconds": 52,
+    "outer_wall_seconds": 60,
+    "outer_kill_grace_seconds": 2,
+    "file_size_bytes": 33554432,
+    "core_bytes": 0,
+    "nofile": 256,
+    "host_growth_reserve_bytes": 268435456,
+    "scratch_growth_bytes": 0,
+    "source": "Existing reviewed one-app offline stage envelope; fresh aggregate/floor/service/sourcepin/output admission required"
+  },
+  "output": "/home/holden/mckernel-work/host-preparation/phase5-exit7-retirement-defect-20261020-1/stage-preparation-1/binding-correction-1/ordinary-stage-1",
+  "host_growth_bytes": 268435456,
+  "scratch_growth_bytes": 0,
+  "new_collector": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-retirement-defect-20261020-1/ordinary-check-1/collector",
+    "sha256": "37b370fd699246d301634e16eed4288b19d867a74ea82c9ef39eef8a04bd2058",
+    "size": 1025768,
+    "mode": 33216
+  },
+  "base": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/exit7.cpio.gz",
+    "sha256": "c8fbd37ecefb905831101baee1dbd8f0585d4b982644d5b1024b7dc503c16bac",
+    "size": 26037494
+  },
+  "lineage_base": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/native-stage-1/m03.cpio.gz",
+    "sha256": "4a18d63bbb1d1287f4a3694e16f59c502ec92fb4494a003746f218706cceecf5",
+    "size": 23684692
+  },
+  "permitted_final_changes": [
+    "init"
+  ],
+  "app": "Exact existing0755 exit7 app28ad; raw1792/exact24B+24B unchanged",
+  "failure_history": "One prior native -11-before-procfsdelete failure; corrected collector passed7actualbody vectors/staticcompile; no native replay authorized; original stageproposal held UNRUN because fullmanifestvalidator would rejectoldliteral4a18, corrected once coherently without recompression",
+  "acceptance_prerequisites": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/EXIT7-RETIREMENT-GRACE-ACTUAL-BODY-CHECKS-AND-STATIC-COLLECTOR-ACCEPTANCE.json",
+      "sha256": "38c27522eaee28b1bca924b76b9c0c3f7eae697933b637213b996dd9307e73d5",
+      "size": 10016,
+      "mode": 33152
+    }
+  ],
+  "runtime_prerequisite": "Use same sole frozen20f95 evaluator for later separately reviewed runtimeowner/execution; evaluator predicates and oracles unchanged",
+  "source_integration": false,
+  "root_or_guest": false,
+  "stage_output_cap_bytes": 67108864,
+  "evaluator": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-grace-retry-binding-20261020-1/runtime-source-1/native_diagnostic.py",
+    "sha256": "20f95e71cb94ded921c8643ff9d0068099ef63b0948884c5294f4a55559d58e0",
+    "size": 58113,
+    "mode": 33152
+  },
+  "evaluator_source_freeze": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-grace-retry-binding-20261020-1/EVALUATOR-SOURCE-FREEZE.json",
+    "sha256": "beb0ae504acc50b5c5d00595d25989510841291c206c1223823c98cd4af4938a",
+    "size": 5733,
+    "mode": 33152
+  },
+  "preserved_unrefused_parent_binding": {
+    "case_id": "startup.nonzero-dualstream.rust.exit7",
+    "payload_artifact": {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/app-0755",
+      "sha256": "28adfaff668facb3ca1f27b4800d56ed6bc3669b9fcac35279ab198819d7ca1f",
+      "size": 5610856,
+      "mode": 33261
+    },
+    "payload": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/app"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "oracle": {
+        "exit_code": 7,
+        "stdout_hex": "6e6f6e7a65726f207374646f75742066697865642d76310a",
+        "stderr_hex": "6e6f6e7a65726f207374646572722066697865642d76310a"
+      },
+      "stderr_limit_bytes": 1024,
+      "stdout_limit_bytes": 1024
+    },
+    "matched_artifacts": {
+      "bzImage": {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+        "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+        "size": 16130048
+      },
+      "mcexec": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+        "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+        "size": 453352
+      },
+      "mckernel_image": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/repaired-image-fresh8b-runtime-0755",
+        "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+        "size": 7988768
+      },
+      "native_boot": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two-0755",
+        "sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5",
+        "size": 35784
+      },
+      "loader": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/ld-linux-x86-64.so.2",
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "size": 930600
+      },
+      "libc": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/libc.so.6",
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "size": 2339896
+      }
+    },
+    "matched_modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk-smp-x86_64.ko",
+        "sha256": "c6a9db8eaa2ec5f7898b021b6835d20e4359a5f4a1209b5b28fd9559cd03387f",
+        "size": 12210104
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/mcctrl.ko",
+        "sha256": "4e2f1e5b11cad8a9fbfaca4ae6671a2f3fa16ef3c8c651357506d93c7edf4fa9",
+        "size": 2368472
+      }
+    ],
+    "matched_profile": {
+      "append": "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1",
+      "memory_mib": 8192,
+      "name": "native-diagnostic-4vcpu-8192mib",
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "accepted_stage_base": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/native-stage-1/m03.cpio.gz",
+      "sha256": "4a18d63bbb1d1287f4a3694e16f59c502ec92fb4494a003746f218706cceecf5",
+      "size": 23684692
+    },
+    "normal_native_boot_argv": [
+      "/bin/native-boot"
+    ]
+  },
+  "required_c8fb_validator_binding": {
+    "case_id": "startup.nonzero-dualstream.rust.exit7",
+    "payload_artifact": {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/app-0755",
+      "sha256": "28adfaff668facb3ca1f27b4800d56ed6bc3669b9fcac35279ab198819d7ca1f",
+      "size": 5610856,
+      "mode": 33261
+    },
+    "payload": {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/app"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "oracle": {
+        "exit_code": 7,
+        "stdout_hex": "6e6f6e7a65726f207374646f75742066697865642d76310a",
+        "stderr_hex": "6e6f6e7a65726f207374646572722066697865642d76310a"
+      },
+      "stderr_limit_bytes": 1024,
+      "stdout_limit_bytes": 1024
+    },
+    "matched_artifacts": {
+      "bzImage": {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+        "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+        "size": 16130048
+      },
+      "mcexec": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/scratch/mcexec-preload-fastpath-build-20260928-1/rust/executer/user/mcexec",
+        "sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+        "size": 453352
+      },
+      "mckernel_image": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1/repaired-image-fresh8b-runtime-0755",
+        "sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+        "size": 7988768
+      },
+      "native_boot": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1/two-cpu-end-to-end-1/two-cpu-running-query-correction-1/native-boot-two-0755",
+        "sha256": "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5",
+        "size": 35784
+      },
+      "loader": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/ld-linux-x86-64.so.2",
+        "sha256": "0853c866a70b198f4d3b0ccb7350e0356f6bf1f8340a69b9b728128c13bb7c1b",
+        "size": 930600
+      },
+      "libc": {
+        "mode": 33261,
+        "path": "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/libc.so.6",
+        "sha256": "b058f87d66478fec923f183c89ac2abd008c4ab5fc6cc5096676b921bb5addd4",
+        "size": 2339896
+      }
+    },
+    "matched_modules": [
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk.ko",
+        "sha256": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+        "size": 1527808
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/ihk-smp-x86_64.ko",
+        "sha256": "c6a9db8eaa2ec5f7898b021b6835d20e4359a5f4a1209b5b28fd9559cd03387f",
+        "size": 12210104
+      },
+      {
+        "mode": 33188,
+        "path": "/home/holden/mckernel-work/scratch/nsd-c-f850b277dcea4b13b4f3730c62f6126b/modules/mcctrl.ko",
+        "sha256": "4e2f1e5b11cad8a9fbfaca4ae6671a2f3fa16ef3c8c651357506d93c7edf4fa9",
+        "size": 2368472
+      }
+    ],
+    "matched_profile": {
+      "append": "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1",
+      "memory_mib": 8192,
+      "name": "native-diagnostic-4vcpu-8192mib",
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "accepted_stage_base": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1/exit7.cpio.gz",
+      "sha256": "c8fbd37ecefb905831101baee1dbd8f0585d4b982644d5b1024b7dc503c16bac",
+      "size": 26037494
+    },
+    "normal_native_boot_argv": [
+      "/bin/native-boot"
+    ]
+  },
+  "host_budget_components_bytes": {
+    "stage_cap": 67108864,
+    "two_capped_capture_streams": 67108864,
+    "emergency": 67108864,
+    "metadata_and_spare": 67108864
+  }
+}

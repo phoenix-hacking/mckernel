@@ -1,3 +1,25 @@
+## Current — both grace stages/normalizations accepted; Exit7 publishes first
+
+Accepted collector source b338/static37b3 keeps the existing five-second grace,
+allowing deferred HOST66 retirement retry. Seven actual-body vectors and static
+compile pass38c275. Generic defect affects both cases; both init-only variants
+are accepted: Exit7 stage046eef/archivec15c/manifesta29a and protection stage
+c6e24/archive67cdf/manifestbddc. Exit7 normalizationea768 plus current62ba
+physical-reader five witnessesff877 and protection normalizationebd6 are accepted.
+No app/kernel/module/compiler replay is needed. Earlier exit7 failure remains
+failed and physically retired62ba; its actual raw1792/24+24 frame is separate.
+
+First rolling source publication is Exit7 only: S3/Q3 corrected96cb/45d0 and
+source review9f53;124 exact repository files are staged for commit/fetched proof.
+Next pure DATA proof materialization, independent exact final19 metadata review,
+one ordinary whole result, then genuine LAST/machine/guard/native. No LAST/native
+has run for this retry. S4/Q4 continues independently; its eventual physical
+predecessor stays unbound rather than blocking the first ready case.
+
+Capacity128MiB growth exception question is pending in foreground; no resize
+permission or mutation. Privileged read-only facts are complete and retained.
+Counts remain15/35,wholeM00/M04/M10,27 native behaviors,Rust17/14.
+
 ## Current — exit7 physical accepted; collector grace defect under repair
 
 Exact failed exit7 packet2 remains FAIL. Atomic plus three readbacks all closed
