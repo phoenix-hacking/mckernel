@@ -1,0 +1,92 @@
+{
+  "status": "PASS_PINNED_MAKE_PIPE_RECIPE",
+  "image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+  "make_path": "/usr/bin/make",
+  "argv": [
+    "/usr/bin/make",
+    "--jobserver-style=pipe",
+    "-j2",
+    "-f",
+    "/probe/Makefile",
+    "all"
+  ],
+  "returncode": 0,
+  "direct_child_joined": true,
+  "pipe_jobserver_observed": true,
+  "fifo_count": 0,
+  "make_sha256": "97539f226fb36b8a39b147b6efe50a44f50c65773f7ad7013c0dc1e633f11362",
+  "make_version": "GNU Make 4.4.1\nBuilt for x86_64-redhat-linux-gnu\nCopyright (C) 1988-2023 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n",
+  "source_rows": {
+    "Makefile": {
+      "bytes": 394,
+      "sha256": "d36c0f40bf1829f7bf077d6155cb9e2e964bc9b720785e99090ceb352a5c79ff"
+    },
+    "probe.py": {
+      "bytes": 9401,
+      "sha256": "41de84025cc90bea8ffbd12d9be7bf53b646c8311b2330df1c9feb901aaeb8e3"
+    }
+  },
+  "actual_observation": {
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-54d223bd812373fc4e1cfb295a35cf65/evidence/probe-result.json",
+    "sha256": "57626f1f9dca850a5ae8e860e0a44b419000165da549b88244be22643a67e527"
+  },
+  "actual_owner": {
+    "path": "/home/holden/mckernel-work/scratch/nsd-o-54d223bd812373fc4e1cfb295a35cf65/owner-receipt.json",
+    "sha256": "b711cbc2c5d5bf86d49bd8c225888b10c17bfdd492ed43f36d5ef84002528362"
+  },
+  "independent_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-boundary-review-20261018-1/ACTUAL-PINNED-MAKE-PROBE-REVIEW.json",
+    "sha256": "5467aeca1abd71e04215a251b46608493d6ac5b0206630438483f047deb79234"
+  },
+  "actual_inputs": {
+    "request": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/pinned-make-pipe-probe-1/owner-export-1/request.json",
+      "sha256": "2f44b0d72f606fe4a972f685cce3a13b2b7a232a9a4ab2c50bbf9bfd4cc800b5"
+    },
+    "preparation": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/pinned-make-pipe-probe-1/owner-export-1/owner-capsule/preparation.json",
+      "sha256": "aa927fb5424bfdd9107208d155e508de068fb4b3dd1c9890f5f27482ce76d642"
+    },
+    "owner_receipt": {
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54d223bd812373fc4e1cfb295a35cf65/owner-receipt.json",
+      "sha256": "b711cbc2c5d5bf86d49bd8c225888b10c17bfdd492ed43f36d5ef84002528362"
+    },
+    "inner_result": {
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-54d223bd812373fc4e1cfb295a35cf65/evidence/probe-result.json",
+      "sha256": "57626f1f9dca850a5ae8e860e0a44b419000165da549b88244be22643a67e527"
+    },
+    "inspect_before": {
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54d223bd812373fc4e1cfb295a35cf65/inspect-before-start.json",
+      "sha256": "ea52438ce4b8cfdf9412ab62bb7633890b09571e9142eb67241f9dcc1d7942f3"
+    },
+    "inspect_terminal": {
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54d223bd812373fc4e1cfb295a35cf65/inspect-terminal-fresh.json",
+      "sha256": "fc3173e12d9e41e7bed3aa4ba6d30253c128d99742017e796559f7ee092f7bba"
+    },
+    "postflight": {
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54d223bd812373fc4e1cfb295a35cf65/postflight-proof.json",
+      "sha256": "2f22d496fe6bb29f57cb2bb0d8d3474dc93217d748e74f9180574f52a5cbfce2"
+    },
+    "ownership_archive": {
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54d223bd812373fc4e1cfb295a35cf65/ownership-archive.json",
+      "sha256": "94765750371f4e9fc6d2230a4a0b281e382b8aebaba969b80e97f571e0a0ec92"
+    },
+    "release_authorized": {
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54d223bd812373fc4e1cfb295a35cf65/record-release-authorized.json",
+      "sha256": "88e1ec5e8c74ccc5b82937fc49d577d70bb7f58280ec5069f3dd782ae6116b1f"
+    },
+    "release_complete": {
+      "path": "/home/holden/mckernel-work/scratch/nsd-o-54d223bd812373fc4e1cfb295a35cf65/record-release-complete.json",
+      "sha256": "37eaa7877a930f7b9b3f8c7986f1fbe22937b1026bd18cbc8da924ca6c320f1d"
+    },
+    "dispatch_status": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/pinned-make-pipe-probe-1/owner-export-1/actual-dispatch-1/dispatch.status.json",
+      "sha256": "91dd59fbb5a56c77317eddde4ee0f5124b2f2f8c8914c60e57f5b3455dd2eea0"
+    },
+    "execution_release": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/pinned-make-pipe-probe-1/owner-export-1/execution-release-1.json",
+      "sha256": "c9421d0605244d29f343616e05136d974db6ca577eb48d8e4f954f060a8a3ff3"
+    }
+  },
+  "driver_build_authority": false
+}

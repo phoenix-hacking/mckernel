@@ -1,0 +1,234 @@
+{
+  "actual_changed_source_commands": {
+    "generator": {
+      "bytes": 663,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/actual-source-preparation-1/generator/status.json",
+      "sha256": "a53ad8a2fb8809bf8f9e68713ca6c1e93e89a248e7e525504d821beb24b95f8a"
+    },
+    "materializer": {
+      "bytes": 679,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/actual-source-preparation-1/materializer/status.json",
+      "sha256": "24e7ce0dfa18674752a2607ef18edb4ea6d28b7b35aa39437cdb541910d645c8"
+    }
+  },
+  "actual_preparation_commands": {
+    "generator": [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "35s",
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=30",
+      "--fsize=33554432",
+      "--core=0",
+      "--nofile=256",
+      "--",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/prepare_fullmodule_inputs.py"
+    ],
+    "materializer": [
+      "/usr/bin/timeout",
+      "--signal=TERM",
+      "--kill-after=2s",
+      "35s",
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=1073741824",
+      "--cpu=30",
+      "--fsize=33554432",
+      "--core=0",
+      "--nofile=256",
+      "--",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/materialize_request.py",
+      "--materialize"
+    ]
+  },
+  "all_source_commands_directjoined_groupabsent": true,
+  "allocator_correction_patch": {
+    "bytes": 478,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase3-allocator-abi-correction-1/allocator.patch",
+    "sha256": "d558b0d5157f41fefadfa0477ea8f00d2ba7c9559c4fc86d14fd2b57e30ed3ed"
+  },
+  "allocator_correction_receipt": {
+    "bytes": 1369,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase3-allocator-abi-correction-1/RECEIPT.json",
+    "sha256": "e8387cd4b4f58416d024d2abf2eec404329296df5e11b4dd6524cc158554993e"
+  },
+  "compiler_calls": 0,
+  "counts": {
+    "materialization_rows": 79,
+    "overlay": 13,
+    "preparation": 1,
+    "prepared_inputs_excluding_preparation": 14,
+    "runtime": 11,
+    "source": 64
+  },
+  "deadcode_disposition": {
+    "ForkResponse_request": "retained declaration; consumed by actual smp_application.rs original parent cpu check1231 and response identity1238",
+    "known_phase1_removal_applied": false,
+    "reason": "removing consumed request accessor would break real composite backend",
+    "with_active_child": "already absent (0 occurrences) in frozen composite"
+  },
+  "default_activation": false,
+  "driver_delta": [
+    "full coherent13 overlay on current61 baseline plus original3allowedLinuxMM wrapper source/header and mcctrl root alias =>64",
+    "actual mcctrl Kbuild two-leaf composite; actual saved Rust/C/link command/dependency bindings",
+    "current IHK v6 and current adoptionv4 exports required; no heldv12/control-receipt exports",
+    "existing real ELF bridge parser requires each final mcctrl.o/ko wrapper oneSTT_FUNC definition and zero unresolved references; leafU0or1 allowed for optimizer; wrapperC defines once"
+  ],
+  "exact_changed_source_paths": [
+    "mcctrl_vm.rs"
+  ],
+  "failure_family_history": "Original composite64 E0308 AllocError->kernelError remains preserved. Exactly one bounded compiler-suggested Ok(Arc::new(...)?) correction, no warning relaxation or behavior/ownership redesign. No corrected compiler attempt. Further unchanged/same-family failure escalates before retry.",
+  "fixture": {
+    "bytes": 3724,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/test_composite_source.py",
+    "sha256": "9f3d845eb1f429451c159708cffc160bfe9f7f61a77ba95da1af3bceb146e95a"
+  },
+  "fixture_evidence": {
+    "fixture": {
+      "bytes": 628,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/actual-source-preparation-1/fixture/status.json",
+      "sha256": "f625cbbb5fe6752770a7a05e5a94ad11ca2237a65cd6d9a029a690016cab130d"
+    },
+    "generator": {
+      "bytes": 632,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/actual-source-preparation-1/generator/status.json",
+      "sha256": "eb4ba0eace7f3326b82bcb071c740439219a1fcf28d0cf12a5e3834e7fff8ddb"
+    },
+    "materializer": {
+      "bytes": 647,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/actual-source-preparation-1/materializer/status.json",
+      "sha256": "c4c334cb0cb5ca20b038122ed2a497f74be3d08f4c2f8a22ad4caa696bf6db8b"
+    }
+  },
+  "fixture_reused_without_replay": true,
+  "functional_scope": "Functional supported OS/apps plus actual compute-C retirement into Rust/reviewed assembly",
+  "generator": {
+    "bytes": 6867,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/prepare_fullmodule_inputs.py",
+    "sha256": "6224b2077074b93cc1cd9595701d0cad419ef09d558b07c500ee6fb2cdf20c78"
+  },
+  "heavy_profile": {
+    "cpu_count": 4,
+    "cpus": "2-5",
+    "jobserver": "pipe",
+    "make_jobs": 2,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "network": "none",
+    "one_heavy": true,
+    "pids_limit": 512
+  },
+  "heavy_recipe_reused_from": "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-preparation-20261019-1/ORDINARY-CHAIN-PROPOSAL.json",
+  "held66_or_v12_rust_sources_mixed": false,
+  "holds": [
+    "Independent exact composite SDK source/build release, link uniqueness/no unresolved refs",
+    "Real Linux MM/module lifetime/native guest positive-parent return proof",
+    "Genuine current guest Rust producer remains gated/source-only",
+    "No scheduled/runnable/revoke/finalACK/destruction authority; sealed credits/owners retained",
+    "Actual module/ABI/default/native/ACK acceptance remains unproved; gate false preserved"
+  ],
+  "index": {
+    "bytes": 3566,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/CAPSULE-AND-MATERIALIZATION-INDEX.json",
+    "sha256": "022dbbfb6dbc4a62404ea14435b2b22db59bbebcae71740985655eee706e30f4"
+  },
+  "known_pipe_owner_reused": true,
+  "latest_accepted_physical_predecessor": {
+    "bytes": 14096,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/CURRENT-V6-COMPOSITE64-ACTUAL-PHYSICAL-RETIREMENT-AND-FIRST-FAILURE-REVIEW.json",
+    "sha256": "9600f61dbbc9847ab6e178a8f86901612deb788d0662bb5962d0d4a42367b789"
+  },
+  "materialization_files": {
+    "bytes": 33919,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/materialization-files.json",
+    "sha256": "90278ce58520cc394c0f6533e0c9af1fd8634b124cf87f9c7a6946568c5fd420"
+  },
+  "materializer": {
+    "bytes": 3073,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/materialize_request.py",
+    "sha256": "06f87efcaf8e0783a0f7de4d988e2af4e05d2a2de4a1502490ed00b1530352dc"
+  },
+  "native_activation": false,
+  "next_action": "Root obtain one independent source boundary review, then preserve exact compiler failure or actual3modules+unique bridge proof; no module loading/guest authority",
+  "ordinary_profile": {
+    "address_space_bytes": 1073741824,
+    "core_bytes": 0,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "grace_seconds": 2,
+    "jobs": 1,
+    "stream_bytes": 33554432,
+    "wall_seconds": 35
+  },
+  "owner_delta": "same accepted known-pipe owner transport/APIs and lifecycle; exact source/preparation/count64 pins and fresh namespace only; inherited diagnostic string exact60-file is stale text, actual count predicate64",
+  "previous_actual_failure": {
+    "bytes": 2365,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/ACTUAL-COMPOSITE64-FIRST-COMPILER-FAILURE.json",
+    "sha256": "afbe6e7b9231c4560231c6caaad91765c71539640bd4361ba73c74e136d22b9e"
+  },
+  "previous_failed_request": {
+    "bytes": 2317,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/request.json",
+    "sha256": "115dd978a972a38f4d39ca92d206c69f6c1d5a9d20930c57271c004b67c661f5"
+  },
+  "production_acceptance": false,
+  "release_prerequisites": [
+    "One focused independent exact composite source/generator/driver/materializer/owner delta review",
+    "Root source publication/fetch/ABI pins as required by accepted canonical route",
+    "Fresh actual physical predecessor/lease/exclusion/UUID/resource/usage/service admission",
+    "Canonical root once compiler execution release bound exact genuine inputs"
+  ],
+  "request": {
+    "bytes": 2479,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/request.json",
+    "sha256": "473b32e7cc06f1c417f68de5df23f3708cbb530b31e30dae8599520847924d65"
+  },
+  "schema": "mckernel.current-v6-composite-sdk-preparation-proposal.v1",
+  "source_authority": {
+    "constructor_v6_and_callback_table": "BYTE_IDENTICAL_FROM_EXACT_AUTHOR_RECEIPT",
+    "gate": false,
+    "patch": {
+      "bytes": 76809,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase3-current-composite-1/current-composite.patch",
+      "sha256": "93a9906dd3697a94f00905ae7eaad803a68165be154ce1879bdd4ac7b76b9f87"
+    },
+    "receipt": {
+      "bytes": 4715,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-20261020-1/phase3-current-composite-1/RECEIPT.json",
+      "sha256": "59f9e76dacd1d945949910e7f0fda0fac1f017f80de7697cd088e5221338b4d1"
+    }
+  },
+  "source_identity": "41b16e6440eb6539cdbb0768ba641d87a965c4f534d13a9961f5205c767475ff",
+  "source_identity_is_git_commit": false,
+  "source_map": {
+    "bytes": 1369,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/source-sha256.json",
+    "sha256": "d93896c193a1dd223d4590c76639f533d5adc599d460b8552320fe1793b069da"
+  },
+  "source_only_fixture_result": {
+    "negative_vectors": 4,
+    "not_production_ABI_proof": true,
+    "positive_vectors": 2,
+    "scope": "synthetic ELF/parser+Kbuild command/alias/source/caller-disposition fixture only"
+  },
+  "source_plan": {
+    "bytes": 31575,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/SOURCE-PLAN.json",
+    "sha256": "3af96c815c7c817bb7f507978628211cf2b99d5f5b66b016932015a1baf6cf13"
+  },
+  "status": "ONE_OBSERVED_ALLOCERROR_CONVERSION_CORRECTION_ACTUAL64_79_11_SOURCE_REQUEST_ONLY",
+  "wrapper_authority": "Existing committed allowed Linux control-plane wrappers only; no new C functionality"
+}
