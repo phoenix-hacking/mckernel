@@ -1,3 +1,27 @@
+## Current — both corrected production metadata paths closed
+
+M02 corrected production metadata ran once under pinned Python3.8: rc0,
+1.153907261s,empty stderr,positive join/group absence/stream closure;CPU6 released.
+Independent cb20d01c accepts genuine e7u parent/full preflight,19 outputs,
+49 unused capture paths and production LAST static joins. Source correction
+and actual fixture are pushed/fetched at a915f270; complete196 proof9d942287
+covers15roles. Ordinary4d70 review is METADATA ONLY. Author/reviewer are preparing
+the existing71ae caller DATA-only native-authority overlay; preserve original19.
+
+CHILD current-tuple source/body correction is pushed/fetched at0cab7e1a.
+Complete356 proof3fec0d78 covers15roles including the one missing pinned71ae
+caller publication. Corrected19 ran once: rc0,0.159658427s,empty stderr,
+positive direct join/group absence/stream closure;CPU6 released. Evidence:
+/home/holden/mckernel-work/host-preparation/phase5-child-actual-stage-normalization-20261020-1/runtime-data-preparation-1/final19-current-tuple-binding-correction-1/ROOT-OUTER-CORRECTED19-1/whole.json.
+Retained reviewer is verifying actual outputs; runtime release remains absent.
+Original stale-image19 and root pre-effect key-lookup failure remain preserved.
+
+CPU7 source copies for both deltas passed exact independent actual-output and
+retirement review; no CPU lease remains during editing/review/publication waits.
+No new guest has run. Counts stay16/35,whole3,28 behaviors,Rust17/14.
+First fully admitted useful native case wins; no cohort barrier,framework work
+or SDK no-resize workaround. Included100%/zero reserve and real service stops.
+
 ## Latest executable feedback — M02 fixture closed; CHILD snapshot binding correction
 
 M02 corrected whole-helper fixture ran once under exact /usr/bin/python3.8:
