@@ -1,3 +1,20 @@
+## 2026-10-20 — image pre-common quarantine diagnosis
+
+Current opt-in image invocation is quarantined before common/lease/container
+creation, not compiling. Atomic reason core-entered-without-proven-successful-
+retirement; guard1974397 holds mutex27:4 and its shared image token. Closed
+Docker census:44 stopped containers, no current namespace mounts; privileged
+client census:zero Docker/runc/shim clients andzero unreadable entries. No
+signals, unlink or release performed. Stale supplemental gitlink manifest
+binding d3495242 versus current83010266 is deterministically rejected in the
+pure request-validation prefix; original suppressed traceback is not claimed.
+One packager/reviewer prepare exact controlled retirement and one coherent
+successor including the known nine-artifact copy fix. Corrected SDK105 inputs
+are fetchedfc35dec4; its late binder awaits genuine physical release. Native
+child oracle235B remains frozen/unrun. Source-only M03 diagnostic is separate.
+Evidence: docs/verification/evidence/phase5-image-precommon-quarantine-20261020-1.
+Counts15/35, wholeM00/M04/M10,26 behaviors,17/14 Rust unchanged;100% included.
+
 ## Current — coherent runtime lifetime source integrated; five actual compilers pass
 
 Exact nine-file runtime retirement consumer and frozen-identity producer are now

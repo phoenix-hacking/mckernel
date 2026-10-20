@@ -1,0 +1,85 @@
+{
+  "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+  "classification": "explicit quarantine after core entry; no compiler/client descendants; exact exception pending",
+  "effects": "none; no signals, lock changes or active capture reads",
+  "kernel_locks": [
+    "107: FLOCK  ADVISORY  WRITE 1974397 00:1b:4 0 EOF"
+  ],
+  "observed_at": 1792491123.5530345,
+  "processes": [
+    {
+      "cmdline": "/home/holden/anaconda3/bin/python3 -I -B /home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/runtime-binding-correction-1/image-execution-preparation-1/root-launch-reviewed-full-once.py --review /home/holden/mckernel-work/host-preparation/phase5-opt-in-production-link-image-independent-review-20261020-1/FINAL-CURRENT-OPT-IN-IMAGE-EXECUTION-REVIEW.json --sha256 2aabc6d7fcf65d9f8bb6d93eeea17324502fdd830001d81c7772a6d834949db6 ",
+      "fd_links": {
+        "0": "/dev/null",
+        "1": "pipe:[7851529]",
+        "2": "pipe:[7851530]",
+        "3": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/runtime-binding-correction-1/image-execution-preparation-1/actual-root-owner-1/stdout",
+        "4": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/runtime-binding-correction-1/image-execution-preparation-1/actual-root-owner-1/stderr"
+      },
+      "pid": 1974393,
+      "ppid": 1809074,
+      "starttime": "28775591",
+      "state": "S",
+      "threads": [
+        1974393
+      ],
+      "wchan": "do_wait"
+    },
+    {
+      "cmdline": "/home/holden/anaconda3/bin/python3 -I -B /home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/runtime-binding-correction-1/image-execution-preparation-1/dispatch-image-once.py 4fe862b654a80fb088505fc86764f16ca1b52360bdbcd9d6cf660d54fceea6e1 ",
+      "fd_links": {
+        "0": "/dev/null",
+        "1": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/runtime-binding-correction-1/image-execution-preparation-1/actual-root-owner-1/stdout",
+        "2": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/runtime-binding-correction-1/image-execution-preparation-1/actual-root-owner-1/stderr",
+        "3": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/runtime-binding-correction-1/image-execution-preparation-1/image-guard.stdout",
+        "4": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/runtime-binding-correction-1/image-execution-preparation-1/image-guard.stderr"
+      },
+      "pid": 1974394,
+      "ppid": 1974393,
+      "starttime": "28775595",
+      "state": "S",
+      "threads": [
+        1974394
+      ],
+      "wchan": "do_wait"
+    },
+    {
+      "cmdline": "/home/holden/anaconda3/bin/python3 -B /home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/runtime-binding-correction-1/image-execution-preparation-1/native_exact_current_optin_image_guard.py --request /home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/runtime-binding-correction-1/image-request.json --request-sha256 2d1d1fc3ff4cd4bd8cf946abb31a1fba266081741944853eca4fa6c97a51baf4 --release /home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/runtime-binding-correction-1/image-execution-preparation-1/image-execution-release.json --release-sha256 4fe862b654a80fb088505fc86764f16ca1b52360bdbcd9d6cf660d54fceea6e1 ",
+      "fd_links": {
+        "0": "/dev/null",
+        "1": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/runtime-binding-correction-1/image-execution-preparation-1/image-guard.stdout",
+        "2": "/home/holden/mckernel-work/host-preparation/phase5-opt-in-image-lock-binding-20261020-1/runtime-binding-correction-1/image-execution-preparation-1/image-guard.stderr",
+        "6": "/run/lock/mckernel-development.lock"
+      },
+      "pid": 1974397,
+      "ppid": 1974394,
+      "starttime": "28775622",
+      "state": "S",
+      "threads": [
+        1974397
+      ],
+      "wchan": "do_select"
+    }
+  ],
+  "quarantine": {
+    "pid": 1974397,
+    "reason": "core-entered-without-proven-successful-retirement",
+    "root_lock": [
+      27,
+      4
+    ],
+    "schema": "mckernel.tool-image-rebind-root-quarantine.v1",
+    "status": "QUARANTINED_ROOT_LOCK_HELD"
+  },
+  "schema": "phase5-image-readonly-quarantine-diagnosis.v1",
+  "shared_record": {
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "device": 1828,
+    "inode": 116113,
+    "kind": "image",
+    "pid": 1974397,
+    "request_sha256": "d2848f6c9588f322dd10bf87eb90c72b6abe4c629d2334ec801f96bdfd592e95",
+    "schema": "mckernel.heavy-operation.v1",
+    "starttime": "28775622"
+  }
+}

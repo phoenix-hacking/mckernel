@@ -1,3 +1,25 @@
+## Current — image attempt quarantined before container creation
+
+The current opt-in image attempt entered explicit guard quarantine while holding
+permanent mutex27:4 and its shared image record. Read-only process/thread/FD
+metadata shows only wrapper1974393, dispatcher1974394 and guard1974397, with no
+compiler or Docker descendants. No common exclusion, lease, output or evidence
+roots were created. This is not CPU/RAM saturation or a completed image.
+
+Static diagnosis identifies the stale gitlink supplemental base-manifest binding:
+old d3495242 versus consumed current83010266. The exact exception traceback has
+not surfaced because quarantine precedes rethrow; a pure prefix reproducer and
+independent controlled-retirement decision are pending. Preserve this consumed
+attempt, its records and frozen sources. Do not unlink mutex27:4 or replay it.
+Corrected enabled-host SDK publication fc35dec4 is fetched and remains ready for
+fresh admission after actual physical release. Native child235-byte oracle and
+observer38780c3e remain unchanged; actual matching image/modules are unproved.
+
+Readonly diagnosis: host-preparation/phase5-image-quarantine-diagnosis-20261020-1/
+READONLY-QUARANTINE-DIAGNOSIS.json and STATIC-FAILURE-CLASSIFICATION.json.
+Counters15/35, wholeM00/M04/M10,26 behaviors,17 production/14 native Rust held.
+Continuous functional OS/Rust cutover,100% included/zero reserve; controls intact.
+
 ## Current — coherent runtime lifetime source integrated; five actual compilers pass
 
 Exact nine-file runtime retirement consumer and frozen-identity producer are now
