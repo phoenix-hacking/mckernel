@@ -1,3 +1,28 @@
+## Current — image final link failed; Rust repair and finite preservation active
+
+The real image owner closed FAIL at 2026-10-20T11:02:33Z after206.876s.
+Fifteen commands passed; final kernel LD rejected unsupported Rust core helpers
+panic_bounds_check and unwrap_failed. Original source, objects, diagnostics and
+all ownership records remain retained. Independent2e2ee449 proves container and
+client retirement only: stopped container/common/shared remain held, so no next
+heavy operation is admitted yet. Root184725d2 confirms unchanged mutex27:4.
+The failure-only52-role preservation/terminal chain has passed its no-effect
+callback check26a41bb3; actual effects still require exact execution release.
+
+One private four-file Rust correction replaces panic-generating indexing/unwrap
+with checked control flow preserving ownership, errors and ACK holds. Its first
+actual fixture compile exposed a test-only registry API name mismatch; original
+failure retained, one remaining-only correction authorized. Genuine production
+object/nm and affected kernel LD remain required; no image/native credit.
+
+M03 real archive stage closedFAIL14.843s at strict manifest keys: inherited pair
+fields violate the exact eight-key schema. Saved archive/overlay are retained;
+one manifest-only completion is being prepared with unchanged validator and
+payload oracles, without recompression. CPU6/7 ordinary work is independently
+admitted and released on whole joins. Counts15/35,whole3,26behaviors,17/14Rust
+held;100% included/zero reserve. Next: finite failure preservation/physical release,
+actual checked Rust object/link feedback, then matching child/run/exit/wait proof.
+
 ## Current — corrected host modules accepted; exact source integrated
 
 SDK artifact3d2651e6 and physical7929aa52 accept all three matching modules,
