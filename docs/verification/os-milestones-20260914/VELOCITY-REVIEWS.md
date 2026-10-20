@@ -6448,3 +6448,21 @@ is authorized when useful, not duplicatework. Host/scratch43.817/13.460GiB at
 review; preserve16/12floors+growth, freshidentities, mutex27:4, Scratch21 and all
 WIP/failures. No new launcher or unapprovedcleanup. Nextreview:2026-10-20T05:08:51.002321Z.
 
+
+
+## Review93 — 2026-10-20T05:10:36.322698Z
+
+Campaign is running, goal active; actual included-usage guard100%, current usage4%.
+User wants continuous functional OS/apps and actual compute-C retirement into Rust/reviewed assembly. Linux-control compatibility C remains allowed. No paid/API usage or automatic retry of real service stops.
+
+Since review92: accepted strict20-launch batch c20d9480 plus physical0ddf5181 meets the4x application-test target at6.332426x (20 /69.7368219649943s versus fixed2 /44.160327s). Same20 repeated application payloads add no distinct behavior or Rust retirement. Reuse this executor for needed regressions; no optional benchmark expansion.
+
+Latest durable-control batch4 independently passes native and legacy objects c542a3c5 and physical efeac6bc. Outer owner31.502804s; wrapper-ready to owner-start71.409s; owner-finish to first supervisor acceptance observation235.749s. That last interval includes review/observation, not pure reviewer execution. Root separately measured notification lag under113s and will wait through short operations for prompt wakeup. New source preparations: frozen current-v6 route7185bd4e (16tests), phase2 coupled VMA/restore0668ff07 (14tests). These permit source-only SDK investigation; neither is live activation. Deferred final-VMA-close repair has focused passing tests and is under independent lifetime review. Phase3 backend/positive-parent implementation remains active.
+
+Counts remain14/35 practical checks, whole M00/M04/M10 complete,26distinct native behaviors,17selected production/14applicable native Rust paths. No criterion, whole milestone, native behavior or Rust-path increment this30-minute interval. Since03:38 resume: +1whole M04, others held. At1.518run hours, whole closure .6588/h versus .3218/h historical gives raw2.05x, based on ONE heterogeneous recognition of prior accepted-profile evidence; not sustained engineering speed. Criterion throughput0/h versus4xtarget3.2178/h remains unmet. Leading indicators total8reviewed source candidates and4compiler feedback batches, including the2new source-only preparations; no historical multiplier or production credit for those indicators.
+
+Critical path: current-v6 SDK61 source/76copies/11runtime inputs accepted d63a8f8b, runtime e241f82f; all97 fetched publication inputs now verify. First proof caught5ignored files omitted by ordinary Git add; correction is preserved in b9a8f0f3 after fed6160e. Canonical one-shot payload is in final execution review. Launch this ready compiler after genuine release/fresh root admission; do not wait for unrelated later phase3 completeness. The frozen61 snapshot predates later phase2/phase3 changes: accept only its exact scope. Continue backend/parent-return implementation and deferred-close review concurrently, with disjoint edits/frozen snapshots. FullABI/link, positive task/MM/root provenance, revoke/ACK/default-provider/native activation remain open, especially P-M08-02; no automatic M05 lifecycle or whole-Rust closure.
+
+Velocity changes: reuse the accepted publication allowlist, explicitly account for its required ignored files before a future commit; no broad force-add or new audit gate. Reuse current compiler owner/canonical caller and accepted physical-report contracts. Short operation -> immediate whole join -> followup_task even for completed reviewers. Measure existing ready/start/finish/next-action timestamps. Do not rehash old unaffected evidence or rerun accepted SDK66/77/78/batch4. No new logging framework. Next needed real behavioral result matters more than extra preparation packets.
+
+Four active actors, no quiet lane at checkpoint. MoreCPU/RAM is authorized when useful, under a concrete aggregate profile; existing one-heavy4CPU/12GiB/noSwap/512tasks and disjointCPU6/7ordinary grants stand. Host/scratch43.611/13.458GiB; preserve16/12floors+growth. Root owns Git/OSsources/root/heavy/guest/release; supervisor monitors and steers only. Preserve Scratch21, permanent mutex27:4, fresh live identities, WIP and all failures. Next review 2026-10-20T05:40:36.322698Z.

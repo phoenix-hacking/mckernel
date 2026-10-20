@@ -1,3 +1,26 @@
+## Current SDK61 compiler feedback — 2026-10-20
+
+The canonical current-v6 phase1 SDK61 attempt closed at epoch1792473182.7571697:
+outer rc1/6.513851404s, direct child joined, process group absent, observer error null.
+First actual compiler failure is E0425: EOVERFLOW is absent from the pinned production
+prelude at current_fork_task_mm.rs62 and smp_application.rs314. The frozen source,
+consumed request and all captures are retained unchanged. A separate fresh correction
+is limited to the two typed errno expressions; no phase2/phase3 source is substituted.
+Independent physical retirement5405af26c2f02b613f59d76fa77f4f3eb0095c059791ecaf635510d50bf80694
+accepts15 joined clients/42 empty group checks, stopped exact container then absence,
+three archived/released ownership records and zero independently matched processes.
+No module artifact, load, default activation or native provider acceptance is claimed.
+
+Deferred-final-VMA-close source review8980d55e closes the affected foreign-destructor
+hold using independent module pins and reaper lifetime; real Linux ABI/full integration
+and activation remain pending. Later backend/positive-parent implementation and its
+changed-source tests continue privately on CPU6 while fresh compiler correction is prepared.
+Current guest source derives real child geometry/root/reserved CPU before publication;
+the selected transaction remains disabled and lacks matching native proof. The separate
+host weak-provider hold remains; there is no selected guest strong-prepare NULL ABI.
+Counters stay14/35 checks,26 behaviors,Rust17 production/14 native. M00/M04/M10 complete.
+Strict20 accepted6.332426x is application throughput only; no optional benchmark variants.
+
 ## Current — twenty strict launches accepted; current-v6 provider compiler next
 
 Independent c20d9480 + physical0ddf5181 accept10rounds/20 real app launches.

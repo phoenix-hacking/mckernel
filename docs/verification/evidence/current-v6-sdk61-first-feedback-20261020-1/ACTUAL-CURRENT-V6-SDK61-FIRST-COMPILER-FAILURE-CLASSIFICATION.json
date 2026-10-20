@@ -1,0 +1,98 @@
+{
+  "compiler_error_count": 2,
+  "compiler_errors": [
+    {
+      "code": "E0425",
+      "column": 42,
+      "line": 62,
+      "message": "cannot find value `EOVERFLOW` in this scope",
+      "source": "current_fork_task_mm.rs",
+      "witness": "error[E0425]: cannot find value `EOVERFLOW` in this scope\n  --> /candidate/modules/current_fork_task_mm.rs:62:42\n   |\n62 |         if grabbed.is_err() { return Err(EOVERFLOW); }\n   |                                          ^^^^^^^^^ not found in this scope\n   |"
+    },
+    {
+      "code": "E0425",
+      "column": 61,
+      "line": 314,
+      "message": "cannot find value `EOVERFLOW` in this scope",
+      "source": "smp_application.rs",
+      "witness": "error[E0425]: cannot find value `EOVERFLOW` in this scope\n   --> /candidate/modules/smp_application.rs:314:61\n    |\n314 |         let pins = pe.parent_slot_pins.checked_add(1).ok_or(EOVERFLOW)?;\n    |                                                             ^^^^^^^^^ not found in this scope\n    |"
+    }
+  ],
+  "compiler_receipt": {
+    "bytes": 20125,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-4a4ba51b41e540a7b6fe5370713d5448/evidence/receipt.json",
+    "sha256": "5bedaf3b35a91892d80fae1e55cb1137a9763b4319727649e617085b11189759"
+  },
+  "decision": "ACCEPT_ACTUAL_COMPILER_FAILURE_CLASSIFICATION_ONLY",
+  "execution_release": {
+    "bytes": 4666,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/execution-release.json",
+    "sha256": "3e7390494511ea22711fa84a110613d46b79c3f672c75a4a73abf81ae5e1c02c"
+  },
+  "failure_family": "Known Linux Rust prelude EOVERFLOW constant visibility: now concretely observed in current61phase1 SMPcrate at2sites. Prior heldSDK family remains preserved; this is not a new Linux kernel defect.",
+  "first_failed_driver_predicate": "make return code must equal0; actual2 raises ValueError external make failed before lateroutputs()",
+  "functional_scope": "Functional supported OS/apps AND actual compute-C retirement into Rust/reviewed assembly; closed exact current61 phase1 SDK compiler feedback only",
+  "implementation_ownership": false,
+  "make_returncode": 2,
+  "make_stderr": {
+    "bytes": 1290,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-4a4ba51b41e540a7b6fe5370713d5448/evidence/make.stderr",
+    "sha256": "851e3f961b3c43739f671362bb5a2de2abbd41841195d2088b2a14f7f3c2f625"
+  },
+  "make_stdout": {
+    "bytes": 341,
+    "path": "/home/holden/mckernel-work/scratch/nsd-c-4a4ba51b41e540a7b6fe5370713d5448/evidence/make.stdout",
+    "sha256": "0df6d0c7d68aa673a71fe0c76b06dff2b0f02dd2e0d33803740b2aba397e2d61"
+  },
+  "narrow_next_step": "Source owner may prepare one explicit bounded correction to import/qualify existing kernel::error::code::EOVERFLOW at both reported sites in a fresh exact61namespace/request under separate source/ordinary/one-time compiler review. No compiler execution or unchanged source replay authorized by this classification.",
+  "not_accepted": [
+    "Compiler or linked all3module success",
+    "LinuxMM API/binding/layout/runtime/non-null CREATE_PPD/ACK/defaultconsumer/native evidence",
+    "Phase2 ownership source inclusion or new computeC retirement",
+    "Automatic retry or rebuild"
+  ],
+  "observed_scope": [
+    "Compiler actually attempted current frozenphase1 rustmodule sources under exact request751df99b/release3e739049; taskMM is an actual SMPcrate dependency.",
+    "Two E0425 missingconstant diagnostics are the concrete first errors. No observed diagnostic here rejects the questioned bindings/mm_count field, but failedwholecrate does not prove their compiler/link/runtime correctness.",
+    "Makefailed before original downstream outputgates; no all3ko/export/import/sourcecmd/modinfo/vermagic/nativeABI acceptance. Any partialobjects are retained diagnostic bytes only.",
+    "Positivephysicalretirement independently accepted5405af26, separate from semanticcompilerFAIL. Everyfailedreceipt/source/stream remains immutable; later correction must have fresh namespaces/pins."
+  ],
+  "outer_status": {
+    "bytes": 1831,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/actual-sdk-build-1/dispatch.status.json",
+    "sha256": "ec6778a01f286eabbc3eff2cb3fa5edc0fcb4d6ca9351f1a49135d64800c1885"
+  },
+  "owner_returncode": 1,
+  "physical_review": {
+    "bytes": 26759,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-independent-review-20261020-1/ACTUAL-CURRENT-V6-SDK61-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "5405af26c2f02b613f59d76fa77f4f3eb0095c059791ecaf635510d50bf80694"
+  },
+  "request": {
+    "bytes": 2341,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-sdk-preparation-20261020-1/request.json",
+    "sha256": "751df99b4f69ebc96d98b12725144ab08e39238cfc4d6540bc14f1e413ce7306"
+  },
+  "reviewed_at": "2026-10-20T05:14:25.840587+00:00",
+  "reviewer": "/root/sdk66_boundary_review",
+  "reviewer_compiler_root_guest_execution": 0,
+  "rustc_commands_observed": [
+    "ihk.o",
+    "ihk_smp_x86_64.o",
+    "mcctrl.o"
+  ],
+  "schema": "mckernel.independent-current-v6-sdk.first-compiler-failure-classification.v1",
+  "source_refs": {
+    "current_fork_task_mm.rs": {
+      "bytes": 4406,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-4a4ba51b41e540a7b6fe5370713d5448/modules/current_fork_task_mm.rs",
+      "sha256": "7bcaa912efac283a264d2e58bf7b8da7b0f5686458e8081606f7ddc538ce5977"
+    },
+    "smp_application.rs": {
+      "bytes": 55609,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-4a4ba51b41e540a7b6fe5370713d5448/modules/smp_application.rs",
+      "sha256": "e9f04a06c33f3d2e6439f14e4b12a2730e41427d9e818ed39dd8d1959904bdf2"
+    }
+  },
+  "status": "FAIL_COMPILER_PRESERVED"
+}
