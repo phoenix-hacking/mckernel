@@ -1,0 +1,139 @@
+[
+  {
+    "argv": [
+      "/usr/bin/cc",
+      "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+      "-DMCEXEC_RUST_HELPERS",
+      "-DPROFILE_ENABLE",
+      "-I/work/output/build/executer/user",
+      "-I/work/output/build",
+      "-I/src/ihk/linux/include",
+      "-I/src/executer/user/arch/x86_64/include",
+      "-I/src/executer/user",
+      "-I/src/executer/user/arch/x86_64",
+      "-I/work/output/build/ihk/linux/include",
+      "-I/out/build",
+      "-g",
+      "-fPIE",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-parameter",
+      "-Wno-sign-compare",
+      "-Wno-unused-function",
+      "-Wno-implicit-fallthrough",
+      "-Wno-stringop-truncation",
+      "-MD",
+      "-MT",
+      "executer/user/CMakeFiles/mcexec.dir/mcexec.c.o",
+      "-MF",
+      "CMakeFiles/mcexec.dir/mcexec.c.o.d",
+      "-o",
+      "CMakeFiles/mcexec.dir/mcexec.c.o",
+      "-c",
+      "/src/executer/user/mcexec.c"
+    ],
+    "cwd": "/work/output/build/executer/user",
+    "generated_dependency_file": "/work/output/build/executer/user/CMakeFiles/mcexec.dir/mcexec.c.o.d",
+    "output": "/work/output/build/executer/user/CMakeFiles/mcexec.dir/mcexec.c.o",
+    "selection": "real-mcexec-C-and-dependencies"
+  },
+  {
+    "argv": [
+      "/usr/bin/cmake",
+      "-E",
+      "env",
+      "MAKEFLAGS=",
+      "/nightly/bin/rustc",
+      "--crate-name",
+      "mcexec_helpers",
+      "--crate-type",
+      "lib",
+      "--edition=2021",
+      "-C",
+      "panic=abort",
+      "-C",
+      "opt-level=2",
+      "-C",
+      "debuginfo=1",
+      "-C",
+      "force-unwind-tables=no",
+      "--emit=obj=/work/output/build/executer/user/rust/mcexec_helpers.o",
+      "/src/executer/user/rust/mcexec_helpers.rs"
+    ],
+    "cwd": "/work/output/build/executer/user",
+    "output": "/work/output/build/executer/user/rust/mcexec_helpers.o",
+    "selection": "real-mcexec-Rust"
+  },
+  {
+    "argv": [
+      "/usr/bin/cc",
+      "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+      "-DPROFILE_ENABLE",
+      "-I/work/output/build/executer/user",
+      "-I/work/output/build",
+      "-I/src/ihk/linux/include",
+      "-I/src/executer/user/arch/x86_64/include",
+      "-I/src/executer/user",
+      "-I/src/executer/user/arch/x86_64",
+      "-I/work/output/build/ihk/linux/include",
+      "-g",
+      "-fPIC",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-parameter",
+      "-Wno-sign-compare",
+      "-Wno-unused-function",
+      "-Wno-implicit-fallthrough",
+      "-Wno-stringop-truncation",
+      "-o",
+      "CMakeFiles/libmcexec.dir/arch/x86_64/archdep.S.o",
+      "-c",
+      "/src/executer/user/arch/x86_64/archdep.S"
+    ],
+    "cwd": "/work/output/build/executer/user",
+    "output": "/work/output/build/executer/user/CMakeFiles/libmcexec.dir/arch/x86_64/archdep.S.o",
+    "selection": "real-mcexec-ASM"
+  },
+  {
+    "argv": [
+      "/usr/bin/ar",
+      "cr",
+      "libmcexec.a",
+      "CMakeFiles/libmcexec.dir/arch/x86_64/archdep.S.o"
+    ],
+    "cwd": "/work/output/build/executer/user",
+    "output": "/work/output/build/executer/user/libmcexec.a",
+    "selection": "real-mcexec-archive-0"
+  },
+  {
+    "argv": [
+      "/usr/bin/ranlib",
+      "libmcexec.a"
+    ],
+    "cwd": "/work/output/build/executer/user",
+    "output": "/work/output/build/executer/user/libmcexec.a",
+    "selection": "real-mcexec-archive-1"
+  },
+  {
+    "argv": [
+      "/usr/bin/cc",
+      "-g",
+      "-fPIE",
+      "-pie",
+      "-Wl,--dependency-file=CMakeFiles/mcexec.dir/link.d",
+      "CMakeFiles/mcexec.dir/mcexec.c.o",
+      "rust/mcexec_helpers.o",
+      "-o",
+      "mcexec",
+      "-Wl,-rpath,::::::::::::::::",
+      "libmcexec.a",
+      "/usr/lib64/librt.a",
+      "/usr/lib64/libnuma.so",
+      "-lpthread"
+    ],
+    "cwd": "/work/output/build/executer/user",
+    "generated_dependency_file": "/work/output/build/executer/user/CMakeFiles/mcexec.dir/link.d",
+    "output": "/work/output/build/executer/user/mcexec",
+    "selection": "real-mcexec-link"
+  }
+]
