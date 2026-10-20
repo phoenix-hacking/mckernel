@@ -1,0 +1,29 @@
+kernel/rust/atomic_helpers.rs:39:    let _ = (*v).counter.fetch_add(i, Ordering::SeqCst);
+kernel/rust/atomic_helpers.rs:49:    let _ = (*v).counter.fetch_add(1, Ordering::SeqCst);
+kernel/rust/atomic_helpers.rs:64:    ((*v).counter.fetch_add(1, Ordering::SeqCst) + 1 == 0) as CInt
+kernel/rust/atomic_helpers.rs:69:    (*v).counter.fetch_add(i, Ordering::SeqCst) + i
+kernel/rust/atomic_helpers.rs:99:    let _ = (*v).counter64.fetch_add(1, Ordering::SeqCst);
+kernel/rust/atomic_helpers.rs:104:    (*v).counter64.fetch_add(i, Ordering::SeqCst) + i
+kernel/rust/atomic_helpers.rs:133:pub unsafe extern "C" fn atomic_cmpxchg8(
+kernel/rust/atomic_helpers.rs:138:    match AtomicU64::from_ptr(addr).compare_exchange(
+kernel/rust/atomic_helpers.rs:149:pub unsafe extern "C" fn atomic_cmpxchg4(addr: *mut u32, oldval: u32, newval: u32) -> CULong {
+kernel/rust/atomic_helpers.rs:150:    match AtomicU32::from_ptr(addr).compare_exchange(
+kernel/rust/atomic_helpers.rs:161:pub unsafe extern "C" fn atomic_cmpxchg_int(addr: *mut CInt, oldval: CInt, newval: CInt) -> CInt {
+kernel/rust/atomic_helpers.rs:162:    match AtomicI32::from_ptr(addr).compare_exchange(
+kernel/rust/atomic_helpers.rs:173:pub unsafe extern "C" fn atomic_cmpxchg_ulong(
+kernel/rust/atomic_helpers.rs:178:    match AtomicU64::from_ptr(addr).compare_exchange(
+kernel/rust/atomic_helpers.rs:189:pub unsafe extern "C" fn atomic_cmpxchg_ptr(
+kernel/rust/atomic_helpers.rs:194:    match AtomicPtr::from_ptr(addr).compare_exchange(
+kernel/rust/atomic_helpers.rs:210:    match AtomicU64::from_ptr(addr.cast::<CULong>()).compare_exchange(
+kernel/rust/atomic_helpers.rs:223:    let _ = AtomicI64::from_ptr(v).fetch_add(i, Ordering::SeqCst);
+kernel/rust/atomic_helpers.rs:228:    let _ = AtomicU64::from_ptr(v).fetch_add(i as CULong, Ordering::SeqCst);
+kernel/rust/atomic_helpers.rs:233:    (AtomicI64::from_ptr(v).fetch_add(i, Ordering::SeqCst) + i) as CULong
+kernel/rust/x86_local.rs:121:        .fetch_add(1, Ordering::SeqCst)
+kernel/rust/x86_memory_helpers.rs:3750:    match atomic.compare_exchange(PTE_NULL, entry, Ordering::SeqCst, Ordering::SeqCst) {
+kernel/rust/process_helpers.rs:4261:        match pgshift.compare_exchange(0, PAGE_SHIFT as CInt, Ordering::SeqCst, Ordering::SeqCst) {
+kernel/rust/process_helpers.rs:5575:pub unsafe extern "C" fn process_ref_dec_and_test_result(
+kernel/rust/process_helpers.rs:5626:    let _ = atomic.fetch_add(1, Ordering::SeqCst);
+kernel/rust/process_helpers.rs:5631:pub unsafe extern "C" fn process_ref_dec_and_test_direct_result(
+kernel/rust/process_helpers.rs:5891:    (*(counter_addr as *mut AtomicI32)).fetch_add(1, Ordering::SeqCst) + 1
+kernel/rust/process_helpers.rs:9728:pub unsafe extern "C" fn process_ref_inc_result(
+kernel/rust/process_helpers.rs:9755:pub unsafe extern "C" fn process_ref_hold_body_result(

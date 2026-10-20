@@ -80,6 +80,7 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/fileobj.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/fork_control_guest.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/fork_control_registry.rs"
+			"${CMAKE_CURRENT_SOURCE_DIR}/rust/fork_child_credits.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/futex.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/gencore.rs"
 			"${CMAKE_CURRENT_SOURCE_DIR}/rust/freeze.rs"

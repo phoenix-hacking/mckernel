@@ -6204,3 +6204,100 @@ Host/scratch44.247/13.538GiB. Preserve one heavy operation4CPU/12GiB/no-swap/512
 aggregate reserves and floors, fresh live identities, permanent mutex27:4,
 Scratch21, dirty worktree and every failure/evidence record. Next review:2026-10-20T03:12:02.621936Z.
 
+
+### Review89 amendment, 2026-10-20T02:48:39Z
+
+Amendment 2026-10-20T02:48:39Z: dispatcher reports its active developer instruction
+requires97%, so NO current controller handoff/arming/signals/restart is released.
+Current run_os_goal.py is again97 by direct source read; the earlier implemented
+100 patch/tests are retained as a reviewed future proposal, not current installed
+or runtime settings. Independent handoff review2fb61d77 also identifies that
+watcher exit10 alone fails to exclude forced worker termination/newer signals.
+Do not execute that helper. Continue ordinary OS engineering under the current
+97 guard; keep requested100/0reserve distinct from the effective97 constraint.
+Root is checkpointing current Rust integration and two-cycle/SDK evidence, then
+should return to corrected SDK and staged20-launch native feedback. This amendment
+supersedes the earlier review89 instruction to complete a controller transition.
+
+
+
+## Current priorities — review 90, 2026-10-20T03:12:13.816426Z
+
+Current practical status is unchanged this interval: M00 and M10 COMPLETE on the
+tested205 profile,14/35checks,26distinct native behaviors,17selected production
+Rust paths/14with applicable native evidence. M00/M10 estimates100%, M05 65-80%;
+other11 ranges held. New source work and failed feedback are real engineering
+progress, but do not imply another whole milestone or accepted native behavior.
+Checkpoint01538f00 is pushed and fetched: current five-file Rust guest-control
+integration, accepted two-cycle evidence and14/35reconciliation. The corrected
+SDK99-row publication also matches fetched source. Preserve all original failures.
+
+The new retained SDK attempt actually ran, failed after22.51owner seconds, and
+retired independently67aca252. Expert38a81d05 classifies three strict FFI failures
+from kernel empty lockdep_map_p types in extern signatures; earlier errno/type
+errors are gone. Missing final provider-linkage evidence is also recorded.
+The next narrow private repair has three opaque extern parameters/eight explicit
+casts and links the EXISTING permitted Linux MM C wrappers into composite
+mcctrl.ko through the pinned Kbuild rules. Rust entry bytes remain unchanged.
+Provider checker requires each wrapper defined exactly once and no unresolved
+reference. Source884424c6 accepts design; fresh66-file/81-copy/11-runtime-source/
+102-publication-row proposal is conditionally accepted ac06bd24. No next compiler
+or module/ABI/activation credit; source commands await allocation/fresh admission.
+Do not suppress lint errors or add compute C.
+
+The20-launch data binder passed0.07325seconds and releasedCPU6; six outputs and
+97guard config were independently accepted. Final7-row mapping b349cc16 and
+matching executor03f96d75 pass. Root used the next heavy slot for this native run,
+avoiding another SDK predecessor invalidation. Snapshot/assembly/final guard
+passed, but actual owner failed after55.79seconds. Three post-run readers did
+not run. First outer attached-Docker-start error was insufficient classification;
+retained result now identifies failed exact-ten-round evidence. Serial shows
+round6complete/round7start followed by Linux power-down. Incomplete run confirmed;
+underlying cause still unknown. No20-launch or3.5x acceptance. Tested image/modules
+remain unchanged. Six-app accepted2.842853251x regression remains valid.
+
+Atomic terminal receipt read passed under exact bounded281da5c2 release. Complete
+physical retirement is not yet independently accepted. The three existing
+remaining readbacks are prepared0b6f1399 with fresh captures/original caps and
+await one consolidated failure-readback release. First diagnose the precise
+collector/runtime termination boundary and establish retirement. Preserve failed
+inputs and original serial; do not replay unchanged or assume an attached-client
+error proves a guest failure. Keep later repair scoped to actual diagnosis.
+
+New Rust child-credit owner is private source-reviewed7364159a. It checks unique
+pre-begin ownership, real parent reference, cancellation ordering and retaining
+child/VM/CPU credits after begin/uncertain results. No current normal-fork caller
+or cleanup authority is activated. Focused three-check proposal62870aba passed
+review. First CPU7compile failed only because the projected fixture omitted
+smp_load_acquire_ulong and arch_barrier; all three tests remain unrun. Expert
+3d48d005 confirms no diagnosed production defect. Author is correcting the exact
+fixture dependencies within the existing bounded grant. Reuse completed source
+checks; keep all original failures and pin actual dependency bodies correctly.
+
+Velocity this interval: zero further literal/whole closures, one coherent fetched
+source/evidence checkpoint,22.51-second failed SDK feedback,55.79-second incomplete
+native feedback and a focused fixture compile failure. Final native map first
+observed03:07:36 -> closed-run feedback first observed03:09:48 is about2.2minutes.
+Earlier binding authorization02:58 -> first observed completion03:02 includes
+minutes of compaction/handoff despite the actual0.07325-second command. Count
+those delays; do not hide setup by timing only the final execution. Keep focused
+file handoffs and wake completed owners on whole joins. Reuse accepted executors
+and passed checks. No more benchmark variants ahead of useful OS code. Do not
+start duplicate work while an actor compacts or a command result is unresolved.
+
+Quota: latest user requests100%included/0reserve, but the active dispatcher reports
+a higher-priority developer97constraint. Current source and activeworker remain97;
+usage96. The100patch/test evidence is a retained future proposal ONLY. Controller
+handoff is parked, not released; independent2fb61d77 also found insufficient
+forced-worker/newer-signal exclusions. No arming, signals, restart, state edits,
+paid/API usage or policy retries. Continue useful OS work under active97 and save
+recoverable source/results before it stops. Do not claim target100 is installed.
+
+Next: finish failed-native readbacks/physical review and diagnose the actual
+termination; complete child-credit focused tests; execute accepted SDK source
+preparation and get the next narrow compiler feedback when safe. Keep disjoint
+ordinary source/check work parallel with one heavy operation. Host/scratch
+44.122/13.522GiB. Preserve4CPU/12GiB/no-swap/512tasks, aggregate reserves/floors,
+fresh identities, permanentmutex27:4, Scratch21, dirty worktree and all evidence.
+Next review:2026-10-20T03:42:13.816426Z.
+

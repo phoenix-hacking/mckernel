@@ -1,5 +1,7 @@
 //! Current guest carrier and receipt observer. No task-publication, revoke
 //! permit, final ACK, or terminal-release API is provided by this module.
+#[path="fork_child_credits.rs"]
+pub(crate) mod child_credits;
 use core::ffi::c_void;
 use core::mem::size_of;
 use core::ptr::{addr_of, addr_of_mut, read_volatile, write, NonNull};
@@ -54,6 +56,7 @@ impl ControlPending {
 pub(crate) struct Carrier {
     handle:Handle,parent:usize,child:usize,request:usize,cpu:i32,initial_args:[u64;6],
     physical:u64,nonce:u64,root:u64,start:u64,length:u64,phase:u32,error:i32,
+    owned_credits:Option<child_credits::ChildCredits>,
     identity:GuestIdentity,control:ControlPending,bytes:[u8;128],
 }
 unsafe extern "C" { fn do_syscall(request:*mut SyscallRequest,cpu:CInt)->CLong; }
@@ -106,6 +109,7 @@ pub(crate) unsafe extern "C" fn process_fork_guest_carrier_create_current_v1(
     write(raw,Carrier{handle:Handle::EMPTY,parent:parent as usize,child:child as usize,
         request:request as usize,cpu:(*parent).cpu_id,initial_args:original,physical:0,nonce:0,root:original[3],
         start:original[1],length:original[2],phase:SUBMITTED,error:0,
+        owned_credits:None,
         identity:GuestIdentity::ZERO,control:ControlPending::ZERO,bytes:[0;128]});
     let physical=crate::x86_memory_helpers::virt_to_phys(addr_of_mut!((*raw).bytes).cast::<c_void>())as u64;
     if physical==0||physical%8!=0||physical.checked_add(128).is_none(){crate::mem_helpers::kfree(raw.cast());return EINVAL;}

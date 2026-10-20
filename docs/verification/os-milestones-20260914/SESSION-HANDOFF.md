@@ -1,3 +1,41 @@
+## Current manual run — source integrated, SDK compiler inputs ready
+
+Invocation20261020T033802 uses verified100% included allowance/0%reserve,
+account reset0%; no paid/API billing. Prior97% invocation ended; its helper
+remains parked. Scratch UUID2a5768c8-718d-4914-bdc0-6b32c5a92a52 and mutex27:4
+were reconciled; existing resource/ownership/exclusion controls remain.
+
+Failed20-launch physical026631f6 independently passes25client reaps, exactCID/
+QEMU removal, emptycensuses/processgroups and lease release. Semantic failure
+'exact ten-round evidence' remains;14 reported leaders are not strict20/4x credit.
+Collector safe-failure diagnostic correction passed2static compiles/8fixtures;
+fresh init-only ordinary stage+consumer joined0/18.163s, actual review pending.
+No new guest has launched in this invocation.
+
+Reviewed Rust child-credit primitive and consuming SAME-request owned-offload
+are integrated. Actual3+4body tests pass; original fixturecompile failure is
+preserved. Fullcurrent native/legacy crate proof predates these last changes;
+new fullcrate/link/defaultcaller/durable request storage/ACK/native remain pending.
+
+SDK strict66source/81copy/11runtime/102publication materialization independently
+passes7930a2c0/18bb92be, with existing Linux MM providers and Rust pointer ABI.
+No fourthcompiler has run; genuine publication/finalrelease/admission next.
+Practical14/35, M00/M10 complete only on tested205; behaviors26/Rust17/14 hold.
+Targets4x appthroughput (fixed2/44.160327 baseline;20<=110.4008175s) and1.5x
+milestone-closure rate remain targets, not claimed results.
+
+## Current manual resume after user-reported usage reset — 2026-10-20
+
+User explicitly authorizes continuous work and encourages more CPUs/RAM.
+This NEW invocation uses100% included weekly allowance and0% usage reserve;
+billing/auth/service stops remain enforced. Old97% invocation is retired;
+its below historical constraints do not configure this new run. Resume the
+saved thread through the canonical launcher; no state editing/handoff helper.
+Current concrete work and4x throughput/1.5x milestone-closure targets are in
+PARALLEL-RESUME.md and current VELOCITY.md. Read the stopped supervisor handoff
+for the latest failed20-launch run, accepted child-owner tests and interrupted
+last integration before using older entries below. Preserve every original.
+
 ## Current — SDK compiler feedback closed; twenty-launch case next
 
 Source checkpoint01538f00 is pushed/fetched. All5 integrated guest-control

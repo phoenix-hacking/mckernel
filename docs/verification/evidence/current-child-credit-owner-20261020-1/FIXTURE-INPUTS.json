@@ -1,0 +1,146 @@
+{
+  "actual_layouts": "whole current abi.rs, distinct real Thread/Process/ProcessVm/CpuLocalVar objects",
+  "actual_release": "10 unchanged production release_thread/refcount/action bodies with real SeqCst decrement",
+  "adapters": [
+    "CLS current pointer",
+    "Linux allocator for Carrier only",
+    "pointer physical-address adapter",
+    "unexecuted destructor bridges fail closed",
+    "do_syscall adapter always-95 and asserted0calls"
+  ],
+  "new_C_compute": 0,
+  "new_tests": 3,
+  "not_proven": [
+    "real CPU reservation acquisition/release",
+    "guest offload/hardware",
+    "current do_fork caller integration",
+    "last-reference destructor"
+  ],
+  "old_tests_replayed": 0,
+  "rows": [
+    {
+      "actual_source": {
+        "bytes": 76151,
+        "path": "/home/holden/mckernel/kernel/rust/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      "fixture": {
+        "bytes": 76151,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-child-credit-owner-1/fixture/abi.rs",
+        "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e"
+      },
+      "whole_module_equal": true
+    },
+    {
+      "actual_source": {
+        "bytes": 8131,
+        "path": "/home/holden/mckernel/kernel/rust/fork_control_registry.rs",
+        "sha256": "246838be1f3a2d71cef7e975de8d17f908bfb89010bd5be9741b81b452830113"
+      },
+      "fixture": {
+        "bytes": 8131,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-child-credit-owner-1/fixture/fork_control_registry.rs",
+        "sha256": "246838be1f3a2d71cef7e975de8d17f908bfb89010bd5be9741b81b452830113"
+      },
+      "whole_module_equal": true
+    },
+    {
+      "actual_source": {
+        "bytes": 15039,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-child-credit-owner-1/source/kernel/rust/fork_control_guest.rs",
+        "sha256": "f9a1d4f5db990df4c1cde12a2b8903c44cff78779340c5040e151f7440845676"
+      },
+      "fixture": {
+        "bytes": 15039,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-child-credit-owner-1/fixture/fork_control_guest.rs",
+        "sha256": "f9a1d4f5db990df4c1cde12a2b8903c44cff78779340c5040e151f7440845676"
+      },
+      "whole_module_equal": true
+    },
+    {
+      "actual_source": {
+        "bytes": 10770,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-child-credit-owner-1/source/kernel/rust/fork_child_credits.rs",
+        "sha256": "98b98b401bc2f52970d1ba1a537f06ad3fb4bc0f5990247d9af07a30b1e8d262"
+      },
+      "appended_test_only": {
+        "bytes": 7607,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-child-credit-owner-1/credit_tests.rs",
+        "sha256": "c1d6f5234a64b2af1c242d288f07c31fb01c7e3e1d88e4ff5cd90d9508735f39"
+      },
+      "fixture": {
+        "bytes": 18377,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/current-child-credit-owner-1/fixture/fork_child_credits.rs",
+        "sha256": "4561399f614e2f24db6236a41a4db3da8b24247b44898da93920fd3eee7dc618"
+      },
+      "production_prefix_byte_equal": true
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_ref_release_should_destroy_result",
+      "sha256": "68ec02cdbef6dfe1cfe26c7edb8ad16d3328cb688b0315674ad2f399375ba9ae",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_ref_dec_and_test_result",
+      "sha256": "fb5e2c50912502c04d4c7fbb29dfaae13c8ab32cd7095d38af644aceae36c83d",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_ref_atomic_at",
+      "sha256": "ae25a1a38969c96a71ffeb8a8ebe7ae99fe6b3861a2bec91f957003caa47a081",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_ref_dec_and_test_direct_result",
+      "sha256": "62aa384bc118b756fb4dde303642930e2fc197e907378b1e6353ffdbc554a789",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "field_ptr",
+      "sha256": "5eee6b6707ebadfbd1f88427b05a50816abc11f76421049b9b80cab2319d9781",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_thread_profile_result",
+      "sha256": "ccb99c56c70f1ccc43ad943ac9a385613c66e40f398d8cb90bbe108976edddbf",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_thread_action_result",
+      "sha256": "9c0668a8fe6f5bb46beeb7508d411a9395670f401cc615a4b2a7d424d7cafc3e",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_vm_action_result",
+      "sha256": "7ae272f125c47fd80cf4b1c16344acafdd3d48c63e8fed1d48fb8472ec6d37fa",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "process_release_thread_body_result",
+      "sha256": "0cff54ad4dece33e745d5093075874850ea5b0105eb521331404752960facb8a",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "release_thread",
+      "sha256": "7e95d7296dcfad7abdf7919191623904f153e94f32bb22e5de30ea5e5cfd4004",
+      "source": "/home/holden/mckernel/kernel/rust/process_helpers.rs"
+    },
+    {
+      "actual_body_equal": true,
+      "item": "cpu_pause",
+      "sha256": "ce7b9211f2921a0f0068a1e55134b41fc17a49b4e1fd7dd57d70c35166fb7915",
+      "source": "/home/holden/mckernel/kernel/rust/x86_cpu_helpers.rs"
+    }
+  ],
+  "schema": "mckernel.actual-current-child-credit-fixture.v1"
+}

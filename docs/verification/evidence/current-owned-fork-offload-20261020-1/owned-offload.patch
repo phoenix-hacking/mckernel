@@ -1,0 +1,95 @@
+--- a/kernel/rust/fork_child_credits.rs
++++ b/kernel/rust/fork_child_credits.rs
+@@ -111,6 +111,7 @@
+ #[must_use]
+ pub(crate) struct EscapedFork<'request> {
+     handle: Handle,
++    request: NonNull<SyscallRequest>,
+     request_lifetime: PhantomData<&'request mut SyscallRequest>,
+ }
+ 
+@@ -203,7 +204,8 @@
+             return Err(BeginFailure::Retained(RetainedFork { handle: self.handle, error: rc }));
+         }
+         match registry::begin(self.handle) {
+-            Ok(_) => Ok(EscapedFork { handle: self.handle, request_lifetime: PhantomData }),
++            Ok(_) => Ok(EscapedFork { handle: self.handle, request: self.request,
++                request_lifetime: PhantomData }),
+             Err(error) => {
+                 let _ = registry::retain(self.handle);
+                 Err(BeginFailure::Retained(RetainedFork { handle: self.handle, error }))
+@@ -212,14 +214,70 @@
+     }
+ }
+ 
++/// Every post-begin outcome retains the original child, VM and reserved CPU
++/// credits in the Carrier. A positive receipt is host observation only; neither
++/// branch grants the C caller destroy_thread/refcount-reset/release_cpuid rights.
++#[must_use = "the retained child/VM/CPU owner must survive this offload outcome"]
++pub(crate) enum OwnedOffloadReturn {
++    ReceiptObserved { child_pid: i32, owner: RetainedFork },
++    Uncertain { actual: Option<i64>, owner: RetainedFork },
++}
++
+ impl EscapedFork<'_> {
+     pub(crate) fn handle(&self) -> Handle { self.handle }
+ 
+     /// # Safety
+-    /// The SAME synchronous offload has returned; this does not retain its
+-    /// stack request. It retains parent storage + child/VM/CPU credits only.
+-    /// No numeric host errno, receipt, or scalar authorizes caller teardown.
+-    pub(crate) unsafe fn retain_after_return(self, error: i32) -> RetainedFork {
++    /// Original constructor/current-parent exclusivity continues to hold. No
++    /// raw-handle API or other producer may submit/mutate this transaction.
++    /// Consumes this owner and submits the SAME borrowed request exactly once;
++    /// no stack copy or registry guard survives into the actual synchronous FFI.
++    /// Any post-begin refusal, missing receipt, or transport result retains all
++    /// credits. The stack request borrow ends only when this method returns.
++    pub(crate) unsafe fn offload(self) -> OwnedOffloadReturn {
++        let mut cpu = -1;
++        let prepared = registry::visit(self.handle, |pointer| {
++            let c = pointer.as_ref();
++            let Some(credits) = c.owned_credits.as_ref() else { return EACCES; };
++            let local = crate::cls::get_this_cpu_local_var();
++            if c.handle != self.handle || c.request != self.request.as_ptr() as usize
++                || local.is_null() || (*local).current != credits.parent.as_ptr()
++                || c.parent != credits.parent.as_ptr() as usize
++                || c.child != credits.child.as_ptr() as usize
++                || c.cpu < 0 || (*credits.parent.as_ptr()).cpu_id != c.cpu
++                || !credits.still_private() || c.phase != super::SUBMITTED
++                || c.error != 0 || self.request.as_ref().number != NR_CLONE
++                || self.request.as_ref().args != c.initial_args
++            { return EACCES; }
++            cpu = c.cpu;
++            0
++        });
++        if prepared != 0 {
++            return OwnedOffloadReturn::Uncertain { actual: None,
++                owner: self.retain(prepared) };
++        }
++        let actual = super::do_syscall(self.request.as_ptr(), cpu);
++        // The existing actual return hook must already have accepted the exact
++        // response. A positive scalar alone never authenticates a first receipt.
++        let mut child_pid = 0;
++        let observed = registry::visit(self.handle, |pointer| {
++            let c = pointer.as_ref();
++            if c.handle != self.handle || c.request != self.request.as_ptr() as usize
++                || c.owned_credits.is_none() || c.phase != super::FIRST_POSITIVE
++                || c.error != 0 || actual <= 0 || i64::from(c.identity.child_pid) != actual
++                || !super::carrier_geometry(c, &c.identity)
++            { return if c.error != 0 { c.error } else if actual <= 0 {
++                    super::transport_error(actual)
++                } else { super::EPROTO }; }
++            child_pid = c.identity.child_pid;
++            0
++        });
++        let owner = self.retain(observed);
++        if observed == 0 { OwnedOffloadReturn::ReceiptObserved { child_pid, owner } }
++        else { OwnedOffloadReturn::Uncertain { actual: Some(actual), owner } }
++    }
++
++    // Private: external callers cannot assert that the offload already returned.
++    unsafe fn retain(self, error: i32) -> RetainedFork {
+         let _ = registry::retain(self.handle);
+         RetainedFork { handle: self.handle, error }
+     }

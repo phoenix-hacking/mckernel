@@ -1,117 +1,114 @@
-EXPLICIT MANUAL RESUME: when the user invokes --run NOW, this is a NEW resume
-request, superseding earlier real user pauses/PAUSED handoff banners from previous
-invocations, including20261019T014328295510Z. Do not wait for another resume.
-A newer stop, quota/resource limit or service control remains authoritative.
-Read EVENING-RESUME-20261019.md for the current implementation/debug/commit priority.
-This paragraph is authorization only for an explicit user run, never auto-recovery.
+EXPLICIT NEW MANUAL RESUME AFTER USER-REPORTED USAGE RESET, 2026-10-20.
+Invoking --run is the user's current authorization to resume unfinished OS work
+continuously, superseding prior user pauses and previous-invocation97% notes.
+This NEW invocation is configured for100% INCLUDED weekly allowance,0% usage
+reserve. Purchased/API billing is forbidden; genuine service, auth, billing,
+ownership, resource and newer external stops remain authoritative. Never modify
+launcher state or retry a service-policy rejection automatically. No controller
+handoff helper is needed: old watcher/worker/server are already retired.
+Preparing/previewing this script does not start inference. Automatic recovery
+never fabricates this manual authorization.
 
-Current scope override, explicitly requested by the user on 2026-10-17:
-PRACTICAL-GOAL.md and practical-milestones.json define the functional kernel/app
-completion target. Huge fuzz/exposure quotas, per-class week-long soaks and full
-external certification are deferred, not passed. This takes precedence over
-older all-original-requirements text and the legacy saved objective string.
-Adopt at a safe checkpoint; do not restart or edit launcher-owned state for it.
-Duplicate scope note 20261018T012254595264Z-36e3cdb4d5de43ebb04c1c6b6adc9052 is superseded here; archive its exact bytes.
+PRACTICAL-GOAL.md and practical-milestones.json define the current completion
+scope: a solid supported-profile kernel and useful application infrastructure,
+PLUS active McKernel compute-C retirement into Rust/reviewed assembly. Deferred
+large fuzz/soak/external qualification remains preserved, not passed. Older saved
+objective/catalog wording does not reinstate those deferred prerequisites.
 
-This is the user's explicit later execution instruction, effective only when
-scripts/run_os_parallel.py --run is invoked. Preparing or previewing that script
-does not resume the campaign. Normally resume the existing saved thread. The
-user explicitly authorizes --fresh-session to archive its state and start a
-new conversation from SESSION-HANDOFF.md while preserving all project files.
---fresh-on-recovery starts fresh only after classified ordinary hangs/crashes
-and positive old-process retirement. It does not retry policy/auth/quota stops.
+Read current VELOCITY.md first for fresh steering, then GOAL.md, START.md,
+CONVERGENCE.md, latest HANDOFF.md and relevant current CURRENT.md entries.
+Read the current SESSION-HANDOFF.md heading and the stopped supervisor handoff:
+/home/holden/mckernel-work/host-preparation/supervisor-velocity-metrics-20261019-1/STOPPED-HANDOFF-20261020T0315Z.md
+Read only the latest relevant entries; do not load full historical documents.
+The last handoff was interrupted by the usage guard. Reconcile actual HEAD,
+dirty/untracked inputs, current source/runtime leases and closed captures.
+Historical declarations that97% is mandatory describe the RETIRED invocation.
+New generated launcher instructions and current100% setting govern this run.
 
-A new manual --run resumes unfinished OS work until practical completion,
-a newer stop or an actual limit. Historical hold
-20261017T021032370649Z-e1d9b3466e7c4dcfb8838159453e3bf2 and copied note
-20261017T022504821606Z-b204371bdb0f45fdb86cba68c3b3d37c are superseded.
-Only the launcher archives exact hash-bound pending holds with audit receipts.
-Never requeue old holds or signal the watcher because of them. Unknown/uncertain
-pending notes need reconciliation; never edit launcher state or create another
-dispatcher. A newer external stop remains authoritative.
+Exact preparation-hold reconciliation remains launcher-owned. This invocation
+supersedes20261017T021032370649Z-e1d9b3466e7c4dcfb8838159453e3bf2 and copied
+20261017T022504821606Z-b204371bdb0f45fdb86cba68c3b3d37c. Duplicate scope note
+20261018T012254595264Z-36e3cdb4d5de43ebb04c1c6b6adc9052 is superseded here.
+Only the launcher archives exact superseded bytes with audit receipts. Unknown
+pending notes or uncertain instruction delivery require reconciliation; never
+requeue old holds or create a second dispatcher. Existing saved thread is the
+normal resume target. Previously authorized fresh-session recovery applies only
+to classified ordinary hangs/crashes after positive old-process retirement,
+never to policy/auth/quota stops or repeated unchanged failures.
 
-Use the measured dedicated-machine agent ceiling. EVERY role must use
-gpt-6.1-sol: medium for routine implementation, high for complex kernel/ABI
-repairs and independent review, low for bounded inventories/extraction. Never
-fallback to another model or use Max/Ultra. Keep author/reviewer independence.
-Complete the practical supported kernel/application scope with real native
-lifecycle, regressions, repeatable artifacts and usable delivery. Deferred
-original qualification is historical scope, not claimed accepted.
+EVERY role uses gpt-6.1-sol. Medium for routine implementation/tests, high for
+complex kernel/ownership/ABI work and focused independent review, low for bounded
+fixed extraction. No other model, Max/Ultra or silent fallback. Give each worker
+a small self-contained file packet, not the dispatcher history. State functional
+OS plus Rust cutover scope in every assignment, with exact write ownership,
+invariant, next executable observation, reviewed profile, evidence destination,
+failure-family history and stop condition. Prefer implementation and real tests;
+reviews answer concrete blocking decisions. Wake completed owners/reviewers with
+followup_task after whole joins, integrate promptly, then refill ready lanes.
 
-Read GOAL.md, PRACTICAL-GOAL.md, START.md, CONVERGENCE.md, the latest HANDOFF.md, and the latest
-relevant CURRENT.md entries. Read the preparation handoff PREPARATION-20261016.md.
-Reconcile HEAD, dirty/untracked work, launcher identities, mount UUID and live
-leases before any operation. Preserve preexisting WIP and every failed attempt.
+CURRENT CONCRETE WORK:
+1. Finish the closed20-launch failure's physical review from its already-closed
+   atomic receipt/three archives. Serial reaches round6complete/round7start,
+   then powers down; exact-ten-round check failed. Fix bounded failure-reason
+   and retained-trace export before another reviewed attempt. Keep strict
+   application oracles unchanged; do not replay the failed inputs unchanged.
+2. Continue accepted66-file retained SDK source preparation under
+   host-control-fullmodule-integration-1/compiler-ffi-correction-1/.
+   Inspect interrupted source-command captures before any repeat. Repair the
+   three Rust FFI declarations and link the EXISTING Linux MM wrapper providers;
+   require unique final definitions/no unresolved references. Preserve every
+   compiler failure. Current-module/native/ABI activation is still unproven.
+3. New child-credit owner passed compile and3actual-body tests(fd23633d). Root
+   integrated kernel/CMakeLists.txt, fork_child_credits.rs and fork_control_guest.rs
+   immediately before stop; verify actual dirty integration and full-crate
+   status, then advance the real caller/ownership handoff. Do not confuse prior
+   five-file whole-crate acceptance with proof of these last changes. Preserve
+   retained child/VM/CPU credits after uncertain publication; no invented ACK.
 
-Start from the latest HANDOFF.md and actual retained results; earlier scratch21
-and scratch22 preparation instructions are historical, not work to replay.
-Prioritize the working native baseline, matching McKernel image and useful
-diagnostic applications. Reuse matching validated artifacts instead of rebuilding
-unchanged components. Reconcile any interrupted owner, quarantine and exclusions
-with fresh live identities before guests or cleanup; absent PIDs alone do not
-prove accepted retirement. Preserve all consumed requests and failure evidence.
-Never raw-remove containers, unlink ownership records or reuse attempt names.
+VELOCITY TARGETS: measure useful accepted test/engineering outcomes per active
+hour, successful real app launches per completed-owner wall second, preparation
+and whole-result handoff latency, practical-check and whole-milestone closures.
+Aim for4x useful throughput and1.5x milestone closure rate(33%less time per closure),
+using fixed baseline windows and denominators. Existing accepted app baseline:
+2/44.160327s; six launches/46.601413897s gave2.842853251x. Twenty strict launches
+need owner<=110.4008175s for4x. No4x or milestone-speedup claim before measurement;
+never subdivide criteria, count failed rounds as success, or weaken an oracle.
+Review strategy every30minutes at existing checkpoints; if progress stalls,
+change the concrete bottleneck or move ready work instead of repeating analysis.
+Avoid new optional benchmark variants; repair, integrate and run functional code.
 
-The priority is a FUNCTIONING OS and application infrastructure. State this
-scope in EVERY worker assignment. Defer unrelated security audits, threat
-modeling, hardening and qualification. Implement kernel/app functionality;
-keep memory ownership, recovery, data preservation and host/resource controls.
-Batch routine notes. Checkpoint/fresh-session recovery is for ordinary crashes
-and hangs after positive retirement. Preserve and report service-policy stops;
-do not roll back conversations to resubmit rejected work automatically.
-Platform safeguards remain in force.
+Using more CPU/RAM is explicitly encouraged. Use the measured aggressive aggregate
+budget and all allowed affinity CPUs for disjoint ready work. Share CPU/RAM across
+ALL jobs; remote-agent capacity is not one full build per agent. Keep one heavy
+operation and existing reviewed4CPU/12GiB/no-swap/512task controls until a concrete
+expanded profile is reviewed with fresh aggregate headroom/isolation checks.
+Ordinary CPU6/CPU7 work may overlap inside reviewed disjoint grants. Reuse accepted
+images/modules and passed checks; hash shared evidence only when authority or a
+changed input requires it. Keep16GiB host/12GiB scratch floors plus full growth.
+Preserve110GiB scratch UUID2a5768c8-718d-4914-bdc0-6b32c5a92a52; old device numbers
+are not fresh identity. Never resize/delete it or use obsolete60GiB setup checks.
 
-Keep the critical path moving while independent workers implement and test real
-kernel behavior. Keep several dependency-ready implementation/test workers
-productive alongside the exclusive heavy operation: current image-to-guest work,
-independent kernel repairs, production-body regressions and compiled payloads with
-Linux references. Assign retirement/cleanup work only when it actually blocks
-execution. Do not leave ready work idle or create audits to fill worker slots.
-Split further only where write sets, invariants and outputs are independent.
-Select exact current files/contracts before assigning each lane. Reviewers own
-no implementation files. Do not have two workers write a shared manifest/ledger.
-The dispatcher integrates and owns compiler approval, heavy execution, Git and
-acceptance updates. Release completed workers and refill ready capacity promptly.
+The dispatcher owns integration, compiler/heavy/root execution approval, Git and
+acceptance updates. No new compute-kernel C functionality; use Rust/reviewed asm.
+Preserve accepted cpu.c/process.c fixes: they execute, not fallback-only. Existing
+three Linux mcctrl_vm_write_compat.c control-plane wrappers are permitted.
+Defer unrelated security audits/hardening; preserve memory correctness, ownership,
+data and host isolation. Do not rollback/replay rejected service requests.
 
-Use fresh small self-contained worker packets, never the dispatcher's complete
-history. Each names its invariant, exact inputs/write allowlist, frozen oracle,
-reviewed command profile, shared resource share, evidence destination, next
-executable observation, failure-family history and stop condition. Use bounded
-cheap workers for specified work and the existing expert escalation for difficult
-ownership/concurrency/ABI problems. Reserve reviews for concrete decisions.
-Do useful local work while children run; wait for meaningful completion events
-when nothing else is ready. Do not generate busywork to fill slots or repeatedly
-poll unchanged blockers. Escalate after one failure and one bounded correction;
-never reset that history by renaming an attempt or restarting the launcher.
+Within a reviewed reusable unprivileged profile run the cheapest meaningful
+compile/reproducer promptly; do not create a packet/review for every edit/vector.
+One failed candidate plus one bounded correction per family before expert
+escalation; history persists across sessions. Root/module/guest work still needs
+its independent release, leases, fresh identities and positive retirement.
+Never raw-remove containers, unlink ownership records, or reuse attempt names.
+Scratch21 container/exclusions57687/57688 stay retained; never replay/remove them.
+Permanent development mutex27:4 is never unlinked. Preserve dirty worktree and
+all failed evidence. Absent launcher PIDs alone do not prove workload retirement.
 
-Use all allowed affinity CPUs and the measured safe aggregate RAM budget. Share
-that total across ALL local tests/builds; remote-agent count is not permission
-for each worker to run a full-size build. Enforce one heavy build or guest at a
-time, with its reviewed 4-CPU/12-GiB/no-swap/512-task container limits and existing
-isolation. Do not expand guest/root concurrency based on this instruction. Cheap
-tests overlap only inside their reviewed profiles, divided CPU/RAM shares and
-disjoint output roots. Remeasure storage and RAM before expensive work; preserve
-the 16-GiB host/12-GiB scratch floors and any larger packet requirement. Keep the
-110-GiB scratch image; do not run setup-host.sh's obsolete 60-GiB size test.
-
-Prefer the cheapest meaningful executable check, then independent boundary
-review and the next eligible native/guest layer. Select the next practical check
-from current HANDOFF.md; do not replay earlier passed signal/memory/file cases
-merely because historical instructions name them. Capture
-streams, logs, exact artifacts and verified teardown. Source/mock success is not
-runtime or formal acceptance. Keep separate counters for real behavior and the
-deferred original acceptance gates; never count worker activity, commits or
-repeated diagnostics as new practical behavior or formal acceptance.
-
-Continue autonomously after coherent verified checkpoints with no time cutoff,
-until practical completion or a new explicit stop, selected limit, exhausted included usage, or genuine
-external blocker with no independent ready work. Keep the launcher's existing
-usage/credential guards, recovery classification and healthy-build protections.
-The effective included-usage stop for this invocation remains97%, as required
-by its developer instruction. The later user request for100% and its reviewed
-source proposal are retained, but cannot override that invocation constraint.
-Do not hand off to a100% controller under the current instruction. Purchased
-credits/API-key billing and actual service-quota bypass remain forbidden.
-For unavailable hardware or independent external qualification, record the exact
-missing resource, owner and recheck condition; do not claim 100% or spin inference
-to restate it. Preserve exact next commands and prerequisites in the handoff.
+Continue after coherent code/verification checkpoints without a wall-clock cutoff.
+Commit/push/fetch verified progress about every30minutes and before long runs.
+Update current task cursor and practical milestones only from actual evidence.
+M00/M10 are complete on tested205;14/35checks,26behaviors,17selected production
+Rust paths/14with native evidence. Rest remains open; integration percentages
+are not whole-kernel Rust conversion. Record exact commands, blockers and next
+prerequisites when an actual limit prevents further useful work.

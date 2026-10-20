@@ -55,9 +55,9 @@ OBJECTIVE = (
 TERMINAL_CODES = {"complete": 0, "paused": 10, "blocked": 20,
                   "usageLimited": 21, "budgetLimited": 22}
 LIMIT_ERRORS = {"usageLimitExceeded", "sessionBudgetExceeded"}
-# The user selected continuous work through effectively the weekly allowance.
-# The user requested a 3% reserve for in-flight work and delayed usage reports.
-INCLUDED_USAGE_STOP_PERCENT = 97
+# The user selected continuous work through the full included allowance.
+# Purchased credits/API-key billing remain forbidden; real service limits still stop work.
+INCLUDED_USAGE_STOP_PERCENT = 100
 USER_INPUT_METHOD = "item/tool/requestUserInput"
 AUTONOMY_REPLY = (
     "Automatic launcher response applying the user's standing instruction; "
@@ -614,7 +614,7 @@ class Campaign:
                 not math.isfinite(used) or not 0 <= used <= 100):
             self.stop_reason, self.stop_now = "included_usage_unknown", True
         elif used >= INCLUDED_USAGE_STOP_PERCENT:
-            # Leave room for already-running turns and delayed usage reports.
+            # Use the full included allowance; service, billing and auth stops still win.
             self.stop_reason, self.stop_now = "included_usage_guard", True
         else:
             old_balance = (previous.get("credits") or {}).get("balance")
@@ -685,7 +685,7 @@ class Campaign:
         continuation = (
             "This invocation has no time limit. The user explicitly requests continuous "
             "work until the entire OS objective is accepted or the included-plan "
-            "usage guard stops this invocation; never spend purchased credits. "
+            "usage guard stops this invocation at 100%; never spend purchased credits or use API-key billing. "
             "Earlier work-window endings, checkpoint pauses and statements that a window "
             "is authoritative are historical and do not pause this invocation. Continue "
             "after checkpoints. Repair project-owned prerequisites and pursue independent "
@@ -892,7 +892,7 @@ class Campaign:
             "for another resume instruction. Begin the next authorized engineering task.\n"
             "Preserved prior instruction reference: " + previous + ".\n"
             "A new stop received during or after this invocation remains authoritative. "
-            "Preserve signal, quota/97% reserve, billing, ownership/resource and service "
+            "Preserve signal, quota/100% included limit, billing, ownership/resource and service "
             "controls; do not replay rejected work or expired execution releases. "
             "The launcher's automatic recovery does not issue this manual authorization.\n"
             + (("Current invocation scope and execution instructions:\n" + note) if note else "")

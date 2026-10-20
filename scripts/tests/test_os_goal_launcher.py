@@ -448,7 +448,7 @@ class CampaignTests(unittest.TestCase):
         self.assertEqual(state["last_rate_limits"]["credits"]["balance"], "0")
 
     def test_included_limit_guard_stops_before_starting_inference(self):
-        for percent in (97, 100):
+        for percent in (100,):
             with self.subTest(percent=percent):
                 rpc = FakeRPC(self.args)
                 rpc.limits["primary"]["usedPercent"] = percent
@@ -458,13 +458,18 @@ class CampaignTests(unittest.TestCase):
                                      for m, _ in rpc.calls))
                 self.assertFalse(watcher.should_restart(21, state))
 
-    def test_included_usage_below_97_percent_keeps_the_requested_reserve(self):
-        self.assertEqual(launcher.INCLUDED_USAGE_STOP_PERCENT, 97)
-        rpc = FakeRPC(self.args, steps=[lambda r: (r.completed(), r.status("complete"))])
-        rpc.limits["primary"]["usedPercent"] = 96.9
-        state = self.run_campaign(rpc, 0)
-        self.assertIsNone(state["stop_reason"])
-        self.assertTrue(any(method == "thread/start" for method, _ in rpc.calls))
+    def test_included_usage_through_99_percent_uses_full_included_allowance(self):
+        self.assertEqual(launcher.INCLUDED_USAGE_STOP_PERCENT, 100)
+        for percent in (97, 99, 99.9):
+            with self.subTest(percent=percent):
+                # Each successful campaign leaves a completed saved goal.
+                self.directory = Path(self.temp.name) / ("usage-" + str(percent))
+                self.directory.mkdir()
+                rpc = FakeRPC(self.args, steps=[lambda r: (r.completed(), r.status("complete"))])
+                rpc.limits["primary"]["usedPercent"] = percent
+                state = self.run_campaign(rpc, 0)
+                self.assertIsNone(state["stop_reason"])
+                self.assertTrue(any(method == "thread/start" for method, _ in rpc.calls))
 
     def test_invalid_included_usage_refuses_inference(self):
         for percent in (float("nan"), float("inf"), -1, 101, True, None, "97"):
@@ -977,7 +982,7 @@ class CampaignTests(unittest.TestCase):
                                 rpc.on_event.__self__.on_signal(2, None)
                             else:
                                 rpc.emit("account/rateLimits/updated", {"rateLimits": {
-                                    "primary": {"usedPercent": 97}, "credits": {"balance": "0"}}})
+                                    "primary": {"usedPercent": 100}, "credits": {"balance": "0"}}})
                         return result
 
                 rpc = StopDuringSeedRPC(self.args, goal("paused"))
