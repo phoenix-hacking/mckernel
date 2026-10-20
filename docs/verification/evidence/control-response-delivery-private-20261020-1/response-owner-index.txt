@@ -1,0 +1,17 @@
+30:    fork_ingress_pending: bool,
+46:#[must_use = "restore the exact response before ending the ingress freeze"]
+47:pub(crate) struct ForkIngressResponse<M: ResponseMemory> {
+53:impl<M: ResponseMemory> ForkIngressResponse<M> {
+57:impl<M: ResponseMemory> Drop for ForkIngressResponse<M> {
+62:        if let Some(response) = self.response.take() { core::mem::forget(response); }
+214:            fork_ingress_pending: false,
+515:        if call.kernel || call.fork_ingress_pending {
+590:    pub(crate) fn take_fork_ingress_response(&mut self, handle: u64, serial: u64,
+591:        expected: &Request) -> Result<ForkIngressResponse<M>>
+595:        if call.cancelled || call.fork_ingress_pending || call.completion.is_some() { return Err(-16); }
+600:        call.fork_ingress_pending = true;
+601:        Ok(ForkIngressResponse { response: Some(response), request: expected.clone(), worker: handle, serial })
+606:    pub(crate) fn restore_fork_ingress_response(&mut self, ticket: &mut ForkIngressResponse<M>) -> Result {
+610:        if !call.fork_ingress_pending || call.response.is_some() || call.completion.is_some() { return Err(-16); }
+613:        call.fork_ingress_pending = false;
+797:        if call.kernel || call.fork_ingress_pending {

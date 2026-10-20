@@ -1,0 +1,74 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "snapshot",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--core=0",
+        "--nofile=256",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/root_manual_snapshot_two_round_native.py",
+        "--bindings-sha256",
+        "b1923eb967f965843249a638e0f6993577e0fef534f721731f3b5614c38e0e06",
+        "--terminal",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-physical-review-20261019-1/decision.json",
+        "--terminal-sha256",
+        "12002bacc9e3bd3754e456906adc31ab0a1a3f2a6bea031acad5a871a6a9c70d"
+      ],
+      "profile": "snapshot",
+      "role": "LAST-snapshot",
+      "status_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/native-packet-1/captures/00-LAST-snapshot/status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/native-packet-1/captures/00-LAST-snapshot/stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/native-packet-1/captures/00-LAST-snapshot/stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 7014,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1/FINAL-TWO-ROUND-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json",
+    "sha256": "1e87fa6260345c28b629e0c6bb44b4d6723c6c9a8bfa2fe3cccbc84cc67b4f2c"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1/FINAL-TWO-ROUND-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json"
+}

@@ -1,0 +1,37 @@
+error[E0425]: cannot find function `fork_ack_publication_frozen` in this scope
+    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/actual-control-delivery.rs:2724:16
+     |
+2724 |             || fork_ack_publication_frozen(&mut slots, token, cpu)
+     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `fork_publication_frozen`
+...
+3092 | fn fork_publication_frozen(slots: &[Option<Entry>], parent: Token, cpu: i32) -> bool {
+     | ------------------------------------------------------------------------------------ similarly named function `fork_publication_frozen` defined here
+
+error[E0425]: cannot find function `publish_fork_ack_in_slots` in this scope
+    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/actual-control-delivery.rs:2727:22
+     |
+2727 |         let result = publish_fork_ack_in_slots(&mut slots, token, cpu, send);
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0599]: no method named `fixture_response_identity_held` found for struct `smp_application_syscall::Mailbox<M>` in the current scope
+    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/actual-control-delivery.rs:3286:21
+     |
+ 917 | pub(crate) struct Mailbox<M: ResponseMemory> {
+     | -------------------------------------------- method `fixture_response_identity_held` not found for this struct
+...
+3286 |  assert!(p.syscalls.fixture_response_identity_held(0x1c00000));
+     |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method not found in `smp_application_syscall::Mailbox<storage::SyscallResponse>`
+
+error[E0599]: no method named `fixture_response_identity_held` found for struct `smp_application_syscall::Mailbox<M>` in the current scope
+    --> /home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/actual-control-delivery.rs:3287:63
+     |
+ 917 | pub(crate) struct Mailbox<M: ResponseMemory> {
+     | -------------------------------------------- method `fixture_response_identity_held` not found for this struct
+...
+3287 |  assert_eq!(request.response(),0x1d00000);assert!(!p.syscalls.fixture_response_identity_held(request.response()));
+     |                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method not found in `smp_application_syscall::Mailbox<storage::SyscallResponse>`
+
+error: aborting due to 4 previous errors
+
+Some errors have detailed explanations: E0425, E0599.
+For more information about an error, try `rustc --explain E0425`.

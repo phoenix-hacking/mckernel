@@ -1,3 +1,33 @@
+## Current — four real Rust applications accepted in one 205 boot
+
+Independent semantic33de5fc5 and physicaldb3dacce PASS the fixed two-round
+selected205 diagnostic: four real Rust app launches, exact387/254-byte oracles
+in each round, strict startup/assigned CPUs, genuine overlap and first-round
+reaping before the second round. One owner46.255768s; root seven-stage chain
+closed2026-10-20T00:54:23.972940Z. Final independent mapping artifact to closed
+feedback78.97s (explicit immutable-report mtime witness). Physical release is
+accepted separately; latest exclusive-operation predecessor isdb3dacce.
+
+Compared with the accepted two-app owner44.160327s, applications per owner wall
+time rose1.9094x. This is bounded batching throughput, not overall engineering
+velocity. New logical cases/Rust retirements0; counts remain26 behaviors,
+12/35 practical checks and17 production/14 selected native Rust paths. All14
+whole milestones and M12 quotas remain open. Accepted source/ordinary/runtime
+records are retained under ../evidence/current-host-pair-205-two-rounds-20261019-1/;
+large archives/binaries remain privately pinned by finite descriptors.
+
+Next concrete work: the separate two-complete-cycle205 collector/oracle uses
+the same tested image/module tuple and unchanged120s logger. Its ordinary
+compile/body/oracle chain has a conditional CPU7 grant after exact affected
+source review and fresh admission. Private Rust exact-response delivery passes
+compile and all four actual-body transport/retention scenarios, independently
+acceptedfa1d3ea0. Original compiler/fixture failures and reviewer errata remain.
+The private code/results are checkpointed under
+../evidence/control-response-delivery-private-20261020-1/. Guest receipt
+consumption and coherent full-module/default-consumer integration follow;
+current activation, original RET/final ACK and native provider holds remain.
+No image rebuild, passed-case replay or optional framework experiment is needed.
+
 ## Current accepted checkpoint — supported profile frozen; repeatability next
 
 P-M00-01 is complete by independent4d28cbe5: the exact tested205 two-CPU image,

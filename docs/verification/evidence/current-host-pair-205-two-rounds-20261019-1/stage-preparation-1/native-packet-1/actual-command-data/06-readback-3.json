@@ -1,0 +1,71 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "reader",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--nofile=256",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/r2052-261019-1/p/attempt-21b78b668471498fb68fa9cbfd57b2c6",
+        "--exclude=./qmp.sock",
+        "."
+      ],
+      "profile": "reader",
+      "role": "readback-3",
+      "status_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/native-packet-1/captures/06-readback-3/status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/native-packet-1/captures/06-readback-3/stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/native-packet-1/captures/06-readback-3/stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": 7014,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1/FINAL-TWO-ROUND-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json",
+    "sha256": "1e87fa6260345c28b629e0c6bb44b4d6723c6c9a8bfa2fe3cccbc84cc67b4f2c"
+  },
+  "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1/FINAL-TWO-ROUND-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json"
+}

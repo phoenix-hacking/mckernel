@@ -1,0 +1,170 @@
+{
+  "AF_UNIX": [
+    {
+      "encoded_bytes": 101,
+      "option": "-qmp",
+      "path": "/home/holden/mckernel-work/scratch/r2052-261019-1/p/attempt-21b78b668471498fb68fa9cbfd57b2c6/qmp.sock"
+    }
+  ],
+  "actual_stage_review": {
+    "bytes": 11737,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1/ACTUAL-INIT-STAGE-AND-TWO-ROUND-CONSUMER-ACCEPTANCE.json",
+    "sha256": "ee396442352d7e05e37d25b21c59ba2985b416889d0a4aa450e0a6ca75cc0fc2"
+  },
+  "component_ABI": {
+    "bytes": 31299,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-THREE-MODULE-ABI-JOIN.json",
+    "sha256": "5d31c1f057127cf4c9fc076f3dc6c675ea4dc11ce4cef69889aab787135bd88c"
+  },
+  "component_artifact": {
+    "bytes": 40051,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-THREE-MODULE-ARTIFACT-REVIEW.json",
+    "sha256": "b9ea18d03dde21fc3b6f958647358081d9a5f249779b10628e9361f4926e5005"
+  },
+  "conditional_metadata": {
+    "bytes": 2438,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/native-packet-1/conditional-metadata.json",
+    "sha256": "9f477e56114b64d8bc09e36b74b38acf53098139a1bf0dee7bce3cf84cc7bb85"
+  },
+  "current_physical": {
+    "bytes": 14183,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-physical-review-20261019-1/decision.json",
+    "sha256": "12002bacc9e3bd3754e456906adc31ab0a1a3f2a6bea031acad5a871a6a9c70d"
+  },
+  "final_release": null,
+  "fresh_snapshot": null,
+  "machine_base": {
+    "bytes": 1899,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/native-packet-1/machine-base.json",
+    "sha256": "eb380f5514ffbb7165e3f83f9aeaa565060df2baf8ba73cae67328ff1e7bc17b"
+  },
+  "normalized_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/r2052m-261019-1/manifest.json",
+    "sha256": "34b1cea7f4a6510f749c66adde751bb6727c6bba1844f7fe5cdb784a9cbc109a",
+    "size": 10511
+  },
+  "ordinary_acceptance": {
+    "bytes": 11737,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1/ACTUAL-INIT-STAGE-AND-TWO-ROUND-CONSUMER-ACCEPTANCE.json",
+    "sha256": "ee396442352d7e05e37d25b21c59ba2985b416889d0a4aa450e0a6ca75cc0fc2"
+  },
+  "owner_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/r2052-261019-1/p",
+    "--nonce",
+    "21b78b668471498fb68fa9cbfd57b2c6",
+    "--owner-sha256",
+    "b9124b0ca4cb4c766e6f5e1d6ccb93f443900fd18aef30761e0c1a782736062c",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/r2052m-261019-1/manifest.json",
+    "--manifest-sha256",
+    "34b1cea7f4a6510f749c66adde751bb6727c6bba1844f7fe5cdb784a9cbc109a"
+  ],
+  "owner_source": {
+    "bytes": 68807,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/native_diagnostic_container_owner.py",
+    "sha256": "b9124b0ca4cb4c766e6f5e1d6ccb93f443900fd18aef30761e0c1a782736062c"
+  },
+  "pair_rounds": 2,
+  "parent_identity": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 759385,
+    "mode": "0o700",
+    "uid": 1000
+  },
+  "proposal": {
+    "bytes": 4243,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/native-packet-1/proposal.json",
+    "sha256": "1be5d94f34f83bad9676e758c3ffcdcf64b00c4a0c32c6eb7d03b1efe8c8c7c5"
+  },
+  "qemu_argv": [
+    "/usr/libexec/qemu-kvm",
+    "-machine",
+    "q35",
+    "-accel",
+    "tcg,thread=multi",
+    "-cpu",
+    "max,la57=off",
+    "-smp",
+    "4,sockets=2,cores=2,threads=1",
+    "-m",
+    "8192",
+    "-object",
+    "memory-backend-ram,size=4G,id=ram-node0",
+    "-object",
+    "memory-backend-ram,size=4G,id=ram-node1",
+    "-numa",
+    "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+    "-numa",
+    "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+    "-nic",
+    "none",
+    "-display",
+    "none",
+    "-no-reboot",
+    "-no-shutdown",
+    "-S",
+    "-monitor",
+    "none",
+    "-qmp",
+    "unix:/home/holden/mckernel-work/scratch/r2052-261019-1/p/attempt-21b78b668471498fb68fa9cbfd57b2c6/qmp.sock,server=on,wait=off",
+    "-serial",
+    "file:/home/holden/mckernel-work/scratch/r2052-261019-1/p/attempt-21b78b668471498fb68fa9cbfd57b2c6/serial.log",
+    "-debugcon",
+    "file:/home/holden/mckernel-work/scratch/r2052-261019-1/p/attempt-21b78b668471498fb68fa9cbfd57b2c6/debugcon.log",
+    "-global",
+    "isa-debugcon.iobase=0xe9",
+    "-kernel",
+    "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+    "-initrd",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/stage-two-rounds-1/lifecycle.cpio.gz",
+    "-append",
+    "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+  ],
+  "runtime_release": false,
+  "runtime_source_refs": [
+    {
+      "bytes": 68807,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/native_diagnostic_container_owner.py",
+      "sha256": "b9124b0ca4cb4c766e6f5e1d6ccb93f443900fd18aef30761e0c1a782736062c"
+    },
+    {
+      "bytes": 6005,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/native_diagnostic_runner.py",
+      "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499"
+    },
+    {
+      "bytes": 76101,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/native_diagnostic.py",
+      "sha256": "cceda258b6ed47ed1f008635ddbf4550f1fba89a90d328b55a6a543506ca8d20"
+    },
+    {
+      "bytes": 25398,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/native_diagnostic_backend.py",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614"
+    },
+    {
+      "bytes": 9913,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+    },
+    {
+      "bytes": 24863,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/repaired_image_authority.py",
+      "sha256": "e375bd0eadf5ea8fa8ef6621603a8617b45bbce965a74f10e08b3cd7256b6f2e"
+    }
+  ],
+  "static_review": {
+    "bytes": 7014,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1/FINAL-TWO-ROUND-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json",
+    "sha256": "1e87fa6260345c28b629e0c6bb44b4d6723c6c9a8bfa2fe3cccbc84cc67b4f2c"
+  },
+  "status": "PASS_NONTEMPORAL_BINDINGS_ONLY_NOT_RUNTIME_RELEASE"
+}

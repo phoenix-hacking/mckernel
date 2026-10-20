@@ -1,0 +1,24 @@
+    /// Control transport only: every error returns the SAME response mapping.
+    /// Even a failed wake CAS after scalar writes must not drop this owner.
+    /// The caller supplies an already authenticated receipt, not a selector.
+    pub(crate) fn prepare_control_retained(mut self, expected:&Request,
+        servicing_tid:i32,value:i64,
+    )->Result<Completion<M>,(i32,Self)>{
+        if servicing_tid<=0{return Err((-22,self));}
+        if let Err(error)=self.check_fork_unpublished(expected){return Err((error,self));}
+        let address=self.memory.address();
+        let status=unsafe{AtomicU64::from_ptr(address.add(8).cast())};
+        let state=unsafe{AtomicU64::from_ptr(address.add(16).cast())};
+        if status.load(Ordering::Acquire)!=0||!matches!(state.load(Ordering::Acquire),0|2){return Err((-71,self));}
+        unsafe{ptr::write_volatile(address.add(4).cast::<i32>(),servicing_tid);
+            ptr::write_volatile(address.add(24).cast::<i64>(),value);}
+        let wake=match state.compare_exchange(0,1,Ordering::AcqRel,Ordering::Acquire){
+            Ok(_)=>None,
+            Err(2)=>{
+                if state.compare_exchange(2,1,Ordering::AcqRel,Ordering::Acquire).is_err(){return Err((-71,self));}
+                Some(self.request.wake())
+            },
+            Err(_)=>return Err((-71,self)),
+        };
+        Ok(Completion{response:Some(self),wake})
+    }

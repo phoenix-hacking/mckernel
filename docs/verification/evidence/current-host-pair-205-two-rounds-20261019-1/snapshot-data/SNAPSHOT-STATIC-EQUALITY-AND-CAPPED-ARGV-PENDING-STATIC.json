@@ -1,0 +1,102 @@
+{
+  "schema": "mckernel.native-snapshot-static-equality-and-capped-argv.v1",
+  "producer": {
+    "bytes": 10710,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/root_manual_snapshot_two_round_native.py",
+    "sha256": "19cb6818f909e58b53f13cb2952441a9abca70d90237206aaeed38cc143414b5"
+  },
+  "bindings": null,
+  "root_snapshot_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=256",
+    "--fsize=33554432",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/root_manual_snapshot_two_round_native.py",
+    "--bindings-sha256",
+    "PENDING_GENUINE_FINAL_BINDINGS_SHA256",
+    "--terminal",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-physical-review-20261019-1/decision.json",
+    "--terminal-sha256",
+    "12002bacc9e3bd3754e456906adc31ab0a1a3f2a6bea031acad5a871a6a9c70d"
+  ],
+  "root_snapshot_output": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/root-live-preflight-1.json",
+  "root_capture_outputs": {
+    "stdout": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/two-round205-case-1/captures/snapshot-1.stdout",
+    "stderr": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/two-round205-case-1/captures/snapshot-1.stderr",
+    "status.json": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-native-snapshot-20261019-1/two-round205-case-1/captures/snapshot-1.status.json"
+  },
+  "snapshot_equal": {
+    "status": "PASS_LIVE_PREEXECUTION_SNAPSHOT",
+    "parent_identity": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 759385,
+      "mode": "0o700",
+      "uid": 1000
+    },
+    "exclusive_heavy_accepted": true,
+    "root_mutex_snapshot_free": true,
+    "terminal_acceptance": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-final-release-physical-review-20261019-1/decision.json",
+      "sha256": "12002bacc9e3bd3754e456906adc31ab0a1a3f2a6bea031acad5a871a6a9c70d"
+    },
+    "independent_static_execution_decision": null,
+    "accepted_actual_stage_fixture_parent_review": null,
+    "non_temporal_join_result": null,
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "heavy_profile": {
+      "cpuset": "2-5",
+      "cpus": 4,
+      "memory": 12884901888,
+      "memory_swap": 12884901888,
+      "pids": 512,
+      "network": "none"
+    },
+    "guest_profile": {
+      "memory_mib": 8192,
+      "vcpus": 4,
+      "numa_nodes": 2
+    },
+    "released_paths_absent": [
+      "/home/holden/mckernel-work/scratch/native-current-parent-pin-sdk-external-modules-operational-exclusion.json",
+      "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock"
+    ],
+    "current_predecessor_container_absent": true,
+    "image_id": null,
+    "cgroup": null
+  },
+  "dynamic_fields_not_preminted": [
+    "time_epoch",
+    "capacity.*.available_bytes",
+    "mem_available_bytes",
+    "included_usage_percent"
+  ],
+  "snapshot_summary_contract": {
+    "required_status": "PASS_LIVE_PREEXECUTION_SNAPSHOT",
+    "path_must_equal": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/root-live-preflight-1.json",
+    "sha256_field": "sha256",
+    "crosscheck_actual_OUTPUT_whole_file": true
+  },
+  "pending": [
+    "genuine static review and final completebindings hash",
+    "source-owner pinned IMAGE/CGROUP constants"
+  ],
+  "not_executable": true,
+  "snapshot_minted": false,
+  "root_or_guest_invoked": false
+}

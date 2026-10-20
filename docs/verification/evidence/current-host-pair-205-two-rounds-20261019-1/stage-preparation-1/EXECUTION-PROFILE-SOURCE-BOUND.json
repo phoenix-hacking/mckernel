@@ -1,0 +1,62 @@
+{
+  "AS_bytes": 1073741824,
+  "CPU": 7,
+  "RAM_min_available_bytes": 18058575872,
+  "antecedent_cost_seconds": [
+    18.804179694,
+    31.371313476
+  ],
+  "capacity_measure_scratch_path": "/home/holden/mckernel-work/scratch",
+  "emergency_reserve_bytes": 671088640,
+  "fresh_capture_root": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/ordinary-chain-capture-1",
+  "host_floor_bytes": 17179869184,
+  "host_total_growth_bytes": 207618048,
+  "jobs": 1,
+  "per_command": [
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/stage_two_round_init.py"
+      ],
+      "cpu_seconds": 45,
+      "role": "metadata-preserving-init-only-stage",
+      "wall_seconds": 45
+    },
+    {
+      "argv": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/prepare_current_pair_consumer.py"
+      ],
+      "cpu_seconds": 10,
+      "role": "actual-owner-runner-full-parent",
+      "wall_seconds": 10
+    }
+  ],
+  "rationale": "One fullgzip afterinit-only tail replacement, no unchangedBASE/image/module staging; prior threecompression N3 stage31.37s plus ownerfixture5.38s fits54s work/60wall. ExplicitCPU7 envelope, no old35/28 claim.",
+  "required_absent_paths": [
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/stage-two-rounds-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/ordinary-chain-capture-1",
+    "/home/holden/mckernel-work/scratch/r2052-261019-1",
+    "/home/holden/mckernel-work/scratch/r2052m-261019-1",
+    "/home/holden/mckernel-work/scratch/r2052f-261019-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/actual-native-preflight-fresh8b.json",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/actual-fresh8b-consumer-parent-result.json"
+  ],
+  "retirement_reserve_seconds": 6,
+  "scope": "TWO_FIXED_ORDINARY_STEPS_ONLY_NO_NATIVE",
+  "scratch_required_free_bytes": 13625196544,
+  "source_pins": {
+    "bytes": 5948,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/stage-preparation-1/source-pins.json",
+    "sha256": "405e1e3e6f1f900329679beb1c25f2deea18a977616e9ee58a4230a86fd00f29"
+  },
+  "stage_total_bytes": 67108864,
+  "stream_bytes": 33554432,
+  "whole_CPU_seconds": 55,
+  "whole_wall_seconds": 60,
+  "work_wall_seconds": 54
+}

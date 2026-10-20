@@ -1,0 +1,9 @@
+30:    fork_ingress_pending: bool,
+113:    pub(crate) fn close_worker(&mut self, handle: u64) -> Result {
+214:            fork_ingress_pending: false,
+515:        if call.kernel || call.fork_ingress_pending {
+595:        if call.cancelled || call.fork_ingress_pending || call.completion.is_some() { return Err(-16); }
+600:        call.fork_ingress_pending = true;
+610:        if !call.fork_ingress_pending || call.response.is_some() || call.completion.is_some() { return Err(-16); }
+613:        call.fork_ingress_pending = false;
+797:        if call.kernel || call.fork_ingress_pending {

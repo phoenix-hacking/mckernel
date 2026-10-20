@@ -1,0 +1,75 @@
+
+fn transport_fields(physical:u64)->(u64,u64,i64){
+ let offset=usize::try_from(physical-0x1000000).unwrap();assert!(offset+32<=unsafe{guest_arena_bytes()});
+ let p=unsafe{guest_arena().add(offset)};
+ unsafe{(core::sync::atomic::AtomicU64::from_ptr(p.add(8).cast()).load(Ordering::Acquire),
+ core::sync::atomic::AtomicU64::from_ptr(p.add(16).cast()).load(Ordering::Acquire),core::ptr::read_volatile(p.add(24).cast::<i64>()))}
+}
+fn guest_transport_word(offset:usize,value:u64){
+ assert!(offset==8||offset==16);let p=unsafe{guest_arena().add(0xc00000+offset)};
+ unsafe{core::sync::atomic::AtomicU64::from_ptr(p.cast()).store(value,Ordering::Release)};
+}
+fn prepared_transport()->(RetainedJoined,u64,u64){
+ let mut j=RetainedJoined::new();assert_eq!(j.adopt(),0);j.first_return();bind_actual_inherited_zap_owners(&mut j);
+ let(rc,w,s)=control(&mut j,control_request(None));assert_eq!(rc,1);assert_eq!(resume_receipt(&mut j,w,s),1);
+ assert_eq!(transport_fields(0x1c00000).0,0);(j,w,s)
+}
+fn unrelated_request()->crate::Request{
+ let mut b=[0u8;128];b[8..12].copy_from_slice(&4i32.to_le_bytes());
+ b[32..36].copy_from_slice(&101i32.to_le_bytes());b[48..52].copy_from_slice(&101i32.to_le_bytes());
+ b[52..56].copy_from_slice(&202i32.to_le_bytes());b[56..64].copy_from_slice(&1u64.to_le_bytes());
+ b[64..72].copy_from_slice(&39u64.to_le_bytes());b[120..128].copy_from_slice(&0x1d00000u64.to_le_bytes());crate::Request::decode(&b,1).unwrap()
+}
+fn start_actual_control_return(j:&Joined,w:u64,s:u64)->std::thread::JoinHandle<(crate::Result,[u8;72])>{
+ let remote=j.remote.clone();let parent=j.parent;
+ std::thread::spawn(move||{let mut b=[0u8;72];b[..8].copy_from_slice(&w.to_le_bytes());b[8..16].copy_from_slice(&s.to_le_bytes());
+ b[24..32].copy_from_slice(&(-95i64).to_le_bytes());
+ let r=remote.return_syscall(parent,&mut b,|_,_,_|panic!("control must not invoke generic return copy"));(r,b)})
+}
+fn await_actual_control_wait(j:&Joined,h:&std::thread::JoinHandle<(crate::Result,[u8;72])>){
+ let end=std::time::Instant::now()+std::time::Duration::from_secs(2);
+ while crate::smp_application::transport_waits(&j.remote)==0{assert!(std::time::Instant::now()<end);assert!(!h.is_finished());std::thread::yield_now();}
+ assert!(!h.is_finished());assert_eq!(transport_fields(0x1c00000).0,0);
+}
+#[test]fn actual_control_transport_waits_and_publishes_only_exact_response(){
+ let(j,w,s)=prepared_transport();let claims=crate::smp_memory::storage::claims(&j.memory);let pending=crate::provider_runtime::control_pending_state();
+ assert_eq!(transport_fields(0x1d00000),(0,0,0));let(rw,rs)=crate::smp_application::delivered_unrelated(&j.remote,j.parent,&j.memory,unrelated_request());
+ assert_eq!(crate::smp_application::return_actual(&j.remote,j.parent,rw,rs,0,777),Ok(()));
+ assert_eq!(j.remote.publish_syscall(j.parent,0,|_|panic!("unrelated return must remain frozen"),||Ok(())),Ok(false));
+ let h=start_actual_control_return(&j,w,s);await_actual_control_wait(&j,&h);
+ assert_eq!(crate::smp_application::transport_observation(&j.remote),(true,false,false,false));
+ assert_eq!(j.remote.publish_syscall(j.parent,0,|_|Ok(()),||Ok(())),Ok(true));j.remote.notify_syscalls();
+ let(result,b)=h.join().unwrap();assert_eq!(result,Ok(()));assert_eq!(u64::from_le_bytes(b[48..56].try_into().unwrap()),1);
+ assert_eq!(transport_fields(0x1c00000),(1,1,0));assert_eq!(transport_fields(0x1d00000).0,0);
+ assert_eq!(crate::smp_application::transport_observation(&j.remote),(true,true,false,false));
+ assert_eq!(crate::provider_runtime::control_pending_state(),pending);assert_eq!(crate::smp_memory::storage::claims(&j.memory),claims);
+ assert_eq!(crate::smp_application::phase(&j.remote),crate::ForkPhase::FirstReturnPublished);
+ assert_eq!(j.remote.publish_syscall(j.parent,0,|_|panic!("no second control/unrelated publication"),||Ok(())),Ok(false));j.retain();
+}
+#[test]fn actual_control_transport_send_retry_and_postpublish_notify_error_keep_marker(){
+ let(j,w,s)=prepared_transport();guest_transport_word(16,2);let h=start_actual_control_return(&j,w,s);await_actual_control_wait(&j,&h);
+ let mut sends=0;assert_eq!(j.remote.publish_syscall(j.parent,0,|_|{sends+=1;Err(crate::EAGAIN)},||panic!("send failure must not notify")),Ok(false));
+ assert_eq!(sends,1);assert_eq!(transport_fields(0x1c00000).0,0);assert!(!h.is_finished());
+ assert_eq!(crate::smp_application::transport_observation(&j.remote),(true,false,false,false));
+ assert_eq!(j.remote.publish_syscall(j.parent,0,|_|{sends+=1;Ok(())},||Err(-5)),Err(-5));j.remote.notify_syscalls();
+ let(result,_)=h.join().unwrap();assert_eq!(result,Ok(()));assert_eq!(sends,2);assert_eq!(transport_fields(0x1c00000),(1,1,0));
+ assert_eq!(crate::smp_application::transport_observation(&j.remote),(true,true,false,false));
+ assert!(j.remote.publish_syscall(j.parent,0,|_|panic!("post-release error cannot replay"),||Ok(())).is_err());j.retain();
+}
+#[test]fn actual_control_transport_worker_close_retains_parked_response(){
+ let(j,w,s)=prepared_transport();let claims=crate::smp_memory::storage::claims(&j.memory);let state=crate::smp_application::control_state(&j.remote);
+ crate::smp_application::close_worker_actual(&j.remote,j.parent,w);
+ assert!(crate::smp_application::queue_control_actual(&j.remote,j.parent,w,s).is_err());
+ assert_eq!(crate::smp_application::transport_observation(&j.remote),(false,false,false,true));
+ assert_eq!(transport_fields(0x1c00000).0,0);assert_eq!(crate::smp_memory::storage::claims(&j.memory),claims);assert_eq!(crate::smp_application::control_state(&j.remote).0,state.0);j.retain();
+}
+#[test]fn actual_control_transport_malformed_wake_state_keeps_same_response(){
+ let(j,w,s)=prepared_transport();let claims=crate::smp_memory::storage::claims(&j.memory);let bytes=carrier_bytes();let state=crate::smp_application::control_state(&j.remote);
+ assert_eq!(crate::smp_application::queue_control_transfer_actual(&j.remote,j.parent,w,s,1,0),Err(-22));
+ assert_eq!(crate::smp_application::queue_control_transfer_actual(&j.remote,j.parent,w,s,0,1),Err(-22));
+ assert_eq!(crate::smp_application::transport_observation(&j.remote),(false,false,false,true));
+ assert_eq!(transport_fields(0x1c00000),(0,0,0));assert_eq!(carrier_bytes(),bytes);assert_eq!(crate::smp_memory::storage::claims(&j.memory),claims);
+ guest_transport_word(16,3);assert_eq!(crate::smp_application::queue_control_actual(&j.remote,j.parent,w,s),Err(-71));
+ assert_eq!(crate::smp_application::transport_observation(&j.remote),(false,false,true,true));
+ assert_eq!(transport_fields(0x1c00000),(0,3,0));assert_eq!(carrier_bytes(),bytes);assert_eq!(crate::smp_memory::storage::claims(&j.memory),claims);assert_eq!(crate::smp_application::control_state(&j.remote).0,state.0);j.retain();
+}

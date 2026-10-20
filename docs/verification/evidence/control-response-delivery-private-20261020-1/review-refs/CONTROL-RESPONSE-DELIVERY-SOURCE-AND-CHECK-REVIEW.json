@@ -1,0 +1,175 @@
+{
+  "accepted_receipt_base": {
+    "bytes": 22715,
+    "path": "/home/holden/mckernel-work/host-preparation/provider-ownership-review-20261019-1/ACTUAL-CONTROL-RECEIPT-PRIVATE-OWNERSHIP-REVIEW.json",
+    "sha256": "5b21a83371a8529ddbd3d95bb422153240e602e2385d89a2de2519a4c740f854"
+  },
+  "actual_body_bindings": {
+    "bytes": 2660,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/actual-body-bindings.json",
+    "sha256": "dfccb1c45a043df9af4de1265dfaa5ee85378d7d243e165891ce48e681103e5c"
+  },
+  "actual_fixture": {
+    "bytes": 364975,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/actual-control-delivery.rs",
+    "sha256": "74bfca35470db724c8d7e1c318cf4ccb01d4445c0c918f47f6a57e0b479af034"
+  },
+  "actual_result_acceptance": false,
+  "changed_Rust_files": 5,
+  "commands": 5,
+  "current_production_overlay": false,
+  "decision": "PASS_PRIVATE_OWNED_CONTROL_RESPONSE_DELIVERY_SOURCE_AND_ONE_FOCUSED_CHECK_CHAIN",
+  "exact_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/run_delivery_check.py"
+  ],
+  "exact_commands": [
+    [
+      "compile",
+      [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "-Wrust_2018_idioms",
+        "-Dwarnings",
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/actual-control-delivery.rs",
+        "-C",
+        "link-arg=/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest.o",
+        "-C",
+        "link-arg=/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/codec.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-1/actual"
+      ]
+    ],
+    [
+      "scenario-1",
+      [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-1/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_transport_waits_and_publishes_only_exact_response",
+        "--test-threads=1",
+        "--nocapture"
+      ]
+    ],
+    [
+      "scenario-2",
+      [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-1/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_transport_send_retry_and_postpublish_notify_error_keep_marker",
+        "--test-threads=1",
+        "--nocapture"
+      ]
+    ],
+    [
+      "scenario-3",
+      [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-1/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_transport_worker_close_retains_parked_response",
+        "--test-threads=1",
+        "--nocapture"
+      ]
+    ],
+    [
+      "scenario-4",
+      [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-1/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_transport_malformed_wake_state_keeps_same_response",
+        "--test-threads=1",
+        "--nocapture"
+      ]
+    ]
+  ],
+  "execution_count": 1,
+  "final_ACK_or_pin_release": false,
+  "fixture_findings": [
+    "All4 scenarios run in distinct exact childprocesses, oneJoined/once-only arena each. Initial200/1b neverreused; parked201/1c; dedicated unrelated202/1d actualMailboxadmission, old201helper unchanged.",
+    "Real stdCondvar adapter releases/reacquires SAME slots mutex; actual Remote.return_syscall/notify_syscalls bodies exercised by realhost waitingthread with actualpublisher and Completion. No fake completion or receipt verifier.",
+    "Four oracles: exactcontrol publication while unrelatedcompletion frozen; prepublishsend retry and postpublishnotifyerror durablemarker; actualworkerclose retention; zero-effectdestination/length refusals followed malformedwake retention.",
+    "CAS-race-after-scalarwrites and postpublication bookkeepingfault injection remain source-reviewed but UNEXECUTED; fullclose/fullcrate/guestdecoder/native remain pending."
+  ],
+  "fixture_inputs": {
+    "bytes": 5907,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/fixture-inputs.json",
+    "sha256": "8fd30c6d4cf1d7b02b5db899210506ff7417cd3c02be33695fd945d6b3e3d68b"
+  },
+  "functional_scope": "Functional OS/apps Rust ownership delivery continuation on private retained provider; no current activation or compute C expansion.",
+  "implementation_author": "/root/clone_thread_affinity_rust_repair",
+  "implementation_ownership": false,
+  "independent_matched_items": 9,
+  "native_or_guest_decoder_acceptance": false,
+  "new_isolated_scenarios": 4,
+  "old62_replayed": false,
+  "output_root": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-1",
+  "patch": {
+    "bytes": 15015,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/control-response-delivery.patch",
+    "sha256": "f5b8c603448a10fbdc02eab58bd95b966026272914e3e81cf8174d419a106d79"
+  },
+  "profile": {
+    "as_bytes": 1073741824,
+    "core": 0,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "fsize_bytes": 33554432,
+    "global_inner_wall_seconds": 28,
+    "jobs": 1,
+    "kill_grace": 2,
+    "nofile": 256,
+    "outer_wall_seconds": 35,
+    "root_or_guest": false
+  },
+  "proposal": {
+    "bytes": 4589,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/delivery-check-command.json",
+    "sha256": "5240927d74e51971fc344ffd6e43b4dba9b7a38c53221c5072c385cc68208659"
+  },
+  "reviewed_at": "2026-10-20T00:48:56.798017+00:00",
+  "reviewer": "/root/next_replace_tid_review",
+  "reviewer_tests_compilers_root": 0,
+  "root_fresh_CPU6_allocation_required": true,
+  "runner": {
+    "bytes": 6165,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/run_delivery_check.py",
+    "sha256": "59adb1036beee7b6445946f855e40f55ff1cdbf8b2d28a5aee508f7251c8aa27"
+  },
+  "schema": "mckernel.independent-private-control-response-delivery-source-and-check-review.v1",
+  "setup_audit": {
+    "bytes": 964,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/SETUP-IDENTITY-AND-ORDINARY-PRESERVATION.json",
+    "sha256": "3c4e60d6c1b5adb846e2fd030032517a4a131d86f8bfc3dfa642b4f1a6289f37"
+  },
+  "source_findings": [
+    "Retained control-only Response prepare returns SAME owner on every protocol/wake-CAS refusal, including after scalar writes. Genericprepare unchanged. Queue rejects closed/cancelled/mismatched call before move, retains Completion before remaining metadata operation; uncertainty keeps exact Response or Completion and quarantines.",
+    "Pure durableowner-presence prefilter preserves ordinaryRET gate/errororder. Exactreadycontrol requires actual source-bound proof/journal/written/currentowner and destination=length=0 BEFORE queueeffects; incoming launcher scalar has noauthority.",
+    "Receipt hook success skips oldparkguard but actualRemote rederives ownedready state. Actualreturn thread queues and waits realdurablepublication marker; queue alone is not ioctl success. Existing pump/notify/wait path reused.",
+    "Targeted publication selects exactfullRequest/worker/serial/CPU/descriptor, not CPU-wide next_completion. Observer sets durablemarker immediately after actualCompletion statusRelease and response memory release, BEFORE fallible bookkeeping/notify.",
+    "Actualsend failure before publication retains SAME Completion forretry. Postpublication errors cannot permit requeue/replay; parentpin/capsule/control remain retained, no legacyHOST_REVOKED/ACK/task scheduling or originalfirstRET rewrite.",
+    "Generic Mailbox return_value and Response prepare byteidentical; factored common publish body byteidentical."
+  ],
+  "source_pins": {
+    "bytes": 3379,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/source-pins.json",
+    "sha256": "163427d5f8dc9aa3bd9e6bfbceae81ecdb48f60f7469aa20aa872335bc4e4198"
+  },
+  "source_preflight_history": "Earlier bb390/157 source and48b/55a proposal preserved unexecuted. Known worker201 collision and no-transfer/ordinary gate corrections incorporated beforefirst targetexecution; existing park/receipt failures+reviewererratum retained.",
+  "status": "SOURCE_AND_EXECUTION_BOUNDARY_ONLY_ACTUAL_RESULT_PENDING",
+  "stop_first_failure": true
+}

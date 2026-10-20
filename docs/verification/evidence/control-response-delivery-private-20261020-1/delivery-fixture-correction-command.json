@@ -1,0 +1,109 @@
+{
+  "status": "READY_NOT_RUN_FIXTURE_CORRECTION",
+  "source_patch": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/control-response-delivery.patch",
+  "source_patch_sha256": "f5b8c603448a10fbdc02eab58bd95b966026272914e3e81cf8174d419a106d79",
+  "commands": [
+    [
+      "compile",
+      [
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "-Wrust_2018_idioms",
+        "-Dwarnings",
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/actual-control-delivery-corrected.rs",
+        "-C",
+        "link-arg=/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/guest.o",
+        "-C",
+        "link-arg=/home/holden/mckernel-work/scratch/native-fork-carrier-link-20261017-1/test-expert/codec.o",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-2/actual"
+      ]
+    ],
+    [
+      "scenario-1",
+      [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-2/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_transport_waits_and_publishes_only_exact_response",
+        "--test-threads=1",
+        "--nocapture"
+      ]
+    ],
+    [
+      "scenario-2",
+      [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-2/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_transport_send_retry_and_postpublish_notify_error_keep_marker",
+        "--test-threads=1",
+        "--nocapture"
+      ]
+    ],
+    [
+      "scenario-3",
+      [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-2/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_transport_worker_close_retains_parked_response",
+        "--test-threads=1",
+        "--nocapture"
+      ]
+    ],
+    [
+      "scenario-4",
+      [
+        "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-2/actual",
+        "--exact",
+        "consumer_fixture::actual::actual_control_transport_malformed_wake_state_keeps_same_response",
+        "--test-threads=1",
+        "--nocapture"
+      ]
+    ]
+  ],
+  "profile": {
+    "cpu": 6,
+    "jobs": 1,
+    "as_bytes": 1073741824,
+    "cpu_seconds": 30,
+    "global_inner_wall_seconds": 28,
+    "outer_wall_seconds": 35,
+    "kill_grace": 2,
+    "fsize_bytes": 33554432,
+    "nofile": 256,
+    "core": 0,
+    "root_or_guest": false
+  },
+  "runner": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/run_delivery_check_correction.py",
+  "fixture_inputs": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/fixture-correction-inputs.json",
+  "output_root": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-2",
+  "limits": "actualbody under LinuxMM/service/condvar adapters only; genericprepare/oldRET unchanged; no guestdecoder/currentactivation/native/fullABI",
+  "isolated_scenarios": [
+    "actual_control_transport_waits_and_publishes_only_exact_response",
+    "actual_control_transport_send_retry_and_postpublish_notify_error_keep_marker",
+    "actual_control_transport_worker_close_retains_parked_response",
+    "actual_control_transport_malformed_wake_state_keeps_same_response"
+  ],
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/run_delivery_check_correction.py"
+  ],
+  "grammar": "exact ready-control destination==0 and length==0, no effects on refusal; two assertions inside existing malformed case",
+  "preflight_corrections": "no-transfer grammar +pureordinaryNone prefilter +dedicated202/fresh1d unrelated delivery; priorversions preserved",
+  "fixture_correction": "exact two ACK helpers + exact actual marker constant; restore prior readonly Mailbox identity view; no production/scenario change"
+}

@@ -1,0 +1,80 @@
+{
+  "actual_application_launches": 0,
+  "actual_failed_harness_status": {
+    "bytes": 1508,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-2/compile-actual-body/status.json",
+    "sha256": "3ab921a68377f41777de3dafa2ace20f687b8a0a160f7d419be124ea41037e08"
+  },
+  "actual_failed_harness_stderr": {
+    "bytes": 3305,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-2/compile-actual-body/stderr",
+    "sha256": "952df1a7cdd3e0119e24afc88dcc9ba22f2807e36e1ec987935bf039c5dacc9f"
+  },
+  "actual_fixed_two_round_production_compile_status": {
+    "bytes": 1529,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-2/compile-two-rounds/status.json",
+    "sha256": "25e595b26fb59eda5ddcdbeb091c4a7065905223b81f385c892c4607a6f1901a"
+  },
+  "actual_outer_status": {
+    "bytes": 1065,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-capture-2/status.json",
+    "sha256": "6ead235c7fde1af88d8daee37930eb070c52978811f104c61cf9f242fe33c06a"
+  },
+  "candidate": {
+    "bytes": 23710,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.c",
+    "sha256": "c0534ae319b76afe6fb6a2e84541e39d0fbeae6bcb9765dfc42ee20111df75b5"
+  },
+  "decision": "ONE_COHERENT_FIXTURE_ONLY_REPAIR_BEFORE_FRESH_ROOT_ADMISSION",
+  "fixture_before_correction": {
+    "bytes": 5939,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_two_round_body.c",
+    "sha256": "7853d5b19d34ff7d7e901d02b8c055b386efac35cc38f26cfcf21198f7670071"
+  },
+  "implementation_ownership": false,
+  "native_guests": 0,
+  "next_exact_scope": [
+    "Reuse both successful production compile status and binary refs with frozen pins; do not rerun either compiler prefix.",
+    "Compile corrected actual-body harness only, then execute15 actual C scenarios including genuine saved trace and4 mutations.",
+    "Run actual full Python evaluate positive and14 strict refusals plus original checker AST equality.",
+    "Existing CPU6/1job/1GiB/30CPU/35wall/shared28secondwork/32MiBfiles and resource floors remain; root fresh admission and grant required."
+  ],
+  "preserve": [
+    "original d448 source and pre-execution child-TID/unknown-wire correction",
+    "first fullproduction format-truncation failure and reused default compile success",
+    "c053128-byte guarded production correction and successful fixed2 compile",
+    "second harness compile failure and all closed captures",
+    "pre-child local-admission literal refusal"
+  ],
+  "production_change_required": false,
+  "quota_credit": false,
+  "remaining_caller_read": "Reviewed all10 orchestration expectations, genuine saved-trace positive+4 refusals, full evaluate observation/manifest construction,14 evaluator refusals, and unchanged original checker AST comparison. No additional concrete blocker found by source review.",
+  "remaining_headers": "Other APIs used by actual_shared_functions.inc, actual_result_io.inc, pair_two_round_support.inc, pair_two_round_run.inc and harness have declarations in existing included headers. No production/source interface waiver required.",
+  "retained_default_compile_status": {
+    "bytes": 1497,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-1/compile-default/status.json",
+    "sha256": "f3a20c1de54d265a3469443d47dee66238b72112d0e4b9ac2244745d6040421c"
+  },
+  "reviewer": "two_cpu_end_to_end_review",
+  "runtime_authority": false,
+  "schema": "mckernel.independent-current-host-pair205-two-round-expert-fixture-failure-review.v1",
+  "scope": "functional OS/apps and Rust plus reviewed assembly; Linux control-plane C harness only",
+  "status": "CLASSIFIED_PRODUCTION_COMPILES_PASS_REMAINING_FIXTURE_REPAIR_REQUIRED",
+  "whole_boundary_findings": [
+    {
+      "basis": "Exact extracted write_all uses struct pollfd, POLLOUT, poll; current fixture includes no poll.h. Actual GCC-Werror stderr establishes compile refusal.",
+      "finding": "missing poll.h",
+      "repair": "Include poll.h in fixture header declarations only."
+    },
+    {
+      "basis": "Fixture now_ns advances 2000000000ns; unchanged write_all computes start+2000*MS then next now_ns equals deadline and breaks before write.",
+      "finding": "fake monotonic tick expires every actual write",
+      "repair": "Use explicit100000000ns deterministic tick, keeping real write_all/deadline predicate unchanged."
+    },
+    {
+      "basis": "save_file invokes now_ns twice between app0 and app1 result creation; their existing200ns lifetimes become disjoint if based independently on mutable fixture_clock.",
+      "finding": "per-app mutable synthetic epoch destroys modeled overlap after write clock is fixed",
+      "repair": "Capture one launch_base before constructing both results and derive both starts/reaps/finishes from it."
+    }
+  ]
+}

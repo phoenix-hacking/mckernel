@@ -1,0 +1,270 @@
+--- a/host-kernel/native-rust/application_syscall.rs
++++ b/host-kernel/native-rust/application_syscall.rs
+@@ -406,6 +406,31 @@
+             memory,
+             request: request.clone(),
+         })
++    }
++
++    /// Control transport only: every error returns the SAME response mapping.
++    /// Even a failed wake CAS after scalar writes must not drop this owner.
++    /// The caller supplies an already authenticated receipt, not a selector.
++    pub(crate) fn prepare_control_retained(mut self, expected:&Request,
++        servicing_tid:i32,value:i64,
++    )->Result<Completion<M>,(i32,Self)>{
++        if servicing_tid<=0{return Err((-22,self));}
++        if let Err(error)=self.check_fork_unpublished(expected){return Err((error,self));}
++        let address=self.memory.address();
++        let status=unsafe{AtomicU64::from_ptr(address.add(8).cast())};
++        let state=unsafe{AtomicU64::from_ptr(address.add(16).cast())};
++        if status.load(Ordering::Acquire)!=0||!matches!(state.load(Ordering::Acquire),0|2){return Err((-71,self));}
++        unsafe{ptr::write_volatile(address.add(4).cast::<i32>(),servicing_tid);
++            ptr::write_volatile(address.add(24).cast::<i64>(),value);}
++        let wake=match state.compare_exchange(0,1,Ordering::AcqRel,Ordering::Acquire){
++            Ok(_)=>None,
++            Err(2)=>{
++                if state.compare_exchange(2,1,Ordering::AcqRel,Ordering::Acquire).is_err(){return Err((-71,self));}
++                Some(self.request.wake())
++            },
++            Err(_)=>return Err((-71,self)),
++        };
++        Ok(Completion{response:Some(self),wake})
+     }
+ 
+     /// Claim the guest's wake state exactly once. On a protocol error the outer
+--- a/host-kernel/native-rust/mcctrl_process.rs
++++ b/host-kernel/native-rust/mcctrl_process.rs
+@@ -859,24 +859,27 @@
+         // returns are unchanged; only the new carrier's second clone can seal
+         // LINK. A failure leaves the delivery owned for exact retry.
+         let value = image::word(&bytes, 24).map_err(errno)? as i64;
+-        // Resume ONLY an already owned control response; a receipt never
+-        // grants standard RET, legacy HOST_REVOKED or final ACK permission.
+-        match unsafe { ihk_os_application_prepare_fork_control_receipt_v1(
++        // Success means a real receipt was written under its authenticated
++        // claim. It may enter ONLY the backend's exact owned-control return;
++        // the incoming launcher scalar is never transport/phase authority.
++        let control_receipt_ready = match unsafe { ihk_os_application_prepare_fork_control_receipt_v1(
+             self.context.as_ptr(), worker.handle, serial, cpu, value,
+         ) } {
+-            0 => {}, 1 => return Err(EBUSY),
++            0 => false, 1 => true,
+             error if (-4095..0).contains(&error) => return Err(errno(error)),
+             _ => return Err(errno(-71)),
+-        }
++        };
+         // Park a genuine fresh selector2 delivery before any legacy return
+         // hook. The incoming launcher -95 is not authority. Parked MUST stop
+         // ordinary RETURN; it cannot manufacture RET0 or a revoke receipt.
++        if !control_receipt_ready {
+         match unsafe { ihk_os_application_prepare_fork_control_v1(
+             self.context.as_ptr(), worker.handle, serial, cpu, value,
+         ) } {
+             0 => {}, 1 => return Err(EBUSY),
+             e if (-4095..0).contains(&e) => return Err(errno(e)),
+             _ => return Err(errno(-71)),
++        }
+         }
+         // SAFETY: This live fd/worker pins our return frame and connection. IHK
+         // authenticates the backend delivery and dispatches only its own capsule.
+--- a/host-kernel/native-rust/smp_application.rs
++++ b/host-kernel/native-rust/smp_application.rs
+@@ -1038,6 +1038,12 @@
+                 .map_err(errno);
+             return self.finish_publication(&mut slots, result, notify);
+         }
++        if fork_link::has_control_completion(&slots, token, cpu) {
++            let result=fork_link::publish_control_receipt_in_slots(self,&mut slots,token,cpu,send);
++            // The exact control publisher records real response release before
++            // bookkeeping/notify errors. No generic completion is selected.
++            return self.finish_publication(&mut slots,result,notify);
++        }
+         if fork_publication_frozen(&slots, token, cpu)
+             || fork_link::publication_frozen(&mut slots, token, cpu)
+             || fork_ack_publication_frozen(&mut slots, token, cpu)
+@@ -1474,6 +1480,17 @@
+         }
+         bytes[48..56].fill(0); // Output: whether the continuing owner accepted the return.
+         let mut slots = self.slots.lock();
++        if fork_link::queue_control_receipt_in_slots(self,&mut slots,token,worker,serial,cpu,destination,length)?.is_some() {
++            bytes[48..56].copy_from_slice(&1u64.to_le_bytes());
++            loop {
++                // Queueing alone is not ioctl success. This marker is set by
++                // the actual Completion status-Release observer only.
++                if fork_link::control_receipt_published(&slots,token,worker,serial,cpu)? { return Ok(()); }
++                let entry=slots.iter().flatten().find(|e|e.key()==token).ok_or(ENOENT)?;
++                if entry.quarantined { return Err(EIO); }
++                self.changed.wait(&mut slots);
++            }
++        }
+         authorize_fork_return(&slots, token, worker, serial, cpu, value)?;
+         let entry = slots
+             .iter_mut()
+--- a/host-kernel/native-rust/smp_application_syscall.rs
++++ b/host-kernel/native-rust/smp_application_syscall.rs
+@@ -614,6 +614,44 @@
+         if closed || call.cancelled { Self::cancel_call(call)?; }
+         Ok(())
+     }
++    /// Transfer exactly one authenticated parked control response. Unlike
++    /// generic restore, close/cancellation refuses before any transfer.
++    /// Error bool denotes a possibly changed guest wake state; its SAME owner
++    /// stays in the ticket or Completion and requires quarantine/retention.
++    pub(crate) fn queue_control_response(&mut self,ticket:&mut ForkIngressResponse<M>,
++        value:i64,
++    )->core::result::Result<(),(i32,bool)>{
++        if self.closed||self.quarantined{return Err((-32,false));}
++        let call=self.fork_abort_call(ticket.worker,ticket.serial,&ticket.request).map_err(|e|(e,false))?;
++        if call.cancelled||!call.fork_ingress_pending||call.response.is_some()||call.completion.is_some(){return Err((-16,false));}
++        let worker=call.worker.ok_or((-71,false))?;
++        call.delivery.check_return(worker,ticket.request.cpu()as i64).map_err(|e|(e,false))?;
++        let response=ticket.response.take().ok_or((-71,false))?;
++        let completion=match response.prepare_control_retained(&ticket.request,worker.tid(),value){
++            Ok(completion)=>completion,
++            Err((error,response))=>{ticket.response=Some(response);return Err((error,true));},
++        };
++        // Retain completion before the remaining metadata step can fail.
++        call.completion=Some(completion);call.fork_ingress_pending=false;
++        call.delivery.begin_return(worker,ticket.request.cpu()as i64).map_err(|e|(e,true))?;
++        Ok(())
++    }
++
++    pub(crate) fn publish_control_observed(&mut self,handle:u64,serial:u64,
++        expected:&Request,cpu:i32,send:impl FnOnce(&[u8;128])->Result,
++        observed:impl FnOnce(&Request,Option<u64>,u64),
++    )->Result<bool>{
++        if self.closed||self.quarantined{return Err(-32);}
++        let index=self.calls.iter().position(|s|s.as_ref().is_some_and(|c|
++            c.delivery.serial().wire()==serial)).ok_or(-2)?;
++        let call=self.calls[index].as_ref().unwrap();
++        if call.delivery.request()!=expected||call.delivery.request().cpu()!=cpu
++            ||call.worker.map(Worker::wire)!=Some(handle)||call.kernel||call.service||call.cancelled
++            ||call.fork_ingress_pending||call.response.is_some()||call.completion.is_none()
++        {return Err(-16);}
++        self.publish_index_observed(index,send,observed)
++    }
++
+     // END PRIVATE FORK INGRESS RESPONSE TICKET
+ 
+     /// Freeze-only observer for an authenticated carrier's second clone. It
+@@ -719,6 +757,12 @@
+         let Some(index) = self.next_completion(Some(cpu)) else {
+             return Ok(false);
+         };
++        self.publish_index_observed(index, send, observed)
++    }
++    fn publish_index_observed(&mut self,index:usize,
++        send:impl FnOnce(&[u8;128])->Result,
++        observed:impl FnOnce(&Request,Option<u64>,u64),
++    )->Result<bool>{
+         self.completion_cursor = (index + 1) % self.calls.len();
+         let slot = &mut self.calls[index];
+         let call = slot.as_mut().unwrap();
+--- a/host-kernel/native-rust/smp_fork_link.rs
++++ b/host-kernel/native-rust/smp_fork_link.rs
+@@ -563,10 +563,12 @@
+     written: bool,
+     uncertain: bool,
+     write_error: Option<i32>,
++    queued: bool,
++    published: bool,
+ }
+ impl ControlReceiptRecord {
+     fn new() -> Self { Self { frozen: false, proof: None, journal: None,
+-        written: false, uncertain: false, write_error: None } }
++        written: false, uncertain: false, write_error: None, queued: false, published: false } }
+ }
+ pub(crate) struct PreparedControlReceiptTicket {
+     remote: Arc<Remote>, parent: Token, child: Token,
+@@ -728,3 +730,91 @@
+         }
+     }
+ }
++
++
++// Zero is transport success only. The private receipt proof, not this scalar,
++// permits queueing; no legacy HOST_REVOKED/ACK/task-publication flag changes.
++const CONTROL_RECEIPT_TRANSPORT_SUCCESS: i64 = 0;
++
++pub(super) fn queue_control_receipt_in_slots(remote: &Remote, slots: &mut [Option<Entry>],
++    parent: Token, worker: u64, serial: u64, cpu: i64, destination: u64, length: u64,
++) -> Result<Option<()>> {
++    let Some((child, descriptor, request)) = control_receipt_snapshot(remote, slots,
++        parent, worker, serial, cpu)? else { return Ok(None); };
++    if destination != 0 || length != 0 { return Err(EINVAL); }
++    let pi = slots.iter().position(|e|e.as_ref().is_some_and(|e|e.key()==parent)).ok_or(ENOENT)?;
++    let ci = slots.iter().position(|e|e.as_ref().is_some_and(|e|e.key()==child)).ok_or(ENOENT)?;
++    if pi == ci { return Err(EIO); }
++    let (p,c) = if pi < ci { let(a,b)=slots.split_at_mut(ci);(a[pi].as_mut().unwrap(),b[0].as_mut().unwrap()) }
++        else { let(a,b)=slots.split_at_mut(pi);(b[0].as_mut().unwrap(),a[ci].as_mut().unwrap()) };
++    let control=c.fork.as_mut().unwrap().control.as_mut().unwrap();
++    if !control.receipt.frozen || !control.receipt.written || control.receipt.uncertain
++        || control.receipt.proof.as_ref().is_none_or(|proof|proof.descriptor != descriptor)
++        || control.receipt.journal != Some(control_receipt_bytes(descriptor))
++        || control.request != request
++    { return Err(EBUSY); }
++    if control.receipt.queued { return Ok(Some(())); }
++    match p.syscalls.queue_control_response(&mut control._response,
++        CONTROL_RECEIPT_TRANSPORT_SUCCESS) {
++        Ok(()) => { control.receipt.queued=true; Ok(Some(())) },
++        Err((error, uncertain)) => {
++            if uncertain {
++                // The SAME response or completion remains owned. No retry can
++                // overwrite a response whose wake-state outcome is uncertain.
++                control.quarantined=true;control.receipt.uncertain=true;
++                control.receipt.write_error=Some(error);c.quarantined=true;
++            }
++            Err(errno(error))
++        },
++    }
++}
++
++pub(super) fn control_receipt_published(slots: &[Option<Entry>], parent: Token,
++    worker:u64, serial:u64, cpu:i64,
++) -> Result<bool> {
++    let control=slots.iter().flatten().filter_map(|e|e.fork.as_ref())
++        .filter_map(|f|f.control.as_ref()).find(|c|c.descriptor.identity.parent==parent.wire()
++            &&c.descriptor.worker==worker&&c.descriptor.delivery==serial).ok_or(ENOENT)?;
++    if control.descriptor.cpu as i64 != cpu || control.descriptor.epoch==0
++        || !control.receipt.written || !control.receipt.queued
++    { return Err(EACCES); }
++    Ok(control.receipt.published)
++}
++
++// Select ONLY the exact authenticated control Completion. A CPU-wide generic
++// next_completion could publish an unrelated return while its owner is frozen.
++pub(super) fn publish_control_receipt_in_slots(remote:&Remote,slots:&mut [Option<Entry>],
++    parent:Token,cpu:i32,send:impl FnOnce(&[u8;128])->Result,
++) -> Result<bool> {
++    let selected=slots.iter().flatten().filter_map(|e|e.fork.as_ref())
++        .filter_map(|f|f.control.as_ref()).find(|c|c.descriptor.identity.parent==parent.wire()
++            &&c.descriptor.cpu==cpu&&c.receipt.queued&&!c.receipt.published)
++        .map(|c|c.descriptor);
++    let Some(d)=selected else {return Ok(false);};
++    let Some((child,actual,request))=control_receipt_snapshot(remote,slots,parent,d.worker,d.delivery,cpu as i64)?
++        else{return Err(EACCES);};
++    if actual!=d{return Err(EACCES);}
++    let pi=slots.iter().position(|e|e.as_ref().is_some_and(|e|e.key()==parent)).ok_or(ENOENT)?;
++    let ci=slots.iter().position(|e|e.as_ref().is_some_and(|e|e.key()==child)).ok_or(ENOENT)?;
++    if pi==ci{return Err(EIO);}
++    let(p,c)=if pi<ci{let(a,b)=slots.split_at_mut(ci);(a[pi].as_mut().unwrap(),b[0].as_mut().unwrap())}
++        else{let(a,b)=slots.split_at_mut(pi);(b[0].as_mut().unwrap(),a[ci].as_mut().unwrap())};
++    let control=c.fork.as_mut().unwrap().control.as_mut().unwrap();
++    if control.quarantined||control.receipt.uncertain||!control.receipt.written
++        ||control.receipt.proof.as_ref().is_none_or(|proof|proof.descriptor!=d)
++        ||control.receipt.journal!=Some(control_receipt_bytes(d))
++    {return Err(EBUSY);}
++    p.syscalls.publish_control_observed(d.worker,d.delivery,&request,cpu,
++        |packet|send(packet).map_err(|e|e.to_errno()),|actual,worker,serial|{
++            // Infallible marker immediately after the real status Release and
++            // response-memory release, BEFORE fallible delivery/worker work.
++            if actual==&control.request&&worker==Some(d.worker)&&serial==d.delivery
++                &&control.descriptor==d {control.receipt.published=true;}
++        }).map_err(errno)
++}
++
++pub(super) fn has_control_completion(slots:&[Option<Entry>],parent:Token,cpu:i32)->bool{
++ slots.iter().flatten().filter_map(|e|e.fork.as_ref()).filter_map(|f|f.control.as_ref())
++  .any(|c|c.descriptor.identity.parent==parent.wire()&&c.descriptor.cpu==cpu
++   &&c.receipt.queued&&!c.receipt.published)
++}

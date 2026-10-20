@@ -1,0 +1,48 @@
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/private_fork_carrier_request_20261017.c:2:#include "include/private_fork_carrier_request_20261017.h"
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/private_fork_carrier_request_20261017.c:12:int private_fork_carrier_request_encode_v1(unsigned char *out,size_t bytes,
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/private_fork_carrier_request_20261017.c:25:int private_fork_carrier_request_bind_v1(pfw_u64 args[6],pfw_u64 physical,size_t bytes)
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/include/private_fork_carrier_request_20261017.h:4:#include "private_fork_wire_20261017.h"
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/include/private_fork_carrier_request_20261017.h:5:/* Additive private request marker; MCFK0001 keeps its original nonce argument. */
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/include/private_fork_carrier_request_20261017.h:6:#define PRIVATE_FORK_CARRIER_MARKER_V1 0x313030434b46434dULL /* MCFKC001 */
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/include/private_fork_carrier_request_20261017.h:12:int private_fork_carrier_request_encode_v1(unsigned char *out, size_t bytes,
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/include/private_fork_carrier_request_20261017.h:15:int private_fork_carrier_request_bind_v1(pfw_u64 args[6], pfw_u64 physical,
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/include/private_fork_guest_carrier_20261017.h:5:#include "private_fork_carrier_request_20261017.h"
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/include/private_fork_guest_carrier_20261017.h:46: * This is not a host-issued key or phase receipt and does not enable a caller.
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:56:#include <private_fork_guest_carrier_20261017.h>
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:282:typedef void (*ptrace_control_log_fn_t)(int event, int value, int result);
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:1888:		ptrace_control_log_fn_t log_fn,
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:1907:		ptrace_control_log_fn_t log_fn);
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:1923:		ptrace_control_log_fn_t log_fn);
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:1930:		ptrace_control_log_fn_t log_fn);
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:3235:		ptrace_control_log_fn_t log_fn);
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7203:		/* control can't be rolled back because vm_range is gone */
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7221:		/* control can't be rolled back because vm_range is gone */
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7299:struct process_fork_guest_revoke_receipt {
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7310:    struct process_fork_guest_revoke_receipt revoked;
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7311:    unsigned int receipt_phase;
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7364:    rc = private_fork_carrier_request_bind_v1(arguments, carrier->physical, sizeof(carrier->bytes));
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7375:    rc = private_fork_carrier_request_encode_v1(carrier->bytes, sizeof(carrier->bytes),
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7506:    if (memcmp(bytes, "MCFKW001", 8) || bytes[8] != 1 || bytes[9] || bytes[10] != 40 || bytes[11]
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7511:    if ((accept->stage == 1 && (carrier->receipt_phase || sequence != 1
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7513:        || (accept->stage == 2 && (carrier->receipt_phase != 1 || kind != 2 || sequence != 2 || accept->result))
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7529:        /* This is a receipt from the genuine pending-owner first writer,
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7531:         * UNSEEN first receipt at sequence1; no postpositive/LINK revoke is
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7536:        carrier->receipt_phase = PRIVATE_FORK_WIRE_HOST_REVOKED_V1;
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7537:    } else carrier->receipt_phase = accept->stage;
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7549:/* Stages3/4 have NO actual carrier producer/control route yet. These closures
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7573: * receipt. The old MCFK0001 path keeps its scalar nonce semantics unchanged. */
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7639:        && carrier->receipt_phase == PRIVATE_FORK_WIRE_HOST_REVOKED_V1
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7713:        struct private_fork_wire_host_v1 host = {
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7720:        int rc = private_fork_wire_encode_v1(carrier->ack_bytes, sizeof(carrier->ack_bytes),
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7737:     * authenticated control ticket; selector/header parse alone is not proof.
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7788:static int do_fork_inband_private(struct thread *child)
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7822:        || !do_fork_inband_private(child) || child->proc->parent != parent->proc || !nonce
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7868:        || !owner->bound || !do_fork_inband_private(child)
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:7923:    if (!owner->bound || owner->credits != 0xf || !do_fork_inband_private(owner->child)
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:8208:		 * authenticated receipt must precede every native PID assignment. */
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:8324:			int receipt = do_fork_inband_accept(fork_owner, 2, err);
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:8325:			if (receipt) { err = receipt; goto native_fork_abort; }
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:19005:		ptrace_control_log_fn_t log_fn)
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:23991:ptrace_control_log_bridge(int event, int value, int result)
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:24408:			ptrace_control_log_bridge);
+/home/holden/mckernel-work/scratch/fork-adoption-wip-20261017-1/kernel/syscall.c:24467:			ptrace_control_log_bridge);

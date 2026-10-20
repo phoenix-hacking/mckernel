@@ -1,0 +1,86 @@
+
+// Zero is transport success only. The private receipt proof, not this scalar,
+// permits queueing; no legacy HOST_REVOKED/ACK/task-publication flag changes.
+const CONTROL_RECEIPT_TRANSPORT_SUCCESS: i64 = 0;
+
+pub(super) fn queue_control_receipt_in_slots(remote: &Remote, slots: &mut [Option<Entry>],
+    parent: Token, worker: u64, serial: u64, cpu: i64, destination: u64, length: u64,
+) -> Result<Option<()>> {
+    // Ordinary returns retain their original gate/error order. Only an exact
+    // durable control owner enters the strict transport/receipt checks.
+    if !slots.iter().flatten().filter_map(|e|e.fork.as_ref()).filter_map(|f|f.control.as_ref())
+        .any(|c|c.descriptor.identity.parent==parent.wire()&&c.descriptor.worker==worker&&c.descriptor.delivery==serial)
+    { return Ok(None); }
+    let Some((child, descriptor, request)) = control_receipt_snapshot(remote, slots,
+        parent, worker, serial, cpu)? else { return Ok(None); };
+    if destination != 0 || length != 0 { return Err(EINVAL); }
+    let pi = slots.iter().position(|e|e.as_ref().is_some_and(|e|e.key()==parent)).ok_or(ENOENT)?;
+    let ci = slots.iter().position(|e|e.as_ref().is_some_and(|e|e.key()==child)).ok_or(ENOENT)?;
+    if pi == ci { return Err(EIO); }
+    let (p,c) = if pi < ci { let(a,b)=slots.split_at_mut(ci);(a[pi].as_mut().unwrap(),b[0].as_mut().unwrap()) }
+        else { let(a,b)=slots.split_at_mut(pi);(b[0].as_mut().unwrap(),a[ci].as_mut().unwrap()) };
+    let control=c.fork.as_mut().unwrap().control.as_mut().unwrap();
+    if !control.receipt.frozen || !control.receipt.written || control.receipt.uncertain
+        || control.receipt.proof.as_ref().is_none_or(|proof|proof.descriptor != descriptor)
+        || control.receipt.journal != Some(control_receipt_bytes(descriptor))
+        || control.request != request
+    { return Err(EBUSY); }
+    if control.receipt.queued { return Ok(Some(())); }
+    match p.syscalls.queue_control_response(&mut control._response,
+        CONTROL_RECEIPT_TRANSPORT_SUCCESS) {
+        Ok(()) => { control.receipt.queued=true; Ok(Some(())) },
+        Err((error, uncertain)) => {
+            if uncertain {
+                // The SAME response or completion remains owned. No retry can
+                // overwrite a response whose wake-state outcome is uncertain.
+                control.quarantined=true;control.receipt.uncertain=true;
+                control.receipt.write_error=Some(error);c.quarantined=true;
+            }
+            Err(errno(error))
+        },
+    }
+}
+
+pub(super) fn control_receipt_published(slots: &[Option<Entry>], parent: Token,
+    worker:u64, serial:u64, cpu:i64,
+) -> Result<bool> {
+    let control=slots.iter().flatten().filter_map(|e|e.fork.as_ref())
+        .filter_map(|f|f.control.as_ref()).find(|c|c.descriptor.identity.parent==parent.wire()
+            &&c.descriptor.worker==worker&&c.descriptor.delivery==serial).ok_or(ENOENT)?;
+    if control.descriptor.cpu as i64 != cpu || control.descriptor.epoch==0
+        || !control.receipt.written || !control.receipt.queued
+    { return Err(EACCES); }
+    Ok(control.receipt.published)
+}
+
+// Select ONLY the exact authenticated control Completion. A CPU-wide generic
+// next_completion could publish an unrelated return while its owner is frozen.
+pub(super) fn publish_control_receipt_in_slots(remote:&Remote,slots:&mut [Option<Entry>],
+    parent:Token,cpu:i32,send:impl FnOnce(&[u8;128])->Result,
+) -> Result<bool> {
+    let selected=slots.iter().flatten().filter_map(|e|e.fork.as_ref())
+        .filter_map(|f|f.control.as_ref()).find(|c|c.descriptor.identity.parent==parent.wire()
+            &&c.descriptor.cpu==cpu&&c.receipt.queued&&!c.receipt.published)
+        .map(|c|c.descriptor);
+    let Some(d)=selected else {return Ok(false);};
+    let Some((child,actual,request))=control_receipt_snapshot(remote,slots,parent,d.worker,d.delivery,cpu as i64)?
+        else{return Err(EACCES);};
+    if actual!=d{return Err(EACCES);}
+    let pi=slots.iter().position(|e|e.as_ref().is_some_and(|e|e.key()==parent)).ok_or(ENOENT)?;
+    let ci=slots.iter().position(|e|e.as_ref().is_some_and(|e|e.key()==child)).ok_or(ENOENT)?;
+    if pi==ci{return Err(EIO);}
+    let(p,c)=if pi<ci{let(a,b)=slots.split_at_mut(ci);(a[pi].as_mut().unwrap(),b[0].as_mut().unwrap())}
+        else{let(a,b)=slots.split_at_mut(pi);(b[0].as_mut().unwrap(),a[ci].as_mut().unwrap())};
+    let control=c.fork.as_mut().unwrap().control.as_mut().unwrap();
+    if control.quarantined||control.receipt.uncertain||!control.receipt.written
+        ||control.receipt.proof.as_ref().is_none_or(|proof|proof.descriptor!=d)
+        ||control.receipt.journal!=Some(control_receipt_bytes(d))
+    {return Err(EBUSY);}
+    p.syscalls.publish_control_observed(d.worker,d.delivery,&request,cpu,
+        |packet|send(packet).map_err(|e|e.to_errno()),|actual,worker,serial|{
+            // Infallible marker immediately after the real status Release and
+            // response-memory release, BEFORE fallible delivery/worker work.
+            if actual==&control.request&&worker==Some(d.worker)&&serial==d.delivery
+                &&control.descriptor==d {control.receipt.published=true;}
+        }).map_err(errno)
+}

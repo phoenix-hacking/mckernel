@@ -1,0 +1,156 @@
+{
+  "accepted_one_round_native": {
+    "bytes": 27300,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/ACTUAL-205-TWO-CPU-AND-RUST-PAIR-NATIVE-DIAGNOSTIC-REVIEW.json",
+    "sha256": "d67e215390a78c991077b671ff9205ecaa9ec925a320414154795106acdc8bc7"
+  },
+  "actual_new_candidate_tests_completed": 0,
+  "actual_saved_trace_input": {
+    "bytes": 121540,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/05-readback-2/stdout",
+    "sha256": "58a4946ebe471b650d62be2e4bb59e047ba316cba8e9070eb4c7273722737fb8"
+  },
+  "actual_saved_trace_serial_SHA256": "823eb3230d08dfdce37dc3369498ea975ef2ab61aeaaed6cb31552d1518ae2a1",
+  "actual_tests_executed_by_reviewer": 0,
+  "application_acceptance": false,
+  "candidate_sources": [
+    {
+      "bytes": 76101,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/native_diagnostic.py",
+      "sha256": "cceda258b6ed47ed1f008635ddbf4550f1fba89a90d328b55a6a543506ca8d20"
+    },
+    {
+      "bytes": 3010,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_assignment.h",
+      "sha256": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643"
+    },
+    {
+      "bytes": 23715,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.c",
+      "sha256": "8cbc7a774cbc5ed4d3047228379c2c9ffebdbc37a1416d8cb3a8ee21a39dd62c"
+    },
+    {
+      "bytes": 4586,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_collector.inc",
+      "sha256": "2f542b57cce20a0289731ef79ee02264012faad91316f2361461ac1398ef515b"
+    },
+    {
+      "bytes": 2469,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_round_oracles.h",
+      "sha256": "4f7fbd55ffa528e59bdb2445bb74ee681fab4e2cd4ca4e5a016d7c0d525d7bbc"
+    },
+    {
+      "bytes": 4434,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_runtime.inc",
+      "sha256": "7605cbdae99fbabcca581ab4ddf0190f6fa308983872d25dbfdc57a02a6527e8"
+    },
+    {
+      "bytes": 2299,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_two_round_run.inc",
+      "sha256": "cca69b8000913a3d85ea816114820076ee851bf7b1a082f59a334c2f6b09ff31"
+    },
+    {
+      "bytes": 8499,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/candidate/pair_two_round_support.inc",
+      "sha256": "01ce3ef0fe3965a93ad8635bde44e1a2885e8ec6031c9a1d0d3e7f7665a15040"
+    }
+  ],
+  "command_set": {
+    "bytes": 2075,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/COMMAND-SET.json",
+    "sha256": "6f0e92ddc4c23bff5b5d6f7cceeab10b3861076a73db4dc8692f070effd8a1a0"
+  },
+  "compute_C_expansion": false,
+  "conditions": [
+    "Root freshCPU6/sharedRAM/capacity/usage<97 admission; unchanged exactpins and freshoutputs.",
+    "One ordinary fixture only; stopfirstfailure/preserveallstatus/streams/ownedretirement. No guest/stage/runtime authority."
+  ],
+  "decision": "APPROVE_ONE_EXACT_CPU6_OFFLINE_BODY_COMPILE_AND_STRICT_EVALUATOR_FIXTURE_AFTER_ROOT_FRESH_ADMISSION",
+  "exact_ordinary_argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=3",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/check_two_rounds.py"
+  ],
+  "findings_corrected_before_execution": [
+    "InitialC gate rejected validnonleader procfs TIDs; coherent correction validates positive TID/knownop/sameOSgen but counts only leader publications/deletions, matching originalstrictPython leaderpredicate. Realacceptedthreadtrace is now a directactualC gate positive plus fourfocusedrefusals.",
+    "Unknown ND_PAIR_ROUND_* or ND_PAIR_ROUNDS_* wire lines now refused before knownother-round PID projection; one targetednegative added. Initialsourceproposal retained."
+  ],
+  "fresh_paths": [
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-1",
+    "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-capture-1"
+  ],
+  "frozen_oracle": {
+    "bytes": 3549,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/FROZEN-ROUND-ORACLE.json",
+    "sha256": "96675eb908587fcf94f48720b08b8c84e6011032840932e84b8e17be5179ca71"
+  },
+  "guest_runs": 0,
+  "implementation_ownership": false,
+  "input_pins": {
+    "bytes": 6704,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/CHECK-INPUT-PINS.json",
+    "sha256": "d557ba6e7454791daa182aef17aacd908d01d1253062c87b381878e912bd6618"
+  },
+  "language_boundary": "Only permittedLinuxcontrol-planeC collector extension; no compute-kernelC or Rustapplication edits.",
+  "native_acceptance": false,
+  "oracle_independent_review": "Original387/254 byte/status/CPU/argv/env oracles independently compared to accepted205 manifest and C numericarrays; fixedtwo-round/oneOS/sequentialhandoff requirements reviewed before any new execution. File authored by implementation owner; independent acceptance is this report, not a claim of independent file authorship.",
+  "ordinary_limits": {
+    "AS_bytes": 1073741824,
+    "CPU": 6,
+    "CPU_seconds": 30,
+    "cleanup_seconds": 3,
+    "global_work_seconds": 28,
+    "growth_per_filesystem_bytes": 67108864,
+    "host_floor_bytes": 17179869184,
+    "jobs": 1,
+    "outer_wall_seconds": 35,
+    "perfile_stream_limit_bytes": 33554432,
+    "reserve_per_filesystem_bytes": 671088640,
+    "scratch_floor_bytes": 12884901888
+  },
+  "planned_actual_checks": {
+    "Python_refusals": 14,
+    "actual_C_body_scenarios": 15,
+    "full_collector_compile": 2,
+    "full_evaluate_positive": 1,
+    "original_pair_checker_AST_identity": 2
+  },
+  "proposal": {
+    "bytes": 3951,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/IMPLEMENTATION-PROPOSAL.json",
+    "sha256": "6f3e9ecb5e9714e86e7d2fbaf62d4962e1db1bbabef399be1f523be793c923e7"
+  },
+  "repeatability_quota_credit": false,
+  "reviewer": "two_cpu_end_to_end_review",
+  "root_operations": 0,
+  "saved_C_klog_boundary_conversion": "Only CRLF serialTTY transport normalized to LF for real klogctl boundary; originalPID/CPU/TID/token/roworder preserved.",
+  "schema": "mckernel.independent-current-host-pair205-fixed-two-round-source-review.v1",
+  "source_findings": [
+    "Exactlytwo rounds compiledbehind ND_PAIR_TWO_ROUNDS; originaldefaultonepair branch and existing supervisor/subreaper ownership logic retained. Rustapps/kernel/image/modules unchanged.",
+    "Roundfailure returnsbeforeanylaterround; unsafe=0 preserves owners via PID1hold and prevents sharedteardown. No attempt to continue on uncertain supervisor joins.",
+    "Each round has private exclusiveevidence, stableemptyworkdir reuse, exactstreams/status/startupCPU/traceroutes/freshattempttokens and procfsempty before next. FourdistinctleaderPIDs/globalattempt-token caps retain fixed bounded case.",
+    "Original _pair_body and _pair_trace ASTidentical, host QMP/identity/deadline/BAD_MARKERS/teardown prefix unchanged. Newparser delegatesone original checker perknownPID partition with sharedoneboot/twochannel evidence and globalforeignschedule/syscall/tokenrefusals.",
+    "Productionklog emittedatfinish; parser intentionally uses identifiedPID partition plus monotonicapp/boundary times, not false serial-position requirements for deferredklog rows.",
+    "Actualfixture includes literal selected productionwrite/save/load/publish/run/gate bodies, stubbing only application launch, klogctl, procfs and clock boundaries; full default/two-round collectors compile separately."
+  ],
+  "source_originals": {
+    "bytes": 2063,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ORIGINAL-SOURCE-REFS.json",
+    "sha256": "98224bb3a1f8fe2efc441946f508b805075e7c8a4963c3b229e0e439ac2382af"
+  },
+  "status": "PASS_FIXED_TWO_ROUND_ORACLE_LINUX_COLLECTOR_HANDOFF_AND_PARSER_SOURCE_FOR_ONE_ORDINARY_CHECK"
+}

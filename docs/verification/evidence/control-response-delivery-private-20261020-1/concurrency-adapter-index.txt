@@ -1,0 +1,7 @@
+1949:struct Arc<T>{inner:std::sync::Arc<T>}
+1985:   pub struct Mutex<T>(std::sync::Mutex<T>);impl<T> Mutex<T>{pub fn new(x:T)->Self{Self(std::sync::Mutex::new(x))}pub fn lock(&self)->std::sync::MutexGuard<'_,T>{self.0.lock().unwrap()}}
+2442:struct Mutex<T>(std::sync::Mutex<T>);
+2447:impl<T> Mutex<T>{fn new(value:T)->Self{Self(std::sync::Mutex::new(value))}fn lock(&self)->FixtureGuard<'_,T>{MM_ACTIVE.with(|active|assert!(!active.get(),"provider lock under MM"));let inner=self.0.lock().unwrap();LOCK_DEPTH.with(|depth|depth.set(depth.get()+1));FixtureGuard{inner:Some(inner)}}}
+5539:struct Arc<T>(std::sync::Arc<T>);
+5561:struct Mutex<T>(RefCell<T>);
+5562:impl<T> Mutex<T> { fn lock(&self)->RefMut<'_,T> { self.0.borrow_mut() } }

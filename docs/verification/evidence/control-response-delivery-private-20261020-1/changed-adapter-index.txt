@@ -1,0 +1,9 @@
+436:    /// retained Mirror and current MM before any Linux PTE is changed.
+694:    /// the original response address and its ownership must remain unchanged.
+2525:pub(crate) struct Remote { owner: OsToken, slots: Mutex<Vec<Option<Entry>>>, transport_failed: AtomicBool, release_token: Token, releases: Mutex<Mailbox<Memory>> }
+2526:impl Remote{fn transport_health(&self)->Result{if self.transport_failed.load(Ordering::Relaxed){Err(EIO)}else{Ok(())}}
+2585:    }fn finish_publication(
+2686:impl Remote { pub(crate) fn release_fork_ack(&self, child: Token, key: ForkIdentity, epoch: u64) -> Result {
+3057:impl Remote {
+3112: let remote=Arc::new(Remote{owner:memory.owner,slots:Mutex::new(vec![Some(p),Some(c)]),transport_failed:AtomicBool::new(false),release_token:Token::allocate().unwrap(),releases:Mutex::new(Mailbox::new().unwrap())},0).unwrap();(remote,pt,ct,w,s)
+3237:// Dedicated kernel-only callback ABI; Invoke commands 1-14 remain unchanged.

@@ -1,0 +1,8 @@
+2456:unsafe impl Send for ForkChildOwner {}
+2528:pub(crate) fn publish_syscall(
+3122:pub(crate) fn return_actual(remote:&Remote,parent:Token,w:u64,s:u64,cpu:i64,value:i64)->Result{let mut slots=remote.slots.lock();authorize_fork_return(&slots,parent,w,s,cpu,value)?;let p=slots.iter_mut().flatten().find(|p|p.key()==parent).unwrap();p.syscalls.return_value(w,s,cpu,value,|_|Ok(())).map_err(errno)?;record_fork_return(&mut slots,parent,w,s,value);Ok(())}
+4070:unsafe impl Send for BackendApplication {}
+4174:unsafe impl Send for ForkProviderOwner {}
+4190:unsafe impl Send for ForkConsumerCapsule {}
+4215:unsafe impl Send for ForkPayloadCapsule {}
+5676:unsafe impl Send for MmIdentity {}

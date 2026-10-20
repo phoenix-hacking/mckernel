@@ -1,0 +1,378 @@
+{
+  "Python_refusals": [
+    {
+      "name": "missing-second-round",
+      "reason": "exact two-round evidence"
+    },
+    {
+      "name": "duplicate-round",
+      "reason": "exact two-round evidence"
+    },
+    {
+      "name": "cross-round-duplicate-PID",
+      "reason": "two-round unique PID"
+    },
+    {
+      "name": "handoff-before-first-reap",
+      "reason": "sequential round handoff"
+    },
+    {
+      "name": "wrong-round-index",
+      "reason": "two-round boundary identity"
+    },
+    {
+      "name": "false-procfs-handoff",
+      "reason": "two-round boundary identity"
+    },
+    {
+      "name": "wrong-second-oracle",
+      "reason": "pair stream oracle"
+    },
+    {
+      "name": "missing-second-EOF",
+      "reason": "pair stream accounting"
+    },
+    {
+      "name": "wrong-second-startup-CPU",
+      "reason": "pair actual CPU mismatch"
+    },
+    {
+      "name": "cross-round-token-reuse",
+      "reason": "two-round fresh retirement tokens"
+    },
+    {
+      "name": "foreign-application",
+      "reason": "two-round global schedules"
+    },
+    {
+      "name": "unknown-round-marker",
+      "reason": "unknown two-round wire marker"
+    },
+    {
+      "name": "two-boots",
+      "reason": "one actual OS boot assignment"
+    },
+    {
+      "name": "round-count-not-a-duration-knob",
+      "reason": "missing/duplicate pair report"
+    }
+  ],
+  "actual_C_scenarios": 16,
+  "actual_full_evaluator_positive": {
+    "completed_apps": 4,
+    "completed_rounds": 2,
+    "concurrent_apps_within_each_round": true,
+    "sequential_handoff": true,
+    "status": "PROTOCOL_PASS",
+    "stdout_bytes_per_round": [
+      387,
+      254
+    ],
+    "strict_CPU": [
+      0,
+      1
+    ],
+    "synthetic_PIDs": [
+      1001,
+      1002,
+      1003,
+      1004
+    ]
+  },
+  "actual_production_compile_proofs_reused": [
+    {
+      "bytes": 1497,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-1/compile-default/status.json",
+      "sha256": "f3a20c1de54d265a3469443d47dee66238b72112d0e4b9ac2244745d6040421c"
+    },
+    {
+      "bytes": 1529,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-2/compile-two-rounds/status.json",
+      "sha256": "25e595b26fb59eda5ddcdbeb091c4a7065905223b81f385c892c4607a6f1901a"
+    }
+  ],
+  "actual_remaining_harness_compile_commands": 1,
+  "actual_result": {
+    "bytes": 24138,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/result.json",
+    "sha256": "085324ec4505c24784ec36f7cdac8656df0e4efd9c3822b904bb6a9d253d31a6"
+  },
+  "all_actual_direct_joined": true,
+  "all_actual_direct_statuses": [
+    {
+      "name": "outer",
+      "pid": 1731793,
+      "returncode": 0,
+      "seconds": 1.6050584879994858,
+      "start": 25379204,
+      "status": {
+        "bytes": 1065,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-capture-3/status.json",
+        "sha256": "e8579dbb755f2a8a275ae8b83a37a79ea65208b2ebc1fd51aa120dff2c0fdbda"
+      }
+    },
+    {
+      "name": "compile-actual-body",
+      "pid": 1731795,
+      "returncode": 0,
+      "seconds": 0.3475534759927541,
+      "start": 25379208,
+      "status": {
+        "bytes": 1504,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/compile-actual-body/status.json",
+        "sha256": "f5e9c725c0be13dfc4de1e216b6ec3af3218402c97508fc7c82a7ca9536d9d8e"
+      }
+    },
+    {
+      "name": "actual-body-0",
+      "pid": 1731800,
+      "returncode": 0,
+      "seconds": 0.02237875698483549,
+      "start": 25379243,
+      "status": {
+        "bytes": 1346,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/actual-body-0/status.json",
+        "sha256": "95ffcea7c2746539903f42d26ce93eb76bbcac54da10bff401877d6e81fb42b5"
+      }
+    },
+    {
+      "name": "actual-body-1",
+      "pid": 1731801,
+      "returncode": 0,
+      "seconds": 0.021060908999061212,
+      "start": 25379246,
+      "status": {
+        "bytes": 1346,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/actual-body-1/status.json",
+        "sha256": "bdc36dcc3d0075a3fad617e0e95decd6a1602251ba1c01f516a34eb7b0556444"
+      }
+    },
+    {
+      "name": "actual-body-2",
+      "pid": 1731802,
+      "returncode": 0,
+      "seconds": 0.02102447100332938,
+      "start": 25379248,
+      "status": {
+        "bytes": 1345,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/actual-body-2/status.json",
+        "sha256": "23d0c1eeee169ddb791841d61c5c4122b3e3cef5ff09f2518077ff6122588833"
+      }
+    },
+    {
+      "name": "actual-body-3",
+      "pid": 1731803,
+      "returncode": 0,
+      "seconds": 0.021807190991239622,
+      "start": 25379251,
+      "status": {
+        "bytes": 1346,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/actual-body-3/status.json",
+        "sha256": "63ad89c07979b32a6b4e64208ed61848e84ba0796ebf992b0fc846a37b632482"
+      }
+    },
+    {
+      "name": "actual-body-4",
+      "pid": 1731804,
+      "returncode": 0,
+      "seconds": 0.5194613450148609,
+      "start": 25379253,
+      "status": {
+        "bytes": 1344,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/actual-body-4/status.json",
+        "sha256": "329d7a9d32635e2f2ae4774e0322d0bc0ccf9b403c445cb7cd34f785056e9de1"
+      }
+    },
+    {
+      "name": "actual-body-5",
+      "pid": 1731805,
+      "returncode": 0,
+      "seconds": 0.022740108979633078,
+      "start": 25379305,
+      "status": {
+        "bytes": 1347,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/actual-body-5/status.json",
+        "sha256": "291fc3884f04a80e7cb510e086535c5e29ee4523789a1995b68bd52cd9fc4e46"
+      }
+    },
+    {
+      "name": "actual-body-6",
+      "pid": 1731806,
+      "returncode": 0,
+      "seconds": 0.021267119998810813,
+      "start": 25379308,
+      "status": {
+        "bytes": 1347,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/actual-body-6/status.json",
+        "sha256": "1ffc5721cdbab4d5103b126bc44349e3750720aff85b64bf0971498191da82c2"
+      }
+    },
+    {
+      "name": "actual-body-7",
+      "pid": 1731807,
+      "returncode": 0,
+      "seconds": 0.025728570006322116,
+      "start": 25379310,
+      "status": {
+        "bytes": 1347,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/actual-body-7/status.json",
+        "sha256": "5dd0cff6bdd2d0e55f175666f693b6c463f2f26dec738c32c66b732d2cb27f7e"
+      }
+    },
+    {
+      "name": "actual-body-8",
+      "pid": 1731808,
+      "returncode": 0,
+      "seconds": 0.021468471008120105,
+      "start": 25379313,
+      "status": {
+        "bytes": 1347,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/actual-body-8/status.json",
+        "sha256": "67d386e2993f1350acae98bf95eccdbb0b9715513a183db07fdfb349aed69f19"
+      }
+    },
+    {
+      "name": "actual-body-9",
+      "pid": 1731809,
+      "returncode": 0,
+      "seconds": 0.029292683000676334,
+      "start": 25379316,
+      "status": {
+        "bytes": 1346,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/actual-body-9/status.json",
+        "sha256": "4fcecc546988a79601746299198dde49eb6840979d1bfbdef106cfc4616d4912"
+      }
+    },
+    {
+      "name": "actual-write-EAGAIN-deadline",
+      "pid": 1731810,
+      "returncode": 0,
+      "seconds": 0.12804551201406866,
+      "start": 25379319,
+      "status": {
+        "bytes": 1379,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/actual-write-EAGAIN-deadline/status.json",
+        "sha256": "2bd69c5883a950cc4271f1229c3593d11844bdf0ddc2e9c49f69c69ba30bdcad"
+      }
+    },
+    {
+      "name": "actual-saved-child-TIDs-positive",
+      "pid": 1731811,
+      "returncode": 0,
+      "seconds": 0.03143437401740812,
+      "start": 25379332,
+      "status": {
+        "bytes": 1511,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/actual-saved-child-TIDs-positive/status.json",
+        "sha256": "c38b727d2038c2f39c52327b922b95e91a496662bfbd9226f45d044900f26c0b"
+      }
+    },
+    {
+      "name": "invalid-child-tid",
+      "pid": 1731812,
+      "returncode": 0,
+      "seconds": 0.03273706798790954,
+      "start": 25379335,
+      "status": {
+        "bytes": 1481,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/invalid-child-tid/status.json",
+        "sha256": "cb387b8abdd4509bd58e4e2c5cbb7e13cde13f5e477d83f7a8c1e086acf6e3f2"
+      }
+    },
+    {
+      "name": "wrong-child-generation",
+      "pid": 1731813,
+      "returncode": 0,
+      "seconds": 0.033282091026194394,
+      "start": 25379339,
+      "status": {
+        "bytes": 1492,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/wrong-child-generation/status.json",
+        "sha256": "6df88dee5691006ae1d45be77c4a63181d607c99a917b678071ed99bfed38c70"
+      }
+    },
+    {
+      "name": "unknown-child-procfs-op",
+      "pid": 1731814,
+      "returncode": 0,
+      "seconds": 0.03229565400397405,
+      "start": 25379342,
+      "status": {
+        "bytes": 1493,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/unknown-child-procfs-op/status.json",
+        "sha256": "a84c3587ffdb2aaceeada3b2352d89ad093f0f95d1443f641b5b42b4a83c7822"
+      }
+    },
+    {
+      "name": "duplicate-leader-publication",
+      "pid": 1731815,
+      "returncode": 0,
+      "seconds": 0.03296812000917271,
+      "start": 25379346,
+      "status": {
+        "bytes": 1503,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-check-3/duplicate-leader-publication/status.json",
+        "sha256": "8060f6b8dada153b49eec5af8ae5361428e76662ee582e4897779f84bf2ce640"
+      }
+    }
+  ],
+  "all_owned_groups_absent": true,
+  "all_stderr_bytes": 0,
+  "all_streams_closed_and_bound_to_stable_capture_metadata": true,
+  "checked_input_pin_count": 33,
+  "cumulative_failure_history_preserved": [
+    "pre-execution d448 source",
+    "first production format-truncation failure",
+    "second missing-poll harness compile failure",
+    "expert timing/header corrections and source-only exact-bound draft",
+    "pre-child local-admission literal refusal"
+  ],
+  "decision": "ACCEPT_SOURCE_AND_ORDINARY_RESULTS_ONLY_NO_STAGE_NATIVE_OR_QUOTA_AUTHORITY",
+  "expert_review": {
+    "bytes": 3336,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1/EXPERT-FROZEN-FIXTURE-AND-REMAINING-ORDINARY-REVIEW.json",
+    "sha256": "7b4b42ef140af0053bdb9263d5882242f72e67a9878684d9ea54e6eff92dfe42"
+  },
+  "frozen_oracle": {
+    "bytes": 3549,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/FROZEN-ROUND-ORACLE.json",
+    "sha256": "96675eb908587fcf94f48720b08b8c84e6011032840932e84b8e17be5179ca71"
+  },
+  "implementation_ownership": false,
+  "input_pins": {
+    "bytes": 8009,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/CHECK-INPUT-PINS-3.json",
+    "sha256": "022c2f42b35702f67ad4d9a509333c580b41e6cad22723905197a17ccb189a08"
+  },
+  "native_guests": 0,
+  "new_Rust_paths": 0,
+  "new_logical_cases": 0,
+  "next_scope": "New actual collector stage and exact owner/runner/parent/fresh physical/snapshot/final release remain separate concrete prerequisites before native execution.",
+  "outer_status": {
+    "bytes": 1065,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/ordinary-capture-3/status.json",
+    "sha256": "e8579dbb755f2a8a275ae8b83a37a79ea65208b2ebc1fd51aa120dff2c0fdbda"
+  },
+  "real_application_launches": 0,
+  "repeatability_quota_acceptance": false,
+  "reviewer": "two_cpu_end_to_end_review",
+  "runtime_authority": false,
+  "schema": "mckernel.independent-current-host-pair205-fixed-two-round-actual-offline-review.v1",
+  "selected_witnesses": [
+    "First exact-byte/startup-CPU failure stops before second round; unsafe-worker scenario preserves safe=0.",
+    "Actual saved d67e child-TID trace passes exact production C gate; wrong TID/generation/op and duplicate leader refuse.",
+    "Unchanged actual write_all refuses at bounded EAGAIN deadline; pipe FDs closed.",
+    "Actual complete evaluator accepts exactly two distinct rounds with untouched original one-pair checkers.",
+    "Malformed/missing/foreign/reused identity, CPU/oracle/EOF and unknown-wire negatives refuse."
+  ],
+  "source_review": {
+    "bytes": 8780,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1/SOURCE-ORACLE-AND-EXACT-ORDINARY-REVIEW.json",
+    "sha256": "8a093708f6fd4ce5e814b1835dff40472ac5c6fe2619e1b42365c50dfcfa914b"
+  },
+  "source_scope": "functional OS/apps plus Rust/reviewed assembly; Linux control collector C only; original Rust applications/image/modules remain frozen",
+  "stage_acceptance": false,
+  "status": "PASS_ACTUAL_FIXED_TWO_ROUND_COLLECTOR_BODY_AND_STRICT_EVALUATOR_OFFLINE",
+  "stubbed_boundaries": "EXPLICIT_TEST_BOUNDARIES",
+  "whole_elapsed_seconds": 1.6050584879994858
+}

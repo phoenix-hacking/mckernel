@@ -5928,3 +5928,17 @@ Usage 88%, nine percentage points to the 97% included stop. Host/scratch free
 reserves/growth floors, fresh live identities, mutex 27:4, Scratch21, failures,
 dirty worktree and evidence. Next review: 2026-10-20T01:05:44.078306Z.
 
+
+## Four-hour user comparison — 2026-10-20T01:02:11.008698Z
+
+Fixed baseline 2026-10-19T21:02:05.897177Z; elapsed 4.00142 hours. Practical
+checks 9 -> 12/35 (+3), distinct native behaviors 25 -> 26 (+1), selected Rust
+production/native paths 17/14 -> 17/14. All engineering bands held; no whole
+milestone or whole-Rust completion is inferred. Accepted final public-release
+sequence, matched two-CPU configuration and four-app/two-round native diagnostic
+are concrete gains. Applications per completed owner wall time improved
+1.9093976x in the matched two-app/four-app comparison; overall engineering
+speedup remains unestablished. Private receipt/delivery source now has body-test
+acceptance, while guest/current-module integration remains pending. Immutable
+comparison: supervisor-milestone-snapshots-20261019-1/four-hour-comparison-20261020T010211Z.json.
+

@@ -1,0 +1,81 @@
+{
+  "actual_result": {
+    "compile_returncode": 0,
+    "remaining_scenarios_unrun": 3,
+    "scenario1_returncode": 101
+  },
+  "actual_source_acceptance": false,
+  "actual_source_evidence": {
+    "Request_decode": "ed5b0d0c3b68a6a34bc0f78f9adb3cbd0f0b4f02de0dcf8feb5f0dc015e7c397",
+    "Response_control_prepare": "c23106ffb1e47740507fb544a133a0c424ad78638fb2dcf17b9e4b901a627df1",
+    "Response_unpublished_check": "ac7dc4dfb907f99187df08a028150fc6f0a834d26b19f08611453f291ec08896",
+    "publication_finish": "f0450991a6911deea8695ae81c8d23b915cf5a9486e9388726858df25e420968"
+  },
+  "bounded_correction_closed_stderr": {
+    "bytes": 421,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-2/scenario-1.stderr",
+    "sha256": "522324d0b1afcb126957e81d243b3701b4cdee4ba1c5645c01e3555e3eb59a17"
+  },
+  "bounded_correction_compile": {
+    "bytes": 1246,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-2/compile.status.json",
+    "sha256": "4101656624aef90c0f0830c40c1d999e350060e600bbaab36a1e826c8698a7a3"
+  },
+  "bounded_correction_scenario1": {
+    "bytes": 817,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-2/scenario-1.status.json",
+    "sha256": "8554bace48e09124ea94a2583f86d41bc76613cfd2f7d1d3607fabe2810adc5c"
+  },
+  "bounded_correction_whole": {
+    "bytes": 580,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/whole-check-correction.status.json",
+    "sha256": "7e7c8ce48a2ad1cc95cefa7319eef7f6a0f850c38cdf08ffb190706c2ac8bde4"
+  },
+  "decision": "CORRECT_TWO_FIXTURE_ORACLES_USING_ACTUAL_DECODER_AND_RETENTION_PRECHECK_NO_PRODUCTION_DELTA",
+  "execution_authorized": false,
+  "first_compile_failure": {
+    "bytes": 1239,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-1/compile.status.json",
+    "sha256": "4cd53c573e6ca1e49fdb36e28e0be6cd234f699da1eecf5231a41791d54c23e6"
+  },
+  "first_compile_stderr": {
+    "bytes": 2741,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/check-1/compile.stderr",
+    "sha256": "fe41915d61fcc9dfb387960204ce83dae6754ec6826822d2cd286e50c9d9bc55"
+  },
+  "implementation_ownership": false,
+  "mandatory_preservation": [
+    "Sourcef5b8 and all genericprepare/returnvalue/publication bodies unchanged.",
+    "Four scenarios and all retention assertions retained; onlytwo incorrect expectations change.",
+    "One compile+4 serial isolatedprocesses under unchanged aggregateCPU6/1GiB30CPU/global28/outer35/32MiB; freshrootgrant after frozenpins.",
+    "Originalcompilefailure+boundedcorrectionruntimefailure, priorpark/receipt families and reviewererrata remain preserved."
+  ],
+  "native_or_guest_ACK_authority": false,
+  "other_case_source_joins": [
+    "No unrelateddelivery collision: dedicated worker202/fresh1d, control201/1c, original200/1b not reused.",
+    "Actual finish_publication maps sendEAGAIN toOk(false) beforestatusRelease, preserving Completion.",
+    "Postpublication notifyerror returnsErr(-5) and latches transporterror; controlwait sees durablepublishedmarker and returnsOk. No repeatstatuspublication is permitted.",
+    "Success before/after Memorycount equality includes one unrelatedCompletion retained as exactcontrol Response is published; status1control/status0unrelated and exactmarker bind identities.",
+    "Workerclose source-refusal retains SAMEparkedowner; no positive release or finalACK inferred."
+  ],
+  "reviewed_at": "2026-10-20T00:57:57.510670+00:00",
+  "reviewer": "/root/next_replace_tid_review",
+  "reviewer_terminology_erratum": "Earlier matching-wire-requester202 wording was wrong. Actual Request decoder defines requester from packet48 (guestTID101), target from packet52 (Linuxworker202). Actual original wirebytes were always correct; only added fixtureassertion was incorrect. This additive correction supersedes that terminology in prior messages/reports without modifying retained bytes.",
+  "schema": "mckernel.independent-control-delivery-identity-and-error-oracle-expert-diagnosis.v1",
+  "scope": "Functional OS/apps Rust private control-response delivery evidence only; no current activation.",
+  "source_patch": {
+    "bytes": 15015,
+    "path": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-receipt-1/control-response-delivery.patch",
+    "sha256": "f5b8c603448a10fbdc02eab58bd95b966026272914e3e81cf8174d419a106d79"
+  },
+  "whole_fixture_expert_prescription": [
+    {
+      "case": "unrelated delivery identity",
+      "change": "Assert requester101 AND target202; preserve packet48=101/52=202, worker202, nr39, freshresponse1d and actualadmit/reserve/copied. Never rewrite guestrequester to worker202."
+    },
+    {
+      "case": "malformedwake state3",
+      "change": "Expect exactErr(-16) from first check_fork_unpublished; retain SAMEresponse/quarantine/status0/state3/zeroRET/frame/claims assertions. -71 covers a later recheck/CASrace path, which this fixture does not inject."
+    }
+  ]
+}

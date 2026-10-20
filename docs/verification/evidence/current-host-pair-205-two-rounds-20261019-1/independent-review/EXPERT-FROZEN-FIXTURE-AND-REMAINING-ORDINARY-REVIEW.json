@@ -1,0 +1,72 @@
+{
+  "additional_regression": "Private pipe2 O_NONBLOCK|O_CLOEXEC, bounded1MiB fill requires actual EAGAIN; unchanged write_all then requires -1 with both pipe FDs closed. No descendants.",
+  "application_launches": 0,
+  "command_set": {
+    "bytes": 2562,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/COMMAND-SET-3.json",
+    "sha256": "ce0fc530ae0fe84d7a56e341ee4c1b9198a4c48375b070944db1d02b310082be"
+  },
+  "decision": "APPROVE_ONE_EXACT_COMMAND_SET_3_AFTER_ROOT_FRESH_CPU6_ADMISSION",
+  "expert_findings_review": {
+    "bytes": 5129,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1/ACTUAL-CORRECTION2-EXPERT-FIXTURE-BOUNDARY-REVIEW.json",
+    "sha256": "a21280d7958d253dea482a324d327fa9c0b65a754dd3ea70ba7c67b9923b6fc4"
+  },
+  "fixture": {
+    "bytes": 6461,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/fixtures/actual_two_round_body.c",
+    "sha256": "97c338999840370b93bd038c35c9bff6f0ef2d35c9417905243559957d228c93"
+  },
+  "implementation_ownership": false,
+  "input_pins": {
+    "bytes": 8009,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/CHECK-INPUT-PINS-3.json",
+    "sha256": "022c2f42b35702f67ad4d9a509333c580b41e6cad22723905197a17ccb189a08"
+  },
+  "native_guests": 0,
+  "production_source_or_oracle_change": false,
+  "profile": {
+    "AS_bytes": 1073741824,
+    "CPU": 6,
+    "CPU_seconds": 30,
+    "cleanup_seconds": 3,
+    "file_bytes": 33554432,
+    "growth_per_filesystem_bytes": 67108864,
+    "host_floor_bytes": 17179869184,
+    "jobs": 1,
+    "reserve_per_filesystem_bytes": 671088640,
+    "scratch_floor_bytes": 12884901888,
+    "shared_work_seconds": 28,
+    "wall_seconds": 35
+  },
+  "proposal": {
+    "bytes": 2001,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/EXPERT-FIXTURE-CORRECTION-PROPOSAL.json",
+    "sha256": "ca1142a4c3d677989cf5dbdfb02883ea35539e0b82e02094847856465c0a6931"
+  },
+  "quota_credit": false,
+  "remaining_execution": [
+    "one actual harness compile with unchanged strict static GCC flags",
+    "16 actual C scenarios including prior15 and one EAGAIN/deadline check",
+    "actual full evaluate positive plus14 strict refusals and original checker AST equality"
+  ],
+  "reused_production_compiles": [
+    "ordinary-check-1/compile-default/status.json rc0",
+    "ordinary-check-2/compile-two-rounds/status.json rc0"
+  ],
+  "reviewer": "two_cpu_end_to_end_review",
+  "root_grant_required": true,
+  "runner": {
+    "bytes": 9767,
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1/check_two_rounds_expert_corrected.py",
+    "sha256": "48bdce3b54823502d0140908f4e227a95ef36f2096567be3cf597920b75d9a11"
+  },
+  "runtime_authority": false,
+  "schema": "mckernel.independent-fixed-two-round-expert-remaining-check-review.v1",
+  "source_delta": [
+    "poll.h provides exact unchanged write_all declarations",
+    "100ms fake monotonic tick allows unchanged2s actual write_all budget",
+    "one launch_base supplies modeled overlap for both stub app results"
+  ],
+  "status": "PASS_FROZEN_EXPERT_FIXTURE_CORRECTION_SOURCE_AND_EXACT_REMAINING_PROFILE"
+}

@@ -1,0 +1,16 @@
+3:This helper writes source only; the consumer owner controls the one compile/run.
+26:def generate(root, output, shared=Path('/home/holden/mckernel')):
+27:    root, output, shared = Path(root), Path(output), Path(shared)
+44:    syscall = capture(root / 'kernel/syscall.c', 'syscall.c')
+45:    headers = capture(root / 'kernel/include/process_helpers.h', 'process_helpers.h')
+47:    helpers = capture(root / 'kernel/rust/process_helpers.rs', 'process_helpers.rs')
+48:    fixture = capture(root / 'scripts/tests/fixtures/native_fork_carrier_link_guest_20261017.c', 'guest-fixture.c')
+50:    for name in ['private_fork_guest_carrier_20261017.h', 'private_fork_carrier_request_20261017.h', 'private_fork_wire_20261017.h']:
+51:        text = capture(root / 'kernel/include' / name, name)
+53:    request_source = capture(root / 'kernel/private_fork_carrier_request_20261017.c', 'private_fork_carrier_request_20261017.c')
+54:    (output / 'private_fork_carrier_request_20261017.c').write_text(request_source)
+62:        'PRIVATE': braced(syscall, 'static int do_fork_inband_private('),
+63:        'CLAIM': braced(syscall, 'static int do_fork_inband_claim('),
+64:        'ACCEPT': braced(syscall, 'static int do_fork_inband_accept('),
+76:    initializer = record_prefix + '\n' + braced(helpers, 'fn fork_destroy_identity_valid(') + '\n#[no_mangle]\n' + braced(helpers, 'pub unsafe extern "C" fn process_fork_destroy_record_init_result(') + '\n'
+80:    return {'source': generated, 'request_codec': output / 'private_fork_carrier_request_20261017.c',
