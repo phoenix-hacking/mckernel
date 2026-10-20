@@ -1,0 +1,28 @@
+{
+  "counterexample": [
+    "Native ring count8/capacity7; writerA loads read_off=0 then stalls.",
+    "Other reader/writers progress to read_off=1/write_off=8, a valid full ring with seven occupied slots.",
+    "A loads write_off=8: wrapping delta8 is not equal7, so equality check treats the slot as available.",
+    "A CAS write_off8->9 may succeed without another writer, exceeding capacity and copying over unreadslot. Geometry/privatecounter arithmetic does not prevent this reservation error."
+  ],
+  "existing_predicate_scope": "Equality full check predates this patch; retained unsafe behavior prevents acceptance of current producer reservation boundary. Author independently identified the same exact point before execution.",
+  "functional_scope": "Functional supported OS/apps and real Rust/reviewed assembly compute-C retirement.",
+  "implementation_ownership": false,
+  "next_step": "One bounded preexecution predicate correction plus deterministic observed-counter capacity witness and existing real256packet nativeconcurrency/legacy9byte/bodycases; author freezes and root owns actualordinarygrant/results.",
+  "other_changed_semantics": "Exactu8copy preserves publiclegacy arbitrary packet lengths/unaligned slots; native-only existing wholeword/count>=2 geometry matches consume_native/SharedQueue; count*u16extent and checkedbase bound candidates beforeCAS under existing immutablegeometry/liveextent contract. PublicationCAS remains SeqCst after fullbytecopy, nativecounter loads Acquire. Sender retries only -16, fatal returns through one IRQrestore/noNotify. These aspects have no separate source blocker, actualbody checks stillUNRUN.",
+  "patch": {
+    "bytes": 3640,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/IKC-PRODUCER-GEOMETRY-AND-FATAL-RETURN.patch",
+    "sha256": "5d65151e698d391cc85cc8893b06e5036c6cf0fd173060611a5c0d83e91202ed"
+  },
+  "required_bounded_correction": "BeforeCAS full test must conservatively treat observed wrapping write-read distance>=count-1 as full; retain retry behavior and reload each loop. Preserve current8f3 candidate and draft evidence before newfreeze. Legacycount1 remains full and valid counterwrap remains modulo arithmetic.",
+  "reviewer": "/root/owned_offload_review",
+  "schema": "mckernel.independent-current-ikc-producer.source-review.v1",
+  "source_freeze": {
+    "bytes": 5080,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/SOURCE-FREEZE.json",
+    "sha256": "8f3c682322298819bf22215756731a14ae3c62f3a64e5437ae49e1204cdeec0e"
+  },
+  "status": "BLOCKED_CONCRETE_CONCURRENT_RESERVATION_PREDICATE",
+  "test_profile": "Proposed CPU6 ordinary six-command wholeproductionmodule/ABI/list fixture with explicit IRQ/log/notify/address adapters is suitable for root admission after exact revisedfreeze. No root/guest/native IRQ/postexit executor proof. Reviewer ran no jobs and grants no execution."
+}

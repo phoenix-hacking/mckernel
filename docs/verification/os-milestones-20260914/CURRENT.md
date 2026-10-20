@@ -1,29 +1,36 @@
-## Current — M03 helper evidence export staged; changed native binding next
+## Current — reviewed IKC Rust correction integrated; M03 retry controls produced
 
-The first M03 owner failed before app startup in 13.415904 seconds. Closed
-captures establish DiagnosticError guest timestamp with zero payload start/reap
-and raw wait -1; the specific earlier helper cause remains unknown. Independent
-39cd2e2f accepts container/client/QEMU/group retirement and preservation of mutex
-27:4. The failed case and its complete readbacks are retained, with no app credit.
+Two reviewed Rust files are integrated after six commands passed: native6 and
+legacy4 actual-body groups cover conservative stale-counter capacity refusal,
+recomputed CAS candidate after a genuine competing reservation, byte-exact legacy
+nine-byte copies, native ABI2 geometry and fatal-send IRQ restoration. Review
+f16f30a0 and root receipt050a368b bind the exact bytes. Full production link,
+hardware IRQ/native evidence, post-exit Request/Response delegation and ACK
+remain open. Frozen M03/image/SDK inputs are unchanged; the two live Rust paths
+are not mutable dependencies of the M03 packet.
 
-Bounded first-helper export correction e44cf590 passes five actual-body cases
-and a static collector compile without changing the app oracle or deadlines.
-Init-only stage59402e8f accepts archive845cd2ee (23,682,792 bytes), manifestd1a54eae,
-62 members and the unchanged complete original archive prefix. Only init changes.
-One normalization/fresh-parent command is conditionally granted under bde92abd
-with fresh CPU6/source/resource admission. The complete latest native-failure
-physical descriptor adapter, source publication, final snapshot and execution
-release remain prerequisites; no retry has yet run. Both success and joined-
-failure terminal/archive readbacks are being prepared before that snapshot.
+M03 retains failed attempt13.415904s and physical39cd2e2f. Helper evidence export
+e44cf590, init-only stage59402e8f and actual normalization are accepted. Additive
+reporta701b2c1 corrects the reversed binding roles in b330 without repeating the
+stage. Whole current native-failure decoder/assembly and actual late-slot CLI
+checks pass7f12f217: four original cases plus one CLI case, no runtime authority.
+The corrected finite binder838b/inputs2168 passed its first actual pending19
+production command0/0.211302s; CPU6 was released. Its prior pre-effect proposals
+remain unrun and preserved. Final static/fetched-source closure, final control
+binding, fresh LAST snapshot and one exact native release still remain.
 
-A disjoint private Rust author now owns the real post-exit delivery capability
-boundary; retained Arcs do not confer Request/Response authority. SDK paired-lease
-source preparation56c2dd3b and its105-row publication are ready, with actual SDK
-compilation held behind the evidence-bearing M03 attempt. Exit7 Linux23f27320
-and future cleanup diagnostic seven-case39db619c are accepted in their limited
-scopes, with no native/default/ACK claim. Counts15/35, whole3, behaviors26,
-selected Rust17/14 remain unchanged. Continuous100%included/zeroreserve applies;
-all WIP, failed attempts, old quarantine and Scratch21 exclusions remain retained.
+Both success and joined-failure atomic/three-archive readers are preconstructed.
+The new owner completion path is phase5-m03-helper-retry-seven-step-preparation-
+20261020-1/captures/03-native-owner/status.json under host-preparation. It has not
+run. The existing reviewer remains responsible through final controls, native
+whole join and readbacks. No SDK compiler or other guest displaces this retry.
+Paired SDK105 sources are pushed/fetched0dc093ef (proof8c63cc95), conditional
+heavy review09d118bd; its genuine latest predecessor/admission/release stay late.
+
+Counts15/35, wholeM00/M04/M10, behaviors26, selected Rust17/14 are unchanged.
+Continuous100%included/zeroreserve applies, with paid/API billing forbidden.
+All original failures, old unfinished quarantine, WIP, permanent mutex27:4 and
+Scratch21 exclusions remain preserved. No heavy workload is currently running.
 
 ## Current — post-effects physical ownership clearance accepted; M03 next
 

@@ -1,0 +1,65 @@
+{
+  "status": "READY_UNRUN_REQUIRES_ROOT_CPU6_GRANT",
+  "source_freeze": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/SOURCE-FREEZE.json",
+    "sha256": "76ff6745f03d2ef626838680e564b677a37408b5dfdf59984a729db3c5f9dd42",
+    "size": 4379,
+    "mode": 33152
+  },
+  "commands": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/COMMANDS.json",
+    "sha256": "a9a1d5fe1c1eafe7db592923e29ce53c08aa9f8312fb2e7bfab450f405997ecd",
+    "size": 2633,
+    "mode": 33152
+  },
+  "input_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/CHECK-PINS.json",
+    "sha256": "0d96c7f7ebdc5170b8ec64259f40bf5ee36248b601eeb499d453970d32f274c1",
+    "size": 2675,
+    "mode": 33152
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/run-ikc-checks-1.py",
+    "sha256": "b085e7d4a06e9af4b338fe2296174f31926be07ebc64b5128f1fc099cdd5aca1",
+    "size": 3484,
+    "mode": 33152
+  },
+  "reviewed_capture_ancestor": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-kernel-panic-free-link-repair-20261020-1/run-panic-free-checks-1.py",
+    "sha256": "c35c2ed0196f586201e62c3e462773b250f2bcc00bb3f2c16c216abd78bf514e",
+    "size": 3661,
+    "mode": 33152
+  },
+  "outer_argv": [
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/run-ikc-checks-1.py"
+  ],
+  "expected_exits": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "profile": "CPU6/1job1GiBAS30CPU35+2wall32MiBperfile/core0nofile256/statusFIRST/directwait/groupabsence/fresh2GiBMemAvailable+host16GiB/scratch12GiB+512MiB",
+  "affected_body_cases": {
+    "native": 5,
+    "legacy": 4
+  },
+  "old_case_replay": 0,
+  "failure_history": "Firstprivatecandidate UNRUN. Earlier source-read inference corrected beforecode: no staticoffsetErrclaim. Oldsource/instructionfamily/allpriorproof preserved. One actualcandidatefailure thenoneboundedcorrection beforeexpert.",
+  "forbidden_effects": "No root/Docker/guest/module/newprotocol/fakeResponse/defaultactivation/sharedsource/Git. No postexitretirementclaim."
+}

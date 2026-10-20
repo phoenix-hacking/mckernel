@@ -1,0 +1,84 @@
+[
+  {
+    "name": "syntax-ikc_queue-1",
+    "argv": [
+      "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "-Zunpretty=normal",
+      "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/source/kernel/rust/ikc_queue.rs"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "syntax-ikc_manycore-1",
+    "argv": [
+      "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "-Zunpretty=normal",
+      "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/source/kernel/rust/ikc_manycore.rs"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "compile-actual-native-1",
+    "argv": [
+      "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--test",
+      "-C",
+      "opt-level=1",
+      "-C",
+      "codegen-units=1",
+      "-C",
+      "debuginfo=0",
+      "-C",
+      "linker=/usr/bin/x86_64-linux-gnu-gcc-9",
+      "--cfg",
+      "native_linux_irq_work_v6_12",
+      "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/fixture-1/actual-ikc.rs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/actual-native-tests-1"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "affected-native-cases-1",
+    "argv": [
+      "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/actual-native-tests-1",
+      "affected_",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "compile-actual-legacy-1",
+    "argv": [
+      "/home/holden/.rustup/toolchains/1.85.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "--test",
+      "-C",
+      "opt-level=1",
+      "-C",
+      "codegen-units=1",
+      "-C",
+      "debuginfo=0",
+      "-C",
+      "linker=/usr/bin/x86_64-linux-gnu-gcc-9",
+      "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/fixture-1/actual-ikc.rs",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/actual-legacy-tests-1"
+    ],
+    "expected_exit": 0
+  },
+  {
+    "name": "affected-legacy-cases-1",
+    "argv": [
+      "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/actual-legacy-tests-1",
+      "affected_",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "expected_exit": 0
+  }
+]

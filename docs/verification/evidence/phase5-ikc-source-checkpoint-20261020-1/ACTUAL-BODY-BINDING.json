@@ -1,0 +1,53 @@
+{
+  "whole_actual_modules": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/source/kernel/rust/ikc_queue.rs",
+      "sha256": "99d7dbb864955fc43b698a74ae3acaa654ba82daf6e8ff638f5d73371cf59af3",
+      "size": 27590,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/source/kernel/rust/ikc_manycore.rs",
+      "sha256": "e3f3f3ffee3bc8ac892748123ad7fe40b85c5705969d4204dab15ba37c6de137",
+      "size": 10469,
+      "mode": 33152
+    }
+  ],
+  "whole_actual_type_sources": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/fixture-1/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "size": 76151,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/fixture-1/list_helpers.rs",
+      "sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a",
+      "size": 5770,
+      "mode": 33152
+    }
+  ],
+  "exact_extra_function_bodies": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/fixture-1/actual-write-body.inc",
+    "sha256": "7bb10850251c7f001dff32db26102f9333719bda47014e51ef2cbf80ef214e00",
+    "size": 3313,
+    "mode": 33152
+  },
+  "fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/fixture-1/actual-ikc.rs",
+    "sha256": "43b6fa0332b1247e828baf70f768cff2c94f01f90bdbff25c06277f8349d4dbe",
+    "size": 11262,
+    "mode": 33152
+  },
+  "extracted_body_names": [
+    "memcpyl",
+    "rem_u64_nonzero",
+    "ihk_ikc_write_queue"
+  ],
+  "deterministic_adapters": [
+    "One readcounter result0 models priorrealread before currentread1/write8; remainingcounterloads realatomic. Count8/cap7 mustreturnfull withnocounter/payloadchange. Actualconsumerprogress toread2 thenpermitsfreshwrite8.",
+    "Before one candidateCAS, genuineproductionenqueue publishescompetingwrite8/slot0. Wrapper realatomicCAS8->9 thenobservesfailure; exactproductionbody reloads/recomputeswrite9/slot1. One actual failedCAS observed; verify competingandownpacket intact."
+  ],
+  "no_fake_production_type_prototypes": true,
+  "actual_IRQ_execution_or_native_ABI_proof": false
+}

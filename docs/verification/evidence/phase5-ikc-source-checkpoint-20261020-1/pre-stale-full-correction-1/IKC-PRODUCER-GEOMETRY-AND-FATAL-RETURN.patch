@@ -1,0 +1,90 @@
+--- a/kernel/rust/ikc_queue.rs
++++ b/kernel/rust/ikc_queue.rs
+@@ -211,8 +211,9 @@
+ 
+ #[inline(always)]
+ unsafe fn memcpyl(dest: *mut c_void, src: *const c_void, len: usize) {
+-    let words = len / core::mem::size_of::<CULong>();
+-    copy_nonoverlapping(src.cast::<CULong>(), dest.cast::<CULong>(), words);
++    // The public legacy queue API accepts arbitrary byte packet sizes.
++    // Native queues separately enforce their pre-existing whole-word ABI.
++    copy_nonoverlapping(src.cast::<u8>(), dest.cast::<u8>(), len);
+ }
+ 
+ #[inline(always)]
+@@ -445,7 +446,19 @@
+     if q.is_null() || packet.is_null() {
+         return -22;
+     }
+-    if (*q).pktcount == 0 {
++    // The caller retains the mapping and immutable geometry through this call.
++    // Enforce the selected consumer's geometry before claiming a slot.
++    // Legacy packets remain byte-sized; native ABI2 requires whole words.
++    let count = (*q).pktcount as u64;
++    let packet_size = (*q).pktsize as usize;
++    let payload_bytes = (*q).queue_size;
++    if count == 0 || packet_size == 0
++        || (cfg!(native_linux_irq_work_v6_12)
++            && (count < 2 || packet_size % core::mem::size_of::<CULong>() != 0))
++        || count.checked_mul(packet_size as u64) != Some(payload_bytes)
++        || (q as usize).checked_add(core::mem::size_of::<IhkIkcQueueHead>())
++            .and_then(|start| start.checked_add(payload_bytes as usize)).is_none()
++    {
+         return -22;
+     }
+ 
+@@ -455,7 +468,7 @@
+         let write = load_queue_counter(&raw mut (*q).write_off);
+         compiler_fence(Ordering::SeqCst);
+ 
+-        if write.wrapping_sub(read) == ((*q).pktcount as u64).wrapping_sub(1) {
++        if write.wrapping_sub(read) == count.wrapping_sub(1) {
+             attempt += 1;
+             if attempt > IHK_IKC_WRITE_QUEUE_RETRY {
+                 kprintf(
+@@ -469,17 +482,18 @@
+             }
+             continue;
+         }
++        // Geometry stays immutable; only the reservation counter may change.
++        // Recompute this exact candidate after every failed CAS. No fallible
++        // geometry work may abandon an already reserved publication sequence.
++        let offset = core::mem::size_of::<IhkIkcQueueHead>()
++            + (rem_u64_nonzero(write, count) * packet_size as u64) as usize;
+         if cmpxchg_u64(&raw mut (*q).write_off, write, write.wrapping_add(1)) != write {
+             continue;
+         }
+-
+-        let Some(offset) = queue_packet_offset(q, write) else {
+-            return -22;
+-        };
+         memcpyl(
+             (q as *mut u8).add(offset).cast::<c_void>(),
+             packet,
+-            (*q).pktsize as usize,
++            packet_size,
+         );
+ 
+         while cmpxchg_u64(&raw mut (*q).max_read_off, write, write.wrapping_add(1)) != write {}
+--- a/kernel/rust/ikc_manycore.rs
++++ b/kernel/rust/ikc_manycore.rs
+@@ -192,12 +192,18 @@
+     loop {
+         if ikc_channel_enabled(channel) {
+             let rc = ihk_ikc_write_queue((*channel).send.queue, packet, opt);
+-            if rc != 0 {
++            // write_queue documents -16 only for an unreserved full queue.
++            // Fatal geometry/argument errors cannot become successful on retry.
++            if rc == -16 {
+                 kprintf(
+                     c"%s: couldn't append packet -> retrying\n".as_ptr().cast(),
+                     c"ihk_ikc_send".as_ptr(),
+                 );
+                 continue;
++            }
++            if rc != 0 {
++                ret = rc;
++                break;
+             }
+             if opt & IKC_NO_NOTIFY == 0 {
+                 ihk_ikc_notify_remote_write(channel);

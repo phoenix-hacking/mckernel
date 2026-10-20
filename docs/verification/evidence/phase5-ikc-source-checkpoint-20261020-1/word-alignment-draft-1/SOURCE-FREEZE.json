@@ -1,0 +1,70 @@
+{
+  "status": "EXACT_TWO_RUST_SOURCES_AND_BODY_FIXTURE_READY_UNRUN",
+  "functional_scope": "Functional McKernel OS/apps + actual Rust/reviewed assembly compute-C cutover; existing Rust IKC producer correction",
+  "sources": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/source/kernel/rust/ikc_queue.rs",
+      "sha256": "33c45ab5a42e80118836a1bde3670ca2941404fb713733462faef5fa39c8d4fc",
+      "size": 27207,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/source/kernel/rust/ikc_manycore.rs",
+      "sha256": "e3f3f3ffee3bc8ac892748123ad7fe40b85c5705969d4204dab15ba37c6de137",
+      "size": 10469,
+      "mode": 33152
+    }
+  ],
+  "base_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/ORIGINAL-TWO-SOURCE-PINS.json",
+    "sha256": "dc28e29aa3e6f19bffbca8521c4322556b074a02707025280c4c366e2f9f3c1c",
+    "size": 653,
+    "mode": 33152
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/IKC-PRODUCER-GEOMETRY-AND-FATAL-RETURN.patch",
+    "sha256": "0a5925c99a3d68415cb7cfccfbe6c85ccd20643faae8bfc8cc0edb7c1007f5e3",
+    "size": 3086,
+    "mode": 33152
+  },
+  "production_authorities": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/BOUNDED-PRODUCTION-AUTHORITIES.json",
+    "sha256": "9a61369af761ce10abb33ed5dbac67fe7b9bf7e01aff9a89313d403641f19c1d",
+    "size": 4906,
+    "mode": 33152
+  },
+  "actual_fixture": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/fixture-1/actual-ikc.rs",
+      "sha256": "bf84c9d84ad47409088d3796600955b73426ac18c26872d4f31f2bafcb400cb3",
+      "size": 7226,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/fixture-1/abi.rs",
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "size": 76151,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-postexit-real-delivery-capability-20261020-1/fixture-1/list_helpers.rs",
+      "sha256": "dac9c2f37c64967eebd8c466426fcdf1bf8d201b5c5ee5f1f466893517feb66a",
+      "size": 5770,
+      "mode": 33152
+    }
+  ],
+  "contract": [
+    "Actual native consumer and host SharedQueue already require >=2slots, whole nonzero u64words and exactqueue_size=count*packet_size; real SyscallIKC packet is128B.",
+    "Current exported queue initializer can construct packet_size9; old memcpyl copies onlyfloor(len/8)words yet producer returns0/publishes. Invalidqueue_size/zero-capacity geometry is rejected before anyreservation/copy/publication.",
+    "All geometry is immutable for the mapping borrow, captured once. Exact candidate offset is computed from that snapshot for each loadedwrite counter beforeCAS; failedCAS reloads/recomputes. Unsafe caller still owns mapping extent; header validation is NOT mapping ownership.",
+    "Full is exactly-16 before any reservation; other fatal errors return with one original IRQrestore. No remote notify followsfatal. Successcopy/publicationCAS order unchanged."
+  ],
+  "diagnosis_correction": "No claim of an immutable staticqueue_packet_offset post-CAS Err: that helper rejects onlycount0 alreadychecked. Actual defect is producer acceptance/publication of geometry its consumer cannot read, plus unconditionalfatalretry.",
+  "scope_limits": [
+    "WholeactualABI/list and actualcompleteproductionqueue/manycorefunctions compile in std fixture; IRQ/log/notify/address translation are explicit platform adapters. No Linux ABI/link/native IRQ proof.",
+    "Concurrent native writers use real atomicCAS and checkedpacket delivery; exactnumberoffailedCAS is notinstrumented/claimed. Legacyfixture omitsconcurrency because its historicalreader usesplaincounters.",
+    "Actualpostexit delegatedexecutor remainsOPEN: ordinarydo_syscall stampsrtid;send_syscall stampspacketpid;waitloop usesactualcurrentwaitq/nestedrequests. No scalar snapshot orArcpin grantsdelegation."
+  ],
+  "source_or_test_jobs": 0,
+  "default_or_runtime_activation": false
+}
