@@ -1,0 +1,59 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "-k",
+    "2",
+    "35",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--core=0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/phase4-guest-compiler-packet-assembly-20261020-1/capacity-split-correction-1/resource-import-correction-1/provider-inventory-correction-1/evidence-export-1/run_export_once.py"
+  ],
+  "binary_copies": 0,
+  "binary_descriptors": 5,
+  "files": 106,
+  "profile": {
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 30,
+    "core": 0,
+    "cpu": 6,
+    "file_bytes": 33554432,
+    "jobs": 1,
+    "kill_after_seconds": 2,
+    "nofile": 256,
+    "wall_seconds": 35
+  },
+  "report": {
+    "bytes": 22959,
+    "path": "/home/holden/mckernel-work/host-preparation/phase4-guest-compiler-independent-review-20261020-1/ACTUAL-FIVE-OBJECT-COMPILER-AND-PHYSICAL-REVIEW.json",
+    "sha256": "4b398812aaa10f4fbe0f09d72e3ef679965e9b13c2952dddb0ab175fb3581710"
+  },
+  "runner": {
+    "bytes": 1694,
+    "path": "/home/holden/mckernel-work/host-preparation/phase4-guest-compiler-packet-assembly-20261020-1/capacity-split-correction-1/resource-import-correction-1/provider-inventory-correction-1/evidence-export-1/run_export_once.py",
+    "sha256": "20265de39a2d74ca3e297e448f8c7dd989f71e589373fffa92ca063bc6d5c9c0"
+  },
+  "schema": "mckernel.closed-guest-five-object-export-command-proposal.v1",
+  "selection": {
+    "bytes": 39135,
+    "path": "/home/holden/mckernel-work/host-preparation/phase4-guest-compiler-packet-assembly-20261020-1/capacity-split-correction-1/resource-import-correction-1/provider-inventory-correction-1/evidence-export-1/SELECTION.json",
+    "sha256": "87876a8fe01e6b855caecfa4b97847f4566b60db7554d8f7c8e8d23dd0dc4c06"
+  },
+  "status": "FROZEN_NO_JOB_PENDING_CPU6_HANDOFF_AND_ROOT_GRANT",
+  "text_bytes": 326335,
+  "writer": {
+    "bytes": 4875,
+    "path": "/home/holden/mckernel-work/host-preparation/phase4-guest-compiler-packet-assembly-20261020-1/capacity-split-correction-1/resource-import-correction-1/provider-inventory-correction-1/evidence-export-1/export.py",
+    "sha256": "1d5320e548ee5a1cf5615e1e5823e7ad18e9b4524758443b21c15f5532cb78ce"
+  }
+}

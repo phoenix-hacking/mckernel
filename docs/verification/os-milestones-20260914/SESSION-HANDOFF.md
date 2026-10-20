@@ -1,3 +1,44 @@
+## Accepted — all five real objects and physical retirement; phase5 next
+
+Independent4b398812 accepts all five actual compiler stages and physical retirement:
+nativeRust15.552s, legacyRust13.356s, selected whole syscall.c1.835s, fallback whole
+syscall.c1.752s and actual process.c constructor provider0.625s. Owner0/36.207018s;
+all exactargv/cwd/child/closedstreams/object hashes and target inventories pass.
+Correct Rust release_cpuid ownership, external clone_thread and selected/fallback
+bridge counts agree. Actual C body plus assertions/config match frozen inputs.
+Thirteen clients retired; exact container removed/three empty censuses, three
+archived ownership records authenticated and originals absent. Latest exclusive
+physical predecessor is4b398812. No ld-r/final link/image/default/native/ACK credit.
+Report: phase4-guest-compiler-independent-review-20261020-1/
+ACTUAL-FIVE-OBJECT-COMPILER-AND-PHYSICAL-REVIEW.json.
+Original first native compile PASS/inventory failure330aa6e3 remains preserved.
+
+Next coherent phase5 whole-consumer compile includes libc child-TID Rust correction,
+genuine production C/Rust FAM assertions, real C provider and relevant mcexec; then
+the unchanged two-child execute/exit/parent-wait oracle requires actual release.
+TID-only five-command/four-new-test ordinary chain is admitted CPU6; no old graph
+case replay. Disjoint private runtime-exit/quiescence-to-retained-pin/parent/host
+revocation/final-ACK source work is owned separately, with all real holds intact.
+Counters remain15/35, whole M00/M04/M10,26 behaviors,17/14 selected Rust paths.
+
+## Current — corrected five-object owner completed; independent acceptance next
+
+The fresh full-five compiler caller completed0/36.207018s, direct child joined,
+process group absent, observer_error null; start1792482671.8955705 and end
+1792482708.1025882. Reviewer was activated immediately on whole join. Actual
+object/physical acceptance is pending; owner exit0 alone is not link/native proof.
+Published ten-row correction b7aebd72/45a42318 and conditionalf2b1257d/finalab176fc8
+bind corrected inventory, unchanged159 sources and latest predecessor330aa6e3.
+The outer runs as normal UID1000 using /usr/bin/python3; sudo belongs only to the
+accepted internal transport. Erroneous whole-caller sudo suggestion was corrected
+before execution, without another failed invocation.
+
+Private libc child-TID Rust correction and real C/Rust FAM proof continue in
+parallel. Genuine FAM recipe6ff2326b pins the retained159 process.h overlay8848d536,
+not mutable worktree headers; whole phase5 compiler must include real provider/C
+consumers, relevant mcexec, and the unchanged child execute/exit/wait oracle.
+No phase5 source/default/runnable/ACK/native claim follows from current results.
+
 ## Latest compiler feedback — whole native Rust PASS; inventory expectation corrected next
 
 Root actual fresh guest compiler owner returned1/17.391955s, direct child joined,
