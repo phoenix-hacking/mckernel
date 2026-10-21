@@ -1,3 +1,27 @@
+## Current — 119-byte final static pass; exact native release next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+119B case actualruntime generation0/.071290327s andwholecaller0/.430398759s;
+19pending/7rows49paths/8FD accepted a2a58df6. Sole full9field mismatch caught
+beforeexecution; one immutable sourceexpression correction5d8f4410 preserved
+reduced5 equality and original37937report. Actual finalbinder0/.119866559s emits
+19final/packet9ceedfa3; required fullstatic_joins0/.194122987s/emptyerr passed.
+Next publish13actualselectedcontrol/sourceblobs, freshaggregategrant andONEexact
+executionreview then qualifiedsevenstep sequence. No119guest/result yet.
+Compiler33 accepted3d7dc040/physical911d; latestcompiler distinct7cnativeancestor
+and23057/978earlierbuild. Image053d/launcher33f/moduleABI/original116 unchanged.
+95sources(37OS/58infra),10native,29behaviors,Rust21/18,24/35/sixwhole held.
+
+Native selfexec newRustnostd source/oracle prepared toobservebeforestdstartup;
+frozen exactstdout199B (193 was proseerror), emptyerr/37. SourceABIreview passes
+with metadata correction; compile/Linuxreference next. Current-source realhost
+exec transfer gap nr186-onlyTID guard rejects nr59 twoELFphases/reversecopy;
+matching releasedmodule source join/implementation stillrequired. Newimagealone
+cannotfixprovider; no unsupported-operationPASS or SDK66/no-resize workaround.
+M05 second-stop staticcollectorcompile passes; focusedactualproducer-model and
+strictdecoder check prepared, unrun. M07/currentAVX observation andM12pair-only
+1boot/6apps partialbudget remainseparate; no publiccycle/durationcredit.
+
 ## Current — exec production compiler33 accepted; 119-byte native next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

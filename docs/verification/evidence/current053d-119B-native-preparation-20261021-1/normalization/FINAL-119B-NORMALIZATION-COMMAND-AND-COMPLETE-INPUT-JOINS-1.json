@@ -1,0 +1,62 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/prepare_native.py",
+    "sha256": "379db95c025d23e7f82f9015fb3f55bde562c34825340c371b8177b9f841255a",
+    "bytes": 9656
+  },
+  "settings": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/SETTINGS.json",
+    "sha256": "780853d18a465649acb7146b8acc39485d8d12c6f20ce74ddb6ed4ff2dd85078",
+    "bytes": 5656
+  },
+  "input_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/INPUT-PINS.json",
+    "sha256": "ff269563c203f9c053502cbae63b163f836b079432f7cc45e142435bd6edd22e",
+    "bytes": 2567
+  },
+  "input_count": 10,
+  "genuine_stage_consumer_report": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/ROOT-MECHANICAL-COMPLETE-119B-STAGE-CONSUMER-REPORT-1.json",
+    "sha256": "8eff67774a15e00b019b041264eb5fa1f2e5404c87f3f33d89415adcb2e6704c",
+    "bytes": 6235
+  },
+  "command": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/prepare_native.py"
+  ],
+  "capture": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/actual-normalization-capture-1",
+  "outputs": [
+    "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/ACTUAL-BINDING.json",
+    "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/ACTUAL-NATIVE-PREFLIGHT.json",
+    "/home/holden/mckernel-work/scratch/nov-n-261021-1/manifest.json"
+  ],
+  "actual_stage_joins": [
+    "typed4 actualmanifest/artifacts image,mcexec,payload,bzImage/stagingbase,overlay,overlaymanifest",
+    "payload_contract exact119B eaacab/emptyerr37",
+    "module_tuple same3 currentmodules",
+    "60members59unchanged apps/app-only delta",
+    "exact futurefull9 parent/read-only21consumedpaths/2roots/QMP101 through existing qualifiedbody"
+  ],
+  "source_review": null,
+  "fresh_grant": null,
+  "normalization_acceptance": null,
+  "runtime_release": null,
+  "no_execution": true
+}

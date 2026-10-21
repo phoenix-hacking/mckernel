@@ -1,0 +1,50 @@
+{
+  "schema": "mckernel.numa-native-app.actual-offline-stage-review.v1",
+  "status": "PASS_ACTUAL_OFFLINE_STAGE_AND_STRICT_MANIFEST_ONLY",
+  "decision": "ACCEPT_EXACT_ACTUAL_MANIFEST_FOR_DOWNSTREAM_SOURCE_NORMALIZATION_AND_RUNTIME_PREPARATION",
+  "reviewer": "/root/numa_image_source_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "strict_loader_passed": true,
+  "all_metadata_equal": true,
+  "launcher_equal": true,
+  "launcher_equal_scope": "Accepted runtime launcher33f remains unchanged; kernel053d, init and modules remain unchanged.",
+  "archive_members": 60,
+  "archive_records_excluding_trailers": 66,
+  "archive_trailers": 2,
+  "unchanged_members": 59,
+  "observed_delta": {
+    "apps/app": {
+      "size": [5619416, 5620160],
+      "sha256": [
+        "0339cb5fcba4ea4f1f2977fd0d3a7653b48e0af1de7e0625fbfafbfe13fce5fb",
+        "029065eb89fb79885d535f338395f986f890a1ed764062bb76ba463777b92ab3"
+      ]
+    }
+  },
+  "actual_capture_facts": {
+    "returncode": 0,
+    "elapsed_seconds": 11.438655008969363,
+    "pid": 2827986,
+    "start": 41771094,
+    "direct_joined": true,
+    "process_group_absent": true,
+    "streams_closed": true,
+    "stderr_bytes": 0,
+    "status_sha256": "ae77d47b71b26f8e8fdc4fc3e948a4efc2b331836727be9eab650031b8bb51b9"
+  },
+  "stage_result_sha256": "86bb8d21e2eb30bf96f8bc8850b8e736e8d67534bcf130cc6164b959f6fb4e9b",
+  "reported_aggregate_stage_bytes": 42550958,
+  "aggregate_asset_bytes_including_result": 42570348,
+  "base_prefix_verified": true,
+  "overlay_frame_verified": true,
+  "changed_payload_bytes_verified": true,
+  "qmp_endpoint_encoded_bytes": 101,
+  "runtime_release": false,
+  "physical_release": false,
+  "native_accepted": false,
+  "normalization_accepted": false,
+  "compute_C_retirement_credit": false,
+  "counter_delta": 0,
+  "reviewer_reran_stage_or_artifact_audit": false
+}

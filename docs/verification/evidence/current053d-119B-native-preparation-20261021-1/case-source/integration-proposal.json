@@ -1,0 +1,36 @@
+{
+  "status": "SOURCE_ONLY_UNRELEASED_PROPOSAL",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "case_id": "numa-nonempty-overlap-20261021-1",
+  "runner": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py",
+  "accepted_kernel_image_sha256": "053d59b533665eef9d56fe1b348e699d97159e954fbc1fbff973bbe46113f485",
+  "payload_source": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/numa_nonempty_overlap_app.rs",
+  "payload_binary": null,
+  "payload_binary_sha256": null,
+  "proposed_payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "threads"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "stdout_hex": "6e756d61206f7665726c61703d312062696e64733d3320717565726965733d34382073706c69743d31207265696e736572743d31206e65696768626f72733d342070726f636573733d31206775617264733d312062797465733d3238363732207072657365727665643d3320756e6d61707065643d310a",
+      "stderr_hex": "",
+      "exit_code": 37
+    },
+    "stdout_limit_bytes": 1024,
+    "stderr_limit_bytes": 1024
+  },
+  "new_case_assets_and_manifest": null,
+  "execution_release": false,
+  "native_acceptance": false,
+  "integration": "Use new distinct assets/manifest/captures for this case with existing staging/runner contract. Bind compiled binary and accepted image through existing reviewed bindings. Do not edit or replace strict116B case, its payload, stage, oracle or launcher."
+}

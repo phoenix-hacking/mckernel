@@ -1,0 +1,11 @@
+--- 
++++ 
+@@ -123,7 +123,7 @@
+     assert cfg['stage_acceptance']['sha256']==stage_pin
+     assert acceptance['status']=='PASS_ACTUAL_OFFLINE_STAGE_AND_STRICT_MANIFEST_ONLY' and acceptance['implementation_ownership'] is False and acceptance['reviewer']
+     assert acceptance['strict_loader_passed'] is True and acceptance['all_metadata_equal'] is True and acceptance['launcher_equal'] is True
+-    assert acceptance['archive_members']==60 and acceptance['unchanged_members']==59 and set(acceptance['observed_delta'])=={'images/mckernel.img'}
++    assert acceptance['archive_members']==60 and acceptance['unchanged_members']==59 and set(acceptance['observed_delta'])=={'apps/app'}
+     accepted_outputs = {acceptance[key]['path']:acceptance[key] for key in ('base','overlay','image','mcexec','payload')}
+     accepted_outputs[acceptance['overlay_manifest']['path']]=acceptance['overlay_manifest']
+     assert acceptance['manifest']==cfg['source_manifest']

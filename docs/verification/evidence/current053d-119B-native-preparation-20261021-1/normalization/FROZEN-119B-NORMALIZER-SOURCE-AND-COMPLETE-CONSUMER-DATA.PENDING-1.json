@@ -1,0 +1,118 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "normalizer": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/prepare_native.py",
+    "sha256": "379db95c025d23e7f82f9015fb3f55bde562c34825340c371b8177b9f841255a",
+    "bytes": 9656
+  },
+  "diff": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/normalizer-exact-app-only-delta.patch",
+    "sha256": "9aa6b6954a543a0bf95c587f71fd877e6b92c0bb55fef43985fc003927a3f0a9",
+    "bytes": 956
+  },
+  "settings_pending": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/SETTINGS.PENDING-ACTUAL-STAGE-ACCEPTANCE.json",
+    "sha256": "dac7782db2657c6956d315459cb0047a2908f545143b51e729c6222ee807b552",
+    "bytes": 5265
+  },
+  "future_input_pins": "Same exact10:five qualified canonical owner/runner/nd/backend/qmp + newnormalizer + unchangedparentbinder + finalSETTINGS + genuinefuturestageacceptance + actualsource_manifest. No artifact rehash/replay.",
+  "normalization_command_after_genuine_stage_and_grant": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/prepare_native.py"
+  ],
+  "capture": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/actual-normalization-capture-1",
+  "actual_stage_result": {
+    "path": "/home/holden/mckernel/scratch/nov-a-261021-1/numa/stage-result.json",
+    "sha256": "86bb8d21e2eb30bf96f8bc8850b8e736e8d67534bcf130cc6164b959f6fb4e9b",
+    "size": 19390,
+    "mode": 33152
+  },
+  "all_consumed_paths_trace": {
+    "count": 21,
+    "roots": [
+      "/home/holden/mckernel",
+      "/home/holden/mckernel-work/scratch"
+    ],
+    "missing": [],
+    "paths": [
+      "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+      "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/init",
+      "/home/holden/mckernel-work/scratch/nov-n-261021-1/manifest.json",
+      "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk-smp-x86_64.ko",
+      "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk.ko",
+      "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/mcctrl.ko",
+      "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/bin/native-boot",
+      "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/ld-linux-x86-64.so.2",
+      "/home/holden/mckernel/scratch/m07-enabled-state-closure-20261017-1/native-proposal/stage-correction-1/stage/root/lib64/libc.so.6",
+      "/home/holden/mckernel/scratch/nov-a-261021-1/image.artifact",
+      "/home/holden/mckernel/scratch/nov-a-261021-1/mcexec",
+      "/home/holden/mckernel/scratch/nov-a-261021-1/numa.app",
+      "/home/holden/mckernel/scratch/nov-a-261021-1/numa/base.cpio.gz",
+      "/home/holden/mckernel/scratch/nov-a-261021-1/numa/lifecycle.cpio.gz",
+      "/home/holden/mckernel/scratch/nov-a-261021-1/numa/overlay-manifest.json",
+      "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+      "/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py",
+      "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+      "/home/holden/mckernel/scripts/application-tests/native_diagnostic_overlay.py",
+      "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py",
+      "/home/holden/mckernel/scripts/application-tests/qmp_capture.py"
+    ]
+  },
+  "stage_consumer_required_fields": [
+    "schema",
+    "status",
+    "decision",
+    "implementation_ownership",
+    "reviewer",
+    "strict_loader_passed",
+    "all_metadata_equal",
+    "launcher_equal",
+    "archive_members60",
+    "unchanged_members59",
+    "observed_delta_apps/app_only",
+    "manifest",
+    "base",
+    "overlay",
+    "image",
+    "mcexec",
+    "payload",
+    "overlay_manifest",
+    "bzImage",
+    "payload_contract119",
+    "module_tuple"
+  ],
+  "latest_native_and_earlier_build_role_data": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/LATEST-NATIVE-AND-RELEASED-BUILD-ROLE-DATA-1.json",
+    "sha256": "3da9354d762bb79402c3f3bdf6b512d88ef5599140a812ba22ca6e08f49ac429",
+    "bytes": 4529
+  },
+  "runtime_closure_requirements": {
+    "single_app_owner": "Canonical9084 + existingloader1b439; complete119payload contract in cfg notold116 literal",
+    "normalization_acceptance": "Genuine future samecurrent receipt binds BOTH binder+snapshot pins; full9exactPythonints, typed4manifest/binding,actualclosedstreams facts",
+    "terminal_join": "Reuse exact8e964 terminal_joins function for genuine latestnative7c156 and separate23057/978 releasedrecords; single-app snapshot static body remains qualified current correctedNUMA body (not whole2CPU batchsnapshot)",
+    "source_fd": "Same qualified6 runtime refs + single-app snapshot + exact978 bounddecoder8/full9/hash/finallyclose. Actual constructor alone records actual identities; futureNULL.",
+    "fresh_namespaces": "nov-a/m/p/n-261021-1; parentnonce/QMP101 fromstagebinding, no identities invented"
+  },
+  "actual_stage_acceptance": null,
+  "actual_normalization_acceptance": null,
+  "runtime_static_review": null,
+  "native_execution_release": null,
+  "ordinary_grant": null,
+  "no_execution": true
+}

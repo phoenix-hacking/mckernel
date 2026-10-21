@@ -1,0 +1,82 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/stage_numa_overlap.py",
+    "sha256": "eedd757aa6f0a003cc01e7db3f93c50b92e64cf5a43ae80eed528f48c4578b85",
+    "bytes": 13647
+  },
+  "source_diff": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/eight-clause-app-only-stage.patch",
+    "sha256": "5f82e7260628ba7ae02f2b36034e44195566af326f96aa93cc596d522e180ea2",
+    "bytes": 13664
+  },
+  "qualified_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/image-only-consumer-source-1/stage_numa_image.py",
+    "sha256": "70e2edeb80df4682f2b93d9e1d30391d1d21b6e49fce2f8d647849e05b93f29f",
+    "bytes": 13269
+  },
+  "binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/BINDING.FROZEN-119B-APP-ONLY.json",
+    "sha256": "0e5acf8686bf319612db75d02089a94538d468b1988845f50439c6c01a48b3a0",
+    "bytes": 13222
+  },
+  "control_input_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/STAGE-INPUT-PINS.json",
+    "sha256": "bfd09de08ac1a4d78a478ac5f51becfa570c6f45bd8e4ed03eae81b2639e99aa",
+    "bytes": 3404
+  },
+  "exact_command": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "taskset",
+    "-c",
+    "7",
+    "prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/stage_numa_overlap.py",
+    "--case",
+    "numa",
+    "--binding",
+    "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/BINDING.FROZEN-119B-APP-ONLY.json",
+    "--binding-sha256",
+    "0e5acf8686bf319612db75d02089a94538d468b1988845f50439c6c01a48b3a0"
+  ],
+  "capture": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/actual-app-only-stage-capture-1",
+  "consumed_fields": "Same qualified binding keys/cases.numa as original image-only source; source validates genuine new119review/binary/oracle +51ec exactbaseline descriptors, existing053d artifact/33f dependency/modules. No fields removed, old116 untouched.",
+  "delta_contract": {
+    "members": 60,
+    "unchanged": 59,
+    "only_changed": [
+      "apps/app"
+    ],
+    "permitted_member_fields": [
+      "sha256",
+      "size"
+    ],
+    "explicit_equal": [
+      "images/mckernel.img",
+      "bin/mcexec",
+      "init"
+    ],
+    "base_byte_identical": true,
+    "all_final_metadata_equal": true,
+    "raw_archive_helpers": "Existing parse_newc/build_overlay/_replay_records/_manifest unchanged; no base reconstruction or image record write"
+  },
+  "future_stage_acceptance": null,
+  "future_normalization_acceptance": null,
+  "future_native_physical": null,
+  "runtime_release": null,
+  "ordinary_grant": null,
+  "no_execution": true,
+  "one_candidate_then_bounded_correction": "No actual candidate stage failure yet; preserve and expert-escalate after one bounded correction if needed."
+}

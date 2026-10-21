@@ -1,0 +1,42 @@
+{
+  "returncode": 0,
+  "pid": 2841715,
+  "start": 41970350,
+  "elapsed_seconds": 0.19412298704264686,
+  "direct_child_joined": true,
+  "process_group_absent": true,
+  "streams_closed": true,
+  "argv": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "60s",
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=55:55",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "-c",
+    "import runpy,json,subprocess,socket,os; from pathlib import Path; p=Path('/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/bound-runtime-source-1'); m=runpy.run_path(str(p/'root_manual_snapshot_threads.py')); b=json.loads((p/'fresh-snapshot-bindings.json').read_bytes()); m['static_joins'](b); print('PASS_ACTUAL_FINAL_119B_STATIC_JOINS_ONLY')"
+  ],
+  "streams": {
+    "stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/exact-native-release-data-preparation-1/actual-final-static-joins-capture-1/stdout",
+      "sha256": "065bee56800177393490ccc8982833f619deb42eee12378afb2df30940ab9dea",
+      "bytes": 41
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/exact-native-release-data-preparation-1/actual-final-static-joins-capture-1/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "case_id": "numa-nonempty-overlap-20261021-1",
+  "app_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/independent-review-1/REVIEW.json",
+    "sha256": "06afa9d9be97cde78371011b9b2ecd14b4da267f5fa6d9e71f0e60b0635f5231",
+    "size": 3981,
+    "mode": 33152
+  },
+  "compiled_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/compile-reference-1/whole.json",
+    "sha256": "52e7f3dfa58ddbb5f0020d87dd1a6fecc3e8d2556aca42ab710a3953914716b3",
+    "bytes": 2419
+  },
+  "binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/BINDING.ACTUAL-APP-BASELINE.PENDING-STAGER-REVIEW.json",
+    "sha256": "8cf82da1eb2b06d84b98a5e028de1e3a3a06e3c583ad1592c74d8d577f3ea6de",
+    "bytes": 12912
+  },
+  "consumer_contract": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/ABI-AND-119B-APP-CONSUMER-CONTRACT.PROPOSED.json",
+    "sha256": "f8cb23844738c02aaddf243296f36c1184c64b9f9a97defb285dcf9968e2a261",
+    "bytes": 5850
+  },
+  "qualified_stager_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/image-only-consumer-source-1/stage_numa_image.py",
+    "sha256": "70e2edeb80df4682f2b93d9e1d30391d1d21b6e49fce2f8d647849e05b93f29f",
+    "bytes": 13269
+  },
+  "source_delta_required": [
+    {
+      "site": "CPU affinity assertion",
+      "delta": "Use reviewed CPU7 ordinary stage lane instead of CPU6; same1GiB/30CPU/35wall/64MiBFS profile."
+    },
+    {
+      "site": "accepted_threads_stage hardpin and manifest/base/overlay joins",
+      "delta": "Use genuine51ec current053d/33f/116 baseline report; preserve all four exact descriptor equalities."
+    },
+    {
+      "site": "app review + fixed payload identity",
+      "delta": "Use genuine source/Linux REVIEW schema/status/decision, ownershipfalse/reviewer and exact8cc source/029065 binary/119eaacab oracle; acceptedwhole52e7 genuine descriptor. No compile/reference replay."
+    },
+    {
+      "site": "payload contract equality",
+      "delta": "Pin new case proposed_payload_contract verbatim119B stdout/emptyerr/37; honest existing app threads argv unchanged."
+    },
+    {
+      "site": "base generation loop",
+      "delta": "Reuse/copy accepted old_base unchanged and parse via same overlay functions; no new image replacement or false kernel-delta requirement. Require unchanged base SHA/size and same gzipraw image053d; no archive ordering edits."
+    },
+    {
+      "site": "final replay delta",
+      "delta": "Same60member replay; require exactly apps/app SHA/size change and all other59 full descriptors equal, explicitly images/mckernel.img/bin/mcexec/init equal; preserve all metadata/order/padding."
+    },
+    {
+      "site": "manifest update",
+      "delta": "Set distinct case_id numa-nonempty-overlap; payload oracle and artifacts.payload point new binary119case; image053d/33f modules exact; old116 manifest untouched."
+    },
+    {
+      "site": "status/result labels",
+      "delta": "Truthful app-only offline stage result; native/runtime/release false. Latest native physical fullref remainsNULL until genuine rootrecord."
+    }
+  ],
+  "source_candidate": null,
+  "stage_command_after_source_review_and_grant": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "taskset",
+    "-c",
+    "7",
+    "prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/stage_numa_overlap.py",
+    "--case",
+    "numa",
+    "--binding",
+    "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/BINDING.ACTUAL-APP-BASELINE.PENDING-STAGER-REVIEW.json",
+    "--binding-sha256",
+    "8cf82da1eb2b06d84b98a5e028de1e3a3a06e3c583ad1592c74d8d577f3ea6de"
+  ],
+  "command_currently_eligible": false,
+  "exact_remaining_stage_conditions": [
+    "Root authorizes/freezes finite case-only stager derivative and independent changed-clause review",
+    "Fresh root ordinaryCPU7 grant/headroom/floors64MiB stage growth +640MiB reserve; private fresh namespace absence",
+    "Latest native fullphysical report is not needed for offline stage bytes but must bind genuinely before runtime admission"
+  ],
+  "future_normalization": {
+    "manifest_directory": "/home/holden/mckernel-work/scratch/nov-n-261021-1",
+    "stage_acceptance": null,
+    "normalized_manifest": null,
+    "parent_identity": null,
+    "nonce": "2df79055769c445d8800cf1775993e2d",
+    "QMP_bytes": 101,
+    "two_runtime_norm_pins": "same genuine future accepted119B norm report",
+    "ordinary_profile": "existing CPU6 or7 disjoint1GiB/30CPU/35wall rootgrant only",
+    "strict_oracle": "119B eaacab76/emptyerr/exit37/rawnormalwait9472; no116 substitution"
+  },
+  "future_native_physical": null,
+  "runtime_execution_review": null,
+  "runtime_release": null,
+  "source_only": true,
+  "no_kernel_build": true,
+  "no_placement_or_callback_coverage_claim": true
+}
