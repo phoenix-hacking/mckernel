@@ -1,0 +1,98 @@
+{
+  "added_readonly_files": [
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/protection.cpio.gz",
+      "sha256": "67cdf384e1cd4bb95a6c5f718f0b9357cf2438a8c3b1eb839c70350128c14112",
+      "size": 25551545
+    },
+    {
+      "mode": 33261,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/collector-0755",
+      "sha256": "37b370fd699246d301634e16eed4288b19d867a74ea82c9ef39eef8a04bd2058",
+      "size": 1025768
+    }
+  ],
+  "expected_consumed_references": 231,
+  "fixture_settings": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-contract-correction-1/FIXTURE-SETTINGS.json",
+    "sha256": "3c8b4c2fc83b2ebb2b2cc9e9d02ae79d54393fd9813f8db479f48c46c2c75365",
+    "size": 4208
+  },
+  "future": {
+    "fixture": null,
+    "native": null,
+    "native_release": null,
+    "normalization": null,
+    "physical": null
+  },
+  "input_pins": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-contract-correction-1/INPUT-PINS.json",
+    "sha256": "bc4dfc93a23045707b4ea2e07fef96a4d50f9363eeca46f68a3cbb159fbca6bf",
+    "size": 3667
+  },
+  "interpreter": {
+    "mode": 33277,
+    "path": "/home/holden/anaconda3/bin/python3.9",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "size": 15880080
+  },
+  "next_command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-contract-correction-1/check_normalization_body.py"
+  ],
+  "normal_deadlines": {
+    "inner": 300,
+    "outer": 360
+  },
+  "physical_predecessor": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/ACTUAL-M02-FAILED-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "a5a44c1d43ff74f2a777583b243a3c20a4102f855f4ffefa31ccccbf5e31eeb8",
+    "size": 64657
+  },
+  "preserved_source_pins": 203,
+  "prior_closed_failure": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/ROOT-ACTUAL-NORMALIZATION-CLOSED-1.json",
+    "sha256": "2c77415478d976bcdb9556c105dbb01cff701e2786c5b40520529008d63f723b",
+    "size": 1309
+  },
+  "profile": {
+    "address_space_bytes": 1073741824,
+    "aggregate_cpu_seconds": 55,
+    "child_wall_seconds": 52,
+    "core_bytes": 0,
+    "cpu": 6,
+    "file_size_bytes": 33554432,
+    "host_floor_bytes": 17179869184,
+    "host_growth_bytes": 268435456,
+    "jobs": 1,
+    "kill_after_seconds": 2,
+    "nofile": 256,
+    "outer_wall_seconds": 60,
+    "scratch_floor_bytes": 12884901888,
+    "scratch_growth_bytes": 0
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "serial_requirement": "Fixture must close/pass and receive independent result review before separate successor normalization grant. First failure stops; no automatic runtime.",
+  "settings": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-contract-correction-1/SETTINGS.json",
+    "sha256": "b91db851915fabe16160399211d73bb93e8e744af25212f2dd9d3c1a461591a8",
+    "size": 2800
+  },
+  "status": "SOURCE_ONLY_REQUIRES_EXACT_EXPERT_REVIEW_AND_FRESH_DISPATCHER_GRANT",
+  "stop": "No fixture/body/normalization/root/guest execution before exact review and fresh grant. Preserve all failed partials and prior family history; expert-directed single correction only.",
+  "successor_normalization_command": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-contract-correction-1/prepare_native.py"
+  ],
+  "successor_source_pins": 207
+}

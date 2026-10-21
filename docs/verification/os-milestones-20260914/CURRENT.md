@@ -1,3 +1,39 @@
+## Current — Rust settid body integrated; M06 normalization accepted
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Manual invocation20261021T011203Z-9cba0828 continues at100%included/zero reserve.
+Checkpointc3e807e1 is pushed/fetched with62 exact changed blobs verified. Formal
+counts remain20/35checks,fivewhole,28native,Rust17production/14native.
+
+M06 stage4b9591f1 and actual successor normalizationb3963fad are accepted.
+Normalization closed0/1.0629s,pid2345888/start34363295,fulljoins/groupabsence/
+closedstreams;CPU6released. Its preceding actual-main fixture passedbothvectors
+in2.5675s,including exactmissing-readonly-file refusal. Originalfailednormalizer,
+partialoutputs and203historicalsourcepins remain. No stage/ELF/compile replay.
+Native author/reviewer now correct the coupled legacyM02/Exit7/40s caller/source
+contract for this actualM06case,current300/360owner and separate genuinea5a44c1d
+failed-M02physicalcontext. Actualwhole-loader/parent/binder19/LASTstatic fixture
+must pass before productionpublication/admission; no inventedfutureproof.
+Evidence: ../evidence/m06-stage-and-normalization-20261021-1/.
+
+Root integrated exactreviewed Rustsettid body+minimal C DMAstack/ABI/log glue:
+kernel/syscall.c81404ef3 and kernel/rust/syscall_policy.rs54f3103e.
+Independent9f13514c accepts12 actual C/Rustbody paritycases acrossfivecommands,
+0.36410sdriver/0.43785souter,0.34786CPU seconds,allinner/outerbirth/wait/group/
+streamproofs. C fallback/selection/caller unchanged; no compute-C expansion.
+This is sourceintegration+finite bodyproof only, not Cretirement or nativecredit.
+Current whole-native/legacycrate and actualselected/fallbacksyscall.c compiler
+proposal is next; preserved160source/header authority needs seven currentRust
+updates plus these two overlays, with exact current source scope retained.
+Evidence: ../evidence/guest-settid-rust-body-20261021-1/.
+
+PPD one-line73989fa5 sourcefix remains integrated/threeactualbodycasesaccepted;
+fresh66-source SDKpreparation382c38d0 passed, but matchingfullmodulecompile and
+nativeforkcause remain unproved. SDKcapacity gate14159970304B/noresize/delete/
+12GiBscratch+16GiBhostfloors remain unchanged. No CPUlease for modelwork, no
+new heavyowner or LAST/census window. Next functional target is M06unsupported
+clone3IO: exact44B,-95,nochild,exit0,emptystderr,positivephysical/nativeverdict.
+
 ## Current manual resume — M06 normalization refusal preserved; Rust source work active
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

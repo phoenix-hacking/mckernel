@@ -1,0 +1,127 @@
+{
+  "schema": "mckernel.m06-clone3-io-actual-v0-elf-stage-successor-review.v1",
+  "created_utc": "2026-10-20T22:32:28.430925+00:00",
+  "reviewer": "/root/m06_optional_failure_literal",
+  "scope": "Functional supported-profile OS/apps plus live compute-C retirement into Rust/reviewed assembly; one optional clone3-IO refusal case only.",
+  "decision": "PASS_ACTUAL_64_BYTE_VERSION0_ELF_CONDITIONAL_STAGE_ONLY_SUCCESSOR",
+  "execution_grant": false,
+  "original_chain": "STOPPED_BEFORE_CHMOD_AND_STAGE_ON_WRONG_88_BYTE_PROPOSAL_EXPECTATION",
+  "preservation": "Original proposal a1c197e7 expected88, conditional sourced7a5d2fc and all first-three closed captures remain unchanged. No88-byte PASS; no unchanged original-chain resume and no compiler repetition.",
+  "root_closed_record": {
+    "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ROOT-FIRST-THREE-CLOSED-1.json",
+    "sha256": "68504c6d132b6c583fe96bde803ec5b79b66f733ee8b676c19ff3242e08643bf",
+    "size": 3531,
+    "mode": 33152
+  },
+  "closed_command_receipts": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-capture-1/00/whole.json",
+      "sha256": "2dbcc537e200fe2e4cb26bd9c8ae1c61426bc606ff20b12f6a3f85aecb69055c",
+      "size": 1070,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-capture-1/01/whole.json",
+      "sha256": "969d732303d23175323e2df67f10e4ef42ad0ad9184e18d0b274389c23e77a73",
+      "size": 1076,
+      "mode": 33152
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-capture-1/02/whole.json",
+      "sha256": "3c4e8741655a4eff743d803fdd39e637ada5e7575f05fa0598429ffa8d268f72",
+      "size": 1075,
+      "mode": 33152
+    }
+  ],
+  "actual_payload": {
+    "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-compile-1/app",
+    "sha256": "f1a10e7f7d8aa7c5b505c71b8e12536219007837597b9605c90ca65e96d568c7",
+    "size": 871368,
+    "mode": 33216
+  },
+  "post_chmod_payload_expected": {
+    "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-compile-1/app",
+    "sha256": "f1a10e7f7d8aa7c5b505c71b8e12536219007837597b9605c90ca65e96d568c7",
+    "size": 871368,
+    "mode": 33261
+  },
+  "actual_ELF_observations": [
+    "Readelf retained stdout27f12e5a/142480: ELF64 little-endian AMDx86-64 ET_EXEC, ten program headers all enumerated with no INTERP or DYNAMIC; static executable. Compiler used -static. GNU_STACK is RW/no executable flag.",
+    "Retained objdumpb09a542d/8171190 main401730: 40174e eax=0x80000000 zero-extends to full64-bit CLONE_IO; 40176b writes flags to args+0; 401770 writes0x11 to args+32; zero stores cover the remaining version0 fields.",
+    "Main40177e edx=0x40 (64),401783 rsi=&args,401788 edi=0x1b3 (435),401798 calls449260 syscall. This is a concrete optional clone3 request, not inference from syscall symbol presence.",
+    "Main checks libc return-1 and errno0x5f95, prints exact fields and returns success only on those results. No executable invocation has occurred."
+  ],
+  "ABI_disposition": {
+    "actual_size": 64,
+    "proposal_expected_size": 88,
+    "valid": true,
+    "source": "kernel/rust/clone3.rs",
+    "source_sha256": "3f7433685512e989f2a82ca213ced344fb5dd5a113733485fcfd724ffe2c9094",
+    "reason": "VERSION_0=64 at line6 and only size<64 is rejected at52-54. The decoder initializes an88-byte zero array then copies min(size,88) at72-73, so absent version1/2 set_tid/set_tid_size/cgroup fields remain zero. CLONE_IO and SIGCHLD fields both lie inside64; stack/stack_size zero is valid; CLONE_IO does not trigger the size88 INTO_CGROUP requirement. Request reaches explicit UNSUPPORTED_FLAGS rejection -95 at112-113.",
+    "selected_profile_join": "Unchanged clone3 source3f743368 is already bound by tested205 manifestd3495242 and artifactfa398247 in prior preserved literal decision. This source reasoning plus actual callsite establishes valid version0 input. It does not assert native error delivery or physical no-child behavior."
+  },
+  "stage_only_successor": {
+    "commands": [
+      {
+        "argv": [
+          "/usr/bin/chmod",
+          "0755",
+          "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-compile-1/app"
+        ]
+      },
+      {
+        "argv": [
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/stage_clone3_app_only.py"
+        ]
+      }
+    ],
+    "source_driver": {
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/stage_clone3_app_only.py",
+      "sha256": "0510460a62fd091924d88681a36741bad237fd0c6bdeddf9ca2e857776827c9f",
+      "size": 3859,
+      "mode": 33152
+    },
+    "profile": {
+      "cpu": 6,
+      "jobs": 1,
+      "address_space_bytes": 1073741824,
+      "aggregate_cpu_seconds": 55,
+      "outer_wall_seconds": 60,
+      "child_wall_seconds": 52,
+      "kill_after_seconds": 2,
+      "file_size_bytes": 33554432,
+      "core_bytes": 0,
+      "nofile": 256,
+      "host_growth_bytes": 268435456,
+      "host_floor_bytes": 17179869184,
+      "scratch_growth_bytes": 0,
+      "scratch_floor_bytes": 12884901888
+    },
+    "conditions": [
+      "Fresh dispatcher CPU6 aggregate admission and exclusive new capture root; original lease is released, original chain remains stopped. Revalidate exact app bytes/hash/current0700 mode, pinned source/input/tool/interpreter descriptors, absent ordinary-stage-1 and service/identity/capacity prerequisites.",
+      "Use accepted owned_capture, exactly chmod then existing unchanged stage command; aggregate55CPU/60wall across both with52s child bounds, closed streams/direct join/group absence and first-failure stop. No Linux app execution, compiler/reproducer/native/root/normalization work.",
+      "After chmod verify same app bytes/size with mode100755 exactly; stage then consumes the actual app hash via engine.ref. Existing app-only metadata/map/prefix and evaluator AST/manifest invariants from sourced7a5d2fc remain mandatory, with no script/source edits.",
+      "256MiB growth covers maximum four32MiB capture streams (128MiB), existing64MiB stage cap, and64MiB emergency reserve. Existing compiler/app evidence is retained read-only except intended chmod; total host16GiB+reserve and scratch12GiB floors remain. Preserve one-heavy4CPU/12GiB/no-swap512task controls.",
+      "Independently accept actual stage output and positive ordinary retirement before successor normalization. Keep future actual descriptors/results null until observed. Native exact44B stdout/emptyerr/exit0, syscall435 route/no-child/normal retirement requirements are unchanged.",
+      "Any descriptor/ELF/stage/source/resource discrepancy or service/auth/billing rejection stops with evidence. One failed candidate plus one bounded correction per family; this successor corrects only wrong ABI-size expectation, not source or oracle."
+    ]
+  },
+  "tests": 0,
+  "reviewer_compiler_runs": 0,
+  "reviewer_app_runs": 0,
+  "reviewer_stage_runs": 0,
+  "reviewer_source_imports": 0,
+  "reviewer_root_operations": 0,
+  "P_M06_03": "OPEN",
+  "native_acceptance": false,
+  "future": {
+    "stage": null,
+    "normalization": null,
+    "native": null,
+    "output": null,
+    "physical": null
+  }
+}

@@ -6661,8 +6661,29 @@ long sys_getppid(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int syscall_settid_body_result(struct syscall_request *request,
+		int nr_tids, int *tids, int gettid_nr,
+		syscall_virt_to_phys_fn_t virt_to_phys_fn,
+		syscall_get_cpu_fn_t get_cpu_fn,
+		syscall_request_call_fn_t syscall_fn, void (*log_fn)(int));
+
+static void syscall_settid_log_bridge(int ret)
+{
+	kprintf("settid: WARNING: do_syscall returns %d\n", ret);
+}
+#endif
+
 static int settid(struct thread *thread, int nr_tids, int *tids)
 {
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	struct syscall_request request IHK_DMA_ALIGN;
+
+	return syscall_settid_body_result(&request, nr_tids, tids, __NR_gettid,
+			syscall_virt_to_phys_bridge, ihk_mc_get_processor_id,
+			syscall_do_syscall_request_bridge,
+			syscall_settid_log_bridge);
+#else
 	int ret;
 	struct syscall_request request IHK_DMA_ALIGN;
 
@@ -6680,6 +6701,7 @@ static int settid(struct thread *thread, int nr_tids, int *tids)
 			__FUNCTION__, ret);
 	}
 	return ret;
+#endif
 }
 
 #ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS

@@ -1,0 +1,84 @@
+{
+  "schema": "mckernel.settid.actual-fixture-and-exact-source-integration-review.v1",
+  "reviewer": "/root/sdk66_source_review",
+  "functional_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_FINITE_ACTUAL_BODY_PARITY_APPROVE_EXACT_TWO_FILE_SOURCE_INTEGRATION",
+  "source_review_sha256": "3b18d5fb5c87be68c2da66aea0a062220d26818e5be0d4c73e794a0c5ca49c90",
+  "execution_review_sha256": "3b372f8dc6822aea83b5c825c976daea7d760684f5b62ff131671aa318484fda",
+  "retained_original_runner_refusal_sha256": "aaf57e2918d5a1686ae2e99b8e4d99c3580b238489b2d5b14b2e64d2fc8726c9",
+  "root_grant_sha256": "fa542521b42e58e7691b302f9c16a24d8a8a711b995c8344f4235a13c51721bf",
+  "root_closed_receipt_sha256": "5864b9c15b5ceebd98544b2da65dd1b2f0747e769c58ee2891ea6f2793f54d5d",
+  "actual_result_sha256": "d9ec0f340595a1746c0d8c692a04a6e3fc1f91aad294516ecf65f97a5ed995b8",
+  "actual_observation": {
+    "commands": 5,
+    "cases": 12,
+    "result": "PASS_FINITE_ACTUAL_C_RUST_SETTID_PARITY",
+    "driver_pid": 2347800,
+    "driver_start": 34389065,
+    "outer_seconds": 0.43784538097679615,
+    "whole_dispatch_seconds": 0.44141654297709465,
+    "driver_seconds": 0.3640980840427801,
+    "driver_and_children_CPU_seconds": 0.34785999999999995,
+    "outer_and_all_inner_returncodes": 0,
+    "outer_and_all_inner_direct_children_joined": true,
+    "outer_and_all_inner_groups_recorded_absent": true,
+    "outer_and_all_inner_streams_closed": true,
+    "all_stream_digests_lengths_and_stable_metadata_checked": true,
+    "all_stderr_empty": true,
+    "no_timeout_execution_or_retirement_errors": true,
+    "CPU6_released_by_dispatcher": true,
+    "outer_command_matches_released_proposal": true,
+    "deterministic_six_variable_environment_recorded_in_grant": true,
+    "exact_limits_and_growth_headroom_recorded": true,
+    "inner_labels": ["rust-object", "original-c", "candidate-c", "link", "actual-12-cases"],
+    "expected_actual_stdout": "PASS: 12 complete actual-C/actual-Rust settid cases; bytes/order/return/log/carrier\n"
+  },
+  "actual_standalone_artifacts": {
+    "actual-helper.o": "3a9409544ddabc59c3988dbb9086606bc30a9166d50ebba7ecc3f9dc53dd1584",
+    "original.o": "2888cb50b605d652aa04805802a1a4923c619e4f5347d2ea03d2d1f277ac815e",
+    "candidate.o": "4a47c1cadb7723375bbdee14788b4863f95b00f47004fb1789a028d5f42a4499",
+    "actual-settid": "ef4df45933230eacd1d867aac3038007af6cd7fe18083f9e10d7fecc236725f6",
+    "standalone_symbol_observation": "nm shows exactly one global defined syscall_settid_body_result in actual-helper.o and in the standalone linked fixture, plus the distinct __wrap carrier observer. Both run_original and run_candidate are linked. This is not a kernel linked-artifact claim."
+  },
+  "finite_ABI_and_behavior_proof": [
+    "The executed strict-warning Rust and separate C translation units retain matching size72/alignment8 and offsets0/4/8/16/24 assertions for the authoritative request representation and selected int32/long64 widths. The real selected SMP IHK_DMA_ALIGN header is used.",
+    "All12 unchanged independent vectors exercised complete original settid and selected C adapter/log plus actual Rust helper, using behavior-equivalent trivial forwarding glue. Callback byte oracle, V/C/D/(L) order, NULL/zero-count translation, alternating CPU0/7, full request zeroing, signed count conversion, long-to-int narrowing before sign/log, exact negative warning text/count, same-invocation C stack carrier and unchanged TID buffers all passed.",
+    "Exact stdout and all five actual command/status/started/direct-wait/direct-join/whole records were inspected without rerunning a compiler, helper or test. Recorded PID/start identities agree across per-command closure records; every bound stream digest/length and regular single-link stable metadata was independently verified."
+  ],
+  "two_file_integration": {
+    "owner": "root dispatcher only",
+    "approved": true,
+    "preimages_current_at_review": true,
+    "files": [
+      {
+        "path": "kernel/syscall.c",
+        "pre_sha256": "2183284fa35f6b25fbf8feb121c298f70aac13cea6840030f536775ee880d5bb",
+        "pre_bytes": 837964,
+        "post_sha256": "81404ef35d90cf965c1f46ba200d6d83106576373c0ddd84128c638dffe3b6fb",
+        "post_bytes": 838685,
+        "patch_sha256": "f0f0833058f8c1466448bcea986ef096a0782b55ec8b9ccba1903708e1358f59"
+      },
+      {
+        "path": "kernel/rust/syscall_policy.rs",
+        "pre_sha256": "7bed3b6f62d7c305693e7e0370d0e6f9f08d1125b66c39d148c1a0af5e00f6fe",
+        "pre_bytes": 696999,
+        "post_sha256": "54f3103ee88d34f91f29c3c81b647bb9b24cef576bfb02a8c777742547ce97b1",
+        "post_bytes": 698330,
+        "patch_sha256": "9d0e143884e45a4b2e7f1d13b5f79988cedab5ab15e47752a79f79e7f902a587"
+      }
+    ],
+    "conditions": [
+      "Reconfirm exact current preimages immediately before applying only these two reviewed patches, and verify exact postimage lengths/digests. Any intervening source change requires a bounded rebase/diff review, not overwriting another owner.",
+      "Retain original C fallback byte body and existing MCKERNEL_RUST_SYSCALL_POLICY_HELPERS selection; no CMake/profile/ABI header or cpu.c/process.c edits accompany this integration.",
+      "Integration is source-only. Continue current full Rust crate and actual production syscall.c compilation with existing ABI checks, unique final kernel helper definition and actual selected caller disassembly before a matching image/native observation."
+    ]
+  },
+  "failure_history": {"source_capture_refusals": 1, "source_capture_corrections": 1, "actual_fixture_candidates": 1, "actual_fixture_failures": 0, "actual_fixture_passes": 1},
+  "reviewer_test_or_compiler_reruns": 0,
+  "reviewer_source_mutations": 0,
+  "full_current_crate_acceptance": false,
+  "production_syscall_c_compilation_acceptance": false,
+  "kernel_linked_artifact_acceptance": false,
+  "native_or_default_activation_acceptance": false,
+  "production_C_retirement": false
+}

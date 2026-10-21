@@ -1,0 +1,61 @@
+{
+  "status": "PROPOSED_NOT_RELEASED_NOT_EXECUTED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "execution_owner": "root dispatcher, using already reviewed reusable ordinary profile; this proposal is not independent execution authority",
+  "profile_basis": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/postpositive-revoke-1/run_control_check.py",
+  "affinity": [
+    6
+  ],
+  "jobs": 1,
+  "address_space_bytes": 1073741824,
+  "cpu_seconds": 30,
+  "driver_wall_seconds": 28,
+  "outer_owner_wall_seconds": 35,
+  "stream_file_limit_bytes": 33554432,
+  "output_growth_cap_bytes": 134217728,
+  "nofile": 256,
+  "core_bytes": 0,
+  "uid": 1000,
+  "gid": 1000,
+  "memory_available_minimum_bytes": 2147483648,
+  "host_floor_plus_growth_bytes": 17314086912,
+  "scratch_floor_plus_growth_bytes": 13019119616,
+  "pinned_rustc": "/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu/bin/rustc",
+  "pinned_cc": "/usr/bin/x86_64-linux-gnu-gcc-9",
+  "candidate_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "/home/holden/mckernel-work/host-preparation/guest-settid-rust-candidate-20261021-1/run_fixture_once.py"
+  ],
+  "outer_requirements": [
+    "root owns CPU6 grant, aggregate headroom and launcher/service checks; no worker lease while authoring",
+    "use existing reviewed outer capture/owner with finite35s wall and positive direct-child/outer-group joins; retain raw stdout/stderr/status and identities",
+    "driver runs exactly5 sequential commands, captures each argv/stdout/stderr/direct-child status/group absence; no automatic second attempt",
+    "no root/module/guest/network action; no source integration; no shared output writes; fail closed if check-1 exists"
+  ],
+  "expected_stdout": "PASS: 12 complete actual-C/actual-Rust settid cases; bytes/order/return/log/carrier\\n",
+  "expected_result": "check-1/result.json status PASS_FINITE_ACTUAL_C_RUST_SETTID_PARITY with5commands/12cases/directjoins/groupabsence",
+  "failure_family": {
+    "name": "settid-port",
+    "executed_candidates": 0,
+    "bounded_corrections_used": 0,
+    "policy": "one failed candidate plus one bounded correction then focused escalation; preserve each original"
+  },
+  "not_claimed": [
+    "fullcrate compilation",
+    "production syscall.c compilation",
+    "native/default activation",
+    "final image/module link",
+    "current image/native pthread proof",
+    "C retirement"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "mckernel.settid-rust-candidate.source-and-fixture-profile-review.v1",
+  "reviewer": "/root/sdk66_source_review",
+  "functional_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "CONDITIONAL_PASS_PRIVATE_SOURCE_AND_PROPOSED_ACTUAL_BODY_COMPARISON",
+  "source_defect_found": false,
+  "pins": {
+    "CONTRACT.md": "22a098de491adea8b2fa79c416da430392cbfb8dd62c110f2431f65bd9fefe2e",
+    "syscall-c.patch": "f0f0833058f8c1466448bcea986ef096a0782b55ec8b9ccba1903708e1358f59",
+    "syscall-policy-rs.patch": "9d0e143884e45a4b2e7f1d13b5f79988cedab5ab15e47752a79f79e7f902a587",
+    "PREPARED-MANIFEST.json": "1660e997c1fd1b6e0d42079b3ab0ef21624d773b8476e02085cf37656027de74",
+    "candidate/kernel/syscall.c": "81404ef35d90cf965c1f46ba200d6d83106576373c0ddd84128c638dffe3b6fb",
+    "candidate/kernel/rust/syscall_policy.rs": "54f3103ee88d34f91f29c3c81b647bb9b24cef576bfb02a8c777742547ce97b1"
+  },
+  "source_equivalence": [
+    "The complete original settid body zeros its 72-byte request, selects __NR_gettid, converts int count to unsigned long args[4], translates tids unconditionally into args[5], queries CPU and synchronously offloads once, assigns long return to int before testing negativity, logs once for negative narrowed int and returns that same int. The Rust body preserves this sequence and all zero-count/null-pointer behavior.",
+    "On the selected x86_64 ABI CInt=i32, CLong=i64 and CULong=u64. Rust nr_tids as CULong agrees with C signed-int to unsigned-long conversion, including negatives. Rust syscall_fn return as CInt preserves the selected compiler's low-32-bit C narrowing before the sign decision. The 12 proposed values explicitly distinguish checking long sign from checking narrowed int sign.",
+    "Existing repr(C) SyscallRequest and C struct match size72/alignment8 and offsets0/4/8/16/24 in their existing Rust/C checks. write_bytes zeros every request byte before field writes; the selected structure has no unaccounted byte region. Callback argument/return types agree with the existing C typedefs and bridges.",
+    "The request remains an existing C automatic struct syscall_request with the real IHK_DMA_ALIGN spelling; its address is borrowed for the complete synchronous Rust/callback chain. Rust adds no allocation, retained pointer, async handoff, early error or ownership transition. Direct nonnull callbacks are supplied by the sole selected C adapter. Existing virt_to_phys and do_syscall bridges contain only the respective original operation.",
+    "The unchanged sole do_fork caller retains threads_lock, temporary/retained TID buffers, error handling before pool adoption, copying until zero/NR_TIDS, and buffer release. The unused thread argument is neither dereferenced nor repurposed. The original C implementation remains in the #else branch; current cpu.c/process.c fixes are outside both patches.",
+    "New C text is justified ABI/control glue: declaration, the existing DMA stack request, one Rust call with existing callback providers, and exact log formatting. The old static function name was settid, so the constant settid warning string has identical bytes to the original %s/__FUNCTION__ output. No new compute-kernel C behavior is introduced."
+  ],
+  "meaningful_fixture_conditions": [
+    "Extract and compile the complete original C settid body and complete selected C adapter/log/bridge bodies in separate translation units, preserving the function name settid, and compile the complete actual new Rust function. Do not substitute a model or hand-rewritten copy. Bind extraction to the reviewed inputs and record output identities.",
+    "Use the actual C syscall_request declaration and existing Rust aliases/repr(C) request declaration plus layout assertions. The smp x86_64 IHK_DMA_ALIGN definition is currently empty in ihk/cokernel/smp/x86_64/include/ihk/memconst.h; use that exact selected profile definition, not a guessed cache-line alignment. Preserve real C long-to-int narrowing in the reference translation unit.",
+    "All 12 proposed cases must compare both actual paths against independent expected 72-byte request contents, callback counts and order V/C/D/(L), translation argument including NULL, alternating CPU0/7, returned int, exact warning bytes/count and untouched TID buffers. Assert request pointer identity throughout each adapter-to-offload invocation; do not demand equality of stack addresses between separate C and Rust invocations.",
+    "Record the candidate's own request pointer before entering the actual Rust helper, for example with a fixture-only linker wrapper that forwards unchanged to the actual helper, and assert the same pointer reaches do_syscall. This observes the retained C stack carrier without editing the production body. Independent expected bytes must include zero rtid/ttid/valid/args0..3 and exact number/count/physical value.",
+    "Keep negative returns that become nonnegative ints and nonnegative longs that become negative ints. Do not discard these as unsupported runtime counts: they verify the complete helper's existing C conversion contract while callbacks remain bounded and do not dereference NULL."
+  ],
+  "ordinary_profile_prerequisite": {
+    "existing_reusable_unprivileged_profile_only": true,
+    "separate_new_heavy_packet_required": false,
+    "dispatcher_execution_admission_required": true,
+    "exact_fixture_and_compiler_argv_binding_required": true,
+    "note": "CONTRACT names a profile and /nightly/bin/rustc but does not yet contain executable fixture files, exact selected compiler paths/identities or complete argv. Prepare those concrete ordinary inputs, then execute promptly within the existing reviewed reusable profile; this source review is not an executable command grant.",
+    "required_boundaries": [
+      "One compiler/test process at a time in one explicitly granted disjoint ordinary CPU6 or CPU7 lane; use the existing reviewed finite memory/CPU/wall/grace/file/nofile limits and aggregate admission, not a new implicit allowance per compiler.",
+      "Bind nightly-2026-02-18 Rust compiler and the selected existing C compiler/profile and actual IHK header; retain --edition=2021 --crate-type=lib --emit=obj -Cpanic=abort -Copt-level=2 for the isolated Rust body. Bind exact C compile/link/test commands before execution. No current full-crate build, root, owner, module, guest, Docker-profile expansion or SDK capacity bypass is authorized by this decision.",
+      "Fresh check-1 output only, bounded commands/captures, actual statuses and direct/group retirement, host16GiB/scratch12GiB floors plus full growth/reserve, no overwritten failure evidence. No admission or capacity check was run by this reviewer."
+    ]
+  },
+  "failure_family": {
+    "name": "settid-port",
+    "executed_candidates": 0,
+    "bounded_corrections": 0,
+    "stop_condition": "One failed candidate plus one bounded correction in this family, then focused expert escalation; retain both failures and do not replay unchanged deterministic inputs."
+  },
+  "remaining_acceptance": [
+    "Actual finite comparison must compile/link and pass; this is currently proposed source only.",
+    "Dispatcher must verify current base pins/rebase only disjoint edits before shared integration, then selected full Rust crate and actual syscall.c compilation with existing ABI checks, unique linked export and actual selected settid consumer disassembly.",
+    "A matching current image and fresh supported native pthread/TID observation with unchanged application oracles remain necessary before claiming production C retirement."
+  ],
+  "tests_or_candidate_commands_executed_by_reviewer": 0,
+  "source_edits": 0,
+  "shared_integration": false,
+  "native_acceptance": false,
+  "production_retirement": false
+}

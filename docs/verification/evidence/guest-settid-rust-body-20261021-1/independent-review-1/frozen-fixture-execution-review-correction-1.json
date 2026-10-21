@@ -1,0 +1,32 @@
+{
+  "schema": "mckernel.settid-frozen-fixture.corrected-execution-review.v1",
+  "reviewer": "/root/sdk66_source_review",
+  "functional_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "CONDITIONAL_PASS_ONE_EXACT_ORDINARY_FIVE_COMMAND_FIXTURE_RUN",
+  "proposal_sha256": "fa108015aedfba6d077a837f6ccb92f0a5dfd2ea885bdfa24c6e8307f41c04ea",
+  "frozen_correction_manifest_sha256": "8765fbe3e76a88b064011aac5d276f2e6d9dbf3233adde8cc8446f72ef6ffd7f",
+  "fixture_inputs_sha256": "8282860de24133be9ca1281c3f557c223fa539bf007425451e48a4655d481e18",
+  "runner_sha256": "509b009d10c84251a1de42daa47fc15f0e2ef1d88c7e96498629e11690183aa9",
+  "accepted_source_equivalence_sha256": "3b18d5fb5c87be68c2da66aea0a062220d26818e5be0d4c73e794a0c5ca49c90",
+  "preserved_predecessor_refusal_sha256": "aaf57e2918d5a1686ae2e99b8e4d99c3580b238489b2d5b14b2e64d2fc8726c9",
+  "lifecycle_findings": [
+    "The changed runner removes its ad hoc Popen/wait/killpg implementation and passes all five unchanged compiler/link/test commands sequentially through the existing pinned 990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8 owned_capture API. That helper and its exact 96d17547 census contract are reused; no second capture design is introduced.",
+    "The accepted helper masks stop signals through fork-to-owner assignment, restores the child mask, retains the known creator unreaped with WNOWAIT through required group actions, directly joins before final group census and closes streams before stable FD capture hashing. The new caller installs the helper stop handlers, uses one remaining-time deadline, and stops before the next command on any return, timeout, retirement or stream-proof failure.",
+    "The whole driver deadline is measured from driver start at 28 seconds and the per-command wait is min(20,remaining). It requires inherited CPU6 affinity and exact 1GiB AS/30CPU/32MiB file/256nofile/core0 limits, checks whole self/children CPU use and bounded output growth, and writes only its fresh correction check-1 tree. The 35-second independent outer capture remains mandatory for closure of the driver itself.",
+    "The helper is imported only after its exact source pin and fixture pins are checked, with bytecode writes disabled. Python3.8-compatible APIs are used on the reachable driver/helper path, including the accepted ast.Module extraction of the census; no ast.unparse/removesuffix/is_relative_to assumption is introduced.",
+    "Existing body/vector/compiler review is reused. The only intended compiler command differences are fresh output roots. The proof scope explicitly covers exact complete original settid, selected C adapter/log and actual Rust body plus behavior-equivalent trivial forwarding glue; it makes no literal whole production transport extraction claim."
+  ],
+  "dispatcher_conditions": [
+    "Issue a fresh disjoint CPU6 ordinary grant after current launcher/service/aggregate admission; bind the four exact correction pins, unchanged source/vector/toolchain pins and accepted source review. Confirm correction check-1 absent, including dangling entries. This review acquires no lease and performs no fresh capacity measurement.",
+    "Execute the exact candidate_argv from corrected FIXTURE-PROPOSAL.json once, under the existing reviewed outer owned capture with finite35-second wait and its accepted bounded retirement. Bind a deterministic ordinary compiler environment for the helper-inherited children, equivalent to the original PATH=/usr/bin:/bin, LANG=C, LC_ALL=C, TZ=UTC, empty MAKEFLAGS and CARGO_BUILD_JOBS=1; do not inject compiler/provider overrides. No driver or fixture rewrite is required for an explicit outer Popen env.",
+    "Preserve CPU6/one job,1GiB AS,30CPU seconds,32MiB per-file,256nofile,core0 and whole128MiB planned growth. Require recorded host16GiB/scratch12GiB floors plus128MiB growth and at least2GiB available memory, with all concurrent jobs included in admission.",
+    "Persist outer command/start/direct-wait/direct-join/whole result and raw streams; require positive driver join, absent outer group, closed stable streams and no errors. For success require exactly5 per-command whole records with direct_child_joined/group_absent/closed_streams true, rc0, empty stderr, no timeout/error/retirement error, and actual result PASS_FINITE_ACTUAL_C_RUST_SETTID_PARITY with12cases. A proposed command or driver summary alone does not establish acceptance.",
+    "Stop on the first failure or uncertain retirement, retain all original bytes and captures and do not replay the same inputs. The predecessor source refusal remains preserved. No compiler/test candidate has run as part of this review."
+  ],
+  "failure_history": {"source_level_runner_refusals": 1, "source_level_lifecycle_corrections": 1, "executed_candidates": 0, "execution_failures": 0},
+  "reviewer_compiler_test_helper_or_candidate_runs": 0,
+  "root_module_guest_heavy_or_shared_source_authority": false,
+  "current_result": null,
+  "native_acceptance": false,
+  "production_C_retirement": false
+}
