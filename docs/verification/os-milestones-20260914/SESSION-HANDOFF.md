@@ -1,3 +1,39 @@
+## Current — cleanup quarantine diagnosed; exact holder retirement prepared
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current image053d/stage51ec/normd7e94 remain accepted. Cleanup entered durable
+quarantine at19:01:03Z after both archive exchanges/releases (eight valid journal
+events), before final complete. Final census failed at vanished /proc/2761779/stat.
+The original root holder2761636/start40670236 retains permanent27:4 and transaction
+mutex1828:116329; no normal cleanup replay, unlink or signal has occurred. Original
+quarantine, archives, plan, journal and all failures remain preserved. This is a
+harness census/visibility failure; no kernel/application result follows from it.
+
+New user-authorized read-only exception81b6 uses one persistentCPU0 reader
+2777042/start40959744; supervisor2590193/start37928121 remains admitted. Qualified
+root prestate2238771a completed0/.161599s/emptyerr and independent31ab acceptance
+verifies sole holder, exactFD3/5, nine stable preserved regulars, valid8-event chain
+and typed-ENOENT active ownership names. Full674834B raw report retained compressed
+with original224e0437 identity. Actual-state acceptance is not retirement authority.
+
+Existing one-shot pidfd retirement protocol is preserved in finite current76ab
+source; complete profileb16d binds genuine31ab/ed46 and exactPythoninteger metadata.
+Next genuine fetched source publication/fresh grant/exact payload review, root-owned
+profile installation, one released holder retirement and positive original capture
+join. Keep all postmutation records; current physical clearance/native remain open.
+
+Current866 accidentally retained old failing986 census body; exact accepted24e
+repair restored only in privateb8c7 successor, independently acceptedb8a98. Four
+current join/original-negative checks0/.035108s confirm exact reuse and original
+line23 failure; prior15 synthetic checks reused within original scope, not replayed.
+No active engine/release changed. Private progress-forwarding/queue tests remain
+undeployed and do not block recovery. Future critical captures bind exact paths
+to the admitted reader for nonterminal visibility, without inferring clearance.
+
+Counts held90sources/32compiler/8native/29behaviors/22checks/fivewhole/Rust19-16.
+Image-to-native clock18:06:04Z stillopen. Strict NUMA116B/emptyerr/37, launcher33f,
+modules, source and accepted stage unchanged; no new build/stage/app replay.
+
 ## Current — observer/readbacks/raw export accepted; fresh cleanup namespace source ready
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
