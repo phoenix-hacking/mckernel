@@ -1,0 +1,276 @@
+{
+  "accepted_observations": [
+    "The original evaluator still rejects the genuine saved failed trace and the saved original FAIL/error is preserved.",
+    "The candidate checker accepts the genuine retained same-slot trace without a return_route record.",
+    "The strict 44-byte stdout/empty application stderr/exit-zero oracle and all other evaluator AST remain preserved by the passing preservation method and the reused independent AST comparison.",
+    "The explicitly synthetic consistent cross-slot trace passes; this is a unit fixture, not a guest execution.",
+    "All eighteen reviewed malformed/foreign/correspondence/duplicate/orphan/missing-return/exit/CPU/order/partial-route-loss/changed-route refusals pass."
+  ],
+  "actual_closed_execution": {
+    "closed_streams": true,
+    "direct_child_joined": true,
+    "error": null,
+    "group_absent": true,
+    "methods_passed": 5,
+    "pid": 2369341,
+    "refusal_subcase_count_basis": "The frozen reviewed test source contains eighteen refusal subcases in the passing test_refusal_vectors method; unittest output reports the five methods rather than each passing subcase.",
+    "remaining_group_members": [],
+    "retirement_error": null,
+    "returncode": 0,
+    "reviewed_refusal_subcases_passed": 18,
+    "seconds": 0.22691240499261767,
+    "start": 34728971,
+    "stderr_bytes": 497,
+    "stderr_is_expected_unittest_report": true,
+    "stdout_bytes": 0,
+    "timed_out": false,
+    "unexpected_group_members": []
+  },
+  "candidate": {
+    "baseline_sha256": "e675f752e83fc5724c937544990487ea392a9e6a55d2f75c2b3bb81f0fa991e5",
+    "bytes": 58229,
+    "change": "Remove only the global nonempty-routes conjunct; retain all other evaluator AST and strict application oracle, as independently established in the reused source review.",
+    "path": "/home/holden/mckernel-work/host-preparation/m06-same-slot-observer-correction-20261021-1/native_diagnostic.py",
+    "sha256": "9955a77138fd477f28f7b2483d8bf4c3d8c122eb662590685cbc3336971380b4"
+  },
+  "capture_verification": {
+    "method": "Reviewer opened each closed stdout/stderr with O_NOFOLLOW, compared fstat before/after complete read, and matched device/inode/mode/nlink/uid/gid/size/mtime/ctime and SHA256 against whole.json. No process metadata or active raw reads were needed.",
+    "streams": {
+      "stderr": {
+        "ctime_ns": 1792549845185052452,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48394396,
+        "mode": "0o600",
+        "mtime_ns": 1792549845185052452,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/m06-same-slot-observer-correction-20261021-1/ordinary-check-1/stderr",
+        "sha256": "3a3a09dab87139af0a628f9459d65c5865f7bb34d1445d79b1eeda48e6a98fbc",
+        "size": 497,
+        "uid": 1000
+      },
+      "stdout": {
+        "ctime_ns": 1792549845013046635,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48394395,
+        "mode": "0o600",
+        "mtime_ns": 1792549845013046635,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/m06-same-slot-observer-correction-20261021-1/ordinary-check-1/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      }
+    }
+  },
+  "command_provenance": {
+    "fact": "ordinary-check-1/command.json is absent; the actual directory contains grant, started, direct-wait, direct-join, whole, stdout and stderr. The grant pins the exact independent execution review but contains no argv.",
+    "limit": "Do not claim an independently present command.json or fully standalone argv chain. The child join and five-method observed result are accepted; any publication requiring exact executed argv must retain the existing dispatcher/tool invocation or a truthful derivative receipt without replay.",
+    "reviewed_argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/m06-same-slot-observer-correction-20261021-1/test_same_slot_observer.py"
+    ],
+    "standalone_command_receipt_present": false
+  },
+  "created_utc": "2026-10-21T02:35:07.689592+00:00",
+  "decision": "Adopt the genuine closed five-method regression result for the already-reviewed private observer candidate; no shared source integration or native release is issued.",
+  "dispatcher_attestations": {
+    "attribution": "These are explicit parent execution attestations; the local seven capture receipts independently establish child birth/join/stream result.",
+    "controller_and_resource": "Parent reports root tool controller closed0, CPU6 released immediately, and shared ordinary2GiB plus heavy12GiB/reserve admission checked while compiler used2-5/controller7; no LAST/census concurrent.",
+    "source_and_interpreter": "Parent reports exact accepted input pins/all nine source descriptors and Python3.8 alias were rechecked before execution; no unchanged source inventory was repeated by reviewer."
+  },
+  "evidence": [
+    {
+      "bytes": 580,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-same-slot-observer-correction-20261021-1/ordinary-check-1/grant.json",
+      "sha256": "883b75c7e15c98a76da87e5ec19df987abd862d16842844ec09b08a8744c0832",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792549845005046364,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48394394,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792549845005046364,
+        "st_nlink": 1,
+        "st_size": 580,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 36,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-same-slot-observer-correction-20261021-1/ordinary-check-1/started.json",
+      "sha256": "c37fd5cd60d0278fa519674abf3aee4fbaf494a612f32dea7ce8381361c59ebe",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792549845013046635,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48394397,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792549845013046635,
+        "st_nlink": 1,
+        "st_size": 36,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 82,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-same-slot-observer-correction-20261021-1/ordinary-check-1/direct-wait.json",
+      "sha256": "8349628e852525193aff12bb29ba1a986cb5fcff02305e666e260ea4f0c240d4",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792549845221053670,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48394398,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792549845221053670,
+        "st_nlink": 1,
+        "st_size": 82,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 260,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-same-slot-observer-correction-20261021-1/ordinary-check-1/direct-join.json",
+      "sha256": "d5185bab763ea4745e946047a99c527778d384f84f9683bf1eed65cf26fa15b3",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792549845241054346,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48394399,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792549845241054346,
+        "st_nlink": 1,
+        "st_size": 260,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 1064,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-same-slot-observer-correction-20261021-1/ordinary-check-1/whole.json",
+      "sha256": "41e5a72b472bc32ad4b92795b47f98135b98f3dc8eba2d20fdcd0e47477651b4",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792549845241054346,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48394400,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792549845241054346,
+        "st_nlink": 1,
+        "st_size": 1064,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-same-slot-observer-correction-20261021-1/ordinary-check-1/stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792549845013046635,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48394395,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792549845013046635,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 497,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-same-slot-observer-correction-20261021-1/ordinary-check-1/stderr",
+      "sha256": "3a3a09dab87139af0a628f9459d65c5865f7bb34d1445d79b1eeda48e6a98fbc",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792549845185052452,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48394396,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792549845185052452,
+        "st_nlink": 1,
+        "st_size": 497,
+        "st_uid": 1000
+      }
+    }
+  ],
+  "implementation_ownership": false,
+  "integration_limit": {
+    "eligibility": "The exact private observer candidate has passed its bounded checker regression and may be proposed for source integration under the documented implicit-slot-zero trace model.",
+    "if_stronger_route_completeness_required": "Require an independent positive per-worker slot/same-slot witness or equivalent source-bound evidence before claiming detection of complete cross-slot witness loss.",
+    "production_prerequisites": "Any production adoption requires an affected exact evaluator/owner/loader/source-map/hash-authority update and appropriate whole-boundary verification/publication. Fresh native execution requires its separate current packet, resource admission, source/runtime authority and independent release. This regression receipt does not grant those actions.",
+    "required_explicit_boundary_decision": "Removing every cross-slot witness remains indistinguishable from a genuine all-slot-zero trace because missing routes are defined as implicit slot zero. The original sole-route-deletion negative changes meaning under this model. Preserve its historical failure and explicitly resolve the intended current criterion; do not silently call it passed or claim complete route-loss detection.",
+    "shared_integration_release": false
+  },
+  "preserved_disposition": {
+    "P_M06_03": "OPEN",
+    "accepted_native_launches_added": 0,
+    "application_acceptance": false,
+    "backend_runs": 0,
+    "exhaustive_no_child_CREATE_PPD_extra_worker_proof": "OPEN",
+    "full_evaluator_runs": 0,
+    "local_syscall435_minus95_witness": "OPEN",
+    "native_acceptance": false,
+    "native_release": false,
+    "new_guest_runs": 0,
+    "original_native_attempt": "FAIL unchanged",
+    "physical_retirement_prior_acceptance": "Unchanged; no new physical or census conclusion is made here."
+  },
+  "profile_observed": {
+    "AS": 1073741824,
+    "MemAvailable": 28374986752,
+    "aggregate_reserved_heavy": 12884901888,
+    "controller_birth": {
+      "pgid": 2369339,
+      "pid": 2369340,
+      "sid": 2369339,
+      "start": 34728966
+    },
+    "core": 0,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "epoch": 1792549845.0099676,
+    "file_size": 8388608,
+    "jobs": 1,
+    "kill_after": 2,
+    "no_LAST_or_census_window": true,
+    "nofile": 256,
+    "ordinary_envelope": 2147483648,
+    "review_sha256": "78ce504ac97ab3bc87d158fdd75796b9613e7bccec344085ee2105e4f9d8bfea",
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "wall_seconds": 30
+  },
+  "review_actions": {
+    "CPU_lease_edits": 0,
+    "Git_operations": 0,
+    "guest_runs": 0,
+    "repeated_source_inventory": 0,
+    "root_operations": 0,
+    "source_edits": 0,
+    "source_imports": 0,
+    "test_executions": 0
+  },
+  "review_read_issue": "An initial read assumed command.json existed and stopped at FileNotFoundError. Read-only layout discovery established its absence; no effects or test replay occurred.",
+  "reviewer": "/root/m06_closed_stage_review",
+  "schema": "mckernel.independent-M06-actual-private-observer-regression-acceptance.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_review_reused": {
+    "bytes": 11654,
+    "path": "/home/holden/mckernel-work/host-preparation/m06-same-slot-observer-correction-20261021-1/independent-review-1/conditional-private-observer-test-execution-review.json",
+    "sha256": "78ce504ac97ab3bc87d158fdd75796b9613e7bccec344085ee2105e4f9d8bfea",
+    "stable_full_identity": {
+      "st_ctime_ns": 1792549676827413198,
+      "st_dev": 66306,
+      "st_gid": 1000,
+      "st_ino": 48394224,
+      "st_mode": 33152,
+      "st_mtime_ns": 1792549676827413198,
+      "st_nlink": 1,
+      "st_size": 11654,
+      "st_uid": 1000
+    }
+  },
+  "status": "PASS_PRIVATE_CHECKER_REGRESSION_ONLY"
+}

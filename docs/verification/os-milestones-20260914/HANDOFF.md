@@ -1,3 +1,46 @@
+## Current — six-stage settid compiler accepted; M06 witness work remains open
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Invocation20261021T011203Z-9cba0828 remains running at100% included/zero reserve.
+Formal counters20/35 checks,five whole,28 native behaviors,Rust17/14 unchanged.
+One new compiler batch (six commands,not six batches) is independently accepted:
+artifact63b0dc9f,physicald7f3557d,warning notea874d327. Native and legacy Rust,
+selected/fallback/policy-off syscall C and real constructor provider all compile;
+settid ownership/FAM/symbol checks pass. Owner43.058641s,outer43.352294s;
+all13hostclients/six compiler groups/container/records retired positively.
+Only its reservation released; mutex27:4 preserved. Warnings48native/51legacy
+retained under existing permissive profile; no final link/native/Cretirement.
+Exact source194 fetcheda6a7e94e and final9 fetched3c56bf34 remain immutable.
+Evidence: ../evidence/guest-settid-current-whole-consumer-compiler-20261021-1/actual-compile-1/.
+
+Next production-link preparation reuses accepted6959-entry full-image closure
+plus four raw overlays (IKC2/settid2),retaining accepted production CMake opt-in
+and real-mcexec gates,rawlib without compiler-only FAM suffix. This is an explicit
+bounded source scope,not current-whole-tree build. Source-scope6b99d1b1 passes;
+actual changed pin/materialization/profile grant and future outputs remain late.
+No accepted18-command replay until genuine changed request/admission.
+
+M06 original native result remains FAIL: exact44B/exit0/empty stderr observed,
+but evaluator rejected missing cross-slot routes. Physical471a accepted;
+semantic3e92 retains P-M06-03 OPEN. Private same-slot checker five methods and
+18refusals passed0.226912s,independent1bbf3311;CPU6released. Missing original
+command.json is preserved as provenance limit with additive after-close exact
+command receipt,no cosmetic replay. Complete-route-loss cannot be treated as
+slot0 without independent positive identity evidence. Local435/-95 and exhaustive
+no-child evidence remain open. Exact finalELF local rejection path and existing
+nestedkmsg hooks are being bound to HOST66 ABI for a minimal evidence export;
+no new native release or kernel defect claim.
+Evidence: ../evidence/m06-same-slot-observer-private-check-20261021-1/.
+
+Separate scheduler mutation candidate source review passes for finite16case
+comparison. Its inherited caller lifetime repair now retains the original target
+reference through owner-offload/apply/release; original reacquire alternative
+is preserved. New retained-reference source review8d1e57ae passes for finite
+actual-body testing; numeric host-owner qualification remains open. Both private
+lanes stay outside the frozen160 compiler snapshot,no shared integration yet.
+SDK fixed14159970304B gate/no-resize,all floors/oneheavy/exclusions/service holds
+remain unchanged. No CPUlease for model/source work. Root owns next real grants.
+
 ## Current — M06 physical PASS; observer failure retained; settid compiler ready
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

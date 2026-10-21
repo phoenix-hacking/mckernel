@@ -1,0 +1,9 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Private bounded correction against the actual `e675f752e83fc5724c937544990487ea392a9e6a55d2f75c2b3bb81f0fa991e5` evaluator: remove only the unconditional nonempty `routes` conjunct. The documented implicit slot0 semantics already validate equal-slot calls; explicit slot1 routes must retain matching worker/delivery, ordering, CPU and per-worker consistency. The unchanged original evaluator and failed report are retained beside the candidate. No tests have run.
+
+`test_same_slot_observer.py` proposes five focused methods: preserve the original actual rejection; accept the genuine all-same-slot trace; bind the unchanged 44-byte/empty-stderr/exit0 oracle and all other evaluator AST; accept synthetic consistent cross-slot routing; refuse 18 malformed/foreign/missing-return/duplicate/CPU/terminal/order/cross-slot variants. Synthetic witnesses are explicitly identified and never replace actual evidence.
+
+Run the proposal only after a dispatcher grant under the existing reviewed ordinary unprivileged profile and closed capture, with exact argv from PROPOSAL.json. No backend or full evaluate observation is manufactured. Existing generic test `test_complete_unique_syscall_correspondence` labels deletion of its sole cross-slot route as a required refusal; that case loses all independent evidence of slot1 and is now correctly the implicit-slot0 positive case. Proposed integration should replace that obsolete expectation with the supplied missing-one-of-several-routes refusal vector. Keep every other refusal.
+
+Syscall435/-95 routing and exhaustive no-child publication remain OPEN. This proposal grants no workload, root, guest, lease, integration, physical retirement or application acceptance authority. Stop if the ordinary grant or actual source contract is unavailable; never replay the native attempt unchanged.
