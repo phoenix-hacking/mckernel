@@ -1,3 +1,34 @@
+## Current — actual whole guard passed; production image control publication
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Checkpoint2bc13a4b pushed/fetched;242 changed blobs exact, proof9efd6690. Root source
+publication adapter89cf101c projects43 actual source rows into unchanged dispatcher
+schema; no new engineering credit. Current source6959/49 and whole gates stay accepted.
+
+Genuine runtime binding44b7a13f independently accepts final basis515d22b5 with
+source disk_identity fixed before review, current owner/provenance imports and
+new source schemas. Source-only caller mismatch (gate acceptance vs source doc)
+was found before execution and corrected; original bytes retained. Actual bind
+0/.320791s then whole real guard/current-owner join0/4.301883s; positive actual
+caller tuple and8 refusals, direct joins/groups absent/closed streams/empty stderr.
+Independent actual acceptance8e980564 binds whole2116340f/resultf062402a and
+actual guard20ce648a. No heavy/image/native/default/C-retirement acceptance.
+
+Canonical consumed controls: ../evidence/numa-current-image-build-controls-20261021-1/.
+Next exact action: focused existing execution controls/profile conditional review,
+publish/fetch control code, bind fresh setup/snapshot/request/final canonical
+payload, independent one-shot release, then one new current production image build.
+Root owns these operations. No live campaign workload or CPUgrant; physicaldae/
+ACK232e current and all old heavy records absent. Preserve dirtytree/all failures.
+
+Existing fixed3/six-app batch65be/33e1 is eligible only for later artifact/ABI/stage
+rebinding after focused NUMA native proof; parked plan in host-preparation/
+numa-current-image-regression-batch-eligibility-20261021-1, no new prerequisite.
+Formal21/35,fivewhole,28logical,Rust17/14,27compilerbatches/sixnativebatches held.
+Oneheavy4CPU12GiB/noSwap512tasks, aggregate/disk floors/UUIDnoresize/mutex and
+all genuine service/auth/resource stops remain. Practical scope, not deferred
+large qualification, governs completion; current linked/native NUMA stays open.
+
 ## Current — NUMA source gates and strict Linux app accepted; image binding next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

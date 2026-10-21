@@ -72,7 +72,7 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 
 ### Next practical work
 
-- Bind accepted actual scheduler/NUMA6959 source ea825bb5/1b584ee5 and whole source-gate acceptance cb188164 to exact production image request/guard; preserve production defaultOFF/diagnostic opt-in and real mcexec/ABI oracles. Run actual whole guard admission/refusal checks, then independent heavy release/fresh admission before one current image build.
+- Actual new source6959/49, both whole source gates and exact guard/current-owner caller join+8refusals accepted (cb188164,8e980564). Publish/fetch new production image controls, bind fresh setup/snapshot/final request/payload, obtain independent one-shot heavy release and build one matching current scheduler/NUMA image. Preserve source/defaultOFF/diagnosticoptin and all real mcexec/ABI oracles.
 - Use accepted unchanged Rust NUMA app compile0/Linuxref37 and strict116B oracle/9 comparator vectors (independent3abbf0e8). Preserve original wrapper field-order failure0ce8675b. No app recompile/replay to repair that comparator; matching linked image/native release still pending.
 - Continue open real process child ownership handoff and native lifecycle/restoration against supported matched artifacts. Preserve accepted21/35 checks/five whole milestones and historical artifact-scoped behaviors; no source/compiler/Linux result counts as native/default/C-retirement.
 - Preserve SDK66 fullmodule capacity/no-resize blocker, scratch UUID/110GiB image, all failed evidence, genuine service/auth/resource stops and existing one-heavy profile. Deferred qualification remains deferred.
@@ -81,8 +81,8 @@ Original formal qualification is **historical / DEFERRED**. Deferred does not me
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-21T07:16:19+00:00`
-- Launcher state heartbeat: `2026-10-21T07:16:13.633624+00:00`
+- Dashboard refreshed: `2026-10-21T07:31:32+00:00`
+- Launcher state heartbeat: `2026-10-21T07:31:23.510732+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `2486026`; server PID: `2486028`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261021T070405Z-729d8cb8`
