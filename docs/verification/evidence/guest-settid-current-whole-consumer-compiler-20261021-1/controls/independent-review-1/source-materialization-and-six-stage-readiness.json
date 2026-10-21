@@ -1,0 +1,75 @@
+{
+  "schema": "mckernel.settid.current-six-stage-source-and-contract-review.v1",
+  "reviewer": "/root/sdk66_source_review",
+  "functional_scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "CONDITIONAL_PASS_ORDINARY_SOURCE_MATERIALIZATION_AND_SIX_STAGE_COMPILER_CONTRACT_READINESS",
+  "execution_release": false,
+  "request_sha256": "24f28adcb03c50bbd5aca32e3e596c392d6e9d076982421b701a12910b1da5c2",
+  "frozen_files_sha256": "9ec4a3b4baf4f34eabb0565a4d6b8f605f8316e8430919e8637e981f69c16904",
+  "source_manifest_sha256": "d7ea4edf7257d68f241cd0366c4589fd5ecfa8bcc2632263b4f20d3f2becb39e",
+  "source_identity_bound_by_recipe": "2f090543b68750b1579e9974f2d723cfafee22a4195679aeb66ee80431731b6b",
+  "commands_sha256": "9e549831ec8cbbf20148fd60407c06cf65bb3c3e0bced18b5d95beb968c3b060",
+  "driver_sha256": "f327f2d76be255e317fb8dac0923d9222b2fa4fdf50bdbbba0efd22da77d795d",
+  "owner_sha256": "ff9f79d5c9a11b3643e9868c80f008c25c6ce86165b658052e3fc636adc3fddb",
+  "materializer_sha256": "29f26418aa11a89a4247fa69b84fdd4c8d0ed5d649c8ae8f3300f5703d21fc25",
+  "source_findings": [
+    "All frozen file references and the nine selected current raw source references match their declared lengths and SHA256 values at review. Their accepted integration/fixture authority is reused; no unsafe implementation audit is reopened.",
+    "The new and accepted manifests contain the same160 relative names. Eight compiled-source rows change bytes: fork_child_credits.rs, fork_control_registry.rs, fork_final_ack.rs, fork_runnable_child.rs, ikc_manycore.rs, ikc_queue.rs, syscall_policy.rs and syscall.c. The ninth selected raw input lib.rs is unchanged; the same accepted newline/FAM assertion suffix remains its only transform. The other152 compiled-source rows retain their exact accepted length/digest.",
+    "The genuine retained generated config row remains unchanged. Changed origin paths do not replace byte authority: materialization must recheck every origin against the declared recipe before copying. No global repository HEAD equality is required. Source recipe count160 totals4869647 output bytes, maximum838685 bytes in one file.",
+    "materialize_sources.py is byte-identical to the accepted normalized-relative/collision-checked materializer. It creates only a fresh private materialized-source tree and exclusive materialization-result.json, verifies original/suffix/output bytes, and has no compiler, owner, root, container, lease, guest, shared-source integration, cleanup or capacity-bypass operation."
+  ],
+  "ordinary_materialization_conditions": [
+    "Dispatcher may admit one exact source_materialization_command_proposal from PREPARATION-RECEIPT.json in a fresh disjoint CPU6 ordinary slot. Rebind request/freeze/source/materializer pins and all selected current inputs, confirm materialized-source and materialization-result.json absent including dangling entries, and retain partial outputs if anything fails.",
+    "Use the existing reviewed reusable ordinary owner/capture, inherited finite30CPU seconds and35-second wait with its accepted retirement grace,2GiB AS,32MiB per-file,256nofile,core0, deterministic environment and aggregate admission. These wrapper limits may be supplied by the dispatcher; they do not require editing the pinned materializer. Reserve at least128MiB growth beyond host16GiB/scratch12GiB floors and include the ordinary job in aggregate CPU/RAM accounting.",
+    "Capture command/start/status, positive direct-child/process-group retirement and closed stable streams, then independently bind the actual160 output files and transformed lib.rs against the recipe before heavy use. Materialization success confers no compiler or native release. No source materializer was executed by this reviewer."
+  ],
+  "compiler_contract_findings": [
+    "The preceding five exact command profiles remain unchanged except the Rust source buildID. Native and legacy full Rust crates still compile separately. Selected and fork-fallback whole syscall.c and the whole process.c constructor-provider objects retain their existing flags, real sources, FAM suffix, strict implicit-declaration rejection and existing boundary obligations.",
+    "The sixth actual whole syscall.c command reuses the selected profile and appends -UMCKERNEL_RUST_SYSCALL_POLICY_HELPERS after its earlier define, producing settid-c-fallback-syscall.o. It keeps the selected fork-owned transaction path. This exercises the actual C fallback rather than a model or a helper-only replacement.",
+    "The driver mechanically adds syscall_settid_body_result to both Rust definition sets and to undefined-only obligations of the two policy-helper-selected C objects; the sixth policy-OFF C object must have no symbol of any kind for that helper. Existing ELF64 x86_64 ET_REL, exact per-object function/import checks and fork/provider checks remain. The sixth object also receives the existing unique40-byte FAM witness with words164/168/4/4/8.",
+    "The driver changes only six-stage selection/counts, settid symbol rules and inclusion of the sixth object in the existing FAM check. The owner changes only HOST_GROWTH, descriptive receipt scope and five-to-six result validation. Accepted transport, capacity monitor, capture, PID ownership, container retirement and archived ownership-record release algorithms are reused.",
+    "Every compiler stage is serialized and uses existing WNOWAIT/direct-join capture with capped closed-stream FD evidence. Six actual command/artifact records must match the exact argv/cwd and be re-parsed by the owner. An incomplete stage set cannot pass. No combined link or whole-kernel unresolved/duplicate closure is implied by per-object checks."
+  ],
+  "truthful_compiler_budget": {
+    "compiler_stages": 6,
+    "stream_count": 12,
+    "stream_bytes_each": 33554432,
+    "capture_bytes": 402653184,
+    "disk_budget_bytes": 536870912,
+    "emergency_reserve_bytes": 671088640,
+    "host_growth_bytes": 1610612736,
+    "host_floor_plus_growth_bytes": 18790481920,
+    "scratch_growth_bytes": 771751936,
+    "scratch_floor_plus_growth_bytes": 13656653824,
+    "scratch_growth_basis": "unchanged640MiB emergency reserve plus3 ownership records capped32MiB each",
+    "whole_work_cap_bytes": 671088640,
+    "MemAvailable_required_bytes": 19327352832,
+    "compiler_seconds": 1750,
+    "owner_seconds": 1800,
+    "container_profile": "one heavy; CPUs2-5/4CPU/12GiB/no-swap/512tasks/nonet/read-only root/private IPC/cap-dropALL/existing256MiB tmpfs",
+    "aggregate_profile": "7jobs/22.6759GiB shared across all work",
+    "existing_host_work_route_only": true,
+    "SDK_scratch_gate_14159970304_preserved_separately": true,
+    "fresh_headroom_measurement_by_reviewer": false
+  },
+  "remaining_execution_gates": [
+    "Actual materialization/output verification and fresh current source/tool inventory binding.",
+    "A concrete outer capture/publication binding and genuine independent/root execution release for this exact owner/request/profile; no execution-release file is created by this decision.",
+    "Positive retirement of actual existing workloads, current runtime/source ownership and fresh latest physical review accepted by the unchanged compileowner profile, permanent development mutex27:4 and fresh leases/exclusions/capacity checks. Preserve Scratch21 and exclusions57687/57688; no ownership record is removed by this review.",
+    "Current included-plan/service/auth/usage admission, no purchased/API billing, no automatic retry of a service-policy rejection, and full host/scratch growth floors on actual devices/Docker data paths."
+  ],
+  "latest_user_scheduling_steering": {
+    "root_reported_user_review128_applied": true,
+    "future_M06_native_completion_required": false,
+    "future_M06_acceptance_is_compiler_release_predicate": false,
+    "note": "Packet prose anticipating future M06 retirement is superseded as scheduling guidance by the current user steering relayed by root. The actual owner has no future-M06-outcome predicate. Genuine current a5 physical authority may be used if root's fresh review accepts it for this existing profile; actual live workload retirement and independent/root release remain required. No new global HEAD equality or future acceptance gate is introduced."
+  },
+  "failure_policy": "Preserve prior source/fixture/compiler failures. This packet has no materialization/compiler attempt. Stop on first failure and use at most one bounded correction per persistent family before focused escalation; no unchanged deterministic replay.",
+  "reviewer_materializations_compilers_imports_tests_or_root_guest_runs": 0,
+  "source_edits": 0,
+  "git_actions": 0,
+  "leases_acquired": 0,
+  "current_artifact": null,
+  "native_activation": false,
+  "production_compute_C_retirement": false
+}

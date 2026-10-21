@@ -1,3 +1,29 @@
+## Current — M06 physical PASS; observer failure retained; settid compiler ready
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Invocation20261021T011203Z-9cba0828 continues at100% included/zero reserve.
+Counts remain20/35 checks,five whole,28 native behaviors,Rust17production/14native.
+
+M06 owner failed43.481057s; complete gates/readbacks and independent physical
+471a1e87 prove25clients/QEMU/container/readers retired and own persistent records
+absent. Only this retired attempt reservation is released; permanentmutex27:4
+and all failures remain. Semantic3e92dd51 remains FAIL_PROTOCOL_NO_CASE_ACCEPTANCE.
+Actual44B stdout/exit0/empty stderr matched; current evaluator e675 line613
+requires nonempty cross-slot routes despite documented implicit same-slot0.
+Bounded private observer correction/faithful retained-case regression is active.
+Explicit local435/-95 and exhaustive no-child evidence remain OPEN; no replay,
+new accepted native behavior or P-M06-03 closure. Reports under
+/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/independent-review-2/.
+
+Current settid160-source materialization b321 remains accepted and frozen.
+Exact193mapped rows plus allowlist-self194 have been copied for finite
+publication under5ad78800; genuine fetched proof/final binding/release and fresh
+admission precede six-stage real compiler execution. Future M06 success is not
+its dependency. A separate private setscheduler candidate receives narrow
+independent source review; no shared integration into frozen compiler inputs.
+SDK capacity/no-resize,12/16GiB floors,oneheavy4CPU/12GiB/noSwap512tasks and all
+service/ownership/source/runtime controls remain. No CPU lease during model work.
+
 ## Current — Rust settid body integrated; M06 normalization accepted
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
