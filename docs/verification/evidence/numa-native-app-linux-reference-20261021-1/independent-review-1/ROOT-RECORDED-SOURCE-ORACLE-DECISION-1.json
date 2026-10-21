@@ -1,0 +1,18 @@
+{
+  "schema": "mckernel.root-recorded-independent-source-decision.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/numa_union_review",
+  "recorder": "/root",
+  "recorded_at_epoch": 1792565792.8771133,
+  "provenance": "Complete source-bound final message delivered by collaboration tool; reviewer performed no file edits or execution.",
+  "status": "CORRECTION_REQUIRED_FOR_INTERVAL_BOUNDARY_ORACLE",
+  "inputs": {
+    "numa_interval_app.rs": "be9aff300818fb5a0fd199eaeac61c2398350930f5ead0ea93570c0c5b6dc0fb",
+    "ORACLE-AND-PROPOSAL.md": "a77210eced09f2d830d59c0aa510db1efd63e48599c9846162962ba660071dd8"
+  },
+  "finding": "Process mode sampled only before mbind and all later queries inside target interval. Global or overextended policy implementation can pass.",
+  "required_correction": "Retain baseline process mode/mask; verify unchanged after bind. Verify original neighboring still-mapped start-1 and start+PAGE policies remain unchanged, while start/interior/end-1 match selected policy. Update exact query count/stdout.",
+  "other_reviewed_contract": "Register/syscall/flags/mask ABI and genuine allowed-node witness consistent; EPERM/ENOSYS remain failure. Exact stdout, empty stderr and raw9472 required. Placement is not claimed.",
+  "execution_performed": false,
+  "native_or_retirement_credit": false
+}

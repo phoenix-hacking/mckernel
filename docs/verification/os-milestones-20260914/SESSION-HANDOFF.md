@@ -1,3 +1,48 @@
+## Current — NUMA source gates and strict Linux app accepted; image binding next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Resumed after classified07:04 serverOverloaded; preserved archived session and all
+failures. Practical goal plus active compute Rust/assembly retirement governs;
+large qualification remains deferred. No launcher/ownership/lock edits performed.
+
+NUMA six-stage compiler was already independently accepted e8b4284c/physical
+dae7598b before this resume:27 compiler batches, not another build. Exact144-row
+closed evidence imported under ../evidence/numa-current-six-stage-compiler-20261021-1/.
+Original six objects/work/materialized160 retained; no compiler or app replay.
+
+Actual new production source6959 accepted:6910 regular files/120829255B,49links,
+private source66306:48406208. Materializer0/9.374740s, exact derivativeea825bb5/
+materialization1b584ee5. Both whole real source validators ran once0/.145953s:
+owned-fork positive, affinity five source gates to genuinely absent compile DB,
+both genuine old-pin refusals; full affinity compile remains pending. Independent
+source-gate receipt cb188164; canonical source/receipt/journal/captures:
+../evidence/numa-current-production-image-source-20261021-1/.
+
+Unchanged NUMA Rust app/proposal specify neighbors/process/guards; original
+wrapper expected guards/neighbors/process. OriginalFAIL0ce8675b retained. Genuine
+independent Linux acceptance3abbf0e8 binds compile0/ref37,empty stderr,116Bexact
+stdout and9 comparator vectors406f0bae; no compile/app replay. First checker
+acceptance always required full bytes; sorted delta never normalized acceptance.
+Positional-only clarity successor also ran0/.063466s before later clarification;
+it is supplemental, never a prerequisite. Canonical app/source/raw failure/results:
+../evidence/numa-native-app-linux-reference-20261021-1/.
+
+Current tested a818 threads e095/eb8 remain accepted.21/35 practical checks,
+five whole milestones,28logical behaviors,Rust17production/14native paths,
+six accepted native batches remain unchanged. No NUMA link/native/default or
+compute-C retirement claim from source/compiler/Linux evidence.
+
+Next: root mechanically bind source-sensitive request mounts/pathdirs and guard
+current receipt/schema, preserving accepted producer/defaultOFF/diagnosticoptin
+and all original ABI/real-mcexec oracles. Request author numa_app_oracle_correction,
+guard author numa_guard_binding; independent reviewer numa_image_source_review.
+Run cheapest actual whole guard admission/refusal checks before heavy release.
+One heavyCPUs2-5/4CPU12GiB/noSwap512tasks remains; CPU6/7 ordinary captures closed,
+no active campaign workload/CPUgrant retained. Three old heavy records absent;
+compiler physicaldae/ACK232e remain current. Preserve scratchUUID/noresize,
+Scratch21/exclusions,mutex27:4,dirtytree,all failures and genuine service stops.
+SDK66 fullmodule capacity blocker and native lifecycle/restoration remain open.
+
 ## Current — threads native accepted; NUMA compiler final publication
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

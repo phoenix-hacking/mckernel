@@ -1,0 +1,381 @@
+{
+  "all11_clients": [
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "--all",
+        "--quiet",
+        "--no-trunc",
+        "--filter",
+        "id=55cebc40398dd3c7f0b0d80529b71878a2f549b8a17069124edb6261efd25d05"
+      ],
+      "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/owner-evidence/command-165c44f0d1764ef2916b7f0dc7b63e30/status.json",
+      "pid": 2482461,
+      "returncode": 0,
+      "sha256": "351cacc3717df403a256adcb56f83d6741dd01dcb1665e556179f76ff8273409",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "wait",
+        "mckernel-numa-compiler-3af338a1e61e"
+      ],
+      "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/owner-evidence/command-1f45722f711b4dd395efedb32555d478/status.json",
+      "pid": 2482241,
+      "returncode": 0,
+      "sha256": "57600e8a5e69308ad388338d159eb6ef59c4affdfb80e3e623816b47c348ef78",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 2,
+      "stdout_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "mckernel-numa-compiler-3af338a1e61e"
+      ],
+      "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/owner-evidence/command-22b0c273b85d4b38a669020517bb315e/status.json",
+      "pid": 2482421,
+      "returncode": 0,
+      "sha256": "28799a56f4a0d095ea4ddf9228576d89ff72c226c061c3a0fcc54a649bc388bf",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 14847,
+      "stdout_sha256": "95b709518c2736dd0d3015eb1974f5629a7655f32aff9d34915d1b3dfcd337f8"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "--all",
+        "--quiet",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-numa-compiler-3af338a1e61e$"
+      ],
+      "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/owner-evidence/command-249bf05ab2204734b81a68aedef1eeee/status.json",
+      "pid": 2482445,
+      "returncode": 0,
+      "sha256": "9ddd5155fbb8e2f67d6a805581a1934b9499e66901b1b62a75d197e96eedfadf",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "start",
+        "mckernel-numa-compiler-3af338a1e61e"
+      ],
+      "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/owner-evidence/command-53400fc433b44ce0aa94888f1bbcc6e6/status.json",
+      "pid": 2482184,
+      "returncode": 0,
+      "sha256": "fa3c54dc036db4af0ca495c6746c27c2a6611429f22f21bd10ab46fcee9a7233",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 36,
+      "stdout_sha256": "b320d4a50559bc97d8627aa4060db47ddddcb049d5b5d3ce4107f05274bfc048"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "create",
+        "--name",
+        "mckernel-numa-compiler-3af338a1e61e",
+        "--label",
+        "mckernel.owner=30d537ca28184998be8db99d70977afc",
+        "--network=none",
+        "--ipc=private",
+        "--cpus=4",
+        "--cpuset-cpus=2-5",
+        "--memory=12g",
+        "--memory-swap=12g",
+        "--pids-limit=512",
+        "--user",
+        "1000:1000",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--init",
+        "--tmpfs",
+        "/tmp:rw,nodev,nosuid,size=256m",
+        "--entrypoint",
+        "/usr/bin/python3",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/materialized-source,dst=/src,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,dst=/nightly,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compile_retirement_current_driver.py,dst=/driver.py,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/source-manifest.json,dst=/inputs.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/guest-compiler-commands.json,dst=/commands.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/work,dst=/work",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/owned_capture_helpers.py,dst=/owned-capture.py,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py,dst=/accepted-host-owner.py,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/actual_retirement_consumer_and_FAM_assertions.h,dst=/prototype-assertions.h,readonly",
+        "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+        "/driver.py",
+        "--execute"
+      ],
+      "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/owner-evidence/command-8b8e94a85253462da102f7e6ba711e94/status.json",
+      "pid": 2482168,
+      "returncode": 0,
+      "sha256": "7a9d953185895927a50b7ad2b70176384d1d3312d473a0a74bd4411e32aa1ce0",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 65,
+      "stdout_sha256": "63e59bb1242db7ba49d9eb4e4e2033e2ec988d65d198ea5fbfb82a89a5a80bf5"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "logs",
+        "mckernel-numa-compiler-3af338a1e61e"
+      ],
+      "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/owner-evidence/command-a01402493423493782839d3d0535d08e/status.json",
+      "pid": 2482429,
+      "returncode": 0,
+      "sha256": "d18b298614a8f6d271224c9a430267dde8de326200801b7adc36dd7371be8654",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "mckernel-numa-compiler-3af338a1e61e"
+      ],
+      "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/owner-evidence/command-c4ad74410da9422e8ddfd31e9abb7047/status.json",
+      "pid": 2482176,
+      "returncode": 0,
+      "sha256": "54da007954aec2464732764428682bdb8a4939adfcb6b5784da101c6f5838d3b",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 14187,
+      "stdout_sha256": "acaf150191eb0a097fbc4b93c2c3f3348e777f07acb3621789eb89bc6dfb1f81"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "image",
+        "inspect",
+        "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5"
+      ],
+      "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/owner-evidence/command-d134eef3435f4b36a2af8daaba0b4d8e/status.json",
+      "pid": 2482159,
+      "returncode": 0,
+      "sha256": "b2f2c754880dcf2908b928c634c241aa00c3197861d1b46ad76ac16a3cc47ddf",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 3033,
+      "stdout_sha256": "ec329466befdb28861175d2a70be0eed867b2a295f36f5d94e33b738dc70cb9b"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "--all",
+        "--quiet",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.owner=30d537ca28184998be8db99d70977afc"
+      ],
+      "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/owner-evidence/command-f190f8a72b2f4afab2737d405479254f/status.json",
+      "pid": 2482453,
+      "returncode": 0,
+      "sha256": "3fe3df62da60b82ddd484dea8d3d605df20b755cc3e2714dccaae6c9afc8f4b9",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "rm",
+        "55cebc40398dd3c7f0b0d80529b71878a2f549b8a17069124edb6261efd25d05"
+      ],
+      "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/owner-evidence/command-f5edbbce797b4d439d5a68f03ebb79bb/status.json",
+      "pid": 2482437,
+      "returncode": 0,
+      "sha256": "3ed6201ac327baa9f0a8eba820226c289282de83494e7fff7c44678df8c30b9a",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 65,
+      "stdout_sha256": "63e59bb1242db7ba49d9eb4e4e2033e2ec988d65d198ea5fbfb82a89a5a80bf5"
+    }
+  ],
+  "all_empty_postflight_group_observations": 29,
+  "compiler_artifact_acceptance_in_this_report": false,
+  "container": {
+    "authenticated_last_state": {
+      "Dead": false,
+      "Error": "",
+      "ExitCode": 0,
+      "FinishedAt": "2026-10-21T06:54:55.054239001Z",
+      "OOMKilled": false,
+      "Paused": false,
+      "Pid": 0,
+      "Restarting": false,
+      "Running": false,
+      "StartedAt": "2026-10-21T06:54:16.677019939Z",
+      "Status": "exited"
+    },
+    "final_absence": {
+      "absent": true,
+      "container_id": "55cebc40398dd3c7f0b0d80529b71878a2f549b8a17069124edb6261efd25d05",
+      "name": "mckernel-numa-compiler-3af338a1e61e",
+      "nonce": "30d537ca28184998be8db99d70977afc",
+      "queries": [
+        "name",
+        "label",
+        "id"
+      ]
+    },
+    "id": "55cebc40398dd3c7f0b0d80529b71878a2f549b8a17069124edb6261efd25d05",
+    "name": "mckernel-numa-compiler-3af338a1e61e",
+    "nonce": "30d537ca28184998be8db99d70977afc",
+    "removed_rc0": true
+  },
+  "current_fresh_admission": null,
+  "decision": "Root/caller/owner closed; eleven journalled Docker clients exited0 and all postflight groups empty; authenticated stopped container removed and exact name/label/CID absent; three exact archived records authorized/released and currently absent. Root may ACK own reservation and freshly admit later work. Compiler artifact acceptance is separate.",
+  "mutex": {
+    "device": 27,
+    "inode": 4,
+    "never_unlinked": true,
+    "route": "Accepted owner cleanup/release route and actual closed owner join; reviewer statted identity only, no live lock probe."
+  },
+  "native_default_link_C_retirement_credit": false,
+  "original_record_paths_currently_absent": true,
+  "owner_receipt_sha256": "c4aa2b868b952efc12e116e1b85e61db7f05c93756f9d86d1bcdc9058f4ca723",
+  "owner_status": {
+    "closed_stable_streams": true,
+    "direct_joined": true,
+    "group_absent": true,
+    "observer_error": null,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/actual-root-owner-1/status.json",
+    "pid": 2482136,
+    "returncode": 0,
+    "seconds": 41.33963394165039,
+    "sha256": "e60449a1331ba173edad80d85ad9c06f28406510dcdae4ee7b2744cb34a6b52f",
+    "start": 36309952
+  },
+  "ownership_archive_sha256": "ddc69f3c7db93a0d0a4827878a42aeb8ca5ee47b9fdf891025b6f699846767e0",
+  "postflight_sha256": "db2a1b557f90133edc62ea335a35bccf0f6cc04196049a150df8e5bb09d58707",
+  "release_authorized_sha256": "a4de10e6fb94d7e6f4b62574628d8e47c7fa600afc361949a061cb5fafc36aa6",
+  "release_complete_sha256": "829ec8a65111ae4891f332794f00b661fd1f8c7d84429a2095c527fbe24b9994",
+  "review_actions": "Static capture, archive/readback/record hashes and exact identity comparisons only. No root/Docker/process census/lease/Git/candidate execution. Initial read-only display/extraction assumptions were corrected to use actual successful cleanup null terminal info, status.json argv and Docker subcommand index4; no workload was rerun.",
+  "reviewer": "/root/scheduler_candidate_review",
+  "root_outer": {
+    "closed_stable_streams": true,
+    "direct_joined": true,
+    "group_absent": true,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/root-dispatch-capture-1/whole.json",
+    "pid": 2482120,
+    "returncode": 0,
+    "seconds": 41.64322590827942,
+    "sha256": "488aebd72fbdc135818cc1ae1d169cef3b721f22947e41416cabee5b264cb2c0",
+    "start": 36309924
+  },
+  "root_reservation_ACK": null,
+  "schema": "mckernel.numa-current-six-stage.actual-physical-retirement.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_NUMA_SIX_STAGE_OWNER_CONTAINER_CLIENTS_AND_RECORDS_PHYSICAL_RETIREMENT_ONLY",
+  "three_archived_records": [
+    {
+      "device": 1828,
+      "inode": 116275,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-numa-compiler-3af338a1e61e.lease.json",
+      "record": {
+        "container_name": "mckernel-numa-compiler-3af338a1e61e",
+        "nonce": "a6d52096928b4f5191513f816fa93fa2",
+        "pid": 2482136,
+        "starttime": "36309952",
+        "state": "owned"
+      },
+      "sha256": "5bc9cfc7e234d4824499ce91232b4cc3fa27a45cdc963143accd5d04cb13f760",
+      "size": 161
+    },
+    {
+      "device": 1828,
+      "inode": 116274,
+      "path": "/home/holden/mckernel-work/scratch/native-held-host-control-fullmodule-external-modules-operational-exclusion.json",
+      "record": {
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "dev": 1828,
+        "inode": 116274,
+        "pid": 2482136,
+        "request_sha256": "5389faafc9994923a26a77e04e7c0ba39a71590a73bdf15a2942312a4d048797",
+        "schema": "mckernel.native-exact-operational-exclusion.v1",
+        "starttime": "36309952"
+      },
+      "sha256": "3e1138e269bd9fb057224318bc0b50029a8dcb5091017b0c7691ee63a86a224f",
+      "size": 269
+    },
+    {
+      "device": 1828,
+      "inode": 116273,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+      "record": {
+        "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+        "device": 1828,
+        "inode": 116273,
+        "kind": "build",
+        "pid": 2482136,
+        "request_sha256": "0b410de098067d4662dad9a0f5da0fbad6999b3656805e30bb4466e0ffc58274",
+        "schema": "mckernel.heavy-operation.v1",
+        "starttime": "36309952"
+      },
+      "sha256": "8c929dd1519356e693b9cad893acdf1ccae25b85bd9bca0f089550372928fad1",
+      "size": 269
+    }
+  ]
+}

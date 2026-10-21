@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/docker",
+    "--host=unix:///var/run/docker.sock",
+    "ps",
+    "--all",
+    "--quiet",
+    "--no-trunc",
+    "--filter",
+    "label=mckernel.owner=30d537ca28184998be8db99d70977afc"
+  ],
+  "exit_code": 0,
+  "pid": 2482453,
+  "state": "exited",
+  "timeout": 30
+}

@@ -72,19 +72,20 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 
 ### Next practical work
 
-- Finish existing child actual raw-stage normalization/parent/whole-owner source closure, then matching opt-in image/module live-parent child-run/known-exit/parent-wait native preparation under genuine release and fresh admission. No default/final-ACK authority from source-only proof.
-- Finish minimal M02 timeout-owner whole-source/mount closure, reusing accepted Exit7 app/kernel/modules/collector and actual body result; classify actual timeout phase and prove positive retirement before any literal closure.
-- Preserve accepted Q6/b7aa current-tuple memory evidence and all failures. P-M03-02/03 remain open. SDK source compilation remains blocked by fixed capacity gate and higher-priority no-resize instruction; do not replay parked cleanup searches or weaken floors.
+- Bind accepted actual scheduler/NUMA6959 source ea825bb5/1b584ee5 and whole source-gate acceptance cb188164 to exact production image request/guard; preserve production defaultOFF/diagnostic opt-in and real mcexec/ABI oracles. Run actual whole guard admission/refusal checks, then independent heavy release/fresh admission before one current image build.
+- Use accepted unchanged Rust NUMA app compile0/Linuxref37 and strict116B oracle/9 comparator vectors (independent3abbf0e8). Preserve original wrapper field-order failure0ce8675b. No app recompile/replay to repair that comparator; matching linked image/native release still pending.
+- Continue open real process child ownership handoff and native lifecycle/restoration against supported matched artifacts. Preserve accepted21/35 checks/five whole milestones and historical artifact-scoped behaviors; no source/compiler/Linux result counts as native/default/C-retirement.
+- Preserve SDK66 fullmodule capacity/no-resize blocker, scratch UUID/110GiB image, all failed evidence, genuine service/auth/resource stops and existing one-heavy profile. Deferred qualification remains deferred.
 
 Original formal qualification is **historical / DEFERRED**. Deferred does not mean passed; its counters below do not define practical completion.
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-21T06:46:56+00:00`
-- Launcher state heartbeat: `2026-10-21T06:46:52.492851+00:00`
+- Dashboard refreshed: `2026-10-21T07:16:19+00:00`
+- Launcher state heartbeat: `2026-10-21T07:16:13.633624+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
-- Worker PID: `2338306`; server PID: `2338308`
-- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261021T011203Z-9cba0828`
+- Worker PID: `2486026`; server PID: `2486028`
+- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261021T070405Z-729d8cb8`
 
 ## Stable kernel core: engineering progress
 
