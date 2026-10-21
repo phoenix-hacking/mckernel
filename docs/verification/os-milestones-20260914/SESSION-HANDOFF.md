@@ -1,3 +1,42 @@
+## Current — exact current recovery preparation authorized; quarantine still held
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+User110107 clarifies no-kill/no-release containment was temporary pending actual
+state, not a stop or permanentban. Actualheldstate independently accepted14a18516;
+minimal exactPID2575750/birth37684618/27:4/mutex116297/pre-mutation retirement
+plan is being prepared from existing protocol for independent exactrelease.
+Current instruction itself grants no signal/unlock/replay. Owner10482/locks/
+quarantine remain held until genuine reviewedauthority; no freshcensusrequested.
+Supervisor API-only monitoring/quiescence retained. Existing source650 has no
+cooperativeexit, so current pidfdprotocol bindings must replace historical ones.
+No new userapproval inferred; quote exactapplicableclause if one actuallyapplies.
+Accepted image/stage/norm/runtimebody and strictapporacle reused unchanged.
+
+## Current — quarantine held-state accepted; producer correction passes synthetic body
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ONE reviewed read-only diagnostic0/.181895s/directjoin/groupabsent/closed/emptyerr;
+stdout182fd96f/364058B independently accepted. Actual rootlock27:4 holder2575750,
+start37684618, rootPython sleeping childof2575747, fd3rootlock/fd6mutex116297.
+Empty mutex116297 and quarantine116298 exist; plan/journal/logcapture/archives
+are absent; originalcommon/shared records match release. Source run1251 census
+precedes logs/plan/Docker-removal/record-exchanges. Current container physical
+state unobserved; this diagnostic is NOT physicalclearance or retirement.
+
+Private producer correction5f6716a8 preserves aborted-sweep PID/parent/birth and
+publisher observations, bounded3retries, unchanged validator/schema/predicates.
+Sole actual extracted-body synthetic regression0/.395711s/15checks passed,
+including originalfailure reproduction and publisher/descendant/exhaustion
+refusals; genuine independent receipt8dd59ea8. No live census/fullengine/native
+acceptance. Active25e engine and tool10482 remain unchanged, LIVE quarantined.
+
+User105033/105210 no kill/release/replay instruction remains authoritative;
+no signal/unlock/archive/markeredit/postjoin/native is authorized. Engine has
+no cooperative quarantine exit. Continue finite source/data reconciliation;
+future authority/currentphysical fields NULL. Accepted image/stage/norm/runtime
+facts reused; current84source/29compiler/6native/21checks/fivewhole held pending
+supervisor accounting. No speedup/native/app/Rustpath credit. Clock10:02:44UTC.
+
 ## Current — cleanup LIVE in intentional quarantine; exact read-only reconciliation next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
