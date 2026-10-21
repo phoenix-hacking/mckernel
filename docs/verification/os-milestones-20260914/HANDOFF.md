@@ -1,3 +1,20 @@
+## Current — readback-path correction before threads native
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Source60 at09b7ae34 is pushed/fetched, proof267288bc. Actual final19 generation
+closed0/0.599949s, but independent dispositionb778baa1 rejects runtime readiness:
+owner9084 creates t.owner/attempt-under-t; host tar/cat readbacks inherited p.
+Groundingae7d145a proves no supported mount/path alias. All original19, captures
+and source2 remain preserved; LAST/native have NOT run. Source-only successor
+whole-caller-path-correction-1 freeze c0cad4a2/proposal121c30bb derives readbacks
+from actual owner tuple and proposes13-case actualowner/coupled19/refusal check.
+Sole source author guest_settid_rust_candidate; reviewer sdk66_source_review.
+Next: focused correction review, fresh CPU6 actualbody check, accepted delta-only
+publication/final19, then real finalrelease/LAST/native. No stage/image/app/norm
+replay or new root witness. Current physicalc7/ACK7885 remain latest, no workload
+or CPU lease live. Formal21/35,fivewhole,28native,Rust17/14,compiler26 held.
+NUMA publication/final-binding-2 remains separate, post-thread physical unbound.
+
 ## Current — threads whole caller accepted; finite publication next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,7 @@
+One bounded correction for b778/ae7d final19 readback-object defect. Source2, its canonical19 and all prior outputs remain untouched.
+
+Candidate binder derives all3raw host readers from genuine b1ba binding/rootowner tuple (parent t, nonce). It preserves original tar/cat options/order and existing nineteen-output engine. A prewrite validator checks proposal/owner, meta/cfg/evidence, all7rows/templates/caller hashes,49freshpaths,lateoutputs and every generated whole descriptor. Three unchanged source helpers are relocated for the successor output namespace; unchanged physical decoder is reused in place. No interpreter rewrite.
+
+The existing wholecaller fixture is extended to13cases: genuine currentchain/real9084owner constructor with explicit inertbackend, hostreadback operand resolution to owner evidence/attempt/result, eight coupled readback/output refusals and four existing physical identity refusals. Constructor performs read-only manifest checks; run/preflight/root/backend lifecycle is never called. Child processes/sockets forbidden. Only pending19/private capture parents and actual-whole-caller-result.json may be produced under root's separate ordinary grant.
+
+Use exact WHOLE-CALLER-CHECK-PROPOSAL.json command/profile: CPU6,1job,1GiB,55CPU seconds,52childwall/60outer,32MiB streams,pinned3.9,990807 positive ownedcapture. No execution by author. Focused sdk review then root actualcheck is next. If deterministic correction fails, retain and escalate this family. Production final19/publication/LAST/runtime remain unbound.

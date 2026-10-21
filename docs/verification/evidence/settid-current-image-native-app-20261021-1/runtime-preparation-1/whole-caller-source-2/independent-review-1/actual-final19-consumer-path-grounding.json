@@ -1,0 +1,60 @@
+{
+  "actual_owner_derivation": {
+    "attempt": "/home/holden/mckernel-work/scratch/stid-p-20261021-2/t/attempt-093a931d54634f5f8794c5ef6cd761dd",
+    "evidence": "/home/holden/mckernel-work/scratch/stid-p-20261021-2/t.owner-093a931d54634f5f8794c5ef6cd761dd",
+    "input_parent": "/home/holden/mckernel-work/scratch/stid-p-20261021-2/t",
+    "nonce": "093a931d54634f5f8794c5ef6cd761dd",
+    "result": "/home/holden/mckernel-work/scratch/stid-p-20261021-2/t/attempt-093a931d54634f5f8794c5ef6cd761dd/result.json",
+    "source": "Canonical9084 DiagnosticOwner.__init__612-613 computes self.evidence=self.parent.with_name(self.parent.name+.owner-+nonce), self.attempt=self.parent/(attempt-+nonce). run1033 creates that exact evidence sibling. _inside1118 passes exact parent and attempt-name to runner; runner114-131 calls diagnostic.prepare_attempt with that parent/name and run_diagnostic for that attempt. Owner readback990-1002 reads self.attempt/result.json and streams from self.attempt. These are actual consumer paths, not a label interpretation."
+  },
+  "authoritative_consumer_sources": {
+    "owner": {
+      "bytes": 58828,
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+      "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200"
+    },
+    "root_capture_caller": {
+      "bytes": 5471,
+      "path": "/home/holden/mckernel-work/host-preparation/settid-current-image-native-app-preparation-20261021-1/runtime-preparation-1/whole-caller-source-2/native-packet-1/root-run-exact-readonly-stage.py",
+      "sha256": "71ae1eaa7732d20d54afe940d2692d5c1896cfbde1718e6748ad05b28899da64"
+    },
+    "runner": {
+      "bytes": 6005,
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py",
+      "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499"
+    }
+  },
+  "decision_unchanged": "PRESERVE_ACTUAL_CLOSED_GENERATION_REFUSE_RUNTIME_READINESS_ONE_BOUNDED_COUPLED_PRODUCER_DATA_CORRECTION",
+  "host_readback_consumers": {
+    "cat_result": "/usr/bin/cat /home/holden/mckernel-work/scratch/stid-p-20261021-2/p/attempt-093a931d54634f5f8794c5ef6cd761dd/result.json resolves the p child path on host. It does not read t/attempt/result.json.",
+    "guard": "Exact finalguard a5f4 copies cfg.postjoin_readback as returned allowed readback metadata, retaining these same wrong targets.",
+    "tar_attempt": "/usr/bin/tar --create --file=- --directory=/home/holden/mckernel-work/scratch/stid-p-20261021-2/p/attempt-093a931d54634f5f8794c5ef6cd761dd --exclude=./qmp.sock . resolves the p/attempt subtree on host. It does not read t/attempt.",
+    "tar_evidence": "/usr/bin/tar --create --file=- --directory=/home/holden/mckernel-work/scratch/stid-p-20261021-2/p.owner-093a931d54634f5f8794c5ef6cd761dd . resolves the p.owner sibling on host. It does not read t.owner created by owner."
+  },
+  "mount_resolution": {
+    "actual_accepted_writable_bind": "type=bind,src=/home/holden/mckernel-work/scratch/stid-p-20261021-2/t,dst=/home/holden/mckernel-work/scratch/stid-p-20261021-2/t",
+    "namespace_conclusion": "Inside runner creates attempt under t using same host/container bind pathname. No mount maps p to t. Host success readbacks run direct sudo tar/cat from generated seven-row argv in host namespace; root-run71ae copies operation argv_template into subprocess.Popen(argv), with no shell/path rewrite/container exec translation.",
+    "other_binds": "Existing REPO and SCRATCH readonly mounts retain same absolute src/dst names; no alternate p alias is installed. Owner evidence sibling is deliberately outside only writable container parent mount and is created by host owner."
+  },
+  "native_outcome": null,
+  "ordinary_current_alias_observation": {
+    "accepted_parent_and_parent_ancestor_resolve_to_themselves": true,
+    "at_utc": "2026-10-21T05:51:09.530518+00:00",
+    "correct_future_t_attempt_evidence_absent": true,
+    "meaning": "There is no existing symlink or owned-object alias at the p names. Distinct absent siblings cannot be asserted equivalent to the owner-derived t objects. Future arbitrary p creation would not establish ownership by this owner/nonce; released source never creates it.",
+    "wrong_p_attempt_lexists": false,
+    "wrong_p_owner_evidence_lexists": false,
+    "wrong_p_parent_lexists": false
+  },
+  "original_disposition": {
+    "bytes": 24788,
+    "path": "/home/holden/mckernel-work/host-preparation/settid-current-image-native-app-preparation-20261021-1/runtime-preparation-1/whole-caller-source-2/independent-review-1/actual-final19-readback-mapping-disposition.json",
+    "sha256": "b778baa141daa2d0188539d078e662312e67f7cec566b36e67ba873719ae8e0e"
+  },
+  "pure_derivation_sufficient": "The actual owner/runner derivation, bind map and direct host tar/cat argument consumption establish wrong-object targets before runtime. No root witness, guest run, path creation, container operation, signal or cleanup is needed.",
+  "runtime_release": false,
+  "schema": "mckernel.settid-native-app.actual-final19-consumer-path-grounding.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "smallest_corrected_contract": "Derive all three success-readback targets from actual owner parent/nonce; require each raw readback and bounded seven-row command tail to name those owner objects, with exact independently checked derivation and wrong-p refusal. Preserve immutable old source/pending/canonical output. Safe aliases may be accepted only on genuine same-owned-object identity evidence; none exists here.",
+  "status": "CONFIRMED_ACTUAL_OWNER_AND_HOST_READBACK_OBJECT_MISMATCH"
+}
