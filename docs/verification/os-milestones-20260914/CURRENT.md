@@ -1,3 +1,30 @@
+## Current — expert terminal descriptor correction accepted; exact successor release next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Retained actual machine/guard body check closed0/.064513s: corrected positive plus
+original machine/guard refusals; fixed fixture clock grants no live admission.
+Expert review accepted exactly two producer ref2 expressions, strict equalities
+unchanged. Fresh successor pending/final generation closed0/.114698/.315365s;
+complete static joins independently accepted05b57d2b, immutable final19 packet3562d7ea.
+Earlier stage/final and prelaunch machine descriptor failures remain archived.
+No guest has run for this regression; all counters held. Next exact consumed-source
+publication, fresh grant/release, mandatory LAST/finalguard, then unchanged six apps.
+New source aliases change only the qualified successor bindings/producer descriptors;
+no new harness/source-counter credit. Prior stage/norm/whole checks remain accepted.
+
+## Current — six-launch prelaunch machine descriptor refusal; no guest started
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exact seven-step release9165ba08/controller attempt closed1 at machine assembly;
+fresh LAST snapshot passed0. Both child processes direct-joined/group absent.
+The retained snapshot terminal descriptor has path/SHA only; machine ancestry
+and projected terminal equality had an extra bytes field for the same9223 report.
+Original failed namespace and genuine raw tool terminal pairfd26c3a8 retained.
+No native/app/milestone failure or gain; no guest launched. Expert finite contract
+review requires only two producer descriptor corrections, strict equalities intact,
+plus one retained-body corrected-positive/original-negative check before newrelease.
+Accepted stage/norm/body/compiler/image/launcher evidence remains reusable.
+
 ## Current — six-launch actual static acceptance; exact native release next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
