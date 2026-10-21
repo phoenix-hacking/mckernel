@@ -1,3 +1,30 @@
+## Current — focused NUMA fails at launcher mode sentinel; physical retired
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual seven-step sequence snapshot/assembly/guard0; native owner1/36.077882s,
+directjoin/groupabsence/noobservererror; three success-only readbacks stayed unrun.
+Retained ND_PAYLOAD: exact39B `FAIL stage=read-mode raw=4 unmap_raw=0\n`,
+rawwait256/stdout0/bothEOF/procfs_emptytrue; normal guest powerdown. Prior allowed
+mask assertion passed. No strict app/native acceptance or path/milestone credit.
+
+ONE existing minimum atomicreceipt read0/.122932s; genuine independent0540fe14
+accepts current failed-native owner physical retirement only: container absent,
+leasefalse, nosecondaryfailures. Original failure and exact receipt retained.
+Image acceptance10:02:44.224961UTC→owner terminal12:17:03.010452UTC =8058.785491s
+(134.313092min), slower than73.69min baseline; no speedup claim.
+
+Two independent source traces confirm Rustlauncher PLD_MPOL_MAX4 collides with
+publicLOCAL4; canonical descriptor/kernel unspecified sentinel is5. Host correctly
+publishes explicit4 and getter copies it. Root integrated ONLY Rustconstant4→5;
+explicitLOCAL/getter/app strict116B/emptyerr/37 unchanged. ABI reportfcaf15d7.
+Next: qualify/reuse existing launcher-only mcexec build contract, compile actual
+affected target and stage genuinely changed launcher with original metadata;
+reuse accepted kernel1d8/artifact0ed9/current physical evidence. No whole-kernel
+rebuild, new framework or synthetic fixture prerequisite. Build/stage/runtime
+future authority remains unbound until genuine reviews/artifacts.
+Evidence: focused-read-mode-failure-and-launcher-sentinel-1.json/paired archive
+under docs/verification/evidence/numa-allowed-mask-native-successor-20261021-1/.
+
 ## Current — corrected image physical accepted; actual runtime whole-caller passed
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

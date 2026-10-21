@@ -82,7 +82,7 @@ const MPOL_DEFAULT: c_int = 0;
 const MPOL_PREFERRED: c_int = 1;
 const MPOL_BIND: c_int = 2;
 const MPOL_INTERLEAVE: c_int = 3;
-const PLD_MPOL_MAX: c_int = 4;
+const PLD_MPOL_MAX: c_int = 5;
 
 const MPOL_NODEMASK_NONE: i32 = 0;
 const MPOL_NODEMASK_LOCAL: i32 = 1;
