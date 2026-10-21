@@ -1,3 +1,43 @@
+## Current — Rust insertion source accepted; existing six-launch stage accepted
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Rust vm_policy_insert source/ownership/body-signature acceptancebcc6aac1 records
+independent compiler reviewer/root recorder. Existing outerwriterlock, unsigned
+left/right adjacency ordering, overlap-EFAULT, diagnostic→link→color and node
+lifetimes retained. Minimal C ABI/RB/diagnostic glue selects Rust under existing
+default policy macro; original C fallback unchanged. Four actualcommands0,
+three tests:9360 parity insertions/720orders +10 unsigned/degenerate insertions
+and3missingcallback refusals; fulltree/metadata/order/rebalance compared.
+Both Ccompiles Werror/emptyerr; Rust fixture273B unusedimport warning preserved.
+Productionheaders/fullTU/fullcrate/link/newimage-native insertion proof remain
+open; no insertion retirement/defaultlinked/nativepath credit. Rust19/16 held.
+
+Existing six-launch stager/consumer finite correction accepted e2bf4c96 actual:
+0/11.887580s positivejoined/groupabsent/emptyerr, five physical records implement
+four final changes(image/launcher/ihk/ihk-smp),68records/62members/58unchanged;
+metadata/order/init36e/apps/oracles preserved. Actualarchivefadc2ef4/18821009B,
+manifestc32950c1; complete stage19895293B<64MiB. No build/guest/stage replay.
+Terminal-body ordinarycheck0/.908225 positive+4refusals and owner algorithms
+independently accepted reusableee1cd500; no repeat after static correction.
+
+Two coherent source units counted: one OS Rust insertion implementation and one
+infrastructure four-member metadata-preserving batchstage/consumer contract.
+No counts for constituent pins, reporting fields, binding DATA or review papers.
+Source catalogue89(34OS55infra); compiler30/native7/behaviors29 unchanged;
+21/35checks/fivewhole/Rust19selected16native. Evidence manifests:
+../evidence/numa-allowed-mask-native-successor-20261021-1/
+rust-vm-policy-insert-source-and-actual-body-1.manifest.json and
+current-six-launch-four-member-actual-stage-1.manifest.json.
+
+Next: existing batchnormalizer using actualstage/currentowner closure with exact
+Python9field ns identities/fullowner-inside-QEMU argv; finite static successor
+preserves2McCPU/pair3 and consistent679477248 reserve. Then necessary wholecaller,
+fetched source/exactruntime release/freshLAST and strict6launch attempt. Independent
+insertion production-object preparation reuses acceptedcompiler/recipe; no build
+or heavy permission from source preparation. SDK66 provider/fixed14GiB gate stays
+blocked/noresize; old duplicate CMakeoption parked. Source subprocesses quiesce
+before exclusivecensus; VM termination never proves full public restoration.
+
 ## Current — named NUMA getter/traversal cutover deduplicated: Rust19/16
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

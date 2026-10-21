@@ -6,7 +6,7 @@ use core::ptr::{
 use core::sync::atomic::{AtomicU64, Ordering};
 
 use crate::abi::{
-    AbiListHead, CInt, CLong, CULong, CpuLocalVar, CpuSet, I387FxsaveStruct, ITimerVal, IhkAtomic,
+    AbiListHead, AbiRbNode, AbiRbRoot, CInt, CLong, CULong, CpuLocalVar, CpuSet, I387FxsaveStruct, ITimerVal, IhkAtomic,
     IhkOsCpuMonitor, IhkSpinlock, IkcScdPacket, IkcScdPacketTraditional, Iovec, KSigAction, Mckfd,
     MovePagesSmpReq, Process, ProcessVm, RLimit, RUsage, SchedParam, SigAction, SigCommon, SigInfo,
     SigInfoChild, SigInfoKill, SigSet, SigStack, SizeT, SysInfo, SyscallRequest, SyscallResponse,
@@ -797,6 +797,11 @@ type SyscallLookupRangeFn = unsafe extern "C" fn(*mut ProcessVm, CULong, CULong)
 type SyscallPolicySearchFn = unsafe extern "C" fn(*mut ProcessVm, CULong) -> *mut VmRangeNumaPolicy;
 type SyscallPolicyClearRangeFn = unsafe extern "C" fn(*mut ProcessVm, CULong, CULong) -> CInt;
 type SyscallPolicyInsertFn = unsafe extern "C" fn(*mut ProcessVm, *mut VmRangeNumaPolicy) -> CInt;
+type SyscallPolicyRbLinkFn =
+    unsafe extern "C" fn(*mut AbiRbNode, *mut AbiRbNode, *mut *mut AbiRbNode);
+type SyscallPolicyRbInsertColorFn = unsafe extern "C" fn(*mut AbiRbNode, *mut AbiRbRoot);
+type SyscallPolicyInsertLogFn =
+    unsafe extern "C" fn(*mut ProcessVm, *mut VmRangeNumaPolicy, *mut VmRangeNumaPolicy);
 type SyscallPolicyRbClearFn = unsafe extern "C" fn(*mut VmRangeNumaPolicy);
 type SyscallPolicyAllocFn = unsafe extern "C" fn(SizeT, CULong) -> *mut c_void;
 type MovePagesVerifyFn = unsafe extern "C" fn(*mut ProcessVm, CULong, SizeT) -> CInt;
@@ -7882,6 +7887,54 @@ pub unsafe extern "C" fn syscall_vm_range_policy_search_body_result(
         }
     }
     null_mut()
+}
+
+/// Inserts the original policy node into the caller's existing NUMA policy tree.
+///
+/// Safety: the caller holds its existing exclusive tree lock. vm, newrange and
+/// every traversed node have the checked C layouts and remain live throughout
+/// the call. newrange is unpublished and does not alias a tree node. Callbacks
+/// preserve that lock/lifetime contract; only link/color may change the tree.
+/// The log callback receives the overlapping node, or null for an insertion.
+/// No allocation, lock acquisition, release or ownership transfer occurs here.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_vm_policy_insert_body_result(
+    vm: *mut ProcessVm,
+    newrange: *mut VmRangeNumaPolicy,
+    link_fn: Option<SyscallPolicyRbLinkFn>,
+    insert_color_fn: Option<SyscallPolicyRbInsertColorFn>,
+    log_fn: Option<SyscallPolicyInsertLogFn>,
+) -> CInt {
+    let (Some(link), Some(insert_color), Some(log)) = (link_fn, insert_color_fn, log_fn) else {
+        return -EINVAL;
+    };
+    let root = unsafe { addr_of_mut!((*vm).vm_range_numa_policy_tree) };
+    let mut slot = unsafe { addr_of_mut!((*root).rb_node) };
+    let mut parent = null_mut();
+    while !unsafe { *slot }.is_null() {
+        let node = unsafe { *slot };
+        let range = unsafe {
+            node.cast::<u8>()
+                .sub(offset_of!(VmRangeNumaPolicy, policy_rb_node))
+                .cast::<VmRangeNumaPolicy>()
+        };
+        parent = node;
+        if unsafe { (*newrange).end <= (*range).start } {
+            slot = unsafe { addr_of_mut!((*node).rb_left) };
+        } else if unsafe { (*newrange).start >= (*range).end } {
+            slot = unsafe { addr_of_mut!((*node).rb_right) };
+        } else {
+            unsafe { log(vm, newrange, range) };
+            return -EFAULT;
+        }
+    }
+    unsafe {
+        log(vm, newrange, null_mut());
+        let node = addr_of_mut!((*newrange).policy_rb_node);
+        link(node, parent, slot);
+        insert_color(node, root);
+    }
+    0
 }
 
 #[no_mangle]

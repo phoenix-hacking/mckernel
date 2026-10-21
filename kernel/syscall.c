@@ -20412,9 +20412,54 @@ struct vm_range_numa_policy *vm_range_policy_search(struct process_vm *vm, uintp
 #endif
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int syscall_vm_policy_insert_body_result(struct process_vm *vm,
+		struct vm_range_numa_policy *newrange,
+		void (*link)(struct rb_node *, struct rb_node *, struct rb_node **),
+		void (*insert_color)(struct rb_node *, struct rb_root *),
+		void (*log)(struct process_vm *, struct vm_range_numa_policy *,
+			struct vm_range_numa_policy *));
+
+static void syscall_vm_policy_link_bridge(struct rb_node *node,
+		struct rb_node *parent, struct rb_node **link)
+{
+	rb_link_node(node, parent, link);
+}
+
+static void syscall_vm_policy_color_bridge(struct rb_node *node,
+		struct rb_root *root)
+{
+	rb_insert_color(node, root);
+}
+
+static void syscall_vm_policy_insert_log_bridge(struct process_vm *vm,
+		struct vm_range_numa_policy *newrange,
+		struct vm_range_numa_policy *overlap)
+{
+	if (overlap) {
+		ekprintf("%s(%p,%lx-%lx (nodemask)%lx (policy)%d): overlap %lx-%lx (nodemask)%lx (policy)%d\n",
+				"vm_policy_insert", vm, newrange->start,
+				newrange->end, newrange->numa_mask,
+				newrange->numa_mem_policy, overlap->start,
+				overlap->end, overlap->numa_mask,
+				overlap->numa_mem_policy);
+	} else {
+		dkprintf("%s: %p,%p: %lx-%lx (nodemask)%lx (policy)%d\n",
+				"vm_policy_insert", vm, newrange, newrange->start,
+				newrange->end, newrange->numa_mask,
+				newrange->numa_mem_policy);
+	}
+}
+#endif
+
 static int vm_policy_insert(struct process_vm *vm,
 		struct vm_range_numa_policy *newrange)
 {
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	return syscall_vm_policy_insert_body_result(vm, newrange,
+			syscall_vm_policy_link_bridge, syscall_vm_policy_color_bridge,
+			syscall_vm_policy_insert_log_bridge);
+#else
 	struct rb_root *root = &vm->vm_range_numa_policy_tree;
 	struct rb_node **new = &(root->rb_node), *parent = NULL;
 	struct vm_range_numa_policy *range;
@@ -20445,6 +20490,7 @@ static int vm_policy_insert(struct process_vm *vm,
 	rb_insert_color(&newrange->policy_rb_node, root);
 
 	return 0;
+#endif
 }
 
 static int vm_policy_clear_range(struct process_vm *vm,
