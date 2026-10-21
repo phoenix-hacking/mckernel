@@ -1,0 +1,14 @@
+--- accepted-failure-only-atomic-receipt-inline
++++ current-NUMA-case-constants-only
+@@ -1,8 +1,8 @@
+ import os, stat, json, hashlib, sys
+ from pathlib import Path
+-STATUS = Path('/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/stage-preparation-1/native-packet-1/captures/03-native-owner/status.json')
+-EVIDENCE = Path('/home/holden/mckernel-work/scratch/r205d-261020-1/p.owner-5947d6617a7c42e1b1a92d7253692340')
+-EXPECTED = ['/usr/bin/sudo', '-A', '/home/holden/anaconda3/bin/python3', '-B', '/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/stage-preparation-1/native_diagnostic_container_owner.py', '--attempt-parent', '/home/holden/mckernel-work/scratch/r205d-261020-1/p', '--nonce', '5947d6617a7c42e1b1a92d7253692340', '--owner-sha256', '2d201a9d0550e1ee4ce02527a554decd2584c99ca041113ce8480672ef17d2a2', '--manifest', '/home/holden/mckernel-work/scratch/r205dm-261020-1/manifest.json', '--manifest-sha256', '3f515735982131b395128326b43e7041d87c70f50e0e705349fa67dcaaebd73f']
++STATUS = Path('/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/runtime-preparation-1/current-physical-bound-1/native-packet-1/captures/03-native-owner/status.json')
++EVIDENCE = Path('/home/holden/mckernel-work/scratch/numa-p-20261021-1/t.owner-d7aa299c51544d4c932741c489adabe0')
++EXPECTED = ['/usr/bin/sudo', '-A', '/home/holden/anaconda3/bin/python3.9', '-I', '-B', '/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py', '--owner-sha256', '9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200', '--attempt-parent', '/home/holden/mckernel-work/scratch/numa-p-20261021-1/t', '--nonce', 'd7aa299c51544d4c932741c489adabe0', '--manifest', '/home/holden/mckernel-work/scratch/numa-n-20261021-1/manifest.json', '--manifest-sha256', '7d596e75ba43ba471848a88847974f9183b5d6973ec4132a43b031a48a947985']
+ KEYS = ('st_dev', 'st_ino', 'st_mode', 'st_uid', 'st_gid', 'st_size', 'st_nlink', 'st_mtime_ns', 'st_ctime_ns')
+ 
+ def need(ok, s):

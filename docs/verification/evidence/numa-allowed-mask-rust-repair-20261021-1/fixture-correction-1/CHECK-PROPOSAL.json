@@ -1,0 +1,46 @@
+{
+  "C_reference_unchanged": true,
+  "accepted_compiler_binding": {
+    "bytes": 898,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-empty-producer-repair-20261021-1/fixture-correction-1/GENUINE-ACCEPTED-COMPILER-BINDING.json",
+    "sha256": "b7f37f6fa3b9a816812fe331d7fbb5abc57fc94cef4473bd77c26bd0fefe6f92"
+  },
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-allowed-empty-producer-repair-20261021-1/fixture-correction-1/propose_actual_body_comparison.py",
+    "--rustc",
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--out",
+    "/home/holden/mckernel-work/host-preparation/numa-allowed-empty-producer-repair-20261021-1/fixture-correction-1/actual-body-comparison-1"
+  ],
+  "assertions_MAIN_byte_identical": true,
+  "expected_status": "PASS_BASELINE_BUG_REPRODUCED_AND_CANDIDATE_TOPOLOGY_ALLOWED_MASK",
+  "failure_family": "fixture-compiler/import-contract",
+  "kernel_module_app_guest_build": false,
+  "prerequisites": [
+    "focused independent exact one-correction source/dependency/compiler binding review",
+    "root genuine existing CPU7/1GiB/30CPU/35wall ordinary grant",
+    "fresh child output; original failed evidence and source retained"
+  ],
+  "prior_actual_failed_candidate": "/home/holden/mckernel-work/host-preparation/numa-allowed-empty-producer-repair-20261021-1/actual-body-envelope-capture-1/whole.json",
+  "root_Docker_lease_cleanup": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "second_actual_family_failure": "STOP for root strategy/expert decision; no automatic further correction/retry",
+  "status": "ONE_BOUNDED_FIXTURE_CORRECTION_PROPOSED_NOT_RUN"
+}

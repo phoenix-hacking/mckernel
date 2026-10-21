@@ -1,3 +1,79 @@
+## Current — successor exact whole guard passed once; checkpoint and fresh build admission
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Genuine source/gates projections02870027/986e6e92 and exact fixed request6fe934de
+passed independent full consumer/runtime field review ed30a90f. Existing binder
+closed0/.341706s; actual whole guard closed0/4.412122s, directjoin/groupabsence/
+closedstreams/emptyerr. Positive and eight refusals passed; peer actual review
+pending. Final guard source frozen. No repeated fixture/source materialization/
+source-gate runs. Root checkpoint now; complete finalDATA genuine joins, conditional
+control review, fresh existing setup/snapshot and exact canonical release review
+before single production image build. No heavy execution authority from prep.
+
+## Current — allowed-mask Rust repair and successor source gates accepted; exact build joins next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Retained first native stderr is exactly `FAIL stage=allowed-empty raw=0 unmap_raw=0`.
+The flags4 producer incorrectly copied allocation-policy vm.numa_mask; the allowed
+mask now derives from assigned topology in a local Rust array. No hardcoded node,
+VM policy mutation, app/oracle/launcher/module ABI change or compute C expansion.
+Live syscall_policy.rs da1e612b, patch2f80b5d7; independent source/actual-body
+acceptance b9b55964. Corrected qualified Rust1.92 body comparison a477caa1 closed
+0/.494420s: each body48vectors plus guards/faults/bounds/policy preservation.
+Old C discrepancy and original old-toolchain/fixture-import failure retained.
+Independent app ABI c688912f found no defect. No test replay required.
+
+Failed native positive physical retirement accepted b081db51 from closed minimum
+receipt capture dd9610c9 and actual atomic receipt039bbe2c: exact container absent,
+lease not retained, FAIL/applicationfalse/no secondary error. No cleanup replay.
+Success-only readbacks remain unexecuted. Evidence exported under
+`docs/verification/evidence/numa-first-native-failure-diagnostic-20261021-1/`.
+
+Successor source actual6959entries/6910regular/49symlinks accepted35f42bbe,
+derivative050b953f/materialization317752dc/privateinode48501031. Whole source
+checker ran once0/.142011s; actual result b7772232 independently accepted43489052.
+Owned-source positive/oldpin refusal passed; affinity gates reached genuine
+missing compile_commands boundary. No whole affinity/compiler claim. Next finite
+existing-schema source compatibility + complete request/guard field join, cheap
+actual wholeguard, fresh admission and one exact production image build release.
+Existing CMake/provider/ABI/default-OFF gates preserved; mcexec is unchanged689d
+and remains an existing transitive recipe dependency. Future newimage refs NULL.
+
+Successor stage/runtime DATA already prepared: exactly one image archive member
+changes/59unchanged; strict app116B/emptyerr/37 unchanged. Bind actual artifacts
+and current physical evidence only when available, with qualified tool-owned
+controller completion and genuine started/completed receipts; no invented outer
+OS birth/wait. Reuse completed checks and measure next image-to-native interval
+against prior73.69min observation only after actual feedback. No speedup claim.
+Review143 official84sources(32OS/52infra),28compiler/6acceptednative;21/35checks,
+fivewhole/28logical/Rust17/14 held. No new milestone/path/default/native credit.
+
+## Current — first focused NUMA native attempt failed; retrieve closed guest evidence
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exactsevenstepreview59e1baea released once; controller2533953/start37081682
+unifiedsession69140 is TERMINALexit1, no repoll/replay aslive. LASTsnapshot0,
+assembly0,finalguard0; nativeowner2533980/start37081798 closed1/37.176767s
+withdirectjoin/groupabsence; caller2533978/start37081793 also joined/absent.
+Sevenchainrootwhole8d3bdc25 FAIL_STOPPED atnative-owner; successonly3readbacks
+correctlyunexecuted. Owner9084 stderr4ab681b0 says Dockerstart--attachnonzero;
+application/kernelcause is UNKNOWN until retained closedguestevidence is read.
+No newnative/check/path/default/Cretirement credit. Accepted82source/28compiler/
+sixnative,21/35/fivewhole/28logical/Rust17/14 held.
+
+Actualprivate F=host-preparation/numa-current-image-native-app-preparation-
+20261021-1/runtime-preparation-1/current-physical-bound-1/; rootfailure
+ROOT-RECORDED-FIRST-NATIVE-ATTEMPT-FAILURE-1.json records real feedbackinterval
+from persistedbuildstatus07:43:45.225986UTC, not a speedupclaim/app-passclaim.
+Rootowner evidence scratch/numa-p-20261021-1/t.owner-d7aa299c51544d4c932741c489adabe0
+is root0700. Existing rootreceipt/atomicstate must establish physicalretirement;
+no newheavy/cleanup or successonlyreader replay before genuine failure release.
+Owner numa_app_oracle_correction prepares bounded existing readonlyfailureexport
+source/manifest; reviewer numa_image_source_review reviews exact diagnostic
+release, rootexecutes. Preserve failed inputs and all strict116B/emptyerr/37.
+Published/fetchedsource02efbe75/all151 exact; no recompile/stage/normalization
+audit/replay. Next real guestfeedback→bounded functionalRust/assembly correction.
+
 ## Current — NUMA whole-caller check closed0; runtime release next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

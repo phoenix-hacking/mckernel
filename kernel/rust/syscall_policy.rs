@@ -8225,10 +8225,14 @@ pub unsafe extern "C" fn get_mempolicy_body_result(
     }
 
     if flags == MPOL_F_MEMS_ALLOWED {
+        // Allowed memory nodes belong to the OS topology, independently of
+        // the current process policy (whose DEFAULT nodemask may be empty).
+        let mut allowed_mask = [0 as CULong; PROCESS_NUMA_MASK_WORDS];
+        policy_mask_set_all_nodes(allowed_mask.as_mut_ptr(), nr_numa_nodes);
         if nodemask_addr != 0
             && copy_to(
                 nodemask_addr,
-                (*vm).numa_mask.as_ptr().cast::<u8>(),
+                allowed_mask.as_ptr().cast::<u8>(),
                 (nodemask_bits >> 3) as SizeT,
             ) != 0
         {

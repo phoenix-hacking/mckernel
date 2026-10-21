@@ -1,0 +1,42 @@
+{
+  "actual_last_policy_mask_writer": "unproven; do not assert producer branch in actual guest",
+  "cause": "allowed topology mask incorrectly aliases process allocation policy mask",
+  "compiler_tests_root_or_native_execution": false,
+  "files": [
+    {
+      "bytes": 1256,
+      "relative": "CHECK-PROPOSAL.json",
+      "sha256": "d5606c696ad25b7b4f470d521e9e57998716cdec5ff7fc690663021a7229752e"
+    },
+    {
+      "bytes": 6135,
+      "relative": "FINDINGS.md",
+      "sha256": "eabc2d1d7eaffc0fa70677d5e582b51608e3af45733f2ded0cc7af2e82dcb297"
+    },
+    {
+      "bytes": 725,
+      "relative": "allowed-mask-policy-separation.patch",
+      "sha256": "2f80b5d748fe4be1d2328bb70b946e86dd5929e2757c1d6f3ee456f1e1618c39"
+    },
+    {
+      "bytes": 7148,
+      "relative": "propose_actual_body_comparison.py",
+      "sha256": "9d2572551fc1b89895339a981d704facb6f115f1b5f6266c8136bdda8e4be33a"
+    },
+    {
+      "bytes": 700034,
+      "relative": "syscall_policy.before.rs",
+      "sha256": "75b89149aa031076ae547248e0aab64eda5a7b75162952a954489e86067f0b2d"
+    },
+    {
+      "bytes": 700332,
+      "relative": "syscall_policy.proposed.rs",
+      "sha256": "da1e612baa6af6cd3e5ddad39f26d0c8aa582faee1920a5b7a86ce507d7b99af"
+    }
+  ],
+  "native_actual_topology_nodes": 1,
+  "proposed_sha256": "da1e612baa6af6cd3e5ddad39f26d0c8aa582faee1920a5b7a86ce507d7b99af",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_baseline_sha256": "75b89149aa031076ae547248e0aab64eda5a7b75162952a954489e86067f0b2d",
+  "status": "MINIMAL_RUST_ALLOWED_QUERY_PROPOSAL_ONLY_NOT_TESTED_OR_INTEGRATED"
+}

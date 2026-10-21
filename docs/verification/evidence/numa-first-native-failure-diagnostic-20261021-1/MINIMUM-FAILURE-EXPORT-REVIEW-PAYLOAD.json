@@ -1,0 +1,102 @@
+{
+  "schema": "mckernel.current-numa.failure-only-minimum-receipt-review-payload.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PENDING_ONE_READONLY_FAILURE_DIAGNOSTIC_REVIEW_AND_FRESH_ROOT_GRANT",
+  "authorized_count_proposed": 1,
+  "actual_failed_inner_owner_status": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/runtime-preparation-1/current-physical-bound-1/native-packet-1/captures/03-native-owner/status.json",
+    "sha256": "7d1aea9107a1144742fda3eec9c4adea22f9268fcf627c6b580d044b4ac838e7",
+    "bytes": 1634
+  },
+  "actual_failed_outer_controller_status": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/runtime-preparation-1/current-physical-bound-1/native-packet-1/root-seven1-native-owner.status.json",
+    "sha256": "82b2040a62b78fb1b86b76fb0132c3c6a1e4ade1af59030e3ad8caf4f997cdac",
+    "bytes": 893
+  },
+  "actual_owner_error_stderr": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/runtime-preparation-1/current-physical-bound-1/native-packet-1/captures/03-native-owner/stderr",
+    "sha256": "4ab681b0cf0e6244c177c338f2f13733ed6e6f7ff7a746a4f8cadab44dd19fc6",
+    "bytes": 1346
+  },
+  "ordinary_observed_failure_facts": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/runtime-preparation-1/current-physical-bound-1/native-failure-diagnostic-1/ORDINARY-READABLE-FAILURE-FACTS.json",
+    "sha256": "7b607ea734740a232f8388d408a43dd8a547fdaa4335dd09654b521358947d27",
+    "bytes": 2618
+  },
+  "accepted_failure_atomic_method": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1-independent-review/DIAGNOSTIC-FAILURE-ONLY-ATOMIC-TERMINAL-READBACK-RELEASE.json",
+    "sha256": "f58c89516cbcc2729b9b07f0b4ce3ecbed3947ceb4644686d12815fe7ec724b2",
+    "bytes": 8862
+  },
+  "data": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/runtime-preparation-1/current-physical-bound-1/native-failure-diagnostic-1/ATOMIC-OWNER-RECEIPT-DATA.json",
+    "sha256": "2ee9ccb7f16392581bc8e0f863f0d7f5120c25091629b0f17aa0987139894211",
+    "bytes": 6071
+  },
+  "capture_caller": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/runtime-preparation-1/current-physical-bound-1/native-packet-1/root-run-exact-readonly-stage.py",
+    "sha256": "71ae1eaa7732d20d54afe940d2692d5c1896cfbde1718e6748ad05b28899da64",
+    "bytes": 5471
+  },
+  "callable_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/runtime-preparation-1/current-physical-bound-1/native-packet-1/root-run-exact-readonly-stage.py",
+    "--commands-file",
+    "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/runtime-preparation-1/current-physical-bound-1/native-failure-diagnostic-1/ATOMIC-OWNER-RECEIPT-DATA.json",
+    "--commands-sha256",
+    "2ee9ccb7f16392581bc8e0f863f0d7f5120c25091629b0f17aa0987139894211",
+    "--index",
+    "1"
+  ],
+  "root_payload_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--fsize=33554432",
+    "--nofile=256",
+    "--core=0",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "30s",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import os, stat, json, hashlib, sys\nfrom pathlib import Path\nSTATUS = Path('/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/runtime-preparation-1/current-physical-bound-1/native-packet-1/captures/03-native-owner/status.json')\nEVIDENCE = Path('/home/holden/mckernel-work/scratch/numa-p-20261021-1/t.owner-d7aa299c51544d4c932741c489adabe0')\nEXPECTED = ['/usr/bin/sudo', '-A', '/home/holden/anaconda3/bin/python3.9', '-I', '-B', '/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py', '--owner-sha256', '9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200', '--attempt-parent', '/home/holden/mckernel-work/scratch/numa-p-20261021-1/t', '--nonce', 'd7aa299c51544d4c932741c489adabe0', '--manifest', '/home/holden/mckernel-work/scratch/numa-n-20261021-1/manifest.json', '--manifest-sha256', '7d596e75ba43ba471848a88847974f9183b5d6973ec4132a43b031a48a947985']\nKEYS = ('st_dev', 'st_ino', 'st_mode', 'st_uid', 'st_gid', 'st_size', 'st_nlink', 'st_mtime_ns', 'st_ctime_ns')\n\ndef need(ok, s):\n    if not ok:\n        raise ValueError(s)\n\ndef pairs(rows):\n    d = {}\n    for (k, v) in rows:\n        need(k not in d, 'duplicate JSON key')\n        d[k] = v\n    return d\n\ndef readfd(fd, limit):\n    a = os.fstat(fd)\n    need(stat.S_ISREG(a.st_mode) and a.st_nlink == 1 and (a.st_size <= limit), 'regular bounded receipt')\n    raw = os.read(fd, limit + 1)\n    b = os.fstat(fd)\n    need(len(raw) == a.st_size and all((getattr(a, k) == getattr(b, k) for k in KEYS)), 'stable full receipt FD')\n    return (raw, a)\nneed(len(sys.argv) == 2 and len(sys.argv[1]) == 64, 'one actual closed ownerstatus hash')\nfd = os.open(STATUS, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC)\ntry:\n    (raw, st) = readfd(fd, 65536)\nfinally:\n    os.close(fd)\nneed(hashlib.sha256(raw).hexdigest() == sys.argv[1], 'actual closed ownerstatus hash')\ns = json.loads(raw, object_pairs_hook=pairs)\nneed(s['argv'] == EXPECTED and type(s['returncode']) is int and (s['returncode'] != 0) and (s['direct_child_joined'] is True) and (s['process_group_absent'] is True) and (s.get('observer_error') is None), 'completed nonzero exact owner directjoin and group')\nneed(EVIDENCE.is_absolute() and EVIDENCE.resolve() == EVIDENCE, 'canonical exact root evidence directory')\np = os.open(EVIDENCE, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)\ntry:\n    d = os.fstat(p)\n    need(d.st_uid == d.st_gid == 0 and stat.S_IMODE(d.st_mode) == 448, 'root0700 owner evidence')\n    f = os.open('result.json', os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=p)\n    try:\n        (raw, row) = readfd(f, 65536)\n        named = os.stat('result.json', dir_fd=p, follow_symlinks=False)\n        need(all((getattr(row, k) == getattr(named, k) for k in KEYS)), 'receipt FD/path join')\n    finally:\n        os.close(f)\n    need(row.st_uid == row.st_gid == 0 and stat.S_IMODE(row.st_mode) == 384, 'root0600 terminal receipt')\n    after = os.fstat(p)\n    named = EVIDENCE.lstat()\n    need(all((getattr(d, k) == getattr(after, k) == getattr(named, k) for k in KEYS)), 'stable root evidence directory')\nfinally:\n    os.close(p)\nv = json.loads(raw, object_pairs_hook=pairs)\nneed(set(v) == {'status', 'application_acceptance', 'container', 'absence_verified', 'lease_retained', 'signal_number', 'failure', 'secondary', 'secondary_omitted'}, 'exact source terminal receipt shape')\nneed(v['status'] in ('FAIL', 'PROTOCOL_PASS') and v['application_acceptance'] is False and (v['absence_verified'] is True) and (v['lease_retained'] is False), 'positive source terminal physical fields')\nprint(json.dumps(dict(status='PASS_CLOSED_OWNER_TERMINAL_RECEIPT_READBACK_ONLY', owner_status_sha256=sys.argv[1], receipt_path=str(EVIDENCE / 'result.json'), receipt_sha256=hashlib.sha256(raw).hexdigest(), receipt_bytes=len(raw), receipt=v, independent_physical_acceptance=False, root_mutations=0), sort_keys=True))\n",
+    "7d1aea9107a1144742fda3eec9c4adea22f9268fcf627c6b580d044b4ac838e7"
+  ],
+  "profile": {
+    "cpu": 6,
+    "AS": 1073741824,
+    "CPU": 30,
+    "child_wall_seconds": 30,
+    "parent_wall_seconds": 35,
+    "parent_kill_grace_seconds": 2,
+    "stream_fsize": 33554432,
+    "host_floor": 17179869184,
+    "scratch_floor": 12884901888,
+    "existing_reserve_bytes": 679477248,
+    "network": false,
+    "Docker": false,
+    "guest": false
+  },
+  "authority_scope": "Only stable-FD read of exact root0700 owner evidence/result.json after exact closed nonzero owner status; source unchanged except STATUS/EVIDENCE/EXPECTED constants/statusSHA. Canonical static02856 ref is capture context, not expanded success-only execution authority.",
+  "expected": "PASS_CLOSED_OWNER_TERMINAL_RECEIPT_READBACK_ONLY with exact shape, absence_verifiedtrue/lease_retainedfalse/applicationfalse; independent physical acceptance remainsfalse.",
+  "on_missing_or_uncertain_receipt": "Preserve root read failure and uncertainty, no archive/replay/cleanup; source owner only flushes receipt after positive absence and lock release.",
+  "intentionally_omitted": [
+    "full guest TAR",
+    "owner TAR",
+    "three success-only readbacks",
+    "new Docker/census/run/cleanup",
+    "app/compiler/normalizer/stage replay"
+  ],
+  "physical_or_native_acceptance": false
+}

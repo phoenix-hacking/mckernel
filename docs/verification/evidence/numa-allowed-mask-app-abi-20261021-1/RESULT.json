@@ -1,0 +1,45 @@
+{
+  "accepted_linux_reference": {
+    "bytes": 4063,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-native-app-consumer-20261021-1/independent-review-1/ROOT-RECORDED-INDEPENDENT-LINUX-REFERENCE-ACCEPTANCE.json",
+    "sha256": "3abbf0e84f3921e87a52199a83db86baf187adb775fa15e78765f39dabf00001"
+  },
+  "app_source": {
+    "bytes": 5797,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-native-app-consumer-20261021-1/numa_interval_app.rs",
+    "sha256": "0863c1e9ef2c3777f6ac9baeab33283afeac99b5d5ea374546ee6b24be886936"
+  },
+  "conclusion": "No app ABI producer error found. Keep app/oracle unchanged. The scope does not locate why the native producer exposes an empty allowed mask.",
+  "limits": [
+    "No observed syscall239 register or nodemask-byte dump in supplied serial; all-zero interior mask is inferred from exact frozen app failure path.",
+    "No fresh compile, tests, execution, root, Docker, network or binary disassembly performed. Retained payload linkage comes from accepted reference, not a new general artifact audit.",
+    "Native diagnostic failed; result.json application_acceptance=false. No native/default/C-retirement acceptance.",
+    "Producer/topology/process initialization investigated by separate owner, deliberately out of scope."
+  ],
+  "native_observed": {
+    "powerdown_text_present": true,
+    "procfs_empty": true,
+    "raw_wait_status": 256,
+    "stderr_ascii": "FAIL stage=allowed-empty raw=0 unmap_raw=0\n",
+    "stderr_eof": true,
+    "stdout_eof": true,
+    "stdout_hex": ""
+  },
+  "native_result": {
+    "bytes": 2795,
+    "path": "/home/holden/mckernel-work/scratch/numa-p-20261021-1/t/attempt-d7aa299c51544d4c932741c489adabe0/result.json",
+    "sha256": "8ca36ec75b6e4602c558a06c51830198851efda676b4f8aaa1e0b31b6a936487"
+  },
+  "native_serial": {
+    "bytes": 76366,
+    "path": "/home/holden/mckernel-work/scratch/numa-p-20261021-1/t/attempt-d7aa299c51544d4c932741c489adabe0/serial.log",
+    "sha256": "9c99db099117cc506b39574fb332a847cf28032dbbb59db1d6ad881a79656163"
+  },
+  "retained_payload_binding": {
+    "bytes": 5619416,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-native-app-consumer-20261021-1/compile-reference-1/numa_interval_app",
+    "sha256": "0339cb5fcba4ea4f1f2977fd0d3a7653b48e0af1de7e0625fbfafbfe13fce5fb"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READ_ONLY_APP_ABI_SOURCE_AND_RETAINED_EVIDENCE_CHECK_NO_APP_ABI_DEFECT_FOUND"
+}

@@ -1,0 +1,57 @@
+{
+  "MAIN_all_assertions_byte_identical": true,
+  "compiler_binding": {
+    "accepted_compile_command": {
+      "bytes": 573,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-native-app-consumer-20261021-1/compile-reference-1/01-compile/command.json",
+      "sha256": "eed2d829009a3836f343204cc09ec2a98afbe2a516a4f9231b7a14b8a4a97e94"
+    },
+    "accepted_grant": {
+      "bytes": 1277,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-native-app-consumer-20261021-1/compile-reference-1/grant.json",
+      "sha256": "33ec7e8d8849a889b883473ea16d465631273282cd3138c9418265e1cd1c1398"
+    },
+    "authority": "Root supplied genuine accepted app compilation grant/01-compile command; no fresh compiler audit/probe by this lane",
+    "bytes": 654904,
+    "path": "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "sha256": "028fd60b0e0add5505c661cd3ccde91393d615c8729bd95d94ab1e91409b36a1",
+    "version": "1.92.0"
+  },
+  "execution_or_probe": false,
+  "files": [
+    {
+      "bytes": 2085,
+      "relative": "CHECK-PROPOSAL.json",
+      "sha256": "17a04eaf413c6e2ec87348685a4da19f0cd75a2315926217d5c3fadea8bc3d56"
+    },
+    {
+      "bytes": 3850,
+      "relative": "DEPENDENCY-REVIEW.md",
+      "sha256": "66bb446b0d1eb2ccecf4f8d12b23c7fdf2972cc6ab9631e80bfda557c1b2ab0e"
+    },
+    {
+      "bytes": 898,
+      "relative": "GENUINE-ACCEPTED-COMPILER-BINDING.json",
+      "sha256": "b7f37f6fa3b9a816812fe331d7fbb5abc57fc94cef4473bd77c26bd0fefe6f92"
+    },
+    {
+      "bytes": 1916,
+      "relative": "fixture-import-and-location-correction.patch",
+      "sha256": "270c937d9bb5e65fa28a2585e8a31686aee2f0c5487e46ec8c17d46650cbe7dc"
+    },
+    {
+      "bytes": 7184,
+      "relative": "propose_actual_body_comparison.py",
+      "sha256": "155768f642f48f95cfb839fcd199a6937ae7381d5d728898475bbb19bf21ea78"
+    }
+  ],
+  "kernel_patch_unchanged": "da1e612baa6af6cd3e5ddad39f26d0c8aa582faee1920a5b7a86ce507d7b99af",
+  "original_failure_preserved": true,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "second_family_failure": "root strategy/expert escalation; no blind retry",
+  "source_deltas": [
+    "explicit read_volatile/write_volatile imports",
+    "child-script parent fixture path"
+  ],
+  "status": "ONE_BOUNDED_FIXTURE_COMPILER_IMPORT_CORRECTION_SOURCE_ONLY_NOT_RUN"
+}

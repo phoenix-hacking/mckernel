@@ -72,17 +72,18 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 
 ### Next practical work
 
-- Accepted production image7331e75d/build28 and decoder405dbe3b/checkpoint69dbe284 are unchanged. Genuine firstthree observer/summary/FD joins and raw5 export accepted3a23d347. Finish reviewed exact same-final-release freshpreflight/conditionalcleanup/postjoin using existing engineec35; container/common/shared retained until actual independent physicalclearance. Preserve all firstfailures/no newheavy/oneheavy/noresize/floors.
-- Stageeccae19c and actual normalizationd4199b24/rootrecorder809e2828 accepted once. Finish finite currentphysicaldecoder/mapping/fullsourceFDmap in parallel withcleanup, leave future clearance refs unresolved. Bind genuine newphysicalacceptance once, run existing boundedwholecallerchecks, exactruntime release and unchanged NUMA app116B/emptyerr/37. No repeated source/app/compiler/stage/normalization audits; qualifiedsixbatch stayslater. Measure from persistedclosedbuildstatus2026-10-21T07:43:45.225986Z toactualnativefeedback; no speedupclaim.
-- Continue open real process child ownership handoff and native lifecycle/restoration against supported matched artifacts. Preserve accepted21/35 checks/five whole milestones and historical artifact-scoped behaviors; no source/compiler/Linux result counts as native/default/C-retirement.
-- Preserve SDK66 fullmodule capacity/no-resize blocker, scratch UUID/110GiB image, all failed evidence, genuine service/auth/resource stops and existing one-heavy profile. Deferred qualification remains deferred.
+- Complete genuine existing-schema successor source/request/guard joins; run necessary actual whole guard once, then fresh admission and one exact production image build release.
+- Bind actual new image acceptance into already prepared one-image-change stage/runtime DATA; retain strict NUMA116B/emptyerr/37 and genuine current physical/tool-owned completion references.
+- Run one fresh focused NUMA native consumer after its exact release; preserve all failures and measure actual accepted-image-to-native feedback without advance speedup or acceptance claims.
+- Continue open real process child ownership handoff and native lifecycle/restoration against supported matched artifacts; preserve artifact-scoped evidence and counts.
+- Preserve SDK66 capacity/no-resize blocker, scratch UUID/110GiB, failed evidence, actual service/auth/resource stops and one-heavy profile; qualification remains deferred.
 
 Original formal qualification is **historical / DEFERRED**. Deferred does not mean passed; its counters below do not define practical completion.
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-21T08:55:39+00:00`
-- Launcher state heartbeat: `2026-10-21T08:55:36.551239+00:00`
+- Dashboard refreshed: `2026-10-21T09:43:09+00:00`
+- Launcher state heartbeat: `2026-10-21T09:43:01.619661+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `2486026`; server PID: `2486028`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261021T070405Z-729d8cb8`
