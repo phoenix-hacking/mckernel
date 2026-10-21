@@ -1,3 +1,25 @@
+## Current — launcher-only build controls and actual whole-guard ready
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Corrected launcher-only driver8a401e/owner9bedd accepted e493; first source-only
+candidate missing SignalLatch/inventory preserved, one consolidated correction
+retains original ownership/signal/client/lifecycle controls and complete evidence
+sealing. Exact mcexec-only target has no kernel dependency; selected outputs forced
+fresh in a private60.5MB configured-tree copy, immutable da71 source overlay.
+Requesteb61/runtimeef72 and guard0dcfac/dispatcherf5d925 current bindings accepted.
+ONE actual whole-guard0/4.378887s, directjoin/groupabsence/closedemptyerr, genuine
+positive plus8refusals accepted b01999. No actual target build executed yet.
+Remaining: fetched current code publication, current existing snapshot/final exact
+execution review+fresh admission, then actual mcexec target. Stageba505 and physical
+decoder67ddd source reviewed; terminalengine2bb4 finite delta reviewed; preserve
+all actual release/FD/resource checks without repeat source/image/app audits.
+
+Review149 reports image-to-first-native-feedback133.79min vs73.69 baseline, includes
+genuine recovery. Separate root owner-terminal metric134.313min remains correctly
+labeled in failure evidence. No speedup/native/milestone or binding/pin source gain.
+Strict app/getter remain unchanged; accepted kernel1d8 reused. Future actual target,
+stage, physical and runtime authority remain unbound until genuine observations.
+
 ## Current — focused NUMA fails at launcher mode sentinel; physical retired
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

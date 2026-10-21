@@ -1,0 +1,13 @@
+--- check_actual_fresh_preflight.py.proposed
++++ check_launcher_fresh_preflight.UNBOUND.py
+@@ -1,8 +1,8 @@
+ """Exact current fresh-attempt preflight only; no engine run/recover/effects."""
+ import argparse,base64,hashlib,json,os,traceback,types
+ from pathlib import Path
+-SOURCE=Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/bound-terminal-source-1/cleanup_pass_image.py')
+-SOURCE_SHA = '5f6716a8914564cfae06693931033fa2efacae49aaf2e21f18600463b376d21d'
++SOURCE = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-terminal-data-preparation-1/cleanup_launcher.py')
++SOURCE_SHA = None
+ CAP=1<<20
+ def inner_completed_process(error):
+     rows=[];tb=error.__traceback__

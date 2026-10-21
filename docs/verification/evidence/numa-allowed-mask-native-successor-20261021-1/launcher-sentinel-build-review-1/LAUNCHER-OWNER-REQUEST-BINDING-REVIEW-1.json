@@ -1,0 +1,173 @@
+{
+  "schema": "mckernel.launcher-sentinel.runtime-owner-request-binding-review.v1",
+  "status": "PASS_EXACT_FULL_RUNTIME_ADAPTER_OWNER_AND_REQUEST_BINDINGS_ONLY",
+  "decision": "PASS_EXACT_LAUNCHER_OWNER_DRIVER_PLAN_AND_REQUEST_BINDINGS_ONLY",
+  "reviewer": "/root/numa_image_source_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "findings": [],
+  "reviewed_request_proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-request.json",
+    "bytes": 26525579,
+    "sha256": "eb61fa2224aa228c18cc13210efd27a7c7473e25599aa9f2f1e1078f8ee86e36"
+  },
+  "reviewed_base_request": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/execution-preparation-1/image-request.json",
+    "bytes": 26524976,
+    "sha256": "1430be233825272d40f5692a62f11b9fd612e49158551ed1c8a321fa26bd31e2"
+  },
+  "actual_source_materialization_acceptance": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/execution-preparation-1/ROOT-RECORDED-GUARD-SCHEMA-SOURCE-ACCEPTANCE.json",
+    "bytes": 2092,
+    "sha256": "028700272e870651b8af9f1251e3e9c27aad789c87f57314ab02eba27ff37171"
+  },
+  "actual_coupled_source_gate_acceptance": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/execution-preparation-1/ROOT-RECORDED-GUARD-SCHEMA-WHOLE-GATES-ACCEPTANCE.json",
+    "bytes": 2105,
+    "sha256": "986e6e92dfd642fcea14be0d0aa6ad40ff2bc75715b58cbd2e81438a9eadd307"
+  },
+  "source_adaptation_acceptance": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-build-review-1/LAUNCHER-ONLY-SOURCE-ADAPTATION-REVIEW-1.json",
+    "bytes": 7485,
+    "sha256": "e493bca8dada6764051f34aa547411731e5d09346e02b2a70937a06a1217c45c"
+  },
+  "reviewed_owner": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/correction-1/launcher_only_container_owner.py",
+    "bytes": 91547,
+    "sha256": "9beddcebdee6542e9357af666be340a59c628822c2e8c785e3c572bc5d5422ab"
+  },
+  "reviewed_driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/correction-1/launcher_only_offline.py",
+    "bytes": 9439,
+    "sha256": "8a401e04462ddec4ad9f1204fa811efb8a9adb6167df27be27845799d2155f59"
+  },
+  "reviewed_launcher_plan": {
+    "bytes": 3577,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-plan.json",
+    "sha256": "58d346ad4f227cd9da07d36c6956216c85101ef34893bbf0ec5092f7383bff9d"
+  },
+  "source_override": {
+    "bytes": 253930,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/mcexec_helpers.sentinel-corrected.rs",
+    "sha256": "da71f31656ccfc58a79c4dcca01f9c6742135c292b213b7d86113ebddc4cae0a"
+  },
+  "exact_changed_request_fields": {
+    "attempt_root": {
+      "before": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-evidence/attempt",
+      "after": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-attempt-1/owner-evidence/attempt"
+    },
+    "common_exclusion_path": {
+      "before": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/common-exclusion.json",
+      "after": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-attempt-1/common-exclusion.json"
+    },
+    "driver_path": {
+      "before": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/native_rust_exact_mckernel_image_offline.py",
+      "after": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/correction-1/launcher_only_offline.py"
+    },
+    "driver_sha256": {
+      "before": "bc2ff0e00864d08489425cf979d35c6717d040c6c8a18b85bb0d0e573904dc6a",
+      "after": "8a401e04462ddec4ad9f1204fa811efb8a9adb6167df27be27845799d2155f59"
+    },
+    "evidence_root": {
+      "before": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/evidence",
+      "after": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-attempt-1/owner-work/evidence"
+    },
+    "jobs": {
+      "before": 4,
+      "after": 1
+    },
+    "launcher_plan": {
+      "before": null,
+      "after": {
+        "bytes": 3577,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-plan.json",
+        "sha256": "58d346ad4f227cd9da07d36c6956216c85101ef34893bbf0ec5092f7383bff9d"
+      }
+    },
+    "lease_path": {
+      "before": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/lease.json",
+      "after": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-attempt-1/lease.json"
+    },
+    "output_root": {
+      "before": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output",
+      "after": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-attempt-1/owner-work/output"
+    },
+    "owner_evidence_root": {
+      "before": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-evidence",
+      "after": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-attempt-1/owner-evidence"
+    },
+    "work_root": {
+      "before": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work",
+      "after": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-attempt-1/owner-work"
+    }
+  },
+  "preserved_request_fields": [
+    "aggregate_memory_required",
+    "backup_identity",
+    "backup_inventory",
+    "backup_root",
+    "candidate_identity_scope",
+    "candidate_sha",
+    "disk_admission",
+    "disk_identity",
+    "gitlink_manifest",
+    "gitlink_manifest_sha256",
+    "gitlink_root",
+    "host_git",
+    "host_owner_path",
+    "host_owner_sha256",
+    "ihk_sha",
+    "image_id",
+    "image_receipt",
+    "image_receipt_sha256",
+    "launcher_aggregate_memory_gib",
+    "materialization_sha256",
+    "memory_allocation_roots",
+    "memory_backed_bytes",
+    "mounts",
+    "native_fork_owned_transaction",
+    "nightly",
+    "path_dirs",
+    "provenance_path",
+    "provenance_sha256",
+    "schema",
+    "source_derivative_sha256",
+    "source_identity",
+    "source_manifest",
+    "source_manifest_sha256",
+    "source_root",
+    "timeout",
+    "toolchain_lock_sha256",
+    "toolchain_manifest",
+    "toolchain_manifest_sha256",
+    "toolchain_roots"
+  ],
+  "owner_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/correction-1/launcher_only_container_owner.py",
+    "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-request.json"
+  ],
+  "in_container_build_argv": [
+    "/usr/bin/cmake",
+    "--build",
+    "/work/output/build",
+    "--target",
+    "mcexec",
+    "-j1"
+  ],
+  "base_authority_scope": "SOURCE0287/GATES986e authenticate the unchanged accepted base materialized tree/fingerprint and historical whole source gates only. New launcher overlay da71 is independently bound by plan58d and source-adaptation e493; no repeated whole6959 gate, compiler or kernel acceptance is asserted.",
+  "retained_lifecycle_scope": "Unchanged existing owner lease/client/container/resource/retirement control flow; actual attempted build retains stopped container/common/shared for separately qualified cleanup.",
+  "guard_dispatcher_review_pending": true,
+  "current_guard_whole_check_pending": true,
+  "source_publication_pending": true,
+  "final_execution_review_pending": true,
+  "execution_release": false,
+  "native_acceptance": false,
+  "application_acceptance": false,
+  "limitations": [
+    "This record supplies genuine existing guard-consumed owner/request/source-base fields; it excludes the future bound guard SHA to avoid circularity.",
+    "Finite guard/dispatcher correction must be independently checked against current owner/driver/request/plan and truthful six-artifact postconditions before its execution release.",
+    "Fresh one-heavy grant, current source publication, exact request/caller/release binding, resource/UUID/lock admission and separate final execution decision remain required."
+  ]
+}

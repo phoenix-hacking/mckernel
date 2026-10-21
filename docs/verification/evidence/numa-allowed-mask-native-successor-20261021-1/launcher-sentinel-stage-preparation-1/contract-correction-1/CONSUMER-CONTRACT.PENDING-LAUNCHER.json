@@ -1,0 +1,89 @@
+{
+  "bzImage": {
+    "mode": 33188,
+    "path": "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+    "sha256": "032653ee0661b059c325e2a0911a9d492805f1a889c4df515473d69a8be105bc",
+    "size": 16130048
+  },
+  "expected_observed_delta": [
+    "bin/mcexec"
+  ],
+  "final_members": 60,
+  "full_metadata_order_padding_preserved": true,
+  "kernel_artifact_acceptance": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/independent-runtime-binding-review-1/ROOT-RECORDED-CANONICAL-ARTIFACT-SCHEMA-PROJECTION-1.json",
+    "sha256": "84bfc043987fc67444e627bef142b2ddaf6c19107d92ba307d50ee10fa157edd",
+    "size": 8699
+  },
+  "kernel_image": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel/scratch/numa-a-20261021-2/image.artifact",
+    "sha256": "1d8c4e78f7219792c0d2008952e11602a19451eb6697593ec10f0c77a8f1c101",
+    "size": 8427720
+  },
+  "launcher_artifact": null,
+  "launcher_artifact_acceptance": null,
+  "launcher_dependency_join": null,
+  "launcher_source_sha256": "da71f31656ccfc58a79c4dcca01f9c6742135c292b213b7d86113ebddc4cae0a",
+  "matched_modules": [
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk.ko",
+      "sha256": "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+      "size": 1440392
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/ihk-smp-x86_64.ko",
+      "sha256": "82c9021f7491fa8bc6d178fe99e7d4b7b6f90838474a9c91b62ddb8edb3d13f8",
+      "size": 11630064
+    },
+    {
+      "mode": 33188,
+      "path": "/home/holden/mckernel-work/scratch/nsd-c-a7d84db0d8b54b9b94347fd0aff57594/modules/mcctrl.ko",
+      "sha256": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972",
+      "size": 1913904
+    }
+  ],
+  "native_acceptance": false,
+  "payload": {
+    "mode": 33261,
+    "path": "/home/holden/mckernel/scratch/numa-a-20261021-2/numa.app",
+    "sha256": "0339cb5fcba4ea4f1f2977fd0d3a7653b48e0af1de7e0625fbfafbfe13fce5fb",
+    "size": 5619416
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "threads"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 37,
+      "stderr_hex": "",
+      "stdout_hex": "6e756d6120616c6c6f7765643d3120696e74657276616c3d3120717565726965733d39206d6f64653d31206d61736b3d31206e65696768626f72733d322070726f636573733d31206775617264733d312062797465733d3132323838207072657365727665643d3120756e6d61707065643d310a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "runtime_release": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_change": "PLD_MPOL_MAX4\u21925 only",
+  "status": "PENDING_GENUINE_LAUNCHER_ARTIFACT_AND_DEPENDENCY_NO_AUTHORITY",
+  "unchanged_dependency_ancestry": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/settid-current-image-native-app-preparation-20261021-1/independent-review-1/actual-static-dependency-closure-acceptance.json",
+    "sha256": "338f6eafeefce26cf4fb826c58d17762c7c204806e146b09ec480facd4452314",
+    "size": 8372
+  },
+  "unchanged_members": 59
+}

@@ -1,0 +1,106 @@
+{
+  "schema": "mckernel.launcher-sentinel.launcher-only-source-adaptation-review.v1",
+  "status": "PASS_SOURCE_ADAPTATION_ONLY",
+  "decision": "PASS_FOCUSED_SOURCE_CONTRACT_PENDING_EXACT_EXECUTION_BINDINGS",
+  "reviewer": "/root/numa_image_source_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "findings": [],
+  "reviewed_driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/correction-1/launcher_only_offline.py",
+    "bytes": 9439,
+    "sha256": "8a401e04462ddec4ad9f1204fa811efb8a9adb6167df27be27845799d2155f59"
+  },
+  "reviewed_owner": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/correction-1/launcher_only_container_owner.py",
+    "bytes": 91547,
+    "sha256": "9beddcebdee6542e9357af666be340a59c628822c2e8c785e3c572bc5d5422ab"
+  },
+  "reviewed_plan": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-plan.json",
+    "bytes": 3577,
+    "sha256": "58d346ad4f227cd9da07d36c6956216c85101ef34893bbf0ec5092f7383bff9d"
+  },
+  "accepted_base_owner": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/native_rust_exact_mckernel_image_container_owner.py",
+    "bytes": 88727,
+    "sha256": "84844a50f98267b6acff57ed6b0854a97c8999a81a520493b6762e4cabaa93a2"
+  },
+  "accepted_base_driver": {
+    "bytes": 135622,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/native_rust_exact_mckernel_image_offline.py",
+    "sha256": "bc2ff0e00864d08489425cf979d35c6717d040c6c8a18b85bb0d0e573904dc6a"
+  },
+  "accepted_base_source": {
+    "bytes": 2092,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/execution-preparation-1/ROOT-RECORDED-GUARD-SCHEMA-SOURCE-ACCEPTANCE.json",
+    "sha256": "028700272e870651b8af9f1251e3e9c27aad789c87f57314ab02eba27ff37171"
+  },
+  "source_override": {
+    "bytes": 253930,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/mcexec_helpers.sentinel-corrected.rs",
+    "sha256": "da71f31656ccfc58a79c4dcca01f9c6742135c292b213b7d86113ebddc4cae0a"
+  },
+  "original_source": {
+    "bytes": 253930,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/source-materialization-1/materialized-source/executer/user/rust/mcexec_helpers.rs",
+    "sha256": "80e59ae27fe87bdced4e08bd3bdb580185b439311a4fba1daaade7308630afc8"
+  },
+  "source_delta": "Exactly one PLD_MPOL_MAX c_int literal4→5 in executer/user/rust/mcexec_helpers.rs; kernel/app/oracle source unchanged.",
+  "preserved_first_candidates": {
+    "driver": {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher_only_offline.py",
+      "bytes": 8290,
+      "sha256": "af25a60ebd0f4ac39ab7c2cd987342f8d12b6b9da17e140886c2beb980b9671e"
+    },
+    "owner": {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher_only_container_owner.py",
+      "bytes": 90068,
+      "sha256": "30a9427bbe2301e72a355bbde3fae66fe273174ffc06c5654a388d43ae1ab733"
+    }
+  },
+  "resolved_findings": [
+    {
+      "symbol": "launcher_only_offline.main/run",
+      "original_issue": "Accepted SignalLatch wrapper omitted.",
+      "correction": "One authenticated base module instance is loaded in main, enters base.SignalLatch, and is passed to run and all accepted process helpers."
+    },
+    {
+      "symbol": "launcher_only_offline.run and launcher_only_container_owner._validate_driver_result",
+      "original_issue": "Prior evidence inventory sealing/completeness check omitted.",
+      "correction": "Driver hashes actual evidence excluding receipt and rechecks final artifacts; owner restores original regular-file inventory completeness/size/hash checks before six launcher artifacts."
+    }
+  ],
+  "accepted_invariants": [
+    "One exact cmake --build /work/output/build --target mcexec -j1; retained Makefile2 pins exactly libmcexec and mcexec_rust_helpers dependencies. No kernel build or copied-kernel production claim.",
+    "Read-only retained configured build is copied into a disjoint fresh canonical /work/output/build; only copied mcexec_helpers.o and mcexec are invalidated, forcing whole Rust compilation and link. Original retained inputs remain read-only.",
+    "Plan binds actual source override/original literal delta, genuine accepted6959 base inode/fingerprints and unchanged C consumer/CMake hashes; it does not fabricate a new whole-tree acceptance.",
+    "Six truthful component artifacts and actual C import/Rust unique provider/asm bridge/ELF NEEDED joins are required before launcher receipt PASS. Logs and provider files are sealed by complete evidence inventory.",
+    "Four CPU2-5/12GiB/no swap/512tasks/offline container and existing sole-RWwork/check-profile/pre-start measurement remain inherited unchanged.",
+    "Owner shared acquisition, validation, common exclusion, lease, Docker client ownership, stopped-container retirement, logs, input revalidation, receipt seal and conditional release control flow is unchanged except truthful scope/name and five extra ROmounts.",
+    "All driver build/proof children use the accepted bounded process helpers and same signal latch. Failure or interruption produces FAIL and preserves evidence; owner retirement uncertainty preserves lease/records.",
+    "Actual attempted build retains stopped container/common/shared and cleanup_separately_requiredTrue. Lease is released only on proven retirement; no container absence or broader physical clearance follows."
+  ],
+  "retained_build": {
+    "dev": 66306,
+    "file_type": "directory",
+    "gid": 1000,
+    "inode": 48508888,
+    "mode": "0o700",
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/full-image-attempt-1/owner-work/output/build",
+    "uid": 1000
+  },
+  "retained_build_bytes": 60500009,
+  "clone_growth_bytes": 328935465,
+  "extra_host_reserve_bytes": 536870912,
+  "execution_release": false,
+  "builds_executed_by_reviewer": 0,
+  "imports_executed_by_reviewer": 0,
+  "native_acceptance": false,
+  "kernel_image_acceptance_changed": false,
+  "remaining_exact_execution_bindings": [
+    "Request must name correction-1 owner/driver exact hashes, unchanged plan58d/source original+override/retained build pins, jobs1/native_fork_owned_transactionTrue and exact fresh attempt/work/evidence/lease/common paths.",
+    "Existing request/toolchain/source/provenance/profile/mount/disjointness checks must bind current values; one exact owner/caller invocation requires genuine fetched code provenance and fresh one-heavy resource/UUID/lock grant.",
+    "No build execution is approved by this source receipt. No extra framework, qualification gate or optional test is required by this review."
+  ]
+}
