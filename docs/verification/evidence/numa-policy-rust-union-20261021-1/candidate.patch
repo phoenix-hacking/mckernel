@@ -1,0 +1,65 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -20382,8 +20382,17 @@
+ }
+ #endif /*ENABLE_PERF*/
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++extern struct vm_range_numa_policy *
++syscall_vm_range_policy_search_body_result(struct process_vm *vm,
++		unsigned long addr);
++#endif
++
+ struct vm_range_numa_policy *vm_range_policy_search(struct process_vm *vm, uintptr_t addr)
+ {
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++	return syscall_vm_range_policy_search_body_result(vm, addr);
++#else
+ 	struct rb_root *root = &vm->vm_range_numa_policy_tree;
+ 	struct rb_node *node = root->rb_node;
+ 	struct vm_range_numa_policy *numa_policy = NULL;
+@@ -20400,6 +20409,7 @@
+ 	}
+ 
+ 	return NULL;
++#endif
+ }
+ 
+ static int vm_policy_insert(struct process_vm *vm,
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -7856,6 +7856,34 @@
+     }
+ }
+ 
++/// Finds the NUMA policy whose half-open range contains addr.
++///
++/// Safety: vm and all traversed nodes are live, aligned allocations with the
++/// checked C layouts. The caller keeps the tree stable under its existing
++/// locking/lifetime rules. A returned policy is borrowed from that same tree.
++#[no_mangle]
++pub unsafe extern "C" fn syscall_vm_range_policy_search_body_result(
++    vm: *mut ProcessVm,
++    addr: CULong,
++) -> *mut VmRangeNumaPolicy {
++    let mut node = unsafe { (*vm).vm_range_numa_policy_tree.rb_node };
++    while !node.is_null() {
++        let policy = unsafe {
++            node.cast::<u8>()
++                .sub(offset_of!(VmRangeNumaPolicy, policy_rb_node))
++                .cast::<VmRangeNumaPolicy>()
++        };
++        if addr < unsafe { (*policy).start } {
++            node = unsafe { (*node).rb_left };
++        } else if addr >= unsafe { (*policy).end } {
++            node = unsafe { (*node).rb_right };
++        } else {
++            return policy;
++        }
++    }
++    null_mut()
++}
++
+ #[no_mangle]
+ pub unsafe extern "C" fn mbind_body_result(
+     addr: CULong,

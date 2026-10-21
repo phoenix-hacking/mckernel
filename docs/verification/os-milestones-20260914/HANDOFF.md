@@ -1,3 +1,31 @@
+## Current — NUMA union integrated; current-image terminal release pending
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Accepted counters remain21/35 checks,five whole,28native,Rust17/14,26compiler builds.
+Reviewed NUMA traversal+getter snapshot union is integrated at exact shared preimages:
+syscall.c ae7134ce and syscall_policy.rs75b89149; rootreceipt9216b6ec. Traversal22case
+acceptance9905682d and caller33scenario/66call acceptancea50d9964 are finite body
+proof only. Getter now snapshots matched policy/requestedmask under the existing
+read lock and usercopies after unlock. No production compile/link/native/default/
+C-retirement credit. Evidence: ../evidence/numa-policy-rust-union-20261021-1/.
+Frozen four-overlay imagea818/mcexec689d/source copies are unchanged.
+
+CurrentPASS2 observer1.760429s, summary/FDmetadata/raw5 allCLOSED0 and independently
+accepted55a0f351. Exact634880B archive/fiveoriginals/88objects97roles/9+9artifacts/
+32inventory/8clientchannels retained. Root0700 originalpermissions preserved;
+ordinary reviewcopies are byteexact. Originalcleanupdraft NOT_RELEASED unchanged.
+One canonical cleanup payload dcace615 is with m06_closed_stage_review for exact
+preflight→cleanup→conditionalpostjoin release; no cleanup execution yet.
+
+Existing thread app558d/25Bstdout/exit37 staged18.999628s, acceptedc6ad2a7f with
+actual1bceced3 manifest; static118symbol/d99module ABI dependency join338f6eaf.
+First normalization failed0.210305s at raw-vs-loader profiledefault equality,
+before any outputs; originalfailure c411490f retained. One coupled successor
+adds only genuine loader-default/schema/fulltuple binding and host-only binder
+classification, with actual8case bodycheck before fresh -2normalization. No guest
+or repeatedstage/ELF/compiler run. sdk66_source_review remains attached.
+SDK/no-resize and all existing evidence/service/ownership/floor controls remain.
+
 ## Current — image build/link accepted; terminal clearance and thread app next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -7856,6 +7856,34 @@ unsafe fn policy_mask_copy_words(dst: *mut CULong, src: *const CULong) {
     }
 }
 
+/// Finds the NUMA policy whose half-open range contains addr.
+///
+/// Safety: vm and all traversed nodes are live, aligned allocations with the
+/// checked C layouts. The caller keeps the tree stable under its existing
+/// locking/lifetime rules. A returned policy is borrowed from that same tree.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_vm_range_policy_search_body_result(
+    vm: *mut ProcessVm,
+    addr: CULong,
+) -> *mut VmRangeNumaPolicy {
+    let mut node = unsafe { (*vm).vm_range_numa_policy_tree.rb_node };
+    while !node.is_null() {
+        let policy = unsafe {
+            node.cast::<u8>()
+                .sub(offset_of!(VmRangeNumaPolicy, policy_rb_node))
+                .cast::<VmRangeNumaPolicy>()
+        };
+        if addr < unsafe { (*policy).start } {
+            node = unsafe { (*node).rb_left };
+        } else if addr >= unsafe { (*policy).end } {
+            node = unsafe { (*node).rb_right };
+        } else {
+            return policy;
+        }
+    }
+    null_mut()
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn mbind_body_result(
     addr: CULong,
@@ -8209,7 +8237,8 @@ pub unsafe extern "C" fn get_mempolicy_body_result(
         return 0;
     }
 
-    let mut range_policy: *mut VmRangeNumaPolicy = core::ptr::null_mut();
+    let mut range_policy_snapshot: Option<CInt> = None;
+    let mut range_mask_snapshot = [0 as CULong; PROCESS_NUMA_MASK_WORDS];
     if (flags & MPOL_F_ADDR) != 0 {
         let (Some(read_lock), Some(read_unlock), Some(lookup_range), Some(policy_search)) = (
             read_lock_fn,
@@ -8230,14 +8259,26 @@ pub unsafe extern "C" fn get_mempolicy_body_result(
             return -(EFAULT as CLong);
         }
 
-        range_policy = policy_search(vm, addr);
+        let range_policy = policy_search(vm, addr);
+        if !range_policy.is_null() {
+            // The tree owns this policy and a writer may free it after unlock.
+            // Snapshot only kernel values here; user copies remain unlocked.
+            let policy = (*range_policy).numa_mem_policy;
+            if nodemask_addr != 0 && policy != MPOL_DEFAULT {
+                copy_nonoverlapping(
+                    core::ptr::addr_of!((*range_policy).numa_mask).cast::<u8>(),
+                    range_mask_snapshot.as_mut_ptr().cast::<u8>(),
+                    (nodemask_bits >> 3) as SizeT,
+                );
+            }
+            range_policy_snapshot = Some(policy);
+        }
         read_unlock(lock);
     }
 
-    let policy = if !range_policy.is_null() {
-        (*range_policy).numa_mem_policy
-    } else {
-        (*vm).numa_mem_policy
+    let policy = match range_policy_snapshot {
+        Some(policy) => policy,
+        None => (*vm).numa_mem_policy,
     };
 
     if mode_addr != 0
@@ -8251,8 +8292,8 @@ pub unsafe extern "C" fn get_mempolicy_body_result(
     }
 
     if nodemask_addr != 0 && policy != MPOL_DEFAULT {
-        let mask = if !range_policy.is_null() {
-            (*range_policy).numa_mask.as_ptr()
+        let mask = if range_policy_snapshot.is_some() {
+            range_mask_snapshot.as_ptr()
         } else {
             (*vm).numa_mask.as_ptr()
         };

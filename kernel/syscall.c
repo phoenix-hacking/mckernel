@@ -20382,8 +20382,17 @@ perf_event_open_do_syscall_bridge(struct syscall_request *request, int cpu)
 }
 #endif /*ENABLE_PERF*/
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern struct vm_range_numa_policy *
+syscall_vm_range_policy_search_body_result(struct process_vm *vm,
+		unsigned long addr);
+#endif
+
 struct vm_range_numa_policy *vm_range_policy_search(struct process_vm *vm, uintptr_t addr)
 {
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	return syscall_vm_range_policy_search_body_result(vm, addr);
+#else
 	struct rb_root *root = &vm->vm_range_numa_policy_tree;
 	struct rb_node *node = root->rb_node;
 	struct vm_range_numa_policy *numa_policy = NULL;
@@ -20400,6 +20409,7 @@ struct vm_range_numa_policy *vm_range_policy_search(struct process_vm *vm, uintp
 	}
 
 	return NULL;
+#endif
 }
 
 static int vm_policy_insert(struct process_vm *vm,
