@@ -1,3 +1,32 @@
+## Current — strict NUMA application and physical retirement accepted
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Genuine independent application acceptance5c4ed97b and physical acceptance9223c7ba
+close the corrected launcher NUMA attempt: exact116B positional output, empty
+stderr, exit37/raw9472, native McKernel route and procfs retirement. Seven-step
+controller closed0; native owner37.410314s; all groups/30clients retired and
+container absent. Raw diagnostic labels and all original failures remain intact.
+
+Accepted totals87sources(33OS54infra),30compiler batches,7native batches,
+29distinct native behaviors,21/35practical checks,five whole milestones,
+Rust17selected/14native. Delta +1behavior/+1batch only; no Rust/default/C-retirement,
+practical-check or full public CPU/memory restoration credit from this app.
+Retained checkpoint: ../evidence/numa-allowed-mask-native-successor-20261021-1/
+launcher-strict-numa-native-accepted-1.manifest.json. Genuine reviewer/compiler_review,
+physical reviewer/source_review, root recorder attribution retained separately.
+
+Launcher artifact13:06:08.124394UTC to exact owner terminal14:26:42.020166UTC
+is80.564929533min. This is the observed owner-terminal endpoint, not an invented
+absolute first-app-byte timestamp; no overall speedup claim.
+
+Next parallel tracks: existing qualified six-launch regression with only reviewed
+four-member stage/consumer delta (reuse accepted image/launcher/modules; no build
+or new harness), matching selected-suite/repaired-boundary evidence to P-M11-01
+and bounded M12; independent Rust P-M06-01 child/process ownership implementation
+and P-M05 restoration gaps. Budgets2boots/10public native cycles/100app launches/
+60mixed minutes allow matched overlap/reuse. VM teardown alone earns no full
+public restoration credit. Source workers quiesce before exclusive census.
+
 ## Current — exact-nanosecond receipt corrected; fresh runtime final19 ready
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -72,18 +72,17 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 
 ### Next practical work
 
-- Actualholderretirement acceptedf86c; originalcallerclosedfailed-9/positivejoin. Exactquarantine-only archival7aca/profile9bbe source/profilePASS awaiting genuinepublished canonicalpayload executionreview+freshgrant; preserveMUTEX116297/private25e094/records. No census/Docker inarchive.
-- After actualarchive acceptance activate reviewed5f67+7dretainedmutexcaller/postjoin245/body602 with genuineengineidentityaddendum; exactsamefinalrelease retained-preflight/cleanup/postjoin and freshcensus only after release and stablemonitor2590193/start37928121 rootACK. No acceptedcheckreplays.
-- Run one fresh focused NUMA native consumer after its exact release; preserve all failures and measure actual accepted-image-to-native feedback without advance speedup or acceptance claims.
-- Continue open real process child ownership handoff and native lifecycle/restoration against supported matched artifacts; preserve artifact-scoped evidence and counts.
-- Preserve SDK66 capacity/no-resize blocker, scratch UUID/110GiB, failed evidence, actual service/auth/resource stops and one-heavy profile; qualification remains deferred.
+- Reuse accepted current kernel1d8/launcher33f/modules51b48a9e/82c9021f/6571ac7e for existing six-launch regression; review only required four-member stage/consumer delta, no build/new framework. Bind actual matched suite/repaired-boundary results to P-M11-01 and bounded M12.
+- Continue real Rust P-M06-01 process creation/exec/wait/child ownership and P-M05 restoration implementation in parallel with source preparation; preserve uncertain-publication credits and require actual CPU/memory/mapping/callback/reference restoration evidence.
+- Final-profile budgets remain2boots/10complete public native lifecycle cycles/100app launches/60mixed minutes; matching observations may overlap/reuse. VM termination alone is not public native restoration.
+- Preserve strict accepted NUMA app/physical evidence, all failures, one-heavy controls/floors/noresize; quiesce source subprocesses before exclusive census. SDK66 capacity blocker remains; deferred qualification is not passed.
 
 Original formal qualification is **historical / DEFERRED**. Deferred does not mean passed; its counters below do not define practical completion.
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-21T14:23:21+00:00`
-- Launcher state heartbeat: `2026-10-21T14:23:07.294104+00:00`
+- Dashboard refreshed: `2026-10-21T14:43:45+00:00`
+- Launcher state heartbeat: `2026-10-21T14:43:37.764393+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `2486026`; server PID: `2486028`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261021T070405Z-729d8cb8`
