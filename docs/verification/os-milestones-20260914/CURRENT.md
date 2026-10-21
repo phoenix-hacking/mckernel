@@ -1,3 +1,25 @@
+## Current — clear interleave cursor corrected and independently accepted
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The supported split-tail finding is resolved in exact integrated Rust3234a384
+(707836B): initialize il_prev to sentinel255 before insert publication, without
+reading the source cursor. Independent source/actualconsumer acceptancea50feffe,
+rootintegrationf3181358. Both focused compile/test commands0, directjoined/groups
+absent/no timeout. Dirty reused tail makes original body cursor2 select5; corrected
+body initializes255 before publication and actual allocator selects2,5,2 with
+accounting/cursor updates. DEFAULT source cursor remains genuinely uninitialized
+and unread. Compiler emitted one unused addr_of import warning; teststderr empty.
+Original parity/caller acceptance and narrow finding preserved; no parity replay.
+The unchanged C fallback retains the inherited cursor defect; no fallback consumer
+correctness claim. Only minimal Rust changed, no additional coherent source credit.
+
+Next: successor of existing J preparation updates exact Rust overlay/pins and
+namespace, preserving gates/body/profile; actual materializer, genuine private
+source/inode acceptance and existing wholevalidators once, then production build.
+No new build/native authority from source-only records. Existing accepted insertion
+four-object outputs reused. Counts22/35/fivewhole/90source/31compiler/8native/
+29behaviors/Rust19-16 held. Strict116B app and accepted runtime tuple remain.
+
 ## Current — insertion four-object join accepted; clear interleave cursor correction required
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

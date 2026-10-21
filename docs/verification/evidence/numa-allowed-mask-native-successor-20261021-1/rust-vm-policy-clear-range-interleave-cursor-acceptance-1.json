@@ -1,0 +1,38 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_CORRECTED_RUST_CLEAR_FOR_CURRENT_VALIDATED_MBIND_INTEGRATION",
+  "reviewer": "/root/numa_clear_range_review",
+  "recorder": "/root",
+  "provenance": "Genuine final independent reviewer response in dispatcher conversation, recorded by root; reviewer performed no writes or test replay.",
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-clear-range-rust-20261021-1/interleave-cursor-correction-1/clear_range_cursor_initialized.rs",
+    "sha256": "9a51762d8e7e74166ad9f2efce23544ff68e7676c0ddc6306d7eba58b9e60b97",
+    "bytes": 5252
+  },
+  "freeze": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-clear-range-rust-20261021-1/interleave-cursor-correction-1/SOURCE-FREEZE.json",
+    "sha256": "315a5dca92260781401ba6ee0ebfda5cc445e30c9dac2a50498b70478af0f912",
+    "bytes": 4520
+  },
+  "test": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-clear-range-rust-20261021-1/interleave-cursor-correction-1/focused_tests.rs",
+    "sha256": "4116d822c19ee1778d5b8dbd35c07596aca37c7cac0374b3a06a8c5f38806b08",
+    "bytes": 8468
+  },
+  "result": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-clear-range-rust-20261021-1/interleave-cursor-correction-1/focused-correction-result-1.json",
+    "sha256": "a27eb9ed1a80aa46bf056d5abd66323a25bf2b285fc6c36de68f5046bdbc0253",
+    "bytes": 2823
+  },
+  "review": [
+    "Sole executable correction writes established sentinel255 before publication, no source cursor read or lock/callback/ownership/error/range changes.",
+    "Actual old body with reused cursor2 selects5; corrected cursor255 selects2,5,2 with cursor/accounting updates.",
+    "DEFAULT source MaybeUninit cursor remains unwritten/unread; only initialized fields accessed.",
+    "Nine actual allocator/dependency bodies match production; physical allocation callbacks are fixtures.",
+    "All14 frozen inputs and four stream hashes/sizes matched; both commands0, joined/groupsabsent/no timeout."
+  ],
+  "compiler_warning": "227-byte stderr is one unused addr_of import warning at focused_tests.rs:7; no warning-free claim.",
+  "disposition": "Prior supported-interleave finding resolved for corrected Rust only. Original finding/parity/caller evidence preserved. Unchanged C fallback retains inherited defect.",
+  "limits": "Host actual-consumer composition within validated mbind contract only; no fullcrate/default/link/native/retirement credit.",
+  "next_check": "Exact corrected source materialization and production build."
+}

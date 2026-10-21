@@ -23245,7 +23245,8 @@ type SyscallPolicyRbNextFn = unsafe extern "C" fn(*const AbiRbNode) -> *mut AbiR
 type SyscallPolicyClearFreeFn = unsafe extern "C" fn(*mut c_void);
 type SyscallPolicyClearLogFn = unsafe extern "C" fn(CInt, CInt);
 
-/// Clears policy ranges with the original C ordering and partial mutations.
+/// Clears policy ranges with original ordering and partial mutations, initializing
+/// the new tail interleave cursor before publication.
 ///
 /// Safety: start < end; the caller holds the existing exclusive VM policy-tree
 /// lock and supplies a valid, disjoint half-open-range tree. vm and linked
@@ -23301,7 +23302,10 @@ pub unsafe extern "C" fn syscall_vm_policy_clear_range_body_result(
                     (*tail).start = end;
                     (*tail).end = orig_end;
                     (*tail).numa_mem_policy = (*iter).numa_mem_policy;
-                    // C copies only mask, leaving il_prev and RB child bytes alone.
+                    // Initialize without reading the source cursor: noninterleave
+                    // source policies need not have an initialized il_prev.
+                    (*tail).il_prev = (PROCESS_NUMA_MASK_BITS - 1) as CInt;
+                    // Copy only the existing policy mask; RB children are set by insert.
                     core::ptr::copy_nonoverlapping(
                         core::ptr::addr_of!((*iter).numa_mask),
                         addr_of_mut!((*tail).numa_mask),
