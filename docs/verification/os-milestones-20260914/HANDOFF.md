@@ -1,3 +1,31 @@
+## Current — physical accepted; corrected whole caller and final static joins pass
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Scoped physical readback0/.782712s/emptyerr/directjoin/groupabs, independently
+accepted7ebbf; rootmechanical physical23057/mapping88b2 retain reviewer provenance,
+actual raw exports, both genuine tool-terminal pairs and observed wrapper births.
+Exact CID/client retirement,27:4/116329 reacquisition,nine original files and valid
+eight-event journal remain strict. Originalfailedcleanup/quarantine preserved;
+no ninth event, normalcleanupPASS, replay, unlink or kernel-failure claim.
+
+Original runtime constructor passed, wholecaller then failed at genuine d7
+normalized_manifest.bytes (actualfield size). One consolidated correction95cdd
+adapts binder/snapshot typedsize+mode/current four-field normalization receipt
+and actual eight-state negative APIs. Actualcorrectedconstructor0/.096818s;
+wholecaller0/.423669s/5cases/19pending/7rows49freshpaths/emptyerr, genuine static
+acceptance8678. Final-mode binder0/.106185s emitsactualfinal19; full pure
+static_joins0/.176581s/emptyerr, no root/snapshot/guest. All failures retained.
+Decoder978/producerdd7b, image053d/stage51ec/normd7/launcher33f unchanged.
+
+Next exact seven-step release/freshaggregategrant and quiescent admission,
+LASTsnapshot/machine/finalguard then one strict NUMA app and success-onlyreadbacks.
+Register exact capture paths in persistentreader beforecriticalwait; any
+QUARANTINED marker means recovery_required, never indefinite terminal waiting.
+Future progress patch is separately integrated by foreground without current
+restart; existing admitted reader remains current visibility authority.
+Countsheld90source/32compiler/8native/29behaviors/22checks/fivewhole/Rust19-16.
+Image-to-nativeclock18:06:04UTC stillopen. No new native/retirement credit.
+
 ## Current — holder retired; paired physical producer/decoder check passed
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
