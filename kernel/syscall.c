@@ -24721,8 +24721,22 @@ SCHED_POLICY_HELPER_SCOPE long sched_getaffinity_body_result(int tid,
 
 /* We do not have actual scheduling classes so we just make sure we store
  * policies and priorities in a POSIX/Linux complaint manner */
+#ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS
+extern int setscheduler_body_result(unsigned long thread_addr, int policy,
+		unsigned long param_addr, size_t param_size,
+		size_t priority_offset, size_t thread_param_offset,
+		size_t thread_policy_offset);
+#endif
+
 static int setscheduler(struct thread *thread, int policy, struct sched_param *param)
 {
+#ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS
+	return setscheduler_body_result((unsigned long)thread, policy,
+			(unsigned long)param, sizeof(*param),
+			__builtin_offsetof(struct sched_param, sched_priority),
+			__builtin_offsetof(struct thread, sched_param),
+			__builtin_offsetof(struct thread, sched_policy));
+#else
 	int ret;
 
 	ret = setscheduler_validate(policy, param->sched_priority);
@@ -24734,6 +24748,7 @@ static int setscheduler(struct thread *thread, int policy, struct sched_param *p
 	thread->sched_policy = policy;
 
 	return 0;
+#endif
 }
 
 static const struct sched_syscall_offsets sched_syscall_offsets = {

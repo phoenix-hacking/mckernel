@@ -800,6 +800,44 @@ pub extern "C" fn setscheduler_validate(policy: CInt, priority: CInt) -> CInt {
     0
 }
 
+/// Applies a previously copied kernel sched_param to a live selected thread.
+///
+/// Safety: the caller provides valid aligned int fields, readable param_size
+/// bytes at param_addr, and a live writable thread with the supplied C offsets.
+/// Source and destination do not overlap, as required by the original memcpy.
+/// Existing caller locking/lifetime rules remain the caller's responsibility.
+#[no_mangle]
+pub unsafe extern "C" fn setscheduler_body_result(
+    thread_addr: usize,
+    policy: CInt,
+    param_addr: usize,
+    param_size: SizeT,
+    priority_offset: SizeT,
+    thread_param_offset: SizeT,
+    thread_policy_offset: SizeT,
+) -> CInt {
+    let priority = unsafe {
+        core::ptr::read(param_addr.wrapping_add(priority_offset) as *const CInt)
+    };
+    let ret = setscheduler_validate(policy, priority);
+    if ret != 0 {
+        return ret;
+    }
+
+    unsafe {
+        core::ptr::copy_nonoverlapping(
+            param_addr as *const u8,
+            thread_addr.wrapping_add(thread_param_offset) as *mut u8,
+            param_size,
+        );
+        core::ptr::write(
+            thread_addr.wrapping_add(thread_policy_offset) as *mut CInt,
+            policy,
+        );
+    }
+    0
+}
+
 #[no_mangle]
 pub extern "C" fn sched_rr_interval_nsec(policy: CInt) -> i64 {
     if policy == SCHED_RR {
@@ -1158,19 +1196,38 @@ pub unsafe extern "C" fn sched_setscheduler_body_result(
     }
 
     let offsets = unsafe { &*offsets };
-    let (thread, normalized_pid, other_thread) =
-        match unsafe { sched_select_thread(pid, current_thread, offsets, find_fn, unlock_fn) } {
-            Ok(selected) => selected,
+    let normalized_pid = unsafe {
+        match sched_normalized_pid(pid, current_thread, offsets) {
+            Ok(pid) => pid,
             Err(ret) => return ret,
-        };
-    if other_thread {
-        let ret = unsafe { syscall2(syscall_nr, SCHED_CHECK_SAME_OWNER, normalized_pid as CULong) };
-        if ret != 0 {
-            return ret;
         }
+    };
+    let current_pid = unsafe { sched_thread_pid(current_thread, offsets) };
+    if current_pid < 0 {
+        return sched_errno(EINVAL);
+    }
+    if current_pid == normalized_pid {
+        return unsafe { apply(current_thread, policy, param_addr) as CLong };
     }
 
-    unsafe { apply(thread, policy, param_addr) as CLong }
+    let (Some(find_thread), Some(thread_unlock)) = (find_fn, unlock_fn) else {
+        return sched_errno(EINVAL);
+    };
+    let thread = unsafe { find_thread(normalized_pid) };
+    if thread == 0 {
+        return sched_errno(ESRCH);
+    }
+    // find_thread owns a reference but has already dropped its hash lock.
+    // Keep that SAME allocation across offload; a repeated ID lookup could
+    // select a different target. Every normal return below consumes this edge.
+    let ret = unsafe { syscall2(syscall_nr, SCHED_CHECK_SAME_OWNER, normalized_pid as CULong) };
+    if ret != 0 {
+        unsafe { thread_unlock(thread) };
+        return ret;
+    }
+    let ret = unsafe { apply(thread, policy, param_addr) as CLong };
+    unsafe { thread_unlock(thread) };
+    ret
 }
 
 #[no_mangle]

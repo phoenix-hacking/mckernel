@@ -1,0 +1,128 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "write_ownership": "/home/holden/mckernel-work/host-preparation/scheduler-current-combined-source-20261021-1 ONLY",
+  "unchanged_frozen_roots": [
+    "current160",
+    "image6959"
+  ],
+  "impact": [
+    {
+      "relative": "kernel/syscall.c",
+      "image_materializer_origin": "/home/holden/mckernel-work/host-preparation/guest-settid-rust-candidate-20261021-1/compile-execution-preparation-1/materialized-source/kernel/syscall.c",
+      "live": {
+        "path": "/home/holden/mckernel/kernel/syscall.c",
+        "bytes": 838685,
+        "sha256": "81404ef35d90cf965c1f46ba200d6d83106576373c0ddd84128c638dffe3b6fb"
+      },
+      "frozen_roots": [
+        {
+          "name": "current160",
+          "file": {
+            "path": "/home/holden/mckernel-work/host-preparation/guest-settid-rust-candidate-20261021-1/compile-execution-preparation-1/materialized-source/kernel/syscall.c",
+            "bytes": 838685,
+            "sha256": "81404ef35d90cf965c1f46ba200d6d83106576373c0ddd84128c638dffe3b6fb"
+          },
+          "device": 66306,
+          "inode": 48393635,
+          "same_file_as_live": false
+        },
+        {
+          "name": "image6959",
+          "file": {
+            "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/source-materialization-1/materialized-source/kernel/syscall.c",
+            "bytes": 838685,
+            "sha256": "81404ef35d90cf965c1f46ba200d6d83106576373c0ddd84128c638dffe3b6fb"
+          },
+          "device": 66306,
+          "inode": 48398000,
+          "same_file_as_live": false
+        }
+      ]
+    },
+    {
+      "relative": "kernel/rust/sched_helpers.rs",
+      "image_materializer_origin": "/home/holden/mckernel-work/host-preparation/phase5-runtime-exit-wait-retirement-consumer-20261020-1/source/kernel/rust/sched_helpers.rs",
+      "live": {
+        "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+        "bytes": 168552,
+        "sha256": "8c5f69629882e7bdcca88fdc7a7fe58d762cf9906e065a0da932f0dfb260628e"
+      },
+      "frozen_roots": [
+        {
+          "name": "current160",
+          "file": {
+            "path": "/home/holden/mckernel-work/host-preparation/guest-settid-rust-candidate-20261021-1/compile-execution-preparation-1/materialized-source/kernel/rust/sched_helpers.rs",
+            "bytes": 168552,
+            "sha256": "8c5f69629882e7bdcca88fdc7a7fe58d762cf9906e065a0da932f0dfb260628e"
+          },
+          "device": 66306,
+          "inode": 48393614,
+          "same_file_as_live": false
+        },
+        {
+          "name": "image6959",
+          "file": {
+            "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/source-materialization-1/materialized-source/kernel/rust/sched_helpers.rs",
+            "bytes": 168552,
+            "sha256": "8c5f69629882e7bdcca88fdc7a7fe58d762cf9906e065a0da932f0dfb260628e"
+          },
+          "device": 66306,
+          "inode": 48397957,
+          "same_file_as_live": false
+        }
+      ]
+    }
+  ],
+  "current160_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/guest-settid-rust-candidate-20261021-1/compile-execution-preparation-1/source-manifest.json",
+    "bytes": 38714,
+    "sha256": "d7ea4edf7257d68f241cd0366c4589fd5ecfa8bcc2632263b4f20d3f2becb39e"
+  },
+  "current_six_commands": {
+    "path": "/home/holden/mckernel-work/host-preparation/guest-settid-rust-candidate-20261021-1/compile-execution-preparation-1/guest-compiler-commands.json",
+    "bytes": 12062,
+    "sha256": "9e549831ec8cbbf20148fd60407c06cf65bb3c3e0bced18b5d95beb968c3b060"
+  },
+  "current_six_artifact_acceptance": {
+    "path": "/home/holden/mckernel-work/host-preparation/guest-settid-rust-candidate-20261021-1/compile-execution-preparation-1/independent-review-1/actual-six-stage-artifact-acceptance.json",
+    "bytes": 14726,
+    "sha256": "63b0dc9f386e7f6fded9820603a81645c5dcd94d96434b228c799ab27f4da2f9"
+  },
+  "source_successor_delta_only": [
+    {
+      "relative": "kernel/syscall.c",
+      "accepted160_sha256": "81404ef35d90cf965c1f46ba200d6d83106576373c0ddd84128c638dffe3b6fb",
+      "accepted160_bytes": 838685,
+      "successor_input": {
+        "path": "/home/holden/mckernel-work/host-preparation/scheduler-current-combined-source-20261021-1/candidate/kernel/syscall.c",
+        "bytes": 839266,
+        "sha256": "55e04a1e152d17c83d61280ea436012d8c073c78cb3c62bf9689c670b4021d34"
+      }
+    },
+    {
+      "relative": "kernel/rust/sched_helpers.rs",
+      "accepted160_sha256": "8c5f69629882e7bdcca88fdc7a7fe58d762cf9906e065a0da932f0dfb260628e",
+      "accepted160_bytes": 168552,
+      "successor_input": {
+        "path": "/home/holden/mckernel-work/host-preparation/scheduler-current-combined-source-20261021-1/candidate/kernel/rust/sched_helpers.rs",
+        "bytes": 170508,
+        "sha256": "a5b8ed0f048adcfa6908094f7b8b5d459b9b14aa0ed4b75e5250abe6f8387c57"
+      }
+    }
+  ],
+  "proposed_successor_source_identity": "25999bf8b2d57ccc64e8c1d7da9107a8e4972179b2d802a9bcb8db0df4c66814",
+  "source_count": 160,
+  "unchanged_source_rows": 158,
+  "future_only_no_materialization": true,
+  "image_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/source-materialization-1/materialization-receipt.json",
+    "bytes": 510,
+    "sha256": "619145d1fbf60b728aee9296f136b0a5e9ab1fe3f90843ccd130cb482eb45356"
+  },
+  "image_sourcebound_request_ref": {
+    "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/source-materialization-1/image-request-SOURCE-BOUND-PROPOSAL.json",
+    "sha256": "26fbef94dfb402099716e5b703fab6bad07088a90d811e865b0450e5f90a1e48",
+    "authority": "existing source-bound author/review reference; giant retained inventory not rehashed for this disjoint source composition"
+  },
+  "image_not_forced_to_wait": true
+}

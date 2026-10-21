@@ -1,0 +1,111 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_LITERAL_HUNK_UNION_SOURCE_ONLY",
+  "parents": {
+    "mutation_patch": {
+      "path": "/home/holden/mckernel-work/host-preparation/private-syscall-rust-next-20261021-1/candidate.patch",
+      "bytes": 2580,
+      "sha256": "8d769da29c6513c4c9b583c4109aaff9e0818e94de0ca568d2c6816b979a2759"
+    },
+    "retained_reference_patch": {
+      "path": "/home/holden/mckernel-work/host-preparation/scheduler-thread-reference-correction-20261021-1/retained-reference-2/candidate.patch",
+      "bytes": 1865,
+      "sha256": "3fbc5a0c538ab71b58f596cde89663efb5e2fb7913a4384d0954f27c24b7fed6"
+    },
+    "mutation_result_acceptance": {
+      "path": "/home/holden/mckernel-work/host-preparation/private-syscall-rust-next-20261021-1/actual-body-fixture-1/correction-1/independent-review-1/RESULT-ACCEPTANCE.md",
+      "bytes": 4099,
+      "sha256": "5f9c66064eb9675669cc636f6730768c92d80fefebf2e253478fec70a4ebcc3d"
+    },
+    "retained_reference_result_acceptance": {
+      "path": "/home/holden/mckernel-work/host-preparation/scheduler-thread-reference-correction-20261021-1/retained-reference-2/independent-review-1/RESULT-ACCEPTANCE.md",
+      "bytes": 3371,
+      "sha256": "23c21b59ceccc827c1187aeb967c49547f9f2f29a56783a42a1267b1c6756a57"
+    },
+    "combined_patch": {
+      "path": "/home/holden/mckernel-work/host-preparation/scheduler-current-combined-source-20261021-1/combined.patch",
+      "bytes": 4375,
+      "sha256": "ef51fce560db693cb812fa231346348bcd3b3417d9fccef857ae73556dd1e6ea"
+    }
+  },
+  "hunks": [
+    {
+      "file": "kernel/syscall.c",
+      "old_start": 24721,
+      "old_count": 8,
+      "new_start": 24721,
+      "new_count": 22,
+      "payload_sha256": "d94344ac182882f89dea38f89327e62e5a73472ebbab560f40feebb1fbd2b3f4",
+      "original_new_start": 24721,
+      "new_start_displacement": 0,
+      "literal_hunk_payload_identical": true
+    },
+    {
+      "file": "kernel/syscall.c",
+      "old_start": 24734,
+      "old_count": 6,
+      "new_start": 24748,
+      "new_count": 7,
+      "payload_sha256": "868787864c375311a1349fd947e9dfb6b265981315ac82ff75638ffde9265543",
+      "original_new_start": 24748,
+      "new_start_displacement": 0,
+      "literal_hunk_payload_identical": true
+    },
+    {
+      "file": "kernel/rust/sched_helpers.rs",
+      "old_start": 800,
+      "old_count": 6,
+      "new_start": 800,
+      "new_count": 44,
+      "payload_sha256": "fe8385100c926e79410f593e75876cbb94e4d03a82701f61980fff7c0597f05f",
+      "original_new_start": 800,
+      "new_start_displacement": 0,
+      "literal_hunk_payload_identical": true
+    },
+    {
+      "file": "kernel/rust/sched_helpers.rs",
+      "old_start": 1158,
+      "old_count": 19,
+      "new_start": 1196,
+      "new_count": 38,
+      "payload_sha256": "ee1a5eba68455f18bb03ef23552db664d12ecc5b0ff12d1fe0c5e3318164cce8",
+      "original_new_start": 1158,
+      "new_start_displacement": 38,
+      "literal_hunk_payload_identical": true
+    }
+  ],
+  "hunk_payloads_changed": 0,
+  "hunks_added_beyond_reviewed_union": 0,
+  "full_postimages": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/scheduler-current-combined-source-20261021-1/candidate/kernel/syscall.c",
+      "bytes": 839266,
+      "sha256": "55e04a1e152d17c83d61280ea436012d8c073c78cb3c62bf9689c670b4021d34"
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/scheduler-current-combined-source-20261021-1/candidate/kernel/rust/sched_helpers.rs",
+      "bytes": 170508,
+      "sha256": "a5b8ed0f048adcfa6908094f7b8b5d459b9b14aa0ed4b75e5250abe6f8387c57"
+    }
+  },
+  "full_preimages": {
+    "kernel/syscall.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/scheduler-current-combined-source-20261021-1/preimage/kernel/syscall.c",
+      "bytes": 838685,
+      "sha256": "81404ef35d90cf965c1f46ba200d6d83106576373c0ddd84128c638dffe3b6fb"
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/scheduler-current-combined-source-20261021-1/preimage/kernel/rust/sched_helpers.rs",
+      "bytes": 168552,
+      "sha256": "8c5f69629882e7bdcca88fdc7a7fe58d762cf9906e065a0da932f0dfb260628e"
+    }
+  },
+  "reverse_composition_equal": true,
+  "composition": "mutation postimage with exact original setscheduler caller replaced by exact retained-reference caller; reverse composition inserts exact reviewed mutation block into retained-reference postimage",
+  "current_live_preimages_match": {
+    "kernel/syscall.c": true,
+    "kernel/rust/sched_helpers.rs": true
+  },
+  "executed_compiler_test_guest": false,
+  "shared_source_changes": false
+}
