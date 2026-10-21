@@ -1,3 +1,27 @@
+## Current — scheduler compiler25 accepted; frozen image final execution review
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Accepted counts21/35 checks,five whole,28 native behaviors,Rust17/14;25compiler batches.
+Scheduler six-stage owner CLOSED0 in42.992615s; independent artifactsfd2f34ab and
+physical2d8840ca accepted. Six actual objects/FAM and both fallback selections
+are compiler evidence only: no final link/native/default/C-retirement credit.
+Its retired reservation is acknowledged through the existing protocol.
+
+Four-overlay image remains frozen independently of shared scheduler integration.
+Actual setup/snapshot/binder CLOSED0 in0.061909/0.292015/0.597649s, with positive
+direct joins,group absence and stream closure; CPU7 released. Acceptance72a37abf.
+Final DATA2 canonicala1618b9b/current caller8e822c28 bind genuine schedulerphysical2d,
+sourceproof3f8d,lateproof5d6a and actual preparation acceptance. Exact35 controls
+published/fetched b75aa710; external proof597577ab. One final canonical execution
+review and fresh live admission remain; image-execution-release.json not yet created.
+m06_closed_stage_review owns final decision; sdk66_source_review is preassigned
+through exact owner completion and finite artifact/physical disposition.
+Private control prefix: host-preparation/settid-current-production-link-preparation-20261021-1/owned-fork-pin-successor-1/coupled-current-pin-correction-1/control-successor-1/.
+
+Original precompiler failure,missing driver receipt,refused cleanup and physical2150
+remain preserved. SDK capacity/developer no-resize and all ownership/resource/service
+controls remain. No CPU lease during model preparation; no accepted-test replay.
+
 ## Current — physical2150 accepted; first ready successor final binding
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
