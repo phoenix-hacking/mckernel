@@ -1,3 +1,29 @@
+## Current — launcher observer and original-five export passed; cleanup release binding
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual current-body checker529726 accepted9e3c50cb:0/1.263083s, eightclients,
+15savedmount/fullcommand joins and fourrefusals; original re-scope and directdict
+reporting failures retained. No unchanged generated-body/source/app replay.
+Read-only observer passed0/1.626558s, summary0/.117635s, original-five fullFD
+metadata0/.127145s, rawfive export0/.147606s; all empty stderr, directjoined,
+groupabsent/closedstreams. Raw5 retained583680B; genuine original observation
+8ce86719/draft0fb13466 restored byte-exact for final cleanup DATA. Metadata-only
+summary intentionally omitted fullinventory; complete actual bytes now available.
+
+Normalization accepted4f071605, runtime generatora468 finite source eligible
+b9221ddb. Both normalization substitutions/full8sourceFD construction prepared;
+future actual launcherphysical report and runtime authority remain NULL.
+Next: finish exact existing three-operation SAME-final-release cleanup review,
+fresh strict preflight, cleanup/postjoin and genuine physical acceptance; bind
+runtime once, necessary bounded wholecaller/exactrelease, then unchanged strict
+116B/emptyerr/exit37 NUMA app using accepted kernel1d8 and launcher33f.
+
+Review150 counts held87sources(33OS/54infra),30compiler,6acceptednative,
+21/35checks/fivewhole/28behaviors/Rust17-14. No pin/binding source gains or new
+native/milestone credit. New launcher artifact clock13:06:08.124394UTC; no new
+native feedback or speedup claim. Owner/container/locks stay held until genuine
+reviewed cleanup. Floors16/12GiB/noresize/oneheavy and stablemonitor preserved.
+
 ## Current — launcher target and stage accepted; current cleanup bindings checked
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
@@ -16,14 +42,21 @@ current observer/preflight/cleanup/postjoin release and physical acceptance.
 Launcher-only stage closed0/20.247997s and independent acceptance da272086
 binds manifestf7d91a3e: only bin/mcexec changed, all other59/60 metadata rows
 preserved. Normalization closed0/.603191s, empty stderr/directjoin/group absent;
-independent preparation-only acceptance is being recorded. No native execution
+independent preparation-only acceptance4f071605 is complete. No native execution
 or physical clearance follows from staging/normalization.
 
 Current terminal DATA constructor closed0/.912038s, nine function/class ASTs
 unchanged. Necessary actual-body checker failed1/.464976s before its predicate:
 missing `re` in extracted function scope. Original failure retained; focused
-checker scope correction/review is next, with no unchanged body or app replay.
-Runtime data/body preparation overlaps, future physical authority stays null.
+checker scope correction fixed the missing import; its next actual check failed
+on an unjustified list index of the already-decoded container object. Both failures
+are retained; expert review now checks the full saved-inspect projection and
+remaining negative paths before another candidate. No unchanged body/app replay.
+Expert-corrected actual checker52972694 now passed0/1.263083s, empty stderr,
+all8clients/full15mount+command joins and4changed-boundary refusals. No sourcegen
+or unchanged-body replay. Independent capture acceptance and exact observer
+release are next. Runtime generatora468 source eligible b9221ddb; genuine
+normalization4f071605 bound, future physical authority stays null.
 
 Chosen new launcher artifact-to-native clock: 13:06:08.124394 UTC (user first
 observation); earlier root preliminary PASS announcement retained separately.
