@@ -1,0 +1,22 @@
+/home/holden/anaconda3/bin/python3 -I -B - <<'PY'
+import pathlib,json,os,stat,hashlib,datetime,subprocess,fcntl,uuid
+G=pathlib.Path('/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/owned-fork-pin-successor-1/coupled-current-pin-correction-1/control-successor-1');q=json.loads(pathlib.Path('/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/owned-fork-pin-successor-1/coupled-current-pin-correction-1/image-request-SOURCE-BOUND-SUCCESSOR-PROPOSAL.json').read_text());data=json.loads((G/'FINAL-ROOT-RELEASE-DATA-PENDING.json').read_text());scratch=pathlib.Path('/home/holden/mckernel-work/scratch')
+def identity(path):
+ p=pathlib.Path(path);s=p.lstat();assert p.resolve()==p and stat.S_ISDIR(s.st_mode);return {'path':str(p),'dev':s.st_dev,'inode':s.st_ino,'mode':stat.S_IMODE(s.st_mode),'file_type':stat.S_IFMT(s.st_mode),'uid':s.st_uid,'gid':s.st_gid}
+assert os.geteuid()==1000
+source=identity(q['source_root']);assert source==q['source_identity'];backup=identity(q['backup_root'])
+mount=json.loads(subprocess.check_output(['/usr/bin/findmnt','-J','-o','SOURCE,TARGET,UUID,MAJ:MIN','-T',str(scratch)],text=True,timeout=10))['filesystems'][0];dev=scratch.stat().st_dev;majmin='%d:%d'%(os.major(dev),os.minor(dev));assert mount['target']==str(scratch) and mount['uuid']=='2a5768c8-718d-4914-bdc0-6b32c5a92a52' and mount['maj:min']==majmin
+sysdev=pathlib.Path('/sys/dev/block')/majmin;volume_bytes=int((sysdev/'size').read_text())*512;assert volume_bytes==110*(1<<30);backing_file=(sysdev/'loop/backing_file').read_text().strip()
+spaces={}
+for name,path in [('host',pathlib.Path('/home/holden')),('scratch',scratch)]:
+ b=data['live_admission_required']['storage']['per_filesystem'][name];s=os.statvfs(path);free=s.f_bavail*s.f_frsize;need=sum(b[k] for k in ['floor_bytes','compiler_and_control_growth_bytes','postbuild_growth_bytes','emergency_reserve_bytes']);assert free>=need;spaces[name]={'path':str(path),'device':path.stat().st_dev,'available_bytes':free,'required_bytes':need,'budget':b}
+mem=int(next(x.split()[1] for x in pathlib.Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')))*1024;assert mem>=16*(1<<30)
+state=json.loads(pathlib.Path('/home/holden/mckernel/.git/os-autopilot/state.json').read_text());used=state['last_rate_limits']['primary']['usedPercent'];assert state['phase']=='running' and state.get('pause_reason') is None and state.get('stop_reason') is None and used<100
+lock=pathlib.Path('/run/lock/mckernel-development.lock');s=lock.stat();assert(s.st_dev,s.st_ino,s.st_uid,s.st_gid)==(27,4,0,0)
+with lock.open('r') as f:fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB);fcntl.flock(f,fcntl.LOCK_UN)
+absent=[q['lease_path'],q['common_exclusion_path'],q['attempt_root'],q['output_root'],q['evidence_root'],str(scratch/'mckernel-heavy-operation.lock'),str(scratch/'native-exact-candidate-operational-exclusion-scratch18.json'),str(scratch/'native-exact-candidate-operational-exclusion-scratch18-image-1.json')];assert all(not os.path.lexists(p) for p in absent)
+assert not list(pathlib.Path(q['work_root']).iterdir()) and not list(pathlib.Path(q['owner_evidence_root']).iterdir())
+nonce=uuid.uuid4().hex;capture=scratch/('native-rust-phase5-current-optin-image-guard-'+nonce);assert not os.path.lexists(capture)
+out={'status':'PASS_READ_ONLY_IMAGE_ROOT_SNAPSHOT','observed_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'boot_id':pathlib.Path('/proc/sys/kernel/random/boot_id').read_text().strip(),'source_identity':source,'backup_identity':backup,'scratch_binding':{'uuid':mount['uuid'],'device':dev},'scratch_mount':mount,'scratch_volume_bytes':volume_bytes,'scratch_backing_file':backing_file,'storage':spaces,'mem_available_bytes':mem,'launcher_phase':state['phase'],'pause_reason':state.get('pause_reason'),'stop_reason':state.get('stop_reason'),'included_used_percent':used,'permanent_mutex_identity':[s.st_dev,s.st_ino,s.st_uid,s.st_gid],'ownership_paths_absent':absent,'work_and_owner_evidence_empty':True,'nonce':nonce,'guard_capture':str(capture),'temporal_policy':'No elapsed snapshot-age limit in reused205 guard/dispatcher. Dispatcher rechecks live UUID/device/storage/memory/state/mutex/source/recordabsence immediately before guard invocation; snapshot is not a substitute.'}
+print(json.dumps(out,sort_keys=True,separators=(',',':')))
+PY
