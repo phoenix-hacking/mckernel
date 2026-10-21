@@ -106,3 +106,8 @@ pub(crate) struct ForkControlCallV1 {
     pub owner:*mut c_void,pub revoke:Option<ForkRevokeV1>,pub accept:Option<ForkAcceptV1>,
     pub release:Option<ForkLeaseReleaseV4>,
 }
+
+// Private UNWIRED exec extension; exact backend Delivered nr59/phase checked.
+pub(crate) const EXEC_TRANSFER:u32=20;
+pub(crate) const EXEC_USERCOPY_DONE:u32=21;
+// TRANSFER: worker/delivery/physical/direction + payload; DONE: worker/delivery/success(0 ABORT,1 COMMIT).

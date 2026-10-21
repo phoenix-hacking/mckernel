@@ -1,0 +1,101 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ONE_BOUNDED_SOURCE_CORRECTION_READY_UNEXECUTED",
+  "family": "pending-exec-descriptor-negative-RET ownership contract; original4PASS/candidate preserved",
+  "minimal_change": "return_value rejects any call.exec.pending() before copy, begin_return and response.take, regardless terminal value; existing successfulRET completion check stays intact.",
+  "predecessors": {
+    "smp_application_syscall.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/phase-completion-postimage-1/smp_application_syscall.rs",
+      "sha256": "99ff248d61dd7b62579d235befcd6241b75e3b8dc6e66017590b856b649ea783",
+      "bytes": 33666
+    },
+    "exec_delivery.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/phase-completion-postimage-1/exec_delivery.rs",
+      "sha256": "65ab86c4aff79e04e46a0f6b9b2eb2397e4e94d16bc5163579e55663eac83b7d",
+      "bytes": 2058
+    },
+    "exec_transfer_checked.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/phase-completion-postimage-1/exec_transfer_checked.rs",
+      "sha256": "a7dae8a829da028cab0ad2d9de233304a587fd7d09059f4bf87c4fee16b67907",
+      "bytes": 9875
+    },
+    "application_syscall.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/phase-completion-postimage-1/application_syscall.rs",
+      "sha256": "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0",
+      "bytes": 20310
+    },
+    "application_rpc.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/phase-completion-postimage-1/application_rpc.rs",
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "bytes": 10080
+    },
+    "application_image.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/phase-completion-postimage-1/application_image.rs",
+      "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+      "bytes": 8356
+    },
+    "application_pager.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/phase-completion-postimage-1/application_pager.rs",
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "bytes": 3196
+    },
+    "actual-ledger-response-bodies.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/phase-completion-postimage-1/actual-ledger-response-bodies.rs",
+      "sha256": "a651cc8abe7b94d98f6ac58d55b94fe7b3a80554fe364c752b2c4b8e4d51b68a",
+      "bytes": 16588
+    }
+  },
+  "postimages": {
+    "smp_application_syscall.rs": {
+      "sha256": "eaecdf66839854c3d2a6461cc7b2e2166f5738ba523af1063df4bc5b0e2b4a3a",
+      "bytes": 34002
+    },
+    "application_image.rs": {
+      "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+      "bytes": 8356
+    },
+    "application_pager.rs": {
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "bytes": 3196
+    },
+    "exec_delivery.rs": {
+      "sha256": "65ab86c4aff79e04e46a0f6b9b2eb2397e4e94d16bc5163579e55663eac83b7d",
+      "bytes": 2058
+    },
+    "application_rpc.rs": {
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "bytes": 10080
+    },
+    "exec_transfer_checked.rs": {
+      "sha256": "a7dae8a829da028cab0ad2d9de233304a587fd7d09059f4bf87c4fee16b67907",
+      "bytes": 9875
+    },
+    "actual_phase_completion_tests.rs": {
+      "sha256": "343d82628a45f6cfde7cb6780a7fd6ca19ff465ae446977f33725a370bfb1f43",
+      "bytes": 14036
+    },
+    "application_syscall.rs": {
+      "sha256": "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0",
+      "bytes": 20310
+    },
+    "actual-ledger-response-bodies.rs": {
+      "sha256": "a651cc8abe7b94d98f6ac58d55b94fe7b3a80554fe364c752b2c4b8e4d51b68a",
+      "bytes": 16588
+    }
+  },
+  "unchanged_coupled_files": [
+    "exec_delivery.rs",
+    "exec_transfer_checked.rs",
+    "application_syscall.rs",
+    "application_rpc.rs",
+    "application_image.rs",
+    "application_pager.rs",
+    "actual-ledger-response-bodies.rs"
+  ],
+  "root_compile": "<pinned-rustc> --edition=2021 --test actual_phase_completion_tests.rs -o <fresh-output>/actual_phase_completion_tests",
+  "root_exact_case": "<fresh-output>/actual_phase_completion_tests --exact memory::actual_mailbox_pending_descriptor_refuses_negative_ret_until_exact_abort --test-threads=1",
+  "root_affected_regression": "<fresh-output>/actual_phase_completion_tests --test-threads=1",
+  "compile_or_test_by_worker": false,
+  "activation": "UNWIRED; source ownership correction only, no current module/default/native claim",
+  "affected_test_expectations": "Two prior assertions during pending descriptor read now require EBUSY(-16), matching the new unconditional hold. Before transfer/after ABORT incomplete RET0 still requires EINVAL(-22)."
+}

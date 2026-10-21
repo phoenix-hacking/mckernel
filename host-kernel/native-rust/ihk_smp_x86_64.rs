@@ -78,6 +78,9 @@ mod application_syscall;
 // The shared image view also defines fields/reservation geometry for mcctrl.
 #[allow(dead_code)]
 mod application_image;
+#[allow(dead_code)]
+mod exec_transfer_checked;
+mod exec_delivery;
 mod smp_application;
 mod smp_application_syscall;
 mod smp_application_image;
@@ -296,6 +299,8 @@ unsafe extern "C" fn application_invoke(
             application_abi::PAGER_SYSCALL => application.pager_syscall(bytes),
             application_abi::CLEAR_SYSCALL => application.clear_syscall(bytes, false),
             application_abi::CLEAR_DONE => application.clear_syscall(bytes, true),
+            application_abi::EXEC_TRANSFER => application.transfer_exec(bytes),
+            application_abi::EXEC_USERCOPY_DONE => application.exec_usercopy_done(bytes),
             application_abi::TID_TRANSFER => application.transfer_tids(bytes),
             _ => Err(EINVAL),
         }

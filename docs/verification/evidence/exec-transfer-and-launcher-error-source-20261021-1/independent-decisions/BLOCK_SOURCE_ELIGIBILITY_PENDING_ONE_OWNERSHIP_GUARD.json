@@ -1,0 +1,37 @@
+{
+  "reviewer": "/root/numa_clear_range_review",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "BLOCK_SOURCE_ELIGIBILITY_PENDING_ONE_OWNERSHIP_GUARD",
+  "packet": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/phase-completion-postimage-1",
+  "finding": {
+    "symbol": "Mailbox::return_value",
+    "file": "smp_application_syscall.rs",
+    "line": 731,
+    "source_sha256": "99ff248d61dd7b62579d235befcd6241b75e3b8dc6e66017590b856b649ea783",
+    "missing_invariant": "Every terminal RET value must retain the original response while exec.pending() is true.",
+    "scenario": "Descriptor transfer establishes pending. A failed or uncertain DONE can leave pending unchanged. A later negative RET bypasses the value==0 completion gate and reaches begin_return/response.take, permitting publication without resolving pending.",
+    "classification": "Source ownership-contract gap; no observed native failure or demonstrated concurrent UserSlice race. The normal synchronous authenticated frontend attempts DONE on both copy outcomes before returning.",
+    "smallest_correction": "Reject exec.pending() for every return value before copy, begin_return or response.take. Retain the separate RET0 completeness requirement.",
+    "smallest_feedback": "Add one actual mailbox-body case: pending descriptor copy rejects negative RET and retains claims; exact ABORT resolves pending; negative RET and publication then succeed. Preserve the existing four results."
+  },
+  "accepted_existing_evidence": {
+    "whole": "actual-phase-completion-1/whole.json",
+    "sha256": "e599a6fb6db18652c1a5967592a8ed0f749c6fbd73c248f59e7e558bd78d13fe",
+    "observed": "Compile and four actual-body tests exited 0, joined directly, groups absent, streams closed, no timeout or capture/retirement error.",
+    "coverage": [
+      "Phase1 exact upload gates RET0.",
+      "Phase2 immutable snapshot survives ABORT and peer mutation; cursor advances after COMMIT and page copy.",
+      "All-BSS still requires descriptor COMMIT.",
+      "Close defers cancellation; queue-full retains claims until publication."
+    ],
+    "compiler_stderr": "Three unused-import warnings: VecExt, AtomicU32 and ResponseOwnedExecClaims.",
+    "test_stdout_sha256": "aac35dc0aa9a8c2fdf3625526a8b436a25413cb299c4c01f52c8b98450bb4ee4"
+  },
+  "other_source_conclusions": [
+    "Relevant response prepare/copy functions match the extracted fixture bodies exactly.",
+    "Rust ABI commands 20/21 forward through existing retained application connections.",
+    "Frontend sends matching worker/delivery DONE after both UserSlice outcomes.",
+    "Existing nr186 completion gate and TID transfer remain unchanged."
+  ],
+  "limits": "Prior ledger acceptance preserved. Actual UserSlice fault execution, full-crate compilation, linking, activation and native behavior remain unproved. No edits or executions performed. Dispatcher records this genuine decision."
+}

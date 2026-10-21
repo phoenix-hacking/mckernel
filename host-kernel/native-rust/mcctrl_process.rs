@@ -228,6 +228,7 @@ impl Registration {
                 mirror,
                 handle,
                 delivery: AtomicU64::new(0),
+                delivery_number: AtomicU64::new(0),
                 delivery_cpu: AtomicI32::new(-1),
                 delivery_trace: AtomicBool::new(false),
             },
@@ -364,6 +365,7 @@ impl Registration {
             // even after the ordinary trace budget is exhausted.
             let traced = number == 231 || self.trace();
             worker.delivery_trace.store(traced, Ordering::Relaxed);
+            worker.delivery_number.store(number, Ordering::Relaxed);
             worker.delivery.store(serial, Ordering::Release);
             if traced {
                 pr_info!("application_syscall=delivered os={} generation={} pid={} worker={} delivery={} cpu={} number={}\n",
@@ -583,16 +585,23 @@ impl Registration {
                 .reader()
                 .read_slice(&mut bytes[prefix..])?;
         }
-        let command = if running {
+        let exec=running&&worker.as_ref().ok_or(EINVAL)?.delivery_number.load(Ordering::Acquire)==59;
+        let command = if exec {super::application_abi::EXEC_TRANSFER} else if running {
             super::application_abi::TID_TRANSFER
         } else {
             super::application_abi::TRANSFER
         };
         self.invoke(command, &mut bytes)?;
         if direction == 1 {
-            UserSlice::new(user, size)
-                .writer()
-                .write_slice(&bytes[prefix..])?;
+            let copied=UserSlice::new(user,size).writer().write_slice(&bytes[prefix..]);
+            if exec {
+                let mut done=[0u8;24];done[..16].copy_from_slice(&bytes[..16]);
+                done[16..24].copy_from_slice(&(copied.is_ok() as u64).to_le_bytes());
+                // Both success and fault finish the exact pending copy. Failed
+                // callback leaves native response and claims retained, never RET0.
+                self.invoke(super::application_abi::EXEC_USERCOPY_DONE,&mut done)?;
+            }
+            copied?;
         }
         Ok(0)
     }
@@ -737,6 +746,7 @@ struct HostWorker {
     mirror: Arc<Mirror>,
     handle: u64,
     delivery: AtomicU64,
+    delivery_number: AtomicU64,
     delivery_cpu: AtomicI32,
     delivery_trace: AtomicBool,
 }

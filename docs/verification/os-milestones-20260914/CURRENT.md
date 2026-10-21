@@ -1,3 +1,40 @@
+## Current — M07 final static pass; exact runtime admission next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M07 actualtwo-member stage0/19.281309460s independentlyaccepted, normalization
+0/.720233148s independentlyaccepted. Sole manifest-variable collision corrected
+before execution, original source preserved. Actual ten runtime source FD joins,
+26 consumed paths/three readonly roots, qualified2McCPU128MiB profile.
+Constructor0/.134744538s +wholecaller0/.515471615s passed three cases,19pending/
+sevenrows/49freshpaths; independent combinedstatic acceptance. Finalbinder and
+fullpure static_joins nowpassed;12selected sourceFD rows. Typed five dynamic
+header rows+120B suffix/empty stderr/exit0 remains strict; no fixed stdout hash.
+Next actualsource publication, fresh aggregategrant and exactsevenstep runtime
+release. No M07guest yet, no check/whole/native credit from these controls.
+
+M05 exact2CPU67-read collector/strictconsumer model accepted; changed static
+collector0e39 passed compile0/.461429317s and artifactreview. Offline61-member/
+57unchanged/fourcontentdelta stage0/18.902504685s accepted. Additive visibleboot
+alias/newmanifest-only operation0/.253014960s accepted, originalstage/archives
+preserved; strictnormalizer/runtime16sourceclosure remains preparation. No full
+mapping/callback/reference restoration or publiccycle credit from these models.
+
+M06 corrected Rust exec delivery sources integrated in nine actual host files,
+including required SMP module declarations. Real responseledger fourbodycases,
+phasecompletion originalfour and correctedfive allpassed. Independentreview
+required unconditional pending-copy hold for every terminal RET; oneguardfix
+accepted. RealUserSlice/fullcrate/modulelink/default/native remain unproved;
+fixed SDK66 gate remains blocked, no resize or alternate compiler path.
+Launchererror-propagation source and threebodycases accepted; target-only build
+preparation uses existing separate unchanged profile. Emptyworksetup passed;
+indentedBASIS write hit32MiBfilecap beforeanyowner/build, partialretained. One
+compactserialization successor is beingprepared; cap and data stay unchanged.
+
+Canonical counts held:97coherent sources(38OS/59infra),33productioncompiler,
+11acceptednativebatches,30behaviors,Rust21/18,24/35checks/sixwhole. Newtests,
+metadata fixes and preparation add no counters. Accepted053d/33f/module tuple
+remains selected. All original failures/ownership/resource/service stops retained.
+
 ## Current — native11 accepted; response-ledger four cases and M07 offline stage pass
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,37 @@
+warning: type `McexecSyscallWaitDesc` is more private than the item `act_execve_phase2`
+  --> /home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/launcher-error-propagation-1/act_execve_phase2.actual-candidate-body.rs:2:1
+   |
+ 2 | / pub unsafe extern "C" fn act_execve_phase2(
+ 3 | |     w: *const McexecSyscallWaitDesc,
+ 4 | |     fd: c_int,
+ 5 | |     cpu: c_int,
+ 6 | | ) -> c_long {
+   | |___________^ function `act_execve_phase2` is reachable at visibility `pub`
+   |
+note: but type `McexecSyscallWaitDesc` is only usable at visibility `pub(crate)`
+  --> /home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/launcher-error-propagation-1/actual-body-harness.rs:22:12
+   |
+22 | #[repr(C)] struct McexecSyscallWaitDesc { sr:Request }
+   |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = note: `#[warn(private_interfaces)]` on by default
+
+warning: type `McexecSyscallWaitDesc` is more private than the item `act_execve`
+  --> /home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/launcher-error-propagation-1/act_execve.actual-candidate-body.rs:2:1
+   |
+ 2 | / pub unsafe extern "C" fn act_execve(
+ 3 | |     w: *const McexecSyscallWaitDesc,
+ 4 | |     fd: c_int,
+ 5 | |     cpu: c_int,
+ 6 | |     pathbuf: *mut u8,
+ 7 | |     main_loop_ret: *mut c_long,
+ 8 | | ) -> c_int {
+   | |__________^ function `act_execve` is reachable at visibility `pub`
+   |
+note: but type `McexecSyscallWaitDesc` is only usable at visibility `pub(crate)`
+  --> /home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/launcher-error-propagation-1/actual-body-harness.rs:22:12
+   |
+22 | #[repr(C)] struct McexecSyscallWaitDesc { sr:Request }
+   |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: 2 warnings emitted
+

@@ -1,0 +1,86 @@
+{
+  "accepted_stage_manifest": {
+    "bytes": 5189,
+    "path": "/home/holden/mckernel-work/scratch/m07m-261021-1/numa/manifest.json",
+    "sha256": "d7b7b535cd150318c105bbf4645d259189bc5536f51d0eb16ee51d028341a5fa"
+  },
+  "actual_metadata_review": {
+    "bytes": 32720,
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/normalization-preparation-1/manifest-row-correction-1/actual-normalization-acceptance-1/ROOT-MECHANICAL-COMPLETE-ACTUAL-M07-NORMALIZATION-REVIEW-1.json",
+    "sha256": "957e78e22a5c3ac88f92a7b22f449df3a77d2f5dd36c68f1bd9049df239ddd52"
+  },
+  "effective_current_controller_stop_percent": 100,
+  "execution_route": "DIRECT_OWNER_AND_THREE_BOUNDED_SUCCESS_ONLY_READERS",
+  "independent_static_execution_decision": {
+    "bytes": 1753,
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/actual-final-binder-and-static-joins-1/INDEPENDENT-ACTUAL-M07-COMBINED-STATIC-ACCEPTANCE-1.json",
+    "sha256": "a034c572f631fc2fba610bcae88a33addae72115dcfe77f28ae51aae7d726883"
+  },
+  "normalized_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/m07n-261021-1/manifest.json",
+    "sha256": "d7b7b535cd150318c105bbf4645d259189bc5536f51d0eb16ee51d028341a5fa",
+    "size": 5189
+  },
+  "parent_full_ninefield_identity": {
+    "ctime_ns": 1792624917054657002,
+    "device": 1828,
+    "gid": 1000,
+    "inode": 883482,
+    "mode": "0o700",
+    "mtime_ns": 1792624917054657002,
+    "nlink": 2,
+    "path": "/home/holden/mckernel-work/scratch/m07p-261021-1/t",
+    "size": 4096,
+    "uid": 1000
+  },
+  "parent_identity": {
+    "device": 1828,
+    "gid": 1000,
+    "inode": 883482,
+    "mode": "0o700",
+    "uid": 1000
+  },
+  "postjoin_readback": {
+    "approved": "CONDITIONAL_ON_EXACT_INDEPENDENT_EXECUTION_RELEASE",
+    "argv": [
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/m07p-261021-1/t.owner-add1802754054ec09898ff0492158a3a",
+        "."
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/m07p-261021-1/t/attempt-add1802754054ec09898ff0492158a3a/result.json"
+      ],
+      [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/m07p-261021-1/t/attempt-add1802754054ec09898ff0492158a3a",
+        "--exclude=./qmp.sock",
+        "."
+      ]
+    ],
+    "capture_limit_bytes_per_command": 33554432,
+    "requested": true,
+    "timeout_seconds_per_command": 30
+  },
+  "proposal": {
+    "bytes": 7197,
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/proposal.json",
+    "sha256": "3b16c41a6447faea1ebe4d62b0ced6b5aa5b0640a3a53ca570980720acce4efa"
+  },
+  "runtime_release": false,
+  "runtime_wrapper": null,
+  "schema": "mckernel.native-diagnostic.nontemporal-metadata.v1",
+  "status": "PASS_NONTEMPORAL_DATA_ONLY"
+}

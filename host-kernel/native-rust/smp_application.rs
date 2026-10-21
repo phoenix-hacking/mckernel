@@ -1040,6 +1040,25 @@ impl Remote {
         result
     }
 
+
+    pub(crate) fn transfer_exec(&self,token:Token,bytes:&mut[u8])->Result{
+        if bytes.len()<=32||bytes.len()-32>16384{return Err(EINVAL);}
+        let word=|at|u64::from_le_bytes(bytes[at..at+8].try_into().unwrap());
+        let(worker,serial,physical,direction)=(word(0),word(8),word(16),word(24));
+        let step=super::exec_transfer_checked::Step{physical,bytes:bytes.len()-32,direction};
+        let mut slots=self.slots.lock();let entry=slots.iter_mut().flatten().find(|e|e.key()==token).ok_or(ENOENT)?;
+        entry.syscalls.transfer_exec(worker,serial,step,&mut bytes[32..],
+            |r,m|m.prepare_exec_delivery(r,token.wire(),worker,serial),
+            |r,m,key,step,data|m.copy_exec_delivery(r,key,step,data)).map_err(errno)
+    }
+    pub(crate) fn exec_usercopy_done(&self,token:Token,bytes:&mut[u8])->Result{
+        if bytes.len()!=24{return Err(EINVAL);}let word=|at|u64::from_le_bytes(bytes[at..at+8].try_into().unwrap());
+        if word(16)>1{return Err(EINVAL);}
+        let mut slots=self.slots.lock();let entry=slots.iter_mut().flatten().find(|e|e.key()==token).ok_or(ENOENT)?;
+        let result=entry.syscalls.exec_usercopy_done(word(0),word(8),word(16)==1);entry.quarantined|=entry.syscalls.quarantined();
+        self.changed.notify_all();result.map_err(errno)
+    }
+
     pub(crate) fn transfer_tids(&self, token: Token, bytes: &mut [u8]) -> Result {
         if bytes.len() <= 32 || bytes.len() - 32 > super::application_image::MAX_FLAT_BYTES {
             return Err(EINVAL);

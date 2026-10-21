@@ -29,6 +29,7 @@ struct Call<M: ResponseMemory> {
     kernel: bool,
     service: bool,
     transferred: bool,
+    exec: Option<super::exec_delivery::ExecDelivery>,
     fork_parked: bool,
     publication_since: Option<u64>,
 }
@@ -218,6 +219,7 @@ impl<M: ResponseMemory> Mailbox<M> {
             kernel: false,
             service: false,
             transferred: false,
+            exec: None,
             fork_parked: false,
             publication_since: None,
         };
@@ -369,6 +371,35 @@ impl<M: ResponseMemory> Mailbox<M> {
         )?;
         call.transferred = true;
         Ok(())
+    }
+
+
+    /// Exact existing Delivered ownership guard, separate from nr186 transfer.
+    pub(crate) fn transfer_exec(&mut self,handle:u64,serial:u64,step:super::exec_transfer_checked::Step,bytes:&mut[u8],
+        initialize:impl FnOnce(&Request,&mut M)->Result<super::exec_delivery::ExecDelivery>,
+        copy:impl FnOnce(&Request,&mut M,super::exec_transfer_checked::ExecKey,super::exec_transfer_checked::Step,&mut[u8])->Result)->Result{
+        if self.closed||self.quarantined{return Err(-32);}
+        let worker=self.workers.iter().flatten().find(|w|w.worker.wire()==handle).ok_or(-2)?;
+        if worker.delivery.map(Token::wire)!=Some(serial){return Err(-16);}
+        let call=self.calls.iter_mut().flatten().find(|c|c.delivery.serial().wire()==serial).ok_or(-2)?;
+        if call.kernel||call.fork_parked||call.service||call.cancelled||call.completion.is_some(){return Err(-16);}
+        let request=call.delivery.request();call.delivery.check_return(worker.worker,request.cpu() as i64)?;
+        if request.number()!=59||!matches!(request.arguments()[0],1|2){return Err(-22);}
+        let memory=call.response.as_mut().ok_or(-71)?.memory_mut();
+        if call.exec.is_none(){call.exec=Some(initialize(request,memory)?);}
+        call.exec.as_mut().unwrap().transfer(request,step,bytes,|key,step,bytes|copy(request,memory,key,step,bytes))
+    }
+    pub(crate) fn exec_usercopy_done(&mut self,handle:u64,serial:u64,success:bool)->Result{
+        if self.quarantined{return Err(-71);}
+        let worker=self.workers.iter().flatten().find(|w|w.worker.wire()==handle).ok_or(-2)?;
+        if worker.delivery.map(Token::wire)!=Some(serial){return Err(-16);}
+        let call=self.calls.iter_mut().flatten().find(|c|c.delivery.serial().wire()==serial).ok_or(-2)?;
+        if call.completion.is_some()||call.kernel||call.fork_parked||call.service{return Err(-16);}
+        call.delivery.check_return(worker.worker,call.delivery.request().cpu() as i64)?;
+        call.exec.as_mut().ok_or(-22)?.usercopy_done(call.delivery.request(),success)?;
+        // Close/reaper could only mark cancellation while usercopy was pending.
+        // Original Response still owns descriptor/section claims here.
+        if call.cancelled{Self::cancel_call(call)?;}Ok(())
     }
 
     /// The caller must already own the authenticated parent connection and
@@ -689,6 +720,12 @@ impl<M: ResponseMemory> Mailbox<M> {
         if call.kernel || call.fork_parked {
             return Err(-16);
         }
+        // Both success and failure RET must wait for the exact descriptor
+        // UserSlice COMMIT/ABORT. A failed callback can leave this pending;
+        // retaining the original Response/group is mandatory for every value.
+        if call.exec.as_ref().is_some_and(|exec|exec.pending()) {
+            return Err(-16);
+        }
         call.delivery.check_return(worker.worker, cpu)?;
         let request = call.delivery.request();
         if value == 0 && request.number() == 186 && request.arguments()[4] != 0 {
@@ -697,6 +734,7 @@ impl<M: ResponseMemory> Mailbox<M> {
                 return Err(-22);
             }
         }
+        if value==0&&request.number()==59&&!call.exec.as_ref().ok_or(-22)?.complete(request)?{return Err(-22);}
         // Only an already copied kernel buffer is used here, never user access.
         // Failed validation/copy leaves Delivered available for a proper retry.
         copy(call.delivery.request())?;
@@ -834,7 +872,7 @@ impl<M: ResponseMemory> Mailbox<M> {
         if call.completion.is_some() {
             return Ok(());
         }
-        if call.kernel || call.fork_parked {
+        if call.kernel || call.fork_parked || call.exec.as_ref().is_some_and(|e|e.pending()) {
             call.cancelled = true;
             return Ok(());
         }

@@ -1,0 +1,31 @@
+--- mcexec_helpers.sentinel-corrected.rs
++++ mcexec_helpers.error-propagation-candidate.rs
+@@ -2460,7 +2460,16 @@
+                         *main_loop_ret = ret;
+                     }
+                 }
+-                1
++                // Exec has already destroyed the old userspace. A worker-only
++                // return is insufficient: join_all_threads discards td.ret.
++                // Match the existing act_exit command-server/process cleanup
++                // sequence and retain a failing process status. No success RET
++                // is published for this incomplete image.
++                unsafe {
++                    mcexec_exit_cmd_servers_bridge();
++                    mcexec_exit_process_bridge(1);
++                }
++                1 // Existing void bridge ABI; real bridge exits the process.
+             } else {
+                 0
+             }
+@@ -3446,7 +3455,9 @@
+             } != 0
+             {
+                 unsafe { perror(DMA_PERROR_TAG.as_ptr()) };
+-                break;
++                // A partial image is unusable. Do not advance sections or
++                // report success after a failed physical page transfer.
++                return -1;
+             }
+         }
+ 

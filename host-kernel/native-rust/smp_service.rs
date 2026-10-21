@@ -1016,6 +1016,8 @@ impl Application {
             .copied_syscall(self.token, bytes)
     }
 
+    pub(in super::super) fn transfer_exec(&self,bytes:&mut[u8])->Result{self.started.runtime.application.transfer_exec(self.token,bytes)}
+    pub(in super::super) fn exec_usercopy_done(&self,bytes:&mut[u8])->Result{self.started.runtime.application.exec_usercopy_done(self.token,bytes)}
     pub(in super::super) fn transfer_tids(&self, bytes: &mut [u8]) -> Result {
         self.started
             .runtime

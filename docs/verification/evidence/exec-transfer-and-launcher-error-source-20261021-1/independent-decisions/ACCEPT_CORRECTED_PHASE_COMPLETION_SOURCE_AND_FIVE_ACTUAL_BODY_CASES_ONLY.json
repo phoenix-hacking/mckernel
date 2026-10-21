@@ -1,0 +1,26 @@
+{
+  "reviewer": "/root/numa_clear_range_review",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_CORRECTED_PHASE_COMPLETION_SOURCE_AND_FIVE_ACTUAL_BODY_CASES_ONLY",
+  "blockers_within_reviewed_scope": [],
+  "packet": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/phase-completion-postimage-1/pending-error-ret-correction-1",
+  "correction": {
+    "source": "smp_application_syscall.rs:723",
+    "sha256": "eaecdf66839854c3d2a6461cc7b2e2166f5738ba523af1063df4bc5b0e2b4a3a",
+    "finding_closed": "Mailbox::return_value now rejects every terminal value with EBUSY while exec.pending(), before check_return, copy, begin_return or response.take. The separate RET0 completeness gate remains intact.",
+    "delta": "One unconditional pending guard; coupled helper, ledger and protocol files unchanged."
+  },
+  "actual_evidence": {
+    "whole": "actual-pending-ret-correction-1/whole.json",
+    "sha256": "5040aba662f3c5d9482770dd992f5cc02cdf8e88887ad12f81ddbc97fe8ba02f",
+    "observed": "Compilation and all five body tests exited 0; direct children joined, groups absent, streams closed, no timeout or capture/retirement error.",
+    "test_source_sha256": "343d82628a45f6cfde7cb6780a7fd6ca19ff465ae446977f33725a370bfb1f43",
+    "test_stdout_sha256": "5abe9e17b0c50180517693ea91da5501af22f108ddf5199fc2ca0b9949c40d39",
+    "new_case": "Pending negative RET cannot invoke its copy closure or publish; response, descriptor and section claims remain held. Stale worker/delivery ABORTs fail. Exact ABORT permits negative RET; claims remain until publication, then quiescence succeeds and the response contains -14.",
+    "regressions": "Four existing cases pass with only the two pending RET0 expectations changed from EINVAL to EBUSY.",
+    "compiler_stderr": "Three retained unused-import warnings: VecExt, AtomicU32 and ResponseOwnedExecClaims. Test stderr is empty."
+  },
+  "preservation": "Original source finding, original four-case PASS and prior ledger acceptance remain valid historical records.",
+  "limits": "Eligible for subsequent separately authorized integration/build checks. Actual UserSlice success/fault execution, whole-module ABI compilation, full-crate compilation, linking, default activation and native behavior remain unproved.",
+  "provenance": "Independent read-only review of exact correction and retained raw results; no edits or executions. Dispatcher records this decision with reviewer attribution."
+}
