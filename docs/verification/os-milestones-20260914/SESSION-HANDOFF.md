@@ -1,3 +1,34 @@
+## Current — corrected insert/clear production image accepted; physical cleanup and strict NUMA next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual G image build closed0/279.562569s/directjoin/groupabsence. Independent
+artifact reviewer /root/numa_image_source_review accepted image053d59b5 (8435496B)
+and same Rust objectc51809af,18commands/32inventoryfiles/9artifacts. Recorderafdf6a8d
+binds actual producerd0276e19 and named production-default Ccaller→Rustobject→ELF
+insert222B/clear564B, including resolved callback relocations and actual sys_mbind
+slot237. No proof-only rebuild. Compiler32 (+1); source90/native8/behaviors29/
+22checks/fivewhole/Rust19selected-16native held; native/retirement credit pending.
+Root first observed artifact acceptance2026-10-21T18:06:04Z; image-to-first-native
+feedback clock starts there. Prior73.69min/133.79min observations remain historical;
+no overall speedup claim. Original source parity/finding/cursor repair and first
+pre-effect gitlinkFAIL1/causal correction remain preserved.
+
+G retained-terminal acceptance9cafcf37 is genuine and separate from physical
+cleanup. Original successful dispatcher already wrote current rootpostjoin43017d26
+after27:4 mutex reacquisition; use that original fact, no repeated mutex probe.
+A later optional diagnostic asserted at line14 after reacquisition; preserve its
+failed tool result and do not turn that redundant probe into an acceptance gate.
+Qualified retained projection/full terminal DATA joins are being completed from
+actual accepted records. Next same-release strict preflight/cleanup/postjoin and
+current physical acceptance, then exact released strict NUMA native116B/emptyerr/37.
+
+Runtime retains separately accepted launcher33f/modules; built689 is build artifact
+only. Parallel finite existing-stager adaptation reuses qualified separate-launcher
+branch with new image and accepted da272 baseline:60members/59unchanged/kernel-only
+delta, original metadata/oracles preserved. No new framework or unchanged audits.
+Future physical/release refs remain null until observed; no cleanup permission from
+artifact/terminal acceptance. One-heavy/floors/noresize and quiescence before census.
+
 ## Current — production preflight failed before owner; bounded gitlink DATA correction accepted
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
