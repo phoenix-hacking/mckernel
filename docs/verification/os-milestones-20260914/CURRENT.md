@@ -1,3 +1,25 @@
+## Current — corrected image physical accepted; actual runtime whole-caller passed
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current physical acceptance a1dd6be4 is complete: same-release retained preflight
+0/2.077320s, corrected cleanup0/5.290606s and postjoin0/1.797944s; actual five
+members, nine journal events and genuine controller terminal pairs joined.
+Original procfs-race failure, reviewed holder retirement and quarantine archive
+remain preserved. Source5f67/three coupled consumers activated; no repeated audits.
+
+Final actual bindings097dce96 constructed0/.099895s; necessary whole-caller
+closed0/2.230852s with empty stderr/direct join/group absence. Positive actual
+physical-reader/owner-loader/pending19/snapshot joins and four refusals pass.
+No snapshot, root runtime or guest executed by these checks. Next: independent
+actual static receipt, existing final-mode binding and exact native release,
+fresh exclusive admission, unchanged strict116B/emptyerr/37 focused NUMA app.
+Stagee01/norm4440/image1d8/artifact0ed9 reused. Clock10:02:44.224961UTC still
+runs to first actual native feedback; no speedup or new native/path/milestone credit.
+Latest supervisor review147 counts85source(32OS/53infra),29compiler,6native;
+21/35checks/fivewhole/28behaviors/Rust17/14 held. Future overhead proposal parked.
+Evidence: docs/verification/evidence/numa-allowed-mask-native-successor-20261021-1/
+corrected-physical-and-actual-runtime-whole-caller-1.json and paired archive.
+
 ## Current — actual retirement accepted; one-quarantine archive source ready
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
