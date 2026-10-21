@@ -1,3 +1,53 @@
+## Current — physical2150 accepted; first ready successor final binding
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Counts21/35 checks,five whole,28 native behaviors,Rust17/14,24compiler batches.
+Exact failed-image physical retirement2150db4d is independently accepted:
+corrected cleanup5.394902s and postjoin1.480426s bothCLOSED0;five-member archive,
+nine-event complete journal, original record identities/log746B,17failure objects
+and45protected pins retained. Only retired owner45d0f8d reservation reconciled;
+no record deletion/state edit. Original precompiler buildFAIL/no driverreceipt
+and refused cleanup are preserved. Evidence: ../evidence/settid-current-terminal-20261021-1/.
+
+Four log-body cases passed0.180679s/adoption5d822; bounded diagnosticfbe280
+established exact log-data channel mismatch; this is one infrastructure repair,
+not compiler/native/check/C-retirement credit. Source7 fetchedaaf59c7b.
+Scheduler160/source199 and image34 successor controls fetched8cdb87e7; exact
+source/kernel/module tuples unchanged. Scheduler finalcaller19a57 accepted with
+genuine late-data rules; author is freezing2150-bound finalcontrols for root
+publication/admission. sdk66_source_review is preassigned and remains waiting
+on scheduler-current-whole-consumer-compile-preparation-20261021-1/compiler-attempt-1/actual-root-owner-1/status.json.
+Image exact3operation normalUID packet cb814/39b is independently moving;
+first admitted heavy job wins, other preparation must use genuinely compatible
+windows/latestphysical. SDK/no-resize and all service/floor/ownership controls
+remain unchanged. No leases during model work.
+
+## Current — terminal log-channel correction; two successors publication-bound
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Counts remain21/35 checks,five whole,28 native behaviors,Rust17/14,24compiler batches.
+The failed four-overlay image still needs physical clearance. Readonly observation
+passed1.532366s and was exported without changing root ownership. Cleanup then
+refused before transaction mutation: all7paths absent, mutex27:4 available;
+independentf89dfcc3 preserves that failure. No postjoin or physical release.
+Bounded readonly diagnostic0.333753s reproduced the exact contract mismatch:
+ps/inspect rc0/empty stderr; logs rc0/stdout0/stderr746, exact3a011216 original
+traceback. Independentfbe28030 adopts this evidence without inventing the
+original failed call's argv. Sole terminal author sdk66_source_review owns a
+narrow current-case log-data adapter/body checks; m06_closed_stage_review owns
+its independent source/execution/actualphysical decision. No unchanged retry.
+Reports: /home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/current-terminal-review-1/.
+
+Image two-pin/two-map correction c269 and real validator0.151s pass913d;
+actual whole-caller0.624s pass196b. Independent scheduler160 materialization
+0.118s/1fd passes, unchanged158rows plus two scheduler rows. Both finite source
+sets are published/fetched8cdb87e7 (image34roles/scheduler199roles). Scheduler
+conditional caller19a57e5 and image controlsd493 are ready for genuine latest
+physical/late release joins. First fully admitted successor may use the oneheavy
+slot after true terminal clearance; neither waits on unrelated source work.
+All original failed sources/captures, missing driverreceipt and SDK no-resize/
+capacity block remain preserved. No new native/link/default/C-retirement claim.
+
 ## Current — literal M06-03 accepted; image precompiler pin failure retained
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

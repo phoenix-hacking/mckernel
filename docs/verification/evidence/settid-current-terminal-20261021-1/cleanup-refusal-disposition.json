@@ -1,0 +1,342 @@
+{
+  "actual": {
+    "actual_cleanup_success_result_created": false,
+    "controller_birth": {
+      "pid": 2400554,
+      "start": 35175973
+    },
+    "outer": {
+      "closed_epoch": 1792554317.043881,
+      "direct_child_joined": true,
+      "process_group_absent": true,
+      "returncode": 1,
+      "stderr": {
+        "ctime_ns": 1792554315041137698,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48403095,
+        "mode": "0o600",
+        "mtime_ns": 1792554315041137698,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-preparation-1/root-cleanup-controller-capture-1/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      "stdout": {
+        "ctime_ns": 1792554317013204237,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48403094,
+        "mode": "0o600",
+        "mtime_ns": 1792554317013204237,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-preparation-1/root-cleanup-controller-capture-1/stdout",
+        "sha256": "a9ea97a3c4c02a32a9272ce1a37988c9b8b13055b6c31ef4d59625fd1d641a67",
+        "size": 444,
+        "uid": 1000
+      }
+    },
+    "postjoin_started": false,
+    "release_sha256": "302b004a98fbf5de8cf22773f0a225e261c79a07f61e6e1f284098602adeeb1e",
+    "root_child_birth": {
+      "pid": 2400555,
+      "start": "35175978"
+    },
+    "status": {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--fsize=134217728:134217728",
+        "--cpu=unlimited:unlimited",
+        "--core=0:0",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-preparation-1/cleanup_failed_image.py",
+        "--release",
+        "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-preparation-1/cleanup-execution-release.json",
+        "--release-sha256",
+        "302b004a98fbf5de8cf22773f0a225e261c79a07f61e6e1f284098602adeeb1e",
+        "--execute"
+      ],
+      "cpu7_released": true,
+      "direct_child_joined": true,
+      "elapsed_seconds": 1.921555852983147,
+      "pid": 2400555,
+      "proc_start_ticks": "35175978",
+      "process_group_absent": true,
+      "returncode": 1,
+      "status": "FAIL_PRESERVED_STOPPED",
+      "stderr": {
+        "bytes": 0,
+        "ctime_ns": 1792554315081139047,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48403100,
+        "mode": "0o600",
+        "mtime_ns": 1792554315081139047,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-preparation-1/actual-cleanup-capture-1/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "uid": 1000
+      },
+      "stdout": {
+        "bytes": 71,
+        "ctime_ns": 1792554316993203562,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48403099,
+        "mode": "0o600",
+        "mtime_ns": 1792554316993203562,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-preparation-1/actual-cleanup-capture-1/stdout",
+        "sha256": "d63a9f167234985bb6986be0ff81164435d69858fc0b0fb7ed09c4d4010750cd",
+        "uid": 1000
+      },
+      "streams_closed": true
+    },
+    "stderr_bytes": 0,
+    "stdout": {
+      "bytes": 71,
+      "parsed": {
+        "reason": "root-command-failed:/usr/bin/docker",
+        "status": "REFUSED"
+      },
+      "sha256": "d63a9f167234985bb6986be0ff81164435d69858fc0b0fb7ed09c4d4010750cd"
+    }
+  },
+  "created_utc": "2026-10-21T03:47:59.352619+00:00",
+  "decision": "Adopt actual joined cleanupREFUSED1 and classify this invocation as pre-mutation failure. Preserve target/ownership retention and stop; no cleanup retry, postjoin or physical release.",
+  "evidence": [
+    {
+      "bytes": 2076,
+      "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-preparation-1/actual-cleanup-capture-1/status.json",
+      "sha256": "e2fce962c1f9102f7e1d8d62e6c245ff0d5239678a7138d132f59038b51c783f",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792554317013204237,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48403104,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792554317013204237,
+        "st_nlink": 1,
+        "st_size": 2076,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 71,
+      "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-preparation-1/actual-cleanup-capture-1/stdout",
+      "sha256": "d63a9f167234985bb6986be0ff81164435d69858fc0b0fb7ed09c4d4010750cd",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792554316993203562,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48403099,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792554316993203562,
+        "st_nlink": 1,
+        "st_size": 71,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-preparation-1/actual-cleanup-capture-1/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792554315081139047,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48403100,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792554315081139047,
+        "st_nlink": 1,
+        "st_size": 0,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 1034,
+      "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-preparation-1/root-cleanup-controller-capture-1/whole.json",
+      "sha256": "0c011abf130937c639b61365f472c556fd3a0b672f86a1e6b65031159b1102f9",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792554317041205182,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48403106,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792554317041205182,
+        "st_nlink": 1,
+        "st_size": 1034,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 1352,
+      "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-preparation-1/ROOT-ACTUAL-POST-REFUSAL-PATH-AND-MUTEX-METADATA.json",
+      "sha256": "5812b325a9569f1f40a3469e7c47e3e54d8d48a7c231ec69a9fff3544cc87044",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792554397631918639,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48403123,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792554397631918639,
+        "st_nlink": 1,
+        "st_size": 1352,
+        "st_uid": 1000
+      }
+    },
+    {
+      "bytes": 47254,
+      "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-preparation-1/cleanup-execution-release.json",
+      "sha256": "302b004a98fbf5de8cf22773f0a225e261c79a07f61e6e1f284098602adeeb1e",
+      "stable_full_identity": {
+        "st_ctime_ns": 1792554315029137293,
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48403090,
+        "st_mode": 33152,
+        "st_mtime_ns": 1792554315029137293,
+        "st_nlink": 1,
+        "st_size": 47254,
+        "st_uid": 1000
+      }
+    }
+  ],
+  "first_actual_predicate": {
+    "established": "A Docker subprocess completed and failed this strict predicate. The generic error does not retain its exact argv, rc, stdout/stderr or which conjunct failed. A timeout/launch exception would use a different path.",
+    "function": "root_command",
+    "line": 836,
+    "not_yet_established": "Exact completed Docker argv/conjunct and retained child stdout/stderr for this cleanup invocation; no Docker-daemon, resource-limit, source-pin or mutation cause is invented.",
+    "predicate": "result.returncode or result.stderr or len(result.stdout) > limit",
+    "raise_line": 837,
+    "source": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/independent-review-1/current-terminal-preparation-1/cleanup_failed_image.py",
+    "source_sha256": "ec7126516041ef267e68127180fbe1dca785847078d795cf9009389980483ba2"
+  },
+  "implementation_ownership": false,
+  "one_precise_next_observation": "One separately reviewed bounded read-only exact Docker-call diagnostic must retain actual argv/rc/stdout/stderr and correlate the current seven-path/mutex/owner/CID retention state. Sourceauthor owns preparation. Do not rerun --execute or loosen empty-stderr checks globally. If stderr-only logs is confirmed, make one narrow channel-preserving correction and actual-body regression before any new effect release.",
+  "pre_mutation_classification": {
+    "accepted_scope": "This failed cleanup invocation did not enter its record/container mutation transaction. This is not whole machine physical release, permanent current absence, or permission to reuse ownership names/reservations.",
+    "no_cleanup_success": true,
+    "physical_release": false,
+    "positive_support": "Actual normalREFUSED return/direct joins with no quarantined nonreturning hold, plus all seven fresh transaction paths absent at epoch1792554397.6364355 and actual root mutex27:4 available. Under unchanged recover1374..1412, a mutation_started failure keeps rootlock/quarantine hold and cannot normally close this way.",
+    "post_refusal_metadata": {
+      "epoch": 1792554397.6364355,
+      "root_mutex": {
+        "device": 27,
+        "held_by_other": false,
+        "inode": 4
+      },
+      "scope": "Time-qualified post-refusal metadata only; not full physical acceptance",
+      "transaction_paths": [
+        {
+          "exists": false,
+          "path": "/home/holden/mckernel-work/scratch/settid-current-precompiler-terminal-20261021-1.mutex"
+        },
+        {
+          "exists": false,
+          "path": "/home/holden/mckernel-work/scratch/settid-current-precompiler-terminal-20261021-1.plan.json"
+        },
+        {
+          "exists": false,
+          "path": "/home/holden/mckernel-work/scratch/settid-current-precompiler-terminal-20261021-1.journal.jsonl"
+        },
+        {
+          "exists": false,
+          "path": "/home/holden/mckernel-work/scratch/settid-current-precompiler-terminal-20261021-1.docker-logs.capture"
+        },
+        {
+          "exists": false,
+          "path": "/home/holden/mckernel-work/scratch/settid-current-precompiler-terminal-20261021-1.quarantine.json"
+        },
+        {
+          "exists": false,
+          "path": "/home/holden/mckernel-work/scratch/settid-current-precompiler-terminal-20261021-1.shared.archive"
+        },
+        {
+          "exists": false,
+          "path": "/home/holden/mckernel-work/host-preparation/settid-current-production-link-preparation-20261021-1/full-image-attempt-1/settid-current-precompiler-terminal-20261021-1.attempt.archive"
+        }
+      ]
+    },
+    "source_flow": "Fresh Transaction constructor holds existing root mutex without creating transaction artifacts. Transaction.run1237..1244 enters preflight_fresh because all new paths are absent. preflight_fresh1226..1233 performs protected_files,pristine,census and readonlycapture_logs before lock(execute)1245 can create MUTEX or any mutation latch. Failed Docker can occur during census ps/inspect or capture_logs logs in that preflight; generic output does not select one."
+  },
+  "preservation": {
+    "cleanup": "REFUSED1 unchanged",
+    "compiler_native_C_retirement_credit": false,
+    "new_attempt_or_retry_authority": false,
+    "original_build": "FAIL_PRECOMPILER_SOURCE_PREREQUISITE_DRIFT unchanged",
+    "owner_nonce": "45d0f8d4997b441ab526df26762e8fbc",
+    "postjoin_authority": "Prior conditional postjoin predicate unsatisfied, so it remains unstarted/unreleased",
+    "retained_common_shared": "Do not raw unlink or release; not physically cleared by this disposition",
+    "targetCID": "88102070029b941df8c18c8a25a11778625a28390887c91127539bae5914b120"
+  },
+  "review_actions": {
+    "Git": 0,
+    "builds": 0,
+    "census_commands": 0,
+    "effects": 0,
+    "imports": 0,
+    "leases": 0,
+    "replay": 0,
+    "root_operations": 0,
+    "source_inventory": 0,
+    "tests": 0
+  },
+  "reviewer": "/root/m06_closed_stage_review",
+  "schema": "mckernel.independent-current-image-first-cleanup-refusal-disposition.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_author_coordination": "/root/sdk66_source_review owns exact diagnostic proposal; reviewer does not duplicate it or run source/root/census commands.",
+  "source_bound_diagnostic_candidate": {
+    "candidate": "The exact precompiler container log is on Docker STDERR. Existing capture_logs sends docker logs through a helper that rejects every nonempty stderr before comparing raw stdout with the expected combined retained log.",
+    "genuine_original_log_client": [
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 882465,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-c8d19a0e07d8465ba1ac61f096e3f82c/command-d6c30dbb34424bbd8be71292a0117311/status.json",
+        "sha256": "4ea525005fe5bb9a6521f34039497232dd7048ec7fde43827810787a6178e08e",
+        "size": 257,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 882467,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-c8d19a0e07d8465ba1ac61f096e3f82c/command-d6c30dbb34424bbd8be71292a0117311/stderr",
+        "sha256": "3a01121644174ac971c1f15c6120ffb1363a0caa8d1aac05bf3367a388031df2",
+        "size": 746,
+        "uid": 1000
+      },
+      {
+        "device": 1828,
+        "gid": 1000,
+        "inode": 882466,
+        "mode": "0o600",
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/scratch/native-rust-phase5-current-optin-image-guard-c8d19a0e07d8465ba1ac61f096e3f82c/command-d6c30dbb34424bbd8be71292a0117311/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      }
+    ],
+    "inference_only": true,
+    "location": "capture_logs174..187 through run_privileged_large/root_command830..837",
+    "original_client_facts": "Original guard log client d6c has exited0, stdout0,stderr746 SHA3a011216, matching retained expected container.log. This makes a logs-channel mismatch a concrete candidate; it does not retroactively prove which current Docker call failed.",
+    "review_miss": "The independent release reused the old strict Docker helper without accounting for this current precompiler stderr-only log shape. That compatibility boundary should have been resolved before the effect attempt; this failure is preserved and does not reset family history."
+  },
+  "status": "FAIL_PRESERVED_BEFORE_TRANSACTION_MUTATION_EXACT_DOCKER_CHILD_PREDICATE_PENDING"
+}
