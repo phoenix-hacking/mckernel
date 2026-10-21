@@ -1,3 +1,53 @@
+## Current — launcher physical accepted; runtime generation/whole/final binding passed
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Genuine raw-five acceptance562c4d98 records reviewer/source_review provenance;
+independent current physical reportea02e577 and mappingf0a5993d accepted with
+separate genuine compiler-review receipt09177e09. No old clearance substituted.
+Actual FD9/TAR5/journal9,78objects/82selected/84roles,4+559inventoryentries,
+two current innerbirths+toolpairs and ownership-record retirement all joined.
+
+Reviewed runtime generatora468 actual0/.140504s; necessary wholecaller0/2.217143s,
+empty stderr/directjoin/groupabsence/closedstreams. Fivecases pass,19pending,
+complete8sourceFD/full9 map, accepted0f4cfa7f. Existing finalbinder0/.608490s,
+19immutablefinaloutputs/sevenrows/49freshpaths, coherentpacketaa13bd7a; no guest.
+ROOT-SEVEN staticpointer and capturetemplates retain genuine0f4 staticacceptance;
+external exactexecutionreview stays separate, avoiding cycles.
+
+Next: bind genuine current publication+fresh grant into prepared exact7step
+payload3ea3a8d8, independently release and run unchanged strict NUMA native.
+Kernel1d8/newlauncher33f/stageda27/norm4f/app0339 preserved. Final temporal
+snapshot/machine/guard remain unobservedNULL until actual sequence.
+Review151 numerical totals held87(33OS54infra)/30compiler/6acceptednative,
+21/35checks/fivewhole/28behaviors/Rust17-14. No pin-only source or planning credit.
+Launcher artifact clock13:06:08.124394UTC; no native feedback/speedup claimed.
+
+## Current — launcher cleanup and postjoin passed; positive physical review pending
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exact three-operation execution review afd358d5 accepted corrected DATA packet;
+original attribution/profile/flag draft preserved. SAME final release405c45d3
+bound preflight/cleanup/postjoin. Fresh floors/UUID/stablemonitor/all-lane
+quiescence checked; permanent development mutex27:4 preserved/no resize.
+
+Actual strict fresh preflight0/1.951221s status0cef1b36: predicatepassed,
+mutationfalse/transactionmutexnotopened/transactionclosed. Cleanup0/5.410368s
+statusdb19d246, stdout2451B/emptyerr; byte-exact O_EXCLresult22ebf917,
+PASS_EXECUTED/terminaltrue/containerabsent. Postjoin0/1.525188s status2a6c2295,
+stdout20480B five-memberTAR, stderr29336B typed positive FD/evidence report.
+Both actual owner groups joined/absent/streamsclosed. Genuine toolpairsf41a0c90
+retain current cleanup/postjoin rawstarted/completed identities and times;
+outer OS/group remainnull, toolhandles86480/65371 never relabeled OSPIDs.
+
+Independent current launcher physical report+knownkind mapping pending exact
+current FD9/TAR5/journal9/controller/record-release joins; no old clearance reuse.
+Runtime sourcea468 already eligibleb922, norm4f0716+observer9bfd bound in
+DATAf31c29cb; only actualphysicalreport/mapping late. Next: accept physical once,
+existing runtime generation/constructor/wholecaller/exactnative release, then
+unchanged strict NUMA native116B/emptyerr/exit37 with kernel1d8 and launcher33f.
+Counts held87sources(33OS54infra)/30compiler/6native,21checks/fivewhole.
+No native feedback or speedup claim; artifact clock13:06:08.124394UTC retained.
+
 ## Current — launcher observer and original-five export passed; cleanup release binding
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
