@@ -1,0 +1,46 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/bound-terminal-source-1/check_current_pass_bodies.py"
+  ],
+  "capture_directory": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/bound-terminal-source-1/ordinary-current-pass-bodies-check-1",
+  "checker": {
+    "bytes": 9110,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/bound-terminal-source-1/check_current_pass_bodies.py",
+    "sha256": "578652d4030fa141d5ce51fce4f8b4a7bffb26ea758288cff6e8a700163b9da3"
+  },
+  "cpu": 7,
+  "profile": {
+    "as_soft_hard": [
+      1073741824,
+      1073741824
+    ],
+    "core": 0,
+    "cpu": 7,
+    "cpu_seconds": 30,
+    "grace_seconds": 2,
+    "jobs": 1,
+    "nofile": 256,
+    "stream_fsize": 33554432,
+    "wall_seconds": 35
+  },
+  "role": "ordinary-current-pass-binding",
+  "root_grant": null,
+  "stream_cap_bytes": 33554432
+}
