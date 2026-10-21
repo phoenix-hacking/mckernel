@@ -1,3 +1,21 @@
+## Current — exact source-FD correction passed; final native controls next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Guard-source-fd-correction-1 source16/full8sourceFDmap and six-case actual11rowloop
+are accepted0ed1/1c6d. Exactlinkcounts1/2+allnineFDfields remain pinned; no source
+mutation, alias/privatecopy or broad link allowance. Source31/body/contextdfac07d2
+pushed/fetched, proofb281c00b;44oldpreownerfailurefiles preserved in that checkpoint.
+Actual newfinal19 closed0/.586317s(PID2467039/start36115541). Actualcanonical guard
+source-loop+snapshotstatic/terminaljoins closed0/.667617s(PID2467522/start36121216),
+no root/main/snapshot. Retained sdk66 reviewer is closing actual19 review; root
+then derives exact finalcontrol list, publishes/fetches, gets one concise root7
+conditional decision and fresh admission→LAST/guard/native in same invocation.
+No new stage/image/app/norm/rootwitness. Prior failed guardD/expired snapshots and
+all source bytes retained; native has NEVER launched for this currentthreads case.
+C7/ACK7885 latestphysical; preownerACKd326 only acknowledges closed preparedchain.
+NUMA actualsource160/source199/final-binding-2 remains queued after threadnative.
+Formal21/35,fivewhole,28native,Rust17/14 and26builds unchanged; no fixturecredit.
+
 ## Current — final guard source-identity refusal; native not launched
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
