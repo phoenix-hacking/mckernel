@@ -1,3 +1,71 @@
+## Current — NUMA whole-caller check closed0; runtime release next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Newcurrent decoder4d8f9446/sourcefreezeaf8f94bc/mappingbcceddfd/full8sourceFDmap
+4c07d3e4 independently source+mapping reviewed. Exactexisting wholecallercheck
+ranonce0/2.235943s, directjoin/groupabsent/closedstreams/emptyerr; realpending19,
+7rows49freshpaths and same4refusals passed, zero root/snapshot/guest operations.
+Peeractualresultreview pending; no runtime/default/native/path credit implied.
+Root envelopepreexecvariableerror retainedcapture1, no childstarted; corrected
+variable/freshcapture2, candidatecodeunchanged. Evidence private runtime-
+preparation-1/current-physical-bound-1/actual-whole-caller-{capture-2,result.json}.
+
+Physicalclearanced0f68d8c accepted. Existing static/sevenstep source-Gitbinding,
+freshsnapshot/finalguard/exactruntime release and native app116B/empty/37 next.
+Rootcheckpoints changed code/evidence once; data-only latebinding adds no push
+prerequisite. Build-to-native feedback clockbasis07:43:45.225986UTC; no feedback
+yet. Userreview141:82source/28compiler/sixnative,21/35/fivewhole/28logical/Rust17/14.
+
+## Current — genuine production image physical release accepted; bind NUMA runtime
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Samefinalrelease6f6ab48d (canonicalc4ae74ec) passed actual read-onlypreflight
+0/2.013154s strictpredicate/noeffects, cleanup0/5.723557s, postjoin0/1.698685s.
+Exactsuccessfulresult3ab05e32;5memberarchive187ddbbf; typedstderrce8434ff;
+9journalrows/all88objects/97roles/92selected/inventories4+577 preserved.
+Independent image_source_review accepts genuine currentphysicalretirement, root
+recordd0f68d8c/15250B, recheckedmatchingfacts once. Container105fd6a3, lease,
+common/shared/quarantine absent; permanent27:4 reacquired; scratchUUID preserved.
+No cleanup replay or additional live census needed. No native acceptance implied.
+
+Current capture controllers used genuine tool-owned terminalreceipts, not prior
+nested wrappers. Exact protocolstarted/completed pairs retained byteforbyte from
+launcherprotocol lines27055/27065/27078/27083. Independent reviewer accepts this
+explicit currentkind with TWO observedrootchildbirths; outerOSidentity unknown,
+no fabricatedouterbirth/directwait/group flags. Originalproposedouter-contract
+source is preserved; finite decoder adaptation source work underway.
+
+Owner numa_app_oracle_correction finishes currentphysicaldecoder/fullsourceFDmap
+and actual runtimebindings; image_source_review checks narrow changedsource/map.
+Next existing bounded wholecaller/guard checks, publication of changed code,
+exact separate runtime release/fresh admission then unchanged NUMA app116B/empty/37.
+Accepted stageeccae19c/normalization809e2828 need no repetition. Buildclosedstatus
+clockbasis07:43:45.225986UTC retained; actualnativefeedback still unobserved.
+Currentuserreview141:82source/28compiler/sixnative,21/35/fivewhole/28logical/Rust17/14.
+
+## Current — terminal raw export closed0; focused NUMA normalization accepted
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Published/fetched69dbe284/a166d55f all45changed blobs exact (proof6dd9e93d).
+Reviewed single read-onlyobserver release3bf973eb ran0/1.746237s (b1ce7675),
+summary0/.131837s (04c06be6), original5FDmetadata0/.128237s (4d59b60e).
+Independent firstthree joins accepted for rawexportonly. Separately reviewed
+raw5release31bf26aa exported originalfive0/.162444s,542720B tar9965f955,
+status024c6fe7. Exact exported five match summary/fullFD hash authority80c173cd;
+raw5wholeacceptance/finalcleanuprelease/preflight/cleanup/postjoin still pending.
+No new heavy while container105fd6a3/common/shared remain retained.
+
+Focused NUMA normalization ran0/.558312s under grantedCPU6 after observerjoin;
+independentactualreview/rootrecorder809e2828 accepts preparationonly. Manifest
+7d596e75 byteidentical5274B, parentemptyfullidentity, fullQMP104B,21runtimepaths
+inside2existingreadonlyroots. Bindingf63dd29f/preflight527cd020/whole d4199b24.
+Rootruntimeowner numa_app_oracle_correction prepares existing FD/guard/caller
+joins; actualnewphysicalclearance and separate runtime release still required.
+No compiler/app/stage replay, native/default/path/Cretirement credit unchanged.
+Evidence private host-preparation/numa-current-image-{terminal,native-app}-
+preparation-20261021-1/. Rootrecords genuine reviewerprovenance, preserve failures.
+Accepted81source/28compiler/sixnative,21checks/fivewhole/28logical/Rust17/14 held.
+
 ## Current — accepted production image; terminal correction passed; NUMA stage accepted
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,35 @@
+--- /home/holden/mckernel-work/host-preparation/settid-current-image-native-app-preparation-20261021-1/runtime-preparation-1/whole-caller-source-2/check_current_whole_caller.py
++++ current-physical-bound-1/check_current_whole_caller.py
+@@ -19,10 +19,10 @@
+     mapping=json.loads(Path(cfg['physical_consumer_mapping']['path']).read_bytes())
+     physical=json.loads(Path(cfg['latest_physical']['path']).read_bytes())
+     expected=mapping['independently_data_bound_expected_projection']
+-    adapter=load('actual_current_pass2_reader',D/'current_pass2_physical.py')
++    adapter=load('actual_current_pass2_reader',D/'current_numa_image_physical.py')
+     snapshot=load('actual_threads_LAST_snapshot_source',D/'root_manual_snapshot_threads.py')
+     rootlock=dict(device=27,inode=4,uid=0,gid=0,mode='0o644')
+-    b=dict(physical_projection_source=ref(D/'current_pass2_physical.py'),physical_review=cfg['latest_physical'],physical_predecessor=expected,root_lock_identity=rootlock)
++    b=dict(physical_projection_source=ref(D/'current_numa_image_physical.py'),physical_review=cfg['latest_physical'],physical_predecessor=expected,root_lock_identity=rootlock)
+     # Exact current source caller, not a stand-in projection function.
+     snapshot.terminal_joins(physical,b)
+     assert physical==adapter.checked(cfg['latest_physical'])
+@@ -35,8 +35,8 @@
+     assert pre['root_owner_argv']==cfg['root_owner_argv'] and pre['qemu_argv']==nd.expected_qemu_argv(manifest,Path(pre['paths']['attempt']))
+     # Invoke the real existing nineteen-output derivative in pending mode only.
+     before=set(D.rglob('*.PENDING-STATIC-CORRECTED'));assert not before
+-    saved_argv=sys.argv;sys.argv=[str(D/'bind_threads_native_packet.py')]
+-    try:runpy.run_path(str(D/'bind_threads_native_packet.py'),run_name='__main__')
++    saved_argv=sys.argv;sys.argv=[str(D/'bind_numa_native_packet.py')]
++    try:runpy.run_path(str(D/'bind_numa_native_packet.py'),run_name='__main__')
+     finally:sys.argv=saved_argv
+     produced=set(D.rglob('*.PENDING-STATIC-CORRECTED'));assert len(produced)==19
+     seven=json.loads((Q/'FINAL-SEVEN-ROOT-CALL-DATA.json.PENDING-STATIC-CORRECTED').read_bytes())
+@@ -58,7 +58,7 @@
+     wrongfd=dict(status['stdout'],inode=status['stdout']['inode']+1)
+     refuse('wrong-complete-stream-FD-inode',lambda:adapter.checked_bytes(wrongfd),contains='full actual transaction/raw record identity')
+     badbirth=copy.deepcopy(physical['captures'][0]);badbirth['inner_birth']['proc_start_ticks']='0'
+-    refuse('changed-inner-birth-identity',lambda:adapter.capture_join(badbirth,status),contains='current inner birth identity')
++    refuse('changed-inner-birth-identity',lambda:adapter.capture_join(badbirth,status,physical['controller_terminal_receipts'][0]),contains='current inner birth identity')
+     for key in ('container_id','owner_nonce'):
+         altered=copy.deepcopy(b);altered['physical_predecessor'][key]='0'*len(altered['physical_predecessor'][key])
+         refuse('wrong-expected-projection-'+key,lambda altered=altered:snapshot.terminal_joins(physical,altered),snapshot.Refusal,contains='complete genuine')

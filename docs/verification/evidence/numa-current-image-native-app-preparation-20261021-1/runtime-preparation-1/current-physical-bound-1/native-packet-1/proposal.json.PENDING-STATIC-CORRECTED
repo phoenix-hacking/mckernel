@@ -1,0 +1,144 @@
+{
+  "actual_full_argument_preflight": {
+    "bytes": 16349,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/normalization-preparation-1/ACTUAL-NATIVE-PREFLIGHT.json",
+    "sha256": "527cd02081103e51d4c3065b5e9ce7da3f7038aeff0da48aec31f642a67a5b2a"
+  },
+  "actual_ordinary_acceptance": {
+    "bytes": 2051,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/normalization-preparation-1/ROOT-RECORDED-ACTUAL-NORMALIZATION-ACCEPTANCE.json",
+    "sha256": "809e2828fa78d9a1cced662e832bc4269316c267eff07641d2181db6b6653d3d"
+  },
+  "actual_owner_sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+  "actual_stage_review": {
+    "bytes": 2051,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/normalization-preparation-1/ROOT-RECORDED-ACTUAL-NORMALIZATION-ACCEPTANCE.json",
+    "sha256": "809e2828fa78d9a1cced662e832bc4269316c267eff07641d2181db6b6653d3d"
+  },
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "--owner-sha256",
+    "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/numa-p-20261021-1/t",
+    "--nonce",
+    "d7aa299c51544d4c932741c489adabe0",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/numa-n-20261021-1/manifest.json",
+    "--manifest-sha256",
+    "7d596e75ba43ba471848a88847974f9183b5d6973ec4132a43b031a48a947985"
+  ],
+  "component_ABI": {
+    "bytes": 4432,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/newbound-source-1/ABI-AND-CONSUMER-CONTRACT.json",
+    "sha256": "ae7c887fe515628f452ba83e4a8bf9e7cd2940470a4f0aee64f353209087b908"
+  },
+  "component_artifact": {
+    "bytes": 11103,
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-cpu-reacquire-external-modules-result-review-20261017-1.json",
+    "sha256": "0cc6f31e9c8f92696abcd9390c937c6414f0917fc065061bef24c28034bf0ec5"
+  },
+  "criterion": "current-native-numa-interval",
+  "diagnostic_extra_capture_growth_bytes": 8388608,
+  "effective_current_controller_stop_percent": 100,
+  "expected_apps_if_native_passes": 1,
+  "final_machine_release": null,
+  "fresh60s_snapshot": null,
+  "latest_exclusive_operation_physical_predecessor": {
+    "bytes": 15250,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-terminal-preparation-20261021-1/schema-correction-1/ROOT-RECORDED-ACTUAL-CURRENT-IMAGE-PHYSICAL-RELEASE-1.json",
+    "sha256": "d0f68d8ce0e8758faa25dff241f6f2d02683904a69deb2c927c3b7a38a53ae6c"
+  },
+  "new_throughput_or_behavior_credit": false,
+  "nonce": "d7aa299c51544d4c932741c489adabe0",
+  "normalized_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/numa-n-20261021-1/manifest.json",
+    "sha256": "7d596e75ba43ba471848a88847974f9183b5d6973ec4132a43b031a48a947985",
+    "size": 5274
+  },
+  "oracles_stdout_bytes": [
+    116
+  ],
+  "parent": {
+    "identity": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 882650,
+      "mode": "0o700",
+      "uid": 1000
+    },
+    "path": "/home/holden/mckernel-work/scratch/numa-p-20261021-1/t"
+  },
+  "parent_full_ninefield_identity": {
+    "ctime_ns": 1792571013769704447,
+    "device": 1828,
+    "gid": 1000,
+    "inode": 882650,
+    "mode": "0o700",
+    "mtime_ns": 1792571013769704447,
+    "nlink": 2,
+    "path": "/home/holden/mckernel-work/scratch/numa-p-20261021-1/t",
+    "size": 4096,
+    "uid": 1000
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "threads"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 37,
+      "stderr_hex": "",
+      "stdout_hex": "6e756d6120616c6c6f7765643d3120696e74657276616c3d3120717565726965733d39206d6f64653d31206d61736b3d31206e65696768626f72733d322070726f636573733d31206775617264733d312062797465733d3132323838207072657365727665643d3120756e6d61707065643d310a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "physical_predecessor_is_not_module_artifact_acceptance": true,
+  "profile": {
+    "cleanup_timeout_seconds": 15,
+    "cpus": 4,
+    "cpuset": "2-5",
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_timeout_seconds": 300,
+    "guest_vcpus": 4,
+    "heavy_operations": 1,
+    "mckernel_cpus": 1,
+    "mckernel_memory_mib": 128,
+    "memory": 12884901888,
+    "memory_swap": 12884901888,
+    "network": "none",
+    "payload_timeout_seconds": 10,
+    "pids": 512
+  },
+  "runtime_release": false,
+  "scope": "Functional OS/apps plus Rust cutover; current selected NUMA interval app with exact116B stdout/empty stderr/exit37 and unchanged full lifecycle; no automatic native/default/ACK/C-retirement credit",
+  "stage_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/numa-m-20261021-1/numa/manifest.json",
+    "sha256": "7d596e75ba43ba471848a88847974f9183b5d6973ec4132a43b031a48a947985",
+    "size": 5274
+  },
+  "status": "PENDING_LAST_SNAPSHOT_AND_FINAL_MACHINE",
+  "strict_oracle": {
+    "exit_code": 37,
+    "stderr_hex": "",
+    "stdout_hex": "6e756d6120616c6c6f7765643d3120696e74657276616c3d3120717565726965733d39206d6f64653d31206d61736b3d31206e65696768626f72733d322070726f636573733d31206775617264733d312062797465733d3132323838207072657365727665643d3120756e6d61707065643d310a"
+  }
+}

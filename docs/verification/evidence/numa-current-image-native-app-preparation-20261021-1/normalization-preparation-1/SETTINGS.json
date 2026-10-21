@@ -1,0 +1,151 @@
+{
+  "attempt_parent": "/home/holden/mckernel-work/scratch/numa-p-20261021-1/t",
+  "collector_sha256": "268b967064e44a61340e43a23940ef2bba16ad22e3615a6f5d0e7108428890b6",
+  "latest_exclusive_predecessor": null,
+  "manifest_directory": "/home/holden/mckernel-work/scratch/numa-n-20261021-1",
+  "nonce": "d7aa299c51544d4c932741c489adabe0",
+  "normalization_interpreter": {
+    "mode": 33277,
+    "path": "/home/holden/anaconda3/bin/python3.9",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "size": 15880080
+  },
+  "parent_binder": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/normalization-preparation-1/native_owner_binding.py",
+    "sha256": "f3bbc2429dfa8a01a8d9178dd2404d93ef3fc0330eb8d1675bebcb428a3e7939",
+    "size": 4257,
+    "mode": 33152
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "threads"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 37,
+      "stderr_hex": "",
+      "stdout_hex": "6e756d6120616c6c6f7765643d3120696e74657276616c3d3120717565726965733d39206d6f64653d31206d61736b3d31206e65696768626f72733d322070726f636573733d31206775617264733d312062797465733d3132323838207072657365727665643d3120756e6d61707065643d310a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "proposed_full_qemu_argv": [
+    "/usr/libexec/qemu-kvm",
+    "-machine",
+    "q35",
+    "-accel",
+    "tcg,thread=multi",
+    "-cpu",
+    "max,la57=off",
+    "-smp",
+    "4,sockets=2,cores=2,threads=1",
+    "-m",
+    "8192",
+    "-object",
+    "memory-backend-ram,size=4G,id=ram-node0",
+    "-object",
+    "memory-backend-ram,size=4G,id=ram-node1",
+    "-numa",
+    "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+    "-numa",
+    "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+    "-nic",
+    "none",
+    "-display",
+    "none",
+    "-no-reboot",
+    "-no-shutdown",
+    "-S",
+    "-monitor",
+    "none",
+    "-qmp",
+    "unix:/home/holden/mckernel-work/scratch/numa-p-20261021-1/t/attempt-d7aa299c51544d4c932741c489adabe0/qmp.sock,server=on,wait=off",
+    "-serial",
+    "file:/home/holden/mckernel-work/scratch/numa-p-20261021-1/t/attempt-d7aa299c51544d4c932741c489adabe0/serial.log",
+    "-debugcon",
+    "file:/home/holden/mckernel-work/scratch/numa-p-20261021-1/t/attempt-d7aa299c51544d4c932741c489adabe0/debugcon.log",
+    "-global",
+    "isa-debugcon.iobase=0xe9",
+    "-kernel",
+    "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+    "-initrd",
+    "/home/holden/mckernel/scratch/numa-a-20261021-1/numa/lifecycle.cpio.gz",
+    "-append",
+    "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+  ],
+  "root_owner_interpreter": {
+    "mode": 33277,
+    "path": "/home/holden/anaconda3/bin/python3.9",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "size": 15880080
+  },
+  "runtime_owner": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+    "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+    "size": 58828
+  },
+  "runtime_release": null,
+  "runtime_source_directory": "/home/holden/mckernel/scripts/application-tests",
+  "runtime_source_pins": [
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_container_owner.py",
+      "sha256": "9084bfd3ca6e0f3eebd66e07922788cab7e99052b3658e3f15a37b8f8b174200",
+      "size": 58828
+    },
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_runner.py",
+      "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499",
+      "size": 6005
+    },
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440
+    },
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+      "size": 25398
+    },
+    {
+      "mode": 33204,
+      "path": "/home/holden/mckernel/scripts/application-tests/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "size": 9913
+    }
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "snapshot": null,
+  "source_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/numa-m-20261021-1/numa/manifest.json",
+    "sha256": "7d596e75ba43ba471848a88847974f9183b5d6973ec4132a43b031a48a947985",
+    "size": 5274
+  },
+  "stage_acceptance": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/independent-review-1/ROOT-RECORDED-ACTUAL-OFFLINE-STAGE-ACCEPTANCE.json",
+    "sha256": "eccae19ce2e4b1439efd4142be6fdde6b739c4f0f65052882e5ecce568211d73",
+    "size": 5715,
+    "mode": 33152
+  },
+  "stage_result": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/scratch/stid-a-20261021-1/threads/stage-result.json",
+    "sha256": "b4c9feac6dace38b19eba1c0f0fe940ff7cb40ef953945cd58284df584e765b2",
+    "size": 19225
+  }
+}

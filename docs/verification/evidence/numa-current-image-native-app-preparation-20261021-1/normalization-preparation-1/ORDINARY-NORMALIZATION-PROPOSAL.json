@@ -1,0 +1,77 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_REVIEW_AND_FRESH_CPU6_GRANT_REQUIRED",
+  "normalizer": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/normalization-preparation-1/prepare_native.py",
+    "sha256": "8f145a79f44ccc8ac9d46460bc3c7d6424b7c4142c3d5c2e4f0c4746fb79b54d",
+    "size": 9566,
+    "mode": 33152
+  },
+  "settings": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/normalization-preparation-1/SETTINGS.json",
+    "sha256": "81153f74ac38f6f6952c33e09dd008b48afc37a7216fcb00e2aa505cd331e0a4",
+    "size": 5545,
+    "mode": 33152
+  },
+  "input_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/normalization-preparation-1/INPUT-PINS.json",
+    "sha256": "3bc2b49395fdd528b4c70b8838f94210ce624e4f16c4c436ad4bdeb74df9b146",
+    "size": 2468,
+    "mode": 33152
+  },
+  "parent_binder": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/normalization-preparation-1/native_owner_binding.py",
+    "sha256": "f3bbc2429dfa8a01a8d9178dd2404d93ef3fc0330eb8d1675bebcb428a3e7939",
+    "size": 4257,
+    "mode": 33152
+  },
+  "command": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=55:55",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-current-image-native-app-preparation-20261021-1/normalization-preparation-1/prepare_native.py"
+  ],
+  "profile": {
+    "cpu": 6,
+    "jobs": 1,
+    "address_space_bytes": 1073741824,
+    "aggregate_cpu_seconds": 55,
+    "child_wall_seconds": 52,
+    "outer_wall_seconds": 60,
+    "network": false,
+    "root": false,
+    "Docker": false,
+    "host_floor_bytes": 17179869184,
+    "scratch_floor_bytes": 12884901888,
+    "emergency_reserve_bytes": 671088640,
+    "host_growth_bytes": 268435456,
+    "scratch_growth_bytes": 1048576,
+    "stdout_limit_bytes": 1048576,
+    "stderr_limit_bytes": 65536
+  },
+  "capture_helper": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1/stage-preparation-1/run_two_commands_source_bound_corrected.py",
+    "sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "expected": [
+    "manifest7d596e75 bytes5274 copied byte-identical mode0600",
+    "new UID/GID1000 empty0700 parent full nine-field identity; actual attempt absent",
+    "same canonical9084 owner strict loader/default handling and no-effect argv/QMP104byte join",
+    "strict NUMA116B/empty/37 with unchanged EOF/lifecycle checks; reala4b7 image/equal689d launcher/module/bz tuple joins",
+    "all runtime-consumed paths in existing REPO/SCRATCH mounts; host-only binder separately pinned",
+    "ordinary child exit0/joined/groupabsent/streamsclosed; no timeout or observer/retirement error"
+  ],
+  "root_authorization": null,
+  "runtime_release": false,
+  "native_accepted": false
+}

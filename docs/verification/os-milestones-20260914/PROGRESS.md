@@ -72,8 +72,8 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 
 ### Next practical work
 
-- Actual new source6959/49, both whole source gates and exact guard/current-owner caller join+8refusals accepted (cb188164,8e980564). Publish/fetch new production image controls, bind fresh setup/snapshot/final request/payload, obtain independent one-shot heavy release and build one matching current scheduler/NUMA image. Preserve source/defaultOFF/diagnosticoptin and all real mcexec/ABI oracles.
-- Use accepted unchanged Rust NUMA app compile0/Linuxref37 and strict116B oracle/9 comparator vectors (independent3abbf0e8). Preserve original wrapper field-order failure0ce8675b. No app recompile/replay to repair that comparator; matching linked image/native release still pending.
+- Accepted production image7331e75d/build28 and decoder405dbe3b/checkpoint69dbe284 are unchanged. Genuine firstthree observer/summary/FD joins and raw5 export accepted3a23d347. Finish reviewed exact same-final-release freshpreflight/conditionalcleanup/postjoin using existing engineec35; container/common/shared retained until actual independent physicalclearance. Preserve all firstfailures/no newheavy/oneheavy/noresize/floors.
+- Stageeccae19c and actual normalizationd4199b24/rootrecorder809e2828 accepted once. Finish finite currentphysicaldecoder/mapping/fullsourceFDmap in parallel withcleanup, leave future clearance refs unresolved. Bind genuine newphysicalacceptance once, run existing boundedwholecallerchecks, exactruntime release and unchanged NUMA app116B/emptyerr/37. No repeated source/app/compiler/stage/normalization audits; qualifiedsixbatch stayslater. Measure from persistedclosedbuildstatus2026-10-21T07:43:45.225986Z toactualnativefeedback; no speedupclaim.
 - Continue open real process child ownership handoff and native lifecycle/restoration against supported matched artifacts. Preserve accepted21/35 checks/five whole milestones and historical artifact-scoped behaviors; no source/compiler/Linux result counts as native/default/C-retirement.
 - Preserve SDK66 fullmodule capacity/no-resize blocker, scratch UUID/110GiB image, all failed evidence, genuine service/auth/resource stops and existing one-heavy profile. Deferred qualification remains deferred.
 
@@ -81,8 +81,8 @@ Original formal qualification is **historical / DEFERRED**. Deferred does not me
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-21T08:17:56+00:00`
-- Launcher state heartbeat: `2026-10-21T08:17:42.565820+00:00`
+- Dashboard refreshed: `2026-10-21T08:55:39+00:00`
+- Launcher state heartbeat: `2026-10-21T08:55:36.551239+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `2486026`; server PID: `2486028`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261021T070405Z-729d8cb8`
