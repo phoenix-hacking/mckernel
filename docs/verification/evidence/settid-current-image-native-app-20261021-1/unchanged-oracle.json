@@ -1,0 +1,58 @@
+{
+  "accepted_review": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/docs/verification/evidence/native-core-threads-current942-result-review-20261017-1.json",
+    "sha256": "2f4e21d99ebf17acd760c2193ac3872d68bf2d03b9a7d444f82daeff93571d23",
+    "size": 13782
+  },
+  "collector": {
+    "mode": 33216,
+    "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/init",
+    "sha256": "268b967064e44a61340e43a23940ef2bba16ad22e3615a6f5d0e7108428890b6",
+    "size": 1021992
+  },
+  "collector_source": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-threads.c",
+    "sha256": "60921bc30463be3fa7bbf49e7589cb23ba31cff0fb56c767075a06927e7d4b70",
+    "size": 23008
+  },
+  "collector_source_contract": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/rust-scheduler-debug-guest-continuation-20261018-1/collector-source-contract.json",
+    "sha256": "b0e447c2b8b50b5fa5a6067d2109fd1d87784e6243b72b183d51d379f8331172",
+    "size": 5110
+  },
+  "evaluator": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+    "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+    "size": 53440
+  },
+  "native_outcome": null,
+  "oracle_semantics": "Unchanged generic native_diagnostic.evaluate exact25-byte stdout NATIVE_CORE PASS threads newline, empty stderr, raw exited37, both1024 limits, stream EOF/accounting and full unchanged lifecycle/error checks. No AVX typed parser or AVX acceptance claims.",
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "threads"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 37,
+      "stderr_hex": "",
+      "stdout_hex": "4e41544956455f434f5245205041535320746872656164730a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "runtime_release": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+}

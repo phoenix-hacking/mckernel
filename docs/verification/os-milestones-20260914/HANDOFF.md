@@ -1,3 +1,23 @@
+## Current — threads whole caller accepted; finite publication next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current image37e/a818 and physicalc7 remain accepted. Exact currentPASS2 reader
+whole-caller source review85647d85 and actual five-case/19-pending resultb53f1f8f
+are accepted. Actual CPU6 PID2446705/start35848278 closed0 in2.149324s with direct
+join, group absence and closed streams; CPU6 released. Genuine c7/full4b80 mapping,
+actual snapshot terminal join, canonical owner loader and19-output generation pass;
+wrong FD/birth/CID/nonce refuse. Pending metadata is not fetched/final/LAST/native
+authority. Next: exact source/control publication, genuine finalstatic/19 binding,
+then same-operation LAST/guard/native after fresh independent release/admission.
+Retained reviewer sdk66_source_review stays assigned through closed result.
+
+NUMA source199 publication at0ac5245c is fetched/verified, proof7b4b4b9b;
+final-binding-2 records true source/peer refs while post-thread physical remains
+unbound. No NUMA compile ahead of ready thread native. Formal21/35,five whole,
+28native,Rust17/14 and26compiler builds unchanged. Reviewed-source catalogue remains76(30OS/46infra); no native/default/
+C-retirement claim from this fixture.
+All original failures, scratch no-resize/SDK capacity and service holds retained.
+
 ## Current — physical clearance accepted; threads runtime decoder boundary
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
