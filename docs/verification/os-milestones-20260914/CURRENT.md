@@ -1,3 +1,38 @@
+## Current — launcher target and stage accepted; current cleanup bindings checked
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Updated 2026-10-21 13:27 UTC. Review150 totals: 87 coherent sources (33 OS/54 infra),
+30 compiler/build batches, six accepted native batches; 21/35 practical checks,
+five whole milestones, 28 behaviors and Rust17 production/14 native paths held.
+
+Actual launcher-only mcexec target closed0/174.422301s; independent artifact
+acceptance a969204e and dependency acceptance6e2767ae bind new launcher33f88082,
+Rust object4d4ed3b3 and the sole Rust sentinel4→5 fix da71f316. Accepted kernel
+image1d8c4e78 is reused. Genuine retained-terminal7c90716b binds actual tool-owned
+controller rawpair66243272; outer OS identity/group observations remain null.
+Stopped container4a46151f and ownership records remain retained pending exact
+current observer/preflight/cleanup/postjoin release and physical acceptance.
+
+Launcher-only stage closed0/20.247997s and independent acceptance da272086
+binds manifestf7d91a3e: only bin/mcexec changed, all other59/60 metadata rows
+preserved. Normalization closed0/.603191s, empty stderr/directjoin/group absent;
+independent preparation-only acceptance is being recorded. No native execution
+or physical clearance follows from staging/normalization.
+
+Current terminal DATA constructor closed0/.912038s, nine function/class ASTs
+unchanged. Necessary actual-body checker failed1/.464976s before its predicate:
+missing `re` in extracted function scope. Original failure retained; focused
+checker scope correction/review is next, with no unchanged body or app replay.
+Runtime data/body preparation overlaps, future physical authority stays null.
+
+Chosen new launcher artifact-to-native clock: 13:06:08.124394 UTC (user first
+observation); earlier root preliminary PASS announcement retained separately.
+No new native feedback or speedup claim. Prior image feedback133.79min vs73.69min.
+Next: correct current checker scope, exact terminal cleanup/physical acceptance,
+bind actual eight-source runtime FD map and separate runtime release, then one
+unchanged strict116-byte/empty-stderr/exit37 NUMA native app. No new framework,
+whole-kernel rebuild, oracle weakening or source gain for binding/pin edits.
+
 ## Current — launcher-only build controls and actual whole-guard ready
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
