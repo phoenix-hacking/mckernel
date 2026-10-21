@@ -1,0 +1,63 @@
+{
+  "status": "PASS_ACTUAL_LINUX_SELF_EXEC_SIGNAL_RESET_REFERENCE_ONLY",
+  "decision": "ACCEPT_EXACT_199B_LINUX_REFERENCE_AND_PRIOR_SOURCE_ABI_SCOPE",
+  "reviewer": "/root/insert_c_correction_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_sha256": "18e936b17f928418c9edffc48be4e065d2640ccc721e4b34506ca78fb195674c",
+  "reference_source_sha256": "6dbcae05da653524644282379e82cf77038ef6913e544d112a2827bf130d5d44",
+  "binary": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-exec-reset-self-exec-case-preparation-20261021-1/ordinary-reference-1/result/app",
+    "sha256": "e225ab42ec8836a7887135297218645f868568e131d5676b5bb59c12c8dd7b52",
+    "bytes": 4656
+  },
+  "actual_reference": {
+    "result_sha256": "96afe685ce21a0d8beb2efc80abd466e1920732d89f219a597229160adfef31a",
+    "stdout_bytes": 199,
+    "stdout_sha256": "c415fd7c85986852584419737460894f4f7b03a781b3d991659d31fb665faf15",
+    "stderr_bytes": 0,
+    "exit_code": 37,
+    "frozen_expected_bytes_equal": true,
+    "executed_source_matches_reviewed_source": true
+  },
+  "actual_ELF": {
+    "readelf_stdout_sha256": "4f69adfd872fc9d4325712490a0364fa05225b8f8813f5abb73a9c4976e893a1",
+    "class": "ELF64",
+    "machine": "x86-64",
+    "type": "EXEC",
+    "entry": "0x201390",
+    "INTERP_present": false,
+    "DYNAMIC_present": false,
+    "compile_returncode": 0,
+    "readelf_returncode": 0
+  },
+  "controller_capture": {
+    "status_sha256": "1237035d70e2ded99f952ca89eac2681780d5f72bb0786561f9f3712b3ca1f6f",
+    "pid": 2846120,
+    "start_ticks": 42038408,
+    "returncode": 0,
+    "elapsed_seconds": 0.14884040399920195,
+    "direct_child_joined": true,
+    "process_group_absent": true,
+    "streams_closed": true,
+    "stdout_bytes": 0,
+    "stderr_bytes": 98,
+    "stderr_meaning": "Successful unittest summary ending OK; distinct from empty application stderr."
+  },
+  "accepted_behavior": "The reviewed no_std early-entry program actually self-executes through syscall59 on Linux. Its strict before/after oracle confirms selected caught disposition resets to default, ignored/default dispositions persist, mask2560 persists and the alternate stack becomes disabled with null pointer and zero size.",
+  "metadata_correction": {
+    "record_sha256": "4ccc2f264a10a2ad9aef7b79036a82208ff2708590ba0d930cb63847c19de272",
+    "correct_stdout_bytes": 199,
+    "frozen_bytes_unchanged": true
+  },
+  "limitations": [
+    "No delivered caught-handler/restorer-return observation or concurrent shared-sighand race coverage.",
+    "Linux reference success does not establish McKernel exec-provider activation, linked reset selection or native behavior.",
+    "Native execution remains blocked on the real delivery-transfer provider, matching released modules/kernel and separate execution authority."
+  ],
+  "native_acceptance": false,
+  "runtime_permission": false,
+  "default_path_credit": false,
+  "C_retirement_credit": false,
+  "reviewer_quiescent": true
+}

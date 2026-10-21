@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "taskset",
+    "-c",
+    "7",
+    "prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/stage_m07_current.RUNTIME-VISIBLE-BOOT.py",
+    "--case",
+    "numa",
+    "--binding",
+    "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/BINDING.M07-TWO-MEMBER-TWO-CPU.PROPOSED.json",
+    "--binding-sha256",
+    "b5b93e42f12ddd266046b964ab988c4d0cbf2c6fc248f61b68176e727f809d2b"
+  ],
+  "cwd": "/home/holden/mckernel"
+}

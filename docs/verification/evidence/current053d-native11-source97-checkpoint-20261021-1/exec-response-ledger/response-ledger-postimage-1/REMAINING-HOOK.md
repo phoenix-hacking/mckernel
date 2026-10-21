@@ -1,0 +1,9 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Private actual SyscallResponse/ledger group postimage and extracted actual-body tests ready, uncompiled. Native activation is UNWIRED. No shared source edits. Existing gettid one-payload path is preserved. Actual helper acceptance does not authorize full module compilation.
+
+The next exact coupled join remains mailbox exec_pending_read and exec_complete state plus distinct kernel-only EXEC_TRANSFER/EXEC_COPY_COMMIT/EXEC_COPY_ABORT commands. Registration must send the original worker/delivery key and backend response identity; provider produces immutable descriptor snapshot; mcctrl_process calls COMMIT only after successful UserSlice writer, ABORT on failure. RET0 must check actual completed phase1 upload or exact phase2 cursor completion. Cancellation must defer while post-usercopy acknowledgement is outstanding, then cancel using the original retained Response after COMMIT/ABORT. Uncertain missing callback quarantines the Response/group, never acknowledges it. No provider methods may become selected until this join and linked ABI dispatch are complete and independently reviewed.
+
+Prepared tests compile exact extracted Span/Tagged/Ledger/ExecClaimGroup/SyscallResponse/ResponseMemory::release bodies plus exact current Request/Response/Completion. Only allocator/mutex/arena mapping and OsToken providers are substituted. Cases inspect real ledger tags across allocation failure, later-conflict rollback, unfinished drop and queue-full until actual Completion::publish. They do not claim real native worker lifecycle, descriptor post-usercopy or full module proof.
+
+Root-granted next compile: pinned rustc --edition=2021 --test actual_response_ledger_tests.rs -o <fresh-output>/actual_response_ledger_tests; then --test-threads=1. No compilation or tests executed by this lane.

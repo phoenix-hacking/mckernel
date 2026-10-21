@@ -1,0 +1,28 @@
+{
+  "decision": "ACCEPT_PRIVATE_RESPONSE_LEDGER_SOURCE_AND_FOUR_HOST_BODY_TESTS",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/numa_clear_range_review",
+  "packet": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/response-ledger-postimage-1",
+  "ready_sha256": "35af51dc30e6e5135068aa6fec6a72bb1c3625e33358034a81e8e26f7dbb9a39",
+  "sysfs_memory_postimage_sha256": "423abb546aa66022db1d3c5c48dababa1c4c70d16a6873dcfbb7450880793a15",
+  "blocking_findings_within_reviewed_scope": [],
+  "source_review": [
+    "Section reservation validates complete mapped extents, alignment, existing ledger conflicts and overlap between new sections before publishing one group under the ledger mutex. Failure can consume serial numbers but publishes no partial section claim or page write.",
+    "The original SyscallResponse privately owns the descriptor payload and exec group. Copying checks the exact key, reserved group and complete page containment.",
+    "Unfinished drop leaves response, descriptor and section tags excluded. shutdown_quiescent now refuses retained exec groups as well as existing claims.",
+    "Completion.publish retains the original response/group on wake publication error. Successful final status release-store precedes ResponseMemory.release; removal of response, descriptor and group claims occurs under one ledger lock without further guest-memory access.",
+    "prepare_payload, copy_tids and pager_copy are byte-identical to the baseline. The ordinary single-payload/TID boundary is preserved."
+  ],
+  "evidence": {
+    "whole": "actual-ledger-gate-1/whole.json",
+    "whole_sha256": "1a072731a99dc2986968c0dac7e066c46953ea5ce41de63bf8915434219444f5",
+    "test_stdout_sha256": "1dc4ac8132b62c9dbe160fc94d4bb27062e5e6ef6d9e7e16a113c1bc136db18e",
+    "observed": "Compilation and test commands exit0 with direct joins, absent groups, closed streams and no capture/retirement errors. Raw output reports four passed tests covering rollback, later-extent conflict, unfinished-drop quarantine and queue-full retention through actual Completion.publish.",
+    "binding": "All11 READY source pins and recorded stream hashes/sizes match. Extracted ledger/response blocks and fixture Memory methods match the private postimage.",
+    "warning": "Compiler stderr contains one unused AtomicU32 import warning in the fixture; compilation was not warning-free."
+  },
+  "limitations": "Host tests substitute allocator, mutex, arena mapping and OsToken providers. Allocation failures are injected during Vec pushes; with_capacity failures and real kernel concurrency are not exercised. Worker/delivery authentication and exact cursor checks remain caller prerequisites, not authority established by numeric keys.",
+  "activation_status": "UNWIRED; no provider or native integration acceptance.",
+  "required_next_boundary": "Implement and independently review the actual mailbox delivery/response binding, phase1 completion gate, immutable descriptor snapshot and phase2 cursor, plus post-UserSlice COMMIT/ABORT handling. Cancellation and RET must retain the original response until acknowledgement or quarantine. Full-module, linked/default-route and native proof remain open.",
+  "reviewer_writes": false
+}

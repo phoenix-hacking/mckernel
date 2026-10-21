@@ -1,0 +1,30 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PRIVATE_PURE_RUST_SOURCE_READY_NATIVE_ACTIVATION_UNWIRED",
+  "implementation": {
+    "exec_transfer_checked.rs": {
+      "sha256": "a7dae8a829da028cab0ad2d9de233304a587fd7d09059f4bf87c4fee16b67907",
+      "bytes": 9875
+    },
+    "exec_transfer_checked_tests.rs": {
+      "sha256": "b6795b6d3671cc051fa4557751b21b7b64bef07df97fd59d9d9575df2e22b224",
+      "bytes": 10171
+    }
+  },
+  "test_cases_prepared": 11,
+  "tests_executed_this_followup": 0,
+  "baseline": "Root reports actual-rejection-body-1/whole.json compile and two tests genuinely passed; baseline not replayed.",
+  "next_compile": "<pinned-rustc> --edition=2021 --test /home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/exec_transfer_checked_tests.rs -o <fresh-private-output>/exec_transfer_checked_tests",
+  "next_test": "<fresh-private-output>/exec_transfer_checked_tests --test-threads=1",
+  "native_integration_blockers": [
+    "ResponseOwnedExecClaims has no native implementation; existing one-payload ledger remains unchanged.",
+    "Exact worker/delivery-bound post-FROM_REMOTE-UserSlice-write commit/abort hook does not exist. Descriptor cannot become delivered before writer success.",
+    "Selected launcher transfer_image currently masks transfer ioctl failure; correct Rust error return before native use.",
+    "Actual new hostmodule compile/link/default selection and independent native release still required."
+  ],
+  "limits": [
+    "Pure geometry/state/interface tests cannot establish real ledger rollback, retained mapping lifetime, native cancellation or queue-full retention. Controlled provider tests only prove cursor eligibility and interface callback ordering.",
+    "Phase1 and phase2 have separate original responses. Phase1 claim lives through actual RET1; phase2 separately claims updated guest descriptor.",
+    "No shared source edits, SDK66 bypass, module build, root or guest execution."
+  ]
+}

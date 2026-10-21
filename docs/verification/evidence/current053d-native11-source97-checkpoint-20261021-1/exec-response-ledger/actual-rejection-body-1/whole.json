@@ -1,0 +1,90 @@
+{
+  "status": "PASS_ACTUAL_OLD_PROVIDER_EXEC_REJECTION_AND_TID_INVARIANTS_REPRODUCER_ONLY",
+  "rows": [
+    {
+      "returncode": 0,
+      "pid": 2849926,
+      "start": 42074490,
+      "elapsed_seconds": 0.3152584350318648,
+      "direct_child_joined": true,
+      "process_group_absent": true,
+      "streams_closed": true,
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256:256",
+        "--",
+        "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+        "--edition=2021",
+        "--test",
+        "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/actual_rejection_reproducer.rs",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/actual-rejection-body-1/actual_rejection_reproducer"
+      ],
+      "streams": {
+        "stdout": {
+          "path": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/actual-rejection-body-1/compile/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/actual-rejection-body-1/compile/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      }
+    },
+    {
+      "returncode": 0,
+      "pid": 2849941,
+      "start": 42074522,
+      "elapsed_seconds": 0.004219377995468676,
+      "direct_child_joined": true,
+      "process_group_absent": true,
+      "streams_closed": true,
+      "argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824:1073741824",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256:256",
+        "--",
+        "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/actual-rejection-body-1/actual_rejection_reproducer",
+        "--test-threads=1"
+      ],
+      "streams": {
+        "stdout": {
+          "path": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/actual-rejection-body-1/actual-body-test/stdout",
+          "sha256": "198fc2b16a99b0ae03dec820ae2beb4cfbe9f080f91f64ae31776a2bee7fa161",
+          "bytes": 264
+        },
+        "stderr": {
+          "path": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/actual-rejection-body-1/actual-body-test/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      }
+    }
+  ],
+  "provider_fixed": false,
+  "module_build": false,
+  "native_execution": false
+}

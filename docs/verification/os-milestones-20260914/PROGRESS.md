@@ -72,18 +72,18 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 
 ### Next practical work
 
-- Run the separately Linux/stage/normalization-accepted119B overlap case on unchanged053d/33f after binding genuine compiler physical911d into finite currentruntime consumer and necessary existing wholecaller/exactrelease; preserve116B unchanged.
-- Locked exec Rust repair passed actual four-object production compiler33 (3d7dc040), physicalretirement911d; final link/default-consumer and applicable native exec validation remain open. Reuse accepted outputs, no unchanged recompile.
-- Advance compiled second-public-stop collector through actual producer/strict decoder comparison and matched current-profile binding; full mapping/callback/reference restoration remains open.
-- M07 existing AVX syscall/futex/signal case is the smallest useful current053d vector observation; no rebuild or whole closure from2/2checks.
-- M12 currentpair profile has1eligibleboot/6apps; both subprofiles require actual matching adjudication before2boots/7apps. Publiccycles0/10 and qualifying60mixedminutes unproved. Preserve separate literalbudgets and no-resize/SDK66 blocker.
+- Complete real M06 response-ledger/phase-completion/post-user-copy and launcher error propagation Rust joins; reuse passed compiler33 and focused tests. No provider/native claim before actual matched build/default/runtime proof.
+- Normalize accepted actual M07 two-member offline stage with complete third readonly helper-root/source-FD closure, then necessary wholecaller/current physical/exact runtime release on053d. No kernel rebuild.
+- Correct M05 strict66-versus67 boot contract for actual selected2CPU4312 in private collector+decoder with stale66 refusal, preserving original failures. Stage only after actual focused comparison and independent acceptance.
+- Keep M12 separate matched profile budget buckets; no VM termination as public stop/destroy/release or full mapping/callback/reference restoration.
+- No resize or SDK66 capacity bypass; continue permitted independent Rust/compiler lanes.
 
 Original formal qualification is **historical / DEFERRED**. Deferred does not mean passed; its counters below do not define practical completion.
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-21T22:41:12+00:00`
-- Launcher state heartbeat: `2026-10-21T22:41:01.386981+00:00`
+- Dashboard refreshed: `2026-10-21T23:14:12+00:00`
+- Launcher state heartbeat: `2026-10-21T23:14:10.125123+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `2486026`; server PID: `2486028`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261021T070405Z-729d8cb8`

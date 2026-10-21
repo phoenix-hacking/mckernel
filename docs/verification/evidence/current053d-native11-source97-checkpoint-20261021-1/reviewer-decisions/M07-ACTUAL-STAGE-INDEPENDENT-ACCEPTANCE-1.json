@@ -1,0 +1,57 @@
+{
+  "schema": "mckernel.numa-native-app.actual-offline-stage-review.v1",
+  "status": "PASS_ACTUAL_OFFLINE_STAGE_AND_STRICT_MANIFEST_ONLY",
+  "decision": "ACCEPT_EXACT_ACTUAL_MANIFEST_FOR_DOWNSTREAM_SOURCE_NORMALIZATION_AND_RUNTIME_PREPARATION",
+  "reviewer": "/root/numa_image_source_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "case_id": "vector.enabled-avx-preservation",
+  "actual_capture_sha256": "c9d45bc7c00cf81b750c0a9e64563853b15c0bd14501b3b38d11ec239fec6f95",
+  "actual_stage_result_sha256": "33df693e11d13c4b1aaa61179ccf87e802b254c270a2eff99d211f993cc0dbcb",
+  "actual_capture_facts": {
+    "returncode": 0,
+    "seconds": 19.281309459998738,
+    "pid": 2855995,
+    "start": 42178829,
+    "direct_child_joined": true,
+    "group_absent": true,
+    "closed_streams": true,
+    "timed_out": false,
+    "error": null,
+    "retirement_error": null,
+    "stderr_bytes": 0
+  },
+  "strict_loader_passed": true,
+  "all_metadata_equal": true,
+  "launcher_equal": true,
+  "archive_members": 60,
+  "archive_records_excluding_trailers": 66,
+  "archive_trailers": 2,
+  "unchanged_members": 58,
+  "observed_delta": {
+    "apps/app": {
+      "size": [5619416, 1522832],
+      "sha256": [
+        "0339cb5fcba4ea4f1f2977fd0d3a7653b48e0af1de7e0625fbfafbfe13fce5fb",
+        "5b116839f8cfbb796793d88f7792d21e5e29bd0510d527e8782284ae18239177"
+      ]
+    },
+    "bin/native-boot": {
+      "size": [31208, 35784],
+      "sha256": [
+        "6b9f753e34d12da474c701ca64ce62825788295646b60f67482ef9ec8690c417",
+        "4312f9a8f53d8db7b2b6be4c7d5e409f5c0f82cf8215728209be0f6ff4a5d5c5"
+      ]
+    }
+  },
+  "base_prefix_and_overlay_frame_verified": true,
+  "native_boot_header_size_field_only": true,
+  "reported_aggregate_stage_bytes": 37306929,
+  "aggregate_asset_bytes_including_result": 37327122,
+  "normalization_accepted": false,
+  "runtime_release": false,
+  "physical_release": false,
+  "native_accepted": false,
+  "M07_closure": false,
+  "counter_delta": 0
+}

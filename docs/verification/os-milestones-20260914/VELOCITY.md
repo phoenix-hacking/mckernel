@@ -1,41 +1,64 @@
-# Current functional McKernel status — review129
+# Functional McKernel progress — review 165
 
-Updated 2026-10-21T02:16:30.419725+00:00; next review:2026-10-21T02:46:30.419725+00:00. Existing saved campaign is running on GPT6.1medium with high for difficult work,11agentcap,7buildjobs,oneheavyoperation and existing limits. Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Follow AGENTS.md. The explicit manual restart was01:12:03UTC; previous service stop and all failures remain preserved. Included stop100%,no paid/API fallback. No fresh conversation or state rollback was used.
+Root additive adoption after review165:97 coherent sources (38OS/protocol,
+59infrastructure) accepted from independent1e9ed3fd and root adoption record.
+Native11/behaviors30/compiler33/Rust21/18/checks24/35/sixwhole unchanged.
+Review165's95-source historical observation remains below.
 
-Accepted counters remain20/35checks,wholeM00/M02/M03/M04/M10,28nativebehaviors,Rust17production/14native paths. This interval added one reviewed infrastructure correction and one nonzero actual native attempt,with no accepted compiler/native/check/whole/Rustpath gain. Catalogue67reviewedsourcechanges(26OS/apps,41infrastructure),23compilerbatches,5acceptednativebatches,2partialcataloguedfailednativeattempts. A matching raw application frame is positive evidence but not whole-run acceptance. No numerical overall4xengineering/1.5xclosure gain is proved. Exclude previous service downtime from current segment velocity.
+Updated 2026-10-21T23:03:17.782844+00:00. Review observed 2026-10-21T22:47:12.925141UTC; next review23:17:12.925UTC.
+Later accepted results below retain their own observation times.
 
-M06 actual owner closedrc1 in43.481057s,directchildjoined,groupabsent,noobservererror; firstcompletionwatch02:04:23.357864UTC. LAST,machine,guard→owner ran in oneoperation. Rootexecutor2358414/start34563532 and nativeowner2358443/start34563716 were recorded; root reports outerjoined/groupabsent/closedstreams. Automatic chain stopped before readbacks. Two receipt gates and three exports later closed. Independent actual QEMU/container/client/reader physical retirement remains pending; the heavy slot remains held until its real release. Do not infer physical freedom from the absent heavy pathname or innerowner closure.
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
-The visible exception is attachedDockerstartreturningnonzero,not a proved daemon-start failure or application diagnosis. The independent source-bound diagnosis reports the retained app frame matches all44expectedstdoutbytes,exit0,empty stderr. Evaluation failed for missing required route/exit evidence. Inspect the actual source/path behind that missing evidence before proposing a repair; preserve the frozen oracle and failed run. P-M06-03 remainsOPEN. No unchanged replay,blanketkernel blame,newnativebehavior or Rustretirement credit. Root owns actual failure-readback/execution/release.
+Canonical progress: 24/35 practical checks and six whole milestones closed:
+M00, M02, M03, M04, M10 and M11. M11 closure covers the declared selected
+regression scope. The concurrent-exec signal-table race remains M06 work.
 
-M06 source preparation is accepted:64byteELF,62memberapp-onlystage,actualnormalizationb3963fad,completecoupled-loader/parent/materializer/binder19/LASTfixture2bbd5d1f,and genuine productionmetadata with19controls/49freshpaths. These must not be rerun unchanged. Current source identity remains distinct from the genuine previous physical predecessor. Physical and semantic review may proceed in parallel only where their actual permissions/inputs allow it; preassigned reviewers consume closed outputs promptly.
+Accepted counts: 30 distinct native behaviors; 21 selected production and18
+applicable native Rust paths; 95 coherent source units (37OS/58infrastructure);
+33 production compiler/build batches and11 accepted native batches.
+Two further reviewed source units await explicit root adoption before credit.
 
-The settid Rust requestbody is integrated and checkpoint e22b195f reported pushed/fetched. Exact12casebodyequivalence passed9f13514c,0.36sjob/0.44souter,completecapture. C retainsDMAstack storage,ABIglue and originalfallback. Actual160-source materializationb3216aa8 passed. Sixstagecurrent-consumer compile proposal preserves five profiles and adds policy-off wholeC with exactsymbol/capture accounting.193mappedpublicationrows plusallowlistmetadata reviewed5ad78800. Remaining genuine fetchedpublication/finalrelease/currentphysicalownershipresource bindings are required; final --release must match its own execution-release.json directory. FutureM06success is only a scheduling preference,not a dependency. Its actual still-held heavy physical boundary is a real prerequisite. No fullcrate/Ccompiler/kernel link/native/Cretirement acceptance yet.
+The current053d image passed the separate119-byte nonempty NUMA overlap case:
+three nonempty interval transitions, 48 policy queries, surviving neighbors,
+three byte-preservation passes and exact119B/empty stderr/exit37. The seven-step
+chain and three readbacks passed; native owner37.482589779s. Application and
+physical retirement were independently accepted and root adoption observed
+22:52:43.196159UTC. This adds one native behavior, not a Rust path or milestone.
+Linux reference to raw native result was79.25min including waits and bindings.
 
-A spare GPT6.1medium author completed a private scheduler sourcecandidate at /home/holden/mckernel-work/host-preparation/private-syscall-rust-next-20261021-1/. Target:still-C setscheduler parametercopy/policymutation,actually consumed by existing Rust sched_setparam/setscheduler bodyresults via sched_apply_scheduler_bridge. It proposes Rust validate→copyC-sizedbytes→policywrite with guardedCoffsetof/sizeof glue and unchangedfallback. About2.03MiB/7files; candidate.patch,CONTRACT.md,preimages/sourcebindings and proposed16caseactualC/Rustcomparison. No tests/build/sharededits/lease or credit. Coordinator must independently review ordering,alias/lifetime,locking,layout/error behavior and decide a later finite check. It must stay outside the current160input snapshot until separately integrated. Handoff cue63565d7a.
+The prior current053d six-app regression remains accepted: owner44.474360006s,
+8.09455 launches/min and an informational2.97882x frozen baseline. Its preparation
+and handoffs took much longer than execution; no overall engineering multiplier
+is demonstrated. The original20-app6.332426x bound-profile benchmark is separate.
 
-SDK66sourcepreparation382c38d0 is accepted; fullSDKbuild remains capacity blocked at unchanged14159970304byte gate. Do not resize/delete scratch,lowerfloors,replaycleanup or rescanparkedfamilies. Preserve user's128MiBproposal without execution under separate current no-resize instruction. Host16GiB/scratch12GiBfloors. M07statechanging candidate remains parked for unproved uniformPKE behavior. No extra security project or framework.
+The locked Rust exec-reset implementation passed one42.59s production batch:
+native and legacy complete Rust crates plus selected and policy-off C syscall
+translation units, actual headers, ABI assertions and symbols. Independent
+artifact and physical decisions were accepted; compiler total33. Existing
+48/51 Rust warnings are retained. No new linked image or native exec proof.
 
-Next:finish actual M06physical verdict and missing-evidence diagnosis,then execute first fully reviewed ready work after real release. Advance ordinary publication/source tasks only outside exclusivecensus windows. Reuse accepted proof; do not manufacture futuretest dependencies or repeatedinventory audits. Oneheavy CPUs2–5,4CPU/12GiB/noSwap/512tasks;ordinaryCPU6/7,CPU0coordination,CPU1excluded. NoCPUlease during modelwork. PositiveinnerANDouterretirement and exactcurrentidentities remain required. PreserveScratch21,all exclusions,mutex27:4,quarantine,dirtytree and allfailed evidence. Fullreview:/home/holden/mckernel-work/host-preparation/manual-reset-resume-20261020T033358Z/REVIEW129.json; archivedpreviousguidance:/home/holden/mckernel-work/host-preparation/manual-reset-resume-20261020T033358Z/VELOCITY-exact-before-review129.md. Earlier review128 below is historical.
+A separate no_std Rust self-exec app passed Linux reference with an exact199-byte
+oracle and reviewed entry ABI. Actual selected-module reproduction confirms
+nr186-only transfer rejects real nr59 exec phases. A pure Rust ELF plan/cursor,
+retained multiple claims and delivery-bound post-user-copy completion are needed.
+The current launcher must also propagate page-transfer errors before native use.
+These repairs remain private and unwired; no blanket syscall allowance.
 
-# Functional McKernel progress — review128
+M05 collector compiled; its actual-model comparison found a stale resource-probe
+adapter against the strict current decoder. The expert correction changes only
+that adapter; reuse passed collector/lifecycle artifacts and preserve failures.
+M07 reuses current-image AVX/syscall/futex/signal hooks. Whole M07 remains open
+despite two completed checks. M12 keeps separate profile buckets; current eligible
+two-CPU bucket has1boot/6launches, not ten public cycles or60 productive minutes.
+M13 delivery remains downstream.
 
-Updated 2026-10-21T01:44:16.152759+00:00. Next review:2026-10-21T02:14:16.152759+00:00. Existing campaign is running on the original saved thread after the user's explicit manual resume at2026-10-21T01:12:03UTC. The previous service hold and all failed evidence remain archived; no state rollback or fresh conversation was used. Current log:/home/holden/mckernel/.git/os-autopilot/runs/20261021T011203Z-9cba0828/console.log.
+Future progress visibility fix5b66b7f2 is pushed/fetched with17 targeted tests.
+The current resident was not restarted. Retain qualified readers and preserve
+quarantine evidence; no automatic kill, unlink, unlock or workload replay.
 
-Every worker brief must state: Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Follow AGENTS.md. Prioritize actual kernel implementation, compiler feedback and useful applications. Keep functional correctness, ownership, lifecycle and resource controls. Service rejections remain terminal for automatic recovery. Use GPT6.1medium by default and high for difficult work. Included stop100%,zero reserve,no purchased/API fallback. Preserve dirty sources and all failures.
-
-Accepted counters remain20/35 checks,five whole milestones(M00/M02/M03/M04/M10),28native behaviors,Rust17production/14native paths. The restarted segment has run about0.537hours, excluding the previous service-stop interval. This review added two independently reviewed source changes:one OS/Rust implementation and one infrastructure correction. It added no accepted production compiler batch,native behavior,check,whole milestone or Rust-retirement path. Catalogue66sources(26OS/apps,40infrastructure),23compilerbatches,5acceptednativebatches; failed-native tracking is partial. No overall4x engineering or1.5x closure multiplier is proved.
-
-The Rust settid request body is integrated in two production source files after12actual-C/Rust body comparison cases passed. Five adapter compile/link/test commands took0.36s; outer0.44s,with complete birth/wait/groupabsence/closedstreams. Independent9f13514c accepts the exact source and integration. Request bytes,translation/CPU/offload order,int narrowing,negative-only logging and Cstack carrier identity are preserved. C retains DMAstack allocation,ABI glue and the unchanged fallback. This is not fullcrate,production Ccompiler,kernel link,native or C-retirement acceptance. The frozen current-consumer proposal binds160inputs,ninecurrentdifferences,preserves five profiles and adds the missing policy-off wholeC stage with six-result/capture/symbol accounting. Focused source/release review is the next prerequisite; do not replay the12case fixture.
-
-M06 is still open. The accepted64byte ELF and app-only stage preserve all62archive members,with only apps/app payload changed. Stage acceptance4b9591f1 remains valid. The first normalization failed because exactly two retained historical files lacked read-only mappings; all203sourcepins stayed preserved. A coupled mapping correction passed the actual loader/owner/normalizer positive and missing-mapping refusal in2.57s. The separate production normalization passed1.06s and independentb3963fad accepts its exact bindings/ordinary retirement. Do not repeat stage,ELF,compiler or normalization.
-
-Remaining M06 work is a current-case caller contract. The older source had Exit7/40second checks and an earlier physical context. The coupled candidate now uses the M06case/exactoracle/normal300/360 deadlines through loader,parent,materializer,binder19 and generatedLAST; the genuine retained physical predecessor is independently pinned and remains distinct from current source authority. Candidate88f0f56e/proposalb998b340 requires expert source review and the complete generation fixture before actual native preparation/release. Preserve every previous partial output and failure. No guest has run in this restarted segment and P-M06-03 is not closed. Native expected44B remains rc=-1 errno95 eopnotsupp1 child_created0,exit0,empty stderr,syscall435 and no child publication,with actual retirement.
-
-The corrected66-source SDK preparation passed382c38d0:81copies,11runtimefiles,request32f9938d/2299B,actual identities/contracts/protocolnofile256 and CLOSED0retirement. Heavy compilation is still blocked at the unchanged14159970304byte scratch gate. The separate current no-resize restriction remains; preserve the user's128MiB proposal without executing or rerouting around it. No lowered floor,unchanged admission retry,parked duplicate-family rescan or cleanup replay. Host floor16GiB,scratch12GiB. M07 state-changing execution also remains parked for unproved uniformPKE behavior. Prior M02/M03 scoped whole acceptance and their runtime proof limits remain unchanged.
-
-Tactical priority: execute the first fully reviewed,dependency-ready finite check promptly. Keep M06 coupled-generation work and settid compile preparation independent. Distinguish real input/retirement prerequisites from scheduling conditions; a future M06 native run is not itself a dependency for unrelated compile preparation when no heavy owner is active. Reuse accepted source bodies,proof and artifacts. Reviews answer concrete blocking decisions; no broad audit,new framework or repeated unchanged hashes. Name the next executable observation and refill a genuinely useful disjoint lane promptly.
-
-One heavy operation remains CPUs2–5,fourCPUs/12GiB/no swap/512tasks. CPU6/7ordinary,CPU0coordination,CPU1excluded. No CPUlease while editing/reviewing. Preserve exact grants,aggregate budgets,exclusive LAST/census windows,and positive inner AND outer retirement. Root owns code/Git/execution; supervisor owns tracking/steering. Preserve Scratch21/exclusions,the permanentmutex27:4,quarantine,dirty worktree and all evidence. Checkpointc3e807e1 was reported pushed/fetched with62changedblobs. Open milestone percentages remain held estimates; M09integration is not Rustconversion. Fullreview:/home/holden/mckernel-work/host-preparation/manual-reset-resume-20261020T033358Z/REVIEW128.json. Prior guidance:/home/holden/mckernel-work/host-preparation/manual-reset-resume-20261020T033358Z/VELOCITY-exact-before-review128.md.
-
-Post-review129 update: physical471a1e87 passed at02:14:43.402229UTC(all25clients/QEMU/container/gates/exports retired),watch-to-report620.044365s includes2gates/3exports/review,notpureidle. Dispatcher may releaseattemptreservation through existingprotocol. Diagnosis:app44B/exit0/stderr0matches;genericline613rejects routes0 despite documentedallslot0 and5delivered/4returned/1exit. Originalfailedrun remains failed. Local435/exhaustivenochild evidence stillunproved. Compiler may proceed independently afterrealrelease and its ownfinalbindings.
+Scratch capacity remains below the fixed SDK66 gate: last exact shortfall
+21,913,600B. Original user-approved110→110.125GiB growth is not executed and is
+blocked by the active higher-priority no-resize instruction. No alternate route
+or relaunch to bypass it. Retain16GiB host/12GiB scratch floors, protected
+evidence and scratch21 exclusions, and permanent mutex27:4.

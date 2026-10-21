@@ -1,3 +1,35 @@
+## Current — native11 accepted; response-ledger four cases and M07 offline stage pass
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Root adopted independent119B application e3c0f94a and physical96b6808e once:
+11 accepted native batches,30 distinct native behaviors. Image053d/launcher33f/
+modules remain selected; exact119B/empty stderr/37, owner37.482589779s, all seven
+steps and three readbacks passed. Original116B case and all failures preserved.
+Independent source dedup1e9ed3fd and root adoption record establish97 coherent
+sources (38OS/protocol,59infrastructure),33 accepted production compiler batches,
+Rust21selected/18applicable native,24/35 practical checks and six whole milestones.
+No new Rust path, retirement, practical check or whole closure from119B.
+
+Real M06 response-owned ExecClaimGroup private postimage compiled and all four
+actual-body tests passed: allocation/conflict rollback, queue-full retention and
+unfinished-drop lifetime. Independent source/body acceptance recorded; one unused-import warning
+retained. Existing11 pure geometry/state cases and199B Linux self-exec reference
+are accepted, not native exec. Actual mailbox phase completion, post-user-copy
+COMMIT/ABORT and launcher transfer-error propagation remain implementation gates.
+No provider activation or SDK66 bypass; no kernel rebuild merely for these tests.
+
+M07 offline two-member stage passed on053d using accepted app and qualified2CPU
+bootstrap:37,306,929 staged bytes, no guest. Actual stage independently accepted; normalization/
+complete readonly source closure and runtime release remain required. Whole M07
+used-vector/final-profile criterion remains open despite2/2 checks.
+M05 v2 model correction passed; selected2CPU bootstrap emits67read checks while
+old collector and strict reboot decoder expect66. Private exact67 profile binding
+and original66 refusal are next; no public-cycle/restoration credit from model.
+M12 keeps separate literal profile buckets; no aggregate cycle/duration claim.
+
+Retained checkpoint evidence: ../evidence/current053d-native11-source97-checkpoint-20261021-1/.
+No resize; floors, one-heavy, ownership and genuine service stops remain strict.
+
 ## Current — 119-byte final static pass; exact native release next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
