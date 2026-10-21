@@ -1,3 +1,29 @@
+## Current — exec production compiler33 accepted; 119-byte native next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual four-object exec production run closed0/42.592589617s, ownerjoined/groupabs/
+noobservererror. Independent artifact3d7dc040 accepts native+legacy complete Rust
+and selected+policy-off complete C with real-header ABI assertions; physical911d
+accepts actual stopped/nonOOM/removal/absence, clients and three-record release.
+Compiler33; coherent95(37OS/58infra), native10, behaviors29, Rust21/18 and24/35/
+sixwhole unchanged. Rust warnings retained; no final-link/default/nativeexec or
+M06/C-retirement claim. Image053d and launcher33f remain selected.
+
+119-byte separate overlap stage9c923 and actual normalization9ad2 independently
+accepted; normalization0/.578250759s,21paths/2roots/QMP101/emptyerr, full9 integers
+preserved. Root compatibleattributedprojection37937 retains original authority.
+Next finite currentcompiler physical join, existing wholecaller/fresh exactnative
+release on053d; no image build or original116 replay. M05 second-stop collector
+staticcompile passed0/.417566306s warningclean; strict actualsecond-stop decoder
+comparison notyetvalidated. No lifecycle/restoration credit.
+
+M11 stays complete in selected scope. M07 used-vector/finalprofile exit remains
+open despite2/2checks; existing accepted AVX syscall/futex/signal case is smallest
+next currentprofile observation. M12 pairprofile1boot/6apps; bothsubprofiles only
+conditionally2boots/7apps, still0publiccycles/10 and no qualifying60mixedminutes.
+Storage growth blocked by active developer no-resize; no alternatepath/reapproval.
+No active compiler session remains; exactfuture guest/resource release separate.
+
 ## Current — M11 complete; 24/35 checks, six whole milestones
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

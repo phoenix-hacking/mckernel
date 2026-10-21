@@ -1,0 +1,88 @@
+{
+  "schema": "mckernel.exec-reset.actual-production-four-object-review.v1",
+  "status": "PASS_ACTUAL_FOUR_PRODUCTION_OBJECT_COMPILER_BOUNDARIES_ONLY",
+  "decision": "ACCEPT_ONE_SCOPED_PRODUCTION_COMPILER_BATCH",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/numa_compiler_review",
+  "implementation_ownership": false,
+  "evidence_base": "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1/locking-correction-1/compiler-owner-preparation-1",
+  "producer_result": {
+    "relative_path": "work/output/build/current-guest-control-fullcrate-1/result.json",
+    "sha256": "45c697eb7e05164735c9ef0e9a39743acce95cb60d86341108beeede86acc923",
+    "bytes": 24179,
+    "status": "CRATE_OBJECT_COMPILE_PASS"
+  },
+  "outer_status_sha256": "9fc40c4ded017c76fd7e96c4388707306a373599c353e836f31b17c9a942d752",
+  "request_sha256": "c46e61ec9dd3ec9baf6c4cca1e0b713ac44d48db4ad3c68331681c7bd6bbf9a6",
+  "accepted_materialization_identity": "960cbf72cbf97a4daa0f366d4c231821a4ea637cef28519fe783849f7dfc5475",
+  "source_binding": "Producer identity matches the request and previously accepted materialization. All four recorded argv/cwd pairs exactly match compiler-commands.json.",
+  "actual_completion": {
+    "outer_returncode": 0,
+    "outer_elapsed_seconds": 42.59258961677551,
+    "outer_direct_joined_and_group_absent": true,
+    "outer_observer_error": null,
+    "compiler_commands": 4,
+    "all_compiler_returncodes": 0,
+    "all_owned_captures_joined_group_absent_streams_closed": true,
+    "all_timeouts_and_retirement_errors_absent": true,
+    "capacity_errors": []
+  },
+  "actual_objects": {
+    "native": {
+      "sha256": "695eef792b47844193fd3f059120e1ed2a685b8f1dac07315e4cc36929c242f2",
+      "bytes": 13598992
+    },
+    "legacy": {
+      "sha256": "1a9cdc93c2758b9400f09ecb6754a1eeb94c0d37d6a5490b09e082cec23ce591",
+      "bytes": 13383744
+    },
+    "selected_C": {
+      "sha256": "9797e04da21710e15e6de008625042a5dd824a93f66593bf13fbe181b9e35ea9",
+      "bytes": 827392
+    },
+    "fallback_C": {
+      "sha256": "20a388c96a80a839a12040801c5f714f397d9106210b305c8c95e01689a338b6",
+      "bytes": 1800816
+    }
+  },
+  "independent_artifact_checks": {
+    "all_four_actual_hashes_and_sizes_match": true,
+    "all_four_ELF64_little_endian_x86_64_ET_REL": true,
+    "boundary_names": [
+      "exec_reset_signal_state_current_v1",
+      "syscall_vm_policy_insert_body_result"
+    ],
+    "each_boundary_in_each_Rust_object": "D1/U0",
+    "each_boundary_in_selected_C": "D0/U1",
+    "each_boundary_in_policy_off_C": "D0/U0",
+    "do_fork_in_both_C_objects": "D1/U0",
+    "do_fork_in_both_Rust_objects": "D0/U1"
+  },
+  "production_ABI_scope": "Both complete C translation units compiled the appended real-header assertions: LP64, insertion/RB/policy layouts and callback signature, Thread signal fields, SigCommon layout, aligned64-byte lock node, signal constants and exec-reset function signature.",
+  "diagnostics_preserved": {
+    "native_stderr": {
+      "bytes": 20529,
+      "sha256": "4545d81308600fc24454e7c503e16fc8454f432318afb5c24e733f53c89dc5c6",
+      "warnings": 48
+    },
+    "legacy_stderr": {
+      "bytes": 21349,
+      "sha256": "493a94dd1713c2a898145e8127a5f983e62a7877f9cc314bbfca5a85c0ca4311",
+      "warnings": 51
+    },
+    "both_C_stderr_empty": true,
+    "warning_free_Rust_claim": false,
+    "global_ABI_warning_clearance_claim": false
+  },
+  "compiler_batch_increment_eligible": 1,
+  "counter_edits_performed": 0,
+  "actual_link_performed": false,
+  "default_activation_accepted": false,
+  "image_acceptance": false,
+  "native_acceptance": false,
+  "M06_completion": false,
+  "C_retirement_credit": false,
+  "physical_clearance": false,
+  "remaining": "Separate final link/default-consumer proof and applicable native exec validation; physical retirement remains the independent review lane.",
+  "reviewer_execution_or_test_replay": false
+}

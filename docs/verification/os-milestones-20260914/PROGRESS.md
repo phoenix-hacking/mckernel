@@ -72,17 +72,18 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 
 ### Next practical work
 
-- Current053d six-launch offline stage and normalization independently accepted; actual wholecaller19pending/7rows49paths/8FD passed, combinedstatic87ffc then actual finalconstructor/fullstaticjoins passed. Publish current source/evidence, exact runtime review/freshgrant/snapshot then six strict launches, no kernel rebuild.
-- Next future terminal constructor authority explicitly adoptedPROC24e after actual generated body check; preserve original failed sourcefixture and all frozen old constructors. Future output namespace/newrelease data must be fresh.
-- Real exec-reset selected Rust locking patch materialized, actual lock body16cases accepted; run required production-header C/full Rust crate through existing four-object owner after six-guest priority. No native/default acceptance yet; inherited C fallback race preserved. SDK66 gate and higher-priority no-resize blocker held.
-- M05/M12 remain open: require actual public stop/destroy/release and declared restoration observations; match final profiles before overlapping2boots/10publiccycles/100launches/60mixedminutes. Separate new NUMA-overlap and second-stop source cases have no acceptance credit.
+- Run the separately Linux/stage/normalization-accepted119B overlap case on unchanged053d/33f after binding genuine compiler physical911d into finite currentruntime consumer and necessary existing wholecaller/exactrelease; preserve116B unchanged.
+- Locked exec Rust repair passed actual four-object production compiler33 (3d7dc040), physicalretirement911d; final link/default-consumer and applicable native exec validation remain open. Reuse accepted outputs, no unchanged recompile.
+- Advance compiled second-public-stop collector through actual producer/strict decoder comparison and matched current-profile binding; full mapping/callback/reference restoration remains open.
+- M07 existing AVX syscall/futex/signal case is the smallest useful current053d vector observation; no rebuild or whole closure from2/2checks.
+- M12 currentpair profile has1eligibleboot/6apps; both subprofiles require actual matching adjudication before2boots/7apps. Publiccycles0/10 and qualifying60mixedminutes unproved. Preserve separate literalbudgets and no-resize/SDK66 blocker.
 
 Original formal qualification is **historical / DEFERRED**. Deferred does not mean passed; its counters below do not define practical completion.
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-21T22:12:30+00:00`
-- Launcher state heartbeat: `2026-10-21T22:12:21.846529+00:00`
+- Dashboard refreshed: `2026-10-21T22:27:39+00:00`
+- Launcher state heartbeat: `2026-10-21T22:27:24.648341+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `2486026`; server PID: `2486028`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261021T070405Z-729d8cb8`
