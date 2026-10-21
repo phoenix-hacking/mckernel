@@ -1,0 +1,11 @@
+--- /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/census-authority-next-constructor-correction-preparation-1/prepare_successor_sources.PROC-AUTHORITY-CORRECTED.py
++++ /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/census-authority-next-constructor-correction-preparation-1/prepare_successor_sources.PROC-AUTHORITY-FRESH-OUTPUT.py
+@@ -98,7 +98,7 @@
+     pins=load(C/'SOURCE-PINS.json')['files']; texts={}
+     for name,row in pins.items():
+         if name.endswith('.py'): texts[name]=checked(row).decode()
+-    p=outdir('bound-terminal-source-1'); write(p/'PASS-CASE-STATIC.json',checked(t['case']))
++    p=outdir('bound-terminal-source-proc24e-source-fixture-1'); write(p/'PASS-CASE-STATIC.json',checked(t['case']))
+     # Bind the finite top-level DATA and two exact guard-directory literals only.
+     # Transaction/census/recovery/ownership algorithms and profiles are preserved.
+     bindings=t['source_bindings']; need(type(bindings) is dict and bindings['current_typed_request']==case['source_identity'] and bindings['target']==case['target'],'complete current terminal source/target DATA')

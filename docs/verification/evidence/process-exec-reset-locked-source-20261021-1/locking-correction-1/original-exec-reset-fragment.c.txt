@@ -1,0 +1,13 @@
+	for(i = 0; i < _NSIG; i++){
+		if(thread->sigcommon->action[i].sa.sa_handler != SIG_IGN &&
+		   thread->sigcommon->action[i].sa.sa_handler != SIG_DFL)
+			thread->sigcommon->action[i].sa.sa_handler = SIG_DFL;
+	}
+
+	/* Reset floating-point environment to default. */
+	clear_fp_regs();
+
+	/* Reset sigaltstack to default */
+	thread->sigstack.ss_sp = NULL;
+	thread->sigstack.ss_flags = SS_DISABLE;
+	thread->sigstack.ss_size = 0;

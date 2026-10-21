@@ -1,0 +1,11 @@
+--- 
++++ 
+@@ -30,7 +30,7 @@
+     assert owner.SOURCE_HASHES==pre['runtime_source_hashes']==cfg['runtime_source_hashes']
+     assert pre['root_owner_argv']==cfg['root_owner_argv']
+     assert pre['qemu_argv']==nd.expected_qemu_argv(manifest,Path(pre['paths']['attempt']))
+-    assert len(pre['consumed_paths'])==76 and len(pre['readonly_roots'])==25
++    assert len(pre['consumed_paths'])==79 and len(pre['readonly_roots'])==30
+     parent=Path(binding['attempt_parent'])
+     assert not list(parent.iterdir()) and not os.path.lexists(pre['paths']['attempt'])
+     assert not os.path.lexists(str(parent)+'.owner-'+binding['nonce'])

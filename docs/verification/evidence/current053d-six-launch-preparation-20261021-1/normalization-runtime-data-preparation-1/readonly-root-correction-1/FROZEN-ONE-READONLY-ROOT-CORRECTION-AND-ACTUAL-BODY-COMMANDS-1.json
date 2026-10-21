@@ -1,0 +1,106 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "failure_family": "One failed normalizer actual missing exact launcher readonly root; one bounded correction",
+  "owner": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/readonly-root-correction-1/runtime-source-1/native_diagnostic_container_owner.py",
+    "sha256": "d2903422f8ca417ff99700e5d7ad9eb768352cb03c2779b5a9b81aef56c11d43",
+    "bytes": 77263
+  },
+  "owner_diff": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/readonly-root-correction-1/owner-exact-launcher-readonly-and-fresh-namespace.patch",
+    "sha256": "fedd123cadab455a330ab733b6df3b737cf825f2bc662d7bb9abaf086175447e",
+    "bytes": 38505
+  },
+  "normalizer": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/readonly-root-correction-1/prepare_batch_native.py",
+    "sha256": "036b05bc6ef8e0fae27639d8fe89c126778b9a8acc54c0fc27f9ccd31efd5ae0",
+    "bytes": 12247
+  },
+  "normalizer_byte_identical_to": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/root-projection-bound-normalization-1/prepare_batch_native.py",
+    "sha256": "036b05bc6ef8e0fae27639d8fe89c126778b9a8acc54c0fc27f9ccd31efd5ae0",
+    "bytes": 12247
+  },
+  "parent_binder": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/readonly-root-correction-1/batch_owner_binding.py",
+    "sha256": "7ded14cd8bbb68d63538eb07bbe21e22ca333a05aa404dd1f7767c81bc2e4fe0",
+    "bytes": 4470
+  },
+  "settings": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/readonly-root-correction-1/SETTINGS.json",
+    "sha256": "a97001a4cdf5a854f48b3111d81714d23566bfef7d68c188867ca7e986a7ba22",
+    "bytes": 6677
+  },
+  "input_pins": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/readonly-root-correction-1/INPUT-PINS.json",
+    "sha256": "32c2286728135a0b474e7338fec123e9e9b75a960a04784bdc915c3c0229aaaa",
+    "bytes": 3572
+  },
+  "checker": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/readonly-root-correction-1/check_actual_consumed_paths.py",
+    "sha256": "198e8801dc31bea8bd0e04a29bf7ee36b033ae2380e46d60edbd8ca3bf92338b",
+    "bytes": 1901
+  },
+  "checker_command": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/readonly-root-correction-1/check_actual_consumed_paths.py"
+  ],
+  "normalization_command_after_positive_and_rootgrant": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "taskset",
+    "-c",
+    "6",
+    "prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/readonly-root-correction-1/prepare_batch_native.py"
+  ],
+  "captures": [
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/readonly-root-correction-1/actual-consumed-paths-body-check-capture-1",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/readonly-root-correction-1/actual-normalization-capture-1"
+  ],
+  "all_consumed_paths_trace": {
+    "count": 79,
+    "original_roots": 29,
+    "missing_only": [
+      "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-sentinel-successor-preparation-1/launcher-attempt-1/owner-work/output/build/executer/user/mcexec"
+    ],
+    "correction": "Append exact launcher file only; no broader directory or relaxed path predicate"
+  },
+  "fresh_namespace": {
+    "attempt_parent": "/home/holden/mckernel-work/scratch/s6p-261021-3/p",
+    "manifest_directory": "/home/holden/mckernel-work/scratch/s6m-261021-3",
+    "nonce": "5bfb7039bfcb43c0bce3850c326ffef1",
+    "identity_and_absence_authority": null
+  },
+  "normalization_acceptance": null,
+  "runtime_release": null,
+  "grant": null,
+  "not_executed": true
+}

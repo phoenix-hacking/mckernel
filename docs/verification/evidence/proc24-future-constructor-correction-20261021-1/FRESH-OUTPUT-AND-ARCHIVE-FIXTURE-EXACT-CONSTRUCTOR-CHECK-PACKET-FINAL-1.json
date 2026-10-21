@@ -1,0 +1,79 @@
+{
+  "actual_constructor_result": null,
+  "actual_generated_proc_check_result": null,
+  "adoption_receipt": null,
+  "archive_fixture_provenance": {
+    "bytes": 4992,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/census-authority-next-constructor-correction-preparation-1/ARCHIVE-SOURCE-FIXTURE-DESCRIPTOR-PROVENANCE-1.json",
+    "sha256": "ed39b852285c5265ce5bc1e99590e549288ffa9009445fdf8ae0478cff7e791b"
+  },
+  "bindings": {
+    "bytes": 17550,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/census-authority-next-constructor-correction-preparation-1/TERMINAL-BINDINGS.ARCHIVE-SOURCE-FIXTURE-1.json",
+    "sha256": "a810eddc5ca5bd4f0da08895a74b15458d8dc87f7401b5d6406ac223ddfd7e76"
+  },
+  "case": {
+    "bytes": 61924,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/census-authority-next-constructor-correction-preparation-1/CASE.ARCHIVED-ORIGINAL-RECORD-SOURCE-FIXTURE-1.json",
+    "sha256": "fe7e35f4760b3ea5989ba95ac249b9be590688d0a19dac362992f8e1b8ab40f7"
+  },
+  "constructor": {
+    "bytes": 23997,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/census-authority-next-constructor-correction-preparation-1/prepare_successor_sources.PROC-AUTHORITY-FRESH-OUTPUT.py",
+    "sha256": "ca69acc2a61e3eef990bd4bb20abad501aba72126e1d215abb346126467056f3"
+  },
+  "constructor_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/census-authority-next-constructor-correction-preparation-1/prepare_successor_sources.PROC-AUTHORITY-FRESH-OUTPUT.py",
+    "terminal",
+    "--bindings",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/census-authority-next-constructor-correction-preparation-1/TERMINAL-BINDINGS.ARCHIVE-SOURCE-FIXTURE-1.json",
+    "--bindings-sha256",
+    "a810eddc5ca5bd4f0da08895a74b15458d8dc87f7401b5d6406ac223ddfd7e76"
+  ],
+  "existing_check_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=67108864:67108864",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3.9",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/bound-terminal-source-proc24e-source-fixture-1/check_current_pass_bodies.py"
+  ],
+  "expected_actual_proc_join": {
+    "checked_by": "Existing generated check_current_pass_bodies extracts actual generated engine PROC_CODE literal.",
+    "forbidden": "986e64c50fd8d78bbe3c23e86a690e67b51255ab03c9f03f29db30ee50891532",
+    "sha256": "24e27a493a84a1ab6c3d22a5248ae456288fa590fc93e31b3fb5a0a29d8659af"
+  },
+  "first_future_authority": "Root must adopt this exact successor as next terminal constructor after actual source-fixture result; this packet does not silently promote an unused private body or modify ca056.",
+  "literal_delta": {
+    "bytes": 1208,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/census-authority-next-constructor-correction-preparation-1/fresh-output-literal-only.patch",
+    "sha256": "3111a48372e0d161b24a977c511ea656e336eb233fd3f15cbd90ced3ca49a40e"
+  },
+  "live_terminal_release": null,
+  "output_directory": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/bound-terminal-source-proc24e-source-fixture-1",
+  "physical_authority": null,
+  "qualified_profile": "Sequential CPU6/1GiBAS/30CPU/35wall/64MiBfile/nofile256/core0; fresh ordinary grant required. No root/census/Docker/stage.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PREPARED_ORDINARY_SOURCE_FIXTURE_ONLY_NOT_EXECUTED"
+}

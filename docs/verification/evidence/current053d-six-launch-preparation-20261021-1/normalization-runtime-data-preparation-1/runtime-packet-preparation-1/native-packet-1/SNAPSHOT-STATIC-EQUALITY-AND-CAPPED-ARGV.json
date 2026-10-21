@@ -1,0 +1,133 @@
+{
+  "OUTPUT": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/root-live-preflight-1.json",
+  "actual_snapshot_ref": null,
+  "actual_snapshot_sha256": null,
+  "actual_static_review": {
+    "bytes": 1064,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/INDEPENDENT-CURRENT-SIX-LAUNCH-COMBINED-STATIC-ACCEPTANCE-1.json",
+    "sha256": "87ffc4ea18cd5e43a1cd17929652331d07456ac6ccf2097da1c92714393a4f27"
+  },
+  "actual_timestamp": null,
+  "application_acceptance": false,
+  "bindings": {
+    "bytes": 57817,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/fresh-snapshot-bindings.json",
+    "sha256": "1a7faaa4efcb398575d2be4831153eab2c0ae661a177ac2fa9ced5d699569a1f"
+  },
+  "current100percent_included_only": true,
+  "latest_physical": {
+    "bytes": 24086,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/current-native-acceptance-1/ROOT-MECHANICAL-ACTUAL-053D-NUMA-NATIVE-PHYSICAL-REPORT-1.json",
+    "sha256": "6816e13d6d4b912f1003342c4cb51468fa3d8269295125622437fdde7747533d"
+  },
+  "non_temporal_freeze": {
+    "bytes": 46750,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/non-temporal-freeze.json",
+    "sha256": "86bb5c0fffffd35e5b3743f1a208d7069989c3bf9db123932345f5ea2abb8fd7"
+  },
+  "producer": {
+    "bytes": 19980,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/root_manual_snapshot_three_round_full_static_selected_set.py",
+    "sha256": "b471e8e205c6c933d59d98c8f94e7fb6b3c6c9a078ccd5939df5bf9d19817b0d"
+  },
+  "profile": {
+    "AS": 1073741824,
+    "CPU": 6,
+    "CPU_seconds": 30,
+    "kill_after_seconds": 2,
+    "stream_bytes": 33554432,
+    "wall_seconds": 35
+  },
+  "root_snapshot_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=30",
+    "--core=0",
+    "--nofile=256",
+    "--fsize=33554432",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/root_manual_snapshot_three_round_full_static_selected_set.py",
+    "--bindings-sha256",
+    "1a7faaa4efcb398575d2be4831153eab2c0ae661a177ac2fa9ced5d699569a1f",
+    "--terminal",
+    "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/current-native-acceptance-1/ROOT-MECHANICAL-ACTUAL-053D-NUMA-NATIVE-PHYSICAL-REPORT-1.json",
+    "--terminal-sha256",
+    "6816e13d6d4b912f1003342c4cb51468fa3d8269295125622437fdde7747533d"
+  ],
+  "schema": "mckernel.current-six-launch.current100-static-snapshot-projection.v1",
+  "snapshot_equal": {
+    "accepted_actual_stage_fixture_parent_review": {
+      "bytes": 1064,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/INDEPENDENT-CURRENT-SIX-LAUNCH-COMBINED-STATIC-ACCEPTANCE-1.json",
+      "sha256": "87ffc4ea18cd5e43a1cd17929652331d07456ac6ccf2097da1c92714393a4f27"
+    },
+    "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+    "cgroup": {
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+      "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+    },
+    "current_predecessor_container_absent": true,
+    "exclusive_heavy_accepted": true,
+    "guest_profile": {
+      "memory_mib": 8192,
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "heavy_profile": {
+      "cpus": 4,
+      "cpuset": "2-5",
+      "memory": 12884901888,
+      "memory_swap": 12884901888,
+      "network": "none",
+      "pids": 512
+    },
+    "image_id": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "independent_static_execution_decision": {
+      "bytes": 1064,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/INDEPENDENT-CURRENT-SIX-LAUNCH-COMBINED-STATIC-ACCEPTANCE-1.json",
+      "sha256": "87ffc4ea18cd5e43a1cd17929652331d07456ac6ccf2097da1c92714393a4f27"
+    },
+    "non_temporal_join_result": {
+      "bytes": 46750,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/non-temporal-freeze.json",
+      "sha256": "86bb5c0fffffd35e5b3743f1a208d7069989c3bf9db123932345f5ea2abb8fd7"
+    },
+    "parent_identity": {
+      "device": 1828,
+      "gid": 1000,
+      "inode": 883258,
+      "mode": "0o700",
+      "uid": 1000
+    },
+    "released_paths_absent": [
+      "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/production-preflight-correction-preparation-1/full-image-attempt-2/common-exclusion.json",
+      "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock"
+    ],
+    "root_mutex_snapshot_free": true,
+    "status": "PASS_LIVE_PREEXECUTION_SNAPSHOT",
+    "terminal_acceptance": {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/current-native-acceptance-1/ROOT-MECHANICAL-ACTUAL-053D-NUMA-NATIVE-PHYSICAL-REPORT-1.json",
+      "sha256": "6816e13d6d4b912f1003342c4cb51468fa3d8269295125622437fdde7747533d"
+    }
+  },
+  "snapshot_equal_fields": 15,
+  "status": "PASS_SOURCE_DERIVED_STATIC_DATA_ONLY_NO_SNAPSHOT",
+  "status_path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/snapshot.status.json",
+  "stderr_path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/snapshot.stderr",
+  "stdout_path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1/snapshot.stdout"
+}

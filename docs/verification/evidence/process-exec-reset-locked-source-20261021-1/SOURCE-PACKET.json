@@ -1,0 +1,30 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_NOT_COMPILED_NOT_INTEGRATED",
+  "write_ownership": "/home/holden/mckernel-work/host-preparation/process-owned-fork-rust-next-preparation-20261021-1",
+  "target": "P-M06-01 real exec signal-state reset after successful host image transfer",
+  "baseline": {
+    "kernel/syscall.c": {
+      "sha256": "bca4d642d927da7a034124a25cdc1fd80189e48c1ffd6a2f44282f33340ea24f",
+      "bytes": 842598
+    },
+    "kernel/rust/syscall_policy.rs": {
+      "sha256": "3234a38477355e9f0a671853046a0aefe12672958906240a5e471c8992c5206a",
+      "bytes": 707836
+    },
+    "kernel/rust/abi.rs": {
+      "sha256": "ff48bc2e7c8fe00abf19572a3fe75661dd464a7a475fec91a0ac7d870f6fdd3e",
+      "bytes": 76151
+    }
+  },
+  "owned_fork_blocker": {
+    "fixed_gate_bytes": 14159970304,
+    "provider_absent_in": "accepted mcctrl6571",
+    "candidate": "practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-ffi-correction-1",
+    "disposition": "existing MM pointer ABI and provider composite candidate retained; no gate relaxation/resize/retry"
+  },
+  "invariant": "Caught handlers become SIG_DFL; SIG_DFL/SIG_IGN remain; action flags/restorer/mask, pending signals, sigmask, table refs/lock and altstack padding remain unchanged; exactly one existing FP reset runs after dispositions and before altstack fields reset. No allocation/destruction/publication or ownership transfer.",
+  "failure_family_history": "SDK compilation original+correction+expert+opaque provider attempt retained, no reset/replay. New exec-body family has no execution yet; first failure permits one bounded correction then expert.",
+  "stop_condition": "source packet only; root must approve/execute ordinary actual-body comparisons then production header/full crate/link and selected native exec before retirement credit",
+  "hostwork": "No builds/tests/root/Docker/guest/census/signals/leases; only finite source reads/writes under CPU0/256MiB/10CPU-seconds/1MiB."
+}

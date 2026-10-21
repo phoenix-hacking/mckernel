@@ -1,0 +1,87 @@
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -7097,6 +7097,11 @@
+ 			munmap_all_log_bridge);
+ } /* munmap_all() */
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++_Static_assert(_NSIG == 64 && SS_DISABLE == 2, "Rust exec signal constants");
++extern void exec_reset_signal_state_current_v1(struct thread *thread);
++#endif
++
+ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
+ 		const char *filename, char **argv, char **envp, int flags)
+ {
+@@ -7115,7 +7120,9 @@
+ 	struct vm_range *range;
+ 	struct process *proc = thread->proc;
+ 	ihk_mc_user_context_t execve_ctx;
++#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ 	int i;
++#endif
+ 
+ 	memcpy(&execve_ctx, ctx, sizeof(execve_ctx));
+ 
+@@ -7244,6 +7251,9 @@
+ 		goto end;
+ 	}
+ 
++#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
++	exec_reset_signal_state_current_v1(thread);
++#else
+ 	for(i = 0; i < _NSIG; i++){
+ 		if(thread->sigcommon->action[i].sa.sa_handler != SIG_IGN &&
+ 		   thread->sigcommon->action[i].sa.sa_handler != SIG_DFL)
+@@ -7257,6 +7267,8 @@
+ 	thread->sigstack.ss_sp = NULL;
+ 	thread->sigstack.ss_flags = SS_DISABLE;
+ 	thread->sigstack.ss_size = 0;
++
++#endif
+ 
+ 	error = ptrace_report_exec(thread, &execve_ctx);
+ 	if (error) {
+--- a/kernel/rust/syscall_policy.rs
++++ b/kernel/rust/syscall_policy.rs
+@@ -22513,6 +22513,41 @@
+     0
+ }
+ 
++/// Reset the signal state at the real successful exec commit point.
++///
++/// # Safety
++/// `thread` and its `sigcommon` are the live current exec owner. The caller
++/// keeps the live signal-table allocation pinned and preemption disabled across
++/// this body and its existing clear_fp_regs call. The shared table writer lock
++/// serializes caught-handler resets with peer sigaction/signal-table access.
++/// This does not acquire/release a Thread, VM, signal table or altstack owner.
++#[no_mangle]
++pub unsafe extern "C" fn exec_reset_signal_state_current_v1(thread: *mut Thread) {
++    unsafe extern "C" { fn clear_fp_regs(); }
++    let common = (*thread).sigcommon.cast::<SigCommon>();
++    let mut node = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
++    let lock = core::ptr::addr_of_mut!((*common).lock).cast();
++    crate::lock_helpers::__mcs_rwlock_writer_lock(lock, node.as_mut_ptr());
++    let actions = core::ptr::addr_of_mut!((*common).action).cast::<KSigAction>();
++    // Match the real x86-64 _NSIG=64 table. Raw field access avoids extending
++    // a whole-table mutable borrow across the architecture callback.
++    for i in 0..64 {
++        let handler = core::ptr::addr_of_mut!((*actions.add(i)).sa.sa_handler);
++        let old = core::ptr::read(handler) as usize;
++        if old != 0 && old != 1 {
++            core::ptr::write(handler, null_mut());
++        }
++    }
++    // Only the action fields are protected. Restore the previous IRQ state and
++    // preemption nesting before the architecture callback or altstack writes.
++    crate::lock_helpers::__mcs_rwlock_writer_unlock(lock, node.as_mut_ptr());
++    // Preserve the exact old ordering: dispositions, FP reset, altstack reset.
++    clear_fp_regs();
++    (*thread).sigstack.ss_sp = null_mut();
++    (*thread).sigstack.ss_flags = 2; // SS_DISABLE
++    (*thread).sigstack.ss_size = 0;
++}
++
+ #[no_mangle]
+ pub extern "C" fn execveat_policy_result(flags: CInt, dirfd: CInt, filename_first: CInt) -> CInt {
+     if (flags & !(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0 {

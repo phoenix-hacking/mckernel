@@ -1,3 +1,47 @@
+## Current — six-launch whole caller and final static joins pass; exact native release next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Reuse accepted053d/33f/modules without image rebuild. Offline six-launch stage
+accepted5b641:68records/62members/5physical replacements→4finalchanges/58unchanged,
+originalcollector0700 preserved. Actual0/12.290344797s/emptyerr/join/groupabsence.
+First normalization refused omitted exact33f launcher read-only path. One bounded
+single-file correction kept predicates strict; originalnegative/correctedpositive
+passed0/.164958698s for79paths/30roots. Normalization0/1.367258062s, independent
+d883; root3992 mechanically projects exact authorized producer fields/integers,
+with original attribution. No replay or fabricated physical fields.
+
+Current six-launch wholechecker0/.515588299s/emptyerr generated19pending through
+ONE internal constructor,7rows49fresh paths,3cases and8actualsourceFD joins.
+Independent combinedstatic87ffc accepted; finalconstructor0/.365517166s/emptyerr
+emits final19 and executes existing fullstatic_joins itself. Current coherent
+packet86874dae. Next exact execution review/freshgrant/checkpoint/freshsnapshot,
+then six strict launches in one guest. No snapshot/root/guest yet in this lane.
+Latestnativephysical6816 stays distinct from earlierbuild23057/eight-event978.
+
+Permanent future constructor authority now explicitly selects acceptedPROC24e;
+actualgeneration succeeded and one historical-descriptor fixture correction
+passed existing bodycheck0/.214506601s without constructor replay. Original
+fixturefailure preserved. NEXT-FUTURE-TERMINAL-CONSTRUCTOR-AUTHORITY.json binds
+actual source/24e/no986 and forbids reuse of consumed fixture output paths.
+No live terminal/physical permission or duplicate15-test claim.
+
+Real process exec locking source is materialized in kernel/syscall.c and
+kernel/rust/syscall_policy.rs, exact reviewed patch; actual-lock16combination
+body test accepted ece55. Selected Rust now uses existing shared writer lock;
+C fallback remains unchanged/unlocked. Production C ABI/full-crate/compiler,
+link/default/native acceptance still pending. Qualified four-object owner ready;
+ordinary materialization runs separately before guest census, no compiler yet.
+
+Counts unchanged90sources(35OS/55infra),32compiler,9native batches,29behaviors,
+22/35checks,fivewhole,Rust21/18. New overlap app Linux119B reference accepted;
+no new native/whole credit. Prior image-to-native177.706min, no speedup claim.
+Progress17-test fix checkpoint5b66b7f2 fetched and exact five blobs verified;
+resident unchanged. Rootreader2777042/start40959744 and supervisor2590193/
+start37928121 remain coordination readers; quiesce source lanes before census.
+Scratch128 prior approval preserved but active higher-priority no-resize blocks
+mutation; ROOT-ACTIVE-INSTRUCTION-NO-RESIZE-ORIGIN-1.json records known origin.
+No growth/alternatepath/reapproval/restart; preserve floors/all failures/27:4.
+
 ## Current — corrected image strict NUMA accepted; six-launch regression staged
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

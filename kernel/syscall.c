@@ -7097,6 +7097,11 @@ static void munmap_all(void)
 			munmap_all_log_bridge);
 } /* munmap_all() */
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+_Static_assert(_NSIG == 64 && SS_DISABLE == 2, "Rust exec signal constants");
+extern void exec_reset_signal_state_current_v1(struct thread *thread);
+#endif
+
 static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 		const char *filename, char **argv, char **envp, int flags)
 {
@@ -7115,7 +7120,9 @@ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 	struct vm_range *range;
 	struct process *proc = thread->proc;
 	ihk_mc_user_context_t execve_ctx;
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 	int i;
+#endif
 
 	memcpy(&execve_ctx, ctx, sizeof(execve_ctx));
 
@@ -7244,6 +7251,9 @@ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 		goto end;
 	}
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	exec_reset_signal_state_current_v1(thread);
+#else
 	for(i = 0; i < _NSIG; i++){
 		if(thread->sigcommon->action[i].sa.sa_handler != SIG_IGN &&
 		   thread->sigcommon->action[i].sa.sa_handler != SIG_DFL)
@@ -7257,6 +7267,8 @@ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 	thread->sigstack.ss_sp = NULL;
 	thread->sigstack.ss_flags = SS_DISABLE;
 	thread->sigstack.ss_size = 0;
+
+#endif
 
 	error = ptrace_report_exec(thread, &execve_ctx);
 	if (error) {

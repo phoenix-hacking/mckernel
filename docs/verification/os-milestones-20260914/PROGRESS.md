@@ -72,17 +72,17 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 
 ### Next practical work
 
-- Reuse accepted053d/33f/modules for existing six-launch regression: actual offline stage passed0/12.290344797s, independent acceptance then qualified normalization/current native physical bindings/exact runtime release. No kernel rebuild.
-- Carry acceptedPROC24e into first future cleanup constructor authority; run focused generated-body join once, preserve frozen historical copies and reuse15acceptedtests.
-- Continue real process Rust ownership/exec work; original scalar body comparison passes but shared SigCommon race blocks integration pending focused existing-lock correction. SDK66 fixed capacity gate remains.
+- Current053d six-launch offline stage and normalization independently accepted; actual wholecaller19pending/7rows49paths/8FD passed, combinedstatic87ffc then actual finalconstructor/fullstaticjoins passed. Publish current source/evidence, exact runtime review/freshgrant/snapshot then six strict launches, no kernel rebuild.
+- Next future terminal constructor authority explicitly adoptedPROC24e after actual generated body check; preserve original failed sourcefixture and all frozen old constructors. Future output namespace/newrelease data must be fresh.
+- Real exec-reset selected Rust locking patch materialized, actual lock body16cases accepted; run required production-header C/full Rust crate through existing four-object owner after six-guest priority. No native/default acceptance yet; inherited C fallback race preserved. SDK66 gate and higher-priority no-resize blocker held.
 - M05/M12 remain open: require actual public stop/destroy/release and declared restoration observations; match final profiles before overlapping2boots/10publiccycles/100launches/60mixedminutes. Separate new NUMA-overlap and second-stop source cases have no acceptance credit.
 
 Original formal qualification is **historical / DEFERRED**. Deferred does not mean passed; its counters below do not define practical completion.
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-21T21:27:55+00:00`
-- Launcher state heartbeat: `2026-10-21T21:27:45.531404+00:00`
+- Dashboard refreshed: `2026-10-21T21:43:55+00:00`
+- Launcher state heartbeat: `2026-10-21T21:43:44.012564+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `2486026`; server PID: `2486028`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261021T070405Z-729d8cb8`
