@@ -1,3 +1,53 @@
+## Current — threads native accepted; NUMA compiler final publication
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Semantic e09598cc/9904B and physical eb8cd2b3/36117B independently accept current
+imagea818/mcexec689d/d99 threads: exact25B stdout/empty stderr/raw9472/app37,
+threeTIDs removed,procfs empty,retirement530/cleanup0,pager remaining0;all30Docker
+clients/QEMU/container/controllers retired. Native38.127051s/whole39.800936s.
+Root ownreservationACKac7098e1 completed without ownership/lock/launcher edits.
+Evidence: ../evidence/settid-current-native-runtime-20261021-1/.
+
+One accepted native batch (six total); same old native-core.threads behavior,
+so28 logical behaviors unchanged. Scoped selectedRust settid native execution is
+supported by exact linked-callgraph plus actual unchangedtwo-pthread app; no
+invented internaltrace. Global17production/14native inventory held: independent
+report grants no production-default activation/C-retirement/SDK66/nonNULLfork.
+Formal21/35,fivewhole/26compiler builds held. Alloldpreowner failures retained.
+
+| Changed path | Source/compile/native evidence | Remaining limit |
+| --- | --- | --- |
+| Rust settid body | integrated9f135; sixstage24; image37e; nativee095 | globaldefault/C-retirement not accepted |
+| Rust NUMA traversal/getter snapshot | integrated7e344841; body9905/a50d; source160d9afa | current sixstage compile next; link/image/native/default open |
+| Scheduler mutation/reference retention | reviewed23c2/5f9c; compilerfd2f | currentimage excludes laterhunks; native/default open |
+
+NUMA final-binding-3/d662aeff binds newestphysicaleb8cd2b3; finite late-diff review
+34405c33 allows exact9+self10 controlpublication. Source199proof7b4b/160source/
+request/profile/driver unchanged. Root finishing finalfetchedproof/currentgrant,
+then existing once-caller sixstagecompile; no new sourceinventory/adapter/image
+rebuild. SDKfullmodule capacity/no-resize remains a separate preserved blocker.
+
+## Current — real threads native chain closed; independent outcome review
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual E=runtime-preparation-1/guard-source-fd-correction-1 root7 whole closed0
+39.800936s, executor2471812/start36178097, nativechild2471841/start36178210.
+All seven steps and three readbacks closed0 with positivegroup/stream joins.
+Native owner38.127051s. Closed frame: exact25B NATIVE_CORE PASS threads newline,
+empty stderr/EOF, raw9472/app37, procfs_empty; capture/cleanup errors empty/reaped.
+These are raw observations, not independent native/default/C-retirement acceptance.
+Retained sdk66 reviewer is completing actualphysical then strictsemantic/pathscope;
+ownerrecord PROTOCOL_PASS/all30clientsreaped/containerabsence evidence underreview.
+Exactstatus: E/native-packet-1/captures/03-native-owner/status.json. Outerreceipt:
+E/actual-root-controller-capture-1/whole.json; alloldfailedguard44files preserved.
+
+Final38 controls/captures10d5880e fetched/proof69ea5621; actual19+canonicaljoins
+accepted8a2b7312; conditionalroot7cd5ff5cf. No sharedsource/hardlink mutation.
+Currentimagea818/mcexec689d/d99 tuple unchanged. NUMA compilepreparation remains
+ready with source199proof7b4b/final-binding-2; next bind genuine newphysical only,
+no recompile/replay until its exact finalrelease/freshadmission pass. Source79
+(30OS/49infra),compiler26,21/35,fivewhole,28native,Rust17/14 held pending review.
+
 ## Current — exact source-FD correction passed; final native controls next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
