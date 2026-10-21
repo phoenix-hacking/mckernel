@@ -1,3 +1,28 @@
+## Current — observer/readbacks/raw export accepted; fresh cleanup namespace source ready
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Nonce2 observer0/1.821615s, summary0/.124345s, fiveFDmetadata0/.137376s and rawexport
+0/.140367s all closed/directjoined/groupsabsent/emptyerr. Actualrawexport independently
+accepted01f4c2b4; exact614400B/5USTARmembers/UID0 metadata and full9ns retained.
+Authorized mechanicalproducer projection2eadcbd includes originalFDobjects; UID1000
+copies remain separatelylabelled. All new decisions mechanicallyrecorded from raw
+completed reviewer messages with provenance; no fabricated/manualfield reconstruction.
+Image053d/stage51ec/normd7e94 remainaccepted. Counts90source/32compiler/8native/
+29behaviors/22checks/fivewhole/Rust19-16 held; clock18:06:04Z stillopen.
+
+Before any cleanup, actualnamespacecheck found pre-existing old numamask transaction
+names occupied. All records preserved; no mutation attempted. Minimal fresh derivative
+C=J/cleanup-namespace-successor-preparation-1 changes only engine PREFIX/PUBLISHED_SCRIPT
+and paired preflight SOURCE/SHA/postjoin ENGINE/SHA globals. Sourceeligibilityd0e1519e
+accepts47/2/8unchangedASTs and exactobservation/92selectedrow reuse; original Bengineb738
+and successfulobserver/rawexport stayimmutable, no replayrequired. Actual4expression
+check0/.076580s proves oldoccupied/new7absent and preservedobservation/sourcefunctions.
+Newengine86654275/preflightece147bd/postjoina4e6be32 need currentfetchedpublication,
+freshgrant and exact3-operation release. Existing32ed/a6ce preflightcaptureroute reused;
+no newframework/gate/sourceunit. Samefinalrelease strictpreflight→cleanup→postjoin,
+then genuinephysicalacceptance and strictNUMA native with33f/116B/emptyerr/37.
+RuntimeDATAe85e alreadybinds samegenuinenormd7 in bothpins/full8FDrecipe; physicalNULL.
+
 ## Current — offline stage and normalization accepted; one observer DATA correction checked
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
