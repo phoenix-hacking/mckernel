@@ -1,0 +1,60 @@
+{
+  "validation": {
+    "at": "2026-10-21T20:59:09.829Z",
+    "tests_passed": 17,
+    "test_seconds": 1.684,
+    "returncode": 0,
+    "children": [
+      {
+        "pid": 2801917,
+        "birth": "41369047",
+        "rc": 0,
+        "joined": true,
+        "group_absent": true
+      },
+      {
+        "pid": 2801918,
+        "birth": "41369051",
+        "rc": 7,
+        "joined": true,
+        "group_absent": true
+      }
+    ],
+    "help_supported_B": true,
+    "unsupported_I_help_preserved": true,
+    "source_integrated": true,
+    "active_process_restarted": false,
+    "original_capture_modified": false,
+    "git_diff_check_passed": true,
+    "independent_review": "/home/holden/mckernel-work/host-preparation/capture-progress-visibility-20261021-1/independent-review-1/FOLLOWUP-REVIEW.json",
+    "new_capture_requires_future_admission": true
+  },
+  "test_start": {
+    "chunk_id": "3318eb",
+    "wall_time_seconds": 1.000591629,
+    "session_id": 82752,
+    "original_token_count": 177,
+    "output": "test_malformed_prefix_is_not_quarantine (test_os_capture_progress.CaptureProgressTests) ... ok\ntest_progress_io_error_does_not_abandon_direct_join (test_os_capture_progress.CaptureProgressTests) ... CONTROLLED_CHILD {\"pid\": 2801917, \"proc_start_ticks\": \"41369047\", \"direct_child_joined\": true, \"returncode\": 0, \"process_group_absent\": true}\nok\ntest_quarantine_is_visible_before_direct_join (test_os_capture_progress.CaptureProgressTests) ... CONTROLLED_CHILD {\"pid\": 2801918, \"proc_start_ticks\": \"41369051\", \"direct_child_joined\": true, \"returncode\": 7, \"process_group_absent\": true}\nok\ntest_registered_files_surface_during_tool_wait_without_completion (test_os_capture_progress.LauncherProgressTests) ... "
+  },
+  "test_completion": {
+    "chunk_id": "e271b0",
+    "wall_time_seconds": 1.5104e-05,
+    "exit_code": 0,
+    "original_token_count": 427,
+    "output": "ok\ntest_terminal_shaped_progress_is_rejected (test_os_capture_progress.LauncherProgressTests) ... ok\ntest_definite_refusal_retains_original_and_allows_later_get_unstuck_instruction (test_os_goal_capture_progress.QueueRegistrationTests) ... ok\ntest_directory_becoming_nonfresh_before_drain_refuses (test_os_goal_capture_progress.QueueRegistrationTests) ... ok\ntest_matching_capability_enqueues_and_mismatch_at_drain_refuses (test_os_goal_capture_progress.QueueRegistrationTests) ... ok\ntest_new_instance_archives_old_hints_and_clears_live_view_with_or_without_new_path (test_os_goal_capture_progress.QueueRegistrationTests) ... ok\ntest_nonsymlink_fresh_path_required_at_enqueue (test_os_goal_capture_progress.QueueRegistrationTests) ... ok\ntest_old_or_incompatible_launcher_rejected_but_plain_instruction_works (test_os_goal_capture_progress.QueueRegistrationTests) ... ok\ntest_plain_instruction_keeps_original_queue_shape_and_routing (test_os_goal_capture_progress.QueueRegistrationTests) ... ok\ntest_real_save_advertises_capability_without_starting_campaign (test_os_goal_capture_progress.QueueRegistrationTests) ... ok\ntest_registration_never_bypasses_existing_stop_gate (test_os_goal_capture_progress.QueueRegistrationTests) ... ok\ntest_save_failure_never_steers_or_changes_active_monitor (test_os_goal_capture_progress.QueueRegistrationTests) ... ok\ntest_two_successive_registrations_persist_before_steer_and_monitor_new_path (test_os_goal_capture_progress.QueueRegistrationTests) ... ok\ntest_wrong_thread_or_instance_refuses_without_steering (test_os_goal_capture_progress.QueueRegistrationTests) ... ok\n\n----------------------------------------------------------------------\nRan 17 tests in 1.684s\n\nOK\n"
+  },
+  "unsupported_isolated_help": {
+    "chunk_id": "20ff9e",
+    "wall_time_seconds": 1.545e-05,
+    "exit_code": 1,
+    "original_token_count": 52,
+    "output": "Traceback (most recent call last):\n  File \"/home/holden/mckernel/scripts/run_os_goal.py\", line 29, in <module>\n    from os_goal_output import LiveOutput\nModuleNotFoundError: No module named 'os_goal_output'\n"
+  },
+  "supported_help": {
+    "chunk_id": "8b6f28",
+    "wall_time_seconds": 1.0916e-05,
+    "exit_code": 0,
+    "original_token_count": 1305,
+    "output": "usage: run_os_goal.py [-h]\n                      [--dry-run | --check | --check-sudo | --status | --progress | --instruct TEXT]\n                      [--capture-progress-directory CAPTURE_PROGRESS_DIRECTORY]\n                      [--hours HOURS] [--grace-seconds GRACE_SECONDS]\n                      [--model {gpt-6.1-sol}] [--effort {low,medium,high}]\n                      [--profile {aggressive,balanced}]\n                      [--max-agents MAX_AGENTS] [--build-jobs BUILD_JOBS]\n                      [--memory-gib MEMORY_GIB]\n                      [--agent-windows {auto,on,off}] [--fresh-session]\n                      [--fresh-on-recovery] [--token-budget TOKEN_BUDGET]\n                      [--codex CODEX]\n                      [--startup-instruction-file STARTUP_INSTRUCTION_FILE]\n                      [--startup-instruction-sha256 STARTUP_INSTRUCTION_SHA256]\n                      [--supersede-instruction ID:SHA256]\n                      [--max-restarts MAX_RESTARTS]\n                      [--restart-delay RESTART_DELAY]\n                      [--watchdog-seconds WATCHDOG_SECONDS]\n                      [--heartbeat-seconds HEARTBEAT_SECONDS]\n                      [--stall-seconds STALL_SECONDS] [--quiet]\n\nStart/resume the McKernel milestone goal through the local Codex app server.\nNo model calls for --dry-run, --status, --check or --check-sudo. A normal\ninvocation starts paid/account-metered work. Runtime state stays in the\nrepository's Git directory.\n\noptional arguments:\n  -h, --help            show this help message and exit\n  --dry-run             Print launch settings; no server, thread or model call\n  --check               Inspect local Codex settings/models; no thread or\n                        inference\n  --check-sudo          Verify private askpass authentication with sudo id -u;\n                        no inference\n  --status              Read the last saved launcher snapshot; no server\n  --progress            Show live runner activity and the last engineering\n                        dashboard; no server\n  --instruct TEXT       Send a live instruction to the coordinator; queues\n                        through checkpoints\n  --capture-progress-directory CAPTURE_PROGRESS_DIRECTORY\n                        Explicit fresh capture directory; with --instruct\n                        register it before steering, otherwise at startup\n  --hours HOURS         Optional work window in hours; 0 means no time limit\n                        (default: 0)\n  --grace-seconds GRACE_SECONDS\n                        Reserve up to this many seconds for a checkpoint\n  --model {gpt-6.1-sol}\n                        Dispatcher model; default: gpt-6.1-sol\n  --effort {low,medium,high}\n  --profile {aggressive,balanced}\n                        Dedicated-machine parallelism (default) or historical\n                        balanced limits\n  --max-agents MAX_AGENTS\n                        Child-agent ceiling; default up to 8 aggressive / 3\n                        balanced\n  --build-jobs BUILD_JOBS\n                        Aggregate build jobs; default all affinity CPUs in\n                        aggressive mode\n  --memory-gib MEMORY_GIB\n                        Aggregate build memory budget; default up to 24 GiB\n                        aggressive / 12 balanced\n  --agent-windows {auto,on,off}\n                        Separate live desktop window per child (default: auto\n                        when a desktop is available); logs always retained\n  --fresh-session       Explicitly start a fresh conversation from Markdown;\n                        archive the previous state\n  --fresh-on-recovery   Use fresh Markdown-guided conversations after\n                        classified recoverable crashes\n  --token-budget TOKEN_BUDGET\n                        Explicit total goal budget; omitted preserves the\n                        current budget\n  --codex CODEX         Path to the local Codex executable\n  --startup-instruction-file STARTUP_INSTRUCTION_FILE\n                        Explicit invocation instructions loaded before\n                        resuming the saved thread\n  --startup-instruction-sha256 STARTUP_INSTRUCTION_SHA256\n                        Pin the invocation instructions across preflight and\n                        watcher recoveries\n  --supersede-instruction ID:SHA256\n                        Archive an exact historical queued instruction before\n                        this explicit resume\n  --max-restarts MAX_RESTARTS\n                        Automatic recoveries; -1 means unlimited, 0 disables\n                        (default: -1)\n  --restart-delay RESTART_DELAY\n                        Initial recovery backoff in seconds (default: 5)\n  --watchdog-seconds WATCHDOG_SECONDS\n                        Recover a runner with no state heartbeat; 0 disables\n  --heartbeat-seconds HEARTBEAT_SECONDS\n                        Print liveness and agent activity every N seconds\n                        (default: 15)\n  --stall-seconds STALL_SECONDS\n                        Opt-in agent-silence watchdog; 0 (default) preserves\n                        healthy silent builds/soaks\n  --quiet               Hide live agent output; keep heartbeats and\n                        console.log\n"
+  }
+}

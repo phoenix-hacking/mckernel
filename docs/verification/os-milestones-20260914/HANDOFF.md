@@ -1,3 +1,37 @@
+## Current — corrected image strict NUMA accepted; six-launch regression staged
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current053d/launcher33f unchanged strict NUMA app and native-owner physical scope
+independently accepted602d2eef. Exact116B/emptyerr/37, EOFs, procfs removal and
+retirement positive; seven-step owner37.528389718s, all seven calls joined,
+14 owned groups absent and30 saved Docker clients reaped. Separate actual native
+physical6816 preserves tool-owned controller shape/null outer OS identity.
+It is distinct from earlier eight-event buildphysical23057; originals retained.
+Named insert/clear default caller→sameRustobject→ELF providers review2ab7 plus
+actual conditionjoin4ce6 adds two selected production/two native Rust paths:
+first-node insertion and clear-entry empty-tree scope only, no nonempty branch,
+callback-trace, whole NUMA or whole-kernel retirement claim. Current totals:
+90 coherent source units(35OS/55infra),32compiler,9acceptednative batches,
+29distinct behaviors,22/35checks,fivewhole,21production/18native Rust paths.
+Image18:06:04→ownerfinish21:03:46.362669=177.706min; no overall speedup claim.
+
+Existing six-launch053d offline stage passed0/12.290344797s/emptyerr/directjoin/
+groupabsence:68records/62members,19892448B staged. Independent actual acceptance
+then existing normalization/runtime closure are next; only required current
+acceptance/tuple pins change. No kernel build or unchanged checker replay.
+New separate NUMA overlap app compiled0/.214813s and Linuxreference37/.002018s,
+exact119B/emptyerr, source8cc209/binary029065/oracleeaacab, no native credit.
+Process Rust scalar body comparison passed eight seeds; shared SigCommon writer
+race blocks integration until existing-lock correction. SDK66 capacity gate held.
+
+Reviewed future progress visibility source plus17 integrated testsPASS remains
+without resident restart; exact capture paths must be registered before waits.
+QUARANTINED means recovery_required, qualified read-only diagnosis promptly,
+no automatic kill/unlock/replay. Permanent27:4/scratch21/all failures preserved.
+Next: accept six-stage, normalize current tuple, exact release/fresh admission
+for six strict launches in one guest; prepare real public lifecycle restoration
+and process Rust independently, quiescing source work before exclusive census.
+
 ## Current — physical accepted; corrected whole caller and final static joins pass
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

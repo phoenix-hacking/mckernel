@@ -37,6 +37,7 @@ REPO = Path(__file__).resolve().parents[1]
 SUDO_HELPER = REPO / "scripts/os_goal_sudo_askpass.py"
 SUDO_CREDENTIAL = Path.home() / ".local/state/mckernel-os-goal/sudo-password"
 PLAN_REL = "docs/verification/os-milestones-20260914"
+CAPTURE_PROGRESS_CAPABILITY = 1
 DEFAULT_DISPATCHER_MODEL = "gpt-6.1-sol"
 DEFAULT_WORKER_MODEL = "gpt-6.1-sol"
 AUDIT_MODEL = "gpt-6.1-sol"
@@ -177,17 +178,44 @@ def atomic_json(path, value):
         os.close(directory)
 
 
-def queue_instruction(directory, instruction):
+def validate_capture_progress_directory(value):
+    """Validate one explicitly named future directory; never discover paths."""
+    if not isinstance(value, (str, Path)) or len(str(value).encode('utf-8')) > 4096:
+        raise ValueError('capture progress directory must be a bounded explicit path')
+    path = Path(value)
+    if (not path.is_absolute() or '..' in path.parts or os.path.lexists(path)
+            or not path.parent.is_dir()
+            or any(p.is_symlink() for p in (path, *path.parents))):
+        raise ValueError('capture progress directory must be fresh, absolute and nonsymlink')
+    return path
+
+
+def queue_instruction(directory, instruction, capture_progress_directory=None):
     """Queue an owner's instruction without touching the running server lease."""
     if not (directory / "state.json").is_file():
         raise RuntimeError("No saved OS campaign exists; start the runner first.")
     if not instruction.strip() or len(instruction.encode("utf-8")) > 8192:
         raise ValueError("Instruction must be nonempty and at most 8192 UTF-8 bytes.")
+    item = {"submitted_at": utc(), "text": instruction}
+    if capture_progress_directory is not None:
+        path = validate_capture_progress_directory(capture_progress_directory)
+        state = json.loads((directory / 'state.json').read_text())
+        if (type(state.get('capture_progress_capability')) is not int
+                or state['capture_progress_capability'] != CAPTURE_PROGRESS_CAPABILITY):
+            raise ValueError('resident launcher does not advertise compatible capture progress capability')
+        if (state.get('phase') != 'running' or not isinstance(state.get('thread_id'), str)
+                or not state['thread_id'] or type(state.get('worker_pid')) is not int
+                or state['worker_pid'] <= 0 or not isinstance(state.get('log_dir'), str)
+                or not state['log_dir']):
+            raise ValueError('capture registration requires an identified running campaign')
+        item['capture_progress'] = dict(directory=str(path), capability_version=CAPTURE_PROGRESS_CAPABILITY,
+            expected_thread_id=state['thread_id'], expected_worker_pid=state['worker_pid'],
+            expected_log_dir=state['log_dir'])
     inbox = directory / "instructions" / "pending"
     inbox.mkdir(mode=0o700, parents=True, exist_ok=True)
     ident = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ") + "-" + uuid4().hex
-    atomic_json(inbox / (ident + ".json"),
-                {"id": ident, "submitted_at": utc(), "text": instruction})
+    item["id"] = ident
+    atomic_json(inbox / (ident + ".json"), item)
     return ident
 
 
@@ -203,6 +231,8 @@ def progress_report(directory, repo):
     lines = ["Runner: {} | goal: {} | active child agents: {}/{}".format(
         state.get("phase", "not_started"), goal.get("status", "none"), children, agents),
         "Last heartbeat: {}".format(state.get("updated_at", "none"))]
+    for progress in state.get('capture_progress', []):
+        lines.append('Capture progress (nonterminal; no clearance): ' + json.dumps(progress, sort_keys=True))
     control = directory / "instructions"
     pending = list((control / "pending").glob("*.json"))
     uncertain = list((control / "sending").glob("*.json"))
@@ -468,13 +498,133 @@ class Campaign:
         self.controlled = False
         self.output = LiveOutput(self.log_dir, quiet=args.quiet, agent_windows=args.agent_windows)
         self.output.primary = self.state.get("thread_id")
+        # Saved hints belong to the preceding launcher instance, never this monitor.
+        previous = {key: self.state[key] for key in
+                    ('capture_progress_registration', 'capture_progress') if key in self.state}
+        if previous:
+            atomic_json(self.log_dir / 'prior-capture-progress.json', dict(
+                classification='historical_inactive_instance_hints', recorded_at=utc(),
+                previous_thread_id=self.state.get('thread_id'),
+                previous_worker_pid=self.state.get('worker_pid'),
+                previous_log_dir=self.state.get('log_dir'), hints=previous))
+        self.state.pop('capture_progress_registration', None)
+        self.state['capture_progress'] = []
+        # Explicit future-capture registration; no path discovery or data execution.
+        self.capture_progress_directory = getattr(args, 'capture_progress_directory', None)
+        self.capture_progress_accepted = {}
+        self.capture_progress_notices = set()
+        if self.capture_progress_directory is not None:
+            path = validate_capture_progress_directory(self.capture_progress_directory)
+            self.state['capture_progress_registration'] = dict(
+                directory=str(path), registered_at=utc(), terminal=False,
+                direct_child_joined=False, release_authorized=False)
+
+    def poll_capture_progress(self):
+        """Read two registered hints only; never dispatch, signal or grant clearance."""
+        if self.capture_progress_directory is None:
+            return
+        rows = []
+        for event in ('CHILD_JOIN_PENDING', 'QUARANTINE_MARKER_OBSERVED'):
+            path = self.capture_progress_directory / ('progress-' + event.lower() + '.json')
+            key = str(path)
+            row = self.capture_progress_accepted.get(key)
+            if row is None:
+                row = dict(path=key, observation='awaiting_file', terminal=False,
+                           direct_child_joined=False, release_authorized=False)
+                fd = None
+                try:
+                    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+                    info = os.fstat(fd)
+                    if not (stat.S_ISREG(info.st_mode) and info.st_uid == os.getuid()
+                            and info.st_nlink == 1 and info.st_size <= 8192):
+                        raise ValueError('unexpected progress file shape')
+                    data = json.loads(os.read(fd, 8193))
+                    if not (isinstance(data, dict) and data.get('schema') == 'capture-progress.v1'
+                            and data.get('event') == event
+                            and data.get('capture_directory') == str(self.capture_progress_directory)
+                            and data.get('terminal') is False
+                            and data.get('direct_child_joined') is False
+                            and data.get('release_authorized') is False
+                            and type(data.get('pid')) is int and data['pid'] > 0
+                            and isinstance(data.get('proc_start_ticks'), str)
+                            and 0 < len(data['proc_start_ticks']) <= 32
+                            and data['proc_start_ticks'].isascii() and data['proc_start_ticks'].isdigit()):
+                        raise ValueError('unexpected progress record')
+                    row.update(observation=event, pid=data['pid'],
+                               proc_start_ticks=data['proc_start_ticks'])
+                    self.capture_progress_accepted[key] = row
+                except FileNotFoundError:
+                    pass
+                except OSError:
+                    row['observation'] = 'unreadable_file'
+                except (ValueError, UnicodeError, RecursionError):
+                    row['observation'] = 'invalid_file'
+                finally:
+                    if fd is not None:
+                        os.close(fd)
+            rows.append(row)
+            notice = (key, row['observation'])
+            # At most four notices per fixed file, including failed-read diagnostics.
+            if notice not in self.capture_progress_notices:
+                self.capture_progress_notices.add(notice)
+                self.output.notice('CAPTURE_PROGRESS nonterminal; ' + json.dumps(row, sort_keys=True))
+        self.state['capture_progress'] = rows
 
     def save(self, **fields):
         self.state.update(fields)
+        self.state['capture_progress_capability'] = CAPTURE_PROGRESS_CAPABILITY
         self.state.update(updated_at=utc(), log_dir=str(self.log_dir), active_turns=self.active,
                           agents=self.output.snapshot(), console_log=str(self.log_dir / "console.log"),
                           agent_event_count=self.output.agent_event_count)
         atomic_json(self.state_path, self.state)
+
+    def register_instruction_capture_progress(self, item, receipt):
+        """Durably acknowledge visibility registration before this instruction steers."""
+        if 'capture_progress' not in item:
+            return ''
+        data = item['capture_progress']
+        if (not isinstance(data, dict) or set(data) != {
+                'directory', 'capability_version', 'expected_thread_id', 'expected_worker_pid', 'expected_log_dir'}
+                or type(data.get('capability_version')) is not int
+                or data['capability_version'] != CAPTURE_PROGRESS_CAPABILITY
+                or type(self.state.get('capture_progress_capability')) is not int
+                or self.state['capture_progress_capability'] != CAPTURE_PROGRESS_CAPABILITY
+                or data.get('expected_thread_id') != self.state.get('thread_id')
+                or type(data.get('expected_worker_pid')) is not int
+                or data['expected_worker_pid'] != os.getpid()
+                or data['expected_worker_pid'] != self.state.get('worker_pid')
+                or data.get('expected_log_dir') != str(self.log_dir)):
+            raise ValueError('capture registration refused: current thread or launcher instance differs')
+        path = validate_capture_progress_directory(data['directory'])
+        if path == self.capture_progress_directory:
+            raise ValueError('capture registration refused: directory already registered')
+        registration = dict(directory=str(path), capability_version=CAPTURE_PROGRESS_CAPABILITY,
+            registered_at=utc(), instruction_id=item['id'],
+            thread_id=self.state['thread_id'], worker_pid=os.getpid(), log_dir=str(self.log_dir),
+            terminal=False, direct_child_joined=False, release_authorized=False)
+        receipt['previous_capture_progress_registration'] = self.state.get('capture_progress_registration')
+        receipt['previous_capture_progress'] = self.state.get('capture_progress', [])
+        receipt['capture_progress_registration'] = registration
+        # A failed save prevents steering. It never authorizes a capture or clears a lock.
+        prior = {key: self.state[key] for key in ('capture_progress_registration', 'capture_progress')
+                 if key in self.state}
+        try:
+            self.save(capture_progress_registration=registration, capture_progress=[])
+        except OSError:
+            # save updates memory before writing; restore it before recording refusal.
+            for key in ('capture_progress_registration', 'capture_progress'):
+                if key in prior:
+                    self.state[key] = prior[key]
+                else:
+                    self.state.pop(key, None)
+            raise
+        self.capture_progress_directory = path
+        self.capture_progress_accepted = {}
+        self.capture_progress_notices = set()
+        self.output.notice('Registered capture progress (nonterminal; no execution or release authority): '
+                           + json.dumps(registration, sort_keys=True))
+        return ('\nLauncher visibility acknowledgment: ' + json.dumps(registration, sort_keys=True)
+                + '\nThis registers progress only. Existing execution, ownership and terminal checks still apply.')
 
     def deliver_instruction(self):
         """Steer one active coordinator turn; retain uncertain deliveries for audit."""
@@ -498,9 +648,39 @@ class Campaign:
         receipt = {"id": item["id"], "thread_id": ident,
                    "turn_id": self.active[ident], "submitted_at": item["submitted_at"]}
         try:
+            progress_ack = self.register_instruction_capture_progress(item, receipt)
+        except ValueError as error:
+            # No RPC was attempted: archive this exact rejected item without
+            # blocking a later ordinary control instruction or replaying this one.
+            receipt.update(status='registration_refused_before_steer', error=str(error))
+            refused = control / 'refused'
+            try:
+                refused.mkdir(mode=0o700, parents=True, exist_ok=True)
+                archived = refused / source.name
+                receipt_path = refused / (source.stem + '.receipt.json')
+                if receipt_path.exists():
+                    raise FileExistsError('refusal receipt already exists')
+                os.link(sending, archived, follow_symlinks=False)
+                atomic_json(receipt_path, receipt)  # fsync also publishes the original link.
+                sending.unlink()
+            except OSError as archive_error:
+                receipt.update(status='registration_archive_failed_before_steer',
+                               error=str(archive_error))
+                self.save(last_instruction=receipt)
+                self.output.notice('Registration refusal archival failed before steering; inspect ' + str(sending))
+                return
+            self.save(last_instruction=receipt)
+            self.output.notice('Capture registration refused before steering; original and receipt at ' + str(refused))
+            return
+        except OSError as error:
+            receipt.update(status='registration_persistence_failed_before_steer', error=str(error))
+            self.save(last_instruction=receipt)
+            self.output.notice('Capture registration persistence failed before steering; retained instruction at ' + str(sending))
+            return  # No RPC attempted; retain uncertain persistence evidence without replay.
+        try:
             self.rpc.call("turn/steer", {"threadId": ident,
                           "expectedTurnId": receipt["turn_id"], "input": [{"type": "text",
-                          "text": "Live user instruction " + item["id"] + ":\n" + item["text"]}]})
+                          "text": "Live user instruction " + item["id"] + ":\n" + item["text"] + progress_ack}]})
             receipt.update(status="accepted_by_server", delivered_at=utc())
             delivered = control / "delivered"
             delivered.mkdir(mode=0o700, parents=True, exist_ok=True)
@@ -1164,6 +1344,7 @@ class Campaign:
                 self.output.flush()
                 now = time.monotonic()
                 if now >= next_heartbeat:
+                    self.poll_capture_progress()
                     self.output.heartbeat(self.goal, self.active, now - started,
                                           os.getpid(), self.state.get("server_pid"))
                     self.save(heartbeat_at=utc(), uptime_seconds=round(now - started, 1))
@@ -1201,6 +1382,8 @@ def arguments(argv=None):
     mode.add_argument("--status", action="store_true", help="Read the last saved launcher snapshot; no server")
     mode.add_argument("--progress", action="store_true", help="Show live runner activity and the last engineering dashboard; no server")
     mode.add_argument("--instruct", metavar="TEXT", help="Send a live instruction to the coordinator; queues through checkpoints")
+    parser.add_argument('--capture-progress-directory', type=Path,
+                        help='Explicit fresh capture directory; with --instruct register it before steering, otherwise at startup')
     parser.add_argument("--hours", type=float, default=0, help="Optional work window in hours; 0 means no time limit (default: 0)")
     parser.add_argument("--grace-seconds", type=float, default=600, help="Reserve up to this many seconds for a checkpoint")
     parser.add_argument("--model", default=DEFAULT_DISPATCHER_MODEL, choices=[DEFAULT_DISPATCHER_MODEL],
@@ -1296,7 +1479,7 @@ def main(argv=None):
         print(progress_report(directory, REPO))
         return 0
     if args.instruct is not None:
-        ident = queue_instruction(directory, args.instruct)
+        ident = queue_instruction(directory, args.instruct, args.capture_progress_directory)
         print("Queued instruction " + ident + "; it will reach the next active coordinator turn.")
         return 0
     if args.dry_run:

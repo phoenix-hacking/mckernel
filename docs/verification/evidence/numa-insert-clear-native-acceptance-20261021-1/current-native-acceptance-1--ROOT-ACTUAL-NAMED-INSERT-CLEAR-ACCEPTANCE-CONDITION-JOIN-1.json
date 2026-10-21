@@ -1,0 +1,58 @@
+{
+  "application_and_physical_independent_review": {
+    "bytes": 4363,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/INDEPENDENT-ACTUAL-053D-NUMA-APPLICATION-AND-NATIVE-PHYSICAL-ACCEPTANCE-1.json",
+    "sha256": "602d2eef7426648999f8c5f11190fdabdaa9933cac52468f6cf4a21a74b5371f"
+  },
+  "eligible_delta": {
+    "applicable_native": 2,
+    "counter_changes_performed": 0,
+    "other_counter_credit": 0,
+    "result_if_recorded_after_required_acceptance": "21 selected production /18 applicable native",
+    "selected_production": 2
+  },
+  "limitations": [
+    "One unit per compute body; no bridge, callback or export multiplication.",
+    "No native split, deletion, reinsertion, allocation-failure or interleave-branch claim.",
+    "Eligible active-default compute-body cutover only; fallback/reference C remains.",
+    "No whole-NUMA, whole-kernel or all-configuration C retirement.",
+    "No build, object audit, test replay, root operation or ledger edit by reviewer."
+  ],
+  "named_independent_review": {
+    "bytes": 4241,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/INDEPENDENT-INSERT-CLEAR-NAMED-DEFAULT-NATIVE-DEDUP-REVIEW-1.json",
+    "sha256": "2ab7b5e4cc0a4b0be4255c27b27afce840565f3497648d148f854b8c157b57ed"
+  },
+  "named_units": [
+    {
+      "applicable_native_delta_eligible": 1,
+      "native_scope": "Normal first-node insertion for the middle-page policy.",
+      "production_delta_eligible": 1,
+      "rust_export": "syscall_vm_policy_insert_body_result",
+      "unit": "vm_policy_insert"
+    },
+    {
+      "applicable_native_delta_eligible": 1,
+      "native_scope": "Clear entry and empty-tree/no-overlap return preceding insertion.",
+      "production_delta_eligible": 1,
+      "rust_export": "syscall_vm_policy_clear_range_body_result",
+      "unit": "vm_policy_clear_range"
+    }
+  ],
+  "native_physical_report": {
+    "bytes": 24086,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/records/current-native-acceptance-1/ROOT-MECHANICAL-ACTUAL-053D-NUMA-NATIVE-PHYSICAL-REPORT-1.json",
+    "sha256": "6816e13d6d4b912f1003342c4cb51468fa3d8269295125622437fdde7747533d"
+  },
+  "no_new_behavior_credit": true,
+  "reachability_basis": {
+    "application": "numa_interval_app.rs:74 makes its single mbind237 call on the fresh mapping's middle page.",
+    "caller": "kernel/rust/syscall_policy.rs:8135-8155 calls clear then insert when no exact interval exists.",
+    "classification": "Caller/source inference joined to actual native application evidence, not a direct callback trace.",
+    "forwarding": "kernel/syscall.c:26101 and26121 forward through the default-selected clear and insert bridges.",
+    "initialization": "kernel/rust/process_helpers.rs:6381 initializes the fresh VM policy-tree root to NULL."
+  },
+  "recorder": "/root",
+  "required_condition_fulfilled": "Genuine current independent application and native-owner physical acceptance bound, preserving original raw diagnostic flags",
+  "whole_public_lifecycle_credit": false
+}
