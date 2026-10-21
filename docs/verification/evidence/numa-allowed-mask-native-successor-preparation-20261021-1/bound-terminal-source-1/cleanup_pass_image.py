@@ -744,63 +744,7 @@ def rename_exchange(fd, source, destination, destination_fd=None):
 # Executed only by root's absolute Python, isolated from caller modules/env.
 # Every listed stat must read/parse; disappearing processes cause a retryable
 # refusal. Two full snapshots and unchanged boot identity authenticate scope.
-PROC_CODE = r'''
-import json,os,sys
-caller=[int(sys.argv[2]),sys.argv[3]]
-caller_parent=int(open('/proc/'+str(caller[0])+'/stat','rb').read().rpartition(b') ')[2].split()[1])
-heavy={'qemu-system-x86_64','qemu-system-aarch64','qemu-kvm','mcexec','firecracker',
-       'rustc','cargo','make','ninja','buildah','gcc','g++','cc','clang','clang++'}
-def publisher(exe,argv):
-    name=os.path.basename(exe[:-10] if exe.endswith(' (deleted)') else exe)
-    if name in heavy or name.startswith('qemu-system-'): return True
-    if name in ('docker','podman') and any(a in ('build','run','start') for a in argv[1:]): return True
-    for arg in argv:
-        base=os.path.basename(arg)
-        if (base.startswith(('native_rust_exact_','native-exact-','native_exact_')) and
-            base.endswith(('.py','.sh')) and any(term in base for term in ('build','cleanup','recovery','prepare'))): return True
-    return False
-def snapshot():
-    rows=[]; publishers=[]; found=False
-    entries=os.listdir('/proc')
-    if len(entries)>4096: raise ValueError('process-count')
-    for name in entries:
-        if not name.isdigit(): continue
-        pid=int(name)
-        with open('/proc/'+name+'/stat','rb') as f: raw=f.read(65537)
-        if len(raw)>65536: raise ValueError('stat-size')
-        left,sep,right=raw.rpartition(b') ')
-        if not sep or not left.startswith(str(pid).encode()+b' ('): raise ValueError('stat-prefix')
-        fields=right.split()
-        if len(fields)<50 or fields[0] not in (b'R',b'S',b'D',b'Z',b'T',b't',b'X',b'x',b'K',b'W',b'P',b'I'): raise ValueError('stat-fields')
-        for field in fields[1:]:
-            digits=field[1:] if field.startswith(b'-') else field
-            if not digits or any(c<48 or c>57 for c in digits): raise ValueError('stat-number')
-        ppid=int(fields[1]); start=int(fields[19])
-        if ppid<0 or start<0: raise ValueError('stat-number')
-        with open('/proc/'+name+'/cmdline','rb') as f: command=f.read(65537)
-        if len(command)>65536 or (command and not command.endswith(b'\0')): raise ValueError('cmdline-size-or-termination')
-        argv=[a.decode('utf-8','strict') for a in command[:-1].split(b'\0')] if command else []
-        if len(argv)>256 or any(len(a)>16384 for a in argv): raise ValueError('cmdline-arguments')
-        if not argv and fields[0] not in (b'Z',b'X',b'x') and not (int(fields[6]) & 0x200000): raise ValueError('live-cmdline-empty')
-        exe=os.readlink('/proc/'+name+'/exe') if argv else ''
-        with open('/proc/'+name+'/stat','rb') as f: again=f.read(65537)
-        check=again.rpartition(b') ')[2].split()
-        if len(check)<50 or check[19]!=fields[19]: raise ValueError('process-raced')
-        if pid==caller[0]:
-            if str(start)!=caller[1]: raise ValueError('caller-raced')
-            found=True
-        elif argv and not (pid==caller_parent and os.path.basename(exe)=='sudo') and publisher(exe,argv): publishers.append([pid,str(start),exe])
-        rows.append([pid,ppid,str(start)])
-    if not found: raise ValueError('caller-missing')
-    return sorted(rows),publishers
-if os.geteuid()!=0: raise ValueError('not-root')
-with open('/proc/sys/kernel/random/boot_id') as f: boot=f.read().strip()
-first,pubs1=snapshot(); second,pubs2=snapshot()
-with open('/proc/sys/kernel/random/boot_id') as f: after=f.read().strip()
-if boot!=after: raise ValueError('boot-raced')
-print(json.dumps({'schema':'fp-save-image.proc.v1','uid':os.geteuid(),'boot_id':boot,
-                  'challenge':sys.argv[1],'caller':caller,'publishers':pubs1+pubs2,'snapshots':[first,second]}))
-'''
+PROC_CODE = "\nimport json,os,sys\ncaller=[int(sys.argv[2]),sys.argv[3]]\ncaller_parent=int(open('/proc/'+str(caller[0])+'/stat','rb').read().rpartition(b') ')[2].split()[1])\nheavy={'qemu-system-x86_64','qemu-system-aarch64','qemu-kvm','mcexec','firecracker',\n       'rustc','cargo','make','ninja','buildah','gcc','g++','cc','clang','clang++'}\ndef publisher(exe,argv):\n    name=os.path.basename(exe[:-10] if exe.endswith(' (deleted)') else exe)\n    if name in heavy or name.startswith('qemu-system-'): return True\n    if name in ('docker','podman') and any(a in ('build','run','start') for a in argv[1:]): return True\n    for arg in argv:\n        base=os.path.basename(arg)\n        if (base.startswith(('native_rust_exact_','native-exact-','native_exact_')) and\n            base.endswith(('.py','.sh')) and any(term in base for term in ('build','cleanup','recovery','prepare'))): return True\n    return False\ndef snapshot():\n    # Retry the entire sweep, never omit an unreadable listed PID. Preserve\n    # every observed identity/publisher so churn cannot hide an owned process.\n    observed={}; publishers=[]\n    for attempt in range(3):\n        try:\n            return _snapshot_once(observed,publishers)\n        except FileNotFoundError as error:\n            path=error.filename\n            parts=path.split('/') if isinstance(path,str) else []\n            if (len(parts)!=4 or parts[:2]!=['','proc'] or\n                    not parts[2].isdigit() or parts[3] not in ('stat','cmdline','exe')):\n                raise\n            if attempt==2: raise ValueError('process-snapshot-unstable') from error\n\ndef _snapshot_once(observed,publishers):\n    rows=[]; found=False\n    entries=os.listdir('/proc')\n    if len(entries)>4096: raise ValueError('process-count')\n    for name in entries:\n        if not name.isdigit(): continue\n        pid=int(name)\n        with open('/proc/'+name+'/stat','rb') as f: raw=f.read(65537)\n        if len(raw)>65536: raise ValueError('stat-size')\n        left,sep,right=raw.rpartition(b') ')\n        if not sep or not left.startswith(str(pid).encode()+b' ('): raise ValueError('stat-prefix')\n        fields=right.split()\n        if len(fields)<50 or fields[0] not in (b'R',b'S',b'D',b'Z',b'T',b't',b'X',b'x',b'K',b'W',b'P',b'I'): raise ValueError('stat-fields')\n        for field in fields[1:]:\n            digits=field[1:] if field.startswith(b'-') else field\n            if not digits or any(c<48 or c>57 for c in digits): raise ValueError('stat-number')\n        ppid=int(fields[1]); start=int(fields[19])\n        if ppid<0 or start<0: raise ValueError('stat-number')\n        row=[pid,ppid,str(start)]\n        previous=observed.get(pid)\n        if previous is not None and previous!=row: raise ValueError('process-raced')\n        observed[pid]=row\n        if len(observed)>4096: raise ValueError('process-count')\n        with open('/proc/'+name+'/cmdline','rb') as f: command=f.read(65537)\n        if len(command)>65536 or (command and not command.endswith(b'\\0')): raise ValueError('cmdline-size-or-termination')\n        argv=[a.decode('utf-8','strict') for a in command[:-1].split(b'\\0')] if command else []\n        if len(argv)>256 or any(len(a)>16384 for a in argv): raise ValueError('cmdline-arguments')\n        if not argv and fields[0] not in (b'Z',b'X',b'x') and not (int(fields[6]) & 0x200000): raise ValueError('live-cmdline-empty')\n        exe=os.readlink('/proc/'+name+'/exe') if argv else ''\n        # Retain an established publisher even if confirmation stat disappears.\n        if pid!=caller[0] and argv and not (pid==caller_parent and os.path.basename(exe)=='sudo') and publisher(exe,argv):\n            publishers.append([pid,str(start),exe])\n        with open('/proc/'+name+'/stat','rb') as f: again=f.read(65537)\n        check=again.rpartition(b') ')[2].split()\n        if len(check)<50 or check[19]!=fields[19]: raise ValueError('process-raced')\n        if pid==caller[0]:\n            if str(start)!=caller[1]: raise ValueError('caller-raced')\n            found=True\n        rows.append([pid,ppid,str(start)])\n    if not found: raise ValueError('caller-missing')\n    return sorted(observed.values()),publishers\nif os.geteuid()!=0: raise ValueError('not-root')\nwith open('/proc/sys/kernel/random/boot_id') as f: boot=f.read().strip()\nfirst,pubs1=snapshot(); second,pubs2=snapshot()\nwith open('/proc/sys/kernel/random/boot_id') as f: after=f.read().strip()\nif boot!=after: raise ValueError('boot-raced')\nprint(json.dumps({'schema':'fp-save-image.proc.v1','uid':os.geteuid(),'boot_id':boot,\n                  'challenge':sys.argv[1],'caller':caller,'publishers':pubs1+pubs2,'snapshots':[first,second]}))\n"
 
 def run_privileged(args):
     return root_command(args, LIMIT)

@@ -1,3 +1,44 @@
+## Current — actual retirement accepted; one-quarantine archive source ready
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Genuine independent f86c26e5 accepts exactretirement db6926/892106 receipts joined
+through TWOfile FD export3d9e and originalcaller0868 failed-9 positiveclosure.
+No current cleanup owner remains. Mutex116297/quarantine116298/common/shared and
+private25e source/release094 remain unchanged. One-quarantine NOREPLACE archive
+source7aca/profile9bbe conditionally source/profilePASS; exactpublished payload
+execution review/grant still pending. No census/engine/Docker/signal in archive.
+
+Corrected5f67 engine15syntheticchecks accepted8dd5; retainedmutex read-only caller
+7d9b conditionally sourcePASSd3a9, using existingrun(False) with strict preserved
+predicates. Canonical repository sourcealiases prepared; actualprivateengine stays
+25e until archive completed/reviewed. Postjoin245c/body602a pin-only, freshadapter
+variantparked; no observer/raw5/49controls/15checks replay required. Future exact
+same-release retained-preflight/cleanup/postjoin authority stillNULL.
+
+Stable coordination reader user112443 rootACK:2590193/start37928121/CPU0/256MiB,
+no children/writes, PTYpollsnonewprocesses. Include before any independently
+releasedfreshcensus; notice itself no operationalauthority. Source-only progress,
+no new app/kernel/native/path/milestone or speedupclaim; imageclock10:02:44UTC.
+
+## Current — reviewed holder retirement closed0; original cleanup failure closed-9
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exact recovery source6590/profileb0e/fetched32ce/payloadfc49 independently released
+39dc. Freshgrant then ONEtool-ownedexecution0/.055030s reported durablecomplete
+db6926c8 and cleanup_authorizedfalse/fresh_preflight_eligiblefalse. Actorbirth was
+notobserved and remainsNULL per explicit scopedreview; executed ownlockbranch
+verified replacement27:4 before durablecomplete. Original tool10482 then closed
+underlying-9/1720.764769s with0868e537 directchildjoined/groupabsent/streamsclosed;
+original120B/806B failure retained. No live quarantined owner remains by this
+closedcaller evidence; quarantine/mutex/common/shared records are preserved.
+
+Next minimal TWO-file root receipt FD export (complete/prepared) and independent
+actualretirement join; no full artifact/observer/export replay. Then exactlocked
+retained-state reconciliation + source5f67/three pin consumers/sourceidentity
+addendum/publication, current same-releasepreflight/cleanup/postjoin only after
+its genuine release. Current physicalclearance/runtimeauthority remainNULL.
+Strict116B/emptyerr/37 app, image1d8/stagee01/norm4440/runtime0317 unchanged.
+
 ## Current — exact current recovery preparation authorized; quarantine still held
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

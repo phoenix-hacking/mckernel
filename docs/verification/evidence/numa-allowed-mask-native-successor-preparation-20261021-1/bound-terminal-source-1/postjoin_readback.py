@@ -4,7 +4,7 @@ import base64,fcntl,hashlib,json,os,resource,stat,subprocess,sys,types
 from pathlib import Path
 ROOT=Path('/home/holden/mckernel-work/scratch')
 ENGINE = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/bound-terminal-source-1/cleanup_pass_image.py')
-ENGINE_SHA = '25e8657a301c6d486833de7bf8f6cdd7ebc360d9930a997809b3089b16551633'
+ENGINE_SHA = '5f6716a8914564cfae06693931033fa2efacae49aaf2e21f18600463b376d21d'
 OBSERVER = Path('/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/bound-terminal-source-1/observe_current_pass_image_retirement.py')
 OBSERVER_SHA = '41a187650605a312ff2710a359f236cf6b9c3d5e90f06efd2f442c038e26a8c1'
 CAP=128*2**20
