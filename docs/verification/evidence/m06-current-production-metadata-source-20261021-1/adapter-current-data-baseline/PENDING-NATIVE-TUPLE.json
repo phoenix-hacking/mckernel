@@ -1,0 +1,812 @@
+{
+  "actual_full_argv": {
+    "container_create_argv": [
+      "create",
+      "--pull=never",
+      "--attach=stdout",
+      "--attach=stderr",
+      "--init",
+      "--name",
+      "mckernel-native-diagnostic-dbaa78c53e184514981d8e5dfce86901",
+      "--label",
+      "mckernel.native-diagnostic.owner=dbaa78c53e184514981d8e5dfce86901",
+      "--cpus=4",
+      "--cpuset-cpus=2-5",
+      "--cgroup-parent=/mckernel-dev",
+      "--memory=12g",
+      "--memory-swap=12g",
+      "--pids-limit=512",
+      "--cap-drop=ALL",
+      "--security-opt=no-new-privileges",
+      "--read-only",
+      "--network=none",
+      "--user=1000:1000",
+      "--ulimit",
+      "core=0",
+      "--ulimit",
+      "nofile=4096:4096",
+      "--tmpfs",
+      "/tmp:rw,nodev,nosuid,size=256m",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel,dst=/home/holden/mckernel,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/scratch,dst=/home/holden/mckernel-work/scratch,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1,dst=/home/holden/mckernel-work/host-preparation/repaired-affinity-n3-variant-20261019-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1,dst=/home/holden/mckernel-work/host-preparation/evening-two-app-batch-20261019-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/postbuild-preparation-1,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/postbuild-preparation-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-heavy-review-20261019-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/source-sha256.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/source-sha256.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/facts-inline-correction-1/actual-positive-fixture-facts.json,dst=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/postbuild-execution-preparation-1/copy-pin-correction-1/facts-inline-correction-1/actual-positive-fixture-facts.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-20261019-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-two-rounds-independent-review-20261019-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-20261020-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-independent-review-20261020-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-three-rounds-independent-review-20261020-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/launch-expansion-source-review-20261020-1,dst=/home/holden/mckernel-work/host-preparation/launch-expansion-source-review-20261020-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1,dst=/home/holden/mckernel-work/host-preparation/current-host-pair-205-launch-expansion-20261020-1/failure-diagnostic-1/route-proof-correction-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1,dst=/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-COMPOSITE64-MODULE-SOURCE-FFI-LINK-ACCEPTANCE.json,dst=/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-COMPOSITE64-MODULE-SOURCE-FFI-LINK-ACCEPTANCE.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json,dst=/home/holden/mckernel-work/host-preparation/current-v6-fork-adoption-independent-review-20261020-1/ALLOCATOR-CORRECTION1-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/request.json,dst=/home/holden/mckernel-work/host-preparation/current-v6-composite-sdk-preparation-20261020-1/compiler-allocator-correction-1/request.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase4-host-sdk-independent-review-20261020-1/HOST66-ACTUAL-THREE-MODULE-FFI-CONTROL-ARTIFACT-REVIEW.json,dst=/home/holden/mckernel-work/host-preparation/phase4-host-sdk-independent-review-20261020-1/HOST66-ACTUAL-THREE-MODULE-FFI-CONTROL-ARTIFACT-REVIEW.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase4-host-sdk-independent-review-20261020-1/HOST66-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json,dst=/home/holden/mckernel-work/host-preparation/phase4-host-sdk-independent-review-20261020-1/HOST66-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/request.json,dst=/home/holden/mckernel-work/host-preparation/phase4-host-sdk-preparation-20261020-1/request.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/ACTUAL-COMPOSITE64-THREE-MODULE-STAGE-ONLY-AND-CONSUMER-FAILURE-REVIEW.json,dst=/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/ACTUAL-COMPOSITE64-THREE-MODULE-STAGE-ONLY-AND-CONSUMER-FAILURE-REVIEW.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/COLLECTOR-DRAIN-CORRECTION1-SOURCE-AND-ACTUAL-ELEVEN-CASES-REVIEW.json,dst=/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-independent-review-20261020-1/COLLECTOR-DRAIN-CORRECTION1-SOURCE-AND-ACTUAL-ELEVEN-CASES-REVIEW.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-independent-functional-slice-20261020-1/ordinary-check-1/app,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-independent-functional-slice-20261020-1/ordinary-check-1/app,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic_container_owner.py,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic_container_owner.py,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic.py,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic.py,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic_runner.py,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic_runner.py,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic_backend.py,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_diagnostic_backend.py,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/qmp_capture.py,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/qmp_capture.py,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/check-1/collector,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/check-1/collector,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/native-stage-1/m03.cpio.gz,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/native-stage-1/m03.cpio.gz,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/native-stage-1/overlay-manifest.json,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/native-stage-1/overlay-manifest.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/native-stage-1/manifest.json,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/stage-preparation-1/native-stage-1/manifest.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_owner_binding.py,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-prepayload-helper-export-correction-20261020-1/runtime-source-1/native_owner_binding.py,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-current-sdk-physical-binding-20261020-1/runtime-source-1,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-current-sdk-physical-binding-20261020-1/runtime-source-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/native-stage-1,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-handshake-init-stage-20261020-1/native-stage-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-ACTUAL-AUTHENTICATED-HANDSHAKE-INIT-ONLY-OFFLINE-STAGE-ACCEPTANCE.json,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/M03-ACTUAL-AUTHENTICATED-HANDSHAKE-INIT-ONLY-OFFLINE-STAGE-ACCEPTANCE.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/check-1/collector,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-authenticated-boot-handshake-correction-20261020-1/check-1/collector,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/runtime-source-1,dst=/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/runtime-source-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1,dst=/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ordinary-stage-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/INPUT-AND-DECLARED-DATA.json,dst=/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/INPUT-AND-DECLARED-DATA.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ACTUAL-TWO-COMMAND-CLOSED-HANDOFF.json,dst=/home/holden/mckernel-work/host-preparation/phase5-exit7-m03-consumer-continuation-20261020-1/ACTUAL-TWO-COMMAND-CLOSED-HANDOFF.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-exit7-grace-retry-binding-20261020-1/runtime-source-1,dst=/home/holden/mckernel-work/host-preparation/phase5-exit7-grace-retry-binding-20261020-1/runtime-source-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-exit7-retirement-defect-20261020-1,dst=/home/holden/mckernel-work/host-preparation/phase5-exit7-retirement-defect-20261020-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/EXIT7-RETIREMENT-GRACE-ACTUAL-BODY-CHECKS-AND-STATIC-COLLECTOR-ACCEPTANCE.json,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-independent-review-20261020-1/EXIT7-RETIREMENT-GRACE-ACTUAL-BODY-CHECKS-AND-STATIC-COLLECTOR-ACCEPTANCE.json,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1,dst=/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/protection.cpio.gz,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/protection.cpio.gz,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/collector-0755,dst=/home/holden/mckernel-work/host-preparation/phase5-m03-protection-grace-stage-20261020-1/ordinary-stage-1/collector-0755,readonly",
+      "--mount",
+      "type=bind,src=/home/holden/mckernel-work/scratch/m6c-261021-1/p,dst=/home/holden/mckernel-work/scratch/m6c-261021-1/p",
+      "--env",
+      "HOME=/tmp",
+      "--env",
+      "TMPDIR=/tmp",
+      "--env",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "--workdir=/home/holden/mckernel-work/scratch/m6c-261021-1/p",
+      "--entrypoint=/usr/bin/python3",
+      "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-contract-correction-1/runtime-source-1/native_diagnostic_container_owner.py",
+      "--inside",
+      "--owner-sha256",
+      "0c37892a15cccec2dd18e0158381711e93369e063b10e8a48076f2aa5da44997",
+      "--manifest",
+      "/home/holden/mckernel-work/scratch/m6cn-261021-1/manifest.json",
+      "--manifest-sha256",
+      "24fafe0d7f35d8e0e094af47064a042a973580638b6fdcf6806923f1e82e49ab",
+      "--attempt-parent",
+      "/home/holden/mckernel-work/scratch/m6c-261021-1/p",
+      "--nonce",
+      "dbaa78c53e184514981d8e5dfce86901"
+    ],
+    "inside_owner_argv": [
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-contract-correction-1/runtime-source-1/native_diagnostic_container_owner.py",
+      "--inside",
+      "--owner-sha256",
+      "0c37892a15cccec2dd18e0158381711e93369e063b10e8a48076f2aa5da44997",
+      "--manifest",
+      "/home/holden/mckernel-work/scratch/m6cn-261021-1/manifest.json",
+      "--manifest-sha256",
+      "24fafe0d7f35d8e0e094af47064a042a973580638b6fdcf6806923f1e82e49ab",
+      "--attempt-parent",
+      "/home/holden/mckernel-work/scratch/m6c-261021-1/p",
+      "--nonce",
+      "dbaa78c53e184514981d8e5dfce86901"
+    ],
+    "owner_argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-contract-correction-1/runtime-source-1/native_diagnostic_container_owner.py",
+      "--owner-sha256",
+      "0c37892a15cccec2dd18e0158381711e93369e063b10e8a48076f2aa5da44997",
+      "--attempt-parent",
+      "/home/holden/mckernel-work/scratch/m6c-261021-1/p",
+      "--nonce",
+      "dbaa78c53e184514981d8e5dfce86901",
+      "--manifest",
+      "/home/holden/mckernel-work/scratch/m6cn-261021-1/manifest.json",
+      "--manifest-sha256",
+      "24fafe0d7f35d8e0e094af47064a042a973580638b6fdcf6806923f1e82e49ab"
+    ],
+    "qemu_argv": [
+      "/usr/libexec/qemu-kvm",
+      "-machine",
+      "q35",
+      "-accel",
+      "tcg,thread=multi",
+      "-cpu",
+      "max,la57=off",
+      "-smp",
+      "4,sockets=2,cores=2,threads=1",
+      "-m",
+      "8192",
+      "-object",
+      "memory-backend-ram,size=4G,id=ram-node0",
+      "-object",
+      "memory-backend-ram,size=4G,id=ram-node1",
+      "-numa",
+      "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+      "-numa",
+      "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+      "-nic",
+      "none",
+      "-display",
+      "none",
+      "-no-reboot",
+      "-no-shutdown",
+      "-S",
+      "-monitor",
+      "none",
+      "-qmp",
+      "unix:/home/holden/mckernel-work/scratch/m6c-261021-1/p/attempt-dbaa78c53e184514981d8e5dfce86901/qmp.sock,server=on,wait=off",
+      "-serial",
+      "file:/home/holden/mckernel-work/scratch/m6c-261021-1/p/attempt-dbaa78c53e184514981d8e5dfce86901/serial.log",
+      "-debugcon",
+      "file:/home/holden/mckernel-work/scratch/m6c-261021-1/p/attempt-dbaa78c53e184514981d8e5dfce86901/debugcon.log",
+      "-global",
+      "isa-debugcon.iobase=0xe9",
+      "-kernel",
+      "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+      "-initrd",
+      "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/ordinary-stage-1/clone3-io.cpio.gz",
+      "-append",
+      "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+    ]
+  },
+  "actual_normalization": {
+    "binding": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-contract-correction-1/ACTUAL-BINDING.json",
+      "sha256": "02ce54fd499e13d174474aadd77f0c03d4c0a44e49d41d6f4fbc88f203ca415b",
+      "size": 340
+    },
+    "closed": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-contract-correction-1/ROOT-ACTUAL-NORMALIZATION-CLOSED-1.json",
+      "sha256": "384c13caad20082a6c9656f2335132f44dc3e2a258c2f11e71fd84b793ef17d2",
+      "size": 1318
+    },
+    "independent_acceptance": null,
+    "preflight": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-contract-correction-1/ACTUAL-NATIVE-PREFLIGHT.json",
+      "sha256": "dffdd18d627e075236222cb5c8a1d119f3d392bc90091f728a8a7ca06c0433d9",
+      "size": 64328
+    }
+  },
+  "binding": {
+    "attempt_parent": "/home/holden/mckernel-work/scratch/m6c-261021-1/p",
+    "manifest": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/scratch/m6cn-261021-1/manifest.json",
+      "sha256": "24fafe0d7f35d8e0e094af47064a042a973580638b6fdcf6806923f1e82e49ab",
+      "size": 5714
+    },
+    "nonce": "dbaa78c53e184514981d8e5dfce86901"
+  },
+  "case_id": "practical.process.clone3-io-unsupported",
+  "existing_family": {
+    "bind_m03_handshake_native_packet.py": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/current-sources/bind_m03_handshake_native_packet.py",
+      "sha256": "582914664e9a4b872c6375be6201cc6e2e585be7b44fdbf406c74b1fac5a39f2",
+      "size": 25313
+    },
+    "current_m02_contract.py": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/current-sources/current_m02_contract.py",
+      "sha256": "5900686a474d8f9a707a899343ae94c16fdb3f25cf77263d00ca73883e2d4f68",
+      "size": 8776
+    },
+    "exact_caller": {
+      "bytes": 5471,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/posteffects-quarantine-variant-1/native-packet-1/root-run-exact-readonly-stage.py",
+      "sha256": "71ae1eaa7732d20d54afe940d2692d5c1896cfbde1718e6748ad05b28899da64"
+    },
+    "failed_context": {
+      "bytes": 23702,
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/runtime-data-preparation-1/correction-1/next-predecessor-preparation-1/CURRENT-CHILD-FAILURE-CONTEXT.json",
+      "sha256": "efded3e8c1d34026b81227c90cb6ac7f2f3eecae39c4175b6bc67f9872631253"
+    },
+    "failed_reader": {
+      "bytes": 16618,
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/runtime-data-preparation-1/correction-1/next-predecessor-preparation-1/native_child_failure_physical_projection.py",
+      "sha256": "7e07f1ba42ad08c32d4351024e38c50e9f32f8a006b00f48cee7955d73786c82"
+    },
+    "failed_reader_acceptance": {
+      "bytes": 18063,
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/ACTUAL-M02-CURRENT-CHILD-FAILURE-READER-AND-LAST-BODY-ACCEPTANCE.json",
+      "sha256": "89872f13488a934e93fedee573ac9a42f1e070534233e07c8de67e30cd0eb0c5"
+    },
+    "machine_assembly_caller.py": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/current-sources/machine_assembly_caller.py",
+      "sha256": "d5ce0f360e4511c38681ce83624c35ea729d0006c3ec03774ab9aef007034103",
+      "size": 1604
+    },
+    "manual_failure_contract": {
+      "bytes": 1338,
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-grace-retry-binding-20261020-1/last-static-interface-correction-1/native-control-packet-5/MANUAL-READBACK-CONTRACT.json",
+      "sha256": "13ba02c4b5c5df1ce4b0ab43d2edd97bfe40943b3145b81805751cd6bac451c2"
+    },
+    "materialize_current_m02_once.py": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/current-sources/materialize_current_m02_once.py",
+      "sha256": "452b69fce80c33aab99ebbcc9e8f68360c6145dc3554294442bd3bd528790f85",
+      "size": 9330
+    },
+    "review_final_205_release.py": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/current-sources/review_final_205_release.py",
+      "sha256": "8ebb8f92ccb5ebe40a6a98fd11f937e1ce4c2a88a3f426e10dcfe26df8bcb2e5",
+      "size": 8340
+    },
+    "root_manual_snapshot_m03.py": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/current-sources/root_manual_snapshot_m03.py",
+      "sha256": "ba1cd2d230dc79ddb37cff935371b11ca11e184fcf10270ed6b32b4c6d36ff9d",
+      "size": 11603
+    },
+    "seven_ancestry": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/native-control-packet-1/FINAL-SEVEN-ROOT-CALL-DATA.json",
+      "sha256": "3b3a257a210b364a149dd609d26e22fe2fabbedf9b56fb3d347d19a2e2be2915",
+      "size": 56996
+    }
+  },
+  "failure_history": "Original generation assertion/bounded correction, first normalization readonly failure and its complete partial outputs remain retained; expert-directed whole-body fixture and root actual normalization supplied separately. No unchanged retry.",
+  "future": {
+    "LAST": null,
+    "captures49": null,
+    "current_physical_consumer_acceptance": null,
+    "fetched_proof": null,
+    "final19": null,
+    "guard": null,
+    "machine": null,
+    "native_outcome": null,
+    "native_release": null,
+    "normalization_independent_acceptance": null,
+    "physical_outcome": null,
+    "source_closure_acceptance": null
+  },
+  "future_namespace": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/future-native-control-packet-1",
+  "no_actions": {
+    "app_runs": 0,
+    "commands_executed": 0,
+    "guest_runs": 0,
+    "leases": 0,
+    "root_operations": 0,
+    "source_publication": 0
+  },
+  "oracle": {
+    "actual_syscall": 435,
+    "errno": 95,
+    "exit_code": 0,
+    "physical_requirements": [
+      "no child publication",
+      "no CREATE_PPD",
+      "no extra worker",
+      "positive normal app/pager/owner retirement"
+    ],
+    "stderr": "",
+    "stdout": "rc=-1 errno=95 eopnotsupp=1 child_created=0\n",
+    "stdout_bytes": 44
+  },
+  "parent_nine_field_identity": {
+    "st_ctime_ns": 1792546188648010077,
+    "st_dev": 1828,
+    "st_gid": 1000,
+    "st_ino": 882351,
+    "st_mode": 16832,
+    "st_mtime_ns": 1792546188648010077,
+    "st_nlink": 2,
+    "st_size": 4096,
+    "st_uid": 1000
+  },
+  "physical_predecessor": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/ACTUAL-M02-FAILED-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+    "sha256": "a5a44c1d43ff74f2a777583b243a3c20a4102f855f4ffefa31ccccbf5e31eeb8",
+    "size": 64657
+  },
+  "remaining_predicate": {
+    "disposition": "DATA mapping only; no reader/source clone, constant substitution, widened accepted kind or framework. Root needs focused independent decision for genuine current schema/source/physical consumer join before materializer can consume M06 data.",
+    "function": "read_source",
+    "location": {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/current-sources/current_m02_contract.py",
+      "sha256": "5900686a474d8f9a707a899343ae94c16fdb3f25cf77263d00ca73883e2d4f68",
+      "size": 8776
+    },
+    "predicates": [
+      {
+        "current": "Current M06 stage/normalization/source acceptance must be admitted as genuine current objects; no relabeling oldM02.",
+        "expected": [
+          "mckernel.independent-actual-M02-source-closure-outside-preflight-acceptance.v1",
+          "PASS_NO_EFFECT_PREFLIGHT_ONLY",
+          "PASS_ACTUAL_COMPLETE_M02_SOURCE_CLOSURE_OWNER_CREATE_INSIDE_QEMU_ARGV_AND_THREE_DRIFT_REFUSALS_ONLY"
+        ],
+        "name": "SOURCE_KIND"
+      },
+      {
+        "current_stage": {
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/independent-review-1/actual-stage-output-acceptance-resume-20261021.json",
+          "sha256": "4b9591f140d98a4079b9a5529ca9410a9c7532d7f1ab0146c1895a766c616a34",
+          "size": 29024
+        },
+        "expected": [
+          "mckernel.independent-actual-exit7-init-only-offline-stage-acceptance.v1",
+          "PASS",
+          "PASS_ACTUAL_EXIT7_INIT_ONLY_RETIREMENT_GRACE_OFFLINE_STAGE"
+        ],
+        "name": "stage.kind"
+      },
+      {
+        "current_acceptance": null,
+        "expected": [
+          "mckernel.independent-actual-exit7-native-preparation-acceptance.v1",
+          "PASS",
+          "PASS_ACTUAL_EXIT7_BYTE_EXACT_NORMALIZATION_FRESH_PARENT_AND_FULL_OWNER_CREATE_INSIDE_QEMU_ARGV_ONLY"
+        ],
+        "name": "normalization.kind"
+      },
+      {
+        "accepted_context": {
+          "bytes": 23702,
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-exit7-accepted-timeout-preparation-20261020-1/runtime-data-preparation-1/correction-1/next-predecessor-preparation-1/CURRENT-CHILD-FAILURE-CONTEXT.json",
+          "sha256": "efded3e8c1d34026b81227c90cb6ac7f2f3eecae39c4175b6bc67f9872631253"
+        },
+        "current_failed_reader_context": null,
+        "name": "physical genuine_bound_roles.physical_FD equality and accepted_context",
+        "required_current_physical": {
+          "mode": 33152,
+          "path": "/home/holden/mckernel-work/host-preparation/phase5-m03-valid-protection-closure-independent-review-20261020-1/ACTUAL-M02-FAILED-NATIVE-PHYSICAL-RETIREMENT-REVIEW.json",
+          "sha256": "a5a44c1d43ff74f2a777583b243a3c20a4102f855f4ffefa31ccccbf5e31eeb8",
+          "size": 64657
+        }
+      }
+    ],
+    "status": "KNOWN_CURRENT_KIND_AND_PHYSICAL_CONTEXT_PREDICATES_UNRESOLVED"
+  },
+  "root_owner_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-contract-correction-1/runtime-source-1/native_diagnostic_container_owner.py",
+    "--owner-sha256",
+    "0c37892a15cccec2dd18e0158381711e93369e063b10e8a48076f2aa5da44997",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/m6c-261021-1/p",
+    "--nonce",
+    "dbaa78c53e184514981d8e5dfce86901",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/m6cn-261021-1/manifest.json",
+    "--manifest-sha256",
+    "24fafe0d7f35d8e0e094af47064a042a973580638b6fdcf6806923f1e82e49ab"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "seven_steps": [
+    {
+      "accepted_existing_source": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/current-sources/root_manual_snapshot_m03.py",
+        "sha256": "ba1cd2d230dc79ddb37cff935371b11ca11e184fcf10270ed6b32b4c6d36ff9d",
+        "size": 11603
+      },
+      "actual_argv_caps": {
+        "AS_bytes": 1073741824,
+        "CPU_seconds": 30,
+        "wall_seconds": 35
+      },
+      "argv": null,
+      "caller_template": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/posteffects-quarantine-variant-1/native-packet-1/root-run-exact-readonly-stage.py",
+        "--commands-file",
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/future-native-control-packet-1/actual-command-data/00-LAST-snapshot.json",
+        "--commands-sha256",
+        null,
+        "--index",
+        "1"
+      ],
+      "command_data_future_path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/future-native-control-packet-1/actual-command-data/00-LAST-snapshot.json",
+      "command_data_sha256": null,
+      "index": 0,
+      "name": "LAST-snapshot",
+      "pending": "Exact current source acceptance, final19/49 metadata and genuine fetched publication; source-local DATA joins then reviewed fullargv. LAST/machine/guard temporal hashes remain future.",
+      "profile": {
+        "cpu": 6,
+        "parent_kill_grace_seconds": 2,
+        "parent_wall_seconds": 40,
+        "stream_fsize": 33554432
+      }
+    },
+    {
+      "accepted_existing_source": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/current-sources/machine_assembly_caller.py",
+        "sha256": "d5ce0f360e4511c38681ce83624c35ea729d0006c3ec03774ab9aef007034103",
+        "size": 1604
+      },
+      "actual_argv_caps": {
+        "AS_bytes": 1073741824,
+        "CPU_seconds": 30,
+        "wall_seconds": 35
+      },
+      "argv": null,
+      "caller_template": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/posteffects-quarantine-variant-1/native-packet-1/root-run-exact-readonly-stage.py",
+        "--commands-file",
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/future-native-control-packet-1/actual-command-data/01-machine-assembly.json",
+        "--commands-sha256",
+        null,
+        "--index",
+        "1"
+      ],
+      "command_data_future_path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/future-native-control-packet-1/actual-command-data/01-machine-assembly.json",
+      "command_data_sha256": null,
+      "index": 1,
+      "name": "machine-assembly",
+      "pending": "Exact current source acceptance, final19/49 metadata and genuine fetched publication; source-local DATA joins then reviewed fullargv. LAST/machine/guard temporal hashes remain future.",
+      "profile": {
+        "cpu": 6,
+        "parent_kill_grace_seconds": 2,
+        "parent_wall_seconds": 40,
+        "stream_fsize": 33554432
+      }
+    },
+    {
+      "accepted_existing_source": {
+        "mode": 33152,
+        "path": "/home/holden/mckernel-work/host-preparation/m02-current-contract-whole-binding-correction-20261020-1/current-sources/review_final_205_release.py",
+        "sha256": "8ebb8f92ccb5ebe40a6a98fd11f937e1ce4c2a88a3f426e10dcfe26df8bcb2e5",
+        "size": 8340
+      },
+      "actual_argv_caps": {
+        "AS_bytes": 1073741824,
+        "CPU_seconds": 30,
+        "wall_seconds": 35
+      },
+      "argv": null,
+      "caller_template": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/posteffects-quarantine-variant-1/native-packet-1/root-run-exact-readonly-stage.py",
+        "--commands-file",
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/future-native-control-packet-1/actual-command-data/02-final-guard.json",
+        "--commands-sha256",
+        null,
+        "--index",
+        "1"
+      ],
+      "command_data_future_path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/future-native-control-packet-1/actual-command-data/02-final-guard.json",
+      "command_data_sha256": null,
+      "index": 2,
+      "name": "final-guard",
+      "pending": "Exact current source acceptance, final19/49 metadata and genuine fetched publication; source-local DATA joins then reviewed fullargv. LAST/machine/guard temporal hashes remain future.",
+      "profile": {
+        "cpu": 6,
+        "parent_kill_grace_seconds": 2,
+        "parent_wall_seconds": 40,
+        "stream_fsize": 33554432
+      }
+    },
+    {
+      "actual_argv_caps": {
+        "AS_bytes": null,
+        "CPU_seconds": null,
+        "wall_seconds": null
+      },
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/home/holden/anaconda3/bin/python3",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-contract-correction-1/runtime-source-1/native_diagnostic_container_owner.py",
+        "--owner-sha256",
+        "0c37892a15cccec2dd18e0158381711e93369e063b10e8a48076f2aa5da44997",
+        "--attempt-parent",
+        "/home/holden/mckernel-work/scratch/m6c-261021-1/p",
+        "--nonce",
+        "dbaa78c53e184514981d8e5dfce86901",
+        "--manifest",
+        "/home/holden/mckernel-work/scratch/m6cn-261021-1/manifest.json",
+        "--manifest-sha256",
+        "24fafe0d7f35d8e0e094af47064a042a973580638b6fdcf6806923f1e82e49ab"
+      ],
+      "caller_template": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/posteffects-quarantine-variant-1/native-packet-1/root-run-exact-readonly-stage.py",
+        "--commands-file",
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/future-native-control-packet-1/actual-command-data/03-native-owner.json",
+        "--commands-sha256",
+        null,
+        "--index",
+        "1"
+      ],
+      "command_data_future_path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/future-native-control-packet-1/actual-command-data/03-native-owner.json",
+      "command_data_sha256": null,
+      "deadlines": {
+        "inner_seconds": 300,
+        "outer_default_seconds": 360
+      },
+      "index": 3,
+      "name": "native-owner",
+      "outer_native_kill_forbidden": true,
+      "pending": "Independent current native execution decision/release, fresh LAST\u2192machine\u2192guard, resource/source/runtime leases and current positive physical reconciliation.",
+      "profile": {
+        "cpu": 7,
+        "parent_kill_grace_seconds": null,
+        "parent_wall_seconds": null,
+        "stream_fsize": 33554432
+      }
+    },
+    {
+      "actual_argv_caps": {
+        "AS_bytes": 1073741824,
+        "CPU_seconds": 30,
+        "wall_seconds": 30
+      },
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--nofile=256",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/m6c-261021-1/p.owner-dbaa78c53e184514981d8e5dfce86901",
+        "."
+      ],
+      "caller_template": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/posteffects-quarantine-variant-1/native-packet-1/root-run-exact-readonly-stage.py",
+        "--commands-file",
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/future-native-control-packet-1/actual-command-data/04-readback-1.json",
+        "--commands-sha256",
+        null,
+        "--index",
+        "1"
+      ],
+      "command_data_future_path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/future-native-control-packet-1/actual-command-data/04-readback-1.json",
+      "command_data_sha256": null,
+      "index": 4,
+      "manual_failure_gate": "Ordinary progression stops on firstFAIL/nonzero. Separate readonly release only after direct owner/client join, closed streams, positive atomic physical retirement and leasefalse; no PID-absence inference.",
+      "name": "readback-1",
+      "profile": {
+        "cpu": 6,
+        "parent_kill_grace_seconds": 2,
+        "parent_wall_seconds": 35,
+        "stream_fsize": 33554432
+      }
+    },
+    {
+      "actual_argv_caps": {
+        "AS_bytes": 1073741824,
+        "CPU_seconds": 30,
+        "wall_seconds": 30
+      },
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--nofile=256",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/usr/bin/cat",
+        "/home/holden/mckernel-work/scratch/m6c-261021-1/p/attempt-dbaa78c53e184514981d8e5dfce86901/result.json"
+      ],
+      "caller_template": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/posteffects-quarantine-variant-1/native-packet-1/root-run-exact-readonly-stage.py",
+        "--commands-file",
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/future-native-control-packet-1/actual-command-data/05-readback-2.json",
+        "--commands-sha256",
+        null,
+        "--index",
+        "1"
+      ],
+      "command_data_future_path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/future-native-control-packet-1/actual-command-data/05-readback-2.json",
+      "command_data_sha256": null,
+      "index": 5,
+      "manual_failure_gate": "Ordinary progression stops on firstFAIL/nonzero. Separate readonly release only after direct owner/client join, closed streams, positive atomic physical retirement and leasefalse; no PID-absence inference.",
+      "name": "readback-2",
+      "profile": {
+        "cpu": 6,
+        "parent_kill_grace_seconds": 2,
+        "parent_wall_seconds": 35,
+        "stream_fsize": 33554432
+      }
+    },
+    {
+      "actual_argv_caps": {
+        "AS_bytes": 1073741824,
+        "CPU_seconds": 30,
+        "wall_seconds": 30
+      },
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--fsize=33554432",
+        "--core=0",
+        "--nofile=256",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "30s",
+        "/usr/bin/tar",
+        "--create",
+        "--file=-",
+        "--directory=/home/holden/mckernel-work/scratch/m6c-261021-1/p/attempt-dbaa78c53e184514981d8e5dfce86901",
+        "--exclude=./qmp.sock",
+        "."
+      ],
+      "caller_template": [
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/phase5-m03-native-app-binding-20261020-1/native-preparation-1/native-packet-1/posteffects-quarantine-variant-1/native-packet-1/root-run-exact-readonly-stage.py",
+        "--commands-file",
+        "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/future-native-control-packet-1/actual-command-data/06-readback-3.json",
+        "--commands-sha256",
+        null,
+        "--index",
+        "1"
+      ],
+      "command_data_future_path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/native-preparation-1/future-native-control-packet-1/actual-command-data/06-readback-3.json",
+      "command_data_sha256": null,
+      "index": 6,
+      "manual_failure_gate": "Ordinary progression stops on firstFAIL/nonzero. Separate readonly release only after direct owner/client join, closed streams, positive atomic physical retirement and leasefalse; no PID-absence inference.",
+      "name": "readback-3",
+      "profile": {
+        "cpu": 6,
+        "parent_kill_grace_seconds": 2,
+        "parent_wall_seconds": 35,
+        "stream_fsize": 33554432
+      }
+    }
+  ],
+  "source_runtime_directory": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-contract-correction-1/runtime-source-1",
+  "stage_acceptance": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/independent-review-1/actual-stage-output-acceptance-resume-20261021.json",
+    "sha256": "4b9591f140d98a4079b9a5529ca9410a9c7532d7f1ab0146c1895a766c616a34",
+    "size": 29024
+  },
+  "status": "DATA_ONLY_PENDING_CURRENT_NATIVE_CONTROL_ADMISSION"
+}

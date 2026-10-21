@@ -6698,3 +6698,8 @@ Service hold2026-10-20T22:34:18Z:cyberPolicy,remote goalblocked,no automaticretr
 ## Review127 — 2026-10-21T01:13:48.043425+00:00
 
 Explicit manual restart confirmed existing thread running/active,worker2338306/server2338308/watcher2338302,newturnaccepted,notfreshsession. Counts20/35checks,5whole,28native,Rust17/14 unchanged. Resume velocity baseline resets01:12:03UTC; downtime excluded. Local duplicate startup scope note shortened to8186B under existing8192B bound. M06stagealreadyclosed; independentacceptance first,no unchanged replay. FunctionalOS/Rustonly,no securitytesting. Nextreview 2026-10-21T01:43:48.043425+00:00. Fullrecord /home/holden/mckernel-work/host-preparation/manual-reset-resume-20261020T033358Z/REVIEW127.json.
+
+
+## Review128 — 2026-10-21T01:44:16.152759+00:00
+
+Restartsegment0.537h:20/35checks,5whole,28native,Rust17/14held. +2reviewedsourcechanges(1OS/Rust,1infrastructure),0compiler/native/check/whole/Rustpathgain. Catalogue66sources(26OS,40infra),23compiler,5acceptednative. Settid12case actualbody comparison0.36s/outer0.44s accepted9f13514c and two productionsourcefilesintegrated; wholeconsumer6stagecompileproposalpending. M06mappingfixture2.57s and normalization1.06s acceptedb396; remainingoldExit7/40s callercontract nowcoupledcandidate88f0f56e/proposalb998; completegenerationfixture/actualnativepending. SDK66sourceprep382accepted,heavycapacityblocked. Prioritizenextfullyreviewedreadyexecution,noreplayacceptedwork,noartificialfuturetestdependencies. No numericalspeedupclaim. Nextreview 2026-10-21T02:14:16.152759+00:00. Fullrecord /home/holden/mckernel-work/host-preparation/manual-reset-resume-20261020T033358Z/REVIEW128.json.
