@@ -1,3 +1,22 @@
+## Live — frozen four-overlay image launched; independent NUMA Rust candidate
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Image actual oncecaller2417712/start35461448 and dispatcher2417713/start35461451
+are active under canonical execution reviewc4238b19 and actualrelease165fa870.
+UID1000 caller retained as required; rootclient boundary unchanged. Oneheavy
+CPUs2-5/4CPU12GiB/noSwap512tasks, dispatcherCPU7/2GiB. Fresh complete host/scratch,
+MemAvailable,usage and ownership admission passed; source scope remains four overlays.
+Exact atomic completion: host-preparation/settid-current-production-link-preparation-20261021-1/owned-fork-pin-successor-1/coupled-current-pin-correction-1/control-successor-1/actual-root-owner-1/status.json.
+Outer capture: sameprefix/actual-root-controller-capture-1/. Root tool session93144
+waits for direct join; absence of terminal status means no completion claim.
+sdk66_source_review is active awaiting this status for finite physical/artifact disposition.
+
+Independent source-only vm_range_policy_search Rust candidate471b1988 is under
+source review and actual-C/Rust fixture preparation in separate private prefixes;
+no execution/CPUlease/shared integration, and no dependency on the running image.
+Accepted counts21/35,five whole,28native,Rust17/14,compiler25 unchanged.
+SDK/no-resize and all historical failures/service/ownership limits preserved.
+
 ## Current — scheduler compiler25 accepted; frozen image final execution review
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
