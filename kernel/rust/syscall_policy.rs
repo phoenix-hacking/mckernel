@@ -23238,3 +23238,98 @@ pub extern "C" fn mmap_is_shared(flags: CInt) -> CInt {
         0
     }
 }
+
+type SyscallPolicyRbEraseFn = unsafe extern "C" fn(*mut AbiRbNode, *mut AbiRbRoot);
+type SyscallPolicyRbFirstFn = unsafe extern "C" fn(*const AbiRbRoot) -> *mut AbiRbNode;
+type SyscallPolicyRbNextFn = unsafe extern "C" fn(*const AbiRbNode) -> *mut AbiRbNode;
+type SyscallPolicyClearFreeFn = unsafe extern "C" fn(*mut c_void);
+type SyscallPolicyClearLogFn = unsafe extern "C" fn(CInt, CInt);
+
+/// Clears policy ranges with the original C ordering and partial mutations.
+///
+/// Safety: start < end; the caller holds the existing exclusive VM policy-tree
+/// lock and supplies a valid, disjoint half-open-range tree. vm and linked
+/// policies have checked C layouts and remain live until the erase/free callback.
+/// Every callback preserves that lock/lifetime contract. policy_size is at least
+/// size_of::<VmRangeNumaPolicy>(); successful allocation returns a fresh, aligned,
+/// writable allocation of at least that size, nonaliasing vm or any live policy.
+/// The existing insertion callback publishes the original allocation only on
+/// success (return 0); on error it leaves the allocation unpublished and does not
+/// consume or free it. The current valid-range/disjoint-tree caller makes that
+/// insertion-error branch unreachable. As in C, allocation failure retains the
+/// already-truncated leading range; no rollback is performed. No Rust references
+/// are retained across callbacks. Do not call this body with empty, reversed or
+/// wrapped ranges: inherited C behavior outside this contract includes an
+/// unpublished, unfreed tail after insertion rejection.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_vm_policy_clear_range_body_result(
+    vm: *mut ProcessVm, start: CULong, end: CULong,
+    policy_size: SizeT, alloc_flags: CULong,
+    alloc_fn: Option<SyscallPolicyAllocFn>,
+    rb_clear_fn: Option<SyscallPolicyRbClearFn>,
+    insert_fn: Option<SyscallPolicyInsertFn>,
+    erase_fn: Option<SyscallPolicyRbEraseFn>,
+    free_fn: Option<SyscallPolicyClearFreeFn>,
+    first_fn: Option<SyscallPolicyRbFirstFn>,
+    next_fn: Option<SyscallPolicyRbNextFn>,
+    log_fn: Option<SyscallPolicyClearLogFn>,
+) -> CInt {
+    let (Some(alloc), Some(rb_clear), Some(insert), Some(erase), Some(free),
+         Some(first), Some(next), Some(log)) =
+        (alloc_fn, rb_clear_fn, insert_fn, erase_fn, free_fn, first_fn, next_fn, log_fn)
+    else { return -EINVAL; };
+    let root = unsafe { addr_of_mut!((*vm).vm_range_numa_policy_tree) };
+    let iter = unsafe { syscall_vm_range_policy_search_body_result(vm, start) };
+    if !iter.is_null() {
+        let mut adjusted = false;
+        let mut orig_end = unsafe { (*iter).end };
+        if unsafe { (*iter).start == start && (*iter).end == end } {
+            unsafe { erase(addr_of_mut!((*iter).policy_rb_node), root); free(iter.cast()); }
+            return 0;
+        }
+        if unsafe { (*iter).start < start } {
+            orig_end = unsafe { (*iter).end };
+            unsafe { (*iter).end = start; }
+            adjusted = true;
+        }
+        if orig_end > end {
+            if adjusted {
+                let tail = unsafe { alloc(policy_size, alloc_flags) }.cast::<VmRangeNumaPolicy>();
+                if tail.is_null() { unsafe { log(0, 0); } return -ENOMEM; }
+                unsafe {
+                    rb_clear(tail);
+                    (*tail).start = end;
+                    (*tail).end = orig_end;
+                    (*tail).numa_mem_policy = (*iter).numa_mem_policy;
+                    // C copies only mask, leaving il_prev and RB child bytes alone.
+                    core::ptr::copy_nonoverlapping(
+                        core::ptr::addr_of!((*iter).numa_mask),
+                        addr_of_mut!((*tail).numa_mask),
+                        1);
+                }
+                let error = unsafe { insert(vm, tail) };
+                if error != 0 { unsafe { log(1, error); } return error; }
+            } else { unsafe { (*iter).start = end; } }
+        }
+    }
+    // C unsigned end - 1 intentionally wraps for end == 0.
+    let iter = unsafe { syscall_vm_range_policy_search_body_result(vm, end.wrapping_sub(1)) };
+    if !iter.is_null() { unsafe { (*iter).start = end; } }
+    // Restart rb_first after every removal, matching the C goto again_search.
+    loop {
+        let mut node = unsafe { first(root) };
+        let mut removed = false;
+        while !node.is_null() {
+            let range = unsafe { node.cast::<u8>()
+                .sub(offset_of!(VmRangeNumaPolicy, policy_rb_node)).cast::<VmRangeNumaPolicy>() };
+            if unsafe { (*range).start >= start && (*range).end <= end } {
+                unsafe { erase(addr_of_mut!((*range).policy_rb_node), root); free(range.cast()); }
+                removed = true;
+                break;
+            }
+            node = unsafe { next(node) };
+        }
+        if !removed { break; }
+    }
+    0
+}

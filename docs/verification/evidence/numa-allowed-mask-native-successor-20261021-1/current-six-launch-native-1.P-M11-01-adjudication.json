@@ -1,0 +1,73 @@
+{
+  "schema": "mckernel.practical.literal-m11-selected-suite-adjudication.v1",
+  "status": "PASS_SCOPED_P_M11_01_CRITERION_SATISFIED",
+  "reviewer": "/root/numa_compiler_review",
+  "recorder": "/root",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Literal practical per-check adjudication using already accepted current records; no new test or audit.",
+  "criterion": {
+    "id": "P-M11-01",
+    "description": "Run integrated selected-suite and repaired-boundary regressions.",
+    "satisfied": true
+  },
+  "basis": {
+    "milestones_path": "docs/verification/os-milestones-20260914/practical-milestones.json",
+    "milestones_sha256": "65b8b7f66fd11c87dc35487e621ae34f19574f125355d44ae0dd81eb1a2338d8",
+    "goal_path": "docs/verification/os-milestones-20260914/PRACTICAL-GOAL.md",
+    "goal_sha256": "ade2e732fd5afaa31c582784964eefa53f203393f1e0c1d1c5ce306d1cadf143",
+    "declared_plan_path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/current-image-six-launch-regression-plan-1/EXISTING-SIX-LAUNCH-CURRENT-IMAGE-REGRESSION-PLAN.json",
+    "declared_plan_sha256": "07ffac8798daae4b713cb2b111c0c315e12ac1308e5a419f163c042f8eb5de3d"
+  },
+  "accepted_evidence": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/six-launch-runtime-data-preparation-1/current-six-launch-app-acceptance-1/ROOT-RECORDED-INDEPENDENT-CURRENT-SIX-LAUNCH-APP-ACCEPTANCE-1.json",
+      "sha256": "665075e19136f2fbedd1348da1dc535ace4f94341a047669601b5a91feb2cd4b",
+      "bytes": 7553
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/six-launch-runtime-data-preparation-1/current-six-launch-physical-review-1/ACTUAL-CURRENT-SIX-LAUNCH-NATIVE-OWNER-PHYSICAL-ACCEPTANCE-1.json",
+      "sha256": "5883bb041c44d54491ccc8bdd175e7493f50373f2ed1e2254b3a3b8269ff626b",
+      "bytes": 17465
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-native-acceptance-1/ROOT-RECORDED-INDEPENDENT-STRICT-NUMA-NATIVE-ACCEPTANCE-1.json",
+      "sha256": "5c4ed97b003d7fb302c4ea781023424adf9ef669db4fe4547a257b72dcb11f84",
+      "bytes": 5585
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/launcher-native-physical-review-1/ACTUAL-CURRENT-NATIVE-OWNER-PHYSICAL-ACCEPTANCE-1.json",
+      "sha256": "9223c7bae2b956fdf9f06c2625dbcee0d74cd20c828bbb7d95703d3a15190504",
+      "bytes": 18054
+    }
+  ],
+  "reason": "Declared fixed-three-round selected suite passed on current kernel1d8/launcher33f/modules51b4,82c9,6571 with unchanged strict387/254B outputs, exit0 and complete native route/EOF/procfs/trace predicates. Separate strict116B NUMA run exercised repaired allowed-mask and launcher default/local-sentinel boundary on the same tuple. Independent physical receipts establish scoped owner retirement without converting VM disposal into public native restoration. Together these satisfy the literal selected-suite and repaired-boundary criterion; no further previously declared relevant regression missing within this selected scope.",
+  "other_m11_checks": {
+    "P-M11-02": "unchanged; broader useful diagnostics and every-failure retention obligation remains",
+    "P-M11-03": "unchanged; broader unexplained panic/corruption/lost-data/stranded-ownership disposition remains",
+    "whole_M11_completed_by_this_review": false
+  },
+  "P-M12-01": {
+    "status": "PARTIAL_MATCHED_PROFILE_EVIDENCE_ONLY",
+    "actual_app_launches": 6,
+    "rounds": 3,
+    "guest_boots": 1,
+    "profile": "Declared4-vCPU8192MiB/two-NUMA guest with two McKernel CPUs0,1 mapped to guest-Linux1,2 and accepted current tuple.",
+    "proven_public_cpu_memory_restoration_cycles": 0,
+    "full_budgets": {
+      "fresh_guest_boots": 2,
+      "complete_native_lifecycle_cycles": 10,
+      "successful_app_launches": 100,
+      "mixed_workload_minutes": 60
+    },
+    "limitations": "Three rounds in one boot are not three lifecycle cycles. No60minute/resource-trend/full-restoration completion. Reuse only with matching final profile/tuple; valid matching evidence may overlap."
+  },
+  "not_required_for_P_M11_01": [
+    "Deferred comprehensive130-case or long-qualification targets",
+    "M12 ten-native-cycle/100-launch/60minute budgets"
+  ],
+  "new_execution": false,
+  "ledger_modified_by_reviewer": false,
+  "automatic_numeric_delta": 0,
+  "new_default_path_or_compute_c_retirement_credit": false,
+  "original_failures_preserved": true
+}

@@ -1,0 +1,147 @@
+{
+  "schema": "mckernel.current-six-launch.strict-native-application-review.v1",
+  "status": "PASS_ACTUAL_CURRENT_SIX_LAUNCH_STRICT_NATIVE_APPLICATIONS_ONLY",
+  "reviewer": "/root/numa_compiler_review",
+  "recorder": "/root",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Three fixed rounds of two unchanged applications on the accepted current kernel/launcher tuple.",
+  "whole": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/six-launch-runtime-data-preparation-1/terminal-descriptor-correction-1/native-packet-1/root-seven-whole-1.json",
+    "sha256": "c1320a7e6b59c6f7e8e65da0557002ed7b850f3bff1b44df1bab87bf7a2539f7",
+    "bytes": 2682
+  },
+  "command_index": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/six-launch-runtime-data-preparation-1/terminal-descriptor-correction-1/native-packet-1/FINAL-SEVEN-ROOT-CALL-DATA.json",
+    "sha256": "9e7e8a766cae4d9078ed2288941bed331f95982b32c80a77b0a4832b8cc284b1",
+    "bytes": 57406
+  },
+  "diagnostic_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/six-launch-runtime-data-preparation-1/terminal-descriptor-correction-1/native-packet-1/captures/05-readback-2/stdout",
+    "sha256": "1a7a38c43d3ae148346498477ac3bfc0f0318aa40da09aed7c1103240dac38a5",
+    "bytes": 214496
+  },
+  "diagnostic_status": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/six-launch-runtime-data-preparation-1/terminal-descriptor-correction-1/native-packet-1/captures/05-readback-2/status.json",
+    "sha256": "d6ac028a9ea71c875331ac67834650eff1d2f2e766e159edd19f5f34d3c3502e",
+    "bytes": 1488
+  },
+  "owner_evidence_tar": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/six-launch-runtime-data-preparation-1/terminal-descriptor-correction-1/native-packet-1/captures/04-readback-1/stdout",
+    "sha256": "5e29c60b029fccc727832610c8d602973447a95369fd33063ffa921d33740145",
+    "bytes": 952320
+  },
+  "attempt_output_tar": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/six-launch-runtime-data-preparation-1/terminal-descriptor-correction-1/native-packet-1/captures/06-readback-3/stdout",
+    "sha256": "ccd91758baabcc4a0450dfe2fa249446957ddc3902f63839dd0984d2c16a8f67",
+    "bytes": 686080
+  },
+  "tar_result_members_byte_equal": true,
+  "readback_order": "04 owner TAR; 05 diagnostic result JSON; 06 attempt-output TAR, as actual FINAL-SEVEN argv records",
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/s6m-261021-1/manifest.json",
+    "sha256": "c32950c18eaafae2d5c6fbf11a139ebfca516cf4e7b6946824bd956424a09dd0",
+    "bytes": 10643
+  },
+  "accepted_tuple": {
+    "kernel_sha256": "1d8c4e78f7219792c0d2008952e11602a19451eb6697593ec10f0c77a8f1c101",
+    "mcexec_sha256": "33f88082a995857c17ca07dab698e51d78064632462b4069b3c2396e0d29a131",
+    "app0_sha256": "024fa5620735622c684283df1a8270c2d7c78f62dd82d294c544f5eb3b197ac4",
+    "app1_sha256": "1f51f0e3c8288bc05aabbc0309d1bf84abab1cbc6d8593c4ec7b1460b38163b7",
+    "module_sha256": [
+      "51b48a9e42eaa2411cab2a28edf9bb5db8b2d648675d083473e926f91dd0e038",
+      "82c9021f7491fa8bc6d178fe99e7d4b7b6f90838474a9c91b62ddb8edb3d13f8",
+      "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972"
+    ]
+  },
+  "actual_profile": {
+    "qemu_vcpus": 4,
+    "qemu_memory_mib": 8192,
+    "numa_nodes": 2,
+    "mckernel_cpus": [
+      0,
+      1
+    ],
+    "assigned_host_cpus": [
+      1,
+      2
+    ],
+    "os": 0,
+    "generation": 1
+  },
+  "completed_rounds": 3,
+  "completed_apps": 6,
+  "round_app_pids": [
+    [
+      256,
+      255
+    ],
+    [
+      263,
+      264
+    ],
+    [
+      271,
+      272
+    ]
+  ],
+  "strict_oracles": {
+    "app0_stdout_bytes": 387,
+    "app0_stdout_sha256": "e5aab46f5a720bacdbb2fb3cb83d682b02df7261336e79663c79fa78022b9bc4",
+    "app1_stdout_bytes": 254,
+    "app1_stdout_sha256": "52095dafd5235a8c1073248bbda3964f8a7b749722306ceaabf321d2fdcd4816",
+    "all_exact_manifest_bytes": true,
+    "all_stderr_empty": true,
+    "all_raw_wait_status_zero": true,
+    "all_clean_fault_timeout": [
+      1,
+      0,
+      0
+    ],
+    "all_eof": true,
+    "all_discarded_zero": true,
+    "all_untruncated": true,
+    "exact_argv_env_cwd": true
+  },
+  "native_route_evidence": [
+    "Six distinct current PIDs registered/prepared; six matching IHK SCHEDULE records on CPU0/1, OS0/generation1.",
+    "Actual NATIVE_PAIR_CPU host1,2/logical0,1; ABI1 service and boot status observed5/expected5.",
+    "Qualified unchanged checker enforced syscall delivered/returned correspondence, valid route/order, one terminal exit per app, bounded retirement response ending0/release cleanup_errno0, procfs publication/deletion, distinct IKC queues/cookies/retirement tokens, overlapping pairs and exact sequential rounds.",
+    "Actual serial and saved report have three start/end pairs, final rounds3/procfs_empty true and every round starts/ends empty."
+  ],
+  "raw_diagnostic_labels_preserved": {
+    "application_acceptance": false,
+    "mckernel_application_executed": false,
+    "runtime_blocker": "protocol observation only; independent guest execution review is pending"
+  },
+  "independent_application_acceptance": true,
+  "independent_mckernel_route_established": true,
+  "outer_owner_status": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-native-successor-preparation-20261021-1/six-launch-runtime-data-preparation-1/terminal-descriptor-correction-1/native-packet-1/root-seven1-native-owner.status.json",
+    "sha256": "a8b6c6d40df1a050db5a2127035364d1346c29c2f5c3cc437b5b8ba3503aafe4",
+    "bytes": 951
+  },
+  "throughput": {
+    "denominator_scope": "Root captured native-owner outer operation, including owner/session/boot/run/retirement; excludes preceding snapshot/assembly/guard and subsequent readbacks. Not application-only elapsed.",
+    "apps": 6,
+    "owner_seconds": 41.17879640404135,
+    "apps_per_owner_wall_minute": 8.742363338348301,
+    "historical_old_six_seconds": 46.601413897,
+    "historical_old_six_apps_per_minute": 7.725087500471209,
+    "ratio_vs_old_six": 1.131684701023133,
+    "historical_baseline_two_seconds": 44.160327,
+    "historical_baseline_two_apps_per_minute": 2.717371182509586,
+    "ratio_vs_baseline_two": 3.2172135314522725,
+    "fourfold_claim": false,
+    "causal_speedup_claim": false
+  },
+  "milestone_scope": "Bounded current two-CPU concurrent applications and three-round repeatability contribution to P-M11-01/M12 only; remaining criteria separate.",
+  "limitations": [
+    "One current owner/native boot with three app rounds does not prove ten public lifecycle cycles, ten boots,60mixedminutes, resource trend completion or full restoration.",
+    "FP output covers unchanged per-thread controls/YMM checks only, not comprehensive architectural restoration qualification.",
+    "No new compiler/defaultselection/compute-C retirement or per-path counter credit; no accepted artifact/stage/norm re-audit.",
+    "Physical clearance is separate; original failures/assertions/rawfalse labels retained. No workload replay."
+  ],
+  "physical_clearance": false,
+  "automatic_milestone_completion": false,
+  "automatic_counter_delta": 0
+}

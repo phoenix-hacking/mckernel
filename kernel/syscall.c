@@ -20493,9 +20493,36 @@ static int vm_policy_insert(struct process_vm *vm,
 #endif
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int syscall_vm_policy_clear_range_body_result(struct process_vm *,
+ unsigned long,unsigned long,size_t,unsigned long,
+ void *(*)(size_t,unsigned long),void (*)(struct vm_range_numa_policy *),
+ int (*)(struct process_vm *,struct vm_range_numa_policy *),
+ void (*)(struct rb_node *,struct rb_root *),void (*)(void *),
+ struct rb_node *(*)(const struct rb_root *),
+ struct rb_node *(*)(const struct rb_node *),void (*)(int,int));
+static void *syscall_vm_policy_clear_alloc_bridge(size_t size,unsigned long flags)
+{ return kmalloc_tracked(size,flags,__FILE__,__LINE__); }
+static void syscall_vm_policy_clear_rb_bridge(struct vm_range_numa_policy *p)
+{ RB_CLEAR_NODE(&p->policy_rb_node); }
+static void syscall_vm_policy_clear_free_bridge(void *p)
+{ kfree_tracked(p,__FILE__,__LINE__); }
+static void syscall_vm_policy_clear_log_bridge(int event,int error)
+{
+ if (event == 0) { dkprintf("%s: error allocating range_policy\n","vm_policy_clear_range"); }
+ else { kprintf("%s: ERROR: could not insert range: %d\n","vm_policy_clear_range",error); }
+}
+#endif
 static int vm_policy_clear_range(struct process_vm *vm,
 		unsigned long start, unsigned long end)
 {
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+ return syscall_vm_policy_clear_range_body_result(vm,start,end,
+ sizeof(struct vm_range_numa_policy),IHK_MC_AP_NOWAIT,
+ syscall_vm_policy_clear_alloc_bridge,syscall_vm_policy_clear_rb_bridge,
+ vm_policy_insert,rb_erase,syscall_vm_policy_clear_free_bridge,
+ rb_first,rb_next,syscall_vm_policy_clear_log_bridge);
+#else
 	struct rb_root *root = &vm->vm_range_numa_policy_tree;
 	struct vm_range_numa_policy *range, *range_policy_iter;
 	struct vm_range_numa_policy *range_policy;
@@ -20588,6 +20615,7 @@ again_search:
 
 out:
 	return error;
+#endif
 }
 
 #ifdef ENABLE_PERF

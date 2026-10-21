@@ -1,3 +1,45 @@
+## Current — six-launch native accepted; P-M11-01 closed; Rust clear-range source integrated
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independent application acceptance665075e1 and physical acceptance5883bb04 record
+three fixed rounds of two unchanged applications on kernel1d8/launcher33f/modules
+51b4,82c9,6571: six exact387/254-byte outputs, empty stderr, exit0, complete EOF,
+route/trace/procfs and retirement checks. All seven controller steps passed.
+Native-owner outer operation41.178796404s gives8.742363338apps/min:1.131684701x
+prior six-launch rate and3.217213531x frozen two-launch baseline. This is scoped
+owner throughput, excludes preparation/reviews, and is neither4x nor causal/overall
+workflow speedup. Raw false diagnostic labels and every original failure remain.
+
+Genuine literal adjudication7a25bc33 combines this declared selected suite with
+strict116B NUMA repaired-boundary acceptance5c4/9223 on the same current tuple:
+P-M11-01 COMPLETE. Checks22/35; five whole milestones unchanged. M11-02/-03 remain
+open. M12 receives six actual launches/three rounds/one guest boot only; no public
+CPU/memory restoration cycle,60-minute completion or whole-budget credit.
+Native batches8, distinct behaviors29; compiler30 and Rust19selected/16native held.
+
+Rust vm_policy_clear_range body+validated mbind caller independently accepted
+099128c1 and integrated by root. Three parity tests cover3375C/Rust comparisons
+and independent expected ranges/error order; focused actualcaller test proves
+four invalid inputs stop before locking/clear and one rounded split executes
+under the existing writerlock with expected policy/mask/ranges. Six actualcompile/
+test commands0, all emptyerr. Exact original C fallback preserved. Current caller
+contract excludes inherited insertion-error unfreed-tail behavior; valid disjoint
+splits cannot trigger that production overlap failure. No general API acceptance.
+One coherent OS source unit: catalogue90(35OS55infra); no path/retirement increment.
+
+| Path | Current accepted proof | Next executable observation |
+| --- | --- | --- |
+| vm_policy_insert | Source/body, actual materialization and finite request join | Four production native/legacy Rust and selected/fallback C objects |
+| vm_policy_clear_range | Rust body, actual validated caller, root integration | Combined production headers/whole-crate compile, later linked/native proof |
+| owned-fork host activation | Storage/ACK already fixed; current host module lacks provider | SDK66 fixed capacity gate and matched provider build; noresize |
+
+Next: publish actual four-object control code, bind genuine current5883 physical,
+matching DATA/release publication+freshgrant and exact independent execution review,
+then execute actual objects once. Its frozen sourcecopy intentionally contains the
+prior insertion integration, not the later clear body. Reuse source/materialization/
+request checks; no whole-kernel rebuild, stage or app replay. One heavy, current
+resource predicates/floors/reserves/noresize remain mandatory.
+
 ## Current — expert terminal descriptor correction accepted; exact successor release next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
