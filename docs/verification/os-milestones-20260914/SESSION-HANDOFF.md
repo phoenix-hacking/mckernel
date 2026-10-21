@@ -1,3 +1,26 @@
+## Current — cleanup LIVE in intentional quarantine; exact read-only reconciliation next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Same-final release094234f9/internalab8a364a strict preflight ran once0/1.964836s,
+positive read-only predicates288cc807. Cleanup tool10482 remains LIVE; outer
+child2575747/start37684611 is not yet proven actual lock holder. Nonfinal stdout
+reports QUARANTINED_ROOT_LOCK_HELD. Completed child refusal records disappearing
+/proc/2575781/stat in process snapshot producer; no kernel/app cause is inferred.
+Engine quarantine loop retains locks indefinitely after mutation_started; actual
+container/ownership/exchange state remains unknown pending exact retained journal.
+No signals, unlock, marker edits, cleanup replay or postjoin authorized. Supervisor
+confirmed shell quiescence105210: API-only monitoring, no reader PID needed.
+Root live snapshots: host-preparation/numa-allowed-mask-native-successor-preparation-
+20261021-1/cleanup-quarantine-root-observation-1/ROOT-LIVE-QUARANTINE-OBSERVATION-1.json.
+
+Observer/summary/original5FD/raw5 accepted5b5c7d1b; stagee01fd9ca/norm4440cb15,
+runtime frozen bodies03170c2a and current image1d8c4e78/0ed99e03 remain accepted.
+No duplicate image/stage/app/source checks. Next bounded read-only exact state
+export and independent recovery decision; focused producer repair stays private.
+Future currentphysical/runtime authority NULL until genuinely observed/reviewed.
+Review145 counts84source/29compiler/6native,21checks/fivewhole held. Artifact clock
+10:02:44.224961UTC continues; no native feedback or speedup claim this cycle.
+
 ## Current — corrected image and one-image stage accepted; terminal body check passed
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

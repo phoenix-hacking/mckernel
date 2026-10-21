@@ -72,8 +72,8 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 
 ### Next practical work
 
-- Corrected image1d8c4e78 independently accepted0ed99/canonical84bf and build29. Stagee01fd9ca exact1image/59unchanged accepted; terminalactualbody2e0f passed once. Complete fresh sourcepublication/exactobserver/export releases and qualifiedcleanup/postjoin, no repeated acceptedchecks.
-- Bind actualstagee01 into existing normalizer and newcurrentphysical mapping; ordinaryactualnormalization only under grant/no exclusivecensus overlap. Current artifact-message clock10:02:44UTC, prior73.69min; no speedup untilactualnativefeedback.
+- LIVE cleanup quarantine tool10482/outer2575747/start37684611; preserve locks/owner. Bounded exact read-only journal/plan/quarantine/27:4 holder export then independent current recovery decision. No signals/replay/postjoin. Supervisor shell quiescence confirmed API-only.
+- Repair observed process-snapshot TOCTOU in private finite source; cheapest deterministic actual-body regression under actual ordinary grant after source-only cause review. Reuse accepted image1d8/stagee01/norm4440/runtime0317; future physical authority remains null.
 - Run one fresh focused NUMA native consumer after its exact release; preserve all failures and measure actual accepted-image-to-native feedback without advance speedup or acceptance claims.
 - Continue open real process child ownership handoff and native lifecycle/restoration against supported matched artifacts; preserve artifact-scoped evidence and counts.
 - Preserve SDK66 capacity/no-resize blocker, scratch UUID/110GiB, failed evidence, actual service/auth/resource stops and one-heavy profile; qualification remains deferred.
@@ -82,8 +82,8 @@ Original formal qualification is **historical / DEFERRED**. Deferred does not me
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-21T10:16:26+00:00`
-- Launcher state heartbeat: `2026-10-21T10:16:13.724102+00:00`
+- Dashboard refreshed: `2026-10-21T10:53:03+00:00`
+- Launcher state heartbeat: `2026-10-21T10:52:50.297779+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `2486026`; server PID: `2486028`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261021T070405Z-729d8cb8`
