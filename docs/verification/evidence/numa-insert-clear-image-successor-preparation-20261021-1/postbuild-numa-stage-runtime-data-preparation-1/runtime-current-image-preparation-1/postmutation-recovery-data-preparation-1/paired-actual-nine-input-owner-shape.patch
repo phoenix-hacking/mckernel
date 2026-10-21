@@ -1,0 +1,11 @@
+--- /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/current_insert_clear_eight_state_physical.CORRECTION-1.UNBOUND.py
++++ /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/current_insert_clear_eight_state_physical.PAIRED-1.UNBOUND.py
+@@ -91,7 +91,7 @@
+     need(parsed==probe['parsed_journal'] and previous==journal['final_chain_hash'],'exact final after_release chain')
+     rows=probe['preservation']['objects'];need(probe['preservation']['nine_rows_equal'] is True and len(rows)==len({r['path']for r in rows})==9,'nine preserved unique actual originals')
+     for row in rows:
+-        need(row['before']==row['fd_after']==row['named_after'] and set(row['before'])==set(FULL9),'full9 original preservation');v=row['before'];need(stat.S_ISREG(v['mode']) and v['nlink']==1 and v['uid']==v['gid']==0 and len(row['sha256'])==64,'regular preserved originals')
++        need(row['before']==row['fd_after']==row['named_after']==row['full9'] and set(row['before'])==set(FULL9),'full9 original preservation');v=row['before'];need(stat.S_ISREG(v['mode']) and v['nlink']==1 and v['uid']==v['gid']==1000 and len(row['sha256'])==64,'regular preserved originals')
+     need(rows==mapping['preserved_original_rows'],'independent complete nine original rows')
+     c=mapping['controller_terminal_contract'];independent(c,'independent direct tool-owned controller proof');need(c['kind']=='tool-owned-unified-exec-terminal' and c['decision']=='PASS_TOOL_TERMINAL_AND_SINGLE_CHILD_CONTROL_FLOW' and c['capture_source']==a['source_capture'],'qualified actual controller kind');checked_bytes(c['capture_source'])
+     pairs=a['controller_terminal_receipts'];need([p['role']for p in pairs]==['holder-retirement','physical-reconciliation'] and t['controller_terminal_receipts']==pairs and [r['role']for r in t['captures']]==[p['role']for p in pairs],'two actual successor roles, no oldpostjoin relabel')

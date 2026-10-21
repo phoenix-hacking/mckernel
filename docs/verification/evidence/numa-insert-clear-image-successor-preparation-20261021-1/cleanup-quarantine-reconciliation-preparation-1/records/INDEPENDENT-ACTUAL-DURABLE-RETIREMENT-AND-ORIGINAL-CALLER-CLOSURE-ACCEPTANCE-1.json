@@ -1,0 +1,76 @@
+{
+  "status": "PASS",
+  "decision": "PASS_ACTUAL_DURABLE_HOLDER_RETIREMENT_AND_ORIGINAL_CALLER_CLOSURE_ONLY",
+  "reviewer": "/root/insert_c_correction_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "actual_retirement_accepted": true,
+  "receipt_export": {
+    "stdout_sha256": "7f5c3860d329e600306ef8639b675b99e7f27db38e175af9e21a27995c4799de",
+    "stdout_bytes": 13434,
+    "status_sha256": "6be075ea5dacee0e4feb4dad4489e20f156cd812126846c43a0a0275182faef1",
+    "returncode": 0,
+    "direct_child_joined": true,
+    "group_absent": true,
+    "streams_closed": true,
+    "stderr_bytes": 0,
+    "producer_status": "PASS_READ_ONLY_TWO_RECEIPTS",
+    "both_receipts_raw_complete_and_full9_stable": true,
+    "both_receipts_root_owned_single_link_regular_mode0600": true
+  },
+  "durable_receipt_chain": {
+    "prepared_sha256": "e3747bcd919e66345f740988ebef522ac845a307db008685b21ed92e44dae037",
+    "prepared_bytes": 3921,
+    "complete_sha256": "2dc61852874e32c0c3bd706e2175e150abcbb35a4cbdb63a70ce3a8cd7be9067",
+    "complete_bytes": 560,
+    "complete_matches_actual_retirement_stdout": true,
+    "prepared_hash_link_valid": true,
+    "retirement_release_sha256": "0c588064b362ddcb84bfc0eaf93a0985b45528198f95b0cf5b0ea8e7374e55cc",
+    "profile_sha256": "b16daea9310d9917b8cb8cf928885817c6fc547b7f33ab683a3d138af5c29ebf",
+    "target": {
+      "pid": 2761636,
+      "starttime": "40670236",
+      "parent": 2761633,
+      "pgrp": 2761633,
+      "uid": 0,
+      "gid": 0
+    },
+    "signal_budget_and_count": 1,
+    "pidfd_exit_ready": true,
+    "replacement_root_lock": [27, 4],
+    "nine_preserved_inputs_exactly_match_reviewed_profile": true,
+    "protected_inputs_unchanged": true,
+    "quarantine_mutex_preserved": true
+  },
+  "original_failed_caller_closure": {
+    "status_sha256": "fb5982af8bc0e0d9152397c3654b1938d328a4f655cfea5afa1d11e90866146b",
+    "pid": 2761633,
+    "proc_start_ticks": "40670229",
+    "returncode": -9,
+    "status": "FAIL_PRESERVED_STOPPED",
+    "direct_child_joined": true,
+    "process_group_absent": true,
+    "streams_closed": true,
+    "cpu7_released": true,
+    "binding": "Separate actual closure evidence; preserve the immutable complete receipt's original_critical_direct_join_receipt:null."
+  },
+  "mechanical_producer_projection_authorization": {
+    "authorized_recorder": "/root",
+    "source": "The exact pinned13434-byte receipt-export stdout above.",
+    "allowed_copy": "Copy complete,prepared,directory and producer authority fields exactly, including raw_base64, parsed_json, hashes and full9 metadata, using Python integers.",
+    "restriction": "Mechanical recording only. Preserve original raw bytes and provenance; do not alter receipt fields, manufacture observations, replace root metadata with copy metadata or merge separate closure evidence into an original receipt."
+  },
+  "remaining_state": {
+    "journal": "Eight valid events through after_release index1; no complete event.",
+    "quarantine": "Preserved and still requires independent exact-state reconciliation.",
+    "ordinary_cleanup_pass": false,
+    "fresh_preflight_eligible": false,
+    "normal_cleanup_replay_authorized": false,
+    "future_physical_authority": null
+  },
+  "findings": [],
+  "physical_clearance": false,
+  "record_or_quarantine_mutation_authorized": false,
+  "native_or_guest_acceptance": false,
+  "reviewer_quiescent_after_review": true
+}

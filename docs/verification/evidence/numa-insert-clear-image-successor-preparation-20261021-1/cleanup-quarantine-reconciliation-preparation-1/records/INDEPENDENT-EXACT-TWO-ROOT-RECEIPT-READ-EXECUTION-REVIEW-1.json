@@ -1,0 +1,83 @@
+{
+  "schema": "mckernel.exact-two-root-retirement-receipt-execution-review.v1",
+  "status": "PASS",
+  "decision": "CONDITIONALLY_APPROVE_ONE_EXACT_READONLY_TWO_RECEIPT_EXPORT",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/numa_compiler_review",
+  "implementation_ownership": false,
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/source/physical-reconciliation-1/read_two_current_retirement_receipts.py",
+    "sha256": "f06c25241926843a274a8742a2d061b97add7e7b1294a45c4d7dae40f08d2887",
+    "bytes": 3606
+  },
+  "reviewed_proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/cleanup-quarantine-reconciliation-preparation-1/source/physical-reconciliation-1/EXACT-TWO-ROOT-RECEIPT-READONLY-EXECUTION-PROPOSAL-1.json",
+    "sha256": "38e16571a895e402cb25485b241c36712a5e5f8c6aced81acf55574bc5d14a26",
+    "bytes": 2926
+  },
+  "command_authorization": {
+    "exact_argv": "The reviewed proposal's root_argv array, unchanged and in order",
+    "execution_count": 1,
+    "requires_fresh_root_grant": true,
+    "requires_fresh_capture_directory": true,
+    "profile": {
+      "cpu": 7,
+      "address_space_bytes": 1073741824,
+      "cpu_seconds": 30,
+      "file_size_limit_bytes": 33554432,
+      "nofile": 256,
+      "core_bytes": 0
+    },
+    "wall_limit_note": "The exact argv contains no wall timeout; proposal.profile.wall_seconds=35 is not an enforced limit. This approval does not claim otherwise."
+  },
+  "independent_source_findings": {
+    "qualified_predecessor_sha256": "3584a509b39793ff0d7de0ca74e4d5db4c48f666b61b1f8ba989e2a1082e4a1e",
+    "exact_delta": [
+      "Fixed BASE directory",
+      "Fixed COMPLETE_SHA",
+      "Exact target PID and starttime literals"
+    ],
+    "remaining_reader_logic_unchanged": true,
+    "fixed_names": ["complete.json", "prepared.json"],
+    "target": {
+      "pid": 2761636,
+      "starttime": "40670236"
+    },
+    "complete_sha256": "2dc61852874e32c0c3bd706e2175e150abcbb35a4cbdb63a70ce3a8cd7be9067",
+    "prepared_hash_authority": "Only prepared_sha256 from the exact verified complete receipt",
+    "checks": [
+      "Root uid/euid and root-owned 0700 final directory",
+      "Directory-FD traversal without following symlinks",
+      "Root-owned regular 0600 files with nlink=1",
+      "Named-before, FD-before, FD-after and named-after full-nine-field equality",
+      "One-MiB maximum raw bytes per receipt",
+      "Raw SHA256, complete base64 bytes and parsed JSON retained",
+      "Exact complete/prepared statuses and matching target birth",
+      "File descriptors closed on success and failure"
+    ]
+  },
+  "required_actual_success_oracle": [
+    "Completed joined capture with exit0 and empty stderr",
+    "Strictly parsed output status PASS_READ_ONLY_TWO_RECEIPTS",
+    "Both receipt rows status PASS_EXACT_ROOT_RECEIPT_READ_ONLY",
+    "Both rows raw_complete=true and stable_full9=true",
+    "Exact complete hash and prepared hash chain",
+    "Exit0 alone is insufficient because refusal can be represented in output JSON"
+  ],
+  "limitations": {
+    "actual_root_receipt_bytes_reviewed": false,
+    "retirement_accepted_by_this_review": false,
+    "mutation": false,
+    "signals_authorized": false,
+    "locks_authorized": false,
+    "census_authorized": false,
+    "docker_authorized": false,
+    "cleanup_authority": false,
+    "physical_clearance": false,
+    "runtime_authority": false,
+    "native_acceptance": false,
+    "counter_delta": 0
+  },
+  "preservation": "Original failed cleanup and current quarantine/reconciliation evidence remain authoritative and unchanged.",
+  "reviewer_quiescent": true
+}

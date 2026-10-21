@@ -1,0 +1,18 @@
+--- /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/prepare_current_image_runtime_sources.py
++++ /home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/prepare_eight_state_runtime_sources.py
+@@ -174,11 +174,11 @@
+         x=first['event']['params']['item']; y=last['event']['params']['item']
+         need(first['event']['method']=='item/started' and last['event']['method']=='item/completed' and x['id']==y['id'] and y['status']=='completed' and y['exitCode']==0,'genuine actual raw protocol pair')
+         expected[pair['role']]=(y['id'],y['processId'],y['durationMs'])
+-    need(set(expected)=={'cleanup','postjoin'} and len(physical['positive_closed_births'])==2,'TWO genuine innerbirths, no outerOS invention')
+-    p=outdir('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/bound-runtime-source-1'); (p/'native-packet-1').mkdir(mode=0o700)
+-    decoder=pinned(S/'launcher-sentinel-terminal-data-preparation-1/current_numa_launcher_physical.UNBOUND.py','67ddd46ee297880b340917c991a0096826dd57dab6f0bf2f36df5b50c2cdc2a6')
++    need(set(expected)=={'holder-retirement','physical-reconciliation'} and len(physical['positive_closed_births'])==2,'TWO genuine innerbirths, no outerOS invention')
++    p=outdir('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/bound-runtime-source-1'); (p/'native-packet-1').mkdir(mode=0o700)
++    decoder=pinned(Path('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/postbuild-numa-stage-runtime-data-preparation-1/runtime-current-image-preparation-1/postmutation-recovery-data-preparation-1/current_insert_clear_eight_state_physical.UNBOUND.py'),'d4079c2b67cde06ebb24392018032407483078b027ab3a3dbfb51572a0b587d1')
+     counts=mapping['current_actual_counts']
+-    instance=dict(mapping=r['physical_mapping'],physical_report=r['physical_report'],tool_terminals=expected,execution_review_sha256=a['execution_review']['sha256'],cleanup_engine_sha256=a['source_cleanup_engine']['sha256'],selected_files=counts['selected_files'],objects=counts['postreader_actual_objects'],roles=counts['finite_roles'])
++    instance=dict(mapping=r['physical_mapping'],physical_report=r['physical_report'],tool_terminals=expected,execution_review_sha256=a['execution_review']['sha256'],cleanup_engine_sha256=a['source_reconciliation']['sha256'],selected_files=counts['selected_files'],objects=counts['postreader_actual_objects'],roles=counts['finite_roles'])
+     decoder=bind_global(decoder,instance)
+     source(p/'current_numa_image_physical.py',decoder)
+     freeze=load(F/'SOURCE-FREEZE.json'); code={Path(row['path']).relative_to(F).as_posix():row for row in freeze['refs'] if row['path'].endswith('.py')}

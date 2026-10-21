@@ -1,3 +1,31 @@
+## Current — holder retired; paired physical producer/decoder check passed
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exact released holder retirement completed0/.198137s, directjoined/groupabsent;
+durable root prepared/complete receipts and original failed caller closure are
+independently accepted0a575. Original failed cleanup remains FAIL_PRESERVED_STOPPED,
+return-9/eightjournal events/no ninthcomplete; all originals/quarantine/mutex remain.
+This closes the holder stall, not current physical clearance or native acceptance.
+
+Producerdd7b and decoder978/generator7d9 have genuine independent source decisions
+68d6/4d374. One ordinary checker setup failed KeyError raw_base64 on the genuine
+hash-only log row; originalef8d/failure retained. One checker-only correctione0e1
+passed0/.078226s/emptyerr, reading nine actual preserved files through producer FD
+formatter into actual decoder helpers plus two genuine root-receipt exports.
+No producer main/project/census/root/guest executed; no synthetic physical PASS.
+Next: publish exact paired source, fresh grant/exact execution review, one scoped
+physical readback retaining eight-event state. Then bind genuine physical data to
+existing runtime constructor/full8FD/wholecaller and exact strict NUMA release.
+
+Before every critical wait register exact stdout/stderr/progress paths in admitted
+persistent reader2777042/start40959744. QUARANTINED means recovery_required: use
+qualified read-only diagnosis promptly, preserveholder/noautokill/unlock/replay.
+Constructors bind acceptedPROC24e from pinnedb8c7, never oldembedded986. Private
+future launcher progress patch remains undeployed; it does not block native work.
+Image053d/stage51ec/normd7e94/launcher33f and strict116B/emptyerr/37 unchanged.
+Counts held90source/32compiler/8native/29behaviors/22checks/fivewhole/Rust19-16;
+image-to-native clock18:06:04UTC remains open. No new acceptance credit.
+
 ## Current — cleanup quarantine diagnosed; exact holder retirement prepared
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
