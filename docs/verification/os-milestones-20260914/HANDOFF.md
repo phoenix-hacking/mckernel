@@ -1,3 +1,29 @@
+## Current — image build/link accepted; terminal clearance and thread app next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Accepted counts21/35 checks,five whole,28native,Rust17/14;26compiler batches.
+Actual four-overlay image owner CLOSED0 in272.020693s. Independent artifact
+acceptance37e641cb verifies18commands/ninebuildartifacts, finalELF imagea81866f5
+8421848B/no strongglobalundefined, productionRust855a4928 and actualC syscall
+join unique settid/ownedfork definitions. Realmcexec689dcad2/394656B resolves
+20C-to-Rustimports; actual productionlayout27u64 equal in Cselected/Cfallback/Rust.
+This is build/link evidence only, no native/default/HOST66/C-retirement uplift.
+Independent physical disposition1d472d0c proves retired owner/clients/groups and
+containerexit0/nonOOM/PID0, BUT common/shared/container remain intentionally retained.
+No heavy clearance. Sole currentPASS terminal packet author:settid_current_compile_prepare;
+reviewer:m06_closed_stage_review. New P/current-pass-terminal-preparation-2/ binds
+actual receipt/artifacts/logstreams with preflight/postlock/preservation unchanged.
+No cleanup execution authorized yet. Evidence: ../evidence/settid-current-image-accepted-20261021-1/.
+
+Existing accepted libc threads payload558d1607/unchanged25B stdout and exit37 is
+being prepared against actual new image/mcexec and exact compatible module ABI.
+Its genuine finalphysical/admission fields stay unbound until terminal clearance.
+NUMA traversal actual22case parity/fivecommands/outer0.461389s accepted9905682d;
+CPU6 released. Separate private getter snapshot source union independently passes,
+recorded accurately by roote26aeb31; actual caller lifetime fixture still source-only.
+No NUMA sharedintegration/currentimage change/native proof. SDK no-resize/capacity,
+all original failures and service/resource/ownership controls remain preserved.
+
 ## Live — frozen four-overlay image launched; independent NUMA Rust candidate
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
