@@ -1,3 +1,44 @@
+## Current — corrected insert/clear source materialized and whole-source gates accepted
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Corrected source3234a384/Cbca4d642 materialized once0/9.482459s, emptyerr,
+joined/groupsabsent. Independent actualsource acceptancec3c1f0f0 proves6959entries,
+6910private regularinodes,49exactsymlinks and21IHKmetadata; observedsource derivative
+cae8b221/materialization3b2cac15. Existing whole908bchecker ran once0/.114617s:
+currentownedpositive/oldQrefusal and affinitysourcegates/oldQrefusal passed; missing
+actual compile_commands endpoint preserved, no fullaffinity/compilerPASS claim.
+Independent gateacceptance650afdbf and mechanical guardprojection35e1899f recorded.
+Source root66306:48520580,0700,uidgid1000; identity ns retained as exactPythonints.
+
+Finite production owner/guard/caller preparation and actualrequestDATA binding
+are parallel, reusing accepted Q algorithms/schema. Next necessarywholeguard,
+exactfresh release/resourceadmission, then one genuine productionimagebuild.
+Newartifact/runtimeauthority remain unbound; runtime keeps sentinel33f and strict
+116B/emptyerr/37 app. No insertion object/test replay. Counts22checks/fivewhole/
+90source/31compiler/8native/29behaviors/Rust19-16 held. Original failures, parity,
+finding, and unchanged Cfallback defect scope retained. Noresize/SDK66gate held.
+
+Current binding clarification: independently accepted DATA-only reporting correction
+preserves original captures/acceptances and raw tool wrapper proof490f0e92. New
+SOURCE7ddb08ce/GATES893e8cd9 references satisfy exact existing consumer joins;
+stream field renames are mechanical, empty arrays derive terminal owned-PGID
+absence only, no historical/escaped-process claim. Operational code unchanged;
+no materializer/validator replay. Exact corrected6refDATA2b2deef9 independently
+accepted. Qualified emptywork setup0/.032517s, both work/evidence roots empty,
+actual backup/device/fullintegerdirectory identitiescce3fba0 recorded. Nextfixed
+BASIS/runtimebindingreview→necessarywholeguard→freshrootadmission/build.
+
+Fixed request BASIS ee1a46da has genuine independent owner/request acceptance
+62d3d64a, actualwork/backup/device binding and unchanged43ownermethods. Finitebinder
+0/.314905s plus necessary wholeguard0/4.522456s, emptyerr/directjoins/groupabsence;
+actualpositive and8distinctrefusals independently accepted7cd96333. Conditional
+controlreview02344cd6 requires fetchedpublication/currentclosure, freshroot
+snapshot/resourceadmission and exactcanonicalrelease review beforeonebuild.
+Actualboundguard69b49aa9; no operationalcode or acceptedsourcecheck replay.
+PostbuildterminalDATAcbbaced2 and NUMAstage/runtimeDATA9575ecca prepared inparallel;
+newartifact/physical/releasefields NULL. Existingartifactreview will include actual
+finalimage insert+clear Ccaller/Rustprovider/object/linkmap joins. Runtime33f stays.
+
 ## Current — clear interleave cursor corrected and independently accepted
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
