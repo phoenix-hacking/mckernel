@@ -1,3 +1,28 @@
+## Current — exact-nanosecond receipt corrected; fresh runtime final19 ready
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+First exact native controller stopped at LAST-snapshot before machine/guard/guest:
+strict parent-role equality caught reviewer receipt4f rounding mtime/ctime by9ns.
+Snapshot child1/.323s and caller1/.374s positively joined/groupabsent; original
+receipt/refusal/all14failuremembers retained. No guest/native owner started;
+no nativefailure/check/whole gain and artifact clock13:06:08.124394UTC continues.
+
+Genuine additive normalization correction455e365a preserves original4f and uses
+Python arbitraryprecision directreads: both ns values1792588835782003191.
+Allotherfull9/legacy5 fields equal; no liveparent mutation or weakened assertion.
+Actual strictstatic_joins correctedpositive0/.229718s; originalnegative expected1/
+.218407s same exactrefusal; no root/live/guest. Freshnamespace generator51255
+actual0/.115516s; existingpendingconstructor0/.626140s,19outputs/7rows/49freshpaths.
+Genuine combined staticd27312ba reuses old0f four unchangedrefusal vectors without
+replay. Existingfinalbinder0/.601855s gives19immutablefinaloutputs/coherentc7f51851.
+
+Acceptedkernel1d8/launcher33f/stage/normactualoperation/cleanup/physicalea02/f0
+unchanged. Only truly affectedreceipt refs/BOTHpins/capture+controllernamespace
+updated. Next bind genuine publication/grant into corrected7step exactpayload,
+independently release and run freshsnapshot/strict NUMA116B/emptyerr/exit37.
+Review152 numericaltotals held87sources(33OS54infra)/30compiler/6acceptednative,
+21checks/fivewhole/28behaviors/Rust17-14. No reporting/pin-only source credit.
+
 ## Current — launcher physical accepted; runtime generation/whole/final binding passed
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
