@@ -1,3 +1,32 @@
+## Current — insertion four-object join accepted; clear interleave cursor correction required
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual corrected two-C operation closed0/9.103566s. Selected/fallback C objects
+142ef42c/f195d5ea passed unchanged ABI/prototype/layout assertions with only the
+reviewed -iquote /src/kernel correction. Independent joined acceptance9ece849e
+reuses already accepted native/legacy Rust objects e4f72c9e/6a9d73e5 without replay.
+One coherent compiler batch is now accepted:31 total. Original four-object attempt
+remains FAIL, with its exact output and separate physical receipt preserved.
+Current physical acceptance8ba49ad0 confirms actual corrected owner directjoin,
+group absence, stopped non-OOM container removal, clients/children reaped and
+owned record/lease release. No repeated physical read or cleanup is required.
+
+Narrow independent reviewer found a supported INTERLEAVE split-tail defect:
+clear publishes an unwritten il_prev, later read before initialization by the
+allocation consumer. This is an inherited C defect, not an observed native failure.
+Original source/parity/caller acceptance remains retained within its scope; it
+does not prove this consumer correct. Unchanged clear integration eligibility is
+blocked. Author prepares minimal Rust sentinel initialization before publication
+and one focused dirty/reused-allocation split-to-consumer check with boundaries.
+Root owns integration; update actual Rust overlay/pins before any source
+materialization, whole validators or image build. Existing J preparation remains
+immutable, unexecuted. No new kernel compute C, insertion replay or extra gate.
+
+Checks22/35, fivewhole,90sources(35OS55infra),31compiler,8native batches,
+29behaviors,Rust19selected/16native. New insert/clear production image/default/
+linked/native proof remains pending. Accepted kernel1d8/launcher33f/modules and
+strict116B/emptyerr/37 oracle remain unchanged. SDK66 capacity gate/noresize held.
+
 ## Current — insertion Rust production objects accepted; quoted-include C-only correction next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
