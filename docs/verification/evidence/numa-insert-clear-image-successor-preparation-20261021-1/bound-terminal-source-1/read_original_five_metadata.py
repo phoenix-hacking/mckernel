@@ -3,7 +3,7 @@ from pathlib import Path
 import hashlib,importlib.util,json,os,resource,stat
 HERE=Path(__file__).resolve().parent
 SUMMARY=HERE/'readback_observer.py'
-SUMMARY_SHA = '736734dc1b49fd02dc04a1b78050472ea576450f82399222b153121839262494'
+SUMMARY_SHA = '6eb00fa2f0eeeb1fe51f0ae58f66457160e2e9db8e3264e1b7fcb4d3d4172d74'
 EXPECTED_HASHES = None
 NAMES=('observer-result.json','observation.json','cleanup-release-draft.json','new-object-metadata.json','ownership.json')
 def need(ok,why):

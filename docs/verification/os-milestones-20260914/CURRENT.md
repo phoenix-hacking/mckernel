@@ -1,3 +1,32 @@
+## Current — offline stage and normalization accepted; one observer DATA correction checked
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Image053d acceptanceafdf/compiler32 stands. Actual NUMA kernel-only stage0/20.184375s
+independentlyaccepted51ec:60members/59fulldescriptors unchanged, only image changes,
+launcher33f/modules/app/oracle preserved. Normalization0/.558514s accepted d7e94bbc:
+byteexactmanifestc93, full9Pythoninteger parent883148,21paths/2RO,QMP104,guest0.
+No native/path/check/whole gains:90source/32compiler/8native/29behaviors/22checks/
+fivewhole/Rust19-16. Artifact-native clock2026-10-21T18:06:04Z remains open.
+
+Terminal constructor/body check passed after actual container-log DATA correction,
+49refusals only in that exact original exercised scope. First released observer
+closed1/.451854s at306 because finite_unique_paths was integer88, expected pathlist.
+Independent scoped failed-observer closure8a498795 proves three prior strict
+synchronous read-only command completions, parent/groupabsence and finallyunlock;
+no cleanup/recordrelease required or authorized. Partial rootoutput and everyfailure
+preserved. Optional fourrecord diagnostic also failed bundledassertion; exactcause
+unresolved, not an acceptance/recovery prerequisite and not replayed.
+
+One bounded DATA correction uses sorted88actual finite-role paths plus separate
+count; roles97/authorities unchanged. Actual observer/postjoin expressioncheck
+0/.084980s correctedpositive/originalscalarnegative, no artifactreads/engineimport.
+Original B tree atomicallyretained at B.failed-finite-path-list-1 with exactprefix
+restorationmapping; rootchildren unchanged. Qualifiedconstructor0/.697675s renders
+currentB correctedcase75fe/newobservationnonce2, sourcealgorithms unchanged. Next
+focusedactual/source-transfer review, current fetchedsource/grant/exactobserver
+release, then existing export/same-releasecleanup/postjoin/physicalacceptance and
+strict NUMA native. No kernel/compiler/stage/normalization replay or newframework.
+
 ## Current — corrected insert/clear production image accepted; physical cleanup and strict NUMA next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

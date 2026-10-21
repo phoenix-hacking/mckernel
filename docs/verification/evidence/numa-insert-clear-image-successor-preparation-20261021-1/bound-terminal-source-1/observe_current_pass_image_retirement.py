@@ -17,7 +17,7 @@ import types
 
 
 FAILURE_CASE = Path('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/bound-terminal-source-1/PASS-CASE-STATIC.json')
-FAILURE_CASE_SHA = '1ddc66d9d485c0c7387e21420c902aaf9dbbfaf6099c62212016765457601c09'
+FAILURE_CASE_SHA = '75fe37ffea4ed608102f67d56837a08e27f2fa295daf5a19295bfbc765ca0892'
 REPO = Path('/home/holden/mckernel')
 ROOT = Path('/home/holden/mckernel-work/scratch')
 PREP = Path('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/bound-terminal-source-1')
@@ -29,7 +29,7 @@ SOURCE_SHA = 'b738e67fd7e0f07c77c251506fa8f29eb23587ada883ee830ad1775df6ad0dd9'
 TEST_SHA = '2fba315ad96f271124cf78f7441faa306f58ea03ae35cdbe78bba5be6488d630'
 RETIREMENT = Path('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/production-preflight-correction-preparation-1/ROOT-RECORDED-QUALIFIED-RETAINED-TERMINAL-PROJECTION-1.json')
 RETIREMENT_SHA = '3ec366e6e3bab684cdbf7073b9aab4edd7ef1f3dc589fd8a1fb5e17ebf575712'
-NONCE = 'numa-insert-clear-pass-image-observation-1'
+NONCE = 'numa-insert-clear-pass-image-observation-2'
 OUTPUT = PREP / ('root-observation-' + NONCE)
 BOOT = '7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
 PIDS = (2734990, 2737973, 2734998, 2735064, 2734982, 2738845, 2735006, 2737965)

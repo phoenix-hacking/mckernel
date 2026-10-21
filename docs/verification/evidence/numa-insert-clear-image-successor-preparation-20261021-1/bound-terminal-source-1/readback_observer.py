@@ -1,8 +1,8 @@
 """Exact finite post-direct-wait observer readback; no cleanup or Docker."""
 import hashlib,json,os,stat
 from pathlib import Path
-OUTPUT = Path('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/bound-terminal-source-1/root-observation-numa-insert-clear-pass-image-observation-1')
-NONCE = 'numa-insert-clear-pass-image-observation-1'
+OUTPUT = Path('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/bound-terminal-source-1/root-observation-numa-insert-clear-pass-image-observation-2')
+NONCE = 'numa-insert-clear-pass-image-observation-2'
 NAMES=('observer-result.json','observation.json','cleanup-release-draft.json','new-object-metadata.json','ownership.json')
 def canonical(v):return json.dumps(v,sort_keys=True,separators=(',',':')).encode()+b'\n'
 def digest(b):return hashlib.sha256(b).hexdigest()

@@ -6,7 +6,7 @@ ROOT=Path('/home/holden/mckernel-work/scratch')
 ENGINE = Path('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/bound-terminal-source-1/cleanup_pass_image.py')
 ENGINE_SHA = 'b738e67fd7e0f07c77c251506fa8f29eb23587ada883ee830ad1775df6ad0dd9'
 OBSERVER = Path('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/bound-terminal-source-1/observe_current_pass_image_retirement.py')
-OBSERVER_SHA = '38edb90034ee48f922196a048217b53c0f891400ff59a81d2f1b2c19d4f6a160'
+OBSERVER_SHA = '371b36c29efda9c162808fa493df1709b5773ddd68156de87a3862ed81a3a841'
 CAP=128*2**20
 DIAGNOSTIC_CAP=65536
 

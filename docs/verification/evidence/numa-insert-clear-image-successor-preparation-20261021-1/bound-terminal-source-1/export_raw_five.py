@@ -3,8 +3,8 @@ import argparse,hashlib,importlib.util,json,os,resource,subprocess,sys
 from pathlib import Path
 HERE=Path(__file__).resolve().parent
 SUMMARY=HERE/'readback_observer.py'
-SUMMARY_SHA = '736734dc1b49fd02dc04a1b78050472ea576450f82399222b153121839262494'
-OUTPUT = Path('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/bound-terminal-source-1/root-observation-numa-insert-clear-pass-image-observation-1')
+SUMMARY_SHA = '6eb00fa2f0eeeb1fe51f0ae58f66457160e2e9db8e3264e1b7fcb4d3d4172d74'
+OUTPUT = Path('/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/bound-terminal-source-1/root-observation-numa-insert-clear-pass-image-observation-2')
 NAMES=('observer-result.json','observation.json','cleanup-release-draft.json','new-object-metadata.json','ownership.json')
 CAP=33554432
 COMMAND=['/usr/bin/tar','--format=ustar','--no-recursion','-cf','-','-C',str(OUTPUT),'--']+list(NAMES)
