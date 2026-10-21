@@ -1,0 +1,691 @@
+{
+  "actual_owner_direct_join": {
+    "bytes": 1199,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/actual-root-owner-1/direct-join.json",
+    "sha256": "138f672490a03227a0f145a21deabffca08b62a7809929771c2f14cd5ceae984"
+  },
+  "actual_owner_status": {
+    "bytes": 2076,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/actual-root-owner-1/status.json",
+    "sha256": "9d3a8bb68457d490c38867603558cd8f18d9487f62e0c1d1a16f96fa179df60e"
+  },
+  "all_saved_clients_reaped_and_groups_empty": true,
+  "automatic_corrected_target_execution_authority": false,
+  "cleanup_separately_required": false,
+  "cleanup_status": "PASS_OWNED_REMOVAL_AND_RECORD_RELEASE",
+  "client_statuses": [
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "logs",
+        "mckernel-vm-policy-insert-14d38098ca9b"
+      ],
+      "exit_code": 0,
+      "pid": 2702649,
+      "status": {
+        "bytes": 248,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-613b2c3978e945778849ca4322635dac/status.json",
+        "sha256": "bf3227d880538ba2346bcde4e5b96f96284a4baa7e25c54d54511bfc11e25034"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "create",
+        "--name",
+        "mckernel-vm-policy-insert-14d38098ca9b",
+        "--label",
+        "mckernel.owner=14d38098ca9b4383bb821152812cc399",
+        "--network=none",
+        "--ipc=private",
+        "--cpus=4",
+        "--cpuset-cpus=2-5",
+        "--memory=12g",
+        "--memory-swap=12g",
+        "--pids-limit=512",
+        "--user",
+        "1000:1000",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--init",
+        "--tmpfs",
+        "/tmp:rw,nodev,nosuid,size=256m",
+        "--entrypoint",
+        "/usr/bin/python3",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/materialized-source,dst=/src,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/scratch/native-exact-rust-nightly-1.95.0-20260218-1/rustup/toolchains/nightly-2026-02-18-x86_64-unknown-linux-gnu,dst=/nightly,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/compile_insert_objects_driver.py,dst=/driver.py,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/source-manifest.json,dst=/inputs.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/compiler-commands.json,dst=/commands.json,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/work,dst=/work",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/guest-control-consumer-1/current-fullcrate-owner-1/owned_capture_helpers.py,dst=/owned-capture.py,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py,dst=/accepted-host-owner.py,readonly",
+        "--mount",
+        "type=bind,src=/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/production-insert-prototype-assertions.h,dst=/prototype-assertions.h,readonly",
+        "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5",
+        "/driver.py",
+        "--execute"
+      ],
+      "exit_code": 0,
+      "pid": 2702471,
+      "status": {
+        "bytes": 2665,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-388d71abab144d3fbd2e1a64e416c407/status.json",
+        "sha256": "2e1f9e98107d0e7580aa7edfdf645b95f2bcf8465ebf8814261ec8e0f4693bfa"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "image",
+        "inspect",
+        "sha256:41778f1f22fd68897c1209e225a9807a197ed47bf0edd17835821bb5986e50b5"
+      ],
+      "exit_code": 0,
+      "pid": 2702459,
+      "status": {
+        "bytes": 297,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-59a6771fc44648b7acb753f38cdb9ba3/status.json",
+        "sha256": "d4e679a02fc69c0557624bd4db0c3e353ee343ab602f8de0a33eacd4689d2033"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "--all",
+        "--quiet",
+        "--no-trunc",
+        "--filter",
+        "id=e5c574be8060fba9d39afe4c11b1d18754d8bf21f043a667efa281e2cd52616c"
+      ],
+      "exit_code": 0,
+      "pid": 2702685,
+      "status": {
+        "bytes": 336,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-497db5662f9644bc876da33a52bd7f15/status.json",
+        "sha256": "62fab8dc74b12e2a77cb04a269ba5a7cbe4ad1c5c295bf80cd33ea6425c2ef70"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "--all",
+        "--quiet",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.owner=14d38098ca9b4383bb821152812cc399"
+      ],
+      "exit_code": 0,
+      "pid": 2702676,
+      "status": {
+        "bytes": 322,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-ddd1cbf7bf4b47b28ef7557bcbbe7f62/status.json",
+        "sha256": "7fb46796c33f02417b09261f8d94808f79a147d066e3d9a87a223b687448052c"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "rm",
+        "e5c574be8060fba9d39afe4c11b1d18754d8bf21f043a667efa281e2cd52616c"
+      ],
+      "exit_code": 0,
+      "pid": 2702657,
+      "status": {
+        "bytes": 271,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-c38d2e2613df4c8da1908a6296598a90/status.json",
+        "sha256": "bef838b63042f47e5c8c55c665b75c350492fe7f11dc6d7dcba6ba16ae201eca"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "wait",
+        "mckernel-vm-policy-insert-14d38098ca9b"
+      ],
+      "exit_code": 0,
+      "pid": 2702546,
+      "status": {
+        "bytes": 249,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-34ac58e9d1ed4e24b0a447a45fbbbbc5/status.json",
+        "sha256": "9c4ecd18784ef405a2c3fc9f51415d9d22060712f56e6ccd5660368da81f34fd"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "start",
+        "mckernel-vm-policy-insert-14d38098ca9b"
+      ],
+      "exit_code": 0,
+      "pid": 2702487,
+      "status": {
+        "bytes": 249,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-c7c5bc7cf79048818f35412218b857b9/status.json",
+        "sha256": "9cb13615b8ee387583ac02452e5d277648b93e8f804f6e05fe8a674fc85c26af"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "mckernel-vm-policy-insert-14d38098ca9b"
+      ],
+      "exit_code": 0,
+      "pid": 2702641,
+      "status": {
+        "bytes": 251,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-e06cb00b0bd04ad898e4acd3bc17fd5a/status.json",
+        "sha256": "a020766c18b101f51f6837e5be0456ecf9d7bce8e4a1696427706a6effec3673"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "--all",
+        "--quiet",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-vm-policy-insert-14d38098ca9b$"
+      ],
+      "exit_code": 0,
+      "pid": 2702665,
+      "status": {
+        "bytes": 315,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-218cc7cb191f468da46326eabef52682/status.json",
+        "sha256": "950665d1a6b25e59351f4fe523a3a9f753ca0610c8ce5cbf72ce122a44c602f5"
+      }
+    },
+    {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "--host=unix:///var/run/docker.sock",
+        "inspect",
+        "mckernel-vm-policy-insert-14d38098ca9b"
+      ],
+      "exit_code": 0,
+      "pid": 2702479,
+      "status": {
+        "bytes": 251,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-d57a75f31bee406aaf5dee7329118797/status.json",
+        "sha256": "e01e0feb17a1812c2f534936d61b80e94bd089c9001d66d4a148e60031b6083b"
+      }
+    }
+  ],
+  "common_exclusion_released": true,
+  "compiler_children": [
+    {
+      "child": {
+        "argv": [
+          "/usr/bin/cmake",
+          "-E",
+          "env",
+          "MAKEFLAGS=",
+          "MCKERNEL_RUST_VERSION=1.8.0",
+          "MCKERNEL_RUST_BUILDID=3114d9e",
+          "/nightly/bin/rustc",
+          "--crate-name",
+          "mckernel_rust",
+          "--crate-type",
+          "lib",
+          "--edition=2021",
+          "-C",
+          "panic=abort",
+          "-C",
+          "opt-level=2",
+          "-C",
+          "debuginfo=2",
+          "-C",
+          "code-model=large",
+          "-C",
+          "relocation-model=static",
+          "-C",
+          "no-redzone=yes",
+          "-C",
+          "force-frame-pointers=yes",
+          "-C",
+          "overflow-checks=off",
+          "-C",
+          "force-unwind-tables=no",
+          "-C",
+          "no-vectorize-loops",
+          "-C",
+          "no-vectorize-slp",
+          "-C",
+          "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+          "--cfg",
+          "native_linux_irq_work_v6_12",
+          "--cfg",
+          "enable_profile",
+          "--cfg",
+          "enable_perf",
+          "--cfg",
+          "enable_rusage",
+          "--emit=obj=/work/output/build/current-guest-control-fullcrate-1/native-mckernel_rust.o",
+          "/src/kernel/rust/lib.rs"
+        ],
+        "cwd": "/work/output/build/kernel",
+        "parent_pid": 7,
+        "pid": 8,
+        "process_group": 8,
+        "starttime": 39753956
+      },
+      "direct_wait": true,
+      "exit_code": 0,
+      "owned_process_group_absent": true
+    },
+    {
+      "child": {
+        "argv": [
+          "/usr/bin/cmake",
+          "-E",
+          "env",
+          "MAKEFLAGS=",
+          "MCKERNEL_RUST_VERSION=1.8.0",
+          "MCKERNEL_RUST_BUILDID=3114d9e",
+          "/nightly/bin/rustc",
+          "--crate-name",
+          "mckernel_rust",
+          "--crate-type",
+          "lib",
+          "--edition=2021",
+          "-C",
+          "panic=abort",
+          "-C",
+          "opt-level=2",
+          "-C",
+          "debuginfo=2",
+          "-C",
+          "code-model=large",
+          "-C",
+          "relocation-model=static",
+          "-C",
+          "no-redzone=yes",
+          "-C",
+          "force-frame-pointers=yes",
+          "-C",
+          "overflow-checks=off",
+          "-C",
+          "force-unwind-tables=no",
+          "-C",
+          "no-vectorize-loops",
+          "-C",
+          "no-vectorize-slp",
+          "-C",
+          "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+          "--cfg",
+          "enable_profile",
+          "--cfg",
+          "enable_perf",
+          "--cfg",
+          "enable_rusage",
+          "--emit=obj=/work/output/build/current-guest-control-fullcrate-1/legacy-mckernel_rust.o",
+          "/src/kernel/rust/lib.rs"
+        ],
+        "cwd": "/work/output/build/kernel",
+        "parent_pid": 7,
+        "pid": 16,
+        "process_group": 16,
+        "starttime": 39755339
+      },
+      "direct_wait": true,
+      "exit_code": 0,
+      "owned_process_group_absent": true
+    },
+    {
+      "child": {
+        "argv": [
+          "/usr/bin/cc",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-DMCKERNEL_NATIVE_FORK_OWNED_TRANSACTION",
+          "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+          "-DMCKERNEL_RUST_SHMID_HELPERS",
+          "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+          "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+          "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+          "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+          "-I/work/output/build/kernel/include",
+          "-I/src/kernel/include",
+          "-I/work/output/build/kernel",
+          "-I/work/output/build",
+          "-I/src/ihk/cokernel/smp/x86_64/include",
+          "-I/src/ihk/cokernel/smp/x86_64",
+          "-I/src/ihk/ikc/include",
+          "-I/src/ihk/linux/include",
+          "-I/src/lib/include",
+          "-I/src/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "-o",
+          "/work/output/build/current-guest-control-fullcrate-1/selected-owned-syscall.o",
+          "-c",
+          "/work/output/build/current-guest-control-fullcrate-1/actual-owned-syscall.c"
+        ],
+        "cwd": "/work/output/build/kernel",
+        "parent_pid": 7,
+        "pid": 24,
+        "process_group": 24,
+        "starttime": 39756796
+      },
+      "direct_wait": true,
+      "exit_code": 1,
+      "owned_process_group_absent": true
+    }
+  ],
+  "compiler_lifetime_result": {
+    "bytes": 16193,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/work/output/build/current-guest-control-fullcrate-1/result.json",
+    "sha256": "6cb9fa419f8ac1e7073accbe7127141342cd1d0efbc29f5ee45d95195bb1fb36"
+  },
+  "compiler_or_object_acceptance": false,
+  "container_absent": true,
+  "container_id": "e5c574be8060fba9d39afe4c11b1d18754d8bf21f043a667efa281e2cd52616c",
+  "container_terminal": {
+    "inspect": {
+      "bytes": 14910,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-e06cb00b0bd04ad898e4acd3bc17fd5a/stdout",
+      "sha256": "6b1bbf4a811521969942f42ddc0d4c8547db6d0536335a97e3be2ce4490a9436"
+    },
+    "value": {
+      "Dead": false,
+      "Error": "",
+      "ExitCode": 1,
+      "FinishedAt": "2026-10-21T16:28:43.321472626Z",
+      "OOMKilled": false,
+      "Paused": false,
+      "Pid": 0,
+      "Restarting": false,
+      "Running": false,
+      "StartedAt": "2026-10-21T16:28:14.447838778Z",
+      "Status": "exited"
+    }
+  },
+  "controller_terminal_contract": {
+    "actual_terminal_item_status": "failed",
+    "capture_source": {
+      "bytes": 5378,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/root-run-insert-objects-once-correction-1.py",
+      "sha256": "3cc79d841bb79bbdab251446c51b7740262716f20af5144b27c58ced61da075e"
+    },
+    "decision": "PASS_FAILED_TOOL_TERMINAL_AND_SINGLE_CHILD_CONTROL_FLOW",
+    "exit_code": 1,
+    "kind": "tool-owned-unified-exec-terminal"
+  },
+  "controller_terminal_pair": {
+    "bytes": 1380,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/failed-attempt-controller-evidence-1/ROOT-GENUINE-FAILED-FOUR-OBJECT-CONTROLLER-PAIR-1.json",
+    "sha256": "1a4221a432842a47b589894ad8a65fcf6fc178d3f4860f3ba84beabb85d243e9"
+  },
+  "decision": "PASS_FAILED_COMPILER_ATTEMPT_CONTAINER_CLIENT_AND_THREE_RECORD_RELEASE_ONLY",
+  "direct_child_joined": true,
+  "exact_owned_removal": {
+    "status": {
+      "bytes": 271,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-c38d2e2613df4c8da1908a6296598a90/status.json",
+      "sha256": "bef838b63042f47e5c8c55c665b75c350492fe7f11dc6d7dcba6ba16ae201eca"
+    },
+    "stdout": {
+      "bytes": 65,
+      "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-c38d2e2613df4c8da1908a6296598a90/stdout",
+      "sha256": "04a7413eaa5f84a4e8f71301fad06459b3c0d2f6681788cabd3bc1e5a8965e61"
+    }
+  },
+  "failure_evidence_preserved": true,
+  "final_empty_name_label_id_queries": [
+    {
+      "status": {
+        "bytes": 336,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-497db5662f9644bc876da33a52bd7f15/status.json",
+        "sha256": "62fab8dc74b12e2a77cb04a269ba5a7cbe4ad1c5c295bf80cd33ea6425c2ef70"
+      },
+      "stdout": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-497db5662f9644bc876da33a52bd7f15/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "status": {
+        "bytes": 322,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-ddd1cbf7bf4b47b28ef7557bcbbe7f62/status.json",
+        "sha256": "7fb46796c33f02417b09261f8d94808f79a147d066e3d9a87a223b687448052c"
+      },
+      "stdout": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-ddd1cbf7bf4b47b28ef7557bcbbe7f62/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "status": {
+        "bytes": 315,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-218cc7cb191f468da46326eabef52682/status.json",
+        "sha256": "950665d1a6b25e59351f4fe523a3a9f753ca0610c8ce5cbf72ce122a44c602f5"
+      },
+      "stdout": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/command-218cc7cb191f468da46326eabef52682/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "implementation_ownership": false,
+  "limitations": [
+    "Compiler and outer operation remain failed with exit1; this report accepts physical retirement only.",
+    "Native/legacy object outputs and selected-C diagnostic remain retained; no object or C-only correction acceptance is inferred.",
+    "Tool session37969 is not an OS identity; owner birth is separately supported by direct-join evidence.",
+    "Three records were released by the already executed qualified same-owner protocol, with archived original bytes and a durable release-complete chain.",
+    "No new root observation, cleanup, signal, success readback or compiler replay was performed."
+  ],
+  "link_image_guest_or_C_retirement_acceptance": false,
+  "new_cleanup_or_signals": false,
+  "new_root_commands_or_census": false,
+  "observer_error": null,
+  "original_error": "RuntimeError('crate driver failed; preserved first compiler diagnostics')",
+  "original_owner_status": "FAIL",
+  "original_wait_exit_code": 1,
+  "outer_capture_streams_empty": true,
+  "outer_os_identity": null,
+  "outer_process_group_observation": null,
+  "owned_process_group_absent": true,
+  "owner_birth": {
+    "pid": 2702438,
+    "start": 39753702
+  },
+  "owner_nonce": "14d38098ca9b4383bb821152812cc399",
+  "owner_receipt": {
+    "bytes": 26980,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/owner-receipt.json",
+    "sha256": "331043773622ae9ef07c1924a6500d028357ee7cd436c958dc44e5e480988896"
+  },
+  "ownership_archive": {
+    "bytes": 13200,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/ownership-archive.json",
+    "sha256": "dbddb2f7e3cea553304066d58f974fa76b322ca0d37d25481dad81dd5a55f8dd"
+  },
+  "postflight_proof": {
+    "bytes": 10077,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/postflight-proof.json",
+    "sha256": "77c2ed1fbe773835499aeae51be3e69007127b1fdd1e64e1d9559375e83157ba"
+  },
+  "record_release_authorized": {
+    "bytes": 2011,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/record-release-authorized.json",
+    "sha256": "b76fa209ac9687910f66b17c58bb3e950c829c249542c4c5bbc2182f586eae63"
+  },
+  "record_release_complete": {
+    "bytes": 176,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/record-release-complete.json",
+    "sha256": "792ba3ac74ed8c9b766a1ce3cf863ef343cf10bdbbac8bed868bf96b42ee0e13"
+  },
+  "request": {
+    "bytes": 19368,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/request.ACTUAL-SOURCE-BOUND-PENDING-HEAVY-RELEASE.json",
+    "sha256": "35c293441c5dc0ccface9ca84a933c87380b49d29b6839e23c8e8a41b9d04b31"
+  },
+  "request_lease_released": true,
+  "retired": true,
+  "reviewer": "/root/numa_image_source_review",
+  "saved_docker_client_count": 11,
+  "schema": "mckernel.numa-vm-policy-insert.failed-four-object-owner-physical-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Failed four-object production compiler attempt physical lifecycle only.",
+  "shared_heavy_record_released": true,
+  "source_authority": {
+    "capture_helpers": "7834a85da04a3667b86365ec6340a55580b560248dd23fec84e673acc31bea90",
+    "crate_driver": "51801d3879aaf0c8f31d8e8eaa4d48838f56f5192aa4c64a0e2636c06a90f7b4",
+    "crate_owner": "ae9356e0d1bcda243a1b95f837c36069bd61f4ea9e7e075aab9650afe0cc5732",
+    "image_transport": "34963a3efdd93ca7c88a88335c1b597a7084fd83f96fdd473daa4e55df474317",
+    "retirement_transport": "3509e0ff79109a8170b766a725da10bc15a0d4359d90728a73abd023a88eb97a"
+  },
+  "status": "PASS_ACTUAL_FAILED_FOUR_OBJECT_OWNER_PHYSICAL_RETIREMENT_ONLY",
+  "three_original_record_bindings": [
+    {
+      "original_record": {
+        "device": 1828,
+        "inode": 116321,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-vm-policy-insert-14d38098ca9b.lease.json",
+        "record": {
+          "container_name": "mckernel-vm-policy-insert-14d38098ca9b",
+          "nonce": "c9052818569c4eaf9830aa8b1fd5099f",
+          "pid": 2702438,
+          "starttime": "39753702",
+          "state": "owned"
+        },
+        "sha256": "7e52f93a5f5f1d19bb360826e3d828bb5a03b572bf585b54fb3761b4a3adbf4f",
+        "size": 164
+      },
+      "retained_bytes": {
+        "bytes": 164,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/lease.record.raw",
+        "sha256": "7e52f93a5f5f1d19bb360826e3d828bb5a03b572bf585b54fb3761b4a3adbf4f"
+      }
+    },
+    {
+      "original_record": {
+        "device": 1828,
+        "inode": 116320,
+        "path": "/home/holden/mckernel-work/scratch/native-held-host-control-fullmodule-external-modules-operational-exclusion.json",
+        "record": {
+          "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+          "dev": 1828,
+          "inode": 116320,
+          "pid": 2702438,
+          "request_sha256": "b4e14fc899ef4bf1121908e0fe4bc580fd4455804493495d178e63acd27f74a9",
+          "schema": "mckernel.native-exact-operational-exclusion.v1",
+          "starttime": "39753702"
+        },
+        "sha256": "8b753f2f4a8295132ffe83cbed80d90864f3becc63f08c07ce120d17faf19f3e",
+        "size": 269
+      },
+      "retained_bytes": {
+        "bytes": 269,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/common.record.raw",
+        "sha256": "8b753f2f4a8295132ffe83cbed80d90864f3becc63f08c07ce120d17faf19f3e"
+      }
+    },
+    {
+      "original_record": {
+        "device": 1828,
+        "inode": 116319,
+        "path": "/home/holden/mckernel-work/scratch/mckernel-heavy-operation.lock",
+        "record": {
+          "boot_id": "7bfc5687-6c04-4d15-84eb-b92ab9a55dcb",
+          "device": 1828,
+          "inode": 116319,
+          "kind": "build",
+          "pid": 2702438,
+          "request_sha256": "5d86fa52c58ff310502fa5b6f8d5af8fe3b490b5ece6f27e7eb01738cd1af6bc",
+          "schema": "mckernel.heavy-operation.v1",
+          "starttime": "39753702"
+        },
+        "sha256": "c1f22df463f9dc87f45dd9b9db967707f4d8a77721cca8ee69e5ca0a37835e19",
+        "size": 269
+      },
+      "retained_bytes": {
+        "bytes": 269,
+        "path": "/home/holden/mckernel-work/host-preparation/numa-vm-policy-insert-rust-20261021-1/production-object-preparation-1/owner-evidence/shared.record.raw",
+        "sha256": "c1f22df463f9dc87f45dd9b9db967707f4d8a77721cca8ee69e5ca0a37835e19"
+      }
+    }
+  ]
+}

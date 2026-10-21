@@ -1,3 +1,38 @@
+## Current — insertion Rust production objects accepted; quoted-include C-only correction next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+First four-object attempt closed1/32.020063s, positive ownerjoin/groupabsence.
+Native and legacy whole Rust crates compiled0/13.7989 and14.5388s; actual insert
+exportD1/U0 objects e4f72c9e/13581184B and6a9d73e5/13365936B independently accepted
+bb659674 for exact reuse. Both complete warning streams retained; no new warning
+header family versus accepted production aggregate; no blanket warning safety claim.
+Whole attempt remains FAIL; accepted compiler counter stays30. SelectedC failed
+on quoted ../executer/include/uti.h after source was copied into an output directory;
+fallbackC never ran. #line does not restore physical include search directories.
+Actual failure/objects/captures are archived, original statuses unchanged.
+
+Independent failed-owner physical acceptanceedd6267e: CIDe5c574 stopped1/nonOOM,
+removed0,11clients and3compiler children joined/groupsabsent, three owned records
+archived/released. No further cleanup/rootreader required. Currentphysical is this
+failed compiler retirement, replacing prior successful six-native5883 as latest.
+
+C-only bounded correction source/profile9f62849a adds exactly -iquote /src/kernel
+to selected and fallbackC argv. Existing driver/owner now run exactly2C stages;
+original flags/prototype assertions/macros/failstop/retirement and resource profile
+preserved. Fresh correction workdirectories observed, all nine integer identity
+fields recorded. No Rust recompilation/materialization/source audit is needed.
+New code publication/exact execution release/fresh grant/data joins precede one
+C-only actual operation. Raw inherited Rust-scope/count4 labels remain preserved
+and require explicit source-bound attribution to the actual two-C operation.
+No current image/launcher/module/app or strict-oracle change. If correction fails,
+preserve it and escalate the actual defect; do not repeat or speculate.
+
+Checks22/35, fivewhole,90sources(35OS55infra),30compiler,8native batches,
+29behaviors,Rust19/16 unchanged. Reviewed clear body is integrated in shared HEAD;
+its production compilation/link/native proof stays separate from the frozen
+insertion-only sourcecopy used by this attempt. Next image source-only preparation
+may overlap; quiesce it before exclusive C-only admission.
+
 ## Current — six-launch native accepted; P-M11-01 closed; Rust clear-range source integrated
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
