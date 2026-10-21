@@ -1,3 +1,33 @@
+## Current — named NUMA getter/traversal cutover deduplicated: Rust19/16
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independent compiler-review/root-recorder decision90d8ebac closes two distinct
+previously-live C compute-body units using accepted default/config/source/link
+and genuine current NUMA native evidence. Prior17/14 inventory contains neither.
+
+| Named unit | Production consumer/link | Applicable native proof |
+| --- | --- | --- |
+| get_mempolicy_body_result | syscall239 Rust entry; accepted1d8 exact1017B linked Rust body; selected default policy consumer | Strict current9query/interval app5c4 +physical9223 |
+| vm_range_policy_search | C forwarding shimfe810940 jumps to named Rustbodyfe8b4350 in retained accepted1d8 | Same strict current interval/neighbors scope5c4 +physical9223 |
+
+Only missing final traversal fact was observed with two named-function objdumps,
+no build/guest/fixture replay or repeated artifact acceptance. Genuine finite
+review supersedes earlier pending-traversal finding only. One unit per compute
+body, no wrapper/callback/vector multiplication. Cfallbacks remain; live insert/
+clear-range C remains and whole NUMA/kernel/all-config retirement is unproven.
+Ledger now19selected/16applicable-native Rust paths; other totals unchanged:
+87sources(33OS54infra),30compiler,7native batches,29behaviors,21/35checks,fivewhole.
+Evidence: ../evidence/numa-allowed-mask-native-successor-20261021-1/
+two-named-numa-path-default-native-dedup-1.manifest.json.
+
+Regression preparation continues on accepted artifacts. Owned-fork activation
+needs matched host provider: accepted1d8 already configured diagnostic optionON;
+shared-tree missing option is not image proof. Acceptedmcctrl6571 lacks adoption
+provider; SDK66 fixed14GiB/modules target gate remains blocked, noresize. Duplicate
+private option parked. Independent Rust capacity now implements vm_policy_insert
+with existing RB callbacks/writer lock; source/test/default-link/native acceptance
+for that new insertion body remains pending. No source-gain claim from proposals.
+
 ## Current — strict NUMA application and physical retirement accepted
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
