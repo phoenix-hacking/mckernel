@@ -1,3 +1,38 @@
+## Current — literal M06-03 accepted; image precompiler pin failure retained
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Invocation20261021T011203Z-9cba0828 continues at100% included/zero reserve.
+Canonical checks21/35, five whole,28 native behaviors,Rust17production/14native.
+Independent e837922f accepts P-M06-03 only: loaded tested205 Rust syscall435
+locally rejects CLONE_IO before sys_clone; genuine app44B/exit0/empty stderr and
+physical471a join that declared unsupported case. HOST435 delivery is not expected
+on this local path. Original generic route FAIL/semantic3e92 remains preserved;
+positive worker-slot/complete-route-loss evidence is still open. No new native
+batch, behavior, whole-M06 or C-retirement credit. P-M06-01 remains open.
+Decision: ../evidence/m06-literal-unsupported-delta-adjudication-20261021-1.json.
+
+The four-overlay production-image attempt closed rc1 before compilation:
+outer2387939/start35010170 joined/group absent in94.074366s. Driver owned-fork
+validator retained old syscall.c and syscall_policy.rs pins; other11 pins match.
+Failure report77f94e89 preserves exact bytes and retained container881020...;
+full physical release is still pending the existing identity-bound terminal route.
+One packager owns a fresh two-pin-only successor and genuine whole-validator
+positive/stale refusal before any further heavy attempt. Frozen image stays on
+its accepted6959-entry source plus four overlays; no scheduler changes folded in.
+Exact closed status: settid-current-production-link-preparation-20261021-1/
+image-execution-preparation-1/actual-source-successor-1/actual-root-owner-1/status.json
+under /home/holden/mckernel-work/host-preparation/.
+
+Shared scheduler mutation/reference-retention union is integrated at8c0f9c3c:
+seven lifetime plus16 mutation actual-body cases accepted (23c21b59/5f9c6606),
+combined review07c68085. Separate current160-source six-stage compiler preparation
+is active with only two source overlays; runtime/link/default retirement remains
+unproved. Existing settid six-stage compiler remains one accepted batch24.
+SDK14159970304-byte admission remains capacity blocked; developer no-resize,
+Scratch21, mutex27:4, all floors/ownership/service controls remain unchanged.
+No CPU lease during source work. Next heavy owner needs fresh release and exact
+completion-status announcement after genuine current physical clearance.
+
 ## Current — six-stage settid compiler accepted; M06 witness work remains open
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

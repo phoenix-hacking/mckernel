@@ -1059,18 +1059,24 @@
         {
           "id": "P-M06-03",
           "description": "Unsupported optional operations fail clearly and safely.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/native-running-publication-independent-review-20261017-1.json",
               "sha256": "de20c89c2ed5c27d09a6f6b856b1d0f3f71cf5ad5480d359236bc1a5db39552f",
               "size": 1133
+            },
+            {
+              "path": "docs/verification/evidence/m06-literal-unsupported-delta-adjudication-20261021-1.json",
+              "sha256": "e837922fdf371288abe559efe9bd95e67cf2b150f676a47f4fb086be6a1d6a70",
+              "size": 28530
             }
           ],
-          "assessment_note": "Reviewed version/unsupported-path errors are narrow source/body evidence, not complete safe-error behavior for the final selected application profile."
+          "assessment_note": "Reviewed version/unsupported-path errors are narrow source/body evidence, not complete safe-error behavior for the final selected application profile.",
+          "literal_reassessment_note": "Independent e837922f accepts only the literal selected tested205/HOST66 unsupported CLONE_IO refusal. The genuine loaded ELF syscall435 dispatch and linked Rust early guard join the frozen app return frame: -1/errno95, exact44B stdout, exit0 and empty stderr; physical471a proves retirement. HOST435 delivery is not expected for this local early rejection. Original generic route-check FAIL/semantic3e92, complete-route-loss ambiguity and positive worker-slot witness remain unresolved and preserved. No exhaustive runtime absence, new native batch/behavior, whole-M06 or Rust/C-retirement credit."
         }
       ],
-      "current_evidence_summary": "Rust std proves overlapping worker lifetimes, joins/TLS/mutex counter2000. Deterministic blocking conelevention and process fork/exec/wait remain open."
+      "current_evidence_summary": "P-M06-02 and P-M06-03 literal checks complete on their declared evidence/profile. Selected application process creation/exec/wait P-M06-01 remains open; whole M06 remains open. Original M06 generic route-check failure remains failed separately from the scoped unsupported-operation literal decision."
     },
     {
       "id": "M07",
@@ -2269,6 +2275,24 @@
       "production_Rust_paths": 17,
       "native_Rust_paths": 14,
       "whole_M03": "open"
+    },
+    "m06_unsupported_literal_delta_20261021": {
+      "decision": {
+        "path": "docs/verification/evidence/m06-literal-unsupported-delta-adjudication-20261021-1.json",
+        "sha256": "e837922fdf371288abe559efe9bd95e67cf2b150f676a47f4fb086be6a1d6a70",
+        "size": 28530
+      },
+      "check_delta": {
+        "P-M06-03": "open -> complete"
+      },
+      "complete_checks": 21,
+      "whole_milestones": 5,
+      "native_behaviors": 28,
+      "production_rust_paths": 17,
+      "native_rust_paths": 14,
+      "new_native_batches": 0,
+      "original_generic_route_failure_preserved": true,
+      "remaining_whole_M06_gap": "P-M06-01 selected process creation/exec/wait"
     }
   }
 }
