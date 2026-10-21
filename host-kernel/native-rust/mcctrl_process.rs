@@ -1091,7 +1091,7 @@ impl Context {
     fn adopt_current_fork_v4(&self,descriptor:&[u8;24],compat:bool)->Result<isize> {
         let word=|at|u64::from_le_bytes(descriptor[at..at+8].try_into().unwrap());
         let (start,length,root)=if compat{let integer=|at|u32::from_le_bytes(descriptor[at..at+4].try_into().unwrap()) as u64;
-            (integer(0),integer(4),integer(8))}else{(word(0),word(8),word(16))};
+            (integer(4),integer(8),integer(0))}else{(word(8),word(16),word(0))};
         // Observation only: each stage precedes the existing fallible effect.
         // Unknown child_pid remains zero until the real child owner exists.
         let mut stage="geometry";let mut child_pid=0;

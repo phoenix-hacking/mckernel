@@ -475,8 +475,8 @@
       "id": "M03",
       "scope_id": "practical-kernel-apps-v1-20261017",
       "title": "Memory and mapping correctness",
-      "engineering_state": "partial",
-      "completion_status": "open",
+      "engineering_state": "complete",
+      "completion_status": "complete",
       "exit_condition": "Used mappings preserve data/access and prevent unsafe release or reuse.",
       "checks": [
         {
@@ -531,7 +531,7 @@
         {
           "id": "P-M03-02",
           "description": "Fix known failed-invalidation ownership gaps or safely disable optional affected operations.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
@@ -542,14 +542,19 @@
               "path": "docs/verification/evidence/practical-memory-protection-current942-independent-result-review-20261017-1.json",
               "sha256": "02bea8dd490489e56429cf7414bdc7a1186ad18a02abd406dd44afb9c9f40b7b",
               "size": 1001
+            },
+            {
+              "path": "docs/verification/evidence/m03-failed-invalidation-literal-delta-20261020-1/decision.json",
+              "sha256": "16b5ad6a21d29e45a087693c6bdd05c81cc3377f4ac57385bde1e93d2d7f9461",
+              "size": 10107
             }
           ],
-          "assessment_note": "No selected evidence closes failed-invalidation ownership gaps or demonstrates a safely disabled optional operation."
+          "assessment_note": "No selected evidence closes failed-invalidation ownership gaps or demonstrates a safely disabled optional operation. Independent16b5ad6a accepts this literal clause for exact repaired33e7 Rust/default-consumer/b9 SDK+8812 native module tuple. Six actual-source failure/cancel/reuse tests retain response/worker/Mirror ownership until exact success/publication; matching default module activation is source-bound. Native failed-MM branch execution is not claimed. Current enlarged shared mailbox is not silently treated as built by that old tuple."
         },
         {
           "id": "P-M03-03",
           "description": "Retain release ownership on failure.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
@@ -570,12 +575,34 @@
               "path": "docs/verification/evidence/practical-memory-protection-current942-independent-result-review-20261017-1.json",
               "sha256": "02bea8dd490489e56429cf7414bdc7a1186ad18a02abd406dd44afb9c9f40b7b",
               "size": 1001
+            },
+            {
+              "path": "docs/verification/evidence/m03-failed-invalidation-literal-delta-20261020-1/decision.json",
+              "sha256": "16b5ad6a21d29e45a087693c6bdd05c81cc3377f4ac57385bde1e93d2d7f9461",
+              "size": 10107
             }
           ],
-          "assessment_note": "Post-effect Shutdown8 and ownership-retained -11\u21920 application retirement are observed. This does not establish all required mapping/release failure ownership invariants."
+          "assessment_note": "Post-effect Shutdown8 and ownership-retained -11\u21920 application retirement are observed. This does not establish all required mapping/release failure ownership invariants. Independent16b5ad6a accepts this literal clause for exact repaired33e7 Rust/default-consumer/b9 SDK+8812 native module tuple. Six actual-source failure/cancel/reuse tests retain response/worker/Mirror ownership until exact success/publication; matching default module activation is source-bound. Native failed-MM branch execution is not claimed. Current enlarged shared mailbox is not silently treated as built by that old tuple."
         }
       ],
-      "current_evidence_summary": "Actual current942 allocation/map/protection/unmap app paths plus protected-write SIGSEGV/ACCERR/exactaddress and restored RW write now pass; final supported-candidate memory/ownership session remains open. Current3bfc zero-length anonymous mmap/EINVAL diagnostic passes independently; adds one distinct behavior only. Current tested205/HOST66 valid protection ebec5598 plus matching b7aa invalid-input/map/unmap evidence completes P-M03-01. Failed-invalidation and release-on-failure ownership obligations remain open."
+      "current_evidence_summary": "Independent34efa2a2 closes the prior5c175 HOST66 identity gap: frozen accepted HOST66 mailboxe937 retains the reviewed failure-retention body and caller guards/default CLEAR_DONE13 dispatch, bound through actualartifactb11c68ea to the same HOST66 modules as accepted tested205 mapping/data/access ebec5598+b7aa witnesses. Practical M03 exit complete for this declared used-mapping profile. Native failed-MM-error injection, automatic recovery, newfork/default activation and wholeOS acceptance remain unproved; no behavior/Rust-path or engineering-percentage uplift inferred.",
+      "exit_condition_evidence": {
+        "path": "docs/verification/evidence/m03-failed-invalidation-literal-delta-20261020-1/whole-m03-HOST66-additive-join-decision.json",
+        "sha256": "34efa2a25377d8cdfce11ffd7825570cc13a6ae3e31c9823d02657c8ea5df298",
+        "size": 16475
+      },
+      "assessment_history": [
+        {
+          "engineering_state": "partial",
+          "completion_status": "open",
+          "current_evidence_summary": "Actual current942 allocation/map/protection/unmap app paths plus protected-write SIGSEGV/ACCERR/exactaddress and restored RW write now pass; final supported-candidate memory/ownership session remains open. Current3bfc zero-length anonymous mmap/EINVAL diagnostic passes independently; adds one distinct behavior only. Current tested205/HOST66 valid protection ebec5598 plus matching b7aa invalid-input/map/unmap evidence completes P-M03-01. Failed-invalidation and release-on-failure ownership obligations remain open. Independent16b5ad6a supports both ownership literals for exact accepted b9 module tuple; all three literal checks complete. Separate5c175 whole-exit decision keeps M03 OPEN pending one HOST66 ownership source/default-consumer provenance join to the P01 mapping profile; existing HOST66 artifactb11 provenance is being inspected, no test replay required.",
+          "exit_condition_evidence": {
+            "path": "docs/verification/evidence/m03-failed-invalidation-literal-delta-20261020-1/whole-m03-exit-decision.json",
+            "sha256": "5c175919d480f3796fa7c1c29e21fee084521dfecbefb8ec7094812f04047700",
+            "size": 7299
+          }
+        }
+      ]
     },
     {
       "id": "M04",

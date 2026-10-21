@@ -1,3 +1,63 @@
+## Current manual resume — M06 normalization refusal preserved; Rust source work active
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Manual invocation20261021T011203Z-9cba0828 is running at100%included/zero reserve;
+prior service-stop evidence remains preserved. Accepted baseline20/35checks,
+wholeM00/M02/M03/M04/M10 (five),28nativebehaviors,Rust17production/14native.
+
+M06 stage independently accepted4b9591f1; actual64-byte clone_args v0 ELF,
+static app and unchanged62-member stage are reused. No restage/recompile.
+Normalization reviewd79883c5 permitted exact ordinary command with root's
+explicit>=1MiB extra scratch reserve. Actual command closedrc1 after1.0451s,
+pid2343407/start34330740 joined/groupabsent/streamsclosed; CPU6released.
+First refusal: historical protection.cpio.gz source pin outside readonly roots,
+prepare_native.py116. Preserve normalized manifest/dirs and original capture.
+Author and independent expert own one coupled current/historical path-coverage
+successor; no guest ran, no unchanged replay, no source pin/check removal.
+Evidence: /home/holden/mckernel-work/host-preparation/m06-clone3-io-native-preparation-20261020-1/normalization-resume-20261021-1/ROOT-ACTUAL-NORMALIZATION-CLOSED-1.json.
+
+PPD actual Cproducer/Rust body regression passedthreecases; independenta8a7034d
+accepted exactone-line decoder correction, integratedsource73989fa5.
+Native descriptor offsets8/16/0,compat4/8/0 preserve geometry/ownership/errno;
+fixture does not identify the unobserved native rejection stage. Retained source,
+original fixture correction and closed evidence imported to
+../evidence/ppd-actual-producer-decoder-correction-20261021-1/.
+Fresh66-source preparation independently accepted382c38d0:81copies,
+11runtimepins,currentrequest32f9938d; two metadata commands closed0.
+No compiler/native/default/ACK acceptance. FullSDK gate14159970304B remains
+blocked by capacity; developer noresize/delete and12/16GiB floors unchanged.
+
+Private liveguest settid Cbody→Rust equivalent is source-reviewed with no
+identified equivalence defect; exact12-case whole-C/Rust fixture preparation
+continues separately. No shared integration/test/native/C-retirement credit.
+Editing/review holds no CPU. Root owns Git/heavy/runtime grants; next executable
+M06 successor ordinary check precedes exact native bindings/freshLAST/release.
+
+## Current — practical M03 complete; PPD ABI reproducer active
+
+Independent34efa2a2 closes the exact HOST66 ownership/default-dispatch identity
+join. Accepted HOST66 mailboxe937 preserves reviewed failure-retention body and
+caller guards, bound through actualartifactb11c68ea to the same modules as P01
+used mapping/data/access witnesses. P-M03-02/P03 complete by16b5ad6a; wholeM03
+complete on this declared used-mapping profile. Prior5c175 open decision remains
+preserved and additively resolved. No native failed-MM-error hit, auto-recovery,
+newfork/default/ACK, wholeOS or percentage uplift is claimed.
+
+Ledger20/35; wholeM00/M02/M03/M04/M10 complete (five), nativebehaviors28,
+Rust17production/14native unchanged. M02 checkpointb2e80969 is pushed/fetched,
+all105 selected blobs verified; unrelated dirty WIP retained. NewM03 decisions
+are saved under evidence/m03-failed-invalidation-literal-delta-20261020-1/.
+
+Next implementation: private actual Cproducer/Rust CREATE_PPD decoder diagnostic
+is checking the exact rpgtable descriptor pointer/layout through the consumed
+bridge. A possible field-order mismatch is being tested, not asserted as the
+unobserved native failure stage. No fabricated runtime descriptor, native retry
+or speculative functional integration; actual-body regression plus independent
+ABI review precede any code integration. Source/artifact holds remain intact.
+One independent finite P-M06-03 optional-operation evidence decision is separate.
+SDK scratch gate remains10559488B short; no unchanged admission rechecks or
+resize/delete/bypass. CPU6/7 have no lease during model preparation/review.
+
 ## Current — practical M02 complete on tested205/HOST66; next ownership gap
 
 Independent3784b544 accepts P-M02-02 and the exact M02 exit on the declared

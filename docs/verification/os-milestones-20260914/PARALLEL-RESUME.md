@@ -9,6 +9,8 @@ handoff helper is needed: old watcher/worker/server are already retired.
 Preparing/previewing this script does not start inference. Automatic recovery
 never fabricates this manual authorization.
 
+OS/Rust work only; no security testing. See AGENTS.md.
+
 PRACTICAL-GOAL.md and practical-milestones.json define the current completion
 scope: a solid supported-profile kernel and useful application infrastructure,
 PLUS active McKernel compute-C retirement into Rust/reviewed assembly. Deferred

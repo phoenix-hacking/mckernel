@@ -1,0 +1,120 @@
+{
+  "status": "ROOT_INTEGRATION_GUIDANCE_TESTED_PRIVATE_CANDIDATE_INDEPENDENT_DECISION_PENDING",
+  "scope": "Functional supported-profile OS/apps plus live compute-C retirement into Rust/reviewed assembly; PPD descriptor field-order repair only",
+  "target_preimage": {
+    "path": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_process.rs",
+    "sha256": "546bb80299d2635683059357c388042db9f6317d437df2bf2ea12f1a1a01a8af",
+    "bytes": 49776
+  },
+  "candidate_postimage": {
+    "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/mcctrl_process.decoder-order-candidate.rs",
+    "sha256": "73989fa5a5507f8ac634600ce3cb1a920187386ff7b2d7502308f784d64f30cd",
+    "bytes": 49776
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/DECODER-ORDER-CANDIDATE.patch",
+    "sha256": "1d92fca800ce4dfca681633fd69b5a142571dbd9dbd96abb3ff6894fb7951e37",
+    "bytes": 793
+  },
+  "exact_guarded_change": {
+    "old": "(integer(0),integer(4),integer(8))}else{(word(0),word(8),word(16))}",
+    "new": "(integer(4),integer(8),integer(0))}else{(word(8),word(16),word(0))}",
+    "occurrences": 1,
+    "rule": "Root checks exact full preimage SHA, applies only this one-line tuple permutation, verifies exact candidate full postimage SHA and preserves every other byte. If source changed, stop for method-level reconciliation; never overwrite newer source with full saved candidate."
+  },
+  "ABI_effect": {
+    "LP64": "C descriptor bytes root0/start8/len16; returned semantic tuple(start,length,root) now reads offsets8/16/0 instead of0/8/16.",
+    "compat": "C uintptr_t source layout root0/start4/len8; semantic tuple now reads4/8/0 instead of0/4/8. Compat test is source-layout only, without actual i386 C producer execution.",
+    "unchanged": "User-copy sizes24/12, descriptor beginning, every geometry/identity/reservation/registration/provider/callback check, operation order, ownership and exact errno behavior; existing diagnostic stays intact."
+  },
+  "closed_verification": {
+    "root_reported_outer": 2288174,
+    "root_reported_owner_exit": 0,
+    "root_reported_wall_seconds": 0.37164,
+    "root_reported_CPU6_released": true,
+    "test_result": {
+      "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/capture-1/RESULT.json",
+      "sha256": "baf9f532d8c5e09ee19392266228592e0b9199ce2744e3c83d6f299b5e293933",
+      "bytes": 227
+    },
+    "test_stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/capture-1/test.stdout",
+      "sha256": "4993545e56b9fab34dc06f10cd216cc858b9567ba4e4de5041c4ab762db40979",
+      "bytes": 464
+    },
+    "positive_waits": [
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/capture-1/c-compile.wait.json",
+        "sha256": "bde9e3f41e62d0c9eb2e912978351ac6aa2db217c94626b39c3a53a705761e2b",
+        "bytes": 145
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/capture-1/rust-compile.wait.json",
+        "sha256": "bb8b8f12b0205d5bddc53f9feda3114149ac52b28caf21667891bf6747ce4ab3",
+        "bytes": 144
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/capture-1/test.wait.json",
+        "sha256": "fbe846a47d2766ce3b50b3abfbee56298d4cba4b5e038ef3a13379e672cf7e2d",
+        "bytes": 147
+      }
+    ],
+    "commands": [
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/capture-1/c-compile.command.json",
+        "sha256": "c46eb1111d0d1a8d4df9764afdccee970fc3134e0b2c29beed123412aa492aaf",
+        "bytes": 358
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/capture-1/rust-compile.command.json",
+        "sha256": "eeb7910b2f16f612c2fac8604a8f2873b8044f654ffff7f8ef99d67a341ae954",
+        "bytes": 595
+      },
+      {
+        "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/capture-1/test.command.json",
+        "sha256": "ebb0cb4104a40d2e7d4b713bd073110a0a450c4d1d430cc9689307eef631d1e1",
+        "bytes": 184
+      }
+    ],
+    "tests": "3 passed; exact complete C producer outputs retained root/start/length fixture bytes. Original actual Rust body permutation witnessed. Candidate LP64 success, six geometry refusals, provider -22 preservation, and source-only compat tuple pass."
+  },
+  "checkpoint_regression_sources": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/producer.c",
+      "sha256": "3a581a951a0d95c120827a030e6a566faf746455a1d3b9a5bb92b3858879e319",
+      "bytes": 4466
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/boundary.rs",
+      "sha256": "97a736c84938594c23f61e8e0f21dc8e2277d4757cd8aaa4490f5345d49e7c45",
+      "bytes": 16506
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/run-check-1.py",
+      "sha256": "7f753a1eceb0366ee19025a1ade5c1c99f41081cb1a0d1893ee74c65461df999",
+      "bytes": 4067
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/SOURCE-FREEZE.json",
+      "sha256": "d3191b772f522f6eb4a0689f7a62d6141a27abb607c81d1d35c388938b5d4dda",
+      "bytes": 1461
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/ORDINARY-CHECK-PROPOSAL.json",
+      "sha256": "86994c5cab07ca9d3500f77ff95a82816f490e1de5a6c4095957a9144ed439d0",
+      "bytes": 2136
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/PREEXECUTION-CORRECTION-RECEIPT.json",
+      "sha256": "a96ce8b2b784ea97b30d9c428a7c1905c2f4904de8be05d991e4a877b12ca81e",
+      "bytes": 1171
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/fixture-vaarg-correction-1/POINTER-BOUNDARY-SOURCE-PROOF.json",
+      "sha256": "b831f238e10009ef5f1167772a7e2782dcd39174c0fcc6fc6279b2130cf54ec4",
+      "bytes": 6386
+    }
+  ],
+  "preservation": "Original root-level producer.c/proposal/freeze remain untouched and record preexecution incompatible-va_arg finding. Corrected successor alone executed. Initial native failure and SDK capacity blocker remain preserved.",
+  "limits": "No shared integration/Git/extra execution performed by this worker. No full affected SDK/module compile or native success, no actual first-rejection-stage/native-cause claim, no new Rust-path retirement/ACK. Independent integration decision and root-owned acceptance required."
+}

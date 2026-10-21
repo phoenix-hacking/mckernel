@@ -1,5 +1,11 @@
 # Dispatcher entry point
 
+Current assignment scope (2026-10-21 UTC): functional McKernel OS/apps and
+Rust/assembly migration only; no security testing. Apply the current assignment
+scope in [AGENTS.md](../../../AGENTS.md) to every worker brief. Keep functional
+correctness and resource/ownership checks. This note does not resume the stopped
+campaign or clear its service-policy hold.
+
 Current user scope (2026-10-17): [PRACTICAL-GOAL.md](PRACTICAL-GOAL.md) and
 [practical-milestones.json](practical-milestones.json) replace comprehensive
 qualification as the active completion target. Read them after GOAL.md. Preserve

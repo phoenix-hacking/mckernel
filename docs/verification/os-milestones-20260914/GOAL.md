@@ -1,5 +1,11 @@
 # Autonomous McKernel goal
 
+Current assignment scope (2026-10-21 UTC): functional McKernel OS/apps and
+Rust/assembly migration only; no security testing. Apply the current assignment
+scope in [AGENTS.md](../../../AGENTS.md) to every worker brief. Keep functional
+correctness and resource/ownership checks. This note does not resume the stopped
+campaign or clear its service-policy hold.
+
 ## Current — FP file native accepted; literal M04-02 closed (2026-10-18 23:06 UTC)
 
 Continuous functional OS/apps plus Rust/reviewed-assembly migration remains active.

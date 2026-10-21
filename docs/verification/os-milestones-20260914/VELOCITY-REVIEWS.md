@@ -6685,3 +6685,16 @@ Accepted16/35 checks,3whole,28native,Rust17/14 held. Interval+2reviewedsourcecha
 ## Review 125 — 2026-10-20T21:57:57.856774+00:00
 
 Counters hold at16/35 checks,3whole,28native,Rust17/14. Interval: one reviewed loader correction, one actual M02 owner observation, no accepted closure gain. Catalogue62 sources(24 OS/38 infrastructure),23 compiler,5 accepted native. The actual40-second owner closed rc1 in42.644926s after same-operation LAST/machine/guard. Closed-owner9582204d permits two preliminary reads only; physical retirement and actual expiry classification remain pending. Source fixture51be and genuine productionc925 are accepted; no repeated preparation is needed. Optional six helper cases accepted but Python3.8 AST observer unpassed; correction is source-only and subordinate. SDK capacity and M07 uniform-PKE proof blockers persist. Next review 2026-10-20T22:27:57.856774+00:00. Full record /home/holden/mckernel-work/host-preparation/manual-reset-resume-20261020T033358Z/REVIEW125.json.
+
+
+## Review 126 — 2026-10-20T22:28:53.058273+00:00
+
+Accepted20/35 checks,5whole(M00/M02/M03/M04/M10),28native,Rust17/14. Interval +4checks,+2whole,+2reviewedsourcechanges; no compiler/native/Rustpath gain. Catalogue64sources(25OS/apps,39infrastructure),23compiler,5acceptednative. Last90minutes5sources(2OS,3infrastructure),0acceptednative. M02 capture/stale-source refusal and M03 same-HOST66 ownership join close declared practical scopes without new runtime credit. Actual C/Rust PPD regression passed3tests in0.37s; exact Rust tuple correction independently approved a8a7034d and reported integrated. Full module/native cause unproved. Existing-image clone3 refusal case is preparing independently for P-M06-03. SDK capacity and higher-priority no-resize restriction persist; M07 execution parked. Next review 2026-10-20T22:58:53.058273+00:00. Full record: /home/holden/mckernel-work/host-preparation/manual-reset-resume-20261020T033358Z/REVIEW126.json.
+
+
+Service hold2026-10-20T22:34:18Z:cyberPolicy,remote goalblocked,no automaticretry. M06stageclosedbeforestop,18.1643s/twoexit0,independentacceptancepending. Accepted20/35checks,5whole,28native,Rust17/14unchanged. Livewatcher/worker/serverabsent;twochildgroupsabsent293procscan. Handoff /home/holden/mckernel-work/host-preparation/manual-reset-resume-20261020T033358Z/SERVICE-HOLD-HANDOFF-20261020T2234Z.md.
+
+
+## Review127 — 2026-10-21T01:13:48.043425+00:00
+
+Explicit manual restart confirmed existing thread running/active,worker2338306/server2338308/watcher2338302,newturnaccepted,notfreshsession. Counts20/35checks,5whole,28native,Rust17/14 unchanged. Resume velocity baseline resets01:12:03UTC; downtime excluded. Local duplicate startup scope note shortened to8186B under existing8192B bound. M06stagealreadyclosed; independentacceptance first,no unchanged replay. FunctionalOS/Rustonly,no securitytesting. Nextreview 2026-10-21T01:43:48.043425+00:00. Fullrecord /home/holden/mckernel-work/host-preparation/manual-reset-resume-20261020T033358Z/REVIEW127.json.

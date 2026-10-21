@@ -1,0 +1,114 @@
+{
+  "status": "SOURCE_BOUNDARY_CONFIRMED_TEST_PENDING",
+  "graph": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/materialized-source/executer/include/uprotocol.h",
+      "sha256": "1770a59cf4486380eb5aa483d3634dc1e4c9c9c16d1bf09865d4ff8f71191e69",
+      "lines": [
+        292,
+        296
+      ],
+      "exact_lines": [
+        "292: struct rpgtable_desc {",
+        "293: \tuintptr_t rpgtable;",
+        "294: \tuintptr_t start;",
+        "295: \tuintptr_t len;",
+        "296: };"
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/phase5-current-consumer-compiler-preparation-20261020-1/real-mcexec-producer-1/kernel-version-correction-1/materialized-source/executer/user/mcexec.c",
+      "sha256": "310301305e41bab4eda63026849ee6f166bb6e5d4d6f2c789aa8003e94745056",
+      "lines": [
+        5934,
+        5943
+      ],
+      "exact_lines": [
+        "5934: \trpt.start = w->sr.args[1];",
+        "5935: \trpt.len = w->sr.args[2];",
+        "5936: \trpt.rpgtable = w->sr.args[3];",
+        "5937: \tif (ioctl(fd, MCEXEC_UP_CREATE_PPD, &rpt)) {",
+        "5938: \t\tfs->status = -errno;",
+        "5939: \t\tfprintf(stderr, \"ERROR: creating PPD %s\\n\", dev);",
+        "5940: \t\tgoto fork_child_sync_pipe;",
+        "5941: \t}",
+        "5942: ",
+        "5943: \tinit_sigaction();"
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/mcctrl.rs",
+      "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      "lines": [
+        89,
+        104
+      ],
+      "exact_lines": [
+        "89: unsafe extern \"C\" fn ioctl(context: *mut c_void, command: u32, argument: u64, compat: u32) -> i64 {",
+        "90:     if compat > 1 || (compat == 1 && argument > u32::MAX as u64) {",
+        "91:         return EINVAL.to_errno() as i64;",
+        "92:     }",
+        "93:     // SAFETY: Successful open supplied this object and its interior locks,",
+        "94:     // live until final close and shared safely by concurrent ioctl borrows.",
+        "95:     let context = unsafe { &*context.cast::<FileContext>() };",
+        "96:     let operation = match command {",
+        "97:         abi::MCEXEC_UP_GET_CREDV => Some(mcctrl_exec::credentials(argument as usize)),",
+        "98:         abi::MCEXEC_UP_STRNCPY_FROM_USER => {",
+        "99:             Some(mcctrl_exec::copy_string(argument as usize, compat == 1))",
+        "100:         }",
+        "101:         abi::MCEXEC_UP_OPEN_EXEC => Some(context.open_executable(argument as usize)),",
+        "102:         abi::MCEXEC_UP_CLOSE_EXEC => Some(context.close_executable()),",
+        "103:         abi::MCEXEC_UP_CREATE_PPD => Some(context.create_process(argument as usize, compat == 1)),",
+        "104:         abi::MCEXEC_UP_PREPARE_IMAGE => Some(context.prepare_image(argument as usize, compat == 1)),"
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_process.rs",
+      "sha256": "546bb80299d2635683059357c388042db9f6317d437df2bf2ea12f1a1a01a8af",
+      "lines": [
+        1091,
+        1103
+      ],
+      "exact_lines": [
+        "1091:     fn adopt_current_fork_v4(&self,descriptor:&[u8;24],compat:bool)->Result<isize> {",
+        "1092:         let word=|at|u64::from_le_bytes(descriptor[at..at+8].try_into().unwrap());",
+        "1093:         let (start,length,root)=if compat{let integer=|at|u32::from_le_bytes(descriptor[at..at+4].try_into().unwrap()) as u64;",
+        "1094:             (integer(0),integer(4),integer(8))}else{(word(0),word(8),word(16))};",
+        "1095:         // Observation only: each stage precedes the existing fallible effect.",
+        "1096:         // Unknown child_pid remains zero until the real child owner exists.",
+        "1097:         let mut stage=\"geometry\";let mut child_pid=0;",
+        "1098:         let result=(||->Result<isize>{",
+        "1099:             let end=start.checked_add(length).ok_or(EINVAL)?;",
+        "1100:             if root==0||root%4096!=0||start%4096!=0||length==0||length%4096!=0{return Err(EINVAL);}",
+        "1101:             stage=\"process\";let process=self.process()?;",
+        "1102:             stage=\"current-identity\";let current=ProcessId::current()?;",
+        "1103:             if !process.pid.same(&current){return Err(EACCES);}"
+      ]
+    },
+    {
+      "path": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_process.rs",
+      "sha256": "546bb80299d2635683059357c388042db9f6317d437df2bf2ea12f1a1a01a8af",
+      "lines": [
+        1131,
+        1143
+      ],
+      "exact_lines": [
+        "1131:     pub(super) fn create_process(&self, argument: usize, compat: bool) -> Result<isize> {",
+        "1132:         if argument != 0 {",
+        "1133:             // Legacy non-null CREATE_PPD also clears Linux mirror VMAs after",
+        "1134:             // fork. Preserve real user-copy failures, but do not claim that VM",
+        "1135:             // operation until its adapter exists. No registration is published.",
+        "1136:             let mut descriptor = [0u8; 24];",
+        "1137:             let bytes = if compat { 12 } else { 24 };",
+        "1138:             UserSlice::new(argument, bytes)",
+        "1139:                 .reader()",
+        "1140:                 .read_slice(&mut descriptor[..bytes])?;",
+        "1141:             if CURRENT_FORK_ADOPTION_ENABLED {return self.adopt_current_fork_v4(&descriptor,compat);}",
+        "1142:             return Err(kernel::error::to_result(-95).unwrap_err());",
+        "1143:         }"
+      ]
+    }
+  ],
+  "conclusion": "LP64 actual C &rpt starts at root offset0, start8, length16. Rust dispatch forwards numeric argument unchanged; UserSlice copies exact argument24 bytes to descriptor0..24; adopter receives descriptor beginning unchanged. Current decoder mistakenly names fields start0,length8,root16. Private candidate start8,length16,root0.",
+  "limits": "No actual device/ioctl/UserSlice/SDK/native execution in proposed fixture; copying24 bytes at intercepted exact producer ioctl pointer is an explicit userspace boundary adapter. Host ioctl service forwarding is source-bound, not executed by fixture. Native first rejection stage and descriptor remain unobserved."
+}

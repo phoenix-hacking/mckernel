@@ -1,5 +1,11 @@
 # Practical kernel and application goal
 
+Current assignment scope (2026-10-21 UTC): functional McKernel OS/apps and
+Rust/assembly migration only; no security testing. Apply the current assignment
+scope in [AGENTS.md](../../../AGENTS.md) to every worker brief. Keep functional
+correctness and resource/ownership checks. This note does not resume the stopped
+campaign or clear its service-policy hold.
+
 ## Active Rust cutover priority — user instruction 2026-10-18
 
 Functional delivery and retiring live McKernel compute C into Rust plus reviewed

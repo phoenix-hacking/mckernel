@@ -1,0 +1,25 @@
+{
+  "status": "PREEXECUTION_FIXTURE_ONLY_SOURCE_CORRECTION_NOT_EXECUTED",
+  "review_finding": "Actual variadic argument is struct rpgtable_desc *; reading const void * with va_arg is incompatible.",
+  "predecessor_source_freeze": {
+    "path": "/home/holden/mckernel-work/host-preparation/ppd-actual-producer-consumer-boundary-20261020-1/SOURCE-FREEZE.json",
+    "sha256": "14e113c7ac874468854dc24e7b4ee95def2483e34cfe136c71c7e81a977588c0"
+  },
+  "original_C_sha256": "c8cdca9e9c853e9107e8945a3c9c3e70c6f12f7a86876e1798c42f3759e340d6",
+  "corrected_C_sha256": "3a581a951a0d95c120827a030e6a566faf746455a1d3b9a5bb92b3858879e319",
+  "exact_change": {
+    "from": "const void *p=va_arg(ap,const void *);",
+    "to": "struct rpgtable_desc *p=va_arg(ap,struct rpgtable_desc *);"
+  },
+  "unchanged": [
+    "Complete actual C mcexec_clone_child_bridge body",
+    "Exact C producer/header structs and pointer proof",
+    "boundary.rs actual Rust methods and adapters",
+    "Private Rust tuple-only candidate and patch",
+    "run-check-1.py execution/resource guards"
+  ],
+  "execution_count": 0,
+  "cpu_lease": false,
+  "native_i386_proof": false,
+  "native_cause_claim": false
+}

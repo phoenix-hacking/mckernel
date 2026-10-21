@@ -1,5 +1,11 @@
 # Convergent execution policy
 
+Current assignment scope (2026-10-21 UTC): functional McKernel OS/apps and
+Rust/assembly migration only; no security testing. Apply the current assignment
+scope in [AGENTS.md](../../../AGENTS.md) to every worker brief. Keep functional
+correctness and resource/ownership checks. This note does not resume the stopped
+campaign or clear its service-policy hold.
+
 Preparation on 2026-09-27 leaves the campaign stopped. A later normal launcher
 invocation is explicit authorization to resume; this preparation hold does not
 stop that invocation. Full dedicated-computer scheduling supersedes older
@@ -70,9 +76,9 @@ evidence; they do not change acceptance, execution releases or resource limits.
 
 The user's current priority is a functional, stable McKernel core quickly, with
 real diagnostic application execution before perfect formal verification.
-The 2026-10-17 clarification is to get the OS functioning first. Defer optional
-security audits, threat modeling, hardening and security-report writing that do
-not unblock the working image or useful applications. Prioritize concrete OS
+The current clarification is to get the OS functioning first. Security testing
+is outside this task, including security audits, threat modeling, unrelated
+hardening and security-report projects. Prioritize concrete OS
 correctness failures and executable fixes. Keep required host isolation,
 ownership checks and platform safeguards; this scheduling priority does not
 disable service-side policy or grant acceptance for unrun qualification.

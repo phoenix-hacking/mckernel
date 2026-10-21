@@ -2,6 +2,20 @@
 
 Updated: 2026-06-02
 
+## Current assignment scope — no security testing (2026-10-21 UTC)
+
+Every dispatcher and worker assignment must state: "Functional McKernel OS/apps
+and Rust/assembly migration only; no security testing."
+
+Do not assign or run penetration tests, vulnerability scans, exploit development,
+attack simulation, security-oriented fuzzing or security audits. Defer threat
+modeling, unrelated hardening and security-report projects. Concentrate on kernel
+implementation, reproducible builds, booting, useful application execution,
+functional regression tests and retirement of compute C into Rust/reviewed
+assembly. Keep functional memory, ownership, lifecycle and resource checks.
+Do not relabel security work as functional testing. This scope instruction does
+not clear a service-policy hold, authorize automatic retries or start a campaign.
+
 ## Current user priority — functional OS (2026-10-17)
 
 Build the working kernel and application infrastructure defined by

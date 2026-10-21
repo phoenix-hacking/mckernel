@@ -1,0 +1,82 @@
+{
+  "schema": "mckernel.whole-M03-practical-exit-adjudication.v1",
+  "reviewed_at": "2026-10-20T22:17:10.760652+00:00",
+  "reviewer": "/root/m03_failed_invalidation_literal_delta",
+  "functional_scope": "Functional supported-profile kernel/apps PLUS live compute-C retirement into Rust/reviewed assembly. Only literal M03 exit adjudicated; no final-delivery, broad Rust-conversion, fault-injection quota or unrelated gate added.",
+  "milestone": "M03",
+  "exit_condition": "Used mappings preserve data/access and prevent unsafe release or reuse.",
+  "recommendation": "OPEN_PRECISE_OWNERSHIP_SOURCE_TO_USED_MAPPING_TUPLE_JOIN_UNBOUND",
+  "assessment": "Used-map data/access behavior is accepted on tested205/HOST66, and the known negative-invalidation unsafe-release bug is repaired/tested and accepted in a different frozen SDK/module tuple. The selected references do not bind that repair and its caller retention contracts into the exact HOST66 modules used for the mapping witnesses. Therefore the whole exit is not yet established for one supported tuple. This is an evidence identity gap, not a newly established code defect and not a demand to repeat passing operations.",
+  "exit_parts": [
+    {
+      "part": "Used mappings preserve data/access",
+      "assessment": "SATISFIED_ON_TESTED205_HOST66",
+      "evidence": "ebec5598 + b7aa10fc: mmap/RW data, real RO write SIGSEGV/SEGV_ACCERR at exacttarget with unchanged byte, RW restore/write, checked unmap; unaligned mprotect EINVAL preserves8192bytes/access. Exact strictoutputs61B/73B, emptyerr/exit0, real retirement and physical acceptance."
+    },
+    {
+      "part": "Prevent unsafe release or reuse",
+      "assessment": "SATISFIED_FOR_REVIEWED33E7_B9_TUPLE_BUT_NOT_BOUND_TO_HOST66_IN_SELECTED_REFERENCES",
+      "evidence": "Independent repair review + six actual-body cases retain exact reservation/response, block reuse/cancellation publication on failure and release once only after exact successful clear/publication. b9ea artifacts/defaultconsumer/ABI + native8812/a03e bind repaired33e7 to the older frozen three-module set. Native failed-MM branch hit remains unclaimed."
+    }
+  ],
+  "used_mapping_tuple": {
+    "mckernel_image_sha256": "ff4fca457e9ffe50dc4eca930c5f91faf317eeee15bf0c2907067cffa77b23bb",
+    "modules": {
+      "ihk": "daced2910f2391f15f1963399838c5089ef7ac6be8f6614db88ff8443c48900c",
+      "ihk-smp-x86_64": "c6a9db8eaa2ec5f7898b021b6835d20e4359a5f4a1209b5b28fd9559cd03387f",
+      "mcctrl": "4e2f1e5b11cad8a9fbfaca4ae6671a2f3fa16ef3c8c651357506d93c7edf4fa9"
+    },
+    "mcexec_sha256": "ee1f660b6c181bb2301bcde8b30c109659f74d52b30407fa6f273d27c02d073b",
+    "accepted_valid_and_invalid_inputs_exact_tuple_match": true
+  },
+  "accepted_ownership_tuple": {
+    "source_commit": "36a475ef",
+    "accepted_mailbox_source_sha256": "33e7b92712ca90fdc2b88cff234ad2a981f3538fbd38fc705dfc2cde937a7378",
+    "sdk_source_candidate_commit": "257ba169b58eebd066281020999ec760bfc2f4e0",
+    "sdk_authority_row": "ACTUAL-SOURCE-AUTHORITY-INPUTS.json/full60/rows/32: repaired source equals parent_source_sha256 and actual consumed sha256; baseline4118de",
+    "artifact_review_sha256": "b9ea18d03dde21fc3b6f958647358081d9a5f249779b10628e9361f4926e5005",
+    "default_consumer_route": "application_abi::CLEAR_DONE -> service Application::clear_syscall(finish=true) -> Entry.syscalls.finish_invalidation; emitted actual default clear_syscall is present, full SDK strict dependencies accepted",
+    "abi_review_sha256": "5d31c1f057127cf4c9fc076f3dc6c675ea4dc11ce4cef69889aab787135bd88c",
+    "module_manifest_sha256": "e3d8c75acf0e691386415590a6982868bc868b898ae6f1a781e3d1f6081b0e56",
+    "modules": {
+      "ihk": "c396958bfdb0f22036b469ea2a64e0a6b188b9619ee4105c7879483bb3b9790d",
+      "ihk-smp-x86_64": "af234fbcd09327a80e12396eebbfbcd30838f88a552fa13ba00a2728a761eeaa",
+      "mcctrl": "6571ac7eca13559d8bab65125d54facbbc65e84f815d4ff3fc77ec6aa1104972"
+    },
+    "native_semantic_review_sha256": "88121b1525ab00f09ae63172544fe78d22369fa41e05b9e81ce4ef0fa8717e61",
+    "native_physical_review_sha256": "a03e987a278d06246f33be78672281d3599e7b5e262ef82a7a391df75d575f60",
+    "activation_observation": "All three matched modules loaded; one actual typed AVX PID255/CPU0 application exact380B/empty stderr/exit0; complete physical retirement independently accepted. No failed-MM branch hit is inferred."
+  },
+  "precise_remaining_gap": "Existing selected reviews do not identify the mailbox source/body and its release-gating caller contracts consumed by HOST66 module c6a9db8e/mcctrl4e2f1e5b, nor establish semantic equivalence to reviewed33e7 and retained original callers. Equal functionality or current source HEAD cannot substitute for this binding. Different hashes alone prove neither regression nor incompatibility.",
+  "shortest_next_observation": {
+    "kind": "Read existing HOST66 accepted full-SDK artifact/default-consumer source provenance; no guest or rebuild inherently needed.",
+    "required_result": "Bind exact HOST66 modules daced291/c6a9db8e/4e2f1e5b to reviewed finish_invalidation33e7 (or exact unchanged function body bdd53415) and unchanged/equivalently reviewed Entry cleanup/HostWorker/Mirror lifetime retention caller contracts. If existing HOST66 review already supplies this, cite it and adjudicate the same exit using existing accepted data/access and six-case failure ownership evidence.",
+    "if_changed": "Name only the differing ownership transition and execute/review the bounded existing actual-source ownership regression under its reviewed profile if necessary; do not repeat P01 or demand an unrelated native-MM fault injection for these literal clauses.",
+    "no_current_source_build_assumption": true
+  },
+  "limits": [
+    "Three satisfied clause assessments on different artifact sets do not automatically prove a whole integrated exit.",
+    "P-M03-01 remains accepted and is not reopened.",
+    "P-M03-02/P-M03-03 previous bounded b9-tuple recommendations remain unchanged.",
+    "No native failed-MM-error proof or automatic recovery is inferred from normal app success.",
+    "No whole latest38e source build or HOST66 ownership source acceptance is invented.",
+    "No new source inspection, test, build, root action, guest execution, bulk hash or shared edit was performed in this extension."
+  ],
+  "references": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m03-failed-invalidation-literal-delta-20261020-1/decision.json",
+      "sha256": "16b5ad6a21d29e45a087693c6bdd05c81cc3377f4ac57385bde1e93d2d7f9461"
+    },
+    {
+      "path": "docs/verification/evidence/m03-q6-native-runtime-checkpoint-20261020-1/sources/phase5-m03-native-app-binding-independent-review-20261020-1/ACTUAL-M03-PROTECTION-GRACE-NATIVE-SEMANTIC-AND-LITERAL-P-M03-01-REVIEW.json",
+      "sha256": "ebec559801d70a62a7ecab1f2c8c4c1e281457c8c3ab47a81b542890bdbc65b8"
+    },
+    {
+      "path": "docs/verification/evidence/m03-authenticated-handshake-native-runtime-20261020-1/independent-review/ACTUAL-M03-AUTHENTICATED-HANDSHAKE-UNALIGNED-MPROTECT-NATIVE-SLICE-SEMANTIC-REVIEW.json",
+      "sha256": "b7aa10fca87703fd94ae60d9f26e728514c8f15d8341e515a87a2ce1a2ef5058"
+    }
+  ],
+  "new_code_defect_established": false,
+  "runtime_authority": false,
+  "shared_edits": false
+}
