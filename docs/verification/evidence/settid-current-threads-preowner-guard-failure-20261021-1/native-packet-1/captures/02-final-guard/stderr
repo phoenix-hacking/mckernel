@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/settid-current-image-native-app-preparation-20261021-1/runtime-preparation-1/whole-caller-path-correction-1/native-packet-1/review_final_threads_release.py", line 107, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+  File "/home/holden/mckernel-work/host-preparation/settid-current-image-native-app-preparation-20261021-1/runtime-preparation-1/whole-caller-path-correction-1/native-packet-1/review_final_threads_release.py", line 73, in main
+    _,ref,_=read(row['path'],row['sha256']) if row['path'].endswith('.json') else read_source(row)
+  File "/home/holden/mckernel-work/host-preparation/settid-current-image-native-app-preparation-20261021-1/runtime-preparation-1/whole-caller-path-correction-1/native-packet-1/review_final_threads_release.py", line 103, in read_source
+    need(stat.S_ISREG(a.st_mode) and a.st_nlink==1 and all(getattr(a,k)==getattr(b,k)==getattr(c,k) for k in STABLE),'stable runtime source')
+  File "/home/holden/mckernel-work/host-preparation/settid-current-image-native-app-preparation-20261021-1/runtime-preparation-1/whole-caller-path-correction-1/native-packet-1/review_final_threads_release.py", line 12, in need
+    if not ok:raise ValueError(label)
+ValueError: stable runtime source

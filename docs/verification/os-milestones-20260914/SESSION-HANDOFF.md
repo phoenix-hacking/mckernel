@@ -1,3 +1,27 @@
+## Current — final guard source-identity refusal; native not launched
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Corrected13case owner/readback fixture6a46 and canonical19f5ce accepted. Source28
+4ee3a5b3/finalcontrols31 at9bbbef32 fetched; actual static+terminal joins passed
+0.672522s. Exact conditional root7 review427e2122 granted fresh execution.
+Actual outer2460602/start36030477 closed1 in1.070807s: LAST0/assembly0/finalguard1;
+native owner NOT launched, no03 status. All outer groups/streams closed. Original
+controls/expired snapshot/machine release and captures remain immutable under
+whole-caller-path-correction-1/actual-root-controller-capture-1 and native-packet-1/.
+
+First genuine failure: finalguard read_source line103 hardcodes nlink1; canonical
+runner25ea29f9 is stable regular nlink2, as are backendcd075/qmp5bcc. Expert sdk66
+confirms owner9084/strictloader impose no nlink1 contract. Next single bounded
+successor binds explicit full nine-field identities/exactlinkcounts for selected
+actual executed sources, preserving paths/hashes/bytes and stableFD checks; no
+unlink/privatecopy/source mutation/broad link allowance. Authorguest_settid owns
+private guard/DATA/caller correction; reviewer sdk66 owns expertdisposition.
+Require actual full source-loop positive plus wrongFD/hash/mode/link refusals
+before another fresh root chain; no old release/partial resume. Physicalc7/ACK7885
+still latest; no heavy operation or CPUlease live. NUMA stays after threadnative.
+Review136 counters77source(30OS/47infra),26builds,21/35,fivewhole,28native,Rust17/14
+remain; current failures/fixtures earn no native or C-retirement credit.
+
 ## Current — readback-path correction before threads native
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

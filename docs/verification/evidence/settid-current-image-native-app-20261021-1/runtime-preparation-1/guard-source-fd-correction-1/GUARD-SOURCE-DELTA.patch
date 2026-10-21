@@ -1,0 +1,51 @@
+--- /home/holden/mckernel-work/host-preparation/settid-current-image-native-app-preparation-20261021-1/runtime-preparation-1/whole-caller-path-correction-1/native-packet-1/review_final_threads_release.py
++++ /home/holden/mckernel-work/host-preparation/settid-current-image-native-app-preparation-20261021-1/runtime-preparation-1/guard-source-fd-correction-1/native-packet-1/review_final_threads_release.py
+@@ -69,9 +69,7 @@
+  need(launch[launch.index('--manifest')+1]==cfg['manifest']['path'] and launch[launch.index('--manifest-sha256')+1]==cfg['manifest']['sha256'],'actual stage CLI pin')
+  # Preclock config holds the actual source closure. Recheck the few runtime
+  # source bytes only, never the full historical source/artifact authority.
+- for row in cfg['runtime_source_refs']:
+-  _,ref,_=read(row['path'],row['sha256']) if row['path'].endswith('.json') else read_source(row)
+-  need(ref==row,'current runtime source bytes')
++ check_runtime_sources(cfg)
+  age=fresh(snapshot)
+  report=dict(schema='mckernel.independent-current-host-pair205-exact-native-release-review.v1',
+   status='PASS_EXACT_MATCHED_SDK_205_TWO_CPU_DIAGNOSTIC_NATIVE_RELEASE',
+@@ -96,12 +94,32 @@
+  def __enter__(self):return self.fd
+  def __exit__(self,*args):os.close(self.fd)
+ 
+-def read_source(row):
++def check_runtime_sources(cfg):
++ rows=cfg['runtime_source_refs'];need(type(rows) is list,'mandatory runtime source rows')
++ selected={row['path'] for row in rows if not row['path'].endswith('.json')}
++ need('runtime_source_fd_identity_map' in cfg,'mandatory runtime source FD map descriptor')
++ descriptor=cfg['runtime_source_fd_identity_map']
++ need(type(descriptor) is dict and set(descriptor)=={'path','sha256','bytes'},'whole runtime source FD map descriptor')
++ pinned,pinref,_=read(descriptor['path'],descriptor['sha256'])
++ need(pinref==descriptor and pinned['schema']=='mckernel.current-native.selected-runtime-source-full-fd-identities.v1','exact runtime source FD map bytes/schema')
++ identities=pinned['identities']
++ need(type(identities) is dict and set(identities)==selected,'exact selected runtime source FD map set')
++ for identity in identities.values():
++  need(type(identity) is dict and set(identity)==set(STABLE) and all(type(identity[k]) is int for k in STABLE) and identity['st_nlink'] in (1,2),'complete exact selected source FD pin')
++ for row in rows:
++  _,actual,_=read(row['path'],row['sha256']) if row['path'].endswith('.json') else read_source(row,identities[row['path']])
++  need(actual==row,'current runtime source bytes')
++ return len(rows)
++
++def read_source(row,expected_identity):
+  path=Path(row['path']);need(path.resolve()==path,'canonical source')
+- with path.open('rb') as f:
+-  a=os.fstat(f.fileno());raw=f.read(1024**2+1);b=os.fstat(f.fileno());c=path.lstat()
+-  need(stat.S_ISREG(a.st_mode) and a.st_nlink==1 and all(getattr(a,k)==getattr(b,k)==getattr(c,k) for k in STABLE),'stable runtime source')
+- need(len(raw)<=1024**2 and hashlib.sha256(raw).hexdigest()==row['sha256'],'runtime source hash')
++ need(type(expected_identity) is dict and set(expected_identity)==set(STABLE) and all(type(expected_identity[k]) is int for k in STABLE) and expected_identity['st_nlink'] in (1,2),'mandatory complete exact source FD pin')
++ fd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC)
++ with os.fdopen(fd,'rb') as f:
++  a=os.fstat(f.fileno());need(stat.S_ISREG(a.st_mode) and {k:getattr(a,k) for k in STABLE}==expected_identity,'exact selected source FD identity')
++  raw=f.read(1024**2+1);b=os.fstat(f.fileno());c=path.lstat()
++  need(all(getattr(a,k)==getattr(b,k)==getattr(c,k)==expected_identity[k] for k in STABLE),'stable runtime source and exact FD pin')
++ need(len(raw)<=1024**2 and len(raw)==row['bytes'] and hashlib.sha256(raw).hexdigest()==row['sha256'],'runtime source hash/bytes')
+  return None,dict(path=str(path),sha256=row['sha256'],bytes=len(raw)),a
+ 
+ if __name__=='__main__':raise SystemExit(main())
