@@ -1,3 +1,33 @@
+## Current — six-launch actual static acceptance; exact native release next
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Accepted stage e2bf4c96 and actual normalization83137acd are complete. Normalization
+closed0/1.167050s with exact nine-field integer identities, full58-source FD closure,
+76 consumed paths/25 read-only roots and unchanged strict six-launch contract.
+Actual whole caller closed0/.465226s (three positive cases). First final generation
+refused before guest execution because equivalent stage ancestry used mismatched
+descriptor shapes; original failure/captures remain retained. The bounded correction
+uses the genuine full descriptor and a fresh packet namespace, preserving strict
+identity equality. Corrected final generation/full static joins closed0/.315323s,
+independently accepted92f85105; final19 packet50eb2386 is immutable. No replay of
+accepted stage, normalization, terminal or whole checks is needed.
+
+Next: fetched publication of13 exact consumed source aliases, genuine fresh exclusive
+grant and independent exact seven-step execution release, then fresh LAST snapshot
+and the existing six-launch regression. Pair3/two McKernel CPUs, strict387/254-byte
+outputs, empty stderr and exit0 remain. No native result or throughput claim yet.
+Quiesce ordinary source work before census; stable CPU0 monitor2590193/start37928121
+remains acknowledged subject to fresh observation. One heavy/floors16/12GiB plus
+679477248-byte reserve, noresize and all original failures remain.
+
+Rust insertion production source materialization independently acceptedc50c5111:
+6911 regular files/49 symlinks with actual config.h, source manifest a8e6ae88.
+Finite four-object request join closed0/.064538s. Compiler execution remains queued
+behind this regression and needs its own exact release/current physical binding.
+No new production link/native insertion credit. Source catalogue89(34OS55infra),
+compiler30/native7/behaviors29,21/35checks/fivewhole,Rust19/16 unchanged.
+VM termination alone never establishes full public lifecycle restoration.
+
 ## Current — Rust insertion source accepted; existing six-launch stage accepted
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
