@@ -1,0 +1,94 @@
+{
+  "already_captured_checks": [
+    {
+      "argv_shapes": [
+        [
+          "bound_readelf",
+          "-h",
+          "ACTUAL_BUILD/kernel/mckernel.img"
+        ],
+        [
+          "bound_nm",
+          "-n",
+          "ACTUAL_BUILD/kernel/mckernel.img"
+        ],
+        [
+          "bound_nm",
+          "-n",
+          "ACTUAL_BUILD/kernel/rust/mckernel_rust.o"
+        ]
+      ],
+      "function": "_validate_image",
+      "saved_members": [
+        "elf-header.txt",
+        "symbols.txt",
+        "rust-object-symbols.txt"
+      ]
+    },
+    {
+      "argv_shapes": [
+        [
+          "bound_nm",
+          "-g",
+          "actual_selected_syscall_C_object"
+        ],
+        [
+          "bound_nm",
+          "-g",
+          "actual_linked_mcexec"
+        ],
+        [
+          "bound_nm",
+          "-g",
+          "actual_mcexec_Rust_object"
+        ],
+        [
+          "bound_nm",
+          "-g",
+          "actual_mcexec_C_object"
+        ]
+      ],
+      "function": "_validate_native_fork_opt_in",
+      "saved_members": [
+        "owned-fork-caller-symbols.txt",
+        "owned-fork-mcexec-symbols.txt",
+        "owned-fork-mcexec-rust-symbols.txt",
+        "owned-fork-mcexec-C-symbols.txt",
+        "owned-fork-opt-in.json"
+      ]
+    },
+    {
+      "argv_shapes": [
+        [
+          "bound_nm",
+          "--undefined-only",
+          "--demangle",
+          "ACTUAL_BUILD/kernel/rust/mckernel_rust.o"
+        ]
+      ],
+      "function": "_validate_production_rust_panic_refs",
+      "saved_members": [
+        "production-rust-undefined.nm",
+        "production-rust-undefined.nm.stderr",
+        "production-rust-core-panic-reference-proof.json"
+      ]
+    },
+    {
+      "argv_shapes": [],
+      "function": "_validate_link_contract/_revalidate_link_contract_snapshots",
+      "gate": "actual raw-ld command/script/map/depfile and final snapshots, not new link command",
+      "saved_members": [
+        "image-link-contract.txt",
+        "image-link-dependency.d"
+      ]
+    }
+  ],
+  "do_not_import_or_rerun_producer_functions": true,
+  "producer_driver": {
+    "bytes": 135622,
+    "path": "/home/holden/mckernel-work/host-preparation/numa-allowed-mask-image-successor-preparation-20261021-1/native_rust_exact_mckernel_image_offline.py",
+    "sha256": "bc2ff0e00864d08489425cf979d35c6717d040c6c8a18b85bb0d0e573904dc6a"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXISTING_ACCEPTED_CHECK_CALLERS_DATA_NOT_EXECUTION"
+}

@@ -1,3 +1,67 @@
+## Current — corrected image and one-image stage accepted; terminal body check passed
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+New image1d8c4e78/8427720B independently accepted0ed99e03; canonical existing-schema
+role-key projection84bfc043 preserves original record and all9actual values. Root
+clock starts firstartifactPASS message observed10:02:44.224961UTC; no speedupclaim.
+18actualbuildphases/9primary+9evidence/32inventory and changed1017BRustbody object↔
+finalbytejoin passed. Real launcher689 unchanged. Retainedterminal3351eefc remains
+separate; stopped container/common/shared still held pending exactcleanup route.
+Official review144:84source/29acceptedcompiler/6acceptednative,21checks/fivewhole,
+28logical/Rust17/14 held. No newnative/default/path/C-retirement credit.
+
+Newstage ranonce0/19.906559s and independently acceptede01fd9ca:60members, exactly
+ONEimage delta59unchanged/fullmetadata/strictmanifest6070bd2f. Reported42539882B
+excludes result19192B; actualincludingresult42559074B<64MiB. App0339/modules/bz/
+launcher/ABI/116B-emptyerr-37 unchanged. NewQMP104/fresh-2locators. Normalizer
+DATA/sourcebinding next under actual ordinary grant, no censusoverlap.
+
+Terminal sourcegenerator futurephase three-join defects corrected once ca056c99,
+originaldd44 retained. Actualterminalgeneration0/.704718s; independently reviewed
+current23sourcepins/fourdocs/97roles/88paths. ExistingCPU7bodycheck ranonce
+0/.170466s, genuinepositive49adapter/3childrefusals/bothsavedchannels accepted
+2e0f2ed4. No observer/root/cleanup actions yet. Next exactpublished-sourceproof+
+source-review scalar schema projection and genuine independent exactobserver
+release; existing observer→summary→5FD→raw5export→strictpreflight/cleanup/postjoin.
+Futureclearance/runtime refs remainNULL; tool-owned started/completed receipts
+and actualrootbirths preserved, no fabricated outerwrapper. Checkpoint allnew
+source/captures/accepted artifacts before root sequence; no source/app/build replay.
+
+## Current — corrected image build closed0; parallel artifact/retained-terminal acceptance
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Tool42567 TERMINALexit0/286.817243s, dispatcher2551719/start37358927 directly
+joined/groupabsent/emptyerr; do not repoll/replay. All18driverphasesPASS, actual
+newdriverreceipt21e54340/41900B and ownerd3e54336/19544B. Image receipt reports
+1d8c4e78/8427720B; newactualimage/object/launcher hashes verified once for focused
+readonly captures, all3closed0/emptyerr; finalnmundefinedstdoutempty. Strict real
+launcher689dcad2 bytes unchanged. Artifactreview compiler_review runs independently
+in parallel with retained-terminal image_source_review; accepted-build counter held.
+
+Newretainedterminal genuinely accepted3351eefc, currentCID4639405e stopped0/nonOOM/
+PID0; common/shared retained, leaseabsent, eight savedclientsclosed, postjoinmutex
+reacquired. This is not physicalclearance: existing separatecleanup route required.
+No oldimage/source/compiler checks repeated. Finite stage/terminal/currentphysical
+sourcegeneratordd44 source-only review in progress; futureartifactacceptance and
+clearance refs remain NULL until actual decisions. Stage exactly1image/59unchanged,
+app116B/emptyerr/37 and modules/ABI unchanged. Start new acceptedimage→native clock
+at genuine new artifact acceptance MESSAGE, prior baseline73.69min, no speedupyet.
+
+## Current — corrected NUMA production image build running, sole heavy
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Checkpoint2697e502 pushed/fetched all153changedblobs exact. Actualwholeguard c6b6
+accepted positive/eightrefusals; conditionalcontrols188f and actualsetup/snapshot/
+finalbinder allclosed0. Exactcanonical71318799/request1430be23/caller18d3c12d
+independently released b4fc65ff for ONEproductionbuild after freshgrant6821f8a1.
+Originaloncecaller tool session42567 is LIVE: no duplicate execution/replay.
+Actualprivate Q/numa-allowed-mask-image-successor-preparation-20261021-1/
+execution-preparation-1/RUNNING-OBSERVATION-1.json binds observed child and live
+admission. Oneheavy CPUs2-5/4jobs/12GiB/noextraSwap/512/nonet; dispatcher7/2GiB.
+Existing engine retains terminal container/common/shared for separatecleanup.
+Newimage/stage/runtime references remain futureNULL; finite consumers ready.
+No newcompiler/native/default/path acceptance until actual scopedreview.
+
 ## Current — successor exact whole guard passed once; checkpoint and fresh build admission
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
