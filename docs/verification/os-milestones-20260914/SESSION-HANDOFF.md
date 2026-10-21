@@ -1,3 +1,78 @@
+## Current — accepted production image; terminal correction passed; NUMA stage accepted
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Production build closed0/278.989250s; independent artifact7331e75d and retained
+physical358126fb accepted. Imagea4b78cd8, unchanged launcher689dcad2. Compiler28;
+81source(31OS/50infra),sixnative,21/35/fivewhole/28logical/Rust17/14 held.
+Stopped container105fd6a32dd3 and common/shared records retained; physical release
+pending existing observer/cleanup chain. No new heavy until scoped clearance.
+
+Original terminal bodycheck failed missing physical.driver_receipt; preserved
+FIRST-BODY-CHECK-FAILURE-1.json and captures. Single bounded correction now passed
+sourcegen0/.138744s and wholebody0/.191562s, exact genuine four-document positive,
+49 refusals, both log channels, all directjoin/groupabsent/closedstreams/emptyerr.
+Independent numa_compiler_review accepts actual result/publication only; no root
+observer, cleanup or physical release yet. Sourcepins6da2a120; whole8343620c.
+Private terminal path: host-preparation/numa-current-image-terminal-preparation-
+20261021-1/schema-correction-1/. Root publishes/fetches then binds exact observer
+release; separate raw5/final cleanup release and fresh preflight still required.
+
+Focused NUMA offline stage accepted0/19.675020s, actual whole572306d3; exact two
+archive data changes/image+app,58other members/metadata/launcher unchanged. Genuine
+reviewer numa_image_source_review/root recorder eccae19c, manifest7d596e75,
+42,554,029B assets. Strict116B/emptyerr/37 retained. Normalization source owner
+numa_app_oracle_correction; next existing prepare_native/owner joins, separate
+runtime release. No stage/app/compiler replay; no native proof credited yet.
+
+## Current — new production image operation closed0; artifact review and retained terminal
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual unifiedexec94695 is terminal0; do not poll/restart it as live. Outercaller
+closed0/278.989250s, directjoin/processgroupabsent, statuscad58070. Producer
+receiptPASS18commands/nineartifacts, exactsourceea825bb5/materialization1b584ee5.
+Newimagea4b78cd8/8424344B; realmcexec689dcad2/394656B equals accepted oldlauncher.
+These are raw closed observations; production artifact/default/native acceptance
+and all Rust-path/milestone increments remain pending independent scoped review.
+
+Guard ownerreceipt8f6a10ed reports PASS/retired, freshstoppedcontainer105fd6a32dd3
+retained for separate cleanup. Private commonfull-image-attempt-1/common-exclusion.json
+and canonicalsharedheavy record remain retained; no new heavy run allowed yet.
+No raw remove/unlink or fabricatedphysicalclearance. Source/objects/failures preserved.
+Exact CLOSED-OBSERVATION-1.json and all status/raw evidence under host-preparation/
+numa-current-image-successor-preparation-20261021-1/execution-preparation-1/.
+
+Owner numa_image_source_review: actualcurrentartifact/link/ABI/default scope review;
+owner numa_guard_binding: adapt existing finite retention/terminal observer/cleanup
+source controls in numa-current-image-terminal-preparation-20261021-1 only.
+Root executes/reviews/Git and accepts their whole results. NativeNUMAsourceproposal
+381e06f5 is independently DATA-only eligible; image/moduleABI/stage/release remains
+unbound. Reuse unchanged116B/app37 oracle/init and explicitly unchanged mcexec;
+old37e artifact authority cannot be substituted for newimageproof. Six-appbatch later.
+Accepted81source/27compiler/sixnative,21/35/fivewhole/28logical/Rust17/14 held.
+
+## Running — exact current production image once-caller (2026-10-21)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Controls092cfa4d pushed/fetched66control/all71changed blobs exact. Independent
+single-use execution reviewe6b2961e binds exact canonicalpayloadb306009b,
+requestd18cbc2b,caller31734da1 and guard20ce648a. Ordinary setup/snapshot/binder
+allclosed0; metadata-onlylate binding independently allowed, no extra data push.
+
+Actual caller LIVE: unifiedexec94695; outer2499901,dispatcher2499903/start36579093,
+guard2499906; fresh finaladmission57%included,HEAD092c frozen. Full candidate
+imagebuild/realRustmcexec operation in progress; no accepted output or retirement
+claimed. Exact captures: host-preparation/numa-current-image-successor-preparation-
+20261021-1/execution-preparation-1/actual-root-owner-1/ and image-guard.status.json.
+RUNNING-OBSERVATION-1.json retains confirmed process/birth identity. Reconcile
+that live handle and owner records before any new heavy work; no automatic replay.
+
+Focused NUMA nativeconsumer source is prepared using unchanged116B/app37 oracle
+and existing stager/init; actualnewimage/ABI/stage/release remain unbound. Existing
+six-launch batch parked later. Accepted81source(31OS/50infra),27compiler/sixnative,
+21/35checks,fivewhole,28logical,Rust17/14 held pending actual scoped outcomes.
+OneheavyCPUs2-5/4CPU12GiBnoSwap512tasks, CPU7dispatcher2GiB; all diskfloors,
+UUIDnoresize,Scratch21/exclusions,mutex27:4,dirtytree and failure evidence preserved.
+
 ## Current — actual whole guard passed; production image control publication
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
