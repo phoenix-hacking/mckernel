@@ -1,0 +1,126 @@
+{
+  "changed_Rust_caller_required_definition": "sched_setscheduler_body_result",
+  "driver_algorithms_unchanged": true,
+  "inherited_FAM_oracle_unchanged": true,
+  "inherited_scheduler_and_settid_rules_unchanged": true,
+  "new_mutation_helper": "setscheduler_body_result",
+  "new_numa_helper": "syscall_vm_range_policy_search_body_result",
+  "no_final_link_or_default_activation_claim": true,
+  "rules": {
+    "constructor-process.o": {
+      "forbidden_global_or_weak_symbols": [
+        "release_cpuid"
+      ],
+      "unique_global_or_weak_STT_FUNC_definitions": [
+        "clone_thread"
+      ],
+      "unique_undefined_global_or_weak_symbols": []
+    },
+    "fallback-owned-syscall.o": {
+      "forbidden_global_or_weak_symbols": [
+        "process_fork_cancel_constructed_current_v1",
+        "process_fork_construct_current_v1",
+        "process_fork_owned_caller_runnable_current_v2",
+        "process_fork_runtime_drain_current_v1"
+      ],
+      "unique_global_or_weak_STT_FUNC_definitions": [
+        "do_fork"
+      ],
+      "unique_undefined_global_or_weak_symbols": [
+        "setscheduler_body_result",
+        "syscall_settid_body_result",
+        "syscall_vm_range_policy_search_body_result"
+      ]
+    },
+    "legacy-mckernel_rust.o": {
+      "forbidden_global_or_weak_symbols": [],
+      "unique_global_or_weak_STT_FUNC_definitions": [
+        "process_fork_cancel_constructed_current_v1",
+        "process_fork_construct_current_v1",
+        "process_fork_guest_carrier_begin_current_v1",
+        "process_fork_guest_carrier_cancel_current_v1",
+        "process_fork_guest_carrier_create_current_v1",
+        "process_fork_guest_carrier_retain_current_v1",
+        "process_fork_guest_control_submit_current_v1",
+        "process_fork_owned_caller_current_v1",
+        "process_fork_owned_caller_current_v2",
+        "process_fork_owned_caller_runnable_current_v2",
+        "process_fork_runtime_drain_current_v1",
+        "process_release_vm_checked_body_result",
+        "release_cpuid",
+        "release_process_checked",
+        "release_process_vm_checked",
+        "release_thread_checked",
+        "sched_schedule_exit_cleanup",
+        "sched_setscheduler_body_result",
+        "setscheduler_body_result",
+        "syscall_settid_body_result",
+        "syscall_vm_range_policy_search_body_result"
+      ],
+      "unique_undefined_global_or_weak_symbols": [
+        "clone_thread"
+      ]
+    },
+    "native-mckernel_rust.o": {
+      "forbidden_global_or_weak_symbols": [],
+      "unique_global_or_weak_STT_FUNC_definitions": [
+        "process_fork_cancel_constructed_current_v1",
+        "process_fork_construct_current_v1",
+        "process_fork_guest_carrier_begin_current_v1",
+        "process_fork_guest_carrier_cancel_current_v1",
+        "process_fork_guest_carrier_create_current_v1",
+        "process_fork_guest_carrier_retain_current_v1",
+        "process_fork_guest_control_submit_current_v1",
+        "process_fork_owned_caller_current_v1",
+        "process_fork_owned_caller_current_v2",
+        "process_fork_owned_caller_runnable_current_v2",
+        "process_fork_runtime_drain_current_v1",
+        "process_release_vm_checked_body_result",
+        "release_cpuid",
+        "release_process_checked",
+        "release_process_vm_checked",
+        "release_thread_checked",
+        "sched_schedule_exit_cleanup",
+        "sched_setscheduler_body_result",
+        "setscheduler_body_result",
+        "syscall_settid_body_result",
+        "syscall_vm_range_policy_search_body_result"
+      ],
+      "unique_undefined_global_or_weak_symbols": [
+        "clone_thread"
+      ]
+    },
+    "selected-owned-syscall.o": {
+      "forbidden_global_or_weak_symbols": [],
+      "unique_global_or_weak_STT_FUNC_definitions": [
+        "do_fork"
+      ],
+      "unique_undefined_global_or_weak_symbols": [
+        "process_fork_cancel_constructed_current_v1",
+        "process_fork_construct_current_v1",
+        "process_fork_owned_caller_runnable_current_v2",
+        "process_fork_runtime_drain_current_v1",
+        "setscheduler_body_result",
+        "syscall_settid_body_result",
+        "syscall_vm_range_policy_search_body_result"
+      ]
+    },
+    "settid-c-fallback-syscall.o": {
+      "forbidden_global_or_weak_symbols": [
+        "setscheduler_body_result",
+        "syscall_settid_body_result",
+        "syscall_vm_range_policy_search_body_result"
+      ],
+      "unique_global_or_weak_STT_FUNC_definitions": [
+        "do_fork"
+      ],
+      "unique_undefined_global_or_weak_symbols": [
+        "process_fork_cancel_constructed_current_v1",
+        "process_fork_construct_current_v1",
+        "process_fork_owned_caller_runnable_current_v2",
+        "process_fork_runtime_drain_current_v1"
+      ]
+    }
+  },
+  "status": "DATA_ONLY_NO_OBJECT_INSPECTION_RUN"
+}

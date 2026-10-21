@@ -1,0 +1,22 @@
+--- accepted/compile_retirement_current_driver.py
++++ candidate/compile_retirement_current_driver.py
+@@ -7,15 +7,15 @@
+ RUST_DEFINITIONS=SYMBOLS|{'process_fork_construct_current_v1','process_fork_cancel_constructed_current_v1',
+     'process_fork_owned_caller_current_v1','process_fork_owned_caller_current_v2','release_process_checked',
+     'release_thread_checked','release_process_vm_checked','release_cpuid','process_fork_owned_caller_runnable_current_v2',
+-    'process_fork_runtime_drain_current_v1','process_release_vm_checked_body_result','sched_schedule_exit_cleanup','syscall_settid_body_result','setscheduler_body_result','sched_setscheduler_body_result'}
++    'process_fork_runtime_drain_current_v1','process_release_vm_checked_body_result','sched_schedule_exit_cleanup','syscall_settid_body_result','syscall_vm_range_policy_search_body_result','setscheduler_body_result','sched_setscheduler_body_result'}
+ BRIDGES={'process_fork_construct_current_v1','process_fork_cancel_constructed_current_v1','process_fork_owned_caller_runnable_current_v2','process_fork_runtime_drain_current_v1'}
+ PROVIDERS={'clone_thread'}
+ C_COMPILER_SHA256='2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2'
+ RULES={'native-mckernel_rust.o':(RUST_DEFINITIONS,PROVIDERS,set()),
+        'legacy-mckernel_rust.o':(RUST_DEFINITIONS,PROVIDERS,set()),
+-       'selected-owned-syscall.o':({'do_fork'},BRIDGES|{'syscall_settid_body_result','setscheduler_body_result'},set()),
+-       'fallback-owned-syscall.o':({'do_fork'},{'syscall_settid_body_result','setscheduler_body_result'},BRIDGES),
+-       'settid-c-fallback-syscall.o':({'do_fork'},BRIDGES,{'syscall_settid_body_result','setscheduler_body_result'}),
++       'selected-owned-syscall.o':({'do_fork'},BRIDGES|{'syscall_settid_body_result','syscall_vm_range_policy_search_body_result','setscheduler_body_result'},set()),
++       'fallback-owned-syscall.o':({'do_fork'},{'syscall_settid_body_result','syscall_vm_range_policy_search_body_result','setscheduler_body_result'},BRIDGES),
++       'settid-c-fallback-syscall.o':({'do_fork'},BRIDGES,{'syscall_settid_body_result','syscall_vm_range_policy_search_body_result','setscheduler_body_result'}),
+        'constructor-process.o':(PROVIDERS,set(),{'release_cpuid'})}
+ 
+ def metadata(st):

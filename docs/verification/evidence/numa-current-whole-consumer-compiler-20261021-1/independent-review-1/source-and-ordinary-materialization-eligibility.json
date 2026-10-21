@@ -1,0 +1,112 @@
+{
+  "schema": "mckernel.numa-current-whole-consumer-source-and-ordinary-eligibility-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/scheduler_candidate_review",
+  "decision": "PASS_EXACT_TWO_ROW_RECIPE_AND_CONDITIONAL_CPU6_ORDINARY_MATERIALIZATION_ELIGIBILITY_ONLY",
+  "blocking_source_contract_defects": [],
+  "boundary": "Narrow successor of the accepted scheduler160 six-stage compiler recipe. Reuse accepted source-union/body-test semantics and unchanged compiler/owner algorithms; no repeated source-function or unchanged-tree audit.",
+  "authority": {
+    "freeze_sha256": "20fdae03e8ba89ca2fb8040b37fb9d917b4e4aeaff82c68382ade629bab6619d",
+    "all_17_frozen_file_pins_match": true,
+    "preparation_receipt_sha256": "b7686b92d9373bb41e0f804bd95bea76b9cd3b52846a291d5c98e0ed326e973b",
+    "root_actual_source_union_integration_sha256": "9216b6ec8254cc6bd98057381b8cd7fc5e03b5802e8cd28fd212dd23c2ecc41c",
+    "reused_scheduler_source_review_sha256": "5493d0168c3f5c3434e15b0738af0427572018a6db3066e9a17ec8597dd0317c",
+    "reused_scheduler_actual_six_stage_artifact_review_sha256": "fd2f34abd19e4a27ebc515c4246e411aaca276fbd3cb01d07e2e735aa53b5ce0",
+    "reused_scheduler_actual_six_stage_physical_review_sha256": "2d8840cad907bcd6fc182f8725984bca3f504d49e47f2f5782d4def837161ed7",
+    "integration_and_two_actual_scheduler_report_file_pins_match": true,
+    "reused_numa_source_union_review_root_record_sha256": "e26aeb31fad3733710857f70b39930bc7ce41f6b8cec41b4f03c3f32919198a7",
+    "reused_traversal_22_case_result_acceptance_sha256": "9905682d3c492ac89fe57ce7f77cfda542d52f904fa07018ba9a8a3822d73e66",
+    "reused_caller_33_scenario_66_call_result_acceptance_sha256": "a50d9964329d7b6f0fc296c23d832d2ba861614aa20367ca1ffdbe9f6d161c60"
+  },
+  "source_recipe": {
+    "manifest_sha256": "f57553dff6e55c9ac9f5d79164e0ff9ce17d93a3fabccf9cadf197f2697c308f",
+    "source_identity": "fab15bfcc6f0b16a2e35451d7da7d1a3a8ff3942d517600b19fb0a38a7dadea2",
+    "identity_independently_recomputed_from_ordered_relative_bytes_sha256_rows": true,
+    "count": 160,
+    "total_destination_bytes": 4874185,
+    "exact_retained_literal_dictionaries": 158,
+    "predecessor_manifest_sha256": "b0e012d8a2796c1822894685faca39fe85c55d8fe8dac2ab5aba318165dc70e7",
+    "only_changed_rows": [
+      {
+        "relative": "kernel/syscall.c",
+        "preimage_sha256": "55e04a1e152d17c83d61280ea436012d8c073c78cb3c62bf9689c670b4021d34",
+        "bytes": 839563,
+        "sha256": "ae7134ce02521d4c71e5e33858e0d81bdc093abdc431e93e0c61bfb4c83c56c3"
+      },
+      {
+        "relative": "kernel/rust/syscall_policy.rs",
+        "preimage_sha256": "54f3103ee88d34f91f29c3c81b647bb9b24cef576bfb02a8c777742547ce97b1",
+        "bytes": 700034,
+        "sha256": "75b89149aa031076ae547248e0aab64eda5a7b75162952a954489e86067f0b2d"
+      }
+    ],
+    "overlay_pins_match_integrated_union_receipt": true,
+    "retained_scheduler_helper_sha256": "a5b8ed0f048adcfa6908094f7b8b5d459b9b14aa0ed4b75e5250abe6f8387c57",
+    "unchanged_input_origins_not_bulk_rehashed": true,
+    "actual_materializer_must_revalidate_every_origin_and_transformed_destination": true
+  },
+  "engine_and_abi_symbol_delta": {
+    "owner_byte_identical_sha256": "ff9f79d5c9a11b3643e9868c80f008c25c6ce86165b658052e3fc636adc3fddb",
+    "materializer_byte_identical_sha256": "29f26418aa11a89a4247fa69b84fdd4c8d0ed5d649c8ae8f3300f5703d21fc25",
+    "FAM_assertion_suffix_byte_identical_sha256": "dfcceac5ea50734419ae79423e5fc20fd0cac36fc8a53e4989c813bd5bb216b9",
+    "driver_sha256": "635bd8735f91f69d397879b1557586d051a1543296e2f1a3b686eb86e7181bb0",
+    "driver_AST_identical_except_assignments": ["RUST_DEFINITIONS", "RULES"],
+    "six_command_manifest_sha256": "6b93fb8b9404698363198c011ccb2f1875ad90107e8d4ff08388160749823a6d",
+    "compiler_command_deltas": "Only the two native/legacy Rust MCKERNEL_RUST_BUILDID values change to numa-current-source-fab15bfcc6f0; all remaining argv and command metadata are literal unchanged.",
+    "new_helper": "syscall_vm_range_policy_search_body_result",
+    "source_abi": "C extern takes struct process_vm * and unsigned long, returning struct vm_range_numa_policy *. Rust extern C takes *mut ProcessVm and CULong, returning *mut VmRangeNumaPolicy. No new ABI type or callback is introduced. Existing full ABI/generated configuration/offset and FAM closure is retained.",
+    "required_unique_Rust_function_definitions": ["native-mckernel_rust.o", "legacy-mckernel_rust.o"],
+    "required_unique_C_undefined_imports": ["selected-owned-syscall.o", "fallback-owned-syscall.o"],
+    "forbidden_in_policy_off_C_object": "settid-c-fallback-syscall.o: no global/weak occurrence of the new helper",
+    "policy_off_selection": "Sixth argv retains late -UMCKERNEL_RUST_SYSCALL_POLICY_HELPERS and -UMCKERNEL_RUST_SCHED_POLICY_HELPERS after earlier -D options. The C helper declaration and delegation use the syscall-policy guard; preserved C traversal is its else branch. No default selector changes.",
+    "all_six_EXPECTED_SYMBOL_DATA_rules_match_actual_driver_RULES": true,
+    "inherited_fork_settid_scheduler_constructor_FAM_oracles_preserved": true,
+    "request_retains_scheduler_rules_and_adds_NUMA_rules": true,
+    "request_and_profile_local_file_pins_match": true,
+    "resource_or_capture_algorithm_changes": false
+  },
+  "ordinary_materialization": {
+    "proposal_sha256": "c95ffe615b86b4ac93e3c15ca4908e86a9e80cbc2af08f25a8f19363c4430eac",
+    "eligible_for_fresh_root_grant": true,
+    "argv": ["/usr/bin/taskset", "-c", "6", "/usr/bin/prlimit", "--as=2147483648", "--core=0", "--nofile=256", "--fsize=33554432", "--", "/home/holden/anaconda3/bin/python3", "-I", "-B", "/home/holden/mckernel-work/host-preparation/numa-current-whole-consumer-compile-preparation-20261021-1/materialize_sources.py"],
+    "limits": "Inherited CPU6, one job, AS2GiB, CPU30s, wall35s plus accepted retirement grace, FSIZE32MiB, NOFILE256, CORE0, deterministic proposal environment. Root must enforce finite CPU/wall/capture limits around the unchanged script.",
+    "conditions_before_launch": [
+      "Fresh ordinary admission and genuine owned capture bound to the exact proposal, interpreter/tool and frozen inputs; no CPU6 conflict or overlapping census/LAST/exclusive window.",
+      "Fresh aggregate CPU/RAM/storage/service/auth/included-usage checks; preserve host16GiB and scratch12GiB floors plus full admitted growth and emergency headroom. Reuse at least the ordinary 128MiB growth allowance and honor any greater current root reserve requirement, including a required640MiB reserve; this report does not establish live capacity.",
+      "Reconfirm materialized-source, materialization-result.json and fresh capture destination absent including dangling entries. Do not delete or reuse partial/failed outputs.",
+      "Materializer revalidates normalized unique paths, all160 exact input pins, appended lib suffix, and each final destination. No candidate import, compiler, Docker, root or lease operation.",
+      "Close exact argv/start/status/direct-child and process-group retirement/stable streams. Independently bind actual160 file results, transformed lib, result and source directory inode before future compiler use."
+    ],
+    "observed_local_materialized_source_result_compiler_attempt_and_execution_release_absent_at_review": true,
+    "current_admission_measured_by_reviewer": false,
+    "execution_grant_issued_by_reviewer": false,
+    "independent_of_future_heavy_physical_clearance": true
+  },
+  "future_heavy_boundary": {
+    "request_sha256": "da72c8de470cafa06ee14480e6a275cbe502eba611b1296662e41e414748b063",
+    "profile_sha256": "388c128f3b7508c06a2d9fdd10a33e44c36ac265ecd294019fc2c0b7364774fc",
+    "status": "NOT_RELEASED",
+    "profile_unchanged": "One heavy operation, CPUs2-5/4CPU/12GiB/no swap/512tasks/no network; one compiler job,1750s compiler/1800s owner,640MiB work cap,12x32MiB streams. Resource values match the accepted scheduler recipe.",
+    "source_materialization_and_inode_binding": null,
+    "publication": null,
+    "current_physical_clearance": null,
+    "current_execution_admission": null,
+    "independent_execution_release": null,
+    "root_authorization": null,
+    "outcomes": null,
+    "prerequisite": "Currentimage37e accepted terminal physical release and thread-native priority, actual materialization acceptance, fresh publication/source/tool/resource/ownership/service/usage checks, and a separately bound genuine execution release. Do not borrow the predecessor execution grant or physical identity."
+  },
+  "review_actions": {
+    "static_hash_dictionary_AST_source_declaration_and_command_comparisons": true,
+    "candidate_imports_tests_compilers_containers_root_leases_shared_or_Git_edits": 0,
+    "private_report_only": true,
+    "tool_note": "One read-only AST-data comparison helper initially rejected the unchanged SYMBOLS set comprehension; a restricted literal/data interpreter then compared all six rules successfully. No candidate code ran and no compiler/runtime family attempt was consumed."
+  },
+  "failure_history": "New NUMA whole-consumer packet has zero executed attempts. Preserve all prior compiler/fixture/capture evidence. One failed candidate plus one bounded correction per family before focused escalation; no unchanged deterministic replay.",
+  "acceptance_limits": [
+    "Source recipe and conditional ordinary materialization eligibility only; no actual new materialization or whole-crate outcome.",
+    "Per-object symbol contract only; no combined link, production-default/native activation or compute-C retirement credit.",
+    "Reuse accepted NUMA traversal parity and matched-policy snapshot source/body evidence only. Controlled fixture callbacks do not prove native lock/free/concurrency behavior; VM-fallback synchronization and inherited scheduler numeric-host-owner qualification remain open.",
+    "No current image, terminal or thread-native dependency is introduced by this preparation review. Preserve included100%/noAPI/service stops, scratch UUID and no-resize controls."
+  ]
+}

@@ -1,3 +1,32 @@
+## Current — physical clearance accepted; threads runtime decoder boundary
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Formal21/35 checks,five whole,28native,Rust17/14;26compiler builds unchanged.
+Current image37e/a818 and realmcexec689d accepted; currentPASS2 physicalc7c38f6a
+accepted after preflight1.989726s/cleanup5.812009s/postjoin1.861804s. RootACK78856d23
+acknowledges only retired237fa7 reservation; no ownership/launcherstate edits.
+All18artifacts/97roles/old failures and exactoriginalrecords preserved. Evidence:
+../evidence/settid-current-pass-terminal-20261021-2/.
+
+Thread stagec6ad/dependency338f/ABI and corrected actualnormalizationb1ba454a are
+accepted: currentmanifest1bce raw5146B, -2parent actual1828:882506 UID/GID1000mode0700,
+empty/noattempt, exact104BQMP and actual3.9hostcaller. Eight actualloader/bodycases
+6ccaf passed before fresh normalization0.547981s. Original normalizationfailure
+c411 and root pre-execution operation-position assertion remain retained.
+Only remaining current runtime binding: explicit currentPASS2 physical-reader
+branch using complete4b80fd16 mapping, then one actualwhole19/caller positive+
+refusal check/publication/LAST/freshnative release. No new rootwitness needed;
+historical execution/14PID/58file aliases cannot substitute genuine currentproof.
+Sole author guest_settid_rust_candidate; sdk66_source_review independentdecision/result.
+No CPUlease during model work. Nativeatomicstatus will be announced from actual
+finalgenerated DATA at launch; no ready/owner0/native credit from this checkpoint.
+
+NUMA sourceunion7e344841 pushed/fetched17files; traversal22/caller33x2 accepted.
+Actual160 materializationd9afa30c/source66306:48404693 accepted; source/control199
+publication is separately eligible underaaf76c33, latestphysical/heavyrelease still
+unbound. Its compiler work must not block currentthreads native. Frozenimage4overlay
+scope, SDK capacity/developer no-resize and allservice/floor/ownership controls remain.
+
 ## Current — NUMA union integrated; current-image terminal release pending
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
