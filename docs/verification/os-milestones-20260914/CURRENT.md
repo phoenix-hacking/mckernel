@@ -1,3 +1,40 @@
+## Current — production preflight failed before owner; bounded gitlink DATA correction accepted
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Released launch closed1/.847716s: live admissionpassed, then existingowner
+preflight refused stale supplemental base40944 versus current manifestcb17.
+Compiler/Docker/owner/developmentlock were not reached. Independentpre-effect
+closureb7fdb069 proves directjoin/groupabsence, exacttraceback/controlflow,
+all9relevantpathsabsent, bothworkrootsempty, permanentmutex27:4 intact. No
+privilegedcleanup required. OriginalFAIL1, release/captures/reviews preserved;
+compiler31/native8/check22/fivewhole/source90/Rust19-16/behaviors29 held.
+
+Minimalcorrectedsupplementa0ab03ce changesone64bytebasepointer40944→cb17;
+causalrequest09975 changesonlysupplementpath/hash. ActualUNCHANGEDwholeowner
+preflight correctedpositive/originalnegative passed0/.698229s emptyerr/directjoin/
+groupabsence. Independentcompletecausalacceptancebeca7493 includes allconsumed
+supplement→manifest/mount/CLI/driver/result joins, unchangedcandidate/IHK/libdwarf
+identity, no additional stale currentpointer/codechange. Mount/CLI traces are
+constructorfacts, not currentcontainerobservations. No source/materialization/
+IHK/gate/eightrefusal replay and no pin-only sourcecredit.
+
+Fresh successor G=.../numa-insert-clear-image-successor-preparation-20261021-1/
+production-preflight-correction-preparation-1 has reviewednamespace/pin-only
+projectionsc23c89a6; all8operationalASTs unchanged. Actualfresh full-image-attempt-2
+setup0/.032306s, twoempty0700roots; minimumidentities6f75ee80. FixednewBASIS0f2ace4d
+(26525575B) usescorrectedsupplement plus7freshpaths only. Prior8guardrefusals and
+source/gate facts reused only within original executedscope. Next exactcurrent
+runtime/BASIS join→finiteguardbinding/construction→freshpub/grant/snapshot/final
+exactrelease; no pipeline restart. Postbuildterminal/NUMADATA alreadyready, actual
+newartifact/physical/releaseNULL; named insert/clear ELF joins stayexistingreview.
+
+CurrentG runtime/BASIS wholejoin54ba1729 accepted; finiteguardconstruction
+0/.310760s, emptyerr/join/groupsabsent. Currentguard0508d10a/c23sourceequivalence
+and exact7assignment DATAjoins independentlyacceptedc4f73ad5. PriorEactual7cd
+wholepositive/8refusals remainoriginalexecutedbytescope; no newGpositive or test
+replay. Currentcodecapsule603f12a7 ready; freshpub/grant/snapshot/exactrelease next.
+PostbuildterminalG DATA16ca2567 andstage/runtimeGcontext0a4b2432 remainfutureNULL.
+
 ## Current — corrected insert/clear source materialized and whole-source gates accepted
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
