@@ -1,0 +1,74 @@
+{
+  "schema": "mckernel.current-six-launch.actual-application-review.v1",
+  "status": "PASS_ACTUAL_CURRENT_053D_SIX_STRICT_APPLICATION_LAUNCHES_ONLY",
+  "decision": "ACCEPT_CURRENT_MATCHED_TUPLE_SELECTED_SUITE_REGRESSION_REPLAY",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/numa_compiler_review",
+  "implementation_ownership": false,
+  "application_acceptance": true,
+  "evidence_base": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/current-six-launch-regression-reuse-preparation-1/normalization-runtime-data-preparation-1/runtime-packet-preparation-1/native-packet-1",
+  "evidence": {
+    "root-seven-whole-1.json": {
+      "sha256": "7f49a751529071f5455efe32c7959bb02ec9828258e788de4cc094effd370ce8",
+      "bytes": 3019
+    },
+    "captures/05-readback-2/stdout": {
+      "sha256": "64c63b1f4625c8365a88a8348c755b8c3a74d1a69c99d24fb53a86aab833ccf0",
+      "bytes": 213548,
+      "type": "Actual guest-result JSON"
+    },
+    "captures/04-readback-1/stdout": {
+      "sha256": "08661d25c9a851add5f0baf222e149e626b2c89edea01d330adc8d10de29553e",
+      "bytes": 1003520,
+      "type": "Owner-evidence TAR"
+    },
+    "captures/06-readback-3/stdout": {
+      "sha256": "5243743b9e2371d6e14be86f0d773c03b92385f735c16e3699419ee7d9491f5f",
+      "bytes": 696320,
+      "type": "Attempt TAR"
+    }
+  },
+  "observed_scope": {
+    "case_id": "practical.rust.fixed-three-rounds.current053d-launcher33f",
+    "rounds": 3,
+    "applications_per_round": 2,
+    "completed_launches": 6,
+    "mckernel_cpus": [0, 1],
+    "os": 0,
+    "generation": 1,
+    "application_pids": [[260, 259], [267, 268], [275, 276]],
+    "all_seven_chain_rows_exit0": true,
+    "native_owner_outer_elapsed_seconds": 44.474360005988274
+  },
+  "strict_results": {
+    "app0_stdout_bytes": 387,
+    "app0_stdout_sha256": "e5aab46f5a720bacdbb2fb3cb83d682b02df7261336e79663c79fa78022b9bc4",
+    "app1_stdout_bytes": 254,
+    "app1_stdout_sha256": "52095dafd5235a8c1073248bbda3964f8a7b749722306ceaabf321d2fdcd4816",
+    "every_launch_matches_manifest_argv_env_cwd_cpu_and_exact_oracle": true,
+    "every_stderr_empty": true,
+    "every_raw_wait_status": 0,
+    "every_stream_EOF_complete_without_truncation_or_discard": true,
+    "every_launch_clean1_fault0_timeout0": true,
+    "every_application_reaped_before_finished": true,
+    "procfs_empty_before_and_after_every_round": true,
+    "all_six_final_application_retirement_errno0": true,
+    "all_six_final_process_release_cleanup_errno0": true,
+    "original_protocol_capture_errors_empty": true,
+    "unchanged_accepted_suite_trace_ABI_pager_and_log_assertions_reused": true
+  },
+  "matched_tuple": "Accepted053d kernel, separately accepted33f launcher and matched51b4/82c9/6571 modules; current manifeste04f64a4.",
+  "preservation": "Original application_acceptance=false and mckernel_application_executed=false diagnostic fields remain unchanged in raw evidence. This independent decision establishes application acceptance separately.",
+  "limitations": [
+    "Three pair rounds in one guest; no ten-cycle,60minute or full-budget claim.",
+    "Current-tuple regression replay; no new distinct behavior, Rust-path or whole-milestone credit.",
+    "No public CPU/memory restoration or physical-owner clearance is established by this application review.",
+    "No throughput speedup claim."
+  ],
+  "physical_clearance": false,
+  "future_runtime_permission": false,
+  "C_retirement_credit": false,
+  "counter_delta": 0,
+  "reviewer_runtime_runs": 0,
+  "reviewer_operations": "Bounded read-only retained evidence inspection; no application execution, source changes, test replay, root operation or extraction writes."
+}

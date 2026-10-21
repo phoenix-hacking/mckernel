@@ -1684,8 +1684,8 @@
       "id": "M11",
       "scope_id": "practical-kernel-apps-v1-20261017",
       "title": "Integrated functional regression",
-      "engineering_state": "partial",
-      "completion_status": "open",
+      "engineering_state": "complete",
+      "completion_status": "complete",
       "exit_condition": "Relevant regressions and negatives pass without unexplained corruption or retained owners.",
       "checks": [
         {
@@ -1762,6 +1762,16 @@
               "path": "docs/verification/evidence/numa-allowed-mask-native-successor-20261021-1/current-six-launch-native-1.P-M11-01-adjudication.json",
               "sha256": "7a25bc33518f8f4af0a3a761f46691b08b4d6964b3e3875e75220940aece83b3",
               "bytes": 4748
+            },
+            {
+              "path": "docs/verification/evidence/current053d-six-launch-accepted-and-M11-closed-20261021-1/INDEPENDENT-ACTUAL-CURRENT-SIX-LAUNCH-APPLICATION-ACCEPTANCE-1.json",
+              "sha256": "a04292eb8f7a82df9f59b2e240a141048fc06d3e46302337c792c24ee9e88261",
+              "size": 3764
+            },
+            {
+              "path": "docs/verification/evidence/current053d-six-launch-accepted-and-M11-closed-20261021-1/INDEPENDENT-ACTUAL-CURRENT-SIX-LAUNCH-PHYSICAL-ACCEPTANCE-1.json",
+              "sha256": "4b518560ad0cc39b266b3977559889e9d9f474f01c0839da423bdfc236bc999f",
+              "size": 1832
             }
           ],
           "assessment_note": "Independent literal adjudication closes the declared current selected suite and repaired allowed-mask/launcher-sentinel boundary: current six strict launches plus strict116B NUMA on matched current tuple, with separate physical acceptances. M11-02/-03 and whole M11 remain open.",
@@ -1772,7 +1782,7 @@
         {
           "id": "P-M11-02",
           "description": "Retain useful kernel diagnostics and every failure.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/signal-mask-restore-current942-result-review-20261017-2.json",
@@ -1833,14 +1843,32 @@
               "path": "docs/verification/evidence/native-core-memory-current942-result-review-20261017-1.json",
               "sha256": "49d4a5b5dc0b7919f4097778fe9f99c75b216afc2345a59db8258eaab312c78f",
               "size": 13664
+            },
+            {
+              "path": "docs/verification/evidence/current053d-six-launch-accepted-and-M11-closed-20261021-1/INDEPENDENT-LITERAL-CURRENT-M11-02-03-AND-WHOLE-ADJUDICATION-1.json",
+              "sha256": "ffc69382d43da14055cd8109e6ea1aeb8760fceeaa81856df6406cdcfc1fefad",
+              "size": 4467
+            },
+            {
+              "path": "docs/verification/evidence/current053d-six-launch-accepted-and-M11-closed-20261021-1/INDEPENDENT-ACTUAL-CURRENT-SIX-LAUNCH-APPLICATION-ACCEPTANCE-1.json",
+              "sha256": "a04292eb8f7a82df9f59b2e240a141048fc06d3e46302337c792c24ee9e88261",
+              "size": 3764
+            },
+            {
+              "path": "docs/verification/evidence/current053d-six-launch-accepted-and-M11-closed-20261021-1/INDEPENDENT-ACTUAL-CURRENT-SIX-LAUNCH-PHYSICAL-ACCEPTANCE-1.json",
+              "sha256": "4b518560ad0cc39b266b3977559889e9d9f474f01c0839da423bdfc236bc999f",
+              "size": 1832
             }
           ],
-          "assessment_note": "These selected run logs, original failures and retention archives are preserved. Keep the broad practical check open until the supported final session retains all of its useful diagnostics and failures."
+          "assessment_note": "Independent literal current-tuple adjudication ffc69382 completes this criterion for current053d selected regression scope; preserve all original failure labels/dispositions. No zero-source-defect, full restoration, session-budget or overall-goal claim.",
+          "assessment_history": [
+            "These selected run logs, original failures and retention archives are preserved. Keep the broad practical check open until the supported final session retains all of its useful diagnostics and failures."
+          ]
         },
         {
           "id": "P-M11-03",
           "description": "Resolve unexplained panic/corruption/lost data/stranded ownership.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
@@ -1862,15 +1890,31 @@
               "sha256": "3e6cc72dec97c327d8ad3b4313dcf0c7f293708e2e80bce77686a22d1907d4fa",
               "size": 49179
             },
-            "docs/verification/evidence/current-host-pair-lifecycle-logical-dedup-20261019-1.json"
+            "docs/verification/evidence/current-host-pair-lifecycle-logical-dedup-20261019-1.json",
+            {
+              "path": "docs/verification/evidence/current053d-six-launch-accepted-and-M11-closed-20261021-1/INDEPENDENT-LITERAL-CURRENT-M11-02-03-AND-WHOLE-ADJUDICATION-1.json",
+              "sha256": "ffc69382d43da14055cd8109e6ea1aeb8760fceeaa81856df6406cdcfc1fefad",
+              "size": 4467
+            },
+            {
+              "path": "docs/verification/evidence/current053d-six-launch-accepted-and-M11-closed-20261021-1/INDEPENDENT-ACTUAL-CURRENT-SIX-LAUNCH-APPLICATION-ACCEPTANCE-1.json",
+              "sha256": "a04292eb8f7a82df9f59b2e240a141048fc06d3e46302337c792c24ee9e88261",
+              "size": 3764
+            },
+            {
+              "path": "docs/verification/evidence/current053d-six-launch-accepted-and-M11-closed-20261021-1/INDEPENDENT-ACTUAL-CURRENT-SIX-LAUNCH-PHYSICAL-ACCEPTANCE-1.json",
+              "sha256": "4b518560ad0cc39b266b3977559889e9d9f474f01c0839da423bdfc236bc999f",
+              "size": 1832
+            }
           ],
-          "assessment_note": "Historical native shutdown failure has later scoped public-cycle evidence: typed AVX workload -> strict stop5-to-0 -> public CPU/memory release -> successful second boot, independently deduplicated current-host-pair-lifecycle-logical-dedup-20261019-1. Preserve original TLS/ownership-retained failures. Full restoration/second public stop and supported final-session unexplained lifetime-defect closure remain open; VM teardown is not public restoration.",
+          "assessment_note": "Independent literal current-tuple adjudication ffc69382 completes this criterion for current053d selected regression scope; preserve all original failure labels/dispositions. No zero-source-defect, full restoration, session-budget or overall-goal claim.",
           "assessment_history": [
-            "Native shutdown remains unresolved. Original TLS failure and expected ownership-retained retirement retry remain visible; no unsupported claim of zero remaining lifetime defects."
+            "Native shutdown remains unresolved. Original TLS failure and expected ownership-retained retirement retry remain visible; no unsupported claim of zero remaining lifetime defects.",
+            "Historical native shutdown failure has later scoped public-cycle evidence: typed AVX workload -> strict stop5-to-0 -> public CPU/memory release -> successful second boot, independently deduplicated current-host-pair-lifecycle-logical-dedup-20261019-1. Preserve original TLS/ownership-retained failures. Full restoration/second public stop and supported final-session unexplained lifetime-defect closure remain open; VM teardown is not public restoration."
           ]
         }
       ],
-      "current_evidence_summary": "29 distinct native behaviors and nine accepted native batches; current053d strict NUMA accepted. Selected-suite P-M11-01 previously closed on its matched tuple; current053d six-launch regression staged, not native accepted yet. Diagnostics and remaining ownership/restoration criteria stay open."
+      "current_evidence_summary": "Independent literal review closes P-M11-02 and P-M11-03 for the declared current053d selected regression scope, together with complete P-M11-01: wholeM11 COMPLETE. Current six strict launches and NUMA have separate genuine app/physical acceptance; historical failure dispositions are preserved. Known shared-sighand exec source defect remains mandatory M06/overall work; M05/M12 full restoration/session budgets remain separate."
     },
     {
       "id": "M12",
@@ -2184,24 +2228,24 @@
     "milestone_rows_complete": 0,
     "closed_check_scope": "P-M02-03: retirement of six current942 accepted diagnostic runs only. Changed final-profile runs retain their own retirement obligation.",
     "latest_selected_functional_checkpoint": {
-      "recorded_at": "2026-10-21T21:26:35.304850+00:00",
+      "recorded_at": "2026-10-21T22:02:06.198249+00:00",
       "native_behaviors": 29,
       "selected_production_rust_paths": 21,
       "applicable_native_paths": 18,
-      "practical_checks_complete": 22,
+      "practical_checks_complete": 24,
       "practical_checks_total": 35,
-      "whole_milestones_complete": 5,
+      "whole_milestones_complete": 6,
       "accepted_compiler_batches": 32,
-      "accepted_native_batches": 9,
-      "coherent_source_units": 90,
+      "accepted_native_batches": 10,
+      "coherent_source_units": 95,
       "evidence": {
-        "path": "docs/verification/evidence/numa-insert-clear-native-acceptance-20261021-1/INDEPENDENT-ACTUAL-053D-NUMA-APPLICATION-AND-NATIVE-PHYSICAL-ACCEPTANCE-1.json",
-        "sha256": "602d2eef7426648999f8c5f11190fdabdaa9933cac52468f6cf4a21a74b5371f",
-        "size": 4363
+        "path": "docs/verification/evidence/current053d-six-launch-accepted-and-M11-closed-20261021-1/ROOT-COUNTER-AND-M11-ADOPTION-1.json",
+        "sha256": "c262b4293d1f651504b62414e809afe952e3f219703cb9da35452f15a5492101",
+        "size": 1756
       },
-      "scope": "Current053d strict NUMA app/physical acceptance602d2eef and named insert/clear conditionjoin4ce6: representative paths only, no new behavior/check/whole closure; sixlaunch current stage passed, runtime pending.",
-      "OS_source_units": 35,
-      "infrastructure_source_units": 55
+      "scope": "Genuine current053d selected six-launch app/physical acceptance, source-unit dedup95/37OS58infra, literalM11-02/-03+wholeclosure. No new behavior/Rust path or M05/M06/M12 closure.",
+      "OS_source_units": 37,
+      "infrastructure_source_units": 58
     },
     "historical_next_actions_preserved_20261019": [
       "Prepare separately reviewed realpayload execution afterfreshsecondboot, proving rebootedOSserveswork; no secondstop/release or10cyclequota authority fromfirstcycle.",
@@ -2612,6 +2656,56 @@
       "Bind actual accepted image into existing image-only stage/separate-launcher consumer; preserve60members/59unchanged/kernel-onlydelta and strict116B/emptyerr/37 oracle. Reuse accepted source/materialization/gates and original dispatcher postjoin; no rebuild or duplicate audits.",
       "Final-profile budgets remain2boots/10complete public native lifecycle cycles/100app launches/60mixed minutes; matching observations may overlap/reuse. VM termination alone is not public native restoration.",
       "Preserve strict accepted NUMA app/physical evidence, all failures, one-heavy controls/floors/noresize; quiesce source subprocesses before exclusive census. SDK66 capacity blocker remains; deferred qualification is not passed."
-    ]
+    ],
+    "historical_selected_checkpoint_before_current_six_M11_20261021": {
+      "recorded_at": "2026-10-21T21:26:35.304850+00:00",
+      "native_behaviors": 29,
+      "selected_production_rust_paths": 21,
+      "applicable_native_paths": 18,
+      "practical_checks_complete": 22,
+      "practical_checks_total": 35,
+      "whole_milestones_complete": 5,
+      "accepted_compiler_batches": 32,
+      "accepted_native_batches": 9,
+      "coherent_source_units": 90,
+      "evidence": {
+        "path": "docs/verification/evidence/numa-insert-clear-native-acceptance-20261021-1/INDEPENDENT-ACTUAL-053D-NUMA-APPLICATION-AND-NATIVE-PHYSICAL-ACCEPTANCE-1.json",
+        "sha256": "602d2eef7426648999f8c5f11190fdabdaa9933cac52468f6cf4a21a74b5371f",
+        "size": 4363
+      },
+      "scope": "Current053d strict NUMA app/physical acceptance602d2eef and named insert/clear conditionjoin4ce6: representative paths only, no new behavior/check/whole closure; sixlaunch current stage passed, runtime pending.",
+      "OS_source_units": 35,
+      "infrastructure_source_units": 55
+    },
+    "current053d_six_launch_and_literal_M11_closure_20261021": {
+      "application_acceptance": {
+        "path": "docs/verification/evidence/current053d-six-launch-accepted-and-M11-closed-20261021-1/INDEPENDENT-ACTUAL-CURRENT-SIX-LAUNCH-APPLICATION-ACCEPTANCE-1.json",
+        "sha256": "a04292eb8f7a82df9f59b2e240a141048fc06d3e46302337c792c24ee9e88261",
+        "size": 3764
+      },
+      "physical_acceptance": {
+        "path": "docs/verification/evidence/current053d-six-launch-accepted-and-M11-closed-20261021-1/INDEPENDENT-ACTUAL-CURRENT-SIX-LAUNCH-PHYSICAL-ACCEPTANCE-1.json",
+        "sha256": "4b518560ad0cc39b266b3977559889e9d9f474f01c0839da423bdfc236bc999f",
+        "size": 1832
+      },
+      "literal_adjudication": {
+        "path": "docs/verification/evidence/current053d-six-launch-accepted-and-M11-closed-20261021-1/INDEPENDENT-LITERAL-CURRENT-M11-02-03-AND-WHOLE-ADJUDICATION-1.json",
+        "sha256": "ffc69382d43da14055cd8109e6ea1aeb8760fceeaa81856df6406cdcfc1fefad",
+        "size": 4467
+      },
+      "source_and_counter_adoption": {
+        "path": "docs/verification/evidence/current053d-six-launch-accepted-and-M11-closed-20261021-1/ROOT-COUNTER-AND-M11-ADOPTION-1.json",
+        "sha256": "c262b4293d1f651504b62414e809afe952e3f219703cb9da35452f15a5492101",
+        "size": 1756
+      },
+      "checks_delta": 2,
+      "whole_delta": 1,
+      "native_batches_delta": 1,
+      "source_units_delta": 5,
+      "compiler_delta": 0,
+      "distinct_behaviors_delta": 0,
+      "production_or_native_Rust_delta": 0,
+      "M12_scope": "Six actual launches/three pair rounds/one guest boot on bound053d two-McKernel-CPU profile; no public cycle/full-restoration/60minute/full-budget completion."
+    }
   }
 }

@@ -1,0 +1,60 @@
+{
+  "schema": "mckernel.practical-M11.literal-current-tuple-adjudication.v1",
+  "status": "PASS_LITERAL_P_M11_02_AND_P_M11_03",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/numa_compiler_review",
+  "implementation_ownership": false,
+  "criteria_preserved": {
+    "P-M11-02": "Retain useful kernel diagnostics and every failure.",
+    "P-M11-03": "Resolve unexplained panic/corruption/lost data/stranded ownership.",
+    "M11_exit": "Relevant regressions and negatives pass without unexplained corruption or retained owners."
+  },
+  "P-M11-02": {
+    "decision": "COMPLETE_FOR_DECLARED_CURRENT_SELECTED_REGRESSION_SCOPE",
+    "basis": "Useful serial/kernel diagnostics, strict streams, statuses, owner evidence and readback archives are retained. Original TLS, lifecycle, observer, normalizer, cursor-comparison and quarantine failures remain separately preserved with their actual failure classifications and subsequent dispositions.",
+    "no_failure_relabelled_PASS": true,
+    "future_session_duration_not_required_by_literal": true
+  },
+  "P-M11-03": {
+    "decision": "COMPLETE_FOR_DECLARED_CURRENT_SELECTED_REGRESSION_SCOPE",
+    "basis": [
+      "TLS1 was a documented collector4096/manifest1024 stream-accounting mismatch; TLS2 subsequently passed while preserving the original failure.",
+      "The historical lifecycle failure documented a poisoned collector procfs flag, not established leaked registrations. Later accepted strict native stop/public release/reboot evidence resolves that historical shutdown scope.",
+      "Current053d strict NUMA and six-launch regressions have genuine application and separate physical acceptances.",
+      "Current six-launch physical acceptance records container absence, released lease,30 reaped clients,14 absent owned groups, QEMU teardown, empty procfs and no primary or secondary failure.",
+      "The postmutation quarantine history was explicitly retired and reconciled; retained diagnostic files are not a stranded live owner."
+    ],
+    "claim": "No unresolved observed unexplained panic, corruption, lost data or stranded owner remains in these declared regressions.",
+    "claim_of_zero_remaining_source_defects": false
+  },
+  "current_evidence": {
+    "application_acceptance_sha256": "a04292eb8f7a82df9f59b2e240a141048fc06d3e46302337c792c24ee9e88261",
+    "physical_acceptance_sha256": "4b518560ad0cc39b266b3977559889e9d9f474f01c0839da423bdfc236bc999f",
+    "existing_P_M11_01_adjudication_sha256": "7a25bc33518f8f4af0a3a761f46691b08b4d6964b3e3875e75220940aece83b3",
+    "lifecycle_dedup_record_sha256": "12439454268a1c9ae752fbbce439d4645f26a79899ecc0eb88f17147ef3d3ee2",
+    "public_cycle_sha256": "9c3847933f8cc9e3d175363338e87ff229ef7fcd1912d146219e7c990224efea",
+    "postreboot_workload_sha256": "babc48ea0f951586074e5aabcdd0915d0b3f1f76669ace8179adc585f07723ab",
+    "later_typed_cycle_review_sha256": "c32f227b0a57bbfdbb8730e66852f7b438f3e6e4d1fc5a344c5b067586a84248"
+  },
+  "active_exec_reset_defect": {
+    "disposition": "REMAINS_OPEN_REQUIRED_IMPLEMENTATION_AND_OVERALL_CORRECTNESS_WORK",
+    "accepted_source_body_receipt_sha256": "ece55b09f6ff2ea0c36caaa8243b9571e62574dc99c932edee7a722fe96ff5af",
+    "finding": "Old do_execveat resets a shared SigCommon table without the writer lock used by peer do_sigaction; local preemption disable does not exclude a CLONE_SIGHAND peer.",
+    "repair_scope": "Locked Rust source and16 modeled IRQ/body cases accepted; repair is not compiled, linked or native-proven in053d. Original C fallback remains defective.",
+    "M11_relevance": "Current accepted regressions neither validate nor repair this concurrent-exec boundary. No native failure from it was observed. It cannot be waived or declared fixed by this adjudication.",
+    "remaining_lane": "Existing M06 production-consumer integration and separately reviewed native exec validation."
+  },
+  "whole_M11_eligible_for_closure": true,
+  "reason": "P-M11-01 is already complete; both remaining literal checks are satisfied in the declared selected scope.",
+  "not_closed": [
+    "M05 full restoration",
+    "M12 repetition and60minute budgets",
+    "M06 exec-reset repair",
+    "Overall functional goal and whole-kernel retirement"
+  ],
+  "new_test_required_for_this_adjudication": false,
+  "ledger_edits_performed": false,
+  "new_runtime_or_Rust_credit": 0,
+  "new_percentage_claim": false,
+  "reviewer_runtime_runs": 0
+}

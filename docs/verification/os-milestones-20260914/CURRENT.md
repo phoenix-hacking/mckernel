@@ -1,3 +1,35 @@
+## Current — M11 complete; 24/35 checks, six whole milestones
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independent literal M11 adjudication ffc69382 closes P-M11-02 retention and
+P-M11-03 unexplained selected-regression failures, with P-M11-01 already complete.
+Whole M11 COMPLETE for current declared053d selected suite. Historical TLS and
+shutdown/collector failures retain original labels and documented later resolution.
+Shared-sighand exec source race remains active mandatory M06/overall work; this
+closure makes no zero-source-defect, full-restoration or M12-budget claim.
+
+Current six-launch app a04292eb and physical4b518560 independently accepted:
+3rounds/6strict launches/387B+254B/emptyerr/exit0; owner44.474360006s and all7calls0,
+14owned groups absent,30clients reaped,3readbacks joined. Rawdiagnostic labels
+remain unchanged. Genuine current fullphysical7c156 mechanically records inspected
+raw owner/atomic/state/ledger/birth/controller facts; toolhandle97265 is notOSPID.
+New native batches10; behaviors29 and Rust21/18 unchanged. Coherent source dedup
+80dfcfaf adopted95=37OS+58infra; compiler32. PROC24 propagation, metadata/pins and
+materialization add zero; five actual distinct accepted code/source units only.
+
+119-byte NEW overlap app-only stage passed0/11.438655009s/emptyerr/join/groupabsence,
+42,550,958B reported. Current053d/33f/init/modules stay equal; only apps/app changes,
+60members/59unchanged. Stageacceptance/qualified normalizer next; no119native yet,
+original116case untouched. Real execRust locked source/body16cases and actual
+6911/49source materialization accepted; necessary unchanged four-object request
+join passed0/.064386672s. Next exact existing compiler release after publication,
+fresh aggregate grant/independentreview; no full image rebuild for these objects.
+
+M05 full mapping/callback/reference restoration and M12 2boots/10publiccycles/
+100launches/60mixedminutes remain separate and open. Storage128approval retained,
+active developer no-resize still blocks growth. No alternativepath/reapproval or
+launcher restart. All failures/27:4/scratch21 preserved; oneheavy/floors remain.
+
 ## Current — six-launch whole caller and final static joins pass; exact native release next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
