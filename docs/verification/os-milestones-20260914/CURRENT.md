@@ -1,3 +1,40 @@
+## Current — complete observer fixture accepted; Rust idle source integrated (2026-10-22 16:16 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Generated observer main→real summary→generated postjoin consumer88objects/97roles
+PASS0/1.334285867s/emptyerr,11negative observer refusals+postjoin scalar refusal,
+all retainedfixtures/locks; final independent boundaryPASS. Production bindings
+observer26d7b366/cleanup6ba2ae5c/summary64cad68a/rawexporte848654e; strict typed
+list+count schema. Source/failure/1268passfixturefiles and failedpositive1 retained,
+archive and exact cleanup publication alias now published in
+../evidence/m07-observer-inventory-expert-cohort-20261022-1/. Next: fetched source
+proof→canonical fresh exact observer review→live admission→actual observer,
+summary/original-five/raw-five→separatecleanup/postjoin/physical→M07 strict native.
+No old release replay. Partialroot700outputs/build/common/shared remain retained.
+
+Disjoint Rust idle scan80 originalC/Rust paritycases+alternate C layout and
+selected/fallback link passed; focused unsafe/ABI reviewPASS. Root integrated
+matching three postimages in6f367112, preserves FP/post-switch fixes and exact
+C fallback. Source101(41OS/60infra); productionTU ABI,defaultlink,newimage/native
+pending. No production/native Rustpath or compilerbatch credit. See
+../evidence/rust-idle-runqueue-scan-20261022-1/.
+
+| Current C path | Rust candidate | Actual retirement/proof scope |
+| --- | --- | --- |
+| process.c idle locked PS_RUNNING scan | sched_idle_runqueue_has_running_result, existingPROCESS_HELPERS selection | sharedsource6f367112 +80extractedC/Rustcases; productionTU/defaultlink/nativeOPEN |
+
+SDK68 input bundle materialized/verified68files/1,346,042B, sourceidentity52fd08d7;
+actual driver/owner preparation validatorsPASS/.566s.14references preserved by
+reference; initial import failure and bounded correction retained. No SDK/compiler/
+module/native or capacity authority. Source bundle:
+../evidence/m05-sdk68-current-source-bundle-20261022-1/. SDKcode81dd8caf and53tests
+remain accepted. Current pinned-container make/native modules/SDKgate still future;
+reserve576unanswered. Held24/35checks,sixwhole,35compiler,13native,31behaviors,
+Rust21production/18native. No2x/4xrate claimed; original baseline/stops retained.
+User's16:29review remains: actualOSvsinfra changes,compiler/native deltas,critical
+path latency and one next blocker. Preserve Scratch21/exclusions57687/57688,27:4,
+all failures and dirty unrelated inputs. No newimage rebuild for current native.
+
 ## Current — SDK68 driver/current unit regression accepted (2026-10-22 15:59 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

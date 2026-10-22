@@ -1,0 +1,17 @@
+{
+  "corrected_input": {
+    "command": "taskset -c 6 /usr/bin/timeout 30 /usr/bin/prlimit --as=1073741824 --cpu=20 -- /usr/bin/python3 -I -B /home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/prepare_existing_current_terminal_sources.FRESH-CORRECTION-1.py terminal --bindings /home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/TERMINAL-GENERATOR.EXPERT-BOUND.json --bindings-sha256 b901e6d7e233fec75e1487203512653c2c4fb4750ee2aef0737a5fa81c062c6e > /home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/generation.stdout 2> /home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/generation.stderr",
+    "exit_code": 0,
+    "stderr": "/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/generation.stderr",
+    "stdout": "/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/generation.stdout"
+  },
+  "failed_input": {
+    "command": "taskset -c 6 /usr/bin/timeout 30 /usr/bin/prlimit --as=1073741824 --cpu=20 -- /usr/bin/python3 -I -B /home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/prepare_existing_current_terminal_sources.FRESH-CORRECTION-1.py terminal --bindings /home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/TERMINAL-GENERATOR.EXPERT-BOUND.json --bindings-sha256 251",
+    "exception": "ValueError: exact dispatcher binding DATA",
+    "exit_code": 1,
+    "retained_trace": "Original tool result: generator line268 digest assertion, need line19 raises ValueError. No output directory created by rejected input.",
+    "stage": "main exact input digest before terminal() and before output creation"
+  },
+  "full_test_executed": false,
+  "status": "SOURCE_GENERATION_ONLY_NO_TEST"
+}

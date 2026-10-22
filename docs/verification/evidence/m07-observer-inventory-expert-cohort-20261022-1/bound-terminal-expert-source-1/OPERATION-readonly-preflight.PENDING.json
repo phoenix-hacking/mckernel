@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--fsize=33554432",
+    "--cpu=unlimited:unlimited",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/bound-terminal-expert-source-1/check_actual_fresh_preflight.py",
+    "--release",
+    "/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/bound-terminal-expert-source-1/cleanup-execution-release.json",
+    "--sha256",
+    "BIND_EXACT_CLEANUP_RELEASE_SHA256"
+  ],
+  "capture_directory": "/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/bound-terminal-expert-source-1/actual-fresh-preflight-capture-1",
+  "positive_required": "PASS_ACTUAL_FRESH_PREFLIGHT_READ_ONLY/predicate_passedtrue/mutation_startedfalse/mfdnone/transactionclosed/rootwhole0",
+  "same_final_cleanup_release": true
+}

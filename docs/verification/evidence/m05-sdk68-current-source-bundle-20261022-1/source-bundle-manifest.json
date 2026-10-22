@@ -1,0 +1,2373 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EXACT68_SOURCE_BUNDLE_ONLY",
+  "preparation": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/current68-host-control-sdk-preparation-20261022-1.json",
+    "sha256": "62c869a85f8ad05e08279df9d4f03a4aae4bb8b0cc10c84e8d9837a2745eb445"
+  },
+  "source_files": 68,
+  "source_bytes": 1346042,
+  "source_identity": "52fd08d7495bd1e622d02cbb186cbbd0696829c192fb9afdedb83fecaa56b53a",
+  "source_identity_encoding": "SHA256 compact JSON sorted [relative,sha256,bytes] triples",
+  "exact_source_map": {
+    "Kbuild": [
+      "7e38447e3c72f3fbaf0847b9010a7c76102a11c9bf826c71603e4ba072895750",
+      502
+    ],
+    "Kconfig": [
+      "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+      848
+    ],
+    "abi/application.rs": [
+      "cc91eb844cbffdb8818f4c2d728bf3dcbd0b39883655cdd0a5e0d98815925eb4",
+      6056
+    ],
+    "abi/os_service.rs": [
+      "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+      2527
+    ],
+    "abi/sysfs.rs": [
+      "63b25ac0df5fe3da4c0989196ea9e45e8d57b573e6e7603ca523452b2f19718e",
+      3393
+    ],
+    "abi/sysfs_request.rs": [
+      "df5fad1ef6ec305b71c56ea6a89c9ecbce7b089b95730ad591e09909e3ffd8c7",
+      9082
+    ],
+    "abi/vdso.rs": [
+      "d796e3a0723d6a21096a1455c35a7820437dfc2b99e5bb0e1c1f4db79f1c7d7d",
+      17839
+    ],
+    "abi/x86_64.rs": [
+      "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      19740
+    ],
+    "application_image.rs": [
+      "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+      8356
+    ],
+    "application_pager.rs": [
+      "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      3196
+    ],
+    "application_rpc.rs": [
+      "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      10080
+    ],
+    "application_syscall.rs": [
+      "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0",
+      20310
+    ],
+    "current_fork_control.rs": [
+      "89e3c6a26826ef48c2d5420759e462cebe12e2ffe437b9cb5a83627d37699304",
+      10580
+    ],
+    "current_fork_host.rs": [
+      "5a68633144eb60f941a73ceff9f2d5b0d30c7b9c1c1d0c25d5e8135dfde959b4",
+      10844
+    ],
+    "current_fork_task_mm.rs": [
+      "e2e124e84030aa6be957af6ff9c2a03116ac1b20118e28c974d24e05048b6dfe",
+      4578
+    ],
+    "device_registry.rs": [
+      "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
+      60221
+    ],
+    "exec_delivery.rs": [
+      "65ab86c4aff79e04e46a0f6b9b2eb2397e4e94d16bc5163579e55663eac83b7d",
+      2058
+    ],
+    "exec_transfer_checked.rs": [
+      "a7dae8a829da028cab0ad2d9de233304a587fd7d09059f4bf87c4fee16b67907",
+      9875
+    ],
+    "ihk-compat-build-id.bin": [
+      "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+      8
+    ],
+    "ihk.rs": [
+      "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+      18754
+    ],
+    "ihk_ioctl.rs": [
+      "60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e",
+      10467
+    ],
+    "ihk_mapping.rs": [
+      "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+      21943
+    ],
+    "ihk_smp_x86_64.rs": [
+      "7457d19bfbc8af95825481a924cdb8dee6ce5c74604907cf49ac34a54b93b5ac",
+      36747
+    ],
+    "ikc_master.rs": [
+      "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+      26480
+    ],
+    "ikc_queue.rs": [
+      "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      23030
+    ],
+    "mcctrl.rs": [
+      "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      8992
+    ],
+    "mcctrl_exec.rs": [
+      "4ebf73c46cf12a05fc76b078fbfcf218190dd372b335f886123125a012ae26b0",
+      8718
+    ],
+    "mcctrl_process.rs": [
+      "7e8572f10af6e5e38b76186c246abe672ec06f63df71e5aaa889b3a09f4fb035",
+      50530
+    ],
+    "mcctrl_rust.rs": [
+      "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      8992
+    ],
+    "mcctrl_vm.rs": [
+      "50e0a20a032cf137ab93f2b19f392577fd1a3f48990b4e368ac415134002bf92",
+      30315
+    ],
+    "mcctrl_vm_write_compat.c": [
+      "dcbe065ede329b51b41abcaf0563015532920fe6a34391c7bf77ed1c2f0abdf0",
+      480
+    ],
+    "mcctrl_vm_write_compat.h": [
+      "ff25bb43907149fc9303b0dd0a7db1c84b9fc2c6f49f1922f18ca9c32b57c527",
+      368
+    ],
+    "os_registry.rs": [
+      "b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6",
+      30435
+    ],
+    "os_runtime.rs": [
+      "4acedfe7e50e51183f0e58d3ab9fd9225eccf4bd5bfdb4101a49e4a201fd55f5",
+      83075
+    ],
+    "os_service.rs": [
+      "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+      6907
+    ],
+    "page_allocator.rs": [
+      "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5",
+      21301
+    ],
+    "page_owner_registry.rs": [
+      "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869",
+      13085
+    ],
+    "procfs_objects.rs": [
+      "4d1247a87706e94fa75d7bea667d9349d48b7c525eba99d02688a87f5369411c",
+      19245
+    ],
+    "smp_application.rs": [
+      "c3e95e0b51ded304497001bedc31699afcee18033f7f099b0989750571d65f61",
+      67246
+    ],
+    "smp_application_image.rs": [
+      "cf3eb651aac4a5510f8ddcf9cc5376479e3379528582a33e1fc55c084f1317b5",
+      9716
+    ],
+    "smp_application_syscall.rs": [
+      "eaecdf66839854c3d2a6461cc7b2e2166f5738ba523af1063df4bc5b0e2b4a3a",
+      34002
+    ],
+    "smp_boot_code.rs": [
+      "0f94af32383cc6e6108e0203619642eef0e492286131dac4b35d5e1248564a7f",
+      2024
+    ],
+    "smp_cpu.rs": [
+      "f65f3aea00dfdd0a7905d3dd396e67684fd428c71cf34dd6e15a56896c73f912",
+      78237
+    ],
+    "smp_file_pager.rs": [
+      "655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c",
+      14152
+    ],
+    "smp_ikc.rs": [
+      "4d1cd859dbea602f8232095fc66dd4d337848ea61ad94436da191fb316628b03",
+      12886
+    ],
+    "smp_image.rs": [
+      "4f35ec396494fa428c55298c91ffe14aa0142d0282dd37d922f94a901a692689",
+      14324
+    ],
+    "smp_loader.rs": [
+      "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+      3194
+    ],
+    "smp_memory.rs": [
+      "60758aeafac150bd8aac62455844e3f4e4200a082f82f80ce66c3c871d4909be",
+      127757
+    ],
+    "smp_procfs.rs": [
+      "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea",
+      28512
+    ],
+    "smp_resource.rs": [
+      "d4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd",
+      133271
+    ],
+    "smp_service.rs": [
+      "fd2c19bc7e09911c9332ec32432060b04e2ce3d4c2918cf94a996eeef82deeac",
+      47527
+    ],
+    "smp_startup.rs": [
+      "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+      4963
+    ],
+    "smp_startup_entry.S": [
+      "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+      1350
+    ],
+    "smp_topology.rs": [
+      "6d925fa50279e7eca938fd5b9d0b2a73105ef875793623024c681f40d70d08e6",
+      11189
+    ],
+    "smp_trampoline.S": [
+      "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+      3650
+    ],
+    "smp_trampoline.rs": [
+      "4a110936d52a80664943b5dd605fbf9ad1c99460fe8ff0a16327ca015d2d0bcb",
+      5709
+    ],
+    "smp_vdso.rs": [
+      "dd94d677c97b0c3271c746f1795289fdaadff89e1c08a660bd7659b14466d488",
+      6664
+    ],
+    "sysfs_memory.rs": [
+      "a06bef19cc2f0c847a4e394703f3cb0e9450c8a8453252c46745e324fe83d600",
+      36934
+    ],
+    "sysfs_objects.rs": [
+      "2b04c57b43516550f0c3bdaf115b667d4a64393030494e79b553248c42aa7453",
+      13988
+    ],
+    "sysfs_os.rs": [
+      "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+      2451
+    ],
+    "sysfs_remote.rs": [
+      "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9",
+      12052
+    ],
+    "sysfs_rpc.rs": [
+      "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+      6833
+    ],
+    "sysfs_setup.rs": [
+      "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+      12683
+    ],
+    "sysfs_snoop.rs": [
+      "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+      5515
+    ],
+    "sysfs_tree.rs": [
+      "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+      12276
+    ],
+    "sysfs_zeroing.rs": [
+      "950919a29ab2fb53b0c488cc6e6d01b433f8caa95b27d1a1f32fb0ff3dc8390e",
+      12023
+    ],
+    "user_string.rs": [
+      "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+      603
+    ],
+    "zero_pages.rs": [
+      "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+      4354
+    ]
+  },
+  "fd9_fields": [
+    "st_dev",
+    "st_ino",
+    "st_mode",
+    "st_uid",
+    "st_gid",
+    "st_nlink",
+    "st_size",
+    "st_mtime_ns",
+    "st_ctime_ns"
+  ],
+  "rows": [
+    {
+      "path": "Kbuild",
+      "origin": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-ffi-correction-1/source-modules/Kbuild",
+      "sha256": "7e38447e3c72f3fbaf0847b9010a7c76102a11c9bf826c71603e4ba072895750",
+      "bytes": 502,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48129180,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 502,
+        "st_mtime_ns": 1792465161493984047,
+        "st_ctime_ns": 1792465161493984047
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646690,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 502,
+        "st_mtime_ns": 1792685908468120518,
+        "st_ctime_ns": 1792685908468120518
+      }
+    },
+    {
+      "path": "Kconfig",
+      "origin": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-1/fresh-fullmodule-attempt-1/source-modules/Kconfig",
+      "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+      "bytes": 848,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48125783,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 848,
+        "st_mtime_ns": 1792461433273181527,
+        "st_ctime_ns": 1792461433273181527
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646691,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 848,
+        "st_mtime_ns": 1792685908500121591,
+        "st_ctime_ns": 1792685908500121591
+      }
+    },
+    {
+      "path": "abi/application.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/abi/application.rs",
+      "sha256": "cc91eb844cbffdb8818f4c2d728bf3dcbd0b39883655cdd0a5e0d98815925eb4",
+      "bytes": 6056,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47468485,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 6056,
+        "st_mtime_ns": 1792625107720652214,
+        "st_ctime_ns": 1792625107720652214
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646693,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 6056,
+        "st_mtime_ns": 1792685908500121591,
+        "st_ctime_ns": 1792685908500121591
+      }
+    },
+    {
+      "path": "abi/os_service.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/abi/os_service.rs",
+      "sha256": "9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937",
+      "bytes": 2527,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47472454,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 2527,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646694,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 2527,
+        "st_mtime_ns": 1792685908500121591,
+        "st_ctime_ns": 1792685908500121591
+      }
+    },
+    {
+      "path": "abi/sysfs.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/abi/sysfs.rs",
+      "sha256": "63b25ac0df5fe3da4c0989196ea9e45e8d57b573e6e7603ca523452b2f19718e",
+      "bytes": 3393,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47471788,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 3393,
+        "st_mtime_ns": 1790650121819503317,
+        "st_ctime_ns": 1790650121819503317
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646695,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 3393,
+        "st_mtime_ns": 1792685908504121726,
+        "st_ctime_ns": 1792685908504121726
+      }
+    },
+    {
+      "path": "abi/sysfs_request.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/abi/sysfs_request.rs",
+      "sha256": "df5fad1ef6ec305b71c56ea6a89c9ecbce7b089b95730ad591e09909e3ffd8c7",
+      "bytes": 9082,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47471868,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 9082,
+        "st_mtime_ns": 1790650195977695036,
+        "st_ctime_ns": 1790650195977695036
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646696,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 9082,
+        "st_mtime_ns": 1792685908520122263,
+        "st_ctime_ns": 1792685908520122263
+      }
+    },
+    {
+      "path": "abi/vdso.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/abi/vdso.rs",
+      "sha256": "d796e3a0723d6a21096a1455c35a7820437dfc2b99e5bb0e1c1f4db79f1c7d7d",
+      "bytes": 17839,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47471153,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 17839,
+        "st_mtime_ns": 1790650219338385889,
+        "st_ctime_ns": 1790650219338385889
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646697,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 17839,
+        "st_mtime_ns": 1792685908520122263,
+        "st_ctime_ns": 1792685908520122263
+      }
+    },
+    {
+      "path": "abi/x86_64.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+      "bytes": 19740,
+      "permission_mode_octal": "0o644",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47460559,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 19740,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646698,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 19740,
+        "st_mtime_ns": 1792685908524122396,
+        "st_ctime_ns": 1792685908524122396
+      }
+    },
+    {
+      "path": "application_image.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/application_image.rs",
+      "sha256": "25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2",
+      "bytes": 8356,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47472732,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 8356,
+        "st_mtime_ns": 1788913797783193120,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646699,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 8356,
+        "st_mtime_ns": 1792685908524122396,
+        "st_ctime_ns": 1792685908524122396
+      }
+    },
+    {
+      "path": "application_pager.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/application_pager.rs",
+      "sha256": "adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19",
+      "bytes": 3196,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47473839,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 3196,
+        "st_mtime_ns": 1788913797775192989,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646700,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 3196,
+        "st_mtime_ns": 1792685908540122933,
+        "st_ctime_ns": 1792685908540122933
+      }
+    },
+    {
+      "path": "application_rpc.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/application_rpc.rs",
+      "sha256": "9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39",
+      "bytes": 10080,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47472680,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 10080,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646701,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 10080,
+        "st_mtime_ns": 1792685908544123067,
+        "st_ctime_ns": 1792685908544123067
+      }
+    },
+    {
+      "path": "application_syscall.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/application_syscall.rs",
+      "sha256": "daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0",
+      "bytes": 20310,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47468655,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 20310,
+        "st_mtime_ns": 1792514115762439878,
+        "st_ctime_ns": 1792514115766440007
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646702,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 20310,
+        "st_mtime_ns": 1792685908544123067,
+        "st_ctime_ns": 1792685908544123067
+      }
+    },
+    {
+      "path": "current_fork_control.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/current_fork_control.rs",
+      "sha256": "89e3c6a26826ef48c2d5420759e462cebe12e2ffe437b9cb5a83627d37699304",
+      "bytes": 10580,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47468660,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 10580,
+        "st_mtime_ns": 1792514115770440135,
+        "st_ctime_ns": 1792514115770440135
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646703,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 10580,
+        "st_mtime_ns": 1792685908544123067,
+        "st_ctime_ns": 1792685908544123067
+      }
+    },
+    {
+      "path": "current_fork_host.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/current_fork_host.rs",
+      "sha256": "5a68633144eb60f941a73ceff9f2d5b0d30c7b9c1c1d0c25d5e8135dfde959b4",
+      "bytes": 10844,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47469452,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 10844,
+        "st_mtime_ns": 1792512543192338935,
+        "st_ctime_ns": 1792512543228340053
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646704,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 10844,
+        "st_mtime_ns": 1792685908560123604,
+        "st_ctime_ns": 1792685908560123604
+      }
+    },
+    {
+      "path": "current_fork_task_mm.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/current_fork_task_mm.rs",
+      "sha256": "e2e124e84030aa6be957af6ff9c2a03116ac1b20118e28c974d24e05048b6dfe",
+      "bytes": 4578,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47468650,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 4578,
+        "st_mtime_ns": 1792475405675328813,
+        "st_ctime_ns": 1792475405675328813
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646705,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 4578,
+        "st_mtime_ns": 1792685908564123738,
+        "st_ctime_ns": 1792685908564123738
+      }
+    },
+    {
+      "path": "device_registry.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/device_registry.rs",
+      "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5",
+      "bytes": 60221,
+      "permission_mode_octal": "0o644",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47460560,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 60221,
+        "st_mtime_ns": 1788746304806417048,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646706,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 60221,
+        "st_mtime_ns": 1792685908564123738,
+        "st_ctime_ns": 1792685908564123738
+      }
+    },
+    {
+      "path": "exec_delivery.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/exec_delivery.rs",
+      "sha256": "65ab86c4aff79e04e46a0f6b9b2eb2397e4e94d16bc5163579e55663eac83b7d",
+      "bytes": 2058,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47469160,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 2058,
+        "st_mtime_ns": 1792625107720652214,
+        "st_ctime_ns": 1792625107720652214
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646707,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 2058,
+        "st_mtime_ns": 1792685908580124274,
+        "st_ctime_ns": 1792685908580124274
+      }
+    },
+    {
+      "path": "exec_transfer_checked.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/exec_transfer_checked.rs",
+      "sha256": "a7dae8a829da028cab0ad2d9de233304a587fd7d09059f4bf87c4fee16b67907",
+      "bytes": 9875,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47469159,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 9875,
+        "st_mtime_ns": 1792625107720652214,
+        "st_ctime_ns": 1792625107720652214
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646708,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 9875,
+        "st_mtime_ns": 1792685908584124409,
+        "st_ctime_ns": 1792685908584124409
+      }
+    },
+    {
+      "path": "ihk-compat-build-id.bin",
+      "origin": "/home/holden/mckernel-work/host-preparation/practical-create-ppd-provider-repair-20261019-1/host-control-fullmodule-integration-1/compiler-correction-1/fresh-fullmodule-attempt-1/source-modules/ihk-compat-build-id.bin",
+      "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+      "bytes": 8,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48125796,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 8,
+        "st_mtime_ns": 1792461433273181527,
+        "st_ctime_ns": 1792461433273181527
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646709,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 8,
+        "st_mtime_ns": 1792685908584124409,
+        "st_ctime_ns": 1792685908584124409
+      }
+    },
+    {
+      "path": "ihk.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/ihk.rs",
+      "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec",
+      "bytes": 18754,
+      "permission_mode_octal": "0o644",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47460568,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 18754,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646710,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 18754,
+        "st_mtime_ns": 1792685908584124409,
+        "st_ctime_ns": 1792685908584124409
+      }
+    },
+    {
+      "path": "ihk_ioctl.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/ihk_ioctl.rs",
+      "sha256": "60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e",
+      "bytes": 10467,
+      "permission_mode_octal": "0o644",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47460569,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 10467,
+        "st_mtime_ns": 1788912261072381701,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646711,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 10467,
+        "st_mtime_ns": 1792685908600124945,
+        "st_ctime_ns": 1792685908600124945
+      }
+    },
+    {
+      "path": "ihk_mapping.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/ihk_mapping.rs",
+      "sha256": "085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc",
+      "bytes": 21943,
+      "permission_mode_octal": "0o644",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47460570,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 21943,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646712,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 21943,
+        "st_mtime_ns": 1792685908604125080,
+        "st_ctime_ns": 1792685908604125080
+      }
+    },
+    {
+      "path": "ihk_smp_x86_64.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "sha256": "7457d19bfbc8af95825481a924cdb8dee6ce5c74604907cf49ac34a54b93b5ac",
+      "bytes": 36747,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47468654,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 36747,
+        "st_mtime_ns": 1792625107720652214,
+        "st_ctime_ns": 1792625107720652214
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646713,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 36747,
+        "st_mtime_ns": 1792685908604125080,
+        "st_ctime_ns": 1792685908604125080
+      }
+    },
+    {
+      "path": "ikc_master.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/ikc_master.rs",
+      "sha256": "1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3",
+      "bytes": 26480,
+      "permission_mode_octal": "0o644",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47460572,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 26480,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646714,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 26480,
+        "st_mtime_ns": 1792685908604125080,
+        "st_ctime_ns": 1792685908604125080
+      }
+    },
+    {
+      "path": "ikc_queue.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/ikc_queue.rs",
+      "sha256": "3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5",
+      "bytes": 23030,
+      "permission_mode_octal": "0o644",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47460573,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 23030,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646715,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 23030,
+        "st_mtime_ns": 1792685908624125750,
+        "st_ctime_ns": 1792685908624125750
+      }
+    },
+    {
+      "path": "mcctrl.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/mcctrl.rs",
+      "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      "bytes": 8992,
+      "permission_mode_octal": "0o644",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47460575,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 8992,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646716,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 8992,
+        "st_mtime_ns": 1792685908624125750,
+        "st_ctime_ns": 1792685908624125750
+      }
+    },
+    {
+      "path": "mcctrl_exec.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_exec.rs",
+      "sha256": "4ebf73c46cf12a05fc76b078fbfcf218190dd372b335f886123125a012ae26b0",
+      "bytes": 8718,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47472533,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 8718,
+        "st_mtime_ns": 1790650132255811624,
+        "st_ctime_ns": 1790650132255811624
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646717,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 8718,
+        "st_mtime_ns": 1792685908628125884,
+        "st_ctime_ns": 1792685908628125884
+      }
+    },
+    {
+      "path": "mcctrl_process.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_process.rs",
+      "sha256": "7e8572f10af6e5e38b76186c246abe672ec06f63df71e5aaa889b3a09f4fb035",
+      "bytes": 50530,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47469071,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 50530,
+        "st_mtime_ns": 1792625107720652214,
+        "st_ctime_ns": 1792625107720652214
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646718,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 50530,
+        "st_mtime_ns": 1792685908628125884,
+        "st_ctime_ns": 1792685908628125884
+      }
+    },
+    {
+      "path": "mcctrl_rust.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/mcctrl.rs",
+      "sha256": "b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030",
+      "bytes": 8992,
+      "permission_mode_octal": "0o644",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47460575,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 8992,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646719,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 8992,
+        "st_mtime_ns": 1792685908644126421,
+        "st_ctime_ns": 1792685908644126421
+      }
+    },
+    {
+      "path": "mcctrl_vm.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_vm.rs",
+      "sha256": "50e0a20a032cf137ab93f2b19f392577fd1a3f48990b4e368ac415134002bf92",
+      "bytes": 30315,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47468656,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 30315,
+        "st_mtime_ns": 1792493541853794886,
+        "st_ctime_ns": 1792493541853794886
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646720,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 30315,
+        "st_mtime_ns": 1792685908644126421,
+        "st_ctime_ns": 1792685908644126421
+      }
+    },
+    {
+      "path": "mcctrl_vm_write_compat.c",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_vm_write_compat.c",
+      "sha256": "dcbe065ede329b51b41abcaf0563015532920fe6a34391c7bf77ed1c2f0abdf0",
+      "bytes": 480,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47468563,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 480,
+        "st_mtime_ns": 1792475526760982026,
+        "st_ctime_ns": 1792475526760982026
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646721,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 480,
+        "st_mtime_ns": 1792685908648126555,
+        "st_ctime_ns": 1792685908648126555
+      }
+    },
+    {
+      "path": "mcctrl_vm_write_compat.h",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/mcctrl_vm_write_compat.h",
+      "sha256": "ff25bb43907149fc9303b0dd0a7db1c84b9fc2c6f49f1922f18ca9c32b57c527",
+      "bytes": 368,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47468665,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 368,
+        "st_mtime_ns": 1792475526760982026,
+        "st_ctime_ns": 1792475526760982026
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646722,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 368,
+        "st_mtime_ns": 1792685908664127092,
+        "st_ctime_ns": 1792685908664127092
+      }
+    },
+    {
+      "path": "os_registry.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/os_registry.rs",
+      "sha256": "b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6",
+      "bytes": 30435,
+      "permission_mode_octal": "0o644",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47460576,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 30435,
+        "st_mtime_ns": 1790624204502451446,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646723,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 30435,
+        "st_mtime_ns": 1792685908664127092,
+        "st_ctime_ns": 1792685908664127092
+      }
+    },
+    {
+      "path": "os_runtime.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/os_runtime.rs",
+      "sha256": "4acedfe7e50e51183f0e58d3ab9fd9225eccf4bd5bfdb4101a49e4a201fd55f5",
+      "bytes": 83075,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47468657,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 83075,
+        "st_mtime_ns": 1792493541853794886,
+        "st_ctime_ns": 1792493541853794886
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646724,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 83075,
+        "st_mtime_ns": 1792685908668127226,
+        "st_ctime_ns": 1792685908668127226
+      }
+    },
+    {
+      "path": "os_service.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/os_service.rs",
+      "sha256": "f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572",
+      "bytes": 6907,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47472456,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 6907,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646725,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 6907,
+        "st_mtime_ns": 1792685908684127762,
+        "st_ctime_ns": 1792685908684127762
+      }
+    },
+    {
+      "path": "page_allocator.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/page_allocator.rs",
+      "sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5",
+      "bytes": 21301,
+      "permission_mode_octal": "0o644",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47460578,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 21301,
+        "st_mtime_ns": 1788746304810417123,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646726,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 21301,
+        "st_mtime_ns": 1792685908684127762,
+        "st_ctime_ns": 1792685908684127762
+      }
+    },
+    {
+      "path": "page_owner_registry.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/page_owner_registry.rs",
+      "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869",
+      "bytes": 13085,
+      "permission_mode_octal": "0o644",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47460579,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 13085,
+        "st_mtime_ns": 1788746304810417123,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646727,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 13085,
+        "st_mtime_ns": 1792685908704128434,
+        "st_ctime_ns": 1792685908704128434
+      }
+    },
+    {
+      "path": "procfs_objects.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/procfs_objects.rs",
+      "sha256": "4d1247a87706e94fa75d7bea667d9349d48b7c525eba99d02688a87f5369411c",
+      "bytes": 19245,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47473254,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 19245,
+        "st_mtime_ns": 1790650124399579533,
+        "st_ctime_ns": 1790650124399579533
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646728,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 19245,
+        "st_mtime_ns": 1792685908708128567,
+        "st_ctime_ns": 1792685908708128567
+      }
+    },
+    {
+      "path": "smp_application.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_application.rs",
+      "sha256": "c3e95e0b51ded304497001bedc31699afcee18033f7f099b0989750571d65f61",
+      "bytes": 67246,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47468658,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 67246,
+        "st_mtime_ns": 1792625107720652214,
+        "st_ctime_ns": 1792625107720652214
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646729,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 67246,
+        "st_mtime_ns": 1792685908724129104,
+        "st_ctime_ns": 1792685908724129104
+      }
+    },
+    {
+      "path": "smp_application_image.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_application_image.rs",
+      "sha256": "cf3eb651aac4a5510f8ddcf9cc5376479e3379528582a33e1fc55c084f1317b5",
+      "bytes": 9716,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47468659,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 9716,
+        "st_mtime_ns": 1792475405675328813,
+        "st_ctime_ns": 1792475405675328813
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646730,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 9716,
+        "st_mtime_ns": 1792685908728129238,
+        "st_ctime_ns": 1792685908728129238
+      }
+    },
+    {
+      "path": "smp_application_syscall.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_application_syscall.rs",
+      "sha256": "eaecdf66839854c3d2a6461cc7b2e2166f5738ba523af1063df4bc5b0e2b4a3a",
+      "bytes": 34002,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47468647,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 34002,
+        "st_mtime_ns": 1792625107720652214,
+        "st_ctime_ns": 1792625107720652214
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646731,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 34002,
+        "st_mtime_ns": 1792685908744129775,
+        "st_ctime_ns": 1792685908744129775
+      }
+    },
+    {
+      "path": "smp_boot_code.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_boot_code.rs",
+      "sha256": "0f94af32383cc6e6108e0203619642eef0e492286131dac4b35d5e1248564a7f",
+      "bytes": 2024,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47470634,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 2024,
+        "st_mtime_ns": 1790650141964098466,
+        "st_ctime_ns": 1790650141964098466
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646732,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 2024,
+        "st_mtime_ns": 1792685908748129909,
+        "st_ctime_ns": 1792685908748129909
+      }
+    },
+    {
+      "path": "smp_cpu.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_cpu.rs",
+      "sha256": "f65f3aea00dfdd0a7905d3dd396e67684fd428c71cf34dd6e15a56896c73f912",
+      "bytes": 78237,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47468700,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 78237,
+        "st_mtime_ns": 1792645662658187507,
+        "st_ctime_ns": 1792645662658187507
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646733,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 78237,
+        "st_mtime_ns": 1792685908764130445,
+        "st_ctime_ns": 1792685908764130445
+      }
+    },
+    {
+      "path": "smp_file_pager.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_file_pager.rs",
+      "sha256": "655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c",
+      "bytes": 14152,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47473905,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 14152,
+        "st_mtime_ns": 1792251627780781433,
+        "st_ctime_ns": 1792251627780781433
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646734,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 14152,
+        "st_mtime_ns": 1792685908768130580,
+        "st_ctime_ns": 1792685908768130580
+      }
+    },
+    {
+      "path": "smp_ikc.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_ikc.rs",
+      "sha256": "4d1cd859dbea602f8232095fc66dd4d337848ea61ad94436da191fb316628b03",
+      "bytes": 12886,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47470777,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 12886,
+        "st_mtime_ns": 1790650141964098466,
+        "st_ctime_ns": 1790650141964098466
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646735,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 12886,
+        "st_mtime_ns": 1792685908784131116,
+        "st_ctime_ns": 1792685908784131116
+      }
+    },
+    {
+      "path": "smp_image.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_image.rs",
+      "sha256": "4f35ec396494fa428c55298c91ffe14aa0142d0282dd37d922f94a901a692689",
+      "bytes": 14324,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47469207,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 14324,
+        "st_mtime_ns": 1790629854552015726,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646736,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 14324,
+        "st_mtime_ns": 1792685908788131251,
+        "st_ctime_ns": 1792685908788131251
+      }
+    },
+    {
+      "path": "smp_loader.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_loader.rs",
+      "sha256": "fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6",
+      "bytes": 3194,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47469503,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 3194,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646737,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 3194,
+        "st_mtime_ns": 1792685908788131251,
+        "st_ctime_ns": 1792685908788131251
+      }
+    },
+    {
+      "path": "smp_memory.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_memory.rs",
+      "sha256": "60758aeafac150bd8aac62455844e3f4e4200a082f82f80ce66c3c871d4909be",
+      "bytes": 127757,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47468908,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 127757,
+        "st_mtime_ns": 1792645662658187507,
+        "st_ctime_ns": 1792645662658187507
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646738,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 127757,
+        "st_mtime_ns": 1792685908788131251,
+        "st_ctime_ns": 1792685908788131251
+      }
+    },
+    {
+      "path": "smp_procfs.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_procfs.rs",
+      "sha256": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea",
+      "bytes": 28512,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47473376,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 28512,
+        "st_mtime_ns": 1792251756504741969,
+        "st_ctime_ns": 1792251756504741969
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646739,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 28512,
+        "st_mtime_ns": 1792685908808131921,
+        "st_ctime_ns": 1792685908808131921
+      }
+    },
+    {
+      "path": "smp_resource.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_resource.rs",
+      "sha256": "d4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd",
+      "bytes": 133271,
+      "permission_mode_octal": "0o644",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47460580,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 133271,
+        "st_mtime_ns": 1790859721433130993,
+        "st_ctime_ns": 1790859721433130993
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646740,
+        "st_mode": 33188,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 133271,
+        "st_mtime_ns": 1792685908808131921,
+        "st_ctime_ns": 1792685908808131921
+      }
+    },
+    {
+      "path": "smp_service.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_service.rs",
+      "sha256": "fd2c19bc7e09911c9332ec32432060b04e2ce3d4c2918cf94a996eeef82deeac",
+      "bytes": 47527,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47468661,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 47527,
+        "st_mtime_ns": 1792625107720652214,
+        "st_ctime_ns": 1792625107720652214
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646741,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 47527,
+        "st_mtime_ns": 1792685908824132458,
+        "st_ctime_ns": 1792685908824132458
+      }
+    },
+    {
+      "path": "smp_startup.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_startup.rs",
+      "sha256": "12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2",
+      "bytes": 4963,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47469786,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 4963,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646742,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 4963,
+        "st_mtime_ns": 1792685908828132592,
+        "st_ctime_ns": 1792685908828132592
+      }
+    },
+    {
+      "path": "smp_startup_entry.S",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_startup_entry.S",
+      "sha256": "b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2",
+      "bytes": 1350,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47470633,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 1350,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646743,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 1350,
+        "st_mtime_ns": 1792685908828132592,
+        "st_ctime_ns": 1792685908828132592
+      }
+    },
+    {
+      "path": "smp_topology.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_topology.rs",
+      "sha256": "6d925fa50279e7eca938fd5b9d0b2a73105ef875793623024c681f40d70d08e6",
+      "bytes": 11189,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47471652,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 11189,
+        "st_mtime_ns": 1790650141964098466,
+        "st_ctime_ns": 1790650141964098466
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646744,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 11189,
+        "st_mtime_ns": 1792685908828132592,
+        "st_ctime_ns": 1792685908828132592
+      }
+    },
+    {
+      "path": "smp_trampoline.S",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_trampoline.S",
+      "sha256": "18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf",
+      "bytes": 3650,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47470632,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 3650,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646745,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 3650,
+        "st_mtime_ns": 1792685908848133263,
+        "st_ctime_ns": 1792685908848133263
+      }
+    },
+    {
+      "path": "smp_trampoline.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_trampoline.rs",
+      "sha256": "4a110936d52a80664943b5dd605fbf9ad1c99460fe8ff0a16327ca015d2d0bcb",
+      "bytes": 5709,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47470630,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 5709,
+        "st_mtime_ns": 1790650141964098466,
+        "st_ctime_ns": 1790650141964098466
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646746,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 5709,
+        "st_mtime_ns": 1792685908848133263,
+        "st_ctime_ns": 1792685908848133263
+      }
+    },
+    {
+      "path": "smp_vdso.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/smp_vdso.rs",
+      "sha256": "dd94d677c97b0c3271c746f1795289fdaadff89e1c08a660bd7659b14466d488",
+      "bytes": 6664,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47471233,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 6664,
+        "st_mtime_ns": 1790650170104930130,
+        "st_ctime_ns": 1790650170104930130
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646747,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 6664,
+        "st_mtime_ns": 1792685908848133263,
+        "st_ctime_ns": 1792685908848133263
+      }
+    },
+    {
+      "path": "sysfs_memory.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/sysfs_memory.rs",
+      "sha256": "a06bef19cc2f0c847a4e394703f3cb0e9450c8a8453252c46745e324fe83d600",
+      "bytes": 36934,
+      "permission_mode_octal": "0o600",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47468662,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 36934,
+        "st_mtime_ns": 1792625107720652214,
+        "st_ctime_ns": 1792625107720652214
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646748,
+        "st_mode": 33152,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 36934,
+        "st_mtime_ns": 1792685908852133397,
+        "st_ctime_ns": 1792685908852133397
+      }
+    },
+    {
+      "path": "sysfs_objects.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/sysfs_objects.rs",
+      "sha256": "2b04c57b43516550f0c3bdaf115b667d4a64393030494e79b553248c42aa7453",
+      "bytes": 13988,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47471416,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 13988,
+        "st_mtime_ns": 1790650111163188559,
+        "st_ctime_ns": 1790650111163188559
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646749,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 13988,
+        "st_mtime_ns": 1792685908868133934,
+        "st_ctime_ns": 1792685908868133934
+      }
+    },
+    {
+      "path": "sysfs_os.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/sysfs_os.rs",
+      "sha256": "ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2",
+      "bytes": 2451,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47471442,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 2451,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646750,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 2451,
+        "st_mtime_ns": 1792685908868133934,
+        "st_ctime_ns": 1792685908868133934
+      }
+    },
+    {
+      "path": "sysfs_remote.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/sysfs_remote.rs",
+      "sha256": "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9",
+      "bytes": 12052,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47471938,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 12052,
+        "st_mtime_ns": 1792251629708840720,
+        "st_ctime_ns": 1792251629708840720
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646751,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 12052,
+        "st_mtime_ns": 1792685908872134067,
+        "st_ctime_ns": 1792685908872134067
+      }
+    },
+    {
+      "path": "sysfs_rpc.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/sysfs_rpc.rs",
+      "sha256": "d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e",
+      "bytes": 6833,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47471936,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 6833,
+        "st_mtime_ns": 1788913797775192989,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646752,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 6833,
+        "st_mtime_ns": 1792685908888134604,
+        "st_ctime_ns": 1792685908888134604
+      }
+    },
+    {
+      "path": "sysfs_setup.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/sysfs_setup.rs",
+      "sha256": "aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62",
+      "bytes": 12683,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47471715,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 12683,
+        "st_mtime_ns": 1788913797775192989,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646753,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 12683,
+        "st_mtime_ns": 1792685908888134604,
+        "st_ctime_ns": 1792685908888134604
+      }
+    },
+    {
+      "path": "sysfs_snoop.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/sysfs_snoop.rs",
+      "sha256": "c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d",
+      "bytes": 5515,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47472060,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 5515,
+        "st_mtime_ns": 1788913797775192989,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646754,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 5515,
+        "st_mtime_ns": 1792685908888134604,
+        "st_ctime_ns": 1792685908888134604
+      }
+    },
+    {
+      "path": "sysfs_tree.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/sysfs_tree.rs",
+      "sha256": "3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232",
+      "bytes": 12276,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47471523,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 12276,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646755,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 12276,
+        "st_mtime_ns": 1792685908892134738,
+        "st_ctime_ns": 1792685908892134738
+      }
+    },
+    {
+      "path": "sysfs_zeroing.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/sysfs_zeroing.rs",
+      "sha256": "950919a29ab2fb53b0c488cc6e6d01b433f8caa95b27d1a1f32fb0ff3dc8390e",
+      "bytes": 12023,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47474062,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 12023,
+        "st_mtime_ns": 1790650130559761517,
+        "st_ctime_ns": 1790650130559761517
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646756,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 12023,
+        "st_mtime_ns": 1792685908908135275,
+        "st_ctime_ns": 1792685908908135275
+      }
+    },
+    {
+      "path": "user_string.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/user_string.rs",
+      "sha256": "fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2",
+      "bytes": 603,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47472482,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 603,
+        "st_mtime_ns": 1788913797779193054,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646757,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 603,
+        "st_mtime_ns": 1792685908908135275,
+        "st_ctime_ns": 1792685908908135275
+      }
+    },
+    {
+      "path": "zero_pages.rs",
+      "origin": "/home/holden/mckernel/host-kernel/native-rust/zero_pages.rs",
+      "sha256": "47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def",
+      "bytes": 4354,
+      "permission_mode_octal": "0o664",
+      "source_fd9": {
+        "st_dev": 66306,
+        "st_ino": 47473986,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 2,
+        "st_size": 4354,
+        "st_mtime_ns": 1788917478654969045,
+        "st_ctime_ns": 1790636578053497666
+      },
+      "bundle_fd9": {
+        "st_dev": 66306,
+        "st_ino": 48646758,
+        "st_mode": 33204,
+        "st_uid": 1000,
+        "st_gid": 1000,
+        "st_nlink": 1,
+        "st_size": 4354,
+        "st_mtime_ns": 1792685908912135409,
+        "st_ctime_ns": 1792685908912135409
+      }
+    }
+  ],
+  "alias_paths": [
+    "mcctrl.rs",
+    "mcctrl_rust.rs"
+  ],
+  "references_not_copied": {
+    "build_commands": {
+      "bytes": 2081,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-evidence/build/native-rust-build-evidence/build.commands",
+      "retained_copy": "/home/holden/mckernel-work/scratch/nsd-i-df75d8453eab42ff918731acbd2573c4/baseline-build.commands",
+      "sha256": "025ae0a10dab15fa6acbec3d209e5125e467038c89bbf6aa9e80e991646f416e"
+    },
+    "build_environment": {
+      "bytes": 170,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-evidence/build/native-rust-build-evidence/build.environment",
+      "retained_copy": "/home/holden/mckernel-work/scratch/nsd-i-df75d8453eab42ff918731acbd2573c4/baseline-build.environment",
+      "sha256": "ad5591d91bbca9a7d795926ff1890a0faadd4de38dc108673c00cc83d402a35f"
+    },
+    "build_makefile": {
+      "bytes": 17493,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/scripts/Makefile.build",
+      "retained_copy": "/home/holden/mckernel-work/scratch/nsd-i-df75d8453eab42ff918731acbd2573c4/Makefile.build",
+      "sha256": "9a4d2a34fb5db30c43db86f14474a9b3135bd877ad2850aedb437d0c7606f9df"
+    },
+    "compiler_ihk": {
+      "bytes": 3259,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/drivers/misc/mckernel/.ihk.o.cmd",
+      "retained_copy": "/home/holden/mckernel-work/scratch/nsd-i-df75d8453eab42ff918731acbd2573c4/baseline-ihk.o.cmd",
+      "sha256": "db2a929e3a8c3e7eaaa5d6cce9dd721b6ac6da05347d54f482a6253fb86b54ef"
+    },
+    "compiler_ihk_smp_x86_64": {
+      "bytes": 6153,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/drivers/misc/mckernel/.ihk_smp_x86_64.o.cmd",
+      "retained_copy": "/home/holden/mckernel-work/scratch/nsd-i-df75d8453eab42ff918731acbd2573c4/baseline-ihk_smp_x86_64.o.cmd",
+      "sha256": "bc808d213c5f4a3881bc3fec5c49c0f46933395c6d071f81def8274c13a5ec62"
+    },
+    "compiler_mcctrl": {
+      "bytes": 2932,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/drivers/misc/mckernel/.mcctrl.o.cmd",
+      "retained_copy": "/home/holden/mckernel-work/scratch/nsd-i-df75d8453eab42ff918731acbd2573c4/baseline-mcctrl.o.cmd",
+      "sha256": "285ff17f816e40f26e8af94377fa26cc324d7c00ffb81d900af841cea34732f4"
+    },
+    "config": {
+      "bytes": 260490,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/.config",
+      "retained_copy": "/home/holden/mckernel-work/scratch/nsd-i-df75d8453eab42ff918731acbd2573c4/baseline.config",
+      "sha256": "106055ad26cfc19373b1bc52e1dcc24b3eaa7c48125c451be029898b8f696474"
+    },
+    "kernel_makefile": {
+      "bytes": 70466,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/Makefile",
+      "retained_copy": "/home/holden/mckernel-work/scratch/nsd-i-df75d8453eab42ff918731acbd2573c4/kernel-Makefile",
+      "sha256": "96d61309de7b5a043f53f8203c05ea30c27808fc7db06b3503d98105f4fde6f6"
+    },
+    "make_pipe_proof": {
+      "bytes": 4863,
+      "path": "/home/holden/mckernel-work/host-preparation/native-kmsg-read-abi-20261018-1/target-preparation-1/proof-bound-target-preparation-1/capsule/prepared-inputs/make-pipe-proof.json",
+      "retained_copy": "/home/holden/mckernel-work/scratch/nsd-i-df75d8453eab42ff918731acbd2573c4/make-pipe-proof.json",
+      "sha256": "462e6fd3dc0db4de7b03370d12b1c50db31156737f072b8859352a9c2ce97cf5"
+    },
+    "modpost_makefile": {
+      "bytes": 4854,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/scripts/Makefile.modpost",
+      "retained_copy": "/home/holden/mckernel-work/scratch/nsd-i-df75d8453eab42ff918731acbd2573c4/Makefile.modpost",
+      "sha256": "c4863ea111f798f9adf5a0ea17db63a398a9ba819ebf4475bbd59209a9d7229a"
+    },
+    "owner": {
+      "bytes": 51420,
+      "path": "/home/holden/mckernel/scripts/native_rust_exact_build_container_owner.py",
+      "retained_copy": "/home/holden/mckernel-work/scratch/nsd-i-df75d8453eab42ff918731acbd2573c4/container-owner.py",
+      "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+    },
+    "release": {
+      "bytes": 40,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/include/config/kernel.release",
+      "retained_copy": "/home/holden/mckernel-work/scratch/nsd-i-df75d8453eab42ff918731acbd2573c4/baseline-kernel.release",
+      "sha256": "42bb1d3c01816ca5d716e59ce1b50f1b96be1e5643d866486b0f6db098d2725a"
+    },
+    "stage_lock": {
+      "bytes": 8241,
+      "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/drivers/misc/mckernel/stage-lock.json",
+      "retained_copy": "/home/holden/mckernel-work/scratch/nsd-i-df75d8453eab42ff918731acbd2573c4/baseline-stage-lock.json",
+      "sha256": "a902a71e67aa8ca1fd0d317df2dbeffdc5998c5e29010fad44060c36aab2a4d3"
+    },
+    "workflow": {
+      "bytes": 95328,
+      "path": "/home/holden/mckernel/.github/workflows/native-rust-host-modules-exact-build.yml",
+      "retained_copy": "/home/holden/mckernel-work/scratch/nsd-i-df75d8453eab42ff918731acbd2573c4/exact-build-workflow.yml",
+      "sha256": "030822f476e5aaa290b06255d3e874dbf584760e06a221b2dd15ed9332ed8629"
+    }
+  },
+  "reference_count": 14,
+  "installed_manifest_checks": [
+    "driver.load_preparation(actual frozen current68)",
+    "owner.validate_preparation(actual frozen current68)"
+  ],
+  "sourcebundle_only": true,
+  "actual_SDK": null,
+  "actual_modules": null,
+  "execution_release": null,
+  "module_acceptance": false,
+  "native_acceptance": false,
+  "rust_retirement": false
+}
