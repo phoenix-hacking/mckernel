@@ -68,6 +68,16 @@ example already identifies the next concrete action.
 
 ## Efficiency directive — 2026-10-21
 
+### Active billing instruction — weekly included usage only (2026-10-22)
+
+The user explicitly switched this campaign to included weekly usage instead of
+prepaid credits. Launch without `--credit-budget` or `--credit-run-id`; stop at
+100% included usage and retain the credit-balance-decrease guard. No automatic
+credit fallback, credit purchase or API-key billing is authorized. Preserve the
+earlier paid-run ledger unchanged as historical accounting. Its old 10,000-credit
+permission is superseded; restoring credit spending needs a new explicit user
+instruction. This billing change does not cancel functional OS implementation.
+
 ### Individual practical-check closure priority — 2026-10-22
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
@@ -104,8 +114,14 @@ Prefer one coherent implementation through executable checks, then one focused
 review. Refill disjoint ordinary lanes; serialize effectful workloads under the
 existing limits. At normal checkpoints report newly accepted check IDs, the
 25/35 baseline delta, nearest next result and exact blockers. After 10–15 minutes
-without an executable result, repair or reroute the named bottleneck. Keep the
-same total 10,000-credit run and existing preservation/resource controls.
+without an executable result, repair or reroute the named bottleneck. Apply the
+latest weekly-only billing instruction and existing preservation/resource controls.
+
+Current closure baseline is 27/35 after P-M01-01 and P-M13-01 acceptance. The user
+explicitly requests completion of all eight remaining checks: P-M01-02,
+P-M05-02, P-M05-03, P-M06-01, P-M08-02, P-M09-02, P-M12-01 and P-M13-03.
+Give each an owned next executable result and evidence-based closure condition;
+overlap qualified observations on matching profiles and reuse accepted evidence.
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 The user requests maximum responsible parallelism, accuracy and useful velocity.
