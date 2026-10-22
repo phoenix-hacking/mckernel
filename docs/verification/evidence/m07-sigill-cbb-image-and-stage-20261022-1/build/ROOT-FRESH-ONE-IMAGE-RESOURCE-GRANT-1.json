@@ -1,0 +1,58 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_CONDITIONAL_ROOT_ONE_CURRENT_IMAGE_RESOURCE_GRANT",
+  "author": "/root",
+  "observed_at_utc": "2026-10-22T06:05:54.023915+00:00",
+  "one_heavy": true,
+  "container": {
+    "cpus": "2-5",
+    "jobs": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "pids": 512,
+    "network": "none"
+  },
+  "spaces": {
+    "host": {
+      "available_bytes": 37849788416,
+      "required_bytes": 34343923712,
+      "margin_bytes": 3505864704,
+      "budget": {
+        "compiler_and_control_growth_bytes": 16107089920,
+        "emergency_reserve_bytes": 679477248,
+        "floor_bytes": 17179869184,
+        "postbuild_growth_bytes": 377487360
+      }
+    },
+    "scratch": {
+      "available_bytes": 14125436928,
+      "required_bytes": 13631488000,
+      "margin_bytes": 493948928,
+      "budget": {
+        "compiler_and_control_growth_bytes": 67108864,
+        "emergency_reserve_bytes": 679477248,
+        "floor_bytes": 12884901888,
+        "postbuild_growth_bytes": 0
+      }
+    }
+  },
+  "mem_available_bytes": 28072038400,
+  "included_used_percent": 98,
+  "backing": {
+    "path": "/home/holden/mckernel-work/scratch.ext4",
+    "device": 66306,
+    "inode": 47468427,
+    "uid": 0,
+    "size": 118111600640,
+    "allocated_bytes": 102260019200,
+    "full_sparse_backing_gap_bytes": 15851581440
+  },
+  "budget_semantics": "Host compiler_and_control_growth includes its original255508480 plus entire measured sparse backing gap; both filesystem emergency allowances raised to campaign679477248. No lower floors/gate/geometry change.",
+  "required_next": "Fresh qualified root snapshot, independent exact canonical execution review and live dispatcher/owner predicates; this resource grant alone permits no build.",
+  "retirement_scope": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-focused-progress-recording-20261021-1/current-normalization-review-recording-1/M07-DIAGNOSTIC-CURRENT-FAILED-OWNER-PHYSICAL-RETIREMENT-ACCEPTANCE.json",
+    "sha256": "f5386f83823b9e3c5c4a56908d62e9a9305b667722349eaa1a877e89358721de",
+    "bytes": 1399
+  },
+  "ordinary_lanes": "Quiesced before admission; persistent readers2590193/start37928121 and2777042/start40959744 only coordination readers."
+}

@@ -1,3 +1,20 @@
+## Current — corrected M07 image accepted; physical/native sequence pending (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Corrected image cbb04b9e independently accepted12150163; compiler35 adopted once.
+Sources99(40OS/59infra) include M05 unit98 and ef901a62 M07 producer unit99.
+Held24/35checks,sixwhole,31behaviors,13native,Rust21/18. Artifact clock
+06:19:32.214139UTC; strict new-image native result remains pending. Stagef024
+accepted60members/59unchanged; reuse it. Terminal source/bodyd0a39a4d accepted,
+including required exact cleanup publication alias. Observer/export execution and
+cleanup/postjoin/current physical acceptance remain separately gated. Normalizer
+sourcee1f23b4e corrects stale authority filename; actual authorize positive/newpath
+and negative/oldpath passed0/.084s, fixture3 reused. Final review pending.
+Reserve MODEL-BOUND6c36924c reviewed; foreground's ONE approval question is pending.
+No mutation/rollback/SDK authority. SDK68 private consumer remains preparation.
+Preserve scratch21,27:4,strict oracle/launcher33f,no resize/delete,fixed gate/floors.
+Evidence: docs/verification/evidence/m07-sigill-cbb-image-and-stage-20261022-1/.
+
 ## Current — M07 #UD producer corrected; actual successor source gates passed (2026-10-22 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

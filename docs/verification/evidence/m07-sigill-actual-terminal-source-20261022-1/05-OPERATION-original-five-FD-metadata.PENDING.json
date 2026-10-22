@@ -1,0 +1,43 @@
+{
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--fsize=33554432",
+    "--cpu=30",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/m07-sigill-successor-native-data-preparation-20261022-1/actual-terminal-preparation-1/bound-terminal-source-correction-1/read_original_five_metadata.py",
+    "--expected-hashes",
+    "/home/holden/mckernel-work/host-preparation/m07-sigill-successor-native-data-preparation-20261022-1/actual-terminal-preparation-1/bound-terminal-source-correction-1/actual-original-five-hashes.json",
+    "--expected-hashes-sha256",
+    "BIND_ACTUAL_FIVE_HASHFILE_SHA256"
+  ],
+  "capture_directory": "/home/holden/mckernel-work/host-preparation/m07-sigill-successor-native-data-preparation-20261022-1/actual-terminal-preparation-1/bound-terminal-source-correction-1/actual-original-five-FD-metadata-capture-1",
+  "cpu": 7,
+  "profile": {
+    "as_soft_hard": [
+      1073741824,
+      1073741824
+    ],
+    "child_cpu_seconds": 30,
+    "cpu": 7,
+    "jobs": 1,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "required_inherited_cpu_limits": [
+      -1,
+      -1
+    ],
+    "stream_fsize": 33554432
+  },
+  "role": "original-five-FD-metadata",
+  "stream_cap_bytes": 33554432
+}

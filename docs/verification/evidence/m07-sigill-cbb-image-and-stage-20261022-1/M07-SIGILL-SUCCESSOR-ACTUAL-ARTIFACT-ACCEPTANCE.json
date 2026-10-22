@@ -1,0 +1,33 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "PASS_ACTUAL_M07_IMAGE_ARTIFACT",
+  "review_started_utc": "2026-10-22 06:16:34 UTC",
+  "accepted_utc": "2026-10-22 06:18:59 UTC",
+  "findings": [],
+  "base": "/home/holden/mckernel-work/host-preparation/m07-sigill-current-image-successor-preparation-20261022-1",
+  "build": "full-image-attempt-1/owner-work/output/build",
+  "identities": {
+    "kernel/mckernel.img": "cbb04b9ecc9b808d8545e847fad8a16d3223c2c172961bcea40da44e87511dd9",
+    "kernel/rust/mckernel_rust.o": "8dd35f8102321cd20e7ff37408e48388b45edd484434ef3035d72b73db0e7c3f",
+    "production_interrupt_object": "66bcbec1fc5086cac18a8009f0e1b36ecaba7bf11f38cadd5de9f03e3873ee44",
+    "production_arch_syscall_object": "6336c64f6c8997986148610cc290a3840d8d5ac1ef843847c71e2457ce1733ea",
+    "owner_receipt": "17c6b69546fddd1c0cbccb701d77313ec6ae6e9685bbd5b3421ab8bdcf30ea6a",
+    "driver_receipt": "1ed7cf43f20d4647d911c0fac297d1ebbdd3c67b0aae4d39d13928b9a4ea7add",
+    "compiler_input_manifest": "4b210de546f8bd160584c3c073392d275c99756a680d2820121ff08bf32e9daf"
+  },
+  "verified": [
+    "All18 recorded phases exited0. All32 inventoried evidence files and nine build artifacts match their recorded sizes/hashes.",
+    "Manifest source map differs from accepted053d successor basis only in reviewed interrupt.S9cffbeb0 and native_signal.rsaea4bf00; modes, kinds and symlinks agree. Actual sources match these hashes. Materialization/derivative identities match dac8439c/1c25d0ce.",
+    "Actual compile rows select MCKERNEL_NATIVE_SIGNAL_STACK for production interrupt.S and unchanged architecture syscall.c. Generated Rust build.make depends on native_signal.rs and builds the full crate with native_linux_irq_work_v6_12.",
+    "Production common_interrupt compares vector6, writes word0x06a5 at rsp+0x32, preserves synthetic error/dispatch and clears the flags word before unchanged register restoration/iretq. Final common_interrupt113 bytes match the object except its resolved handle_interrupt call relocation.",
+    "Exactly one native_signal_context_prepare_result definition exists in the production Rust object and final ELF. All754 function bytes match exactly; code SHA256=df26802b25dc5849b5f9bea164f8097810ff14eeedb8a69e577d855ddbcb7323. Machine code checks bytes50/51 plus error6 and writes frame offsets192/200.",
+    "Architecture syscall object imports the producer at relocation0x23cc. Final do_signal loads producer address0xfffffffffe87e600 at0xfffffffffe82304a and calls it at0xfffffffffe82306c.",
+    "Actual link contract/map includes the production assembly, unchanged C caller and same Rust object. Final ELF has no undefined symbols. Current production ABI/affinity/release compiler reports pass; unchanged ABI/CMake/default-source facts retain the prior scoped review."
+  ],
+  "accepted_scope": "Exact new image identity, compiler-input joins and linked M07 producer correction. Existing report PENDING_POSTBUILD/PENDING_NATIVE fields are not promoted to broader feature acceptance.",
+  "actual_physical_acceptance": null,
+  "actual_native_acceptance": null,
+  "limitations": "No compile, tests, rebuild, guest, container operation or cleanup performed. Build/artifact acceptance does not establish native ERR0/TRAP6 delivery or application acceptance. App, launcher, modules and separate terminal review remain outside this decision.",
+  "recording": "Decision payload returned for dispatcher recording; reviewer remained read-only.",
+  "evidence": "[Actual driver receipt](/home/holden/mckernel-work/host-preparation/m07-sigill-current-image-successor-preparation-20261022-1/full-image-attempt-1/owner-work/evidence/receipt.json)"
+}
