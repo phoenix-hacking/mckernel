@@ -1,3 +1,89 @@
+## Current — failed observer closed; entry correction under review (2026-10-22 15:15 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+New manual invocation 20261022T151118Z-972089c4 is active on the saved thread.
+Preserve persistent credit run 0c216c56957b4e64a89d54d4b28a2ad6 and its selected
+100-credit budget; no purchases, API billing or service-stop retries. The reviewed
+launcher/helper changes and startup receipts are checkpointed as infrastructure,
+with no OS behavior credit. Receipt: ../evidence/account-credit-budget-resume-20261022-1/.
+
+Independent failed-observer closure accepts direct child/group/stream retirement
+only: PID3035822/start44972881, exit1/.140694955s, null current_live_postjoin
+TypeError before root mutex/observation/output. Genuine decision/raw event:
+../evidence/m07-observer-entry-correction-20261022-1/FAILED-OBSERVER-CLOSURE.json.
+Retained build ownership remains; no physical clearance or next-heavy authority.
+The one bounded correction binds the genuine already-observed guard postjoin,
+retaining future cleanup/postjoin null. Actual entry positive and seven negatives
+passed; independent correction review and exact publication/release remain next.
+Private correction: /home/holden/mckernel-work/host-preparation/m07-observer-current-postjoin-correction-20261022-1/.
+SDK68 installed-consumer source binding work is disjoint; no module admission.
+
+Held six whole milestones,24/35checks,99sources(40OS/59infra),35compiler,
+13native,31behaviors,Rust21production/18native. Reuse accepted cbb04 image/stage.
+Reserve576 approval unanswered; no mutation. Preserve all failures,Scratch21,
+27:4,one-heavy profile/floors and dirty unrelated work. Original velocity baseline
+2026-10-21T01:12:03Z remains; stopped interval 07:03:54→15:11:18 is excluded
+from future active-time rates, and earlier recovery gaps remain unreconciled.
+No new active-time/speedup claim. Next: accepted entry correction→new exact
+observer release→summary/original-five/export→separate cleanup/postjoin and
+physical decision→unchanged strict M07 native test.
+
+## Running — prepaid continuation confirmed (2026-10-22 15:11 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The existing campaign resumed successfully on GPT-6.1/medium, goal active.
+Thread `01a1626a-eaa3-7282-a47b-3292178e2cca`; watcher 3180621, worker 3180623,
+server 3180625. Run: `.git/os-autopilot/runs/20261022T151118Z-972089c4`.
+Persistent credit run `0c216c56957b4e64a89d54d4b28a2ad6` has budget 100,
+initial balance 58235.9614400000 and initial observed spend zero. These are
+startup observations, not continuing process/clearance claims. The dispatcher
+acknowledged the null-postjoin repair and that reserve approval is still pending.
+Monitor: `python3 -B scripts/run_os_goal.py --progress`.
+Console: `.git/os-autopilot/launch-logs/parallel-lev50434.log`.
+
+## Current — explicit prepaid-credit continuation (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The user explicitly requests campaign continuation using existing account credits.
+Resume with `--credit-budget 100`: a 100-credit starter budget, GPT-6.1 only,
+medium by default and high for complex work. This explicit option supersedes the
+included-usage pause for this invocation. Default launches remain included-only.
+The persistent account-balance guard survives worker/fresh-session recovery;
+never reset its ledger, buy credits, enable API-key billing, or retry a genuine
+service/auth/billing/policy rejection. Other account use counts toward the guard;
+in-flight charges may settle after shutdown. Launcher preparation passed 160
+offline tests and an independent source review; read-only account/model preflight
+passed. Startup is confirmed above; do not infer a new native result.
+
+Resume the retained observer repair first: the consumed observer refused before
+observation because `current_live_postjoin` was null. Correct and check the full
+current-data join through the actual entry point before a new reviewed release;
+retain the failure and do not replay unchanged inputs. Reuse the accepted cbb04
+image, stage and normalization when their current profiles permit. Physical
+clearance and the strict current-image native result remain pending.
+
+Held baseline: six whole milestones, 24/35 practical checks, 99 source units
+(40 OS/59 infrastructure), 35 compiler batches, 13 native batches, 31 behaviors
+and 21 production/18 applicable native Rust paths. Launcher budget work is not
+OS milestone credit. Preserve the original measurement baseline; reconcile the
+coordinator recovery and downtime before calculating a new active-time velocity.
+The separate 576 MiB scratch-reserve question remains UNANSWERED: this credit
+authorization permits no filesystem mutation. Preserve Scratch21, all retained
+owners/exclusions/evidence, permanent mutex 27:4 and existing workload/floor gates.
+Earlier stopped entries below remain historical evidence.
+
+## Foreground stop — 2026-10-22 07:03:54 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Included usage reached100%; campaign stopped, saved goal paused and incomplete.
+Watcher/worker/server were observed absent. Held six whole milestones,24/35checks,
+99 source units(40OS/59infra),35compiler batches,13native batches and31behaviors.
+Corrected cbb04 image/stage/normalization accepted; physical/native clearance pending.
+Observer refused before observation on null current_live_postjoin; do not replay its
+consumed release. Reserve576MiB approval question remains pending; no mutation.
+Preserve all ownership/evidence/Scratch21. Resume only after included usage is available.
+Exact next commands, prerequisites and measurement continuity: [STOP-HANDOFF-20261022-070354.md](STOP-HANDOFF-20261022-070354.md).
+
 ## Current — corrected M07 image accepted; physical/native sequence pending (2026-10-22 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

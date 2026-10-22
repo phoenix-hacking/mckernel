@@ -1,60 +1,42 @@
-# Functional McKernel progress — review 170
+# Campaign continuation with an explicit prepaid-credit budget
 
-Observed 2026-10-22T01:18:45.700043+00:00. Next review 2026-10-22T01:48:45.700Z.
+Startup confirmed 2026-10-22 15:11 UTC: saved goal active, GPT-6.1/medium,
+100-credit persistent budget, observed spend initially zero. The dispatcher
+started the null-postjoin observer repair. No new milestone delta yet. Preserve
+the prior baseline and record the stopped interval when reconciling velocity.
+Current state: `python3 -B scripts/run_os_goal.py --progress`.
+
+## Current — prepaid continuation requested (2026-10-22 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The user explicitly requests continuation using existing credits. The foreground
+is starting the saved campaign with a 100-credit starter budget on GPT-6.1.
+The persistent balance guard survives recovery; other account charges count and
+in-flight charges may settle after shutdown. No purchases or API-key billing.
+160 offline tests, independent source review and real read-only preflight pass.
+No new native/OS completion credit follows from this launcher repair.
 
-Accepted results remain **24/35 practical checks and six complete milestones**
-(M00, M02, M03, M04, M10, M11), 30 native behaviors, 21 production and
-18 native Rust paths, 97 coherent source units (38 OS / 59 infrastructure),
-33 compiler batches and 11 accepted native batches.
-No newly accepted numerical gain in this half-hour interval.
+Held baseline: six whole milestones, 24/35 practical checks, 99 source units
+(40 OS/59 infrastructure), 35 compiler batches, 13 native batches, 31 behaviors,
+Rust 21 production/18 applicable native paths. Continue the null-postjoin observer
+repair and reuse accepted corrected image/stage inputs. Keep independent ready
+implementation lanes busy, one heavy workload, strict functional results and
+short focused reviews of concrete blockers. Preserve the original measurement
+baseline and all historical windows; reconcile coordinator recovery/downtime
+before computing active-time velocity. The separate reserve approval is pending.
+See the latest CURRENT.md and HANDOFF.md for startup confirmation.
 
-M07's corrected graph, normalization, complete loader, constructor and whole
-caller passed. Two missing receipt fields were repaired through an expert-scoped
-additive projection; original-negative and corrected-positive checks passed
-against the unchanged full-static consumer. Final binding/static, source
-publication and fetched verification, grant and exact execution review passed.
+## Foreground stop — 2026-10-22 07:03:54 UTC
 
-The third owner attempt failed after 12.50 seconds. Snapshot, machine assembly
-and final guard passed; no success-only readbacks ran. Failed-owner retirement
-is independently accepted. The new collector retained complete helper stdout,
-exit 1 and empty stderr; the application never started.
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Included usage reached100%; campaign stopped, saved goal paused and incomplete.
+Watcher/worker/server were observed absent. Held six whole milestones,24/35checks,
+99 source units(40OS/59infra),35compiler batches,13native batches and31behaviors.
+Corrected cbb04 image/stage/normalization accepted; physical/native clearance pending.
+Observer refused before observation on null current_live_postjoin; do not replay its
+consumed release. Reserve576MiB approval question remains pending; no mutation.
+Preserve all ownership/evidence/Scratch21. Resume only after included usage is available.
+Exact next commands, prerequisites and measurement continuity: [STOP-HANDOFF-20261022-070354.md](STOP-HANDOFF-20261022-070354.md).
 
-**Cause now identified:** helper line21 opens
-`/case/evidence/pair.challenge` before CPU reservation, but the M07 collector
-never creates it. The generic CPU-reservation failure label did not establish
-an actual reservation or kernel defect. The implementer is reusing the accepted
-challenge-and-discovery sequence and preparing an actual helper-boundary check.
-A kernel rebuild or weaker assertion is not required for this correction.
-
-M05 init-only stage (11.070303602 seconds), namespace3 normalization (0.915s)
-and mandatory real loader (0.556s) have independent acceptance. Its runtime
-constructor data selects 16 runtime sources plus snapshot and decoder, 18 FDs.
-Further construction/admission awaits the shared boot repair and current
-physical authority. No native public second-stop/restoration or cycle credit.
-
-Independent M05 preparation/review overlapped M07's final binding/publication.
-All foreground helpers remain finished. Only the existing persistent reader
-ran during exclusive admission. The recorded coordinator interval from
-00:56:24 to first new command observation01:00:41 was 257.123 seconds;
-this does not distinguish model computation from idle.
-
-M07 diagnostic stage acceptance first observed00:42:51 to failed-owner result
-01:11:45 was about28.899 minutes, versus12.50s reported owner execution.
-This is a cycle observation, not a comparable overall speedup baseline.
-Repeated harness source/projection errors and handoffs remain material delay.
-No overall4× engineering multiplier or additional milestone closure is claimed.
-
-Next: repair the required challenge once, exercise the actual changed helper
-path, reuse accepted kernel/modules/apps and unchanged stage machinery,
-then obtain genuine native feedback. Avoid repeat payload attempts while
-bootstrap is unresolved. Main root owns all releases and workloads.
-
-Included usage observed90%; stop remains100%.
-Capacity at review: host35.969GiB, scratch13.163GiB.
-Keep16GiB host/12GiB scratch floors, reserve qualification, no-resize/delete
-restriction, scratch21 records, permanent mutex and every failure.
-Launcher target build is ready but unrun; SDK66 capacity still blocks the
-full-module proof. M07 whole remains open despite2/2 checks; M09's range
-is integration readiness, not the percentage of the whole kernel in Rust.
+The previous measurement baseline and all checkpoint history are preserved.
+Do not infer a final active-time rate across unreconciled coordinator recovery.

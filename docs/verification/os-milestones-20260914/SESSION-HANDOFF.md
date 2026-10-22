@@ -1,3 +1,33 @@
+## Current — failed observer closed; entry correction under review (2026-10-22 15:15 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+New manual invocation 20261022T151118Z-972089c4 is active on the saved thread.
+Preserve persistent credit run 0c216c56957b4e64a89d54d4b28a2ad6 and its selected
+100-credit budget; no purchases, API billing or service-stop retries. The reviewed
+launcher/helper changes and startup receipts are checkpointed as infrastructure,
+with no OS behavior credit. Receipt: ../evidence/account-credit-budget-resume-20261022-1/.
+
+Independent failed-observer closure accepts direct child/group/stream retirement
+only: PID3035822/start44972881, exit1/.140694955s, null current_live_postjoin
+TypeError before root mutex/observation/output. Genuine decision/raw event:
+../evidence/m07-observer-entry-correction-20261022-1/FAILED-OBSERVER-CLOSURE.json.
+Retained build ownership remains; no physical clearance or next-heavy authority.
+The one bounded correction binds the genuine already-observed guard postjoin,
+retaining future cleanup/postjoin null. Actual entry positive and seven negatives
+passed; independent correction review and exact publication/release remain next.
+Private correction: /home/holden/mckernel-work/host-preparation/m07-observer-current-postjoin-correction-20261022-1/.
+SDK68 installed-consumer source binding work is disjoint; no module admission.
+
+Held six whole milestones,24/35checks,99sources(40OS/59infra),35compiler,
+13native,31behaviors,Rust21production/18native. Reuse accepted cbb04 image/stage.
+Reserve576 approval unanswered; no mutation. Preserve all failures,Scratch21,
+27:4,one-heavy profile/floors and dirty unrelated work. Original velocity baseline
+2026-10-21T01:12:03Z remains; stopped interval 07:03:54→15:11:18 is excluded
+from future active-time rates, and earlier recovery gaps remain unreconciled.
+No new active-time/speedup claim. Next: accepted entry correction→new exact
+observer release→summary/original-five/export→separate cleanup/postjoin and
+physical decision→unchanged strict M07 native test.
+
 ## Current — corrected M07 image accepted; physical/native sequence pending (2026-10-22 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

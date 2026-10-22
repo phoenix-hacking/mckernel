@@ -193,6 +193,21 @@ class RecoveryTests(unittest.TestCase):
         self.assertEqual(len(spawns), 1)
         self.assertIn("recovery_stopped_server_identity_unresolved", [row["event"] for row in records])
 
+    def test_fresh_recovery_preserves_same_prepaid_credit_run(self):
+        states = [{"thread_id": "old-thread", "worker_pid": 100,
+                   "goal": {"status": "active"}},
+                  {"thread_id": "new-thread", "worker_pid": 101,
+                   "goal": {"status": "complete"}}]
+        ident = "a" * 32
+        argv = ["--fresh-on-recovery", "--credit-budget", "100", "--credit-run-id", ident]
+        code, spawns, _, _ = self.supervise([-9, 0], states, fresh=True, argv=argv)
+        self.assertEqual(code, 0)
+        self.assertEqual(len(spawns), 2)
+        for call in spawns:
+            command = call.args[0]
+            self.assertEqual(command[command.index("--credit-budget") + 1], "100")
+            self.assertEqual(command[command.index("--credit-run-id") + 1], ident)
+
     def test_explicit_first_fresh_launch_does_not_repeat_on_saved_recovery(self):
         states = [{"thread_id": "saved-thread", "worker_pid": 100,
                    "goal": {"status": "active"}},

@@ -44,6 +44,27 @@ class ParallelTests(unittest.TestCase):
         (sending / 'uncertain.json').write_text('{}')
         self.assertTrue(parallel.queue_blockers(self.root))
 
+    def test_duplicate_scope_note_is_bound_without_rewriting_queue(self):
+        pending = self.root / 'instructions/pending'
+        pending.mkdir(parents=True)
+        path = pending / (parallel.SCOPE_NOTE_ID + '.json')
+        raw = b'{"text":"duplicate scope already in startup note"}'
+        path.write_bytes(raw)
+        with mock.patch.object(parallel, 'SCOPE_NOTE_SHA', hashlib.sha256(raw).hexdigest()):
+            self.assertEqual(parallel.queue_blockers(self.root), [])
+            self.assertEqual(path.read_bytes(), raw)
+            self.assertFalse((self.root / 'instructions/superseded').exists())
+            path.write_bytes(raw + b' ')
+            self.assertTrue(parallel.queue_blockers(self.root))
+
+    def test_bound_scope_note_does_not_hide_unrelated_pending_instruction(self):
+        pending = self.root / 'instructions/pending'
+        pending.mkdir(parents=True)
+        (pending / 'unexpected.json').write_text('{"text":"new stop"}')
+        failures = parallel.queue_blockers(self.root)
+        self.assertEqual(len(failures), 1)
+        self.assertIn('unexpected.json', failures[0])
+
     def test_active_campaign_and_missing_goal_block(self):
         self.assertTrue(parallel.stopped_blockers(self.root, {}))
         self.assertTrue(parallel.stopped_blockers(self.root, {
@@ -178,6 +199,19 @@ class ParallelTests(unittest.TestCase):
         self.assertIn('/feedback', failures[0])
         self.assertIn('failed-compact-turn', failures[0])
         self.assertNotIn('run the same command', failures[0])
+
+    def test_paused_policy_stop_is_visible_in_preview_without_mutating_state(self):
+        state = self.stopped_state_with_retired_turn()
+        state.update(stop_reason='turn_failed', last_error={'codexErrorInfo': 'cyberPolicy'},
+                     last_turn={'thread_id': 'reviewer', 'id': 'interrupted', 'status': 'interrupted'},
+                     agents={'actual-worker': {'status': 'failed', 'turn_id': 'actual-failure'}})
+        before = json.dumps(state, sort_keys=True)
+        failures = parallel.stopped_blockers(self.root, state)
+        self.assertEqual(len(failures), 1)
+        self.assertIn('thread=actual-worker; turn=actual-failure', failures[0])
+        self.assertIn('/feedback', failures[0])
+        self.assertEqual(parallel.stopped_blockers(self.root, state, allow_blocked_resume=True), [])
+        self.assertEqual(json.dumps(state, sort_keys=True), before)
 
     def test_only_explicit_manual_resume_admits_a_stopped_blocked_goal(self):
         state = self.stopped_state_with_retired_turn()
@@ -357,7 +391,7 @@ class ParallelTests(unittest.TestCase):
 
     def fake_main(self, argv, failures=(), preflight_error=None, resource_snapshot=None):
         note = self.root / 'note'
-        note.write_text('Reconcile ' + parallel.HOLD_ID)
+        note.write_text('Reconcile ' + ' '.join(item['id'] for item in parallel.instruction_bindings()))
         state_path = self.root / 'state.json'
         state_path.write_text(json.dumps({'thread_id': 'existing', 'phase': 'stopped',
             'active_turns': {}, 'goal': {'status': 'paused', 'objective': launcher.OBJECTIVE,
@@ -403,6 +437,9 @@ class ParallelTests(unittest.TestCase):
         self.assertNotIn('--new', command)
         self.assertEqual(command[command.index('--supersede-instruction') + 1],
                          parallel.HOLD_ID + ':' + parallel.HOLD_SHA)
+        self.assertEqual([command[i + 1] for i, value in enumerate(command)
+                          if value == '--supersede-instruction'],
+                         [item['id'] + ':' + item['sha256'] for item in parallel.instruction_bindings()])
         note = Path(command[command.index('--startup-instruction-file') + 1])
         self.assertEqual(command[command.index('--startup-instruction-sha256') + 1],
                          hashlib.sha256(note.read_bytes()).hexdigest())

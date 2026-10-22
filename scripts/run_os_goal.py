@@ -31,6 +31,8 @@ from os_goal_resources import (check_resources, resolve_resources,
                                resource_environment, resource_instructions)
 from os_goal_windows import window_capability
 from os_goal_instructions import reconcile_instructions
+from os_goal_credits import (CreditBudget, available_balance, billing_policy,
+                             credit_budget_argument)
 
 
 REPO = Path(__file__).resolve().parents[1]
@@ -57,7 +59,7 @@ TERMINAL_CODES = {"complete": 0, "paused": 10, "blocked": 20,
                   "usageLimited": 21, "budgetLimited": 22}
 LIMIT_ERRORS = {"usageLimitExceeded", "sessionBudgetExceeded"}
 # The user selected continuous work through the full included allowance.
-# Purchased credits/API-key billing remain forbidden; real service limits still stop work.
+# Prepaid credits require --credit-budget; API-key billing is never enabled.
 INCLUDED_USAGE_STOP_PERCENT = 100
 USER_INPUT_METHOD = "item/tool/requestUserInput"
 AUTONOMY_REPLY = (
@@ -468,6 +470,7 @@ def preflight(rpc, args, repo):
     return {"model": args.model, "effort": args.effort, "agents": expected,
             "model_routing": model_routing(args),
             "included_usage_stop_percent": INCLUDED_USAGE_STOP_PERCENT,
+            "billing": billing_policy(args),
             "resources": launch_resources(args, repo), "policy_sha256": policy_hashes(repo),
             "agent_windows": window_capability(args.agent_windows),
             "goals": True, "approval_policy": "never", "sandbox_mode": "danger-full-access",
@@ -493,6 +496,9 @@ class Campaign:
         self.stop_reason = None
         self.stop_now = False
         self.checkpoint_requested = False
+        self.credit_guard = (CreditBudget(directory, args.credit_run_id, args.credit_budget,
+                                          atomic_json, recovered=args.recovered)
+                             if getattr(args, "credit_budget", None) is not None else None)
         self.last_activity = time.monotonic()
         self.stopping = False
         self.controlled = False
@@ -793,6 +799,15 @@ class Campaign:
         if (not isinstance(used, (int, float)) or isinstance(used, bool) or
                 not math.isfinite(used) or not 0 <= used <= 100):
             self.stop_reason, self.stop_now = "included_usage_unknown", True
+        elif self.credit_guard is not None:
+            try:
+                record, exhausted = self.credit_guard.observe(limits)
+                self.save(credit_budget=record)
+                if exhausted:
+                    self.stop_reason, self.stop_now = "credit_budget_exhausted", True
+            except (OSError, ValueError, TypeError, InvalidOperation) as error:
+                self.save(credit_budget_error=str(error))
+                self.stop_reason, self.stop_now = "credit_budget_unknown", True
         elif used >= INCLUDED_USAGE_STOP_PERCENT:
             # Use the full included allowance; service, billing and auth stops still win.
             self.stop_reason, self.stop_now = "included_usage_guard", True
@@ -806,7 +821,16 @@ class Campaign:
                 except InvalidOperation:
                     self.stop_reason, self.stop_now = "credit_balance_unknown", True
         if self.stop_reason:
-            self.output.notice("Included-usage safety stop: " + self.stop_reason)
+            self.output.notice("Usage/billing stop: " + self.stop_reason)
+
+    def refresh_credit_budget(self):
+        """Poll without inference; notifications alone cannot enforce a budget."""
+        try:
+            self.record_rate_limits(self.rpc.call("account/rateLimits/read", {}, timeout=10).get("rateLimits"))
+        except Exception as error:
+            self.save(credit_budget_error=str(error))
+            self.stop_reason = self.stop_reason or "credit_budget_unknown"
+            self.stop_now = True
 
     def event(self, message):
         method, data = message.get("method"), message.get("params", {})
@@ -862,10 +886,21 @@ class Campaign:
                 stream.write(excerpt)
 
     def instructions(self):
+        usage_policy = (
+            "The user explicitly authorized this invocation to use up to "
+            + self.args.credit_budget + " existing prepaid credits. The local 100% "
+            "included-usage stop is replaced ONLY for this invocation by the persistent "
+            "account-balance credit guard. Never change or reset its budget/run identifier, "
+            "buy credits, enable API-key billing, or bypass a real service/auth/billing stop. "
+            "The launcher counts all observed account balance decreases, including other "
+            "conversations; in-flight charges may settle during shutdown. "
+            if getattr(self.args, "credit_budget", None) is not None else
+            "The included-plan usage guard stops this invocation at 100%; never spend "
+            "purchased credits or use API-key billing. "
+        )
         continuation = (
             "This invocation has no time limit. The user explicitly requests continuous "
-            "work until the entire OS objective is accepted or the included-plan "
-            "usage guard stops this invocation at 100%; never spend purchased credits or use API-key billing. "
+            "work until the entire OS objective is accepted or the selected usage/budget guard stops it. "
             "Earlier work-window endings, checkpoint pauses and statements that a window "
             "is authoritative are historical and do not pause this invocation. Continue "
             "after checkpoints. Repair project-owned prerequisites and pursue independent "
@@ -880,6 +915,7 @@ class Campaign:
             (("Current user instruction for this invocation, loaded before session activation:\n"
               + self.args.startup_instruction + "\nEnd current invocation instruction.\n")
              if getattr(self.args, "startup_instruction", None) else "") +
+            usage_policy +
             (("The user explicitly requested a fresh OS development conversation guided by "
               "Markdown. Read " + PLAN_REL + "/SESSION-HANDOFF.md first, then the current "
               "goal/start/convergence/handoff files. Prior session state is preserved under "
@@ -1072,7 +1108,7 @@ class Campaign:
             "for another resume instruction. Begin the next authorized engineering task.\n"
             "Preserved prior instruction reference: " + previous + ".\n"
             "A new stop received during or after this invocation remains authoritative. "
-            "Preserve signal, quota/100% included limit, billing, ownership/resource and service "
+            "Preserve signal, quota and selected included/credit budget, billing, ownership/resource and service "
             "controls; do not replay rejected work or expired execution releases. "
             "The launcher's automatic recovery does not issue this manual authorization.\n"
             + (("Current invocation scope and execution instructions:\n" + note) if note else "")
@@ -1308,7 +1344,8 @@ class Campaign:
         deadline = started + self.args.hours * 3600 if self.args.hours else float("inf")
         checkpoint_at = max(started, deadline - min(self.args.grace_seconds, self.args.hours * 1800))
         stop_deadline = None
-        next_refresh = started + 30
+        refresh_interval = 5 if self.credit_guard is not None else 30
+        next_refresh = started + refresh_interval
         next_heartbeat = started
         code = 1
         try:
@@ -1322,7 +1359,8 @@ class Campaign:
                     code = 21 if self.stop_reason in {"quota_exhausted", "included_usage_guard",
                                                       "included_usage_unknown", "credit_balance_decreased",
                                                       "credit_balance_unknown", "chatgpt_auth_required",
-                                                      "chatgpt_auth_changed"} else 23
+                                                      "chatgpt_auth_changed", "credit_budget_exhausted",
+                                                      "credit_budget_unknown"} else 23
                     break
                 if status in TERMINAL_CODES and not self.checkpoint_requested:
                     code = TERMINAL_CODES[status]
@@ -1350,8 +1388,12 @@ class Campaign:
                     self.save(heartbeat_at=utc(), uptime_seconds=round(now - started, 1))
                     next_heartbeat = now + self.args.heartbeat_seconds
                 if now >= next_refresh:
+                    if self.credit_guard is not None:
+                        self.refresh_credit_budget()
+                        if self.stop_now:
+                            continue
                     self.remember_goal(self.rpc.call("thread/goal/get", {"threadId": self.state["thread_id"]})["goal"])
-                    next_refresh = now + 30
+                    next_refresh = now + refresh_interval
         except Exception as error:
             self.stop_reason = self.stop_reason or "launcher_error"
             self.save(last_error=str(error), retryable=isinstance(error, (
@@ -1402,6 +1444,9 @@ def arguments(argv=None):
                         help="Use fresh Markdown-guided conversations after classified recoverable crashes")
     parser.add_argument("--fresh-recovery-proof", type=Path, help=argparse.SUPPRESS)
     parser.add_argument("--token-budget", type=int, help="Explicit total goal budget; omitted preserves the current budget")
+    parser.add_argument("--credit-budget", type=credit_budget_argument, metavar="CREDITS",
+                        help="Explicitly allow existing prepaid credits up to an observed account-balance budget; in-flight charges may settle later")
+    parser.add_argument("--credit-run-id", help=argparse.SUPPRESS)
     parser.add_argument("--codex", default="codex", help="Path to the local Codex executable")
     parser.add_argument("--startup-instruction-file", type=Path,
                         help="Explicit invocation instructions loaded before resuming the saved thread")
@@ -1418,6 +1463,11 @@ def arguments(argv=None):
     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument("--recovered", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
+    if args.credit_run_id is not None and (args.credit_budget is None or
+            len(args.credit_run_id) != 32 or any(c not in "0123456789abcdef" for c in args.credit_run_id)):
+        parser.error("credit-run-id requires a credit budget and a 32-character lowercase hex identifier")
+    if args.worker and args.credit_budget is not None and args.credit_run_id is None:
+        parser.error("Credit-funded workers require the watcher's persistent credit-run-id")
     if args.fresh_recovery_proof and not (args.worker and args.recovered and args.fresh_on_recovery):
         parser.error("Fresh recovery requires the supervised recovered worker and a watcher proof")
     args.startup_instruction = (read_startup_instruction(args.startup_instruction_file)
@@ -1494,6 +1544,7 @@ def main(argv=None):
                           "resources": launch_resources(args, REPO), "policy_sha256": policy_hashes(REPO),
                           "model_routing": model_routing(args),
                           "included_usage_stop_percent": INCLUDED_USAGE_STOP_PERCENT,
+                          "billing": billing_policy(args),
                           "supersede_instructions": args.supersede_instructions,
                           "agent_windows": window_capability(args.agent_windows),
                           "startup_instruction_sha256": (hashlib.sha256(args.startup_instruction.encode()).hexdigest()
@@ -1518,14 +1569,25 @@ def main(argv=None):
         with tempfile.TemporaryDirectory(prefix="mckernel-goal-check-") as temporary:
             rpc = RPC(server_argv(args, REPO), Path(temporary), lambda event: None)
             try:
-                print(json.dumps(preflight(rpc, args, REPO), indent=2))
+                report = preflight(rpc, args, REPO)
+                if args.credit_budget is not None:
+                    account = rpc.call("account/read", {"refreshToken": False}).get("account") or {}
+                    if account.get("type") != "chatgpt":
+                        raise RuntimeError("Prepaid credits require ChatGPT account authentication")
+                    limits = rpc.call("account/rateLimits/read", {}).get("rateLimits")
+                    report["billing"]["available_prepaid_credits"] = str(available_balance(limits))
+                print(json.dumps(report, indent=2))
             finally:
                 rpc.close()
         return 0
     if not args.worker:
         check_resources(launch_resources(args, REPO))
         from watch_os_goal import supervise
-        return supervise(args, REPO, directory, list(sys.argv[1:] if argv is None else argv), Lease, atomic_json)
+        forwarded = list(sys.argv[1:] if argv is None else argv)
+        if args.credit_budget is not None and args.credit_run_id is None:
+            args.credit_run_id = uuid4().hex
+            forwarded.extend(["--credit-run-id", args.credit_run_id])
+        return supervise(args, REPO, directory, forwarded, Lease, atomic_json)
     directory.mkdir(mode=0o700, parents=True, exist_ok=True)
     lease = Lease(directory / "run.lock")
     try:

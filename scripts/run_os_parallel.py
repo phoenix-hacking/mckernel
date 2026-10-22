@@ -21,6 +21,7 @@ from os_goal_resources import check_resources, resolve_resources
 from run_os_goal import (DEFAULT_DISPATCHER_MODEL, INCLUDED_USAGE_STOP_PERCENT,
                          OBJECTIVE, is_policy_stop, model_routing, restart_advice)
 from os_goal_instructions import reconcile_instructions
+from os_goal_credits import billing_policy, credit_budget_argument
 
 REPO = Path(__file__).resolve().parents[1]
 SCRATCH = Path('/home/holden/mckernel-work/scratch')
@@ -28,6 +29,8 @@ UUID = '2a5768c8-718d-4914-bdc0-6b32c5a92a52'
 NOTE = REPO / 'docs/verification/os-milestones-20260914/PARALLEL-RESUME.md'
 HOLD_ID = '20261017T021032370649Z-e1d9b3466e7c4dcfb8838159453e3bf2'
 HOLD_SHA = 'a05027f2144889dfa93755e2680f27614352b588972becb178697f524ff831b9'
+SCOPE_NOTE_ID = '20261018T012254595264Z-36e3cdb4d5de43ebb04c1c6b6adc9052'
+SCOPE_NOTE_SHA = 'e0969e6c21990432889029364b5c54c6ebcfad5ae030e67486faa56e060cb4a9'
 
 
 def read_json(path):
@@ -40,9 +43,15 @@ def state_directory(repo):
     return (repo / value).resolve() / 'os-autopilot'
 
 
+def instruction_bindings():
+    """Exact superseded notes only; unknown pending instructions still block."""
+    return [{'id': HOLD_ID, 'sha256': HOLD_SHA},
+            {'id': SCOPE_NOTE_ID, 'sha256': SCOPE_NOTE_SHA}]
+
+
 def queue_blockers(directory):
     try:
-        reconcile_instructions(directory, [{'id': HOLD_ID, 'sha256': HOLD_SHA}],
+        reconcile_instructions(directory, instruction_bindings(),
                                hashlib.sha256(NOTE.read_bytes()).hexdigest(), execute=False)
     except (OSError, ValueError) as error:
         return [str(error)]
@@ -75,8 +84,10 @@ def stopped_blockers(directory, state, allow_blocked_resume=False, allow_fresh_b
     # --run is an explicit manual request. A cached blocked status must not
     # permanently prevent it from reaching the service, which still evaluates
     # the request normally. The watcher never automatically retries policy stops.
-    if (not fresh_bootstrap and goal_status != 'paused'
-            and not (allow_blocked_resume and goal_status == 'blocked')):
+    if (not fresh_bootstrap and (
+            (is_policy_stop(state) and not allow_blocked_resume)
+            or (goal_status != 'paused'
+                and not (allow_blocked_resume and goal_status == 'blocked')))):
         failures.append(restart_advice(state) if is_policy_stop(state) else
                         'Saved goal must be paused; inspect its actual status before resuming.')
     if (state.get('resume_instruction') or {}).get('status') in ('sending', 'delivery_uncertain'):
@@ -155,12 +166,15 @@ def launch_command(args, resources):
             '--build-jobs', str(resources['build_jobs']),
             '--hours', str(args.hours), '--agent-windows', args.windows,
             '--stall-seconds', '0', '--startup-instruction-file', str(NOTE),
-            '--startup-instruction-sha256', hashlib.sha256(NOTE.read_bytes()).hexdigest(),
-            '--supersede-instruction', HOLD_ID + ':' + HOLD_SHA]
+            '--startup-instruction-sha256', hashlib.sha256(NOTE.read_bytes()).hexdigest()]
+    for binding in instruction_bindings():
+        command.extend(['--supersede-instruction', binding['id'] + ':' + binding['sha256']])
     if args.fresh_session:
         command.append('--fresh-session')
     if args.fresh_on_recovery:
         command.append('--fresh-on-recovery')
+    if getattr(args, 'credit_budget', None) is not None:
+        command.extend(['--credit-budget', args.credit_budget])
     return command
 
 
@@ -181,6 +195,8 @@ def main(argv=None):
                           action='store_false', help='Disable fresh conversations after classified crashes')
     parser.add_argument('--agents', type=int, help='Optional smaller ceiling; default is the measured maximum')
     parser.add_argument('--hours', type=float, default=0, help='0: no wall-clock cutoff; optional finite window')
+    parser.add_argument('--credit-budget', type=credit_budget_argument, metavar='CREDITS',
+                        help='Explicitly allow this much existing prepaid-credit spend; default remains included-only')
     parser.add_argument('--windows', choices=('auto', 'on', 'off'), default='auto')
     parser.add_argument('--model', default=DEFAULT_DISPATCHER_MODEL, choices=[DEFAULT_DISPATCHER_MODEL],
                         help='Coordinator model; default: ' + DEFAULT_DISPATCHER_MODEL)
@@ -203,7 +219,8 @@ def main(argv=None):
     mount, host_failures = host_blockers()
     failures += host_failures
     note = NOTE.read_text()
-    if not note.strip() or len(note.encode()) > 8192 or HOLD_ID not in note:
+    if (not note.strip() or len(note.encode()) > 8192
+            or not all(binding['id'] in note for binding in instruction_bindings())):
         raise ValueError('Missing/invalid preparation-hold reconciliation in startup instructions')
     command = launch_command(args, resources)
     print(json.dumps({
@@ -214,6 +231,7 @@ def main(argv=None):
         'fresh_on_recovery': args.fresh_on_recovery,
         'model_routing': model_routing(args),
         'included_usage_stop_percent': INCLUDED_USAGE_STOP_PERCENT,
+        'billing': billing_policy(args),
         'scratch': mount, 'startup_instruction_sha256': hashlib.sha256(note.encode()).hexdigest(),
         'pending_hold': 'Before activation the launcher archives only exact superseded bytes and an audit receipt.',
         'launch_blockers': failures,

@@ -1,13 +1,17 @@
-EXPLICIT NEW MANUAL RESUME AFTER USER-REPORTED USAGE RESET, 2026-10-20.
-Invoking --run is the user's current authorization to resume unfinished OS work
-continuously, superseding prior user pauses and previous-invocation97% notes.
-This NEW invocation is configured for100% INCLUDED weekly allowance,0% usage
-reserve. Purchased/API billing is forbidden; genuine service, auth, billing,
-ownership, resource and newer external stops remain authoritative. Never modify
-launcher state or retry a service-policy rejection automatically. No controller
-handoff helper is needed: old watcher/worker/server are already retired.
-Preparing/previewing this script does not start inference. Automatic recovery
-never fabricates this manual authorization.
+CURRENT CREDIT AUTHORIZATION, 2026-10-22.
+The user explicitly requested continuation using existing account credits.
+Only an invocation with --credit-budget CREDITS may spend prepaid credits.
+Its persistent account-balance budget survives worker/fresh-session recovery;
+never reset it, buy credits, enable API-key billing, or treat it as permission
+to bypass an actual service/auth/billing/policy stop. Without that explicit
+option, the original included-only100% stop remains. In-flight charges may
+settle after the measured budget stop. Read the latest CURRENT/HANDOFF entries:
+repair the null current_live_postjoin observer entry before any new release.
+The reserve576MiB approval remains separately pending; no mutation is authorized.
+
+Invoking --run explicitly resumes unfinished work. Previous checkpoint pauses
+and retired97% notes are historical. Never modify launcher state or retry a
+service-policy rejection automatically. Preview does not start inference.
 
 OS/Rust work only; no security testing. See AGENTS.md.
 
@@ -17,15 +21,10 @@ PLUS active McKernel compute-C retirement into Rust/reviewed assembly. Deferred
 large fuzz/soak/external qualification remains preserved, not passed. Older saved
 objective/catalog wording does not reinstate those deferred prerequisites.
 
-Read current VELOCITY.md first for fresh steering, then GOAL.md, START.md,
-CONVERGENCE.md, latest HANDOFF.md and relevant current CURRENT.md entries.
-Read the current SESSION-HANDOFF.md heading and the stopped supervisor handoff:
-/home/holden/mckernel-work/host-preparation/supervisor-velocity-metrics-20261019-1/STOPPED-HANDOFF-20261020T0315Z.md
-Read only the latest relevant entries; do not load full historical documents.
-The last handoff was interrupted by the usage guard. Reconcile actual HEAD,
-dirty/untracked inputs, current source/runtime leases and closed captures.
-Historical declarations that97% is mandatory describe the RETIRED invocation.
-New generated launcher instructions and current100% setting govern this run.
+Read VELOCITY.md, GOAL.md, START.md, CONVERGENCE.md and only the latest relevant
+HANDOFF/CURRENT/SESSION-HANDOFF entries. The current stopped handoff is
+STOP-HANDOFF-20261022-070354.md. Reconcile HEAD, dirty inputs, leases and closed
+captures. Preserve the original velocity baseline across coordinator recovery.
 
 Exact preparation-hold reconciliation remains launcher-owned. This invocation
 supersedes20261017T021032370649Z-e1d9b3466e7c4dcfb8838159453e3bf2 and copied

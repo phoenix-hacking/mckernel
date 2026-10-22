@@ -458,6 +458,85 @@ class CampaignTests(unittest.TestCase):
                                      for m, _ in rpc.calls))
                 self.assertFalse(watcher.should_restart(21, state))
 
+    def credit_arguments(self):
+        self.args.credit_budget = "100"
+        self.args.credit_run_id = "a" * 32
+
+    def test_explicit_prepaid_budget_allows_exhausted_included_plan(self):
+        self.credit_arguments()
+        rpc = FakeRPC(self.args, steps=[lambda r: (r.completed(), r.status("complete"))])
+        rpc.limits = {"primary": {"usedPercent": 100},
+                      "credits": {"hasCredits": True, "unlimited": False, "balance": "1000"}}
+        state = self.run_campaign(rpc, 0)
+        self.assertIsNone(state["stop_reason"])
+        self.assertEqual(state["credit_budget"]["budget"], "100")
+        self.assertTrue(any(m == "thread/start" for m, _ in rpc.calls))
+        instructions = next(p["developerInstructions"] for m, p in rpc.calls if m == "thread/start")
+        self.assertIn("up to 100 existing prepaid credits", instructions)
+
+    def test_paid_budget_threshold_stops_without_automatic_recovery(self):
+        self.credit_arguments()
+        def spend(rpc):
+            rpc.emit("account/rateLimits/updated", {"rateLimits": {
+                "primary": {"usedPercent": 100},
+                "credits": {"hasCredits": True, "unlimited": False, "balance": "900"}}})
+        rpc = FakeRPC(self.args, steps=[spend])
+        rpc.limits = {"primary": {"usedPercent": 100},
+                      "credits": {"hasCredits": True, "unlimited": False, "balance": "1000"}}
+        state = self.run_campaign(rpc, 21)
+        self.assertEqual(state["stop_reason"], "credit_budget_exhausted")
+        self.assertEqual(state["credit_budget"]["spent"], "100")
+        self.assertFalse(watcher.should_restart(21, state, watchdog=True))
+
+    def test_paid_mode_does_not_ignore_real_service_quota_error(self):
+        self.credit_arguments()
+        def denied(rpc):
+            rpc.emit("error", {"threadId": "test-thread", "turnId": "turn-1",
+                     "error": {"codexErrorInfo": "usageLimitExceeded"}, "willRetry": False})
+        rpc = FakeRPC(self.args, steps=[denied])
+        rpc.limits = {"primary": {"usedPercent": 100},
+                      "credits": {"hasCredits": True, "unlimited": False, "balance": "1000"}}
+        state = self.run_campaign(rpc, 21)
+        self.assertEqual(state["stop_reason"], "quota_exhausted")
+        self.assertFalse(watcher.should_restart(21, state))
+
+    def test_paid_mode_unknown_balance_refuses_before_inference(self):
+        self.credit_arguments()
+        rpc = FakeRPC(self.args)
+        rpc.limits = {"primary": {"usedPercent": 100}, "credits": {"hasCredits": False}}
+        state = self.run_campaign(rpc, 21)
+        self.assertEqual(state["stop_reason"], "credit_budget_unknown")
+        self.assertFalse(any(m in ("thread/start", "thread/resume") for m, _ in rpc.calls))
+
+    def test_paid_refresh_reads_balance_without_unsolicited_events(self):
+        self.credit_arguments()
+        campaign = launcher.Campaign(self.args, self.directory, self.directory)
+        try:
+            initial = {"primary": {"usedPercent": 100},
+                       "credits": {"hasCredits": True, "unlimited": False, "balance": "1000"}}
+            campaign.record_rate_limits(initial)
+            campaign.rpc = Mock()
+            current = dict(initial, credits=dict(initial["credits"], balance="900"))
+            campaign.rpc.call.return_value = {"rateLimits": current}
+            campaign.refresh_credit_budget()
+            campaign.rpc.call.assert_called_once_with("account/rateLimits/read", {}, timeout=10)
+            self.assertEqual(campaign.stop_reason, "credit_budget_exhausted")
+            self.assertTrue(campaign.stop_now)
+        finally:
+            campaign.output.close()
+
+    def test_paid_refresh_failure_stops_instead_of_waiting_for_notifications(self):
+        self.credit_arguments()
+        campaign = launcher.Campaign(self.args, self.directory, self.directory)
+        try:
+            campaign.rpc = Mock()
+            campaign.rpc.call.side_effect = TimeoutError("account unavailable")
+            campaign.refresh_credit_budget()
+            self.assertEqual(campaign.stop_reason, "credit_budget_unknown")
+            self.assertTrue(campaign.stop_now)
+        finally:
+            campaign.output.close()
+
     def test_included_usage_through_99_percent_uses_full_included_allowance(self):
         self.assertEqual(launcher.INCLUDED_USAGE_STOP_PERCENT, 100)
         for percent in (97, 99, 99.9):
@@ -555,6 +634,66 @@ class CampaignTests(unittest.TestCase):
                              for method, params in rpc.calls[len(calls_at_failure):]))
         self.assertFalse(any(method == "thread/resume"
                              for method, _ in rpc.calls[len(calls_at_failure):]))
+
+    def test_child_failure_identity_survives_sibling_interruptions(self):
+        class InterruptingRPC(FakeRPC):
+            def call(self, method, params, **kwargs):
+                if method == "turn/interrupt":
+                    self.calls.append((method, params))
+                    turn = dict(self.turns.pop(params["threadId"]))
+                    turn["status"] = "interrupted"
+                    self.emit("turn/completed", {"threadId": params["threadId"], "turn": turn})
+                    return {}
+                return super().call(method, params, **kwargs)
+
+        for event in ("turn/completed", "error"):
+            with self.subTest(event=event):
+                self.saved(goal())
+
+                def fail(rpc):
+                    rpc.started("failed-child-turn", "failed-worker")
+                    rpc.started("later-review-turn", "later-reviewer")
+                    error = {"message": "service policy refusal", "codexErrorInfo": "cyberPolicy"}
+                    if event == "turn/completed":
+                        rpc.turns.pop("failed-worker")
+                        rpc.emit(event, {"threadId": "failed-worker", "turn": {
+                            "id": "failed-child-turn", "status": "failed", "error": error}})
+                    else:
+                        rpc.emit(event, {"threadId": "failed-worker", "error": error,
+                                         "willRetry": False})
+
+                rpc = InterruptingRPC(self.args, goal(), steps=[fail])
+                campaign = launcher.Campaign(self.args, self.directory, self.directory, rpc.factory)
+                output = io.StringIO()
+                with redirect_stdout(output):
+                    self.assertEqual(campaign.run(), 23)
+                state = json.loads((self.directory / "state.json").read_text())
+                self.assertEqual(state["last_turn"]["status"], "interrupted")
+                self.assertEqual(state["last_failure"]["thread_id"], "failed-worker")
+                self.assertEqual(state["last_failure"]["id"], "failed-child-turn")
+                advice = launcher.restart_advice(state)
+                self.assertIn("thread=failed-worker; turn=failed-child-turn", advice)
+                self.assertNotIn("later-reviewer", advice)
+                self.assertFalse(watcher.should_restart(23, state))
+                self.assertFalse(watcher.should_restart(23, state, watchdog=True))
+                self.assertFalse(any(method in ("thread/start", "turn/start") for method, _ in rpc.calls))
+                self.assertEqual(sum(method == "thread/resume" for method, _ in rpc.calls), 1)
+
+    def test_legacy_failure_advice_uses_unique_failed_worker_not_interrupted_reviewer(self):
+        state = {"thread_id": "dispatcher", "stop_reason": "turn_failed",
+                 "last_error": {"codexErrorInfo": "cyberPolicy"}, "log_dir": "current-run",
+                 "last_turn": {"thread_id": "reviewer", "id": "interrupted-turn",
+                               "status": "interrupted"},
+                 "agents": {"failed-worker": {"status": "failed", "turn_id": "actual-failure"},
+                            "reviewer": {"status": "interrupted", "turn_id": "interrupted-turn"}},
+                 "last_failure": {"thread_id": "old-worker", "id": "old-failure",
+                                  "log_dir": "previous-run", "error": {"codexErrorInfo": "cyberPolicy"}}}
+        advice = launcher.restart_advice(state)
+        self.assertIn("thread=failed-worker; turn=actual-failure", advice)
+        self.assertNotIn("interrupted-turn", advice)
+        self.assertNotIn("old-failure", advice)
+        state["agents"]["another-failure"] = {"status": "failed", "turn_id": "ambiguous"}
+        self.assertIn("turn=unknown", launcher.restart_advice(state))
 
     def test_signal_notice_keeps_resume_hint_with_stale_policy_error(self):
         self.saved(goal())

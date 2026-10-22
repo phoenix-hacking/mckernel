@@ -1,3 +1,87 @@
+## Current — failed observer closed; entry correction under review (2026-10-22 15:15 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+New manual invocation 20261022T151118Z-972089c4 is active on the saved thread.
+Preserve persistent credit run 0c216c56957b4e64a89d54d4b28a2ad6 and its selected
+100-credit budget; no purchases, API billing or service-stop retries. The reviewed
+launcher/helper changes and startup receipts are checkpointed as infrastructure,
+with no OS behavior credit. Receipt: ../evidence/account-credit-budget-resume-20261022-1/.
+
+Independent failed-observer closure accepts direct child/group/stream retirement
+only: PID3035822/start44972881, exit1/.140694955s, null current_live_postjoin
+TypeError before root mutex/observation/output. Genuine decision/raw event:
+../evidence/m07-observer-entry-correction-20261022-1/FAILED-OBSERVER-CLOSURE.json.
+Retained build ownership remains; no physical clearance or next-heavy authority.
+The one bounded correction binds the genuine already-observed guard postjoin,
+retaining future cleanup/postjoin null. Actual entry positive and seven negatives
+passed; independent correction review and exact publication/release remain next.
+Private correction: /home/holden/mckernel-work/host-preparation/m07-observer-current-postjoin-correction-20261022-1/.
+SDK68 installed-consumer source binding work is disjoint; no module admission.
+
+Held six whole milestones,24/35checks,99sources(40OS/59infra),35compiler,
+13native,31behaviors,Rust21production/18native. Reuse accepted cbb04 image/stage.
+Reserve576 approval unanswered; no mutation. Preserve all failures,Scratch21,
+27:4,one-heavy profile/floors and dirty unrelated work. Original velocity baseline
+2026-10-21T01:12:03Z remains; stopped interval 07:03:54→15:11:18 is excluded
+from future active-time rates, and earlier recovery gaps remain unreconciled.
+No new active-time/speedup claim. Next: accepted entry correction→new exact
+observer release→summary/original-five/export→separate cleanup/postjoin and
+physical decision→unchanged strict M07 native test.
+
+## Running — prepaid continuation confirmed (2026-10-22 15:11 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The existing saved thread `01a1626a-eaa3-7282-a47b-3292178e2cca` is active;
+watcher/worker/server observed 3180621/3180623/3180625. The dispatcher explicitly
+started the null-postjoin observer repair and retained the unapproved reserve hold.
+Run `.git/os-autopilot/runs/20261022T151118Z-972089c4`; console
+`.git/os-autopilot/launch-logs/parallel-lev50434.log`.
+Credit run `0c216c56957b4e64a89d54d4b28a2ad6`, budget 100, initial balance
+58235.9614400000 and initial observed spend zero. These are startup observations.
+Do not start a second copy. Use `python3 -B scripts/run_os_goal.py --progress`
+or `tail -F .git/os-autopilot/launch-logs/parallel-lev50434.log` to observe it.
+The reviewed launcher changes remain in the preserved dirty worktree; include
+them in the next coherent source checkpoint without absorbing unrelated changes.
+
+## Current — explicit prepaid-credit continuation (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The user explicitly resumes using existing prepaid account credits. Use
+`python3 -B scripts/run_os_parallel.py --run --background --credit-budget 100 --windows off`.
+GPT-6.1 remains mandatory, medium by default/high for complex work. The reviewed
+persistent account-balance budget survives recovery and stops at 100 observed
+credits spent; in-flight/other account charges can settle during shutdown.
+No purchases, API-key billing, ledger reset or service-stop bypass. Default
+launches retain the included-only limit. All 160 offline tests and independent
+source review passed; real read-only preflight confirmed credits and models.
+The foreground is starting the existing saved campaign, not a second dispatcher.
+
+First engineering dependency: repair the null `current_live_postjoin` in the
+retained observer's actual consumed data, check the complete entry point, obtain
+a new reviewed release, then perform the retained physical/native sequence.
+No unchanged replay. Reuse accepted corrected cbb04 image/stage/normalization.
+Held six whole milestones, 24/35 checks, 99 source units (40 OS/59 infrastructure),
+35 compiler/13 native batches, 31 behaviors and Rust 21 production/18 native paths.
+Do not count credit-harness work as OS progress. Preserve the original baseline;
+coordinator recovery/downtime still needs reconciliation for velocity metrics.
+
+The separate 576 MiB reserve approval remains unanswered. Credit authorization
+does not authorize tune2fs, rollback, SDK execution or relaxed capacity gates.
+Preserve all retained ownership/evidence, Scratch21 and mutex 27:4. Earlier stop
+entries below are historical; startup confirmation is recorded above.
+
+## Foreground stop — 2026-10-22 07:03:54 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Included usage reached100%; campaign stopped, saved goal paused and incomplete.
+Watcher/worker/server were observed absent. Held six whole milestones,24/35checks,
+99 source units(40OS/59infra),35compiler batches,13native batches and31behaviors.
+Corrected cbb04 image/stage/normalization accepted; physical/native clearance pending.
+Observer refused before observation on null current_live_postjoin; do not replay its
+consumed release. Reserve576MiB approval question remains pending; no mutation.
+Preserve all ownership/evidence/Scratch21. Resume only after included usage is available.
+Exact next commands, prerequisites and measurement continuity: [STOP-HANDOFF-20261022-070354.md](STOP-HANDOFF-20261022-070354.md).
+
 ## Current — corrected M07 image accepted; physical/native sequence pending (2026-10-22 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
