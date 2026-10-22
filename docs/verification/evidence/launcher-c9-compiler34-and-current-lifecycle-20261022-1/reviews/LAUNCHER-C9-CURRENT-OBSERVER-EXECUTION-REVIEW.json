@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "reviewer": "/root/launcher_current_observer_source_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "observer_sha256": "bc0b1b28b491a237b8163eb03a3b00bf5658b71888d5efeeb70e8f50920c17bc",
+  "cleanup_source_sha256": "4fe17a2e23ab840742a8db812dc7dc7fbd6d345e392c49a6cac8b0029b5531c4",
+  "cleanup_tests_sha256": "2fba315ad96f271124cf78f7441faa306f58ea03ae35cdbe78bba5be6488d630",
+  "reviewed_observation_payload_sha256": "5c000905ca814bf51bb75cb43f1705d85349c7cb995a6ce93da95b0e3870a5cf",
+  "accepted_scope": "One exact current read-only observer payload using the existing qualified capture route, subject to fresh dispatcher admission.",
+  "verified": {
+    "canonical_payload_bytes": 5551,
+    "execution_review_absent_from_reviewed_payload": true,
+    "supplied_reference_files_verified": 7,
+    "publication_commit": "fe522bb44864acc8b1786a922114cc936bda1647",
+    "publication_tree": "9f5ece98b4deacdbd4889109b0292103a78e0365",
+    "publication_rows": 18,
+    "embedded_cleanup_publication_paths_bound": true,
+    "actual_engine_parser_evidence": "26525680-byte request; qualified address-space limits; successful direct wait and join; matching PID/start; empty stderr; group absent",
+    "tool_owned_controller_scope_preserved": true
+  },
+  "required_before_entry": [
+    "Insert only the genuine execution_review reference; final canonical payload excluding that key must retain the reviewed hash.",
+    "Freeze and hash the final release and operation. Fill only the final release digest in the reviewed argv template.",
+    "Use CPU7, metadata AS256MiB/hard2GiB, child CPU30, FS32MiB, CORE0, and the exact isolated Anaconda interpreter. Keep the capture parent CPU limits unlimited and apply no outer wall/grace kill.",
+    "Dispatcher must freshly bind exclusive admission, source-worker quiescence, aggregate resource grant, disk floors and headroom, boot/scratch identity, retained target and ownership, absent request lease, and applicable root-mutex predicates."
+  ],
+  "cleanup_authorized": false,
+  "physical_release": false,
+  "native_acceptance": false,
+  "limitations": "Execution-payload review only. No observer or live admission executed; no root, Docker, census, tests, children, edits, or repeated source audit."
+}

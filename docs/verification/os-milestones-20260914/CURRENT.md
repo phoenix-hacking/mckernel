@@ -1,3 +1,25 @@
+## Current — C9 observed/exported; fresh cleanup namespace correction passed (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Current C9 observer0/1.604613032s, summary0/.116148849s, original-five metadata
+0/.133853529s and raw-five export0/.138172085s all joined/groups absent/emptyerr.
+Independent raw5/full-FD acceptance3ce1d50d binds all five originals and604160B
+archive. No cleanup or physical release is inferred. Pre-effect bounded path
+check found old transaction namespace occupied; all originals remain untouched.
+Fresh constant/DATA successor d8ee7886 preserves all nine function/class bodies
+and original full observation; actual pure check0/.393898599s passed fresh-path
+positive and old-occupied negative. New source publication and exact same-release
+preflight/cleanup/postjoin review are next, with all mutations still held.
+
+M07 paired alias publication0/.248375386s and real HERE/owner normalization
+0/.695803824s independently accepted392198a2:27paths,11source identities,three
+read-only roots. Outer constructor0/.104095s passed; wholecaller correctly stopped
+on current retained ownership names. Await shared genuine physical closure; no
+bypass or retry. M05 current constructor remains accepted and prepared.
+Canonical24/35,sixwhole,97sources(38OS/59infra),34compiler,12native,30behaviors,
+Rust21/18 held. No source credit for namespace/pins/DATA. No resize/delete, gate
+bypass, framework or unchanged build/stage/native replay.
+
 ## Current — Launcher compiler34 accepted; current lifecycle closure next (2026-10-22 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
