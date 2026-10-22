@@ -63,27 +63,37 @@ class CreditBudget:
         balance = available_balance(limits)
         if self.path.exists():
             saved = json.loads(self.path.read_text())
-            if (not isinstance(saved, dict) or saved.get("schema_version") != 1 or saved.get("id") != self.identifier
+            if (not isinstance(saved, dict) or type(saved.get("schema_version")) is not int
+                    or saved.get("schema_version") not in (1, 2) or saved.get("id") != self.identifier
                     or amount(saved.get("budget"), positive=True) != self.budget):
                 raise ValueError("Credit-run budget or identity changed")
             initial = amount(saved.get("initial_balance"))
             minimum = amount(saved.get("minimum_balance"))
             previous = amount(saved.get("last_balance"))
-            if not minimum <= previous <= initial:
+            spent = amount(saved.get("spent"))
+            remaining = amount(saved.get("remaining"))
+            if (minimum > initial or minimum > previous
+                    or spent < initial - minimum
+                    or remaining != max(Decimal(0), self.budget - spent)
+                    or (saved["schema_version"] == 1
+                        and (previous > initial or spent != initial - minimum))):
                 raise ValueError("Inconsistent retained credit-run accounting")
-            if balance > previous:
-                raise ValueError("Credit balance increased; reconcile before continuing")
+            # Poll responses and notifications can arrive out of balance order.
+            # Count only downward steps and never refund allowance on an upward
+            # snapshot. A stale down/up/down sequence may count conservatively;
+            # it cannot erase observed spending or extend the user's allowance.
+            spent += max(Decimal(0), previous - balance)
         else:
             if self.recovered or self.initialized:
                 raise ValueError("Recovery has no retained credit budget; refusing a new allowance")
             initial = minimum = balance
+            spent = Decimal(0)
         minimum = min(minimum, balance)
-        spent = initial - minimum
-        saved = {"schema_version": 1, "id": self.identifier,
+        saved = {"schema_version": 2, "id": self.identifier,
                  "budget": str(self.budget), "initial_balance": str(initial),
                  "minimum_balance": str(minimum), "last_balance": str(balance),
                  "spent": str(spent), "remaining": str(max(Decimal(0), self.budget - spent)),
-                 "scope": "Account-wide observed balance decreases; in-flight charges can settle later"}
+                 "scope": "Cumulative account-wide observed balance decreases; increases never restore allowance; stale snapshots may count conservatively; in-flight charges can settle later"}
         self.path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
         # Persist before allowing inference, including the exhausted state.
         self.write_json(self.path, saved)
