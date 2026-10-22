@@ -1,3 +1,53 @@
+## Current — Challenge repair full static passed; exact guest admission next (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual failed M07 retirement6a3f/c043 is accepted. Retained telemetry identifies
+missing pair.challenge before reservation; no payload ran. Collector04154cf8
+reuses accepted challenge/discovery with unchanged helper4312 and strict oracles.
+Compile/12actual-body cases independently acceptede1758cdd; init2f8c8743 keeps
+host0700, explicit guest0755. Stage0/10.643368165s independently accepted8397e74d:
+60members/59unchanged, soleinitdelta, currentmanifestcd1b9054. Source5norm and
+realHERE0/.650937049s and0/.725310752s accepted4d1c67f2; completeprojectioncea75
+includes all four capture facts with distinct actualstatus/preflight provenance.
+
+Constructor0/.117555772s and wholecaller0/.446154938s acceptedSTATIC99e1e155.
+Finalbinder0/.126253450s and fullstatic0/.292221375s pass. Finalpacket e2ce9310,
+seven50fe6439, executorc32fe531 and17-code mapf0abd168 are frozen. Exactsource
+publication/fetch, fresh admission and detached execution review are next; keep
+immutableSTATICpointer intact. No newkernel/modules/launcher/app build required.
+
+M05 two-generation helper/collector/strictdecoder actual11case boundary passes,
+independently accepted14eaf4c5; first4312/generation1/evidence preserved, explicit
+newgeneration2/nonce/frontier contract. First fixturecompileFAIL and bounded
+main/braces correction retained. Stage62member contract/component preparation
+continues independently; no native/restoration credit. Canonical counts held:
+24/35,sixwhole,97sources(38OS/59infra),33compiler,11native,30behaviors,Rust21/18.
+No resize/reserve change, no framework or unrelated qualification. Floors,
+oneheavy, mutex27:4, scratch21 and genuine service/ownership stops remain strict.
+
+## Current — Diagnostic M07 attempt stopped; minimum retained read next (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Changed controls pushed/fetchedcf521b5a; all17 consumed code blobs match. Exact
+detached execution58da02f1 consumed once, immutable STATIC pointer preserved.
+Actualtool72444 closed1: LASTsnapshot0/.477765396s, machine0/.081497537s,
+finalguard0/.117567461s; nativeowner1/12.501919006s. Outer2902443/start42889294
+and inner2902444/start42889298 directly joined/groups absent/closed. No three
+success readbacks. Current owner stdout empty, stderr reports docker start failure;
+no kernel/payload cause inferred. Exact minimum read0/.160693491s retained
+all11fixed files; independent failed-owner retirement6a3f0ed8 accepted, complete
+current reportc043dcab. Diagnostic stdout identifies boothelperline21 opening
+missing /case/evidence/pair.challenge before reservation. M07 and M05 collectors
+omit the required producer/discovery; bounded repairs reuse accepted pair_runtime
+challenge+48B nonce/generation/CPU/route proof. No unchanged replay or cleanup.
+Qcompat finalpacket edaba2dc, seven77303e5d, executor9c53532b remain immutable.
+
+M05 normalization3 and actual realHERE/ownerloader passed0/.914837082s and
+0/.555886581s, independently acceptedf447c0b3:16FD/32paths/three roots. Runtime
+source/DATA preparation may continue with future physical/release refs null.
+Canonical counters held24/35,sixwhole,97source,33compiler,11native,30behaviors,
+Rust21/18. All failures, strict oracles, floors/noresize and mutex27:4 preserved.
+
 ## Current — M07 corrected full static joins pass (2026-10-22 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

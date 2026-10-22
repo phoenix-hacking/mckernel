@@ -1,0 +1,59 @@
+{
+  "status": "PASS_SOURCE_CONDITIONAL_ORDINARY_ONLY",
+  "decision": "ACCEPT_EXACT_SOURCE4_GRAPH_FOR_NORMALIZATION_THEN_COMPLETE_ACTUAL_LOADER_CHECK",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/numa_image_source_review",
+  "implementation_ownership": false,
+  "packet_sha256": "9e7c7efab7b77328bd3eb2bc3b67b20bd4fcc3800fbef33144e4aa22ada58203",
+  "verified_graph": {
+    "adapter": "212aea025f5048eccb8d4e941c62202019f228bf197f3d7552ebd8b2bd5e96f4",
+    "runner": "7b44721d46d9938864b3014ef47f9b8f40700cbb2e1b62650c48c212fec8e9bb",
+    "owner": "fe40ae5f721d8fe8947c02dd059ef833badea95476577bc6f1df69ad2f694ddc",
+    "normalizer": "590d3a13c3ac7c17743a53a1bac08c4fd9bc4f238c0b49957b536ef18c0bd927",
+    "binder": "346cd437e6fbc39c56ab70213a6f45bcc1d7576ce4deb7d167bb961579ab1ac0",
+    "settings": "4011d12a8fd18c47910266653a448a07ec5b465766c841c20a7ebd1cc32003d2",
+    "input_pins": "3c79c28376e3b340be767fe55f27fc6c2e600e895e5d51ea7a9cef80ca6ad976",
+    "input_pin_count": 17,
+    "runtime_source_count": 10,
+    "all_consumed_hash_path_mount_edges_coherent": true
+  },
+  "precheck_classification": {
+    "status_sha256": "e0775ef16da5fc495af1f56ea48f1a8a619aa7fcb5d58adb332f140e9dee513a",
+    "stderr_sha256": "3076a82e20640a07b6f39f904c115dd1dc1965d4fc9500ddba4ab3387397ecd1",
+    "actual_returncode": 1,
+    "preserve_as_failure": true,
+    "observed": "Actual _runtime returned; _bind_m07 passed its source-local diagnostic and adapter identity gates, then adapter.binding encountered exactly the absent m07n-261021-4/manifest.json.",
+    "checker_defect": "check_actual_topological_runtime_before_normalization.py catches the local diagnostic.DiagnosticError, while adapter.binding raises canonical m07_original_nd.DiagnosticError.",
+    "not_proven": [
+      "Parser validation after the missing-manifest read",
+      "Complete frozen-plan comparison and evaluator installation",
+      "Owner checks located after the failed catch",
+      "Complete successful manifest binding"
+    ]
+  },
+  "ordinary_sequence": [
+    "Execute packet.normalization_argv once under a fresh root resource grant.",
+    "After successful normalization, execute packet.loader_argv once using checker9880 and exact body-inputs da7a7becb4d6402b56e5bf6127faf260e0de430470615c217bdc4fbab11c12c1.",
+    "Require genuine complete positive actual runner, adapter, parser and owner binding before actual normalization/loader acceptance."
+  ],
+  "profile": {
+    "cpu": 7,
+    "AS_bytes": 1073741824,
+    "CPU_seconds": 30,
+    "wall_seconds": 35,
+    "FSIZE_bytes": 33554432,
+    "core": 0,
+    "nofile": 256,
+    "jobs": 1
+  },
+  "conditions": [
+    "Keep accepted stage455b/73583, manifest e5e38, collector9508 and current failed physicalf17 unchanged.",
+    "Preserve fresh namespace4, noncee2262e4b52334b71a1eb0a274215abfc, storage floors/reserve and exact full-nine observations.",
+    "No runtime source rewrite or precheck replay is required for this ordinary sequence.",
+    "Any checker-only exception repair must retain exact canonical exception and FileNotFoundError cause/filename assertions; it cannot convert unrelated failures into success."
+  ],
+  "actual_normalization_acceptance": false,
+  "runtime_execution_permission": false,
+  "native_acceptance": false,
+  "reviewer_has_active_child": false
+}

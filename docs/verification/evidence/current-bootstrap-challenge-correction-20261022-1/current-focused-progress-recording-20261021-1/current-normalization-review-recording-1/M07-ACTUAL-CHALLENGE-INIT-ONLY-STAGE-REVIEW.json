@@ -1,0 +1,74 @@
+{
+  "schema": "mckernel.numa-native-app.actual-offline-stage-review.v1",
+  "status": "PASS_ACTUAL_OFFLINE_STAGE_AND_STRICT_MANIFEST_ONLY",
+  "decision": "ACCEPT_EXACT_ACTUAL_MANIFEST_FOR_DOWNSTREAM_SOURCE_NORMALIZATION_AND_RUNTIME_PREPARATION",
+  "actual_scope": "M07 challenge-discovery collector init-only stage",
+  "reviewer": "/root/insert_c_correction_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_sha256": "91c9f485f4864fdb83e5eadc77b311aa77ebd96a094383c9e800719b1b48223e",
+  "binding_sha256": "1342130e61ab1823fe7b3800b466970fdd8c805b5b025f853189fe34c200069c",
+  "collector_review_sha256": "e1758cdda9dc449fb5c3304557830db093731d683c038e492b794b14cf2c4a43",
+  "actual_stage_result": {
+    "path": "/home/holden/mckernel/scratch/m07d-261021-1/numa/stage-result.json",
+    "sha256": "5e90141024ae88cae87c69503cbc753ab43b0e880615f55f11e9ae3b2c598b5f",
+    "bytes": 19586
+  },
+  "actual_capture": {
+    "status_sha256": "1f67571f477de680a5008b3d7a8a8d280e52d4e3597f72c915be6f6f756eded4",
+    "stdout_sha256": "d1c88a450b2c98d9092739acf3511ff013aa716da534a0aee451bc66ef062317",
+    "pid": 2908591,
+    "start_ticks": 42990149,
+    "returncode": 0,
+    "elapsed_seconds": 10.643368165008724,
+    "direct_child_joined": true,
+    "group_absent": true,
+    "closed_streams": true,
+    "stderr_bytes": 0,
+    "error": null,
+    "retirement_error": null
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/scratch/m07dm-261021-1/numa/manifest.json",
+    "sha256": "cd1b9054f0b84d1b2fbee324c0a5e3ef808a9b7995e5fb79b384a1b13f661e9b",
+    "size": 5152,
+    "mode": 33152
+  },
+  "overlay_manifest": {
+    "path": "/home/holden/mckernel/scratch/m07d-261021-1/numa/overlay-manifest.json",
+    "sha256": "c37ee151f9722ecf38937637f12d193f48be59ec14c242303e668a74de9149d2",
+    "size": 19265,
+    "mode": 33152
+  },
+  "verified": {
+    "final_members": 60,
+    "unchanged_final_members": 59,
+    "changed_final_members": ["init"],
+    "delta_fields": ["sha256", "size"],
+    "all_other_final_metadata_equal": true,
+    "accepted_base_byte_exact": true,
+    "baseline_is_genuine_4b01_stage": true,
+    "final_map_matches_overlay_manifest": true,
+    "collector_visible_and_0755": true,
+    "collector_sha256": "2f8c87431a0ff2833f8f4254cec673fdee80a5c15d3fe4e01798d5a6852402b8",
+    "collector_size": 1025784,
+    "manifest_collector_and_overlay_descriptors_join": true,
+    "strict_manifest_loader_passed": true,
+    "image_launcher_boot_payload_modules_and_oracle_preserved": true
+  },
+  "mechanical_projection_authority": {
+    "authorized": true,
+    "scope": "Use the same complete stage-consumer projection contract as the prior accepted init-only stage. Copy genuine current stage-result fields plus exact overlay_manifest,native_boot,bzImage,modules and payload_contract descriptors from this actual manifest.",
+    "native_allocation": {
+      "cpus": 2,
+      "memory_mib": 128
+    },
+    "constraints": "Preserve original records, this reviewer attribution and challenge-init scope. Retain empty raw_header_proof; do not invent physical-record counts, guest results or further authority. Intermediate9508/e5 evidence remains separate."
+  },
+  "blocking_findings": [],
+  "normalization_acceptance": false,
+  "runtime_permission": false,
+  "native_acceptance": false,
+  "M07_closure_credit": false,
+  "reviewer_quiescent": true
+}

@@ -1,0 +1,76 @@
+{
+  "operations": [
+    {
+      "argv_template": [],
+      "profile": "snapshot",
+      "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+    },
+    {
+      "argv_template": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2s",
+        "35s",
+        "/usr/bin/taskset",
+        "-c",
+        "6",
+        "/usr/bin/prlimit",
+        "--as=1073741824",
+        "--cpu=30",
+        "--core=0",
+        "--nofile=256",
+        "--fsize=33554432",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-challenge-producer-correction-1/normalization-runtime-preparation-1/runtime-construction-source-5/bound-runtime-source-1/root_manual_snapshot_threads.py",
+        "--bindings-sha256",
+        "5224997e184e488ae6ca1bbc391bdf33460384b69b99792bf2a6715d92fa94c0",
+        "--terminal",
+        "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/runtime-construction-source-4/normalization-capture-facts-compatibility-1/bound-runtime-source-1/native-packet-1/failed-owner-minimum-diagnosis-3/observed-failure-join-3/ROOT-MECHANICAL-COMPLETE-CURRENT-FAILED-M07-PHYSICAL-REPORT-3.json",
+        "--terminal-sha256",
+        "c043dcabf6c9d74e29f07b5f8e67c2122e67d4520e63ec96b01239511a42d53e"
+      ],
+      "profile": "snapshot",
+      "role": "LAST-snapshot",
+      "status_path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-challenge-producer-correction-1/normalization-runtime-preparation-1/runtime-construction-source-5/bound-runtime-source-1/native-packet-1/snapshot.status.json",
+      "stderr_path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-challenge-producer-correction-1/normalization-runtime-preparation-1/runtime-construction-source-5/bound-runtime-source-1/native-packet-1/snapshot.stderr",
+      "stdout_path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-challenge-producer-correction-1/normalization-runtime-preparation-1/runtime-construction-source-5/bound-runtime-source-1/native-packet-1/snapshot.stdout"
+    }
+  ],
+  "profiles": {
+    "metadata": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    },
+    "native": {
+      "cpu": 7,
+      "parent_kill_grace_seconds": null,
+      "parent_wall_seconds": null,
+      "stream_fsize": 33554432
+    },
+    "reader": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 35,
+      "stream_fsize": 33554432
+    },
+    "snapshot": {
+      "cpu": 6,
+      "parent_kill_grace_seconds": 2,
+      "parent_wall_seconds": 40,
+      "stream_fsize": 33554432
+    }
+  },
+  "release": {
+    "bytes": null,
+    "path": null,
+    "sha256": null
+  },
+  "root_installed_release_path": null
+}
