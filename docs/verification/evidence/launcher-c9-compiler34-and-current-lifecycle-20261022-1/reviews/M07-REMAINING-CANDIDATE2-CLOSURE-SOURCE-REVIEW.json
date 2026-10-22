@@ -1,0 +1,70 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/m07_remaining_stager_consumer_review",
+  "implementation_ownership": false,
+  "decision": "PASS_CANDIDATE2_GENERATED_SOURCE_CLOSURE_AND_RETAINED_PURE_BODY_CHECK_ONLY",
+  "root": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/current053d-stage-preparation-1/runtime-closure-correction-1",
+  "references_relative_to_root": {
+    "COMPLETED-UNIT-1.json": {
+      "sha256": "47af469d0a56088218efeab4d254e353f7f1e0b3bcc2ab3709c33efae35681a5",
+      "bytes": 14398
+    },
+    "candidate2/BOUND-RUNTIME-SOURCE-ONLY.json": {
+      "sha256": "2dae396ed35e06046cb3d5f09518b3cbf1bc8fea4a7585a939af69667208fcd3",
+      "bytes": 8660
+    },
+    "candidate2/prepare_bound_runtime.py": {
+      "sha256": "075778df2820ca54e3a91ec568a3beb99e088670449da3e10b55f1be8035f55d",
+      "bytes": 3390
+    },
+    "candidate2/body-result.json": {
+      "sha256": "6ec7672d84fae6549d08d3ea61acc1f2cb79890535b08221e5950f735fa41e07",
+      "bytes": 885
+    },
+    "candidate2/result.json": {
+      "sha256": "b7c492be525ad95d876c34f6badb50d314e6195be8b4b0b04551b5c8e72f46cc",
+      "bytes": 2077
+    }
+  },
+  "source_pins": {
+    "joint_table": "candidate2/BOUND-RUNTIME-SOURCE-ONLY.json",
+    "all_eleven_SHA256_and_sizes_independently_matched": true,
+    "private_files": 8,
+    "external_source_pins": 3,
+    "owner": {
+      "relative_path": "candidate2/runtime-source-1/native_diagnostic_container_owner.py",
+      "sha256": "7cee21a7fafe4101bdb16ca0539a68822b1b6079c5c55671ba5c154ab3efdf71",
+      "bytes": 63932
+    },
+    "SOURCE_HASHES": "Exactly ten remaining private/external pins; owner separately bound",
+    "parser_and_descriptor": "Byte-identical to accepted remaining_stdout.py and remaining_descriptor.json",
+    "manifest": "Exact independently accepted c2d2ab3cb6e19d67ca3a206305540f20583e1901fd69a565c103d1d02ffcee6b / 5143 bytes"
+  },
+  "findings_resolution": {
+    "SELF": "Corrected; generated owner identity and inside arguments reference candidate2",
+    "source_mount": "Corrected in create arguments and requested/actual mount expectations",
+    "visibility": "Owner, runner, evaluator, parser and adjacent descriptor co-located; external imports under existing repo root; manifest under existing scratch root",
+    "readonly_roots": "Exactly repo, scratch and selected private runtime directory; no broader root",
+    "production_validation_weakening": false,
+    "new_findings": []
+  },
+  "retained_actual_body_scope": {
+    "positive": "Generated bound_manifest, DiagnosticOwner constructor, SELF hash, inside arguments, create arguments and complete _profile body",
+    "negative": [
+      "old owner hash equality guard",
+      "old requested source root",
+      "old actual source root",
+      "wrong manifest identity"
+    ],
+    "lifecycle": "PID2948884/start43629299; exit0 in0.330010328s; joined, group absent, streams closed, empty stderr",
+    "failure_preserved": "Initial fixture omitted CgroupnsMode and failed namespace/OOM defaults. Sole fixture correction adds explicit empty string; production validation unchanged.",
+    "limitation": "Synthetic profile body check; no actual container inspection or inside/backend execution"
+  },
+  "projection_permission": "Root may record this genuine candidate2 source/body acceptance and use the exact eleven-pin table for ordinary normalization and finite outer FD/snapshot/binder integration.",
+  "remaining_limits": "Outer normalization/FD integration remains separately reviewable. STOP/all-inapplicable remain zero credit; partial component coverage cannot close M07. No native, Docker, guest, application or whole-M07 acceptance follows.",
+  "native_credit_delta": 0,
+  "physical_acceptance": null,
+  "publication": null,
+  "execution_release": null,
+  "quiescent": true
+}

@@ -1,3 +1,32 @@
+## Current — Launcher compiler34 accepted; current lifecycle closure next (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+C9 launcher-only six-artifact c401b7a4 and retained-terminal df2fd824 reviews PASS.
+Root adoption91f639a4 records exactly compiler33→34; kernel was not rebuilt.
+Actual launcher8cc599c2 preserves accepted kernel053d; runtime activation remains
+unproven. Driver1.6723324s and typed-tool164772ms are distinct; owner elapsed
+is unobserved. Stopped container and common/shared records remain retained.
+
+Current terminal formatter/constructor/checker and nine-body/15FD freeze PASS.
+Independent observer source review PASS with an exact engine-parser/resource
+check required before live admission. Existing observer/summary/5FD/raw5, exact
+cleanup/postjoin and genuine physical acceptance remain the shared next gate.
+Embedded cleanup publication paths are retained byte-for-byte; no build replay.
+Evidence: `docs/verification/evidence/launcher-c9-compiler34-and-current-lifecycle-20261022-1/`.
+
+M05 N4 normalization, actual HERE/owner loader and19-output/18FD constructor/whole
+are independently accepted0342d571. Normal nine-event released-record adapter
+reuses qualified67ddd46e; future current physical authority remains null.
+M07 conditional remaining-component static/Linux result and app-only60-member
+stage are independently accepted. Candidate2 repaired source closure and actual
+loader/profile body positive plus four refusals PASS; ordinary normalization
+and outer runtime integration proceed independently. Whole M07 remains open.
+
+Canonical24/35 checks,six whole,97sources(38OS/59infra),34compiler,12native,
+30behaviors,Rust21/18. No native/path/check/whole credit from this checkpoint.
+SDK66 remains blocked at unchanged capacity gate. No resize/delete/reserve
+change, no framework; floors, oneheavy, mutex27:4 and all failures preserved.
+
 ## Current — M07 native accepted; remaining components and M05 checks active (2026-10-22 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

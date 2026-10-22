@@ -1,0 +1,23 @@
+from pathlib import Path
+import os,json,hashlib,resource,fcntl,datetime
+T=Path('/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/launcher-error-propagation-1/target-build-preparation-1');D=T/'latest-native12-release-binding-preparation-1'
+rp=T/'launcher-execution-release.json';raw=rp.read_bytes();assert hashlib.sha256(raw).hexdigest()=='2004b10963cc2a2d367269f645021257ccf04ba73938767cf20a2a41672ff4fe';r=json.loads(raw)
+qp=Path(r['request']['path']);assert hashlib.sha256(qp.read_bytes()).hexdigest()==r['request']['sha256'];q=json.loads(qp.read_bytes())
+snap=json.loads(Path(r['root_snapshot']['path']).read_bytes());state=json.loads(Path('/home/holden/mckernel/.git/os-autopilot/state.json').read_bytes());assert state['phase']=='running' and not state.get('stop_reason') and not state.get('pause_reason') and state['auth_mode']=='chatgpt' and state['last_rate_limits']['primary']['usedPercent']<100
+assert Path('/proc/sys/kernel/random/boot_id').read_text().strip()==r['boot_id'];scratch=Path('/home/holden/mckernel-work/scratch');assert scratch.stat().st_dev==r['scratch_binding']['device'];sd=Path('/sys/dev/block')/('%d:%d'%(os.major(scratch.stat().st_dev),os.minor(scratch.stat().st_dev)));assert int((sd/'size').read_text())*512==110*(1<<30) and (sd/'loop/backing_file').read_text().strip()=='/home/holden/mckernel-work/scratch.ext4'
+spaces={}
+for name,path in [('host',Path('/home/holden')),('scratch',scratch)]:
+ s=os.statvfs(path);free=s.f_bavail*s.f_frsize;budget=r['live_admission_required']['storage']['per_filesystem'][name];need=sum(budget[k] for k in ['floor_bytes','compiler_and_control_growth_bytes','postbuild_growth_bytes','emergency_reserve_bytes']);assert free>=need;spaces[name]=dict(available_bytes=free,required_bytes=need)
+mem=int(next(x.split()[1] for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')))*1024;assert mem>=16*(1<<30)
+s=Path(q['source_root']).lstat();assert [s.st_dev,s.st_ino,s.st_uid,s.st_gid,s.st_mode&4095]==r['live_admission_required']['source_identity'];assert Path(q['source_root']).resolve()==Path(q['source_root'])
+assert all(not os.path.lexists(p) for p in snap['ownership_paths_absent']);assert not list(Path(q['work_root']).iterdir()) and not list(Path(q['owner_evidence_root']).iterdir());assert not os.path.lexists(r['guard_capture'])
+lock=Path('/run/lock/mckernel-development.lock');ls=lock.stat();assert (ls.st_dev,ls.st_ino,ls.st_uid,ls.st_gid)==(27,4,0,0)
+with lock.open('r') as f:fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB);fcntl.flock(f,fcntl.LOCK_UN)
+readers=[]
+for pid,start in [(2777042,40959744),(2590193,37928121)]:
+ p=Path('/proc')/str(pid);actual=int((p/'stat').read_text().rsplit(')',1)[1].split()[19]);assert actual==start;readers.append(dict(pid=pid,start=start,affinity=sorted(os.sched_getaffinity(pid))))
+assert resource.getrlimit(resource.RLIMIT_CPU)==(-1,-1)
+out=dict(scope=r['scope'],status='PASS_IMMEDIATE_PRE_GUARD_ADMISSION_ONLY',observed_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),release_sha256=hashlib.sha256(raw).hexdigest(),storage=spaces,mem_available_bytes=mem,included_used_percent=state['last_rate_limits']['primary']['usedPercent'],other_workload_children_quiescent=True,foreground_quiescence='Latest explicit confirmation; persistentreader only',stable_coordination_readers=readers,permanent_mutex_identity=[27,4],no_global_clearance_inference=True,guard_must_acquire_own_mutex=True)
+with (D/'ROOT-IMMEDIATE-PRE-GUARD-ADMISSION-1.json').open('x') as f:json.dump(out,f,sort_keys=True);f.write('\n')
+argv=['/usr/bin/taskset','-c','7','/usr/bin/prlimit','--as=2147483648','--','/home/holden/anaconda3/bin/python3','-B',str(T/'native_exact_current_optin_launcher_guard.py'),'--request',str(qp),'--request-sha256',r['request']['sha256'],'--release',str(rp),'--release-sha256',hashlib.sha256(raw).hexdigest()]
+print(json.dumps(dict(status='ENTERING_EXACT_ONE_LAUNCHER_BUILD',admission=out,argv=argv)),flush=True);os.execv(argv[0],argv)

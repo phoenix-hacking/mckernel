@@ -1,0 +1,59 @@
+{
+  "decision": "PASS",
+  "reviewer": "/root/launcher_actual_sixartifact_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "artifact_consumer_values": {
+    "schema": "mckernel.launcher-only-production-artifact-review.v1",
+    "status": "PASS_ACTUAL_LAUNCHER_ONLY_PRODUCTION_TARGET_ARTIFACT",
+    "decision": "PASS_ACTUAL_LAUNCHER_ONLY_TARGET_AND_REAL_MCEXEC_LINK_ARTIFACTS_ONLY",
+    "target": "mcexec",
+    "kernel_rebuilt": false,
+    "physical_clearance": false,
+    "source_change": "transfer_image failure and fatal exec caller propagation over accepted sentinel5 source only",
+    "launcher_source_sha256": "c9b1d55b3b25d18ff1336b9b18e46b845fa0407d246c36d7d25d79276722d78b",
+    "source_derivative_sha256": "050b953f46ff55f5ec819923819096fde8688400d860f7e666db9bbddb5b3f44",
+    "materialization_sha256": "317752dc9138cde2aac932da3b9e1b3e7f3434379361778a6aff035b2d46c44c",
+    "application_acceptance": false,
+    "native_acceptance": false,
+    "runtime_acceptance": false,
+    "compute_C_retirement_credit": false,
+    "default_retirement_credit": false
+  },
+  "producer_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-exec-delivery-transfer-rust-repair-20261021-1/launcher-error-propagation-1/target-build-preparation-1/launcher-attempt-1/owner-work/evidence/receipt.json",
+    "bytes": 7442,
+    "sha256": "56d2193a68983bc2fe03cab2d2c93666960c7d9a6aeb26ed2823f0b476ede182"
+  },
+  "owner_receipt_relative_to_target_preparation": {
+    "path": "launcher-attempt-1/owner-evidence/owner-receipt.json",
+    "bytes": 23332,
+    "sha256": "fa68aba705b5caf7e45e154fda8115e63a4286888ecc3c6221355ec103cb1327"
+  },
+  "verified": [
+    "All six primary outputs and six evidence copies match SHA256, size, mode, device, inode, mtime_ns and ctime_ns; all thirteen sealed inventory rows match.",
+    "Actual default C main calls Rust mcexec_main_body; MCEXEC_RUST_HELPERS is selected. Rust provider definitions and existing C bridge definitions resolve in the final ELF.",
+    "Actual transfer_image disassembly returns -1 after failed ioctl/perror. act_execve calls phase2, stores its failing result, calls existing cleanup bridge then process-exit bridge with status1. Exact ELF relocations resolve those calls; exit bridge calls libc exit.",
+    "Actual command-server cleanup bridge is a no-op in this profile; no runtime cleanup claim follows."
+  ],
+  "dependency_consumer_values": {
+    "schema": "mckernel.launcher-only-dependency-join-review.v1",
+    "status": "PASS_ACTUAL_LAUNCHER_ONLY_DEPENDENCY_JOIN",
+    "actual_elf_needed_provider_join": true,
+    "needed": ["libnuma.so.1", "libc.so.6"],
+    "interpreter": "/lib64/ld-linux-x86-64.so.2",
+    "search_path": ["::::::::::::::::"],
+    "runtime_release": false
+  },
+  "dependency_basis": "Genuine baseline closure338f6eaf and accepted33f launcher closure retained. Current interpreter, dynamic strings, symbol versions, version requirements and PLT relocations are identical; all undefined dynamic symbol rows and external dynamic-relocation requirements are identical, including118 strong undefined symbols. Whole dynsym is NOT byte-identical: only defined gettid/tgkill addresses move. Internal FINI/relative addresses also change. No loaded-provider identity or runtime inference.",
+  "mechanical_projection_permission": {
+    "granted_to": "/root",
+    "artifact_descriptors_verified": "Use exactly all six authenticated producer_receipt.artifacts members. Key each as artifacts/<name>; translate /work/ prefix to target-preparation/launcher-attempt-1/owner-work/; rename size to bytes; retain SHA256.",
+    "raw_link_evidence": "Project authenticated inventory consumer-symbols.txt, linked-symbols.txt and rust-symbols.txt into consumer_symbols, linked_symbols and rust_symbols full host-path/bytes/SHA256 descriptors.",
+    "dependency_refs": "Use current projected mcexec descriptor, current producer receipt, and current baseline-dynamic.txt/new-dynamic.txt inventory descriptors.",
+    "attribution": "Preserve this reviewer identity separately from root recorder; no expansion beyond accepted scope."
+  },
+  "findings": [],
+  "limitations": "No native/kernel-path credit, kernel rebuild, cleanup completion, fresh physical clearance or execution permission. Two ancillary reviewer reads hit unchanged AS256 MemoryError; preserve them as reviewer read failures, not build/runtime failures.",
+  "reviewer_quiescent": true
+}
