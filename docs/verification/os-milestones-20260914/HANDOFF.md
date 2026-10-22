@@ -1,3 +1,63 @@
+## Restart checkpoint — explicit total-budget reduction (2026-10-22 15:24 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+User reduces THIS run total existing-credit budget20000→10000. Foreground owns
+SIGINT/amendment and next same-thread/manual invocation; agents do not amend
+state/ledger. Preserve credit run0c216c56957b4e64a89d54d4b28a2ad6 and all spending.
+Stop new dispatch/releases; all two bounded reviewers completed, no active worker
+or privileged workload. No observer/cleanup/native/build executed this invocation.
+Reserve576 remains unanswered; retained build/container/common/shared unchanged.
+
+Completed: independent downstream-cohort source review PASS, no blocking finding;
+observer4e2360ed, cohort mapfb28911a, executor119d9b77. Exact twelve current/reused
+source objects plus both cleanup configure aliases matched fetched4f189903 bytes.
+Source review/proofs saved under ../evidence/m07-observer-entry-correction-20261022-1/.
+No execution authority follows from source PASS/publication. Old failed release
+remains consumed and preserved. Next root action AFTER manual resume: construct
+canonical observer payload from OBSERVER-REQUEST-DRAFT with genuine new source
+review descriptor, fetched4f189903 commit/tree/proof; obtain independent exact
+execution review and fresh live/resource/quiescence admission; only then run new
+observer→summary→metadata→separately authenticated raw-five. Separate actual
+cleanup/preflight/postjoin/physical acceptance still precedes unchanged M07 native.
+Private source cohort/HANDOFF unchanged at
+/home/holden/mckernel-work/host-preparation/m07-observer-current-postjoin-correction-20261022-1/.
+
+SDK expert disposition now gives a concrete repair, saved under
+../evidence/m05-sdk68-owner-location-wip-20261022-1/FIXTURE-EXPERT-DISPOSITION.verbatim.md.
+AFTER manual resume: one worker prepares NEW fixture using exact full-key role
+mapping, checks pinned owner/test distinct bytes, parses copied owner at truthful
+__file__/compile origin, checks all11cohort keys, and fails closed before dependent
+commands. Independent repair check precedes ONE helper-only observation CPU6,
+1GiB/20CPU/30wall. No owner imports/authenticate/admission/main. Preserve failed
+fixture and7076a5e1test pin. No installed/module/native acceptance from helper test.
+
+Held sixwhole,24/35checks,99sources(40OS/59infra),35compiler,13native,31behaviors,
+Rust21production/18native. Original velocity baseline retained; stopped intervals
+and recovery gaps not reclassified as active work. Preserve all dirty inputs,
+Scratch21/exclusions57687/57688,27:4 and accepted cbb04 image/stage. Do not resume
+until the new launcher invocation. This restart checkpoint is not OS completion.
+
+## Current — user-authorized 20,000-credit continuation (2026-10-22 15:20 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The user explicitly raises this run's TOTAL existing-credit budget to 20,000.
+The foreground checkpointed the existing dispatcher; watcher/worker/server
+3180621/3180623/3180625 are absent and all bounded workers joined. Under both
+launcher leases, the credit ledger was amended and the recovered guard passed.
+Credit run `0c216c56957b4e64a89d54d4b28a2ad6`, original balance and all spending
+history are preserved. Audit: host-preparation/paid-credit-resume-20261022-1/
+BUDGET-20000-AMENDMENT.json. Only budget/remaining allowance changed.
+
+The foreground is immediately resuming this same conversation with
+`--credit-budget 20000 --credit-run-id 0c216c56957b4e64a89d54d4b28a2ad6`.
+Do not create a second dispatcher or a new credit allowance. Earlier restart
+stops and the 100-credit starter budget are historical for the new invocation.
+The existing live console path remains `.git/os-autopilot/launch-logs/parallel-lev50434.log`.
+GPT-6.1 and functional scope/resource controls remain. No purchases/API billing;
+other account use and later in-flight charges count. Reserve576 remains unapproved.
+Continue from the saved engineering checkpoint immediately below; spending
+configuration is not milestone acceptance. Original velocity baseline is retained.
+
 ## Restart checkpoint — explicit user stop for budget amendment (2026-10-22 15:18 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
