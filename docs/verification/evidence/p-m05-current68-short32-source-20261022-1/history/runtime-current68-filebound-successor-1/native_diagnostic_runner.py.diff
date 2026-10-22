@@ -1,0 +1,48 @@
+--- /home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-successor-1/native_diagnostic_runner.py
++++ /home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/native_diagnostic_runner.py
+@@ -14,10 +14,11 @@
+ import os
+ from pathlib import Path
+ import re
++import resource
+ import sys
+ 
+ 
+-_HERE = Path('/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/two-generation-namespace-4')  # Exact unchanged qualified diagnostic/backend/QMP siblings.
++_HERE = Path(__file__).resolve().parent
+ _SAFE_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
+ 
+ 
+@@ -34,7 +35,7 @@
+     """Execute backend with the exact sibling qmp_capture, never ambient state."""
+     sentinel = object()
+     previous = sys.modules.get("qmp_capture", sentinel)
+-    qmp = _module("native_diagnostic_runner_qmp_capture", _HERE / "qmp_capture.py")
++    qmp = _module("native_diagnostic_runner_qmp_capture", Path('/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/runtime-source-1/two-generation-namespace-4/qmp_capture.py'))
+     sys.modules["qmp_capture"] = qmp
+     try:
+         return _module("native_diagnostic_runner_backend", _HERE / "native_diagnostic_backend.py")
+@@ -55,7 +56,7 @@
+ def _bind_m05(diagnostic, manifest, manifest_path):
+     source = _HERE / 'native_diagnostic.py'
+     if (Path(diagnostic.__file__).resolve() != source or
+-            hashlib.sha256(source.read_bytes()).hexdigest() != '1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e'):
++            hashlib.sha256(source.read_bytes()).hexdigest() != '250a4d16d67f733331b0242cb62e55ecfadef702f2607caa546144197cf74422'):
+         raise ValueError('M05 private diagnostic binding only')
+     adapter_path = Path('/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-successor-1/case_evaluator.py')
+     if hashlib.sha256(adapter_path.read_bytes()).hexdigest() != 'fe00a5808880d980df4b6df34a0a3b068fa49417fbd58edef721174957ca2e43':
+@@ -126,8 +127,14 @@
+         pass
+ 
+ 
++
++def require_short_fsize():
++    if resource.getrlimit(resource.RLIMIT_FSIZE) != (33554432, 33554432):
++        raise ValueError("exact inherited SHORT32 FSIZE required")
++
+ def run(manifest_path, attempt_parent, attempt_name, timeout, *, diagnostic=None, backend=None):
+     """Reserve one attempt and execute exactly one injected diagnostic."""
++    require_short_fsize()
+     manifest_path = _canonical_file(manifest_path, "manifest")
+     attempt_parent = _private_parent(attempt_parent)
+     attempt_name = _attempt_name(attempt_name)

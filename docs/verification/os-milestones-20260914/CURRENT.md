@@ -1,3 +1,41 @@
+## Current — self-exec accepted; native fork failure isolated (2026-10-22 23:45 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The practical baseline remains28/35; seven open P-M01-02/P-M05-02/P-M05-03/
+P-M06-01/P-M08-02/P-M09-02/P-M12-01. Weekly included only, reserve576 unanswered.
+No critical/native/build operation is live. Original velocity baseline is preserved.
+
+Actual current-tuple199 self-exec PASSED: exact199B stdout, empty stderr, exit37,
+ordered EOF/reap timestamps, procfs deletion, realexec59 and cleanup/retirement.
+Independent acceptance069db00f accepts linked Rust exec-reset behavior for exact
+image10972/SDK20352/launcher0d77/helpercccb/C020 tuple; original PROTOCOL_PASS fields
+remain untouched. Host physical retirement1b8dd675 is separate from full McKernel
+resource restoration. Capsule: ../evidence/p-m06-native199-abi2-selfexec-20261022-1/.
+
+Actual235 failed after realfork: stdout13B parentstart, stderr35B threadpool-count
+error, rawwait0; serviceEINVAL with guest owners retained. Strict235 oracle stays.
+Independent60a05112 accepts HOST physical retirement only; all77journalfiles and
+fresh nonce/sixcanonicalrecord ENOENT observations under27:4 retained. Capsule:
+../evidence/p-m06-native235-threadpool-failure-20261022-1/.227 is staged/validated
+but blocked by this same fork family; no unchanged native replay is released.
+
+High-effort fork_threadpool_failure owns isolated five-source Rust candidate in
+host-preparation/current68-native235-threadpool-failure-20261022-1/: missing native
+pool-query dispatch, exact child-start admission after successful response publication,
+exact mailbox handle/serial selection, and terminal WAIT failure propagation.
+Sixteen actualbody tests/fourcompiles+fourruns PASS1.369207362s; this is hostRust1.85.1
+fixture scope, not SDK1.92/full-crate/native proof. Original firstcompilerexit0 plus
+Python3.8 supervisor-error retained; corrected anaconda capture passed. Canonical
+sources are unchanged; matched_guest_build_review owns focused ownership/ABI review.
+
+P05 actual62-member stage PASS22.1693s, exactly5replaced/57unchanged. Its two helpers
+already require status5. lifecycle_missing_recovery owns coherent SHORT32 file-bound
+runtime plus bounded per-container log configuration and affected cheap checks;
+then focused4source review and actual restoration execution. Preserve f043 workload,
+strict decoder and independently conditioned tuples(0,1,1)/(0,2,2). No P05 cycle yet.
+P12 producer/transport/HOST boundary remain reusable; start qualifying hour only after
+full restoration and frozen matching profile, with separate release. No speedup claim.
+
 ## Current executable results — ABI2 helper and P05 stage PASS (2026-10-22 23:04 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

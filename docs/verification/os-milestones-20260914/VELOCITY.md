@@ -1,3 +1,28 @@
+## Strategy checkpoint — 2026-10-22 23:45 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+23:00–23:36 result window: one independently accepted real current-tuple app (199
+self-exec), one failed real app (235). Completed owner wall:37.484381830+36.881317725
+=74.365699555s; failed235 contributes zero successes. Practical/whole closures0,
+28/35 unchanged. This differs from the original app workload; no comparable2x/4x
+or milestone-speedup claim follows. Original2/44.160327s baseline stays unchanged.
+
+Owned file timestamps place helper compile-result23:00:42, native199 release23:16:35,
+terminal23:17:12 and235 release23:27:23. Thus preparation/review/retirement latency
+still dominates; CPU/RAM saturation is not the blocker. Exact root-export/query
+algorithm and separate235/227 data were reviewed together; the six canonical record
+paths now have an actual reusable ENOENT-under27:4 observation. Next operations reuse
+these bodies without coordinator reconstruction or broad source/archive checks.
+
+Useful OS result: native linked Rust exec-reset behavior accepted. Native235 exposed
+real missing pool-query dispatch and child scheduled-state handoff, plus zero-exit
+failure propagation; isolated5-source candidate passed16actualbody tests and is under
+focused independent review. P05 actualstage/source infrastructure advances its next
+eligible restoration run, but is not a check closure. Continue P05 file/log bounds
+and Rust repair concurrently; compile matched changed providers only after acceptance.
+After first complete restoration, adapt existing batch runner once for matchedcycles
+with per-iteration live admission and strict semantic acceptance, not transportzero.
+
 ## Current — recovery reconciled; raw export retained (2026-10-22 16:56 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

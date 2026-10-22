@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=8388608",
+    "--core=0:0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport importlib.util,json,hashlib,os\nB=Path(__import__('sys').argv[1]);P=json.loads(Path(__import__('sys').argv[2]).read_text())\ndef load(n,path):\n s=importlib.util.spec_from_file_location(n,path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m\no=load('actual_owner',B/'native_diagnostic_container_owner.py');d=load('actual_diagnostic',B/'native_diagnostic.py');parent=Path(P['new_owner_parent']);manifest=Path(P['new_manifest']);need='3864bc52bf4d45761fbc6649bae0c864897a885adf74ea95fb4920400584d66d'\nassert hashlib.sha256((B/'native_diagnostic_container_owner.py').read_bytes()).hexdigest()=='4d7ae097cae866389ed044a6247e01f1bc78ff8744fc8d72f39fb294b55bb298'\nassert hashlib.sha256(manifest.read_bytes()).hexdigest()==need\no.private_parent(str(parent));o._manifest_identity(str(manifest),need);o._manifest_outside_writable_parent(str(manifest),parent)\nattempt=parent/('attempt-'+P['fresh_nonce']);assert not os.path.lexists(attempt)\na=d.expected_qemu_argv(json.loads(manifest.read_text()),attempt);q=P['qmp_socket'];assert a[a.index('-qmp')+1]=='unix:'+q+',server=on,wait=off';assert len(os.fsencode(q))==93\nprint('PASS actual source4d7 parent/scratch manifest/outside-writable guards and actual expected_qemu_argv with93byte QMP socket')",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/ROOT-EXACT-GUARD-DATA.json"
+  ],
+  "data_only_from_accepted_guard": "795903bf8f2d5a7464df7a1ebf717ed786f50ea6ee3e68ce33718d546d21863f"
+}

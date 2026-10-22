@@ -1,0 +1,158 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "READY_EXACT_ORDINARY_STAGE_COMMAND_PENDING_FRESH_ROOT_ADMISSION_CONDITIONAL_REVIEW_ONLY",
+  "stage_consumer": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/stage_m05_two_generation.py",
+    "bytes": 12180,
+    "sha256": "01645826b5b33b131ab6af08ce6097dc18c90d3bad7dd92a9c53ea006bf7ac53"
+  },
+  "binding": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/BINDING.json",
+    "bytes": 8066,
+    "sha256": "57ca4a0466c3002b15f922fbddf418b4deac5ccb9e190e8f3ebfeb7952c49480"
+  },
+  "accepted_capture_supervisor": {
+    "path": "/home/holden/mckernel/scripts/application-tests/supervisor.py",
+    "bytes": 24564,
+    "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873"
+  },
+  "reused_accepted_caller_ancestry": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/filled-stage-execution-1/nproc-profile-correction-1/run-stage-199.py",
+    "bytes": 909,
+    "sha256": "f6ee58c073d321b4df08d6a863ad1ae8c6c7635c68fcc05a780bd6b2e2f7f56f"
+  },
+  "caller": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/run_actual_current68_m05_stage_once.py",
+    "bytes": 958,
+    "sha256": "1cd7ad128e79daea54caa18c6aca9b830343a5d9218e591edf1773a0e5016320"
+  },
+  "caller_changes": "Only argvfile/capture/result/print case paths and CPUprofile data; exact existing run_supervised body/timeouts/environment/strict exit+cleanup assertion unchanged. No new capture harness.",
+  "full_caller_argv": [
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--fsize=134217728",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/run_actual_current68_m05_stage_once.py"
+  ],
+  "full_stage_child_argv": [
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--fsize=134217728",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/stage_m05_two_generation.py",
+    "--stage"
+  ],
+  "cwd": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1",
+  "env": {
+    "PATH": "/usr/bin:/bin",
+    "HOME": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1",
+    "LC_ALL": "C"
+  },
+  "stage_argvfile": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/READY-ACTUAL-P05-STAGE-ARGV.json",
+    "bytes": 381,
+    "sha256": "32de172f00c0dea9ffa833130ce807bf4723caf260c27dda62391052188c7284"
+  },
+  "caller_argvfile": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/READY-ACTUAL-P05-STAGE-CALLER-ARGV.json",
+    "bytes": 379,
+    "sha256": "1f3a0372673540d5e11a1e0298d43d722adbd9053c543188a65d7934024a9ddd"
+  },
+  "fresh_names_absent_snapshot": {
+    "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/actual-stage-1": true,
+    "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/actual-current68-m05-stage-capture-1": true,
+    "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/ACTUAL-CURRENT68-M05-STAGE-CAPTURE-RESULT-1.json": true
+  },
+  "profile": {
+    "CPU_affinity": [
+      0
+    ],
+    "jobs": 1,
+    "child_AS_bytes": 536870912,
+    "caller_AS_bytes": 536870912,
+    "CPU_seconds": 30,
+    "payload_wall_seconds": 30,
+    "cleanup_seconds": 3,
+    "whole_wrapper_join_allowance_seconds": 35,
+    "nofile": 256,
+    "core": 0,
+    "perfile_fsize_bytes": 134217728,
+    "stdout_limit_bytes": 8388608,
+    "stderr_limit_bytes": 8388608,
+    "NPROC": "Inherit current hostUID soft/hard unchanged through caller/child; omit perUID512. No Docker/guest here.",
+    "no_profile_expansion": true
+  },
+  "finite_growth": {
+    "stage_output_aggregate_cap_bytes": 134217728,
+    "capture_stream_cap_total_bytes": 16777216,
+    "capture_control_metadata_allowance_bytes": 1048576,
+    "total_HOST_growth_conservative_bytes": 152043520,
+    "host_floor_bytes": 17179869184,
+    "HOST_free_required_conservative_bytes": 17331912704,
+    "source_guard_HOST_free_minimum_bytes": 17330864128,
+    "scratch_growth_bytes": 0,
+    "scratch_floor_bytes": 12884901888,
+    "source_inflated_base_cap_bytes": 67108864,
+    "patched_cpio_cap_bytes": 100663296,
+    "memory_limit_per_child_bytes": 536870912,
+    "note": "Existing frozen consumer caps aggregate stageoutputs128MiB. Existing two8MiB capturestreams add16MiB; conservative1MiB capturesmallmetadata =>145MiB total HOSTgrowth. This explicitly includes capture and does not claim128MiB covers all evidence. Input scratch/oldstage/canonical/shared artifacts read-only, no scratch expansion/reserve mutation."
+  },
+  "fresh_root_fields": {
+    "actual_execution_authority": null,
+    "conditional_independent_execution_permit": null,
+    "fresh_host_capacity_and_source_output_identity": null,
+    "fresh_scratch_identity_and_capacity": null,
+    "aggregate_CPU0_memory_job_admission_with_foreground_CPU6": null,
+    "current_UID_NPROC_and_required_inherited_limits": null
+  },
+  "accepted_static_checks_reused": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/ACTUAL-SELECTION-CHECK-1.json",
+      "bytes": 3489,
+      "sha256": "880a0ab2eb5c8312eb4f6b252afd8e98f87d5b1e8dc23599e0a260e28af5b497"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/ACTUAL-REWRITE-BODY-CHECK-1.json",
+      "bytes": 3485,
+      "sha256": "c332b1bf40b3bafc19e84b27823dda7619c9d010e5ab479a3bba56a1b2d2b728"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/REWRITE-BODY-COVERAGE-HANDOFF.json",
+      "bytes": 6543,
+      "sha256": "ad1bc12da18f2f200f07f2374c9905c4792b79c8d5b22b8ec3a15749ebe4bc81"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/P05-QUALIFIED-HELPERS-CURRENT-ABI2-STATUS-APPLICABILITY.json",
+      "bytes": 16370,
+      "sha256": "c3dcfff843a66a453ea87d17e723c38538ef2be693feeb1e371963b33d3bb420"
+    }
+  ],
+  "source_review": "Dispatcher reports genuine independent m07_final_closure_review sourcePASS completed; exactrootreviewrecord to bind at admission, no repeatedreview/checks here.",
+  "preserved_contract": "Exact f043 init+originalsignal-mask workload/strictoutput40+emptyerr/exit0 and4312first/1a7second helpers alreadypostBOOT5;62members only5tuplechanged/57unchanged. Expectedsource tuples(0,1,1)/(0,2,2) retain exactfreshmodule/noextraorfailedprepare conditions.",
+  "on_failure": "Preserve all partial output/capture and exactfailure. Never overwrite actual-stage-1/capture/result or automatically repeat deterministicfailure. Onecandidate+oneboundedcorrection familythenexpert.",
+  "next_after_success": "Bind actualmap/archive/manifest/normalization to existing M05 two-generation resource/reboot/second-stop decoders and exact runtime readonly publication/mounts. Do not substitute199 singleapp runtime or start P05VM before199dependency without explicitroot reasoning/release.",
+  "actual_stage_executions": 0,
+  "actual_root_guest_compiler_operations": 0,
+  "runtime_release": false,
+  "native_or_goal_credit": false,
+  "stop": "Exactordinarycaller/proposal ready. No actualstage invocation in this preparation."
+}

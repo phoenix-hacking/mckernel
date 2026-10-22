@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/check_actual_short32_runtime.py", line 148, in <module>
+    spawn = backend.process_factory([backend.QEMU, '-qmp', 'unix:'+str(D/'qmp.sock')+',server=on,wait=off'], str(D), popen_factory=forbidden)
+  File "/home/holden/mckernel-work/host-preparation/p-m05-current68-second-stop-binding-20261022-1/consumer-successor-1/runtime-current68-filebound-successor-1/check_actual_short32_runtime.py", line 27, in forbidden
+    raise AssertionError('no process/socket/backend/root/guest effects')
+AssertionError: no process/socket/backend/root/guest effects
