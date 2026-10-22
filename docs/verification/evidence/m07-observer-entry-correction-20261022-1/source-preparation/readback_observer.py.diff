@@ -1,0 +1,13 @@
+--- /home/holden/mckernel-work/host-preparation/m07-sigill-successor-native-data-preparation-20261022-1/actual-terminal-preparation-1/bound-terminal-source-correction-1/readback_observer.py
++++ /home/holden/mckernel-work/host-preparation/m07-observer-current-postjoin-correction-20261022-1/readback_observer.py
+@@ -1,8 +1,8 @@
+ """Exact finite post-direct-wait observer readback; no cleanup or Docker."""
+ import hashlib,json,os,stat
+ from pathlib import Path
+-OUTPUT = Path('/home/holden/mckernel-work/host-preparation/m07-sigill-successor-native-data-preparation-20261022-1/actual-terminal-preparation-1/bound-terminal-source-correction-1/root-observation-m07-sigill-pass-image-observation-1')
+-NONCE = 'm07-sigill-pass-image-observation-1'
++OUTPUT = Path('/home/holden/mckernel-work/host-preparation/m07-observer-current-postjoin-correction-20261022-1/root-observation-m07-sigill-pass-image-observation-postjoin-correction-1')
++NONCE = 'm07-sigill-pass-image-observation-postjoin-correction-1'
+ NAMES=('observer-result.json','observation.json','cleanup-release-draft.json','new-object-metadata.json','ownership.json')
+ def canonical(v):return json.dumps(v,sort_keys=True,separators=(',',':')).encode()+b'\n'
+ def digest(b):return hashlib.sha256(b).hexdigest()
