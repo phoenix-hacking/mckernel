@@ -1,0 +1,32 @@
+{
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=20",
+    "--core=0",
+    "--",
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--crate-name",
+    "mcexec_helpers",
+    "--crate-type",
+    "lib",
+    "--edition=2021",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "debuginfo=1",
+    "-C",
+    "force-unwind-tables=no",
+    "--emit=obj=/home/holden/mckernel-work/host-preparation/p-m06-01-whole-launcher-rust-compile-20261022-1/mcexec_helpers.o",
+    "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs"
+  ],
+  "source_sha256": "9901615acc98ec710d23afa57423d59eee802cde1981752805436b1bf535c463",
+  "cmake_flags": "exact executer/user/CMakeLists.txt default Rust object flags",
+  "profile": "CPU0/AS1GiB/CPU20/wall30/one compiler",
+  "native_or_link_acceptance": false
+}

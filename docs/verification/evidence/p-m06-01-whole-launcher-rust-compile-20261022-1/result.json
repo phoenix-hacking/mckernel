@@ -1,0 +1,135 @@
+{
+  "application_acceptance": false,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=1073741824",
+    "--cpu=20",
+    "--core=0",
+    "--",
+    "/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/rustc",
+    "--crate-name",
+    "mcexec_helpers",
+    "--crate-type",
+    "lib",
+    "--edition=2021",
+    "-C",
+    "panic=abort",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "debuginfo=1",
+    "-C",
+    "force-unwind-tables=no",
+    "--emit=obj=/home/holden/mckernel-work/host-preparation/p-m06-01-whole-launcher-rust-compile-20261022-1/mcexec_helpers.o",
+    "/home/holden/mckernel/executer/user/rust/mcexec_helpers.rs"
+  ],
+  "cleanup_complete": true,
+  "cleanup_timeout_seconds": 3.0,
+  "cwd": "/home/holden/mckernel-work/host-preparation/p-m06-01-whole-launcher-rust-compile-20261022-1",
+  "descendant_records_omitted": 0,
+  "descendants": [],
+  "elapsed_seconds": 1.8184114710311405,
+  "env": {
+    "HOME": "/home/holden/mckernel-work/host-preparation/p-m06-01-whole-launcher-rust-compile-20261022-1/home",
+    "LC_ALL": "C",
+    "MAKEFLAGS": "",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/p-m06-01-whole-launcher-rust-compile-20261022-1/tmp"
+  },
+  "events": [
+    {
+      "kind": "cleanup_started",
+      "monotonic": 470848.187053109,
+      "reason": "leader_exited"
+    }
+  ],
+  "executable": {
+    "path": "/usr/bin/taskset",
+    "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+    "size": 35048
+  },
+  "executable_path": "/usr/bin/taskset",
+  "fd_setup": {
+    "close_fds": true,
+    "pass_fds": [],
+    "stderr": "separate owned pipe",
+    "stdin": "regular file or /dev/null",
+    "stdout": "owned pipe"
+  },
+  "gid": 1000,
+  "groups": [
+    4,
+    20,
+    24,
+    27,
+    30,
+    46,
+    120,
+    131,
+    132,
+    133,
+    1000
+  ],
+  "monotonic_finished": 470848.19238025,
+  "monotonic_started": 470846.373968779,
+  "payload_completion_observed_monotonic": 470848.187022109,
+  "payload_monotonic_deadline": 470876.374492526,
+  "payload_monotonic_started": 470846.374492526,
+  "process": {
+    "pgid": 3225380,
+    "pid": 3225380,
+    "ppid": 3225379,
+    "session": 3225380,
+    "starttime_ticks": 48618450,
+    "state": "R"
+  },
+  "provenance": "Linux process collection only; no McKernel evidence",
+  "raw_wait_status": 0,
+  "schema_version": 1,
+  "status": "COMPLETED",
+  "stderr_limit_bytes": 1048576,
+  "stdin": {
+    "kind": "devnull"
+  },
+  "stdin_path": null,
+  "stdout_limit_bytes": 1048576,
+  "streams": {
+    "stderr": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-01-whole-launcher-rust-compile-20261022-1/capture/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "bytes_observed": 0,
+      "bytes_retained": 0,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 1048576,
+      "truncated": false
+    },
+    "stdout": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-01-whole-launcher-rust-compile-20261022-1/capture/stdout.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "bytes_observed": 0,
+      "bytes_retained": 0,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 1048576,
+      "truncated": false
+    }
+  },
+  "supervisor_pid": 3225379,
+  "timeout_seconds": 30.0,
+  "uid": 1000,
+  "umask": "0077",
+  "wait_status": {
+    "code": 0,
+    "kind": "exited"
+  }
+}

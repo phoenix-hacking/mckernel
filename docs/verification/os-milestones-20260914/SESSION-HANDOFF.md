@@ -1,3 +1,62 @@
+## Current — whole launcher Rust object PASS (2026-10-22 17:06 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual integrated9901615a wholemcexec_helpers.rs compiledPASS0/1.818411471s,
+emptyout/err, ownedleader/groupcleanupcomplete, pinnedRust1.92+exactproduction
+CMakeobjectflags CPU0/1GiBAS/20CPU/30wall. Retainedcommand/capture/object in
+../evidence/p-m06-01-whole-launcher-rust-compile-20261022-1/. Replaces priorinflight
+cursor. This is wholeactualcrate compile, not matchedC/Rustlauncherlink, current
+modulebuild or native199Bselfexec/235Bprocessapp; P-M06-01 remainsopen. No new
+productioncompilerbatch adopted.25/35checks/sixwholeheld; M07coupledrepairs active.
+
+## Current — P-M13-02 closed; real M06 launcher repair integrated (2026-10-22 17:05 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+P-M13-02 literal capability/unsupported/knownlimitations/actualresults statement
+independentlyPASS /root/m13_literal_review; root published exactstatement+six
+profiletuples+contractmap and adopted singlecheck.25/35practicalchecks,sixwhole;
+M13-01/M13-03/wholeM13 remainopen. No native/compiler/Rustretirementcredit from
+statement. Evidence ../evidence/p-m13-02-capability-statement-20261022-1/.
+
+M06 actual Rustlauncher nowintegrates independentlyreviewedac5d873e patch onto
+exactda71f316→9901615a pre/postimages: pageioctlfailure propagatesfatal, phase2
+allocation/descriptor/cloexec errors no longer fabricateRET or returnfalse success;
+realexistingexitbridges preserve uncertainownership/credits. Three newactualbody
+failuretests+pinnedRust1.92compilePASS; previoussuccess/page1/page2 reusedafter
+exactbodycomparison. Correctedpriorreferenceadditively to whole.json/c25a1965;
+originaltypo retained. Evidence ../evidence/p-m06-01-launcher-error-handoff-20261022-1/.
+WholelauncherRustcompile nowinflight CPU0/1GiB/20CPU/30wall; notwholelink/native.
+P-M06-01 andvoidRETpublicationuncertainty remainopen; compiler33 priorproofscope
+unchanged. No extra sourcecounter adoption for this integration in thischeckpoint.
+
+M07 expertprocacquisitionrepair privately implements<=8sweeps/5s/2completes,
+cumulativeidentities/publishers/acquisitionledger with fullconsumer tests;
+no vanishedPID skipping or unchangedrootretry. Parallel nativeouterconstructor/
+binder/snapshot schema repair consumesgenuine current acceptedstage/normalization
+without forgingoldschema. Both implementation-through-cheaptest grants active;
+rootcleanup/physical/native gates stillopen, reserve576unapproved.
+
+## Current — fresh preflight refused; no cleanup effect (2026-10-22 17:00 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exact independent cleanupreviewPASS bound releasebd41bb5f. Newly admitted actual
+fresh preflight exited0/2.361546612s but parsed ACTUAL_FRESH_PREFLIGHT_REFUSAL,
+predicatefalse,transactionclosed; root correctly blockedcleanup. Inner process
+census exhausted3fullsweeps on vanished /proc/3222656/stat (process-snapshot-
+unstable). Captured stdout7458B/stderr1114B/status36c01008 retained in currentG/
+actual-fresh-preflight-capture-1/. No cleanup/postjoin/physical/native proof.
+Current exactrelease is consumed for this preflight; no automaticunchangedretry.
+Focused reviewer now decides concrete changedcondition/correction with retained
+publisher/identity invariants. Cheap ordinary stat-only20sweep/.320s diagnostic
+297identities/0vanishes is not rootabsenceproof. All original evidence preserved.
+
+M06 private coherent launcher pageioctl+phase2 failurepropagation implementation
+resumed after criticalchildwholejoin; no invented RET/ACK or uncertaincreditrelease.
+P-M13-02 actualcapabilitystatement metadata lane active, independentliteralreview
+next. M07 stage/normalization resolves unchanged manifest6d5c00a7/owner0d3664b2;
+exact finalsevenstep runtimepacket/physical/release stillnull. Root checkpoint
+3b72f3d2 pushed/fetched67changedblobs exact. Counts held; reserve576unapproved.
+
 ## Current — recovery reconciled; raw export retained (2026-10-22 16:56 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
