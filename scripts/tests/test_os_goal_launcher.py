@@ -537,6 +537,116 @@ class CampaignTests(unittest.TestCase):
         finally:
             campaign.output.close()
 
+    @staticmethod
+    def unavailable_usage_error(message_suffix=""):
+        return RuntimeError("account/rateLimits/read: " + json.dumps({
+            "code": -32603,
+            "message": "failed to fetch codex rate limits: GET "
+                       "https://chatgpt.com/backend-api/wham/usage failed: "
+                       "503 Service Unavailable; temporary backend failure" + message_suffix}))
+
+    def test_paid_usage503_retries_only_read_and_retains_spending(self):
+        self.credit_arguments()
+        campaign = launcher.Campaign(self.args, self.directory, self.directory)
+        try:
+            initial = {"primary": {"usedPercent": 100}, "credits": {
+                "hasCredits": True, "unlimited": False, "balance": "1000"}}
+            campaign.record_rate_limits(initial)
+            campaign.save(credit_budget_error="historical failure")
+            current = dict(initial, credits=dict(initial["credits"], balance="950"))
+            campaign.rpc = Mock()
+            campaign.rpc.call.side_effect = [self.unavailable_usage_error(),
+                                             self.unavailable_usage_error(), {"rateLimits": current}]
+            with patch.object(launcher.time, "sleep") as sleep:
+                campaign.refresh_credit_budget()
+            self.assertEqual(campaign.rpc.call.call_count, 3)
+            for call in campaign.rpc.call.call_args_list:
+                self.assertEqual(call.args, ("account/rateLimits/read", {}))
+            self.assertEqual([call.args for call in sleep.call_args_list], [(1,), (2,)])
+            self.assertIsNone(campaign.stop_reason)
+            self.assertFalse(campaign.stop_now)
+            self.assertEqual(campaign.state["credit_budget"]["spent"], "50")
+            self.assertEqual(campaign.state["credit_budget"]["initial_balance"], "1000")
+            self.assertIsNone(campaign.state["credit_budget_error"])
+        finally:
+            campaign.output.close()
+
+    def test_paid_usage503_retry_limit_still_stops_unknown_balance(self):
+        self.credit_arguments()
+        campaign = launcher.Campaign(self.args, self.directory, self.directory)
+        try:
+            campaign.rpc = Mock()
+            campaign.rpc.call.side_effect = self.unavailable_usage_error()
+            with patch.object(launcher.time, "sleep") as sleep:
+                campaign.refresh_credit_budget()
+            self.assertEqual(campaign.rpc.call.call_count, 3)
+            self.assertEqual(sleep.call_count, 2)
+            self.assertEqual(campaign.stop_reason, "credit_budget_unknown")
+            self.assertTrue(campaign.stop_now)
+            self.assertFalse(watcher.should_restart(21, campaign.state))
+        finally:
+            campaign.output.close()
+
+    def test_paid_usage_retry_never_retries_other_or_protected_errors(self):
+        self.credit_arguments()
+        nested_limit = json.loads(str(self.unavailable_usage_error()).split(": ", 1)[1])
+        nested_limit["data"] = {"codexErrorInfo": "sessionBudgetExceeded"}
+        errors = [TimeoutError("account unavailable"), RuntimeError("unknown failure"),
+                  RuntimeError("account/rateLimits/read: invalid json"),
+                  RuntimeError('account/rateLimits/read: {"code":-32603,"message":"401 Unauthorized"}'),
+                  RuntimeError('account/rateLimits/read: {"code":-32603,"message":"429 Too Many Requests"}'),
+                  self.unavailable_usage_error("; quota exhausted"),
+                  self.unavailable_usage_error("; cyberPolicy"),
+                  self.unavailable_usage_error("; authentication required"),
+                  RuntimeError("account/rateLimits/read: " + json.dumps(nested_limit))]
+        for error in errors:
+            with self.subTest(error=str(error)):
+                campaign = launcher.Campaign(self.args, self.directory, self.directory)
+                try:
+                    campaign.rpc = Mock()
+                    campaign.rpc.call.side_effect = error
+                    with patch.object(launcher.time, "sleep") as sleep:
+                        campaign.refresh_credit_budget()
+                    campaign.rpc.call.assert_called_once()
+                    sleep.assert_not_called()
+                    self.assertEqual(campaign.stop_reason, "credit_budget_unknown")
+                    self.assertTrue(campaign.stop_now)
+                finally:
+                    campaign.output.close()
+
+    def test_paid_usage_retry_preserves_stop_received_during_backoff(self):
+        self.credit_arguments()
+        campaign = launcher.Campaign(self.args, self.directory, self.directory)
+        try:
+            campaign.rpc = Mock()
+            campaign.rpc.call.side_effect = self.unavailable_usage_error()
+            with patch.object(launcher.time, "sleep", side_effect=lambda _: setattr(campaign, "stop_reason", "signal_2")):
+                campaign.refresh_credit_budget()
+            campaign.rpc.call.assert_called_once()
+            self.assertEqual(campaign.stop_reason, "signal_2")
+            self.assertFalse(campaign.stop_now)
+        finally:
+            campaign.output.close()
+
+    def test_paid_startup_can_recover_usage503_before_starting_inference(self):
+        self.credit_arguments()
+        rpc = FakeRPC(self.args, steps=[lambda r: (r.completed(), r.status("complete"))])
+        rpc.limits = {"primary": {"usedPercent": 100}, "credits": {
+            "hasCredits": True, "unlimited": False, "balance": "1000"}}
+        original_call = rpc.call
+        reads = []
+        def call(method, params, **kwargs):
+            if method == "account/rateLimits/read":
+                reads.append(method)
+                if len(reads) == 1:
+                    raise self.unavailable_usage_error()
+            return original_call(method, params, **kwargs)
+        with patch.object(rpc, "call", side_effect=call), patch.object(launcher.time, "sleep"):
+            state = self.run_campaign(rpc, 0)
+        self.assertGreaterEqual(len(reads), 2)
+        self.assertIsNone(state["stop_reason"])
+        self.assertEqual(state["credit_budget"]["initial_balance"], "1000")
+
     def test_included_usage_through_99_percent_uses_full_included_allowance(self):
         self.assertEqual(launcher.INCLUDED_USAGE_STOP_PERCENT, 100)
         for percent in (97, 99, 99.9):

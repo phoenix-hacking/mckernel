@@ -477,6 +477,28 @@ def preflight(rpc, args, repo):
             "scope": "Configuration and advertised models only; quota and inference untested."}
 
 
+def temporary_usage_read_failure(error):
+    """Only the observed read-only usage endpoint's HTTP503 is retryable."""
+    prefix = "account/rateLimits/read: "
+    if not isinstance(error, RuntimeError) or not str(error).startswith(prefix):
+        return False
+    try:
+        detail = json.loads(str(error)[len(prefix):])
+    except (TypeError, ValueError):
+        return False
+    if not isinstance(detail, dict) or detail.get("code") != -32603:
+        return False
+    message = detail.get("message")
+    if not isinstance(message, str) or not message.startswith(
+            "failed to fetch codex rate limits: GET https://chatgpt.com/backend-api/wham/usage "
+            "failed: 503 Service Unavailable;"):
+        return False
+    protected = ("policy", "quota", "usagelimitexceeded", "sessionbudgetexceeded", "ratelimitexceeded",
+                 "authentication", "unauthorized", "forbidden", "billing",
+                 "spendcontrol", "spend control")
+    return not any(word in json.dumps(detail).lower() for word in protected)
+
+
 class Campaign:
     def __init__(self, args, repo, directory, rpc_factory=RPC):
         self.args, self.repo, self.directory = args, repo, directory
@@ -802,7 +824,7 @@ class Campaign:
         elif self.credit_guard is not None:
             try:
                 record, exhausted = self.credit_guard.observe(limits)
-                self.save(credit_budget=record)
+                self.save(credit_budget=record, credit_budget_error=None)
                 if exhausted:
                     self.stop_reason, self.stop_now = "credit_budget_exhausted", True
             except (OSError, ValueError, TypeError, InvalidOperation) as error:
@@ -825,12 +847,26 @@ class Campaign:
 
     def refresh_credit_budget(self):
         """Poll without inference; notifications alone cannot enforce a budget."""
-        try:
-            self.record_rate_limits(self.rpc.call("account/rateLimits/read", {}, timeout=10).get("rateLimits"))
-        except Exception as error:
-            self.save(credit_budget_error=str(error))
-            self.stop_reason = self.stop_reason or "credit_budget_unknown"
-            self.stop_now = True
+        for attempt in range(3):
+            if self.stop_reason or self.stop_now:
+                return
+            try:
+                result = self.rpc.call("account/rateLimits/read", {}, timeout=10)
+                self.record_rate_limits(result.get("rateLimits"))
+                return
+            except Exception as error:
+                if (attempt < 2 and not self.stop_reason and not self.stop_now
+                        and temporary_usage_read_failure(error)):
+                    self.save(last_usage_read_retry={"at": utc(), "attempt": attempt + 1,
+                                                    "error": str(error)})
+                    self.output.notice("Usage reporting returned503; retrying read-only balance check "
+                                       + str(attempt + 1) + "/2.")
+                    time.sleep(attempt + 1)
+                    continue
+                self.save(credit_budget_error=str(error))
+                self.stop_reason = self.stop_reason or "credit_budget_unknown"
+                self.stop_now = True
+                return
 
     def event(self, message):
         method, data = message.get("method"), message.get("params", {})
@@ -1138,7 +1174,10 @@ class Campaign:
             self.save(auth_mode=account.get("type"))
             return
         self.save(auth_mode="chatgpt")
-        self.record_rate_limits(self.rpc.call("account/rateLimits/read", {}).get("rateLimits"))
+        if self.credit_guard is not None:
+            self.refresh_credit_budget()
+        else:
+            self.record_rate_limits(self.rpc.call("account/rateLimits/read", {}).get("rateLimits"))
         if self.stop_reason:
             return
         bindings = getattr(self.args, "supersede_instructions", [])
