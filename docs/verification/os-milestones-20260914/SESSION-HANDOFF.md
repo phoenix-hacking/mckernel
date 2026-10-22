@@ -1,3 +1,30 @@
+## Current — C9 physical and normal9 mapping accepted; M05/M07 native binding active (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Genuine current C9 physical cleanup accepted92eb36ff: strict preflight0/2.0376s,
+cleanup0/5.3610s, postjoin0/1.5732s. Nine-event journal,27:4, two archived original
+ownership records, current-container/record absence and both closed tool pairs
+passed. Old occupied namespace was never targeted. Physical acceptance is
+recorded scope, not continuing global clearance. Current normal9 report60f34700,
+mapping6f12b8d0, decoder a84f98ae and sidecar9570e1f7 are accepted425910a0 after
+actual seven-field project/capture_join PASS0/.5451s. Genuine reviewers and root
+recorder remain distinct; all original decisions/captures remain retained.
+
+M05 binds the accepted current C9 released-record role separately from native87f
+ancestry using its qualified two-role snapshot contract. M07 constructor/whole
+caller control closure passed0/.3715s and0/.6181s:19pending outputs,sevensteps,
+49paths and complete current controls/FD joins. Canonical manifest delta is only
+the actual append default; raw immutable bindings and complete equality remain.
+Current C9 role amendment is next for M07; no generic older-clearance substitution.
+Both cases reuse053d/33f/modules/apps; no ancillary build is admitted. Root retains
+source publication, fresh snapshot/resource/ownership and exact native release.
+
+Canonical24/35,sixwhole,97sources(38OS/59infra),34compiler,12native,30behaviors,
+Rust21/18 held. RawPASS02:41:07→physical acceptance03:56:20 is75.23min including
+real correction/review; driver1.6723324s/tool164772ms/ownerunknown stay distinct.
+No resize/delete/reserve or fixed-gate bypass, no framework, no source credit
+for pins/DATA. SDK66 remains blocked. Preserve every failure and all stops.
+
 ## Current — C9 observed/exported; fresh cleanup namespace correction passed (2026-10-22 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
