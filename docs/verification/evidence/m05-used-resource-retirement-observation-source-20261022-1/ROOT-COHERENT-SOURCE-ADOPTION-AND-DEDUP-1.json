@@ -1,0 +1,48 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "recorder": "/root",
+  "genuine_reviewer": "/root/m05_resource_observation_source_review",
+  "review_ref": "/home/holden/mckernel-work/host-preparation/current-focused-progress-recording-20261021-1/current-normalization-review-recording-1/M05-USED-RESOURCE-OBSERVATION-INDEPENDENT-SOURCE-REVIEW.json",
+  "source_unit": "M05-used-resource-identity-prepared-committed-Rust-observation",
+  "coherent_source_delta": 1,
+  "source_class": "OS",
+  "source_total_before": 97,
+  "source_total_after": 98,
+  "OS_sources_before": 38,
+  "OS_sources_after": 39,
+  "infra_sources_held": 59,
+  "dedup": "Two additive Rust producer files and their exact strict decoder are one coherent functional observation unit; body tests, pins and binding DATA are not additional units. No prior second-stop resource identity observations existed in matched baseline.",
+  "actual_integration": {
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "integrated_exact_reviewed_postimages": [
+      {
+        "path": "/home/holden/mckernel/host-kernel/native-rust/smp_cpu.rs",
+        "before_sha256": "356853344bffaa5b3d625c97eb3928b8908d45abbc94d16902e19bdef45ea90c",
+        "after_sha256": "f65f3aea00dfdd0a7905d3dd396e67684fd428c71cf34dd6e15a56896c73f912",
+        "bytes": 78237
+      },
+      {
+        "path": "/home/holden/mckernel/host-kernel/native-rust/smp_memory.rs",
+        "before_sha256": "8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525",
+        "after_sha256": "60758aeafac150bd8aac62455844e3f4e4200a082f82f80ce66c3c871d4909be",
+        "bytes": 127757
+      }
+    ],
+    "independent_reviewer": "/root/m05_resource_observation_source_review",
+    "genuine_review": "/home/holden/mckernel-work/host-preparation/current-focused-progress-recording-20261021-1/current-normalization-review-recording-1/M05-USED-RESOURCE-OBSERVATION-INDEPENDENT-SOURCE-REVIEW.json",
+    "full_module_build": false,
+    "native_proof": false,
+    "complete_cycle_credit": 0,
+    "public_EBUSY_semantics_unchanged": true
+  },
+  "actual_body_tests_passed": 21,
+  "decoder_positive": 2,
+  "decoder_negatives": 21,
+  "production_compiler_delta": 0,
+  "native_delta": 0,
+  "Rust_path_delta": 0,
+  "practical_check_delta": 0,
+  "whole_milestone_delta": 0,
+  "full_module_native_proof": false,
+  "next": "SDK66 fullmodule fixedgate; independently bind exact perboot owner/epoch slice before native consumer use. EBUSY stays unknown; no Linux-page/mapping/callback/ref/full-cycle claim."
+}

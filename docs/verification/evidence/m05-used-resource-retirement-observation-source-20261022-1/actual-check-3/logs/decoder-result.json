@@ -1,0 +1,122 @@
+{
+  "status": "PASS",
+  "actual_body_positive": {
+    "schema": "native-resource-policy-observation-v1",
+    "owner": [
+      7,
+      91
+    ],
+    "boot_epoch": 3,
+    "cpu_identities": [
+      [
+        1,
+        33,
+        1
+      ],
+      [
+        2,
+        34,
+        1
+      ]
+    ],
+    "returned_memory_extents": [
+      [
+        4096,
+        8192,
+        0
+      ]
+    ],
+    "returned_memory_bytes": 8192,
+    "resource_policy_return_verified": true,
+    "linux_page_release_verified": false,
+    "mapping_callback_reference_frame_retirement_verified": false,
+    "complete_cycle_verified": false
+  },
+  "rejected": [
+    {
+      "name": "irq_retained",
+      "reason": "complete coupled commit sequence"
+    },
+    {
+      "name": "map_retained",
+      "reason": "complete coupled commit sequence"
+    },
+    {
+      "name": "epoch_retained",
+      "reason": "complete coupled commit sequence"
+    },
+    {
+      "name": "bounded_unknown",
+      "reason": "incomplete inventory is unknown"
+    },
+    {
+      "name": "missing_all_observation",
+      "reason": "complete coupled commit sequence"
+    },
+    {
+      "name": "missing_committed_cpu",
+      "reason": "complete coupled commit sequence"
+    },
+    {
+      "name": "same_slot_new_generation",
+      "reason": "exact owner/epoch"
+    },
+    {
+      "name": "same_generation_new_epoch",
+      "reason": "exact owner/epoch"
+    },
+    {
+      "name": "incomplete_marker",
+      "reason": "incomplete inventory is unknown"
+    },
+    {
+      "name": "invented_zero_rows",
+      "reason": "ordered unique rows"
+    },
+    {
+      "name": "duplicate_row",
+      "reason": "ordered unique rows"
+    },
+    {
+      "name": "duplicate_field",
+      "reason": "duplicate field"
+    },
+    {
+      "name": "negative_integer",
+      "reason": "exact u64"
+    },
+    {
+      "name": "leading_zero_integer",
+      "reason": "exact u64"
+    },
+    {
+      "name": "truncated_record",
+      "reason": "complete bounded record"
+    },
+    {
+      "name": "unknown_version",
+      "reason": "known record"
+    },
+    {
+      "name": "wrong_physical_coverage",
+      "reason": "ordered nonoverlapping extents"
+    },
+    {
+      "name": "lost_other_generation",
+      "reason": "same physical coverage returned to reserved pool; other owners retained"
+    },
+    {
+      "name": "wrong_CPU_hardware",
+      "reason": "same CPU identities"
+    },
+    {
+      "name": "CPU_still_assigned",
+      "reason": "CPU policy returned online/unowned"
+    },
+    {
+      "name": "false_unowned_generation",
+      "reason": "canonical unowned"
+    }
+  ],
+  "negative_cases": 21
+}

@@ -1,0 +1,44 @@
+--- a/host-kernel/native-rust/smp_memory.rs
++++ b/host-kernel/native-rust/smp_memory.rs
+@@ -1441,12 +1441,33 @@
+     /// boundary. The legacy owner-only finish guard above remains unchanged:
+     /// this separate path additionally requires actual service/callback/ledger
+     /// retirement from this exact Started Arc and boot epoch.
++    /// The CPU -> memory lock order and live claim already serialize this
++    /// exact generation. Physical extents remain reserved Linux page owners;
++    /// these rows do not establish Linux page release or callback/ref cleanup.
++    fn observe_shutdown_memory(&self, claim: &ShutdownBoot, phase: &str) {
++        let owner = claim.owner;
++        let count = self.map.len();
++        let emitted = count.min(64);
++        pr_info!("IHK-SMP: resource-memory-v1 os={} generation={} epoch={} phase={} rows={} emitted={} complete={}\n",
++            owner.slot(), owner.generation(), claim.epoch_id(), phase, count, emitted, (count <= 64) as u8);
++        for index in 0..emitted {
++            if let Some(range) = self.map.extent(index) {
++                let token = range.owner();
++                pr_info!("IHK-SMP: resource-memory-row-v1 os={} generation={} epoch={} phase={} index={} start={} bytes={} numa={} owner_none={} owner_slot={} owner_generation={}\n",
++                    owner.slot(), owner.generation(), claim.epoch_id(), phase, index,
++                    range.start(), range.length(), range.numa_node(), token.is_none() as u8,
++                    token.map_or(0, |token| token.slot()), token.map_or(0, |token| token.generation()));
++            }
++        }
++    }
++
+     fn finish_shutdown_claim(&mut self, claim: &ShutdownBoot, commit_cpu: impl FnOnce()) -> Result {
+         self.verify()?;
+         self.validate_shutdown_boot(claim)?;
+         if claim.epoch.shutdown.load(Ordering::Acquire) != SHUTDOWN_SERVICES_RETIRED {
+             return Err(EBUSY);
+         }
++        self.observe_shutdown_memory(claim, "prepared");
+         let owner = claim.owner;
+         let image = self.images.get_mut(owner.slot() as usize)
+             .and_then(Option::as_mut).ok_or(EIO)?;
+@@ -1472,6 +1493,7 @@
+         boot.started = false;
+         self.images[owner.slot() as usize] = None;
+         self.arguments[owner.slot() as usize] = None;
++        self.observe_shutdown_memory(claim, "committed");
+         Ok(())
+     }
+ 

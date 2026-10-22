@@ -1,0 +1,40 @@
+--- a/host-kernel/native-rust/smp_cpu.rs
++++ b/host-kernel/native-rust/smp_cpu.rs
+@@ -1161,6 +1161,26 @@
+             .commit()
+             .unwrap_or_else(|_| panic!("OS CPU publication invariant violated"));
+         Ok(0)
++    }
++
++    /// Bounded observation under the existing CPU policy/hotplug locks.
++    /// This reports policy and retained topology identity, not device-ref drop
++    /// or physical restoration. Incomplete records never establish zero use.
++    fn observe_shutdown_cpus(&self, boot: &super::smp_memory::ShutdownBoot, phase: &str, count: usize) {
++        let owner = boot.owner();
++        let emitted = count.min(64);
++        pr_info!("IHK-SMP: resource-cpu-v1 os={} generation={} epoch={} phase={} rows={} emitted={} complete={}\n",
++            owner.slot(), owner.generation(), boot.epoch_id(), phase, count, emitted, (count <= 64) as u8);
++        for index in 0..emitted {
++            let cpu = self.requests[index];
++            if let Ok(slot) = self.table.slot(cpu) {
++                let token = slot.owner();
++                pr_info!("IHK-SMP: resource-cpu-row-v1 os={} generation={} epoch={} phase={} index={} cpu={} hardware={} numa={} state={:?} owner_none={} owner_slot={} owner_generation={}\n",
++                    owner.slot(), owner.generation(), boot.epoch_id(), phase, index, cpu,
++                    slot.hardware_id(), slot.numa_node(), slot.state(), token.is_none() as u8,
++                    token.map_or(0, |token| token.slot()), token.map_or(0, |token| token.generation()));
++            }
++        }
+     }
+ 
+     fn query_os(&mut self, owner: OsToken, request: Option<&CpuRequest>) -> Result<isize> {
+@@ -1650,8 +1670,10 @@
+             context.validate_shutdown_target(owner, record, true, &read, &hotplug)?;
+         }
+     }
++    context.observe_shutdown_cpus(&boot, "prepared", count);
+     let transaction = context.table.prepare_shutdown_online(owner, &context.requests[..count]).map_err(|_| EIO)?;
+     super::smp_memory::finish_shutdown_claim(&boot, || { transaction.commit(); })?;
++    context.observe_shutdown_cpus(&boot, "committed", count);
+     for index in 0..count {
+         let cpu = context.requests[index];
+         // Keep the module-owned Linux device reference and original topology.

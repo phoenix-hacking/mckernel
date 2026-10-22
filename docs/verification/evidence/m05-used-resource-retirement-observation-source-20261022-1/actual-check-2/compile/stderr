@@ -1,0 +1,85 @@
+error: `self` parameter is only allowed in associated functions
+    --> /home/holden/mckernel-work/host-preparation/m05-used-resource-retirement-observation-20261022-1/actual-resource-body.rs:2425:26
+     |
+2425 | fn observe_shutdown_cpus(&self, boot: &super::smp_memory::ShutdownBoot, phase: &str, count: usize) {
+     |                          ^^^^^ not semantically valid as function parameter
+     |
+     = note: associated functions are those in `impl` or `trait` definitions
+
+error[E0609]: no field `exec_payloads` on type `CountedGuard<'_, Ledger>`
+   --> /home/holden/mckernel-work/host-preparation/m05-used-resource-retirement-observation-20261022-1/actual-resource-body.rs:696:23
+    |
+696 |             || ledger.exec_payloads.iter().any(Option::is_some)
+    |                       ^^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `guard`, `counter`
+    = note: available fields are: `requests`, `responses`, `payloads`, `snoops`, `procfs`, `zeroing`
+
+error[E0599]: no method named `observe_shutdown_cpus` found for mutable reference `&mut CpuContext` in the current scope
+    --> /home/holden/mckernel-work/host-preparation/m05-used-resource-retirement-observation-20261022-1/actual-resource-body.rs:2303:13
+     |
+2303 |     context.observe_shutdown_cpus(&boot, "prepared", count);
+     |             ^^^^^^^^^^^^^^^^^^^^^ method not found in `&mut CpuContext`
+
+error[E0599]: no method named `observe_shutdown_cpus` found for mutable reference `&mut CpuContext` in the current scope
+    --> /home/holden/mckernel-work/host-preparation/m05-used-resource-retirement-observation-20261022-1/actual-resource-body.rs:2306:13
+     |
+2306 |     context.observe_shutdown_cpus(&boot, "committed", count);
+     |             ^^^^^^^^^^^^^^^^^^^^^ method not found in `&mut CpuContext`
+
+error[E0282]: type annotations needed
+    --> /home/holden/mckernel-work/host-preparation/m05-used-resource-retirement-observation-20261022-1/actual-resource-body.rs:2433:29
+     |
+2433 |                 let token = slot.owner();
+     |                             ^^^^ cannot infer type
+
+error[E0282]: type annotations needed
+    --> /home/holden/mckernel-work/host-preparation/m05-used-resource-retirement-observation-20261022-1/actual-resource-body.rs:2437:38
+     |
+2437 |                     token.map_or(0, |token| token.slot()), token.map_or(0, |token| token.generation()));
+     |                                      ^^^^^  ----- type must be known at this point
+     |
+help: consider giving this closure parameter an explicit type
+     |
+2437 |                     token.map_or(0, |token: /* Type */| token.slot()), token.map_or(0, |token| token.generation()));
+     |                                           ++++++++++++
+
+error[E0282]: type annotations needed
+    --> /home/holden/mckernel-work/host-preparation/m05-used-resource-retirement-observation-20261022-1/actual-resource-body.rs:2437:77
+     |
+2437 |                     token.map_or(0, |token| token.slot()), token.map_or(0, |token| token.generation()));
+     |                                                                             ^^^^^  ----- type must be known at this point
+     |
+help: consider giving this closure parameter an explicit type
+     |
+2437 |                     token.map_or(0, |token| token.slot()), token.map_or(0, |token: /* Type */| token.generation()));
+     |                                                                                  ++++++++++++
+
+error[E0560]: struct `smp_application::Entry` has no field named `parent_slot_pins`
+    --> /home/holden/mckernel-work/host-preparation/m05-used-resource-retirement-observation-20261022-1/actual-resource-body.rs:2518:13
+     |
+2518 |             parent_slot_pins: 0,
+     |             ^^^^^^^^^^^^^^^^ `smp_application::Entry` does not have this field
+     |
+     = note: all struct fields are already assigned
+
+error[E0560]: struct `smp_application::Entry` has no field named `fork_ingress`
+    --> /home/holden/mckernel-work/host-preparation/m05-used-resource-retirement-observation-20261022-1/actual-resource-body.rs:2519:13
+     |
+2519 |             fork_ingress:None,
+     |             ^^^^^^^^^^^^ `smp_application::Entry` does not have this field
+     |
+     = note: all struct fields are already assigned
+
+error[E0560]: struct `smp_application::Entry` has no field named `inherited_root`
+    --> /home/holden/mckernel-work/host-preparation/m05-used-resource-retirement-observation-20261022-1/actual-resource-body.rs:2520:13
+     |
+2520 |             inherited_root:None,
+     |             ^^^^^^^^^^^^^^ `smp_application::Entry` does not have this field
+     |
+     = note: all struct fields are already assigned
+
+error: aborting due to 10 previous errors
+
+Some errors have detailed explanations: E0282, E0560, E0599, E0609.
+For more information about an error, try `rustc --explain E0282`.

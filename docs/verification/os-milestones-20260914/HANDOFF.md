@@ -1,3 +1,31 @@
+## Current — M07 diagnostic final source ready; M05 Rust identity observation integrated (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M07 diagnostic7430 stage10.6363s accepted12fe; paired alias.2463s and real loader
+normalization.6838s accepted5362. Two provisional pending-path observer failures
+were preserved; expertaf4f authorized only optional provisional-observer removal.
+Constructor.3633s and pendingwhole1.4457s passed/accepted1fada. Finalbinder.6070s
+and untouched guard REALunsuffixedconfig.1016s passed/accepted417d:17Python plus
+descriptor/helper19FD,16guardrows over12Python,19final/7steps49. Exact19source
+publication is ready; fetched proof and separate native/failure release are next.
+Original native125 cause remains UNKNOWN; current kernel053d/launcher33f reused.
+
+M05 two public stops/applicationc70a and physical3140 remain accepted;13native,
+31behaviors,24/35checks,sixwhole,Rust21/18,34compiler. New coherent OS source unit
+integrates independently reviewedf45ef two Rust resource observations and strict
+consumer:21 actualbody tests and2decoderpositives/21negatives pass. Public EBUSY
+semantics remain unchanged. Source98(39OS/59infra); no compiler/native/path/check
+or whole credit from this source unit. Fullmodule build remains SDK66-gated;
+caller must independently bind each exact boot owner/epoch before consuming logs.
+No complete mapping/callback/reference/frame/Linux-page/physical restoration proof.
+
+A NEW reserved-block policy proposal is preparation-only: active invocation bans
+image resize/delete, no explicit reserved-count minimum. Old1percent/growth
+approvals are not permission. Geometry/UUID/fixedSDKgate/floors preserved; exact
+readonly superblock exception reviewed, no configuration change authorized.
+No reserve mutation, resize/delete, gate bypass or new framework. Preserve every
+failure,27:4,scratch21,resource floors and fresh actual execution authority.
+
 ## Current — M05 second public stop accepted; M07 fault-diagnostic successor staging next (2026-10-22 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
