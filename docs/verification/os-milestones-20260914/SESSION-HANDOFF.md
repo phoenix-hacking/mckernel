@@ -1,3 +1,21 @@
+## Current executable results — ABI2 helper and P05 stage PASS (2026-10-22 23:04 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ABI2 production helper cccbf269 (31000B) compiled and all twelve exact-status
+predicates passed FIRST invocation in0.655688082s/0.601948CPU. Five children joined,
+closed streams/groups absent; result262a70b2. ABI1 exact4 unchanged; ABI2 exact5,
+signed diagnostics including-5. Capsule ../evidence/p-m06-native199-abi2-helper-20261022-1/.
+No native credit. sdk_host_profile_candidate now binds helper-only byte patch and
+unchanged overlay/manifest; reviewer checks its frozen ordinary execution data.
+
+P05 actual five-member stage PASS22.169300127s, CPU0 released; exact transformer
+preserves57of62members and both existing qualified status5 helpers. Original
+stage/result retained in host-preparation/p-m05-current68-second-stop-binding-
+20261022-1/consumer-successor-1/. Owner now prepares actual two-generation resource
+consumer/runtime join; expectedtuple conditions and separate release remain.
+Next runtime remains fresh199 then235/227;28/35 and all seven open checks unchanged.
+Weekly included only, reserve576 unanswered. No source/image/module rebuild needed.
+
 ## Current — exact ABI2 boot-helper correction; native status failure retired (2026-10-22 22:58 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

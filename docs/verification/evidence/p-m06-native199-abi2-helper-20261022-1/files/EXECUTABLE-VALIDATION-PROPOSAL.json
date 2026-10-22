@@ -1,0 +1,431 @@
+{
+  "status": "SOURCE_ONLY_PENDING_ORDINARY_GRANT_NOT_RELEASED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "diagnosis": "Supported ABI/helper expectation mismatch. Actual selected provider uses callback ABI2; successful BOOT publishes Running5. Helper legacy exactReady4 assertion is stale for this selected tuple. No provider Rust change or status relaxation is justified.",
+  "actual_diagnostic_serial": {
+    "path": "/home/holden/mckernel-work/scratch/n199b1/p/attempt-e696db0e49884b968eaebc267731b88b/serial.log",
+    "bytes": 68395,
+    "sha256": "546f3d96c388fd8e450ad4aa28cdff42fa4b245769e277f68e98436e6cae625d"
+  },
+  "actual_module_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-20352dabb9c94403a03c224ec2826ff2/evidence/receipt.json",
+    "bytes": 28044,
+    "sha256": "58ffcfb9febb788d6e3f4c6d949f0307c88031b95940655b49f8a577a0bbb2d3"
+  },
+  "exact_source_proof": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/ihk_smp_x86_64.rs",
+      "bytes": 36747,
+      "sha256": "7457d19bfbc8af95825481a924cdb8dee6ce5c74604907cf49ac34a54b93b5ac",
+      "lines": [
+        129,
+        135
+      ],
+      "claim": "Selected provider calls create_unbooted_v6 with literal callback ABI2."
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/os_runtime.rs",
+      "bytes": 83075,
+      "sha256": "4acedfe7e50e51183f0e58d3ab9fd9225eccf4bd5bfdb4101a49e4a201fd55f5",
+      "lines": [
+        927,
+        930,
+        982,
+        1308,
+        1313,
+        1463,
+        1481
+      ],
+      "claim": "ABI2 selects Running; successful synchronous start publishes it before BOOT returns0; OS_STATUS dispatches registry."
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/os_registry.rs",
+      "bytes": 30435,
+      "sha256": "b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6",
+      "lines": [
+        49,
+        55
+      ],
+      "claim": "Ready4 and Running5 are distinct public status values."
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/ihk_ioctl.rs",
+      "bytes": 10467,
+      "sha256": "60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e",
+      "lines": [
+        269,
+        279
+      ],
+      "claim": "Status ioctl returns exact registry snapshot enum as i64."
+    }
+  ],
+  "original_helper_source": {
+    "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/boot-probe-source/native-boot.c",
+    "bytes": 10760,
+    "sha256": "f9f6a0b266ef4a3da40dfe454cf511b7862b5457e42f92361b6a67aed7bb64b0"
+  },
+  "original_compile_record": {
+    "path": "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/record.json",
+    "bytes": 125262,
+    "sha256": "1a334354c1a93f35c740092de82dc512265c69d9960af3590c2883d399ef5dec"
+  },
+  "original_compile_argv": [
+    "cc",
+    "-m64",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-ffreestanding",
+    "-fno-builtin",
+    "-fno-stack-protector",
+    "-fno-pie",
+    "-nostdlib",
+    "-static",
+    "-no-pie",
+    "-Wl,-e,_start",
+    "-Wl,-z,noexecstack",
+    "-DCPUHP_FAILURE_STATE=234",
+    "-DNATIVE_VDSO_REV3=1",
+    "-DNATIVE_SYSFS_OS=1",
+    "-DNATIVE_SYSFS_SETUP=1",
+    "-DNATIVE_SYSFS_SERVICE=1",
+    "-DNATIVE_MCCTRL_SERVICE=1",
+    "-DBOOT_PREPARE_ONLY=0",
+    "/work/native-ultra-futex-guest-20260909-2026091302/boot-probe-source/native-boot.c",
+    "-o",
+    "/work/native-ultra-futex-guest-20260909-2026091302/root/bin/native-boot"
+  ],
+  "candidate": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot.c",
+    "bytes": 11178,
+    "sha256": "541fb393492eeda72be26046f0e42389a50f1960a6a70b4667c658126d62ab0e"
+  },
+  "compiler": {
+    "path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+    "bytes": 1158288,
+    "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+  },
+  "commands": [
+    {
+      "name": "01-production-helper-compile",
+      "argv": [
+        "/usr/bin/x86_64-linux-gnu-gcc-9",
+        "-m64",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-ffreestanding",
+        "-fno-builtin",
+        "-fno-stack-protector",
+        "-fno-pie",
+        "-nostdlib",
+        "-static",
+        "-no-pie",
+        "-Wl,-e,_start",
+        "-Wl,-z,noexecstack",
+        "-DCPUHP_FAILURE_STATE=234",
+        "-DNATIVE_VDSO_REV3=1",
+        "-DNATIVE_SYSFS_OS=1",
+        "-DNATIVE_SYSFS_SETUP=1",
+        "-DNATIVE_SYSFS_SERVICE=1",
+        "-DNATIVE_MCCTRL_SERVICE=1",
+        "-DBOOT_PREPARE_ONLY=0",
+        "-DNATIVE_BOOT_CALLBACK_ABI2=1",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot.callback-abi2"
+      ]
+    },
+    {
+      "name": "02-default-abi1-model-compile",
+      "argv": [
+        "/usr/bin/x86_64-linux-gnu-gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/actual-status-gate-fixture.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/status-model-abi1"
+      ]
+    },
+    {
+      "name": "03-explicit-abi2-model-compile",
+      "argv": [
+        "/usr/bin/x86_64-linux-gnu-gcc-9",
+        "-std=gnu11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DNATIVE_BOOT_CALLBACK_ABI2=1",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/actual-status-gate-fixture.c",
+        "-o",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/status-model-abi2"
+      ]
+    },
+    {
+      "name": "04-default-abi1-six-statuses",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/status-model-abi1"
+      ],
+      "expected_abi": 1
+    },
+    {
+      "name": "05-explicit-abi2-six-statuses",
+      "argv": [
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/status-model-abi2"
+      ],
+      "expected_abi": 2
+    }
+  ],
+  "fixture_scope": "Actual helper conditional gate and rawstatus diagnostic body copied verbatim; syscall result and output adapters only. Six statuses under both defaultABI1 and explicitABI2; negative5 diagnostic must retain minus sign.",
+  "production_feature_delta": [
+    "-DNATIVE_BOOT_CALLBACK_ABI2=1"
+  ],
+  "unchanged": "All boot assertions other than selected status constant, sysfs/service checks, two10s capture pauses, resource ownership, collector, module/image/app bytes and strict app oracles remain unchanged.",
+  "limits": {
+    "cpu": 6,
+    "jobs": 1,
+    "as_bytes": 536870912,
+    "cpu_seconds": 30,
+    "aggregate_child_work_seconds": 24,
+    "exceptional_cleanup_seconds": 6,
+    "whole_wall_seconds": 30,
+    "fsize_bytes": 1048576,
+    "nproc": "inherited unchanged",
+    "retained_output_file_count_max": 39,
+    "retained_payload_bytes_max": 40894464,
+    "host_retained_reserve_bytes": 67108864,
+    "host_temporary_reserve_bytes": 1073741824
+  },
+  "fresh_artifacts": [
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot.callback-abi2",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/status-model-abi1",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/status-model-abi2"
+  ],
+  "native_acceptance": false,
+  "actual_stage": null,
+  "actual_release": null,
+  "inputs": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot.c",
+      "bytes": 11178,
+      "sha256": "541fb393492eeda72be26046f0e42389a50f1960a6a70b4667c658126d62ab0e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-os-resource-assignment.c",
+      "bytes": 9829,
+      "sha256": "57eb965f63e8aff5ff0e1e9ed72e29b0dedb01772236d6556268d4d157213ae5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-memory-reservation.c",
+      "bytes": 14223,
+      "sha256": "a42f4ec7394c74934a3e3832ae9872c6bc2098e38d834b06f652ab678256f5fb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-cpu-reservation.c",
+      "bytes": 8289,
+      "sha256": "babae66b4b53e2982a652781c707743e48a6429df26cd6a18e9ed198ba854807"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot-status-contract.h",
+      "bytes": 284,
+      "sha256": "f9e6e105d3f8b17a5d8b119f732ac1e47f79e51267a2e9c3151f8170960da44b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/actual-status-gate.inc",
+      "bytes": 430,
+      "sha256": "3f2bdfa551ce8baacafc3749bfa58110663f6082ba728044209a0ba70a71b58f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/actual-status-gate-fixture.c",
+      "bytes": 1537,
+      "sha256": "cf99fa7466e22e2ad347d5ce036620652d1f31fb009c2f3d32e12833b60294d5"
+    },
+    {
+      "path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+      "bytes": 1158288,
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/ihk_smp_x86_64.rs",
+      "bytes": 36747,
+      "sha256": "7457d19bfbc8af95825481a924cdb8dee6ce5c74604907cf49ac34a54b93b5ac",
+      "lines": [
+        129,
+        135
+      ],
+      "claim": "Selected provider calls create_unbooted_v6 with literal callback ABI2."
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/os_runtime.rs",
+      "bytes": 83075,
+      "sha256": "4acedfe7e50e51183f0e58d3ab9fd9225eccf4bd5bfdb4101a49e4a201fd55f5",
+      "lines": [
+        927,
+        930,
+        982,
+        1308,
+        1313,
+        1463,
+        1481
+      ],
+      "claim": "ABI2 selects Running; successful synchronous start publishes it before BOOT returns0; OS_STATUS dispatches registry."
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/os_registry.rs",
+      "bytes": 30435,
+      "sha256": "b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6",
+      "lines": [
+        49,
+        55
+      ],
+      "claim": "Ready4 and Running5 are distinct public status values."
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/ihk_ioctl.rs",
+      "bytes": 10467,
+      "sha256": "60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e",
+      "lines": [
+        269,
+        279
+      ],
+      "claim": "Status ioctl returns exact registry snapshot enum as i64."
+    }
+  ],
+  "capture": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/ordinary-envelope-1/run_three_commands_source_bound.py",
+    "bytes": 14757,
+    "sha256": "37e5d4fcf0d5ad196627a1c60831ff4887a14a8fa89c9ebe29c82387faf1d6c4"
+  },
+  "capture_census": {
+    "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+    "bytes": 51420,
+    "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/run_checks_once.py",
+    "bytes": 4227,
+    "sha256": "13d89e6c8b975d132d80da6db1ef52eb3634ac28e8393613c5205a84be88329c"
+  },
+  "pinned_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot.c",
+      "bytes": 11178,
+      "sha256": "541fb393492eeda72be26046f0e42389a50f1960a6a70b4667c658126d62ab0e"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-os-resource-assignment.c",
+      "bytes": 9829,
+      "sha256": "57eb965f63e8aff5ff0e1e9ed72e29b0dedb01772236d6556268d4d157213ae5"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-memory-reservation.c",
+      "bytes": 14223,
+      "sha256": "a42f4ec7394c74934a3e3832ae9872c6bc2098e38d834b06f652ab678256f5fb"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-cpu-reservation.c",
+      "bytes": 8289,
+      "sha256": "babae66b4b53e2982a652781c707743e48a6429df26cd6a18e9ed198ba854807"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/native-boot-status-contract.h",
+      "bytes": 284,
+      "sha256": "f9e6e105d3f8b17a5d8b119f732ac1e47f79e51267a2e9c3151f8170960da44b"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/actual-status-gate.inc",
+      "bytes": 430,
+      "sha256": "3f2bdfa551ce8baacafc3749bfa58110663f6082ba728044209a0ba70a71b58f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/actual-status-gate-fixture.c",
+      "bytes": 1537,
+      "sha256": "cf99fa7466e22e2ad347d5ce036620652d1f31fb009c2f3d32e12833b60294d5"
+    },
+    {
+      "path": "/usr/bin/x86_64-linux-gnu-gcc-9",
+      "bytes": 1158288,
+      "sha256": "6cb2d84ccd9fd3485d4e47ba032e626be65692601c38fad46866a6b565f3100f"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/ihk_smp_x86_64.rs",
+      "bytes": 36747,
+      "sha256": "7457d19bfbc8af95825481a924cdb8dee6ce5c74604907cf49ac34a54b93b5ac",
+      "lines": [
+        129,
+        135
+      ],
+      "claim": "Selected provider calls create_unbooted_v6 with literal callback ABI2."
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/os_runtime.rs",
+      "bytes": 83075,
+      "sha256": "4acedfe7e50e51183f0e58d3ab9fd9225eccf4bd5bfdb4101a49e4a201fd55f5",
+      "lines": [
+        927,
+        930,
+        982,
+        1308,
+        1313,
+        1463,
+        1481
+      ],
+      "claim": "ABI2 selects Running; successful synchronous start publishes it before BOOT returns0; OS_STATUS dispatches registry."
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/os_registry.rs",
+      "bytes": 30435,
+      "sha256": "b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6",
+      "lines": [
+        49,
+        55
+      ],
+      "claim": "Ready4 and Running5 are distinct public status values."
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-current-source-bundle-20261022-1/source-modules/ihk_ioctl.rs",
+      "bytes": 10467,
+      "sha256": "60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e",
+      "lines": [
+        269,
+        279
+      ],
+      "claim": "Status ioctl returns exact registry snapshot enum as i64."
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/ordinary-envelope-1/run_three_commands_source_bound.py",
+      "bytes": 14757,
+      "sha256": "37e5d4fcf0d5ad196627a1c60831ff4887a14a8fa89c9ebe29c82387faf1d6c4"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_rust_exact_build_container_owner.py",
+      "bytes": 51420,
+      "sha256": "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/run_checks_once.py",
+      "bytes": 4227,
+      "sha256": "13d89e6c8b975d132d80da6db1ef52eb3634ac28e8393613c5205a84be88329c"
+    }
+  ],
+  "invocation": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/python3",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/run_checks_once.py"
+  ],
+  "fresh_ordinary_output": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/abi2-boolean-diagnostic-1/ordinary-check-1",
+  "preimage_proposal": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-boot-status-abi2-correction-1/EXECUTABLE-VALIDATION-PROPOSAL.json",
+    "bytes": 17825,
+    "sha256": "77d7aa98a89860b49fdce0c1ca3accc25754fcad3ba253ed4797d3d9b6ae6e4a"
+  },
+  "diagnostic": "ABI2 emits one bounded signed raw_status line with expected5/callbackABI2 before strict require(status==5); negative errno retains sign. DefaultABI1 output and exact4 gate unchanged. No arbitrary expectedstatus override."
+}
