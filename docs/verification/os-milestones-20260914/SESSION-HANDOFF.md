@@ -1,3 +1,71 @@
+## Current — actual SDK compiler failure; host retirement accepted (2026-10-22 20:55 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+CanonicalSDK host-output/root-owned-backing/opt-in cohort569c19e0 was published/
+fetched11exactruntimefiles. Real68+15inputsource/namespace/mount/capacity gates
+passed44ms to genuinein-ownerhistorical-observationboundary. Exactindependent
+one-shot SDKrelease executed nonceb4f00815998b400c82838400ae2275cd. Actualowner
+PID3310538/start49935102, capture3310537/start49935098/session65398 TERMINAL.
+Ownerclosed21.898870s, buildFAIL/make2: mcctrl_rust.rs unexpectedcfgMODULE at146,
+152,module! macro. Full2155Bstderr andfailedcandidate/partialobjects retained.
+Scope of failure: newcustom --check-cfg enables namechecking; Linuxalreadyadds
+--cfgMODULE, so minimalfixadds expected cfg(MODULE), preservesactivation/-Dwarnings.
+No sourcebody/lint weakening. Foreground originalauthor prepares coherentdata
+successor; drafta46aHOLD caught staleclosurebytes/Kbuildreplacementliteral BEFORE
+execution, do notadopt it. Freshfinalsourceauthority/release/nonce required.
+
+Actualfailedownerretiredtrue/cleanupPASS_OWNED_REMOVAL_AND_RECORD_RELEASE;
+independent m07_final_closure_review accepts scopedhostretirement at
+host-preparation/m05-sdk68-canonical-host-output-request-20261022-1/
+INDEPENDENT-ACTUAL-FAILED-SDK-RETIREMENT-1.json:14Docker+1historicalclients reaped,
+38+4emptygroupchecks,3recordsarchived/released,CID72451e6a absent,27:4 preserved.
+Gitretention ../evidence/sdk68-actual-cfg-module-failure-20261022-1/ retains85new
+runtime/driver/clientfiles+6historicaladmissionfiles; alloriginalpartialobjects
+remainprivate. NoSDKartifact/nativeacceptance;28/35/sevenopen unchanged.
+
+Matchedguestprivate4-sourceproductionchain andmaterializedsource nowindependently
+PASS afterstrictprovenance/driver/owner/gitlinkpinrepair; real3.555schecks, no
+compiler. SDKcanonical11helpers remainuntouchedbyguestwork; newimagebuildafter
+SDKsuccessorretirement/freshadmission. Then199Bselfexec→235Bprocess→227Brecovery,
+resource-restoration/ABI/Rustboundary proofs,matching10cycles/2boots/100apps/60min.
+P12producer/transport finishedsource+modeledchecks withexplicitCPU6grants; reuse
+frozenpointers, no native/time credit or additionalprepdelay. HOST177GB/scratch
+14.122GB passfullhost-outputbounds; noexact25cleanup/trim/reservechange needed.
+Weeklyincludedonly/originalvelocitybaseline/stoppedintervals preserved. No gain
+claim from infrastructure or failedcompilation. Rootcontinues activecampaign.
+
+## Current — M06 physical retirement accepted; SDK host-output path ready to integrate (2026-10-22 20:14 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exact source6 bounded correction completed realcapture/preflight composition
+PASS/.424s/7strictrefusals, published/fetched c0573b91/tree44f00fab,23files.
+Freshactualpreflight PASS3.254169449s; cleanup PASS_EXECUTED6.605471470s;
+postjoin PASS1.878200111s/20480Bfive-memberarchive. All directjoined/closed/
+groupsabsent. Genuine independent source-bound acceptance at host-preparation/
+p-m06-current-build-terminal-preparation-20261022-1/
+INDEPENDENT-ACTUAL-SOURCE6-PHYSICAL-ACCEPTANCE.json accepts hostcontroller/stopped
+16bcontainer/common+sharedrecordretirement,9journal events/12completeproc.v2
+reports/8savedPIDsabsent/64finiteobjects/68protectedidentities/permanent27:4.
+No kernelresource-restoration/native/P06literalcredit; practical28/35 unchanged.
+
+User freed hostcapacity:177790599168B. Scratch14123524096B still572071936Bshort
+of originalSDKgate14695596032B. Existinghost-outputprofile nowpassesits exact
+capacitymodel:hostminimum37990092800B, scratchminimum14091616256B (31907840B
+margin), fullsparsegrowth+4GBallocatedoutputbound charged, floors unchanged.
+Root chooses existinghost-output boundary plus corrected54ef68provideropt-in
+successor; sdk_host_profile_candidate owns isolated composition+actualcheapchecks.
+No archive cleanup/trim needed IF that coherentprofile/source/freshadmission
+independentlypasses. Original25candidate untouched; userdiskdrift neverignored.
+New54efoptinKbuild+driver requires actualRustcmdcfg and currentMM/provider checks;
+never build oldcfgOFF52fd. Foreground narrowoptinreview andP12longsessionbinding
+reused, no duplicated broad checks. lifecycle_missing_recovery now materializes
+minimal2sourceguest successor overacceptedcbb: existingfork/childcreditdefault
+paths alreadylinked; missingactualexec_reset provider is exact newimage delta.
+Then root newSDKmodules/newmatchedguestimage→199Bselfexec→235Bprocess→227Brecovery,
+fullrestoration→tenmatchedcycles+twofreshboots+100realapps+60mixedminutes where
+literalcontractspermit. SevenopenP01-02/P05-02/P05-03/P06-01/P08-02/P09-02/P12-01.
+Weeklyincludedonly, no reserve576 mutation; scratch110GiB/Scratch21/mutex retained.
+
 ## Current — live preflight refused safely; log-channel correction active (2026-10-22 20:02 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
