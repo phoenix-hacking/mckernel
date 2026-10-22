@@ -27,17 +27,31 @@ host = image._HOST_OWNER
 shared = image._SHARED_HEAVY_ENTRY_CONTRACT
 REPO = Path(__file__).resolve().parents[1]
 ROOT = Path('/home/holden/mckernel-work/scratch')
+# New profile only: created separately after review; inputs/leases stay scratch.
+OUTPUT_PARENT = Path('/home/holden/mckernel-work/host-preparation/native-running-modules-host-output')
+BACKING = ROOT.parent / 'scratch.ext4'
+HOST_UUID = '983bfa59-3985-4ca8-87af-3675adcfe2b3'
+CAMPAIGN_BYTES = 679477248
+SUPPLEMENTAL_SCRATCH_BYTES = 527237120
+NEXT_HOST_BYTES = 269488128  # Includes fixed source/publication packet32MiB.
+OUTPUT_FILES = 8192  # Existing4096 inventory bound for each writable tree.
+OUTPUT_LOGICAL_BYTES = (512 + 64) * 2**20
+# No packing/fragmentation discount: one5-block extent path per allocated
+# data block, another transient5-block path per file, rounded data and16MiB dirs.
+OUTPUT_BLOCKS = (OUTPUT_LOGICAL_BYTES + 4095) // 4096 + OUTPUT_FILES
+OUTPUT_ALLOCATION_BYTES = 6 * OUTPUT_BLOCKS * 4096 + 5 * OUTPUT_FILES * 4096 + 16 * 2**20
+
 BASIS = ROOT / 'mckernel-exact-candidate-scratch-22-authority3-output'
 PREPARATION = REPO / 'docs/verification/evidence/current68-host-control-sdk-preparation-20261022-1.json'
-PREPARATION_SHA = '62c869a85f8ad05e08279df9d4f03a4aae4bb8b0cc10c84e8d9837a2745eb445'
+PREPARATION_SHA = '05ac2a27042b02fa5f89f74c346dabe7cca4df9616cb4eb2243bd619b3711baf'
 DRIVER = REPO / 'scripts/native_running_external_modules_offline.py'
 HISTORICAL_OBSERVER = REPO / 'scripts/native_exact_historical_lease_observer.py'
 HISTORICAL_OBSERVER_SHA = '463ae558e141c2a6fe5a016fb19baddb26ed883c3bf6d39c114b27711ee78a51'
 HISTORICAL_PREFIX = ('/usr/bin/sudo', '-A', '/home/holden/anaconda3/bin/python3', '-I', '-B')
 IMAGE = 'sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d'
 CANDIDATE = '942c927b1ec93cc31284ff498455909d9bb2d0fc'
-SOURCE_CANDIDATE = '52fd08d7495bd1e622d02cbb186cbbd0696829c192fb9afdedb83fecaa56b53a'
-EXACT_SOURCE_MAP = {'Kbuild': ['7e38447e3c72f3fbaf0847b9010a7c76102a11c9bf826c71603e4ba072895750', 502], 'Kconfig': ['48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f', 848], 'abi/application.rs': ['cc91eb844cbffdb8818f4c2d728bf3dcbd0b39883655cdd0a5e0d98815925eb4', 6056], 'abi/os_service.rs': ['9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937', 2527], 'abi/sysfs.rs': ['63b25ac0df5fe3da4c0989196ea9e45e8d57b573e6e7603ca523452b2f19718e', 3393], 'abi/sysfs_request.rs': ['df5fad1ef6ec305b71c56ea6a89c9ecbce7b089b95730ad591e09909e3ffd8c7', 9082], 'abi/vdso.rs': ['d796e3a0723d6a21096a1455c35a7820437dfc2b99e5bb0e1c1f4db79f1c7d7d', 17839], 'abi/x86_64.rs': ['89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3', 19740], 'application_image.rs': ['25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2', 8356], 'application_pager.rs': ['adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19', 3196], 'application_rpc.rs': ['9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39', 10080], 'application_syscall.rs': ['daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0', 20310], 'current_fork_control.rs': ['89e3c6a26826ef48c2d5420759e462cebe12e2ffe437b9cb5a83627d37699304', 10580], 'current_fork_host.rs': ['5a68633144eb60f941a73ceff9f2d5b0d30c7b9c1c1d0c25d5e8135dfde959b4', 10844], 'current_fork_task_mm.rs': ['e2e124e84030aa6be957af6ff9c2a03116ac1b20118e28c974d24e05048b6dfe', 4578], 'device_registry.rs': ['43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5', 60221], 'exec_delivery.rs': ['65ab86c4aff79e04e46a0f6b9b2eb2397e4e94d16bc5163579e55663eac83b7d', 2058], 'exec_transfer_checked.rs': ['a7dae8a829da028cab0ad2d9de233304a587fd7d09059f4bf87c4fee16b67907', 9875], 'ihk-compat-build-id.bin': ['6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0', 8], 'ihk.rs': ['8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec', 18754], 'ihk_ioctl.rs': ['60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e', 10467], 'ihk_mapping.rs': ['085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc', 21943], 'ihk_smp_x86_64.rs': ['7457d19bfbc8af95825481a924cdb8dee6ce5c74604907cf49ac34a54b93b5ac', 36747], 'ikc_master.rs': ['1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3', 26480], 'ikc_queue.rs': ['3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5', 23030], 'mcctrl.rs': ['b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030', 8992], 'mcctrl_exec.rs': ['4ebf73c46cf12a05fc76b078fbfcf218190dd372b335f886123125a012ae26b0', 8718], 'mcctrl_process.rs': ['7e8572f10af6e5e38b76186c246abe672ec06f63df71e5aaa889b3a09f4fb035', 50530], 'mcctrl_rust.rs': ['b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030', 8992], 'mcctrl_vm.rs': ['50e0a20a032cf137ab93f2b19f392577fd1a3f48990b4e368ac415134002bf92', 30315], 'mcctrl_vm_write_compat.c': ['dcbe065ede329b51b41abcaf0563015532920fe6a34391c7bf77ed1c2f0abdf0', 480], 'mcctrl_vm_write_compat.h': ['ff25bb43907149fc9303b0dd0a7db1c84b9fc2c6f49f1922f18ca9c32b57c527', 368], 'os_registry.rs': ['b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6', 30435], 'os_runtime.rs': ['4acedfe7e50e51183f0e58d3ab9fd9225eccf4bd5bfdb4101a49e4a201fd55f5', 83075], 'os_service.rs': ['f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572', 6907], 'page_allocator.rs': ['8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5', 21301], 'page_owner_registry.rs': ['443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869', 13085], 'procfs_objects.rs': ['4d1247a87706e94fa75d7bea667d9349d48b7c525eba99d02688a87f5369411c', 19245], 'smp_application.rs': ['c3e95e0b51ded304497001bedc31699afcee18033f7f099b0989750571d65f61', 67246], 'smp_application_image.rs': ['cf3eb651aac4a5510f8ddcf9cc5376479e3379528582a33e1fc55c084f1317b5', 9716], 'smp_application_syscall.rs': ['eaecdf66839854c3d2a6461cc7b2e2166f5738ba523af1063df4bc5b0e2b4a3a', 34002], 'smp_boot_code.rs': ['0f94af32383cc6e6108e0203619642eef0e492286131dac4b35d5e1248564a7f', 2024], 'smp_cpu.rs': ['f65f3aea00dfdd0a7905d3dd396e67684fd428c71cf34dd6e15a56896c73f912', 78237], 'smp_file_pager.rs': ['655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c', 14152], 'smp_ikc.rs': ['4d1cd859dbea602f8232095fc66dd4d337848ea61ad94436da191fb316628b03', 12886], 'smp_image.rs': ['4f35ec396494fa428c55298c91ffe14aa0142d0282dd37d922f94a901a692689', 14324], 'smp_loader.rs': ['fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6', 3194], 'smp_memory.rs': ['60758aeafac150bd8aac62455844e3f4e4200a082f82f80ce66c3c871d4909be', 127757], 'smp_procfs.rs': ['4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea', 28512], 'smp_resource.rs': ['d4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd', 133271], 'smp_service.rs': ['fd2c19bc7e09911c9332ec32432060b04e2ce3d4c2918cf94a996eeef82deeac', 47527], 'smp_startup.rs': ['12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2', 4963], 'smp_startup_entry.S': ['b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2', 1350], 'smp_topology.rs': ['6d925fa50279e7eca938fd5b9d0b2a73105ef875793623024c681f40d70d08e6', 11189], 'smp_trampoline.S': ['18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf', 3650], 'smp_trampoline.rs': ['4a110936d52a80664943b5dd605fbf9ad1c99460fe8ff0a16327ca015d2d0bcb', 5709], 'smp_vdso.rs': ['dd94d677c97b0c3271c746f1795289fdaadff89e1c08a660bd7659b14466d488', 6664], 'sysfs_memory.rs': ['a06bef19cc2f0c847a4e394703f3cb0e9450c8a8453252c46745e324fe83d600', 36934], 'sysfs_objects.rs': ['2b04c57b43516550f0c3bdaf115b667d4a64393030494e79b553248c42aa7453', 13988], 'sysfs_os.rs': ['ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2', 2451], 'sysfs_remote.rs': ['fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9', 12052], 'sysfs_rpc.rs': ['d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e', 6833], 'sysfs_setup.rs': ['aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62', 12683], 'sysfs_snoop.rs': ['c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d', 5515], 'sysfs_tree.rs': ['3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232', 12276], 'sysfs_zeroing.rs': ['950919a29ab2fb53b0c488cc6e6d01b433f8caa95b27d1a1f32fb0ff3dc8390e', 12023], 'user_string.rs': ['fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2', 603], 'zero_pages.rs': ['47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def', 4354]}
+SOURCE_CANDIDATE = '54ef687dd7e2cb5141848eea7e8fe91ee16e2669740d33f1fcc241189b9aca67'
+EXACT_SOURCE_MAP = {'Kbuild': ['38e7ea6bb9875fe44950d497e7e3a4c040ebad99f4c3de4475ecc03f622287f5', 1023], 'Kconfig': ['48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f', 848], 'abi/application.rs': ['cc91eb844cbffdb8818f4c2d728bf3dcbd0b39883655cdd0a5e0d98815925eb4', 6056], 'abi/os_service.rs': ['9dac670ec6567d379c346106d3b164ddb6d607be1dedc2be21283d4adffa5937', 2527], 'abi/sysfs.rs': ['63b25ac0df5fe3da4c0989196ea9e45e8d57b573e6e7603ca523452b2f19718e', 3393], 'abi/sysfs_request.rs': ['df5fad1ef6ec305b71c56ea6a89c9ecbce7b089b95730ad591e09909e3ffd8c7', 9082], 'abi/vdso.rs': ['d796e3a0723d6a21096a1455c35a7820437dfc2b99e5bb0e1c1f4db79f1c7d7d', 17839], 'abi/x86_64.rs': ['89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3', 19740], 'application_image.rs': ['25b7810c273c9f4b5dbff073f54e67db52c69636e63760c7d5f62e471b7a61b2', 8356], 'application_pager.rs': ['adb65c878f6e9817cfb0932c38ac2f87d2715659468051957a1b747b7974ad19', 3196], 'application_rpc.rs': ['9f811c86c4e996294a6cd3be6b83315dabd20a3fb375419e091f4b9dedcfad39', 10080], 'application_syscall.rs': ['daaa3b0fabb002b40cafdc4d7c74ed6cdfd606e18dc82d3bb32bc3055e1a96e0', 20310], 'current_fork_control.rs': ['89e3c6a26826ef48c2d5420759e462cebe12e2ffe437b9cb5a83627d37699304', 10580], 'current_fork_host.rs': ['5a68633144eb60f941a73ceff9f2d5b0d30c7b9c1c1d0c25d5e8135dfde959b4', 10844], 'current_fork_task_mm.rs': ['e2e124e84030aa6be957af6ff9c2a03116ac1b20118e28c974d24e05048b6dfe', 4578], 'device_registry.rs': ['43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5', 60221], 'exec_delivery.rs': ['65ab86c4aff79e04e46a0f6b9b2eb2397e4e94d16bc5163579e55663eac83b7d', 2058], 'exec_transfer_checked.rs': ['a7dae8a829da028cab0ad2d9de233304a587fd7d09059f4bf87c4fee16b67907', 9875], 'ihk-compat-build-id.bin': ['6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0', 8], 'ihk.rs': ['8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec', 18754], 'ihk_ioctl.rs': ['60739598352b236a0d698abae0c6104e7adfc05524be9a0653b2477b8728519e', 10467], 'ihk_mapping.rs': ['085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc', 21943], 'ihk_smp_x86_64.rs': ['7457d19bfbc8af95825481a924cdb8dee6ce5c74604907cf49ac34a54b93b5ac', 36747], 'ikc_master.rs': ['1e52c69093936291f309a0317fac707c47858c6d0151cb2d288ced12353853f3', 26480], 'ikc_queue.rs': ['3163d9cc7541941e49059aed7f8824a62229cbe8a650e02f79a4eb7a3944e9c5', 23030], 'mcctrl.rs': ['b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030', 8992], 'mcctrl_exec.rs': ['4ebf73c46cf12a05fc76b078fbfcf218190dd372b335f886123125a012ae26b0', 8718], 'mcctrl_process.rs': ['7e8572f10af6e5e38b76186c246abe672ec06f63df71e5aaa889b3a09f4fb035', 50530], 'mcctrl_rust.rs': ['b3898d1a4d08ba5512ee9b12e66224409f6aed4db3adc293b47631aa16fa8030', 8992], 'mcctrl_vm.rs': ['50e0a20a032cf137ab93f2b19f392577fd1a3f48990b4e368ac415134002bf92', 30315], 'mcctrl_vm_write_compat.c': ['dcbe065ede329b51b41abcaf0563015532920fe6a34391c7bf77ed1c2f0abdf0', 480], 'mcctrl_vm_write_compat.h': ['ff25bb43907149fc9303b0dd0a7db1c84b9fc2c6f49f1922f18ca9c32b57c527', 368], 'os_registry.rs': ['b776668f4746a309c59c3de5318eff4723e5d485d88235c089ebac5ec9bd0ad6', 30435], 'os_runtime.rs': ['4acedfe7e50e51183f0e58d3ab9fd9225eccf4bd5bfdb4101a49e4a201fd55f5', 83075], 'os_service.rs': ['f5fc0c7fa0f62e0c3d1cef366a280c74ce083030ee6569b8c52979d9b361a572', 6907], 'page_allocator.rs': ['8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5', 21301], 'page_owner_registry.rs': ['443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869', 13085], 'procfs_objects.rs': ['4d1247a87706e94fa75d7bea667d9349d48b7c525eba99d02688a87f5369411c', 19245], 'smp_application.rs': ['c3e95e0b51ded304497001bedc31699afcee18033f7f099b0989750571d65f61', 67246], 'smp_application_image.rs': ['cf3eb651aac4a5510f8ddcf9cc5376479e3379528582a33e1fc55c084f1317b5', 9716], 'smp_application_syscall.rs': ['eaecdf66839854c3d2a6461cc7b2e2166f5738ba523af1063df4bc5b0e2b4a3a', 34002], 'smp_boot_code.rs': ['0f94af32383cc6e6108e0203619642eef0e492286131dac4b35d5e1248564a7f', 2024], 'smp_cpu.rs': ['f65f3aea00dfdd0a7905d3dd396e67684fd428c71cf34dd6e15a56896c73f912', 78237], 'smp_file_pager.rs': ['655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c', 14152], 'smp_ikc.rs': ['4d1cd859dbea602f8232095fc66dd4d337848ea61ad94436da191fb316628b03', 12886], 'smp_image.rs': ['4f35ec396494fa428c55298c91ffe14aa0142d0282dd37d922f94a901a692689', 14324], 'smp_loader.rs': ['fa86ebb489454cd95c2607bba3a3d564ca36d6e65c5eea6bd6aa319bb40100e6', 3194], 'smp_memory.rs': ['60758aeafac150bd8aac62455844e3f4e4200a082f82f80ce66c3c871d4909be', 127757], 'smp_procfs.rs': ['4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea', 28512], 'smp_resource.rs': ['d4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd', 133271], 'smp_service.rs': ['fd2c19bc7e09911c9332ec32432060b04e2ce3d4c2918cf94a996eeef82deeac', 47527], 'smp_startup.rs': ['12c3a816af6ff20dcf916c946b780ff988e90650300ab7c00e07a83cda1474a2', 4963], 'smp_startup_entry.S': ['b65dc8545456edc714fe2913e8bafe0c87bb287ab84e4769cf9575263a59d9b2', 1350], 'smp_topology.rs': ['6d925fa50279e7eca938fd5b9d0b2a73105ef875793623024c681f40d70d08e6', 11189], 'smp_trampoline.S': ['18c960336e3803f2b554481a2f6fc7c3927190bfeeee1516264c37de6c126bcf', 3650], 'smp_trampoline.rs': ['4a110936d52a80664943b5dd605fbf9ad1c99460fe8ff0a16327ca015d2d0bcb', 5709], 'smp_vdso.rs': ['dd94d677c97b0c3271c746f1795289fdaadff89e1c08a660bd7659b14466d488', 6664], 'sysfs_memory.rs': ['a06bef19cc2f0c847a4e394703f3cb0e9450c8a8453252c46745e324fe83d600', 36934], 'sysfs_objects.rs': ['2b04c57b43516550f0c3bdaf115b667d4a64393030494e79b553248c42aa7453', 13988], 'sysfs_os.rs': ['ce44efe98498383862bd2d897f3fe17201917aa141a144853459a0cac7ecffd2', 2451], 'sysfs_remote.rs': ['fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9', 12052], 'sysfs_rpc.rs': ['d1bb17868dd426b3c6635171f2f8cc53e498b54779973c1abc58968d1d96cc4e', 6833], 'sysfs_setup.rs': ['aef0af92406948da3a4519c937dcfd32724b18d81ab00e394e66c89753863d62', 12683], 'sysfs_snoop.rs': ['c795209a3d116142c6da2ab969d3cdb88ba69796287b20adbab2f59bdbe7249d', 5515], 'sysfs_tree.rs': ['3ee25a02b17654b6f23776d13aaa62de5b597e23cb214ca9c519b5886c29b232', 12276], 'sysfs_zeroing.rs': ['950919a29ab2fb53b0c488cc6e6d01b433f8caa95b27d1a1f32fb0ff3dc8390e', 12023], 'user_string.rs': ['fa83818bc26d52ffff1a763a34a92684dff47775ba389fa6ac831d0835bf62d2', 603], 'zero_pages.rs': ['47a4e27b63f50366229af4045d79dc5dee6ace179307cc19c08cc338c68b1def', 4354]}
 EXACT_DEPENDENCIES = {'ihk': ['abi/application.rs', 'abi/os_service.rs', 'abi/x86_64.rs', 'device_registry.rs', 'ihk.rs', 'ihk_ioctl.rs', 'ikc_master.rs', 'ikc_queue.rs', 'os_registry.rs', 'os_runtime.rs', 'os_service.rs', 'page_allocator.rs', 'page_owner_registry.rs'], 'ihk_smp_x86_64': ['abi/application.rs', 'abi/sysfs.rs', 'abi/sysfs_request.rs', 'abi/vdso.rs', 'abi/x86_64.rs', 'application_image.rs', 'application_pager.rs', 'application_rpc.rs', 'application_syscall.rs', 'current_fork_control.rs', 'current_fork_task_mm.rs', 'exec_delivery.rs', 'exec_transfer_checked.rs', 'ihk-compat-build-id.bin', 'ihk_mapping.rs', 'ihk_smp_x86_64.rs', 'ikc_master.rs', 'ikc_queue.rs', 'procfs_objects.rs', 'smp_application.rs', 'smp_application_image.rs', 'smp_application_syscall.rs', 'smp_boot_code.rs', 'smp_cpu.rs', 'smp_file_pager.rs', 'smp_ikc.rs', 'smp_image.rs', 'smp_loader.rs', 'smp_memory.rs', 'smp_procfs.rs', 'smp_resource.rs', 'smp_service.rs', 'smp_startup.rs', 'smp_startup_entry.S', 'smp_topology.rs', 'smp_trampoline.S', 'smp_trampoline.rs', 'smp_vdso.rs', 'sysfs_memory.rs', 'sysfs_objects.rs', 'sysfs_os.rs', 'sysfs_remote.rs', 'sysfs_rpc.rs', 'sysfs_setup.rs', 'sysfs_snoop.rs', 'sysfs_tree.rs', 'sysfs_zeroing.rs', 'user_string.rs', 'zero_pages.rs'], 'mcctrl': ['abi/application.rs', 'abi/os_service.rs', 'abi/x86_64.rs', 'application_image.rs', 'current_fork_host.rs', 'mcctrl_exec.rs', 'mcctrl_process.rs', 'mcctrl_rust.rs', 'mcctrl_vm.rs', 'user_string.rs']}
 UUID = '2a5768c8-718d-4914-bdc0-6b32c5a92a52'
 BOOT = '7bfc5687-6c04-4d15-84eb-b92ab9a55dcb'
@@ -134,6 +148,46 @@ def profile(info, request, name, nonce, cid=None):
          extras[0].get('Destination') == '/tmp' and extras[0].get('RW') is True), 'extra mount refused')
 
 
+def output_admission(request):
+    parent = safe_path(str(OUTPUT_PARENT))
+    actual = node(parent)
+    need(actual == request['output_parent_identity'] and
+         actual['device'] == Path('/').stat().st_dev != ROOT.stat().st_dev and
+         actual['uid'] == actual['gid'] == 1000 and actual['mode'] == 0o700,
+         'exact private host output parent identity/device/owner required')
+    raw = subprocess.check_output(['/usr/bin/findmnt', '-J', '-T', str(parent), '-o',
+                                   'TARGET,UUID,FSTYPE,OPTIONS'], timeout=15)
+    rows = json.loads(raw)['filesystems']
+    need(len(rows) == 1 and rows[0].get('target') == '/' and
+         rows[0].get('uuid') == HOST_UUID and rows[0].get('fstype') == 'ext4' and
+         'rw' in rows[0].get('options', '').split(',') and os.statvfs(parent).f_frsize == 4096,
+         'reviewed host ext4/4KiB filesystem required')
+    backing = safe_path(str(BACKING), False)
+    meta = backing.stat()
+    expected = request['backing_identity']
+    need(expected == dict(node(backing), size=meta.st_size, nlink=meta.st_nlink) and
+         meta.st_dev == actual['device'] and meta.st_uid == meta.st_gid == 0 and
+         meta.st_nlink == 1 and meta.st_size == 110 * 2**30,
+         'exact unchanged110GiB root-owned backing inode/size/owner required')
+    return json.loads(raw)
+
+
+def output_namespace(request):
+    nonce = request['nonce']
+    for key, prefix in (('candidate_root', 'native-running-modules-candidate-'),
+                        ('input_root', 'native-running-modules-inputs-'),
+                        ('owner_evidence_root', 'native-running-modules-owner-')):
+        path = Path(request[key])
+        parent = ROOT if key == 'input_root' else OUTPUT_PARENT
+        need(path.parent == parent and path.name == prefix + nonce,
+             'fresh nonce-bound host-output/scratch-input namespace')
+        safe_path(str(parent))
+        if key == 'owner_evidence_root':
+            need(not os.path.lexists(path), 'owner evidence already exists')
+        else:
+            safe_path(str(path))
+
+
 def live_admission(request):
     need(Path('/proc/sys/kernel/random/boot_id').read_text().strip() == BOOT == request['boot_id'], 'boot changed')
     raw = subprocess.check_output(['/usr/bin/findmnt', '-J', '-T', str(ROOT), '-o',
@@ -143,11 +197,14 @@ def live_admission(request):
          rows[0].get('fstype') == 'ext4' and rows[0].get('maj:min') == '7:36' and
          {'rw', 'nodev', 'nosuid'} <= set(rows[0].get('options', '').split(',')) and
          ROOT.stat().st_dev == 1828, 'scratch UUID/device/mount differs')
+    output_admission(request)
     for path, identity in ((BASIS, request['basis_identity']),
                            (Path(request['candidate_root']), request['candidate_identity']),
                            (Path(request['input_root']), request['input_identity'])):
         actual = node(safe_path(str(path)))
-        need(actual == identity and actual['device'] == 1828 and actual['uid'] == actual['gid'] == 1000,
+        need(actual == identity and actual['device'] ==
+             (request['output_parent_identity']['device'] if path == Path(request['candidate_root']) else ROOT.stat().st_dev) and
+             actual['uid'] == actual['gid'] == 1000,
              'input directory identity/device/owner differs')
         if path != BASIS:
             need(actual['mode'] == 0o700, 'private input/candidate directory required')
@@ -155,9 +212,16 @@ def live_admission(request):
 
 
 def measure(request):
-    # Reserve both candidate and captures above the continuing host/scratch floors.
-    reserve = request['disk_budget_bytes'] + request['capture_budget_bytes']
-    observed = host.measure('/', str(ROOT), 16 * 2**30 + reserve, 12 * 2**30 + reserve)
+    # Revalidate parent/backing before every capacity check, including polling.
+    output_admission(request)
+    meta = BACKING.stat()
+    gap = max(0, meta.st_size - meta.st_blocks * 512)
+    host_minimum = 16 * 2**30 + CAMPAIGN_BYTES + gap + NEXT_HOST_BYTES + OUTPUT_ALLOCATION_BYTES
+    scratch_minimum = 12 * 2**30 + CAMPAIGN_BYTES + SUPPLEMENTAL_SCRATCH_BYTES
+    observed = host.measure('/', str(ROOT), host_minimum, scratch_minimum)
+    observed.update(full_sparse_growth_bytes=gap, host_minimum_bytes=host_minimum,
+                    scratch_minimum_bytes=scratch_minimum,
+                    host_output_allocation_bound_bytes=OUTPUT_ALLOCATION_BYTES)
     for key, maximum in (('candidate_root', request['disk_budget_bytes']),
                          ('owner_evidence_root', request['capture_budget_bytes'])):
         root = Path(request[key]); total = count = 0
@@ -231,7 +295,8 @@ def validate_historical_report(report):
 def validate_preparation(prep):
     need(prep['baseline_candidate'] == CANDIDATE and prep['tool_image'] == IMAGE and
          prep['status'] == 'INPUTS_PREPARED_EXECUTION_NOT_RELEASED' and
-         prep['closure_files'] == 68 and prep['closure_bytes'] == 1346042 and
+         prep.get('host_fork_adoption_opt_in') is True and
+         prep['closure_files'] == 68 and prep['closure_bytes'] == 1346563 and
          len(prep['closure']) == 68 and prep['source_identity'] == SOURCE_CANDIDATE and
          {r['path']: [r['sha256'], r['bytes']] for r in prep['closure']} == EXACT_SOURCE_MAP and
          prep['source_dependency_sets'] == EXACT_DEPENDENCIES, 'frozen exact current68 preparation closure')
@@ -242,8 +307,9 @@ def validate_request(request, request_path, historical_observe=None):
     required = {'schema', 'candidate_sha', 'image_id', 'nonce', 'request_path', 'preparation', 'driver',
                 'input_root', 'candidate_root', 'owner_evidence_root', 'lease_path', 'common_exclusion_path',
                 'basis_identity', 'candidate_identity', 'input_identity', 'boot_id', 'timeout',
-                'disk_budget_bytes', 'capture_budget_bytes', 'terminal_policy'}
-    need(set(request) == required and request['schema'] == 'mckernel.native-running-external-modules-request.v1',
+                'disk_budget_bytes', 'capture_budget_bytes', 'terminal_policy',
+                'output_parent_identity', 'backing_identity'}
+    need(set(request) == required and request['schema'] == 'mckernel.native-running-external-modules-host-output-request.v2',
          'exact external-module request schema')
     nonce = request['nonce']
     need(re.fullmatch('[0-9a-f]{32}', str(nonce)) and request['candidate_sha'] == CANDIDATE and
@@ -256,15 +322,7 @@ def validate_request(request, request_path, historical_observe=None):
          type(request['disk_budget_bytes']) is int and request['disk_budget_bytes'] == 512 * 2**20 and
          type(request['capture_budget_bytes']) is int and request['capture_budget_bytes'] == 64 * 2**20 and
          request['terminal_policy'] == 'remove-owned-terminal', 'fixed budget/terminal policy')
-    for key, prefix in (('candidate_root', 'native-running-modules-candidate-'),
-                        ('input_root', 'native-running-modules-inputs-'),
-                        ('owner_evidence_root', 'native-running-modules-owner-')):
-        path = Path(request[key])
-        need(path.parent == ROOT and path.name == prefix + nonce, 'fresh nonce-bound namespace')
-        if key == 'owner_evidence_root':
-            need(not os.path.lexists(path), 'owner evidence already exists')
-        else:
-            safe_path(str(path))
+    output_namespace(request)
     safe_path(str(request_path), False)
     prep = bound(request['preparation'])
     validate_preparation(prep)
@@ -665,7 +723,7 @@ def validate_runtime_source_bindings(source_sha256):
 def authenticate(request_path, request_sha, release_path, release_sha):
     request = bound(dict(path=str(request_path), sha256=request_sha))
     release = bound(dict(path=str(release_path), sha256=release_sha))
-    need(release.get('schema') == 'mckernel.native-running-external-modules-release.v1' and
+    need(release.get('schema') == 'mckernel.native-running-external-modules-host-output-release.v2' and
          release.get('status') == 'PASS_EXECUTION_RELEASE' and release.get('execution_count') == 1 and
          type(release['execution_count']) is int and release.get('request') == {'path': str(request_path), 'sha256': request_sha} and
          release.get('nonce') == request.get('nonce') and release.get('boot_id') == BOOT and

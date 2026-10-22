@@ -1,0 +1,139 @@
+test_actual_cmd_consumer_accepts_bound_enabled_mode (combined_cfg_fixture.OptInFlow) ... ok
+test_actual_cmd_consumer_refuses_missing_and_ambiguous_cfg (combined_cfg_fixture.OptInFlow) ... ok
+test_invalid_make_modes_and_overrides_refuse (combined_cfg_fixture.OptInFlow) ... ok
+test_pinned_preparation_reaches_exact_make_plan (combined_cfg_fixture.OptInFlow) ... ok
+test_actual_authenticate_accepts_canonical_role_hash_join (__main__.CanonicalAuth) ... FAIL
+test_actual_authenticate_refuses_driver_role_hash_mismatch (__main__.CanonicalAuth) ... FAIL
+test_actual_sourceguard_accepts_canonical_complete_cohort (__main__.CanonicalAuth) ... FAIL
+test_actual_sourceguard_refuses_incomplete_cohort (__main__.CanonicalAuth) ... FAIL
+test_actual_sourceguard_refuses_isolated_entrypoint (__main__.CanonicalAuth) ... FAIL
+
+======================================================================
+FAIL: test_actual_authenticate_accepts_canonical_role_hash_join (__main__.CanonicalAuth)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/check_canonical_cfg_auth.py", line 39, in setUp
+    self.m = load_module(self.repo / 'scripts/native_running_external_modules_owner.py',
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/check_canonical_cfg_auth.py", line 23, in load_module
+    spec.loader.exec_module(module)
+  File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/canonical-auth-j59ws5ig/scripts/native_running_external_modules_owner.py", line 23, in <module>
+  File "/home/holden/mckernel/scripts/native_rust_exact_mckernel_image_container_owner.py", line 27, in <module>
+    import uuid
+  File "/usr/lib/python3.8/uuid.py", line 60, in <module>
+    _platform_system = platform.system()
+  File "/usr/lib/python3.8/platform.py", line 892, in system
+    return uname().system
+  File "/usr/lib/python3.8/platform.py", line 858, in uname
+    processor = _syscmd_uname('-p', '')
+  File "/usr/lib/python3.8/platform.py", line 614, in _syscmd_uname
+    output = subprocess.check_output(('uname', option),
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/check_canonical_cfg_auth.py", line 112, in forbidden
+    raise AssertionError('No subprocess permitted in cfg/auth fixtures')
+AssertionError: No subprocess permitted in cfg/auth fixtures
+
+======================================================================
+FAIL: test_actual_authenticate_refuses_driver_role_hash_mismatch (__main__.CanonicalAuth)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/check_canonical_cfg_auth.py", line 39, in setUp
+    self.m = load_module(self.repo / 'scripts/native_running_external_modules_owner.py',
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/check_canonical_cfg_auth.py", line 23, in load_module
+    spec.loader.exec_module(module)
+  File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/canonical-auth-zw48vhqw/scripts/native_running_external_modules_owner.py", line 23, in <module>
+  File "/home/holden/mckernel/scripts/native_rust_exact_mckernel_image_container_owner.py", line 27, in <module>
+    import uuid
+  File "/usr/lib/python3.8/uuid.py", line 60, in <module>
+    _platform_system = platform.system()
+  File "/usr/lib/python3.8/platform.py", line 892, in system
+    return uname().system
+  File "/usr/lib/python3.8/platform.py", line 858, in uname
+    processor = _syscmd_uname('-p', '')
+  File "/usr/lib/python3.8/platform.py", line 614, in _syscmd_uname
+    output = subprocess.check_output(('uname', option),
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/check_canonical_cfg_auth.py", line 112, in forbidden
+    raise AssertionError('No subprocess permitted in cfg/auth fixtures')
+AssertionError: No subprocess permitted in cfg/auth fixtures
+
+======================================================================
+FAIL: test_actual_sourceguard_accepts_canonical_complete_cohort (__main__.CanonicalAuth)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/check_canonical_cfg_auth.py", line 39, in setUp
+    self.m = load_module(self.repo / 'scripts/native_running_external_modules_owner.py',
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/check_canonical_cfg_auth.py", line 23, in load_module
+    spec.loader.exec_module(module)
+  File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/canonical-auth-htefit4o/scripts/native_running_external_modules_owner.py", line 23, in <module>
+  File "/home/holden/mckernel/scripts/native_rust_exact_mckernel_image_container_owner.py", line 27, in <module>
+    import uuid
+  File "/usr/lib/python3.8/uuid.py", line 60, in <module>
+    _platform_system = platform.system()
+  File "/usr/lib/python3.8/platform.py", line 892, in system
+    return uname().system
+  File "/usr/lib/python3.8/platform.py", line 858, in uname
+    processor = _syscmd_uname('-p', '')
+  File "/usr/lib/python3.8/platform.py", line 614, in _syscmd_uname
+    output = subprocess.check_output(('uname', option),
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/check_canonical_cfg_auth.py", line 112, in forbidden
+    raise AssertionError('No subprocess permitted in cfg/auth fixtures')
+AssertionError: No subprocess permitted in cfg/auth fixtures
+
+======================================================================
+FAIL: test_actual_sourceguard_refuses_incomplete_cohort (__main__.CanonicalAuth)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/check_canonical_cfg_auth.py", line 39, in setUp
+    self.m = load_module(self.repo / 'scripts/native_running_external_modules_owner.py',
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/check_canonical_cfg_auth.py", line 23, in load_module
+    spec.loader.exec_module(module)
+  File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/canonical-auth-9tu30nlt/scripts/native_running_external_modules_owner.py", line 23, in <module>
+  File "/home/holden/mckernel/scripts/native_rust_exact_mckernel_image_container_owner.py", line 27, in <module>
+    import uuid
+  File "/usr/lib/python3.8/uuid.py", line 60, in <module>
+    _platform_system = platform.system()
+  File "/usr/lib/python3.8/platform.py", line 892, in system
+    return uname().system
+  File "/usr/lib/python3.8/platform.py", line 858, in uname
+    processor = _syscmd_uname('-p', '')
+  File "/usr/lib/python3.8/platform.py", line 614, in _syscmd_uname
+    output = subprocess.check_output(('uname', option),
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/check_canonical_cfg_auth.py", line 112, in forbidden
+    raise AssertionError('No subprocess permitted in cfg/auth fixtures')
+AssertionError: No subprocess permitted in cfg/auth fixtures
+
+======================================================================
+FAIL: test_actual_sourceguard_refuses_isolated_entrypoint (__main__.CanonicalAuth)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/check_canonical_cfg_auth.py", line 39, in setUp
+    self.m = load_module(self.repo / 'scripts/native_running_external_modules_owner.py',
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/check_canonical_cfg_auth.py", line 23, in load_module
+    spec.loader.exec_module(module)
+  File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/canonical-auth-1yh3vxjb/scripts/native_running_external_modules_owner.py", line 23, in <module>
+  File "/home/holden/mckernel/scripts/native_rust_exact_mckernel_image_container_owner.py", line 27, in <module>
+    import uuid
+  File "/usr/lib/python3.8/uuid.py", line 60, in <module>
+    _platform_system = platform.system()
+  File "/usr/lib/python3.8/platform.py", line 892, in system
+    return uname().system
+  File "/usr/lib/python3.8/platform.py", line 858, in uname
+    processor = _syscmd_uname('-p', '')
+  File "/usr/lib/python3.8/platform.py", line 614, in _syscmd_uname
+    output = subprocess.check_output(('uname', option),
+  File "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/combined-host-output-opt-in-1/check_canonical_cfg_auth.py", line 112, in forbidden
+    raise AssertionError('No subprocess permitted in cfg/auth fixtures')
+AssertionError: No subprocess permitted in cfg/auth fixtures
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.148s
+
+FAILED (failures=5)

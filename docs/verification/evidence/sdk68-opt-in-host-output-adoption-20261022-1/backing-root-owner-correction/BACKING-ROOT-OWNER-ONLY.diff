@@ -1,0 +1,14 @@
+--- /home/holden/mckernel/scripts/native_running_external_modules_owner.py@4f530
++++ /home/holden/mckernel-work/host-preparation/m05-sdk68-backing-owner-correction-20261022-1/native_running_external_modules_owner.py
+@@ -166,9 +166,9 @@
+     meta = backing.stat()
+     expected = request['backing_identity']
+     need(expected == dict(node(backing), size=meta.st_size, nlink=meta.st_nlink) and
+-         meta.st_dev == actual['device'] and meta.st_uid == meta.st_gid == 1000 and
++         meta.st_dev == actual['device'] and meta.st_uid == meta.st_gid == 0 and
+          meta.st_nlink == 1 and meta.st_size == 110 * 2**30,
+-         'exact unchanged110GiB backing inode/size/owner required')
++         'exact unchanged110GiB root-owned backing inode/size/owner required')
+     return json.loads(raw)
+ 
+ 

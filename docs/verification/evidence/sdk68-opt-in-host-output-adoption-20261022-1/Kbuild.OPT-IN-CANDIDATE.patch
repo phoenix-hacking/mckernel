@@ -1,0 +1,18 @@
+--- a/Kbuild
++++ b/Kbuild
+@@ -10,3 +10,15 @@
+ 
+ # Keep canonical mcctrl.ko; compile the unchanged Rust root under a leaf name.
+ mcctrl-y := mcctrl_rust.o mcctrl_vm_write_compat.o
++# Recognize the explicit capability cfg even in the default-OFF build.
++RUSTFLAGS_mcctrl_rust.o += --check-cfg 'cfg(mckernel_current_fork_adoption_opt_in)'
++ifneq ($(MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN),)
++ifneq ($(MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN),0)
++ifneq ($(MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN),1)
++$(error MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN must be empty, 0 or 1)
++endif
++endif
++endif
++ifeq ($(MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN),1)
++RUSTFLAGS_mcctrl_rust.o += --cfg mckernel_current_fork_adoption_opt_in
++endif

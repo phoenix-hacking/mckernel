@@ -1,0 +1,27 @@
+{
+  "status": "PASS_ISOLATED_CANONICAL_OWNER_IMPORT_AND_ARGPARSE_ONLY",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--core=0:0",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import sys,runpy; sys.path.insert(0,'/home/holden/mckernel/scripts'); runpy.run_path('/home/holden/mckernel/scripts/native_running_external_modules_owner.py',run_name='__main__')",
+    "--help"
+  ],
+  "returncode": 0,
+  "stdout": "usage: native_running_external_modules_owner.py [-h] --request REQUEST\n                                                --request-sha256\n                                                REQUEST_SHA256 --release\n                                                RELEASE --release-sha256\n                                                RELEASE_SHA256\n\nOne separately released external-module build; no guest or Linux build. Reuse\nthe accepted Docker client rundown and root quarantine mechanisms. Uncertain\nownership never releases the development flock or exclusion records. Stopped\ncontainers are retained unless this new operation's exact execution release\nexpressly authorizes owned terminal removal.\n\noptional arguments:\n  -h, --help            show this help message and exit\n  --request REQUEST\n  --request-sha256 REQUEST_SHA256\n  --release RELEASE\n  --release-sha256 RELEASE_SHA256\n",
+  "stderr": "",
+  "code_sha256": "fa2285c14a35ae24dac0c221e089c4002392230cdc0436d6fb2b07571d54db28",
+  "original_failure": "ModuleNotFoundError native_rust_exact_mckernel_image_container_owner when-I omitted canonical scripts sys.path",
+  "source_guard_unchanged": true,
+  "owner_canonical_path_unchanged": true,
+  "root_operations": 0,
+  "compiler_runs": 0
+}

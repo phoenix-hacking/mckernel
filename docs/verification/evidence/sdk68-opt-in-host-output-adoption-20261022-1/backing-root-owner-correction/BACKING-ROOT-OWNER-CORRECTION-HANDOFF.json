@@ -1,0 +1,125 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_BACKING_ROOT_OWNER_FOCUSED_SOURCE_AND10_REAL_METADATA_CHECKS_ONLY",
+  "owner": {
+    "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-backing-owner-correction-20261022-1/native_running_external_modules_owner.py",
+    "bytes": 54065,
+    "sha256": "abb1a448b9c77efc14d78b485d241aa061fefa499c3211772e4bd182b4b4e1b9"
+  },
+  "preimage": {
+    "canonical_path": "/home/holden/mckernel/scripts/native_running_external_modules_owner.py",
+    "sha256": "4f530016e64e4c04db36d8e3f1d30c57366b72dfefec319617af4764cf5e31e9",
+    "bytes": 54057
+  },
+  "diff": {
+    "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-backing-owner-correction-20261022-1/BACKING-ROOT-OWNER-ONLY.diff",
+    "bytes": 803,
+    "sha256": "b6acdc7c248c5a1805bd3b625759eacdeb3b952108638fd45ec3b668ebf490fe"
+  },
+  "exact_delta": "output_admission BACKINGmeta.st_uid==meta.st_gid==1000 ->0 only; diagnostic addsroot-owned. AllotherfunctionASTs unchanged; hostparent/candidate/input and ownercaller1000 checks unchanged. Exactrequestbackingdescriptor equality remains enforced.",
+  "actual_backing_stat": {
+    "path": "/home/holden/mckernel-work/scratch.ext4",
+    "device": 66306,
+    "inode": 47468427,
+    "mode": 384,
+    "uid": 0,
+    "gid": 0,
+    "size": 118111600640,
+    "nlink": 1
+  },
+  "backing_file_bytes_read": 0,
+  "tests": {
+    "count": 10,
+    "result": {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-backing-owner-correction-20261022-1/checks-result.json",
+      "bytes": 473,
+      "sha256": "41c88fe2647f9d4144250f78e5c67a36990335321d7cd11669dcd55f93d668ac"
+    },
+    "source": {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-backing-owner-correction-20261022-1/check_real_backing.py",
+      "bytes": 3156,
+      "sha256": "3d477d5935bcecb1d353e9ae11b314165cf96972b9222b38ea821a22adec84c8"
+    },
+    "stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-backing-owner-correction-20261022-1/checks.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-backing-owner-correction-20261022-1/checks.stderr",
+      "bytes": 689,
+      "sha256": "cfd25c41cc3d6cec0f670691bc4fb332d93a0c50558ad0f7a6ba6f3bb18464bb"
+    },
+    "wall_seconds": 0.21522461500717327,
+    "PID": 3303394,
+    "whole_group_absent": true,
+    "positive": "Actualoutput_admission uses REALBACKINGstat/node, UID0/GID0/mode600/nlink1/dev66306/inode47468427/110GiB. ONLYhostoutputparenttemporaryfixture andfindmntresponse edges replaced; no mockedbackingstat/node/UID.",
+    "negative_cases": [
+      "declaredUID1000",
+      "declaredGID1000",
+      "wronginode",
+      "wrongsize",
+      "wrongmode",
+      "wrongnlink",
+      "scratchasoutputparentnamespace",
+      "rootUIDclaimforordinaryhostparent"
+    ],
+    "only_changed_function_AST": "output_admission",
+    "no_private_entrypoint_admission": true
+  },
+  "adoption_files": {
+    "canonical_install_delta": {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-backing-owner-correction-20261022-1/CANONICAL-OWNER-INSTALL-DELTA.json",
+      "bytes": 967,
+      "sha256": "d48a2ca4a13c746e62907b735565908d5099446652864809fc624acce253e4e7"
+    },
+    "canonical11cohort": {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-backing-owner-correction-20261022-1/CANONICAL-RUNTIME-SOURCE-COHORT.SUCCESSOR.json",
+      "bytes": 6330,
+      "sha256": "1eeba08a82d205b8a5ec752e5dbd3abd320d9dcf33cf40bee5fa3791eed74261"
+    },
+    "runtime_input_map": {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-backing-owner-correction-20261022-1/ACTUAL-CANONICAL-RUNTIME-INPUT-MAP.SUCCESSOR.json",
+      "bytes": 4125,
+      "sha256": "bfac15f7f2a0a64f9ba972322019b2166156d6dc5a6d41d59ab7a29721119a2c"
+    },
+    "request_template": {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-backing-owner-correction-20261022-1/REQUEST.PAYLOAD-TEMPLATE.SUCCESSOR.json",
+      "bytes": 1119,
+      "sha256": "9f4175d12fcead2ffd3894d217526ab596f1df93cf308843cb71bd310a005f4b"
+    },
+    "release_template": {
+      "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-backing-owner-correction-20261022-1/RELEASE.PAYLOAD-TEMPLATE.SUCCESSOR.json",
+      "bytes": 2343,
+      "sha256": "03c06d94cec73e1cf460685153f63f27e4047a215049b9f1f0edeaeab39d0e10"
+    }
+  },
+  "unchanged": {
+    "driver_sha256": "e55c07e286d3f7d712c5f8e9131d37a9ab60b16e166151326672a59f7b88531e",
+    "preparation_sha256": "05ac2a27042b02fa5f89f74c346dabe7cca4df9616cb4eb2243bd619b3711baf",
+    "source_identity": "54ef687dd7e2cb5141848eea7e8fe91ee16e2669740d33f1fcc241189b9aca67",
+    "source_files": 68,
+    "source_bytes": 1346563,
+    "canonical_cohort_other10": true,
+    "one_heavy4CPU12GiB512tasks_noswap_nonetwork": true,
+    "host_scratch_floors_full_sparse_growth_outputallocation": true,
+    "ordinary_UID1000_canonical_owner_argv": true,
+    "exact_installed_runtime_source_guard": true
+  },
+  "failure_family": {
+    "name": "BackingUIDmetadataadmissionmismatch",
+    "original": "Canonical4f530 required1000 but actualroot-owned110GiBbackinghasUID/GID0. Discoveredfrommetadata BEFORESDKexecution; no failedSDKattempt.",
+    "candidate": 1,
+    "bounded_corrections": 0,
+    "failed_candidate_tests": []
+  },
+  "source_review": null,
+  "actual_canonical_installation": null,
+  "actual_Git_fetched_proof": null,
+  "actual_request": null,
+  "actual_release": null,
+  "SDK_build": null,
+  "root_Docker_guest_commands": 0,
+  "chown_or_reserve_or_resize_operations": 0,
+  "next": "Focused delta review ofabb1source+realmetadatafixture; root alone installs canonicalowner afterpreimage4f530check, updates exact11sourcecohort/runtimeinputmap/request-releasebindings+fetchedproof, freshlybindsactualbackingroot0descriptor/ownership/resources, then separatelyreleasedone-shotSDKbuild. No broadreview/test replay required by this correction."
+}
