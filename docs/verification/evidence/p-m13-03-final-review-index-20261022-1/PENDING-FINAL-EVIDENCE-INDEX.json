@@ -1,0 +1,84 @@
+{
+  "status": "PENDING_NOT_FINAL_ACCEPTANCE",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "at": "2026-10-22T17:19:16.327642+00:00",
+  "delivered_profile": "tested205-ff4f-current-host-c396-af234-6571-two-cpu-20261019",
+  "accepted_small_entry_points": [
+    {
+      "path": "docs/verification/evidence/p-m13-01-delivered-handoff-20261022-1/BUILD-RUN-HANDOFF.md",
+      "sha256": "359749de4c05e38a5b7c28fe3d41dfe82ceb11d7583040d5d69a7e19932fca04",
+      "bytes": 13707
+    },
+    {
+      "path": "docs/verification/evidence/p-m13-01-delivered-handoff-20261022-1/tested-artifact-identities.json",
+      "sha256": "955cf56da6aa80156279f0c883c06e655379ec39724d448cd9273867d3b4f1aa",
+      "bytes": 16374
+    },
+    {
+      "path": "docs/verification/evidence/p-m13-01-delivered-handoff-20261022-1/INDEPENDENT-LITERAL-ACCEPTANCE.json",
+      "sha256": "e10f4910788e620ceec273f5f147872b65c66310b85f57882ba919e1130683bb",
+      "bytes": 1257
+    },
+    {
+      "path": "docs/verification/evidence/p-m13-02-capability-statement-20261022-1/CAPABILITY-STATEMENT.md",
+      "sha256": "e877026cf804bf6c657c3fffd4aa8d7ea0b9cc36007d30eac31d953e61e86afe",
+      "bytes": 14771
+    },
+    {
+      "path": "docs/verification/evidence/p-m13-02-capability-statement-20261022-1/profile-tuples.json",
+      "sha256": "7faa53b5e6d762d108d1bed72e7b6d0b3170d6f9e064dfa9b0df109a606a464b",
+      "bytes": 22878
+    },
+    {
+      "path": "docs/verification/evidence/p-m13-02-capability-statement-20261022-1/INDEPENDENT-LITERAL-ACCEPTANCE.json",
+      "sha256": "f0b21c9f1ac7d07133aaf857b263217c5dbfea88b5d67217b6bfdf8182e1740d",
+      "bytes": 1152
+    },
+    {
+      "path": "docs/verification/evidence/p-m01-01-foreground-literal-review-20261022-1/INDEPENDENT-REVIEW.json",
+      "sha256": "c9062871c31365b18c1d55d05c0d832b001359b9c6a3712e6c052e620d57c176",
+      "bytes": 3551
+    }
+  ],
+  "remaining_literal_checks": [
+    {
+      "id": "P-M01-02",
+      "contract": "Observe supported guest fault/cancellation recovery without premature release."
+    },
+    {
+      "id": "P-M05-02",
+      "contract": "Observe CPU/memory restoration plus process/mapping/callback/ref retirement."
+    },
+    {
+      "id": "P-M05-03",
+      "contract": "Complete ten native lifecycle cycles; failures retain ownership and block reuse."
+    },
+    {
+      "id": "P-M06-01",
+      "contract": "Exercise process creation/exec/wait required by the selected app infrastructure."
+    },
+    {
+      "id": "P-M08-02",
+      "contract": "Validate used boot/resource/process/mapping/shutdown ABI paths and changed unsafe boundaries."
+    },
+    {
+      "id": "P-M09-02",
+      "contract": "Validate changed consumed Rust/C/assembly boundaries in the final artifact set."
+    },
+    {
+      "id": "P-M12-01",
+      "contract": "Meet bounded session budgets on the declared final profile; overlap checks and reuse matching valid evidence."
+    },
+    {
+      "id": "P-M13-03",
+      "contract": "Complete focused final correctness/ownership review; announce only scoped completion."
+    }
+  ],
+  "required_before_final_decision": [
+    "Actual final delivered artifact/profile tuple selected explicitly; do not merge P205/P053D/cbb04",
+    "Matched production/native results and ownership/retirement accepted for changed used paths",
+    "Actual scoped completion predicates satisfied with deferred qualification and livecomputeC status explicit",
+    "Independent focused final correctness/ownership decision tied to actual artifact/results, not this index"
+  ],
+  "no_new_runtime_or_status_change": true
+}

@@ -1,0 +1,27 @@
+--- original/check_final_static_closure.py
++++ cli-corrected/check_final_static_closure.py
+@@ -2,10 +2,10 @@
+ Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ """
+ from pathlib import Path
+-import ast,copy,hashlib,importlib.util,json,os,socket,stat,subprocess
++import ast,copy,hashlib,importlib.util,json,os,socket,stat,subprocess,sys
+ D=Path(__file__).resolve().parent;Q=D/'native-packet-1'
+-REVIEW=Path('/home/holden/mckernel-work/host-preparation/current-focused-progress-recording-20261021-1/current-normalization-review-recording-1/M07-DIAGNOSTIC-ACTUAL-SOURCE-DATA-PENDING-WHOLE-ACCEPTANCE.json')
+-REVIEW_SHA='1fadaaf903ae5b2bc90330c3566b88380bfca7ee6e682c4486e8311c97c57834'
++REVIEW=None
++REVIEW_SHA=None
+ FIELDS=('st_dev','st_ino','st_uid','st_gid','st_mode','st_nlink','st_size','st_mtime_ns','st_ctime_ns')
+ def load(p):return json.loads(Path(p).read_bytes())
+ def ref(p):
+@@ -17,7 +17,9 @@
+ def forbidden(*a,**k):raise AssertionError('pure final static closure prohibits process/socket/backend/root')
+ def main():
+  subprocess.Popen=forbidden;subprocess.run=forbidden;socket.socket=forbidden;os.execve=forbidden
+- review=ref(REVIEW);assert review['sha256']==REVIEW_SHA and review['bytes']==847
++ need(len(sys.argv)==4,'usage: check_final_static_closure.py GENUINE_PENDING_REVIEW SHA256 BYTES')
++ review=ref(sys.argv[1]);need(review['sha256']==sys.argv[2] and review['bytes']==int(sys.argv[3]),'whole genuine independent pending review descriptor')
++ authority=load(sys.argv[1]);need(authority['implementation_ownership'] is False and authority['reviewer'] and authority['decision']=='PASS_CURRENT_NATIVE_SCHEMA_PENDING19_SOURCE_DATA_BINDING_ONLY' and authority['findings']==[],'independent passing source/data review')
+  pending=load(D/'actual-whole-caller-result.json')['actual_pending_outputs']
+  outputs={}
+  for row in pending:

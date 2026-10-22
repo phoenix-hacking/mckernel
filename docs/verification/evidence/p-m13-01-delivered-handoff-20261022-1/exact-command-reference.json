@@ -1,0 +1,2003 @@
+{
+  "schema": "mckernel.tested205.delivered-exact-command-reference.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "execution_authority": false,
+  "history_warning": "All retained attempt paths, nonces, releases, command hashes, output/capture names and root commands are consumed history. Do not execute them. Fresh adaptation and actual independent admission are required.",
+  "compute_build": {
+    "driver_receipt": {
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/owner-work/evidence/receipt.json",
+      "sha256": "4be2ccc9c38c604ee2aae760b6e7193bf045693ecc96cec2c24fa5e60be0211c",
+      "bytes": 35607
+    },
+    "source_authority": {
+      "actual_file_pins": {
+        "kernel/rust/process_helpers.rs": "e6b80f8a93298ddf5a1570fb00b528a515c6676b01af6de92f985a9ad5cca786",
+        "kernel/rust/sched_helpers.rs": "3510ce13fc4653311fa98f68ba472c8eb64e330ddf41b8ae691b81dc6563e70e",
+        "kernel/syscall.c": "90732f8aac62d1221f56d9c56d059e597f82dbd7ac22f8f1ef531f074e90161c"
+      },
+      "candidate_identity_scope": "base_git_commit_only",
+      "candidate_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+      "code_checkpoint": "205410e43e19456ec98777dd6392940707061324",
+      "ihk_sha": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "manifest": {
+        "bytes": 6717521,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/thin-inputs.json",
+        "sha256": "d3495242284b653ef10de9f4f70706fc0ea118696189aa957305ce8bf5df8098"
+      },
+      "materialization_receipt": {
+        "bytes": 483,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialization-receipt.json",
+        "sha256": "e2f4361997676db57505dacf2125e513f47b1013844e616070da56fff721a425"
+      },
+      "materialization_sha256": "a6c5602304214426c70a73823607ed58f6cc5d475457051b477271bd4d48ffcc",
+      "request": {
+        "bytes": 35945925,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json",
+        "sha256": "8b7b34ede927594675ad8cd303c24c233f4dcdaaa414c5a4c1171adc1139cbe1"
+      },
+      "source_derivative_sha256": "46ef55bc149a7c17cafc7b082e4774561980452e9d89f1d34e2096e7b9a2107e",
+      "source_identity": {
+        "dev": 66306,
+        "file_type": 16384,
+        "gid": 1000,
+        "inode": 48016248,
+        "mode": 448,
+        "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/materialized-source",
+        "uid": 1000
+      }
+    },
+    "request": {
+      "bytes": 35945925,
+      "path": "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/image-request.json",
+      "sha256": "8b7b34ede927594675ad8cd303c24c233f4dcdaaa414c5a4c1171adc1139cbe1"
+    },
+    "commands_in_original_order": [
+      {
+        "argv": [
+          "/usr/bin/cmake",
+          "-S",
+          "/src",
+          "-B",
+          "/work/output/build",
+          "-G",
+          "Unix Makefiles",
+          "-DCMAKE_BUILD_TYPE=Debug",
+          "-DBUILD_TARGET=smp-x86",
+          "-DKERNEL_DIR=/out/build",
+          "-DENABLE_PERF=ON",
+          "-DENABLE_RUSAGE=ON",
+          "-DENABLE_LINUX_WORK_IRQ_FOR_IKC=ON",
+          "-DRUSTC=/nightly/bin/rustc",
+          "-DCMAKE_C_COMPILER=/usr/bin/cc",
+          "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+          "-DENABLE_RUST_KERNEL=ON",
+          "-DENABLE_RUST_IHK_MODULE_HELPERS=ON",
+          "-DENABLE_RUST_USER_TOOLS=ON",
+          "-DMCKERNEL_HOST_IRQ_ABI=linux-6.12",
+          "-DKBUILD_MAKE_FLAGS=CC=/usr/bin/clang;LD=/usr/bin/ld.lld",
+          "-DCMAKE_MAKE_PROGRAM=/usr/bin/make",
+          "-DCMAKE_LINKER=/usr/bin/ld",
+          "-DCMAKE_AR=/usr/bin/ar",
+          "-DCMAKE_RANLIB=/usr/bin/ranlib",
+          "-DCMAKE_NM=/usr/bin/nm",
+          "-DCMAKE_OBJCOPY=/usr/bin/objcopy",
+          "-DCMAKE_READELF=/usr/bin/readelf",
+          "-DGIT_EXECUTABLE=/usr/bin/git"
+        ],
+        "cwd": "/src",
+        "env_sha256": "32b2734ac7207c8317d8e807903d112334910a72acacd31d684b2d4cbcdb46e9",
+        "exit_code": 0,
+        "phase": "configure"
+      },
+      {
+        "argv": [
+          "/usr/bin/cc",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+          "-I/work/output/build/kernel/include",
+          "-I/src/kernel/include",
+          "-I/work/output/build/kernel",
+          "-I/work/output/build",
+          "-I/src/ihk/cokernel/smp/x86_64/include",
+          "-I/src/ihk/cokernel/smp/x86_64",
+          "-I/src/ihk/ikc/include",
+          "-I/src/ihk/linux/include",
+          "-I/src/lib/include",
+          "-I/src/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "-fsyntax-only",
+          "/work/output/build/production-abi-cpu.c"
+        ],
+        "cwd": "/work/output/build/kernel",
+        "exit_code": 0,
+        "fixture_sha256": "8e31891a24714475b3ed39e8edf66ed6f732c5e06ad74b344df33e93fc894741",
+        "phase": "production-abi-cpu",
+        "source_sha256": "67dd7ea590ad9c1470ce34434770efa5e8cd7449b5f28d3b4ee5d3e0c96eb348"
+      },
+      {
+        "argv": [
+          "/usr/bin/cc",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-DMCKERNEL_RUST_PROCESS_HELPERS",
+          "-I/work/output/build/kernel/include",
+          "-I/src/kernel/include",
+          "-I/work/output/build/kernel",
+          "-I/work/output/build",
+          "-I/src/ihk/cokernel/smp/x86_64/include",
+          "-I/src/ihk/cokernel/smp/x86_64",
+          "-I/src/ihk/ikc/include",
+          "-I/src/ihk/linux/include",
+          "-I/src/lib/include",
+          "-I/src/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "-fsyntax-only",
+          "/work/output/build/production-abi-process.c"
+        ],
+        "cwd": "/work/output/build/kernel",
+        "exit_code": 0,
+        "fixture_sha256": "7d06c58fb258d63ac9f9d6001215a1465f473eee6f8ec96cabe469d48102bf14",
+        "phase": "production-abi-process",
+        "source_sha256": "a400590c51d4badeca9af7f75fa2aaca2c15a7182020380fed79bdf9d007ac33"
+      },
+      {
+        "argv": [
+          "/usr/bin/cc",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-DMCKERNEL_RUST_X86_CPU_HELPERS",
+          "-I/work/output/build/kernel/include",
+          "-I/src/kernel/include",
+          "-I/work/output/build/kernel",
+          "-I/work/output/build",
+          "-I/src/ihk/cokernel/smp/x86_64/include",
+          "-I/src/ihk/cokernel/smp/x86_64",
+          "-I/src/ihk/ikc/include",
+          "-I/src/ihk/linux/include",
+          "-I/src/lib/include",
+          "-I/src/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "-include",
+          "/work/output/build/release-fp-regs-production/production-c-abi-assertions.h",
+          "-c",
+          "/src/arch/x86_64/kernel/cpu.c",
+          "-o",
+          "/work/output/build/release-fp-regs-production/selected-cpu.o"
+        ],
+        "assertion_header_sha256": "50b83b93409a72f3c93a2675b42c39e0237f7e42d368c1b7e0bc35d5a5f1ad0d",
+        "cpu_source_sha256": "67dd7ea590ad9c1470ce34434770efa5e8cd7449b5f28d3b4ee5d3e0c96eb348",
+        "cwd": "/work/output/build/kernel",
+        "exit_code": 0,
+        "generated_rust_make_sha256": "6266a07d0a839c0175e5ca451678d69f78fe413f8a534348f5290f8133a58613",
+        "phase": "release-full-cpu-selected"
+      },
+      {
+        "argv": [
+          "/usr/bin/cc",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-I/work/output/build/kernel/include",
+          "-I/src/kernel/include",
+          "-I/work/output/build/kernel",
+          "-I/work/output/build",
+          "-I/src/ihk/cokernel/smp/x86_64/include",
+          "-I/src/ihk/cokernel/smp/x86_64",
+          "-I/src/ihk/ikc/include",
+          "-I/src/ihk/linux/include",
+          "-I/src/lib/include",
+          "-I/src/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "-include",
+          "/work/output/build/release-fp-regs-production/production-c-abi-assertions.h",
+          "-c",
+          "/src/arch/x86_64/kernel/cpu.c",
+          "-o",
+          "/work/output/build/release-fp-regs-production/fallback-cpu.o"
+        ],
+        "assertion_header_sha256": "50b83b93409a72f3c93a2675b42c39e0237f7e42d368c1b7e0bc35d5a5f1ad0d",
+        "cpu_source_sha256": "67dd7ea590ad9c1470ce34434770efa5e8cd7449b5f28d3b4ee5d3e0c96eb348",
+        "cwd": "/work/output/build/kernel",
+        "exit_code": 0,
+        "generated_rust_make_sha256": "6266a07d0a839c0175e5ca451678d69f78fe413f8a534348f5290f8133a58613",
+        "phase": "release-full-cpu-fallback"
+      },
+      {
+        "argv": [
+          "/usr/bin/cmake",
+          "-E",
+          "env",
+          "MAKEFLAGS=",
+          "MCKERNEL_RUST_VERSION=1.8.0",
+          "MCKERNEL_RUST_BUILDID=3114d9e",
+          "/nightly/bin/rustc",
+          "--crate-name",
+          "mckernel_rust",
+          "--crate-type",
+          "lib",
+          "--edition=2021",
+          "-C",
+          "panic=abort",
+          "-C",
+          "opt-level=2",
+          "-C",
+          "debuginfo=2",
+          "-C",
+          "code-model=large",
+          "-C",
+          "relocation-model=static",
+          "-C",
+          "no-redzone=yes",
+          "-C",
+          "force-frame-pointers=yes",
+          "-C",
+          "overflow-checks=off",
+          "-C",
+          "force-unwind-tables=no",
+          "-C",
+          "no-vectorize-loops",
+          "-C",
+          "no-vectorize-slp",
+          "-C",
+          "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+          "--cfg",
+          "native_linux_irq_work_v6_12",
+          "--cfg",
+          "enable_profile",
+          "--cfg",
+          "enable_perf",
+          "--cfg",
+          "enable_rusage",
+          "--emit=obj=/work/output/build/release-fp-regs-production/native-mckernel_rust.o",
+          "/src/kernel/rust/lib.rs"
+        ],
+        "assertion_header_sha256": "50b83b93409a72f3c93a2675b42c39e0237f7e42d368c1b7e0bc35d5a5f1ad0d",
+        "cpu_source_sha256": "67dd7ea590ad9c1470ce34434770efa5e8cd7449b5f28d3b4ee5d3e0c96eb348",
+        "cwd": "/work/output/build/kernel",
+        "exit_code": 0,
+        "generated_rust_make_sha256": "6266a07d0a839c0175e5ca451678d69f78fe413f8a534348f5290f8133a58613",
+        "phase": "release-full-crate-native"
+      },
+      {
+        "argv": [
+          "/usr/bin/cmake",
+          "-E",
+          "env",
+          "MAKEFLAGS=",
+          "MCKERNEL_RUST_VERSION=1.8.0",
+          "MCKERNEL_RUST_BUILDID=3114d9e",
+          "/nightly/bin/rustc",
+          "--crate-name",
+          "mckernel_rust",
+          "--crate-type",
+          "lib",
+          "--edition=2021",
+          "-C",
+          "panic=abort",
+          "-C",
+          "opt-level=2",
+          "-C",
+          "debuginfo=2",
+          "-C",
+          "code-model=large",
+          "-C",
+          "relocation-model=static",
+          "-C",
+          "no-redzone=yes",
+          "-C",
+          "force-frame-pointers=yes",
+          "-C",
+          "overflow-checks=off",
+          "-C",
+          "force-unwind-tables=no",
+          "-C",
+          "no-vectorize-loops",
+          "-C",
+          "no-vectorize-slp",
+          "-C",
+          "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+          "--cfg",
+          "enable_profile",
+          "--cfg",
+          "enable_perf",
+          "--cfg",
+          "enable_rusage",
+          "--emit=obj=/work/output/build/release-fp-regs-production/legacy-mckernel_rust.o",
+          "/src/kernel/rust/lib.rs"
+        ],
+        "assertion_header_sha256": "50b83b93409a72f3c93a2675b42c39e0237f7e42d368c1b7e0bc35d5a5f1ad0d",
+        "cpu_source_sha256": "67dd7ea590ad9c1470ce34434770efa5e8cd7449b5f28d3b4ee5d3e0c96eb348",
+        "cwd": "/work/output/build/kernel",
+        "exit_code": 0,
+        "generated_rust_make_sha256": "6266a07d0a839c0175e5ca451678d69f78fe413f8a534348f5290f8133a58613",
+        "phase": "release-full-crate-legacy"
+      },
+      {
+        "argv": [
+          "/usr/bin/cc",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-DMCKERNEL_RUST_PROCESS_HELPERS",
+          "-I/work/output/build/kernel/include",
+          "-I/src/kernel/include",
+          "-I/work/output/build/kernel",
+          "-I/work/output/build",
+          "-I/src/ihk/cokernel/smp/x86_64/include",
+          "-I/src/ihk/cokernel/smp/x86_64",
+          "-I/src/ihk/ikc/include",
+          "-I/src/ihk/linux/include",
+          "-I/src/lib/include",
+          "-I/src/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "-Werror=implicit-function-declaration",
+          "-c",
+          "/work/output/build/release-tid-production/production-process.c",
+          "-o",
+          "/work/output/build/release-tid-production/selected-process.o"
+        ],
+        "cwd": "/work/output/build/kernel",
+        "exit_code": 0,
+        "full_TU_fixture_sha256": "ec13ccfcc6f11085b317effcb0baddfa5db3de6ed5627e9865575594bafbaf4b",
+        "no_injected_release_prototype": true,
+        "phase": "release-tid-full-process-selected",
+        "source_sha256": "a400590c51d4badeca9af7f75fa2aaca2c15a7182020380fed79bdf9d007ac33"
+      },
+      {
+        "argv": [
+          "/usr/bin/cc",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-I/work/output/build/kernel/include",
+          "-I/src/kernel/include",
+          "-I/work/output/build/kernel",
+          "-I/work/output/build",
+          "-I/src/ihk/cokernel/smp/x86_64/include",
+          "-I/src/ihk/cokernel/smp/x86_64",
+          "-I/src/ihk/ikc/include",
+          "-I/src/ihk/linux/include",
+          "-I/src/lib/include",
+          "-I/src/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "-Werror=implicit-function-declaration",
+          "-c",
+          "/work/output/build/release-tid-production/production-process.c",
+          "-o",
+          "/work/output/build/release-tid-production/fallback-process.o"
+        ],
+        "cwd": "/work/output/build/kernel",
+        "exit_code": 0,
+        "full_TU_fixture_sha256": "ec13ccfcc6f11085b317effcb0baddfa5db3de6ed5627e9865575594bafbaf4b",
+        "no_injected_release_prototype": true,
+        "phase": "release-tid-full-process-fallback",
+        "source_sha256": "a400590c51d4badeca9af7f75fa2aaca2c15a7182020380fed79bdf9d007ac33"
+      },
+      {
+        "argv": [
+          "/usr/bin/cc",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_POLICY_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+          "-DMCKERNEL_RUST_SHMID_HELPERS",
+          "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+          "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+          "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+          "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+          "-I/work/output/build/kernel/include",
+          "-I/src/kernel/include",
+          "-I/work/output/build/kernel",
+          "-I/work/output/build",
+          "-I/src/ihk/cokernel/smp/x86_64/include",
+          "-I/src/ihk/cokernel/smp/x86_64",
+          "-I/src/ihk/ikc/include",
+          "-I/src/ihk/linux/include",
+          "-I/src/lib/include",
+          "-I/src/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "-iquote",
+          "/src/kernel",
+          "-Werror=implicit-function-declaration",
+          "-c",
+          "/work/output/build/clone-affinity-production/production-syscall.c",
+          "-o",
+          "/work/output/build/clone-affinity-production/selected-syscall.o"
+        ],
+        "cwd": "/work/output/build/kernel",
+        "exit_code": 0,
+        "generated_fixture_sha256": "ff50269a3dbd9f99d2bbfda2534a96438469c723681f907162ebbc359f70da9b",
+        "phase": "affinity-full-syscall-selected",
+        "syscall_source_sha256": "90732f8aac62d1221f56d9c56d059e597f82dbd7ac22f8f1ef531f074e90161c"
+      },
+      {
+        "argv": [
+          "/usr/bin/cc",
+          "-DIHK_IKC_USE_LINUX_WORK_IRQ",
+          "-DIHK_OS_MANYCORE",
+          "-DKERNEL_RAM_VADDR=0xfffffffffe800000",
+          "-DMAP_KERNEL_START=0xfffffffffe800000UL",
+          "-DMCKERNEL_NATIVE_CLONE3",
+          "-DMCKERNEL_NATIVE_CLONE_TID",
+          "-DMCKERNEL_NATIVE_FAULT_FIXUP",
+          "-DMCKERNEL_NATIVE_FUTEX",
+          "-DMCKERNEL_NATIVE_SIGNAL_STACK",
+          "-DMCKERNEL_RUST_ATOMIC_HELPERS",
+          "-DMCKERNEL_RUST_BITOPS",
+          "-DMCKERNEL_RUST_LIST_HELPERS",
+          "-DMCKERNEL_RUST_LOCK_HELPERS",
+          "-DMCKERNEL_RUST_MCS_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_MC_RWLOCK_HELPERS",
+          "-DMCKERNEL_RUST_PTE_HELPERS",
+          "-DMCKERNEL_RUST_REFCOUNT_HELPERS",
+          "-DMCKERNEL_RUST_SPINLOCK_HELPERS",
+          "-DPROFILE_ENABLE",
+          "-D__KERNEL__",
+          "-DMCKERNEL_RUST_RLIMIT_HELPERS",
+          "-DMCKERNEL_RUST_SCHED_PRIO_HELPERS",
+          "-DMCKERNEL_RUST_SHMID_HELPERS",
+          "-DMCKERNEL_RUST_SHM_PERM_HELPERS",
+          "-DMCKERNEL_RUST_SIGNAL_HELPERS",
+          "-DMCKERNEL_RUST_SYSCALL_OFFLOAD",
+          "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+          "-I/work/output/build/kernel/include",
+          "-I/src/kernel/include",
+          "-I/work/output/build/kernel",
+          "-I/work/output/build",
+          "-I/src/ihk/cokernel/smp/x86_64/include",
+          "-I/src/ihk/cokernel/smp/x86_64",
+          "-I/src/ihk/ikc/include",
+          "-I/src/ihk/linux/include",
+          "-I/src/lib/include",
+          "-I/src/arch/x86_64/kernel/include",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wno-sign-compare",
+          "-Wno-unused-function",
+          "-Wno-implicit-fallthrough",
+          "-Wno-stringop-truncation",
+          "-ffreestanding",
+          "-O2",
+          "-nostdinc",
+          "-isystem",
+          "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+          "-fno-omit-frame-pointer",
+          "-mcmodel=large",
+          "-mno-red-zone",
+          "-mno-sse",
+          "-iquote",
+          "/src/kernel",
+          "-Werror=implicit-function-declaration",
+          "-c",
+          "/work/output/build/clone-affinity-production/production-syscall.c",
+          "-o",
+          "/work/output/build/clone-affinity-production/fallback-syscall.o"
+        ],
+        "cwd": "/work/output/build/kernel",
+        "exit_code": 0,
+        "generated_fixture_sha256": "ff50269a3dbd9f99d2bbfda2534a96438469c723681f907162ebbc359f70da9b",
+        "phase": "affinity-full-syscall-fallback",
+        "syscall_source_sha256": "90732f8aac62d1221f56d9c56d059e597f82dbd7ac22f8f1ef531f074e90161c"
+      },
+      {
+        "argv": [
+          "/usr/bin/cmake",
+          "-E",
+          "env",
+          "MAKEFLAGS=",
+          "MCKERNEL_RUST_VERSION=1.8.0",
+          "MCKERNEL_RUST_BUILDID=3114d9e",
+          "/nightly/bin/rustc",
+          "--crate-name",
+          "mckernel_rust",
+          "--crate-type",
+          "lib",
+          "--edition=2021",
+          "-C",
+          "panic=abort",
+          "-C",
+          "opt-level=2",
+          "-C",
+          "debuginfo=2",
+          "-C",
+          "code-model=large",
+          "-C",
+          "relocation-model=static",
+          "-C",
+          "no-redzone=yes",
+          "-C",
+          "force-frame-pointers=yes",
+          "-C",
+          "overflow-checks=off",
+          "-C",
+          "force-unwind-tables=no",
+          "-C",
+          "no-vectorize-loops",
+          "-C",
+          "no-vectorize-slp",
+          "-C",
+          "target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma",
+          "--cfg",
+          "native_linux_irq_work_v6_12",
+          "--cfg",
+          "enable_profile",
+          "--cfg",
+          "enable_perf",
+          "--cfg",
+          "enable_rusage",
+          "--emit=obj=/work/output/build/clone-affinity-production/actual-rust-layout.o",
+          "/work/output/build/clone-affinity-production/actual-affinity-layout.rs"
+        ],
+        "cwd": "/work/output/build/kernel",
+        "exit_code": 0,
+        "generated_fixture_sha256": "ff50269a3dbd9f99d2bbfda2534a96438469c723681f907162ebbc359f70da9b",
+        "phase": "affinity-actual-Rust-layout",
+        "syscall_source_sha256": "90732f8aac62d1221f56d9c56d059e597f82dbd7ac22f8f1ef531f074e90161c"
+      },
+      {
+        "argv": [
+          "/usr/bin/objcopy",
+          "--dump-section",
+          ".mckernel_affinity_abi=/work/output/build/clone-affinity-production/selected-syscall.bin",
+          "/work/output/build/clone-affinity-production/selected-syscall.o",
+          "/dev/null"
+        ],
+        "cwd": "/work/output/build/clone-affinity-production",
+        "exit_code": 0,
+        "generated_fixture_sha256": "ff50269a3dbd9f99d2bbfda2534a96438469c723681f907162ebbc359f70da9b",
+        "phase": "affinity-layout-capture-selected-syscall",
+        "syscall_source_sha256": "90732f8aac62d1221f56d9c56d059e597f82dbd7ac22f8f1ef531f074e90161c"
+      },
+      {
+        "argv": [
+          "/usr/bin/objcopy",
+          "--dump-section",
+          ".mckernel_affinity_abi=/work/output/build/clone-affinity-production/fallback-syscall.bin",
+          "/work/output/build/clone-affinity-production/fallback-syscall.o",
+          "/dev/null"
+        ],
+        "cwd": "/work/output/build/clone-affinity-production",
+        "exit_code": 0,
+        "generated_fixture_sha256": "ff50269a3dbd9f99d2bbfda2534a96438469c723681f907162ebbc359f70da9b",
+        "phase": "affinity-layout-capture-fallback-syscall",
+        "syscall_source_sha256": "90732f8aac62d1221f56d9c56d059e597f82dbd7ac22f8f1ef531f074e90161c"
+      },
+      {
+        "argv": [
+          "/usr/bin/objcopy",
+          "--dump-section",
+          ".mckernel_affinity_abi=/work/output/build/clone-affinity-production/actual-rust-layout.bin",
+          "/work/output/build/clone-affinity-production/actual-rust-layout.o",
+          "/dev/null"
+        ],
+        "cwd": "/work/output/build/clone-affinity-production",
+        "exit_code": 0,
+        "generated_fixture_sha256": "ff50269a3dbd9f99d2bbfda2534a96438469c723681f907162ebbc359f70da9b",
+        "phase": "affinity-layout-capture-actual-rust-layout",
+        "syscall_source_sha256": "90732f8aac62d1221f56d9c56d059e597f82dbd7ac22f8f1ef531f074e90161c"
+      },
+      {
+        "argv": [
+          "/usr/bin/cmake",
+          "--build",
+          "/work/output/build",
+          "--target",
+          "mckernel.img",
+          "-j4"
+        ],
+        "cwd": "/src",
+        "env_sha256": "32b2734ac7207c8317d8e807903d112334910a72acacd31d684b2d4cbcdb46e9",
+        "exit_code": 0,
+        "phase": "build"
+      }
+    ],
+    "original_outer_command": {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/affinity-full-syscall-include-correction-1/fresh-full-attempt-1/heavy-proposal-1/dispatch-image-once-corrected.py",
+        "a9786aee7697738c0f10f9d482f4571a648180e9d454e328671eef3aae0868f1"
+      ],
+      "each_stream_cap_bytes": 33554432,
+      "release_sha256": "a9786aee7697738c0f10f9d482f4571a648180e9d454e328671eef3aae0868f1",
+      "review": {
+        "path": "/home/holden/mckernel-work/host-preparation/fresh-full-metadata-independent-review-20261019-1/FINAL-HEAVY-EXECUTION-REVIEW.json",
+        "sha256": "53bd51497864e4fd9b7bcc5e0f855d8adfd73997e4656ab555d8fe71f1d8ca43"
+      }
+    },
+    "environment_sha256": "32b2734ac7207c8317d8e807903d112334910a72acacd31d684b2d4cbcdb46e9",
+    "fixture_generation": "Use the exact request-pinned image driver; it generates the ABI/layout fixtures in the receipt. The 16 command argv rows alone are not a replacement for driver setup."
+  },
+  "matched_module_build": {
+    "artifact_review": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-independent-review-20261019-1/CURRENT-HOST-PAIR-ACTUAL-THREE-MODULE-ARTIFACT-REVIEW.json",
+      "sha256": "b9ea18d03dde21fc3b6f958647358081d9a5f249779b10628e9361f4926e5005",
+      "bytes": 40051
+    },
+    "request": {
+      "bytes": 2305,
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/request.json",
+      "sha256": "2ba04a12cc0fb051d848d3cd1fe8048bee936574a1482b05e65b7d477969cf02"
+    },
+    "image_id": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+    "driver": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-rust-pair-sdk-20261019-1/capsule/scripts/native_running_external_modules_offline.py",
+      "sha256": "ad6c09af765ca347c5a18edac943afd2178f9baf0099e94096dbfba69c8f453f"
+    },
+    "source_provenance": {
+      "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+      "closure_hash_encoding": "SHA256 of UTF-8 JSON relative-path-to-SHA256 map, sorted keys, separators comma/colon",
+      "closure_sha256": "f7183ef9cd8aa032dede3822357219c811664ba2d365e0c0f9486b90a90c3970",
+      "compatibility_build_id": {
+        "meaning": "Retained baseline ABI compatibility blob; not proof of unchanged compiled source",
+        "path": "ihk-compat-build-id.bin",
+        "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0"
+      },
+      "excluded_working_tree": "Every unreviewed working-tree file excluded; retained accepted60 closure plus reviewed kmsg reader and mailbox failed-invalidation ownership pair included",
+      "reviewed_deltas": [
+        {
+          "baseline_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+          "path": "ihk_smp_x86_64.rs",
+          "source_candidate_sha256": "5b12bf77664095c966245ac8a1312a41c2fc16dd4a8233abd9e6c602305ecd6d"
+        },
+        {
+          "baseline_sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+          "path": "os_runtime.rs",
+          "source_candidate_sha256": "6b736f94751c21a6b745f0476484d516c0de536c1cc2f4e1717eb899bf8be5e7"
+        },
+        {
+          "baseline_sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+          "path": "smp_application.rs",
+          "source_candidate_sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2"
+        },
+        {
+          "baseline_sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55",
+          "path": "smp_application_syscall.rs",
+          "source_candidate_sha256": "33e7b92712ca90fdc2b88cff234ad2a981f3538fbd38fc705dfc2cde937a7378"
+        },
+        {
+          "baseline_sha256": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb",
+          "path": "smp_cpu.rs",
+          "source_candidate_sha256": "356853344bffaa5b3d625c97eb3928b8908d45abbc94d16902e19bdef45ea90c"
+        },
+        {
+          "baseline_sha256": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+          "path": "smp_file_pager.rs",
+          "source_candidate_sha256": "655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c"
+        },
+        {
+          "baseline_sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+          "path": "smp_memory.rs",
+          "source_candidate_sha256": "8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525"
+        },
+        {
+          "baseline_sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+          "path": "smp_procfs.rs",
+          "source_candidate_sha256": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea"
+        },
+        {
+          "baseline_sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+          "path": "smp_service.rs",
+          "source_candidate_sha256": "cd97c1528602323c43aaf70f528342fc3874fe9da1660cf1a767d27284cb5b5a"
+        },
+        {
+          "baseline_sha256": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81",
+          "path": "sysfs_memory.rs",
+          "source_candidate_sha256": "d64efe15ff3545e6f21733cdc6dcbf026df370049484a7221a653d502612bfc1"
+        },
+        {
+          "baseline_sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+          "path": "sysfs_remote.rs",
+          "source_candidate_sha256": "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9"
+        }
+      ],
+      "source_candidate_sha": "257ba169b58eebd066281020999ec760bfc2f4e0"
+    },
+    "actual_make_request": {
+      "argv": [
+        "/usr/bin/env",
+        "-i",
+        "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+        "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+        "KBUILD_BUILD_USER=mckernel",
+        "KBUILD_BUILD_VERSION=1",
+        "SOURCE_DATE_EPOCH=1786434034",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "TZ=UTC",
+        "BASH_ENV=",
+        "ENV=",
+        "GNUMAKEFLAGS=",
+        "MAKEFILES=",
+        "MAKEFLAGS=",
+        "MAKEOVERRIDES=",
+        "MFLAGS=",
+        "LD_LIBRARY_PATH=",
+        "LD_PRELOAD=",
+        "HOME=/candidate/home",
+        "TMPDIR=/candidate/tmp",
+        "/usr/bin/make",
+        "-C",
+        "/out/source/linux-6.12.0-211.44.1.el10_2",
+        "O=/out/build",
+        "M=/candidate/modules",
+        "ARCH=x86_64",
+        "LLVM=1",
+        "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+        "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+        "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+        "KBUILD_BUILD_USER=mckernel",
+        "KBUILD_BUILD_VERSION=1",
+        "SOURCE_DATE_EPOCH=1786434034",
+        "--jobserver-style=pipe",
+        "-j2",
+        "modules"
+      ],
+      "cwd": "/out/build",
+      "environment": {
+        "BASH_ENV": "",
+        "ENV": "",
+        "GNUMAKEFLAGS": "",
+        "HOME": "/candidate/home",
+        "KBUILD_BUILD_HOST": "rocky-10.2-x86_64",
+        "KBUILD_BUILD_TIMESTAMP": "Tue, 11 Aug 2026 07:40:34 +0000",
+        "KBUILD_BUILD_USER": "mckernel",
+        "KBUILD_BUILD_VERSION": "1",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "LD_LIBRARY_PATH": "",
+        "LD_PRELOAD": "",
+        "MAKEFILES": "",
+        "MAKEFLAGS": "",
+        "MAKEOVERRIDES": "",
+        "MFLAGS": "",
+        "PATH": "/usr/bin:/bin",
+        "SOURCE_DATE_EPOCH": "1786434034",
+        "TMPDIR": "/candidate/tmp",
+        "TZ": "UTC"
+      },
+      "timeout_seconds": 1800,
+      "read_only_mounts": [
+        "/out",
+        "/inputs"
+      ],
+      "writable_mounts": [
+        "/candidate"
+      ],
+      "all_three_modules_required": [
+        "ihk",
+        "ihk-smp-x86_64",
+        "mcctrl"
+      ],
+      "application_acceptance": false,
+      "execution_release": false,
+      "source_provenance": {
+        "baseline_source_sha": "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+        "source_candidate_sha": "257ba169b58eebd066281020999ec760bfc2f4e0",
+        "closure_sha256": "f7183ef9cd8aa032dede3822357219c811664ba2d365e0c0f9486b90a90c3970",
+        "closure_hash_encoding": "SHA256 of UTF-8 JSON relative-path-to-SHA256 map, sorted keys, separators comma/colon",
+        "reviewed_deltas": [
+          {
+            "path": "ihk_smp_x86_64.rs",
+            "baseline_sha256": "a353b2915a4038e7739d01cc440376daf091367f976cf6de297bceb1dd59fce8",
+            "source_candidate_sha256": "5b12bf77664095c966245ac8a1312a41c2fc16dd4a8233abd9e6c602305ecd6d"
+          },
+          {
+            "path": "os_runtime.rs",
+            "baseline_sha256": "9519b7f35f5d28c88cdf366fe5c67a244ea005db713690a3686afe8c2a60fcab",
+            "source_candidate_sha256": "6b736f94751c21a6b745f0476484d516c0de536c1cc2f4e1717eb899bf8be5e7"
+          },
+          {
+            "path": "smp_application.rs",
+            "baseline_sha256": "6b37a71ba79bf5746fd72123b82ebe5afc71c809310a2a942cea08a3d66cf5e8",
+            "source_candidate_sha256": "127829f3dd35b3d44c2b098279b7439dccb31a53508055e3cdd1fd9e450682e2"
+          },
+          {
+            "path": "smp_application_syscall.rs",
+            "baseline_sha256": "4118de1401f33b2df17393660e6acbce2f337dca8a9cdfcf10965b1d3dc84c55",
+            "source_candidate_sha256": "33e7b92712ca90fdc2b88cff234ad2a981f3538fbd38fc705dfc2cde937a7378"
+          },
+          {
+            "path": "smp_cpu.rs",
+            "baseline_sha256": "ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb",
+            "source_candidate_sha256": "356853344bffaa5b3d625c97eb3928b8908d45abbc94d16902e19bdef45ea90c"
+          },
+          {
+            "path": "smp_file_pager.rs",
+            "baseline_sha256": "9876f1b374ecfb44fba09395aa9fca1ed840619488f9b4f8cde38a6693004cd9",
+            "source_candidate_sha256": "655c029bcddf937b6445ee01d076978ff9606832d60fd038e07076bee939e96c"
+          },
+          {
+            "path": "smp_memory.rs",
+            "baseline_sha256": "db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522",
+            "source_candidate_sha256": "8785b1be4dffe2ef24bc54dc8f861c290418ce13773d46177692c709d69fb525"
+          },
+          {
+            "path": "smp_procfs.rs",
+            "baseline_sha256": "7aba4319fdc6fa76761ca01128c7a7d920c4be85244737167122c914fc1268d5",
+            "source_candidate_sha256": "4ae39992d0354b2f0b32de4a3e26ce8a621ede6dff69dd92ce303d4ab90232ea"
+          },
+          {
+            "path": "smp_service.rs",
+            "baseline_sha256": "bd0a109fe6c402e21b702b0fa96d99c2d9edbd5179877aa61f9f27bd595fe0e4",
+            "source_candidate_sha256": "cd97c1528602323c43aaf70f528342fc3874fe9da1660cf1a767d27284cb5b5a"
+          },
+          {
+            "path": "sysfs_memory.rs",
+            "baseline_sha256": "c4bb558432a85c565977a7820d42eaf06530398d7fe9b916bf58f6741ca78d81",
+            "source_candidate_sha256": "d64efe15ff3545e6f21733cdc6dcbf026df370049484a7221a653d502612bfc1"
+          },
+          {
+            "path": "sysfs_remote.rs",
+            "baseline_sha256": "8a33f152307d66f7c205fe7557da1a4e02e5d230335dd9b36f16797e11db53ee",
+            "source_candidate_sha256": "fe4ec42333148770a36843a82f0c4cdf675a27065dbed1f13449a2b61472dfa9"
+          }
+        ],
+        "compatibility_build_id": {
+          "path": "ihk-compat-build-id.bin",
+          "sha256": "6836dd3f0fd3d273816c58b067eeea1b53a2a7ab760c68e3d918eb14e80c38f0",
+          "meaning": "Retained baseline ABI compatibility blob; not proof of unchanged compiled source"
+        },
+        "excluded_working_tree": "Every unreviewed working-tree file excluded; retained accepted60 closure plus reviewed kmsg reader and mailbox failed-invalidation ownership pair included"
+      }
+    },
+    "source_closure_count": 60
+  },
+  "run": {
+    "recipe": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/current-host-pair-205-native-20261019-1/usable-profile-1/USABLE-TESTED-PROFILE-RECIPE.json",
+      "sha256": "8fbd21f08080fc450391462c7e60dbbfaa2c5c24b5df16a2b615513cd8c4e4b5",
+      "bytes": 9460
+    },
+    "historical_actual_owner_argv": [
+      "/usr/bin/sudo",
+      "-A",
+      "/home/holden/anaconda3/bin/python3",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/native_diagnostic_container_owner.py",
+      "--attempt-parent",
+      "/home/holden/mckernel-work/scratch/cp205p-261019-1/p",
+      "--nonce",
+      "645f24de220946959adc1bed7c658493",
+      "--owner-sha256",
+      "5ab04f3bb41b21d52f3f567169c519a0837419fa12f9ec2897f1b1b116f8860a",
+      "--manifest",
+      "/home/holden/mckernel-work/scratch/cp205m-261019-1/manifest.json",
+      "--manifest-sha256",
+      "4aa72c2a5a759bda71c4a0e8e33499068261346113ec2c9fd19d4669b3f8e41d"
+    ],
+    "fixed_owner_and_manifest_slots": {
+      "--manifest": "/home/holden/mckernel-work/scratch/cp205m-261019-1/manifest.json",
+      "--manifest-sha256": "4aa72c2a5a759bda71c4a0e8e33499068261346113ec2c9fd19d4669b3f8e41d",
+      "--owner-sha256": "5ab04f3bb41b21d52f3f567169c519a0837419fa12f9ec2897f1b1b116f8860a"
+    },
+    "fresh_parameter_slots": {
+      "--attempt-parent": "FRESH_ADMITTED_EMPTY_PARENT",
+      "--nonce": "FRESH_ADMITTED_NONCE_HEX32"
+    },
+    "runtime_sources": [
+      {
+        "bytes": 66233,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/native_diagnostic_container_owner.py",
+        "sha256": "5ab04f3bb41b21d52f3f567169c519a0837419fa12f9ec2897f1b1b116f8860a"
+      },
+      {
+        "bytes": 6005,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/native_diagnostic_runner.py",
+        "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499"
+      },
+      {
+        "bytes": 70246,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/native_diagnostic.py",
+        "sha256": "8d29c650b74285d9d22435391059dfca7ae7605d0c1158a2a9cb850bd3aa0e20"
+      },
+      {
+        "bytes": 25398,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/native_diagnostic_backend.py",
+        "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614"
+      },
+      {
+        "bytes": 9913,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/qmp_capture.py",
+        "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+      },
+      {
+        "bytes": 24863,
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/repaired_image_authority.py",
+        "sha256": "e375bd0eadf5ea8fa8ef6621603a8617b45bbce965a74f10e08b3cd7256b6f2e"
+      }
+    ],
+    "reuse_procedure": [
+      "Keep this exact image, all three matching module descriptors, apps, oracles, strict diagnostic and owner/runner source hashes. No compiler or archive stage replay is required.",
+      "Use the existing accepted owner/runner API with a NEW empty private parent and NEW nonce. The recorded owner argv and machine release are consumed history and must never be replayed.",
+      "Complete actual owner/runner/full-parent/expanded AF_UNIX metadata preflight for that fresh geometry before the clock.",
+      "Bind the actual latest physical predecessor separately from component b9/5d; take a genuine fresh <=60s snapshot only after static caller/capture closure and independent release/admission.",
+      "Use the existing seven-step direct-owner capture route; guard.allowed_argv is owner exactly with no added outer kill/CPU/AS cap. Only after positive owner retirement run the three bounded readbacks, excluding qmp.sock from attempt tar.",
+      "Keep observed raw streams, PIDs/start identities, status and app result, and obtain independent semantic and physical disposition before reuse."
+    ],
+    "actual_root_index": {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/FINAL-SEVEN-ROOT-CALL-DATA.json",
+      "sha256": "5660ee2b5bc07392c2120607a580563432cb726d10eb3fe823dd7159af9a06ad",
+      "bytes": 46145
+    },
+    "ordered_steps": [
+      {
+        "name": "LAST-snapshot",
+        "historical_command_data_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/actual-command-data/00-LAST-snapshot.json",
+        "historical_command_data": {
+          "operations": [
+            {
+              "argv_template": [],
+              "profile": "snapshot",
+              "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+            },
+            {
+              "argv_template": [
+                "/usr/bin/sudo",
+                "-A",
+                "/usr/bin/timeout",
+                "--signal=TERM",
+                "--kill-after=2s",
+                "35s",
+                "/usr/bin/taskset",
+                "-c",
+                "6",
+                "/usr/bin/prlimit",
+                "--as=1073741824",
+                "--cpu=30",
+                "--core=0",
+                "--nofile=256",
+                "--fsize=33554432",
+                "--",
+                "/home/holden/anaconda3/bin/python3",
+                "-I",
+                "-B",
+                "-c",
+                "import hashlib,importlib.util,pathlib\np=pathlib.Path('/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/root_manual_snapshot_current_parent_sdk.py');raw=p.read_bytes();assert hashlib.sha256(raw).hexdigest()=='926c8437a415ff6d8d1bf1dac4aa74ceee082e6c2f9ae4ed7dc99107f7762132'\nspec=importlib.util.spec_from_file_location('actual_n3_sdk_fresh_snapshot2',p);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nmodule.OUTPUT=pathlib.Path('/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/root-live-preflight-2.json')\nraise SystemExit(module.main())\n",
+                "--bindings-sha256",
+                "37fa988add4ed7d1c1c8a2a6e9bb8c647db7eae532732006211179415a7d7a5d",
+                "--terminal",
+                "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-independent-review-20261019-1/CURRENT-PARENT-PIN-SDK-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+                "--terminal-sha256",
+                "2adfe7694a66bee99e8d4eba3b9c6842fcc9bafe21de8a7b9284e9c4b13e7304"
+              ],
+              "profile": "snapshot",
+              "role": "LAST-snapshot",
+              "status_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/00-LAST-snapshot/status.json",
+              "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/00-LAST-snapshot/stderr",
+              "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/00-LAST-snapshot/stdout"
+            }
+          ],
+          "profiles": {
+            "metadata": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 40,
+              "stream_fsize": 33554432
+            },
+            "native": {
+              "cpu": 7,
+              "parent_kill_grace_seconds": null,
+              "parent_wall_seconds": null,
+              "stream_fsize": 33554432
+            },
+            "reader": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 35,
+              "stream_fsize": 33554432
+            },
+            "snapshot": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 40,
+              "stream_fsize": 33554432
+            }
+          },
+          "release": {
+            "bytes": 5433,
+            "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json",
+            "sha256": "d9c02604d05b67259552dd976fcef430c3bf5b16d74323ee36dd3c0f78201df3"
+          },
+          "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json"
+        },
+        "argv_template": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/timeout",
+          "--signal=TERM",
+          "--kill-after=2s",
+          "35s",
+          "/usr/bin/taskset",
+          "-c",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=30",
+          "--core=0",
+          "--nofile=256",
+          "--fsize=33554432",
+          "--",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "-c",
+          "import hashlib,importlib.util,pathlib\np=pathlib.Path('/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/root_manual_snapshot_current_parent_sdk.py');raw=p.read_bytes();assert hashlib.sha256(raw).hexdigest()=='926c8437a415ff6d8d1bf1dac4aa74ceee082e6c2f9ae4ed7dc99107f7762132'\nspec=importlib.util.spec_from_file_location('actual_n3_sdk_fresh_snapshot2',p);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nmodule.OUTPUT=pathlib.Path('/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/root-live-preflight-2.json')\nraise SystemExit(module.main())\n",
+          "--bindings-sha256",
+          "37fa988add4ed7d1c1c8a2a6e9bb8c647db7eae532732006211179415a7d7a5d",
+          "--terminal",
+          "/home/holden/mckernel-work/host-preparation/current-parent-pin-sdk-independent-review-20261019-1/CURRENT-PARENT-PIN-SDK-ACTUAL-PHYSICAL-RETIREMENT-REVIEW.json",
+          "--terminal-sha256",
+          "2adfe7694a66bee99e8d4eba3b9c6842fcc9bafe21de8a7b9284e9c4b13e7304"
+        ],
+        "caller_argv_template": [
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/source-generation-final-1/root-run-exact-readonly-stage.py",
+          "--commands-file",
+          "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/actual-command-data/00-LAST-snapshot.json",
+          "--commands-sha256",
+          null,
+          "--index",
+          "1"
+        ],
+        "late_argument_substitutions": {},
+        "profile": {
+          "cpu": 6,
+          "parent_kill_grace_seconds": 2,
+          "parent_wall_seconds": 40,
+          "stream_fsize": 33554432
+        },
+        "success_conditions": "direct0/groupabsent/noobservererror/closedstdoutstderr/emptychildstderr; failstop preserve all",
+        "outer_native_kill_forbidden": false
+      },
+      {
+        "name": "machine-assembly",
+        "historical_command_data_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/actual-command-data/01-machine-assembly.json",
+        "historical_command_data": {
+          "operations": [
+            {
+              "argv_template": [],
+              "profile": "metadata",
+              "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+            },
+            {
+              "argv_template": [
+                "/usr/bin/taskset",
+                "--cpu-list",
+                "6",
+                "/usr/bin/prlimit",
+                "--as=1073741824",
+                "--cpu=30",
+                "--fsize=33554432",
+                "--core=0",
+                "--nofile=256",
+                "/usr/bin/timeout",
+                "--signal=TERM",
+                "--kill-after=2s",
+                "35s",
+                "/home/holden/anaconda3/bin/python3",
+                "-I",
+                "-B",
+                "-c",
+                "import pathlib,json,hashlib,time,sys\nV=pathlib.Path('/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant');B=pathlib.Path('/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1')\nbasebytes=(B/'machine-base.json').read_bytes();assert hashlib.sha256(basebytes).hexdigest()==sys.argv[1];base=json.loads(basebytes)\nsnapshotbytes=(V/'root-live-preflight-2.json').read_bytes();assert hashlib.sha256(snapshotbytes).hexdigest()==sys.argv[2];snapshot=json.loads(snapshotbytes)\nassert snapshot['status']=='PASS_LIVE_PREEXECUTION_SNAPSHOT' and 0<=time.time()-snapshot['time_epoch']<=60 and snapshot['parent_identity']==base['parent_identity']\nassert base['execution_count']==1 and base['runtime_release'] is False and base['fresh_live_preflight'] is None\nassert base['terminal_cleanup_and_common_shared_release']['status']=='PASS' and snapshot['terminal_acceptance']=={k:base['exclusive_queue_predecessor'][k] for k in ['path','sha256']}\nbase.update(status='PASS_EXECUTION_RELEASE',runtime_release=True,fresh_live_preflight={'path':str(V/'root-live-preflight-2.json'),'sha256':sys.argv[2],'bytes':len(snapshotbytes)})\nraw=(json.dumps(base,indent=2)+'\\n').encode()\nwith (B/'execution-release.json').open('xb') as f:f.write(raw)\nprint(json.dumps({'path':str(B/'execution-release.json'),'sha256':hashlib.sha256(raw).hexdigest(),'bytes':len(raw)}),flush=True)\n",
+                "03578183e2cdf32b97eb20f528cc3ca23daeec877567b6914c3856b2bf33d68f",
+                "28d3bc25158f874a778216c2bdc7161ff800328bfc128fd2c09090956b6e4893"
+              ],
+              "profile": "metadata",
+              "role": "machine-assembly",
+              "status_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/01-machine-assembly/status.json",
+              "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/01-machine-assembly/stderr",
+              "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/01-machine-assembly/stdout"
+            }
+          ],
+          "profiles": {
+            "metadata": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 40,
+              "stream_fsize": 33554432
+            },
+            "native": {
+              "cpu": 7,
+              "parent_kill_grace_seconds": null,
+              "parent_wall_seconds": null,
+              "stream_fsize": 33554432
+            },
+            "reader": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 35,
+              "stream_fsize": 33554432
+            },
+            "snapshot": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 40,
+              "stream_fsize": 33554432
+            }
+          },
+          "release": {
+            "bytes": 5433,
+            "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json",
+            "sha256": "d9c02604d05b67259552dd976fcef430c3bf5b16d74323ee36dd3c0f78201df3"
+          },
+          "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json"
+        },
+        "argv_template": [
+          "/usr/bin/taskset",
+          "--cpu-list",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=30",
+          "--fsize=33554432",
+          "--core=0",
+          "--nofile=256",
+          "/usr/bin/timeout",
+          "--signal=TERM",
+          "--kill-after=2s",
+          "35s",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "-c",
+          "import pathlib,json,hashlib,time,sys\nV=pathlib.Path('/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant');B=pathlib.Path('/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1')\nbasebytes=(B/'machine-base.json').read_bytes();assert hashlib.sha256(basebytes).hexdigest()==sys.argv[1];base=json.loads(basebytes)\nsnapshotbytes=(V/'root-live-preflight-2.json').read_bytes();assert hashlib.sha256(snapshotbytes).hexdigest()==sys.argv[2];snapshot=json.loads(snapshotbytes)\nassert snapshot['status']=='PASS_LIVE_PREEXECUTION_SNAPSHOT' and 0<=time.time()-snapshot['time_epoch']<=60 and snapshot['parent_identity']==base['parent_identity']\nassert base['execution_count']==1 and base['runtime_release'] is False and base['fresh_live_preflight'] is None\nassert base['terminal_cleanup_and_common_shared_release']['status']=='PASS' and snapshot['terminal_acceptance']=={k:base['exclusive_queue_predecessor'][k] for k in ['path','sha256']}\nbase.update(status='PASS_EXECUTION_RELEASE',runtime_release=True,fresh_live_preflight={'path':str(V/'root-live-preflight-2.json'),'sha256':sys.argv[2],'bytes':len(snapshotbytes)})\nraw=(json.dumps(base,indent=2)+'\\n').encode()\nwith (B/'execution-release.json').open('xb') as f:f.write(raw)\nprint(json.dumps({'path':str(B/'execution-release.json'),'sha256':hashlib.sha256(raw).hexdigest(),'bytes':len(raw)}),flush=True)\n",
+          "03578183e2cdf32b97eb20f528cc3ca23daeec877567b6914c3856b2bf33d68f",
+          null
+        ],
+        "caller_argv_template": [
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/source-generation-final-1/root-run-exact-readonly-stage.py",
+          "--commands-file",
+          "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/actual-command-data/01-machine-assembly.json",
+          "--commands-sha256",
+          null,
+          "--index",
+          "1"
+        ],
+        "late_argument_substitutions": {
+          "last_argument": "json.loads(CLOSED snapshot stdout bytes)['sha256']; verify actual OUTPUT2 bytes SHA equals this value; NEVER capture.streams.stdout.sha256"
+        },
+        "profile": {
+          "cpu": 6,
+          "parent_kill_grace_seconds": 2,
+          "parent_wall_seconds": 40,
+          "stream_fsize": 33554432
+        },
+        "success_conditions": "direct0/groupabsent/noobservererror/closedstdoutstderr/emptychildstderr; failstop preserve all",
+        "outer_native_kill_forbidden": false
+      },
+      {
+        "name": "final-guard",
+        "historical_command_data_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/actual-command-data/02-final-guard.json",
+        "historical_command_data": {
+          "operations": [
+            {
+              "argv_template": [],
+              "profile": "metadata",
+              "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+            },
+            {
+              "argv_template": [
+                "/usr/bin/taskset",
+                "--cpu-list",
+                "6",
+                "/usr/bin/prlimit",
+                "--as=1073741824",
+                "--cpu=30",
+                "--fsize=33554432",
+                "--core=0",
+                "--nofile=256",
+                "/usr/bin/timeout",
+                "--signal=TERM",
+                "--kill-after=2s",
+                "35s",
+                "/home/holden/anaconda3/bin/python3",
+                "-I",
+                "-B",
+                "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/fresh2/review_final_205_release.py",
+                "--config-sha256",
+                "982d9da0a5b2cff140b0bf544037d8ae8b676611d53411050fc6b60a432d0621",
+                "--machine-sha256",
+                "f62d48ae7679a5e12d175c57cca82339492877ab4b11e1d7cc29e80875c2c587",
+                "--snapshot-sha256",
+                "28d3bc25158f874a778216c2bdc7161ff800328bfc128fd2c09090956b6e4893"
+              ],
+              "profile": "metadata",
+              "role": "final-guard",
+              "status_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/02-final-guard/status.json",
+              "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/02-final-guard/stderr",
+              "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/02-final-guard/stdout"
+            }
+          ],
+          "profiles": {
+            "metadata": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 40,
+              "stream_fsize": 33554432
+            },
+            "native": {
+              "cpu": 7,
+              "parent_kill_grace_seconds": null,
+              "parent_wall_seconds": null,
+              "stream_fsize": 33554432
+            },
+            "reader": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 35,
+              "stream_fsize": 33554432
+            },
+            "snapshot": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 40,
+              "stream_fsize": 33554432
+            }
+          },
+          "release": {
+            "bytes": 5433,
+            "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json",
+            "sha256": "d9c02604d05b67259552dd976fcef430c3bf5b16d74323ee36dd3c0f78201df3"
+          },
+          "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json"
+        },
+        "argv_template": [
+          "/usr/bin/taskset",
+          "--cpu-list",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=30",
+          "--fsize=33554432",
+          "--core=0",
+          "--nofile=256",
+          "/usr/bin/timeout",
+          "--signal=TERM",
+          "--kill-after=2s",
+          "35s",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/fresh2/review_final_205_release.py",
+          "--config-sha256",
+          "982d9da0a5b2cff140b0bf544037d8ae8b676611d53411050fc6b60a432d0621",
+          "--machine-sha256",
+          null,
+          "--snapshot-sha256",
+          null
+        ],
+        "caller_argv_template": [
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/source-generation-final-1/root-run-exact-readonly-stage.py",
+          "--commands-file",
+          "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/actual-command-data/02-final-guard.json",
+          "--commands-sha256",
+          null,
+          "--index",
+          "1"
+        ],
+        "late_argument_substitutions": {
+          "--machine-sha256": "json.loads(CLOSED assembly stdout bytes)['sha256']; verify actual execution-release bytes SHA",
+          "--snapshot-sha256": "json.loads(CLOSED snapshot stdout bytes)['sha256']; never captured stream hash"
+        },
+        "profile": {
+          "cpu": 6,
+          "parent_kill_grace_seconds": 2,
+          "parent_wall_seconds": 40,
+          "stream_fsize": 33554432
+        },
+        "success_conditions": "direct0/groupabsent/noobservererror/closedstdoutstderr/emptychildstderr; failstop preserve all",
+        "outer_native_kill_forbidden": false
+      },
+      {
+        "name": "native-owner",
+        "historical_command_data_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/actual-command-data/03-native-owner.json",
+        "historical_command_data": {
+          "operations": [
+            {
+              "argv_template": [],
+              "profile": "native",
+              "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+            },
+            {
+              "argv_template": [
+                "/usr/bin/sudo",
+                "-A",
+                "/home/holden/anaconda3/bin/python3",
+                "-B",
+                "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/native_diagnostic_container_owner.py",
+                "--attempt-parent",
+                "/home/holden/mckernel-work/scratch/cp205p-261019-1/p",
+                "--nonce",
+                "645f24de220946959adc1bed7c658493",
+                "--owner-sha256",
+                "5ab04f3bb41b21d52f3f567169c519a0837419fa12f9ec2897f1b1b116f8860a",
+                "--manifest",
+                "/home/holden/mckernel-work/scratch/cp205m-261019-1/manifest.json",
+                "--manifest-sha256",
+                "4aa72c2a5a759bda71c4a0e8e33499068261346113ec2c9fd19d4669b3f8e41d"
+              ],
+              "profile": "native",
+              "role": "native-owner",
+              "status_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/03-native-owner/status.json",
+              "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/03-native-owner/stderr",
+              "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/03-native-owner/stdout"
+            }
+          ],
+          "profiles": {
+            "metadata": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 40,
+              "stream_fsize": 33554432
+            },
+            "native": {
+              "cpu": 7,
+              "parent_kill_grace_seconds": null,
+              "parent_wall_seconds": null,
+              "stream_fsize": 33554432
+            },
+            "reader": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 35,
+              "stream_fsize": 33554432
+            },
+            "snapshot": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 40,
+              "stream_fsize": 33554432
+            }
+          },
+          "release": {
+            "bytes": 5433,
+            "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json",
+            "sha256": "d9c02604d05b67259552dd976fcef430c3bf5b16d74323ee36dd3c0f78201df3"
+          },
+          "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json"
+        },
+        "argv_template": [
+          "/usr/bin/sudo",
+          "-A",
+          "/home/holden/anaconda3/bin/python3",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/n3-variant/native_diagnostic_container_owner.py",
+          "--attempt-parent",
+          "/home/holden/mckernel-work/scratch/cp205p-261019-1/p",
+          "--nonce",
+          "645f24de220946959adc1bed7c658493",
+          "--owner-sha256",
+          "5ab04f3bb41b21d52f3f567169c519a0837419fa12f9ec2897f1b1b116f8860a",
+          "--manifest",
+          "/home/holden/mckernel-work/scratch/cp205m-261019-1/manifest.json",
+          "--manifest-sha256",
+          "4aa72c2a5a759bda71c4a0e8e33499068261346113ec2c9fd19d4669b3f8e41d"
+        ],
+        "caller_argv_template": [
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/source-generation-final-1/root-run-exact-readonly-stage.py",
+          "--commands-file",
+          "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/actual-command-data/03-native-owner.json",
+          "--commands-sha256",
+          null,
+          "--index",
+          "1"
+        ],
+        "late_argument_substitutions": {},
+        "profile": {
+          "cpu": 7,
+          "parent_kill_grace_seconds": null,
+          "parent_wall_seconds": null,
+          "stream_fsize": 33554432
+        },
+        "success_conditions": "direct0/groupabsent/noobservererror/closedstdoutstderr/emptychildstderr; failstop preserve all",
+        "outer_native_kill_forbidden": true
+      },
+      {
+        "name": "readback-1",
+        "historical_command_data_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/actual-command-data/04-readback-1.json",
+        "historical_command_data": {
+          "operations": [
+            {
+              "argv_template": [],
+              "profile": "reader",
+              "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+            },
+            {
+              "argv_template": [
+                "/usr/bin/sudo",
+                "-A",
+                "/usr/bin/taskset",
+                "--cpu-list",
+                "6",
+                "/usr/bin/prlimit",
+                "--as=1073741824",
+                "--cpu=30",
+                "--fsize=33554432",
+                "--core=0",
+                "--nofile=256",
+                "/usr/bin/timeout",
+                "--signal=TERM",
+                "--kill-after=2s",
+                "30s",
+                "/usr/bin/tar",
+                "--create",
+                "--file=-",
+                "--directory=/home/holden/mckernel-work/scratch/cp205p-261019-1/p.owner-645f24de220946959adc1bed7c658493",
+                "."
+              ],
+              "profile": "reader",
+              "role": "readback-1",
+              "status_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/04-readback-1/status.json",
+              "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/04-readback-1/stderr",
+              "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/04-readback-1/stdout"
+            }
+          ],
+          "profiles": {
+            "metadata": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 40,
+              "stream_fsize": 33554432
+            },
+            "native": {
+              "cpu": 7,
+              "parent_kill_grace_seconds": null,
+              "parent_wall_seconds": null,
+              "stream_fsize": 33554432
+            },
+            "reader": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 35,
+              "stream_fsize": 33554432
+            },
+            "snapshot": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 40,
+              "stream_fsize": 33554432
+            }
+          },
+          "release": {
+            "bytes": 5433,
+            "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json",
+            "sha256": "d9c02604d05b67259552dd976fcef430c3bf5b16d74323ee36dd3c0f78201df3"
+          },
+          "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json"
+        },
+        "argv_template": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/taskset",
+          "--cpu-list",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=30",
+          "--fsize=33554432",
+          "--core=0",
+          "--nofile=256",
+          "/usr/bin/timeout",
+          "--signal=TERM",
+          "--kill-after=2s",
+          "30s",
+          "/usr/bin/tar",
+          "--create",
+          "--file=-",
+          "--directory=/home/holden/mckernel-work/scratch/cp205p-261019-1/p.owner-645f24de220946959adc1bed7c658493",
+          "."
+        ],
+        "caller_argv_template": [
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/source-generation-final-1/root-run-exact-readonly-stage.py",
+          "--commands-file",
+          "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/actual-command-data/04-readback-1.json",
+          "--commands-sha256",
+          null,
+          "--index",
+          "1"
+        ],
+        "late_argument_substitutions": {},
+        "profile": {
+          "cpu": 6,
+          "parent_kill_grace_seconds": 2,
+          "parent_wall_seconds": 35,
+          "stream_fsize": 33554432
+        },
+        "success_conditions": "direct0/groupabsent/noobservererror/closedstdoutstderr/emptychildstderr; failstop preserve all",
+        "outer_native_kill_forbidden": false
+      },
+      {
+        "name": "readback-2",
+        "historical_command_data_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/actual-command-data/05-readback-2.json",
+        "historical_command_data": {
+          "operations": [
+            {
+              "argv_template": [],
+              "profile": "reader",
+              "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+            },
+            {
+              "argv_template": [
+                "/usr/bin/sudo",
+                "-A",
+                "/usr/bin/taskset",
+                "--cpu-list",
+                "6",
+                "/usr/bin/prlimit",
+                "--as=1073741824",
+                "--cpu=30",
+                "--fsize=33554432",
+                "--core=0",
+                "--nofile=256",
+                "/usr/bin/timeout",
+                "--signal=TERM",
+                "--kill-after=2s",
+                "30s",
+                "/usr/bin/cat",
+                "/home/holden/mckernel-work/scratch/cp205p-261019-1/p/attempt-645f24de220946959adc1bed7c658493/result.json"
+              ],
+              "profile": "reader",
+              "role": "readback-2",
+              "status_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/05-readback-2/status.json",
+              "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/05-readback-2/stderr",
+              "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/05-readback-2/stdout"
+            }
+          ],
+          "profiles": {
+            "metadata": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 40,
+              "stream_fsize": 33554432
+            },
+            "native": {
+              "cpu": 7,
+              "parent_kill_grace_seconds": null,
+              "parent_wall_seconds": null,
+              "stream_fsize": 33554432
+            },
+            "reader": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 35,
+              "stream_fsize": 33554432
+            },
+            "snapshot": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 40,
+              "stream_fsize": 33554432
+            }
+          },
+          "release": {
+            "bytes": 5433,
+            "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json",
+            "sha256": "d9c02604d05b67259552dd976fcef430c3bf5b16d74323ee36dd3c0f78201df3"
+          },
+          "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json"
+        },
+        "argv_template": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/taskset",
+          "--cpu-list",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=30",
+          "--fsize=33554432",
+          "--core=0",
+          "--nofile=256",
+          "/usr/bin/timeout",
+          "--signal=TERM",
+          "--kill-after=2s",
+          "30s",
+          "/usr/bin/cat",
+          "/home/holden/mckernel-work/scratch/cp205p-261019-1/p/attempt-645f24de220946959adc1bed7c658493/result.json"
+        ],
+        "caller_argv_template": [
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/source-generation-final-1/root-run-exact-readonly-stage.py",
+          "--commands-file",
+          "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/actual-command-data/05-readback-2.json",
+          "--commands-sha256",
+          null,
+          "--index",
+          "1"
+        ],
+        "late_argument_substitutions": {},
+        "profile": {
+          "cpu": 6,
+          "parent_kill_grace_seconds": 2,
+          "parent_wall_seconds": 35,
+          "stream_fsize": 33554432
+        },
+        "success_conditions": "direct0/groupabsent/noobservererror/closedstdoutstderr/emptychildstderr; failstop preserve all",
+        "outer_native_kill_forbidden": false
+      },
+      {
+        "name": "readback-3",
+        "historical_command_data_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/actual-command-data/06-readback-3.json",
+        "historical_command_data": {
+          "operations": [
+            {
+              "argv_template": [],
+              "profile": "reader",
+              "role": "UNUSED_INDEX_ZERO_DO_NOT_EXECUTE"
+            },
+            {
+              "argv_template": [
+                "/usr/bin/sudo",
+                "-A",
+                "/usr/bin/taskset",
+                "--cpu-list",
+                "6",
+                "/usr/bin/prlimit",
+                "--as=1073741824",
+                "--cpu=30",
+                "--fsize=33554432",
+                "--core=0",
+                "--nofile=256",
+                "/usr/bin/timeout",
+                "--signal=TERM",
+                "--kill-after=2s",
+                "30s",
+                "/usr/bin/tar",
+                "--create",
+                "--file=-",
+                "--directory=/home/holden/mckernel-work/scratch/cp205p-261019-1/p/attempt-645f24de220946959adc1bed7c658493",
+                "--exclude=./qmp.sock",
+                "."
+              ],
+              "profile": "reader",
+              "role": "readback-3",
+              "status_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/06-readback-3/status.json",
+              "stderr_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/06-readback-3/stderr",
+              "stdout_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/captures/06-readback-3/stdout"
+            }
+          ],
+          "profiles": {
+            "metadata": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 40,
+              "stream_fsize": 33554432
+            },
+            "native": {
+              "cpu": 7,
+              "parent_kill_grace_seconds": null,
+              "parent_wall_seconds": null,
+              "stream_fsize": 33554432
+            },
+            "reader": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 35,
+              "stream_fsize": 33554432
+            },
+            "snapshot": {
+              "cpu": 6,
+              "parent_kill_grace_seconds": 2,
+              "parent_wall_seconds": 40,
+              "stream_fsize": 33554432
+            }
+          },
+          "release": {
+            "bytes": 5433,
+            "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json",
+            "sha256": "d9c02604d05b67259552dd976fcef430c3bf5b16d74323ee36dd3c0f78201df3"
+          },
+          "root_installed_release_path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/FINAL-N3-SDK-SNAPSHOT-SOURCE-AND-NONTEMPORAL-REVIEW.json"
+        },
+        "argv_template": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/taskset",
+          "--cpu-list",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=30",
+          "--fsize=33554432",
+          "--core=0",
+          "--nofile=256",
+          "/usr/bin/timeout",
+          "--signal=TERM",
+          "--kill-after=2s",
+          "30s",
+          "/usr/bin/tar",
+          "--create",
+          "--file=-",
+          "--directory=/home/holden/mckernel-work/scratch/cp205p-261019-1/p/attempt-645f24de220946959adc1bed7c658493",
+          "--exclude=./qmp.sock",
+          "."
+        ],
+        "caller_argv_template": [
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/terminal-preparation-1/fresh-full-8b-amendment-1/source-generation-final-1/root-run-exact-readonly-stage.py",
+          "--commands-file",
+          "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-20261019-1/native-packet-1/fresh-window-2/actual-command-data/06-readback-3.json",
+          "--commands-sha256",
+          null,
+          "--index",
+          "1"
+        ],
+        "late_argument_substitutions": {},
+        "profile": {
+          "cpu": 6,
+          "parent_kill_grace_seconds": 2,
+          "parent_wall_seconds": 35,
+          "stream_fsize": 33554432
+        },
+        "success_conditions": "direct0/groupabsent/noobservererror/closedstdoutstderr/emptychildstderr; failstop preserve all",
+        "outer_native_kill_forbidden": false
+      }
+    ]
+  }
+}

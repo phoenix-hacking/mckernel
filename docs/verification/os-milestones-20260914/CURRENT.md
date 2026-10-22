@@ -1,3 +1,56 @@
+## Current — P-M13-01 published;27/35 checks (2026-10-22 17:18 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independent /root/m13_literal_review accepted literalP-M13-01 actualtested205
+concisebuild/run handoff+matchingartifactidentities,16buildcommandrows/original
+modulemake/sevenrunsteps. Root publishedexactreviewedfiles/adoptedcheck:
+../evidence/p-m13-01-delivered-handoff-20261022-1/. Freshnonce/admission/snapshot/
+retirement gates remain; historicalcommands never replay; cbb04/SDK68 no native
+promotion.27/35checks (+2vs25individualprioritybaseline),eightopen,sixwhole;
+P-M13-03 andwholeM13 remainopen. No newruntime/compiler/Rustpath count.
+Newclosures P-M01-01 andP-M13-01 reuse realalreadyaccepted scopedresults, with
+exactdescriptors/review; P-M13-02 earlierclosure also retained. Currenteightcheck
+routing inpracticalnextactions replaces historicalremainingtenwording without
+changingoriginalcontracts. M07retentioncorrection/nativephysicalgate stillactive.
+
+## Current — P-M01-01 literal selected-app scope accepted (2026-10-22 17:18 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Root inspected foreground independenthigh review and exact4smallacceptedJSON
+refs (hashes/sizes match; noarchives/replay). P205 strictfile/threadnative oracle
+exercises EINVAL22/cursor14unchanged and ENOENT2, withordered/delivered/returned
+CPUroute evidence. Separate current053d sixlaunch accepts unchanged387/254byte
+oracles/positiveretirement; tuplesstaydistinct. LiteralP-M01-01contract satisfied,
+rootadopted26/35checks (+1 from25baseline),sixwholeunchanged. P-M01-02 recovery,
+changedexec/lifetimepaths andoriginalHOST66genericroutefailure remainopen/failed.
+Evidence ../evidence/p-m01-01-foreground-literal-review-20261022-1/INDEPENDENT-REVIEW.json.
+P-M13-01 actualtested205deliveryhandoff nowfocusedreview; no unrelatednewmodule
+prerequisite. M07procsource3reviewcaught8-reportcapvs9-censusfullrun plusmissing
+quarantinereportretention; ownercoherentboundedcorrection/fullrunregressionactive.
+NativeguardsourceCLIorderingcorrection independentlyPASS; source/dataonly,
+physical/snapshot/finalstatic/executionstillpending. Samecreditledger/reservegates.
+
+## Individual-check closure routing adopted (2026-10-22 17:13 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+User171224 instruction and CONVERGENCE Individual practical-check closure priority
+adopted:25/35→35/35 literalchecks, withoutunrelatedwholemilestone prerequisites.
+P-M13-01 ordinaryowner nowdelivers tested205 build/run handoff+matchingidentity
+manifest fromacceptedM00/M10recipes and P-M13-02statement; focusedliteralreview
+next. Never labelcbb04candidate nativevalidated or replayhistoricalrelease/nonces.
+P-M06-01 currentC/ASM+updatedwholeRust selected HOSTlinkPASS1.143s,8supervised
+commands/emptycompile+linkstderr/retiredchildren; realCbridges/uniquesymbols,
+GCC9.4/ld2.34/libc2.31 explicit. Pinnedproductionlink+matchedSDK/native199Bselfexec/
+235Bprocessapp remainnext. Do not rerunacceptedbodytests. Missing P-M01-01request
+negatives/P-M01-02faultcancellation/P-M08-02changedABI/P-M09-02Rustboundaries map
+separately into sameactualmatchedprocess/lifecyclebatch wherequalified.
+SDK68 P-M05-02complete-restoration proof gates P-M05-03/P-M12-01; counts only
+matchingprofilecycles/boots/launches/mixedminutes afterrestoration. P-M13-03small
+finalartifact/resultindex accumulates acceptedresults, finaldecisiondeferred.
+M07 2/2literalchecks cannotincrease35denominator; retain runtimebridge repairs.
+Currentproc.v2 actualconsumer tests and nativeguard actualCLI correction ready
+forfocusedreviews; no freshrootrelease yet. Same10000ledger,reserve576unapproved.
+
 ## Current — whole launcher Rust object PASS (2026-10-22 17:06 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

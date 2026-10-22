@@ -68,6 +68,45 @@ example already identifies the next concrete action.
 
 ## Efficiency directive — 2026-10-21
 
+### Individual practical-check closure priority — 2026-10-22
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The user explicitly prioritizes closing the remaining ten literal checks from
+25/35 to 35/35. Use the active practical contracts; retain the larger deferred
+qualification backlog and the active live compute-C retirement requirement.
+Each lane names its check IDs, exact missing observation, executable next step
+and closure condition. Close a check as soon as its own evidence is accepted;
+do not add unrelated whole-milestone dependencies. Preserve scoped profiles and
+all failed results. Do not change a predicate or count source/mock success as
+native acceptance to move the counter.
+
+| Remaining check | Next result and shared work |
+|---|---|
+| P-M13-01 | Prepare a concise delivered build/run handoff and tested artifact identities from the accepted frozen profile and existing recipes. Focused review decides whether its literal contract is met now or names the exact missing item. New candidate modules or whole-M13 completion are not automatic prerequisites; never present an untested candidate as the tested delivery. |
+| P-M06-01 | Finish matched launcher link and actual selected process creation/exec/wait observations after the integrated Rust failure-handoff repair. Reuse the passing whole Rust object and focused checks. |
+| P-M01-01 | Bind actual consumed request/response and required negative coverage to the selected application suite; add only missing observations to the process/native batch. |
+| P-M01-02 | Observe actual supported fault/cancellation recovery with positive process/resource retirement; combine with the same lifecycle sequence where qualified. |
+| P-M05-02 | Build the exact SDK68 modules and observe per-boot CPU/memory/process/mapping/callback/reference restoration. Source-only decoders are not restoration proof. |
+| P-M08-02 | Reuse that matched module/lifecycle/process batch to validate the changed used ABI boundaries, with its own exact evidence mapping. |
+| P-M05-03 | After complete restoration is established, perform the remaining matching ten-cycle budget and required failure/recovery observations. |
+| P-M12-01 | Overlap qualifying lifecycle cycles, two boots, 100 real launches and 60 mixed-workload minutes on the declared matching profile; retain separate counters and reuse matching valid evidence. |
+| P-M09-02 | Validate changed default Rust/C/assembly consumer, ABI, link, fallback and applicable native boundaries in the declared artifact set. Keep full live compute-C retirement status explicit and deferred qualification separate. |
+| P-M13-03 | Complete focused final correctness/ownership review against the actual delivered artifacts and results; announce only the accepted scope. |
+
+The retained-owner cleanup and M07 census/guard repairs remain shared runtime
+prerequisites. M07 already has two completed literal checks; its pending whole
+exit is separate from the 35-check denominator. Reuse its accepted image and
+prepare immutable inputs while ordinary lanes continue. SDK capacity, ownership,
+pinned compiler and fresh execution release remain real gates; the unanswered
+reserve proposal is not authorized by this priority instruction.
+
+Prefer one coherent implementation through executable checks, then one focused
+review. Refill disjoint ordinary lanes; serialize effectful workloads under the
+existing limits. At normal checkpoints report newly accepted check IDs, the
+25/35 baseline delta, nearest next result and exact blockers. After 10–15 minutes
+without an executable result, repair or reroute the named bottleneck. Keep the
+same total 10,000-credit run and existing preservation/resource controls.
+
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 The user requests maximum responsible parallelism, accuracy and useful velocity.
 Give an implementer a coherent repair through its focused executable checks,
@@ -86,12 +125,45 @@ accepted stages, compiler outputs, source reviews and unchanged evidence when
 their bindings still match. Do not replay whole trees, archives or tests merely
 because a context or worker changed.
 
+Derive a changed template's hash and byte count together from the same frozen
+bytes. Before freezing successor DATA or publishing it, enumerate its fixed
+output paths and reject occupied transaction/archive names. Keep the final
+fresh admission checks: an early check is not a continuing lease. Preserve
+occupied historical paths and choose fresh owned names rather than repairing
+or deleting the old namespace.
+
+For a successor's final controls, derive all coupled references from the same
+current source and profile map before freezing the cohort: caller profile hash,
+live source identity, guard fingerprint literals, binder assertions, terminal
+schema keys and publication references. Exercise the actual changed consumer
+predicates under the existing ordinary grant, including the final launch branch;
+a source-admission test alone does not cover that branch. Repair the complete
+cohort and refresh its maps once, reusing unchanged reviewed bodies. Keep future
+artifact and execution authority null until observed; these cheap checks grant
+no build or guest permission. Measure accepted-source-to-live-entry time
+separately from operation runtime so repeated binding repairs remain visible.
+
+At a completed, quiescent work-unit boundary, give subsequent work a fresh
+worker context when the old context is causing repeated compaction delays.
+Save a concise Markdown handoff with the exact accepted source and receipt
+pointers, remaining work, commands and grants. Preserve the old thread and
+evidence. Do not interrupt an active host operation, duplicate a pending job,
+or use context rotation to retry a genuine policy, authentication or billing
+stop. Ordinary context age alone does not require revalidating accepted inputs.
+
 Keep eligible ordinary jobs moving on CPU6 and CPU7 with disjoint owned outputs.
 Refill independent implementation lanes up to the established agent/resource
 limits. Further CPU borrowing needs its applicable explicit grant; keep CPU1
 excluded, CPU0 for coordination, one heavy CPU2-5 workload, resource reserves,
 fresh live admission, ownership and independent execution review intact. Prepare
 all non-temporal inputs before quiescing for a native sequence.
+
+Prepare the exact bounded failure-only receipt/log operation before a native
+attempt when the qualified contracts permit it without delaying ready work.
+Review it alongside the native release with distinct payload hashes and
+decisions. Keep its original-failure, direct-join, stable-stream, namespace and
+file/byte-limit predicates. A failure export grants no retry, mutation, signal,
+unlock or cleanup authority, and never uses success-only readback permission.
 
 Measure readiness-to-result and readiness-to-acceptance time, queue/preparation
 time, execution time, preventable harness failures, actual CPU/memory pressure,
