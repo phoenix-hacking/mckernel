@@ -1,0 +1,79 @@
+{
+  "status": "PASS_ACTUAL_CURRENT_M07_FUNCTIONAL_APPLICATION_ONLY",
+  "decision": "ACCEPT_OBSERVED_ENABLED_VECTOR_BOUNDARIES_WITHIN_DECLARED_CURRENT_PROFILE",
+  "reviewer": "/root/insert_c_correction_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "evidence_root": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-challenge-producer-correction-1/normalization-runtime-preparation-1/runtime-construction-source-5/bound-runtime-source-1/native-packet-1",
+  "case_id": "vector.enabled-avx-preservation",
+  "actual_application_observation_accepted": true,
+  "formal_catalog_qualification": false,
+  "evidence": {
+    "report": {
+      "path": "captures/05-readback-2/stdout",
+      "sha256": "e7c4b38807522fd3354026c5c0ca605903fcd0a04eadea3206efd6c7466dd263",
+      "size": 85703
+    },
+    "owner_export": {
+      "path": "captures/04-readback-1/stdout",
+      "sha256": "9b3e5bc42079e2aa56ef959c301c9a12232d593ec6c087352f72726e0dc3e703",
+      "size": 563200
+    },
+    "attempt_export": {
+      "path": "captures/06-readback-3/stdout",
+      "sha256": "ba41ff4e8eaaf322c8525cb1199207bacc5d6e77a9226b35ee5f2ffc963345d1",
+      "size": 409600
+    },
+    "serial_sha256": "b5877d2d3c9aacf2f23d0962a4cdbdca3dd516ec5183ace0157d66a0b7259603"
+  },
+  "observed": {
+    "three_report_copies_byte_identical": true,
+    "serial_and_debugcon_copies_exact": true,
+    "serial_ND_PAYLOAD_equals_guest_report": true,
+    "stdout_bytes": 380,
+    "stdout_sha256": "9a82eb916caf96e85af3d35adb6cea0eb6757533b865c97381fd931c710660f7",
+    "five_dynamic_exposure_headers": true,
+    "exact_120_byte_success_suffix": true,
+    "stderr_bytes": 0,
+    "raw_wait_status": 0,
+    "both_streams_eof": true,
+    "discarded_bytes": 0,
+    "truncated": false,
+    "observed_xcr0": 543,
+    "required_xcr0": 7,
+    "cpuid_d0_context_bytes": 2696,
+    "boot_status_observed": 5,
+    "boot_status_expected": 5,
+    "mckernel_cpu_pair_observed": true,
+    "application_pid": 256,
+    "worker_tid": 258,
+    "application_scheduled": true,
+    "both_procfs_entries_deleted": true,
+    "guest_procfs_empty": true,
+    "retirement_initial_errno": -11,
+    "retirement_final_errno": 0,
+    "application_release_cleanup_errno": 0,
+    "three_readbacks_returncode_zero_joined_groups_absent": true,
+    "three_readback_stderr_empty": true,
+    "qmp_shutdown_observed": true,
+    "qemu_controlled_teardown_returncode": -9,
+    "qemu_reaped": true,
+    "qemu_cleanup_errors": []
+  },
+  "accepted_boundary": "Actual current McKernel application execution satisfies the accepted oracle for selected x87 control-word, MXCSR and YMM preservation across its syscall, futex and signal boundaries, within the admitted two-McKernel-CPU profile.",
+  "raw_generic_application_flags_remain_false": true,
+  "limitations": {
+    "whole_M07_adjudication": false,
+    "whole_ISA_or_IFUNC_qualification": false,
+    "preservation_of_every_exposed_xstate_component": false,
+    "named_FPU_getter_invocation_credit": false,
+    "new_source_or_C_retirement_credit": false,
+    "global_host_physical_clearance": false,
+    "additional_execution_authority": false
+  },
+  "mechanical_projection_authority": {
+    "permitted": true,
+    "scope": "Copy exact current producer fields, descriptors and observed application facts into the existing downstream application receipt while retaining this reviewer attribution, raw evidence references and limitations. Preserve original generic flags and every failure record. Physical owner acceptance remains the separate independent review."
+  },
+  "quiescent": true
+}

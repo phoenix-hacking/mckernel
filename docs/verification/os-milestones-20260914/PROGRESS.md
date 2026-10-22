@@ -18,7 +18,7 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 | M04 | Useful C and Rust applications | complete | complete | Useful actual applications and representative core regressions work. | Independent d82180bd maps useful actual C/Rust applications and representative selected core regressions to declared accepted profile evidence. Exact M04 exit complete; historical profiles remain artifact-bound. No current205 execution, final delivery, new behavior or Rust retirement is inferred; engineering estimate is not automatically set to100. |
 | M05 | Native lifecycle and restoration | partial | open | Actual native boot/workload/stop/destroy/release/boot restores resources. | Two public boot/workload/stop/destroy/release/boot observations, latest serves real workload after second boot. No second native stop or complete restoration proof; final-profile ten-cycle budget remains open. |
 | M06 | Processes, threads and used syscalls | partial | open | Selected apps have working process creation/exec/wait and thread/syscall semantics. | P-M06-02 and P-M06-03 literal checks complete on their declared evidence/profile. Selected application process creation/exec/wait P-M06-01 remains open; whole M06 remains open. Original M06 generic route-check failure remains failed separately from the scoped unsupported-operation literal decision. |
-| M07 | Used FPU/vector state | partial | open | Actually used vector/FPU state survives switching, syscalls and signals. | Current492 accepted AVX/vector signal-thread chain plus NULL-fpstate guaranteed x87 FINIT reset on the declared XSAVE profile. Eight selected Rust bodies production-proved, seven applicable native paths. NULL evidence makes no full SSE/MXCSR/AVX reset or fallback/error-branch claim; complete used-feature/final-profile checks remain open. |
+| M07 | Used FPU/vector state | partial | open | Actually used vector/FPU state survives switching, syscalls and signals. | Current053d/33f two-McKernel-CPU x87 control-word/MXCSR/YMM syscall, blocking-futex and signal observation independently passes380B/emptyerr/exit0 with positive owner retirement. Current-profile coverage for components0/1/2 is closed. Literalwhole remains OPEN only conservative MPX3/4 and PKRU9 requirements/applicability-to-preservation; no blanketISA/IFUNC/namedgetter/global-clearance inference. |
 | M08 | Native modules and interfaces | partial | open | Matched native modules build/load and used ABI/lifetime paths work. | Current matched SDK b9ea18d0/ABI5d31c1f0 builds all three modules from the joint kmsg6b736/mailbox33e7 source closure. Actual matching FP1e7 diagnostic88121b15 verifies all three loads, strict AVX output and bounded ring transport; physicala03e987a accepts retirement. Native failed-MM-error ownership and changed fork/provider/complete lifetime boundaries remain open. Separate205 compatibility preparation is not runtime acceptance. |
 | M09 | Rust and assembly integration | partial | open | Existing Rust consumers preserved; live McKernel compute C retired into Rust/reviewed assembly through production default consumers, linked artifacts and native proof; host compatibility exceptions explicit. | 21 selected production Rust paths/18 applicable native paths after actual named insert/clear default caller/object/ELF joins and representative current053d NUMA native acceptance. First-node insertion and clear-entry empty-tree scope only; nonempty branches/full final boundary set and whole-kernel C retirement remain open. |
 | M10 | Repeatable runnable build | complete | complete | Pinned recipe replays a matched runnable artifact set. | Independent8c3b7389 directly accepts M10 exact tested205 pinned recipe replay against cleanf735/fa398 build and matching currentd67 image/module native replay. Final delivery, other profiles and whole Rust migration remain separate; all future launches still need fresh admission. |
@@ -73,8 +73,8 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 ### Next practical work
 
 - Complete real M06 response-ledger/phase-completion/post-user-copy and launcher error propagation Rust joins; reuse passed compiler33 and focused tests. No provider/native claim before actual matched build/default/runtime proof.
-- Normalize accepted actual M07 two-member offline stage with complete third readonly helper-root/source-FD closure, then necessary wholecaller/current physical/exact runtime release on053d. No kernel rebuild.
-- Correct M05 strict66-versus67 boot contract for actual selected2CPU4312 in private collector+decoder with stale66 refusal, preserving original failures. Stage only after actual focused comparison and independent acceptance.
+- M07 current-profile x87/MXCSR/YMM and native retirement accepted; first resolve only MPX3/4+PKRU9 actual supported-workload requirements/applicability from named c18d/c039 records. Use a justified scoped exclusion if genuine; otherwise test only remaining required executable components. Do not manufacture new use or change profile.
+- M05 two-generation bootstrap source/body and62member stage contract independently accepted; actual62member stage passed21.344s, actualacceptance/normalization4 and wholecaller/runtime release next. Preservefirst4312/generation1/evidence and strict67; no restoration credit.
 - Keep M12 separate matched profile budget buckets; no VM termination as public stop/destroy/release or full mapping/callback/reference restoration.
 - No resize or SDK66 capacity bypass; continue permitted independent Rust/compiler lanes.
 
@@ -82,8 +82,8 @@ Original formal qualification is **historical / DEFERRED**. Deferred does not me
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-22T01:41:50+00:00`
-- Launcher state heartbeat: `2026-10-22T01:41:48.269247+00:00`
+- Dashboard refreshed: `2026-10-22T02:13:29+00:00`
+- Launcher state heartbeat: `2026-10-22T02:13:21.975067+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
 - Worker PID: `2486026`; server PID: `2486028`
 - Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261021T070405Z-729d8cb8`

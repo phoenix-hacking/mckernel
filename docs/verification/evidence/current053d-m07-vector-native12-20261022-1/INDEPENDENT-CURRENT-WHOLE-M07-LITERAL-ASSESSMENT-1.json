@@ -1,0 +1,43 @@
+{
+  "status": "PASS_LITERAL_M07_ASSESSMENT_WHOLE_M07_OPEN",
+  "reviewer": "/root/numa_compiler_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "milestone": "M07",
+  "literal_exit": "Actually used vector/FPU state survives switching, syscalls and signals.",
+  "adjudicated_status": "open",
+  "checks": {
+    "P-M07-01": "complete_preserved",
+    "P-M07-02": "complete_preserved"
+  },
+  "accepted_current_evidence": {
+    "application_sha256": "af412abf4ec347f1e0331ef3b1cded5e4cf2298448e0ee3a2663959d0b2f3bf0",
+    "physical_sha256": "c3572c300b4eb1673a6baf2f31e09d4eaf6ec97b104c0a9800780fc4eb841f11",
+    "application_scope": "Current053d/33f two-McKernel-CPU execution preserves selected x87 control-word, MXCSR and YMM state across its syscall, blocking-futex and signal boundaries.",
+    "strict_result": "Exact380-byte stdout, empty stderr, exit0, EOF without truncation/discard, both procfs entries deleted.",
+    "lifecycle_scope": "Separate genuine owner retirement, QEMU/container teardown and fourteen group/thirty client joins accepted; no global-host-clearance inference.",
+    "new_observation": "The current supported-profile gap for these tested state classes is closed."
+  },
+  "requirements_to_coverage": {
+    "declaration_sha256": "c18d0f14be9ba16a4e1495ebe69f33fc7a497caa17ce5819db5f62cf6c21ad1e",
+    "prior_adjudication_sha256": "c0399202d46c2d2172e06bb0853d9f37082603b3488fad9efb6cf5eb58a107e3",
+    "declared_component_ids": [0, 1, 2, 3, 4, 9],
+    "current_empirically_covered_component_ids": [0, 1, 2],
+    "unresolved_component_ids": [3, 4, 9],
+    "current_xcr0": 543,
+    "application_required_xcr0": 7,
+    "finding": "The accepted declaration conservatively requires MPX BNDREGS/BNDCSR and PKRU support without asserting actual use or nonuse. Current exposure headers do not establish that these components were exercised. The latest preservation oracle covers mask7 and does not resolve their remaining requirements-to-preservation join.",
+    "structural_evidence_limit": "Accepted full-mask/full-extent save, copy and restore support remains meaningful, but supplies neither an actual-use exclusion nor observed noninitial MPX/PKRU preservation."
+  },
+  "exact_remaining_obligation": "Resolve only the declared MPX3/4 and PKRU9 coverage: establish a bounded applicable exclusion from actual supported-workload requirements, or obtain same-profile preservation evidence for the components that remain required and executable.",
+  "smallest_next_experiment_if_needed": "One focused extension of the existing state-preservation application on the unchanged supported profile: for each remaining required executable component, seed architecturally valid noninitial state, exercise the existing syscall, real futex handoff and signal boundaries, compare state after each boundary, and restore original state before exit. Establish component access eligibility before using its instructions; XCR0 exposure alone is insufficient. An inapplicable component needs an explicit justified exclusion, not a synthetic preservation PASS.",
+  "not_required_by_this_decision": [
+    "Unconditional guest replay or full-library/IFUNC audit.",
+    "AVX512 qualification, profile changes or cross-CPU migration proof.",
+    "M12 session budgets, public restoration cycles or C-retirement completion."
+  ],
+  "counter_delta": 0,
+  "runtime_release": false,
+  "preservation": "All current application/physical acceptance, completed literal checks and original failures remain intact.",
+  "provenance": "Independent bounded read-only comparison of literal criteria, current accepted reports, current exposure headers and the two named requirements records; no tests, edits, root actions or census."
+}

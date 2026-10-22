@@ -1,3 +1,35 @@
+## Current — M07 native accepted; remaining components and M05 checks active (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M07 source5 tool66029 closed0: owner37.822756688s and three ordered readbacks
+passed. Independent functional application af412abf and physical retirement
+c3572c30 accept the current053d/33f two-McKernel-CPU tuple. Exact380B stdout,
+empty stderr and exit0 establish selected x87/MXCSR/YMM across syscall, queued
+futex and signal boundaries. Raw diagnostic flags remain false; no formal
+catalog, getter, C-retirement or public lifecycle restoration credit is inferred.
+Root adoption53c83784 records native batch11→12, with behavior30 and Rust21/18
+unchanged. Retained current evidence is under
+`docs/verification/evidence/current053d-m07-vector-native12-20261022-1/`.
+
+Literal whole-M07 assessment0d97ef50 remains OPEN only for conservatively required
+MPX3/4 and PKRU9. One separate conditional access/preservation case is in repair:
+exact fault classification and joint MPX3/4 ownership must pass focused review;
+no synthetic PASS or XCR0-only eligibility. Original vector case stays unchanged.
+
+M05 actual62-member stage accepted df20f539:0/21.343738651s,60 unchanged, sole
+collector replacement plus new second-generation helper. Source/body/static
+14eaf4c5 accepted; actual second-public-stop/restoration is unproven. Frozen N4
+packet090b54ff is admitted for ordered CPU6 normalization and actual real-loader
+checks under the existing ordinary profile. Fresh owners replace completed,
+quiescent work units; old threads and evidence are preserved. Current successful
+physical consumer formatting proceeds from genuine retained exports in parallel.
+
+Canonical24/35 checks,six whole,97sources(38OS/59infra),33compiler,12native,
+30behaviors,Rust21/18. SDK66 fixed capacity gate remains blocked; no resize,
+delete, reserve change or bypass. Floors, oneheavy, mutex27:4, scratch21 and all
+service/ownership/resource checks remain strict. No new kernel build is needed
+for M05 or the remaining-component app case.
+
 ## Current — Challenge repair full static passed; exact guest admission next (2026-10-22 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
