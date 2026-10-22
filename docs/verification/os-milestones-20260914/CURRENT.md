@@ -1,3 +1,36 @@
+## Current — M07 #UD producer corrected; actual successor source gates passed (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Second M07 diagnostic retained strict exit125 with SIGILL trap0/error6; failure-only
+export passed and independent f5386f83 accepts actual failed-owner retirement.
+Rust/assembly correction preserves dispatch error6 and exports ERR0/TRAP6 only
+for genuine marked #UD. Focused actual-body/nested/reused-context checks passed;
+independent a1c9d7bd source/ABI review accepted with additive lifetime wording
+correction. Both exact postimages are integrated; production/native proof pending.
+
+One coherent source unit adopted:99(40OS/59infra), including earlier M05 unit98.
+Other totals held24/35checks,sixwhole,31behaviors,13native,34compiler,Rust21/18.
+Source evidence: docs/verification/evidence/m07-sigill-trap-error-producer-source-20261022-1/.
+No compiler/native/path/whole credit for source changes or DATA/pin corrections.
+
+Successor controls preserved initial undefined PosixPath defect; actual corrected
+loader passed0/.511s and independently accepted926def6d. Exact private source
+materialization passed0/9.4296s:6959entries/49symlinks, independently accepted797b74bb.
+Existing whole source checks passed0/.1532s:owned positive/old-pin refusal and
+affinity source gates/old-pin refusal; missing compile_commands is its endpoint,
+not affinity compiler acceptance. Next finite request/guard/source projections
+must bind actual corrected053d consumer fields before independent build release.
+M07 kernel image is independent of SDK module capacity. Driver/terminal helpers
+remain qualified; future artifact/physical/runtime authority stays unobserved.
+
+M05 observation Rust is integrated/reviewed but needs a separately admitted SDK
+module build and independently bound per-boot decoding. Full restoration and ten
+complete cycles remain open. c75 was source-preparation prose, not a request;
+new finite current SDK descriptor/recovery bounds are preparation-only. Reserve
+amount must follow bounded actual workload plus retained recovery and independent
+review/new exact user approval. No reserve action, resize/delete or gate lowering.
+Preserve strict oracles, all failures,27:4,scratch21,one-heavy/floors/genuine stops.
+
 ## Current — M07 diagnostic final source ready; M05 Rust identity observation integrated (2026-10-22 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

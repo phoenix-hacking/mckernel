@@ -1,0 +1,39 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "SOURCE_AND_FOCUSED_ABI_ACCEPTED_WITH_EVIDENCE_CORRECTION",
+  "functional_findings": [],
+  "artifact_base": "/home/holden/mckernel-work/host-preparation/m07-sigill-trap-error-producer-correction-20261022-1",
+  "verified_refs": {
+    "COMPLETED-UNIT-1.json": "daf930f70da416af30bbb7acb1a61c1d35fc6b72c4ab288b969101a66a890ddd",
+    "SOURCE-FREEZE-1.json": "31436440877fe2a2121c5e94926398eb068f049e99f8e8fb7a8fe28170364e80",
+    "postimages/arch/x86_64/kernel/interrupt.S": "9cffbeb01046a7215cbbca2bb1cf580611269d27d4fa317151cdb19441a15f61",
+    "postimages/kernel/rust/native_signal.rs": "aea4bf00889641d831f4cebf5c452924947e0255cf1f5d47437e804bcbadb250"
+  },
+  "accepted_boundary": [
+    "All frozen artifacts and seven selected-source pins match. Both patches reproduce their postimages exactly.",
+    "interrupt.S:common_interrupt preserves synthetic dispatch error6 and register/return ordering; native vector6 alone writes bytes50/51. PUSH_ALL_REGS initializes the complete flags word; POP_ALL_REGS clears it. Separate nested contexts preserve outer metadata.",
+    "native_signal_context_prepare_result requires both marker bytes and orig_rax6, then changes only frame REG_ERR/REG_TRAPNO to0/6. Missing or partial metadata retains prior behavior. Null/restart error paths and publication ordering remain unchanged.",
+    "The context remains224B. C/Rust layout and libc slots19/20 agree. Native syscall, PF, GP, NMI, debug and int3 entries initialize flags through the same macro; Rust initial-user-context construction zeroes the entire context."
+  ],
+  "evidence_finding": {
+    "severity": "LOW_DOCUMENTATION",
+    "path": "COMPLETED-UNIT-1.json:initialization_and_lifetime[2]",
+    "scenario": "The assertion that syscall.c resets the user context by memset is unsupported by the cited selected source: arch/x86_64/kernel/syscall.c:1404 clears struct user_regs_struct in ptrace_read_gpregs.",
+    "needed_correction": "Add a correction identifying the actual lifetime evidence: assembly full-word initialization/clearing and kernel/rust/x86_cpu_helpers.rs:x86_init_user_process_body_result:1229. Preserve the frozen original."
+  },
+  "observed_evidence": [
+    "Decoded native serial.log:970 ND_PAYLOAD confirms exit125, empty stdout and160-byte diagnostic: signal4/trap0/error6/code2, PC=armed=address0x4031ba, eligibility1/known1.",
+    "Fixture macros/common body and complete Rust prepare function match production source, with fixture entry and privileged-return adaptations. Retained result7c6f61e1 confirms exit0, joined child, absent group and empty stderr; stdout demonstrates baseline6/0 and candidate0/6, sequential/reused-stack, nested32 and partial-metadata checks."
+  ],
+  "conditional_integration_eligibility": {
+    "eligible": true,
+    "target": "Exact smp-x86 native linux-6.12 mckernel.img successor using both reviewed postimages; root owns integration and decision.",
+    "required_before_runtime_claim": [
+      "Preserve unchanged source gates; bind the corrected materialized sources and compiler inputs.",
+      "Prove production interrupt.S object contains the guarded marker write and the final ELF contains the updated Rust export reached by unchanged syscall.c:do_signal:1883.",
+      "Obtain separately released unchanged M07 native evidence. No current image/module build or SDK-gate exception is granted."
+    ]
+  },
+  "limitations": "No edits, tests, builds, guests or object audit performed by this reviewer. Fixture evidence establishes the bounded producer/consumer behavior only; native correction, application acceptance and general GP/PF/ISA behavior remain unproved.",
+  "larger_evidence": "[Frozen completed unit](/home/holden/mckernel-work/host-preparation/m07-sigill-trap-error-producer-correction-20261022-1/COMPLETED-UNIT-1.json)"
+}

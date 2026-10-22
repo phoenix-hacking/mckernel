@@ -1,0 +1,137 @@
+{
+  "schema": "mckernel.m07.ud-signal-producer-private-correction.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_PRIVATE_FOCUSED_ACTUAL_BODY_ABI_TESTS_PENDING_INDEPENDENT_REVIEW_AND_INTEGRATION",
+  "created_utc": "2026-10-22T05:25:32.989022+00:00",
+  "live_source_edits": false,
+  "kernel_or_module_builds": 0,
+  "guest_runs": 0,
+  "native_acceptance": false,
+  "accepted_image_sha256": "053d59b533665eef9d56fe1b348e699d97159e954fbc1fbff973bbe46113f485",
+  "accepted_image_source_basis": "/home/holden/mckernel-work/host-preparation/numa-insert-clear-image-successor-preparation-20261021-1/production-request-data-preparation-1/image-request-ACTUAL-FIXED-SOURCE-BOUND-BASIS-1.json",
+  "selected_source_equality": {
+    "path": "/home/holden/mckernel-work/host-preparation/m07-sigill-trap-error-producer-correction-20261022-1/ACCEPTED-053D-SELECTED-SOURCE-EQUALITY.json",
+    "sha256": "77f4936f2bc57cfe9143036b2fa2fbdf4ab3413cbb3ae0e47b8679c9ce4c7dd7",
+    "bytes": 681
+  },
+  "actual_native_counterexample": {
+    "attempt": "/home/holden/mckernel-work/scratch/m07fp-261022-1/t/attempt-c463bf2d71ea43bf983e209a64d15a70",
+    "signal": 4,
+    "trap": 0,
+    "error": 6,
+    "code": 2,
+    "pc": "0x4031ba",
+    "exit": 125,
+    "stdout_bytes": 0,
+    "stderr_bytes": 160,
+    "oracle_unchanged": true
+  },
+  "source_cause": [
+    "cpu.c init_idt selects generic_common_handlers[6]; case6 builds SIGILL/ILL_ILLOPN with si_addr=gpr.rip.",
+    "generic interrupt.S vector6 stub pushes vector6 in synthetic error slot; common_interrupt reads it as dispatch vector; hardware #UD supplies no error code.",
+    "native_signal_context_prepare_result copies gpr.orig_rax (C error union) into libc greg19 REG_ERR and literal0 into greg20 REG_TRAPNO.",
+    "Actual C/libc layouts agree; this is producer metadata loss, not consumer index swapping."
+  ],
+  "correction": [
+    "Only native generic vector6 assembly entry marks existing spare_flags6/5 with 0xa5/6; gpr.error and dispatch/return stack remain unchanged.",
+    "Rust recognizes both marker bytes plus synthetic error6; emits user-frame ERR0/TRAP6 only for that exact metadata. Other contexts retain prior error and unknown trap0.",
+    "No C kernel expansion, no struct size/field order change, no application/normalizer/oracle edits."
+  ],
+  "initialization_and_lifetime": [
+    "PUSH_ALL_REGS writes complete eight-byte flags word to1: both metadata bytes begin0 for each generic/nmi/PF/GP/syscall/debug/int3 entry; only native generic vector6 marks them.",
+    "POP_ALL_REGS clears complete flags word to0 before returning; nested entry uses separate context and cannot inherit outer #UD marker.",
+    "cpu.c init_user_context memsets entire context to0 before is_gpr_valid=1; syscall.c reset context also memsets entire context.",
+    "All explicit spare_flags6/5 source readers/writers before candidate are only ABI declarations. Context copies preserve exact fault metadata; no new signature/size."
+  ],
+  "extraction_checks": [
+    "baseline complete actual native_signal_context_prepare_result body exact",
+    "candidate complete actual native_signal_context_prepare_result body exact",
+    "baseline exact PUSH/POP macros/common body; only privileged iret fixture return adaptation",
+    "candidate exact PUSH/POP macros/common body; only privileged iret fixture return adaptation"
+  ],
+  "test_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/m07-sigill-trap-error-producer-correction-20261022-1/corrected-toolchain-capture-d35453afdaf34e6095387dfa8c51404f/result.json",
+    "sha256": "7c6f61e1eec1e2f25784ec35e283190041d6cfe27d466c64c31718de1eb1ec5e",
+    "bytes": 1168
+  },
+  "stdout": {
+    "path": "/home/holden/mckernel-work/host-preparation/m07-sigill-trap-error-producer-correction-20261022-1/corrected-toolchain-capture-d35453afdaf34e6095387dfa8c51404f/stdout",
+    "sha256": "7b52c325a4afff2bce6292f345817f3a344762f35b204401725f0a39e1542614",
+    "bytes": 2873
+  },
+  "stderr": {
+    "path": "/home/holden/mckernel-work/host-preparation/m07-sigill-trap-error-producer-correction-20261022-1/corrected-toolchain-capture-d35453afdaf34e6095387dfa8c51404f/stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "checks": [
+    "baseline actual assembly producer + actual complete Rust function: ERR6/TRAP0 reproduced",
+    "candidate same actual boundary: ERR0/TRAP6",
+    "9 sequential entries including repeated #UD/non-UD reused stack; non-UD flags verified cleared",
+    "3 nested generic32 entries preserve outer #UD metadata; kernel synthetic dispatch word preserved",
+    "6 unknown/partial/dirty metadata vectors never infer #UD",
+    "actual selected C structs versus libc ucontext:224B kernel context; metadata50/51; ERR192/TRAP200"
+  ],
+  "failure_family_history": [
+    {
+      "family": "fixture_toolchain_default_old_nightly",
+      "first_failure": {
+        "path": "/home/holden/mckernel-work/host-preparation/m07-sigill-trap-error-producer-correction-20261022-1/actual-body-capture-9b25bd484a3946d1ab3b99b5efad5c2f/result.json",
+        "sha256": "604a69eeb0c3fe60171bd1ae051b04e50513f79b8d5804892f31eafbc1699aa0",
+        "bytes": 1154
+      },
+      "errors": {
+        "path": "/home/holden/mckernel-work/host-preparation/m07-sigill-trap-error-producer-correction-20261022-1/actual-body-capture-9b25bd484a3946d1ab3b99b5efad5c2f/stderr",
+        "sha256": "7d04a4bfeffd2f9fcef0b412d7826953bc79179ba64dfe1c8b34e4bbbd3c5206",
+        "bytes": 3720
+      },
+      "bounded_correction": "explicit installed Rust1.85.1; source bodies and expected outputs unchanged; fresh output root and capture",
+      "corrected_result": {
+        "path": "/home/holden/mckernel-work/host-preparation/m07-sigill-trap-error-producer-correction-20261022-1/corrected-toolchain-capture-d35453afdaf34e6095387dfa8c51404f/result.json",
+        "sha256": "7c6f61e1eec1e2f25784ec35e283190041d6cfe27d466c64c31718de1eb1ec5e",
+        "bytes": 1168
+      },
+      "further_unchanged_retry_allowed": false
+    }
+  ],
+  "test_commands": {
+    "path": "/home/holden/mckernel-work/host-preparation/m07-sigill-trap-error-producer-correction-20261022-1/test_driver.py",
+    "sha256": "605687df0a1f586a238eb11ba99d278674f8695b452044a441506ff492c0e989",
+    "bytes": 709
+  },
+  "limits": {
+    "cpu": 7,
+    "address_space": 1073741824,
+    "cpu_seconds": 30,
+    "wall_seconds": 35,
+    "fsize": 67108864,
+    "nofile": 256,
+    "core": 0
+  },
+  "patches": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m07-sigill-trap-error-producer-correction-20261022-1/interrupt.S.patch",
+      "sha256": "8f0be9130d74eb1dc81e01e276538665c6f168a0eb042bae543b95f6ea37793d",
+      "bytes": 744
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m07-sigill-trap-error-producer-correction-20261022-1/native_signal.rs.patch",
+      "sha256": "a3094dde4b05bf3de5526c7c411d0f56d80a6c1d16d1fbc9ff31a761dde9284d",
+      "bytes": 953
+    }
+  ],
+  "postimages": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m07-sigill-trap-error-producer-correction-20261022-1/postimages/arch/x86_64/kernel/interrupt.S",
+      "sha256": "9cffbeb01046a7215cbbca2bb1cf580611269d27d4fa317151cdb19441a15f61",
+      "bytes": 5678
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/m07-sigill-trap-error-producer-correction-20261022-1/postimages/kernel/rust/native_signal.rs",
+      "sha256": "aea4bf00889641d831f4cebf5c452924947e0255cf1f5d47437e804bcbadb250",
+      "bytes": 12106
+    }
+  ],
+  "next": "Independent focused ABI/source review of exact two-file candidate and actual tests, root-owned integration, smallest supported current native image compile, image/source binding and separately released unchanged M07 application diagnostic. No #GP/#PF/general-exception port or guest retry authorized by this record.",
+  "stop_condition": "Candidate functional behavior failure or independent source concern: preserve evidence; one bounded candidate correction then expert escalation; no further unchanged native replay."
+}

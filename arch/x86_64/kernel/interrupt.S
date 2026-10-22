@@ -97,6 +97,17 @@ common_interrupt:
 		je  1f
 		PUSH_ALL_REGS
 		movq    ERROR_OFFSET(%rsp), %rdi
+#ifdef MCKERNEL_NATIVE_SIGNAL_STACK
+		/* #UD has no CPU error word: generic entry saved its vector in
+		 * gpr.error for dispatch. Keep that convention, and mark the
+		 * separate native signal-frame trap metadata in spare flag bytes.
+		 * PUSH_ALL_REGS initialized the complete flag word to one, so
+		 * other interrupts/syscalls cannot inherit this valid marker. */
+		cmpq    $6, %rdi
+		jne     .Lnative_signal_not_ud
+		movw    $0x06a5, (X86_FLAGS_BASE + 2)(%rsp)
+.Lnative_signal_not_ud:
+#endif
 		movq	%rsp, %rsi
 		call 	handle_interrupt /* Enter C code */
 		POP_ALL_REGS

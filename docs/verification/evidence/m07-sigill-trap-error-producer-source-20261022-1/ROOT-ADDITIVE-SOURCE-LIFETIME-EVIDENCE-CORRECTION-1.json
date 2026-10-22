@@ -1,0 +1,13 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "genuine_review": "/home/holden/mckernel-work/host-preparation/current-focused-progress-recording-20261021-1/current-normalization-review-recording-1/M07-SIGILL-PRODUCER-RUST-ASSEMBLY-INDEPENDENT-SOURCE-REVIEW.json",
+  "frozen_original_preserved": true,
+  "corrected_field": "COMPLETED-UNIT-1.json:initialization_and_lifetime[2]",
+  "unsupported_statement": "Csyscall.c memset is usercontextreset proof; cited1404 clears ptrace user_regs_struct",
+  "actual_supported_lifetime_evidence": [
+    "interrupt.S PUSH_ALL_REGS fullflagswordinitialization andPOP_ALL_REGS clearing",
+    "kernel/rust/x86_cpu_helpers.rs:x86_init_user_process_body_result:1229 zerosentireinitialcontext"
+  ],
+  "functional_code_change": false,
+  "test_replay": false
+}
