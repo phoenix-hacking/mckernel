@@ -1,0 +1,81 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "CHANGED_STATIC_APP_LINUX_AND_ACTUAL_HANDLER_BODY_PASS_PENDING_INDEPENDENT_REVIEW_NO_NATIVE_ACCEPTANCE",
+  "sources": [
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/remaining-state.c",
+      "sha256": "604a9c7ee214247759caf943b93c03629a39ddcf758e01ce80230e8e8e03be27",
+      "size": 11578
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/remaining-state.S",
+      "sha256": "d379625f47345b4c6057a93053b2458db3fee9b695c554a7d6a46d114b1ef858",
+      "size": 5611
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/expected-output.json",
+      "sha256": "f25580648cd0fd303895bac1dbc19bc4792f493bb557eb9b4ba5e31478f020b7",
+      "size": 1392
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/verify-output.py",
+      "sha256": "dd4473bbfa317e3eb7f1c124075c3cca456ed3f5d15b439d05dd3740ebb55b43",
+      "size": 3541
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/test-fault-handler.c",
+      "sha256": "f0f4ee3e22feb068cd36652e289630b0721110c29b3b7a0492adaf422a8613cf",
+      "size": 2574
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/run-ordinary-checks.py",
+      "sha256": "70065676dbce468e93591af8333b2373f287f30839c5bff92cec93ba79a4bbd1",
+      "size": 4466
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/run-ordinary-checks-correction-1.py",
+      "sha256": "81127c16c4a54bbf52ef3c9f8aa2420ef0b87762dfa20a28091e7f6468c32a68",
+      "size": 4466
+    }
+  ],
+  "binary": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/remaining-state-static",
+    "sha256": "743002457716113509fc98c8aa942fdf82139b0a2a8c40a485e0d760a727e7da",
+    "size": 1581368
+  },
+  "compile_command": {
+    "argv": [
+      "cc",
+      "-static",
+      "-O2",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fno-pie",
+      "-no-pie",
+      "-Wl,-z,noexecstack",
+      "-pthread",
+      "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/remaining-state.c",
+      "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/remaining-state.S",
+      "-o",
+      "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/remaining-state-static"
+    ],
+    "cwd": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1"
+  },
+  "profile": {
+    "address_space_bytes": 1073741824,
+    "core": 0,
+    "cpu": 6,
+    "cpu_seconds": 30,
+    "file_size_bytes": 67108864,
+    "jobs": 1,
+    "nofile": 256,
+    "wall_seconds": 35
+  },
+  "predicate_preserved_exact": true,
+  "assembly_oracle_unchanged_exact": true,
+  "success_stdout_unchanged_exact": true,
+  "native_credit_delta": 0,
+  "execution_release": null
+}

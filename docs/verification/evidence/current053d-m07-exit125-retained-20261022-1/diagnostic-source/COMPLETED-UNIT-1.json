@@ -1,0 +1,329 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "CHANGED_STATIC_APP_LINUX_AND_ACTUAL_HANDLER_BODY_PASS_PENDING_INDEPENDENT_REVIEW_NO_NATIVE_ACCEPTANCE",
+  "source_freeze": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/SOURCE-FREEZE-1.json",
+    "sha256": "ee0a3db56ff5494d7e3b8942f796575c6770f20a81c6d64a9c01df4c0d9cd9d4",
+    "size": 5084
+  },
+  "original_failure": {
+    "result": {
+      "path": "/home/holden/mckernel-work/scratch/m07rp-261022-1/t/attempt-a7c3f1249e8b4da28f0c9d65e21b7063/result.json",
+      "sha256": "5913747a2b52f0da30f80cac4fafd93c362a52ad252f82e02fb10d3488129862",
+      "size": 2780
+    },
+    "serial": {
+      "path": "/home/holden/mckernel-work/scratch/m07rp-261022-1/t/attempt-a7c3f1249e8b4da28f0c9d65e21b7063/serial.log",
+      "sha256": "e620c08dbafc40a80643ede2e67cbc62f2865d335fc87327ac52b5dc074ca9a3",
+      "size": 76002
+    },
+    "retained_raw_frame": {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/original-ND_PAYLOAD-line.txt",
+      "sha256": "6bc9f52d6866dcdaf1123586c576f107fd57d3256bcb3da2e6f3cac81dab7858",
+      "size": 516
+    },
+    "raw_wait_status": 32000,
+    "decoded_exit": 125,
+    "stdout_bytes": 0,
+    "stderr_bytes": 0,
+    "procfs_empty": true,
+    "claim": "Payload process returned125; exact guest/kernel first cause unobserved. Normal procfs retirement and Power down are observed, full physical retirement belongs to root."
+  },
+  "defect": "Unexpected fault handler discarded all fault identity before unchanged _exit125; this is an evidence defect and does not establish native failure causation.",
+  "change": "Before same _exit125, bounded384B stack serializer formats signal/trap/error/info/code/PC/armed/address/eligibility/known/UD/GP using scalar bounded loops and one async-signal-safe write. No diagnostic path recovery or new kernel code.",
+  "maximum_record_bytes": 250,
+  "record_bound_basis": {
+    "literal_bytes": 97,
+    "signed_decimal_fields": 9,
+    "max_decimal_bytes": 11,
+    "pointer_fields": 3,
+    "pointer_bytes": 18,
+    "stack_buffer": 384,
+    "observed_largest": 179,
+    "failed_write": "No retry; same exit125"
+  },
+  "strict_gate": "Unchanged exact armed known instruction plus trap6/SIGILL/ILL_ILLOPN/error0/addressPC OR trap13/SIGSEGV/SI_KERNEL/error0/addressNULL.",
+  "checks": {
+    "compile-static-capture-1": {
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792643475720304855,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48634272,
+          "mode": "0o600",
+          "mtime_ns": 1792643475720304855,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/compile-static-capture-1/stderr",
+          "sha256": "da62a4025e54774140ea0f4af4cfd62210e9e9f3ef8ef6842ad51ee96d0f616f",
+          "size": 857,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792643475504298086,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48634271,
+          "mode": "0o600",
+          "mtime_ns": 1792643475504298086,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/compile-static-capture-1/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        }
+      },
+      "closed_streams": true,
+      "direct_child_joined": true,
+      "error": null,
+      "group_absent": true,
+      "pid": 2977332,
+      "remaining_group_members": [],
+      "retirement_error": null,
+      "returncode": 1,
+      "seconds": 0.256392166018486,
+      "start": 44092020,
+      "timed_out": false,
+      "unexpected_group_members": []
+    },
+    "compile-static-capture-2": {
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792643498373014791,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48634283,
+          "mode": "0o600",
+          "mtime_ns": 1792643498373014791,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/compile-static-capture-2/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792643498373014791,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48634282,
+          "mode": "0o600",
+          "mtime_ns": 1792643498373014791,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/compile-static-capture-2/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        }
+      },
+      "closed_streams": true,
+      "direct_child_joined": true,
+      "error": null,
+      "group_absent": true,
+      "pid": 2977414,
+      "remaining_group_members": [],
+      "retirement_error": null,
+      "returncode": 0,
+      "seconds": 0.3573112830054015,
+      "start": 44094307,
+      "timed_out": false,
+      "unexpected_group_members": []
+    },
+    "linux-static-reference-capture-1": {
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792643498737026199,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48634293,
+          "mode": "0o600",
+          "mtime_ns": 1792643498737026199,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/linux-static-reference-capture-1/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792643498737026199,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48634292,
+          "mode": "0o600",
+          "mtime_ns": 1792643498737026199,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/linux-static-reference-capture-1/stdout",
+          "sha256": "e929f58e7ec36dc94e95c932ccc362b83df452a9e27afa9ea2ef89634cfbabe3",
+          "size": 291,
+          "uid": 1000
+        }
+      },
+      "closed_streams": true,
+      "direct_child_joined": true,
+      "error": null,
+      "group_absent": true,
+      "pid": 2977421,
+      "remaining_group_members": [],
+      "retirement_error": null,
+      "returncode": 0,
+      "seconds": 0.03500625997548923,
+      "start": 44094343,
+      "timed_out": false,
+      "unexpected_group_members": []
+    },
+    "static-output-oracle-capture-1": {
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792643498773027327,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48634301,
+          "mode": "0o600",
+          "mtime_ns": 1792643498773027327,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/static-output-oracle-capture-1/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792643498809028456,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48634300,
+          "mode": "0o600",
+          "mtime_ns": 1792643498809028456,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/static-output-oracle-capture-1/stdout",
+          "sha256": "0b64c3bbb5b29328ad29fb23597f638b00d85156ef2fe570bf9726e9b317cb58",
+          "size": 204,
+          "uid": 1000
+        }
+      },
+      "closed_streams": true,
+      "direct_child_joined": true,
+      "error": null,
+      "group_absent": true,
+      "pid": 2977423,
+      "remaining_group_members": [],
+      "retirement_error": null,
+      "returncode": 0,
+      "seconds": 0.06253335997462273,
+      "start": 44094347,
+      "timed_out": false,
+      "unexpected_group_members": []
+    },
+    "handler-test-compile-capture-1": {
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792643498841029458,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48634309,
+          "mode": "0o600",
+          "mtime_ns": 1792643498841029458,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/handler-test-compile-capture-1/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792643498841029458,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48634308,
+          "mode": "0o600",
+          "mtime_ns": 1792643498841029458,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/handler-test-compile-capture-1/stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        }
+      },
+      "closed_streams": true,
+      "direct_child_joined": true,
+      "error": null,
+      "group_absent": true,
+      "pid": 2977424,
+      "remaining_group_members": [],
+      "retirement_error": null,
+      "returncode": 0,
+      "seconds": 0.36727704101940617,
+      "start": 44094354,
+      "timed_out": false,
+      "unexpected_group_members": []
+    },
+    "handler-test-capture-1": {
+      "captures": {
+        "stderr": {
+          "ctime_ns": 1792643499213041117,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48634318,
+          "mode": "0o600",
+          "mtime_ns": 1792643499213041117,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/handler-test-capture-1/stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "uid": 1000
+        },
+        "stdout": {
+          "ctime_ns": 1792643499213041117,
+          "device": 66306,
+          "gid": 1000,
+          "inode": 48634317,
+          "mode": "0o600",
+          "mtime_ns": 1792643499213041117,
+          "nlink": 1,
+          "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/native-125-failure-evidence-correction-1/handler-test-capture-1/stdout",
+          "sha256": "69a3f5212ced7a1cdebebe98e7fde4e38dbed0c4906f76b00bb57fbdd19eaaa3",
+          "size": 1462,
+          "uid": 1000
+        }
+      },
+      "closed_streams": true,
+      "direct_child_joined": true,
+      "error": null,
+      "group_absent": true,
+      "pid": 2977435,
+      "remaining_group_members": [],
+      "retirement_error": null,
+      "returncode": 0,
+      "seconds": 0.023613021010532975,
+      "start": 44094391,
+      "timed_out": false,
+      "unexpected_group_members": []
+    }
+  },
+  "handler_body_vectors": {
+    "allowed_silent": 2,
+    "rejected_exit125_diagnostic": 7,
+    "vectors": [
+      "permitted UD",
+      "permitted GP",
+      "unarmed",
+      "PF trap14",
+      "wrong code",
+      "wrong address",
+      "inactive eligibility",
+      "unknown PC",
+      "INT_MIN error and INT_MAX code"
+    ]
+  },
+  "failure_family_history": [
+    "Native original exit125 retained, no unchanged replay.",
+    "First diagnostic compile rejected warn_unused_result for cast-away write result, source/capture retained.",
+    "One bounded compiler correction stores write result in ssize_t then explicitly ignores local; compile/reference/handler tests pass.",
+    "First correction harness invocation stopped before compile on O_EXCL existing preflight filename; original evidence unchanged, fresh preflight2 used."
+  ],
+  "all_owned_captures_joined_group_absent": true,
+  "guest_runs": 0,
+  "app_acceptance": false,
+  "next_check": "Independent source review of private changed app/freeze; root binds new static payload and new addresses/provenance into fresh reviewed stage/runtime attempt. Read first REMAINING_FAULT_V1 from raw ND_PAYLOAD stderr; preserve strict oracle and exit. No kernel repair until cause observed.",
+  "source_closure_inventory": {
+    "app": "Exact freeze3 app has sole literal _exit125 at fault_handler unexpected fault branch.",
+    "launcher_collector": "Exact33f launcher and2f8 collector source closure linkage not yet located; current repo candidates inspected only and cannot establish frozen producer completeness. No all-producer claim."
+  }
+}

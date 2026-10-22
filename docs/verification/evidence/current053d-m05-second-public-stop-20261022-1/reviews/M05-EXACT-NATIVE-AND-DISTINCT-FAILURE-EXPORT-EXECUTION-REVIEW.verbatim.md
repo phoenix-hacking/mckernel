@@ -1,0 +1,59 @@
+{
+  "reviewer": "/root/m05_current_normal9_actual_source_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "packet_directory": "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/runtime4-construction-preparation-1/actual-current4-construction-preparation-1/current-normal9-final-binding-1/final-compact-descriptor-materialization-1/execution-release-preparation-1",
+  "native_execution_decision": {
+    "status": "PASS_CONDITIONAL_ONE_EXACT_M05_SEVEN_STEP_EXECUTION",
+    "reviewed_payload": {
+      "path": "EXACT-M05-NATIVE-EXECUTION-REVIEW-CANDIDATE.CURRENT-BASIS-1.json",
+      "sha256": "36a8ffef9a11ac43a41b725db9190f77cd5783003660bd2efa595ca62f475b78",
+      "bytes": 68398
+    },
+    "immediate_admission_payload": {
+      "path": "IMMEDIATE-ROOT-ADMISSION-COMMAND.CURRENT-BASIS-1.json",
+      "sha256": "6dbf0d0ec7fbe07aca072ecd5d445963a0ac9094aec955a644cb4b021f6c9dac",
+      "bytes": 8469
+    },
+    "conditional_execution_permission": true,
+    "native_execution_count": 1,
+    "accepted_scope": "Exact unchanged executor613bd9bc and seven-index1a8b8a8d: LAST snapshot, machine assembly, final guard, one native owner and three success-only readbacks. Current owner manifest/argv,053d/33f tuple, signal40B/empty/exit0 and strict67/second-public-stop oracles remain exact.",
+    "verification": "Candidate23 source descriptors equal fetched publication23. Final19 DATA, guard21 references and eighteen FD paths match accepted materialization. Seven commands/profiles/deadlines were inspected; native49 paths and all89 watch paths were absent at review.",
+    "conditions": [
+      "Root records this genuine decision separately and binds cc04 original eligibility,03ddd compact addendum,f82a publication,4252 intervening failed-owner retirement and5c0db conditional resource grant without expanding their scopes.",
+      "Immediately before entry, root confirms quiescence, exclusive ownership, current identity/resources/included-plan state, exact empty parent and fresh output/watch paths.",
+      "Use exact outer argv with UID1000 and unlimited inherited AS/CPU; retain existing internal metadata/reader limits and native lifecycle deadlines. No outer timeout or kill.",
+      "Actual LAST snapshot, machine and final guard must succeed. Preserve their freshness checks and exact allowed argv; never prefill temporal hashes.",
+      "Stop on failure. Success-only readbacks require native success. This decision permits no retry or second native invocation."
+    ],
+    "role_limits": "Native87f remains terminal ancestry; current C9 separately supplies released-record provenance. Intervening M07 acceptance supplies retirement only, with no inferred census, common/shared absence, lock reacquisition or retry authority."
+  },
+  "failure_export_decision": {
+    "status": "PASS_DISTINCT_CONDITIONAL_ONE_FAILURE_ONLY_OWNER_EXPORT",
+    "reviewed_payload": {
+      "path": "M05-FAILURE-ONLY-READBACK-EXECUTION-REVIEW.CANDIDATE.json",
+      "sha256": "21f12aa03b2219099d5d23d6a02764d6fa77dc28604efe56d9d09108d80b2b60",
+      "bytes": 6993
+    },
+    "reviewed_core": {
+      "path": "EXACT-M05-FAILURE-ONLY-READBACK-CORE-PAYLOAD.json",
+      "sha256": "9ee544437bbab99eb416dd1753783e491e8b02b4b4e8f837f6a6f952624c4db3",
+      "bytes": 2265
+    },
+    "conditional_execution_permission": true,
+    "execution_count": 1,
+    "conditions": [
+      "Only after this exact native-owner step actually fails and controller/capture children are directly joined with groups positively absent; no uncertain publisher or retirement.",
+      "Use existing caller71ae index1 and exact fixed owner-evidence tar argv. Preserve CPU6,AS1GiB,CPU30,32MiB capture,30-second tar timeout and35-second parent bound.",
+      "Materialize only genuine failure-decision release/destination fields around unchanged reviewed operations/profiles. Install exact release bytes before index1, satisfy caller release equality and record the actual command-file hash.",
+      "Recheck current state/resources/leases and fresh failure outputs immediately before export. Preserve original failure; no success-readback substitution, workload mutation, cleanup or retry authority."
+    ]
+  },
+  "findings": [],
+  "late_snapshot": null,
+  "late_machine_release": null,
+  "late_final_guard": null,
+  "native_acceptance": false,
+  "application_acceptance": false,
+  "limitations": "Conditional execution review only. Accepted source/static authorities reused; no tests, root operations, census, Docker, guests or execution performed by this reviewer. No runtime result, restoration, cycle or Rust retirement credit."
+}

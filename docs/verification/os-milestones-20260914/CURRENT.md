@@ -1,3 +1,30 @@
+## Current — M05 second public stop accepted; M07 fault-diagnostic successor staging next (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Genuine M05 applicationc70a5b6f and physical3140f538 decisions accept two exact40B
+signal workloads across generations1/2, strict67 intervening fresh boot, and two
+public shutdown/destroy/128MiB-release observations. Seven-step chain passed0;
+owner64.296130475s/caller64.252265672s, whole66.047758341s; all30Dockerclients,
+14caller/rootchildgroups, container/lease and QEMU retired. QEMU return-9 is not
+public lifecycle restoration. Assigned inventories return EBUSY, not empty.
+Complete mapping/callback/reference/frame/physical-identity restoration and ten
+complete-cycle quota remain OPEN. Two launches, zero complete-cycle quota credit.
+One unique second-stop behavior and one native batch adopted; repeated signal
+workloads do not add signal behavior credit.
+
+Canonical24/35,sixwhole,97sources(38OS/59infra),34compiler,13native,
+31behaviors,Rust21/18. Practical check/whole/path/source/compiler counts held.
+Evidence: docs/verification/evidence/current053d-m05-second-public-stop-20261022-1/.
+
+M07 original raw125/empty-stream failed result remains unresolved and preserved.
+Its failed-owner retirement4252d6ea independently passed; strict fault-gate/exit125
+diagnostic source1c4921a8 passes compile/Linux291B/nine handler vectors. New
+payload74300245 stage successor changes only payload/review DATA assertions in
+qualified60/59 staging algorithm. Next: ordinary exact stage/normalization, then
+fresh separate runtime bindings/release for actual diagnostic feedback on053d.
+No new kernel build, framework, resize/delete/reserve/gate bypass or unchanged
+replay. Preserve27:4,scratch21,all failures/floors/ownership and genuine stops.
+
 ## Current — M07 exit125 preserved; failed-owner review and M05 admission preparation (2026-10-22 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/current053d-stage-preparation-1/ordinary-normalization-runtime-integration-1/runtime-source-1/native_diagnostic_container_owner.py", line 1208, in <module>
+    raise SystemExit(main())
+  File "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/current053d-stage-preparation-1/ordinary-normalization-runtime-integration-1/runtime-source-1/native_diagnostic_container_owner.py", line 1202, in main
+    execute_owner(DiagnosticOwner(args.attempt_parent, manifest=args.manifest,
+  File "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/current053d-stage-preparation-1/ordinary-normalization-runtime-integration-1/runtime-source-1/native_diagnostic_container_owner.py", line 1184, in execute_owner
+    raise owner.failure
+  File "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/current053d-stage-preparation-1/ordinary-normalization-runtime-integration-1/runtime-source-1/native_diagnostic_container_owner.py", line 1152, in execute_owner
+    owner.run()
+  File "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/current053d-stage-preparation-1/ordinary-normalization-runtime-integration-1/runtime-source-1/native_diagnostic_container_owner.py", line 1117, in run
+    raise self.failure
+  File "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/current053d-stage-preparation-1/ordinary-normalization-runtime-integration-1/runtime-source-1/native_diagnostic_container_owner.py", line 1071, in run
+    started = self._call(["start", "--attach", self.container], timeout=deadline)
+  File "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/current053d-stage-preparation-1/ordinary-normalization-runtime-integration-1/runtime-source-1/native_diagnostic_container_owner.py", line 758, in _call
+    raise failure
+  File "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/remaining-components-functional-case-preparation-20261022-1/joint-mpx-exact-fault-correction-1/current053d-stage-preparation-1/ordinary-normalization-runtime-integration-1/runtime-source-1/native_diagnostic_container_owner.py", line 721, in _call
+    raise OwnerError("docker command failed: " + argv[0])
+__main__.OwnerError: docker command failed: start
