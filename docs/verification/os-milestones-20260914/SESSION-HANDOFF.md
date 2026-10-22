@@ -1,3 +1,92 @@
+## Current — actual matched image retirement chain PASS (2026-10-22 21:58 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Genuine exact cleanup review plus fresh full-growth/memory admission authorized one
+chain: actual read-only preflight PASS2.240699s, cleanup PASS6.607093s, postjoin
+PASS1.934451s. All directjoined/streamsclosed/groupsabsent. Cleanup reports
+PASS_EXECUTED/terminal/container_absent; exact stdout retained4f696f50. Postjoin
+retains five-member51200B archive and110291B report PASS_CLEANUP_POSTJOIN_READBACK_ONLY.
+Independent physical acceptance remains under review; no new native admission yet.
+Private exact evidence: host-preparation/p-m06-matched-guest-build-binding-20261022-1/
+matched-image-terminal-preparation-1/actual-first-four-retained-assembly-2/.
+Original observer-five, source2, failures and immutable inputs remain preserved.
+
+Filled199 offline stage packet f021eb34 has conditional focused execution PASS;
+new concrete downstream blocker is actual stager/native-runner manifest schema
+join plus exact new readonly input mounts. sdk_host_profile_candidate owns one
+coherent isolated successor and ordinary Python regressions through that boundary,
+without rebuilding accepted image10972/modules or weakening199/235/227 oracles.
+Root handles admission/execution; terminal author retains actual retirement capsule.
+Next physical acceptance→compatible stage/runner boundary→199→235→227 native.
+Practical28/35 remains unchanged; seven open P-M01-02/P-M05-02/P-M05-03/P-M06-01/
+P-M08-02/P-M09-02/P-M12-01. Weeklyincludedonly; reserve576 unanswered/no mutation.
+No native/check/Rust-retirement credit from retirement or preparation. Original
+velocity baseline and recovery intervals preserved; no speedup claim.
+
+## Current — actual observer and original-five retention PASS; cleanup payload delegated (2026-10-22 21:49 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual matched image build closed0/290.458766s; independent artifact review47050d75
+accepts image10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2
+8439816B, linked production Rust/callers/newexec-reset and named boundaries only.
+SDKthree retainedmodules separately accepted; no recompilation afterstaleheld
+exportpredicate correction. Imagebuilt689d launcher staysdistinctfrom selected
+separatelyaccepted native0d774a14 launcher. No newnative/case/checkcredit.
+
+StoppedCIDe2142e66299909fe793c53ca3e7dd94dc06dbcb51529459e2f7800ccbac92c9d
+common/shared remainHELD. Source2 retirementcohort published/fetched3355e156.
+Genuine retainedreview2a8479779 corrects only review1's ownershipmetadata omission
+with alreadyobservedfull9fieldidentities; originalreview1 unchanged. Production
+fullidentitypositive/inode-negative passed before rootrelease. Actualindependently
+released observerPASS2.308914569s, summaryPASS.124970404s, originalfiveFDmetadata
+PASS.136373564s, rawfiveexportPASS.149720370s/542720Btar. All directjoined/closed/
+groupsabsent/emptyerr. Source2 originalrootfiles and failed/unreleased evidence
+preserved. No cleanup/recordrelease/physicalacceptance yet.
+
+At user21:47 steering, m07_closure_join owns complete ACTUAL five-member retained
+assembly, cleanup payload and exact fresh-preflight/cleanup/postjoin argv/profile/
+paths/hashes at host-preparation/p-m06-matched-guest-build-binding-20261022-1/
+matched-image-terminal-preparation-1/READY-ACTUAL-CLEANUP-EXECUTION-2.json (pending).
+Independent m07_final_closure_review remainsactiveforthatreadyexactpayload;
+root handlesadmission/execution ratherthan protocol reconstruction. sdk_host_
+profile_candidate fills199stageexecutionpacket concurrently; source1b891f42
+independentlypasses, actual56-rowbaseinventory/dynamicclosure/replacementgate
+PASS.158889s; originalreadonlycallerPath-argument failure retained and corrected
+bydecodingJSON, no productchange/stagingeffect. Newstage/native remain gated on
+positiveimagephysicalreview. Next actualpreflight→cleanup→postjoin→indphysical,
+then unchanged199→235→227. P12 source/transport finishedandreusedlater.
+
+Practical28/35; sevenremaining P-M01-02/P-M05-02/P-M05-03/P-M06-01/P-M08-02/
+P-M09-02/P-M12-01. Weeklyincludedonly/no creditfallback/noreserve576 mutation.
+Originalvelocitybaseline and stoppedintervals retained; no measuredspeedup claim.
+
+## Current — SDK artifacts accepted; matching image build admitted (2026-10-22 21:20 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Existing20352 modules passed source-reviewed read-only revalidation firsttry:
+0.265345s/directjoined/emptyerr;107files50696615B unchanged before/after.
+Independent m07_final_closure_review accepts exact ihk daced2910 (1527808B),
+SMP50f6e2bc (12799928B), mcctrlbff603a5 (2637656B), current-v6/adopt-v4/control-v1
+ABI/source/cfg/MM/artifact bindings. Original58ffcf FAIL/make0 remains preserved;
+no compiler replay/native credit. Published/fetched42bc4bc4 retains typed artifact
+acceptance and matched guest private11runtime/qualifiedguard cohort.
+
+Newguest guard projection/basis boundary independently accepted after real
+0.844483s ordinary two-positive/one-stalerefusal. Exact one-shot payloadc659aea9
+and callerabea2a16 independently PASS_EXECUTION. Actual oncecaller launched,
+session42531 ACTIVE: dispatcher3324953/start50139218; guard3324956 active.
+Fresh dispatcher liveadmission passed host177GB/scratch14.122GB/fullgrowth/RAM/
+UUID/device/27:4/ownedpathabsence/runningstate. Guard performs remaining source
+and owner admission before compiler; no actualnewimage or nativeclaim yet.
+Guardnonce d18ea24c04e0435cbd8f673e253dc59d, evidence underhost-preparation/
+p-m06-matched-guest-build-binding-20261022-1/guest-runtime-admission-preparation-2/.
+Root does not replay/signal activework. m07_closure_join prepares only reused
+actualimage terminal/physical-clearance bridge inparallel. Newimage→positive
+physicalretirement→matching199/235/227 native remains criticalpath.
+
+28/35/sevenopen unchanged; no new whole practical/native/Rust-retirement credit.
+Weeklyincludedonly/no credits/noreserve576 mutation; originalbaseline retained.
+
 ## Current — SDK modules compile; provider export acceptance blocked (2026-10-22 21:07 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

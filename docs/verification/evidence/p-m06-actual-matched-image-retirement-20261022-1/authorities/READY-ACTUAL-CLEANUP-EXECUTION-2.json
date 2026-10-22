@@ -1,0 +1,241 @@
+{
+  "canonical_without_execution_review_sha256": "260b948b750030836293f5239e333eba4f342dd93cfb3fc72decdff94b69b978",
+  "cleanup_executed": false,
+  "copy_after_cleanup": {
+    "argv": [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/actual-first-four-retained-assembly-2/copy_joined_cleanup_result.py"
+    ],
+    "source": {
+      "bytes": 1510,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/actual-first-four-retained-assembly-2/copy_joined_cleanup_result.py",
+      "sha256": "f065f0f53bb855f6e5ad98fb83d11237da40027f0117d9915dbed3cf80130b02"
+    }
+  },
+  "fetched_source_proof": {
+    "bytes": 6922,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/ROOT-SOURCE2-FETCHED-PROOF-1.json",
+    "sha256": "60dddd7f9748b31b1f5e495a6e6a4fefae62387af04dc22f992e838af34cfc1a"
+  },
+  "finalizer": {
+    "argv": [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/actual-first-four-retained-assembly-2/finalize_reviewed_cleanup.py",
+      "--review",
+      "GENUINE_INDEPENDENT_EXECUTION_REVIEW_JSON",
+      "--review-sha256",
+      "GENUINE_REVIEW_FILE_SHA256"
+    ],
+    "review_predicate": "statusPASS/reviewer!=author/implementation_ownershipfalse/reviewed_payload_sha256 equals exact canonical above. Finalizer inserts actual evidence_sha256 and writes finalrelease+exactoperations+argv index; no source mutation.",
+    "source": {
+      "bytes": 4193,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/actual-first-four-retained-assembly-2/finalize_reviewed_cleanup.py",
+      "sha256": "926985e385072d5b381e445f89a93801d1fbe409de04ea6c43ae308401292b4a"
+    }
+  },
+  "native_acceptance": false,
+  "operations": {
+    "cleanup": {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--fsize=134217728:134217728",
+        "--cpu=unlimited:unlimited",
+        "--core=0:0",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/cleanup_pass_image.py",
+        "--release",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/ROOT-CLEANUP-EXECUTION-RELEASE-2.json",
+        "--release-sha256",
+        "BIND_EXACT_CLEANUP_RELEASE_SHA256",
+        "--execute"
+      ],
+      "capture_directory": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/actual-first-four-retained-assembly-2/actual-cleanup-capture-1",
+      "profile": {
+        "as_soft_hard": [
+          2147483648,
+          2147483648
+        ],
+        "cpu": 7,
+        "jobs": 1,
+        "outer_grace_kill": null,
+        "outer_wall_kill": null,
+        "required_inherited_cpu_limits": [
+          -1,
+          -1
+        ],
+        "stream_fsize": 134217728
+      },
+      "template": {
+        "bytes": 1642,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/ROOT-CLEANUP-OPERATION-TEMPLATE-2.json",
+        "sha256": "24586d5003bd2e3e401a5064fca2d0d73cd29931705dd344cb38a90d37f15152"
+      },
+      "wrapper": {
+        "bytes": 2927,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/capture_critical_two.py",
+        "sha256": "eff9ff04d6b3f4d33fde2cbb95d98fa65129f1db3210ed639365ab92f527ae46"
+      }
+    },
+    "postjoin": {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=1073741824:2147483648",
+        "--fsize=134217728:134217728",
+        "--cpu=unlimited:unlimited",
+        "--core=0:0",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/postjoin_readback.py",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/ROOT-CLEANUP-EXECUTION-RELEASE-2.json",
+        "BIND_EXACT_CLEANUP_RELEASE_SHA256",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/actual-first-four-retained-assembly-2/actual-cleanup-result.json"
+      ],
+      "capture_directory": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/actual-first-four-retained-assembly-2/actual-postjoin-capture-1",
+      "profile": {
+        "as_soft_hard": [
+          1073741824,
+          2147483648
+        ],
+        "cpu": 7,
+        "jobs": 1,
+        "outer_grace_kill": null,
+        "outer_wall_kill": null,
+        "required_inherited_cpu_limits": [
+          -1,
+          -1
+        ],
+        "stream_fsize": 134217728
+      },
+      "template": {
+        "bytes": 1780,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/ROOT-POSTJOIN-OPERATION-TEMPLATE-2.json",
+        "sha256": "67e53b048bf7cd692b55238ebceed5dcaadfa26ad44922c5ea0ee33a156f839a"
+      },
+      "wrapper": {
+        "bytes": 2927,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/capture_critical_two.py",
+        "sha256": "eff9ff04d6b3f4d33fde2cbb95d98fa65129f1db3210ed639365ab92f527ae46"
+      }
+    },
+    "readonly-preflight": {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--fsize=33554432",
+        "--cpu=unlimited:unlimited",
+        "--core=0:0",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/check_actual_fresh_preflight.py",
+        "--release",
+        "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/ROOT-CLEANUP-EXECUTION-RELEASE-2.json",
+        "--sha256",
+        "BIND_EXACT_CLEANUP_RELEASE_SHA256"
+      ],
+      "capture_directory": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/actual-first-four-retained-assembly-2/actual-fresh-preflight-capture-1",
+      "profile": {
+        "as_soft_hard": [
+          2147483648,
+          2147483648
+        ],
+        "cpu": 7,
+        "jobs": 1,
+        "outer_grace_kill": null,
+        "outer_wall_kill": null,
+        "required_inherited_cpu_limits": [
+          -1,
+          -1
+        ],
+        "stream_fsize": 33554432
+      },
+      "template": {
+        "bytes": 1823,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/ROOT-FRESH-PREFLIGHT-OPERATION-TEMPLATE-2.json",
+        "sha256": "18dc20e6eda61485d09b6c233baaacd8473e95f9bc59fe0c619e9377a0f85e25"
+      },
+      "wrapper": {
+        "bytes": 2447,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/actual-first-four-retained-assembly-2/capture_preflight.REUSED.py",
+        "sha256": "ac891c0c44cf040318328aef49fa7c04d3019a2f6c111246c689943525f5612f"
+      }
+    }
+  },
+  "ordinary_consumer_result": {
+    "bytes": 836,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/actual-first-four-retained-assembly-2/ORDINARY-ASSEMBLY-RESULT.json",
+    "sha256": "dc28dd5dcaec2cf67b70bbb740016f34196ef217a0934efc5ba4e93d83d5f878"
+  },
+  "payload": {
+    "bytes": 247961,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/ROOT-CLEANUP-EXECUTION-PAYLOAD-2.json",
+    "sha256": "e4be83fbb55e9fb58bba8c871cfad4ebf42731899ae0dbd580745649ea42b41f"
+  },
+  "physical_clearance": false,
+  "preflight_capture_reuse": {
+    "accepted_source": {
+      "bytes": 2458,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/capture_current_pass_check.py",
+      "sha256": "09bc17f96df8c3cdb23cf26dd37a89c76089c159494966a112f9a6da100e7938"
+    },
+    "delta": "Only finite role admission tuple ordinary-current-pass-binding -> readonly-preflight. Accepted a6ce function bodies and directwait/closedstreams/groupabsence/FDhash capture tail unchanged.",
+    "inherited_CPU_required": "unlimited soft/hard; no outer timeout/kill",
+    "source": {
+      "bytes": 2447,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/actual-first-four-retained-assembly-2/capture_preflight.REUSED.py",
+      "sha256": "ac891c0c44cf040318328aef49fa7c04d3019a2f6c111246c689943525f5612f"
+    }
+  },
+  "reserve_576MiB_approval": null,
+  "retention": {
+    "bytes": 4984,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/actual-first-four-retained-assembly-2/ACTUAL-FIRST-FOUR-RETENTION.json",
+    "sha256": "085d8ea596dab0ff6039e32aa450800d04172d4a214f35c3cdf99b2c13dfbbc6"
+  },
+  "root_execution_sequence": [
+    "Run finalizer after genuine review is recorded; inspect its FINAL-RELEASE-AND-EXACT-OPERATIONS.json.",
+    "Run exact readonly-preflight wrapper argv once. Root status must be returncode0/direct_child_joinedtrue/process_group_absenttrue/streams_closedtrue, stdout PASS_ACTUAL_FRESH_PREFLIGHT_READ_ONLY, predicate_passedtrue, mutation_startedfalse, transaction_mutex_openedfalse, transaction_closedtrue, no_cleanup_or_record_releasetrue. Stop on JSON refusal even if process0.",
+    "Only on actual positive preflight run exact cleanup wrapper argv once; no competing root/guest/compiler/cleanup.",
+    "After positive cleanup wholejoin execute exact copy_joined_cleanup_result.py command; it preserves original stdout and refuses nonpositive cleanup/hash/CID/release joins.",
+    "Run exact postjoin wrapper argv once; its stdout is original archive, preserve unchanged; obtain independent physical release before any matched native/guest execution."
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_immutable": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2",
+  "source_pins": {
+    "bytes": 3976,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/SOURCE-PINS.json",
+    "sha256": "baa4f73cffc1adb251752788574385e8703844b41bda1454bb3346b8f4f0b642"
+  },
+  "source_review": {
+    "bytes": 799,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/INDEPENDENT-SOURCE-REVIEW.json",
+    "sha256": "92fd616ce59b31e88765b044c30e89f8dc8894794491ca36b335a714d08ecafe"
+  },
+  "status": "ACTUAL_RETENTION_COMPLETE_CLEANUP_CANDIDATE_PENDING_GENUINE_EXECUTION_REVIEW"
+}

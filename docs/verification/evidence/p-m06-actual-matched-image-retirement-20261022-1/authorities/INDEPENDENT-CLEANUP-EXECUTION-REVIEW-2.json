@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "reviewer": "/root/m07_final_closure_review",
+  "implementation_ownership": false,
+  "reviewed_payload_sha256": "260b948b750030836293f5239e333eba4f342dd93cfb3fc72decdff94b69b978",
+  "reviewed_handoff_sha256": "e613c6a9afb409f2576330adb44e50c9499f7c2956fb4cceda6717064a4228f2",
+  "findings": [],
+  "pre_execution_condition": "Root must record fresh passing host/scratch/full-growth and aggregate-memory admission for 2GiB, with no competing heavy/build/cleanup. This review does not assert that fresh admission already occurred.",
+  "authorized_sequence": "ONE exact18dc20e6 readonly preflight; only after captured returncode0/directjoin/streamsclosed/groupabsent/emptyerr AND explicit PASS_ACTUAL_FRESH_PREFLIGHT_READ_ONLY,predicate_passedtrue,mutation_startedfalse,transaction_mutex_openedfalse,transaction_closedtrue,no_cleanup_or_record_releasetrue, ONE exact24586d50 cleanup. Only after actual joined PASS_EXECUTED/terminal/container_absent/exactCID+release, exact f065f0f5 resultcopy then ONE exact67e53b04 postjoin. Stop on any refusal; no retries.",
+  "profile": "CPU7 onejob; preflight/cleanup AS2GiBsoft-hard; postjoin1GiBsoft2GiBhard; unlimited inheritedCPU; noouterkill; unchanged inner command/report caps; core0; streams32MiB preflight/128MiB cleanup+postjoin.",
+  "finalization": "Exact926985e3 finalizer may insert genuine execution_review plus this receipt evidence_sha256, then replace only BIND_EXACT_CLEANUP_RELEASE_SHA256 with final raw digest in exact operations. Preserve payload and other operation fields.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact retained stopped image/container and owned-record retirement only.",
+  "physical_clearance": false,
+  "native_or_new_workload_authorized": false
+}
