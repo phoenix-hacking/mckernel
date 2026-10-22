@@ -1,3 +1,52 @@
+## BILLING_SWITCH_QUIESCENT — 2026-10-22 18:57 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+User instruction20261022T185528530446Z supersedes prepaid-credit authorization:
+foreground will restart included WEEKLY only, no --credit-budget/--credit-run-id,
+100% included stop/no credit fallback. Original creditrun0c216c56957b4e64a89d54d4b28a2ad6
+and its cumulative ledger remain unchanged history. Agent changed no launcher state.
+No new privileged/build/guest/cleanup admission occurred in this invocation.
+All four children completed; all bounded ordinary commands directjoined; no
+critical/native/build/effectful host operation is in flight from this dispatcher.
+No owners signalled, records released or workloads removed for this transition.
+Configuration checkpoint only; OS incomplete, no goal-status pause requested.
+
+Owned results retained/exactarchive verified at
+../evidence/billing-switch-checkpoint-20261022-1855-1/ (61files+actualreviewevent).
+M07 owner released_build_consumer packet8599bc7e: actualprojectorCLI0,binderCLI0
+(.581240096s;19pendingoutputs/7rows/49paths), snapshotactualmain positive+5refusals,
+13selectedruntimeFDpaths pass. Independent latest_native_boundary_review accepts
+retained composition only: source4imageheavy / f538latestfailednative / 87fhistorical
+remain distinct. Root/live edges mocked; no runtime or finalstatic acceptance.
+EXACT NEXT FIX: coherently adapt copied check_current_whole_caller.py and
+check_final_static_closure.py from17code/12runtime to18code/13runtime andnewrole;
+run smallest actual closure consumer, focused delta review, publish/fetch exact
+cohort, finalstatic then freshly admitted snapshot/separate strict M07 native
+using accepted cbb04 image/stage. Finalstatic/snapshot/release still absent/null.
+
+M06 owner m06_pinned_publication freshpacketf56f6d17/draft99773bdc/manifestfe22a48c;
+reviewer m06_exact_build_release_review PASS_CONDITIONAL_EXACT_LAUNCHER_BUILD_ONLY.
+Actual source/build identities andfivecontrols match; pinnedmcexec-j1,owner4c4d/
+offline03f6/source990. No build executed. Fresh roots/0700parents/FINALhash/newest
+retiredpredecessor/liveUUID/census/grant/release are required after restart.
+Launcheronly fits measured capacity independently of SDK: hostfullminimum
+33897179177B inclfullsparsegrowth vs37257252864B; scratch13421772800B vs14123528192B.
+These are historical measurements, never fresh restart admission. SDK fullgate
+14695596032B remains572067840B short; reserve576 unanswered/no mutation.
+
+Eight remaining literal checks (27/35baseline, sixwhole; no count uplift):
+- P-M06-01: M06 lane/root—matched pinned launcher then actual creation/exec/wait.
+- P-M01-02: same lifecycle batch/root—actual supported fault/cancel recovery+retirement.
+- P-M05-02: SDK68 lane/root—pinned modules and full CPU/memory/process/mapping/callback/reference restoration.
+- P-M08-02: SDK68+lifecycle/root—changed used ABI/lifetime proof on matching artifacts.
+- P-M05-03: lifecycle/root—ten matching complete restoration cycles plusrequired failure/recovery.
+- P-M12-01: matching lifecycle batch/root—two boots/100real launches/60mixed minutes; overlap only qualified observations.
+- P-M09-02: Rust-boundary/root—changed default consumer/link/ABI/fallback/applicable native final proof.
+- P-M13-03: independent final reviewer—focused delivered-artifact/result correctness/ownership decision when predicates hold.
+No current active child owner after joins; reuse ready candidates/reviews on explicit
+included-only resume. Fresh admission follows configuration restart. Preserve all
+originalfailures, Scratch21/exclusions57687/57688, permanentmutex27:4 andbaseline.
+
 ## Current — manual recovery and actual build retirement reconciled (2026-10-22 18:51 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
