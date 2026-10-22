@@ -4,6 +4,11 @@
 
 #include <types.h>
 
+/* Caller holds runq_lock; list nodes and C-produced offsets stay valid. */
+int sched_idle_runqueue_has_running_result(unsigned long runq_head,
+	unsigned long thread_sched_list_offset,
+	unsigned long thread_status_offset, int running_status);
+
 #define FUTEX_WAIT_POST_SUCCESS 0
 #define FUTEX_WAIT_POST_RETRY 1
 #define FUTEX_WAIT_POST_TIMEOUT 2

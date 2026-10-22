@@ -3907,15 +3907,32 @@ static void idle(void)
 		if (v->status == CPU_STATUS_IDLE ||
 		    v->status == CPU_STATUS_RESERVED) {
 			long s;
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 			struct thread *t;
+#endif
 
 			s = ihk_mc_spinlock_lock(&v->runq_lock);
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+			_Static_assert(__builtin_types_compatible_p(
+				__typeof__(((struct thread *)0)->status), int),
+				"idle runqueue status must be a C int");
+			_Static_assert(sizeof(((struct thread *)0)->status) == 4,
+				"idle runqueue status must match Rust i32");
+			_Static_assert(offsetof(struct list_head, next) == 0,
+				"idle runqueue next must be the first list field");
+			if (sched_idle_runqueue_has_running_result(
+				(unsigned long)&v->runq,
+				offsetof(struct thread, sched_list),
+				offsetof(struct thread, status), PS_RUNNING))
+				v->status = CPU_STATUS_RUNNING;
+#else
 			for (t = ((typeof(*t) *)((char *)((&v->runq)->next) - offsetof(typeof(*t), sched_list))); &t->sched_list != (&v->runq); t = ((typeof(*t) *)((char *)(t->sched_list.next) - offsetof(typeof(*t), sched_list)))) {
 				if (t->status == PS_RUNNING) {
 					v->status = CPU_STATUS_RUNNING;
 					break;
 				}
 			}
+#endif
 			ihk_mc_spinlock_unlock(&v->runq_lock, s);
 		}
 		if (v->status == CPU_STATUS_IDLE ||

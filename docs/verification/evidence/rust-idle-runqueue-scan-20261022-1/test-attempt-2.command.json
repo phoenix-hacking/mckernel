@@ -1,0 +1,27 @@
+{
+  "argv": [
+    "taskset",
+    "-c",
+    "0",
+    "timeout",
+    "30s",
+    "python3",
+    "-m",
+    "unittest",
+    "scripts.tests.test_rust_idle_runqueue_scan_20261022",
+    "-v"
+  ],
+  "environment": {
+    "MCKERNEL_IDLE_SCAN_SOURCE": "/home/holden/mckernel-work/host-preparation/rust-idle-runqueue-scan-20261022-1/postimage",
+    "MCKERNEL_IDLE_SCAN_PREIMAGE": "/home/holden/mckernel-work/host-preparation/rust-idle-runqueue-scan-20261022-1/preimage",
+    "MCKERNEL_IDLE_SCAN_OUTPUT": "/home/holden/mckernel-work/host-preparation/rust-idle-runqueue-scan-20261022-1/test-attempt-2"
+  },
+  "profile": {
+    "affinity": [
+      0
+    ],
+    "address_space_bytes": 1073741824,
+    "cpu_seconds": 20,
+    "wall_seconds": 30
+  }
+}

@@ -1938,6 +1938,34 @@ pub unsafe extern "C" fn timer_set_timer_body_result(
     num_running
 }
 
+/// Returns one iff a locked idle runqueue contains a thread exactly running.
+///
+/// # Safety
+/// The caller holds the runqueue lock and supplies a valid circular list whose
+/// sentinel and thread nodes remain live for this call. Offsets come from the
+/// C thread definition; status is a C int and list_head.next is its first field.
+/// This scan retains no references and changes no list, thread, CPU, or IRQ state.
+#[no_mangle]
+pub unsafe extern "C" fn sched_idle_runqueue_has_running_result(
+    runq_head: usize,
+    thread_sched_list_offset: usize,
+    thread_status_offset: usize,
+    running_status: CInt,
+) -> CInt {
+    let mut entry = unsafe { list_next(runq_head) };
+    while entry != runq_head {
+        let thread = entry.wrapping_sub(thread_sched_list_offset);
+        let status = unsafe {
+            read_volatile(thread.wrapping_add(thread_status_offset) as *const CInt)
+        };
+        if status == running_status {
+            return 1;
+        }
+        entry = unsafe { list_next(entry) };
+    }
+    0
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn sched_request_migrate_body_result(
     target_cpu_id: CInt,
