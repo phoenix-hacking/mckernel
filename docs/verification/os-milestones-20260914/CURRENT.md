@@ -1,3 +1,86 @@
+## Current — M07 corrected full static joins pass (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Additive receiptbb7e267f preserves original0fc9 and the full-static KeyError.
+Actual corrected constructor0/.130141522s and original-negative/corrected-whole
+comparison0/.691267898s pass. Finalbinder0/.129750203s and fullstatic_joins
+0/.292889812s pass, direct joined/groups absent/closed/empty stderr. Finalpacket
+edaba2dc, seven77303e5d, executor9c53532b, final17-code mapfbd2054a are frozen.
+Publication/fetch, fresh admission and independent exact release are next; no
+snapshot/root/guest occurred in these ordinary checks. M05 normalization3 ready
+commands are admitted independently onCPU6; stage79d041bb is accepted. Counters
+hold24/35,sixwhole,97source,33compiler,11native,30behaviors,Rust21/18.
+
+## Current — Diagnostic collectors staged; M07 receipt compatibility correction (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M07 init-only stage independently accepted73583e92:0/10.745166930s,60members/
+59unchanged; collector9508643a preserves strict success predicates and retains
+first failed-helper diagnostics before powerdown. Source4 normalization and real
+loader pass0/.638409017s and0/.715346025s, independently accepted378ca84a.
+Constructor0/.117858751s and complete wholecaller0/.459007657s pass; genuine
+staticd7ec5540 accepts pending19/12FD joins only. Finalbinder passed0/.129748594s;
+fullstatic failed on missing receipt projection aliases, before any snapshot or
+root/guest. Independent cause review7926833c confirms exactly two absent fields:
+process_group_absent from retained group_absent and guest_runs from actual
+preflight. Additive projectionbb7e267f preserves original0fc9 and failure; one
+bounded actual-consumer correction is admitted. No normalization/stage replay.
+
+M05 init-only stage0/11.070303602s independently accepted79d041bb:61members/
+60unchanged, sole initf6ef8e3c delta. Strict loader and32paths/three roots pass.
+Fresh normalization preparation can reuse these actual facts and accepted source
+reviews; no native lifecycle/restoration acceptance is implied.
+
+Prior failed M07 owner is physically retiredf17ae995; raw payload never started,
+boot-helper cause remains UNKNOWN because old guest did not retain its streams.
+Next real guest uses the diagnostic collector after final static/code publication,
+fresh admission and exact independent release. Launcher target request remains
+ready/unrun; SDK66 fixed gate remains blocked. No resize/reserve-policy change.
+
+Canonical counts held24/35 checks,six whole,97sources(38OS/59infra),33compiler,
+11accepted native batches,30behaviors,Rust21/18. Permanent mutex27:4, scratch21,
+resource floors, one-heavy and genuine service/ownership stops remain in force.
+Foreground quiescent; no campaign restart or extra framework.
+
+## Current — M07 pre-payload failure retired; helper diagnostics corrected (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Changed controls published and fetched761ca6e8; new exact execution release513d2972
+consumed once. Actual LASTsnapshot0/.479903843s, machine0/.082676415s and guard
+0/.114243107s passed. Native-owner1/12.524550189s stopped the chain; three success
+readbacks did not run. Independent current failed-owner retirement is accepted:
+mechanical reportf17ae995 preserves atomic FAIL, CIDd9bae4f1/nonce05807dbc,
+owner2883481/start42583945, four completed caller/root-child pairs and actual
+tool-owned57565 failure terminal. No global/common/shared census or retry credit.
+
+Minimum retained cause export shows one ND_PAYLOAD: raw_wait_status=-1,
+started_ns=reaped_ns=0, empty streams. No payload execution is established.
+Guest powered down normally; first boot-helper status/streams existed only in
+volatile guest files and were omitted from serial on failure. Actual boot cause
+remains UNKNOWN. Selected collector has no66/67 predicate; that hypothesis was
+rejected from its actual source. Preserve all failures and strict boot/app checks.
+
+Minimal collector619a5e97/init9508643a adds three bounded first-helper diagnostic
+records with existing serializers; helper/payload acceptance and success stay
+unchanged. Static compile and serializer checks accepted independently. Actual
+old/changed helper controlpath now passes failure7/success fixtures, complete
+streams, real fork/reap and four group absences (21a6aa6b); focused review next.
+Init-only staging derivative uses existing qualified metadata/archive machinery;
+no stage or guest replay authorized. M05 common collector is checked for the same
+blind failure path before first native attempt, preserving its accepted norm2.
+
+M05 actual paired normalization independently accepted866c9827:0/.917012727s,
+32paths/three readonly roots/16full source identities and actual loader positive.
+Its16+2FD runtime construction remains preparation, not lifecycle/restoration
+acceptance. Launcher guard/whole/source evidence passed; finite exact target-build
+request preparation overlaps ordinary collector work. SDK66 remains blocked.
+
+Canonical counts held:24/35 checks,six whole,97sources(38OS/59infra),33compiler,
+11accepted native batches,30behaviors,Rust21/18. Failed owner adds no acceptance.
+No resize or reserve change; permanent mutex27:4, floors, one-heavy and service
+stops preserved. Current source jobs CPU6/7 and boundedCPU0 DATA only; root alone
+admits workloads. Persistent readers retained; no campaign restart performed.
+
 ## Current — M07 final caller/static pass; M05 paired normalization pass (2026-10-22 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,44 @@
+{
+  "status": "PASS_CAUSAL_DATA_COMPATIBILITY_CORRECTION_ONLY",
+  "reviewer": "/root/numa_compiler_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "finding": {
+    "symbol": "root_manual_snapshot_threads.py:static_joins",
+    "line": 49,
+    "failure": "The original normalization projection lacks process_group_absent and guest_runs in actual_capture_facts. Evaluation fails first with KeyError process_group_absent.",
+    "complete_consumed_capture_fact_fields": [
+      "returncode",
+      "direct_child_joined",
+      "process_group_absent",
+      "guest_runs"
+    ],
+    "other_facts_variable": "The binder's parent_identity and parent_nine_field_identity accesses use a separate locally constructed dictionary from preflight; they require no capture-facts aliases."
+  },
+  "accepted_candidate": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/runtime-construction-source-4/ROOT-MECHANICAL-COMPLETE-SOURCE4-NORMALIZATION-CONSUMER-COMPATIBILITY-2.json",
+    "sha256": "bb7e267fd83ff36e7f4d8833cbf6b1f609cb1738720a2a3269abe7f2f983d1de",
+    "bytes": 39418,
+    "verified_delta": "Exactly two capture-facts additions and separate additive provenance; every original field remains unchanged.",
+    "process_group_absent": {
+      "value": true,
+      "source": "Exact retained normalization status.group_absent, matching the existing four-field whole.process_group_absent."
+    },
+    "guest_runs": {
+      "value": 0,
+      "source": "Exact actual preflight.guest_runs, also matching ordered-results and actual_producer; explicitly distinguished from OS capture metadata."
+    }
+  },
+  "preservation": {
+    "original_projection_sha256": "0fc9d4d39104d09a3e761b1717cfda46035b8bb96b4bf03b2df6cc5a2ab4e51a",
+    "original_full_static_failure_preserved": true,
+    "prior_pending19_static_acceptance_remains_scoped": true,
+    "assertions_unchanged": true
+  },
+  "permitted_next_observation": "Under a fresh ordinary grant, use the existing focused checker on the unchanged actual full-static consumer: corrected projection positive and preserved original projection negative. Bind the corrected descriptor consistently into both normalization hardpin slots and dependent DATA references. No normalization replay or assertion relaxation is needed.",
+  "limitations": "Compatibility source/DATA acceptance only. Corrected full-static success remains unobserved by this decision; final binding, execution review and fresh resource admission remain separate.",
+  "runtime_release": false,
+  "guest_permission": false,
+  "counter_delta": 0,
+  "provenance": "Independent bounded read-only inspection of actual consumer sites, retained producer fields, failure traceback and exact candidate delta; no tests, edits, root actions or census."
+}

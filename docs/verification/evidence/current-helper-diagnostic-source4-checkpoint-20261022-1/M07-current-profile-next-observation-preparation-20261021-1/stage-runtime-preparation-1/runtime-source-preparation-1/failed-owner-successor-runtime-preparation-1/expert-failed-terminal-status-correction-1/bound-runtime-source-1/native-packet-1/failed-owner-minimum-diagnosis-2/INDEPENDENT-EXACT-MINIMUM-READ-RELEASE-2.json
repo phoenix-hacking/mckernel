@@ -1,0 +1,14 @@
+{
+  "reviewer": "/root/numa_clear_range_review",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ALLOW_ONE_EXACT_CURRENT_FAILED_OWNER_MINIMUM_READ",
+  "proposal_sha256": "641e0023c333bada334ce508e663574f2832e9cd33cd8c884767ee3274e724b2",
+  "source_sha256": "5482d585d2b00aae7e6b8ec1511d34f069bf6c7d9d4b1fc4071813fbca7fdaf9",
+  "accepted_boundary": "The 1590-byte reader differs from qualified predecessor 50ce784798aec2f261841b7a9caa6016a0f0d92f9539c9b31c336e64b3f55c97 only in the fixed current evidence-root literal.",
+  "current_evidence_root": "/home/holden/mckernel-work/scratch/m07p-261021-2/t.owner-05807dbcbbdf46989fee0f5f57b632a2",
+  "identity_join": "Current owner argv descriptor 35c354968d28d64eff183f34493e0b7205a77215a8cc22b10178cecd7f3b2a1c binds that parent and nonce.",
+  "execution_scope": "One execution of the exact proposed sudo/timeout/taskset/prlimit/Python argv, captured by the existing unprivileged outer helper. CPU0, AS256MiB, CPU10s, wall15s, FSIZE1MiB, NOFILE64.",
+  "reader_contract": "Read-only, no-follow regular-file FDs; stable nine-field identity checks; 64KiB per file and 256KiB total. Reads owner/result/state and selected start-command records. No Docker, census, unlock, cleanup, guest or retry.",
+  "limitations": "This releases only the diagnostic read. Current failed-owner retirement, failure cause and native behavior remain unaccepted until actual retained bytes are reviewed.",
+  "provenance": "Independent read-only exact source-delta and command review. No privileged action or execution performed. Dispatcher records this decision."
+}

@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/runtime-source-4/case_evaluator.py", line 38, in binding
+    nd._need(digest(MANIFEST) == MANIFEST_SHA, 'M07 manifest source drift')
+  File "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/runtime-source-4/case_evaluator.py", line 21, in digest
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+  File "/home/holden/anaconda3/lib/python3.9/pathlib.py", line 1259, in read_bytes
+    with self.open(mode='rb') as f:
+  File "/home/holden/anaconda3/lib/python3.9/pathlib.py", line 1252, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/home/holden/anaconda3/lib/python3.9/pathlib.py", line 1120, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/holden/mckernel-work/scratch/m07n-261021-4/manifest.json'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/normalization-source-4/check_actual_topological_runtime_before_normalization.py", line 31, in <module>
+    if __name__=='__main__':main()
+  File "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/normalization-source-4/check_actual_topological_runtime_before_normalization.py", line 18, in main
+    try:runner._bind_m07(diagnostic,staged,future)
+  File "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/runtime-source-4/native_diagnostic_runner.py", line 64, in _bind_m07
+    _, _, frozen = adapter.binding(str(manifest_path), adapter.MANIFEST_SHA)
+  File "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/runtime-source-4/case_evaluator.py", line 49, in binding
+    raise nd.DiagnosticError('M07 binding: '+str(error)) from error
+m07_original_nd.DiagnosticError: M07 binding: [Errno 2] No such file or directory: '/home/holden/mckernel-work/scratch/m07n-261021-4/manifest.json'

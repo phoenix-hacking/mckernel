@@ -1,45 +1,53 @@
-# Functional McKernel progress — review 167
+# Functional McKernel progress — review 169
 
-Updated 2026-10-21T23:50:43.850892+00:00. Next review 2026-10-22T00:17:48.564Z.
+Observed 2026-10-22T00:48:29.142304+00:00. Next review 2026-10-22T01:18:29.142Z.
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
-Canonical progress: 24/35 practical checks and six complete milestones:
-M00, M02, M03, M04, M10 and M11. Accepted behaviors30; Rust paths21production/18native.
-Accepted source units97(38OS/59infrastructure), compiler batches33, native batches11.
-This interval has no new accepted numerical gain.
+Accepted results remain **24/35 practical checks and six complete milestones**
+(M00, M02, M03, M04, M10, M11), 30 native behaviors, 21 production and
+18 native Rust paths, 97 coherent source units (38 OS / 59 infrastructure),
+33 compiler batches and 11 accepted native batches. No numerical gain
+in this half-hour interval.
 
-The current M07 owner failed after2.44s on a missing hashlib import in its Python
-loader hook, after passing live snapshot/machine/finalguard. This is not an
-established kernel defect or native application outcome. The qualified atomic
-receipt and independent review support retirement of this FAILED attempt.
-No success readbacks or native credit. Import-only correction and real-loader
-body positive/original-negative checks are next. M05 shares the import defect;
-its corresponding private correction is prepared before native execution.
+M07's minimal helper-failure diagnostic collector passed actual helper-path
+checks and independent source/static review. Its init-only stage passed in
+10.745 seconds, preserving 59 of 60 members. Independent stage acceptance
+is genuine; this is not native execution or milestone closure.
 
-M05 exact67 collector,18.90s archive stage and byte-identical visible boot alias
-passed; original archive/stage/failures retained. Its normalization/runtime is
-pending. M07 stage/normalization/constructor/whole/final static had passed; reuse
-those only where corrected source and current physical bindings genuinely match.
+New normalization passed, but the real loader found a stale runner-to-adapter
+hash pin. The adapter → runner → owner → input-pin graph is being repaired
+together. The next source-gate check reached the intended missing-manifest
+boundary, then failed because the checker caught another module's exception
+class. Both failures are preserved. Namespace4 was not normalized at review.
 
-Corrected exec mailbox/response ledger sources and host tests are accepted and
-integrated; actual full-module build/link/default/native remains blocked by
-the unchanged SDK66 capacity gate. Launcher target recipe is ready; setup hit
-a32MiB indented-JSON limit before any build. Semantically equal compact26,525,680B
-successor is prepared, not executed. Preserve the original partial file and cap.
+M05's corresponding collector and init-only stager component checks passed
+(0.403 seconds; 61/60 map and all 32 paths within three roots). Its stage
+received conditional source approval. Actual stage acceptance, downstream
+runtime and public native second-stop/restoration remain open.
+Launcher target build remains ready but unrun; the SDK66 capacity gate
+still blocks the full-module proof.
 
-No overall4x engineering speedup demonstrated. The latest M07 stage-to-release
-sequence produced failure feedback, not new acceptance. Reduce preventable
-Python hook failures by invoking the actual loader under its cheap bounded
-ordinary check before freezing the next packet. Do not replace this with a
-general framework, broader review or unchanged-evidence hashing.
+User priority is maximum safe parallelism and accurate results. Coherent
+fix-through-test ownership and actual changed-consumer checks are in
+CONVERGENCE.md. Reuse accepted artifacts and reviews; avoid repeated
+unchanged-tree hashing and per-field handoffs. Eligible independent CPU6/7
+work overlaps under existing grants; the single heavy slot stays exclusive.
 
-Fixed SDK66 shortfall last measured21,913,600B. A bounded foreground follow-up
-found no already-authorized smaller cleanup candidate: known32,514,048B archive
-remains unreleased without ownership/consumer proof. No scan, cleanup or mutation.
-No resize/capacity bypass; keep host16GiB/scratch12GiB floors, one-heavy controls,
-permanent mutex27:4, scratch21 evidence/container/exclusions and genuine service stops.
+One-second host sample at 00:47:47 UTC: allowed CPU mean 11.43% busy,
+28,271,505,408 bytes available RAM (about 26.3 GiB), CPU pressure avg60
+0.08%, memory and I/O pressure zero. This indicates headroom at that
+instant, not a benchmark, admission proof or model-idle measurement.
+Repeated source coupling and handoff latency remain the immediate target.
 
-M07 whole remains open despite2/2 checks. M12 separate profile buckets still
-require actual public cycles and productive duration; M09 is integration
-readiness, not percentage of whole-kernel Rust conversion.
+At 00:49:15 UTC the 23.619-hour continuous measurement window recorded
++4 practical checks, +1 complete milestone, +2 native behaviors, and
++4 production / +4 native Rust paths. Rates are 0.169 checks/hour and
+0.042 whole milestones/hour. No overall 4× engineering speedup is established.
+The separate historical application-throughput benchmark remains preserved.
+
+All foreground helpers are finished and quiescent. The private binding-reuse
+prototype is future-only, with no live changes or measured wall-time gain.
+Main root owns every workload, release and cleanup action. Retain the
+16 GiB host / 12 GiB scratch floors, existing reserve qualification,
+scratch21 records, permanent mutex and all failure evidence.

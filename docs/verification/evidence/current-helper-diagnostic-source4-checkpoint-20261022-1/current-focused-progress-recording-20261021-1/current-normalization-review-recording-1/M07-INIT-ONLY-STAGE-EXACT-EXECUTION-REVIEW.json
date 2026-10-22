@@ -1,0 +1,54 @@
+{
+  "status": "PASS_EXECUTION_ORDINARY_INIT_ONLY_STAGE_ONCE",
+  "reviewer": "/root/insert_c_correction_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewed_packet_sha256": "7cbd997eac1b79f7483e33d3aa69782634764ea2c22a20308da422c2dfb99ca1",
+  "reviewed_packet_bytes": 5640,
+  "source_sha256": "91c9f485f4864fdb83e5eadc77b311aa77ebd96a094383c9e800719b1b48223e",
+  "binding_sha256": "7af985479e5901a545c600e511d4df51ce054de8d6cb2c6d74564f2541900e75",
+  "execution_count": 1,
+  "approved_command": "Exactly reviewed_packet.exact_next_ordinary_stage_argv, without substitution.",
+  "verified_correction": {
+    "source_delta": "Only the erroneous path-inclusive launcher equality becomes exact sha256,size,mode equality.",
+    "independent_artifact_path_authority_preserved": true,
+    "both_exact_descriptor_reads_preserved": true,
+    "visible_runtime_alias_preserved": true,
+    "binding_runtime_profile_corrected_to_two_McKernel_CPUs": true,
+    "binding_other_changes": "Stage-source descriptor recoupling only."
+  },
+  "affected_gate_result_sha256": "398f4eabc7b10b6c7a03c1663722a8ff785e98ca830e2fc4c35b33fad7d89734",
+  "affected_gate_scope": {
+    "original_different_path_refused": true,
+    "genuine_alias_and_artifact_accepted": true,
+    "wrong_hash_refused": true,
+    "wrong_size_refused": true,
+    "wrong_mode_refused": true,
+    "stage_executed": false
+  },
+  "accepted_reuse": {
+    "init_delta_and_loader_fixture_sha256": "d5e123f9349e0afb17f5c1401242a9895f9875b6c67c0dd420dcb52a841191cd",
+    "candidate_path_check_sha256": "3093a43a6c4c1cd4ce6966c70d601f88dc95d4b286ece25dbb20af3e4f3709ba",
+    "candidate_paths": 26,
+    "read_only_roots": 3,
+    "path_check_scope": "Candidate routing fixture; future files, hashes and identities remain unobserved.",
+    "actual_helper_controlpath_sha256": "21a6aa6b6e44cf9ff8e2e9f5e25e96b036710ef389141e352b55f0dbd4c3be77",
+    "collector_source_sha256": "619a5e97d067f87b26b085f628d074e2945c5da853ded38daf71a5d311768094",
+    "collector_artifact_sha256": "9508643afbbd962cf24822896505b134d3d9ae7da4dc1163be861a2a3f65c0b4"
+  },
+  "conditions": [
+    "Obtain genuine fresh ordinary admission; maintain all source and dispatcher capacity floors/reserves and no heavy-operation or census overlap.",
+    "Use CPU7,1GiB AS,30CPU seconds,35-second wall,32MiB per-file limit,nofile256 and one job.",
+    "Require fresh roots and preserve originals; stop on the first failure.",
+    "Actual stage must satisfy unchanged base bytes,60 final members,59 unchanged,init-only content delta, preserved other metadata and strict manifest-loader success.",
+    "Keep the collector copy runtime-visible and0755, preserving the original0700 artifact.",
+    "Record actual output descriptors and measured size before downstream normalization acceptance."
+  ],
+  "remaining_blocker": null,
+  "stage_result_observed": false,
+  "normalization_permission": false,
+  "native_permission": false,
+  "native_acceptance": false,
+  "M07_closure_credit": false,
+  "reviewer_quiescent": true
+}

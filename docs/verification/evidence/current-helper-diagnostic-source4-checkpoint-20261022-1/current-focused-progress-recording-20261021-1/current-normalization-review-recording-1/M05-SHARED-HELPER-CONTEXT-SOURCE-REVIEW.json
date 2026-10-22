@@ -1,0 +1,32 @@
+{
+  "reviewer": "/root/numa_clear_range_review",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_M05_SHARED_HELPER_FAILURE_CONTEXT_SOURCE_AND_ACTUAL_COMPONENT_EVIDENCE_ONLY",
+  "blockers_within_reviewed_scope": [],
+  "packet": "/home/holden/mckernel-work/host-preparation/native-second-stop-case-preparation-20261021-1/current053d-normalization-runtime-preparation-1/current-runtime-construction-preparation-1/helper-failure-context-correction-1",
+  "source": {
+    "sha256": "e4a2a4f5278c6fd1588571431f0fe7ec3840af531e3ea18fa2fb750308d9f38b",
+    "findings": [
+      "Actual diff adds first-failure storage, its publisher and one finish-path invocation; existing helper status and safe results remain unchanged.",
+      "supervise initializes the complete result before every path; helper_capture assigns the captured value before returning. Storage copies the result by value and retains a static tag, avoiding borrowed stack lifetime.",
+      "Only the first failed shared load/first-boot helper is retained. Subsequent failures cannot overwrite it.",
+      "Publication precedes fault/final publication/powerdown and runs independently of safe. Publisher failure marks good false; it grants no success or retry.",
+      "Shared-helper streams remain bounded to 1024 bytes each. Existing stream_json bounds apply; direct lifecycle/resource/second-boot capture and the 4096-byte resource chunk protocol remain unchanged."
+    ]
+  },
+  "actual_evidence": {
+    "result": "ACTUAL-M05-HELPER-CONTROL-PATH-AND-STATIC-RESULT-1.json",
+    "sha256": "619bb89b4c5faa162966bd68698b3aef3f77f6f6e1c688bf759766ba3265620a",
+    "observed": "All eleven compiler/body commands exited 0, directly joined, groups absent, streams closed, no timeout or capture/retirement errors. Compiler stderr is empty.",
+    "coverage": "Ten controlled Linux helper children exercise actual supervise/helper_capture/shared helper. Original failure exports no console context; corrected failure exports three records. Two failures preserve the first. Successful saved captures remain byte-identical.",
+    "bounds": "Two full 1024-byte streams produce 2197-byte lines; observed header is 195 bytes. Each remains below PIPE_BUF 4096.",
+    "static_binary": {
+      "sha256": "f6ef8e3cc1ec50a871339f0550f1f1ba53f5bcf3b44e950059825a73d7cc4850",
+      "bytes": 1034408,
+      "verified": "ELF64 x86-64 EXEC; no PT_INTERP or PT_DYNAMIC; dependency file names the exact changed source."
+    }
+  },
+  "eligibility": "Eligible input for the separately granted init-only staging step. Planned 61-member map, one changed init and 60 unchanged members must still be measured.",
+  "limitations": "PID1 main and actual unsafe-retirement publication were not executed by these tests. Boot failure cause remains unknown. No stage, normalization, source-retirement counter, native execution, restoration or cycle credit.",
+  "provenance": "Independent read-only exact source/diff and retained raw-evidence review. No tests, root actions, census or edits. Original failures and prior scope remain preserved."
+}

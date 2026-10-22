@@ -1,0 +1,33 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "cause": "Guest-only helper evidence omitted from retained serial; actual helper failure cause unknown. No 66/67 check in collector.",
+  "original_source": {
+    "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/collector-threads.c",
+    "sha256": "60921bc30463be3fa7bbf49e7589cb23ba31cff0fb56c767075a06927e7d4b70",
+    "bytes": 23008
+  },
+  "original_binary": {
+    "path": "/home/holden/mckernel-work/scratch/native-core-current942-preparation-20261017-1/threads-1/init",
+    "sha256": "268b967064e44a61340e43a23940ef2bba16ad22e3615a6f5d0e7108428890b6",
+    "bytes": 1021992
+  },
+  "corrected_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/collector-helper-failure-context.c",
+    "sha256": "619a5e97d067f87b26b085f628d074e2945c5da853ded38daf71a5d311768094",
+    "bytes": 24476
+  },
+  "actual_collector": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/init",
+    "sha256": "9508643afbbd962cf24822896505b134d3d9ae7da4dc1163be861a2a3f65c0b4",
+    "bytes": 1022088
+  },
+  "actual_result": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-collector-profile-correction-1/bounded-compile-correction-1/ACTUAL-COMPILE-AND-FAILURE-CONTEXT-BODY-RESULT-1.json",
+    "sha256": "2060b935b6705a17d9e63616420c69820e66349505811bb56d15a8f23905fb32",
+    "bytes": 3893
+  },
+  "native_acceptance": false,
+  "new_stage": null,
+  "new_normalization": null,
+  "new_runtime_release": null
+}

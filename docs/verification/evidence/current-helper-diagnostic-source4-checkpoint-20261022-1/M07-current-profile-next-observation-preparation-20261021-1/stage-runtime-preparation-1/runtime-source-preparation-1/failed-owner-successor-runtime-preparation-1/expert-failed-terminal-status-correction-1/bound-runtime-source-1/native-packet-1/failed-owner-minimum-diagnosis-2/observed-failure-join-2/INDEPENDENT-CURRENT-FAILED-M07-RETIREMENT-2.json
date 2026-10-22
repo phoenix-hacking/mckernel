@@ -1,0 +1,46 @@
+{
+  "reviewer": "/root/numa_clear_range_review",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "decision": "ACCEPT_CURRENT_FAILED_OWNER_RETIREMENT_ONLY",
+  "status": "PASS_CURRENT_FAILED_OWNER_RETIREMENT_ONLY",
+  "current_identity": {
+    "nonce": "05807dbcbbdf46989fee0f5f57b632a2",
+    "container": "d9bae4f1d2455aec60e1ec5719ee3e93564bd0fb7a2cf41e982355ec1e3ab4ec",
+    "owner_pid": 2883481,
+    "owner_start": 42583945,
+    "native_owner_caller_pid": 2883478,
+    "native_owner_caller_start": 42583937,
+    "lock_device_inode": [27, 4]
+  },
+  "producer_contract": {
+    "source_sha256": "4b92fa8001a37bd1ea7667d96f8adc7349780540dda10d9606ce337fd10c3974",
+    "qualification": "_cleanup, _release and _flush are unchanged from the previously reviewed owner contract.",
+    "meaning": "Published result requires authenticated container absence, local Docker-client retirement, acknowledged final reap records and released lock FD. The permanent mutex is not unlinked."
+  },
+  "actual_receipt": {
+    "absence_verified": true,
+    "application_acceptance": false,
+    "container": "d9bae4f1d2455aec60e1ec5719ee3e93564bd0fb7a2cf41e982355ec1e3ab4ec",
+    "failure": "OwnerError",
+    "lease_retained": false,
+    "secondary": [],
+    "secondary_omitted": 0,
+    "signal_number": null,
+    "status": "FAIL",
+    "decoded_sha256": "c4c2950a983ab7288e72480e7b0d7ad085226e28e5f416dcd6056b29038d2761"
+  },
+  "evidence": {
+    "packet": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/failed-owner-successor-runtime-preparation-1/expert-failed-terminal-status-correction-1/bound-runtime-source-1/native-packet-1",
+    "minimum_export": "failed-owner-minimum-diagnosis-2/actual-fixed-read-capture-1/stdout",
+    "minimum_export_sha256": "0ddd8272cdbb0d7de084665d3f8f8e58ba4112dde5ec94ed9f372d4645d6fdd4",
+    "export_capture_sha256": "4ca7cbb6d530b7cfbbd724a9c44724cebd77cde89690e7f023bd6fd450663fd9",
+    "sequence_sha256": "956f814d3fd9d943730e5166cf9b44d5ecfa5e69faad98679804a5c70f0325b2",
+    "observed": "Four completed stages and eight caller/root-child groups: all directly joined and absent, observer errors null. Native-owner stage exited 1; three success readbacks did not run.",
+    "start_command": "PID 2883530/start 42583998 reaped with returncode 1. stderr: native diagnostic failed: M07 case: M07 raw exited zero",
+    "state_json": "Absent; no successful exit or non-OOM state inferred."
+  },
+  "missing_retirement_observations": [],
+  "mechanical_recording": "Permit complete copying of genuine current producer fields and exact references with reviewer/recorder attribution. Preserve receipt status FAIL.",
+  "limits": "Raw application status and failure cause require the separate retained cause export. No kernel defect, native acceptance, restoration, new global census, common/shared record observation or retry authority inferred. Previous attempt retirement is not substituted.",
+  "provenance": "Independent read-only review; no execution, root action, census, cleanup or source edits."
+}

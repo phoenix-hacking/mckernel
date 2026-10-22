@@ -1,0 +1,188 @@
+{
+  "attempt_parent": "/home/holden/mckernel-work/scratch/m07p-261021-4/t",
+  "collector_sha256": "9508643afbbd962cf24822896505b134d3d9ae7da4dc1163be861a2a3f65c0b4",
+  "expected_stage_acceptance_sha256": "455b4bef6a4859cfc7893ed00db5662553250b6ea618f5f2afef9f0f80bb2e52",
+  "latest_exclusive_predecessor": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/failed-owner-successor-runtime-preparation-1/expert-failed-terminal-status-correction-1/bound-runtime-source-1/native-packet-1/failed-owner-minimum-diagnosis-2/observed-failure-join-2/ROOT-MECHANICAL-COMPLETE-CURRENT-FAILED-M07-PHYSICAL-REPORT-2.json",
+    "sha256": "f17ae9950db446acd88e4ec5efd35208a452d44d481a2deaef5ec89d0ea0a073",
+    "size": 31692
+  },
+  "manifest_directory": "/home/holden/mckernel-work/scratch/m07n-261021-4",
+  "nonce": "e2262e4b52334b71a1eb0a274215abfc",
+  "normalization_interpreter": {
+    "mode": 33277,
+    "path": "/home/holden/anaconda3/bin/python3.9",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "size": 15880080
+  },
+  "parent_binder": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/normalization-source-4/native_owner_binding.py",
+    "sha256": "346cd437e6fbc39c56ab70213a6f45bcc1d7576ce4deb7d167bb961579ab1ac0",
+    "size": 4420
+  },
+  "payload_contract": {
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "app",
+      "threads"
+    ],
+    "cwd": "/case/work",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PATH": "/usr/bin:/bin"
+    },
+    "oracle": {
+      "exit_code": 0,
+      "stderr_hex": "",
+      "stdout_hex": "454e41424c45445f52455155495245445f584352303d303030303030303030303030303030370a454e41424c45445f53595343414c4c5f504153530a454e41424c45445f46555445585f504153530a454e41424c45445f5349474e414c5f504153530a454e41424c45445f50524f46494c455f504153530a"
+    },
+    "stderr_limit_bytes": 1024,
+    "stdout_limit_bytes": 1024
+  },
+  "proposed_full_qemu_argv": [
+    "/usr/libexec/qemu-kvm",
+    "-machine",
+    "q35",
+    "-accel",
+    "tcg,thread=multi",
+    "-cpu",
+    "max,la57=off",
+    "-smp",
+    "4,sockets=2,cores=2,threads=1",
+    "-m",
+    "8192",
+    "-object",
+    "memory-backend-ram,size=4G,id=ram-node0",
+    "-object",
+    "memory-backend-ram,size=4G,id=ram-node1",
+    "-numa",
+    "node,nodeid=0,cpus=0-1,memdev=ram-node0",
+    "-numa",
+    "node,nodeid=1,cpus=2-3,memdev=ram-node1",
+    "-nic",
+    "none",
+    "-display",
+    "none",
+    "-no-reboot",
+    "-no-shutdown",
+    "-S",
+    "-monitor",
+    "none",
+    "-qmp",
+    "unix:/home/holden/mckernel-work/scratch/m07p-261021-4/t/attempt-e2262e4b52334b71a1eb0a274215abfc/qmp.sock,server=on,wait=off",
+    "-serial",
+    "file:/home/holden/mckernel-work/scratch/m07p-261021-4/t/attempt-e2262e4b52334b71a1eb0a274215abfc/serial.log",
+    "-debugcon",
+    "file:/home/holden/mckernel-work/scratch/m07p-261021-4/t/attempt-e2262e4b52334b71a1eb0a274215abfc/debugcon.log",
+    "-global",
+    "isa-debugcon.iobase=0xe9",
+    "-kernel",
+    "/home/holden/mckernel-work/scratch/native-artifact-revalidate-authority3-20261017-1/payload/native-rust-build-evidence/bzImage",
+    "-initrd",
+    "/home/holden/mckernel/scratch/m07c-261021-1/numa/lifecycle.cpio.gz",
+    "-append",
+    "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1 memmap=4K%0x80000-1"
+  ],
+  "root_owner_interpreter": {
+    "mode": 33277,
+    "path": "/home/holden/anaconda3/bin/python3.9",
+    "sha256": "8f122d7bdf820e716491d2be6c3b9f2b85f5fa46b34811e29432fa7cd8fd41fb",
+    "size": 15880080
+  },
+  "runtime_owner": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/runtime-source-4/native_diagnostic_container_owner.py",
+    "sha256": "fe40ae5f721d8fe8947c02dd059ef833badea95476577bc6f1df69ad2f694ddc",
+    "size": 62544
+  },
+  "runtime_readonly_helper_root": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/runtime-source-4",
+  "runtime_release": null,
+  "runtime_source_directory": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/runtime-source-4",
+  "runtime_source_pins": [
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/runtime-source-4/native_diagnostic_runner.py",
+      "sha256": "7b44721d46d9938864b3014ef47f9b8f40700cbb2e1b62650c48c212fec8e9bb",
+      "size": 7049
+    },
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/runtime-source-4/case_evaluator.py",
+      "sha256": "212aea025f5048eccb8d4e941c62202019f228bf197f3d7552ebd8b2bd5e96f4",
+      "size": 5013
+    },
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/runtime-source-4/enabled_stdout.py",
+      "sha256": "4bb20b4866ce43eb9c20f9ab0e9a7a0928f2473b36727cdd7136a5d57c5ca4e7",
+      "size": 3048
+    },
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/runtime-source-4/native_diagnostic.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440
+    },
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/runtime-source-4/native_diagnostic_backend.py",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+      "size": 25398
+    },
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/runtime-source-4/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "size": 9913
+    },
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic.py",
+      "sha256": "1b43934aacf63f21082448a99dd7237759387411200ced997aa2a16700505e5e",
+      "size": 53440
+    },
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel/scripts/application-tests/native_diagnostic_backend.py",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614",
+      "size": 25398
+    },
+    {
+      "mode": 33204,
+      "path": "/home/holden/mckernel/scripts/application-tests/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741",
+      "size": 9913
+    },
+    {
+      "mode": 33152,
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/coupled-sourcegraph-correction-1/runtime-source-4/native_diagnostic_container_owner.py",
+      "sha256": "fe40ae5f721d8fe8947c02dd059ef833badea95476577bc6f1df69ad2f694ddc",
+      "size": 62544
+    }
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "snapshot": null,
+  "source_manifest": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/scratch/m07cm-261021-1/numa/manifest.json",
+    "sha256": "e5e38a81ed3c15587b321e4a51d232947abe9639296ac391fc8b40c51d23cd33",
+    "size": 5152
+  },
+  "stage_acceptance": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/collector-diagnostic-normalization-runtime-preparation-1/ROOT-MECHANICAL-COMPLETE-ACTUAL-M07-INIT-ONLY-STAGE-CONSUMER-1.json",
+    "sha256": "455b4bef6a4859cfc7893ed00db5662553250b6ea618f5f2afef9f0f80bb2e52",
+    "size": 29369
+  },
+  "stage_result": {
+    "mode": 33152,
+    "path": "/home/holden/mckernel/scratch/m07c-261021-1/numa/stage-result.json",
+    "sha256": "3fa436277f662eca56c9bbe3abc954cf35062bfe702822f73988076c162c9781",
+    "size": 19586
+  }
+}
