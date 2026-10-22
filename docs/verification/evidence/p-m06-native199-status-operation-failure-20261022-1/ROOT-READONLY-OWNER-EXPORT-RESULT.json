@@ -1,0 +1,41 @@
+{
+  "status": "PASS_EXACT_READONLY_ROOT_OWNER_EXPORT",
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-status-failure-retirement-1/readonly_export_exact_owner.py"
+  ],
+  "source_sha256": "79bd9776c785c39c7b8bc4589101764bcb8cd582c64a8b8a98ec10fa3e7f9b5f",
+  "root_identity": {
+    "device": 1828,
+    "inode": 884346,
+    "uid": 0,
+    "gid": 0,
+    "mode": 448
+  },
+  "pid": 3364355,
+  "start_ticks": "50697097",
+  "returncode": 0,
+  "elapsed_seconds": 0.113176520972047,
+  "stdout_bytes": 282677,
+  "stdout_sha256": "a2a9f4480f679f009f28e4259f44842c2fc41db0378ec5e15a992b1b5b6f0fad",
+  "stderr_bytes": 0,
+  "direct_joined": true,
+  "streams_closed": true,
+  "process_group_absent": true,
+  "no_truncation": true,
+  "root_mutations": false
+}

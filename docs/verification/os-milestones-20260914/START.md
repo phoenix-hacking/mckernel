@@ -29,6 +29,14 @@ change does not invoke it. Keep older interactive campaigns paused while the
 launcher owns the checkout. A running dispatcher reloads the new policy at a
 safe checkpoint after reconciling local/remote changes without discarding WIP.
 
+## Active agent dispatch rule — 2026-10-22
+
+New work for a completed or idle agent MUST use `followup_task` to start a new
+turn. Use `send_message` only to steer an already running agent. Confirm the new
+turn/status once, then wait for its result without busy-polling. Sending a message
+to a completed agent and waiting for it is not productive work. Apply this rule
+before reporting a review or implementation lane as active.
+
 ## Dispatcher startup packet
 
 1. Read GOAL.md, START.md, CONVERGENCE.md and HANDOFF.md in that order, overriding

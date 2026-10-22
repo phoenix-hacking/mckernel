@@ -1,0 +1,55 @@
+{
+  "accepted_body_preimage": {
+    "bytes": 2334,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/short-path-correction-1/ACTUAL-PATH-CHECK-ARGV.json",
+    "sha256": "e3b603829e938afbd38d69468d51bd1e439b4a54c668e443f3e06c57d902e5ac"
+  },
+  "actual_execution_by_worker": false,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=8388608",
+    "--core=0:0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport importlib.util,json,hashlib,os\nB=Path(__import__('sys').argv[1]);P=json.loads(Path(__import__('sys').argv[2]).read_text())\ndef load(n,path):\n s=importlib.util.spec_from_file_location(n,path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m\no=load('actual_owner',B/'native_diagnostic_container_owner.py');d=load('actual_diagnostic',B/'native_diagnostic.py');parent=Path(P['new_owner_parent']);manifest=Path(P['new_manifest']);need='d63985a14c2a4a898bda4713c192ac935df0da0f31b93728ebb00df53618dffb'\nassert hashlib.sha256((B/'native_diagnostic_container_owner.py').read_bytes()).hexdigest()=='4d7ae097cae866389ed044a6247e01f1bc78ff8744fc8d72f39fb294b55bb298'\nassert hashlib.sha256(manifest.read_bytes()).hexdigest()==need\no.private_parent(str(parent));o._manifest_identity(str(manifest),need);o._manifest_outside_writable_parent(str(manifest),parent)\nattempt=parent/('attempt-'+P['fresh_nonce']);assert not os.path.lexists(attempt)\na=d.expected_qemu_argv(json.loads(manifest.read_text()),attempt);q=P['qmp_socket'];assert a[a.index('-qmp')+1]=='unix:'+q+',server=on,wait=off';assert len(os.fsencode(q))==93\nprint('PASS actual source4d7 parent/scratch manifest/outside-writable guards and actual expected_qemu_argv with93byte QMP socket')",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/EXACT-FRESH-NATIVE199-GUARD-DATA.json"
+  ],
+  "body_delta": "Only expectedmanifestSHA148de\u2192d639 and newdataargument; omit accepted overlongnegative section. Sourceowner4d7 validation/sourcehash constant and production expected_qemu_argv body unchanged. No new algorithm/helper/test.",
+  "data": {
+    "bytes": 308,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/EXACT-FRESH-NATIVE199-GUARD-DATA.json",
+    "sha256": "87c793c01e1818e12c87b1ec68203ecd4a802b113f1fad8a0e5255eabd85d89d"
+  },
+  "expected_manifest_sha256": "d63985a14c2a4a898bda4713c192ac935df0da0f31b93728ebb00df53618dffb",
+  "expected_output": "PASS actual source4d7 parent/scratch manifest/outside-writable guards and actual expected_qemu_argv with93byte QMP socket",
+  "expected_owner_sha256": "4d7ae097cae866389ed044a6247e01f1bc78ff8744fc8d72f39fb294b55bb298",
+  "negative_vector_replayed": false,
+  "precondition": "Root publishes exact d6396405B manifest/m.json0600 and/p0700 via supplied exclusive ordinarypublicationargv after genuine review, then invokes this pure command under existing capture recipe. This command never creates paths/sockets/children beyond its ordinary Python process.",
+  "profile": {
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 30,
+    "Docker": false,
+    "NPROC": "inherited",
+    "compiler": false,
+    "cpu": [
+      7
+    ],
+    "guest": false,
+    "jobs": 1,
+    "root": false,
+    "stream_cap_bytes": 8388608,
+    "wall_seconds": 35
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_READONLY_FRESH_NATIVE199_GUARD_ARGV_READY_AFTER_METADATA_PUBLICATION"
+}

@@ -1,0 +1,29 @@
+{
+  "status": "PASS_CONDITIONAL_ORDINARY_EXECUTION",
+  "decision": "ONE_COLLECTOR_ONLY_199_RAW_STAGE_INVOCATION",
+  "reviewer": "/root/matched_guest_build_review",
+  "implementation": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewed_proposal_sha256": "241fdf5f5605ffd830ef98f8c9ae77946ae5b88032e3d5d456d20e592f73fb0a",
+  "caller_sha256": "527664db40ba1758da32df921e75220b1317573e7b962c8e3ba4b2824472df1a",
+  "raw_argv_sha256": "45699f0a3cd6914ebec6d07f227a562085e60251b30cd8ed5ba9fd8e1c8965e3",
+  "collector_sha256": "c020a8e0ab43e222caf901d92bfecb2a8d8cf20ea0b539910a17a578f1fd12fc",
+  "verified": [
+    "Collector reference matches actual compile receipt; current file identity, mode and 1021320-byte size match the bound record.",
+    "Independent collector source review and compile/six-fixture result hashes match the supplied authorities.",
+    "Caller differs from accepted predecessor only in argv/result/capture names and reporting text; supervisor behavior and completion assertion remain unchanged.",
+    "Accepted stager, replacement map, image, modules, launcher and strict application selection are reused.",
+    "Output, capture and result namespaces were observed absent."
+  ],
+  "required_profile": "CPU6, one job, AS512MiB, CPU30s, supervisor30s+3s cleanup, outer45s, streams8MiB each, FSIZE128MiB, nofile256, core0, inherited NPROC.",
+  "release_conditions": [
+    "Root records fresh aggregate capacity and CPU6 availability under existing exclusion controls.",
+    "Exact proposal, caller, argv and collector binding remain current.",
+    "Run once in the named fresh namespaces; retain any failure without automatic retry."
+  ],
+  "limitations": [
+    "Authority covers this ordinary raw-stage invocation only.",
+    "Actual overlay, complete native manifest and strict-consumer validation remain pending.",
+    "No 235/227 invocation, compiler, Docker, guest or native execution is authorized."
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "decision": "ACCEPT_E696_FAILED_NATIVE199_HOST_PHYSICAL_RETIREMENT_ONLY",
+  "reviewer": "/root/matched_guest_build_review",
+  "implementation": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "nonce": "e696db0e49884b968eaebc267731b88b",
+  "container": "7c54fc6b0681a82c6259adff718628221bec1edb0b6ba6087055fdc9d662c53f",
+  "evidence_sha256": {
+    "original_failed_capture": "451d99c6ce5e9e1e4e4813f314291ccf323b9fcf6078fb41b2c65ceee3f2a062",
+    "actual_owner_export": "a2a9f4480f679f009f28e4259f44842c2fc41db0378ec5e15a992b1b5b6f0fad",
+    "export_result": "24d5920be6badbaf007606666c00fce6bb472b34d543a14c4862ac2774696d3f",
+    "current_name_label_clearance": "e9a2c2d12e12b3eb690c4a55934bbe5ab0490ea0b22551c00adec071a6a9cdcc",
+    "owner_terminal_result": "181a85c2cf8a9f16e8a07558f129b1bc8e6f5467d197df2ef4ca53dc5e8f3af2",
+    "guest_terminal_result": "abb2089f4708e24d27ad84b08cf469e4250c36381c4f079cb52bd1a2e05aec06"
+  },
+  "accepted_observations": [
+    "Independently decoded all77 exported files; every recorded length and SHA256 matched.",
+    "All25 distinct Docker client processes were recorded reaped.",
+    "Inspect021 recorded exited, Running=false, Pid=0 and OOMKilled=false.",
+    "Remove022 returned0 for the exact container; subsequent separate name, label and container-ID queries returned0 with empty outputs.",
+    "Fresh independent e696 name and owner-label queries returned0 with empty streams and closed process groups.",
+    "Owner terminal FAIL preserved absence_verified=true, lease_retained=false and no secondary failures.",
+    "Original capture directly joined with closed streams and absent process group; fresh permanent27:4 reacquisition/release and shared-heavy absence passed.",
+    "Guest QEMU container-namespace PID10 returned-9; cleanup recorded reaped=true and no errors."
+  ],
+  "physical_retirement_blockers": [],
+  "application_acceptance": false,
+  "normal_native_cpu_memory_restoration_accepted": false,
+  "execution_authorized": false,
+  "remaining": "OS_STATUS/provider diagnosis and any corrected operation require their own source/evidence review, fresh inputs and execution release."
+}

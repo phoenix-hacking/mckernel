@@ -1,0 +1,134 @@
+{
+  "application_acceptance": false,
+  "argv": [
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--fsize=134217728",
+    "--nofile=256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native_diagnostic_stager.current68.py",
+    "--base-root",
+    "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root",
+    "--payload",
+    "/home/holden/mckernel-work/host-preparation/native-exec-reset-self-exec-case-preparation-20261021-1/ordinary-reference-1/result/app",
+    "--collector",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/collector-helper-diagnostic",
+    "--replacements",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/REPLACEMENTS.ACTUAL-CURRENT68-AND-IMAGE.json",
+    "--output",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-199-raw-stage-1"
+  ],
+  "cleanup_complete": true,
+  "cleanup_timeout_seconds": 3.0,
+  "cwd": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1",
+  "descendant_records_omitted": 0,
+  "descendants": [],
+  "elapsed_seconds": 9.116122473962605,
+  "env": {
+    "HOME": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1"
+  },
+  "events": [
+    {
+      "kind": "cleanup_started",
+      "monotonic": 490865.424478936,
+      "reason": "leader_exited"
+    }
+  ],
+  "executable": {
+    "path": "/usr/bin/taskset",
+    "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+    "size": 35048
+  },
+  "executable_path": "/usr/bin/taskset",
+  "fd_setup": {
+    "close_fds": true,
+    "pass_fds": [],
+    "stderr": "separate owned pipe",
+    "stdin": "regular file or /dev/null",
+    "stdout": "owned pipe"
+  },
+  "gid": 1000,
+  "groups": [
+    4,
+    20,
+    24,
+    27,
+    30,
+    46,
+    120,
+    131,
+    132,
+    133,
+    1000
+  ],
+  "monotonic_finished": 490865.426790975,
+  "monotonic_started": 490856.310668501,
+  "payload_completion_observed_monotonic": 490865.424468997,
+  "payload_monotonic_deadline": 490886.31114791,
+  "payload_monotonic_started": 490856.31114791,
+  "process": {
+    "pgid": 3359481,
+    "pid": 3359481,
+    "ppid": 3359475,
+    "session": 3359481,
+    "starttime_ticks": 50619443,
+    "state": "R"
+  },
+  "provenance": "Linux process collection only; no McKernel evidence",
+  "raw_wait_status": 0,
+  "schema_version": 1,
+  "status": "COMPLETED",
+  "stderr_limit_bytes": 8388608,
+  "stdin": {
+    "kind": "devnull"
+  },
+  "stdin_path": null,
+  "stdout_limit_bytes": 8388608,
+  "streams": {
+    "stderr": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-199-raw-stage-capture-1/stderr.bin",
+        "sha256": "8ec12690459972270f3ea25fd8e8e49750287f725a4d48101e007bbd070f126e",
+        "size": 13
+      },
+      "bytes_observed": 13,
+      "bytes_retained": 13,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 8388608,
+      "truncated": false
+    },
+    "stdout": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/collector-only-restage-1/actual-199-raw-stage-capture-1/stdout.bin",
+        "sha256": "08bf590d5fbf36e5162ab6723527b4385459ba4c442f451ab16dab18949cc0f0",
+        "size": 21912
+      },
+      "bytes_observed": 21912,
+      "bytes_retained": 21912,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 8388608,
+      "truncated": false
+    }
+  },
+  "supervisor_pid": 3359475,
+  "timeout_seconds": 30.0,
+  "uid": 1000,
+  "umask": "0077",
+  "wait_status": {
+    "code": 0,
+    "kind": "exited"
+  }
+}

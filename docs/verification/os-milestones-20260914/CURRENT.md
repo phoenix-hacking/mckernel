@@ -1,3 +1,38 @@
+## Current — exact ABI2 boot-helper correction; native status failure retired (2026-10-22 22:58 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical 28/35: seven open P-M01-02, P-M05-02, P-M05-03, P-M06-01,
+P-M08-02, P-M09-02 and P-M12-01. Weekly included only; reserve576 unanswered.
+No application, restoration, cycle or Rust-retirement credit from this checkpoint.
+
+Actual e696 native199 failed after McKernel fullready3; the corrected C020 collector
+exported exact boot-helper status/streams. Helper line215 required READY4. Independent
+source traces prove selected SDK20352 callbackABI2 publishes RUNNING5 on BOOT0;
+provider/image/module changes are unwarranted. All strict application oracles remain.
+Independent host physical retirement PASS is preserved with original failed captures
+in ../evidence/p-m06-native199-status-operation-failure-20261022-1/; no normal
+McKernel CPU/memory restoration is inferred. No critical/native/build operation live.
+
+Foreground author owns explicit boolean ABI2 helper541fb393 (exact5; legacy4
+unchanged). Independent source review b904cc91 PASS; root granted ONE CPU6 compile
+and twelve actual predicate cases under proposal4a88ab1a/runner13d89e6c,
+512MiB/onejob/30CPU/24work+6cleanup/1MiB live file cap/inherited NPROC.
+Actual output remains pending. sdk_host_profile_candidate owns helper-only restage
+using accepted derive_base_payloads single-record replacement, then unchanged overlay
+and strict manifest consumer. New helper ELF stays unbound until actual compile PASS.
+Reuse image10972/SDK20352/launcher0d77/C020 collector. Then fresh released199,
+235 process/exec/wait and227 recovery, with separate exact evidence and admission.
+
+P05 source successor01645826 replaces exactly five of62 members;57 unchanged,
+including real workload, collector and two qualified helpers already requiring5.
+Actual stage proposal f30b9c9b is ready for narrow ordinary-profile review/admission;
+no stage/native result yet. Expected tuples(0,1,1),(0,2,2) require fresh module loads,
+qualified helper flags, no extra/failed prepare and unambiguous log prefixes.
+P12 HOST-output boundary/source fixtures are ready; actual restoration/final matching
+profile and separate long execution release remain prerequisites. No throughput claim.
+Active workflow rule persisted: followup_task wakes completed/idle agents;
+send_message only steers running agents. Confirm one new turn, then avoid busy polling.
+
 ## Current — real McKernel boot; collector failed before application (2026-10-22 22:31 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

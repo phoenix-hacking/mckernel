@@ -1,0 +1,5 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Actual corrected-collector199 attempt e696 failed in15.607591s with no accepted app launch. Exact serial/debug/QMP/result, three raw ND helper diagnostic frames, capture and pipeline/data/source/compile/release evidence,77 genuine rootowner journal files and fresh exactname/label/mutex/sharedheavy readbacks are retained. Original failure status and strict199B/exit37 oracle remain unchanged.
+
+All25 Docker clients reaped; container exited/Pid0,remove succeeded,final name/label/CIDqueries empty,owner result FAIL/absence_verifiedtrue/lease_retainedfalse. QEMU was killed/reaped with cleanup errors empty. Fresh root name+label queries and permanent27:4 reacquisition/sharedheavy absence pass. These are physical-review facts, not worker acceptance or full native restoration. Foreground owns OS_STATUS/enum/callback diagnosis; this lane performed none. Previous failure capsule and all original inputs remain preserved, with no image/module/ELF/overlay binary duplication.

@@ -1,0 +1,60 @@
+{
+  "status": "PASS_CURRENT_NATIVE_OWNER_READONLY_ABSENCE",
+  "queries": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=10:10",
+        "--fsize=1048576:1048576",
+        "--core=0:0",
+        "--",
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-native-diagnostic-e696db0e49884b968eaebc267731b88b$"
+      ],
+      "pid": 3364243,
+      "returncode": 0,
+      "empty_streams": true,
+      "direct_joined_closed_group_absent": true
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=10:10",
+        "--fsize=1048576:1048576",
+        "--core=0:0",
+        "--",
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.native-diagnostic.owner=e696db0e49884b968eaebc267731b88b"
+      ],
+      "pid": 3364251,
+      "returncode": 0,
+      "empty_streams": true,
+      "direct_joined_closed_group_absent": true
+    }
+  ],
+  "permanent_mutex27_4_acquired_released": true,
+  "shared_heavy_record_absent": true,
+  "no_new_heavy_admitted": true,
+  "elapsed_seconds": 0.22942601901013404,
+  "mutation": false
+}

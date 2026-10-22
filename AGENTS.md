@@ -16,6 +16,14 @@ assembly. Keep functional memory, ownership, lifecycle and resource checks.
 Do not relabel security work as functional testing. This scope instruction does
 not clear a service-policy hold, authorize automatic retries or start a campaign.
 
+## Active agent dispatch rule — 2026-10-22
+
+New work for a completed or idle agent MUST use `followup_task` to start a new
+turn. Use `send_message` only to steer an already running agent. Confirm the new
+turn/status once, then wait for its result without busy-polling. Sending a message
+to a completed agent and waiting for it is not productive work. Apply this rule
+before reporting a review or implementation lane as active.
+
 ## Current user priority — functional OS (2026-10-17)
 
 Build the working kernel and application infrastructure defined by

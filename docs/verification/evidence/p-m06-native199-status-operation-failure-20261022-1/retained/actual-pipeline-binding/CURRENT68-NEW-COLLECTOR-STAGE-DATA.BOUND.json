@@ -1,0 +1,288 @@
+{
+  "SDK_original_failure_preserved": true,
+  "actual_apps": 0,
+  "archive": null,
+  "cases": [
+    {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/app"
+      ],
+      "binary": {
+        "bytes": 4656,
+        "path": "/home/holden/mckernel-work/host-preparation/native-exec-reset-self-exec-case-preparation-20261021-1/ordinary-reference-1/result/app",
+        "sha256": "e225ab42ec8836a7887135297218645f868568e131d5676b5bb59c12c8dd7b52"
+      },
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "execution_order": 1,
+      "id": "p-m06-exec-reset-selfexec-199B",
+      "oracle": {
+        "exit_code": 37,
+        "stderr": {
+          "bytes": 0,
+          "path": "/home/holden/mckernel-work/host-preparation/native-exec-reset-self-exec-case-preparation-20261021-1/expected.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 199,
+          "path": "/home/holden/mckernel-work/host-preparation/native-exec-reset-self-exec-case-preparation-20261021-1/expected.stdout",
+          "sha256": "c415fd7c85986852584419737460894f4f7b03a781b3d991659d31fb665faf15"
+        }
+      },
+      "staged_member": "apps/app",
+      "strict_oracle_unchanged": true
+    },
+    {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/app"
+      ],
+      "binary": {
+        "bytes": 5628568,
+        "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait",
+        "sha256": "537cb22b2af1f7fca1202afaf45b017364823c185c2ec47474093e51647ba5b8"
+      },
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "execution_order": 2,
+      "id": "P-M06-01-process-exec-wait-235B",
+      "oracle": {
+        "exit_code": 0,
+        "stderr": {
+          "bytes": 0,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/expected.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 235,
+          "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/expected.stdout",
+          "sha256": "0e7aa2ed289b122be9c38f44dc284cbb7bda64a662c2b09b4036a030f3f2d17b"
+        }
+      },
+      "staged_member": "apps/app",
+      "strict_oracle_unchanged": true
+    },
+    {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "/apps/app"
+      ],
+      "binary": {
+        "bytes": 5631824,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-recovery-batch-prerequisite-20261022-1/process_cancel_recovery",
+        "sha256": "6abb5e9046444c64d72139f85fcae9e4796eff7ceb5cc2dd1e5b1a47ef3695a5"
+      },
+      "coverage_limit": "app child SIGTERM recovery; does not induce pending UserSlice ABORT or cancelled deliveredexec",
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "execution_order": 3,
+      "expert_Linux_reference": {
+        "bytes": 3233,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-recovery-trace-expert-20261022-1/HANDOFF.json",
+        "sha256": "72e593a4a4615d8aa81c605c46369a69856000132f2dc78e9b1b867d1f59cc3e"
+      },
+      "fold_condition": "Only after same exact enabledfork/liveexec artifacts and independent source/oracle/runtime collector/evaluator release; separate appstage, no change to199/235 oracles",
+      "id": "P-M01-02-child-SIGTERM-and-exec-recovery-227B",
+      "oracle": {
+        "exit_code": 0,
+        "stderr": {
+          "bytes": 0,
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-recovery-batch-prerequisite-20261022-1/expected.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 227,
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-recovery-batch-prerequisite-20261022-1/expected.stdout",
+          "sha256": "4eba8ea20e13ebe307fe67b771c200de36305e787ec31590b05e92dcb67ac9d6"
+        }
+      },
+      "staged_member": "apps/app"
+    }
+  ],
+  "collector": {
+    "bytes": 1021320,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/collector-helper-diagnostic",
+    "sha256": "c020a8e0ab43e222caf901d92bfecb2a8d8cf20ea0b539910a17a578f1fd12fc"
+  },
+  "collector_compile_result": {
+    "bytes": 5950,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/ordinary-check-1/result.json",
+    "sha256": "e78a91e5048fb9281d9afc69a9aa3d092ad64d1c037f8bb10970a5bb7770d27d"
+  },
+  "existing_runtime": {
+    "argv_shape": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "backend": {
+      "bytes": 25398,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/consumer-readonly-correction-1/native_diagnostic_backend.py",
+      "sha256": "cd0759c926876483665065cb320b9daf7d7c6b32f56e561805b4b0343f60d614"
+    },
+    "branch": "existing no-pair single-payload manifest, not pair_rounds/ten-round collector",
+    "collector_total_seconds": 120,
+    "existing_vm_profile": {
+      "memory_mib": 8192,
+      "name": "native-diagnostic-4vcpu-8192mib",
+      "numa_nodes": 2,
+      "vcpus": 4
+    },
+    "lifecycle_and_evaluator": {
+      "bytes": 76466,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/consumer-readonly-correction-1/native_diagnostic.py",
+      "sha256": "69d7bdb600309a4aea02f38746ba17438bf6e4758def35d6c2f90264c3ee75e3"
+    },
+    "outer_heavy_profile": "one reviewed operation; CPUs2-5, 4CPU,12GiB,no swap,512tasks,networknone; fresh root release/lease/mutex/capacity/runtime identity mandatory",
+    "owner": {
+      "bytes": 90856,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/consumer-readonly-correction-1/native_diagnostic_container_owner.py",
+      "sha256": "3cd622d180e03342004714a5e26842f350924a09c1b8ae53016f973f440fbe14"
+    },
+    "payload_timeout_ms": 10000,
+    "qmp_capture": {
+      "bytes": 9913,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/consumer-readonly-correction-1/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+    },
+    "reuse_conditions": [
+      "existing exact stream/exit oracle remains unchanged",
+      "direct owner wait and whole physical retirement required; timeout is failure and owned descendants must retire",
+      "same per-VM module/OS ownership and postjoin readbacks; no cleanup authority from missing PIDs",
+      "fresh stage manifest must bind exact actual image/module/mcexec/app/collector bytes before native release"
+    ],
+    "runner": {
+      "bytes": 6005,
+      "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/consumer-readonly-correction-1/native_diagnostic_runner.py",
+      "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499"
+    }
+  },
+  "existing_stager_receipt_parser": "None: production replacement consumer takes exactfiledescriptors and does not read BUILD_ARTIFACT_CHECKS_PASS or any buildreceiptstatus; no typedstatusgate added.",
+  "export_profile": "current-v6-adopt-v4-control-v1",
+  "image": {
+    "artifact": {
+      "mode": 493,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+      "size": 8439816
+    },
+    "driver_receipt": {
+      "bytes": 41900,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/evidence/receipt.json",
+      "sha256": "806cc4e6cd7a52346442aeb72df198ec8d4bb817fe454306ed0966aad8c25d39"
+    },
+    "driver_status": "PASS",
+    "independent_artifact_acceptance": {
+      "authority": "Actualindependentacceptanceprovidedbydispatcher; no repeatedreview/test.",
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/INDEPENDENT-ACTUAL-MATCHED-IMAGE-ARTIFACT-REVIEW-1.json",
+      "sha256": "47050d75307bd365841f528c769fe7c42d1766a7aafa1f705890da020b9eff57"
+    },
+    "independent_linked_provider_review": null,
+    "linked_exec_reset_and_fourfork_providers": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/ACTUAL-LINKED-EXEC-RESET-PROVIDER-1.json",
+      "proof": "DispatcherreportedactualuniqueT/noU exec_reset source/defaultcallers+fourforkbridges acceptance; no nm/compiler rerun here."
+    },
+    "physical_retirement_accepted": null
+  },
+  "independent_artifact_acceptance": {
+    "bytes": 1960,
+    "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-canonical-host-output-request-20261022-1/INDEPENDENT-CURRENT68-RETAINED-ARTIFACT-ACCEPTANCE-1.json",
+    "sha256": "1471eb15683255085a824714c1b3ca98d7a4902654330608541a9c689bec33ca"
+  },
+  "independent_failed_owner_retirement": {
+    "bytes": 1471,
+    "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-canonical-host-output-request-20261022-1/INDEPENDENT-ACTUAL-FAILED-SDK-RETIREMENT-2.json",
+    "sha256": "b09d1ffa57d34fc4e270de81ab9fdd28d028f732a26ba5766db16e4d8710e989"
+  },
+  "launcher": {
+    "bytes": 394640,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec",
+    "sha256": "0d774a14c08bdd4abcd0368060ca8eafba18bf44244dafba5459f895c5d78a7a"
+  },
+  "launcher_identity_distinction": {
+    "actual_stager_replacement_enforces_0d774": true,
+    "image_build_emitted_launcher": {
+      "bytes": 394656,
+      "sha256": "689dcad27b2ce3a30f49df1bfe9452f2169a14e9c350c24c9677c88b1f152876"
+    },
+    "image_build_launcher_not_selected": true,
+    "selected_staged_launcher": {
+      "bytes": 394640,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec",
+      "sha256": "0d774a14c08bdd4abcd0368060ca8eafba18bf44244dafba5459f895c5d78a7a"
+    }
+  },
+  "manifest": null,
+  "native_acceptance": false,
+  "observation": {
+    "bytes": 14031,
+    "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/current-export-contract-correction-1/readonly-validation-1/report.json",
+    "sha256": "f11eb168837814022b00a8d1d69f24124e11274e7f1af0eb45ed2ef206fc45e8"
+  },
+  "original_failed_driver_receipt": {
+    "bytes": 28044,
+    "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-20352dabb9c94403a03c224ec2826ff2/evidence/receipt.json",
+    "sha256": "58ffcfb9febb788d6e3f4c6d949f0307c88031b95940655b49f8a577a0bbb2d3"
+  },
+  "original_make_returncode": 0,
+  "original_receipt_relabelled": false,
+  "original_status": "FAIL",
+  "preparation_sha256": "26a572abd9ee003ca6fef03fbe110d3a5ec6e54aa701ae3b5ffc9b798318f7cb",
+  "prior_collector_receipt_preserved": {
+    "bytes": 1021304,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/process-exec-wait-collector",
+    "sha256": "d1c72d0fe0a2e6872b8aa210354984aa946d5475865ce9e9fe6c79de79cfa0be"
+  },
+  "replacement_map": {
+    "bytes": 1629,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/REPLACEMENTS.ACTUAL-CURRENT68-AND-IMAGE.json",
+    "sha256": "5072b59eea21eaeb6a952d0cb3ff58a0d3a7db4f5cf9a38eabfa1befc4f5ce11"
+  },
+  "root_runtime_release": null,
+  "runner": {
+    "bytes": 6005,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/consumer-readonly-correction-1/native_diagnostic_runner.py",
+    "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_identity": "d9b827db21614e84e45f647deddf6df0a8fec8703da8a716d976d843f78ff3b9",
+  "stage": null,
+  "stager": {
+    "bytes": 22574,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native_diagnostic_stager.current68.py",
+    "sha256": "1b891f42873b1352ae4087b966d2767d4054666790eade553dd79c933b02efd2"
+  },
+  "stager_diff": {
+    "bytes": 2224,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/STAGER-PINS-ONLY.diff",
+    "sha256": "634fbe85d9f49e62d1aeb06a5a557bda1fe504275a986ba9910b4c388a9e7134"
+  },
+  "stager_preimage": {
+    "bytes": 21904,
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/source/scripts/application-tests/native_diagnostic_stager.py",
+    "sha256": "e935383fac40ec9f2e10f6ffdd42c5e7c4c0de49a243cb34ec0e9b417f5ec860"
+  },
+  "status": "NEW_CORRECTED_COLLECTOR_C020_COMPILE_SOURCE_BOUND_NO_STAGE_RUNTIME_RELEASE",
+  "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload "
+}
