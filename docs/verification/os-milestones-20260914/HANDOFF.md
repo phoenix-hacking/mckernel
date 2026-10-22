@@ -1,3 +1,115 @@
+## Current — pinned M06 artifact independently accepted (2026-10-22 19:26 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual one-shot production launcher owner closed0/227.971554733s, directjoined/
+streamsclosed/groupabsent; session58377 terminal, do notpollorrestart. Pinned
+cmake mcexec-j1 driverPASS2.744613409s/emptybuildstderr; sixoriginal/copyartifact
+pairs and13inventorymembers independentlyaccepted bym07_final_closure_review.
+ActualELF0d774a14c08bdd4abcd0368060ca8eafba18bf44244dafba5459f895c5d78a7a
+(394640B),Rustobj87764d93/source990/pinnedtoolchaina68e; exactRustfataltransfer→
+phase2→act_execve→unchangedCexitbridges linkage verified. Baselineunchanged,
+kernelnotrebuilt. ../evidence/p-m06-01-actual-pinned-launcher-build-20261022-1/
+retains77actualfiles+request/grant/release/read-onlyfailures/productionacceptance.
+This is productioncompiler/artifactproof, notnativeprocessorP06closure.
+
+Actual stoppedcontainer16b64e81d41985cd96ccea154a1b75d17009e13332b43348cd432dc2b044aef7,
+noncecbb64b5d21224c038490b8ea4ef43272; common/sharedrecords stillretained. Ownerlease
+absent isexpectedretiredfinallyrelease; absencealone isnotcontainer/recordclearance.
+Current terminalowner m07_closure_join completes truthful typedcontrollerproof/
+7savedDockerclientledger across C9observer/engine/checkers whilepreservingsource4
+proc.v2+retentionfixes. Genuine exacttoolstarted/completed/source nowretained;
+no old8guardclient/guardpostjoinshape fabricated. Freshrootobserver/cleanup/
+postjoin/independentphysicalrelease stillrequired. Then rootadvances smallest
+matchedactualselfexec/process/cancellationnativebatch; lifecycle_missing_recovery
+is bindingexactminimumkernel/module/ABI20/21/CREATE_PPD dependencies now.
+
+P13-03 adopted28/35; allsevenfunctional/nativechecks stayopen. Currentdelivered
+pointer is ../evidence/p-m13-01-delivered-handoff-cycle-clarification-20261022-1/CURRENT-DELIVERED-HANDOFF.json;
+source-boundfinalreview verified; P205nativecycles0/unproved, historicaltuples
+separate. Wholepractical/native restoration/livecompute-Cretirement remainOPEN.
+SDKhostprofilecandidate10testsPASS stillstrictlycapacityblocked; alternative
+25redundantSCRATCHarchivecandidate845582336B has exactretainedrestorationmaps/
+unchangedmetadata andM06/M07sourceinputdisjointness, butneedsfreshregistry,
+mount/FD/dependencyreview pluspositiveM06retirement beforeanyseparatelyreleased
+cleanup. No deletion/trim/reservechange. Pendingreserve576 remainsunanswered.
+Includedweekly-only guardsandoriginalvelocitybaseline/stoppedintervalspreserved.
+
+## Current — M06 production build active; P-M13-03 closed (2026-10-22 19:14 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Weekly-only/no credits. User tactical190647: prioritize actual count-moving M06
+launcher build independently of blockedSDK68; do not wait forwholeM07native.
+Fresh expertread-only admissionPASS0/.296387s,2completepublisherfreecensuses,
+Docker/currentreleasedrecordsabsence,UUID110GiB/mutex27:4,cgroup4CPU/12GiB/512task,
+capacityfullhost34039785513Bminimum vs37299765248B, scratch14123528192B,
+MemAvailable28626522112B. Earlier512MiBDockerfailureandwrongv2cgroupread retained;
+expertreviewed2GiBreadonly/v1map correction only, no heavyprofileexpansion.
+Exact FINALrequest25c94c22 andone-shotrootauthority bind current source4released
+imagepredecessor. Actual pinned launcher ownerPID3271558/start49391494,
+unifiedexecsession58377 LIVE; capture at host-preparation/p-m06-01-publication-ready-
+20261022-1/fresh-request-preparation-1/actual-pinned-build-capture-1/. Do not restart,
+signal or inferretirement frommissinglauncher; poll samehandle. No module/guest.
+
+P-M13-03 independently accepted corrected bounded P205diagnostic delivery;
+rootverifiedfive smallfinalreceiptrefs and onlyoriginalmanifestcycle1→0diff.
+Current delivered handoff is ../evidence/p-m13-01-delivered-handoff-cycle-clarification-
+20261022-1/CURRENT-DELIVERED-HANDOFF.json. Originalfrozenmanifest/pins preserved;
+P205 complete native restoration cycles0/unproved. Observed apps/process+host
+owner/client/QEMU/containerretirement accepted only; historicalprofiles separate.
+Adopted literalcheck:28/35complete,sevenopen; no newruntime/compiler/Rustcredit.
+Finalacceptance ../evidence/p-m13-03-foreground-final-review-20261022-1/INDEPENDENT-FINAL-ACCEPTANCE.json.
+Whole practicalgoal/native restoration/livecompute-Cretirement remainOPEN.
+
+M07 ordinary closure helper actualwholecallerPASS19outputs/18code/20FD/13runtime,
+sixcases, independentfocusedsourcePASS; actualpositivefinalstatic/publish/snapshot/
+native stillpending. New M06heavy supersedes source4 aslatestuntilactualpositive
+retirement; nevercarryoldlatestheavyintoM07release. RecoveryRustappcompile+
+oneLinuxrunPASS227B/emptyerr/0,2childrenSIGTERM/reap/ECHILD→realexec37; expert
+retainedtraceparser25checksPASSwithoutapprerun. NativeP01-02/P06stillpending.
+SDKhost-outputcandidate10testsPASS butstrictmetadata/fullgrowth stillrefuses:
+hostshort718327808B,scratchmargin31911936B; no installedprofilechange/reserveaction.
+Sevenopen: P01-02,P05-02,P05-03,P06-01,P08-02,P09-02,P12-01. Rootownsactual
+M06result/retirement→matchedselfexec/process/recovery; SDKcapacityreview/restoration
+separatelygated. Reusequalifyingmatchingobservations; no oraclerelaxation.
+
+## Weekly-only continuation; complete all eight checks — 2026-10-22 18:59 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+LATEST EXPLICIT USER INSTRUCTION: included weekly usage only, no prepaid-credit
+fallback. Old10000-credit authorization is superseded for this continuation.
+Its ledger remains unchanged as history; do not restore its paid command/flags
+without new explicit user authorization. Current launch omits both credit-budget
+and credit-run-id; default billing is included_only with100% included-usage stop,
+credit-balance-decrease protection, no automatic purchase/API-key billing.
+Policy19cd27d1 is pushed/fetched and its exact CONVERGENCE blob verified.
+
+This normal invocation explicitly resumes autonomous engineering now. The
+BILLING_SWITCH_QUIESCENT/SIGINT pause was only the configuration transition and
+is historical after this invocation; do not wait in repeated pause turns.
+Prior watcher/worker/server are absent; all ordinary children joined, no effectful
+operation was in flight. Same thread/dirty sources/evidence and protected owners
+are preserved. Read new live state for confirmation; no new workload authority
+is implied by changing billing. Fresh admission still applies.
+
+User says COMPLETE ALL EIGHT remaining checks. Current baseline27/35. Keep named
+next results for P-M01-02 recovery, P-M05-02 restoration, P-M05-03 complete cycles,
+P-M06-01 process creation/exec/wait, P-M08-02 used ABI/lifetime, P-M09-02 changed
+Rust/assembly boundaries, P-M12-01 matching bounded budgets and P-M13-03 final
+focused review. Overlap genuinely qualifying matching observations; reuse passed
+artifacts and reviews. Implement through executable tests and close exact literal
+checks promptly on accepted evidence; do not add unrelated qualification quotas.
+
+Next exact work retained in billing checkpointfe8cdd0b: M07 released-build consumer
+composition already independently accepted; fix downstream closure helpers17/12
+to18/13 plus role split, run actual cheap consumer path, focused review, then
+fresh final-static/publication/snapshot/runtime admission using accepted cbb04
+image/stage. M06 pinned exact build packet/conditional review are retained; use
+newest actually retired predecessor, not historical source4 ifM07 runs first.
+SDK capacity/pinnedcompiler/release remain real gates; reserve576 unanswered.
+Preserve Scratch21/exclusions, permanent27:4, failures and all dirty work. No new
+native/compiler/check credit from the billing switch; retain this stopped interval
+in velocity metrics and use GPT-6.1 medium/high by task complexity.
+
 ## BILLING_SWITCH_QUIESCENT — 2026-10-22 18:57 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

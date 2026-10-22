@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "at": "2026-10-22T19:09:51.306110+00:00",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "check_id": "P-M13-03",
+  "reviewer": "/root/final_delivery_check",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "high",
+  "implementation_ownership": false,
+  "review_method": "Independent read-only focused final functional correctness/ownership review of the actual bounded P205 diagnostic delivery; no edits/tests/workloads/status changes by reviewer.",
+  "decision": "PASS_CONDITIONAL_FOR_SCOPED_P205_DIAGNOSTIC_DELIVERY",
+  "blocking_defect": "Delivered manifest accepted_observations.native_lifecycle_cycles=1 is unsupported by its P205 native diagnostic and host-only physical acceptance.",
+  "required_correction": [
+    "Preserve original accepted manifest and reports, with their exact identities.",
+    "Add a reviewed corrected manifest/correction declaring P205 native_lifecycle_cycles=0/unproved and ensuring current delivery references consume the correction.",
+    "Limit ownership acceptance to observed app/process and host-owner/client/QEMU/container retirement. Explicitly retain native CPU/memory/mapping/callback/reference restoration as unproved.",
+    "Keep other profiles and current candidates, failures and live compute-C retirement status separate."
+  ],
+  "accepted_bounded_claims": [
+    "Exact P205 recipe/artifact identities.",
+    "Two exact application oracles, observed overlap and process retirement.",
+    "Separately accepted host-owner/QEMU/container retirement."
+  ],
+  "predicate_distinction": "The literal row requires focused final correctness/ownership review and only scoped announcement. Actual native restoration remains a requirement for whole practical-goal acceptance, not a prerequisite for every possible limited diagnostic-delivery review.",
+  "additional_concrete_defects_in_limited_claims": "None identified after the stated correction.",
+  "practical_goal_disposition": "OPEN; actual matched native restoration and remaining required functional observations are still required.",
+  "native_restoration_accepted": false,
+  "general_kernel_ownership_safety_accepted": false,
+  "new_native_or_Rust_retirement_credit": false,
+  "status_adoption": "PENDING dispatcher verification of corrected delivery and this conditional decision.",
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p-m13-01-delivered-handoff-20261022-1/tested-artifact-identities.json",
+      "sha256": "955cf56da6aa80156279f0c883c06e655379ec39724d448cd9273867d3b4f1aa",
+      "size": 16374
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/ACTUAL-205-TWO-CPU-AND-RUST-PAIR-NATIVE-DIAGNOSTIC-REVIEW.json",
+      "sha256": "d67e215390a78c991077b671ff9205ecaa9ec925a320414154795106acdc8bc7",
+      "size": 27300
+    },
+    {
+      "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-physical-review-20261019-1/decision.json",
+      "sha256": "7d869a4f69a7d840a14bd18b4638f0a5043354ac246a1d5c57adf9e23f75001c",
+      "size": 16123
+    }
+  ]
+}

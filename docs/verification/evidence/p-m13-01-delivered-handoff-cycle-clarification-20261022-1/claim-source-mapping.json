@@ -1,0 +1,84 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ADDITIVE_DELIVERED_MANIFEST_CORRECTION_NO_NEW_RUNTIME_OR_ACCEPTANCE",
+  "profile_id": "tested205-ff4f-current-host-c396-af234-6571-two-cpu-20261019",
+  "supersedes_only": {
+    "source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p-m13-01-delivered-handoff-20261022-1/tested-artifact-identities.json",
+      "sha256": "955cf56da6aa80156279f0c883c06e655379ec39724d448cd9273867d3b4f1aa",
+      "bytes": 16374
+    },
+    "json_pointer": "/accepted_observations/native_lifecycle_cycles",
+    "original": 1,
+    "corrected": 0,
+    "meaning": "Zero proven complete native lifecycle/restoration cycles for this exact P205 tuple; lifecycle restoration remains unproved."
+  },
+  "corrected_manifest": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p-m13-01-delivered-handoff-cycle-clarification-20261022-1/tested-artifact-identities.json",
+    "sha256": "8c64e14dde1fb6f15599784f177ce69525adb1542fa6ea23ea0929839e9b05d2",
+    "bytes": 16374
+  },
+  "preserved": [
+    "All artifact/module/app/source/toolchain/runtime pins and profile fields",
+    "One guest boot; two real app launches; exact outputs/exit codes; CPU routing; 1.620779456-second overlap; empty procfs",
+    "Independent host owner/client/QEMU/container physical retirement"
+  ],
+  "source_mapping": [
+    {
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-compatibility-independent-review-20261019-1/ACTUAL-205-TWO-CPU-AND-RUST-PAIR-NATIVE-DIAGNOSTIC-REVIEW.json",
+        "sha256": "d67e215390a78c991077b671ff9205ecaa9ec925a320414154795106acdc8bc7",
+        "bytes": 27300
+      },
+      "json_pointers": [
+        "/decision",
+        "/actual_guest_runs",
+        "/actual_application_invocations",
+        "/whole_native_acceptance",
+        "/QEMU_returncode_after_shutdown",
+        "/apps",
+        "/actual_overlap_ns",
+        "/all_initial_and_later_syscall_samples_on_assigned_CPU",
+        "/procfs_empty"
+      ],
+      "claim": "One guest/two-CPU concurrent Rust application diagnostic only. QEMU returned -9; whole native acceptance false. No complete CPU/memory/mapping/callback/reference restoration claim."
+    },
+    {
+      "source": {
+        "path": "/home/holden/mckernel-work/host-preparation/current-host-pair-205-physical-review-20261019-1/decision.json",
+        "sha256": "7d869a4f69a7d840a14bd18b4638f0a5043354ac246a1d5c57adf9e23f75001c",
+        "bytes": 16123
+      },
+      "json_pointers": [
+        "/decision",
+        "/physical_release",
+        "/physical_facts/qemu/returncode",
+        "/physical_facts/cleanup/reaped"
+      ],
+      "claim": "Owner/client/QEMU/container physical retirement only; no complete native resource-restoration inference."
+    }
+  ],
+  "separate_historical_profile": {
+    "source": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native-resource-reboot-cycle-result-review-20261017-2.json",
+      "sha256": "9c3847933f8cc9e3d175363338e87ff229ef7fcd1912d146219e7c990224efea",
+      "bytes": 5172
+    },
+    "source_candidate_sha": "d99edf2f58ee44b1a7e9aa726cbb49eee7850248",
+    "smp_sha256": "82c9021f7491fa8bc6d178fe99e7d4b7b6f90838474a9c91b62ddb8edb3d13f8",
+    "accepted_public_native_cycles": 1,
+    "credit_to_P205": 0,
+    "limits": [
+      "Onecycleonly; secondOS/resources retained until ordinary VM shutdown; no secondnative stop",
+      "No physicalframe/generation-identity or complete mapping/callback/reference restoration proof",
+      "Ten cycles/100 launches/60minute mixed workload/finalprofile review remain open",
+      "No comprehensive formal qualification or newdistinctappcredit"
+    ],
+    "meaning": "Historical public boot/workload/stop/destroy/release/reboot sequence only; distinct module profile, not complete mapping/callback/reference/frame restoration."
+  },
+  "new_builds": 0,
+  "new_guest_runs": 0,
+  "new_app_launches": 0,
+  "counter_delta": 0,
+  "foreground_next": "Existing foreground P-M13-03 conditional decision is durable; dispatcher condition reconciliation/adoption remains pending. No duplicate final review or completion claim."
+}

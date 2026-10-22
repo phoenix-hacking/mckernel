@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "at": "2026-10-22T19:13:05.612907+00:00",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "check_id": "P-M13-03",
+  "decision": "PASS_LITERAL_SCOPED_P205_DIAGNOSTIC_DELIVERY_FINAL_CORRECTNESS_OWNERSHIP_REVIEW",
+  "reviewer": "/root/final_delivery_check",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "high",
+  "implementation_ownership": false,
+  "conditions_verified": {
+    "only_manifest_change_native_lifecycle_cycles_1_to_0": true,
+    "current_pointer_consumes_correction": true,
+    "original_manifest_bytes_unchanged": true,
+    "source_artifact_pins_and_accepted_observations_preserved": true,
+    "ownership_acceptance_limited_to_observed_process_and_host_retirement": true,
+    "native_restoration_explicitly_unproved": true,
+    "historical_profiles_not_merged": true
+  },
+  "accepted_scope": "Exact corrected P205 diagnostic delivery: recipe/artifacts, two application oracles, observed overlap/process retirement and separately accepted host-owner/client/QEMU/container retirement.",
+  "whole_practical_goal_disposition": "OPEN: actual native restoration, remaining functional observations and unfinished live compute-C retirement remain required.",
+  "new_runtime_or_Rust_retirement_credit": false,
+  "status_adoption": "Dispatcher owns adoption; no tracker changes by foreground or reviewer.",
+  "evidence": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p-m13-01-delivered-handoff-cycle-clarification-20261022-1/CURRENT-DELIVERED-HANDOFF.json",
+      "sha256": "c0a12f3196f3e6b783e4df41095a525202b60b3ab3fe68ec79372171ad5c89fc",
+      "size": 894
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p-m13-01-delivered-handoff-cycle-clarification-20261022-1/tested-artifact-identities.json",
+      "sha256": "8c64e14dde1fb6f15599784f177ce69525adb1542fa6ea23ea0929839e9b05d2",
+      "size": 16374
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p-m13-01-delivered-handoff-cycle-clarification-20261022-1/HANDOFF-CLARIFICATION.md",
+      "sha256": "553f56a8cb62a972845435c0728731daef6d4e366d226c87e565706ebbadcad5",
+      "size": 2674
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p-m13-01-delivered-handoff-cycle-clarification-20261022-1/claim-source-mapping.json",
+      "sha256": "206ccb1bd465be3c8416519705e0bec2be553664459faed83c2dab1b1667e4df",
+      "size": 4224
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p-m13-03-foreground-final-review-20261022-1/INDEPENDENT-CONDITIONAL-REVIEW.json",
+      "sha256": "e9558eeed91581b14f77dc045581fb9801fb9ea2d86ed0a9856eb49038cda682",
+      "size": 3180
+    }
+  ]
+}
