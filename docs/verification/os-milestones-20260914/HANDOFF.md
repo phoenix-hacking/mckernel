@@ -1,3 +1,149 @@
+## Nearest practical closures — user steering adopted (2026-10-22 16:57 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Priority1 wholeM07: finish exactcleanup review/freshsame-releasepreflight/cleanup/
+postjoin/independentphysical, then strict unchanged MPX3/4+PKRU9 preservation or
+correct applicability on accepted cbb04image/stage;2/2literalchecks alone notwhole.
+Parallel P-M13-02 owner produces actualprofile capability/knownlimitations statement
+for focusedliteralcontract review, including remainingcomputeC, withoutwholeM13.
+P-M06-01 high-effort owner implements coherent real responseledger/phasecompletion/
+postusercopy/launchererrorconsumer join privately then cheapest actualbodytest;
+compiler33 reused, matcheddefaultbuild/native stillrequired. SDK68 sharedM05/M08
+prerequisite retains53tests/exactbundle; pinnedclang21.1.8 requires reviewedSDK
+execution/capacity/ownership, hostclang15notreplacement, reserve576unapproved.
+M05/M12 cycles/boots/launches/mixed count only matchingfinalprofile afterrestoration.
+Recheck strategy after10–15minutes without executable result; no sourcerateuplift.
+
+## Current — recovery reconciled; raw export retained (2026-10-22 16:56 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Manual invocation20261022T165434Z-ddbaa92c resumes same thread/creditrun10000total.
+Read-only progress confirmsactive/no pendinginstructions. SourceHEADad2d9786 is
+foreground launcher503repair only; sourcef7a097a4/tree754b6a64 pins remain exact.
+The16:36 and16:45 account-read503 interruptions add stopped intervals; do not
+compute active-time uplift across them. Original baseline/creditledger preserved.
+No cleanuprelease or cleanupcapture exists; prior reviewer was interrupted.
+Fresh independent focused review now consumes unchanged actualpayload77cc5d79;
+no expired release reuse. Another worker resolves existing accepted M07 native
+inputs/non-temporal controls while physicalgate waits; no workload/rebuild.
+
+Actual raw-five exportPASS0/.152562615s/emptyerr,552960Btar08bbea52; all five
+original rootowned regular members authenticate to genuine summaryhashes.
+Actual current-pass adapter/logcheckPASS0/.23440242s/emptyerr. Previous cursor's
+raw-exportpending wording is historical. Published retained read-only captures,
+releases/admissions/hashauthority and full cleanupdraft provenance:
+../evidence/m07-actual-observer-and-export-20261022-1/. Original captures retained.
+Next: genuine independent cleanupdecision→fresh same-releasepreflight→conditional
+cleanup+O_EXCLresult→postjoinarchive→independentphysical→unchangedM07native.
+Held101source,35productioncompiler,13native,31behaviors,Rust21/18,24/35checks,
+sixwhole. No physical/native/checkclosure claim. Reserve576 pending; preserve
+Scratch21/exclusions57687/57688/permanent27:4/all owners and unrelated dirtywork.
+
+## Usage503 retry repair and same-run resume — 2026-10-22 16:54 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The 16:45 restart stopped on another read-only account usage503. The reviewed
+launcher repair ad2d9786 is pushed/fetched with exact source blobs verified;
+169 relevant tests pass, including bounded503 recovery and quota/auth/policy
+exclusions. Retry only account/rateLimits/read up to three total attempts with
+1s/2s backoff; persistent unknown balance still stops before further dispatch.
+No model request retry, allowance reset or service-policy hold removal.
+
+Foreground is invoking the same thread and original credit run
+0c216c56957b4e64a89d54d4b28a2ad6 with TOTAL10000 cap, original balance and cumulative
+spent preserved. The 16:44 resume note is historical; both503 failures remain
+retained. Read actual new state before claiming active. No new OS/compiler/native
+or milestone credit from this launcher repair. Existing next M07 cleanup decision
+requires inspecting retained actual results and any interrupted review before
+fresh effect; accepted cbb04 image is reused. SDK pinned compiler and reserve576
+remain separate prerequisites. Preserve Scratch21, all owners and permanent27:4.
+
+Use GPT-6.1 medium for routine implementation/tests; explicitly select high on
+fresh independent workers for difficult kernel/ABI/lifecycle defects and focused
+review. No blanket Max/Ultra. Give coherent repair-through-test tasks; keep
+ordinary independent Rust/SDK prerequisites moving while effectful work waits.
+Record useful accepted results per credit, rework and time to first executable
+result. Do not infer2x/4x gains or new engineering percentages from routing.
+
+## Usage-reporting recovery and worker routing — 2026-10-22 16:44 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The prior campaign paused at16:36:15UTC solely because read-only account usage
+reporting returned503. No policy/authentication/quota rejection was observed.
+Fresh read-only account/credit validation now passes. Old watcher/worker/server
+are absent; original credit run0c216c56957b4e64a89d54d4b28a2ad6, balance history,
+spending and TOTAL10000 cap are preserved. Foreground is normally resuming the
+same conversation, with no fresh session or budget reset. The old pause is
+historical for this invocation. Pending foreground steering16:37 is reconciled
+by the launcher using its exact hash; original JSON and audit are retained.
+
+Its intent remains active: while the exact cleanup release is reviewed, prepare
+next M07 native immutable inputs and non-temporal controls. Reuse accepted cbb04
+image/stage and qualified captures; no image rebuild for source-only idle scan.
+Observer/readback/five-file export passed; cleanup decision/physical/native proof
+remain pending and must be read from actual retained results before any effect.
+SDK uses pinned Rocky clang21.1.8; hostclang15 is not a replacement. Reserve576
+is still unanswered. Preserve all owners, failures, Scratch21 and permanent27:4.
+
+User asks whether workers should be more intelligent. Keep GPT-6.1 ONLY: medium
+for routine code/tests, high for kernel/ABI/lifecycle/ownership problems and
+focused independent review; low only fixed extraction. This routing is already
+configured. Ensure explicit effort on fresh independent worker assignments;
+do not assume role names enforce it. Use small concrete packets and complete
+consumer tests. Judge by rework, first-test latency and accepted native/milestone
+results per credit, not effort alone. No blanket Max/Ultra or model switch.
+
+Held101source(41OS/60infra),35production compiler,13native,31behaviors,Rust21/18,
+24/35practical checks and six whole milestones. No percentage uplift is inferred
+from harness recovery; preserve original measurement baseline/stopped intervals.
+
+## Current — readback and production-header prerequisite (2026-10-22 16:33 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exact actual observer summaryPASS0/.125978045s and original-fiveFDmetadataPASS0/
+.132548693s,emptyerr,directjoined/groupabsent/streamsclosed. Actual five hashes
+bound exclusively from successful summary; raw-five canonical payload327ac58c
+awaits focused independent execution decision, then freshCPU7admission/export.
+No cleanup/physical/native acceptance. G=host-preparation/m07-observer-inventory-
+expert-cohort-20261022-1/bound-terminal-expert-source-1/ retains all actualcaptures.
+
+Rust idle bridge actual production-header TU firstcandidatePASS: statusint4,
+statusoffset4184,sched_list4328,threadsize5568,listnext0,PS_RUNNING1,CPU_RUNNING2.
+HostGCC9.4 differs from productionGCC14.3.1; productionwholeTU/defaultlink/native
+remainOPEN. No Rustretirement/compilerbatch/check credit. Evidence:
+../evidence/rust-idle-production-abi-20261022-1/. SDKprovider lightlane pinpointed
+pinnedRocky clang21.1.8 absent as directly runnable hosttool(hostclang15); no
+substitute compile attempted. Existing exact command/config/headers retained in
+../evidence/m05-sdk68-provider-prerequisite-20261022-1/. HeavySDK remains behind
+capacity/currentownership/release; reserve576unanswered. Source101,24/35checks,
+sixwhole,35productioncompiler,13native,31behaviors,Rust21/18 held. Campaignactive.
+
+## Current — actual observer PASS; 16:29 strategy checkpoint (2026-10-22 16:33 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual newly released observer passed0/1.753362797s/emptystderr at16:26:47UTC,
+child3210160/start48385078 directjoined/groupabsent/streamsclosed. Status SHA
+fbbdb3a3f8035bd24abd618ff7f2deb26c44980144b1665019d9dff86b829604;
+retained at host-preparation/m07-observer-inventory-expert-cohort-20261022-1/
+bound-terminal-expert-source-1/actual-observer-capture-1/. This proves read-only
+observation, not physical retirement or native acceptance. Next exact blocker:
+readback+original-five FD metadata/raw-five retention before separately reviewed
+same-release preflight/cleanup/postjoin/physical decision, then unchanged M07
+native with accepted cbb04 image/stage. No rebuild/replay/reserve mutation.
+
+Strategy review: source99→101 comprises one SDK infrastructure unit and one
+Rust idle-scan OS unit; actual generated fullconsumer+11negatives passed1.334s,
+actual observer now passed1.753s. Held24/35checks,sixwhole,35production compiler,
+13native batches,31behaviors,Rust21production/18native; all closure deltas zero.
+Retained filesystem timestamps show fullfixture stream closure16:13:32 to actual
+observer status16:26:47 =13m15s for review/publication/release/admission as a whole;
+this is not summed reviewer occupancy or pure wait time. No measured2x/4x gain
+or active-hour rate across unreconciled recovery. Original baseline preserved.
+Disjoint ordinary lanes now attempt actual production-header idle ABI compile
+(CPU0) and smallest SDK provider compiler prerequisite (CPU6), with no heavy/
+root/container use and no repeated accepted suites. Root readback remainsCPU7.
+All original failures/owners/Scratch21/27:4/dirtyothers retained; reserve576 pending.
+
 ## Current — complete observer fixture accepted; Rust idle source integrated (2026-10-22 16:16 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

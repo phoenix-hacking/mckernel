@@ -1,0 +1,50 @@
+{
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=268435456:2147483648",
+    "--fsize=33554432",
+    "--cpu=30",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/bound-terminal-expert-source-1/observe_current_pass_image_retirement.py",
+    "--git-commit",
+    "f7a097a467ea15ff0aeeb75989eb494f23a286c9",
+    "--git-tree",
+    "754b6a64bae547740bfedcc127c1fba5a2f8a57b",
+    "--observation-release",
+    "/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/bound-terminal-expert-source-1/observation-execution-release.json",
+    "--observation-release-sha256",
+    "1b81c7273f68a2b1871e99b274de490b334f23deb693434e3be9fea2ab5ccd8b"
+  ],
+  "capture_directory": "/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/bound-terminal-expert-source-1/actual-observer-capture-1",
+  "cpu": 7,
+  "profile": {
+    "as_soft_hard": [
+      268435456,
+      2147483648
+    ],
+    "child_cpu_seconds": 30,
+    "cpu": 7,
+    "jobs": 1,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "required_inherited_cpu_limits": [
+      -1,
+      -1
+    ],
+    "stream_fsize": 33554432
+  },
+  "role": "observer",
+  "stream_cap_bytes": 33554432,
+  "status": "PASS_EXACT_REVIEW_BOUND_REQUIRES_FRESH_ENTRY_ADMISSION",
+  "canonical_payload_sha256": "7d186b1e46d1a35980821b96e3d019ad2095b222c96ba8a2249407f819766106",
+  "execution_authorized": true
+}

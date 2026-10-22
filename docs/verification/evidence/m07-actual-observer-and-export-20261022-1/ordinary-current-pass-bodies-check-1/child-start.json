@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2s",
+    "35s",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=1073741824:1073741824",
+    "--cpu=30:30",
+    "--fsize=33554432",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/m07-observer-inventory-expert-cohort-20261022-1/bound-terminal-expert-source-1/check_current_pass_bodies.py"
+  ],
+  "pid": 3212849,
+  "proc_start_ticks": "48430854",
+  "process_group": 3212849
+}

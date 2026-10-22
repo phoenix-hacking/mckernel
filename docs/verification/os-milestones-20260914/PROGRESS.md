@@ -72,9 +72,10 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 
 ### Next practical work
 
-- Complete actual observer/summary/original-five/raw-five from accepted generated full-consumer fixture; exact fresh source publication/execution release and live admission remain mandatory. Then separate cleanup/postjoin/physical acceptance before unchanged M07 native test.
+- Nearest closures: whole M07 requires strict MPX3/4 and PKRU9 preservation/applicability after actual cleanup/physical release; parallel literal P-M13-02 truthful profile capability statement and coherent P-M06-01 real consumer join. No whole M07 from 2/2 checks; no whole M13 from statement.
+- Actual observer, exact summary, original-five FD metadata and authenticated raw-five export passed. Complete separately reviewed same-release actual fresh preflight then conditional cleanup/postjoin and independent physical clearance before unchanged M07 native test; preserve all previous failed attempts.
 - After actual observer/export, separately released cleanup/postjoin and independent physical clearance, run unchanged strict M07 remaining-state native test on accepted corrected cbb04 image/stage. Artifact acceptance is not native proof.
-- SDK68 source81dd8caf published/fetched,53tests and actual68file/1,346,042B sourcebundle verified. Module compiler still requires current ownership release, actualSDK/capacity/floors, fresh identities and independent release; reserve576 unanswered. New Rust idle scan6f367112 needs productionTU/defaultlink/native proof, independent of accepted cbb04 image.
+- SDK68 source81dd8caf and exact68 host bundle accepted,53tests. Pinned Rocky clang21.1.8 not directly available on host; actual SDK/container compiler remains behind capacity/currentownership/fresh release, reserve576 unanswered. Rust idle scan6f367112 actual production-header ABI probe passes with hostGCC9.4; productionGCC14.3.1 wholeTU/defaultlink/native still required, accepted cbb04 image unchanged.
 - M05 Rust resource observations need actual matched module build and independently bound per-boot decoding; prove complete CPU/memory/process/mapping/callback/reference restoration and ten complete native cycles. Two public stop observations do not prove complete cycles.
 - Complete real M06 response-ledger/phase-completion/post-user-copy and launcher error propagation Rust joins; reuse passed compiler33 and focused tests. No provider/native claim before actual matched build/default/runtime proof.
 - Keep M12 separate matched profile budget buckets; no VM termination as public stop/destroy/release or full mapping/callback/reference restoration.
@@ -83,11 +84,11 @@ Original formal qualification is **historical / DEFERRED**. Deferred does not me
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-22T16:23:11+00:00`
-- Launcher state heartbeat: `2026-10-22T16:23:04.304407+00:00`
+- Dashboard refreshed: `2026-10-22T16:57:05+00:00`
+- Launcher state heartbeat: `2026-10-22T16:56:56.237977+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
-- Worker PID: `3190734`; server PID: `3190736`
-- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261022T153425Z-18937b24`
+- Worker PID: `3219946`; server PID: `3219948`
+- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261022T165434Z-ddbaa92c`
 
 ## Stable kernel core: engineering progress
 

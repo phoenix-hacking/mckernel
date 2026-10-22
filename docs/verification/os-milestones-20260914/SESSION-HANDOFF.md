@@ -1,3 +1,75 @@
+## Current — recovery reconciled; raw export retained (2026-10-22 16:56 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Manual invocation20261022T165434Z-ddbaa92c resumes same thread/creditrun10000total.
+Read-only progress confirmsactive/no pendinginstructions. SourceHEADad2d9786 is
+foreground launcher503repair only; sourcef7a097a4/tree754b6a64 pins remain exact.
+The16:36 and16:45 account-read503 interruptions add stopped intervals; do not
+compute active-time uplift across them. Original baseline/creditledger preserved.
+No cleanuprelease or cleanupcapture exists; prior reviewer was interrupted.
+Fresh independent focused review now consumes unchanged actualpayload77cc5d79;
+no expired release reuse. Another worker resolves existing accepted M07 native
+inputs/non-temporal controls while physicalgate waits; no workload/rebuild.
+
+Actual raw-five exportPASS0/.152562615s/emptyerr,552960Btar08bbea52; all five
+original rootowned regular members authenticate to genuine summaryhashes.
+Actual current-pass adapter/logcheckPASS0/.23440242s/emptyerr. Previous cursor's
+raw-exportpending wording is historical. Published retained read-only captures,
+releases/admissions/hashauthority and full cleanupdraft provenance:
+../evidence/m07-actual-observer-and-export-20261022-1/. Original captures retained.
+Next: genuine independent cleanupdecision→fresh same-releasepreflight→conditional
+cleanup+O_EXCLresult→postjoinarchive→independentphysical→unchangedM07native.
+Held101source,35productioncompiler,13native,31behaviors,Rust21/18,24/35checks,
+sixwhole. No physical/native/checkclosure claim. Reserve576 pending; preserve
+Scratch21/exclusions57687/57688/permanent27:4/all owners and unrelated dirtywork.
+
+## Current — readback and production-header prerequisite (2026-10-22 16:33 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exact actual observer summaryPASS0/.125978045s and original-fiveFDmetadataPASS0/
+.132548693s,emptyerr,directjoined/groupabsent/streamsclosed. Actual five hashes
+bound exclusively from successful summary; raw-five canonical payload327ac58c
+awaits focused independent execution decision, then freshCPU7admission/export.
+No cleanup/physical/native acceptance. G=host-preparation/m07-observer-inventory-
+expert-cohort-20261022-1/bound-terminal-expert-source-1/ retains all actualcaptures.
+
+Rust idle bridge actual production-header TU firstcandidatePASS: statusint4,
+statusoffset4184,sched_list4328,threadsize5568,listnext0,PS_RUNNING1,CPU_RUNNING2.
+HostGCC9.4 differs from productionGCC14.3.1; productionwholeTU/defaultlink/native
+remainOPEN. No Rustretirement/compilerbatch/check credit. Evidence:
+../evidence/rust-idle-production-abi-20261022-1/. SDKprovider lightlane pinpointed
+pinnedRocky clang21.1.8 absent as directly runnable hosttool(hostclang15); no
+substitute compile attempted. Existing exact command/config/headers retained in
+../evidence/m05-sdk68-provider-prerequisite-20261022-1/. HeavySDK remains behind
+capacity/currentownership/release; reserve576unanswered. Source101,24/35checks,
+sixwhole,35productioncompiler,13native,31behaviors,Rust21/18 held. Campaignactive.
+
+## Current — actual observer PASS; 16:29 strategy checkpoint (2026-10-22 16:33 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual newly released observer passed0/1.753362797s/emptystderr at16:26:47UTC,
+child3210160/start48385078 directjoined/groupabsent/streamsclosed. Status SHA
+fbbdb3a3f8035bd24abd618ff7f2deb26c44980144b1665019d9dff86b829604;
+retained at host-preparation/m07-observer-inventory-expert-cohort-20261022-1/
+bound-terminal-expert-source-1/actual-observer-capture-1/. This proves read-only
+observation, not physical retirement or native acceptance. Next exact blocker:
+readback+original-five FD metadata/raw-five retention before separately reviewed
+same-release preflight/cleanup/postjoin/physical decision, then unchanged M07
+native with accepted cbb04 image/stage. No rebuild/replay/reserve mutation.
+
+Strategy review: source99→101 comprises one SDK infrastructure unit and one
+Rust idle-scan OS unit; actual generated fullconsumer+11negatives passed1.334s,
+actual observer now passed1.753s. Held24/35checks,sixwhole,35production compiler,
+13native batches,31behaviors,Rust21production/18native; all closure deltas zero.
+Retained filesystem timestamps show fullfixture stream closure16:13:32 to actual
+observer status16:26:47 =13m15s for review/publication/release/admission as a whole;
+this is not summed reviewer occupancy or pure wait time. No measured2x/4x gain
+or active-hour rate across unreconciled recovery. Original baseline preserved.
+Disjoint ordinary lanes now attempt actual production-header idle ABI compile
+(CPU0) and smallest SDK provider compiler prerequisite (CPU6), with no heavy/
+root/container use and no repeated accepted suites. Root readback remainsCPU7.
+All original failures/owners/Scratch21/27:4/dirtyothers retained; reserve576 pending.
+
 ## Current — complete observer fixture accepted; Rust idle source integrated (2026-10-22 16:16 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

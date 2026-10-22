@@ -1,3 +1,118 @@
+## Current — recovery reconciled; raw export retained (2026-10-22 16:56 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Manual invocation20261022T165434Z-ddbaa92c resumes same thread/creditrun10000total.
+Read-only progress confirmsactive/no pendinginstructions. SourceHEADad2d9786 is
+foreground launcher503repair only; sourcef7a097a4/tree754b6a64 pins remain exact.
+The16:36 and16:45 account-read503 interruptions add stopped intervals; do not
+compute active-time uplift across them. Original baseline/creditledger preserved.
+No cleanuprelease or cleanupcapture exists; prior reviewer was interrupted.
+Fresh independent focused review now consumes unchanged actualpayload77cc5d79;
+no expired release reuse. Another worker resolves existing accepted M07 native
+inputs/non-temporal controls while physicalgate waits; no workload/rebuild.
+
+Actual raw-five exportPASS0/.152562615s/emptyerr,552960Btar08bbea52; all five
+original rootowned regular members authenticate to genuine summaryhashes.
+Actual current-pass adapter/logcheckPASS0/.23440242s/emptyerr. Previous cursor's
+raw-exportpending wording is historical. Published retained read-only captures,
+releases/admissions/hashauthority and full cleanupdraft provenance:
+../evidence/m07-actual-observer-and-export-20261022-1/. Original captures retained.
+Next: genuine independent cleanupdecision→fresh same-releasepreflight→conditional
+cleanup+O_EXCLresult→postjoinarchive→independentphysical→unchangedM07native.
+Held101source,35productioncompiler,13native,31behaviors,Rust21/18,24/35checks,
+sixwhole. No physical/native/checkclosure claim. Reserve576 pending; preserve
+Scratch21/exclusions57687/57688/permanent27:4/all owners and unrelated dirtywork.
+
+## Current — actual observer PASS; 16:29 strategy checkpoint (2026-10-22 16:33 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual newly released observer passed0/1.753362797s/emptystderr at16:26:47UTC,
+child3210160/start48385078 directjoined/groupabsent/streamsclosed. Status SHA
+fbbdb3a3f8035bd24abd618ff7f2deb26c44980144b1665019d9dff86b829604;
+retained at host-preparation/m07-observer-inventory-expert-cohort-20261022-1/
+bound-terminal-expert-source-1/actual-observer-capture-1/. This proves read-only
+observation, not physical retirement or native acceptance. Next exact blocker:
+readback+original-five FD metadata/raw-five retention before separately reviewed
+same-release preflight/cleanup/postjoin/physical decision, then unchanged M07
+native with accepted cbb04 image/stage. No rebuild/replay/reserve mutation.
+
+Strategy review: source99→101 comprises one SDK infrastructure unit and one
+Rust idle-scan OS unit; actual generated fullconsumer+11negatives passed1.334s,
+actual observer now passed1.753s. Held24/35checks,sixwhole,35production compiler,
+13native batches,31behaviors,Rust21production/18native; all closure deltas zero.
+Retained filesystem timestamps show fullfixture stream closure16:13:32 to actual
+observer status16:26:47 =13m15s for review/publication/release/admission as a whole;
+this is not summed reviewer occupancy or pure wait time. No measured2x/4x gain
+or active-hour rate across unreconciled recovery. Original baseline preserved.
+Disjoint ordinary lanes now attempt actual production-header idle ABI compile
+(CPU0) and smallest SDK provider compiler prerequisite (CPU6), with no heavy/
+root/container use and no repeated accepted suites. Root readback remainsCPU7.
+All original failures/owners/Scratch21/27:4/dirtyothers retained; reserve576 pending.
+
+## Measured bottleneck and removal plan — 2026-10-22 16:08 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Measured current-run window 15:34:26–16:08:21 UTC (33m55s): no actual compiler
+or native workload in 171 completed command items. Observer failed in .478s;
+26m46s of repair/review followed before generated fixture failed in .217s.
+Mean active child turns 1.14, peak three; no child active for 23.9% of window.
+These are turn-occupancy observations, not CPU-use measurements. Most command
+items lack useful duration values; do not invent a summed execution-time rate.
+Host sample: load about 2.2 with seven allowed CPUs and 26.4 GiB available RAM.
+The present critical path is observer/fixture integration and serial handoffs.
+
+Apply the EXISTING CONVERGENCE.md ordinary unprivileged diagnostic lane: one
+owner implements the coherent producer/consumer fixture correction and runs its
+cheap full-consumer positive/negative checks under an explicit already-reviewed
+ordinary profile; consolidate the passing diff/results before focused independent
+review and final source freeze. Do not create a new packet/review for each routine
+fixture edit. This does not reopen consumed one-shot releases, authorize unchanged
+replays, or remove independent privileged/cleanup admission and freshness checks.
+
+Concrete reproduced defect: Python3.8 Path.stat/lstat use a cached accessor and
+bypass patches to os.stat/lstat. Repair the fixture's actual Path boundary with
+consistent fstat/path identities; retain real consumer predicates and failures.
+Foreground stdlib-only reproduction is PATHLIB-STAT-BOUNDARY-REPRO.json beneath
+host-preparation/bottleneck-analysis-20261022-1/. Timing source and caveats are
+TIMING-FINDINGS.md and timing-snapshot.json in the same private directory.
+
+Refill separate SDK68 publication/build-prerequisite and genuinely ready Rust
+implementation lanes while the critical fixture is repaired. Keep review workers
+for ready concrete decisions. Reuse accepted image/stage and unchanged evidence.
+Aim to reduce a comparable repair-to-next-test loop below ten minutes; measure
+before claiming any speedup. Next decisive result is full consumer PASS followed
+by accepted physical/native progression, not another source packet. Scratch has
+about 1.154 GiB above its floor: a future heavy-admission constraint, not the cause
+of this fixture delay. Reserve576 approval remains unanswered. Existing16:29
+strategy review and original engineering baseline remain; no new dashboard loop.
+
+## Foreground steering — speed with real closure (2026-10-22 16:04 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Latest user priority: move as fast and accurately as possible. Current accepted
+24/35 practical checks and six whole milestones are unchanged from the pre-credit
+baseline. One accepted SDK68 infrastructure fix raises source units 99 to 100;
+53 unit tests pass. Compiler 35/native 13/behaviors 31/Rust 21 production and
+18 applicable native paths remain held. This is genuine prerequisite progress,
+but milestone/native closure velocity is currently flat; no 2x/4x claim.
+
+Prioritize the complete actual generated observer main/summary/postjoin fixture,
+correct the source/data mismatch at its real producer/consumer, then promptly
+advance the exact reviewed retirement/native sequence. Reuse accepted image,
+stage and unchanged SDK unit results. Repeat reviews/checks only for a changed
+input or a concrete unresolved boundary. Earlier narrow fixtures missed actual
+schema errors; successful full-consumer observation is the next useful result.
+
+Refill independent ready work after joins: SDK68 source publication/next compiler
+prerequisites and a bounded disjoint Rust implementation/regression slice when
+its real dependencies permit. Clear write ownership and functional expectations;
+do not invent parallel work or duplicate blocked native attempts. Keep existing
+one-heavy, CPU/RAM/task/capacity/ownership gates. Reserve576 remains unanswered.
+At each existing 30-minute review, report accepted OS/infrastructure changes,
+compiler/native results and practical/whole/Rust deltas; identify the blocking
+step and cheapest action that removes it. Preserve the original time baseline.
+Existing next strategy review stays 16:29 UTC or earlier on a meaningful result.
+
 ## Engineering checkpoint — SDK68 adapter and53 unit tests (2026-10-22 15:59 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

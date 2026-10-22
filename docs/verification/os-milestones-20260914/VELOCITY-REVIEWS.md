@@ -1,3 +1,29 @@
+## Current — actual observer PASS; 16:29 strategy checkpoint (2026-10-22 16:33 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual newly released observer passed0/1.753362797s/emptystderr at16:26:47UTC,
+child3210160/start48385078 directjoined/groupabsent/streamsclosed. Status SHA
+fbbdb3a3f8035bd24abd618ff7f2deb26c44980144b1665019d9dff86b829604;
+retained at host-preparation/m07-observer-inventory-expert-cohort-20261022-1/
+bound-terminal-expert-source-1/actual-observer-capture-1/. This proves read-only
+observation, not physical retirement or native acceptance. Next exact blocker:
+readback+original-five FD metadata/raw-five retention before separately reviewed
+same-release preflight/cleanup/postjoin/physical decision, then unchanged M07
+native with accepted cbb04 image/stage. No rebuild/replay/reserve mutation.
+
+Strategy review: source99→101 comprises one SDK infrastructure unit and one
+Rust idle-scan OS unit; actual generated fullconsumer+11negatives passed1.334s,
+actual observer now passed1.753s. Held24/35checks,sixwhole,35production compiler,
+13native batches,31behaviors,Rust21production/18native; all closure deltas zero.
+Retained filesystem timestamps show fullfixture stream closure16:13:32 to actual
+observer status16:26:47 =13m15s for review/publication/release/admission as a whole;
+this is not summed reviewer occupancy or pure wait time. No measured2x/4x gain
+or active-hour rate across unreconciled recovery. Original baseline preserved.
+Disjoint ordinary lanes now attempt actual production-header idle ABI compile
+(CPU0) and smallest SDK provider compiler prerequisite (CPU6), with no heavy/
+root/container use and no repeated accepted suites. Root readback remainsCPU7.
+All original failures/owners/Scratch21/27:4/dirtyothers retained; reserve576 pending.
+
 # OS velocity supervision reviews
 
 User requested 30-minute to one-hour reviews and continuous concrete steering
@@ -6799,3 +6825,41 @@ Review 168 observed 2026-10-22T00:18:27.493954+00:00: accepted counters held24/3
 Review 169 observed 2026-10-22T00:48:29.142304+00:00: counters held at 24/35 checks, six whole milestones, 97 source units, 33 compiler batches, 11 native batches, 30 native behaviors and Rust paths 21/18. M07 diagnostic init-only stage passed 10.745s and independent review; normalization passed but actual loader caught stale adapter pin, followed by an exception-class mismatch in the changed graph checker. Both retained; no guest or native credit. M05 collector/component checks passed and init-only stage conditionally approved. Coherent graph repair and independent ordinary CPU6/7 work continue. One-second sample shows 11.43% allowed-core utilization and about 26.3GiB available RAM; no sustained benchmark or overall 4x claim. Next review 2026-10-22T01:18:29.142Z. Private REVIEW169.json.
 
 Review 170 observed 2026-10-22T01:18:45.700043+00:00: accepted counters held24/35 checks, six whole milestones,97 source units,33 compiler,11 native batches,30 behaviors and Rust21/18. M07 corrected graph/loader/whole/final static/publication/exact release passed; third owner failed12.50s with no application start. New telemetry retained helper exit1 and complete output; failed-owner retirement accepted. Source trace identifies missing /case/evidence/pair.challenge opened before reservation, rather than an established kernel/reservation defect. Accepted challenge/discovery reuse and actual helper-path check next. M05 actual init-stage11.0703s and namespace3 normalization0.915s/real loader0.556s independently accepted,18-FD runtime preparation pending shared boot repair. No new closure or overall4x claim. Usage90%, stop100%. Next review 2026-10-22T01:48:45.700Z. Private REVIEW170.json.
+
+Review171 observed 2026-10-22T01:48:49.505741+00:00: counters initially held24/35 checks, six whole,97 source,33 compiler,11 native,30 behaviors,Rust21/18. Repaired M07 owner rawPASS37.82s/all three readbacks; genuine app and physical reviews passed later01:50:27. Coordinator announced native batch12 at01:51:50; no new behavior/Rust paths. Whole-M07 assessment stays open for declared MPX3/4 and PKRU9 applicability or actual preservation; current0/1/2 scope is accepted. No AVX512/full-library/M12/C-retirement expansion required. M05 two-generation source/body/static and62-member stager component0.625s accepted; exact stage conditionally approved/unrun. Stage→full-static preparation22.172→10.796min, two observations only/no overall multiplier. Usage91/stop100. Next2026-10-22T02:18:49.505Z. Original observation preserved with later addenda in REVIEW171.json.
+
+Review172 observed 2026-10-22T02:19:19.566719+00:00:24/35 checks,six whole,30 behaviors,Rust21/18,97 source,33 compiler,12 native batches. +1 accepted native batch since171 original observation; already present in its later addendum, not duplicate credit. Current M07 selected-state pass checkpointdb39c94a remotely verified; wholeM07 open only declaredMPX3/4/PKRU9 applicability/preservation. Fresh owner freeze3 source/unsafeABI/oracle accepted for Linux preparation; no compilation yet, typedSTOP/INAPPLICABLE zero credit. M05 actual62-member stage21.344s andN4 .893787/.555348s independently accepted; runtime/native pending. Launcher current-physical-bound release DATA ready, build unrun; completed guard checks reused. Clean-boundary fresh-context Markdown handoff directive saved in CONVERGENCE, diffcheckPASS. Usage92/stop100. Next2026-10-22T02:49:19.566Z. Private REVIEW172.json.
+
+Review173 observed 2026-10-22T02:49:38.369136+00:00:24/35 checks,six whole,30 behaviors,Rust21/18,97 sources,33 adopted compiler,12 native. Launcher target rawPASS and independent sixartifact/terminal PASS; compiler adoption and physical release pending. Driver1.6723324s/tool164772ms/ownerelapsed unknown; first-observation7.347min cycle is separate. Current postjoin fields verified later, no cleanup authority inferred. M05 actual18FD/19-output constructor/whole accepted; new-build qualified physical DATA/join pending final native. M07 static payload51240e57/LinuxPKRU/291B oracle10regressions accepted as local results, MPX inapplicable/Linux no credit; native components remain open. Two fresh preparation lanes refill M05 record-adapter andM07 stage work. Usage92/stop100. Next2026-10-22T03:19:38.369Z. Private REVIEW173.json.
+
+Review174 observed 2026-10-22T03:20:25.250408+00:00:24/35 checks,six whole,34 compiler(+1 since173 original; already in its addendum),12 native,30 behaviors,Rust21/18,97 source. Current launcher artifacts/terminal/postjoin accepted but heavyrecords retained39.299min after first rawPASS; observer sourceeligibility now reviewed. Driver1.6723s/tool164772ms/ownerelapsed unknown; no all-idle inference. M05 normal9-event projector qualifiedbody+7refusals ready; finalnative waits truecurrentphysicalDATA. M07 static/component/app-onlystage10.6297s and constructorrepair.3300s accepted;11pin outerintegration/native pending, wholeopen. Prioritize one coherent lifecycle closure owner with exact existing controls. Usage93/stop100. Next2026-10-22T03:50:25.250Z. Private REVIEW174.json.
+
+Review175 observed 2026-10-22T03:51:26.469727+00:00:24/35 checks,six whole,34 compiler,12 native,30 behaviors,Rust21/18,97 sources; zero new counter gain. Strict cleanup preflight2.038s passed; later cleanup5.361s/postjoin1.573s and independent physical acceptance03:56:20 clear current launcher gate. Nine-event journal/archives/records preserved. Freshnamespace correction reused observer/export. M07 pairedalias.248s/normalize.696s accepted; outerconstructor.104s passed, wholecaller append-default mismatch corrected then missingcaller seed found, boundedclosure review active. M05 accepted18FD/19output path awaits realC9 integration and native. Early paired hash/length+namespace rules saved in CONVERGENCE, diffcheckPASS. Usage94/stop100. Next2026-10-22T04:21:26.469Z. Original observation preserved; privateREVIEW175.json exported after critical admission.
+
+Review176 observed 2026-10-22T04:22:03.042940+00:00:24/35 checks,six whole,34 compiler,12 native,30 behaviors,Rust21/18,97 source. M07 final/currentC9 controls and exactseven-step release passed; later native37.793s FAIL, raw32000/exit125/empty app streams, no success readbacks; exact originunknown. Failed-owner retirement independently accepted04:39. M05 then passed native64.30s/allreadbacks; app/public and physical reviews accepted later, recorded in review177 as batch13/behavior31. WholeM05 remains open; no restoration/cycle credit. Original observation preserved with separate later times; export deferred through critical admissions. Next2026-10-22T04:52:03.042Z. Private REVIEW176.json.
+
+Review177 observed 2026-10-22T04:52:13.158023+00:00:24/35 checks,six whole,34 compiler,13 native(+1),31 behaviors(+1),Rust21/18,97 source. M05 two native signal launches/two public stoprelease/one reboot and full owner retirement accepted; completecycles0/fullrestoration unproved, assignedinventoryEBUSY notempty. M05 unit will tracevalidobservation boundary/addactual used-resource retirement proof before10cyclebatch. M07exit125diagnostic successor Linux/source/handler9vectors accepted, app-onlystage10.6363s/60members accepted; actualfault originunknown. Paired failure-export preparation and distinct reviews saved in CONVERGENCE, diffcheckPASS, no frozenexecutor change. Existing acceptedimage reused. Checkpoint40c8359b. Usage96/stop100. Next2026-10-22T05:22:13.158Z. Private REVIEW177.json.
+
+## Review178 — 2026-10-22T05:22:21.482910+00:00
+
+Accepted counts held: 24/35 checks, six whole milestones, 31 native behaviors, 13 native batches, 34 compiler batches, 97 source units; Rust21 production/18 native paths. M07 diagnostic owner37.42s failed strict125; failure-only exportPASS captured SIGILL trap0/error6. Producer source trace identifies assembly/Rust trap/error handoff; correction testing and independent physical retirement pending. No native/check/whole credit. M05 full restoration and ten cycles remain open. Corrected64MiB scratch reserve proposal unapproved. No overall4x claim. Next full review 2026-10-22T05:52:21.483Z.
+
+Later observation 2026-10-22T05:28:58.274052Z: independent current-failed-owner retirement accepted (25 clients/four caller pairs/container/lease/QEMU); strict exit125 preserved. Two-file Rust/assembly producer correction passed independent source/focused ABI review with evidence wording correction and no functional findings. Eligible for exact-source integration only; production object/final ELF and current-image native confirmation remain pending. All accepted counts unchanged. Evidence: REVIEW178-M07-SOURCE-AND-RETIREMENT-ADDENDUM.json in supervisor directory.
+
+## Review179 — 2026-10-22T05:52:33.911236+00:00
+
+Original counts held:24/35checks,sixwhole,31behaviors,13nativebatches,34compilerbatches,97root-reconciledsourceunits,Rust21production/18native. M07producerfix committed/pushedverifiedef901a62; source/controlchecks passed. Leading rework: Pathnamespace,missingterminalkeys,profilehash/sourceinode/fingerprintcoupling. M05checker accepted,currentclosure68files,finite SDKbudget/reserve proposalunapproved. Export deferredforimageadmission.
+
+Later 2026-10-22T06:16:00.614730+00:00: M07imageoperationexit0 in287.62s/joined/groupabsent/emptyerr. Artifactacceptanceandretained-terminal/physicalreviewpending,noguestorwholecredit. CorrectedSDKextraallocation527237120B; unapproved576MiBreservedreduction leaves550.398MiB. Originalobservations/countspreserved. Next 2026-10-22T06:22:33.911Z.
+
+## Review180 — 2026-10-22T06:22:53.360756+00:00
+
+Sixwhole/24of35checks,31nativebehaviors,13nativebatches,Rust21production/18nativeheld. M07correctedimageoperationexit0/287.62s andactualartifactaccepted(identitycbb04b9e...11dd9,productionASM+RustELFpathproved),retainedterminalaccepted;separatecleanup/physicalclearance/nativepending. Source97/compiler34heldpendingrootreconciliationofef901a62/newimage. Sourceacceptance→liveentry41.4minversusoperation4.79min;completefinalpinconsumerdirectivepersisted. SDKcorrected576MiBreserveproposalnumericalreviewactive,noapproval/mutation,current68consumerbindingspending. Nextfullreview 2026-10-22T06:52:53.361Z.
+
+## Review 181 — 2026-10-22T06:54:18.129317+00:00
+
+Whole/check/native/Rust totals held at six, 24/35, 31 behaviors/13 batches and 21/18 paths. Root reconciled earlier M05 unit98 and M07 unit99: source99=40OS/59infrastructure; accepted new image is compiler35. Actual offline image stage19.13s accepted; publish0.245s/normalize0.661s raw passes await independent review. Cleanup/physical/native still pending about38min after operation closure. Transient GPT6.1 capacity failure recovered without workload replay/model fallback. One exact576MiB reserve approval question pending; no mutation authority. Next 2026-10-22T07:24:18.129Z.
+
+## Terminal checkpoint — 2026-10-22T07:03:54.850249Z
+
+Included usage100%; stopped/paused, not complete. Six whole/24of35checks,99source(40OS/59infrastructure),35compiler,13native/31behaviors,Rust21/18 held. Capacity recovery created new thread; baseline unchanged, recovery downtime reconciliation pending. Watcher/worker/server absent. Observer entry failed before observation; ownership retained. Exact reserve approval pending, no mutation. See STOP-HANDOFF-20261022-070354.md.
