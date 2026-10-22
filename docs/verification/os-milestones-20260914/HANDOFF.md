@@ -1,3 +1,74 @@
+## Current — manual recovery and actual build retirement reconciled (2026-10-22 18:51 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Invocation20261022T184714Z-be3cc16c resumes original10000-total credit ledger.
+HEAD5a4fe29b is foreground usage-transport repair; source4d2e78c21 remains pinned.
+Prior read-only transport stop interval17:53→18:47 is excluded before active-time
+rates; original velocity baseline remains unchanged. No new rate claim.
+Recovered exact prior independent reviewer events, without repeating reviews:
+source4 image-build physical retirement PASS17:52 and corrected M06 paired-source
+preparation PASS17:44. Actual freshpreflight2.026885391s,cleanup5.990067896s and
+postjoin1.742490169s all closed/positive; cleanup result a1c2f9be and postjoin tar
+fba453c6 preserved. Actual12proc.v2reports,9journalrows,archiveidentities,88finite
+rows and protected4/577 inventories independently accepted. Evidence retained at
+../evidence/m07-source4-actual-retirement-20261022-1/; no cleanup replay.
+This releases IMAGE BUILD ownership only, not native/application acceptance.
+
+Current executable dependency: released_build_consumer owns coherent actual
+snapshot/binder amendment and CPU6 consumer positives/role-confusion negatives,
+keeping source4 current_heavy_released_record distinct from genuine earlier
+external_latest_native_physical_review. Focused changed-boundary review then
+fresh static/publication/snapshot/execution admission precede unchanged strict
+M07 native on accepted cbb04 image/stage. No rebuild or future ACK fabricated.
+Parallel m06_pinned_publication prepares accepted corrected pair/failure evidence;
+actual pinned launcher build/native remain pending. SDK complete capacity gate
+still previously short572022784B; fresh admission required, reserve576 unanswered.
+27/35checks/eightopen/sixwhole; no new native/compiler/Rust-retirement credit.
+
+## Usage-transport recovery; same-run continuation — 2026-10-22 18:47 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The 17:53 pause was read-only account usage transport failure, not quota or a
+policy rejection. Fresh account/usage read succeeds and included allowance is
+available again. Launcher repair5a4fe29b is pushed/fetched with exact two owned
+blobs verified; independent GPT-6.1 high review PASS and99 launcher tests PASS.
+Only the exact observed usage transport error joins existing bounded503 retries;
+three total read-only attempts/1s2s backoff, then persistent unknown balance stops.
+No inference retry, policy/auth/quota bypass, allowance reset or extra purchase.
+Foreground normally resumes the same thread and original total10000 credit run;
+original balance/history/cumulative spending remain. Check live state for active.
+
+Important newer actual result: the17:51 independent review accepted source4
+actual cleanup/postjoin for RELEASED IMAGE BUILD ownership. Its accepted seven
+fields belong under current_heavy_released_record with the reviewed projector;
+it is not native-owner retirement and cannot be inserted into native-only
+terminal_joins. Preserve genuine earlier native physical evidence separately
+under external_latest_native_physical_review. Read the retained actual source4
+result and final review before any further effect; do not replay cleanup or
+assume an execution release. Same permanent27:4 and Scratch21 remain protected.
+
+Continue27/35 toward35/35 under the existing eight-check map. Prepare/finish the
+current released-record consumer amendment through actual cheap consumers and
+focused review, then fresh native admission with accepted cbb04 image/stage.
+Keep M06 real launcher/process work and qualified independent prerequisites
+moving. SDK pinned compiler/capacity/release and unanswered reserve576 remain
+gates. No count or native credit from this launcher repair; preserve the stopped
+interval in velocity metrics and read current actual artifacts before resuming.
+
+## Current — source4 real observer/export chain PASS (2026-10-22 17:43 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Source4 publishd2e78c21/treefac61211 pushed/fetched61changedblobs exact. Fresh
+reviewedobserverPASS0/2.114796076s;summaryPASS.134055302s;originalfiveFDmetadata
+PASS.139331420s;rawfiveexportPASS.213226017s. All emptyerr/directjoined/closed/
+groupabsent. Actualnew552960Btar de0a4765 bindsall5rootownedregularmembers.
+G4/rootcanonicalcleanup payloadb37e8ffd derivescompleteactualnewdraft/observation
+b08f88f4,source414ac6ff andactualnewhashauthority, awaitingexactcleanupreview.
+No v1archive reuse. Next same-finalreleasefreshpreflight→conditionalcleanup/
+exactstdoutO_EXCL→postjoin→independentphysical; no cleanup effect yet.
+RootM06ordinarytestsCPU6 mayrun duringreview, mustquiesce/ACKbeforecriticaladmission.
+27/35checks/sixwhole; no newnative/compilerbatch/Rustpathcredit. Reserve576pending.
+
 ## Current — corrected proc.v2 source independently accepted (2026-10-22 17:33 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

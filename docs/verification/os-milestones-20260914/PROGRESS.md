@@ -73,7 +73,7 @@ Closure states below are recorded assessments. Unassessed does not mean no engin
 ### Next practical work
 
 - Remaining eight individual checks: P-M06-01 actual matched process/exec/wait; P-M01-02 supported fault/cancellation recovery; P-M08-02 changed used ABI and P-M09-02 Rust boundaries mapped into same matched lifecycle/process batch where qualified. SDK68 P-M05-02 complete restoration gates P-M05-03/P-M12-01 budgets. P-M13-03 final actual-artifact/result review remains. P-M01-01/P-M13-01/P-M13-02 accepted in literal scope; M07 runtimebridge already2/2checks.
-- Actual observer, exact summary, original-five FD metadata and authenticated raw-five export passed. Complete separately reviewed same-release actual fresh preflight then conditional cleanup/postjoin and independent physical clearance before unchanged M07 native test; preserve all previous failed attempts.
+- Actual new proc.v2 source4 observer/summary/original-five FD metadata/authenticated raw-five export allPASS on published d2e78c21. Exact cleanup payload b37e8ffd pending independent execution review, then same-release positive freshpreflight/conditionalcleanup/postjoin/independentphysical before unchanged M07 native; all predecessor failures/releases retained.
 - After actual observer/export, separately released cleanup/postjoin and independent physical clearance, run unchanged strict M07 remaining-state native test on accepted corrected cbb04 image/stage. Artifact acceptance is not native proof.
 - SDK68 source81dd8caf and exact68 host bundle accepted,53tests. Pinned Rocky clang21.1.8 not directly available on host; actual SDK/container compiler remains behind capacity/currentownership/fresh release, reserve576 unanswered. Rust idle scan6f367112 actual production-header ABI probe passes with hostGCC9.4; productionGCC14.3.1 wholeTU/defaultlink/native still required, accepted cbb04 image unchanged.
 - M05 Rust resource observations need actual matched module build and independently bound per-boot decoding; prove complete CPU/memory/process/mapping/callback/reference restoration and ten complete native cycles. Two public stop observations do not prove complete cycles.
@@ -84,11 +84,11 @@ Original formal qualification is **historical / DEFERRED**. Deferred does not me
 
 ## Snapshot
 
-- Dashboard refreshed: `2026-10-22T17:33:34+00:00`
-- Launcher state heartbeat: `2026-10-22T17:33:31.186835+00:00`
+- Dashboard refreshed: `2026-10-22T18:51:49+00:00`
+- Launcher state heartbeat: `2026-10-22T18:51:37.977148+00:00`
 - Launcher: **RUNNING**; phase `running`; stop reason `none`
-- Worker PID: `3219946`; server PID: `3219948`
-- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261022T165434Z-ddbaa92c`
+- Worker PID: `3259404`; server PID: `3259406`
+- Run directory: `/home/holden/mckernel/.git/os-autopilot/runs/20261022T184714Z-be3cc16c`
 
 ## Stable kernel core: engineering progress
 

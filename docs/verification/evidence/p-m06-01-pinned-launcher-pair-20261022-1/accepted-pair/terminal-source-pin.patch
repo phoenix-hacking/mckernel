@@ -1,0 +1,11 @@
+--- original/launcher_only_container_owner.py
++++ terminal-correction-1/launcher_only_container_owner.py
+@@ -1296,7 +1296,7 @@
+ def _validate_driver_result(evidence, output, result, request):
+     evidence=_safe_directory(evidence,'launcher evidence');output=_safe_directory(output,'launcher output')
+     _fail(result.get('schema')=='mckernel.native-exact-launcher-build-receipt.v1' and result.get('status')=='PASS' and result.get('operation_scope')=='launcher-only' and result.get('kernel_rebuilt') is False,'truthful launcher-only receipt required')
+-    _fail(result.get('target')=='mcexec' and result.get('launcher_source_sha256')=='da71f31656ccfc58a79c4dcca01f9c6742135c292b213b7d86113ebddc4cae0a' and result.get('actual_elf_needed_provider_join') is True,'actual launcher target/source/providers')
++    _fail(result.get('target')=='mcexec' and result.get('launcher_source_sha256')==EXPECTED_LAUNCHER_SOURCE_AUTHORITY['source_override'] and result.get('actual_elf_needed_provider_join') is True,'actual launcher target/source/providers')
+     _fail(result.get('candidate_sha')==request['candidate_sha'] and result.get('ihk_sha')==request['ihk_sha'] and result.get('source_manifest_sha256')==request['source_manifest_sha256'] and result.get('toolchain_manifest_sha256')==request['toolchain_manifest_sha256'],'accepted base/toolchain provenance')
+     commands=result.get('commands');_fail(isinstance(commands,list) and len(commands)==1 and commands[0]['argv']==['/usr/bin/cmake','--build','/work/output/build','--target','mcexec','-j1'] and commands[0]['exit_code']==0,'single actual production target command')
+     inventory = result.get("inventory")
