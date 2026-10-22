@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "decision": "ACCEPT_FAILED_NATIVE199_HOST_OWNER_CONTAINER_PHYSICAL_RETIREMENT_ONLY",
+  "reviewer": "/root/matched_guest_build_review",
+  "implementation": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewed_handoff_sha256": "0178fbd6e801ae3bf1670eda23ae7cf21b3f386e37ed96446660b9f5dd8d44aa",
+  "nonce": "e052072870f740fc81596b8e7f3cb819",
+  "container": "e5921736853779c770cfa3c4ff01d15262928626db2bd8001b5a61a4c45a23a9",
+  "accepted_observations": [
+    "All 77 exported owner files independently passed decoded length and SHA256 checks.",
+    "All 25 distinct Docker client processes were recorded reaped.",
+    "Final inspect recorded exited, Running=false, Pid=0 and OOMKilled=false; remove022 returned zero.",
+    "Postremove name, owner-label and container-ID queries returned zero with empty outputs.",
+    "Independent current name and owner-label queries returned zero with empty streams and closed process groups.",
+    "Owner terminal result preserved FAIL, absence_verified=true, lease_retained=false and no secondary failures.",
+    "Outer owner/capture processes and groups were observed absent; permanent mutex27:4 reacquisition/release and shared-heavy absence passed.",
+    "Guest result recorded QEMU returncode=-9 and cleanup.reaped=true with no cleanup errors; PID10 is a container-namespace identity."
+  ],
+  "evidence": {
+    "owner_export_sha256": "cf897fb45419fed7f0da509bfd201ee32362ec163589431c472e3ac36ab17298",
+    "current_clearance_sha256": "971a551f76af277a4ce0899391e2bab7942c43f95c54830f898f979a3eababcb",
+    "original_failed_capture_sha256": "88d42a24f71426f0f8c780e7269cd147bfd06db4d8d6c5a9ad35fee558dab44c",
+    "guest_terminal_result_sha256": "0f9e2118342589667d094d2cdfdee421f13d86954393be07d8f510ecdfc2e490"
+  },
+  "physical_retirement_blockers": [],
+  "application_acceptance": false,
+  "normal_native_cpu_memory_restoration_accepted": false,
+  "execution_authorized": false,
+  "remaining": "Corrected collector source and ordinary evidence, fresh stage/manifest/nonce, current admission and a separately reviewed exact execution release remain required."
+}

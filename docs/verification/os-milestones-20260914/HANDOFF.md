@@ -1,3 +1,61 @@
+## Current — real McKernel boot; collector failed before application (2026-10-22 22:31 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual image10972/current68modules/launcher0d77 guest reached fullguestready3.
+ShortQMP93-byte correction passed actualproductionparent/manifest/path guards;
+new exacte052 invocation ran16.157864s then FAIL. ND_PAYLOAD start/reap0/raw-1,
+emptyuneofstreams: no app launched. Foreground source trace identifies boothelper
+failed BEFORE its firstmandatory10s pause, so evaluator guesttimestamp is a
+secondary opaque receipt. Strict199B/emptyerr/exit37 unchanged; no acceptedapp.
+Original longpath/precreatefailure, GoCLI AS512failure and allfailedcaptures kept.
+
+Genuine independent physical acceptance verifies all77ownerfiles/25reapedDocker
+clients/containerremoval/name-label-CIDabsence/ownerlease release/mutex27:4. No
+normalnativeCPU/memory/resource-restoration claim. Public exactfailurecapsule:
+../evidence/p-m06-native199-first-guest-failure-20261022-1/. Activeworkload none.
+Runtime schema/mount/FSIZE32sourcecohort published/fetched f950695f; no rebuilding
+acceptedimage/modules/launcher. Seven literalchecks remain open,28/35 unchanged.
+
+Foreground owns minimal failure-only boothelper metadata/stream export in
+host-preparation/p-m06-current68-native-stage-binding-20261022-1/
+native199-helper-failure-export-1/, with exact ordinary compile+6fixture proposal
+pending. sdk_host_profile_candidate owns ONLYcollector-substitution stage/overlay/
+native-manifest data afteractualnewELFPASS.235/227prepared short93Bpaths andinherit
+NPROC but NOTstaged withknownopaqueoldcollector. Next newcollector→199diagnostic,
+then235creation/exec/wait→227recovery; unchangedoracles andfreshpercase gates.
+P12tinyfileboundtests PASSfirsttry.265355s/CPU6released; no nativecredit. Disjoint
+worker prepares typedLONG HOST-output boundary because its3.389GBgrowth doesnotfit
+scratch; no LONGguest beforecomplete restoration/finalprofile andseparaterelease.
+Weeklyincludedonly; reserve576 unanswered/no mutation. No speedup orcheckuplift.
+
+## Current — physical retirement accepted; actual199 stage PASS (2026-10-22 22:03 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Independent physical acceptance5002fa14 verifies current image CID/container and
+owned common/shared/requestlease/quarantine retirement, permanent27:4 preserved;
+postjoin93selected rows/89original metadata rows/ninejournal events. Exact public
+retirement capsule committed/pushed/fetched d5a5e536b12640afca66614aba920cafdb2253d4.
+No native application or full McKernel resource-restoration claim follows.
+
+Stage199 first invocation failed BEFORE worker creation: hostUID already689tasks,
+per-UID NPROC512 caused PopenEAGAIN; original partial capture retained/no stageoutput.
+One independently reviewed bounded correction8d2493bd omits only NPROC512 in
+outer/child argv, preserves inherited126258, freshstage2/capture2 namespaces,
+onejob/CPU6/512MiB/30CPU/30+3wall/45outer/8MiBstreams unchanged. Docker512 untouched.
+Actual correctedstage PASS9.227976s; PID3344129/start50396576 positively absent,
+groupabsent/directwrapperjoined/EOFstreams/supervisorcleanup true; result0427f921.
+Actual cpioff44e02a/gzip428d2e2a retained underhost-preparation/
+p-m06-current68-native-stage-binding-20261022-1/filled-stage-execution-1/
+nproc-profile-correction-1/actual-selfexec-199-stage-2/. No native/checkcredit.
+
+sdk_host_profile_candidate owns isolated coherent actualoverlay/native-schema join
+and exactreadonlymount successor, using unchanged existing overlay transformer and
+native strictconsumer. Actual rawstage feeds this boundary; no wasted rebuild or
+rawstage replay. CPU6 grantedordinaryregression only; independentreviewer waiting
+for final integrated bytes/results/exactruntimepayload. Next admitted199native,
+then235process/227recovery. Practical28/35/sevenopen unchanged; weeklyincludedonly,
+reserve576 unanswered, no newfilesystemmutation or measuredspeedup claim.
+
 ## Current — actual matched image retirement chain PASS (2026-10-22 21:58 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

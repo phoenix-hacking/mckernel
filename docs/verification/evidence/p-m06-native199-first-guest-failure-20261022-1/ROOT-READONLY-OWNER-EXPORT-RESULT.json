@@ -1,0 +1,41 @@
+{
+  "status": "PASS_EXACT_READONLY_ROOT_OWNER_EXPORT",
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/actual-199-payload-launch-failure-1/readonly_export_exact_owner.py"
+  ],
+  "source_sha256": "5d543a67365a74724fcea98da71cca0ab8164d55f63a615563cca0b18700e5c6",
+  "root_identity": {
+    "device": 1828,
+    "inode": 884258,
+    "uid": 0,
+    "gid": 0,
+    "mode": 448
+  },
+  "pid": 3354241,
+  "start_ticks": "50550822",
+  "returncode": 0,
+  "elapsed_seconds": 0.12818307295674458,
+  "stdout_bytes": 282665,
+  "stdout_sha256": "cf897fb45419fed7f0da509bfd201ee32362ec163589431c472e3ac36ab17298",
+  "stderr_bytes": 0,
+  "direct_joined": true,
+  "streams_closed": true,
+  "process_group_absent": true,
+  "no_truncation": true,
+  "root_mutations": false
+}

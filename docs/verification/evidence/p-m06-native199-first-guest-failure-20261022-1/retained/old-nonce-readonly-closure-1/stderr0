@@ -1,0 +1,17 @@
+fatal error: failed to reserve page summary memory
+
+runtime stack:
+runtime.throw({0x5619dbd72b68?, 0x7f14a6522008?})
+	/usr/lib/go-1.22/src/runtime/panic.go:1023 +0x5e fp=0x7ffd010babc8 sp=0x7ffd010bab98 pc=0x5619db22251e
+runtime.(*pageAlloc).sysInit(0x5619dcb0cc48, 0x98?)
+	/usr/lib/go-1.22/src/runtime/mpagealloc_64bit.go:81 +0x11c fp=0x7ffd010bac38 sp=0x7ffd010babc8 pc=0x5619db217b7c
+runtime.(*pageAlloc).init(0x5619dcb0cc48, 0x5619dcb0cc40, 0x5619dcb6a898, 0x0)
+	/usr/lib/go-1.22/src/runtime/mpagealloc.go:320 +0x85 fp=0x7ffd010bac68 sp=0x7ffd010bac38 pc=0x5619db215565
+runtime.(*mheap).init(0x5619dcb0cc40)
+	/usr/lib/go-1.22/src/runtime/mheap.go:769 +0x165 fp=0x7ffd010baca0 sp=0x7ffd010bac68 pc=0x5619db212885
+runtime.mallocinit()
+	/usr/lib/go-1.22/src/runtime/malloc.go:454 +0xd7 fp=0x7ffd010bacd8 sp=0x7ffd010baca0 pc=0x5619db1f5c97
+runtime.schedinit()
+	/usr/lib/go-1.22/src/runtime/proc.go:785 +0xb7 fp=0x7ffd010bad50 sp=0x7ffd010bacd8 pc=0x5619db2262d7
+runtime.rt0_go()
+	/usr/lib/go-1.22/src/runtime/asm_amd64.s:349 +0x120 fp=0x7ffd010bad58 sp=0x7ffd010bad50 pc=0x5619db2566e0

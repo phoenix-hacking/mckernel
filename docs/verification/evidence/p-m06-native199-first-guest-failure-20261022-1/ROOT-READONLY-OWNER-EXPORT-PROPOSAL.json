@@ -1,0 +1,48 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ROOT_READONLY_EXPORT_PROPOSAL_NOT_EXECUTED",
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/actual-199-payload-launch-failure-1/readonly_export_exact_owner.py",
+    "bytes": 1638,
+    "sha256": "5d543a67365a74724fcea98da71cca0ab8164d55f63a615563cca0b18700e5c6"
+  },
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=16777216",
+    "--core=0:0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/actual-199-payload-launch-failure-1/readonly_export_exact_owner.py"
+  ],
+  "profile": {
+    "cpu": [
+      0
+    ],
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 30,
+    "outer_wall_seconds": 35,
+    "stdout_cap_bytes": 16777216,
+    "stderr_cap_bytes": 1048576,
+    "core_bytes": 0,
+    "nofile": 256,
+    "NPROC": "inherited"
+  },
+  "output_stdout": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/actual-199-payload-launch-failure-1/root-owner-export-1.stdout.json",
+  "output_stderr": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/actual-199-payload-launch-failure-1/root-owner-export-1.stderr",
+  "root_mutations": false,
+  "source_byte_cap": 8388608,
+  "base64_output_within16MiB": true,
+  "requires_root_exact_readonly_review": true,
+  "output_json_total_enforced_bytes": 16777216
+}

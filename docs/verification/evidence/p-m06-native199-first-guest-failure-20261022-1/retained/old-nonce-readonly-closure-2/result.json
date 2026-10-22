@@ -1,0 +1,67 @@
+{
+  "status": "PASS_PRECREATE_OLD_NONCE_READONLY_CLOSURE",
+  "separate_lookup_results": [
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=10:10",
+        "--fsize=1048576:1048576",
+        "--core=0:0",
+        "--",
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-native-diagnostic-c37000c46dc94ad786fe714a1c04e4f9$"
+      ],
+      "pid": 3350404,
+      "returncode": 0,
+      "direct_joined": true,
+      "streams_closed": true,
+      "process_group_absent": true,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=10:10",
+        "--fsize=1048576:1048576",
+        "--core=0:0",
+        "--",
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.native-diagnostic.owner=c37000c46dc94ad786fe714a1c04e4f9"
+      ],
+      "pid": 3350412,
+      "returncode": 0,
+      "direct_joined": true,
+      "streams_closed": true,
+      "process_group_absent": true,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    }
+  ],
+  "old_parent_empty_attempt_and_evidence_absent": true,
+  "old_capture_owner_PID_and_group_absent": true,
+  "permanent_mutex27_4_acquired_released": true,
+  "no_heavy_admitted": true,
+  "no_container_or_record_mutation": true,
+  "elapsed_seconds": 0.22942206397419795
+}

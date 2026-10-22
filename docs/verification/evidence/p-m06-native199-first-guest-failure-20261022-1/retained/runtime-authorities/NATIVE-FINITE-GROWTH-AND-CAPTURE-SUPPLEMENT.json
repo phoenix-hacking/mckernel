@@ -1,0 +1,96 @@
+{
+  "affected_tests": {
+    "bytes": 1486,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/FSIZE-AFFECTED-WHOLE-JOIN.json",
+    "sha256": "b3861d25ed0ee7c55781401ab7e9a7290ea482a94414be160d3f115c85623406"
+  },
+  "capture_delta": "Only addrole'native199-owner'; accepted a6ce directwait/streamclose/group/FDhash tail unchanged; truthful outer wall/grace kill null. Inherited host NPROC preserved.",
+  "capture_operation": {
+    "bytes": 2006,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/OPERATION-native199-owner.json",
+    "sha256": "d4dfc1f1b76272daae3b9dd2107ce66680eb42e3c6f126bfc0b37c4293e05c94"
+  },
+  "capture_preimage": {
+    "bytes": 2485,
+    "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-canonical-host-output-request-20261022-1/capture_sdk_owner.py",
+    "sha256": "f64dc4118fb7416d0d11eb4501778d4b7416bfef169be432f5b4be114d322e8d"
+  },
+  "capture_source": {
+    "bytes": 2503,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/capture_native199_owner.py",
+    "sha256": "e41eecb6a3f2eeb37338b82233241dc3f9659f529103f5c300bfe17ea420d3cf"
+  },
+  "capture_source_hash_check_argv": [
+    "/usr/bin/sha256sum",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/capture_native199_owner.py"
+  ],
+  "exact_outer_capture_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/capture_native199_owner.py",
+    "--operation",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/OPERATION-native199-owner.json",
+    "--sha256",
+    "d4dfc1f1b76272daae3b9dd2107ce66680eb42e3c6f126bfc0b37c4293e05c94"
+  ],
+  "fsize_delta": {
+    "bytes": 1981,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/OWNER-FSIZE-ONLY.diff",
+    "sha256": "4cfe5b01f5f47fa6f5c2133956da40536f99196a98900cd6c92e69dbb707f571"
+  },
+  "parent_requirements": "Root launch through existing accepted ordinary process supervisor/caller recipe, record capture PID/procstart, direct wait, streams closed and whole group/proc absent. No kill of a live root owner with uncertain container ownership; existing owner retains lock and cleanup authority. No invented external watchdog claim.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_PROFILE_AND_SNAPSHOT_PROPOSAL_NOT_RELEASED",
+  "storage": {
+    "backing": {
+      "allocated_bytes": 102261067776,
+      "dev": 66306,
+      "gid": 0,
+      "inode": 47468427,
+      "path": "/home/holden/mckernel-work/scratch.ext4",
+      "size": 118111600640,
+      "uid": 0
+    },
+    "campaign_headroom_bytes": 679477248,
+    "finite_source_predicates": [
+      "Docker _create_argv sets fsize33554432 soft/hard; exact _profile verifies identical Ulimits; daemon-created container does not inherit outer fsize.",
+      "Seven fixed regular output names: serial.log/debugcon.log/qemu.stdout/qemu.stderr/qmp.transcript.json/result.json/first-failure.jsonl. Any write beyond32MiB is a retained failure, never accepted truncation.",
+      "Owner lifetime pending_evidence total<=128MiB and4096 records; no flush until container absent/lockreleased. Recovery never flushes repeatedly while live; same bounded queue retains ownership.",
+      "Metadata+result allowance32MiB; actual ordinary publication6461B plus small request/status. No new image/module/cpio/overlay copy during native run. Existing retained binary inputs charged in current free space; no compression discount/recount."
+    ],
+    "full_remaining_sparse_growth_bytes": 15850532864,
+    "host_available_bytes": 177144496128,
+    "host_floor_bytes": 17179869184,
+    "host_margin_bytes": 142897745920,
+    "host_required_bytes": 34246750208,
+    "host_transaction_components": {
+      "Docker_start_log_duplicate_upper_bytes": 134217728,
+      "emergency_bytes": 134217728,
+      "metadata_bytes": 16777216,
+      "outer_stdout_stderr_bytes": 67108864
+    },
+    "host_transaction_reserve_bytes": 536870912,
+    "measured_utc": "2026-10-22T22:10:50.776170+00:00",
+    "prospective_capacity_credit": false,
+    "reserve576_used": false,
+    "root_must_remeasure": true,
+    "scratch_UUID": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "scratch_available_bytes": 14121881600,
+    "scratch_floor_bytes": 12884901888,
+    "scratch_margin_bytes": 20631552,
+    "scratch_required_bytes": 14101250048,
+    "scratch_runtime_components": {
+      "metadata_and_result_allowance_bytes": 33554432,
+      "owner_lifetime_queued_evidence_upper_bytes": 134217728,
+      "seven_fixed_attempt_files_at_fsize32MiB": 234881024
+    },
+    "scratch_runtime_reserve_bytes": 402653184,
+    "scratch_separate_emergency_bytes": 134217728,
+    "snapshot_model_pass": true,
+    "status": "SNAPSHOT_ONLY_NOT_ROOT_ADMISSION"
+  }
+}
