@@ -1,3 +1,49 @@
+## Current — SDK modules compile; provider export acceptance blocked (2026-10-22 21:07 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Fresh independently released SDK attempt20352dabb9c94403a03c224ec2826ff2 executed
+once: owner3318148/start50047637, session60268 TERMINAL, directjoined/closed/group
+absent in22.961756s. Minimal MODULE declaration fix verified: make0; all three
+.ko files linked. Driver correctly FAILS artifact acceptance because selected
+Module.symvers lacks ihk_os_create_unbooted_v12 (only createv1-v6 exports).
+No checker relaxation/retry. matched_guest_build_review now diagnoses exact
+selected provider/default source versus required current exports; one concrete
+new failure family. m07_final_closure_review independently joins hostretirement.
+Owner reports retiredtrue, cleanup_separately_requiredfalse; failed outputs kept.
+Public original74-file/344522B capture retained at ../evidence/
+sdk68-actual-provider-export-failure-20261022-1/; all partial artifacts private.
+
+Guest source/runtime template lane remains readying already accepted private
+four-source cohort against matching live admission/capture guards. Next real
+SDK provider correction or admitted matching guest compile; then199/235/227.
+28/35 unchanged; seven open IDs and exact literal contracts unchanged. Weekly
+included only; no filesystem reserve/cleanup/image mutation or speedup claim.
+
+## Current — MODULE correction published; fresh SDK execution review (2026-10-22 21:02 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Final revision-2 source review c3275698 accepted the minimal cfg(MODULE)
+declaration and all coupled 68-file/1346589-byte authority updates. Exact three
+canonical postimages installed; old05ac preparation/failed candidate preserved.
+Commit48fc63993ea92a5cdebc9c88969d6f1e3b86e6b3 pushed/fetched; all eleven runtime
+sources plus new26a572 preparation match fetched blobs. Fresh nonce
+20352dabb9c94403a03c224ec2826ff2 has 68module/15input materialization; request
+10f10117da29e77fe945e67d6d9872b9a46d61501fd539a2369470588718dd6a.
+Actual ordinary gates PASS28ms to expected in-owner authenticated historical
+observation boundary. Host177601519616B/scratch14122209280B pass full host-output
+growth bounds. No cleanup/reserve/image mutation needed. Exact one-shot payload
+2c3c67eb6c9a0976d479ab6eed5a9e60aaf15e40076a6b9ef9605be0be177e6a is with
+m07_final_closure_review; root invokes once after genuine exact execution release.
+Owner itself acquires27:4 and performs fresh authenticated observation; no extra
+standalone observer. Prior cfgMODULE failure/retirement remain immutable.
+
+Next SDK actual compile/artifact acceptance and positive retirement, then matched
+guest compiler (lifecycle_missing_recovery prepares existing accepted private
+cohort dynamic packet), then unchanged199/235/227 native cases. Practical28/35;
+seven remain P-M01-02/P-M05-02/P-M05-03/P-M06-01/P-M08-02/P-M09-02/P-M12-01.
+P12 frozen modeled/source results reused later; no new native/closure credit.
+Weekly included only; original velocity baseline and retained owners preserved.
+
 ## Current — actual SDK compiler failure; host retirement accepted (2026-10-22 20:55 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
