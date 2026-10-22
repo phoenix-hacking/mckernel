@@ -1,6 +1,7 @@
 """Injected process tests only: synthetic ELF files carry no compilation credit."""
 import copy
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
@@ -13,31 +14,43 @@ from unittest.mock import patch
 from scripts import native_running_external_modules_offline as driver
 
 ROOT = Path(__file__).resolve().parents[2]
-PREPARATION = ROOT / "docs/verification/evidence/native-running-external-modules-preparation-20261017-2.json"
+PREPARATION = ROOT / "docs/verification/evidence/current68-host-control-sdk-preparation-20261022-1.json"
 
 
-def fake_elf(name, release=driver.RELEASE):
-    names = b"\0.shstrtab\0.modinfo\0"
+def fake_elf(name, release=driver.RELEASE, bridges=()):
+    names = b"\0.shstrtab\0.modinfo\0.strtab\0.symtab\0"
     info = ("name=" + name + "\0vermagic=" + release + " SMP mod_unload \0license=GPL\0").encode()
+    strings = b"\0"
+    symbols = bytes(24)
+    for symbol, defined in bridges:
+        symbols += struct.pack("<IBBHQQ", len(strings), 0x12, 0, 1 if defined else 0, 0, 0)
+        strings += symbol.encode() + b"\0"
     header = bytearray(64)
     header[:6] = b"\x7fELF\x02\x01"
     struct.pack_into("<HH", header, 16, 1, 62)
     struct.pack_into("<Q", header, 40, 64)
-    struct.pack_into("<HHH", header, 58, 64, 3, 1)
+    struct.pack_into("<HHH", header, 58, 64, 5, 1)
     sections = bytes(64)
-    sections += struct.pack("<IIQQQQIIQQ", 1, 3, 0, 0, 256, len(names), 0, 0, 1, 0)
-    sections += struct.pack("<IIQQQQIIQQ", 11, 1, 0, 0, 256 + len(names), len(info), 0, 0, 1, 0)
-    return bytes(header) + sections + names + info
+    offset = 64 + 5 * 64
+    for name_offset, kind, data, link, entry_size in (
+            (1, 3, names, 0, 0), (11, 1, info, 0, 0),
+            (20, 3, strings, 0, 0), (28, 2, symbols, 3, 24)):
+        sections += struct.pack("<IIQQQQIIQQ", name_offset, kind, 0, 0, offset, len(data), link, 0, 1, entry_size)
+        offset += len(data)
+    return bytes(header) + sections + names + info + strings + symbols
 
 
 class ExternalModulesDriverTests(unittest.TestCase):
     def setUp(self):
         parent = os.environ.get("MCKERNEL_EXTERNAL_DRIVER_EVIDENCE")
-        self.root = Path(tempfile.mkdtemp(prefix="driver-case-", dir=parent))
+        temp = tempfile.TemporaryDirectory(prefix="driver-case-", dir=parent)
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
         self.baseline, self.candidate, self.inputs = [self.root / x for x in ("out", "candidate", "inputs")]
         for path in [self.baseline, self.inputs, self.candidate / "modules", self.candidate / "home", self.candidate / "tmp"]:
             path.mkdir(parents=True, exist_ok=True)
-        # Authentication is mocked explicitly; all path/hash/output logic is real.
+        # Synthetic executor cases replace only preparation loading and the tool basis.
+        # Separate loader tests exercise the installed current68 authentication contract.
         # Synthetic input bytes are never passed to a compiler.
         self.manifest = json.loads(PREPARATION.read_text())
         self.manifest["references"] = {}
@@ -57,6 +70,22 @@ class ExternalModulesDriverTests(unittest.TestCase):
             self.manifest["references"]["compiler_" + crate] = {
                 "path": "/reference/" + name, "retained_copy": "/retained/" + name,
                 "sha256": hashlib.sha256(content.encode()).hexdigest()}
+        # Unit fixtures inject the container's make identity; no host make executes.
+        # Keep the actual pipe-proof decoder and content hash checks in the path.
+        proof = dict(status="PASS_PINNED_MAKE_PIPE_RECIPE", image_id="sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+                     make_path="/usr/bin/make", returncode=0, direct_child_joined=True,
+                     pipe_jobserver_observed=True, fifo_count=0,
+                     argv=["/usr/bin/make", "--jobserver-style=pipe", "-j2", "-f", "/probe/Makefile", "all"],
+                     make_sha256="97539f226fb36b8a39b147b6efe50a44f50c65773f7ad7013c0dc1e633f11362")
+        raw = json.dumps(proof).encode()
+        self.manifest["make_pipe_probe"] = dict(input_name="fixture-make-pipe-proof.json", sha256=hashlib.sha256(raw).hexdigest())
+        (self.inputs / "fixture-make-pipe-proof.json").write_bytes(raw)
+        original_digest = driver.digest
+        def container_digest(path):
+            if path == Path("/usr/bin/make"): return proof["make_sha256"]
+            return original_digest(path)
+        injected_make = patch.object(driver, "digest", side_effect=container_digest)
+        injected_make.start(); self.addCleanup(injected_make.stop)
         (self.baseline / "build").mkdir()
         tool = self.baseline / "build/fixture-tool"
         tool.write_bytes(b"synthetic tool input, never executed")
@@ -81,13 +110,27 @@ class ExternalModulesDriverTests(unittest.TestCase):
             (directory / (module + ".ko")).write_bytes(fake_elf(crate))
             for suffix in (".o", ".mod.c", ".mod.o"):
                 (directory / (module + suffix)).write_bytes(b"synthetic generated fixture\n")
-            text = "savedcmd_/candidate/modules/" + crate + ".o := rustc --crate-name " + crate
-            text += " --emit=obj=/candidate/modules/" + crate + ".o /candidate/modules/" + crate + ".rs\n"
-            text += "source_/candidate/modules/" + crate + ".o := /candidate/modules/" + crate + ".rs\n"
-            text += "deps_/candidate/modules/" + crate + ".o := \\\n  /candidate/modules/" + crate + ".rs \\\n"
-            (directory / ("." + crate + ".o.cmd")).write_text(text)
+            leaf = "mcctrl_rust" if crate == "mcctrl" else crate
+            text = "savedcmd_/candidate/modules/" + leaf + ".o := rustc --crate-name " + leaf
+            text += " --emit=obj=/candidate/modules/" + leaf + ".o /candidate/modules/" + leaf + ".rs\n"
+            text += "source_/candidate/modules/" + leaf + ".o := /candidate/modules/" + leaf + ".rs\n"
+            text += "deps_/candidate/modules/" + leaf + ".o := \\\n"
+            text += "".join("  /candidate/modules/" + name + " \\\n" for name in driver.EXACT_DEPENDENCIES[crate])
+            (directory / ("." + leaf + ".o.cmd")).write_text(text)
+        definitions = [(symbol, True) for symbol in driver.MM_BRIDGES]
+        (directory / "mcctrl_rust.o").write_bytes(fake_elf("mcctrl", bridges=[(symbol, False) for symbol in driver.MM_BRIDGES]))
+        for name in ("mcctrl_vm_write_compat.o", "mcctrl.o", "mcctrl.ko"):
+            (directory / name).write_bytes(fake_elf("mcctrl", bridges=definitions))
+        (directory / ".mcctrl_vm_write_compat.o.cmd").write_text(
+            "savedcmd_C := cc -c /candidate/modules/mcctrl_vm_write_compat.c -o /candidate/modules/mcctrl_vm_write_compat.o\n"
+            "source_C := /candidate/modules/mcctrl_vm_write_compat.c\n"
+            "deps_C := /candidate/modules/mcctrl_vm_write_compat.h\n")
+        (directory / "mcctrl.mod").write_text("/candidate/modules/mcctrl_rust.o /candidate/modules/mcctrl_vm_write_compat.o\n")
+        (directory / ".mcctrl.o.cmd").write_text("savedcmd_link := ld -r -o /candidate/modules/mcctrl.o @/candidate/modules/mcctrl.mod\n")
         (directory / "modules.order").write_text("".join("/candidate/modules/" + name + ".o\n" for name in driver.MODULES.values()))
-        (directory / "Module.symvers").write_text("0x00000000\tihk_os_create_unbooted_v6\t/candidate/modules/ihk\tEXPORT_SYMBOL_GPL\tMCKERNEL_IHK_V1\n")
+        exports = ("ihk_os_create_unbooted_v6", "ihk_os_create_unbooted_v12", "ihk_os_application_prepare_fork_control_v1",
+                   "ihk_os_application_prepare_fork_control_receipt_v1")
+        (directory / "Module.symvers").write_text("".join("0x00000000\t" + symbol + "\t/candidate/modules/ihk\tEXPORT_SYMBOL_GPL\tMCKERNEL_IHK_V1\n" for symbol in exports))
         return subprocess.CompletedProcess(argv, 0)
 
     def test_frozen_preparation_and_exact_all_three_plan(self):
@@ -100,7 +143,7 @@ class ExternalModulesDriverTests(unittest.TestCase):
         self.assertNotIn("bzImage", plan["argv"])
         provenance = plan["source_provenance"]
         self.assertEqual(provenance["baseline_source_sha"], "942c927b1ec93cc31284ff498455909d9bb2d0fc")
-        self.assertEqual(provenance["source_candidate_sha"], "1769263c751befa9983d19705833d3d5ac6a1ace")
+        self.assertEqual(provenance["source_candidate_sha"], "52fd08d7495bd1e622d02cbb186cbbd0696829c192fb9afdedb83fecaa56b53a")
         self.assertEqual({row["path"] for row in provenance["reviewed_deltas"]}, set(driver.REPLACEMENTS))
         closure = {row["path"]: row["sha256"] for row in manifest["closure"]}
         encoded = json.dumps(closure, sort_keys=True, separators=(",", ":")).encode()
@@ -110,6 +153,80 @@ class ExternalModulesDriverTests(unittest.TestCase):
         changed.write_bytes(PREPARATION.read_bytes() + b" ")
         with self.assertRaisesRegex(ValueError, "frozen preparation digest"):
             driver.load_preparation(changed)
+
+    def test_historical_preparation_is_refused(self):
+        historical = ROOT / "docs/verification/evidence/native-running-external-modules-preparation-20261017-2.json"
+        with self.assertRaisesRegex(ValueError, "frozen preparation digest"):
+            driver.load_preparation(historical)
+
+    def test_current68_loader_refuses_changed_map_and_dependencies(self):
+        for failure in ("map", "dependencies", "identity", "replacement"):
+            manifest = json.loads(PREPARATION.read_text())
+            if failure == "map": manifest["closure"][0]["sha256"] = "0" * 64
+            if failure == "dependencies": manifest["source_dependency_sets"]["ihk"] = []
+            if failure == "identity": manifest["source_identity"] = "0" * 64
+            if failure == "replacement": manifest["closure"][0]["reviewed_replacement"] = False
+            path = self.root / (failure + ".json")
+            path.write_text(json.dumps(manifest))
+            # Rebind only the outer digest: exercise real semantic decoding.
+            with self.subTest(failure=failure), patch.object(driver, "PREPARATION_SHA256", driver.digest(path)), self.assertRaises(ValueError):
+                driver.load_preparation(path)
+
+    def test_final_mm_provider_undefined_or_duplicate_symbols_are_refused(self):
+        for failure in ("undefined", "duplicate"):
+            with self.subTest(failure=failure):
+                self.synthetic_process(self.manifest["proposed_external_command"], cwd=self.baseline / "build",
+                                       env=self.manifest["environment"], timeout=1800, stdout=io.BytesIO())
+                bridges = [(symbol, failure != "undefined") for symbol in driver.MM_BRIDGES]
+                if failure == "duplicate": bridges.append((driver.MM_BRIDGES[0], True))
+                (self.candidate / "modules/mcctrl.ko").write_bytes(fake_elf("mcctrl", bridges=bridges))
+                with self.assertRaisesRegex(ValueError, "MM provider D/U mismatch"):
+                    driver.actual_mm_provider_check(self.candidate / "modules")
+
+    def test_actual_current68_reference_only_pipe_proof_contract(self):
+        manifest = driver.load_preparation(PREPARATION)
+        self.assertNotIn("make_pipe_probe", manifest)
+        reference = manifest["references"]["make_pipe_proof"]
+        retained = Path(reference["retained_copy"])
+        self.assertEqual(driver.digest(retained), reference["sha256"])
+        # Only /usr/bin/make identity is injected by setUp; descriptor, proof
+        # bytes, hashes and every decoder/content check use installed code.
+        driver.pipe_probe(manifest, retained.parent)
+
+    def test_actual_reference_only_pipe_proof_drift_is_refused(self):
+        current = driver.load_preparation(PREPARATION)
+        self.assertNotIn("make_pipe_probe", current)
+        reference = current["references"]["make_pipe_proof"]
+        retained = Path(reference["retained_copy"])
+        copied = self.inputs / retained.name
+        copied.write_bytes(retained.read_bytes())
+        for failure in ("reference", "proof", "content"):
+            manifest = copy.deepcopy(current)
+            copied.write_bytes(retained.read_bytes())
+            if failure == "reference":
+                manifest["references"]["make_pipe_proof"]["sha256"] = "0" * 64
+            elif failure == "proof":
+                copied.write_bytes(copied.read_bytes() + b" ")
+            else:
+                proof = json.loads(copied.read_bytes())
+                proof["direct_child_joined"] = False
+                copied.write_text(json.dumps(proof))
+                manifest["references"]["make_pipe_proof"]["sha256"] = driver.digest(copied)
+            expected = "pipe recipe proof" if failure == "content" else "pipe probe drift"
+            with self.subTest(failure=failure), self.assertRaisesRegex(ValueError, expected):
+                driver.pipe_probe(manifest, self.inputs)
+
+    def test_missing_pipe_probe_is_refused_before_executor(self):
+        self.manifest.pop("make_pipe_probe")
+        receipt, process = self.run_driver(self.synthetic_process)
+        self.assertIn("retained make pipe proof reference required", receipt["error"])
+        process.assert_not_called()
+
+    def test_changed_pipe_probe_is_refused_before_executor(self):
+        (self.inputs / "fixture-make-pipe-proof.json").write_text("changed proof")
+        receipt, process = self.run_driver(self.synthetic_process)
+        self.assertIn("pipe probe drift", receipt["error"])
+        process.assert_not_called()
 
     def test_plan_never_launches_a_process(self):
         receipt, process = self.run_driver(execute=False)

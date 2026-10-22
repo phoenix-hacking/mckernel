@@ -1,3 +1,121 @@
+## Current — SDK68 driver/current unit regression accepted (2026-10-22 15:59 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+New retained-reference pipe adapter resolves real current68 descriptor/driver
+mismatch, preserving every proof/image/recipe/pinnedmake check. Both affected
+unit suites53PASS/.748stesttime/.916610commandwall; actual frozen descriptor/proof
+contractPASS/.114886s, injecting ONLY pinned-container make digest (hostmake not
+accepted). Independent source/resultPASS; current owner96687487,driver3ba03f13,
+owner-testc816f7df,offline-test5ba949db,preparation62c869a8. CURRENT11 map28f9a79d
+is refreshed; other9pins unchanged. Old7076helper fixture and all original raw
+failures remain preserved. Source acceptance/evidence/count adoption:
+../evidence/m05-sdk68-expert-fixture-accepted-20261022-1/.
+One NEW coherent infrastructure source unit adopted for adapter/code/regressions:
+100sources(40OS/60infra),35compiler,13native,31behaviors,Rust21/18,24/35checks,
+sixwhole. No module/native/kernel behavior/check/whole credit. Actual pinned
+container make,SDK/compiler/module/native,fullauthentication/loadedorigins and
+fresh independent execution release remain unproved; reserve576 unanswered.
+
+Observer fullschema expert directed four source/fixture repairs after retained
+local failure: consistent fstat/stat/lstat ownership boundary, actual generated
+observer/postjoin+predecessor guard propagation, retained exclusive fixtures,
+negative counts/reason-stage assertions. Fresh prepared cohort owner active at
+host-preparation/m07-observer-inventory-expert-cohort-20261022-1/. Independent
+sourcecheck must precede ONE full generated-main/summary/postjoin+negative run.
+No root retry is released; current build/common/shared/container remain held.
+Preserve root700partial diagnostics,allfailedbytes,Scratch21,27:4 and dirty others.
+
+Original velocity baseline/stopped intervals preserved; no new active-hour or4x
+claim. Bottleneck remains actual retained-owner physical closure; sourcepredicate
+fixtures were insufficient, so use full generated consumer execution before any
+next privileged observer. Next executable SDK step is source publication/proof;
+module admission still blocked by current ownership/capacity/release prerequisites.
+
+## Current — SDK68 source integrated; observer full-schema repair active (2026-10-22 15:46 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Expert-directed SDK helper observation passed0/.080404769s,emptyerr,directjoin/
+groupabsent. Independent result+owner-location delta acceptance allows exact
+source integration. Root installed owner96687487,driverb19b610f,preparation62c869a8
+and verified full11runtime hashes; all preimages/failed fixtures remain retained.
+Source evidence: ../evidence/m05-sdk68-expert-fixture-accepted-20261022-1/.
+Fullauthenticate,loadedorigins,SDK/compiler/modules/native remain unproved. No
+new whole/check/behavior/compiler/Rust-path credit from this source preparation.
+
+Second observer failure independently closed and expert decision preserved:
+../evidence/m07-observer-entry-correction-20261022-1/SECOND-FAILURE-EXPERT-DISPOSITION.verbatim.md.
+97finite roles→88unique paths, but malformed integer88 broke observer/postjoin.
+Fresh source owner observer_inventory_schema_repair implements generator/shared
+strict decoder plus full actual-main successful-return and actualpostjoin fixture,
+keeping decoding/receipt joins/descriptors/inventories/comparisons/draft/summary
+real and mocking only explicit privilege/host boundaries. Scalar/count/path/
+descriptor/client/final-inventory negatives mandatory; no early-stop substitute.
+Private output: host-preparation/m07-observer-full-inventory-schema-correction-20261022-1/.
+No privileged retry is released. Preserve both failed attempts/partialroot700output.
+
+Ledger remains same10000total, no new external stop. Original velocity baseline/
+all stopped intervals retained. Held sixwhole,24/35checks,99sources(40OS/59infra),
+35compiler,13native,31behaviors,Rust21/18. Reuse accepted cbb04image/stage. Reserve576
+unanswered; preserve build/common/shared,Scratch21,27:4 and all dirty other work.
+Next: complete fullconsumer repair→independent review/publication/new exact release.
+
+## Current — observer second failure; full schema expert escalation (2026-10-22 15:39 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Manual invocation20261022T153425Z-18937b24 active; same credit run/10000total.
+Observer payload896cf193 independently released after source/cohort acceptance,
+fetched4f189903code/aliases and fresh UUID110GiB/resource/quiescence admission.
+Actual corrected observer failed exit1/.478018049s at main309: finite_unique_paths
+is an integer consumed as an iterable. Corrected predecessor join passed; root
+observation/commands ran before the later schema error. Partial root700 diagnostic
+output is RETAINED; no cleanup/export/native and no physical clearance inferred.
+Direct PID3192325/start48096130 joined,streamsclosed/groupabsent. Full failure,
+release/admission/status and raw tool events retained under host-preparation/
+m07-observer-current-postjoin-correction-20261022-1/. First null failure plus its
+one bounded correction are consumed; expert owner observer_execution_review now
+owns full producer/actual-consumer schema repair design and failed-child closure.
+Do NOT replay or authorize another attempt from the early-stop fixture alone.
+
+Independent SDK expert-directed fixture source prepared CPU6/1GiB/20CPU/30wall,
+compile-only/all11pins checked, no fixture/helper run. Source review now pending
+before one admitted helper-only observation; installed/module/native proof stays
+unproven. Location: host-preparation/m05-sdk68-expert-fixture-correction-20261022-1/.
+
+Held sixwhole,24/35checks,99sources(40OS/59infra),35compiler,13native,31behaviors,
+Rust21production/18native. Reuse accepted cbb04image/stage. Reserve576unanswered;
+no mutation. Preserve retained build/common/shared,all failures,Scratch21,27:4,
+dirty work and original velocity baseline; no4x/new active-rate claim.
+
+## Current — total credit budget reduced to 10,000 (2026-10-22 15:26 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Latest explicit user instruction replaces the earlier 20,000-credit amount with
+10,000 TOTAL for this run. The checkpointed amendment retained credit run
+`0c216c56957b4e64a89d54d4b28a2ad6`, initial balance 58235.9614400000 and all
+cumulative spending. Observed spend at amendment: 3.827815 credits; remaining
+9996.172185. Both launcher leases were held and old watcher/worker/server were
+absent. The recovered guard validated the changed budget. No allowance reset,
+purchase or API billing. Other account charges count; in-flight charges can
+settle later. Audit: host-preparation/paid-credit-resume-20261022-1/
+BUDGET-10000-AMENDMENT.json.
+
+Restart status: same-thread resume CONFIRMED at 2026-10-22T15:36:03.416701+00:00. Goal active.
+The 10,000-credit guard uses cumulative observed account-wide balance declines.
+Higher snapshots never restore allowance; stale reports may count conservatively
+and stop early. Local accounting fix 5d3fc83d is pushed/fetched-blob verified,
+independently reviewed and passes all 164 relevant offline tests. The prior
+credit_budget_unknown field/stop belongs to the preserved earlier invocation. The preceding restart stop
+and all earlier 100/20,000-credit amounts are historical for this invocation.
+GPT-6.1 and the existing resource/ownership/functional controls remain. Continue
+from the saved observer-cohort execution-release/admission dependency; the SDK
+fixture repair is separate and the reserve576 approval remains unanswered.
+No new OS milestone or native acceptance follows from this budget configuration.
+
+Runtime planning: logged token mix priced at published Standard GPT-6.1 rates
+suggests about 350 credits/hour, or about 28 hours for 10,000 credits. This is a
+provisional token-cost estimate, not a measured account debit rate or a promise
+of OS completion. Preserve the original velocity baseline and stopped intervals.
+
 ## Restart checkpoint — explicit total-budget reduction (2026-10-22 15:24 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

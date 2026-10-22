@@ -1,0 +1,45 @@
+{
+  "status": "PASS_FOCUSED_CURRENT68_PIPE_REFERENCE_AND_53_UNIT_TESTS_HOST_MAKE_IDENTITY_INJECTED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_sha256": {
+    "scripts/tests/test_native_running_external_modules_owner.py": "c816f7dfd6fa167670876d8e64e8474bec119e1f19280fcc1cb902dff1a2c340",
+    "scripts/tests/test_native_running_external_modules_offline.py": "5ba949dbb61d1357c471097d0a8190ddb7c5b7976deaf558a2dbe933d7fe5b13",
+    "scripts/native_running_external_modules_offline.py": "3ba03f133513835fd888e0efce5866f9a574a7d649a2c4b509f2fe52fa2ed3a3",
+    "scripts/native_running_external_modules_owner.py": "966874870dfe34dabe78bebac535466eae36e9d23c5542ea486cb82045cbbb67",
+    "docs/verification/evidence/current68-host-control-sdk-preparation-20261022-1.json": "62c869a85f8ad05e08279df9d4f03a4aae4bb8b0cc10c84e8d9837a2745eb445"
+  },
+  "tests": 53,
+  "actual_contract": {
+    "command": [
+      "python3",
+      "/home/holden/mckernel-work/host-preparation/m05-sdk68-installed-unit-regressions-20261022-1/pipe-reference-correction-1/actual-current-preparation-pipe-contract.py"
+    ],
+    "returncode": 0,
+    "wall_seconds": 0.11488645302597433,
+    "cpu": 0,
+    "max_as_bytes": 1073741824,
+    "cpu_seconds": 20,
+    "wall_limit_seconds": 30
+  },
+  "suite": {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "scripts.tests.test_native_running_external_modules_owner",
+      "scripts.tests.test_native_running_external_modules_offline",
+      "-v"
+    ],
+    "returncode": 0,
+    "wall_seconds": 0.9166104210307822,
+    "cpu": 0,
+    "max_as_bytes": 1073741824,
+    "cpu_seconds": 20,
+    "wall_limit_seconds": 30
+  },
+  "module_acceptance": false,
+  "native_acceptance": false,
+  "rust_retirement": false,
+  "final_runtime11_map_implication": "Owner test hash remains c816f7df; driver changed and must replace old b19b610f input. Offline test changed again; outside owner SOURCES11 but preserve exact independent test evidence source binding.",
+  "previous_actual_failure_preserved": "../actual-preparation-pipe-contract.log"
+}
