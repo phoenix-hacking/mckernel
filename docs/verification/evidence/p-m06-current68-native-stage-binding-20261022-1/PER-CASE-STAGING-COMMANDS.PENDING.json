@@ -1,0 +1,102 @@
+{
+  "status": "NOT_EXECUTED_NOT_RELEASED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "cases": [
+    {
+      "case": "p-m06-exec-reset-selfexec-199B",
+      "argv": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native_diagnostic_stager.current68.py",
+        "--base-root",
+        "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root",
+        "--payload",
+        "/home/holden/mckernel-work/host-preparation/native-exec-reset-self-exec-case-preparation-20261021-1/ordinary-reference-1/result/app",
+        "--collector",
+        "/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/process-exec-wait-collector",
+        "--replacements",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/REPLACEMENTS.ACTUAL-CURRENT68-AND-IMAGE.json",
+        "--output",
+        null
+      ],
+      "strict_stdout": {
+        "path": "/home/holden/mckernel-work/host-preparation/native-exec-reset-self-exec-case-preparation-20261021-1/expected.stdout",
+        "bytes": 199,
+        "sha256": "c415fd7c85986852584419737460894f4f7b03a781b3d991659d31fb665faf15"
+      },
+      "strict_stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/native-exec-reset-self-exec-case-preparation-20261021-1/expected.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "strict_exit": 37,
+      "actual_output_namespace": null,
+      "execution_release": null
+    },
+    {
+      "case": "P-M06-01-process-exec-wait-235B",
+      "argv": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native_diagnostic_stager.current68.py",
+        "--base-root",
+        "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root",
+        "--payload",
+        "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/process_exec_wait",
+        "--collector",
+        "/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/process-exec-wait-collector",
+        "--replacements",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/REPLACEMENTS.ACTUAL-CURRENT68-AND-IMAGE.json",
+        "--output",
+        null
+      ],
+      "strict_stdout": {
+        "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/expected.stdout",
+        "bytes": 235,
+        "sha256": "0e7aa2ed289b122be9c38f44dc284cbb7bda64a662c2b09b4036a030f3f2d17b"
+      },
+      "strict_stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/practical-process-exec-wait-rust-20261019-1/expected.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "strict_exit": 0,
+      "actual_output_namespace": null,
+      "execution_release": null
+    },
+    {
+      "case": "P-M01-02-child-SIGTERM-and-exec-recovery-227B",
+      "argv": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native_diagnostic_stager.current68.py",
+        "--base-root",
+        "/home/holden/mckernel-work/scratch/native-ultra-futex-guest-20260909-2026091302/root",
+        "--payload",
+        "/home/holden/mckernel-work/host-preparation/p-m06-recovery-batch-prerequisite-20261022-1/process_cancel_recovery",
+        "--collector",
+        "/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/process-exec-wait-collector",
+        "--replacements",
+        "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/REPLACEMENTS.ACTUAL-CURRENT68-AND-IMAGE.json",
+        "--output",
+        null
+      ],
+      "strict_stdout": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-recovery-batch-prerequisite-20261022-1/expected.stdout",
+        "bytes": 227,
+        "sha256": "4eba8ea20e13ebe307fe67b771c200de36305e787ec31590b05e92dcb67ac9d6"
+      },
+      "strict_stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-recovery-batch-prerequisite-20261022-1/expected.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "strict_exit": 0,
+      "actual_output_namespace": null,
+      "execution_release": null
+    }
+  ]
+}

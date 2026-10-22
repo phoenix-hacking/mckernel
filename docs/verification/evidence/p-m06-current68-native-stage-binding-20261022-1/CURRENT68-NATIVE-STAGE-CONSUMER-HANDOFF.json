@@ -1,0 +1,163 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_MINIMAL_DATA_JOIN_AND_ACTUAL_PRODUCTION_REPLACEMENT_CONSUMER_ONLY",
+  "input_data": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/CURRENT68-STAGE-INPUT-DATA.json",
+    "bytes": 13130,
+    "sha256": "5736ae9156826dfe24cc595bfe915bde22e444c6eb346e7b62efbc24690164e4"
+  },
+  "actual_replacements": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/REPLACEMENTS.ACTUAL-CURRENT68-AND-IMAGE.json",
+    "bytes": 1629,
+    "sha256": "5072b59eea21eaeb6a952d0cb3ff58a0d3a7db4f5cf9a38eabfa1befc4f5ce11"
+  },
+  "private_stager": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native_diagnostic_stager.current68.py",
+    "bytes": 22574,
+    "sha256": "1b891f42873b1352ae4087b966d2767d4054666790eade553dd79c933b02efd2"
+  },
+  "diff": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/STAGER-PINS-ONLY.diff",
+    "bytes": 2224,
+    "sha256": "634fbe85d9f49e62d1aeb06a5a557bda1fe504275a986ba9910b4c388a9e7134"
+  },
+  "base_stager": {
+    "path": "/home/holden/mckernel-work/host-preparation/phase5-child-exec-wait-native-preparation-20261020-1/source/scripts/application-tests/native_diagnostic_stager.py",
+    "bytes": 21904,
+    "sha256": "e935383fac40ec9f2e10f6ffdd42c5e7c4c0de49a243cb34ec0e9b417f5ec860"
+  },
+  "tests": {
+    "count": 7,
+    "result": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/checks-result.json",
+      "bytes": 487,
+      "sha256": "35c09af35cc73e2857b9bbdc7777815074169b93bb8d7e409095d01a14ffe487"
+    },
+    "stdout": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/checks.stdout",
+      "bytes": 921,
+      "sha256": "4a9a3de120b3e48739002342e2654dc5b53aaad947a025d5ec604309e4cc1262"
+    },
+    "stderr": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/checks.stderr",
+      "bytes": 744,
+      "sha256": "8fa241f0303bfcfb38c0b2cbb61408c9dadee8d34688e748e5d47937fa21a2c4"
+    },
+    "source": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/check_production_consumer.py",
+      "bytes": 4197,
+      "sha256": "56c471c83bb3c2a557911a12e11397a2539efcb64af44addbd40c1d5b0787c00"
+    },
+    "wall_seconds": 0.2647640950162895,
+    "direct_join_returncode": 0,
+    "whole_group_absent": true,
+    "production_functions_unmocked": [
+      "_replacement_map",
+      "_authenticate_source",
+      "_open_source",
+      "_hash_fd",
+      "_recheck_source"
+    ],
+    "actual_reads": "Allthreeaccepted.ko,currentimage10972,andlauncher0d77 passedrealstableheldFD/hash/size/mode/parent/namedidentitychecks. Allthreeactualapphashesread; onlywholebaseinventory fixturewasmocked for_check_inputs.",
+    "refusals": [
+      "wrongactualmodulemaphash",
+      "unknownexportprofile",
+      "mixedvermagic",
+      "unknownmodulekey",
+      "forgedrelabelledoriginalreceiptstatus",
+      "unselectedappimagepath"
+    ]
+  },
+  "original_failed_receipt_preserved": {
+    "path": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-20352dabb9c94403a03c224ec2826ff2/evidence/receipt.json",
+    "bytes": 28044,
+    "sha256": "58ffcfb9febb788d6e3f4c6d949f0307c88031b95940655b49f8a577a0bbb2d3"
+  },
+  "original_status": "FAIL",
+  "original_make_returncode": 0,
+  "original_owner_receipt_relabelled": false,
+  "new_observation": {
+    "path": "/home/holden/mckernel-work/host-preparation/seven-check-closure-20261022-1/provider-opt-in-1/current-export-contract-correction-1/readonly-validation-1/report.json",
+    "bytes": 14031,
+    "sha256": "f11eb168837814022b00a8d1d69f24124e11274e7f1af0eb45ed2ef206fc45e8"
+  },
+  "typed_independent_acceptance": {
+    "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-canonical-host-output-request-20261022-1/INDEPENDENT-CURRENT68-RETAINED-ARTIFACT-ACCEPTANCE-1.json",
+    "bytes": 1960,
+    "sha256": "1471eb15683255085a824714c1b3ca98d7a4902654330608541a9c689bec33ca"
+  },
+  "host_owner_retirement": {
+    "path": "/home/holden/mckernel-work/host-preparation/m05-sdk68-canonical-host-output-request-20261022-1/INDEPENDENT-ACTUAL-FAILED-SDK-RETIREMENT-2.json",
+    "bytes": 1471,
+    "sha256": "b09d1ffa57d34fc4e270de81ab9fdd28d028f732a26ba5766db16e4d8710e989"
+  },
+  "source_identity": "d9b827db21614e84e45f647deddf6df0a8fec8703da8a716d976d843f78ff3b9",
+  "preparation_sha256": "26a572abd9ee003ca6fef03fbe110d3a5ec6e54aa701ae3b5ffc9b798318f7cb",
+  "export_profile": "current-v6-adopt-v4-control-v1",
+  "vermagic": "6.12.0-211.44.1.el10_2.mckernel1.x86_64 SMP preempt mod_unload ",
+  "stager_parser_decision": "Existingproductionreplacementmap neverreadsbuildstatus. MinimalDATAjoin only; no newstatusgate or syntheticBUILD_ARTIFACT_CHECKS_PASS receipt.",
+  "source_delta": "MCEEXEC_SHA256689d->0d77,SIZE394656->394640; selectedappcanonicalpath/hash tablefor199/235/227; only_check_inputsfunctionASTchanges. Allsourceauthentication/replacement/copy/archive/metadatafunctions unchanged. Exactcaseoracles remain199Bexit37/235Bexit0/227Bexit0.",
+  "source_runtime": {
+    "bytes": 6005,
+    "path": "/home/holden/mckernel-work/host-preparation/current-v6-composite-native-probe-20261020-1/consumer-readonly-correction-1/native_diagnostic_runner.py",
+    "sha256": "25ea29f9b07232094e9df1db6094ad0a85ec678281749a1d6998abb7c700d499"
+  },
+  "per_case_staging_commands": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/PER-CASE-STAGING-COMMANDS.PENDING.json",
+    "bytes": 4815,
+    "sha256": "f9f3b030b7488334b3b6233e5ec840dcfd6588017ef86b2991702c24c49dee25"
+  },
+  "image": {
+    "artifact": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/mckernel.img",
+      "sha256": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+      "size": 8439816,
+      "mode": 493
+    },
+    "driver_receipt": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/evidence/receipt.json",
+      "bytes": 41900,
+      "sha256": "806cc4e6cd7a52346442aeb72df198ec8d4bb817fe454306ed0966aad8c25d39"
+    },
+    "driver_status": "PASS",
+    "physical_retirement_accepted": null,
+    "independent_linked_provider_review": null,
+    "independent_artifact_acceptance": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/INDEPENDENT-ACTUAL-MATCHED-IMAGE-ARTIFACT-REVIEW-1.json",
+      "sha256": "47050d75307bd365841f528c769fe7c42d1766a7aafa1f705890da020b9eff57",
+      "authority": "Actualindependentacceptanceprovidedbydispatcher; no repeatedreview/test."
+    },
+    "linked_exec_reset_and_fourfork_providers": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/ACTUAL-LINKED-EXEC-RESET-PROVIDER-1.json",
+      "proof": "DispatcherreportedactualuniqueT/noU exec_reset source/defaultcallers+fourforkbridges acceptance; no nm/compiler rerun here."
+    }
+  },
+  "new_guest_image_identity_pending": false,
+  "guest_image_physical_acceptance": null,
+  "linked_guest_provider_review": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/INDEPENDENT-ACTUAL-MATCHED-IMAGE-ARTIFACT-REVIEW-1.json",
+    "sha256": "47050d75307bd365841f528c769fe7c42d1766a7aafa1f705890da020b9eff57",
+    "authority": "Actualindependentacceptanceprovidedbydispatcher; no repeatedreview/test."
+  },
+  "independent_source_delta_review": null,
+  "actual_stage": null,
+  "actual_manifest": null,
+  "native_release": null,
+  "actual_native_runs": 0,
+  "root_build_Docker_mount_guest_archive_or_stage_actions": 0,
+  "failed_candidates": [],
+  "next": "Focused minimalstagerpin/DATAbridge acceptance. Root completescurrentimagephysicalretirement/linkedproviderreview, freshordinarycapacity/isolation/exactbaseinventory admission, then existingstager transforms freshpercaseoutput underseparateauthorization. Bindactualstage/manifest/strictsingle-app nativeownerrelease and latestphysicalpredecessor. Do not reuseoldmoduletuple or relabelSDKFAIL; no run authorized by these checks.",
+  "launcher_identity_distinction": {
+    "selected_staged_launcher": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-01-pinned-launcher-process-inputs-20261022-1/pinned-launcher-attempt-1/owner-work/evidence/artifacts/mcexec",
+      "sha256": "0d774a14c08bdd4abcd0368060ca8eafba18bf44244dafba5459f895c5d78a7a",
+      "bytes": 394640
+    },
+    "image_build_emitted_launcher": {
+      "sha256": "689dcad27b2ce3a30f49df1bfe9452f2169a14e9c350c24c9677c88b1f152876",
+      "bytes": 394656
+    },
+    "image_build_launcher_not_selected": true,
+    "actual_stager_replacement_enforces_0d774": true
+  }
+}
