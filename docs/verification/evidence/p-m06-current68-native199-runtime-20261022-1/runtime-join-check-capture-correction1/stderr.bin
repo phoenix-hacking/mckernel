@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/check_runtime_join_correction1.py", line 33, in <module>
+    x=copy.deepcopy(h);x['Mounts'][-2]['ReadOnly']=False;refuses(lambda:check(x,row),'writable current input requested mount')
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/check_runtime_join_correction1.py", line 9, in refuses
+    try:action()
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/check_runtime_join_correction1.py", line 33, in <lambda>
+    x=copy.deepcopy(h);x['Mounts'][-2]['ReadOnly']=False;refuses(lambda:check(x,row),'writable current input requested mount')
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/check_runtime_join_correction1.py", line 31, in check
+    def check(h,row):exec(code,dict(self=instance,h=h,row=row,need=o.need,REPO=o.REPO,SCRATCH=o.SCRATCH,EXTRA_READONLY=o.EXTRA_READONLY))
+  File "actual production mount oracle", line 870, in <module>
+  File "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_container_owner.py", line 69, in need
+    raise OwnerError(message)
+production_owner.OwnerError: requested mount identities
