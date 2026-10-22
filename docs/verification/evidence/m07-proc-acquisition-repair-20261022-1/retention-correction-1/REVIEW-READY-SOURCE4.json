@@ -1,0 +1,234 @@
+{
+  "amendment": {
+    "bytes": 21981,
+    "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/apply_coupled_amendment.py",
+    "sha256": "5ffdea18d356429aee232f9d00558b41d480a846f4a915c41750802945b42368"
+  },
+  "bindings": {
+    "bytes": 16028,
+    "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/TERMINAL-GENERATOR.PROC-V2-BOUND.json",
+    "sha256": "f64fa9be8021d2814ffe722a7f50e8b78297079f0cfbc1e0cf5326d53f5d2347"
+  },
+  "budget_evidence": {
+    "bytes": 282,
+    "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/MAX-NORMAL-CENSUS-BUDGET.json",
+    "sha256": "61f8538545b2bd4fde6a74e34ce35622660cdc353c0aeab60c56de2ec0eeeb83"
+  },
+  "checks": [
+    {
+      "argv": [
+        "timeout",
+        "30s",
+        "taskset",
+        "-c",
+        "7",
+        "prlimit",
+        "--as=1073741824",
+        "--cpu=20",
+        "--",
+        "python3",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/test_full_transaction_retention.py"
+      ],
+      "exit_status": 0,
+      "stderr": {
+        "bytes": 419,
+        "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/frozen-full-transaction.stderr",
+        "sha256": "600703d631ff836a0f2893e53765c86651c6769222a78bcb376b5a69916246f8"
+      },
+      "stdout": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/frozen-full-transaction.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "test_source": {
+        "bytes": 9202,
+        "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/test_full_transaction_retention.py",
+        "sha256": "3bc40f43a0a6274b760d6a369dababcf119add73e8c5149632cba05d2edeb169"
+      }
+    },
+    {
+      "argv": [
+        "timeout",
+        "30s",
+        "taskset",
+        "-c",
+        "7",
+        "prlimit",
+        "--as=1073741824",
+        "--cpu=20",
+        "--",
+        "python3",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/test_proc_acquisition.py"
+      ],
+      "exit_status": 0,
+      "stderr": {
+        "bytes": 1044,
+        "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/accepted-unit.stderr",
+        "sha256": "1d2a60b334d091e834a02a287061fa3cdbd4cbf65f3b43ae66754bfd42b61f35"
+      },
+      "stdout": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/accepted-unit.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "test_source": {
+        "bytes": 11740,
+        "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/test_proc_acquisition.py",
+        "sha256": "7efe2eb68e0d5caa127d0354073849da6d0b1f6fe331f274a6cb2607bfa3c314"
+      }
+    },
+    {
+      "argv": [
+        "timeout",
+        "30s",
+        "taskset",
+        "-c",
+        "7",
+        "prlimit",
+        "--as=1073741824",
+        "--cpu=20",
+        "--",
+        "python3",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/test_generated_full_main.final-v2.py"
+      ],
+      "exit_status": 0,
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/generated-full-main.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 707,
+        "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/generated-full-main.stdout",
+        "sha256": "80b4273d9cc777e13355a68c3df0947cb8d006cf98175dfa6d16029ef5b0e573"
+      },
+      "test_source": {
+        "bytes": 20265,
+        "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/test_generated_full_main.final-v2.py",
+        "sha256": "91619e72ab08ffc54e98f2555c33abaf037a12ffa0fb3fb84b4d998b61a6a2e3"
+      }
+    },
+    {
+      "argv": [
+        "timeout",
+        "30s",
+        "taskset",
+        "-c",
+        "7",
+        "prlimit",
+        "--as=1073741824",
+        "--cpu=20",
+        "--",
+        "python3",
+        "-B",
+        "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/coupled/bound-terminal-proc-v2-source-4/check_current_pass_bodies.py"
+      ],
+      "exit_status": 0,
+      "stderr": {
+        "bytes": 0,
+        "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/generated-bodies.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 1575,
+        "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/generated-bodies.stdout",
+        "sha256": "39b6209e26e0a316f12641a03c042d65e7cca5b41da206c43aae745ee5cf8f15"
+      },
+      "test_source": {
+        "bytes": 10152,
+        "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/coupled/bound-terminal-proc-v2-source-4/check_current_pass_bodies.py",
+        "sha256": "f24e0c080667e533a5b6431a2932f1058b977e2a21e6bdaaca95d48cd8ae4cb4"
+      }
+    }
+  ],
+  "corrects_blocked_source3_packet": {
+    "bytes": 8054,
+    "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/REVIEW-READY.json",
+    "sha256": "a8f0f9c2ce8c5558987c1c06e5d55af31a01684ccfc6999249e7ee7902888121"
+  },
+  "failed_fixture_evidence": [
+    {
+      "bytes": 1416,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/full-transaction.stderr",
+      "sha256": "32a15011d4d77427a245d9fae954994d07344f5e7bb8ccb601db5b24c068093a"
+    },
+    {
+      "bytes": 7807,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/test_full_transaction_retention.fixture-failed-1.py",
+      "sha256": "b0b534dc0b46cf8a61fa0d0e50a67be1e1a61c47385e3ca96937e058d0697147"
+    },
+    {
+      "bytes": 1044,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/full-transaction-budget.stderr",
+      "sha256": "435ff1935c799f10348edf9b589af8fc6dd269373f8e8091d87941014025679f"
+    },
+    {
+      "bytes": 9178,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/test_full_transaction_retention.geometry-fixture-failed-1.py",
+      "sha256": "85caf19a222b12ebfc43d210b0678821e2cdb8a35ab66a482e265ea27e1c4c35"
+    }
+  ],
+  "generated_refs": {
+    "bytes": 7510,
+    "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/coupled/bound-terminal-proc-v2-source-4/GENERATED-SOURCE-DATA-REFS.json",
+    "sha256": "d1c152178c69314abb8f34d9177d57d2789d875ad0b51b31c8783c4690370721"
+  },
+  "generator": {
+    "bytes": 31022,
+    "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/coupled/prepare_existing_current_terminal_sources.FRESH-CORRECTION-1.py",
+    "sha256": "4e9e32385624393eb21086762c7651715d14d882c76eb1e52099d7f6ff21024a"
+  },
+  "native_acceptance": false,
+  "normal_fresh_path_evidence": {
+    "bytes": 170,
+    "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/FULL-TRANSACTION-MEASUREMENTS.json",
+    "sha256": "7baee3c4ada7e956d37a63337eda14f50fb3b46b96bdde5f7ca53110176cfbf7"
+  },
+  "patch": {
+    "bytes": 21309,
+    "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/SOURCE3-TO-SOURCE4.diff",
+    "sha256": "dbf69d742365fc8ad6b9dccbdc6890818afdaa81b566a8b484696312b4a9d347"
+  },
+  "physical_release": false,
+  "review_notes": {
+    "bytes": 5221,
+    "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/REVIEW-NOTES-SOURCE4.md",
+    "sha256": "53610aa53824ecd5a0bfb4eab1c67e4817695f3256efb74a05c793c277f02d16"
+  },
+  "root_executed": false,
+  "schema": "mckernel.m07.proc-acquisition-retention-correction.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_directory": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/coupled/bound-terminal-proc-v2-source-4",
+  "source_freeze": "source4 immutable; independently review before root release",
+  "sources": [
+    {
+      "bytes": 95567,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/coupled/bound-terminal-proc-v2-source-4/cleanup_pass_image.py",
+      "sha256": "414ac6ff817e820d8dfd5524396d455f0d6ec87f3fbf31fd7558e1683eed4ce4"
+    },
+    {
+      "bytes": 27776,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/coupled/bound-terminal-proc-v2-source-4/observe_current_pass_image_retirement.py",
+      "sha256": "633532e95417aa2449472f3954cbdd3be544c7dd02a9ef4c72b24453e2c16789"
+    },
+    {
+      "bytes": 9825,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/coupled/bound-terminal-proc-v2-source-4/postjoin_readback.py",
+      "sha256": "472cdc2f44c3d99396a8c2dbbb86c76260a3fd030b44267ba58afab132b48dfe"
+    },
+    {
+      "bytes": 3324,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/coupled/bound-terminal-proc-v2-source-4/check_actual_fresh_preflight.py",
+      "sha256": "4e80ea81171a91cb55f46d077769f44800be60b729aded480d047ca2a1eed884"
+    },
+    {
+      "bytes": 10152,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-proc-acquisition-repair-20261022-1/retention-correction-1/coupled/bound-terminal-proc-v2-source-4/check_current_pass_bodies.py",
+      "sha256": "f24e0c080667e533a5b6431a2932f1058b977e2a21e6bdaaca95d48cd8ae4cb4"
+    }
+  ],
+  "status": "READY_FOCUSED_INDEPENDENT_SOURCE_REVIEW_NO_ROOT_RELEASE"
+}

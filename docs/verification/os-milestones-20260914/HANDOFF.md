@@ -1,3 +1,29 @@
+## Current — corrected proc.v2 source independently accepted (2026-10-22 17:33 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+FinalSOURCE4 packet29725079 independentlyPASS /root/cleanup_execution_review_resumed;
+engine414ac6ff/observer633532e9/postjoin472cdc2f. Sixteenreportcount supportsnine
+actualfreshcleanup acquisitions;16MiBaggregate+4MiBreservationunchanged. Actual
+main/recover/Transaction.run completes9censuses/9journalrows; ninthpostmutation
+refusal durableallreports; quarantinewritefailure keepsoriginalsignal/rootlockhold.
+4fulltransaction+15regressions+actualgeneratedmain/summary/postjoin+49bodyrefusals
+PASS. Maxnormal4096PIDgeometry9reports10,286,578B; arbitrary9*4MiBnotclaimed.
+Source3blocked8count/missingquarantineretention andallpreparationfailuresretained.
+Official source/evidence ../evidence/m07-proc-acquisition-repair-20261022-1/;
+actualsourceG=host-preparation/m07-proc-acquisition-repair-20261022-1/
+retention-correction-1/coupled/bound-terminal-proc-v2-source-4/. Next rootpublish/
+fetchedproof→exactfreshobservernonceproc-acquisition-4 review+liveadmission→
+summary/originalfive/rawexport→newactualcleanupreview/preflight/cleanup/postjoin/
+independentphysical. No source3/v1archiveexception or unchangedrelease replay.
+
+SDK exactcomplete capacitymodel is14,695,596,032B minimum vs14,123,573,248B
+scratchavailable:572,022,784B short;14,159,970,304B fixedgate alone omitscorrected
+supplemental527,237,120B+campaignadjustment8,388,608B. It is totalfreegate, not
+14GiBadditionalcopy. No eligiblecurrentduplicatecleanup identified bytargeted
+existingrefs; no filesystemreservechange authorized. Preservepinnedclang21.1.8,
+53tests/exact68bundle. Pinnedlauncher/sourceadmissionpair updated privately,
+8checksPASS; focusedreviewnext, no build/native yet. Counts27/35/sixwholeheld.
+
 ## Current — P-M13-01 published;27/35 checks (2026-10-22 17:18 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
