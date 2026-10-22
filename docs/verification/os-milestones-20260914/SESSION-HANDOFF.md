@@ -1,3 +1,48 @@
+## Current — live preflight refused safely; log-channel correction active (2026-10-22 20:02 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The exact independently released preflight completed0/2.290449151s with JSON
+ACTUAL_FRESH_PREFLIGHT_EXCEPTION: capture_logs line149 called .items() on tuple
+PASS_LOG_CHANNELS. Explicit predicate check blocked cleanup; NO cleanup invoked.
+Transaction closed, no records/container released. Original failure retained at
+host-preparation/p-m06-current-build-terminal-preparation-20261022-1/
+actual-cleanup-fresh-preflight-capture-1/. Prior conditionalrelease consumed;
+no unchanged retry. Owner m07_closure_join now owns additive source6 correction
+through real capture_logs/preflight composition regression in ordinary CPU6
+profile. Bind actual current seven-client Docker log channel; retain strict
+log bytes/hash/empty-stderr and legacy guard behavior. Focused changed-boundary
+review/new exact release follows passing coherent correction. Root owns runtime.
+Original5 retained/metadata/export PASS; exact25disk cleanup/SDK/native remain
+pending actual positive M06 physical clearance.28/35; weekly-only; no reserve.
+
+## Current — live M06 observer and original-five retention passed (2026-10-22 19:58 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Included weekly only; no prepaid fallback. Practical status remains28/35, seven
+open: P-M01-02/P-M05-02/P-M05-03/P-M06-01/P-M08-02/P-M09-02/P-M12-01.
+Exact512MiB observer cohort published/fetched at6bbb8f58/treebb061f35,22rows.
+Independent source/admission approvals reused with genuine exact payload binding.
+Actual live observer PASS0/2.453173088s, summary PASS0/.121894141s, original5FD
+metadata PASS0/.139048015s, raw5export PASS0/.132753349s/552960B. All directjoined,
+streamsclosed/groupsabsent; stderr empty. Original256MiBMemoryError preserved;
+no observer replay or oracle change. Evidence host-preparation/
+p-m06-current-build-terminal-preparation-20261022-1/actual-{root-observer-profile512,
+root-summary,original-five-metadata,raw-five-export}-capture-1/; original5 retained
+by post-live-observer-retention-preparation-1/actual-export-cleanup-assembly-1/.
+No new native app/check/Rust-retirement credit from observer infrastructure.
+
+Root next: focused exact actual cleanup payload decision, fresh read-only
+preflight then conditional released transaction cleanup, postjoin and independent
+physical acceptance. M06 stopped16b container/common/shared records remain owned
+until that actual sequence. Then fresh current-registry-v2 reader/hash binding,
+strict reviewed exact25 duplicate-archive reclaim845582336B, targeted trim and
+full SDK gate14695596032B remeasurement. Foreground source/template reviews reused;
+no blanket archive rehash. SDK68 is genuinely needed for positive CREATE_PPD and
+exec20/21 providers before matched process/self-exec/cancellation native batch.
+Keep M06 matched app/runtime proof priority; M07 already2/2 literal checks.
+Reserve576 unanswered,110GiB UUID/permanent27:4/Scratch21 retained. Original
+velocity baseline/stopped intervals remain; no throughput uplift claim.
+
 ## Current — pinned M06 artifact independently accepted (2026-10-22 19:26 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
