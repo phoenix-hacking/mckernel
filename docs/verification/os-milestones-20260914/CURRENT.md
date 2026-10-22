@@ -1,3 +1,25 @@
+## Current — M07 exit125 preserved; failed-owner review and M05 admission preparation (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exact M07 seven-step attempt stopped at native-owner1/37.792638s after LAST
+snapshot, machine and final guard passed. Inner payload raw32000/exit125,
+empty streams and normal powerdown observed; cause remains unknown. No success
+readbacks ran. Separate reviewed minimum failed-owner receipt export passed
+0/.123441s, direct joined/group absent/empty stderr. Actual retirement review
+is pending. Original attempt, sources and all captures remain preserved.
+
+M07 diagnostic source independently passes unchanged strict fault gate/exit125,
+static compile, exact291B Linux reference and nine handler-body vectors; no
+native diagnosis or credit. M05 compact DATA addendum03ddd796 accepts actual
+constructor/finalbinder/static checks:16 typed rows,18 FDs,21 guard references,
+19 outputs. All23 exact final code files are published with source map.
+Next: genuine failed-owner retirement, fetched source proof and exact fresh
+M05 runtime release. M05 does not wait for M07 diagnostic restaging.
+
+Canonical24/35,sixwhole,97sources(38OS/59infra),34compiler,12native,
+30behaviors,Rust21/18 held. No resize/delete/reserve/gate bypass or new framework.
+Preserve all failures,27:4,scratch21,resource floors and actual release checks.
+
 ## Current — C9 physical and normal9 mapping accepted; M05/M07 native binding active (2026-10-22 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
