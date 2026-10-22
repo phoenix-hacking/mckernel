@@ -66,6 +66,42 @@ Use this cycle:
 Do not start a second design/history audit when a failing compile or positive
 example already identifies the next concrete action.
 
+## Efficiency directive — 2026-10-21
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+The user requests maximum responsible parallelism, accuracy and useful velocity.
+Give an implementer a coherent repair through its focused executable checks,
+using an already reviewed unprivileged profile and a sufficiently explicit
+ordinary grant. Within that grant, do not stop at an uncompiled postimage or
+request another handoff for each routine edit. Return the diff, actual results
+and the remaining production boundary together. Root retains workload admission;
+this does not create an execution release or widen a grant.
+
+Before freezing changed Python loader or binding code, invoke its actual cheap
+consumer path with the intended input shape. Syntax compilation alone misses
+undefined runtime names. Derive descriptors from the actual consumer schema;
+preserve exact integer identities and distinguish receipt `bytes` from descriptor
+`size`. Add only a relevant failure observation for the changed boundary. Reuse
+accepted stages, compiler outputs, source reviews and unchanged evidence when
+their bindings still match. Do not replay whole trees, archives or tests merely
+because a context or worker changed.
+
+Keep eligible ordinary jobs moving on CPU6 and CPU7 with disjoint owned outputs.
+Refill independent implementation lanes up to the established agent/resource
+limits. Further CPU borrowing needs its applicable explicit grant; keep CPU1
+excluded, CPU0 for coordination, one heavy CPU2-5 workload, resource reserves,
+fresh live admission, ownership and independent execution review intact. Prepare
+all non-temporal inputs before quiescing for a native sequence.
+
+Measure readiness-to-result and readiness-to-acceptance time, queue/preparation
+time, execution time, preventable harness failures, actual CPU/memory pressure,
+accepted native behaviors and practical milestone deltas. Label first-observed
+timestamps and profile scope honestly. Source counts and busy agents are not a
+substitute for working code. Record metrics at existing checkpoints; do not let
+accounting or a fresh dashboard delay an eligible test. Fix the largest measured
+delay, then compare the next equivalent cycle without claiming a broad speedup
+from a single short sample.
+
 ## User priority: sustained implementation progress
 
 Apply the user's [tactical velocity plan](VELOCITY.md) at the next safe dispatch

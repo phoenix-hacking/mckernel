@@ -1,3 +1,87 @@
+## Current — M07 final caller/static pass; M05 paired normalization pass (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M07 fresh normalization and real-directory loader are independently accepted
+(a7a9fbe4):0/.758095490s and0/.873680182s. Complete successor caller exposed
+actual typed-controller field/status mismatches. Original KeyError and Refusal
+are preserved. Expert review required exact started_event/completed_event fields
+and failed command status with item/completed event/exit1; no status broadening.
+Actual corrected constructor0/.131173482s and complete caller0/.488207868s pass,
+including original-negative, completed-status/exit0 and CID/nonce refusals.
+Independent static46fc7597 accepts pending19/twelve full-FD joins. Finalbinder
+0/.127508600s and full static_joins0/.291563506s pass; final packet1edaeabd,
+seven65c93db3, executor22fb77e9. Code checkpoint/fetched proof, fresh admission
+and new exact seven-step execution review are next; consumed old release unused.
+
+M05 complete32-path check found exactly one exterior staging-source descriptor.
+Expert accepted byte-identical source alias and additive manifest successor:
+actual operation0/.251341494s/strictloader passed, archives unchanged. Root's
+first alias capture was refused by inherited AS hardlimit before Python ran;
+its evidence is preserved. Paired normalizerfe54 now passes0/.917012727s:
+actual corrected loader positive,32paths/three roots/16sourceFD identities,
+fresh namespace2. Actual preflight8b8eec2f and binding345780df await independent
+actual acceptance; failed namespace1 and earlier aliases/stage stay preserved.
+
+Launcher boundguardf157aac0 and existing NOARGS wholecheck passed0/5.959684563s
+with all eight refusal cases, independent acceptance4f2419bc. Genuine compact
+BASISaf45 and partial pretty-write failure remain separate. Target-only build
+still needs code publication, fresh one-heavy admission and exact build release.
+SDK66 remains blocked; no resize, reserve change or alternate compiler path.
+
+Counts unchanged:24/35 practical checks,six whole,97coherent sources(38OS/59infra),
+33production compiler batches,11accepted native batches,30behaviors,Rust21/18.
+Accepted053d/33f/module tuple and strict M07 oracle unchanged. No guest or new
+native result from this checkpoint. Evidence:../evidence/current-loader-and-launcher-controls-20261022-1/.
+Current included usage87%, launcher running/no stop; service checks remain active.
+
+## Current — M05 visibility refusal preserved (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual M05 genuine-receipt normalization failed1/1.069597334s, PID2876887/
+42482702 directly joined, group absent, streams closed, no observer/retirement
+error. Strict loader rejected staging.overlay_source.path outside the exact
+three readonly roots. Original normalized partial and parent remain preserved;
+no final preflight/binding or normalization acceptance. Existing owner now checks
+ALL consumed manifest/closure paths together before a finite metadata-alias
+correction. No wider mount, archive rewrite, stage replay or weakened guard.
+M07 fresh normalization and actual-directory loader both remain PASS; current
+focused actual review and successor runtime bindings proceed independently.
+Counters unchanged:24/35,six whole,97sources,33compiler,11native,30behaviors,
+Rust21/18. No native application result from either ordinary operation.
+
+## Current — corrected M07 real loader passes; M05 normalization executing (2026-10-22 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+M07 first exact sequence stopped on native-owner1/2.435933104s: missing hashlib
+in the Python loader, not a demonstrated kernel/application failure. Independent
+failed-owner retirement797a8008 preserves atomic FAIL, actual CID/nonce, direct
+joins and release scope; no success readbacks or native credit. Original outputs
+and all failure evidence remain immutable.
+
+Import-only M07/M05 corrections passed real-loader original-negative/positive
+checks and independent review. Fresh M07 normalization0/.758095490s and actual
+fresh-source-directory loader0/.873680182s now pass: children2876287/42476235 and
+2876290/42476311 directly joined, groups absent, streams closed, empty stderr.
+Actual preflight25c3dea0 and bindingd2cf1ea6 await focused actual acceptance;
+strict typed application oracle remains unchanged. Existing failed-owner branch
+and canonical PROC24 constructor feed fresh runtime bindings; no stage/build replay.
+M05 exact67 collector/stage/visible-boot alias remain accepted; genuine-receipt
+normalizer5713018c now has CPU6 grant including mandatory real loader positive.
+
+Launcher compact BASISaf45c849 completed0/1.109305585s and independent runtime
+binding review passed. Original32MiB pretty-write partial remains preserved.
+Final guard binding and existing ordinary NOARGS wholecheck proceed on CPU7;
+heavy target-build release is separate. M06 nine integrated Rust provider sources
+still lack full-module compile/link/default/native proof: fixed SDK66 capacity
+gate remains blocked, with no resize or alternate compiler profile.
+
+Counts held:97 coherent sources(38OS/59infrastructure),33 production compiler
+batches,11 accepted native batches,30 behaviors,Rust21/18,24/35 checks,six whole.
+No credit from imports, bindings, tests or preparation. Accepted053d/33f/module
+tuple and all ownership/resource/service stops remain authoritative. Current
+included usage87%, launcher running, no service stop. Efficiency directive read;
+ordinary repair-through-check grants now overlap CPU6/7 within aggregate limits.
+
 ## Current — M07 final static pass; exact runtime admission next
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

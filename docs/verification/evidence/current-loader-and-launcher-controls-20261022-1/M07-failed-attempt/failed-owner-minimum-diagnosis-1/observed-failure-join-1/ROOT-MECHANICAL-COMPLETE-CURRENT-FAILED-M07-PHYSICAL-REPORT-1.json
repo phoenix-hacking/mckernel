@@ -1,0 +1,575 @@
+{
+  "schema": "mckernel.current-native.failed-owner-physical-retirement-review.v1",
+  "status": "PASS_CURRENT_FAILED_OWNER_RETIREMENT_ONLY",
+  "decision": "ACCEPT_CURRENT_FAILED_OWNER_RETIREMENT_ONLY",
+  "implementation_ownership": false,
+  "reviewer": "/root/numa_clear_range_review",
+  "recorder": "/root",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "original_independent_decision": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/failed-owner-minimum-diagnosis-1/observed-failure-join-1/INDEPENDENT-CURRENT-FAILED-M07-OWNER-RETIREMENT-1.json",
+    "sha256": "9974ff9f745798180b0022de9fa4fb7923b06f97da1f93841036edb235b57f48",
+    "bytes": 3261
+  },
+  "source_of_observations": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/failed-owner-minimum-diagnosis-1/observed-failure-join-1/ROOT-MECHANICAL-FAILED-M07-OBSERVATIONS-1.json",
+    "sha256": "fa1458c5529e8a92f55fd7ed2e383386e012dbe46d785dddb6a2118c04e02e8f",
+    "bytes": 26419
+  },
+  "current_identity": {
+    "nonce": "add1802754054ec09898ff0492158a3a",
+    "container": "0fcfe2c95bf8973d60d12bc4d7197be604956e987bccc45889fdd1c86b6fb01f",
+    "owner_pid": 2868753,
+    "owner_start": 42353045,
+    "native_owner_caller_pid": 2868750,
+    "native_owner_caller_start": 42353038,
+    "lock_device_inode": [
+      27,
+      4
+    ]
+  },
+  "owner_record": {
+    "application_acceptance": false,
+    "attempt": "/home/holden/mckernel-work/scratch/m07p-261021-1/t/attempt-add1802754054ec09898ff0492158a3a",
+    "cgroup_profile": {
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+      "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+      "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+      "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+    },
+    "lock": {
+      "dev": 27,
+      "gid": 0,
+      "ino": 4,
+      "mode": 420,
+      "nlink": 1,
+      "uid": 0
+    },
+    "name": "mckernel-native-diagnostic-add1802754054ec09898ff0492158a3a",
+    "nonce": "add1802754054ec09898ff0492158a3a",
+    "outer": {
+      "pgid": 2868750,
+      "pid": 2868753,
+      "proc_starttime": 42353045,
+      "sid": 2868750
+    },
+    "owner_sha256": "0d8cff2b0c63957af4a461a7639de60b11a5ce9ddd02dd4d5c0ec9b8606cec4d"
+  },
+  "owner_record_ref": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/failed-owner-minimum-diagnosis-1/observed-failure-join-1/owner.json",
+    "sha256": "b4ae1f438d26607f9759b1ad1d62b1ef7309a6b626d7b9393026965278511550",
+    "bytes": 798
+  },
+  "atomic_owner_receipt": {
+    "descriptor": {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/failed-owner-minimum-diagnosis-1/observed-failure-join-1/result.json",
+      "sha256": "c5c1e63b92850dcefcd8fb558de19449522e143bd19d077b24f4b33a21752edf",
+      "bytes": 256
+    },
+    "value": {
+      "absence_verified": true,
+      "application_acceptance": false,
+      "container": "0fcfe2c95bf8973d60d12bc4d7197be604956e987bccc45889fdd1c86b6fb01f",
+      "failure": "OwnerError",
+      "lease_retained": false,
+      "secondary": [],
+      "secondary_omitted": 0,
+      "signal_number": null,
+      "status": "FAIL"
+    }
+  },
+  "actual_closed_births": [
+    {
+      "role": "LAST-snapshot",
+      "outer_status": {
+        "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/root-seven1-LAST-snapshot.status.json",
+        "sha256": "dffad0814f8142805815284290575cbd44b89ef9460ffcd72f4b9a7b649ac238",
+        "bytes": 1046
+      },
+      "rootchild_status": {
+        "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/snapshot.status.json",
+        "sha256": "3d363d8125e6f44104456123e34788056d76b90efa63086061032fa98a3cc33f",
+        "bytes": 2122
+      },
+      "outer": {
+        "returncode": 0,
+        "pid": 2868726,
+        "start": 42352961,
+        "direct_child_joined": true,
+        "process_group_absent": true,
+        "observer_error": null,
+        "elapsed_seconds": 0.5185371190309525,
+        "started_at": 1792626084.91933,
+        "finished_at": 1792626085.4378686,
+        "argv": [
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=30",
+          "--",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/root-run-exact-readonly-stage.py",
+          "--commands-file",
+          "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/actual-command-data/00-LAST-snapshot.json",
+          "--commands-sha256",
+          "c565f24dcfab71a289cd8df721a569cac394b49ffbe11b585f44afb944212bb5",
+          "--index",
+          "1"
+        ]
+      },
+      "rootchild": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/usr/bin/timeout",
+          "--signal=TERM",
+          "--kill-after=2s",
+          "35s",
+          "/usr/bin/taskset",
+          "-c",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=30",
+          "--core=0",
+          "--nofile=256",
+          "--fsize=33554432",
+          "--",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/root_manual_snapshot_threads.py",
+          "--bindings-sha256",
+          "a73f21684ae133f723cdffecc1bc36cd707c122550e0f714bc75f46b171bb87b",
+          "--terminal",
+          "/home/holden/mckernel-work/host-preparation/numa-nonempty-overlap-native-case-preparation-20261021-1/native-stage-runtime-preparation-1/normalization-runtime-data/runtime-source-preparation-1/bound-runtime-source-1/actual-native-acceptance-1/ROOT-MECHANICAL-COMPLETE-ACTUAL-119B-NATIVE-PHYSICAL-REPORT-1.json",
+          "--terminal-sha256",
+          "0d17b32ffb4c7671051894a939cc2b5dff7d2bac6907acae36a33afa4b6c3537"
+        ],
+        "direct_child_joined": true,
+        "elapsed_seconds": 0.47137647203635424,
+        "observer_error": null,
+        "pid": 2868727,
+        "process_group_absent": true,
+        "returncode": 0,
+        "role": "LAST-snapshot",
+        "start": "42352965",
+        "streams": {
+          "stderr": {
+            "metadata": {
+              "ctime_ns": 1792626084955407100,
+              "device": 66306,
+              "gid": 1000,
+              "inode": 48541328,
+              "mode": 384,
+              "mtime_ns": 1792626084955407100,
+              "nlink": 1,
+              "size": 0,
+              "uid": 1000
+            },
+            "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/snapshot.stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "stdout": {
+            "metadata": {
+              "ctime_ns": 1792626085383420574,
+              "device": 66306,
+              "gid": 1000,
+              "inode": 48541327,
+              "mode": 384,
+              "mtime_ns": 1792626085383420574,
+              "nlink": 1,
+              "size": 361,
+              "uid": 1000
+            },
+            "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/snapshot.stdout",
+            "sha256": "20080e9b51eebdc243c9eae1dc45ade0ec7b312d779f80e9bdc630178cabc74f"
+          }
+        }
+      }
+    },
+    {
+      "role": "machine-assembly",
+      "outer_status": {
+        "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/root-seven1-machine-assembly.status.json",
+        "sha256": "1b167af866b30c00841f523cf17bec9e4a9d863bbb0b3636b514535e0b5afcaf",
+        "bytes": 1051
+      },
+      "rootchild_status": {
+        "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/captures/01-machine-assembly/status.json",
+        "sha256": "6bb713dd81bca15079fcd70de7131f1289f0fe52bc1217813ff514c8b2a7e3bd",
+        "bytes": 3177
+      },
+      "outer": {
+        "returncode": 0,
+        "pid": 2868743,
+        "start": 42353013,
+        "direct_child_joined": true,
+        "process_group_absent": true,
+        "observer_error": null,
+        "elapsed_seconds": 0.08360790001461282,
+        "started_at": 1792626085.438526,
+        "finished_at": 1792626085.5221355,
+        "argv": [
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=30",
+          "--",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/root-run-exact-readonly-stage.py",
+          "--commands-file",
+          "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/actual-command-data/01-machine-assembly.json",
+          "--commands-sha256",
+          "d35d1d612ae9860a52de5927f2067d682bf8eb2d7bcf46e466cb548d12e03fd4",
+          "--index",
+          "1"
+        ]
+      },
+      "rootchild": {
+        "argv": [
+          "/usr/bin/taskset",
+          "--cpu-list",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=30",
+          "--fsize=33554432",
+          "--core=0",
+          "--nofile=256",
+          "/usr/bin/timeout",
+          "--signal=TERM",
+          "--kill-after=2s",
+          "35s",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "-c",
+          "import pathlib,json,hashlib,time,sys\nV=pathlib.Path('/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1');B=pathlib.Path('/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1')\nbasebytes=(B/'machine-base.json').read_bytes();assert hashlib.sha256(basebytes).hexdigest()==sys.argv[1];base=json.loads(basebytes)\nsnapshotbytes=(V/'root-live-preflight-1.json').read_bytes();assert hashlib.sha256(snapshotbytes).hexdigest()==sys.argv[2];snapshot=json.loads(snapshotbytes)\nassert snapshot['status']=='PASS_LIVE_PREEXECUTION_SNAPSHOT' and 0<=time.time()-snapshot['time_epoch']<=60 and snapshot['parent_identity']==base['parent_identity']\nassert base['execution_count']==1 and base['runtime_release'] is False and base['fresh_live_preflight'] is None\nassert base['terminal_cleanup_and_common_shared_release']['status']=='PASS' and snapshot['terminal_acceptance']==base['exclusive_queue_predecessor']\nbase.update(status='PASS_EXECUTION_RELEASE',runtime_release=True,fresh_live_preflight={'path':str(V/'root-live-preflight-1.json'),'sha256':sys.argv[2],'bytes':len(snapshotbytes)})\nraw=(json.dumps(base,indent=2)+chr(10)).encode()\nwith (B/'execution-release.json').open('xb') as f:f.write(raw)\nprint(json.dumps({'path':str(B/'execution-release.json'),'sha256':hashlib.sha256(raw).hexdigest(),'bytes':len(raw)}),flush=True)\n",
+          "f8d54b849f568e7c23e1396ac0b7ead0b92645cb087cac40eca7eb1a9c53d391",
+          "7764427c309e8a8e8e351be4e1d1e2231028f2b55d6d361733224cc418265953"
+        ],
+        "direct_child_joined": true,
+        "elapsed_seconds": 0.036046022025402635,
+        "observer_error": null,
+        "pid": 2868744,
+        "process_group_absent": true,
+        "returncode": 0,
+        "role": "machine-assembly",
+        "start": "42353017",
+        "streams": {
+          "stderr": {
+            "metadata": {
+              "ctime_ns": 1792626085475423471,
+              "device": 66306,
+              "gid": 1000,
+              "inode": 48541340,
+              "mode": 384,
+              "mtime_ns": 1792626085475423471,
+              "nlink": 1,
+              "size": 0,
+              "uid": 1000
+            },
+            "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/captures/01-machine-assembly/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "stdout": {
+            "metadata": {
+              "ctime_ns": 1792626085499424226,
+              "device": 66306,
+              "gid": 1000,
+              "inode": 48541339,
+              "mode": 384,
+              "mtime_ns": 1792626085499424226,
+              "nlink": 1,
+              "size": 328,
+              "uid": 1000
+            },
+            "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/captures/01-machine-assembly/stdout",
+            "sha256": "201698c13d355273e3c2411b1f0db79e08777ddd555324597c4fde3abe4b828c"
+          }
+        }
+      }
+    },
+    {
+      "role": "final-guard",
+      "outer_status": {
+        "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/root-seven1-final-guard.status.json",
+        "sha256": "7d38fabc480b2d0fb3c197ba0a876df2697d1867c3b546417f3d41049fdbd2ba",
+        "bytes": 1046
+      },
+      "rootchild_status": {
+        "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/captures/02-final-guard/status.json",
+        "sha256": "928d12b4e47fed9fad96797bf5fc41c3ada656967984661cc7cb776782e997a9",
+        "bytes": 1909
+      },
+      "outer": {
+        "returncode": 0,
+        "pid": 2868746,
+        "start": 42353021,
+        "direct_child_joined": true,
+        "process_group_absent": true,
+        "observer_error": null,
+        "elapsed_seconds": 0.12161243200534955,
+        "started_at": 1792626085.522751,
+        "finished_at": 1792626085.6443653,
+        "argv": [
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=30",
+          "--",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/root-run-exact-readonly-stage.py",
+          "--commands-file",
+          "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/actual-command-data/02-final-guard.json",
+          "--commands-sha256",
+          "a28b40556c55c0c2ad8cb5154a90384b8127ddddf0b2a74435988851cc02da48",
+          "--index",
+          "1"
+        ]
+      },
+      "rootchild": {
+        "argv": [
+          "/usr/bin/taskset",
+          "--cpu-list",
+          "6",
+          "/usr/bin/prlimit",
+          "--as=1073741824",
+          "--cpu=30",
+          "--fsize=33554432",
+          "--core=0",
+          "--nofile=256",
+          "/usr/bin/timeout",
+          "--signal=TERM",
+          "--kill-after=2s",
+          "35s",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/review_final_threads_release.py",
+          "--config-sha256",
+          "083ddb022d6d6ecda262406bb1f48da93aefed870c58ff091a248e8a750978f1",
+          "--machine-sha256",
+          "1058a5aba7b369bbc3cae02e79b6dfe1c9b2b18c92bfb8f7edb944c99ffd7a40",
+          "--snapshot-sha256",
+          "7764427c309e8a8e8e351be4e1d1e2231028f2b55d6d361733224cc418265953"
+        ],
+        "direct_child_joined": true,
+        "elapsed_seconds": 0.06774985900847241,
+        "observer_error": null,
+        "pid": 2868747,
+        "process_group_absent": true,
+        "returncode": 0,
+        "role": "final-guard",
+        "start": "42353026",
+        "streams": {
+          "stderr": {
+            "metadata": {
+              "ctime_ns": 1792626085563426241,
+              "device": 66306,
+              "gid": 1000,
+              "inode": 48541352,
+              "mode": 384,
+              "mtime_ns": 1792626085563426241,
+              "nlink": 1,
+              "size": 0,
+              "uid": 1000
+            },
+            "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/captures/02-final-guard/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "stdout": {
+            "metadata": {
+              "ctime_ns": 1792626085607427627,
+              "device": 66306,
+              "gid": 1000,
+              "inode": 48541351,
+              "mode": 384,
+              "mtime_ns": 1792626085607427627,
+              "nlink": 1,
+              "size": 1143,
+              "uid": 1000
+            },
+            "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/captures/02-final-guard/stdout",
+            "sha256": "b5c9d66e9514cbdc35b11ed7d0074f1679003a19f4720f1badc7e6be33f79547"
+          }
+        }
+      }
+    },
+    {
+      "role": "native-owner",
+      "outer_status": {
+        "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/root-seven1-native-owner.status.json",
+        "sha256": "7c0b9fe16ee50dc48ab950d96af80c944679a6525ea7a499eeed47296ecf5505",
+        "bytes": 974
+      },
+      "rootchild_status": {
+        "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/captures/03-native-owner/status.json",
+        "sha256": "c65e176d2b8073fcfa76c2785a2d2588054de5b763d001ee0fb03e352a35d26f",
+        "bytes": 1825
+      },
+      "outer": {
+        "returncode": 1,
+        "pid": 2868749,
+        "start": 42353034,
+        "direct_child_joined": true,
+        "process_group_absent": true,
+        "observer_error": null,
+        "elapsed_seconds": 2.4359331039595418,
+        "started_at": 1792626085.6449695,
+        "finished_at": 1792626088.0809047,
+        "argv": [
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/root-run-exact-readonly-stage.py",
+          "--commands-file",
+          "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/actual-command-data/03-native-owner.json",
+          "--commands-sha256",
+          "330a7fa5d8aeb78753ce9ba1af9f0b3f4817d7624b184da5753ea2e49adafcf3",
+          "--index",
+          "1"
+        ]
+      },
+      "rootchild": {
+        "argv": [
+          "/usr/bin/sudo",
+          "-A",
+          "/home/holden/anaconda3/bin/python3.9",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-1/manifest-bound-1/native_diagnostic_container_owner.py",
+          "--owner-sha256",
+          "0d8cff2b0c63957af4a461a7639de60b11a5ce9ddd02dd4d5c0ec9b8606cec4d",
+          "--attempt-parent",
+          "/home/holden/mckernel-work/scratch/m07p-261021-1/t",
+          "--nonce",
+          "add1802754054ec09898ff0492158a3a",
+          "--manifest",
+          "/home/holden/mckernel-work/scratch/m07n-261021-1/manifest.json",
+          "--manifest-sha256",
+          "d7b7b535cd150318c105bbf4645d259189bc5536f51d0eb16ee51d028341a5fa"
+        ],
+        "direct_child_joined": true,
+        "elapsed_seconds": 2.3885669549927115,
+        "observer_error": null,
+        "pid": 2868750,
+        "process_group_absent": true,
+        "returncode": 1,
+        "role": "native-owner",
+        "start": "42353038",
+        "streams": {
+          "stderr": {
+            "metadata": {
+              "ctime_ns": 1792626088055504697,
+              "device": 66306,
+              "gid": 1000,
+              "inode": 48541364,
+              "mode": 384,
+              "mtime_ns": 1792626088055504697,
+              "nlink": 1,
+              "size": 2290,
+              "uid": 1000
+            },
+            "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/captures/03-native-owner/stderr",
+            "sha256": "725148b01cbc158b07af074a6ca11d6f5962510c59396d860bb8e1c21bd997d7"
+          },
+          "stdout": {
+            "metadata": {
+              "ctime_ns": 1792626085679429894,
+              "device": 66306,
+              "gid": 1000,
+              "inode": 48541363,
+              "mode": 384,
+              "mtime_ns": 1792626085679429894,
+              "nlink": 1,
+              "size": 0,
+              "uid": 1000
+            },
+            "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/captures/03-native-owner/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        }
+      }
+    }
+  ],
+  "controller_terminal_pair": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/failed-owner-minimum-diagnosis-1/observed-failure-join-1/ACTUAL-FAILED-M07-TYPED-TOOL-CONTROLLER-PAIR-1.json",
+    "sha256": "f7d011fc6483538363d3479b04116bbed03d3f4f282d1193ef7b23c780c0b3ea",
+    "bytes": 1252
+  },
+  "controller_terminal": {
+    "kind": "tool-owned-unified-exec-terminal",
+    "root_thread": "01a15d46-4031-75f0-8544-470342a17531",
+    "item_id": "exec-9b742dd2-d5e7-4a52-865e-1a686b1c82c2",
+    "tool_process_handle": "5011",
+    "process_handle_is_OS_PID": false,
+    "exit_code": 1,
+    "actual_whole_failure_matches_terminal_output": true,
+    "started_event": {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/failed-owner-minimum-diagnosis-1/observed-failure-join-1/ACTUAL-M07-TOOL-STARTED-1.raw.jsonl",
+      "sha256": "17c648624d8c10dbe6a57a3f335e572b7404cbefd6052ef905d1e834de1e3945",
+      "bytes": 1209
+    },
+    "completed_event": {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/failed-owner-minimum-diagnosis-1/observed-failure-join-1/ACTUAL-M07-TOOL-COMPLETED-1.raw.jsonl",
+      "sha256": "9cea062fc4dcdd74b350f1133fefb0f82d4f9051d9cde62609eec7d57a47d348",
+      "bytes": 2763
+    },
+    "outer_os_identity": null,
+    "outer_process_group_observation": null
+  },
+  "failure_start_command": {
+    "descriptor": {
+      "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/failed-owner-minimum-diagnosis-1/observed-failure-join-1/009-start.json",
+      "sha256": "81e5e12bb57991a54b8925270b1df867b9f8f7c606b10377766794bbc666aea8",
+      "bytes": 298
+    },
+    "value": {
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/docker",
+        "start",
+        "--attach",
+        "0fcfe2c95bf8973d60d12bc4d7197be604956e987bccc45889fdd1c86b6fb01f"
+      ],
+      "command": {
+        "pgid": 2868802,
+        "pid": 2868802,
+        "proc_starttime": 42353099,
+        "reaped": true,
+        "returncode": 1,
+        "sid": 2868750
+      },
+      "failure": "OwnerError",
+      "returncode": 1,
+      "timeout": 360
+    }
+  },
+  "failure_start_stderr": {
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/stage-runtime-preparation-1/runtime-source-preparation-1/bound-runtime-source-1/native-packet-1/failed-owner-minimum-diagnosis-1/observed-failure-join-1/009-start.stderr",
+    "sha256": "ed0dbf2c277d997198bbf43667773daf441755dbd8991c8c2ef9f6bb82d2c6e4",
+    "bytes": 56
+  },
+  "retirement_source_contract": "_cleanup establishes authenticated container absence and no pending Docker clients; _release additionally requires acknowledged final reap records and resolves the lock without unlinking it. _flush requires absence and lock=None before publishing result.json.",
+  "missing_retirement_observations": [],
+  "success_readbacks_executed": false,
+  "application_acceptance": false,
+  "native_accepted": false,
+  "new_global_census_observed": false,
+  "new_common_shared_record_absence_observed": false,
+  "root_mutex_reacquisition_observed": false,
+  "runtime_retry_authority": false,
+  "forbidden_inferences": [
+    "Container ExitCode 0 or non-OOM state.",
+    "Seven successful steps, fourteen groups, thirty clients or three success readbacks.",
+    "Native application acceptance, restoration or new case credit.",
+    "New global census or independently observed common/shared record release."
+  ]
+}

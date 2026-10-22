@@ -1,29 +1,45 @@
-# Functional McKernel progress — review 166
+# Functional McKernel progress — review 167
 
-Updated 2026-10-21T23:18:05.803098+00:00. Next review23:47:18.663UTC.
+Updated 2026-10-21T23:50:43.850892+00:00. Next review 2026-10-22T00:17:48.564Z.
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
-Canonical progress:24/35 practical checks; six whole milestones complete
-(M00,M02,M03,M04,M10,M11). Native behaviors30; Rust paths21production/18native.
-Leading accepted counts:97coherent source units(38OS/59infrastructure),
-33production compiler batches and11native batches.
+Canonical progress: 24/35 practical checks and six complete milestones:
+M00, M02, M03, M04, M10 and M11. Accepted behaviors30; Rust paths21production/18native.
+Accepted source units97(38OS/59infrastructure), compiler batches33, native batches11.
+This interval has no new accepted numerical gain.
 
-This interval added2sources,1native batch and1native behavior; no practical
-check or whole-milestone gain. The current119B nonempty NUMA native acceptance
-is genuine; owner37.482589779s. Root checkpoint564e58e3 is pushed/fetched.
+The current M07 owner failed after2.44s on a missing hashlib import in its Python
+loader hook, after passing live snapshot/machine/finalguard. This is not an
+established kernel defect or native application outcome. The qualified atomic
+receipt and independent review support retirement of this FAILED attempt.
+No success readbacks or native credit. Import-only correction and real-loader
+body positive/original-negative checks are next. M05 shares the import defect;
+its corresponding private correction is prepared before native execution.
 
-Completed and pending work\n\nActual119B nonempty NUMA native case independently accepted and root-adopted; owner37.482589779s, all7steps/3readbacks. Genuine incremental source dedup/root adoption97(38OS/59infra). Checkpoint564e58e3 pushed/fetched selected ledger blobs. Exec pure plan/cursor11actual cases and response-ledger4host-body cases accepted; target/native not proven. Launcher propagation3bodycases pass, success0 and page1/page2failure1, cleanup/exit ordering; independent review scoped mocks/no target compile. M05 resource-v2 adapter correction and exact two-CPU67 collector/decoder correction pass with stale66/altered68 refusals; original machinery/failures retained. M07 current053d app+bootstrap stage accepted60members/58unchanged, no kernel rebuild/guest.
+M05 exact67 collector,18.90s archive stage and byte-identical visible boot alias
+passed; original archive/stage/failures retained. Its normalization/runtime is
+pending. M07 stage/normalization/constructor/whole/final static had passed; reuse
+those only where corrected source and current physical bindings genuinely match.
 
-M06 mailbox completion/post-user-copy COMMIT/ABORT four-case candidate ready uncompiled/unwired; real mapping/claims/default/link/native remain gates. Corrected launcher target build not yet accepted. M05 changed full-static collector and exact runtime stage/bindings not yet accepted; no public-restoration cycle. M07 third-readonly-root/10-source normalization packet0118f2fb ready, normalization/runtime/native unrun. SDK66 storage fixed-capacity gate remains blocked; active no-resize prevails.
+Corrected exec mailbox/response ledger sources and host tests are accepted and
+integrated; actual full-module build/link/default/native remains blocked by
+the unchanged SDK66 capacity gate. Launcher target recipe is ready; setup hit
+a32MiB indented-JSON limit before any build. Semantically equal compact26,525,680B
+successor is prepared, not executed. Preserve the original partial file and cap.
 
-Velocity and next actions\n\nSince review165: +2 coherent source units,+1 accepted native batch,+1 native behavior; no practical/whole/Rust-path gains. Ready work moved from one dispatcher to disjoint CPU6/7 ordinary checks alongside checkpoint after a causal foreground steer; both completed. No overall4x engineering claim. Native119 compile-reference-to-raw79.2478min includes waits/bindings; owner37.48s only. Latest six-app regression8.09455/min informational2.97882x baseline; historical20-app6.332426x scope remains separate.
+No overall4x engineering speedup demonstrated. The latest M07 stage-to-release
+sequence produced failure feedback, not new acceptance. Reduce preventable
+Python hook failures by invoking the actual loader under its cheap bounded
+ordinary check before freezing the next packet. Do not replace this with a
+general framework, broader review or unchanged-evidence hashing.
 
-Prioritize completion-hook actual body gate and real linked/provider obligations; avoid another new framework or broad readiness audit. Run only changed M05 static collector and current-profile stage; reuse accepted v2 probe/model/lifecycle artifacts. Finish M07 normalizer with exact third readonly root once. Overlap disjoint ordinary work within grants; root alone serializes heavy/native releases. Count source once only after actual dedup/adoption; body/app compile not production batch.
+Fixed SDK66 shortfall last measured21,913,600B. A bounded foreground follow-up
+found no already-authorized smaller cleanup candidate: known32,514,048B archive
+remains unreleased without ownership/consumer proof. No scan, cleanup or mutation.
+No resize/capacity bypass; keep host16GiB/scratch12GiB floors, one-heavy controls,
+permanent mutex27:4, scratch21 evidence/container/exclusions and genuine service stops.
 
-Milestone limits\n\nSix complete M00/M02/M03/M04/M10/M11. M07 broader exit still open despite2/2. M12 profile buckets remain separate: eligible2CPU1boot/6launches, no public10cycles/100launches/60productive minutes. M09 integration estimate is not whole-kernel Rust conversion.
-
-Resource controls remain: one heavy workload onCPU2-5/4jobs/12GiB/512tasks;
-ordinaryCPU6/7 grants only, host16GiB/scratch12GiB floors, preserved scratch21
-container/exclusions and permanent mutex27:4. No resize or capacity bypass.
-Current resident was not restarted; future visibility fix5b66b7f2 has17tests.
+M07 whole remains open despite2/2 checks. M12 separate profile buckets still
+require actual public cycles and productive duration; M09 is integration
+readiness, not percentage of whole-kernel Rust conversion.

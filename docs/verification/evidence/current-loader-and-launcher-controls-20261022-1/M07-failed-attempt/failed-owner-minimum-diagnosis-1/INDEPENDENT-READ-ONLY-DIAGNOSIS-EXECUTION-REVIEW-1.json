@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "decision": "PASS_EXECUTION_READ_ONLY_DIAGNOSIS",
+  "reviewer": "/root/insert_c_correction_review",
+  "implementation_ownership": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewed_command_sha256": "0262440cfb62432ae0c76afdc7030acf35cb52bca4109cc248c3e209fc1093ca",
+  "reviewed_command_bytes": 1301,
+  "source_sha256": "50ce784798aec2f261841b7a9caa6016a0f0d92f9539c9b31c336e64b3f55c97",
+  "source_bytes": 1590,
+  "execution_count": 1,
+  "evidence_root": "/home/holden/mckernel-work/scratch/m07p-261021-1/t.owner-add1802754054ec09898ff0492158a3a",
+  "accepted_operation": {
+    "fixed_names": ["owner.json", "result.json", "state.json"],
+    "additional_names": "Only three-digit-prefix -start.json, -start.stdout and -start.stderr entries in that exact directory.",
+    "maximum_directory_entries": 256,
+    "maximum_file_bytes": 65536,
+    "maximum_total_bytes": 262144,
+    "regular_files_only": true,
+    "O_NOFOLLOW": true,
+    "full_nine_field_before_after_named_identity_equality": true,
+    "output": "Captured stdout JSON with raw base64 and exact integer metadata; missing selected files reported explicitly."
+  },
+  "profile": {
+    "CPU": 0,
+    "AS_bytes": 268435456,
+    "CPU_seconds": 10,
+    "FSIZE_bytes": 1048576,
+    "nofile": 64,
+    "core": 0,
+    "supervisor_wall_seconds": 15
+  },
+  "conditions": [
+    "Use the exact recorded argv with inherited askpass and the existing owned capture enforcing the15-second wall bound; the argv itself contains no wall-time limiter.",
+    "Keep other work held. Stop on the first unexpected file type, identity change, size/count bound or command failure; preserve the resulting capture.",
+    "Preserve every owner, lease, lock and failed-operation record. This operation grants no cleanup, signal, unlock, Docker query, census, guest or replay authority."
+  ],
+  "blocking_findings": [],
+  "failure_cause_determined": false,
+  "physical_clearance": false,
+  "retirement_acceptance": false,
+  "runtime_retry_authority": false,
+  "reviewer_quiescent": true
+}
