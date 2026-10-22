@@ -545,6 +545,41 @@ class CampaignTests(unittest.TestCase):
                        "https://chatgpt.com/backend-api/wham/usage failed: "
                        "503 Service Unavailable; temporary backend failure" + message_suffix}))
 
+    @staticmethod
+    def transport_usage_error():
+        return RuntimeError("account/rateLimits/read: " + json.dumps({
+            "code": -32603,
+            "message": "failed to fetch codex rate limits: error sending request for url "
+                       "(https://chatgpt.com/backend-api/wham/usage)"}))
+
+    def test_paid_usage_transport_retries_preserve_budget_when_weekly_allowance_returns(self):
+        self.credit_arguments()
+        campaign = launcher.Campaign(self.args, self.directory, self.directory)
+        try:
+            initial = {"primary": {"usedPercent": 100}, "credits": {
+                "hasCredits": True, "unlimited": False, "balance": "1000"}}
+            campaign.record_rate_limits(initial)
+            campaign.record_rate_limits(dict(initial, credits=dict(initial["credits"], balance="950")))
+            campaign.save(credit_budget_error="historical transport failure")
+            current = dict(initial, primary={"usedPercent": 1},
+                           credits=dict(initial["credits"], balance="950"))
+            campaign.rpc = Mock()
+            campaign.rpc.call.side_effect = [self.transport_usage_error(), {"rateLimits": current}]
+            with patch.object(launcher.time, "sleep") as sleep:
+                campaign.refresh_credit_budget()
+            self.assertEqual(campaign.rpc.call.call_count, 2)
+            for call in campaign.rpc.call.call_args_list:
+                self.assertEqual(call.args, ("account/rateLimits/read", {}))
+            sleep.assert_called_once_with(1)
+            self.assertIsNone(campaign.stop_reason)
+            self.assertFalse(campaign.stop_now)
+            self.assertIsNone(campaign.state["credit_budget_error"])
+            self.assertEqual(campaign.state["credit_budget"]["initial_balance"], "1000")
+            self.assertEqual(campaign.state["credit_budget"]["spent"], "50")
+            self.assertEqual(campaign.state["credit_budget"]["remaining"], "50")
+        finally:
+            campaign.output.close()
+
     def test_paid_usage503_retries_only_read_and_retains_spending(self):
         self.credit_arguments()
         campaign = launcher.Campaign(self.args, self.directory, self.directory)
@@ -571,12 +606,14 @@ class CampaignTests(unittest.TestCase):
         finally:
             campaign.output.close()
 
-    def test_paid_usage503_retry_limit_still_stops_unknown_balance(self):
+    def test_paid_usage_retry_limit_still_stops_unknown_balance(self):
         self.credit_arguments()
         campaign = launcher.Campaign(self.args, self.directory, self.directory)
         try:
             campaign.rpc = Mock()
-            campaign.rpc.call.side_effect = self.unavailable_usage_error()
+            campaign.rpc.call.side_effect = [self.transport_usage_error(),
+                                             self.unavailable_usage_error(),
+                                             self.transport_usage_error()]
             with patch.object(launcher.time, "sleep") as sleep:
                 campaign.refresh_credit_budget()
             self.assertEqual(campaign.rpc.call.call_count, 3)
@@ -591,6 +628,10 @@ class CampaignTests(unittest.TestCase):
         self.credit_arguments()
         nested_limit = json.loads(str(self.unavailable_usage_error()).split(": ", 1)[1])
         nested_limit["data"] = {"codexErrorInfo": "sessionBudgetExceeded"}
+        nested_transport_limit = json.loads(str(self.transport_usage_error()).split(": ", 1)[1])
+        nested_transport_limit["data"] = {"codexErrorInfo": "sessionBudgetExceeded"}
+        unrelated_transport = json.loads(str(self.transport_usage_error()).split(": ", 1)[1])
+        unrelated_transport["message"] = unrelated_transport["message"].replace("/wham/usage", "/auth")
         errors = [TimeoutError("account unavailable"), RuntimeError("unknown failure"),
                   RuntimeError("account/rateLimits/read: invalid json"),
                   RuntimeError('account/rateLimits/read: {"code":-32603,"message":"401 Unauthorized"}'),
@@ -598,7 +639,9 @@ class CampaignTests(unittest.TestCase):
                   self.unavailable_usage_error("; quota exhausted"),
                   self.unavailable_usage_error("; cyberPolicy"),
                   self.unavailable_usage_error("; authentication required"),
-                  RuntimeError("account/rateLimits/read: " + json.dumps(nested_limit))]
+                  RuntimeError("account/rateLimits/read: " + json.dumps(nested_limit)),
+                  RuntimeError("account/rateLimits/read: " + json.dumps(nested_transport_limit)),
+                  RuntimeError("account/rateLimits/read: " + json.dumps(unrelated_transport))]
         for error in errors:
             with self.subTest(error=str(error)):
                 campaign = launcher.Campaign(self.args, self.directory, self.directory)

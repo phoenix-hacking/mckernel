@@ -478,7 +478,7 @@ def preflight(rpc, args, repo):
 
 
 def temporary_usage_read_failure(error):
-    """Only the observed read-only usage endpoint's HTTP503 is retryable."""
+    """Retry only observed temporary failures of the read-only usage endpoint."""
     prefix = "account/rateLimits/read: "
     if not isinstance(error, RuntimeError) or not str(error).startswith(prefix):
         return False
@@ -489,9 +489,15 @@ def temporary_usage_read_failure(error):
     if not isinstance(detail, dict) or detail.get("code") != -32603:
         return False
     message = detail.get("message")
-    if not isinstance(message, str) or not message.startswith(
-            "failed to fetch codex rate limits: GET https://chatgpt.com/backend-api/wham/usage "
-            "failed: 503 Service Unavailable;"):
+    if not isinstance(message, str):
+        return False
+    unavailable = message.startswith(
+        "failed to fetch codex rate limits: GET https://chatgpt.com/backend-api/wham/usage "
+        "failed: 503 Service Unavailable;")
+    transport = message == (
+        "failed to fetch codex rate limits: error sending request for url "
+        "(https://chatgpt.com/backend-api/wham/usage)")
+    if not (unavailable or transport):
         return False
     protected = ("policy", "quota", "usagelimitexceeded", "sessionbudgetexceeded", "ratelimitexceeded",
                  "authentication", "unauthorized", "forbidden", "billing",
@@ -859,7 +865,7 @@ class Campaign:
                         and temporary_usage_read_failure(error)):
                     self.save(last_usage_read_retry={"at": utc(), "attempt": attempt + 1,
                                                     "error": str(error)})
-                    self.output.notice("Usage reporting returned503; retrying read-only balance check "
+                    self.output.notice("Usage reporting temporarily unavailable; retrying read-only balance check "
                                        + str(attempt + 1) + "/2.")
                     time.sleep(attempt + 1)
                     continue
