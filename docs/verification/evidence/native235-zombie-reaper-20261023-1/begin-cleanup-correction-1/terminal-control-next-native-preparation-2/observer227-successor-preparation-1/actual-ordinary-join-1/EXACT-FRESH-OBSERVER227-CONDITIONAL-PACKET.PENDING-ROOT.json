@@ -1,0 +1,267 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FRESH_OBSERVER227_REUSED_SDK5_MANIFEST_PENDING_FRESH_ROOT_RELEASE",
+  "diagnostic_only": true,
+  "formal_227_acceptance": false,
+  "nonce": "5b6435d74a994387b5458138fa24dcf6",
+  "metadata_parent": "/home/holden/mckernel-work/scratch/n227o2",
+  "qmp_encoded_bytes": 93,
+  "strict_oracle": {
+    "exit_code": 0,
+    "stderr": {
+      "bytes": 0,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-recovery-batch-prerequisite-20261022-1/expected.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr_bytes_hex": "",
+    "stdout": {
+      "bytes": 227,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-recovery-batch-prerequisite-20261022-1/expected.stdout",
+      "sha256": "4eba8ea20e13ebe307fe67b771c200de36305e787ec31590b05e92dcb67ac9d6"
+    },
+    "stdout_bytes_hex": "7265636f7665727920706172656e742073746172740a706172656e742063616e63656c207369676e616c3d31352072656164793d3120707265726561703d3020656f663d31207265617065643d3120656368696c643d31206f776e65643d300a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e74207265636f76657279206578656320657869743d333720656f663d31207265617065643d3120656368696c643d310a706172656e74207265636f7665727920636f6d706c657465206368696c6472656e3d32206f776e65643d300a"
+  },
+  "profile": {
+    "container_CPU_affinity": "2-5",
+    "container_CPU_count": 4,
+    "container_fsize": [
+      33554432,
+      33554432
+    ],
+    "container_memory_bytes": 12884901888,
+    "container_network": "none",
+    "container_swap_bytes": 0,
+    "container_tasks": 512,
+    "cpu": 7,
+    "host_UID_NPROC": "inherited126258:126258; no per-UID512",
+    "jobs": 1,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "owner_CPU_limits": [
+      -1,
+      -1
+    ],
+    "owner_as_bytes": [
+      2147483648,
+      2147483648
+    ],
+    "payload_timeout_ms": 10000,
+    "required_inherited_cpu_limits": [
+      -1,
+      -1
+    ],
+    "runner_timeout_seconds": 300,
+    "stream_fsize": 33554432
+  },
+  "read_only_admission_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--core=0:0",
+    "--fsize=8388608:8388608",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/read_only_native227_admission.py"
+  ],
+  "expected_actual_admission_status": "PASS_FRESH_READ_ONLY_NATIVE235_CURRENT_LIVE_ADMISSION",
+  "metadata_publication_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path; import hashlib,os,sys; src=Path(sys.argv[1]); root=Path(sys.argv[2]); digest=sys.argv[3]; raw=src.read_bytes(); assert hashlib.sha256(raw).hexdigest()==digest; assert os.getuid()==os.geteuid()==os.getgid()==os.getegid()==1000; root.mkdir(mode=0o700); (root/'p').mkdir(mode=0o700); f=(root/'m.json').open('xb'); f.write(raw); f.flush(); os.fsync(f.fileno()); f.close(); os.chmod(root/'m.json',0o600); assert hashlib.sha256((root/'m.json').read_bytes()).hexdigest()==digest",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-227/ACTUAL-V3-NATIVE227-MANIFEST.json",
+    "/home/holden/mckernel-work/scratch/n227o2",
+    "ff1a136b16eed54d40c886be3b48e6508b9c9ad96cc5dd43028657ea0cd2a777"
+  ],
+  "production_guard_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=8388608",
+    "--core=0:0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport importlib.util,json,hashlib,os\nB=Path(__import__('sys').argv[1]);P=json.loads(Path(__import__('sys').argv[2]).read_text())\ndef load(n,path):\n s=importlib.util.spec_from_file_location(n,path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m\no=load('actual_owner',B/'native_diagnostic_container_owner.py');d=load('actual_diagnostic',B/'native_diagnostic.py');parent=Path(P['new_owner_parent']);manifest=Path(P['new_manifest']);need='ff1a136b16eed54d40c886be3b48e6508b9c9ad96cc5dd43028657ea0cd2a777'\nassert hashlib.sha256((B/'native_diagnostic_container_owner.py').read_bytes()).hexdigest()=='251acc456d5c7f6b563cb8e41feeb7e095c8098c1a780c44338f2157d357b0e6'\nassert hashlib.sha256(manifest.read_bytes()).hexdigest()==need\no.private_parent(str(parent));o._manifest_identity(str(manifest),need);o._manifest_outside_writable_parent(str(manifest),parent)\nattempt=parent/('attempt-'+P['fresh_nonce']);assert not os.path.lexists(attempt)\na=d.expected_qemu_argv(json.loads(manifest.read_text()),attempt);q=P['qmp_socket'];assert a[a.index('-qmp')+1]=='unix:'+q+',server=on,wait=off';assert len(os.fsencode(q))==93\nprint('PASS actual source4d7 parent/scratch manifest/outside-writable guards and actual expected_qemu_argv with93byte QMP socket')",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/runtime",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/EXACT-GUARD-DATA.json"
+  ],
+  "native_capture_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/capture_native199_owner.py",
+    "--operation",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/NATIVE-OPERATION.ACTUAL.json",
+    "--sha256",
+    "79bc00cd1287ad0c20947c462a5f4d814baa082f493c9b04c754fa4cba78603c"
+  ],
+  "owner_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/runtime/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/scratch/n227o2/p",
+    "--nonce",
+    "5b6435d74a994387b5458138fa24dcf6",
+    "--owner-sha256",
+    "251acc456d5c7f6b563cb8e41feeb7e095c8098c1a780c44338f2157d357b0e6",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/n227o2/m.json",
+    "--manifest-sha256",
+    "ff1a136b16eed54d40c886be3b48e6508b9c9ad96cc5dd43028657ea0cd2a777"
+  ],
+  "references": {
+    "actual_native_manifest": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-227/ACTUAL-V3-NATIVE227-MANIFEST.json",
+      "sha256": "ff1a136b16eed54d40c886be3b48e6508b9c9ad96cc5dd43028657ea0cd2a777",
+      "bytes": 8791
+    },
+    "actual_stage_strict_consumer_join": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/REUSED-MANIFEST-STRICT-QMP-JOIN.json",
+      "sha256": "32f1fc94c4101799ea6591aeea445e4089227eb1bc6102dc8e0580253a7bcb83",
+      "bytes": 3560
+    },
+    "native_operation": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/NATIVE-OPERATION.ACTUAL.json",
+      "sha256": "79bc00cd1287ad0c20947c462a5f4d814baa082f493c9b04c754fa4cba78603c",
+      "bytes": 2410
+    },
+    "native_capture_argv": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/NATIVE-CAPTURE-ARGV.ACTUAL.json",
+      "sha256": "115c4a3027d20b76194d7e332ff1f5d0a17a6a8dc334548779233eed54134fa7",
+      "bytes": 527
+    },
+    "metadata_publication_argv": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/METADATA-PUBLICATION-ARGV.MANIFEST-REUSED.json",
+      "sha256": "19232e56d7cc91aa0d0efab2db28094fdaa1f89a1b815ea968855d24bffa4cd2",
+      "bytes": 900
+    },
+    "source_binding_proof": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/ACTUAL-OBSERVER-SOURCE-COHORT.json",
+      "sha256": "5e3983181aec5200f2dd188af7e83f81fc210c2c37e2ec15d585164d71ac1663",
+      "bytes": 3072
+    },
+    "admission_operation": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/ROOT-EXACT-READONLY-ADMISSION-OPERATION.PENDING.json",
+      "sha256": "b07e74f21b46e42d692662b085a53505ed2d452c619a96c44d3b5a3a64ed79a2",
+      "bytes": 1133
+    },
+    "production_guard_data": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/EXACT-GUARD-DATA.json",
+      "sha256": "094cae2d40209532cf1d8f16475f3e35667586404069443b56150dffaa68f140",
+      "bytes": 308
+    },
+    "production_guard_argv": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/PRODUCTION-GUARD-ARGV.ACTUAL.json",
+      "sha256": "eb4b9b7fb7491b7e8919dcf3c75056a4733f9945992571fd3f387490ea6948a0",
+      "bytes": 1880
+    },
+    "accepted_SDK5_artifact_physical": {
+      "bytes": 2584,
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/INDEPENDENT-ACTUAL-SDK-ARTIFACT-AND-PHYSICAL-ACCEPTANCE.json",
+      "sha256": "8614e3e2bbf9e07c01f396079fc83fedbbb4119a3c37b5e311bdcc6cb6099623"
+    },
+    "actual_SDK5_native_cohort": {
+      "bytes": 4026,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/runtime-provider-rebind-1/SOURCE-REFERENCE-REBIND-RESULT.json",
+      "sha256": "0402016e7e3971b927ce25263e9d238abad46477ec1259821398ab7c4285906b"
+    },
+    "actual235_protocol_result": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/result.json",
+      "sha256": "b127540b3f359b5f9a169a6ba0da34c866ff672220c9f0803276c49e2967cc19",
+      "bytes": 257
+    },
+    "latest235_formal_acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/INDEPENDENT-FORMAL-STRICT235-APPLICATION-ACCEPTANCE.json",
+      "sha256": "de21eb47f58ebb45c23ae2365004ac39fb6032a45c4ac879cb10cd3fc13769d5",
+      "bytes": 2339
+    },
+    "latest235_physical_acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/INDEPENDENT-ACTUAL-PHYSICAL-ACCEPTANCE.json",
+      "sha256": "683a686ae88536a9c8c7e3b84cbe435ea4f180b88b7d004ec0bafe7c92b7af46",
+      "bytes": 1558
+    },
+    "actual_failed227_result": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/case227-actual-post-physical-1/decoded-root/result.json",
+      "sha256": "0ab5f2c27f488730a965f24ee941ab0e7b924db633c3a7eff78eddd20630ef4b",
+      "bytes": 256
+    },
+    "prior_failed227_physical_acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/case227-actual-post-physical-1/INDEPENDENT-ACTUAL-PHYSICAL-ACCEPTANCE.json",
+      "sha256": "2ba0b100a2c80849edd7fd6741f70aa32a4e78481f7b4e8de8d608c36aab427f"
+    },
+    "accepted_observer_source_review": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/observer-correction-227-1/INDEPENDENT-SOURCE-REVIEW.json",
+      "sha256": "aa79a375ad7c5b3c7c93aa647221013aafe3d57e24a3ce8f5125a3982cbed00a"
+    },
+    "actual_observer_regressions": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/observer-correction-227-1/SOURCE-AND-ACTUAL-FULL-CONSUMER-RESULT.json",
+      "sha256": "0dbe0c645ac195bf6b028771703dff5b84b02dda1b77eeecbd6e8bc73418b74d"
+    }
+  },
+  "current_live_postjoin": null,
+  "required_fresh_bindings": {
+    "formal235acceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/INDEPENDENT-FORMAL-STRICT235-APPLICATION-ACCEPTANCE.json",
+      "sha256": "de21eb47f58ebb45c23ae2365004ac39fb6032a45c4ac879cb10cd3fc13769d5",
+      "bytes": 2339
+    },
+    "positive235physicalacceptance": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/INDEPENDENT-ACTUAL-PHYSICAL-ACCEPTANCE.json",
+      "sha256": "683a686ae88536a9c8c7e3b84cbe435ea4f180b88b7d004ec0bafe7c92b7af46",
+      "bytes": 1558
+    },
+    "root_read_only_admission": null,
+    "metadata_identity_and_closed_capture": null,
+    "production_guard_closed_capture": null,
+    "current_source_tool_backend_identity_and_fetched_checkpoint": null,
+    "independent_execution_review": null,
+    "one_shot_execution_release": null
+  },
+  "reserved_root_result_paths": {
+    "admission_capture": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/actual-admission-1/receipt.json",
+    "admission_stdout": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/actual-admission-1/stdout.json",
+    "metadata_capture": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/actual-metadata-1/receipt.json",
+    "metadata_identity": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/actual-metadata-1/IDENTITIES.json",
+    "guard_capture": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/actual-guard-1/receipt.json",
+    "guard_stdout": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/actual-guard-1/stdout",
+    "current_identity_and_fetched": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/BOUND-CURRENT-IDENTITIES.ROOT.json",
+    "final_live_join": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/CURRENT-LIVE-POSTJOIN.ACTUAL.json",
+    "independent_review": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/INDEPENDENT-CONDITIONAL-REVIEW.json",
+    "one_shot_release": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/ROOT-ONE-SHOT-NATIVE227-RELEASE.json"
+  },
+  "failure_history": "RetainedSDK4system3.8observerfailure corrected withacceptedAnaconda; a7ca235EPIPE/serviceEBUSY mappedtoPROCFS_DELETECREATEgate; SDK5Rustf5c56/ffefrepair acceptedbuild8614. Actual708984235PROTOCOL_PASS observed; prospectiveformal/physicalreview pending. Strict227stageff1a usesSDK5SMP2eb3/mcctrl06e8/IHKdaced andf368/45010, original6abb227oracle unchanged. Genuine235formal de21eb47 andphysical683a686a nowaccepted; priorprospective review wording above retainedhistorically. Freshobserver successor retainskernelSDK5/ff1amanifest/db3overlay/original6abb227oracle. Prior451c attempt failure andlostobservation retained; independentlyacceptedobserver/native-parser changes requireactualfreshreplay once, never anunchangedreplay or235rerun.",
+  "native_execution_authorized": false,
+  "application_acceptance": false,
+  "root_operations": 0,
+  "guest_runs": 0
+}

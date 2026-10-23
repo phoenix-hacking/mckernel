@@ -1,0 +1,37 @@
+test_begin_cannot_fake_legacy_release (__main__.FullNestedTests) ... ok
+test_begin_full_nested_preserves_all_resource_results (__main__.FullNestedTests) ... ERROR
+test_legacy_controls_remain_strict (__main__.FullNestedTests) ... ok
+test_legacy_original_and_successor_full_nested_equal (__main__.FullNestedTests) ... ok
+test_missing_ack_each_epoch (__main__.FullNestedTests) ... ok
+test_missing_intent_each_epoch (__main__.FullNestedTests) ... ok
+test_physical_counter_wrong_both_releases (__main__.FullNestedTests) ... ok
+test_profile_identity_is_strict (__main__.FullNestedTests) ... ok
+test_retirement_before_ack_each_epoch (__main__.FullNestedTests) ... ok
+test_undeclared_begin_cannot_replace_legacy (__main__.FullNestedTests) ... ok
+test_wrong_generation_ack (__main__.FullNestedTests) ... ok
+test_wrong_pid_each_epoch (__main__.FullNestedTests) ... ok
+
+======================================================================
+ERROR: test_begin_full_nested_preserves_all_resource_results (__main__.FullNestedTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/consumer-correction-1/test_full_nested.py", line 89, in test_begin_full_nested_preserves_all_resource_results
+    new = self.evaluate(self.begin_serial)
+  File "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/consumer-correction-1/test_full_nested.py", line 78, in evaluate
+    return consumer.evaluate(self.manifest if begin else self.legacy, observation)
+  File "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/consumer-correction-1/second_stop_capture.py", line 141, in evaluate
+    original = bound("workload").evaluate(manifest, observation)
+  File "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/consumer-correction-1/reboot_workload_capture.py", line 148, in evaluate
+    first_observation = dict(observation, serial=workload_view(serial, 1, manifest))
+  File "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/consumer-correction-1/reboot_workload_capture.py", line 137, in workload_view
+    begin._check_begin_cleanup(epoch_view, 'os=0 generation=' + epoch + ' pid=' + pid,
+  File "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/runtime-first-restoration-1/native_diagnostic.py", line 1058, in _check_begin_cleanup
+    _need(len(acknowledgements)==1, "missing/duplicate real cleanup ACK")
+  File "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/runtime-first-restoration-1/native_diagnostic.py", line 73, in _need
+    raise DiagnosticError(message)
+reboot_workload_begin_nd.DiagnosticError: missing/duplicate real cleanup ACK
+
+----------------------------------------------------------------------
+Ran 12 tests in 1.209s
+
+FAILED (errors=1)

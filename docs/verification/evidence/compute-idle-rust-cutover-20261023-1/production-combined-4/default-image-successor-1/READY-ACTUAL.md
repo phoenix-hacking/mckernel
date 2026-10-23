@@ -1,0 +1,7 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Actual source materialization and incremental static request PASS. The6,959-entry source copy has only the two accepted memory postimages advanced; idle3 and all other references are preserved. Manifest802f963e8f3ec1c47f98c5f3440b8a132f5b0fa617dd2e014976c63d78870073. Private static request65f8f8f0f95f4c75fdd53081c11f9076aeb16ced94303bc0c7ac64b9df0e6921 is26,525,037bytes; admissions remain null. All request fields outside the enumerated source/controller/gitlink/namespace delta are equal to accepted correction1.
+
+The granted CPU0 operation took9.712926572s wall/3.153472CPU seconds. Source-copy creator joined with exit0, group absent, closed streams and null errors. Capture and original materializer result/admission are retained in materialization-capture-1/ and materialization-result-1/. No source tree or large static-request duplication into Git evidence.
+
+ACTUAL-CANDIDATE.json binds the private source, exact controller cohort, compact static request, fixed profile and unchanged defaultGCC14/fullcrate/finalimage commands. Next: focused independent actual-source/profile review, then root-owned source/publication, physical predecessor/observer, fresh identity/capacity/aggregate admission and one-shot execution release. No compiler/root/Docker/guest ran; no image/native/retirement credit. Earlier PREPARATION-RECEIPT describes the pre-execution state and remains unchanged.

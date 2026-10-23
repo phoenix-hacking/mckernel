@@ -1,0 +1,57 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "caller_argv": [
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--fsize=134217728",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/run_actual_sdk5_m05_stage_once.py"
+  ],
+  "stage_argv": [
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--fsize=134217728",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/stage_m05_two_generation.py",
+    "--stage"
+  ],
+  "sources": {
+    "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/run_actual_sdk5_m05_stage_once.py": {
+      "sha256": "f94a42a73ceedeb9995bda6a1d166d2de6d1c769f6b964fd7a67b8a749710ded",
+      "bytes": 1025
+    },
+    "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/stage_m05_two_generation.py": {
+      "sha256": "65c01a4f1e4bc7b70350c9705a56fca1c08fb0ed96161a761ad5802f76597193",
+      "bytes": 16074
+    },
+    "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/BINDING.json": {
+      "sha256": "96a826240147102f48d7b0fa77df697f0583750819ca1281d6d1883a18be639a",
+      "bytes": 12631
+    },
+    "/home/holden/mckernel/scripts/application-tests/supervisor.py": {
+      "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873",
+      "bytes": 24564
+    }
+  },
+  "source_snapshot": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/stage-capture-source-1/supervisor.py",
+  "source_review": "root explicit exactdiff+BINDING96a82624 acceptance in task",
+  "runtime_release": null
+}

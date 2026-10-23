@@ -1,0 +1,148 @@
+--- originalf368/native_diagnostic.py
++++ /home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer-correction-227-1/native_diagnostic.py
+@@ -574,13 +574,13 @@
+                     *[r"application procfs " + op + " " + prefix + " tid=" + schedules[0] + r"\b"
+                       for op in ("published", "deleted")]):
+         _need(len(re.findall(pattern, serial)) == 1, "retirement/release evidence")
+-    _check_syscall_trace(serial, prefix, _begin_cleanup_enabled(manifest), _begin_process_case(manifest))
++    _check_syscall_trace(serial, prefix, _begin_cleanup_enabled(manifest), _begin_process_case(manifest), _begin_cancel_case(manifest))
+     return {"schema_version": 1, "kind": "native-diagnostic-result", "case_id": manifest["case_id"],
+             "status": "PROTOCOL_PASS", "application_acceptance": False, "mckernel_application_executed": False,
+             "guest_report": report, "observation": observation, "runtime_blocker": DIAGNOSTIC_LIMITATION}
+ 
+ 
+-def _check_syscall_trace(serial, prefix, begin_cleanup=False, child_domain=False):
++def _check_syscall_trace(serial, prefix, begin_cleanup=False, child_domain=False, cancellation=False):
+     """Join every sampled delivery; exit_group deliberately has no RET.
+ 
+     mcctrl_process.rs::return_syscall prints return_route only when the Linux
+@@ -591,7 +591,7 @@
+     single-thread startup fixture requires one final exit_group (231).
+     """
+     if child_domain:
+-        serial, _ = _audit_begin_children(serial, prefix)
++        serial, _ = _audit_begin_children(serial, prefix, cancellation)
+     suffixes = {
+         "delivered": r"worker=(\d+) delivery=(\d+) cpu=(\d+) number=(\d+)",
+         "returned": r"worker=(\d+) delivery=(\d+) cpu=(\d+) value=(-?\d+)",
+@@ -948,6 +948,11 @@
+     if failure is not None:
+         record = {"status": "FAIL", "application_acceptance": False,
+                   "mckernel_application_executed": False, "failure": failure}
++        # An observer refusal must retain the already-collected real envelope.
++        # This adds evidence only; the first failure and false acceptance flags
++        # remain unchanged, under the existing bounded final-record writer.
++        if observation:
++            record["observation"] = observation
+     record["cleanup"] = cleanup
+     record["capture_errors"] = capture_errors
+     if qemu_evidence is not None:
+@@ -1353,13 +1358,14 @@
+ def _begin_process_case(manifest):
+     return _begin_cleanup_enabled(manifest) and manifest["case_id"] in BEGIN_PROCESS_CASES
+ 
+-def _audit_begin_children(serial, prefix):
++def _audit_begin_children(serial, prefix, cancellation=False):
+     """Return a parent projection only after auditing every observed child row.
+ 
+     Child authority is a positive RET to a matched parent clone(56), plus real
+     same-generation procfs publication. A child can run before the parent RET
+     log. A SIGTERM-cancelled child need not emit exit_group; every sampled
+-    ordinary delivery still needs its actual return and valid optional route.
++    ordinary delivery needs its actual return and valid optional route, except
++    the frozen227 first-child poll proven drained by real terminal cleanup.
+     """
+     owner=re.fullmatch(r"os=(\d+) generation=(\d+) pid=(\d+)",prefix)
+     _need(owner is not None,"process trace parent identity")
+@@ -1404,12 +1410,21 @@
+         delivered,returned,routes=(groups[child][k] for k in suffixes)
+         _need(delivered and set(routes)<=set(returned)<=set(delivered),"child syscall correspondence")
+         terminals={k for k,(row,_) in delivered.items() if row[1] in (60,231)}
+-        _need(len(terminals)<=1 and set(returned)==set(delivered)-terminals,"child ordinary RET coverage")
++        cancelled=set(delivered)-terminals-set(returned)
++        if cancelled:
++            _need(cancellation, "child ordinary RET coverage")
++            _audit_cancelled_begin_child(serial, prefix, child, children, groups, cancelled, terminals)
++        _need(len(terminals)<=1 and set(returned)==set(delivered)-terminals-cancelled,"child ordinary RET coverage")
+         terminal=delivered[next(iter(terminals))][1] if terminals else None
+         workers={}
+         for key,((cpu,number),begin) in delivered.items():
+             _need(cpu==0 and begin>publication[0],"child CPU/publication order")
+             if key in terminals:continue
++            if key in cancelled:
++                # Slot0 has no return_route. Require its earlier completed rows
++                # to establish this SAME worker's slot before terminal closure.
++                _need(workers.get(key[0])==0, "cancelled worker route history")
++                continue
+             (retcpu,_),end=returned[key]
+             _need(retcpu==0 and begin<end and (terminal is None or end<terminal),"child syscall/terminal order")
+             slot=0
+@@ -1420,3 +1435,68 @@
+             _need(workers.setdefault(key[0],slot)==slot,"child worker route changed")
+     parent_view=[line for position,line in enumerate(serial.splitlines()) if position not in row_pids or row_pids[position]==parent]
+     return "\n".join(parent_view), sorted(children)
++
++
++
++def _begin_cancel_case(manifest):
++    """Only the original SIGTERM227 payload/oracle has cancellation authority.
++
++    Its frozen source waits READY, checks waitpid(child,WNOHANG)==0, signals
++    that SAME owned child with SIGTERM15, requires raw signal15/EOF/reap/ECHILD,
++    then creates a distinct recovery child. stdout is checked before this hook.
++    No host nr62 row is claimed: the guest implements that signal locally.
++    """
++    if manifest["case_id"] != BEGIN_PROCESS_CASES[1]:return False
++    _need(_begin_cleanup_enabled(manifest) and
++          manifest["artifacts"]["payload"]["sha256"] == "6abb5e9046444c64d72139f85fcae9e4796eff7ceb5cc2dd1e5b1a47ef3695a5" and
++          manifest["payload"]["oracle"] == CANCEL_227_ORACLE, "frozen227 cancellation payload/oracle")
++    return True
++
++CANCEL_227_ORACLE = {'exit_code': 0, 'stderr_hex': '', 'stdout_hex': '7265636f7665727920706172656e742073746172740a706172656e742063616e63656c207369676e616c3d31352072656164793d3120707265726561703d3020656f663d31207265617065643d3120656368696c643d31206f776e65643d300a6368696c642065786563207375636365737320746f6b656e3d66697865642d76310a706172656e74207265636f76657279206578656320657869743d333720656f663d31207265617065643d3120656368696c643d310a706172656e74207265636f7665727920636f6d706c657465206368696c6472656e3d32206f776e65643d300a'}
++
++def _audit_cancelled_begin_child(serial, prefix, child, children, groups, missing, terminals):
++    """Prove one frozen227 poll's terminal cancellation, never a missing RET.
++
++    Entry::request_cleanup closes its mailbox and waits for drained() before
++    publishing cleanup. Mailbox cancellation publishes the retained Response
++    and clears its call without a dying Linux worker's userspace RET log.
++    Thus this real successful cleanup ACK proves that exact Entry's admitted
++    poll drained. No worker-retired row or retirement0 is invented: query -11
++    may remain until the parent performs the real wait/destructor transaction.
++    """
++    ordered=sorted(children,key=children.get)
++    _need(len(ordered)==2 and child==ordered[0] and len(missing)==1 and len(terminals)==1,
++          "cancelled child/one-poll scope")
++    key=next(iter(missing));terminal_key=next(iter(terminals))
++    delivered=groups[child]["delivered"]
++    (cpu,number),begin=delivered[key];(tcpu,tnumber),terminal=delivered[terminal_key]
++    _need(cpu==tcpu==0 and number==7 and tnumber==231 and key[0]!=terminal_key[0] and begin<terminal,
++          "cancelled poll/other-worker terminal")
++    _need(all(k==key or k[0]!=key[0] or pos<begin for k,(_,pos) in delivered.items()),
++          "cancelled worker reused after poll")
++    parent=int(re.fullmatch(r"os=\d+ generation=\d+ pid=(\d+)",prefix).group(1))
++    domain=prefix.rsplit(" pid=",1)[0]+" pid="+str(child)
++    evidence={"intent":[],"ack":[],"query":[],"delete":[]}
++    patterns={"intent":("application_process=cleanup_requested ",r"intent_errno=(-?\d+)"),
++              "ack":("application cleanup ACK ",r"token=(\d+) errno=(-?\d+) abandoned=([01])"),
++              "query":("application retirement ",r"token=(\d+) errno=(-?\d+)"),
++              "delete":("application procfs deleted ",r"tid=(\d+)")}
++    for position,line in enumerate(serial.splitlines()):
++        for kind,(marker,suffix) in patterns.items():
++            if marker not in line or not re.search(r"pid="+str(child)+r"\b",line):continue
++            match=re.search(re.escape(marker+domain)+" "+suffix+r"\s*$",line)
++            _need(match is not None,"cancelled child lifecycle identity")
++            evidence[kind].append((position,*map(int,match.groups())))
++    intent,ack,queries,deletes=(evidence[k] for k in ("intent","ack","query","delete"))
++    _need(len(intent)==len(ack)==len(deletes)==1 and intent[0][1]==0 and
++          0<ack[0][1]<2**64 and ack[0][2]==0 and deletes[0][1]==child,
++          "cancelled child real intent/ACK/procfs delete")
++    _need(terminal<intent[0][0] and terminal<ack[0][0] and
++          1<=len(queries)<=12 and len({q[1] for q in queries})==len(queries) and
++          all(0<q[1]<2**64 and q[0]>ack[0][0] and q[2] in (-11,0) for q in queries) and
++          all(q[2]==-11 for q in queries[:-1]), "cancelled child cleanup publication/query")
++    pd,pr=groups[parent]["delivered"],groups[parent]["returned"]
++    reaps=[(key,pos,pr[key][1]) for key,((cpu,number),pos) in pd.items()
++           if number==61 and key in pr and pr[key][0]==(0,child)]
++    _need(len(reaps)==1 and ack[0][0]<reaps[0][1]<reaps[0][2]<deletes[0][0]<children[ordered[1]],
++          "cancelled child parent reap/delete/recovery order")

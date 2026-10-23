@@ -1,0 +1,115 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_ORDINARY_SDK5_M05_STAGE_ONLY",
+  "capture": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/ACTUAL-SDK5-M05-STAGE-CAPTURE-RESULT-1.json",
+    "sha256": "e7235795855caa996f416c72f36cdef6c8a1754318e3bdc714ce6eda2b95d916",
+    "bytes": 3542
+  },
+  "supervisor": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/stage-capture-source-1/supervisor.py",
+    "sha256": "8b8700175e6673c3a6b652d4a93bd18b56def83dfa3ac4ec821d4ae6c554e873",
+    "bytes": 24564
+  },
+  "driver": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/run_actual_sdk5_m05_stage_once.py",
+    "sha256": "f94a42a73ceedeb9995bda6a1d166d2de6d1c769f6b964fd7a67b8a749710ded",
+    "bytes": 1025
+  },
+  "source_and_argv": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/STAGE-EXECUTION-SOURCE-AND-ARGV.json",
+    "sha256": "7e9e3d34fc433360cea27ffca2202a19c019700d0015e7b505c58e6572b718a6",
+    "bytes": 2226
+  },
+  "wait_status": {
+    "code": 0,
+    "kind": "exited"
+  },
+  "raw_wait_status": 0,
+  "cleanup_complete": true,
+  "descendants": [],
+  "streams": {
+    "stderr": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/actual-sdk5-m05-stage-capture-1/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "bytes_observed": 0,
+      "bytes_retained": 0,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 8388608,
+      "truncated": false
+    },
+    "stdout": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/actual-sdk5-m05-stage-capture-1/stdout.bin",
+        "sha256": "da983c815f17dcfdb30a1f397bff873985c79554a1a0ff30cfacf4d2d2a521fa",
+        "size": 221
+      },
+      "bytes_observed": 221,
+      "bytes_retained": 221,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 8388608,
+      "truncated": false
+    }
+  },
+  "elapsed_seconds": 23.904395599034615,
+  "collected_child": {
+    "pgid": 3614627,
+    "pid": 3614627,
+    "ppid": 3614625,
+    "session": 3614627,
+    "starttime_ticks": 54499851,
+    "state": "R"
+  },
+  "supervisor_pid": 3614625,
+  "retirement_evidence": "Accepted Anaconda supervisor subreaper performed scoped descendant cleanup before directwait; report COMPLETED/rawwait0/cleanup_complete with no descendants and both stream EOF. Subsequent original PID paths absent is supplementary only.",
+  "cpu0_released": true,
+  "actual_stage": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/actual-stage-1/stage-result.json",
+    "sha256": "d506292caec4132bc6d4ff02756cd3b538d2b9ee514fe93f1b01580363fe1436",
+    "bytes": 18673
+  },
+  "manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/actual-stage-1/manifest.json",
+    "sha256": "8c03e5570b98a99db009f74f6dea9bf27ad9f046abeeea44d66ec561cbe708d7",
+    "size": 7881,
+    "mode": 33152
+  },
+  "overlay": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/actual-stage-1/lifecycle.cpio.gz",
+    "sha256": "38b100b8efda0108eb84d23056a4bb0dc8294a82513840bd84a7cc532b8c80eb",
+    "size": 15449439,
+    "mode": 33152
+  },
+  "base": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/actual-stage-1/base.cpio.gz",
+    "sha256": "2acd13c9338fb1e0f2ab2df24318d667c94dd1cd61124251c9c62f955d849f70",
+    "size": 14535486,
+    "mode": 33152
+  },
+  "overlay_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/actual-stage-1/overlay-manifest.json",
+    "sha256": "92333ab70c6dbf23416cbb73e6efca24a2d2560b9b6260ad4137e36c00733eea",
+    "size": 20058,
+    "mode": 33152
+  },
+  "changed_members": [
+    "bin/mcexec",
+    "images/mckernel.img",
+    "modules/ihk-smp-x86_64.ko",
+    "modules/ihk.ko",
+    "modules/mcctrl.ko"
+  ],
+  "unchanged_members": 57,
+  "total_members": 62,
+  "expected_epochs": [
+    1,
+    2
+  ],
+  "native_acceptance": false,
+  "runtime_release": null
+}

@@ -1,0 +1,210 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "sources": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/case227-post-native-preparation-1/readonly_export_exact_owner.py",
+      "sha256": "608391b9019cbbdf8574bc1ee8ccc931acb6175af5e6877efd278fd7743be710",
+      "bytes": 1638
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_proc.py",
+      "sha256": "a24a82383e83e7363b2a1833f9bdee942e8590ca1a369f44a5af59baf3cce097",
+      "bytes": 1724
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_mutex_paths_positive.py",
+      "sha256": "ca4226a4b7afe068db63b086177333d5662331d0c6ab0d9ef2ad322015a36418",
+      "bytes": 2288
+    }
+  ],
+  "operations": [
+    {
+      "name": "export",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/case227-post-native-preparation-1/readonly_export_exact_owner.py"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only export observation after terminal capture."
+    },
+    {
+      "name": "proc",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_proc.py"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only proc observation after terminal capture."
+    },
+    {
+      "name": "mutex",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256",
+        "--",
+        "/home/holden/anaconda3/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_mutex_paths_positive.py"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only mutex observation after terminal capture."
+    },
+    {
+      "name": "name",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "/usr/bin/docker",
+        "--config=/dev/null",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "name=^/mckernel-native-diagnostic-451c853bf14c44c3ba6acc56b0aad42e$"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only name observation after terminal capture."
+    },
+    {
+      "name": "label",
+      "argv": [
+        "/usr/bin/sudo",
+        "-A",
+        "/usr/bin/taskset",
+        "-c",
+        "7",
+        "/usr/bin/prlimit",
+        "--as=2147483648:2147483648",
+        "--cpu=30:30",
+        "--fsize=33554432:33554432",
+        "--core=0:0",
+        "--nofile=256",
+        "--",
+        "/usr/bin/env",
+        "-i",
+        "PATH=/usr/bin:/bin",
+        "LANG=C",
+        "LC_ALL=C",
+        "/usr/bin/docker",
+        "--config=/dev/null",
+        "--host=unix:///var/run/docker.sock",
+        "ps",
+        "-aq",
+        "--no-trunc",
+        "--filter",
+        "label=mckernel.native-diagnostic.owner=451c853bf14c44c3ba6acc56b0aad42e"
+      ],
+      "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only label observation after terminal capture."
+    }
+  ],
+  "capture": "Dispatcher-owned direct O_EXCL regular stdout/stderr files; positive direct-child wait and streams closed; no signals, no outer timeout/kill. Keep root operations serialized after native terminal and independent one-shot read-only release. Existing source-local bounds retained.",
+  "preceding_facts": "Actual SDK5 native227 closed capture FAIL exit1/37.413470541s, positive directjoin/groupgone/streamsclosed. stderr2226B OwnerError docker command failed:start; kernel/appcause unknown pending protected export. No runtime acceptance, clearance or replay inferred.",
+  "mutations": 0,
+  "physical_clearance": false,
+  "status": "EXACT_SDK5_NATIVE227_CLOSED_FAIL_CAPTURE_POST_READONLY5_PENDING_INDEPENDENT_RELEASE",
+  "nonce": "451c853bf14c44c3ba6acc56b0aad42e",
+  "known_parent": "/home/holden/mckernel-work/scratch/n227p5/p",
+  "owner_evidence_root": "/home/holden/mckernel-work/scratch/n227p5/p.owner-451c853bf14c44c3ba6acc56b0aad42e",
+  "fresh_exact_CID": null,
+  "id_operation": null,
+  "actual_native_result": null,
+  "actual_closed_capture": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-227/actual-sdk5-native-owner-capture-1/status.json",
+    "sha256": "98e68aea9b98f2412b406c4e08e956216032d5a9eb0db490d0958a235718aa77",
+    "bytes": 2200
+  },
+  "actual_owner_export": null,
+  "execution_authorized": false,
+  "cleanup_authorized": false,
+  "application_acceptance": false,
+  "capture_profile": {
+    "cpu": 7,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 30,
+    "FSIZE_bytes": 33554432,
+    "nofile": 256,
+    "core": 0,
+    "NPROC": "inherited",
+    "outer_wall_kill": null,
+    "outer_grace_kill": null,
+    "signals": false,
+    "direct_child_join_required": true,
+    "streams_closed_required": true
+  },
+  "complete_PROC_binding": {
+    "wrapper": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_proc.py",
+      "sha256": "a24a82383e83e7363b2a1833f9bdee942e8590ca1a369f44a5af59baf3cce097",
+      "bytes": 1724
+    },
+    "engine_sha256": "59efab0bc29fa5784dc855743cec397237552821bc150b60ea1d6c2e5f7ac00d",
+    "expected": "COMPLETE; failure None; publishers []; exactly two snapshots"
+  },
+  "source_only_changes": [
+    "Export ROOT literal only from actual227ownerargv and pinned owner self.evidence source line609; normalized AST equal.",
+    "Name/label nonce data only; proc/mutex sources and all operation profiles unchanged."
+  ],
+  "native_owner_source": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/runtime-provider-rebind-1/native/native_diagnostic_container_owner.py",
+    "sha256": "45010e54e1f78e3efcd6572b71342ee6078abeea98961f2c5d49849575dd5048",
+    "bytes": 93120
+  },
+  "independent_source_operation_review": null,
+  "execution_release": null,
+  "actual_native227_manifest": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-227/ACTUAL-V3-NATIVE227-MANIFEST.json",
+    "sha256": "ff1a136b16eed54d40c886be3b48e6508b9c9ad96cc5dd43028657ea0cd2a777",
+    "bytes": 8791
+  }
+}

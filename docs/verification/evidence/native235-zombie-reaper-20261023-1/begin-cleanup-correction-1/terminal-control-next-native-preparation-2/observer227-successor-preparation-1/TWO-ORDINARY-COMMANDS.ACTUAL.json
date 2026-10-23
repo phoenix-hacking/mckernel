@@ -1,0 +1,44 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argvs": [
+    [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=30:30",
+      "--fsize=33554432:33554432",
+      "--nofile=256:256",
+      "--core=0:0",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/prepare_observer_successor.py"
+    ],
+    [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=30:30",
+      "--fsize=33554432:33554432",
+      "--nofile=256:256",
+      "--core=0:0",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/join_reused_manifest_and_packet.py"
+    ]
+  ],
+  "source_gate": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/OBSERVER-SOURCE-ACCEPTANCE.INPUT.json",
+    "sha256": "446a939ce2f802fa97a43481e6eab6767ef0415833e8a7f5e95b2c3b85b91ece",
+    "bytes": 1477
+  },
+  "capture": "AcceptedAnaconda supervisor30wall+3cleanup/8MiBstreams;CPU6onejob2GiBASCPU30FSIZE32MiBNOFILE256core0",
+  "root_grant": "Rootdirect2exactordinarycommands; no root/native/Docker/CPIO/SDK operation"
+}

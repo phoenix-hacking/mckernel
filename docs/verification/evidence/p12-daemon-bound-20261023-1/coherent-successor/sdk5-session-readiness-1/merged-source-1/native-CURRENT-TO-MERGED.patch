@@ -1,0 +1,85 @@
+--- native-current
++++ native-merged
+@@ -660,6 +660,9 @@
+     # The reviewed runner supplies its frozen plan back as expected_plan. Unit
+     # injection remains useful for lifecycle mechanics without pretending a
+     # synthetic Process object is an admitted QEMU command.
++    if _long_transport().is_long(manifest):
++        return exercise_lifecycle(*args, admitted_argv=tuple(plan["argv"]) if expected_plan is not None else None,
++                                  long_profile=_long_transport().TRANSPORT)
+     if expected_plan is not None:
+         return exercise_lifecycle(*args, admitted_argv=tuple(plan["argv"]))
+     return exercise_lifecycle(*args)
+@@ -815,7 +818,7 @@
+     return original if isinstance(original, BaseException) else None
+ 
+ 
+-def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=300, *, admitted_argv=None):
++def exercise_lifecycle(manifest, attempt, process_factory, qmp_factory, timeout=300, *, admitted_argv=None,long_profile=None):
+     """Injected-backend lifecycle exercise; never reports guest acceptance.
+ 
+     This entry point grants no execution release. QMP/backend methods accept a
+@@ -830,7 +833,12 @@
+         _need(type(admitted_argv) is tuple and admitted_argv and
+               all(type(item) is str for item in admitted_argv), "admitted QEMU argv")
+     try:
+-        _need(type(timeout) in (int, float) and math.isfinite(timeout) and 0 < timeout <= 3600, "finite deadline")
++        if long_profile is not None:
++            _need(_long_transport().is_long(manifest) and long_profile == _long_transport().TRANSPORT, "explicit long lifecycle profile")
++            _long_transport().deadline(timeout, True)
++        else:
++            _need(not _long_transport().is_long(manifest), "long lifecycle requires explicit transport profile")
++            _need(type(timeout) in (int, float) and math.isfinite(timeout) and 0 < timeout <= 3600, "finite deadline")
+         started = time.monotonic()
+         deadline = started + timeout
+         # Assign owners inside the alarm context. If a factory returns after
+@@ -928,8 +936,9 @@
+                 texts = {}
+                 for name in ("serial", "debugcon"):
+                     with (Path(attempt) / (name + ".log")).open("rb") as stream:
+-                        data = stream.read(MAX_JSON + 1)
+-                    _need(len(data) <= MAX_JSON, "capture limit exceeded")
++                        cap = (_long_transport().TRANSPORT["serial_bytes"] if long_profile is not None and name == "serial" else MAX_JSON)
++                        data = stream.read(cap + 1)
++                    _need(len(data) <= cap, "capture limit exceeded")
+                     texts[name] = data.decode("utf-8", errors="strict")
+                 identity_getter = getattr(process, "process_identity", None)
+                 _need(callable(identity_getter), "process identity unavailable")
+@@ -1224,6 +1233,7 @@
+           not BAD_MARKERS.search(serial + "\n" + observation["debugcon"]), "kernel failure marker")
+     _need(observation["qmp"] == {"status": "shutdown"}, "QMP terminal status")
+     _need(observation["teardown"] is True, "teardown uncertain")
++    if _long_transport().is_long(manifest):return _evaluate_long_transport(manifest,observation)
+     return _pair_launch_expansion_body(manifest,observation) if manifest.get("pair_rounds")==10 else _pair_body(manifest,observation)
+ 
+ def _pair_launch_expansion_body(manifest,observation):
+@@ -1420,3 +1430,29 @@
+             _need(workers.setdefault(key[0],slot)==slot,"child worker route changed")
+     parent_view=[line for position,line in enumerate(serial.splitlines()) if position not in row_pids or row_pids[position]==parent]
+     return "\n".join(parent_view), sorted(children)
++
++
++def _long_transport():
++    import importlib.util
++    spec=importlib.util.spec_from_file_location('p12_explicit_long_transport',Path(__file__).resolve().parent/'long_transport.py')
++    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);return module
++
++_short_transport_validate_manifest = _validate_manifest
++
++def _validate_manifest(obj):
++    if 'pair_long_session' not in obj:return _short_transport_validate_manifest(obj)
++    _long_transport().is_long(obj)
++    value=_short_transport_validate_manifest({k:v for k,v in obj.items() if k!='pair_long_session'})
++    return {**value,'pair_long_session':dict(obj['pair_long_session'])}
++
++def _evaluate_long_transport(manifest,observation):
++    for name in ("serial", "debugcon"):
++        _need(len(observation[name].encode("utf-8")) <= _long_transport().TRANSPORT["serial_bytes" if name == "serial" else "other_stream_bytes"], "long retained capture cap")
++    import importlib.util
++    spec=importlib.util.spec_from_file_location('p12_long_work_checker',Path(__file__).resolve().parent/'p12_long_session.py')
++    checker=importlib.util.module_from_spec(spec);spec.loader.exec_module(checker)
++    metrics=checker.check_long_session(manifest,observation,pair_check=_pair_body)
++    return dict(schema_version=1,kind='native-diagnostic-result',case_id=manifest['case_id'],
++        status='PROTOCOL_PASS',application_acceptance=False,mckernel_application_executed=False,
++        native_acceptance=False,guest_report=metrics,observation=_long_transport().compact_observation(observation),
++        runtime_blocker=DIAGNOSTIC_LIMITATION,long_transport_profile=_long_transport().TRANSPORT)

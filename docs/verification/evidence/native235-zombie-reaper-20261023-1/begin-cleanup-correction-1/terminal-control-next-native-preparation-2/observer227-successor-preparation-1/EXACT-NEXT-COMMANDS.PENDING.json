@@ -1,0 +1,75 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FINITE_EXACT_NEXT_COMMANDS_PREPARED_NOT_EXECUTED",
+  "observed_unaccepted_native_candidate": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/observer-correction-227-1/native_diagnostic.py",
+    "sha256": "e1b1f63f97878dd2ba4ae3642aac07e3af8473283c1135a277e414f9080a77fc",
+    "bytes": 91423
+  },
+  "native_source_review": null,
+  "actual_regression_acceptance": null,
+  "prior_failed227_physical_acceptance": null,
+  "source_helper": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/prepare_observer_successor.py",
+    "sha256": "5979637ae7ba5a08e156305c5da8e1931728d43fc246d0328630d3815fe2caaf",
+    "bytes": 4335
+  },
+  "strict_reuse_packet_helper": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/join_reused_manifest_and_packet.py",
+    "sha256": "585e17f5f2900f896529b9716bf5380e4e6a180b4ac171cc38d8399fe539cbdb",
+    "bytes": 6242
+  },
+  "exact_ordinary_commands_after_source_and_physical_gates": [
+    [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=30:30",
+      "--fsize=33554432:33554432",
+      "--nofile=256:256",
+      "--core=0:0",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/prepare_observer_successor.py"
+    ],
+    [
+      "/usr/bin/taskset",
+      "-c",
+      "6",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=30:30",
+      "--fsize=33554432:33554432",
+      "--nofile=256:256",
+      "--core=0:0",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/join_reused_manifest_and_packet.py"
+    ]
+  ],
+  "gate_file": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/observer227-successor-2/OBSERVER-SOURCE-ACCEPTANCE.INPUT.json",
+  "gate_required_fields": {
+    "status": "ACCEPTED_OBSERVER_SOURCE_READY_FOR_FRESH_SUCCESSOR",
+    "native_consumer": "exact candidate path/sha256/bytes",
+    "independent_source_review": "genuinePASS_SOURCE exactpath+sha256",
+    "actual_tests": "actualregressions exactpath+sha256",
+    "prior_failed227_physical_acceptance": "genuinePASS/physical_acceptance true exactpath+sha256"
+  },
+  "next_root_commands_after_helpers": "Generated exactconditionalpacket containsadmission/metadata/productionguard/nativecapture; allrootlivefetched/executionreview/one-shot gatesrefuseNULL.",
+  "artifact_reuse": "Originalff1amanifest/db3overlay allSDK5modules/image/launcher/payloadbyteoracles unchanged; no CPIO/image/launcherwork",
+  "native_source_hash_expected": "e1b1f63f97878dd2ba4ae3642aac07e3af8473283c1135a277e414f9080a77fc",
+  "actual_successor_native_hash": null,
+  "actual_successor_owner_hash": null,
+  "source_effects_executed": false,
+  "root_operations": 0,
+  "fixture_operations": 0,
+  "compiler_operations": 0,
+  "Docker_operations": 0,
+  "native_runs": 0
+}

@@ -1,0 +1,85 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_READY_PENDING_INDEPENDENT_RELEASE",
+  "original_packet": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/post-native-preparation-1/POST-NATIVE-PHYSICAL-OPERATIONS.PENDING.json",
+    "sha256": "919da1cdd39e548d3a1ee53f2f958fdafc34710a202232677844b11a7c85fe94"
+  },
+  "actual_operation": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-227/NATIVE-OPERATION.ACTUAL.json",
+    "sha256": "fe6e57e23d3fe83d67b2fd33f071eb2912ff9ad90c3461b9211c3839f3ab280e",
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--fsize=33554432",
+      "--as=2147483648:2147483648",
+      "--core=0:0",
+      "--",
+      "/usr/bin/sudo",
+      "-A",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/runtime-provider-rebind-1/native/native_diagnostic_container_owner.py",
+      "--attempt-parent",
+      "/home/holden/mckernel-work/scratch/n227p5/p",
+      "--nonce",
+      "451c853bf14c44c3ba6acc56b0aad42e",
+      "--owner-sha256",
+      "45010e54e1f78e3efcd6572b71342ee6078abeea98961f2c5d49849575dd5048",
+      "--manifest",
+      "/home/holden/mckernel-work/scratch/n227p5/m.json",
+      "--manifest-sha256",
+      "ff1a136b16eed54d40c886be3b48e6508b9c9ad96cc5dd43028657ea0cd2a777"
+    ]
+  },
+  "owner_evidence_derivation": {
+    "source": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/runtime-provider-rebind-1/native/native_diagnostic_container_owner.py",
+    "sha256": "45010e54e1f78e3efcd6572b71342ee6078abeea98961f2c5d49849575dd5048",
+    "line": 609,
+    "expression": "self.evidence = self.parent.with_name(self.parent.name + \".owner-\" + self.nonce)",
+    "parent": "/home/holden/mckernel-work/scratch/n227p5/p",
+    "nonce": "451c853bf14c44c3ba6acc56b0aad42e",
+    "root": "/home/holden/mckernel-work/scratch/n227p5/p.owner-451c853bf14c44c3ba6acc56b0aad42e"
+  },
+  "normalized_AST_equal_ROOT_only": true,
+  "original_export_sha256": "db0d41e0f525822a626c54c415d889e8e76fe7675e9c738e98fc9affbfc96daa",
+  "three_sources": [
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/case227-post-native-preparation-1/readonly_export_exact_owner.py",
+      "sha256": "608391b9019cbbdf8574bc1ee8ccc931acb6175af5e6877efd278fd7743be710",
+      "bytes": 1638
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_proc.py",
+      "sha256": "a24a82383e83e7363b2a1833f9bdee942e8590ca1a369f44a5af59baf3cce097",
+      "bytes": 1724
+    },
+    {
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_mutex_paths_positive.py",
+      "sha256": "ca4226a4b7afe068db63b086177333d5662331d0c6ab0d9ef2ad322015a36418",
+      "bytes": 2288
+    }
+  ],
+  "five_operations": [
+    "export",
+    "proc",
+    "mutex",
+    "name",
+    "label"
+  ],
+  "execution": false,
+  "cleanup": false,
+  "probes": false,
+  "runtime_replayed": false,
+  "CID": null,
+  "native_result": null,
+  "closed_capture": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/next-stage-preparation-1/source-ready-1/case-227/actual-sdk5-native-owner-capture-1/status.json",
+    "sha256": "98e68aea9b98f2412b406c4e08e956216032d5a9eb0db490d0958a235718aa77",
+    "bytes": 2200
+  },
+  "metadata_check_note": "Initial final inline check compared first16argv tokens, accidentally including distinct exporter/proc/mutex script path, and raised AssertionError after packet files were already written. Corrected final metadata check compares first15common prefix tokens; all preserved five operation argv unchanged. Original transient failed inline source/output not separately retained; no execution/probe/root operation occurred."
+}

@@ -1,0 +1,20 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "STOP_AFTER_ONE_BOUNDED_CORRECTION_EXPERT_REQUIRED",
+  "first_attempt": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/consumer-correction-1/attempt-1/result.json",
+    "sha256": "b3a12dbb1c3f24b05ef30e1ed4d42d1f88a385bdf7b2353717992114f6652da9",
+    "outcome": "Setup ERROR beforetests: read_text universalnewline conversion differed from exactCRLF raw observation. Exact prelaunch sources/rawstderr retained."
+  },
+  "bounded_correction": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/consumer-correction-1/bounded-correction-1/result.json",
+    "sha256": "29969d62bf438af19aa5bde45fe0efd7b20faf82c289392e880fb610c30d3372",
+    "outcome": "12 actualfullnested tests:3ERROR,9reportedOK; no acceptance countcredit. Positive legacy and BEGIN comparison cannot complete. Returncode1,1.245s; directjoined/groupabsent/closedstreams.",
+    "stderr_sha256": "d57856cf6a6db3fa635f75a88f023d787354add3e21b87a4dce765686d68cb3d",
+    "source_test_sha256": "da2fe5a2b542e6b7993279696a0a254a9f7d4a01afd892f0c24304a7b31a111f"
+  },
+  "concrete_defect": "Nested successor line206 unconditionally passes a third begin_cleanup boolean to diagnostic._check_syscall_trace. Legacy diagnostic1b439 exposes only2arguments; accepted BEGIN059c exposes optional third. This violates unchangedlegacy dispatch. No counter/oracle change needed.",
+  "next_expert_decision": "Review a conditional dispatch preserving exact2arg legacy call and3arg BEGIN call; then independently authorized fresh correction/test. Worker stops without thirdattempt or source edit.",
+  "source_state": "Prepared private actual implementation remains candidate only; native059c/e752/67b8 originals and canonical sources unchanged.",
+  "retention": "Both prelaunch drivers/tests/consumer sources and every actual command/rawstream/positivejoin persisted. Earlier inline source-preparation quotingSyntaxError original transient source/output not retained; no executed consumer artifact from that setup command."
+}

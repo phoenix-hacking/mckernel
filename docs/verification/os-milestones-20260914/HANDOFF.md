@@ -1,3 +1,37 @@
+## Observer correction accepted; fresh227 admission passed — 2026-10-23 10:09 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Functional30/35 and7/14 wholemilestones; P-M06-01+M06remaincomplete. No further
+closed IDs. Final-profilecycles/launches/actualmixedminutes0/0/0. OriginalSDK5
+strict235formalacceptancede21/physical683a retained. First227native37.413s failed
+collector childordinaryRETcoverage; rawguest ND_PAYLOAD isexact227B/emptyerr/raw0,
+SIGTERM15ready/prereap0/EOF/reap/ECHILD thenrecoveryexec37. Independentphysical2ba0
+accepts25clients/QEMU/container/records/freshPROC/mutex; no duplicatecleanup.
+Cancelledchild258 poll7worker33delivery49 lacksRET beforeotherworker34terminal231.
+RealACKprovesmailboxdrain, notchildfinalcreditrelease; childretirement0 isunobserved.
+Observere1b1f63f tightlygatesoriginal227singlecancelledpoll and preserves ordinary
+coverage/all235checks/parentfinalretirement0. Additivefailurewriter retainsactual
+observation;24actualfullconsumer/writer/negativefixturesPASS. IndependentSOURCEaa79.
+Offline227hostenvelope modeledTESTONLY, originalfailedcapture notaccepted. Fresh
+observerowner251acc45 with139map4changed/135reused, unchangedff1a/db3/SDK5kernel/
+launcher. Fresh5b643/n227o2 admission/meta/guardallPASS; nextrootfetchedfactsreview
+thenonefresh227. NoSDKrebuild/235replay. Exactpostread5packetreadybeforeguest.
+V3 firstrestorationordinarystage23.904s PASS manifest8c03. Existingnestedlegacy
+release-marker consumer corrected forstrictBEGINwithoutchangingresourcecounters.
+ThirteenfullnestedfixturesPASS1.705s; independentSOURCE+regressionaccepted. Actual
+runtime/restoration/cycles stillpendingcoherentowner/adapterrelease and227PASS.
+P12mergedcurrentBEGIN/WAIT+NONE+Python3.8 sourcecorrectedrealLONGroundprojection;
+400syntheticrounds/800syntheticlaunches giveZEROactualruntimecredit. SourcePASS,
+142growth-dependentcapacity/externalcaptureNULL. Separateexplicitcurrent110variant
+beingprepared withsamefloors/budgets; actualadmissionmuststillqualify.No resize.
+M14 separate: productioncandidate6959sourceentries120862993B materialized9.713s,
+newmanifest802f963e/staticrequest65f8f8f0. IndependentSOURCE_PROFILEPASS: onlytwo
+memorypostimages changed,idle3preserved,controllersallfunctionASTsunchanged and
+1MiBcapretained.HOST-outputbuildnotintrinsicallyblockedbyscratch13.1GiB; rootfresh
+identities/fullHOSTgap/reserves/fetchedproof/admission/executionrelease pending.
+No productionimagebuild/defaultGCC14/finalELF/native/file/area acceptance yet.
+Included-only100%/servicechecks active; originalvelocitybaseline kept,nospeedupclaim.
+
 ## Literal process check and whole M06 accepted — 2026-10-23 09:20 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

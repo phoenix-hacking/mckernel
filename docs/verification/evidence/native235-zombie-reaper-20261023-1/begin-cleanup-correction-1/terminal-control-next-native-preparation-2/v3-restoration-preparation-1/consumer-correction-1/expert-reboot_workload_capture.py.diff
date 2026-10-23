@@ -1,0 +1,14 @@
+--- prior-candidate/reboot_workload_capture.py
++++ expert-approved/reboot_workload_capture.py
+@@ -203,6 +203,10 @@
+                     *[r'application procfs ' + op + ' ' + prefix + r' tid=' + schedules[0] + r'\b'
+                       for op in ('published', 'deleted')]):
+         need(len(re.findall(pattern, serial)) == 1, 'generation2 retirement/release')
+-    diagnostic._check_syscall_trace(workload_view(serial, 2, manifest), prefix, 'cleanup_profile' in manifest)
++    second_view = workload_view(serial, 2, manifest)
++    if 'cleanup_profile' in manifest:
++        diagnostic._check_syscall_trace(second_view, prefix, True)
++    else:
++        diagnostic._check_syscall_trace(second_view, prefix)
+     return dict(result, first_workload_protocol=first['status'], rebooted_os_workload_protocol='PASS', second_workload=report,
+                 second_stop_verified=False, native_execution_verified=False, full_cycle_verified=False)

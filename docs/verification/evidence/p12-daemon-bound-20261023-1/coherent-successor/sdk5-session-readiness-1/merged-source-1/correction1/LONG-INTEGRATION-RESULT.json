@@ -1,0 +1,35 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "python": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+  "real_pair_checker_source_sha256": "f417a029b43b1d7916e733742946a709584b0a606849f1ca2fc46647bd40dbef",
+  "geometry": "LONG source requires142GiB growth acceptance;110GiB context is not supportedLONGadmission",
+  "actual142_capacity": null,
+  "EXTERNAL_CAPTURE_BINDING": null,
+  "HOST4GiB": "reviewed arithmetic only; not observedlivebound",
+  "root": 0,
+  "Docker": 0,
+  "guest": 0,
+  "compiler": 0,
+  "status": "PASS_REAL_LONG_EVALUATOR_THROUGH_UNMODIFIED_STRICT_PAIR_CHECKER",
+  "accepted_rounds": 400,
+  "accepted_launches": 800,
+  "synthetic_work_ns": 3600000000000,
+  "trace_bytes": 664374,
+  "baseline_expected_rejection": "missing/failed BEGIN intent",
+  "negative_controls": [
+    {
+      "case": "missing_ACK",
+      "error": "missing/duplicate real cleanup ACK"
+    },
+    {
+      "case": "foreign_generation_ACK",
+      "error": "foreign/malformed application trace"
+    },
+    {
+      "case": "duplicate_ACK",
+      "error": "missing/duplicate real cleanup ACK"
+    }
+  ],
+  "strict_pair_checker_stubbed": false,
+  "oracles_weakened": false
+}

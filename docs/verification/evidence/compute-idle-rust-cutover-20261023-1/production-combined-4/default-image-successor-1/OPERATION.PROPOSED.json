@@ -1,0 +1,173 @@
+{
+  "acceptance_credit": false,
+  "eventual_outer_argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/native_rust_exact_mckernel_image_container_owner.py",
+    "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/image-request.FINAL.json"
+  ],
+  "execution_released": false,
+  "failure_family_history": [
+    "Original materialization SourceFSIZE8MiB EFBIG retained; correction32MiB accepted. Do not repeat 8MiB.",
+    "Original observer32MiB versus global1MiB rejected; accepted correction1 sitecap1MiB preserved. Any recurrence requires expert escalation; never widen guard."
+  ],
+  "final_image": null,
+  "final_request": null,
+  "followup_preparation": "After successful materialization: bind predicted manifest actual bytes; mechanically advance existing gitlink supplement base_manifest_sha256; incrementally derive accepted 26,524,779-byte compact static request with exact new source/manifest/controller/gitlink pins and fresh namespace. Preserve every other inventory/toolchain/null admission field. Do not execute old owner or static request unchanged.",
+  "native": null,
+  "next_preparation": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "0",
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/materialize_source.py"
+    ],
+    "grant_required": true,
+    "preconditions": [
+      "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/source-materialization-attempt-1 exists empty mode0700",
+      "positive predecessor/aggregate reconciliation; no competing heavy workload"
+    ],
+    "profile": {
+      "as_bytes": 2147483648,
+      "capture_extra_bytes": 16777216,
+      "core": 0,
+      "cpu": 0,
+      "cpu_seconds": 30,
+      "fsize_bytes": 33554432,
+      "host_floor_bytes": 17179869184,
+      "host_growth_max_bytes": 268435456,
+      "jobs": 1,
+      "nofile": 256,
+      "scratch_floor_bytes": 12884901888,
+      "scratch_writes": false,
+      "termination_grace_seconds": 3,
+      "wall_seconds": 35
+    },
+    "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Materialize exact finite successor once after ordinary grant; preserve source/journal/failure bytes."
+  },
+  "pinned_inner_commands": {
+    "configure": [
+      "/usr/bin/cmake",
+      "-S",
+      "/src",
+      "-B",
+      "/work/output/build",
+      "-G",
+      "Unix Makefiles",
+      "-DCMAKE_BUILD_TYPE=Debug",
+      "-DBUILD_TARGET=smp-x86",
+      "-DKERNEL_DIR=/out/build",
+      "-DENABLE_PERF=ON",
+      "-DENABLE_RUSAGE=ON",
+      "-DENABLE_LINUX_WORK_IRQ_FOR_IKC=ON",
+      "-DRUSTC=/nightly/bin/rustc",
+      "-DCMAKE_C_COMPILER=/usr/bin/cc",
+      "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+      "-DENABLE_RUST_KERNEL=ON",
+      "-DENABLE_RUST_IHK_MODULE_HELPERS=ON",
+      "-DENABLE_RUST_USER_TOOLS=ON",
+      "-DMCKERNEL_HOST_IRQ_ABI=linux-6.12",
+      "-DENABLE_NATIVE_FORK_OWNED_TRANSACTION=ON",
+      "-DKBUILD_MAKE_FLAGS=CC=/usr/bin/clang;LD=/usr/bin/ld.lld",
+      "-DCMAKE_MAKE_PROGRAM=/usr/bin/make",
+      "-DCMAKE_LINKER=/usr/bin/ld",
+      "-DCMAKE_AR=/usr/bin/ar",
+      "-DCMAKE_RANLIB=/usr/bin/ranlib",
+      "-DCMAKE_NM=/usr/bin/nm",
+      "-DCMAKE_OBJCOPY=/usr/bin/objcopy",
+      "-DCMAKE_READELF=/usr/bin/readelf",
+      "-DGIT_EXECUTABLE=/usr/bin/git"
+    ],
+    "driver": [
+      "/driver.py",
+      "--source-root",
+      "/src",
+      "--candidate-sha",
+      "942c927b1ec93cc31284ff498455909d9bb2d0fc",
+      "--ihk-sha",
+      "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "--manifest",
+      "/inputs.json",
+      "--toolchain",
+      "/toolchain.json",
+      "--output",
+      "/work/output",
+      "--evidence",
+      "/work/evidence",
+      "--jobs",
+      "4",
+      "--timeout",
+      "19800",
+      "--gitlink-manifest",
+      "/libdwarf-inputs.json",
+      "--native-fork-owned-transaction"
+    ],
+    "image": [
+      "/usr/bin/cmake",
+      "--build",
+      "/work/output/build",
+      "--target",
+      "mckernel.img",
+      "-j4"
+    ],
+    "production_Rust_object": [
+      "/usr/bin/cmake",
+      "--build",
+      "/work/output/build",
+      "--target",
+      "mckernel_rust_obj",
+      "-j4"
+    ]
+  },
+  "predecessor_operation": {
+    "bytes": 8817,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-2/correction1/EXACT-PRODUCTION-OPERATION.CORRECTION1.PROPOSED.json",
+    "sha256": "e8b207bb781cefabb295ca012695760bc36136980c0a907c17e6fd1b0d251b74"
+  },
+  "production_sources": {
+    "native_rust_exact_build_offline.py": {
+      "bytes": 41116,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/native_rust_exact_build_offline.py",
+      "sha256": "4ca7811da5e9c7b1352ed7d9c986a3307080e2fa7fd1d01d404dd850ed579257"
+    },
+    "native_rust_exact_mckernel_image_container_owner.py": {
+      "bytes": 89722,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/native_rust_exact_mckernel_image_container_owner.py",
+      "sha256": "297488c421a652f1544d1672737f45833b2b5a2e2a96d57a2724690f532f6c61"
+    },
+    "native_rust_exact_mckernel_image_offline.py": {
+      "bytes": 145310,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/native_rust_exact_mckernel_image_offline.py",
+      "sha256": "18017e51cf39e4f2554e70f144669400916a6bcadffb423d248b22b95304887d"
+    }
+  },
+  "profile": {
+    "cpus": "2-5",
+    "heavy_operations": 1,
+    "host_floor_bytes": 17179869184,
+    "jobs_max": 4,
+    "memory_bytes": 12884901888,
+    "memory_swap_bytes": 12884901888,
+    "mutex": "27:4 never unlink",
+    "network": "none",
+    "pids_max": 512,
+    "scratch_UUID": "2a5768c8-718d-4914-bdc0-6b32c5a92a52",
+    "scratch_floor_bytes": 12884901888
+  },
+  "required_root_gates": [
+    "focused independent source/profile review",
+    "fetched publication and source acceptance",
+    "positive physical predecessor retirement and repaired observer",
+    "fresh disk/loop/backing identity and full sparse-gap capacity",
+    "aggregate single-heavy grant and one-shot execution release"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_manifest": null,
+  "source_root": null,
+  "static_request": null,
+  "status": "PREPARED_NOT_RELEASED_NOT_MATERIALIZED"
+}

@@ -1,0 +1,1662 @@
+{
+  "status": "PASS",
+  "HEAD": "65fabc73b30c57f25e778833b5bfd293689aa12c",
+  "fetched_commit": "65fabc73b30c57f25e778833b5bfd293689aa12c",
+  "changed_blobs": [
+    {
+      "path": "arch/x86_64/kernel/memory.c",
+      "blob": "0796fb7adb905141bea4cc4546c351fc8eded8c6"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/CANONICAL-INTEGRATION.json",
+      "blob": "62daf2d6c75d01349be73b3518f15d2ce37a4190"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/INDEPENDENT-SOURCE-REVIEW.json",
+      "blob": "bc0f8ac85f5067f192f6e53f6d7370d042a35fc1"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/RESULT.json",
+      "blob": "14bb4355c81e2d92e1b623ca64f0ab7e59d5dc69"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/SEMANTIC-PROPOSAL.json",
+      "blob": "df92b28064eecfef8dfa0db344abf0665fa85eea"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/SOURCE-PREPARATION.json",
+      "blob": "0b8c45fe032e8f840ca8d26d089b37474b2b57b7"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/actual-candidate-data.c.inc",
+      "blob": "6ec430fb8acabb564f51390c174238c03ebce425"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/actual-original-callback.c.inc",
+      "blob": "fbe0ab90432a108866774ce642d41a727958a867"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/actual-rust-callback.rs.inc",
+      "blob": "431479b6bceef814df4379b4b6ff0fb6a5b77583"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/baseline-preprocess-capture-1/command.json",
+      "blob": "1956dd97a5099a41042dd568b4519dc7c092e45a"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/baseline-preprocess-capture-1/direct-join.json",
+      "blob": "07a5aba80530c92359fdb6004ab705d0597aef7f"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/baseline-preprocess-capture-1/direct-wait.json",
+      "blob": "bff427ccbc3eaea4955c8e206f2c23d48f9ce6ce"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/baseline-preprocess-capture-1/started.json",
+      "blob": "c129712c57862a880026a22ead208195dc728eb1"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/baseline-preprocess-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/baseline-preprocess-capture-1/stdout",
+      "blob": "ccccc94c818b8190faf7032fe8ff03175267b9bf"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/baseline-preprocess-capture-1/whole-join.json",
+      "blob": "8454d6f67a2eb5f77756a21aa6b8de8d326dc365"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/candidate-preprocess-capture-1/command.json",
+      "blob": "229aa6bb824eae33e6c39c5f024da88d923faa40"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/candidate-preprocess-capture-1/direct-join.json",
+      "blob": "447a526807056f0f01ac01a296a88f938f744155"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/candidate-preprocess-capture-1/direct-wait.json",
+      "blob": "82599cda81332c8fdb2353a74f44c9979cdf4f54"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/candidate-preprocess-capture-1/started.json",
+      "blob": "539024792beffa23fff726a7cb06946f5d417a71"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/candidate-preprocess-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/candidate-preprocess-capture-1/stdout",
+      "blob": "87283985c98ed6d2f89c2fa1b3a1b4d33930884f"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/candidate-preprocess-capture-1/whole-join.json",
+      "blob": "51b30fa261a93464e27cc92985b2144eb2692895"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/candidate/arch/x86_64/kernel/memory.c",
+      "blob": "0796fb7adb905141bea4cc4546c351fc8eded8c6"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/candidate/kernel/rust/x86_memory_helpers.rs",
+      "blob": "d2c0edb9a01951f03bf38dd36b32546c2bd4face"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/fixture-execute-capture-1/command.json",
+      "blob": "f4eaeeb5e82a34ad45eddcd5d312994d0b65e491"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/fixture-execute-capture-1/direct-join.json",
+      "blob": "4eb7beab543774db7791c9c250106047b0ee1c4a"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/fixture-execute-capture-1/direct-wait.json",
+      "blob": "7af7ded783f947d06e83c758cc453766da2f6215"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/fixture-execute-capture-1/started.json",
+      "blob": "596a4b857d766467ac11e664b7be80410ba81de8"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/fixture-execute-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/fixture-execute-capture-1/stdout",
+      "blob": "352a048f36b07ac30520327db1a20b01a9220978"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/fixture-execute-capture-1/whole-join.json",
+      "blob": "658b114bd50ef2fd68d70362a087632cecc9c226"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/fixture-link-capture-1/command.json",
+      "blob": "bfd86b7e1a640bf4759d66170809f4b440bba19d"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/fixture-link-capture-1/direct-join.json",
+      "blob": "d6d60db4c954f84adf41d587cd6c3bf625e3d1b2"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/fixture-link-capture-1/direct-wait.json",
+      "blob": "fc5bbb8337482368a0b67fe18120703c01a2a2df"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/fixture-link-capture-1/started.json",
+      "blob": "b82dc5fa9f44bf24fe98e4085dd6a241f4f551f4"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/fixture-link-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/fixture-link-capture-1/stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/fixture-link-capture-1/whole-join.json",
+      "blob": "ad6d5c8a02f3904ec3c9891d06eefc85a09c506c"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/fixture.c",
+      "blob": "e71c639bd9a092f0c3a6536bc5eeefbcdc0aaae1"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/fixture.rs",
+      "blob": "91c1b6bbed46d507a1ad303bd660edfbe0980eab"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/memory.c.patch",
+      "blob": "f3e4b0f30644b6c72baa0e387757fe362a8bc260"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/preimage/arch/x86_64/kernel/memory.c",
+      "blob": "6ef039fa75a7730f6b86f24738f2272d243e7490"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/preimage/kernel/rust/x86_memory_helpers.rs",
+      "blob": "dcc48ac4fded5b2168a1c044efc827ec0a265ccf"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/run_fixture.py",
+      "blob": "5cbab8ba7380d82865d225556c4374a9fdb3da93"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/rust-object-capture-1/command.json",
+      "blob": "f0f7abf7af46a57244454d3f26a7fa03108659f5"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/rust-object-capture-1/direct-join.json",
+      "blob": "6842ea874dfc9e41781ff0cbd19785de2e268cc1"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/rust-object-capture-1/direct-wait.json",
+      "blob": "21a10bc3f71c5809f4b8fd7e5b897d28afae1fc4"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/rust-object-capture-1/started.json",
+      "blob": "a1abe9c5f627721735d60987120349a0ce2fab5d"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/rust-object-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/rust-object-capture-1/stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/rust-object-capture-1/whole-join.json",
+      "blob": "7196ffb3e86db7ed7efd2f4486ebe4515f4fcaf5"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/x86_memory_helpers.rs.patch",
+      "blob": "1104d8ff25400b9ab8231a243682b8c5d236abe5"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/C-symbols-capture-1/command.json",
+      "blob": "f74415e16083118b60a5bc4518a618a646f5a9c3"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/C-symbols-capture-1/direct-join.json",
+      "blob": "06dece80d0dcb84dd17c1b466e2ddc17620b9c86"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/C-symbols-capture-1/direct-wait.json",
+      "blob": "e820637c9fa3ad543fc99732ccc242d444b14d70"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/C-symbols-capture-1/started.json",
+      "blob": "2aaa262567762d20f2db32e1e8f26a1b55cdbcf0"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/C-symbols-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/C-symbols-capture-1/stdout",
+      "blob": "8afde634a1f2313803af038f1d2fd6b9c4f75f2d"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/C-symbols-capture-1/whole-join.json",
+      "blob": "37927eaed1773f76e9ab0717238c46f1b4614534"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/INDEPENDENT-SELECTED-CONSUMER-REVIEW.json",
+      "blob": "45ef8738326acffdb4bbc8adf3868cbcd9be465d"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/POSTPROCESS-RETENTION-CLARIFICATION.json",
+      "blob": "90d44662d0d58ae0bdc0462c3ff28d5636567961"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/RESULT.json",
+      "blob": "e9e1df0063c28be9602eabb44de414e19098654b"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/SOURCE-BINDINGS.json",
+      "blob": "3957b5652fa1d396197b60a702ec13005a26c5d2"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/memory.c",
+      "blob": "6ef039fa75a7730f6b86f24738f2272d243e7490"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/partial-link-capture-1/command.json",
+      "blob": "d78d92033d89db6665a2b7f6318c5c80acc5ca2e"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/partial-link-capture-1/direct-join.json",
+      "blob": "6059686724edeff2a7ebdae8633ca64f49c0aa18"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/partial-link-capture-1/direct-wait.json",
+      "blob": "cce020ca9e5cfcf95443c3580528312f72a80933"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/partial-link-capture-1/started.json",
+      "blob": "2679b88b055d86ae8d309e79c3092e322c6b5911"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/partial-link-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/partial-link-capture-1/stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/partial-link-capture-1/whole-join.json",
+      "blob": "653c6fcbca5ec4684b50a991297479d73d5c9de7"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/partial-symbols-capture-1/command.json",
+      "blob": "af1e32c115bc7e56de2fbdfad95e5907d9a33905"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/partial-symbols-capture-1/direct-join.json",
+      "blob": "a852726252e292691d06b73ceb82a91722f70826"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/partial-symbols-capture-1/direct-wait.json",
+      "blob": "21728f65f925ee872af8f30bf5571a62d27044b9"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/partial-symbols-capture-1/started.json",
+      "blob": "e203253fceb0adf134afc69aa515322a3294d93d"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/partial-symbols-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/partial-symbols-capture-1/stdout",
+      "blob": "425b0de44ada89f7e591f90065c870541b9a5399"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/partial-symbols-capture-1/whole-join.json",
+      "blob": "a1441b38be4d7a44646cdf0feee4e6fd1b858ee9"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/preprocess-capture-1/command.json",
+      "blob": "d7a9aa1e562f64e3d53f53acc1e873eb4a37a7eb"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/preprocess-capture-1/direct-join.json",
+      "blob": "f33f5d5962fa98fced3ee32df906b569d2a5ef9e"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/preprocess-capture-1/direct-wait.json",
+      "blob": "65d8cf4f3c746d3378393bf07220ccc4dfd6a5f8"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/preprocess-capture-1/started.json",
+      "blob": "780e1ba277e16496b2bb7a8de70eb973243d639c"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/preprocess-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/preprocess-capture-1/stdout",
+      "blob": "36cd049b605ebecfaac7d864aafce8fde7dc6238"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/preprocess-capture-1/whole-join.json",
+      "blob": "fd47958d605fe93a7946a95cf04ee284d374f6fb"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/relocations-capture-1/command.json",
+      "blob": "b0bfe644756cf3a875eb8f57c49e235d8d550966"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/relocations-capture-1/direct-join.json",
+      "blob": "6c5adba93592b553054bc23e878e83baf79ddb08"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/relocations-capture-1/direct-wait.json",
+      "blob": "44db9c8eeef8ee22f0150ce49324448ed2f1ab8f"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/relocations-capture-1/started.json",
+      "blob": "09fe2c7691c8b73ee281f40d93afff6fb3503fcd"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/relocations-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/relocations-capture-1/stdout",
+      "blob": "b0bea2b89c230660ecbfc852dc02f3e3b3e53057"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/relocations-capture-1/whole-join.json",
+      "blob": "8a3814f052d40bbd9561a1049c58ae076f3be17a"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/run_selected.py",
+      "blob": "c6952103e8c9ad52892f5d6ed08ac2083b6f2db2"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/whole-C-TU-capture-1/command.json",
+      "blob": "4247366a32b156e7770ae20292684b051b29e0df"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/whole-C-TU-capture-1/direct-join.json",
+      "blob": "df1df8977908b094d30bdfb6e331ac9e70d66a6f"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/whole-C-TU-capture-1/direct-wait.json",
+      "blob": "d44db946cb656121b3583825b349b3338e569199"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/whole-C-TU-capture-1/started.json",
+      "blob": "7ec637fa48f6dff5ef2ea0325c66bbb9a77af64d"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/whole-C-TU-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/whole-C-TU-capture-1/stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-3/ordinary-selected-memory-callback3-1/whole-C-TU-capture-1/whole-join.json",
+      "blob": "937f4f557f148f3f1bf45383506e3548f99102ad"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/C-symbols-capture-1/command.json",
+      "blob": "12550f523be9d1bc103a1aefbd43904ed07d17ce"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/C-symbols-capture-1/direct-join.json",
+      "blob": "a0a52dc8c87d525e7dcc65c92035f62adbf33dc6"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/C-symbols-capture-1/direct-wait.json",
+      "blob": "9b601c14e82879c630aaae2172e72edce45be62a"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/C-symbols-capture-1/started.json",
+      "blob": "30390811d3b0af8f2a0ee20b1aaead0393f6e59f"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/C-symbols-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/C-symbols-capture-1/stdout",
+      "blob": "e0c31e623cc98da051574235067d7c53088d04a6"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/C-symbols-capture-1/whole-join.json",
+      "blob": "bb515d40e883c63cbd5b15b4a64bcd515a86e484"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/INDEPENDENT-ACTUAL-HOST-CONSUMER-REVIEW.json",
+      "blob": "01757d4dc3eb35ac622333bd356bba229b04de19"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/PREPARED-COMMANDS.NOT-EXECUTED.json",
+      "blob": "0ea43c70ba01a741c425fe188679a2f91c8f9f02"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/RESULT.json",
+      "blob": "c123ef244eb165b868098d5f1fd7df374a4505da"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/Rust-symbols-capture-1/command.json",
+      "blob": "b2e6fe86354b0cf9f115c8c14467a1a37518c578"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/Rust-symbols-capture-1/direct-join.json",
+      "blob": "746746df5927069a662cd794a4a6e150ed5ebb04"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/Rust-symbols-capture-1/direct-wait.json",
+      "blob": "3a1a3b20a51ef7d41f76034500a5a33839837e53"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/Rust-symbols-capture-1/started.json",
+      "blob": "29bf91df6144fcc95a4f873ea3303e30db7c2010"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/Rust-symbols-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/Rust-symbols-capture-1/stdout",
+      "blob": "ee9794c8b6e6331bf65fa386f1cc9e19ed334b93"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/Rust-symbols-capture-1/whole-join.json",
+      "blob": "2dfbccf58b022815c8dbbf0e7c89cb03a686816a"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/SOURCE-BINDINGS.json",
+      "blob": "90c70e3bb9322098987af6baeb42676ccee7518f"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/fullcrate-capture-1/command.json",
+      "blob": "78c8d9b5cce865c673f8ae8d10ffa89b046e9e6f"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/fullcrate-capture-1/direct-join.json",
+      "blob": "038a5045a7eedc12d4664cf9cd119f5c922253d3"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/fullcrate-capture-1/direct-wait.json",
+      "blob": "28071f9bc65d85b3c9152913fc800c92805d2162"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/fullcrate-capture-1/started.json",
+      "blob": "bf4865997895aafb69228068812433c634e9c621"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/fullcrate-capture-1/stderr",
+      "blob": "804981317fe7ce3fed3bf28240c0dc532cbe5607"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/fullcrate-capture-1/stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/fullcrate-capture-1/whole-join.json",
+      "blob": "561ffe43585db95d16dd052f65aac96680c8b227"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/partial-link-capture-1/command.json",
+      "blob": "7d0d5c27735f73071577d0312f8e1775d7e0f358"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/partial-link-capture-1/direct-join.json",
+      "blob": "1ca0f98266bf2279edb2ea4abaa60ed2c5856697"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/partial-link-capture-1/direct-wait.json",
+      "blob": "9468751a4eaeb93740547d36b23e1bc1ef3e6e20"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/partial-link-capture-1/started.json",
+      "blob": "d37657bccdb2f3888b0045993cf5cd6924851431"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/partial-link-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/partial-link-capture-1/stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/partial-link-capture-1/whole-join.json",
+      "blob": "52aa122479972787b78a2207df05e2105de0d8a0"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/partial-symbols-capture-1/command.json",
+      "blob": "a5c83e9f2b022248ce5d7fc1f5e8afeef52f16cf"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/partial-symbols-capture-1/direct-join.json",
+      "blob": "6b07b9790545a1656728d6a8bb4511f78a8e9f5e"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/partial-symbols-capture-1/direct-wait.json",
+      "blob": "da3cc96ba2f0a26ebc211a5ff43bef9e7488654c"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/partial-symbols-capture-1/started.json",
+      "blob": "1f7a4e574ccdaf1c73de7b1345b65680c39d0b0f"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/partial-symbols-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/partial-symbols-capture-1/stdout",
+      "blob": "0c6f649e36ca44c665860bc2a7c30d9f4bf11322"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/partial-symbols-capture-1/whole-join.json",
+      "blob": "d51051d8beafe8a491cf5b03605853f609409b6c"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/preprocess-capture-1/command.json",
+      "blob": "eedee91e80c1d30795a3dd7e058ac568979929bf"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/preprocess-capture-1/direct-join.json",
+      "blob": "0ec8e8c8966adcb87f70a1509be3410a5c59fa0b"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/preprocess-capture-1/direct-wait.json",
+      "blob": "6203c9c0073ca759d3a92090568d549aa1a5b03a"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/preprocess-capture-1/started.json",
+      "blob": "a2f65257ff7bc286bf6b0053a7d7d960cdc503de"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/preprocess-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/preprocess-capture-1/stdout",
+      "blob": "7cb8ccff5698c9a5fc78c8b0383cdd52b2d5718d"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/preprocess-capture-1/whole-join.json",
+      "blob": "dbe332c217093b4efaaf6ad31c4aa124b09bb69d"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/relocations-capture-1/command.json",
+      "blob": "774b26cde41685024eed3b2f10ece17ddbe60d05"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/relocations-capture-1/direct-join.json",
+      "blob": "6dcebdcbc7adf1f1ec9414dee78764472de4f906"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/relocations-capture-1/direct-wait.json",
+      "blob": "eb376e74861f5a3490c9f175d29bfa2510a37d7b"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/relocations-capture-1/started.json",
+      "blob": "ebc2ea2f1b0d89f8e8192f39bc261d80c193c935"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/relocations-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/relocations-capture-1/stdout",
+      "blob": "0dbefec6ebd8de299ddd786006c0eedf16917986"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/relocations-capture-1/whole-join.json",
+      "blob": "5dfefd42d4fca9121f0989c64fc5333953203742"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/run_actual.py",
+      "blob": "811401939ac00643fca10f763a2d35bc6b1351a6"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/selected-C-TU-capture-1/command.json",
+      "blob": "833a1a836a13027ca95066b558c32349d4e1f150"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/selected-C-TU-capture-1/direct-join.json",
+      "blob": "e712948532e178d4746ff7ad07956cff8ee6a1c0"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/selected-C-TU-capture-1/direct-wait.json",
+      "blob": "59063a7a5980a1940e3d20c3a43c4d820d7f46cd"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/selected-C-TU-capture-1/started.json",
+      "blob": "4bd113199f19ede80b63310f5eea416f845a3c66"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/selected-C-TU-capture-1/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/selected-C-TU-capture-1/stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-4/selected-C-TU-capture-1/whole-join.json",
+      "blob": "9bee939e2618bec0d56597751d625bb5e15b8ebd"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/CHECKPOINT-028B51A7-FETCHED.json",
+      "blob": "b0f4054a2c6166cdca97386203dee266ec706f2a"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/INDEPENDENT-FORMAL-STRICT235-APPLICATION-ACCEPTANCE.json",
+      "blob": "e96eea28b10a3ed2419814355409532d8970dfae"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/NEXT-STAGE-PUBLICATION-MAP.PENDING.json",
+      "blob": "9ea9bc94f2cc07a5e94779a9a512e12552fdea42"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/NEXT-STAGE-SOURCE-READY-PUBLICATION.json",
+      "blob": "6aacc90e56f3e99f4d605b196742c7d6e631dce0"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-case227-stage-1/ACTUAL-CASE227-STAGE-HANDOFF.json",
+      "blob": "e8df6bddff6227321389350d8a0e6139c11246b0"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-case227-stage-1/ACTUAL-V3-CASE-ARTIFACT-AND-STRICT-CONSUMER-JOIN.json",
+      "blob": "39a0532ef7b43c0ec4f6ebb15f63a0cd8c73d075"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-case227-stage-1/ACTUAL-V3-NATIVE227-MANIFEST.json",
+      "blob": "3593c56cc1f5e5333ad9cd3f74bf895e3f12a488"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-case227-stage-1/ACTUAL-V3-OVERLAY-CAPTURE-RESULT.json",
+      "blob": "03a3f6a17b1c187fabf30d34eb1364b24343f28d"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-case227-stage-1/ACTUAL-V3-STRICT-CONSUMER-CAPTURE-RESULT.json",
+      "blob": "e340694a7170c9a0e56c13e5a5fe0e4551ee2e01"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-case227-stage-1/CASE-DATA.BASE-BOUND.json",
+      "blob": "8e53f2af59572e1b6f88611e8768e0b4dec8489a"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-case227-stage-1/METADATA-PUBLICATION-ARGV.ACTUAL.json",
+      "blob": "fb50cc87703ca2578835863b775b4c08bea2cafd"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-case227-stage-1/NATIVE-CAPTURE-ARGV.ACTUAL.json",
+      "blob": "7587545ad257c90f7b0f60628385e5ac66373f2b"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-case227-stage-1/NATIVE-OPERATION.ACTUAL.json",
+      "blob": "a98bcd68c0cf71af383bad7b889ff868e283c5f8"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-case227-stage-1/OVERLAY-ARGV.ACTUAL.json",
+      "blob": "481afdc11c54288673b7f156d99c2937aaf5be5f"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-case227-stage-1/TWO-ORDINARY-STAGE-WHOLE-JOIN.json",
+      "blob": "20e261a42293085b4015464a0ba13d38e98d8200"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-case227-stage-1/sdk5-native227-overlay-1.manifest.json",
+      "blob": "960d89aad96bdd55cec7b2b9f1dc0e70c9945f3e"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/INDEPENDENT-ACTUAL-PHYSICAL-ACCEPTANCE.json",
+      "blob": "253439ab296841182d8a438625ad2704d059f522"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/INDEPENDENT-FIVE-OBSERVATION-RELEASE.json",
+      "blob": "fafe5ab0c47baa226de34fef940891c440b89622"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/001-ps.json",
+      "blob": "91c2d29f55480d4db27ff4a68edafff1beba4d27"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/001-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/001-ps.stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/002-ps.json",
+      "blob": "7235f5e9568f8521e09ae036625518c2cc895432"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/002-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/002-ps.stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/003-image.json",
+      "blob": "2f87d27ad3df15bc6e58e11ffc63b8dbce32bfb5"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/003-image.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/003-image.stdout",
+      "blob": "749448e26dffec34a4bfce2e9876988136bb6ab9"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/004-create.json",
+      "blob": "7b489638eaac0dc7f40a74573da9abb4395025f5"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/004-create.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/004-create.stdout",
+      "blob": "f0daac948ed350b9d0ee4b9a4246c96507cbead8"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/005-ps.json",
+      "blob": "db75e863352f7d5c96dcb8dd51e632b542b4bc8a"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/005-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/005-ps.stdout",
+      "blob": "f0daac948ed350b9d0ee4b9a4246c96507cbead8"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/006-ps.json",
+      "blob": "a67a1beb99ab27c05a58037b43ab428fdcc4a4e5"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/006-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/006-ps.stdout",
+      "blob": "f0daac948ed350b9d0ee4b9a4246c96507cbead8"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/007-ps.json",
+      "blob": "29a696cf06b09e118a95b34502ef53dd514e9b11"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/007-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/007-ps.stdout",
+      "blob": "f0daac948ed350b9d0ee4b9a4246c96507cbead8"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/008-inspect.json",
+      "blob": "1a96d1b7fc8b75cb6fd45ab23ff767e78f64c069"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/008-inspect.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/008-inspect.stdout",
+      "blob": "bee6d90ab58e38d050247faf7cb27ded849880f4"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/009-start.json",
+      "blob": "910c3a8fe065f8f162749e2f0c4202349c95bb00"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/009-start.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/009-start.stdout",
+      "blob": "b4c05081ea052d1e2fb610d438e74a4b43f0b9b6"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/010-wait.json",
+      "blob": "1cfacc9b7501791f25da09a9d225bfcfc24f9b4d"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/010-wait.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/010-wait.stdout",
+      "blob": "573541ac9702dd3969c9bc859d2b91ec1f7e6e56"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/011-ps.json",
+      "blob": "f4aa430f643844a868e8d6e74a30b18282cd757e"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/011-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/011-ps.stdout",
+      "blob": "f0daac948ed350b9d0ee4b9a4246c96507cbead8"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/012-ps.json",
+      "blob": "1eb6c850faab86d3d2bf7af63349e20645cb1253"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/012-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/012-ps.stdout",
+      "blob": "f0daac948ed350b9d0ee4b9a4246c96507cbead8"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/013-ps.json",
+      "blob": "f3d34205360f2f7034cd0f96a1c0d5240244e58b"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/013-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/013-ps.stdout",
+      "blob": "f0daac948ed350b9d0ee4b9a4246c96507cbead8"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/014-inspect.json",
+      "blob": "a8fb0340a11eb0e0200feae079a20b23031b9407"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/014-inspect.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/014-inspect.stdout",
+      "blob": "efabbf584929bbf9dcf543018ac8ea8e9312f64a"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/015-wait.json",
+      "blob": "b16972f3994da0c4b3dfe0e79da1c8f8ead13935"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/015-wait.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/015-wait.stdout",
+      "blob": "573541ac9702dd3969c9bc859d2b91ec1f7e6e56"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/016-logs.json",
+      "blob": "74c61ecd7ce3bf59cbce93a0b7c5e2ecc51f639b"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/016-logs.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/016-logs.stdout",
+      "blob": "98bffbd94e2a03b54ed473f69d3b442b590da655"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/017-inspect.json",
+      "blob": "d91f0b3fbf9c2aea2fd6b0b4695bbf78c9b7a682"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/017-inspect.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/017-inspect.stdout",
+      "blob": "e6fdeb105e534765d160bddd7c12e148fe9dcb1f"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/018-ps.json",
+      "blob": "fbcd48fc384d29d900c5c3b04b44262ec44a2c3e"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/018-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/018-ps.stdout",
+      "blob": "f0daac948ed350b9d0ee4b9a4246c96507cbead8"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/019-ps.json",
+      "blob": "d591cca57d8045cbf59a2706ce4c78556accc4b2"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/019-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/019-ps.stdout",
+      "blob": "f0daac948ed350b9d0ee4b9a4246c96507cbead8"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/020-ps.json",
+      "blob": "ee14c8ec5bb0c6ed012c79efc9ae1017989ae017"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/020-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/020-ps.stdout",
+      "blob": "f0daac948ed350b9d0ee4b9a4246c96507cbead8"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/021-inspect.json",
+      "blob": "9d02765077802a8e0703dd222b5ef07688b7f9d7"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/021-inspect.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/021-inspect.stdout",
+      "blob": "5d163600babd3519912a93bcd2c07ec2f9d4e96f"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/022-stop.json",
+      "blob": "98318fc91b4aceb34c272245dcf8d78842325f03"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/022-stop.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/022-stop.stdout",
+      "blob": "f0daac948ed350b9d0ee4b9a4246c96507cbead8"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/023-kill.json",
+      "blob": "44abfbc6f0ddd2b4a8c8457edc6cbfef9f60944f"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/023-kill.stderr",
+      "blob": "813df37042934911376bfebfcf63f652127b5467"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/023-kill.stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/024-wait.json",
+      "blob": "05dffaea175ff2c6ae3826c273a225e68ff1e624"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/024-wait.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/024-wait.stdout",
+      "blob": "573541ac9702dd3969c9bc859d2b91ec1f7e6e56"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/025-logs.json",
+      "blob": "3bd81e52c88a856d1f128386ecd8f28b0c8ef356"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/025-logs.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/025-logs.stdout",
+      "blob": "98bffbd94e2a03b54ed473f69d3b442b590da655"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/026-inspect.json",
+      "blob": "42aee220de5d0efeeb546eaa22a9a724ffbbc337"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/026-inspect.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/026-inspect.stdout",
+      "blob": "6e186fba4a7f2fc97633fa616603211a744ef48b"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/027-rm.json",
+      "blob": "d48dd5642e9d8f0c33aa7db23be1457865abce82"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/027-rm.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/027-rm.stdout",
+      "blob": "f0daac948ed350b9d0ee4b9a4246c96507cbead8"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/028-ps.json",
+      "blob": "02a26e9f54b6c7c68e037ca3d339d407b9c61bcc"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/028-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/028-ps.stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/029-ps.json",
+      "blob": "be8984882350b38affab0cbc020ce07dc2f47ebc"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/029-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/029-ps.stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/030-ps.json",
+      "blob": "7900494e7a5a5ffcd949593b267620901dd49521"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/030-ps.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/030-ps.stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/capture-bindings.json",
+      "blob": "3b8cb3405db43def74c9b2e31271e2e7fd64ad8d"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/debugcon.log",
+      "blob": "184d53d1c80805c32361c8d7da7707ec3ef7a39b"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/inner-result.json",
+      "blob": "9c90bff8757221d0c3b58446f3706a3f6db6c4b0"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/owner.json",
+      "blob": "8c2e153dc129431d8943becefc585eeebdea0123"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/qemu.stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/qemu.stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/qmp.transcript.json",
+      "blob": "5ab24bee0948f2fc39b0d9303f4434a024dcd59d"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/result.json",
+      "blob": "67324d10bb10be9f21375d10fdaab7f13c2706fa"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/serial.log",
+      "blob": "01a8c7f1a844469bb8633a47fcf1b71abf42875c"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/decoded-root/state.json",
+      "blob": "70633eef45000a8e332af543c3899a5fad0a704e"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/receipt.json",
+      "blob": "db50dfc910ff154d9c6fcc02d121da5949750099"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/export/stdout",
+      "blob": "395d36ad70fb65499d451f1ec59eb0dd791cb5a5"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/label/receipt.json",
+      "blob": "b26099b53a11777a32c9374e816b27dd12f0ff53"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/label/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/label/stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/mutex/receipt.json",
+      "blob": "599c9f9623f6255ef9029d905183e1672f513014"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/mutex/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/mutex/stdout",
+      "blob": "115d341277be7260d2d8247003d5a57cac3f140a"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/name/receipt.json",
+      "blob": "6f62989fac4856f49df7daa9f46ee931fcb505b1"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/name/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/name/stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/proc/receipt.json",
+      "blob": "8e1dc025b69d908aa6b18e7ce0c449e74eeaa8d3"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/proc/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-post-physical-1/proc/stdout",
+      "blob": "2252b348b86a58fbd2779d7fcb75603fe80806ea"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-BIND-BASE-CAPTURE-RESULT.json",
+      "blob": "d75573806bfbaaae9cc5af1d227acfdac670c71d"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-BIND-SDK5-CAPTURE-RESULT.json",
+      "blob": "3b8e586e4d9fbb61619f9946e3bfda4e341df3df"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-BIND-SMP-SNAPSHOT-CAPTURE-RESULT.json",
+      "blob": "53760cbcdfb3b2d072968c1404e553b73719b931"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-MKDIR-CAPTURE-RESULT.json",
+      "blob": "880f95caad47f954b2057404c2f0f4e92c62f617"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-ORDINARY-STAGE-HANDOFF.json",
+      "blob": "de8fb804592a54f34eab1406efb64f5f6a87ce3d"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-PREPARE-RELEASE-CAPTURE-RESULT.json",
+      "blob": "0bec474e23bd99f64f48c5e4cf5fccfc014ba202"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-SDK5-SMP-ONE-RECORD-BASE-PATCH-1.json",
+      "blob": "49d3dd3db7b699bb8d8a1dec88e4fe5a6fd5a39c"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-SMP-ONE-RECORD-PATCH-CAPTURE-RESULT.json",
+      "blob": "a350c623279677e42edc07428ff9d85ceba779d7"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ACTUAL-SMP-SNAPSHOT-CAPTURE-RESULT.json",
+      "blob": "565b2d26cb0f2c0248942fee124322500033356f"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/FIRST8-ORDINARY-WHOLE-JOIN.json",
+      "blob": "b882199d606a956d163b08cebf0e1d77a21476ad"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/NINE-ORDINARY-WHOLE-JOIN.json",
+      "blob": "91f1614492c42c7d7434f7b675ffafbd09b4d65f"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ORDINARY-RUNLIST.SOURCE-REVIEW-AND-ROOT-GRANT-BOUND.json",
+      "blob": "58e09bc73c5d5eb119e8be7ad7d0027eb5c84480"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/PRODUCER-TWO-MODULES.ACTUAL.json",
+      "blob": "0d6fc9780a532ff56a55dfdef9ae724b4731a739"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/ROOT-DELIVERED-ORDINARY-SOURCE-REVIEW.json",
+      "blob": "5a3dcdd4e8f3665e1cbfec78721a83a9b19a4112"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/ACTUAL-V3-CASE-ARTIFACT-AND-STRICT-CONSUMER-JOIN.json",
+      "blob": "7025e1483e1b3e683fa94c9fc2c81a9fe97576f3"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/ACTUAL-V3-NATIVE235-MANIFEST.json",
+      "blob": "a645897e541a899820b1906ba2c8c8ce755c814d"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/ACTUAL-V3-OVERLAY-CAPTURE-RESULT.json",
+      "blob": "2bc44d5f59f6a5f89649ec714b8f2db4e71653bc"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/ACTUAL-V3-STRICT-CONSUMER-CAPTURE-RESULT.json",
+      "blob": "3bbf4bcbfb0fba00c33b7c914240cfcaa9dc93e2"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/CASE-DATA.BASE-BOUND.json",
+      "blob": "e29da746a1c23876d11466c4f22a06d33fac4486"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/METADATA-PUBLICATION-ARGV.ACTUAL.json",
+      "blob": "b9b971f6fbacff2f0b43976c60b7b6c0232fe638"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/NATIVE-CAPTURE-ARGV.ACTUAL.json",
+      "blob": "5a606ee8ce114634e108fc1565770e4ada919fce"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/NATIVE-OPERATION.ACTUAL.json",
+      "blob": "e7e7e2cb8eab945c4f4d21128bcc9e9c4706f36c"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/final-runtime-ready-terminal-1/EXACT-GUARD-DATA.json",
+      "blob": "69dcb5f9b3f04ef526aec4f604897e8cc9dfc823"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/final-runtime-ready-terminal-1/EXACT-PRODUCTION-GUARD-ARGV.json",
+      "blob": "cdc4b4496221904ef638fdd8943a8ff44f26e908"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/root-live-admission-terminal-1/read_only_native235_admission.py",
+      "blob": "959f2bc7ee3583c65ec7aaab10a374b1d4770131"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/case-235/sdk5-native235-overlay-1.manifest.json",
+      "blob": "53a94fab04366fdd0b754541be36c19dac9cf345"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/release-preparation-1/CURRENT-LIVE-POSTJOIN.PENDING-ADMISSION.json",
+      "blob": "ae99389989343b36eb9f455c6a500df0d5009112"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/release-preparation-1/EXACT-NATIVE235-CONDITIONAL-PACKET.PENDING-ROOT.json",
+      "blob": "30e08e041c260c523de3f7796176855824dccd93"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/actual-stage-and-release-preparation-1/release-preparation-1/ROOT-EXACT-READONLY-ADMISSION-OPERATION.json",
+      "blob": "d69b6225c1c6f2756a5041cd549441f5fa6b38bc"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/case227-root-preparation-1/235-ACCEPTANCE-BIND-RESULT.json",
+      "blob": "7ea6235922274f105afaa902c1a5bf7df7639f2d"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/case227-root-preparation-1/ADMISSION-DATA-ONLY.patch",
+      "blob": "a4f7ee84adf98c624af04bf13bc63d303dd8b4e3"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/case227-root-preparation-1/EXACT-NATIVE227-CONDITIONAL-PACKET.235-ACCEPTANCE-BOUND.json",
+      "blob": "d48dfc016d73d116f4be6de0f0ab0d10971b9225"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/case227-root-preparation-1/EXACT-NATIVE227-CONDITIONAL-PACKET.PENDING-ROOT.json",
+      "blob": "f1a0bb5b9ac2e833bc62fa5facf704b99cacc451"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/case227-root-preparation-1/ROOT-EXACT-READONLY-ADMISSION-OPERATION.json",
+      "blob": "4e1b29c686e74776cacf31ee6ea15e9e617d107b"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/case227-root-preparation-1/SOURCE-AND-DATA-BINDING-PROOF.json",
+      "blob": "9440d47bb2583dcd26b2e24b93a9055088d31fa2"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/case227-root-preparation-1/admission/read_only_native227_admission.py",
+      "blob": "4c2c4cf5a3917a2628d0d6b6f03a9418c0e5aa72"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/case227-root-preparation-1/guard/EXACT-GUARD-DATA.json",
+      "blob": "bfe893a69dffe65190b2026c44cbbd288d771832"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/case227-root-preparation-1/guard/EXACT-PRODUCTION-GUARD-ARGV.json",
+      "blob": "4208714d6a8e3f2d2b41586c4bdf52eb802ebe65"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-preparation-1/NATIVE-STAGE-COMMAND-BINDING.PENDING.json",
+      "blob": "d177e1d4f97f5d5db7c29917792539f7b784ce85"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-preparation-1/SMP-ONE-RECORD-PATCH-ARGV.TEMPLATE.PENDING.json",
+      "blob": "c41eb8ff3f640740e1920b8c829df2f327b43627"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-preparation-1/SMP-ONE-RECORD-PATCH-INPUTS.TEMPLATE.PENDING.json",
+      "blob": "8c8220293dc6bd86c9d6360200f56ccd257451c6"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-preparation-1/SMP-SNAPSHOT-ARGV.TEMPLATE.PENDING.json",
+      "blob": "568e6230ac59d6cf5955a0418be03caff832f02a"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-preparation-1/bind_actual_case_schema3.TEMPLATE.py",
+      "blob": "20f2060f9847f68dedf3764b744cc637a8b593e9"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-preparation-1/case-227/OVERLAY-ARGV.TEMPLATE.PENDING.json",
+      "blob": "07fe5ae9fb206af74efa86d8617331b4e74f7875"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-preparation-1/case-227/STRICT-NATIVE-MANIFEST.TEMPLATE.PENDING.json",
+      "blob": "1906f0eca1ad5020b6e60821a2d2b6adac0e828d"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-preparation-1/case-235/OVERLAY-ARGV.TEMPLATE.PENDING.json",
+      "blob": "79d888b4ced870cc59c637c38ce21133b0b81e90"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-preparation-1/case-235/STRICT-NATIVE-MANIFEST.TEMPLATE.PENDING.json",
+      "blob": "8f7949e6b1bb83bdf94e244396e986058468f714"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/ACCEPTANCE-BIND-RESULT.json",
+      "blob": "bd1a56f0342df29f070ed61a1dd8db7d3c55b102"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/ACTUAL-SDK5-RELEASE.BOUND.json",
+      "blob": "d6c54757590717a6d678c1682948fe5f9e07324a"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/ACTUAL-SDK5-RELEASE.PENDING.json",
+      "blob": "89b361ca135748113ee315bbb1fc76db6feb579a"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/ACTUAL-SDK5-RELEASE.PRIOR-NULL.json",
+      "blob": "89b361ca135748113ee315bbb1fc76db6feb579a"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/ORDINARY-RUNLIST.ACCEPTANCE-BOUND.PENDING-REVIEW.json",
+      "blob": "f9be43c2b84d262f51aa702b760303ce29ce4dbe"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/REVIEW-READY.json",
+      "blob": "982404850edc4a8446facf7e1144a77a6b2081fb"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/SMP-ONE-RECORD-PATCH-ARGV.SOURCE-BOUND.json",
+      "blob": "32f422869e76dc7da10662c41733be3d8f04964f"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/SMP-ONE-RECORD-PATCH-INPUTS.SOURCE-BOUND.json",
+      "blob": "7ca66b7500b386c23ed5b64d1e403d7a0d594785"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/SMP-SNAPSHOT-ARGV.SOURCE-BOUND.json",
+      "blob": "bff5bd89e47ef1fd77b84f987b714bafa92db681"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/bind_actual_case_schema3.py",
+      "blob": "20f2060f9847f68dedf3764b744cc637a8b593e9"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/bind_actual_stage_data.py",
+      "blob": "f0c0b3f812d73bd2363b82b792b91eafed27e59b"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/case-227/CASE-DATA.SOURCE-BOUND.json",
+      "blob": "a387df6da037b5ba2fde3fa2534721da751f8aae"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/case-227/METADATA-PUBLICATION-ARGV.PENDING.json",
+      "blob": "b366437d125867772d9ebfec8ffc3de209f0ccdc"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/case-227/NATIVE-CAPTURE-ARGV.PENDING.json",
+      "blob": "3d63cc1983dd20bea17f516f61fd387f6a66d6a3"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/case-227/NATIVE-OPERATION.SCHEMA2-PENDING.json",
+      "blob": "ac7a6163a5f44233df0db24fa99374c158e16bb4"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/case-227/OVERLAY-ARGV.PENDING.json",
+      "blob": "8898e721b93a744fd65c1cb0e85b827c983a34d9"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/case-227/STRICT-NATIVE-MANIFEST.SOURCE-BOUND.json",
+      "blob": "a4e4e986f6a27f6a1f9a1afb3c59667f0ba3bfd6"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/case-235/CASE-DATA.SOURCE-BOUND.json",
+      "blob": "eab2551d9fc4edeb31db0f9950799ebe4ecefa17"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/case-235/METADATA-PUBLICATION-ARGV.PENDING.json",
+      "blob": "1ee7d29ba200c2ad67a3c9c0488be73c9aba3383"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/case-235/NATIVE-CAPTURE-ARGV.PENDING.json",
+      "blob": "2128d80db69e3a93521e0e61409bbbf21607710b"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/case-235/NATIVE-OPERATION.SCHEMA2-PENDING.json",
+      "blob": "d9f50a7ce6ec6419ebc106a4015d8c13e8a8d716"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/case-235/OVERLAY-ARGV.PENDING.json",
+      "blob": "85875ad03543c67efd5a75a43eb6d343bd7b7484"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/case-235/STRICT-NATIVE-MANIFEST.SOURCE-BOUND.json",
+      "blob": "b73d9cd2f970542e9d496c3da777e2718beb00fa"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/helper2-correction1/CORRECTION-RESULT.json",
+      "blob": "eaaeec03eeaf3264e4ca097d5b38f1212d24dfed"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/helper2-correction1/HELPER2-METADATA-CORRECTION.patch",
+      "blob": "905d7595ea8a1335cd85d6cfeb03c9759b981cdf"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/helper2-correction1/prepare_release_data.sdk5.PRIOR-HISTORICAL-REF.py",
+      "blob": "0e51d87887134b240321dfdc8b7c308edb4ce2ec"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/helper2-correction1/prepare_release_data.sdk5.py",
+      "blob": "4f18410096acabb7dc3b120f0b54a856498431b1"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/next-stage-source-ready-1/release-preparation-1/prepare_release_data.sdk5.py",
+      "blob": "0e51d87887134b240321dfdc8b7c308edb4ce2ec"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/post-native-preparation-1/EXACT-OWNER-EXPORT-OPERATION.json",
+      "blob": "890bf972b25cce6bad0cf3493adc7e9e7aa30bc7"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/post-native-preparation-1/EXPORT-ROOT-ONLY-SOURCE-PROOF.json",
+      "blob": "e05dde3b539f9401abb25f6fa7d3c0aa14531d04"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/post-native-preparation-1/EXPORT-ROOT-ONLY.patch",
+      "blob": "3e0bb813d84c9d49898f2160485c43e862a27700"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/post-native-preparation-1/POST-NATIVE-PHYSICAL-OPERATIONS.PENDING.json",
+      "blob": "9d5b04fb3d38782d9f8a017215e15e2fddac3548"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/post-native-preparation-1/readonly_export_exact_owner.py",
+      "blob": "013ef7761208476a8e2078a570907b5c36926114"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/process-check-closure-preparation-1/LITERAL-PROCESS-CHECK-CLOSURE.ACTUAL.json",
+      "blob": "8b9ba56146ea20565870c3bbc79506b1d02c5de0"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/process-check-closure-preparation-1/LITERAL-PROCESS-CHECK-JOIN.PENDING.json",
+      "blob": "d94bf48b5d3d1cbfc092ee6a79815f57d6e0503f"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/process-check-closure-preparation-1/LITERAL-PROCESS-CHECK-JOIN.PRIOR-EXPORT.json",
+      "blob": "4545b1c040963f93084e777478aaf8ab58542e6d"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/process-check-closure-preparation-1/LITERAL-PROCESS-CHECK-JOIN.PRIOR-EXPORT.md",
+      "blob": "5e20d1cbc0f4b28a237f2f54ba127bf47af59db9"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/process-check-closure-preparation-1/LITERAL-PROCESS-CHECK-JOIN.md",
+      "blob": "a2f20c5f51d21020594d13d68b1299a053c76dca"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/v3-restoration-preparation-1/BINDING.diff",
+      "blob": "81ca30eadda81b84f436f9a5f680117c1378024f"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/v3-restoration-preparation-1/BINDING.json",
+      "blob": "8b153d3b1d067036341db6e6d9e92b101b8649f5"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/v3-restoration-preparation-1/NEXT-ORDINARY-STAGE-ARGV.json",
+      "blob": "1555f92a9063048c88e668c652f710d6ce94ca9f"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/v3-restoration-preparation-1/stage_m05_two_generation.py",
+      "blob": "b7de2719a5edac71b2eda180fedb480f76fbcbbc"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/v3-restoration-preparation-1/stage_m05_two_generation.py.diff",
+      "blob": "4296ba4dc252ab3e771066a8a26d325d456b3741"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/INDEPENDENT-ACTUAL-SDK-ARTIFACT-AND-PHYSICAL-ACCEPTANCE.json",
+      "blob": "b33fb4a5c881e0f3784b7f69f52b0f103bb32316"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/actual-post-physical-1/INDEPENDENT-FOUR-OBSERVATION-RELEASE.json",
+      "blob": "c03932970d7056cc5e38884d826a8bc197641df8"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/actual-post-physical-1/label/receipt.json",
+      "blob": "c9cd1f32ff56a2fb889d80018f7a775f39e07334"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/actual-post-physical-1/label/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/actual-post-physical-1/label/stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/actual-post-physical-1/mutex/receipt.json",
+      "blob": "d74197f99fb95beccf1940c44a0ebebad6aef684"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/actual-post-physical-1/mutex/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/actual-post-physical-1/mutex/stdout",
+      "blob": "115d341277be7260d2d8247003d5a57cac3f140a"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/actual-post-physical-1/name/receipt.json",
+      "blob": "24a131d0a84a5cca38ec8bc10198be3c60f7ee62"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/actual-post-physical-1/name/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/actual-post-physical-1/name/stdout",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/actual-post-physical-1/proc/receipt.json",
+      "blob": "fc06141688b1ac190d7df189f3cfbdf68c9b6e1e"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/actual-post-physical-1/proc/stderr",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/actual-post-physical-1/proc/stdout",
+      "blob": "294be9b0825998ddd91f132cc10749e24956cd87"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/postbuild-preparation-1/ACTUAL-READS-AND-PHYSICAL-PACKET-READY.json",
+      "blob": "87f6d0a8033b5cd0866ea4af7bb456f7f7ecd978"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/postbuild-preparation-1/ACTUAL-READS.SCHEMA.PENDING.json",
+      "blob": "0ff237afca38a95c546854503f60c73ee23632da"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/postbuild-preparation-1/ACTUAL-SDK5-ARTIFACT-AND-POSTFLIGHT-READS.json",
+      "blob": "30a34d45d42fbc6ce5513d4fe0871579f50d5a20"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/postbuild-preparation-1/POSTBUILD-ARTIFACT-READS.PENDING.json",
+      "blob": "f38268a61a4d5488af87ba7a78dd1fdf6e3bc41b"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/postbuild-preparation-1/POSTBUILD-PHYSICAL-OPERATIONS.PENDING.json",
+      "blob": "c6f5254f05354b214d18bcaebedc4c33927ad4c2"
+    },
+    {
+      "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-sdk-preparation-5/postbuild-preparation-1/POSTBUILD-PHYSICAL-OPERATIONS.TERMINAL-BOUND.PENDING.json",
+      "blob": "143456ce5231a37271a55b587df58a5a4dce5184"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/CURRENT.md",
+      "blob": "2df54d2bec1627b5e56c0ea217b5cf8031a80f2d"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/HANDOFF.md",
+      "blob": "9e1965050348fd486757e7a307d9f4999c16e2f0"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/PROGRESS.md",
+      "blob": "ad39d9efe55a0a31a6c787d3ffa804eb33245ebb"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/RUST-CUTOVER-M14.md",
+      "blob": "b0da74618a10c40057bc66b1a1edbe6103dc89d9"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/SESSION-HANDOFF.md",
+      "blob": "a828c2a5a2d02e90cc0c6bcf1b8e43c5f7da6d40"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/practical-milestones.json",
+      "blob": "127ae669f30f03928e15baea198134c93341509a"
+    },
+    {
+      "path": "docs/verification/os-milestones-20260914/rust-cutover-m14.json",
+      "blob": "5544c7ac53d5389f25d308aab2f8d798fe6e6ba2"
+    },
+    {
+      "path": "kernel/rust/x86_memory_helpers.rs",
+      "blob": "d2c0edb9a01951f03bf38dd36b32546c2bd4face"
+    }
+  ],
+  "verified_blob_count": 413,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "time_ns": 1792747315778754289
+}

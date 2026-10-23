@@ -1,0 +1,58 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "STOP_NEW_FIXTURE_FAMILY_EXPERT_REQUIRED",
+  "expert_dispatch_fix": "Exact requested conditional2arg legacy/3arg BEGIN dispatch applied; nested591ffcb6/e752successor45a51524/adapter69f5f540. Full legacy equality now PASS.",
+  "actual_test_result": "12tests:11reportedOK,1positiveBEGIN ERROR missing/duplicate realcleanupACK; no all-suite or BEGIN acceptance.",
+  "whole_join": {
+    "captures": {
+      "stderr": {
+        "ctime_ns": 1792749239433115219,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48801179,
+        "mode": "0o600",
+        "mtime_ns": 1792749239433115219,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/consumer-correction-1/expert-correction-1/stderr",
+        "sha256": "993aabfa45da337efcc82f73368394ac2d93b4a7b90c6879316469964e2e1626",
+        "size": 3198,
+        "uid": 1000
+      },
+      "stdout": {
+        "ctime_ns": 1792749238177079946,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48801178,
+        "mode": "0o600",
+        "mtime_ns": 1792749238177079946,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/consumer-correction-1/expert-correction-1/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      }
+    },
+    "closed_streams": true,
+    "direct_child_joined": true,
+    "error": null,
+    "group_absent": true,
+    "pid": 3624922,
+    "remaining_group_members": [],
+    "retirement_error": null,
+    "returncode": 1,
+    "seconds": 1.3114683370804414,
+    "start": 54668287,
+    "timed_out": false,
+    "unexpected_group_members": []
+  },
+  "failure_diagnosis": "Retained accepted legacy baseline already contains actual cleanup ACKs for both epochs: generation1 pid256 token3 atserial951; generation2 pid265 token25 atserial1057. Controlled begin_fixture mistakenly appends additional artificialACKs900+epoch before first retirement, so acceptedchecker correctly rejects duplicates. No private consumer failure established by this result.",
+  "expert_next_decision": "Preserve actual baseline ACK rows; controlled derivative should replace only legacy release marker with cleanup_requested intent_errno0 (ACK may precede intent per acceptedchecker). Retain unchanged actual retirement/resource/startup/shutdown data. Do not waive duplicateACK check. Authorize exact fixture correction/newcapture only after expert decision.",
+  "source_and_raw_retained": true,
+  "no_new_retry_or_source_edit": true,
+  "test_sha256": "da2fe5a2b542e6b7993279696a0a254a9f7d4a01afd892f0c24304a7b31a111f",
+  "postimages": {
+    "reboot_workload_capture.py": "591ffcb6dd5dae854af4a3c2ae60bd7c1c440b3c5d8f1548b903e97b18a8f626",
+    "second_stop_capture.py": "45a51524a8c8900d2c6d1be3f111bb886fb66693c4fb8706318bc4aa0f714df0",
+    "case_evaluator.py": "69f5f5405c9f2bf605f0b02412e22e508e9cf117108a13914387ae5b03e8a864"
+  }
+}

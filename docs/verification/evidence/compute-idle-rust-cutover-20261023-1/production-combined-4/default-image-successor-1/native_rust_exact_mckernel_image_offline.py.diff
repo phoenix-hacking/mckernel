@@ -1,0 +1,27 @@
+--- /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-2/correction1/native_rust_exact_mckernel_image_offline.py
++++ /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/native_rust_exact_mckernel_image_offline.py
+@@ -27,7 +27,7 @@
+ import native_rust_exact_build_offline as provenance
+ 
+ # Authenticate the neighboring provenance selected by this exact driver capsule.
+-EXPECTED_PROVENANCE_SHA256 = '1be3a017e2ae47a0d1ecfcd4e1d22d7d8d569808e495d2b6d055c851d0582ae2'
++EXPECTED_PROVENANCE_SHA256 = '4ca7811da5e9c7b1352ed7d9c986a3307080e2fa7fd1d01d404dd850ed579257'
+ _EXPECTED_PROVENANCE_PATH = Path(__file__).with_name("native_rust_exact_build_offline.py").resolve()
+ if (Path(provenance.__file__).resolve() != _EXPECTED_PROVENANCE_PATH or
+         hashlib.sha256(_EXPECTED_PROVENANCE_PATH.read_bytes()).hexdigest() != EXPECTED_PROVENANCE_SHA256):
+@@ -1454,11 +1454,12 @@
+     'kernel/process.c': '7203019d2ba8143f9240a03d11bc8c5cfcd495d89183aa7ab643c6159a6bd02d',
+     'kernel/rust/sched_helpers.rs': '449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923',
+     'kernel/include/sched_helpers.h': '9712a3df59eb0251f517ce01254e4576119868924b35f7da6fbee294bff966ae',
+-    'arch/x86_64/kernel/memory.c': '95bb6a4a916a802e98eb9f7eac98eef990d6f75a3e42b06f29ac0a73ef2a452b',
+-    'kernel/rust/x86_memory_helpers.rs': '689b9741821609a7c2e3aadb8cd46b0dbc57948090b38758f0b3eb120a5297fb',
++    'arch/x86_64/kernel/memory.c': '25c13c856dff0a1219a316ac3cf38cbe40f79c16561813b98a408f8cb62c24ed',
++    'kernel/rust/x86_memory_helpers.rs': '35664d46edaa3674d633b3c1ff96e85723fd21e5daf517d53c2438de35d5c4a3',
+ }
+ M14_IDLE_IMPORTS = ('sched_idle_loop_body_result', 'sched_idle_current_cpu_bridge')
+-M14_MEMORY_IMPORTS = ('x86_clear_old_action_bridge', 'x86_clear_phys_to_virt_bridge')
++M14_MEMORY_IMPORTS = ('x86_clear_old_action_bridge', 'x86_clear_phys_to_virt_bridge',
++                      'x86_clear_page_unmap_bridge', 'x86_clear_free_pages_user_bridge')
+ M14_RUST_EXPORTS = M14_IDLE_IMPORTS + M14_MEMORY_IMPORTS + (
+     'sched_idle_begin_body_result', 'sched_idle_iteration_body_result',
+     'sched_idle_runqueue_has_running_result', 'process_sched_cpu_local_bridge',

@@ -1,0 +1,96 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_13_ACTUAL_FULL_NESTED_CONSUMER_TESTS_PENDING_INDEPENDENT_REVIEW",
+  "whole_join": {
+    "captures": {
+      "stderr": {
+        "ctime_ns": 1792749571738713758,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48801262,
+        "mode": "0o600",
+        "mtime_ns": 1792749571738713758,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/consumer-correction-1/expert-fixture-correction-1/stderr",
+        "sha256": "5696001ed47ceea7277721765f7c74e38f0a98abdee653fa70292db6e3dfab38",
+        "size": 1025,
+        "uid": 1000
+      },
+      "stdout": {
+        "ctime_ns": 1792749570086664981,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48801261,
+        "mode": "0o600",
+        "mtime_ns": 1792749570086664981,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/consumer-correction-1/expert-fixture-correction-1/stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      }
+    },
+    "closed_streams": true,
+    "direct_child_joined": true,
+    "error": null,
+    "group_absent": true,
+    "pid": 3627034,
+    "remaining_group_members": [],
+    "retirement_error": null,
+    "returncode": 0,
+    "seconds": 1.7045201240107417,
+    "start": 54701478,
+    "timed_out": false,
+    "unexpected_group_members": []
+  },
+  "source_postimages": {
+    "reboot_workload_capture.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/consumer-correction-1/reboot_workload_capture.py",
+      "sha256": "591ffcb6dd5dae854af4a3c2ae60bd7c1c440b3c5d8f1548b903e97b18a8f626"
+    },
+    "second_stop_capture.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/consumer-correction-1/second_stop_capture.py",
+      "sha256": "45a51524a8c8900d2c6d1be3f111bb886fb66693c4fb8706318bc4aa0f714df0"
+    },
+    "case_evaluator.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/consumer-correction-1/case_evaluator.py",
+      "sha256": "69f5f5405c9f2bf605f0b02412e22e508e9cf117108a13914387ae5b03e8a864"
+    }
+  },
+  "test": {
+    "path": "/home/holden/mckernel-work/host-preparation/p-m05-v3-matched-first-restoration-binding-20261023-1/sdk5-successor-1/consumer-correction-1/test_full_nested.py",
+    "sha256": "5f680ffe16432cad34f7b6babd52a7ad471d255ad8e81ab930b43f0b74ed0f25",
+    "methods": 13,
+    "positive": "Original legacy e752 fullchain equals new legacy fullchain; controlled BEGIN fullchain equals original resource/reboot/two-stop/workload result.",
+    "negative": "Both epochs missingintent/missingACK/foreignPID/duplicateactualACK/retirement-beforeACK; wrongACKgeneration; wrongphysicalbytecounter in each release; missinglegacyrelease/wronglegacycounter; undeclaredBEGIN/fakelegacyrelease/invalidcleanup_profile. No validators mocked."
+  },
+  "baseline": {
+    "serial.log": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p-m05-current68-first-complete-restoration-20261022-1/actual-guest/serial.log",
+      "sha256": "8a2e5eb9e0617c5f80f99c5e853a7a4fedf93a2e7310e6b70b49997dad517182",
+      "bytes": 320765
+    },
+    "result.json": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p-m05-current68-first-complete-restoration-20261022-1/actual-guest/result.json",
+      "sha256": "9a8187a62ce188a3b5eee95be44d514b48b5c45af44997ad7fb99ac7b7adce07",
+      "bytes": 333456
+    }
+  },
+  "controlled_derivative": "Only one exact legacyrelease row per scheduled epoch changes to cleanup_requested intent0 with same sourceprefix/PID/generation/position/CRLF. AssertoneactualexistingACK+release per epoch. ActualACK/retirement/resource/startup/shutdownbytes remain unchanged. No900tokens/syntheticACKrows.",
+  "native059c_unchanged": "059c40c95b2306265f21bce2a77c49edc7baeb4792e977b189770fc0d21685f1",
+  "dispatch": "Validated declaredcleanup_profile only selects accepted059c realintent/ACK/retirement; exact2arg legacy1b439 call retained,3arg BEGIN call conditional. Strict fullresource/boot/workload/secondstop consumers unchanged.",
+  "history": [
+    "attempt-1: exactrawCRLF fixture load failure beforetests; sources/raw retained.",
+    "bounded-correction-1: legacy2arg dispatch mismatch; expertreview authorized preciseconditional correction.",
+    "expert-correction-1: controlledfixture addedduplicateACK despitebaselineactualACK; expertreview authorized fixture-only release\u2192intent correction.",
+    "expert-fixture-correction-1:13fulltestsPASS; all earlier sources/raw retained."
+  ],
+  "source_generator_note": "prepare_source.py/SOURCE-PREPARATION.json preserve initial preparation history, not final postimages. Do not rerun old generator over final candidate; use finalpostimages and FINALdiffs.",
+  "runtime_acceptance": false,
+  "native_execution": false,
+  "physical_restoration_acceptance": false,
+  "cycle_credit": 0,
+  "canonical_sources_modified": false,
+  "CPU6_released": true,
+  "next": "Independent finalsource+actualevidence review; root integration/release and genuine227/native prerequisites remain external."
+}

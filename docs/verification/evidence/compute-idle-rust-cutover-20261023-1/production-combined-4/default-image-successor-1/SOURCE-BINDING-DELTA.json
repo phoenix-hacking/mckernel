@@ -1,0 +1,56 @@
+{
+  "all_other_source_references_preserved": true,
+  "base_manifest": {
+    "bytes": 10195266,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-2/source-materialization-attempt-2/source-inputs.json",
+    "sha256": "9b86c84a92133678171b3e476560bcdfc99070f727b9c11c764de7092de8b88c"
+  },
+  "canonical_integration": {
+    "bytes": 1181,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-free-callback-4/CANONICAL-INTEGRATION.json",
+    "sha256": "56e6b9884e52952156a97af868462051b70424585d6d1bf342b361b67b9400c7"
+  },
+  "changed_source_files": [
+    {
+      "after_sha256": "25c13c856dff0a1219a316ac3cf38cbe40f79c16561813b98a408f8cb62c24ed",
+      "before_sha256": "95bb6a4a916a802e98eb9f7eac98eef990d6f75a3e42b06f29ac0a73ef2a452b",
+      "path": "arch/x86_64/kernel/memory.c"
+    },
+    {
+      "after_sha256": "35664d46edaa3674d633b3c1ff96e85723fd21e5daf517d53c2438de35d5c4a3",
+      "before_sha256": "689b9741821609a7c2e3aadb8cd46b0dbc57948090b38758f0b3eb120a5297fb",
+      "path": "kernel/rust/x86_memory_helpers.rs"
+    }
+  ],
+  "controller_successors": {
+    "native_rust_exact_build_offline.py": {
+      "bytes": 41116,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/native_rust_exact_build_offline.py",
+      "sha256": "4ca7811da5e9c7b1352ed7d9c986a3307080e2fa7fd1d01d404dd850ed579257"
+    },
+    "native_rust_exact_mckernel_image_container_owner.py": {
+      "bytes": 89722,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/native_rust_exact_mckernel_image_container_owner.py",
+      "sha256": "297488c421a652f1544d1672737f45833b2b5a2e2a96d57a2724690f532f6c61"
+    },
+    "native_rust_exact_mckernel_image_offline.py": {
+      "bytes": 145310,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/native_rust_exact_mckernel_image_offline.py",
+      "sha256": "18017e51cf39e4f2554e70f144669400916a6bcadffb423d248b22b95304887d"
+    }
+  },
+  "gate_extension": "Existing selected preprocessing/import/relocation and unique Rust/final export gates now cover both additional memory callbacks; existing 1MiB cap/global guard unchanged.",
+  "materialization_result": null,
+  "materialized_source": null,
+  "predicted_materialization_sha256": "0cf60ebe1ba213781da316a709c50e70a4b28448316487fe5ba4ccb95199ac23",
+  "predicted_source_derivative_sha256": "2a1e94e1d9fd3675e978c7b2fdc3d0cd5b0a4c8f39fc15fe67e6b5e463647d8d",
+  "predicted_source_manifest_bytes": 10195266,
+  "predicted_source_manifest_sha256": "802f963e8f3ec1c47f98c5f3440b8a132f5b0fa617dd2e014976c63d78870073",
+  "preserved_idle3": {
+    "kernel/include/sched_helpers.h": "9712a3df59eb0251f517ce01254e4576119868924b35f7da6fbee294bff966ae",
+    "kernel/process.c": "7203019d2ba8143f9240a03d11bc8c5cfcd495d89183aa7ab643c6159a6bd02d",
+    "kernel/rust/sched_helpers.rs": "449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_entries": 6959
+}

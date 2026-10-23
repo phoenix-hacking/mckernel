@@ -1,0 +1,21 @@
+--- /home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/source/p12_long_session.py
++++ /home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/merged-source-1/correction1/source/p12_long_session.py
+@@ -18,7 +18,7 @@
+ MARKERS = {"ND_PAIR_LONG_PROFILE", "ND_PAIR_LONG_PROGRESS", "ND_PAIR_LONG_COMPLETE",
+            "ND_PAIR_LONG_TRACE_BEGIN", "ND_PAIR_LONG_TRACE_END",
+            "ND_PAIR_ROUND_START", "ND_PAIR_ROUND_END", "ND_PAIR"}
+-APP = re.compile(r"application(?:_syscall=\w+| SCHEDULE| retirement|_process=release| procfs \w+) os=(\d+) generation=(\d+) pid=(\d+)(?: |$)")
++APP = re.compile(r"application(?:_syscall=\w+| SCHEDULE| retirement|_process=(?:release|cleanup_requested)| cleanup ACK| procfs \w+) os=(\d+) generation=(\d+) pid=(\d+)(?: |$)")
+ 
+ class LongSessionError(ValueError):
+     pass
+@@ -125,7 +125,8 @@
+     startup_bytes = 0
+     tokens = set()
+     app_markers = ("application_syscall=", "application SCHEDULE ", "application retirement ",
+-                   "application_process=release ", "application procfs ")
++                   "application_process=release ", "application_process=cleanup_requested ",
++                   "application cleanup ACK ", "application procfs ")
+     for index, line in enumerate(lines):
+         if any(marker in line for marker in app_markers):
+             need(trace_begin_at < index < trace_end_at, "application record outside retained trace")
