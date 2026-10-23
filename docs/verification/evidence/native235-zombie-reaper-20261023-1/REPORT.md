@@ -1,0 +1,13 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+The candidate makes process detachment send existing cleanup intent once while a fork pair still retains the child registration. It also treats a referenced terminal Linux worker task as nonexecuting. The conservative group identity check remains unchanged for an exited leader with live siblings.
+
+Candidate production source: `candidate-mcctrl_process.rs` SHA256 `fcddb2679847c70e8d663cdf990f54be3a7645560c0dac2910018cda82ae5d2f`; exact accepted consumed preimage `b2e635f6590d401e2d37646486c2d3a5a52fece210d569533001f354d0537d23`. No canonical or retained SDK source was changed.
+
+Three candidate ownership tests and five candidate liveness cases pass. The same exact old bodies produce three baseline ownership observations and five baseline liveness observations: last-file detach suppresses final registration Drop through the real mutual Arc pair, sends zero cleanup requests, and leaves the terminal delivery unpublished; the old liveness predicate reports terminal referenced tasks alive. New behavior sends one cleanup request, retains response ownership/status on failed publication, and releases the response only after actual mailbox publication. The real reaper body likewise retains a worker until publication completes. Actual referenced-task adapter checks balance every acquired task reference and preserve live/sleeping/stopped tasks and conservative group identity.
+
+The tests compile complete accepted fork/mailbox/response source with explicit std/Linux/IHK adapters. They do not execute the real Remote cleanup/destructor, Linux guest, module or host retirement. The cleanup adapter returns timeout deliberately; pair/routes/armed owners remain retained. Test-only manual pair teardown happens after assertions and confers no production ACK or release authority.
+
+The two failed 512 MiB compiler attempts and original harness error are retained. Expert/root approved a reusable ordinary unprivileged 2 GiB address-space profile on CPU 6; all final compiles and tests exit 0 with empty stderr, joined child processes, closed streams and absent process groups. Maximum compile resident memory was under 164 MiB; address-space overhead caused the earlier bounded failures.
+
+Root's next step is independent source acceptance, successor SDK integration and a real matched module build under the existing reviewed build profile. A new native235 attempt requires its own execution release. The retained fork pair/credits still require genuine terminal/destructor evidence; this candidate does not release them or establish full normal-exit lifecycle acceptance.

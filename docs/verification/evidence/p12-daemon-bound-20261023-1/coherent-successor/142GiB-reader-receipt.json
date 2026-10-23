@@ -1,0 +1,53 @@
+{
+  "bounded_corrections": 0,
+  "failed_candidates": 0,
+  "limitations": "Actual live_growth body; UUID/loop/stat/open/statvfs observations are fixtures. No real root admission or geometry mutation.",
+  "native_credit": 0,
+  "observations": [
+    {
+      "host_required_bytes": 66571993090,
+      "name": "accept142",
+      "result": "PASS_ACCEPT"
+    },
+    {
+      "name": "refuse110",
+      "reason": "exact142GiB host sparse backing and distinct output filesystem",
+      "result": "PASS_REFUSE"
+    },
+    {
+      "name": "refuse143",
+      "reason": "exact142GiB host sparse backing and distinct output filesystem",
+      "result": "PASS_REFUSE"
+    },
+    {
+      "name": "refuse_wrong_uuid",
+      "reason": "scratch UUID and live mounted device",
+      "result": "PASS_REFUSE"
+    },
+    {
+      "name": "refuse_wrong_loop_backing",
+      "reason": "live scratch loop backing identity",
+      "result": "PASS_REFUSE"
+    },
+    {
+      "name": "refuse_wrong_output_geometry",
+      "reason": "exact142GiB host sparse backing and distinct output filesystem",
+      "result": "PASS_REFUSE"
+    },
+    {
+      "name": "refuse_nonregular_backing",
+      "reason": "exact142GiB host sparse backing and distinct output filesystem",
+      "result": "PASS_REFUSE"
+    },
+    {
+      "name": "refuse_old110_gap",
+      "reason": "full live sparse backing gap required",
+      "result": "PASS_REFUSE"
+    }
+  ],
+  "runtime_mutations": 0,
+  "runtime_release": "NOT_RELEASED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": "source/long_transport.py",
+  "status": "PASS_8_ACTUAL_READER_FIXTURE_OBSERVATIONS_NO_RUNTIME"
+}

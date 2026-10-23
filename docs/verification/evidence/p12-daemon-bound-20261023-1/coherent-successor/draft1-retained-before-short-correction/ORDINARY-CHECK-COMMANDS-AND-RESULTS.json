@@ -1,0 +1,67 @@
+{
+  "profile": {
+    "cpu": 0,
+    "jobs": 1,
+    "as_bytes": 536870912,
+    "cpu_seconds": 30,
+    "core_bytes": 0,
+    "fsize_bytes": 8388608,
+    "nofile": 256,
+    "no_root_or_docker": true
+  },
+  "commands": [
+    {
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "purpose": "Execute actual private successor functional regression with fixture observations; no root/Docker/guest/build/stress.",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=536870912",
+        "--cpu=30",
+        "--core=0",
+        "--fsize=8388608",
+        "--nofile=256",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/check_successor.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+      "purpose": "Execute actual private successor functional regression with fixture observations; no root/Docker/guest/build/stress.",
+      "argv": [
+        "/usr/bin/taskset",
+        "-c",
+        "0",
+        "/usr/bin/prlimit",
+        "--as=536870912",
+        "--cpu=30",
+        "--core=0",
+        "--fsize=8388608",
+        "--nofile=256",
+        "--",
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/check_geometry.py"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "actual_body_receipt": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/ACTUAL-BODY-REGRESSION.json",
+    "sha256": "2b88d54245d4fafdb33ec964d4e74e012b24e6c5b02414add9f22bde9f0d41e2",
+    "bytes": 1987
+  },
+  "geometry_receipt": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/142GiB-reader-receipt.json",
+    "sha256": "397dc256514887772e046f0ce4524b20010dc02c1b7ee6214b29645ce93a698a",
+    "bytes": 1680
+  },
+  "failure_history": "0 failed source candidates,0 bounded corrections. Initial32 actual-body checks passed; fresh no-restart gate addition passed35. Geometry8 passed on merged source."
+}

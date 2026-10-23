@@ -1,0 +1,25 @@
+{
+  "decision": "PASS_ONE_CORRECTED_READONLY_MUTEX_PATH_OBSERVATION",
+  "reviewer": "/root/case227_stage_review",
+  "operation_sha256": "8586583834eccc088f879ce9ca0e5be29fdcd673d7641afce369abe1df1d7ed4",
+  "source_sha256": "ca4226a4b7afe068db63b086177333d5662331d0c6ab0d9ef2ad322015a36418",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--core=0:0",
+    "--fsize=8388608:8388608",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_mutex_paths_positive.py"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "physical_clearance": false
+}

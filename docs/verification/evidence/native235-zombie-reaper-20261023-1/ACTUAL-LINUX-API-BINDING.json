@@ -1,0 +1,24 @@
+[
+  {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/rust/bindings/bindings_generated.rs",
+    "sha256": "470679fcb04150e22f13cecdc8aa20ae30d84c77bf455433f5ea2780290b8d6e",
+    "snippets": {
+      "pub exit_state: core::ffi::c_int,": "ve_mm: *mut mm_struct,\n    pub faults_disabled_mapping: *mut address_space,\n    pub exit_state: core::ffi::c_int,\n    pub exit_code: core::ffi::c_int,\n    pub exit_signal: core::ffi::c_int,\n    pub pdeath_signal: core::ffi::c_int,\n    pub jobctl: core::ffi::c_",
+      "pub fn get_pid_task(": "k(pid: *mut pid, arg1: pid_type) -> *mut task_struct;\n}\nunsafe extern \"C\" {\n    pub fn get_pid_task(pid: *mut pid, arg1: pid_type) -> *mut task_struct;\n}\nunsafe extern \"C\" {\n    pub fn get_task_pid(task: *mut task_struct, type_: pid_type) -> *mut pid;\n}\nunsafe"
+    }
+  },
+  {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/source/linux-6.12.0-211.44.1.el10_2/kernel/pid.c",
+    "sha256": "86ae9fc38d5a486b8fe2ebaf2d326c320ddb73fdd6da37ea467fc360d7278cc1",
+    "snippets": {
+      "struct task_struct *get_pid_task(": ", type)));\n\trcu_read_unlock();\n\treturn pid;\n}\nEXPORT_SYMBOL_GPL(get_task_pid);\n\nstruct task_struct *get_pid_task(struct pid *pid, enum pid_type type)\n{\n\tstruct task_struct *result;\n\trcu_read_lock();\n\tresult = pid_task(pid, type);\n\tif (result)\n\t\tget_task_struct(result);\n\trcu_read_unlock();\n\treturn result;\n}\nEXPORT_SYMBOL_GPL(get_pid_task);\n\nstruct pid *find_get_pid(pid_t nr)\n{\n\tstruct pid *pid;\n\n\trcu_read_lock();\n\tpid = get_pid(find_vpid(nr));\n\trcu_read_unlock();\n\n\treturn pid;\n}\nEXPORT_SYMBOL_GPL(find_get_pid);\n\npid_t pid_nr_ns(struct pid *pid, struct pid_namespace *ns)\n{\n\tstruct upid *upid;\n\tpid_t nr = 0;\n\n\tif (pid && ns->level <= pid->level) {\n\t\tupid = &pid->numbers[ns->level];\n\t\tif (upid->ns == ns)\n\t\t\tnr = upid->nr;\n\t}\n\treturn nr;\n}\nEXPORT_SYMBOL_GPL(pid_nr_ns);\n\npid_t pid_vnr(struct pid *pid)\n{\n\treturn pid_nr_ns(pid, task_active_pid_ns(current));\n}\nEXPORT_SYMBOL_GPL(pid_vnr);\n\npid_t __task_pid_nr_ns(struct task_struct *task, enum pid_type type,\n\t\t\tstruct pid_name"
+    }
+  },
+  {
+    "path": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output/build/rust/bindings/bindings_helpers_generated.rs",
+    "sha256": "8e5d0035a389d3562eb742d54a489a9cdc02d55af9d8a2f6c2b061594b422ed5",
+    "snippets": {
+      "pub fn put_task_struct(": "ruct);\n}\nunsafe extern \"C\" {\n    #[link_name=\"rust_helper_put_task_struct\"]\n    pub fn put_task_struct(t: *mut task_struct);\n}\nunsafe extern \"C\" {\n    #[link_name=\"rust_helper_copy_from_user\"]\n    pub fn copy_from_user(\n        to: *mut core::ffi::c_void,\n    "
+    }
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ORDINARY_MOCKS_NOT_EXECUTION_RELEASED",
+  "owner": "scratch_growth_prepare",
+  "command": ["taskset", "-c", "6", "prlimit", "--as=536870912", "--cpu=20", "--nofile=64", "--core=0", "timeout", "25s", "python3", "-m", "unittest", "discover", "-s", "docs/verification/evidence/scratch-growth-20261023-1/maintenance-source", "-p", "test_grow_scratch.py", "-v"],
+  "join": {"exec_exit_code": 0, "session_id": null, "tests_passed": 14, "tests_failed": 0, "reported_test_seconds": 0.013},
+  "source_sha256": "4025c62df96cc0254cf4414fd31d690793823920ebf24c20aa74a9da1931b1b7",
+  "tests_sha256": "663cf564bac8c68cee69c15b05e88a5e710617d1979b7a53918346cd00fbac93",
+  "stdout": {"path": "mock-tests.stdout", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+  "stderr": {"path": "mock-tests.stderr", "sha256": "da8ad9d7e8ba936bbe7cc8489a1339634bb0e85c7d5f5e27481b78f9e6509cea"},
+  "root_main_exercised": false,
+  "root_or_docker_or_guest_execution": false,
+  "filesystem_mutation": false,
+  "ownership_mutation": false,
+  "failed_candidate_history": "New candidate mocks first passed12 tests, then14 after added installed-identity binding and capture-timeout cases. No failed candidate or correction. Prior128MiB proposal retained as not executed; no replay.",
+  "next": "Independent focused operation/source review; exact installed reserve/fallback qualification; fresh current retirement and consumer-successor bindings; dispatcher alone issues exact root release."
+}

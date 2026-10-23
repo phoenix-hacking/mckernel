@@ -1,0 +1,204 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Exact retained distro orig source fragment lines; archiveSHA256 and .dsc source chain in../source-binding/.
+
+docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/distro-reference/cli/cli/flags/options.go: bb034fa246d83c3862723f6c32d3d381fb089df4c0a10c336f93bcc5d0bdd06a
+74: // InstallFlags adds flags for the common options on the FlagSet
+75: func (o *ClientOptions) InstallFlags(flags *pflag.FlagSet) {
+76: 	configDir := config.Dir()
+77: 	if dockerCertPath == "" {
+78: 		dockerCertPath = configDir
+79: 	}
+80: 
+81: 	flags.StringVar(&o.ConfigDir, "config", configDir, "Location of client config files")
+82: 	flags.BoolVarP(&o.Debug, "debug", "D", false, "Enable debug mode")
+83: 	flags.StringVarP(&o.LogLevel, "log-level", "l", "info", `Set the logging level ("debug", "info", "warn", "error", "fatal")`)
+84: 	flags.BoolVar(&o.TLS, "tls", dockerTLS, "Use TLS; implied by --tlsverify")
+
+docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/distro-reference/cli/cli/command/cli.go: 2a357792a226a304c8071f3ca4e95d32fb8fa45f01e88883c8200ec5fedf43e8
+251: 			return err
+252: 		}
+253: 	}
+254: 	cliflags.SetLogLevel(opts.LogLevel)
+255: 
+256: 	if opts.ConfigDir != "" {
+257: 		config.SetDir(opts.ConfigDir)
+258: 	}
+259: 
+260: 	if opts.Debug {
+261: 		debug.Enable()
+262: 	}
+263: 	if opts.Context != "" && len(opts.Hosts) > 0 {
+264: 		return errors.New("conflicting options: either specify --host or --context, not both")
+265: 	}
+266: 
+267: 	cli.options = opts
+268: 	cli.configFile = config.LoadDefaultConfigFile(cli.err)
+269: 	cli.currentContext = resolveContextName(cli.options, cli.configFile)
+270: 	cli.contextStore = &ContextStoreWithDefault{
+271: 		Store: store.New(config.ContextStoreDir(), cli.contextStoreConfig),
+
+docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/distro-reference/cli/cli/config/config.go: 4a146d3ee39d6a115faadf1fa59dc4ead621f4ca96b13bd65003ac2995e49d51
+61: // SetDir sets the directory the configuration file is stored in
+62: func SetDir(dir string) {
+63: 	// trigger the sync.Once to synchronise with Dir()
+64: 	initConfigDir.Do(func() {})
+65: 	configDir = filepath.Clean(dir)
+66: }
+
+docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/distro-reference/cli/cli/config/config.go: 4a146d3ee39d6a115faadf1fa59dc4ead621f4ca96b13bd65003ac2995e49d51
+89: func Load(configDir string) (*configfile.ConfigFile, error) {
+90: 	if configDir == "" {
+91: 		configDir = Dir()
+92: 	}
+93: 	return load(configDir)
+94: }
+95: 
+96: func load(configDir string) (*configfile.ConfigFile, error) {
+97: 	filename := filepath.Join(configDir, ConfigFileName)
+98: 	configFile := configfile.New(filename)
+99: 
+100: 	file, err := os.Open(filename)
+101: 	if err != nil {
+102: 		if os.IsNotExist(err) {
+103: 			//
+104: 			// if file is there but we can't stat it for any reason other
+105: 			// than it doesn't exist then stop
+106: 			return configFile, nil
+107: 		}
+108: 		// if file is there but we can't stat it for any reason other
+109: 		// than it doesn't exist then stop
+110: 		return configFile, nil
+111: 	}
+112: 	defer file.Close()
+113: 	err = configFile.LoadFromReader(file)
+114: 	if err != nil {
+115: 		err = errors.Wrap(err, filename)
+116: 	}
+117: 	return configFile, err
+118: }
+119: 
+120: // LoadDefaultConfigFile attempts to load the default config file and returns
+121: // an initialized ConfigFile struct if none is found.
+122: func LoadDefaultConfigFile(stderr io.Writer) *configfile.ConfigFile {
+123: 	configFile, err := load(Dir())
+124: 	if err != nil {
+125: 		_, _ = fmt.Fprintf(stderr, "WARNING: Error loading config file: %v\n", err)
+126: 	}
+127: 	if !configFile.ContainsAuth() {
+128: 		configFile.CredentialsStore = credentials.DetectDefaultStore(configFile.CredentialsStore)
+129: 	}
+130: 	return configFile
+131: }
+
+docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/distro-reference/cli/cli/command/system/info.go: e77f80e26fac7c507edbc5749b7023f4d61141f4d66ee7c40bbd0ee735f722ad
+78: 	cmd.Flags().StringVarP(&opts.format, "format", "f", "", flagsHelper.InspectFormatHelp)
+79: 	return cmd
+80: }
+81: 
+82: func runInfo(ctx context.Context, cmd *cobra.Command, dockerCli command.Cli, opts *infoOptions) error {
+83: 	info := dockerInfo{
+84: 		ClientInfo: &clientInfo{
+85: 			// Don't pass a dockerCLI to newClientVersion(), because we currently
+86: 			// don't include negotiated API version, and want to avoid making an
+87: 			// API connection when only printing the Client section.
+88: 			clientVersion: newClientVersion(dockerCli.CurrentContext(), nil),
+89: 			Debug:         debug.IsEnabled(),
+90: 		},
+91: 		Info: &system.Info{},
+92: 	}
+93: 	if plugins, err := pluginmanager.ListPlugins(dockerCli, cmd.Root()); err == nil {
+94: 		info.ClientInfo.Plugins = plugins
+95: 	} else {
+96: 		info.ClientErrors = append(info.ClientErrors, err.Error())
+97: 	}
+98: 
+99: 	if needsServerInfo(opts.format, info) {
+100: 		if dinfo, err := dockerCli.Client().Info(ctx); err == nil {
+101: 			info.Info = &dinfo
+102: 		} else {
+
+docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/distro-reference/cli/cli/config/credentials/default_store.go: 784c107c8eb80f8c68de56445c51c3a3295b59b6e7229c7c98ab047c1ee1412c
+1: package credentials
+2: 
+3: import "os/exec"
+4: 
+5: // DetectDefaultStore return the default credentials store for the platform if
+6: // no user-defined store is passed, and the store executable is available.
+7: func DetectDefaultStore(store string) string {
+8: 	if store != "" {
+9: 		// use user-defined
+10: 		return store
+11: 	}
+12: 
+13: 	platformDefault := defaultCredentialsStore()
+14: 	if platformDefault == "" {
+15: 		return ""
+16: 	}
+17: 
+18: 	if _, err := exec.LookPath(remoteCredentialsPrefix + platformDefault); err != nil {
+19: 		return ""
+20: 	}
+21: 	return platformDefault
+22: }
+
+docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/distro-reference/engine/api/server/router/system/system.go: c072ecbdd79e3b17baf4ff6e91301e6dbf345dd581bf600ae75990d5f5a3de53
+35: 	}
+36: 
+37: 	r.routes = []router.Route{
+38: 		router.NewOptionsRoute("/{anyroute:.*}", optionsHandler),
+39: 		router.NewGetRoute("/_ping", r.pingHandler),
+40: 		router.NewHeadRoute("/_ping", r.pingHandler),
+41: 		router.NewGetRoute("/events", r.getEvents),
+42: 		router.NewGetRoute("/info", r.getInfo),
+43: 		router.NewGetRoute("/version", r.getVersion),
+44: 		router.NewGetRoute("/system/df", r.getDiskUsage),
+45: 		router.NewPostRoute("/auth", r.postAuth),
+46: 	}
+47: 
+
+docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/distro-reference/engine/api/server/router/system/system_routes.go: f9e072f334e68ca3681cbe32be1b09b0ad44db5c53cadaba9698db0c03948657
+60: func (s *systemRouter) getInfo(ctx context.Context, w http.ResponseWriter, r *http.Request, vars map[string]string) error {
+61: 	version := httputils.VersionFromContext(ctx)
+62: 	info, _, _ := s.collectSystemInfo.Do(ctx, version, func(ctx context.Context) (*system.Info, error) {
+63: 		info, err := s.backend.SystemInfo(ctx)
+64: 		if err != nil {
+65: 			return nil, err
+66: 		}
+67: 
+68: 		if s.cluster != nil {
+69: 			info.Swarm = s.cluster.Info(ctx)
+70: 			info.Warnings = append(info.Warnings, info.Swarm.Warnings...)
+
+docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/distro-reference/engine/daemon/info.go: 158836396d4f4f17756f932028e74b253bf089478f257a78a0df29781770a426
+46: func (daemon *Daemon) SystemInfo(ctx context.Context) (*system.Info, error) {
+47: 	defer metrics.StartTimer(hostInfoFunctions.WithValues("system_info"))()
+48: 
+49: 	sysInfo := daemon.RawSysInfo()
+50: 	cfg := daemon.config()
+51: 
+52: 	v := &system.Info{
+53: 		ID:                 daemon.id,
+54: 		Images:             daemon.imageService.CountImages(ctx),
+55: 		IPv4Forwarding:     !sysInfo.IPv4ForwardingDisabled,
+56: 		BridgeNfIptables:   !sysInfo.BridgeNFCallIPTablesDisabled,
+57: 		BridgeNfIP6tables:  !sysInfo.BridgeNFCallIP6TablesDisabled,
+58: 		Name:               hostName(ctx),
+59: 		SystemTime:         time.Now().Format(time.RFC3339Nano),
+60: 		LoggingDriver:      daemon.defaultLogConfig.Type,
+61: 		KernelVersion:      kernelVersion(ctx),
+62: 		OperatingSystem:    operatingSystem(ctx),
+63: 		OSVersion:          osVersion(ctx),
+64: 		IndexServerAddress: registry.IndexServer,
+65: 		OSType:             runtime.GOOS,
+66: 		Architecture:       platform.Architecture,
+67: 		RegistryConfig:     doWithTrace(ctx, "registry.ServiceConfig", daemon.registryService.ServiceConfig),
+68: 		NCPU:               doWithTrace(ctx, "sysinfo.NumCPU", sysinfo.NumCPU),
+69: 		MemTotal:           memInfo(ctx).MemTotal,
+70: 		GenericResources:   daemon.genericResources,
+71: 		DockerRootDir:      cfg.Root,
+72: 		Labels:             cfg.Labels,
+73: 		ExperimentalBuild:  cfg.Experimental,
+74: 		ServerVersion:      dockerversion.Version,
+75: 		HTTPProxy:          config.MaskCredentials(getConfigOrEnv(cfg.HTTPProxy, "HTTP_PROXY", "http_proxy")),
+76: 		HTTPSProxy:         config.MaskCredentials(getConfigOrEnv(cfg.HTTPSProxy, "HTTPS_PROXY", "https_proxy")),
+

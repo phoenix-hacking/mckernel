@@ -1,0 +1,31 @@
+{
+  "schema": "mckernel.p12.readonly-filesystem-capture.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "wrapper_sha256": "1ee7d5198a2a20a3048d33d3e3875f9d6d9909da1c6fc90f6d019d6bf881158d",
+  "query": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/query_daemon_filesystem.NOT-EXECUTED.py",
+    "sha256": "a4ab692a918a93cc30dc7febd8e4ee29241672db66463d4915bcd0b1c83975ba",
+    "bytes": 8816
+  },
+  "capture_directory": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/actual-readonly-filesystem-capture-2",
+  "wall_seconds": 35,
+  "root_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=8388608:8388608",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/query_daemon_filesystem.NOT-EXECUTED.py",
+    "a4ab692a918a93cc30dc7febd8e4ee29241672db66463d4915bcd0b1c83975ba"
+  ]
+}

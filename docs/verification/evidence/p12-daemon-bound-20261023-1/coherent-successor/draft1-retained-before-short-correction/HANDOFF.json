@@ -1,0 +1,103 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "IMPLEMENTED_AND_ACTUAL_BODY_TESTED_PHYSICAL_BOUND_OPEN_FAILCLOSED",
+  "utc": "2026-10-23T03:16:05.453167+00:00",
+  "cohort": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/COHERENT-NINE-FILE-SOURCE-COHORT.NOT-RELEASED.json",
+    "sha256": "597627478903fbd6c8deb2abba03597baca7eb87b4fe2949ffa78519d2cbd100",
+    "bytes": 7641
+  },
+  "profile": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/FINAL-TRANSPORT-PROFILE.NOT-RELEASED.json",
+    "sha256": "86e4ec1226a365e1f052b38ccca358a826891bd5da042337451253e21f1a20d3",
+    "bytes": 1244
+  },
+  "tests": {
+    "actual_owner_and_accounting_checks": 35,
+    "actual_geometry_reader_fixture_checks": 8,
+    "commands_and_results": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/ORDINARY-CHECK-COMMANDS-AND-RESULTS.json",
+      "sha256": "51c58412fe4f0ee02803b745c38d718b7367ca2bdd9167e0e3a603b15b7a6ab3",
+      "bytes": 2328
+    },
+    "source_failed_candidates": 0,
+    "bounded_corrections": 0
+  },
+  "repair": {
+    "before": "Both run.finally and cleanup could issue Docker logs while start/wait/stop/kill had failed and container still produced output. Local client joins did not bound daemon readers.",
+    "after": "All LONG Docker log reads route _capture_logs: fresh authenticated identity, exact no-restart policy, exited/zeroPid and all Running/Paused/Restarting/Dead boolFalse. No request if uncertain; one request maximum even if client times out. SHORT prior behavior retained. Cleanup continues its existing authenticated removal flow and retains original errors.",
+    "writer_stop_source_chain": [
+      "Exact distro engine/daemon/monitor.go59-62 calls c.Reset(false) before104 c.SetStopped.",
+      "engine/container/monitor.go30-48 closes LogDriver after copier completion or10second drain timeout.",
+      "exact source loggerutils/logfile.go359-375 closes writer under mutex, publishes closed and waits rotation. Later writes cannot create new rotated files.",
+      "No-restart/exclusive ownership required; stopped logger may be recreated read-only for logs but no payload producer starts.",
+      "Both readers would see frozen files even if daemon async close lags. One request gate additionally prevents duplicated owner reader attempts."
+    ],
+    "preserved": "All7 other sourcefiles byteidentical including strictP12apporacles; owner._inner_result AST identical preserving serial/debugcon/QMP/file copies and original strict application join. No computeC functionality."
+  },
+  "geometry_bytes": 152471339008,
+  "accounting": {
+    "attempt_slots_bytes": 2818572288,
+    "owner_queue_bytes": 536870912,
+    "docker_log_provisional_bytes": 100663296,
+    "metadata_bytes": 33554432,
+    "external_streams_bytes": 805306368,
+    "total_logical_bytes": 4294967296,
+    "physical_bound_accepted": false
+  },
+  "remaining_physical_premise": "Actual Docker log filesystem identity/features/allocation knobs plus exact running Ubuntu kernel ext4 allocation source proof covering preallocation/extentmetadata/transient release within96MiB. Current statvfs4096 and exact daemon logical32196874B do not prove it. Also remaining whole4GiB metadata/physical allowance and external capture wrapper/source/argv/path/copy bindings must be reviewed.",
+  "failclosed": {
+    "DAEMON_ALLOCATION_BINDING": null,
+    "EXTERNAL_CAPTURE_BINDING": null,
+    "behavior": "validate_release refuses before filesystem admission or workload launch; neither null may be filled with an unproved assertion."
+  },
+  "minimal_rootfacts_proposal": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/ROOT-READONLY-FILESYSTEM-QUERY.NOT-RELEASED.json",
+    "sha256": "b2eee735767a820df219fbb0e369ec41c75e747e1518a16108d2e2b1a5197a59",
+    "bytes": 2688
+  },
+  "distro_stop_source": {
+    "distro-reference/engine/daemon/start.go": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/distro-reference/engine/daemon/start.go",
+      "sha256": "090bc994edd104725871828492be3c666e88a8b692a7943d159da2df7f6022a4",
+      "bytes": 9405
+    },
+    "distro-reference/engine/daemon/monitor.go": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/distro-reference/engine/daemon/monitor.go",
+      "sha256": "5c39095b2a27f72ad9f2942b2dd1a31278809af6cfbc36aa95ba609a8dd89253",
+      "bytes": 9345
+    },
+    "distro-reference/engine/container/container.go": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/distro-reference/engine/container/container.go",
+      "sha256": "6ed6a9d2a3a32ecf6cbb91eaefdb5925c1316e8ea35e0856b7bb85530d143739",
+      "bytes": 26442
+    },
+    "distro-reference/engine/container/monitor.go": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/distro-reference/engine/container/monitor.go",
+      "sha256": "801e7590df22ef074d127261a338b1663519297bfb400a3e7d3f73b28d2cf095",
+      "bytes": 1079
+    },
+    "distro-reference/engine/container/state.go": {
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/distro-reference/engine/container/state.go",
+      "sha256": "191de7cebd813b2ef7da58225fd390ae059abcf6c105495d7892bf2fc2114f1e",
+      "bytes": 11497
+    }
+  },
+  "downstream": [
+    "Independent focused source review of new shutdown/read gate and coherent pins.",
+    "Independent distinct exactsource review of proposed read-only rootfacts query, pipe capture; no execution from this packet.",
+    "Bind actual DockerRoot/ext4 facts and source allocation theorem or choose a separately reviewed enforced finite backing limit; keep closed if unavailable.",
+    "Bind final external capture and physical allocation/metadata model; install/regenerate9source guard/stage/manifest/release only after dispatcher acceptance.",
+    "First matchedV3 whole restoration, fresh identities/capacity/leases/positivepriorretirement and independentP12native release still required."
+  ],
+  "actions": {
+    "root": 0,
+    "Docker": 0,
+    "guest": 0,
+    "build": 0,
+    "stress": 0,
+    "daemon_config_mutations": 0,
+    "canonical_source_mutations": 0,
+    "native_practical_credit": 0
+  }
+}

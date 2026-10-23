@@ -1,0 +1,105 @@
+error: an inner attribute is not permitted in this context
+   --> /home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/candidate-actual.rs:125:1
+    |
+125 |   #![allow(dead_code,non_snake_case)]
+    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+126 | / mod process {
+127 | | // Explicit std ownership/locking/allocation and IHK-auth adapters. No Linux ABI,
+128 | | // MM, actual provider Request authentication or native process-exit proof.
+129 | | use std::{ptr,pin::Pin,sync::{Arc,Mutex as StdMutex,OnceLock,atomic::{AtomicBool,AtomicI32,Ordering}},ffi::c_void};
+...   |
+271 | | }
+    | |_- the inner attribute doesn't annotate this module
+    |
+    = note: inner attributes, like `#![no_std]`, annotate the item enclosing them, and are usually found at the beginning of source files
+help: to annotate the module, change the attribute from inner to outer style
+    |
+125 - #![allow(dead_code,non_snake_case)]
+125 + #[allow(dead_code,non_snake_case)]
+    |
+
+error[E0432]: unresolved import `super::super::application_abi`
+ --> /home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/modules/current_fork_host.rs:4:19
+  |
+4 | use super::super::application_abi::{ForkControlCallV1,ForkRevokeClaimV1,ForkPreparedV3,ForkGeometryV3};
+  |                   ^^^^^^^^^^^^^^^
+  |                   |
+  |                   unresolved import
+  |                   help: a similar path exists: `crate::process::application_abi`
+
+error[E0433]: failed to resolve: unresolved import
+  --> /home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/modules/current_fork_host.rs:27:27
+   |
+27 |     _module:super::super::mcctrl_vm::DeferredModule,
+   |                           ^^^^^^^^^ unresolved import
+   |
+help: a similar path exists
+   |
+27 |     _module:super::super::crate::process::mcctrl_vm::DeferredModule,
+   |                           ++++++++++++++++
+help: consider importing this module
+   |
+ 3 + use crate::process::mcctrl_vm;
+   |
+help: if you import `mcctrl_vm`, refer to it directly
+   |
+27 -     _module:super::super::mcctrl_vm::DeferredModule,
+27 +     _module:mcctrl_vm::DeferredModule,
+   |
+
+error[E0433]: failed to resolve: unresolved import
+   --> /home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/modules/current_fork_host.rs:130:38
+    |
+130 |             let module=super::super::mcctrl_vm::DeferredModule::acquire()?;
+    |                                      ^^^^^^^^^ unresolved import
+    |
+help: a similar path exists
+    |
+130 |             let module=super::super::crate::process::mcctrl_vm::DeferredModule::acquire()?;
+    |                                      ++++++++++++++++
+help: consider importing this struct
+    |
+  3 + use crate::process::mcctrl_vm::DeferredModule;
+    |
+help: if you import `DeferredModule`, refer to it directly
+    |
+130 -             let module=super::super::mcctrl_vm::DeferredModule::acquire()?;
+130 +             let module=DeferredModule::acquire()?;
+    |
+
+error[E0433]: failed to resolve: unresolved import
+   --> /home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/candidate-actual.rs:195:28
+    |
+195 |                     super::application_abi::CLEANUP,
+    |                            ^^^^^^^^^^^^^^^ unresolved import
+    |
+help: a similar path exists
+    |
+195 |                     super::crate::process::application_abi::CLEANUP,
+    |                            ++++++++++++++++
+help: consider importing this module
+    |
+129 + use crate::process::application_abi;
+    |
+help: if you import `application_abi`, refer to it directly
+    |
+195 -                     super::application_abi::CLEANUP,
+195 +                     application_abi::CLEANUP,
+    |
+
+error[E0616]: field `child` of struct `ForkChildRoute` is private
+   --> /home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/candidate-actual.rs:262:323
+    |
+262 | ...ren.lock().len(),1);assert!(p.control_children.lock()[0].child.armed.load(Ordering::Acquire));crate::CLOSES.with(|n|assert_eq!(n.get()...
+    |                                                             ^^^^^ private field
+
+error[E0616]: field `child` of struct `ForkChildRoute` is private
+   --> /home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/candidate-actual.rs:267:53
+    |
+267 |  let child=p.control_children.lock().swap_remove(0).child;child.fork_parent.lock().take();drop(child);drop(p);drop(process);
+    |                                                     ^^^^^ private field
+
+error: aborting due to 7 previous errors
+
+Some errors have detailed explanations: E0432, E0433, E0616.
+For more information about an error, try `rustc --explain E0432`.

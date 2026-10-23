@@ -1,0 +1,62 @@
+{
+  "approved_snapshot_sha256": "932f92710d7fb5dfd7bc4e66eedb9684059dd9b328bad7ae3a7c3edf872b3a84",
+  "fresh_capture": "/home/holden/mckernel-work/host-preparation/scratch-growth-20261023-1/readonly-qualification-attempt-1",
+  "mutation_released": false,
+  "ordinary_parent_argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=30:30",
+    "--fsize=8388608:8388608",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/scratch-growth-20261023-1/maintenance-source/readonly-qualification/capture_query.py"
+  ],
+  "owned_capture_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+  "privileged_execution_performed": false,
+  "root_argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=8388608:8388608",
+    "--core=0:0",
+    "--nofile=256:256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/scratch-growth-20261023-1/maintenance-source/readonly-qualification/query_installed.py"
+  ],
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_files": [
+    {
+      "bytes": 10566,
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch-growth-20261023-1/maintenance-source/readonly-qualification/query_installed.py",
+      "sha256": "f0db6e0338cb5e8b806cc2a0fd926fc7ccde1b79adfce0b9bfaf48d1eae255cf"
+    },
+    {
+      "bytes": 3847,
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch-growth-20261023-1/maintenance-source/readonly-qualification/capture_query.py",
+      "sha256": "9e2edb164f479c799921ce5d7d290028cb9ad54a09e3a0404b4a5c4b4fd5f017"
+    },
+    {
+      "bytes": 10633,
+      "path": "/home/holden/mckernel/docs/verification/evidence/scratch-growth-20261023-1/maintenance-source/readonly-qualification/READONLY-PROFILE.md",
+      "sha256": "c8b96f517960688d4e304067d81a74e5cd6876fae54d959b363a3ed5f6016ef7"
+    }
+  ],
+  "status": "PREPARATION_ONLY_NOT_EXECUTION_RELEASED",
+  "stock_resize2fs_fallback_risk_explicitly_accepted": null,
+  "wall_seconds": 35
+}

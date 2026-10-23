@@ -1,0 +1,180 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "BOUNDED_SOURCE_CANDIDATE_WITH_ACTUAL_BODY_REGRESSIONS_PASS; INDEPENDENT_REVIEW_PENDING",
+  "production_preimage_sha256": "b2e635f6590d401e2d37646486c2d3a5a52fece210d569533001f354d0537d23",
+  "production_candidate_sha256": "fcddb2679847c70e8d663cdf990f54be3a7645560c0dac2910018cda82ae5d2f",
+  "actual_tests": {
+    "candidate_ownership_cases": 3,
+    "baseline_ownership_observations": 3,
+    "candidate_liveness_cases": 5,
+    "baseline_liveness_observations": 5
+  },
+  "behavior_changes": [
+    "last process detach sends existing CLEANUP once independently of Registration final ArcDrop",
+    "CLEANUP request/Drop share cleanup_requested AtomicBool; unarmed connection untouched",
+    "worker identity with referenced terminal Linux task becomes eligible for existing WORKER_CLOSE",
+    "TGID link check remains conservative for exited leader with live siblings"
+  ],
+  "unchanged_invariants": [
+    "armed state/pair/routes/mapping/credit owners retained",
+    "no ACK or completion synthesis",
+    "WORKER_CLOSE cancellation owns response until actual mailbox publication",
+    "no production SDK/canonical source changes; no root/module/guest execution"
+  ],
+  "actual_body_scope": [
+    "exact Process::detach_owners and Binding::drop",
+    "exact Registration::request_cleanup, Drop and reap_workers",
+    "complete exact accepted current_fork_host::reserve_fork_pair module",
+    "complete exact accepted mailbox/application_syscall response+completion implementation",
+    "exact ProcessId thread_alive/group_alive/alive against referenced task adapter"
+  ],
+  "explicit_adapters": [
+    "std Arc/Mutex/Vec allocator",
+    "Linux PID/task acquisition and exit_state storage",
+    "IHK invoke dispatcher routes CLEANUP to actual Mailbox::close and WORKER_CLOSE to actual Mailbox::close_worker",
+    "cleanup adapter deliberately returns -110, retaining armed pair/routes; real Remote cleanup/guest destructor not executed",
+    "test-only mutual-pair teardown after all ownership assertions; no production release authority"
+  ],
+  "remaining": [
+    "independent ownership review",
+    "root integrate candidate into successor SDK source bundle",
+    "actual accepted-profile full mcctrl compile/link with -Dwarnings and matched source bindings",
+    "separately reviewed fresh native235 execution and physical retirement",
+    "normal terminal fork pair/credit ownership needs later real destructor/retirement evidence; no route or credit release in this candidate"
+  ],
+  "failure_family_history": {
+    "harness_adapter": "compile-candidate-1 failed module nesting/private field accesses; corrected scaffolding without production changes",
+    "memory_profile": "compile-candidate-2 rustc codegen worker EAGAIN at512MiB AS; bounded correction compile-candidate-3 SIGSEGV at512MiB AS+CGU1+1MiB compiler stack; escalated, no further512MiB retries",
+    "reviewed_successor": "root/expert2GiBAS CPU6 CGU1 stack2MiB; compilecandidateactual4 and all selected baseline/liveness compiles pass"
+  },
+  "capture_results": {
+    "compile-candidate-1.status": {
+      "exit": 1
+    },
+    "compile-candidate-3.status": {
+      "exit": -11
+    },
+    "compile-candidate-actual-4.status": {
+      "exit": 0,
+      "elapsed": 0.6667402980383486,
+      "stop_reason": null,
+      "direct_join": true,
+      "streams_closed": true,
+      "process_group_absent": true,
+      "output_bytes": {
+        "stdout": 0,
+        "stderr": 0
+      },
+      "maxrss_kib": 165252
+    },
+    "compile-preimage-actual-4.status": {
+      "exit": 0,
+      "elapsed": 0.5358661810168996,
+      "stop_reason": null,
+      "direct_join": true,
+      "streams_closed": true,
+      "process_group_absent": true,
+      "output_bytes": {
+        "stdout": 0,
+        "stderr": 0
+      },
+      "maxrss_kib": 167636
+    },
+    "run-preimage-liveness-1.status": {
+      "exit": 0,
+      "elapsed": 0.0010719929705373943,
+      "stop_reason": null,
+      "direct_join": true,
+      "streams_closed": true,
+      "process_group_absent": true,
+      "output_bytes": {
+        "stdout": 425,
+        "stderr": 0
+      },
+      "maxrss_kib": 167636
+    },
+    "run-preimage-actual-4.status": {
+      "exit": 0,
+      "elapsed": 0.0014617409906350076,
+      "stop_reason": null,
+      "direct_join": true,
+      "streams_closed": true,
+      "process_group_absent": true,
+      "output_bytes": {
+        "stdout": 350,
+        "stderr": 0
+      },
+      "maxrss_kib": 167636
+    },
+    "compile-candidate-2.status": {
+      "exit": 101
+    },
+    "compile-candidate-liveness-1.status": {
+      "exit": 0,
+      "elapsed": 0.10235669399844483,
+      "stop_reason": null,
+      "direct_join": true,
+      "streams_closed": true,
+      "process_group_absent": true,
+      "output_bytes": {
+        "stdout": 0,
+        "stderr": 0
+      },
+      "maxrss_kib": 112840
+    },
+    "compile-preimage-liveness-1.status": {
+      "exit": 0,
+      "elapsed": 0.09600587503518909,
+      "stop_reason": null,
+      "direct_join": true,
+      "streams_closed": true,
+      "process_group_absent": true,
+      "output_bytes": {
+        "stdout": 0,
+        "stderr": 0
+      },
+      "maxrss_kib": 167636
+    },
+    "run-candidate-liveness-1.status": {
+      "exit": 0,
+      "elapsed": 0.0013124599936418235,
+      "stop_reason": null,
+      "direct_join": true,
+      "streams_closed": true,
+      "process_group_absent": true,
+      "output_bytes": {
+        "stdout": 425,
+        "stderr": 0
+      },
+      "maxrss_kib": 112840
+    },
+    "run-candidate-actual-4.status": {
+      "exit": 0,
+      "elapsed": 0.00158663495676592,
+      "stop_reason": null,
+      "direct_join": true,
+      "streams_closed": true,
+      "process_group_absent": true,
+      "output_bytes": {
+        "stdout": 350,
+        "stderr": 0
+      },
+      "maxrss_kib": 165252
+    }
+  },
+  "next_incremental_kernel_command_proposal": [
+    "/usr/bin/make",
+    "-C",
+    "/out/source/linux-6.12.0-211.44.1.el10_2",
+    "O=/out/build",
+    "M=/candidate/modules",
+    "ARCH=x86_64",
+    "LLVM=1",
+    "LOCALVERSION=-211.44.1.el10_2.mckernel1.x86_64",
+    "MCKERNEL_CURRENT_FORK_ADOPTION_OPT_IN=1",
+    "--jobserver-style=pipe",
+    "-j2",
+    "modules"
+  ],
+  "kernel_command_qualification": "Proposal only. Root must retain full accepted environment/source module bundle/exact reviewed release and fresh successor output root; never mutate accepted consumed SDK in place. Need all three final module artifacts, current mcctrl -Dwarnings command, unique definitions/unresolved-symbol checks and positive retirement."
+}

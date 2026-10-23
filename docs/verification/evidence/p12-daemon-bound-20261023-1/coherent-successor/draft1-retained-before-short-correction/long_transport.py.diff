@@ -1,0 +1,56 @@
+--- accepted/long_transport.py
++++ private-successor/long_transport.py
+@@ -19,16 +19,28 @@
+                    device=66306, uid=1000, gid=1000, mode=0o700,
+                    scratch_output_bytes=0)
+ DOCKER_LOG = {'Type': 'json-file', 'Config': {'max-size': '16m', 'max-file': '2'}}
+-# Two16MiB rotation payloads plus32MiB record/rotation overshoot per file.
++# Logical named-file bound32196874B from exact distro source;96MiB physical
++# provision remains unproved pending actual log filesystem/allocation binding.
+ # QEMU's four live file sinks never enter Docker stdout/stderr.
+ DOCKER_LOG_BYTES = 96 * 2**20
++# Deliberately closed: reader repair is not an ext4 physical-allocation proof.
++DAEMON_ALLOCATION_BINDING = None
++# Separate direct-file capture storage; no claim that post-join32MiB hashing limits writes.
++EXTERNAL_CAPTURE = dict(command_count=1, stream_slots=2, retained_copies=1,
++                        stream_file_bytes=384 * 2**20)
++EXTERNAL_CAPTURE_BYTES = (EXTERNAL_CAPTURE['command_count'] * EXTERNAL_CAPTURE['stream_slots'] *
++                          EXTERNAL_CAPTURE['retained_copies'] * EXTERNAL_CAPTURE['stream_file_bytes'])
++# No final wrapper/argv/path/copy binding exists in this private cohort.
++EXTERNAL_CAPTURE_BINDING = None
+ TRANSPORT = dict(docker_log=DOCKER_LOG, docker_log_bytes=DOCKER_LOG_BYTES, host_output=HOST_OUTPUT, schema='mckernel.p12.long-transport-profile.v2',
+                  producer=PROFILE, inner_seconds=7800, outer_seconds=8100,
+                  serial_bytes=384 * 2**20, shared_capture_bytes=512 * 2**20,
+                  trace_bytes=256 * 2**20, other_stream_bytes=4 * 2**20,
+                  qmp_bytes=24 * 2**20, per_app_bytes=1024, per_app_timeout_ms=10000,
+                  file_bytes=384 * 2**20, attempt_file_slots=7,
+-                 metadata_bytes=32 * 2**20, logical_growth_bytes=(7 * 384 + 512 + 32 + 96) * 2**20)
++                 metadata_bytes=32 * 2**20, external_capture=EXTERNAL_CAPTURE,
++                 external_capture_bytes=EXTERNAL_CAPTURE_BYTES,
++                 logical_growth_bytes=(7 * 384 + 512 + 32 + 96) * 2**20 + EXTERNAL_CAPTURE_BYTES)
+ FILES = ('native_diagnostic.py', 'native_diagnostic_runner.py',
+          'native_diagnostic_backend.py', 'native_diagnostic_container_owner.py',
+          'qmp_capture.py', 'repaired_image_authority.py', 'composite_module_binding.py',
+@@ -211,9 +223,9 @@
+     fd = os.open(backing, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC)
+     try:
+         info = os.fstat(fd)
+-        need(stat.S_ISREG(info.st_mode) and info.st_size == 110 * 2**30 and
++        need(stat.S_ISREG(info.st_mode) and info.st_size == 142 * 2**30 and
+              info.st_dev == Path(parent).stat().st_dev and info.st_dev != device,
+-             'unchanged110GiB host sparse backing and distinct output filesystem')
++             'exact142GiB host sparse backing and distinct output filesystem')
+         gap = max(0, info.st_size - info.st_blocks * 512)
+     finally:
+         os.close(fd)
+@@ -223,6 +235,10 @@
+ 
+ 
+ def validate_release(path, expected_sha, manifest_path, nonce, parent, *, clock=time.time, boot_id=None):
++    need(DAEMON_ALLOCATION_BINDING is not None,
++         'daemon filesystem/allocation authority not bound; execution blocked')
++    need(EXTERNAL_CAPTURE_BINDING is not None,
++         'final external capture wrapper/argv/paths/copy count not bound; execution blocked')
+     output_parent(parent)
+     readonly_input(path, parent)
+     readonly_input(manifest_path, parent)

@@ -1,0 +1,28 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/sdk-successor-preparation/stage_bound_successor.py",
+    "--execute"
+  ],
+  "returncode": 0,
+  "direct_child_pid": 3474088,
+  "direct_child_joined": true,
+  "streams_closed": true,
+  "elapsed_seconds": 0.05920625396538526,
+  "stdout_bytes": 1761,
+  "stderr_bytes": 0,
+  "host_before": 176073281536,
+  "scratch_before": 14114709504,
+  "full_backing_gap": 15846838272,
+  "heavy_build_started": false
+}

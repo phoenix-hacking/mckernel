@@ -1,0 +1,17 @@
+error: rustc interrupted by SIGSEGV, printing backtrace
+
+/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/../lib/librustc_driver-d31eb41759495bb2.so(+0x3c04adf)[0x7f57fbc20adf]
+/lib/x86_64-linux-gnu/libpthread.so.0(+0x14420)[0x7f57f7fd1420]
+/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/../lib/librustc_driver-d31eb41759495bb2.so(+0x694389b)[0x7f57fe95f89b]
+/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/../lib/librustc_driver-d31eb41759495bb2.so(_ZN3std3sys4sync4once5futex4Once4call17h2423c0c333975c13E+0xf7)[0x7f57f9c97537]
+/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/../lib/librustc_driver-d31eb41759495bb2.so(+0x6739b25)[0x7f57fe755b25]
+/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/../lib/librustc_driver-d31eb41759495bb2.so(+0x673a164)[0x7f57fe756164]
+/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/../lib/librustc_driver-d31eb41759495bb2.so(+0x6594be2)[0x7f57fe5b0be2]
+/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/../lib/librustc_driver-d31eb41759495bb2.so(+0x614a300)[0x7f57fe166300]
+/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/../lib/librustc_driver-d31eb41759495bb2.so(+0x6149fe4)[0x7f57fe165fe4]
+/home/holden/mckernel-work/toolchains/rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin/../lib/librustc_driver-d31eb41759495bb2.so(+0x614896f)[0x7f57fe16496f]
+/lib/x86_64-linux-gnu/libpthread.so.0(+0x8609)[0x7f57f7fc5609]
+/lib/x86_64-linux-gnu/libc.so.6(clone+0x43)[0x7f57f7eea353]
+
+note: we would appreciate a report at https://github.com/rust-lang/rust
+help: you can increase rustc's stack size by setting RUST_MIN_STACK=2097152

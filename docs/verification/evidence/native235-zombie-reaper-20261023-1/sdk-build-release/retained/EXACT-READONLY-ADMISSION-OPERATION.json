@@ -1,0 +1,73 @@
+{
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=8388608",
+    "--core=0:0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/release-assembly/readonly_existing_successor_admission.py",
+    "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/release-assembly/EXACT-READONLY-ADMISSION-DATA.json"
+  ],
+  "data": {
+    "bytes": 4887,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/release-assembly/EXACT-READONLY-ADMISSION-DATA.json",
+    "sha256": "1a50fcacb477ffbd3f699e295d613e5e925c175039ca9ef0ee843e2cbd6965fa"
+  },
+  "review": null,
+  "root_Docker_compiler_guest_operations": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "separate_fresh_nonce_query_argv": [
+    [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=10:10",
+      "--fsize=1048576:1048576",
+      "--core=0:0",
+      "--",
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/docker",
+      "ps",
+      "-aq",
+      "--no-trunc",
+      "--filter",
+      "name=^/mckernel-external-9850d940ac3649a6b8e7ebebf3251853$"
+    ],
+    [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=10:10",
+      "--fsize=1048576:1048576",
+      "--core=0:0",
+      "--",
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/docker",
+      "ps",
+      "-aq",
+      "--no-trunc",
+      "--filter",
+      "label=mckernel.owner=9850d940ac3649a6b8e7ebebf3251853"
+    ]
+  ],
+  "source": {
+    "bytes": 4142,
+    "path": "/home/holden/mckernel-work/host-preparation/native235-zombie-sdk-successor-20261023-1/release-assembly/readonly_existing_successor_admission.py",
+    "sha256": "d23c2dfb2dd25e085d7dca64c8d316a7cd42afb69e32cba0310a5437faabe7cb"
+  },
+  "status": "OPTIONAL_DRAFT_SUPERSEDED_BY_EXISTING_IN_COMMAND_ADMISSION_NOT_REQUIRED_NOT_RELEASED"
+}
