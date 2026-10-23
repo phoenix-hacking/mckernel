@@ -1,0 +1,143 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -4367,29 +4367,11 @@
+  * set before calling this function.
+  * NOTE: one must set thread->spin_sleep to 1 before evaluating
+  * the wait condition to avoid lost wake-ups.
+  */
++#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+ void spin_sleep_or_schedule(void)
+ {
+-#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+-	sched_spin_sleep_or_schedule_body_result(
+-			(unsigned long)get_this_cpu_local_var()->current,
+-			(unsigned long)get_this_cpu_local_var(),
+-			ihk_ikc_get_processor_id(), idle_halt,
+-			CPU_FLAG_NEED_RESCHED,
+-			&process_sched_runqueue_offsets,
+-			process_sched_irq_save_bridge,
+-			process_sched_irq_restore_bridge,
+-			process_spin_lock_bridge,
+-			process_spin_unlock_bridge,
+-			process_sched_noirq_lock_bridge,
+-			process_sched_noirq_unlock_bridge,
+-			process_sched_schedule_bridge,
+-			process_sched_zero_free_bridge,
+-			process_sched_pause_bridge,
+-			process_sched_has_signal_bridge,
+-			process_sched_runq_log_bridge);
+-#else
+ 	struct thread *thread = get_this_cpu_local_var()->current;
+ 	struct cpu_local_var *v;
+ 	int do_schedule = 0;
+ 	int woken = 0;
+@@ -4463,10 +4445,10 @@
+ out_schedule:
+ 	schedule();
+ 	dkprintf("%s: woken while sleeping, cpu: %d\n",
+ 		 __func__, ihk_ikc_get_processor_id());
+-#endif
+-}
++}
++#endif
+ 
+ #ifdef MCKERNEL_RUST_PROCESS_HELPERS
+ extern unsigned long sched_schedule_fp_admit(int exited_status);
+ extern void sched_schedule_debug_handoff(struct thread *prev, struct thread *next);
+--- a/kernel/rust/sched_helpers.rs
++++ b/kernel/rust/sched_helpers.rs
+@@ -7,8 +7,13 @@
+     SigCommon, SizeT, Thread, TimeSpec, Waitq, CPU_SET_MAX_CPUS,
+ };
+ 
+ unsafe extern "C" {
++    static mut idle_halt: CInt;
++    fn process_sched_irq_restore_bridge(irqstate: CULong);
++    fn process_sched_zero_free_bridge();
++    fn process_sched_pause_bridge();
++    fn process_sched_has_signal_bridge(thread_addr: usize) -> CInt;
+     fn get_this_cpu_local_var() -> *mut CpuLocalVar;
+     static mut time_sharing: CInt;
+     static process_timer_runtime_offsets: TimerRuntimeOffsets;
+     fn process_timer_spin_lock_bridge(lock_addr: usize) -> CULong;
+@@ -3662,8 +3667,44 @@
+     }
+     action
+ }
+ 
++/// Current-CPU spin-sleep boundary; preserve the existing timer/scheduler body.
++///
++/// # Safety
++/// A wait/futex queue is already installed and the current thread's spin_sleep
++/// marker is set before testing its wait condition. The caller preserves the
++/// original current-CPU/IRQ lifetime contract. The existing shared ABI supplies
++/// current and the stack-local immutable offset table; the body does not retain
++/// either the table or callback pointers. No lock or pointer ownership transfers.
++#[no_mangle]
++pub unsafe extern "C" fn spin_sleep_or_schedule() {
++    let thread = unsafe { (*get_this_cpu_local_var()).current };
++    let cpu = unsafe { get_this_cpu_local_var() };
++    // The live LWK ihk/ikc/include/ikc/ihk.h maps ihk_ikc_get_processor_id
++    // directly to ihk_mc_get_processor_id.
++    let current_cpu_id = unsafe { ihk_mc_get_processor_id() };
++    let halt = unsafe { core::ptr::read(core::ptr::addr_of!(idle_halt)) };
++    let offsets = sched_runqueue_offsets();
++    let _ = unsafe {
++        sched_spin_sleep_or_schedule_body_result(
++            thread as usize, cpu as usize, current_cpu_id, halt,
++            CPU_FLAG_NEED_RESCHED, &offsets,
++            Some(process_sched_irq_save_bridge),
++            Some(process_sched_irq_restore_bridge),
++            Some(sched_process_spin_lock_bridge),
++            Some(sched_process_spin_unlock_bridge),
++            Some(sched_process_noirq_lock_bridge),
++            Some(sched_process_noirq_unlock_bridge),
++            Some(process_sched_schedule_bridge),
++            Some(process_sched_zero_free_bridge),
++            Some(process_sched_pause_bridge),
++            Some(process_sched_has_signal_bridge),
++            Some(process_sched_runq_log_bridge),
++        )
++    };
++}
++
+ #[no_mangle]
+ pub unsafe extern "C" fn sched_spin_sleep_or_schedule_body_result(
+     thread_addr: usize,
+     cpu_addr: usize,
+--- a/kernel/rust/tests/run_equivalence.sh
++++ b/kernel/rust/tests/run_equivalence.sh
+@@ -143025,9 +143025,9 @@
+ __attribute__((weak)) int ihk_mc_get_interrupt_id(int cpu)
+ {
+ 	return cpu + 0x40;
+ }
+-__attribute__((weak)) void spin_sleep_or_schedule(void) {}
++/* spin_sleep_or_schedule is supplied by the actual Rust scheduler object. */
+ struct sig_pending;
+ __attribute__((weak)) struct sig_pending *hassigpending(struct thread *thread)
+ {
+ 	(void)thread;
+@@ -145102,9 +145102,10 @@
+ grep -Eq 'U runq_reservation_lock' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U waitq_sched_wakeup_thread_bridge' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U waitq_sched_wakeup_thread_locked_bridge' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U schedule' "${tmpdir}/out/rust.undefined"
+-grep -Eq 'U spin_sleep_or_schedule' "${tmpdir}/out/rust.undefined"
++grep -Eq ' T spin_sleep_or_schedule$' "${tmpdir}/out/rust.global"
++! grep -Eq 'U spin_sleep_or_schedule$' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U time$' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U arch_copy_to_user_bridge' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U arch_copy_from_user_bridge' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U arch_rt_sigreturn_context_bridge' "${tmpdir}/out/rust.undefined"
+@@ -145516,9 +145517,9 @@
+ grep -Eq 'U x86_xsave_size_bridge' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U x86_xsave_mask_bridge' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U xpmem_page_in_remote_on_attach' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U uti_desc' "${tmpdir}/out/rust.undefined"
+-test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 597
++test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 596
+ 
+ python3 - "${repo_root}/kernel/rust/syscall_policy.rs" <<'PY'
+ import sys
+ 

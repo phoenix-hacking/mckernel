@@ -1,3 +1,86 @@
+## Mount-corrected L12C1 fresh admission PASS; static publication before mintage — 2026-10-23 16:56 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35,whole12/14 unchanged. current_live_postjoin remains nonNULL
+FAILED_DFBB_LONG_POSITIVELY_RETIRED viaa1cdfe6e; noheavy running. Exactonehistorical
+identityROmount correction independentlyaccepted6b19/174destinationmodel/156pins
+retained; actualcontainervisibilitystillfuture. Fresh runtimeownerD83/newnonce
+ aa5bc7668ff049d4b1b55b9649954336/HOSTl12c1/p/immutablemanifestp12s5l3-0c0
+publication+strictconsumerPASS. Exactrootquery868156/profile921ab actualPASS0/
+.481386s and3authenticatedreadbacks; rawfb2ddaac79096B independentlyaccepted:
+34pins/currentUUIDloopbacking/2completepublisherfreePROC/mutex27:4/eightabsence/
+NONE/profile/fullsparsegap+floors/reserves allPASS. Staticcheckpoint thenfreeze
+canonicalpayload for genuineindependenthashapproval, attachonlyreview/publish/
+fullrealclockvalidate/onecontrollerinvocation next. Noexpiry/release minted yet,
+noqueryreplay/unchangeddfbb replay. Capsules/SDK5/image10972/apps/quotas reused.
+LONGaccepted0/100launches/0/60actualmixedminutes, no newcheckclosure.
+M14spin canonicale8290a18 exact3files integrated aftersourcepinexclusion and
+independentsource+leaf+78productionRustacceptance:15.242227s/compilerONCE/U560->559
+onlyspinremoved/50prior-warningheadings preserved29983B; fullC/layout/defaultlink/
+nativeOPEN. MetadataS03updating. M07futurestaticpacketaccepted57f6 sourceprofile;
+rootquery/guard/capture/admission/runtimeunreleased, latestphysicalneededafterP12.
+
+## DFBB physically retired; one RO mount correction next — 2026-10-23 16:47 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35,whole12/14 unchanged. Independent PASS_ACTUAL_DFBB_LONG_PHYSICAL_
+RETIREMENT_AND_CURRENT_POSTJOIN rootrecord INDEPENDENT-ACTUAL-DFBB-PHYSICAL-ACCEPTANCE.ROOT-RECORD.json.
+Actual37fileexporte10e2f02/23directreaps/exactCID6f9removed+3emptyqueries, owner
+leasefalse; freshCOMPLETE2PROC snapshots304+303/dde67837/all25identitiesabsent,
+mutex5e8d2c19 permanent27:4free/eightpathsabsent; allobservations0/joined/gone/
+closed/emptyerr. current_live_postjoin FAILED_DFBB_LONG_POSITIVELY_RETIRED (nonnull),
+unknownpriorcontainerinitbirthNULL. No furthercleanup/query needed. Preserve
+actualOwnerError start/insidebound_manifest missinghistoricalROroot, ZEROguest/
+app/hour/restorationcredit. Nextonecorrection adds exactidentityRO oldP12source
+root withoutremoving156sourcehashes; case227_stage owns actualcreateargv coverage
+fixture/newcoherentbinding/freshadmission prep. No unchanged replay/expiredrelease.
+M07actualdestinationmodel covers156pins/173paths; noM07productionholefound, only
+model/sourceproof/nonnative. M14nextspin source+leaf129750 independentlyaccepted;
+full78Rustproductionconsumer CPU6grant active (pinnedacceptednightly1.95profile,
+leafRust1.92 separate). DefaultC/layout/link/native remainOPEN. No competingheavy.
+
+## Actual dfbb container source failure closed; mount correction and physical review — 2026-10-23 16:41 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35,whole12/14 unchanged. Actual tool8527 CLOSED: outerFAIL1/1.503681s,
+innerFAIL1/1.358414s bothdirectjoined/groupgone/closed/noTERM/forcekill. Newdfbb
+container executed insidePythonowner then bound_manifest fails canonicalsource
+resolution of retainedp12-sdk5-session-successor-20261023-1 parent NOTmounted.
+Exact009-start.stderr retained in final-execution-release-1/authenticated-dfbb-
+owner-results-1. No guestattemptdirectory/kernelfailure/app/hourcredit. Normal
+result: absence_verifiedtrue/lease_retainedfalse/FAILOwnerError/nosecondary,
+CID6f9bebd3605da11ba97081ef5a131df723a5c617128170eef5033ec27eb61631.
+current_live_postjoin CLOSED_DFBB_PENDING_PHYSICAL (nonnull); rootretains heavy.
+terminal_lifecycle_repair prepares exact37client/cleanup export thenfreshPROC/
+mutex8paths review; no duplicatecleanup/signals. case227_stage owns minimal
+actual RO mount visibility correction preservingall156identitychecks. Actual
+mount destination/ancestorfixture required; previoushost-onlycoverage insufficient.
+No unchangedreplay/release reuse. m14_callback applies only concrete sharedmount
+lesson to futureM07 typedcohort source/fixture; no new native gate. Independent
+M14spin_sleep private129750leaf+ABIreviewPASS; fullcrate/layout/link/nativeOPEN.
+Candidate9source/pureaccepted, defaultbuildOPEN; no competingheavy/resize.
+
+## Corrected collector LONG actually running — 2026-10-23 16:35 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35,whole12/14 unchanged. Fetchedstatic60f715877f413e961b037f7578a9d8253563bd03/
+180blobs proof042ff881. Actualfreshrootquery98d98a9d PASS and independent frozen
+operation acceptance. Genuine canonicalpayload4dfa540d approved by independent
+native235_release_review; only approvedreview attached; publishedreleasea5095fc4/
+2769B andrequest00fa4da8. Fullproductionrealclock/bootvalidate_release PASS0/.072323s
+beforeONEexactcontroller87eae invocation with386.468558s releaseleft. Tool8527
+RUNNING, sudoanchor3801627/start57068576, newnonce dfbb3adb1c7d45b689a899140f3afffc.
+current_live_postjoin ACTIVE_LONG_OWNER_PENDING_AUTHENTICATED_STARTED (nonNULL),
+soleheavy occupied. Nooutertimeout/signal/kill, persistentdirectwait. No competing
+heavy/resize. Rootauthstartedread thenordinaryboundedprogressobservation next.
+StaticSDK5/image10972/launcher/apps/quotas/oracles unchanged; only collectorinit
+changed to accepted diagnosticproducer cb3b. No elapsedwall or app/hourcredit:
+acceptedLONG0/100launches,0/60mixedminutes pending actualterminalvalidation.
+M07typedcapsule+source175controlledguards independentlyaccepted,nativeOPEN.
+M14candidate9 source/pure43.540s independentlyaccepted, build/defaultlink/native
+OPEN; next spin_sleep_or_schedule private129750 C/Rustleaf comparisonsPASS incl
+64875actualfutexcallback, sourceABIreviewactive, canonicalunchanged. CPU6released.
+
 ## Corrected cohort actual PASS; preserved-evidence query correction in review — 2026-10-23 16:24 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

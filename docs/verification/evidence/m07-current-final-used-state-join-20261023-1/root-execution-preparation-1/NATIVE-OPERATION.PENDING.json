@@ -1,0 +1,77 @@
+{
+  "actual_release": null,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/usr/bin/sudo",
+    "-A",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/root-execution-preparation-1/native_diagnostic_container_owner.py",
+    "--attempt-parent",
+    "/home/holden/mckernel-work/native-runs/m07t1/p",
+    "--nonce",
+    "3cf46420bf424c07b4d83a3500b87a89",
+    "--owner-sha256",
+    "a32ff371f6879e3034a2605c057dbf2cde76f357514f8911fed1b515ba723a56",
+    "--manifest",
+    "/home/holden/mckernel-work/scratch/m07s1/m.json",
+    "--manifest-sha256",
+    "2b9115a45ddfffddeecf95f5d7c2da5670ef80272e34d8f2bdbdfe34f2c4de7e"
+  ],
+  "capture_directory": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/root-execution-preparation-1/actual-M07-owner-capture-1",
+  "case_id": "m07.private-used-state-3-4-9",
+  "cpu": 7,
+  "execution_review": null,
+  "fresh_root_admission": null,
+  "profile": {
+    "container_CPU_affinity": "2-5",
+    "container_CPU_count": 4,
+    "container_fsize": [
+      33554432,
+      33554432
+    ],
+    "container_memory_bytes": 12884901888,
+    "container_network": "none",
+    "container_swap_bytes": 0,
+    "container_tasks": 512,
+    "cpu": 7,
+    "guest_memory_mib": 8192,
+    "guest_numa_nodes": 2,
+    "guest_vcpus": 4,
+    "host_UID_NPROC": "inherited126258:126258; no per-UID512",
+    "jobs": 1,
+    "outer_grace_kill": null,
+    "outer_wall_kill": null,
+    "owner_CPU_limits": [
+      -1,
+      -1
+    ],
+    "owner_as_bytes": [
+      2147483648,
+      2147483648
+    ],
+    "payload_timeout_ms": 10000,
+    "required_inherited_cpu_limits": [
+      -1,
+      -1
+    ],
+    "runner_timeout_seconds": 300,
+    "stream_fsize": 33554432
+  },
+  "role": "native199-owner",
+  "schema_cohort": {
+    "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/typed-runtime-successor-1/COHERENT-RUNTIME-SOURCE-AND-FIXTURE-RESULT.json",
+    "sha256": "ff7f515bf51e4e8d42ca587c83876967c960b7774a53ccf7742d9dedb20fe0c3"
+  },
+  "status": "SOURCE_BOUND_PREPARATION_NOT_RELEASED",
+  "stream_cap_bytes": 33554432,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+}

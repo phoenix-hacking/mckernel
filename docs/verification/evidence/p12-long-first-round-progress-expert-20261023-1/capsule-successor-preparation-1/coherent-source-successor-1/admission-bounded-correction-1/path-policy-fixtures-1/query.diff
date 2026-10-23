@@ -1,0 +1,40 @@
+--- dc336-correctedquery
++++ required-path-policy-query
+@@ -44,12 +44,28 @@
+   return dict(dev=a.st_dev,ino=a.st_ino,uid=a.st_uid,gid=a.st_gid,mode=stat.S_IMODE(a.st_mode),directory=stat.S_ISDIR(a.st_mode),children=children)
+  finally:os.close(fd)
+ 
++def validate_output_path_policy(f,c):
++ # Historical retained evidence is required present, never a fresh output.
++ expected_old='/home/holden/mckernel-work/native-runs/l12a1/p.owner-'+c['prior_failed_nonce']
++ need(c['retained_previous_owner_evidence_paths']==[expected_old] and
++      c['retained_previous_owner_retirement_authority']==c['physical'] and
++      c['physical']['sha256']=='591cdb070b8f6cfe18a9903a69e3603a5590f737c12e478fc01833d9a5cef01f',
++      'exact retained historical owner policy and retirement authority')
++ need(f['retained_previous_owner_evidence']=={expected_old:True},'required retained historical owner evidence present')
++ parent=Path(c['operation']['HOST_parent']);nonce=c['operation']['nonce']
++ expected_new={c['operation']['capture_directory'],str(parent.with_name(parent.name+'.owner-'+nonce)),
++               str(parent/('attempt-'+nonce)),c['operation']['future_release_path'],c['operation']['future_request_path']}
++ need(set(f['output_paths_exist'])==expected_new and not expected_new.intersection({expected_old}),
++      'exact new output path inventory excludes historical evidence')
++ need(all(type(v) is bool for v in f['output_paths_exist'].values()) and
++      not any(f['output_paths_exist'].values()),'fresh LONG capture owner attempt and unpublished release/request paths absent')
++
+ def validate(f,c,growth):
+  need(f['uid']==f['euid']==0 and f['affinity']==[7],'root query CPU7')
+  need(f['proc']['status']=='COMPLETE' and f['proc']['failure'] is None and f['proc']['publishers']==[] and len(f['proc']['snapshots'])==2,'complete publisher-free census')
+  need(f['physical']['verdict']=='PASS_ACTUAL_CANCELLED_LONG_PHYSICAL_RETIREMENT_AND_CURRENT_POSTJOIN' and f['physical']['current_live_postjoin']['state']=='CANCELLED_LONG_POSITIVELY_RETIRED' and f['physical']['current_live_postjoin']['nonce']==c['prior_failed_nonce'] and f['physical']['current_live_postjoin']['owner_lease_retained'] is False and f['physical']['current_live_postjoin']['container_absent'] is True and f['physical']['current_live_postjoin']['permanent_mutex_device_inode']==[27,4] and f['physical']['current_live_postjoin']['mutex_free'] is True and f['physical']['current_live_postjoin']['shared_paths_absent']==8,'actual cancelled LONG positive physical/current postjoin')
+  p=f['parent'];need(p['directory'] and p['uid']==p['gid']==1000 and p['mode']==0o700 and p['children']==[],'fresh private HOST LONG parent exists empty UID1000 mode700')
+- need(not any(f['output_paths_exist'].values()),'fresh LONG capture owner attempt and unpublished release/request paths absent')
++ validate_output_path_policy(f,c)
+  need(not any(f['ownership_paths_exist'].values()),'exact SDK image launcher ownership paths absent')
+  need(f['lock']==[27,4,0,0,1] and f['locks']==[] and f['lock_acquired'] is True,'stable permanent mutex27:4 available')
+  need(f['docker_running']=='' and all(v=='' for v in f['docker_identities'].values()),'no competing container or current nonce identity')
+@@ -111,6 +127,7 @@
+   for item in cpus.split(','):
+    ends=item.split('-');online.update(range(int(ends[0]),int(ends[-1])+1))
+   f=dict(uid=os.getuid(),euid=os.geteuid(),affinity=sorted(os.sched_getaffinity(0)),proc=proc,physical=physical,parent=parent_info,output_paths_exist=outputs,ownership_paths_exist={p:os.path.lexists(p) for p in leases},lock=[lock.st_dev,lock.st_ino,lock.st_uid,lock.st_gid,lock.st_nlink],locks=locks,lock_acquired=True,docker_running=run(['/usr/bin/docker','ps','-q','--no-trunc']),docker_identities=identities,server=server,docker_info=info,daemon_binding=daemon,image_ok=image.get('Id')==c['owner_constants']['IMAGE'] and image.get('Architecture')=='amd64' and image.get('Os')=='linux' and image.get('Config')==retained.get('Config') and image.get('RootFS')==retained.get('RootFS'),mounts_ok=all(r['path']==r['resolved'] for r in mount_facts),mount_facts=mount_facts,cgroup={p:Path(p).read_text().strip() for p in c['owner_constants']['CGROUP']},allowed_container_cpus={2,3,4,5}<=online,memory_available=int(next(l for l in Path('/proc/meminfo').read_text().splitlines() if l.startswith('MemAvailable:')).split()[1])*1024,launcher_phase=state['phase'],launcher_stop_reason=state['stop_reason'],backing=dict(inode=bs.st_ino,size=bs.st_size,allocated=bs.st_blocks*512,gap=max(0,bs.st_size-bs.st_blocks*512),regular=stat.S_ISREG(bs.st_mode),canonical=Path('/home/holden/mckernel-work/scratch.ext4').resolve(strict=True)==Path('/home/holden/mckernel-work/scratch.ext4'),host_device=bs.st_dev),HOST_device=host_device,scratch_device=device,uuid_device=uuid.st_rdev,loop_backing=Path('/sys/dev/block/%d:%d/loop/backing_file'%(os.major(device),os.minor(device))).read_text().strip(),mount=mount,HOST_available=host.f_bavail*host.f_frsize,scratch_available=other.f_bavail*other.f_frsize,admission=admission,source_pins=source_pins)
++  f['retained_previous_owner_evidence']={p:os.path.lexists(p) for p in c['retained_previous_owner_evidence_paths']}
+   required=validate(f,c,growth)
+  finally:os.close(fd)
+  return f,required

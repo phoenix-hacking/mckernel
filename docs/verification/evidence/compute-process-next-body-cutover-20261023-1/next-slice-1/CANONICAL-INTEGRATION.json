@@ -1,0 +1,54 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "CANONICAL_BOUNDED_SPIN_SLEEP_SOURCE_INTEGRATED",
+  "at": "2026-10-23T16:55:10.119531+00:00",
+  "preimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "sha256": "55872d7235a06364565ec7732b7a67c918ed7c006b1e55ababa88dbe42e2a93a",
+      "bytes": 161780
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "sha256": "700a9e20349df5ae18ceea8c9195e38078a6bb05b81c79f7368fbdf6fc14abcc",
+      "bytes": 180017
+    },
+    "kernel/rust/tests/run_equivalence.sh": {
+      "path": "/home/holden/mckernel/kernel/rust/tests/run_equivalence.sh",
+      "sha256": "5df92eff793c7ff0358567340a35b3d9e36188b142186c4fe962a40370490822",
+      "bytes": 5010196
+    }
+  },
+  "postimages": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/source/kernel/process.c",
+      "sha256": "9e3cdea2027618ce954b80f2436ed44ef16e2df448c83a5b3734d77ffb161798",
+      "bytes": 161155
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/source/kernel/rust/sched_helpers.rs",
+      "sha256": "5a09c8420d33027483d302ce9f94c350ed2dfdad450a3834214cd224023ab4f8",
+      "bytes": 181991
+    },
+    "kernel/rust/tests/run_equivalence.sh": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/source/kernel/rust/tests/run_equivalence.sh",
+      "sha256": "b6e5926d39edcdc9b65f00877e74564af4b363ad20034ab5ccccbb9c919ab737",
+      "bytes": 5010284
+    }
+  },
+  "source_pin_check": {
+    "selected_runtime_owner_sha256": "d83ed95aaa874fa3c6806b4dbcfca263450281a468b082f48df5c2168ba42c8b",
+    "source_guard_keys": 156,
+    "exact_three_canonical_paths_absent": true,
+    "keys_preserved_from_prior_accepted_transitive_exclusion": "Existing selected authority subset is unchanged except namespace/long transport; earlier selected transitive authority check excluded same three canonical paths."
+  },
+  "independent_review": "INDEPENDENT-PRODUCTION-SPIN-SLEEP-CONSUMER-ACCEPTANCE.ROOT-RECORD.json",
+  "leaf_modeled_cases": 129750,
+  "actual_futex_callback_cases": 64875,
+  "production_Rust_compiler_invocations": 1,
+  "whole_C_layout": "OPEN",
+  "default_image_link": "OPEN",
+  "native": "OPEN",
+  "retirement_credit": false,
+  "practical_closures": []
+}

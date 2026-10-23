@@ -472,6 +472,12 @@
                   "sha256": "fc641655391f9ee414ecb79fd8b6f3a31cd9c086a665d38131146a26f342317e",
                   "size": 2295,
                   "scope": "Exact three-file canonical set_timer wrapper source integration after independent ABI review; unchanged functional image; no retirement credit."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/CANONICAL-INTEGRATION.json",
+                  "sha256": "e8290a189f27384e3ceed24a2d8f9385df56bc9640813f00d432e57b2f03a7c9",
+                  "size": 2602,
+                  "scope": "Root exact three-file canonical spin_sleep_or_schedule wrapper integration after156active source-pin exclusion and independent review; no whole C/defaultlink/native or retirement credit."
                 }
               ]
             },
@@ -499,6 +505,30 @@
                   "sha256": "7b4382c28686032125b466595e73a2ed38643f8c2532488ede7c1790510c722f",
                   "size": 1203,
                   "scope": "Independent source/ABI and actual Rust object consumer acceptance only; whole C TU/default image/native/retirement OPEN."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/ACTUAL-LEAF-RECEIPT.json",
+                  "sha256": "687b629495887d44ebc2496b683bd22d9fa55991d7c49853d3b07eb4776fc3cc",
+                  "size": 5848,
+                  "scope": "129750 modeled original-selected-C/actual-Rust wrapper/body state and ordered-callback comparisons, including64875 calls through the extracted actual futex direct-schedule callback; current timer/scheduler headerABI compile. Whole production process layout/currentCpuLocal offsets remain OPEN."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+                  "sha256": "a19c4303bdbe94285a41fc0822b7528afc3468ff9f83ebccafc7e73c540f28df",
+                  "size": 7319,
+                  "scope": "Actual78-input same-profile production Rust compile ONCE15.242227s; NM/readelf verify unique GLOBAL FUNC spin_sleep/body/currentCPU, no unresolved spin/descriptor, exact productionU560->559 removingonlyspin, preservedmemory/set_timer exports. Whole C/layout/defaultkernel/native OPEN."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/INDEPENDENT-PRIVATE-SPIN-SLEEP-SOURCE-LEAF-ACCEPTANCE.ROOT-RECORD.json",
+                  "sha256": "2133b6b88d74a8d94c1bd0b995d6b87e4785646f68a9662bbf4773725e591b90",
+                  "size": 668,
+                  "scope": "Independent private source/ABI and actual modeled leaf acceptance only; no whole layout/defaultlink/native acceptance."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/INDEPENDENT-PRODUCTION-SPIN-SLEEP-CONSUMER-ACCEPTANCE.ROOT-RECORD.json",
+                  "sha256": "aedadb96da3395ced78cd27dc3f6a2afaa9df545c63703e7c3d69738ab2dd9fe",
+                  "size": 783,
+                  "scope": "Independent actual productionRust object consumer acceptance; compiler diagnostics retained29983B/50warnings with unchanged warning headings, NM/readelf stderr empty; whole C/layout/defaultlink/native OPEN."
                 }
               ]
             },
@@ -581,6 +611,50 @@
                   "sha256": "7b4382c28686032125b466595e73a2ed38643f8c2532488ede7c1790510c722f",
                   "size": 1203,
                   "scope": "Independent source/ABI and actual Rust object consumer acceptance only; whole C TU/default image/native/retirement OPEN."
+                }
+              ]
+            },
+            {
+              "id": "M14-02-04-S03",
+              "title": "spin_sleep_or_schedule current-CPU and futex callback orchestration",
+              "status": "partial",
+              "rust_consumer": "kernel/rust/sched_helpers.rs::spin_sleep_or_schedule -> sched_spin_sleep_or_schedule_body_result; caller kernel/rust/futex.rs::futex_wait_schedule_direct_bridge",
+              "implementation": "Canonical selected PUBLIC C forwarding wrapper replaced by Rust export reusing existing sharedABI offset constructor, lock adapters and body; exact complete C fallback and all other accepted process fixes preserved. No new C provider/data/layout.",
+              "focused_checks": "129750 modeled C/Rust state/callback-order comparisons incl64875 extracted actual futex callback cases and actual headerABI compile; exact78input productionRust object PASS15.242227s/NM/readelf/productionU560->559; independent acceptance reused.",
+              "production_link": "OPEN for this slice: actual whole process.c selected TU/currentCpuLocal layout+offset witness and matched default kernel link not executed. Prior idle and set_timer evidence remain separate.",
+              "native_validation": "OPEN for matching native futex/spin/wakeup/scheduler behavior; functional image unchanged.",
+              "remaining_dependencies": "Actual whole C/layout/currentCpuLocal offsets, default unique final Rust provider/callback ownership and matching native functional proof; no whole-area/file/native retirement credit.",
+              "next_action": "Prepare coherent private successor from retained candidate9 with this exact three-file canonical delta and real selected consumer/layout/link guards; no in-place frozen candidate9 edit or runtime claim.",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/CANONICAL-INTEGRATION.json",
+                  "sha256": "e8290a189f27384e3ceed24a2d8f9385df56bc9640813f00d432e57b2f03a7c9",
+                  "size": 2602,
+                  "scope": "Root exact three-file canonical spin_sleep_or_schedule wrapper integration after156active source-pin exclusion and independent review; no whole C/defaultlink/native or retirement credit."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/ACTUAL-LEAF-RECEIPT.json",
+                  "sha256": "687b629495887d44ebc2496b683bd22d9fa55991d7c49853d3b07eb4776fc3cc",
+                  "size": 5848,
+                  "scope": "129750 modeled original-selected-C/actual-Rust wrapper/body state and ordered-callback comparisons, including64875 calls through the extracted actual futex direct-schedule callback; current timer/scheduler headerABI compile. Whole production process layout/currentCpuLocal offsets remain OPEN."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/ACTUAL-PRODUCTION-FULLCRATE-RECEIPT.json",
+                  "sha256": "a19c4303bdbe94285a41fc0822b7528afc3468ff9f83ebccafc7e73c540f28df",
+                  "size": 7319,
+                  "scope": "Actual78-input same-profile production Rust compile ONCE15.242227s; NM/readelf verify unique GLOBAL FUNC spin_sleep/body/currentCPU, no unresolved spin/descriptor, exact productionU560->559 removingonlyspin, preservedmemory/set_timer exports. Whole C/layout/defaultkernel/native OPEN."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/INDEPENDENT-PRIVATE-SPIN-SLEEP-SOURCE-LEAF-ACCEPTANCE.ROOT-RECORD.json",
+                  "sha256": "2133b6b88d74a8d94c1bd0b995d6b87e4785646f68a9662bbf4773725e591b90",
+                  "size": 668,
+                  "scope": "Independent private source/ABI and actual modeled leaf acceptance only; no whole layout/defaultlink/native acceptance."
+                },
+                {
+                  "path": "docs/verification/evidence/compute-process-next-body-cutover-20261023-1/next-slice-1/INDEPENDENT-PRODUCTION-SPIN-SLEEP-CONSUMER-ACCEPTANCE.ROOT-RECORD.json",
+                  "sha256": "aedadb96da3395ced78cd27dc3f6a2afaa9df545c63703e7c3d69738ab2dd9fe",
+                  "size": 783,
+                  "scope": "Independent actual productionRust object consumer acceptance; compiler diagnostics retained29983B/50warnings with unchanged warning headings, NM/readelf stderr empty; whole C/layout/defaultlink/native OPEN."
                 }
               ]
             }

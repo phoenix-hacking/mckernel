@@ -143026,7 +143026,7 @@ __attribute__((weak)) int ihk_mc_get_interrupt_id(int cpu)
 {
 	return cpu + 0x40;
 }
-__attribute__((weak)) void spin_sleep_or_schedule(void) {}
+/* spin_sleep_or_schedule is supplied by the actual Rust scheduler object. */
 struct sig_pending;
 __attribute__((weak)) struct sig_pending *hassigpending(struct thread *thread)
 {
@@ -145103,7 +145103,8 @@ grep -Eq 'U runq_reservation_lock' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U waitq_sched_wakeup_thread_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U waitq_sched_wakeup_thread_locked_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U schedule' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U spin_sleep_or_schedule' "${tmpdir}/out/rust.undefined"
+grep -Eq ' T spin_sleep_or_schedule$' "${tmpdir}/out/rust.global"
+! grep -Eq 'U spin_sleep_or_schedule$' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U time$' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_copy_to_user_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_copy_from_user_bridge' "${tmpdir}/out/rust.undefined"
@@ -145517,7 +145518,7 @@ grep -Eq 'U x86_xsave_size_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_xsave_mask_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U xpmem_page_in_remote_on_attach' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U uti_desc' "${tmpdir}/out/rust.undefined"
-test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 597
+test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 596
 
 python3 - "${repo_root}/kernel/rust/syscall_policy.rs" <<'PY'
 import sys

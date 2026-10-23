@@ -1,0 +1,111 @@
+{
+  "actions": "After exact payload review only: attach approved review; O_EXCLpublish newr0600; full original realclock/defaultboot validate_release; derive request/canonicalLF+digest and exactrootargv. Does not invoke controller. Root may invoke generated exactargv ONCE only under genuine conditional execution approval.",
+  "actual_admission_readback": {
+    "bytes": 79096,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-docker-start-1/runtime-successor-1/admission-preparation-1/authenticated-admission-readback-1/stdout",
+    "sha256": "fb2ddaac7b7d6b66b42a76812062e191ec639e7c401d4e99de89ce8ad0a93eba"
+  },
+  "argv": [
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport importlib.util,json,os,sys,time\nD=Path('/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-docker-start-1/runtime-successor-1')\nassert sys.version_info[:3]==(3,9,12) and os.getuid()==os.geteuid()==1000\ns=importlib.util.spec_from_file_location('actual_selected_production_transport',D/'source/long_transport.py');g=importlib.util.module_from_spec(s);s.loader.exec_module(g)\nassert g.digest(g.stable(D/'source/long_transport.py'))=='264194c5370a55666e4b70232fee529a608c80c5b89acb8620d06ebcf82ddc8f'\n# Authenticated readback exists ONLY in repository; no private-copy prerequisite.\nquery=Path('/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-docker-start-1/runtime-successor-1/admission-preparation-1/authenticated-admission-readback-1/stdout');qraw=g.stable(query);assert len(qraw)==79096 and g.digest(qraw)=='fb2ddaac7b7d6b66b42a76812062e191ec639e7c401d4e99de89ce8ad0a93eba';q=json.loads(qraw);assert q['status']=='PASS_FRESH_READ_ONLY_P12_LONG_ADMISSION'\ndef exclusive(p,raw):\n fd=os.open(p,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600)\n with os.fdopen(fd,'wb') as f:f.write(raw);f.flush();os.fsync(f.fileno())\nassert len(sys.argv)==4\npayloadpath=Path(sys.argv[1]);payloadsha=sys.argv[2];reviewpath=Path(sys.argv[3]);assert len(payloadsha)==64 and payloadpath.is_absolute() and reviewpath.is_absolute()\npayloadraw=g.stable(payloadpath);assert g.digest(payloadraw)==payloadsha;value=json.loads(payloadraw);assert 'independent_review' not in value and g.canonical(value)==payloadraw and payloadraw.endswith(b'\\n')\nreview=json.loads(g.stable(reviewpath));assert set(review)=={'status','reviewer','implementation_ownership','payload_sha256'} and review['status']=='PASS' and review['implementation_ownership'] is False and review['reviewer']!=value['author'] and review['payload_sha256']==g.digest(payloadraw)\nassert value['profile']==g.TRANSPORT and value['storage_admission']==q['observations']['admission'] and value['boot_id']==Path('/proc/sys/kernel/random/boot_id').read_text().strip()\nassert value['nonce']=='aa5bc7668ff049d4b1b55b9649954336' and value['attempt_parent']=='/home/holden/mckernel-work/native-runs/l12c1/p' and value['manifest']=={'path':'/home/holden/mckernel-work/scratch/p12s5l3/m.json','sha256':'0c0c6e3bb3744665c5b4dddbfdd0977be39db25b78ca19392e5a380f7f0502f6'}\nnow=time.time();assert now<=value['expires_unix']<=now+600 and value['execution_count']==1\nvalue['independent_review']=review;raw=g.canonical(value);release=Path('/home/holden/mckernel-work/scratch/p12s5l3/r.json');exclusive(release,raw);release_sha=g.digest(raw)\n# No clock or boot override: full unmodified production validation on published bytes.\nvalidated=g.validate_release(str(release),release_sha,value['manifest']['path'],value['nonce'],value['attempt_parent'])\nreq=json.loads(g.stable(D/'CAPTURE-REQUEST.PROTOTYPE.NOT-EXECUTABLE.json'));req['long_profile_release']={'path':str(release),'sha256':release_sha};req['argv'][req['argv'].index('--long-profile-release-sha256')+1]=release_sha;req['status']='EXACT_IMMUTABLE_REQUEST_CONDITIONED_ON_APPROVED_PAYLOAD_AND_REALCLOCK_CONSUMER';request_raw=g.canonical(req);exclusive(D/'CAPTURE-REQUEST.json',request_raw);request_sha=g.digest(request_raw)\nargv=json.loads(g.stable(D/'ROOT-ARGV.PROTOTYPE.NOT-EXECUTABLE.json'));argv[-1]=request_sha;exclusive(D/'ROOT-ARGV.FINAL.NOT-EXECUTED.json',g.canonical(argv))\nresult={'scope':'Functional OS/apps and Rust/assembly migration only; no security testing.','status':'PASS_PUBLISHED_FINAL_SERIALIZATION_AND_FULL_REALCLOCK_RELEASE_CONSUMER','payload_sha256':g.digest(payloadraw),'release_path':str(release),'release_sha256':release_sha,'request_path':str(D/'CAPTURE-REQUEST.json'),'request_sha256':request_sha,'root_argv_path':str(D/'ROOT-ARGV.FINAL.NOT-EXECUTED.json'),'expires_unix':validated['expires_unix'],'independent_review_source':str(reviewpath),'native_invoked':False}\nexclusive(D/'ACTUAL-FINAL-SERIALIZATION-AND-REALCLOCK-CONSUMER.json',g.canonical(result));print(json.dumps(result))\n",
+    null,
+    null,
+    null
+  ],
+  "current_live_postjoin": "FAILED_DFBB_LONG_POSITIVELY_RETIRED",
+  "future_expiry": null,
+  "future_independent_review": null,
+  "future_payload_sha256": null,
+  "future_release_sha256": null,
+  "future_request_sha256": null,
+  "no_private_query_copy_required": true,
+  "nonce": "aa5bc7668ff049d4b1b55b9649954336",
+  "root_controller_argv_prototype": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=unlimited:unlimited",
+    "--fsize=402653184:402653184",
+    "--core=0:0",
+    "--nofile=4096:4096",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-docker-start-1/runtime-successor-1/capture_root_LONG.NOT-RELEASED.py",
+    "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-docker-start-1/runtime-successor-1/CAPTURE-REQUEST.json",
+    null
+  ],
+  "runtime": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_TRANSPORT": {
+    "bytes": 17024,
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-docker-start-1/runtime-successor-1/source/long_transport.py",
+    "sha256": "264194c5370a55666e4b70232fee529a608c80c5b89acb8620d06ebcf82ddc8f"
+  },
+  "slots": {
+    "argv5": "ROOT actual frozen canonical pre-review payload absolute path",
+    "argv6": "ROOT actual frozen canonical payload SHA256 reviewed BEFORE attach",
+    "argv7": "Actual reviewer-approved exact four-key independent_review object path"
+  },
+  "source_files": {
+    "CURRENT68-SDK5-AUTHORITY-LINKS.json": {
+      "bytes": 2336,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-docker-start-1/runtime-successor-1/source/CURRENT68-SDK5-AUTHORITY-LINKS.json",
+      "sha256": "14bc2034e4f11fe679ebef354b367dc61d5133321d0718a236f7e92aa1776d02"
+    },
+    "composite_module_binding.py": {
+      "bytes": 3871,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-docker-start-1/runtime-successor-1/source/composite_module_binding.py",
+      "sha256": "eb44f800926479e31a7a423b5d4ba5bde0f8941ed44bf0f881adbe18a21040c4"
+    },
+    "long_transport.py": {
+      "bytes": 17024,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-docker-start-1/runtime-successor-1/source/long_transport.py",
+      "sha256": "264194c5370a55666e4b70232fee529a608c80c5b89acb8620d06ebcf82ddc8f"
+    },
+    "native_diagnostic.py": {
+      "bytes": 88446,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-docker-start-1/runtime-successor-1/source/native_diagnostic.py",
+      "sha256": "88a07d6224f388805552d57b16a671007a1b21ecf099ba1e7b00938a2512ca23"
+    },
+    "native_diagnostic_backend.py": {
+      "bytes": 26316,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-docker-start-1/runtime-successor-1/source/native_diagnostic_backend.py",
+      "sha256": "3f01a73dbd7664a12a514163561790fc56edf46114018f13781ab62387cccd52"
+    },
+    "native_diagnostic_container_owner.py": {
+      "bytes": 104772,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-docker-start-1/runtime-successor-1/source/native_diagnostic_container_owner.py",
+      "sha256": "d83ed95aaa874fa3c6806b4dbcfca263450281a468b082f48df5c2168ba42c8b"
+    },
+    "native_diagnostic_runner.py": {
+      "bytes": 7500,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-docker-start-1/runtime-successor-1/source/native_diagnostic_runner.py",
+      "sha256": "d3cbf307b619e347c994503e2765da9d1962d0affe42baf54482529a4f372094"
+    },
+    "p12_long_session.py": {
+      "bytes": 10930,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-docker-start-1/runtime-successor-1/source/p12_long_session.py",
+      "sha256": "bff717d885afdda0d82cd0ab05a0930a3e66b242c6200b1295f2173bb4cdc5d3"
+    },
+    "qmp_capture.py": {
+      "bytes": 9913,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-docker-start-1/runtime-successor-1/source/qmp_capture.py",
+      "sha256": "5bccd46cdcf8ee6201e28835f5bcbebda6217f9f902f964c5430e70e4b70d741"
+    },
+    "repaired_image_authority.py": {
+      "bytes": 3432,
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/failure-dfbb-docker-start-1/runtime-successor-1/source/repaired_image_authority.py",
+      "sha256": "63db0419d0a6866d223f288d007a3c202f22fa5bf9d0d5d00b6fe4f098743e38"
+    }
+  },
+  "status": "EXACT_FINALIZATION_TEMPLATE_ROOT_REVIEW_AND_FROZEN_PAYLOAD_REQUIRED_NOT_EXECUTED"
+}

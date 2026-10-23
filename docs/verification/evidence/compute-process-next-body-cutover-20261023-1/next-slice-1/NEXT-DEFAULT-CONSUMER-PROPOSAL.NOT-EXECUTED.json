@@ -1,0 +1,37 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PROPOSAL_ONLY_NOT_EXECUTED",
+  "execution_authority": false,
+  "actual_live_consumer": {
+    "path": "kernel/rust/futex.rs",
+    "function": "futex_wait_schedule_direct_bridge",
+    "line": 798,
+    "source": {
+      "path": "/home/holden/mckernel/kernel/rust/futex.rs",
+      "sha256": "ecfafb1d08247eec584c429c0bc9cd4fbd75d1bd8f01e10847e5dad796a6b4d7",
+      "bytes": 34480
+    },
+    "body": "spin_sleep_or_schedule();",
+    "observed_leaf_cases": 64875
+  },
+  "production_source_delta": "Exactly3private files from SOURCE-BINDINGS; no candidate9/canonical modification. Existing Rust sched_runqueue_offsets and4lock adapters reused; existing C process_sched_runqueue_offsets remains static and unchanged for schedule() caller.",
+  "next_cheapest_production_Rust": "After independent sourceABIreview/grant, exact accepted pinnednightly1.95/78input/4cfg/2externalmodule CGU1 CPU6onejob AS2GiB CPU60 wall90+6 FSIZE32MiB NOFILE256 core0 stack2MiB; onlyprivate sched_helpers.rs overlay, compilerONCE with durableobjectreceipt beforeNM. This leafgrant does NOT authorize it.",
+  "production_Rust_expected": {
+    "T": [
+      "spin_sleep_or_schedule",
+      "sched_spin_sleep_or_schedule_body_result",
+      "get_this_cpu_local_var",
+      "ihk_mc_get_processor_id"
+    ],
+    "not_U": [
+      "spin_sleep_or_schedule",
+      "process_sched_runqueue_offsets"
+    ],
+    "preserve_memory_and_set_timer_exports": true,
+    "exact_same_profile_U_delta": "Prior set_timer actual productionU560 -> expected559, only removed Uspin_sleep_or_schedule; no new external C data/provider. Verify exactsetdelta, never use broadharness597->596 total for this four-cfg production profile."
+  },
+  "whole_C_consumer": "Future coherent successor of frozen candidate9 only; actualGCC14 selected process.c fullTU must show no Cspin_sleep_or_schedule body/definition and unchanged public declaration. Fallback C body exact. ActualsharedABI offsetconstructor vs actualCheader/offsetinitializer must join. No invented Ccaller/import requirement: actualcallsite is Rustfutex callback.",
+  "default_link": "one uniquely Rust-owned spin_sleep_or_schedule T; existing C/Rust callback primitive providers, currentCPU and descriptor remain accounted; final unresolvedset empty. Preserve candidate9 memory/set_timer/idle/page_unmap guards; no broadoracle/profile weakening.",
+  "native": "Matching future futex/scheduler/wakeup app evidence under separate release; currentimage10972 unchanged.",
+  "CPU6_held": false
+}

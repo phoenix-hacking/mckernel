@@ -1,0 +1,35 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "FAIL_CONTAINER_SOURCE_VISIBILITY_BEFORE_GUEST",
+  "nonce": "dfbb3adb1c7d45b689a899140f3afffc",
+  "outer_seconds": 1.5036805459531024,
+  "inner_seconds": 1.358413644018583,
+  "outer_and_inner_joined_closed_groups_absent": true,
+  "outer_timeout_signals_kill": false,
+  "owner_result": {
+    "absence_verified": true,
+    "application_acceptance": false,
+    "container": "6f9bebd3605da11ba97081ef5a131df723a5c617128170eef5033ec27eb61631",
+    "failure": "OwnerError",
+    "lease_retained": false,
+    "secondary": [],
+    "secondary_omitted": 0,
+    "signal_number": null,
+    "status": "FAIL"
+  },
+  "cause_evidence": "authenticated-dfbb-owner-results-1/009-start.stderr",
+  "observed_cause": "Inside container owner bound_manifest verifies retained source; canonical resolution of /home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1 fails FileNotFoundError. Host source verification did not prove actual container mount visibility.",
+  "guest_attempt_created": false,
+  "kernel_failure_proven": false,
+  "accepted_launches": 0,
+  "accepted_mixed_minutes": 0,
+  "current_live_postjoin": {
+    "state": "CLOSED_DFBB_PENDING_PHYSICAL",
+    "owner_pid": 3801631,
+    "owner_start": 57068588,
+    "sudo_anchor_pid": 3801627,
+    "sudo_anchor_start": 57068576,
+    "heavy_reserved": true
+  },
+  "next": "Exact retained client/container export and fresh physical review; minimal coherent RO mount correction with actual argv visibility fixture. No unchanged replay/extra cleanup."
+}

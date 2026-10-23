@@ -1,0 +1,20 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "verdict": "PASS_PRIVATE_SPIN_SLEEP_SOURCE_ABI_AND_ACTUAL_PRODUCTION_RUST_OBJECT_ONLY",
+  "reviewer": "/root/m14_build_release_review",
+  "at": "2026-10-23T16:55:10.099502+00:00",
+  "actual_fullcrate_receipt_sha256": "a19c4303bdbe94285a41fc0822b7528afc3468ff9f83ebccafc7e73c540f28df",
+  "compiler_seconds": 15.242226611,
+  "compiler_stderr_bytes": 29983,
+  "compiler_warnings": 50,
+  "warning_headings_match_prior_production": true,
+  "nm_readelf_stderr_empty": true,
+  "undefined_symbols": {
+    "before": 560,
+    "after": 559,
+    "only_removed": "spin_sleep_or_schedule",
+    "new": []
+  },
+  "object_rehashed_by_reviewer": false,
+  "full_C_layout_defaultlink_native": "OPEN"
+}

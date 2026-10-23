@@ -1,0 +1,40 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_ACTUAL_M07_CREATEARGV_DESTINATION_RO_COVERAGE",
+  "owner_sha256": "20da767d408f65746b8f64f72e5654625d9e666b4deb6bfb9cc65dbf7dd6ab07",
+  "source_pin_count": 156,
+  "required_path_count": 173,
+  "model_source_sha256": "5bf700e3e09d687b7de6cf69104e1ac15b02edccfc5b589d5b594c91b75c6fb2",
+  "capture_result_sha256": "765c0885d8f9e80feab2811a67a9c17da9c15e04e6488688a159d02b2aec93dd",
+  "coverage_result_sha256": "bd159947d951437278174e8463730c7816677fa27b315b47f7a2a93af0f60598",
+  "original_actual_P12_failure": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-long-first-round-progress-expert-20261023-1/capsule-successor-preparation-1/coherent-source-successor-1/final-execution-release-1/authenticated-dfbb-owner-results-1/009-start.stderr",
+    "sha256": "d3d5e477fb6e60715fca47cca8a6bb8a9b4f1de6c2aca1b819379b7762689b22",
+    "actual_missing_root": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1"
+  },
+  "conclusion": "M07 actual createargv identity RO destination routes cover all156 source pins and all173 unique required HOSTinputs including SELF,runner,sibling imports,manifest,staging,artifact,module and cleanup provider/consumer refs. Most-specific destination chosen conservatively; conflicting same-depth/foreign/RW/tmpfs routes reject. M07 has no P12old-root pins; no M07 production source/mount correction required. Exact missingP12root is a failing negative and model-only identityRO restoration passes.",
+  "negative_controls": [
+    "actual_P12_missing_root_uncovered",
+    "synthetic_tmpfs_same_destination_shadow",
+    "synthetic_foreign_RO_same_destination_shadow",
+    "synthetic_RW_child_shadow"
+  ],
+  "capture": {
+    "seconds": 0.2706856729928404,
+    "returncode": 0,
+    "direct_child_joined": true,
+    "group_absent": true,
+    "closed_streams": true,
+    "error": null,
+    "retirement_error": null
+  },
+  "cpu0_released": true,
+  "production_source_changed": false,
+  "limits": [
+    "Source/argv destination model only; no Docker mount execution or container filesystem observation.",
+    "Image-provided /usr/bin/python3,stdlib and QEMU are not claimed HOSTbind inputs; original pinned image/QEMU controls remain.",
+    "No guest/native/release credit."
+  ],
+  "independent_execution_release": null,
+  "native_result": null
+}

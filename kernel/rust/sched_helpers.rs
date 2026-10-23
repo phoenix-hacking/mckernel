@@ -8,6 +8,11 @@ use crate::abi::{
 };
 
 unsafe extern "C" {
+    static mut idle_halt: CInt;
+    fn process_sched_irq_restore_bridge(irqstate: CULong);
+    fn process_sched_zero_free_bridge();
+    fn process_sched_pause_bridge();
+    fn process_sched_has_signal_bridge(thread_addr: usize) -> CInt;
     fn get_this_cpu_local_var() -> *mut CpuLocalVar;
     static mut time_sharing: CInt;
     static process_timer_runtime_offsets: TimerRuntimeOffsets;
@@ -3661,6 +3666,42 @@ pub unsafe extern "C" fn sched_schedule_prepare_body_result(
         );
     }
     action
+}
+
+/// Current-CPU spin-sleep boundary; preserve the existing timer/scheduler body.
+///
+/// # Safety
+/// A wait/futex queue is already installed and the current thread's spin_sleep
+/// marker is set before testing its wait condition. The caller preserves the
+/// original current-CPU/IRQ lifetime contract. The existing shared ABI supplies
+/// current and the stack-local immutable offset table; the body does not retain
+/// either the table or callback pointers. No lock or pointer ownership transfers.
+#[no_mangle]
+pub unsafe extern "C" fn spin_sleep_or_schedule() {
+    let thread = unsafe { (*get_this_cpu_local_var()).current };
+    let cpu = unsafe { get_this_cpu_local_var() };
+    // The live LWK ihk/ikc/include/ikc/ihk.h maps ihk_ikc_get_processor_id
+    // directly to ihk_mc_get_processor_id.
+    let current_cpu_id = unsafe { ihk_mc_get_processor_id() };
+    let halt = unsafe { core::ptr::read(core::ptr::addr_of!(idle_halt)) };
+    let offsets = sched_runqueue_offsets();
+    let _ = unsafe {
+        sched_spin_sleep_or_schedule_body_result(
+            thread as usize, cpu as usize, current_cpu_id, halt,
+            CPU_FLAG_NEED_RESCHED, &offsets,
+            Some(process_sched_irq_save_bridge),
+            Some(process_sched_irq_restore_bridge),
+            Some(sched_process_spin_lock_bridge),
+            Some(sched_process_spin_unlock_bridge),
+            Some(sched_process_noirq_lock_bridge),
+            Some(sched_process_noirq_unlock_bridge),
+            Some(process_sched_schedule_bridge),
+            Some(process_sched_zero_free_bridge),
+            Some(process_sched_pause_bridge),
+            Some(process_sched_has_signal_bridge),
+            Some(process_sched_runq_log_bridge),
+        )
+    };
 }
 
 #[no_mangle]
