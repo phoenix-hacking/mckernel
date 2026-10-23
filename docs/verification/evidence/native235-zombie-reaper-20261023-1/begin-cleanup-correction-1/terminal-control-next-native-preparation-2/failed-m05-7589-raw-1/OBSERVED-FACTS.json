@@ -1,0 +1,117 @@
+{
+  "actual_host_timestamps": {
+    "deadline": 537339.925112677,
+    "finished_at": 537074.215975012,
+    "started_at": 537039.925112677
+  },
+  "capture_errors": [],
+  "capture_status": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/failed-m05-7589-raw-1/capture/status.json",
+    "sha256": "c527a225dc42dda9a14ce9ab85eb33b52578776f9c2b5616fd8912cb8ea0a661"
+  },
+  "cleanup": {
+    "errors": [],
+    "reaped": true
+  },
+  "cycle_credit": 0,
+  "direct_child_joined": true,
+  "full_observation_retained": true,
+  "host_envelope_modeled": false,
+  "observation_serial_exact_raw_bytes_UTF8": true,
+  "outer_returncode": 1,
+  "outer_seconds": 36.91837990109343,
+  "payloads": [
+    {
+      "argv": [
+        "/bin/mcexec",
+        "-t",
+        "1",
+        "0",
+        "app",
+        "A",
+        "",
+        "B"
+      ],
+      "cwd": "/case/work",
+      "env": {
+        "COKERNEL_PATH": "/apps",
+        "PATH": "/usr/bin:/bin"
+      },
+      "finished_ns": 32391497978,
+      "procfs_empty": false,
+      "raw_wait_status": 0,
+      "reaped_ns": 32153272449,
+      "started_ns": 31724198084,
+      "streams": {
+        "stderr": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 32051258646,
+          "hex": "",
+          "limit": 1024,
+          "observed": 0,
+          "retained": 0,
+          "truncated": false
+        },
+        "stdout": {
+          "discarded": 0,
+          "eof": true,
+          "eof_ns": 32051315916,
+          "hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+          "limit": 1024,
+          "observed": 40,
+          "retained": 40,
+          "truncated": false
+        }
+      }
+    }
+  ],
+  "physical_review": null,
+  "process_group_absent": true,
+  "raw_failure": {
+    "error": "M05 case: payload after resource capture",
+    "phase": "evaluation",
+    "type": "DiagnosticError"
+  },
+  "raw_false_flags": {
+    "application_acceptance": false,
+    "mckernel_application_executed": false
+  },
+  "raw_records_edited": false,
+  "raw_result_status": "FAIL",
+  "resource_restoration_credit": 0,
+  "retained_result": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/failed-m05-7589-raw-1/guest/result.json",
+    "sha256": "69e1ad884baffa6c62eea4dfe76a3a948fffe0891a1551afe5a83d40dba6b799"
+  },
+  "retention_map": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/failed-m05-7589-raw-1/RETENTION-MAP.json",
+    "sha256": "b803f7d2abe9bc952640be1474850af58c3e8563d5824d63d21fcfefbaed413d"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "scope_limit": "Payload procfs_empty false, ACK0 then retirement-11 then procfs DELETE observed. No generation1 application_quiesce/shutdown row in retained serial. No root-cause diagnosis or restoration credit follows. Readiness cause belongs to assigned expert.",
+  "selected_serial_rows": [
+    {
+      "line": 948,
+      "text": "<6>[   32.106375] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=256 intent_errno=0"
+    },
+    {
+      "line": 949,
+      "text": "<6>[   32.119243] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=256 token=3 errno=0 abandoned=1"
+    },
+    {
+      "line": 950,
+      "text": "<6>[   32.123140] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=256 token=21 errno=-11"
+    },
+    {
+      "line": 951,
+      "text": "<6>[   32.129164] ihk_smp_x86_64: IHK-SMP: application procfs deleted os=0 generation=1 pid=256 tid=256"
+    },
+    {
+      "line": 955,
+      "text": "[   32.466517] reboot: Power down"
+    }
+  ],
+  "shutdown_application_quiesce_rows": 0,
+  "status": "RETAINED_LITERAL_FAILED_M05_7589_FACTS_NO_ACCEPTANCE"
+}

@@ -1,3 +1,31 @@
+## M05 actual reader correction staged; execution review active — 2026-10-23 11:48 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical31/35,whole8/14; newly closedIDsnone. Finalcycles/launches/mixedminutes0/0/0.
+SecondM05 attempt7589 FAILED36.918s, preserved fullobservation69e1ad88 and raw14files.
+Independent positivephysicalretirement1abd5a73 accepts25clients/QEMUreaped/CIDremoved,
+completefreshPROC/no publishers/permanentmutex27:4/ownerabsence/leasefalse. No new
+restoration/cycle/no-forcekill credit. Expert reproduced real reader defect:
+repeated save_file(O_EXCL) on the same snapshot path failed secondpoll EEXIST.
+C01ddc7c now reads everypoll, preserves firstpending once and distinct terminal
+only on unchangedRust13d actualretirement0 gate; original five-second loops and
+resource/application oracles unchanged.20actualcommands/staticELF024c PASS and
+independentSOURCE+ACTUAL_BUILD accepted. Newinit-only61unchanged stage21.576s,
+manifest1fb66e1f, owner434b018c; realinsideSELF/hash/hooksPASS.572s. Exactpacketf746
+nonceefb431/HOSTm05h2 is under focused source/execution preparation review;
+freshadmission/guard/publication/finalrelease remainrequired. No SDK/image rebuild.
+M14candidate5 selectedsource/profile accepted; threeHOSTnamespaces created and
+fivefreshidentity fields finalized actualrequest377e6be0. No compiler/defaultELF/
+native proof yet. Actualrequest jobs4 matchesfourCPU existing ceiling; earlier
+prospectivej2 annotation is superseded, request unchanged. Fresh buildfacts owner
+m14_production_stage; one-heavy serialization persists.
+P12final-gate candidate39ownedcommands/staticELF558198 PASS: terminal COMPLETE
+afterfinalCchecks plus realdefaultworkspace postflight; focused independentreview
+active, no native/hour credit. LONGapps Linux/sourceaccepted, native timingopen.
+Critical dependency: root freshM05 admission/release after coherentreview; next
+actual outcome firstfullV3restoration. Included-only100%/servicechecks remain;
+no resize/reservelowering/speedup claim.
+
 ## Corrected M05 collector/cohort ready for release review — 2026-10-23 11:21 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
