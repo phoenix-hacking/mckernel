@@ -1,0 +1,157 @@
+{
+  "GCC14_defaultlink_native": false,
+  "Rust_callback_relocation_counts": {
+    "mem_tlb_atomic_inc_bridge": 1,
+    "mem_tlb_atomic_read_bridge": 1,
+    "mem_tlb_atomic_set_bridge": 1,
+    "mem_tlb_current_cpu_bridge": 1,
+    "mem_tlb_flush_all_bridge": 1,
+    "mem_tlb_flush_single_bridge": 1,
+    "mem_tlb_get_vector_bridge": 1,
+    "mem_tlb_interrupt_cpu_bridge": 1,
+    "mem_tlb_noirq_lock_bridge": 1,
+    "mem_tlb_noirq_unlock_bridge": 2,
+    "mem_tlb_pause_bridge": 1,
+    "mem_tlb_rdtsc_bridge": 1,
+    "syscall_alloc_bridge": 3,
+    "syscall_mckfd_lock_bridge": 6,
+    "syscall_mckfd_unlock_bridge": 9,
+    "vm_range_insert_dump_bridge": 1,
+    "vm_range_insert_log_bridge": 2,
+    "x86_cpuid6_bridge": 1,
+    "x86_read_msr_bridge": 2,
+    "x86_running_on_kvm_bridge": 1,
+    "x86_write_msr_bridge": 4
+  },
+  "artifact_authority": {
+    "bytes": 24284,
+    "path": "/home/holden/mckernel-work/host-preparation/velocity-intervention-20261023-4/m14-memory-callback-next/production-consumer-preparation-1/coherent-current78-refresh-corrected-1/ACTUAL-PRODUCTION-OBSERVER-STOP-RECEIPT.json",
+    "sha256": "90239bcb458a6b716b1bc8370c8b2b36aa56b3434fbd4e6e3b9a63b0dcd24986"
+  },
+  "artifacts_stat_unchanged_no_rehash": true,
+  "callback_proof": {
+    "C_const_pointer_ABI_checked_separately": true,
+    "callbacks": {
+      "x86_clear_range_l3_callback": {
+        "relocation": {
+          "addend": 2496,
+          "offset": 0,
+          "target": {
+            "bind": 0,
+            "index": 2,
+            "name": "",
+            "shndx": 1,
+            "size": 0,
+            "type": 3,
+            "value": 0
+          },
+          "type": 1
+        },
+        "relocation_section": {
+          "addr": 0,
+          "align": 8,
+          "entsize": 24,
+          "flags": 64,
+          "index": 14,
+          "info": 13,
+          "link": 31,
+          "name": ".rela.data.rel.ro.local",
+          "name_off": 125,
+          "offset": 89376,
+          "size": 24,
+          "type": 4
+        },
+        "section": {
+          "addr": 0,
+          "align": 8,
+          "entsize": 0,
+          "flags": 3,
+          "index": 13,
+          "info": 0,
+          "link": 0,
+          "name": ".data.rel.ro.local",
+          "name_off": 130,
+          "offset": 23128,
+          "size": 8,
+          "type": 1
+        },
+        "symbol": {
+          "bind": 1,
+          "index": 395,
+          "name": "x86_clear_range_l3_callback",
+          "shndx": 13,
+          "size": 8,
+          "type": 1,
+          "value": 0
+        }
+      },
+      "x86_clear_range_l4_callback": {
+        "relocation": {
+          "addend": 0,
+          "offset": 0,
+          "target": {
+            "bind": 1,
+            "index": 394,
+            "name": "x86_clear_range_l4_body",
+            "shndx": 0,
+            "size": 0,
+            "type": 0,
+            "value": 0
+          },
+          "type": 1
+        },
+        "relocation_section": {
+          "addr": 0,
+          "align": 8,
+          "entsize": 24,
+          "flags": 64,
+          "index": 12,
+          "info": 11,
+          "link": 31,
+          "name": ".rela.data.rel.ro",
+          "name_off": 107,
+          "offset": 89352,
+          "size": 24,
+          "type": 4
+        },
+        "section": {
+          "addr": 0,
+          "align": 8,
+          "entsize": 0,
+          "flags": 3,
+          "index": 11,
+          "info": 0,
+          "link": 0,
+          "name": ".data.rel.ro",
+          "name_off": 112,
+          "offset": 23120,
+          "size": 8,
+          "type": 1
+        },
+        "symbol": {
+          "bind": 1,
+          "index": 393,
+          "name": "x86_clear_range_l4_callback",
+          "shndx": 11,
+          "size": 8,
+          "type": 1,
+          "value": 0
+        }
+      }
+    },
+    "lower_C_callback_chain_remains": true,
+    "retained_private_C_child": {
+      "bind": 0,
+      "index": 27,
+      "name": "x86_clear_range_walk_l3_bridge",
+      "shndx": 1,
+      "size": 69,
+      "type": 2,
+      "value": 2496
+    },
+    "section_indices_and_function_offsets_not_hardcoded": true
+  },
+  "compiler_invocations": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.\nExact exclusive namespace/request preparation and one complete pure validation; no run/acquire.\n",
+  "status": "PASS_ACTUAL_RETAINED_GCC9_ELF_CALLBACK_WITNESSES_ONLY"
+}

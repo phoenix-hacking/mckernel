@@ -1,0 +1,65 @@
+{
+  "CPU_reservation": null,
+  "actual_manifest": null,
+  "actual_source": null,
+  "actual_wholejoin": null,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/run_source_materialization_once.py"
+  ],
+  "compiler_build_native": null,
+  "grant": null,
+  "owned_wrapper": {
+    "bytes": 4441,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/run_source_materialization_once.py",
+    "sha256": "8c0d8258d67253d9db73c7d7408eb5db7f1d04885fab4055096828e7b39b7990"
+  },
+  "prediction": {
+    "canonical_manifest_sha256": "c424dca7e887265f6146d518277b10287161bd2dbd81282f12607fcd648c1a95",
+    "entries": 6959,
+    "materialization_sha256": "efc18e12b65da9479e5e966752265554a33817a946bf868de844303ac18137ec",
+    "source_derivative_sha256": "bf4f7ee78ae3222c54330e6a41906202596defd8cf30192853171d7fe158212b",
+    "symlinks": 49
+  },
+  "producer": {
+    "bytes": 11262,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-15/default-image-preparation-1/materialize_source.py",
+    "sha256": "8ae43ae897e9b17a74be03066dccf2138e4676662b09e660ebc9bd698c70777f"
+  },
+  "profile": {
+    "AS": 2147483648,
+    "CPU": 6,
+    "CPU_seconds": 60,
+    "FSIZE": 33554432,
+    "HOST": "16GiB + full110sparsegap +16106090496compiler/output+377487360postcapture+679477248emergency+256MiBsource+16MiBcapture",
+    "MemAvailable_minimum": 20401094656,
+    "NOFILE": 256,
+    "capture_growth_max": 16777216,
+    "core": 0,
+    "handlers": [
+      "SIGTERM",
+      "SIGINT",
+      "SIGALRM"
+    ],
+    "jobs": 1,
+    "owned_capture_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+    "retirement_seconds": 6,
+    "scratch_required": 13631488000,
+    "source_growth_max": 268435456,
+    "wall_seconds": 90
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "EXACT_SOURCE_COPY_RECIPE_ONLY_NO_GRANT_NO_RESERVATION"
+}
