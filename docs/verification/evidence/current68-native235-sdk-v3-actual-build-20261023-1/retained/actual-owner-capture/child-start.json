@@ -1,0 +1,28 @@
+{
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--fsize=33554432",
+    "--as=2147483648:2147483648",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "import sys,runpy; sys.path.insert(0,'/home/holden/mckernel/scripts'); runpy.run_path('/home/holden/mckernel/scripts/native_running_external_modules_owner.py',run_name='__main__')",
+    "--request",
+    "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/actual-sdk-v3-build-attempt-1/request.json",
+    "--request-sha256",
+    "20c8f8bade0eaeaf3b41623929edc78658b44530a935da5eeaa946972cd1b225",
+    "--release",
+    "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/final-actual-build-release-preparation-1/release.json",
+    "--release-sha256",
+    "0c822ce6a53d55e8dbeee09c53eb5e61cfa89ea110d44939847dc422bb40fed3"
+  ],
+  "pid": 3401504,
+  "proc_start_ticks": "51294463",
+  "process_group": 3401504
+}

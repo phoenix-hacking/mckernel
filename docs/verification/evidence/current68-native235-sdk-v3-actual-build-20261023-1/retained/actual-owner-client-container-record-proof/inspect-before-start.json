@@ -1,0 +1,294 @@
+{
+  "AppArmorProfile": "",
+  "Args": [
+    "/driver.py",
+    "--execute"
+  ],
+  "Config": {
+    "AttachStderr": true,
+    "AttachStdin": false,
+    "AttachStdout": true,
+    "Cmd": [
+      "/driver.py",
+      "--execute"
+    ],
+    "Domainname": "",
+    "Entrypoint": [
+      "/usr/bin/python3"
+    ],
+    "Env": [
+      "container=oci"
+    ],
+    "Hostname": "91c28d662da2",
+    "Image": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+    "Labels": {
+      "io.buildah.version": "1.43.1",
+      "license": "BSD-3-Clause",
+      "mckernel.owner": "bc3cf0ecfe164d6bbcad77dd3bae8e16",
+      "name": "rockylinux",
+      "org.opencontainers.image.authors": "Lukas Magauer, Neil Hanlon, Louis Abel",
+      "org.opencontainers.image.licenses": "BSD-3-Clause",
+      "org.opencontainers.image.source": "https://git.resf.org/sig_core/rocky-kiwi-descriptions/src/branch/r10",
+      "org.opencontainers.image.title": "rockylinux",
+      "org.opencontainers.image.vendor": "Rocky Enterprise Software Foundation",
+      "org.opencontainers.image.version": "10",
+      "summary": "Rocky Linux Base image",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "version": "10"
+    },
+    "OnBuild": null,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Tty": false,
+    "User": "1000:1000",
+    "Volumes": null,
+    "WorkingDir": "/"
+  },
+  "Created": "2026-10-23T00:31:40.624612259Z",
+  "Driver": "overlay2",
+  "ExecIDs": null,
+  "GraphDriver": {
+    "Data": {
+      "LowerDir": "/var/lib/docker/overlay2/e4f24fce8dc3f8714c87e6eb7056934b17818df01bf54131c78eac1fa59f86da-init/diff:/var/lib/docker/overlay2/2b630378d51d71fdf5e1daf76f09ad0083d31140f811ad015375eb25a26bd540/diff:/var/lib/docker/overlay2/2a23ddce6067a5847fc046c77f050a037a224c752e9e6ff2d7d56ac9162e8982/diff",
+      "MergedDir": "/var/lib/docker/overlay2/e4f24fce8dc3f8714c87e6eb7056934b17818df01bf54131c78eac1fa59f86da/merged",
+      "UpperDir": "/var/lib/docker/overlay2/e4f24fce8dc3f8714c87e6eb7056934b17818df01bf54131c78eac1fa59f86da/diff",
+      "WorkDir": "/var/lib/docker/overlay2/e4f24fce8dc3f8714c87e6eb7056934b17818df01bf54131c78eac1fa59f86da/work"
+    },
+    "Name": "overlay2"
+  },
+  "HostConfig": {
+    "AutoRemove": false,
+    "Binds": null,
+    "BlkioDeviceReadBps": [],
+    "BlkioDeviceReadIOps": [],
+    "BlkioDeviceWriteBps": [],
+    "BlkioDeviceWriteIOps": [],
+    "BlkioWeight": 0,
+    "BlkioWeightDevice": [],
+    "CapAdd": null,
+    "CapDrop": [
+      "ALL"
+    ],
+    "Cgroup": "",
+    "CgroupParent": "",
+    "CgroupnsMode": "host",
+    "ConsoleSize": [
+      0,
+      0
+    ],
+    "ContainerIDFile": "",
+    "CpuCount": 0,
+    "CpuPercent": 0,
+    "CpuPeriod": 0,
+    "CpuQuota": 0,
+    "CpuRealtimePeriod": 0,
+    "CpuRealtimeRuntime": 0,
+    "CpuShares": 0,
+    "CpusetCpus": "2-5",
+    "CpusetMems": "",
+    "DeviceCgroupRules": null,
+    "DeviceRequests": null,
+    "Devices": [],
+    "Dns": [],
+    "DnsOptions": [],
+    "DnsSearch": [],
+    "ExtraHosts": null,
+    "GroupAdd": null,
+    "IOMaximumBandwidth": 0,
+    "IOMaximumIOps": 0,
+    "Init": true,
+    "IpcMode": "private",
+    "Isolation": "",
+    "Links": null,
+    "LogConfig": {
+      "Config": {},
+      "Type": "json-file"
+    },
+    "MaskedPaths": [
+      "/proc/asound",
+      "/proc/acpi",
+      "/proc/kcore",
+      "/proc/keys",
+      "/proc/latency_stats",
+      "/proc/timer_list",
+      "/proc/timer_stats",
+      "/proc/sched_debug",
+      "/proc/scsi",
+      "/sys/firmware",
+      "/sys/devices/virtual/powercap"
+    ],
+    "Memory": 12884901888,
+    "MemoryReservation": 0,
+    "MemorySwap": 12884901888,
+    "MemorySwappiness": null,
+    "Mounts": [
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output",
+        "Target": "/out",
+        "Type": "bind"
+      },
+      {
+        "Source": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-bc3cf0ecfe164d6bbcad77dd3bae8e16",
+        "Target": "/candidate",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/scratch/native-running-modules-inputs-bc3cf0ecfe164d6bbcad77dd3bae8e16",
+        "Target": "/inputs",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/scripts/native_running_external_modules_offline.py",
+        "Target": "/driver.py",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/actual-sdk-v3-build-attempt-1/request.json",
+        "Target": "/request.json",
+        "Type": "bind"
+      }
+    ],
+    "NanoCpus": 4000000000,
+    "NetworkMode": "none",
+    "OomKillDisable": false,
+    "OomScoreAdj": 0,
+    "PidMode": "",
+    "PidsLimit": 512,
+    "PortBindings": {},
+    "Privileged": false,
+    "PublishAllPorts": false,
+    "ReadonlyPaths": [
+      "/proc/bus",
+      "/proc/fs",
+      "/proc/irq",
+      "/proc/sys",
+      "/proc/sysrq-trigger"
+    ],
+    "ReadonlyRootfs": true,
+    "RestartPolicy": {
+      "MaximumRetryCount": 0,
+      "Name": "no"
+    },
+    "Runtime": "runc",
+    "SecurityOpt": [
+      "no-new-privileges"
+    ],
+    "ShmSize": 67108864,
+    "Tmpfs": {
+      "/tmp": "rw,nodev,nosuid,size=256m"
+    },
+    "UTSMode": "",
+    "Ulimits": [],
+    "UsernsMode": "",
+    "VolumeDriver": "",
+    "VolumesFrom": null
+  },
+  "HostnamePath": "",
+  "HostsPath": "",
+  "Id": "91c28d662da245578133ccc9fd54ca843c8ca829810510d9f12ef2a66e984169",
+  "Image": "sha256:0f8ad280e47d76b23554de4aec411752e1f779f9b2fc7fece6b0b3375dc9775d",
+  "LogPath": "",
+  "MountLabel": "",
+  "Mounts": [
+    {
+      "Destination": "/inputs",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/scratch/native-running-modules-inputs-bc3cf0ecfe164d6bbcad77dd3bae8e16",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/driver.py",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel/scripts/native_running_external_modules_offline.py",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/request.json",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/host-preparation/current68-native235-production-binding-20261022-1/actual-sdk-v3-build-attempt-1/request.json",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/out",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-output",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/candidate",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": true,
+      "Source": "/home/holden/mckernel-work/host-preparation/native-running-modules-host-output/native-running-modules-candidate-bc3cf0ecfe164d6bbcad77dd3bae8e16",
+      "Type": "bind"
+    }
+  ],
+  "Name": "/mckernel-external-bc3cf0ecfe164d6bbcad77dd3bae8e16",
+  "NetworkSettings": {
+    "Bridge": "",
+    "EndpointID": "",
+    "Gateway": "",
+    "GlobalIPv6Address": "",
+    "GlobalIPv6PrefixLen": 0,
+    "HairpinMode": false,
+    "IPAddress": "",
+    "IPPrefixLen": 0,
+    "IPv6Gateway": "",
+    "LinkLocalIPv6Address": "",
+    "LinkLocalIPv6PrefixLen": 0,
+    "MacAddress": "",
+    "Networks": {
+      "none": {
+        "Aliases": null,
+        "DNSNames": null,
+        "DriverOpts": null,
+        "EndpointID": "",
+        "Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "IPAMConfig": null,
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "Links": null,
+        "MacAddress": "",
+        "NetworkID": ""
+      }
+    },
+    "Ports": {},
+    "SandboxID": "",
+    "SandboxKey": "",
+    "SecondaryIPAddresses": null,
+    "SecondaryIPv6Addresses": null
+  },
+  "Path": "/usr/bin/python3",
+  "Platform": "linux",
+  "ProcessLabel": "",
+  "ResolvConfPath": "",
+  "RestartCount": 0,
+  "State": {
+    "Dead": false,
+    "Error": "",
+    "ExitCode": 0,
+    "FinishedAt": "0001-01-01T00:00:00Z",
+    "OOMKilled": false,
+    "Paused": false,
+    "Pid": 0,
+    "Restarting": false,
+    "Running": false,
+    "StartedAt": "0001-01-01T00:00:00Z",
+    "Status": "created"
+  }
+}

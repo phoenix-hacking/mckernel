@@ -1,3 +1,35 @@
+## Current — V3 SDK build/artifacts/retirement accepted; launcher next (2026-10-23 00:40 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+29/35 practical checks; six remain P-M01-02/P-M05-03/P-M06-01/P-M08-02/P-M09-02/
+P-M12-01. Weekly included only; reserve576 unanswered. Whole goal stays OPEN.
+
+V3 exactSDK68 productionbuild FIRSTPASS22.516794958s, make/artifactchecks PASS and
+outerstderr0. Genuine6a6a47b9 accepts all68/1353815B compiler/defaultcfg/MODULE/optin,
+currentexports/MMuniqueproviders/vermagic/source bindings and positive host physical
+retirement. NewSMP8234e5ef/12917072B, mcctrlc47cb000/2655616B; ihkdaced291 remains
+byte-identical1527808B. All14clients+admissionobserver/owner/container retired and
+operation/common/shared records released. No guest/native/P06 credit from this build.
+Capsule ../evidence/current68-native235-sdk-v3-actual-build-20261023-1/.
+
+Launcher745309b5 source/staticbindings remain accepted. ActualnewestSDK-bound root
+admission FIRSTPASS.311065435s/closedjoin/groupabsence/emptyerr; current rootdata in
+current68-native235-production-binding-20261022-1/launcher-successor-1/final-actual-
+launcher-preparation-1/. m07_closure_join fills actualFINALrequest/rootbinding; then
+one exactexecutionreview, freshfinaladmission and pinnedtargetmcexec build. Reuse
+existing4CPU/12GiB/noSwap/512task envelope; no image/helper rebuild. SDK actualowner
+noncebc3cf0ecfe164d6bbcad77dd3bae8e16 is retired and MUST NOT replay.
+
+Minimal fresh235/227 recipe is ready under N/fork-v3-matched-process-successor-1/:
+4runtime snapshots underacceptedROroot, oneexact4recordbasepatch, then separate
+oracles/nonces/93BQMPpaths. Newlauncher descriptors remainNULL until actualaccepted
+outputs;139runtime sourcepins unchanged. Old235FAIL retained; no unchangedSDK replay.
+Batchadaptation22puretests PASS1.3416s, independentlyaccepted source/modeled only;
+one production adapter is the next implementation/test boundary before a later
+fixed-profile batch review.
+Old20352 firstfullrestoration+ONEcycle remains scoped; V3budgets startfromzero after
+matchingfullrestoration. P12longHOSTsource/transport ready; no nativehour claim.
+
 ## Current — P-M05-02 accepted;29/35 practical checks (2026-10-23 00:18 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
