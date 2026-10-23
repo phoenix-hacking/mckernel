@@ -1,0 +1,32 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/readonly_export_current_capture.py"
+  ],
+  "pid": 3703197,
+  "start": "55694091",
+  "returncode": 0,
+  "seconds": 0.11045563407242298,
+  "direct_child_joined": true,
+  "process_group_absent": true,
+  "streams_closed": true,
+  "stdout_sha256": "3bbc0475b191bcec31db659873864d5c0cac41ba4e84a8d0d8838f15f5b87d39",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_bytes": 5812,
+  "stderr_bytes": 0
+}

@@ -1,0 +1,74 @@
+{
+  "AST_test_definition": "Parse source and predecessor, replace only top-level ROOT assignment value by same sentinel AST, compare full ast.dump without attributes. Also reconstruct original exactbytes by inverse literal replacement.",
+  "body_preserved": {
+    "base64_and_sha256": true,
+    "directory_mode": "root0700",
+    "files": "original root0600/0700 remain unchanged; no chmod/chown; original stable identity includes st_mode/UID/GID",
+    "max_encoded_bytes": 16777216,
+    "max_named_files": 4096,
+    "max_per_file_bytes": 8388608,
+    "max_total_source_bytes": 8388608,
+    "old_nonROOT_body_identical": true,
+    "stable_FD": true
+  },
+  "derived_from": {
+    "actual_root_capture": {
+      "bytes": 930,
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/actual-root-tiny-execution-1/stdout",
+      "sha256": "a58d976c73adade1fe39efd7e7dc557ea628b5ac76393de1ef7d4d5b5db27044"
+    },
+    "controller": {
+      "bytes": 6711,
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/capture_root.NOT-RELEASED.py",
+      "sha256": "7e83cdc3a6714a8000ca8e89eacbc30f1116d967be9a97b191ce31f797bf4e59"
+    },
+    "request": {
+      "bytes": 1448,
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/CAPTURE-REQUEST.NOT-RELEASED.json",
+      "sha256": "b73b8e8ee9f33e55548a99a5d66e82b0a13ce41b9d112c063a114acb3838828e"
+    },
+    "smoke": {
+      "bytes": 5566,
+      "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/smoke.NOT-RELEASED.py",
+      "sha256": "df938a0f5275c62b83d0624180a36ec9df961b1aca11fac3595e77bea5a987d8"
+    }
+  },
+  "exports": [
+    {
+      "AST_equal_after_ROOT_literal_mask": true,
+      "ROOT": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/p.owner-089abb30162c46c4b42b86db06235ecf",
+      "role": "owner",
+      "source": {
+        "bytes": 1744,
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/readonly_export_current_owner.py",
+        "sha256": "8845ec9fc378d52a07160b3a5580e2557e376aeffca43d1080eb4d1ffe4b704d"
+      },
+      "whole_other_source_bytes_identical": true
+    },
+    {
+      "AST_equal_after_ROOT_literal_mask": true,
+      "ROOT": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/actual-capture-1",
+      "role": "capture",
+      "source": {
+        "bytes": 1720,
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/capacity-binding-1/final-budget-and-smoke-preparation-1/final-tiny-execution-preparation-1/post-tiny-readonly-preparation-1/readonly_export_current_capture.py",
+        "sha256": "15903625c9a1eedcbdbdee7a26cd259b3daa0a2c794d758610ea8bd2c9f7f9f9"
+      },
+      "whole_other_source_bytes_identical": true
+    }
+  ],
+  "nonce": "089abb30162c46c4b42b86db06235ecf",
+  "predecessor": {
+    "bytes": 1712,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/readonly_export_retired_owner.py",
+    "sha256": "d514137bfd5bc09931605ca80cd6ddd1b12a19e0504907396dd05bea85f9eebb"
+  },
+  "root_queries": 0,
+  "roots": {
+    "capture": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/actual-capture-1",
+    "owner": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/none-attach-smoke-1/python38-controller-successor-1/p.owner-089abb30162c46c4b42b86db06235ecf"
+  },
+  "runtime_tests": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_SOURCE_ONLY_TWO_ROOT_LITERAL_SUBSTITUTIONS"
+}

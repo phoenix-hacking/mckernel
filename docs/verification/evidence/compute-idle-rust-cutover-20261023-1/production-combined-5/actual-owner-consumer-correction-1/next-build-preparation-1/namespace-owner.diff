@@ -1,0 +1,20 @@
+--- /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/native_rust_exact_mckernel_image_container_owner.py
++++ /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/native_rust_exact_mckernel_image_container_owner.py
+@@ -38,7 +38,7 @@
+ # exclusions explicit: accepting one of these would allow a request to race a
+ # retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
+ # fixture, so the rejection list remains separate from the active value.
+-COMMON_EXCLUSION = '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1/common-exclusion.json'
++COMMON_EXCLUSION = '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pinned-full-image-attempt-2/common-exclusion.json'
+ RETIRED_COMMON_EXCLUSIONS = frozenset(
+     "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-" + suffix + ".json"
+     for suffix in (
+@@ -60,6 +60,8 @@
+ RETIRED_COMMON_EXCLUSIONS = RETIRED_COMMON_EXCLUSIONS | frozenset(('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-2/correction1/pinned-full-image-attempt-1/common-exclusion.json',))
+ 
+ RETIRED_COMMON_EXCLUSIONS = RETIRED_COMMON_EXCLUSIONS | frozenset(('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-4/default-image-successor-1/pinned-full-image-attempt-1/common-exclusion.json',))
++
++RETIRED_COMMON_EXCLUSIONS = RETIRED_COMMON_EXCLUSIONS | frozenset(('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/pinned-full-image-attempt-1/common-exclusion.json',))
+ 
+ LIMITS = {
+     "NanoCpus": 4_000_000_000, "CpusetCpus": "2-5",

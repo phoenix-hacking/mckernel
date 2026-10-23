@@ -1,0 +1,32 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "argv": [
+    "/usr/bin/sudo",
+    "-A",
+    "/usr/bin/taskset",
+    "-c",
+    "7",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--core=0:0",
+    "--nofile=256",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/native235-resume-20261023-1/retirement-preparation/readonly_current_proc.py"
+  ],
+  "pid": 3703201,
+  "start": "55694102",
+  "returncode": 0,
+  "seconds": 0.23410310107283294,
+  "direct_child_joined": true,
+  "process_group_absent": true,
+  "streams_closed": true,
+  "stdout_sha256": "90a09a46cb7c539e45a94914562695af3dd06bf9394b814b2f23f9f005109270",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_bytes": 39949,
+  "stderr_bytes": 0
+}

@@ -1,3 +1,29 @@
+## Literal M08/M09 closed;33/35 — 2026-10-23 12:53 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+NEW literalclosures P-M08-02/M08 andP-M09-02/M09 independentlyPASS40db9eec after
+finiteusedABI/changedconsumedboundaryjoin76e364ca. Practical33/35,whole10/14.
+Originalfailedrecords/rawprotocolflags and child261final0limitation preserved;
+unusedexhaustivequalification andfullcomputeCcutover are not thesechecks. M14
+separateactive. Remainingchecks P-M05-03tencompletecycles andP-M12-01real session.
+AcceptedmatchingV3cycles1; neworderedtenbatch0/10; LONGlaunches0/100/minutes0/60.
+RealNONEtiny089aPASS1.082879s; independentfunctional+physical15827d0b:87authfiles,
+26clientsreaped/CID26fe removed/name+label+IDempty/completefreshPROC/mutex27:4/
+8pathsabsent/leasefalse; sourceLogConfig none. No guest/hourcredit; no blanket
+no-Docker-killclaim (inheritedkill repliednotrunning). Originalrootmodes retained.
+Freshposttinybatchquery2PASS0/.319s. Exact10case/rootfactse73d7844 bindsfetched4abd
+source/20parentIDs/profileb118/owner a874/manifest1fb66/epochs; genuine10percase
+andorderedbatchrelease underprimaryreview. Rootreserved21GiB inclusivebatch+
+owner/capture/coord below22.5259; HOST153486360576B requirementconservatively
+includesfull110GiBbacking+16GiBcapture+floor/reserves; sourceguardsunchanged.
+M14successor2f7e1/request28caca freshHOSTnamespace actualfullpureconsumerPASS33.435s,
+independentsource/profile/namespaceacceptance; defaultcompiler/link/nativepending.
+Separateprivate actualCbridge x86_init_normal_set_large_bridge Rustport owner
+m14_actual_consumer_fix: originalC/Rust+providerfixtures andcurrentfullcratepass,
+sourcehandoff/reviewpending; canonical/frozencandidates unchanged. Nextheavy is
+orderedfunctionaltenbatch; no slotcompetition/resize/reservelowering/speedupclaim.
+Included-only100%guard/servicechecks remainactive.
+
 ## Ten-cycle release and real NONE smoke are next — 2026-10-23 12:28 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
