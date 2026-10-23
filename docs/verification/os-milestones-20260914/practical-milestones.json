@@ -225,8 +225,8 @@
       "id": "M01",
       "scope_id": "practical-kernel-apps-v1-20261017",
       "title": "Requests, responses and recovery",
-      "engineering_state": "partial",
-      "completion_status": "open",
+      "engineering_state": "complete",
+      "completion_status": "complete",
       "exit_condition": "Supported requests and cancellation/errors preserve ownership and recover.",
       "checks": [
         {
@@ -300,7 +300,7 @@
         {
           "id": "P-M01-02",
           "description": "Observe supported guest fault/cancellation recovery without premature release.",
-          "status": "open",
+          "status": "complete",
           "evidence": [
             {
               "path": "docs/verification/evidence/native-lifecycle-current942-failure-review-20261017-1.json",
@@ -311,12 +311,36 @@
               "path": "docs/verification/evidence/thread-tls-isolation-current942-failure-review-20261017-1.json",
               "sha256": "04fee569980a34f5e29f4d7a3396266643ddd78cc63b00fb47c8fb799e8fd17a",
               "size": 12226
+            },
+            {
+              "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/literal-recovery-closure-preparation-1/INDEPENDENT-LITERAL-M01-ACCEPTANCE.json",
+              "sha256": "e2fc34c6234049eaca61a5c49b0e1db474bde17b051747bf7703462d0178c77f",
+              "size": 1211
+            },
+            {
+              "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/INDEPENDENT-FORMAL-STRICT227-ADDITIVE-APPLICATION-ACCEPTANCE.json",
+              "sha256": "14c81222ea09f604c2a5112b3b041e9fa21d8a673b8ac03b354b4ce8eae174e7",
+              "size": 2816
             }
           ],
-          "assessment_note": "Known failures and fail-closed retirement are preserved. Supported application cancellation/fault recovery has not been established by these selected records."
+          "assessment_note": "Literal request/response and supported cancellation/recovery independently accepted. Actual227 cancellation/EOF/reap/ECHILD/owned0 then exec37, parent final retirement and independent physical retirement; preserved observer false-negative corrected by reviewed offline full-consumer evaluation. No universal child-credit/resource-restoration claim.",
+          "prior_assessment_20261023_recovery_closure": {
+            "status": "open",
+            "assessment_note": "Known failures and fail-closed retirement are preserved. Supported application cancellation/fault recovery has not been established by these selected records."
+          }
         }
       ],
-      "current_evidence_summary": "Nine native diagnostic request/response paths work; selected failures are preserved. Required final-suite negatives/cancellation recovery remain open."
+      "current_evidence_summary": "Literal request/response and supported cancellation/recovery independently accepted. Actual227 cancellation/EOF/reap/ECHILD/owned0 then exec37, parent final retirement and independent physical retirement; preserved observer false-negative corrected by reviewed offline full-consumer evaluation. No universal child-credit/resource-restoration claim.",
+      "prior_assessment_20261023_recovery_closure": {
+        "engineering_state": "partial",
+        "completion_status": "open",
+        "current_evidence_summary": "Nine native diagnostic request/response paths work; selected failures are preserved. Required final-suite negatives/cancellation recovery remain open."
+      },
+      "literal_exit_acceptance": {
+        "path": "docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/literal-recovery-closure-preparation-1/INDEPENDENT-LITERAL-M01-ACCEPTANCE.json",
+        "sha256": "e2fc34c6234049eaca61a5c49b0e1db474bde17b051747bf7703462d0178c77f",
+        "size": 1211
+      }
     },
     {
       "id": "M02",
@@ -2399,13 +2423,11 @@
     "signed production/repository/independent external release qualification"
   ],
   "next_actions": [
-    "Remaining eight individual checks: P-M06-01 actual matched process/exec/wait; P-M01-02 supported fault/cancellation recovery; P-M08-02 changed used ABI and P-M09-02 Rust boundaries mapped into same matched lifecycle/process batch where qualified. SDK68 P-M05-02 complete restoration gates P-M05-03/P-M12-01 budgets. P-M13-03 final actual-artifact/result review remains. P-M01-01/P-M13-01/P-M13-02 accepted in literal scope; M07 runtimebridge already2/2checks.",
-    "Actual new proc.v2 source4 observer/summary/original-five FD metadata/authenticated raw-five export allPASS on published d2e78c21. Exact cleanup payload b37e8ffd pending independent execution review, then same-release positive freshpreflight/conditionalcleanup/postjoin/independentphysical before unchanged M07 native; all predecessor failures/releases retained.",
-    "After actual observer/export, separately released cleanup/postjoin and independent physical clearance, run unchanged strict M07 remaining-state native test on accepted corrected cbb04 image/stage. Artifact acceptance is not native proof.",
-    "SDK68 source81dd8caf and exact68 host bundle accepted,53tests. Pinned Rocky clang21.1.8 not directly available on host; actual SDK/container compiler remains behind capacity/currentownership/fresh release, reserve576 unanswered. Rust idle scan6f367112 actual production-header ABI probe passes with hostGCC9.4; productionGCC14.3.1 wholeTU/defaultlink/native still required, accepted cbb04 image unchanged.",
-    "M05 Rust resource observations need actual matched module build and independently bound per-boot decoding; prove complete CPU/memory/process/mapping/callback/reference restoration and ten complete native cycles. Two public stop observations do not prove complete cycles.",
-    "Complete real M06 response-ledger/phase-completion/post-user-copy and launcher error propagation Rust joins; reuse passed compiler33 and focused tests. No provider/native claim before actual matched build/default/runtime proof.",
-    "Keep M12 separate matched profile budget buckets; no VM termination as public stop/destroy/release or full mapping/callback/reference restoration."
+    "Four remaining practical checks: P-M05-03 ten complete current-tuple cycles; P-M08-02 changed used ABI; P-M09-02 changed consumed Rust/C/assembly boundaries; P-M12-01 actual final session. Practical31/35, whole8/14. M14 full Rust cutover remains separate and active.",
+    "Execute independently released first full V3 restoration on accepted SDK5/image10972/launcher dca025 using reviewed M05 owner3ff7/runnerc557 and strict BEGIN consumers. Actual published8c03 manifest and real hook binding pass; fresh root admission and guard pass. Final one-shot execution review remains required. Reuse accepted235 and additive original227 evidence.",
+    "Bind first V3 restoration and physical review once to M08/M09 finite observations, then reviewed ten-cycle batch with zero carried final-profile credit. Preserve original app/resource oracles.",
+    "P12 actual LONG Rust producer implementation and complete storage admission are pending. NONE transport/current110 source variants accepted; no hour/launch credit until real accepted session. Preserve floors/full sparse gap and filesystem reserves.",
+    "M14 selected default image candidate/source profile accepted, fresh identity facts captured; final HOST-output budget/namespace/aggregate reservation and exact build release remain required. Separate private public page_unmap Rust body fixture164 invocations passes, source/default-link/native still pending."
   ],
   "evidence_reconciliation": {
     "date": "2026-10-17",
@@ -3003,5 +3025,14 @@
       "source_increment": 0,
       "physical_release": false
     }
-  }
+  },
+  "prior_next_actions_20261023_recovery_closure": [
+    "Remaining eight individual checks: P-M06-01 actual matched process/exec/wait; P-M01-02 supported fault/cancellation recovery; P-M08-02 changed used ABI and P-M09-02 Rust boundaries mapped into same matched lifecycle/process batch where qualified. SDK68 P-M05-02 complete restoration gates P-M05-03/P-M12-01 budgets. P-M13-03 final actual-artifact/result review remains. P-M01-01/P-M13-01/P-M13-02 accepted in literal scope; M07 runtimebridge already2/2checks.",
+    "Actual new proc.v2 source4 observer/summary/original-five FD metadata/authenticated raw-five export allPASS on published d2e78c21. Exact cleanup payload b37e8ffd pending independent execution review, then same-release positive freshpreflight/conditionalcleanup/postjoin/independentphysical before unchanged M07 native; all predecessor failures/releases retained.",
+    "After actual observer/export, separately released cleanup/postjoin and independent physical clearance, run unchanged strict M07 remaining-state native test on accepted corrected cbb04 image/stage. Artifact acceptance is not native proof.",
+    "SDK68 source81dd8caf and exact68 host bundle accepted,53tests. Pinned Rocky clang21.1.8 not directly available on host; actual SDK/container compiler remains behind capacity/currentownership/fresh release, reserve576 unanswered. Rust idle scan6f367112 actual production-header ABI probe passes with hostGCC9.4; productionGCC14.3.1 wholeTU/defaultlink/native still required, accepted cbb04 image unchanged.",
+    "M05 Rust resource observations need actual matched module build and independently bound per-boot decoding; prove complete CPU/memory/process/mapping/callback/reference restoration and ten complete native cycles. Two public stop observations do not prove complete cycles.",
+    "Complete real M06 response-ledger/phase-completion/post-user-copy and launcher error propagation Rust joins; reuse passed compiler33 and focused tests. No provider/native claim before actual matched build/default/runtime proof.",
+    "Keep M12 separate matched profile budget buckets; no VM termination as public stop/destroy/release or full mapping/callback/reference restoration."
+  ]
 }

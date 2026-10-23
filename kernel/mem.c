@@ -5285,12 +5285,18 @@ int page_unmap_body_result(struct page *page,
 		page_unmap_orchestrate_fn_t orchestrate_fn,
 		page_unmap_log_fn_t log_fn);
 
-static unsigned long page_hash_lock_bridge(unsigned long lock_addr)
+#ifdef MCKERNEL_RUST_PAGE_HELPERS
+#define PAGE_UNMAP_PUBLIC_BRIDGE
+#else
+#define PAGE_UNMAP_PUBLIC_BRIDGE static
+#endif
+
+PAGE_UNMAP_PUBLIC_BRIDGE unsigned long page_hash_lock_bridge(unsigned long lock_addr)
 {
 	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock_addr);
 }
 
-static void page_hash_unlock_bridge(unsigned long lock_addr,
+PAGE_UNMAP_PUBLIC_BRIDGE void page_hash_unlock_bridge(unsigned long lock_addr,
 		unsigned long flags)
 {
 	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock_addr, flags);
@@ -5760,7 +5766,7 @@ struct page *phys_to_page_insert_hash(uint64_t phys)
 			phys_to_page_insert_hash_log_bridge);
 }
 
-static void page_unmap_log_bridge(int event, struct page *page, int ret)
+PAGE_UNMAP_PUBLIC_BRIDGE void page_unmap_log_bridge(int event, struct page *page, int ret)
 {
 	switch (event) {
 	case PAGE_UNMAP_LOG_ENTER:
@@ -5781,6 +5787,13 @@ static void page_unmap_log_bridge(int event, struct page *page, int ret)
 	}
 }
 
+#ifdef MCKERNEL_RUST_PAGE_HELPERS
+/* Immutable C ABI geometry; the public wrapper executes in Rust. */
+const int page_unmap_hash_shift = PAGE_SHIFT;
+const unsigned long page_unmap_hash_mask = PHYS_PAGE_HASH_MASK;
+const unsigned long page_unmap_lock_stride = sizeof(page_hash_locks[0]);
+int page_unmap(struct page *page);
+#else
 int page_unmap(struct page *page)
 {
 	return page_unmap_body_result(page,
@@ -5789,6 +5802,7 @@ int page_unmap(struct page *page)
 			page_hash_lock_bridge, page_hash_unlock_bridge,
 			page_unmap_orchestrate_result, page_unmap_log_bridge);
 }
+#endif
 
 void register_kmalloc(void)
 {

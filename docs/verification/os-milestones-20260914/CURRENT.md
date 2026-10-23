@@ -1,3 +1,71 @@
+## M05 physically retired; public page_unmap Rust integrated — 2026-10-23 10:54 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+31/35,8/14; newIDsnone sinceP-M01-02/M01. M05failed495e hostphysicalretirement
+independentlyPASS:77authenticatedfiles196871B/25clients/QEMUreaped(-9)/CIDremoved,
+freshcompletePROC/no publishers,mutex27:4/eightpaths absent. QEMU-9 grants no
+normalshutdown/no-force-kill/restoration credit; no duplicatecleanupneeded.
+Causeownerterminal_lifecycle_repair: originalcollector waitsprocfsdeletion only,
+thenunchangedshutdown sees pendingBEGINslot retirement. Actualmatchingretirement0
+readiness repair requires a proven runtimeprogressactor, notsleep/procfsabsence as
+proof. No SDKrebuild/unchangedreplay authorizedbythis diagnosis. ExactM05writer
+retained-observation port f4c3/6actualfixtures independentlySOURCEPASS; futurecoherent
+collector/source stage remains pending. Finalcycles/launches/actualmixedminutes0/0/0.
+M14actualincrement: canonicalkernel/mem.c publicpage_unmap wrapper nowselectsRust
+page_helpers.rs usingexistingPAGE_HELPERS.164originalC/Rustfixtureinvocations,
+82Rustfullcrate+actualwholeGCC9memTU/preprocess/13Texports/7relocs/partiallink all
+independentlyaccepted. OneGCC9COMMONvsBSSchecker correction retained, nocompiler
+replay. Twoexactpostimages integrated atphysicalquiescence; currentimage10972 and
+allfrozenfunctionalinputs unchanged. M14-01-03partial; defaultGCC14/finalELF/native/
+wholefile/area remainOPEN. Coherentdefaultimagecandidate5 preparation owner
+m14_production_stage; no heavybuild executed. Priorcandidate4 retained.
+P12actualRustLONGbody10tests passed, independentreviewfoundpostflightownershipflag
+andfinalI/Odeadline gaps; onecoherentcorrection+realcollectorbridge ownerm14_callback.
+No P12runtime/capacity/nativecredit. Included-only100%/servicechecks remainactive.
+
+## First full V3 restoration failed — 2026-10-23 10:45 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+31/35 and8/14 remain; newly closedIDsnone beyondP-M01-02/M01 alreadyadopted.
+ActualfirstV3M05nonce495e ran37.168827603s andFAILED, outerstatusf9ff4cc2.
+App254 returnedexpected40B/raw0/emptyerr, butprocfs_emptyfalse. ActualBEGINACK3=0,
+retirementquery21=-11, thenpublicshutdown application_quiesce=-16 and helper
+EBUSY; noresourcecapture/secondgeneration/fullrestoration/cyclecredit. Evaluator
+reported'M05 case: payload after resource capture'; rawfalseflags remainpreserved.
+Fourteenguests/outerfiles319236B stable-retained d57e6745 underN/failed-m05-495e-
+raw-1; N=native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-
+control-next-native-preparation-2. Physicalfiveexactreadsall0, authentic77files
+196871B exported; independentphysicalreview pending. No heavyuntilpositiveclearance.
+Criticalsource/trace repair ownerterminal_lifecycle_repair, no unchangedreplay.
+SeparateM05failurewriter successor ownercase227_stage retainsactualobservation.
+M14publicpage_unmapsourcePASS,164fixtureinvocations; private82Rust/fullmemTU
+productionconsumerbuilds pass, GCC9common-symbolchecker correctioninprogress,
+no canonical/defaultimage/native increment. P12actualRustLONGbody+10testspass;
+realcollector Operations bridge implementation ownerm14_callback, no runtimecredit.
+Final-profilecycle/launch/actualmixedminute counters0/0/0. Service/included100%
+guardsremain. No resize/reservemutation orspeedupclaim.
+
+## Literal recovery check and whole M01 accepted — 2026-10-23 10:38 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+P-M01-02 and wholeM01 CLOSED by independentliteralreview:31/35 and8/14.
+Original2275b643 actualcapture remainsrawFAIL; additiveformalacceptance14c81222
+binds originalcriteria01347, completeauthenticactual6e2fc958, correctedoffline
+f967fullconsumer34/34 and independentphysical5e4d36ec. No f967liveexecutionclaim,
+no child261finalretirement0/allchildcredit/resource-restoration inference. Prior
+selectedrequestresponse P-M01-01c906 plus supportedcancellation/recovery satisfyM01.
+Literalreview: terminal-control-next-native-preparation-2/literal-recovery-closure-
+preparation-1/INDEPENDENT-LITERAL-M01-ACCEPTANCE.json under native235 evidence.
+M05 freshrootadmission0/.310s and productionguard0/.179s, actual8c03metadata and
+real owner/runnerhook binding8e6a pass. Finalexecutionfacts/review owner
+m14_production_stage/m14_callback_review; firstactualV3restoration isnextheavy.
+Final-profilecycles/launches/actualmixedminutes0/0/0. M08/M09 stillopen awaiting
+firstrestorejoin. M14privatepublicpage_unmap body164C/RustfixtureinvocationsPASS;
+no canonical/defaultlink/native increment. P12remaining actualLONGproducer Rust
+implementation ownerm14_callback, actualstoragegrowth/reserves stillunaccepted.
+Checkpoint630ff73f pushed/fetched261blobs proof4d6f4fac, no interveningheavy since
+positive227physical. Included-only100%/servicechecks remain; no resize/speedupclaim.
+
 ## Fresh227 observer failure physically retired — 2026-10-23 10:29 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

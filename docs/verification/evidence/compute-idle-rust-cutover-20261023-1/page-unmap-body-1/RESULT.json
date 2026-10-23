@@ -1,0 +1,315 @@
+{
+  "status": "PASS_PRIVATE_SOURCE_AND_ORIGINAL_C_VS_RUST_ACTUAL_BODY_FIXTURE",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "M14_slice": "F01 public page_unmap wrapper; F05 x86 callback already Rust and receives no new credit",
+  "source_deltas": [
+    {
+      "path": "kernel/mem.c",
+      "preimage_sha256": "00c5e0fc6718bb3f1bd0940d2db88d0a5536390ced699ee435ec882c51eb7c72",
+      "postimage_sha256": "bac5d4fb766b5cb80e036457465e215743a1cb31622ff11c5b5b605749f3d7fe"
+    },
+    {
+      "path": "kernel/rust/page_helpers.rs",
+      "preimage_sha256": "fa2f68c00a1568acf6e9ebc4bbdfb0b2bf13e2e5eff758b9048acb06a6aec597",
+      "postimage_sha256": "cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70"
+    }
+  ],
+  "source_author": true,
+  "independent_source_acceptance": null,
+  "native_acceptance": false,
+  "retirement_credit": false,
+  "canonical_source_modified": false,
+  "production_combined4_modified": false,
+  "ABI": {
+    "public": "Existing int page_unmap(struct page *) unchanged.",
+    "context": "Existing page_hash_locks symbol plus C-defined immutable shift/mask/sizeof(lock) values; Rust does not assume ihk_spinlock_t size.",
+    "callbacks": "Existing lock/unlock/log bodies unchanged, externally visible only under existing MCKERNEL_RUST_PAGE_HELPERS.",
+    "ownership": "Existing Rust page_unmap_body_result -> page_unmap_orchestrate_result -> page_unmap_locked_result unchanged. No page freeing added; exactly one locked decrement and final hash unlink."
+  },
+  "selection": "Existing kernel/CMakeLists.txt:334 selects MCKERNEL_RUST_PAGE_HELPERS for mem.c. PUBLIC page_unmap definition is Rust; original C wrapper remains only in #else. No CMake/header/x86 provider edits.",
+  "fixture": {
+    "original": "Exact extracted preimage kernel/mem.c public wrapper; actual production postimage page_helpers.rs, lock/log callback bodies and geometry initializers.",
+    "controlled_providers": "IHK spinlock primitive is a controlled fixture provider; two opaque storage widths24/8 validate forwarded geometry, flags, ordering and single unlock. This is not production lock/runtime acceptance.",
+    "vectors_per_stride": 82,
+    "strides": [
+      24,
+      8
+    ],
+    "total_invocations": 164,
+    "counts": [
+      1,
+      2,
+      3,
+      2147483647
+    ],
+    "phys": [
+      0,
+      4096,
+      4190208,
+      4194304,
+      18446744073709547520
+    ],
+    "modes": [
+      0,
+      7
+    ],
+    "assertions": [
+      "Original C and Rust return match independently expected remaining/final-reference result.",
+      "Exactly one lock and unlock, same C-selected hash bucket and flags; count decrement occurs while locked.",
+      "ENTER precedes lock; final/still-mapped log follows unlock.",
+      "Remaining references retain hash linkage; final reference unlinks and poisons hash pointers.",
+      "Phys/mode/list/mapped/offset/page-shift fields unchanged.",
+      "NULL returns0 without lock, unlock or log."
+    ],
+    "stdout": [
+      "PASS original C/public Rust actual bodies: 80 ownership invocations +2 NULL; lock stride 24; exact lock/unlock/log order; refcount and unlink preserved",
+      "PASS original C/public Rust actual bodies: 80 ownership invocations +2 NULL; lock stride 8; exact lock/unlock/log order; refcount and unlink preserved"
+    ],
+    "operations": [
+      {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1792751818669170563,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48801933,
+            "mode": "0o600",
+            "mtime_ns": 1792751818669170563,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/attempt-1-step-1/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792751818669170563,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48801932,
+            "mode": "0o600",
+            "mtime_ns": 1792751818669170563,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/attempt-1-step-1/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 3643688,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 0.11209270393010229,
+        "start": 54926337,
+        "timed_out": false,
+        "unexpected_group_members": []
+      },
+      {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1792751818789174448,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48801942,
+            "mode": "0o600",
+            "mtime_ns": 1792751818789174448,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/attempt-1-step-2/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792751818789174448,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48801941,
+            "mode": "0o600",
+            "mtime_ns": 1792751818789174448,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/attempt-1-step-2/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 3643695,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 0.11465155996847898,
+        "start": 54926348,
+        "timed_out": false,
+        "unexpected_group_members": []
+      },
+      {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1792751818905178205,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48801951,
+            "mode": "0o600",
+            "mtime_ns": 1792751818905178205,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/attempt-1-step-3/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792751818905178205,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48801950,
+            "mode": "0o600",
+            "mtime_ns": 1792751818905178205,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/attempt-1-step-3/stdout",
+            "sha256": "01aff3d6dacdefc84bdefec650fb15719171f43890da50cd3cee67e092a7d174",
+            "size": 152,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 3643700,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 0.021867803996428847,
+        "start": 54926360,
+        "timed_out": false,
+        "unexpected_group_members": []
+      },
+      {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1792751818929178982,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48801959,
+            "mode": "0o600",
+            "mtime_ns": 1792751818929178982,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/attempt-1-step-4/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792751818929178982,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48801958,
+            "mode": "0o600",
+            "mtime_ns": 1792751818929178982,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/attempt-1-step-4/stdout",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 3643701,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 0.10422101302538067,
+        "start": 54926363,
+        "timed_out": false,
+        "unexpected_group_members": []
+      },
+      {
+        "captures": {
+          "stderr": {
+            "ctime_ns": 1792751819037182479,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48801968,
+            "mode": "0o600",
+            "mtime_ns": 1792751819037182479,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/attempt-1-step-5/stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "uid": 1000
+          },
+          "stdout": {
+            "ctime_ns": 1792751819041182609,
+            "device": 66306,
+            "gid": 1000,
+            "inode": 48801967,
+            "mode": "0o600",
+            "mtime_ns": 1792751819041182609,
+            "nlink": 1,
+            "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/attempt-1-step-5/stdout",
+            "sha256": "b9ee917c9b4db6fbb396de8b460d782ec698ee424733aa6a3e547ff4d0bc2021",
+            "size": 151,
+            "uid": 1000
+          }
+        },
+        "closed_streams": true,
+        "direct_child_joined": true,
+        "error": null,
+        "group_absent": true,
+        "pid": 3643706,
+        "remaining_group_members": [],
+        "retirement_error": null,
+        "returncode": 0,
+        "seconds": 0.02207897393964231,
+        "start": 54926373,
+        "timed_out": false,
+        "unexpected_group_members": []
+      }
+    ]
+  },
+  "profile": {
+    "cpus": [
+      0
+    ],
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 60,
+    "wall_seconds_per_command": 90,
+    "retirement_seconds": 6,
+    "FSIZE_bytes": 33554432,
+    "NOFILE": 256,
+    "CORE": 0,
+    "rust": "1.92.0",
+    "CGU": 1,
+    "RUST_MIN_STACK": 2097152,
+    "GCC": "/usr/bin/gcc-9",
+    "owned_capture_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8"
+  },
+  "failure_family": {
+    "candidate_failures": 0,
+    "bounded_corrections": 0
+  },
+  "unchanged": {
+    "arch/x86_64/kernel/memory.c": "25c13c856dff0a1219a316ac3cf38cbe40f79c16561813b98a408f8cb62c24ed",
+    "kernel/rust/x86_memory_helpers.rs": "35664d46edaa3674d633b3c1ff96e85723fd21e5daf517d53c2438de35d5c4a3",
+    "kernel/include/page.h": "c8f3f5e7804c71430c814395ea14a1ee93267180713caeb39880b662cc9cd0dc",
+    "kernel/CMakeLists.txt": "af2758e8cad6fd4baa3c067d23cc81ab483aa71d666ca6249d54e8ccfd2701e5"
+  },
+  "remaining": [
+    "Independent focused source/ABI review.",
+    "Root integration of exact two-file successor without modifying accepted combined4 input.",
+    "Current full Rust crate and production mem.c TU compile; unique final page_unmap definition and no unresolved context/callback symbols.",
+    "Reviewed linked artifact and native use before any language-retirement credit."
+  ]
+}

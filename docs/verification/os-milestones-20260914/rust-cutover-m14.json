@@ -84,7 +84,7 @@
       "c_file": "kernel/mem.c",
       "title": "Generic VM, allocation and memory ownership",
       "status": "open",
-      "owner": null,
+      "owner": "dispatcher + terminal_lifecycle_repair; production consumer m14_production_stage",
       "inventory_basis": "Exact current image compile database and final link contract; surviving body counts still unmeasured.",
       "object_output": "kernel/CMakeFiles/mckernel.img.dir/mem.c.o",
       "source_dependency_file": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/full-image-attempt-1/owner-work/output/build/kernel/CMakeFiles/mckernel.img.dir/mem.c.o.d",
@@ -185,28 +185,66 @@
         {
           "id": "M14-01-03",
           "title": "Page and memobj reference ownership, map/unmap accounting and final release; carry explicit last-reference rules into Rust.",
-          "status": "unassessed",
-          "owner": null,
+          "status": "partial",
+          "owner": "terminal_lifecycle_repair implementation; dispatcher integration",
           "remaining_c_functions": null,
-          "rust_consumer": null,
-          "next_action": "Reconcile this area with the current matched consumer and already accepted Rust bodies; implement only the actual remaining C behavior.",
+          "rust_consumer": "kernel/rust/page_helpers.rs public page_unmap using existing PAGE_HELPERS default selector",
+          "next_action": "Coherent default GCC14 image with exact two postimages, final ELF ownership/default linkage and relevant native page map/unmap evidence; remaining area/file bodies remain open.",
           "proof": {
             "implementation": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/CANONICAL-INTEGRATION.json",
+                  "sha256": "470bd305420d2f848d8a002ee24d0988a6ef1a52538309a7039ce45902a909dc",
+                  "size": 1850
+                },
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/INDEPENDENT-SOURCE-REVIEW.json",
+                  "sha256": "038945e0912a8bc9bd3a472e8d28c20a6b88f1445bb4110ab29d2742a3eaaabf",
+                  "size": 1021
+                }
+              ]
             },
             "focused_checks": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/RESULT.json",
+                  "sha256": "63bc5c481ea8fec6049255762d7c5e1cf558df9ad617517d6bccf9995bf10815",
+                  "size": 12330
+                }
+              ]
             },
             "production_link": {
-              "status": "unassessed",
-              "evidence": []
+              "status": "partial",
+              "evidence": [
+                {
+                  "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/production-consumer-1/INDEPENDENT-ACTUAL-CONSUMER-REVIEW.json",
+                  "sha256": "02632334a7ebc114fc96208a2b617ebeb3bd6fbb80439f2fe9e87c852bc9e8cc",
+                  "size": 1027
+                }
+              ]
             },
             "native_validation": {
               "status": "unassessed",
               "evidence": []
             }
+          },
+          "prior_assessment_20261023_page_unmap": {
+            "status": "unassessed",
+            "owner": null,
+            "next_action": "Reconcile this area with the current matched consumer and already accepted Rust bodies; implement only the actual remaining C behavior."
+          },
+          "bounded_slice_20261023_page_unmap": {
+            "body": "public page_unmap C wrapper displaced in canonical selected source",
+            "actual_C_Rust_fixture_invocations": 164,
+            "actual_fullcrate_Rust_inputs": 82,
+            "actual_GCC9_whole_mem_TU_and_partial_link": true,
+            "tracked_Rust_exports": 13,
+            "default_GCC14_final_ELF": false,
+            "native": false,
+            "whole_area_or_file_retirement": false
           }
         },
         {
@@ -1530,6 +1568,16 @@
       "as_of": "2026-10-23T09:19:57.314512+00:00",
       "kind": "user_page_free_callback_source_and_actual_consumer_partial",
       "summary": "Added partialS04 canonical free-pages Rust callback with data-only C provenance metadata,28vectors and independently accepted82input fullcrate/12exports/GCC9 TU/partial-link proof. PriorS01\u2013S03 and oldproofs preserved; allM14area/file/native closures remain open. Functional30/35 with P-M06-01 and wholeM06 closed independently; noM14closure."
+    },
+    {
+      "scope": "M14-01-03 bounded public page_unmap source integration",
+      "evidence": {
+        "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/CANONICAL-INTEGRATION.json",
+        "sha256": "470bd305420d2f848d8a002ee24d0988a6ef1a52538309a7039ce45902a909dc",
+        "size": 1850
+      },
+      "practical_check_increment": 0,
+      "whole_M14_subgoal_increment": 0
     }
   ]
 }

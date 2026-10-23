@@ -1,0 +1,35 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "inputs": {
+    "kernel/mem.c": {
+      "sha256": "00c5e0fc6718bb3f1bd0940d2db88d0a5536390ced699ee435ec882c51eb7c72",
+      "bytes": 225590
+    },
+    "kernel/rust/page_helpers.rs": {
+      "sha256": "fa2f68c00a1568acf6e9ebc4bbdfb0b2bf13e2e5eff758b9048acb06a6aec597",
+      "bytes": 16412
+    },
+    "kernel/include/page.h": {
+      "sha256": "c8f3f5e7804c71430c814395ea14a1ee93267180713caeb39880b662cc9cd0dc",
+      "bytes": 1647
+    },
+    "kernel/CMakeLists.txt": {
+      "sha256": "af2758e8cad6fd4baa3c067d23cc81ab483aa71d666ca6249d54e8ccfd2701e5",
+      "bytes": 24684
+    },
+    "arch/x86_64/kernel/memory.c": {
+      "sha256": "25c13c856dff0a1219a316ac3cf38cbe40f79c16561813b98a408f8cb62c24ed",
+      "bytes": 84385
+    },
+    "kernel/rust/x86_memory_helpers.rs": {
+      "sha256": "35664d46edaa3674d633b3c1ff96e85723fd21e5daf517d53c2438de35d5c4a3",
+      "bytes": 190789
+    }
+  },
+  "selected_x86_callback_unchanged": true,
+  "actual_provider": "kernel/mem.c",
+  "rust_provider": "kernel/rust/page_helpers.rs",
+  "selection": "Existing kernel/CMakeLists.txt mem.c MCKERNEL_RUST_PAGE_HELPERS; no build selection change required.",
+  "native_acceptance": false,
+  "retirement_credit": false
+}

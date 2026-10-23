@@ -1,0 +1,102 @@
+{
+  "actual_payload_rows": [
+    {
+      "line": 959,
+      "payload": {
+        "argv": [
+          "/bin/mcexec",
+          "-t",
+          "1",
+          "0",
+          "app",
+          "A",
+          "",
+          "B"
+        ],
+        "cwd": "/case/work",
+        "env": {
+          "COKERNEL_PATH": "/apps",
+          "PATH": "/usr/bin:/bin"
+        },
+        "finished_ns": 32641767009,
+        "procfs_empty": false,
+        "raw_wait_status": 0,
+        "reaped_ns": 32340591021,
+        "started_ns": 31911249583,
+        "streams": {
+          "stderr": {
+            "discarded": 0,
+            "eof": true,
+            "eof_ns": 32237159719,
+            "hex": "",
+            "limit": 1024,
+            "observed": 0,
+            "retained": 0,
+            "truncated": false
+          },
+          "stdout": {
+            "discarded": 0,
+            "eof": true,
+            "eof_ns": 32237276773,
+            "hex": "68616e646c65643d31206f627365727665645f626c6f636b65643d3120726573746f7265643d310a",
+            "limit": 1024,
+            "observed": 40,
+            "retained": 40,
+            "truncated": false
+          }
+        }
+      }
+    }
+  ],
+  "cycle_credit": 0,
+  "direct_child_joined": true,
+  "inference": "Original evaluator refusal follows actual generation1 shutdown application_quiesce -16 after cleanup intent/ACK and application retirement -11. This finite packet records observations, not a root-cause or physical-acceptance verdict.",
+  "observed_app_bytes": 40,
+  "observed_app_raw_wait_status": 0,
+  "observed_procfs_empty": false,
+  "outer_capture_status_sha256": "f9ff4cc2b2d6caf830fe1c7fc218a5e1b2c68d4f436175547005b8b5aba6b95d",
+  "outer_returncode": 1,
+  "outer_seconds": 37.16882760298904,
+  "physical_acceptance": null,
+  "process_group_absent": true,
+  "raw_application_acceptance_preserved": false,
+  "raw_capture_errors": [],
+  "raw_cleanup": {
+    "errors": [],
+    "reaped": true
+  },
+  "raw_flags_edited": false,
+  "raw_mckernel_application_executed_flag_preserved": false,
+  "raw_result_failure": {
+    "error": "M05 case: payload after resource capture",
+    "phase": "evaluation",
+    "type": "DiagnosticError"
+  },
+  "raw_result_status": "FAIL",
+  "resource_restoration_credit": 0,
+  "retention_map": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/failed-m05-495e-raw-1/RETENTION-MAP.json",
+    "sha256": "d57e6745e11caa016197008a513789fb5131d89d9427085830720b538b5613f4"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_serial_evidence": [
+    {
+      "line": 950,
+      "text": "<6>[   32.298693] mcctrl: application_process=cleanup_requested os=0 generation=1 pid=254 intent_errno=0"
+    },
+    {
+      "line": 951,
+      "text": "<6>[   32.304388] ihk_smp_x86_64: IHK-SMP: application cleanup ACK os=0 generation=1 pid=254 token=3 errno=0 abandoned=1"
+    },
+    {
+      "line": 952,
+      "text": "<6>[   32.309450] ihk_smp_x86_64: IHK-SMP: application retirement os=0 generation=1 pid=254 token=21 errno=-11"
+    },
+    {
+      "line": 954,
+      "text": "<6>[   32.435199] ihk_smp_x86_64: IHK-SMP: shutdown os=0 generation=1 stage=application_quiesce result=-16 effect=post"
+    }
+  ],
+  "source_changes": false,
+  "status": "LITERAL_FAILED_M05_FACTS_NO_ACCEPTANCE"
+}

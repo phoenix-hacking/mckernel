@@ -1,0 +1,36 @@
+--- a/kernel/rust/page_helpers.rs
++++ b/kernel/rust/page_helpers.rs
+@@ -643,6 +643,33 @@
+     1
+ }
+ 
++// The C provider exports its immutable geometry and existing lock/log
++// callbacks. No Rust assumption about ihk_spinlock_t size or page shift.
++unsafe extern "C" {
++    static page_hash_locks: [u8; 1];
++    static page_unmap_hash_shift: CInt;
++    static page_unmap_hash_mask: CULong;
++    static page_unmap_lock_stride: usize;
++    fn page_hash_lock_bridge(lock_addr: usize) -> CULong;
++    fn page_hash_unlock_bridge(lock_addr: usize, flags: CULong);
++    fn page_unmap_log_bridge(event: CInt, page: *mut Page, ret: CInt);
++}
++
++#[no_mangle]
++pub unsafe extern "C" fn page_unmap(page: *mut Page) -> CInt {
++    page_unmap_body_result(
++        page,
++        core::ptr::addr_of!(page_hash_locks) as usize,
++        page_unmap_hash_shift,
++        page_unmap_hash_mask,
++        page_unmap_lock_stride,
++        Some(page_hash_lock_bridge),
++        Some(page_hash_unlock_bridge),
++        Some(page_unmap_orchestrate_result),
++        Some(page_unmap_log_bridge),
++    )
++}
++
+ #[no_mangle]
+ pub unsafe extern "C" fn is_splitable(page: *mut Page, memobj_flags: u32) -> CInt {
+     if !page.is_null() && (page_in_memobj_predicate(page) || page_multi_mapped_predicate(page)) {

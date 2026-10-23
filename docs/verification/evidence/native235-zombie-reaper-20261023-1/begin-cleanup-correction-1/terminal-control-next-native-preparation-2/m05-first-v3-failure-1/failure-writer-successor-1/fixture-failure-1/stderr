@@ -1,0 +1,30 @@
+test_atomic_first_publication_and_dangling_symlink_no_overwrite (__main__.WriterTests) ... ok
+test_capture_failure_retains_first_error_without_fabricated_observation (__main__.WriterTests) ... ok
+test_existing_capture_bound_is_unchanged (__main__.WriterTests) ... ok
+test_lifecycle_failure_priority_over_capture_failure (__main__.WriterTests) ... ok
+test_real_M05_evaluator_retains_actual_serial_TEST_ONLY_host_envelope (__main__.WriterTests) ... FAIL
+test_real_evaluation_failure_retains_envelope_and_preimage_loses_it (__main__.WriterTests) ... FAIL
+
+======================================================================
+FAIL: test_real_M05_evaluator_retains_actual_serial_TEST_ONLY_host_envelope (__main__.WriterTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-first-v3-failure-1/failure-writer-successor-1/test_failure_writer.py", line 44, in test_real_M05_evaluator_retains_actual_serial_TEST_ONLY_host_envelope
+    r,j=self.exercise(NEW,evaluator=lambda _,o:adapter.case_evaluate(manifest,o));self.assertEqual(r['failure']['error'],'M05 case: payload after resource capture');self.assertEqual(r['observation']['serial'],(RAW/'serial.log').read_text());self.assertEqual(j,r['failure'])
+AssertionError: 'M05 case: M05 original immutable plan changed' != 'M05 case: payload after resource capture'
+- M05 case: M05 original immutable plan changed
++ M05 case: payload after resource capture
+
+
+======================================================================
+FAIL: test_real_evaluation_failure_retains_envelope_and_preimage_loses_it (__main__.WriterTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-first-v3-failure-1/failure-writer-successor-1/test_failure_writer.py", line 41, in test_real_evaluation_failure_retains_envelope_and_preimage_loses_it
+    if expected:self.assertEqual(r['observation']['serial'],(RAW/'serial.log').read_text());self.assertLess(r['observation']['finished_at'],r['observation']['deadline'])
+AssertionError: '[   [200 chars]0000\r\n[    0.000000] Command line: console=t[77631 chars]\r\n' != '[   [200 chars]0000\n[    0.000000] Command line: console=tty[75709 chars]wn\n'
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.159s
+
+FAILED (failures=2)

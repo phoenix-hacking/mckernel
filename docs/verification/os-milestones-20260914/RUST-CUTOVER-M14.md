@@ -208,3 +208,15 @@ S01–S03 and their earlier proofs remain preserved. Pinned GCC14/default final
 image linkage, native evidence and every M14 area/file closure remain open.
 The separate functional count is 30/35; this slice closes no practical check or
 M14 milestone.
+
+## Public page_unmap source increment — 2026-10-23
+
+M14-01-03 is PARTIAL. The selected public `kernel/mem.c` wrapper now uses the
+Rust `page_helpers.rs` entry point. Independent source review,164 original-C/Rust
+fixture invocations,82-input full production Rust crate, actual whole GCC9 mem.c
+TU,13 tracked exports and partial linkage pass. Existing lock/log bodies and
+read-only C geometry remain explicit providers; no page freeing was added.
+Evidence: `../evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/`.
+Current image10972 and prior default-image candidate remain unchanged. Default
+GCC14/final-ELF ownership and relevant native proof remain open; no whole area,
+file or practical-check credit is added.

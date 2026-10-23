@@ -1,0 +1,37 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "CANONICAL_TWO_FILE_SOURCE_INTEGRATION_ONLY",
+  "time_ns": 1792752648745038748,
+  "source_review": "/root/native235_release_review PASS_SOURCE",
+  "consumer_review": "/root/m14_callback_review PASS_ACTUAL_PRODUCTION_CONSUMER_ONLY",
+  "accepted_source": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/RESULT.json",
+    "sha256": "63bc5c481ea8fec6049255762d7c5e1cf558df9ad617517d6bccf9995bf10815",
+    "bytes": 12330
+  },
+  "actual_production_consumer": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/page-unmap-body-1/production-consumer-1/FINAL-CONSUMER-RECEIPT.json",
+    "sha256": "1f339f690fa1e1301aba08c5bb856bfd2a0c820d122801e078b99a7a026c8c51",
+    "bytes": 4740
+  },
+  "integrated": [
+    {
+      "path": "kernel/mem.c",
+      "preimage_sha256": "00c5e0fc6718bb3f1bd0940d2db88d0a5536390ced699ee435ec882c51eb7c72",
+      "postimage_sha256": "bac5d4fb766b5cb80e036457465e215743a1cb31622ff11c5b5b605749f3d7fe"
+    },
+    {
+      "path": "kernel/rust/page_helpers.rs",
+      "preimage_sha256": "fa2f68c00a1568acf6e9ebc4bbdfb0b2bf13e2e5eff758b9048acb06a6aec597",
+      "postimage_sha256": "cfc64f72bf9b94c65417bc8f4e29d65b81f98239fe52ab2a7dd0352ebdfc3f70"
+    }
+  ],
+  "physical_boundary": "M05nonce495e accepted host physical retirement; no heavy workload active",
+  "frozen_current_image": "10972f87277e8429e2badd238d3ac53e451b8a2351a8ebf013941e1dfb95e1e2",
+  "frozen_image_unchanged": true,
+  "M05_149_source_cohort_canonical_kernel_arch_consumers": [],
+  "default_image_successor4_preserved": true,
+  "new_default_image_link": false,
+  "native_validation": false,
+  "whole_file_or_area_retirement": false
+}
