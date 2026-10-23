@@ -1,3 +1,22 @@
+## WAIT-observer SDK accepted; actual native stage complete — 2026-10-23 07:13 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+29/35 functional checks; no new closed IDs; final-profile cycles/launches/mixed
+minutes0/0/0. Actual SDK3 buildPASS21.822s, complete authenticationPASS .001743s;
+independent artifact/physical acceptanceb589f2ab verifies68actual source bindings,
+IHKdaced/SMP1053 unchanged/newmcctrle7d39ac1, MM uniqueproviders/vermagic/exports,
+14Docker+1admissionclient reaps/ownedremoval/releasedrecords and freshPROC/mutex/
+name/label observations. No duplicate cleanup needed. Actual sevenordinary stages
+PASS: snapshot/bind/one-recordpatch9.474s/basebind/original235overlay10.823s/strictjoin;
+manifest60682d52 and wholejoineb31d7a3. Next root operation fresh read-only admission,
+metadata/guard and exact one-shot native diagnostic release. Original235app/oracle,
+image10972/launcher unchanged; WAITerror observation adds no lifecycle repair or
+native acceptance. p12identity sourcecohortPASS, final helper review in progress.
+M14 separate: cap-contract correction1 passes13 actual-body cases/four real children,
+allgroupsretired, preserves global1MiB guard; focused rereview active. Production
+fullcrate/defaultlink/native stillopen; no file/area/check closure. No resize performed.
+Preserve original velocity baseline; no speedup claim. Included-only100% stop remains.
+
 ## WAIT-error observation staged; diagnostic retired — 2026-10-23 06:55 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
