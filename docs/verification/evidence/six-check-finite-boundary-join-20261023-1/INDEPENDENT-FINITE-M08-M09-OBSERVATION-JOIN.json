@@ -1,0 +1,104 @@
+{
+  "check_closure": false,
+  "checks": [
+    "P-M08-02",
+    "P-M09-02"
+  ],
+  "current_status": "OPEN",
+  "decision": "FINITE_REMAINING_NATIVE_OBSERVATION_MAP_NO_ACCEPTANCE",
+  "execution_authorized": false,
+  "implementation_ownership": false,
+  "no_new_broad_audit_required": true,
+  "quota_boundary": "Old20352 restoration and accepted199 remain scoped historical evidence; ten cycles/failed-stop recovery/P12 budgets are separate obligations.",
+  "remaining": [
+    {
+      "boundary": "Process/exec ABI",
+      "check": "P-M08-02",
+      "providers": [
+        "mcctrl.rs",
+        "mcctrl_process.rs",
+        "smp_application_syscall.rs",
+        "mcexec_helpers8f9"
+      ],
+      "required": [
+        "Exact235-byte stdout, empty stderr, exit0.",
+        "Actual nr56 child creation and nr59 exec/wait routes.",
+        "EXEC_TRANSFER20/EXEC_USERCOPY_DONE21 and CREATE_PPD completion on V3.",
+        "Join requester/worker/delivery/serial and parent/child identities, not transport0."
+      ],
+      "route": "235"
+    },
+    {
+      "boundary": "Changed ownership/error crossings",
+      "check": "P-M08-02",
+      "providers": [
+        "smp_application.rs",
+        "mailbox syscall routing",
+        "fork-control/task-MM owners"
+      ],
+      "required": [
+        "Successful selector1 response publication precedes child admission/scheduling, with exact parent/child/generation/route.",
+        "227 READY\u2192WNOHANG0\u2192SIGTERM15\u2192EOF/reap/ECHILD\u2192new child exec37/reap.",
+        "Alias revocation/finalACK precedes VM/CPU-credit retirement; app owned=0 alone is insufficient."
+      ],
+      "route": "235/227"
+    },
+    {
+      "boundary": "Boot/resource/mapping/shutdown",
+      "check": "P-M08-02",
+      "providers": [
+        "smp_cpu::reconcile_shutdown_boot",
+        "Started::retire_after_peer_stop",
+        "smp_memory::finish_shutdown_claim",
+        "Context::release",
+        "PageOwner::drop"
+      ],
+      "required": [
+        "Complete kernel.log segments with independently expected (0,1,1)/(0,2,2).",
+        "Exact CPU identities and original physical-interval/NUMA coverage.",
+        "Service/worker/process/procfs/mapping/callback/ref/frame quiescence.",
+        "Public destroy/RELEASE0 through original PageOwner coverage; reboot and subsequent workload.",
+        "Incomplete rows or EBUSY prove no restoration."
+      ],
+      "route": "First V3 full restoration"
+    },
+    {
+      "boundary": "Final consumed Rust/C/assembly joins",
+      "check": "P-M09-02",
+      "required": [
+        "Bind exact final image/module/launcher artifacts to the named native observations.",
+        "Establish native applicability for pool-query dispatch, exact mailbox selection and publication-gated child admission.",
+        "Preserve unchanged accepted assembly/default bindings; no unrelated C-retirement inventory gate."
+      ],
+      "route": "235/227/first V3 full restoration"
+    }
+  ],
+  "reuse": [
+    {
+      "observation": "Compiled ABI/layout/process-DWARF14 and C assertions",
+      "scope": "Existing accepted assertions retain their original matching applicability."
+    },
+    {
+      "evidence": "docs/verification/evidence/current68-native235-sdk-v3-actual-build-20261023-1/INDEPENDENT-ACTUAL-SDK68-V3-ARTIFACT-AND-PHYSICAL-ACCEPTANCE-1.json",
+      "observation": "SDK6a6a current-v6/current-v4/control-v1 exports, resolved MM providers, four V3 host Rust sources/defaults",
+      "sha256": "6a6a47b9899e8de45ab650023419b5a1af0596fb34865241cae263e0b19cac2f"
+    },
+    {
+      "evidence": "docs/verification/evidence/current68-launcher-v3-actual-build-20261023-1/actual/INDEPENDENT-ACTUAL-LAUNCHER-PRODUCTION-ARTIFACT-ACCEPTANCE-1.json",
+      "observation": "Launcher5eeb whole8f9 Rust body/C mainloop/imports/exit bridges production-link proof",
+      "sha256": "5eeb7f2ea4aba4421d7d79ed935946506a12720d0c7711e01d30065cb14dda54"
+    },
+    {
+      "observation": "Image10972 default exec-reset/caller/provider and accepted199 signal-reset native result",
+      "scope": "Unchanged image applicability; old run is not a V3 launch quota."
+    }
+  ],
+  "reviewer": "/root/matched_guest_build_review",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": "Genuine focused reviewer result returned before recorded policy hold; dispatcher records exact bounded disposition.",
+  "wait_error_branch": {
+    "accepted_scope": "Source, actual-body subprocess exit1 and production-linked bridges.",
+    "condition": "If cancellation/shutdown actually reaches terminalWAITerror, retain nonzero exit and ownership proof; otherwise explicitly unexercised. Literal checks do not automatically require a new fault suite.",
+    "native_observation": "Not established by successful235/227."
+  }
+}

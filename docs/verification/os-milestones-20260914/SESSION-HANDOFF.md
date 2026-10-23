@@ -1,3 +1,33 @@
+## Current — independent prerequisites advanced; native policy hold preserved (2026-10-23 02:32 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+29/35; no newnative/checkclosure or workloadadmission. RecordedcyberPolicy resolution
+remainsunproved; no rejectedturn/workload retried andno model/settings/billingfallback.
+
+Safeindependentwork completed: retained genuinefiniteM08/M09join under
+../evidence/six-check-finite-boundary-join-20261023-1/: exactmissingnative observations
+share235/227/firstV3restore, no broaderaudit/newfaultsuite gate. Published approved
+P05five-source/runtime+actualstagebinding under ../evidence/p-m05-v3-runtime-source-ready-20261023-1/;
+originalunsupportedapprovalclaim preserved withtruthfulcorrection/currentpointer.
+Theseare source/stage scope, no native/restoration credit.
+
+Independent P12 source/resource review foundONEconcreteunprovenbound:96MiBDockerlog
+allowance/3489660928Btotal lacks selecteddaemon encodedrecord/peakrotation proof.
+Sourcecontrols exactjson-file16m2/LONG384MiB/SHORT32/typedHOSTgrowth+64modeledconsumer
+observations accepted onlyas scopedsourcefacts. ../evidence/p12-coupled-resource-review-20261023-1/
+retains genuinefinding/9sourcefiles/raw64PASS/privatebindings. Ordinarychecks1/2passed;
+check3followed64→96MiBadjustment, zero failedcandidate retries. Localpackagequery
+observed docker.io26.1.3-0ubuntu1~20.04.1; upstreamtagcandidate loggingcode isnot a
+runningdaemon/distributionpatch binding. Needexactselectedimplementation/record+rotation
+bound andfinalexternalcapturebudget beforeLONGresourcequalification; no host/Docker/
+privileged workloadprobe or admission executed. FirstmatchedV3restore/stage/LONGrelease
+remainNULL. Originalfiles/failures andweeklyincluded-only100%guard preserved.
+
+Next aftersupportedpolicyresolution: fresh235admission/exactrelease→235→227→V3fullrestore,
+thenreviewedfixedbatch/qualifyingP12session; finalV3budgets0cycles/0launches/0mixedminutes.
+Aftergenuine35/35+positive retirement continueauthorizedseededfunctionaltests per
+[POST-CLOSURE-FUNCTIONAL-FUZZING-20261023.md](POST-CLOSURE-FUNCTIONAL-FUZZING-20261023.md).
+
 ## Current — manual resume reconciled; recorded service-policy hold unresolved (2026-10-23 02:19 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

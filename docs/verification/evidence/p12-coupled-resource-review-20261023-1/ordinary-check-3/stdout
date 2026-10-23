@@ -1,0 +1,64 @@
+PASS refusal outer missing retention base
+PASS real descriptor-walk host device/uid/gid/mode/fresh layout and inner mounted-parent-only path
+PASS refusal production root rejects fixture parent
+PASS refusal foreign parent
+PASS refusal wrong root device
+PASS refusal nonprivate parent
+PASS refusal symlink parent
+PASS refusal nonfresh retention base
+PASS refusal nonfresh parent
+PASS refusal writable manifest nested in output
+PASS refusal input outside readonly scratch
+PASS exact typed v2 profile with HOST output binding
+PASS refusal wrong-root
+PASS refusal foreign-root
+PASS refusal bool-device
+PASS refusal obsolete profile
+PASS actual _create_argv and complete production _profile mode-specific FSIZE positive
+PASS exact fsize refusal missing
+PASS exact fsize refusal wrong_soft
+PASS exact fsize refusal wrong_hard
+PASS real LONG create/inspect mount boundary; owner-retention base not mounted
+PASS refusal requested writable scratch input
+PASS refusal actual writable scratch input
+PASS refusal requested extra writable root
+PASS refusal actual extra writable root
+PASS refusal missing/wrong/unbounded Docker logging None
+PASS refusal missing/wrong/unbounded Docker logging {'Type': 'json-file', 'Config': {}}
+PASS refusal missing/wrong/unbounded Docker logging {'Type': 'local', 'Config': {}}
+PASS refusal missing/wrong/unbounded Docker logging {'Type': 'json-file', 'Config': {'max-size': '16m'}}
+PASS refusal missing/wrong/unbounded Docker logging {'Type': 'json-file', 'Config': {'max-size': '16m', 'max-file': '3'}}
+PASS refusal missing/wrong/unbounded Docker logging {'Type': 'json-file', 'Config': {'max-size': '16m', 'max-file': '2', 'compress': 'true'}}
+PASS actual complete LONG create/inspect finite Docker log configuration
+PASS actual _create_argv and complete production _profile mode-specific FSIZE positive
+PASS exact fsize refusal missing
+PASS exact fsize refusal wrong_soft
+PASS exact fsize refusal wrong_hard
+PASS refusal actual inherited FSIZE (-1, -1)
+PASS refusal actual inherited FSIZE (402653183, 402653184)
+PASS refusal actual inherited FSIZE (402653184, 402653185)
+PASS refusal actual inherited FSIZE (-1, -1)
+PASS refusal actual inherited FSIZE (33554431, 33554432)
+PASS refusal actual inherited FSIZE (33554432, 33554433)
+PASS actual shared FSIZE consumer positive and wrong/infinite limits; all four runtime layers preserved
+PASS refusal HOST growth one byte short
+PASS refusal scratch floor one byte short
+PASS refusal understated full sparse gap
+PASS refusal missing growth host_floor_bytes
+PASS refusal missing growth scratch_floor_bytes
+PASS refusal missing growth remaining_backing_growth_bytes
+PASS refusal missing growth emergency_bytes
+PASS refusal missing growth campaign_bytes
+PASS refusal missing growth scratch_input_growth_bytes
+PASS refusal invalid growth emergency_bytes
+PASS refusal invalid growth campaign_bytes
+PASS refusal invalid growth host_floor_bytes
+PASS refusal invalid growth scratch_floor_bytes
+PASS refusal invalid growth remaining_backing_growth_bytes
+PASS refusal invalid growth scratch_input_growth_bytes
+PASS coupled complete HOST growth exact boundary and all missing/reserve/floor/sparse-gap refusals
+PASS actual outer _preflight positive consumes release budget; refusal propagates before QEMU/lease/create
+PASS outer preflight consumes reviewed release storage_admission before acquisition/create
+PASS actual planned QMP predicate 96 /home/holden/mckernel-work/native-runs/l12a1/p/attempt-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/qmp.sock
+PASS refusal overlong QMP
+PASS no runtime base created; no native or P12 acceptance

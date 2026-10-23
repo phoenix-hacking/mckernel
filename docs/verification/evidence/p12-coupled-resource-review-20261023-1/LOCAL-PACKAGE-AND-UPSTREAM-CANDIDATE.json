@@ -1,0 +1,38 @@
+{
+  "ceiling_accepted": false,
+  "local_package_query": {
+    "argv": [
+      "/usr/bin/dpkg-query",
+      "-W",
+      "-f=${Package} ${Version} ${Status}\\n",
+      "docker.io",
+      "docker-ce",
+      "docker-ce-cli",
+      "moby-engine"
+    ],
+    "exit_code": 1,
+    "stderr": "docker-ce/docker-ce-cli/moby-engine not installed; package query only, no Docker command.",
+    "stdout": "docker.io 26.1.3-0ubuntu1~20.04.1 install ok installed\n"
+  },
+  "observed_utc": "2026-10-23T02:31:49.396528+00:00",
+  "primary_source_candidates": [
+    {
+      "fact": "Upstream defaultBufSize16KiB; copier emits buffer-sized partial records.",
+      "qualification": "Candidate upstream tag; no installed/running-daemon or distribution patch binding.",
+      "url": "https://raw.githubusercontent.com/moby/moby/v26.1.3/daemon/logger/copier.go"
+    },
+    {
+      "fact": "json-file constructs serialized records; compression defaults false; max-size/max-file configure LogFile.",
+      "qualification": "Encoded attributes/record bound and actual selected implementation still require proof.",
+      "url": "https://raw.githubusercontent.com/moby/moby/v26.1.3/daemon/logger/jsonfilelog/jsonfilelog.go"
+    },
+    {
+      "fact": "WriteLogEntry checks prior size before adding one record; uncompressed rotation removes oldest then renames current. ReadLogs can retain open file references.",
+      "qualification": "Live reader count/unlinked storage and actual daemon binding remain unproved.",
+      "url": "https://raw.githubusercontent.com/moby/moby/v26.1.3/daemon/logger/loggerutils/logfile.go"
+    }
+  ],
+  "service_hold_resolved": false,
+  "status": "CANDIDATE_UPSTREAM_SOURCE_ONLY_NO_RUNNING_DAEMON_BINDING",
+  "workloads_or_privileged_queries": 0
+}
