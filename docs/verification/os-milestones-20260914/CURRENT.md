@@ -1,3 +1,46 @@
+## Expert controller correction and fresh91c admission accepted — 2026-10-23 17:27 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35, whole12/14 unchanged; no new literal check closure.
+Current_live_postjoin AA5_PRE_EFFECT_CONTROLLER_POSITIVELY_RETIRED remains nonNULL;
+no heavy running, no cleanup/query replay. Expert848controller/d79transport/071owner
+accepted with actual18 pre-effect regressions (.714735s), including six controller
+and nine request stale-field negatives. Actual fresh91c admission ea295d6c79783B
+PASS0/.500485s plus three authenticated readbacks independently accepted: 38pins,
+complete publisher-free snapshots, permanent27:4/eightabsent, UUID/loop/backing and
+full sparse-growth budgets/profile exact. Frozen capsule/image10972/SDK5 unchanged.
+Final c41 template suffix independently confirmed actual byte[10]/length1; root
+initial escaped-repr diagnosis was incorrect, no source correction needed.
+No expiry or release minted. Next: static fetched checkpoint, genuine canonicalLF
+payload independent hash approval, full realclock validator AND actual published
+request pre-effect consumer20868, then one-shot controller with fresh91c/newrelease.
+LONG accepted0/100 launches and0/60actual mixedminutes; no elapsed-wall credit.
+M14 actual GCC9 header-layout witness d6ac77fe PASS130ABI/type facts plus26spin and
+15timer initializer values; real CpuLocalVar.current7848/size8128, no model types.
+CPU6 released. Independent m14_build_release_review checks this finite receipt;
+exact GCC14 wholeprocessTU/defaultlink/native remainOPEN. Canonical timer/spin Rust
+partial implementation preserved; M07 future static native packet retained/unreleased.
+
+## AA5 pre-effect controller failure retired; expert binding repair — 2026-10-23 17:07 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35,whole12/14 unchanged. Static365d5a0eabe9ca053571f94a7ad285656075566a
+fetched369blobs proofb74a4340. Genuinefcd8payload/050drelease/fullrealclockvalidator
+PASS precededONE aa5controller invocation with408.272416s remaining, but actual
+controllerFAIL1/.131764s: fourconstants stilloldp12s5l2/l12b1/dfbb. Main56fails
+BEFOREmkdir63/Popen76. PID3813588/start57244323 directjoined/groupgone/closed,
+nooutertimeout/signal/kill. Independent pre-effectretirement qualifies via closed
+controller+priora1cdphysical/fb2dadmission continuity. current_live_postjoin
+AA5_PRE_EFFECT_CONTROLLER_POSITIVELY_RETIRED (nonnull). Noowner/client/container/
+lease created; newPROC/mutex/removal/reapsNULLor0, no inventedobservation/cleanup.
+Old050/aa5approvalSTOPPED, no remint/replay. HIGHterminal_lifecycle_repair owns
+ONE coherent six-literal derivation/hashpropagation correction+actualpre-effect
+consumer oldFAIL/newPASS/staleREJECT/no processfactories; case227writepaused.
+Nextactualruntime mustnewnonce/immutable release, freshadmission/separatereview.
+Allfailures preserved, ZEROguest/app/hourcredit. Noheavy running; no resize.
+M14canonicalspin+timer partial proofs preserved; actualfullRust15.242s/50warnings,
+C/layout/defaultlink/nativeOPEN. M07staticfuturepacketaccepted, runtimeunreleased.
+
 ## Mount-corrected L12C1 fresh admission PASS; static publication before mintage — 2026-10-23 16:56 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

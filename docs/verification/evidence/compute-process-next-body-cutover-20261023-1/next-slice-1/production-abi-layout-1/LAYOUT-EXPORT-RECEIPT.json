@@ -1,0 +1,53 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_EXPORT_ACTUAL_HEADER_TYPE_LAYOUT_ONLY",
+  "actual_receipt": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/production-abi-layout-1/ACTUAL-LAYOUT-RECEIPT.json",
+    "sha256": "d6ac77fe557bf78c49ee916d84055dfa1af62cf479c37f0f4fc1c46bdbdfd27f",
+    "bytes": 13354
+  },
+  "actual_values": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/production-abi-layout-1/ACTUAL-LAYOUT-VALUES.json",
+    "sha256": "f52ff4ddaa7533fe42d0d424f9dd88c48d2b536e28e745fcf090c4bf7953522c",
+    "bytes": 10406
+  },
+  "recipe": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/production-abi-layout-1/EXACT-LAYOUT-WITNESS-RECIPE.GRANTED.json",
+    "sha256": "d2ae46b0559a636ac42a4ddfe0f09a4857437ac6314aabc806365961234e173a",
+    "bytes": 80748
+  },
+  "runner": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/production-abi-layout-1/run_layout_owned.py",
+    "sha256": "b5754e38af5751df1e4b0710717e935b9ffdeefceaa7b52108320f8bdb3f390f",
+    "bytes": 8590
+  },
+  "source_generator": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/production-abi-layout-1/prepare_witness.py",
+    "sha256": "24f8fe0058684981f60daa3f1e2fc3b6441b0079be5073841bce2e55979496e4",
+    "bytes": 11466
+  },
+  "actual_facts": {
+    "sizeof.Thread": 5568,
+    "align.Thread": 64,
+    "sizeof.CpuLocalVar": 8128,
+    "align.CpuLocalVar": 64,
+    "sizeof.Timer": 56,
+    "CpuLocalVar.current": 7848,
+    "descriptor.sizeof.SchedRunqueueOffsets": 208,
+    "descriptor.sizeof.TimerRuntimeOffsets": 120
+  },
+  "objects_durable_before_ELF_observer": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/next-slice-1/production-abi-layout-1/DURABLE-LAYOUT-OBJECTS.json",
+    "sha256": "eb4b7d726f56595e8c27c4037cc39080750406ac1b72ba6696dad2df109b10e7",
+    "bytes": 1103
+  },
+  "C_GCC9_difference": "Root explicitly approved reuse of existing GCC9idle/headerfixture flags; exact production compile-db is GCC14.3.1, so wholeprocessTU/defaultlink remain OPEN.",
+  "layout_scope": "Real actual Cheader/config and actualRustsharedtypes; no modelstructs. All26spin offsets from existing unchanged constructor body and15timer offsets from realRustTimer/Thread/CpuLocalVar.",
+  "constructor_qualification": "Only const qualification/name for compiler-emitted data; source body extracted unchanged. Full actualabi.rs copied byte-for-byte, both descriptor types/typealiases exactsource extracts.",
+  "no_execution": "Both compiler outputs decoded as ELF64 OBJECT data; no linked witness/kernel/ASM/host-state function executed.",
+  "failures": 0,
+  "corrections": 0,
+  "CPU6_released": true,
+  "canonical_candidate9_changed": false,
+  "exact_GCC14_whole_C_TU_default_link_native": "OPEN"
+}
