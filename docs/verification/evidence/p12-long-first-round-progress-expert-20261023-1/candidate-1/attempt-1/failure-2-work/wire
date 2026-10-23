@@ -1,0 +1,14 @@
+P12_LONG_PHASE round=0 stage=setup-spool
+ND_PAIR_LONG_PROFILE {"version":1,"work_ns":3600000000000,"wall_ns":7200000000000,"min_launches":100,"round_cap":2048,"trace_cap":268435456}
+ND_PAIR_ROUND_START {"round":0,"time_ns":552180017741951,"procfs_empty":true}
+P12_LONG_PHASE round=0 stage=round-evidence
+P12_LONG_PHASE round=0 stage=callback-discover
+P12_LONG_PHASE round=0 stage=callback-launch
+P12_LONG_PHASE round=0 stage=callback-load
+P12_LONG_FAILURE round=0 stage=callback-load pair_stage=setup result=-5 ownership_complete=0 rounds=0 launches=0 trace_bytes=0
+ND_PAIR_LONG_ABORT
+P12_LONG_PHASE round=0 stage=failure-trace-snapshot
+P12_LONG_PHASE round=0 stage=failure-trace-save
+P12_LONG_FAILURE_TRACE_BEGIN bytes=73 saved=1
+CONTROLLED_RETAINED_LINUX_TRACE no_native_acceptance=1 ownership=unknown
+P12_LONG_FAILURE_TRACE_END bytes=73

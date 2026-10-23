@@ -1,0 +1,113 @@
+{
+  "CPU0_released": true,
+  "actual_terminal_validation": null,
+  "capture": {
+    "captures": {
+      "stderr": {
+        "ctime_ns": 1792769058063593765,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48926921,
+        "mode": "0o600",
+        "mtime_ns": 1792769058063593765,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/live-counter-observation-preparation-1/actual-read-2/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0,
+        "uid": 1000
+      },
+      "stdout": {
+        "ctime_ns": 1792769058099594901,
+        "device": 66306,
+        "gid": 1000,
+        "inode": 48926920,
+        "mode": "0o600",
+        "mtime_ns": 1792769058099594901,
+        "nlink": 1,
+        "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/final-execution-assembly-1/post-M14-fresh-admission-preparation-1/expired-release-successor-1/serialized-release-successor-2/live-counter-observation-preparation-1/actual-read-2/stdout",
+        "sha256": "fe5e3fd9414d6f026f32e5bd9d6ca4ad4c9afc05b3d1132638c069f1919551a3",
+        "size": 41857,
+        "uid": 1000
+      }
+    },
+    "closed_streams": true,
+    "direct_child_joined": true,
+    "error": null,
+    "group_absent": true,
+    "pid": 3771620,
+    "remaining_group_members": [],
+    "retirement_error": null,
+    "returncode": 0,
+    "seconds": 0.0767629980109632,
+    "start": 56650276,
+    "timed_out": false,
+    "unexpected_group_members": []
+  },
+  "cause": null,
+  "deadlines": {
+    "LONG_Rust_wall_seconds": 7200,
+    "PID1_collector_alarm_seconds": 7320,
+    "app_TERM_to_KILL_ms": 100,
+    "app_ms": 10000,
+    "app_stop_reap_ms": 2000,
+    "inner_owner_seconds": 7800,
+    "limitation": "App/pair limits are checked in their loops; setup/discovery/filesystem/ioctl/trace callbacks need not return to those checks. Collector outeralarm retains PID1 and prevents successful publication; inner/outer host limits then reject/retire via existing owner. No new diagnostic or cancellation authorized.",
+    "outer_capture_seconds": 8100,
+    "pair_wait_ms": 15000
+  },
+  "gap_seconds": 115.15,
+  "next_success_marker": "ND_PAIR followed by ND_PAIR_ROUND_END then ND_PAIR_LONG_PROGRESS after run_pair ownership/result/strictgate/postflight/trace-retention gates",
+  "read1_start": 56638761,
+  "read1_stdout_equals_read2_sha256": true,
+  "read2_start": 56650276,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_observation": {
+    "anchor_after": {
+      "expected_start": 56612906,
+      "observed_start": 56612906,
+      "pid": 3769329,
+      "same_identity": true,
+      "state": "S"
+    },
+    "anchor_before": {
+      "expected_start": 56612906,
+      "observed_start": 56612906,
+      "pid": 3769329,
+      "same_identity": true,
+      "state": "S"
+    },
+    "anchor_identity_consistent": true,
+    "application_acceptance": false,
+    "last_complete_progress": null,
+    "native_acceptance": false,
+    "nonce": "110f473a34f14ca58d88e080e273be2c",
+    "owner_private_ledger_live": "UNKNOWN; owner queue flush only after verified absence+mutexrelease",
+    "pending_round_excluded": true,
+    "prefix": {
+      "bytes": 30009,
+      "capped_before_initial_EOF": false,
+      "complete_line_bytes": 30009,
+      "final_file_size": 30009,
+      "identity": {
+        "st_dev": 66306,
+        "st_gid": 1000,
+        "st_ino": 48926852,
+        "st_mode": 33152,
+        "st_nlink": 1,
+        "st_uid": 1000
+      },
+      "initial_file_size": 30009,
+      "prefix_cap_bytes": 8388608,
+      "sha256": "93a970f2e3d63035877296ba6b61c4e4317086cfd19bde0c13bc9ffc4d938e84",
+      "unparsed_incomplete_tail_bytes": 0
+    },
+    "producer_reported_completed_launches": null,
+    "producer_reported_mixed_work_ns": null,
+    "retained_prefix_tail_max1000B": ", switching default tracing clock to \"global\"\r\n[    6.676691] If you want to keep using the local clock, then add:\r\n[    6.676691]   \"trace_clock=local\"\r\n[    6.676691] on the kernel command line\r\n[    6.680467] clk: Disabling unused clocks\r\n[    6.681305] PM: genpd: Disabling unused power domains\r\n[    6.853504] input: ImExPS/2 Generic Explorer Mouse as /devices/platform/i8042/serio1/input/input3\r\n[    6.935074] Freeing unused decrypted memory: 2028K\r\n[    7.562916] Freeing unused kernel image (initmem) memory: 4204K\r\n[    7.563388] Write protecting the kernel read-only data: 32768k\r\n[    7.568142] Freeing unused kernel image (rodata/data gap) memory: 264K\r\n[    7.869529] x86/mm: Checked W+X mappings: passed, no W+X pages found.\r\n[    7.870484] Run /init as init process\r\nND_PAIR_LONG_PROFILE {\"version\":1,\"work_ns\":3600000000000,\"wall_ns\":7200000000000,\"min_launches\":100,\"round_cap\":2048,\"trace_cap\":268435456}\r\nND_PAIR_ROUND_START {\"round\":0,\"time_ns\":32518438594,\"procfs_empty\":true}\r\n",
+    "serial_path": "/home/holden/mckernel-work/native-runs/l12a1/p/attempt-110f473a34f14ca58d88e080e273be2c/serial.log",
+    "status": "UNKNOWN_OR_INCOMPLETE_LIVE_COUNTERS",
+    "wire_error": null
+  },
+  "source_interpretation": "ROUND_START emitted after nativeboot completed and firstempty check. It precedes rounddir mkdir, CPU/assignment discovery, workspace creation, two supervised launches, result load, postflight verification, trace gate and retainedreport. Identical prefix cannot identify which operation is waiting or whether failure entered failclosed PID1. No application launch/work credit is observed.",
+  "status": "SECOND_AUTHORIZED_PREFIX_OBSERVATION_COMPLETE_COUNTERS_UNKNOWN"
+}

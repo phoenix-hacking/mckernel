@@ -1,0 +1,60 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "SOURCE_ONLY_NOT_COMPILED",
+  "source_inputs": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel/kernel/process.c",
+      "sha256": "7203019d2ba8143f9240a03d11bc8c5cfcd495d89183aa7ab643c6159a6bd02d",
+      "bytes": 161630
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs",
+      "sha256": "449df570965855f992a0fe024fca7cd6527b20622b4b8e3b33af04900b02e923",
+      "bytes": 178661
+    },
+    "kernel/rust/tests/run_equivalence.sh": {
+      "path": "/home/holden/mckernel/kernel/rust/tests/run_equivalence.sh",
+      "sha256": "fce1f3b9a5606eedb245996d4b88b5e93022ae56145729592c9d675ecb267386",
+      "bytes": 5008672
+    }
+  },
+  "outputs": {
+    "kernel/process.c": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/source/kernel/process.c",
+      "sha256": "55872d7235a06364565ec7732b7a67c918ed7c006b1e55ababa88dbe42e2a93a",
+      "bytes": 161780
+    },
+    "kernel/rust/sched_helpers.rs": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/source/kernel/rust/sched_helpers.rs",
+      "sha256": "700a9e20349df5ae18ceea8c9195e38078a6bb05b81c79f7368fbdf6fc14abcc",
+      "bytes": 180017
+    },
+    "kernel/rust/tests/run_equivalence.sh": {
+      "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/source/kernel/rust/tests/run_equivalence.sh",
+      "sha256": "5df92eff793c7ff0358567340a35b3d9e36188b142186c4fe962a40370490822",
+      "bytes": 5010196
+    }
+  },
+  "original_body": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/ORIGINAL-set_timer.c",
+    "sha256": "0ed12b6c0860ff219f52fd712da8d93600d8183349503f21818a4b313bc0b0be",
+    "bytes": 349
+  },
+  "patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/compute-process-next-body-cutover-20261023-1/PRIVATE-PRODUCTION.patch",
+    "sha256": "420092fe681cfb587b49fe362aff1c42db72abbc5a56a954e6c05487aef571a8",
+    "bytes": 7324
+  },
+  "existing_header": {
+    "path": "/home/holden/mckernel/kernel/include/sched_helpers.h",
+    "sha256": "9712a3df59eb0251f517ce01254e4576119868924b35f7da6fbee294bff966ae",
+    "bytes": 34428
+  },
+  "existing_process_header": {
+    "path": "/home/holden/mckernel/kernel/include/process.h",
+    "sha256": "8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649",
+    "bytes": 26602
+  },
+  "fixture_semantics": "Original C wrapper and actual Rust wrapper feed captured callback/descriptor arguments to the same extracted existing actual Rust timer body. Host fixture models layout only; ABI TU uses real current headers.",
+  "whole_C_TU_default_kernel_native": "OPEN"
+}

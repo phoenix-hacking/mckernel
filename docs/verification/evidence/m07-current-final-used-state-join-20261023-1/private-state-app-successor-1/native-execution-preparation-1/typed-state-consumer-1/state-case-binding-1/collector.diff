@@ -1,0 +1,65 @@
+--- /home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-challenge-producer-correction-1/collector-helper-failure-context-pair-boot.c
++++ /home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/native-execution-preparation-1/typed-state-consumer-1/state-case-binding-1/collector-state-case.c
+@@ -1,3 +1,7 @@
++/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing. */
++#if !defined(ND_CORE_THREADS) || defined(ND_FUTEX) || defined(ND_CORE_MEMORY) || defined(ND_CORE_FILES) || defined(ND_CORE_SIGNALS)
++#error "This private collector is only the fixed M07 state-case ND_CORE_THREADS profile"
++#endif
+ /* SPDX-License-Identifier: GPL-2.0-only
+  * Fixed PID-1 diagnostic collector, not a general-purpose init.
+  * The host-only tests include this exact supervisor and serializer.
+@@ -23,7 +27,7 @@
+ #include <time.h>
+ #include <unistd.h>
+ 
+-#if defined(ND_FUTEX)
++#if defined(ND_FUTEX) || defined(ND_CORE_THREADS)
+ #define STREAM_LIMIT 4096u
+ #define FRAME_LIMIT 8192u
+ #else
+@@ -62,19 +66,10 @@
+                           defined(ND_CORE_THREADS) || defined(ND_CORE_SIGNALS))
+ #error "ND_FUTEX is mutually exclusive with ND_CORE_* profiles"
+ #endif
+-#if defined(ND_CORE_MEMORY)
+-static const char nd_core_case[] = "memory";
+-#elif defined(ND_CORE_FILES)
+-static const char nd_core_case[] = "files";
+-#elif defined(ND_CORE_THREADS)
+-static const char nd_core_case[] = "threads";
+-#elif defined(ND_CORE_SIGNALS)
+-static const char nd_core_case[] = "signals";
+-#endif
+ #if defined(ND_CORE_MEMORY) || defined(ND_CORE_FILES) || \
+     defined(ND_CORE_THREADS) || defined(ND_CORE_SIGNALS)
+ static char *const payload_argv[] = {
+-    "/bin/mcexec", "-t", "1", "0", "app", (char *)nd_core_case, NULL
++    "/bin/mcexec", "-t", "1", "0", "/apps/app", NULL
+ };
+ #elif defined(ND_FUTEX)
+ static char *const payload_argv[] = {
+@@ -85,7 +80,7 @@
+     "/bin/mcexec", "-t", "1", "0", "app", "A", "", "B", NULL
+ };
+ #endif
+-static char *const payload_env[] = {"PATH=/usr/bin:/bin", "COKERNEL_PATH=/apps", NULL};
++static char *const payload_env[] = {"PATH=/usr/bin:/bin", "COKERNEL_PATH=/apps", "PAIR_CPU=0", NULL};
+ static char *const helper_env[] = {"PATH=/bin:/sbin:/usr/bin:/usr/sbin", "LC_ALL=C", NULL};
+ #if defined(ND_FUTEX) || defined(ND_CORE_THREADS)
+ static char *const futex_boot_argv[] = {
+@@ -323,12 +318,10 @@
+     size_t n = 0;
+ #if defined(ND_CORE_MEMORY) || defined(ND_CORE_FILES) || \
+     defined(ND_CORE_THREADS) || defined(ND_CORE_SIGNALS)
+-    const char *const argv_case = nd_core_case;
+-    if (append(b, &n, "ND_PAYLOAD {\"argv\":[\"/bin/mcexec\",\"-t\",\"1\",\"0\","
+-               "\"app\",\"%s\"],\"cwd\":\"/case/work\","
+-               "\"env\":{\"PATH\":\"/usr/bin:/bin\",\"COKERNEL_PATH\":\"/apps\"},"
++    if (append(b, &n, "ND_PAYLOAD {\"argv\":[\"/bin/mcexec\",\"-t\",\"1\",\"0\",\"/apps/app\"],\"cwd\":\"/case/work\","
++               "\"env\":{\"PATH\":\"/usr/bin:/bin\",\"COKERNEL_PATH\":\"/apps\",\"PAIR_CPU\":\"0\"},"
+                "\"raw_wait_status\":%d,\"started_ns\":%llu,\"reaped_ns\":%llu,"
+-               "\"finished_ns\":%llu,\"streams\":{\"stdout\":", argv_case, r->status,
++               "\"finished_ns\":%llu,\"streams\":{\"stdout\":", r->status,
+                (unsigned long long)r->started, (unsigned long long)r->reaped,
+                (unsigned long long)r->finished) ||
+ #elif defined(ND_FUTEX)

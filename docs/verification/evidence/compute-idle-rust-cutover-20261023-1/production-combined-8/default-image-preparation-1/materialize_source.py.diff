@@ -1,0 +1,36 @@
+--- frozen7/materialize_source.py
++++ future8/materialize_source.py
+@@ -13,13 +13,13 @@
+ import time
+ 
+ REPO = Path('/home/holden/mckernel')
+-OUT = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/source-materialization-attempt-1')
+-BASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-6/default-image-preparation-1/source-materialization-attempt-1')
++OUT = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-8/default-image-preparation-1/source-materialization-attempt-1')
++BASE = Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/source-materialization-attempt-1')
+ SOURCE = BASE / 'materialized-source'
+ DEST = OUT / 'materialized-source'
+-AUTHORITY = Path('/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/text-map-start-bridge-rust-20261023-1/CANONICAL-TEXTMAP-BRIDGE-INTEGRATION.json')
+-BASE_CANONICAL_SHA = '2c937f9311f1ff43da4cf6df3d26e03e759ab73d96b0d22fceee0fb23464f1e9'
+-POST = {'arch/x86_64/kernel/memory.c': '935dce935e814974a85729fafde9b3912e9fbff816d9074f6044fa63102370cb', 'kernel/rust/x86_memory_helpers.rs': '19919d35402c84540336b1983e7ac031397bc5f2d7855a7ae901a35dcedbf3f9', 'kernel/rust/tests/run_equivalence.sh': '2e1aa8e4299480ce31282f85e303a463034a475abbf20fb21fae95990230ed23'}
++AUTHORITY = Path('/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/next-memory-bridge-rust-20261023-1/CANONICAL-INTEGRATION.json')
++BASE_CANONICAL_SHA = '1ff94d6e48bb3b694d09ac467fc1dd630d471983fcc24335b2cd5c3c85aaf48b'
++POST = {'arch/x86_64/kernel/memory.c': '3dccbb04986c7fb4c1c47bad1a382372c19cd270861501cf064ce95f36d46c32', 'kernel/rust/x86_memory_helpers.rs': 'f88ca6d45b1395b74c0c86565b5a391d01124fa3fb30486a7e4eb31c85d9eff8', 'kernel/rust/tests/run_equivalence.sh': 'fce1f3b9a5606eedb245996d4b88b5e93022ae56145729592c9d675ecb267386'}
+ MAX_GROWTH = 256 << 20
+ EXTRA = 16 << 20
+ SCOPE = 'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.'
+@@ -45,12 +45,12 @@
+ 
+ def main():
+     begin = time.monotonic()
+-    need(os.getuid() == os.geteuid() == 1000 and os.sched_getaffinity(0) == {0}, 'ordinary CPU0 grant required')
++    need(os.getuid() == os.geteuid() == 1000 and os.sched_getaffinity(0) == {6}, 'ordinary CPU6 grant required')
+     need(not os.path.lexists(DEST), 'fresh coherent destination required')
+     baseline = json.loads((BASE / 'source-inputs.json').read_text())
+     need(sha(canonical(baseline)) == BASE_CANONICAL_SHA, 'accepted exact base source manifest')
+     authority_raw = AUTHORITY.read_bytes();authority = json.loads(authority_raw)
+-    need(authority['status'] == 'PARTIAL_CANONICAL_SOURCE_INTEGRATED' and {row['path']:row['sha256'] for row in authority['files']} == POST,
++    need(authority['status'] == 'CANONICAL_SOURCE_INTEGRATED_BOUNDED_SLICE' and {row['path']:row['sha256'] for row in authority['after']} == POST,
+          'actual reviewed latest two-file canonical integration')
+     document = copy.deepcopy(baseline)
+     changed = []

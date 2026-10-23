@@ -1,3 +1,49 @@
+## Silent first-round LONG; reviewed normal cancellation next — 2026-10-23 15:55 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35,whole12/14. Active2203 owner3769329/start56612906, outer3769325/
+56612895, nonce110f473a. Two boundedordinaryreads115s apart retain identical30009B
+serial: exactLONGprofile+round0start, no completedprogress. CountersUNKNOWN/no
+launch/hourcredit. Exactselectedproducer can returnerror thenunsafeownership
+hold BEFORE failure/traceexport; callbackblockvsreturnedfailure causeunproven.
+Private twoCfile failure/phase/export fix passed35actualcommands+independent
+review; finalproductionELFcb3bfbcd andunchangedconsumer5commandsPASS. Noactive
+sourcechanged. NormalownerSIGTERM/cleanup callpathindependentlyaccepted; helper
+950b exactpidfdguards reviewed, expertcad1 owned-childproofPASS exit42/onehandler/
+noFDleak. EarliermissingPythonAPI andstdiofixturefailures preserved. Nextone
+roothelper3422956a afterverifiedpublication, ownercleanupunchanged; noadditional
+forceaction/ACK/leasechange. SenderreceiptNOTphysicalclearance; retainsoleheavy
+untilactualowner/client/container/lease/mutexindependentlyretired.
+M07typed26+staticcollector sourceprofileaccepted, nonnative. M14memory3bridges
+canonical/sourceRustaccepted; candidate8purePASSwithrecorded7predicate deviation
+andactualfull19numericPASS/future19restored. processset_timer25750leaf+78input
+RustcompilePASS17.651s, observercountcorrectedwithoutrecompile; canonical/link/
+nativepending. Onlyordinarysource/testworkoverlaps; no competingheavy/resize.
+
+## Corrected final LONG actually running — 2026-10-23 15:19 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35,whole12/14. Rootfinalexecution independentlyPASS exactcorrected
+release e38c4a884c1c03bc931fc3467721520df208967b6bfe3eedb1a18415f1501ccf,
+requestf9a4281b620b53f4480c5cc06d0ee3056951a3938bdb50c3438dc4daebea8caa.
+Actual realclock/fullproductionvalidatorPASS beforelaunch, canonicalLF5b4c8562.
+Fresh admissiond588/80034B confirmsold15eowner/attempt/container/leasesabsent,
+mutex27:4free and allfloors+fullgrowth. Staticcheckpointd1e6ab6c fetched380blobs.
+ONEcorrectedrootPopen launchedbeforeexpiry279.319s; toolsession2203 isRUNNING.
+SudoanchorPID3769325/start56612895; authenticatedstartedread actualinnerowner
+PID3769329/start56612906. Newnonce110f473a34f14ca58d88e080e273be2c. No competing
+heavy/build/resize. Current_live_postjoin ACTIVE_LONG_OWNER3769329 (notNULL/no
+terminalclearance); owner/leases/control remain retained until actualretirement.
+Externalcapture: serialized-release-successor-2/final-execution-release-1/
+actual-root-controller-capture-1; rootprivatecapture siblingactual-capture-1.
+No outertimeout/signal/kill; directpersistentwait. LONG acceptedcountersremain
+0/100launches,0/60actualmixedminutes pending actualobservation/terminalvalidation;
+neverinferworkfromelapsedwall. Firstfailedcanonical-reviewcandidate preserved.
+M14 thirdaddressbridge canonicalc07d47d1 sourceABI+17leaf+78inputRustcratePASS,
+actualwholeC/defaultkernel/nativeOPEN; frozenfunctionalimage10972 unchanged.
+Next: finiteexistinglivecounter read then actualLONGterminal+physicalreview;
+independentM07typedconsumer/source andM14sourcework mayuseordinaryslots only.
+
 ## LONG actual preflight FAIL; canonical serialization correction — 2026-10-23 15:01 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

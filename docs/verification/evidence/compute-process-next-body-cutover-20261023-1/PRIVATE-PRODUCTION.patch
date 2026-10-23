@@ -1,0 +1,180 @@
+--- a/kernel/process.c
++++ b/kernel/process.c
+@@ -87,9 +87,9 @@
+ extern void __runq_add_proc(struct thread *proc, int cpu_id);
+ extern void lapic_timer_enable(unsigned int clocks);
+ extern void lapic_timer_disable();
+ 
+-static const struct timer_runtime_offsets process_timer_runtime_offsets = {
++PROCESS_SCHED_PUBLIC_BRIDGE const struct timer_runtime_offsets process_timer_runtime_offsets = {
+ 	.thread_status_offset = __builtin_offsetof(struct thread, status),
+ 	.thread_sched_list_offset = __builtin_offsetof(struct thread, sched_list),
+ 	.thread_spin_sleep_lock_offset =
+ 		__builtin_offsetof(struct thread, spin_sleep_lock),
+@@ -109,25 +109,25 @@
+ 	.timer_list_offset = __builtin_offsetof(struct timer, list),
+ 	.timer_thread_offset = __builtin_offsetof(struct timer, thread),
+ };
+ 
+-static unsigned long process_timer_spin_lock_bridge(unsigned long lock_addr)
++PROCESS_SCHED_PUBLIC_BRIDGE unsigned long process_timer_spin_lock_bridge(unsigned long lock_addr)
+ {
+ 	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock_addr);
+ }
+ 
+-static void process_timer_spin_unlock_bridge(unsigned long lock_addr,
++PROCESS_SCHED_PUBLIC_BRIDGE void process_timer_spin_unlock_bridge(unsigned long lock_addr,
+ 					     unsigned long irqstate)
+ {
+ 	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock_addr, irqstate);
+ }
+ 
+-static void process_timer_lapic_enable_bridge(unsigned int clocks)
++PROCESS_SCHED_PUBLIC_BRIDGE void process_timer_lapic_enable_bridge(unsigned int clocks)
+ {
+ 	lapic_timer_enable(clocks);
+ }
+ 
+-static void process_timer_lapic_disable_bridge(void)
++PROCESS_SCHED_PUBLIC_BRIDGE void process_timer_lapic_disable_bridge(void)
+ {
+ 	lapic_timer_disable();
+ }
+ extern int num_processors;
+@@ -4347,8 +4347,9 @@
+ 			process_sched_do_migrate_log_bridge);
+ }
+ #endif
+ 
++#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+ void set_timer(int runq_locked)
+ {
+ 	struct cpu_local_var *v = get_this_cpu_local_var();
+ 
+@@ -4358,8 +4359,9 @@
+ 			process_timer_spin_unlock_bridge,
+ 			process_timer_lapic_enable_bridge,
+ 			process_timer_lapic_disable_bridge);
+ }
++#endif
+ 
+ /*
+  * NOTE: it is assumed that a wait-queue (or futex queue) is
+  * set before calling this function.
+--- a/kernel/rust/sched_helpers.rs
++++ b/kernel/rust/sched_helpers.rs
+@@ -7,8 +7,15 @@
+     SigCommon, SizeT, Thread, TimeSpec, Waitq, CPU_SET_MAX_CPUS,
+ };
+ 
+ unsafe extern "C" {
++    fn get_this_cpu_local_var() -> *mut CpuLocalVar;
++    static mut time_sharing: CInt;
++    static process_timer_runtime_offsets: TimerRuntimeOffsets;
++    fn process_timer_spin_lock_bridge(lock_addr: usize) -> CULong;
++    fn process_timer_spin_unlock_bridge(lock_addr: usize, irqstate: CULong);
++    fn process_timer_lapic_enable_bridge(clocks: u32);
++    fn process_timer_lapic_disable_bridge();
+     fn arch_flush_icache_all();
+     fn release_thread(thread: *mut core::ffi::c_void);
+     fn rusage_num_threads_dec();
+     fn kprintf(format: *const i8, ...) -> CInt;
+@@ -1848,8 +1855,32 @@
+         }
+     }
+ }
+ 
++/// Preserve the process.c timer entry boundary using the existing timer body.
++///
++/// # Safety
++/// The caller runs on the current CPU under the original scheduler/IRQ contract;
++/// runq_locked describes ownership of its runqueue lock. C owns the immutable
++/// descriptor and callback providers; no pointer or lock ownership is transferred.
++#[no_mangle]
++pub unsafe extern "C" fn set_timer(runq_locked: CInt) {
++    let v = unsafe { get_this_cpu_local_var() };
++    let sharing = unsafe { core::ptr::read(core::ptr::addr_of!(time_sharing)) };
++    let _ = unsafe {
++        timer_set_timer_body_result(
++            v as usize,
++            sharing,
++            runq_locked,
++            core::ptr::addr_of!(process_timer_runtime_offsets),
++            Some(process_timer_spin_lock_bridge),
++            Some(process_timer_spin_unlock_bridge),
++            Some(process_timer_lapic_enable_bridge),
++            Some(process_timer_lapic_disable_bridge),
++        )
++    };
++}
++
+ #[no_mangle]
+ pub unsafe extern "C" fn timer_set_timer_body_result(
+     cpu_local_addr: usize,
+     time_sharing_enabled: CInt,
+--- a/kernel/rust/tests/run_equivalence.sh
++++ b/kernel/rust/tests/run_equivalence.sh
+@@ -141530,9 +141530,34 @@
+ 	*(volatile int *)p = value;
+ }
+ __attribute__((weak)) void arch_delay(int us) { (void)us; }
+ __attribute__((weak)) void ihk_mc_delay_us(int us) { (void)us; }
+-__attribute__((weak)) void set_timer(int runq_locked) { (void)runq_locked; }
++struct timer_runtime_offsets {
++	unsigned long thread_status_offset;
++	unsigned long thread_sched_list_offset;
++	unsigned long thread_spin_sleep_lock_offset;
++	unsigned long thread_spin_sleep_offset;
++	unsigned long thread_itimer_enabled_offset;
++	unsigned long cpu_runq_lock_offset;
++	unsigned long cpu_runq_offset;
++	unsigned long cpu_runq_len_offset;
++	unsigned long cpu_current_offset;
++	unsigned long cpu_timer_enabled_offset;
++	unsigned long cpu_backlog_list_offset;
++	unsigned long timer_timeout_offset;
++	unsigned long timer_waitq_offset;
++	unsigned long timer_list_offset;
++	unsigned long timer_thread_offset;
++};
++/* Only host equivalence bindings; production providers remain process.c. */
++__attribute__((weak)) const struct timer_runtime_offsets process_timer_runtime_offsets;
++__attribute__((weak)) unsigned long process_timer_spin_lock_bridge(unsigned long p)
++{ (void)p; return 0; }
++__attribute__((weak)) void process_timer_spin_unlock_bridge(unsigned long p, unsigned long s)
++{ (void)p; (void)s; }
++__attribute__((weak)) void process_timer_lapic_enable_bridge(unsigned int c) { (void)c; }
++__attribute__((weak)) void process_timer_lapic_disable_bridge(void) {}
++
+ __attribute__((weak)) int ihk_ikc_send(void *channel, void *packet, int opt)
+ {
+ 	(void)channel;
+ 	(void)packet;
+@@ -145255,9 +145280,15 @@
+ grep -Eq 'U ihk_mc_register_interrupt_handler' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U ihk_mc_unregister_interrupt_handler' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U init_process_stack' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U kmalloc_init' "${tmpdir}/out/rust.undefined"
+-grep -Eq 'U set_timer' "${tmpdir}/out/rust.undefined"
++grep -Eq ' T set_timer$' "${tmpdir}/out/rust.global"
++! grep -Eq 'U set_timer$' "${tmpdir}/out/rust.undefined"
++grep -Eq 'U process_timer_runtime_offsets$' "${tmpdir}/out/rust.undefined"
++grep -Eq 'U process_timer_spin_lock_bridge$' "${tmpdir}/out/rust.undefined"
++grep -Eq 'U process_timer_spin_unlock_bridge$' "${tmpdir}/out/rust.undefined"
++grep -Eq 'U process_timer_lapic_enable_bridge$' "${tmpdir}/out/rust.undefined"
++grep -Eq 'U process_timer_lapic_disable_bridge$' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U pvti$' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U pvti_npages' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U pvti_msr' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U x86_alloc_aligned_pages_node_bridge' "${tmpdir}/out/rust.undefined"
+@@ -145485,9 +145516,9 @@
+ grep -Eq 'U x86_xsave_size_bridge' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U x86_xsave_mask_bridge' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U xpmem_page_in_remote_on_attach' "${tmpdir}/out/rust.undefined"
+ grep -Eq 'U uti_desc' "${tmpdir}/out/rust.undefined"
+-test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 593
++test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 597
+ 
+ python3 - "${repo_root}/kernel/rust/syscall_policy.rs" <<'PY'
+ import sys
+ 

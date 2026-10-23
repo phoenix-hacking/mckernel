@@ -1,0 +1,39 @@
+--- frozen7owner
++++ candidate8owner
+@@ -30,15 +30,15 @@
+ REQUEST_SCHEMA = "mckernel.native-exact-mckernel-image-container-request.v1"
+ RECEIPT_SCHEMA = "mckernel.native-exact-mckernel-image-container-receipt.v1"
+ OWNER_RECEIPT_NAME = "owner-receipt.json"
+-EXPECTED_DRIVER_SHA256 = '6c600601097aa9ee053a8c6cb7350a5d11b17613e07bf1bf2cc9dad0d9178d0a'
+-EXPECTED_PROVENANCE_SHA256 = 'dbe2a604df56b4e90eaa11716ba290c5d23d3eaaf7da017be52620f29687bb7a'
++EXPECTED_DRIVER_SHA256 = '7b907d0b7748042bfa7e7a4753058591846018d75504b0e4f3783c7e23244d6e'
++EXPECTED_PROVENANCE_SHA256 = 'e2d5176d457217bb8f16f32bd6fea5cabd48ca16deb20b649b62f57151ef070b'
+ EXPECTED_HOST_OWNER_SHA256 = "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+ EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
+ # The image owner advances with the image-candidate namespace.  Keep consumed
+ # exclusions explicit: accepting one of these would allow a request to race a
+ # retired build candidate.  Tests may replace COMMON_EXCLUSION with a private
+ # fixture, so the rejection list remains separate from the active value.
+-COMMON_EXCLUSION = '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/common-exclusion.json'
++COMMON_EXCLUSION = '/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-8/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/common-exclusion.json'
+ RETIRED_COMMON_EXCLUSIONS = frozenset(
+     "/home/holden/mckernel-work/scratch/native-exact-candidate-operational-exclusion-" + suffix + ".json"
+     for suffix in (
+@@ -66,6 +66,8 @@
+ RETIRED_COMMON_EXCLUSIONS = RETIRED_COMMON_EXCLUSIONS | frozenset(('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/pinned-full-image-attempt-2/common-exclusion.json',))
+ 
+ RETIRED_COMMON_EXCLUSIONS = RETIRED_COMMON_EXCLUSIONS | frozenset(('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-6/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/common-exclusion.json',))
++
++RETIRED_COMMON_EXCLUSIONS = RETIRED_COMMON_EXCLUSIONS | frozenset(('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/next-build-preparation-1/pinned-full-image-attempt-1/common-exclusion.json',))
+ 
+ LIMITS = {
+     "NanoCpus": 4_000_000_000, "CpusetCpus": "2-5",
+@@ -203,7 +205,7 @@
+ _HOST_OWNER_PATH = Path('/home/holden/mckernel-work/host-preparation/four-callback-affinity-image-preparation-20261019-1/adapters/native_rust_exact_build_container_owner.py')
+ _HOST_OWNER = _load_reviewed_host_owner(
+     _HOST_OWNER_PATH, EXPECTED_HOST_OWNER_SHA256,
+-    Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-7/default-image-preparation-1/native_rust_exact_build_offline.py'),
++    Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-8/default-image-preparation-1/native_rust_exact_build_offline.py'),
+     EXPECTED_PROVENANCE_SHA256)
+ 
+ 

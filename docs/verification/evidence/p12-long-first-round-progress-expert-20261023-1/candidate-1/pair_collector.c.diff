@@ -1,0 +1,12 @@
+--- accepted/pair_collector.c
++++ private-candidate/pair_collector.c
+@@ -533,7 +533,8 @@
+ #endif
+ #if defined(ND_PAIR_LAUNCH_EXPANSION)
+     #if defined(ND_PAIR_LONG)
+-    if(long_dispatch(console,&safe,&empty))good=0;
++    int long_result=long_dispatch(console,&safe,&empty);
++    if(long_result){good=0;(void)long_failure_export(console,safe);}
+     #else
+     if(pair_run_launch_expansion(console,&safe,&empty))good=0;
+     #endif

@@ -1,0 +1,149 @@
+{
+  "LONG_physical_retirement": null,
+  "PAIR_CPU_derivation": {
+    "accepted_pair_contract": "pair_routes requires both guest ranks0,1 matched to2physicalassigned CPUs. Collector pair_discover remains unchanged before app.",
+    "app_source": "app.rs pair_pin interprets canonicaldecimal CPUbit, requires returned inheritedmaskbit and readbackexactsingleton.",
+    "kernel_source": {
+      "facts": "setaffinity intersects user bits with process CPUset over0..num_processors; getaffinity copies thread CPUset. Indices are McKernel logical CPU IDs, not HOST/Linux physical affinity IDs.",
+      "function_ranges": [
+        "sched_setaffinity_body_result:1413-1518",
+        "sched_getaffinity_body_result:1519-1574"
+      ],
+      "path": "/home/holden/mckernel/kernel/rust/sched_helpers.rs"
+    },
+    "selected_logical_zero": "App prefix starts onMcKernelCPU0; fixedPAIR_CPU=0 pins waiter/waker there with existingallow_oversubscribe startup. This does not chooseHOSTCPU0/1 and does not changeHOSTCPU1exclusion/containerCPU2-5."
+  },
+  "accounting": {
+    "canonical_LONG_source_edits": 0,
+    "new_compilers": 0,
+    "new_extra_tests": 0,
+    "new_root_guests": 0
+  },
+  "changed_functions": [
+    "Case-specific _validate_state_case_binding, typedcaseonlyenv/argv/profile path. Generic env unchanged.",
+    "Supplemental _check_state_thread_trace requires exactsamegenerationparent+onewaiter pub/delete, waiter deletedbeforeparentexit, sampled202insidewaiterlifetime. Originalgenericdelivery/RET/routechecker stillrunsunchanged.",
+    "Privatecollectorselectedthreadsprofile argv/env/report matching exactstatecase; allsupervision/normalretirement/boothelpers preserved."
+  ],
+  "collector_compile_precedent": {
+    "bytes": 670,
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-challenge-producer-correction-1/actual-production-collector-compile-capture-1/command.json",
+    "sha256": "8c6ed304a3a5119f5676651cc6d0f8669feb0d6252933d1334e174402992b4a7"
+  },
+  "collector_preimage": {
+    "bytes": 24671,
+    "path": "/home/holden/mckernel-work/host-preparation/M07-current-profile-next-observation-preparation-20261021-1/boot-challenge-producer-correction-1/collector-helper-failure-context-pair-boot.c",
+    "sha256": "04154cf8b2cc273f7bd50599239d9c28a1f3a8d2ed0af6de60e98047d83c4af4"
+  },
+  "collector_source": {
+    "bytes": 24648,
+    "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/native-execution-preparation-1/typed-state-consumer-1/state-case-binding-1/collector-state-case.c",
+    "sha256": "3bcd2e331a8f2c226d7acba2bbc2a67cf1eaabc49f76b905d9878cddbd2e0aa2"
+  },
+  "fixed_case_binding": {
+    "McKernel_logical_CPUs": [
+      0,
+      1
+    ],
+    "argv": [
+      "/bin/mcexec",
+      "-t",
+      "1",
+      "0",
+      "/apps/app"
+    ],
+    "case_id": "m07.private-used-state-3-4-9",
+    "collector_profile": "OnlyND_CORE_THREADS, unchangedbootpaircontract/nativebootallow_oversubscribe, supervisedoneapp and originalretirement/cleanup. Stream4096/frame8192 reusesoriginalND_FUTEXbounds; failonframingoverflow remains.",
+    "env": {
+      "COKERNEL_PATH": "/apps",
+      "PAIR_CPU": "0",
+      "PATH": "/usr/bin:/bin"
+    },
+    "guest": {
+      "memory_mib": 8192,
+      "numa_nodes": 2,
+      "vcpus": 4
+    }
+  },
+  "focused_fixtures": {
+    "additional_compiler_or_test_grant": null,
+    "existing18already_passed_priorECC_runner_only": {
+      "bytes": 1809,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/native-execution-preparation-1/typed-state-consumer-1/ACTUAL-FIXTURE-RESULT.json",
+      "sha256": "7a69e68e4970984d03de78859ebe0ccd872492269161f58af36d6a1daf7a4040"
+    },
+    "expected_tests": 26,
+    "new_binding_fixture_result": null,
+    "proposed_command": [
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/native-execution-preparation-1/typed-state-consumer-1/state-case-binding-1/test_state_binding.py"
+    ],
+    "sources": [
+      {
+        "bytes": 7050,
+        "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/native-execution-preparation-1/typed-state-consumer-1/state-case-binding-1/test_typed_state.py",
+        "sha256": "4b1f4e4d2dd007a38923d849e44007aba67fd1b0db501cfe3402eda0d22435bb"
+      },
+      {
+        "bytes": 3609,
+        "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/native-execution-preparation-1/typed-state-consumer-1/state-case-binding-1/test_state_binding.py",
+        "sha256": "660da12ced07f9c9d18ef38fa801cd319ce60a6826c911c304afe591a6441af6"
+      }
+    ]
+  },
+  "future_actual_collector": null,
+  "future_coherent_owner": null,
+  "future_compile_command_NOT_AUTHORIZED": [
+    "/usr/bin/gcc",
+    "-std=gnu11",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-static",
+    "-fno-pie",
+    "-no-pie",
+    "-Wl,-z,noexecstack",
+    "-DND_CORE_THREADS",
+    "-MD",
+    "-MF",
+    "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/native-execution-preparation-1/typed-state-consumer-1/state-case-binding-1/collector.d",
+    "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/native-execution-preparation-1/typed-state-consumer-1/state-case-binding-1/collector-state-case.c",
+    "-o",
+    "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/native-execution-preparation-1/typed-state-consumer-1/state-case-binding-1/collector.init"
+  ],
+  "future_overlay_manifest": null,
+  "future_stage_result": null,
+  "independent_source_acceptance": null,
+  "native_result": null,
+  "runner": {
+    "bytes": 73891,
+    "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/native-execution-preparation-1/typed-state-consumer-1/state-case-binding-1/native_diagnostic.py",
+    "sha256": "f42a21f248e7ed45373e439d192ba322441a00c263bac377ca6a6e3423c1aad6"
+  },
+  "runtime_release": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "selected_PAIR_CPU": "0",
+  "status": "IMPLEMENTED_PRIVATE_FIXED_STATE_CASE_PENDING_FIXTURES_COMPILE_AND_REVIEW",
+  "unchanged_app_oracles": {
+    "app_sha256": "fdf4661f2da7b1002327c26e3a8473b35e57288abd3d13c9b8f0ab5ca217d023",
+    "complete0_all0x218": true,
+    "failure1_or_signal": true,
+    "partial77_notPASS": true,
+    "state_instructions_executed": false
+  },
+  "unchanged_pair_contract": [
+    {
+      "bytes": 2397,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/native-execution-preparation-1/typed-state-consumer-1/state-case-binding-1/pair_boot_contract.inc",
+      "sha256": "081921ed526b9cf874901554d1cc4a2bc5cb6ed1835f7f8237fb10b4cc166b2d"
+    },
+    {
+      "bytes": 3010,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/native-execution-preparation-1/typed-state-consumer-1/state-case-binding-1/pair_assignment.h",
+      "sha256": "29963c5088598368fe7565a6fba88f5712cece4105314e4d1f2205c6a936b643"
+    }
+  ],
+  "whole_M07_acceptance": null
+}
