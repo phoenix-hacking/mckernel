@@ -1,0 +1,143 @@
+{
+  "application_acceptance": false,
+  "argv": [
+    "/usr/bin/taskset",
+    "--cpu-list",
+    "6",
+    "/usr/bin/prlimit",
+    "--as=536870912",
+    "--cpu=30",
+    "--core=0",
+    "--fsize=134217728",
+    "--nofile=256",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native-runtime-ready-1/native_diagnostic_overlay.py",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/shared-v3-matched-base-1.cpio.gz",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/following-process-recovery-cases-1/abi2-helper-c020-successor-1/case-235/payload.snapshot",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/native199-helper-failure-export-1/errno-correction-1/collector-helper-diagnostic",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/launcher-runtime-snapshot-1/mcexec",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/v3-native235-overlay-1.cpio.gz",
+    "--collector-sha256",
+    "c020a8e0ab43e222caf901d92bfecb2a8d8cf20ea0b539910a17a578f1fd12fc",
+    "--mcexec-sha256",
+    "dca0250159ce04a272a72dd1217213a4b6e0f21ec8c21da211eede250c451954",
+    "--payload-sha256",
+    "537cb22b2af1f7fca1202afaf45b017364823c185c2ec47474093e51647ba5b8",
+    "--base-sha256",
+    "8059b462f84964e6ab4a8aecb001d83f9a68f8aada14372155ae99c8d83e2984",
+    "--base-size",
+    "12909057",
+    "--base-cpio-sha256",
+    "3f385a5b7615cdc17400d4bffe58489cef6e55c375215e56d5f6dd3e4228a0e7",
+    "--base-cpio-size",
+    "42508248"
+  ],
+  "cleanup_complete": true,
+  "cleanup_timeout_seconds": 3.0,
+  "cwd": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235",
+  "descendant_records_omitted": 0,
+  "descendants": [],
+  "elapsed_seconds": 11.420464822964277,
+  "env": {
+    "HOME": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "TMPDIR": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235"
+  },
+  "events": [
+    {
+      "kind": "cleanup_started",
+      "monotonic": 502214.4995398,
+      "reason": "leader_exited"
+    }
+  ],
+  "executable": {
+    "path": "/usr/bin/taskset",
+    "sha256": "28f2dd426247d7d1d794c0fb8a723efc6a1ae3c56393a238b180fe9a0dc32f1c",
+    "size": 35048
+  },
+  "executable_path": "/usr/bin/taskset",
+  "fd_setup": {
+    "close_fds": true,
+    "pass_fds": [],
+    "stderr": "separate owned pipe",
+    "stdin": "regular file or /dev/null",
+    "stdout": "owned pipe"
+  },
+  "gid": 1000,
+  "groups": [
+    4,
+    20,
+    24,
+    27,
+    30,
+    46,
+    120,
+    131,
+    132,
+    133,
+    1000
+  ],
+  "monotonic_finished": 502214.506835059,
+  "monotonic_started": 502203.086370236,
+  "payload_completion_observed_monotonic": 502214.499532014,
+  "payload_monotonic_deadline": 502233.086714312,
+  "payload_monotonic_started": 502203.086714312,
+  "process": {
+    "pgid": 3431254,
+    "pid": 3431254,
+    "ppid": 3431253,
+    "session": 3431254,
+    "starttime_ticks": 51754121,
+    "state": "R"
+  },
+  "provenance": "Linux process collection only; no McKernel evidence",
+  "raw_wait_status": 0,
+  "schema_version": 1,
+  "status": "COMPLETED",
+  "stderr_limit_bytes": 8388608,
+  "stdin": {
+    "kind": "devnull"
+  },
+  "stdin_path": null,
+  "stdout_limit_bytes": 8388608,
+  "streams": {
+    "stderr": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/actual-v3-overlay-capture-1/stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "bytes_observed": 0,
+      "bytes_retained": 0,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 8388608,
+      "truncated": false
+    },
+    "stdout": {
+      "artifact": {
+        "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/fork-v3-matched-process-successor-1/case-235/actual-v3-overlay-capture-1/stdout.bin",
+        "sha256": "9c46d8929bc08c4a1640d620eec574fb306ed630be9fbcc8d0c781abdafe664c",
+        "size": 15369
+      },
+      "bytes_observed": 15369,
+      "bytes_retained": 15369,
+      "discarded_observed_bytes": 0,
+      "eof": true,
+      "limit_bytes": 8388608,
+      "truncated": false
+    }
+  },
+  "supervisor_pid": 3431253,
+  "timeout_seconds": 30.0,
+  "uid": 1000,
+  "umask": "0077",
+  "wait_status": {
+    "code": 0,
+    "kind": "exited"
+  }
+}

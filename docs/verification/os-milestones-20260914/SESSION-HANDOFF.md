@@ -1,3 +1,31 @@
+## Current — launcher physically cleared; native235 next (2026-10-23 01:59 UTC)
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Six-check routing SIX-CHECK-CLOSURE-FOCUS-20261023.md adopted.29/35; zero newliteral
+closures. RemainingP-M01-02/M05-03/M06-01/M08-02/M09-02/M12-01. Weeklyincludedonly;
+reserve576 unanswered. NewV3 qualifyingcycles/launches/mixedminutes remain0/0/0.
+
+Genuine46ed040d accepts actual launcher physicalretirement after preflight2.502s,
+cleanup6.144s andpostjoin1.868s: exactcontainer/common/shared/lease/quarantine absent,
+originalownership archived, all9journal/11rootproc.v2reports/64finiteobjects checked,
+27:4preserved. Build161.481sPASS andELFdca0258f9 accepted5eeb; newSDK8234/c47 accepted6a6a.
+Buildcompleted01:26; nextnativeadmission01:55 (~29minhandoff). Mandatoryobserver,
+retention/freshpreflight/cleanup/postjoin accountactualseconds separately; machine
+payloadconstruction andserialreviewhandoffs dominate elapsedtime, notCPU saturation.
+No multiplierclaim. Original2/44.160327s baselinepreserved.
+
+235overlayFIRSTPASS11.420s+strictconsumer.259s fullyboundnewtuple, same235Boracle,
+QMP93. Rootpublishes exact24source/datarecords+2frozenindices; fresh6records/nonce/
+capacity/census/metadata/productionguard thenoneconditionalreleased235native.
+227preparednextseparatecase/release. Oneexistingboundaryowner found finiteM08/M09
+remainingobservations fit235+227+firstV3restore; unchanged199imageexecproof/default/
+link/ABIassertionsreuse, no broadnewaudit. NativeWAITfatalbranch remainsunexercised
+unlessactuallyreached; actualbodyexit1+linkedbridgeproof retained, notnativeclaim.
+P05V3stage20.551s accepted250d, private5sourceaccepted withtruthfulsource-onlyauthority
+correction, runtimepublication/releasepending. Fixedbatchadapter20tests accepted;
+P12HOST/loggrowthcoupling64checks passed, profile reviewpending. Theseareengineering
+outcomes, notliteralclosure/nativebudget credit. Nextactualresults235→227→V3restore.
+
 ## Current — corrected launcher actual production build PASS; terminal retirement next (2026-10-23 01:26 UTC)
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
