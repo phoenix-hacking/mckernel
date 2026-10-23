@@ -1,3 +1,26 @@
+## SDK8 actual build, physical retirement and capsule accepted; runtime fixture next — 2026-10-23 21:25 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual SDK8 build PASS0/21.814462s, closed owner capture c2324c6b; three module
+artifacts independently accepted cd787806. Only SMP changed versus SDK6 (887dc356);
+IHK daced291 and mcctrl06e8 unchanged. Physical two-observation0575e4e1 accepted
+9cd2fcf8: owner and all15 clients absent, normal removal/record release and permanent
+27:4 available. current_live_postjoin SDK8_BUILD_POSITIVELY_RETIRED is NONNULL.
+Composite artifact+physical authority eef9bbfa; no further cleanup/query is needed.
+Actual capsule stage/full strict loader PASS0/20.900863s, joined/gone/closed.
+Handoff230168d0 independently accepted; capsule0fbc70d5, manifest6cfab63a;
+62member delta is exactly SMP replacement plus61 unchanged. Image10972, collector,
+apps and launcher unchanged. EBUSY cause remains UNKNOWN; diagnostics are not a fix.
+Fresh runtime nonce599bd7a0a4cb4e29b52d6ed0cc9aa0db, HOSTretention l12s8a1/p,
+scratch p12s8l1/m.json published, r.json absent; additive namespace22a8d4d0 preserves
+original record. Terminal owner freezes coherent actual-consumer fixture under CPU6
+grant; case227 prepares disjoint admission data. No runtime owner/heavy reservation.
+Next: actual fixture/source review, static checkpoint, fresh admission/exact release,
+then one LONG and prompt direct30-60s readback. Practical34/35, whole12/14 unchanged;
+P-M12-01 remains OPEN, formal LONG credit0. M14 source/selected TU/partial link remain
+partial; default image/native OPEN. Private remote-flush implementation active;
+foreground syscall slice disjoint, no compiler grant. No final Rust retirement claim.
+
 ## SDK8 callerfix actualfixture+stagingPASS; publish thenfreshbuildadmission — 2026-10-23 20:59 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

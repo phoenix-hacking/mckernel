@@ -1,0 +1,15 @@
+{
+  "actual_function": "def _host_output(path, binding, *, fresh=False):\n    \"\"\"Apply a source/release-bound layout without creating any output.\"\"\"\n    identity = _host_directory(path, binding['parent'], binding['device'], fresh=fresh)\n    # Only outer admission sees the unmounted retention base. Inside the\n    # container its ancestor is synthetic; the exact p bind still has host dev.\n    if fresh:\n        _host_directory(binding['retention_parent'], binding['retention_parent'], binding['device'])\n        need(sorted(os.listdir(binding['retention_parent'])) == ['p'],\n             'fresh dedicated host retention parent required')\n    return identity",
+  "actual_parent_identity": null,
+  "published_host": "/home/holden/mckernel-work/l12s8a1",
+  "required_data_successor_host": "/home/holden/mckernel-work/l12s8a1/p",
+  "required_retention_base": "/home/holden/mckernel-work/l12s8a1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-settlement-successor-1/source/long_transport.py",
+    "sha256": "394e91d91d96d4edebf7f85e320a64dbe4afd81664bd7e8775e3606fa99c3cd1"
+  },
+  "source_fixture": null,
+  "source_guard_change": false,
+  "status": "EXACT_EXISTING_NAMESPACE_LAYOUT_REQUIREMENT_NO_TEST_OR_MUTATION"
+}

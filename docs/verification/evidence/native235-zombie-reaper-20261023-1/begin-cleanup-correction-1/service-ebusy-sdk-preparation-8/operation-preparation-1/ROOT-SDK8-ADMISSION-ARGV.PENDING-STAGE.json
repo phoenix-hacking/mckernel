@@ -1,0 +1,17 @@
+[
+  "/usr/bin/taskset",
+  "-c",
+  "7",
+  "/usr/bin/sudo",
+  "-A",
+  "/usr/bin/prlimit",
+  "--as=2147483648:2147483648",
+  "--cpu=30:30",
+  "--core=0:0",
+  "--fsize=8388608:8388608",
+  "--",
+  "/usr/bin/python3",
+  "-I",
+  "-B",
+  null
+]
