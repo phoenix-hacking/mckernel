@@ -1,0 +1,40 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PENDING_EXACT_FRESH_READONLY3_RELEASE",
+  "runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/fresh-post-M05-readonly-1/run_three_readonly.py",
+    "sha256": "ec8fc3fe3929d9d3b90bd870415113cfa62a416b85785cebc33de2ad352383d4"
+  },
+  "base_runner": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/final-build-facts-preparation-1/run_three_readonly.py",
+    "sha256": "8051d94f88d70f2fc077515b465edfe2ec3e544aa05ce4c67689ea098a4813b9"
+  },
+  "delta": "Only D literal replaced with fresh task evidence directory; all command/capture bodies unchanged.",
+  "prepared_commands": {
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/fresh-post-M05-readonly-1/PREPARED-THREE-READONLY.json",
+    "sha256": "96a3005220536feb902db834fae361701e294a1421afe3fd0bf1bc9cbfd73fab"
+  },
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/fresh-post-M05-readonly-1/run_three_readonly.py"
+  ],
+  "capture_output": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/fresh-post-M05-readonly-1",
+  "profile": {
+    "cpu": 6,
+    "jobs": 1,
+    "AS_bytes": 2147483648,
+    "CPU_seconds": 30,
+    "wall_seconds": 60,
+    "FSIZE_bytes": 33554432,
+    "nofile": 256,
+    "core": 0
+  },
+  "CPU6_expert_prior_job_released": true,
+  "root_heavy_probe_mutations": false,
+  "root_loop_continuity": "Root loop association PASS before M05; M05 accesses scratch inputs readonly/no remount/resize/loop operation occurred. Root final continuity required."
+}

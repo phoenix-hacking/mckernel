@@ -1,0 +1,15 @@
+{
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Build two LONG userspaceRust ELFs and strictLinuxreference only.",
+  "runner_sha256": "8c0a5d96e9c1801273fc9dcfb9722bd100722d0b7593de90c26a366c795428b5",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "6",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel/docs/verification/evidence/p12-long-mixed-apps-20261023-1/run_actual.py"
+  ],
+  "profile": "CPU6/1job/AS2GiB/CPU60/wall90+6/FSIZE32MiB/NOFILE256/core0;CGU1/RUST_MIN_STACK2MiB",
+  "native": false
+}

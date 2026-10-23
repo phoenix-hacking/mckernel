@@ -1,3 +1,28 @@
+## First full V3 restoration accepted — 2026-10-23 12:05 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical31/35,whole8/14; newly closedIDsnone. MatchingV3cycles1, tenbatch0/10,
+LONGsessionlaunches0/100, actualmixedminutes0/60. ActualM05efb431 PROTOCOL_PASS
+65.894086584s; outerc390ab0b and authenticatedinner532aeb25 retained. Independent
+formal firstV3 restoration/application12a05b2d and physical1f3c1830 PASS. Both
+40B/raw0/emptyerr/EOF/procfsempty, actualBEGINfinalretire0 (gen2pending thennew
+successful token), CPU1/2hardware+NUMA andsame128MiBextent4324327424ownershipcleared,
+bothdestroy/publicrelease/strictstatus5reboot/secondworkload/stop, finalreserved
+memory0. Raw protocol-onlyfalseflags preserved; acceptance additive.100authfiles
+1306096B/30clients/QEMUreaped/CID3500cb9e removed/name+label+IDempty/completePROC/
+mutex27:4/eightpathsabsent; no duplicatecleanupneeded. Failed495e/7589 remain.
+Ten-parentHOSTpolicy a874 independentlyaccepted, fourrealbatchconsumerfixtures
+qualifyobservedfirstV3semantics; exactcoherentten-cyclebindings ownercase227_stage.
+P-M05-03stillopen; M08/M09onlyliteralobservedjoins accepted, remainingcoverageopen.
+M14candidate5/sourceprofile/captureadapterc679 accepted; freshrootloopmatches,
+newexactreadonly3capacitysuccessorawaitsreview; finalbuildrelease/defaultlink/native
+stillNULL. No competingheavy sincephysicalclearance. P12actualLONGsavedcapsule
+strictcurrent110load_manifest nowpassesafterexpert exactSDK5/currentimage/source/
+launcherboundary corrections; independentreviewpending. TinyNONEsourceprofileand
+fullsparsegapbudget acceptedproposed, exactfreshadmission sourceownerterminalrepair.
+Rootnexteligibleheavy: exact10cyclebatch or reviewedM14build whilebatchbinds;
+no unsupportedclosure/speedup/resize/reservelowering. Included-only100%guardactive.
+
 ## M05 actual reader correction staged; execution review active — 2026-10-23 11:48 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

@@ -1,0 +1,49 @@
+In file included from /home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/bridge_fixture.c:10:
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/pair_collector.c: In function ‘make_pipe’:
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/pair_collector.c:134:9: warning: implicit declaration of function ‘pipe2’; did you mean ‘pipe’? [-Wimplicit-function-declaration]
+  134 |     if (pipe2(p, O_CLOEXEC)) return -1;
+      |         ^~~~~
+      |         pipe
+In file included from /home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/bridge_fixture.c:10:
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/pair_collector.c: In function ‘preserved_collector_main’:
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/pair_collector.c:593:16: warning: implicit declaration of function ‘syncfs’; did you mean ‘sync’? [-Wimplicit-function-declaration]
+  593 |     else { if (syncfs(evidence_fd)) good = 0; if (close(evidence_fd)) good = 0; }
+      |                ^~~~~~
+      |                sync
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/bridge_fixture.c: In function ‘controlled_snapshot’:
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/bridge_fixture.c:27:5: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   27 |     if(n<0 || n>=size)return -1;used=n;
+      |     ^~
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/bridge_fixture.c:27:33: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   27 |     if(n<0 || n>=size)return -1;used=n;
+      |                                 ^~~~
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/bridge_fixture.c:38:9: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   38 |         if(n<0 || n>=size-used)return -1;used+=n;
+      |         ^~
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/bridge_fixture.c:38:42: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   38 |         if(n<0 || n>=size-used)return -1;used+=n;
+      |                                          ^~~~
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/bridge_fixture.c:41:13: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   41 |             if(n<0 || n>=size-used)return -1;used+=n;
+      |             ^~
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/bridge_fixture.c:41:46: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   41 |             if(n<0 || n>=size-used)return -1;used+=n;
+      |                                              ^~~~
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/bridge_fixture.c:45:13: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   45 |             if(n<0 || n>=size-used)return -1;used+=n;
+      |             ^~
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/bridge_fixture.c:45:46: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   45 |             if(n<0 || n>=size-used)return -1;used+=n;
+      |                                              ^~~~
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/bridge_fixture.c:49:9: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   49 |         if(n<0 || n>=size-used)return -1;used+=n;
+      |         ^~
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/bridge_fixture.c:49:42: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   49 |         if(n<0 || n>=size-used)return -1;used+=n;
+      |                                          ^~~~
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/bridge_fixture.c:52:13: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   52 |             if(n<0 || n>=size-used)return -1;used+=n;
+      |             ^~
+/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/bridge_fixture.c:52:46: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   52 |             if(n<0 || n>=size-used)return -1;used+=n;
+      |                                              ^~~~

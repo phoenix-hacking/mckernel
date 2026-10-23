@@ -1,0 +1,26 @@
+{
+  "actual_parent_identities": null,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=30:30",
+    "--fsize=33554432:33554432",
+    "--nofile=256",
+    "--core=0:0",
+    "--",
+    "/home/holden/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport json,os,stat,sys\nassert os.getuid()==os.geteuid()==os.getgid()==os.getegid()==1000\nrows=json.loads(Path(sys.argv[1]).read_text());assert len(rows)==10 and len({r['parent']for r in rows})==10\nfor row in rows:\n root=Path(row['retention_parent']);parent=Path(row['parent']);assert parent==root/'p' and root.parent==Path('/home/holden/mckernel-work/native-runs')\n assert root.parent.resolve(strict=True)==root.parent and not any(p.is_symlink()for p in(root.parent,*root.parent.parents))\n assert not os.path.lexists(root) and not os.path.lexists(parent)\nfor row in rows:\n root=Path(row['retention_parent']);parent=Path(row['parent']);root.mkdir(mode=0o700);parent.mkdir(mode=0o700)\n for path in(root,parent):\n  s=path.lstat();assert stat.S_ISDIR(s.st_mode) and s.st_uid==s.st_gid==1000 and stat.S_IMODE(s.st_mode)==0o700 and s.st_dev==row['device']\n  print(json.dumps(dict(path=str(path),dev=s.st_dev,inode=s.st_ino,mode=s.st_mode,uid=s.st_uid,gid=s.st_gid,blocks=s.st_blocks),sort_keys=True))\n",
+    "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/DECLARED-TEN-HOST-PARENTS.json"
+  ],
+  "execution_authorized": false,
+  "first_physical_and_formal_restoration": null,
+  "independent_preparation_review": null,
+  "purpose": "Functional OS only; no security testing. Exclusive UID1000 publication of exactly ten reviewed HOST directory pairs after independent preparation release.",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+}

@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path;import os,stat,json,shutil;paths=['/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/source-materialization-attempt-1/materialized-source', '/home/holden/mckernel-work/scratch/mckernel-exact-candidate-scratch-22-authority3-metadata-backup', '/home/holden', '/home/holden/mckernel-work/scratch'];out={};\nfor p in paths:\n s=os.lstat(p);out[p]={'path':str(Path(p).resolve(strict=True)),'dev':s.st_dev,'inode':s.st_ino,'uid':s.st_uid,'gid':s.st_gid,'mode':stat.S_IMODE(s.st_mode),'file_type':stat.S_IFMT(s.st_mode)}\nprint(json.dumps({'scope':'Functional McKernel OS/apps and Rust/assembly migration only; no security testing.','identities':out,'space':{p:shutil.disk_usage(p)._asdict() for p in paths[-2:]},'memory':[l.strip() for l in Path('/proc/meminfo').read_text().splitlines() if l.startswith(('MemTotal:','MemAvailable:'))]},sort_keys=True))"
+  ],
+  "purpose": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Read-only finite current source/backup/device identities, space and memory; does not grant admission.",
+  "shell": false
+}

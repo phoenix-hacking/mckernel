@@ -1,0 +1,13 @@
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+
+Both reported integration defects are repaired in this private successor. Rust run now prepares authenticated work/trace output without COMPLETE. The actual collector main completes all original evidence, printk-restoration, syncfs and close gates before one terminal Rust export. It retains the same summary/context and absolute deadline, clears the one-shot pending flag before calling, and never normal-powers-off after terminal publication failure. Existing Operations/Summary layouts and fixed TEN preprocessed output remain exact.
+
+The real default long_empty now checks the original procfs iterator and a bounded, read-only workspace postflight using the pinned round0 baseline. All three directory identities and both empty workdirs are verified without recreating directories. The last quota pair receives the same check. Quotas and original pair/LONG consumers are unchanged.
+
+Actual Rust1.92/GCC9 fixtures pass the prior12 regressions, one real default-workspace positive and nine retained bridge modes. The unchanged full LONG consumer accepts the controlled positive and rejects late syncfs/close/klog-save/klog-read/printk/evidence-open/teardown-save failures, dirty last workdir, pure inode replacement and final-deadline failure; every negative has no COMPLETE. The pure replacement fixture keeps the old inode outside two-app, leaving the expected parent contents and equal metadata while replacing work0 identity. These are controlled protocol inputs, never native/hour/launch credit.
+
+The full static Linux PID1 successor builds with the accepted seed GCC9 flags and approved --gc-sections/Rust panic-abort archive. ELF is AMD64 static EXEC with unique Rust run/terminal exports, actual default callbacks, no interpreter/dynamic section/undefined symbol. Both selected LONG and unchanged TEN preprocessing were checked. No produced ELF was run as PID1 or in a guest.
+
+All39 owned operations returned0, joined, proved process groups absent and closed streams without capture/retirement errors; CPU7 is released. One metadata assertion wrongly expected a separate static C long_complete symbol; GCC inlined it into main, whose actual disassembly calls the new Rust terminal export. This note is preserved and caused no source/binary change or replay. The fixture-only refinement is additive; all earlier evidence remains.
+
+Independent source review and root integration/native release remain pending. No canonical code, M05 source, kernel/SDK/image, runtime owner or milestone acceptance was modified.

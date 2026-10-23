@@ -1,0 +1,8 @@
+--- preimage/pair_long_producer.h
++++ final-gate/pair_long_producer.h
+@@ -28,4 +28,5 @@
+     int32_t ownership_complete, completed;
+ };
+ int32_t pair_run_long_session(void *, const struct pair_long_operations *, struct pair_long_summary *);
++int32_t pair_complete_long_session(void *, const struct pair_long_operations *, struct pair_long_summary *, uint64_t, uint64_t);
+ #endif

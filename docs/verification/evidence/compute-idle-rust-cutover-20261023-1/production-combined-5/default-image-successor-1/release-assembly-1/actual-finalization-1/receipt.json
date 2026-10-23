@@ -1,0 +1,29 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "reviewer": "/root/m14_callback_review",
+  "status": "PASS_FINITE_METADATA_OPERATIONS_ONLY",
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "-c",
+    "from pathlib import Path;import json,hashlib,os;s=Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/image-request.STATIC-DATA.json');raw=s.read_bytes();assert hashlib.sha256(raw).hexdigest()=='52670b287700d82e77e7b291dd0010738b0b583e3a3fbc83b44b03199ba15416';d=json.loads(raw);f=json.loads(Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/FRESH-FIVE-FIELDS.ROOT.json').read_text());assert set(f)=={'source_identity','disk_identity','backup_identity','host_device','scratch_device'};assert all(d[k] is None and isinstance(f[k],dict) for k in ('source_identity','disk_identity','backup_identity'));assert all(d['disk_admission'][k] is None and type(f[k]) is int for k in ('host_device','scratch_device'));d.update({k:f[k] for k in ('source_identity','disk_identity','backup_identity')});d['disk_admission'].update({k:f[k] for k in ('host_device','scratch_device')});b=(json.dumps(d,sort_keys=True,separators=(',',':'),allow_nan=False)+'\\n').encode();assert len(b)<32<<20;p=Path('/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/image-request.FINAL.json');fd=os.open(p,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600);o=os.fdopen(fd,'wb');o.write(b);o.flush();os.fsync(o.fileno());o.close();assert p.read_bytes()==b;print(json.dumps({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}))"
+  ],
+  "pid": 3669874,
+  "returncode": 0,
+  "elapsed_seconds": 0.6558603800367564,
+  "direct_child_joined": true,
+  "streams_closed": true,
+  "build_execution": false,
+  "stdout": {
+    "bytes": 263,
+    "sha256": "ad852264359f3895e7d103a2e2c9f0d556b8c871620bea6e9060e21f0b11921d"
+  },
+  "stderr": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

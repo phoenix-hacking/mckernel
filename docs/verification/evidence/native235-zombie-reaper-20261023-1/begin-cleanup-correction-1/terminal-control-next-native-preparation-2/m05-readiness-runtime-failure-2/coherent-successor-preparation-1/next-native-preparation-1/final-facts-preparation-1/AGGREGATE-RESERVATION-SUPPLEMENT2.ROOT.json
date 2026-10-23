@@ -1,0 +1,27 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "supersedes_only": "Earlier supplementary CPU6 ordinary512MiB reservation; first stage retired, expert read-only manifest validation now reserves CPU6 ordinary2GiB. Frozen native unchanged.",
+  "reservation": {
+    "heavy_CPUs": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "heavy_jobs": 4,
+    "heavy_memory_bytes": 12884901888,
+    "CPU0_ordinary_jobs": 1,
+    "CPU0_ordinary_AS_bytes": 2147483648,
+    "CPU6_ordinary_jobs": 1,
+    "CPU6_ordinary_AS_bytes": 2147483648,
+    "CPU7_coordination_jobs": 1,
+    "aggregate_jobs": 7,
+    "aggregate_memory_bytes": 17179869184,
+    "one_heavy": true,
+    "CPU1_excluded": true
+  },
+  "new_grant_owner": "/root/p12_consumer_fixture_expert",
+  "grant_work": "Actual existing consumer manifest read-only validation; one ordinary CPU6job.",
+  "no_intervening_heavy_or_service_rejection": true,
+  "at_ns": 1792756533834571005
+}

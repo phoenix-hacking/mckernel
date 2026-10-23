@@ -1,0 +1,248 @@
+{
+  "status": "PASS_PRIVATE_FINAL_GATE_PRODUCER_SOURCE_ACTUAL_STATIC_ELF_AND_UNCHANGED_FULL_CONSUMER_NEGATIVES",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source": {
+    "pair_long_producer.rs": "9f5c980fb616d07a4c9816ea2474c7c6a8d045099df1ae2db11c12a2ebc92917",
+    "pair_long_static.rs": "fc8d6f783b761f6e0552cbac7ad62de2732bace959cd76e442b64717fead1ddb",
+    "long_bridge.inc": "8d699da823b0cb397b74edf2e77d144e5a10a36d943ad5951e4ebafe0cbbb268",
+    "long_support.inc": "306d889b49249caecc2852454308ed4692d5bb8699fc70314cd07e844fa2cc03",
+    "pair_collector.c": "8bbceeb0f5c969a2cfb39c373da820f90c322f7e550f2821c36bb2ca2aefb5ce",
+    "pair_long_producer.h": "c929df9548b9660857c55fb6c01886df5a7363e7f992f7032941c81a054ef599"
+  },
+  "source_preimages": {
+    "pair_long_producer.rs": "4aa18ec12638183f6fab19ef0e2e45b02569abd17c7f496d3ca4be2ac55303c3",
+    "long_bridge.inc": "40dc585f781a22759d092c0dbe83039b813e631e077f5e7cd556d0f47a558858",
+    "long_support.inc": "b0e4dffda81f23a015b5fcc3e3baf5c6a44f747e2fc2d7c8f18aa71d4f6108ad",
+    "pair_collector.c": "cf5728240c9debfab9e4e7922f1bd288f878c0572531e7f5a04b9665783ceb90",
+    "pair_long_producer.h": "6dcbafaadee1743c26c5f7e32675d42b5fd5a72311f1491aca907ae596c86646"
+  },
+  "artifact": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/attempt-1/pair-long-collector",
+    "sha256": "558198defafaf16481785d87627f7ccff83a8ebca303346c6051ca192a4dc6ca",
+    "bytes": 1628432
+  },
+  "default_TEN": {
+    "preprocessed_byte_equal_seed": true,
+    "sha256": "4cc4eb11748a4c5ef76ae24e0e96aaf0b92e587290c49de0c055b8ccc55ec4c0",
+    "flags_preserved": true,
+    "selected_LONG_excludes_TEN_body": true
+  },
+  "ELF": {
+    "ELF64": true,
+    "AMD64": true,
+    "static_EXEC": true,
+    "INTERP": false,
+    "dynamic_section": false,
+    "undefined_symbols": [],
+    "unique_Rust_entries": true,
+    "retained_actual_callbacks": {
+      "pair_run_long_session": [
+        "0000000000407610 T pair_run_long_session"
+      ],
+      "pair_complete_long_session": [
+        "00000000004074f0 T pair_complete_long_session"
+      ],
+      "long_empty": [
+        "0000000000403440 t long_empty"
+      ],
+      "long_now": [
+        "00000000004034c0 t long_now"
+      ],
+      "long_pair": [
+        "0000000000405e10 t long_pair"
+      ],
+      "long_read": [
+        "0000000000402850 t long_read"
+      ],
+      "long_retain": [
+        "00000000004035d0 t long_retain"
+      ],
+      "long_write": [
+        "00000000004036f0 t long_write"
+      ],
+      "pair_round_workspace_verify": [
+        "00000000004031b0 t pair_round_workspace_verify"
+      ]
+    },
+    "long_complete_C_inlined_into_main": true,
+    "no_personality_stub": true
+  },
+  "ABI": {
+    "Operations_size": 48,
+    "Summary_size": 48,
+    "App_size": 48,
+    "Pair_size": 152,
+    "existing_layouts_unchanged": true,
+    "new_export": "int32_t pair_complete_long_session(void *,const struct pair_long_operations *,struct pair_long_summary *,uint64_t not_before,uint64_t absolute);",
+    "ownership": "Same synchronous exclusive C context and matching numeric summary retained across final gates; console remains owned. Spool is checked closed before pending summary publication. Terminal callback uses only retained console/clock, no closed spool access.",
+    "one_shot": "long_final_pending is cleared before terminal call; errors retain PID1 and never normal-poweroff/retry.",
+    "clock": "Same absolute WALL_NS supplied by existing empty/run callbacks; final not_before after spool close. Rust checks monotonic/absolute time before and after bounded serial callback. If bytes became visible before a post-write failure, PID1 remains alive and native shutdown acceptance cannot occur."
+  },
+  "fixes": {
+    "terminal": "Rust work loop emits through TRACE_END only and leaves completed=0. Actual main first completes teardown logsave, final kernel log/save, printk restoration, evidence syncfs/close, final printk restoration and good/safe/empty checks. Only then does the one-shot Rust terminal export emit unchanged COMPLETE and set completed1. Failure does not reach normal poweroff.",
+    "workspace": "Existing round0 preflight creates/captures baseline once. Real default long_empty retains pair_round_empty/procfs iterator and performs pure bounded three-directory lstat/opened-fstat/post-close-lstat identity and expected contents checks. No postflight mkdir or baseline replacement. Checks run inside and after every pair, including last quota pair.",
+    "quotas": "Original 3600s application-work,7200s wall,100 minimum launches,2048 round cap,268435456-byte trace cap unchanged."
+  },
+  "actual_tests": {
+    "preserved_Rust_regressions": 12,
+    "new_real_default_workspace_positive": 1,
+    "actual_retained_bridge_modes": 9,
+    "primary_full_LONG": {
+      "status": "PASS_ACTUAL_FINAL_GATE_AND_DEFAULT_WORKSPACE_FULL_LONG_CONSUMER",
+      "results": [
+        {
+          "mode": 0,
+          "unchanged_full_LONG": "PASS",
+          "successful_launches": 720,
+          "native_acceptance": false
+        },
+        {
+          "mode": 1,
+          "unchanged_full_LONG": "REJECTED",
+          "error": "missing/duplicate ND_PAIR_LONG_COMPLETE",
+          "complete_present": false
+        },
+        {
+          "mode": 2,
+          "unchanged_full_LONG": "REJECTED",
+          "error": "missing/duplicate ND_PAIR_LONG_COMPLETE",
+          "complete_present": false
+        },
+        {
+          "mode": 3,
+          "unchanged_full_LONG": "REJECTED",
+          "error": "missing/duplicate ND_PAIR_LONG_COMPLETE",
+          "complete_present": false
+        },
+        {
+          "mode": 4,
+          "unchanged_full_LONG": "REJECTED",
+          "error": "missing/duplicate ND_PAIR_LONG_COMPLETE",
+          "complete_present": false
+        },
+        {
+          "mode": 5,
+          "unchanged_full_LONG": "REJECTED",
+          "error": "missing/duplicate ND_PAIR_LONG_COMPLETE",
+          "complete_present": false
+        },
+        {
+          "mode": 6,
+          "unchanged_full_LONG": "REJECTED",
+          "error": "missing/duplicate ND_PAIR_LONG_COMPLETE",
+          "complete_present": false
+        },
+        {
+          "mode": 7,
+          "unchanged_full_LONG": "REJECTED",
+          "error": "missing/duplicate ND_PAIR_LONG_COMPLETE",
+          "complete_present": false
+        },
+        {
+          "mode": 9,
+          "unchanged_full_LONG": "REJECTED",
+          "error": "missing/duplicate ND_PAIR_LONG_COMPLETE",
+          "complete_present": false
+        },
+        {
+          "mode": 10,
+          "unchanged_full_LONG": "REJECTED",
+          "error": "missing/duplicate ND_PAIR_LONG_COMPLETE",
+          "complete_present": false
+        }
+      ],
+      "controlled_derivatives_only": true,
+      "native_acceptance": false
+    },
+    "pure_inode_and_terminal_deadline": [
+      {
+        "status": "PASS_PURE_REPLACED_WORKSPACE_IDENTITY_REJECTED_BY_REAL_DEFAULT_CALLBACK_AND_UNCHANGED_FULL_CONSUMER",
+        "error": "missing/duplicate ND_PAIR_LONG_COMPLETE",
+        "complete_present": false,
+        "two_app_contents": [
+          "work0",
+          "work1"
+        ],
+        "retained_old_inode": 48902919,
+        "replaced_inode": 48902921,
+        "native_acceptance": false
+      },
+      {
+        "status": "PASS_ACTUAL_FINAL_DEADLINE_GATE_UNCHANGED_FULL_CONSUMER_REJECTS",
+        "error": "missing/duplicate ND_PAIR_LONG_COMPLETE",
+        "complete_present": false,
+        "native_acceptance": false
+      }
+    ],
+    "consumer_sources_unchanged": {
+      "native_diagnostic.py": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/source/native_diagnostic.py",
+        "sha256": "f417a029b43b1d7916e733742946a709584b0a606849f1ca2fc46647bd40dbef",
+        "size": 88327
+      },
+      "p12_long_session.py": {
+        "path": "/home/holden/mckernel/docs/verification/evidence/p12-daemon-bound-20261023-1/coherent-successor/sdk5-session-readiness-1/current110-variant-1/source/p12_long_session.py",
+        "sha256": "bff717d885afdda0d82cd0ab05a0930a3e66b242c6200b1295f2173bb4cdc5d3",
+        "size": 10930
+      }
+    },
+    "injected_callbacks": "Real default long_provider.empty remains pair_round_empty; only procfs path maps to private empty directory and kernel trace/discovery providers are controlled. Workspace verification uses actual Linux directories/stat/opendir/readdir/close. Final-gate fixture is exact actual main tail with controlled failing libc/evidence surfaces.",
+    "pure_inode": "Refinement retains old work0 outside two-app; parent contents are exactly work0/work1 with matching mode/uid/gid/nlink but different work0 inode. Real callback rejects; full LONG rejects missing COMPLETE.",
+    "old_strict_pair_consumer": "Unchanged full _pair_body passes actual controlled pair report/trace before derivative generation.",
+    "false_credit": "Controlled derivative720 launches/360 rounds is protocol-only; no McKernel app launch, native hour or physical acceptance."
+  },
+  "operation_receipts": {
+    "initial": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/attempt-1/RESULT.json",
+      "sha256": "26a482c7f299b8421a8aedac6e44c336ba969488605f27448aaec2f6eecb918f",
+      "size": 45662
+    },
+    "fixture_refinement": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/RESULT.json",
+      "sha256": "70bb22a684314e9c436910a893aff69c47826a8313426f51d45abdec807722e6",
+      "size": 6969
+    },
+    "source_bindings": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/FROZEN-SOURCES.json",
+      "sha256": "971277a05b782d5d05a167039dc32fe2759df60921a0aa5fb72ecb8654271025",
+      "size": 3857
+    },
+    "refinement_bindings": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/inode-fixture-refinement-1/SOURCE-BINDINGS.json",
+      "sha256": "9c98a22fae9359dedc366206c180dc41801157c6a99725c0554e387afc38582e",
+      "size": 2947
+    }
+  },
+  "whole_join": {
+    "operations": 39,
+    "all_returncode0": true,
+    "all_direct_child_joined": true,
+    "all_group_absent": true,
+    "all_streams_closed": true,
+    "all_capture_and_retirement_errors_null": true,
+    "owned_wall_seconds": 10.29146707302425,
+    "CPU7_released": true
+  },
+  "history": {
+    "production_candidate_failures": 0,
+    "production_bounded_corrections": 0,
+    "fixture_only_refinement": 1,
+    "reason": "Avoid dirty-parent contents masking the replacement inode guard; add actual terminal-deadline negative. Original34 operation proof preserved.",
+    "metadata_note": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/capacity-binding-1/producer-implementation-1/real-consumer-1/final-gate-correction-1/POSTPROCESS-INLINED-C-FUNCTION-NOTE.json",
+      "sha256": "6e576df54e31feb47ea80dadf28f7eb6d276e5e127bed99e40bfe8882edbec89",
+      "size": 397
+    },
+    "prior_original_author_failure_records": "Retained parent candidate2 and expert-fixture-correction-1 records untouched; new correction creates successor only."
+  },
+  "independent_source_review": null,
+  "root_integration": null,
+  "native_acceptance": false,
+  "actual_hour_workload": false,
+  "native_launch_credit": 0,
+  "practical_or_M14_credit": 0,
+  "remaining": [
+    "Independent focused review of exact final source/ABI and actual full-consumer negative evidence.",
+    "Root integrates/stages accepted successor with exact source/ELF/profile binding and separate native release."
+  ]
+}

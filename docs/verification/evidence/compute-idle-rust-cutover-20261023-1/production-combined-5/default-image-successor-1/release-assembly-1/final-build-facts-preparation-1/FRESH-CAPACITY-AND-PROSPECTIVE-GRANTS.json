@@ -1,0 +1,102 @@
+{
+  "adopted_budget": {
+    "bytes": 2943,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/DECLARED-HOST-OUTPUT-BUDGET.json",
+    "sha256": "05b6ed0bdd67debc5334684ef76b13029c4025b9627b9338cef4e5e6f5e8ac6c"
+  },
+  "current_mount": {
+    "fstype": "ext4",
+    "maj:min": "7:36",
+    "options": "rw,nosuid,nodev,relatime",
+    "source": "/dev/loop36",
+    "target": "/home/holden/mckernel-work/scratch",
+    "uuid": "2a5768c8-718d-4914-bdc0-6b32c5a92a52"
+  },
+  "fresh_backing": {
+    "allocated_bytes": 102271246336,
+    "dev": 66306,
+    "full_bytes": 118111600640,
+    "full_remaining_sparse_gap_bytes": 15840354304,
+    "inode": 47468427,
+    "path": "/home/holden/mckernel-work/scratch.ext4"
+  },
+  "fresh_root_loop_association": null,
+  "measured_memory_available_bytes": 28372426752,
+  "per_filesystem": {
+    "host": {
+      "adopted_budget": {
+        "compiler_and_control_growth_bytes": 16106090496,
+        "emergency_reserve_bytes": 679477248,
+        "floor_bytes": 17179869184,
+        "full_remaining_sparse_backing_growth_bytes": 15840354304,
+        "postbuild_growth_bytes": 377487360
+      },
+      "capacity_acceptance": null,
+      "measured_available_bytes": 172496404480,
+      "measured_margin_bytes": 122313125888,
+      "required_bytes": 50183278592
+    },
+    "scratch": {
+      "adopted_budget": {
+        "compiler_and_control_growth_bytes": 67108864,
+        "emergency_reserve_bytes": 679477248,
+        "floor_bytes": 12884901888,
+        "full_remaining_sparse_backing_growth_bytes": 0,
+        "postbuild_growth_bytes": 0
+      },
+      "capacity_acceptance": null,
+      "measured_available_bytes": 14103748608,
+      "measured_margin_bytes": 472260608,
+      "required_bytes": 13631488000
+    }
+  },
+  "prior_genuine_root_loop_association": {
+    "association": {
+      "autoclear": true,
+      "back-file": "/home/holden/mckernel-work/scratch.ext4",
+      "dio": false,
+      "log-sec": 512,
+      "name": "/dev/loop36",
+      "offset": 0,
+      "ro": false,
+      "sizelimit": 0
+    },
+    "historical": true,
+    "receipt": {
+      "bytes": 637,
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/actual-readonly-facts-1/4/receipt.json",
+      "sha256": "3bc65d9651c4da987b0527c79bf2b76f92e016ab94fe54d0fe1b303e9420db88"
+    },
+    "stdout": {
+      "bytes": 198,
+      "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/actual-readonly-facts-1/4/stdout",
+      "sha256": "406d2ba88a35b38f86ebebf6caeea9298a65a23cf1b72ba3578c068d00b915aa"
+    }
+  },
+  "prospective_grants": {
+    "aggregate_resource_admission": null,
+    "immutable_FINAL_build_jobs": 4,
+    "known_planned_build_plus_metadata_memory_ceiling_bytes": 15032385536,
+    "metadata_lane_AS_limit_bytes": 2147483648,
+    "metadata_lane_cpu": 6,
+    "other_current_grants": null,
+    "planned_heavy_container_CPU_count": 4,
+    "planned_heavy_container_CPUs": "2-5",
+    "planned_heavy_memory_bytes": 12884901888,
+    "planned_heavy_network": "none",
+    "planned_heavy_swap_extra_bytes": 0,
+    "planned_heavy_tasks": 512,
+    "root_jobs_resolution": "Root confirms j2 was prospective annotation; preserve377eFINAL jobs4 and present actualj4 profile for independent release.",
+    "root_planned_build_jobs": 4,
+    "sole_heavy_ownership_declaration": null
+  },
+  "read_only_result": {
+    "bytes": 5015,
+    "path": "/home/holden/mckernel/docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/release-assembly-1/final-build-facts-preparation-1/ACTUAL-THREE-READONLY-RESULT.json",
+    "sha256": "741fa0b6f1c1009a7189894113e0596219ba445126cbabc01b38dde72ddba057"
+  },
+  "root_budget_adoption": "Root explicitly adopted unchanged05b6ed0b; no floor/reserve reduction.",
+  "root_decision_to_reuse_previous_loop_receipt": null,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "ACTUAL_READONLY_NUMBERS_WITH_ADOPTED_BUDGET_NOT_FINAL_ADMISSION"
+}
