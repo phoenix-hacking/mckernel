@@ -1,0 +1,23 @@
+{
+  "actual_result": null,
+  "argv": [
+    "/usr/bin/taskset",
+    "-c",
+    "0",
+    "/usr/bin/prlimit",
+    "--as=2147483648:2147483648",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--nofile=256:256",
+    "--core=0:0",
+    "--",
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-6/default-image-preparation-1/run_materialization.py"
+  ],
+  "helper_sha256": "990807ab7ecaee4bd4386908270e2d68f2172d09b505a5602949247dd3e7fdc8",
+  "materializer_sha256": "9d5875313b1c5ab0d036631183bf7d2886ce6549e7c243b7667de55d852125d3",
+  "runner_sha256": "8622a78fcd7ed36e236c9a34408f22f21c75ed529519c9591e91229da3f8933d",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing."
+}

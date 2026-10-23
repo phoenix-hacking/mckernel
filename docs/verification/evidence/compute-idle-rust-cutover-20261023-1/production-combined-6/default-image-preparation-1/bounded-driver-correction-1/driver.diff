@@ -1,0 +1,35 @@
+--- prepared995bdriver
++++ corrected-driver
+@@ -1462,9 +1462,9 @@
+ }
+ M14_IDLE_IMPORTS = ('sched_idle_loop_body_result', 'sched_idle_current_cpu_bridge')
+ M14_MEMORY_IMPORTS = ('x86_clear_old_action_bridge', 'x86_clear_phys_to_virt_bridge',
+-                      'x86_clear_page_unmap_bridge', 'x86_clear_free_pages_user_bridge',
+-                      'x86_init_normal_set_large_bridge')
+-M14_RUST_EXPORTS = M14_IDLE_IMPORTS + M14_MEMORY_IMPORTS + ('page_unmap',) + (
++                      'x86_clear_page_unmap_bridge', 'x86_clear_free_pages_user_bridge')
++M14_C_RETIRED_MEMORY_BODIES = ('clear_range_old_action', 'x86_init_normal_set_large_bridge')
++M14_RUST_EXPORTS = M14_IDLE_IMPORTS + M14_MEMORY_IMPORTS + ('page_unmap', 'x86_init_normal_set_large_bridge') + (
+     'sched_idle_begin_body_result', 'sched_idle_iteration_body_result',
+     'sched_idle_runqueue_has_running_result', 'process_sched_cpu_local_bridge',
+     'get_cpu_local_var', 'ihk_mc_get_processor_id')
+@@ -1568,7 +1568,7 @@
+     oi = args.index('-o')
+     pp = _m14_observe(args[:oi] + ['-E', str(source_root / 'arch/x86_64/kernel/memory.c')],
+                       'selected-memory-preprocess', out, tools, env, timeout, command_rows)
+-    for name in ('clear_range_old_action',) + M14_MEMORY_IMPORTS:
++    for name in M14_C_RETIRED_MEMORY_BODIES + M14_MEMORY_IMPORTS:
+         _fail(re.search(r'\b' + name + r'\s*\([^;{}]*\)\s*\{', pp, re.S) is None,
+               'M14 original C definition selected: ' + name)
+     _fail(all('extern ' in pp[max(0, match.start()-20):match.start()]
+@@ -1625,6 +1625,10 @@
+     undefined = _m14_observe([tools['tools']['nm']['path'], '-u', str(build/'kernel/mckernel.img')],
+                              'final-undefined', out, tools, env, timeout, command_rows)
+     _fail(undefined.strip() == '', 'M14 final unresolved provider')
++    # The new bridge has Rust-internal callback consumers. PUBLIC excludes both
++    # its C definition and all four C caller bodies; no C import is required.
++    # Exact source pin binds the reviewed four Rust callback sites even when
++    # optimization resolves the local callback without an external relocation.
+     rust_undefined = _m14_observe([tools['tools']['nm']['path'], '-u', str(build/'kernel/rust/mckernel_rust.o')],
+                                   'Rust-undefined', out, tools, env, timeout, command_rows)
+     _fail(not any(line.split()[-1:] == ['x86_init_normal_set_large_bridge'] for line in rust_undefined.splitlines()),

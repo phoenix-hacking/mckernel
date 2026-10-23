@@ -1,0 +1,11 @@
+--- /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/default-image-successor-1/native_rust_exact_build_offline.py
++++ /home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-6/default-image-preparation-1/native_rust_exact_build_offline.py
+@@ -777,7 +777,7 @@
+ 
+ 
+ THIN_SCHEMA = 'mckernel.m14-combined-production-thin-inputs.v1'
+-EXPECTED_SUCCESSOR_CANONICAL_SHA256 = 'b47cf0f2a65aa90f2e010d717bf381c85adf063b68951fd8e53682cb87f27be6'
++EXPECTED_SUCCESSOR_CANONICAL_SHA256 = '2c937f9311f1ff43da4cf6df3d26e03e759ab73d96b0d22fceee0fb23464f1e9'
+ def validate_thin_document(document,candidate,ihk):
+     _thin_require(candidate==BASE_CANDIDATE and ihk==BASE_IHK and document.get("candidate_sha")==candidate and document.get("ihk_sha")==ihk,"cutover base identities")
+     _thin_require(document.get("schema")==THIN_SCHEMA and _thin_digest(_thin_canonical(document))==EXPECTED_SUCCESSOR_CANONICAL_SHA256,"exact independently reviewed cutover authority required")

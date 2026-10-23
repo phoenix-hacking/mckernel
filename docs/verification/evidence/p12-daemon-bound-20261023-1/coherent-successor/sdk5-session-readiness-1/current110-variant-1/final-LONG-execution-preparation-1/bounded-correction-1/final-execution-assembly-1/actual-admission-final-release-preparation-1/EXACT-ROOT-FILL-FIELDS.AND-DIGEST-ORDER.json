@@ -1,0 +1,74 @@
+{
+  "actual_admission_rootfacts": "ACTUAL-ADMISSION-AND-FINAL-ROOT-FACTS.NOT-RELEASED.json",
+  "after_independent_review": [
+    {
+      "action": "Publish exactreleaseonce O_EXCL readonlyoutside HOSTparent",
+      "path": "/home/holden/mckernel-work/scratch/p12s5l1/r.json",
+      "sha256": null
+    },
+    {
+      "action": "Fill sameactualreleaseSHA in request.long_profile_release.sha256 and request.argv[-1]; setrequeststatus to rootfinalized; nootherfieldchange",
+      "path": "/home/holden/mckernel-work/host-preparation/p12-sdk5-session-successor-20261023-1/current110-variant-1/final-LONG-execution-preparation-1/bounded-correction-1/CAPTURE-REQUEST.json",
+      "sha256": null
+    },
+    {
+      "action": "Fill lastrootargvitem with actualpublishedrequestSHA; everyotherargvbyte unchanged",
+      "argv_file": "FINAL-ROOT-ARGV.ROOT-FILL-DRAFT.json",
+      "request_sha256": null
+    }
+  ],
+  "final_root_release": null,
+  "only_remaining_authorization_boundary": "Root-authored exact currentboot expiring release with independent_review, followed by finalrootexecutionrelease. Actualadmission evidence is now genuine and nonNULL.",
+  "release_file": "LONG-RELEASE.ROOT-FILL-DRAFT.json",
+  "root_fill": [
+    {
+      "current": null,
+      "field": "status",
+      "value": "PASS_EXECUTION_RELEASE",
+      "when": "Root+independent reviewer authorize this exact once-only release"
+    },
+    {
+      "current": null,
+      "field": "author",
+      "value": "actual rootauthor name; proposed /root",
+      "when": "Rootauthors exactpayload"
+    },
+    {
+      "current": null,
+      "field": "boot_id",
+      "value": "exact /proc/sys/kernel/random/boot_id; no guessed boot",
+      "when": "Rootauthoring reads currentboot under existingcontrolflow"
+    },
+    {
+      "current": null,
+      "field": "expires_unix",
+      "value": "finite currentclock plus <=600seconds, stillfresh when existing consumer runs",
+      "when": "Rootauthoring/finalreview"
+    },
+    {
+      "current": null,
+      "field": "independent_review",
+      "value": {
+        "implementation_ownership": false,
+        "payload_sha256": "sha256 of json.dumps(payload excluding independent_review,sort_keys=True,separators=(comma,colon)).encode(utf8)",
+        "reviewer": "actual different non-author independent reviewer",
+        "status": "PASS"
+      },
+      "when": "Independentreview of exactcanonicalpayload excluding thiskey"
+    }
+  ],
+  "root_operations_in_this_preparation": 0,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_and_runtime_does_not_change": true,
+  "status": "EXACT_ROOT_FILL_FIELDS_NO_NEW_QUERY_REQUIRED",
+  "unchanged_release_keys": [
+    "attempt_parent",
+    "execution_count",
+    "manifest",
+    "nonce",
+    "profile",
+    "schema",
+    "source_sha256",
+    "storage_admission"
+  ]
+}

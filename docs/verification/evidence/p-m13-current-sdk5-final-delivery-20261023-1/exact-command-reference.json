@@ -1,0 +1,491 @@
+{
+  "general_build_run_environment_recipe_preserved": {
+    "bytes": 13707,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p-m13-01-delivered-handoff-20261022-1/BUILD-RUN-HANDOFF.md",
+    "sha256": "359749de4c05e38a5b7c28fe3d41dfe82ceb11d7583040d5d69a7e19932fca04"
+  },
+  "general_original_exact_commands_preserved": {
+    "bytes": 88783,
+    "path": "/home/holden/mckernel/docs/verification/evidence/p-m13-01-delivered-handoff-20261022-1/exact-command-reference.json",
+    "sha256": "8a783c36c3c0f2c3d54de13b62c1d535c727ff97ffa30f2d72ca3a3d2ddcbea9"
+  },
+  "historical_commands_only": true,
+  "new_run_requirements": [
+    "Fresh independently released source/profile and execution bindings; consumed nonces and parents cannot be replayed.",
+    "Fresh aggregate capacity, exact identity/lease/admission and source-publication proof; same resource floors and full growth/capture budget.",
+    "One heavy owner only, normal ownership cleanup and positive retirement before successor workloads."
+  ],
+  "one_init_stage": {
+    "actual_whole_join": {
+      "bytes": 77632,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/coherent-successor-preparation-1/ACTUAL-COHERENT-STAGE-AND-HOOKS-WHOLE-JOIN.json",
+      "sha256": "a61565f0c66e429dd4bb2ee311f56db5cee4888e3be707717ff04c97bb2445d3"
+    },
+    "argv": [
+      "/usr/bin/taskset",
+      "--cpu-list",
+      "0",
+      "/usr/bin/prlimit",
+      "--as=536870912",
+      "--cpu=30",
+      "--core=0",
+      "--fsize=134217728",
+      "--nofile=256",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/coherent-successor-preparation-1/stage_m05_two_generation.py",
+      "--stage"
+    ],
+    "binding": {
+      "bytes": 13394,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/coherent-successor-preparation-1/BINDING.json",
+      "sha256": "589e773f9931d0bc8b7147c03d219f166c40c2b3193cc1f78e1926a358331741"
+    },
+    "producer": {
+      "bytes": 15947,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/coherent-successor-preparation-1/stage_m05_two_generation.py",
+      "sha256": "f491968f1b9d7e9dd4cd38f251478ebc9bfb28cb3d1565b349f36a12515ae9cb"
+    }
+  },
+  "replay_authorized": false,
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "sdk5_build": {
+    "argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--fsize=33554432",
+      "--as=2147483648:2147483648",
+      "--core=0:0",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "import sys,runpy; sys.path.insert(0,'/home/holden/mckernel/scripts'); runpy.run_path('/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk/derived-runtime/native_running_external_modules_owner.py',run_name='__main__')",
+      "--request",
+      "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk/request.json",
+      "--request-sha256",
+      "e0d1642d405b7afaaeffd8c34c30e3f648dc8428792ec79ffd70c31e01cf1863",
+      "--release",
+      "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk/release-assembly/release.json",
+      "--release-sha256",
+      "30c3a93d33b074cf354beca15b1db3a7f7f411dddfab3aa13f480e9c62c4076c"
+    ],
+    "capture_argv": [
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/m05-sdk68-canonical-host-output-request-20261022-1/capture_sdk_owner.py",
+      "--operation",
+      "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk/release-assembly/operation.json",
+      "--sha256",
+      "44974a35e9dcb124e1028079035deea7ef25d188ef7f0e5d720e648ccd0d975e"
+    ],
+    "operation": {
+      "bytes": 2233,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk/release-assembly/operation.json",
+      "sha256": "44974a35e9dcb124e1028079035deea7ef25d188ef7f0e5d720e648ccd0d975e"
+    },
+    "release": {
+      "bytes": 5705,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk/release-assembly/release.json",
+      "sha256": "30c3a93d33b074cf354beca15b1db3a7f7f411dddfab3aa13f480e9c62c4076c"
+    },
+    "request": {
+      "bytes": 2989,
+      "path": "/home/holden/mckernel-work/host-preparation/native235-procfs-delete-sdk-preparation-20261023-5/prepared-sdk/request.json",
+      "sha256": "e0d1642d405b7afaaeffd8c34c30e3f648dc8428792ec79ffd70c31e01cf1863"
+    }
+  },
+  "ten_cycle_run": {
+    "actual_closed_capture": {
+      "bytes": 500,
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/actual-ordered-ten-batch-capture-1/ACTUAL-CLOSED-CAPTURE.json",
+      "sha256": "f4d440530c31dfea105c02d7c0111f324f40e0db516705639f6cc21ff0849c82"
+    },
+    "batch_source": {
+      "bytes": 19459,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/reviewed-ten-cycle-successor/native_diagnostic_batch.py",
+      "sha256": "3b99d6c8b7d11d7a6e628ba0340d82d90b1d1a3d4ce9380913f26d5fd79202dc"
+    },
+    "binding": {
+      "bytes": 1998,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/PROFILE-TUPLE-ACCEPTANCE-BINDING.json",
+      "sha256": "d1af6a91fb31d3e3821efae6c44bb2c8484f0d8208b84710bf747b3037f5362a"
+    },
+    "caller": {
+      "bytes": 1547,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/run_ten_cycles.py",
+      "sha256": "6a4eb2862367b54e6dfe0987f01f1bd2e0911564ea1390c6d6b8de68c1ec081f"
+    },
+    "case_commands": [
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/prlimit",
+          "--fsize=33554432",
+          "--as=2147483648:2147483648",
+          "--core=0:0",
+          "--",
+          "/usr/bin/sudo",
+          "-A",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/finite-ten-parent-policy-1/native_diagnostic_container_owner.py",
+          "--attempt-parent",
+          "/home/holden/mckernel-work/native-runs/m5b01/p",
+          "--nonce",
+          "f324ecd78ecb4c0492727aded48495fc",
+          "--owner-sha256",
+          "a874f4db0914489b7b3fd859c51d2dc5ffaa06d73e551f561b061bcaea7b1ee4",
+          "--manifest",
+          "/home/holden/mckernel-work/scratch/nm05h2a1/m.json",
+          "--manifest-sha256",
+          "1fb66e1f61d92723b7191ff1464a07df2d3b131f04081a8cd9ca3fc1fc0c3c2d"
+        ],
+        "case_id": "m05-sdk5-024c-full-restoration-01",
+        "release": {
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-01.RELEASE.json",
+          "sha256": "2353db238ae484d08c9ce56f7c2477ed77f1e023cdea3c971eaa7eb86e496d7b"
+        },
+        "timeout_seconds": 600
+      },
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/prlimit",
+          "--fsize=33554432",
+          "--as=2147483648:2147483648",
+          "--core=0:0",
+          "--",
+          "/usr/bin/sudo",
+          "-A",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/finite-ten-parent-policy-1/native_diagnostic_container_owner.py",
+          "--attempt-parent",
+          "/home/holden/mckernel-work/native-runs/m5b02/p",
+          "--nonce",
+          "1b4b1482a3294703a9c0c8b495c6dd7d",
+          "--owner-sha256",
+          "a874f4db0914489b7b3fd859c51d2dc5ffaa06d73e551f561b061bcaea7b1ee4",
+          "--manifest",
+          "/home/holden/mckernel-work/scratch/nm05h2a1/m.json",
+          "--manifest-sha256",
+          "1fb66e1f61d92723b7191ff1464a07df2d3b131f04081a8cd9ca3fc1fc0c3c2d"
+        ],
+        "case_id": "m05-sdk5-024c-full-restoration-02",
+        "release": {
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-02.RELEASE.json",
+          "sha256": "3d791a7c1ea3a483490c570e7082130324cc29a8748deca265e50f3dbcb62b07"
+        },
+        "timeout_seconds": 600
+      },
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/prlimit",
+          "--fsize=33554432",
+          "--as=2147483648:2147483648",
+          "--core=0:0",
+          "--",
+          "/usr/bin/sudo",
+          "-A",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/finite-ten-parent-policy-1/native_diagnostic_container_owner.py",
+          "--attempt-parent",
+          "/home/holden/mckernel-work/native-runs/m5b03/p",
+          "--nonce",
+          "318f29c17b674e9cbf1874d77a86630c",
+          "--owner-sha256",
+          "a874f4db0914489b7b3fd859c51d2dc5ffaa06d73e551f561b061bcaea7b1ee4",
+          "--manifest",
+          "/home/holden/mckernel-work/scratch/nm05h2a1/m.json",
+          "--manifest-sha256",
+          "1fb66e1f61d92723b7191ff1464a07df2d3b131f04081a8cd9ca3fc1fc0c3c2d"
+        ],
+        "case_id": "m05-sdk5-024c-full-restoration-03",
+        "release": {
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-03.RELEASE.json",
+          "sha256": "59b250bb0996cd3479241f68b5d2d1a0e16fb474b6bca60b15e0e5a510170d64"
+        },
+        "timeout_seconds": 600
+      },
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/prlimit",
+          "--fsize=33554432",
+          "--as=2147483648:2147483648",
+          "--core=0:0",
+          "--",
+          "/usr/bin/sudo",
+          "-A",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/finite-ten-parent-policy-1/native_diagnostic_container_owner.py",
+          "--attempt-parent",
+          "/home/holden/mckernel-work/native-runs/m5b04/p",
+          "--nonce",
+          "ecb72212c9944e05ad53a027e5c5b342",
+          "--owner-sha256",
+          "a874f4db0914489b7b3fd859c51d2dc5ffaa06d73e551f561b061bcaea7b1ee4",
+          "--manifest",
+          "/home/holden/mckernel-work/scratch/nm05h2a1/m.json",
+          "--manifest-sha256",
+          "1fb66e1f61d92723b7191ff1464a07df2d3b131f04081a8cd9ca3fc1fc0c3c2d"
+        ],
+        "case_id": "m05-sdk5-024c-full-restoration-04",
+        "release": {
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-04.RELEASE.json",
+          "sha256": "28444d54def6a9258e8c1c7e871ed50ca26db70345125b8044e90fc807f11a67"
+        },
+        "timeout_seconds": 600
+      },
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/prlimit",
+          "--fsize=33554432",
+          "--as=2147483648:2147483648",
+          "--core=0:0",
+          "--",
+          "/usr/bin/sudo",
+          "-A",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/finite-ten-parent-policy-1/native_diagnostic_container_owner.py",
+          "--attempt-parent",
+          "/home/holden/mckernel-work/native-runs/m5b05/p",
+          "--nonce",
+          "25c2e2047a9d4c4fa319676d7971632e",
+          "--owner-sha256",
+          "a874f4db0914489b7b3fd859c51d2dc5ffaa06d73e551f561b061bcaea7b1ee4",
+          "--manifest",
+          "/home/holden/mckernel-work/scratch/nm05h2a1/m.json",
+          "--manifest-sha256",
+          "1fb66e1f61d92723b7191ff1464a07df2d3b131f04081a8cd9ca3fc1fc0c3c2d"
+        ],
+        "case_id": "m05-sdk5-024c-full-restoration-05",
+        "release": {
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-05.RELEASE.json",
+          "sha256": "92e0e66c70615f52f1616b4300403ff92a081cfa357d8e28d249907c3d556023"
+        },
+        "timeout_seconds": 600
+      },
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/prlimit",
+          "--fsize=33554432",
+          "--as=2147483648:2147483648",
+          "--core=0:0",
+          "--",
+          "/usr/bin/sudo",
+          "-A",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/finite-ten-parent-policy-1/native_diagnostic_container_owner.py",
+          "--attempt-parent",
+          "/home/holden/mckernel-work/native-runs/m5b06/p",
+          "--nonce",
+          "529bcc2984bc4f23b1b820d30a34540e",
+          "--owner-sha256",
+          "a874f4db0914489b7b3fd859c51d2dc5ffaa06d73e551f561b061bcaea7b1ee4",
+          "--manifest",
+          "/home/holden/mckernel-work/scratch/nm05h2a1/m.json",
+          "--manifest-sha256",
+          "1fb66e1f61d92723b7191ff1464a07df2d3b131f04081a8cd9ca3fc1fc0c3c2d"
+        ],
+        "case_id": "m05-sdk5-024c-full-restoration-06",
+        "release": {
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-06.RELEASE.json",
+          "sha256": "f1945a9ced4ab96ab3ccd7c5fffabed30b8da383d70323e7d9d87bb8dede8cc4"
+        },
+        "timeout_seconds": 600
+      },
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/prlimit",
+          "--fsize=33554432",
+          "--as=2147483648:2147483648",
+          "--core=0:0",
+          "--",
+          "/usr/bin/sudo",
+          "-A",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/finite-ten-parent-policy-1/native_diagnostic_container_owner.py",
+          "--attempt-parent",
+          "/home/holden/mckernel-work/native-runs/m5b07/p",
+          "--nonce",
+          "f4432e377fb2495781530000dbd18692",
+          "--owner-sha256",
+          "a874f4db0914489b7b3fd859c51d2dc5ffaa06d73e551f561b061bcaea7b1ee4",
+          "--manifest",
+          "/home/holden/mckernel-work/scratch/nm05h2a1/m.json",
+          "--manifest-sha256",
+          "1fb66e1f61d92723b7191ff1464a07df2d3b131f04081a8cd9ca3fc1fc0c3c2d"
+        ],
+        "case_id": "m05-sdk5-024c-full-restoration-07",
+        "release": {
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-07.RELEASE.json",
+          "sha256": "d7da7bb1cb81bb652d81c94c77de62491b5d850c90c6061607366bc3591b3b6b"
+        },
+        "timeout_seconds": 600
+      },
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/prlimit",
+          "--fsize=33554432",
+          "--as=2147483648:2147483648",
+          "--core=0:0",
+          "--",
+          "/usr/bin/sudo",
+          "-A",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/finite-ten-parent-policy-1/native_diagnostic_container_owner.py",
+          "--attempt-parent",
+          "/home/holden/mckernel-work/native-runs/m5b08/p",
+          "--nonce",
+          "bfe3824803d7439c972c33b070198003",
+          "--owner-sha256",
+          "a874f4db0914489b7b3fd859c51d2dc5ffaa06d73e551f561b061bcaea7b1ee4",
+          "--manifest",
+          "/home/holden/mckernel-work/scratch/nm05h2a1/m.json",
+          "--manifest-sha256",
+          "1fb66e1f61d92723b7191ff1464a07df2d3b131f04081a8cd9ca3fc1fc0c3c2d"
+        ],
+        "case_id": "m05-sdk5-024c-full-restoration-08",
+        "release": {
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-08.RELEASE.json",
+          "sha256": "659726dfbfab56310b6ccabe68dd39a7fd996fab877e51144b58d3c4d2008a89"
+        },
+        "timeout_seconds": 600
+      },
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/prlimit",
+          "--fsize=33554432",
+          "--as=2147483648:2147483648",
+          "--core=0:0",
+          "--",
+          "/usr/bin/sudo",
+          "-A",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/finite-ten-parent-policy-1/native_diagnostic_container_owner.py",
+          "--attempt-parent",
+          "/home/holden/mckernel-work/native-runs/m5b09/p",
+          "--nonce",
+          "97db92150635499d8d26578e09d48931",
+          "--owner-sha256",
+          "a874f4db0914489b7b3fd859c51d2dc5ffaa06d73e551f561b061bcaea7b1ee4",
+          "--manifest",
+          "/home/holden/mckernel-work/scratch/nm05h2a1/m.json",
+          "--manifest-sha256",
+          "1fb66e1f61d92723b7191ff1464a07df2d3b131f04081a8cd9ca3fc1fc0c3c2d"
+        ],
+        "case_id": "m05-sdk5-024c-full-restoration-09",
+        "release": {
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-09.RELEASE.json",
+          "sha256": "6f7182ab55b9358069af07ed3fd226bc421d5576f1a9e3ebfecc2863a2315600"
+        },
+        "timeout_seconds": 600
+      },
+      {
+        "argv": [
+          "/usr/bin/taskset",
+          "-c",
+          "7",
+          "/usr/bin/prlimit",
+          "--fsize=33554432",
+          "--as=2147483648:2147483648",
+          "--core=0:0",
+          "--",
+          "/usr/bin/sudo",
+          "-A",
+          "/home/holden/anaconda3/bin/python3",
+          "-I",
+          "-B",
+          "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/finite-ten-parent-policy-1/native_diagnostic_container_owner.py",
+          "--attempt-parent",
+          "/home/holden/mckernel-work/native-runs/m5b10/p",
+          "--nonce",
+          "3e1cfcb68dd14072a354a823a2a1cdd6",
+          "--owner-sha256",
+          "a874f4db0914489b7b3fd859c51d2dc5ffaa06d73e551f561b061bcaea7b1ee4",
+          "--manifest",
+          "/home/holden/mckernel-work/scratch/nm05h2a1/m.json",
+          "--manifest-sha256",
+          "1fb66e1f61d92723b7191ff1464a07df2d3b131f04081a8cd9ca3fc1fc0c3c2d"
+        ],
+        "case_id": "m05-sdk5-024c-full-restoration-10",
+        "release": {
+          "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/case-releases/case-10.RELEASE.json",
+          "sha256": "4d0921f185de6b694ba2d48bae9161aa2a37e2bc767053c7f523737cd46b70a3"
+        },
+        "timeout_seconds": 600
+      }
+    ],
+    "ordered_release": {
+      "bytes": 17686,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/ORDERED-TEN-BATCH-RELEASE.json",
+      "sha256": "2572907d96caf8c2cdbdf5fda58fa13cc31479b5cbb828613397c05e92c024b4"
+    },
+    "profile": {
+      "bytes": 4968,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/reviewed-ten-cycle-successor/FIXED-CURRENT-PROFILE.json",
+      "sha256": "b118211182c206ba9a268356b55decfe7cfeeb10d90728c86ed97e096d22cfca"
+    },
+    "root_execution_release": {
+      "bytes": 2738,
+      "path": "/home/holden/mckernel/docs/verification/evidence/native235-zombie-reaper-20261023-1/begin-cleanup-correction-1/terminal-control-next-native-preparation-2/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/ROOT-ORDERED-TEN-BATCH-EXECUTION-RELEASE.json",
+      "sha256": "17e783ec2a9c4e395ab86e252a489392bfdb35ee8a0639d3c20a99e2fcde7ce4"
+    },
+    "spec": {
+      "bytes": 18079,
+      "path": "/home/holden/mckernel-work/host-preparation/p-m06-current68-native-stage-binding-20261022-1/procfs-delete-native-successor-1/m05-readiness-runtime-failure-2/next-batch-binding-preparation-1/coherent-ten-cycle-preparation-1/accepted-first-binding-1/derivation-bounded-correction-1/release-assembly-1/EXACT-TEN-CASE-SPEC.RELEASED.json",
+      "sha256": "a5a67205b048db96d457c48274b5b9372a9f270897027c1097f659a2a72d32f6"
+    }
+  }
+}

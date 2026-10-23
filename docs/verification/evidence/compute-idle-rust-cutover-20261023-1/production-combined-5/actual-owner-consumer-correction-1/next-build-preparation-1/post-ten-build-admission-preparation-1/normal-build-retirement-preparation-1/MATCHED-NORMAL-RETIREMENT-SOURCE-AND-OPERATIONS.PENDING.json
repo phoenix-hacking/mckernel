@@ -1,0 +1,218 @@
+{
+  "CPU6_released": true,
+  "actual_current_admission": null,
+  "case": {
+    "bytes": 72936,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/PASS-CASE-STATIC.json",
+    "sha256": "d11bf39e86a5a9c730c6d9e674edf862c16bae06287143875da6498a9b0d2cb9"
+  },
+  "cleanup_result": null,
+  "current_exact_terminal_inspect": {
+    "Config.Labels.mckernel.owner": "c90a9cee3da242fa90366c447a25a081",
+    "Id": "0a0d591d48b44b8f88fce70d6fd6e0cd85592dbfad547a1e4d6155caa9eaa85b",
+    "Name": "/mckernel-image-f4c31978a59048069cb2cf143a9f3f10",
+    "State.Dead": false,
+    "State.ExitCode": 0,
+    "State.OOMKilled": false,
+    "State.Paused": false,
+    "State.Pid": 0,
+    "State.Restarting": false,
+    "State.Running": false,
+    "exactly_one_item": true,
+    "full_profile_comparison": "Accepted cleanup engine image_owner_receipt_binding compares full historical terminal inspect with exact current inspect using accepted core.inspect_comparison; do not reduce to these listed fields."
+  },
+  "current_inspect_closed_capture": {
+    "bytes": 1130,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/actual-readonly-terminal-inspect-1/ACTUAL-CLOSED-CAPTURE.json",
+    "sha256": "ba37644d5d1988dbd2052b7fe080d8eb0a75b8cf026045f74bf96f0b7f14e069"
+  },
+  "current_inspect_raw": {
+    "bytes": 17174,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/actual-readonly-terminal-inspect-1/stdout",
+    "sha256": "42cb8155240030114cfdd5f48ff327064bfd7b1b44fca649455ea3c411476aa5"
+  },
+  "current_live_postjoin": {
+    "container_id": "0a0d591d48b44b8f88fce70d6fd6e0cd85592dbfad547a1e4d6155caa9eaa85b",
+    "container_retained": true,
+    "controller_joined_group_absent_streams_closed": true,
+    "failed_mutex_observation": {
+      "path": "docs/verification/evidence/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/actual-post-build-physical-readonly2-1/mutex/ACTUAL-CLOSED-CAPTURE.json",
+      "sha256": "6b492b3fa5156d2166df0f085a531f2776c23f69413e7223accc610ab4b52cc2",
+      "size": 959
+    },
+    "normal_cleanup_required": true,
+    "shared_heavy_token_retained": true,
+    "status": "HOLD_RETAINED_BUILD_OWNERSHIP"
+  },
+  "existing_normal_engine": {
+    "bytes": 116010,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/cleanup_pass_image.py",
+    "sha256": "59efab0bc29fa5784dc855743cec397237552821bc150b60ea1d6c2e5f7ac00d"
+  },
+  "existing_normal_observer": {
+    "bytes": 27776,
+    "path": "/home/holden/mckernel-work/host-preparation/p-m06-matched-guest-build-binding-20261022-1/matched-image-terminal-preparation-1/bound-matched-image-terminal-source-2/observe_current_pass_image_retirement.py",
+    "sha256": "656230a896322bab3982529d1c5aacec91309eba840988ff5f1d7fd09c0d7027"
+  },
+  "fresh_root_observation": null,
+  "matched_engine": {
+    "bytes": 125139,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/cleanup_pass_image.py",
+    "sha256": "afc557b8430eb395b1a0bd59eedbbc8ff126e3a9c49229437ac0b449d5bb281b"
+  },
+  "matched_observer": {
+    "bytes": 26767,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/observe_current_pass_image_retirement.py",
+    "sha256": "8276cefefc635612e90a384b18c2172b52fadc11ca3b92c249aace36ad36bd9f"
+  },
+  "next_root_operation": {
+    "argv_template": [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--as=536870912:2147483648",
+      "--cpu=30:30",
+      "--fsize=33554432:33554432",
+      "--core=0:0",
+      "--nofile=256",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/observe_current_pass_image_retirement.py",
+      "--git-commit",
+      "ROOT_VERIFIED_COMMIT",
+      "--git-tree",
+      "ROOT_VERIFIED_TREE",
+      "--observation-release",
+      "ROOT_FILLED_EXACT_OBSERVER_RELEASE",
+      "--observation-release-sha256",
+      "ROOT_FILLED_OBSERVER_RELEASE_SHA256"
+    ],
+    "cleanup_authorized": false,
+    "expected": "Fresh27:4 held, complete publisher-freePROC, scratchUUID/mount, same exact stoppedCID/profile/owner/exit0, seven originalclientspositive, original common/shared ownerbinding and full stable inode/metadata captures, full protected source/output/selected input joins; emits observation.json and NOT_RELEASED cleanup-release-draft.json.",
+    "fetched_source_bytes_required": true,
+    "fresh_output": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/root-observation-m14-normal-image-terminal-observation-20261023-1",
+    "fresh_root_external_capture": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/actual-normal-image-observer-capture-1",
+    "independent_source_and_execution_review_required": true,
+    "logical_accepted_observer_command": [
+      "/usr/bin/sudo",
+      "-A",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/observe_current_pass_image_retirement.py"
+    ],
+    "name": "matched-normal-image-readonly-observation",
+    "source_local_resource_profile": {
+      "command_timeout_seconds": 30,
+      "inventory_cap": 400000,
+      "metadata_hard_as": 2147483648,
+      "metadata_soft_as": 536870912,
+      "only_exact_docker_child_soft_as": 2147483648,
+      "output_limit_bytes": 1048576,
+      "selected_hash_cap_bytes": 134217728
+    }
+  },
+  "no_new_framework": true,
+  "observer_release_template": {
+    "bytes": 1914,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/OBSERVER-RELEASE.PENDING.json",
+    "sha256": "240f9134bb0fcc14e051b903c26e19a91950d47dd8a607d3006d946f21309306"
+  },
+  "physical_clearance": false,
+  "preserved_historical_failures": [
+    "Postbuild eight-path oracle failed on retained token; not repeated or weakened.",
+    "Original59ef engine/656observer/oldreleases unchanged.",
+    "Preparation binder syntax failure copy retained; missing historical materialization filename failure corrected to genuine current MATERIALIZATION-RESULT source authority before purecandidate."
+  ],
+  "pure_guard_observations": {
+    "actual_common_record_checked": false,
+    "actual_common_record_requirement": "Fresh root observer must acquire stable original common identity and run unchanged image_record_binding; pure test claims no common-file observation.",
+    "actual_fresh_inspect": true,
+    "actual_shared_record_canonical": "2176c6f4ce78d73122e2180864afd9ffc0c90abadf55a589f8205089c9b85274",
+    "current_closed_owner": true,
+    "expected_common_record_codec": "3709416f1edb745b961d7d3a55227869b53b1ce1994fdd29b31d1d30c27c9146",
+    "finite_paths": 83,
+    "finite_roles": 93,
+    "mutations": 0,
+    "negative_controls": [
+      "closed-pid",
+      "closed-proc_start_ticks",
+      "closed-direct_child_joined",
+      "closed-process_group_absent",
+      "closed-streams_closed",
+      "closed-returncode",
+      "prepared-file-digest-cannot-replace-shared-canonical",
+      "current-inspect-PID-drift",
+      "artifact-owner-source-drift"
+    ],
+    "physical_clearance": false,
+    "privileged_or_Docker_or_cleanup_calls": 0,
+    "status": "PASS_ACTUAL_RETAINED_NORMAL_IMAGE_TYPED_GUARDS_PURE_ONLY"
+  },
+  "pure_guard_result": {
+    "bytes": 1389,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/pure-current-guard-capture-1/RESULT.json",
+    "sha256": "0643ac9ae51da568c258fe31d45222c0a1c07564e273ab66e2fe38b62df89c4c"
+  },
+  "raw_remove_unlink_or_kill": false,
+  "retained_authority_HOLD": {
+    "bytes": 4441,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/CURRENT-RETAINED-BUILD-AUTHORITY.HOLD.json",
+    "sha256": "755133996d04e83100a032657b749f6a8742de540b00bbf6310b30df2d8cc596"
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_algorithm_delta": {
+    "bytes": 1892,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/SOURCE-ALGORITHM-DELTA.json",
+    "sha256": "803932a9ec2e85fa3dba2008d1d33571657d32a4b9e38e150d3695d2578831f2"
+  },
+  "status": "MATCHED_CURRENT_NORMAL_IMAGE_SOURCE_AND_PURE_GUARDS_READY_INDEPENDENT_RELEASE_REQUIRED",
+  "then_exact_existing_archival_transaction": {
+    "argv_template": [
+      "/usr/bin/sudo",
+      "-A",
+      "/usr/bin/taskset",
+      "-c",
+      "7",
+      "/usr/bin/prlimit",
+      "--as=2147483648:2147483648",
+      "--cpu=30:30",
+      "--fsize=33554432:33554432",
+      "--core=0:0",
+      "--nofile=256",
+      "--",
+      "/home/holden/anaconda3/bin/python3",
+      "-I",
+      "-B",
+      "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/cleanup_pass_image.py",
+      "--release",
+      "ROOT_INDEPENDENTLY_FILLED_EXACT_CLEANUP_RELEASE",
+      "--release-sha256",
+      "ROOT_CLEANUP_RELEASE_SHA256",
+      "--execute"
+    ],
+    "execution_authorized": false,
+    "fresh_external_capture": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/actual-normal-image-cleanup-capture-1",
+    "release": null,
+    "required_existing_guards": [
+      "Exact fresh observation source and all data identities unchanged",
+      "independent source+execution reviews and fetched Git script/tests bytes",
+      "same request/target/boot/recordinode/fullcontent matching existing image_record_binding codecs",
+      "publisher-free census before transaction and every sentinel release",
+      "protected inventories and all selected actual source/artifact/receipt bytes unchanged",
+      "accepted archival exchange/sentinels; no newer owner removed; no permanent mutex unlink"
+    ],
+    "result": null,
+    "source": {
+      "bytes": 125139,
+      "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-5/actual-owner-consumer-correction-1/next-build-preparation-1/post-ten-build-admission-preparation-1/normal-build-retirement-preparation-1/bound-current-normal-image-source-1/cleanup_pass_image.py",
+      "sha256": "afc557b8430eb395b1a0bd59eedbbc8ff126e3a9c49229437ac0b449d5bb281b"
+    },
+    "transaction_prefix": "m14-normal-image-terminal-20261023-1"
+  }
+}

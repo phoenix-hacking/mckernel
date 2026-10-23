@@ -1,0 +1,213 @@
+
+/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/state-app:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+000000000023ebb8 <component_probe>:
+  23ebb8:	53                   	push   %rbx
+  23ebb9:	41 54                	push   %r12
+  23ebbb:	41 55                	push   %r13
+  23ebbd:	41 56                	push   %r14
+  23ebbf:	41 57                	push   %r15
+  23ebc1:	41 89 fd             	mov    %edi,%r13d
+  23ebc4:	49 89 f4             	mov    %rsi,%r12
+  23ebc7:	48 89 d3             	mov    %rdx,%rbx
+  23ebca:	45 31 f6             	xor    %r14d,%r14d
+  23ebcd:	48 8b 7b 10          	mov    0x10(%rbx),%rdi
+  23ebd1:	48 8b 03             	mov    (%rbx),%rax
+  23ebd4:	48 89 c2             	mov    %rax,%rdx
+  23ebd7:	48 c1 ea 20          	shr    $0x20,%rdx
+  23ebdb:	48 0f ae 27          	xsave64 (%rdi)
+  23ebdf:	48 f7 03 00 02 00 00 	testq  $0x200,(%rbx)
+  23ebe6:	74 31                	je     23ec19 <component_probe+0x61>
+  23ebe8:	48 8b 4b 30          	mov    0x30(%rbx),%rcx
+  23ebec:	48 8b 73 10          	mov    0x10(%rbx),%rsi
+  23ebf0:	48 8b 7b 08          	mov    0x8(%rbx),%rdi
+  23ebf4:	31 c0                	xor    %eax,%eax
+  23ebf6:	48 f7 86 00 02 00 00 	testq  $0x200,0x200(%rsi)
+  23ebfd:	00 02 00 00 
+  23ec01:	74 03                	je     23ec06 <component_probe+0x4e>
+  23ec03:	8b 04 0e             	mov    (%rsi,%rcx,1),%eax
+  23ec06:	25 ff ff ff 3f       	and    $0x3fffffff,%eax
+  23ec0b:	8b 14 0f             	mov    (%rdi,%rcx,1),%edx
+  23ec0e:	81 e2 00 00 00 c0    	and    $0xc0000000,%edx
+  23ec14:	09 c2                	or     %eax,%edx
+  23ec16:	89 14 0f             	mov    %edx,(%rdi,%rcx,1)
+  23ec19:	48 8b 7b 08          	mov    0x8(%rbx),%rdi
+  23ec1d:	48 8b 03             	mov    (%rbx),%rax
+  23ec20:	48 89 c2             	mov    %rax,%rdx
+  23ec23:	48 c1 ea 20          	shr    $0x20,%rdx
+  23ec27:	48 0f ae 2f          	xrstor64 (%rdi)
+  23ec2b:	4c 8b 7b 08          	mov    0x8(%rbx),%r15
+  23ec2f:	48 8b 7b 18          	mov    0x18(%rbx),%rdi
+  23ec33:	48 8b 03             	mov    (%rbx),%rax
+  23ec36:	48 89 c2             	mov    %rax,%rdx
+  23ec39:	48 c1 ea 20          	shr    $0x20,%rdx
+  23ec3d:	48 0f ae 27          	xsave64 (%rdi)
+  23ec41:	48 8b 87 00 02 00 00 	mov    0x200(%rdi),%rax
+  23ec48:	49 33 87 00 02 00 00 	xor    0x200(%r15),%rax
+  23ec4f:	48 23 03             	and    (%rbx),%rax
+  23ec52:	0f 85 92 01 00 00    	jne    23edea <component_probe+0x232>
+  23ec58:	4c 8b 53 20          	mov    0x20(%rbx),%r10
+  23ec5c:	49 8b 4a 08          	mov    0x8(%r10),%rcx
+  23ec60:	48 85 c9             	test   %rcx,%rcx
+  23ec63:	74 2a                	je     23ec8f <component_probe+0xd7>
+  23ec65:	49 8b 42 10          	mov    0x10(%r10),%rax
+  23ec69:	49 85 87 00 02 00 00 	test   %rax,0x200(%r15)
+  23ec70:	74 17                	je     23ec89 <component_probe+0xd1>
+  23ec72:	49 8b 02             	mov    (%r10),%rax
+  23ec75:	49 8d 34 07          	lea    (%r15,%rax,1),%rsi
+  23ec79:	48 8b 7b 18          	mov    0x18(%rbx),%rdi
+  23ec7d:	48 01 c7             	add    %rax,%rdi
+  23ec80:	fc                   	cld    
+  23ec81:	f3 a6                	repz cmpsb %es:(%rdi),%ds:(%rsi)
+  23ec83:	0f 85 61 01 00 00    	jne    23edea <component_probe+0x232>
+  23ec89:	49 83 c2 18          	add    $0x18,%r10
+  23ec8d:	eb cd                	jmp    23ec5c <component_probe+0xa4>
+  23ec8f:	48 8b 7b 28          	mov    0x28(%rbx),%rdi
+  23ec93:	c7 07 01 00 00 00    	movl   $0x1,(%rdi)
+  23ec99:	41 83 fd 00          	cmp    $0x0,%r13d
+  23ec9d:	74 21                	je     23ecc0 <component_probe+0x108>
+  23ec9f:	41 83 fd 01          	cmp    $0x1,%r13d
+  23eca3:	74 38                	je     23ecdd <component_probe+0x125>
+  23eca5:	41 83 fd 02          	cmp    $0x2,%r13d
+  23eca9:	0f 84 98 00 00 00    	je     23ed47 <component_probe+0x18f>
+  23ecaf:	41 83 fd 03          	cmp    $0x3,%r13d
+  23ecb3:	74 62                	je     23ed17 <component_probe+0x15f>
+  23ecb5:	41 be 05 00 00 00    	mov    $0x5,%r14d
+  23ecbb:	e9 48 01 00 00       	jmpq   23ee08 <component_probe+0x250>
+  23ecc0:	b8 27 00 00 00       	mov    $0x27,%eax
+  23ecc5:	0f 05                	syscall 
+  23ecc7:	48 8b 7b 28          	mov    0x28(%rbx),%rdi
+  23eccb:	48 89 47 10          	mov    %rax,0x10(%rdi)
+  23eccf:	48 85 c0             	test   %rax,%rax
+  23ecd2:	0f 8e 2a 01 00 00    	jle    23ee02 <component_probe+0x24a>
+  23ecd8:	e9 a4 00 00 00       	jmpq   23ed81 <component_probe+0x1c9>
+  23ecdd:	41 c7 44 24 04 01 00 	movl   $0x1,0x4(%r12)
+  23ece4:	00 00 
+  23ece6:	4c 89 e7             	mov    %r12,%rdi
+  23ece9:	be 80 00 00 00       	mov    $0x80,%esi
+  23ecee:	31 d2                	xor    %edx,%edx
+  23ecf0:	4c 8d 15 a9 18 fc ff 	lea    -0x3e757(%rip),%r10        # 2005a0 <component_timeout>
+  23ecf7:	45 31 c0             	xor    %r8d,%r8d
+  23ecfa:	45 31 c9             	xor    %r9d,%r9d
+  23ecfd:	b8 ca 00 00 00       	mov    $0xca,%eax
+  23ed02:	0f 05                	syscall 
+  23ed04:	48 8b 7b 28          	mov    0x28(%rbx),%rdi
+  23ed08:	48 89 47 10          	mov    %rax,0x10(%rdi)
+  23ed0c:	48 85 c0             	test   %rax,%rax
+  23ed0f:	0f 85 ed 00 00 00    	jne    23ee02 <component_probe+0x24a>
+  23ed15:	eb 6a                	jmp    23ed81 <component_probe+0x1c9>
+  23ed17:	4c 89 e7             	mov    %r12,%rdi
+  23ed1a:	be 81 00 00 00       	mov    $0x81,%esi
+  23ed1f:	ba 01 00 00 00       	mov    $0x1,%edx
+  23ed24:	45 31 d2             	xor    %r10d,%r10d
+  23ed27:	45 31 c0             	xor    %r8d,%r8d
+  23ed2a:	45 31 c9             	xor    %r9d,%r9d
+  23ed2d:	b8 ca 00 00 00       	mov    $0xca,%eax
+  23ed32:	0f 05                	syscall 
+  23ed34:	48 8b 7b 28          	mov    0x28(%rbx),%rdi
+  23ed38:	48 89 47 10          	mov    %rax,0x10(%rdi)
+  23ed3c:	48 85 c0             	test   %rax,%rax
+  23ed3f:	0f 88 bd 00 00 00    	js     23ee02 <component_probe+0x24a>
+  23ed45:	eb 3a                	jmp    23ed81 <component_probe+0x1c9>
+  23ed47:	c7 05 27 16 11 00 00 	movl   $0x0,0x111627(%rip)        # 350378 <COMPONENT_SIGNAL_SEEN>
+  23ed4e:	00 00 00 
+  23ed51:	41 8b 7c 24 08       	mov    0x8(%r12),%edi
+  23ed56:	41 8b 74 24 0c       	mov    0xc(%r12),%esi
+  23ed5b:	ba 0a 00 00 00       	mov    $0xa,%edx
+  23ed60:	b8 ea 00 00 00       	mov    $0xea,%eax
+  23ed65:	0f 05                	syscall 
+  23ed67:	48 8b 7b 28          	mov    0x28(%rbx),%rdi
+  23ed6b:	48 89 47 10          	mov    %rax,0x10(%rdi)
+  23ed6f:	48 85 c0             	test   %rax,%rax
+  23ed72:	0f 85 8a 00 00 00    	jne    23ee02 <component_probe+0x24a>
+  23ed78:	83 3d f9 15 11 00 01 	cmpl   $0x1,0x1115f9(%rip)        # 350378 <COMPONENT_SIGNAL_SEEN>
+  23ed7f:	75 79                	jne    23edfa <component_probe+0x242>
+  23ed81:	4c 8b 7b 08          	mov    0x8(%rbx),%r15
+  23ed85:	48 8b 7b 18          	mov    0x18(%rbx),%rdi
+  23ed89:	48 8b 03             	mov    (%rbx),%rax
+  23ed8c:	48 89 c2             	mov    %rax,%rdx
+  23ed8f:	48 c1 ea 20          	shr    $0x20,%rdx
+  23ed93:	48 0f ae 27          	xsave64 (%rdi)
+  23ed97:	48 8b 87 00 02 00 00 	mov    0x200(%rdi),%rax
+  23ed9e:	49 33 87 00 02 00 00 	xor    0x200(%r15),%rax
+  23eda5:	48 23 03             	and    (%rbx),%rax
+  23eda8:	75 48                	jne    23edf2 <component_probe+0x23a>
+  23edaa:	4c 8b 53 20          	mov    0x20(%rbx),%r10
+  23edae:	49 8b 4a 08          	mov    0x8(%r10),%rcx
+  23edb2:	48 85 c9             	test   %rcx,%rcx
+  23edb5:	74 26                	je     23eddd <component_probe+0x225>
+  23edb7:	49 8b 42 10          	mov    0x10(%r10),%rax
+  23edbb:	49 85 87 00 02 00 00 	test   %rax,0x200(%r15)
+  23edc2:	74 13                	je     23edd7 <component_probe+0x21f>
+  23edc4:	49 8b 02             	mov    (%r10),%rax
+  23edc7:	49 8d 34 07          	lea    (%r15,%rax,1),%rsi
+  23edcb:	48 8b 7b 18          	mov    0x18(%rbx),%rdi
+  23edcf:	48 01 c7             	add    %rax,%rdi
+  23edd2:	fc                   	cld    
+  23edd3:	f3 a6                	repz cmpsb %es:(%rdi),%ds:(%rsi)
+  23edd5:	75 1b                	jne    23edf2 <component_probe+0x23a>
+  23edd7:	49 83 c2 18          	add    $0x18,%r10
+  23eddb:	eb d1                	jmp    23edae <component_probe+0x1f6>
+  23eddd:	48 8b 7b 28          	mov    0x28(%rbx),%rdi
+  23ede1:	c7 47 04 01 00 00 00 	movl   $0x1,0x4(%rdi)
+  23ede8:	eb 1e                	jmp    23ee08 <component_probe+0x250>
+  23edea:	41 be 01 00 00 00    	mov    $0x1,%r14d
+  23edf0:	eb 16                	jmp    23ee08 <component_probe+0x250>
+  23edf2:	41 be 02 00 00 00    	mov    $0x2,%r14d
+  23edf8:	eb 0e                	jmp    23ee08 <component_probe+0x250>
+  23edfa:	41 be 03 00 00 00    	mov    $0x3,%r14d
+  23ee00:	eb 06                	jmp    23ee08 <component_probe+0x250>
+  23ee02:	41 be 04 00 00 00    	mov    $0x4,%r14d
+  23ee08:	48 8b 7b 10          	mov    0x10(%rbx),%rdi
+  23ee0c:	48 8b 03             	mov    (%rbx),%rax
+  23ee0f:	48 89 c2             	mov    %rax,%rdx
+  23ee12:	48 c1 ea 20          	shr    $0x20,%rdx
+  23ee16:	48 0f ae 2f          	xrstor64 (%rdi)
+  23ee1a:	48 8b 7b 28          	mov    0x28(%rbx),%rdi
+  23ee1e:	c7 47 08 01 00 00 00 	movl   $0x1,0x8(%rdi)
+  23ee25:	4c 8b 7b 10          	mov    0x10(%rbx),%r15
+  23ee29:	48 8b 7b 18          	mov    0x18(%rbx),%rdi
+  23ee2d:	48 8b 03             	mov    (%rbx),%rax
+  23ee30:	48 89 c2             	mov    %rax,%rdx
+  23ee33:	48 c1 ea 20          	shr    $0x20,%rdx
+  23ee37:	48 0f ae 27          	xsave64 (%rdi)
+  23ee3b:	48 8b 87 00 02 00 00 	mov    0x200(%rdi),%rax
+  23ee42:	49 33 87 00 02 00 00 	xor    0x200(%r15),%rax
+  23ee49:	48 23 03             	and    (%rbx),%rax
+  23ee4c:	75 40                	jne    23ee8e <component_probe+0x2d6>
+  23ee4e:	4c 8b 53 20          	mov    0x20(%rbx),%r10
+  23ee52:	49 8b 4a 08          	mov    0x8(%r10),%rcx
+  23ee56:	48 85 c9             	test   %rcx,%rcx
+  23ee59:	74 26                	je     23ee81 <component_probe+0x2c9>
+  23ee5b:	49 8b 42 10          	mov    0x10(%r10),%rax
+  23ee5f:	49 85 87 00 02 00 00 	test   %rax,0x200(%r15)
+  23ee66:	74 13                	je     23ee7b <component_probe+0x2c3>
+  23ee68:	49 8b 02             	mov    (%r10),%rax
+  23ee6b:	49 8d 34 07          	lea    (%r15,%rax,1),%rsi
+  23ee6f:	48 8b 7b 18          	mov    0x18(%rbx),%rdi
+  23ee73:	48 01 c7             	add    %rax,%rdi
+  23ee76:	fc                   	cld    
+  23ee77:	f3 a6                	repz cmpsb %es:(%rdi),%ds:(%rsi)
+  23ee79:	75 13                	jne    23ee8e <component_probe+0x2d6>
+  23ee7b:	49 83 c2 18          	add    $0x18,%r10
+  23ee7f:	eb d1                	jmp    23ee52 <component_probe+0x29a>
+  23ee81:	48 8b 7b 28          	mov    0x28(%rbx),%rdi
+  23ee85:	c7 47 0c 01 00 00 00 	movl   $0x1,0xc(%rdi)
+  23ee8c:	eb 06                	jmp    23ee94 <component_probe+0x2dc>
+  23ee8e:	41 be 06 00 00 00    	mov    $0x6,%r14d
+  23ee94:	44 89 f0             	mov    %r14d,%eax
+  23ee97:	41 5f                	pop    %r15
+  23ee99:	41 5e                	pop    %r14
+  23ee9b:	41 5d                	pop    %r13
+  23ee9d:	41 5c                	pop    %r12
+  23ee9f:	5b                   	pop    %rbx
+  23eea0:	c3                   	retq   
+
+Disassembly of section .init:
+
+Disassembly of section .fini:
+
+Disassembly of section .iplt:

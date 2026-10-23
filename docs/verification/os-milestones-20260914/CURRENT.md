@@ -1,3 +1,31 @@
+## Actual Rust default build accepted; normal retirement pending — 2026-10-23 13:43 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Practical34/35,whole11/14 unchanged; finalLONGlaunches0/100/mixedminutes0/60.
+ActualM14candidate5 successor2 build32880 PASS0/281.264994s; controller3725755/
+start55985185joined/groupabsent/closed, status e7ff989f. Independentdefaultlink
+38694775 accepts actualGCC14 process/memory/mem consumers, fullproductionRust
+crate/finalimagec13f405e8460424B/Rustobjecte5c2609013637208B/13uniqueRUSTexports/
+finalundefined0. BoundedM14-02-04/05-03/01-03productionlinkPARTIALadvanced; native/
+wholearea/file stillopen. Canonicalnewlargepagebridge13756 NOTinthisfrozenimage.
+CRITICALphysicalHOLD: ownerexplicitcleanup_separately_requiredtrue/container
+retainedtrue; CID0a0d591d48b44b8f88fce70d6fd6e0cd85592dbfad547a1e4d6155caa9eaa85b
+name mckernel-image-f4c31978a59048069cb2cf143a9f3f10, ownernonce c90a9cee3da242fa90366c447a25a081.
+Sharedheavyrecord1828:116651 retained forPID3725755/start55985185/canonicalrequest
+2176c6f4ce78d73122e2180864afd9ffc0c90abadf55a589f8205089c9b85274.
+PostbuildPROC0complete41b56cb5; mutexreadFAIL1/8ca0stderr onsharedtokenpresence.
+Failedread/capture retained,no replay/unlink/guess. Ownerp12_consumer_fixture_expert
+prepares EXISTINGcleanup_pass_image.py59efab normalarchivaltransaction exactCID
+binding; sourceoldcase cannotrununchanged. Rootnormalcleanup/exactindependent
+release/positivephysicalbeforeLONG. No competingheavy; current_live_postjoin is
+HOLD_RETAINED_BUILD_OWNERSHIP, notNULLorclear. LONGhistoricalquerya467/.303389sPASS
+isnotfinalcontinuity afterbuild. TerminalownerpreparedfreshpostM14querynamespace
+withactualnewphysicalinputNULLuntilreceipt. CorrectedLONG39actualchecksaccepted
+e4b7beab andsourcepublished99747c13/fetched61; finalrootrelease/request/hashstill
+pending. M07privateRust/assemblysuccessor5puretests+GCC9assembly+Rust1.92staticlink
+7ownedcapturesPASS166dbaa2, independentsourceABIaccepted; no stateinstruction/app
+execution/nativecredit. Included-only100%/servicechecks active; noresize/reserves.
+
 ## Ten complete native cycles accepted;34/35 — 2026-10-23 13:24 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

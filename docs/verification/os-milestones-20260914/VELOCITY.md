@@ -1,3 +1,32 @@
+## Ten native cycles and next Rust default build — 2026-10-23 13:38 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Actual orderedtenbatch completed20 genuine40B application launches across ten
+two-generation restoration cycles in650.614390s completed-ownerwall. Formal75eec
+andphysical125669 independentlyaccept allten; P-M05-03/M05 close, practical34/35,
+whole11/14. No priorcyclecredit transferred. This restoration workload differs
+from the original2/44.160327s appbaseline; no4x/1.5x closure-speedup claim follows.
+LONGlaunches0/100/actualmixedminutes0/60. Originalbaseline preserved.
+
+Batchterminalabout13:13 and nextactualheavyM14build start13:33:27 leaveabout20min
+withnoheavywork. That interval includes ten rawtrace/formal/physicalreviews, real
+LONGfourfamily39consumerchecks and sourcecorrection, Gitpublication and fresh
+admission work; it is notcompiler time. Exactavoidablefraction is notmeasured.
+Concrete avoidabledesign defects beforeexecution were stale8attemptnamespace
+literals, missing observerprofilebinding and missingstop-handlerregistration.
+All corrected/reviewed beforeoneactualobserver0/.306973s, thenactualbuildstarted.
+Use accepted finite observerregistration/profile directly on subsequent captures.
+No unchangedfailedruntime replays, duplicatecleanup or broadenedrootprofile.
+
+ActualM14build32880 stillhealthy at13:38: innerreceipt/progressPASS and actual
+defaultlinkreceiptPASS_PINNED_FULLCRATE_DEFAULT_C_CONSUMERS_AND_FINAL_LINK_ONLY;
+outerownerretirement/artifactreview pending. LONGfreshquery0/.303389s/a467PASS is
+nowhistoricalbecausebuildintervened; onepostbuildphysical-boundfreshnamespace
+successor isprepared, nofalsecontinuityclaim. IndependentM07implementation also
+passed5puresemantictests/GCC9assembly/Rust1.92staticlink; stateinstructions notrun.
+Next outcome: actualbuildterminal+positivephysicalclearance thenexactfinalLONG
+release/session; keep source-only/compile/native evidence separate.
+
 ## Actual closure checkpoint — 2026-10-23 00:18 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

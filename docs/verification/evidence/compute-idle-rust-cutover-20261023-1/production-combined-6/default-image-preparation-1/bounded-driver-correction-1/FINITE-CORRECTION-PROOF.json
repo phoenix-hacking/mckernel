@@ -1,0 +1,43 @@
+{
+  "actual_compiler_defaultlink_native": null,
+  "driver": {
+    "bytes": 150230,
+    "path": "/home/holden/mckernel-work/host-preparation/compute-idle-rust-cutover-20261023-1/production-combined-6/default-image-preparation-1/bounded-driver-correction-1/native_rust_exact_mckernel_image_offline.py",
+    "sha256": "7b9ef43fbf2ff1f07cf2aceaeb04d5057976d717c34f75e929cd89d27940a418"
+  },
+  "new_bridge_C_import_required": false,
+  "real_C_imports": [
+    "x86_clear_old_action_bridge",
+    "x86_clear_phys_to_virt_bridge",
+    "x86_clear_page_unmap_bridge",
+    "x86_clear_free_pages_user_bridge"
+  ],
+  "retired_C_bodies": [
+    "clear_range_old_action",
+    "x86_init_normal_set_large_bridge"
+  ],
+  "reviewed_Rust_callback_source_sites": {
+    "init_low_area": 4941,
+    "init_text_area": 4872,
+    "x86_init_linux_kernel_mapping_public": 5116,
+    "x86_init_normal_area_public": 4801
+  },
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "status": "PASS_CORRECTED_SOURCE_CONSTANTS_ONLY_NOT_COMPILED",
+  "unique_Rust_final_T_exports": [
+    "sched_idle_loop_body_result",
+    "sched_idle_current_cpu_bridge",
+    "x86_clear_old_action_bridge",
+    "x86_clear_phys_to_virt_bridge",
+    "x86_clear_page_unmap_bridge",
+    "x86_clear_free_pages_user_bridge",
+    "page_unmap",
+    "x86_init_normal_set_large_bridge",
+    "sched_idle_begin_body_result",
+    "sched_idle_iteration_body_result",
+    "sched_idle_runqueue_has_running_result",
+    "process_sched_cpu_local_bridge",
+    "get_cpu_local_var",
+    "ihk_mc_get_processor_id"
+  ]
+}

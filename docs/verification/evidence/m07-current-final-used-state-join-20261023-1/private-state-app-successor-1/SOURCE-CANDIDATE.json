@@ -1,0 +1,80 @@
+{
+  "ABI": "Context56/Range24/Report24/Control16 const offset assertions;64-byte aligned4096-byte buffers; validated CPUID standard offsets; no new kernel layout",
+  "existing_source_fact": "accepted syscall/futex/signal state app is native-vector-enabled-state.c+.S; exact retained Rustapp1.rs+fp_state.S is paired-yield only; no prior3/4/9 noninitial producer/oracle in these refs",
+  "failure_family_history": "initial source candidate only; no compile/runtime candidate yet",
+  "files": {
+    "ABI-AND-NEXT-COMPILE.md": {
+      "bytes": 5687,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/ABI-AND-NEXT-COMPILE.md",
+      "sha256": "afc957293e24dfabec96d56bfc5a3cd18efb70c678a29f156bd8511af0b6b479"
+    },
+    "PREDECESSOR-BINDINGS.json": {
+      "bytes": 1589,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/PREDECESSOR-BINDINGS.json",
+      "sha256": "7776ce44d326b6bef6d15a28c4db34c79828e28f57d9ea5196897e6b971bbca1"
+    },
+    "PROPOSED-ORDINARY-COMMANDS.NOT-EXECUTED.json": {
+      "bytes": 2615,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/PROPOSED-ORDINARY-COMMANDS.NOT-EXECUTED.json",
+      "sha256": "e8dfc84a888ba36a635cc094e9a21ab633b6020011671f4566b07e3a7f1432c8"
+    },
+    "app.rs": {
+      "bytes": 10492,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/app.rs",
+      "sha256": "596a0491ef09554afa679d52b8a942b4624ca7a2d5f58882728cae5185aa3d31"
+    },
+    "component_state.S": {
+      "bytes": 5805,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/component_state.S",
+      "sha256": "dbea5d46c0c8398829cc337fa5fc514222d5a3d72460d39d9eafe2d21b1d8513"
+    },
+    "eligibility.rs": {
+      "bytes": 7060,
+      "path": "/home/holden/mckernel-work/host-preparation/m07-current-final-used-state-join-20261023-1/private-state-app-successor-1/eligibility.rs",
+      "sha256": "69649fdcb2f3b2fe4344146515dc3af5bef34ab3af20ead038880f2f86099f0b"
+    }
+  },
+  "implemented": "private Rust eligibility/layout/seed/oracle driver plus standard XSAVE/XRSTOR GPR-only live interval for existing raw getpid/blocking private-futex handoff/self-tgkill sequence; distinct helper and handler state; restore+readback on controlled exits",
+  "no_acceptance_claims": [
+    "not compiled",
+    "no semantic tests executed",
+    "no host target-register operations",
+    "no guest/root/image change",
+    "no new preservation/native/M07 or35-check credit",
+    "old mask7 acceptance remains scoped and unchanged"
+  ],
+  "open_source_review_decisions": [
+    "MPX BNDCFGU EN0/BNDPRESERVE1 noninitial state and defined3/4 serialization semantics",
+    "PKRU key15-only state patterns under fixed ordinary-key0 mapping profile; no pkey/access-control tests",
+    "signal-handler distinct-state handoff and synchronous marker before interrupted comparison",
+    "all assembly controlled returns restore original selected state and GPR ABI",
+    "static Rust/libc signal ABI and partial/NOTEXECUTED result interpretation"
+  ],
+  "required_mask_hex": "0x218",
+  "retained_exposure_expected_branch": {
+    "OSPKE": false,
+    "XCR0": "0x21f",
+    "component9": "NOTEXECUTED ospke-clear; never preservation PASS",
+    "components3_4": "only pending eligibility until actual CPUID.D layouts and noninitial readback; no current execution claim",
+    "whole_app_exit_if3_4pass9notexecuted": 77
+  },
+  "review_ready_reference_sha256": "c58f762b9d27d74c49b90f979b97902f60cd4b009a5de64acfde893bf2748ac0",
+  "schema": "mckernel.m07-private-state-app-source-successor.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_only_accounting": {
+    "canonical_mutations": 0,
+    "compilers": 0,
+    "executed_semantic_tests": 0,
+    "guests": 0,
+    "host_register_tests": 0,
+    "root_operations": 0
+  },
+  "source_only_tests_added": [
+    "retainedOSPKE-clear does not selectPKRU",
+    "MPX feature/XCR0 pair gating",
+    "supervisor/overflow/overlap layout rejection",
+    "architecturally defined-byte seed distinctness",
+    "per-component payload corruption/missing in-use rejection and init-state restoration byte semantics"
+  ],
+  "status": "IMPLEMENTED_SOURCE_CANDIDATE_UNCOMPILED_UNEXECUTED"
+}
