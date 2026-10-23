@@ -1,3 +1,25 @@
+## SDK6 actualadmission PASS; staticpublication beforeexactrelease — 2026-10-23 18:42 UTC
+
+Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+Noheavy/current_live_postjoin SDK6_BUILD_POSITIVELY_RETIRED(nonNULL), continuity.
+Cohort420a/93aa/fbed+04b source/actual18guards167pins188paths48ROmounts independently
+accepted006495. OneactualfreshqueryPASS0/.519877s andthreeauthenticatedreadbacks:
+917e206a85222B independentlyaccepted55pins/emptyHOST66306:55725983/allprospective
+outputs+8pathsabsent/2COMPLETE306nopublishers/free27:4/NONE26.1.3/profile/capacity/
+UUIDloopbacking110GiB identities. No newquery or sourcefixture required.
+Rootpublishingselectedstaticbeforemintingexpiry; terminalauthorpreparesexisting
+C41data-onlyfreeze+attachtemplates. Thenfreeze selectedg.TRANSPORT/source9/actual
+917estorage+boot/nonce5603/l12d1/m2f4c/count1/author/590sexpirycanonicalLF, exact
+independentreview, attachonlyreview/O_EXCLr, fullunmodifiedrealclockvalidate+04b on
+actualpublishedrequest→one420acontroller. No expiry minted/no runtime yet.
+Predictor nosecondprovenbug/newgate: old91cappsactuallyranbeforeEVENTFDENOSYS; first
+newdecisiveobservationround0load/postflight/gate/report+completedprogress2launches.
+Practical34/35,whole12/14,acceptedLONG0launches0minutes/no closure orspeedupclaim.
+M14nextloggingbody actual32000pairs256flags6layout+PUBLIC/fallback/partiallinkPASS,
+independentsourceleafreviewactive; currentcanonicalunchangedforslice3. Candidate11
+actualsource/pure42.669s independentlyaccepted; GCC14TU/defaultlink/nativeOPEN.
+ForegroundCPU6memoryreservationreleasedunused; no CPU6jobuntilnewreadygrant.
+
 ## AcceptedSDK6 capsule published; coherent runtime binding next — 2026-10-23 18:27 UTC
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.

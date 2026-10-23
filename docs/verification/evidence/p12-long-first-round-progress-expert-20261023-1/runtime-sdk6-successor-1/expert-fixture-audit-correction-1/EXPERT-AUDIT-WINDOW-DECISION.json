@@ -1,0 +1,105 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "verdict": "APPROVE_ONE_FIXTURE_ONLY_AUDIT_WINDOW_CORRECTION_PENDING_ROOT_RELAYED_ORDINARY_RUN_GRANT",
+  "status": "SOURCE_DECISION_ONLY_NO_EXECUTION",
+  "source_finding": "Audit hook currently collects fixture owner/transport/matrix/controller metadata loads and PRECISE-SDK6-CONSUMED-PATHS.json. required.update(actual_reads) then imposes fixture metadata as a container runtime mount requirement. The actual second failure names PRECISE metadata, which is consumed by the fixture after strict runtime bound_manifest returns.",
+  "exact_correction": "Initialize audit_active=False; gate audit_open on that boolean; set True immediately before actual o.bound_manifest, and False in a finally immediately after. Do not change actual bound_manifest or any product guards.",
+  "scope_justification": "Owner.bound_manifest hashes all167 SOURCE_HASHES and calls actual native.load_manifest with unchanged manifest. Explicit174 required_paths already include every167 source key and selectedS/manifest/capsule/SDK6 proofs. Existing actual read footprint during bound_manifest adds runtime transitive reads. Fixture metadata/model reads are not runtime consumer IO.",
+  "frozen_fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/fixture_actual_controller_guards.py",
+    "sha256": "351c5fd9974bb5e260fe9eda1077272b2fd632bc6b91ddc4b640a34576814836",
+    "bytes": 13018
+  },
+  "proposed_fixture": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/expert-fixture-audit-correction-1/fixture_actual_controller_guards.proposed.py",
+    "sha256": "894ee3be1e7b4d92843a4b993f51fc623150e89a995454fdf8d9d2f102df743b",
+    "bytes": 13107
+  },
+  "exact_semantic_patch": {
+    "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/expert-fixture-audit-correction-1/fixture-audit-window-only.diff",
+    "sha256": "a34629b3a58077209336712430f847294b8fb6b73f8584fa693facd177ab0fff",
+    "bytes": 2228
+  },
+  "frozen_products": {
+    "capture_root_LONG.NOT-RELEASED.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/capture_root_LONG.NOT-RELEASED.py",
+      "sha256": "420a55c44bc32f90910b81f1855cdab521e41a2683f741ac3628cda24564f50d",
+      "bytes": 7706
+    },
+    "source/long_transport.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/source/long_transport.py",
+      "sha256": "93aa1d942e14b7fab5c77138b4bf40a8b9b99e9848119cd4f96214a5fc3f8636",
+      "bytes": 16874
+    },
+    "source/native_diagnostic_container_owner.py": {
+      "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/source/native_diagnostic_container_owner.py",
+      "sha256": "fbedb881439d6db6b0aa13ecea2d7dfa31737607cc1fc1f150a2e65ac4d89ce3",
+      "bytes": 108359
+    }
+  },
+  "source_hash_count": 167,
+  "explicit_required_paths": 174,
+  "all167_in_explicit_required": true,
+  "unchanged_guards": [
+    "All18 actual controller/request guards including f*64 mismatch",
+    "Actual strict owner.bound_manifest and native.load_manifest",
+    "All167 SOURCE_HASHES and explicit174 required paths",
+    "SELF/RUNNER/manifest and actual bound_manifest read footprint",
+    "Actual _create_argv destination/most-specific ancestor-shadow mapping",
+    "Missing exact SDK6 owner RO mount must fail",
+    "Writable destination shadow must fail",
+    "No factory calls or actual runtime capture creation"
+  ],
+  "two_failed_closed_captures": [
+    {
+      "capture": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/actual-controller-guard-fixture-1/RESULT.json",
+        "sha256": "d1893493af5bfd2beecdbfe420a68c192956cf2390a18ba0c55261190a453d4e",
+        "bytes": 1154
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/actual-controller-guard-fixture-1/stderr",
+        "sha256": "dacc95b48fa4cbd1dbe5396bfd62d65331453a0cd6d21aca0c1dd5e30ae58119",
+        "bytes": 1492
+      },
+      "seconds": 0.3506709879729897
+    },
+    {
+      "capture": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/actual-controller-guard-fixture-correction1/RESULT.json",
+        "sha256": "d4f2b2bcea4c672309864649aa9bd8f757a09885253094fcdee483ba72dae712",
+        "bytes": 1173
+      },
+      "stderr": {
+        "path": "/home/holden/mckernel-work/host-preparation/p12-long-first-round-progress-expert-20261023-1/runtime-sdk6-successor-1/actual-controller-guard-fixture-correction1/stderr",
+        "sha256": "3e08678b0893a0e10b7bb8b89e1257130a98ae08a39d25da5eb42690d4a366b8",
+        "bytes": 967
+      },
+      "seconds": 0.8155937179690227
+    }
+  ],
+  "failure_history": "Author candidate1 negative0*64 aliased positive; author correction1 changed it to f*64, passed guards/full bound_manifest, failed fixture metadata mount audit. Both retained. This is the one expert correction for concrete audit-window defect, not a family reset.",
+  "fresh_namespace_requirement": "Author must preserve old source/command/raw captures and stage reviewed fixture change in existing runtime directory with fresh TESTONLY guard/request/capture output literals (e.g. guard-vectors-expert1, TESTONLY-expert1-request-XX, actual-controller-guard-fixture-expert1). Never overwrite prior vectors/captures/results. These are fixture output namespace changes only; D/product paths remain exact. Existing accepted owned_capture990807 adapter reused, no new wrapper.",
+  "run_profile": {
+    "cpu": [
+      0
+    ],
+    "AS": 2147483648,
+    "CPU": 60,
+    "wall": 120,
+    "grace": 6,
+    "FSIZE": 33554432,
+    "NOFILE": 256,
+    "core": 0,
+    "interpreter": "/home/holden/anaconda3/bin/python3",
+    "version": "3.9.12"
+  },
+  "run_grant": "Root relays approval before author runs one corrected fixture; expert does not execute.",
+  "stop_condition": "Preserve result; if any new actual guard/mount failure appears, stop and return exact failing path/guard without widening mounts or weakening source/path/oracles.",
+  "product_edits": 0,
+  "mount_widening": 0,
+  "tests_run": 0,
+  "root_Docker_live_PROCQMP_probes": 0,
+  "actual_runtime_release": null,
+  "native_acceptance": false
+}

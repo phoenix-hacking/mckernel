@@ -1,0 +1,45 @@
+--- preserved-second-failed-fixture
++++ expert-approved-fixture-only-successor
+@@ -4,7 +4,7 @@
+ """
+ import ast,copy,hashlib,importlib.util,json,os,resource,sys,types
+ from pathlib import Path
+-D=Path(__file__).resolve().parent;OLD=D.parent/'failure-dfbb-docker-start-1/runtime-successor-1';S=D/'source';F=D/'guard-vectors-correction1';F.mkdir(mode=0o700)
++D=Path(__file__).resolve().parent;OLD=D.parent/'failure-dfbb-docker-start-1/runtime-successor-1';S=D/'source';F=D/'guard-vectors-expert-audit1';F.mkdir(mode=0o700)
+ assert os.getuid()==os.geteuid()==1000 and sys.executable=='/home/holden/anaconda3/bin/python3' and sys.version_info[:3]==(3,9,12)
+ def sha(b):return hashlib.sha256(b).hexdigest()
+ def load(p,name):
+@@ -21,7 +21,7 @@
+ def refused_factory(*a,**kw):factory_calls.append((a,kw));raise AssertionError('process factory forbidden')
+ checks=[];seq=[0]
+ def request_file(x):
+- seq[0]+=1;p=D/('TESTONLY-correction1-request-%02d.json'%seq[0]);b=(json.dumps(x,sort_keys=True)+'\n').encode();p.write_bytes(b);return p,sha(b)
++ seq[0]+=1;p=D/('TESTONLY-expert-audit1-request-%02d.json'%seq[0]);b=(json.dumps(x,sort_keys=True)+'\n').encode();p.write_bytes(b);return p,sha(b)
+ def consume(controller,request_path,request_sha):
+  m=load(controller,'actual_controller_'+str(seq[0]));tree=ast.parse(controller.read_bytes());main=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='main');body=[];boundary=None
+  for n in main.body:
+@@ -65,8 +65,9 @@
+  ('request_capture_name_drift',lambda r:r.update(capture_directory=str(F/'unexpected-capture')),'exact fresh capture path')]:
+  r=copy.deepcopy(corrected);mut(r);p,h=request_file(r);expect(name,D/'capture_root_LONG.NOT-RELEASED.py',p,h,reason)
+ tracked_open_paths=set()
++audit_active=False
+ def audit_open(event,args):
+- if event=='open' and args and isinstance(args[0],(str,bytes,os.PathLike)):
++ if audit_active and event=='open' and args and isinstance(args[0],(str,bytes,os.PathLike)):
+   path=os.fsdecode(args[0]);flags=args[2] if len(args)>2 and isinstance(args[2],int) else 0
+   if path.startswith('/home/holden/mckernel') and not flags&(os.O_WRONLY|os.O_RDWR|os.O_CREAT):tracked_open_paths.add(path)
+ sys.addaudithook(audit_open)
+@@ -75,7 +76,12 @@
+ assert module.HOST_PARENT==g.HOST_OUTPUT['parent']==field('--attempt-parent') and module.NONCE==field('--nonce')
+ assert module.MANIFEST_PATH==field('--manifest') and module.MANIFEST_SHA==field('--manifest-sha256') and module.RELEASE_PATH==r['long_profile_release']['path']==field('--long-profile-release')
+ assert r['wrapper_sha256']==g.EXTERNAL_CAPTURE_BINDING['controller_sha256']==sha((D/'capture_root_LONG.NOT-RELEASED.py').read_bytes()) and g.EXTERNAL_CAPTURE_BINDING['controller_path']==str(D/'capture_root_LONG.NOT-RELEASED.py') and g.EXTERNAL_CAPTURE_BINDING['request_path']==str(D/'CAPTURE-REQUEST.json') and g.EXTERNAL_CAPTURE_BINDING['capture_directory']==r['capture_directory']
+-d,m=o.bound_manifest(module.MANIFEST_PATH,module.MANIFEST_SHA);assert m['pair_long_session']==g.PROFILE and len(o.SOURCE_HASHES)==matrix['source_hash_rows']
++audit_active=True
++try:
++ d,m=o.bound_manifest(module.MANIFEST_PATH,module.MANIFEST_SHA)
++finally:
++ audit_active=False
++assert m['pair_long_session']==g.PROFILE and len(o.SOURCE_HASHES)==matrix['source_hash_rows']
+ checks.append(dict(name='actual_full_bound_manifest_current_and_controller_transport_owner_request_matrix',status='PASS',readonly_roots=len(o.EXTRA_READONLY)))
+ assert not factory_calls and not (D/'actual-capture-1').exists()
+ # Model exact actualcreateargv destinations, including most-specific ancestor shadow.
